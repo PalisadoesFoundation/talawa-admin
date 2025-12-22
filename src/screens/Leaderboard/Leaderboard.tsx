@@ -65,8 +65,7 @@ import { debounce, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 import { useQuery } from '@apollo/client';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
 enum TimeFrame {
   All = 'allTime',
@@ -139,6 +138,35 @@ function leaderboard(): JSX.Element {
     [rankingsData],
   );
 
+  const leaderboardDropdowns = [
+    {
+      label: tCommon('sort'),
+      type: 'sort' as const,
+      options: [
+        { label: t('mostHours'), value: 'hours_DESC' },
+        { label: t('leastHours'), value: 'hours_ASC' },
+      ],
+      selectedOption: sortBy,
+      onOptionChange: (value: string | number) =>
+        setSortBy(value as 'hours_DESC' | 'hours_ASC'),
+      dataTestIdPrefix: 'sort',
+    },
+    {
+      label: t('timeFrame'),
+      type: 'filter' as const,
+      options: [
+        { label: t('allTime'), value: TimeFrame.All },
+        { label: t('weekly'), value: TimeFrame.Weekly },
+        { label: t('monthly'), value: TimeFrame.Monthly },
+        { label: t('yearly'), value: TimeFrame.Yearly },
+      ],
+      selectedOption: timeFrame,
+      onOptionChange: (value: string | number) =>
+        setTimeFrame(value as TimeFrame),
+      dataTestIdPrefix: 'timeFrame',
+    },
+  ];
+
   if (rankingsLoading) {
     return <Loader size="xl" />;
   }
@@ -168,19 +196,19 @@ function leaderboard(): JSX.Element {
         if (params.row.rank === 1) {
           return (
             <>
-              <img src={gold} alt="gold" className={styles.rankings} />
+              <img src={gold} alt={t('gold')} className={styles.rankings} />
             </>
           );
         } else if (params.row.rank === 2) {
           return (
             <>
-              <img src={silver} alt="silver" className={styles.rankings} />
+              <img src={silver} alt={t('silver')} className={styles.rankings} />
             </>
           );
         } else if (params.row.rank === 3) {
           return (
             <>
-              <img src={bronze} alt="bronze" className={styles.rankings} />
+              <img src={bronze} alt={t('bronze')} className={styles.rankings} />
             </>
           );
         } else return <>{params.row.rank}</>;
@@ -211,7 +239,7 @@ function leaderboard(): JSX.Element {
               {image ? (
                 <img
                   src={image}
-                  alt="User"
+                  alt={tCommon('user')}
                   data-testid={`image${_id + 1}`}
                   className={styles.TableImage}
                 />
@@ -268,44 +296,15 @@ function leaderboard(): JSX.Element {
 
   return (
     <div className="mt-4 mx-2 bg-white p-4 pt-2 rounded-4 shadow">
-      {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <SearchBar
-          placeholder={t('searchByVolunteer')}
-          onSearch={debouncedSearch}
-          inputTestId="searchBy"
-          buttonTestId="searchBtn"
-        />
-        <div className="d-flex gap-3 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-3">
-            <SortingButton
-              sortingOptions={[
-                { label: t('mostHours'), value: 'hours_DESC' },
-                { label: t('leastHours'), value: 'hours_ASC' },
-              ]}
-              selectedOption={sortBy}
-              onSortChange={(value) =>
-                setSortBy(value as 'hours_DESC' | 'hours_ASC')
-              }
-              dataTestIdPrefix="sort"
-              buttonLabel={tCommon('sort')}
-            />
-            <SortingButton
-              sortingOptions={[
-                { label: t('allTime'), value: TimeFrame.All },
-                { label: t('weekly'), value: TimeFrame.Weekly },
-                { label: t('monthly'), value: TimeFrame.Monthly },
-                { label: t('yearly'), value: TimeFrame.Yearly },
-              ]}
-              selectedOption={timeFrame}
-              onSortChange={(value) => setTimeFrame(value as TimeFrame)}
-              dataTestIdPrefix="timeFrame"
-              buttonLabel={t('timeFrame')}
-              type="filter"
-            />
-          </div>
-        </div>
-      </div>
+      <AdminSearchFilterBar
+        searchPlaceholder={t('searchByVolunteer')}
+        searchValue={searchTerm}
+        onSearchChange={debouncedSearch}
+        searchInputTestId="searchBy"
+        searchButtonTestId="searchBtn"
+        hasDropdowns={true}
+        dropdowns={leaderboardDropdowns}
+      />
 
       {/* Table with Action Items */}
       <DataGrid

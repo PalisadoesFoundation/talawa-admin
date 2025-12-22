@@ -62,10 +62,8 @@
   "Venues": "Venues",
   "Action Items": "Action Items",
   "Posts": "Posts",
-  "unblock": "Unblock",
   "Chat": "Chat",
   "Block/Unblock": "Block/Unblock",
-  "unblockedSuccessfully": "{{item}} Unblocked Successfully",
   "Advertisement": "Advertisement",
   "Funds": "Funds",
   "Membership Requests": "Membership Requests",
@@ -102,13 +100,10 @@
   "createdEarliest": "Created Earliest",
   "searchBy": "Search by {{item}}",
   "plugins": "Plugins",
-  "pluginSettings": "Plugin Settings",
   "save": "Save",
   "saving": "Saving...",
-  "sl_no": "Sl. No.",
-  "actions": "Actions",
-  "notFound": "Not Found",
-  "profilePicture": "profile picture",
-  "profilePicturePlaceholder": "dummy picture",
-  "userProfileMenu": "User Profile Menu"
+  "toggleOptions": "Toggle options",
+  "filterAndSortOptions": "Filter and sort options",
+  "clear": "Clear",
+  "noResultsFound": "No results found"
 }

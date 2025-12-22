@@ -1,0 +1,383 @@
+[Admin Docs](/)
+
+***
+
+# Interface: InterfaceAdminSearchFilterBarAdvanced
+
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:287](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L287)
+
+Configuration for AdminSearchFilterBar with search and dropdown functionality.
+
+Use this variant when you need search capabilities combined with one or more
+sorting/filtering dropdowns.
+
+## Examples
+
+```tsx
+<AdminSearchFilterBar
+  hasDropdowns={true}
+  searchPlaceholder="Search plugins"
+  searchValue={searchTerm}
+  onSearchChange={setSearchTerm}
+  dropdowns={[
+    {
+      label: 'Filter plugins',
+      type: 'filter',
+      options: [
+        { label: 'All Plugins', value: 'all' },
+        { label: 'Installed Plugins', value: 'installed' }
+      ],
+      selectedOption: filterState.selectedOption,
+      onOptionChange: handleFilterChange,
+      dataTestIdPrefix: 'filterPlugins'
+    }
+  ]}
+/>
+```
+
+```tsx
+<AdminSearchFilterBar
+  hasDropdowns={true}
+  searchPlaceholder="Search by volunteer"
+  searchValue={searchTerm}
+  onSearchChange={setSearchTerm}
+  dropdowns={[
+    {
+      label: 'Sort',
+      type: 'sort',
+      options: [
+        { label: 'Most Hours', value: 'hours_DESC' },
+        { label: 'Least Hours', value: 'hours_ASC' }
+      ],
+      selectedOption: sortBy,
+      onOptionChange: (value) => setSortBy(value as 'hours_DESC' | 'hours_ASC'),
+      dataTestIdPrefix: 'sort'
+    },
+    {
+      label: 'Time Frame',
+      type: 'filter',
+      options: [
+        { label: 'All Time', value: 'allTime' },
+        { label: 'Weekly', value: 'weekly' }
+      ],
+      selectedOption: timeFrame,
+      onOptionChange: (value) => setTimeFrame(value as TimeFrame),
+      dataTestIdPrefix: 'timeFrame'
+    }
+  ]}
+/>
+```
+
+## Extends
+
+- `InterfaceAdminSearchFilterBarBase`
+
+## Properties
+
+### additionalButtons?
+
+> `optional` **additionalButtons**: `ReactNode`
+
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:329](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L329)
+
+Optional additional React elements to render after the dropdowns.
+**Job:** Allows inserting custom buttons or components (e.g., "Upload Plugin" button).
+These elements are rendered inside the btnsBlockSearchBar container after all dropdowns.
+
+#### Example
+
+```tsx
+additionalButtons={
+  <Button onClick={() => setShowModal(true)}>
+    Upload Plugin
+  </Button>
+}
+```
+
+***
+
+### containerClassName?
+
+> `optional` **containerClassName**: `string`
+
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L176)
+
+Optional custom class name for the container div.
+**Job:** Allows overriding the default container styling for different screen layouts.
+
+#### Default
+
+```ts
+"btnsContainerSearchBar"
+```
+
+#### Example
+
+```ts
+"btnsContainer", "btnsContainerSearchBar"
+```
+
+#### Inherited from
+
+`InterfaceAdminSearchFilterBarBase.containerClassName`
+
+***
+
+### debounceDelay?
+
+> `optional` **debounceDelay**: `number`
+
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:185](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L185)
+
+Optional delay in milliseconds for debouncing search input changes.
+**Job:** Controls how long to wait after the user stops typing before calling onSearchChange.
+This prevents excessive API calls while the user is actively typing.
+
+#### Default
+
+```ts
+300
+```
+
+#### Example
+
+```ts
+300, 500, 1000
+```
+
+#### Inherited from
+
+`InterfaceAdminSearchFilterBarBase.debounceDelay`
+
+***
+
+### dropdowns
+
+> **dropdowns**: [`InterfaceDropdownConfig`](InterfaceDropdownConfig.md)[]
+
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:314](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L314)
+
+Array of dropdown configurations for sorting and filtering.
+**Job:** Defines all the dropdown controls that appear alongside the search bar.
+Each dropdown can be either a sort control or a filter control.
+The order of dropdowns in this array determines their visual order in the UI.
+
+#### Example
+
+```ts
+dropdowns={[
+  {
+    label: 'Sort',
+    type: 'sort',
+    options: [...],
+    selectedOption: sortBy,
+    onOptionChange: setSortBy,
+    dataTestIdPrefix: 'sort'
+  }
+]}
+```
+
+***
+
+### hasDropdowns
+
+> **hasDropdowns**: `true`
+
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:293](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L293)
+
+Discriminator property indicating this variant has dropdowns.
+**Job:** When `true`, the `dropdowns` property must be provided.
+
+***
+
+### onSearchChange()
+
+> **onSearchChange**: (`value`) => `void`
+
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:136](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L136)
+
+Callback function triggered on every keystroke in the search input.
+**Trigger:** User types or deletes characters in the search field (onChange event).
+**Job:** Updates the parent component's search state immediately.
+Parent components should handle their own debouncing for expensive operations.
+
+#### Parameters
+
+##### value
+
+`string`
+
+The current value of the search input field
+
+#### Returns
+
+`void`
+
+#### Example
+
+```ts
+onSearchChange={(value) => setSearchTerm(value)}
+```
+
+#### Inherited from
+
+`InterfaceAdminSearchFilterBarBase.onSearchChange`
+
+***
+
+### onSearchSubmit()?
+
+> `optional` **onSearchSubmit**: (`value`) => `void`
+
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:152](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L152)
+
+Optional callback function triggered when the user explicitly submits the search.
+**Trigger:** User presses Enter key or clicks the search button.
+**Job:** Performs an immediate search action.
+Useful for triggering search on explicit user action vs typing.
+
+#### Parameters
+
+##### value
+
+`string`
+
+The current value of the search input field
+
+#### Returns
+
+`void`
+
+#### Example
+
+```ts
+onSearchSubmit={(value) => {
+  console.log('User explicitly searched for:', value);
+  performSearch(value);
+}}
+```
+
+#### Inherited from
+
+`InterfaceAdminSearchFilterBarBase.onSearchSubmit`
+
+***
+
+### searchButtonTestId?
+
+> `optional` **searchButtonTestId**: `string`
+
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:168](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L168)
+
+Optional data-testid for the search button.
+**Job:** Enables testing frameworks to identify the search button element.
+
+#### Default
+
+```ts
+"searchButton"
+```
+
+#### Example
+
+```ts
+"searchPluginsBtn", "searchBtn", "searchButton"
+```
+
+#### Inherited from
+
+`InterfaceAdminSearchFilterBarBase.searchButtonTestId`
+
+***
+
+### searchInputTestId?
+
+> `optional` **searchInputTestId**: `string`
+
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:160](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L160)
+
+Optional data-testid for the search input field.
+**Job:** Enables testing frameworks to identify the search input element.
+
+#### Default
+
+```ts
+"searchInput"
+```
+
+#### Example
+
+```ts
+"searchPlugins", "searchBy", "searchRequests"
+```
+
+#### Inherited from
+
+`InterfaceAdminSearchFilterBarBase.searchInputTestId`
+
+***
+
+### searchPlaceholder
+
+> **searchPlaceholder**: `string`
+
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L115)
+
+Placeholder text displayed in the search input field.
+**Job:** Provides guidance to users about what they can search for.
+
+#### Example
+
+```ts
+"Search by volunteer", "Search requests", "Search plugins"
+```
+
+#### Inherited from
+
+`InterfaceAdminSearchFilterBarBase.searchPlaceholder`
+
+***
+
+### searchValue
+
+> **searchValue**: `string`
+
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L123)
+
+The current search term value.
+**Job:** Controls the value of the search input field (controlled component pattern).
+This should be managed in the parent component's state.
+
+#### Example
+
+```ts
+"John Doe", "authentication", ""
+```
+
+#### Inherited from
+
+`InterfaceAdminSearchFilterBarBase.searchValue`
+
+***
+
+### translations?
+
+> `optional` **translations**: [`InterfaceAdminSearchFilterBarTranslations`](InterfaceAdminSearchFilterBarTranslations.md)
+
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:198](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L198)
+
+Optional translation overrides for accessibility and UI customization.
+**Job:** Allows customizing internal component translations while providing sensible defaults.
+
+#### Example
+
+```ts
+translations: {
+  searchButtonAriaLabel: "Search for volunteers",
+  dropdownAriaLabel: "Toggle {label} options"
+}
+```
+
+#### Inherited from
+
+`InterfaceAdminSearchFilterBarBase.translations`

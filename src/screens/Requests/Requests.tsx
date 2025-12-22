@@ -78,8 +78,8 @@ import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import styles from '../../style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import { Stack } from '@mui/material';
-import PageHeader from 'shared-components/Navbar/Navbar';
 import {
   dataGridStyle,
   PAGE_SIZE,
@@ -509,21 +509,15 @@ const Requests = (): JSX.Element => {
   };
 
   return (
-    <>
-      {/* Buttons Container */}
-      <div
-        className={styles.btnsContainer + ' gap-4 flex-wrap'}
-        data-testid="testComp"
-      >
-        <PageHeader
-          search={{
-            placeholder: t('searchRequests'),
-            onSearch: handleSearch,
-            inputTestId: 'searchByName',
-            buttonTestId: 'searchButton',
-          }}
-        />
-      </div>
+    <div data-testid="testComp">
+      <AdminSearchFilterBar
+        searchPlaceholder={t('searchRequests')}
+        searchValue={searchByName}
+        onSearchChange={handleSearch}
+        searchInputTestId="searchByName"
+        searchButtonTestId="searchButton"
+        hasDropdowns={false}
+      />
 
       {!isLoading && orgsData?.organizations?.length === 0 ? (
         <div className={styles.notFound}>
@@ -572,7 +566,7 @@ const Requests = (): JSX.Element => {
           )}
         </div>
       )}
-    </>
+    </div>
   );
 };
 
