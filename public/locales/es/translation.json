@@ -1698,5 +1698,9 @@
     "altText": "Foto de perfil de {{name}}",
     "modalTitle": "Foto de perfil",
     "enlargedAltText": "Foto de perfil ampliada de {{name}}"
+  "common": {
+    "signOut": "Cerrar sesión",
+    "signingOut": "Cerrando sesión...",
+    "retryPrompt": "Error al revocar la sesión. ¿Reintentar?"
   }
 }
