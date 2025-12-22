@@ -24,6 +24,7 @@
  *   `.searchButton` (for form input field search button)
  *   `.addButton` (for buttons that add/create task)
  *   `.removeButton` (for buttons that remove/delete task)
+ *   `.cancelButton` (for buttons that cancel task)
  *   `.modalHeader` (for header section of any modal)
  *   `.editButton` (for buttons inside table)
  *   `.switch` (for form toggles)
@@ -65,6 +66,13 @@
   --removeButton-border-hover: #ff4d4f;
   --removeButton-border: #f8d6dc;
   --removeButton-color-hover: #ffffff;
+
+  --cancelButton-bg: #f8f9fa;
+  --cancelButton-color: #555555;
+  --cancelButton-bg-hover: #e2e6ea;
+  --cancelButton-border-hover: #dae0e5;
+  --cancelButton-border: #f8f9fa;
+  --cancelButton-color-hover: #333333;
 
   --activeTab-bg: #eaebef;
   --activeTab-color: #808080;
@@ -927,6 +935,22 @@
   background-color: var(--removeButton-bg-hover) !important;
   border-color: var(--removeButton-border-hover);
   color: var(--removeButton-color-hover);
+}
+
+/* Cancel Button */
+
+.cancelButton {
+  margin-bottom: 10px;
+  background-color: var(--cancelButton-bg);
+  color: var(--cancelButton-color);
+  margin-right: 10px;
+  --bs-btn-border-color: var(--cancelButton-border);
+}
+
+.cancelButton:is(:hover, :active, :focus) {
+  background-color: var(--cancelButton-bg-hover) !important;
+  border-color: var(--cancelButton-border-hover);
+  color: var(--cancelButton-color-hover);
 }
 
 /* Active Tab */

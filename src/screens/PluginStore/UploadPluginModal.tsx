@@ -273,7 +273,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
             <Button
               variant="outlined"
               color="secondary"
-              className={styles.removeButton}
+              className={styles.cancelButton}
               onClick={handleClose}
               disabled={isInstalling}
               style={{
