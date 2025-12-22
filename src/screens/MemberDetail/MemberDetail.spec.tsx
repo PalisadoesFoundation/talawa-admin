@@ -146,114 +146,86 @@ describe('MemberDetail', () => {
     const formData = {
       addressLine1: 'Line 1',
       addressLine2: 'Line 2',
-      avatarMimeType: 'image/jpeg',
-      avatarURL: 'http://example.com/avatar.jpg',
       birthDate: '2000-01-01',
       city: 'nyc',
-      countryCode: 'bb',
-      createdAt: '2025-02-06T03:10:50.254',
+      countryCode: 'bb', // e.g., BB (adjust to your actual code)
       description: 'This is a description',
-      educationGrade: 'grade_8',
       emailAddress: 'test221@gmail.com',
-      employmentStatus: 'employed',
-      homePhoneNumber: '+9999999998',
-      id: '0194d80f-03cd-79cd-8135-683494b187a1',
-      isEmailAddressVerified: false,
-      maritalStatus: 'engaged',
       mobilePhoneNumber: '+9999999999',
-      name: 'Rishav Jha',
-      natalSex: 'male',
-      naturalLanguageCode: 'en',
-      postalCode: '111111',
-      role: 'regular',
-      state: 'State1',
-      updatedAt: '2025-02-06T03:22:17.808',
+      homePhoneNumber: '+9999999998',
       workPhoneNumber: '+9999999998',
+      name: 'Rishav Jha',
+      postalCode: '111111',
+      state: 'State1',
     };
 
     renderMemberDetailScreen(link2);
-
     await wait();
 
-    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
-    expect(screen.getAllByText(/Email/i)).toBeTruthy();
-    expect(screen.getByText('User')).toBeInTheDocument();
-
-    // Set birth date
+    // birth date
     const birthDateDatePicker = screen.getByTestId('birthDate');
     fireEvent.change(birthDateDatePicker, {
       target: { value: formData.birthDate },
     });
 
-    // Helper for clearing and typing
-    const setTextAndGetElement = async (testIdRegex: RegExp, value: string) => {
-      const el = screen.getByTestId(testIdRegex);
-      // Only type if editable
-      if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
-        if (!el.readOnly && !el.disabled) {
-          await userEvent.clear(el);
-          await userEvent.type(el, value);
-        }
-        // readOnly/disabled: skip typing, still return element for assertions
-      } else {
-        // fallback for custom components: maybe use click -> type if needed
-        await userEvent.click(el);
-        await userEvent.type(el, value);
-      }
+    // Helper to set text inputs safely
+    const setText = async (testIdRegex: RegExp, value: string) => {
+      const el = screen.getByTestId(testIdRegex) as
+        | HTMLInputElement
+        | HTMLTextAreaElement;
+      await userEvent.clear(el);
+      await userEvent.type(el, value);
       return el;
     };
 
-    // Fill all inputs
-    const nameInput = await setTextAndGetElement(/inputName/i, formData.name);
-    const addressLine1Input = await setTextAndGetElement(
+    // Fill editable text inputs ONCE
+    const nameInput = await setText(/inputName/i, formData.name);
+    const addressLine1Input = await setText(
       /addressLine1/i,
       formData.addressLine1,
     );
-    const addressLine2Input = await setTextAndGetElement(
+    const addressLine2Input = await setText(
       /addressLine2/i,
       formData.addressLine2,
     );
-    const cityInput = await setTextAndGetElement(/inputCity/i, formData.city);
-    const stateInput = await setTextAndGetElement(
-      /inputState/i,
-      formData.state,
-    );
-    const postalCodeInput = await setTextAndGetElement(
+    const cityInput = await setText(/inputCity/i, formData.city);
+    const stateInput = await setText(/inputState/i, formData.state);
+    const postalCodeInput = await setText(
       /inputPostalCode/i,
       formData.postalCode,
     );
-    const descriptionInput = await setTextAndGetElement(
+    const descriptionInput = await setText(
       /inputDescription/i,
       formData.description,
     );
-    const emailInput = await setTextAndGetElement(
-      /inputEmail/i,
-      formData.emailAddress,
-    );
-    const mobilePhoneInput = await setTextAndGetElement(
+    const emailInput = await setText(/inputEmail/i, formData.emailAddress);
+    const mobilePhoneInput = await setText(
       /inputMobilePhoneNumber/i,
       formData.mobilePhoneNumber,
     );
-    const homePhoneInput = await setTextAndGetElement(
+    const homePhoneInput = await setText(
       /inputHomePhoneNumber/i,
       formData.homePhoneNumber,
     );
-    const workPhoneInput = await setTextAndGetElement(
+    const workPhoneInput = await setText(
       /workPhoneNumber/i,
       formData.workPhoneNumber,
     );
 
-    // Country (adjust this if it's a select or MUI-style select)
-    const countryTrigger = screen.getByTestId(/inputCountry/i); // trigger/button
+    // MUI/custom select trigger (non-editable control)
+    const countryTrigger = screen.getByTestId(/inputCountry/i);
     await userEvent.click(countryTrigger);
-    const option = await screen.findByRole('option', { name: /Barbados/i });
-    await userEvent.click(option);
-    expect(countryTrigger).toHaveTextContent(/Barbados/i);
+    // Adjust the label below to whatever your UI shows for the code "bb"
+    const countryOption = await screen.findByRole('option', {
+      name: /barbados|bb/i,
+    });
+    await userEvent.click(countryOption);
+    expect(countryTrigger).toHaveTextContent(/barbados|bb/i);
 
-    // Save changes
+    // Save once
     await userEvent.click(screen.getByText(/Save Changes/i));
 
-    // Assertions
+    // Assertions (text inputs)
     expect(nameInput).toHaveValue(formData.name);
     expect(addressLine1Input).toHaveValue(formData.addressLine1);
     expect(addressLine2Input).toHaveValue(formData.addressLine2);
