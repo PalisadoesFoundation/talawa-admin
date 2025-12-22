@@ -8,7 +8,7 @@ import {
   emptyStateWithDescriptionMock,
   emptyStateWithIconMock,
   emptyStateWithCustomIconMock,
-  emptyStateWithActionBaseMock,
+  emptyStateBaseForActionMock,
   emptyStateWithAllPropsMock,
   emptyStateWithCustomCSSMock,
   emptyStateWithCustomDataTestIdMock,
@@ -25,10 +25,6 @@ const renderEmptyState = (props: InterfaceEmptyStateProps) => {
 };
 
 describe('EmptyState Component', () => {
-  beforeEach(() => {
-    vi.clearAllMocks(); // Clear call history
-  });
-
   afterEach(() => {
     vi.clearAllMocks(); // Clear call history
   });
@@ -56,7 +52,7 @@ describe('EmptyState Component', () => {
   it('applies action props correctly and test onClick action prop', () => {
     const handleClick = vi.fn();
     renderEmptyState({
-      ...emptyStateWithActionBaseMock,
+      ...emptyStateBaseForActionMock,
       action: {
         label: 'createNew',
         onClick: handleClick,
@@ -111,22 +107,20 @@ describe('EmptyState Component', () => {
 });
 
 describe('EmptyState – i18n failure fallback', () => {
-  describe('EmptyState – i18n failure fallback', () => {
-    it('falls back to raw text when translation throws', async () => {
-      vi.resetModules();
+  it('falls back to raw text when translation throws', async () => {
+    vi.resetModules();
 
-      vi.doMock('react-i18next', () => ({
-        useTranslation: () => ({
-          t: () => {
-            throw new Error('i18n crashed');
-          },
-        }),
-      }));
+    vi.doMock('react-i18next', () => ({
+      useTranslation: () => ({
+        t: () => {
+          throw new Error('i18n crashed');
+        },
+      }),
+    }));
 
-      const { default: EmptyStateComponent } = await import('./EmptyState');
-      render(<EmptyStateComponent message="Fallback Text" />);
+    const { default: EmptyStateComponent } = await import('./EmptyState');
+    render(<EmptyStateComponent message="Fallback Text" />);
 
-      expect(screen.getByText('Fallback Text')).toBeInTheDocument();
-    });
+    expect(screen.getByText('Fallback Text')).toBeInTheDocument();
   });
 });

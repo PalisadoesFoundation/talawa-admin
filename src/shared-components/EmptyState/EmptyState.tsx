@@ -113,7 +113,6 @@ const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
       spacing={2}
       padding={4}
       className={className}
-      role="alert"
       aria-label={messageText}
       data-testid={dataTestId}
     >
@@ -126,7 +125,6 @@ const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
               fill="var(--bs-secondary)"
               width="48px"
               height="48px"
-              aria-label={icon}
             />
           ) : (
             icon
@@ -140,7 +138,6 @@ const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
         color="text.secondary"
         textAlign="center"
         data-testid={`${dataTestId}-message`}
-        aria-label={messageText}
       >
         {messageText}
       </Typography>
@@ -152,7 +149,6 @@ const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
           color="text.secondary"
           textAlign="center"
           data-testid={`${dataTestId}-description`}
-          aria-label={descriptionText}
         >
           {descriptionText}
         </Typography>
@@ -164,7 +160,6 @@ const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
           variant={buttonVariant}
           onClick={action.onClick}
           data-testid={`${dataTestId}-action`}
-          aria-label={`${getText(action.label)}`}
         >
           {getText(action.label)}
         </Button>

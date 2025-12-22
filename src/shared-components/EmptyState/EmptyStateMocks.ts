@@ -20,7 +20,7 @@ export const emptyStateWithCustomIconMock: InterfaceEmptyStateProps = {
   icon: React.createElement('div', { 'data-testid': 'custom-icon' }, '🎉'),
 };
 
-export const emptyStateWithActionBaseMock: Omit<
+export const emptyStateBaseForActionMock: Omit<
   InterfaceEmptyStateProps,
   'action'
 > = {
