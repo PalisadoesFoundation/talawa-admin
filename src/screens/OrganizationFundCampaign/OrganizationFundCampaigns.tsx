@@ -14,7 +14,6 @@ import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import Loader from 'components/Loader/Loader';
 import TableLoader from 'components/TableLoader/TableLoader';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import CampaignModal from './modal/CampaignModal';
@@ -149,9 +148,6 @@ const orgFundCampaign = (): JSX.Element => {
     return <Navigate to={'/'} />;
   }
 
-  if (campaignLoading) {
-    return <Loader size="xl" />;
-  }
   if (campaignError) {
     return (
       <div className={styles.whiteContainer}>

@@ -212,6 +212,33 @@ describe('FundCampaigns Screen', () => {
     );
   });
 
+  it('Should display loading state', () => {
+    mockRouteParams();
+    // Create a link with a delay to simulate loading
+    const delayedMocks = [
+      {
+        request: MOCKS[0].request,
+        result: {
+          data: {
+            organization: {
+              fund: {
+                campaigns: {
+                  edges: [],
+                },
+              },
+            },
+          },
+        },
+        delay: 50,
+      },
+    ];
+    const delayedLink = new StaticMockLink(delayedMocks, true);
+
+    renderFundCampaign(delayedLink);
+    // Immediately check for loader
+    expect(screen.getByTestId('TableLoader')).toBeInTheDocument();
+  });
+
   it('Displays campaigns with dates correctly', async () => {
     mockRouteParams();
     renderFundCampaign(link1);

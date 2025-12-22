@@ -275,6 +275,29 @@ describe('OrganizationFunds Screen =>', () => {
     );
   });
 
+  it('Should display loading state', () => {
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
+    const delayedMocks = [
+      {
+        request: MOCKS[0].request,
+        result: {
+          data: {
+            organization: {
+              funds: {
+                edges: [],
+              },
+            },
+          },
+        },
+        delay: 50,
+      },
+    ];
+    const delayedLink = new StaticMockLink(delayedMocks, true);
+
+    renderOrganizationFunds(delayedLink);
+    expect(screen.getByTestId('TableLoader')).toBeInTheDocument();
+  });
+
   it('Displays fund names in the table', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);

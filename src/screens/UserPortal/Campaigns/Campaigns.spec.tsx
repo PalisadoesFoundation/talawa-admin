@@ -190,6 +190,30 @@ describe('Testing User Campaigns Screen', () => {
     );
   });
 
+  it('Should display loading state', () => {
+    // Create a link with a delay to simulate loading
+    const delayedMocks = [
+      {
+        request: MOCKS[0].request,
+        result: {
+          data: {
+            organization: {
+              funds: {
+                edges: [],
+              },
+            },
+          },
+        },
+        delay: 50, // fast delay just to check initial render state
+      },
+    ];
+    const delayedLink = new StaticMockLink(delayedMocks);
+
+    renderCampaigns(delayedLink);
+    // Immediately check for loader
+    expect(screen.getByTestId('TableLoader')).toBeInTheDocument();
+  });
+
   it('Should display campaigns in DataGrid', async () => {
     renderCampaigns(link1);
 
@@ -462,19 +486,34 @@ describe('Testing User Campaigns Screen', () => {
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
     });
 
-    // Find the Start Date header and click it to trigger sort
+    // Get the campaign names in their initial order
+    const getCampaignOrder = (): string[] => {
+      const campaignCells = screen.getAllByTestId('campaignName');
+      return campaignCells.map((cell) => cell.textContent || '');
+    };
+
+    // Find the Start Date header and click it to trigger ascending sort
     const startDateHeader = screen.getByRole('columnheader', {
       name: /start date/i,
     });
     expect(startDateHeader).toBeInTheDocument();
 
-    // Click to sort - this triggers the sortComparator function
+    // Click to sort ascending (School Campaign has earlier startAt: 2024-06-15, Hospital: 2024-07-28)
     await userEvent.click(startDateHeader);
 
-    // Verify campaigns are still displayed (sorting happened)
     await waitFor(() => {
-      expect(screen.getByText('School Campaign')).toBeInTheDocument();
-      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+      const sortedOrder = getCampaignOrder();
+      // After ascending sort by start date, School Campaign (2024-06-15) should come before Hospital (2024-07-28)
+      expect(sortedOrder).toEqual(['School Campaign', 'Hospital Campaign']);
+    });
+
+    // Click again to sort descending
+    await userEvent.click(startDateHeader);
+
+    await waitFor(() => {
+      const descendingOrder = getCampaignOrder();
+      // After descending sort, Hospital Campaign (2024-07-28) should come before School (2024-06-15)
+      expect(descendingOrder).toEqual(['Hospital Campaign', 'School Campaign']);
     });
   });
 
@@ -487,19 +526,34 @@ describe('Testing User Campaigns Screen', () => {
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
     });
 
-    // Find the End Date header and click it to trigger sort
+    // Get the campaign names in their initial order
+    const getCampaignOrder = (): string[] => {
+      const campaignCells = screen.getAllByTestId('campaignName');
+      return campaignCells.map((cell) => cell.textContent || '');
+    };
+
+    // Find the End Date header and click it to trigger ascending sort
     const endDateHeader = screen.getByRole('columnheader', {
       name: /end date/i,
     });
     expect(endDateHeader).toBeInTheDocument();
 
-    // Click to sort - this triggers the sortComparator function
+    // Click to sort ascending (Hospital Campaign has earlier endAt: 2022-08-30, School: 2099-12-31)
     await userEvent.click(endDateHeader);
 
-    // Verify campaigns are still displayed (sorting happened)
     await waitFor(() => {
-      expect(screen.getByText('School Campaign')).toBeInTheDocument();
-      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+      const sortedOrder = getCampaignOrder();
+      // After ascending sort by end date, Hospital Campaign (2022-08-30) should come before School (2099-12-31)
+      expect(sortedOrder).toEqual(['Hospital Campaign', 'School Campaign']);
+    });
+
+    // Click again to sort descending
+    await userEvent.click(endDateHeader);
+
+    await waitFor(() => {
+      const descendingOrder = getCampaignOrder();
+      // After descending sort, School Campaign (2099-12-31) should come before Hospital (2022-08-30)
+      expect(descendingOrder).toEqual(['School Campaign', 'Hospital Campaign']);
     });
   });
 });

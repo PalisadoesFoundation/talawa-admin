@@ -21,7 +21,6 @@ import { USER_FUND_CAMPAIGNS } from 'GraphQl/Queries/fundQueries';
 import { useQuery } from '@apollo/client';
 import type { InterfaceUserCampaign } from 'utils/interfaces';
 import { currencySymbols } from 'utils/currency';
-import Loader from 'components/Loader/Loader';
 import TableLoader from 'components/TableLoader/TableLoader';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
@@ -134,10 +133,6 @@ const Campaigns = (): JSX.Element => {
       campaign.name.toLowerCase().includes(searchText.toLowerCase()),
     );
   }, [campaigns, searchText]);
-
-  if (campaignLoading) {
-    return <Loader size="xl" />;
-  }
 
   if (campaignError) {
     return (
