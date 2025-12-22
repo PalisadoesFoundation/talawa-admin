@@ -2,8 +2,18 @@
 
 ***
 
-# Variable: REACT\_APP\_BACKEND\_WEBSOCKET\_URL
+# Function: deriveBackendWebsocketUrl()
 
-> `const` **REACT\_APP\_BACKEND\_WEBSOCKET\_URL**: `string`
+> **deriveBackendWebsocketUrl**(`httpUrl`): `string`
 
 Defined in: [src/Constant/constant.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/Constant/constant.ts#L5)
+
+## Parameters
+
+### httpUrl
+
+`string`
+
+## Returns
+
+`string`

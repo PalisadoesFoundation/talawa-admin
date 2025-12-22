@@ -856,7 +856,6 @@ jobs:
           REACT_APP_TALAWA_URL=http://localhost:4000/graphql
           REACT_APP_USE_RECAPTCHA=
           REACT_APP_RECAPTCHA_SITE_KEY=
-          REACT_APP_BACKEND_WEBSOCKET_URL=ws://localhost:4000/graphql
           ALLOW_LOGS=NO
           USE_DOCKER=YES
           DOCKER_PORT=4321
@@ -1142,7 +1141,6 @@ jobs:
         env:
           CYPRESS_BASE_URL: http://localhost:4321
           CYPRESS_API_URL: http://127.0.0.1:4000/graphql
-          REACT_APP_BACKEND_WEBSOCKET_URL: ws://127.0.0.1:4000/graphql
 
       - name: Upload cypress screenshots on failure
         uses: actions/upload-artifact@v4
