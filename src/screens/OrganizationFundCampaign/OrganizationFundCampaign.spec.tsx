@@ -11,7 +11,7 @@ import { MemoryRouter, Route, Routes, useParams } from 'react-router';
 import { store } from '../../state/store';
 import { StaticMockLink } from '../../utils/StaticMockLink';
 import i18nForTest from '../../utils/i18nForTest';
-import OrganizaitionFundCampiagn from './OrganizationFundCampagins';
+import OrganizaitionFundCampiagn from './OrganizationFundCampaigns';
 import {
   EMPTY_MOCKS,
   MOCKS,

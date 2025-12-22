@@ -18,7 +18,7 @@ Defined in: [src/plugin/graphql-service.ts:85](https://github.com/PalisadoesFoun
 
 ##### apolloClient
 
-`ApolloClient`\<`unknown`\>
+`any`
 
 #### Returns
 
