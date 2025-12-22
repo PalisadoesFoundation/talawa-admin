@@ -713,14 +713,14 @@ describe('MemberDetail', () => {
     ).toBeInTheDocument();
 
     // Find the dropdown by the fieldName from DynamicDropDown props
-    const maritialStatus = screen.getByTestId('maritalstatus-dropdown-btn');
-    expect(maritialStatus).toBeInTheDocument();
+    const maritalStatus = screen.getByTestId('maritalstatus-dropdown-btn');
+    expect(maritalStatus).toBeInTheDocument();
 
     // Test initial state
-    expect(maritialStatus).toHaveTextContent('Engaged');
+    expect(maritalStatus).toHaveTextContent('Engaged');
 
     // Click the dropdown button to open it
-    await userEvent.click(maritialStatus);
+    await userEvent.click(maritalStatus);
 
     expect(
       screen.getByTestId('maritalstatus-dropdown-menu'),
@@ -731,7 +731,7 @@ describe('MemberDetail', () => {
     await userEvent.click(option);
 
     // Verify the selection was made
-    expect(maritialStatus).toHaveTextContent('Single');
+    expect(maritalStatus).toHaveTextContent('Single');
   });
 
   test('renders gender status dropdown and handles selection', async () => {
