@@ -19,8 +19,14 @@ import { props } from './EventListCardProps';
 import { ERROR_MOCKS, MOCKS } from './Modal/EventListCardMocks';
 import { vi, beforeAll, afterAll, afterEach, expect, it } from 'vitest';
 
-// biome-ignore lint/correctness/useHookAtTopLevel: useLocalStorage is a storage helper, not a React hook
-const { setItem, clearAllItems } = useLocalStorage();
+let setItem: ReturnType<typeof useLocalStorage>['setItem'];
+let clearAllItems: ReturnType<typeof useLocalStorage>['clearAllItems'];
+
+beforeAll(() => {
+  const storage = useLocalStorage();
+  setItem = storage.setItem;
+  clearAllItems = storage.clearAllItems;
+});
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(ERROR_MOCKS, true);

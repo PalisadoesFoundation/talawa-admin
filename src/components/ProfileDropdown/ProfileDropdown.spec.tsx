@@ -9,10 +9,16 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
-import { vi } from 'vitest';
+import { vi, beforeAll } from 'vitest';
 
-// biome-ignore lint/correctness/useHookAtTopLevel: useLocalStorage is a storage helper, not a React hook
-const { setItem, clearAllItems } = useLocalStorage();
+let setItem: ReturnType<typeof useLocalStorage>['setItem'];
+let clearAllItems: ReturnType<typeof useLocalStorage>['clearAllItems'];
+
+beforeAll(() => {
+  const storage = useLocalStorage();
+  setItem = storage.setItem;
+  clearAllItems = storage.clearAllItems;
+});
 
 let mockNavigate: ReturnType<typeof vi.fn>;
 
