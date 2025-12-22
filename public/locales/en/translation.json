@@ -1693,5 +1693,10 @@
     "deleteComment": "Delete Comment",
     "deleting": "Deleting…",
     "emptyCommentError": "Please enter a comment before submitting."
+  },
+  "common": {
+    "signOut": "Sign out",
+    "signingOut": "Signing out...",
+    "retryPrompt": "Failed to revoke session. Retry?"
   }
 }

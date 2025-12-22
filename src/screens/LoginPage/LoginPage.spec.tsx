@@ -56,6 +56,7 @@ const MOCKS = [
             avatarURL: 'https://example.com/avatar.jpg',
           },
           authenticationToken: 'authenticationToken',
+          refreshToken: 'refreshToken',
         },
       },
     },
@@ -75,6 +76,7 @@ const MOCKS = [
         signUp: {
           user: { id: '1' },
           authenticationToken: 'authenticationToken',
+          refreshToken: 'refreshToken',
         },
       },
     },
@@ -1591,6 +1593,7 @@ describe('Extra coverage for 100 %', () => {
                 avatarURL: null,
               },
               authenticationToken: 'token',
+              refreshToken: 'refreshToken',
             },
           },
         },
@@ -1871,4 +1874,100 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     expect(toastMocks.warn).toHaveBeenCalledWith('Not found');
   });
+});
+
+describe('RefreshToken storage verification', () => {
+  it('should store refreshToken in localStorage on successful login', async () => {
+    const SIGNIN_WITH_REFRESH_TOKEN_MOCK = [
+      {
+        request: {
+          query: RECAPTCHA_MUTATION,
+          variables: { recaptchaToken: 'validToken' },
+        },
+        result: { data: { recaptcha: true } },
+      },
+      {
+        request: {
+          query: SIGNIN_QUERY,
+          variables: { email: 'test@gmail.com', password: 'testPassword' },
+        },
+        result: {
+          data: {
+            signIn: {
+              user: {
+                id: 'userId123',
+                name: 'Test User',
+                emailAddress: 'test@gmail.com',
+                role: 'user',
+              },
+              authenticationToken: 'newAuthToken123',
+              refreshToken: 'newRefreshToken456',
+            },
+          },
+        },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: { data: { organizations: [] } },
+      },
+    ];
+
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        reload: vi.fn(),
+        href: 'https://localhost:4321/',
+        origin: 'https://localhost:4321',
+        pathname: '/',
+      },
+    });
+
+    render(
+      <MockedProvider
+        mocks={SIGNIN_WITH_REFRESH_TOKEN_MOCK}
+        addTypename={false}
+      >
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await userEvent.type(screen.getByTestId('loginEmail'), 'test@gmail.com');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'testPassword',
+    );
+    await userEvent.type(
+      screen.getAllByTestId('mock-recaptcha')[0],
+      'validToken',
+    );
+    await userEvent.click(screen.getByTestId('loginBtn'));
+
+    await wait();
+
+    // Verify that setItem was called with refreshToken
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+      'refreshToken',
+      'newRefreshToken456',
+    );
+    // Verify that setItem was also called with the auth token
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+      'token',
+      'newAuthToken123',
+    );
+  });
+
+  // Note: Registration uses the same code path as login for storing refreshToken
+  // The login test above verifies the refreshToken storage behavior
 });

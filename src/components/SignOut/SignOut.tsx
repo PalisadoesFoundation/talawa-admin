@@ -35,6 +35,7 @@
  * ```
  */
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import LogoutIcon from '@mui/icons-material/Logout';
 import useSession from 'utils/useSession';
@@ -42,20 +43,17 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
-import { useTranslation } from 'react-i18next';
 
 interface ISignOutProps {
   hideDrawer?: boolean; // Optional prop to conditionally render the button
 }
 
 const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
+  const { t } = useTranslation('translation', { keyPrefix: 'common' });
   const { endSession } = useSession();
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'signOut',
-  });
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
   const navigate = useNavigate();
-  const { clearAllItems } = useLocalStorage();
+  const { clearAllItems, getItem } = useLocalStorage();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const logout = async (): Promise<void> => {
@@ -67,15 +65,27 @@ const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
       navigate('/');
     };
 
+    const storedRefreshToken = getItem('refreshToken');
+
+    // If no refresh token, just do local logout
+    if (!storedRefreshToken) {
+      handleSignOut();
+      return;
+    }
+
     try {
-      await revokeRefreshToken();
+      await revokeRefreshToken({
+        variables: { refreshToken: storedRefreshToken },
+      });
       handleSignOut();
     } catch (error) {
       console.error('Error revoking refresh token:', error);
       const retryRevocation = window.confirm(t('retryPrompt'));
       if (retryRevocation) {
         try {
-          await revokeRefreshToken();
+          await revokeRefreshToken({
+            variables: { refreshToken: storedRefreshToken },
+          });
           handleSignOut();
         } catch {
           // Proceed with local logout if retry fails
