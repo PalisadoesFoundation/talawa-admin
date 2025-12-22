@@ -704,7 +704,7 @@ describe('MemberDetail', () => {
     expect(employmentStatus).toHaveTextContent('Full-Time');
   });
 
-  test('renders maritial status dropdown and handles selection', async () => {
+  test('renders marital status dropdown and handles selection', async () => {
     renderMemberDetailScreen(link1);
     await wait();
 
