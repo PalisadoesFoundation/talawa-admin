@@ -139,6 +139,8 @@ export const ProfileAvatarDisplay = ({
             alt={t('enlargedAltText', { name: fallbackName })}
             className={styles.enlargedImage}
             crossOrigin={crossOrigin}
+            onLoad={() => (onLoad ? onLoad() : null)}
+            onError={() => (onError ? onError() : null)}
           />
         ) : (
           <div className={styles.enlargedFallback}>
@@ -203,8 +205,6 @@ export const ProfileAvatarDisplay = ({
         className={containerClasses}
         style={customSizeStyle}
         data-testid={dataTestId}
-        onError={() => (onError ? onError() : null)}
-        onLoad={() => (onLoad ? onLoad() : null)}
         onClick={handleClick}
         role={enableEnlarge ? 'button' : undefined}
         tabIndex={enableEnlarge ? 0 : undefined}

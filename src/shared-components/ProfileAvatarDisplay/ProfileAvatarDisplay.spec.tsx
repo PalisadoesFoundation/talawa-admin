@@ -432,4 +432,52 @@ describe('ProfileAvatarDisplay Component', () => {
 
     expect(onLoadMock).toHaveBeenCalled();
   });
+
+  test('calls onLoad callback when enlarged modal image loads', () => {
+    const onLoadMock = vi.fn();
+    render(
+      <ProfileAvatarDisplay
+        {...defaultProps}
+        imageUrl="https://example.com/image.jpg"
+        enableEnlarge={true}
+        onLoad={onLoadMock}
+      />,
+    );
+
+    // Open the modal
+    const avatarContainer = screen.getByTestId('test-avatar');
+    fireEvent.click(avatarContainer);
+
+    // Find the enlarged image in the modal
+    const enlargedImg = screen.getByAltText(
+      'Enlarged profile picture of John Doe',
+    );
+    fireEvent.load(enlargedImg);
+
+    expect(onLoadMock).toHaveBeenCalled();
+  });
+
+  test('calls onError callback when enlarged modal image errors', () => {
+    const onErrorMock = vi.fn();
+    render(
+      <ProfileAvatarDisplay
+        {...defaultProps}
+        imageUrl="https://example.com/image.jpg"
+        enableEnlarge={true}
+        onError={onErrorMock}
+      />,
+    );
+
+    // Open the modal
+    const avatarContainer = screen.getByTestId('test-avatar');
+    fireEvent.click(avatarContainer);
+
+    // Find the enlarged image in the modal
+    const enlargedImg = screen.getByAltText(
+      'Enlarged profile picture of John Doe',
+    );
+    fireEvent.error(enlargedImg);
+
+    expect(onErrorMock).toHaveBeenCalled();
+  });
 });
