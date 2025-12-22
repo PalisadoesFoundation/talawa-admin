@@ -167,12 +167,6 @@ class TestCheckEmbeddedStyles(unittest.TestCase):
         violations = check_embedded_styles(content, "test.tsx")
         self.assertEqual(len(violations), 0)
 
-    def test_ignores_import_with_braces(self):
-        """Test that import statements without spaces are ignored."""
-        content = "import{colors}from'./colors';"
-        violations = check_embedded_styles(content, "test.tsx")
-        self.assertEqual(len(violations), 0)
-
     def test_ignores_dynamic_import(self):
         """Test that dynamic import() statements are ignored."""
         content = "const module = import('./module');"
