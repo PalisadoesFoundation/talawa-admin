@@ -6,4 +6,4 @@
 
 > `const` **MOCKS\_FETCHMORE\_UNDEFINED**: `ListMock`[] = `MOCK_RESPONSES.FETCHMORE_UNDEFINED`
 
-Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:319](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L319)
+Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:345](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L345)

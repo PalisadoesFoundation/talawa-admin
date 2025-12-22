@@ -6,7 +6,7 @@
 
 > `const` **MOCKDETAIL**: `object`[]
 
-Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L34)
+Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L36)
 
 ## Type Declaration
 
@@ -41,6 +41,10 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 #### result.data.event.allDay
 
 > **allDay**: `boolean` = `false`
+
+#### result.data.event.baseEvent
+
+> **baseEvent**: `any` = `null`
 
 #### result.data.event.createdAt
 
@@ -77,6 +81,10 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 #### result.data.event.isPublic
 
 > **isPublic**: `boolean` = `true`
+
+#### result.data.event.isRecurringEventTemplate
+
+> **isRecurringEventTemplate**: `boolean` = `false`
 
 #### result.data.event.isRegisterable
 

@@ -6,7 +6,7 @@
 
 > `const` **orgPostListMock**: `object`
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:208](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.data.ts#L208)
+Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:234](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.data.ts#L234)
 
 ## Type Declaration
 
@@ -62,6 +62,10 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:208](https://github.com/Pa
 
 > **organization**: `object`
 
+#### result.data.organization.\_\_typename
+
+> **\_\_typename**: `string` = `'Organization'`
+
 #### result.data.organization.avatarURL
 
 > **avatarURL**: `any` = `null`
@@ -78,6 +82,10 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:208](https://github.com/Pa
 
 > **posts**: `object`
 
+#### result.data.organization.posts.\_\_typename
+
+> **\_\_typename**: `string` = `'PostConnection'`
+
 #### result.data.organization.posts.edges
 
 > **edges**: `object`[]
@@ -85,6 +93,10 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:208](https://github.com/Pa
 #### result.data.organization.posts.pageInfo
 
 > **pageInfo**: `object`
+
+#### result.data.organization.posts.pageInfo.\_\_typename
+
+> **\_\_typename**: `string` = `'PageInfo'`
 
 #### result.data.organization.posts.pageInfo.endCursor
 

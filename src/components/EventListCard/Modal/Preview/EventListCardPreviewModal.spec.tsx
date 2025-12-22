@@ -111,9 +111,6 @@ const renderComponent = (props = {}) => {
   );
 };
 
-const getPickerInputByLabel = (label: string) =>
-  screen.getByLabelText(label, { selector: 'input' }) as HTMLInputElement;
-
 describe('EventListCardPreviewModal', () => {
   afterEach(() => {
     vi.restoreAllMocks();
@@ -631,7 +628,9 @@ describe('EventListCardPreviewModal', () => {
     const dateInputs = screen.getAllByPlaceholderText('MM/DD/YYYY');
     expect(dateInputs.length).toBeGreaterThan(0);
     const startDateInput = dateInputs[0];
-    const startDatePicker = startDateInput.closest('.MuiFormControl-root') || startDateInput.parentElement?.parentElement;
+    const startDatePicker =
+      startDateInput.closest('.MuiFormControl-root') ||
+      startDateInput.parentElement?.parentElement;
     const calendarButton = within(
       startDatePicker as HTMLElement,
     ).getByLabelText(/choose date/i);
@@ -659,7 +658,9 @@ describe('EventListCardPreviewModal', () => {
     const dateInputs = screen.getAllByPlaceholderText('MM/DD/YYYY');
     expect(dateInputs.length).toBeGreaterThanOrEqual(2);
     const endDateInput = dateInputs[1];
-    const endDatePicker = endDateInput.closest('.MuiFormControl-root') || endDateInput.parentElement?.parentElement;
+    const endDatePicker =
+      endDateInput.closest('.MuiFormControl-root') ||
+      endDateInput.parentElement?.parentElement;
     const calendarButton = within(endDatePicker as HTMLElement).getByLabelText(
       /choose date/i,
     );
@@ -687,7 +688,9 @@ describe('EventListCardPreviewModal', () => {
     const timeInputs = screen.getAllByPlaceholderText('hh:mm aa');
     expect(timeInputs.length).toBeGreaterThan(0);
     const startTimeInput = timeInputs[0];
-    const startTimePicker = startTimeInput.closest('.MuiFormControl-root') || startTimeInput.parentElement?.parentElement;
+    const startTimePicker =
+      startTimeInput.closest('.MuiFormControl-root') ||
+      startTimeInput.parentElement?.parentElement;
     const clockButton = within(startTimePicker as HTMLElement).getByLabelText(
       /choose time/i,
     );
@@ -718,7 +721,9 @@ describe('EventListCardPreviewModal', () => {
     const timeInputs = screen.getAllByPlaceholderText('hh:mm aa');
     expect(timeInputs.length).toBeGreaterThanOrEqual(2);
     const endTimeInput = timeInputs[1];
-    const endTimePicker = endTimeInput.closest('.MuiFormControl-root') || endTimeInput.parentElement?.parentElement;
+    const endTimePicker =
+      endTimeInput.closest('.MuiFormControl-root') ||
+      endTimeInput.parentElement?.parentElement;
     const clockButton = within(endTimePicker as HTMLElement).getByLabelText(
       /choose time/i,
     );
@@ -1094,7 +1099,9 @@ describe('EventListCardPreviewModal', () => {
       const dateInputs = screen.getAllByPlaceholderText('MM/DD/YYYY');
       expect(dateInputs.length).toBeGreaterThan(0);
       const dateInput = dateInputs[0];
-      const datePicker = dateInput.closest('.MuiFormControl-root') || dateInput.parentElement?.parentElement;
+      const datePicker =
+        dateInput.closest('.MuiFormControl-root') ||
+        dateInput.parentElement?.parentElement;
       const calendarButton = within(datePicker as HTMLElement).getByLabelText(
         /choose date/i,
       );

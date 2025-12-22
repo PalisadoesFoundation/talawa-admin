@@ -158,7 +158,7 @@ const createRegisterMutationMock = (variables: Record<string, unknown>) => {
             id: 'newUser1',
             name:
               'name' in defaultVariables &&
-                typeof defaultVariables.name === 'string'
+              typeof defaultVariables.name === 'string'
                 ? defaultVariables.name
                 : 'New User',
           },

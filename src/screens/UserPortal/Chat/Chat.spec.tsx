@@ -1,5 +1,11 @@
 import React from 'react';
-import { render, screen, waitFor, fireEvent, act } from '@testing-library/react';
+import {
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+  act,
+} from '@testing-library/react';
 import { MockLink } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
@@ -81,7 +87,15 @@ const mockChatsListData = {
       users: [{}, {}],
       image: '',
       organization: { id: 'org-1', name: 'Test Org' },
-      members: { edges: [], pageInfo: { hasNextPage: false, hasPreviousPage: false, startCursor: null, endCursor: null } },
+      members: {
+        edges: [],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: null,
+          endCursor: null,
+        },
+      },
       lastMessage: null,
       unreadMessagesCount: 0,
       __typename: 'Chat',
@@ -98,11 +112,46 @@ const mockChatsListData = {
       organization: { id: 'org-1', name: 'Test Org' },
       members: {
         edges: [
-          { node: { user: { id: 'u1', name: 'User 1', avatarMimeType: null, avatarURL: null }, role: 'MEMBER' } },
-          { node: { user: { id: 'u2', name: 'User 2', avatarMimeType: null, avatarURL: null }, role: 'MEMBER' } },
-          { node: { user: { id: 'u3', name: 'User 3', avatarMimeType: null, avatarURL: null }, role: 'MEMBER' } },
+          {
+            node: {
+              user: {
+                id: 'u1',
+                name: 'User 1',
+                avatarMimeType: null,
+                avatarURL: null,
+              },
+              role: 'MEMBER',
+            },
+          },
+          {
+            node: {
+              user: {
+                id: 'u2',
+                name: 'User 2',
+                avatarMimeType: null,
+                avatarURL: null,
+              },
+              role: 'MEMBER',
+            },
+          },
+          {
+            node: {
+              user: {
+                id: 'u3',
+                name: 'User 3',
+                avatarMimeType: null,
+                avatarURL: null,
+              },
+              role: 'MEMBER',
+            },
+          },
         ],
-        pageInfo: { hasNextPage: false, hasPreviousPage: false, startCursor: null, endCursor: null },
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: null,
+          endCursor: null,
+        },
       },
       lastMessage: null,
       unreadMessagesCount: 0,
@@ -118,7 +167,15 @@ const mockChatsListData = {
       users: [{}, {}],
       image: '',
       organization: { id: 'org-1', name: 'Test Org' },
-      members: { edges: [], pageInfo: { hasNextPage: false, hasPreviousPage: false, startCursor: null, endCursor: null } },
+      members: {
+        edges: [],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: null,
+          endCursor: null,
+        },
+      },
       lastMessage: null,
       unreadMessagesCount: 0,
       __typename: 'Chat',
@@ -439,11 +496,46 @@ describe('Chat Component', () => {
               organization: { id: 'org-1', name: 'Legacy Org' },
               members: {
                 edges: [
-                  { node: { user: { id: 'u1', name: 'User 1', avatarMimeType: null, avatarURL: null }, role: 'MEMBER' } },
-                  { node: { user: { id: 'u2', name: 'User 2', avatarMimeType: null, avatarURL: null }, role: 'MEMBER' } },
-                  { node: { user: { id: 'u3', name: 'User 3', avatarMimeType: null, avatarURL: null }, role: 'MEMBER' } },
+                  {
+                    node: {
+                      user: {
+                        id: 'u1',
+                        name: 'User 1',
+                        avatarMimeType: null,
+                        avatarURL: null,
+                      },
+                      role: 'MEMBER',
+                    },
+                  },
+                  {
+                    node: {
+                      user: {
+                        id: 'u2',
+                        name: 'User 2',
+                        avatarMimeType: null,
+                        avatarURL: null,
+                      },
+                      role: 'MEMBER',
+                    },
+                  },
+                  {
+                    node: {
+                      user: {
+                        id: 'u3',
+                        name: 'User 3',
+                        avatarMimeType: null,
+                        avatarURL: null,
+                      },
+                      role: 'MEMBER',
+                    },
+                  },
                 ],
-                pageInfo: { hasNextPage: false, hasPreviousPage: false, startCursor: null, endCursor: null },
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
               },
               lastMessage: null,
               unreadMessagesCount: 0,
@@ -461,10 +553,35 @@ describe('Chat Component', () => {
               organization: { id: 'org-1', name: 'Legacy Org' },
               members: {
                 edges: [
-                  { node: { user: { id: 'u1', name: 'User 1', avatarMimeType: null, avatarURL: null }, role: 'MEMBER' } },
-                  { node: { user: { id: 'u2', name: 'User 2', avatarMimeType: null, avatarURL: null }, role: 'MEMBER' } },
+                  {
+                    node: {
+                      user: {
+                        id: 'u1',
+                        name: 'User 1',
+                        avatarMimeType: null,
+                        avatarURL: null,
+                      },
+                      role: 'MEMBER',
+                    },
+                  },
+                  {
+                    node: {
+                      user: {
+                        id: 'u2',
+                        name: 'User 2',
+                        avatarMimeType: null,
+                        avatarURL: null,
+                      },
+                      role: 'MEMBER',
+                    },
+                  },
                 ],
-                pageInfo: { hasNextPage: false, hasPreviousPage: false, startCursor: null, endCursor: null },
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
               },
               lastMessage: null,
               unreadMessagesCount: 0,
@@ -563,7 +680,12 @@ describe('Chat Component', () => {
               organization: { id: 'org-1', _id: 'org-1', name: 'Org 1' },
               members: {
                 edges: [],
-                pageInfo: { hasNextPage: false, hasPreviousPage: false, startCursor: null, endCursor: null },
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
               },
               lastMessage: null,
               unreadMessagesCount: 0,
@@ -581,7 +703,12 @@ describe('Chat Component', () => {
               organization: { id: 'org-2', _id: 'org-2', name: 'Org 2' },
               members: {
                 edges: [],
-                pageInfo: { hasNextPage: false, hasPreviousPage: false, startCursor: null, endCursor: null },
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
               },
               lastMessage: null,
               unreadMessagesCount: 0,
@@ -728,7 +855,12 @@ describe('Chat Component', () => {
                     },
                   },
                 ],
-                pageInfo: { hasNextPage: false, hasPreviousPage: false, startCursor: null, endCursor: null },
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
               },
               lastMessage: null,
               unreadMessagesCount: 0,
@@ -771,7 +903,12 @@ describe('Chat Component', () => {
                     },
                   },
                 ],
-                pageInfo: { hasNextPage: false, hasPreviousPage: false, startCursor: null, endCursor: null },
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
               },
               lastMessage: null,
               unreadMessagesCount: 0,
@@ -835,7 +972,12 @@ describe('Chat Component', () => {
                     },
                   },
                 ],
-                pageInfo: { hasNextPage: false, hasPreviousPage: false, startCursor: null, endCursor: null },
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
               },
               lastMessage: null,
               unreadMessagesCount: 0,
@@ -870,7 +1012,12 @@ describe('Chat Component', () => {
                     },
                   },
                 ],
-                pageInfo: { hasNextPage: false, hasPreviousPage: false, startCursor: null, endCursor: null },
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
               },
               lastMessage: null,
               unreadMessagesCount: 0,
@@ -913,7 +1060,12 @@ describe('Chat Component', () => {
               unreadMessagesCount: 0,
               members: {
                 edges: [],
-                pageInfo: { hasNextPage: false, hasPreviousPage: false, startCursor: null, endCursor: null },
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
               },
               __typename: 'Chat',
             },
@@ -931,7 +1083,12 @@ describe('Chat Component', () => {
               unreadMessagesCount: 0,
               members: {
                 edges: [],
-                pageInfo: { hasNextPage: false, hasPreviousPage: false, startCursor: null, endCursor: null },
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
               },
               __typename: 'Chat',
             },

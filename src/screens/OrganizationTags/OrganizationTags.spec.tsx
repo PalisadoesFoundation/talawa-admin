@@ -268,7 +268,7 @@ describe('Organisation Tags Page', () => {
                   />
                   <button
                     data-testid={search.buttonTestId}
-                    onClick={() => { }}
+                    onClick={() => {}}
                     tabIndex={-1}
                     type="button"
                   >

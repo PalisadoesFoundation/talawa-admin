@@ -104,7 +104,7 @@ function OrganizationDashboard(): JSX.Element {
   }
 
   const { data: membershipRequestData, loading: loadingMembershipRequests } =
-    useQuery<InterfaceMembershipRequestData>(MEMBERSHIP_REQUEST, {
+    useQuery<InterfaceMembershipRequestData>(MEMBERSHIP_REQUEST_PG, {
       variables: {
         input: {
           id: orgId ?? '',

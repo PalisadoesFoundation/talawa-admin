@@ -390,8 +390,12 @@ describe('PledgeModal', () => {
 
     const startDateGroup = getPickerInputByLabel('Start Date');
     const endDateGroup = getPickerInputByLabel('End Date');
-    const startDateInput = within(startDateGroup).getByRole('textbox', { hidden: true });
-    const endDateInput = within(endDateGroup).getByRole('textbox', { hidden: true });
+    const startDateInput = within(startDateGroup).getByRole('textbox', {
+      hidden: true,
+    });
+    const endDateInput = within(endDateGroup).getByRole('textbox', {
+      hidden: true,
+    });
 
     expect(startDateInput).toBeDisabled();
     expect(endDateInput).toBeDisabled();
@@ -594,8 +598,12 @@ describe('PledgeModal', () => {
       expect(screen.getByLabelText('Currency')).toBeInTheDocument();
       const startDateGroup = getPickerInputByLabel('Start Date');
       const endDateGroup = getPickerInputByLabel('End Date');
-      const startDateInput = within(startDateGroup).getByRole('textbox', { hidden: true });
-      const endDateInput = within(endDateGroup).getByRole('textbox', { hidden: true });
+      const startDateInput = within(startDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
+      const endDateInput = within(endDateGroup).getByRole('textbox', {
+        hidden: true,
+      });
       expect(startDateInput).toBeDisabled();
       expect(endDateInput).toBeDisabled();
     });

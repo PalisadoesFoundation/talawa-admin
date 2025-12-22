@@ -4,6 +4,6 @@
 
 # Variable: loadingMocks
 
-> `const` **loadingMocks**: `MockedResponse`[]
+> `const` **loadingMocks**: `MockLink.MockedResponse`[]
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:450](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.data.ts#L450)
+Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:533](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.data.ts#L533)

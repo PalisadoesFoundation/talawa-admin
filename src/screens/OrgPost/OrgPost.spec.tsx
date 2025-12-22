@@ -9,7 +9,7 @@ import {
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import type { MockLink } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing/react';
-import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import OrgPost from './OrgPost';
 import {
   GET_POSTS_BY_ORG,
@@ -60,7 +60,7 @@ vi.mock('utils/errorHandler', () => ({ errorHandler: mockErrorHandler }));
 
 vi.mock('react-i18next', () => ({
   // Include initReactI18next
-  initReactI18next: { type: '3rdParty', init: () => { } },
+  initReactI18next: { type: '3rdParty', init: () => {} },
   useTranslation: () => ({
     t: (key: string) => {
       const translations: { [key: string]: string } = {
@@ -79,7 +79,7 @@ vi.mock('react-i18next', () => ({
       };
       return translations[key] || key;
     },
-    i18n: { changeLanguage: () => new Promise(() => { }), language: 'en' },
+    i18n: { changeLanguage: () => new Promise(() => {}), language: 'en' },
   }),
   Trans: ({ children }: { children: React.ReactNode }) => children,
   I18nextProvider: ({ children }: { children: React.ReactNode }) => children,
@@ -181,7 +181,11 @@ describe('OrgPost Component', () => {
     // Open modal
     fireEvent.click(await screen.findByTestId('createPostModalBtn'));
     expect(
-      await screen.findByTestId('modalOrganizationHeader', {}, { timeout: 3000 }),
+      await screen.findByTestId(
+        'modalOrganizationHeader',
+        {},
+        { timeout: 3000 },
+      ),
     ).toBeInTheDocument();
 
     // Fill required fields
@@ -267,7 +271,6 @@ describe('OrgPost Component', () => {
       error: new Error('GraphQL error: Failed to create post'),
     };
 
-    const requestSpy = vi.fn();
     // Wrap to spy on it if needed, or simply trust the mock provider
 
     render(
@@ -315,7 +318,7 @@ describe('OrgPost Component', () => {
     // Submit without file to match the error mock
     fireEvent.click(await screen.findByTestId('createPostBtn'));
 
-    const { toast } = await import('react-toastify');
+    await import('react-toastify');
 
     // Expect error handler to be called when mutation fails
     await waitFor(
@@ -2957,7 +2960,7 @@ describe('OrgPost Pinned Posts Functionality', () => {
   });
 
   it('should handle orgPinnedPostListError correctly', async () => {
-    vi.spyOn(console, 'error').mockImplementation(() => { });
+    vi.spyOn(console, 'error').mockImplementation(() => {});
 
     renderComponentWithPinnedPosts(pinnedPostsErrorMock);
 

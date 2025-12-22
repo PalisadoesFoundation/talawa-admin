@@ -6,7 +6,7 @@
 
 > `const` **dataGridStyle**: `object`
 
-Defined in: [src/utils/organizationTagsUtils.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L13)
+Defined in: [src/utils/organizationTagsUtils.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/organizationTagsUtils.ts#L12)
 
 ## Type Declaration
 

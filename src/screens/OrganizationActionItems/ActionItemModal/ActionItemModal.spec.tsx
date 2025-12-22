@@ -1,4 +1,5 @@
 import { MockedProvider } from '@apollo/client/testing/react';
+import type { MockedResponse } from '@apollo/client/testing';
 import {
   fireEvent,
   render,
@@ -8,11 +9,7 @@ import {
 } from '@testing-library/react';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
-import type {
-  IItemModalProps,
-  IUpdateActionItemForInstanceVariables,
-  ICreateActionItemVariables,
-} from 'types/ActionItems/interface.ts';
+import type { IItemModalProps } from 'types/ActionItems/interface.ts';
 import ItemModal, {
   IEventVolunteersData,
   IEventVolunteerGroupsData,
@@ -59,17 +56,6 @@ vi.mock('react-i18next', () => ({
     },
   }),
 }));
-
-const matchesInputSubset = (
-  variables: { input: unknown },
-  expectedInput: Record<string, unknown>,
-) => {
-  const actualInput = variables.input as Record<string, unknown> | undefined;
-  if (!actualInput) return false;
-  return Object.entries(expectedInput).every(
-    ([key, value]) => actualInput[key] === value,
-  );
-};
 
 const createVolunteer = (
   eventId: string,
@@ -587,7 +573,7 @@ const mockQueries = [
 // Helper function to render the component with necessary providers
 const renderWithProviders = (
   props: IItemModalProps,
-  mocks: any[] = mockQueries,
+  mocks: ReadonlyArray<MockedResponse> = mockQueries,
 ) => {
   return render(
     <MockedProvider mocks={mocks}>
@@ -783,7 +769,6 @@ describe('ItemModal - Additional Test Cases', () => {
       );
       expect(volunteerGroupSelect).toBeInTheDocument();
 
-      const volunteerGroupInput = screen.getByLabelText(/volunteerGroup/i);
       await waitFor(() =>
         expect(within(volunteerGroupSelect).getByRole('combobox')).toHaveValue(
           'Test Group 1',
@@ -2969,15 +2954,16 @@ describe('orgActionItemsRefetch functionality', () => {
     const updateMutationMock = {
       request: {
         query: UPDATE_ACTION_ITEM_FOR_INSTANCE,
-      },
-      variableMatcher: (vars: { input: IUpdateActionItemForInstanceVariables['input'] }) => {
-        // Ensure input has required fields but ignore exact date format nuances if dayjs versions align
-        const { input } = vars;
-        return (
-          input.actionId === '1' &&
-          input.volunteerId === 'volunteer1' &&
-          input.eventId === 'event123'
-        );
+        variables: {
+          input: {
+            actionId: '1',
+            eventId: 'event123',
+            volunteerId: 'volunteer1',
+            categoryId: 'cat1',
+            assignedAt: dayjs(mockActionItem.assignedAt).toISOString(),
+            preCompletionNotes: 'Test notes',
+          },
+        },
       },
       result: {
         data: {
@@ -3002,7 +2988,10 @@ describe('orgActionItemsRefetch functionality', () => {
         data: {
           event: {
             id: 'event123',
-            recurrenceRule: { id: 'rec-event123', __typename: 'RecurrenceRule' },
+            recurrenceRule: {
+              id: 'rec-event123',
+              __typename: 'RecurrenceRule',
+            },
             baseEvent: { id: 'base-event123', __typename: 'Event' },
             __typename: 'Event',
             volunteers: [
@@ -3017,7 +3006,11 @@ describe('orgActionItemsRefetch functionality', () => {
       },
     };
 
-    const mutationMocks = [updateMutationMock, customVolunteerMock, ...mockQueries];
+    const mutationMocks = [
+      updateMutationMock,
+      customVolunteerMock,
+      ...mockQueries,
+    ];
 
     const props: IItemModalProps = {
       isOpen: true,
@@ -3619,7 +3612,8 @@ describe('orgActionItemsRefetch functionality', () => {
         (input) =>
           (input as HTMLInputElement).value.includes('Test notes') ||
           (input as HTMLInputElement).id === 'preCompletionNotes',
-      )!;
+      );
+      if (!originalNotesInput) throw new Error('Notes input not found');
 
       // Verify initial value
       expect((originalNotesInput as HTMLInputElement).value).toContain(
@@ -4113,7 +4107,6 @@ describe('orgActionItemsRefetch functionality', () => {
             expect(screen.getByTestId('categorySelect')).toBeInTheDocument(),
           );
 
-          const submitButton = screen.getByTestId('submitBtn');
           // First switch to volunteer group to set some state
           const volunteerGroupChip = screen.getByRole('button', {
             name: 'volunteerGroup',

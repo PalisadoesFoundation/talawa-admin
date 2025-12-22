@@ -6,7 +6,7 @@
 
 > **computeAdjustedEndDate**(`pledgeEndDate`, `date`): `Date`
 
-Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L121)
+Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L122)
 
 Ensures pledge end date is not before the selected start date.
 Returns the later of the two dates.

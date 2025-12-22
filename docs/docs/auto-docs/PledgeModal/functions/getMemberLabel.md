@@ -6,7 +6,7 @@
 
 > **getMemberLabel**(`member`): `string`
 
-Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L106)
+Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L107)
 
 Builds a display label for a member.
 Empty name parts are safely ignored.

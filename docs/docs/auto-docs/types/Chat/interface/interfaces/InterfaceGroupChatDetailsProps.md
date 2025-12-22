@@ -18,7 +18,7 @@ Defined in: [src/types/Chat/interface.ts:103](https://github.com/PalisadoesFound
 
 ### chatRefetch()
 
-> **chatRefetch**: (`variables?`) => `Promise`\<`ApolloQueryResult`\<\{ `chat`: [`NewChatType`](../type-aliases/NewChatType.md); \}\>\>
+> **chatRefetch**: (`variables?`) => `Promise`\<`any`\>
 
 Defined in: [src/types/Chat/interface.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Chat/interface.ts#L104)
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Chat/interface.ts:104](https://github.com/PalisadoesFound
 
 #### Returns
 
-`Promise`\<`ApolloQueryResult`\<\{ `chat`: [`NewChatType`](../type-aliases/NewChatType.md); \}\>\>
+`Promise`\<`any`\>
 
 ***
 

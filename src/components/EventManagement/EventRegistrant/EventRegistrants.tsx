@@ -58,6 +58,8 @@ import { useParams } from 'react-router';
 import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
 import type { InterfaceUserAttendee } from 'types/User/interface';
+import type { IEvent } from 'types/Event/interface';
+import type { InterfaceAttendeeQueryResponse } from 'types/CheckIn/interface';
 
 function EventRegistrants(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventRegistrant' });
@@ -73,7 +75,8 @@ function EventRegistrants(): JSX.Element {
   const [removeRegistrantMutation] = useMutation(REMOVE_EVENT_ATTENDEE);
 
   // First, get event details to determine if it's recurring or standalone
-  const { data: eventData } = useQuery<any>(EVENT_DETAILS, {
+  // First, get event details to determine if it's recurring or standalone
+  const { data: eventData } = useQuery<{ event: IEvent }>(EVENT_DETAILS, {
     variables: { eventId: eventId },
     fetchPolicy: 'cache-first',
   });
@@ -85,14 +88,19 @@ function EventRegistrants(): JSX.Element {
     }
   }, [eventData]);
 
-  const [getEventRegistrants] = useLazyQuery<any>(EVENT_REGISTRANTS, {
+  const [getEventRegistrants] = useLazyQuery<{
+    getEventAttendeesByEventId: Omit<InterfaceUserAttendee, 'time'>[];
+  }>(EVENT_REGISTRANTS, {
     fetchPolicy: 'cache-and-network',
   });
 
   // Fetch check-in status
-  const [getEventCheckIns] = useLazyQuery<any>(EVENT_CHECKINS, {
-    fetchPolicy: 'cache-and-network',
-  });
+  const [getEventCheckIns] = useLazyQuery<InterfaceAttendeeQueryResponse>(
+    EVENT_CHECKINS,
+    {
+      fetchPolicy: 'cache-and-network',
+    },
+  );
 
   // callback function to refresh the data
   const refreshData = useCallback(() => {
@@ -122,7 +130,7 @@ function EventRegistrants(): JSX.Element {
           setRegistrants(mappedData);
         }
       })
-      .catch((error) => {
+      .catch(() => {
         // Silent catch or simple log if needed, but removing debug log
       });
 
@@ -304,13 +312,13 @@ function EventRegistrants(): JSX.Element {
                   >
                     {data.time && data.time !== 'N/A'
                       ? new Date(`1970-01-01T${data.time}`).toLocaleTimeString(
-                        [],
-                        {
-                          hour: 'numeric',
-                          minute: '2-digit',
-                          hour12: true,
-                        },
-                      )
+                          [],
+                          {
+                            hour: 'numeric',
+                            minute: '2-digit',
+                            hour12: true,
+                          },
+                        )
                       : 'N/A'}
                   </TableCell>
                   <TableCell
@@ -318,10 +326,11 @@ function EventRegistrants(): JSX.Element {
                     data-testid={`registrant-options-${index}`}
                   >
                     <button
-                      className={`btn btn-sm ${data.isCheckedIn
-                        ? 'btn-secondary'
-                        : 'btn-outline-danger'
-                        }`}
+                      className={`btn btn-sm ${
+                        data.isCheckedIn
+                          ? 'btn-secondary'
+                          : 'btn-outline-danger'
+                      }`}
                       onClick={() => deleteRegistrant(data.user.id)}
                       disabled={data.isCheckedIn}
                       data-testid={`delete-registrant-${index}`}

@@ -225,11 +225,11 @@ const ItemModal: FC<IItemModalProps> = ({
       },
       ...(eventId
         ? [
-          {
-            query: GET_EVENT_ACTION_ITEMS,
-            variables: { input: { id: eventId } },
-          },
-        ]
+            {
+              query: GET_EVENT_ACTION_ITEMS,
+              variables: { input: { id: eventId } },
+            },
+          ]
         : []),
     ],
   });
@@ -241,11 +241,11 @@ const ItemModal: FC<IItemModalProps> = ({
       },
       ...(eventId
         ? [
-          {
-            query: GET_EVENT_ACTION_ITEMS,
-            variables: { input: { id: eventId } },
-          },
-        ]
+            {
+              query: GET_EVENT_ACTION_ITEMS,
+              variables: { input: { id: eventId } },
+            },
+          ]
         : []),
     ],
   });
@@ -255,17 +255,16 @@ const ItemModal: FC<IItemModalProps> = ({
     {
       refetchQueries: eventId
         ? [
-          {
-            query: GET_EVENT_ACTION_ITEMS,
-            variables: { input: { id: eventId } },
-          },
-        ]
+            {
+              query: GET_EVENT_ACTION_ITEMS,
+              variables: { input: { id: eventId } },
+            },
+          ]
         : [],
     },
   );
 
   const runRefetches = (): void => {
-
     actionItemsRefetch();
     orgActionItemsRefetch?.();
   };
@@ -336,8 +335,6 @@ const ItemModal: FC<IItemModalProps> = ({
         preCompletionNotes: preCompletionNotes,
         postCompletionNotes: postCompletionNotes || undefined,
       };
-
-
 
       await updateActionItem({
         variables: { input },

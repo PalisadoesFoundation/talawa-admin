@@ -6,7 +6,7 @@
 
 > `const` **MOCKS2**: `object`[]
 
-Defined in: [src/screens/MemberDetail/MemberDetailMocks.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/MemberDetailMocks.ts#L64)
+Defined in: [src/screens/MemberDetail/MemberDetailMocks.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/MemberDetailMocks.ts#L69)
 
 ## Type Declaration
 
@@ -89,6 +89,22 @@ Defined in: [src/screens/MemberDetail/MemberDetailMocks.ts:64](https://github.co
 #### result.data.currentUser.employmentStatus
 
 > **employmentStatus**: `string` = `'employed'`
+
+#### result.data.currentUser.eventsAttended
+
+> **eventsAttended**: `object`
+
+#### result.data.currentUser.eventsAttended.\_\_typename
+
+> **\_\_typename**: `string` = `'UserEventsConnection'`
+
+#### result.data.currentUser.eventsAttended.edges
+
+> **edges**: `any`[] = `[]`
+
+#### result.data.currentUser.eventsAttended.id
+
+> **id**: `string` = `'events-id-2'`
 
 #### result.data.currentUser.homePhoneNumber
 

@@ -724,7 +724,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
     const searchBar = screen.getByTestId('searchInput');
     const searchBtn = screen.getByTestId('searchBtn');
     await userEvent.type(searchBar, 'Dummy');
-    fireEvent.click(searchBtn);
+    await act(async () => {
+      fireEvent.click(searchBtn);
+    });
   });
 
   test('Testing search functionality by with empty search bar', async () => {

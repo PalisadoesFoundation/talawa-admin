@@ -18,7 +18,7 @@ Defined in: [src/plugin/manager.ts:22](https://github.com/PalisadoesFoundation/t
 
 ##### apolloClient?
 
-`ApolloClient`\<`unknown`\>
+`ApolloClient`
 
 #### Returns
 
@@ -288,7 +288,7 @@ Defined in: [src/plugin/manager.ts:43](https://github.com/PalisadoesFoundation/t
 
 ##### apolloClient
 
-`ApolloClient`\<`unknown`\>
+`ApolloClient`
 
 #### Returns
 

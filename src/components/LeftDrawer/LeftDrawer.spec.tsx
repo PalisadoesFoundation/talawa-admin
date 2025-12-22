@@ -290,8 +290,6 @@ describe('LeftDrawer Component', () => {
 
       const setHideDrawer = vi.fn();
 
-
-
       render(
         <MockedProvider mocks={[]}>
           <MemoryRouter>
@@ -318,8 +316,6 @@ describe('LeftDrawer Component', () => {
       });
 
       const setHideDrawer = vi.fn();
-
-
 
       render(
         <MockedProvider mocks={[]}>

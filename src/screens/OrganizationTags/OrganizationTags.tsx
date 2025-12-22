@@ -50,16 +50,13 @@ import TableLoader from 'components/TableLoader/TableLoader';
 import type { InterfaceTagDataPG } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import type { GridCellParams } from '@mui/x-data-grid';
-import type { SortedByType } from 'utils/organizationTagsUtils';
 import {
   TAGS_QUERY_DATA_CHUNK_SIZE,
   dataGridStyle,
   type InterfaceOrganizationTagsQuery,
+  type SortedByType,
 } from 'utils/organizationTagsUtils';
-import {
-  PAGE_SIZE,
-  COLUMN_BUFFER_PX,
-} from 'types/ReportingTable/utils';
+import { PAGE_SIZE, COLUMN_BUFFER_PX } from 'types/ReportingTable/utils';
 import type {
   ReportingRow,
   ReportingTableColumn,
@@ -100,7 +97,6 @@ function OrganizationTags(): JSX.Element {
     data: orgUserTagsData,
     error: orgUserTagsError,
     refetch: orgUserTagsRefetch,
-    fetchMore: orgUserTagsFetchMore,
   }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST, {
     variables: {
       id: orgId,
@@ -109,17 +105,6 @@ function OrganizationTags(): JSX.Element {
       sortedBy: { id: tagSortOrder },
     },
   });
-
-  const loadMoreUserTags = (): void => {
-    orgUserTagsFetchMore({
-      variables: {
-        id: orgId,
-        first: PAGE_SIZE,
-        where: { name: { starts_with: tagSearchName } },
-        sortedBy: { id: tagSortOrder },
-      },
-    });
-  };
 
   useEffect(() => {
     orgUserTagsRefetch();
@@ -139,7 +124,7 @@ function OrganizationTags(): JSX.Element {
       const { data } = await create({
         variables: { name: tagName, organizationId: orgId },
       });
-      if ((data as any)?.createUserTag) {
+      if ((data as { createUserTag: unknown })?.createUserTag) {
         toast.success(t('tagCreationSuccess'));
         orgUserTagsRefetch();
         setTagName('');
@@ -169,7 +154,7 @@ function OrganizationTags(): JSX.Element {
 
   const userTagsList =
     orgUserTagsData?.organizations?.[0]?.userTags?.edges?.map(
-      (edge: { node: InterfaceTagDataPG }) => edge.node,
+      (edge) => (edge as unknown as { node: InterfaceTagDataPG }).node,
     ) || [];
 
   const redirectToManageTag = (tagId: string): void => {

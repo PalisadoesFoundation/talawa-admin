@@ -6,7 +6,7 @@
 
 > `const` **MOCK\_RESPONSES**: `object`
 
-Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L107)
+Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:133](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L133)
 
 ## Type Declaration
 
@@ -36,7 +36,7 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:107](https://
 
 ### NULL\_END\_CURSOR
 
-> **NULL\_END\_CURSOR**: (`ListMock` \| \{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after`: `any`; `first`: `number`; `input`: \{ `id`: `string`; \}; `sortedBy`: \{ `id`: `string`; \}; `where`: \{ `name`: \{ `starts_with`: `string`; \}; \}; \}; \}; \})[]
+> **NULL\_END\_CURSOR**: (`ListMock` \| \{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after`: `any`; `first`: `number`; `id`: `string`; `sortedBy`: \{ `id`: `string`; \}; `where`: \{ `name`: \{ `starts_with`: `string`; \}; \}; \}; \}; \})[]
 
 ### UNDEFINED\_USER\_TAGS
 

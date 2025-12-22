@@ -29,9 +29,6 @@
  * This component is part of the Talawa Admin Portal and is styled using `styles` imported from a CSS module.
  */
 
-
-import { WarningAmberOutlined } from '@mui/icons-material';
-
 import CollapsibleDropdown from 'components/CollapsibleDropdown/CollapsibleDropdown';
 import IconComponent from 'components/IconComponent/IconComponent';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';

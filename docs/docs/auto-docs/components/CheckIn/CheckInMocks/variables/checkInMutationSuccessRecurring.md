@@ -6,7 +6,7 @@
 
 > `const` **checkInMutationSuccessRecurring**: `object`[]
 
-Defined in: [src/components/CheckIn/CheckInMocks.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/CheckInMocks.ts#L103)
+Defined in: [src/components/CheckIn/CheckInMocks.ts:138](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/CheckInMocks.ts#L138)
 
 ## Type Declaration
 

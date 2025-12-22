@@ -301,7 +301,7 @@ describe('ProfileDropdown Component', () => {
   });
 
   test('handles error when revokeRefreshToken fails during logout', async () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const errorMocks = [
       {
         request: { query: REVOKE_REFRESH_TOKEN },

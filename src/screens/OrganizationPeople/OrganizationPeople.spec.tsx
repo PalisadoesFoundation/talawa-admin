@@ -85,7 +85,7 @@ vi.mock('screens/components/Navbar', () => {
                 />
                 <button
                   data-testid={search.buttonTestId}
-                  onClick={() => { }}
+                  onClick={() => {}}
                   tabIndex={-1}
                   type="button"
                 >
@@ -154,9 +154,9 @@ type MemberConnectionVariables = {
 };
 
 type MemberEdge = {
-  __typename?: string;
+  __typename: string;
   node: {
-    __typename?: string;
+    __typename: string;
     id: string;
     name: string;
     emailAddress: string;
@@ -226,7 +226,7 @@ const createMemberConnectionMock = (
     },
   };
 
-  const data: any = { ...defaultData };
+  const data = { ...defaultData };
   const withRole = (edge: MemberEdge): MemberEdge => ({
     ...edge,
     node: {
@@ -268,9 +268,9 @@ type UserListVariables = {
 };
 
 type UserEdge = {
-  __typename?: string;
+  __typename: string;
   node: {
-    __typename?: string;
+    __typename: string;
     id: string;
     name: string;
     emailAddress: string;
@@ -337,7 +337,7 @@ const createUserListMock = (
     },
   };
 
-  const data: any = { ...defaultData };
+  const data = { ...defaultData };
   const withRole = (edge: UserEdge): UserEdge => ({
     ...edge,
     node: {
@@ -906,7 +906,9 @@ describe('OrganizationPeople', () => {
       {
         edges: [
           {
+            __typename: 'UserEdge',
             node: {
+              __typename: 'User',
               id: 'member3',
               name: 'Bob Johnson',
               emailAddress: 'bob@example.com',
@@ -1266,7 +1268,9 @@ describe('OrganizationPeople', () => {
       {
         edges: [
           {
+            __typename: 'UserMembersEdge',
             node: {
+              __typename: 'User',
               id: 'member1',
               name: 'John Doe',
               emailAddress: 'john@example.com',
@@ -1422,7 +1426,9 @@ describe('OrganizationPeople', () => {
       {
         edges: [
           {
+            __typename: 'UserMembersEdge',
             node: {
+              __typename: 'User',
               id: 'member1',
               name: 'John Doe',
               emailAddress: 'john@example.com',

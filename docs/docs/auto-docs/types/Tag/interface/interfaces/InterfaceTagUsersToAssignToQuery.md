@@ -4,7 +4,7 @@
 
 # Interface: InterfaceTagUsersToAssignToQuery
 
-Defined in: [src/types/Tag/interface.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L55)
+Defined in: [src/types/Tag/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L54)
 
 ## Extends
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Tag/interface.ts:55](https://github.com/PalisadoesFoundat
 
 > `optional` **data**: `object`
 
-Defined in: [src/types/Tag/interface.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L57)
+Defined in: [src/types/Tag/interface.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L55)
 
 #### getUsersToAssignTo
 
@@ -26,9 +26,9 @@ Defined in: [src/types/Tag/interface.ts:57](https://github.com/PalisadoesFoundat
 
 ### error?
 
-> `optional` **error**: `ApolloError`
+> `optional` **error**: `Error`
 
-Defined in: [src/types/Tag/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L41)
+Defined in: [src/types/Tag/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L40)
 
 #### Inherited from
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Tag/interface.ts:41](https://github.com/PalisadoesFoundat
 
 > **fetchMore**: (`options`) => `void`
 
-Defined in: [src/types/Tag/interface.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L60)
+Defined in: [src/types/Tag/interface.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L58)
 
 #### Parameters
 
@@ -58,7 +58,7 @@ Defined in: [src/types/Tag/interface.ts:60](https://github.com/PalisadoesFoundat
 
 > **loading**: `boolean`
 
-Defined in: [src/types/Tag/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L40)
+Defined in: [src/types/Tag/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L39)
 
 #### Inherited from
 
@@ -70,7 +70,7 @@ Defined in: [src/types/Tag/interface.ts:40](https://github.com/PalisadoesFoundat
 
 > `optional` **refetch**: () => `void`
 
-Defined in: [src/types/Tag/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L42)
+Defined in: [src/types/Tag/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L41)
 
 #### Returns
 

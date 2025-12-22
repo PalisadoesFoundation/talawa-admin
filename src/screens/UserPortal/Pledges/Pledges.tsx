@@ -45,7 +45,7 @@ import type {
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
 } from 'utils/interfaces';
-import { type ObservableQuery, CombinedGraphQLErrors } from '@apollo/client';
+import { CombinedGraphQLErrors } from '@apollo/client';
 
 import { useQuery } from '@apollo/client/react';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
@@ -106,12 +106,6 @@ const Pledges = (): JSX.Element => {
     [key in ModalState]: boolean;
   }>({ [ModalState.UPDATE]: false, [ModalState.DELETE]: false });
 
-  type PledgeQueryResult = ApolloQueryResult<{
-    getPledgesByUserId: InterfacePledgeInfo[];
-  }>;
-  interface IPledgeRefetchFn {
-    (): Promise<PledgeQueryResult>;
-  }
   const {
     data: pledgeData,
     loading: pledgeLoading,
@@ -122,9 +116,9 @@ const Pledges = (): JSX.Element => {
       input: { userId: userId },
       where: searchTerm
         ? {
-          ...(searchBy === 'pledgers' && { firstName_contains: searchTerm }),
-          ...(searchBy === 'campaigns' && { name_contains: searchTerm }),
-        }
+            ...(searchBy === 'pledgers' && { firstName_contains: searchTerm }),
+            ...(searchBy === 'campaigns' && { name_contains: searchTerm }),
+          }
         : {},
       orderBy: sortBy,
     },
@@ -283,7 +277,7 @@ const Pledges = (): JSX.Element => {
           >
             {
               currencySymbols[
-              params.row.currency as keyof typeof currencySymbols
+                params.row.currency as keyof typeof currencySymbols
               ]
             }
             {params.row.amount}
@@ -307,7 +301,7 @@ const Pledges = (): JSX.Element => {
           >
             {
               currencySymbols[
-              params.row.currency as keyof typeof currencySymbols
+                params.row.currency as keyof typeof currencySymbols
               ]
             }
             0
@@ -425,10 +419,10 @@ const Pledges = (): JSX.Element => {
             onSortChange={(value) =>
               setSortBy(
                 value as
-                | 'amount_ASC'
-                | 'amount_DESC'
-                | 'endDate_ASC'
-                | 'endDate_DESC',
+                  | 'amount_ASC'
+                  | 'amount_DESC'
+                  | 'endDate_ASC'
+                  | 'endDate_DESC',
               )
             }
             dataTestIdPrefix="filter"
