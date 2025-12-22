@@ -61,6 +61,7 @@ describe('Minio Upload Integration', (): void => {
       Promise.resolve({
         ok: true,
         json: () => Promise.resolve({}),
+        text: () => Promise.resolve(''),
       } as Response),
     );
   });
@@ -260,7 +261,10 @@ describe('Minio Upload Integration', (): void => {
     );
 
     (global.fetch as unknown as () => Promise<Response>) = vi.fn(() =>
-      Promise.resolve({ ok: false } as Response),
+      Promise.resolve({
+        ok: false,
+        text: () => Promise.resolve('File upload failed'),
+      } as Response),
     );
 
     const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
@@ -276,9 +280,14 @@ describe('Minio Upload Integration', (): void => {
     });
 
     expect(consoleSpy).toHaveBeenCalled();
-    const errorArg = consoleSpy.mock.calls[0][1] || consoleSpy.mock.calls[0][0];
-    const errorMessage = errorArg?.message || errorArg;
-    expect(errorMessage).toBe('File upload failed');
+    const found = consoleSpy.mock.calls.some((call) =>
+      call.some(
+        (arg: unknown) =>
+          (arg as { message?: string })?.message === 'File upload failed' ||
+          arg === 'File upload failed',
+      ),
+    );
+    expect(found).toBe(true);
     consoleSpy.mockRestore();
   });
 });

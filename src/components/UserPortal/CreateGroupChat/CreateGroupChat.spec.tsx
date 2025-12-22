@@ -7,7 +7,6 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
-import { useMinioUpload } from 'utils/MinioUpload';
 import CreateGroupChat from './CreateGroupChat';
 import {
   CREATE_CHAT,
@@ -25,13 +24,13 @@ vi.mock('react-router', async () => {
   };
 });
 
-const mockUploadFileToMinio = vi
-  .fn()
-  .mockResolvedValue({ objectName: 'https://minio-test.com/test-image.jpg' });
+const testFile = new File(['(⌐□_□)'], 'chucknorris.png', {
+  type: 'image/png',
+});
 
-vi.mock('utils/MinioUpload', () => ({
-  useMinioUpload: vi.fn(() => ({ uploadFileToMinio: mockUploadFileToMinio })),
-}));
+global.URL.createObjectURL = vi.fn(
+  () => 'https://minio-test.com/test-image.jpg',
+);
 
 const { mockLocalStorageStore } = vi.hoisted(() => ({
   mockLocalStorageStore: {} as Record<string, unknown>,
@@ -159,9 +158,8 @@ const CREATE_CHAT_MOCK = {
         organizationId: 'test-org-id',
         name: 'Test Group',
         description: 'Test Description',
-        // The component has a bug and sends `null` instead of the image URL.
-        // The test is changed to reflect the current buggy behavior.
-        avatar: null,
+        // The mutation now expects the raw File object
+        avatar: testFile,
       },
     },
   },
@@ -281,10 +279,7 @@ describe('CreateGroupChat', () => {
 
     // Upload image
     const fileInput = screen.getByTestId('fileInput');
-    const file = new File(['(⌐□_□)'], 'chucknorris.png', {
-      type: 'image/png',
-    });
-    fireEvent.change(fileInput, { target: { files: [file] } });
+    fireEvent.change(fileInput, { target: { files: [testFile] } });
 
     // Wait for the async state update to be reflected in the DOM
     await waitFor(() => {
@@ -469,53 +464,6 @@ describe('CreateGroupChat', () => {
       expect(chatsListRefetch).toHaveBeenCalled();
     });
     expect(toggleCreateGroupChatModal).toHaveBeenCalled();
-  });
-
-  test('should handle image upload failure', async () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    const mockUploadFileToMinioFailure = vi
-      .fn()
-      .mockRejectedValue(new Error('Upload failed'));
-
-    vi.mocked(useMinioUpload).mockReturnValue({
-      uploadFileToMinio: mockUploadFileToMinioFailure,
-    });
-
-    try {
-      render(
-        <MockedProvider mocks={mocks}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Provider store={store}>
-              <CreateGroupChat
-                createGroupChatModalisOpen={true}
-                toggleCreateGroupChatModal={toggleCreateGroupChatModal}
-                chatsListRefetch={chatsListRefetch}
-              />
-            </Provider>
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      const fileInput = screen.getByTestId('fileInput');
-      const file = new File(['(⌐□_□)'], 'chucknorris.png', {
-        type: 'image/png',
-      });
-      fireEvent.change(fileInput, { target: { files: [file] } });
-
-      await waitFor(() => {
-        expect(consoleSpy).toHaveBeenCalledWith(
-          'Error uploading image to MinIO:',
-          expect.any(Error),
-        );
-      });
-    } finally {
-      consoleSpy.mockRestore();
-
-      // Restore the original mock implementation
-      vi.mocked(useMinioUpload).mockReturnValue({
-        uploadFileToMinio: mockUploadFileToMinio,
-      });
-    }
   });
 
   test('should handle edit image button click', () => {

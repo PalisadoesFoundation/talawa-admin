@@ -18,21 +18,9 @@ import {
   filledMockChat,
   incompleteMockChat,
   failingMocks,
+  testFile,
 } from './GroupChatDetailsMocks';
 import type { NewChatType } from 'types/Chat/interface';
-
-// Mock MinIO hooks used for uploading/downloading files
-vi.mock('utils/MinioUpload', () => ({
-  useMinioUpload: () => ({
-    uploadFileToMinio: vi.fn().mockResolvedValue({ objectName: 'object1' }),
-  }),
-}));
-
-vi.mock('utils/MinioDownload', () => ({
-  useMinioDownload: () => ({
-    getFileFromMinio: vi.fn().mockResolvedValue('https://minio/object1'),
-  }),
-}));
 
 const { mockLocalStorageStore } = vi.hoisted(() => ({
   mockLocalStorageStore: {} as Record<string, unknown>,
@@ -66,6 +54,8 @@ async function wait(ms = 100): Promise<void> {
     });
   });
 }
+
+global.URL.createObjectURL = vi.fn(() => 'https://minio/test-image.jpg');
 
 i18n.use(initReactI18next).init({
   lng: 'en',
@@ -669,10 +659,9 @@ describe('GroupChatDetails', () => {
     });
 
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
-    const file = new File(['(⌐□_□)'], 'chucknorris.png', { type: 'image/png' });
 
     Object.defineProperty(fileInput, 'files', {
-      value: [file],
+      value: [testFile],
     });
 
     await act(async () => {
@@ -860,10 +849,9 @@ describe('GroupChatDetails', () => {
     });
 
     const fileInput = screen.getByTestId('fileInput') as HTMLInputElement;
-    const file = new File(['content'], 'test.png', { type: 'image/png' });
 
     Object.defineProperty(fileInput, 'files', {
-      value: [file],
+      value: [testFile],
     });
 
     await act(async () => {
