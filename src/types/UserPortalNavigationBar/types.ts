@@ -1,3 +1,4 @@
+import React from 'react';
 /**
  * @file Type definitions for UserPortalNavigationBar
  *

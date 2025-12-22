@@ -1697,6 +1697,10 @@
   "common": {
     "signOut": "Cerrar sesión",
     "signingOut": "Cerrando sesión...",
-    "retryPrompt": "Error al revocar la sesión. ¿Reintentar?"
+    "retryPrompt": "Error al revocar la sesión. ¿Reintentar?",
+    "selectLanguage": "Seleccionar Idioma",
+    "userMenu": "Menú de Usuario",
+    "settings": "Ajustes",
+    "logout": "Cerrar sesión"
   }
 }

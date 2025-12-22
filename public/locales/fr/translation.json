@@ -1697,6 +1697,10 @@
   "common": {
     "signOut": "Se déconnecter",
     "signingOut": "Déconnexion en cours...",
-    "retryPrompt": "Échec de la révocation de session. Réessayer ?"
+    "retryPrompt": "Échec de la révocation de session. Réessayer ?",
+    "selectLanguage": "Sélectionner la Langue",
+    "userMenu": "Menu Utilisateur",
+    "settings": "Paramètres",
+    "logout": "Déconnexion"
   }
 }

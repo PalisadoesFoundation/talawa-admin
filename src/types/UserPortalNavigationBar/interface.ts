@@ -165,6 +165,19 @@ export interface InterfaceUserPortalNavbarProps {
    */
   userName?: string;
 }
+/**
+ * Props interface for LanguageSelector subcomponent
+ *
+ * @description
+ * Defines properties for the language selection dropdown that allows users
+ * to switch between available interface languages (en, fr, hi, es, zh).
+ *
+ * @property {boolean} [showLanguageSelector] - Whether to display the language selector
+ * @property {string} [testIdPrefix] - Prefix for test IDs
+ * @property {'up' | 'down' | 'start' | 'end'} [dropDirection] - Direction for dropdown menu
+ * @property {function} handleLanguageChange - Handler called when language is selected
+ * @property {string} [currentLanguageCode] - Currently active language code
+ */
 export interface InterfaceLanguageSelectorProps {
   showLanguageSelector?: boolean;
   testIdPrefix?: string;
@@ -172,6 +185,20 @@ export interface InterfaceLanguageSelectorProps {
   handleLanguageChange: (languageCode: string) => void | Promise<void>;
   currentLanguageCode?: string;
 }
+
+/**
+ * Props interface for UserDropdown subcomponent
+ *
+ * @property {boolean} showUserProfile - Whether to display the user profile dropdown
+ * @property {string} testIdPrefix - Prefix for test IDs
+ * @property {'up' | 'down' | 'start' | 'end'} dropDirection - Direction for dropdown menu
+ * @property {function} handleLogout - Handler called when logout is clicked
+ * @property {string} finalUserName - User display name
+ * @property {NavigateFunction} navigate - React Router navigate function
+ * @property {TFunction} tCommon - i18next translation function
+ * @property {CSSModuleClasses} styles - CSS module classes object
+ * @property {OverridableComponent} PermIdentityIcon - Material-UI person icon component
+ */
 export interface InterfaceUserDropdownProps {
   showUserProfile: boolean;
   testIdPrefix: string;

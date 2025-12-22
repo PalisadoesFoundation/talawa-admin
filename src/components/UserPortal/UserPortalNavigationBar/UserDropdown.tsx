@@ -1,7 +1,45 @@
 import { Dropdown } from 'react-bootstrap';
 import { InterfaceUserDropdownProps } from 'types/UserPortalNavigationBar/interface';
-
-// Render user profile dropdown
+/**
+ * UserProfileDropdown Component
+ *
+ * @description
+ * Renders a dropdown menu for user profile actions including settings navigation
+ * and logout functionality. This component is typically used in the navigation bar
+ * to provide quick access to user-related actions.
+ *
+ * @component
+ *
+ * @param {InterfaceUserDropdownProps} props - Component props
+ * @param {boolean} props.showUserProfile - Whether to display the dropdown (returns null if false)
+ * @param {string} props.testIdPrefix - Prefix for test IDs to ensure unique identifiers
+ * @param {'up' | 'down' | 'start' | 'end'} props.dropDirection - Direction the dropdown menu opens
+ * @param {() => void} props.handleLogout - Callback function executed when user clicks logout
+ * @param {string} props.finalUserName - User's display name shown in the dropdown
+ * @param {NavigateFunction} props.navigate - React Router navigation function for routing
+ * @param {TFunction} props.tCommon - i18next translation function for common translations
+ * @param {CSSModuleClasses} props.styles - CSS module classes for styling
+ * @param {OverridableComponent<SvgIconTypeMap>} props.PermIdentityIcon - Material-UI icon component for user avatar
+ *
+ * @returns {JSX.Element | null} The rendered dropdown component, or null if showUserProfile is false
+ *
+ * @example
+ * ```tsx
+ * <UserProfileDropdown
+ *   showUserProfile={true}
+ *   testIdPrefix="navbar"
+ *   dropDirection="start"
+ *   handleLogout={handleLogoutAction}
+ *   finalUserName="John Doe"
+ *   navigate={navigate}
+ *   tCommon={t}
+ *   styles={navbarStyles}
+ *   PermIdentityIcon={PermIdentityIcon}
+ * />
+ * ```
+ *
+ * @see {@link InterfaceUserDropdownProps} for detailed prop type definitions
+ */
 const UserProfileDropdown = (
   props: InterfaceUserDropdownProps,
 ): JSX.Element | null => {
@@ -25,6 +63,7 @@ const UserProfileDropdown = (
         id="dropdown-basic"
         data-testid={`${testIdPrefix}logoutDropdown`}
         className={styles.colorWhite}
+        aria-label={tCommon('userMenu')}
       >
         <PermIdentityIcon
           className={styles.colorWhite}

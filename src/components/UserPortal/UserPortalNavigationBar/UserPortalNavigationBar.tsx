@@ -125,7 +125,11 @@ export const UserPortalNavigationBar = (
       clearAllItems();
       window.location.replace('/');
     } else {
-      revokeRefreshToken();
+      try {
+        revokeRefreshToken();
+      } catch (e) {
+        console.log(e);
+      }
       clearAllItems();
       navigate('/');
     }

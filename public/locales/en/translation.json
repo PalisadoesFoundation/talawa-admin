@@ -1697,6 +1697,10 @@
   "common": {
     "signOut": "Sign out",
     "signingOut": "Signing out...",
-    "retryPrompt": "Failed to revoke session. Retry?"
+    "retryPrompt": "Failed to revoke session. Retry?",
+    "selectLanguage": "Select Language",
+    "userMenu": "User Menu",
+    "settings": "Settings",
+    "logout": "Logout"
   }
 }

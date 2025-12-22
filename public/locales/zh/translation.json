@@ -1697,6 +1697,10 @@
   "common": {
     "signOut": "退出登录",
     "signingOut": "正在退出...",
-    "retryPrompt": "撤销会话失败。重试？"
+    "retryPrompt": "撤销会话失败。重试？",
+    "selectLanguage": "选择语言",
+    "userMenu": "用户菜单",
+    "settings": "设置",
+    "logout": "退出登录"
   }
 }
