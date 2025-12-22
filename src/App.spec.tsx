@@ -11,7 +11,7 @@ import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import i18nForTest from './utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import 'style/app-fixed.module.css';
-import { useLocalStorage } from 'utils/useLocalstorage';
+import * as useLSModule from 'utils/useLocalstorage';
 
 vi.mock('@mui/x-charts/PieChart', () => ({
   pieArcLabelClasses: vi.fn(),
@@ -464,11 +464,70 @@ describe('Testing the App Component', () => {
   });
 
   it('should navigate to user settings', async () => {
-    const { setItem, removeItem } = useLocalStorage();
+    const { setItem, removeItem } = useLSModule.useLocalStorage();
     setItem('IsLoggedIn', 'TRUE');
     removeItem('AdminFor');
 
     renderApp(link, '/user/settings');
     expect(await screen.findByTestId('mock-settings')).toBeInTheDocument();
+  });
+
+  // Add below your existing tests in App.spec.tsx
+
+  describe('SecuredRouteForUser branch coverage', () => {
+    it('redirects away from /user/settings when not logged in', async () => {
+      // Force IsLoggedIn !== 'TRUE'
+      const lsSpy = vi.spyOn(useLSModule, 'default').mockImplementation(
+        () =>
+          ({
+            getItem: (key: string) =>
+              key === 'IsLoggedIn' ? 'FALSE' : undefined,
+            setItem: vi.fn(),
+            removeItem: vi.fn(),
+            getStorageKey: (k: string) => `Talawa-admin_${k}`,
+          }) as unknown as ReturnType<typeof useLSModule.default>,
+      );
+
+      try {
+        // Try to hit the protected route
+        renderApp(link, '/user/settings');
+
+        // Since guard blocks, the mocked Settings component must NOT render
+        await waitFor(() => {
+          expect(screen.queryByTestId('mock-settings')).not.toBeInTheDocument();
+        });
+      } finally {
+        lsSpy.mockRestore();
+      }
+    });
+
+    it('renders not-found branch when AdminFor is present', async () => {
+      // Force IsLoggedIn === 'TRUE' and AdminFor present
+      const lsSpy = vi.spyOn(useLSModule, 'default').mockImplementation(
+        () =>
+          ({
+            getItem: (key: string) =>
+              key === 'IsLoggedIn'
+                ? 'TRUE'
+                : key === 'AdminFor'
+                  ? 'some-org-id'
+                  : undefined,
+            setItem: vi.fn(),
+            removeItem: vi.fn(),
+            getStorageKey: (k: string) => `Talawa-admin_${k}`,
+          }) as unknown as ReturnType<typeof useLSModule.default>,
+      );
+
+      try {
+        renderApp(link, '/user/settings');
+
+        // Settings should still NOT render because guard takes the not-found path
+        await waitFor(() => {
+          expect(screen.queryByTestId('mock-settings')).not.toBeInTheDocument();
+        });
+      } finally {
+        lsSpy.mockRestore();
+      }
+    });
   });
 });
