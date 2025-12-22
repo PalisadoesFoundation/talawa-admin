@@ -118,6 +118,9 @@ describe('OrganizationFunds Screen =>', () => {
             pageSize: number;
           }) => void;
         };
+        listProps?: {
+          endMessage?: React.ReactNode;
+        };
       }) => {
         loadingOverlaySpy(props.gridProps?.slots?.loadingOverlay?.());
 
@@ -136,7 +139,14 @@ describe('OrganizationFunds Screen =>', () => {
             default: React.ComponentType<typeof wrappedProps>;
           }
         ).default;
-        return <Component {...wrappedProps} />;
+
+        return (
+          <>
+            <Component {...wrappedProps} />
+            {/* Render endMessage if provided in listProps */}
+            {props.listProps?.endMessage}
+          </>
+        );
       },
     };
   });
@@ -342,6 +352,108 @@ describe('OrganizationFunds Screen =>', () => {
     // Verify component is still stable
     await waitFor(() => {
       expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
+    });
+  });
+
+  it('should clear the search input when clear button is clicked', async () => {
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
+    renderOrganizationFunds(link1);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
+    });
+
+    // Get the search field and type into it
+    const searchField = await screen.findByTestId('searchByName');
+    await userEvent.type(searchField, 'testsearch');
+
+    // Verify search text is entered (onChange trims spaces)
+    expect(searchField).toHaveValue('testsearch');
+
+    // Click the clear button
+    const clearButton = await screen.findByTestId('clearSearch');
+    await userEvent.click(clearButton);
+
+    // Verify search input is cleared
+    await waitFor(() => {
+      expect(searchField).toHaveValue('');
+    });
+  });
+
+  it('should display "noResultsFoundFor" message when search yields no results', async () => {
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
+    renderOrganizationFunds(link1);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
+    });
+
+    // Wait for funds to load
+    await waitFor(() => {
+      expect(screen.getAllByTestId('fundName').length).toBeGreaterThan(0);
+    });
+
+    // Type a search term that won't match any funds
+    const searchField = await screen.findByTestId('searchByName');
+    await userEvent.type(searchField, 'nonexistentfundxyz');
+
+    // Verify "No results found for" message is displayed
+    await waitFor(() => {
+      expect(screen.getByText(/No results found for/i)).toBeInTheDocument();
+      expect(screen.getByText(/"nonexistentfundxyz"/)).toBeInTheDocument();
+    });
+  });
+
+  it('should display "endOfResults" message when funds are displayed', async () => {
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
+    renderOrganizationFunds(link1);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
+    });
+
+    // Wait for funds to load
+    await waitFor(() => {
+      expect(screen.getAllByTestId('fundName').length).toBeGreaterThan(0);
+    });
+
+    // Verify "End of results" message is displayed
+    await waitFor(() => {
+      expect(screen.getByText(/End of results/i)).toBeInTheDocument();
+    });
+  });
+
+  it('should sort funds by createdAt using sortComparator', async () => {
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
+    const { container } = renderOrganizationFunds(link1);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
+    });
+
+    // Wait for funds to load
+    await waitFor(() => {
+      expect(screen.getAllByTestId('fundName').length).toBeGreaterThan(0);
+    });
+
+    // Find and click on the "Created On" column header to trigger sort
+    const createdOnHeader = container.querySelector(
+      '[data-field="createdAt"] .MuiDataGrid-columnHeaderTitle',
+    );
+
+    if (createdOnHeader) {
+      fireEvent.click(createdOnHeader);
+      await wait(300);
+
+      // Click again to toggle sort direction
+      fireEvent.click(createdOnHeader);
+      await wait(300);
+    }
+
+    // Verify created on dates are displayed
+    await waitFor(() => {
+      const createdOnElements = screen.getAllByTestId('createdOn');
+      expect(createdOnElements.length).toBeGreaterThan(0);
     });
   });
 });

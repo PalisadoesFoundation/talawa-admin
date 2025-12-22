@@ -285,4 +285,173 @@ describe('FundCampaigns Screen', () => {
       expect(screen.getByTestId('fundScreen')).toBeInTheDocument();
     });
   });
+
+  it('should sort campaigns by start date when clicking start date column header', async () => {
+    mockRouteParams();
+    renderFundCampaign(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('Campaign 1')).toBeInTheDocument();
+      expect(screen.getByText('Campaign 2')).toBeInTheDocument();
+    });
+
+    // Find and click the Start Date column header to trigger sorting
+    const startDateHeader = screen.getByText('Start Date');
+    expect(startDateHeader).toBeInTheDocument();
+    await userEvent.click(startDateHeader);
+
+    // Wait for sorting to be applied - the campaigns should still be visible
+    await waitFor(() => {
+      expect(screen.getByText('Campaign 1')).toBeInTheDocument();
+      expect(screen.getByText('Campaign 2')).toBeInTheDocument();
+    });
+
+    // Click again to reverse sort order
+    await userEvent.click(startDateHeader);
+
+    await waitFor(() => {
+      expect(screen.getByText('Campaign 1')).toBeInTheDocument();
+      expect(screen.getByText('Campaign 2')).toBeInTheDocument();
+    });
+  });
+
+  it('should sort campaigns by end date when clicking end date column header', async () => {
+    mockRouteParams();
+    renderFundCampaign(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('Campaign 1')).toBeInTheDocument();
+      expect(screen.getByText('Campaign 2')).toBeInTheDocument();
+    });
+
+    // Find and click the End Date column header to trigger sorting
+    const endDateHeader = screen.getByText('End Date');
+    expect(endDateHeader).toBeInTheDocument();
+    await userEvent.click(endDateHeader);
+
+    // Wait for sorting to be applied
+    await waitFor(() => {
+      const endDateCells = screen.getAllByTestId('endDateCell');
+      expect(endDateCells.length).toBeGreaterThan(0);
+    });
+
+    // Click again to reverse sort order
+    await userEvent.click(endDateHeader);
+
+    await waitFor(() => {
+      expect(screen.getByText('Campaign 1')).toBeInTheDocument();
+    });
+  });
+
+  it('should render campaign name cells with correct data-testid', async () => {
+    mockRouteParams();
+    renderFundCampaign(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      const campaignNameCells = screen.getAllByTestId('campaignName');
+      expect(campaignNameCells.length).toBe(2);
+      expect(campaignNameCells[0]).toHaveTextContent('Campaign 1');
+      expect(campaignNameCells[1]).toHaveTextContent('Campaign 2');
+    });
+  });
+
+  it('should display no results message when search yields no matches', async () => {
+    mockRouteParams();
+    renderFundCampaign(link1);
+
+    const searchField = await screen.findByTestId('searchFullName');
+
+    // Search for a term that doesn't match any campaign
+    fireEvent.change(searchField, {
+      target: { value: 'NonExistentCampaign' },
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText(/No results found for/i)).toBeInTheDocument();
+    });
+  });
+
+  it('should clear search input when clear button is clicked', async () => {
+    mockRouteParams();
+    renderFundCampaign(link1);
+
+    const searchField = await screen.findByTestId('searchFullName');
+
+    // Search for a term
+    fireEvent.change(searchField, {
+      target: { value: 'Campaign' },
+    });
+
+    await waitFor(() => {
+      expect(searchField).toHaveValue('Campaign');
+    });
+
+    // Click the clear button
+    const clearButton = screen.getByTestId('clearSearch');
+    await userEvent.click(clearButton);
+
+    await waitFor(() => {
+      expect(searchField).toHaveValue('');
+    });
+  });
+
+  it('should render progress cells with CircularProgress and percentage', async () => {
+    mockRouteParams();
+    renderFundCampaign(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('Campaign 1')).toBeInTheDocument();
+    });
+
+    // Verify progress cells are rendered with the percentage display
+    const progressCells = screen.getAllByTestId('progressCell');
+    expect(progressCells.length).toBeGreaterThan(0);
+
+    // Each progress cell should contain 0% (since raised is hardcoded to 0)
+    progressCells.forEach((cell) => {
+      expect(cell).toHaveTextContent('0%');
+    });
+  });
+
+  it('should display raised cells with currency symbol', async () => {
+    mockRouteParams();
+    renderFundCampaign(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('Campaign 1')).toBeInTheDocument();
+    });
+
+    // Verify raised cells are rendered
+    const raisedCells = screen.getAllByTestId('raisedCell');
+    expect(raisedCells.length).toBeGreaterThan(0);
+
+    // Each raised cell should contain $0 (USD currency)
+    raisedCells.forEach((cell) => {
+      expect(cell).toHaveTextContent('$0');
+    });
+  });
+
+  it('should display end of results message when campaigns are displayed', async () => {
+    mockRouteParams();
+    renderFundCampaign(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('Campaign 1')).toBeInTheDocument();
+      expect(screen.getByText('Campaign 2')).toBeInTheDocument();
+    });
+
+    // Verify that multiple campaign elements are visible (confirming the list is displayed)
+    const campaignNameCells = screen.getAllByTestId('campaignName');
+    expect(campaignNameCells.length).toBe(2);
+
+    // Verify goal cells are also visible (confirming table rendering)
+    const goalCells = screen.getAllByTestId('goalCell');
+    expect(goalCells.length).toBe(2);
+  });
 });

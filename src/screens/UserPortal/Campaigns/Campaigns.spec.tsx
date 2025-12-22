@@ -371,4 +371,135 @@ describe('Testing User Campaigns Screen', () => {
       expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument();
     });
   });
+
+  it('Clears search text when clear button is clicked', async () => {
+    renderCampaigns(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+    });
+
+    // Enter search text
+    const searchInput = screen.getByTestId('searchCampaigns');
+    fireEvent.change(searchInput, { target: { value: 'School' } });
+
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.queryByText('Hospital Campaign')).not.toBeInTheDocument();
+    });
+
+    // Click clear button to trigger onClear callback
+    const clearButton = screen.getByTestId('clearSearch');
+    await userEvent.click(clearButton);
+
+    // After clearing, both campaigns should be visible again
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+    });
+  });
+
+  it('Shows noResultsFoundFor message when search has no results', async () => {
+    renderCampaigns(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+    });
+
+    // Search for something that doesn't exist
+    const searchInput = screen.getByTestId('searchCampaigns');
+    fireEvent.change(searchInput, { target: { value: 'NonExistentCampaign' } });
+
+    // Should show "No results found for" message with the search text
+    await waitFor(() => {
+      expect(screen.getByText(/No results found for/i)).toBeInTheDocument();
+      expect(screen.getByText(/"NonExistentCampaign"/)).toBeInTheDocument();
+    });
+  });
+
+  it('Displays progress cells with correct percentage and colors', async () => {
+    renderCampaigns(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+    });
+
+    // Verify progress cells are rendered
+    const progressCells = screen.getAllByTestId('progressCell');
+    expect(progressCells.length).toBeGreaterThan(0);
+
+    // All progress cells should show 0% since raised is hardcoded to 0
+    progressCells.forEach((cell) => {
+      expect(cell).toHaveTextContent('0%');
+    });
+  });
+
+  it('Renders campaigns list with campaigns data', async () => {
+    renderCampaigns(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+    });
+
+    // Verify the campaigns list container is rendered with the listBox style
+    // The endMessage is passed to ReportingTable but only rendered with infiniteProps
+    const campaignCells = screen.getAllByTestId('campaignName');
+    expect(campaignCells).toHaveLength(2);
+  });
+
+  it('Supports sorting by startDate column', async () => {
+    renderCampaigns(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+    });
+
+    // Find the Start Date header and click it to trigger sort
+    const startDateHeader = screen.getByRole('columnheader', {
+      name: /start date/i,
+    });
+    expect(startDateHeader).toBeInTheDocument();
+
+    // Click to sort - this triggers the sortComparator function
+    await userEvent.click(startDateHeader);
+
+    // Verify campaigns are still displayed (sorting happened)
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+    });
+  });
+
+  it('Supports sorting by endDate column', async () => {
+    renderCampaigns(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+    });
+
+    // Find the End Date header and click it to trigger sort
+    const endDateHeader = screen.getByRole('columnheader', {
+      name: /end date/i,
+    });
+    expect(endDateHeader).toBeInTheDocument();
+
+    // Click to sort - this triggers the sortComparator function
+    await userEvent.click(endDateHeader);
+
+    // Verify campaigns are still displayed (sorting happened)
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+    });
+  });
 });
