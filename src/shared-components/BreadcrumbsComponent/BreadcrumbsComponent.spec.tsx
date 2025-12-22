@@ -83,28 +83,33 @@ describe('BreadcrumbsComponent', () => {
       expect(screen.getByText('Only Item')).toBeInTheDocument();
       expect(screen.getByRole('navigation')).toBeInTheDocument();
     });
+
+    it('renders non-current breadcrumb without link as plain text', () => {
+      renderComponent([
+        { label: 'Parent' },
+        { label: 'Current', isCurrent: true },
+      ]);
+
+      const parent = screen.getByText('Parent');
+
+      expect(parent).toBeInTheDocument();
+      expect(parent.closest('a')).toBeNull();
+    });
   });
 
-  it('renders non-current breadcrumb without link as plain text', () => {
-    renderComponent([
-      { label: 'Parent' },
-      { label: 'Current', isCurrent: true },
-    ]);
+  /**
+   * Edge Case Tests
+   */
+  describe('Edge Case Tests', () => {
+    it('handles breadcrumb item with no label and no translationKey gracefully', () => {
+      renderComponent([{ to: '/' }, { label: 'Current', isCurrent: true }]);
 
-    const parent = screen.getByText('Parent');
-
-    expect(parent).toBeInTheDocument();
-    expect(parent.closest('a')).toBeNull();
-  });
-
-  it('handles breadcrumb item with no label and no translationKey gracefully', () => {
-    renderComponent([{ to: '/' }, { label: 'Current', isCurrent: true }]);
-
-    const nav = screen.getByRole('navigation');
-    expect(nav).toBeInTheDocument();
-    expect(screen.getByText('Current')).toBeInTheDocument();
-    const listItems = nav.querySelectorAll('li');
-    expect(listItems[0]).toHaveTextContent('');
+      const nav = screen.getByRole('navigation');
+      expect(nav).toBeInTheDocument();
+      expect(screen.getByText('Current')).toBeInTheDocument();
+      const listItems = nav.querySelectorAll('li');
+      expect(listItems[0]).toHaveTextContent('');
+    });
   });
 
   /**
