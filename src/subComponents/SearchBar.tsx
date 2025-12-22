@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { Search } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 import styles from './../style/app-fixed.module.css';
 import type { InterfaceSimpleSearchBarProps } from 'types/SimpleSearchBar/interface';
 
@@ -19,10 +20,11 @@ const SearchBar: React.FC<InterfaceSimpleSearchBarProps> = ({
   className = styles.input,
   inputTestId,
   buttonTestId,
-  buttonAriaLabel = 'Search',
+  buttonAriaLabel,
   value,
   ...inputProps
 }) => {
+  const { t } = useTranslation('common');
   const [internalSearchTerm, setInternalSearchTerm] = useState('');
 
   const isControlled = value !== undefined;
@@ -59,7 +61,7 @@ const SearchBar: React.FC<InterfaceSimpleSearchBarProps> = ({
         value={searchTerm}
         className={styles.inputField}
         autoComplete="off"
-        placeholder={placeholder || 'Search...'}
+        placeholder={placeholder || t('searchPlaceholder')}
         onChange={handleSearchChange}
         onKeyUp={handleSearchByEnter}
         data-testid={inputTestId}
@@ -70,7 +72,7 @@ const SearchBar: React.FC<InterfaceSimpleSearchBarProps> = ({
         className={` ${styles.searchButton} `}
         onClick={handleSearchClick}
         data-testid={buttonTestId}
-        aria-label={buttonAriaLabel}
+        aria-label={buttonAriaLabel || t('search')}
       >
         <Search className={styles.searchIcon} />
       </Button>

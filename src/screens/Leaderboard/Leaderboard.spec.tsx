@@ -240,10 +240,13 @@ describe('Testing Leaderboard Screen', () => {
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
 
+    const searchButton = await screen.findByTestId('searchBtn');
+    expect(searchButton).toBeInTheDocument();
+
     // Search by name on press of ENTER
     await userEvent.type(searchInput, 'T');
     await debounceWait();
-    fireEvent.click(screen.getByTestId('searchBtn'));
+    await userEvent.click(searchButton);
 
     await waitFor(() => {
       const userName = screen.getAllByTestId('userName');
