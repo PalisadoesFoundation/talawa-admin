@@ -61,7 +61,7 @@ import {
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { debounce, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 import { useQuery } from '@apollo/client';
@@ -127,11 +127,6 @@ function leaderboard(): JSX.Element {
       },
     },
   });
-
-  const debouncedSearch = useMemo(
-    () => debounce((value: string) => setSearchTerm(value), 300),
-    [],
-  );
 
   const rankings = useMemo(
     () => rankingsData?.getVolunteerRanks || [],
@@ -302,7 +297,7 @@ function leaderboard(): JSX.Element {
       <AdminSearchFilterBar
         searchPlaceholder={t('searchByVolunteer')}
         searchValue={searchTerm}
-        onSearchChange={debouncedSearch}
+        onSearchChange={setSearchTerm}
         searchInputTestId="searchBy"
         searchButtonTestId="searchBtn"
         hasDropdowns={true}

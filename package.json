@@ -43,6 +43,7 @@
     "inquirer": "^13.0.1",
     "js-cookie": "^3.0.1",
     "jszip": "^3.10.1",
+    "lodash": "^4.17.21",
     "prop-types": "^15.8.1",
     "react": "^19.1.0",
     "react-bootstrap": "^2.10.10",

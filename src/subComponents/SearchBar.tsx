@@ -3,7 +3,7 @@ import type { ChangeEvent } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { Search } from '@mui/icons-material';
 import styles from './../style/app-fixed.module.css';
-import type { InterfaceSearchBarProps } from 'types/SearchBar/interface';
+import type { InterfaceSimpleSearchBarProps } from 'types/SimpleSearchBar/interface';
 
 /**
  * SearchBar component renders a search input with a button.
@@ -12,14 +12,14 @@ import type { InterfaceSearchBarProps } from 'types/SearchBar/interface';
  * @param props - The properties for the SearchBar component.
  * @returns The rendered SearchBar component.
  */
-const SearchBar: React.FC<InterfaceSearchBarProps> = ({
+const SearchBar: React.FC<InterfaceSimpleSearchBarProps> = ({
   placeholder,
   onSearch,
   onChange,
   className = styles.input,
   inputTestId,
   buttonTestId,
-  buttonAriaLabel,
+  buttonAriaLabel = 'Search',
   value,
   ...inputProps
 }) => {
