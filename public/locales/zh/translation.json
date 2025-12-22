@@ -1698,6 +1698,7 @@
     "altText": "{{name}}的个人资料图片",
     "modalTitle": "个人资料图片",
     "enlargedAltText": "{{name}}的放大个人资料图片"
+  },
   "common": {
     "signOut": "退出登录",
     "signingOut": "正在退出...",

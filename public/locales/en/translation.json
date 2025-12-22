@@ -1698,6 +1698,7 @@
     "altText": "Profile picture of {{name}}",
     "modalTitle": "Profile Picture",
     "enlargedAltText": "Enlarged profile picture of {{name}}"
+  },
   "common": {
     "signOut": "Sign out",
     "signingOut": "Signing out...",

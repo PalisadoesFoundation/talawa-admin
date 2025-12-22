@@ -1698,6 +1698,7 @@
     "altText": "{{name}} की प्रोफ़ाइल तस्वीर",
     "modalTitle": "प्रोफ़ाइल तस्वीर",
     "enlargedAltText": "{{name}} की बड़ी प्रोफ़ाइल तस्वीर"
+  },
   "common": {
     "signOut": "साइन आउट",
     "signingOut": "साइन आउट हो रहा है...",

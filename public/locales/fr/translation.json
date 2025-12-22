@@ -1698,6 +1698,7 @@
     "altText": "Photo de profil de {{name}}",
     "modalTitle": "Photo de profil",
     "enlargedAltText": "Photo de profil agrandie de {{name}}"
+  },
   "common": {
     "signOut": "Se déconnecter",
     "signingOut": "Déconnexion en cours...",

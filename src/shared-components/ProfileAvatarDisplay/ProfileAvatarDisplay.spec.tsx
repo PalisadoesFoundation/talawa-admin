@@ -433,6 +433,20 @@ describe('ProfileAvatarDisplay Component', () => {
     expect(onLoadMock).toHaveBeenCalled();
   });
 
+  test('does not throw when image loads without onLoad callback', () => {
+    const { getByAltText } = render(
+      <ProfileAvatarDisplay
+        {...defaultProps}
+        imageUrl="https://example.com/image.jpg"
+      />,
+    );
+
+    const img = getByAltText('Profile picture of John Doe');
+
+    expect(() => fireEvent.load(img)).not.toThrow();
+    expect(img).toBeInTheDocument();
+  });
+
   test('calls onLoad callback when enlarged modal image loads', () => {
     const onLoadMock = vi.fn();
     render(
