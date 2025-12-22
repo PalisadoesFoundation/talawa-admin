@@ -13,6 +13,7 @@ import {
   CREATE_CHAT_MEMBERSHIP,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
+import { testFile } from '../../GroupChatDetails/GroupChatDetailsMocks';
 
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
@@ -22,10 +23,6 @@ vi.mock('react-router', async () => {
       orgId: 'test-org-id',
     }),
   };
-});
-
-const testFile = new File(['(⌐□_□)'], 'chucknorris.png', {
-  type: 'image/png',
 });
 
 global.URL.createObjectURL = vi.fn(

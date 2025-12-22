@@ -280,14 +280,19 @@ describe('Minio Upload Integration', (): void => {
     });
 
     expect(consoleSpy).toHaveBeenCalled();
-    const found = consoleSpy.mock.calls.some((call) =>
-      call.some(
-        (arg: unknown) =>
-          (arg as { message?: string })?.message === 'File upload failed' ||
-          arg === 'File upload failed',
+    expect(
+      consoleSpy.mock.calls.some(
+        (call) =>
+          call.some(
+            (arg) =>
+              typeof arg === 'string' && arg.includes('File upload failed'),
+          ) ||
+          call.some(
+            (arg) =>
+              (arg as { message?: string })?.message === 'File upload failed',
+          ),
       ),
-    );
-    expect(found).toBe(true);
+    ).toBe(true);
     consoleSpy.mockRestore();
   });
 });
