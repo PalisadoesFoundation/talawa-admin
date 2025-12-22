@@ -109,4 +109,11 @@
   "unblockedSuccessfully": "{{item}} सफलतापूर्वक अनब्लॉक किया गया",
   "breadcrumb": "ब्रेडक्रंब",
   "clearSearch": "खोज साफ़ करें"
+  "sl_no": "क्रम संख्या",
+  "actions": "क्रियाएं",
+  "notFound": "नहीं मिला",
+  "profilePicture": "प्रोफ़ाइल चित्र",
+  "profilePicturePlaceholder": "डमी चित्र",
+  "userProfileMenu": "उपयोगकर्ता प्रोफ़ाइल मेनू",
+  "breadcrumbs": "ब्रेडक्रंब्स"
 }

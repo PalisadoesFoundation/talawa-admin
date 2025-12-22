@@ -1195,6 +1195,7 @@ export const SIGNIN_QUERY = gql`
         avatarURL
       }
       authenticationToken
+      refreshToken
     }
   }
 `;

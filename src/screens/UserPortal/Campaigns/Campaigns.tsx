@@ -470,7 +470,6 @@ const Campaigns = (): JSX.Element => {
         userId={userId}
         pledge={null}
         refetchPledge={refetchCampaigns}
-        endDate={selectedCampaign?.endDate ?? new Date()}
         mode="create"
       />
     </>

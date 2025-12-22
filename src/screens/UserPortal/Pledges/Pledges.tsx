@@ -114,6 +114,7 @@ const Pledges = (): JSX.Element => {
   interface IPledgeRefetchFn {
     (): Promise<PledgeQueryResult>;
   }
+  const shouldSkip = !orgId || !userId;
   const {
     data: pledgeData,
     loading: pledgeLoading,
@@ -125,10 +126,11 @@ const Pledges = (): JSX.Element => {
     error?: ApolloError;
     refetch: IPledgeRefetchFn;
   } = useQuery(USER_PLEDGES, {
-    skip: !orgId || !userId,
-    variables: userId
-      ? {
-          input: { userId },
+    skip: shouldSkip,
+    variables: shouldSkip
+      ? undefined
+      : {
+          input: { userId: userId as string },
           where: searchTerm
             ? {
                 ...(searchBy === 'pledgers' && {
@@ -138,8 +140,7 @@ const Pledges = (): JSX.Element => {
               }
             : {},
           orderBy: sortBy,
-        }
-      : undefined,
+        },
   });
 
   if (!orgId || !userId) {
@@ -207,7 +208,7 @@ const Pledges = (): JSX.Element => {
   const columns: GridColDef[] = [
     {
       field: 'pledger',
-      headerName: t('pledger'),
+      headerName: t('pledgers'),
       flex: 4,
       minWidth: 50,
       align: 'left',
@@ -397,21 +398,25 @@ const Pledges = (): JSX.Element => {
 
   return (
     <div>
-      <div
-        className={
-          styles.btnsContainer +
-          ' gap-3 flex-column flex-lg-row align-items-stretch'
-        }
-      >
-        <div className="flex-grow-1 w-100">
+      {/* Refactored Header Structure */}
+      <div className={styles.calendar__header}>
+        {/* 1. Search Bar Section */}
+        <div className={styles.calendar__search}>
           <SearchBar
-            placeholder={t('searchBy') + ' ' + t(searchBy)}
+            placeholder={t('searchByPlaceholder', { field: t(searchBy) })}
             onSearch={setSearchTerm}
             inputTestId="searchPledges"
             buttonTestId="searchBtn"
+            // Required PR Props
+            showSearchButton={true}
+            showLeadingIcon={true}
+            showClearButton={true}
+            buttonAriaLabel={tCommon('search')}
           />
         </div>
-        <div className="d-flex gap-3 flex-wrap align-items-center">
+
+        {/* 2. Controls Section (Sorting) */}
+        <div className={styles.btnsBlock}>
           <SortingButton
             sortingOptions={[
               { label: t('pledgers'), value: 'pledgers' },
@@ -467,7 +472,7 @@ const Pledges = (): JSX.Element => {
           id: pledge.id,
           name: pledge.pledger?.name,
           image: pledge.pledger?.avatarURL,
-          startDate: pledge.startDate,
+          createdAt: pledge.createdAt,
           endDate: pledge.campaign?.endAt,
           amount: pledge.amount,
           campaign: pledge.campaign,
@@ -487,7 +492,6 @@ const Pledges = (): JSX.Element => {
         userId={userId}
         pledge={pledge}
         refetchPledge={refetchPledge}
-        endDate={pledge?.campaign ? pledge?.campaign.endAt : new Date()}
         mode={'edit'}
       />
 

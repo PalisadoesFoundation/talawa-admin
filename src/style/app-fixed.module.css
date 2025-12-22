@@ -983,15 +983,19 @@
   border: 1px solid var(--search-border-color, #d0d5dd);
   border-radius: 8px;
   background-color: var(--search-background-color, #fcfcfc);
-  box-shadow: 0 15px 35px rgba(149, 156, 202, 0.2);
+  box-shadow: 0 4px 6px rgba(149, 156, 202, 0.1);
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
   overflow: hidden;
-  flex: 1 1 500px;
-  min-width: 600px;
-  width: auto;
+
+  /* Flex properties to make it sit on the same line */
+  flex-grow: 1; /* Allow it to grow to fill space */
+  flex-shrink: 1; /* Allow it to shrink if needed */
+  width: auto; /* Stop forcing 100% width */
+  min-width: 200px;
   max-width: 100%;
+  height: 48px;
 }
 
 .searchBarContainerWithButton {
@@ -1008,7 +1012,7 @@
   flex: 1;
   display: flex;
   align-items: center;
-  min-height: 55px;
+  min-height: 48px;
   padding: 0.75rem 2.5rem 0.75rem 1.25rem;
   background-color: transparent;
 }
@@ -1033,9 +1037,12 @@
   border: none;
   background: transparent;
   padding: 0;
+  padding-left: 3rem !important;
   font-size: 0.95rem;
   color: var(--search-text-color, #1e293b);
   outline: none;
+  width: 100%;
+  height: 100%;
 }
 
 .searchBarInput::-webkit-search-cancel-button,
@@ -1071,9 +1078,12 @@
 .searchBarIcon {
   position: absolute;
   left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
   color: var(--search-icon-color, #a0aec0);
   display: inline-flex;
-  font-size: 1rem;
+  font-size: 1.2rem;
+  pointer-events: none;
 }
 
 .searchBarTrailingIcon {
@@ -1119,8 +1129,8 @@
   border-radius: 0;
   background-color: var(--search-button-bg, #b3ceff);
   color: #2f3f5f;
-  width: 55px;
-  height: 55px;
+  width: 48px;
+  height: 48px;
   font-weight: 600;
   transition:
     background-color 0.2s ease,
@@ -1395,12 +1405,13 @@ form label,
 
 /* btnsBlock & btnsContainer */
 
-.btnsContainer {
+.btnsContainer,
+.calendar__controls {
   display: flex;
-  margin: 2.5rem 0;
-  align-items: stretch;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px; /* Space between the Sort, Create, and Bell icons */
+  flex-shrink: 0; /* Prevents buttons from getting squished */
+  white-space: nowrap;
 }
 
 .btnsContainer > :first-child {
@@ -1491,7 +1502,7 @@ form label,
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 1rem;
+  margin-top: 0;
 }
 
 @media (max-width: 1020px) {
@@ -2117,6 +2128,7 @@ form label,
 
 .orgCard .innerContainer {
   display: flex;
+  height: 100%;
 }
 
 .orgCard {
@@ -2756,15 +2768,6 @@ form label,
   margin: 8px;
 }
 
-.calendar__header {
-  display: flex;
-  align-items: stretch;
-  justify-content: flex-start;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  margin-right: 0;
-}
-
 .calendar__search {
   flex: 1 1 360px;
   min-width: 260px;
@@ -2779,13 +2782,6 @@ form label,
 }
 
 @media (max-width: 520px) {
-  .calendar__header {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
   .space {
     display: block !important;
     text-align: center;
@@ -8777,21 +8773,18 @@ form {
 /* -- Campaigns.tsx -- */
 
 .outlineBtn {
-  margin-bottom: 10px;
   background-color: var(--outlineBtn-bg);
   color: var(--outlineBtn-color);
   border-color: var(--outlineBtn-border);
 }
 
 .outlineBtn:is(:hover, :active) {
-  margin-bottom: 10px;
   background-color: var(--outlineBtn-hover-bg) !important;
   color: var(--outlineBtn-bg) !important;
   border-color: var(--outlineBtn-hover-bg);
 }
 
 .outlineBtn:disabled {
-  margin-bottom: 10px;
   background-color: var(--outlineBtn-bg);
   color: var(--outlineBtn-disabled);
   border-color: var(--outlineBtn-disabled);
@@ -9128,12 +9121,9 @@ form {
 }
 
 .content {
-  height: fit-content;
-  min-height: calc(100% - 40px);
-}
-
-.content {
-  min-height: calc(100% - 40px);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .orgCard .innerContainer .content {
@@ -9753,24 +9743,37 @@ form {
 }
 
 .outlineBtn {
-  margin-bottom: 10px;
+  /* SAME layout as manageBtn */
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+
+  display: flex;
+  justify-content: space-around;
+  width: 8rem;
+
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+
+  box-shadow: 0 2px 2px var(--manageBtn-box-shadow);
   background-color: var(--outlineBtn-bg);
   color: var(--outlineBtn-color);
-  border-color: var(--outlineBtn-border);
+  border: 1px solid var(--outlineBtn-border);
 }
 
 .outlineBtn:is(:hover, :active) {
-  margin-bottom: 10px;
   background-color: var(--outlineBtn-hover-bg) !important;
-  color: var(--outlineBtn-color-hover) !important;
-  border-color: var(--outlineBtn-hover-border);
+  color: var(--outlineBtn-bg) !important;
+  border-color: var(--outlineBtn-hover-bg);
+  box-shadow: var(--hover-shadow);
 }
 
 .outlineBtn:disabled {
-  margin-bottom: 10px;
-  background-color: var(--outlineBtn-bg-disabled);
-  color: var(--outlineBtn-color-disabled);
-  border-color: var(--outlineBtn-border-disabled);
+  background-color: var(--outlineBtn-bg);
+  color: var(--outlineBtn-disabled);
+  border-color: var(--outlineBtn-disabled);
 }
 
 .modalTable {
@@ -9999,8 +10002,88 @@ form {
   margin-top: auto;
   display: flex;
   justify-content: flex-end;
+  padding-bottom: 10px;
+}
+.manageBtn,
+.withdrawBtn,
+.outlineBtn {
+  min-width: 8rem;
+  height: 2.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 
+.statusChip {
+  display: inline-block;
+  margin-top: 0.25rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.member {
+  background-color: #e6f4ea;
+  color: #137333;
+}
+
+.pending {
+  background-color: #fff4e5;
+  color: #b26a00;
+}
+
+.notMember {
+  background-color: #f1f3f4;
+  color: #5f6368;
+}
+
+.btnsBlock {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 12px !important;
+  width: auto !important;
+  flex-shrink: 0;
+  height: 48px !important;
+  margin: 0 !important;
+}
+
+/* 2. Ensure the header stays in one line and doesn't wrap on Desktop */
+.calendar__header {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: nowrap !important;
+  width: 100%;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  margin-top: 1rem;
+}
+
+/* 3. Mobile responsiveness: Only allow wrapping on actual small screens */
+@media (max-width: 768px) {
+  .calendar__header {
+    flex-wrap: wrap !important;
+  }
+  .btnsBlock {
+    width: 100% !important;
+    justify-content: flex-end !important;
+    margin-top: 10px !important;
+  }
+}
+
+.btnsBlock > * {
+  margin: 0 !important;
+  height: 100% !important; /* Fill the container's 48px */
+  display: flex !important;
+  align-items: center !important;
+  min-height: auto !important;
+}
 /* ----------------------------------------------------- */
 
 .whiteContainer {

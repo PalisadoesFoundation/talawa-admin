@@ -52,7 +52,7 @@ vi.mock('shared-components/OrganizationCard/OrganizationCard', () => ({
   ),
 }));
 
-const { setItem } = useLocalStorage();
+const { setItem, clearAllItems } = useLocalStorage();
 
 const mockLinks = {
   superAdmin: new StaticMockLink(MOCKS, true),
@@ -571,7 +571,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  localStorage.clear();
+  clearAllItems();
   cleanup();
   vi.clearAllMocks();
 });
@@ -1496,8 +1496,7 @@ describe('Advanced Component Functionality Tests', () => {
     setItem('SuperAdmin', true);
     setItem('role', 'administrator');
 
-    // Mock localStorage.clear and window.location.assign
-    const clearSpy = vi.spyOn(Storage.prototype, 'clear');
+    // Mock window.location.assign
     const assignMock = vi.fn();
     const originalLocation = window.location;
     const originalDescriptor = Object.getOwnPropertyDescriptor(
@@ -1584,7 +1583,6 @@ describe('Advanced Component Functionality Tests', () => {
         writable: true,
       },
     );
-    clearSpy.mockRestore();
   });
 
   test('Testing pagination navigation functionality', async () => {

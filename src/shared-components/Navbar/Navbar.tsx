@@ -59,6 +59,7 @@
  * @returns {JSX.Element} The rendered PageHeader component.
  */
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
@@ -89,6 +90,7 @@ export default function PageHeader({
   showEventTypeFilter = false,
   actions,
 }: InterfacePageHeaderProps) {
+  const { t } = useTranslation('translation');
   return (
     <div
       className={styles.calendarEventHeader}
@@ -104,6 +106,9 @@ export default function PageHeader({
             onSearch={search.onSearch}
             inputTestId={search.inputTestId}
             buttonTestId={search.buttonTestId}
+            showSearchButton={true} //  true
+            showLeadingIcon={true} //  true (Magnifying glass)
+            showClearButton={true}
           />
         )}
 
@@ -126,18 +131,16 @@ export default function PageHeader({
         {showEventTypeFilter && (
           <div className={styles.btnsBlock}>
             <SortingButton
-              title="Event Type"
+              title={t('eventType')}
               sortingOptions={[
                 { label: 'Events', value: 'Events' },
                 { label: 'Workshops', value: 'Workshops' },
               ]}
               selectedOption={'Events'}
-              onSortChange={(value) =>
-                console.log(`Selected Event Type: ${value}`)
-              }
+              onSortChange={() => {}}
               dataTestIdPrefix="eventType"
               className={styles.dropdown}
-              buttonLabel="Event Type"
+              buttonLabel={t('eventType')}
             />
           </div>
         )}

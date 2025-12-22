@@ -56,6 +56,11 @@
     "selectOrg": "Seleccione una organización",
     "afterRegister": "Registro exitoso. Por favor, espere a que el administrador apruebe su solicitud."
   },
+  "signOut": {
+    "retryPrompt": "Error al Cerrar sesión. ¿Reintentar?",
+    "signingOut": "Cerrando sesión...",
+    "signOut": "Cerrar sesión"
+  },
   "userLoginPage": {
     "title": "Administrador Talawa",
     "fromPalisadoes": "Una aplicación de código abierto de los voluntarios de la Fundación palisados",
@@ -219,10 +224,18 @@
     "placeholderAvatarAlt": "Avatar predeterminado"
   },
   "users": {
+    "membershipStatus": {
+      "member": "Estado de membresía: Miembro",
+      "pending": "Estado de membresía: Pendiente",
+      "notMember": "Estado de membresía: No es miembro"
+    },
     "title": "Roles Talawa",
     "searchByName": "Buscar por nombre",
     "users": "Usuarios",
     "name": "Nombre",
+    "member": "Miembro",
+    "pending": "Pendiente",
+    "notMember": "No es miembro",
     "email": "Correo electrónico",
     "joined_organizations": "Organizaciones unidas",
     "blocked_organizations": "Organizaciones bloqueadas",
@@ -734,7 +747,9 @@
     "pledges": "Compromisos",
     "endsOn": "Finaliza el",
     "raisedAmount": "Monto recaudado",
-    "pledgedAmount": "Monto comprometido"
+    "pledgedAmount": "Monto comprometido",
+    "searchByPlaceholder": "Buscar por {{field}}",
+    "selectPledger": "Por favor seleccione un prometedor"
   },
   "orgPost": {
     "title": "Publicaciones de Talawa",
@@ -1038,7 +1053,13 @@
   "people": {
     "title": "Gente",
     "searchUsers": "Buscar usuarios",
-    "nothingToShow": "Nada que mostrar aquí."
+    "nothingToShow": "Nada que mostrar aquí.",
+    "sNo": "N.º",
+    "avatar": "Avatar",
+    "name": "Nombre",
+    "email": "Correo Electrónico",
+    "role": "Rol",
+    "loading": "Cargando..."
   },
   "userRegister": {
     "register": "Registro",
@@ -1069,7 +1090,8 @@
     "settings": "Ajustes",
     "language": "Idioma",
     "logout": "Cerrar sesión",
-    "close": "Cerca"
+    "close": "Cerrar",
+    "talawaBranding": "Marca Talawa"
   },
   "userOrganizations": {
     "allOrganizations": "Todas las organizaciones",
@@ -1082,7 +1104,8 @@
     "organizations": "Organizaciones",
     "searchByName": "Buscar por nombre",
     "searchUsers": "Buscar usuarios",
-    "searchOrganizations": "Buscar Organizaciones"
+    "searchOrganizations": "Buscar Organizaciones",
+    "loading": "Cargando..."
   },
   "userSidebarOrg": {
     "yourOrganizations": "Tus Organizaciones",
@@ -1542,6 +1565,7 @@
     "fundingGoal": "Objetivo de financiación",
     "raised": "Cantidad recaudada",
     "viewPledge": "Ver compromiso"
+    "amountRaised": "Monto Recaudado"
   },
   "userPledges": {
     "title": "Mis Promesas"
@@ -1630,7 +1654,21 @@
     "eventInvitationRecurringSubject": "Invitación a ser voluntario para serie de eventos recurrentes",
     "pending": "Pendiente",
     "accepted": "Aceptado",
-    "rejected": "Rechazado"
+    "rejected": "Rechazado",
+    "assignee": "Asignado",
+    "group": "Grupo",
+    "event": "Evento",
+    "received": "Recibido",
+    "location": "Ubicación",
+    "recurrence": "Recurrencia",
+    "endDate": "Fecha de Fin",
+    "description": "Descripción",
+    "volunteerGroups": "Grupos de Voluntarios",
+    "groupTable": "Tabla de Grupos",
+    "srNo": "N.º",
+    "groupName": "Nombre del Grupo",
+    "noOfMembers": "Número de Miembros",
+    "options": "Opciones"
   },
   "pluginStore": {
     "title": "Tienda de Plugins",
@@ -1665,5 +1703,10 @@
     "deleteComment": "Eliminar comentario",
     "deleting": "Eliminando...",
     "emptyCommentError": "Por favor ingrese un comentario antes de enviar."
+  },
+  "common": {
+    "signOut": "Cerrar sesión",
+    "signingOut": "Cerrando sesión...",
+    "retryPrompt": "Error al revocar la sesión. ¿Reintentar?"
   }
 }

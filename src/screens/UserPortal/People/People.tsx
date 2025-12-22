@@ -47,16 +47,15 @@
  */
 import React, { useEffect, useState } from 'react';
 import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
-import { Dropdown } from 'react-bootstrap';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
-import { FilterAltOutlined } from '@mui/icons-material';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useParams } from 'react-router';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import SortingButton from 'subComponents/SortingButton';
 
 interface IMemberNode {
   id: string;
@@ -204,62 +203,55 @@ export default function People(): React.JSX.Element {
   return (
     <>
       <div className={`${styles.mainContainer_people}`}>
-        <div className={styles.people__header}>
-          <div className={styles.input}>
+        {/* Refactored Header Structure */}
+        <div className={styles.calendar__header}>
+          {/* 1. Search Bar Section */}
+          <div className={styles.calendar__search}>
             <SearchBar
               placeholder={t('searchUsers')}
               onSearch={handleSearch}
               onClear={() => handleSearch('')}
               inputTestId="searchInput"
               buttonTestId="searchBtn"
+              // Standardized props
+              showSearchButton={true}
+              showLeadingIcon={true}
+              showClearButton={true}
+              buttonAriaLabel={tCommon('search')}
             />
           </div>
 
-          <Dropdown drop="down-centered">
-            <Dropdown.Toggle
-              className={styles.dropdown}
-              id="dropdown-basic"
-              data-testid={`modeChangeBtn`}
-            >
-              <FilterAltOutlined
-                sx={{
-                  fontSize: '25px',
-                  marginBottom: '2px',
-                  marginRight: '2px',
-                }}
-              />
-              {tCommon('filter')}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {modes.map((value, index) => {
-                return (
-                  <Dropdown.Item
-                    key={index}
-                    data-testid={`modeBtn${index}`}
-                    onClick={(): void => setMode(index)}
-                  >
-                    {value}
-                  </Dropdown.Item>
-                );
-              })}
-            </Dropdown.Menu>
-          </Dropdown>
+          {/* 2. Controls Section (Converted Dropdown to SortingButton) */}
+          <div className={styles.btnsBlock}>
+            <SortingButton
+              sortingOptions={modes.map((value, index) => ({
+                label: value,
+                value: index,
+              }))}
+              selectedOption={modes[mode]}
+              onSortChange={(value) => setMode(value as number)}
+              dataTestIdPrefix="modeChangeBtn"
+              buttonLabel={tCommon('filter')}
+              type="filter" // Adds the filter icon automatically
+            />
+          </div>
         </div>
+
         <div className={styles.people_content}>
           <div className={styles.people_card_header}>
             <span style={{ flex: '1' }} className={styles.display_flex}>
-              <span style={{ flex: '1' }}>S.No</span>
-              <span style={{ flex: '1' }}>Avatar</span>
+              <span style={{ flex: '1' }}>{t('sNo')}</span>
+              <span style={{ flex: '1' }}>{t('avatar')}</span>
             </span>
-            <span style={{ flex: '2' }}>Name</span>
-            <span style={{ flex: '2' }}>Email</span>
-            <span style={{ flex: '2' }}>Role</span>
+            <span style={{ flex: '2' }}>{t('name')}</span>
+            <span style={{ flex: '2' }}>{t('email')}</span>
+            <span style={{ flex: '2' }}>{t('role')}</span>
           </div>
 
           <div className={styles.people_card_main_container}>
             {loading ? (
               <div className={styles.custom_row_center}>
-                <HourglassBottomIcon /> <span>Loading...</span>
+                <HourglassBottomIcon /> <span>{t('loading')}</span>
               </div>
             ) : (
               <>

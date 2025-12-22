@@ -56,6 +56,11 @@
     "user": "उपयोगकर्ता",
     "loading": "लोड हो रहा है"
   },
+  "signOut": {
+    "retryPrompt": "सेशन रद्द करने में विफल। पुनः प्रयास करें?",
+    "signingOut": "साइन आउट हो रहा है...",
+    "signOut": "साइन आउट"
+  },
   "userLoginPage": {
     "title": "तालावा व्यवस्थापक",
     "fromPalisadoes": "Palisadoes फाउंडेशन स्वयंसेवकों द्वारा विकसित एक ओपन-सोर्स एप्लिकेशन",
@@ -219,9 +224,17 @@
     "placeholderAvatarAlt": "प्लेसहोल्डर अवतार"
   },
   "users": {
+    "membershipStatus": {
+      "member": "सदस्यता स्थिति: सदस्य",
+      "pending": "सदस्यता स्थिति: लंबित",
+      "notMember": "सदस्यता स्थिति: सदस्य नहीं"
+    },
     "title": "तालावा भूमिकाएँ",
     "joined_organizations": "संगठनों में शामिल हुए",
     "blocked_organizations": "अवरुद्ध संगठन",
+    "member": "सदस्य",
+    "pending": "लंबित",
+    "notMember": "सदस्य नहीं",
     "orgJoinedBy": "द्वारा शामिल संगठन",
     "orgThatBlocked": "अवरुद्ध संगठन",
     "hasNotJoinedAnyOrg": "किसी भी संगठन में शामिल नहीं हुआ",
@@ -734,7 +747,9 @@
     "raisedAmount": "उठाया गया राशि",
     "pledgedAmount": "प्रतिबद्ध राशि",
     "startDate": "प्रारंभ तिथि",
-    "endDate": "समाप्ति तिथि"
+    "endDate": "समाप्ति तिथि",
+    "searchByPlaceholder": "{{field}} द्वारा खोजें",
+    "selectPledger": "कृपया एक प्रतिज्ञाकर्ता का चयन करें"
   },
   "orgPost": {
     "title": "पदों",
@@ -1024,7 +1039,13 @@
   "people": {
     "title": "लोग",
     "searchUsers": "उपयोगकर्ताओं को खोजें",
-    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है."
+    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
+    "sNo": "क्र.सं.",
+    "avatar": "अवतार",
+    "name": "नाम",
+    "email": "ईमेल",
+    "role": "भूमिका",
+    "loading": "लोड हो रहा है..."
   },
   "userLogin": {
     "login": "लॉग इन करें",
@@ -1069,7 +1090,8 @@
     "language": "भाषा",
     "settings": "समायोजन",
     "logout": "लॉग आउट करें",
-    "close": "बंद करें"
+    "close": "बंद करें",
+    "talawaBranding": "तालावा ब्रांडिंग"
   },
   "userOrganizations": {
     "allOrganizations": "सभी संगठन",
@@ -1082,7 +1104,8 @@
     "search": "खोजें",
     "filter": "फ़िल्टर",
     "searchByName": "नाम से खोजें",
-    "searchOrganizations": "संगठनों खोजें"
+    "searchOrganizations": "संगठनों खोजें",
+    "loading": "लोड हो रहा है..."
   },
   "userSidebarOrg": {
     "yourOrganizations": "आपके संगठन",
@@ -1542,6 +1565,7 @@
     "fundingGoal": "निधि लक्ष्य",
     "raised": "जुठाई गई राशि",
     "viewPledge": "प्रतिज्ञा देखें"
+    "amountRaised": "एकत्रित राशि"
   },
   "userPledges": {
     "title": "मेरी प्रतिज्ञाएँ"
@@ -1630,7 +1654,21 @@
     "eventInvitationRecurringSubject": "पुनरावर्ती घटना श्रृंखला के लिए स्वयंसेवक बनने का निमंत्रण",
     "pending": "लंबित",
     "accepted": "स्वीकृत",
-    "rejected": "अस्वीकृत"
+    "rejected": "अस्वीकृत",
+    "assignee": "नियुक्त व्यक्ति",
+    "group": "समूह",
+    "event": "कार्यक्रम",
+    "received": "प्राप्त",
+    "location": "स्थान",
+    "recurrence": "पुनरावृत्ति",
+    "endDate": "समाप्ति तिथि",
+    "description": "विवरण",
+    "volunteerGroups": "स्वयंसेवक समूह",
+    "groupTable": "समूह तालिका",
+    "srNo": "क्र.सं.",
+    "groupName": "समूह का नाम",
+    "noOfMembers": "सदस्यों की संख्या",
+    "options": "विकल्प"
   },
   "pluginStore": {
     "title": "प्लगइन स्टोर",
@@ -1665,5 +1703,10 @@
     "deleteComment": "टिप्पणी हटाएं",
     "deleting": "हटाया जा रहा है…",
     "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।"
+  },
+  "common": {
+    "signOut": "साइन आउट",
+    "signingOut": "साइन आउट हो रहा है...",
+    "retryPrompt": "सेशन रद्द करने में विफल। पुनः प्रयास करें?"
   }
 }

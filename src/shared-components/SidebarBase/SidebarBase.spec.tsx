@@ -153,6 +153,7 @@ describe('SidebarBase Component', () => {
         getItem: vi.fn(),
         removeItem: vi.fn(),
         getStorageKey: vi.fn(() => ''),
+        clearAllItems: vi.fn(),
       });
 
       renderComponent({ persistToggleState: false });
@@ -168,6 +169,7 @@ describe('SidebarBase Component', () => {
         getItem: vi.fn(),
         removeItem: vi.fn(),
         getStorageKey: vi.fn(() => ''),
+        clearAllItems: vi.fn(),
       });
 
       renderComponent({ persistToggleState: true, hideDrawer: false });
@@ -183,6 +185,7 @@ describe('SidebarBase Component', () => {
         getItem: vi.fn(),
         removeItem: vi.fn(),
         getStorageKey: vi.fn(() => ''),
+        clearAllItems: vi.fn(),
       });
 
       renderComponent({ persistToggleState: true, hideDrawer: true });

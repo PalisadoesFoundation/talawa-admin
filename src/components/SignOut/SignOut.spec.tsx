@@ -1,18 +1,49 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider, MockedResponse } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router';
+import { I18nextProvider } from 'react-i18next';
 import type { Mock } from 'vitest';
 import { vi } from 'vitest';
 import SignOut from './SignOut';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import useSession from 'utils/useSession';
+import useLocalStorage from 'utils/useLocalstorage';
+import i18n from 'utils/i18nForTest';
 
 // Mock dependencies
 vi.mock('utils/useSession', () => ({
   default: vi.fn(() => ({
     endSession: vi.fn(),
+  })),
+}));
+
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        signOut: 'Sign out',
+        signingOut: 'Signing out...',
+        retryPrompt: 'Token revocation failed. Would you like to retry?',
+      };
+      return translations[key] || key;
+    },
+  }),
+  I18nextProvider: ({ children }: { children: React.ReactNode }) => children,
+  initReactI18next: { type: '3rdParty', init: () => {} },
+}));
+
+vi.mock('utils/useLocalstorage', () => ({
+  default: vi.fn(() => ({
+    getItem: vi.fn((key: string) => {
+      if (key === 'refreshToken') return 'test-refresh-token';
+      return null;
+    }),
+    setItem: vi.fn(),
+    removeItem: vi.fn(),
+    getStorageKey: vi.fn((key: string) => key),
+    clearAllItems: vi.fn(),
   })),
 }));
 
@@ -25,12 +56,45 @@ vi.mock('react-router', async () => {
   };
 });
 
-let mockLocalStorage: { clear: ReturnType<typeof vi.fn> };
+const createMock = () => {
+  const mockClearAllItems = vi.fn();
+  const mockGetItem = vi.fn((key: string) => {
+    if (key === 'refreshToken') return 'test-refresh-token';
+    return null;
+  });
+  (useLocalStorage as Mock).mockReturnValue({
+    clearAllItems: mockClearAllItems,
+    getItem: mockGetItem,
+    setItem: vi.fn(),
+    removeItem: vi.fn(),
+    getStorageKey: vi.fn((key: string) => key),
+  });
+
+  return {
+    mockClearAllItems,
+    mockGetItem,
+  };
+};
+
+const renderWithProviders = (
+  component: React.ReactElement,
+  mocks: MockedResponse[] = [],
+) => {
+  const mockProviderProps = { mocks };
+  return render(
+    <MockedProvider {...mockProviderProps}>
+      <I18nextProvider i18n={i18n}>
+        <BrowserRouter>{component}</BrowserRouter>
+      </I18nextProvider>
+    </MockedProvider>,
+  );
+};
 
 describe('SignOut Component', () => {
   const mockRevokeRefreshToken = {
     request: {
       query: REVOKE_REFRESH_TOKEN,
+      variables: { refreshToken: 'test-refresh-token' },
     },
     result: {
       data: {
@@ -41,18 +105,51 @@ describe('SignOut Component', () => {
 
   beforeEach(() => {
     mockNavigate = vi.fn();
-    mockLocalStorage = {
-      clear: vi.fn(),
-    };
-    Object.defineProperty(window, 'localStorage', {
-      value: mockLocalStorage,
-      configurable: true,
-    });
     vi.clearAllMocks();
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
+  });
+
+  test('handles sign out when no refresh token exists', async () => {
+    // Override the mock to return null for refreshToken
+    const mockClearAllItems = vi.fn();
+    const useLocalStorageMock = await import('utils/useLocalstorage');
+    vi.mocked(useLocalStorageMock.default).mockReturnValue({
+      getItem: vi.fn(() => null),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      getStorageKey: vi.fn((key: string) => key),
+      clearAllItems: mockClearAllItems,
+    });
+
+    const mockEndSession = vi.fn();
+    (useSession as Mock).mockReturnValue({
+      endSession: mockEndSession,
+    });
+
+    render(
+      <MockedProvider mocks={[]}>
+        <BrowserRouter>
+          <SignOut />
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const signOutButton = screen.getByText('Sign out');
+    fireEvent.click(signOutButton);
+
+    await waitFor(() => {
+      // Verify clearAllItems was called
+      expect(mockClearAllItems).toHaveBeenCalled();
+
+      // Verify endSession was called
+      expect(mockEndSession).toHaveBeenCalled();
+
+      // Verify navigation to home page
+      expect(mockNavigate).toHaveBeenCalledWith('/');
+    });
   });
 
   test('calls logout functionality when sign out button is clicked', async () => {
@@ -61,15 +158,11 @@ describe('SignOut Component', () => {
       endSession: mockEndSession,
     });
 
-    render(
-      <MockedProvider mocks={[mockRevokeRefreshToken]}>
-        <BrowserRouter>
-          <SignOut />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    const { mockClearAllItems } = createMock();
 
-    const signOutButton = screen.getByText('Sign Out');
+    renderWithProviders(<SignOut />, [mockRevokeRefreshToken]);
+
+    const signOutButton = screen.getByText('Sign out');
     fireEvent.click(signOutButton);
 
     await waitFor(() => {
@@ -77,7 +170,7 @@ describe('SignOut Component', () => {
       expect(mockRevokeRefreshToken.result).toBeTruthy();
 
       // Verify localStorage was cleared
-      expect(mockLocalStorage.clear).toHaveBeenCalled();
+      expect(mockClearAllItems).toHaveBeenCalled();
 
       // Verify endSession was called
       expect(mockEndSession).toHaveBeenCalled();
@@ -94,6 +187,7 @@ describe('SignOut Component', () => {
     const mockErrorRevokeRefreshToken = {
       request: {
         query: REVOKE_REFRESH_TOKEN,
+        variables: { refreshToken: 'test-refresh-token' },
       },
       error: new Error('Failed to revoke refresh token'),
     };
@@ -103,15 +197,11 @@ describe('SignOut Component', () => {
       endSession: mockEndSession,
     });
 
-    render(
-      <MockedProvider mocks={[mockErrorRevokeRefreshToken]}>
-        <BrowserRouter>
-          <SignOut />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    const { mockClearAllItems } = createMock();
 
-    const signOutButton = screen.getByText('Sign Out');
+    renderWithProviders(<SignOut />, [mockErrorRevokeRefreshToken]);
+
+    const signOutButton = screen.getByText('Sign out');
     fireEvent.click(signOutButton);
 
     await waitFor(() => {
@@ -122,7 +212,7 @@ describe('SignOut Component', () => {
       );
 
       // Verify localStorage was cleared
-      expect(mockLocalStorage.clear).toHaveBeenCalled();
+      expect(mockClearAllItems).toHaveBeenCalled();
 
       // Verify endSession was called
       expect(mockEndSession).toHaveBeenCalled();
@@ -147,17 +237,21 @@ describe('SignOut Component', () => {
       endSession: mockEndSession,
     });
 
+    const { mockClearAllItems } = createMock();
+
     // First call fails, second call succeeds
     const mocks = [
       {
         request: {
           query: REVOKE_REFRESH_TOKEN,
+          variables: { refreshToken: 'test-refresh-token' },
         },
         error: new Error('Failed to revoke refresh token'),
       },
       {
         request: {
           query: REVOKE_REFRESH_TOKEN,
+          variables: { refreshToken: 'test-refresh-token' },
         },
         result: {
           data: {
@@ -167,25 +261,19 @@ describe('SignOut Component', () => {
       },
     ];
 
-    render(
-      <MockedProvider mocks={mocks}>
-        <BrowserRouter>
-          <SignOut />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderWithProviders(<SignOut />, mocks);
 
-    const signOutButton = screen.getByText('Sign Out');
+    const signOutButton = screen.getByText('Sign out');
     fireEvent.click(signOutButton);
 
     await waitFor(() => {
       // Verify confirm was called
       expect(window.confirm).toHaveBeenCalledWith(
-        'Failed to revoke session. Retry?',
+        'Token revocation failed. Would you like to retry?',
       );
 
       // Verify localStorage was cleared
-      expect(mockLocalStorage.clear).toHaveBeenCalled();
+      expect(mockClearAllItems).toHaveBeenCalled();
 
       // Verify endSession was called
       expect(mockEndSession).toHaveBeenCalled();
@@ -210,31 +298,29 @@ describe('SignOut Component', () => {
       endSession: mockEndSession,
     });
 
+    const { mockClearAllItems } = createMock();
+
     // Both calls fail
     const mocks = [
       {
         request: {
           query: REVOKE_REFRESH_TOKEN,
+          variables: { refreshToken: 'test-refresh-token' },
         },
         error: new Error('First failure'),
       },
       {
         request: {
           query: REVOKE_REFRESH_TOKEN,
+          variables: { refreshToken: 'test-refresh-token' },
         },
         error: new Error('Retry failure'),
       },
     ];
 
-    render(
-      <MockedProvider mocks={mocks}>
-        <BrowserRouter>
-          <SignOut />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderWithProviders(<SignOut />, mocks);
 
-    const signOutButton = screen.getByText('Sign Out');
+    const signOutButton = screen.getByText('Sign out');
     fireEvent.click(signOutButton);
 
     await waitFor(() => {
@@ -248,7 +334,7 @@ describe('SignOut Component', () => {
       );
 
       // Verify localStorage was cleared
-      expect(mockLocalStorage.clear).toHaveBeenCalled();
+      expect(mockClearAllItems).toHaveBeenCalled();
 
       // Verify endSession was called
       expect(mockEndSession).toHaveBeenCalled();
@@ -273,30 +359,27 @@ describe('SignOut Component', () => {
       endSession: mockEndSession,
     });
 
+    const { mockClearAllItems } = createMock();
+
     const mocks = [
       {
         request: {
           query: REVOKE_REFRESH_TOKEN,
+          variables: { refreshToken: 'test-refresh-token' },
         },
         error: new Error('Failed to revoke refresh token'),
       },
     ];
 
-    render(
-      <MockedProvider mocks={mocks}>
-        <BrowserRouter>
-          <SignOut />
-        </BrowserRouter>
-      </MockedProvider>,
-    );
+    renderWithProviders(<SignOut />, mocks);
 
-    const signOutButton = screen.getByText('Sign Out');
+    const signOutButton = screen.getByText('Sign out');
     fireEvent.click(signOutButton);
 
     await waitFor(() => {
       // Verify confirm was called
       expect(window.confirm).toHaveBeenCalledWith(
-        'Failed to revoke session. Retry?',
+        'Token revocation failed. Would you like to retry?',
       );
 
       // Verify the second revoke token attempt was NOT made
@@ -305,7 +388,7 @@ describe('SignOut Component', () => {
       );
 
       // Verify localStorage was cleared
-      expect(mockLocalStorage.clear).toHaveBeenCalled();
+      expect(mockClearAllItems).toHaveBeenCalled();
 
       // Verify endSession was called
       expect(mockEndSession).toHaveBeenCalled();
@@ -324,13 +407,7 @@ describe('SignOut Component', () => {
         endSession: mockEndSession,
       });
 
-      render(
-        <MockedProvider mocks={[mockRevokeRefreshToken]}>
-          <BrowserRouter>
-            <SignOut />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+      renderWithProviders(<SignOut />, [mockRevokeRefreshToken]);
 
       const signOutButton = screen.getByTestId('signOutBtn');
       expect(signOutButton).toBeInTheDocument();
@@ -345,13 +422,9 @@ describe('SignOut Component', () => {
         endSession: mockEndSession,
       });
 
-      render(
-        <MockedProvider mocks={[mockRevokeRefreshToken]}>
-          <BrowserRouter>
-            <SignOut />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+      const { mockClearAllItems } = createMock();
+
+      renderWithProviders(<SignOut />, [mockRevokeRefreshToken]);
 
       const signOutButton = screen.getByTestId('signOutBtn');
       signOutButton.focus();
@@ -359,7 +432,7 @@ describe('SignOut Component', () => {
       await userEvent.keyboard('{Enter}');
 
       await waitFor(() => {
-        expect(mockLocalStorage.clear).toHaveBeenCalled();
+        expect(mockClearAllItems).toHaveBeenCalled();
         expect(mockEndSession).toHaveBeenCalled();
         expect(mockNavigate).toHaveBeenCalledWith('/');
       });
@@ -371,13 +444,9 @@ describe('SignOut Component', () => {
         endSession: mockEndSession,
       });
 
-      render(
-        <MockedProvider mocks={[mockRevokeRefreshToken]}>
-          <BrowserRouter>
-            <SignOut />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+      const { mockClearAllItems } = createMock();
+
+      renderWithProviders(<SignOut />, [mockRevokeRefreshToken]);
 
       const signOutButton = screen.getByTestId('signOutBtn');
       signOutButton.focus();
@@ -385,7 +454,7 @@ describe('SignOut Component', () => {
       await userEvent.keyboard(' ');
 
       await waitFor(() => {
-        expect(mockLocalStorage.clear).toHaveBeenCalled();
+        expect(mockClearAllItems).toHaveBeenCalled();
         expect(mockEndSession).toHaveBeenCalled();
         expect(mockNavigate).toHaveBeenCalledWith('/');
       });
@@ -397,13 +466,9 @@ describe('SignOut Component', () => {
         endSession: mockEndSession,
       });
 
-      render(
-        <MockedProvider mocks={[mockRevokeRefreshToken]}>
-          <BrowserRouter>
-            <SignOut />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+      const { mockClearAllItems } = createMock();
+
+      renderWithProviders(<SignOut />, [mockRevokeRefreshToken]);
 
       const signOutButton = screen.getByTestId('signOutBtn');
       signOutButton.focus();
@@ -414,7 +479,7 @@ describe('SignOut Component', () => {
 
       await new Promise((resolve) => setTimeout(resolve, 100));
 
-      expect(mockLocalStorage.clear).not.toHaveBeenCalled();
+      expect(mockClearAllItems).not.toHaveBeenCalled();
       expect(mockEndSession).not.toHaveBeenCalled();
       expect(mockNavigate).not.toHaveBeenCalled();
     });
@@ -431,6 +496,8 @@ describe('SignOut Component', () => {
         endSession: mockEndSession,
       });
 
+      const { mockClearAllItems } = createMock();
+
       const mocks = [
         {
           request: {
@@ -440,13 +507,7 @@ describe('SignOut Component', () => {
         },
       ];
 
-      render(
-        <MockedProvider mocks={mocks}>
-          <BrowserRouter>
-            <SignOut />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+      renderWithProviders(<SignOut />, mocks);
 
       const signOutButton = screen.getByTestId('signOutBtn');
       signOutButton.focus();
@@ -455,9 +516,9 @@ describe('SignOut Component', () => {
 
       await waitFor(() => {
         expect(window.confirm).toHaveBeenCalledWith(
-          'Failed to revoke session. Retry?',
+          'Token revocation failed. Would you like to retry?',
         );
-        expect(mockLocalStorage.clear).toHaveBeenCalled();
+        expect(mockClearAllItems).toHaveBeenCalled();
         expect(mockEndSession).toHaveBeenCalled();
         expect(mockNavigate).toHaveBeenCalledWith('/');
       });
@@ -473,20 +534,14 @@ describe('SignOut Component', () => {
         endSession: mockEndSession,
       });
 
-      render(
-        <MockedProvider mocks={[mockRevokeRefreshToken]} addTypename={false}>
-          <BrowserRouter>
-            <SignOut />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+      renderWithProviders(<SignOut />, [mockRevokeRefreshToken]);
 
       const signOutButton = screen.getByTestId('signOutBtn');
 
       // Verify initial state
       expect(signOutButton).toHaveStyle({ opacity: '1' });
       expect(signOutButton).toHaveAttribute('aria-disabled', 'false');
-      expect(screen.getByText('Sign Out')).toBeInTheDocument();
+      expect(screen.getByText('Sign out')).toBeInTheDocument();
 
       // Click the button
       fireEvent.click(signOutButton);
@@ -507,13 +562,7 @@ describe('SignOut Component', () => {
         endSession: mockEndSession,
       });
 
-      render(
-        <MockedProvider mocks={[mockRevokeRefreshToken]} addTypename={false}>
-          <BrowserRouter>
-            <SignOut />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+      renderWithProviders(<SignOut />, [mockRevokeRefreshToken]);
 
       const signOutButton = screen.getByTestId('signOutBtn');
 
@@ -535,13 +584,7 @@ describe('SignOut Component', () => {
         endSession: mockEndSession,
       });
 
-      render(
-        <MockedProvider mocks={[mockRevokeRefreshToken]} addTypename={false}>
-          <BrowserRouter>
-            <SignOut />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+      renderWithProviders(<SignOut />, [mockRevokeRefreshToken]);
 
       const signOutButton = screen.getByTestId('signOutBtn');
 
@@ -563,18 +606,14 @@ describe('SignOut Component', () => {
         endSession: mockEndSession,
       });
 
-      render(
-        <MockedProvider mocks={[mockRevokeRefreshToken]} addTypename={false}>
-          <BrowserRouter>
-            <SignOut hideDrawer={true} />
-          </BrowserRouter>
-        </MockedProvider>,
-      );
+      renderWithProviders(<SignOut hideDrawer={true} />, [
+        mockRevokeRefreshToken,
+      ]);
 
       const signOutButton = screen.getByTestId('signOutBtn');
 
       // Initially, label text should be hidden when hideDrawer is true
-      expect(screen.queryByText('Sign Out')).not.toBeInTheDocument();
+      expect(screen.queryByText('Sign out')).not.toBeInTheDocument();
       expect(screen.queryByText('Signing out...')).not.toBeInTheDocument();
 
       // Click the button
@@ -584,7 +623,7 @@ describe('SignOut Component', () => {
       await waitFor(() => {
         expect(signOutButton).toHaveStyle({ opacity: '0.5' });
         expect(signOutButton).toHaveAttribute('aria-disabled', 'true');
-        expect(screen.queryByText('Sign Out')).not.toBeInTheDocument();
+        expect(screen.queryByText('Sign out')).not.toBeInTheDocument();
         expect(screen.queryByText('Signing out...')).not.toBeInTheDocument();
       });
     });
