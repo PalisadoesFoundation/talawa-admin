@@ -148,7 +148,7 @@ describe('MemberDetail', () => {
       addressLine2: 'Line 2',
       birthDate: '2000-01-01',
       city: 'nyc',
-      countryCode: 'bb', // e.g., BB (adjust to your actual code)
+      countryCode: 'BB', // e.g., BB (adjust to your actual code)
       description: 'This is a description',
       emailAddress: 'test221@gmail.com',
       mobilePhoneNumber: '+9999999999',
@@ -170,16 +170,12 @@ describe('MemberDetail', () => {
 
     // Helper to set text inputs safely
     const setText = async (testIdRegex: RegExp, value: string) => {
-      const el = screen.getByTestId(testIdRegex);
-      // Only type if editable
-      if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
-        if (!el.readOnly && !el.disabled) {
-          await userEvent.clear(el);
-          await userEvent.type(el, value);
-        } // readOnly/disabled: skip typing, still return element for assertions }
-      } else {
-        // fallback for custom components: maybe use click -> type if needed
-        await userEvent.click(el);
+      const el = screen.getByTestId(testIdRegex) as
+        | HTMLInputElement
+        | HTMLTextAreaElement;
+
+      if (!el.readOnly && !el.disabled) {
+        await userEvent.clear(el);
         await userEvent.type(el, value);
       }
       return el;
