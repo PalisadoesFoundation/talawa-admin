@@ -241,7 +241,9 @@ def check_files(
         directory = os.path.abspath(directory)
 
         for root, _, files_in_dir in os.walk(directory):
-            if any(
+            root_dirname = os.path.basename(root)
+
+            if root_dirname in {"__tests__", "test", "tests"} or any(
                 root.startswith(exclude_dir)
                 for exclude_dir in exclude_directories
             ):
@@ -252,23 +254,8 @@ def check_files(
                 if file_path in exclude_files:
                     continue
 
-                if (
-                    file.endswith((".ts", ".tsx"))
-                    and not any(
-                        pattern in file
-                        for pattern in [
-                            ".test.",
-                            ".spec.",
-                        ]
-                    )
-                    and not any(
-                        pattern in root
-                        for pattern in [
-                            "__tests__",
-                            "test/",
-                            "tests/",
-                        ]
-                    )
+                if file.endswith((".ts", ".tsx")) and not any(
+                    pattern in file for pattern in [".test.", ".spec."]
                 ):
                     process_typescript_file(file_path, all_violations)
 

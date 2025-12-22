@@ -404,7 +404,7 @@ class TestCheckFiles(unittest.TestCase):
             f.write("const color = '#ff0000';")
 
         result = check_files([self.test_dir], [], [], [])
-        self.assertEqual(len(result.violations), 1)
+        self.assertEqual(len(result.violations), 0)
 
     def test_excludes_test_directory(self):
         """Test that files in test/ directory are excluded."""
@@ -415,7 +415,7 @@ class TestCheckFiles(unittest.TestCase):
             f.write("const color = '#ff0000';")
 
         result = check_files([self.test_dir], [], [], [])
-        self.assertEqual(len(result.violations), 1)
+        self.assertEqual(len(result.violations), 0)
 
     def test_processes_explicit_file_list(self):
         """Test processing explicit list of files."""
