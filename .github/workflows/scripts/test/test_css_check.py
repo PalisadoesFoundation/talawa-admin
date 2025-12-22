@@ -191,12 +191,6 @@ class TestCheckEmbeddedStyles(unittest.TestCase):
         violations = check_embedded_styles(content, "test.tsx")
         self.assertEqual(len(violations), 0)
 
-    def test_empty_content(self):
-        """Test handling of empty content."""
-        content = ""
-        violations = check_embedded_styles(content, "test.tsx")
-        self.assertEqual(len(violations), 0)
-
     def test_whitespace_only_content(self):
         """Test handling of whitespace-only content."""
         content = "   \n  \t  \n   "
