@@ -57,7 +57,7 @@ const ProfileDropdown = ({
   const { endSession } = useSession();
   const { t: tCommon } = useTranslation('common');
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
-  const { getItem } = useLocalStorage();
+  const { getItem, clearAllItems } = useLocalStorage();
   const userRole = getItem<string>('role');
   const name: string = getItem<string>('name') || '';
   const userImage: string = getItem<string>('UserImage') || '';
@@ -70,7 +70,7 @@ const ProfileDropdown = ({
     } catch (error) {
       console.error('Error revoking refresh token:', error);
     }
-    localStorage.clear();
+    clearAllItems();
     endSession();
     navigate('/');
   };
@@ -92,7 +92,7 @@ const ProfileDropdown = ({
           {userImage && userImage !== 'null' ? (
             <img
               src={userImage}
-              alt={`profile picture`}
+              alt={tCommon('profilePicture')}
               data-testid="display-img"
               crossOrigin="anonymous"
             />
@@ -102,7 +102,7 @@ const ProfileDropdown = ({
               data-testid="display-img"
               size={45}
               name={name}
-              alt={`dummy picture`}
+              alt={tCommon('profilePicturePlaceholder')}
             />
           )}
         </div>
@@ -121,13 +121,13 @@ const ProfileDropdown = ({
         data-testid="togDrop"
         id="dropdown-split-basic"
         className={styles.dropdownToggle}
-        aria-label="User Profile Menu"
+        aria-label={tCommon('userProfileMenu')}
       />
       <Dropdown.Menu>
         <Dropdown.Item
           data-testid="profileBtn"
           onClick={() => navigate(profileDestination)}
-          aria-label="View Profile"
+          aria-label={tCommon('viewProfile')}
         >
           {tCommon('viewProfile')}
         </Dropdown.Item>

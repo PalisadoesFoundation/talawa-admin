@@ -39,8 +39,8 @@ const pledgeProps: InterfaceDeletePledgeModal = {
     id: '1',
     amount: 100,
     currency: 'USD',
-    startDate: '2024-01-01',
-    endDate: '2024-01-10',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-10T00:00:00.000Z',
     pledger: {
       id: '1',
       firstName: 'John',

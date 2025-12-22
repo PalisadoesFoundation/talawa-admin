@@ -254,7 +254,7 @@ function actions(): JSX.Element {
                   {avatarURL ? (
                     <img
                       src={avatarURL}
-                      alt="Assignee"
+                      alt={t('assignee')}
                       data-testid={`image${id + 1}`}
                       className={`${styles.TableImage} me-2`}
                       style={{ verticalAlign: 'middle' }}
@@ -412,42 +412,50 @@ function actions(): JSX.Element {
 
   return (
     <div>
-      {/* Header with search, filter and Create Button */}
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <SearchBar
-          placeholder={tCommon('searchBy', {
-            item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
-          })}
-          onSearch={debouncedSearch}
-          inputTestId="searchBy"
-          buttonTestId="searchBtn"
-        />
-        <div className="d-flex gap-3 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-3">
-            <SortingButton
-              sortingOptions={[
-                { label: t('assignee'), value: 'assignee' },
-                { label: t('category'), value: 'category' },
-              ]}
-              selectedOption={searchBy}
-              onSortChange={(value) =>
-                setSearchBy(value as 'assignee' | 'category')
-              }
-              dataTestIdPrefix="searchByToggle"
-              buttonLabel={tCommon('searchBy', { item: '' })}
-            />
-            <SortingButton
-              sortingOptions={[
-                { label: t('latestAssigned'), value: 'dueDate_DESC' },
-                { label: t('earliestAssigned'), value: 'dueDate_ASC' },
-              ]}
-              onSortChange={(value) =>
-                setSortBy(value as 'dueDate_DESC' | 'dueDate_ASC')
-              }
-              dataTestIdPrefix="sort"
-              buttonLabel={tCommon('sort')}
-            />
-          </div>
+      {/* Refactored Header Structure */}
+      <div className={styles.calendar__header}>
+        {/* 1. Search Bar Section */}
+        <div className={styles.calendar__search}>
+          <SearchBar
+            placeholder={tCommon('searchBy', {
+              item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
+            })}
+            onSearch={debouncedSearch}
+            inputTestId="searchBy"
+            buttonTestId="searchBtn"
+            // Required PR Props
+            showSearchButton={true}
+            showLeadingIcon={true}
+            showClearButton={true}
+            buttonAriaLabel={t('search')}
+          />
+        </div>
+
+        {/* 2. Controls Section (Sorting & Filtering) */}
+        <div className={styles.btnsBlock}>
+          <SortingButton
+            sortingOptions={[
+              { label: t('assignee'), value: 'assignee' },
+              { label: t('category'), value: 'category' },
+            ]}
+            selectedOption={searchBy}
+            onSortChange={(value) =>
+              setSearchBy(value as 'assignee' | 'category')
+            }
+            dataTestIdPrefix="searchByToggle"
+            buttonLabel={tCommon('searchBy', { item: '' })}
+          />
+          <SortingButton
+            sortingOptions={[
+              { label: t('latestAssigned'), value: 'dueDate_DESC' },
+              { label: t('earliestAssigned'), value: 'dueDate_ASC' },
+            ]}
+            onSortChange={(value) =>
+              setSortBy(value as 'dueDate_DESC' | 'dueDate_ASC')
+            }
+            dataTestIdPrefix="sort"
+            buttonLabel={tCommon('sort')}
+          />
         </div>
       </div>
 

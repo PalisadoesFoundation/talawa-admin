@@ -80,11 +80,10 @@ async function wait(ms = 100): Promise<void> {
 
 const originalMatchMedia = window.matchMedia;
 const originalLocation = window.location;
+const { setItem, clearAllItems } = useLocalStorage();
 
 describe('Testing Settings Screen [User Portal]', () => {
   beforeEach(() => {
-    localStorage.clear();
-    const { setItem } = useLocalStorage();
     setItem('name', 'John Doe');
     vi.useFakeTimers();
     Object.defineProperty(window, 'matchMedia', {
@@ -106,6 +105,7 @@ describe('Testing Settings Screen [User Portal]', () => {
   });
 
   afterEach(() => {
+    clearAllItems();
     vi.clearAllMocks();
     vi.useRealTimers();
     Object.defineProperty(window, 'matchMedia', {

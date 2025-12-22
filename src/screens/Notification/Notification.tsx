@@ -147,8 +147,8 @@ const Notification: React.FC = () => {
                 >
                   <div className={styles.profileSection} />
                   <div className={styles.notificationContent}>
-                    <div className={styles.notificationTitle}>&nbsp;</div>
-                    <div className={styles.notificationBody}>&nbsp;</div>
+                    <div className={styles.notificationTitle}>{'\u00A0'}</div>
+                    <div className={styles.notificationBody}>{'\u00A0'}</div>
                   </div>
                   <div style={{ width: 92 }} />
                 </ListGroup.Item>

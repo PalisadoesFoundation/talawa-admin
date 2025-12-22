@@ -11,3 +11,5 @@ Defined in: [src/utils/getRefreshToken.ts:7](https://github.com/PalisadoesFounda
 ## Returns
 
 `Promise`\<`boolean`\>
+
+Returns true if token refresh was successful, false otherwise

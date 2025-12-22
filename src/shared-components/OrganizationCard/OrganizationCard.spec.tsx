@@ -22,11 +22,17 @@ vi.mock('react-i18next', () => ({
         'users.withdraw': 'withdraw',
         'users.orgJoined': 'orgJoined',
         'users.errorOccurred': 'errorOccurred',
+        'users.member': 'Member',
+        'users.pending': 'Pending',
+        'users.notMember': 'Not a member',
         'users.AlreadyJoined': 'AlreadyJoined',
         'users.MembershipRequestSent': 'MembershipRequestSent',
         'users.UserIdNotFound': 'UserIdNotFound',
         'users.MembershipRequestWithdrawn': 'MembershipRequestWithdrawn',
         'users.MembershipRequestNotFound': 'MembershipRequestNotFound',
+        'users.membershipStatus.member': 'Membership status: Member',
+        'users.membershipStatus.pending': 'Membership status: Pending',
+        'users.membershipStatus.notMember': 'Membership status: Not a member',
       };
 
       return translations[key] || key;
@@ -194,6 +200,72 @@ describe('OrganizationCard', () => {
 
     fireEvent.click(button);
     expect(mockNavigate).toHaveBeenCalledWith('/user/organization/123');
+  });
+
+  it('displays "Member" status chip for joined users', () => {
+    const joinedData = { ...mockData, isJoined: true };
+
+    render(
+      <MockedProvider>
+        <OrganizationCard data={joinedData} />
+      </MockedProvider>,
+    );
+
+    const statusChip = screen.getByTestId('membershipStatus');
+
+    expect(statusChip).toHaveTextContent('Member');
+    expect(statusChip).toHaveAttribute('data-status', 'member');
+    expect(statusChip).toHaveAttribute('role', 'status');
+    expect(statusChip).toHaveAttribute(
+      'aria-label',
+      'Membership status: Member',
+    );
+  });
+
+  it('displays "Pending" status chip when membership request is pending', () => {
+    const pendingData = {
+      ...mockData,
+      isJoined: false,
+      membershipRequestStatus: 'pending',
+    };
+
+    render(
+      <MockedProvider>
+        <OrganizationCard data={pendingData} />
+      </MockedProvider>,
+    );
+
+    const statusChip = screen.getByTestId('membershipStatus');
+
+    expect(statusChip).toHaveTextContent('Pending');
+    expect(statusChip).toHaveAttribute('data-status', 'pending');
+    expect(statusChip).toHaveAttribute(
+      'aria-label',
+      'Membership status: Pending',
+    );
+  });
+
+  it('displays "Not a member" status chip for non-members', () => {
+    const nonMemberData = {
+      ...mockData,
+      isJoined: false,
+      membershipRequestStatus: undefined,
+    };
+
+    render(
+      <MockedProvider>
+        <OrganizationCard data={nonMemberData} />
+      </MockedProvider>,
+    );
+
+    const statusChip = screen.getByTestId('membershipStatus');
+
+    expect(statusChip).toHaveTextContent('Not a member');
+    expect(statusChip).toHaveAttribute('data-status', 'notMember');
+    expect(statusChip).toHaveAttribute(
+      'aria-label',
+      'Membership status: Not a member',
+    );
   });
 
   it('renders "Join" button for non-joined user', () => {

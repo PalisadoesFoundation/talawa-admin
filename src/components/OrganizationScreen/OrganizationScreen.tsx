@@ -38,7 +38,6 @@ import styles from 'style/app-fixed.module.css';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useQuery } from '@apollo/client/react';
 import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
-import type { InterfaceEvent } from 'types/Event/interface';
 import useLocalStorage from 'utils/useLocalstorage';
 
 const OrganizationScreen = (): JSX.Element => {
@@ -58,6 +57,9 @@ const OrganizationScreen = (): JSX.Element => {
   const [eventName, setEventName] = useState<string | null>(null);
 
   const isEventPath = useMatch('/event/:orgId/:eventId');
+  const eventId = isEventPath?.params.eventId;
+  const shouldFetchEventName = Boolean(orgId && eventId);
+  const EVENTS_PAGE_SIZE = 150;
 
   // Get the application routes from the Redux store
   const appRoutes: { targets: TargetsType[] } = useSelector(
@@ -104,8 +106,23 @@ const OrganizationScreen = (): JSX.Element => {
       setEventName(event.name);
     } else {
       setEventName(null);
+      return;
     }
-  }, [isEventPath, eventsData]);
+    // Wait until event data has been fetched before attempting lookup
+    if (!eventsData?.organization?.events) {
+      return;
+    }
+    const edges = eventsData.organization.events.edges ?? [];
+    const matched = edges.find((edge: { node?: { id?: string } }) => {
+      return edge?.node?.id === eventId;
+    });
+    if (!matched?.node?.id) {
+      console.warn(`Event with id ${eventId} not found`);
+      setEventName(null);
+      return;
+    }
+    setEventName(matched.node.name ?? null);
+  }, [eventId, eventsData]);
 
   // Handle screen resizing to show/hide the side drawer
   const handleResize = (): void => {

@@ -56,6 +56,11 @@
     "user": "उपयोगकर्ता",
     "loading": "लोड हो रहा है"
   },
+  "signOut": {
+    "retryPrompt": "सेशन रद्द करने में विफल। पुनः प्रयास करें?",
+    "signingOut": "साइन आउट हो रहा है...",
+    "signOut": "साइन आउट"
+  },
   "userLoginPage": {
     "title": "तालावा व्यवस्थापक",
     "fromPalisadoes": "Palisadoes फाउंडेशन स्वयंसेवकों द्वारा विकसित एक ओपन-सोर्स एप्लिकेशन",
@@ -219,9 +224,17 @@
     "placeholderAvatarAlt": "प्लेसहोल्डर अवतार"
   },
   "users": {
+    "membershipStatus": {
+      "member": "सदस्यता स्थिति: सदस्य",
+      "pending": "सदस्यता स्थिति: लंबित",
+      "notMember": "सदस्यता स्थिति: सदस्य नहीं"
+    },
     "title": "तालावा भूमिकाएँ",
     "joined_organizations": "संगठनों में शामिल हुए",
     "blocked_organizations": "अवरुद्ध संगठन",
+    "member": "सदस्य",
+    "pending": "लंबित",
+    "notMember": "सदस्य नहीं",
     "orgJoinedBy": "द्वारा शामिल संगठन",
     "orgThatBlocked": "अवरुद्ध संगठन",
     "hasNotJoinedAnyOrg": "किसी भी संगठन में शामिल नहीं हुआ",
@@ -463,6 +476,17 @@
     "monthlyOn": "मासिक पर",
     "yearlyOn": "वार्षिक पर",
     "yearlyRecurrenceDesc": "यह घटना हर साल घटना की शुरुआत की तारीख को ही दोहराई जाएगी।",
+    "doesNotRepeat": "पुनरावृत्ति नहीं होती",
+    "daily": "दैनिक",
+    "weeklyOn": "हर सप्ताह {{day}} को",
+    "monthlyOnDay": "हर माह की {{day}} तारीख को",
+    "annuallyOn": "प्रतिवर्ष {{day}} {{month}} को",
+    "everyWeekday": "हर कार्यदिवस (सोम–शुक्र)",
+    "custom": "कस्टम…",
+    "day": "दिन",
+    "week": "सप्ताह",
+    "month": "महीना",
+    "year": "वर्ष",
     "events": "कार्यक्रम",
     "description": "विवरण",
     "location": "स्थान",
@@ -731,7 +755,9 @@
     "raisedAmount": "उठाया गया राशि",
     "pledgedAmount": "प्रतिबद्ध राशि",
     "startDate": "प्रारंभ तिथि",
-    "endDate": "समाप्ति तिथि"
+    "endDate": "समाप्ति तिथि",
+    "searchByPlaceholder": "{{field}} द्वारा खोजें",
+    "selectPledger": "कृपया एक प्रतिज्ञाकर्ता का चयन करें"
   },
   "orgPost": {
     "title": "पदों",
@@ -1020,7 +1046,13 @@
   "people": {
     "title": "लोग",
     "searchUsers": "उपयोगकर्ताओं को खोजें",
-    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है."
+    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
+    "sNo": "क्र.सं.",
+    "avatar": "अवतार",
+    "name": "नाम",
+    "email": "ईमेल",
+    "role": "भूमिका",
+    "loading": "लोड हो रहा है..."
   },
   "userLogin": {
     "login": "लॉग इन करें",
@@ -1065,7 +1097,8 @@
     "language": "भाषा",
     "settings": "समायोजन",
     "logout": "लॉग आउट करें",
-    "close": "बंद करें"
+    "close": "बंद करें",
+    "talawaBranding": "तालावा ब्रांडिंग"
   },
   "userOrganizations": {
     "allOrganizations": "सभी संगठन",
@@ -1078,7 +1111,8 @@
     "search": "खोजें",
     "filter": "फ़िल्टर",
     "searchByName": "नाम से खोजें",
-    "searchOrganizations": "संगठनों खोजें"
+    "searchOrganizations": "संगठनों खोजें",
+    "loading": "लोड हो रहा है..."
   },
   "userSidebarOrg": {
     "yourOrganizations": "आपके संगठन",
@@ -1332,7 +1366,18 @@
     "eventLocation": "कार्यक्रम स्थान",
     "startDate": "प्रारंभ तिथि",
     "endDate": "समाप्ति तिथि",
-    "createChat": "चैट बनाएं"
+    "createChat": "चैट बनाएं",
+    "doesNotRepeat": "पुनरावृत्ति नहीं होती",
+    "daily": "दैनिक",
+    "weeklyOn": "हर सप्ताह {{day}} को",
+    "monthlyOnDay": "हर माह की {{day}} तारीख को",
+    "annuallyOn": "प्रतिवर्ष {{day}} {{month}} को",
+    "everyWeekday": "हर कार्यदिवस (सोम–शुक्र)",
+    "custom": "कस्टम…",
+    "day": "दिन",
+    "week": "सप्ताह",
+    "month": "महीना",
+    "year": "वर्ष"
   },
   "userEventCard": {
     "starts": "प्रारंभ होगा",
@@ -1530,7 +1575,9 @@
     "addPledge": "प्रतिज्ञा जोड़ें",
     "viewPledges": "प्रतिज्ञाएँ देखें",
     "noPledges": "कोई प्रतिज्ञा नहीं मिली",
-    "noCampaigns": "कोई अभियान नहीं मिला"
+    "noCampaigns": "कोई अभियान नहीं मिला",
+    "raised": "एकत्रित",
+    "amountRaised": "एकत्रित राशि"
   },
   "userPledges": {
     "title": "मेरी प्रतिज्ञाएँ"
@@ -1619,7 +1666,21 @@
     "eventInvitationRecurringSubject": "पुनरावर्ती घटना श्रृंखला के लिए स्वयंसेवक बनने का निमंत्रण",
     "pending": "लंबित",
     "accepted": "स्वीकृत",
-    "rejected": "अस्वीकृत"
+    "rejected": "अस्वीकृत",
+    "assignee": "नियुक्त व्यक्ति",
+    "group": "समूह",
+    "event": "कार्यक्रम",
+    "received": "प्राप्त",
+    "location": "स्थान",
+    "recurrence": "पुनरावृत्ति",
+    "endDate": "समाप्ति तिथि",
+    "description": "विवरण",
+    "volunteerGroups": "स्वयंसेवक समूह",
+    "groupTable": "समूह तालिका",
+    "srNo": "क्र.सं.",
+    "groupName": "समूह का नाम",
+    "noOfMembers": "सदस्यों की संख्या",
+    "options": "विकल्प"
   },
   "pluginStore": {
     "title": "प्लगइन स्टोर",
@@ -1654,5 +1715,15 @@
     "deleteComment": "टिप्पणी हटाएं",
     "deleting": "हटाया जा रहा है…",
     "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।"
+  },
+  "profileAvatar": {
+    "altText": "{{name}} की प्रोफ़ाइल तस्वीर",
+    "modalTitle": "प्रोफ़ाइल तस्वीर",
+    "enlargedAltText": "{{name}} की बड़ी प्रोफ़ाइल तस्वीर"
+  },
+  "common": {
+    "signOut": "साइन आउट",
+    "signingOut": "साइन आउट हो रहा है...",
+    "retryPrompt": "सेशन रद्द करने में विफल। पुनः प्रयास करें?"
   }
 }

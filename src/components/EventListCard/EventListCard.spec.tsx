@@ -19,7 +19,7 @@ import { props } from './EventListCardProps';
 import { ERROR_MOCKS, MOCKS } from './Modal/EventListCardMocks';
 import { vi, beforeAll, afterAll, expect, it } from 'vitest';
 
-const { setItem } = useLocalStorage();
+const { setItem, clearAllItems } = useLocalStorage();
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(ERROR_MOCKS, true);
@@ -97,7 +97,7 @@ describe('Testing Event List Card', () => {
   });
 
   afterAll(() => {
-    localStorage.clear();
+    clearAllItems();
     vi.clearAllMocks();
   });
 
@@ -299,12 +299,15 @@ describe('Testing Event List Card', () => {
   });
 
   it('should show already registered text when the user is registered for an event', async () => {
+    setItem('userId', '456');
     renderEventListCard(props[3]);
 
     await userEvent.click(screen.getByTestId('card'));
 
-    expect(
-      screen.getByText(translations.alreadyRegistered),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.alreadyRegistered),
+      ).toBeInTheDocument();
+    });
   });
 });

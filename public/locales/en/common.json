@@ -107,5 +107,9 @@
   "saving": "Saving...",
   "sl_no": "Sl. No.",
   "actions": "Actions",
-  "notFound": "Not Found"
+  "notFound": "Not Found",
+  "profilePicture": "profile picture",
+  "profilePicturePlaceholder": "dummy picture",
+  "userProfileMenu": "User Profile Menu",
+  "breadcrumbs": "Breadcrumbs"
 }

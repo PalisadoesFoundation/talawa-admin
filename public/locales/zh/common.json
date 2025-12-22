@@ -107,5 +107,9 @@
   "saving": "保存中...",
   "sl_no": "序号",
   "actions": "操作",
-  "notFound": "未找到"
+  "notFound": "未找到",
+  "profilePicture": "個人頭像",
+  "profilePicturePlaceholder": "佔位圖片",
+  "userProfileMenu": "使用者個人資料選單",
+  "breadcrumbs": "面包屑导航"
 }

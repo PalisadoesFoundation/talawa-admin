@@ -56,6 +56,11 @@
     "user": "user",
     "loading": "loading"
   },
+  "signOut": {
+    "retryPrompt": "Failed to revoke session. Retry?",
+    "signingOut": "Signing out...",
+    "signOut": "Sign Out"
+  },
   "userLoginPage": {
     "title": "Talawa Admin",
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
@@ -219,6 +224,14 @@
     "placeholderAvatarAlt": "Placeholder avatar"
   },
   "users": {
+    "membershipStatus": {
+      "member": "Membership status: Member",
+      "pending": "Membership status: Pending",
+      "notMember": "Membership status: Not a member"
+    },
+    "member": "Member",
+    "pending": "Pending",
+    "notMember": "Not a member",
     "title": "Talawa Roles",
     "joined_organizations": "Joined Organizations",
     "blocked_organizations": "Blocked Organizations",
@@ -461,6 +474,17 @@
     "monthlyOn": "Monthly On",
     "yearlyOn": "Yearly On",
     "yearlyRecurrenceDesc": "This event will repeat every year on the same date as the event start date.",
+    "doesNotRepeat": "Does not repeat",
+    "daily": "Daily",
+    "weeklyOn": "Weekly on {{day}}",
+    "monthlyOnDay": "Monthly on day {{day}}",
+    "annuallyOn": "Annually on {{month}} {{day}}",
+    "everyWeekday": "Every weekday (Mon–Fri)",
+    "custom": "Custom…",
+    "day": "Day",
+    "week": "Week",
+    "month": "Month",
+    "year": "Year",
     "startTime": "startTime",
     "endTime": "endTime",
     "eventLocation": "eventLocation",
@@ -731,7 +755,9 @@
     "raisedAmount": "Raised amount ",
     "pledgedAmount": "Pledged amount",
     "startDate": "startDate",
-    "endDate": "endDate"
+    "endDate": "endDate",
+    "searchByPlaceholder": "Search by {{field}}",
+    "selectPledger": "Please select a pledger"
   },
   "orgPost": {
     "title": "Posts",
@@ -1072,7 +1098,13 @@
   "people": {
     "title": "People",
     "searchUsers": "Search users",
-    "nothingToShow": "Nothing to show here"
+    "nothingToShow": "Nothing to show here",
+    "sNo": "S.No",
+    "avatar": "Avatar",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "loading": "Loading..."
   },
   "userLogin": {
     "login": "Login",
@@ -1117,7 +1149,8 @@
     "language": "Language",
     "settings": "settings",
     "logout": "logout",
-    "close": "close"
+    "close": "close",
+    "talawaBranding": "Talawa Branding"
   },
   "userOrganizations": {
     "allOrganizations": "All Organizations",
@@ -1130,7 +1163,8 @@
     "search": "search",
     "filter": "filter",
     "searchByName": "Search by Name",
-    "searchOrganizations": "Search Organization"
+    "searchOrganizations": "Search Organization",
+    "loading": "Loading..."
   },
   "userSidebarOrg": {
     "yourOrganizations": "Your Organizations",
@@ -1332,7 +1366,18 @@
     "eventDescription": "eventDescription",
     "eventLocation": "eventLocation",
     "startDate": "startDate",
-    "endDate": "endDate"
+    "endDate": "endDate",
+    "doesNotRepeat": "Does not repeat",
+    "daily": "Daily",
+    "weeklyOn": "Weekly on {{day}}",
+    "monthlyOnDay": "Monthly on day {{day}}",
+    "annuallyOn": "Annually on {{month}} {{day}}",
+    "everyWeekday": "Every weekday (Mon–Fri)",
+    "custom": "Custom…",
+    "day": "Day",
+    "week": "Week",
+    "month": "Month",
+    "year": "Year"
   },
   "userEventCard": {
     "starts": "Starts",
@@ -1530,7 +1575,9 @@
     "addPledge": "Add Pledge",
     "viewPledges": "View Pledges",
     "noPledges": "No Pledges Found",
-    "noCampaigns": "No Campaigns Found"
+    "noCampaigns": "No Campaigns Found",
+    "raised": "Raised",
+    "amountRaised": "Amount Raised"
   },
   "userPledges": {
     "title": "My Pledges"
@@ -1619,7 +1666,21 @@
     "groupInvitationSubject": "Invitation to join volunteer group",
     "eventInvitationSubject": "Invitation to volunteer for event",
     "groupInvitationRecurringSubject": "Invitation to join volunteer group for recurring event series",
-    "eventInvitationRecurringSubject": "Invitation to volunteer for recurring event series"
+    "eventInvitationRecurringSubject": "Invitation to volunteer for recurring event series",
+    "assignee": "Assignee",
+    "group": "Group",
+    "event": "Event",
+    "received": "Received",
+    "location": "Location",
+    "recurrence": "Recurrence",
+    "endDate": "End Date",
+    "description": "Description",
+    "volunteerGroups": "Volunteer Groups",
+    "groupTable": "Group Table",
+    "srNo": "Sr. No.",
+    "groupName": "Group Name",
+    "noOfMembers": "No. of Members",
+    "options": "Options"
   },
   "pluginStore": {
     "title": "Plugin Store",
@@ -1654,5 +1715,15 @@
     "deleteComment": "Delete Comment",
     "deleting": "Deleting…",
     "emptyCommentError": "Please enter a comment before submitting."
+  },
+  "profileAvatar": {
+    "altText": "Profile picture of {{name}}",
+    "modalTitle": "Profile Picture",
+    "enlargedAltText": "Enlarged profile picture of {{name}}"
+  },
+  "common": {
+    "signOut": "Sign out",
+    "signingOut": "Signing out...",
+    "retryPrompt": "Failed to revoke session. Retry?"
   }
 }

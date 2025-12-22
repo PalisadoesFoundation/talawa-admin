@@ -11,7 +11,7 @@ import { MemoryRouter, Route, Routes, useParams } from 'react-router';
 import { store } from '../../state/store';
 import { StaticMockLink } from '../../utils/StaticMockLink';
 import i18nForTest from '../../utils/i18nForTest';
-import OrganizaitionFundCampiagn from './OrganizationFundCampagins';
+import OrganizationFundCampaign from './OrganizationFundCampaigns';
 import {
   EMPTY_MOCKS,
   MOCKS,
@@ -54,7 +54,7 @@ const renderFundCampaign = (link: ApolloLink): RenderResult => {
               <Routes>
                 <Route
                   path="/orgfundcampaign/:orgId/:fundId"
-                  element={<OrganizaitionFundCampiagn />}
+                  element={<OrganizationFundCampaign />}
                 />
                 <Route
                   path="/fundCampaignPledge/orgId/campaignId1"
@@ -118,7 +118,7 @@ describe('FundCampaigns Screen', () => {
                 <Routes>
                   <Route
                     path="/orgfundcampaign/"
-                    element={<OrganizaitionFundCampiagn />}
+                    element={<OrganizationFundCampaign />}
                   />
                   <Route
                     path="/"

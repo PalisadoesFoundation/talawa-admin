@@ -107,5 +107,9 @@
   "saving": "Enregistrement...",
   "sl_no": "N° de série",
   "actions": "Actions",
-  "notFound": "Non trouvé"
+  "notFound": "Non trouvé",
+  "profilePicture": "Photo de profil",
+  "profilePicturePlaceholder": "Image factice",
+  "userProfileMenu": "Menu du profil utilisateur",
+  "breadcrumbs": "Fil d’Ariane"
 }

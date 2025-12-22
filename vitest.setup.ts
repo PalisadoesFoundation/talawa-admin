@@ -2,6 +2,14 @@ import { TextEncoder, TextDecoder } from 'util';
 import { cleanup } from '@testing-library/react';
 import { afterAll, afterEach, beforeAll, vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
+import { setupLocalStorageMock } from './src/test-utils/localStorageMock';
+
+// Setup localStorage mock globally for all tests
+const localStorageMock = setupLocalStorageMock();
+
+if (typeof globalThis.localStorage === 'undefined') {
+  globalThis.localStorage = localStorageMock as unknown as Storage;
+}
 
 // Enable React act environment for testing
 (globalThis as Record<string, unknown>).IS_REACT_ACT_ENVIRONMENT = true;
@@ -56,6 +64,7 @@ beforeAll(() => {
 // Basic cleanup after each test
 afterEach(() => {
   cleanup();
+  localStorage.clear();
   vi.clearAllMocks();
 });
 

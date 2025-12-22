@@ -27,7 +27,7 @@ import { expect, describe, it, vi, beforeEach, afterEach } from 'vitest';
 import { GraphQLError } from 'graphql';
 import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
 
-const { setItem } = useLocalStorage();
+const { setItem, clearAllItems } = useLocalStorage();
 
 const { mockToast, mockUseParams } = vi.hoisted(() => ({
   mockToast: {
@@ -36,6 +36,21 @@ const { mockToast, mockUseParams } = vi.hoisted(() => ({
     success: vi.fn(),
   },
   mockUseParams: vi.fn(),
+}));
+
+// Mock MUI icons to prevent "too many open files" error on Windows
+vi.mock('@mui/icons-material', () => ({
+  HourglassBottom: vi.fn(() => null),
+  Favorite: vi.fn(() => null),
+  ChatBubbleOutline: vi.fn(() => null),
+  PushPinOutlined: vi.fn(() => null),
+  PushPin: vi.fn(() => null),
+  Share: vi.fn(() => null),
+  MoreHoriz: vi.fn(() => null),
+  Send: vi.fn(() => null),
+  DeleteOutline: vi.fn(() => null),
+  EditOutlined: vi.fn(() => null),
+  ThumbUpOutlined: vi.fn(() => null),
 }));
 
 vi.mock('react-toastify', () => ({
@@ -573,7 +588,7 @@ const commentsQueryMockAlt = {
 const link = new StaticMockLink(MOCKS, true);
 
 afterEach(() => {
-  localStorage.clear();
+  clearAllItems();
 });
 
 async function wait(ms = 100): Promise<void> {
@@ -1970,12 +1985,9 @@ describe('PinnedPostCard Component Tests', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
-  });
-
-  afterEach(() => {
     vi.clearAllMocks();
-    localStorage.clear();
+    vi.restoreAllMocks();
+    clearAllItems();
   });
 
   it('should render pinned posts in carousel', async () => {

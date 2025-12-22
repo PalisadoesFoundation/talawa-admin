@@ -435,7 +435,7 @@ describe('Testing People Screen [User Portal]', () => {
     await wait();
 
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('modeBtn1'));
+    await userEvent.click(screen.getByTestId('1'));
     await wait();
 
     expect(screen.queryByText('Admin User')).toBeInTheDocument();
@@ -670,7 +670,7 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
     expect(screen.getByText('Admin User')).toBeInTheDocument();
 
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('modeBtn1'));
+    await userEvent.click(screen.getByTestId('1'));
     await wait();
 
     expect(screen.getByText('Admin User')).toBeInTheDocument();
@@ -685,14 +685,14 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
     expect(screen.getByText('Test User')).toBeInTheDocument();
 
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('modeBtn1'));
+    await userEvent.click(screen.getByTestId('1'));
     await wait();
 
     expect(screen.queryByText('Admin User')).toBeInTheDocument();
     expect(screen.queryByText('Test User')).not.toBeInTheDocument();
 
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('modeBtn0'));
+    await userEvent.click(screen.getByTestId('0'));
     await wait();
 
     expect(screen.getByText('Test User')).toBeInTheDocument();
@@ -708,7 +708,7 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
     expect(screen.getByText('test@example.com')).toBeInTheDocument();
 
     await userEvent.click(screen.getByTestId('modeChangeBtn'));
-    await userEvent.click(screen.getByTestId('modeBtn1'));
+    await userEvent.click(screen.getByTestId('1'));
     await wait();
 
     expect(screen.getByText('Admin User')).toBeInTheDocument();

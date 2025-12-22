@@ -49,7 +49,6 @@ const MOCKS = [
 const link = new StaticMockLink(MOCKS, true);
 
 afterEach(() => {
-  localStorage.clear();
   vi.clearAllMocks();
 });
 
