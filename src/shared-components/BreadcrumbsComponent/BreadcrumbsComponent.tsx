@@ -40,7 +40,6 @@ const BreadcrumbsComponent = ({
 }: IBreadcrumbsComponentProps): JSX.Element | null => {
   const { t } = useTranslation('common');
 
-  /* istanbul ignore next -- defensive guard */
   if (!items || items.length === 0) {
     return null;
   }

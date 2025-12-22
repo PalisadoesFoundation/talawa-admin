@@ -85,6 +85,18 @@ describe('BreadcrumbsComponent', () => {
     });
   });
 
+  it('renders non-current breadcrumb without link as plain text', () => {
+    renderComponent([
+      { label: 'Parent' },
+      { label: 'Current', isCurrent: true },
+    ]);
+
+    const parent = screen.getByText('Parent');
+
+    expect(parent).toBeInTheDocument();
+    expect(parent.closest('a')).toBeNull();
+  });
+
   /**
    * Navigation Tests
    */
