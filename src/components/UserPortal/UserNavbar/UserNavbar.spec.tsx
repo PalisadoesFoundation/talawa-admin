@@ -281,7 +281,6 @@ describe('Testing UserNavbar Component [User Portal]', () => {
   it('Logs out the user and clears local storage', async () => {
     // Spy on the mock's clear function directly
     const { mockClearAllItems } = createMock();
-    const clearSpy = vi.spyOn(localStorage, 'clear');
 
     render(
       <MockedProvider link={link}>
@@ -304,6 +303,5 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     expect(mockClearAllItems).toHaveBeenCalled();
     expect(window.location.pathname).toBe('/');
-    clearSpy.mockRestore();
   });
 });

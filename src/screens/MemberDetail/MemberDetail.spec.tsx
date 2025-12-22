@@ -246,8 +246,8 @@ describe('MemberDetail', () => {
     // Country (adjust this if it's a select or MUI-style select)
     const countryTrigger = screen.getByTestId(/inputCountry/i); // trigger/button
     await userEvent.click(countryTrigger);
-    const countryOption = screen.getByText(/Barbados/i); // visible label
-    await userEvent.click(countryOption);
+    const option = await screen.findByRole('option', { name: /Barbados/i });
+    await userEvent.click(option);
     expect(countryTrigger).toHaveTextContent(/Barbados/i);
 
     // Save changes
@@ -400,9 +400,12 @@ describe('MemberDetail', () => {
     const emailInput = screen.getByTestId('inputEmail');
     expect(emailInput).toHaveValue('test221@gmail.com');
 
-    const countryInput = screen.getByTestId('inputCountry');
-    fireEvent.select(countryInput, { target: { value: 'in' } });
-    expect(countryInput).toHaveValue('in');
+    const countryTrigger = screen.getByTestId('inputCountry');
+    await userEvent.click(countryTrigger);
+    const option = await screen.findByRole('option', { name: /India/i });
+    await userEvent.click(option);
+
+    expect(countryTrigger).toHaveTextContent(/India/i);
   });
 
   it('handles user update success', async () => {
@@ -812,7 +815,11 @@ describe('MemberDetail', () => {
     expect(countrySelect).toBeInTheDocument();
 
     // Simulate changing the country selection
-    fireEvent.change(countrySelect, { target: { value: 'us' } });
-    expect(countrySelect).toHaveValue('us');
+    const countryTrigger = screen.getByTestId('inputCountry');
+    await userEvent.click(countryTrigger);
+    const option = await screen.findByRole('option', { name: /United States/i });
+    await userEvent.click(option);
+
+    expect(countryTrigger).toHaveTextContent(/United States/i);
   });
 });
