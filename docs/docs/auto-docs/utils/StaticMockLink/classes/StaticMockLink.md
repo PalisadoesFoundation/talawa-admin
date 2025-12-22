@@ -11,7 +11,7 @@ when it is used allowing it to be used in places like Storybook.
 
 ## Extends
 
-- `unknown`
+- `ApolloLink`
 
 ## Constructors
 
@@ -25,7 +25,7 @@ Defined in: [src/utils/StaticMockLink.ts:40](https://github.com/PalisadoesFounda
 
 ##### mockedResponses
 
-readonly `MockedResponse`[]
+readonly `MockedResponse`\<`Record`\<`string`, `any`\>, `Record`\<`string`, `any`\>\>[]
 
 ##### addTypename
 
@@ -90,3 +90,7 @@ Defined in: [src/utils/StaticMockLink.ts:65](https://github.com/PalisadoesFounda
 #### Returns
 
 `Observable`\<`FetchResult`\>
+
+#### Overrides
+
+`ApolloLink.request`
