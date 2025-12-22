@@ -9,6 +9,8 @@ interface InterfaceMinioUpload {
   ) => Promise<{ objectName: string; fileHash: string }>;
 }
 
+import { normalizeMinioUrl } from './minioUtils';
+
 export const useMinioUpload = (): InterfaceMinioUpload => {
   const [generatePresignedUrl] = useMutation<{
     createPresignedUrl: {
@@ -43,7 +45,9 @@ export const useMinioUpload = (): InterfaceMinioUpload => {
 
       // Upload the file only if required
       if (requiresUpload && presignedUrl) {
-        const response = await fetch(presignedUrl, {
+        const normalizedUrl = normalizeMinioUrl(presignedUrl);
+        console.log('Attempting upload to:', normalizedUrl);
+        const response = await fetch(normalizedUrl, {
           method: 'PUT',
           body: file,
           headers: {
@@ -52,7 +56,12 @@ export const useMinioUpload = (): InterfaceMinioUpload => {
         });
 
         if (!response.ok) {
-          throw new Error('File upload failed');
+          const errorText = await response.text();
+          console.error('File upload failed with status:', response.status);
+          console.error('Error response body:', errorText);
+          throw new Error(
+            `File upload failed: ${response.status} ${errorText}`,
+          );
         }
       }
 

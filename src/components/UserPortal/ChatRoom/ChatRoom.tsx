@@ -211,6 +211,8 @@ const MessageImageBase: React.FC<IMessageImageProps> = ({
 
 export const MessageImage = React.memo(MessageImageBase);
 
+import { normalizeMinioUrl } from 'utils/minioUtils';
+
 export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChatRoom',
@@ -326,6 +328,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
             input: {
               chatId,
               messageId,
+              userId,
             },
           },
         });
@@ -334,7 +337,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
         setSupportsMarkRead(false);
       }
     },
-    [markChatMessagesAsRead, supportsMarkRead],
+    [markChatMessagesAsRead, supportsMarkRead, userId],
   );
 
   const deleteMessage = async (messageId: string): Promise<void> => {
@@ -471,7 +474,13 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           unreadChatListRefetch();
         });
     }
-  }, [props.selectedContact, chatData]);
+  }, [
+    props.selectedContact,
+    chatData,
+    markReadIfSupported,
+    props,
+    unreadChatListRefetch,
+  ]);
 
   useEffect(() => {
     if (chatData) {
@@ -490,15 +499,17 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
         if (otherUser) {
           setChatTitle(`${otherUser.name}`);
           setChatSubtitle('');
-          setChatImage(otherUser.avatarURL);
+          setChatImage(
+            otherUser.avatarURL ? normalizeMinioUrl(otherUser.avatarURL) : '',
+          );
         }
-      } else if (chat.members?.edges?.length > 2) {
-        setChatTitle(chat.name);
+      } else {
+        setChatTitle(chat.name || 'Chat');
         setChatSubtitle(`${chat.members?.edges?.length || 0} members`);
-        setChatImage(chat.avatarURL);
+        setChatImage(chat.avatarURL ? normalizeMinioUrl(chat.avatarURL) : '');
       }
     }
-  }, [chatData]);
+  }, [chatData, userId]);
 
   const sendMessage = async (): Promise<void> => {
     let messageBody = newMessage;
@@ -689,6 +700,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                   src={chatImage}
                   alt={chatTitle}
                   className={styles.contactImage}
+                  crossOrigin="anonymous"
                 />
               ) : (
                 <Avatar
@@ -754,9 +766,12 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                             message.creator.id !== userId &&
                             (message.creator?.avatarURL ? (
                               <img
-                                src={message.creator.avatarURL}
+                                src={normalizeMinioUrl(
+                                  message.creator.avatarURL,
+                                )}
                                 alt={message.creator.avatarURL}
                                 className={styles.contactImage}
+                                crossOrigin="anonymous"
                               />
                             ) : (
                               <Avatar

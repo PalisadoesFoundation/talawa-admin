@@ -40,6 +40,8 @@ import Avatar from 'components/Avatar/Avatar';
 import { Badge } from 'react-bootstrap';
 import type { InterfaceContactCardProps } from 'types/Chat/interface';
 
+import { normalizeMinioUrl } from 'utils/minioUtils';
+
 function contactCard(props: InterfaceContactCardProps): JSX.Element {
   const handleSelectedContactChange = (): void => {
     props.setSelectedContact(props.id);
@@ -64,9 +66,10 @@ function contactCard(props: InterfaceContactCardProps): JSX.Element {
       >
         {props.image ? (
           <img
-            src={props.image}
+            src={normalizeMinioUrl(props.image)}
             alt={props.title}
             className={styles.contactImage}
+            crossOrigin="anonymous"
           />
         ) : (
           <Avatar

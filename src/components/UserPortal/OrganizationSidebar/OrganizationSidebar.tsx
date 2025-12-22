@@ -48,6 +48,8 @@ import type {
   InterfaceMemberInfo,
 } from 'utils/interfaces';
 
+import { normalizeMinioUrl } from 'utils/minioUtils';
+
 export default function OrganizationSidebar(): JSX.Element {
   // Translation functions for different namespaces
   const { t } = useTranslation('translation', {
@@ -135,7 +137,11 @@ export default function OrganizationSidebar(): JSX.Element {
                 >
                   <div className="d-flex flex-row">
                     <img
-                      src={member.image ? member.image : AboutImg}
+                      src={
+                        member.image
+                          ? normalizeMinioUrl(member.image)
+                          : AboutImg
+                      }
                       className={styles.memberImage}
                       width="auto"
                       height="30px"

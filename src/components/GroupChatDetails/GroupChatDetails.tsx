@@ -71,8 +71,6 @@ import { BsThreeDotsVertical } from 'react-icons/bs';
 import useLocalStorage from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
 import type { InterfaceGroupChatDetailsProps } from 'types/Chat/interface';
-import { useMinioUpload } from 'utils/MinioUpload';
-import { useMinioDownload } from 'utils/MinioDownload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -129,9 +127,6 @@ export default function groupChatDetails({
   const [editChatTitle, setEditChatTitle] = useState<boolean>(false);
   const [chatName, setChatName] = useState<string>(chat?.name || '');
   const [, setSelectedImage] = useState(chat?.avatarURL || '');
-
-  const { uploadFileToMinio } = useMinioUpload();
-  const { getFileFromMinio } = useMinioDownload();
 
   //mutations
 
@@ -235,18 +230,16 @@ export default function groupChatDetails({
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file && chat.organization?.id) {
+      // Set immediate local preview
+      const localUrl = URL.createObjectURL(file);
+      setSelectedImage(localUrl);
+
       try {
-        const { objectName } = await uploadFileToMinio(
-          file,
-          chat.organization.id,
-        );
-        const url = await getFileFromMinio(objectName, chat.organization.id);
-        setSelectedImage(url);
         await updateChat({
           variables: {
             input: {
               id: chat.id,
-              avatar: { uri: objectName },
+              avatar: file,
               name: chatName,
             },
           },

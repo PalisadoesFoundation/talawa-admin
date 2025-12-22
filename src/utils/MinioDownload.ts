@@ -8,6 +8,8 @@ interface InterfaceMinioDownload {
   ) => Promise<string>;
 }
 
+import { normalizeMinioUrl } from './minioUtils';
+
 export const useMinioDownload = (): InterfaceMinioDownload => {
   const [generateGetFileUrl] = useMutation<{
     createGetfileUrl: {
@@ -36,7 +38,7 @@ export const useMinioDownload = (): InterfaceMinioDownload => {
       const { presignedUrl } = data.createGetfileUrl;
 
       // Return the presigned URL which can be used directly in <img> tags or for display
-      return presignedUrl;
+      return normalizeMinioUrl(presignedUrl);
     } catch (error) {
       console.error('Error fetching file from Minio:', error);
       throw error;

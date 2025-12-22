@@ -67,7 +67,6 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import Avatar from 'components/Avatar/Avatar';
 import { FiEdit } from 'react-icons/fi';
-import { useMinioUpload } from 'utils/MinioUpload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 interface InterfaceCreateGroupChatProps {
@@ -126,9 +125,9 @@ export default function CreateGroupChat({
 
   const [addUserModalisOpen, setAddUserModalisOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [rawImageFile, setRawImageFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { orgId: currentOrg } = useParams();
-  const { uploadFileToMinio } = useMinioUpload();
 
   function openAddUserModal(): void {
     setAddUserModalisOpen(true);
@@ -140,6 +139,8 @@ export default function CreateGroupChat({
   function reset(): void {
     setTitle('');
     setUserIds([]);
+    setSelectedImage(null);
+    setRawImageFile(null);
   }
 
   useEffect(() => {
@@ -147,30 +148,32 @@ export default function CreateGroupChat({
   }, [userIds]);
 
   async function handleCreateGroupChat(): Promise<void> {
-    // Create the chat
     const chatResult = await createChat({
       variables: {
         input: {
           organizationId: currentOrg,
           name: title,
           description: description,
-          avatar: null,
+          avatar: rawImageFile,
         },
       },
     });
     const chatId = (chatResult.data as { createChat: { id: string } })
       ?.createChat?.id;
 
-    if (chatId && userId) {
-      await createChatMembership({
-        variables: {
-          input: {
-            memberId: userId,
-            chatId,
-            role: 'administrator',
+    if (chatId) {
+      if (userId) {
+        await createChatMembership({
+          variables: {
+            input: {
+              memberId: userId,
+              chatId,
+              role: 'administrator',
+            },
           },
-        },
-      });
+        });
+      }
+
       for (const memberId of userIds) {
         await createChatMembership({
           variables: {
@@ -224,12 +227,11 @@ export default function CreateGroupChat({
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file && currentOrg) {
-      try {
-        const { objectName } = await uploadFileToMinio(file, currentOrg);
-        setSelectedImage(objectName);
-      } catch (error) {
-        console.error('Error uploading image to MinIO:', error);
-      }
+      // Set immediate local preview
+      const localUrl = URL.createObjectURL(file);
+      setSelectedImage(localUrl);
+
+      setRawImageFile(file);
     }
   };
 

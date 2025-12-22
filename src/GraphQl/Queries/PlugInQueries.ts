@@ -243,6 +243,8 @@ export const CHATS_LIST = gql`
       id
       name
       description
+      avatarURL
+      avatarMimeType
       createdAt
       organization {
         id

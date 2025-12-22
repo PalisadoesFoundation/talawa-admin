@@ -47,6 +47,8 @@ import styles from 'style/app-fixed.module.css';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { resolveProfileNavigation } from 'utils/profileNavigation';
 
+import { normalizeMinioUrl } from 'utils/minioUtils';
+
 interface InterfaceProfileCardProps {
   portal?: 'admin' | 'user';
 }
@@ -83,7 +85,7 @@ const ProfileCard = ({
         <div className={styles.imageContainer}>
           {userImage && userImage !== 'null' ? (
             <img
-              src={userImage}
+              src={normalizeMinioUrl(userImage)}
               alt={`profile picture`}
               data-testid="display-img"
               crossOrigin="anonymous"
