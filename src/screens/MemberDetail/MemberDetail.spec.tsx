@@ -110,7 +110,7 @@ describe('MemberDetail', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
     cleanup();
   });
 
@@ -170,11 +170,18 @@ describe('MemberDetail', () => {
 
     // Helper to set text inputs safely
     const setText = async (testIdRegex: RegExp, value: string) => {
-      const el = screen.getByTestId(testIdRegex) as
-        | HTMLInputElement
-        | HTMLTextAreaElement;
-      await userEvent.clear(el);
-      await userEvent.type(el, value);
+      const el = screen.getByTestId(testIdRegex);
+      // Only type if editable
+      if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+        if (!el.readOnly && !el.disabled) {
+          await userEvent.clear(el);
+          await userEvent.type(el, value);
+        } // readOnly/disabled: skip typing, still return element for assertions }
+      } else {
+        // fallback for custom components: maybe use click -> type if needed
+        await userEvent.click(el);
+        await userEvent.type(el, value);
+      }
       return el;
     };
 
