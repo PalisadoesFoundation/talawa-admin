@@ -110,5 +110,6 @@
   "notFound": "Non trouvé",
   "profilePicture": "Photo de profil",
   "profilePicturePlaceholder": "Image factice",
-  "userProfileMenu": "Menu du profil utilisateur"
+  "userProfileMenu": "Menu du profil utilisateur",
+  "breadcrumbs": "Fil d’Ariane"
 }
