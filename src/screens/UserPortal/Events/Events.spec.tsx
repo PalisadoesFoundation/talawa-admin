@@ -594,7 +594,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   afterEach(() => {
     localStorage.clear();
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('Should render the Events screen properly', async () => {

@@ -45,7 +45,7 @@
  * ```
  */
 import { useMutation, useQuery } from '@apollo/client';
-import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
+import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
 import {
   ORGANIZATIONS_LIST,
   GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
@@ -232,10 +232,8 @@ export default function events(): JSX.Element {
         return;
       }
 
-      // For other errors (like empty results), just log them but don't redirect
-      console.warn('Non-critical error in user events page:', {
-        eventDataError: eventDataError.message,
-      });
+      // For other errors (like empty results), handle them properly
+      errorHandler(t, eventDataError);
     }
   }, [eventDataError]);
 
