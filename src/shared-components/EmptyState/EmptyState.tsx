@@ -9,7 +9,7 @@
  *
  * @remarks
  * - All text is i18n-ready - pass translation keys or plain strings
- * - Accessibility: Uses role="alert" and aria-label for screen readers
+ * - Accessibility: Uses aria-label for screen readers
  * - Flexible icon system: accepts icon names or custom ReactNode
  *
  * @example
@@ -113,7 +113,6 @@ const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
       spacing={2}
       padding={4}
       className={className}
-      aria-label={messageText}
       data-testid={dataTestId}
     >
       {/* Icon Section */}
