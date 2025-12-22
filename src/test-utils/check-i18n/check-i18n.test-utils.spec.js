@@ -71,48 +71,48 @@ describe('check-i18n test utils', () => {
       cleanupTempDirs();
     });
 
-    it('executes the script and captures stdout/stderr', async () => {
-      const result = await runScript([], { scriptContent: mockScript });
+    it('executes the script and captures stdout/stderr', () => {
+      const result = runScript([], { scriptContent: mockScript });
       expect(result.status).toBe(0);
       expect(result.stdout).toContain('Success');
       expect(result.stdout).toContain('Info message');
       expect(result.stderr).toContain('Warning message');
     });
 
-    it('handles process.exit(code)', async () => {
-      const result = await runScript(['--fail'], { scriptContent: mockScript });
+    it('handles process.exit(code)', () => {
+      const result = runScript(['--fail'], { scriptContent: mockScript });
       expect(result.status).toBe(1);
       expect(result.stderr).toContain('Error occurred');
     });
 
-    it('handles thrown errors', async () => {
-      const result = await runScript(['--throw'], {
+    it('handles thrown errors', () => {
+      const result = runScript(['--throw'], {
         scriptContent: mockScript,
       });
       expect(result.status).toBe(1);
       expect(result.stderr).toContain('Runtime error');
     });
 
-    it('sets environment variables', async () => {
-      const result = await runScript(['--env'], {
+    it('sets environment variables', () => {
+      const result = runScript(['--env'], {
         scriptContent: mockScript,
         env: { TEST_VAR: 'test-value' },
       });
       expect(result.stdout).toContain('ENV_VAR=test-value');
     });
 
-    it('restores existing environment variables', async () => {
+    it('restores existing environment variables', () => {
       process.env.EXISTING_VAR = 'original';
-      await runScript([], {
+      runScript([], {
         env: { EXISTING_VAR: 'modified' },
       });
       expect(process.env.EXISTING_VAR).toBe('original');
       delete process.env.EXISTING_VAR;
     });
 
-    it('sets current working directory', async () => {
+    it('sets current working directory', () => {
       const tempDir = makeTempDir();
-      const result = await runScript(['--cwd'], {
+      const result = runScript(['--cwd'], {
         scriptContent: mockScript,
         cwd: tempDir,
       });

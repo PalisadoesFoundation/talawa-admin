@@ -27,9 +27,12 @@ export const fixturesDir = path.resolve(
 const tempDirs = [];
 const tempFiles = [];
 
-// Track last spawn time to prevent rapid concurrent spawns across threads
-let lastSpawnTime = 0;
-const MIN_SPAWN_INTERVAL_MS = 50;
+const sleepSync = (ms) => {
+  if (ms <= 0) return;
+  const sab = new SharedArrayBuffer(4);
+  const int32 = new Int32Array(sab);
+  Atomics.wait(int32, 0, 0, ms);
+};
 
 export const runScript = (targets, options = {}) => {
   const { env, scriptContent, ...rest } = options;
@@ -63,10 +66,7 @@ export const runScript = (targets, options = {}) => {
       attempts++;
       // Exponential backoff with a small cap to avoid long stalls
       const waitMs = Math.min(200, backoffBaseMs * Math.pow(2, attempts - 1));
-      const start = Date.now();
-      while (Date.now() - start < waitMs) {
-        // Busy wait
-      }
+      sleepSync(waitMs);
       continue;
     }
     

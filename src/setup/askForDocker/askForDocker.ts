@@ -76,12 +76,13 @@ export const askAndUpdateTalawaApiUrl = async (
         const raw = endpoint.includes('://') ? endpoint : `http://${endpoint}`;
         try {
           const parsed = new URL(raw);
+          // Normalize hostname and strip IPv6 brackets (e.g. "[::1]")
+          const hostname = (parsed.hostname || '').replace(/^\[|\]$/g, '');
           const isLocalHost = ['localhost', '127.0.0.1', '::1'].includes(
-            parsed.hostname,
+            hostname,
           );
-          const isIPv6LocalLiteral = raw.includes('[::1]');
 
-          if (isLocalHost || isIPv6LocalLiteral) {
+          if (isLocalHost) {
             parsed.hostname = 'host.docker.internal';
             const dockerUrl = parsed.toString();
             updateEnvFile('REACT_APP_TALAWA_URL', dockerUrl);

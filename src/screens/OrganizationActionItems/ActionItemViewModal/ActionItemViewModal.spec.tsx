@@ -204,12 +204,6 @@ const renderItemViewModal = (
   );
 };
 
-const getPickerInputByLabel = (label: string) =>
-  screen.getByLabelText(label, {
-    selector: 'input',
-    exact: true,
-  });
-
 describe('Testing ItemViewModal', () => {
   beforeEach(() => {
     vi.clearAllMocks();
@@ -655,7 +649,12 @@ describe('Testing ItemViewModal', () => {
       expect(screen.getByLabelText(t.creator)).toBeInTheDocument();
       expect(screen.getByLabelText(t.status)).toBeInTheDocument();
       expect(screen.getByLabelText(t.event)).toBeInTheDocument();
-      expect(getPickerInputByLabel(t.assignmentDate)).toBeInTheDocument();
+      expect(
+        screen.getByLabelText(t.assignmentDate, {
+          selector: 'input',
+          exact: true,
+        }),
+      ).toBeInTheDocument();
       expect(screen.getByLabelText(t.preCompletionNotes)).toBeInTheDocument();
     });
 
