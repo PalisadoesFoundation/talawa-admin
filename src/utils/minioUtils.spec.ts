@@ -36,6 +36,12 @@ describe('normalizeMinioUrl', () => {
     expect(normalizeMinioUrl(url)).toBe(expected);
   });
 
+  it('should support https protocol', () => {
+    const url = 'https://minio:9000/bucket/file';
+    const expected = 'https://localhost:9000/bucket/file';
+    expect(normalizeMinioUrl(url)).toBe(expected);
+  });
+
   it('should return original url if invalid', () => {
     const url = 'not-a-url';
     expect(normalizeMinioUrl(url)).toBe(url);

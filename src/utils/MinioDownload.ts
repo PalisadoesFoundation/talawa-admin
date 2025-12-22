@@ -1,14 +1,14 @@
 import { GET_FILE_PRESIGNEDURL } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 
+import { normalizeMinioUrl } from './minioUtils';
+
 interface InterfaceMinioDownload {
   getFileFromMinio: (
     objectName: string,
     organizationId: string,
   ) => Promise<string>;
 }
-
-import { normalizeMinioUrl } from './minioUtils';
 
 export const useMinioDownload = (): InterfaceMinioDownload => {
   const [generateGetFileUrl] = useMutation<{
