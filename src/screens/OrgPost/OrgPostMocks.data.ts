@@ -156,47 +156,47 @@ export const ORGANIZATION_PINNED_POST_LIST_EMPTY_MOCK =
   orgPinnedPostListMockBasic;
 
 export const ORGANIZATION_PINNED_POST_LIST_INITIAL_MOCK: MockLink.MockedResponse =
-  {
-    request: {
-      query: ORGANIZATION_PINNED_POST_LIST,
-      variables: {
-        input: { id: '123' },
-        first: 6,
-        last: null,
-      },
+{
+  request: {
+    query: ORGANIZATION_PINNED_POST_LIST,
+    variables: {
+      input: { id: '123' },
+      first: 6,
+      last: null,
     },
-    result: {
-      data: {
-        organization: {
-          __typename: 'Organization',
-          id: '123',
-          postsCount: 2,
-          pinnedPosts: {
-            __typename: 'PostConnection',
-            edges: [
-              {
-                __typename: 'PostEdge',
-                node: enrichPostNode(samplePosts[0]),
-                cursor: 'cursor1',
-              },
-              {
-                __typename: 'PostEdge',
-                node: enrichPostNode(samplePosts[1]),
-                cursor: 'cursor2',
-              },
-            ],
-            pageInfo: {
-              __typename: 'PageInfo',
-              startCursor: 'cursor1',
-              endCursor: 'cursor2',
-              hasNextPage: true,
-              hasPreviousPage: false,
+  },
+  result: {
+    data: {
+      organization: {
+        __typename: 'Organization',
+        id: '123',
+        postsCount: 2,
+        pinnedPosts: {
+          __typename: 'PostConnection',
+          edges: [
+            {
+              __typename: 'PostEdge',
+              node: enrichPostNode(samplePosts[0]),
+              cursor: 'cursor1',
             },
+            {
+              __typename: 'PostEdge',
+              node: enrichPostNode(samplePosts[1]),
+              cursor: 'cursor2',
+            },
+          ],
+          pageInfo: {
+            __typename: 'PageInfo',
+            startCursor: 'cursor1',
+            endCursor: 'cursor2',
+            hasNextPage: true,
+            hasPreviousPage: false,
           },
         },
       },
     },
-  };
+  },
+};
 
 export const ORGANIZATION_PINNED_POST_LIST_WITH_PAGINATION_MOCK = {
   request: {
@@ -569,7 +569,12 @@ export const createPostSuccessMock: MockLink.MockedResponse = {
         organizationId: '123',
         isPinned: false,
         attachments: [
-          new File(['dummy content'], 'test.png', { type: 'image/png' }),
+          {
+            fileHash: '275876e34cf609db118f3d84b799a790fe8dc0a4b087037f465c49f87c12662c',
+            mimetype: 'IMAGE_PNG',
+            name: 'test.png',
+            objectName: 'uploads/test.png',
+          },
         ],
       },
     },

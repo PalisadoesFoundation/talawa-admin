@@ -726,6 +726,7 @@ describe('makeUserTags utility function - pageInfo default parameter coverage', 
       endCursor: '2',
       hasNextPage: false,
       hasPreviousPage: false,
+      __typename: 'PageInfo',
     });
   });
 
@@ -740,6 +741,7 @@ describe('makeUserTags utility function - pageInfo default parameter coverage', 
       endCursor: '2',
       hasNextPage: true,
       hasPreviousPage: false,
+      __typename: 'PageInfo',
     });
   });
 
@@ -758,6 +760,7 @@ describe('makeUserTags utility function - pageInfo default parameter coverage', 
       endCursor: 'custom-end',
       hasNextPage: true,
       hasPreviousPage: true,
+      __typename: 'PageInfo',
     });
   });
 
@@ -772,6 +775,7 @@ describe('makeUserTags utility function - pageInfo default parameter coverage', 
       endCursor: null,
       hasNextPage: false,
       hasPreviousPage: false,
+      __typename: 'PageInfo',
     });
   });
 

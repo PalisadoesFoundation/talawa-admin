@@ -14,8 +14,10 @@ export type TagEdge = {
     usersAssignedTo: { totalCount: number };
     childTags: { totalCount: number };
     ancestorTags: TagAncestor[];
+    __typename?: string;
   };
   cursor: string;
+  __typename?: string;
 };
 
 type PageInfo = {
@@ -23,12 +25,20 @@ type PageInfo = {
   endCursor: string | null;
   hasNextPage: boolean;
   hasPreviousPage: boolean;
+  __typename?: string;
 };
 
 type UserTags = {
   edges: TagEdge[];
   pageInfo: PageInfo;
   totalCount: number;
+  __typename?: string;
+};
+
+type OrganizationMockData = {
+  id: string;
+  userTags: UserTags;
+  __typename?: string;
 };
 
 type ListMock = {
@@ -36,7 +46,11 @@ type ListMock = {
     query: typeof ORGANIZATION_USER_TAGS_LIST;
     variables: Record<string, unknown>;
   };
-  result: { data: { organizations: { id: string; userTags: UserTags }[] } };
+  result: {
+    data: {
+      organizations: OrganizationMockData[];
+    };
+  };
 };
 
 type ErrorMock = {
@@ -64,8 +78,10 @@ export const makeTagEdge = (
     usersAssignedTo: { totalCount: opts?.users ?? 5 },
     childTags: { totalCount: opts?.children ?? 5 },
     ancestorTags: opts?.ancestors ?? [],
+    __typename: 'Tag',
   },
   cursor: String(id),
+  __typename: 'TagEdge',
 });
 
 export const makeUserTags = (
@@ -79,8 +95,10 @@ export const makeUserTags = (
     hasNextPage: false,
     hasPreviousPage: false,
     ...pageInfo,
+    __typename: 'PageInfo',
   },
   totalCount: edges.length,
+  __typename: 'UserTags',
 });
 
 const listMock = (
@@ -91,7 +109,13 @@ const listMock = (
   request: { query: ORGANIZATION_USER_TAGS_LIST, variables },
   result: {
     data: {
-      organizations: [{ id: 'orgId', userTags: makeUserTags(edges, pageInfo) }],
+      organizations: [
+        {
+          id: 'orgId',
+          userTags: makeUserTags(edges, pageInfo),
+          __typename: 'Organization',
+        },
+      ],
     },
   },
 });

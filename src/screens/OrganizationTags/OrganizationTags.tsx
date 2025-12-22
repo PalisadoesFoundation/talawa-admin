@@ -50,10 +50,16 @@ import TableLoader from 'components/TableLoader/TableLoader';
 import type { InterfaceTagDataPG } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import type { GridCellParams } from '@mui/x-data-grid';
-import type {
-  InterfaceOrganizationTagsQueryPG,
-  SortedByType,
+import type { SortedByType } from 'utils/organizationTagsUtils';
+import {
+  TAGS_QUERY_DATA_CHUNK_SIZE,
+  dataGridStyle,
+  type InterfaceOrganizationTagsQuery,
 } from 'utils/organizationTagsUtils';
+import {
+  PAGE_SIZE,
+  COLUMN_BUFFER_PX,
+} from 'types/ReportingTable/utils';
 import type {
   ReportingRow,
   ReportingTableColumn,
@@ -107,13 +113,12 @@ function OrganizationTags(): JSX.Element {
   const loadMoreUserTags = (): void => {
     orgUserTagsFetchMore({
       variables: {
-        input: { id: orgId },
+        id: orgId,
         first: PAGE_SIZE,
         where: { name: { starts_with: tagSearchName } },
         sortedBy: { id: tagSortOrder },
       },
-    },
-    );
+    });
   };
 
   useEffect(() => {
@@ -163,7 +168,7 @@ function OrganizationTags(): JSX.Element {
   };
 
   const userTagsList =
-    orgUserTagsData?.organization?.tags?.edges?.map(
+    orgUserTagsData?.organizations?.[0]?.userTags?.edges?.map(
       (edge: { node: InterfaceTagDataPG }) => edge.node,
     ) || [];
 

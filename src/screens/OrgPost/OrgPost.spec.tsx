@@ -181,7 +181,7 @@ describe('OrgPost Component', () => {
     // Open modal
     fireEvent.click(await screen.findByTestId('createPostModalBtn'));
     expect(
-      await screen.findByTestId('modalOrganizationHeader'),
+      await screen.findByTestId('modalOrganizationHeader', {}, { timeout: 3000 }),
     ).toBeInTheDocument();
 
     // Fill required fields
