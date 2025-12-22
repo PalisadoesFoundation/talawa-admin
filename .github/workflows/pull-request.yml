@@ -135,6 +135,7 @@ jobs:
 
   CSS-Policy-Check:
     name: CSS Policy Check
+    needs: [Code-Quality-Checks]
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
 
