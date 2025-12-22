@@ -104,6 +104,39 @@ describe('EmptyState Component', () => {
     expect(getByTestId('custom-empty-state-action')).toBeInTheDocument();
     expect(getByTestId('custom-empty-state')).toHaveClass('custom-class');
   });
+  it('renders action button with secondary variant', () => {
+    renderEmptyState({
+      message: 'Test',
+      action: {
+        label: 'Secondary Action',
+        onClick: vi.fn(),
+        variant: 'secondary',
+      },
+    });
+
+    const button = screen.getByRole('button', {
+      name: 'Secondary Action',
+    });
+
+    expect(button).toHaveClass('MuiButton-text');
+  });
+
+  it('renders action button with outlined variant', () => {
+    renderEmptyState({
+      message: 'Test',
+      action: {
+        label: 'Outlined Action',
+        onClick: vi.fn(),
+        variant: 'outlined',
+      },
+    });
+
+    const button = screen.getByRole('button', {
+      name: 'Outlined Action',
+    });
+
+    expect(button).toHaveClass('MuiButton-outlined');
+  });
 });
 
 describe('EmptyState – i18n failure fallback', () => {
