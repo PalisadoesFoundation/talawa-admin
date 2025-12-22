@@ -4,7 +4,7 @@ import { useQuery, useApolloClient } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
-import OrganizaitionFundCampiagn from 'screens/OrganizationFundCampaign/OrganizationFundCampaigns';
+import OrganizationFundCampaign from 'screens/OrganizationFundCampaign/OrganizationFundCampaigns';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import LoginPage from 'screens/LoginPage/LoginPage';
 import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
@@ -235,7 +235,7 @@ function App(): React.ReactElement {
               />
               <Route
                 path="/orgfundcampaign/:orgId/:fundId"
-                element={<OrganizaitionFundCampiagn />}
+                element={<OrganizationFundCampaign />}
               />
               <Route
                 path="/fundCampaignPledge/:orgId/:fundCampaignId"
