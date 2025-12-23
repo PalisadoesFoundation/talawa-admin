@@ -79,7 +79,7 @@ const useSession = (): UseSessionReturnType => {
     clearAllItems();
     endSession();
     navigate('/');
-    NotificationToast.warning(tCommon('sessionLogout'), { autoClose: false });
+    NotificationToast.warning(tCommon('sessionLogOut'), { autoClose: false });
   };
 
   const initializeTimers = (

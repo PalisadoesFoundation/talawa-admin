@@ -103,7 +103,6 @@ const Notification = lazy(() => import('screens/Notification/Notification'));
 
 const PluginStore = lazy(() => import('screens/PluginStore/PluginStore'));
 
-const { t } = useTranslation('common');
 const { setItem } = useLocalStorage();
 
 /**
@@ -125,6 +124,9 @@ const { setItem } = useLocalStorage();
 
 function App(): React.ReactElement {
   const { data, loading } = useQuery(CURRENT_USER);
+
+  const { t } = useTranslation('common');
+
   const apolloClient = useApolloClient();
 
   // Get user permissions and admin status (memoized to prevent infinite loops)

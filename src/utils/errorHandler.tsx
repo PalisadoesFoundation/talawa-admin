@@ -73,6 +73,8 @@ export const errorHandler = (a: unknown, error: unknown): void => {
   NotificationToast.error({
     key: 'unknownError',
     namespace: 'errors',
-    values: { msg: error },
+    values: {
+      msg: typeof error === 'string' ? error : JSON.stringify(error),
+    },
   });
 };
