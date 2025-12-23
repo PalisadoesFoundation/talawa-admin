@@ -172,7 +172,9 @@ describe('PluginList', () => {
     expect(emptyState).toHaveStyle('padding: 40px 20px');
     expect(emptyState).toHaveStyle('background: #fff');
     expect(emptyState).toHaveStyle('border-radius: 12px');
-    expect(emptyState).toHaveStyle('border: 1px solid #e7e7e7');
+    expect(emptyState).toHaveStyle('border-width: 1px');
+    expect(emptyState).toHaveStyle('border-style: solid');
+    expect(emptyState).toHaveStyle('border-color: rgb(231, 231, 231)');
   });
 
   // Test 8: Plugin list container has correct styles
