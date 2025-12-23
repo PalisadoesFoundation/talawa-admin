@@ -66,6 +66,7 @@ import {
 } from '../../../types/ReportingTable/utils';
 import TableLoader from 'components/TableLoader/TableLoader';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
+import { GridCellParams } from '@mui/x-data-grid';
 
 interface IMemberNode {
   id: string;
@@ -147,9 +148,8 @@ export default function People(): React.JSX.Element {
 
   // Prepare table rows
   const tableRows = useMemo(() => {
-    return members.map((member: IMemberEdge, index: number) => ({
+    return members.map((member: IMemberEdge) => ({
       id: member.node.id,
-      rowNumber: index + 1,
       name: member.node.name,
       email: member.node.emailAddress || '***********************',
       role: member.node.role === 'administrator' ? 'Admin' : 'Member',
@@ -175,6 +175,13 @@ export default function People(): React.JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       flex: 1,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <div>
+            {params.api.getRowIndexRelativeToVisibleRows(params.row.id) + 1}
+          </div>
+        );
+      },
     },
     {
       field: 'name',
