@@ -292,9 +292,11 @@ describe('Testing Users screen', () => {
 
     // Wait for the "no results" message
     expect(await screen.findByTestId('users-empty-state')).toBeInTheDocument();
-    expect(screen.getByTestId('users-empty-state-message')).toHaveTextContent(
-      'NonexistentName',
-    );
+    const message = screen.getByTestId('users-empty-state-message');
+
+    expect(message).toHaveTextContent('No results found for');
+    expect(message).toHaveTextContent('NonexistentName');
+
     expect(
       screen.getByTestId('users-empty-state-description'),
     ).toHaveTextContent('tryAdjustingFilters');
@@ -587,11 +589,11 @@ describe('Testing Users screen', () => {
       );
 
       await wait();
-      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
-      expect(
-        screen.getByText(/Error occurred while loading Users/),
-      ).toBeInTheDocument();
-      expect(screen.getByText(/Network error occurred/)).toBeInTheDocument();
+      const errorMsg = screen.getByTestId('errorMsg');
+
+      expect(errorMsg).toBeInTheDocument();
+      expect(errorMsg).toHaveTextContent('errorLoadingUsers');
+      expect(errorMsg).toHaveTextContent('Network error occurred');
     });
 
     it('should reset search and refetch on clear', async () => {

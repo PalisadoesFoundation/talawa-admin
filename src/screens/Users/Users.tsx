@@ -363,7 +363,7 @@ const Users = (): JSX.Element => {
           }}
           sorting={[
             {
-              title: t('Sort by'),
+              title: t('sortBy'),
               options: [
                 { label: t('Newest'), value: 'newest' },
                 { label: t('Oldest'), value: 'oldest' },
@@ -373,7 +373,7 @@ const Users = (): JSX.Element => {
               testIdPrefix: 'sortUsers',
             },
             {
-              title: t('Filter by role'),
+              title: t('filterByRole'),
               options: [
                 { label: tCommon('admin'), value: 'admin' },
                 { label: tCommon('user'), value: 'user' },

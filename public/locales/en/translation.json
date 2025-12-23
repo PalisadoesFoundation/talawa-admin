@@ -247,6 +247,8 @@
     "sort": "Sort",
     "Newest": "Newest First",
     "Oldest": "Oldest First",
+    "sortBy": "Sort by",
+    "filterByRole": "Filter by role",
     "noOrgError": "Organizations not found, please create an organization through dashboard",
     "roleUpdated": "Role Updated.",
     "joinNow": "Join Now",

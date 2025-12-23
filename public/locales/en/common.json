@@ -4,7 +4,7 @@
   "searchByName": "Search by name...",
   "loading": "Loading...",
   "endOfResults": "End of results",
-  "noResultsFoundFor": "No results found for ",
+  "noResultsFoundFor": "No results found for {{query}}",
   "edit": "Edit",
   "admins": "Admins",
   "admin": "ADMIN",
