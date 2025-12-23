@@ -43,17 +43,26 @@ vi.mock('utils/useLocalstorage', () => ({
 }));
 
 const createMock = () => {
+  const mockGetItem = vi.fn(() => 'Test user');
+  const mockSetItem = vi.fn();
+  const mockRemoveItem = vi.fn();
+  const mockGetStorageKey = vi.fn((key: string) => key);
   const mockClearAllItems = vi.fn();
-  const mockgetItems = vi.fn(() => 'Test user');
 
   (useLocalStorage as Mock).mockReturnValue({
+    getItem: mockGetItem,
+    setItem: mockSetItem,
+    removeItem: mockRemoveItem,
+    getStorageKey: mockGetStorageKey,
     clearAllItems: mockClearAllItems,
-    getItem: mockgetItems,
   });
 
   return {
+    mockGetItem,
+    mockSetItem,
+    mockRemoveItem,
+    mockGetStorageKey,
     mockClearAllItems,
-    mockgetItems,
   };
 };
 

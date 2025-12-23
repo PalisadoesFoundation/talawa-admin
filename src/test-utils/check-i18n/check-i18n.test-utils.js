@@ -25,15 +25,57 @@ export const fixturesDir = path.resolve(
 );
 
 const tempDirs = [];
+const tempFiles = [];
+
+const sleepSync = (ms) => {
+  if (ms <= 0) return;
+  const sab = new SharedArrayBuffer(4);
+  const int32 = new Int32Array(sab);
+  Atomics.wait(int32, 0, 0, ms);
+};
 
 export const runScript = (targets, options = {}) => {
-  const { env, ...rest } = options;
-  const res = spawnSync(process.execPath, [scriptPath, ...targets], {
-    encoding: 'utf-8',
-    env: { ...process.env, ...(env ?? {}), FORCE_COLOR: '0', NO_COLOR: '1' },
-    timeout: 30_000,
-    ...rest,
-  });
+  const { env, scriptContent, ...rest } = options;
+  let targetScript = scriptPath;
+  let tempScriptPath = null;
+
+  if (scriptContent) {
+    const tempDir = makeTempDir();
+    targetScript = path.join(tempDir, 'script.js');
+    tempScriptPath = targetScript;
+    tempFiles.push(tempScriptPath); // Track for later cleanup
+    fs.writeFileSync(targetScript, scriptContent);
+  }
+
+  // Retry logic for EBADF errors (Bad File Descriptor)
+  let res;
+  let attempts = 0;
+  const maxAttempts = 8;
+  const backoffBaseMs = 25;
+  
+  while (attempts < maxAttempts) {
+    res = spawnSync(process.execPath, [targetScript, ...targets], {
+      encoding: 'utf-8',
+      env: { ...process.env, ...(env ?? {}), FORCE_COLOR: '0', NO_COLOR: '1' },
+      timeout: 30_000,
+      ...rest,
+    });
+    
+    // If EBADF error, wait a bit and retry
+    if (res.error && res.error.code === 'EBADF' && attempts < maxAttempts - 1) {
+      attempts++;
+      // Exponential backoff with a small cap to avoid long stalls
+      const waitMs = Math.min(200, backoffBaseMs * Math.pow(2, attempts - 1));
+      sleepSync(waitMs);
+      continue;
+    }
+    
+    break;
+  }
+  
+  // Don't cleanup immediately - let cleanupTempDirs handle it
+  // This prevents EBADF errors from file descriptor race conditions
+  
   if (res.error) throw res.error;
   return res;
 };
@@ -52,8 +94,10 @@ export const writeTempFile = (dir, relPath, content) => {
 };
 
 export const cleanupTempDirs = () => {
+  // Cleanup temp dirs (which includes temp files inside them)
   tempDirs.forEach((dir) => {
     fs.rmSync(dir, { recursive: true, force: true });
   });
   tempDirs.length = 0;
+  tempFiles.length = 0;
 };
