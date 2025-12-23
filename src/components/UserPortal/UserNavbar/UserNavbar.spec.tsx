@@ -288,7 +288,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
   });
 
   it('Logs out the user and clears local storage', async () => {
-    // Spy on the mock's clear function directly
+    // Create a fresh mock and extract clearAllItems for assertion
     const { mockClearAllItems } = createMock();
 
     render(
