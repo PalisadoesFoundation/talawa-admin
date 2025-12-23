@@ -1212,3 +1212,35 @@ jobs:
           if [ -f .pidfile_dev ]; then
             kill "$(cat .pidfile_dev)"
           fi
+  Post-PR-Comment:
+    name: Post PR Comment After All Checks
+    runs-on: ubuntu-latest
+    needs: [ZAP-Security-Scan]
+    if: ${{ github.event_name == 'pull_request' }}
+    permissions:
+      issues: write
+      pull-requests: write
+      contents: read
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Read PR comment from file
+        id: read_comment
+        run: |
+          COMMENT_BODY="$(cat .github/workflows/config/pr-comment.txt)"
+          echo "comment<<EOF" >> $GITHUB_OUTPUT
+          echo "$COMMENT_BODY" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Post comment on Pull Request
+        uses: actions/github-script@v6
+        with:
+          script: |
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: `${{ steps.read_comment.outputs.comment }}`
+            })
