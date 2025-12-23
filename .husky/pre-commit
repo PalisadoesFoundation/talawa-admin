@@ -1,12 +1,14 @@
 #!/bin/bash
 . "$(dirname "$0")/_/husky.sh"
 
+# 1. Translation Tag Check
 STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACMRT | grep -E '\.(ts|tsx|js|jsx)$')
 
 if [ -n "$STAGED_FILES" ]; then
   echo "$STAGED_FILES" | xargs python3 .github/workflows/scripts/translation_check.py --files
 fi
 
+# 2. Standard Quality Checks
 pnpm run format:fix
 pnpm run lint-staged
 pnpm run typecheck
@@ -17,9 +19,11 @@ npx knip --config knip.deps.json --include dependencies
 pnpm run check-mock-cleanup
 pnpm run check-localstorage
 
+# 3. CSS Policy Check (CodeRabbit Fix: Added xargs for filenames with spaces)
 CSS_STAGED=$(git diff --cached --name-only --diff-filter=ACM | grep -v '^src/utils/' | grep -v '^src/types/' || true)
 if [ -n "$CSS_STAGED" ]; then
-  python3 .github/workflows/scripts/css_check.py --files $CSS_STAGED
+  echo "$CSS_STAGED" | xargs python3 .github/workflows/scripts/css_check.py --files
 fi
 
-git add .
+# 4. Re-stage modified files (CodeRabbit Fix: Use -u for tracked files only)
+git add -u
