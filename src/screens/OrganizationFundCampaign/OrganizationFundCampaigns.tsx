@@ -154,7 +154,7 @@ const orgFundCampaign = (): JSX.Element => {
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading Campaigns
+            {t('errorLoading')}
             <br />
             {campaignError.message}
           </h6>

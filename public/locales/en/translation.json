@@ -728,7 +728,8 @@
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
     "lowestGoal": "Lowest Goal",
-    "highestGoal": "Highest Goal"
+    "highestGoal": "Highest Goal",
+    "errorLoading": "Error occured while loading campaigns data"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
