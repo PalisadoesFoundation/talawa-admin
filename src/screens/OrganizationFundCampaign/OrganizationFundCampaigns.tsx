@@ -255,21 +255,15 @@ const orgFundCampaign = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => (
-        <div
+        <button
+          type="button"
           className={styles.hyperlinkText}
           data-testid="campaignName"
           onClick={() => handleClick(params.row.id as InterfaceCampaignInfo)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              handleClick(params.row.id as InterfaceCampaignInfo);
-            }
-          }}
-          role="button"
-          tabIndex={0}
           aria-label={t('campaignName')}
         >
           {params.row.name}
-        </div>
+        </button>
       ),
     },
     {
@@ -401,7 +395,7 @@ const orgFundCampaign = (): JSX.Element => {
   ];
 
   const gridProps: ReportingTableGridProps = {
-    columnBuffer: COLUMN_BUFFER_PX,
+    columnBufferPx: COLUMN_BUFFER_PX,
     paginationMode: 'client',
     pagination: true,
     paginationModel,

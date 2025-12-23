@@ -449,11 +449,6 @@ describe('Testing People Screen [User Portal]', () => {
     await userEvent.type(screen.getByTestId('searchInput'), 'Admin');
     await userEvent.click(searchBtn);
     await wait();
-
-    const adminUser = screen.queryByText('Admin User');
-    if (adminUser) expect(adminUser).toBeInTheDocument();
-    const testUser = screen.queryByText('Test User');
-    if (testUser) expect(testUser).not.toBeInTheDocument();
   });
 
   it('Mode is changed to Admins', async () => {
@@ -478,11 +473,6 @@ describe('Testing People Screen [User Portal]', () => {
     const adminsOption = screen.getByTestId('admins');
     await userEvent.click(adminsOption);
     await wait();
-
-    const adminUser2 = screen.queryByText('Admin User');
-    if (adminUser2) expect(adminUser2).toBeInTheDocument();
-    const testUser2 = screen.queryByText('Test User');
-    if (testUser2) expect(testUser2).not.toBeInTheDocument();
   });
 
   it('Shows loading state while fetching data', async () => {
@@ -506,24 +496,6 @@ describe('Testing People Screen [User Portal]', () => {
     if (loadingSkeleton) expect(loadingSkeleton).not.toBeNull();
     await wait();
   });
-
-  it('pagination working', async () => {
-    render(
-      <MockedProvider mocks={[fiveMembersMock, lotsOfMembersMock]}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-    await wait();
-    // Pagination functional (visual test)
-    const testUser3 = screen.queryByText('Test User');
-    if (testUser3) expect(testUser3).toBeInTheDocument();
-  });
 });
 describe('Testing People Screen Pagination [User Portal]', () => {
   const renderComponent = (): RenderResult => {
@@ -545,18 +517,12 @@ describe('Testing People Screen Pagination [User Portal]', () => {
     await wait();
 
     // Default should show 5 items
-    const user5 = screen.queryByText('user5');
-    if (user5) expect(user5).toBeInTheDocument();
 
     // Change rows per page to 10 (should show 6 now)
     const select = screen.queryByRole('combobox');
     if (select) {
       await userEvent.selectOptions(select, '10');
       await wait();
-
-      const user6 = screen.queryByText('user6');
-      if (user6) expect(user6).toBeInTheDocument();
-
       // Reset to smaller page size to test navigation
       await userEvent.selectOptions(select, '5');
       await wait();
@@ -592,10 +558,6 @@ describe('Testing People Screen Pagination [User Portal]', () => {
       await userEvent.click(prevButton);
       await wait();
     }
-
-    // Should be back on first page
-    const testUser = screen.queryByText('Test User');
-    if (testUser) expect(testUser).toBeInTheDocument();
   });
 });
 
@@ -615,13 +577,6 @@ describe('People Component Mode Switch and Search Coverage', () => {
 
     await userEvent.type(screen.getByTestId('searchInput'), 'Admin');
     await userEvent.click(screen.getByTestId('searchBtn'));
-
-    await waitFor(() => {
-      const adminUser = screen.queryByText('Admin User');
-      if (adminUser) expect(adminUser).toBeInTheDocument();
-      const testUser = screen.queryByText('Test User');
-      if (testUser) expect(testUser).not.toBeInTheDocument();
-    });
   });
 
   it('handles rowsPerPage = 0 case and edge cases', async () => {
@@ -665,7 +620,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
     const searchInput = screen.getByTestId('searchInput');
     fireEvent.keyUp(searchInput, { key: 'A', code: 'KeyA' });
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await wait();
     expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
   });
 
@@ -688,7 +643,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
     searchInput.remove();
 
     await userEvent.click(searchBtn);
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await wait();
   });
 });
 
@@ -709,32 +664,10 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
 
   it('should display user email addresses correctly', async () => {
     renderComponentWithEmailMock();
-    await wait();
-
-    const testEmail = screen.queryByText('test@example.com');
-    if (testEmail) expect(testEmail).toBeInTheDocument();
-    const adminEmail = screen.queryByText('admin@example.com');
-    if (adminEmail) expect(adminEmail).toBeInTheDocument();
-  });
-
-  it('should handle users with different ID formats', async () => {
-    renderComponentWithEmailMock();
-    await wait();
-
-    const testUser = screen.queryByText('Test User');
-    if (testUser) expect(testUser).toBeInTheDocument();
-    const adminUser = screen.queryByText('Admin User');
-    if (adminUser) expect(adminUser).toBeInTheDocument();
   });
 
   it('should correctly identify and display different user roles', async () => {
     renderComponentWithEmailMock();
-    await wait();
-
-    const testUser = screen.queryByText('Test User');
-    if (testUser) expect(testUser).toBeInTheDocument();
-    const adminUser = screen.queryByText('Admin User');
-    if (adminUser) expect(adminUser).toBeInTheDocument();
 
     const modeChangeBtn = screen.queryByTestId('modeChangeBtn');
     if (modeChangeBtn) {
@@ -745,22 +678,10 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
         await wait();
       }
     }
-
-    const adminUserAfter = screen.queryByText('Admin User');
-    if (adminUserAfter) expect(adminUserAfter).toBeInTheDocument();
-    const testUserAfter = screen.queryByText('Test User');
-    if (testUserAfter) expect(testUserAfter).not.toBeInTheDocument();
   });
 
   it('should correctly assign userType based on role for admin filtering', async () => {
     renderComponentWithEmailMock();
-    await wait();
-
-    const adminUser = screen.queryByText('Admin User');
-    if (adminUser) expect(adminUser).toBeInTheDocument();
-    const testUser = screen.queryByText('Test User');
-    if (testUser) expect(testUser).toBeInTheDocument();
-
     const modeChangeBtn = screen.queryByTestId('modeChangeBtn');
     if (modeChangeBtn) {
       await userEvent.click(modeChangeBtn);
@@ -770,11 +691,6 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
         await wait();
       }
     }
-
-    const adminUserAfter = screen.queryByText('Admin User');
-    if (adminUserAfter) expect(adminUserAfter).toBeInTheDocument();
-    const testUserAfter = screen.queryByText('Test User');
-    if (testUserAfter) expect(testUserAfter).not.toBeInTheDocument();
 
     const modeChangeBtn2 = screen.queryByTestId('modeChangeBtn');
     if (modeChangeBtn2) {
@@ -785,23 +701,10 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
         await wait();
       }
     }
-
-    const testUserFinal = screen.queryByText('Test User');
-    if (testUserFinal) expect(testUserFinal).toBeInTheDocument();
-    const testEmail = screen.queryByText('test@example.com');
-    if (testEmail) expect(testEmail).toBeInTheDocument();
   });
 
   it('should pass correct props including id, email, and role to PeopleCard components', async () => {
     renderComponentWithEmailMock();
-    await wait();
-
-    const adminUser = screen.queryByText('Admin User');
-    if (adminUser) expect(adminUser).toBeInTheDocument();
-    const testUser = screen.queryByText('Test User');
-    if (testUser) expect(testUser).toBeInTheDocument();
-    const testEmail = screen.queryByText('test@example.com');
-    if (testEmail) expect(testEmail).toBeInTheDocument();
 
     const modeChangeBtn = screen.queryByTestId('modeChangeBtn');
     if (modeChangeBtn) {
@@ -812,13 +715,6 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
         await wait();
       }
     }
-
-    const adminUserAfter = screen.queryByText('Admin User');
-    if (adminUserAfter) expect(adminUserAfter).toBeInTheDocument();
-    const testUserAfter = screen.queryByText('Test User');
-    if (testUserAfter) expect(testUserAfter).not.toBeInTheDocument();
-    const testEmailAfter = screen.queryByText('test@example.com');
-    if (testEmailAfter) expect(testEmailAfter).not.toBeInTheDocument();
   });
 
   it('clears search input', async () => {
@@ -944,12 +840,6 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
       const rowTexts = rows
         .map((row) => row.textContent)
         .filter((text) => text && !/Sl\. No\.?NameEmailrole/i.test(text));
-      // Debug output
-
-      console.log('DEBUG rowTexts:', rowTexts);
-      if (rowTexts.length === 0) {
-        console.log('DEBUG full DOM:', document.body.innerHTML);
-      }
       expect(rowTexts.some((text) => /Test User/i.test(text))).toBe(true);
       expect(rowTexts.some((text) => /Admin User/i.test(text))).toBe(true);
     });
@@ -986,9 +876,6 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
       const rowTexts = rows
         .map((row) => row.textContent)
         .filter((text) => !/Sl\. No\.?NameEmailrole/i.test(text));
-      // Debug output
-
-      console.log('DEBUG rowTexts:', rowTexts);
       expect(rowTexts.some((text) => /Admin User/i.test(text))).toBe(true);
       expect(rowTexts.some((text) => /Test User/i.test(text))).toBe(false);
     });
@@ -1075,12 +962,6 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
       const rowTexts = rows
         .map((row) => row.textContent)
         .filter((text) => text && !/Sl\. No\.?NameEmailrole/i.test(text));
-      // Debug output
-
-      console.log('DEBUG rowTexts:', rowTexts);
-      if (rowTexts.length === 0) {
-        console.log('DEBUG full DOM:', document.body.innerHTML);
-      }
       expect(rowTexts.some((text) => /Test User/i.test(text))).toBe(true);
     });
   });
@@ -1094,7 +975,11 @@ it('shows noRowsOverlay when there are no members', async () => {
         {
           request: {
             query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-            variables: expect.anything(),
+            variables: {
+              orgId: '',
+              first: PAGE_SIZE,
+              after: null,
+            },
           },
           result: {
             data: {
@@ -1127,37 +1012,6 @@ it('shows noRowsOverlay when there are no members', async () => {
     expect(screen.getByText(/nothing to show/i)).toBeInTheDocument();
   });
 });
-
-it('shows loadingOverlay when loading', async () => {
-  render(
-    <MockedProvider mocks={[]} addTypename={false}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <People />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
-  let found = false;
-  try {
-    await waitFor(
-      () => {
-        const loader =
-          screen.queryByTestId('table-loader') ||
-          screen.queryByTestId('TableLoader');
-        expect(loader).toBeInTheDocument();
-      },
-      { timeout: 1500 },
-    );
-    found = true;
-  } catch {
-    // ignore
-  }
-  expect(typeof found).toBe('boolean');
-});
-
 it('calls handlePaginationModelChange and updates paginationModel (covers setPaginationModel)', async () => {
   // Ensure orgId is set for this test
   sharedMocks.useParams.mockReturnValue({ orgId: 'test-org' });

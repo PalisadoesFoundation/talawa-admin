@@ -1223,7 +1223,7 @@ describe('BlockUser Component', () => {
       // After clicking next, check that a user from the second page is visible
       // and a user from the first page is not
       await waitFor(() => {
-        expect(screen.getByText('User 11')).toBeInTheDocument();
+        expect(screen.getByText(`User ${PAGE_SIZE + 1}`)).toBeInTheDocument();
         expect(screen.queryByText('User 1')).not.toBeInTheDocument();
       });
     });

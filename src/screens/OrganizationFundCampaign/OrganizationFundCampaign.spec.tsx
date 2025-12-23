@@ -20,6 +20,7 @@ import {
 import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
+import { PAGE_SIZE } from '../../types/ReportingTable/utils';
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -120,7 +121,6 @@ describe('FundCampaigns Screen', () => {
   it('should cover setPaginationModel and TableLoader overlay (lines 112, 483)', async () => {
     mockRouteParams();
     // Use PAGE_SIZE from the component or set to 10 if unknown
-    const PAGE_SIZE = 10;
     const manyCampaigns = Array.from({ length: PAGE_SIZE + 1 }, (_, i) => ({
       node: {
         id: `campaignId${i + 1}`,
@@ -251,21 +251,71 @@ describe('FundCampaigns Screen', () => {
   });
   it('should trigger pagination and cover setPaginationModel', async () => {
     mockRouteParams();
-    renderFundCampaign(link1);
+    // Use PAGE_SIZE from the earlier test
+    const manyCampaigns = Array.from({ length: PAGE_SIZE + 1 }, (_, i) => ({
+      node: {
+        id: `campaignId${i + 1}`,
+        name: `Campaign ${i + 1}`,
+        startAt: '2024-01-01T00:00:00.000Z',
+        endAt: '2026-01-01T00:00:00.000Z',
+        currencyCode: 'USD',
+        goalAmount: 100 + i,
+        __typename: 'Campaign',
+      },
+    }));
+    const paginationMocks = [
+      {
+        request: {
+          query: FUND_CAMPAIGN,
+          variables: { input: { id: 'fundId' } },
+        },
+        result: {
+          data: {
+            fund: {
+              id: 'fundId',
+              name: 'Fund 1',
+              campaigns: {
+                edges: manyCampaigns,
+                __typename: 'CampaignConnection',
+              },
+              __typename: 'Fund',
+            },
+          },
+        },
+      },
+    ];
+    render(
+      <MockedProvider mocks={paginationMocks}>
+        <MemoryRouter initialEntries={['/orgfundcampaign/orgId/fundId']}>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Routes>
+                  <Route
+                    path="/orgfundcampaign/:orgId/:fundId"
+                    element={<OrganizationFundCampaigns />}
+                  />
+                </Routes>
+              </I18nextProvider>
+            </LocalizationProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
 
     // Wait for campaigns to load
     await waitFor(() => {
       expect(screen.getByText('Campaign 1')).toBeInTheDocument();
     });
 
-    // Find the DataGrid pagination next button and click it
+    // Find the DataGrid pagination next button and wait for it to be enabled before clicking
     const nextButton = screen.getByLabelText('Go to next page');
     expect(nextButton).toBeInTheDocument();
-    userEvent.click(nextButton);
+    await waitFor(() => expect(nextButton).toBeEnabled());
+    await userEvent.click(nextButton);
 
-    // Since we only have 2 campaigns and PAGE_SIZE is likely >= 2, add more mock campaigns if needed for real pagination
-    // For now, just check that the handler is triggered and the page changes (if pagination is enabled)
-    // Optionally, check for the presence of a campaign on the next page if more data is available
+    // Optionally, check for the presence of a campaign on the next page
+    expect(screen.getByText('Campaign 11')).toBeInTheDocument();
   });
   beforeEach(() => {
     vi.mock('react-router', async () => {
