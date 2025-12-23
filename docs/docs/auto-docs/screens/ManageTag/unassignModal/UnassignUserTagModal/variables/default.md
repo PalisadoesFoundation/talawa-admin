@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceUnassignUserTagModalProps`](../interfaces/InterfaceUnassignUserTagModalProps.md)\>
 
-Defined in: [src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx#L44)
+Defined in: [src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/unassignModal/UnassignUserTagModal.tsx#L32)
