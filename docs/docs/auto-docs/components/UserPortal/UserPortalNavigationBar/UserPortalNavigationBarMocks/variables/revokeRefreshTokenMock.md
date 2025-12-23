@@ -20,6 +20,14 @@ Mock GraphQL mutation for revoking refresh token
 
 > **query**: `DocumentNode` = `REVOKE_REFRESH_TOKEN`
 
+#### request.variables
+
+> **variables**: `object`
+
+#### request.variables.refreshToken
+
+> **refreshToken**: `any`
+
 ### result
 
 > **result**: `object`
@@ -28,6 +36,6 @@ Mock GraphQL mutation for revoking refresh token
 
 > **data**: `object`
 
-#### result.data.revokeRefreshToken
+#### result.data.revokeRefreshTokenForUser
 
-> **revokeRefreshToken**: `boolean` = `true`
+> **revokeRefreshTokenForUser**: `boolean` = `true`

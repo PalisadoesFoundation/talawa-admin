@@ -38,10 +38,13 @@ export const organizationDataMock = {
 export const revokeRefreshTokenMock = {
   request: {
     query: REVOKE_REFRESH_TOKEN,
+    variables: {
+      refreshToken: expect.any(String),
+    },
   },
   result: {
     data: {
-      revokeRefreshToken: true,
+      revokeRefreshTokenForUser: true,
     },
   },
 };
