@@ -14,6 +14,8 @@ import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScreen';
 import Loader from 'components/Loader/Loader';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
+import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
+import { useTranslation } from 'react-i18next';
 
 const OrganizationScreen = lazy(
   () => import('components/OrganizationScreen/OrganizationScreen'),
@@ -101,6 +103,7 @@ const Notification = lazy(() => import('screens/Notification/Notification'));
 
 const PluginStore = lazy(() => import('screens/PluginStore/PluginStore'));
 
+const { t } = useTranslation('common');
 const { setItem } = useLocalStorage();
 
 /**
@@ -173,6 +176,7 @@ function App(): React.ReactElement {
   return (
     <>
       <Suspense fallback={<Loader />}>
+        <NotificationToastContainer />
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/register" element={<LoginPage />} />
@@ -193,7 +197,7 @@ function App(): React.ReactElement {
                   element={
                     <PluginRouteRenderer
                       route={route}
-                      fallback={<div>Loading admin plugin...</div>}
+                      fallback={<div>{t('loadingAdminPlugin')}</div>}
                     />
                   }
                 />
@@ -260,7 +264,7 @@ function App(): React.ReactElement {
                   element={
                     <PluginRouteRenderer
                       route={route}
-                      fallback={<div>Loading admin plugin...</div>}
+                      fallback={<div>{t('loadingAdminPlugin')}</div>}
                     />
                   }
                 />
@@ -286,7 +290,7 @@ function App(): React.ReactElement {
                   element={
                     <PluginRouteRenderer
                       route={route}
-                      fallback={<div>Loading user plugin...</div>}
+                      fallback={<div>{t('loadingUserPlugin')}</div>}
                     />
                   }
                 />
@@ -322,7 +326,7 @@ function App(): React.ReactElement {
                   element={
                     <PluginRouteRenderer
                       route={route}
-                      fallback={<div>Loading user plugin...</div>}
+                      fallback={<div>{t('loadingUserPlugin')}</div>}
                     />
                   }
                 />
