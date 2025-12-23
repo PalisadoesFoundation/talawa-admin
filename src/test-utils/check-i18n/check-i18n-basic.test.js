@@ -13,7 +13,7 @@ afterEach(() => {
   cleanupTempDirs();
 });
 
-describe('check-i18n script - basic functionality', () => {
+describe.sequential('check-i18n script - basic functionality', () => {
   it('fails with violations', () => {
     const tmp = makeTempDir();
     const file = writeTempFile(

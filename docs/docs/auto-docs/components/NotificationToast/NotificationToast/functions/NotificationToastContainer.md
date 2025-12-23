@@ -17,7 +17,7 @@ any prop via `props`.
 
 ### props
 
-`ToastContainerProps`
+`ToastContainerProps` = `{}`
 
 ## Returns
 
