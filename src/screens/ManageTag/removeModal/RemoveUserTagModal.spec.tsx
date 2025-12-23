@@ -5,6 +5,7 @@ import RemoveUserTagModal, {
   InterfaceRemoveUserTagModalProps,
 } from './RemoveUserTagModal';
 import type { TFunction } from 'i18next';
+import { toast } from 'react-toastify';
 
 // Mock CSS module
 vi.mock('style/app-fixed.module.css', () => ({
@@ -149,10 +150,10 @@ describe('RemoveUserTagModal Component', () => {
     const error = new Error('Remove failed');
 
     const failingHandler = vi.fn().mockRejectedValue(error);
-
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
       .mockImplementation(() => {});
+    const toastErrorSpy = vi.spyOn(toast, 'error');
 
     render(
       <RemoveUserTagModal
@@ -172,6 +173,10 @@ describe('RemoveUserTagModal Component', () => {
       expect(confirmButton).not.toBeDisabled();
     });
 
+    expect(consoleErrorSpy).toHaveBeenCalledWith(error);
+    expect(toastErrorSpy).toHaveBeenCalledWith('removeUserTagError');
+
     consoleErrorSpy.mockRestore();
+    toastErrorSpy.mockRestore();
   });
 });

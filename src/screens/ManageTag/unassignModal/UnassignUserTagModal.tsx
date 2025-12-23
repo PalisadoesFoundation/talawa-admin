@@ -28,6 +28,7 @@ import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { BaseModal } from 'shared-components/BaseModal';
+import { toast } from 'react-toastify';
 
 export interface InterfaceUnassignUserTagModalProps {
   unassignUserTagModalIsOpen: boolean;
@@ -54,6 +55,7 @@ const UnassignUserTagModal: React.FC<InterfaceUnassignUserTagModalProps> = ({
       await handleUnassignUserTag();
     } catch (error) {
       console.error(error);
+      toast.error(t('unassignUserTagError'));
     } finally {
       setIsSubmitting(false);
     }

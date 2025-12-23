@@ -191,6 +191,8 @@ describe('UnassignUserTagModal Component', () => {
       expect(confirmButton).not.toBeDisabled();
     });
 
+    expect(consoleErrorSpy).toHaveBeenCalledWith(error);
+
     consoleErrorSpy.mockRestore();
   });
 });
