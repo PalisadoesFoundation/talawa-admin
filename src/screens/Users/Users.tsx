@@ -79,6 +79,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import type { ApolloError } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import PageHeader from 'shared-components/Navbar/Navbar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
@@ -336,6 +337,17 @@ const Users = (): JSX.Element => {
     t('blocked_organizations'),
   ];
 
+  /**
+   * Helper function to determine empty state message
+   * @returns {string} - The appropriate empty state message
+   */
+  const getEmptyStateMessage = () => {
+    if (searchByName.length > 0) {
+      return `${tCommon('noResultsFoundFor')} "${searchByName}"`;
+    }
+    return t('noUserFound');
+  };
+
   return (
     <>
       {/* Buttons Container */}
@@ -376,31 +388,17 @@ const Users = (): JSX.Element => {
       {/* Error Panel */}
       {usersQueryErrorPanel}
 
-      {isLoading == false &&
-      usersData &&
-      displayedUsers.length === 0 &&
-      searchByName.length > 0 ? (
-        <section
-          className={styles.notFound}
-          role="alert"
-          aria-label="No results found"
-        >
-          <h4>
-            {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
-          </h4>
-        </section>
-      ) : isLoading == false &&
-        usersData &&
-        usersData.length === 0 &&
-        displayedUsers.length === 0 &&
-        searchByName.length === 0 ? (
-        <div
-          className={styles.notFound}
-          role="alert"
-          aria-label="No results found"
-        >
-          <h4>{t('noUserFound')}</h4>
-        </div>
+      {isLoading == false && displayedUsers.length === 0 ? (
+        <EmptyState
+          icon="person_off"
+          message={getEmptyStateMessage()}
+          description={
+            displayedUsers.length === 0 && searchByName.length > 0
+              ? t('tryAdjustingFilters')
+              : undefined
+          }
+          dataTestId="users-empty-state"
+        />
       ) : (
         <div className={styles.listBox}>
           {isLoading && (
