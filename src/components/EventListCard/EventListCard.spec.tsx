@@ -17,9 +17,16 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { useLocalStorage } from 'utils/useLocalstorage';
 import { props } from './EventListCardProps';
 import { ERROR_MOCKS, MOCKS } from './Modal/EventListCardMocks';
-import { vi, beforeAll, afterAll, expect, it } from 'vitest';
+import { vi, beforeAll, afterAll, afterEach, expect, it } from 'vitest';
 
-const { setItem } = useLocalStorage();
+let setItem: ReturnType<typeof useLocalStorage>['setItem'];
+let clearAllItems: ReturnType<typeof useLocalStorage>['clearAllItems'];
+
+beforeAll(() => {
+  const storage = useLocalStorage();
+  setItem = storage.setItem;
+  clearAllItems = storage.clearAllItems;
+});
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(ERROR_MOCKS, true);
@@ -88,6 +95,7 @@ const renderEventListCard = (
 
 describe('Testing Event List Card', () => {
   afterEach(() => {
+    clearAllItems();
     vi.clearAllMocks();
   });
   beforeAll(() => {
@@ -97,7 +105,7 @@ describe('Testing Event List Card', () => {
   });
 
   afterAll(() => {
-    vi.clearAllMocks();
+    clearAllItems();
   });
 
   it('Should navigate to "/" if orgId is not defined', async () => {
