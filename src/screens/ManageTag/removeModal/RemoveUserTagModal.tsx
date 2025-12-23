@@ -62,12 +62,8 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
       size="sm"
       backdrop="static"
       keyboard={false}
-      headerClassName={styles.modalHeader}
-      headerContent={
-        <h5 className={`modal-title text-white`} id="removeUserTag">
-          {t('removeUserTag')}
-        </h5>
-      }
+      title={t('removeUserTag')}
+      headerClassName={`${styles.modalHeader} text-white`}
       dataTestId="remove-user-tag-modal"
       footer={
         <>
@@ -91,7 +87,7 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
         </>
       }
     >
-      <p id="removeUserTagMessage">{t('removeUserTagMessage')}</p>
+      <p>{t('removeUserTagMessage')}</p>
     </BaseModal>
   );
 };

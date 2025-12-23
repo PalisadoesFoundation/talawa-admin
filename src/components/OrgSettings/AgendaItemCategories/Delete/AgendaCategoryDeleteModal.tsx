@@ -72,13 +72,9 @@ const AgendaCategoryDeleteModal: React.FC<
       className={styles.campaignModal}
       backdrop="static"
       keyboard={false}
-      headerClassName="bg-primary"
+      title={t('deleteAgendaCategory')}
+      headerClassName="bg-primary text-white"
       closeButtonVariant="light"
-      headerContent={
-        <h5 className="modal-title text-white" id="deleteAgendaCategory">
-          {t('deleteAgendaCategory')}
-        </h5>
-      }
       dataTestId="agenda-category-delete-modal"
       footer={
         <>

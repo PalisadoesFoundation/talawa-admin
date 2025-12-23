@@ -63,12 +63,8 @@ const UnassignUserTagModal: React.FC<InterfaceUnassignUserTagModalProps> = ({
       size="sm"
       backdrop="static"
       keyboard={false}
-      headerClassName={styles.modalHeader}
-      headerContent={
-        <h5 className="modal-title text-white" id="unassignTag">
-          {t('unassignUserTag')}
-        </h5>
-      }
+      title={t('unassignUserTag')}
+      headerClassName={`${styles.modalHeader} text-white`}
       dataTestId="unassign-user-tag-modal"
       footer={
         <>
