@@ -727,7 +727,8 @@
     "lowestGoal": "सबसे कम उद्देश्य",
     "highestGoal": "सबसे ऊंचा उद्देश्य",
     "editCampaign": "अभियान संपादित करें",
-    "searchCampaigns": "अभियान खोजें"
+    "searchCampaigns": "अभियान खोजें",
+    "errorLoading": "अभियान डेटा लोड करते समय त्रुटि हुई"
   },
   "pledges": {
     "title": "निधि अभियान प्रतिज्ञाएँ",

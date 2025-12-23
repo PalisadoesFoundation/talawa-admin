@@ -727,7 +727,8 @@
     "lowestGoal": "Objectif le plus bas",
     "highestGoal": "Objectif le plus élevé",
     "editCampaign": "Modifier la campagne",
-    "searchCampaigns": "Rechercher des campagnes"
+    "searchCampaigns": "Rechercher des campagnes",
+    "errorLoading": "Erreur lors du chargement des données de la campagne"
   },
   "pledges": {
     "title": "Engagements de campagne de financement",

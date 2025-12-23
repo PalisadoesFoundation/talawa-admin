@@ -727,7 +727,8 @@
     "lowestGoal": "Meta más baja",
     "highestGoal": "Meta más alta",
     "editCampaign": "Editar campaña",
-    "searchCampaigns": "Buscar campañas"
+    "searchCampaigns": "Buscar campañas",
+    "errorLoading": "Error al cargar los datos de la campaña"
   },
   "pledges": {
     "title": "Compromisos de Campaña de Financiamiento",

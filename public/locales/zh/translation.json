@@ -727,7 +727,8 @@
     "lowestGoal": "最低目标",
     "highestGoal": "最高目标",
     "editCampaign": "编辑活动",
-    "searchCampaigns": "搜索活动"
+    "searchCampaigns": "搜索活动",
+    "errorLoading": "加载活动数据时出错"
   },
   "pledges": {
     "title": "基金活动承诺",
