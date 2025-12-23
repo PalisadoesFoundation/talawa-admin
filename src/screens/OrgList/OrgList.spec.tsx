@@ -737,10 +737,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     renderWithProviders(mockLinks.empty);
 
     await wait();
-    expect(screen.queryByText('Organizations Not Found')).toBeInTheDocument();
-    expect(
-      screen.queryByText('Please create an organization through dashboard'),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('orglist-no-orgs-empty')).toBeInTheDocument();
   });
 
   test('Testing Organization data is not present', async () => {
@@ -1359,7 +1356,7 @@ describe('Advanced Component Functionality Tests', () => {
     await wait();
 
     // Check for "no results found" message
-    expect(screen.getByTestId('noResultFound')).toBeInTheDocument();
+    expect(screen.getByTestId('orglist-search-empty')).toBeInTheDocument();
   });
 
   test('Testing sort by Earliest functionality', async () => {
