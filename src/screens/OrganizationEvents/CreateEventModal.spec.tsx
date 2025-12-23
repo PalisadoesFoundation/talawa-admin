@@ -8,7 +8,21 @@ vi.mock('react-i18next', async (importOriginal) => {
   const actual = (await importOriginal()) as Record<string, unknown>;
   return {
     ...actual,
-    useTranslation: () => ({ t: (k: string) => k }),
+    useTranslation: () => ({
+      t: (key: string, params?: Record<string, unknown>) => {
+        // Handle translations with parameters
+        if (key === 'weeklyOn' && params?.day) return `Weekly on ${params.day}`;
+        if (key === 'monthlyOnDay' && params?.day)
+          return `Monthly on day ${params.day}`;
+        if (key === 'annuallyOn' && params?.month && params?.day)
+          return `Annually on ${params.month} ${params.day}`;
+        if (key === 'everyWeekday') return 'Every weekday';
+        if (key === 'doesNotRepeat') return 'Does not repeat';
+        if (key === 'daily') return 'Daily';
+        if (key === 'custom') return 'Custom';
+        return key;
+      },
+    }),
   };
 });
 
@@ -129,7 +143,54 @@ vi.mock('../../utils/recurrenceUtils', async (importOriginal) => {
 
 // Mock CustomRecurrenceModal with controllable implementation
 const { CustomRecurrenceModalMock } = vi.hoisted(() => ({
-  CustomRecurrenceModalMock: vi.fn((): null => null),
+  CustomRecurrenceModalMock: vi.fn(
+    ({
+      customRecurrenceModalIsOpen,
+      hideCustomRecurrenceModal,
+      setRecurrenceRuleState,
+    }: {
+      customRecurrenceModalIsOpen?: boolean;
+      hideCustomRecurrenceModal?: () => void;
+      setRecurrenceRuleState?: (rule: unknown) => void;
+    }): React.ReactElement | null => {
+      // Only render when modal is open
+      if (!customRecurrenceModalIsOpen) return null;
+
+      return React.createElement(
+        'div',
+        { 'data-testid': 'customRecurrenceModalRendered' },
+        [
+          React.createElement(
+            'button',
+            {
+              key: 'close',
+              'data-testid': 'closeCustomModal',
+              onClick: hideCustomRecurrenceModal,
+            },
+            'Close',
+          ),
+          React.createElement(
+            'button',
+            {
+              key: 'update',
+              'data-testid': 'updateRecurrenceFunc',
+              onClick: () => {
+                if (setRecurrenceRuleState) {
+                  // Test both direct and function-based setter
+                  setRecurrenceRuleState({ frequency: 'CUSTOM', interval: 2 });
+                  setRecurrenceRuleState((prev: unknown) => ({
+                    ...(prev as object),
+                    updated: true,
+                  }));
+                }
+              },
+            },
+            'Update',
+          ),
+        ],
+      );
+    },
+  ),
 }));
 
 vi.mock('./CustomRecurrenceModal', () => ({
@@ -1266,34 +1327,6 @@ describe('CreateEventModal', () => {
   });
 
   it('tests function-based recurrence state updates', () => {
-    // Override mock implementation to test function-based setter
-    CustomRecurrenceModalMock.mockImplementation(
-      // @ts-expect-error - Mock implementation intentionally returns JSX instead of null
-      ({
-        setRecurrenceRuleState,
-      }: {
-        setRecurrenceRuleState: (
-          newRecurrence:
-            | Record<string, unknown>
-            | ((prev: Record<string, unknown>) => Record<string, unknown>),
-        ) => void;
-      }) => (
-        <button
-          type="button"
-          data-testid="updateRecurrenceFunc"
-          onClick={() => {
-            // Call with a function to trigger the typeof check branch
-            setRecurrenceRuleState((prev: Record<string, unknown>) => ({
-              ...prev,
-              interval: ((prev.interval as number) || 1) + 1,
-            }));
-          }}
-        >
-          Update Recurrence
-        </button>
-      ),
-    );
-
     render(
       <CreateEventModal
         isOpen={true}
@@ -1329,12 +1362,6 @@ describe('CreateEventModal', () => {
   });
 
   it('tests conditional rendering of CustomRecurrenceModal', () => {
-    // Override mock implementation to render something visible
-    // @ts-expect-error - Mock implementation intentionally returns JSX instead of null
-    CustomRecurrenceModalMock.mockImplementation(() => (
-      <div data-testid="customRecurrenceModalRendered">Custom Modal</div>
-    ));
-
     render(
       <CreateEventModal
         isOpen={true}
