@@ -1606,6 +1606,7 @@ form label,
   transform: scale(1.5);
   color: var(--bs-danger, var(--errorIcon-color));
   margin-bottom: 1rem;
+  font-size: 2.25rem;
 
   /* Add error icon for non-color indication */
   &::before {
