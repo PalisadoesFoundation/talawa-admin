@@ -120,5 +120,11 @@
   "overview": "Resumen",
   "organizations": "Organizaciones",
   "events": "Eventos",
-  "tags": "Etiquetas"
+  "tags": "Etiquetas",
+  "memberDetailNumberExample": "Ej. +1234567890",
+  "commentUpdatedSuccessfully": "Comentario actualizado correctamente",
+  "memberDetailExampleLane": "Ej. Calle 2",
+  "enterDescription": "Introduce la descripción",
+  "enterCity": "Introduce el nombre de la ciudad",
+  "enterState": "Introduce el nombre del estado"
 }

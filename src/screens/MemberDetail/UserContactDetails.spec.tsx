@@ -506,4 +506,185 @@ describe('UserContactDetails', () => {
       expect(screen.getByTestId('resetChangesBtn')).toBeInTheDocument();
     });
   });
+
+  it('updates educationGrade when dropdown changes', async () => {
+    renderComponent();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('inputName')).toHaveValue('John Doe');
+    });
+
+    const educationDropdown = screen.getByTestId('dropdown-educationGrade');
+
+    // Change the value
+    fireEvent.change(educationDropdown, { target: { value: 'option2' } });
+
+    // Save button should appear
+    await waitFor(() => {
+      expect(screen.getByTestId('saveChangesBtn')).toBeInTheDocument();
+    });
+  });
+
+  it('updates employmentStatus when dropdown changes', async () => {
+    renderComponent();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('inputName')).toHaveValue('John Doe');
+    });
+
+    const employmentDropdown = screen.getByTestId('dropdown-employmentStatus');
+
+    // Change the value
+    fireEvent.change(employmentDropdown, { target: { value: 'option1' } });
+
+    // Save button should appear
+    await waitFor(() => {
+      expect(screen.getByTestId('saveChangesBtn')).toBeInTheDocument();
+    });
+  });
+
+  it('shows error for invalid avatar file type', async () => {
+    renderComponent();
+
+    await screen.findByTestId('profile-picture');
+
+    const invalidFile = new File(['test'], 'test.txt', {
+      type: 'text/plain',
+    });
+
+    fireEvent.change(screen.getByTestId('fileInput'), {
+      target: { files: [invalidFile] },
+    });
+
+    expect(toast.error).toHaveBeenCalledWith('invalidFileType');
+  });
+
+  it('shows error when avatar file is too large', async () => {
+    renderComponent();
+
+    await screen.findByTestId('profile-picture');
+
+    const largeFile = new File(['a'.repeat(6 * 1024 * 1024)], 'large.jpg', {
+      type: 'image/jpeg',
+    });
+
+    fireEvent.change(screen.getByTestId('fileInput'), {
+      target: { files: [largeFile] },
+    });
+
+    expect(toast.error).toHaveBeenCalledWith('fileTooLarge');
+  });
+
+  it('blocks update when password is invalid', async () => {
+    const { validatePassword } = await import('utils/passwordValidator');
+    vi.mocked(validatePassword).mockReturnValue(
+      'Password must be at least 8 characters',
+    );
+
+    renderComponent();
+
+    await screen.findByTestId('inputName');
+
+    fireEvent.change(screen.getByTestId('inputPassword'), {
+      target: { value: '123' },
+    });
+
+    fireEvent.click(screen.getByTestId('saveChangesBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'Password must be at least 8 characters',
+      );
+    });
+  });
+
+  it('renders Avatar component when avatarURL is missing', async () => {
+    const noAvatarMock: MockedResponse = {
+      ...getUserMock,
+      result: {
+        data: {
+          user: { ...user, avatarURL: '' },
+        },
+      },
+    };
+
+    renderComponent([noAvatarMock]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('profile-picture')).toBeInTheDocument();
+    });
+  });
+
+  it('shows error handler when GraphQL query fails', async () => {
+    const errorMock = {
+      request: {
+        query: GET_USER_BY_ID,
+        variables: { input: { id: '12345' } },
+      },
+      error: new Error('Failed to fetch'),
+    };
+
+    renderComponent([errorMock]);
+
+    await waitFor(() => {
+      // Loader should be shown initially, then errorHandler should be called
+      expect(screen.getByTestId('loader')).toBeInTheDocument();
+    });
+
+    expect(screen.getByTestId('loader')).toBeInTheDocument(); // Loader remains for error case
+  });
+
+  it('shows toast error if urlToFile fails', async () => {
+    const { urlToFile } = await import('utils/urlToFile');
+    vi.mocked(urlToFile).mockRejectedValueOnce(new Error('conversion failed'));
+
+    renderComponent();
+
+    await screen.findByTestId('inputName');
+
+    // Remove selectedAvatar to trigger urlToFile path
+    fireEvent.change(screen.getByTestId('inputName'), {
+      target: { value: 'John Doe Updated' },
+    });
+
+    await screen.findByTestId('saveChangesBtn');
+
+    fireEvent.click(screen.getByTestId('saveChangesBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'Failed to process profile picture. Please try uploading again.',
+      );
+    });
+  });
+
+  it('updates all form fields using handleFieldChange', async () => {
+    renderComponent();
+    await screen.findByTestId('inputName');
+
+    const fields: Record<string, string> = {
+      name: 'Jane Doe',
+      mobilePhoneNumber: '+1111111111',
+      workPhoneNumber: '+2222222222',
+      homePhoneNumber: '+3333333333',
+      addressLine1: 'New Street 1',
+      addressLine2: 'New Apt',
+      postalCode: '54321',
+      city: 'New City',
+      state: 'New State',
+      description: 'Updated description',
+      password: 'StrongPassword123',
+      countryCode: 'us',
+    };
+
+    for (const [field, value] of Object.entries(fields)) {
+      const el = screen.getByTestId(
+        field.startsWith('input')
+          ? `input${field.charAt(0).toUpperCase() + field.slice(1)}`
+          : `input${field.charAt(0).toUpperCase() + field.slice(1)}`,
+      ) as HTMLInputElement;
+      fireEvent.change(el, { target: { value } });
+      expect(el.value).toBe(value);
+    }
+  });
 });

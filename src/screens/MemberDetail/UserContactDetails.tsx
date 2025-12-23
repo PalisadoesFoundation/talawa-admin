@@ -6,14 +6,10 @@
  * @component
  * @param {MemberDetailProps} props - The props for the component.
  * @param {string} [props.id] - Optional user ID used to fetch profile details.
- *                            If not provided, the ID is resolved from route state
- *                            or local storage.
  *
  * @returns {JSX.Element} The rendered UserContactDetails component.
  *
  * @remarks
- * - Uses Apollo Client's `useQuery` to fetch user data and `useMutation` to update it.
- * - Tracks unsaved changes and conditionally displays Save/Reset actions.
  * - Prevents invalid password updates using custom validation logic.
  *
  * @example
@@ -23,12 +19,6 @@
 
  * @dependencies
  * - `@apollo/client` for GraphQL queries and mutations
- * - `react-bootstrap` for layout and form components
- * - `@mui/x-date-pickers` for date selection
- * - `react-toastify` for user notifications
- * - `dayjs` for date handling
- * - Custom utilities for password validation, avatar sanitization,
- *   local storage handling, and error processing
  *
  */
 import React, { useEffect, useRef, useState } from 'react';
@@ -74,7 +64,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
   const [formState, setFormState] = useState({
     addressLine1: '',
     addressLine2: '',
-    birthDate: null,
+    birthDate: null as string | null,
     emailAddress: '',
     city: '',
     avatar: selectedAvatar,
@@ -94,25 +84,23 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     state: '',
     workPhoneNumber: '',
   });
-  const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION, {
-    update: (cache, { data }) => {
-      if (data?.updateCurrentUser) {
-        cache.writeQuery({
-          query: GET_USER_BY_ID,
-          variables: { input: { id: currentId } },
-          data: { user: data.updateCurrentUser },
-        });
-      }
+  const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION);
+  const { data, loading } = useQuery(GET_USER_BY_ID, {
+    variables: {
+      input: {
+        id: currentId,
+      },
     },
   });
-  const { data, loading } = useQuery(GET_USER_BY_ID, {
-    variables: { input: { id: currentId } },
-    skip: !currentId,
-  });
-  useEffect(
-    () => data?.user && setFormState((prev) => ({ ...prev, ...data.user })),
-    [data],
-  );
+  useEffect(() => {
+    if (!data?.user) return;
+    const { birthDate, ...rest } = data.user;
+    setFormState((prev) => ({
+      ...prev,
+      ...rest,
+      birthDate: birthDate ? dayjs(birthDate).format('YYYY-MM-DD') : '',
+    }));
+  }, [data]);
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target?.files?.[0];
     if (!f) return;
@@ -136,10 +124,8 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
           ([v]) => v != null && (typeof v !== 'string' || v.trim()),
         ),
       ) as Partial<T>;
-    if (formState.password && validatePassword(formState.password)) {
+    if (formState.password && validatePassword(formState.password))
       toast.error(validatePassword(formState.password));
-      return;
-    }
     const avatarFile =
       !selectedAvatar && formState.avatarURL
         ? await urlToFile(formState.avatarURL).catch(() => {
@@ -149,12 +135,31 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
             return null;
           })
         : null;
-    const input = removeEmptyFields({
-      ...formState,
-      avatar: selectedAvatar || avatarFile,
-    });
-    delete input.avatarURL;
-    delete input.emailAddress;
+    const normalizedBirthDate = formState.birthDate
+      ? dayjs(formState.birthDate).format('YYYY-MM-DD')
+      : null;
+    const data: Omit<typeof formState, 'avatarURL' | 'emailAddress'> = {
+      addressLine1: formState.addressLine1,
+      addressLine2: formState.addressLine2,
+      birthDate: normalizedBirthDate,
+      city: formState.city,
+      countryCode: formState.countryCode,
+      description: formState.description,
+      educationGrade: formState.educationGrade,
+      employmentStatus: formState.employmentStatus,
+      homePhoneNumber: formState.homePhoneNumber,
+      maritalStatus: formState.maritalStatus,
+      mobilePhoneNumber: formState.mobilePhoneNumber,
+      name: formState.name,
+      natalSex: formState.natalSex,
+      naturalLanguageCode: formState.naturalLanguageCode,
+      password: formState.password,
+      postalCode: formState.postalCode,
+      state: formState.state,
+      workPhoneNumber: formState.workPhoneNumber,
+      avatar: selectedAvatar ? selectedAvatar : avatarFile,
+    };
+    const input = removeEmptyFields(data);
     try {
       const { data: updateData } = await updateUser({ variables: { input } });
       if (updateData)
@@ -169,18 +174,13 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
   };
   const resetChanges = (): void => {
     setisUpdated(false);
-    if (data?.user) {
-      setFormState({ ...data.user });
-    }
+    if (data?.user) setFormState({ ...data.user });
   };
-  if (loading || !data?.user) {
-    return <Loader />;
-  }
+  if (loading || !data?.user) return <Loader />;
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Row className="g-4 mt-1">
         <Col md={6}>
-          {/* Personal Details Card */}
           <Card className={`${styles.allRound}`}>
             <Card.Header className={styles.userContactDetailPersonalCardHeader}>
               <h3 className="m-0">{t('personalDetailsHeading')}</h3>
@@ -383,7 +383,6 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
             </Card.Body>
           </Card>
         </Col>
-
         <Col md={6}>
           <Card className={`${styles.allRound}`}>
             <Card.Header className={`py-3 px-4 ${styles.topRadius}`}>

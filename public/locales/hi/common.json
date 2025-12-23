@@ -120,5 +120,11 @@
   "overview": "अवलोकन",
   "organizations": "संगठन",
   "events": "कार्यक्रम",
-  "tags": "टैग"
+  "tags": "टैग",
+  "memberDetailNumberExample": "उदा. +1234567890",
+  "commentUpdatedSuccessfully": "टिप्पणी सफलतापूर्वक अपडेट की गई",
+  "memberDetailExampleLane": "उदा. गली 2",
+  "enterDescription": "विवरण दर्ज करें",
+  "enterCity": "शहर का नाम दर्ज करें",
+  "enterState": "राज्य का नाम दर्ज करें"
 }

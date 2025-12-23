@@ -120,5 +120,11 @@
   "notFound": "Not Found",
   "profilePicture": "profile picture",
   "profilePicturePlaceholder": "dummy picture",
-  "userProfileMenu": "User Profile Menu"
+  "userProfileMenu": "User Profile Menu",
+  "memberDetailNumberExample": "Ex. +1234567890",
+  "commentUpdatedSuccessfully": "Comment updated successfully",
+  "memberDetailExampleLane": "Ex. Lane 2",
+  "enterDescription": "Enter Description",
+  "enterCity": "Enter city name",
+  "enterState": "Enter state name"
 }
