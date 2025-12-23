@@ -184,7 +184,7 @@ const orgFundCampaign = (): JSX.Element => {
     return campaigns;
   }, [filteredCampaigns, sortBy]);
 
-  const handleClick = (campaignId: InterfaceCampaignInfo): void => {
+  const handleClick = (campaignId: string): void => {
     navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);
   };
 
@@ -259,7 +259,7 @@ const orgFundCampaign = (): JSX.Element => {
           type="button"
           className={styles.hyperlinkText}
           data-testid="campaignName"
-          onClick={() => handleClick(params.row.id as InterfaceCampaignInfo)}
+          onClick={() => handleClick(params.row.id as string)}
           aria-label={t('campaignName')}
         >
           {params.row.name}
@@ -383,7 +383,7 @@ const orgFundCampaign = (): JSX.Element => {
             size="sm"
             className={styles.editButton}
             data-testid="viewBtn"
-            onClick={() => handleClick(params.row.id as InterfaceCampaignInfo)}
+            onClick={() => handleClick(params.row.id as string)}
             aria-label={t('viewPledges')}
           >
             <i className="fa fa-eye me-1" />
@@ -485,7 +485,7 @@ const orgFundCampaign = (): JSX.Element => {
       </Row>
 
       <ReportingTable
-        rows={sortedCampaigns.map((campaign) => campaign) as ReportingRow[]}
+        rows={sortedCampaigns as ReportingRow[]}
         columns={columns}
         gridProps={gridProps}
       />

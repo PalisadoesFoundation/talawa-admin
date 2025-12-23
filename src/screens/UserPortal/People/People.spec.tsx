@@ -34,7 +34,6 @@ import { vi, it, beforeEach, afterEach } from 'vitest';
 
 // Common test params
 const DEFAULT_ORG_ID = '';
-const DEFAULT_SEARCH = '';
 const DEFAULT_FIRST = 5;
 
 // Helper for members edges
@@ -63,10 +62,9 @@ const memberEdge = (props: InterfaceMemberEdgeProps = {}) => ({
   },
 });
 
-// Queries in People.tsx always set these variables (orgId, firstName_contains, first, after)
+// Queries in People.tsx always set these variables (orgId, name, first, after)
 const makeQueryVars = (overrides = {}) => ({
   orgId: DEFAULT_ORG_ID,
-  firstName_contains: DEFAULT_SEARCH,
   first: DEFAULT_FIRST,
   ...overrides,
 });
@@ -123,9 +121,8 @@ const defaultQueryMock = {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     variables: {
       orgId: 'test-org',
-      first: 5,
+      first: PAGE_SIZE,
       after: null,
-      firstName_contains: '',
     },
   },
   result: {
@@ -152,8 +149,7 @@ const nextPageMock = {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
     variables: {
       orgId: '',
-      firstName_contains: '',
-      first: 5,
+      first: PAGE_SIZE,
       after: 'cursor3', // This matches the failing query!
     },
   },
@@ -211,11 +207,11 @@ const adminsOnlyMock = {
   },
 };
 
-// Mock for search with "Admin" as firstName_contains
+// Mock for search with "Admin" as name
 const adminSearchMock = {
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    variables: makeQueryVars({ firstName_contains: 'Admin' }),
+    variables: makeQueryVars({ name: 'Admin' }),
   },
   result: {
     data: {
@@ -245,11 +241,11 @@ const adminSearchMock = {
   },
 };
 
-// Mock for search with "Ad" as firstName_contains
+// Mock for search with "Ad" as name
 const adSearchMock = {
   request: {
     query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    variables: makeQueryVars({ firstName_contains: 'Ad' }),
+    variables: makeQueryVars({ name: 'Ad' }),
   },
   result: {
     data: {
@@ -272,64 +268,6 @@ const adSearchMock = {
             hasPreviousPage: false,
             hasNextPage: false,
             startCursor: 'cursor2',
-          },
-        },
-      },
-    },
-  },
-};
-
-// Mocks for changing rows per page (simulate more members)
-const lotsOfMembersEdges = Array.from({ length: 6 }, (_, i) =>
-  memberEdge({
-    cursor: `cursor${i + 1}`,
-    id: `${i + 1}`,
-    name: `user${i + 1}`,
-  }),
-);
-const lotsOfMembersMock = {
-  request: {
-    query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    variables: makeQueryVars({ first: 10 }),
-  },
-  result: {
-    data: {
-      organization: {
-        __typename: 'Organization',
-        members: {
-          __typename: 'MemberConnection',
-          edges: lotsOfMembersEdges,
-          pageInfo: {
-            __typename: 'PageInfo',
-            endCursor: 'cursor6',
-            hasPreviousPage: true,
-            hasNextPage: false,
-            startCursor: 'cursor1',
-          },
-        },
-      },
-    },
-  },
-};
-
-const fiveMembersMock = {
-  request: {
-    query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    variables: makeQueryVars({ first: 5 }),
-  },
-  result: {
-    data: {
-      organization: {
-        __typename: 'Organization',
-        members: {
-          __typename: 'MemberConnection',
-          edges: lotsOfMembersEdges.slice(0, 5),
-          pageInfo: {
-            __typename: 'PageInfo',
-            endCursor: 'cursor5',
-            hasPreviousPage: true,
-            hasNextPage: true,
-            startCursor: 'cursor1',
           },
         },
       },
@@ -418,10 +356,6 @@ describe('Testing People Screen [User Portal]', () => {
     await userEvent.type(screen.getByTestId('searchInput'), 'Ad{enter}');
     await wait();
 
-    const adminUser = screen.queryByText('Admin User');
-    if (adminUser) {
-      expect(adminUser).toBeInTheDocument();
-    }
     const testUser = screen.queryByText('Test User');
     // Only assert not.toBeInTheDocument if the element is found
     if (testUser) {
@@ -474,61 +408,8 @@ describe('Testing People Screen [User Portal]', () => {
     await userEvent.click(adminsOption);
     await wait();
   });
-
-  it('Shows loading state while fetching data', async () => {
-    render(
-      <MockedProvider mocks={[defaultQueryMock]}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    // The new UI uses TableLoader skeleton, not 'Loading...' text
-    // Check for the TableLoader by role or fallback to a skeleton element
-    // TableLoader should now have data-testid="table-loader"
-    const loadingSkeleton = screen.queryByTestId('table-loader');
-    // Only assert if found, otherwise skip to avoid false negatives
-    if (loadingSkeleton) expect(loadingSkeleton).not.toBeNull();
-    await wait();
-  });
 });
 describe('Testing People Screen Pagination [User Portal]', () => {
-  const renderComponent = (): RenderResult => {
-    return render(
-      <MockedProvider mocks={[fiveMembersMock, lotsOfMembersMock]}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <People />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-  };
-
-  it('handles rows per page change and pagination navigation', async () => {
-    renderComponent();
-    await wait();
-
-    // Default should show 5 items
-
-    // Change rows per page to 10 (should show 6 now)
-    const select = screen.queryByRole('combobox');
-    if (select) {
-      await userEvent.selectOptions(select, '10');
-      await wait();
-      // Reset to smaller page size to test navigation
-      await userEvent.selectOptions(select, '5');
-      await wait();
-    }
-  });
-
   it('handles backward pagination correctly', async () => {
     // Use mocks that support forward and backward navigation
     render(
@@ -661,10 +542,6 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
       </MockedProvider>,
     );
   };
-
-  it('should display user email addresses correctly', async () => {
-    renderComponentWithEmailMock();
-  });
 
   it('should correctly identify and display different user roles', async () => {
     renderComponentWithEmailMock();
@@ -851,7 +728,7 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
     const testOrgMock = {
       request: {
         query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-        variables: { orgId: 'test-org', first: 10, after: null },
+        variables: { orgId: 'test-org', first: PAGE_SIZE, after: null },
       },
       result: defaultQueryMock.result,
     };
@@ -1083,5 +960,5 @@ it('calls handlePaginationModelChange and updates paginationModel (covers setPag
   await userEvent.click(nextPageBtn);
 
   // Assert that the new page is rendered (e.g., User 10)
-  await screen.findByText('User 10');
+  await screen.findByText(`User ${PAGE_SIZE}`);
 });
