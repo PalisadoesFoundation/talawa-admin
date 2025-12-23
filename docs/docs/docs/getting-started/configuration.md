@@ -33,16 +33,15 @@ cp .env.example .env
 
 This `.env` file must be populated with the following environment variables for `talawa-admin` to work:
 
-| Variable                        | Description                                       |
-| ------------------------------- | ------------------------------------------------- |
-| PORT                            | Custom port for Talawa-Admin development purposes |
-| USE_DOCKER                      | Whether you want to use Docker or not             |
-| DOCKER_PORT                     | Port to use when running with Docker              |
-| REACT_APP_TALAWA_URL            | URL endpoint for talawa-api graphql service       |
-| REACT_APP_BACKEND_WEBSOCKET_URL | URL endpoint for websocket end point (Optional)   |
-| REACT_APP_USE_RECAPTCHA         | Whether you want to use reCAPTCHA or not          |
-| REACT_APP_RECAPTCHA_SITE_KEY    | Site key for authentication using reCAPTCHA       |
-| ALLOW_LOGS                      | Whether you want to see logs in the console       |
+| Variable                     | Description                                       |
+| ---------------------------- | ------------------------------------------------- |
+| PORT                         | Custom port for Talawa-Admin development purposes |
+| USE_DOCKER                   | Whether you want to use Docker or not             |
+| DOCKER_PORT                  | Port to use when running with Docker              |
+| REACT_APP_TALAWA_URL         | URL endpoint for talawa-api graphql service       |
+| REACT_APP_USE_RECAPTCHA      | Whether you want to use reCAPTCHA or not          |
+| REACT_APP_RECAPTCHA_SITE_KEY | Site key for authentication using reCAPTCHA       |
+| ALLOW_LOGS                   | Whether you want to see logs in the console       |
 
 > **Note:** In previous versions, `REACT_APP_BACKEND_WEBSOCKET_URL` was required as a separate variable. This is no longer needed - WebSocket connections are now automatically proxied through the same `/graphql` endpoint as HTTP requests.
 #### Setting up PORT in .env file
@@ -92,16 +91,6 @@ The application will automatically handle the necessary proxy routing based on y
 
 **Important for Manual Production Builds:**
 If you are deploying a production build manually without Docker, the Vite Dev Server is not active. You must configure your web server (Nginx or Apache) to forward requests from `/graphql` to your API URL, similar to the rules found in `config/docker/setup/`.
-
-#### Setting up REACT_APP_BACKEND_WEBSOCKET_URL in .env file
-
-**Optional.** This variable configures the WebSocket endpoint for subscriptions.
-
-The Vite configuration automatically converts your `REACT_APP_TALAWA_URL` to the appropriate WebSocket URL format (replacing `http://` with `ws://` or `https://` with `wss://`). This ensures WebSocket connections use the correct protocol without requiring separate configuration.
-
-* **When to set it:** Only set this variable if you need a WebSocket endpoint different from your main API endpoint.
-* **Format:** Use the full WebSocket URL (e.g., `ws://localhost:4000/graphql` or `ws://<SERVER_IP>:4000/graphql`).
-* **Default:** If left blank, the application derives the WebSocket URL from `REACT_APP_TALAWA_URL`.
 
 #### Setting up REACT_APP_RECAPTCHA_SITE_KEY in .env file
 

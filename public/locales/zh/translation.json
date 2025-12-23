@@ -478,6 +478,17 @@
     "monthlyOn": "每月开",
     "yearlyOn": "每年开",
     "yearlyRecurrenceDesc": "此事件将在每年的事件开始日期的同一天重复。",
+    "doesNotRepeat": "不重复",
+    "daily": "每天",
+    "weeklyOn": "每周 {{day}}",
+    "monthlyOnDay": "每月第 {{day}} 天",
+    "annuallyOn": "每年 {{month}} {{day}} 日",
+    "everyWeekday": "每个工作日（周一至周五）",
+    "custom": "自定义…",
+    "day": "天",
+    "week": "周",
+    "month": "月",
+    "year": "年",
     "events": "活动",
     "description": "描述",
     "location": "位置",
@@ -1357,7 +1368,18 @@
     "eventLocation": "活动位置",
     "startDate": "开始日期",
     "endDate": "结束日期",
-    "createChat": "创建聊天"
+    "createChat": "创建聊天",
+    "doesNotRepeat": "不重复",
+    "daily": "每天",
+    "weeklyOn": "每周 {{day}}",
+    "monthlyOnDay": "每月第 {{day}} 天",
+    "annuallyOn": "每年 {{month}} {{day}} 日",
+    "everyWeekday": "每个工作日（周一至周五）",
+    "custom": "自定义…",
+    "day": "天",
+    "week": "周",
+    "month": "月",
+    "year": "年"
   },
   "userEventCard": {
     "starts": "开始",
@@ -1695,5 +1717,15 @@
     "deleteComment": "删除评论",
     "deleting": "删除中…",
     "emptyCommentError": "请在提交前输入评论。"
+  },
+  "profileAvatar": {
+    "altText": "{{name}}的个人资料图片",
+    "modalTitle": "个人资料图片",
+    "enlargedAltText": "{{name}}的放大个人资料图片"
+  },
+  "common": {
+    "signOut": "退出登录",
+    "signingOut": "正在退出...",
+    "retryPrompt": "撤销会话失败。重试？"
   }
 }
