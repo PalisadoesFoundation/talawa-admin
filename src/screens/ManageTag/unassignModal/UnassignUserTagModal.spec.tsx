@@ -152,4 +152,45 @@ describe('UnassignUserTagModal Component', () => {
       'addButton-class',
     );
   });
+  it('handles error when handleUnassignUserTag rejects', async () => {
+    const error = new Error('Unassign failed');
+
+    let rejectFn: ((reason?: unknown) => void) | undefined;
+
+    const promise = new Promise<never>((_resolve, reject) => {
+      rejectFn = reject;
+    });
+
+    const failingHandler = vi.fn(() => promise);
+
+    promise.catch(() => {});
+
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    render(
+      <UnassignUserTagModal
+        {...defaultProps}
+        handleUnassignUserTag={failingHandler}
+      />,
+    );
+
+    const confirmButton = screen.getByTestId('unassignTagModalSubmitBtn');
+    fireEvent.click(confirmButton);
+
+    await waitFor(() => {
+      expect(failingHandler).toHaveBeenCalledTimes(1);
+    });
+
+    if (rejectFn) {
+      rejectFn(error);
+    }
+
+    await waitFor(() => {
+      expect(confirmButton).not.toBeDisabled();
+    });
+
+    consoleErrorSpy.mockRestore();
+  });
 });

@@ -51,6 +51,8 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
     setIsSubmitting(true);
     try {
       await handleRemoveUserTag();
+    } catch (error) {
+      console.error(error);
     } finally {
       setIsSubmitting(false);
     }

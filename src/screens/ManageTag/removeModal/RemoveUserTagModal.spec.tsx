@@ -145,4 +145,33 @@ describe('RemoveUserTagModal Component', () => {
       'addButton-class',
     );
   });
+  it('handles error when handleRemoveUserTag rejects', async () => {
+    const error = new Error('Remove failed');
+
+    const failingHandler = vi.fn().mockRejectedValue(error);
+
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    render(
+      <RemoveUserTagModal
+        {...defaultProps}
+        handleRemoveUserTag={failingHandler}
+      />,
+    );
+
+    const confirmButton = screen.getByTestId('removeUserTagSubmitBtn');
+    fireEvent.click(confirmButton);
+
+    await waitFor(() => {
+      expect(failingHandler).toHaveBeenCalledTimes(1);
+    });
+
+    await waitFor(() => {
+      expect(confirmButton).not.toBeDisabled();
+    });
+
+    consoleErrorSpy.mockRestore();
+  });
 });
