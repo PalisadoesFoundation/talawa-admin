@@ -154,7 +154,7 @@ class DisableStatementsChecker:
 
 
 def main() -> None:
-    """Main function.
+    """Execute the main functionality of the disable statements checker.
 
     Args:
         None

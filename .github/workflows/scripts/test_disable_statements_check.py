@@ -188,7 +188,7 @@ line 4"""
         self.assertEqual(len(violations), 3)
 
     def check_file_content_for_testing(self, content: str) -> list:
-        """Helper method to test file content directly.
+        """Check file content directly for testing purposes.
 
         Args:
             content: File content to test.
