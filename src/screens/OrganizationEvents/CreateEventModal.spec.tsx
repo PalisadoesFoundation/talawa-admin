@@ -25,16 +25,29 @@ vi.mock('@mui/x-date-pickers', () => ({
       value?: unknown;
       onChange?: (date: unknown) => void;
       'data-testid'?: string;
-    }) =>
-      React.createElement('input', {
+    }) => {
+      // Format value properly for date input (YYYY-MM-DD)
+      let formattedValue = '';
+      if (value) {
+        if (dayjs.isDayjs(value)) {
+          formattedValue = value.format('YYYY-MM-DD');
+        } else if (value instanceof Date) {
+          formattedValue = dayjs(value).format('YYYY-MM-DD');
+        } else {
+          formattedValue = String(value);
+        }
+      }
+      return React.createElement('input', {
         'data-testid': dataTestId || label || 'date-picker',
-        value: value ? String(value) : '',
+        type: 'date',
+        value: formattedValue,
         onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
           if (onChange) {
             onChange(dayjs(e.target.value));
           }
         },
-      }),
+      });
+    },
   ),
   TimePicker: vi.fn(
     ({
@@ -47,16 +60,29 @@ vi.mock('@mui/x-date-pickers', () => ({
       value?: unknown;
       onChange?: (time: unknown) => void;
       'data-testid'?: string;
-    }) =>
-      React.createElement('input', {
+    }) => {
+      // Format value properly for time input (HH:mm:ss)
+      let formattedValue = '';
+      if (value) {
+        if (dayjs.isDayjs(value)) {
+          formattedValue = value.format('HH:mm:ss');
+        } else if (value instanceof Date) {
+          formattedValue = dayjs(value).format('HH:mm:ss');
+        } else {
+          formattedValue = String(value);
+        }
+      }
+      return React.createElement('input', {
         'data-testid': dataTestId || label || 'time-picker',
-        value: value ? String(value) : '',
+        type: 'time',
+        value: formattedValue,
         onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
           if (onChange) {
             onChange(dayjs(e.target.value, 'HH:mm:ss'));
           }
         },
-      }),
+      });
+    },
   ),
 }));
 
@@ -74,45 +100,32 @@ vi.mock('utils/errorHandler', () => ({
 }));
 
 // Mock recurrence utilities
-vi.mock('../../utils/recurrenceUtils', () => ({
-  createDefaultRecurrenceRule: vi.fn(() => ({
-    frequency: 'WEEKLY',
-    interval: 1,
-  })),
-  validateRecurrenceInput: vi.fn(() => ({ isValid: true, errors: [] })),
-  formatRecurrenceForApi: vi.fn((rule) => rule),
-  Frequency: {
-    DAILY: 'DAILY',
-    WEEKLY: 'WEEKLY',
-    MONTHLY: 'MONTHLY',
-    YEARLY: 'YEARLY',
-  },
-  WeekDays: [],
-  InterfaceRecurrenceRule: {},
-  // Add missing exports that tests use
-  RecurrenceEndOption: {
-    NEVER: 'never',
-    ON: 'on',
-    AFTER: 'after',
-  },
-  endsNever: { value: 'never', label: 'Never' },
-  endsOn: { value: 'on', label: 'On' },
-  endsAfter: { value: 'after', label: 'After' },
-  frequencies: [],
-  daysOptions: [],
-  Days: {},
-  recurrenceEndOptions: [],
-  dayNames: [],
-  monthNames: [],
-  getWeekOfMonth: vi.fn(),
-  getOrdinalString: vi.fn(),
-  getDayName: vi.fn(() => 'Monday'),
-  getMonthlyOptions: vi.fn(() => []),
-  getRecurrenceRuleText: vi.fn(() => 'Weekly'),
-  getOrdinalSuffix: vi.fn(),
-  getEndTypeFromRecurrence: vi.fn(),
-  areRecurrenceRulesEqual: vi.fn(() => false),
-}));
+vi.mock('../../utils/recurrenceUtils', async (importOriginal) => {
+  const original =
+    await importOriginal<typeof import('../../utils/recurrenceUtils')>();
+  return {
+    ...original, // Spread all original exports including endsNever, endsOn, endsAfter, etc.
+    createDefaultRecurrenceRule: vi.fn(() => ({
+      frequency: 'WEEKLY',
+      interval: 1,
+    })),
+    validateRecurrenceInput: vi.fn(() => ({ isValid: true, errors: [] })),
+    formatRecurrenceForApi: vi.fn((rule) => rule),
+    getRecurrenceRuleText: vi.fn((rule) => {
+      // Return appropriate text based on the rule
+      if (!rule || !rule.frequency) return 'Does not repeat';
+      if (rule.isCustom) return 'Custom';
+      if (rule.frequency === 'DAILY') return 'Daily';
+      if (rule.frequency === 'WEEKLY') return 'Weekly';
+      if (rule.frequency === 'MONTHLY') return 'Monthly';
+      if (rule.frequency === 'YEARLY') return 'Yearly';
+      return 'Custom';
+    }),
+    getDayName: vi.fn(() => 'Monday'),
+    getMonthlyOptions: vi.fn(() => []),
+    areRecurrenceRulesEqual: vi.fn(() => false),
+  };
+});
 
 // Mock CustomRecurrenceModal with controllable implementation
 const { CustomRecurrenceModalMock } = vi.hoisted(() => ({
