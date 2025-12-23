@@ -1,4 +1,3 @@
-/* global HTMLButtonElement, HTMLTextAreaElement */
 /**
  * The `people` component is responsible for rendering a list of members and admins
  * of an organization. It provides functionality for searching, filtering, and paginating
@@ -45,17 +44,28 @@
  * @param mode - The current filter mode (0 for "All Members", 1 for "Admins").
  * @param organizationId - The ID of the organization extracted from URL parameters.
  */
-import React, { useEffect, useState } from 'react';
-import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
-import PaginationList from 'components/Pagination/PaginationList/PaginationList';
-import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useQuery } from '@apollo/client';
+import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useParams } from 'react-router';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
-import SortingButton from 'subComponents/SortingButton';
+import { Stack } from '@mui/material';
+import type { GridPaginationModel } from '@mui/x-data-grid';
+import PageHeader from 'shared-components/Navbar/Navbar';
+import type {
+  ReportingRow,
+  ReportingTableColumn,
+  ReportingTableGridProps,
+} from '../../../types/ReportingTable/interface';
+import {
+  dataGridStyle,
+  ROW_HEIGHT,
+  COLUMN_BUFFER_PX,
+  PAGE_SIZE,
+} from '../../../types/ReportingTable/utils';
+import TableLoader from 'components/TableLoader/TableLoader';
+import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 
 interface IMemberNode {
   id: string;
@@ -71,220 +81,204 @@ interface IMemberEdge {
   node: IMemberNode;
 }
 
-interface IMemberWithUserType extends IMemberEdge {
-  userType: string;
-}
-
-interface IOrganizationCardProps {
-  id: string;
-  name: string;
-  image: string;
-  email: string;
-  role: string;
-  sno: string;
-}
-
 export default function People(): React.JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'people' });
   const { t: tCommon } = useTranslation('common');
-  const [rowsPerPage, setRowsPerPage] = useState<number>(5);
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [mode, setMode] = useState<number>(0); // 0: All Members, 1: Admins
-  const [pageCursors, setPageCursors] = useState<string[]>(['']); // Keep track of cursors for each page
-  const [currentPage, setCurrentPage] = useState<number>(0);
 
   const { orgId: organizationId } = useParams();
 
-  const modes = ['All Members', 'Admins'];
+  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+    page: 0,
+    pageSize: PAGE_SIZE,
+  });
 
-  // Query the current page of members
-  const { data, loading, fetchMore, refetch } = useQuery(
-    ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    {
-      variables: {
-        orgId: organizationId,
-        firstName_contains: searchTerm,
-        first: rowsPerPage,
-        after: pageCursors[currentPage] || undefined,
-      },
-      errorPolicy: 'ignore',
-      notifyOnNetworkStatusChange: true,
-    },
-  );
-
-  // Extract members for the current page and filter by role if needed
-  const members: IMemberWithUserType[] = React.useMemo(() => {
-    if (!data?.organization?.members?.edges) return [];
-    let edges: IMemberEdge[] = data.organization.members.edges;
-    let adminsList = edges
-      .filter((m) => m.node.role === 'administrator')
-      .map((admin) => ({ ...admin, userType: 'Admin' as const }));
-    if (mode === 1) return adminsList;
-    // For all members, assign userType based on role
-    return edges.map((member) => ({
-      ...member,
-      userType: member.node.role === 'administrator' ? 'Admin' : 'Member',
-    }));
-  }, [data, mode]);
-
-  // Pagination info from backend
-  const pageInfo = data?.organization?.members?.pageInfo;
-
-  // Handle page change: fetch next/prev page
-  const handleChangePage = async (
-    _event: React.MouseEvent<HTMLButtonElement> | null,
-    newPage: number,
-  ) => {
-    // If moving forward, fetch next page
-    if (newPage > currentPage && pageInfo?.hasNextPage) {
-      const afterCursor = pageInfo.endCursor;
-      // fetchMore returns next page data
-      await fetchMore({
-        variables: {
-          orgId: organizationId,
-          firstName_contains: searchTerm,
-          first: rowsPerPage,
-          after: afterCursor,
-        },
-        updateQuery: (prev, { fetchMoreResult }) => fetchMoreResult,
-      });
-      setPageCursors((prev) => {
-        const next = [...prev];
-        next[newPage] = afterCursor;
-        return next;
-      });
-      setCurrentPage(newPage);
-    }
-    // If moving backward, simply update page (cursors already tracked)
-    else if (newPage < currentPage && pageCursors[newPage] !== undefined) {
-      setCurrentPage(newPage);
-    }
-  };
-
-  const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ): void => {
-    const newRowsPerPage = parseInt(event.target.value, 10);
-    setRowsPerPage(newRowsPerPage);
-    setPageCursors(['']); // Reset pagination
-    setCurrentPage(0);
-    refetch({
-      orgId: organizationId,
-      firstName_contains: searchTerm,
-      first: newRowsPerPage,
-      after: undefined,
-    });
-  };
-
-  const handleSearch = (newFilter: string): void => {
-    setSearchTerm(newFilter);
-    setPageCursors(['']);
-    setCurrentPage(0);
-    refetch({
-      orgId: organizationId,
-      firstName_contains: newFilter,
-      first: rowsPerPage,
-      after: undefined,
-    });
+  const handlePaginationModelChange = (newModel: GridPaginationModel): void => {
+    setPaginationModel(newModel);
   };
 
   useEffect(() => {
-    // When mode changes, refetch from first page
-    setPageCursors(['']);
-    setCurrentPage(0);
-    refetch({
+    document.title = t('title');
+  }, [t]);
+
+  // Query members
+  const { data, loading } = useQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
+    variables: {
       orgId: organizationId,
-      firstName_contains: searchTerm,
-      first: rowsPerPage,
-      after: undefined,
-    });
-  }, [mode, organizationId, rowsPerPage]); // intentionally not including searchTerm (it's handled above)
+      first: PAGE_SIZE,
+      after: null,
+      ...(mode === 1 && {
+        where: {
+          role: {
+            equal: 'administrator',
+          },
+        },
+      }),
+    },
+    skip: !organizationId,
+    notifyOnNetworkStatusChange: true,
+  });
+
+  // Extract and filter members
+  const allMembers = useMemo(() => {
+    if (!data?.organization?.members?.edges) return [];
+    return data.organization.members.edges;
+  }, [data]);
+
+  // Filter by search term
+  const members = useMemo(() => {
+    if (!searchTerm) return allMembers;
+    const lowerSearch = searchTerm.toLowerCase();
+    return allMembers.filter(
+      (edge: IMemberEdge) =>
+        edge.node.name?.toLowerCase().includes(lowerSearch) ||
+        edge.node.emailAddress?.toLowerCase().includes(lowerSearch),
+    );
+  }, [allMembers, searchTerm]);
+
+  const handleSearch = (value: string): void => {
+    setSearchTerm(value);
+  };
+
+  const handleSortChange = (value: string | number): void => {
+    setMode(String(value) === 'admins' ? 1 : 0);
+  };
+
+  // Prepare table rows
+  const tableRows = useMemo(() => {
+    return members.map((member: IMemberEdge, index: number) => ({
+      id: member.node.id,
+      rowNumber: index + 1,
+      name: member.node.name,
+      email: member.node.emailAddress || '***********************',
+      role: member.node.role === 'administrator' ? 'Admin' : 'Member',
+      avatarURL: member.node.avatarURL,
+    }));
+  }, [members]);
+
+  const headerTitles: string[] = [
+    tCommon('sl_no'),
+    tCommon('name'),
+    tCommon('email'),
+    t('role'),
+  ];
+
+  // Define columns
+  const columns: ReportingTableColumn[] = [
+    {
+      field: 'sl_no',
+      headerName: tCommon('sl_no'),
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      flex: 1,
+    },
+    {
+      field: 'name',
+      headerName: tCommon('name'),
+      minWidth: 150,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      flex: 2,
+    },
+    {
+      field: 'email',
+      headerName: tCommon('email'),
+      minWidth: 200,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      flex: 2,
+    },
+    {
+      field: 'role',
+      headerName: t('role'),
+      minWidth: 150,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      flex: 1,
+    },
+  ];
+
+  // Configure DataGrid props
+  const gridProps: ReportingTableGridProps = {
+    columnBufferPx: COLUMN_BUFFER_PX,
+    paginationMode: 'client',
+    pagination: true,
+    paginationModel,
+    onPaginationModelChange: handlePaginationModelChange,
+    rowCount: tableRows.length,
+    pageSizeOptions: [PAGE_SIZE],
+    hideFooterSelectedRowCount: true,
+    getRowId: (row: IMemberNode) => row.id,
+    slots: {
+      noRowsOverlay: () => (
+        <Stack height="100%" alignItems="center" justifyContent="center">
+          {t('nothingToShow')}
+        </Stack>
+      ),
+      loadingOverlay: () => (
+        <TableLoader
+          headerTitles={headerTitles}
+          noOfRows={PAGE_SIZE}
+          data-testid="table-loader"
+        />
+      ),
+    },
+    loading,
+    sx: { ...dataGridStyle },
+    getRowClassName: () => `${styles.rowBackgrounds}`,
+    rowHeight: ROW_HEIGHT,
+    isRowSelectable: () => false,
+    disableColumnMenu: true,
+    style: { overflow: 'visible' },
+  };
 
   return (
     <>
       <div className={`${styles.mainContainer_people}`}>
-        {/* Refactored Header Structure */}
-        <div className={styles.calendar__header}>
-          {/* 1. Search Bar Section */}
-          <div className={styles.calendar__search}>
-            <SearchBar
-              placeholder={t('searchUsers')}
-              onSearch={handleSearch}
-              onClear={() => handleSearch('')}
-              inputTestId="searchInput"
-              buttonTestId="searchBtn"
-              // Standardized props
-              showSearchButton={true}
-              showLeadingIcon={true}
-              showClearButton={true}
-              buttonAriaLabel={tCommon('search')}
-            />
-          </div>
-
-          {/* 2. Controls Section (Converted Dropdown to SortingButton) */}
-          <div className={styles.btnsBlock}>
-            <SortingButton
-              sortingOptions={modes.map((value, index) => ({
-                label: value,
-                value: index,
-              }))}
-              selectedOption={modes[mode]}
-              onSortChange={(value) => setMode(value as number)}
-              dataTestIdPrefix="modeChangeBtn"
-              buttonLabel={tCommon('filter')}
-              type="filter" // Adds the filter icon automatically
+        <div className={styles.people__header}>
+          <div className={styles.input}>
+            <PageHeader
+              search={{
+                placeholder: t('searchUsers'),
+                onSearch: handleSearch,
+                inputTestId: 'searchInput',
+                buttonTestId: 'searchBtn',
+              }}
+              sorting={[
+                {
+                  title: t('sortMembers'),
+                  options: [
+                    { label: t('allMembers'), value: 'allMembers' },
+                    { label: t('admins'), value: 'admins' },
+                  ],
+                  selected: mode === 1 ? 'admins' : 'allMembers',
+                  onChange: handleSortChange,
+                  testIdPrefix: 'sortMembers',
+                },
+              ]}
             />
           </div>
         </div>
-
-        <div className={styles.people_content}>
-          <div className={styles.people_card_header}>
-            <span style={{ flex: '1' }} className={styles.display_flex}>
-              <span style={{ flex: '1' }}>{t('sNo')}</span>
-              <span style={{ flex: '1' }}>{t('avatar')}</span>
-            </span>
-            <span style={{ flex: '2' }}>{t('name')}</span>
-            <span style={{ flex: '2' }}>{t('email')}</span>
-            <span style={{ flex: '2' }}>{t('role')}</span>
-          </div>
-
-          <div className={styles.people_card_main_container}>
-            {loading ? (
-              <div className={styles.custom_row_center}>
-                <HourglassBottomIcon /> <span>{t('loading')}</span>
-              </div>
-            ) : (
-              <>
-                {members && members.length > 0 ? (
-                  members.map((member: IMemberWithUserType, index) => {
-                    const name = `${member.node.name}`;
-                    const cardProps: IOrganizationCardProps = {
-                      name,
-                      image: member.node.avatarURL ?? '',
-                      id: member.node.id ?? '',
-                      email:
-                        member.node.emailAddress ?? '***********************',
-                      role: member.userType ?? '',
-                      sno: (index + 1 + currentPage * rowsPerPage).toString(),
-                    };
-                    return <PeopleCard key={index} {...cardProps} />;
-                  })
-                ) : (
-                  <span>{t('nothingToShow')}</span>
-                )}
-              </>
-            )}
-          </div>
-          <PaginationList
-            count={
-              pageInfo?.hasNextPage
-                ? (currentPage + 1) * rowsPerPage + 1
-                : currentPage * rowsPerPage + members.length
-            }
-            rowsPerPage={rowsPerPage}
-            page={currentPage}
-            onPageChange={handleChangePage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
+        <div
+          className={
+            styles.btnsContainer +
+            ' gap-3 flex-column flex-lg-row align-items-stretch'
+          }
+        >
+          <ReportingTable
+            rows={tableRows as ReportingRow[]}
+            columns={columns}
+            gridProps={gridProps}
           />
         </div>
       </div>

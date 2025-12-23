@@ -724,7 +724,8 @@
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
     "lowestGoal": "Lowest Goal",
-    "highestGoal": "Highest Goal"
+    "highestGoal": "Highest Goal",
+    "raisedAmount": "Raised Amount"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",

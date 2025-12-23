@@ -41,8 +41,7 @@
  * - JSX.Element: A table displaying members or blocked users with options to block/unblock.
  */
 import { useQuery, useMutation } from '@apollo/client';
-import React, { useEffect, useState, useCallback } from 'react';
-import { Table } from 'react-bootstrap';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import Button from 'react-bootstrap/Button';
 import { toast } from 'react-toastify';
 import {
@@ -59,6 +58,8 @@ import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import { useParams } from 'react-router';
 
+import { Stack } from '@mui/material';
+import type { GridCellParams, GridPaginationModel } from '@mui/x-data-grid';
 import type {
   InterfaceUserPg,
   InterfaceOrganizationPg,
@@ -67,6 +68,18 @@ import type {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import PageHeader from 'shared-components/Navbar/Navbar';
+import type {
+  ReportingRow,
+  ReportingTableColumn,
+  ReportingTableGridProps,
+} from '../../types/ReportingTable/interface';
+import {
+  dataGridStyle,
+  ROW_HEIGHT,
+  COLUMN_BUFFER_PX,
+  PAGE_SIZE,
+} from '../../types/ReportingTable/utils';
+import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 
 const BlockUser = (): JSX.Element => {
   // Translation hooks for internationalization
@@ -75,7 +88,6 @@ const BlockUser = (): JSX.Element => {
   });
   const { t: tCommon } = useTranslation('common');
 
-  document.title = t('title'); // Set document title
   const { orgId: currentUrl } = useParams(); // Get current organization ID from URL
 
   // State hooks
@@ -90,13 +102,22 @@ const BlockUser = (): JSX.Element => {
     InterfaceUserPg[]
   >([]);
 
+  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
+    page: 0,
+    pageSize: PAGE_SIZE,
+  });
+
+  const handlePaginationModelChange = (newModel: GridPaginationModel): void => {
+    setPaginationModel(newModel);
+  };
+
   // Query to fetch blocked users list
   const {
     data: blockedUsersData,
     loading: loadingBlockedUsers,
     error: errorBlockedUsers,
   } = useQuery<InterfaceOrganizationPg>(GET_ORGANIZATION_BLOCKED_USERS_PG, {
-    variables: { id: currentUrl, first: 32, after: null },
+    variables: { id: currentUrl, first: PAGE_SIZE, after: null },
     notifyOnNetworkStatusChange: true,
   });
 
@@ -121,7 +142,7 @@ const BlockUser = (): JSX.Element => {
     loading: loadingMembers,
     error: errorMembers,
   } = useQuery<InterfaceOrganizationPg>(GET_ORGANIZATION_MEMBERS_PG, {
-    variables: { id: currentUrl, first: 32, after: null },
+    variables: { id: currentUrl, first: PAGE_SIZE, after: null },
     notifyOnNetworkStatusChange: true,
   });
 
@@ -219,23 +240,146 @@ const BlockUser = (): JSX.Element => {
     setSearchTerm(value);
   }, []);
 
-  // Header titles for the table
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
+
+  // Prepare rows with IDs for DataGrid
+  const tableRows = useMemo(() => {
+    const users = showBlockedMembers
+      ? filteredBlockedUsers
+      : filteredAllMembers;
+    return users.map((user) => ({
+      id: user.id,
+      name: user.name,
+      email: user.emailAddress,
+      user: user,
+    }));
+  }, [showBlockedMembers, filteredBlockedUsers, filteredAllMembers]);
+
   const headerTitles: string[] = [
-    '#',
+    tCommon('sl_no'),
     tCommon('name'),
     tCommon('email'),
     t('block_unblock'),
   ];
 
-  if (loadingMembers || loadingBlockedUsers) {
-    return (
-      <TableLoader
-        data-testid="TableLoader"
-        headerTitles={headerTitles}
-        noOfRows={10}
-      />
-    );
-  }
+  // Define columns for DataGrid
+  const columns: ReportingTableColumn[] = [
+    {
+      field: 'sl_no',
+      headerName: tCommon('sl_no'),
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      flex: 1,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <div>
+            {params.api.getRowIndexRelativeToVisibleRows(params.row.id) + 1}
+          </div>
+        );
+      },
+    },
+    {
+      field: 'name',
+      headerName: tCommon('name'),
+      minWidth: 150,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      flex: 2,
+    },
+    {
+      field: 'email',
+      headerName: tCommon('email'),
+      minWidth: 200,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      flex: 2,
+    },
+    {
+      field: 'action',
+      headerName: t('block_unblock'),
+      minWidth: 150,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      flex: 1,
+      renderCell: (params: GridCellParams) => {
+        const user = params.row.user as InterfaceUserPg;
+        return showBlockedMembers ? (
+          <Button
+            variant="success"
+            size="sm"
+            className={styles.unblockButton}
+            onClick={async () => {
+              await handleUnBlockUser(user as InterfaceUserPg);
+            }}
+            data-testid={`blockUser${user.id}`}
+            aria-label={t('unblock')}
+          >
+            <FontAwesomeIcon icon={faUserPlus} className={styles.unbanIcon} />
+            {t('unblock')}
+          </Button>
+        ) : (
+          <Button
+            variant="success"
+            size="sm"
+            className={styles.removeButton}
+            onClick={async () => {
+              await handleBlockUser(user as InterfaceUserPg);
+            }}
+            data-testid={`blockUser${user.id}`}
+            aria-label={t('block')}
+          >
+            <FontAwesomeIcon icon={faBan} className={styles.banIcon} />
+            {t('block')}
+          </Button>
+        );
+      },
+    },
+  ];
+
+  // Configure DataGrid props
+  const gridProps: ReportingTableGridProps = {
+    columnBufferPx: COLUMN_BUFFER_PX,
+    paginationMode: 'client',
+    pagination: true,
+    paginationModel,
+    onPaginationModelChange: handlePaginationModelChange,
+    rowCount: tableRows.length,
+    pageSizeOptions: [PAGE_SIZE],
+    hideFooterSelectedRowCount: true,
+    getRowId: (row: InterfaceUserPg) => row.id,
+    slots: {
+      noRowsOverlay: () => (
+        <Stack height="100%" alignItems="center" justifyContent="center">
+          {searchTerm.length === 0
+            ? showBlockedMembers
+              ? t('noSpammerFound')
+              : t('noUsersFound')
+            : `${tCommon('noResultsFoundFor')} "${searchTerm}"`}
+        </Stack>
+      ),
+      loadingOverlay: () => (
+        <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
+      ),
+    },
+    loading: loadingMembers || loadingBlockedUsers,
+    sx: { ...dataGridStyle },
+    getRowClassName: () => `${styles.rowBackgrounds}`,
+    rowHeight: ROW_HEIGHT,
+    isRowSelectable: () => false,
+    disableColumnMenu: true,
+    style: { overflow: 'visible' },
+  };
 
   return (
     <>
@@ -267,108 +411,11 @@ const BlockUser = (): JSX.Element => {
             />
           </div>
         </div>
-        <div className={styles.listBox}>
-          <Table
-            responsive
-            data-testid="userList"
-            className={styles.custom_table}
-          >
-            <thead>
-              <tr>
-                {headerTitles.map((title: string, index: number) => (
-                  <th key={index} scope="col">
-                    {title}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {!showBlockedMembers ? (
-                filteredAllMembers.length > 0 ? (
-                  filteredAllMembers.map((user, index: number) => (
-                    <tr key={user.id}>
-                      <th scope="row">{index + 1}</th>
-                      <td>{user.name}</td>
-                      <td>{user.emailAddress}</td>
-                      <td>
-                        <Button
-                          variant="success"
-                          size="sm"
-                          className={styles.removeButton}
-                          onClick={async (): Promise<void> => {
-                            await handleBlockUser(user);
-                          }}
-                          data-testid={`blockUser${user.id}`}
-                        >
-                          <FontAwesomeIcon
-                            icon={faBan}
-                            className={styles.banIcon}
-                          />
-                          {t('block')}
-                        </Button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan={headerTitles.length}
-                      className={styles.noDataMessage}
-                    >
-                      <div className={styles.notFound}>
-                        <h4>
-                          {searchTerm.length === 0
-                            ? t('noUsersFound')
-                            : `${tCommon('noResultsFoundFor')} "${searchTerm}"`}
-                        </h4>
-                      </div>
-                    </td>
-                  </tr>
-                )
-              ) : filteredBlockedUsers.length > 0 ? (
-                filteredBlockedUsers.map((user, index: number) => (
-                  <tr key={user.id}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{user.name}</td>
-                    <td>{user.emailAddress}</td>
-                    <td>
-                      <Button
-                        variant="success"
-                        size="sm"
-                        className={styles.unblockButton}
-                        onClick={async (): Promise<void> => {
-                          await handleUnBlockUser(user);
-                        }}
-                        data-testid={`blockUser${user.id}`}
-                      >
-                        <FontAwesomeIcon
-                          icon={faUserPlus}
-                          className={styles.unbanIcon}
-                        />
-                        {t('unblock')}
-                      </Button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td
-                    colSpan={headerTitles.length}
-                    className={styles.noDataMessage}
-                  >
-                    <div className={styles.notFound}>
-                      <h4>
-                        {searchTerm.length === 0
-                          ? t('noSpammerFound')
-                          : `${tCommon('noResultsFoundFor')} "${searchTerm}"`}
-                      </h4>
-                    </div>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </Table>
-        </div>
+        <ReportingTable
+          rows={tableRows as ReportingRow[]}
+          columns={columns}
+          gridProps={gridProps}
+        />
       </div>
     </>
   );

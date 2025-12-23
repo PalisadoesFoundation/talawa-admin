@@ -21,6 +21,7 @@ import { BrowserRouter } from 'react-router';
 import { ToastContainer, toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { DocumentNode } from 'graphql';
+import { PAGE_SIZE } from '../../types/ReportingTable/utils';
 
 const { toastMocks, routerMocks, errorHandlerMock } = vi.hoisted(() => {
   const useParams = vi.fn();
@@ -112,7 +113,7 @@ const createMocks = (
     {
       request: {
         query: GET_ORGANIZATION_MEMBERS_PG,
-        variables: { id: '123', first: 32, after: null },
+        variables: { id: '123', first: PAGE_SIZE, after: null },
       },
       ...(membersQueryError
         ? { error: new Error('Failed to fetch members') }
@@ -153,7 +154,7 @@ const createMocks = (
     {
       request: {
         query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-        variables: { id: '123', first: 32, after: null },
+        variables: { id: '123', first: PAGE_SIZE, after: null },
       },
       ...(blockedUsersQueryError
         ? { error: new Error('Failed to fetch blocked users') }
@@ -299,7 +300,7 @@ describe('BlockUser Component', () => {
         {
           request: {
             query: GET_ORGANIZATION_MEMBERS_PG,
-            variables: { id: '123', first: 32, after: null },
+            variables: { id: '123', first: PAGE_SIZE, after: null },
           },
           result: {
             data: { organization: null },
@@ -308,7 +309,7 @@ describe('BlockUser Component', () => {
         {
           request: {
             query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-            variables: { id: '123', first: 32, after: null },
+            variables: { id: '123', first: PAGE_SIZE, after: null },
           },
           result: {
             data: { organization: null },
@@ -966,7 +967,7 @@ describe('BlockUser Component', () => {
         {
           request: {
             query: GET_ORGANIZATION_MEMBERS_PG,
-            variables: { id: '123', first: 32, after: null },
+            variables: { id: '123', first: PAGE_SIZE, after: null },
           },
           result: {
             data: {
@@ -991,7 +992,7 @@ describe('BlockUser Component', () => {
         {
           request: {
             query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-            variables: { id: '123', first: 32, after: null },
+            variables: { id: '123', first: PAGE_SIZE, after: null },
           },
           result: {
             data: {
@@ -1046,7 +1047,7 @@ describe('BlockUser Component', () => {
         {
           request: {
             query: GET_ORGANIZATION_MEMBERS_PG,
-            variables: { id: '123', first: 32, after: null },
+            variables: { id: '123', first: PAGE_SIZE, after: null },
           },
           result: {
             data: {
@@ -1062,7 +1063,7 @@ describe('BlockUser Component', () => {
         {
           request: {
             query: GET_ORGANIZATION_BLOCKED_USERS_PG,
-            variables: { id: '123', first: 32, after: null },
+            variables: { id: '123', first: PAGE_SIZE, after: null },
           },
           result: {
             data: {
@@ -1151,9 +1152,54 @@ describe('BlockUser Component', () => {
       expect(document.title).toBe('title');
     });
 
-    it('renders table headers correctly', async () => {
+    it('triggers pagination and updates page', async () => {
+      // Create more than PAGE_SIZE mock users to trigger pagination
+      const manyMembers = Array.from({ length: PAGE_SIZE + 2 }, (_, i) => ({
+        node: {
+          id: `${i + 1}`,
+          name: `User ${i + 1}`,
+          emailAddress: `user${i + 1}@example.com`,
+          role: 'regular',
+        },
+      }));
+
+      const customMocks = [
+        {
+          request: {
+            query: GET_ORGANIZATION_MEMBERS_PG,
+            variables: { id: '123', first: PAGE_SIZE, after: null },
+          },
+          result: {
+            data: {
+              organization: {
+                members: {
+                  edges: manyMembers,
+                  pageInfo: { hasNextPage: true, endCursor: null },
+                },
+              },
+            },
+          },
+        },
+        {
+          request: {
+            query: GET_ORGANIZATION_BLOCKED_USERS_PG,
+            variables: { id: '123', first: PAGE_SIZE, after: null },
+          },
+          result: {
+            data: {
+              organization: {
+                blockedUsers: {
+                  edges: [],
+                  pageInfo: { hasNextPage: false, endCursor: null },
+                },
+              },
+            },
+          },
+        },
+      ];
+
       render(
-        <MockedProvider mocks={createMocks()}>
+        <MockedProvider mocks={customMocks}>
           <BrowserRouter>
             <BlockUser />
           </BrowserRouter>
@@ -1164,11 +1210,22 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      // Check for table headers
-      expect(screen.getByText('#')).toBeInTheDocument();
-      expect(screen.getByText('name')).toBeInTheDocument();
-      expect(screen.getByText('email')).toBeInTheDocument();
-      expect(screen.getByText('block_unblock')).toBeInTheDocument();
+      // Find the DataGrid and trigger pagination event
+      const grid = document.querySelector('.MuiDataGrid-root');
+      expect(grid).toBeTruthy();
+
+      // Simulate a pagination event (go to page 1)
+      // Find the next page button (aria-label="Go to next page")
+      const nextPageBtn = screen.getByLabelText(/go to next page/i);
+      expect(nextPageBtn).toBeInTheDocument();
+      fireEvent.click(nextPageBtn);
+
+      // After clicking next, check that a user from the second page is visible
+      // and a user from the first page is not
+      await waitFor(() => {
+        expect(screen.getByText('User 11')).toBeInTheDocument();
+        expect(screen.queryByText('User 1')).not.toBeInTheDocument();
+      });
     });
   });
 });

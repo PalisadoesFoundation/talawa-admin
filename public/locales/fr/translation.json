@@ -724,7 +724,8 @@
     "latestEndDate": "Dernière date de fin",
     "earliestEndDate": "Date de fin la plus ancienne",
     "lowestGoal": "Objectif le plus bas",
-    "highestGoal": "Objectif le plus élevé"
+    "highestGoal": "Objectif le plus élevé",
+    "raisedAmount": "Montant collecté"
   },
   "pledges": {
     "title": "Engagements de campagne de financement",
