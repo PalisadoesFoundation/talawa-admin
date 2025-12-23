@@ -176,10 +176,6 @@ const Users = (): JSX.Element => {
 
   // Manage loading more state
   useEffect(() => {
-    if (!usersData || usersData.length === 0) {
-      return;
-    }
-
     let newDisplayedUsers = sortUsers(usersData, sortingOption);
     newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
     setDisplayedUsers(newDisplayedUsers);
@@ -395,7 +391,7 @@ const Users = (): JSX.Element => {
           icon="person_off"
           message={getEmptyStateMessage()}
           description={
-            searchByName.length > 0 ? t('tryAdjustingFilters') : undefined
+            searchByName.length > 0 ? tCommon('tryAdjustingFilters') : undefined
           }
           dataTestId="users-empty-state"
         />
@@ -440,20 +436,19 @@ const Users = (): JSX.Element => {
                 </tr>
               </thead>
               <tbody>
-                {usersData &&
-                  displayedUsers.map(
-                    (user: InterfaceQueryUserListItem, index: number) => {
-                      return (
-                        <UsersTableItem
-                          key={user.id}
-                          index={index}
-                          resetAndRefetch={resetAndRefetch}
-                          user={user}
-                          loggedInUserId={loggedInUserId}
-                        />
-                      );
-                    },
-                  )}
+                {displayedUsers.map(
+                  (user: InterfaceQueryUserListItem, index: number) => {
+                    return (
+                      <UsersTableItem
+                        key={user.id}
+                        index={index}
+                        resetAndRefetch={resetAndRefetch}
+                        user={user}
+                        loggedInUserId={loggedInUserId}
+                      />
+                    );
+                  },
+                )}
               </tbody>
             </Table>
           </InfiniteScroll>

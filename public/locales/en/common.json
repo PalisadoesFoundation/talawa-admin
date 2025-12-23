@@ -5,6 +5,7 @@
   "loading": "Loading...",
   "endOfResults": "End of results",
   "noResultsFoundFor": "No results found for {{query}}",
+  "tryAdjustingFilters": "Try adjusting your filters or search term.",
   "edit": "Edit",
   "admins": "Admins",
   "admin": "ADMIN",

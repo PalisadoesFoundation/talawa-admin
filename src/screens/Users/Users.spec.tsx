@@ -299,7 +299,7 @@ describe('Testing Users screen', () => {
 
     expect(
       screen.getByTestId('users-empty-state-description'),
-    ).toHaveTextContent('tryAdjustingFilters');
+    ).toHaveTextContent('Try adjusting your filters or search term.');
   });
 
   it('should show noUserFound when user is empty', async () => {
@@ -592,7 +592,7 @@ describe('Testing Users screen', () => {
       const errorMsg = screen.getByTestId('errorMsg');
 
       expect(errorMsg).toBeInTheDocument();
-      expect(errorMsg).toHaveTextContent('errorLoadingUsers');
+      expect(errorMsg).toHaveTextContent('Error occurred while loading Users');
       expect(errorMsg).toHaveTextContent('Network error occurred');
     });
 
