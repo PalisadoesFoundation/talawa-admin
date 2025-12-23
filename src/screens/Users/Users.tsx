@@ -176,17 +176,13 @@ const Users = (): JSX.Element => {
 
   // Manage loading more state
   useEffect(() => {
-    let newDisplayedUsers = sortUsers(usersData, sortingOption);
-    newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
+    let newDisplayedUsers = [...usersData];
+    if (newDisplayedUsers.length > 0) {
+      newDisplayedUsers = sortUsers(newDisplayedUsers, sortingOption);
+      newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
+    }
     setDisplayedUsers(newDisplayedUsers);
   }, [usersData, sortingOption, filteringOption]);
-
-  // To clear the search when the component is unmounted
-  useEffect(() => {
-    return () => {
-      setSearchByName('');
-    };
-  }, []);
 
   // Show a warning if there are no organizations
   useEffect(() => {
