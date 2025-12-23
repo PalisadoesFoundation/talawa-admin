@@ -9692,10 +9692,6 @@ form {
 
 .outlineBtn {
   /* SAME layout as manageBtn */
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-
   display: flex;
   justify-content: space-around;
   width: 8rem;
@@ -9709,6 +9705,12 @@ form {
   background-color: var(--outlineBtn-bg);
   color: var(--outlineBtn-color);
   border: 1px solid var(--outlineBtn-border);
+}
+
+.outlineBtnPositioned {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
 }
 
 .outlineBtn:is(:hover, :active) {
@@ -9978,7 +9980,7 @@ form {
   color: #137333;
 }
 
-.pending {
+.pendingMembership {
   background-color: #fff4e5;
   color: #b26a00;
 }
@@ -9989,15 +9991,15 @@ form {
 }
 
 .btnsBlock {
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
-  justify-content: flex-end !important;
-  gap: 12px !important;
-  width: auto !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  width: auto;
   flex-shrink: 0;
-  height: 48px !important;
-  margin: 0 !important;
+  height: 48px;
+  margin: 0;
 }
 
 /* 2. Ensure the header stays in one line and doesn't wrap on Desktop */
@@ -10019,18 +10021,19 @@ form {
     flex-wrap: wrap !important;
   }
   .btnsBlock {
-    width: 100% !important;
-    justify-content: flex-end !important;
-    margin-top: 10px !important;
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 10px;
   }
 }
 
-.btnsBlock > * {
-  margin: 0 !important;
-  height: 100% !important; /* Fill the container's 48px */
-  display: flex !important;
-  align-items: center !important;
-  min-height: auto !important;
+.btnsBlock > button,
+.btnsBlock > .btn {
+  margin: 0;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.4rem;
 }
 /* ----------------------------------------------------- */
 .orgListContainer {

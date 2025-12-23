@@ -26,10 +26,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import App from './App';
 import { store } from './state/store';
-import {
-  BACKEND_URL,
-  REACT_APP_BACKEND_WEBSOCKET_URL,
-} from 'Constant/constant';
+import { BACKEND_URL, BACKEND_WEBSOCKET_URL } from 'Constant/constant';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { ApolloLink } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
@@ -178,7 +175,7 @@ const uploadLink = createUploadLink({
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: REACT_APP_BACKEND_WEBSOCKET_URL,
+    url: BACKEND_WEBSOCKET_URL,
     connectionParams: () => {
       const token = getItem('token');
       const authParams = token ? { authorization: BEARER_PREFIX + token } : {};

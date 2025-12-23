@@ -15,4 +15,12 @@ npx knip --config knip.deps.json --include dependencies
 pnpm run check-mock-cleanup
 pnpm run check-localstorage
 
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM \
+  | grep -v '^src/utils/' \
+  | grep -v '^src/types/' \
+  || true)
+if [ -n "$STAGED_FILES" ]; then
+  python .github/workflows/scripts/css_check.py --files $STAGED_FILES
+fi
+
 git add .
