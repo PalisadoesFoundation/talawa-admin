@@ -24,7 +24,7 @@
  * />
  */
 import type { TFunction } from 'i18next';
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { BaseModal } from 'shared-components/BaseModal';
@@ -44,6 +44,18 @@ const UnassignUserTagModal: React.FC<InterfaceUnassignUserTagModalProps> = ({
   t,
   tCommon,
 }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onConfirmUnassign = async (): Promise<void> => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    try {
+      await handleUnassignUserTag();
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
     <BaseModal
       show={unassignUserTagModalIsOpen}
@@ -72,15 +84,8 @@ const UnassignUserTagModal: React.FC<InterfaceUnassignUserTagModalProps> = ({
           <Button
             type="button"
             className={`btn ${styles.addButton}`}
-            onClick={async (e) => {
-              const btn = e.currentTarget;
-              btn.disabled = true;
-              try {
-                await handleUnassignUserTag();
-              } finally {
-                btn.disabled = false;
-              }
-            }}
+            onClick={onConfirmUnassign}
+            disabled={isSubmitting}
             data-testid="unassignTagModalSubmitBtn"
             aria-label={tCommon('yes')}
           >

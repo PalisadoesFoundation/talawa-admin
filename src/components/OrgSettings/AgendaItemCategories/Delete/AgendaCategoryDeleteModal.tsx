@@ -29,7 +29,7 @@
  * />
  * ```
  */
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { BaseModal } from 'shared-components/BaseModal';
@@ -51,6 +51,19 @@ const AgendaCategoryDeleteModal: React.FC<
   t,
   tCommon,
 }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onConfirmDelete = async (): Promise<void> => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    try {
+      await deleteAgendaCategoryHandler();
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <BaseModal
       show={agendaCategoryDeleteModalIsOpen}
@@ -80,7 +93,8 @@ const AgendaCategoryDeleteModal: React.FC<
           <Button
             type="button"
             className="btn btn-success"
-            onClick={deleteAgendaCategoryHandler}
+            onClick={onConfirmDelete}
+            disabled={isSubmitting}
             data-testid="deleteAgendaCategoryBtn"
           >
             {tCommon('yes')}

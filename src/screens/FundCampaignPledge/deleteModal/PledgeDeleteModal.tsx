@@ -23,7 +23,7 @@
  */
 import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import { DELETE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
@@ -49,7 +49,12 @@ const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
 
   const [deletePledge] = useMutation(DELETE_PLEDGE);
 
-  const deleteHandler = async (): Promise<void> => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onConfirmDelete = async (): Promise<void> => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
     try {
       await deletePledge({ variables: { id: pledge?.id } });
       refetchPledge();
@@ -57,6 +62,8 @@ const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
       toast.success(t('pledgeDeleted') as string);
     } catch (error: unknown) {
       toast.error((error as Error).message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -72,11 +79,13 @@ const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
         <>
           <Button
             variant="danger"
-            onClick={deleteHandler}
+            onClick={onConfirmDelete}
+            disabled={isSubmitting}
             data-testid="deleteyesbtn"
           >
             {tCommon('yes')}
           </Button>
+
           <Button variant="secondary" onClick={hide} data-testid="deletenobtn">
             {tCommon('no')}
           </Button>
