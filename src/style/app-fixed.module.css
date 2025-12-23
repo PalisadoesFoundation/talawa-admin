@@ -2084,6 +2084,7 @@ form label,
 
 .orgCard .innerContainer {
   display: flex;
+  height: 100%;
 }
 
 .orgCard {
@@ -8345,7 +8346,7 @@ form {
 
 /* -- CampaignModal.tsx -- */
 
-/* -- OrganizationFundCampagins.tsx -- */
+/* -- OrganizationFundCampaigns.tsx -- */
 
 .organizationFundCampaignContainer {
   margin: 0.5rem 0;
@@ -8720,21 +8721,18 @@ form {
 /* -- Campaigns.tsx -- */
 
 .outlineBtn {
-  margin-bottom: 10px;
   background-color: var(--outlineBtn-bg);
   color: var(--outlineBtn-color);
   border-color: var(--outlineBtn-border);
 }
 
 .outlineBtn:is(:hover, :active) {
-  margin-bottom: 10px;
   background-color: var(--outlineBtn-hover-bg) !important;
   color: var(--outlineBtn-bg) !important;
   border-color: var(--outlineBtn-hover-bg);
 }
 
 .outlineBtn:disabled {
-  margin-bottom: 10px;
   background-color: var(--outlineBtn-bg);
   color: var(--outlineBtn-disabled);
   border-color: var(--outlineBtn-disabled);
@@ -9071,12 +9069,9 @@ form {
 }
 
 .content {
-  height: fit-content;
-  min-height: calc(100% - 40px);
-}
-
-.content {
-  min-height: calc(100% - 40px);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .orgCard .innerContainer .content {
@@ -9696,24 +9691,39 @@ form {
 }
 
 .outlineBtn {
-  margin-bottom: 10px;
+  /* SAME layout as manageBtn */
+  display: flex;
+  justify-content: space-around;
+  width: 8rem;
+
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+
+  box-shadow: 0 2px 2px var(--manageBtn-box-shadow);
   background-color: var(--outlineBtn-bg);
   color: var(--outlineBtn-color);
-  border-color: var(--outlineBtn-border);
+  border: 1px solid var(--outlineBtn-border);
+}
+
+.outlineBtnPositioned {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
 }
 
 .outlineBtn:is(:hover, :active) {
-  margin-bottom: 10px;
   background-color: var(--outlineBtn-hover-bg) !important;
-  color: var(--outlineBtn-color-hover) !important;
-  border-color: var(--outlineBtn-hover-border);
+  color: var(--outlineBtn-bg) !important;
+  border-color: var(--outlineBtn-hover-bg);
+  box-shadow: var(--hover-shadow);
 }
 
 .outlineBtn:disabled {
-  margin-bottom: 10px;
-  background-color: var(--outlineBtn-bg-disabled);
-  color: var(--outlineBtn-color-disabled);
-  border-color: var(--outlineBtn-border-disabled);
+  background-color: var(--outlineBtn-bg);
+  color: var(--outlineBtn-disabled);
+  border-color: var(--outlineBtn-disabled);
 }
 
 .modalTable {
@@ -9942,18 +9952,54 @@ form {
   margin-top: auto;
   display: flex;
   justify-content: flex-end;
+  padding-bottom: 10px;
+}
+.manageBtn,
+.withdrawBtn,
+.outlineBtn {
+  min-width: 8rem;
+  height: 2.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.statusChip {
+  display: inline-block;
+  margin-top: 0.25rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.member {
+  background-color: #e6f4ea;
+  color: #137333;
+}
+
+.pendingMembership {
+  background-color: #fff4e5;
+  color: #b26a00;
+}
+
+.notMember {
+  background-color: #f1f3f4;
+  color: #5f6368;
 }
 
 .btnsBlock {
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
-  justify-content: flex-end !important;
-  gap: 12px !important;
-  width: auto !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  width: auto;
   flex-shrink: 0;
-  height: 48px !important;
-  margin: 0 !important;
+  height: 48px;
+  margin: 0;
 }
 
 /* 2. Ensure the header stays in one line and doesn't wrap on Desktop */
@@ -9975,18 +10021,19 @@ form {
     flex-wrap: wrap !important;
   }
   .btnsBlock {
-    width: 100% !important;
-    justify-content: flex-end !important;
-    margin-top: 10px !important;
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 10px;
   }
 }
 
-.btnsBlock > * {
-  margin: 0 !important;
-  height: 100% !important; /* Fill the container's 48px */
-  display: flex !important;
-  align-items: center !important;
-  min-height: auto !important;
+.btnsBlock > button,
+.btnsBlock > .btn {
+  margin: 0;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.4rem;
 }
 /* ----------------------------------------------------- */
 .orgListContainer {
