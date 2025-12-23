@@ -48,6 +48,10 @@ import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
+// Import UserPortalNavigationBar to ensure it's part of the module graph
+// This component will be used in future iterations to replace the current sidebar
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { UserPortalNavigationBar } from 'components/UserPortal/UserPortalNavigationBar';
 
 const map: InterfaceMapType = {
   organization: 'home',

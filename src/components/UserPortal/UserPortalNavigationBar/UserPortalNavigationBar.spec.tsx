@@ -17,12 +17,19 @@ import i18next from 'i18next';
 import { UserPortalNavigationBar } from './UserPortalNavigationBar';
 import UserProfileDropdown from './UserDropdown';
 import LanguageSelector from './LanguageSelector';
-import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { languages } from 'utils/languages';
 import useLocalStorage from 'utils/useLocalstorage';
 import { OverridableComponent } from '@mui/material/OverridableComponent';
 import { SvgIconTypeMap } from '@mui/material';
+import {
+  mockUserId,
+  mockUserName,
+  mockOrganizationId,
+  mockOrganizationName,
+  organizationDataMock,
+  revokeRefreshTokenMock,
+  mockNavigationLinksBase,
+} from './UserPortalNavigationBarMocks';
 
 // Mock dependencies
 vi.mock('react-toastify', () => ({ toast: { error: vi.fn() } }));
@@ -30,7 +37,7 @@ vi.mock('js-cookie', () => ({ default: { get: vi.fn(), set: vi.fn() } }));
 vi.mock('i18next', () => ({ default: { changeLanguage: vi.fn() } }));
 vi.mock('utils/useLocalstorage', () => ({ default: vi.fn() }));
 
-// Mock CSS modules
+// Mock CSS modules - inline the mock values to avoid hoisting issues
 vi.mock('./UserPortalNavigationBar.module.css', () => ({
   default: {
     colorPrimary: '_colorPrimary_1234',
@@ -56,38 +63,6 @@ vi.mock('react-router-dom', async () => {
 });
 
 describe('UserPortalNavigationBar', () => {
-  const mockUserId = 'test-user-123';
-  const mockUserName = 'Test User';
-  const mockOrganizationId = 'org-123';
-  const mockOrganizationName = 'Test Organization';
-
-  const organizationDataMock = {
-    request: {
-      query: GET_ORGANIZATION_BASIC_DATA,
-      variables: { id: mockOrganizationId },
-    },
-    result: {
-      data: {
-        organization: {
-          id: mockOrganizationId,
-          name: mockOrganizationName,
-          __typename: 'Organization',
-        },
-      },
-    },
-  };
-
-  const revokeRefreshTokenMock = {
-    request: {
-      query: REVOKE_REFRESH_TOKEN,
-    },
-    result: {
-      data: {
-        revokeRefreshToken: true,
-      },
-    },
-  };
-
   beforeEach(() => {
     mockNavigate = vi.fn();
     vi.clearAllMocks();
@@ -388,33 +363,13 @@ describe('UserPortalNavigationBar', () => {
   });
 
   describe('UserPortalNavigationBar - Navigation Links', () => {
-    const navigationLinks = [
-      {
-        id: 'home',
-        label: 'Home',
-        path: '/home',
-      },
-      {
-        id: 'campaigns',
-        label: 'Campaigns',
-        path: '/campaigns',
-        translationKey: 'userNavbar.campaigns',
-      },
-      {
-        id: 'events',
-        label: 'Events',
-        path: '/events',
-        onClick: vi.fn(),
-      },
-    ];
-
     it('renders navigation links', () => {
       render(
         <MockedProvider mocks={[]}>
           <MemoryRouter>
             <UserPortalNavigationBar
               mode="organization"
-              navigationLinks={navigationLinks}
+              navigationLinks={mockNavigationLinksBase}
             />
           </MemoryRouter>
         </MockedProvider>,
@@ -437,7 +392,7 @@ describe('UserPortalNavigationBar', () => {
           <MemoryRouter>
             <UserPortalNavigationBar
               mode="organization"
-              navigationLinks={navigationLinks}
+              navigationLinks={mockNavigationLinksBase}
               currentPage="campaigns"
             />
           </MemoryRouter>
@@ -456,7 +411,7 @@ describe('UserPortalNavigationBar', () => {
           <MemoryRouter>
             <UserPortalNavigationBar
               mode="organization"
-              navigationLinks={navigationLinks}
+              navigationLinks={mockNavigationLinksBase}
             />
           </MemoryRouter>
         </MockedProvider>,
@@ -508,7 +463,7 @@ describe('UserPortalNavigationBar', () => {
           <MemoryRouter>
             <UserPortalNavigationBar
               mode="organization"
-              navigationLinks={navigationLinks}
+              navigationLinks={mockNavigationLinksBase}
               onNavigation={customOnNavigation}
             />
           </MemoryRouter>
@@ -519,7 +474,9 @@ describe('UserPortalNavigationBar', () => {
       fireEvent.click(homeLink);
 
       await waitFor(() => {
-        expect(customOnNavigation).toHaveBeenCalledWith(navigationLinks[0]);
+        expect(customOnNavigation).toHaveBeenCalledWith(
+          mockNavigationLinksBase[0],
+        );
       });
     });
 
