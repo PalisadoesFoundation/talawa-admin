@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import UnassignUserTagModal, {
   InterfaceUnassignUserTagModalProps,
 } from './UnassignUserTagModal';
@@ -33,10 +33,6 @@ describe('UnassignUserTagModal Component', () => {
     t: mockT,
     tCommon: mockTCommon,
   };
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
 
   afterEach(() => {
     vi.clearAllMocks();
