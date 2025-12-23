@@ -1213,10 +1213,9 @@ jobs:
             kill "$(cat .pidfile_dev)"
           fi
   Post-PR-Comment:
-    name: Post PR Comment After All Checks
+    name: Post PR Comment
     runs-on: ubuntu-latest
     needs: [ZAP-Security-Scan]
-    if: ${{ github.event_name == 'pull_request' }}
     permissions:
       issues: write
       pull-requests: write
@@ -1235,7 +1234,7 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Post comment on Pull Request
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             await github.rest.issues.createComment({
