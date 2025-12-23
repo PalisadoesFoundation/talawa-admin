@@ -2,12 +2,24 @@
  * PledgeDeleteModal Component
  *
  * Renders a confirmation modal for deleting a pledge.
+ * Allows the user to confirm or cancel the deletion action.
  *
  * @component
- * @param {InterfaceDeletePledgeModal} props - Props including isOpen, hide, pledge, refetchPledge.
+ * @param {InterfaceDeletePledgeModal} props - The props for the component.
+ * @param {boolean} props.isOpen - Determines whether the modal is visible.
+ * @param {() => void} props.hide - Function to close the modal.
+ * @param {InterfacePledgeInfo | null} props.pledge - The pledge information to be deleted.
+ * @param {() => void} props.refetchPledge - Function to refetch pledge data after deletion.
+ *
+ * @returns {JSX.Element} The rendered delete pledge confirmation modal.
  *
  * @example
- * <PledgeDeleteModal isOpen={true} hide={handleClose} pledge={pledge} refetchPledge={refetch} />
+ * <PledgeDeleteModal
+ *   isOpen={true}
+ *   hide={handleClose}
+ *   pledge={pledge}
+ *   refetchPledge={refetch}
+ * />
  */
 import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';

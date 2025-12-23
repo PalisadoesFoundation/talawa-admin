@@ -2,9 +2,17 @@
  * UnassignUserTagModal Component
  *
  * Renders a confirmation modal for unassigning a user tag.
+ * Provides "Yes" and "No" options to confirm or cancel the action.
  *
  * @component
- * @param {InterfaceUnassignUserTagModalProps} props - Props including visibility, toggle, handler, translations.
+ * @param {InterfaceUnassignUserTagModalProps} props - The props for the component.
+ * @param {boolean} props.unassignUserTagModalIsOpen - Determines if the modal is open or closed.
+ * @param {() => void} props.toggleUnassignUserTagModal - Function to toggle the modal's visibility.
+ * @param {() => Promise<void>} props.handleUnassignUserTag - Async function to handle the unassigning of a user tag.
+ * @param {TFunction<'translation', 'manageTag' | 'memberDetail'>} props.t - Translation function for localized strings specific to the modal.
+ * @param {TFunction<'common', undefined>} props.tCommon - Translation function for common localized strings.
+ *
+ * @returns {JSX.Element} The rendered modal component.
  *
  * @example
  * <UnassignUserTagModal

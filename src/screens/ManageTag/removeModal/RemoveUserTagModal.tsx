@@ -4,7 +4,14 @@
  * Renders a confirmation modal for removing a user tag in the Manage Tag section.
  *
  * @component
- * @param {InterfaceRemoveUserTagModalProps} props - Props including visibility, toggle, handler, translations.
+ * @param {InterfaceRemoveUserTagModalProps} props - The props for the component.
+ * @param {boolean} props.removeUserTagModalIsOpen - Determines whether the modal is visible.
+ * @param {() => void} props.toggleRemoveUserTagModal - Function to toggle the visibility of the modal.
+ * @param {() => Promise<void>} props.handleRemoveUserTag - Async function to handle the removal of a user tag.
+ * @param {TFunction<'translation', 'manageTag'>} props.t - Translation function for the "manageTag" namespace.
+ * @param {TFunction<'common', undefined>} props.tCommon - Translation function for common terms.
+ *
+ * @returns {JSX.Element} The rendered modal component.
  *
  * @example
  * <RemoveUserTagModal
@@ -16,7 +23,7 @@
  * />
  */
 import type { TFunction } from 'i18next';
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { BaseModal } from 'shared-components/BaseModal';
@@ -36,6 +43,18 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
   t,
   tCommon,
 }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onConfirmRemove = async (): Promise<void> => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    try {
+      await handleRemoveUserTag();
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
     <BaseModal
       show={removeUserTagModalIsOpen}
@@ -63,7 +82,8 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
           <Button
             type="button"
             className={`btn ${styles.addButton}`}
-            onClick={handleRemoveUserTag}
+            onClick={onConfirmRemove}
+            disabled={isSubmitting}
             data-testid="removeUserTagSubmitBtn"
           >
             {tCommon('yes')}

@@ -4,9 +4,22 @@
  * Renders a confirmation modal for deleting an agenda category.
  *
  * @component
- * @param {InterfaceAgendaCategoryDeleteModalProps} props - Props including visibility, toggle, handler, translations.
+ * @param {InterfaceAgendaCategoryDeleteModalProps} props - The props for the component.
+ * @param {boolean} props.agendaCategoryDeleteModalIsOpen - Determines if the modal is open or closed.
+ * @param {() => void} props.toggleDeleteModal - Function to toggle the visibility of the modal.
+ * @param {() => Promise<void>} props.deleteAgendaCategoryHandler - Async function to handle the deletion of the agenda category.
+ * @param {(key: string) => string} props.t - Translation function for component-specific strings.
+ * @param {(key: string) => string} props.tCommon - Translation function for common strings.
+ *
+ * @returns {JSX.Element} The rendered delete confirmation modal.
+ *
+ * @remarks
+ * - Uses the shared `BaseModal` component for consistent modal behavior.
+ * - The `t` and `tCommon` props are used for internationalization (i18n).
+ * - Styled using `app-fixed.module.css`.
  *
  * @example
+ * ```tsx
  * <AgendaCategoryDeleteModal
  *   agendaCategoryDeleteModalIsOpen={true}
  *   toggleDeleteModal={handleToggle}
@@ -14,6 +27,7 @@
  *   t={tFunction}
  *   tCommon={tCommonFunction}
  * />
+ * ```
  */
 import React from 'react';
 import { Button } from 'react-bootstrap';
@@ -47,7 +61,6 @@ const AgendaCategoryDeleteModal: React.FC<
       keyboard={false}
       headerClassName="bg-primary"
       closeButtonVariant="light"
-      aria-labelledby="deleteAgendaCategory"
       headerContent={
         <h5 className="modal-title text-white" id="deleteAgendaCategory">
           {t('deleteAgendaCategory')}

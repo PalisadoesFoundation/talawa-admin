@@ -4,7 +4,7 @@
 
 # Interface: InterfaceRemoveUserTagModalProps
 
-Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L24)
+Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L31)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:24](https:
 
 > **handleRemoveUserTag**: () => `Promise`\<`void`\>
 
-Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L27)
+Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L34)
 
 #### Returns
 
@@ -24,7 +24,7 @@ Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:27](https:
 
 > **removeUserTagModalIsOpen**: `boolean`
 
-Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L25)
+Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L32)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:25](https:
 
 > **t**: `TFunction`\<`"translation"`, `"manageTag"`\>
 
-Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L28)
+Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L35)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:28](https:
 
 > **tCommon**: `TFunction`\<`"common"`, `undefined`\>
 
-Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L29)
+Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L36)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:29](https:
 
 > **toggleRemoveUserTagModal**: () => `void`
 
-Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L26)
+Defined in: [src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/ManageTag/removeModal/RemoveUserTagModal.tsx#L33)
 
 #### Returns
 
