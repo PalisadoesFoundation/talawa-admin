@@ -19,13 +19,15 @@ vi.mock('@mui/x-date-pickers', () => ({
       label,
       value,
       onChange,
+      'data-testid': dataTestId,
     }: {
       label?: string;
       value?: unknown;
       onChange?: (date: unknown) => void;
+      'data-testid'?: string;
     }) =>
       React.createElement('input', {
-        'data-testid': label || 'date-picker',
+        'data-testid': dataTestId || label || 'date-picker',
         value: value ? String(value) : '',
         onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
           if (onChange) {
@@ -39,13 +41,15 @@ vi.mock('@mui/x-date-pickers', () => ({
       label,
       value,
       onChange,
+      'data-testid': dataTestId,
     }: {
       label?: string;
       value?: unknown;
       onChange?: (time: unknown) => void;
+      'data-testid'?: string;
     }) =>
       React.createElement('input', {
-        'data-testid': label || 'time-picker',
+        'data-testid': dataTestId || label || 'time-picker',
         value: value ? String(value) : '',
         onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
           if (onChange) {
@@ -85,6 +89,29 @@ vi.mock('../../utils/recurrenceUtils', () => ({
   },
   WeekDays: [],
   InterfaceRecurrenceRule: {},
+  // Add missing exports that tests use
+  RecurrenceEndOption: {
+    NEVER: 'never',
+    ON: 'on',
+    AFTER: 'after',
+  },
+  endsNever: { value: 'never', label: 'Never' },
+  endsOn: { value: 'on', label: 'On' },
+  endsAfter: { value: 'after', label: 'After' },
+  frequencies: [],
+  daysOptions: [],
+  Days: {},
+  recurrenceEndOptions: [],
+  dayNames: [],
+  monthNames: [],
+  getWeekOfMonth: vi.fn(),
+  getOrdinalString: vi.fn(),
+  getDayName: vi.fn(() => 'Monday'),
+  getMonthlyOptions: vi.fn(() => []),
+  getRecurrenceRuleText: vi.fn(() => 'Weekly'),
+  getOrdinalSuffix: vi.fn(),
+  getEndTypeFromRecurrence: vi.fn(),
+  areRecurrenceRulesEqual: vi.fn(() => false),
 }));
 
 // Mock CustomRecurrenceModal with controllable implementation
