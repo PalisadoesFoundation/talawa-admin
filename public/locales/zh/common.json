@@ -4,7 +4,7 @@
   "searchByName": "按名称搜索",
   "loading": "加载中...",
   "endOfResults": "结果结束",
-  "noResultsFoundFor": "没有找到结果 ",
+  "noResultsFoundFor": "没有找到 {{query}} 的结果",
   "tryAdjustingFilters": "尝试调整过滤器或搜索词",
   "edit": "编辑",
   "admins": "管理员",

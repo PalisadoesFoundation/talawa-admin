@@ -247,6 +247,7 @@
     "filterByRole": "Filter par rôle",
     "errorLoadingUsers": "Erreur lors du chargement des utilisateurs",
     "sort": "Trier",
+    "sortBy": "Trier par",
     "Newest": "Le plus récent d'abord",
     "Oldest": "Le plus âgé en premier",
     "noOrgError": "Organisations introuvables, veuillez créer une organisation via le tableau de bord",
