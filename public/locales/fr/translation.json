@@ -1403,6 +1403,7 @@
   },
   "userChat": {
     "title": "Discussions",
+    "deleteChat": "Supprimer le Chat",
     "add": "Ajouter",
     "chat": "Chat",
     "contacts": "Contacts",

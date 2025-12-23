@@ -1425,6 +1425,7 @@
     "failedToDeleteChat": "Failed to delete chat",
     "chatNameUpdatedSuccessfully": "Chat name updated successfully",
     "failedToUpdateChatName": "Failed to update chat name",
+    "deleteChat": "Delete Chat",
     "remove": "Remove",
     "searchFullName": "Search by Full Name",
     "customizedTable": "customized table",

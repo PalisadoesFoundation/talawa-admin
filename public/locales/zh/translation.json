@@ -1403,6 +1403,7 @@
   },
   "userChat": {
     "title": "聊天",
+    "deleteChat": "删除聊天",
     "add": "添加",
     "chat": "聊天",
     "contacts": "联系方式",

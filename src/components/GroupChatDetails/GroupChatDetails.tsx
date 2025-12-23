@@ -280,6 +280,7 @@ export default function groupChatDetails({
               <Button
                 variant="outline-danger"
                 size="sm"
+                aria-label={t('deleteChat')}
                 onClick={async () => {
                   if (
                     window.confirm('Are you sure you want to delete this chat?')

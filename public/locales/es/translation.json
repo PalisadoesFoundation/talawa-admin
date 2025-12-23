@@ -1403,6 +1403,7 @@
   },
   "userChat": {
     "title": "Chats",
+    "deleteChat": "Eliminar Chat",
     "add": "Agregar",
     "chat": "Charlar",
     "search": "Buscar",

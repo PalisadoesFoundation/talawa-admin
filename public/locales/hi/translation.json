@@ -1403,6 +1403,7 @@
   },
   "userChat": {
     "title": "चैट्स",
+    "deleteChat": "चैट हटाएं",
     "add": "जोड़ें",
     "chat": "बात करना",
     "contacts": "संपर्क",
