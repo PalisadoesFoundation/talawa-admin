@@ -244,6 +244,8 @@
     "enterName": "Entrez le nom",
     "loadingUsers": "Chargement des utilisateurs...",
     "noUserFound": "Aucun utilisateur trouvé",
+    "filterByRole": "Filter par rôle",
+    "errorLoadingUsers": "Erreur lors du chargement des utilisateurs",
     "sort": "Trier",
     "Newest": "Le plus récent d'abord",
     "Oldest": "Le plus âgé en premier",
