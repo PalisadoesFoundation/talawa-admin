@@ -1031,10 +1031,10 @@ jobs:
           source venv/bin/activate
           python -m pip install --upgrade pip
           pip install -r .github/workflows/requirements.txt
-      - name: Run Python tests for CSS check
+      - name: Run Python tests for scripts
         run: |
           source venv/bin/activate
-          pytest .github/workflows/scripts/test/test_css_check.py
+          pytest .github/workflows/scripts/test
 
       - name: Run Black Formatter Check
         run: |
