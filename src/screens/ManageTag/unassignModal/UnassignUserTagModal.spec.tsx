@@ -1,0 +1,159 @@
+import React from 'react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import UnassignUserTagModal, {
+  InterfaceUnassignUserTagModalProps,
+} from './UnassignUserTagModal';
+import type { TFunction } from 'i18next';
+
+// Mock CSS module
+vi.mock('style/app-fixed.module.css', () => ({
+  default: {
+    modalHeader: 'modalHeader-class',
+    removeButton: 'removeButton-class',
+    addButton: 'addButton-class',
+  },
+}));
+
+describe('UnassignUserTagModal Component', () => {
+  const mockT = vi.fn((key) => key) as unknown as TFunction<
+    'translation',
+    'manageTag' | 'memberDetail'
+  >;
+
+  const mockTCommon = vi.fn((key) => key) as unknown as TFunction<
+    'common',
+    undefined
+  >;
+
+  const defaultProps: InterfaceUnassignUserTagModalProps = {
+    unassignUserTagModalIsOpen: true,
+    toggleUnassignUserTagModal: vi.fn(),
+    handleUnassignUserTag: vi.fn().mockResolvedValue(undefined),
+    t: mockT,
+    tCommon: mockTCommon,
+  };
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('renders the modal when open', () => {
+    render(<UnassignUserTagModal {...defaultProps} />);
+
+    expect(screen.getByTestId('unassign-user-tag-modal')).toBeInTheDocument();
+
+    expect(screen.getByText('unassignUserTag')).toBeInTheDocument();
+    expect(screen.getByText('unassignUserTagMessage')).toBeInTheDocument();
+
+    expect(screen.getByTestId('unassignTagModalCloseBtn')).toBeInTheDocument();
+
+    expect(screen.getByTestId('unassignTagModalSubmitBtn')).toBeInTheDocument();
+  });
+
+  it('does not render the modal when closed', () => {
+    render(
+      <UnassignUserTagModal
+        {...defaultProps}
+        unassignUserTagModalIsOpen={false}
+      />,
+    );
+
+    expect(
+      screen.queryByTestId('unassign-user-tag-modal'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('calls toggleUnassignUserTagModal when No button is clicked', () => {
+    render(<UnassignUserTagModal {...defaultProps} />);
+
+    const cancelButton = screen.getByTestId('unassignTagModalCloseBtn');
+    fireEvent.click(cancelButton);
+
+    expect(defaultProps.toggleUnassignUserTagModal).toHaveBeenCalledTimes(1);
+  });
+
+  it('calls handleUnassignUserTag when Yes button is clicked', async () => {
+    render(<UnassignUserTagModal {...defaultProps} />);
+
+    const confirmButton = screen.getByTestId('unassignTagModalSubmitBtn');
+    fireEvent.click(confirmButton);
+
+    await waitFor(() => {
+      expect(defaultProps.handleUnassignUserTag).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('disables the submit button while submitting', async () => {
+    let resolvePromise: (() => void) | undefined;
+
+    const pendingPromise = new Promise<void>((resolve) => {
+      resolvePromise = resolve;
+    });
+
+    const propsWithPendingSubmit = {
+      ...defaultProps,
+      handleUnassignUserTag: vi.fn(() => pendingPromise),
+    };
+
+    render(<UnassignUserTagModal {...propsWithPendingSubmit} />);
+
+    const confirmButton = screen.getByTestId('unassignTagModalSubmitBtn');
+
+    fireEvent.click(confirmButton);
+
+    expect(confirmButton).toBeDisabled();
+
+    if (resolvePromise) {
+      resolvePromise();
+    }
+
+    await waitFor(() => {
+      expect(confirmButton).not.toBeDisabled();
+    });
+  });
+
+  it('prevents multiple submissions while already submitting', async () => {
+    let resolvePromise: (() => void) | undefined;
+
+    const pendingPromise = new Promise<void>((resolve) => {
+      resolvePromise = resolve;
+    });
+
+    const handleUnassignUserTag = vi.fn(() => pendingPromise);
+
+    render(
+      <UnassignUserTagModal
+        {...defaultProps}
+        handleUnassignUserTag={handleUnassignUserTag}
+      />,
+    );
+
+    const confirmButton = screen.getByTestId('unassignTagModalSubmitBtn');
+
+    fireEvent.click(confirmButton);
+    fireEvent.click(confirmButton);
+
+    expect(handleUnassignUserTag).toHaveBeenCalledTimes(1);
+
+    if (resolvePromise) {
+      resolvePromise();
+    }
+  });
+
+  it('applies correct CSS classes to buttons', () => {
+    render(<UnassignUserTagModal {...defaultProps} />);
+
+    expect(screen.getByTestId('unassignTagModalCloseBtn')).toHaveClass(
+      'removeButton-class',
+    );
+
+    expect(screen.getByTestId('unassignTagModalSubmitBtn')).toHaveClass(
+      'addButton-class',
+    );
+  });
+});
