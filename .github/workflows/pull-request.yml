@@ -484,6 +484,23 @@ jobs:
         run: |
           python .github/workflows/scripts/itskip_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
+  Translation-Tag-Check:
+    name: Translation Tag Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: pip install -r .github/workflows/requirements.txt
+      - name: Run Translation Checker
+        run: python3 .github/workflows/scripts/translation_check.py --directories src
+
+
   Pre-Test-Checks-Pass:
     name: All Pre-Testing Checks Pass
     runs-on: ubuntu-latest
@@ -496,7 +513,7 @@ jobs:
         Check-ItSkip-Disable,
         Check-Mock-Isolation,
         CSS-Policy-Check,
-        Python-Compliance,
+        Python-Compliance, Translation-Tag-Check,
       ]
     steps:
       - name: This job intentionally does nothing
