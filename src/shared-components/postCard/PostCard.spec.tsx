@@ -786,6 +786,15 @@ describe('PostCard', () => {
     expect(moreButton).not.toBeInTheDocument();
   });
 
+  test('hides menu when role is missing in localStorage', () => {
+    // role is null, user is not post creator
+    setAuthContext('999', null as unknown as string);
+
+    renderPostCard();
+
+    expect(screen.queryByTestId('more-options-button')).not.toBeInTheDocument();
+  });
+
   it('creates comment and clears input', async () => {
     renderPostCard();
     const input = screen.getByPlaceholderText(/add comment/i);

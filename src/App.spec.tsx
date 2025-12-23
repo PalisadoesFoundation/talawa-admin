@@ -472,7 +472,6 @@ describe('Testing the App Component', () => {
     expect(await screen.findByTestId('mock-settings')).toBeInTheDocument();
   });
 
-  // Add below your existing tests in App.spec.tsx
   it('blocks /user/settings when not logged in', async () => {
     // Force IsLoggedIn !== 'TRUE'
     const lsSpy = vi.spyOn(useLSModule, 'default').mockImplementation(
