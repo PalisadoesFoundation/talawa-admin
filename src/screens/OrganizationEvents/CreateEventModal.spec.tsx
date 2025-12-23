@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import dayjs from 'dayjs';
@@ -247,7 +247,7 @@ describe('CreateEventModal', () => {
     expect(screen.queryByTestId('startTime')).not.toBeInTheDocument();
 
     // Toggle all-day off
-    const alldayCheck = screen.getByTestId('alldayCheck');
+    const alldayCheck = screen.getByTestId('allDayEventCheck');
     fireEvent.click(alldayCheck);
 
     // Now time pickers should be visible
@@ -265,7 +265,7 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    const publicCheck = screen.getByTestId('ispublicCheck');
+    const publicCheck = screen.getByTestId('publicEventCheck');
     expect(publicCheck).toBeChecked();
 
     fireEvent.click(publicCheck);
@@ -282,7 +282,7 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    const registrableCheck = screen.getByTestId('registrableCheck');
+    const registrableCheck = screen.getByTestId('registerableEventCheck');
     expect(registrableCheck).not.toBeChecked();
 
     fireEvent.click(registrableCheck);
@@ -431,7 +431,7 @@ describe('CreateEventModal', () => {
     );
 
     // Uncheck all-day
-    fireEvent.click(screen.getByTestId('alldayCheck'));
+    fireEvent.click(screen.getByTestId('allDayEventCheck'));
 
     // Fill form
     fireEvent.change(screen.getByTestId('eventTitleInput'), {
@@ -487,7 +487,7 @@ describe('CreateEventModal', () => {
     );
 
     // Uncheck all-day to show time pickers
-    fireEvent.click(screen.getByTestId('alldayCheck'));
+    fireEvent.click(screen.getByTestId('allDayEventCheck'));
 
     const startTimeInput = screen.getByTestId('startTime');
     const endTimeInput = screen.getByTestId('endTime');
@@ -658,9 +658,9 @@ describe('CreateEventModal', () => {
     );
 
     // Toggle all checkboxes
-    fireEvent.click(screen.getByTestId('alldayCheck')); // Turn off
-    fireEvent.click(screen.getByTestId('ispublicCheck')); // Turn off
-    fireEvent.click(screen.getByTestId('registrableCheck')); // Turn on
+    fireEvent.click(screen.getByTestId('allDayEventCheck')); // Turn off
+    fireEvent.click(screen.getByTestId('publicEventCheck')); // Turn off
+    fireEvent.click(screen.getByTestId('registerableEventCheck')); // Turn on
 
     // Fill form
     fireEvent.change(screen.getByTestId('eventTitleInput'), {
@@ -727,7 +727,7 @@ describe('CreateEventModal', () => {
     );
 
     // Uncheck all-day to show time pickers
-    fireEvent.click(screen.getByTestId('alldayCheck'));
+    fireEvent.click(screen.getByTestId('allDayEventCheck'));
 
     const startTimeInput = screen.getByTestId('startTime');
     const endTimeInput = screen.getByTestId('endTime');
@@ -753,7 +753,7 @@ describe('CreateEventModal', () => {
     );
 
     // Uncheck all-day to show time pickers
-    fireEvent.click(screen.getByTestId('alldayCheck'));
+    fireEvent.click(screen.getByTestId('allDayEventCheck'));
 
     const startTimeInput = screen.getByTestId('startTime');
     const endTimeInput = screen.getByTestId('endTime');
@@ -1039,7 +1039,7 @@ describe('CreateEventModal', () => {
     );
 
     // Uncheck all-day
-    fireEvent.click(screen.getByTestId('alldayCheck'));
+    fireEvent.click(screen.getByTestId('allDayEventCheck'));
 
     // Set specific times
     fireEvent.change(screen.getByTestId('startTime'), {
@@ -1120,7 +1120,7 @@ describe('CreateEventModal', () => {
     });
 
     // Step 2: Toggle all-day off
-    fireEvent.click(screen.getByTestId('alldayCheck'));
+    fireEvent.click(screen.getByTestId('allDayEventCheck'));
 
     // Step 3: Change times
     fireEvent.change(screen.getByTestId('startTime'), {
@@ -1136,7 +1136,7 @@ describe('CreateEventModal', () => {
     fireEvent.click(screen.getByTestId('recurrenceOption-2')); // Weekly
 
     // Step 5: Toggle visibility
-    fireEvent.click(screen.getByTestId('ispublicCheck'));
+    fireEvent.click(screen.getByTestId('publicEventCheck'));
 
     // Step 6: Fill form
     fireEvent.change(screen.getByTestId('eventTitleInput'), {
@@ -1171,7 +1171,7 @@ describe('CreateEventModal', () => {
     );
 
     // Uncheck all-day to show time pickers
-    fireEvent.click(screen.getByTestId('alldayCheck'));
+    fireEvent.click(screen.getByTestId('allDayEventCheck'));
 
     const startTimeInput = screen.getByTestId('startTime');
 
