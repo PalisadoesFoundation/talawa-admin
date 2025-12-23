@@ -208,7 +208,6 @@ vi.mock('@apollo/client', () => ({
 }));
 
 import CreateEventModal from './CreateEventModal';
-import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import {
   createDefaultRecurrenceRule,
