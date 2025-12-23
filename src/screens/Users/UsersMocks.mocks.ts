@@ -110,16 +110,20 @@ export const USER_UNDEFINED_MOCK = [
         first: 12,
         after: null,
         orgFirst: 32,
-        where: { name: '' },
-        filter: '',
-        limit: null,
-        offset: null,
+        where: undefined,
       },
     },
     result: {
       data: {
-        allUsers: undefined,
-        organizations: [],
+        allUsers: {
+          pageInfo: {
+            endCursor: null,
+            hasPreviousPage: false,
+            hasNextPage: false,
+            startCursor: null,
+          },
+          edges: [],
+        },
       },
     },
   },
@@ -128,12 +132,8 @@ export const USER_UNDEFINED_MOCK = [
       query: USER_LIST,
       variables: {
         input: {
-          ids: '',
+          ids: [],
         },
-        first: 12,
-        skip: 0,
-        filter: '',
-        order: 'createdAt_DESC',
       },
     },
     result: {

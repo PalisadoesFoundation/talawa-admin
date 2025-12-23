@@ -388,14 +388,12 @@ const Users = (): JSX.Element => {
       {/* Error Panel */}
       {usersQueryErrorPanel}
 
-      {isLoading == false && displayedUsers.length === 0 ? (
+      {isLoading === false && displayedUsers.length === 0 ? (
         <EmptyState
           icon="person_off"
           message={getEmptyStateMessage()}
           description={
-            displayedUsers.length === 0 && searchByName.length > 0
-              ? t('tryAdjustingFilters')
-              : undefined
+            searchByName.length > 0 ? t('tryAdjustingFilters') : undefined
           }
           dataTestId="users-empty-state"
         />
