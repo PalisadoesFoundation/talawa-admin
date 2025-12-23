@@ -85,7 +85,9 @@ const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
   const { t: tCommon } = useTranslation('common');
 
-  document.title = t('title');
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
 
   const { getItem } = useLocalStorage();
 
@@ -321,7 +323,7 @@ const Users = (): JSX.Element => {
       <div className={styles.message} data-testid="errorMsg">
         <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
         <h6 className="fw-bold text-danger text-center">
-          Error occurred while loading Users
+          {t('errorLoadingUsers')}
           <br />
           {UsersError.message}
         </h6>
@@ -343,7 +345,7 @@ const Users = (): JSX.Element => {
    */
   const getEmptyStateMessage = () => {
     if (searchByName.length > 0) {
-      return `${tCommon('noResultsFoundFor')} "${searchByName}"`;
+      return tCommon('noResultsFoundFor', { query: searchByName });
     }
     return t('noUserFound');
   };
@@ -361,7 +363,7 @@ const Users = (): JSX.Element => {
           }}
           sorting={[
             {
-              title: 'Sort by',
+              title: t('Sort by'),
               options: [
                 { label: t('Newest'), value: 'newest' },
                 { label: t('Oldest'), value: 'oldest' },
@@ -371,7 +373,7 @@ const Users = (): JSX.Element => {
               testIdPrefix: 'sortUsers',
             },
             {
-              title: 'Filter by role',
+              title: t('Filter by role'),
               options: [
                 { label: tCommon('admin'), value: 'admin' },
                 { label: tCommon('user'), value: 'user' },
