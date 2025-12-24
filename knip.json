@@ -12,8 +12,7 @@
     "docs/src/**/*.test.{ts,tsx,js}",
     "docs/src/**/*.spec.{ts,tsx,js}",
     "src/types/Event/interface.ts",
-    "src/test-utils/**",
-    "src/shared-components/**"
+    "src/test-utils/**"
   ],
   "ignoreDependencies": [],
   "ignoreExportsUsedInFile": true
