@@ -223,7 +223,7 @@ const startPostModal = ({
           </span>
         </Modal.Title>
       </Modal.Header>
-      <hr style={{ margin: 0 }}></hr>
+      <hr></hr>
       <Form>
         <Modal.Body>
           <Form.Control

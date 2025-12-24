@@ -287,7 +287,7 @@ const ForgotPassword = (): JSX.Element => {
                 >
                   <ArrowRightAlt
                     fontSize="medium"
-                    style={{ transform: 'rotate(180deg)' }}
+                    sx={{ transform: 'rotate(180deg)' }}
                   />
                   {t('backToLogin')}
                 </Link>

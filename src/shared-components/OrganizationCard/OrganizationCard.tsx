@@ -293,7 +293,6 @@ function OrganizationCard({
                     data-cy="manageBtn"
                     className={styles.manageBtn}
                     onClick={() => navigate(`/user/organization/${id}`)}
-                    style={{ width: '8rem' }}
                   >
                     {t('users.visit')}
                   </Button>
@@ -311,7 +310,6 @@ function OrganizationCard({
                     onClick={joinOrganization}
                     data-testid="joinBtn"
                     className={styles.outlineBtn}
-                    style={{ width: '8rem' }}
                   >
                     {t('users.joinNow')}
                   </Button>
