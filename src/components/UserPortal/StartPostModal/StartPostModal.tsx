@@ -33,6 +33,7 @@ import { Button, Form, Image, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 import { errorHandler } from 'utils/errorHandler';
 import UserDefault from '../../../assets/images/defaultImg.png';
@@ -150,7 +151,7 @@ const startPostModal = ({
         throw new Error("Can't create a post with an empty body.");
       }
 
-      toast.info('Processing your post. Please wait.');
+      NotificationToast.info('Processing your post. Please wait.');
 
       let attachment = null;
 
@@ -179,7 +180,7 @@ const startPostModal = ({
 
       if (data) {
         toast.dismiss();
-        toast.success(t('postNowVisibleInFeed') as string);
+        NotificationToast.success(t('postNowVisibleInFeed') as string);
         fetchPosts();
         handleHide();
       }

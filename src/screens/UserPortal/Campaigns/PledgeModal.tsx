@@ -54,7 +54,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   Autocomplete,
   FormControl,
@@ -232,11 +232,11 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         await updatePledge({
           variables: { id: pledge?.id, ...updatedFields },
         });
-        toast.success(t('pledgeUpdated') as string);
+        NotificationToast.success(t('pledgeUpdated') as string);
         refetchPledge();
         hide();
       } catch (error: unknown) {
-        toast.error((error as Error).message);
+        NotificationToast.error((error as Error).message);
       }
     },
     [formState, pledge],
@@ -253,7 +253,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
       if (pledgeUsers.length === 0 || !pledgeUsers[0]) {
-        toast.error(t('selectPledger') as string);
+        NotificationToast.error(t('selectPledger') as string);
         return;
       }
 
@@ -269,7 +269,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           },
         });
 
-        toast.success(t('pledgeCreated') as string);
+        NotificationToast.success(t('pledgeCreated') as string);
         refetchPledge();
         setFormState({
           pledgeUsers: [],
@@ -280,7 +280,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         });
         hide();
       } catch (error: unknown) {
-        toast.error((error as Error).message);
+        NotificationToast.error((error as Error).message);
       }
     },
     [

@@ -41,7 +41,7 @@ import {
 import { useMutation } from '@apollo/client';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material/styles';
 import { Image } from 'react-bootstrap';
@@ -156,10 +156,10 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
       await deleteComment({
         variables: { input: { id: id } },
       });
-      toast.success(t('commentDeletedSuccessfully'));
+      NotificationToast.success(t('commentDeletedSuccessfully'));
       refetchComments?.();
     } catch (error) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
     } finally {
       handleMenuClose();
     }
@@ -170,12 +170,12 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
       await updateComment({
         variables: { input: { id: id, body: body } },
       });
-      toast.success(t('commentUpdatedSuccessfully'));
+      NotificationToast.success(t('commentUpdatedSuccessfully'));
       refetchComments?.();
       handleMenuClose();
       return true;
     } catch (error) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
       return false;
     }
   };
@@ -195,7 +195,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
 
   const handleToggleLike = async (): Promise<void> => {
     if (!userId) {
-      toast.warn(t('pleaseSignInToLikeComments'));
+      NotificationToast.warning(t('pleaseSignInToLikeComments'));
       return;
     }
     try {
@@ -211,7 +211,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
           setLikes((prev) => Math.max(prev - 1, 0));
           setIsLiked(false);
         } else {
-          toast.error(t('couldNotRemoveExistingLike'));
+          NotificationToast.error(t('couldNotRemoveExistingLike'));
         }
       } else {
         // Like
@@ -233,11 +233,11 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
         }
       )?.graphQLErrors?.[0]?.extensions?.code;
       if (errorCode === 'forbidden_action_on_arguments_associated_resources') {
-        toast.error(t('alreadyLikedComment'));
+        NotificationToast.error(t('alreadyLikedComment'));
       } else if (errorCode === 'arguments_associated_resources_not_found') {
-        toast.error(t('noAssociatedVoteFound'));
+        NotificationToast.error(t('noAssociatedVoteFound'));
       } else {
-        toast.error((error as Error).message);
+        NotificationToast.error((error as Error).message);
       }
     }
   };
@@ -345,7 +345,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
                 disabled={updatingComment}
                 onClick={async () => {
                   if (!editedCommentText.trim()) {
-                    toast.error(t('emptyCommentError'));
+                    NotificationToast.error(t('emptyCommentError'));
                     return;
                   }
                   const updated = await handleUpdateComment(editedCommentText);
