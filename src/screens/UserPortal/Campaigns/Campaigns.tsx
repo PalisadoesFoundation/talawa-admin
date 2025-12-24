@@ -296,7 +296,7 @@ const Campaigns = (): JSX.Element => {
                 value={100}
                 size={32}
                 thickness={4}
-                sx={{ color: '#e0e0e0' }}
+                sx={{ color: 'var(--progress-track-color)' }}
               />
               <CircularProgress
                 variant="determinate"
@@ -306,17 +306,17 @@ const Campaigns = (): JSX.Element => {
                 sx={{
                   color:
                     percentage >= 100
-                      ? '#4caf50'
+                      ? 'var(--progress-complete-color)'
                       : percentage >= 50
-                        ? '#ff9800'
-                        : '#2196f3',
+                        ? 'var(--progress-half-color)'
+                        : 'var(--progress-low-color)',
                   position: 'absolute',
                   left: 0,
                   top: 0,
                 }}
               />
             </Box>
-            <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+            <Typography variant="body2" className={styles.progressTypography}>
               {percentage.toFixed(0)}%
             </Typography>
           </Box>
@@ -382,15 +382,8 @@ const Campaigns = (): JSX.Element => {
 
   return (
     <>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          marginBottom: '1rem',
-          gap: '16px',
-        }}
-      >
-        <div style={{ maxWidth: '700px', minWidth: '400px', margin: 0 }}>
+      <div className={styles.searchContainerRowNoTopMargin}>
+        <div className={styles.searchContainerCampaigns}>
           <SearchBar
             placeholder={t('searchCampaigns')}
             value={searchText}
@@ -405,8 +398,7 @@ const Campaigns = (): JSX.Element => {
         <Button
           variant="success"
           data-testid="myPledgesBtn"
-          style={{ whiteSpace: 'nowrap' }}
-          className={styles.createFundButton}
+          className={`${styles.createFundButton} ${styles.buttonNoWrap}`}
           onClick={() => navigate(`/user/pledges/${orgId}`, { replace: true })}
         >
           {t('myPledges')}

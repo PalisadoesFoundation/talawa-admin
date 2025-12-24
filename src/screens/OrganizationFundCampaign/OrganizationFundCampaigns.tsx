@@ -41,10 +41,10 @@ const dataGridStyle = {
     '&:focus-within': { outline: 'none' },
   },
   '& .MuiDataGrid-row:hover': {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: 'var(--row-hover-bg)',
   },
   '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: 'var(--row-hover-bg)',
   },
   '& .MuiDataGrid-cell:focus': { outline: 'none' },
   '& .MuiDataGrid-cell:focus-within': { outline: 'none' },
@@ -313,7 +313,7 @@ const orgFundCampaign = (): JSX.Element => {
                 value={100}
                 size={32}
                 thickness={4}
-                sx={{ color: '#e0e0e0' }}
+                sx={{ color: 'var(--progress-track-color)' }}
               />
               <CircularProgress
                 variant="determinate"
@@ -323,17 +323,17 @@ const orgFundCampaign = (): JSX.Element => {
                 sx={{
                   color:
                     percentage >= 100
-                      ? '#4caf50'
+                      ? 'var(--progress-complete-color)'
                       : percentage >= 50
-                        ? '#ff9800'
-                        : '#2196f3',
+                        ? 'var(--progress-half-color)'
+                        : 'var(--progress-low-color)',
                   position: 'absolute',
                   left: 0,
                   top: 0,
                 }}
               />
             </Box>
-            <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+            <Typography variant="body2" className={styles.progressTypography}>
               {percentage.toFixed(0)}%
             </Typography>
           </Box>
@@ -396,8 +396,7 @@ const orgFundCampaign = (): JSX.Element => {
     <div className={styles.organizationFundCampaignContainer}>
       <Breadcrumbs
         aria-label={tCommon('breadcrumb')}
-        className="ms-1"
-        style={{ marginTop: '0.5rem' }}
+        className={`ms-1 ${styles.breadcrumbsMargin}`}
       >
         <Link
           underline="hover"
@@ -411,16 +410,8 @@ const orgFundCampaign = (): JSX.Element => {
         <Typography color="text.primary">{t('title')}</Typography>
       </Breadcrumbs>
 
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '16px',
-          marginBottom: '1rem',
-          marginTop: '1rem',
-        }}
-      >
-        <div className={styles.head} style={{ margin: 0 }}>
+      <div className={styles.searchContainerRow}>
+        <div className={`${styles.head} ${styles.searchBarMarginReset}`}>
           <SearchBar
             placeholder={t('searchCampaigns')}
             value={searchText}
@@ -435,8 +426,7 @@ const orgFundCampaign = (): JSX.Element => {
         <Button
           variant="success"
           onClick={() => handleOpenModal(null, 'create')}
-          className={styles.createButton}
-          style={{ whiteSpace: 'nowrap' }}
+          className={`${styles.createButton} ${styles.buttonNoWrap}`}
           data-testid="addCampaignBtn"
           disabled={isArchived}
         >

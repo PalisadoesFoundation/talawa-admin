@@ -179,6 +179,15 @@
   --register-button-color: #555555;
   --register-button-color-hover: #555555;
 
+  /* Progress indicator colors */
+  --progress-track-color: #e0e0e0;
+  --progress-complete-color: #4caf50;
+  --progress-half-color: #ff9800;
+  --progress-low-color: #2196f3;
+
+  /* Row hover background */
+  --row-hover-bg: #f0f0f0;
+
   --row-bg: #fff;
   --row-bg-scroll: #00000029;
   --row-color: #6c757d;
@@ -990,9 +999,12 @@
   overflow: hidden;
 
   /* Flex properties to make it sit on the same line */
-  flex-grow: 1; /* Allow it to grow to fill space */
-  flex-shrink: 1; /* Allow it to shrink if needed */
-  width: auto; /* Stop forcing 100% width */
+  flex-grow: 1;
+  /* Allow it to grow to fill space */
+  flex-shrink: 1;
+  /* Allow it to shrink if needed */
+  width: auto;
+  /* Stop forcing 100% width */
   min-width: 200px;
   max-width: 100%;
   height: 48px;
@@ -1409,8 +1421,10 @@ form label,
 .calendar__controls {
   display: flex;
   align-items: center;
-  gap: 12px; /* Space between the Sort, Create, and Bell icons */
-  flex-shrink: 0; /* Prevents buttons from getting squished */
+  gap: 12px;
+  /* Space between the Sort, Create, and Bell icons */
+  flex-shrink: 0;
+  /* Prevents buttons from getting squished */
   white-space: nowrap;
 }
 
@@ -10004,6 +10018,7 @@ form {
   justify-content: flex-end;
   padding-bottom: 10px;
 }
+
 .manageBtn,
 .withdrawBtn,
 .outlineBtn {
@@ -10070,6 +10085,7 @@ form {
   .calendar__header {
     flex-wrap: wrap !important;
   }
+
   .btnsBlock {
     width: 100% !important;
     justify-content: flex-end !important;
@@ -10091,4 +10107,109 @@ form {
   border-radius: 1rem;
   margin-top: 1rem;
   margin-bottom: 1rem;
+}
+
+/* -- Common Layout Classes -- */
+
+/* Flex container for title area in screens */
+.flexContainerColumn {
+  flex: 1;
+}
+
+/* Breadcrumbs margin spacing */
+.breadcrumbsMargin {
+  margin-top: 0.5rem;
+}
+
+/* Search container row layout for fund campaign/funds screens */
+.searchContainerRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+/* Search container row layout without top margin */
+.searchContainerRowNoTopMargin {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 1rem;
+}
+
+/* Search bar margin reset */
+.searchBarMarginReset {
+  margin: 0;
+}
+
+/* Button style to prevent text wrapping */
+.buttonNoWrap {
+  white-space: nowrap;
+}
+
+/* Search container for Campaigns screen with min/max width */
+.searchContainerCampaigns {
+  max-width: 700px;
+  min-width: 400px;
+  margin: 0;
+}
+
+/* UserScreen main content margin when expanded */
+.userScreenExpandedMargin {
+  margin-left: 100px;
+}
+
+/* -- Progress Indicator Styles for Campaign Tables -- */
+
+/* Progress indicator container */
+.progressIndicatorContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
+}
+
+/* Progress indicator wrapper (relative positioning) */
+.progressIndicatorWrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Progress indicator base track color */
+.progressIndicatorBase {
+  color: var(--progress-track-color, #e0e0e0);
+}
+
+/* Progress indicator overlay (absolute positioning) */
+.progressIndicatorAbsolute {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* Progress indicator color states */
+.progressComplete {
+  color: var(--progress-complete-color, #4caf50);
+}
+
+.progressHalf {
+  color: var(--progress-half-color, #ff9800);
+}
+
+.progressLow {
+  color: var(--progress-low-color, #2196f3);
+}
+
+/* Progress percentage text */
+.progressTypography {
+  font-weight: bold;
+}
+
+/* -- DataGrid Row Hover Styles -- */
+
+/* DataGrid row hover background */
+.dataGridRowHover:hover {
+  background-color: var(--row-hover-bg, #f0f0f0);
 }

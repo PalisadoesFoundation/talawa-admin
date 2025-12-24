@@ -32,10 +32,10 @@ const dataGridStyle = {
     cursor: 'pointer',
   },
   '& .MuiDataGrid-row:hover': {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: 'var(--row-hover-bg)',
   },
   '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: 'var(--row-hover-bg)',
   },
 };
 
@@ -352,15 +352,8 @@ const organizationFunds = (): JSX.Element => {
 
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '16px',
-          marginBottom: '1rem',
-        }}
-      >
-        <div style={{ margin: 0 }}>
+      <div className={styles.searchContainerRowNoTopMargin}>
+        <div className={styles.searchBarMarginReset}>
           <SearchBar
             placeholder={t('searchFunds')}
             value={searchText}
@@ -375,8 +368,7 @@ const organizationFunds = (): JSX.Element => {
         <Button
           variant="success"
           onClick={() => handleOpenModal(null, 'create')}
-          className={styles.createFundButton}
-          style={{ whiteSpace: 'nowrap' }}
+          className={`${styles.createFundButton} ${styles.buttonNoWrap}`}
           data-testid="createFundBtn"
         >
           <i className="fa fa-plus me-2" />
