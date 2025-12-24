@@ -76,6 +76,6 @@ const DonationCard: React.FC<InterfaceDonationCardProps> = ({
       </div>
     </UserPortalCard>
   );
-};
+};    
 
 export default DonationCard;
