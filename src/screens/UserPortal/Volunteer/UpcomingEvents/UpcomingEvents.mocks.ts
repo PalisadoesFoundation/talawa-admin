@@ -25,7 +25,12 @@ export { baseRecurringEvent } from './UpcomingEvents.mockEvents';
 const eventsQuery = {
   request: {
     query: USER_EVENTS_VOLUNTEER,
-    variables: { organizationId: 'orgId', upcomingOnly: true, first: 30 },
+    variables: {
+      organizationId: 'orgId',
+      upcomingOnly: true,
+      first: 30,
+      includeInviteOnly: false,
+    },
   },
 };
 

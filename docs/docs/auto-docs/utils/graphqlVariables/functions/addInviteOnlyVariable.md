@@ -6,11 +6,14 @@
 
 > **addInviteOnlyVariable**\<`T`\>(`variables`): `T` & `object`
 
-Defined in: [src/utils/graphqlVariables.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/graphqlVariables.ts#L25)
+Defined in: [src/utils/graphqlVariables.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/graphqlVariables.ts#L39)
 
 Adds the includeInviteOnly variable to query variables based on feature flag.
-Use this helper when calling queries that support the isInviteOnly field to ensure
-the field is only queried when the backend supports it.
+For mutations with an input object, also conditionally includes input.isInviteOnly
+to ensure backward compatibility with older backends.
+
+Use this helper when calling queries or mutations that support the isInviteOnly field
+to ensure the field is only queried/sent when the backend supports it.
 
 ## Type Parameters
 
@@ -24,21 +27,32 @@ the field is only queried when the backend supports it.
 
 `T`
 
-Existing query variables
+Existing query/mutation variables
 
 ## Returns
 
 `T` & `object`
 
-Variables object with includeInviteOnly added based on REACT_APP_ENABLE_INVITE_ONLY
+Variables object with includeInviteOnly added and input.isInviteOnly conditionally included
 
 ## Example
 
 ```ts
+// For queries
 const { data } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
   variables: addInviteOnlyVariable({
     id: orgId,
     first: 10,
+  }),
+});
+
+// For mutations
+await create({
+  variables: addInviteOnlyVariable({
+    input: {
+      name: 'Event',
+      isInviteOnly: true, // Will be omitted if feature flag is disabled
+    },
   }),
 });
 ```

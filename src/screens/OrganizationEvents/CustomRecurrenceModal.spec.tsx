@@ -47,10 +47,24 @@ vi.mock('@mui/x-date-pickers', async () => {
   };
 });
 
+// Read CSS variable value to avoid hardcoded colors (Material-UI doesn't support CSS variables directly)
+// CSS variable is set in vitest.setup.ts
+const getSuccessColor = (): string => {
+  if (typeof document !== 'undefined' && document.documentElement) {
+    const color = getComputedStyle(document.documentElement)
+      .getPropertyValue('--bs-success')
+      .trim();
+    if (color) return color;
+  }
+  throw new Error(
+    'CSS variable --bs-success not available in test environment',
+  );
+};
+
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#31bb6b',
+      main: getSuccessColor(),
     },
   },
 });

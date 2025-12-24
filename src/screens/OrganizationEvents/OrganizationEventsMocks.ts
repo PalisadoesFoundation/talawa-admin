@@ -210,7 +210,10 @@ export const MOCKS = [
   {
     request: {
       query: CREATE_EVENT_MUTATION,
-      variables: buildCreateEventVariables(),
+      variables: {
+        ...buildCreateEventVariables(),
+        includeInviteOnly: false, // Match addInviteOnlyVariable helper output
+      },
     },
     result: {
       data: {
@@ -246,11 +249,14 @@ export const MOCKS = [
   {
     request: {
       query: CREATE_EVENT_MUTATION,
-      variables: buildCreateEventVariables({
-        isPublic: false,
-        isRegisterable: true,
-        isInviteOnly: true,
-      }),
+      variables: {
+        ...buildCreateEventVariables({
+          isPublic: false,
+          isRegisterable: true,
+          isInviteOnly: true,
+        }),
+        includeInviteOnly: true, // Match addInviteOnlyVariable helper output when isInviteOnly is true
+      },
     },
     result: {
       data: {

@@ -195,6 +195,7 @@ export const USER_EVENTS_VOLUNTEER = gql`
     $organizationId: String!
     $upcomingOnly: Boolean
     $first: Int
+    $includeInviteOnly: Boolean = false
   ) {
     organization(input: { id: $organizationId }) {
       id
@@ -210,7 +211,7 @@ export const USER_EVENTS_VOLUNTEER = gql`
             allDay
             isPublic
             isRegisterable
-            isInviteOnly
+            isInviteOnly @include(if: $includeInviteOnly)
             isRecurringEventTemplate
             baseEvent {
               id

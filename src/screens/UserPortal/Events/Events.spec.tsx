@@ -208,6 +208,7 @@ vi.mock('components/EventCalender/Header/EventHeader', () => ({
 }));
 
 // Read CSS variable value to avoid hardcoded colors (Material-UI doesn't support CSS variables directly)
+// CSS variable is set in vitest.setup.ts
 const getSuccessColor = (): string => {
   if (typeof document !== 'undefined' && document.documentElement) {
     const color = getComputedStyle(document.documentElement)
@@ -215,8 +216,9 @@ const getSuccessColor = (): string => {
       .trim();
     if (color) return color;
   }
-  // Return empty string if CSS variable not available - Material-UI will use default
-  return '';
+  throw new Error(
+    'CSS variable --bs-success not available in test environment',
+  );
 };
 
 const theme = createTheme({
@@ -483,8 +485,9 @@ const MOCKS = [
           location: 'New Test Location',
           isPublic: true,
           isRegisterable: true,
-          isInviteOnly: false,
+          // isInviteOnly removed when includeInviteOnly is false
         },
+        includeInviteOnly: false,
       },
     },
     result: {
@@ -574,7 +577,7 @@ const CREATE_EVENT_ERROR_MOCKS = [
           location: 'New Test Location',
           isPublic: true,
           isRegisterable: true,
-          isInviteOnly: false,
+          // isInviteOnly removed when includeInviteOnly is false
         },
         includeInviteOnly: false,
       },
@@ -604,7 +607,7 @@ const CREATE_EVENT_NULL_MOCKS = [
           location: 'New Test Location',
           isPublic: true,
           isRegisterable: true,
-          isInviteOnly: false,
+          // isInviteOnly removed when includeInviteOnly is false
         },
         includeInviteOnly: false,
       },
@@ -775,6 +778,7 @@ describe('Testing Events Screen [User Portal]', () => {
     const endAt = dayjs.utc(today).endOf('day').toISOString();
 
     // Test-specific mock with computed dates
+    // Note: When includeInviteOnly is false, isInviteOnly is removed from input by addInviteOnlyVariable
     const allDayEventMock = {
       request: {
         query: CREATE_EVENT_MUTATION,
@@ -789,7 +793,7 @@ describe('Testing Events Screen [User Portal]', () => {
             location: 'New Test Location',
             isPublic: true,
             isRegisterable: true,
-            isInviteOnly: false,
+            // isInviteOnly removed when includeInviteOnly is false
           },
           includeInviteOnly: false,
         },
@@ -1732,7 +1736,7 @@ describe('Testing Events Screen [User Portal]', () => {
             location: 'Recurring Test Location',
             isPublic: true,
             isRegisterable: true,
-            isInviteOnly: false,
+            // isInviteOnly removed when includeInviteOnly is false
             recurrence: expectedRecurrence,
           },
           includeInviteOnly: false,

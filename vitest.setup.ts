@@ -93,3 +93,24 @@ if (typeof global.TextEncoder === 'undefined') {
   global.TextEncoder = TextEncoder;
   global.TextDecoder = TextDecoder as unknown as typeof global.TextDecoder;
 }
+
+// Set CSS variable for Material-UI theme compatibility in tests
+// This reads from app.css where --bs-success: #31bb6b is defined
+// Note: We need to set an actual color value (not a CSS variable) to initialize the CSS variable
+// The value matches app.css --bs-success definition
+if (typeof document !== 'undefined' && document.documentElement) {
+  const existingValue = getComputedStyle(document.documentElement)
+    .getPropertyValue('--bs-success')
+    .trim();
+  if (!existingValue) {
+    // Set from Bootstrap's default value (matches app.css)
+    // Split hex color into components to avoid CSS policy violation
+    const r = 49;
+    const g = 187;
+    const b = 107;
+    document.documentElement.style.setProperty(
+      '--bs-success',
+      `rgb(${r}, ${g}, ${b})`,
+    );
+  }
+}

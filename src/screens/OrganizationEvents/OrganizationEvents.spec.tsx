@@ -41,6 +41,7 @@ vi.mock('utils/useLocalstorage', () => {
 });
 
 // Read CSS variable value to avoid hardcoded colors (Material-UI doesn't support CSS variables directly)
+// CSS variable is set in vitest.setup.ts
 const getSuccessColor = (): string => {
   if (typeof document !== 'undefined' && document.documentElement) {
     const color = getComputedStyle(document.documentElement)
@@ -48,8 +49,9 @@ const getSuccessColor = (): string => {
       .trim();
     if (color) return color;
   }
-  // Return empty string if CSS variable not available - Material-UI will use default
-  return '';
+  throw new Error(
+    'CSS variable --bs-success not available in test environment',
+  );
 };
 
 const theme = createTheme({

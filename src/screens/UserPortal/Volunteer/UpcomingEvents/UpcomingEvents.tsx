@@ -66,6 +66,7 @@ import {
   USER_VOLUNTEER_MEMBERSHIP,
 } from 'GraphQl/Queries/EventVolunteerQueries';
 import { CREATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 import { toast } from 'react-toastify';
 import { FaCheck } from 'react-icons/fa';
 import SortingButton from 'subComponents/SortingButton';
@@ -293,11 +294,11 @@ const UpcomingEvents = (): JSX.Element => {
     error?: Error | undefined;
     refetch: () => void;
   } = useQuery(USER_EVENTS_VOLUNTEER, {
-    variables: {
+    variables: addInviteOnlyVariable({
       organizationId: orgId,
       upcomingOnly: true,
       first: 30,
-    },
+    }),
     fetchPolicy: 'cache-first', // Use cache-first to reduce network requests
     errorPolicy: 'all', // Handle rate limiting errors gracefully
   });
@@ -424,7 +425,7 @@ const UpcomingEvents = (): JSX.Element => {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded className={styles.errorIcon} />
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Events' })}
           </h6>
@@ -575,10 +576,7 @@ const UpcomingEvents = (): JSX.Element => {
                 )}
                 {volunteerGroups && volunteerGroups.length > 0 && (
                   <Form.Group>
-                    <Form.Label
-                      className="fw-lighter ms-2 mb-2 "
-                      style={{ fontSize: '1rem', color: 'grey' }}
-                    >
+                    <Form.Label className="fw-lighter ms-2 mb-2 text-secondary">
                       {t('volunteerGroups')}:
                     </Form.Label>
 

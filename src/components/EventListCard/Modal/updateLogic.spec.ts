@@ -34,6 +34,10 @@ vi.mock('utils/errorHandler', async () => ({
   errorHandler: vi.fn(),
 }));
 
+vi.mock('utils/featureFlags', async () => ({
+  isInviteOnlyEnabled: vi.fn(() => true), // Enable feature flag for tests
+}));
+
 const mockUseMutation = useMutation as Mock;
 const mockT = (key: string) => key;
 
