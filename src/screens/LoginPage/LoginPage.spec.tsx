@@ -1940,6 +1940,121 @@ describe('Extra coverage for 100 %', () => {
       expect.stringMatching(/locked.*\d+.*minute|minute.*\d+.*locked/i),
     );
   });
+
+  /* 14. account_locked error without retryAfter timestamp */
+  it('shows generic account locked message when retryAfter is missing', async () => {
+    const { GraphQLError } = await import('graphql');
+
+    const ACCOUNT_LOCKED_NO_TIMER_MOCK = [
+      {
+        request: {
+          query: RECAPTCHA_MUTATION,
+          variables: { recaptchaToken: 'token' },
+        },
+        result: { data: { recaptcha: true } },
+      },
+      {
+        request: {
+          query: SIGNIN_QUERY,
+          variables: { email: 'locked@test.com', password: 'wrongpass' },
+        },
+        result: {
+          errors: [
+            new GraphQLError('Account temporarily locked', {
+              extensions: {
+                code: 'account_locked',
+                // No retryAfter provided
+              },
+            }),
+          ],
+        },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: { data: { organizations: [] } },
+      },
+    ];
+
+    setLocationPath('/');
+    renderLoginPage(ACCOUNT_LOCKED_NO_TIMER_MOCK);
+    await wait();
+
+    await userEvent.type(screen.getByTestId('loginEmail'), 'locked@test.com');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'wrongpass',
+    );
+    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[0], 'token');
+    await userEvent.click(screen.getByTestId('loginBtn'));
+    await wait();
+
+    // Should show generic account locked message (without countdown)
+    expect(toastMocks.error).toHaveBeenCalledWith(
+      'Account is temporarily locked due to too many failed login attempts. Please try again later.',
+      expect.any(Object),
+    );
+  });
+
+  /* 15. Other GraphQL errors should use errorHandler */
+  it('handles non-account_locked GraphQL errors via errorHandler', async () => {
+    const { GraphQLError } = await import('graphql');
+
+    const OTHER_GRAPHQL_ERROR_MOCK = [
+      {
+        request: {
+          query: RECAPTCHA_MUTATION,
+          variables: { recaptchaToken: 'token' },
+        },
+        result: { data: { recaptcha: true } },
+      },
+      {
+        request: {
+          query: SIGNIN_QUERY,
+          variables: { email: 'test@test.com', password: 'wrongpass' },
+        },
+        result: {
+          errors: [
+            new GraphQLError('Invalid credentials', {
+              extensions: {
+                code: 'UNAUTHENTICATED',
+              },
+            }),
+          ],
+        },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: { data: { organizations: [] } },
+      },
+    ];
+
+    setLocationPath('/');
+    renderLoginPage(OTHER_GRAPHQL_ERROR_MOCK);
+    await wait();
+
+    await userEvent.type(screen.getByTestId('loginEmail'), 'test@test.com');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'wrongpass',
+    );
+    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[0], 'token');
+    await userEvent.click(screen.getByTestId('loginBtn'));
+    await wait();
+
+    // Should call errorHandler which shows the error message
+    expect(toastMocks.error).toHaveBeenCalledWith(
+      'Invalid credentials',
+      expect.any(Object),
+    );
+  });
 });
 
 describe('RefreshToken storage verification', () => {

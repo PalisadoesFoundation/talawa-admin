@@ -11,23 +11,11 @@ export const errorHandler = (a: unknown, error: unknown): void => {
     const errorMessage = error.message;
 
     if (errorMessage === 'Failed to fetch') {
-      toast.error(tErrors('talawaApiUnavailable'));
-    } else if (errorMessage.match(/value is not a valid phone number/i)) {
-      toast.error(tErrors('invalidPhoneNumber'));
-    } else if (errorMessage.match(/does not exist in "EducationGrade"/i)) {
-      toast.error(tErrors('invalidEducationGrade'));
-    } else if (errorMessage.match(/does not exist in "EmploymentStatus"/i)) {
-      toast.error(tErrors('invalidEmploymentStatus'));
-    } else if (errorMessage.match(/does not exist in "MaritalStatus"/i)) {
-      toast.error(tErrors('invalidMaritalStatus'));
-    } else if (errorMessage.match(/status code 400/i)) {
-      toast.error(tErrors('error400'));
-    } else if (errorMessage.match(/organization name already exists/i)) {
-      toast.error(tErrors('organizationNameAlreadyExists'));
-    } else if (errorMessage.match(/account.*locked/i)) {
-      toast.error(tErrors('accountLocked'));
-    } else {
-      toast.error(errorMessage);
+      NotificationToast.error({
+        key: 'talawaApiUnavailable',
+        namespace: 'errors',
+      });
+      return;
     }
 
     if (/value is not a valid phone number/i.test(errorMessage)) {
@@ -73,6 +61,14 @@ export const errorHandler = (a: unknown, error: unknown): void => {
     if (/organization name already exists/i.test(errorMessage)) {
       NotificationToast.error({
         key: 'organizationNameAlreadyExists',
+        namespace: 'errors',
+      });
+      return;
+    }
+
+    if (/account.*locked/i.test(errorMessage)) {
+      NotificationToast.error({
+        key: 'accountLocked',
         namespace: 'errors',
       });
       return;
