@@ -383,6 +383,8 @@
     "viewProfile": "Ver",
     "noAssignedMembersFound": "Ningún miembro asignado",
     "unassignUserTag": "Desasignar Etiqueta",
+    "unassignUserTagError": "Error al desasignar la etiqueta del usuario",
+    "removeUserTagError": "Error al eliminar la etiqueta del usuario",
     "unassignUserTagMessage": "¿Desea eliminar la etiqueta de este usuario?",
     "successfullyUnassigned": "Etiqueta desasignada del usuario",
     "addPeople": "Agregar Personas",
@@ -482,6 +484,17 @@
     "monthlyOn": "Mensual en",
     "yearlyOn": "Anual en",
     "yearlyRecurrenceDesc": "Este evento se repetirá cada año en la misma fecha que la fecha de inicio del evento.",
+    "doesNotRepeat": "No se repite",
+    "daily": "Diariamente",
+    "weeklyOn": "Semanal los {{day}}",
+    "monthlyOnDay": "Mensual el día {{day}}",
+    "annuallyOn": "Anual el {{day}} de {{month}}",
+    "everyWeekday": "Cada día laborable (lun–vie)",
+    "custom": "Personalizado…",
+    "day": "Día",
+    "week": "Semana",
+    "month": "Mes",
+    "year": "Año",
     "done": "Hecho",
     "createChat": "Crear chat"
   },
@@ -1355,7 +1368,18 @@
     "registerable": "Es registrable",
     "monthlyCalendarView": "Calendario mensual",
     "yearlyCalendarView": "Calendario anual",
-    "createChat": "Crear chat"
+    "createChat": "Crear chat",
+    "doesNotRepeat": "No se repite",
+    "daily": "Diariamente",
+    "weeklyOn": "Semanal los {{day}}",
+    "monthlyOnDay": "Mensual el día {{day}}",
+    "annuallyOn": "Anual el {{day}} de {{month}}",
+    "everyWeekday": "Cada día laborable (lun–vie)",
+    "custom": "Personalizado…",
+    "day": "Día",
+    "week": "Semana",
+    "month": "Mes",
+    "year": "Año"
   },
   "userEventCard": {
     "location": "Ubicación",
@@ -1712,6 +1736,11 @@
     "deleteComment": "Eliminar comentario",
     "deleting": "Eliminando...",
     "emptyCommentError": "Por favor ingrese un comentario antes de enviar."
+  },
+  "profileAvatar": {
+    "altText": "Foto de perfil de {{name}}",
+    "modalTitle": "Foto de perfil",
+    "enlargedAltText": "Foto de perfil ampliada de {{name}}"
   },
   "common": {
     "signOut": "Cerrar sesión",

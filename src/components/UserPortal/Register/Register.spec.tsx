@@ -345,6 +345,9 @@ describe('Testing Register Component [User Portal]', () => {
     await waitForAsync();
 
     // Assert that toast.error is called with the error message
-    expect(toast.error).toHaveBeenCalledWith('GraphQL error occurred');
+    expect(toast.error).toHaveBeenCalledWith(
+      'GraphQL error occurred',
+      expect.any(Object),
+    );
   });
 });
