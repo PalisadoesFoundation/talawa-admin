@@ -110,5 +110,8 @@
   "notFound": "नहीं मिला",
   "profilePicture": "प्रोफ़ाइल चित्र",
   "profilePicturePlaceholder": "डमी चित्र",
-  "userProfileMenu": "उपयोगकर्ता प्रोफ़ाइल मेनू"
+  "userProfileMenu": "उपयोगकर्ता प्रोफ़ाइल मेनू",
+  "breadcrumbs": "ब्रेडक्रंब्स",
+  "loadingAdminPlugin": "व्यवस्थापक प्लगइन लोड हो रहा है...",
+  "loadingUserPlugin": "उपयोगकर्ता प्लगइन लोड हो रहा है..."
 }

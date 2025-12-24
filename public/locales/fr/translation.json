@@ -224,10 +224,18 @@
     "placeholderAvatarAlt": "Avatar par défaut"
   },
   "users": {
+    "membershipStatus": {
+      "member": "Statut d'adhésion: Membre",
+      "pending": "Statut d'adhésion: En attente",
+      "notMember": "Statut d'adhésion: Non membre"
+    },
     "title": "Rôles Talawa",
     "joined_organizations": "Organisations rejointes",
     "blocked_organizations": "Organisations bloquées",
     "orgJoinedBy": "Organisations rejointes par",
+    "member": "Membre",
+    "pending": "En attente",
+    "notMember": "Non membre",
     "orgThatBlocked": "Organisations qui ont bloqué",
     "hasNotJoinedAnyOrg": "n'a rejoint aucune organisation",
     "isNotBlockedByAnyOrg": "n'est bloqué par aucune organisation",
@@ -377,6 +385,8 @@
     "unassignUserTag": "Désassigner l'étiquette",
     "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
     "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
+    "unassignUserTagError": "Erreur lors de la suppression de l'affectation d'étiquette",
+    "removeUserTagError": "Erreur lors de la suppression de l'étiquette et de tous ses sous-étiquettes",
     "addPeople": "Ajouter des personnes",
     "add": "Ajouter",
     "subTags": "Sous-étiquettes",
@@ -468,6 +478,17 @@
     "monthlyOn": "Mensuel le",
     "yearlyOn": "Annuel le",
     "yearlyRecurrenceDesc": "Cet événement se répétera chaque année à la même date que la date de début de l'événement.",
+    "doesNotRepeat": "Ne se répète pas",
+    "daily": "Quotidien",
+    "weeklyOn": "Hebdomadaire le {{day}}",
+    "monthlyOnDay": "Mensuel le jour {{day}}",
+    "annuallyOn": "Annuel le {{day}} {{month}}",
+    "everyWeekday": "Chaque jour de semaine (lun–ven)",
+    "custom": "Personnalisé…",
+    "day": "Jour",
+    "week": "Semaine",
+    "month": "Mois",
+    "year": "Année",
     "events": "Événements",
     "description": "Description",
     "location": "Emplacement",
@@ -737,6 +758,7 @@
     "pledgedAmount": "Montant promis",
     "startDate": "Date de début",
     "endDate": "Date de fin",
+    "searchByPlaceholder": "Rechercher par {{field}}",
     "selectPledger": "Veuillez sélectionner un donateur"
   },
   "orgPost": {
@@ -1026,7 +1048,13 @@
   "people": {
     "title": "Personnes",
     "searchUsers": "Rechercher des utilisateurs",
-    "nothingToShow": "Rien à montrer ici."
+    "nothingToShow": "Rien à montrer ici.",
+    "sNo": "N°",
+    "avatar": "Avatar",
+    "name": "Nom",
+    "email": "E-mail",
+    "role": "Rôle",
+    "loading": "Chargement..."
   },
   "userLogin": {
     "login": "Se connecter",
@@ -1085,7 +1113,8 @@
     "search": "Rechercher",
     "filter": "Filtrer",
     "searchByName": "Rechercher par nom",
-    "searchOrganizations": "Rechercher Organisations"
+    "searchOrganizations": "Rechercher Organisations",
+    "loading": "Chargement..."
   },
   "userSidebarOrg": {
     "yourOrganizations": "Vos organisations",
@@ -1339,7 +1368,18 @@
     "eventLocation": "Lieu de l'événement",
     "startDate": "Date de début",
     "endDate": "Date de fin",
-    "createChat": "Créer une discussion"
+    "createChat": "Créer une discussion",
+    "doesNotRepeat": "Ne se répète pas",
+    "daily": "Quotidien",
+    "weeklyOn": "Hebdomadaire le {{day}}",
+    "monthlyOnDay": "Mensuel le jour {{day}}",
+    "annuallyOn": "Annuel le {{day}} {{month}}",
+    "everyWeekday": "Chaque jour de semaine (lun–ven)",
+    "custom": "Personnalisé…",
+    "day": "Jour",
+    "week": "Semaine",
+    "month": "Mois",
+    "year": "Année"
   },
   "userEventCard": {
     "starts": "Départs",
@@ -1537,7 +1577,9 @@
     "addPledge": "Ajouter une promesse",
     "viewPledges": "Voir les promesses",
     "noPledges": "Aucune promesse trouvée",
-    "noCampaigns": "Aucune campagne trouvée"
+    "noCampaigns": "Aucune campagne trouvée",
+    "raised": "Collecté",
+    "amountRaised": "Montant Collecté"
   },
   "userPledges": {
     "title": "Mes Promesses"
@@ -1626,7 +1668,21 @@
     "eventInvitationRecurringSubject": "Invitation à faire du bénévolat pour la série d'événements récurrents",
     "pending": "En attente",
     "accepted": "Accepté",
-    "rejected": "Rejeté"
+    "rejected": "Rejeté",
+    "assignee": "Assigné",
+    "group": "Groupe",
+    "event": "Événement",
+    "received": "Reçu",
+    "location": "Emplacement",
+    "recurrence": "Récurrence",
+    "endDate": "Date de Fin",
+    "description": "Description",
+    "volunteerGroups": "Groupes de Bénévoles",
+    "groupTable": "Tableau des Groupes",
+    "srNo": "N°",
+    "groupName": "Nom du Groupe",
+    "noOfMembers": "Nombre de Membres",
+    "options": "Options"
   },
   "pluginStore": {
     "title": "Boutique de Plugins",
@@ -1661,5 +1717,15 @@
     "deleteComment": "Supprimer le commentaire",
     "deleting": "Suppression…",
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre."
+  },
+  "profileAvatar": {
+    "altText": "Photo de profil de {{name}}",
+    "modalTitle": "Photo de profil",
+    "enlargedAltText": "Photo de profil agrandie de {{name}}"
+  },
+  "common": {
+    "signOut": "Se déconnecter",
+    "signingOut": "Déconnexion en cours...",
+    "retryPrompt": "Échec de la révocation de session. Réessayer ?"
   }
 }

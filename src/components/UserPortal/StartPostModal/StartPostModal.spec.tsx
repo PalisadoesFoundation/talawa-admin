@@ -135,6 +135,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await userEvent.click(screen.getByTestId('createPostBtn'));
     expect(toastSpy).toHaveBeenCalledWith(
       "Can't create a post with an empty body.",
+      expect.any(Object),
     );
   });
 

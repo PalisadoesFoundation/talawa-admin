@@ -22,17 +22,34 @@ vi.mock('utils/errorHandler', () => ({
   errorHandler: vi.fn(),
 }));
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-  }),
-}));
+vi.mock('react-i18next', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-i18next')>();
+
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+      i18n: { changeLanguage: vi.fn() },
+    }),
+    initReactI18next: {
+      type: '3rdParty',
+      init: vi.fn(),
+    },
+  };
+});
 
 const mockClearAllItems = vi.fn();
 
 vi.mock('./useLocalstorage', () => ({
   default: vi.fn(() => ({
     clearAllItems: mockClearAllItems,
+    getItem: vi.fn((key: string) => {
+      if (key === 'refreshToken') return 'test-refresh-token';
+      return null;
+    }),
+    setItem: vi.fn(),
+    removeItem: vi.fn(),
+    getStorageKey: vi.fn((key: string) => key),
   })),
 }));
 
@@ -105,7 +122,10 @@ describe('useSession Hook', () => {
         'keydown',
         expect.any(Function),
       );
-      expect(toast.warning).toHaveBeenCalledWith('sessionWarning');
+      expect(toast.warning).toHaveBeenCalledWith(
+        'sessionWarning',
+        expect.any(Object),
+      );
     });
 
     vi.useRealTimers();
@@ -203,10 +223,20 @@ describe('useSession Hook', () => {
     await vi.waitFor(() => {
       expect(mockClearAllItems).toHaveBeenCalled();
       expect(toast.warning).toHaveBeenCalledTimes(2);
-      expect(toast.warning).toHaveBeenNthCalledWith(1, 'sessionWarning');
-      expect(toast.warning).toHaveBeenNthCalledWith(2, 'sessionLogout', {
-        autoClose: false,
-      });
+
+      expect(toast.warning).toHaveBeenNthCalledWith(
+        1,
+        'sessionWarning',
+        expect.any(Object),
+      );
+
+      expect(toast.warning).toHaveBeenNthCalledWith(
+        2,
+        'sessionLogOut',
+        expect.objectContaining({
+          autoClose: false,
+        }),
+      );
     });
   });
 
@@ -226,7 +256,10 @@ describe('useSession Hook', () => {
     vi.advanceTimersByTime(15 * 60 * 1000);
 
     await vi.waitFor(() =>
-      expect(toast.warning).toHaveBeenCalledWith('sessionWarning'),
+      expect(toast.warning).toHaveBeenCalledWith(
+        'sessionWarning',
+        expect.any(Object),
+      ),
     );
 
     vi.useRealTimers();
@@ -254,6 +287,7 @@ describe('useSession Hook', () => {
       {
         request: {
           query: REVOKE_REFRESH_TOKEN,
+          variables: { refreshToken: 'test-refresh-token' },
         },
         error: new Error('Failed to revoke refresh token'),
       },
@@ -443,9 +477,10 @@ describe('useSession Hook', () => {
 
     await vi.waitFor(() => {
       expect(mockClearAllItems).toHaveBeenCalled();
-      expect(toast.warning).toHaveBeenCalledWith('sessionLogout', {
-        autoClose: false,
-      });
+      expect(toast.warning).toHaveBeenCalledWith(
+        'sessionLogOut',
+        expect.objectContaining({ autoClose: false }),
+      );
     });
 
     vi.useRealTimers();
@@ -467,9 +502,10 @@ describe('useSession Hook', () => {
 
     await vi.waitFor(() => {
       expect(mockClearAllItems).toHaveBeenCalled();
-      expect(toast.warning).toHaveBeenCalledWith('sessionLogout', {
-        autoClose: false,
-      });
+      expect(toast.warning).toHaveBeenCalledWith(
+        'sessionLogOut',
+        expect.objectContaining({ autoClose: false }),
+      );
     });
 
     vi.useRealTimers();
@@ -504,7 +540,10 @@ test('should extend session when called directly', async () => {
   vi.advanceTimersByTime(14 * 60 * 1000);
 
   await vi.waitFor(() =>
-    expect(toast.warning).toHaveBeenCalledWith('sessionWarning'),
+    expect(toast.warning).toHaveBeenCalledWith(
+      'sessionWarning',
+      expect.any(Object),
+    ),
   );
 
   vi.useRealTimers();
@@ -714,7 +753,10 @@ test('should handle edge case when visibility state is neither visible nor hidde
   vi.advanceTimersByTime(15 * 60 * 1000);
 
   await vi.waitFor(() => {
-    expect(toast.warning).toHaveBeenCalledWith('sessionWarning');
+    expect(toast.warning).toHaveBeenCalledWith(
+      'sessionWarning',
+      expect.any(Object),
+    );
   });
 
   vi.useRealTimers();
