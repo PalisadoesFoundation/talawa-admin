@@ -126,5 +126,8 @@
   "memberDetailExampleLane": "例：2号巷",
   "enterDescription": "请输入描述",
   "enterCity": "请输入城市名称",
-  "enterState": "请输入省/州名称"
+  "enterState": "请输入省/州名称",
+  "breadcrumbs": "面包屑导航",
+  "loadingAdminPlugin": "正在加载行政插件...",
+  "loadingUserPlugin": "正在加载用户插件..."
 }

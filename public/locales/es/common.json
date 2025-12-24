@@ -126,5 +126,7 @@
   "memberDetailExampleLane": "Ej. Calle 2",
   "enterDescription": "Introduce la descripción",
   "enterCity": "Introduce el nombre de la ciudad",
-  "enterState": "Introduce el nombre del estado"
+  "enterState": "Introduce el nombre del estado",
+  "breadcrumbs": "Migas de navegación",
+  "loadingAdminPlugin": "Cargando complemento de administrador...",
 }

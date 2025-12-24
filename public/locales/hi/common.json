@@ -126,5 +126,8 @@
   "memberDetailExampleLane": "उदा. गली 2",
   "enterDescription": "विवरण दर्ज करें",
   "enterCity": "शहर का नाम दर्ज करें",
-  "enterState": "राज्य का नाम दर्ज करें"
+  "enterState": "राज्य का नाम दर्ज करें",
+  "breadcrumbs": "ब्रेडक्रंब्स",
+  "loadingAdminPlugin": "व्यवस्थापक प्लगइन लोड हो रहा है...",
+  "loadingUserPlugin": "उपयोगकर्ता प्लगइन लोड हो रहा है..."
 }

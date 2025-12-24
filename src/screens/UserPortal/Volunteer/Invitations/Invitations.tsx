@@ -154,43 +154,53 @@ const Invitations = (): JSX.Element => {
   // Renders the invitations list and UI elements for searching, sorting, and accepting/rejecting invites
   return (
     <>
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        {/* Search input field and button */}
-        <SearchBar
-          placeholder={t('searchByEventName')}
-          onSearch={debouncedSearch}
-          inputTestId="searchBy"
-          buttonTestId="searchBtn"
-        />
-        <div className="d-flex gap-4 mb-1">
-          <div className="d-flex gap-3 justify-space-between">
-            <SortingButton
-              sortingOptions={[
-                { label: t('receivedLatest'), value: 'createdAt_DESC' },
-                { label: t('receivedEarliest'), value: 'createdAt_ASC' },
-              ]}
-              onSortChange={(value) =>
-                setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC')
-              }
-              dataTestIdPrefix="sort"
-              buttonLabel={tCommon('sort')}
-            />
-            <SortingButton
-              sortingOptions={[
-                { label: tCommon('all'), value: 'all' },
-                { label: t('groupInvite'), value: 'group' },
-                { label: t('individualInvite'), value: 'individual' },
-              ]}
-              onSortChange={(value) =>
-                setFilter(value === 'all' ? null : (value as ItemFilter))
-              }
-              dataTestIdPrefix="filter"
-              buttonLabel={t('filter')}
-              type="filter"
-            />
-          </div>
+      {/* Refactored Header Structure */}
+      <div className={styles.calendar__header}>
+        {/* 1. Search Bar Section */}
+        <div className={styles.calendar__search}>
+          <SearchBar
+            placeholder={t('searchByEventName')}
+            onSearch={debouncedSearch}
+            inputTestId="searchBy"
+            buttonTestId="searchBtn"
+            showSearchButton={true}
+            showLeadingIcon={true}
+            showClearButton={true}
+            buttonAriaLabel={tCommon('search')}
+          />
+        </div>
+
+        {/* 2. Controls Section (Sorting & Filtering) */}
+        <div className={styles.btnsBlock}>
+          <SortingButton
+            sortingOptions={[
+              { label: t('receivedLatest'), value: 'createdAt_DESC' },
+              { label: t('receivedEarliest'), value: 'createdAt_ASC' },
+            ]}
+            selectedOption={sortBy ?? undefined}
+            onSortChange={(value) =>
+              setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC')
+            }
+            dataTestIdPrefix="sort"
+            buttonLabel={tCommon('sort')}
+          />
+          <SortingButton
+            sortingOptions={[
+              { label: tCommon('all'), value: 'all' },
+              { label: t('groupInvite'), value: 'group' },
+              { label: t('individualInvite'), value: 'individual' },
+            ]}
+            selectedOption={filter ?? 'all'}
+            onSortChange={(value) =>
+              setFilter(value === 'all' ? null : (value as ItemFilter))
+            }
+            dataTestIdPrefix="filter"
+            buttonLabel={t('filter')}
+            type="filter"
+          />
         </div>
       </div>
+
       {invitations.length < 1 ? (
         <Stack height="100%" alignItems="center" justifyContent="center">
           {/* Displayed if no invitations are found */}
@@ -229,7 +239,7 @@ const Invitations = (): JSX.Element => {
                   <>
                     <div>
                       <FaUserGroup className="mb-1 me-1" color="grey" />
-                      <span className="text-muted">Group:</span>{' '}
+                      <span className="text-muted">{t('group')}:</span>{' '}
                       <span>{invite.group.name} </span>
                     </div>
                     |
@@ -241,13 +251,13 @@ const Invitations = (): JSX.Element => {
                     color="grey"
                     size={20}
                   />
-                  <span className="text-muted">Event:</span>{' '}
+                  <span className="text-muted">{t('event')}:</span>{' '}
                   <span>{invite.event.name}</span>
                 </div>
                 |
                 <div>
                   <FaRegClock className="mb-1 me-1" color="grey" />
-                  <span className="text-muted">Received:</span>{' '}
+                  <span className="text-muted">{t('received')}:</span>{' '}
                   {new Date(invite.createdAt).toLocaleString()}
                 </div>
               </div>

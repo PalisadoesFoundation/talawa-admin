@@ -126,5 +126,8 @@
   "memberDetailExampleLane": "Ex. Allée 2",
   "enterDescription": "Entrez la description",
   "enterCity": "Entrez le nom de la ville",
-  "enterState": "Entrez le nom de l'état"
+  "enterState": "Entrez le nom de l'état",
+  "breadcrumbs": "Fil d’Ariane",
+  "loadingAdminPlugin": "Chargement du plugin administrateur...",
+  "loadingUserPlugin": "Chargement du plugin utilisateur..."
 }

@@ -31,9 +31,11 @@
  * ```
  */
 import type { TFunction } from 'i18next';
-import React from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
+import { BaseModal } from 'shared-components/BaseModal';
+import { toast } from 'react-toastify';
 
 export interface InterfaceRemoveUserTagModalProps {
   removeUserTagModalIsOpen: boolean;
@@ -50,33 +52,36 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
   t,
   tCommon,
 }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onConfirmRemove = async (): Promise<void> => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    try {
+      await handleRemoveUserTag();
+    } catch (error) {
+      console.error(error);
+      toast.error(t('removeUserTagError'));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
-    <>
-      <Modal
-        size="sm"
-        id="removeUserTagModal"
-        aria-describedby="removeUserTagMessage"
-        show={removeUserTagModalIsOpen}
-        onHide={toggleRemoveUserTagModal}
-        backdrop="static"
-        keyboard={false}
-        centered
-      >
-        <Modal.Header closeButton className={styles.modalHeader}>
-          <Modal.Title className="text-white" id="removeUserTag">
-            {t('removeUserTag')}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body id="removeUserTagMessage">
-          {t('removeUserTagMessage')}
-        </Modal.Body>
-        <Modal.Footer>
+    <BaseModal
+      show={removeUserTagModalIsOpen}
+      onHide={toggleRemoveUserTagModal}
+      size="sm"
+      backdrop="static"
+      keyboard={false}
+      title={t('removeUserTag')}
+      headerClassName={`${styles.modalHeader} text-white`}
+      dataTestId="remove-user-tag-modal"
+      footer={
+        <>
           <Button
             type="button"
             className={`btn btn-danger ${styles.removeButton}`}
-            data-dismiss="modal"
-            role="button"
-            aria-label={tCommon('no')}
             onClick={toggleRemoveUserTagModal}
             data-testid="removeUserTagModalCloseBtn"
           >
@@ -85,16 +90,17 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
           <Button
             type="button"
             className={`btn ${styles.addButton}`}
-            role="button"
-            aria-label={tCommon('yes')}
-            onClick={handleRemoveUserTag}
+            onClick={onConfirmRemove}
+            disabled={isSubmitting}
             data-testid="removeUserTagSubmitBtn"
           >
             {tCommon('yes')}
           </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+        </>
+      }
+    >
+      <p>{t('removeUserTagMessage')}</p>
+    </BaseModal>
   );
 };
 

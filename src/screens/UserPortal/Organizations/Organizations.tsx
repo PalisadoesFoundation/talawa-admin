@@ -42,13 +42,13 @@ import {
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import React, { useEffect, useState, useRef } from 'react';
-import { Dropdown } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../../style/app-fixed.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import type { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
+import SortingButton from 'subComponents/SortingButton';
 
 function useDebounce<T>(fn: (val: T) => void, delay: number) {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -67,13 +67,8 @@ function useDebounce<T>(fn: (val: T) => void, delay: number) {
 
 type IOrganizationCardProps = InterfaceOrganizationCardProps;
 
-/**
- * Interface defining the structure of organization properties.
- */
-
 interface InterfaceMemberNode {
   id: string;
-  // add other fields if needed
 }
 interface InterfaceMemberEdge {
   node: InterfaceMemberNode;
@@ -134,9 +129,6 @@ interface IOrgData {
   name: string;
 }
 
-/**
- * Component for displaying and managing user organizations.
- */
 export default function Organizations(): React.JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userOrganizations',
@@ -149,9 +141,6 @@ export default function Organizations(): React.JSX.Element {
     return stored === 'true';
   });
 
-  /**
-   * Handles window resize events to toggle drawer visibility.
-   */
   const handleResize = (): void => {
     if (window.innerWidth <= 820) {
       setHideDrawer(true);
@@ -213,9 +202,7 @@ export default function Organizations(): React.JSX.Element {
     variables: { id: userId, filter: filterName },
     skip: mode !== 2,
   });
-  /**
-   * 2) doSearch sets the filterName (triggering refetch)
-   */
+
   function doSearch(value: string) {
     setFilterName(value);
     if (mode === 0) {
@@ -234,16 +221,11 @@ export default function Organizations(): React.JSX.Element {
     debouncedSearch(newVal);
   };
 
-  /**
-   * React to changes in mode or relevant query data
-   */
   useEffect(() => {
     if (mode === 0) {
       if (allOrganizationsData?.organizations) {
         const orgs = allOrganizationsData.organizations.map((org: IOrgData) => {
-          // Check if current user is a member
           const isMember = org.isMember;
-
           return {
             id: org.id,
             name: org.name,
@@ -255,13 +237,12 @@ export default function Organizations(): React.JSX.Element {
             membershipRequestStatus: isMember ? 'accepted' : '',
             userRegistrationRequired: false,
             membershipRequests: [],
-            isJoined: isMember, // Set based on membership check
+            isJoined: isMember,
           };
         });
         setOrganizations(orgs);
       }
     } else if (mode === 1) {
-      // Joined
       if (joinedOrganizationsData?.user?.organizationsWhereMember?.edges) {
         const orgs =
           joinedOrganizationsData.user.organizationsWhereMember.edges.map(
@@ -269,7 +250,7 @@ export default function Organizations(): React.JSX.Element {
               const organization = edge.node;
               return {
                 ...organization,
-                membershipRequestStatus: 'accepted', // Always set to 'accepted' for joined orgs
+                membershipRequestStatus: 'accepted',
                 isJoined: true,
               };
             },
@@ -279,7 +260,6 @@ export default function Organizations(): React.JSX.Element {
         setOrganizations([]);
       }
     } else if (mode === 2) {
-      // Created
       if (createdOrganizationsData?.user?.createdOrganizations) {
         const orgs = createdOrganizationsData.user.createdOrganizations.map(
           (org: IOrganization) => ({
@@ -301,9 +281,6 @@ export default function Organizations(): React.JSX.Element {
     userId,
   ]);
 
-  /**
-   * pagination
-   */
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number,
@@ -320,29 +297,10 @@ export default function Organizations(): React.JSX.Element {
   };
 
   const isLoading = loadingAll || loadingJoined || loadingCreated;
-
-  /** We are treating the viewer for this screen as an User always*/
   const role = 'user';
 
   return (
     <>
-      {/* {hideDrawer ? (
-        <Button
-          className={styles.opendrawer}
-          onClick={() => setHideDrawer(!hideDrawer)}
-          data-testid="openMenu"
-        >
-          <i className="fa fa-angle-double-right" />
-        </Button>
-      ) : (
-        <Button
-          className={styles.collapseSidebarButton}
-          onClick={() => setHideDrawer(!hideDrawer)}
-          data-testid="closeMenu"
-        >
-          <i className="fa fa-angle-double-left" />
-        </Button>
-      )} */}
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
         className={`${hideDrawer ? styles.expand : styles.contract}`}
@@ -362,42 +320,38 @@ export default function Organizations(): React.JSX.Element {
             </div>
           </div>
 
-          <div className={styles.head}>
-            <div className={styles.btnsContainer}>
-              <div className={styles.input}>
-                <SearchBar
-                  className={styles.maxWidth}
-                  placeholder={t('searchOrganizations')}
-                  value={typedValue}
-                  onChange={(val) => handleChangeFilter(val)}
-                  onSearch={(val) => doSearch(val)}
-                  inputTestId="searchInput"
-                  buttonTestId="searchBtn"
-                />
-              </div>
-              <div className={styles.btnsBlock}>
-                <Dropdown drop="down-centered">
-                  <Dropdown.Toggle
-                    className={styles.dropdown}
-                    variant="success"
-                    id="dropdown-basic"
-                    data-testid="modeChangeBtn"
-                  >
-                    {modes[mode]}
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    {modes.map((value, index) => (
-                      <Dropdown.Item
-                        key={index}
-                        data-testid={`modeBtn${index}`}
-                        onClick={() => setMode(index)}
-                      >
-                        {value}
-                      </Dropdown.Item>
-                    ))}
-                  </Dropdown.Menu>
-                </Dropdown>
-              </div>
+          {/* Refactored Header Structure */}
+          <div className={styles.calendar__header}>
+            {/* 1. Search Bar Section */}
+            <div className={styles.calendar__search}>
+              <SearchBar
+                placeholder={t('searchOrganizations')}
+                value={typedValue}
+                onChange={(val) => handleChangeFilter(val)}
+                onSearch={(val) => doSearch(val)}
+                inputTestId="searchInput"
+                buttonTestId="searchBtn"
+                // Standardized props
+                showSearchButton={true}
+                showLeadingIcon={true}
+                showClearButton={true}
+                buttonAriaLabel={t('search')}
+              />
+            </div>
+
+            {/* 2. Controls Section (Converted Dropdown to SortingButton) */}
+            <div className={styles.btnsBlock}>
+              <SortingButton
+                sortingOptions={modes.map((value, index) => ({
+                  label: value,
+                  value: index,
+                }))}
+                selectedOption={modes[mode]}
+                onSortChange={(value) => setMode(value as number)}
+                dataTestIdPrefix="modeChangeBtn"
+                buttonLabel={t('filter')} // Or appropriate label
+                type="filter"
+              />
             </div>
           </div>
 
@@ -462,7 +416,6 @@ export default function Organizations(): React.JSX.Element {
                             ></div>
 
                             <OrganizationCard data={cardProps} />
-                            {/* Add a hidden span with organization name for testing purposes */}
                             <span
                               data-testid={`org-name-${organization.name}`}
                               className="visually-hidden"

@@ -126,5 +126,8 @@
   "memberDetailExampleLane": "Ex. Lane 2",
   "enterDescription": "Enter Description",
   "enterCity": "Enter city name",
-  "enterState": "Enter state name"
+  "enterState": "Enter state name",
+  "breadcrumbs": "Breadcrumbs",
+  "loadingAdminPlugin": "Loading admin plugin...",
+  "loadingUserPlugin": "Loading user plugin..."
 }
