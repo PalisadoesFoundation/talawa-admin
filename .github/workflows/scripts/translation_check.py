@@ -111,9 +111,7 @@ def get_target_files(
     if files:
         for file_item in files:
             path = Path(file_item)
-            if path.exists() and any(
-                file_item.endswith(ext) for ext in extensions
-            ):
+            if path.exists() and any(file_item.endswith(ext) for ext in extensions):
                 target_files.append(path)
 
     if directories:
@@ -142,13 +140,9 @@ def main() -> None:
     Returns:
         None
     """
-    parser = argparse.ArgumentParser(
-        description="Search for and validate translation tags."
-    )
+    parser = argparse.ArgumentParser(description="Search for and validate translation tags.")
     parser.add_argument("--files", nargs="+", help="Specific files to check")
-    parser.add_argument(
-        "--directories", nargs="+", help="Directories to search"
-    )
+    parser.add_argument("--directories", nargs="+", help="Directories to search")
     parser.add_argument(
         "--locales-dir",
         default="public/locales/en",
