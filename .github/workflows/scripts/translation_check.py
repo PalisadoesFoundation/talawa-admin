@@ -10,7 +10,15 @@ from pathlib import Path
 
 
 def get_keys(data: dict, prefix: str = "") -> set[str]:
-    """Flatten nested translation JSON into dot-notation keys."""
+    """Flatten nested translation JSON into dot-notation keys.
+
+    Args:
+        data: Parsed JSON dictionary containing translation keys.
+        prefix: Prefix used for nested key traversal.
+
+    Returns:
+        A set of flattened translation keys.
+    """
     keys: set[str] = set()
     for key, value in data.items():
         if isinstance(value, dict):
@@ -21,12 +29,29 @@ def get_keys(data: dict, prefix: str = "") -> set[str]:
 
 
 def get_translation_keys(data: dict) -> set[str]:
-    """Extract translation keys from parsed locale JSON."""
+    """Extract translation keys from parsed locale JSON.
+
+    Args:
+        data: Parsed JSON dictionary.
+
+    Returns:
+        A set of translation keys.
+    """
     return get_keys(data)
 
 
 def load_locale_keys(locales_dir: str | Path) -> set[str]:
-    """Load all valid translation keys from locale JSON files."""
+    """Load all valid translation keys from locale JSON files.
+
+    Args:
+        locales_dir: Path to the locale directory.
+
+    Returns:
+        A set of all valid translation keys.
+
+    Raises:
+        FileNotFoundError: If the locale directory does not exist.
+    """
     base = Path(locales_dir)
     if not base.exists():
         raise FileNotFoundError(locales_dir)
@@ -42,7 +67,14 @@ def load_locale_keys(locales_dir: str | Path) -> set[str]:
 
 
 def find_translation_tags(source: str | Path) -> set[str]:
-    """Find all translation tags used inside a source file or string."""
+    """Find all translation tags used inside a source file or string.
+
+    Args:
+        source: File path or raw source string.
+
+    Returns:
+        A set of detected translation keys.
+    """
     if isinstance(source, Path):
         try:
             content = source.read_text(encoding="utf-8")
@@ -68,7 +100,16 @@ def get_target_files(
     directories: list[str] | None = None,
     exclude: list[str] | None = None,
 ) -> list[Path]:
-    """Resolve target source files for translation validation."""
+    """Resolve target source files for translation validation.
+
+    Args:
+        files: Explicit list of files to scan.
+        directories: Directories to recursively scan.
+        exclude: Filename patterns to exclude.
+
+    Returns:
+        A list of source file paths.
+    """
     exclude = exclude or []
     targets: list[Path] = []
 
@@ -93,14 +134,26 @@ def get_target_files(
 
 
 def check_file(path: Path, valid_keys: set[str]) -> list[str]:
-    """Check a file for missing translation keys."""
+    """Check a file for missing translation keys.
+
+    Args:
+        path: File path to check.
+        valid_keys: Set of valid translation keys.
+
+    Returns:
+        A sorted list of missing translation keys.
+    """
     return sorted(
         tag for tag in find_translation_tags(path) if tag not in valid_keys
     )
 
 
 def main() -> None:
-    """CLI entry point for translation validation."""
+    """CLI entry point for translation validation.
+
+    Returns:
+        None. Exits with status code 1 if missing translations are found.
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument("--files", nargs="*", default=[])
     parser.add_argument("--directories", nargs="*", default=[])
