@@ -253,6 +253,7 @@ const MOCKS = [
         startAt: startDate,
         endAt: endDate,
         includeRecurring: true,
+        includeInviteOnly: false,
       },
     },
     result: {
@@ -345,6 +346,7 @@ const MOCKS = [
         startAt: '2023-05-31T18:30:00.000Z',
         endAt: '2023-06-30T18:29:59.999Z',
         includeRecurring: true,
+        includeInviteOnly: false,
       },
     },
     result: {
@@ -512,6 +514,7 @@ const ERROR_MOCKS = [
         startAt: startDate,
         endAt: endDate,
         includeRecurring: true,
+        includeInviteOnly: false,
       },
     },
     error: new Error('Network error'),
@@ -540,6 +543,7 @@ const RATE_LIMIT_MOCKS = [
         startAt: startDate,
         endAt: endDate,
         includeRecurring: true,
+        includeInviteOnly: false,
       },
     },
     error: new Error('Too many requests. Please try again later'),

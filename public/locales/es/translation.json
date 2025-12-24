@@ -882,7 +882,13 @@
     "agendas": "Agendas",
     "statistics": "Estadísticas",
     "to": "A",
-    "volunteers": "Voluntarios"
+    "volunteers": "Voluntarios",
+    "eventNotFound": "Evento no encontrado",
+    "noOfRegistrations": "Número de inscripciones",
+    "noOfAttendees": "Número de asistentes",
+    "averageFeedback": "Comentarios promedio",
+    "location": "Ubicación:",
+    "registrantsLabel": "Inscritos:"
   },
   "forgotPassword": {
     "title": "Talawa olvidó su contraseña",
@@ -1216,7 +1222,10 @@
     "nextPage": "Página siguiente",
     "goToToday": "Ir a hoy",
     "genderDistribution": "Distribución por género",
-    "ageDistribution": "Distribución por edad"
+    "ageDistribution": "Distribución por edad",
+    "errorLoadingEventDetails": "Error al cargar los detalles del evento. Por favor, inténtelo de nuevo más tarde.",
+    "attendedEventsList": "Lista de eventos asistidos",
+    "eventDate": "Fecha del evento"
   },
   "eventRegistrant": {
     "sort": "Ordenar",
@@ -1228,7 +1237,15 @@
     "createdAt": "Creado en",
     "options": "Opciones",
     "addRegistrant": "Agregar registrado",
-    "noRegistrantsFound": "No se encontraron registrados"
+    "noRegistrantsFound": "No se encontraron registrados",
+    "cannotUnregisterCheckedIn": "No se puede anular el registro de un usuario que ya se ha registrado",
+    "attendeeRemovedSuccessfully": "Asistente eliminado con éxito",
+    "errorRemovingAttendee": "Error al eliminar asistente"
+  },
+  "memberActivity": {
+    "unableToLoadEventDetails": "No se pudieron cargar los detalles del evento. Por favor, inténtelo de nuevo más tarde.",
+    "eventNotFoundOrDeleted": "Evento no encontrado o eliminado",
+    "numberOfAttendees": "Número de asistentes"
   },
   "onSpotAttendee": {
     "title": "Asistente en el lugar",
@@ -1589,11 +1606,21 @@
   },
   "checkIn": {
     "errorCheckingIn": "Error al registrarse",
-    "checkedInSuccessfully": "Registrado con éxito"
+    "checkedInSuccessfully": "Registrado con éxito",
+    "eventCheckInManagement": "Gestión de registro de eventos",
+    "searchAttendees": "Buscar asistentes"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error al agregar asistente",
-    "errorRemovingAttendee": "Error al eliminar asistente"
+    "errorRemovingAttendee": "Error al eliminar asistente",
+    "pleaseChooseUser": "¡Por favor elija un usuario para agregar primero!",
+    "eventRegistrants": "Inscritos al evento",
+    "noRegistrationsFound": "No se encontraron inscripciones",
+    "addOnspotRegistration": "Agregar inscripción en el lugar",
+    "addRegistrant": "Agregar un inscrito",
+    "chooseUserToAdd": "Elija el usuario que desea agregar",
+    "inviteByEmail": "Invitar por correo electrónico",
+    "addRegistrantButton": "Agregar inscrito"
   },
   "userCampaigns": {
     "title": "Campañas de recaudación de fondos",

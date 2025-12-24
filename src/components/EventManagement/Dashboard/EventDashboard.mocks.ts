@@ -4,7 +4,7 @@ export const MOCKS_WITH_TIME = [
   {
     request: {
       query: EVENT_DETAILS,
-      variables: { eventId: 'event123' },
+      variables: { eventId: 'event123', includeInviteOnly: false },
     },
     result: {
       data: {
@@ -37,7 +37,7 @@ export const MOCKS_WITHOUT_TIME = [
   {
     request: {
       query: EVENT_DETAILS,
-      variables: { eventId: 'event123' },
+      variables: { eventId: 'event123', includeInviteOnly: false },
     },
     result: {
       data: {
@@ -70,7 +70,7 @@ export const MOCKS_NO_EVENT = [
   {
     request: {
       query: EVENT_DETAILS,
-      variables: { eventId: 'event123' },
+      variables: { eventId: 'event123', includeInviteOnly: false },
     },
     result: {
       data: {
@@ -84,7 +84,7 @@ export const MOCKS_MISSING_DATA = [
   {
     request: {
       query: EVENT_DETAILS,
-      variables: { eventId: 'event123' },
+      variables: { eventId: 'event123', includeInviteOnly: false },
     },
     result: {
       data: null,
@@ -96,7 +96,7 @@ export const MOCKS_NO_LOCATION = [
   {
     request: {
       query: EVENT_DETAILS,
-      variables: { eventId: 'event123' },
+      variables: { eventId: 'event123', includeInviteOnly: false },
     },
     result: {
       data: {
@@ -129,7 +129,7 @@ export const MOCKS_INVALID_DATETIME = [
   {
     request: {
       query: EVENT_DETAILS,
-      variables: { eventId: 'event123' },
+      variables: { eventId: 'event123', includeInviteOnly: false },
     },
     result: {
       data: {

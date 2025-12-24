@@ -37,6 +37,7 @@ import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import { formatDate } from 'utils/dateFormatter';
 import useLocalStorage from 'utils/useLocalstorage';
+import { isInviteOnlyEnabled } from 'utils/featureFlags';
 
 const EventDashboard = (props: { eventId: string }): JSX.Element => {
   const { eventId } = props;
@@ -57,7 +58,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
   const { data: eventData, loading: eventInfoLoading } = useQuery(
     EVENT_DETAILS,
     {
-      variables: { eventId },
+      variables: { eventId, includeInviteOnly: isInviteOnlyEnabled() },
     },
   );
 
@@ -74,7 +75,9 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
   }
 
   if (!eventData || !eventData.event) {
-    return <div data-testid="no-event">Event not found</div>;
+    return (
+      <div data-testid="no-event">{t('eventManagement.eventNotFound')}</div>
+    );
   }
 
   const formatTimeFromDateTime = (dateTime: string): string => {
@@ -137,7 +140,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
               <h1>
                 <b data-testid="registrations-count">N/A</b>
               </h1>
-              <span>No of Registrations</span>
+              <span>{t('eventManagement.noOfRegistrations')}</span>
             </div>
           </div>
           <div className={`${styles.ctacards}`} data-testid="attendees-card">
@@ -146,7 +149,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
               <h1>
                 <b data-testid="attendees-count">N/A</b>
               </h1>
-              <span>No of Attendees</span>
+              <span>{t('eventManagement.noOfAttendees')}</span>
             </div>
           </div>
           <div className={`${styles.ctacards}`} data-testid="feedback-card">
@@ -155,7 +158,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
               <h1>
                 <b data-testid="feedback-rating">N/A</b>
               </h1>
-              <span>Average Feedback</span>
+              <span>{t('eventManagement.averageFeedback')}</span>
             </div>
           </div>
         </div>
@@ -176,12 +179,12 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
                 {eventData.event.description}
               </p>
               <p className={styles.toporgloc} data-testid="event-location">
-                <b>Location:</b>
+                <b>{t('eventManagement.location')}</b>
                 <span>{eventData.event.location || 'N/A'}</span>
               </p>
               {/* Attendees not available; remove or adjust */}
               <p className={styles.toporgloc} data-testid="event-registrants">
-                <b>Registrants:</b> <span>N/A</span>
+                <b>{t('eventManagement.registrantsLabel')}</b> <span>N/A</span>
               </p>
             </div>
             <div className={styles.time} data-testid="event-time">

@@ -39,6 +39,7 @@ const MOCKS = [
         organization_id: 'events',
         first: 3,
         skip: 0,
+        includeInviteOnly: false,
       },
     },
     result: {

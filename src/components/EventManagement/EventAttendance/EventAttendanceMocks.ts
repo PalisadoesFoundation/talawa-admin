@@ -35,7 +35,7 @@ export const MOCKDETAIL = [
   {
     request: {
       query: EVENT_DETAILS,
-      variables: { eventId: 'event123' },
+      variables: { eventId: 'event123', includeInviteOnly: false },
     },
     result: {
       data: {

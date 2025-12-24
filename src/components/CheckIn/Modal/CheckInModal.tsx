@@ -48,6 +48,9 @@ import type {
 import type { GridColDef, GridRowHeightReturnValue } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import { useTranslation } from 'react-i18next';
+import { isInviteOnlyEnabled } from 'utils/featureFlags';
+import styles from './CheckInModal.module.css';
 
 export const CheckInModal = ({
   show,
@@ -55,6 +58,7 @@ export const CheckInModal = ({
   handleClose,
   onCheckInUpdate,
 }: InterfaceModalProp): JSX.Element => {
+  const { t } = useTranslation('translation', { keyPrefix: 'checkIn' });
   // State to hold the data for the table
   const [tableData, setTableData] = useState<InterfaceTableData[]>([]);
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
@@ -69,7 +73,7 @@ export const CheckInModal = ({
 
   // First, get event details to determine if it's recurring or standalone
   const { data: eventData } = useQuery(EVENT_DETAILS, {
-    variables: { eventId: eventId },
+    variables: { eventId: eventId, includeInviteOnly: isInviteOnlyEnabled() },
     fetchPolicy: 'cache-first',
   });
 
@@ -146,21 +150,18 @@ export const CheckInModal = ({
         centered
         size="lg"
       >
-        <Modal.Header
-          closeButton
-          style={{ backgroundColor: 'var(--tableHeader-bg)' }}
-        >
+        <Modal.Header closeButton className={styles.modalHeader}>
           <Modal.Title
             className="text-tableHeader-color"
             data-testid="modal-title"
           >
-            Event Check In Management
+            {t('eventCheckInManagement')}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="p-2">
             <SearchBar
-              placeholder="Search Attendees"
+              placeholder={t('searchAttendees')}
               value={userFilterQuery}
               onChange={(value) => {
                 setUserFilterQuery(value);
@@ -187,7 +188,7 @@ export const CheckInModal = ({
               clearButtonTestId="clearSearchAttendees"
             />
           </div>
-          <div style={{ height: 500, width: '100%' }}>
+          <div className={styles.dataGridContainer}>
             <DataGrid
               rows={tableData}
               getRowHeight={(): GridRowHeightReturnValue => 'auto'}

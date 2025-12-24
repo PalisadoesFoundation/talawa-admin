@@ -26,6 +26,10 @@ Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:83
 
 > **eventId**: `string` = `'event123'`
 
+#### request.variables.includeInviteOnly
+
+> **includeInviteOnly**: `boolean` = `false`
+
 ### result
 
 > **result**: `object`

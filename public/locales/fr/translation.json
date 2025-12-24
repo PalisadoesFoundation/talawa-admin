@@ -882,7 +882,13 @@
     "agendas": "Ordres du jour",
     "statistics": "Statistiques",
     "to": "À",
-    "volunteers": "Bénévoles"
+    "volunteers": "Bénévoles",
+    "eventNotFound": "Événement introuvable",
+    "noOfRegistrations": "Nombre d'inscriptions",
+    "noOfAttendees": "Nombre de participants",
+    "averageFeedback": "Commentaires moyens",
+    "location": "Emplacement :",
+    "registrantsLabel": "Inscrits :"
   },
   "forgotPassword": {
     "title": "Talawa Mot de passe oublié",
@@ -1216,7 +1222,10 @@
     "nextPage": "Page suivante",
     "goToToday": "Aller à aujourd'hui",
     "genderDistribution": "Distribution par sexe",
-    "ageDistribution": "Distribution par âge"
+    "ageDistribution": "Distribution par âge",
+    "errorLoadingEventDetails": "Erreur lors du chargement des détails de l'événement. Veuillez réessayer plus tard.",
+    "attendedEventsList": "Liste des événements assistés",
+    "eventDate": "Date de l'événement"
   },
   "eventRegistrant": {
     "sort": "Trier",
@@ -1228,7 +1237,15 @@
     "createdAt": "Créé le",
     "options": "Options",
     "addRegistrant": "Ajouter un inscrit",
-    "noRegistrantsFound": "Aucun inscrit trouvé."
+    "noRegistrantsFound": "Aucun inscrit trouvé.",
+    "cannotUnregisterCheckedIn": "Impossible d'annuler l'inscription d'un utilisateur déjà enregistré",
+    "attendeeRemovedSuccessfully": "Participant supprimé avec succès",
+    "errorRemovingAttendee": "Erreur lors de la suppression du participant"
+  },
+  "memberActivity": {
+    "unableToLoadEventDetails": "Impossible de charger les détails de l'événement. Veuillez réessayer plus tard.",
+    "eventNotFoundOrDeleted": "Événement introuvable ou supprimé",
+    "numberOfAttendees": "Nombre de participants"
   },
   "onSpotAttendee": {
     "title": "Participant sur place",
@@ -1589,11 +1606,21 @@
   },
   "checkIn": {
     "errorCheckingIn": "Erreur lors de l'enregistrement",
-    "checkedInSuccessfully": "Enregistrement réussi"
+    "checkedInSuccessfully": "Enregistrement réussi",
+    "eventCheckInManagement": "Gestion de l'enregistrement des événements",
+    "searchAttendees": "Rechercher des participants"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",
-    "errorRemovingAttendee": "Erreur lors de la suppression du participant"
+    "errorRemovingAttendee": "Erreur lors de la suppression du participant",
+    "pleaseChooseUser": "Veuillez d'abord choisir un utilisateur à ajouter !",
+    "eventRegistrants": "Inscrits à l'événement",
+    "noRegistrationsFound": "Aucune inscription trouvée",
+    "addOnspotRegistration": "Ajouter une inscription sur place",
+    "addRegistrant": "Ajouter un inscrit",
+    "chooseUserToAdd": "Choisissez l'utilisateur que vous souhaitez ajouter",
+    "inviteByEmail": "Inviter par e-mail",
+    "addRegistrantButton": "Ajouter un inscrit"
   },
   "userCampaigns": {
     "title": "Campagnes de financement",

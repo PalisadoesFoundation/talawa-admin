@@ -47,6 +47,7 @@ import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import styles from 'style/app-fixed.module.css';
+import componentStyles from './EventRegistrants.module.css';
 import { useLazyQuery, useQuery, useMutation } from '@apollo/client';
 import {
   EVENT_REGISTRANTS,
@@ -58,6 +59,7 @@ import { useParams } from 'react-router';
 import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
 import type { InterfaceUserAttendee } from 'types/User/interface';
+import { isInviteOnlyEnabled } from 'utils/featureFlags';
 
 function EventRegistrants(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventRegistrant' });
@@ -74,7 +76,7 @@ function EventRegistrants(): JSX.Element {
 
   // First, get event details to determine if it's recurring or standalone
   const { data: eventData } = useQuery(EVENT_DETAILS, {
-    variables: { eventId: eventId },
+    variables: { eventId: eventId, includeInviteOnly: isInviteOnlyEnabled() },
     fetchPolicy: 'cache-first',
   });
 
@@ -138,7 +140,7 @@ function EventRegistrants(): JSX.Element {
     (userId: string): void => {
       // Check if user is already checked in
       if (checkedInUsers.includes(userId)) {
-        toast.error('Cannot unregister a user who has already checked in');
+        toast.error(t('cannotUnregisterCheckedIn'));
         return;
       }
 
@@ -149,11 +151,11 @@ function EventRegistrants(): JSX.Element {
 
       removeRegistrantMutation({ variables: removeVariables })
         .then(() => {
-          toast.success('Attendee removed successfully');
+          toast.success(t('attendeeRemovedSuccessfully'));
           refreshData(); // Refresh the data after removal
         })
         .catch((err) => {
-          toast.error('Error removing attendee');
+          toast.error(t('errorRemovingAttendee'));
           toast.error(err.message);
         });
     },
@@ -216,8 +218,7 @@ function EventRegistrants(): JSX.Element {
       </div>
       <TableContainer
         component={Paper}
-        className="mt-3"
-        sx={{ borderRadius: '16px' }}
+        className={`mt-3 ${componentStyles.tableContainer}`}
       >
         <Table aria-label={t('eventRegistrantsTable')} role="grid">
           <TableHead>

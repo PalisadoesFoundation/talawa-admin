@@ -1,0 +1,18 @@
+.modalHeader {
+  background-color: var(--tableHeader-bg);
+}
+
+.addOnspotLink {
+  color: var(--inputField-text-color);
+  text-decoration: underline;
+}
+
+.inviteButton {
+  background-color: var(--bs-success, #6cc9a6);
+  color: var(--bs-white);
+}
+
+.addRegistrantButton {
+  background-color: var(--addButton-bg);
+  color: var(--inputField-text-color);
+}

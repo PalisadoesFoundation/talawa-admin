@@ -882,7 +882,13 @@
     "agendas": "एजेंडे",
     "statistics": "आँकड़े",
     "to": "को",
-    "volunteers": "स्वयंसेवक"
+    "volunteers": "स्वयंसेवक",
+    "eventNotFound": "इवेंट नहीं मिला",
+    "noOfRegistrations": "पंजीकरण की संख्या",
+    "noOfAttendees": "उपस्थित लोगों की संख्या",
+    "averageFeedback": "औसत प्रतिक्रिया",
+    "location": "स्थान:",
+    "registrantsLabel": "कुलसचिव:"
   },
   "forgotPassword": {
     "title": "तलावा पासवर्ड भूल गए",
@@ -1216,7 +1222,10 @@
     "nextPage": "अगला पृष्ठ",
     "goToToday": "आज पर जाएं",
     "genderDistribution": "लिंग वितरण",
-    "ageDistribution": "आयु वितरण"
+    "ageDistribution": "आयु वितरण",
+    "errorLoadingEventDetails": "इवेंट विवरण लोड करने में त्रुटि। कृपया बाद में पुनः प्रयास करें।",
+    "attendedEventsList": "भाग लिए गए कार्यक्रमों की सूची",
+    "eventDate": "इवेंट की तारीख"
   },
   "eventRegistrant": {
     "sort": "छांटें",
@@ -1228,7 +1237,15 @@
     "createdAt": "निर्माण तिथि",
     "options": "विकल्प",
     "addRegistrant": "पंजीकृत व्यक्ति जोड़ें",
-    "noRegistrantsFound": "कोई पंजीकृत व्यक्ति नहीं मिला"
+    "noRegistrantsFound": "कोई पंजीकृत व्यक्ति नहीं मिला",
+    "cannotUnregisterCheckedIn": "एक उपयोगकर्ता को अनपंजीकृत नहीं कर सकते जो पहले से ही चेक-इन हो चुका है",
+    "attendeeRemovedSuccessfully": "उपस्थित व्यक्ति सफलतापूर्वक हटाया गया",
+    "errorRemovingAttendee": "उपस्थित व्यक्ति को हटाने में त्रुटि"
+  },
+  "memberActivity": {
+    "unableToLoadEventDetails": "इवेंट विवरण लोड करने में असमर्थ। कृपया बाद में पुनः प्रयास करें।",
+    "eventNotFoundOrDeleted": "इवेंट नहीं मिला या हटा दिया गया",
+    "numberOfAttendees": "उपस्थित लोगों की संख्या"
   },
   "onSpotAttendee": {
     "title": "ऑन-स्पॉट प्रतिभागी",
@@ -1589,11 +1606,21 @@
   },
   "checkIn": {
     "errorCheckingIn": "चेक-इन में त्रुटि",
-    "checkedInSuccessfully": "सफलतापूर्वक चेक-इन किया गया"
+    "checkedInSuccessfully": "सफलतापूर्वक चेक-इन किया गया",
+    "eventCheckInManagement": "इवेंट चेक-इन प्रबंधन",
+    "searchAttendees": "उपस्थित लोगों को खोजें"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
-    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि"
+    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि",
+    "pleaseChooseUser": "कृपया पहले जोड़ने के लिए एक उपयोगकर्ता चुनें!",
+    "eventRegistrants": "इवेंट पंजीकृत व्यक्ति",
+    "noRegistrationsFound": "कोई पंजीकरण नहीं मिला",
+    "addOnspotRegistration": "स्पॉट पर पंजीकरण जोड़ें",
+    "addRegistrant": "एक पंजीकृत व्यक्ति जोड़ें",
+    "chooseUserToAdd": "वह उपयोगकर्ता चुनें जिसे आप जोड़ना चाहते हैं",
+    "inviteByEmail": "ईमेल द्वारा आमंत्रित करें",
+    "addRegistrantButton": "पंजीकृत व्यक्ति जोड़ें"
   },
   "userCampaigns": {
     "title": "धन उगाहने के अभियान",
