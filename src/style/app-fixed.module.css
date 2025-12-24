@@ -1362,8 +1362,8 @@ form label,
 }
 
 .tableHeaders {
-  background-color: var(--bs-primary-text-emphasis);
-  color: var(--bs-white);
+  background-color: var(--bs-primary-text-emphasis, #052c65);
+  color: var(--bs-white, #fff);
   font-size: 1rem;
 }
 
@@ -4733,7 +4733,7 @@ form label,
 
 .cardHeader {
   padding: 1.25rem 1rem 1rem 1rem;
-  border-bottom: 1px solid var(--bs-gray-200);
+  border-bottom: 1px solid var(--bs-gray-200, #e9ecef);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -4890,7 +4890,7 @@ form label,
 
 .cardHeader {
   padding: 1.25rem 1rem 1rem 1rem;
-  border-bottom: 1px solid var(--bs-gray-200);
+  border-bottom: 1px solid var(--bs-gray-200, #e9ecef);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -4980,12 +4980,12 @@ form label,
 
 .opendrawer:hover {
   transition: background-color 0.5s ease;
-  background-color: var(--bs-primary);
+  background-color: var(--bs-primary, #0d6efd);
 }
 
 .collapseSidebarButton:hover {
   transition: background-color 0.5s ease;
-  background-color: var(--bs-primary);
+  background-color: var(--bs-primary, #0d6efd);
 }
 
 @media (max-width: 1120px) {
@@ -6285,7 +6285,7 @@ form {
   padding: 0.8rem 1rem 0 1rem;
   background-color: var(--leftDrawer-fixedModule-bg) !important;
   transition: 0.5s;
-  font-family: var(--bs-leftDrawer-font-family);
+  font-family: var(--bs-leftDrawer-font-family, inherit);
   overflow-x: hidden !important;
 }
 
@@ -7824,7 +7824,7 @@ form {
 }
 
 .btnsContainerSearchBar input {
-  outline: 1px solid var(--bs-gray-400);
+  outline: 1px solid var(--bs-gray-400, #ced4da);
 }
 
 .btnsContainerSearchBar .inputOrgList button {
@@ -7917,12 +7917,12 @@ form {
 }
 
 .itemCardOrgList .loadingWrapper {
-  background-color: var(--bs-white);
+  background-color: var(--bs-white, #fff);
   margin: 0.5rem;
   height: calc(120px + 2rem);
   padding: 1rem;
   border-radius: 8px;
-  outline: 1px solid var(--bs-gray-200, var(--bs-gray-300));
+  outline: 1px solid var(--bs-gray-200, var(--bs-gray-300, #e9ecef));
   position: relative;
 }
 
@@ -10092,7 +10092,7 @@ form {
 }
 
 .textRed {
-  color: var(--bs-danger);
+  color: var(--bs-danger, #dc3545);
 }
 
 .fontSize14 {
@@ -10104,7 +10104,7 @@ form {
 }
 
 .groupChatTableCellHead {
-  background-color: var(--bs-success) !important;
+  background-color: var(--bs-success, #198754) !important;
   color: white;
 }
 
