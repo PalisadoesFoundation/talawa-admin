@@ -569,20 +569,26 @@ describe('UserPortalNavigationBar', () => {
     });
 
     it('applies custom inline styles', () => {
-      const customStyles = { backgroundColor: 'red' };
+      const customClass = 'custom-bg-red';
+      // Create a temporary style element for testing
+      const style = document.createElement('style');
+      style.innerHTML = `.${customClass} { background-color: red; }`;
+      document.head.appendChild(style);
 
       const { container } = render(
         <MockedProvider mocks={[]}>
           <MemoryRouter>
-            <UserPortalNavigationBar mode="user" customStyles={customStyles} />
+            <UserPortalNavigationBar mode="user" className={customClass} />
           </MemoryRouter>
         </MockedProvider>,
       );
 
       const navbar = container.querySelector('nav');
 
-      expect(navbar).toHaveAttribute('style');
-      expect(navbar?.getAttribute('style')).toContain('background-color');
+      expect(navbar).toHaveClass(customClass);
+
+      // Cleanup
+      document.head.removeChild(style);
     });
   });
 
