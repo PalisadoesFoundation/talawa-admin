@@ -6,7 +6,7 @@
  *
  * @remarks
  * - The component uses useLocalStorage to retrieve user details such as name, role, and profile image.
- * - The user's role is determined based on the presence of SuperAdmin or AdminFor in local storage.
+ * - The user's role is determined based on the presence of Admin or AdminFor in local storage.
  * - If the user's full name exceeds the maximum length, it is truncated and appended with ellipses.
  * - The profile image is displayed if available; otherwise, a default avatar is shown.
  * - Clicking the chevron button navigates the user to different routes based on their role.
@@ -18,7 +18,7 @@
  * - `@mui/icons-material`: Provides the `ChevronRightIcon` for the navigation button.
  *
  * ### Local Storage Keys
- * - `SuperAdmin`: Boolean indicating if the user is a super admin.
+ * - `Admin`: Boolean indicating if the user is a admin.
  * - `AdminFor`: Array or string indicating the organizations the user is an admin for.
  * - `FirstName`: The user's first name.
  * - `LastName`: The user's last name.
@@ -84,7 +84,7 @@ const ProfileCard = ({
           {userImage && userImage !== 'null' ? (
             <img
               src={userImage}
-              alt={`profile picture`}
+              alt=""
               data-testid="display-img"
               crossOrigin="anonymous"
               onError={(e) => {
@@ -98,7 +98,7 @@ const ProfileCard = ({
               size={45}
               avatarStyle={styles.avatarStyle}
               name={`${firstName} ${lastName}`}
-              alt={`dummy picture`}
+              alt=""
             />
           )}
         </div>

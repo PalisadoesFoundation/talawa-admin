@@ -11,9 +11,10 @@ import styles from 'style/app-fixed.module.css';
 import { usePluginDrawerItems } from 'plugin';
 
 // Mock the local storage hook
+// Mock the local storage hook
 vi.mock('utils/useLocalstorage', () => ({
   default: vi.fn(() => ({
-    getItem: vi.fn((key) => (key === 'SuperAdmin' ? 'true' : null)),
+    getItem: vi.fn(() => null),
   })),
 }));
 
@@ -113,9 +114,9 @@ describe('LeftDrawer Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    // Reset to default super admin mock
+    // Reset to default mock
     vi.mocked(useLocalStorage).mockImplementation(() => ({
-      getItem: vi.fn((key) => (key === 'SuperAdmin' ? 'true' : null)),
+      getItem: vi.fn(() => null),
       setItem: vi.fn(),
       removeItem: vi.fn(),
       getStorageKey: vi.fn(() => ''),
@@ -140,21 +141,6 @@ describe('LeftDrawer Component', () => {
       expect(screen.getByTestId('usersBtn')).toBeInTheDocument();
       expect(screen.getByTestId('communityProfileBtn')).toBeInTheDocument();
       expect(screen.getByTestId('pluginStoreBtn')).toBeInTheDocument();
-    });
-
-    it('renders users button for all users', () => {
-      vi.mocked(useLocalStorage).mockImplementation(() => ({
-        getItem: vi.fn(() => null),
-        setItem: vi.fn(),
-        removeItem: vi.fn(),
-        getStorageKey: vi.fn(() => ''),
-        clearAllItems: vi.fn(),
-      }));
-
-      renderComponent();
-      expect(screen.getByTestId('organizationsBtn')).toBeInTheDocument();
-      expect(screen.getByTestId('usersBtn')).toBeInTheDocument();
-      expect(screen.getByTestId('communityProfileBtn')).toBeInTheDocument();
     });
   });
 
@@ -237,7 +223,7 @@ describe('LeftDrawer Component', () => {
   describe('Navigation Behavior', () => {
     it('applies correct styles when on users route', () => {
       vi.mocked(useLocalStorage).mockImplementation(() => ({
-        getItem: vi.fn((key) => (key === 'SuperAdmin' ? 'true' : null)),
+        getItem: vi.fn(() => null),
         setItem: vi.fn(),
         removeItem: vi.fn(),
         getStorageKey: vi.fn(() => ''),
@@ -554,7 +540,7 @@ describe('LeftDrawer Component', () => {
 
     it('should handle non-admin users correctly for plugins', () => {
       vi.mocked(useLocalStorage).mockImplementation(() => ({
-        getItem: vi.fn(() => null), // Non-admin user (SuperAdmin is null)
+        getItem: vi.fn(() => null),
         setItem: vi.fn(),
         removeItem: vi.fn(),
         getStorageKey: vi.fn(() => ''),

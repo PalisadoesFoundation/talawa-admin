@@ -333,10 +333,6 @@ const userRoleEnum = [
     label: 'Admin',
   },
   {
-    value: 'SUPERADMIN',
-    label: 'Super Admin',
-  },
-  {
     value: 'NON_USER',
     label: 'Non-User',
   },

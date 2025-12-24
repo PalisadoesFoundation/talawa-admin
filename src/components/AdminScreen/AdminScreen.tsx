@@ -9,14 +9,14 @@
  * - Page titles are dynamically translated using `react-i18next`.
  * - Route segments are mapped to translation keys via the `map` object.
  *
- * @returns The rendered `SuperAdminScreen` component.
+ * @returns The rendered `AdminScreen` component.
  *
  * @example
  * ```tsx
- * import SuperAdminScreen from './SuperAdminScreen';
+ * import AdminScreen from './AdminScreen';
  *
  * function App() {
- *   return <SuperAdminScreen />;
+ *   return <AdminScreen />;
  * }
  * ```
  */
@@ -28,7 +28,7 @@ import { Outlet, useLocation } from 'react-router';
 import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
-const superAdminScreen = (): React.ReactElement => {
+const AdminScreen = (): React.ReactElement => {
   const location = useLocation();
   const { getItem, setItem } = useLocalStorage();
   const titleKey = map[location.pathname.split('/')[1]];
@@ -100,7 +100,7 @@ const superAdminScreen = (): React.ReactElement => {
   );
 };
 
-export default superAdminScreen;
+export default AdminScreen;
 
 /**
  * Map of route segments to translation keys for page titles.

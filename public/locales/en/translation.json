@@ -262,7 +262,6 @@
     "email": "email",
     "endOfResults": "endOfResults",
     "admin": "admin",
-    "superAdmin": "superAdmin",
     "user": "user",
     "filter": "filter",
     "noResultsFoundFor": "noResultsFoundFor",
@@ -982,7 +981,6 @@
     "email": "email",
     "password": "password",
     "admin": "admin",
-    "superAdmin": "superAdmin",
     "displayImage": "displayImage",
     "saveChanges": "saveChanges",
     "cancel": "cancel"

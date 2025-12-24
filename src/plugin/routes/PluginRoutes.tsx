@@ -9,6 +9,7 @@ import React, { lazy, Suspense } from 'react';
 import { Route } from 'react-router-dom';
 import { usePluginRoutes } from '../hooks';
 import type { IRouteExtension } from '../types';
+import { t } from 'i18next';
 
 interface IPluginRoutesProps {
   userPermissions?: string[];
@@ -20,11 +21,10 @@ interface IPluginRoutesProps {
  * Component that renders plugin routes dynamically
  */
 const PluginRoutes: React.FC<IPluginRoutesProps> = ({
-  userPermissions = [],
   isAdmin = false,
-  fallback = <div>Loading plugin...</div>,
+  fallback = <div>{t('Loading plugin...')}</div>,
 }) => {
-  const routes = usePluginRoutes(userPermissions, isAdmin);
+  const routes = usePluginRoutes(isAdmin);
   const safeRoutes = Array.isArray(routes) ? routes : [];
 
   const renderPluginRoute = (route: IRouteExtension) => {
@@ -60,13 +60,14 @@ const PluginRoutes: React.FC<IPluginRoutesProps> = ({
                 }}
               >
                 <h3 style={{ color: '#dc3545', marginBottom: '16px' }}>
-                  Plugin Error
+                  {t('Plugin Error')}
                 </h3>
                 <p style={{ color: '#6c757d', marginBottom: '8px' }}>
-                  Failed to load component: <strong>{route.component}</strong>
+                  {t('Failed to load component:')}{' '}
+                  <strong>{route.component}</strong>
                 </p>
                 <p style={{ color: '#6c757d', marginBottom: '8px' }}>
-                  Plugin: <strong>{route.pluginId}</strong>
+                  {t('Plugin:')} <strong>{route.pluginId}</strong>
                 </p>
                 <p style={{ color: '#6c757d', fontSize: '14px' }}>
                   {error.message}

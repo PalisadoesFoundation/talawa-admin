@@ -4,7 +4,7 @@ declare global {
   namespace Cypress {
     interface Chainable<Subject> {
       /**
-       * @param role - The user role (e.g., 'superadmin', 'admin', 'user')
+       * @param role - The user role (e.g., 'admin', 'user')
        */
       loginByApi(role: string): Chainable<Subject>;
       /**

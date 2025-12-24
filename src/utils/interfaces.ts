@@ -2021,17 +2021,6 @@ export interface InterfaceQueryBlockPageMemberListItem {
  * @property {string} user.registeredEvents._id - The unique identifier of the registered event.
  * @property {object[]} user.membershipRequests - An array of membership requests made by the user.
  * @property {string} user.membershipRequests.id - The unique identifier of the membership request.
- * @property {object} appUserProfile - The application user profile.
- * @property {string} appUserProfile._id - The unique identifier of the app user profile.
- * @property {object[]} appUserProfile.adminFor - An array of organizations the user is an admin for.
- * @property {string} appUserProfile.adminFor._id - The unique identifier of the organization.
- * @property {boolean} appUserProfile.isSuperAdmin - Indicates if the user is a super admin.
- * @property {object[]} appUserProfile.createdOrganizations - An array of organizations created by the user.
- * @property {string} appUserProfile.createdOrganizations._id - The unique identifier of the created organization.
- * @property {object[]} appUserProfile.createdEvents - An array of events created by the user.
- * @property {string} appUserProfile.createdEvents._id - The unique identifier of the created event.
- * @property {object[]} appUserProfile.eventAdmin - An array of events the user is an admin for.
- * @property {string} appUserProfile.eventAdmin._id - The unique identifier of the event.
  */
 export interface InterfaceQueryUserListItem {
   id: string;
@@ -2080,14 +2069,6 @@ export interface InterfaceQueryUserListItem {
         };
       };
     }[];
-  };
-  /**
-   * Optional app user profile with administrative metadata.
-   * Note: This field is present in several GraphQL responses and is optional.
-   */
-  appUserProfile?: {
-    isSuperAdmin?: boolean;
-    adminFor?: Array<{ _id: string }>;
   };
 }
 
@@ -2157,14 +2138,6 @@ export interface InterfaceQueryUserListItemForAdmin {
         };
       };
     }[];
-  };
-  /**
-   * Optional app user profile with administrative metadata.
-   * Note: This field is present in several GraphQL responses and is optional.
-   */
-  appUserProfile?: {
-    isSuperAdmin?: boolean;
-    adminFor?: Array<{ _id: string }>;
   };
 }
 

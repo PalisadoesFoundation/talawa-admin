@@ -262,7 +262,6 @@
     "email": "ईमेल",
     "endOfResults": "परिणाम समाप्त",
     "admin": "प्रशासक",
-    "superAdmin": "सुपर प्रशासक",
     "user": "उपयोगकर्ता",
     "filter": "फ़िल्टर",
     "noResultsFoundFor": "कोई परिणाम नहीं मिला",
@@ -930,7 +929,6 @@
     "email": "ईमेल",
     "password": "पासवर्ड",
     "admin": "प्रशासक",
-    "superAdmin": "सुपर प्रशासक",
     "displayImage": "प्रदर्शन छवि",
     "saveChanges": "परिवर्तन सहेजें",
     "cancel": "रद्द करें"

@@ -6,6 +6,6 @@
 
 > `const` **PluginRoutes**: `React.FC`\<`IPluginRoutesProps`\>
 
-Defined in: [src/plugin/routes/PluginRoutes.tsx:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/routes/PluginRoutes.tsx#L22)
+Defined in: [src/plugin/routes/PluginRoutes.tsx:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/routes/PluginRoutes.tsx#L23)
 
 Component that renders plugin routes dynamically

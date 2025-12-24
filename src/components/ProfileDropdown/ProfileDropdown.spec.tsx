@@ -45,8 +45,8 @@ beforeEach(() => {
     'UserImage',
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
   );
-  setItem('SuperAdmin', false);
-  setItem('AdminFor', []);
+  setItem('Admin', false);
+
   setItem('id', '123');
 });
 
@@ -201,7 +201,7 @@ describe('ProfileDropdown Component', () => {
 
   test('navigates to /member/:orgId for non-user roles when orgId is not present', async () => {
     window.history.pushState({}, 'Test page', '/orglist');
-    setItem('SuperAdmin', true); // Set as admin
+    setItem('Admin', true); // Set as admin
     setItem('id', '123');
 
     render(
@@ -229,7 +229,7 @@ describe('ProfileDropdown Component', () => {
 
   test('navigates to /member/:userID for non-user roles', async () => {
     window.history.pushState({}, 'Test page', '/321');
-    setItem('SuperAdmin', true); // Set as admin
+    setItem('Admin', true); // Set as admin
     setItem('id', '123');
 
     render(

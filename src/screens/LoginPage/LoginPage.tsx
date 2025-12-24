@@ -375,6 +375,12 @@ const loginPage = (): JSX.Element => {
         }
         const loggedInUserId = user.id;
 
+        if (user.role === 'administrator') {
+          setItem('Admin', true);
+        } else {
+          setItem('Admin', false);
+        }
+
         setItem('token', authenticationToken);
         setItem('refreshToken', refreshToken);
         setItem('IsLoggedIn', 'TRUE');
@@ -453,7 +459,7 @@ const loginPage = (): JSX.Element => {
                 >
                   <img
                     src={data.community.logoURL}
-                    alt="Community Logo"
+                    alt=""
                     data-testid="preLoginLogo"
                   />
                   <p className="text-center">{data.community.name}</p>
@@ -906,7 +912,7 @@ const loginPage = (): JSX.Element => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label="Organizations"
+                            label=""
                             className={styles.selectOrgText}
                           />
                         )}

@@ -71,9 +71,6 @@ const MOCKS = [
           address: { line1: 'line1', state: 'state', countryCode: 'IND' },
           phone: { mobile: '+8912313112' },
           userType: 'USER',
-          appUserProfile: {
-            adminFor: [],
-          },
         },
       },
     },
@@ -90,28 +87,6 @@ const ADMIN_MOCKS = [
           name: 'Admin User',
           emailAddress: 'admin@example.com',
           userType: 'ADMIN',
-          appUserProfile: {
-            adminFor: [{ _id: 'org1' }, { _id: 'org2' }],
-          },
-        },
-      },
-    },
-  },
-];
-
-const SUPER_ADMIN_MOCKS = [
-  {
-    request: { query: CURRENT_USER },
-    result: {
-      data: {
-        currentUser: {
-          id: '789',
-          name: 'Super Admin',
-          emailAddress: 'superadmin@example.com',
-          userType: 'SUPERADMIN',
-          appUserProfile: {
-            adminFor: [{ _id: 'org1' }, { _id: 'org2' }, { _id: 'org3' }],
-          },
         },
       },
     },
@@ -128,7 +103,6 @@ const ERROR_MOCKS = [
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink([], true);
 const adminLink = new StaticMockLink(ADMIN_MOCKS, true);
-const superAdminLink = new StaticMockLink(SUPER_ADMIN_MOCKS, true);
 const errorLink = new StaticMockLink(ERROR_MOCKS, true);
 
 const renderApp = (mockLink = link, initialRoute = '/') => {
@@ -202,88 +176,27 @@ describe('Testing the App Component', () => {
     });
   });
 
-  it('should handle regular user permissions correctly', async () => {
+  it('should handle plugin routes for regular user', async () => {
     const { usePluginRoutes } = await import('./plugin');
 
     renderApp();
 
     await waitFor(() => {
       // Regular user should have empty permissions array
-      expect(usePluginRoutes).toHaveBeenCalledWith([], false, false); // userGlobalPluginRoutes
-      expect(usePluginRoutes).toHaveBeenCalledWith([], false, true); // userOrgPluginRoutes
+      expect(usePluginRoutes).toHaveBeenCalledWith(false, false); // userGlobalPluginRoutes
+      expect(usePluginRoutes).toHaveBeenCalledWith(false, true); // userOrgPluginRoutes
     });
   });
 
-  it('should handle admin user permissions correctly', async () => {
+  it('should handle plugin routes for admin user', async () => {
     const { usePluginRoutes } = await import('./plugin');
 
     renderApp(adminLink);
 
     await waitFor(() => {
       // Admin should have org permissions
-      expect(usePluginRoutes).toHaveBeenCalledWith(
-        ['org1', 'org2'],
-        true,
-        false,
-      ); // adminGlobalPluginRoutes
-      expect(usePluginRoutes).toHaveBeenCalledWith(
-        ['org1', 'org2'],
-        true,
-        true,
-      ); // adminOrgPluginRoutes
-    });
-  });
-
-  it('should handle super admin user permissions correctly', async () => {
-    const { usePluginRoutes } = await import('./plugin');
-
-    renderApp(superAdminLink);
-
-    await waitFor(() => {
-      // Super admin should have org permissions
-      expect(usePluginRoutes).toHaveBeenCalledWith(
-        ['org1', 'org2', 'org3'],
-        true,
-        false,
-      );
-      expect(usePluginRoutes).toHaveBeenCalledWith(
-        ['org1', 'org2', 'org3'],
-        true,
-        true,
-      );
-    });
-  });
-
-  it('should handle user data with no admin organizations', async () => {
-    const noAdminMocks = [
-      {
-        request: { query: CURRENT_USER },
-        result: {
-          data: {
-            currentUser: {
-              id: '999',
-              name: 'Regular User',
-              emailAddress: 'user@example.com',
-              userType: 'USER',
-              appUserProfile: {
-                adminFor: null, // Test null case
-              },
-            },
-          },
-        },
-      },
-    ];
-
-    const noAdminLink = new StaticMockLink(noAdminMocks, true);
-    renderApp(noAdminLink);
-
-    await wait();
-
-    // Should handle null adminFor gracefully
-    expect(document.body).toBeInTheDocument();
-    // Verify plugin system is initialized even with null adminFor
-    await waitFor(() => {
-      expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
+      expect(usePluginRoutes).toHaveBeenCalledWith(true, false); // adminGlobalPluginRoutes
+      expect(usePluginRoutes).toHaveBeenCalledWith(true, true); // adminOrgPluginRoutes
     });
   });
 
@@ -348,37 +261,6 @@ describe('Testing the App Component', () => {
     });
   });
 
-  it('should handle user without appUserProfile', async () => {
-    const noProfileMocks = [
-      {
-        request: { query: CURRENT_USER },
-        result: {
-          data: {
-            currentUser: {
-              id: '555',
-              name: 'No Profile User',
-              emailAddress: 'noprofile@example.com',
-              userType: 'USER',
-              // Missing appUserProfile
-            },
-          },
-        },
-      },
-    ];
-
-    const noProfileLink = new StaticMockLink(noProfileMocks, true);
-    renderApp(noProfileLink);
-
-    await wait();
-
-    // Should handle missing appUserProfile gracefully
-    expect(document.body).toBeInTheDocument();
-    // Verify plugin system is initialized even without appUserProfile
-    await waitFor(() => {
-      expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
-    });
-  });
-
   it('should handle different plugin route types correctly', async () => {
     const { usePluginRoutes } = await import('./plugin');
 
@@ -438,15 +320,6 @@ describe('Testing the App Component', () => {
       // Restore original lazy
       React.lazy = originalLazy;
     }
-  });
-
-  it('should correctly determine isAdmin and isSuperAdmin flags', async () => {
-    renderApp(superAdminLink);
-
-    await waitFor(() => {
-      // Verify plugin system is initialized
-      expect(mockPluginManager.setApolloClient).toHaveBeenCalled();
-    });
   });
 
   it('should handle user with userType ADMIN correctly', async () => {

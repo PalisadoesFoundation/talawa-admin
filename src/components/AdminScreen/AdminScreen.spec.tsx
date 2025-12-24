@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
-import SuperAdminScreen from './SuperAdminScreen';
+import AdminScreen from './AdminScreen';
 import { describe, test, expect, vi } from 'vitest';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
@@ -58,7 +58,7 @@ const resizeWindow = (width: number): void => {
   fireEvent(window, new window.Event('resize'));
 };
 
-describe('Testing LeftDrawer in SuperAdminScreen', () => {
+describe('Testing LeftDrawer in AdminScreen', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -76,7 +76,7 @@ describe('Testing LeftDrawer in SuperAdminScreen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <SuperAdminScreen />
+              <AdminScreen />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>

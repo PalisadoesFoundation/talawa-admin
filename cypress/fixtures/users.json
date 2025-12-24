@@ -1,9 +1,4 @@
 {
-  "superAdmin": {
-    "email": "testsuperadmin@example.com",
-    "name": "Wilt Shepherd",
-    "password": "Pass@123"
-  },
   "admin": {
     "email": "testadmin1@example.com",
     "name": "Vyvyan Kerry",

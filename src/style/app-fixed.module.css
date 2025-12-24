@@ -990,9 +990,12 @@
   overflow: hidden;
 
   /* Flex properties to make it sit on the same line */
-  flex-grow: 1; /* Allow it to grow to fill space */
-  flex-shrink: 1; /* Allow it to shrink if needed */
-  width: auto; /* Stop forcing 100% width */
+  flex-grow: 1;
+  /* Allow it to grow to fill space */
+  flex-shrink: 1;
+  /* Allow it to shrink if needed */
+  width: auto;
+  /* Stop forcing 100% width */
   min-width: 200px;
   max-width: 100%;
   height: 48px;
@@ -1374,8 +1377,10 @@ form label,
 .calendar__controls {
   display: flex;
   align-items: center;
-  gap: 12px; /* Space between the Sort, Create, and Bell icons */
-  flex-shrink: 0; /* Prevents buttons from getting squished */
+  gap: 12px;
+  /* Space between the Sort, Create, and Bell icons */
+  flex-shrink: 0;
+  /* Prevents buttons from getting squished */
   white-space: nowrap;
 }
 
@@ -4251,7 +4256,7 @@ form label,
 
 /* -- OrganizationScreen.tsx -- */
 
-/* -- SuperAdminScreen.tsx -- */
+/* -- AdminScreen.tsx -- */
 
 .navContainer {
   display: flex;
@@ -7795,7 +7800,8 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 12px; /* bring controls closer together */
+  margin-left: 12px;
+  /* bring controls closer together */
   gap: 12px;
 }
 
@@ -7807,12 +7813,14 @@ form {
 }
 
 .btnsContainerSearchBar .inputOrgList {
-  flex: 1 1 640px; /* make input wider and flexible */
+  flex: 1 1 640px;
+  /* make input wider and flexible */
   max-width: 760px;
   position: relative;
   display: flex;
   align-items: center;
-  margin-left: 18px; /* gap from left */
+  margin-left: 18px;
+  /* gap from left */
 }
 
 .btnsContainerSearchBar input {
@@ -7820,7 +7828,8 @@ form {
 }
 
 .btnsContainerSearchBar .inputOrgList button {
-  width: 44px; /* slightly smaller square button */
+  width: 44px;
+  /* slightly smaller square button */
   height: 38px;
   margin-left: 8px;
   flex: 0 0 44px;
@@ -8304,6 +8313,7 @@ form {
 .switch :global(.form-check-input) {
   margin-inline-start: -1.7em;
 }
+
 .checkboxdiv {
   display: flex;
   margin-bottom: 5px;
@@ -9952,6 +9962,7 @@ form {
   justify-content: flex-end;
   padding-bottom: 10px;
 }
+
 .manageBtn,
 .withdrawBtn,
 .outlineBtn {
@@ -10018,6 +10029,7 @@ form {
   .calendar__header {
     flex-wrap: wrap !important;
   }
+
   .btnsBlock {
     width: 100% !important;
     justify-content: flex-end !important;
@@ -10027,11 +10039,13 @@ form {
 
 .btnsBlock > * {
   margin: 0 !important;
-  height: 100% !important; /* Fill the container's 48px */
+  height: 100% !important;
+  /* Fill the container's 48px */
   display: flex !important;
   align-items: center !important;
   min-height: auto !important;
 }
+
 /* ----------------------------------------------------- */
 .orgListContainer {
   padding-left: 40px;
