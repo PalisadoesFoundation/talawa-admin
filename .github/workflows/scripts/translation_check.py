@@ -1,9 +1,4 @@
-"""
-i18n Translation Tag Checker.
-
-This module provides functionality to scan source files for translation tags
-and validate them against locale JSON files.
-"""
+"""Validates i18n translation tags in the codebase against locale JSON files."""
 
 from __future__ import annotations
 
@@ -17,8 +12,7 @@ from pathlib import Path
 
 
 def get_translation_keys(json_data: dict, prefix: str = "") -> set[str]:
-    """
-    Recursively extract all dot-notation keys from a nested dictionary.
+    """Recursively extract all dot-notation keys from a nested dictionary.
 
     Args:
         json_data: The dictionary containing translation data.
@@ -38,8 +32,7 @@ def get_translation_keys(json_data: dict, prefix: str = "") -> set[str]:
 
 
 def find_translation_tags(content_or_path: str | Path) -> set[str]:
-    """
-    Extract translation tags from a string or file path using regex.
+    """Extract translation tags from a string or file path using regex.
 
     Args:
         content_or_path: String content or Path object to a source file.
@@ -68,8 +61,7 @@ def find_translation_tags(content_or_path: str | Path) -> set[str]:
 
 
 def load_locale_keys(locales_path: str) -> set[str]:
-    """
-    Load all translation keys from common, translation, and error JSON files.
+    """Load all translation keys from common, translation, and error JSON files.
 
     Args:
         locales_path: Path to the directory containing locale JSON files.
@@ -107,8 +99,7 @@ def get_target_files(
     directories: list[str] | None,
     extensions: Iterable[str],
 ) -> list[Path]:
-    """
-    Collect and filter files for scanning based on extensions and exclusions.
+    """Collect and filter files for scanning based on extensions and exclusions.
 
     Args:
         files: Specific file paths to include.
