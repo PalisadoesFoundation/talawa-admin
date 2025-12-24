@@ -1994,7 +1994,7 @@ describe('Extra coverage for 100 %', () => {
 
     // Should show generic account locked message (without countdown)
     expect(toastMocks.error).toHaveBeenCalledWith(
-      'Account is temporarily locked due to too many failed login attempts. Please try again later.',
+      i18nForTest.t('errors:accountLocked'),
       expect.any(Object),
     );
   });
