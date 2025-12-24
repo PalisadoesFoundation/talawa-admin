@@ -56,7 +56,7 @@ export class AdvertisementPage {
       .should('be.visible')
       .selectFile(mediaPath, { force: true });
     cy.get(this._adTypeSelect).should('be.visible').select(type);
-    cy.get(this._registerAdBtn).should('be.visible').click();
+    cy.get(this._registerAdBtn).should('be.visible').scrollIntoView().click();
     cy.get(this._alert)
       .should('be.visible')
       .and('contain.text', 'Advertisement created successfully.');
@@ -69,7 +69,7 @@ export class AdvertisementPage {
     cy.get(this._dropdownBtn).should('be.visible').click();
     cy.get(this._editBtn).should('be.visible').trigger('click');
     cy.get(this._adNameInput).should('be.visible').clear().type(newName);
-    cy.get(this._saveChangesBtn).should('be.visible').click();
+    cy.get(this._saveChangesBtn).should('be.visible').scrollIntoView().click();
     cy.get(this._alert)
       .should('be.visible')
       .and('contain.text', 'Advertisement updated Successfully');
@@ -81,7 +81,10 @@ export class AdvertisementPage {
     cy.contains(adName).should('be.visible');
     cy.get(this._dropdownBtn).should('be.visible').click();
     cy.get(this._deleteBtn).should('be.visible').trigger('click');
-    cy.get(this._deleteConfirmBtn).should('be.visible').click();
+    cy.get(this._deleteConfirmBtn)
+      .should('be.visible')
+      .scrollIntoView()
+      .click();
     cy.get(this._alert)
       .should('be.visible')
       .and('contain.text', 'Advertisement deleted successfully.');

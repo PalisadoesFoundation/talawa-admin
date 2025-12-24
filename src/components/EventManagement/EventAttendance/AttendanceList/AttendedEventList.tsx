@@ -7,7 +7,7 @@
  *
  * @component
  * @param {Partial<InterfaceEvent>} props - Partial properties of the event interface.
- * @param {string} [props._id] - The unique identifier of the event to fetch details for.
+ * @param {string} [props.id] - The unique identifier of the event to fetch details for.
  *
  * @returns {React.ReactElement} A React component that displays a list of attended events.
  *
@@ -19,7 +19,7 @@
  *
  * @example
  * ```tsx
- * <AttendedEventList _id="event123" />
+ * <AttendedEventList id="event123" />
  * ```
  *
  * @dependencies

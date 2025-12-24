@@ -21,7 +21,6 @@ vi.mock('utils/featureFlags', () => ({
 describe('CustomTableCell', () => {
   afterEach(() => {
     vi.clearAllMocks();
-    vi.restoreAllMocks();
   });
   it('renders event details correctly', async () => {
     render(
@@ -81,7 +80,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event999', includeInviteOnly: false },
+          variables: { eventId: 'event123', includeInviteOnly: false },
         },
         error: new Error('An error occurred'),
       },

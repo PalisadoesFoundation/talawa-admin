@@ -23,7 +23,7 @@ export class AdminEventPage {
     cy.get(this._eventTitleInput).should('be.visible').type(title);
     cy.get(this._eventDescriptionInput).should('be.visible').type(description);
     cy.get(this._eventLocationInput).should('be.visible').type(location);
-    cy.get(this._createEventBtn).should('be.visible').click();
+    cy.get(this._createEventBtn).should('be.visible').scrollIntoView().click();
     cy.assertToast('Congratulations! The Event is created.');
   }
 
@@ -45,7 +45,10 @@ export class AdminEventPage {
       .should('be.visible')
       .clear()
       .type(location);
-    cy.get(this._previewUpdateEventBtn).should('be.visible').click();
+    cy.get(this._previewUpdateEventBtn)
+      .should('be.visible')
+      .scrollIntoView()
+      .click();
     cy.assertToast('Event updated successfully.');
   }
 
