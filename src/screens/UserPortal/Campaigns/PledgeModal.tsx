@@ -53,6 +53,7 @@ import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { errorHandler } from 'utils/errorHandler';
 import {
   Autocomplete,
   FormControl,
@@ -200,10 +201,10 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         refetchPledge();
         hide();
       } catch (error: unknown) {
-        NotificationToast.error((error as Error).message);
+        errorHandler(t, error);
       }
     },
-    [formState, pledge],
+    [formState, pledge, t],
   );
 
   /**
@@ -239,7 +240,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         });
         hide();
       } catch (error: unknown) {
-        NotificationToast.error((error as Error).message);
+        errorHandler(t, error);
       }
     },
     [
@@ -248,6 +249,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       pledgeAmount,
       pledgeCurrency,
       pledgeUsers,
+      t,
       createPledge,
       t,
       refetchPledge,

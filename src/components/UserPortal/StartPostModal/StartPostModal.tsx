@@ -151,7 +151,11 @@ const startPostModal = ({
         throw new Error("Can't create a post with an empty body.");
       }
 
-      NotificationToast.info('Processing your post. Please wait.');
+      NotificationToast.info({
+        key: 'processingPost',
+        namespace: 'translation',
+        keyPrefix: 'home',
+      });
 
       let attachment = null;
 
