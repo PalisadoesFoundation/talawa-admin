@@ -23,20 +23,7 @@ import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './Groups.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, afterEach, beforeEach, describe, it, expect } from 'vitest';
 
-type LSApi = ReturnType<typeof useLocalStorage>;
-let setItem: LSApi['setItem'];
-let removeItem: LSApi['removeItem'];
-
-beforeEach(() => {
-  const ls = useLocalStorage();
-  setItem = ls.setItem;
-  removeItem = ls.removeItem;
-
-  // Seed guard keys for every test
-  setItem('IsLoggedIn', 'TRUE');
-  setItem('userId', '123'); // if this screen reads it
-  removeItem('AdminFor'); // must be absent (== undefined)
-});
+const { setItem, clearAllItems } = useLocalStorage();
 
 const routerMocks = vi.hoisted(() => ({
   useParams: vi.fn(() => ({ orgId: 'orgId' })),
@@ -123,6 +110,7 @@ describe('Testing Groups Screen', () => {
     cleanup();
     vi.clearAllMocks();
     routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
+    clearAllItems();
   });
 
   /**
