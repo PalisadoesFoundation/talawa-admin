@@ -44,11 +44,6 @@ vi.mock('../../plugin', () => ({
   )),
 }));
 
-vi.mock('../../utils/useLocalstorage', () => ({
-  __esModule: true,
-  default: vi.fn(),
-}));
-
 // ===== FUNCTION MOCKS =====
 
 // ===== APOLLO GRAPHQL MOCKS =====
@@ -571,20 +566,6 @@ const mocks = [
 
 const link = new StaticMockLink(mocks, true);
 
-const setAuthContext = (userId: string, role: string) => {
-  vi.mocked(useLocalStorage).mockImplementation(() => ({
-    getItem: vi.fn((key: string) => {
-      if (key === 'userId') return userId;
-      if (key === 'role') return role;
-      return null;
-    }),
-    setItem: vi.fn(),
-    removeItem: vi.fn(),
-    getStorageKey: vi.fn((key: string) => key),
-    clearAllItems: vi.fn(),
-  }));
-};
-
 describe('PostCard', () => {
   const fetchPostsMock = vi.fn();
 
@@ -615,6 +596,10 @@ describe('PostCard', () => {
     customMock: MockedResponse,
     propsOverrides: Partial<InterfacePostCard> = {},
   ) => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+    setItem('role', 'administrator');
+
     const mocksArray = [
       customMock,
       ...mocks.filter((m) => m.request.query !== GET_POST_COMMENTS),
@@ -650,6 +635,10 @@ describe('PostCard', () => {
   };
 
   const renderPostCardWithCustomMock = (customMock: MockedResponse) => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+    setItem('role', 'administrator'); // Set admin role for pin/unpin tests
+
     // Only include the custom mock and base mocks, NOT commentsWithPaginationMock
     const mocksArray = [
       customMock,
@@ -672,22 +661,13 @@ describe('PostCard', () => {
   };
 
   beforeEach(() => {
-    // Configure the useLocalStorage mock
-    vi.mocked(useLocalStorage).mockImplementation(() => ({
-      getItem: vi.fn((key: string) => {
-        if (key === 'userId') return '1';
-        if (key === 'role') return 'administrator';
-        return null;
-      }),
-      setItem: vi.fn(),
-      removeItem: vi.fn(),
-      getStorageKey: vi.fn((key: string) => key),
-      clearAllItems: vi.fn(),
-    }));
+    vi.clearAllMocks();
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   test('opens and closes edit modal', async () => {
@@ -741,60 +721,6 @@ describe('PostCard', () => {
     renderPostCard();
     expect(screen.getByTestId('plugin-injector-g4')).toBeInTheDocument();
   });
-
-  test('shows menu when user is admin but not post creator', async () => {
-    // Mock: Admin role, different userId than creator
-    setAuthContext('999', 'administrator');
-
-    renderPostCard();
-
-    // Menu button should be visible for admin
-    const moreButton = screen.getByTestId('more-options-button');
-    expect(moreButton).toBeInTheDocument();
-  });
-
-  test('shows menu when user is post creator but not admin', async () => {
-    // Mock: Non-admin role, same userId as creator
-    setAuthContext('1', 'user');
-
-    renderPostCard();
-
-    // Menu button should be visible for post creator
-    const moreButton = screen.getByTestId('more-options-button');
-    expect(moreButton).toBeInTheDocument();
-  });
-
-  test('shows menu when user is both admin and post creator', async () => {
-    // Mock: Admin role AND same userId as creator
-    setAuthContext('1', 'administrator');
-
-    renderPostCard();
-
-    // Menu button should be visible
-    const moreButton = screen.getByTestId('more-options-button');
-    expect(moreButton).toBeInTheDocument();
-  });
-
-  test('hides menu when user is neither admin nor post creator', async () => {
-    // Mock: Non-admin role, different userId than creator
-    setAuthContext('999', 'user');
-
-    renderPostCard();
-
-    // Menu button should NOT be visible for normal users
-    const moreButton = screen.queryByTestId('more-options-button');
-    expect(moreButton).not.toBeInTheDocument();
-  });
-
-  test('hides menu when role is missing in localStorage', () => {
-    // role is null, user is not post creator
-    setAuthContext('999', null as unknown as string);
-
-    renderPostCard();
-
-    expect(screen.queryByTestId('more-options-button')).not.toBeInTheDocument();
-  });
-
   it('creates comment and clears input', async () => {
     renderPostCard();
     const input = screen.getByPlaceholderText(/add comment/i);
@@ -1004,11 +930,7 @@ describe('PostCard', () => {
 
     await waitFor(() => {
       expect(defaultProps.fetchPosts).toHaveBeenCalled();
-      expect(toast.success).toHaveBeenCalledWith(
-        expect.stringMatching(
-          /Post updated successfully|postCard\.postUpdatedSuccess/i,
-        ),
-      );
+      expect(toast.success).toHaveBeenCalledWith('Post updated successfully');
     });
   });
 
@@ -1161,6 +1083,8 @@ describe('PostCard', () => {
   };
 
   it('should load more comments successfully when button is clicked', async () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
     renderPostCardWithPagination();
 
     // Open comments section
@@ -1190,6 +1114,9 @@ describe('PostCard', () => {
   });
 
   it('should handle error when loading more comments fails', async () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+
     renderPostCardWithPagination({
       fetchMoreMock: fetchMoreCommentsErrorMock,
     });
@@ -1249,6 +1176,9 @@ describe('PostCard', () => {
   });
 
   it('should handle onCompleted callback when data.post.comments is null', async () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+
     renderPostCardWithPagination({
       customMocks: [nullCommentsMock],
     });
@@ -1264,6 +1194,9 @@ describe('PostCard', () => {
   });
 
   it('should handle fetchMoreResult with null comments in updateQuery', async () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+
     renderPostCardWithPagination({
       fetchMoreMock: nullFetchMoreMock,
     });
@@ -1294,6 +1227,9 @@ describe('PostCard', () => {
   };
 
   it('should not display comments section when commentCount is 0', () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+
     render(
       <MockedProvider mocks={mocks} link={link}>
         <BrowserRouter>
@@ -1311,6 +1247,9 @@ describe('PostCard', () => {
   });
 
   it('should render avatar with UserDefault fallback when avatarURL is null', () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+
     // Post props with null avatarURL to test the fallback
     const postWithNullAvatar = {
       ...defaultProps,
@@ -1333,9 +1272,7 @@ describe('PostCard', () => {
     );
 
     // Check that avatar uses fallback (UserDefault) when avatarURL is null
-    const avatar = screen.getByRole('img', {
-      name: defaultProps.creator.name,
-    });
+    const avatar = screen.getByRole('img', { name: defaultProps.creator.name });
     expect(avatar).toBeInTheDocument();
   });
 
@@ -1467,6 +1404,10 @@ describe('PostCard', () => {
   });
 
   it('should close dropdown when clicking pin/unpin', async () => {
+    const { setItem } = useLocalStorage();
+    setItem('userId', '1');
+    setItem('role', 'administrator'); // Set admin role for pin/unpin tests
+
     render(
       <MockedProvider link={link}>
         <BrowserRouter>

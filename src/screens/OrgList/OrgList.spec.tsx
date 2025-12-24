@@ -52,20 +52,7 @@ vi.mock('shared-components/OrganizationCard/OrganizationCard', () => ({
   ),
 }));
 
-type LSApi = ReturnType<typeof useLocalStorage>;
-let setItem: LSApi['setItem'];
-let removeItem: LSApi['removeItem'];
-
-beforeEach(() => {
-  const ls = useLocalStorage();
-  setItem = ls.setItem;
-  removeItem = ls.removeItem;
-
-  // Seed guard keys for every test
-  setItem('IsLoggedIn', 'TRUE');
-  setItem('userId', '123'); // if this screen reads it
-  removeItem('AdminFor'); // must be absent (== undefined)
-});
+const { setItem, clearAllItems } = useLocalStorage();
 
 const mockLinks = {
   superAdmin: new StaticMockLink(MOCKS, true),
@@ -584,6 +571,7 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  clearAllItems();
   cleanup();
   vi.clearAllMocks();
 });

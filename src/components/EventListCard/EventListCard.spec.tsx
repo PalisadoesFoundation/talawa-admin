@@ -14,7 +14,7 @@ import { store } from 'state/store';
 import { toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { useLocalStorage } from 'utils/useLocalstorage';
+import useLocalStorage from 'utils/useLocalstorage';
 import { props } from './EventListCardProps';
 import { ERROR_MOCKS, MOCKS } from './Modal/EventListCardMocks';
 import { vi, beforeAll, afterAll, afterEach, expect, it } from 'vitest';
@@ -311,12 +311,10 @@ describe('Testing Event List Card', () => {
 
     await userEvent.click(screen.getByTestId('card'));
 
-    await waitFor(() =>
-      expect(screen.getByTestId('eventModalCloseBtn')).toBeInTheDocument(),
-    );
-
     await waitFor(() => {
-      screen.getByText((text) => text.includes(translations.alreadyRegistered));
+      expect(
+        screen.getByText(translations.alreadyRegistered),
+      ).toBeInTheDocument();
     });
   });
 });

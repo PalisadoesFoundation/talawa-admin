@@ -1142,7 +1142,6 @@
     "postDeletedSuccess": "Message supprimé avec succès.",
     "postPinnedSuccess": "Message épinglé avec succès.",
     "postUnpinnedSuccess": "Message désépinglé avec succès.",
-    "postUpdatedSuccess": "Message mis à jour avec succès.",
     "viewPost": "Voir le message",
     "editPost": "Modifier le message",
     "pinPost": "Épingler le message",
@@ -1154,8 +1153,7 @@
     "noMoreComments": "Plus de commentaires à charger",
     "postedOn": "Publié le {{date}}",
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
-    "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer.",
-    "moreOptions": "Plus d'options"
+    "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer."
   },
   "home": {
     "posts": "Des postes",

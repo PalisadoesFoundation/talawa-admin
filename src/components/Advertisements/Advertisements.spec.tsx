@@ -1139,9 +1139,8 @@ describe('Testing Advertisement Component', () => {
   it('authLink adds authorization header when token exists in localStorage', async () => {
     const mockToken = 'test-token-123';
 
-    // Spy on the mock's getItem function directly
     const getItemSpy = vi
-      .spyOn(localStorage, 'getItem')
+      .spyOn(window.localStorage, 'getItem')
       .mockImplementation((key: string) => {
         if (key === 'Talawa-admin_token') return mockToken;
         return null;
@@ -1163,11 +1162,14 @@ describe('Testing Advertisement Component', () => {
 
     expect(getItemSpy).toHaveBeenCalledWith('Talawa-admin_token');
     expect(getItemSpy).toHaveReturnedWith(mockToken);
+
+    getItemSpy.mockRestore();
   });
 
   it('authLink does not add authorization header when token is null in localStorage', async () => {
-    // Spy on the mock's getItem function directly
-    const getItemSpy = vi.spyOn(localStorage, 'getItem').mockReturnValue(null);
+    const getItemSpy = vi
+      .spyOn(window.localStorage, 'getItem')
+      .mockImplementation(() => null);
 
     render(
       <ApolloProvider client={client}>
@@ -1185,5 +1187,7 @@ describe('Testing Advertisement Component', () => {
 
     expect(getItemSpy).toHaveBeenCalledWith('Talawa-admin_token');
     expect(getItemSpy).toHaveReturnedWith(null);
+
+    getItemSpy.mockRestore();
   });
 });

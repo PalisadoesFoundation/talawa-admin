@@ -286,9 +286,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     await userEvent.click(screen.getByText('Settings'));
     expect(window.location.pathname).toBe('/user/settings');
   });
-
   it('Logs out the user and clears local storage', async () => {
-    // Create a fresh mock and extract clearAllItems for assertion
     const { mockClearAllItems } = createMock();
 
     render(
