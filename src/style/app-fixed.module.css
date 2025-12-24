@@ -10100,7 +10100,7 @@ form {
 }
 
 .tableContainerRounded {
-  border-radius: var(--table-head-radius);
+  border-radius: var(--table-head-radius, 20px);
 }
 
 .groupChatTableCellHead {
