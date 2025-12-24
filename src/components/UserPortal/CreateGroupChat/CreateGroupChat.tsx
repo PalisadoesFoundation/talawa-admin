@@ -68,6 +68,7 @@ import { useParams } from 'react-router';
 import Avatar from 'components/Avatar/Avatar';
 import { FiEdit } from 'react-icons/fi';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import { toast } from 'react-toastify';
 
 interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
@@ -148,49 +149,54 @@ export default function CreateGroupChat({
   }, [userIds]);
 
   async function handleCreateGroupChat(): Promise<void> {
-    const chatResult = await createChat({
-      variables: {
-        input: {
-          organizationId: currentOrg,
-          name: title,
-          description: description,
-          avatar: rawImageFile,
+    try {
+      const chatResult = await createChat({
+        variables: {
+          input: {
+            organizationId: currentOrg,
+            name: title,
+            description: description,
+            avatar: rawImageFile,
+          },
         },
-      },
-    });
-    const chatId = (chatResult.data as { createChat: { id: string } })
-      ?.createChat?.id;
+      });
+      const chatId = (chatResult.data as { createChat: { id: string } })
+        ?.createChat?.id;
 
-    if (chatId) {
-      if (userId) {
-        await createChatMembership({
-          variables: {
-            input: {
-              memberId: userId,
-              chatId,
-              role: 'administrator',
+      if (chatId) {
+        if (userId) {
+          await createChatMembership({
+            variables: {
+              input: {
+                memberId: userId,
+                chatId,
+                role: 'administrator',
+              },
             },
-          },
-        });
+          });
+        }
+
+        for (const memberId of userIds) {
+          await createChatMembership({
+            variables: {
+              input: {
+                memberId,
+                chatId,
+                role: 'regular',
+              },
+            },
+          });
+        }
       }
 
-      for (const memberId of userIds) {
-        await createChatMembership({
-          variables: {
-            input: {
-              memberId,
-              chatId,
-              role: 'regular',
-            },
-          },
-        });
-      }
+      chatsListRefetch();
+      toggleAddUserModal();
+      toggleCreateGroupChatModal();
+      reset();
+    } catch (error) {
+      console.error('Error creating group chat:', error);
+      toast.error('Failed to create group chat');
     }
-
-    chatsListRefetch();
-    toggleAddUserModal();
-    toggleCreateGroupChatModal();
-    reset();
   }
 
   const [userName, setUserName] = useState('');

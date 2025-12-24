@@ -62,8 +62,8 @@ interface IChatRoomProps {
   chatListRefetch: (
     variables?:
       | Partial<{
-          id: string;
-        }>
+        id: string;
+      }>
       | undefined,
   ) => Promise<ApolloQueryResult<{ chatList: GroupChat[] }>>;
 }
@@ -473,7 +473,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       const lastMessage =
         chatData.chat.messages.edges[chatData.chat.messages.edges.length - 1];
       markReadIfSupported(props.selectedContact, lastMessage.node.id)
-        .catch(() => {})
+        .catch(() => { })
         .finally(() => {
           props.chatListRefetch();
           unreadChatListRefetch();
@@ -567,14 +567,14 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       if (
         messageSubscriptionData?.data.data.chatMessageCreate &&
         messageSubscriptionData?.data.data.chatMessageCreate.chat?.id ===
-          props.selectedContact
+        props.selectedContact
       ) {
         const newMessage = messageSubscriptionData.data.data.chatMessageCreate;
         if (newMessage?.creator?.id === userId) {
           shouldAutoScrollRef.current = true;
         }
         await markReadIfSupported(props.selectedContact, newMessage.id).catch(
-          () => {},
+          () => { },
         );
 
         // Soft-append the new message to local state to avoid pagination issues.
@@ -598,14 +598,14 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                 },
                 parentMessage: newMessage.parentMessage
                   ? {
-                      id: newMessage.parentMessage.id,
-                      body: newMessage.parentMessage.body,
-                      createdAt: newMessage.parentMessage.createdAt,
-                      creator: {
-                        id: newMessage.parentMessage.creator.id,
-                        name: newMessage.parentMessage.creator.name,
-                      },
-                    }
+                    id: newMessage.parentMessage.id,
+                    body: newMessage.parentMessage.body,
+                    createdAt: newMessage.parentMessage.createdAt,
+                    creator: {
+                      id: newMessage.parentMessage.creator.id,
+                      name: newMessage.parentMessage.creator.name,
+                    },
+                  }
                   : undefined,
               },
             } as INewChat['messages']['edges'][0];
@@ -950,7 +950,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
               </button>
               <Form.Control
                 placeholder={t('sendMessage')}
-                aria-label="Send Message"
+                aria-label={t('sendMessage')}
                 value={newMessage}
                 data-testid="messageInput"
                 onChange={handleNewMessageChange}

@@ -1359,7 +1359,7 @@ describe('ChatRoom Component', () => {
 
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     renderChatRoom([ERROR_LOAD_MORE_MOCK]);
 
@@ -1805,7 +1805,7 @@ describe('ChatRoom Component', () => {
   it('handles error in handleImageChange when file upload fails', async () => {
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     // Override the mock to throw an error for this test
     mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
@@ -2748,7 +2748,7 @@ describe('ChatRoom Component', () => {
   it('handles fileInputRef.current being null in error catch block', async () => {
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     // Override the mock to throw an error
     mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
@@ -3091,7 +3091,7 @@ describe('ChatRoom Component', () => {
       // Mock console.error to catch any error logs
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => {});
+        .mockImplementation(() => { });
 
       render(
         <MockedProvider mocks={[]}>
@@ -3273,7 +3273,7 @@ describe('ChatRoom Component', () => {
       // Mock network errors that would occur without the skip fix
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => {});
+        .mockImplementation(() => { });
 
       render(
         <MockedProvider mocks={[]}>
@@ -3312,6 +3312,92 @@ describe('ChatRoom Component', () => {
       );
 
       consoleErrorSpy.mockRestore();
+    });
+
+    it('should normalize MinIO URLs and add crossOrigin attribute in chat header', async () => {
+      const minioAvatarUrl = 'http://minio:9000/bucket/chat-avatar.jpg';
+      const minioChatData = {
+        ...mockChatData,
+        avatarURL: minioAvatarUrl,
+      };
+      const MINIO_CHAT_MOCK = {
+        request: {
+          query: CHAT_BY_ID,
+          variables: {
+            input: { id: 'chat123' },
+            first: 10,
+            after: null,
+            lastMessages: 10,
+            beforeMessages: null,
+          },
+        },
+        result: {
+          data: {
+            chat: minioChatData,
+          },
+        },
+      };
+
+      renderChatRoom([MINIO_CHAT_MOCK]);
+      await waitFor(() => {
+        const img = screen.getByAltText('Test Chat');
+        expect(img).toHaveAttribute(
+          'src',
+          'http://localhost:9000/bucket/chat-avatar.jpg',
+        );
+        expect(img).toHaveAttribute('crossOrigin', 'anonymous');
+      });
+    });
+
+    it('should normalize MinIO URLs and add crossOrigin attribute for message creators in group chat', async () => {
+      const minioUserAvatarUrl = 'http://minio:9000/bucket/user-avatar.jpg';
+      const minioGroupChatData = {
+        ...mockGroupChatData,
+        messages: {
+          ...mockGroupChatData.messages,
+          edges: [
+            {
+              cursor: 'msgCursor1',
+              node: {
+                ...mockGroupChatData.messages.edges[0].node,
+                creator: {
+                  ...mockGroupChatData.messages.edges[0].node.creator,
+                  id: 'otherUser123',
+                  name: 'Other User',
+                  avatarURL: minioUserAvatarUrl,
+                },
+              },
+            },
+          ],
+        },
+      };
+      const MINIO_GROUP_CHAT_MOCK = {
+        request: {
+          query: CHAT_BY_ID,
+          variables: {
+            input: { id: 'chat123' },
+            first: 10,
+            after: null,
+            lastMessages: 10,
+            beforeMessages: null,
+          },
+        },
+        result: {
+          data: {
+            chat: minioGroupChatData,
+          },
+        },
+      };
+
+      renderChatRoom([MINIO_GROUP_CHAT_MOCK]);
+      await waitFor(() => {
+        const img = screen.getByAltText('Other User');
+        expect(img).toHaveAttribute(
+          'src',
+          'http://localhost:9000/bucket/user-avatar.jpg',
+        );
+        expect(img).toHaveAttribute('crossOrigin', 'anonymous');
+      });
     });
   });
 });

@@ -235,6 +235,57 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
       'src',
       expect.stringContaining('defaultImg.png'),
     );
+    expect(images[0]).toHaveAttribute('crossOrigin', 'anonymous');
     expect(images[1]).toHaveAttribute('src', 'mockImage');
+    expect(images[1]).toHaveAttribute('crossOrigin', 'anonymous');
+  });
+
+  it('Should normalize MinIO member images and add crossOrigin attribute', async () => {
+    mockId = 'minio-members';
+    const MINIO_MEMBER_MOCK = {
+      request: {
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: {
+          orgId: 'minio-members',
+          first: 3,
+          skip: 0,
+        },
+      },
+      result: {
+        data: {
+          organizationsMemberConnection: {
+            edges: [
+              {
+                _id: '1',
+                firstName: 'Minio',
+                lastName: 'User',
+                image: 'http://minio:9000/bucket/img.jpg',
+                email: 'minio@gmail.com',
+                createdAt: '2023-01-01T00:00:00Z',
+              },
+            ],
+          },
+        },
+      },
+    };
+
+    render(
+      <MockedProvider mocks={[MINIO_MEMBER_MOCK]}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <OrganizationSidebar />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+    await wait();
+    const images = screen.getAllByRole('img');
+    expect(images[0]).toHaveAttribute(
+      'src',
+      'http://localhost:9000/bucket/img.jpg',
+    );
+    expect(images[0]).toHaveAttribute('crossOrigin', 'anonymous');
   });
 });

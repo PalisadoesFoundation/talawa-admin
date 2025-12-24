@@ -14,6 +14,14 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import { testFile } from '../../GroupChatDetails/GroupChatDetailsMocks';
+import { toast } from 'react-toastify';
+
+vi.mock('react-toastify', () => ({
+  toast: {
+    error: vi.fn(),
+    success: vi.fn(),
+  },
+}));
 
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
@@ -514,5 +522,146 @@ describe('CreateGroupChat', () => {
     fireEvent.click(clearBtn);
 
     expect(searchInput).toHaveValue('');
+  });
+
+  test('should show error toast when createChat mutation fails', async () => {
+    const CREATE_CHAT_FAIL_MOCK = {
+      request: {
+        query: CREATE_CHAT,
+        variables: {
+          input: {
+            organizationId: 'test-org-id',
+            name: 'Fail Group',
+            description: '',
+            avatar: null,
+          },
+        },
+      },
+      error: new Error('Failed to create chat'),
+    };
+
+    const localMocks = [ORGANIZATION_MEMBERS_MOCK, CREATE_CHAT_FAIL_MOCK];
+
+    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => { });
+
+    render(
+      <MockedProvider mocks={localMocks}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Provider store={store}>
+            <CreateGroupChat
+              createGroupChatModalisOpen={true}
+              toggleCreateGroupChatModal={toggleCreateGroupChatModal}
+              chatsListRefetch={chatsListRefetch}
+            />
+          </Provider>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    fireEvent.change(screen.getByTestId('groupTitleInput'), {
+      target: { value: 'Fail Group' },
+    });
+    fireEvent.click(screen.getByTestId('nextBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId('createBtn'));
+
+    await waitFor(() => {
+      expect(toastErrorSpy).toHaveBeenCalledWith('Failed to create group chat');
+      expect(consoleErrorSpy).toHaveBeenCalled();
+    });
+
+    toastErrorSpy.mockRestore();
+    consoleErrorSpy.mockRestore();
+  });
+
+  test('should show error toast when createChatMembership mutation fails', async () => {
+    const CREATE_CHAT_MEMBER_FAIL_MOCK = {
+      request: {
+        query: CREATE_CHAT,
+        variables: {
+          input: {
+            organizationId: 'test-org-id',
+            name: 'Member Fail Group',
+            description: '',
+            avatar: null,
+          },
+        },
+      },
+      result: {
+        data: {
+          createChat: {
+            __typename: 'Chat',
+            id: 'member-fail-chat-id',
+            name: 'Member Fail Group',
+            description: '',
+            organization: {
+              __typename: 'Organization',
+              id: 'test-org-id',
+              name: 'Test Org Name',
+            },
+          },
+        },
+      },
+    };
+
+    const CREATE_CHAT_MEMBERSHIP_FAIL_MOCK = {
+      request: {
+        query: CREATE_CHAT_MEMBERSHIP,
+        variables: {
+          input: {
+            memberId: '1',
+            chatId: 'member-fail-chat-id',
+            role: 'administrator',
+          },
+        },
+      },
+      error: new Error('Failed to create membership'),
+    };
+
+    const localMocks = [
+      ORGANIZATION_MEMBERS_MOCK,
+      CREATE_CHAT_MEMBER_FAIL_MOCK,
+      CREATE_CHAT_MEMBERSHIP_FAIL_MOCK,
+    ];
+
+    const toastErrorSpy = vi.spyOn(toast, 'error');
+
+    render(
+      <MockedProvider mocks={localMocks}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Provider store={store}>
+            <CreateGroupChat
+              createGroupChatModalisOpen={true}
+              toggleCreateGroupChatModal={toggleCreateGroupChatModal}
+              chatsListRefetch={chatsListRefetch}
+            />
+          </Provider>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    fireEvent.change(screen.getByTestId('groupTitleInput'), {
+      target: { value: 'Member Fail Group' },
+    });
+    fireEvent.click(screen.getByTestId('nextBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId('createBtn'));
+
+    await waitFor(() => {
+      expect(toastErrorSpy).toHaveBeenCalledWith('Failed to create group chat');
+    });
+
+    toastErrorSpy.mockRestore();
   });
 });

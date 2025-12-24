@@ -230,6 +230,46 @@ describe('ProfileDropdown Component', () => {
     expect(screen.getByAltText('profile picture')).toBeInTheDocument();
     expect(screen.getByText('User')).toBeInTheDocument();
   });
+
+  test('normalizes MinIO URL and adds crossOrigin attribute', () => {
+    setItem('UserImage', 'http://minio:9000/bucket/avatar.jpg');
+    setItem('role', 'regular');
+    render(
+      <MockedProvider mocks={MOCKS}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileCard />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const img = screen.getByTestId('display-img');
+    expect(img).toHaveAttribute(
+      'src',
+      'http://localhost:9000/bucket/avatar.jpg',
+    );
+    expect(img).toHaveAttribute('crossOrigin', 'anonymous');
+  });
+
+  test('does not normalize non-MinIO URL but adds crossOrigin attribute', () => {
+    const normalUrl = 'https://example.com/avatar.jpg';
+    setItem('UserImage', normalUrl);
+    setItem('role', 'regular');
+    render(
+      <MockedProvider mocks={MOCKS}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileCard />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const img = screen.getByTestId('display-img');
+    expect(img).toHaveAttribute('src', normalUrl);
+    expect(img).toHaveAttribute('crossOrigin', 'anonymous');
+  });
 });
 
 describe('Member screen routing testing', () => {

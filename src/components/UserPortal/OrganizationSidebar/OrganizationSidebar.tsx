@@ -144,6 +144,7 @@ export default function OrganizationSidebar(): JSX.Element {
                       className={styles.memberImage}
                       width="auto"
                       height="30px"
+                      crossOrigin="anonymous"
                     />
                     <div className={styles.orgName}>{memberName}</div>
                   </div>

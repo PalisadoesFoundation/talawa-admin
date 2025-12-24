@@ -133,4 +133,42 @@ describe('Testing ContactCard Component [User Portal]', () => {
 
     await wait();
   });
+
+  it('should normalize MinIO URLs and add crossOrigin attribute', async () => {
+    const minioUrl = 'http://minio:9000/bucket/image.jpg';
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ContactCard {...props} image={minioUrl} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const img = screen.getByAltText(props.title);
+    expect(img).toHaveAttribute('src', 'http://localhost:9000/bucket/image.jpg');
+    expect(img).toHaveAttribute('crossOrigin', 'anonymous');
+  });
+
+  it('should not normalize non-MinIO URLs but still add crossOrigin attribute', async () => {
+    const normalUrl = 'https://example.com/image.jpg';
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <ContactCard {...props} image={normalUrl} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const img = screen.getByAltText(props.title);
+    expect(img).toHaveAttribute('src', normalUrl);
+    expect(img).toHaveAttribute('crossOrigin', 'anonymous');
+  });
 });
