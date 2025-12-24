@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes } from 'react-router';
 import OrganizationTransactions from './OrganizationTransactions';
 import i18nForTest from '../../utils/i18nForTest';
 
@@ -10,9 +10,19 @@ const sharedMocks = vi.hoisted(() => ({
   PluginInjector: vi.fn(() => (
     <div data-testid="plugin-injector">Mock Plugin Injector</div>
   )),
+  BreadcrumbsComponent: vi.fn(({ items }) => (
+    <nav data-testid="breadcrumbs">
+      {items?.map((item: { translationKey: string }, index: number) => (
+        <span key={index}>{item.translationKey}</span>
+      ))}
+    </nav>
+  )),
 }));
 
-vi.mock('plugin', () => sharedMocks);
+vi.mock('plugin', () => ({ PluginInjector: sharedMocks.PluginInjector }));
+vi.mock('shared-components/BreadcrumbsComponent', () => ({
+  BreadcrumbsComponent: sharedMocks.BreadcrumbsComponent,
+}));
 
 describe('OrganizationTransactions', () => {
   beforeEach(() => {

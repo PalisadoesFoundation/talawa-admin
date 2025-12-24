@@ -16,7 +16,7 @@
  */
 import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router';
 import styles from 'style/app-fixed.module.css';
 import { PluginInjector } from 'plugin';
 import { BreadcrumbsComponent } from 'shared-components/BreadcrumbsComponent';
@@ -25,6 +25,11 @@ import type { IBreadcrumbItem } from 'types/shared-components/BreadcrumbsCompone
 export default function OrganizationTransactions(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'transactions' });
   const { orgId } = useParams();
+
+  // Redirect to orglist if orgId is missing
+  if (!orgId) {
+    return <Navigate to="/orglist" replace />;
+  }
 
   // Breadcrumb items for organization -> transactions navigation
   const breadcrumbItems: IBreadcrumbItem[] = [
