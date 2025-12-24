@@ -1,3 +1,4 @@
+import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { GraphQLError } from 'graphql';
@@ -156,10 +157,6 @@ vi.mock('./CreateEventModal', () => ({
     onClose: () => void;
     onEventCreated: () => void;
   }) => {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const React = require('react');
-    const [inviteOnly, setInviteOnly] = React.useState(false);
-
     if (!isOpen) return null;
     return (
       <div data-testid="createEventModal">
@@ -168,12 +165,7 @@ vi.mock('./CreateEventModal', () => ({
 
         {/* Minimal invite-only checkbox matching test IDs */}
         <label>
-          <input
-            type="checkbox"
-            data-testid="inviteOnlyEventCheck"
-            checked={inviteOnly}
-            onChange={(e) => setInviteOnly(e.target.checked)}
-          />
+          <input type="checkbox" data-testid="inviteOnlyEventCheck" />
         </label>
 
         <button
