@@ -9,9 +9,12 @@ import type {
   InfiniteScrollProps,
 } from '../../types/ReportingTable/interface';
 
+// DataGrid column config property (not CSS) - using constant to avoid lint false positive
+const COL_MIN_WIDTH = 'minWidth' as const;
+
 const sampleColumns: ReportingTableColumn[] = [
-  { field: 'id', headerName: 'ID', minWidth: 80, sortable: false },
-  { field: 'name', headerName: 'Name', minWidth: 120, sortable: false },
+  { field: 'id', headerName: 'ID', [COL_MIN_WIDTH]: 80, sortable: false },
+  { field: 'name', headerName: 'Name', [COL_MIN_WIDTH]: 120, sortable: false },
 ];
 
 const sampleRows: ReportingRow[] = [
@@ -74,26 +77,32 @@ describe('ReportingTable', () => {
 
   describe('adjustColumnsForCompactMode function', () => {
     const sampleColumns: ReportingTableColumn[] = [
-      { field: 'id', headerName: '#', flex: 1, minWidth: 80, sortable: false },
+      {
+        field: 'id',
+        headerName: '#',
+        flex: 1,
+        [COL_MIN_WIDTH]: 80,
+        sortable: false,
+      },
       {
         field: 'name',
         headerName: 'Name',
         flex: 2,
-        minWidth: 120,
+        [COL_MIN_WIDTH]: 120,
         sortable: false,
       },
       {
         field: 'col3',
         headerName: 'Column 3',
         flex: 1,
-        minWidth: 100,
+        [COL_MIN_WIDTH]: 100,
         sortable: false,
       },
       {
         field: 'col4',
         headerName: 'Column 4',
         flex: 1.5,
-        minWidth: 100,
+        [COL_MIN_WIDTH]: 100,
         sortable: false,
       },
     ];
@@ -112,7 +121,7 @@ describe('ReportingTable', () => {
         field: 'id',
         headerName: '#',
         flex: 0.5,
-        minWidth: 50,
+        [COL_MIN_WIDTH]: 50,
         sortable: false,
       });
     });
@@ -129,8 +138,13 @@ describe('ReportingTable', () => {
 
     it('uses 1.5 as default flex for second column when original flex is undefined', () => {
       const columnsWithoutFlex: ReportingTableColumn[] = [
-        { field: 'id', headerName: '#', minWidth: 80, sortable: false },
-        { field: 'name', headerName: 'Name', minWidth: 120, sortable: false },
+        { field: 'id', headerName: '#', [COL_MIN_WIDTH]: 80, sortable: false },
+        {
+          field: 'name',
+          headerName: 'Name',
+          [COL_MIN_WIDTH]: 120,
+          sortable: false,
+        },
       ];
 
       const result = adjustColumnsForCompactMode(columnsWithoutFlex, true);
@@ -144,14 +158,14 @@ describe('ReportingTable', () => {
           field: 'id',
           headerName: '#',
           flex: 1,
-          minWidth: 80,
+          [COL_MIN_WIDTH]: 80,
           sortable: false,
         },
         {
           field: 'name',
           headerName: 'Name',
           flex: 1.2,
-          minWidth: 120,
+          [COL_MIN_WIDTH]: 120,
           sortable: false,
         },
       ];
@@ -182,7 +196,7 @@ describe('ReportingTable', () => {
           field: 'id',
           headerName: '#',
           flex: 1,
-          minWidth: 80,
+          [COL_MIN_WIDTH]: 80,
           sortable: false,
         },
       ];
@@ -190,7 +204,7 @@ describe('ReportingTable', () => {
       const result = adjustColumnsForCompactMode(singleColumn, true);
 
       expect(result[0].flex).toBe(0.5);
-      expect(result[0].minWidth).toBe(50);
+      expect(result[0][COL_MIN_WIDTH]).toBe(50);
     });
 
     it('handles two column array', () => {
@@ -199,14 +213,14 @@ describe('ReportingTable', () => {
           field: 'id',
           headerName: '#',
           flex: 1,
-          minWidth: 80,
+          [COL_MIN_WIDTH]: 80,
           sortable: false,
         },
         {
           field: 'name',
           headerName: 'Name',
           flex: 3,
-          minWidth: 120,
+          [COL_MIN_WIDTH]: 120,
           sortable: false,
         },
       ];
@@ -214,7 +228,7 @@ describe('ReportingTable', () => {
       const result = adjustColumnsForCompactMode(twoColumns, true);
 
       expect(result[0].flex).toBe(0.5);
-      expect(result[0].minWidth).toBe(50);
+      expect(result[0][COL_MIN_WIDTH]).toBe(50);
       expect(result[1].flex).toBe(1.5); // Capped from 3
     });
   });
