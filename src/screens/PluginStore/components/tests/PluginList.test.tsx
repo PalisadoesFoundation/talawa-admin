@@ -170,13 +170,11 @@ describe('PluginList', () => {
     // Check main container styles
     expect(emptyState).toHaveStyle('text-align: center');
     expect(emptyState).toHaveStyle('padding: 40px 20px');
-    expect(emptyState).toHaveStyle('background: var(--empty-state-bg)');
+    expect(emptyState).toHaveStyle('background: #ffffff');
     expect(emptyState).toHaveStyle('border-radius: 12px');
     expect(emptyState).toHaveStyle('border-width: 1px');
     expect(emptyState).toHaveStyle('border-style: solid');
-    expect(emptyState).toHaveStyle(
-      'border-color: var(--empty-state-border-color)',
-    );
+    expect(emptyState).toHaveStyle('border-color: #e7e7e7');
   });
 
   // Test 8: Plugin list container has correct styles
