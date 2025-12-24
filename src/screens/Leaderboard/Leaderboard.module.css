@@ -6,7 +6,7 @@
   padding: 1rem;
   padding-top: 0.5rem;
   border-radius: 1rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  box-shadow: var(--bs-box-shadow-sm);
 }
 
 .dataGridStyle .MuiDataGrid-root .MuiDataGrid-cell:focus-within {
@@ -20,11 +20,11 @@
 }
 
 .dataGridStyle .MuiDataGrid-row:hover {
-  background-color: transparent;
+  background-color: var(--bs-secondary-bg);
 }
 
 .dataGridStyle .MuiDataGrid-row.Mui-hovered {
-  background-color: transparent;
+  background-color: var(--bs-secondary-bg);
 }
 
 .dataGridStyle .MuiDataGrid-root {

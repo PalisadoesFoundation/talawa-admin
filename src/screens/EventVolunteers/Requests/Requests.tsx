@@ -277,7 +277,7 @@ function requests(): JSX.Element {
               data-testid={`rejectBtn`}
               onClick={() => updateMembershipStatus(params.row.id, 'rejected')}
             >
-              <FaXmark size={18} fontWeight={900} />
+              <FaXmark size={18} className={requestsStyles.rejectIcon} />
             </Button>
           </>
         );

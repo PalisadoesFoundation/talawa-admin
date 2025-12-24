@@ -297,7 +297,7 @@ export default function groupChatDetails({
             type="file"
             accept="image/*"
             ref={fileInputRef}
-            style={{ display: 'none' }} // Hide the input
+            className={groupChatStyles.hiddenInput}
             onChange={handleImageChange}
             data-testid="fileInput"
           />
@@ -419,14 +419,7 @@ export default function groupChatDetails({
                           <Dropdown.Toggle
                             variant="link"
                             id={`dropdown-${user.id}`}
-                            style={{
-                              color: 'black',
-                              border: 'none',
-                              padding: '0',
-                              background: 'none',
-                              boxShadow: 'none',
-                            }}
-                            className="btn-sm"
+                            className={`btn-sm ${groupChatStyles.dropdownToggle}`}
                           >
                             <BsThreeDotsVertical />
                           </Dropdown.Toggle>
@@ -447,7 +440,7 @@ export default function groupChatDetails({
                             </Dropdown.Item>
                             {canRemove && (
                               <Dropdown.Item
-                                style={{ color: 'red' }}
+                                className={groupChatStyles.removeItem}
                                 onClick={() => {
                                   if (
                                     window.confirm(

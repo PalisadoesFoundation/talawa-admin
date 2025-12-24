@@ -49,6 +49,10 @@
   min-width: 32px;
 }
 
+.rejectIcon {
+  font-weight: 900;
+}
+
 .textSm {
   font-size: var(--font-size-table-body);
 }
@@ -64,7 +68,7 @@
 }
 
 .errorMessage {
-  color: #dc3545; /* Bootstrap danger color */
+  color: var(--bs-danger);
   text-align: center;
   font-weight: 600;
 }

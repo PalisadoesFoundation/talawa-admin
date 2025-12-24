@@ -112,5 +112,7 @@
   "toggleOptions": "विकल्प टॉगल करें",
   "filterAndSortOptions": "फिल्टर और सॉर्ट विकल्प",
   "clear": "साफ़ करें",
-  "noResultsFound": "कोई परिणाम नहीं मिला"
+  "noResultsFound": "कोई परिणाम नहीं मिला",
+  "loadingAdminPlugin": "व्यवस्थापक प्लगइन लोड हो रहा है...",
+  "loadingUserPlugin": "उपयोगकर्ता प्लगइन लोड हो रहा है..."
 }

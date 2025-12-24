@@ -112,5 +112,7 @@
   "toggleOptions": "Alternar opciones",
   "filterAndSortOptions": "Opciones de filtrado y ordenamiento",
   "clear": "Limpiar",
-  "noResultsFound": "No se encontraron resultados"
+  "noResultsFound": "No se encontraron resultados",
+  "loadingAdminPlugin": "Cargando complemento de administrador...",
+  "loadingUserPlugin": "Cargando complemento de usuario..."
 }

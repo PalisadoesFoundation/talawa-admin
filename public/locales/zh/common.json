@@ -112,5 +112,7 @@
   "toggleOptions": "切换选项",
   "filterAndSortOptions": "筛选和排序选项",
   "clear": "清除",
-  "noResultsFound": "未找到结果"
+  "noResultsFound": "未找到结果",
+  "loadingAdminPlugin": "正在加载管理员插件...",
+  "loadingUserPlugin": "正在加载用户插件..."
 }
