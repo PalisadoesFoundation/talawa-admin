@@ -123,7 +123,9 @@ def get_target_files(
     if files:
         for file_item in files:
             path = Path(file_item)
-            if path.exists() and any(file_item.endswith(ext) for ext in extensions):
+            if path.exists() and any(
+                file_item.endswith(ext) for ext in extensions
+            ):
                 target_files.append(path)
 
     if directories:
@@ -134,8 +136,14 @@ def get_target_files(
                     target_files.extend(path.rglob(f"*{ext}"))
 
     test_patterns = (
-        ".spec.tsx", ".test.tsx", ".spec.ts", ".test.ts",
-        ".spec.jsx", ".test.jsx", ".spec.js", ".test.js"
+        ".spec.tsx",
+        ".test.tsx",
+        ".spec.ts",
+        ".test.ts",
+        ".spec.jsx",
+        ".test.jsx",
+        ".spec.js",
+        ".test.js",
     )
     return [f for f in target_files if not str(f).endswith(test_patterns)]
 
@@ -146,7 +154,9 @@ def main() -> None:
         description="Search for and validate translation tags."
     )
     parser.add_argument("--files", nargs="+", help="Specific files to check")
-    parser.add_argument("--directories", nargs="+", help="Directories to search")
+    parser.add_argument(
+        "--directories", nargs="+", help="Directories to search"
+    )
     parser.add_argument(
         "--locales-dir",
         default="public/locales/en",
@@ -193,4 +203,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-    
