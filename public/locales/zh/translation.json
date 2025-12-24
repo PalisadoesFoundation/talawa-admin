@@ -1173,7 +1173,8 @@
     "media": "媒体",
     "event": "事件",
     "article": "文章",
-    "postNowVisibleInFeed": "帖子现在在动态中可见"
+    "postNowVisibleInFeed": "帖子现在在动态中可见",
+    "processingPost": "正在处理您的帖子。请稍候。"
   },
   "eventAttendance": {
     "historical_statistics": "历史统计",
