@@ -77,12 +77,14 @@ interface InterfaceCreateDirectChatProps {
   chats: GroupChat[];
 }
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+const StyledTableCell = styled(TableCell)(() => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: ['#31bb6b', '!important'],
-    color: theme.palette.common.white,
+    backgroundColor: 'var(--tableHead-bg)',
+    color: 'var(--tableHeader-color)',
   },
-  [`&.${tableCellClasses.body}`]: { fontSize: 14 },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 'var(--font-size-table-body)',
+  },
 }));
 
 /**

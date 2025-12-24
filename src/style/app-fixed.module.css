@@ -5748,8 +5748,7 @@ form {
 .dropdownItem:hover,
 .dropdownItem:focus,
 .dropdownItem:active {
-  background-color: var(--dropdownItem-hover-bg,
-      #eff1f7 var(--dropdownItem-hover-bg) #e8e5e5) !important;
+  background-color: var(--dropdownItem-hover-bg, #eff1f7) !important;
   color: var(--dropdownItem-color) !important;
   outline: none !important;
 }
