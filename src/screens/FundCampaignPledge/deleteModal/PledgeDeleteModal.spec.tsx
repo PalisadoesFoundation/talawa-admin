@@ -93,12 +93,13 @@ describe('PledgeDeleteModal', () => {
 
   it('should render PledgeDeleteModal', () => {
     renderPledgeDeleteModal(link, pledgeProps);
-    expect(screen.getByTestId('deletePledgeCloseBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('pledge-delete-modal')).toBeInTheDocument();
+    expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
   });
 
   it('should successfully Delete pledge', async () => {
     renderPledgeDeleteModal(link, pledgeProps);
-    expect(screen.getByTestId('deletePledgeCloseBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('pledge-delete-modal')).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('deleteyesbtn'));
 
@@ -111,7 +112,7 @@ describe('PledgeDeleteModal', () => {
 
   it('should fail to Delete pledge', async () => {
     renderPledgeDeleteModal(link2, pledgeProps);
-    expect(screen.getByTestId('deletePledgeCloseBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('pledge-delete-modal')).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('deleteyesbtn'));
 

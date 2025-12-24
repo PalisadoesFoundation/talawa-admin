@@ -386,6 +386,8 @@
     "unassignUserTagMessage": "Do you want to remove the tag from this user?",
     "successfullyUnassigned": "Tag unassigned from user",
     "addPeople": "Add People",
+    "unassignUserTagError": "Error unassigning tag from user",
+    "removeUserTagError": "Error removing tag from user",
     "add": "Add",
     "subTags": "Sub Tags",
     "successfullyAssignedToPeople": "Tag assigned successfully",

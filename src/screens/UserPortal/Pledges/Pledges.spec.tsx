@@ -1263,11 +1263,9 @@ describe('Testing User Pledge Screen', () => {
       ).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByTestId('deletePledgeCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('deletePledgeCloseBtn'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
   });
 

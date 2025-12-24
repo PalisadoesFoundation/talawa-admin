@@ -30,9 +30,10 @@
  * />
  * ```
  */
-import React from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
+import { BaseModal } from 'shared-components/BaseModal';
 
 interface InterfaceAgendaCategoryDeleteModalProps {
   agendaCategoryDeleteModalIsOpen: boolean;
@@ -51,44 +52,55 @@ const AgendaCategoryDeleteModal: React.FC<
   t,
   tCommon,
 }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onConfirmDelete = async (): Promise<void> => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    try {
+      await deleteAgendaCategoryHandler();
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
-    <Modal
-      size="sm"
-      id={`deleteAgendaCategoryModal`}
-      className={styles.campaignModal}
+    <BaseModal
       show={agendaCategoryDeleteModalIsOpen}
       onHide={toggleDeleteModal}
+      size="sm"
+      className={styles.campaignModal}
       backdrop="static"
       keyboard={false}
+      title={t('deleteAgendaCategory')}
+      headerClassName="bg-primary text-white"
+      closeButtonVariant="light"
+      dataTestId="agenda-category-delete-modal"
+      footer={
+        <>
+          <Button
+            type="button"
+            className="btn btn-danger"
+            onClick={toggleDeleteModal}
+            data-testid="deleteAgendaCategoryCloseBtn"
+          >
+            {tCommon('no')}
+          </Button>
+          <Button
+            type="button"
+            className="btn btn-success"
+            onClick={onConfirmDelete}
+            disabled={isSubmitting}
+            data-testid="deleteAgendaCategoryBtn"
+          >
+            {tCommon('yes')}
+          </Button>
+        </>
+      }
     >
-      <Modal.Header closeButton className="bg-primary">
-        <Modal.Title className="text-white" id={`deleteAgendaCategory`}>
-          {t('deleteAgendaCategory')}
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <p>{t('deleteAgendaCategoryMsg')}</p>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          type="button"
-          className="btn btn-danger"
-          data-dismiss="modal"
-          onClick={toggleDeleteModal}
-          data-testid="deleteAgendaCategoryCloseBtn"
-        >
-          {tCommon('no')}
-        </Button>
-        <Button
-          type="button"
-          className="btn btn-success"
-          onClick={deleteAgendaCategoryHandler}
-          data-testid="deleteAgendaCategoryBtn"
-        >
-          {tCommon('yes')}
-        </Button>
-      </Modal.Footer>
-    </Modal>
+      <p>{t('deleteAgendaCategoryMsg')}</p>
+    </BaseModal>
   );
 };
 

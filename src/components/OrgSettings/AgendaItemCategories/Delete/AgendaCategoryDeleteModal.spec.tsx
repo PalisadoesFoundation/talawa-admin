@@ -59,12 +59,18 @@ describe('AgendaCategoryDeleteModal', () => {
 
   it('renders the modal when open', () => {
     renderComponent(true);
+    expect(
+      screen.getByTestId('agenda-category-delete-modal'),
+    ).toBeInTheDocument();
     expect(screen.getByText('deleteAgendaCategory')).toBeInTheDocument();
     expect(screen.getByText('deleteAgendaCategoryMsg')).toBeInTheDocument();
   });
 
   test('modal is not rendered when closed', () => {
     renderComponent(false);
+    expect(
+      screen.queryByTestId('agenda-category-delete-modal'),
+    ).not.toBeInTheDocument();
     expect(screen.queryByText('deleteAgendaCategory')).not.toBeInTheDocument();
   });
 

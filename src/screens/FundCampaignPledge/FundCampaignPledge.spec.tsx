@@ -436,9 +436,10 @@ describe('Testing Campaign Pledge Screen', () => {
     await waitFor(() =>
       expect(screen.getByText(translations.deletePledge)).toBeInTheDocument(),
     );
-    await userEvent.click(screen.getByTestId('deletePledgeCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
+
     await waitFor(() =>
-      expect(screen.queryByTestId('deletePledgeCloseBtn')).toBeNull(),
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument(),
     );
   });
 

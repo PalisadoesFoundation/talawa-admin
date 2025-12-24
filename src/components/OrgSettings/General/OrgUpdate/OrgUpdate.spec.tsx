@@ -272,7 +272,10 @@ describe('OrgUpdate Component', () => {
     });
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Failed to update organization');
+      expect(toast.error).toHaveBeenCalledWith(
+        'Failed to update organization',
+        expect.any(Object),
+      );
     });
 
     await waitFor(() => {
@@ -619,6 +622,7 @@ describe('OrgUpdate Component', () => {
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith(
           'Failed to update organization',
+          expect.any(Object),
         );
       });
     });
@@ -818,6 +822,7 @@ describe('OrgUpdate Component', () => {
         () => {
           expect(toast.error).toHaveBeenCalledWith(
             i18n.t('orgUpdate.failedToUpdateOrg'),
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
