@@ -1,6 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
-import { Stack } from '@mui/material';
+import { WarningAmberRounded, AccountBalance } from '@mui/icons-material';
 import {
   type GridCellParams,
   type GridPaginationModel,
@@ -23,6 +22,7 @@ import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceFundInfo } from 'utils/interfaces';
 import PageHeader from 'shared-components/Navbar/Navbar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 import {
   dataGridStyle,
   PAGE_SIZE,
@@ -197,7 +197,7 @@ const organizationFunds = (): JSX.Element => {
     return (
       <div className={styles.container + ' bg-white rounded-4 my-3'}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded className={styles.errorIcon} />
           <h6 className="fw-bold text-danger text-center">
             {t('errorLoadingFundsData')}
             <br />
@@ -368,20 +368,26 @@ const organizationFunds = (): JSX.Element => {
     getRowId: (row: InterfaceFundInfo) => row.id,
     slots: {
       noRowsOverlay: () => (
-        <Stack height="100%" alignItems="center" justifyContent="center">
-          {t('noFundsFound')}
-        </Stack>
+        <EmptyState
+          icon={<AccountBalance />}
+          message={t('noFundsFound')}
+          action={{
+            label: t('createFund'),
+            onClick: () => handleOpenModal(null, 'create'),
+            variant: 'primary',
+          }}
+          dataTestId="funds-empty-state"
+        />
       ),
       loadingOverlay: () => (
         <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
       ),
     },
-    sx: { ...dataGridStyle },
+    sx: { ...dataGridStyle, overflow: 'visible' },
     getRowClassName: () => `${styles.rowBackgrounds}`,
     rowHeight: ROW_HEIGHT,
     isRowSelectable: () => false,
     disableColumnMenu: true,
-    style: { overflow: 'visible' },
   };
 
   return (
