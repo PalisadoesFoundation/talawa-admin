@@ -385,6 +385,8 @@
     "unassignUserTag": "Désassigner l'étiquette",
     "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
     "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
+    "unassignUserTagError": "Erreur lors de la suppression de l'affectation d'étiquette",
+    "removeUserTagError": "Erreur lors de la suppression de l'étiquette et de tous ses sous-étiquettes",
     "addPeople": "Ajouter des personnes",
     "add": "Ajouter",
     "subTags": "Sous-étiquettes",

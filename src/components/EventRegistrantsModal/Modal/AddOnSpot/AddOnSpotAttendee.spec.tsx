@@ -183,6 +183,7 @@ describe('AddOnSpotAttendee Component', () => {
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(
         expect.stringContaining('Failed to add attendee'),
+        expect.any(Object),
       );
     });
   });
