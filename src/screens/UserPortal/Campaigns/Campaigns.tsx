@@ -138,7 +138,9 @@ const Campaigns = (): JSX.Element => {
     return (
       <div className={styles.whiteContainer}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded
+            className={`${styles.errorIcon} ${styles.errorIconLarge}`}
+          />
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Campaigns' })}
             <br />
@@ -281,13 +283,7 @@ const Campaigns = (): JSX.Element => {
 
         return (
           <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 1,
-              height: '100%',
-            }}
+            className={styles.progressCellContainer}
             data-testid="progressCell"
           >
             <Box sx={{ position: 'relative', display: 'inline-flex' }}>

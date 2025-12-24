@@ -191,7 +191,9 @@ const organizationFunds = (): JSX.Element => {
     return (
       <div className={styles.whiteContainer}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded
+            className={`${styles.errorIcon} ${styles.errorIconLarge}`}
+          />
           <h6 className="fw-bold text-danger text-center">
             {t('errorLoadingFundsData')}
             <br />

@@ -1005,7 +1005,7 @@
   /* Allow it to shrink if needed */
   width: auto;
   /* Stop forcing 100% width */
-  min-width: 200px;
+  min-width: 450px;
   max-width: 100%;
   height: 48px;
 }
@@ -1025,6 +1025,7 @@
   display: flex;
   align-items: center;
   min-height: 48px;
+  min-width: 40rem;
   padding: 0.75rem 2.5rem 0.75rem 1.25rem;
   background-color: transparent;
 }
@@ -1383,7 +1384,7 @@ form label,
   display: flex;
   margin: 2.5rem 0;
   align-items: center;
-  max-width: 60%;
+  max-width: 600px;
 }
 
 .searchBarContainer {
@@ -10095,11 +10096,13 @@ form {
 
 .btnsBlock > * {
   margin: 0 !important;
-  height: 100% !important; /* Fill the container's 48px */
+  height: 100% !important;
+  /* Fill the container's 48px */
   display: flex !important;
   align-items: center !important;
   min-height: auto !important;
 }
+
 /* ----------------------------------------------------- */
 
 .whiteContainer {
@@ -10125,9 +10128,9 @@ form {
 .searchContainerRow {
   display: flex;
   align-items: center;
-  gap: 16px;
   margin-bottom: 1rem;
   margin-top: 1rem;
+  gap: 1rem;
 }
 
 /* Search container row layout without top margin */
@@ -10138,7 +10141,7 @@ form {
   margin-bottom: 1rem;
 }
 
-/* Search bar margin reset */
+/* Search bar margin reset with flex grow */
 .searchBarMarginReset {
   margin: 0;
 }
@@ -10146,6 +10149,11 @@ form {
 /* Button style to prevent text wrapping */
 .buttonNoWrap {
   white-space: nowrap;
+}
+
+/* Button margin reset for flex containers with gap */
+.buttonMarginReset {
+  margin: 0;
 }
 
 /* Search container for Campaigns screen with min/max width */
@@ -10212,4 +10220,18 @@ form {
 /* DataGrid row hover background */
 .dataGridRowHover:hover {
   background-color: var(--row-hover-bg, #f0f0f0);
+}
+
+/* Error icon large size */
+.errorIconLarge {
+  font-size: 2rem;
+}
+
+/* Progress cell container */
+.progressCellContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
 }

@@ -1,13 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
-import {
-  Stack,
-  Typography,
-  Breadcrumbs,
-  Link,
-  Box,
-  CircularProgress,
-} from '@mui/material';
+import { Stack, Typography, Box, CircularProgress } from '@mui/material';
 import { type GridCellParams } from '@mui/x-data-grid';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -31,6 +24,7 @@ import {
   ReportingTableGridProps,
 } from 'types/ReportingTable/interface';
 import { PAGE_SIZE, ROW_HEIGHT } from 'types/ReportingTable/utils';
+import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/BreadcrumbsComponent';
 
 const dataGridStyle = {
   borderRadius: 'var(--table-head-radius)',
@@ -152,7 +146,9 @@ const orgFundCampaign = (): JSX.Element => {
     return (
       <div className={styles.whiteContainer}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded
+            className={`${styles.errorIcon} ${styles.errorIconLarge}`}
+          />
           <h6 className="fw-bold text-danger text-center">
             {t('errorLoading')}
             <br />
@@ -298,13 +294,7 @@ const orgFundCampaign = (): JSX.Element => {
 
         return (
           <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: 1,
-              height: '100%',
-            }}
+            className={styles.progressCellContainer}
             data-testid="progressCell"
           >
             <Box sx={{ position: 'relative', display: 'inline-flex' }}>
@@ -394,24 +384,21 @@ const orgFundCampaign = (): JSX.Element => {
 
   return (
     <div className={styles.organizationFundCampaignContainer}>
-      <Breadcrumbs
+      <BreadcrumbsComponent
         aria-label={tCommon('breadcrumb')}
-        className={`ms-1 ${styles.breadcrumbsMargin}`}
-      >
-        <Link
-          underline="hover"
-          color="inherit"
-          component="button"
-          data-testid="fundsLink"
-          onClick={() => navigate(`/orgfunds/${orgId}`)}
-        >
-          {fundName}
-        </Link>
-        <Typography color="text.primary">{t('title')}</Typography>
-      </Breadcrumbs>
-
+        items={[
+          {
+            label: fundName,
+            to: `/orgfunds/${orgId}`,
+          },
+          {
+            label: t('title'),
+            to: `/orgfunds/${orgId}/campaigns`,
+          },
+        ]}
+      />
       <div className={styles.searchContainerRow}>
-        <div className={`${styles.head} ${styles.searchBarMarginReset}`}>
+        <div className={styles.searchBarMarginReset}>
           <SearchBar
             placeholder={t('searchCampaigns')}
             value={searchText}
@@ -426,7 +413,7 @@ const orgFundCampaign = (): JSX.Element => {
         <Button
           variant="success"
           onClick={() => handleOpenModal(null, 'create')}
-          className={`${styles.createButton} ${styles.buttonNoWrap}`}
+          className={`${styles.createButton} ${styles.buttonNoWrap} ${styles.buttonMarginReset}`}
           data-testid="addCampaignBtn"
           disabled={isArchived}
         >
