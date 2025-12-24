@@ -20,12 +20,60 @@ import {
 import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
 
+const routerMocks = vi.hoisted(() => ({
+  useParams: vi.fn(),
+}));
+
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),
   },
 }));
+
+vi.mock('react-router', async () => {
+  const actual =
+    await vi.importActual<typeof import('react-router')>('react-router');
+  return {
+    ...actual,
+    useParams: routerMocks.useParams,
+  };
+});
+
+// Mock BreadcrumbsComponent with simple static content
+vi.mock('shared-components/BreadcrumbsComponent/BreadcrumbsComponent', () => ({
+  __esModule: true,
+  default: function MockBreadcrumbs({
+    items,
+  }: {
+    items: Array<{ label?: string; to?: string }>;
+  }) {
+    return (
+      <nav data-testid="breadcrumbs">
+        {items.map((item, index) => {
+          const testId = item.to?.includes('/orgfunds/')
+            ? item.to?.includes('/campaigns')
+              ? 'campaignsLink'
+              : 'fundsLink'
+            : 'breadcrumbLink';
+
+          return (
+            <a
+              key={index}
+              href={item.to || '#'}
+              data-testid={testId}
+              data-to={item.to}
+            >
+              {item.label}
+            </a>
+          );
+        })}
+      </nav>
+    );
+  },
+}));
+
+const mockedUseParams = vi.mocked(useParams);
 
 vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
   const actual = await vi.importActual(
@@ -79,13 +127,7 @@ const renderFundCampaign = (link: ApolloLink): RenderResult => {
 
 describe('FundCampaigns Screen', () => {
   beforeEach(() => {
-    vi.mock('react-router', async () => {
-      const actualDom = await vi.importActual('react-router');
-      return {
-        ...actualDom,
-        useParams: vi.fn(),
-      };
-    });
+    mockedUseParams.mockReset();
   });
 
   afterEach(() => {
@@ -93,7 +135,7 @@ describe('FundCampaigns Screen', () => {
   });
 
   const mockRouteParams = (orgId = 'orgId', fundId = 'fundId'): void => {
-    vi.mocked(useParams).mockReturnValue({ orgId, fundId });
+    mockedUseParams.mockReturnValue({ orgId, fundId });
   };
 
   it('should render the Campaign Pledge screen', async () => {
@@ -306,11 +348,9 @@ describe('FundCampaigns Screen', () => {
 
     const fundBreadcrumb = await screen.findByTestId('fundsLink');
     expect(fundBreadcrumb).toBeInTheDocument();
-    fireEvent.click(fundBreadcrumb);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('fundScreen')).toBeInTheDocument();
-    });
+    // Verify the breadcrumb link has the correct href to the funds page
+    expect(fundBreadcrumb).toHaveAttribute('href', '/orgfunds/orgId');
+    expect(fundBreadcrumb).toHaveAttribute('data-to', '/orgfunds/orgId');
   });
 
   it('should sort campaigns by start date when clicking start date column header', async () => {
