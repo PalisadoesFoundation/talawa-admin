@@ -33,7 +33,8 @@
  * @function redirectToSubTags - Navigates to the sub-tags page for a specific tag.
  * @function handleSortChange - Updates the sorting order of tags.
  */
-import { useMutation, useQuery } from '@apollo/client';
+
+import { useMutation, useQuery } from '@apollo/client/react';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { useNavigate, useParams, Link } from 'react-router';
 import type { ChangeEvent } from 'react';
@@ -49,10 +50,13 @@ import TableLoader from 'components/TableLoader/TableLoader';
 import type { InterfaceTagDataPG } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import type { GridCellParams } from '@mui/x-data-grid';
-import type {
-  InterfaceOrganizationTagsQueryPG,
-  SortedByType,
+import {
+  TAGS_QUERY_DATA_CHUNK_SIZE,
+  dataGridStyle,
+  type InterfaceOrganizationTagsQuery,
+  type SortedByType,
 } from 'utils/organizationTagsUtils';
+import { PAGE_SIZE, COLUMN_BUFFER_PX } from 'types/ReportingTable/utils';
 import type {
   ReportingRow,
   ReportingTableColumn,
@@ -60,12 +64,7 @@ import type {
 } from '../../types/ReportingTable/interface';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import { Stack } from '@mui/material';
-import {
-  dataGridStyle,
-  COLUMN_BUFFER_PX,
-  PAGE_SIZE,
-} from '../../types/ReportingTable/utils';
-import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
+import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import PageHeader from 'shared-components/Navbar/Navbar';
 
@@ -98,17 +97,14 @@ function OrganizationTags(): JSX.Element {
     data: orgUserTagsData,
     error: orgUserTagsError,
     refetch: orgUserTagsRefetch,
-  }: InterfaceOrganizationTagsQueryPG = useQuery(
-    ORGANIZATION_USER_TAGS_LIST_PG,
-    {
-      variables: {
-        input: { id: orgId },
-        first: PAGE_SIZE,
-        where: { name: { starts_with: tagSearchName } },
-        sortedBy: { id: tagSortOrder },
-      },
+  }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST, {
+    variables: {
+      id: orgId,
+      first: TAGS_QUERY_DATA_CHUNK_SIZE,
+      where: { name: { starts_with: tagSearchName } },
+      sortedBy: { id: tagSortOrder },
     },
-  );
+  });
 
   useEffect(() => {
     orgUserTagsRefetch();
@@ -128,7 +124,7 @@ function OrganizationTags(): JSX.Element {
       const { data } = await create({
         variables: { name: tagName, organizationId: orgId },
       });
-      if (data) {
+      if ((data as { createUserTag: unknown })?.createUserTag) {
         toast.success(t('tagCreationSuccess'));
         orgUserTagsRefetch();
         setTagName('');
@@ -157,8 +153,8 @@ function OrganizationTags(): JSX.Element {
   };
 
   const userTagsList =
-    orgUserTagsData?.organization?.tags?.edges?.map(
-      (edge: { node: InterfaceTagDataPG }) => edge.node,
+    orgUserTagsData?.organizations?.[0]?.userTags?.edges?.map(
+      (edge) => (edge as unknown as { node: InterfaceTagDataPG }).node,
     ) || [];
 
   const redirectToManageTag = (tagId: string): void => {

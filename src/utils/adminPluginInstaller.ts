@@ -45,7 +45,7 @@ export interface IAdminPluginInstallationResult {
 export interface IAdminPluginInstallationOptions {
   zipFile: File;
   backup?: boolean;
-  apolloClient?: ApolloClient<NormalizedCacheObject>;
+  apolloClient?: ApolloClient;
 }
 
 /**
@@ -321,7 +321,7 @@ export async function installAdminPluginFromZip({
           },
         });
 
-        if (result.data?.uploadPluginZip) {
+        if ((result.data as any)?.uploadPluginZip) {
           installedComponents.push('API');
         }
       } catch (error) {

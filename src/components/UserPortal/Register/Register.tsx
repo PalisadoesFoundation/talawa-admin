@@ -31,7 +31,7 @@ import { useTranslation } from 'react-i18next';
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 
 import styles from './Register.module.css';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 

@@ -19,7 +19,7 @@ export class PluginManager {
   private lifecycleManager: LifecycleManager;
   private isInitialized: boolean = false;
 
-  constructor(apolloClient?: ApolloClient<unknown>) {
+  constructor(apolloClient?: ApolloClient) {
     // Initialize managers
     this.eventManager = new EventManager();
     this.extensionRegistry = new ExtensionRegistryManager();
@@ -40,7 +40,7 @@ export class PluginManager {
     this.initializePlugins();
   }
 
-  setApolloClient(apolloClient: ApolloClient<unknown>): void {
+  setApolloClient(apolloClient: ApolloClient): void {
     if (!apolloClient) {
       throw new Error('Apollo client cannot be null or undefined');
     }
@@ -178,9 +178,7 @@ export class PluginManager {
 // Create and export singleton instance
 let pluginManagerInstance: PluginManager | null = null;
 
-export function getPluginManager(
-  apolloClient?: ApolloClient<unknown>,
-): PluginManager {
+export function getPluginManager(apolloClient?: ApolloClient): PluginManager {
   if (!pluginManagerInstance) {
     pluginManagerInstance = new PluginManager(apolloClient);
   } else if (apolloClient) {

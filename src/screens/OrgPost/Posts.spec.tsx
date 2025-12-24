@@ -2,7 +2,7 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import PostsRenderer from './Posts';
-import { ApolloError } from '@apollo/client';
+
 import type {
   InterfacePost,
   InterfacePostEdge,
@@ -316,7 +316,7 @@ describe('PostsRenderer', () => {
   });
 
   it('renders error message when error is provided', () => {
-    const mockError = new ApolloError({ errorMessage: 'Test error' });
+    const mockError = new Error('Test error');
     render(<PostsRenderer {...defaultProps} error={mockError} />);
     expect(screen.getByTestId('error-message')).toBeInTheDocument();
     expect(screen.getByText('Error loading posts')).toBeInTheDocument();

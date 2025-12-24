@@ -106,7 +106,7 @@ Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:33](h
 
 ### objectFit?
 
-> `optional` **objectFit**: `"fill"` \| `"cover"` \| `"contain"` \| `"none"` \| `"scale-down"`
+> `optional` **objectFit**: `"fill"` \| `"none"` \| `"cover"` \| `"contain"` \| `"scale-down"`
 
 Defined in: [src/types/shared-components/ProfileAvatarDisplay/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ProfileAvatarDisplay/interface.ts#L26)
 

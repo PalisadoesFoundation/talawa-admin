@@ -6,7 +6,7 @@
 
 > `const` **getUserByIdMockUser1**: `object`
 
-Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.data.ts#L25)
+Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.data.ts#L26)
 
 ## Type Declaration
 
@@ -41,6 +41,10 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:25](https://github.com/Pal
 #### result.data.user
 
 > **user**: `object`
+
+#### result.data.user.\_\_typename
+
+> **\_\_typename**: `string` = `'User'`
 
 #### result.data.user.avatarURL
 

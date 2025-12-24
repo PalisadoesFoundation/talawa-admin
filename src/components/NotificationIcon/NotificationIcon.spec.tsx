@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { MemoryRouter, Routes, Route } from 'react-router';
 import NotificationIcon from './NotificationIcon';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';

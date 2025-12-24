@@ -61,7 +61,7 @@ import {
 import { Bar, Line } from 'react-chartjs-2';
 import { useParams } from 'react-router';
 import { EVENT_DETAILS, RECURRING_EVENTS } from 'GraphQl/Queries/Queries';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client/react';
 import { exportToCSV } from 'utils/chartToPdf';
 import type { ChartOptions, TooltipItem } from 'chart.js';
 import type {
@@ -103,9 +103,12 @@ export const AttendanceStatisticsModal: React.FC<
   const { orgId, eventId } = useParams();
   const [currentPage, setCurrentPage] = useState(0);
   const eventsPerPage = 10;
-  const [loadEventDetails, { data: eventData }] = useLazyQuery(EVENT_DETAILS);
-  const [loadRecurringEvents, { data: recurringData }] =
-    useLazyQuery(RECURRING_EVENTS);
+  const [loadEventDetails, { data: eventData }] = useLazyQuery<{
+    event: InterfaceEvent;
+  }>(EVENT_DETAILS);
+  const [loadRecurringEvents, { data: recurringData }] = useLazyQuery<{
+    getRecurringEvents: InterfaceEvent[];
+  }>(RECURRING_EVENTS);
   const currentEventIndex = useMemo(() => {
     if (!recurringData?.getRecurringEvents || !eventId) return -1;
     return recurringData.getRecurringEvents.findIndex(

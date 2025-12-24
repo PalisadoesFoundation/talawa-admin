@@ -25,7 +25,7 @@ import { Navigate, useParams } from 'react-router';
 import { Circle, WarningAmberRounded, Group } from '@mui/icons-material';
 import dayjs from 'dayjs';
 
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
 
 import type { IActionItemInfo } from 'types/ActionItems/interface';
@@ -122,7 +122,13 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
     loading: eventInfoLoading,
     error: eventInfoError,
     refetch: eventActionItemsRefetch,
-  } = useQuery(GET_EVENT_ACTION_ITEMS, {
+  } = useQuery<{
+    event: {
+      actionItems: { edges: { node: IActionItemInfo }[] };
+      recurrenceRule?: unknown;
+      baseEvent?: { id: string } | null;
+    };
+  }>(GET_EVENT_ACTION_ITEMS, {
     variables: {
       input: {
         id: eventId,
@@ -193,7 +199,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
 
       setActionItems(filteredItems);
       setIsRecurring(!!eventData.event.recurrenceRule);
-      setBaseEvent(eventData.event.baseEvent);
+      setBaseEvent(eventData.event.baseEvent || null);
     }
   }, [eventData, status, searchTerm, searchBy, sortBy]);
 

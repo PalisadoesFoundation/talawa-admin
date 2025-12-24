@@ -1,7 +1,10 @@
 import { requestMiddleware, responseMiddleware } from './dateTimeMiddleware';
-import type { Operation, FetchResult } from '@apollo/client/core';
-import { Observable } from '@apollo/client/core';
-import { gql } from '@apollo/client';
+import {
+  gql,
+  Observable,
+  type Operation,
+  type ApolloLink,
+} from '@apollo/client';
 import type { DocumentNode } from 'graphql';
 import { describe, it, expect, vi } from 'vitest';
 
@@ -27,11 +30,13 @@ describe('Date Time Middleware Tests', () => {
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
-      };
+        operationType: 'query',
+        client: {} as any,
+      } as unknown as Operation;
 
       const forward = vi.fn(
         (op) =>
-          new Observable<FetchResult>((observer) => {
+          new Observable<ApolloLink.Result>((observer) => {
             expect(op.variables['startDate']).toBe('2023-09-01');
             expect(op.variables['startTime']).toMatch(
               /\d{2}:\d{2}:\d{2}.\d{3}Z/,
@@ -50,10 +55,9 @@ describe('Date Time Middleware Tests', () => {
 
   describe('Response Middleware', () => {
     it('should convert UTC date and time to local format in response data', () => {
-      const testResponse: FetchResult = {
+      const testResponse: ApolloLink.Result = {
         data: { createdAt: '2023-09-01T12:00:00.000Z' },
         extensions: {},
-        context: {},
       };
 
       const operation: Operation = {
@@ -63,11 +67,13 @@ describe('Date Time Middleware Tests', () => {
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
-      };
+        operationType: 'query',
+        client: {} as any,
+      } as unknown as Operation;
 
       const forward = vi.fn(
         () =>
-          new Observable<FetchResult>((observer) => {
+          new Observable<ApolloLink.Result>((observer) => {
             observer.next(testResponse);
             observer.complete();
           }),
@@ -77,7 +83,7 @@ describe('Date Time Middleware Tests', () => {
       expect(observable).not.toBeNull();
       return new Promise<void>((resolve, reject) => {
         observable?.subscribe({
-          next: (response: FetchResult) => {
+          next: (response: ApolloLink.Result) => {
             if (!response.data) {
               reject(new Error('Expected response.data to be defined'));
               return;
@@ -106,11 +112,13 @@ describe('Date Time Middleware Tests', () => {
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
-      };
+        operationType: 'query',
+        client: {} as any,
+      } as unknown as Operation;
 
       const forward = vi.fn(
         (op) =>
-          new Observable<FetchResult>((observer) => {
+          new Observable<ApolloLink.Result>((observer) => {
             expect(op.variables['startDate']).toBe('not-a-date');
             expect(op.variables['startTime']).toBe('25:99:99');
             observer.complete();
@@ -125,10 +133,9 @@ describe('Date Time Middleware Tests', () => {
     });
 
     it('should not break when encountering invalid dates in response middleware', () => {
-      const testResponse: FetchResult = {
+      const testResponse: ApolloLink.Result = {
         data: { createdAt: 'invalid-date-time' },
         extensions: {},
-        context: {},
       };
 
       const operation: Operation = {
@@ -138,11 +145,13 @@ describe('Date Time Middleware Tests', () => {
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
-      };
+        operationType: 'query',
+        client: {} as any,
+      } as unknown as Operation;
 
       const forward = vi.fn(
         () =>
-          new Observable<FetchResult>((observer) => {
+          new Observable<ApolloLink.Result>((observer) => {
             observer.next(testResponse);
             observer.complete();
           }),
@@ -153,7 +162,7 @@ describe('Date Time Middleware Tests', () => {
       expect(observable).not.toBeNull();
       return new Promise<void>((resolve, reject) => {
         observable?.subscribe({
-          next: (response: FetchResult) => {
+          next: (response: ApolloLink.Result) => {
             // Ensure there's always an assertion
             expect(response.data).toBeTruthy(); // This ensures `response.data` is defined and truthy
 
@@ -196,11 +205,13 @@ describe('Date Time Middleware Tests', () => {
         getContext: vi.fn(() => ({})),
         setContext: vi.fn(),
         extensions: {},
-      };
+        operationType: 'query',
+        client: {} as any,
+      } as unknown as Operation;
 
       const forward = vi.fn(
         (op) =>
-          new Observable<FetchResult>((observer) => {
+          new Observable<ApolloLink.Result>((observer) => {
             expect(op.variables.event.startDate).toBe('2023-10-01');
             expect(op.variables.event.startTime).toMatch(
               /\d{2}:\d{2}:\d{2}.\d{3}Z/,

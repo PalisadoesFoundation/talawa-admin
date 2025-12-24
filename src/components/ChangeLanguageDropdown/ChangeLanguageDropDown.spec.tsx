@@ -8,7 +8,7 @@ import {
   type Mock,
 } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import React from 'react';
 import { toast } from 'react-toastify';
 import cookies from 'js-cookie';

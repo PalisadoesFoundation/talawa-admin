@@ -2,13 +2,8 @@
  * GraphQL service for plugin operations
  */
 
-import {
-  useMutation,
-  useQuery,
-  type QueryResult,
-  type OperationVariables,
-  type ApolloClient,
-} from '@apollo/client';
+import { type OperationVariables, type ApolloClient } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { GET_ALL_PLUGINS } from '../GraphQl/Queries/PlugInQueries';
 import {
   CREATE_PLUGIN_MUTATION,
@@ -46,10 +41,7 @@ export interface IDeletePluginInput {
   id: string;
 }
 
-export const useGetAllPlugins = (): QueryResult<
-  { getPlugins: IPlugin[] },
-  OperationVariables
-> => {
+export const useGetAllPlugins = () => {
   return useQuery<{ getPlugins: IPlugin[] }>(GET_ALL_PLUGINS);
 };
 
@@ -80,15 +72,15 @@ export const useDeletePlugin = () => {
 };
 
 export class PluginGraphQLService {
-  private client: ApolloClient<unknown>;
+  private client: ApolloClient;
 
-  constructor(apolloClient: ApolloClient<unknown>) {
+  constructor(apolloClient: ApolloClient) {
     this.client = apolloClient;
   }
 
   async getAllPlugins(): Promise<IPlugin[]> {
     try {
-      const result = await this.client.query({
+      const result = await this.client.query<{ getPlugins: IPlugin[] }>({
         query: GET_ALL_PLUGINS,
         fetchPolicy: 'cache-first',
       });
@@ -101,7 +93,7 @@ export class PluginGraphQLService {
 
   async createPlugin(input: ICreatePluginInput): Promise<IPlugin | null> {
     try {
-      const result = await this.client.mutate({
+      const result = await this.client.mutate<{ createPlugin: IPlugin }>({
         mutation: CREATE_PLUGIN_MUTATION,
         variables: { input },
         refetchQueries: [{ query: GET_ALL_PLUGINS }],
@@ -115,7 +107,7 @@ export class PluginGraphQLService {
 
   async installPlugin(input: IInstallPluginInput): Promise<IPlugin | null> {
     try {
-      const result = await this.client.mutate({
+      const result = await this.client.mutate<{ installPlugin: IPlugin }>({
         mutation: INSTALL_PLUGIN_MUTATION,
         variables: { input },
         refetchQueries: [{ query: GET_ALL_PLUGINS }],
@@ -129,7 +121,7 @@ export class PluginGraphQLService {
 
   async updatePlugin(input: IUpdatePluginInput): Promise<IPlugin | null> {
     try {
-      const result = await this.client.mutate({
+      const result = await this.client.mutate<{ updatePlugin: IPlugin }>({
         mutation: UPDATE_PLUGIN_MUTATION,
         variables: { input },
         refetchQueries: [{ query: GET_ALL_PLUGINS }],
@@ -145,7 +137,9 @@ export class PluginGraphQLService {
     input: IDeletePluginInput,
   ): Promise<{ id: string; pluginId: string } | null> {
     try {
-      const result = await this.client.mutate({
+      const result = await this.client.mutate<{
+        deletePlugin: { id: string; pluginId: string };
+      }>({
         mutation: DELETE_PLUGIN_MUTATION,
         variables: { input },
         refetchQueries: [{ query: GET_ALL_PLUGINS }],

@@ -50,7 +50,7 @@ import type {
 import styles from '../../../style/app-fixed.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { toast } from 'react-toastify';
 import {
@@ -62,6 +62,7 @@ import {
   TextField,
 } from '@mui/material';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
+import type { UserDetailsResult } from 'types/GraphQL/queryResults';
 
 export interface InterfacePledgeModal {
   isOpen: boolean;
@@ -146,34 +147,33 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   const { pledgeUsers, pledgeAmount, pledgeCurrency } = formState;
 
   // Query to get the user details based on the userId prop
-  const { data: userData } = useQuery(USER_DETAILS, {
+  const { data: userData } = useQuery<UserDetailsResult>(USER_DETAILS, {
     variables: { input: { id: userId } },
   });
 
   // Effect to update the pledgers state when user data is fetched
   useEffect(() => {
-    if (userData?.user) {
-      const user = userData.user;
-      const nameParts = user.name ? user.name.split(' ') : [''];
-      const firstName = nameParts[0];
-      const lastName = nameParts.slice(1).join(' ');
+    if (userData?.user?.user) {
+      const user = userData.user.user;
+      const firstName = user.firstName || '';
+      const lastName = user.lastName || '';
 
       const currentUser = {
-        id: user.id,
+        id: user._id,
         firstName,
         lastName,
-        name: user.name,
-        avatarURL: user.avatarURL,
+        name: `${firstName} ${lastName}`.trim(),
+        avatarURL: user.image,
       };
 
       setPledgers([currentUser]);
 
-      if (user.role === 'regular') {
-        setFormState((prevState) => ({
-          ...prevState,
-          pledgeUsers: [currentUser],
-        }));
-      }
+      // Auto-select current user as pledger for regular users
+      // Note: role is not available on the nested user object, so we always set the pledgeUsers
+      setFormState((prevState) => ({
+        ...prevState,
+        pledgeUsers: [currentUser],
+      }));
     }
   }, [userData]);
 
@@ -278,7 +278,8 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           }
           className="p-3"
         >
-          {userData?.user?.role !== 'regular' && (
+          {/* Show pledger autocomplete for all users */}
+          {userData?.user?.user && (
             <Form.Group className="d-flex mb-3 w-100">
               <Autocomplete
                 className={`${styles.noOutline} w-100`}

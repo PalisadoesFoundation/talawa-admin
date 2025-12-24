@@ -40,7 +40,8 @@
  * Returns:
  * - JSX.Element: A table displaying members or blocked users with options to block/unblock.
  */
-import { useQuery, useMutation } from '@apollo/client';
+
+import { useMutation, useQuery } from '@apollo/client/react';
 import React, { useEffect, useState, useCallback } from 'react';
 import { Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
@@ -170,7 +171,7 @@ const BlockUser = (): JSX.Element => {
     }
   }, [searchTerm, allMembers, blockedUsers]);
 
-  const [blockUser] = useMutation(BLOCK_USER_MUTATION_PG);
+  const [blockUser] = useMutation<any>(BLOCK_USER_MUTATION_PG);
   const [unBlockUser] = useMutation(UNBLOCK_USER_MUTATION_PG);
 
   const handleBlockUser = useCallback(

@@ -4,7 +4,7 @@
  * Renders a table row for a user, managing organization membership and role.
  */
 
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import {
   REMOVE_MEMBER_MUTATION,
   UNBLOCK_USER_MUTATION_PG,
@@ -53,7 +53,9 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const [searchByNameJoinedOrgs, setSearchByNameJoinedOrgs] = useState('');
   const [searchByNameBlockedOrgs, setSearchByNameBlockedOrgs] = useState('');
   const [removeUser] = useMutation(REMOVE_MEMBER_MUTATION);
-  const [unblockUser] = useMutation(UNBLOCK_USER_MUTATION_PG);
+  const [unblockUser] = useMutation<{ unblockUser: any }>(
+    UNBLOCK_USER_MUTATION_PG,
+  );
   const [updateUserInOrgType] = useMutation(UPDATE_USER_ROLE_IN_ORG_MUTATION);
   const navigate = useNavigate();
 

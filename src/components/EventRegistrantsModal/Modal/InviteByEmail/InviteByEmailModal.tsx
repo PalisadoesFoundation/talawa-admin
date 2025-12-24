@@ -5,11 +5,10 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form, Spinner } from 'react-bootstrap';
 import TextField from '@mui/material/TextField';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { SEND_EVENT_INVITATIONS } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import type { ApolloError } from '@apollo/client/errors';
 
 type Props = {
   show: boolean;
@@ -92,7 +91,7 @@ const InviteByEmailModal: React.FC<Props> = ({
       if (onInvitesSent) onInvitesSent();
       handleClose();
     } catch (err) {
-      const error = err as ApolloError;
+      const error = err as Error;
       toast.error(t('errorSendingInvites') || 'Error sending invites');
       if (error?.message) toast.error(error.message);
     } finally {

@@ -24,7 +24,8 @@
  *
 
  */
-import { useQuery } from '@apollo/client';
+
+import { useQuery } from '@apollo/client/react';
 import React, { useEffect, useState, JSX } from 'react';
 import { Button, Card } from 'react-bootstrap';
 import Col from 'react-bootstrap/Col';
@@ -80,8 +81,30 @@ function OrganizationDashboard(): JSX.Element {
    * All hooks must be called before the conditional return to comply with React's Rules of Hooks.
    */
 
+  /**
+   * Query to fetch organization data.
+   */
+
+  interface InterfaceMembershipRequestData {
+    organization: {
+      id: string;
+      membershipRequestsCount: number;
+      membershipRequests: {
+        membershipRequestId: string;
+        createdAt: string;
+        status: string;
+        user: {
+          avatarURL?: string;
+          id: string;
+          name: string;
+          emailAddress: string;
+        };
+      }[];
+    };
+  }
+
   const { data: membershipRequestData, loading: loadingMembershipRequests } =
-    useQuery(MEMBERSHIP_REQUEST_PG, {
+    useQuery<InterfaceMembershipRequestData>(MEMBERSHIP_REQUEST_PG, {
       variables: {
         input: {
           id: orgId ?? '',
@@ -106,46 +129,77 @@ function OrganizationDashboard(): JSX.Element {
     fetchPolicy: 'cache-and-network',
   });
 
+  useEffect(() => {
+    if (orgMemberData) {
+      setAdminCount(orgMemberData.organization.adminsCount);
+      setMemberCount(orgMemberData.organization.membersCount);
+    }
+  }, [orgMemberData, orgId]);
+
+  interface InterfaceOrganizationPostsCountData {
+    organization: {
+      id: string;
+      postsCount: number;
+    };
+  }
+
   const {
     data: orgPostsData,
     loading: orgPostsLoading,
     error: orgPostsError,
-  } = useQuery(GET_ORGANIZATION_POSTS_COUNT_PG, {
-    variables: { id: orgId ?? '' },
-    skip: !orgId,
-    fetchPolicy: 'cache-and-network',
-    notifyOnNetworkStatusChange: true,
-  });
+  } = useQuery<InterfaceOrganizationPostsCountData>(
+    GET_ORGANIZATION_POSTS_COUNT_PG,
+    { variables: { id: orgId } },
+  );
+
+  interface InterfaceOrganizationEventsData {
+    organization: {
+      eventsCount: number;
+      events: {
+        edges: IEvent[];
+      };
+    };
+  }
 
   const {
     data: orgEventsData,
     loading: orgEventsLoading,
     error: orgEventsError,
-  } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
-    variables: { id: orgId ?? '', first: 8, after: null },
-    skip: !orgId,
-    fetchPolicy: 'cache-and-network',
-    notifyOnNetworkStatusChange: true,
+  } = useQuery<InterfaceOrganizationEventsData>(GET_ORGANIZATION_EVENTS_PG, {
+    variables: { id: orgId, first: 8, after: null },
   });
+
+  interface InterfaceBlockedUsersCountData {
+    organization: {
+      id: string;
+      blockedUsersCount: number;
+    };
+  }
 
   const {
     data: orgBlockedUsersData,
     loading: orgBlockedUsersLoading,
     error: orgBlockedUsersError,
-  } = useQuery(GET_ORGANIZATION_BLOCKED_USERS_COUNT, {
-    variables: { id: orgId ?? '' },
-    skip: !orgId,
-    fetchPolicy: 'cache-and-network',
-    notifyOnNetworkStatusChange: true,
-  });
+  } = useQuery<InterfaceBlockedUsersCountData>(
+    GET_ORGANIZATION_BLOCKED_USERS_COUNT,
+    {
+      variables: { id: orgId },
+      notifyOnNetworkStatusChange: true,
+    },
+  );
 
+  interface InterfaceVenuesCountData {
+    organization: {
+      id: string;
+      venuesCount: number;
+    };
+  }
   const {
     data: orgVenuesData,
     loading: orgVenuesLoading,
     error: orgVenuesError,
-  } = useQuery(GET_ORGANIZATION_VENUES_COUNT, {
-    variables: { id: orgId ?? '' },
-    skip: !orgId,
+  } = useQuery<InterfaceVenuesCountData>(GET_ORGANIZATION_VENUES_COUNT, {
+    variables: { id: orgId },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'cache-and-network',
   });
@@ -238,11 +292,20 @@ function OrganizationDashboard(): JSX.Element {
   /**
    * Query to fetch posts for the organization.
    */
+
+  interface InterfaceOrganizationPostsData {
+    organization: {
+      posts: {
+        edges: InterfaceOrganizationPostsConnectionEdgePg[];
+      };
+    };
+  }
+
   const {
     data: postData,
     loading: loadingPost,
     error: errorPost,
-  } = useQuery(GET_ORGANIZATION_POSTS_PG, {
+  } = useQuery<InterfaceOrganizationPostsData>(GET_ORGANIZATION_POSTS_PG, {
     variables: { id: orgId, first: 5 },
     notifyOnNetworkStatusChange: true,
     fetchPolicy: 'cache-and-network',

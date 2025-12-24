@@ -14,7 +14,7 @@ import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { FormControl, TextField } from '@mui/material';
 import { TaskAlt, HistoryToggleOff } from '@mui/icons-material';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { GET_ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 
@@ -46,7 +46,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
   } = item;
 
   // Query to get category details
-  const { data: categoryData } = useQuery(GET_ACTION_ITEM_CATEGORY, {
+  const { data: categoryData } = useQuery<any>(GET_ACTION_ITEM_CATEGORY, {
     variables: {
       input: { id: categoryId },
     },
@@ -54,7 +54,7 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
   });
 
   // Query to get organization members to resolve assignee and creator details
-  const { data: membersData } = useQuery(MEMBERS_LIST, {
+  const { data: membersData } = useQuery<any>(MEMBERS_LIST, {
     variables: { organizationId: organizationId },
   });
 

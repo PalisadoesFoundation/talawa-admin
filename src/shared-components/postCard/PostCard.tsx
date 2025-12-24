@@ -21,7 +21,7 @@
  * @returns A JSX.Element representing the post card.
  */
 import React from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import {
@@ -103,7 +103,14 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
     loading: commentsLoading,
     fetchMore: fetchMoreComments,
     refetch: refetchComments,
-  } = useQuery(GET_POST_COMMENTS, {
+  } = useQuery<{
+    post: {
+      comments: {
+        edges: InterfaceCommentEdge[];
+        pageInfo: { endCursor: string; hasNextPage: boolean };
+      };
+    };
+  }>(GET_POST_COMMENTS, {
     skip: shouldSkipComments,
     variables: shouldSkipComments
       ? undefined

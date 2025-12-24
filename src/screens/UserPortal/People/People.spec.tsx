@@ -7,7 +7,7 @@ import {
   waitFor,
   act,
 } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router';
@@ -583,6 +583,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
     expect(select).toBeInTheDocument();
     const nextButton = screen.getByTestId('nextPage');
     await userEvent.click(nextButton);
+    await wait();
   });
 
   it('should not trigger search for non-Enter key press', async () => {
@@ -601,7 +602,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
     const searchInput = screen.getByTestId('searchInput');
     fireEvent.keyUp(searchInput, { key: 'A', code: 'KeyA' });
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await wait();
     expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
   });
 
@@ -624,14 +625,16 @@ describe('People Component Mode Switch and Search Coverage', () => {
     searchInput.remove();
 
     await userEvent.click(searchBtn);
-    await new Promise((resolve) => setTimeout(resolve, 100));
+    await wait();
   });
 });
 
 describe('People Component Field Tests (Email, ID, Role)', () => {
   const renderComponentWithEmailMock = (): RenderResult => {
     return render(
-      <MockedProvider mocks={[defaultQueryMock]}>
+      <MockedProvider
+        mocks={[defaultQueryMock, defaultQueryMock, defaultQueryMock]}
+      >
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

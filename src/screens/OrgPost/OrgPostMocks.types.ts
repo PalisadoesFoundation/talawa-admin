@@ -15,6 +15,7 @@ export interface IPostNode {
   updatedAt?: string;
   pinnedAt?: string | null;
   pinned?: boolean;
+  hasUserVoted?: { hasVoted: boolean; voteType: string };
   attachments?: unknown[];
   imageUrl?: string | null;
   videoUrl?: string | null;

@@ -51,8 +51,13 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
-import { useLazyQuery } from '@apollo/client';
-import { GridCellParams, GridPaginationModel } from '@mui/x-data-grid';
+import { useLazyQuery } from '@apollo/client/react';
+import {
+  DataGrid,
+  GridColDef,
+  GridCellParams,
+  GridPaginationModel,
+} from '@mui/x-data-grid';
 import { Stack } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import type {
@@ -159,21 +164,29 @@ function OrganizationPeople(): JSX.Element {
   }>({ hasNextPage: false, hasPreviousPage: false });
 
   // Query hooks
-  const [fetchMembers, { loading: memberLoading, error: memberError }] =
-    useLazyQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
-      onCompleted: (data) => {
-        setData(data?.organization?.members);
-      },
-    });
+  // Query hooks
+  const [
+    fetchMembers,
+    { loading: memberLoading, error: memberError, data: membersData },
+  ] = useLazyQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {} as any);
 
-  const [fetchUsers, { loading: userLoading, error: userError }] = useLazyQuery(
-    USER_LIST_FOR_TABLE,
-    {
-      onCompleted: (data) => {
-        setData(data?.allUsers);
-      },
-    },
-  );
+  const [
+    fetchUsers,
+    { loading: userLoading, error: userError, data: usersData },
+  ] = useLazyQuery(USER_LIST_FOR_TABLE);
+
+  // Sync data from hooks to component state (onCompleted isn't reliable)
+  useEffect(() => {
+    if (membersData) {
+      setData((membersData as any)?.organization?.members);
+    }
+  }, [membersData]);
+
+  useEffect(() => {
+    if (usersData) {
+      setData((usersData as any)?.allUsers);
+    }
+  }, [usersData]);
 
   // Handle data changes
   useEffect(() => {

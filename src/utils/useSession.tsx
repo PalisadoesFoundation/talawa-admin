@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { t } from 'i18next';
@@ -40,7 +40,7 @@ const useSession = (): UseSessionReturnType => {
   const navigate = useNavigate();
 
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
-  const { data, error: queryError } = useQuery(
+  const { data, error: queryError } = useQuery<any>(
     GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
   );
 

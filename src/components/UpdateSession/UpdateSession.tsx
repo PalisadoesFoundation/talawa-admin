@@ -39,7 +39,7 @@ import { useTranslation } from 'react-i18next';
 import { Card, Button, Form } from 'react-bootstrap';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
@@ -63,14 +63,19 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
     30,
   ); // Timeout from database for the community
 
+  type TimeoutDataType = { inactivityTimeoutDuration: number };
+
   const {
     data,
     loading,
     error: queryError,
-  } = useQuery(GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG);
+  } = useQuery<{ community: TimeoutDataType }>(
+    GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
+    {
+      notifyOnNetworkStatusChange: true,
+    },
+  );
   const [uploadSessionTimeout] = useMutation(UPDATE_SESSION_TIMEOUT_PG);
-
-  type TimeoutDataType = { inactivityTimeoutDuration: number };
 
   /**
    * Effect that fetches the current session timeout from the server and sets the initial state.

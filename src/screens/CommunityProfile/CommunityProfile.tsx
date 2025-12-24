@@ -37,7 +37,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Form } from 'react-bootstrap';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { toast } from 'react-toastify';
 
 import Loader from 'components/Loader/Loader';
@@ -104,8 +104,7 @@ const CommunityProfile = (): JSX.Element => {
   });
 
   // Query to fetch community data
-  const { data, loading } = useQuery(GET_COMMUNITY_DATA_PG);
-
+  const { data, loading, error } = useQuery<any>(GET_COMMUNITY_DATA_PG);
   // Mutations for updating and resetting community data
   const [uploadPreLoginImagery] = useMutation(UPDATE_COMMUNITY_PG);
   const [resetPreLoginImagery] = useMutation(RESET_COMMUNITY);

@@ -18,9 +18,13 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.helpers.ts:3](https://github.com/P
 
 `object`
 
+### \_\_typename
+
+> **\_\_typename**: `string` = `'Post'`
+
 ### attachments
 
-> **attachments**: `unknown`[]
+> **attachments**: `any`[]
 
 ### caption
 
@@ -41,6 +45,10 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.helpers.ts:3](https://github.com/P
 ### creator
 
 > **creator**: `object`
+
+#### creator.\_\_typename
+
+> **\_\_typename**: `string` = `'User'`
 
 #### creator.avatarURL
 
@@ -69,6 +77,10 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.helpers.ts:3](https://github.com/P
 ### downVotesCount
 
 > **downVotesCount**: `number`
+
+### hasUserVoted
+
+> **hasUserVoted**: \{ `hasVoted`: `boolean`; `voteType`: `string`; \} \| \{ `__typename`: `string`; `hasVoted`: `false`; `voteType`: `string`; \}
 
 ### id
 

@@ -16,7 +16,7 @@
  * import { MockedProvider } from '@apollo/client/testing';
  *
  * render(
- * <MockedProvider mocks={getActiveAdvertisementMocks} addTypename={false}>
+ * <MockedProvider mocks={getActiveAdvertisementMocks}>
  * <Advertisements />
  * </MockedProvider>
  * );
@@ -26,7 +26,7 @@
  * @category Mocks
  */
 import { act } from 'react';
-import type { NormalizedCacheObject, DocumentNode } from '@apollo/client';
+import type { DocumentNode } from '@apollo/client';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
@@ -36,6 +36,7 @@ import {
   HttpLink,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import {
   ADD_ADVERTISEMENT_MUTATION,
@@ -48,6 +49,7 @@ type AdvertisementType = 'banner' | 'pop_up' | 'menu';
 interface IAttachment {
   mimeType: string;
   url: string;
+  __typename?: string;
 }
 
 interface IAdvertisementNode {
@@ -57,11 +59,13 @@ interface IAdvertisementNode {
   endAt: string;
   organization: {
     id: string;
+    __typename?: string;
   };
   name: string;
   startAt: string;
   type: AdvertisementType;
   attachments: IAttachment[];
+  __typename?: string;
 }
 
 interface IPageInfo {
@@ -69,10 +73,12 @@ interface IPageInfo {
   endCursor: string | null;
   hasNextPage: boolean;
   hasPreviousPage: boolean;
+  __typename?: string;
 }
 
 interface IEdge {
   node: IAdvertisementNode;
+  __typename?: string;
 }
 
 interface IAdvertisementListMock {
@@ -90,7 +96,9 @@ interface IAdvertisementListMock {
   result: {
     data: {
       organization: {
+        __typename?: string;
         advertisements: {
+          __typename?: string;
           edges: IEdge[];
           pageInfo: IPageInfo;
         };
@@ -134,8 +142,6 @@ interface IBaseMutationMock<T = unknown> {
   error?: Error;
 }
 
-const { getItem } = useLocalStorage();
-
 export const dateConstants = {
   create: {
     startAtISO: '2024-12-31T18:30:00.000Z',
@@ -167,21 +173,21 @@ const httpLink = new HttpLink({
   uri: BACKEND_URL,
 });
 
+const { getItem } = useLocalStorage();
+
 const authLink = setContext((_, { headers }) => {
   const token = getItem('token');
   return {
     headers: {
       ...headers,
-      ...(token ? { authorization: `Bearer ${token}` } : {}),
+      authorization: token ? `Bearer ${token}` : '',
     },
   };
 });
 
-export const link = ApolloLink.from([authLink, httpLink]);
-
-export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+export const client: ApolloClient = new ApolloClient({
   cache: new InMemoryCache(),
-  link,
+  link: ApolloLink.from([authLink, httpLink]),
 });
 
 export async function wait(ms = 100): Promise<void> {
@@ -210,17 +216,23 @@ const createAdvertisementNode = ({
 }: IAdvertisementNodeParams): IEdge => ({
   node: {
     id,
+    __typename: 'Advertisement',
     createdAt,
     description,
     endAt,
     organization: {
       id: organizationId,
+      __typename: 'Organization',
     },
     name,
     startAt,
     type,
-    attachments,
+    attachments: (attachments || []).map((a) => ({
+      ...a,
+      __typename: 'AdvertisementAttachment',
+    })),
   },
+  __typename: 'AdvertisementEdge',
 });
 
 const createAdvertisementListMock = ({
@@ -248,13 +260,16 @@ const createAdvertisementListMock = ({
   result: {
     data: {
       organization: {
+        __typename: 'Organization',
         advertisements: {
+          __typename: 'AdvertisementConnection',
           edges,
           pageInfo: {
             startCursor,
             endCursor,
             hasNextPage,
             hasPreviousPage,
+            __typename: 'PageInfo',
           } as IPageInfo,
         },
       },
@@ -334,16 +349,26 @@ const activeAdNode = createAdvertisementNode({
 
 export const getCompletedAdvertisementMocks: IAdvertisementListMock[] = [
   createAdvertisementListMock({ isCompleted: true, edges: [completedAdNode] }),
+  createAdvertisementListMock({ isCompleted: true, edges: [completedAdNode] }),
+  createAdvertisementListMock({ isCompleted: false, edges: [] }),
   createAdvertisementListMock({ isCompleted: false, edges: [] }),
 ];
 
 export const getActiveAdvertisementMocks: IAdvertisementListMock[] = [
   createAdvertisementListMock({ isCompleted: false, edges: [activeAdNode] }),
+  createAdvertisementListMock({ isCompleted: false, edges: [activeAdNode] }),
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
   createAdvertisementListMock({ isCompleted: true, edges: [] }),
 ];
 
 export const deleteAdvertisementMocks = [
   createAdvertisementListMock({ isCompleted: true, edges: [completedAdNode] }),
+  createAdvertisementListMock({ isCompleted: true, edges: [completedAdNode] }),
+  createAdvertisementListMock({
+    isCompleted: false,
+    edges: [],
+    hasNextPage: false,
+  }),
   createAdvertisementListMock({
     isCompleted: false,
     edges: [],
@@ -361,6 +386,20 @@ export const initialArchivedData: IAdvertisementListMock[] = [
     isCompleted: false,
     edges: [],
     hasNextPage: false,
+  }),
+  createAdvertisementListMock({
+    isCompleted: false,
+    edges: [],
+    hasNextPage: false,
+  }),
+  createAdvertisementListMock({
+    isCompleted: true,
+    edges: createBatchNodes(
+      6,
+      'Cookie shop',
+      'this is an active advertisement',
+      new Date('2025-02-03').toISOString(),
+    ),
   }),
   createAdvertisementListMock({
     isCompleted: true,
@@ -394,6 +433,20 @@ export const initialActiveData: IAdvertisementListMock[] = [
     isCompleted: true,
     edges: [],
     hasNextPage: false,
+  }),
+  createAdvertisementListMock({
+    isCompleted: true,
+    edges: [],
+    hasNextPage: false,
+  }),
+  createAdvertisementListMock({
+    isCompleted: false,
+    edges: createBatchNodes(
+      6,
+      'Cookie shop',
+      'this is an active advertisement',
+      new Date('2030-02-03').toISOString(),
+    ),
   }),
   createAdvertisementListMock({
     isCompleted: false,
@@ -433,6 +486,17 @@ export const filterActiveAdvertisementData: IAdvertisementListMock[] = [
       true,
     ),
   }),
+  createAdvertisementListMock({
+    isCompleted: false,
+    edges: createBatchNodes(
+      6,
+      'Cookie shop',
+      'this is an active advertisement',
+      new Date('2030-01-01').toISOString(),
+      true,
+    ),
+  }),
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
   createAdvertisementListMock({ isCompleted: true, edges: [] }),
 ];
 
@@ -447,6 +511,17 @@ export const filterCompletedAdvertisementData: IAdvertisementListMock[] = [
       true,
     ),
   }),
+  createAdvertisementListMock({
+    isCompleted: true,
+    edges: createBatchNodes(
+      6,
+      'Cookie shop',
+      'this is a completed advertisement',
+      new Date().toISOString(),
+      true,
+    ),
+  }),
+  createAdvertisementListMock({ isCompleted: false, edges: [] }),
   createAdvertisementListMock({ isCompleted: false, edges: [] }),
 ];
 
@@ -473,10 +548,23 @@ export const createAdvertisement = [
       }),
     ],
   }),
+  createAdvertisementListMock({
+    edges: [
+      createAdvertisementNode({
+        id: '1',
+        name: 'Ad1',
+        description: 'This is a new advertisement created for testing.',
+        startAt: createDates.startAtISO,
+        endAt: createDates.endAtISO,
+      }),
+    ],
+  }),
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
   createAdvertisementListMock({ isCompleted: true, edges: [] }),
 ];
 
 export const createAdvertisementWithoutName = [
+  ...getActiveAdvertisementMocks,
   createMutationMock(
     ADD_ADVERTISEMENT_MUTATION,
     {
@@ -490,6 +578,7 @@ export const createAdvertisementWithoutName = [
 ];
 
 export const createAdvertisementWithEndDateBeforeStart = [
+  ...getActiveAdvertisementMocks,
   createMutationMock(
     ADD_ADVERTISEMENT_MUTATION,
     {
@@ -503,6 +592,7 @@ export const createAdvertisementWithEndDateBeforeStart = [
 ];
 
 export const createAdvertisementError = [
+  ...getActiveAdvertisementMocks,
   createMutationMock(
     ADD_ADVERTISEMENT_MUTATION,
     {
@@ -517,7 +607,11 @@ export const createAdvertisementError = [
 ];
 
 export const updateAdMocks = [
+  // First pair: completed query fires first in component
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
   createAdvertisementListMock({
+    isCompleted: false,
     edges: [
       createAdvertisementNode({
         id: '1',
@@ -528,7 +622,45 @@ export const updateAdMocks = [
       }),
     ],
   }),
+  createAdvertisementListMock({
+    isCompleted: false,
+    edges: [
+      createAdvertisementNode({
+        id: '1',
+        name: 'Ad1',
+        description: 'This is a new advertisement created for testing.',
+        startAt: updateDates.startAtISO,
+        endAt: updateDates.endAtISO,
+      }),
+    ],
+  }),
+  // Second pair for refetch after update
   createAdvertisementListMock({ isCompleted: true, edges: [] }),
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
+  createAdvertisementListMock({
+    isCompleted: false,
+    edges: [
+      createAdvertisementNode({
+        id: '1',
+        name: 'Ad1',
+        description: 'This is a new advertisement created for testing.',
+        startAt: updateDates.startAtISO,
+        endAt: updateDates.endAtISO,
+      }),
+    ],
+  }),
+  createAdvertisementListMock({
+    isCompleted: false,
+    edges: [
+      createAdvertisementNode({
+        id: '1',
+        name: 'Ad1',
+        description: 'This is a new advertisement created for testing.',
+        startAt: updateDates.startAtISO,
+        endAt: updateDates.endAtISO,
+      }),
+    ],
+  }),
   createMutationMock(
     UPDATE_ADVERTISEMENT_MUTATION,
     {
@@ -539,7 +671,11 @@ export const updateAdMocks = [
     },
     { updateAdvertisement: { id: '1' } },
   ),
+  // Third pair after mutation completes
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
+  createAdvertisementListMock({ isCompleted: true, edges: [] }),
   createAdvertisementListMock({
+    isCompleted: false,
     edges: [
       createAdvertisementNode({
         id: '1',
@@ -550,7 +686,18 @@ export const updateAdMocks = [
       }),
     ],
   }),
-  createAdvertisementListMock({ isCompleted: true, edges: [] }),
+  createAdvertisementListMock({
+    isCompleted: false,
+    edges: [
+      createAdvertisementNode({
+        id: '1',
+        name: 'Ad1',
+        description: 'This is an updated advertisement',
+        startAt: updateDates.startAtISO,
+        endAt: updateDates.endAtISO,
+      }),
+    ],
+  }),
 ];
 
 export const fetchErrorMocks = [

@@ -92,7 +92,6 @@ export const EMPTY_MOCKS = [
   {
     request: {
       query: ORGANIZATION_LIST,
-      variables: { filter: '', limit: null, offset: null },
     },
     result: {
       data: {
@@ -128,7 +127,6 @@ export const MOCKS_NEW_2 = [
   {
     request: {
       query: ORGANIZATION_LIST,
-      variables: { filter: '', limit: null, offset: null },
     },
     result: {
       data: {
@@ -184,7 +182,6 @@ export const MOCKS_NEW = [
   {
     request: {
       query: ORGANIZATION_LIST,
-      variables: { filter: '', limit: null, offset: null },
     },
     result: {
       data: {

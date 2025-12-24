@@ -6,7 +6,7 @@
 
 > `const` **dateConstants**: `object`
 
-Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:139](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L139)
+Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:145](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L145)
 
 ## Type Declaration
 

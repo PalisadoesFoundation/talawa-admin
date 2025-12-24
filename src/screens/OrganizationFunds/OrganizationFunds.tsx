@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { Stack } from '@mui/material';
 import {
@@ -129,19 +129,7 @@ const organizationFunds = (): JSX.Element => {
     loading: fundLoading,
     error: fundError,
     refetch: refetchFunds,
-  }: {
-    data?: {
-      organization: {
-        funds: {
-          edges: { node: InterfaceFundInfo }[];
-        };
-      };
-    };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(FUND_LIST, {
-    skip: !orgId,
+  } = useQuery<any>(FUND_LIST, {
     variables: {
       input: {
         id: orgId ?? '',

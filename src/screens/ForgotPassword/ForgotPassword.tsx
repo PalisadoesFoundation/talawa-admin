@@ -39,7 +39,8 @@
  *
  * @returns {JSX.Element} The ForgotPassword component.
  */
-import { useMutation } from '@apollo/client';
+
+import { useMutation } from '@apollo/client/react';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router';
@@ -84,10 +85,11 @@ const ForgotPassword = (): JSX.Element => {
   });
 
   // GraphQL mutations
-  const [otp, { loading: otpLoading }] = useMutation(GENERATE_OTP_MUTATION);
-  const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(
-    FORGOT_PASSWORD_MUTATION,
+  const [otp, { loading: otpLoading }] = useMutation<any>(
+    GENERATE_OTP_MUTATION,
   );
+  const [sendForGotPasswordMail, { loading: forgotPasswordLoading, data }] =
+    useMutation<any>(FORGOT_PASSWORD_MUTATION);
 
   // Check if the user is already logged in
   const isLoggedIn = getItem('IsLoggedIn');
@@ -148,8 +150,12 @@ const ForgotPassword = (): JSX.Element => {
     }
 
     try {
-      const { data } = await forgotPassword({
-        variables: { userOtp, newPassword, otpToken },
+      const { data } = await sendForGotPasswordMail({
+        variables: {
+          email: registeredEmail,
+          password: newPassword,
+          confirmPassword: confirmNewPassword,
+        },
       });
 
       if (data) {

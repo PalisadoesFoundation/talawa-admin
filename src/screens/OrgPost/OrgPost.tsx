@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import {
   ORGANIZATION_POST_LIST_WITH_VOTES,
   GET_POSTS_BY_ORG,
@@ -14,12 +14,16 @@ import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
 import styles from 'style/app-fixed.module.css';
-import PostsRenderer from './Posts';
+import PostsRenderer, { type InterfaceOrganizationData } from './Posts';
 import type {
   InterfacePostEdge,
   InterfaceOrganizationPostListData,
   InterfacePost,
 } from '../../types/Post/interface';
+
+interface InterfacePostsByOrgData {
+  postsByOrganization: InterfacePost[];
+}
 
 import CreatePostModal from './CreatePostModal';
 import PageHeader from 'shared-components/Navbar/Navbar';
@@ -55,7 +59,7 @@ function OrgPost(): JSX.Element {
     loading,
     error,
     refetch: refetchPosts,
-  } = useQuery(GET_POSTS_BY_ORG, {
+  } = useQuery<InterfacePostsByOrgData>(GET_POSTS_BY_ORG, {
     variables: { input: { organizationId: currentUrl } },
     fetchPolicy: 'network-only',
   });
@@ -69,6 +73,7 @@ function OrgPost(): JSX.Element {
   };
 
   const userId = getItem('id');
+
   const {
     data: orgPostListData,
     loading: orgPostListLoading,
@@ -149,7 +154,9 @@ function OrgPost(): JSX.Element {
       <PostsRenderer
         loading={loading}
         error={error}
-        data={isFiltering ? data : orgPostListData}
+        data={
+          (isFiltering ? data : orgPostListData) as InterfaceOrganizationData
+        }
         pinnedPostData={orgPinnedPostListData?.organization?.pinnedPosts?.edges}
         isFiltering={isFiltering}
         searchTerm={searchTerm}
@@ -208,7 +215,12 @@ function OrgPost(): JSX.Element {
           (post: InterfacePost) =>
             post.caption?.toLowerCase().includes(term.toLowerCase()),
         );
-        setFilteredPosts(filtered);
+        const filteredEdges = filtered.map((post: InterfacePost) => ({
+          node: post,
+          cursor: '',
+        })) as InterfacePostEdge[];
+
+        setFilteredPosts(filteredEdges);
       }
     } catch {
       toast.error('Error searching posts');

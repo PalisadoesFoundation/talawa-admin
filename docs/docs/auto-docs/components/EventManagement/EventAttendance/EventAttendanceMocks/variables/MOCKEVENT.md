@@ -14,6 +14,10 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 > **allDay**: `boolean` = `false`
 
+### baseEvent
+
+> **baseEvent**: `any` = `null`
+
 ### createdAt
 
 > **createdAt**: `string` = `'2030-04-01T00:00:00.000Z'`
@@ -49,6 +53,10 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 ### isPublic
 
 > **isPublic**: `boolean` = `true`
+
+### isRecurringEventTemplate
+
+> **isRecurringEventTemplate**: `boolean` = `false`
 
 ### isRegisterable
 

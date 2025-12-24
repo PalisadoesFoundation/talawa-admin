@@ -41,7 +41,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import {
   EVENT_ATTENDEES,
   MEMBERS_LIST,
@@ -62,6 +62,18 @@ type ModalPropType = {
   handleClose: () => void;
 };
 
+interface InterfaceEventDetails {
+  event: {
+    recurrenceRule: {
+      id: string;
+    } | null;
+  };
+}
+
+interface InterfaceMembersList {
+  usersByOrganizationId: InterfaceUser[];
+}
+
 export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   const { eventId, orgId, handleClose, show } = props;
   const [member, setMember] = useState<InterfaceUser | null>(null);
@@ -79,7 +91,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
 
   // First, get event details to determine if it's recurring or standalone
-  const { data: eventData } = useQuery(EVENT_DETAILS, {
+  const { data: eventData } = useQuery<InterfaceEventDetails>(EVENT_DETAILS, {
     variables: { eventId: eventId },
     fetchPolicy: 'cache-first',
   });
@@ -96,7 +108,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
     variables: { eventId: eventId },
   });
 
-  const { data: memberData } = useQuery(MEMBERS_LIST, {
+  const { data: memberData } = useQuery<InterfaceMembersList>(MEMBERS_LIST, {
     variables: { organizationId: orgId },
   });
 

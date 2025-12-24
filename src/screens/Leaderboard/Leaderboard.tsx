@@ -64,7 +64,7 @@ import {
 import { debounce, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 
@@ -114,11 +114,7 @@ function leaderboard(): JSX.Element {
     data: rankingsData,
     loading: rankingsLoading,
     error: rankingsError,
-  }: {
-    data?: { getVolunteerRanks: InterfaceVolunteerRank[] };
-    loading: boolean;
-    error?: Error | undefined;
-  } = useQuery(VOLUNTEER_RANKING, {
+  } = useQuery<any>(VOLUNTEER_RANKING, {
     variables: {
       orgId,
       where: {
@@ -324,7 +320,12 @@ function leaderboard(): JSX.Element {
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}
-        rows={rankings.map((ranking, index) => ({ id: index + 1, ...ranking }))}
+        rows={rankings.map(
+          (
+            ranking: { rank?: number; hoursVolunteered?: number },
+            index: number,
+          ) => ({ id: index + 1, ...ranking }),
+        )}
         columns={columns}
         isRowSelectable={() => false}
       />

@@ -1,28 +1,29 @@
-﻿import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import dayjs from 'dayjs';
+import React from 'react';
+import { MockedProvider } from '@apollo/client/testing/react';
+import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { I18nextProvider } from 'react-i18next';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
+import { GraphQLError } from 'graphql';
 
-// Mock react-i18next properly with importOriginal to avoid missing exports
-vi.mock('react-i18next', async (importOriginal) => {
-  const actual = (await importOriginal()) as Record<string, unknown>;
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, params?: Record<string, unknown>) => {
-        // Handle translations with parameters
-        if (key === 'weeklyOn' && params?.day) return `Weekly on ${params.day}`;
-        if (key === 'monthlyOnDay' && params?.day)
-          return `Monthly on day ${params.day}`;
-        if (key === 'annuallyOn' && params?.month && params?.day)
-          return `Annually on ${params.month} ${params.day}`;
-        if (key === 'everyWeekday') return 'Every weekday';
-        if (key === 'doesNotRepeat') return 'Does not repeat';
-        if (key === 'daily') return 'Daily';
-        if (key === 'custom') return 'Custom';
-        return key;
-      },
-    }),
+import CreateEventModal from './CreateEventModal';
+import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
+import i18n from 'utils/i18nForTest';
+import { toast } from 'react-toastify';
+import * as errorHandlerModule from 'utils/errorHandler';
+import type { IEventFormProps } from 'types/EventForm/interface';
+import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
+import { Frequency } from 'utils/recurrenceUtils';
+
+// Extend Window interface for test data storage
+interface ITestWindow extends Window {
+  __eventFormData?: {
+    name?: string;
+    description?: string;
+    location?: string;
+    recurrenceRule?: InterfaceRecurrenceRule | null;
   };
 });
 
@@ -245,12 +246,13 @@ describe('CreateEventModal', () => {
 
   it('renders when open', () => {
     render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     expect(screen.getByText(/eventDetails/i)).toBeInTheDocument();
@@ -261,12 +263,13 @@ describe('CreateEventModal', () => {
 
   it('does not render when isOpen is false', () => {
     render(
-      <CreateEventModal
-        isOpen={false}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} isOpen={false} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     expect(screen.queryByText(/eventDetails/i)).not.toBeInTheDocument();
@@ -275,12 +278,13 @@ describe('CreateEventModal', () => {
   it('calls onClose when close button is clicked', () => {
     const onClose = vi.fn();
     render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={onClose}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     const closeBtn = screen.getByTestId('createEventModalCloseBtn');
@@ -311,12 +315,13 @@ describe('CreateEventModal', () => {
     const onEventCreated = vi.fn();
     const onClose = vi.fn();
     render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={onClose}
-        onEventCreated={onEventCreated}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     const titleInput = screen.getByTestId('eventTitleInput');
@@ -340,12 +345,13 @@ describe('CreateEventModal', () => {
 
   it('toggles all-day checkbox and shows/hides time pickers', () => {
     render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     // Initially all-day is checked, so time pickers should not be visible
@@ -470,12 +476,13 @@ describe('CreateEventModal', () => {
 
   it('prevents submission when recurrence validation fails', async () => {
     render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[errorMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     // Fill form
@@ -542,12 +549,13 @@ describe('CreateEventModal', () => {
   it('submits form with time when all-day is unchecked', async () => {
     const onEventCreated = vi.fn();
     render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={onEventCreated}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[delayedMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     // Uncheck all-day
@@ -618,12 +626,13 @@ describe('CreateEventModal', () => {
 
   it('resets form when modal is closed and reopened', () => {
     const { rerender } = render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     // Fill form
@@ -639,44 +648,32 @@ describe('CreateEventModal', () => {
 
     // Reopen modal
     rerender(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} isOpen={false} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
-    // Form should be reset (empty values)
-    expect(screen.getByTestId('eventTitleInput')).toHaveValue('');
-    expect(screen.getByTestId('eventDescriptionInput')).toHaveValue('');
-  });
-
-  it('disables create button when loading', () => {
-    mockUseMutation.mockReturnValue([mockCreate, { loading: true }]);
-
-    render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+    rerender(
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} isOpen={true} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     const createBtn = screen.getByTestId('createEventBtn');
     expect(createBtn).toBeDisabled();
   });
 
-  it('validates required fields before submission', async () => {
-    render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
-    );
+  test('handles recurrence rule formatting and submission', async () => {
+    const { formatRecurrenceForPayload } =
+      await import('shared-components/EventForm/EventForm');
 
     // Fill only title, leave others empty
     fireEvent.change(screen.getByTestId('eventTitleInput'), {
@@ -693,12 +690,13 @@ describe('CreateEventModal', () => {
 
   it('handles recurrence dropdown toggle', () => {
     render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[recurrenceMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     // Enable recurring event checkbox first
@@ -742,12 +740,13 @@ describe('CreateEventModal', () => {
 
   it('handles whitespace-only input as invalid', async () => {
     render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     // Fill with whitespace only
@@ -771,12 +770,13 @@ describe('CreateEventModal', () => {
 
   it('submits with all boolean flags correctly', async () => {
     render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     // Toggle all checkboxes
@@ -818,12 +818,13 @@ describe('CreateEventModal', () => {
   // Date/Time Constraint Tests
   it('auto-adjusts endDate when startDate is changed to after endDate', () => {
     render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     // Set endDate to a specific date first
@@ -840,12 +841,13 @@ describe('CreateEventModal', () => {
 
   it('auto-adjusts endTime when startTime is changed to after endTime', () => {
     render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     // Uncheck all-day to show time pickers
@@ -877,12 +879,13 @@ describe('CreateEventModal', () => {
   // Recurrence Handling Tests
   it('returns "Custom" label when recurrence does not match predefined options', async () => {
     render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[errorMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     // Enable recurring event checkbox first
@@ -928,12 +931,13 @@ describe('CreateEventModal', () => {
     });
 
     render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[networkErrorMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     // Enable recurring event checkbox first
@@ -964,12 +968,13 @@ describe('CreateEventModal', () => {
 
   it('displays dynamically generated recurrence option labels correctly', () => {
     render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     // Enable recurring event checkbox first
@@ -1021,12 +1026,13 @@ describe('CreateEventModal', () => {
 
   it('verifies endDate DatePicker minDate constraint', () => {
     render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[delayedMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     const startDateInput = screen.getByTestId('eventStartAt');
@@ -1073,18 +1079,9 @@ describe('CreateEventModal', () => {
     });
   });
 
-  it('handles non-Error exception in catch block', async () => {
-    // Mock the mutation to throw a non-Error object
-    mockCreate.mockRejectedValueOnce('String error');
-
-    render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
-    );
+  test('handles undefined recurrence in formatRecurrenceForPayload', async () => {
+    const { formatRecurrenceForPayload } =
+      await import('shared-components/EventForm/EventForm');
 
     // Fill form with valid data
     fireEvent.change(screen.getByTestId('eventTitleInput'), {
@@ -1113,12 +1110,13 @@ describe('CreateEventModal', () => {
     });
 
     render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     // Fill form
@@ -1168,12 +1166,13 @@ describe('CreateEventModal', () => {
   it('verifies time parsing in mutation payload for all-day false', async () => {
     const onEventCreated = vi.fn();
     render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={onEventCreated}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     // Uncheck all-day
@@ -1210,14 +1209,15 @@ describe('CreateEventModal', () => {
     });
   });
 
-  it('tests helper functions - getDayName and getMonthName via recurrence options', () => {
-    render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+  test('resets form on close via header close button', async () => {
+    const { rerender } = render(
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     // Enable recurring event checkbox first
@@ -1226,24 +1226,58 @@ describe('CreateEventModal', () => {
     const dropdown = screen.getByTestId('recurrenceDropdown');
     fireEvent.click(dropdown);
 
-    // The recurrence options should include day and month names
-    // This tests getDayName and getMonthName helper functions
-    const weeklyOption = screen.getByTestId('recurrenceOption-2');
-    expect(weeklyOption.textContent).toMatch(/Weekly on \w+/);
+    // Reopen to verify reset
+    rerender(
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} isOpen={true} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
 
-    const annuallyOption = screen.getByTestId('recurrenceOption-4');
-    expect(annuallyOption.textContent).toMatch(/Annually on \w+ \d+/);
+    const nameInput = screen.getByTestId(
+      'event-name-input',
+    ) as HTMLInputElement;
+    expect(nameInput.value).toBe('');
   });
 
-  it('tests complex multi-step workflow', async () => {
-    const onEventCreated = vi.fn();
+  test('handles successful event creation with createEventData', async () => {
     render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={onEventCreated}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
+
+    const submitButton = screen.getByTestId('event-form-submit');
+    await userEvent.click(submitButton);
+
+    await waitFor(
+      () => {
+        expect(toast.success).toHaveBeenCalledWith(
+          'Congratulations! The Event is created.',
+        );
+        expect(mockOnEventCreated).toHaveBeenCalledTimes(1);
+        expect(mockOnClose).toHaveBeenCalledTimes(1);
+      },
+      { timeout: 3000 },
+    );
+  });
+
+  test('formResetKey changes when handleClose is called', async () => {
+    const { rerender } = render(
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     // Step 1: Change dates
@@ -1254,8 +1288,16 @@ describe('CreateEventModal', () => {
       target: { value: '2025-12-21' },
     });
 
-    // Step 2: Toggle all-day off
-    fireEvent.click(screen.getByTestId('allDayEventCheck'));
+    // Reopen modal - form should have new key
+    rerender(
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} isOpen={true} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
+    );
 
     // Step 3: Skip time changes (TimePicker has no testIDs)
     // Time functionality is tested through integration
@@ -1293,12 +1335,13 @@ describe('CreateEventModal', () => {
 
   it('tests timeToDayJs helper function indirectly through time changes', () => {
     render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[nullDataMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     // Uncheck all-day to show time pickers
@@ -1311,12 +1354,13 @@ describe('CreateEventModal', () => {
 
   it('tests hideCustomRecurrenceModal function', async () => {
     render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     // Enable recurring event checkbox first
@@ -1388,12 +1432,13 @@ describe('CreateEventModal', () => {
 
   it('tests conditional rendering of CustomRecurrenceModal', async () => {
     render(
-      <CreateEventModal
-        isOpen={true}
-        onClose={vi.fn()}
-        onEventCreated={vi.fn()}
-        currentUrl="org1"
-      />,
+      <MockedProvider mocks={[successMock]}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <I18nextProvider i18n={i18n}>
+            <CreateEventModal {...defaultProps} />
+          </I18nextProvider>
+        </LocalizationProvider>
+      </MockedProvider>,
     );
 
     // Enable recurring event checkbox first

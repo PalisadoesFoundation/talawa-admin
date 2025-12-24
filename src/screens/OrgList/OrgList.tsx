@@ -45,7 +45,7 @@
  * - `Modal` - For managing features after organization creation.
  */
 import React, { useEffect, useState, useRef, useMemo } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import {
   CREATE_ORGANIZATION_MUTATION_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
@@ -159,7 +159,9 @@ function orgList(): JSX.Element {
   });
 
   const toggleModal = (): void => setShowModal(!showModal);
-  const [create] = useMutation(CREATE_ORGANIZATION_MUTATION_PG);
+  const [createOrganization] = useMutation<any>(
+    CREATE_ORGANIZATION_MUTATION_PG,
+  );
   const [createMembership] = useMutation(
     CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
   );
@@ -173,7 +175,7 @@ function orgList(): JSX.Element {
     data: InterfaceCurrentUserTypePG | undefined;
     loading: boolean;
     error?: Error | undefined;
-  } = useQuery(CURRENT_USER, {
+  } = useQuery<any>(CURRENT_USER, {
     variables: { userId: getItem('id') },
     context,
   });
@@ -182,7 +184,7 @@ function orgList(): JSX.Element {
     data: allOrganizationsData,
     loading: loadingAll,
     refetch: refetchOrgs,
-  } = useQuery(ORGANIZATION_FILTER_LIST, {
+  } = useQuery<any>(ORGANIZATION_FILTER_LIST, {
     variables: { filter: filterName },
     fetchPolicy: 'network-only',
     errorPolicy: 'all',
@@ -249,7 +251,7 @@ function orgList(): JSX.Element {
     const state = _state.trim();
 
     try {
-      const { data } = await create({
+      const { data } = await createOrganization({
         variables: {
           addressLine1: addressLine1,
           addressLine2: addressLine2,

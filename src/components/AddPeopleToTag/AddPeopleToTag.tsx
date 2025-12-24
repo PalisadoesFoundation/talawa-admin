@@ -38,7 +38,7 @@
  * It is designed to be displayed as a modal and requires integration with GraphQL APIs.
  */
 
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid';
 import { USER_TAGS_MEMBERS_TO_ASSIGN_TO } from 'GraphQl/Queries/userTagQueries';
@@ -57,7 +57,6 @@ import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScroll
 import type {
   InterfaceAddPeopleToTagProps,
   InterfaceMemberData,
-  InterfaceTagUsersToAssignToQuery,
   InterfaceQueryUserTagsMembersToAssignTo,
 } from 'types/Tag/interface';
 import { TAGS_QUERY_DATA_CHUNK_SIZE, dataGridStyle } from 'types/Tag/utils';
@@ -83,26 +82,27 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   const [memberToAssignToSearchLastName, setMemberToAssignToSearchLastName] =
     useState('');
 
+  interface TagUsersToAssignToData {
+    getUsersToAssignTo: InterfaceQueryUserTagsMembersToAssignTo;
+  }
+
   const {
     data: userTagsMembersToAssignToData,
     loading: userTagsMembersToAssignToLoading,
     error: userTagsMembersToAssignToError,
     refetch: userTagsMembersToAssignToRefetch,
     fetchMore: fetchMoreMembersToAssignTo,
-  }: InterfaceTagUsersToAssignToQuery = useQuery(
-    USER_TAGS_MEMBERS_TO_ASSIGN_TO,
-    {
-      variables: {
-        id: currentTagId,
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        where: {
-          firstName: { starts_with: memberToAssignToSearchFirstName },
-          lastName: { starts_with: memberToAssignToSearchLastName },
-        },
+  } = useQuery<TagUsersToAssignToData>(USER_TAGS_MEMBERS_TO_ASSIGN_TO, {
+    variables: {
+      id: currentTagId,
+      first: TAGS_QUERY_DATA_CHUNK_SIZE,
+      where: {
+        firstName: { starts_with: memberToAssignToSearchFirstName },
+        lastName: { starts_with: memberToAssignToSearchLastName },
       },
-      skip: !addPeopleToTagModalIsOpen,
     },
-  );
+    skip: !addPeopleToTagModalIsOpen,
+  });
 
   useEffect(() => {
     setMemberToAssignToSearchFirstName('');

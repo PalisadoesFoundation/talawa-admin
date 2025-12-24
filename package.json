@@ -5,9 +5,8 @@
   "type": "module",
   "config-overrides-path": "scripts/config-overrides",
   "dependencies": {
-    "@apollo/client": "3.14.0",
+    "@apollo/client": "4.0.7",
     "@apollo/link-error": "^2.0.0-beta.3",
-    "@apollo/react-testing": "^4.0.0",
     "@dicebear/collection": "^9.2.2",
     "@dicebear/core": "^9.2.2",
     "@emotion/react": "^11.13.3",
@@ -28,7 +27,7 @@
     "@reduxjs/toolkit": "^2.3.0",
     "@remix-run/router": "^1.23.0",
     "@wry/equality": "^0.5.7",
-    "apollo-upload-client": "^18.0.1",
+    "apollo-upload-client": "^19.0.0",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.6",
     "dayjs": "^1.11.13",
@@ -60,6 +59,7 @@
     "react-toastify": "^11.0.3",
     "react-tooltip": "^5.28.0",
     "redux": "^5.0.1",
+    "rxjs": "^7.8.2",
     "sanitize-html": "^2.17.0",
     "ts-invariant": "^0.10.3",
     "vite-plugin-environment": "^1.1.3",
@@ -126,7 +126,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
-    "@types/apollo-upload-client": "^18.0.0",
+    "@types/apollo-upload-client": "^19.0.0",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^24.3.0",
     "@types/prop-types": "^15.7.15",
@@ -151,6 +151,7 @@
     "glob": "^13.0.0",
     "graphql": "^16.10.0",
     "husky": "^9.1.6",
+    "jsdom": "^27.3.0",
     "knip": "^5.66.0",
     "lint-staged": "^16.2.3",
     "nyc": "^17.1.0",
@@ -192,18 +193,12 @@
     "temp-directory": ".nyc_output"
   },
   "resolutions": {
-    "@apollo/client": "3.14.0"
+    "@apollo/client": "4.0.7"
   },
   "pnpm": {
     "overrides": {
-      "@apollo/client": "3.14.0"
-    },
-    "onlyBuiltDependencies": [
-      "@parcel/watcher",
-      "core-js",
-      "cypress",
-      "esbuild"
-    ]
+      "@apollo/client": "4.0.7"
+    }
   },
   "engines": {
     "node": ">=24.x"

@@ -1,6 +1,6 @@
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
-import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
-import { PAGE_SIZE } from 'types/ReportingTable/utils';
+import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
+import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 
 /* ---------- Types ---------- */
 
@@ -14,8 +14,10 @@ export type TagEdge = {
     usersAssignedTo: { totalCount: number };
     childTags: { totalCount: number };
     ancestorTags: TagAncestor[];
+    __typename?: string;
   };
   cursor: string;
+  __typename?: string;
 };
 
 type PageInfo = {
@@ -23,25 +25,37 @@ type PageInfo = {
   endCursor: string | null;
   hasNextPage: boolean;
   hasPreviousPage: boolean;
+  __typename?: string;
 };
 
 type UserTags = {
   edges: TagEdge[];
   pageInfo: PageInfo;
   totalCount: number;
+  __typename?: string;
+};
+
+type OrganizationMockData = {
+  id: string;
+  userTags: UserTags;
+  __typename?: string;
 };
 
 type ListMock = {
   request: {
-    query: typeof ORGANIZATION_USER_TAGS_LIST_PG;
+    query: typeof ORGANIZATION_USER_TAGS_LIST;
     variables: Record<string, unknown>;
   };
-  result: { data: { organization: { tags: UserTags } } };
+  result: {
+    data: {
+      organizations: OrganizationMockData[];
+    };
+  };
 };
 
 type ErrorMock = {
   request: {
-    query: typeof ORGANIZATION_USER_TAGS_LIST_PG;
+    query: typeof ORGANIZATION_USER_TAGS_LIST;
     variables: Record<string, unknown>;
   };
   error: Error;
@@ -64,8 +78,10 @@ export const makeTagEdge = (
     usersAssignedTo: { totalCount: opts?.users ?? 5 },
     childTags: { totalCount: opts?.children ?? 5 },
     ancestorTags: opts?.ancestors ?? [],
+    __typename: 'Tag',
   },
   cursor: String(id),
+  __typename: 'TagEdge',
 });
 
 export const makeUserTags = (
@@ -79,8 +95,10 @@ export const makeUserTags = (
     hasNextPage: false,
     hasPreviousPage: false,
     ...pageInfo,
+    __typename: 'PageInfo',
   },
   totalCount: edges.length,
+  __typename: 'UserTags',
 });
 
 const listMock = (
@@ -88,9 +106,17 @@ const listMock = (
   edges: TagEdge[],
   pageInfo: Partial<PageInfo> = {},
 ): ListMock => ({
-  request: { query: ORGANIZATION_USER_TAGS_LIST_PG, variables },
+  request: { query: ORGANIZATION_USER_TAGS_LIST, variables },
   result: {
-    data: { organization: { tags: makeUserTags(edges, pageInfo) } },
+    data: {
+      organizations: [
+        {
+          id: 'orgId',
+          userTags: makeUserTags(edges, pageInfo),
+          __typename: 'Organization',
+        },
+      ],
+    },
   },
 });
 
@@ -98,7 +124,7 @@ const errorMock = (
   variables: Record<string, unknown>,
   error: Error,
 ): ErrorMock => ({
-  request: { query: ORGANIZATION_USER_TAGS_LIST_PG, variables },
+  request: { query: ORGANIZATION_USER_TAGS_LIST, variables },
   error,
 });
 
@@ -108,8 +134,8 @@ export const MOCK_RESPONSES = {
   DEFAULT: [
     listMock(
       {
-        input: { id: 'orgId' },
-        first: PAGE_SIZE,
+        id: 'orgId',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
       },
@@ -118,8 +144,8 @@ export const MOCK_RESPONSES = {
     ),
     listMock(
       {
-        input: { id: 'orgId' },
-        first: PAGE_SIZE,
+        id: 'orgId',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: '10',
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
@@ -128,8 +154,8 @@ export const MOCK_RESPONSES = {
     ),
     listMock(
       {
-        input: { id: 'orgId' },
-        first: PAGE_SIZE,
+        id: 'orgId',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: 'searchUserTag' } },
         sortedBy: { id: 'DESCENDING' },
       },
@@ -146,8 +172,8 @@ export const MOCK_RESPONSES = {
     ),
     listMock(
       {
-        input: { id: 'orgId' },
-        first: PAGE_SIZE,
+        id: 'orgId',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: 'searchUserTag' } },
         sortedBy: { id: 'ASCENDING' },
       },
@@ -174,15 +200,15 @@ export const MOCK_RESPONSES = {
         query: CREATE_USER_TAG,
         variables: { name: 'userTag 13', organizationId: 'orgId' },
       },
-      result: { data: null },
+      result: { data: { createUserTag: null } },
     },
   ],
 
   ERROR_ORG: [
     errorMock(
       {
-        input: { id: 'orgIdError' },
-        first: PAGE_SIZE,
+        id: 'orgIdError',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
       },
@@ -203,8 +229,8 @@ export const MOCK_RESPONSES = {
   EMPTY: [
     listMock(
       {
-        input: { id: 'orgId' },
-        first: PAGE_SIZE,
+        id: 'orgId',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
       },
@@ -215,17 +241,17 @@ export const MOCK_RESPONSES = {
   UNDEFINED_USER_TAGS: [
     {
       request: {
-        query: ORGANIZATION_USER_TAGS_LIST_PG,
+        query: ORGANIZATION_USER_TAGS_LIST,
         variables: {
-          input: { id: 'orgId' },
-          first: PAGE_SIZE,
+          id: 'orgId',
+          first: TAGS_QUERY_DATA_CHUNK_SIZE,
           where: { name: { starts_with: '' } },
           sortedBy: { id: 'DESCENDING' },
         },
       },
       result: {
         data: {
-          organization: { tags: undefined as unknown as UserTags },
+          organizations: [{ userTags: null as unknown as UserTags }],
         },
       },
     },
@@ -234,8 +260,8 @@ export const MOCK_RESPONSES = {
   NULL_END_CURSOR: [
     listMock(
       {
-        input: { id: 'orgId' },
-        first: PAGE_SIZE,
+        id: 'orgId',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
       },
@@ -244,8 +270,8 @@ export const MOCK_RESPONSES = {
     ),
     listMock(
       {
-        input: { id: 'orgId' },
-        first: PAGE_SIZE,
+        id: 'orgId',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         after: null,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
@@ -255,10 +281,10 @@ export const MOCK_RESPONSES = {
     ),
     {
       request: {
-        query: ORGANIZATION_USER_TAGS_LIST_PG,
+        query: ORGANIZATION_USER_TAGS_LIST,
         variables: {
-          input: { id: 'orgId' },
-          first: PAGE_SIZE,
+          id: 'orgId',
+          first: TAGS_QUERY_DATA_CHUNK_SIZE,
           after: null,
           where: { name: { starts_with: '' } },
           sortedBy: { id: 'DESCENDING' },
@@ -271,8 +297,8 @@ export const MOCK_RESPONSES = {
   ASCENDING_NO_SEARCH: [
     listMock(
       {
-        input: { id: 'orgId' },
-        first: PAGE_SIZE,
+        id: 'orgId',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'ASCENDING' },
       },
@@ -284,8 +310,8 @@ export const MOCK_RESPONSES = {
   FETCHMORE_UNDEFINED: [
     listMock(
       {
-        input: { id: 'orgId' },
-        first: PAGE_SIZE,
+        id: 'orgId',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
         where: { name: { starts_with: '' } },
         sortedBy: { id: 'DESCENDING' },
       },
@@ -294,10 +320,10 @@ export const MOCK_RESPONSES = {
     ),
     {
       request: {
-        query: ORGANIZATION_USER_TAGS_LIST_PG,
+        query: ORGANIZATION_USER_TAGS_LIST,
         variables: {
-          input: { id: 'orgId' },
-          first: PAGE_SIZE,
+          id: 'orgId',
+          first: TAGS_QUERY_DATA_CHUNK_SIZE,
           after: '1',
           where: { name: { starts_with: '' } },
           sortedBy: { id: 'DESCENDING' },

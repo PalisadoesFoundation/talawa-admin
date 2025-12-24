@@ -18,10 +18,10 @@ export const MOCKS = [
     result: {
       data: {
         organization: {
-          id: '01960b81-bfed-7369-ae96-689dbd4281ba',
+          __typename: 'Organization',
+          id: 'orgId',
           membersCount: 2,
           adminsCount: 1,
-          __typename: 'Organization',
         },
       },
       loading: false,
@@ -38,9 +38,9 @@ export const MOCKS = [
     result: {
       data: {
         organization: {
+          __typename: 'Organization',
           id: 'orgId',
           postsCount: 10,
-          __typename: 'Organization',
         },
       },
       loading: false,
@@ -57,6 +57,7 @@ export const MOCKS = [
     result: {
       data: {
         organization: {
+          __typename: 'Organization',
           id: 'orgId',
           eventsCount: 1,
           events: {
@@ -123,7 +124,6 @@ export const MOCKS = [
             },
             __typename: 'OrganizationEventsConnection',
           },
-          __typename: 'Organization',
         },
       },
       loading: false,
@@ -139,6 +139,7 @@ export const MOCKS = [
     result: {
       data: {
         organization: {
+          __typename: 'Organization',
           id: 'orgId',
           posts: {
             edges: [
@@ -160,7 +161,6 @@ export const MOCKS = [
             ],
             __typename: 'OrganizationPostsConnection',
           },
-          __typename: 'Organization',
         },
       },
       loading: false,
@@ -176,9 +176,9 @@ export const MOCKS = [
     result: {
       data: {
         organization: {
+          __typename: 'Organization',
           id: 'orgId',
           venuesCount: 10,
-          __typename: 'Organization',
         },
       },
       loading: false,
@@ -199,6 +199,8 @@ export const MOCKS = [
     result: {
       data: {
         organization: {
+          __typename: 'Organization',
+          membershipRequestsCount: 1,
           id: 'orgId',
           membershipRequests: [
             {
@@ -228,7 +230,6 @@ export const MOCKS = [
               __typename: 'MembershipRequest',
             },
           ],
-          __typename: 'Organization',
         },
       },
     },
@@ -243,9 +244,9 @@ export const MOCKS = [
     result: {
       data: {
         organization: {
-          id: '01960b81-bfed-7369-ae96-689dbd4281ba',
-          blockedUsersCount: 2,
           __typename: 'Organization',
+          id: 'orgId',
+          blockedUsersCount: 2,
         },
       },
       loading: false,
@@ -263,9 +264,9 @@ export const EMPTY_MOCKS = [
     result: {
       data: {
         organization: {
+          __typename: 'Organization',
           id: 'orgId',
           postsCount: 0,
-          __typename: 'Organization',
         },
       },
     },
@@ -280,6 +281,8 @@ export const EMPTY_MOCKS = [
     result: {
       data: {
         organization: {
+          __typename: 'Organization',
+          id: 'orgId',
           eventsCount: 0,
           events: {
             edges: [],
@@ -290,7 +293,6 @@ export const EMPTY_MOCKS = [
             },
             __typename: 'OrganizationEventsConnection',
           },
-          __typename: 'Organization',
         },
       },
     },
@@ -309,9 +311,10 @@ export const EMPTY_MOCKS = [
     result: {
       data: {
         organization: {
+          __typename: 'Organization',
+          membershipRequestsCount: 0,
           id: 'orgId',
           membershipRequests: [],
-          __typename: 'Organization',
         },
       },
     },
@@ -325,8 +328,9 @@ export const EMPTY_MOCKS = [
     result: {
       data: {
         organization: {
-          posts: { edges: [], __typename: 'OrganizationPostsConnection' },
           __typename: 'Organization',
+          id: 'orgId',
+          posts: { edges: [] },
         },
       },
     },
@@ -340,10 +344,10 @@ export const EMPTY_MOCKS = [
     result: {
       data: {
         organization: {
-          id: '01960b81-bfed-7369-ae96-689dbd4281ba',
+          __typename: 'Organization',
+          id: 'orgId',
           membersCount: 0,
           adminsCount: 0,
-          __typename: 'Organization',
         },
       },
       loading: false,
@@ -358,9 +362,9 @@ export const EMPTY_MOCKS = [
     result: {
       data: {
         organization: {
-          id: '01960b81-bfed-7369-ae96-689dbd4281ba',
-          blockedUsersCount: 0,
           __typename: 'Organization',
+          id: 'orgId',
+          blockedUsersCount: 0,
         },
       },
       loading: false,
@@ -375,9 +379,9 @@ export const EMPTY_MOCKS = [
     result: {
       data: {
         organization: {
+          __typename: 'Organization',
           id: 'orgId',
           venuesCount: 0,
-          __typename: 'Organization',
         },
       },
       loading: false,

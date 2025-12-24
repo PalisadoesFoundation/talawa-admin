@@ -47,7 +47,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
 import { WarningAmberRounded } from '@mui/icons-material';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { debounce, Stack } from '@mui/material';
 
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
@@ -122,12 +122,7 @@ function groups(): JSX.Element {
     loading: groupsLoading,
     error: groupsError,
     refetch: refetchGroups,
-  }: {
-    data?: { getEventVolunteerGroups: InterfaceVolunteerGroupInfo[] };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(EVENT_VOLUNTEER_GROUP_LIST, {
+  } = useQuery<any>(EVENT_VOLUNTEER_GROUP_LIST, {
     variables: {
       where: {
         eventId: undefined,

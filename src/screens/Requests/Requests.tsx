@@ -48,7 +48,8 @@
  * - Displays appropriate messages when no data is available.
  *
  */
-import { useQuery, useMutation } from '@apollo/client';
+
+import { useQuery, useMutation } from '@apollo/client/react';
 import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -120,7 +121,7 @@ const Requests = (): JSX.Element => {
   const organizationId = orgId;
 
   // Query to fetch membership requests
-  const { data, loading, fetchMore, refetch } = useQuery(
+  const { data, loading, fetchMore, refetch } = useQuery<any>(
     MEMBERSHIP_REQUEST_PG,
     {
       variables: {
@@ -135,7 +136,7 @@ const Requests = (): JSX.Element => {
     },
   );
 
-  const { data: orgsData } = useQuery(ORGANIZATION_LIST);
+  const { data: orgsData } = useQuery<any>(ORGANIZATION_LIST);
   const [displayedRequests, setDisplayedRequests] = useState<
     InterfaceRequestsListItem[]
   >([]);

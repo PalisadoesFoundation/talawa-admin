@@ -1,5 +1,5 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -75,48 +75,25 @@ const MOCKS = [
   {
     request: {
       query: GET_ORGANIZATION_EVENTS_PG,
-      variables: { id: '123', first: 150, after: null },
+      variables: { id: '123' },
     },
     result: {
       data: {
-        organization: {
-          eventsCount: 1,
-          events: {
-            edges: [
-              {
-                cursor: 'cursor-1',
-                node: {
-                  id: 'event123',
-                  name: 'Test Event Title',
-                  description: 'Test Description',
-                  startAt: '2024-01-01T09:00:00.000Z',
-                  endAt: '2024-01-02T17:00:00.000Z',
-                  allDay: false,
-                  location: 'Test Location',
-                  isPublic: true,
-                  isRegisterable: true,
-                  isRecurringEventTemplate: false,
-                  baseEvent: null,
-                  sequenceNumber: null,
-                  totalCount: null,
-                  hasExceptions: false,
-                  progressLabel: null,
-                  recurrenceDescription: null,
-                  recurrenceRule: null,
-                  attachments: [],
-                  creator: { id: 'u1', name: 'Test User' },
-                  organization: { id: '123', name: 'Test Org' },
-                  createdAt: '2024-01-01T00:00:00.000Z',
-                  updatedAt: '2024-01-01T00:00:00.000Z',
-                },
-              },
-            ],
-            pageInfo: {
-              hasNextPage: false,
-              endCursor: null,
-            },
+        eventsByOrganization: [
+          {
+            id: 'event123',
+            name: 'Test Event Title',
+            description: 'Test Description',
+            startDate: '2024-01-01',
+            endDate: '2024-01-02',
+            location: 'Test Location',
+            startTime: '09:00',
+            endTime: '17:00',
+            allDay: false,
+            isPublic: true,
+            isRegisterable: true,
           },
-        },
+        ],
       },
     },
   },

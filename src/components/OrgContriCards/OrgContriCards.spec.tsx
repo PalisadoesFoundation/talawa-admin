@@ -1,16 +1,36 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import type { NormalizedCacheObject } from '@apollo/client';
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
+import { Defer20220824Handler } from '@apollo/client/incremental';
+import { LocalState } from '@apollo/client/local-state';
+import { ApolloProvider } from '@apollo/client/react';
 import { I18nextProvider } from 'react-i18next';
 
 import OrgContriCards from './OrgContriCards';
 import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 import { describe, expect } from 'vitest';
-const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+const client: ApolloClient = new ApolloClient({
   cache: new InMemoryCache(),
-  uri: BACKEND_URL,
+
+  link: new HttpLink({
+    uri: BACKEND_URL,
+  }),
+
+  /*
+  Inserted by Apollo Client 3->4 migration codemod.
+  If you are not using the `@client` directive in your application,
+  you can safely remove this option.
+  */
+  localState: new LocalState({}),
+
+  /*
+  Inserted by Apollo Client 3->4 migration codemod.
+  If you are not using the `@defer` directive in your application,
+  you can safely remove this option.
+  */
+  incrementalHandler: new Defer20220824Handler(),
 });
 
 describe('Testing the Organization Contributions Cards', () => {

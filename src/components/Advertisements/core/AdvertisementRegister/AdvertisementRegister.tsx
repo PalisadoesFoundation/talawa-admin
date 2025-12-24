@@ -49,7 +49,7 @@ import {
   ADD_ADVERTISEMENT_MUTATION,
   UPDATE_ADVERTISEMENT_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
@@ -276,6 +276,7 @@ function AdvertisementRegister({
 
   // Handles advertisement update.
   const handleUpdate = async (): Promise<void> => {
+    console.log('handleUpdate called', formState, idEdit);
     try {
       const updatedFields: Partial<InterfaceFormStateTypes> = {};
 
@@ -295,6 +296,8 @@ function AdvertisementRegister({
       if (formState.endAt !== endAtEdit) {
         updatedFields.endAt = formState.endAt;
       }
+
+      console.log('handleUpdate fields:', updatedFields);
 
       // if both are updated, check if end date is greater or not
       if (updatedFields.endAt && updatedFields.startAt) {

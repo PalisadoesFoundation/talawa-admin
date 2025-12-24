@@ -39,17 +39,21 @@ export const getOrganizationPostListMock = (count = 1) => {
     result: {
       data: {
         organization: {
+          __typename: 'Organization',
           id: '123',
           name: 'Test Organization',
           avatarURL: null,
           postsCount: samplePosts.length,
           posts: {
+            __typename: 'PostConnection',
             edges: samplePosts.map((post) => ({
+              __typename: 'PostEdge',
               node: enrichPostNode(post),
               cursor: `cursor-${post.id}`,
             })),
             totalCount: samplePosts.length,
             pageInfo: {
+              __typename: 'PageInfo',
               startCursor: 'cursor-1',
               endCursor: `cursor-${samplePosts.length}`,
               hasNextPage: true,
@@ -84,7 +88,7 @@ export const getMockOrgPostList1 = (count = 1) => {
 // Composed mock arrays
 export const baseMocks = [
   ...getOrganizationPostListMock(100),
-  getPostsByOrgInitialMock,
+  ...Array(20).fill(getPostsByOrgInitialMock),
   ...Array(100).fill(ORGANIZATION_PINNED_POST_LIST_WITH_PAGINATION_MOCK),
   ...Array(100).fill(ORGANIZATION_PINNED_POST_LIST_INITIAL_MOCK),
   {
@@ -171,8 +175,8 @@ export const mocks = [
   getUserByIdMockUser2,
   getUserByIdMockUser2,
   getUserByIdMockUser2,
-  getPostsByOrgInitialMock,
-  ...getMockOrgPostList1(5),
+  ...Array(20).fill(getPostsByOrgInitialMock),
+  ...getMockOrgPostList1(50),
   {
     request: {
       query: ORGANIZATION_POST_LIST_WITH_VOTES,
@@ -201,5 +205,28 @@ export const mocks = [
     },
     result: { data: mockOrgPostList1 },
   },
-  ...Array(5).fill(ORGANIZATION_PINNED_POST_LIST_EMPTY_MOCK),
+  {
+    request: {
+      query: CREATE_POST_MUTATION,
+      variables: {
+        input: {
+          caption: 'Test Post Title',
+          organizationId: '123',
+          isPinned: false,
+        },
+      },
+    },
+    result: {
+      data: {
+        createPost: {
+          __typename: 'Post',
+          id: '3',
+          caption: 'Test Post Title',
+          pinnedAt: null,
+          attachments: [],
+        },
+      },
+    },
+  },
+  ...Array(50).fill(ORGANIZATION_PINNED_POST_LIST_EMPTY_MOCK),
 ];

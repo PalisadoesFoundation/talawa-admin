@@ -30,7 +30,8 @@
  *
  * @returns {React.FC} A React functional component that renders a tag node with optional subtags.
  */
-import { useQuery } from '@apollo/client';
+
+import { useQuery } from '@apollo/client/react';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import React, { useState } from 'react';
 import type {
@@ -177,7 +178,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
       </div>
 
       {expanded && subTagsLoading && (
-        <div className="ms-5">
+        <div className="ms-5" data-testid="subTagsLoader">
           <div className={styles.simpleLoader}>
             <div className={styles.spinner} />
           </div>

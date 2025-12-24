@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { EventsAttendedByUser } from './EventsAttendedByUser';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { EVENT_DETAILS_BASIC } from 'GraphQl/Queries/Queries';
 
 /**

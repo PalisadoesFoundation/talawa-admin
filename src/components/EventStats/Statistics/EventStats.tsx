@@ -38,7 +38,7 @@ import { ReviewStats } from './Review/Review';
 import { AverageRating } from './AverageRating/AverageRating';
 import styles from 'style/app-fixed.module.css';
 import eventStatsStyles from '../css/EventStats.module.css';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { EVENT_FEEDBACKS } from 'GraphQl/Queries/Queries';
 
 type ModalPropType = {
@@ -46,6 +46,15 @@ type ModalPropType = {
   eventId: string;
   handleClose: () => void;
 };
+import type { Feedback } from 'types/Event/type';
+
+interface EventFeedbackData {
+  event: {
+    _id: string;
+    averageFeedbackScore: number | null;
+    feedback: Feedback[];
+  };
+}
 
 export const EventStats = ({
   show,
@@ -53,9 +62,13 @@ export const EventStats = ({
   eventId,
 }: ModalPropType): JSX.Element => {
   // Query to fetch event feedback data
-  const { data, loading } = useQuery(EVENT_FEEDBACKS, {
-    variables: { id: eventId },
-  });
+  const { data, loading, error } = useQuery<EventFeedbackData>(
+    EVENT_FEEDBACKS,
+    {
+      variables: { id: eventId },
+      skip: !eventId,
+    },
+  );
 
   // Show a loading screen while data is being fetched
   if (loading) {
@@ -64,6 +77,10 @@ export const EventStats = ({
         <div className={styles.loader}></div>
       </>
     );
+  }
+
+  if (error || !data) {
+    return <></>;
   }
 
   return (

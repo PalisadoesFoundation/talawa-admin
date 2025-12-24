@@ -1,5 +1,6 @@
 import React, { act } from 'react';
-import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
+import type { MockedResponse } from '@apollo/client/testing';
 import {
   render,
   screen,
@@ -107,6 +108,7 @@ const MOCKS = [
             addressLine1: '123 Random Street',
             description: 'Unity Foundation for community development',
             avatarURL: null,
+            isMember: false,
           },
           {
             id: 'db1d5caad2ade57ab811e681',
@@ -114,6 +116,7 @@ const MOCKS = [
             addressLine1: '5112 Dare Centers',
             description: 'Mills Group organization',
             avatarURL: null,
+            isMember: false,
           },
         ],
       },
@@ -1933,10 +1936,7 @@ describe('RefreshToken storage verification', () => {
     });
 
     render(
-      <MockedProvider
-        mocks={SIGNIN_WITH_REFRESH_TOKEN_MOCK}
-        addTypename={false}
-      >
+      <MockedProvider mocks={SIGNIN_WITH_REFRESH_TOKEN_MOCK}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { Modal, Form, Button } from 'react-bootstrap';
@@ -133,7 +133,6 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
         toast.error(t('organizationIdMissing'));
         return;
       }
-
       const { data } = await create({
         variables: {
           input: {
@@ -171,6 +170,8 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
         if (videoInput) videoInput.value = '';
 
         onHide();
+      } else {
+        toast.error('Failed to create post');
       }
     } catch (error: unknown) {
       errorHandler(t, error);

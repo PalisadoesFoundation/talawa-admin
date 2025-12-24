@@ -40,7 +40,7 @@ import React, { useState } from 'react';
 import { Modal, Form, Button, Spinner } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useParams } from 'react-router';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { toast } from 'react-toastify';
 import type {
   InterfaceAddOnSpotAttendeeProps,
@@ -65,7 +65,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   const { t: tCommon } = useTranslation('common');
   const { orgId } = useParams<{ orgId: string }>();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [addSignUp] = useMutation(SIGNUP_MUTATION);
+  const [addSignUp] = useMutation<{ signUp: any }>(SIGNUP_MUTATION);
   const validateForm = (): boolean => {
     if (!formData.firstName || !formData.lastName || !formData.email) {
       toast.error(t('invalidDetailsMessage'));

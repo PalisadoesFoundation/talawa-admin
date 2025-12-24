@@ -7,11 +7,8 @@ import Modal from 'react-bootstrap/Modal';
 import { Button } from '@mui/material';
 import { FaUpload, FaExclamationTriangle, FaCheck } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import {
-  useApolloClient,
-  type ApolloClient,
-  type NormalizedCacheObject,
-} from '@apollo/client';
+import { type ApolloClient, type NormalizedCacheObject } from '@apollo/client';
+import { useApolloClient } from '@apollo/client/react';
 import {
   installAdminPluginFromZip,
   validateAdminPluginZip,
@@ -101,7 +98,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
     try {
       const result = await installAdminPluginFromZip({
         zipFile: selectedFile,
-        apolloClient: apolloClient as ApolloClient<NormalizedCacheObject>,
+        apolloClient: apolloClient as ApolloClient,
       });
 
       if (result.success) {

@@ -1,5 +1,6 @@
 import type { ApolloLink } from '@apollo/client';
-import { MockedProvider, type MockedResponse } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
+import { type MockedResponse } from '@apollo/client/testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import type { RenderResult } from '@testing-library/react';
 import dayjs from 'dayjs';
@@ -275,7 +276,7 @@ const renderPledgeModal = (
   props: InterfacePledgeModal,
 ): RenderResult => {
   return render(
-    <MockedProvider link={link} addTypename={false}>
+    <MockedProvider link={link}>
       <Provider store={store}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>

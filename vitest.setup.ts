@@ -11,6 +11,25 @@ if (typeof globalThis.localStorage === 'undefined') {
   globalThis.localStorage = localStorageMock as unknown as Storage;
 }
 
+// Enable React act environment for testing
+(globalThis as Record<string, unknown>).IS_REACT_ACT_ENVIRONMENT = true;
+
+// Handle unhandled rejections from Apollo Client cleanup (AbortError)
+// This is a known issue with Apollo Client 4.x and rxjs when components unmount
+// while queries are still in flight
+process.on('unhandledRejection', (reason: unknown) => {
+  if (
+    reason instanceof Error &&
+    (reason.name === 'AbortError' ||
+      reason.message === 'The operation was aborted.')
+  ) {
+    // Suppress expected AbortError from Apollo Client cleanup
+    return;
+  }
+  // Re-throw other unhandled rejections
+  throw reason;
+});
+
 // Simple console error handler for React 18 warnings
 const originalError = console.error;
 const originalWarn = console.warn;
@@ -56,15 +75,13 @@ global.URL.revokeObjectURL = vi.fn();
 
 // Mock HTMLFormElement.prototype.requestSubmit for jsdom
 // TODO: Remove once jsdom adds native support
-if (typeof HTMLFormElement.prototype.requestSubmit === 'undefined') {
-  HTMLFormElement.prototype.requestSubmit = function () {
-    if (this.checkValidity()) {
-      this.dispatchEvent(
-        new Event('submit', { cancelable: true, bubbles: true }),
-      );
-    }
-  };
-}
+HTMLFormElement.prototype.requestSubmit = function () {
+  if (this.checkValidity()) {
+    this.dispatchEvent(
+      new Event('submit', { cancelable: true, bubbles: true }),
+    );
+  }
+};
 afterAll(() => {
   console.error = originalError;
   console.warn = originalWarn;

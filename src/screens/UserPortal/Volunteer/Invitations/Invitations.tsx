@@ -46,7 +46,7 @@ import { FaUserGroup } from 'react-icons/fa6';
 import { debounce, Stack } from '@mui/material';
 
 import useLocalStorage from 'utils/useLocalstorage';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import { FaRegClock } from 'react-icons/fa';
 import Loader from 'components/Loader/Loader';
@@ -113,12 +113,7 @@ const Invitations = (): JSX.Element => {
     loading: invitationLoading,
     error: invitationError,
     refetch: refetchInvitations,
-  }: {
-    data?: { getVolunteerMembership: InterfaceVolunteerMembership[] };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(USER_VOLUNTEER_MEMBERSHIP, {
+  } = useQuery<any>(USER_VOLUNTEER_MEMBERSHIP, {
     variables: {
       where: {
         userId: userId,

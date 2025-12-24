@@ -23,7 +23,7 @@ import { Navigate, useParams } from 'react-router';
 
 import { WarningAmberRounded } from '@mui/icons-material';
 
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import Loader from 'components/Loader/Loader';
@@ -108,19 +108,7 @@ function volunteerGroups(): JSX.Element {
     loading: groupsLoading,
     error: groupsError,
     refetch: refetchGroups,
-  }: {
-    data?: {
-      event: {
-        id: string;
-        recurrenceRule?: { id: string } | null;
-        baseEvent?: { id: string } | null;
-        volunteerGroups: InterfaceVolunteerGroupInfo[];
-      };
-    };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(GET_EVENT_VOLUNTEER_GROUPS, {
+  } = useQuery<any>(GET_EVENT_VOLUNTEER_GROUPS, {
     variables: {
       input: {
         id: eventId,

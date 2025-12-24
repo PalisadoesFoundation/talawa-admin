@@ -31,7 +31,7 @@ import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, Form, Image, Modal } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 
 import { errorHandler } from 'utils/errorHandler';

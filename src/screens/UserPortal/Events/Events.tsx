@@ -44,8 +44,10 @@
  * <Events />
  * ```
  */
-import { useMutation, useQuery } from '@apollo/client';
-import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
+
+import { useMutation, useQuery } from '@apollo/client/react';
+import { DatePicker, TimePicker } from '@mui/x-date-pickers';
+import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATIONS_LIST,
   GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
@@ -62,7 +64,7 @@ import { toast } from 'react-toastify';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { IEventEdge } from 'types/Event/interface';
+import type { IEventEdge, IOrgList } from 'types/Event/interface';
 import styles from 'style/app-fixed.module.css';
 import EventForm, {
   formatRecurrenceForPayload,
@@ -90,7 +92,6 @@ export default function events(): JSX.Element {
     setCurrentYear(year);
   };
 
-  // Query to fetch events for the organization
   const {
     data,
     error: eventDataError,
@@ -185,40 +186,41 @@ export default function events(): JSX.Element {
     setCreateEventmodalisOpen(!createEventModal);
 
   // Normalize event data for EventCalendar with proper typing
-  const events = (data?.organization?.events?.edges || []).map(
-    (edge: IEventEdge) => ({
-      id: edge.node.id || '',
+  const eventEdges =
+    (data as { organization?: { events?: { edges: IEventEdge[] } } })
+      ?.organization?.events?.edges || [];
+  const events = eventEdges.map((edge: IEventEdge) => ({
+    id: edge.node.id || '',
 
-      name: edge.node.name || '',
-      description: edge.node.description || '',
-      startAt: dayjs.utc(edge.node.startAt).format('YYYY-MM-DD'),
-      endAt: dayjs.utc(edge.node.endAt).format('YYYY-MM-DD'),
-      startTime: edge.node.allDay
-        ? null
-        : dayjs.utc(edge.node.startAt).format('HH:mm:ss'),
-      endTime: edge.node.allDay
-        ? null
-        : dayjs.utc(edge.node.endAt).format('HH:mm:ss'),
-      allDay: edge.node.allDay,
-      location: edge.node.location || '',
-      isPublic: edge.node.isPublic,
-      isRegisterable: edge.node.isRegisterable,
-      // Add recurring event information
-      isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
-      baseEvent: edge.node.baseEvent,
-      sequenceNumber: edge.node.sequenceNumber,
-      totalCount: edge.node.totalCount,
-      hasExceptions: edge.node.hasExceptions,
-      progressLabel: edge.node.progressLabel,
-      recurrenceDescription: edge.node.recurrenceDescription,
-      recurrenceRule: edge.node.recurrenceRule,
-      creator: edge.node.creator || {
-        id: '',
-        name: '',
-      },
-      attendees: [], // Adjust if attendees are added to schema
-    }),
-  ); // Handle errors gracefully
+    name: edge.node.name || '',
+    description: edge.node.description || '',
+    startAt: dayjs.utc(edge.node.startAt).format('YYYY-MM-DD'),
+    endAt: dayjs.utc(edge.node.endAt).format('YYYY-MM-DD'),
+    startTime: edge.node.allDay
+      ? null
+      : dayjs.utc(edge.node.startAt).format('HH:mm:ss'),
+    endTime: edge.node.allDay
+      ? null
+      : dayjs.utc(edge.node.endAt).format('HH:mm:ss'),
+    allDay: edge.node.allDay,
+    location: edge.node.location || '',
+    isPublic: edge.node.isPublic,
+    isRegisterable: edge.node.isRegisterable,
+    // Add recurring event information
+    isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
+    baseEvent: edge.node.baseEvent,
+    sequenceNumber: edge.node.sequenceNumber,
+    totalCount: edge.node.totalCount,
+    hasExceptions: edge.node.hasExceptions,
+    progressLabel: edge.node.progressLabel,
+    recurrenceDescription: edge.node.recurrenceDescription,
+    recurrenceRule: edge.node.recurrenceRule,
+    creator: edge.node.creator || {
+      id: '',
+      name: '',
+    },
+    attendees: [], // Adjust if attendees are added to schema
+  })); // Handle errors gracefully
   React.useEffect(() => {
     if (eventDataError) {
       // Handle rate limiting errors more gracefully - check multiple variations
@@ -275,7 +277,7 @@ export default function events(): JSX.Element {
         viewType={viewType}
         eventData={events}
         refetchEvents={refetch}
-        orgData={orgData}
+        orgData={orgData as IOrgList | undefined}
         userRole={userRole}
         userId={userId}
         onMonthChange={onMonthChange}

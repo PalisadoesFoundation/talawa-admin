@@ -1,4 +1,5 @@
-import { useQuery, type ApolloQueryResult } from '@apollo/client';
+import { type ObservableQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
@@ -87,16 +88,7 @@ const fundCampaignPledge = (): JSX.Element => {
     loading: pledgeLoading,
     error: pledgeError,
     refetch: refetchPledge,
-  }: {
-    data?: { fundCampaign: InterfaceQueryFundCampaignsPledges };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => Promise<
-      ApolloQueryResult<{
-        fundCampaign: InterfaceQueryFundCampaignsPledges;
-      }>
-    >;
-  } = useQuery(FUND_CAMPAIGN_PLEDGE, {
+  } = useQuery<any>(FUND_CAMPAIGN_PLEDGE, {
     variables: {
       input: { id: fundCampaignId },
     },
@@ -107,39 +99,54 @@ const fundCampaignPledge = (): JSX.Element => {
     let totalRaised = 0;
 
     const pledgesList =
-      pledgeData?.fundCampaign?.pledges?.edges.map((edge) => {
-        const amount = edge.node.amount || 0;
-        totalPledged += amount;
-        // Assuming there's no raised amount for now,
-        // this should be updated when raised amount data is available
-        totalRaised += 0;
+      pledgeData?.fundCampaign?.pledges?.edges.map(
+        (edge: {
+          node: {
+            id: string;
+            amount?: number;
+            createdAt?: string;
+            users?: Array<{ name?: string }>;
+            pledger?: { name?: string };
+          };
+        }) => {
+          const amount = edge.node.amount || 0;
+          totalPledged += amount;
+          // Assuming there's no raised amount for now,
+          // this should be updated when raised amount data is available
+          totalRaised += 0;
 
-        const allUsers =
-          'users' in edge.node && Array.isArray(edge.node.users)
-            ? edge.node.users
-            : [edge.node.pledger];
+          const allUsers =
+            'users' in edge.node && Array.isArray(edge.node.users)
+              ? edge.node.users
+              : [edge.node.pledger];
 
-        return {
-          id: edge.node.id,
-          amount: amount,
-          pledgeDate: edge.node.createdAt
-            ? new Date(edge.node.createdAt)
-            : new Date(),
-          endDate: pledgeData.fundCampaign.endAt
-            ? new Date(pledgeData.fundCampaign.endAt)
-            : new Date(),
-          users: allUsers.filter(Boolean),
-          currency: pledgeData.fundCampaign.currencyCode || 'USD',
-        };
-      }) ?? [];
+          return {
+            id: edge.node.id,
+            amount: amount,
+            pledgeDate: edge.node.createdAt
+              ? new Date(edge.node.createdAt)
+              : new Date(),
+            endDate: pledgeData.fundCampaign.endAt
+              ? new Date(pledgeData.fundCampaign.endAt)
+              : new Date(),
+            users: allUsers.filter(Boolean),
+            currency: pledgeData.fundCampaign.currencyCode || 'USD',
+          };
+        },
+      ) ?? [];
 
     const filteredPledges = searchTerm
-      ? pledgesList.filter((pledge) => {
-          const search = searchTerm.toLowerCase();
-          return pledge.users.some((user) =>
-            user.name?.toLowerCase().includes(search),
-          );
-        })
+      ? pledgesList.filter(
+          (pledge: {
+            users: Array<{ name?: string } | null>;
+            amount: number;
+          }) => {
+            const search = searchTerm.toLowerCase();
+            return pledge.users.some((user: { name?: string } | null) =>
+              user?.name?.toLowerCase().includes(search),
+            );
+          },
+        )
       : pledgesList;
 
     const sortedPledges = [...filteredPledges].sort((a, b) => {

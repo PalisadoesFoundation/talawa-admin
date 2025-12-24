@@ -34,7 +34,7 @@ import {
   DELETE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION,
   REGISTER_EVENT,
 } from 'GraphQl/Mutations/EventMutations';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { toast } from 'react-toastify';
 import { useUpdateEventHandler } from './updateLogic';
 import { errorHandler } from 'utils/errorHandler';

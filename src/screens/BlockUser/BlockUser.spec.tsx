@@ -6,7 +6,7 @@ import {
   waitFor,
   act,
 } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { vi } from 'vitest';
 import BlockUser from './BlockUser';
 import {

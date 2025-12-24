@@ -6,7 +6,7 @@
  * @component
  * @param {InterfacePostsRenderer} props - The props for the component.
  * @param {boolean} props.loading - Indicates whether the data is still loading.
- * @param {ApolloError | undefined} props.error - The error object from Apollo Client, if any.
+ * @param {Error | undefined} props.error - The error object from Apollo Client, if any.
  * @param {InterfaceOrganizationData} props.data - The data containing posts and organization details.
  * @param {boolean} props.isFiltering - Indicates whether the posts are being filtered.
  * @param {string} props.searchTerm - The search term used for filtering posts.
@@ -16,7 +16,7 @@
  * @returns {JSX.Element | null} A JSX element rendering the posts or appropriate fallback UI.
  */
 import React, { useState } from 'react';
-import type { ApolloError } from '@apollo/client';
+
 import { Modal, Button } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
 import NotFound from 'components/NotFound/NotFound';
@@ -27,7 +27,7 @@ import type { InterfacePostCard } from 'utils/interfaces';
 import PinnedPostsStory from './PinnedPostsStory';
 import { Close } from '@mui/icons-material';
 
-interface InterfaceOrganizationData {
+export interface InterfaceOrganizationData {
   organization?: {
     posts?: {
       edges?: {
@@ -42,7 +42,7 @@ interface InterfaceOrganizationData {
 // Define interface for props with proper types
 interface InterfacePostsRenderer {
   loading: boolean;
-  error: ApolloError | undefined;
+  error: Error | undefined;
   data: InterfaceOrganizationData;
   pinnedPostData: InterfacePostEdge[] | undefined;
   isFiltering: boolean;

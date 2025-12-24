@@ -42,6 +42,10 @@ Defined in: [src/screens/OrgPost/OrgPostMocks.data.ts:10](https://github.com/Pal
 
 > **user**: `object`
 
+#### result.data.user.\_\_typename
+
+> **\_\_typename**: `string` = `'User'`
+
 #### result.data.user.id
 
 > **id**: `string` = `'123'`

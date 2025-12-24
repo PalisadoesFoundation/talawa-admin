@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { vi } from 'vitest';
 import CreatePostModal from './CreatePostModal';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -1345,6 +1345,7 @@ describe('CreatePostModal', () => {
 
       await waitFor(() => {
         expect(mockDigest).toHaveBeenCalled();
+        expect(toast.success).toHaveBeenCalled();
       });
     } finally {
       File.prototype.arrayBuffer = originalArrayBuffer;
@@ -1420,7 +1421,7 @@ describe('CreatePostModal', () => {
 
     // Wait a tick to allow mutation to resolve
     await waitFor(() => {
-      expect(toast.success).not.toHaveBeenCalledWith('postCreatedSuccess');
+      expect(toast.success).not.toHaveBeenCalled();
       expect(mockRefetch).not.toHaveBeenCalled();
       expect(mockOnHide).not.toHaveBeenCalled();
     });

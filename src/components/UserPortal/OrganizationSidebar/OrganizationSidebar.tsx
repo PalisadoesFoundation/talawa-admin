@@ -34,7 +34,7 @@ import AboutImg from 'assets/images/defaultImg.png';
 import styles from './OrganizationSidebar.module.css';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Link, useParams } from 'react-router';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   ORGANIZATION_EVENT_CONNECTION_LIST,
@@ -67,28 +67,26 @@ export default function OrganizationSidebar(): JSX.Element {
   const peopleLink = `/user/people/${organizationId}`;
 
   // Query to fetch members of the organization
-  const { data: memberData, loading: memberLoading } = useQuery(
-    ORGANIZATIONS_MEMBER_CONNECTION_LIST,
-    {
-      variables: {
-        orgId: organizationId,
-        first: 3, // Fetch top 3 members
-        skip: 0, // No offset
-      },
+  const { data: memberData, loading: memberLoading } = useQuery<{
+    organizationsMemberConnection: { edges: InterfaceMemberInfo[] };
+  }>(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
+    variables: {
+      orgId: organizationId,
+      first: 3, // Fetch top 3 members
+      skip: 0, // No offset
     },
-  );
+  });
 
   // Query to fetch events of the organization
-  const { data: eventsData, loading: eventsLoading } = useQuery(
-    ORGANIZATION_EVENT_CONNECTION_LIST,
-    {
-      variables: {
-        organization_id: organizationId,
-        first: 3, // Fetch top 3 upcoming events
-        skip: 0, // No offset
-      },
+  const { data: eventsData, loading: eventsLoading } = useQuery<{
+    eventsByOrganizationConnection: InterfaceQueryOrganizationEventListItem[];
+  }>(ORGANIZATION_EVENT_CONNECTION_LIST, {
+    variables: {
+      organization_id: organizationId,
+      first: 3, // Fetch top 3 upcoming events
+      skip: 0, // No offset
     },
-  );
+  });
 
   /**
    * Effect hook to update members state when memberData is fetched.

@@ -35,7 +35,7 @@ import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import { Card, Col, Row } from 'react-bootstrap';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
@@ -141,8 +141,8 @@ export default function Settings(): React.JSX.Element {
   }, [hideDrawer, setItem]);
 
   // Query and mutation setup
-  const { data, loading, error } = useQuery(CURRENT_USER);
-  const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION);
+  const { data, loading, error } = useQuery<any>(CURRENT_USER);
+  const [updateUser] = useMutation<any>(UPDATE_CURRENT_USER_MUTATION);
 
   // set the initial data
   useEffect(() => {

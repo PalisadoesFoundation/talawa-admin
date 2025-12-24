@@ -7,14 +7,14 @@ import {
   waitFor,
 } from '@testing-library/react';
 import GroupChatDetails from './GroupChatDetails';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import i18n from 'i18next';
 import { useLocalStorage } from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 import { toast } from 'react-toastify';
 import {
-  mocks,
+  getMocks,
   filledMockChat,
   incompleteMockChat,
   failingMocks,
@@ -137,7 +137,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={getMocks()}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
@@ -159,7 +159,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={getMocks()}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
@@ -184,7 +184,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={getMocks()}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
@@ -209,7 +209,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={getMocks()}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
@@ -254,7 +254,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={getMocks()}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
@@ -300,7 +300,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={getMocks()}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
@@ -349,7 +349,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={getMocks()}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
@@ -387,7 +387,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={getMocks()}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
@@ -423,8 +423,11 @@ describe('GroupChatDetails', () => {
       fireEvent.click(clearBtn);
     });
 
-    await waitFor(() => {
-      expect(searchInput).toHaveValue('');
+    // Clear results in refetch, which triggers loading specific to this component logic (loader replaces input)
+    // So the input unmounts and remounts. We must re-query it.
+    await waitFor(async () => {
+      const newSearchInput = await screen.findByTestId('searchUser');
+      expect(newSearchInput).toHaveValue('');
     });
   });
 
@@ -432,7 +435,7 @@ describe('GroupChatDetails', () => {
     useLocalStorage().setItem('userId', 'user1');
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={getMocks()}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
@@ -486,7 +489,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={getMocks()}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
@@ -649,7 +652,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={getMocks()}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
@@ -704,7 +707,7 @@ describe('GroupChatDetails', () => {
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={getMocks()}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}

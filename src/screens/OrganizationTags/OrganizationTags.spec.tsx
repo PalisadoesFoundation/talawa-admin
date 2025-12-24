@@ -1,5 +1,5 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import type { RenderResult } from '@testing-library/react';
 import {
   act,
@@ -403,6 +403,8 @@ describe('Organisation Tags Page', () => {
         translations.tagCreationSuccess,
       );
     });
+
+    await wait();
   });
   test('creates a new user tag with error', async () => {
     renderOrganizationTags(link3);
@@ -724,6 +726,7 @@ describe('makeUserTags utility function - pageInfo default parameter coverage', 
       endCursor: '2',
       hasNextPage: false,
       hasPreviousPage: false,
+      __typename: 'PageInfo',
     });
   });
 
@@ -738,6 +741,7 @@ describe('makeUserTags utility function - pageInfo default parameter coverage', 
       endCursor: '2',
       hasNextPage: true,
       hasPreviousPage: false,
+      __typename: 'PageInfo',
     });
   });
 
@@ -756,6 +760,7 @@ describe('makeUserTags utility function - pageInfo default parameter coverage', 
       endCursor: 'custom-end',
       hasNextPage: true,
       hasPreviousPage: true,
+      __typename: 'PageInfo',
     });
   });
 
@@ -770,6 +775,7 @@ describe('makeUserTags utility function - pageInfo default parameter coverage', 
       endCursor: null,
       hasNextPage: false,
       hasPreviousPage: false,
+      __typename: 'PageInfo',
     });
   });
 

@@ -36,7 +36,7 @@ import type { InterfaceUserInfo } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import React, { useCallback, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { toast } from 'react-toastify';
 import { Autocomplete, TextField } from '@mui/material';
 
@@ -78,7 +78,7 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
   const [applyTo, setApplyTo] = useState<'series' | 'instance'>('series');
   const [addVolunteer] = useMutation(ADD_VOLUNTEER);
 
-  const { data: membersData } = useQuery(MEMBERS_LIST, {
+  const { data: membersData } = useQuery<any>(MEMBERS_LIST, {
     variables: { organizationId: orgId },
   });
 

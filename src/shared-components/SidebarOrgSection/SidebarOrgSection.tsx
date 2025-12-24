@@ -23,7 +23,7 @@
  */
 
 import React from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { WarningAmberOutlined } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
