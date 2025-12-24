@@ -27,6 +27,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, expect, it, describe } from 'vitest';
+import { GraphQLError } from 'graphql';
 
 vi.mock('utils/useLocalstorage');
 
@@ -1452,8 +1453,8 @@ const renderLoginPage = (
       {...(isLink
         ? { link: mocksOrLink }
         : {
-            mocks: mocksOrLink as ReadonlyArray<MockedResponse>,
-          })}
+          mocks: mocksOrLink as ReadonlyArray<MockedResponse>,
+        })}
     >
       <BrowserRouter>
         <Provider store={store}>
@@ -1883,7 +1884,6 @@ describe('Extra coverage for 100 %', () => {
 
   /* 13. account_locked error with retryAfter timestamp */
   it('shows account locked message with countdown when retryAfter is provided', async () => {
-    const { GraphQLError } = await import('graphql');
     // Set retryAfter to 15 minutes from now
     const retryAfterDate = new Date(Date.now() + 15 * 60 * 1000).toISOString();
 
@@ -1943,8 +1943,6 @@ describe('Extra coverage for 100 %', () => {
 
   /* 14. account_locked error without retryAfter timestamp */
   it('shows generic account locked message when retryAfter is missing', async () => {
-    const { GraphQLError } = await import('graphql');
-
     const ACCOUNT_LOCKED_NO_TIMER_MOCK = [
       {
         request: {
@@ -2001,8 +1999,6 @@ describe('Extra coverage for 100 %', () => {
 
   /* 15. Other GraphQL errors should use errorHandler */
   it('handles non-account_locked GraphQL errors via errorHandler', async () => {
-    const { GraphQLError } = await import('graphql');
-
     const OTHER_GRAPHQL_ERROR_MOCK = [
       {
         request: {
