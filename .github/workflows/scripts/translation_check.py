@@ -19,7 +19,7 @@ def get_translation_keys(json_data: dict, prefix: str = "") -> set[str]:
         prefix: The current key prefix for recursion.
 
     Returns:
-        A set of flattened translation keys.
+        set: A set of flattened translation keys found in the JSON data.
     """
     keys = set()
     for key, value in json_data.items():
@@ -38,7 +38,7 @@ def find_translation_tags(content_or_path: str | Path) -> set[str]:
         content_or_path: String content or Path object to a source file.
 
     Returns:
-        A set of unique translation tags found.
+        set: A set of unique translation tags extracted from the content.
     """
     tags = set()
     regex = r"(?:(?:\bi18n)\.)?\bt\(\s*['\"]([^'\" \n\r\t]+)['\"]"
@@ -67,7 +67,7 @@ def load_locale_keys(locales_path: str) -> set[str]:
         locales_path: Path to the directory containing locale JSON files.
 
     Returns:
-        A set of all valid translation keys.
+        set: A set of all valid translation keys loaded from the locale files.
 
     Raises:
         FileNotFoundError: If the locales_path does not exist.
@@ -88,9 +88,6 @@ def load_locale_keys(locales_path: str) -> set[str]:
             except (json.JSONDecodeError, OSError):
                 continue
 
-    if not valid_keys:
-        print(f"Warning: No translation keys found in {locales_path}")
-
     return valid_keys
 
 
@@ -107,7 +104,7 @@ def get_target_files(
         extensions: Iterable of file extensions to include.
 
     Returns:
-        A list of filtered Path objects.
+        list: A list of filtered Path objects ready for translation scanning.
     """
     target_files = []
 
@@ -140,7 +137,11 @@ def get_target_files(
 
 
 def main() -> None:
-    """Entry point for the translation checker CLI."""
+    """Entry point for the translation checker CLI.
+
+    Returns:
+        None
+    """
     parser = argparse.ArgumentParser(
         description="Search for and validate translation tags."
     )
