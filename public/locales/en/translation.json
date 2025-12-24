@@ -1428,11 +1428,11 @@
     "deleteChat": "Delete Chat",
     "remove": "Remove",
     "searchFullName": "Search by Full Name",
-    "customizedTable": "customized table",
+    "customizedTable": "Customized Table",
     "demoteToRegular": "Demote to Regular",
     "promoteToAdmin": "Promote to Admin",
     "user": "User",
-    "chatAction": "Chat"
+    "chatAction": "Chat action"
   },
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",
