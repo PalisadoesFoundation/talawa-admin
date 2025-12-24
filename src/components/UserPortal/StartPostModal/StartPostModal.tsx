@@ -152,9 +152,8 @@ const startPostModal = ({
       }
 
       NotificationToast.info({
-        key: 'processingPost',
+        key: 'home.processingPost',
         namespace: 'translation',
-        keyPrefix: 'home',
       });
 
       let attachment = null;
