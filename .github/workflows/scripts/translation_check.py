@@ -61,7 +61,16 @@ def load_locale_keys(locales_dir: str | Path) -> set[str]:
     for name in ("common.json", "translation.json", "errors.json"):
         path = base / name
         if path.exists():
-            keys.update(get_keys(json.loads(path.read_text(encoding="utf-8"))))
+            try:
+                keys.update(
+                    get_keys(json.loads(path.read_text(encoding="utf-8")))
+                )
+            except (json.JSONDecodeError, OSError) as e:
+                print(f"Warning: Failed to parse {path}: {e}", file=sys.stderr)
+                continue
+
+    if not keys:
+        print(f"Warning: No translation keys found in {base}", file=sys.stderr)
 
     return keys
 
@@ -88,6 +97,7 @@ def find_translation_tags(source: str | Path) -> set[str]:
         content,
     )
 
+    # Extract key from namespace-qualified tags (e.g., "common:hello" -> "hello")
     return {
         tag.split(":")[-1]
         for tag in tags
@@ -114,7 +124,12 @@ def get_target_files(
     targets: list[Path] = []
 
     if files:
-        targets.extend(Path(f) for f in files)
+        for f in files:
+            path = Path(f)
+            if path.exists() and path.is_file():
+                targets.append(path)
+            else:
+                print(f"Warning: File not found: {f}", file=sys.stderr)
 
     if directories:
         for directory in directories:
@@ -127,7 +142,7 @@ def get_target_files(
         path
         for path in targets
         if path.suffix in {".ts", ".tsx", ".js", ".jsx"}
-        and not any(x in path.name for x in exclude)
+        and not any(path.name.endswith(x) or x in path.parts for x in exclude)
         and ".spec." not in path.name
         and ".test." not in path.name
     ]
