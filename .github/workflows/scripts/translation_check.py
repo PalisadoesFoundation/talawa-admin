@@ -1,4 +1,4 @@
-"""Validates i18n translation tags in the codebase against locale JSON files."""
+"""Validates i18n translation tags against locale JSON files."""
 
 from __future__ import annotations
 
@@ -6,185 +6,126 @@ import argparse
 import json
 import re
 import sys
-from collections import defaultdict
-from collections.abc import Iterable
 from pathlib import Path
 
 
-def get_translation_keys(json_data: dict, prefix: str = "") -> set[str]:
-    """Recursively extract all dot-notation keys from a nested dictionary.
-
-    Args:
-        json_data: The dictionary containing translation data.
-        prefix: The current key prefix for recursion.
-
-    Returns:
-        set: A set of flattened translation keys found in the JSON data.
-    """
-    keys = set()
-    for key, value in json_data.items():
-        full_key = f"{prefix}{key}"
+def get_keys(data: dict, prefix: str = "") -> set[str]:
+    """Flatten nested translation JSON into dot-notation keys."""
+    keys: set[str] = set()
+    for key, value in data.items():
         if isinstance(value, dict):
-            keys.update(get_translation_keys(value, f"{full_key}."))
+            keys.update(get_keys(value, f"{prefix}{key}."))
         else:
-            keys.add(full_key)
+            keys.add(f"{prefix}{key}")
     return keys
 
 
-def find_translation_tags(content_or_path: str | Path) -> set[str]:
-    """Extract translation tags from a string or file path using regex.
+def get_translation_keys(data: dict) -> set[str]:
+    """Extract translation keys from parsed locale JSON."""
+    return get_keys(data)
 
-    Args:
-        content_or_path: String content or Path object to a source file.
 
-    Returns:
-        set: A set of unique translation tags extracted from the content.
-    """
-    tags = set()
-    regex = r"(?:(?:\bi18n)\.)?\bt\(\s*['\"]([^'\" \n\r\t]+)['\"]"
+def load_locale_keys(locales_dir: str | Path) -> set[str]:
+    """Load all valid translation keys from locale JSON files."""
+    base = Path(locales_dir)
+    if not base.exists():
+        raise FileNotFoundError(locales_dir)
 
-    if isinstance(content_or_path, Path):
+    keys: set[str] = set()
+
+    for name in ("common.json", "translation.json", "errors.json"):
+        path = base / name
+        if path.exists():
+            keys.update(get_keys(json.loads(path.read_text(encoding="utf-8"))))
+
+    return keys
+
+
+def find_translation_tags(source: str | Path) -> set[str]:
+    """Find all translation tags used inside a source file or string."""
+    if isinstance(source, Path):
         try:
-            with open(content_or_path, encoding="utf-8") as file:
-                content = file.read()
+            content = source.read_text(encoding="utf-8")
         except (OSError, UnicodeDecodeError):
-            return tags
+            return set()
     else:
-        content = content_or_path
+        content = source
 
-    matches = re.findall(regex, content)
-    for match in matches:
-        if ":" in match:
-            match = match.split(":")[-1]
-        tags.add(match)
-    return tags
+    tags = re.findall(
+        r"(?:(?:\bi18n)\.)?\bt\(\s*['\"]([^'\" \n]+)['\"]",
+        content,
+    )
 
-
-def load_locale_keys(locales_path: str) -> set[str]:
-    """Load all translation keys from common, translation, and error JSON files.
-
-    Args:
-        locales_path: Path to the directory containing locale JSON files.
-
-    Returns:
-        set: A set of all valid translation keys loaded from the locale files.
-
-    Raises:
-        FileNotFoundError: If the locales_path does not exist.
-    """
-    valid_keys = set()
-    path = Path(locales_path)
-    if not path.exists():
-        raise FileNotFoundError(f"Locales path not found: {locales_path}")
-
-    files_to_load = ["common.json", "translation.json", "errors.json"]
-    for filename in files_to_load:
-        file_path = path / filename
-        if file_path.exists():
-            try:
-                with open(file_path, encoding="utf-8") as file:
-                    data = json.load(file)
-                    valid_keys.update(get_translation_keys(data))
-            except (json.JSONDecodeError, OSError):
-                continue
-
-    return valid_keys
+    return {
+        tag.split(":")[-1]
+        for tag in tags
+        if ":" not in tag or tag.split(":")[-1].isidentifier()
+    }
 
 
 def get_target_files(
-    files: list[str] | None,
-    directories: list[str] | None,
-    extensions: Iterable[str],
+    files: list[str] | None = None,
+    directories: list[str] | None = None,
+    exclude: list[str] | None = None,
 ) -> list[Path]:
-    """Collect and filter files for scanning based on extensions and exclusions.
-
-    Args:
-        files: Specific file paths to include.
-        directories: Directories to recursively scan.
-        extensions: Iterable of file extensions to include.
-
-    Returns:
-        list: A list of filtered Path objects ready for translation scanning.
-    """
-    target_files = []
+    """Resolve target source files for translation validation."""
+    exclude = exclude or []
+    targets: list[Path] = []
 
     if files:
-        for file_item in files:
-            path = Path(file_item)
-            if path.exists() and any(file_item.endswith(ext) for ext in extensions):
-                target_files.append(path)
+        targets.extend(Path(f) for f in files)
 
     if directories:
         for directory in directories:
-            path = Path(directory)
-            if path.exists():
-                for ext in extensions:
-                    target_files.extend(path.rglob(f"*{ext}"))
+            targets.extend(Path(directory).rglob("*"))
 
-    test_patterns = (
-        ".spec.tsx",
-        ".test.tsx",
-        ".spec.ts",
-        ".test.ts",
-        ".spec.jsx",
-        ".test.jsx",
-        ".spec.js",
-        ".test.js",
+    if not files and not directories:
+        targets = list(Path("src").rglob("*"))
+
+    return [
+        path
+        for path in targets
+        if path.suffix in {".ts", ".tsx", ".js", ".jsx"}
+        and not any(x in path.name for x in exclude)
+        and ".spec." not in path.name
+        and ".test." not in path.name
+    ]
+
+
+def check_file(path: Path, valid_keys: set[str]) -> list[str]:
+    """Check a file for missing translation keys."""
+    return sorted(
+        tag for tag in find_translation_tags(path) if tag not in valid_keys
     )
-    return [f for f in target_files if not str(f).endswith(test_patterns)]
 
 
 def main() -> None:
-    """Entry point for the translation checker CLI.
-
-    Returns:
-        None
-    """
-    parser = argparse.ArgumentParser(description="Search for and validate translation tags.")
-    parser.add_argument("--files", nargs="+", help="Specific files to check")
-    parser.add_argument("--directories", nargs="+", help="Directories to search")
-    parser.add_argument(
-        "--locales-dir",
-        default="public/locales/en",
-        help="Locales directory",
-    )
-    parser.add_argument(
-        "--extensions",
-        nargs="+",
-        default=[".ts", ".tsx", ".js", ".jsx"],
-        help="File extensions to scan",
-    )
-
+    """CLI entry point for translation validation."""
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--files", nargs="*", default=[])
+    parser.add_argument("--directories", nargs="*", default=[])
+    parser.add_argument("--locales-dir", default="public/locales/en")
     args = parser.parse_args()
 
-    try:
-        valid_keys = load_locale_keys(args.locales_dir)
-        dirs = args.directories if args.directories else []
-        if not args.files and not dirs:
-            dirs = ["src"]
+    valid_keys = load_locale_keys(args.locales_dir)
+    targets = get_target_files(args.files, args.directories)
 
-        target_files = get_target_files(args.files, dirs, args.extensions)
-        missing_keys = defaultdict(list)
+    errors = {
+        str(path): missing
+        for path in targets
+        if (missing := check_file(path, valid_keys))
+    }
 
-        for filepath in target_files:
-            found_tags = find_translation_tags(filepath)
-            for tag in found_tags:
-                if tag not in valid_keys:
-                    missing_keys[str(filepath)].append(tag)
+    if errors:
+        for file, tags in errors.items():
+            print(
+                f"File: {file}\n"
+                + "\n".join(f"  - Missing: {tag}" for tag in tags)
+            )
+        sys.exit(1)
 
-        if missing_keys:
-            for filepath, tags in missing_keys.items():
-                print(f"File: {filepath}")
-                for tag in sorted(set(tags)):
-                    print(f"  - Missing key: {tag}")
-            sys.exit(1)
-        else:
-            print("All translation tags validated successfully.")
-            sys.exit(0)
-
-    except FileNotFoundError as err:
-        print(f"Error: {err}")
-        sys.exit(2)
+    print("All translation tags validated successfully")
+    sys.exit(0)
 
 
 if __name__ == "__main__":
