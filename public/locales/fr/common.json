@@ -112,5 +112,7 @@
   "profilePicture": "Photo de profil",
   "profilePicturePlaceholder": "Image factice",
   "userProfileMenu": "Menu du profil utilisateur",
-  "breadcrumbs": "Fil d’Ariane"
+  "breadcrumbs": "Fil d’Ariane",
+  "loadingAdminPlugin": "Chargement du plugin administrateur...",
+  "loadingUserPlugin": "Chargement du plugin utilisateur..."
 }

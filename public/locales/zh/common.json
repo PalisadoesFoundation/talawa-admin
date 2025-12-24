@@ -112,5 +112,7 @@
   "profilePicture": "個人頭像",
   "profilePicturePlaceholder": "佔位圖片",
   "userProfileMenu": "使用者個人資料選單",
-  "breadcrumbs": "面包屑导航"
+  "breadcrumbs": "面包屑导航",
+  "loadingAdminPlugin": "正在加载行政插件...",
+  "loadingUserPlugin": "正在加载用户插件..."
 }

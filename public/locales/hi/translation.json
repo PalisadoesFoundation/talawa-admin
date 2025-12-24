@@ -388,6 +388,8 @@
     "unassignUserTag": "टैग को हटाएं",
     "unassignUserTagMessage": "क्या आप इस उपयोगकर्ता से टैग हटाना चाहते हैं?",
     "successfullyUnassigned": "उपयोगकर्ता से टैग हटा दिया गया",
+    "unassignUserTagError": "उपयोगकर्ता से टैग असाइनमेंट हटाने में त्रुटि",
+    "removeUserTagError": "टैग और उसके सभी उप-टैग्स को हटाने में त्रुटि",
     "addPeople": "लोगों को जोड़ें",
     "add": "जोड़ें",
     "subTags": "उप-टैग्स",
