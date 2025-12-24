@@ -56,11 +56,10 @@ import {
   CREATE_CHAT_MEMBERSHIP,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { styled } from '@mui/material/styles';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
 import { useTranslation } from 'react-i18next';
@@ -82,30 +81,8 @@ interface InterfaceCreateGroupChatProps {
  * Styled table container with custom styles.
  */
 
-const StyledTableContainer = styled(TableContainer)<{
-  component?: React.ElementType;
-}>(() => ({ borderRadius: 'var(--table-head-radius)' }));
-
-/**
- * Styled table cell with custom styles.
- */
-
-const StyledTableCell = styled(TableCell)(() => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: 'var(--table-head-bg)',
-    color: 'var(--table-header-color)',
-    fontSize: 'var(--font-size-header)',
-  },
-  [`&.${tableCellClasses.body}`]: { fontSize: 'var(--font-size-table-body)' },
-}));
-
-/**
- * Styled table row with custom styles.
- */
-
-const StyledTableRow = styled(TableRow)(() => ({
-  '&:last-child td, &:last-child th': { border: 'var(--table-row-border)' },
-}));
+// No longer using TableContainer, TableCell, TableRow as they were flagging CSS violations.
+// We'll use standard MUI components with CSS classes instead.
 
 const { getItem } = useLocalStorage();
 
@@ -257,7 +234,7 @@ export default function CreateGroupChat({
             type="file"
             accept="image/*"
             ref={fileInputRef}
-            style={{ display: 'none' }}
+            className={styles.displayNone}
             onChange={handleImageChange}
             data-testid="fileInput"
           />
@@ -346,13 +323,28 @@ export default function CreateGroupChat({
                 />
               </div>
 
-              <StyledTableContainer component={Paper}>
+              <TableContainer
+                className={styles.tableContainerRounded}
+                component={Paper}
+              >
                 <Table aria-label="customized table">
                   <TableHead>
                     <TableRow>
-                      <StyledTableCell>#</StyledTableCell>
-                      <StyledTableCell align="center">{'user'}</StyledTableCell>
-                      <StyledTableCell align="center">{'Chat'}</StyledTableCell>
+                      <TableCell className={styles.groupChatTableCellHead}>
+                        #
+                      </TableCell>
+                      <TableCell
+                        className={styles.groupChatTableCellHead}
+                        align="center"
+                      >
+                        {'user'}
+                      </TableCell>
+                      <TableCell
+                        className={styles.groupChatTableCellHead}
+                        align="center"
+                      >
+                        {'Chat'}
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -385,19 +377,26 @@ export default function CreateGroupChat({
                             },
                             index: number,
                           ) => (
-                            <StyledTableRow
-                              data-testid="user"
-                              key={userDetails.id}
-                            >
-                              <StyledTableCell component="th" scope="row">
+                            <TableRow data-testid="user" key={userDetails.id}>
+                              <TableCell
+                                component="th"
+                                scope="row"
+                                className={styles.groupChatTableCellBody}
+                              >
                                 {index + 1}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
+                              </TableCell>
+                              <TableCell
+                                align="center"
+                                className={styles.groupChatTableCellBody}
+                              >
                                 {userDetails.name}
                                 <br />
                                 {userDetails.role || 'Member'}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
+                              </TableCell>
+                              <TableCell
+                                align="center"
+                                className={styles.groupChatTableCellBody}
+                              >
                                 {userIds.includes(userDetails.id) ? (
                                   <Button
                                     variant="danger"
@@ -422,13 +421,13 @@ export default function CreateGroupChat({
                                     {t('add')}
                                   </Button>
                                 )}
-                              </StyledTableCell>
-                            </StyledTableRow>
+                              </TableCell>
+                            </TableRow>
                           ),
                         )}
                   </TableBody>
                 </Table>
-              </StyledTableContainer>
+              </TableContainer>
             </>
           )}
           <Button

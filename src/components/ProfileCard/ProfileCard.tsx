@@ -79,7 +79,7 @@ const ProfileCard = ({
   });
 
   return (
-    <Dropdown as={ButtonGroup} variant="none" style={{ width: '100%' }}>
+    <Dropdown as={ButtonGroup} variant="none" className={styles.fullWidth}>
       <div className={styles.profileContainer}>
         <div className={styles.imageContainer}>
           {userImage && userImage !== 'null' ? (
@@ -105,8 +105,7 @@ const ProfileCard = ({
         </div>
         <div className={styles.profileTextUserSidebarOrg}>
           <span
-            style={{ whiteSpace: 'nowrap' }}
-            className={styles.primaryText}
+            className={`${styles.primaryText} ${styles.nowrap}`}
             data-testid="display-name"
           >
             {displayedName}

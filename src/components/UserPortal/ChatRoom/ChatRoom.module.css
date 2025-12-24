@@ -2,7 +2,8 @@
   padding: 10px;
   flex-grow: 1;
   height: 100%;
-  min-height: 0; /* allow inner flex children to shrink and scroll */
+  min-height: 0;
+  /* allow inner flex children to shrink and scroll */
   display: flex;
   flex-direction: column;
   /* background-color: rgba(196, 255, 211, 0.3); */
@@ -143,9 +144,12 @@
 
 .chatMessages {
   margin: 10px 0;
-  flex: 1; /* take up available space within the flex column */
-  min-height: 0; /* allow the child to shrink and become scrollable in flex */
-  overflow-y: auto; /* enable vertical scrolling */
+  flex: 1;
+  /* take up available space within the flex column */
+  min-height: 0;
+  /* allow the child to shrink and become scrollable in flex */
+  overflow-y: auto;
+  /* enable vertical scrolling */
   display: flex;
   flex-direction: column;
 }
@@ -195,6 +199,7 @@
   border: none;
   --bs-btn-active-bg: none;
 }
+
 .customToggle svg {
   color: black;
   font-size: 12px;
@@ -287,6 +292,7 @@
   from {
     background-color: white;
   }
+
   to {
     background-color: rgb(82, 83, 81);
   }
@@ -295,4 +301,24 @@
 a {
   color: currentColor;
   width: 100%;
+}
+
+.minHeight0 {
+  min-height: 0;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.cursorPointer {
+  cursor: pointer;
+}
+
+.textRed {
+  color: var(--bs-danger, red);
+}
+
+.displayNone {
+  display: none;
 }

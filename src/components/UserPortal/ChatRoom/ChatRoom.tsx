@@ -62,8 +62,8 @@ interface IChatRoomProps {
   chatListRefetch: (
     variables?:
       | Partial<{
-        id: string;
-      }>
+          id: string;
+        }>
       | undefined,
   ) => Promise<ApolloQueryResult<{ chatList: GroupChat[] }>>;
 }
@@ -475,7 +475,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       const lastMessage =
         chatData.chat.messages.edges[chatData.chat.messages.edges.length - 1];
       markReadIfSupported(selectedContact, lastMessage.node.id)
-        .catch(() => { })
+        .catch(() => {})
         .finally(() => {
           chatListRefetch();
           unreadChatListRefetch();
@@ -569,14 +569,14 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       if (
         messageSubscriptionData?.data.data.chatMessageCreate &&
         messageSubscriptionData?.data.data.chatMessageCreate.chat?.id ===
-        props.selectedContact
+          props.selectedContact
       ) {
         const newMessage = messageSubscriptionData.data.data.chatMessageCreate;
         if (newMessage?.creator?.id === userId) {
           shouldAutoScrollRef.current = true;
         }
         await markReadIfSupported(props.selectedContact, newMessage.id).catch(
-          () => { },
+          () => {},
         );
 
         // Soft-append the new message to local state to avoid pagination issues.
@@ -600,14 +600,14 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                 },
                 parentMessage: newMessage.parentMessage
                   ? {
-                    id: newMessage.parentMessage.id,
-                    body: newMessage.parentMessage.body,
-                    createdAt: newMessage.parentMessage.createdAt,
-                    creator: {
-                      id: newMessage.parentMessage.creator.id,
-                      name: newMessage.parentMessage.creator.name,
-                    },
-                  }
+                      id: newMessage.parentMessage.id,
+                      body: newMessage.parentMessage.body,
+                      createdAt: newMessage.parentMessage.createdAt,
+                      creator: {
+                        id: newMessage.parentMessage.creator.id,
+                        name: newMessage.parentMessage.creator.name,
+                      },
+                    }
                   : undefined,
               },
             } as INewChat['messages']['edges'][0];
@@ -731,8 +731,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
             </div>
           </div>
           <div
-            className={`d-flex flex-grow-1 flex-column`}
-            style={{ minHeight: 0 }}
+            className={`d-flex flex-grow-1 flex-column ${styles.minHeight0}`}
           >
             <div
               className={styles.chatMessages}
@@ -832,7 +831,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                             <div className={styles.messageAttributes}>
                               <Dropdown
                                 data-testid="moreOptions"
-                                style={{ cursor: 'pointer' }}
+                                className={styles.cursorPointer}
                               >
                                 <Dropdown.Toggle
                                   className={styles.customToggle}
@@ -867,7 +866,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                                           deleteMessage(message.id)
                                         }
                                         data-testid="deleteMessage"
-                                        style={{ color: 'red' }}
+                                        className={styles.textRed}
                                       >
                                         Delete
                                       </Dropdown.Item>
@@ -898,7 +897,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
               type="file"
               accept="image/*"
               ref={fileInputRef}
-              style={{ display: 'none' }} // Hide the input
+              className={styles.displayNone} // Hide the input
               onChange={handleImageChange}
               data-testid="hidden-file-input"
             />

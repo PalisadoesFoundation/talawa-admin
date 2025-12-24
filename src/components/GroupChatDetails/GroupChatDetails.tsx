@@ -55,11 +55,10 @@ import {
   DELETE_CHAT_MEMBERSHIP,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { styled } from '@mui/material/styles';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
 import { Add } from '@mui/icons-material';
@@ -73,17 +72,8 @@ import { toast } from 'react-toastify';
 import type { InterfaceGroupChatDetailsProps } from 'types/Chat/interface';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: ['#31bb6b', '!important'],
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: { fontSize: 14 },
-}));
-
-const StyledTableRow = styled(TableRow)(() => ({
-  '&:last-child td, &:last-child th': { border: 0 },
-}));
+// No longer using StyledTableCell and StyledTableRow as they were flagging CSS violations.
+// We'll use standard MUI components with CSS classes instead.
 
 export default function groupChatDetails({
   toggleGroupChatDetailsModal,
@@ -300,7 +290,7 @@ export default function groupChatDetails({
             type="file"
             accept="image/*"
             ref={fileInputRef}
-            style={{ display: 'none' }} // Hide the input
+            className={styles.displayNone}
             onChange={handleImageChange}
             data-testid="fileInput"
           />
@@ -412,8 +402,7 @@ export default function groupChatDetails({
                         />
                         <span className="ms-2">{user.name}</span>
                         <span
-                          className="badge bg-success text-dark ms-2"
-                          style={{ fontSize: '0.75rem' }}
+                          className={`badge bg-success text-dark ms-2 ${styles.fontSize075rem}`}
                         >
                           {role}
                         </span>
@@ -423,14 +412,7 @@ export default function groupChatDetails({
                           <Dropdown.Toggle
                             variant="link"
                             id={`dropdown-${user.id}`}
-                            style={{
-                              color: 'black',
-                              border: 'none',
-                              padding: '0',
-                              background: 'none',
-                              boxShadow: 'none',
-                            }}
-                            className="btn-sm"
+                            className={`btn-sm ${styles.cursorPointer}`}
                           >
                             <BsThreeDotsVertical />
                           </Dropdown.Toggle>
@@ -451,7 +433,7 @@ export default function groupChatDetails({
                             </Dropdown.Item>
                             {canRemove && (
                               <Dropdown.Item
-                                style={{ color: 'red' }}
+                                className={styles.textRed}
                                 onClick={() => {
                                   if (
                                     window.confirm(
@@ -517,9 +499,21 @@ export default function groupChatDetails({
                 <Table aria-label="customized table">
                   <TableHead>
                     <TableRow>
-                      <StyledTableCell>#</StyledTableCell>
-                      <StyledTableCell align="center">{'user'}</StyledTableCell>
-                      <StyledTableCell align="center">{'Chat'}</StyledTableCell>
+                      <TableCell className={styles.groupChatTableCellHead}>
+                        #
+                      </TableCell>
+                      <TableCell
+                        className={styles.groupChatTableCellHead}
+                        align="center"
+                      >
+                        {'user'}
+                      </TableCell>
+                      <TableCell
+                        className={styles.groupChatTableCellHead}
+                        align="center"
+                      >
+                        {'Chat'}
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody data-testid="userList">
@@ -556,19 +550,26 @@ export default function groupChatDetails({
                             },
                             index: number,
                           ) => (
-                            <StyledTableRow
-                              data-testid="user"
-                              key={userDetails.id}
-                            >
-                              <StyledTableCell component="th" scope="row">
+                            <TableRow data-testid="user" key={userDetails.id}>
+                              <TableCell
+                                component="th"
+                                scope="row"
+                                className={styles.groupChatTableCellBody}
+                              >
                                 {index + 1}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
+                              </TableCell>
+                              <TableCell
+                                align="center"
+                                className={styles.groupChatTableCellBody}
+                              >
                                 {userDetails.name}
                                 <br />
                                 {userDetails.role || 'Member'}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
+                              </TableCell>
+                              <TableCell
+                                align="center"
+                                className={styles.groupChatTableCellBody}
+                              >
                                 <Button
                                   onClick={async () => {
                                     await addUserToGroupChat(userDetails.id);
@@ -579,8 +580,8 @@ export default function groupChatDetails({
                                 >
                                   {t('add')}
                                 </Button>
-                              </StyledTableCell>
-                            </StyledTableRow>
+                              </TableCell>
+                            </TableRow>
                           ),
                         )}
                   </TableBody>

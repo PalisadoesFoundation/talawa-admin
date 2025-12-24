@@ -545,7 +545,7 @@ describe('CreateGroupChat', () => {
     const toastErrorSpy = vi.spyOn(toast, 'error');
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
 
     render(
       <MockedProvider mocks={localMocks}>
@@ -634,7 +634,7 @@ describe('CreateGroupChat', () => {
     const toastErrorSpy = vi.spyOn(toast, 'error');
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
 
     render(
       <MockedProvider mocks={localMocks}>

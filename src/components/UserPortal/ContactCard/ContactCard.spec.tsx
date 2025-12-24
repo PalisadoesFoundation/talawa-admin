@@ -149,7 +149,10 @@ describe('Testing ContactCard Component [User Portal]', () => {
     );
 
     const img = screen.getByAltText(props.title);
-    expect(img).toHaveAttribute('src', 'http://localhost:9000/bucket/image.jpg');
+    expect(img).toHaveAttribute(
+      'src',
+      'http://localhost:9000/bucket/image.jpg',
+    );
     expect(img).toHaveAttribute('crossOrigin', 'anonymous');
   });
 
