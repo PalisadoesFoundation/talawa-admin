@@ -499,7 +499,9 @@ jobs:
         run: pip install -r .github/workflows/requirements.txt
       - name: Run Translation Checker
         run: |
-          CHANGED_FILES=$(git diff --name-only origin/develop...HEAD | grep -E '\.(ts|tsx|js|jsx)$' || true)
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | grep -E '\.(ts|tsx|js|jsx)$' || true)
+
           if [ -n "$CHANGED_FILES" ]; then
             python3 .github/workflows/scripts/translation_check.py --files $CHANGED_FILES
           else
