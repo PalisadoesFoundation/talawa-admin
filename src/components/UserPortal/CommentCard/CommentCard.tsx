@@ -46,6 +46,7 @@ import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material/styles';
 import { Image } from 'react-bootstrap';
 import styles from '../../../style/app-fixed.module.css';
+import commentCardStyles from './CommentCard.module.css';
 import { VoteType } from 'utils/interfaces';
 import defaultAvatar from 'assets/images/defaultImg.png';
 import {
@@ -76,7 +77,6 @@ const EditModalContent = styled(Box)({
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: '90%',
   maxWidth: 500,
   backgroundColor: 'white',
   borderRadius: 8,
@@ -299,7 +299,10 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
                 data-testid="update-comment-button"
                 onClick={toggleEditComment}
               >
-                <EditOutlined sx={{ mr: 1 }} fontSize="small" />
+                <EditOutlined
+                  sx={{ mr: 1 }}
+                  className={commentCardStyles.iconSmall}
+                />
                 {t('editComment')}
               </MenuItem>
               <MenuItem
@@ -307,7 +310,10 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
                 onClick={handleDeleteComment}
                 disabled={deletingComment}
               >
-                <DeleteOutline sx={{ mr: 1 }} fontSize="small" />
+                <DeleteOutline
+                  sx={{ mr: 1 }}
+                  className={commentCardStyles.iconSmall}
+                />
                 {deletingComment ? t('deleting') : t('deleteComment')}
               </MenuItem>
             </Menu>
@@ -321,7 +327,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
         onClose={toggleEditComment}
         data-testid="edit-comment-modal"
       >
-        <EditModalContent>
+        <EditModalContent className={commentCardStyles.editModalContent}>
           <Typography variant="h6">{t('editComment')}</Typography>
           <FormControl fullWidth sx={{ mb: 2 }}>
             <Input
