@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import styles from '../../style/app-fixed.module.css';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
 import { errorHandler } from 'utils/errorHandler';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 import EventForm, {
   formatRecurrenceForPayload,
 } from 'shared-components/EventForm/EventForm';
@@ -97,7 +98,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
       };
 
       const { data: createEventData } = await create({
-        variables: { input },
+        variables: addInviteOnlyVariable({ input }),
       });
 
       if (createEventData) {

@@ -6,4 +6,4 @@
 
 > `const` **REGISTER\_EVENT**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/EventMutations.ts:182](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventMutations.ts#L182)
+Defined in: [src/GraphQl/Mutations/EventMutations.ts:199](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventMutations.ts#L199)

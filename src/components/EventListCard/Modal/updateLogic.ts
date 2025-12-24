@@ -7,6 +7,7 @@ import {
 } from 'GraphQl/Mutations/EventMutations';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import type { InterfaceEvent } from 'types/Event/interface';
@@ -199,21 +200,21 @@ export const useUpdateEventHandler = () => {
 
       if (!isRecurringInstance) {
         const result = await updateStandaloneEvent({
-          variables: { input: updateInput },
+          variables: addInviteOnlyVariable({ input: updateInput }),
         });
         data = result.data;
       } else {
         switch (updateOption) {
           case 'single': {
             const singleResult = await updateSingleRecurringEventInstance({
-              variables: { input: updateInput },
+              variables: addInviteOnlyVariable({ input: updateInput }),
             });
             data = singleResult.data;
             break;
           }
           case 'following': {
             const followingResult = await updateThisAndFollowingEvents({
-              variables: { input: updateInput },
+              variables: addInviteOnlyVariable({ input: updateInput }),
             });
             data = followingResult.data;
             break;
@@ -240,7 +241,7 @@ export const useUpdateEventHandler = () => {
               entireSeriesInput.isInviteOnly = inviteOnlyChecked;
             }
             const entireSeriesResult = await updateEntireRecurringEventSeries({
-              variables: { input: entireSeriesInput },
+              variables: addInviteOnlyVariable({ input: entireSeriesInput }),
             });
             data = entireSeriesResult.data;
             break;

@@ -6,7 +6,7 @@
 
 > **useUpdateEventHandler**(): `object`
 
-Defined in: [src/components/EventListCard/Modal/updateLogic.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/Modal/updateLogic.ts#L63)
+Defined in: [src/components/EventListCard/Modal/updateLogic.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventListCard/Modal/updateLogic.ts#L64)
 
 ## Returns
 

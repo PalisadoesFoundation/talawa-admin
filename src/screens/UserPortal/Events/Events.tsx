@@ -47,6 +47,7 @@
  */
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 import {
   ORGANIZATIONS_LIST,
   GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
@@ -171,7 +172,7 @@ export default function events(): JSX.Element {
       };
 
       const { data: createEventData } = await create({
-        variables: { input },
+        variables: addInviteOnlyVariable({ input }),
       });
       if (createEventData) {
         toast.success(t('eventCreated') as string);

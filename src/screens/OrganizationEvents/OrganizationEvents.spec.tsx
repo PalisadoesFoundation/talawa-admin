@@ -1,4 +1,3 @@
-import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { act, render, screen, waitFor } from '@testing-library/react';
 import { GraphQLError } from 'graphql';
@@ -40,10 +39,22 @@ vi.mock('utils/useLocalstorage', () => {
   };
 });
 
+// Read CSS variable value to avoid hardcoded colors (Material-UI doesn't support CSS variables directly)
+const getSuccessColor = (): string => {
+  if (typeof document !== 'undefined' && document.documentElement) {
+    const color = getComputedStyle(document.documentElement)
+      .getPropertyValue('--bs-success')
+      .trim();
+    if (color) return color;
+  }
+  // Return empty string if CSS variable not available - Material-UI will use default
+  return '';
+};
+
 const theme = createTheme({
   palette: {
     primary: {
-      main: green[600],
+      main: getSuccessColor(),
     },
   },
 });
@@ -145,9 +156,26 @@ vi.mock('./CreateEventModal', () => ({
     onClose: () => void;
     onEventCreated: () => void;
   }) => {
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const React = require('react');
+    const [inviteOnly, setInviteOnly] = React.useState(false);
+
     if (!isOpen) return null;
     return (
       <div data-testid="createEventModal">
+        {/* Minimal title input so tests can wait on modal readiness */}
+        <input data-testid="eventTitleInput" />
+
+        {/* Minimal invite-only checkbox matching test IDs */}
+        <label>
+          <input
+            type="checkbox"
+            data-testid="inviteOnlyEventCheck"
+            checked={inviteOnly}
+            onChange={(e) => setInviteOnly(e.target.checked)}
+          />
+        </label>
+
         <button
           type="button"
           data-testid="createEventModalCloseBtn"

@@ -6,4 +6,4 @@
 
 > `const` **UPDATE\_THIS\_AND\_FOLLOWING\_EVENTS\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/EventMutations.ts:145](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventMutations.ts#L145)
+Defined in: [src/GraphQl/Mutations/EventMutations.ts:160](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventMutations.ts#L160)

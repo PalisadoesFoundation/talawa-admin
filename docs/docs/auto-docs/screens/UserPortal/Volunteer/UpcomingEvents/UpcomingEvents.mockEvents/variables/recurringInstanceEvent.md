@@ -6,7 +6,7 @@
 
 > `const` **recurringInstanceEvent**: `object`
 
-Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts:179](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts#L179)
+Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts:197](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts#L197)
 
 ## Type Declaration
 
@@ -42,9 +42,21 @@ Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mock
 
 > **id**: `string` = `'eventInstanceId1'`
 
+### isInviteOnly
+
+> **isInviteOnly**: `boolean` = `false`
+
+### isPublic
+
+> **isPublic**: `boolean` = `true`
+
 ### isRecurringEventTemplate
 
 > **isRecurringEventTemplate**: `boolean` = `false`
+
+### isRegisterable
+
+> **isRegisterable**: `boolean` = `true`
 
 ### location
 

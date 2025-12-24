@@ -207,10 +207,22 @@ vi.mock('components/EventCalender/Header/EventHeader', () => ({
   },
 }));
 
+// Read CSS variable value to avoid hardcoded colors (Material-UI doesn't support CSS variables directly)
+const getSuccessColor = (): string => {
+  if (typeof document !== 'undefined' && document.documentElement) {
+    const color = getComputedStyle(document.documentElement)
+      .getPropertyValue('--bs-success')
+      .trim();
+    if (color) return color;
+  }
+  // Return empty string if CSS variable not available - Material-UI will use default
+  return '';
+};
+
 const theme = createTheme({
   palette: {
     primary: {
-      main: green[600],
+      main: getSuccessColor(),
     },
   },
 });
@@ -564,6 +576,7 @@ const CREATE_EVENT_ERROR_MOCKS = [
           isRegisterable: true,
           isInviteOnly: false,
         },
+        includeInviteOnly: false,
       },
     },
     error: new Error('Failed to create event'),
@@ -593,6 +606,7 @@ const CREATE_EVENT_NULL_MOCKS = [
           isRegisterable: true,
           isInviteOnly: false,
         },
+        includeInviteOnly: false,
       },
     },
     result: {},
@@ -775,8 +789,9 @@ describe('Testing Events Screen [User Portal]', () => {
             location: 'New Test Location',
             isPublic: true,
             isRegisterable: true,
-            recurrence: undefined,
+            isInviteOnly: false,
           },
+          includeInviteOnly: false,
         },
       },
       result: {
@@ -871,6 +886,7 @@ describe('Testing Events Screen [User Portal]', () => {
             isPublic: true,
             isRegisterable: true,
           },
+          includeInviteOnly: false,
         },
       },
       result: {
@@ -1374,16 +1390,8 @@ describe('Testing Events Screen [User Portal]', () => {
             isRegisterable: true,
             isInviteOnly: true,
           },
+          includeInviteOnly: false,
         },
-      },
-      result: () => {
-        return {
-          data: {
-            createEvent: {
-              id: 'inviteOnlyEvent1',
-            },
-          },
-        };
       },
       newData: () => {
         return {
@@ -1724,8 +1732,10 @@ describe('Testing Events Screen [User Portal]', () => {
             location: 'Recurring Test Location',
             isPublic: true,
             isRegisterable: true,
+            isInviteOnly: false,
             recurrence: expectedRecurrence,
           },
+          includeInviteOnly: false,
         },
       },
       result: {
