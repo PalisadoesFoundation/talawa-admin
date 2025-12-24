@@ -18,7 +18,7 @@
  * - Uses `useMutation` to create a new chat via the `CREATE_CHAT` GraphQL mutation.
  * - Fetches user data using the `USERS_CONNECTION_LIST` GraphQL query.
  * - Allows users to search for and add members to the group.
- * - Supports image upload functionality using MinIO.
+ * - Supports image upload functionality with direct GraphQL file upload and local preview.
  *
  * @example
  * ```tsx
@@ -117,6 +117,10 @@ export default function CreateGroupChat({
   function reset(): void {
     setTitle('');
     setUserIds([]);
+    // Clean up object URL when resetting
+    if (selectedImage && selectedImage.startsWith('blob:')) {
+      URL.revokeObjectURL(selectedImage);
+    }
     setSelectedImage(null);
     setRawImageFile(null);
   }
@@ -124,6 +128,15 @@ export default function CreateGroupChat({
   useEffect(() => {
     setUserIds(userIds);
   }, [userIds]);
+
+  // Cleanup object URLs on unmount
+  useEffect(() => {
+    return () => {
+      if (selectedImage && selectedImage.startsWith('blob:')) {
+        URL.revokeObjectURL(selectedImage);
+      }
+    };
+  }, [selectedImage]);
 
   async function handleCreateGroupChat(): Promise<void> {
     try {
@@ -210,11 +223,23 @@ export default function CreateGroupChat({
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file && currentOrg) {
+      // Clean up previous object URL to prevent memory leaks
+      if (selectedImage && selectedImage.startsWith('blob:')) {
+        URL.revokeObjectURL(selectedImage);
+      }
+
       // Set immediate local preview
       const localUrl = URL.createObjectURL(file);
       setSelectedImage(localUrl);
 
       setRawImageFile(file);
+    } else {
+      // Clean up object URL if file selection is cleared
+      if (selectedImage && selectedImage.startsWith('blob:')) {
+        URL.revokeObjectURL(selectedImage);
+      }
+      setSelectedImage(null);
+      setRawImageFile(null);
     }
   };
 

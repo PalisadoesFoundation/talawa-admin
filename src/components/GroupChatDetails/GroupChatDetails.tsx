@@ -95,6 +95,15 @@ export default function groupChatDetails({
     }
   }, [userId, t]);
 
+  // Cleanup object URLs on unmount
+  useEffect(() => {
+    return () => {
+      if (selectedImage && selectedImage.startsWith('blob:')) {
+        URL.revokeObjectURL(selectedImage);
+      }
+    };
+  }, [selectedImage]);
+
   if (!userId) {
     return (
       <Modal
@@ -116,7 +125,7 @@ export default function groupChatDetails({
   const [userName, setUserName] = useState('');
   const [editChatTitle, setEditChatTitle] = useState<boolean>(false);
   const [chatName, setChatName] = useState<string>(chat?.name || '');
-  const [, setSelectedImage] = useState(chat?.avatarURL || '');
+  const [selectedImage, setSelectedImage] = useState<string>('');
 
   //mutations
 
@@ -220,6 +229,11 @@ export default function groupChatDetails({
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file && chat.organization?.id) {
+      // Clean up previous object URL to prevent memory leaks
+      if (selectedImage && selectedImage.startsWith('blob:')) {
+        URL.revokeObjectURL(selectedImage);
+      }
+
       // Set immediate local preview
       const localUrl = URL.createObjectURL(file);
       setSelectedImage(localUrl);
@@ -236,13 +250,25 @@ export default function groupChatDetails({
         });
         await chatRefetch({ input: { id: chat.id } });
         toast.success('Chat image updated successfully');
+        // Clean up object URL after successful upload
+        if (selectedImage && selectedImage.startsWith('blob:')) {
+          URL.revokeObjectURL(selectedImage);
+        }
         setSelectedImage('');
       } catch (error) {
         toast.error('Failed to update chat image');
         console.error(error);
+        // Clean up object URL on error
+        if (selectedImage && selectedImage.startsWith('blob:')) {
+          URL.revokeObjectURL(selectedImage);
+        }
         setSelectedImage('');
       }
     } else {
+      // Clean up object URL if file selection is cleared
+      if (selectedImage && selectedImage.startsWith('blob:')) {
+        URL.revokeObjectURL(selectedImage);
+      }
       setSelectedImage('');
     }
   };
@@ -295,7 +321,9 @@ export default function groupChatDetails({
             data-testid="fileInput"
           />
           <div className={styles.groupInfo}>
-            {chat?.avatarURL ? (
+            {selectedImage ? (
+              <img className={styles.chatImage} src={selectedImage} alt="" />
+            ) : chat?.avatarURL ? (
               <img className={styles.chatImage} src={chat?.avatarURL} alt="" />
             ) : (
               <Avatar avatarStyle={styles.groupImage} name={chat.name || ''} />

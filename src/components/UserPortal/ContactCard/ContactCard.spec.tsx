@@ -148,6 +148,8 @@ describe('Testing ContactCard Component [User Portal]', () => {
       </MockedProvider>,
     );
 
+    await wait();
+
     const img = screen.getByAltText(props.title);
     expect(img).toHaveAttribute(
       'src',
@@ -169,6 +171,8 @@ describe('Testing ContactCard Component [User Portal]', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
+
+    await wait();
 
     const img = screen.getByAltText(props.title);
     expect(img).toHaveAttribute('src', normalUrl);
