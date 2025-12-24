@@ -269,8 +269,24 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
       },
     };
 
+    const MINIO_EVENT_MOCK = {
+      request: {
+        query: ORGANIZATION_EVENT_CONNECTION_LIST,
+        variables: {
+          organization_id: 'minio-members',
+          first: 3,
+          skip: 0,
+        },
+      },
+      result: {
+        data: {
+          eventsByOrganizationConnection: [],
+        },
+      },
+    };
+
     render(
-      <MockedProvider mocks={[MINIO_MEMBER_MOCK]}>
+      <MockedProvider mocks={[MINIO_MEMBER_MOCK, MINIO_EVENT_MOCK]}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

@@ -632,6 +632,9 @@ describe('CreateGroupChat', () => {
     ];
 
     const toastErrorSpy = vi.spyOn(toast, 'error');
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => { });
 
     render(
       <MockedProvider mocks={localMocks}>
@@ -660,8 +663,10 @@ describe('CreateGroupChat', () => {
 
     await waitFor(() => {
       expect(toastErrorSpy).toHaveBeenCalledWith('Failed to create group chat');
+      expect(consoleErrorSpy).toHaveBeenCalled();
     });
 
     toastErrorSpy.mockRestore();
+    consoleErrorSpy.mockRestore();
   });
 });

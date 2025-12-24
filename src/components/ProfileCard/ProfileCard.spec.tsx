@@ -270,6 +270,46 @@ describe('ProfileDropdown Component', () => {
     expect(img).toHaveAttribute('src', normalUrl);
     expect(img).toHaveAttribute('crossOrigin', 'anonymous');
   });
+
+  test('preserves 127.0.0.1 in MinIO URLs', () => {
+    const minioUrl = 'http://127.0.0.1:9000/bucket/avatar.jpg';
+    setItem('UserImage', minioUrl);
+    setItem('role', 'regular');
+    render(
+      <MockedProvider mocks={MOCKS}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileCard />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const img = screen.getByTestId('display-img');
+    expect(img).toHaveAttribute('src', minioUrl);
+  });
+
+  test('preserves query parameters in MinIO URLs during normalization', () => {
+    const minioUrlWithParams =
+      'http://minio:9000/bucket/avatar.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minioadmin';
+    setItem('UserImage', minioUrlWithParams);
+    setItem('role', 'regular');
+    render(
+      <MockedProvider mocks={MOCKS}>
+        <BrowserRouter>
+          <I18nextProvider i18n={i18nForTest}>
+            <ProfileCard />
+          </I18nextProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const img = screen.getByTestId('display-img');
+    expect(img).toHaveAttribute(
+      'src',
+      'http://localhost:9000/bucket/avatar.jpg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minioadmin',
+    );
+  });
 });
 
 describe('Member screen routing testing', () => {

@@ -468,22 +468,24 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   // NOTE(caching): With cache policies, unread chats list can be updated via
   // cache.modify on Query.unreadChats instead of refetching.
 
+  const { selectedContact, chatListRefetch } = props;
+
   useEffect(() => {
     if (chatData?.chat?.messages?.edges?.length) {
       const lastMessage =
         chatData.chat.messages.edges[chatData.chat.messages.edges.length - 1];
-      markReadIfSupported(props.selectedContact, lastMessage.node.id)
+      markReadIfSupported(selectedContact, lastMessage.node.id)
         .catch(() => { })
         .finally(() => {
-          props.chatListRefetch();
+          chatListRefetch();
           unreadChatListRefetch();
         });
     }
   }, [
-    props.selectedContact,
+    selectedContact,
     chatData,
     markReadIfSupported,
-    props,
+    chatListRefetch,
     unreadChatListRefetch,
   ]);
 
