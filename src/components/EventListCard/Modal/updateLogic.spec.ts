@@ -275,6 +275,28 @@ describe('useUpdateEventHandler', () => {
       expect(calledInputs.isInviteOnly).toBe(true);
     });
 
+    it('handles standalone event update with isInviteOnly toggle from true to false', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: {
+            ...mockEventListCardProps,
+            isInviteOnly: true, // Original state is true
+          },
+          inviteOnlyChecked: false, // Toggled to false
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toBeCalledTimes(1);
+      const calledInputs =
+        mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
+      expect(calledInputs.isInviteOnly).toBe(false);
+    });
+
     it('does not include isInviteOnly in update when unchanged', async () => {
       mockUpdateStandaloneEvent.mockResolvedValueOnce({
         data: { updateEvent: {} },

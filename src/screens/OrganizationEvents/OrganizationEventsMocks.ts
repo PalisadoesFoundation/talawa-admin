@@ -85,6 +85,7 @@ export const MOCKS = [
                   location: null,
                   isPublic: true,
                   isRegisterable: true,
+                  isInviteOnly: false,
                   isRecurringEventTemplate: false,
                   baseEvent: null,
                   sequenceNumber: null,

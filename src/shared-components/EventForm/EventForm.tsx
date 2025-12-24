@@ -227,7 +227,7 @@ const EventForm: React.FC<IEventFormProps> = ({
       allDay: formState.allDay,
       isPublic: formState.isPublic,
       isRegisterable: formState.isRegisterable,
-      isInviteOnly: formState.isInviteOnly,
+      isInviteOnly: formState.isInviteOnly ?? false,
       recurrenceRule:
         recurrenceEnabled && formState.recurrenceRule
           ? formState.recurrenceRule
@@ -479,7 +479,7 @@ const EventForm: React.FC<IEventFormProps> = ({
                 className={`me-4 ${styles.switch}`}
                 id="isinviteonly"
                 type="checkbox"
-                checked={formState.isInviteOnly || false}
+                checked={!!formState.isInviteOnly}
                 data-testid="inviteOnlyEventCheck"
                 onChange={(): void =>
                   setFormState((prev) => ({
