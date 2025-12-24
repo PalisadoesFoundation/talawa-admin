@@ -21,7 +21,7 @@ env:
 
 jobs:
   Code-Quality-Checks:
-    uses: PalisadoesFoundation/.github/.github/workflows/pull-request-typescript-code-quallity.yml@feature/typescript-code-quality-workflow
+    uses: PalisadoesFoundation/.github/.github/workflows/pull-request-typescript-code-quality.yml@feature/typescript-code-quality-workflow
   CSS-Policy-Check:
     name: CSS Policy Check
     runs-on: ubuntu-latest
