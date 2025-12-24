@@ -84,7 +84,7 @@ export const NotificationToast: InterfaceNotificationToastHelpers = {
  * any prop via `props`.
  */
 export function NotificationToastContainer(
-  props: ToastContainerProps,
+  props: ToastContainerProps = {},
 ): React.ReactElement {
   return <ToastContainer {...DEFAULT_CONTAINER_PROPS} {...props} />;
 }

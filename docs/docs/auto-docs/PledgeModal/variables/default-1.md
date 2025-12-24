@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`InterfacePledgeModal`](../interfaces/InterfacePledgeModal-1.md)\>
 
-Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L106)
+Defined in: [src/screens/UserPortal/Campaigns/PledgeModal.tsx:131](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Campaigns/PledgeModal.tsx#L131)

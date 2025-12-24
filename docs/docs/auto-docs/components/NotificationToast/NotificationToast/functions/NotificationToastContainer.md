@@ -6,7 +6,7 @@
 
 > **NotificationToastContainer**(`props`): `ReactElement`
 
-Defined in: [src/components/NotificationToast/NotificationToast.tsx:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/NotificationToast/NotificationToast.tsx#L85)
+Defined in: [src/components/NotificationToast/NotificationToast.tsx:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/NotificationToast/NotificationToast.tsx#L86)
 
 NotificationToastContainer
 
@@ -17,7 +17,7 @@ any prop via `props`.
 
 ### props
 
-`ToastContainerProps`
+`ToastContainerProps` = `{}`
 
 ## Returns
 
