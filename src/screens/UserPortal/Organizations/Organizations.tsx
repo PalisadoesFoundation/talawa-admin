@@ -304,18 +304,11 @@ export default function Organizations(): React.JSX.Element {
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
         className={`${hideDrawer ? styles.expand : styles.contract}`}
-        style={{
-          marginLeft: hideDrawer ? '40px' : '20px',
-          paddingTop: '20px',
-        }}
         data-testid="organizations-container"
       >
-        <div
-          className={styles.mainContainerOrganization}
-          style={{ overflowX: 'hidden' }}
-        >
-          <div className="d-flex justify-content-between align-items-center">
-            <div style={{ flex: 1 }}>
+        <div className={styles.mainContainerOrganization}>
+          <div className="d-flex justify-content-between align-items-center flex-1">
+            <div>
               <h1>{t('selectOrganization')}</h1>
             </div>
           </div>

@@ -59,7 +59,6 @@
  * @returns {JSX.Element} The rendered PageHeader component.
  */
 import React from 'react';
-import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
@@ -73,7 +72,6 @@ export default function PageHeader({
   showEventTypeFilter = false,
   actions,
 }: InterfacePageHeaderProps) {
-
   const { t: tCommon } = useTranslation('common');
 
   return (
@@ -127,7 +125,7 @@ export default function PageHeader({
               onSortChange={() => {}}
               dataTestIdPrefix="eventType"
               className={styles.dropdown}
-              buttonLabel={t('eventType')}
+              buttonLabel={tCommon('eventType')}
             />
           </div>
         )}
