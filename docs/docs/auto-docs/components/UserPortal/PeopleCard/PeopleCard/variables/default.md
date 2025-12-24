@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`InterfacePeopleCardProps`](../interfaces/InterfacePeopleCardProps.md)\>
 
-Defined in: [src/components/UserPortal/PeopleCard/PeopleCard.tsx:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PeopleCard/PeopleCard.tsx#L18)
+Defined in: [src/components/UserPortal/PeopleCard/PeopleCard.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/PeopleCard/PeopleCard.tsx#L52)
