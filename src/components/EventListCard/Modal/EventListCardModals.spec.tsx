@@ -55,6 +55,9 @@ vi.mock('react-toastify', () => ({
 vi.mock('utils/errorHandler', () => ({
   errorHandler: vi.fn(),
 }));
+vi.mock('utils/featureFlags', () => ({
+  isInviteOnlyEnabled: vi.fn(() => false),
+}));
 vi.mock('./Preview/EventListCardPreviewModal', () => ({
   default: vi.fn(),
 }));
@@ -256,12 +259,13 @@ describe('EventListCardModals', () => {
     });
 
     expect(mockUpdateStandaloneEvent).toHaveBeenCalledWith({
-      variables: {
-        input: {
+      variables: expect.objectContaining({
+        includeInviteOnly: false,
+        input: expect.objectContaining({
           id: 'event1',
           name: 'Updated Event',
-        },
-      },
+        }),
+      }),
     });
     expect(toast.success).toHaveBeenCalledWith('eventUpdated');
     expect(mockEventListCardProps.refetchEvents).toHaveBeenCalled();
@@ -281,12 +285,13 @@ describe('EventListCardModals', () => {
       await updatedPreviewProps.handleEventUpdate();
     });
     expect(mockUpdateStandaloneEvent).toHaveBeenCalledWith({
-      variables: {
-        input: {
+      variables: expect.objectContaining({
+        includeInviteOnly: false,
+        input: expect.objectContaining({
           id: 'event1',
           description: 'Updated Description',
-        },
-      },
+        }),
+      }),
     });
   });
 
@@ -304,12 +309,13 @@ describe('EventListCardModals', () => {
       await updatedPreviewProps.handleEventUpdate();
     });
     expect(mockUpdateStandaloneEvent).toHaveBeenCalledWith({
-      variables: {
-        input: {
+      variables: expect.objectContaining({
+        includeInviteOnly: false,
+        input: expect.objectContaining({
           id: 'event1',
           location: 'Updated Location',
-        },
-      },
+        }),
+      }),
     });
   });
 
@@ -324,12 +330,13 @@ describe('EventListCardModals', () => {
       await updatedPreviewProps.handleEventUpdate();
     });
     expect(mockUpdateStandaloneEvent).toHaveBeenCalledWith({
-      variables: {
-        input: {
+      variables: expect.objectContaining({
+        includeInviteOnly: false,
+        input: expect.objectContaining({
           id: 'event1',
           isPublic: false,
-        },
-      },
+        }),
+      }),
     });
   });
 
@@ -344,12 +351,13 @@ describe('EventListCardModals', () => {
       await updatedPreviewProps.handleEventUpdate();
     });
     expect(mockUpdateStandaloneEvent).toHaveBeenCalledWith({
-      variables: {
-        input: {
+      variables: expect.objectContaining({
+        includeInviteOnly: false,
+        input: expect.objectContaining({
           id: 'event1',
           isRegisterable: false,
-        },
-      },
+        }),
+      }),
     });
   });
 
@@ -364,12 +372,13 @@ describe('EventListCardModals', () => {
       await updatedPreviewProps.handleEventUpdate();
     });
     expect(mockUpdateStandaloneEvent).toHaveBeenCalledWith({
-      variables: {
+      variables: expect.objectContaining({
+        includeInviteOnly: false,
         input: expect.objectContaining({
           id: 'event1',
           allDay: true,
         }),
-      },
+      }),
     });
   });
 
@@ -472,12 +481,13 @@ describe('EventListCardModals', () => {
     await userEvent.click(confirmButton);
 
     expect(mockUpdateSingleRecurringEvent).toHaveBeenCalledWith({
-      variables: {
-        input: {
+      variables: expect.objectContaining({
+        includeInviteOnly: false,
+        input: expect.objectContaining({
           id: 'event1',
           name: 'Updated Instance',
-        },
-      },
+        }),
+      }),
     });
   });
 
@@ -506,12 +516,13 @@ describe('EventListCardModals', () => {
     await userEvent.click(confirmButton);
 
     expect(mockUpdateFollowingRecurringEvent).toHaveBeenCalledWith({
-      variables: {
+      variables: expect.objectContaining({
+        includeInviteOnly: false,
         input: expect.objectContaining({
           id: 'event1',
           name: 'Updated Following',
         }),
-      },
+      }),
     });
   });
 
@@ -541,13 +552,14 @@ describe('EventListCardModals', () => {
     await userEvent.click(confirmButton);
 
     expect(mockUpdateEntireRecurringEventSeries).toHaveBeenCalledWith({
-      variables: {
-        input: {
+      variables: expect.objectContaining({
+        includeInviteOnly: false,
+        input: expect.objectContaining({
           id: 'event1',
           name: 'Updated Series',
           description: 'Updated Series Description',
-        },
-      },
+        }),
+      }),
     });
   });
 
@@ -575,12 +587,13 @@ describe('EventListCardModals', () => {
     await userEvent.click(confirmButton);
 
     expect(mockUpdateEntireRecurringEventSeries).toHaveBeenCalledWith({
-      variables: {
-        input: {
+      variables: expect.objectContaining({
+        includeInviteOnly: false,
+        input: expect.objectContaining({
           id: 'event1',
           name: 'Updated Series Name',
-        },
-      },
+        }),
+      }),
     });
   });
 
@@ -608,12 +621,13 @@ describe('EventListCardModals', () => {
     await userEvent.click(confirmButton);
 
     expect(mockUpdateEntireRecurringEventSeries).toHaveBeenCalledWith({
-      variables: {
-        input: {
+      variables: expect.objectContaining({
+        includeInviteOnly: false,
+        input: expect.objectContaining({
           id: 'event1',
           description: 'Updated Series Event Description',
-        },
-      },
+        }),
+      }),
     });
   });
 
@@ -638,13 +652,14 @@ describe('EventListCardModals', () => {
       });
 
       expect(mockUpdateStandaloneEvent).toHaveBeenCalledWith({
-        variables: {
-          input: {
+        variables: expect.objectContaining({
+          includeInviteOnly: false,
+          input: expect.objectContaining({
             id: 'event1',
             startAt: '2024-05-10T00:00:00.000Z',
             endAt: '2024-05-11T23:59:59.999Z',
-          },
-        },
+          }),
+        }),
       });
     });
 
@@ -674,12 +689,13 @@ describe('EventListCardModals', () => {
       await userEvent.click(confirmButton);
 
       expect(mockUpdateSingleRecurringEvent).toHaveBeenCalledWith({
-        variables: {
-          input: {
+        variables: expect.objectContaining({
+          includeInviteOnly: false,
+          input: expect.objectContaining({
             id: 'event1',
             name: 'Updated Name',
-          },
-        },
+          }),
+        }),
       });
     });
 
@@ -703,7 +719,13 @@ describe('EventListCardModals', () => {
         await updatedPreviewProps.handleEventUpdate();
       });
       expect(mockUpdateStandaloneEvent).toHaveBeenCalledWith({
-        variables: { input: { id: 'event1', name: 'Updated Name' } },
+        variables: expect.objectContaining({
+          includeInviteOnly: false,
+          input: expect.objectContaining({
+            id: 'event1',
+            name: 'Updated Name',
+          }),
+        }),
       });
     });
 
@@ -727,7 +749,13 @@ describe('EventListCardModals', () => {
         await updatedPreviewProps.handleEventUpdate();
       });
       expect(mockUpdateStandaloneEvent).toHaveBeenCalledWith({
-        variables: { input: { id: 'event1', name: 'Updated Name' } },
+        variables: expect.objectContaining({
+          includeInviteOnly: false,
+          input: expect.objectContaining({
+            id: 'event1',
+            name: 'Updated Name',
+          }),
+        }),
       });
     });
 
@@ -825,12 +853,13 @@ describe('EventListCardModals', () => {
         await updatedPreviewProps.handleEventUpdate();
       });
       expect(mockUpdateStandaloneEvent).toHaveBeenCalledWith({
-        variables: {
-          input: {
+        variables: expect.objectContaining({
+          includeInviteOnly: false,
+          input: expect.objectContaining({
             id: 'event1',
             name: 'Updated Name',
-          },
-        },
+          }),
+        }),
       });
     });
   });
@@ -1016,6 +1045,7 @@ describe('EventListCardModals', () => {
         expect(mockUpdateFollowingRecurringEvent).toHaveBeenCalledWith(
           expect.objectContaining({
             variables: expect.objectContaining({
+              includeInviteOnly: false,
               input: expect.objectContaining({}),
             }),
           }),
