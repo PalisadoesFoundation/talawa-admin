@@ -150,7 +150,8 @@
     "allCaughtUp": "Vous êtes à jour !",
     "prev": "Précédent",
     "next": "Suivant",
-    "markAsRead": "Marquer comme lues"
+    "markAsRead": "Marquer comme lues",
+    "markAsReadAriaLabel": "Marquer la notification '{{title}}' comme lue"
   },
   "orgList": {
     "title": "Organisations Talawa",
@@ -1704,6 +1705,8 @@
     "noPluginsAvailable": "Aucun plugin disponible",
     "installPluginsToSeeHere": "Installez des plugins pour les voir ici",
     "checkBackLater": "Revenez plus tard pour de nouveaux plugins",
+    "tryDifferentSearch": "Essayez un autre terme de recherche ou parcourez tous les plugins",
+    "explorePluginStore": "Explorez la boutique de plugins pour découvrir de nouveaux plugins",
     "noResultsFoundFor": "Aucun résultat trouvé pour"
   },
   "commentCard": {

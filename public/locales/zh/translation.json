@@ -150,7 +150,8 @@
     "allCaughtUp": "全部已读！",
     "prev": "上一页",
     "next": "下一页",
-    "markAsRead": "标记为已读"
+    "markAsRead": "标记为已读",
+    "markAsReadAriaLabel": "将通知'{{title}}'标记为已读"
   },
   "orgList": {
     "title": "塔拉瓦组织",
@@ -1704,6 +1705,8 @@
     "noPluginsAvailable": "没有可用的插件",
     "installPluginsToSeeHere": "安装插件以在此查看",
     "checkBackLater": "稍后查看新插件",
+    "tryDifferentSearch": "尝试使用不同的搜索词或浏览所有插件",
+    "explorePluginStore": "探索插件商店以发现新插件",
     "noResultsFoundFor": "未找到相关结果"
   },
   "commentCard": {
