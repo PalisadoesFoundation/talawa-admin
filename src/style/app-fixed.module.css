@@ -845,6 +845,9 @@
   --dropdown-font-color: #555555;
 
   --input-bg: #f2f7ff;
+
+  --empty-state-bg: #ffffff;
+  --empty-state-border-color: #e7e7e7;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -1606,6 +1609,7 @@ form label,
   transform: scale(1.5);
   color: var(--bs-danger, var(--errorIcon-color));
   margin-bottom: 1rem;
+  font-size: 2.1875rem; /* MUI "large" = 35px = 2.1875rem */
 
   /* Add error icon for non-color indication */
   &::before {
