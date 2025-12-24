@@ -23,6 +23,12 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+// Mock utils/i18n to use the test i18n instance for NotificationToast
+// This ensures NotificationToast can resolve translation keys correctly in tests
+vi.mock('utils/i18n', () => ({
+  default: i18nForTest,
+}));
+
 const MOCKS = [
   {
     request: {

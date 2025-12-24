@@ -27,6 +27,11 @@ interface InterfaceGraphQLErrorWithCode extends Error {
   }>;
 }
 
+// Mock utils/i18n to use the test i18n instance for NotificationToast
+vi.mock('utils/i18n', () => ({
+  default: i18nForTest,
+}));
+
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),

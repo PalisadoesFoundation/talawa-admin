@@ -26,6 +26,11 @@ const toastMocks = vi.hoisted(() => ({
   warn: vi.fn(),
 }));
 
+// Mock utils/i18n to use the test i18n instance for NotificationToast
+vi.mock('utils/i18n', () => ({
+  default: i18n,
+}));
+
 vi.mock('react-toastify', () => ({
   toast: toastMocks,
 }));
