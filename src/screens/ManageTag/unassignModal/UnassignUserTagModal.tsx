@@ -1,8 +1,6 @@
 /**
- * UnassignUserTagModal Component
- *
- * Renders a confirmation modal for unassigning a user tag.
- * Provides "Yes" and "No" options to confirm or cancel the action.
+ * A React functional component that renders a modal for unassigning a user tag.
+ * This modal provides a confirmation dialog with "Yes" and "No" options.
  *
  * @component
  * @param {InterfaceUnassignUserTagModalProps} props - The props for the component.
@@ -14,14 +12,21 @@
  *
  * @returns {JSX.Element} The rendered modal component.
  *
+ * @remarks
+ * - The modal is styled using Bootstrap and custom CSS classes from `app-fixed.module.css`.
+ * - The "Yes" button is disabled while the `handleUnassignUserTag` function is executing.
+ * - Accessibility attributes such as `aria-label` are used for better screen reader support.
+ *
  * @example
+ * ```tsx
  * <UnassignUserTagModal
  *   unassignUserTagModalIsOpen={true}
- *   toggleUnassignUserTagModal={handleToggle}
- *   handleUnassignUserTag={handleUnassign}
- *   t={tFunction}
- *   tCommon={tCommonFunction}
+ *   toggleUnassignUserTagModal={() => console.log('Toggle modal')}
+ *   handleUnassignUserTag={async () => console.log('Unassign user tag')}
+ *   t={(key) => key}
+ *   tCommon={(key) => key}
  * />
+ * ```
  */
 import type { TFunction } from 'i18next';
 import React, { useState } from 'react';

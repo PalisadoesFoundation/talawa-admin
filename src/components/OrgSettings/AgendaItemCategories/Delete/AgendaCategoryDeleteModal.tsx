@@ -1,7 +1,8 @@
 /**
  * AgendaCategoryDeleteModal Component
  *
- * Renders a confirmation modal for deleting an agenda category.
+ * This component renders a modal for confirming the deletion of an agenda category.
+ * It provides options to either confirm or cancel the deletion action.
  *
  * @component
  * @param {InterfaceAgendaCategoryDeleteModalProps} props - The props for the component.
@@ -11,12 +12,12 @@
  * @param {(key: string) => string} props.t - Translation function for component-specific strings.
  * @param {(key: string) => string} props.tCommon - Translation function for common strings.
  *
- * @returns {JSX.Element} The rendered delete confirmation modal.
+ * @returns {React.FC} A React functional component that renders the delete confirmation modal.
  *
  * @remarks
- * - Uses the shared `BaseModal` component for consistent modal behavior.
+ * - The modal uses `react-bootstrap` for styling and functionality.
  * - The `t` and `tCommon` props are used for internationalization (i18n).
- * - Styled using `app-fixed.module.css`.
+ * - The modal is styled using a CSS module imported as `styles`.
  *
  * @example
  * ```tsx
@@ -24,8 +25,8 @@
  *   agendaCategoryDeleteModalIsOpen={true}
  *   toggleDeleteModal={handleToggle}
  *   deleteAgendaCategoryHandler={handleDelete}
- *   t={tFunction}
- *   tCommon={tCommonFunction}
+ *   t={(key) => translations[key]}
+ *   tCommon={(key) => commonTranslations[key]}
  * />
  * ```
  */

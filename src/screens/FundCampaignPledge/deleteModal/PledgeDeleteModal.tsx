@@ -1,25 +1,33 @@
 /**
  * PledgeDeleteModal Component
  *
- * Renders a confirmation modal for deleting a pledge.
- * Allows the user to confirm or cancel the deletion action.
+ * This component renders a modal for deleting a pledge. It provides a confirmation
+ * dialog to the user, allowing them to either confirm or cancel the deletion of a pledge.
  *
  * @component
  * @param {InterfaceDeletePledgeModal} props - The props for the component.
  * @param {boolean} props.isOpen - Determines whether the modal is visible.
- * @param {() => void} props.hide - Function to close the modal.
+ * @param {() => void} props.hide - Function to hide the modal.
  * @param {InterfacePledgeInfo | null} props.pledge - The pledge information to be deleted.
- * @param {() => void} props.refetchPledge - Function to refetch pledge data after deletion.
+ * @param {() => void} props.refetchPledge - Function to refetch the pledge data after deletion.
  *
- * @returns {JSX.Element} The rendered delete pledge confirmation modal.
+ * @returns {React.FC} A React functional component rendering the delete pledge modal.
+ *
+ * @remarks
+ * - The component uses `react-bootstrap` for modal and button styling.
+ * - It utilizes the `useTranslation` hook from `react-i18next` for internationalization.
+ * - The `useMutation` hook from `@apollo/client` is used to perform the `DELETE_PLEDGE` GraphQL mutation.
+ * - Notifications are displayed using `react-toastify` to indicate success or error during the deletion process.
  *
  * @example
+ * ```tsx
  * <PledgeDeleteModal
  *   isOpen={true}
- *   hide={handleClose}
- *   pledge={pledge}
- *   refetchPledge={refetch}
+ *   hide={() => setShowModal(false)}
+ *   pledge={selectedPledge}
+ *   refetchPledge={fetchPledges}
  * />
+ * ```
  */
 import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';

@@ -1,7 +1,6 @@
 /**
- * RemoveUserTagModal Component
- *
- * Renders a confirmation modal for removing a user tag in the Manage Tag section.
+ * A React functional component that renders a modal for confirming the removal of a user tag.
+ * This modal is designed to be used in the "Manage Tag" section of the application.
  *
  * @component
  * @param {InterfaceRemoveUserTagModalProps} props - The props for the component.
@@ -13,7 +12,15 @@
  *
  * @returns {JSX.Element} The rendered modal component.
  *
+ * @remarks
+ * - The modal uses `react-bootstrap` for styling and functionality.
+ * - The `t` and `tCommon` props are used for internationalization (i18n) support.
+ * - The modal includes two buttons:
+ *   - A "No" button to close the modal without performing any action.
+ *   - A "Yes" button to confirm the removal of the user tag.
+ *
  * @example
+ * ```tsx
  * <RemoveUserTagModal
  *   removeUserTagModalIsOpen={true}
  *   toggleRemoveUserTagModal={handleToggle}
@@ -21,6 +28,7 @@
  *   t={tFunction}
  *   tCommon={tCommonFunction}
  * />
+ * ```
  */
 import type { TFunction } from 'i18next';
 import React, { useState } from 'react';
