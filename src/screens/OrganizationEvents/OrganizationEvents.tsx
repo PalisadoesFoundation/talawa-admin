@@ -38,6 +38,8 @@ import CreateEventModal from './CreateEventModal';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import { Button } from 'react-bootstrap';
 import AddIcon from '@mui/icons-material/Add';
+import { BreadcrumbsComponent } from 'shared-components/BreadcrumbsComponent';
+import type { IBreadcrumbItem } from 'types/shared-components/BreadcrumbsComponent/interface';
 
 // Define the type for an event edge
 interface IEventEdge {
@@ -96,12 +98,24 @@ function organizationEvents(): JSX.Element {
   const { getItem } = useLocalStorage();
 
   document.title = t('title');
+  const { orgId: currentUrl } = useParams();
+
+  // Breadcrumb items for organization -> events navigation
+  const breadcrumbItems: IBreadcrumbItem[] = [
+    {
+      translationKey: 'organization',
+      to: `/orgdash/${currentUrl}`,
+    },
+    {
+      translationKey: 'Events',
+      isCurrent: true,
+    },
+  ];
   const [createEventmodalisOpen, setCreateEventmodalisOpen] = useState(false);
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [searchByName, setSearchByName] = useState('');
-  const { orgId: currentUrl } = useParams();
 
   const showInviteModal = (): void => setCreateEventmodalisOpen(true);
   const hideCreateEventModal = (): void => setCreateEventmodalisOpen(false);
@@ -234,6 +248,7 @@ function organizationEvents(): JSX.Element {
 
   return (
     <>
+      <BreadcrumbsComponent items={breadcrumbItems} />
       <div className={styles.mainpageright}>
         <div className={styles.justifyspOrganizationEvents}>
           <PageHeader

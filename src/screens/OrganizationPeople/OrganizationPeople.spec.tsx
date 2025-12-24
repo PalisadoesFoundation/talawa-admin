@@ -431,6 +431,42 @@ describe('OrganizationPeople', () => {
     expect(screen.getByText('01/01/2023')).toBeInTheDocument(); // Formatted date
   });
 
+  test('renders breadcrumbs navigation', async () => {
+    const mocks = [
+      createMemberConnectionMock({
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      }),
+    ];
+
+    const link = new StaticMockLink(mocks, true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Verify breadcrumbs navigation is present
+    await waitFor(() => {
+      expect(screen.getByRole('navigation')).toBeInTheDocument();
+    });
+  });
+
   test('handles search functionality correctly', async () => {
     const mocks = [
       createMemberConnectionMock({

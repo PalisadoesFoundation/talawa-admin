@@ -1,8 +1,8 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import OrganizationTransactions from './OrganizationTransactions';
 import i18nForTest from '../../utils/i18nForTest';
 
@@ -24,13 +24,13 @@ describe('OrganizationTransactions', () => {
     vi.restoreAllMocks();
   });
 
-  const renderWithRouter = (initialEntry = '/org/123/transactions') => {
+  const renderWithRouter = (initialEntry = '/orgtransactions/123') => {
     return render(
       <I18nextProvider i18n={i18nForTest}>
         <MemoryRouter initialEntries={[initialEntry]}>
           <Routes>
             <Route
-              path="/org/:orgId/transactions"
+              path="/orgtransactions/:orgId"
               element={<OrganizationTransactions />}
             />
           </Routes>
@@ -43,6 +43,15 @@ describe('OrganizationTransactions', () => {
     renderWithRouter();
 
     expect(screen.getByTestId('plugin-injector')).toBeInTheDocument();
+  });
+
+  it('renders breadcrumbs navigation', async () => {
+    renderWithRouter();
+
+    // Verify breadcrumbs navigation is present
+    await waitFor(() => {
+      expect(screen.getByRole('navigation')).toBeInTheDocument();
+    });
   });
 
   it('sets the document title from i18n', () => {

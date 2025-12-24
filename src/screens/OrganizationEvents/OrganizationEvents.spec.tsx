@@ -207,6 +207,17 @@ describe('Organisation Events Page', () => {
     expect(window.location.pathname).toBe('/orglist');
   });
 
+  test('renders breadcrumbs navigation', async () => {
+    renderWithLink(defaultLink);
+
+    await wait();
+
+    // Verify breadcrumbs navigation is present
+    await waitFor(() => {
+      expect(screen.getByRole('navigation')).toBeInTheDocument();
+    });
+  });
+
   test('renders when there is no mock event data (no events query result)', async () => {
     const emptyLink = new StaticMockLink([], true);
 
