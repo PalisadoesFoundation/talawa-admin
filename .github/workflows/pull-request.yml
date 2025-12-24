@@ -131,7 +131,7 @@ jobs:
           exit 1
 
       - name: Check for unused files and exports in src/ and docs/src
-        run: pnpm knip --include files,exports
+        run: pnpm knip --include files,exports,nsExports,nsType
 
   CSS-Policy-Check:
     name: CSS Policy Check
