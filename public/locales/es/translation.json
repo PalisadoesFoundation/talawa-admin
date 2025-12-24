@@ -385,6 +385,8 @@
     "viewProfile": "Ver",
     "noAssignedMembersFound": "Ningún miembro asignado",
     "unassignUserTag": "Desasignar Etiqueta",
+    "unassignUserTagError": "Error al desasignar la etiqueta del usuario",
+    "removeUserTagError": "Error al eliminar la etiqueta del usuario",
     "unassignUserTagMessage": "¿Desea eliminar la etiqueta de este usuario?",
     "successfullyUnassigned": "Etiqueta desasignada del usuario",
     "addPeople": "Agregar Personas",

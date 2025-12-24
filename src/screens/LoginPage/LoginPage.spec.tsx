@@ -1534,7 +1534,8 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.type(screen.getAllByTestId('mock-recaptcha')[1], 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
-    expect(toastMocks.warn).toHaveBeenCalledWith(
+    expect(toastMocks.warn).toHaveBeenNthCalledWith(
+      1,
       'Name should contain only letters, spaces, and hyphens',
     );
   });
@@ -1555,7 +1556,8 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.type(screen.getAllByTestId('mock-recaptcha')[1], 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
-    expect(toastMocks.warn).toHaveBeenCalledWith(
+    expect(toastMocks.warn).toHaveBeenNthCalledWith(
+      1,
       'Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character',
     );
   });
@@ -1647,7 +1649,10 @@ describe('Extra coverage for 100 %', () => {
 
     // errorHandler should call toast.error with the error message
     await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith('Network error');
+      expect(toastMocks.error).toHaveBeenCalledWith(
+        'Network error',
+        expect.any(Object),
+      );
     });
 
     fetchSpy.mockRestore();
@@ -1830,7 +1835,8 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.type(screen.getAllByTestId('mock-recaptcha')[1], 'token');
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
-    expect(toastMocks.warn).toHaveBeenCalledWith(
+    expect(toastMocks.warn).toHaveBeenNthCalledWith(
+      1,
       'Email should have atleast 8 characters',
     );
   });

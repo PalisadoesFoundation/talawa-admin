@@ -34,13 +34,19 @@ describe('Test if errorHandler is working properly', () => {
     const error = new Error('Failed to fetch');
     errorHandler(t, error);
 
-    expect(toast.error).toHaveBeenCalledWith(tErrors('talawaApiUnavailable'));
+    expect(toast.error).toHaveBeenCalledWith(
+      tErrors('talawaApiUnavailable'),
+      expect.any(Object),
+    );
   });
 
   it('should call toast.error with the correct message if error message contains this substring "Value is not a valid phone number"', () => {
     const error = new Error('This value is not a valid phone number');
     errorHandler(t, error);
-    expect(toast.error).toHaveBeenCalledWith(tErrors('invalidPhoneNumber'));
+    expect(toast.error).toHaveBeenCalledWith(
+      tErrors('invalidPhoneNumber'),
+      expect.any(Object),
+    );
   });
 
   test.each([
@@ -50,14 +56,20 @@ describe('Test if errorHandler is working properly', () => {
   ])('should handle invalid %s error', (field, expectedKey) => {
     const error = new Error(`This value does not exist in "${field}"`);
     errorHandler(t, error);
-    expect(toast.error).toHaveBeenCalledWith(tErrors(expectedKey));
+    expect(toast.error).toHaveBeenCalledWith(
+      tErrors(expectedKey),
+      expect.any(Object),
+    );
   });
 
   it('should call toast.error with the correct message if error message contains this substring "status code 400"', () => {
     const error = new Error('Server responded with status code 400');
     errorHandler(t, error);
 
-    expect(toast.error).toHaveBeenCalledWith(tErrors('error400'));
+    expect(toast.error).toHaveBeenCalledWith(
+      tErrors('error400'),
+      expect.any(Object),
+    );
   });
 
   it('should call toast.error with the correct message if error message contains this substring "organization name already exists"', () => {
@@ -66,6 +78,7 @@ describe('Test if errorHandler is working properly', () => {
 
     expect(toast.error).toHaveBeenCalledWith(
       tErrors('organizationNameAlreadyExists'),
+      expect.any(Object),
     );
   });
 
@@ -80,16 +93,22 @@ describe('Test if errorHandler is working properly', () => {
 
   it('should handle error messages with different cases', () => {
     errorHandler(t, new Error('VALUE IS NOT A VALID PHONE NUMBER'));
-    expect(toast.error).toHaveBeenCalledWith(tErrors('invalidPhoneNumber'));
+    expect(toast.error).toHaveBeenCalledWith(
+      tErrors('invalidPhoneNumber'),
+      expect.any(Object),
+    );
 
     errorHandler(t, new Error('This Value Does Not Exist in "EducationGrade"'));
-    expect(toast.error).toHaveBeenCalledWith(tErrors('invalidEducationGrade'));
+    expect(toast.error).toHaveBeenCalledWith(
+      tErrors('invalidEducationGrade'),
+      expect.any(Object),
+    );
   });
 
   it('should call toast.error with the error message if it is an instance of error but have not matched any error message patterns', () => {
     const error = new Error('Bandhan sent an error message');
     errorHandler(t, error);
-    expect(toast.error).toHaveBeenCalledWith(error.message);
+    expect(toast.error).toHaveBeenCalledWith(error.message, expect.any(Object));
   });
 
   it('should handle different types for the first parameter while still showing error messages', () => {
@@ -107,11 +126,13 @@ describe('Test if errorHandler is working properly', () => {
     errorHandler(t, { message: 'Error message in object' });
     expect(toast.error).toHaveBeenCalledWith(
       tErrors('unknownError', { msg: { message: 'Error message in object' } }),
+      expect.any(Object),
     );
 
     errorHandler(t, 'Direct error message');
     expect(toast.error).toHaveBeenCalledWith(
       tErrors('unknownError', { msg: 'Direct error message' }),
+      expect.any(Object),
     );
   });
 
@@ -121,6 +142,7 @@ describe('Test if errorHandler is working properly', () => {
 
     expect(toast.error).toHaveBeenCalledWith(
       tErrors('unknownError', { msg: error }),
+      expect.any(Object),
     );
   });
 });
