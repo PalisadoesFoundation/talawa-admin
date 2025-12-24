@@ -27,6 +27,7 @@ import {
   GET_ORGANIZATION_EVENTS_PG,
   GET_ORGANIZATION_DATA_PG,
 } from 'GraphQl/Queries/Queries';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -123,7 +124,7 @@ function organizationEvents(): JSX.Element {
     error: eventDataError,
     refetch: refetchEvents,
   } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
-    variables: {
+    variables: addInviteOnlyVariable({
       id: currentUrl,
       first: 100,
       after: null,
@@ -134,7 +135,7 @@ function organizationEvents(): JSX.Element {
         .endOf('month')
         .toISOString(),
       includeRecurring: true,
-    },
+    }),
     notifyOnNetworkStatusChange: true,
     errorPolicy: 'all',
     fetchPolicy: 'cache-and-network',
@@ -269,7 +270,7 @@ function organizationEvents(): JSX.Element {
                 data-cy="createEventModalBtn"
               >
                 <div>
-                  <AddIcon className={styles.addIconStyle} />
+                  <AddIcon className={styles.addButtonIcon} />
                   <span>{t('createEvent')}</span>
                 </div>
               </Button>

@@ -39,6 +39,7 @@ import {
   GET_ORGANIZATION_BLOCKED_USERS_COUNT,
   GET_ORGANIZATION_VENUES_COUNT,
 } from 'GraphQl/Queries/Queries';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 import UsersIcon from 'assets/svgs/users.svg?react';
 import CardItem from 'components/OrganizationDashCards/CardItem/CardItem';
 import CardItemLoading from 'components/OrganizationDashCards/CardItem/Loader/CardItemLoading';
@@ -122,7 +123,11 @@ function OrganizationDashboard(): JSX.Element {
     loading: orgEventsLoading,
     error: orgEventsError,
   } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
-    variables: { id: orgId ?? '', first: 8, after: null },
+    variables: addInviteOnlyVariable({
+      id: orgId ?? '',
+      first: 8,
+      after: null,
+    }),
     skip: !orgId,
     fetchPolicy: 'cache-and-network',
     notifyOnNetworkStatusChange: true,
@@ -330,7 +335,7 @@ function OrganizationDashboard(): JSX.Element {
                     <DashBoardCard
                       count={pendingMembershipRequests.length}
                       title={tCommon('requests')}
-                      icon={<UsersIcon fill="#555555" />}
+                      icon={<UsersIcon fill="var(--addButton-font)" />}
                     />
                   </button>
                 </Col>
@@ -422,8 +427,7 @@ function OrganizationDashboard(): JSX.Element {
                   ))
                 ) : pendingMembershipRequests.length === 0 ? (
                   <div
-                    className={styles.emptyContainer}
-                    style={{ height: '150px' }}
+                    className={`${styles.emptyContainer} ${styles.emptyContainerHeight}`}
                   >
                     <h6>{t('noMembershipRequests')}</h6>
                   </div>
@@ -464,8 +468,7 @@ function OrganizationDashboard(): JSX.Element {
                 </Button>
               </div>
               <Card.Body
-                className={styles.containerBody}
-                style={{ padding: '0px' }}
+                className={`${styles.containerBody} ${styles.containerBodyNoPadding}`}
               >
                 {/* {rankingsLoading ? (
                   [...Array(3)].map((_, index) => {
