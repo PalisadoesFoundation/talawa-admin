@@ -272,6 +272,46 @@ const OrgCard: React.FC<InterfaceOrgCardProps> = ({
 export default OrgCard;
 ```
 
+
+## Existing Shared Components
+
+Below are some commonly used shared components available in the codebase.
+
+### EmptyState
+
+`EmptyState` is a reusable component for displaying consistent empty or no-data states across the application.
+
+**Use cases:**
+- No search results
+- Empty lists or tables
+- No organizations / users / events
+- First-time onboarding states
+
+**Key features:**
+- Optional icon, description, and action button
+- Built-in accessibility (`role="alert"`, `aria-label`)
+- i18n-ready (supports translation keys and plain strings)
+- Fully tested with 100% coverage
+
+**Example usage:**
+
+```tsx
+import EmptyState from 'src/shared-components/EmptyState/EmptyState';
+
+<EmptyState
+  message="noResults"
+  description="tryAdjustingFilters"
+  icon="person_off"
+  action={{
+    label: 'createNew',
+    onClick: handleCreate,
+    variant: 'primary',
+  }}
+/>
+```
+
+
+
 ## Creating Shared Components
 
 This section provides guidance on our shared components policy.

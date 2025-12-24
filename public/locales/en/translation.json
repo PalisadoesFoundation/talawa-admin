@@ -386,6 +386,8 @@
     "unassignUserTagMessage": "Do you want to remove the tag from this user?",
     "successfullyUnassigned": "Tag unassigned from user",
     "addPeople": "Add People",
+    "unassignUserTagError": "Error unassigning tag from user",
+    "removeUserTagError": "Error removing tag from user",
     "add": "Add",
     "subTags": "Sub Tags",
     "successfullyAssignedToPeople": "Tag assigned successfully",
@@ -474,6 +476,17 @@
     "monthlyOn": "Monthly On",
     "yearlyOn": "Yearly On",
     "yearlyRecurrenceDesc": "This event will repeat every year on the same date as the event start date.",
+    "doesNotRepeat": "Does not repeat",
+    "daily": "Daily",
+    "weeklyOn": "Weekly on {{day}}",
+    "monthlyOnDay": "Monthly on day {{day}}",
+    "annuallyOn": "Annually on {{month}} {{day}}",
+    "everyWeekday": "Every weekday (Mon–Fri)",
+    "custom": "Custom…",
+    "day": "Day",
+    "week": "Week",
+    "month": "Month",
+    "year": "Year",
     "startTime": "startTime",
     "endTime": "endTime",
     "eventLocation": "eventLocation",
@@ -1355,7 +1368,18 @@
     "eventDescription": "eventDescription",
     "eventLocation": "eventLocation",
     "startDate": "startDate",
-    "endDate": "endDate"
+    "endDate": "endDate",
+    "doesNotRepeat": "Does not repeat",
+    "daily": "Daily",
+    "weeklyOn": "Weekly on {{day}}",
+    "monthlyOnDay": "Monthly on day {{day}}",
+    "annuallyOn": "Annually on {{month}} {{day}}",
+    "everyWeekday": "Every weekday (Mon–Fri)",
+    "custom": "Custom…",
+    "day": "Day",
+    "week": "Week",
+    "month": "Month",
+    "year": "Year"
   },
   "userEventCard": {
     "starts": "Starts",
@@ -1712,6 +1736,11 @@
     "deleteComment": "Delete Comment",
     "deleting": "Deleting…",
     "emptyCommentError": "Please enter a comment before submitting."
+  },
+  "profileAvatar": {
+    "altText": "Profile picture of {{name}}",
+    "modalTitle": "Profile Picture",
+    "enlargedAltText": "Enlarged profile picture of {{name}}"
   },
   "common": {
     "signOut": "Sign out",
