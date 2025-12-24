@@ -62,7 +62,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import Avatar from 'components/Avatar/Avatar';
@@ -317,11 +317,7 @@ export default function CreateGroupChat({
           <Modal.Title>{'Chat'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {allUsersLoading ? (
-            <>
-              <Loader />
-            </>
-          ) : (
+          <LoadingState isLoading={allUsersLoading} variant="inline" size="lg">
             <>
               <div className={styles.input}>
                 <SearchBar
@@ -422,7 +418,7 @@ export default function CreateGroupChat({
                 </Table>
               </StyledTableContainer>
             </>
-          )}
+          </LoadingState>
           <Button
             className={`${styles.colorPrimary} ${styles.borderNone}`}
             variant="success"

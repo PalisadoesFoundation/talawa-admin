@@ -53,7 +53,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { styled } from '@mui/material/styles';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
@@ -268,11 +268,7 @@ export default function createDirectChatModal({
           <Modal.Title>{'Chat'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {allUsersLoading ? (
-            <>
-              <Loader />
-            </>
-          ) : (
+          <LoadingState isLoading={allUsersLoading} variant="inline" size="lg">
             <>
               <div className={styles.inputContainer}>
                 <SearchBar
@@ -360,7 +356,7 @@ export default function createDirectChatModal({
                 </Table>
               </TableContainer>
             </>
-          )}
+          </LoadingState>
         </Modal.Body>
       </Modal>
     </>
