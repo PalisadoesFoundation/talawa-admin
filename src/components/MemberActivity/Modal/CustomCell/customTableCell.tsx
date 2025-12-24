@@ -90,7 +90,7 @@ export const CustomTableCell: React.FC<{ eventId: string }> = ({ eventId }) => {
         })}
       </TableCell>
       <TableCell align="left">
-        {event.isRecurringEventTemplate ? 'Yes' : 'No'}
+        {event.isRecurringEventTemplate ? t('yes') : t('no')}
       </TableCell>
       <TableCell align="left">
         <span title={t('numberOfAttendees')}>

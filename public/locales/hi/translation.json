@@ -1225,7 +1225,8 @@
     "ageDistribution": "आयु वितरण",
     "errorLoadingEventDetails": "इवेंट विवरण लोड करने में त्रुटि। कृपया बाद में पुनः प्रयास करें।",
     "attendedEventsList": "भाग लिए गए कार्यक्रमों की सूची",
-    "eventDate": "इवेंट की तारीख"
+    "eventDate": "इवेंट की तारीख",
+    "eventDateWithName": "इवेंट की तारीख: {{name}}"
   },
   "eventRegistrant": {
     "sort": "छांटें",
@@ -1245,7 +1246,9 @@
   "memberActivity": {
     "unableToLoadEventDetails": "इवेंट विवरण लोड करने में असमर्थ। कृपया बाद में पुनः प्रयास करें।",
     "eventNotFoundOrDeleted": "इवेंट नहीं मिला या हटा दिया गया",
-    "numberOfAttendees": "उपस्थित लोगों की संख्या"
+    "numberOfAttendees": "उपस्थित लोगों की संख्या",
+    "yes": "हाँ",
+    "no": "नहीं"
   },
   "onSpotAttendee": {
     "title": "ऑन-स्पॉट प्रतिभागी",

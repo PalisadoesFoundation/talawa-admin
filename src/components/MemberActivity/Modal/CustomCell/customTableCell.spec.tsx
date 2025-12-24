@@ -14,9 +14,13 @@ vi.mock('react-toastify', () => ({
     error: vi.fn(),
   },
 }));
+vi.mock('utils/featureFlags', () => ({
+  isInviteOnlyEnabled: vi.fn(() => false),
+}));
 
 describe('CustomTableCell', () => {
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
   it('renders event details correctly', async () => {
@@ -47,7 +51,9 @@ describe('CustomTableCell', () => {
         }),
       ),
     ).toBeInTheDocument();
-    expect(screen.getByText('Yes')).toBeInTheDocument();
+    expect(
+      screen.getByText(i18nForTest.t('memberActivity.yes')),
+    ).toBeInTheDocument();
     expect(screen.getByText('2')).toBeInTheDocument();
 
     const link = screen.getByRole('link', { name: 'Test Event' });
@@ -75,7 +81,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event999' },
+          variables: { eventId: 'event999', includeInviteOnly: false },
         },
         error: new Error('An error occurred'),
       },
@@ -107,7 +113,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event123' },
+          variables: { eventId: 'event123', includeInviteOnly: false },
         },
         result: {
           data: {
@@ -118,7 +124,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event999' },
+          variables: { eventId: 'event999', includeInviteOnly: false },
         },
         result: {
           data: {
@@ -156,7 +162,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event456' },
+          variables: { eventId: 'event456', includeInviteOnly: false },
         },
         result: {
           data: {
@@ -194,7 +200,9 @@ describe('CustomTableCell', () => {
     await waitFor(() => screen.getByTestId('custom-row'));
 
     expect(screen.getByText('Non-Recurring Event')).toBeInTheDocument();
-    expect(screen.getByText('No')).toBeInTheDocument();
+    expect(
+      screen.getByText(i18nForTest.t('memberActivity.no')),
+    ).toBeInTheDocument();
     expect(screen.getByText('3')).toBeInTheDocument();
 
     const link = screen.getByRole('link', { name: 'Non-Recurring Event' });
@@ -206,7 +214,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event789' },
+          variables: { eventId: 'event789', includeInviteOnly: false },
         },
         result: {
           data: {
@@ -240,7 +248,9 @@ describe('CustomTableCell', () => {
     await waitFor(() => screen.getByTestId('custom-row'));
 
     expect(screen.getByText('Event with No Attendees')).toBeInTheDocument();
-    expect(screen.getByText('Yes')).toBeInTheDocument();
+    expect(
+      screen.getByText(i18nForTest.t('memberActivity.yes')),
+    ).toBeInTheDocument();
     expect(screen.getByText('0')).toBeInTheDocument();
   });
 
@@ -249,7 +259,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event000' },
+          variables: { eventId: 'event000', includeInviteOnly: false },
         },
         result: {
           data: {
@@ -283,7 +293,9 @@ describe('CustomTableCell', () => {
     await waitFor(() => screen.getByTestId('custom-row'));
 
     expect(screen.getByText('Event with Empty Attendees')).toBeInTheDocument();
-    expect(screen.getByText('No')).toBeInTheDocument();
+    expect(
+      screen.getByText(i18nForTest.t('memberActivity.no')),
+    ).toBeInTheDocument();
     expect(screen.getByText('0')).toBeInTheDocument();
   });
 
@@ -292,7 +304,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event111' },
+          variables: { eventId: 'event111', includeInviteOnly: false },
         },
         result: {
           data: {
@@ -328,7 +340,9 @@ describe('CustomTableCell', () => {
     expect(
       screen.getByText('Event with Undefined Attendees'),
     ).toBeInTheDocument();
-    expect(screen.getByText('Yes')).toBeInTheDocument();
+    expect(
+      screen.getByText(i18nForTest.t('memberActivity.yes')),
+    ).toBeInTheDocument();
     expect(screen.getByText('0')).toBeInTheDocument();
   });
 
@@ -337,7 +351,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event222' },
+          variables: { eventId: 'event222', includeInviteOnly: false },
         },
         result: {
           data: {

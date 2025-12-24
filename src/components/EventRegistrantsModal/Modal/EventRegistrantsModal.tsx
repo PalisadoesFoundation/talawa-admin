@@ -159,14 +159,16 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
             noOptionsText={
               <div className="d-flex ">
                 <p className="me-2">{t('noRegistrationsFound')}</p>
-                <span
+                <button
+                  type="button"
                   className={`underline ${styles.addOnspotLink}`}
                   onClick={() => {
                     setOpen(true);
                   }}
+                  aria-label={t('addOnspotRegistration')}
                 >
                   {t('addOnspotRegistration')}
-                </span>
+                </button>
               </div>
             }
             options={memberData?.usersByOrganizationId || []}

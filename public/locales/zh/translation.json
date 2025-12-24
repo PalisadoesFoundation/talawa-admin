@@ -1225,7 +1225,8 @@
     "ageDistribution": "年龄分布",
     "errorLoadingEventDetails": "加载事件详情时出错。请稍后再试。",
     "attendedEventsList": "参加的活动列表",
-    "eventDate": "活动日期"
+    "eventDate": "活动日期",
+    "eventDateWithName": "活动日期：{{name}}"
   },
   "eventRegistrant": {
     "sort": "排序",
@@ -1245,7 +1246,9 @@
   "memberActivity": {
     "unableToLoadEventDetails": "无法加载事件详情。请稍后再试。",
     "eventNotFoundOrDeleted": "未找到事件或已被删除",
-    "numberOfAttendees": "参与人数"
+    "numberOfAttendees": "参与人数",
+    "yes": "是",
+    "no": "否"
   },
   "onSpotAttendee": {
     "title": "现场参与者",

@@ -1225,7 +1225,8 @@
     "ageDistribution": "Distribución por edad",
     "errorLoadingEventDetails": "Error al cargar los detalles del evento. Por favor, inténtelo de nuevo más tarde.",
     "attendedEventsList": "Lista de eventos asistidos",
-    "eventDate": "Fecha del evento"
+    "eventDate": "Fecha del evento",
+    "eventDateWithName": "Fecha del evento: {{name}}"
   },
   "eventRegistrant": {
     "sort": "Ordenar",
@@ -1245,7 +1246,9 @@
   "memberActivity": {
     "unableToLoadEventDetails": "No se pudieron cargar los detalles del evento. Por favor, inténtelo de nuevo más tarde.",
     "eventNotFoundOrDeleted": "Evento no encontrado o eliminado",
-    "numberOfAttendees": "Número de asistentes"
+    "numberOfAttendees": "Número de asistentes",
+    "yes": "Sí",
+    "no": "No"
   },
   "onSpotAttendee": {
     "title": "Asistente en el lugar",

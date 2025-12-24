@@ -123,6 +123,7 @@ vi.mock('react-router', async () => {
 
 describe('Testing OrganizationSidebar Component [User Portal]', () => {
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
   it('Component should be rendered properly when members and events list is empty', async () => {

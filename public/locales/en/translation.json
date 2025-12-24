@@ -915,7 +915,8 @@
     "ageDistribution": "Age Distribution",
     "errorLoadingEventDetails": "Error loading event details. Please try again later.",
     "attendedEventsList": "Attended events list",
-    "eventDate": "Event Date"
+    "eventDate": "Event Date",
+    "eventDateWithName": "Event date: {{name}}"
   },
   "eventRegistrant": {
     "sort": "Sort",
@@ -935,7 +936,9 @@
   "memberActivity": {
     "unableToLoadEventDetails": "Unable to load event details. Please try again later.",
     "eventNotFoundOrDeleted": "Event not found or has been deleted",
-    "numberOfAttendees": "Number of attendees"
+    "numberOfAttendees": "Number of attendees",
+    "yes": "Yes",
+    "no": "No"
   },
   "onSpotAttendee": {
     "title": "On-spot Attendee",

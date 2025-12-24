@@ -1225,7 +1225,8 @@
     "ageDistribution": "Distribution par âge",
     "errorLoadingEventDetails": "Erreur lors du chargement des détails de l'événement. Veuillez réessayer plus tard.",
     "attendedEventsList": "Liste des événements assistés",
-    "eventDate": "Date de l'événement"
+    "eventDate": "Date de l'événement",
+    "eventDateWithName": "Date de l'événement : {{name}}"
   },
   "eventRegistrant": {
     "sort": "Trier",
@@ -1245,7 +1246,9 @@
   "memberActivity": {
     "unableToLoadEventDetails": "Impossible de charger les détails de l'événement. Veuillez réessayer plus tard.",
     "eventNotFoundOrDeleted": "Événement introuvable ou supprimé",
-    "numberOfAttendees": "Nombre de participants"
+    "numberOfAttendees": "Nombre de participants",
+    "yes": "Oui",
+    "no": "Non"
   },
   "onSpotAttendee": {
     "title": "Participant sur place",
