@@ -1939,6 +1939,12 @@ describe('Extra coverage for 100 %', () => {
     expect(toastMocks.error).toHaveBeenCalledWith(
       expect.stringMatching(/locked.*\d+.*minute|minute.*\d+.*locked/i),
     );
+
+    // Verify reCAPTCHA is reset to allow retry
+    expect(resetReCAPTCHA).toHaveBeenCalled();
+
+    // Verify navigation does NOT occur (early return on error)
+    expect(routerMocks.navigate).not.toHaveBeenCalled();
   });
 
   /* 14. account_locked error without retryAfter timestamp */
@@ -1995,6 +2001,12 @@ describe('Extra coverage for 100 %', () => {
       i18nForTest.t('errors:accountLocked'),
       expect.any(Object),
     );
+
+    // Verify reCAPTCHA is reset to allow retry
+    expect(resetReCAPTCHA).toHaveBeenCalled();
+
+    // Verify navigation does NOT occur (early return on error)
+    expect(routerMocks.navigate).not.toHaveBeenCalled();
   });
 
   /* 15. Other GraphQL errors should use errorHandler */
@@ -2046,10 +2058,17 @@ describe('Extra coverage for 100 %', () => {
     await wait();
 
     // Should call errorHandler which shows the error message
+    // Note: errorHandler passes raw backend error messages directly without i18n wrapping
     expect(toastMocks.error).toHaveBeenCalledWith(
       'Invalid credentials',
       expect.any(Object),
     );
+
+    // Verify reCAPTCHA is reset to allow retry
+    expect(resetReCAPTCHA).toHaveBeenCalled();
+
+    // Verify navigation does NOT occur (early return on error)
+    expect(routerMocks.navigate).not.toHaveBeenCalled();
   });
 });
 
