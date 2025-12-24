@@ -384,6 +384,8 @@
     "unassignUserTag": "टैग को हटाएं",
     "unassignUserTagMessage": "क्या आप इस उपयोगकर्ता से टैग हटाना चाहते हैं?",
     "successfullyUnassigned": "उपयोगकर्ता से टैग हटा दिया गया",
+    "unassignUserTagError": "उपयोगकर्ता से टैग असाइनमेंट हटाने में त्रुटि",
+    "removeUserTagError": "टैग और उसके सभी उप-टैग्स को हटाने में त्रुटि",
     "addPeople": "लोगों को जोड़ें",
     "add": "जोड़ें",
     "subTags": "उप-टैग्स",
@@ -475,6 +477,17 @@
     "monthlyOn": "मासिक पर",
     "yearlyOn": "वार्षिक पर",
     "yearlyRecurrenceDesc": "यह घटना हर साल घटना की शुरुआत की तारीख को ही दोहराई जाएगी।",
+    "doesNotRepeat": "पुनरावृत्ति नहीं होती",
+    "daily": "दैनिक",
+    "weeklyOn": "हर सप्ताह {{day}} को",
+    "monthlyOnDay": "हर माह की {{day}} तारीख को",
+    "annuallyOn": "प्रतिवर्ष {{day}} {{month}} को",
+    "everyWeekday": "हर कार्यदिवस (सोम–शुक्र)",
+    "custom": "कस्टम…",
+    "day": "दिन",
+    "week": "सप्ताह",
+    "month": "महीना",
+    "year": "वर्ष",
     "events": "कार्यक्रम",
     "description": "विवरण",
     "location": "स्थान",
@@ -1353,7 +1366,18 @@
     "eventLocation": "कार्यक्रम स्थान",
     "startDate": "प्रारंभ तिथि",
     "endDate": "समाप्ति तिथि",
-    "createChat": "चैट बनाएं"
+    "createChat": "चैट बनाएं",
+    "doesNotRepeat": "पुनरावृत्ति नहीं होती",
+    "daily": "दैनिक",
+    "weeklyOn": "हर सप्ताह {{day}} को",
+    "monthlyOnDay": "हर माह की {{day}} तारीख को",
+    "annuallyOn": "प्रतिवर्ष {{day}} {{month}} को",
+    "everyWeekday": "हर कार्यदिवस (सोम–शुक्र)",
+    "custom": "कस्टम…",
+    "day": "दिन",
+    "week": "सप्ताह",
+    "month": "महीना",
+    "year": "वर्ष"
   },
   "userEventCard": {
     "starts": "प्रारंभ होगा",
@@ -1691,6 +1715,11 @@
     "deleteComment": "टिप्पणी हटाएं",
     "deleting": "हटाया जा रहा है…",
     "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।"
+  },
+  "profileAvatar": {
+    "altText": "{{name}} की प्रोफ़ाइल तस्वीर",
+    "modalTitle": "प्रोफ़ाइल तस्वीर",
+    "enlargedAltText": "{{name}} की बड़ी प्रोफ़ाइल तस्वीर"
   },
   "common": {
     "signOut": "साइन आउट",

@@ -110,5 +110,7 @@
   "profilePicture": "Foto de perfil",
   "profilePicturePlaceholder": "Imagen de prueba",
   "userProfileMenu": "Menú de perfil de usuario",
-  "breadcrumbs": "Migas de navegación"
+  "breadcrumbs": "Migas de navegación",
+  "loadingAdminPlugin": "Cargando complemento de administrador...",
+  "loadingUserPlugin": "Cargando complemento de usuario..."
 }

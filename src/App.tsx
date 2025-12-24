@@ -4,7 +4,7 @@ import { useQuery, useApolloClient } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
-import OrganizaitionFundCampiagn from 'screens/OrganizationFundCampaign/OrganizationFundCampagins';
+import OrganizationFundCampaign from 'screens/OrganizationFundCampaign/OrganizationFundCampaigns';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import LoginPage from 'screens/LoginPage/LoginPage';
 import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
@@ -14,6 +14,8 @@ import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScreen';
 import Loader from 'components/Loader/Loader';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
+import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
+import { useTranslation } from 'react-i18next';
 
 const OrganizationScreen = lazy(
   () => import('components/OrganizationScreen/OrganizationScreen'),
@@ -120,6 +122,9 @@ const { setItem } = useLocalStorage();
 
 function App(): React.ReactElement {
   const { data, loading } = useQuery(CURRENT_USER);
+
+  const { t } = useTranslation('common');
+
   const apolloClient = useApolloClient();
 
   // Get plugin routes
@@ -162,6 +167,7 @@ function App(): React.ReactElement {
   return (
     <>
       <Suspense fallback={<Loader />}>
+        <NotificationToastContainer />
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/register" element={<LoginPage />} />
@@ -221,7 +227,7 @@ function App(): React.ReactElement {
               />
               <Route
                 path="/orgfundcampaign/:orgId/:fundId"
-                element={<OrganizaitionFundCampiagn />}
+                element={<OrganizationFundCampaign />}
               />
               <Route
                 path="/fundCampaignPledge/:orgId/:fundCampaignId"
