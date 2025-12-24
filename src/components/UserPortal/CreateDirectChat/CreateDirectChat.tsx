@@ -48,11 +48,10 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import Table from '@mui/material/Table';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { styled } from '@mui/material/styles';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -77,8 +76,6 @@ interface InterfaceCreateDirectChatProps {
   chats: GroupChat[];
 }
 
-
-
 const { getItem } = useLocalStorage();
 
 export const handleCreateDirectChat = async (
@@ -90,11 +87,11 @@ export const handleCreateDirectChat = async (
     (
       options?:
         | MutationFunctionOptions<
-          unknown,
-          OperationVariables,
-          DefaultContext,
-          ApolloCache<unknown>
-        >
+            unknown,
+            OperationVariables,
+            DefaultContext,
+            ApolloCache<unknown>
+          >
         | undefined,
     ): Promise<FetchResult<unknown>>;
     (arg0: {
@@ -112,11 +109,11 @@ export const handleCreateDirectChat = async (
     (
       options?:
         | MutationFunctionOptions<
-          unknown,
-          OperationVariables,
-          DefaultContext,
-          ApolloCache<unknown>
-        >
+            unknown,
+            OperationVariables,
+            DefaultContext,
+            ApolloCache<unknown>
+          >
         | undefined,
     ): Promise<FetchResult<unknown>>;
     (arg0: {
@@ -279,8 +276,8 @@ export default function createDirectChatModal({
                   <TableHead>
                     <TableRow>
                       <TableCell>#</TableCell>
-                      <TableCell align="center">{'user'}</TableCell>
-                      <TableCell align="center">{'Chat'}</TableCell>
+                      <TableCell align="center">{t('user')}</TableCell>
+                      <TableCell align="center">{t('chat')}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -301,10 +298,7 @@ export default function createDirectChatModal({
                             }: { node: InterfaceOrganizationMember },
                             index: number,
                           ) => (
-                            <TableRow
-                              data-testid="user"
-                              key={userDetails.id}
-                            >
+                            <TableRow data-testid="user" key={userDetails.id}>
                               <TableCell component="th" scope="row">
                                 {index + 1}
                               </TableCell>

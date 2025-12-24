@@ -56,11 +56,10 @@ import {
   CREATE_CHAT_MEMBERSHIP,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { styled } from '@mui/material/styles';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useTranslation } from 'react-i18next';
@@ -77,7 +76,6 @@ interface InterfaceCreateGroupChatProps {
     variables?: Partial<{ id: string }> | undefined,
   ) => Promise<ApolloQueryResult<unknown>>;
 }
-
 
 const { getItem } = useLocalStorage();
 
@@ -306,13 +304,16 @@ export default function CreateGroupChat({
                 />
               </div>
 
-              <TableContainer component={Paper}>
+              <TableContainer
+                className={styles.tableContainer}
+                component={Paper}
+              >
                 <Table aria-label="customized table">
                   <TableHead>
                     <TableRow>
                       <TableCell>#</TableCell>
-                      <TableCell align="center">{'user'}</TableCell>
-                      <TableCell align="center">{'Chat'}</TableCell>
+                      <TableCell align="center">{t('user')}</TableCell>
+                      <TableCell align="center">{t('chat')}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -345,10 +346,7 @@ export default function CreateGroupChat({
                             },
                             index: number,
                           ) => (
-                            <TableRow
-                              data-testid="user"
-                              key={userDetails.id}
-                            >
+                            <TableRow data-testid="user" key={userDetails.id}>
                               <TableCell component="th" scope="row">
                                 {index + 1}
                               </TableCell>

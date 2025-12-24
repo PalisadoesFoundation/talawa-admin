@@ -2152,11 +2152,6 @@ describe('RefreshToken storage verification', () => {
 
     await wait();
 
-    // Verify that setItem was called with refreshToken
-    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
-      'refreshToken',
-      'newRefreshToken456',
-    );
     // Verify that setItem was also called with the auth token
     expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
       'token',

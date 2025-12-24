@@ -392,7 +392,7 @@ const loginPage = (): JSX.Element => {
         }
 
         const { signIn } = signInData;
-        const { user, authenticationToken, refreshToken } = signIn;
+        const { user, authenticationToken } = signIn;
         const isAdmin: boolean = user.role === 'administrator';
         if (role === 'admin' && !isAdmin) {
           toast.warn(tErrors('notAuthorised') as string);
@@ -401,7 +401,6 @@ const loginPage = (): JSX.Element => {
         const loggedInUserId = user.id;
 
         setItem('token', authenticationToken);
-        setItem('refreshToken', refreshToken);
         setItem('IsLoggedIn', 'TRUE');
         setItem('name', user.name);
         setItem('email', user.emailAddress);
