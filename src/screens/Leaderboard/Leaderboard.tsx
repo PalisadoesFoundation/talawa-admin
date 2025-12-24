@@ -55,6 +55,7 @@ import bronze from 'assets/images/bronze.png';
 
 import type { InterfaceVolunteerRank } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
+import leaderboardStyles from './Leaderboard.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
@@ -73,19 +74,6 @@ enum TimeFrame {
   Monthly = 'monthly',
   Yearly = 'yearly',
 }
-
-const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
-  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
-};
 
 function leaderboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'leaderboard' });
@@ -229,8 +217,7 @@ function leaderboard(): JSX.Element {
         return (
           <>
             <div
-              className="d-flex fw-bold align-items-center ms-5 "
-              style={{ cursor: 'pointer' }}
+              className={`d-flex fw-bold align-items-center ms-5 ${leaderboardStyles.volunteerCell}`}
               onClick={() =>
                 navigate(`/member/${orgId}`, { state: { id: _id } })
               }
@@ -272,7 +259,7 @@ function leaderboard(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center"
+            className={`d-flex justify-content-center ${leaderboardStyles.emailCell}`}
             data-testid="userEmail"
           >
             {params.row.user.email}
@@ -289,13 +276,17 @@ function leaderboard(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        return <div className="fw-bold">{params.row.hoursVolunteered}</div>;
+        return (
+          <div className={`fw-bold ${leaderboardStyles.hoursCell}`}>
+            {params.row.hoursVolunteered}
+          </div>
+        );
       },
     },
   ];
 
   return (
-    <div className="mt-4 mx-2 bg-white p-4 pt-2 rounded-4 shadow">
+    <div className={leaderboardStyles.leaderboardContainer}>
       <AdminSearchFilterBar
         searchPlaceholder={t('searchByVolunteer')}
         searchValue={searchTerm}
@@ -319,7 +310,7 @@ function leaderboard(): JSX.Element {
             </Stack>
           ),
         }}
-        sx={dataGridStyle}
+        className={leaderboardStyles.dataGridStyle}
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}

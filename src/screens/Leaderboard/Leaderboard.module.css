@@ -1,0 +1,55 @@
+.leaderboardContainer {
+  margin-top: 1.5rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  background-color: var(--rowBackground-bg);
+  padding: 1rem;
+  padding-top: 0.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.dataGridStyle .MuiDataGrid-root .MuiDataGrid-cell:focus-within {
+  outline: none !important;
+}
+
+.dataGridStyle .MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within {
+  outline: none !important;
+}
+
+.dataGridStyle .MuiDataGrid-row:hover {
+  background-color: transparent;
+}
+
+.dataGridStyle .MuiDataGrid-row.Mui-hovered {
+  background-color: transparent;
+}
+
+.dataGridStyle .MuiDataGrid-root {
+  border-radius: 0.5rem;
+}
+
+.dataGridStyle .MuiDataGrid-main {
+  border-radius: 0.5rem;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.volunteerCell {
+  display: flex;
+  font-weight: bold;
+  align-items: center;
+  margin-left: 1.25rem;
+  cursor: pointer;
+}
+
+.emailCell {
+  display: flex;
+  justify-content: center;
+}
+
+.hoursCell {
+  font-weight: bold;
+}

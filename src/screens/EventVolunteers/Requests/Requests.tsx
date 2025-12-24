@@ -50,6 +50,7 @@ import {
 } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
 import styles from '../../../style/app-fixed.module.css';
+import requestsStyles from './Requests.module.css';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import dayjs from 'dayjs';
@@ -58,24 +59,6 @@ import { toast } from 'react-toastify';
 import { debounce } from '@mui/material';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-
-const dataGridStyle = {
-  backgroundColor: 'white',
-  borderRadius: '16px',
-  '& .MuiDataGrid-columnHeaders': { border: 'none' },
-  '& .MuiDataGrid-cell': { border: 'none' },
-  '& .MuiDataGrid-columnSeparator': { display: 'none' },
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
-  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
-};
 
 function requests(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
@@ -278,8 +261,7 @@ function requests(): JSX.Element {
             <Button
               variant="success"
               size="sm"
-              style={{ minWidth: '32px' }}
-              className="me-2 rounded"
+              className={`me-2 rounded ${requestsStyles.acceptButton}`}
               data-testid="acceptBtn"
               onClick={() => updateMembershipStatus(params.row.id, 'accepted')}
             >
@@ -288,7 +270,7 @@ function requests(): JSX.Element {
             <Button
               size="sm"
               variant="danger"
-              className="rounded"
+              className={`rounded ${requestsStyles.rejectButton}`}
               data-testid={`rejectBtn`}
               onClick={() => updateMembershipStatus(params.row.id, 'rejected')}
             >
@@ -352,7 +334,7 @@ function requests(): JSX.Element {
           columnBufferPx={5}
           hideFooter={true}
           getRowId={(row) => row.id}
-          sx={dataGridStyle}
+          className={requestsStyles.dataGridStyle}
           getRowClassName={() => `${styles.rowBackgrounds}`}
           autoHeight
           rowHeight={65}

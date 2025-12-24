@@ -1,0 +1,44 @@
+.dataGridStyle {
+  background-color: var(--rowBackground-bg);
+  border-radius: 16px;
+}
+
+.dataGridStyle .MuiDataGrid-columnHeaders {
+  border: none;
+}
+
+.dataGridStyle .MuiDataGrid-cell {
+  border: none;
+}
+
+.dataGridStyle .MuiDataGrid-columnSeparator {
+  display: none;
+}
+
+.dataGridStyle .MuiDataGrid-root .MuiDataGrid-cell:focus-within {
+  outline: none !important;
+}
+
+.dataGridStyle .MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within {
+  outline: none !important;
+}
+
+.dataGridStyle .MuiDataGrid-row:hover {
+  background-color: transparent;
+}
+
+.dataGridStyle .MuiDataGrid-row.Mui-hovered {
+  background-color: transparent;
+}
+
+.dataGridStyle .MuiDataGrid-root {
+  border-radius: 0.5rem;
+}
+
+.dataGridStyle .MuiDataGrid-main {
+  border-radius: 0.5rem;
+}
+
+.acceptButton {
+  min-width: 32px;
+}

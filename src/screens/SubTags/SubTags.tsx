@@ -172,7 +172,7 @@ function SubTags(): JSX.Element {
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded className={styles.errorIcon} />
           <h6 className="fw-bold text-danger text-center">
             {tCommon('errorOccured')}
           </h6>

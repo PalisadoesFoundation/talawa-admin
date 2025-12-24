@@ -46,6 +46,7 @@ import { Paper, TableBody } from '@mui/material';
 import React, { useRef, useState, useEffect } from 'react';
 import { Button, ListGroup, Modal, Dropdown } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
+import groupChatStyles from './GroupChatDetails.module.css';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   UPDATE_CHAT,
@@ -55,11 +56,10 @@ import {
   DELETE_CHAT_MEMBERSHIP,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { styled } from '@mui/material/styles';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
 import { Add } from '@mui/icons-material';
@@ -74,18 +74,6 @@ import type { InterfaceGroupChatDetailsProps } from 'types/Chat/interface';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: ['#31bb6b', '!important'],
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: { fontSize: 14 },
-}));
-
-const StyledTableRow = styled(TableRow)(() => ({
-  '&:last-child td, &:last-child th': { border: 0 },
-}));
 
 export default function groupChatDetails({
   toggleGroupChatDetailsModal,
@@ -421,8 +409,7 @@ export default function groupChatDetails({
                         />
                         <span className="ms-2">{user.name}</span>
                         <span
-                          className="badge bg-success text-dark ms-2"
-                          style={{ fontSize: '0.75rem' }}
+                          className={`badge bg-success text-dark ms-2 ${groupChatStyles.roleBadge}`}
                         >
                           {role}
                         </span>
@@ -527,13 +514,21 @@ export default function groupChatDetails({
                 <Table aria-label={t('customizedTable')}>
                   <TableHead>
                     <TableRow>
-                      <StyledTableCell>#</StyledTableCell>
-                      <StyledTableCell align="center">
+                      <TableCell className={groupChatStyles.tableHeader}>
+                        #
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        className={groupChatStyles.tableHeader}
+                      >
                         {t('user')}
-                      </StyledTableCell>
-                      <StyledTableCell align="center">
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        className={groupChatStyles.tableHeader}
+                      >
                         {t('chatAction')}
-                      </StyledTableCell>
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody data-testid="userList">
@@ -570,19 +565,26 @@ export default function groupChatDetails({
                             },
                             index: number,
                           ) => (
-                            <StyledTableRow
-                              data-testid="user"
-                              key={userDetails.id}
-                            >
-                              <StyledTableCell component="th" scope="row">
+                            <TableRow key={userDetails.id} data-testid="user">
+                              <TableCell
+                                component="th"
+                                scope="row"
+                                className={groupChatStyles.tableBody}
+                              >
                                 {index + 1}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
+                              </TableCell>
+                              <TableCell
+                                align="center"
+                                className={groupChatStyles.tableBody}
+                              >
                                 {userDetails.name}
                                 <br />
                                 {userDetails.role || 'Member'}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
+                              </TableCell>
+                              <TableCell
+                                align="center"
+                                className={groupChatStyles.tableBody}
+                              >
                                 <Button
                                   onClick={async () => {
                                     await addUserToGroupChat(userDetails.id);
@@ -593,8 +595,8 @@ export default function groupChatDetails({
                                 >
                                   {t('add')}
                                 </Button>
-                              </StyledTableCell>
-                            </StyledTableRow>
+                              </TableCell>
+                            </TableRow>
                           ),
                         )}
                   </TableBody>

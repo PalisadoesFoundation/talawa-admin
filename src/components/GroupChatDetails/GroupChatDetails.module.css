@@ -1,0 +1,12 @@
+.tableHeader {
+  background-color: var(--tableHeader-green) !important;
+  color: var(--tableHeader-color);
+}
+
+.tableBody {
+  font-size: var(--font-size-table-body);
+}
+
+.roleBadge {
+  font-size: 0.75rem;
+}
