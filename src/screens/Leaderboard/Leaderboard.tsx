@@ -217,7 +217,7 @@ function leaderboard(): JSX.Element {
         return (
           <>
             <div
-              className={`d-flex fw-bold align-items-center ms-5 ${leaderboardStyles.volunteerCell}`}
+              className={`align-items-center ms-5 ${leaderboardStyles.volunteerCell}`}
               onClick={() =>
                 navigate(`/member/${orgId}`, { state: { id: _id } })
               }
@@ -298,26 +298,30 @@ function leaderboard(): JSX.Element {
       />
 
       {/* Table with Action Items */}
-      <DataGrid
-        disableColumnMenu
-        columnBufferPx={7}
-        hideFooter={true}
-        getRowId={(row) => row.user._id}
-        slots={{
-          noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noVolunteers')}
-            </Stack>
-          ),
-        }}
-        className={leaderboardStyles.dataGridStyle}
-        getRowClassName={() => `${styles.rowBackground}`}
-        autoHeight
-        rowHeight={65}
-        rows={rankings.map((ranking, index) => ({ id: index + 1, ...ranking }))}
-        columns={columns}
-        isRowSelectable={() => false}
-      />
+      <div className={leaderboardStyles.dataGridStyle}>
+        <DataGrid
+          disableColumnMenu
+          columnBufferPx={7}
+          hideFooter={true}
+          getRowId={(row) => row.user._id}
+          slots={{
+            noRowsOverlay: () => (
+              <Stack height="100%" alignItems="center" justifyContent="center">
+                {t('noVolunteers')}
+              </Stack>
+            ),
+          }}
+          getRowClassName={() => `${styles.rowBackground}`}
+          autoHeight
+          rowHeight={65}
+          rows={rankings.map((ranking, index) => ({
+            id: index + 1,
+            ...ranking,
+          }))}
+          columns={columns}
+          isRowSelectable={() => false}
+        />
+      </div>
     </div>
   );
 }

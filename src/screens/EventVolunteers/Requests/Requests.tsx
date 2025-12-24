@@ -192,7 +192,7 @@ function requests(): JSX.Element {
             {avatarURL ? (
               <img
                 src={avatarURL}
-                alt={tCommon('user')}
+                alt={t('volunteer')}
                 data-testid={`volunteer_image`}
                 className={styles.TableImages}
               />
@@ -329,19 +329,20 @@ function requests(): JSX.Element {
       {/* Table with Volunteer Membership Requests */}
 
       {requests.length > 0 ? (
-        <DataGrid
-          disableColumnMenu
-          columnBufferPx={5}
-          hideFooter={true}
-          getRowId={(row) => row.id}
-          className={requestsStyles.dataGridStyle}
-          getRowClassName={() => `${styles.rowBackgrounds}`}
-          autoHeight
-          rowHeight={65}
-          rows={requests}
-          columns={columns}
-          isRowSelectable={() => false}
-        />
+        <div className={requestsStyles.dataGridStyle}>
+          <DataGrid
+            disableColumnMenu
+            columnBufferPx={5}
+            hideFooter={true}
+            getRowId={(row) => row.id}
+            getRowClassName={() => `${styles.rowBackgrounds}`}
+            autoHeight
+            rowHeight={65}
+            rows={requests}
+            columns={columns}
+            isRowSelectable={() => false}
+          />
+        </div>
       ) : (
         <div className="d-flex justify-content-center align-items-center mt-5">
           <h5>{t('noRequests')}</h5>

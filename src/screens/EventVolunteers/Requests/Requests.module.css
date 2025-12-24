@@ -16,11 +16,13 @@
 }
 
 .dataGridStyle .MuiDataGrid-root .MuiDataGrid-cell:focus-within {
-  outline: none !important;
+  outline: 2px solid var(--primary-theme-color);
+  outline-offset: -2px;
 }
 
 .dataGridStyle .MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within {
-  outline: none !important;
+  outline: 2px solid var(--primary-theme-color);
+  outline-offset: -2px;
 }
 
 .dataGridStyle .MuiDataGrid-row:hover {
@@ -40,5 +42,9 @@
 }
 
 .acceptButton {
+  min-width: 32px;
+}
+
+.rejectButton {
   min-width: 32px;
 }
