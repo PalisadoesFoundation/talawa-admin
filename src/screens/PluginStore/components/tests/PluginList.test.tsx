@@ -5,6 +5,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, describe, it, expect } from 'vitest';
 import PluginList from '../PluginList';
 import type { IPluginMeta } from 'plugin';
+import styles from '../Plugin.module.css';
 
 // Mock the PluginCard component - Fix ESLint errors
 vi.mock('../PluginCard', () => ({
@@ -166,15 +167,9 @@ describe('PluginList', () => {
     render(<PluginList {...defaultProps} plugins={[]} />);
 
     const emptyState = screen.getByTestId('plugin-list-empty');
-
+    expect(emptyState).toBeInTheDocument();
     // Check main container styles
-    expect(emptyState).toHaveStyle('text-align: center');
-    expect(emptyState).toHaveStyle('padding: 40px 20px');
-    expect(emptyState).toHaveStyle('background: #ffffff');
-    expect(emptyState).toHaveStyle('border-radius: 12px');
-    expect(emptyState).toHaveStyle('border-width: 1px');
-    expect(emptyState).toHaveStyle('border-style: solid');
-    expect(emptyState).toHaveStyle('border-color: #e7e7e7');
+    expect(emptyState).toHaveClass(styles.emptyState);
   });
 
   // Test 8: Plugin list container has correct styles
@@ -183,9 +178,7 @@ describe('PluginList', () => {
 
     const listContainer = screen.getByTestId('plugin-list-container');
 
-    expect(listContainer).toHaveStyle('display: flex');
-    expect(listContainer).toHaveStyle('flex-direction: column');
-    expect(listContainer).toHaveStyle('gap: 20px');
+    expect(listContainer).toHaveClass(styles.listContainer);
   });
 
   // Test 9: renders one item per plugin id for each PluginCard

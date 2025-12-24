@@ -1,0 +1,24 @@
+.emptyState {
+  text-align: center;
+  padding: 40px 20px;
+  background: var(--empty-state-bg);
+  border-radius: 12px;
+  border: 1px solid var(--empty-state-border-color);
+}
+
+.emptyTitle {
+  font-size: 18px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.emptyDescription {
+  font-size: 14px;
+  color: #888;
+}
+
+.listContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

@@ -294,12 +294,13 @@ describe('Testing Users screen', () => {
     expect(await screen.findByTestId('users-empty-state')).toBeInTheDocument();
     const message = screen.getByTestId('users-empty-state-message');
 
-    expect(message).toHaveTextContent('No results found for');
-    expect(message).toHaveTextContent('NonexistentName');
+    expect(message).toHaveTextContent(
+      i18nForTest.t('common:noResultsFoundFor', { query: 'NonexistentName' }),
+    );
 
     expect(
       screen.getByTestId('users-empty-state-description'),
-    ).toHaveTextContent('Try adjusting your filters or search term.');
+    ).toHaveTextContent(i18nForTest.t('common:tryAdjustingFilters'));
   });
 
   it('should show noUserFound when user is empty', async () => {
