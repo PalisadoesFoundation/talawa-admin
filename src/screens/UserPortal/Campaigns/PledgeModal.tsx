@@ -232,7 +232,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         await updatePledge({
           variables: { id: pledge?.id, ...updatedFields },
         });
-        NotificationToast.success(t('pledgeUpdated') as string);
+        NotificationToast.success(t('pledgeUpdated'));
         refetchPledge();
         hide();
       } catch (error: unknown) {
@@ -253,7 +253,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
       e.preventDefault();
       if (pledgeUsers.length === 0 || !pledgeUsers[0]) {
-        NotificationToast.error(t('selectPledger') as string);
+        NotificationToast.error(t('selectPledger'));
         return;
       }
 
@@ -269,7 +269,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           },
         });
 
-        NotificationToast.success(t('pledgeCreated') as string);
+        NotificationToast.success(t('pledgeCreated'));
         refetchPledge();
         setFormState({
           pledgeUsers: [],

@@ -179,8 +179,9 @@ const startPostModal = ({
       });
 
       if (data) {
+        // Note: Using toast.dismiss() directly as NotificationToast doesn't expose dismiss functionality
         toast.dismiss();
-        NotificationToast.success(t('postNowVisibleInFeed') as string);
+        NotificationToast.success(t('postNowVisibleInFeed'));
         fetchPosts();
         handleHide();
       }

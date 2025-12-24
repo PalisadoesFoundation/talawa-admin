@@ -11,21 +11,22 @@ import type {
 
 const DEFAULT_NAMESPACE: NotificationToastNamespace = 'common';
 
-const DEFAULT_TOAST_OPTIONS: ToastOptions = {
-  position: 'top-right',
-  autoClose: 5000,
+const SHARED_DEFAULTS = {
+  position: 'top-right' as const,
   closeOnClick: true,
   pauseOnHover: true,
   draggable: true,
 };
 
+const DEFAULT_TOAST_OPTIONS: ToastOptions = {
+  ...SHARED_DEFAULTS,
+  autoClose: 5000,
+};
+
 const DEFAULT_CONTAINER_PROPS: ToastContainerProps = {
-  position: 'top-right',
+  ...SHARED_DEFAULTS,
   limit: 5,
   newestOnTop: false,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
   theme: 'colored',
 };
 
