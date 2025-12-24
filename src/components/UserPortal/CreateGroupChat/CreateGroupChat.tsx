@@ -78,34 +78,6 @@ interface InterfaceCreateGroupChatProps {
   ) => Promise<ApolloQueryResult<unknown>>;
 }
 
-/**
- * Styled table container with custom styles.
- */
-
-const StyledTableContainer = styled(TableContainer)<{
-  component?: React.ElementType;
-}>(() => ({ borderRadius: 'var(--table-head-radius)' }));
-
-/**
- * Styled table cell with custom styles.
- */
-
-const StyledTableCell = styled(TableCell)(() => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: 'var(--table-head-bg)',
-    color: 'var(--table-header-color)',
-    fontSize: 'var(--font-size-header)',
-  },
-  [`&.${tableCellClasses.body}`]: { fontSize: 'var(--font-size-table-body)' },
-}));
-
-/**
- * Styled table row with custom styles.
- */
-
-const StyledTableRow = styled(TableRow)(() => ({
-  '&:last-child td, &:last-child th': { border: 'var(--table-row-border)' },
-}));
 
 const { getItem } = useLocalStorage();
 
@@ -334,13 +306,13 @@ export default function CreateGroupChat({
                 />
               </div>
 
-              <StyledTableContainer component={Paper}>
+              <TableContainer component={Paper}>
                 <Table aria-label="customized table">
                   <TableHead>
                     <TableRow>
-                      <StyledTableCell>#</StyledTableCell>
-                      <StyledTableCell align="center">{'user'}</StyledTableCell>
-                      <StyledTableCell align="center">{'Chat'}</StyledTableCell>
+                      <TableCell>#</TableCell>
+                      <TableCell align="center">{'user'}</TableCell>
+                      <TableCell align="center">{'Chat'}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -373,19 +345,19 @@ export default function CreateGroupChat({
                             },
                             index: number,
                           ) => (
-                            <StyledTableRow
+                            <TableRow
                               data-testid="user"
                               key={userDetails.id}
                             >
-                              <StyledTableCell component="th" scope="row">
+                              <TableCell component="th" scope="row">
                                 {index + 1}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
+                              </TableCell>
+                              <TableCell align="center">
                                 {userDetails.name}
                                 <br />
                                 {userDetails.role || 'Member'}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
+                              </TableCell>
+                              <TableCell align="center">
                                 {userIds.includes(userDetails.id) ? (
                                   <Button
                                     variant="danger"
@@ -410,13 +382,13 @@ export default function CreateGroupChat({
                                     {t('add')}
                                   </Button>
                                 )}
-                              </StyledTableCell>
-                            </StyledTableRow>
+                              </TableCell>
+                            </TableRow>
                           ),
                         )}
                   </TableBody>
                 </Table>
-              </StyledTableContainer>
+              </TableContainer>
             </>
           </LoadingState>
           <Button

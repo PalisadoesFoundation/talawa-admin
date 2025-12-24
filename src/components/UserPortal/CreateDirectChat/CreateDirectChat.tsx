@@ -77,23 +77,7 @@ interface InterfaceCreateDirectChatProps {
   chats: GroupChat[];
 }
 
-const StyledTableCell = styled(TableCell)(() => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: 'var(--tableHead-bg)',
-    color: 'var(--tableHeader-color)',
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 'var(--font-size-table-body)',
-  },
-}));
 
-/**
- * Styled table row with custom styles.
- */
-
-const StyledTableRow = styled(TableRow)(() => ({
-  '&:last-child td, &:last-child th': { border: 0 },
-}));
 
 const { getItem } = useLocalStorage();
 
@@ -106,11 +90,11 @@ export const handleCreateDirectChat = async (
     (
       options?:
         | MutationFunctionOptions<
-            unknown,
-            OperationVariables,
-            DefaultContext,
-            ApolloCache<unknown>
-          >
+          unknown,
+          OperationVariables,
+          DefaultContext,
+          ApolloCache<unknown>
+        >
         | undefined,
     ): Promise<FetchResult<unknown>>;
     (arg0: {
@@ -128,11 +112,11 @@ export const handleCreateDirectChat = async (
     (
       options?:
         | MutationFunctionOptions<
-            unknown,
-            OperationVariables,
-            DefaultContext,
-            ApolloCache<unknown>
-          >
+          unknown,
+          OperationVariables,
+          DefaultContext,
+          ApolloCache<unknown>
+        >
         | undefined,
     ): Promise<FetchResult<unknown>>;
     (arg0: {
@@ -294,9 +278,9 @@ export default function createDirectChatModal({
                 <Table aria-label="customized table">
                   <TableHead>
                     <TableRow>
-                      <StyledTableCell>#</StyledTableCell>
-                      <StyledTableCell align="center">{'user'}</StyledTableCell>
-                      <StyledTableCell align="center">{'Chat'}</StyledTableCell>
+                      <TableCell>#</TableCell>
+                      <TableCell align="center">{'user'}</TableCell>
+                      <TableCell align="center">{'Chat'}</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -317,19 +301,19 @@ export default function createDirectChatModal({
                             }: { node: InterfaceOrganizationMember },
                             index: number,
                           ) => (
-                            <StyledTableRow
+                            <TableRow
                               data-testid="user"
                               key={userDetails.id}
                             >
-                              <StyledTableCell component="th" scope="row">
+                              <TableCell component="th" scope="row">
                                 {index + 1}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
+                              </TableCell>
+                              <TableCell align="center">
                                 {userDetails.name}
                                 <br />
                                 {userDetails.role || 'Member'}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
+                              </TableCell>
+                              <TableCell align="center">
                                 <Button
                                   onClick={() => {
                                     handleCreateDirectChat(
@@ -350,8 +334,8 @@ export default function createDirectChatModal({
                                 >
                                   {t('add')}
                                 </Button>
-                              </StyledTableCell>
-                            </StyledTableRow>
+                              </TableCell>
+                            </TableRow>
                           ),
                         )}
                   </TableBody>
