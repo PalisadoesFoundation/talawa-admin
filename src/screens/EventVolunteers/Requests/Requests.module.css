@@ -48,3 +48,23 @@
 .rejectButton {
   min-width: 32px;
 }
+
+.textSm {
+  font-size: var(--font-size-table-body);
+}
+
+.textBold {
+  font-weight: 600;
+}
+
+.errorContainer {
+  background-color: white;
+  border-radius: 0.375rem;
+  margin: 1rem 0;
+}
+
+.errorMessage {
+  color: #dc3545; /* Bootstrap danger color */
+  text-align: center;
+  font-weight: 600;
+}

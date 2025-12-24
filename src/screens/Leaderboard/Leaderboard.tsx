@@ -162,7 +162,7 @@ function leaderboard(): JSX.Element {
   if (rankingsError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded className={styles.icon} fontSize="large" />
+        <WarningAmberRounded className={styles.icon} />
         <h6 className="fw-bold text-danger text-center">
           {tErrors('errorLoading', { entity: 'Volunteer Rankings' })}
         </h6>

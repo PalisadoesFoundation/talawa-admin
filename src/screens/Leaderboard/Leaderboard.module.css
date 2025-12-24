@@ -55,3 +55,7 @@
 .hoursCell {
   font-weight: bold;
 }
+
+.headerSm {
+  font-size: var(--font-size-table-body);
+}
