@@ -1,3 +1,44 @@
+/**
+ * OrganizationCard Component
+ *
+ * Displays information about an organization inside the User Portal.
+ * Allows users to join an organization, withdraw a pending request,
+ * or visit the organization based on their membership status.
+ *
+ * @component
+ * @param props - Props for the OrganizationCard component.
+ * @param props.id - Unique identifier of the organization.
+ * @param props.name - Name of the organization.
+ * @param props.description - Short description of the organization.
+ * @param props.addressLine1 - Primary address line of the organization.
+ * @param props.adminsCount - Total number of administrators.
+ * @param props.membersCount - Total number of members.
+ * @param props.membershipRequestStatus - Current membership request status.
+ * @param props.membershipRequests - List of membership requests.
+ * @param props.isJoined - Whether the current user is already a member.
+ *
+ * @returns JSX.Element representing an organization card.
+ *
+ * @remarks
+ * - Uses GraphQL mutations to send and cancel membership requests.
+ * - Displays success or error feedback using `react-toastify`.
+ * - Layout is provided by the reusable `UserPortalCard`.
+ *
+ * @example
+ * ```tsx
+ * <OrganizationCard
+ *   id="org-1"
+ *   name="Sample Organization"
+ *   description="An example organization"
+ *   addressLine1="123 Main Street"
+ *   adminsCount={2}
+ *   membersCount={10}
+ *   membershipRequestStatus="pending"
+ *   membershipRequests={[]}
+ *   isJoined={false}
+ * />
+ * ```
+ */
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
@@ -12,20 +53,7 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 
 import styles from './OrganizationCard.module.css';
-
-interface InterfaceOrganizationCardProps {
-  id: string;
-  name: string;
-  description: string;
-  addressLine1: string;
-  role: string;
-  membersCount: number;
-  adminsCount: number;
-  isJoined?: boolean;
-  membershipRequestStatus?: string;
-  membershipRequests?: { id: string; user: { id: string } }[];
-  userRegistrationRequired?: boolean;
-}
+import type { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
 
 const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
   id,
@@ -40,24 +68,40 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
 }) => {
   const { t } = useTranslation();
 
-  const [sendRequest] = useMutation(SEND_MEMBERSHIP_REQUEST);
-  const [cancelRequest] = useMutation(CANCEL_MEMBERSHIP_REQUEST);
+  const [sendRequest, { loading: sendLoading }] = useMutation(
+    SEND_MEMBERSHIP_REQUEST,
+  );
+  const [cancelRequest, { loading: cancelLoading }] = useMutation(
+    CANCEL_MEMBERSHIP_REQUEST,
+  );
 
   const pendingRequest = membershipRequests[0];
 
   const handleJoin = async (): Promise<void> => {
-    await sendRequest({ variables: { organizationId: id } });
-    toast.success(t('organization.join_success', 'Request sent'));
+    try {
+      await sendRequest({ variables: { organizationId: id } });
+      toast.success(t('organization.join_success', 'Request sent'));
+    } catch {
+      toast.error(
+        t('organization.join_error', 'Failed to send membership request'),
+      );
+    }
   };
 
   const handleWithdraw = async (): Promise<void> => {
     if (!pendingRequest) return;
 
-    await cancelRequest({
-      variables: { membershipRequestId: pendingRequest.id },
-    });
+    try {
+      await cancelRequest({
+        variables: { membershipRequestId: pendingRequest.id },
+      });
 
-    toast.success(t('organization.withdraw_success', 'Request withdrawn'));
+      toast.success(t('organization.withdraw_success', 'Request withdrawn'));
+    } catch {
+      toast.error(
+        t('organization.withdraw_error', 'Failed to withdraw request'),
+      );
+    }
   };
 
   const actionsSlot = (() => {
@@ -76,6 +120,7 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
           variant="danger"
           data-testid="withdrawBtn"
           onClick={handleWithdraw}
+          disabled={cancelLoading}
         >
           {t('organization.withdraw', 'Withdraw')}
         </Button>
@@ -83,7 +128,12 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
     }
 
     return (
-      <Button size="sm" data-testid="joinBtn" onClick={handleJoin}>
+      <Button
+        size="sm"
+        data-testid="joinBtn"
+        onClick={handleJoin}
+        disabled={sendLoading}
+      >
         {t('organization.join', 'Join')}
       </Button>
     );

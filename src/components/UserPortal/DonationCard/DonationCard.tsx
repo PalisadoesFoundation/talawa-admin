@@ -1,3 +1,32 @@
+/**
+ * DonationCard Component
+ *
+ * Renders a card displaying donation details including donor name,
+ * donation amount, and donation date.
+ *
+ * @component
+ * @param props - Props for the DonationCard component.
+ * @param props.name - Name of the donor.
+ * @param props.amount - Donated amount.
+ * @param props.updatedAt - ISO timestamp of the donation.
+ *
+ * @returns JSX.Element representing a donation card.
+ *
+ * @remarks
+ * - Formats the donation date into a readable string.
+ * - Uses `UserPortalCard` for consistent layout.
+ * - Styling is handled via CSS Modules.
+ *
+ * @example
+ * ```tsx
+ * <DonationCard
+ *   name="John Doe"
+ *   amount={100}
+ *   updatedAt="2023-03-15T12:00:00Z"
+ * />
+ * ```
+ */
+
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -76,6 +105,6 @@ const DonationCard: React.FC<InterfaceDonationCardProps> = ({
       </div>
     </UserPortalCard>
   );
-};    
+};
 
 export default DonationCard;

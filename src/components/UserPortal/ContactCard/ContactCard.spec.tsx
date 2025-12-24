@@ -9,7 +9,6 @@
  */
 
 import React, { act } from 'react';
-import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, afterEach } from 'vitest';
@@ -60,7 +59,7 @@ const renderComponent = (props: InterfaceContactCardProps) =>
 
 describe('ContactCard [User Portal]', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders contact card container and text', async () => {

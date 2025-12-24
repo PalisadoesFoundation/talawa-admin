@@ -1,3 +1,39 @@
+/**
+ * Represents a contact card component used in the user portal.
+ * This component displays a contact's avatar, name, last message,
+ * and the count of unseen messages. It also highlights the selected contact.
+ *
+ * @component
+ * @param {InterfaceContactCardProps} props - The properties for the contact card.
+ * @param {string} props.id - The unique identifier for the contact.
+ * @param {string} props.title - The name or title of the contact.
+ * @param {string} [props.image] - The URL of the contact's avatar image.
+ * @param {string} [props.lastMessage] - The last message sent or received from the contact.
+ * @param {number} [props.unseenMessages] - The count of unseen messages for the contact.
+ * @param {string} props.selectedContact - The ID of the currently selected contact.
+ * @param {(id: string) => void} props.setSelectedContact - Callback to update the selected contact.
+ *
+ * @returns {JSX.Element} A styled contact card component.
+ *
+ * @remarks
+ * - The component uses `React.useState` to manage the selection state of the contact.
+ * - The `React.useEffect` hook ensures the selection state updates when the selected contact changes.
+ * - The component conditionally renders an avatar image or a fallback avatar component.
+ * - The `Badge` component is used to display the count of unseen messages.
+ *
+ * @example
+ * ```tsx
+ * <ContactCard
+ *   id="123"
+ *   title="John Doe"
+ *   image="https://example.com/avatar.jpg"
+ *   lastMessage="Hello!"
+ *   unseenMessages={3}
+ *   selectedContact="123"
+ *   setSelectedContact={(id) => console.log(id)}
+ * />
+ * ```
+ */
 import React from 'react';
 import { Badge } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -64,18 +100,10 @@ const ContactCard: React.FC<InterfaceContactCardProps> = ({
       actionsSlot={actionsSlot}
       className={styles.contactCardWrapper}
     >
-      <div
-        role="button"
-        tabIndex={0}
+      <button
+        type="button"
         onClick={handleSelect}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            handleSelect();
-          }
-        }}
         data-testid={`contact-container-${id}`}
-        data-selected={String(isSelected)}
         aria-pressed={isSelected}
         className={`${styles.contentInner} ${
           isSelected ? styles.selected : ''
@@ -84,6 +112,7 @@ const ContactCard: React.FC<InterfaceContactCardProps> = ({
         <div className={styles.titleRow}>
           <div className={styles.titleText} data-testid={`contact-title-${id}`}>
             <b>{title}</b>
+
             {lastMessage && (
               <div
                 className={styles.lastMessage}
@@ -94,7 +123,7 @@ const ContactCard: React.FC<InterfaceContactCardProps> = ({
             )}
           </div>
         </div>
-      </div>
+      </button>
     </UserPortalCard>
   );
 };

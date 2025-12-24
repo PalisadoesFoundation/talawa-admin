@@ -1,5 +1,4 @@
 import React, { act } from 'react';
-import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 
@@ -79,7 +78,7 @@ describe('DonationCard [User Portal]', () => {
     await wait();
 
     expect(screen.getByTestId('donation-date')).toBeInTheDocument();
-    expect(screen.getByText(/Jan/i)).toBeInTheDocument();
+    expect(screen.getByText(/2024/)).toBeInTheDocument();
   });
 
   it('renders view button with addButton class', async () => {

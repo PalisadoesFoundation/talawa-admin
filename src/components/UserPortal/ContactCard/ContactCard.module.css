@@ -1,30 +1,21 @@
-/* ContactCard.module.css
-   Only contact-specific visual styles.
-   Layout (flex, spacing, density) is handled by UserPortalCard.
-*/
-
 .contactCardWrapper {
   /* Hook for small per-card overrides; no layout duplication */
 }
 
-/* Inner clickable area (content region) */
 .contentInner {
   display: flex;
   align-items: center;
   width: 100%;
   outline: none;
   cursor: pointer;
-  padding: 0; /* spacing is controlled by UserPortalCard */
+  padding: 0;
 }
 
-/* Visual selected state */
 .selected {
-  /* subtle highlight for selection; keep token-based color usage */
-  background-color: rgba(196, 255, 211, 0.3); /* matches previous bgGreen */
+  background-color: var(--contact-selected-bg, rgba(196, 255, 211, 0.3));
   border-radius: 8px;
 }
 
-/* Row that holds title + badge */
 .titleRow {
   display: flex;
   justify-content: space-between;
@@ -33,7 +24,6 @@
   gap: 0.5rem;
 }
 
-/* Title / text container */
 .titleText {
   display: flex;
   flex-direction: column;
@@ -42,7 +32,6 @@
   overflow: hidden;
 }
 
-/* Last message line (muted) */
 .lastMessage {
   margin: 0;
   font-size: 0.875rem;
@@ -52,7 +41,6 @@
   overflow: hidden;
 }
 
-/* Avatar / image size used inside UserPortalCard imageSlot */
 .contactImage {
   width: 45px;
   height: 45px;
@@ -61,7 +49,6 @@
   flex-shrink: 0;
 }
 
-/* Unseen messages badge */
 .unseenBadge {
   border-radius: 999px;
   min-width: 28px;
@@ -69,9 +56,16 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--removeButton-bg, #f8d6dc); /* token fallback */
+  background-color: var(--removeButton-bg, #f8d6dc);
   color: var(--removeButton-color, #c8102e);
   font-weight: 600;
   font-size: 0.8rem;
   padding: 0 6px;
+}
+
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left;
 }

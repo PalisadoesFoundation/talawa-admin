@@ -1,3 +1,37 @@
+/**
+ * PeopleCard Component
+ *
+ * Displays information about a person within an organization,
+ * including serial number, avatar, name, email, and role.
+ *
+ * @component
+ * @param props - Props for the PeopleCard component.
+ * @param props.id - Unique identifier of the person.
+ * @param props.name - Name of the person.
+ * @param props.image - URL of the person's profile image.
+ * @param props.email - Email address of the person.
+ * @param props.role - Role or designation of the person.
+ * @param props.sno - Serial number in the list.
+ *
+ * @returns JSX.Element representing a people card.
+ *
+ * @remarks
+ * - Uses `Avatar` when no image URL is provided.
+ * - Layout is handled by `UserPortalCard`.
+ *
+ * @example
+ * ```tsx
+ * <PeopleCard
+ *   id="1"
+ *   name="John Doe"
+ *   image="https://example.com/john.jpg"
+ *   email="john.doe@example.com"
+ *   role="Administrator"
+ *   sno="1"
+ * />
+ * ```
+ */
+
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -34,11 +68,11 @@ const PeopleCard: React.FC<InterfacePeopleCardProps> = ({
     <img
       src={image}
       alt={avatarAlt}
-      className={styles.avatar}
+      className={styles.avatarImage}
       data-testid={`people-${id}-image`}
     />
   ) : (
-    <Avatar name={name} alt={avatarAlt} avatarStyle={styles.avatar} />
+    <Avatar name={name} alt={avatarAlt} avatarStyle={styles.avatarImage} />
   );
 
   return (
