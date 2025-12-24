@@ -275,45 +275,6 @@ export const ORGANIZATION_USER_TAGS_LIST = gql`
   }
 `;
 
-export const ORGANIZATION_USER_TAGS_LIST_PG = gql`
-  query OrganizationTags(
-    $input: QueryOrganizationInput!
-    $after: String
-    $before: String
-    $first: Int
-    $last: Int
-  ) {
-    organization(input: $input) {
-      id
-      name
-      tags(after: $after, before: $before, first: $first, last: $last) {
-        edges {
-          cursor
-          node {
-            id
-            name
-            createdAt
-            updater {
-              id
-              name
-            }
-            folder {
-              id
-              name
-            }
-          }
-        }
-        pageInfo {
-          hasNextPage
-          hasPreviousPage
-          startCursor
-          endCursor
-        }
-      }
-    }
-  }
-`;
-
 /**
  * GraphQL query to retrieve organizations created by a user.
  *

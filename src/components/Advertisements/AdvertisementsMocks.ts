@@ -16,7 +16,7 @@
  * import { MockedProvider } from '@apollo/client/testing';
  *
  * render(
- * <MockedProvider mocks={getActiveAdvertisementMocks} addTypename={false}>
+ * <MockedProvider mocks={getActiveAdvertisementMocks}>
  * <Advertisements />
  * </MockedProvider>
  * );
@@ -26,7 +26,7 @@
  * @category Mocks
  */
 import { act } from 'react';
-import type { NormalizedCacheObject, DocumentNode } from '@apollo/client';
+import type { DocumentNode } from '@apollo/client';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
@@ -142,8 +142,6 @@ interface IBaseMutationMock<T = unknown> {
   error?: Error;
 }
 
-const { getItem } = useLocalStorage();
-
 export const dateConstants = {
   create: {
     startAtISO: '2024-12-31T18:30:00.000Z',
@@ -175,8 +173,10 @@ const httpLink = new HttpLink({
   uri: BACKEND_URL,
 });
 
+const { getItem } = useLocalStorage();
+
 const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('Talawa-admin_token');
+  const token = getItem('token');
   return {
     headers: {
       ...headers,

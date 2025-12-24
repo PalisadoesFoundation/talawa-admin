@@ -250,6 +250,96 @@ const MOCKS = [
                   id: 'event1',
                   name: 'Test Event 1',
                   description: 'Test Description 1',
+                  startAt: '2023-06-05T00:00:00.000Z',
+                  endAt: '2023-06-05T23:59:59.999Z',
+                  location: 'Test Location',
+                  allDay: true,
+                  isPublic: true,
+                  isRegisterable: true,
+                  isRecurringEventTemplate: false,
+                  baseEvent: null,
+                  sequenceNumber: null,
+                  totalCount: null,
+                  hasExceptions: false,
+                  progressLabel: null,
+                  recurrenceDescription: null,
+                  recurrenceRule: null,
+                  creator: {
+                    id: 'user1',
+                    name: 'Test User',
+                  },
+                  attachments: [],
+                  organization: {
+                    id: 'org123',
+                    name: 'Test Org',
+                  },
+                },
+                cursor: 'cursor1',
+              },
+              {
+                node: {
+                  id: 'event2',
+                  name: 'Test Event 2',
+                  description: 'Test Description 2',
+                  startAt: '2023-06-06T08:00:00.000Z',
+                  endAt: '2023-06-06T10:00:00.000Z',
+                  location: 'Test Location 2',
+                  allDay: false,
+                  isPublic: false,
+                  isRegisterable: false,
+                  isRecurringEventTemplate: false,
+                  baseEvent: null,
+                  sequenceNumber: null,
+                  totalCount: null,
+                  hasExceptions: false,
+                  progressLabel: null,
+                  recurrenceDescription: null,
+                  recurrenceRule: null,
+                  creator: {
+                    id: 'user2',
+                    name: 'Test User 2',
+                  },
+                  attachments: [],
+                  organization: {
+                    id: 'org123',
+                    name: 'Test Org',
+                  },
+                },
+                cursor: 'cursor2',
+              },
+            ],
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: 'cursor2',
+            },
+          },
+        },
+      },
+    },
+  },
+  // Additional mock for month-change path using fixed May/June 2023 window
+  {
+    request: {
+      query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
+      variables: {
+        id: 'org123',
+        first: 150,
+        after: null,
+        startAt: '2023-05-31T18:30:00.000Z',
+        endAt: '2023-06-30T18:29:59.999Z',
+        includeRecurring: true,
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          events: {
+            edges: [
+              {
+                node: {
+                  id: 'event1',
+                  name: 'Test Event 1',
+                  description: 'Test Description 1',
                   startAt: '2024-03-05T00:00:00.000Z',
                   endAt: '2024-03-05T23:59:59.999Z',
                   location: 'Test Location',
@@ -1138,10 +1228,6 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle network error gracefully', async () => {
-    const consoleWarnSpy = vi
-      .spyOn(console, 'warn')
-      .mockImplementation(() => {});
-
     render(
       <MockedProvider link={errorLink}>
         <BrowserRouter>
@@ -1160,10 +1246,8 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await wait(500);
 
-    // Should log warning for non-rate-limit errors
-    expect(consoleWarnSpy).toHaveBeenCalled();
-
-    consoleWarnSpy.mockRestore();
+    // Should call toast.error for non-rate-limit errors via errorHandler
+    expect(mockToast.error).toHaveBeenCalled();
   });
 
   it('Should suppress rate limit errors silently', async () => {

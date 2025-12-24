@@ -94,4 +94,46 @@ describe('sanitizeAvatars', () => {
     const result = sanitizeAvatars(null, 'https://example.com/üser/avatär.jpg');
     expect(result).toBe('https://example.com/%C3%BCser/avat%C3%A4r.jpg');
   });
+
+  // Security tests for XSS prevention
+  describe('XSS prevention', () => {
+    it('should block javascript: protocol', () => {
+      const result = sanitizeAvatars(null, 'javascript:alert(1)');
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Invalid fallback URL provided',
+      );
+      expect(result).toBe('');
+    });
+
+    it('should block javascript: protocol with encoded payload', () => {
+      const result = sanitizeAvatars(
+        null,
+        'javascript:fetch("https://evil.com")',
+      );
+      expect(result).toBe('');
+    });
+
+    it('should block data: protocol', () => {
+      const result = sanitizeAvatars(
+        null,
+        'data:text/html,<script>alert(1)</script>',
+      );
+      expect(result).toBe('');
+    });
+
+    it('should block vbscript: protocol', () => {
+      const result = sanitizeAvatars(null, 'vbscript:msgbox(1)');
+      expect(result).toBe('');
+    });
+
+    it('should allow http: protocol', () => {
+      const result = sanitizeAvatars(null, 'http://example.com/avatar.jpg');
+      expect(result).toBe('http://example.com/avatar.jpg');
+    });
+
+    it('should allow https: protocol', () => {
+      const result = sanitizeAvatars(null, 'https://example.com/avatar.jpg');
+      expect(result).toBe('https://example.com/avatar.jpg');
+    });
+  });
 });

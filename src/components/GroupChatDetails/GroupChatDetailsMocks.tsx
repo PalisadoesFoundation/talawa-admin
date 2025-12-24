@@ -368,8 +368,6 @@ export const getMocks = () => [
   },
 ];
 
-export const mocks = getMocks();
-
 export const failingMocks = [
   // Mock for role update failure
   {

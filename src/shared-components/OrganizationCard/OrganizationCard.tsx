@@ -217,7 +217,7 @@ function OrganizationCard({
                   membershipState === 'member'
                     ? styles.member
                     : membershipState === 'pending'
-                      ? styles.pending
+                      ? styles.pendingMembership
                       : styles.notMember,
                 ].join(' ')}
                 data-testid="membershipStatus"

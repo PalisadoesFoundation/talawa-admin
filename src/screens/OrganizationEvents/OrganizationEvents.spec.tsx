@@ -1,12 +1,6 @@
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing/react';
-import {
-  act,
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-} from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import { GraphQLError } from 'graphql';
 import { Provider } from 'react-redux';
 import userEvent from '@testing-library/user-event';
@@ -140,40 +134,47 @@ vi.mock('utils/errorHandler', () => ({
 }));
 
 // Mock CreateEventModal to avoid testing its internal logic
-vi.mock('./CreateEventModal', () => ({
-  default: ({
-    isOpen,
-    onClose,
-    onEventCreated,
-  }: {
-    isOpen: boolean;
-    onClose: () => void;
-    onEventCreated: () => void;
-  }) => {
-    if (!isOpen) return null;
-    return (
-      <div data-testid="createEventModal">
-        <button
-          type="button"
-          data-testid="createEventModalCloseBtn"
-          onClick={onClose}
-        >
-          Close
-        </button>
-        <button
-          type="button"
-          data-testid="mockCreateEventSuccess"
-          onClick={() => {
-            onEventCreated();
-            onClose();
-          }}
-        >
-          Create Event Success
-        </button>
-      </div>
-    );
-  },
-}));
+vi.mock('./CreateEventModal', async () => {
+  const React = await import('react');
+  return {
+    default: ({
+      isOpen,
+      onClose,
+      onEventCreated,
+    }: {
+      isOpen: boolean;
+      onClose: () => void;
+      onEventCreated: () => void;
+    }) => {
+      if (!isOpen) return null;
+      return React.createElement('div', { 'data-testid': 'createEventModal' }, [
+        React.createElement(
+          'button',
+          {
+            key: 'close',
+            type: 'button',
+            'data-testid': 'createEventModalCloseBtn',
+            onClick: onClose,
+          },
+          'Close',
+        ),
+        React.createElement(
+          'button',
+          {
+            key: 'success',
+            type: 'button',
+            'data-testid': 'mockCreateEventSuccess',
+            onClick: () => {
+              onEventCreated();
+              onClose();
+            },
+          },
+          'Create Event Success',
+        ),
+      ]);
+    },
+  };
+});
 
 describe('Organisation Events Page', () => {
   beforeEach(() => {

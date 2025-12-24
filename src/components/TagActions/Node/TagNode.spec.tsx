@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  act,
-} from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { describe, it, expect, vi } from 'vitest';
 import TagNode from './TagNode';
@@ -14,14 +8,6 @@ import type { TFunction } from 'i18next';
 import { MOCKS, MOCKS_ERROR_SUBTAGS_QUERY } from '../TagActionsMocks';
 import { MOCKS_ERROR_SUBTAGS_QUERY1, MOCKS1 } from './TagNodeMocks';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
-
-async function wait(ms = 500): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 
 const mockTag: InterfaceTagData = {
   _id: '1',
@@ -539,22 +525,39 @@ describe('Edge Cases and Coverage Improvements', () => {
   });
 
   it('handles nullish coalescing operator for subTagsList length when data is null', async () => {
-    // This test covers the scenario where the GraphQL query returns null data
+    // This test covers the scenario where the GraphQL query returns empty data
     // and the nullish coalescing operator ?? 0 is used on line 194
-    const mockWithNullData = [
+    const mockWithEmptyData = [
       {
         request: {
           query: USER_TAG_SUB_TAGS,
           variables: { id: '1', first: 10 },
         },
         result: {
-          data: null, // This will make subTagsData null, so subTagsList will be []
+          data: {
+            getChildTags: {
+              __typename: 'GetChildTagsPayload',
+              childTags: {
+                __typename: 'ChildTagsConnection',
+                edges: [], // Empty edges to simulate no subtags
+                pageInfo: {
+                  __typename: 'PageInfo',
+                  hasNextPage: false,
+                  endCursor: null,
+                  startCursor: null,
+                  hasPreviousPage: false,
+                },
+                totalCount: 0,
+              },
+              ancestorTags: [],
+            },
+          },
         },
       },
     ];
 
     render(
-      <MockedProvider mocks={mockWithNullData}>
+      <MockedProvider mocks={mockWithEmptyData}>
         <TagNode
           tag={mockTag}
           checkedTags={mockCheckedTags}
@@ -572,15 +575,13 @@ describe('Edge Cases and Coverage Improvements', () => {
     });
 
     await waitFor(() => {
-      // When data is null, subTagsList will be [] (empty array), so the InfiniteScroll won't render
+      // When edges are empty, subTagsList will be [] (empty array), so the InfiniteScroll won't render
       // due to the condition: {expanded && subTagsList?.length && (...)}
       // This still covers the ?? 0 fallback in the dataLength prop
       expect(
         screen.queryByTestId(`subTagsScrollableDiv${mockTag._id}`),
       ).not.toBeInTheDocument();
     });
-
-    await wait();
   });
 
   it('exercises nullish coalescing operator for hasNextPage with undefined value', async () => {

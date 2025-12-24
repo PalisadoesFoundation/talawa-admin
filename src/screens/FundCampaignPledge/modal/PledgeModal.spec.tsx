@@ -190,13 +190,8 @@ const NO_CHANGE_MOCK = {
   },
 };
 
-const getPickerInputByLabel = (label: string) => {
-  // MUI DatePicker renders as a TextField, query by label text
-  // The parent container has the MuiFormControl class
-  const input = screen.getByRole('textbox', { name: label, hidden: true });
-  // Return the closest parent that has the disabled class to check for disabled state
-  return input.closest('.MuiFormControl-root') as HTMLElement;
-};
+// Note: getPickerInputByLabel helper removed since Start Date and End Date fields
+// were removed from PledgeModal component (PR #5288)
 
 describe('PledgeModal', () => {
   beforeAll(() => {
@@ -293,68 +288,8 @@ describe('PledgeModal', () => {
     });
   });
 
-  it('should update pledgeStartDate when a new date is selected', async () => {
-    renderPledgeModal(link1, pledgeProps[1]);
-    const startDateGroup = getPickerInputByLabel('Start Date');
-    const startDateInput = within(startDateGroup).getByRole('textbox', {
-      hidden: true,
-    });
-    fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
-    expect(startDateInput).toHaveValue('02/01/2024');
-    fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
-    expect(startDateInput).toHaveValue('02/01/2024');
-  });
-
-  it('pledgeStartDate onChange when its null', async () => {
-    await act(async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
-    });
-    const startDateGroup = getPickerInputByLabel('Start Date');
-    const startDateInput = within(startDateGroup).getByRole('textbox', {
-      hidden: true,
-    });
-    // Verify the input is disabled (as per component design)
-    expect(startDateInput).toBeDisabled();
-    // The DatePicker is disabled so the onChange won't trigger,
-    // but we verify the component rendered correctly with the date picker
-    expect(startDateInput).toBeInTheDocument();
-  });
-
-  it('should update pledgeEndDate when a new date is selected', async () => {
-    renderPledgeModal(link1, pledgeProps[1]);
-    const endDateGroup = getPickerInputByLabel('End Date');
-    const endDateInput = within(endDateGroup).getByRole('textbox', {
-      hidden: true,
-    });
-    fireEvent.change(endDateInput, { target: { value: '12/01/2024' } });
-    expect(endDateInput).toHaveValue('12/01/2024');
-    expect(pledgeProps[1].pledge?.endDate).toEqual('2024-01-10');
-  });
-
-  it('pledgeEndDate onChange when its null', async () => {
-    await act(async () => {
-      renderPledgeModal(link1, pledgeProps[1]);
-    });
-    const endDateGroup = getPickerInputByLabel('End Date');
-    const endDateInput = within(endDateGroup).getByRole('textbox', {
-      hidden: true,
-    });
-    // Verify the input is disabled (as per component design)
-    expect(endDateInput).toBeDisabled();
-    // The DatePicker is disabled so the onChange won't trigger,
-    // but we verify the component rendered correctly with the date picker
-    expect(endDateInput).toBeInTheDocument();
-  });
-
-  it('should update end date if start date is after current end date', () => {
-    renderPledgeModal(link1, pledgeProps[1]);
-
-    const endDateGroup = getPickerInputByLabel('End Date');
-    const endDateInput = within(endDateGroup).getByRole('textbox', {
-      hidden: true,
-    });
-    expect(endDateInput).toBeDisabled();
-  });
+  // NOTE: Tests for Start Date and End Date fields removed since these fields
+  // were removed from PledgeModal component (PR #5288)
 
   it('should handle create pledge error', async () => {
     renderPledgeModal(errorLink, pledgeProps[0]);
@@ -384,32 +319,6 @@ describe('PledgeModal', () => {
 
       expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
     });
-  });
-
-  it('should enforce date constraints (start date before end date)', () => {
-    renderPledgeModal(link1, pledgeProps[1]);
-
-    const startDateGroup = getPickerInputByLabel('Start Date');
-    const endDateGroup = getPickerInputByLabel('End Date');
-    const startDateInput = within(startDateGroup).getByRole('textbox', {
-      hidden: true,
-    });
-    const endDateInput = within(endDateGroup).getByRole('textbox', {
-      hidden: true,
-    });
-
-    expect(startDateInput).toBeDisabled();
-    expect(endDateInput).toBeDisabled();
-  });
-
-  it('should enforce campaign end date as the max date', async () => {
-    const campaignEndDate = new Date('2024-06-30');
-    const props = { ...pledgeProps[0], endDate: campaignEndDate };
-
-    renderPledgeModal(link1, props);
-
-    const endDateGroup = getPickerInputByLabel('End Date');
-    expect(endDateGroup).toBeInTheDocument();
   });
 
   it('should reset form state after successful pledge creation', async () => {
@@ -595,16 +504,6 @@ describe('PledgeModal', () => {
       const amountInput = screen.getByLabelText('Amount');
       expect(amountInput).toHaveAttribute('value', '0');
       expect(screen.getByLabelText('Currency')).toBeInTheDocument();
-      const startDateGroup = getPickerInputByLabel('Start Date');
-      const endDateGroup = getPickerInputByLabel('End Date');
-      const startDateInput = within(startDateGroup).getByRole('textbox', {
-        hidden: true,
-      });
-      const endDateInput = within(endDateGroup).getByRole('textbox', {
-        hidden: true,
-      });
-      expect(startDateInput).toBeDisabled();
-      expect(endDateInput).toBeDisabled();
     });
   });
 

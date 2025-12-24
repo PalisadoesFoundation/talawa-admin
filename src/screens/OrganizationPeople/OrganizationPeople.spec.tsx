@@ -1332,16 +1332,61 @@ describe('OrganizationPeople', () => {
       before: null,
     });
 
+    // Mock for forward navigation (when clicking Next Page)
+    const nextPageMock = createMemberConnectionMock(
+      {
+        orgId: 'orgid',
+        first: 10,
+        after: 'cursor2',
+        last: null,
+        before: null,
+      },
+      {
+        edges: [
+          {
+            __typename: 'UserMembersEdge',
+            node: {
+              __typename: 'User',
+              id: 'member3',
+              name: 'Bob Johnson',
+              emailAddress: 'bob@example.com',
+              avatarURL: null,
+              createdAt: '2023-01-03T00:00:00Z',
+            },
+            cursor: 'cursor3',
+          },
+        ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: true,
+          startCursor: 'cursor3',
+          endCursor: 'cursor3',
+        },
+      },
+    );
+
     // Mock for backward navigation without stored cursors
     const backwardMock = createMemberConnectionMock({
       orgId: 'orgid',
       first: null,
       after: null,
       last: 10,
-      before: null, // This will test the fallback to null
+      before: 'cursor3',
     });
 
-    const link = new StaticMockLink([initialMock, backwardMock], true);
+    // Mock for returning to first page
+    const firstPageMock = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+
+    const link = new StaticMockLink(
+      [initialMock, nextPageMock, backwardMock, firstPageMock],
+      true,
+    );
 
     render(
       <MockedProvider link={link}>

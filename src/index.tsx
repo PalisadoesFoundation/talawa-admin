@@ -1,11 +1,12 @@
 import React, { Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
-import type { NormalizedCacheObject } from '@apollo/client';
 import { ApolloClient, InMemoryCache, ApolloLink } from '@apollo/client';
 
 import { ApolloProvider } from '@apollo/client/react';
 import { getMainDefinition } from '@apollo/client/utilities';
+import { Observable, from as fromPromise, mergeMap } from 'rxjs';
+import type { Observer } from 'rxjs';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { onError } from '@apollo/link-error';
@@ -21,10 +22,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import App from './App';
 import { store } from './state/store';
-import {
-  BACKEND_URL,
-  REACT_APP_BACKEND_WEBSOCKET_URL,
-} from 'Constant/constant';
+import { BACKEND_URL, BACKEND_WEBSOCKET_URL } from 'Constant/constant';
 import { ThemeProvider, createTheme } from '@mui/material';
 import { setContext } from '@apollo/client/link/context';
 import './assets/css/scrollStyles.css';
@@ -78,7 +76,7 @@ const errorLink = onError(
         // Skip token refresh logic for authentication operations (login/signup)
         const operationName = operation.operationName;
         const authOperations = ['SignIn', 'SignUp', 'RefreshToken'];
-        if (authOperations.includes(operationName)) {
+        if (operationName && authOperations.includes(operationName)) {
           continue;
         }
 
@@ -95,7 +93,7 @@ const errorLink = onError(
 
           // If already refreshing, queue this request
           if (isRefreshing) {
-            return new Observable((observer) => {
+            return new Observable((observer: Observer<unknown>) => {
               pendingRequests.push(() => {
                 const subscriber = {
                   next: observer.next.bind(observer),
@@ -130,26 +128,28 @@ const errorLink = onError(
               .finally(() => {
                 isRefreshing = false;
               }),
-          ).flatMap((success) => {
-            if (success) {
-              // Retry the original request with new token
-              const oldHeaders = operation.getContext().headers;
-              const newToken = getItem('token');
-              const authHeaders = newToken
-                ? { authorization: BEARER_PREFIX + newToken }
-                : {};
-              operation.setContext({
-                headers: {
-                  ...oldHeaders,
-                  ...authHeaders,
-                },
+          ).pipe(
+            mergeMap((success: boolean) => {
+              if (success) {
+                // Retry the original request with new token
+                const oldHeaders = operation.getContext().headers;
+                const newToken = getItem('token');
+                const authHeaders = newToken
+                  ? { authorization: BEARER_PREFIX + newToken }
+                  : {};
+                operation.setContext({
+                  headers: {
+                    ...oldHeaders,
+                    ...authHeaders,
+                  },
+                });
+                return forward(operation);
+              }
+              return new Observable((observer: Observer<unknown>) => {
+                observer.error(error);
               });
-              return forward(operation);
-            }
-            return new Observable((observer) => {
-              observer.error(error);
-            });
-          });
+            }),
+          );
         }
       }
     }
@@ -172,7 +172,7 @@ const uploadLink = new UploadHttpLink({
 
 const wsLink = new GraphQLWsLink(
   createClient({
-    url: REACT_APP_BACKEND_WEBSOCKET_URL,
+    url: BACKEND_WEBSOCKET_URL,
     connectionParams: () => {
       const token = getItem('token');
       const authParams = token ? { authorization: BEARER_PREFIX + token } : {};

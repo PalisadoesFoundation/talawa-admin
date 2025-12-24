@@ -4,20 +4,13 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import {
   BACKEND_URL,
-  REACT_APP_BACKEND_WEBSOCKET_URL,
+  BACKEND_WEBSOCKET_URL,
+  deriveBackendWebsocketUrl,
 } from 'Constant/constant';
 import { toast } from 'react-toastify';
 import i18n from './utils/i18n';
 import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
 import UploadHttpLink from 'apollo-upload-client/UploadHttpLink.mjs';
-
-// Define types for mocked modules
-interface InterfaceToastMock {
-  success: ReturnType<typeof vi.fn>;
-  error: ReturnType<typeof vi.fn>;
-  info: ReturnType<typeof vi.fn>;
-  warning: ReturnType<typeof vi.fn>;
-}
 
 interface InterfaceHeaders {
   authorization: string;
@@ -34,14 +27,6 @@ const getTestToken = (): string =>
 const getTestExpiredToken = (): string =>
   process.env.VITE_TEST_EXPIRED_TOKEN || 'expired-token';
 
-// Mock external modules
-const mockToast: InterfaceToastMock = {
-  success: vi.fn(),
-  error: vi.fn(),
-  info: vi.fn(),
-  warning: vi.fn(),
-};
-
 vi.mock('react-toastify', () => ({
   ToastContainer: (): JSX.Element => <div>ToastContainer</div>,
   toast: {
@@ -55,6 +40,21 @@ vi.mock('react-toastify', () => ({
 vi.mock('Constant/constant', () => ({
   BACKEND_URL: 'http://localhost:4000/graphql',
   REACT_APP_BACKEND_WEBSOCKET_URL: 'ws://localhost:4000/graphql',
+  BACKEND_WEBSOCKET_URL: 'ws://localhost:4000/graphql',
+  deriveBackendWebsocketUrl: (url: string | undefined | null): string => {
+    if (!url) return '';
+    if (url.startsWith('https://')) {
+      // Remove fragment/hash from URL
+      const urlWithoutHash = url.split('#')[0];
+      return urlWithoutHash.replace('https://', 'wss://');
+    }
+    if (url.startsWith('http://')) {
+      // Remove fragment/hash from URL
+      const urlWithoutHash = url.split('#')[0];
+      return urlWithoutHash.replace('http://', 'ws://');
+    }
+    return '';
+  },
 }));
 
 // Mutable mock for localStorage
@@ -88,6 +88,9 @@ vi.mock('utils/timezoneUtils', async () => {
     ),
   };
 });
+
+// Mock refreshToken function for Token Refresh Error Link tests
+const refreshToken = vi.fn();
 
 // Helper to configure localStorage mock
 const createLocalStorageMock = (
@@ -146,14 +149,53 @@ describe('Apollo Client Setup', () => {
   });
 
   it('should configure WebSocket link with correct URL', (): void => {
-    // @ts-ignore - Ignoring type check for createClient mock
     const wsLink = new GraphQLWsLink(
       createClient({
-        url: REACT_APP_BACKEND_WEBSOCKET_URL,
+        url: BACKEND_WEBSOCKET_URL,
       }),
     );
 
     expect(wsLink).toBeDefined();
+  });
+
+  it('should derive websocket URLs from HTTP endpoints', () => {
+    expect(deriveBackendWebsocketUrl('https://example.com/graphql')).toBe(
+      'wss://example.com/graphql',
+    );
+
+    expect(deriveBackendWebsocketUrl('http://example.com/graphql')).toBe(
+      'ws://example.com/graphql',
+    );
+
+    expect(deriveBackendWebsocketUrl('not-a-url')).toBe('');
+    expect(deriveBackendWebsocketUrl('ftp://example.com/graphql')).toBe('');
+    expect(deriveBackendWebsocketUrl(undefined)).toBe('');
+
+    // Test null input
+    expect(deriveBackendWebsocketUrl(null)).toBe('');
+
+    // Test empty string
+    expect(deriveBackendWebsocketUrl('')).toBe('');
+
+    // Test URL with port
+    expect(deriveBackendWebsocketUrl('https://example.com:8080/graphql')).toBe(
+      'wss://example.com:8080/graphql',
+    );
+
+    // Test URL with path
+    expect(deriveBackendWebsocketUrl('http://example.com/api/graphql')).toBe(
+      'ws://example.com/api/graphql',
+    );
+
+    // Test URL with query parameters
+    expect(
+      deriveBackendWebsocketUrl('https://example.com/graphql?token=abc'),
+    ).toBe('wss://example.com/graphql?token=abc');
+
+    // Test URL with fragment (should be excluded)
+    expect(
+      deriveBackendWebsocketUrl('https://example.com/graphql#section'),
+    ).toBe('wss://example.com/graphql');
   });
 
   describe('Authorization Headers', () => {

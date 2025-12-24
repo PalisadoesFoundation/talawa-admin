@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  render,
-  screen,
-  waitFor,
-  fireEvent,
-  act,
-} from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { MockLink } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
@@ -16,14 +10,6 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { vi, type Mock, beforeEach, afterEach } from 'vitest';
 import Chat from './Chat';
 import { CHATS_LIST, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
-
-async function wait(ms = 500): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 
 const { mockUseParams } = vi.hoisted(() => ({
   mockUseParams: vi.fn(),
@@ -456,7 +442,6 @@ describe('Chat Component', () => {
         screen.queryByTestId('contact-card-chat-3'),
       ).not.toBeInTheDocument();
     });
-    await wait();
   });
 
   test('should filter for group chats', async () => {
@@ -475,7 +460,6 @@ describe('Chat Component', () => {
         screen.queryByTestId('contact-card-chat-3'),
       ).not.toBeInTheDocument();
     });
-    await wait();
   });
 
   test('should filter for legacy group chats by user count', async () => {
@@ -616,7 +600,6 @@ describe('Chat Component', () => {
         screen.queryByTestId('contact-card-legacy-direct'),
       ).not.toBeInTheDocument();
     });
-    await wait();
   });
 
   test('should switch back to all filter', async () => {
@@ -640,7 +623,6 @@ describe('Chat Component', () => {
       expect(screen.getByTestId('contact-card-chat-2')).toBeInTheDocument();
       expect(screen.getByTestId('contact-card-chat-3')).toBeInTheDocument();
     });
-    await wait();
   });
 
   test('should open new direct and group chat modals', async () => {
@@ -934,7 +916,6 @@ describe('Chat Component', () => {
     await waitFor(() => {
       expect(screen.getByTestId('contact-card-group-1')).toBeInTheDocument();
     });
-    await wait();
   });
 
   test('should handle NewChatType in second useEffect with orgId filtering', async () => {
@@ -1037,7 +1018,6 @@ describe('Chat Component', () => {
     await waitFor(() => {
       expect(screen.getByTestId('contact-card-chat-new-1')).toBeInTheDocument();
     });
-    await wait();
   });
 
   test('should handle legacy GroupChat type in orgId filtering', async () => {

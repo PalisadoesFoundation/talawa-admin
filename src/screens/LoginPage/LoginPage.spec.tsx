@@ -1,5 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/client/testing/react';
+import type { MockedResponse } from '@apollo/client/testing';
 import {
   render,
   screen,
@@ -1929,10 +1930,7 @@ describe('RefreshToken storage verification', () => {
     });
 
     render(
-      <MockedProvider
-        mocks={SIGNIN_WITH_REFRESH_TOKEN_MOCK}
-        addTypename={false}
-      >
+      <MockedProvider mocks={SIGNIN_WITH_REFRESH_TOKEN_MOCK}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -241,7 +241,7 @@ describe('CreateEventModal', () => {
 
   test('renders modal when isOpen is true', () => {
     render(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -256,7 +256,7 @@ describe('CreateEventModal', () => {
 
   test('does not render modal when isOpen is false', () => {
     render(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} isOpen={false} />
@@ -271,7 +271,7 @@ describe('CreateEventModal', () => {
 
   test('renders close button and calls onClose when clicked', async () => {
     render(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -290,7 +290,7 @@ describe('CreateEventModal', () => {
 
   test('passes correct initial values to EventForm', () => {
     render(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -316,7 +316,7 @@ describe('CreateEventModal', () => {
 
   test('successfully creates event and calls callbacks', async () => {
     render(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -343,7 +343,7 @@ describe('CreateEventModal', () => {
 
   test('handles mutation error and calls errorHandler', async () => {
     render(
-      <MockedProvider mocks={[errorMock]} addTypename={false}>
+      <MockedProvider mocks={[errorMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -371,7 +371,7 @@ describe('CreateEventModal', () => {
     };
 
     render(
-      <MockedProvider mocks={[delayedMock]} addTypename={false}>
+      <MockedProvider mocks={[delayedMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -400,7 +400,7 @@ describe('CreateEventModal', () => {
 
   test('resets form when modal closes', async () => {
     const { rerender } = render(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -419,7 +419,7 @@ describe('CreateEventModal', () => {
 
     // Reopen modal
     rerender(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} isOpen={false} />
@@ -429,7 +429,7 @@ describe('CreateEventModal', () => {
     );
 
     rerender(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} isOpen={true} />
@@ -446,12 +446,11 @@ describe('CreateEventModal', () => {
   });
 
   test('handles recurrence rule formatting and submission', async () => {
-    const { formatRecurrenceForPayload } = await import(
-      'shared-components/EventForm/EventForm'
-    );
+    const { formatRecurrenceForPayload } =
+      await import('shared-components/EventForm/EventForm');
 
     render(
-      <MockedProvider mocks={[recurrenceMock]} addTypename={false}>
+      <MockedProvider mocks={[recurrenceMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -491,7 +490,7 @@ describe('CreateEventModal', () => {
 
   test('handles null recurrence rule', async () => {
     render(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -517,7 +516,7 @@ describe('CreateEventModal', () => {
 
   test('EventForm cancel button triggers modal close', async () => {
     render(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -534,7 +533,7 @@ describe('CreateEventModal', () => {
 
   test('passes correct props to EventForm', () => {
     render(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -550,7 +549,7 @@ describe('CreateEventModal', () => {
 
   test('increments formResetKey on successful submission', async () => {
     render(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -573,7 +572,7 @@ describe('CreateEventModal', () => {
 
   test('does not call onEventCreated or onClose on mutation failure', async () => {
     render(
-      <MockedProvider mocks={[errorMock]} addTypename={false}>
+      <MockedProvider mocks={[errorMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -616,7 +615,7 @@ describe('CreateEventModal', () => {
     };
 
     render(
-      <MockedProvider mocks={[networkErrorMock]} addTypename={false}>
+      <MockedProvider mocks={[networkErrorMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -635,7 +634,7 @@ describe('CreateEventModal', () => {
 
   test('modal header displays correct title', () => {
     render(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -654,7 +653,7 @@ describe('CreateEventModal', () => {
     };
 
     render(
-      <MockedProvider mocks={[delayedMock]} addTypename={false}>
+      <MockedProvider mocks={[delayedMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -679,12 +678,11 @@ describe('CreateEventModal', () => {
   });
 
   test('handles undefined recurrence in formatRecurrenceForPayload', async () => {
-    const { formatRecurrenceForPayload } = await import(
-      'shared-components/EventForm/EventForm'
-    );
+    const { formatRecurrenceForPayload } =
+      await import('shared-components/EventForm/EventForm');
 
     render(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -717,7 +715,7 @@ describe('CreateEventModal', () => {
 
   test('correctly constructs mutation input with all fields', async () => {
     render(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -740,7 +738,7 @@ describe('CreateEventModal', () => {
 
   test('resets form on close via header close button', async () => {
     const { rerender } = render(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -756,7 +754,7 @@ describe('CreateEventModal', () => {
 
     // Reopen to verify reset
     rerender(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} isOpen={true} />
@@ -773,7 +771,7 @@ describe('CreateEventModal', () => {
 
   test('handles successful event creation with createEventData', async () => {
     render(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -799,7 +797,7 @@ describe('CreateEventModal', () => {
 
   test('formResetKey changes when handleClose is called', async () => {
     const { rerender } = render(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -814,7 +812,7 @@ describe('CreateEventModal', () => {
 
     // Reopen modal - form should have new key
     rerender(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} isOpen={true} />
@@ -852,7 +850,7 @@ describe('CreateEventModal', () => {
     };
 
     render(
-      <MockedProvider mocks={[nullDataMock]} addTypename={false}>
+      <MockedProvider mocks={[nullDataMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -876,7 +874,7 @@ describe('CreateEventModal', () => {
 
   test('handles all-day event with proper time values', async () => {
     render(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />
@@ -898,7 +896,7 @@ describe('CreateEventModal', () => {
 
   test('passes translation functions to EventForm', () => {
     render(
-      <MockedProvider mocks={[successMock]} addTypename={false}>
+      <MockedProvider mocks={[successMock]}>
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <I18nextProvider i18n={i18n}>
             <CreateEventModal {...defaultProps} />

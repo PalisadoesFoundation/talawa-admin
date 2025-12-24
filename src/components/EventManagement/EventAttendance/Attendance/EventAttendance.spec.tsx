@@ -9,7 +9,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Routes, Route } from 'react-router';
+import { MemoryRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import EventAttendance from './EventAttendance';
 import { store } from 'state/store';
@@ -112,6 +112,7 @@ describe('Event Attendance Component', () => {
   });
 
   afterEach(async () => {
+    vi.clearAllMocks();
     cleanup();
     const actual = await vi.importActual<typeof import('@apollo/client/react')>(
       '@apollo/client/react',

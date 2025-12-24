@@ -18,7 +18,7 @@
  * ```
  */
 
-import React, { useState, useEffect, useRef, JSX } from 'react';
+import React, { useState, useEffect, useMemo, JSX } from 'react';
 import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
@@ -30,7 +30,7 @@ import {
 import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
-import { useParams, useNavigate } from 'react-router';
+import { useParams } from 'react-router';
 import type { InterfaceEvent, InterfaceIOrgList } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';

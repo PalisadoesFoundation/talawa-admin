@@ -89,7 +89,7 @@ describe('Calendar', () => {
   it('Should show prev and next month on clicking < & > buttons', () => {
     //testing previous month button
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <Calendar
             eventData={eventData}
@@ -117,7 +117,7 @@ describe('Calendar', () => {
   it('Should show prev and next year on clicking < & > buttons when in year view', async () => {
     //testing previous month button
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <I18nextProvider i18n={i18nForTest}>
           <Calendar
             eventData={eventData}
@@ -145,7 +145,7 @@ describe('Calendar', () => {
   it('Should show prev and next date on clicking < & > buttons in the day view', async () => {
     render(
       <Router>
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar
               eventData={eventData}
@@ -192,7 +192,7 @@ describe('Calendar', () => {
     ];
     render(
       <Router>
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar
               eventData={currentDayEventMock}
@@ -211,7 +211,7 @@ describe('Calendar', () => {
   it('Test for superadmin case', () => {
     render(
       <Router>
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar
               eventData={eventData}
@@ -230,7 +230,7 @@ describe('Calendar', () => {
   it('Today Cell is having correct styles', () => {
     render(
       <Router>
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar
               eventData={eventData}
@@ -252,7 +252,7 @@ describe('Calendar', () => {
   it('Today button should show today cell', () => {
     render(
       <Router>
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar
               eventData={eventData}
@@ -362,7 +362,7 @@ describe('Calendar', () => {
     ];
     render(
       <Router>
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar
               eventData={multipleEventData}
@@ -411,7 +411,7 @@ describe('Calendar', () => {
   test('Handles window resize', () => {
     render(
       <Router>
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar
               eventData={eventData}
@@ -472,7 +472,7 @@ describe('Calendar', () => {
     // Test navigation at month boundaries
     render(
       <Router>
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar
               eventData={eventData}
@@ -511,7 +511,7 @@ describe('Calendar', () => {
 
     render(
       <Router>
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar
               eventData={eventData}
@@ -563,7 +563,7 @@ describe('Calendar', () => {
 
     render(
       <Router>
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar
               eventData={eventData}
@@ -617,7 +617,7 @@ describe('Calendar', () => {
 
     render(
       <Router>
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar
               eventData={eventData}
@@ -670,7 +670,7 @@ describe('Calendar', () => {
 
     render(
       <Router>
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar
               eventData={eventData}
@@ -723,7 +723,7 @@ describe('Calendar', () => {
 
     render(
       <Router>
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider link={link}>
           <I18nextProvider i18n={i18nForTest}>
             <Calendar
               eventData={eventData}
@@ -837,7 +837,7 @@ describe('Calendar', () => {
 
       const { container } = render(
         <Router>
-          <MockedProvider addTypename={false} link={link}>
+          <MockedProvider link={link}>
             <I18nextProvider i18n={i18nForTest}>
               <Calendar
                 eventData={adminTestEventData}
@@ -909,7 +909,7 @@ describe('Calendar', () => {
 
       const { container } = render(
         <Router>
-          <MockedProvider addTypename={false} link={link}>
+          <MockedProvider link={link}>
             <I18nextProvider i18n={i18nForTest}>
               <Calendar
                 eventData={memberTestEventData}
@@ -995,7 +995,7 @@ describe('Calendar', () => {
       // Render with organization member first to verify all events are shown
       const { rerender } = render(
         <Router>
-          <MockedProvider addTypename={false} link={link}>
+          <MockedProvider link={link}>
             <I18nextProvider i18n={i18nForTest}>
               <Calendar
                 eventData={nonMemberTestEventData}
@@ -1021,7 +1021,7 @@ describe('Calendar', () => {
       // Now test with non-member
       rerender(
         <Router>
-          <MockedProvider addTypename={false} link={link}>
+          <MockedProvider link={link}>
             <I18nextProvider i18n={i18nForTest}>
               <Calendar
                 eventData={nonMemberTestEventData}
@@ -1090,7 +1090,7 @@ describe('Calendar', () => {
 
       const { container, rerender } = render(
         <Router>
-          <MockedProvider addTypename={false} link={link}>
+          <MockedProvider link={link}>
             <I18nextProvider i18n={i18nForTest}>
               <Calendar
                 eventData={noRoleTestEventData}
@@ -1116,7 +1116,7 @@ describe('Calendar', () => {
       // Now test without userRole - should only see public events
       rerender(
         <Router>
-          <MockedProvider addTypename={false} link={link}>
+          <MockedProvider link={link}>
             <I18nextProvider i18n={i18nForTest}>
               <Calendar
                 eventData={noRoleTestEventData}
@@ -1181,7 +1181,7 @@ describe('Calendar', () => {
 
       const { container, rerender } = render(
         <Router>
-          <MockedProvider addTypename={false} link={link}>
+          <MockedProvider link={link}>
             <I18nextProvider i18n={i18nForTest}>
               <Calendar
                 eventData={noUserIdTestEventData}
@@ -1207,7 +1207,7 @@ describe('Calendar', () => {
       // Now test without userId - should only see public events
       rerender(
         <Router>
-          <MockedProvider addTypename={false} link={link}>
+          <MockedProvider link={link}>
             <I18nextProvider i18n={i18nForTest}>
               <Calendar
                 eventData={noUserIdTestEventData}
@@ -1272,7 +1272,7 @@ describe('Calendar', () => {
 
       const { container, rerender } = render(
         <Router>
-          <MockedProvider addTypename={false} link={link}>
+          <MockedProvider link={link}>
             <I18nextProvider i18n={i18nForTest}>
               <Calendar
                 eventData={emptyOrgTestEventData}
@@ -1298,7 +1298,7 @@ describe('Calendar', () => {
       // Now test without orgData - should only see public events
       rerender(
         <Router>
-          <MockedProvider addTypename={false} link={link}>
+          <MockedProvider link={link}>
             <I18nextProvider i18n={i18nForTest}>
               <Calendar
                 eventData={emptyOrgTestEventData}
@@ -1374,7 +1374,7 @@ describe('Calendar', () => {
 
       const { container, rerender } = render(
         <Router>
-          <MockedProvider addTypename={false} link={link}>
+          <MockedProvider link={link}>
             <I18nextProvider i18n={i18nForTest}>
               <Calendar
                 eventData={emptyMembersTestEventData}
@@ -1400,7 +1400,7 @@ describe('Calendar', () => {
       // Now test with empty members orgData - should only see public events
       rerender(
         <Router>
-          <MockedProvider addTypename={false} link={link}>
+          <MockedProvider link={link}>
             <I18nextProvider i18n={i18nForTest}>
               <Calendar
                 eventData={emptyMembersTestEventData}
@@ -1480,7 +1480,7 @@ describe('Calendar', () => {
 
       const { container } = render(
         <Router>
-          <MockedProvider addTypename={false} link={link}>
+          <MockedProvider link={link}>
             <I18nextProvider i18n={i18nForTest}>
               <Calendar
                 eventData={mixedEventData}
@@ -1571,7 +1571,7 @@ describe('Calendar', () => {
 
       render(
         <Router>
-          <MockedProvider addTypename={false} link={link}>
+          <MockedProvider link={link}>
             <I18nextProvider i18n={i18nForTest}>
               <Calendar
                 eventData={emptyEvents}
