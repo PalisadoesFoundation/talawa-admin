@@ -1,5 +1,25 @@
 /// <reference types="cypress" />
 export {};
+
+/** Type definitions for GraphQL signIn response */
+interface SignInUser {
+  id: string;
+  name: string;
+  emailAddress: string;
+  role: string;
+}
+
+interface SignInResponse {
+  data?: {
+    signIn?: {
+      user: SignInUser;
+      accessToken: string;
+      refreshToken: string;
+    };
+  };
+  errors?: Array<{ message: string }>;
+}
+
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
@@ -39,12 +59,10 @@ Cypress.Commands.add('loginByApi', (role: string) => {
       cy.get('[data-cy="loginBtn"]').click();
 
       // Wait for and check the signIn response
-      cy.wait('@signInRequest', { timeout: 30000 }).then((interception) => {
-        const body = interception.response?.body;
-        if (body?.errors?.length > 0) {
-          const errMsg = body.errors
-            .map((e: { message: string }) => e.message)
-            .join(', ');
+      cy.wait('@signInRequest', { timeout: 15000 }).then((interception) => {
+        const body = interception.response?.body as SignInResponse;
+        if (body?.errors && body.errors.length > 0) {
+          const errMsg = body.errors.map((e) => e.message).join(', ');
           throw new Error(`Login failed: ${errMsg}`);
         }
         if (!body?.data?.signIn) {
