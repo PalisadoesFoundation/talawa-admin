@@ -16,7 +16,7 @@ import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
 import i18n from 'utils/i18nForTest';
 import { MOCKS } from '../EventAttendanceMocks';
-import { vi, describe, afterEach, expect, it, beforeEach } from 'vitest';
+import { vi, describe, afterEach, expect, it } from 'vitest';
 import styles from 'style/app-fixed.module.css';
 import { ApolloError, useLazyQuery } from '@apollo/client';
 import * as ApolloClientModule from '@apollo/client';
@@ -30,6 +30,11 @@ vi.mock('react-chartjs-2', async () => ({
 
 vi.mock('utils/featureFlags', () => ({
   isInviteOnlyEnabled: vi.fn(() => false),
+}));
+
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
+  useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
 }));
 
 const renderEventAttendance = (): RenderResult => {
@@ -58,12 +63,14 @@ const renderEventAttendanceWithSpy = (): RenderResult => {
   );
 };
 
+let useLazyQuerySpy: ReturnType<typeof vi.spyOn> | null = null;
+
 function mockLazyQuery(returned: {
   data?: unknown;
   loading?: boolean;
   error?: ApolloError | null;
 }) {
-  vi.spyOn(ApolloClientModule, 'useLazyQuery').mockReturnValue([
+  const spy = vi.spyOn(ApolloClientModule, 'useLazyQuery').mockReturnValue([
     () => {},
     {
       data: returned.data,
@@ -75,18 +82,14 @@ function mockLazyQuery(returned: {
       refetch: vi.fn(),
     },
   ] as unknown as ReturnType<typeof useLazyQuery>);
+  useLazyQuerySpy = spy as ReturnType<typeof vi.spyOn>;
 }
 
 describe('Event Attendance Component', () => {
-  beforeEach(() => {
-    vi.mock('react-router', async () => ({
-      ...(await vi.importActual('react-router')),
-      useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
-    }));
-  });
-
   afterEach(() => {
-    vi.restoreAllMocks();
+    useLazyQuerySpy?.mockRestore();
+    useLazyQuerySpy = null;
+    vi.clearAllMocks();
     cleanup();
   });
 

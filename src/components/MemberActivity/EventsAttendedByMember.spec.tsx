@@ -7,11 +7,17 @@ import { EVENT_DETAILS_BASIC } from 'GraphQl/Queries/Queries';
 import { mocks, errorMocks } from './MemberActivityMocks';
 import { vi } from 'vitest';
 
+const mockIsInviteOnlyEnabled = vi.hoisted(() => vi.fn(() => false));
+
 vi.mock('utils/featureFlags', () => ({
-  isInviteOnlyEnabled: vi.fn(() => false),
+  isInviteOnlyEnabled: mockIsInviteOnlyEnabled,
 }));
 
 describe('EventsAttendedByMember', () => {
+  beforeEach(() => {
+    mockIsInviteOnlyEnabled.mockReturnValue(false);
+  });
+
   afterEach(() => {
     vi.clearAllMocks();
   });
@@ -95,5 +101,49 @@ describe('EventsAttendedByMember', () => {
 
     expect(screen.getByText('Fallback Event')).toBeInTheDocument();
     expect(screen.getByText('Fallback Location')).toBeInTheDocument();
+  });
+
+  test('renders event correctly when feature flag is enabled', async () => {
+    mockIsInviteOnlyEnabled.mockReturnValue(true);
+
+    // Note: EVENT_DETAILS_BASIC doesn't include isInviteOnly field,
+    // so this test verifies the component works when the flag is enabled
+    // but the query doesn't request invite-only data
+    const featureFlagEnabledMocks = [
+      {
+        request: {
+          query: EVENT_DETAILS_BASIC,
+          variables: { eventId: 'event123' },
+        },
+        result: {
+          data: {
+            event: {
+              id: 'event123',
+              name: 'Test Event with Flag Enabled',
+              startAt: '2030-01-01T09:00:00.000Z',
+              location: 'Test Location',
+              organization: {
+                id: 'org123',
+                name: 'Test Organization',
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <BrowserRouter>
+        <MockedProvider mocks={featureFlagEnabledMocks}>
+          <EventsAttendedByMember eventsId="event123" />
+        </MockedProvider>
+      </BrowserRouter>,
+    );
+
+    await screen.findByTestId('EventsAttendedCard');
+    expect(
+      screen.getByText('Test Event with Flag Enabled'),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Test Location')).toBeInTheDocument();
   });
 });

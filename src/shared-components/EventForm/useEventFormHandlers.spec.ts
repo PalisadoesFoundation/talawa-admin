@@ -9,7 +9,7 @@ describe('useEventFormHandlers', () => {
     vi.clearAllMocks();
   });
 
-  test('toggleAllDay updates form state correctly', () => {
+  test('toggleAllDay updates form state from false to true', () => {
     const setFormState = vi.fn();
     const setRecurrenceEnabled = vi.fn();
 
@@ -50,6 +50,55 @@ describe('useEventFormHandlers', () => {
     expect(newState.allDay).toBe(true);
     expect(newState.startTime).toBe('08:00:00');
     expect(newState.endTime).toBe('10:00:00');
+  });
+
+  test('toggleAllDay updates form state from true to false', () => {
+    const setFormState = vi.fn();
+    const setRecurrenceEnabled = vi.fn();
+
+    const { result } = renderHook(() =>
+      useEventFormHandlers({
+        setFormState,
+        disableRecurrence: false,
+        showRecurrenceToggle: true,
+        setRecurrenceEnabled,
+      }),
+    );
+
+    act(() => {
+      result.current.toggleAllDay();
+    });
+
+    expect(setFormState).toHaveBeenCalledWith(expect.any(Function));
+
+    // Test the updater function
+    const updater = setFormState.mock.calls[0][0];
+    const prevState: IEventFormValues = {
+      name: 'Test Event',
+      description: 'Test Description',
+      location: 'Test Location',
+      startDate: new Date('2024-01-01'),
+      endDate: new Date('2024-01-02'),
+      startTime: '09:00:00',
+      endTime: '17:00:00',
+      allDay: true,
+      isPublic: true,
+      isRegisterable: false,
+      isInviteOnly: false,
+      recurrenceRule: null,
+      createChat: true,
+    };
+
+    const newState = updater(prevState);
+    expect(newState.allDay).toBe(false);
+    expect(newState.startTime).toBe('09:00:00');
+    expect(newState.endTime).toBe('17:00:00');
+    expect(newState.name).toBe('Test Event');
+    expect(newState.description).toBe('Test Description');
+    expect(newState.location).toBe('Test Location');
+    expect(newState.isPublic).toBe(true);
+    expect(newState.isRegisterable).toBe(false);
+    expect(newState.createChat).toBe(true);
   });
 
   test('toggleRecurrence enables recurrence when disabled', () => {
