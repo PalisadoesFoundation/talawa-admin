@@ -851,11 +851,21 @@
 
   --input-bg: #f2f7ff;
 
+  --icon-color: #555555;
+
   --empty-state-bg: #ffffff;
   --empty-state-border-color: #e7e7e7;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
+
+.icon-fill {
+  fill: var(--icon-color);
+}
+
+.h-150px {
+  height: 150px !important;
+}
 
 /* Custom Height */
 
@@ -3946,6 +3956,10 @@ form label,
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.h-220px {
+  height: 220px !important;
 }
 
 /* -- NotFound.tsx -- */
