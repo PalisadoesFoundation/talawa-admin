@@ -44,7 +44,9 @@ const CardItemLoading = (): JSX.Element => {
         <div className={`${styles.iconWrapper} me-3`}>
           <div className={styles.themeOverlay} />
         </div>
-        <span className={`${styles.title} ${styles['h-1-5rem']} shimmer rounded`}>
+        <span
+          className={`${styles.title} ${styles['h-1-5rem']} shimmer rounded`}
+        >
           &nbsp;
         </span>
       </div>
