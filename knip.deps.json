@@ -1,7 +1,13 @@
 {
   "$schema": "https://unpkg.com/knip@5/schema.json",
   "entry": ["**/*.{ts,tsx,js}"],
-  "ignore": ["node_modules/**", "build/**", "coverage/**", "**/*.d.ts"],
-  "ignoreDependencies": ["nyc", "@commitlint/config-conventional"],
+  "ignore": [
+    "node_modules/**",
+    "build/**",
+    "coverage/**",
+    "**/*.d.ts",
+    "src/shared-components/BreadcrumbsComponent/index.ts"
+  ],
+  "ignoreDependencies": ["nyc"],
   "ignoreExportsUsedInFile": true
 }
