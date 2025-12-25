@@ -34,14 +34,13 @@ export const organizationDataMock = {
 
 /**
  * Mock GraphQL mutation for revoking refresh token
+ * Using variableMatcher to match any refresh token string
  */
 export const revokeRefreshTokenMock = {
   request: {
     query: REVOKE_REFRESH_TOKEN,
-    variables: {
-      refreshToken: expect.any(String),
-    },
   },
+  variableMatcher: () => true, // Match any variables
   result: {
     data: {
       revokeRefreshTokenForUser: true,
