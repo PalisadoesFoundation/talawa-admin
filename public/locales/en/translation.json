@@ -152,7 +152,8 @@
     "allCaughtUp": "You're all caught up!",
     "prev": "Prev",
     "next": "Next",
-    "markAsRead": "Mark as Read"
+    "markAsRead": "Mark as Read",
+    "markAsReadAriaLabel": "Mark notification '{{title}}' as read"
   },
   "orgList": {
     "title": "Organizations",
@@ -1199,6 +1200,7 @@
     "postDeletedSuccess": "Post deleted successfully.",
     "postPinnedSuccess": "Post pinned successfully.",
     "postUnpinnedSuccess": "Post unpinned successfully.",
+    "postUpdatedSuccess": "Post updated successfully.",
     "editPost": "Edit Post",
     "pinPost": "Pin Post",
     "unpinPost": "Unpin Post",
@@ -1209,7 +1211,8 @@
     "noMoreComments": "No more comments",
     "postedOn": "Posted on {{date}}",
     "emptyCommentError": "Please enter a comment before submitting.",
-    "unexpectedError": "An unexpected error occurred. Please try again."
+    "unexpectedError": "An unexpected error occurred. Please try again.",
+    "moreOptions": "More options"
   },
   "home": {
     "posts": "Posts",
@@ -1706,6 +1709,8 @@
     "noPluginsAvailable": "No plugins available",
     "installPluginsToSeeHere": "Install plugins to see them here",
     "checkBackLater": "Check back later for new plugins",
+    "tryDifferentSearch": "Try a different search term or browse all plugins",
+    "explorePluginStore": "Explore the plugin store to discover new plugins",
     "noResultsFoundFor": "No results found for"
   },
   "commentCard": {
