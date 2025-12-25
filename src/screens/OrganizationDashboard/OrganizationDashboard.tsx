@@ -330,7 +330,7 @@ function OrganizationDashboard(): JSX.Element {
                     <DashBoardCard
                       count={pendingMembershipRequests.length}
                       title={tCommon('requests')}
-                      icon={<UsersIcon fill="#555555" />}
+                      icon={<UsersIcon className="icon-fill" />}
                     />
                   </button>
                 </Col>
@@ -421,10 +421,7 @@ function OrganizationDashboard(): JSX.Element {
                     <CardItemLoading key={'requestsLoading_' + index} />
                   ))
                 ) : pendingMembershipRequests.length === 0 ? (
-                  <div
-                    className={styles.emptyContainer}
-                    style={{ height: '150px' }}
-                  >
+                  <div className={`${styles.emptyContainer} h-150px`}>
                     <h6>{t('noMembershipRequests')}</h6>
                   </div>
                 ) : (
@@ -463,10 +460,7 @@ function OrganizationDashboard(): JSX.Element {
                   {t('viewAll')}
                 </Button>
               </div>
-              <Card.Body
-                className={styles.containerBody}
-                style={{ padding: '0px' }}
-              >
+              <Card.Body className={`${styles.containerBody} p-0`}>
                 {/* {rankingsLoading ? (
                   [...Array(3)].map((_, index) => {
                     return <CardItemLoading key={`rankingLoading_${index}`} />;

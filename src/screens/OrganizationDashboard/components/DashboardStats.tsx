@@ -130,7 +130,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
           <DashBoardCard
             count={memberCount}
             title={tCommon('members')}
-            icon={<UsersIcon fill="#555555" />}
+            icon={<UsersIcon className="icon-fill" />}
           />
         </button>
       </Col>
@@ -145,7 +145,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
           <DashBoardCard
             count={adminCount}
             title={tCommon('admins')}
-            icon={<AdminsIcon fill="#555555" />}
+            icon={<AdminsIcon className="icon-fill" />}
           />
         </button>
       </Col>
@@ -160,7 +160,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
           <DashBoardCard
             count={postsCount ?? 0}
             title={tCommon('posts')}
-            icon={<PostsIcon fill="#555555" />}
+            icon={<PostsIcon className="icon-fill" />}
           />
         </button>
       </Col>
@@ -175,7 +175,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
           <DashBoardCard
             count={eventCount}
             title={tCommon('events')}
-            icon={<EventsIcon fill="#555555" />}
+            icon={<EventsIcon className="icon-fill" />}
           />
         </button>
       </Col>
@@ -190,7 +190,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
           <DashBoardCard
             count={blockedCount}
             title={tCommon('blockedUsers')}
-            icon={<BlockedUsersIcon fill="#555555" />}
+            icon={<BlockedUsersIcon className="icon-fill" />}
           />
         </button>
       </Col>
@@ -205,7 +205,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
           <DashBoardCard
             count={venueCount}
             title={tCommon('venues')}
-            icon={<VenuesIcon fill="#555555" />}
+            icon={<VenuesIcon className="icon-fill" />}
           />
         </button>
       </Col>
