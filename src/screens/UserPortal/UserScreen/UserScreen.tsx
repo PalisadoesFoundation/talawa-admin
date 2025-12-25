@@ -163,12 +163,15 @@ const UserScreen = (): React.JSX.Element => {
         )}
       </div>
       <div
+
         className={`${hideDrawer ? styles.expand : styles.contract} ${hideDrawer ? localStyles.contentContainer : ''}`}
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
           <div className={localStyles.titleContainer}>
             <h1>{t('title')}</h1>
+
+       
           </div>
           {/* <ProfileDropdown /> */}
         </div>
