@@ -156,6 +156,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await userEvent.click(screen.getByTestId('createPostBtn'));
     expect(toast.info).toHaveBeenCalledWith(
       'Processing your post. Please wait.',
+      expect.any(Object),
     );
   });
 
@@ -422,6 +423,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
 
@@ -447,6 +449,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -504,6 +507,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -521,6 +525,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -538,6 +543,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -598,6 +604,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -614,6 +621,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -630,6 +638,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -646,6 +655,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -662,6 +672,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -678,6 +689,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -694,6 +706,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -715,6 +728,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
 

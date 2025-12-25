@@ -13,6 +13,10 @@ import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { toast } from 'react-toastify';
 vi.mock('react-i18next', () => ({
+  initReactI18next: {
+    type: '3rdParty',
+    init: vi.fn(),
+  },
   useTranslation: () => ({
     t: (key: string) => {
       const translations: Record<string, string> = {
@@ -323,7 +327,10 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('orgJoined');
+      expect(toast.success).toHaveBeenCalledWith(
+        'orgJoined',
+        expect.any(Object),
+      );
     });
   });
 
@@ -358,7 +365,10 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('MembershipRequestSent');
+      expect(toast.success).toHaveBeenCalledWith(
+        'MembershipRequestSent',
+        expect.any(Object),
+      );
     });
   });
 
@@ -390,7 +400,10 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('AlreadyJoined');
+      expect(toast.error).toHaveBeenCalledWith(
+        'AlreadyJoined',
+        expect.any(Object),
+      );
     });
   });
 
@@ -422,7 +435,10 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('errorOccurred');
+      expect(toast.error).toHaveBeenCalledWith(
+        'errorOccurred',
+        expect.any(Object),
+      );
     });
   });
 
@@ -447,7 +463,10 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('errorOccurred');
+      expect(toast.error).toHaveBeenCalledWith(
+        'errorOccurred',
+        expect.any(Object),
+      );
     });
   });
 
@@ -499,7 +518,10 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('errorOccurred');
+      expect(toast.error).toHaveBeenCalledWith(
+        'errorOccurred',
+        expect.any(Object),
+      );
     });
   });
 
@@ -536,7 +558,10 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('UserIdNotFound');
+      expect(toast.error).toHaveBeenCalledWith(
+        'UserIdNotFound',
+        expect.any(Object),
+      );
     });
   });
 
@@ -573,7 +598,10 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('MembershipRequestWithdrawn');
+      expect(toast.success).toHaveBeenCalledWith(
+        'MembershipRequestWithdrawn',
+        expect.any(Object),
+      );
     });
   });
 
@@ -594,7 +622,10 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('MembershipRequestNotFound');
+      expect(toast.error).toHaveBeenCalledWith(
+        'MembershipRequestNotFound',
+        expect.any(Object),
+      );
     });
   });
 
@@ -628,7 +659,10 @@ describe('OrganizationCard', () => {
       expect(toast.error).toHaveBeenCalled();
     });
 
-    expect(toast.error).toHaveBeenCalledWith('errorOccurred');
+    expect(toast.error).toHaveBeenCalledWith(
+      'errorOccurred',
+      expect.any(Object),
+    );
   });
   it('logs error to console in development environment when withdrawing fails', async () => {
     const pendingData = {

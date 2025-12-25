@@ -478,6 +478,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeUpdated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
@@ -558,6 +559,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeUpdated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
@@ -590,6 +592,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeUpdated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
@@ -644,6 +647,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeUpdated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
@@ -679,7 +683,10 @@ describe('PledgeModal', () => {
 
       await waitFor(
         () => {
-          expect(toast.error).toHaveBeenCalledWith(translations.selectPledger);
+          expect(toast.error).toHaveBeenCalledWith(
+            translations.selectPledger,
+            expect.any(Object),
+          );
         },
         { timeout: 2000 },
       );
@@ -819,6 +826,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeCreated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
