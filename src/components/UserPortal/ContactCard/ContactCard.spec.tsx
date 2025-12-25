@@ -43,7 +43,6 @@ const baseProps: InterfaceContactCardProps = {
   isGroup: false,
 };
 
-
 const renderComponent = (props: InterfaceContactCardProps) =>
   render(
     <MockedProvider link={link}>
