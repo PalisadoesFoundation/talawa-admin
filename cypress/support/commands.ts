@@ -25,9 +25,9 @@ Cypress.Commands.add('loginByApi', (role: string) => {
         throw new Error(`User role "${role}" not found in users fixture`);
       }
 
-      // Intercept signIn query to capture response
+      // Intercept signIn query to capture response using operation name for robust matching
       cy.intercept('POST', '**/graphql', (req) => {
-        if (req.body?.query?.includes('signIn')) {
+        if (req.body?.operationName === 'SignIn') {
           req.alias = 'signInRequest';
         }
       });
