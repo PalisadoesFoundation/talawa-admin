@@ -96,7 +96,8 @@
     "cy:run": "cross-env CYPRESS_COVERAGE=true pnpm run start-server cypress:run",
     "check-mock-cleanup": "bash scripts/githooks/check-mock-cleanup.sh",
     "check:pom": "node scripts/githooks/check_pom.js",
-    "check-i18n": "node scripts/check-i18n.js"
+    "check-i18n": "node scripts/check-i18n.js",
+    "check-pagination": "tsx scripts/githooks/check-pagination-patterns.ts"
   },
   "eslintConfig": {
     "extends": [
@@ -231,7 +232,12 @@
     "**/*.{ts, tsx, json, scss, css}": [
       "prettier --write"
     ],
-    "**/*.{ts, tsx, json}": "eslint --fix"
+    "**/*.{ts, tsx, json}": [
+      "eslint --fix"
+    ],
+    "src/screens/**/*.{ts,tsx}": [
+      "tsx scripts/githooks/check-pagination-patterns.ts"
+    ]
   },
   "packageManager": "pnpm@10.4.1"
 }

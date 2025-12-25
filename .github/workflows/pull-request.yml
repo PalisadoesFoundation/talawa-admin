@@ -385,6 +385,37 @@ jobs:
             echo "No relevant files changed, skipping check."
           fi
 
+  Check-Pagination-Patterns:
+    name: Check for deprecated pagination patterns
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+          cache: 'pnpm'
+
+      - name: Install ripgrep
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ripgrep
+
+      - name: Install tsx (minimal deps)
+        run: pnpm add -g tsx
+
+      - name: Run pagination pattern check
+        run: tsx scripts/githooks/check-pagination-patterns.ts
+
   Pre-Test-Checks-Pass:
     name: All Pre-Testing Checks Pass
     runs-on: ubuntu-latest
@@ -394,6 +425,7 @@ jobs:
         Check-AutoDocs,
         Check-Disable-Statements,
         Check-Mock-Isolation,
+        Check-Pagination-Patterns,
         CSS-Policy-Check,
         Python-Compliance,
         Translation-Tag-Check,

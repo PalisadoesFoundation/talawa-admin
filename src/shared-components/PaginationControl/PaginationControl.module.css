@@ -1,0 +1,104 @@
+/*
+  Styles are intentionally minimal and inherit global theme styles
+  to remain consistent with existing Talawa Admin shared components.
+*/
+
+.paginationContainer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  flex-wrap: wrap;
+}
+
+.paginationContainer:focus {
+  outline: none;
+}
+
+.navButton {
+  background: transparent;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  min-width: 2.25rem;
+  height: 2.25rem;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navButton:hover:not(:disabled) {
+  background-color: #f9fafb;
+}
+
+.navButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.navButton:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.pageInfo {
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.pageSizeLabel {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  white-space: nowrap;
+}
+
+.pageSizeSelect {
+  background: transparent;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 0.25rem 0.4rem;
+  font-size: 0.875rem;
+}
+
+.pageSizeSelect:hover:not(:disabled) {
+  border-color: #9ca3af;
+}
+
+.pageSizeSelect:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.itemRange {
+  font-size: 0.875rem;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.emptyState {
+  color: #9ca3af;
+  font-size: 0.875rem;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+  .paginationContainer {
+    justify-content: center;
+  }
+
+  .navButton {
+    min-width: 2rem;
+    height: 2rem;
+  }
+
+  .pageInfo,
+  .pageSizeLabel,
+  .itemRange {
+    font-size: 0.8rem;
+  }
+}
