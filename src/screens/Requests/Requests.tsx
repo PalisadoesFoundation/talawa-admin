@@ -534,7 +534,7 @@ const Requests = (): JSX.Element => {
           message={tCommon('noResultsFoundFor', {
             query: searchByName,
           })}
-          description={'tryAdjustingFilters'}
+          description={tCommon('tryAdjustingFilters')}
           dataTestId="requests-search-empty"
         />
       ) : !isLoading && data && displayedRequests.length === 0 ? (
