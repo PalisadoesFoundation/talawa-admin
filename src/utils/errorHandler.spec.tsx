@@ -134,7 +134,7 @@ describe('Test if errorHandler is working properly', () => {
   it('should handle non-null but non-Error objects for the error parameter', () => {
     errorHandler(null, { message: 'Error message in object' });
     expect(toast.error).toHaveBeenCalledWith(
-      'errors:unknownError:"{\\\"message\\\":\\\"Error message in object\\\"}"',
+      'errors:unknownError:"{\\"message\\":\\"Error message in object\\"}"',
       expect.any(Object),
     );
 
