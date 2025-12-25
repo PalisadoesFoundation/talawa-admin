@@ -76,6 +76,7 @@ import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCar
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import style from './OrgList.module.css';
+import { Group, Search } from '@mui/icons-material';
 
 const { getItem } = useLocalStorage();
 
@@ -392,16 +393,16 @@ function orgList(): JSX.Element {
       searchByName.length === 0 &&
       (!userData || adminFor.length === 0) ? (
         <EmptyState
-          icon="groups"
-          message={'noOrgErrorTitle'}
-          description={'noOrgErrorDescription'}
+          icon={<Group />}
+          message={t('noOrgErrorTitle')}
+          description={t('noOrgErrorDescription')}
           dataTestId="orglist-no-orgs-empty"
         />
       ) : !isLoading &&
         sortedOrganizations?.length === 0 &&
         searchByName.length > 0 ? (
         <EmptyState
-          icon="search"
+          icon={<Search />}
           message={tCommon('noResultsFoundFor', {
             query: searchByName,
           })}

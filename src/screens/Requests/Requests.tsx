@@ -85,6 +85,7 @@ import {
   ROW_HEIGHT,
 } from '../../types/ReportingTable/utils';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
+import { Group, Search } from '@mui/icons-material';
 
 interface InterfaceRequestsListItem {
   membershipRequestId: string;
@@ -520,9 +521,9 @@ const Requests = (): JSX.Element => {
 
       {!isLoading && orgsData?.organizations?.length === 0 ? (
         <EmptyState
-          icon="groups"
-          message={'noOrgErrorTitle'}
-          description={'noOrgErrorDescription'}
+          icon={<Group />}
+          message={t('noOrgErrorTitle')}
+          description={t('noOrgErrorDescription')}
           dataTestId="requests-no-orgs-empty"
         />
       ) : !isLoading &&
@@ -530,7 +531,7 @@ const Requests = (): JSX.Element => {
         displayedRequests.length === 0 &&
         searchByName.length > 0 ? (
         <EmptyState
-          icon="search"
+          icon={<Search />}
           message={tCommon('noResultsFoundFor', {
             query: searchByName,
           })}
@@ -540,8 +541,8 @@ const Requests = (): JSX.Element => {
       ) : !isLoading && data && displayedRequests.length === 0 ? (
         <EmptyState
           icon="groups"
-          message={'noRequestsFound'}
-          description={'newMembersWillAppearHere'}
+          message={t('noRequestsFound')}
+          description={t('newMembersWillAppearHere')}
           dataTestId="requests-no-requests-empty"
         />
       ) : (
