@@ -1748,7 +1748,7 @@
   "common": {
     "signOut": "Se déconnecter",
     "signingOut": "Déconnexion en cours...",
-    "retryPrompt": "Échec de la révocation de session. Réessayer ?",
+    "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
     "breadcrumb": "fil d'Ariane",
     "action": "Action"
   }
