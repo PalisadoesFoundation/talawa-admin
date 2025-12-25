@@ -8,9 +8,8 @@ import OrganizationCard from './OrganizationCard';
 
 const mockMutationFn = vi.fn().mockResolvedValue({ data: {} });
 vi.mock('@apollo/client', async () => {
-  const actual = await vi.importActual<typeof import('@apollo/client')>(
-    '@apollo/client',
-  );
+  const actual =
+    await vi.importActual<typeof import('@apollo/client')>('@apollo/client');
   return {
     ...actual,
     useMutation: () => [mockMutationFn, { loading: false, error: undefined }],
@@ -91,19 +90,18 @@ describe('OrganizationCard [PR-2]', () => {
   });
 
   it('calls toast and mutation on join click', async () => {
-  render(<OrganizationCard {...baseProps} />);
+    render(<OrganizationCard {...baseProps} />);
 
-  fireEvent.click(screen.getByTestId('joinBtn'));
+    fireEvent.click(screen.getByTestId('joinBtn'));
 
-  await waitFor(() => {
-    expect(mockMutationFn).toHaveBeenCalledWith({
-      variables: { organizationId: 'org-1' },
+    await waitFor(() => {
+      expect(mockMutationFn).toHaveBeenCalledWith({
+        variables: { organizationId: 'org-1' },
+      });
     });
+
+    expect(toast.success).toHaveBeenCalled();
   });
-
-  expect(toast.success).toHaveBeenCalled();
-});
-
 
   it('calls toast on withdraw click', async () => {
     render(

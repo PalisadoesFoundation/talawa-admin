@@ -30,18 +30,11 @@ describe('PeopleCard [User Portal]', () => {
     expect(screen.getByTestId('people-role-1')).toHaveTextContent('Admin');
 
     // Avatar fallback should be used
-    expect(
-      screen.queryByTestId('people-1-image'),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByTestId('people-1-image')).not.toBeInTheDocument();
   });
 
   it('renders provided image with correct src when image is passed', () => {
-    render(
-      <PeopleCard
-        {...baseProps}
-        image="http://example.com/avatar.png"
-      />,
-    );
+    render(<PeopleCard {...baseProps} image="http://example.com/avatar.png" />);
 
     const img = screen.getByTestId('people-1-image') as HTMLImageElement;
     expect(img).toBeInTheDocument();

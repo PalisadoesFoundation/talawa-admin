@@ -15,7 +15,6 @@
   outline-offset: 2px;
 }
 
-
 .selected {
   background-color: var(--contact-selected-bg, rgba(196, 255, 211, 0.3));
   border-radius: 8px;
