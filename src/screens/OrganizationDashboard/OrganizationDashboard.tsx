@@ -330,7 +330,7 @@ function OrganizationDashboard(): JSX.Element {
                     <DashBoardCard
                       count={pendingMembershipRequests.length}
                       title={tCommon('requests')}
-                      icon={<UsersIcon className="icon-fill" />}
+                      icon={<UsersIcon className={styles['icon-fill']} />}
                     />
                   </button>
                 </Col>
