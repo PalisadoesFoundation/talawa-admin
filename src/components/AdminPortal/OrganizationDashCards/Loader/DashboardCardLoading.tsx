@@ -50,10 +50,10 @@ const DashBoardCardLoading = (): JSX.Element => {
           </Col>
           <Col sm={8} className={styles.textWrapper}>
             <span
-              className={`${styles.primaryText} h-1-75rem shimmer rounded w-75 mb-2`}
+              className={`${styles.primaryText} ${styles['h-1-75rem']} shimmer rounded w-75 mb-2`}
             />
             <span
-              className={`${styles.secondaryText} h-1-25rem shimmer rounded`}
+              className={`${styles.secondaryText} ${styles['h-1-25rem']} shimmer rounded`}
             />
           </Col>
         </Row>
