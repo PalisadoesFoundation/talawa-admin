@@ -31,6 +31,11 @@ import PledgeModal, {
   getMemberLabel,
 } from './PledgeModal';
 
+// Mock utils/i18n to use the test i18n instance for NotificationToast
+vi.mock('utils/i18n', () => ({
+  default: i18nForTest,
+}));
+
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -472,6 +477,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeUpdated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
@@ -552,6 +558,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeUpdated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
@@ -584,6 +591,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeUpdated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
@@ -638,6 +646,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeUpdated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
@@ -673,7 +682,10 @@ describe('PledgeModal', () => {
 
       await waitFor(
         () => {
-          expect(toast.error).toHaveBeenCalledWith(translations.selectPledger);
+          expect(toast.error).toHaveBeenCalledWith(
+            translations.selectPledger,
+            expect.any(Object),
+          );
         },
         { timeout: 2000 },
       );
@@ -813,6 +825,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeCreated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },

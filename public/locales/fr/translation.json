@@ -1185,7 +1185,8 @@
     "media": "Médias",
     "event": "Événement",
     "article": "Article",
-    "postNowVisibleInFeed": "Le post est maintenant visible dans le fil d'actualité"
+    "postNowVisibleInFeed": "Le post est maintenant visible dans le fil d'actualité",
+    "processingPost": "Traitement de votre publication. Veuillez patienter."
   },
   "eventAttendance": {
     "historical_statistics": "Statistiques historiques",
