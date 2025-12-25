@@ -1670,7 +1670,9 @@ form label,
 }
 
 /* Not Found */
-
+/**
+*Pages still using .notFound class are - screen/UserPortal/Campaigns, screen/UserPortal/Campaigns
+*/
 .notFound {
   flex: 1;
   display: flex;
