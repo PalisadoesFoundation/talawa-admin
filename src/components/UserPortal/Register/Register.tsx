@@ -32,7 +32,7 @@ import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 
 import styles from './Register.module.css';
 import { useMutation } from '@apollo/client';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 
 interface InterfaceRegisterProps {
@@ -80,11 +80,11 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
         registerVariables.lastName
       )
     ) {
-      toast.error(t('invalidDetailsMessage') as string); // Error if fields are missing
+      NotificationToast.error(t('invalidDetailsMessage')); // Error if fields are missing
     } else if (
       registerVariables.password !== registerVariables.confirmPassword
     ) {
-      toast.error(t('passwordNotMatch') as string); // Error if passwords do not match
+      NotificationToast.error(t('passwordNotMatch')); // Error if passwords do not match
     } else {
       try {
         await registerMutation({
@@ -96,7 +96,7 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
           },
         });
 
-        toast.success(t('afterRegister') as string); // Success message
+        NotificationToast.success(t('afterRegister')); // Success message
 
         // Reset form fields
         setRegisterVariables({

@@ -54,7 +54,11 @@
     "OR": "或",
     "admin": "管理员",
     "user": "用户",
-    "loading": "加载中"
+    "loading": "加载中",
+    "communityLogo": "社区标志",
+    "organizations": "组织",
+    "accountLocked": "由于登录失败次数过多，您的账户已被暂时锁定。请稍后重试。",
+    "accountLockedWithTimer": "您的账户已被暂时锁定。请在 {{minutes}} 分钟后重试。"
   },
   "signOut": {
     "retryPrompt": "撤銷工作階段失敗。要重試嗎？",
@@ -1185,7 +1189,8 @@
     "media": "媒体",
     "event": "事件",
     "article": "文章",
-    "postNowVisibleInFeed": "帖子现在在动态中可见"
+    "postNowVisibleInFeed": "帖子现在在动态中可见",
+    "processingPost": "正在处理您的帖子。请稍候。"
   },
   "eventAttendance": {
     "historical_statistics": "历史统计",

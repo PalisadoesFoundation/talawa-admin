@@ -54,7 +54,11 @@
     "OR": "OU",
     "admin": "Administrateur",
     "user": "Utilisateur",
-    "loading": "Chargement"
+    "loading": "Chargement",
+    "communityLogo": "Logo de la Communauté",
+    "organizations": "Organisations",
+    "accountLocked": "Votre compte a été temporairement verrouillé en raison de trop nombreuses tentatives de connexion échouées. Veuillez réessayer plus tard.",
+    "accountLockedWithTimer": "Votre compte a été temporairement verrouillé. Veuillez réessayer dans {{minutes}} minute(s)."
   },
   "signOut": {
     "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
@@ -1185,7 +1189,8 @@
     "media": "Médias",
     "event": "Événement",
     "article": "Article",
-    "postNowVisibleInFeed": "Le post est maintenant visible dans le fil d'actualité"
+    "postNowVisibleInFeed": "Le post est maintenant visible dans le fil d'actualité",
+    "processingPost": "Traitement de votre publication. Veuillez patienter."
   },
   "eventAttendance": {
     "historical_statistics": "Statistiques historiques",
