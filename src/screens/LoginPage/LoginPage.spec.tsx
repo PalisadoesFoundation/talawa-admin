@@ -1453,8 +1453,8 @@ const renderLoginPage = (
       {...(isLink
         ? { link: mocksOrLink }
         : {
-          mocks: mocksOrLink as ReadonlyArray<MockedResponse>,
-        })}
+            mocks: mocksOrLink as ReadonlyArray<MockedResponse>,
+          })}
     >
       <BrowserRouter>
         <Provider store={store}>
