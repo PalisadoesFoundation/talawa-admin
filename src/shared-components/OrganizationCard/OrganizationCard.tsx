@@ -122,24 +122,24 @@ function OrganizationCard({
     try {
       if (userRegistrationRequired) {
         await sendMembershipRequest({ variables: { organizationId: id } });
-        NotificationToast.success(t('users.MembershipRequestSent') as string);
+        NotificationToast.success(t('users.MembershipRequestSent'));
       } else {
         await joinPublicOrganization({
           variables: { input: { organizationId: id } },
         });
-        NotificationToast.success(t('users.orgJoined') as string);
+        NotificationToast.success(t('users.orgJoined'));
       }
     } catch (error: unknown) {
       if (error instanceof ApolloError) {
         const apolloError = error;
         const errorCode = apolloError.graphQLErrors?.[0]?.extensions?.code;
         if (errorCode === 'ALREADY_MEMBER') {
-          NotificationToast.error(t('users.AlreadyJoined') as string);
+          NotificationToast.error(t('users.AlreadyJoined'));
         } else {
-          NotificationToast.error(t('users.errorOccurred') as string);
+          NotificationToast.error(t('users.errorOccurred'));
         }
       } else {
-        NotificationToast.error(t('users.errorOccurred') as string);
+        NotificationToast.error(t('users.errorOccurred'));
       }
     }
   }
@@ -150,7 +150,7 @@ function OrganizationCard({
   async function withdrawMembershipRequest(): Promise<void> {
     const currentUserId = userId;
     if (!currentUserId) {
-      NotificationToast.error(t('users.UserIdNotFound') as string);
+      NotificationToast.error(t('users.UserIdNotFound'));
       return;
     }
 
@@ -160,7 +160,7 @@ function OrganizationCard({
 
     try {
       if (!membershipRequest) {
-        NotificationToast.error(t('users.MembershipRequestNotFound') as string);
+        NotificationToast.error(t('users.MembershipRequestNotFound'));
         return;
       }
 
@@ -168,14 +168,12 @@ function OrganizationCard({
         variables: { membershipRequestId: membershipRequest.id },
       });
 
-      NotificationToast.success(
-        t('users.MembershipRequestWithdrawn') as string,
-      );
+      NotificationToast.success(t('users.MembershipRequestWithdrawn'));
     } catch (error: unknown) {
       if (process.env.NODE_ENV === 'development') {
         console.error('Failed to withdraw membership request:', error);
       }
-      NotificationToast.error(t('users.errorOccurred') as string);
+      NotificationToast.error(t('users.errorOccurred'));
     }
   }
 

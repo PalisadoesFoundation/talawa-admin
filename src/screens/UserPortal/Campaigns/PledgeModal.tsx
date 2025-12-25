@@ -251,7 +251,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
       pledgeUsers,
       t,
       createPledge,
-      t,
       refetchPledge,
       hide,
     ],

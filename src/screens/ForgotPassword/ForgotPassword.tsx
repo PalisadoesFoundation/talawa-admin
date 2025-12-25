@@ -137,7 +137,7 @@ const ForgotPassword = (): JSX.Element => {
     const { userOtp, newPassword, confirmNewPassword } = forgotPassFormData;
 
     if (newPassword !== confirmNewPassword) {
-      NotificationToast.error(t('passwordMismatches') as string);
+      NotificationToast.error(t('passwordMismatches'));
       return;
     }
 
@@ -153,7 +153,7 @@ const ForgotPassword = (): JSX.Element => {
       });
 
       if (data) {
-        NotificationToast.success(t('passwordChanges') as string);
+        NotificationToast.success(t('passwordChanges'));
         setShowEnterEmail(true);
         setForgotPassFormData({
           userOtp: '',

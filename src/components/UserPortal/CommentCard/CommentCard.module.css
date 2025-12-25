@@ -43,10 +43,7 @@
   width: 20px;
 }
 
-.editModalContent {
-  width: 90%;
-}
-
 .iconSmall {
   font-size: 1.25rem;
+  margin-right: 0.5rem;
 }

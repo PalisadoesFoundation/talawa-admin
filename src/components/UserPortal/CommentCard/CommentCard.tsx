@@ -77,6 +77,7 @@ const EditModalContent = styled(Box)({
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
+  width: '90%',
   maxWidth: 500,
   backgroundColor: 'white',
   borderRadius: 8,
@@ -299,10 +300,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
                 data-testid="update-comment-button"
                 onClick={toggleEditComment}
               >
-                <EditOutlined
-                  sx={{ mr: 1 }}
-                  className={commentCardStyles.iconSmall}
-                />
+                <EditOutlined className={commentCardStyles.iconSmall} />
                 {t('editComment')}
               </MenuItem>
               <MenuItem
@@ -310,10 +308,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
                 onClick={handleDeleteComment}
                 disabled={deletingComment}
               >
-                <DeleteOutline
-                  sx={{ mr: 1 }}
-                  className={commentCardStyles.iconSmall}
-                />
+                <DeleteOutline className={commentCardStyles.iconSmall} />
                 {deletingComment ? t('deleting') : t('deleteComment')}
               </MenuItem>
             </Menu>
@@ -327,7 +322,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
         onClose={toggleEditComment}
         data-testid="edit-comment-modal"
       >
-        <EditModalContent className={commentCardStyles.editModalContent}>
+        <EditModalContent>
           <Typography variant="h6">{t('editComment')}</Typography>
           <FormControl fullWidth sx={{ mb: 2 }}>
             <Input
