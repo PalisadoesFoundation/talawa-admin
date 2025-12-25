@@ -857,6 +857,20 @@
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
 
+/* Custom Height */
+
+.h-1-25rem {
+  height: 1.25rem !important;
+}
+
+.h-1-5rem {
+  height: 1.5rem !important;
+}
+
+.h-1-75rem {
+  height: 1.75rem !important;
+}
+
 /* Add Button */
 
 .addButton {
@@ -4195,6 +4209,11 @@ form label,
 .cardItem .creator {
   font-size: 1rem;
   color: var(--cardItem-creator-color);
+}
+
+.creator {
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .iconWrapper {

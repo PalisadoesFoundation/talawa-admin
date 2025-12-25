@@ -63,7 +63,7 @@ import EventsIcon from 'assets/svgs/events.svg?react';
 import PostsIcon from 'assets/svgs/post.svg?react';
 import UsersIcon from 'assets/svgs/users.svg?react';
 import VenuesIcon from 'assets/svgs/venues.svg?react';
-import DashBoardCard from 'components/OrganizationDashCards/DashboardCard';
+import DashBoardCard from 'components/AdminPortal/OrganizationDashCards/DashboardCard';
 import DashboardCardLoading from 'components/AdminPortal/OrganizationDashCards/Loader/DashboardCardLoading';
 
 interface InterfaceDashboardStatsProps {
@@ -101,7 +101,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
 
   if (isLoading) {
     return (
-      <Row style={{ display: 'flex' }}>
+      <Row className="d-flex">
         {[...Array(6)].map((_, index) => (
           <Col
             xs={6}
@@ -118,7 +118,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
   }
 
   return (
-    <Row style={{ display: 'flex' }}>
+    <Row className="d-flex">
       <Col xs={6} sm={4} className="mb-4">
         <button
           type="button"
