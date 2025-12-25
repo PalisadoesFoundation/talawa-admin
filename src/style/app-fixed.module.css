@@ -32,7 +32,8 @@
  *   `.subtleBlueGrey` (for blue Text)
  *   `.activeTab` (for tabs which are active)
  *   `.inActiveTab` (for tabs which are not selected)
- *
+ *   `.h-150px`, `.h-220px`, `.h-1-25rem`, `.h-1-5rem`, `.h-1-75rem` (height utilities)
+ *  `.icon-fill` (applies icon color)
  */
 :root {
   --primary-theme-color: #1778f2;
@@ -863,10 +864,6 @@
   fill: var(--icon-color);
 }
 
-.h-150px {
-  height: 150px !important;
-}
-
 /* Custom Height */
 
 .h-1-25rem {
@@ -879,6 +876,14 @@
 
 .h-1-75rem {
   height: 1.75rem !important;
+}
+
+.h-150px {
+  height: 150px !important;
+}
+
+.h-220px {
+  height: 220px !important;
 }
 
 /* Add Button */
@@ -3958,10 +3963,6 @@ form label,
   align-items: center;
 }
 
-.h-220px {
-  height: 220px !important;
-}
-
 /* -- NotFound.tsx -- */
 
 .section {
@@ -4225,11 +4226,6 @@ form label,
   color: var(--cardItem-creator-color);
 }
 
-.creator {
-  font-size: 12px;
-  font-weight: bold;
-}
-
 .iconWrapper {
   display: flex;
   align-items: center;
@@ -4281,6 +4277,8 @@ form label,
   flex-direction: row;
   gap: 0.5rem;
   align-items: center;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .creator p {
