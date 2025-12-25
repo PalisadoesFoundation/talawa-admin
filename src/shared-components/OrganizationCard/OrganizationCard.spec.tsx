@@ -647,7 +647,7 @@ describe('OrganizationCard', () => {
 
     expect(NotificationToast.error).toHaveBeenCalledWith('errorOccurred');
   });
-  it('logs error to console in development environment when withdrawing fails', async () => {
+  it('handles error gracefully when withdrawing fails in development environment', async () => {
     const pendingData = {
       ...mockData,
       membershipRequestStatus: 'pending',
@@ -665,7 +665,6 @@ describe('OrganizationCard', () => {
     ];
 
     const originalEnv = process.env;
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     try {
       process.env = { ...originalEnv, NODE_ENV: 'development' };
@@ -680,13 +679,11 @@ describe('OrganizationCard', () => {
       fireEvent.click(button);
 
       await waitFor(() => {
-        expect(consoleSpy).toHaveBeenCalledWith(
-          'Failed to withdraw membership request:',
-          expect.any(Error),
-        );
+        expect(NotificationToast.error).toHaveBeenCalled();
       });
+
+      expect(NotificationToast.error).toHaveBeenCalledWith('errorOccurred');
     } finally {
-      consoleSpy.mockRestore();
       process.env = originalEnv;
     }
   });

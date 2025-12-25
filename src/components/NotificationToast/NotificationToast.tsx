@@ -69,12 +69,16 @@ function showToast(
  *
  * @example
  * NotificationToast.error({ key: 'unknownError', namespace: 'errors' });
+ *
+ * @example
+ * NotificationToast.dismiss(); // Dismiss all active toasts
  */
 export const NotificationToast: InterfaceNotificationToastHelpers = {
   success: (message, options) => showToast('success', message, options),
   error: (message, options) => showToast('error', message, options),
   warning: (message, options) => showToast('warning', message, options),
   info: (message, options) => showToast('info', message, options),
+  dismiss: () => toast.dismiss(),
 };
 
 /**

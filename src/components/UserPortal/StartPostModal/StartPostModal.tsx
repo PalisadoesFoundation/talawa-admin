@@ -30,7 +30,6 @@
 import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, Form, Image, Modal } from 'react-bootstrap';
-import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -182,8 +181,7 @@ const startPostModal = ({
       });
 
       if (data) {
-        // Note: Using toast.dismiss() directly as NotificationToast doesn't expose dismiss functionality
-        toast.dismiss();
+        NotificationToast.dismiss();
         NotificationToast.success(t('postNowVisibleInFeed'));
         fetchPosts();
         handleHide();
