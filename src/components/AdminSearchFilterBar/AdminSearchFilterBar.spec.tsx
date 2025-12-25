@@ -79,7 +79,6 @@ vi.mock('lodash', async () => {
 
 describe('AdminSearchFilterBar', () => {
   beforeEach(() => {
-    vi.clearAllMocks();
     vi.useFakeTimers();
   });
 

@@ -72,12 +72,10 @@ i18n.use(initReactI18next).init({
       translation: {
         userChat: {
           // Keys (for checking title/toast keys)
-          Error: 'userChat.Error',
-          groupInfo: 'userChat.groupInfo',
-          failedToUpdateChatName: 'userChat.failedToUpdateChatName',
-          failedToUpdateChatImage: 'userChat.failedToUpdateChatImage',
-
-          // Values (for checking visible text)
+          Error: 'Error',
+          groupInfo: 'Group Info',
+          failedToUpdateChatName: 'Failed to update chat name',
+          failedToUpdateChatImage: 'Failed to update chat image',
           userNotFound: 'User not found',
           members: 'members',
           addMembers: 'Add Members',
@@ -181,7 +179,7 @@ describe('GroupChatDetails', () => {
         </MockedProvider>
       </I18nextProvider>,
     );
-    expect(screen.getByText('userChat.Error')).toBeInTheDocument();
+    expect(screen.getByText('Error')).toBeInTheDocument();
     expect(screen.getByText('User not found')).toBeInTheDocument();
     expect(toastSpy).toHaveBeenCalledTimes(1);
     expect(toastSpy).toHaveBeenCalledWith('User not found');
@@ -212,7 +210,7 @@ describe('GroupChatDetails', () => {
     );
 
     expect(toastSpy).toHaveBeenCalledTimes(0);
-    expect(screen.getByText('userChat.groupInfo')).toBeInTheDocument();
+    expect(screen.getByText('Group Info')).toBeInTheDocument();
     const closeButton = screen.getByRole('button', { name: /close/i });
     expect(closeButton).toBeInTheDocument();
 
@@ -948,9 +946,7 @@ describe('GroupChatDetails', () => {
     });
 
     await waitFor(() => {
-      expect(toastError).toHaveBeenCalledWith(
-        'userChat.failedToUpdateChatName',
-      );
+      expect(toastError).toHaveBeenCalledWith('Failed to update chat name');
       expect(consoleError).toHaveBeenCalled();
     });
 
@@ -998,9 +994,7 @@ describe('GroupChatDetails', () => {
     });
 
     await waitFor(() => {
-      expect(toastError).toHaveBeenCalledWith(
-        'userChat.failedToUpdateChatImage',
-      );
+      expect(toastError).toHaveBeenCalledWith('Failed to update chat image');
       expect(consoleError).toHaveBeenCalled();
     });
 
