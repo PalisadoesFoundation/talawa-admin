@@ -56,7 +56,9 @@
     "selectOrg": "Seleccione una organización",
     "afterRegister": "Registro exitoso. Por favor, espere a que el administrador apruebe su solicitud.",
     "communityLogo": "Logo de la Comunidad",
-    "organizations": "Organizaciones"
+    "organizations": "Organizaciones",
+    "accountLocked": "Su cuenta ha sido bloqueada temporalmente debido a demasiados intentos fallidos de inicio de sesión. Por favor, inténtelo de nuevo más tarde.",
+    "accountLockedWithTimer": "Su cuenta ha sido bloqueada temporalmente. Por favor, inténtelo de nuevo en {{minutes}} minuto(s)."
   },
   "signOut": {
     "retryPrompt": "Error al Cerrar sesión. ¿Reintentar?",

@@ -24,16 +24,40 @@ Cypress.Commands.add('loginByApi', (role: string) => {
       if (!user) {
         throw new Error(`User role "${role}" not found in users fixture`);
       }
+
+      // Intercept signIn query to capture response
+      cy.intercept('POST', '**/graphql', (req) => {
+        if (req.body?.query?.includes('signIn')) {
+          req.alias = 'signInRequest';
+        }
+      });
+
       const loginPath = role === 'user' ? '/' : '/admin';
       cy.visit(loginPath);
       cy.get('[data-cy="loginEmail"]').type(user.email);
       cy.get('[data-cy="loginPassword"]').type(user.password);
       cy.get('[data-cy="loginBtn"]').click();
 
+      // Wait for and check the signIn response
+      cy.wait('@signInRequest', { timeout: 30000 }).then((interception) => {
+        const body = interception.response?.body;
+        if (body?.errors?.length > 0) {
+          const errMsg = body.errors
+            .map((e: { message: string }) => e.message)
+            .join(', ');
+          throw new Error(`Login failed: ${errMsg}`);
+        }
+        if (!body?.data?.signIn) {
+          throw new Error(
+            `Login failed: No signIn data in response. Response: ${JSON.stringify(body)}`,
+          );
+        }
+      });
+
       if (role === 'user') {
-        cy.url().should('include', '/user/organizations');
+        cy.url({ timeout: 60000 }).should('include', '/user/organizations');
       } else {
-        cy.url().should('include', '/orglist');
+        cy.url({ timeout: 60000 }).should('include', '/orglist');
       }
     });
   });

@@ -56,7 +56,9 @@
     "user": "Utilisateur",
     "loading": "Chargement",
     "communityLogo": "Logo de la Communauté",
-    "organizations": "Organisations"
+    "organizations": "Organisations",
+    "accountLocked": "Votre compte a été temporairement verrouillé en raison de trop nombreuses tentatives de connexion échouées. Veuillez réessayer plus tard.",
+    "accountLockedWithTimer": "Votre compte a été temporairement verrouillé. Veuillez réessayer dans {{minutes}} minute(s)."
   },
   "signOut": {
     "retryPrompt": "Échec de la révocation de la session. Réessayer ?",

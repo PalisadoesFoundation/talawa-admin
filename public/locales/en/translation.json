@@ -56,7 +56,9 @@
     "user": "user",
     "loading": "loading",
     "communityLogo": "Community Logo",
-    "organizations": "Organizations"
+    "organizations": "Organizations",
+    "accountLocked": "Your account has been temporarily locked due to too many failed login attempts. Please try again later.",
+    "accountLockedWithTimer": "Your account has been temporarily locked. Please try again in {{minutes}} minute(s)."
   },
   "signOut": {
     "retryPrompt": "Failed to revoke session. Retry?",
