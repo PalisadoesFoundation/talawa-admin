@@ -10,6 +10,10 @@ describe('Testing the DashBoardCardLoading component', () => {
     expect(screen.getByTestId('Card')).toBeInTheDocument();
   });
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('should render every children elements of the component', () => {
     const Card = screen.queryByTestId('Card');
     const CardBody = Card?.querySelector(`.${styles.cardBody}`);
