@@ -1498,7 +1498,11 @@
     "demoteToRegular": "Demote to Regular",
     "promoteToAdmin": "Promote to Admin",
     "user": "User",
-    "chatAction": "Chat action"
+    "chatAction": "Chat action",
+    "starredMessages": "Starred Messages",
+    "all": "All",
+    "unread": "Unread",
+    "groups": "Groups"
   },
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",

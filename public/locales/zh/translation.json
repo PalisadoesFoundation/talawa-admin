@@ -1497,7 +1497,11 @@
     "demoteToRegular": "降级为普通用户",
     "promoteToAdmin": "提升为管理员",
     "user": "用户",
-    "chatAction": "聊天操作"
+    "chatAction": "聊天操作",
+    "starredMessages": "星标消息",
+    "all": "全部",
+    "unread": "未读",
+    "groups": "小组"
   },
   "userChatRoom": {
     "selectContact": "选择联系人开始对话",

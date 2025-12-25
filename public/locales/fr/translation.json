@@ -1497,7 +1497,11 @@
     "demoteToRegular": "Rétrograder au rang régulier",
     "promoteToAdmin": "Promouvoir administrateur",
     "user": "Utilisateur",
-    "chatAction": "Action de chat"
+    "chatAction": "Action de chat",
+    "starredMessages": "Messages favoris",
+    "all": "Tous",
+    "unread": "Non lu",
+    "groups": "Groupes"
   },
   "userChatRoom": {
     "selectContact": "Sélectionnez un contact pour démarrer la conversation",

@@ -1497,7 +1497,11 @@
     "demoteToRegular": "नियमित में पदावनत करें",
     "promoteToAdmin": "व्यवस्थापक में पदोन्नत करें",
     "user": "उपयोगकर्ता",
-    "chatAction": "चैट कार्रवाई"
+    "chatAction": "चैट कार्रवाई",
+    "starredMessages": "तारांकित संदेश",
+    "all": "सभी",
+    "unread": "अपठित",
+    "groups": "समूह"
   },
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
