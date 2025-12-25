@@ -421,7 +421,9 @@ function OrganizationDashboard(): JSX.Element {
                     <CardItemLoading key={'requestsLoading_' + index} />
                   ))
                 ) : pendingMembershipRequests.length === 0 ? (
-                  <div className={`${styles.emptyContainer} ${styles['h-150px']}`}>
+                  <div
+                    className={`${styles.emptyContainer} ${styles['h-150px']}`}
+                  >
                     <h6>{t('noMembershipRequests')}</h6>
                   </div>
                 ) : (
