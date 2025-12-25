@@ -1,18 +1,19 @@
 import DashBoardCardLoading from './DashboardCardLoading';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { vi, afterEach } from 'vitest';
+import { vi } from 'vitest';
 import styles from 'style/app-fixed.module.css';
 describe('Testing the DashBoardCardLoading component', () => {
   beforeEach(() => {
     render(<DashBoardCardLoading />);
   });
-  test('should render the component', () => {
-    expect(screen.getByTestId('Card')).toBeInTheDocument();
-  });
 
   afterEach(() => {
     vi.clearAllMocks();
+  });
+
+  test('should render the component', () => {
+    expect(screen.getByTestId('Card')).toBeInTheDocument();
   });
 
   test('should render every children elements of the component', () => {
