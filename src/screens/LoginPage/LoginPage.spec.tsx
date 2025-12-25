@@ -2157,6 +2157,12 @@ describe('RefreshToken storage verification', () => {
       'token',
       'newAuthToken123',
     );
+
+    // Verify that refreshToken is stored (critical for session renewal)
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+      'refreshToken',
+      'newRefreshToken456',
+    );
   });
 
   // Note: Registration uses the same code path as login for storing refreshToken

@@ -248,14 +248,21 @@ export default function createDirectChatModal({
         contentClassName={styles.modalContent}
       >
         <Modal.Header closeButton data-testid="createDirectChat">
-          <Modal.Title>{'Chat'}</Modal.Title>
+          <Modal.Title>{t('chat', { defaultValue: 'Chat' })}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <LoadingState isLoading={allUsersLoading} variant="inline" size="lg">
+          <LoadingState
+            isLoading={allUsersLoading}
+            variant="inline"
+            size="lg"
+            data-testid="createDirectChatLoading"
+          >
             <>
               <div className={styles.inputContainer}>
                 <SearchBar
-                  placeholder="searchFullName"
+                  placeholder={t('searchFullName', {
+                    defaultValue: 'Search full name',
+                  })}
                   value={userName}
                   onChange={(value) => setUserName(value)}
                   onSearch={(value) => handleUserModalSearchChange(value)}
@@ -272,12 +279,20 @@ export default function createDirectChatModal({
                 className={styles.tableContainer}
                 component={Paper}
               >
-                <Table aria-label="customized table">
+                <Table
+                  aria-label={t('organizationMembersTable', {
+                    defaultValue: 'Organization Members Table',
+                  })}
+                >
                   <TableHead>
                     <TableRow>
-                      <TableCell>#</TableCell>
-                      <TableCell align="center">{t('user')}</TableCell>
-                      <TableCell align="center">{t('chat')}</TableCell>
+                      <TableCell>{t('hash', { defaultValue: '#' })}</TableCell>
+                      <TableCell align="center">
+                        {t('user', { defaultValue: 'User' })}
+                      </TableCell>
+                      <TableCell align="center">
+                        {t('chat', { defaultValue: 'Chat' })}
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -326,7 +341,7 @@ export default function createDirectChatModal({
                                   }}
                                   data-testid="addBtn"
                                 >
-                                  {t('add')}
+                                  {t('add', { defaultValue: 'Add' })}
                                 </Button>
                               </TableCell>
                             </TableRow>

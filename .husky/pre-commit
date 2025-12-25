@@ -22,7 +22,7 @@ STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM \
   | grep -v '\.test\.' \
   || true)
 if [ -n "$STAGED_FILES" ]; then
-  python3 .github/workflows/scripts/css_check.py --files $STAGED_FILES
+  python .github/workflows/scripts/css_check.py --files $STAGED_FILES
 fi
 
 git add .
