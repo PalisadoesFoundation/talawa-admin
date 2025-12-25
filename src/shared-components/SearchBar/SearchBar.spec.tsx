@@ -261,6 +261,23 @@ describe('SearchBar', () => {
     expect(button).toHaveAttribute('aria-label', 'Search');
   });
 
+  it('uses default aria-label from i18n when clearButtonAriaLabel is undefined', async () => {
+    const user = userEvent.setup();
+    render(
+      <SearchBar
+        onSearch={vi.fn()}
+        inputTestId="search-input"
+        clearButtonTestId="clear-search"
+      />,
+    );
+
+    const input = screen.getByTestId('search-input');
+    await user.type(input, 'test');
+
+    const clearButton = screen.getByTestId('clear-search');
+    expect(clearButton).toHaveAttribute('aria-label', 'clear');
+  });
+
   it('handles missing onSearch prop gracefully', async () => {
     const user = userEvent.setup();
     render(

@@ -500,7 +500,7 @@ describe('GroupChatDetails', () => {
     expect(searchInput).toHaveValue('Smith');
 
     // Find clear button (rendered by SearchBar when value is not empty)
-    // SearchBar renders a button with aria-label="Clear search"
+    // SearchBar renders a button with aria-label='Clear'
     const clearBtn = await screen.findByLabelText('Clear');
     await act(async () => {
       fireEvent.click(clearBtn);

@@ -247,5 +247,32 @@ describe('SortingButton', () => {
       const button = screen.getByRole('button', { expanded: false });
       expect(button).toHaveClass('btn-success');
     });
+
+    it('should handle invalid numeric selectedOption and display it without preselecting an option', () => {
+      render(
+        <SortingButton
+          {...defaultProps}
+          selectedOption={999}
+          buttonLabel="Sort By"
+        />,
+      );
+
+      const button = screen.getByRole('button', { expanded: false });
+
+      // Button should render with the label
+      expect(screen.getByText('Sort By')).toBeInTheDocument();
+
+      // Button should show success variant (not empty)
+      expect(button).toHaveClass('btn-success');
+
+      // Open dropdown and verify no option matches 999
+      fireEvent.click(button);
+
+      // All options should be visible but none should be "active" or preselected
+      expect(screen.getByText('Latest')).toBeInTheDocument();
+      expect(screen.getByText('Oldest')).toBeInTheDocument();
+      expect(screen.getByText('Most Popular')).toBeInTheDocument();
+      expect(screen.getByText('Least Popular')).toBeInTheDocument();
+    });
   });
 });

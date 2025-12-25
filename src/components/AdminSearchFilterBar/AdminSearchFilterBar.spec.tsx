@@ -291,6 +291,16 @@ describe('AdminSearchFilterBar', () => {
       );
       expect(dropdownsContainer).toBeInTheDocument();
     });
+
+    it('should have correct aria-label when hasDropdowns is true', () => {
+      const { container } = render(<AdminSearchFilterBar {...advancedProps} />);
+
+      const dropdownsContainer = container.querySelector('div[role="toolbar"]');
+      expect(dropdownsContainer).toHaveAttribute(
+        'aria-label',
+        'filterAndSortOptions',
+      );
+    });
   });
 
   describe('Advanced Variant - Additional Buttons', () => {
