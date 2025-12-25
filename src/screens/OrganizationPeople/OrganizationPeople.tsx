@@ -341,7 +341,7 @@ function OrganizationPeople(): JSX.Element {
     tCommon('profile'),
     tCommon('name'),
     tCommon('email'),
-    tCommon('joined on'),
+    tCommon('joinedOn'),
     tCommon('action'),
   ];
 
@@ -440,7 +440,7 @@ function OrganizationPeople(): JSX.Element {
     },
     {
       field: 'joined',
-      headerName: tCommon('joined on'),
+      headerName: tCommon('joinedOn'),
       flex: 2,
       minWidth: 100,
       align: 'center',

@@ -770,7 +770,7 @@
     "startDate": "Date de début",
     "endDate": "Date de fin",
     "searchByPlaceholder": "Rechercher par {{field}}",
-    "selectPledger": "Veuillez sélectionner un donateur",
+    "selectPledger": "Veuillez sélectionner un prometteur",
     "moreUsers": "+{{count}} de plus...",
     "togglePledgedRaised": "Basculer entre les montants Promis et Collectés",
     "pledgeDate": "Date d'Engagement",

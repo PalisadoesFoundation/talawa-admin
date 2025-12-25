@@ -146,7 +146,7 @@ const fundCampaignPledge = (): JSX.Element => {
     // Get fund name from the campaign's fund property
     const fundName =
       pledgeData?.fundCampaign?.pledges?.edges[0]?.node?.campaign?.fund?.name ??
-      tCommon('Funds');
+      tCommon('funds');
     return { pledges: sortedPledges, totalPledged, totalRaised, fundName };
   }, [pledgeData, searchTerm, sortBy, tCommon]);
 
