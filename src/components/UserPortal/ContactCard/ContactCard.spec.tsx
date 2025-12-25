@@ -9,7 +9,7 @@
  */
 
 import React, { act } from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 
@@ -138,5 +138,17 @@ describe('ContactCard [User Portal]', () => {
     await wait();
 
     expect(screen.queryByTestId(`contact-unseen-${props.id}`)).toBeNull();
+  });
+
+  it('calls setSelectedContact when clicked', () => {
+    const setSelectedContact = vi.fn();
+
+    render(
+      <ContactCard {...baseProps} setSelectedContact={setSelectedContact} />,
+    );
+
+    fireEvent.click(screen.getByTestId(`contact-container-${baseProps.id}`));
+
+    expect(setSelectedContact).toHaveBeenCalledWith(baseProps.id);
   });
 });

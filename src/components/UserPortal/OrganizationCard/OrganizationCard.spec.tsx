@@ -124,4 +124,36 @@ describe('OrganizationCard [PR-2]', () => {
 
     expect(toast.success).toHaveBeenCalled();
   });
+
+  it('shows error toast when join mutation fails', async () => {
+    mockMutationFn.mockRejectedValueOnce(new Error('Mutation failed'));
+
+    render(<OrganizationCard {...baseProps} />);
+
+    fireEvent.click(screen.getByTestId('joinBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        'Failed to send membership request',
+      );
+    });
+  });
+
+  it('shows error toast when withdraw mutation fails', async () => {
+    mockMutationFn.mockRejectedValueOnce(new Error('Mutation failed'));
+
+    render(
+      <OrganizationCard
+        {...baseProps}
+        membershipRequestStatus="pending"
+        membershipRequests={[{ id: 'req-1', user: { id: 'u1' } }]}
+      />,
+    );
+
+    fireEvent.click(screen.getByTestId('withdrawBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith('Failed to withdraw request');
+    });
+  });
 });
