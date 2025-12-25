@@ -67,8 +67,10 @@ export interface InterfaceSearchBarProps
   showSearchButton?: boolean;
   /** Toggle visibility of the inline clear button. Defaults to true. */
   showClearButton?: boolean;
-  /** Toggle the leading search icon visibility. Defaults to true. */
+  /** Toggle the leading search icon visibility. Defaults to false. */
   showLeadingIcon?: boolean;
+  /** Toggle the trailing search icon visibility. Defaults to false. */
+  showTrailingIcon?: boolean;
   /** Optional label shown inside the search button. */
   buttonLabel?: string;
   /** Accessible label for the search button. */

@@ -54,7 +54,11 @@
     "OR": "OU",
     "admin": "Administrateur",
     "user": "Utilisateur",
-    "loading": "Chargement"
+    "loading": "Chargement",
+    "communityLogo": "Logo de la Communauté",
+    "organizations": "Organisations",
+    "accountLocked": "Votre compte a été temporairement verrouillé en raison de trop nombreuses tentatives de connexion échouées. Veuillez réessayer plus tard.",
+    "accountLockedWithTimer": "Votre compte a été temporairement verrouillé. Veuillez réessayer dans {{minutes}} minute(s)."
   },
   "signOut": {
     "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
@@ -150,7 +154,8 @@
     "allCaughtUp": "Vous êtes à jour !",
     "prev": "Précédent",
     "next": "Suivant",
-    "markAsRead": "Marquer comme lues"
+    "markAsRead": "Marquer comme lues",
+    "markAsReadAriaLabel": "Marquer la notification '{{title}}' comme lue"
   },
   "orgList": {
     "title": "Organisations Talawa",
@@ -221,7 +226,8 @@
     "name": "Nom",
     "email": "E-mail",
     "profilePictureAlt": "Image de profil de {{name}}",
-    "placeholderAvatarAlt": "Avatar par défaut"
+    "placeholderAvatarAlt": "Avatar par défaut",
+    "newMembersWillAppearHere": "Les nouvelles demandes d'adhésion apparaîtront ici"
   },
   "users": {
     "membershipStatus": {
@@ -244,7 +250,10 @@
     "enterName": "Entrez le nom",
     "loadingUsers": "Chargement des utilisateurs...",
     "noUserFound": "Aucun utilisateur trouvé",
+    "filterByRole": "Filter par rôle",
+    "errorLoadingUsers": "Erreur lors du chargement des utilisateurs",
     "sort": "Trier",
+    "sortBy": "Trier par",
     "Newest": "Le plus récent d'abord",
     "Oldest": "Le plus âgé en premier",
     "noOrgError": "Organisations introuvables, veuillez créer une organisation via le tableau de bord",
@@ -702,7 +711,8 @@
     "viewCampaigns": "Voir les campagnes",
     "assocCampaigns": "Campagnes associées",
     "errorLoadingFundsData": "Erreur lors du chargement des données des fonds",
-    "editFund": "Modifier le fonds"
+    "editFund": "Modifier le fonds",
+    "searchFunds": "Rechercher des fonds"
   },
   "fundCampaign": {
     "title": "Campagnes de collecte de fonds",
@@ -726,7 +736,10 @@
     "latestEndDate": "Dernière date de fin",
     "earliestEndDate": "Date de fin la plus ancienne",
     "lowestGoal": "Objectif le plus bas",
-    "highestGoal": "Objectif le plus élevé"
+    "highestGoal": "Objectif le plus élevé",
+    "editCampaign": "Modifier la campagne",
+    "searchCampaigns": "Rechercher des campagnes",
+    "errorLoading": "Erreur lors du chargement des données de la campagne"
   },
   "pledges": {
     "title": "Engagements de campagne de financement",
@@ -1043,7 +1056,8 @@
     "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
     "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
     "tagsAssigned": "étiquettes assignées",
-    "noTagsAssigned": "Aucune étiquette assignée"
+    "noTagsAssigned": "Aucune étiquette assignée",
+    "actions": "Actions"
   },
   "people": {
     "title": "Personnes",
@@ -1144,6 +1158,7 @@
     "postDeletedSuccess": "Message supprimé avec succès.",
     "postPinnedSuccess": "Message épinglé avec succès.",
     "postUnpinnedSuccess": "Message désépinglé avec succès.",
+    "postUpdatedSuccess": "Message mis à jour avec succès.",
     "viewPost": "Voir le message",
     "editPost": "Modifier le message",
     "pinPost": "Épingler le message",
@@ -1155,7 +1170,8 @@
     "noMoreComments": "Plus de commentaires à charger",
     "postedOn": "Publié le {{date}}",
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
-    "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer."
+    "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer.",
+    "moreOptions": "Plus d'options"
   },
   "home": {
     "posts": "Des postes",
@@ -1173,7 +1189,8 @@
     "media": "Médias",
     "event": "Événement",
     "article": "Article",
-    "postNowVisibleInFeed": "Le post est maintenant visible dans le fil d'actualité"
+    "postNowVisibleInFeed": "Le post est maintenant visible dans le fil d'actualité",
+    "processingPost": "Traitement de votre publication. Veuillez patienter."
   },
   "eventAttendance": {
     "historical_statistics": "Statistiques historiques",
@@ -1578,7 +1595,13 @@
     "viewPledges": "Voir les promesses",
     "noPledges": "Aucune promesse trouvée",
     "noCampaigns": "Aucune campagne trouvée",
-    "raised": "Collecté",
+    "searchCampaigns": "Rechercher des campagnes",
+    "campaignName": "Nom de la campagne",
+    "startDate": "Date de début",
+    "endDate": "Date de fin",
+    "fundingGoal": "Objectif de financement",
+    "raised": "Montant collecté",
+    "viewPledge": "Voir l'engagement",
     "amountRaised": "Montant Collecté"
   },
   "userPledges": {
@@ -1704,6 +1727,8 @@
     "noPluginsAvailable": "Aucun plugin disponible",
     "installPluginsToSeeHere": "Installez des plugins pour les voir ici",
     "checkBackLater": "Revenez plus tard pour de nouveaux plugins",
+    "tryDifferentSearch": "Essayez un autre terme de recherche ou parcourez tous les plugins",
+    "explorePluginStore": "Explorez la boutique de plugins pour découvrir de nouveaux plugins",
     "noResultsFoundFor": "Aucun résultat trouvé pour"
   },
   "commentCard": {

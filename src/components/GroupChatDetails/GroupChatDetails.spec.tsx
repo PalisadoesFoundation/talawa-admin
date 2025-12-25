@@ -64,6 +64,9 @@ i18n.use(initReactI18next).init({
       translation: {
         // Add your translations here
       },
+      common: {
+        clearSearch: 'Clear search',
+      },
     },
   },
 });

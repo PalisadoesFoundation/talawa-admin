@@ -161,6 +161,12 @@ describe('Notification Component', () => {
     );
 
     await waitFor(() => {
+      expect(
+        screen.getByTestId('notifications-empty-state'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId('notifications-empty-state-icon'),
+      ).toBeInTheDocument();
       expect(screen.getByText(/you're all caught up!/i)).toBeInTheDocument();
     });
   });
@@ -332,6 +338,9 @@ describe('Pagination Visibility', () => {
     );
 
     await waitFor(() => {
+      expect(
+        screen.getByTestId('notifications-empty-state'),
+      ).toBeInTheDocument();
       expect(screen.getByText(/you're all caught up!/i)).toBeInTheDocument();
     });
 
