@@ -816,7 +816,7 @@ describe('CreateEventModal', () => {
   });
 
   // Date/Time Constraint Tests
-  it('auto-adjusts endDate when startDate is changed to after endDate', () => {
+  it('auto-adjusts endDate when startDate is changed to after endDate', async () => {
     render(
       <CreateEventModal
         isOpen={true}
@@ -826,16 +826,30 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    // Set endDate to a specific date first
     const endDateInput = screen.getByTestId('eventEndAt');
+    const startDateInput = screen.getByTestId('eventStartAt');
+
+    // First, set startDate to an earlier date to establish a baseline
+    fireEvent.change(startDateInput, { target: { value: '2025-12-15' } });
+
+    await waitFor(() => {
+      expect(startDateInput).toHaveValue('2025-12-15');
+    });
+
+    // Set endDate to Dec 20
     fireEvent.change(endDateInput, { target: { value: '2025-12-20' } });
 
-    // Now set startDate to a date after the endDate
-    const startDateInput = screen.getByTestId('eventStartAt');
+    await waitFor(() => {
+      expect(endDateInput).toHaveValue('2025-12-20');
+    });
+
+    // Now set startDate to Dec 25 (after endDate)
     fireEvent.change(startDateInput, { target: { value: '2025-12-25' } });
 
-    // endDate should be auto-adjusted to match startDate or later
-    expect(endDateInput).toHaveValue('2025-12-25');
+    // endDate should be auto-adjusted to match startDate
+    await waitFor(() => {
+      expect(endDateInput).toHaveValue('2025-12-25');
+    });
   });
 
   it('auto-adjusts endTime when startTime is changed to after endTime', () => {
