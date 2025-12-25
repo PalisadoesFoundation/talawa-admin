@@ -97,7 +97,9 @@ def find_translation_tags(source: str | Path) -> set[str]:
         content,
     )
 
-    # Extract key from namespace-qualified tags (e.g., "common:hello" -> "hello")
+    # Extract key from namespace-qualified tags
+    # (e.g., "common:hello" -> "hello")
+    
     return {
         tag.split(":")[-1]
         for tag in tags
