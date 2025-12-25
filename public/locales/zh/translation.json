@@ -222,7 +222,8 @@
     "name": "名称",
     "email": "电子邮件",
     "profilePictureAlt": "{{name}} 的头像",
-    "placeholderAvatarAlt": "占位符头像"
+    "placeholderAvatarAlt": "占位符头像",
+    "newMembersWillAppearHere": "新的会员请求将出现在这里"
   },
   "users": {
     "membershipStatus": {

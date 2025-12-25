@@ -455,15 +455,6 @@ const Requests = (): JSX.Element => {
     pageSizeOptions: [PAGE_SIZE],
     loading: isLoading || isLoadingMore,
     hideFooter: true,
-    slots: {
-      noRowsOverlay: () => (
-        <EmptyState
-          icon="groups"
-          message={'noRequestsFound'}
-          dataTestId="requests-grid-empty"
-        />
-      ),
-    },
     getRowClassName: () => `${styles.rowBackground}`,
     isRowSelectable: () => false,
     disableColumnMenu: true,
@@ -540,10 +531,10 @@ const Requests = (): JSX.Element => {
         searchByName.length > 0 ? (
         <EmptyState
           icon="search"
-          message={'noResultsFound'}
-          description={tCommon('noResultsFoundFor', {
-            query: `"${searchByName}"`,
+          message={tCommon('noResultsFoundFor', {
+            query: searchByName,
           })}
+          description={'tryAdjustingFilters'}
           dataTestId="requests-search-empty"
         />
       ) : !isLoading && data && displayedRequests.length === 0 ? (

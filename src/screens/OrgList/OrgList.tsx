@@ -75,6 +75,7 @@ import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
+import style from './OrgList.module.css';
 
 const { getItem } = useLocalStorage();
 
@@ -401,10 +402,10 @@ function orgList(): JSX.Element {
         searchByName.length > 0 ? (
         <EmptyState
           icon="search"
-          message={'noResultsFound'}
-          description={tCommon('noResultsFoundFor', {
-            query: `"${searchByName}"`,
+          message={tCommon('noResultsFoundFor', {
+            query: searchByName,
           })}
+          description={tCommon('tryAdjustingFilters')}
           dataTestId="orglist-search-empty"
         />
       ) : (
@@ -446,7 +447,7 @@ function orgList(): JSX.Element {
             })}
           </div>
           {/* pagination */}
-          <table style={{ width: '100%' }}>
+          <table className={style.table_fullWidth}>
             <tbody>
               <tr>
                 <PaginationList
