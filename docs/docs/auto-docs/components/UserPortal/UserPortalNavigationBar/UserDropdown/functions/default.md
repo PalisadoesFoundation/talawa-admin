@@ -2,9 +2,9 @@
 
 ***
 
-# Function: UserProfileDropdown()
+# Function: default()
 
-> **UserProfileDropdown**(`props`): `Element`
+> **default**(`props`): `Element`
 
 Defined in: [src/components/UserPortal/UserPortalNavigationBar/UserDropdown.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserPortalNavigationBar/UserDropdown.tsx#L43)
 
@@ -14,7 +14,7 @@ UserProfileDropdown Component
 
 ### props
 
-[`InterfaceUserDropdownProps`](../../../../UserPortalNavigationBar/interface/interfaces/InterfaceUserDropdownProps.md)
+[`InterfaceUserDropdownProps`](../../../../../UserPortalNavigationBar/interface/interfaces/InterfaceUserDropdownProps.md)
 
 Component props
 
@@ -50,4 +50,4 @@ to provide quick access to user-related actions.
 
 ## See
 
-[InterfaceUserDropdownProps](../../../../UserPortalNavigationBar/interface/interfaces/InterfaceUserDropdownProps.md) for detailed prop type definitions
+[InterfaceUserDropdownProps](../../../../../UserPortalNavigationBar/interface/interfaces/InterfaceUserDropdownProps.md) for detailed prop type definitions

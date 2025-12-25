@@ -2,9 +2,9 @@
 
 ***
 
-# Function: LanguageSelector()
+# Function: default()
 
-> **LanguageSelector**(`props`): `Element`
+> **default**(`props`): `Element`
 
 Defined in: [src/components/UserPortal/UserPortalNavigationBar/LanguageSelector.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserPortalNavigationBar/LanguageSelector.tsx#L51)
 
@@ -14,7 +14,7 @@ LanguageSelector Component
 
 ### props
 
-[`InterfaceLanguageSelectorProps`](../../../../UserPortalNavigationBar/interface/interfaces/InterfaceLanguageSelectorProps.md)
+[`InterfaceLanguageSelectorProps`](../../../../../UserPortalNavigationBar/interface/interfaces/InterfaceLanguageSelectorProps.md)
 
 Component props
 
@@ -58,5 +58,5 @@ const handleLanguageChange = async (languageCode: string) => {
 
 ## See
 
- - [InterfaceLanguageSelectorProps](../../../../UserPortalNavigationBar/interface/interfaces/InterfaceLanguageSelectorProps.md) for detailed prop type definitions
- - [languages](../../../../utils/languages/variables/languages.md) for the list of supported languages
+ - [InterfaceLanguageSelectorProps](../../../../../UserPortalNavigationBar/interface/interfaces/InterfaceLanguageSelectorProps.md) for detailed prop type definitions
+ - [languages](../../../../../utils/languages/variables/languages.md) for the list of supported languages
