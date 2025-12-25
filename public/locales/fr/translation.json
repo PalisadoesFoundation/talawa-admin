@@ -245,7 +245,10 @@
     "enterName": "Entrez le nom",
     "loadingUsers": "Chargement des utilisateurs...",
     "noUserFound": "Aucun utilisateur trouvé",
+    "filterByRole": "Filter par rôle",
+    "errorLoadingUsers": "Erreur lors du chargement des utilisateurs",
     "sort": "Trier",
+    "sortBy": "Trier par",
     "Newest": "Le plus récent d'abord",
     "Oldest": "Le plus âgé en premier",
     "noOrgError": "Organisations introuvables, veuillez créer une organisation via le tableau de bord",
@@ -1145,6 +1148,7 @@
     "postDeletedSuccess": "Message supprimé avec succès.",
     "postPinnedSuccess": "Message épinglé avec succès.",
     "postUnpinnedSuccess": "Message désépinglé avec succès.",
+    "postUpdatedSuccess": "Message mis à jour avec succès.",
     "viewPost": "Voir le message",
     "editPost": "Modifier le message",
     "pinPost": "Épingler le message",
@@ -1156,7 +1160,8 @@
     "noMoreComments": "Plus de commentaires à charger",
     "postedOn": "Publié le {{date}}",
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
-    "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer."
+    "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer.",
+    "moreOptions": "Plus d'options"
   },
   "home": {
     "posts": "Des postes",

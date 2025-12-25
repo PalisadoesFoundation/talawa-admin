@@ -248,6 +248,8 @@
     "sort": "Sort",
     "Newest": "Newest First",
     "Oldest": "Oldest First",
+    "sortBy": "Sort by",
+    "filterByRole": "Filter by role",
     "noOrgError": "Organizations not found, please create an organization through dashboard",
     "roleUpdated": "Role Updated.",
     "joinNow": "Join Now",
@@ -277,7 +279,8 @@
     "errorOccurred": "An error occurred. Please try again",
     "UserIdNotFound": "User ID not found",
     "MembershipRequestNotFound": "Membership request not found",
-    "MembershipRequestWithdrawn": "Membership request withdrawn successfully"
+    "MembershipRequestWithdrawn": "Membership request withdrawn successfully",
+    "errorLoadingUsers": "Error occurred while loading Users"
   },
   "communityProfile": {
     "title": "Community Profile",
@@ -1198,6 +1201,7 @@
     "postDeletedSuccess": "Post deleted successfully.",
     "postPinnedSuccess": "Post pinned successfully.",
     "postUnpinnedSuccess": "Post unpinned successfully.",
+    "postUpdatedSuccess": "Post updated successfully.",
     "editPost": "Edit Post",
     "pinPost": "Pin Post",
     "unpinPost": "Unpin Post",
@@ -1208,7 +1212,8 @@
     "noMoreComments": "No more comments",
     "postedOn": "Posted on {{date}}",
     "emptyCommentError": "Please enter a comment before submitting.",
-    "unexpectedError": "An unexpected error occurred. Please try again."
+    "unexpectedError": "An unexpected error occurred. Please try again.",
+    "moreOptions": "More options"
   },
   "home": {
     "posts": "Posts",

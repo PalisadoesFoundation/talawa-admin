@@ -253,9 +253,12 @@
     "enterName": "Ingrese su nombre",
     "loadingUsers": "Cargando usuarios ...",
     "noUserFound": "No se encontró ningún usuario.",
+    "errorLoadingUsers": "Se produjo un error al cargar los usuarios",
     "sort": "Ordenar",
     "Oldest": "Más Antiguas Primero",
     "Newest": "Más Recientes Primero",
+    "sortBy": "Ordenar por",
+    "filterByRole": "Filtrar por rol",
     "filter": "Filtrar",
     "roleUpdated": "Rol actualizado.",
     "noResultsFoundFor": "No se encontraron resultados para ",
@@ -1144,6 +1147,7 @@
     "postDeletedSuccess": "Publicación eliminada con éxito.",
     "postPinnedSuccess": "Publicación fijada con éxito.",
     "postUnpinnedSuccess": "Publicación desfijada con éxito.",
+    "postUpdatedSuccess": "Publicación actualizada con éxito.",
     "addComment": "Agregar comentario",
     "viewPost": "Ver publicación",
     "editPost": "Editar publicación",
@@ -1156,7 +1160,8 @@
     "noMoreComments": "No hay más comentarios",
     "postedOn": "Publicado el {{date}}",
     "emptyCommentError": "Por favor ingrese un comentario antes de enviarlo.",
-    "unexpectedError": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo."
+    "unexpectedError": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo.",
+    "moreOptions": "Más opciones"
   },
   "home": {
     "posts": "Publicaciones",
