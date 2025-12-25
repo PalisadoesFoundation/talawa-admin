@@ -150,7 +150,8 @@
     "allCaughtUp": "Vous êtes à jour !",
     "prev": "Précédent",
     "next": "Suivant",
-    "markAsRead": "Marquer comme lues"
+    "markAsRead": "Marquer comme lues",
+    "markAsReadAriaLabel": "Marquer la notification '{{title}}' comme lue"
   },
   "orgList": {
     "title": "Organisations Talawa",
@@ -385,6 +386,8 @@
     "unassignUserTag": "Désassigner l'étiquette",
     "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
     "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
+    "unassignUserTagError": "Erreur lors de la suppression de l'affectation d'étiquette",
+    "removeUserTagError": "Erreur lors de la suppression de l'étiquette et de tous ses sous-étiquettes",
     "addPeople": "Ajouter des personnes",
     "add": "Ajouter",
     "subTags": "Sous-étiquettes",
@@ -1147,6 +1150,7 @@
     "postDeletedSuccess": "Message supprimé avec succès.",
     "postPinnedSuccess": "Message épinglé avec succès.",
     "postUnpinnedSuccess": "Message désépinglé avec succès.",
+    "postUpdatedSuccess": "Message mis à jour avec succès.",
     "viewPost": "Voir le message",
     "editPost": "Modifier le message",
     "pinPost": "Épingler le message",
@@ -1158,7 +1162,8 @@
     "noMoreComments": "Plus de commentaires à charger",
     "postedOn": "Publié le {{date}}",
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
-    "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer."
+    "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer.",
+    "moreOptions": "Plus d'options"
   },
   "home": {
     "posts": "Des postes",
@@ -1713,6 +1718,8 @@
     "noPluginsAvailable": "Aucun plugin disponible",
     "installPluginsToSeeHere": "Installez des plugins pour les voir ici",
     "checkBackLater": "Revenez plus tard pour de nouveaux plugins",
+    "tryDifferentSearch": "Essayez un autre terme de recherche ou parcourez tous les plugins",
+    "explorePluginStore": "Explorez la boutique de plugins pour découvrir de nouveaux plugins",
     "noResultsFoundFor": "Aucun résultat trouvé pour"
   },
   "commentCard": {

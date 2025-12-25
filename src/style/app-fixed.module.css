@@ -36,6 +36,7 @@
  */
 :root {
   --primary-theme-color: #1778f2;
+  --success-green-color: #31bb6b;
 
   --addButton-font: #555555;
   --addButton-border: #eaebef;
@@ -1656,6 +1657,7 @@ form label,
   transform: scale(1.5);
   color: var(--bs-danger, var(--errorIcon-color));
   margin-bottom: 1rem;
+  font-size: 1.5rem;
 
   /* Add error icon for non-color indication */
   &::before {
@@ -9759,10 +9761,6 @@ form {
 
 .outlineBtn {
   /* SAME layout as manageBtn */
-  position: absolute;
-  right: 10px;
-  bottom: 10px;
-
   display: flex;
   justify-content: space-around;
   width: 8rem;
@@ -9776,6 +9774,12 @@ form {
   background-color: var(--outlineBtn-bg);
   color: var(--outlineBtn-color);
   border: 1px solid var(--outlineBtn-border);
+}
+
+.outlineBtnPositioned {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
 }
 
 .outlineBtn:is(:hover, :active) {
@@ -10046,7 +10050,7 @@ form {
   color: #137333;
 }
 
-.pending {
+.pendingMembership {
   background-color: #fff4e5;
   color: #b26a00;
 }
@@ -10057,15 +10061,15 @@ form {
 }
 
 .btnsBlock {
-  display: flex !important;
-  flex-direction: row !important;
-  align-items: center !important;
-  justify-content: flex-end !important;
-  gap: 12px !important;
-  width: auto !important;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  width: auto;
   flex-shrink: 0;
-  height: 48px !important;
-  margin: 0 !important;
+  height: 48px;
+  margin: 0;
 }
 
 /* 2. Ensure the header stays in one line and doesn't wrap on Desktop */
@@ -10088,9 +10092,9 @@ form {
   }
 
   .btnsBlock {
-    width: 100% !important;
-    justify-content: flex-end !important;
-    margin-top: 10px !important;
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 10px;
   }
 }
 
@@ -10233,4 +10237,24 @@ form {
   justify-content: center;
   gap: 8px;
   height: 100%;
+}
+
+/* Button width 8rem - for visit and join buttons */
+.buttonWidth8rem {
+  width: 8rem;
+}
+
+/* Video full width - for video elements */
+.videoFullWidth {
+  width: 100%;
+}
+
+/* Margin left auto - for positioning elements to the right */
+.marginLeftAuto {
+  margin-left: auto;
+}
+
+/* Background paper - matches MUI background.paper */
+.backgroundPaper {
+  background-color: var(--popup-bg, #fff);
 }

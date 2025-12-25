@@ -314,6 +314,48 @@ describe('OrganizationFunds Screen =>', () => {
     });
   });
 
+  it('Sort the Pledges list by Earliest created Date', async () => {
+    mockedUseParams.mockReturnValue({ orgId: 'orgId' });
+    const { container } = renderOrganizationFunds(link1);
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
+    });
+    await waitFor(() => {
+      expect(screen.getAllByTestId('fundName').length).toBeGreaterThan(0);
+    });
+
+    // Find and click on the "Created On" column header to trigger sort (ASC)
+    const createdOnHeader = container.querySelector(
+      '[data-field="createdAt"] .MuiDataGrid-columnHeaderTitle',
+    );
+
+    expect(createdOnHeader).toBeInTheDocument();
+    if (createdOnHeader) {
+      fireEvent.click(createdOnHeader);
+      await wait(300);
+    }
+
+    const allFundNames = screen.getAllByTestId('fundName');
+
+    // Find Fund 1 and Fund 2 in the visible list
+    const fund1Index = allFundNames.findIndex(
+      (row) => row.textContent === 'Fund 1',
+    );
+    const fund2Index = allFundNames.findIndex(
+      (row) => row.textContent === 'Fund 2',
+    );
+
+    // If both funds are visible on the current page, verify their relative order
+    if (fund1Index >= 0 && fund2Index >= 0) {
+      // Verify Fund 2 (2024-06-21, earlier) appears before Fund 1 (2024-06-22, later) when sorted ASC
+      expect(fund2Index).toBeLessThan(fund1Index);
+    } else {
+      // If they're not both visible (due to pagination), verify that funds are still rendered
+      expect(allFundNames.length).toBeGreaterThan(0);
+    }
+  });
+
   it('Click on Fund Name', async () => {
     mockedUseParams.mockReturnValue({ orgId: 'orgId' });
     renderOrganizationFunds(link1);

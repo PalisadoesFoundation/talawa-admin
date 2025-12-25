@@ -5,9 +5,9 @@ import { t } from 'i18next';
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from './useLocalstorage';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 type UseSessionReturnType = {
   startSession: () => void;
@@ -79,7 +79,7 @@ const useSession = (): UseSessionReturnType => {
     clearAllItems();
     endSession();
     navigate('/');
-    toast.warning(tCommon('sessionLogout'), { autoClose: false });
+    NotificationToast.warning(tCommon('sessionLogOut'), { autoClose: false });
   };
 
   const initializeTimers = (
@@ -95,7 +95,7 @@ const useSession = (): UseSessionReturnType => {
     startTime = Date.now();
 
     warningTimerRef.current = setTimeout(() => {
-      toast.warning(tCommon('sessionWarning'));
+      NotificationToast.warning(tCommon('sessionWarning'));
     }, warningTimeInMilliseconds);
 
     sessionTimerRef.current = setTimeout(async () => {

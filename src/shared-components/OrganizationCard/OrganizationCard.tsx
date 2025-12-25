@@ -216,7 +216,7 @@ function OrganizationCard({
                   membershipState === 'member'
                     ? styles.member
                     : membershipState === 'pending'
-                      ? styles.pending
+                      ? styles.pendingMembership
                       : styles.notMember,
                 ].join(' ')}
                 data-testid="membershipStatus"
@@ -289,9 +289,8 @@ function OrganizationCard({
                   <Button
                     data-testid="manageBtn"
                     data-cy="manageBtn"
-                    className={styles.manageBtn}
+                    className={`${styles.manageBtn} ${styles.buttonWidth8rem}`}
                     onClick={() => navigate(`/user/organization/${id}`)}
-                    style={{ width: '8rem' }}
                   >
                     {t('users.visit')}
                   </Button>
@@ -308,8 +307,7 @@ function OrganizationCard({
                   <Button
                     onClick={joinOrganization}
                     data-testid="joinBtn"
-                    className={styles.outlineBtn}
-                    style={{ width: '8rem' }}
+                    className={`${styles.outlineBtn} ${styles.buttonWidth8rem}`}
                   >
                     {t('users.joinNow')}
                   </Button>

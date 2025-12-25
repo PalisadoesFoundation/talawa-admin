@@ -114,5 +114,7 @@
   "profilePicture": "profile picture",
   "profilePicturePlaceholder": "dummy picture",
   "userProfileMenu": "User Profile Menu",
-  "breadcrumbs": "Breadcrumbs"
+  "breadcrumbs": "Breadcrumbs",
+  "loadingAdminPlugin": "Loading admin plugin...",
+  "loadingUserPlugin": "Loading user plugin..."
 }

@@ -150,7 +150,8 @@
     "allCaughtUp": "¡Estás al día!",
     "prev": "Anterior",
     "next": "Siguiente",
-    "markAsRead": "Marcar como leído"
+    "markAsRead": "Marcar como leído",
+    "markAsReadAriaLabel": "Marcar notificación '{{title}}' como leída"
   },
   "orgList": {
     "title": "Organizaciones Talawa",
@@ -383,6 +384,8 @@
     "viewProfile": "Ver",
     "noAssignedMembersFound": "Ningún miembro asignado",
     "unassignUserTag": "Desasignar Etiqueta",
+    "unassignUserTagError": "Error al desasignar la etiqueta del usuario",
+    "removeUserTagError": "Error al eliminar la etiqueta del usuario",
     "unassignUserTagMessage": "¿Desea eliminar la etiqueta de este usuario?",
     "successfullyUnassigned": "Etiqueta desasignada del usuario",
     "addPeople": "Agregar Personas",
@@ -1146,6 +1149,7 @@
     "postDeletedSuccess": "Publicación eliminada con éxito.",
     "postPinnedSuccess": "Publicación fijada con éxito.",
     "postUnpinnedSuccess": "Publicación desfijada con éxito.",
+    "postUpdatedSuccess": "Publicación actualizada con éxito.",
     "addComment": "Agregar comentario",
     "viewPost": "Ver publicación",
     "editPost": "Editar publicación",
@@ -1158,7 +1162,8 @@
     "noMoreComments": "No hay más comentarios",
     "postedOn": "Publicado el {{date}}",
     "emptyCommentError": "Por favor ingrese un comentario antes de enviarlo.",
-    "unexpectedError": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo."
+    "unexpectedError": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo.",
+    "moreOptions": "Más opciones"
   },
   "home": {
     "posts": "Publicaciones",
@@ -1713,6 +1718,8 @@
     "noPluginsAvailable": "No hay plugins disponibles",
     "installPluginsToSeeHere": "Instala plugins para verlos aquí",
     "checkBackLater": "Vuelve más tarde para nuevos plugins",
+    "tryDifferentSearch": "Prueba con un término de búsqueda diferente o explora todos los plugins",
+    "explorePluginStore": "Explora la tienda de plugins para descubrir nuevos plugins",
     "noResultsFoundFor": "No se encontraron resultados para"
   },
   "commentCard": {
