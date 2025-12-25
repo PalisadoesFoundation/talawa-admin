@@ -28,10 +28,6 @@ vi.mock('react-chartjs-2', async () => ({
   Bar: () => null,
 }));
 
-vi.mock('utils/featureFlags', () => ({
-  isInviteOnlyEnabled: vi.fn(() => false),
-}));
-
 vi.mock('react-router', async () => ({
   ...(await vi.importActual('react-router')),
   useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
