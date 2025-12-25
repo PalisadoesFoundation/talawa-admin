@@ -30,6 +30,23 @@ vi.mock('react-toastify', () => ({
   toast: { success: vi.fn(), error: vi.fn() },
 }));
 
+export const getPickerInputByLabel = (label: string): HTMLElement => {
+  const allInputs = screen.getAllByRole('textbox', { hidden: true });
+  for (const input of allInputs) {
+    const formControl = input.closest('.MuiFormControl-root');
+    if (formControl) {
+      const labelEl = formControl.querySelector('label');
+      if (labelEl) {
+        const labelText = labelEl.textContent?.toLowerCase() || '';
+        if (labelText.includes(label.toLowerCase())) {
+          return formControl as HTMLElement;
+        }
+      }
+    }
+  }
+  throw new Error(`Could not find date picker for label: ${label}`);
+};
+
 const link1 = new StaticMockLink(PLEDGE_MODAL_MOCKS);
 const errorLink = new StaticMockLink(PLEDGE_MODAL_ERROR_MOCKS);
 const translations = JSON.parse(

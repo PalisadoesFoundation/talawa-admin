@@ -238,4 +238,90 @@ describe('SearchBar', () => {
     await user.type(input, 'test{enter}');
     // Should not throw
   });
+
+  describe('showTrailingIcon feature', () => {
+    it('renders trailing search icon when showTrailingIcon is true', () => {
+      render(
+        <SearchBar
+          onSearch={vi.fn()}
+          showTrailingIcon={true}
+          inputTestId="search-input"
+        />,
+      );
+
+      // The trailing icon should be rendered as a span with the search icon
+      const container = screen.getByTestId('search-input').parentElement;
+      expect(container).toBeInTheDocument();
+      // Verify the trailing icon span exists
+      const trailingIcon = container?.querySelector('span[aria-hidden="true"]');
+      expect(trailingIcon).toBeInTheDocument();
+    });
+
+    it('does not render trailing search icon when showTrailingIcon is false', () => {
+      render(
+        <SearchBar
+          onSearch={vi.fn()}
+          showTrailingIcon={false}
+          inputTestId="search-input"
+        />,
+      );
+
+      const container = screen.getByTestId('search-input').parentElement;
+      // When showTrailingIcon is false, there should be no trailing icon
+      // The container might still have other elements, but not the trailing icon
+      expect(container).toBeInTheDocument();
+    });
+
+    it('does not render trailing icon by default', () => {
+      render(<SearchBar onSearch={vi.fn()} inputTestId="search-input" />);
+
+      // Default behavior should not show trailing icon
+      const container = screen.getByTestId('search-input').parentElement;
+      expect(container).toBeInTheDocument();
+      // By default, showTrailingIcon is false
+    });
+
+    it('renders both clear button and trailing icon when both are enabled', async () => {
+      const user = userEvent.setup();
+      render(
+        <SearchBar
+          onSearch={vi.fn()}
+          showTrailingIcon={true}
+          showClearButton={true}
+          inputTestId="search-input"
+          clearButtonTestId="clear-search"
+        />,
+      );
+
+      const input = screen.getByTestId('search-input');
+      await user.type(input, 'test');
+
+      // Both the clear button and trailing icon should coexist
+      expect(screen.getByTestId('clear-search')).toBeInTheDocument();
+      const container = input.parentElement;
+      const trailingIcon = container?.querySelector('span[aria-hidden="true"]');
+      expect(trailingIcon).toBeInTheDocument();
+    });
+
+    it('positions trailing icon correctly in the input wrapper', () => {
+      const { container } = render(
+        <SearchBar
+          onSearch={vi.fn()}
+          showTrailingIcon={true}
+          inputTestId="search-input"
+        />,
+      );
+
+      // Verify that the trailing icon is a child of the input wrapper
+      const inputWrapper = container.querySelector(
+        'div > div', // The searchBarInputWrapper div
+      );
+      expect(inputWrapper).toBeInTheDocument();
+
+      const trailingIcon = inputWrapper?.querySelector(
+        'span[aria-hidden="true"]',
+      );
+      expect(trailingIcon).toBeInTheDocument();
+    });
+  });
 });

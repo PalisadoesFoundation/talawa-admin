@@ -711,7 +711,8 @@
     "viewCampaigns": "Ver campañas",
     "assocCampaigns": "Campañas asociadas",
     "errorLoadingFundsData": "Error al cargar los datos de fondos",
-    "editFund": "Editar fondo"
+    "editFund": "Editar fondo",
+    "searchFunds": "Buscar fondos"
   },
   "fundCampaign": {
     "title": "Campañas de recaudación de fondos",
@@ -735,7 +736,10 @@
     "latestEndDate": "Fecha de finalización más reciente",
     "earliestEndDate": "Fecha de finalización más temprana",
     "lowestGoal": "Meta más baja",
-    "highestGoal": "Meta más alta"
+    "highestGoal": "Meta más alta",
+    "editCampaign": "Editar campaña",
+    "searchCampaigns": "Buscar campañas",
+    "errorLoading": "Error al cargar los datos de la campaña"
   },
   "pledges": {
     "title": "Compromisos de Campaña de Financiamiento",
@@ -1052,7 +1056,8 @@
     "unassignUserTagMessage": "¿Desea eliminar la etiqueta de este usuario?",
     "successfullyUnassigned": "Etiqueta desasignada del usuario",
     "tagsAssigned": "Etiquetas asignadas",
-    "noTagsAssigned": "No se asignaron etiquetas"
+    "noTagsAssigned": "No se asignaron etiquetas",
+    "actions": "Acciones"
   },
   "userLogin": {
     "login": "Acceso",
@@ -1589,7 +1594,13 @@
     "viewPledges": "Ver Promesas",
     "noPledges": "No se encontraron promesas",
     "noCampaigns": "No se encontraron campañas",
-    "raised": "Recaudado",
+    "searchCampaigns": "Buscar campañas",
+    "campaignName": "Nombre de la campaña",
+    "startDate": "Fecha de inicio",
+    "endDate": "Fecha de finalización",
+    "fundingGoal": "Objetivo de financiación",
+    "raised": "Cantidad recaudada",
+    "viewPledge": "Ver compromiso",
     "amountRaised": "Monto Recaudado"
   },
   "userPledges": {

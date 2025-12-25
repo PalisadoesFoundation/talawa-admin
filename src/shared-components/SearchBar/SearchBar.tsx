@@ -7,6 +7,7 @@ import React, {
   useRef,
   useState,
 } from 'react';
+import { useTranslation } from 'react-i18next';
 import SearchIcon from '@mui/icons-material/Search';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import styles from 'style/app-fixed.module.css';
@@ -29,8 +30,9 @@ const mergeClassNames = (
  */
 const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
   (props, ref) => {
+    const { t } = useTranslation('common');
     const {
-      placeholder = 'Search...',
+      placeholder,
       value,
       defaultValue = '',
       onSearch,
@@ -47,6 +49,7 @@ const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
       showSearchButton = true,
       showClearButton = true,
       showLeadingIcon = false,
+      showTrailingIcon = false,
       buttonLabel = '',
       buttonAriaLabel,
       isLoading = false,
@@ -218,12 +221,17 @@ const SearchBar = forwardRef<InterfaceSearchBarRef, InterfaceSearchBarProps>(
             <button
               type="button"
               className={styles.searchBarClearButton}
-              aria-label="Clear search"
+              aria-label={t('clearSearch')}
               onClick={handleClear}
               data-testid={clearButtonTestId}
             >
               <CloseRoundedIcon fontSize="small" />
             </button>
+          )}
+          {showTrailingIcon && (
+            <span className={styles.searchBarTrailingIcon} aria-hidden="true">
+              <SearchIcon fontSize="small" />
+            </span>
           )}
         </div>
         {showSearchButton && (
