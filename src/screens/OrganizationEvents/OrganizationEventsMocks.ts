@@ -3,6 +3,7 @@ import {
   GET_ORGANIZATION_EVENTS_PG,
   GET_ORGANIZATION_DATA_PG,
 } from 'GraphQl/Queries/Queries';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -66,7 +67,7 @@ export const MOCKS = [
   {
     request: {
       query: GET_ORGANIZATION_EVENTS_PG,
-      variables: buildEventsVariables(),
+      variables: addInviteOnlyVariable(buildEventsVariables()),
     },
     result: {
       data: {

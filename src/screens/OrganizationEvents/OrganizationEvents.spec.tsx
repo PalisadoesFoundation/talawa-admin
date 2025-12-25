@@ -20,6 +20,7 @@ import {
   GET_ORGANIZATION_DATA_PG,
   GET_ORGANIZATION_EVENTS_PG,
 } from 'GraphQl/Queries/Queries';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 import { MOCKS } from './OrganizationEventsMocks';
 import { toast } from 'react-toastify';
 import { green } from '@mui/material/colors';
@@ -522,7 +523,7 @@ describe('Organisation Events Page', () => {
         {
           request: {
             query: GET_ORGANIZATION_EVENTS_PG,
-            variables: buildEventsVariables(),
+            variables: addInviteOnlyVariable(buildEventsVariables()),
           },
           error: new Error('Too Many Requests'),
         },
@@ -565,7 +566,7 @@ describe('Organisation Events Page', () => {
         {
           request: {
             query: GET_ORGANIZATION_EVENTS_PG,
-            variables: buildEventsVariables(),
+            variables: addInviteOnlyVariable(buildEventsVariables()),
           },
           error: new Error('some other apollo error'),
         },
@@ -603,7 +604,7 @@ describe('Organisation Events Page', () => {
         {
           request: {
             query: GET_ORGANIZATION_EVENTS_PG,
-            variables: buildEventsVariables(),
+            variables: addInviteOnlyVariable(buildEventsVariables()),
           },
           result: {
             data: {
@@ -637,7 +638,7 @@ describe('Organisation Events Page', () => {
         {
           request: {
             query: GET_ORGANIZATION_EVENTS_PG,
-            variables: buildEventsVariables(),
+            variables: addInviteOnlyVariable(buildEventsVariables()),
           },
           result: {
             data: {
@@ -675,7 +676,7 @@ describe('Organisation Events Page', () => {
         {
           request: {
             query: GET_ORGANIZATION_EVENTS_PG,
-            variables: buildEventsVariables(),
+            variables: addInviteOnlyVariable(buildEventsVariables()),
           },
           result: {
             data: {
@@ -812,7 +813,7 @@ describe('Organisation Events Page', () => {
       {
         request: {
           query: GET_ORGANIZATION_EVENTS_PG,
-          variables: buildEventsVariables(),
+          variables: addInviteOnlyVariable(buildEventsVariables()),
         },
         result: {
           data: {
@@ -1024,13 +1025,13 @@ const ERROR_MOCK = [
   {
     request: {
       query: GET_ORGANIZATION_EVENTS_PG,
-      variables: {
+      variables: addInviteOnlyVariable({
         id: 'orgId',
         first: 32,
         after: null,
         startDate: expect.any(String),
         endDate: expect.any(String),
-      },
+      }),
     },
     result: {
       errors: [new GraphQLError('Failed to fetch organization events')],

@@ -44,6 +44,11 @@ export class ActionItemPage {
       .should('be.visible')
       .scrollIntoView()
       .click();
+    // Wait for event modal/preview to fully load (including invite-only toggle if present)
+    cy.get(
+      '[data-testid="updateIsInviteOnly"], [data-testid="showEventDashboardBtn"]',
+      { timeout: 10000 },
+    ).should('exist');
     return this;
   }
 

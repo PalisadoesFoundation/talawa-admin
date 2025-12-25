@@ -20,6 +20,8 @@ export class AdvertisementPage {
     cy.visit('/orglist');
     cy.get('[data-cy="manageBtn"]').should('be.visible').first().click();
     cy.url({ timeout }).should('match', /\/orgdash\/[a-f0-9-]+/);
+    // Wait for dashboard to fully load (including event queries that may include invite-only)
+    cy.get('[data-testid="leftDrawerContainer"]', { timeout }).should('exist');
     cy.get('body').then(($body) => {
       const drawerElement = $body.find('[data-testid="leftDrawerContainer"]');
       if (drawerElement.length > 0) {
@@ -37,6 +39,7 @@ export class AdvertisementPage {
     cy.get(this._leftDrawerAdBtn, { timeout })
       .scrollIntoView()
       .should('exist')
+      .should('be.visible')
       .click({ force: true });
     cy.url().should('match', /\/orgads\/[a-f0-9-]+/);
     return this;
@@ -50,13 +53,17 @@ export class AdvertisementPage {
     timeout = 10000,
   ) {
     cy.get(this._createAdBtn, { timeout }).should('be.visible').click();
-    cy.get(this._adNameInput).should('be.visible').type(name);
+    // Wait for modal to fully load
+    cy.get(this._adNameInput).should('be.visible');
+    cy.get(this._adNameInput).type(name);
     cy.get(this._adDescriptionInput).should('be.visible').type(description);
     cy.get(this._adMediaInput)
       .should('be.visible')
       .selectFile(mediaPath, { force: true });
     cy.get(this._adTypeSelect).should('be.visible').select(type);
-    cy.get(this._registerAdBtn).should('be.visible').scrollIntoView().click();
+    // Ensure submit button is ready before clicking
+    cy.get(this._registerAdBtn).should('be.visible').should('not.be.disabled');
+    cy.get(this._registerAdBtn).scrollIntoView().click();
     cy.get(this._alert)
       .should('be.visible')
       .and('contain.text', 'Advertisement created successfully.');
@@ -68,8 +75,11 @@ export class AdvertisementPage {
     cy.contains(oldName).should('be.visible');
     cy.get(this._dropdownBtn).should('be.visible').click();
     cy.get(this._editBtn).should('be.visible').trigger('click');
-    cy.get(this._adNameInput).should('be.visible').clear().type(newName);
-    cy.get(this._saveChangesBtn).should('be.visible').scrollIntoView().click();
+    // Wait for edit modal to fully load
+    cy.get(this._adNameInput).should('be.visible');
+    cy.get(this._adNameInput).clear().type(newName);
+    cy.get(this._saveChangesBtn).should('be.visible').should('not.be.disabled');
+    cy.get(this._saveChangesBtn).scrollIntoView().click();
     cy.get(this._alert)
       .should('be.visible')
       .and('contain.text', 'Advertisement updated Successfully');
