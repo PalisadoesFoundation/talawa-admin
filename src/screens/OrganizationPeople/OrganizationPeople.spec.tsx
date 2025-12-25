@@ -826,7 +826,7 @@ describe('OrganizationPeople', () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText((t) => t.includes('Admin User')),
+        screen.getByRole('link', { name: 'Admin User' }),
       ).toBeInTheDocument();
     });
 
@@ -837,7 +837,7 @@ describe('OrganizationPeople', () => {
     // Wait for next page data to load
     await waitFor(() => {
       expect(
-        screen.getByText((t) => t.includes('Admin User 2')),
+        screen.getByRole('link', { name: 'Admin User 2' }),
       ).toBeInTheDocument();
     });
 
@@ -850,7 +850,7 @@ describe('OrganizationPeople', () => {
     // Wait for previous page data to load
     await waitFor(() => {
       expect(
-        screen.getByText((t) => t.includes('Admin User')),
+        screen.getByRole('link', { name: 'Admin User' }),
       ).toBeInTheDocument();
     });
   });

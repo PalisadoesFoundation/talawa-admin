@@ -1671,7 +1671,7 @@ form label,
 
 /* Not Found */
 /**
-*Pages still using .notFound class are - screen/UserPortal/Campaigns, screen/UserPortal/Campaigns
+*Pages still using .notFound class are - screen/UserPortal/Campaigns, screen/BlockUser
 */
 .notFound {
   flex: 1;
