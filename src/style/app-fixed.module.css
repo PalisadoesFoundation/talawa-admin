@@ -8268,18 +8268,18 @@ form {
   box-shadow: var(--drop-shadow);
 }
 
+.checkboxButton input:focus {
+  border-color: var(--checkbox-focus-border);
+  outline: none;
+  box-shadow: none;
+}
+
 .assigneeCellContainer {
   height: 100%;
 }
 
 .groupIconSecondary {
   color: var(--view-color);
-}
-
-.checkboxButton input:focus {
-  border-color: var(--checkbox-focus-border);
-  outline: none;
-  box-shadow: none;
 }
 
 /* -- OrganizationDashboard.tsx -- */
