@@ -58,13 +58,13 @@ Defined in: [src/types/Event/type.ts:116](https://github.com/PalisadoesFoundatio
 
 > `readonly` **location\_DESC**: `"location_DESC"` = `'location_DESC'`
 
-### recurrance\_ASC
+### recurrence\_ASC
 
-> `readonly` **recurrance\_ASC**: `"recurrance_ASC"` = `'recurrance_ASC'`
+> `readonly` **recurrence\_ASC**: `"recurrence_ASC"` = `'recurrence_ASC'`
 
-### recurrance\_DESC
+### recurrence\_DESC
 
-> `readonly` **recurrance\_DESC**: `"recurrance_DESC"` = `'recurrance_DESC'`
+> `readonly` **recurrence\_DESC**: `"recurrence_DESC"` = `'recurrence_DESC'`
 
 ### startDate\_ASC
 

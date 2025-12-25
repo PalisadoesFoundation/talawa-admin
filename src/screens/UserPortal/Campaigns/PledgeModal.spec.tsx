@@ -48,26 +48,25 @@ vi.mock('@mui/x-date-pickers', async () => {
   const actual = await vi.importActual<typeof import('@mui/x-date-pickers')>(
     '@mui/x-date-pickers',
   );
-  interface InterfaceTestDatePickerProps {
-    label?: React.ReactNode;
+  interface InterfaceMockDatePickerProps {
+    label?: string;
     value?: dayjs.Dayjs | null;
     onChange?: (value: dayjs.Dayjs | null) => void;
+    [key: string]: unknown;
   }
 
   return {
     ...actual,
-    DatePicker: ({ label, value, onChange }: InterfaceTestDatePickerProps) => (
-      <div role="group" aria-label={label as string}>
-        <input
-          aria-label={label as string}
-          value={value ? value.format('DD/MM/YYYY') : ''}
-          onChange={(e) =>
-            (onChange as ((value: unknown) => void) | undefined)?.(
-              e.target.value ? dayjs(e.target.value, 'DD/MM/YYYY') : null,
-            )
-          }
-        />
-      </div>
+    DatePicker: ({ label, value, onChange }: InterfaceMockDatePickerProps) => (
+      <input
+        aria-label={label as string}
+        value={value ? value.format('DD/MM/YYYY') : ''}
+        onChange={(e) =>
+          (onChange as ((value: unknown) => void) | undefined)?.(
+            e.target.value ? dayjs(e.target.value, 'DD/MM/YYYY') : null,
+          )
+        }
+      />
     ),
   };
 });

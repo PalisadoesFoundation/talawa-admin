@@ -286,7 +286,7 @@ function OrganizationCard({
                   <Button
                     data-testid="manageBtn"
                     data-cy="manageBtn"
-                    className={styles.manageBtn}
+                    className={`${styles.manageBtn} ${styles.buttonWidth8rem}`}
                     onClick={() => navigate(`/user/organization/${id}`)}
                   >
                     {t('users.visit')}
