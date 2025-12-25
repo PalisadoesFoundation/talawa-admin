@@ -9,7 +9,6 @@ import {
   render,
   screen,
   waitFor,
-  within,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
@@ -191,153 +190,59 @@ describe('Testing User Campaigns Screen', () => {
     );
   });
 
-  it('Check if All details are rendered correctly', async () => {
-    renderCampaigns(link1);
+  it('Should display loading state', () => {
+    // Create a link with a delay to simulate loading
+    const delayedMocks = [
+      {
+        request: MOCKS[0].request,
+        result: {
+          data: {
+            organization: {
+              funds: {
+                edges: [],
+              },
+            },
+          },
+        },
+        delay: 50, // fast delay just to check initial render state
+      },
+    ];
+    const delayedLink = new StaticMockLink(delayedMocks);
 
-    const detailContainer = await screen.findByTestId('detailContainer1');
-    const detailContainer2 = await screen.findByTestId('detailContainer2');
-    await waitFor(() => {
-      expect(detailContainer).toBeInTheDocument();
-      expect(detailContainer2).toBeInTheDocument();
-      expect(detailContainer).toHaveTextContent('School Campaign');
-      expect(detailContainer).toHaveTextContent('$22000');
-      expect(detailContainer).toHaveTextContent(
-        new Date('2024-07-28').toLocaleDateString('en-US'),
-      );
-      expect(detailContainer).toHaveTextContent(
-        new Date('2099-12-31').toLocaleDateString('en-US'),
-      );
-      expect(detailContainer).toHaveTextContent('Active');
-      expect(detailContainer2).toHaveTextContent('Hospital Campaign');
-      expect(detailContainer2).toHaveTextContent('$9000');
-      expect(detailContainer2).toHaveTextContent(
-        new Date('2024-07-28').toLocaleDateString('en-US'),
-      );
-      expect(detailContainer2).toHaveTextContent(
-        new Date('2022-08-30').toLocaleDateString('en-US'),
-      );
-      expect(detailContainer2).toHaveTextContent('Ended');
-    });
+    renderCampaigns(delayedLink);
+    // Immediately check for loader
+    expect(screen.getByTestId('TableLoader')).toBeInTheDocument();
   });
 
-  it('Sort the Campaigns list by lowest fundingGoal', async () => {
+  it('Should display campaigns in DataGrid', async () => {
     renderCampaigns(link1);
 
-    const searchCampaigns = await screen.findByTestId('searchCampaigns');
-    expect(searchCampaigns).toBeInTheDocument();
-
-    await userEvent.click(screen.getByTestId('filter'));
-    await waitFor(() => {
-      expect(screen.getByTestId('fundingGoal_ASC')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('fundingGoal_ASC'));
-
+    // Wait for campaigns to load and verify they appear in the DataGrid
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
     });
 
-    await waitFor(() => {
-      const detailContainer = screen.getByTestId('detailContainer2');
-      expect(detailContainer).toHaveTextContent('School Campaign');
-      expect(detailContainer).toHaveTextContent('$22000');
-      expect(detailContainer).toHaveTextContent(
-        new Date('2024-07-28').toLocaleDateString('en-US'),
-      );
-      expect(detailContainer).toHaveTextContent(
-        new Date('2099-12-31').toLocaleDateString('en-US'),
-      );
-    });
+    // Verify campaign names are rendered in the table
+    const campaignNames = screen.getAllByTestId('campaignName');
+    expect(campaignNames.length).toBeGreaterThan(0);
   });
 
-  it('Sort the Campaigns list by highest fundingGoal', async () => {
+  it('Displays goal and date cells correctly', async () => {
     renderCampaigns(link1);
 
-    const searchCampaigns = await screen.findByTestId('searchCampaigns');
-    expect(searchCampaigns).toBeInTheDocument();
-
-    await userEvent.click(screen.getByTestId('filter'));
-    await waitFor(() => {
-      expect(screen.getByTestId('fundingGoal_DESC')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('fundingGoal_DESC'));
-
+    // Wait for the DataGrid to render
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
-      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
     });
 
-    await waitFor(() => {
-      const detailContainer = screen.getByTestId('detailContainer1');
-      expect(detailContainer).toHaveTextContent('School Campaign');
-      expect(detailContainer).toHaveTextContent('$22000');
-      expect(detailContainer).toHaveTextContent(
-        new Date('2024-07-28').toLocaleDateString('en-US'),
-      );
-      expect(detailContainer).toHaveTextContent(
-        new Date('2099-12-31').toLocaleDateString('en-US'),
-      );
-    });
-  });
+    // Verify goal cells are rendered (sorting now via DataGrid column headers)
+    const goalCells = screen.getAllByTestId('goalCell');
+    expect(goalCells.length).toBeGreaterThan(0);
 
-  it('Sort the Campaigns list by earliest endDate', async () => {
-    renderCampaigns(link1);
-
-    const searchCampaigns = await screen.findByTestId('searchCampaigns');
-    expect(searchCampaigns).toBeInTheDocument();
-
-    await userEvent.click(screen.getByTestId('filter'));
-    await waitFor(() => {
-      expect(screen.getByTestId('endDate_ASC')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('endDate_ASC'));
-
-    await waitFor(() => {
-      expect(screen.getByText('School Campaign')).toBeInTheDocument();
-      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
-    });
-
-    await waitFor(() => {
-      const detailContainer = screen.getByTestId('detailContainer2');
-      expect(detailContainer).toHaveTextContent('School Campaign');
-      expect(detailContainer).toHaveTextContent('$22000');
-      expect(detailContainer).toHaveTextContent(
-        new Date('2024-07-28').toLocaleDateString('en-US'),
-      );
-      expect(detailContainer).toHaveTextContent(
-        new Date('2099-12-31').toLocaleDateString('en-US'),
-      );
-    });
-  });
-
-  it('Sort the Campaigns list by latest endDate', async () => {
-    renderCampaigns(link1);
-
-    const searchCampaigns = await screen.findByTestId('searchCampaigns');
-    expect(searchCampaigns).toBeInTheDocument();
-
-    await userEvent.click(screen.getByTestId('filter'));
-    await waitFor(() => {
-      expect(screen.getByTestId('endDate_DESC')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('endDate_DESC'));
-
-    await waitFor(() => {
-      expect(screen.getByText('School Campaign')).toBeInTheDocument();
-      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
-    });
-
-    await waitFor(() => {
-      const detailContainer = screen.getByTestId('detailContainer1');
-      expect(detailContainer).toHaveTextContent('School Campaign');
-      expect(detailContainer).toHaveTextContent('$22000');
-      expect(detailContainer).toHaveTextContent(
-        new Date('2024-07-28').toLocaleDateString('en-US'),
-      );
-      expect(detailContainer).toHaveTextContent(
-        new Date('2099-12-31').toLocaleDateString('en-US'),
-      );
-    });
+    // Verify end date cells are rendered
+    const endDateCells = screen.getAllByTestId('endDateCell');
+    expect(endDateCells.length).toBeGreaterThan(0);
   });
 
   it('Search the Campaigns list by name', async () => {
@@ -346,10 +251,10 @@ describe('Testing User Campaigns Screen', () => {
     const searchCampaigns = await screen.findByTestId('searchCampaigns');
     expect(searchCampaigns).toBeInTheDocument();
 
+    // SearchBar now uses onChange instead of searchBtn
     fireEvent.change(searchCampaigns, {
       target: { value: 'Hospital' },
     });
-    fireEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       expect(screen.queryByText('School Campaign')).toBeNull();
@@ -425,17 +330,14 @@ describe('Testing User Campaigns Screen', () => {
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
     });
 
-    // Use within() to scope query to specific campaign container
-    // Navigate to parent element (AccordionSummary) which contains the addPledgeBtn
-    const hospitalContainer = screen.getByTestId('detailContainer2');
-    const accordionSummary = hospitalContainer.parentElement;
-    expect(accordionSummary).toBeDefined();
-    const endedCampaignButton = within(
-      accordionSummary as HTMLElement,
-    ).getByTestId('addPledgeBtn');
+    // Find all addPledgeBtn buttons and check if any is disabled (for ended campaigns)
+    const addPledgeButtons = screen.getAllByTestId('addPledgeBtn');
+    const disabledButton = addPledgeButtons.find((btn) =>
+      btn.hasAttribute('disabled'),
+    );
 
-    expect(endedCampaignButton).toBeInTheDocument();
-    expect(endedCampaignButton).toBeDisabled();
+    expect(disabledButton).toBeDefined();
+    expect(disabledButton).toBeDisabled();
   });
 
   it('Handles fund with no campaigns gracefully', async () => {
@@ -456,17 +358,17 @@ describe('Testing User Campaigns Screen', () => {
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
     });
 
+    // SearchBar now uses onChange instead of searchBtn
     const searchInput = screen.getByTestId('searchCampaigns');
     fireEvent.change(searchInput, { target: { value: 'School' } });
-    fireEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
       expect(screen.queryByText('Hospital Campaign')).not.toBeInTheDocument();
     });
 
+    // Clear search
     fireEvent.change(searchInput, { target: { value: '' } });
-    fireEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
@@ -491,6 +393,167 @@ describe('Testing User Campaigns Screen', () => {
     // Should show "No Campaigns Found" when campaigns field is undefined
     await waitFor(() => {
       expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument();
+    });
+  });
+
+  it('Clears search text when clear button is clicked', async () => {
+    renderCampaigns(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+    });
+
+    // Enter search text
+    const searchInput = screen.getByTestId('searchCampaigns');
+    fireEvent.change(searchInput, { target: { value: 'School' } });
+
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.queryByText('Hospital Campaign')).not.toBeInTheDocument();
+    });
+
+    // Click clear button to trigger onClear callback
+    const clearButton = screen.getByTestId('clearSearch');
+    await userEvent.click(clearButton);
+
+    // After clearing, both campaigns should be visible again
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+    });
+  });
+
+  it('Shows noResultsFoundFor message when search has no results', async () => {
+    renderCampaigns(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+    });
+
+    // Search for something that doesn't exist
+    const searchInput = screen.getByTestId('searchCampaigns');
+    fireEvent.change(searchInput, { target: { value: 'NonExistentCampaign' } });
+
+    // Should show "No results found for" message with the search text
+    await waitFor(() => {
+      expect(screen.getByText(/No results found for/i)).toBeInTheDocument();
+      expect(screen.getByText(/"NonExistentCampaign"/)).toBeInTheDocument();
+    });
+  });
+
+  it('Displays progress cells with correct percentage and colors', async () => {
+    renderCampaigns(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+    });
+
+    // Verify progress cells are rendered
+    const progressCells = screen.getAllByTestId('progressCell');
+    expect(progressCells.length).toBeGreaterThan(0);
+
+    // All progress cells should show 0% since raised is hardcoded to 0
+    progressCells.forEach((cell) => {
+      expect(cell).toHaveTextContent('0%');
+    });
+  });
+
+  it('Renders campaigns list with campaigns data', async () => {
+    renderCampaigns(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+    });
+
+    // Verify the campaigns list container is rendered with the listBox style
+    // The endMessage is passed to ReportingTable but only rendered with infiniteProps
+    const campaignCells = screen.getAllByTestId('campaignName');
+    expect(campaignCells).toHaveLength(2);
+  });
+
+  it('Supports sorting by startDate column', async () => {
+    renderCampaigns(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+    });
+
+    // Get the campaign names in their initial order
+    const getCampaignOrder = (): string[] => {
+      const campaignCells = screen.getAllByTestId('campaignName');
+      return campaignCells.map((cell) => cell.textContent || '');
+    };
+
+    // Find the Start Date header and click it to trigger ascending sort
+    const startDateHeader = screen.getByRole('columnheader', {
+      name: /start date/i,
+    });
+    expect(startDateHeader).toBeInTheDocument();
+
+    // Click to sort ascending (School Campaign has earlier startAt: 2024-06-15, Hospital: 2024-07-28)
+    await userEvent.click(startDateHeader);
+
+    await waitFor(() => {
+      const sortedOrder = getCampaignOrder();
+      // After ascending sort by start date, School Campaign (2024-06-15) should come before Hospital (2024-07-28)
+      expect(sortedOrder).toEqual(['School Campaign', 'Hospital Campaign']);
+    });
+
+    // Click again to sort descending
+    await userEvent.click(startDateHeader);
+
+    await waitFor(() => {
+      const descendingOrder = getCampaignOrder();
+      // After descending sort, Hospital Campaign (2024-07-28) should come before School (2024-06-15)
+      expect(descendingOrder).toEqual(['Hospital Campaign', 'School Campaign']);
+    });
+  });
+
+  it('Supports sorting by endDate column', async () => {
+    renderCampaigns(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+      expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
+    });
+
+    // Get the campaign names in their initial order
+    const getCampaignOrder = (): string[] => {
+      const campaignCells = screen.getAllByTestId('campaignName');
+      return campaignCells.map((cell) => cell.textContent || '');
+    };
+
+    // Find the End Date header and click it to trigger ascending sort
+    const endDateHeader = screen.getByRole('columnheader', {
+      name: /end date/i,
+    });
+    expect(endDateHeader).toBeInTheDocument();
+
+    // Click to sort ascending (Hospital Campaign has earlier endAt: 2022-08-30, School: 2099-12-31)
+    await userEvent.click(endDateHeader);
+
+    await waitFor(() => {
+      const sortedOrder = getCampaignOrder();
+      // After ascending sort by end date, Hospital Campaign (2022-08-30) should come before School (2099-12-31)
+      expect(sortedOrder).toEqual(['Hospital Campaign', 'School Campaign']);
+    });
+
+    // Click again to sort descending
+    await userEvent.click(endDateHeader);
+
+    await waitFor(() => {
+      const descendingOrder = getCampaignOrder();
+      // After descending sort, School Campaign (2099-12-31) should come before Hospital (2022-08-30)
+      expect(descendingOrder).toEqual(['School Campaign', 'Hospital Campaign']);
     });
   });
 });

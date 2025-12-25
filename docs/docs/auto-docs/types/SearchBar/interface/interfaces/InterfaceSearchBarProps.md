@@ -18,7 +18,7 @@ Strongly typed props for the shared SearchBar component.
 
 > `optional` **buttonAriaLabel**: `string`
 
-Defined in: [src/types/SearchBar/interface.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L75)
+Defined in: [src/types/SearchBar/interface.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L77)
 
 Accessible label for the search button.
 
@@ -38,7 +38,7 @@ Additional class applied to the search button.
 
 > `optional` **buttonLabel**: `string`
 
-Defined in: [src/types/SearchBar/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L73)
+Defined in: [src/types/SearchBar/interface.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L75)
 
 Optional label shown inside the search button.
 
@@ -65,6 +65,16 @@ Additional class applied to the container.
 #### Overrides
 
 `Omit.className`
+
+***
+
+### clearButtonAriaLabel?
+
+> `optional` **clearButtonAriaLabel**: `string`
+
+Defined in: [src/types/SearchBar/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L79)
+
+Accessible label for the clear button.
 
 ***
 
@@ -96,7 +106,7 @@ Initial value when used in uncontrolled mode.
 
 > `optional` **icon**: `ReactNode`
 
-Defined in: [src/types/SearchBar/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L79)
+Defined in: [src/types/SearchBar/interface.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L83)
 
 Optional custom icon rendered inside the input field.
 
@@ -126,7 +136,7 @@ Input test id override.
 
 > `optional` **isLoading**: `boolean`
 
-Defined in: [src/types/SearchBar/interface.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L77)
+Defined in: [src/types/SearchBar/interface.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L81)
 
 Renders a loading spinner inside the button when true.
 
@@ -224,7 +234,7 @@ Toggle visibility of the inline clear button. Defaults to true.
 
 Defined in: [src/types/SearchBar/interface.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L71)
 
-Toggle the leading search icon visibility. Defaults to true.
+Toggle the leading search icon visibility. Defaults to false.
 
 ***
 
@@ -235,6 +245,16 @@ Toggle the leading search icon visibility. Defaults to true.
 Defined in: [src/types/SearchBar/interface.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L67)
 
 Toggle visibility of the trailing search button. Defaults to true.
+
+***
+
+### showTrailingIcon?
+
+> `optional` **showTrailingIcon**: `boolean`
+
+Defined in: [src/types/SearchBar/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L73)
+
+Toggle the trailing search icon visibility. Defaults to false.
 
 ***
 

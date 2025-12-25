@@ -1,5 +1,25 @@
 /// <reference types="cypress" />
 export {};
+
+/** Type definitions for GraphQL signIn response */
+interface SignInUser {
+  id: string;
+  name: string;
+  emailAddress: string;
+  role: string;
+}
+
+interface SignInResponse {
+  data?: {
+    signIn?: {
+      user: SignInUser;
+      accessToken: string;
+      refreshToken: string;
+    };
+  };
+  errors?: Array<{ message: string }>;
+}
+
 declare global {
   namespace Cypress {
     interface Chainable<Subject> {
@@ -24,16 +44,38 @@ Cypress.Commands.add('loginByApi', (role: string) => {
       if (!user) {
         throw new Error(`User role "${role}" not found in users fixture`);
       }
+
+      // Intercept signIn query to capture response using operation name for robust matching
+      cy.intercept('POST', '**/graphql', (req) => {
+        if (req.body?.operationName === 'SignIn') {
+          req.alias = 'signInRequest';
+        }
+      });
+
       const loginPath = role === 'user' ? '/' : '/admin';
       cy.visit(loginPath);
       cy.get('[data-cy="loginEmail"]').type(user.email);
       cy.get('[data-cy="loginPassword"]').type(user.password);
       cy.get('[data-cy="loginBtn"]').click();
 
+      // Wait for and check the signIn response
+      cy.wait('@signInRequest', { timeout: 15000 }).then((interception) => {
+        const body = interception.response?.body as SignInResponse;
+        if (body?.errors && body.errors.length > 0) {
+          const errMsg = body.errors.map((e) => e.message).join(', ');
+          throw new Error(`Login failed: ${errMsg}`);
+        }
+        if (!body?.data?.signIn) {
+          throw new Error(
+            `Login failed: No signIn data in response. Response: ${JSON.stringify(body)}`,
+          );
+        }
+      });
+
       if (role === 'user') {
-        cy.url().should('include', '/user/organizations');
+        cy.url({ timeout: 15000 }).should('include', '/user/organizations');
       } else {
-        cy.url().should('include', '/orglist');
+        cy.url({ timeout: 15000 }).should('include', '/orglist');
       }
     });
   });

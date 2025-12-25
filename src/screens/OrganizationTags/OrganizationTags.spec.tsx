@@ -83,7 +83,7 @@ vi.mock('shared-components/ReportingTable/ReportingTable', async () => {
     }) => {
       loadingOverlaySpy(props.gridProps?.slots?.loadingOverlay?.());
       const Component = (
-        actual as { default: React.ComponentType<typeof props> }
+        actual as unknown as { default: React.ComponentType<typeof props> }
       ).default;
       return <Component {...props} />;
     },

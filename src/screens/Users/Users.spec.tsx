@@ -45,6 +45,7 @@ vi.mock('react-toastify', async (importOriginal) => {
 
 vi.mock('@mui/icons-material', () => ({
   WarningAmberRounded: vi.fn(() => null),
+  PersonOff: vi.fn(() => null),
 }));
 
 vi.mock('components/IconComponent/IconComponent', () => ({

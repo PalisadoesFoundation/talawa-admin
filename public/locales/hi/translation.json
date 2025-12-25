@@ -54,7 +54,11 @@
     "OR": "या",
     "admin": "व्यवस्थापक",
     "user": "उपयोगकर्ता",
-    "loading": "लोड हो रहा है"
+    "loading": "लोड हो रहा है",
+    "communityLogo": "समुदाय लोगो",
+    "organizations": "संगठन",
+    "accountLocked": "बहुत अधिक असफल लॉगिन प्रयासों के कारण आपका खाता अस्थायी रूप से लॉक कर दिया गया है। कृपया बाद में पुनः प्रयास करें।",
+    "accountLockedWithTimer": "आपका खाता अस्थायी रूप से लॉक कर दिया गया है। कृपया {{minutes}} मिनट में पुनः प्रयास करें।"
   },
   "signOut": {
     "retryPrompt": "सेशन रद्द करने में विफल। पुनः प्रयास करें?",
@@ -222,7 +226,8 @@
     "name": "नाम",
     "email": "ईमेल",
     "profilePictureAlt": "{{name}} की प्रोफ़ाइल छवि",
-    "placeholderAvatarAlt": "प्लेसहोल्डर अवतार"
+    "placeholderAvatarAlt": "प्लेसहोल्डर अवतार",
+    "newMembersWillAppearHere": "नई सदस्यता अनुरोध यहाँ दिखाई देंगे"
   },
   "users": {
     "membershipStatus": {
@@ -706,7 +711,8 @@
     "viewCampaigns": "कैम्पेंस देखें",
     "assocCampaigns": "संबद्ध अभियान",
     "errorLoadingFundsData": "फंड डेटा लोड करते समय त्रुटि हुई",
-    "editFund": "फंड संपादित करें"
+    "editFund": "फंड संपादित करें",
+    "searchFunds": "फंड खोजें"
   },
   "fundCampaign": {
     "title": "फंडरेजिंग कैंपेन",
@@ -730,7 +736,10 @@
     "latestEndDate": "अंतिम समाप्ति तिथि",
     "earliestEndDate": "सबसे पहली समाप्ति तिथि",
     "lowestGoal": "सबसे कम उद्देश्य",
-    "highestGoal": "सबसे ऊंचा उद्देश्य"
+    "highestGoal": "सबसे ऊंचा उद्देश्य",
+    "editCampaign": "अभियान संपादित करें",
+    "searchCampaigns": "अभियान खोजें",
+    "errorLoading": "अभियान डेटा लोड करते समय त्रुटि हुई"
   },
   "pledges": {
     "title": "निधि अभियान प्रतिज्ञाएँ",
@@ -1047,7 +1056,8 @@
     "unassignUserTagMessage": "क्या आप इस उपयोगकर्ता से टैग हटाना चाहते हैं?",
     "successfullyUnassigned": "उपयोगकर्ता से टैग हटा दिया गया",
     "tagsAssigned": "टैग सौंपे गए",
-    "noTagsAssigned": "कोई टैग सौंपा नहीं गया"
+    "noTagsAssigned": "कोई टैग सौंपा नहीं गया",
+    "actions": "कार्रवाई"
   },
   "people": {
     "title": "लोग",
@@ -1179,7 +1189,8 @@
     "media": "मिडिया",
     "event": "आयोजन",
     "article": "लेख",
-    "postNowVisibleInFeed": "पोस्ट अब फीड में दिखाई दे रहा है"
+    "postNowVisibleInFeed": "पोस्ट अब फीड में दिखाई दे रहा है",
+    "processingPost": "आपकी पोस्ट प्रसंस्करण हो रही है। कृपया प्रतीक्षा करें।"
   },
   "eventAttendance": {
     "historical_statistics": "ऐतिहासिक आंकड़े",
@@ -1433,6 +1444,7 @@
   },
   "userChat": {
     "title": "चैट्स",
+    "deleteChat": "चैट हटाएं",
     "add": "जोड़ें",
     "chat": "बात करना",
     "contacts": "संपर्क",
@@ -1443,7 +1455,25 @@
     "newGroupChat": "नया समूह चैट",
     "groupInfo": "समूह जानकारी",
     "members": "सदस्यों",
-    "addMembers": "सदस्य जोड़ें"
+    "addMembers": "सदस्य जोड़ें",
+    "userNotFound": "उपयोगकर्ता नहीं मिला",
+    "roleUpdatedSuccessfully": "भूमिका सफलतापूर्वक अपडेट की गई",
+    "failedToUpdateRole": "भूमिका अपडेट करने में विफल",
+    "memberRemovedSuccessfully": "सदस्य सफलतापूर्वक हटाया गया",
+    "failedToRemoveMember": "सदस्य हटाने में विफल",
+    "chatImageUpdatedSuccessfully": "चैट छवि सफलतापूर्वक अपडेट की गई",
+    "failedToUpdateChatImage": "चैट छवि अपडेट करने में विफल",
+    "chatDeletedSuccessfully": "चैट सफलतापूर्वक हटाई गई",
+    "failedToDeleteChat": "चैट हटाने में विफल",
+    "chatNameUpdatedSuccessfully": "चैट नाम सफलतापूर्वक अपडेट किया गया",
+    "failedToUpdateChatName": "चैट नाम अपडेट करने में विफल",
+    "remove": "हटाएं",
+    "searchFullName": "पूर्ण नाम से खोजें",
+    "customizedTable": "कस्टमाइज़्ड टेबल",
+    "demoteToRegular": "नियमित में पदावनत करें",
+    "promoteToAdmin": "व्यवस्थापक में पदोन्नत करें",
+    "user": "उपयोगकर्ता",
+    "chatAction": "चैट कार्रवाई"
   },
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
@@ -1584,7 +1614,13 @@
     "viewPledges": "प्रतिज्ञाएँ देखें",
     "noPledges": "कोई प्रतिज्ञा नहीं मिली",
     "noCampaigns": "कोई अभियान नहीं मिला",
-    "raised": "एकत्रित",
+    "searchCampaigns": "अभियान खोजें",
+    "campaignName": "अभियान का नाम",
+    "startDate": "आरंभ करने की तिथि",
+    "endDate": "अंतिम तिथि",
+    "fundingGoal": "निधि लक्ष्य",
+    "raised": "जुठाई गई राशि",
+    "viewPledge": "प्रतिज्ञा देखें",
     "amountRaised": "एकत्रित राशि"
   },
   "userPledges": {

@@ -1,0 +1,28 @@
+.tableHeader {
+  background-color: var(--tableHeader-green) !important;
+  color: var(--tableHeader-color);
+}
+
+.tableBody {
+  font-size: var(--font-size-table-body);
+}
+
+.roleBadge {
+  font-size: 0.75rem;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.dropdownToggle {
+  color: black;
+  border: none;
+  padding: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.removeItem {
+  color: var(--bs-danger);
+}

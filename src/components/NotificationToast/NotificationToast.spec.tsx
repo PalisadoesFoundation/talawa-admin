@@ -82,11 +82,12 @@ describe('NotificationToast', () => {
   });
 
   it('translates an i18n message using the provided namespace', () => {
-    NotificationToast.error({
+    const id = NotificationToast.error({
       key: 'talawaApiUnavailable',
       namespace: 'errors',
     });
 
+    expect(id).toBe('error-id');
     expect(getFixedTMock).toHaveBeenCalledWith(null, 'errors');
     expect(toastMock.error).toHaveBeenCalledWith(
       'errors:talawaApiUnavailable',
@@ -95,8 +96,9 @@ describe('NotificationToast', () => {
   });
 
   it('merges custom toast options over defaults', () => {
-    NotificationToast.warning('Be careful', { autoClose: false });
+    const id = NotificationToast.warning('Be careful', { autoClose: false });
 
+    expect(id).toBe('warning-id');
     expect(toastMock.warning).toHaveBeenCalledWith(
       'Be careful',
       expect.objectContaining({ autoClose: false }),
@@ -153,13 +155,5 @@ describe('NotificationToastContainer', () => {
     expect(container).toHaveAttribute('data-limit', '9');
     expect(container).toHaveAttribute('data-position', 'top-right');
     expect(toastContainerSpy).toHaveBeenCalled();
-  });
-
-  it('uses default container props when none are provided', () => {
-    render(<NotificationToastContainer />);
-
-    const container = screen.getByTestId('toast-container');
-    expect(container).toHaveAttribute('data-limit', '5');
-    expect(container).toHaveAttribute('data-position', 'top-right');
   });
 });

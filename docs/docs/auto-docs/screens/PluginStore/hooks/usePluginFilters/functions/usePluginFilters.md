@@ -70,7 +70,7 @@ Defined in: [src/screens/PluginStore/hooks/usePluginFilters.ts:16](https://githu
 
 ##### value
 
-`string`
+`string` | `number`
 
 #### Returns
 

@@ -826,25 +826,33 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    const endDateInput = screen.getByTestId('eventEndAt');
     const startDateInput = screen.getByTestId('eventStartAt');
+    const endDateInput = screen.getByTestId('eventEndAt');
 
-    fireEvent.change(startDateInput, { target: { value: '2025-12-15' } });
-
+    // First set startDate to an early date to establish a baseline
+    fireEvent.change(startDateInput, { target: { value: '2025-12-10' } });
     await waitFor(() => {
-      expect(startDateInput).toHaveValue('2025-12-15');
+      expect(startDateInput).toHaveValue('2025-12-10');
     });
 
+    // Set endDate to a date after startDate
     fireEvent.change(endDateInput, { target: { value: '2025-12-20' } });
-
     await waitFor(() => {
       expect(endDateInput).toHaveValue('2025-12-20');
     });
 
+    // Now set startDate to a date AFTER the endDate - this should trigger auto-adjust
     fireEvent.change(startDateInput, { target: { value: '2025-12-25' } });
 
+    // Verify startDate was set
     await waitFor(() => {
-      expect(endDateInput).toHaveValue('2025-12-25');
+      expect(startDateInput).toHaveValue('2025-12-25');
+    });
+
+    // endDate should be auto-adjusted to match startDate
+    await waitFor(() => {
+      const updatedEndDateInput = screen.getByTestId('eventEndAt');
+      expect(updatedEndDateInput).toHaveValue('2025-12-25');
     });
   });
 

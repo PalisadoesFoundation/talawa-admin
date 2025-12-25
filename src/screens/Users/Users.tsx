@@ -77,7 +77,7 @@ import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { ApolloError } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
+import { PersonOff, WarningAmberRounded } from '@mui/icons-material';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 
@@ -384,7 +384,7 @@ const Users = (): JSX.Element => {
 
       {isLoading === false && displayedUsers.length === 0 ? (
         <EmptyState
-          icon="person_off"
+          icon={<PersonOff />}
           message={getEmptyStateMessage()}
           description={
             searchByName.length > 0 ? tCommon('tryAdjustingFilters') : undefined
