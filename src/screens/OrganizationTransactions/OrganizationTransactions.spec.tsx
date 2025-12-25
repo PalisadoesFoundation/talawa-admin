@@ -55,13 +55,11 @@ describe('OrganizationTransactions', () => {
     expect(screen.getByTestId('plugin-injector')).toBeInTheDocument();
   });
 
-  it('renders breadcrumbs navigation', async () => {
+  it('renders breadcrumbs navigation', () => {
     renderWithRouter();
 
     // Verify breadcrumbs navigation is present
-    await waitFor(() => {
-      expect(screen.getByRole('navigation')).toBeInTheDocument();
-    });
+    expect(screen.getByRole('navigation')).toBeInTheDocument();
   });
 
   it('sets the document title from i18n', () => {

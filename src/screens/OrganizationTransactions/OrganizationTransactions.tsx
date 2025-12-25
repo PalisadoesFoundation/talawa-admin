@@ -26,6 +26,11 @@ export default function OrganizationTransactions(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'transactions' });
   const { orgId } = useParams();
 
+  // Set document title (must be before early return to comply with Rules of Hooks)
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
+
   // Redirect to orglist if orgId is missing
   if (!orgId) {
     return <Navigate to="/orglist" replace />;
@@ -42,10 +47,6 @@ export default function OrganizationTransactions(): JSX.Element {
       isCurrent: true,
     },
   ];
-
-  useEffect(() => {
-    document.title = t('title');
-  }, [t]);
 
   return (
     <>
