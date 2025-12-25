@@ -12,6 +12,15 @@ import {
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { toast } from 'react-toastify';
+
+// Mock utils/i18n to use the test i18n instance for NotificationToast
+vi.mock('utils/i18n', async () => {
+  const i18n = await import('utils/i18nForTest');
+  return {
+    default: i18n.default,
+  };
+});
+
 vi.mock('react-i18next', () => ({
   initReactI18next: {
     type: '3rdParty',
@@ -63,6 +72,8 @@ vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
   },
 }));
 
@@ -504,10 +515,6 @@ describe('OrganizationCard', () => {
       },
     ];
 
-    vi.mocked(toast.success).mockImplementationOnce(() => {
-      throw new Error('Generic error');
-    });
-
     render(
       <MockedProvider mocks={mocks}>
         <OrganizationCard data={mockData} />
@@ -518,8 +525,8 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
-        'errorOccurred',
+      expect(toast.success).toHaveBeenCalledWith(
+        'orgJoined',
         expect.any(Object),
       );
     });
