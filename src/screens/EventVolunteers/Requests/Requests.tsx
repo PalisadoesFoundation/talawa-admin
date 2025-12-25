@@ -50,7 +50,6 @@ import {
 } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
 import styles from '../../../style/app-fixed.module.css';
-import requestsStyles from './Requests.module.css';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import dayjs from 'dayjs';
@@ -59,6 +58,24 @@ import { toast } from 'react-toastify';
 import { debounce } from '@mui/material';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+
+const dataGridStyle = {
+  backgroundColor: 'white',
+  borderRadius: '16px',
+  '& .MuiDataGrid-columnHeaders': { border: 'none' },
+  '& .MuiDataGrid-cell': { border: 'none' },
+  '& .MuiDataGrid-columnSeparator': { display: 'none' },
+  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+    outline: 'none !important',
+  },
+  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
+    outline: 'none',
+  },
+  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
+  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
+  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
+};
 
 function requests(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
@@ -148,13 +165,10 @@ function requests(): JSX.Element {
   if (requestsError) {
     // Displays an error message if there is an issue loading the requests
     return (
-      <div className={`${styles.container} ${requestsStyles.errorContainer}`}>
-        <div
-          className={`${styles.message} ${requestsStyles.errorMessage}`}
-          data-testid="errorMsg"
-        >
-          <WarningAmberRounded className={styles.errorIcon} />
-          <h6>
+      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+        <div className={styles.message} data-testid="errorMsg">
+          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Volunteership Requests' })}
           </h6>
         </div>
@@ -195,7 +209,7 @@ function requests(): JSX.Element {
             {avatarURL ? (
               <img
                 src={avatarURL}
-                alt={t('volunteer')}
+                alt="volunteer"
                 data-testid={`volunteer_image`}
                 className={styles.TableImages}
               />
@@ -264,7 +278,8 @@ function requests(): JSX.Element {
             <Button
               variant="success"
               size="sm"
-              className={`me-2 rounded ${requestsStyles.acceptButton}`}
+              style={{ minWidth: '32px' }}
+              className="me-2 rounded"
               data-testid="acceptBtn"
               onClick={() => updateMembershipStatus(params.row.id, 'accepted')}
             >
@@ -273,11 +288,11 @@ function requests(): JSX.Element {
             <Button
               size="sm"
               variant="danger"
-              className={`rounded ${requestsStyles.rejectButton}`}
+              className="rounded"
               data-testid={`rejectBtn`}
               onClick={() => updateMembershipStatus(params.row.id, 'rejected')}
             >
-              <FaXmark size={18} className={requestsStyles.rejectIcon} />
+              <FaXmark size={18} fontWeight={900} />
             </Button>
           </>
         );
@@ -294,7 +309,6 @@ function requests(): JSX.Element {
           onSearch={debouncedSearch}
           inputTestId="searchBy"
           buttonTestId="searchBtn"
-          clearButtonAriaLabel={tCommon('clear')}
         />
         <div className="d-flex gap-3 mb-1">
           <div className="d-flex justify-space-between align-items-center gap-3">
@@ -332,20 +346,19 @@ function requests(): JSX.Element {
       {/* Table with Volunteer Membership Requests */}
 
       {requests.length > 0 ? (
-        <div className={requestsStyles.dataGridStyle}>
-          <DataGrid
-            disableColumnMenu
-            columnBufferPx={5}
-            hideFooter={true}
-            getRowId={(row) => row.id}
-            getRowClassName={() => `${styles.rowBackgrounds}`}
-            autoHeight
-            rowHeight={65}
-            rows={requests}
-            columns={columns}
-            isRowSelectable={() => false}
-          />
-        </div>
+        <DataGrid
+          disableColumnMenu
+          columnBufferPx={5}
+          hideFooter={true}
+          getRowId={(row) => row.id}
+          sx={dataGridStyle}
+          getRowClassName={() => `${styles.rowBackgrounds}`}
+          autoHeight
+          rowHeight={65}
+          rows={requests}
+          columns={columns}
+          isRowSelectable={() => false}
+        />
       ) : (
         <div className="d-flex justify-content-center align-items-center mt-5">
           <h5>{t('noRequests')}</h5>

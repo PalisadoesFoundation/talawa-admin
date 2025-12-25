@@ -348,8 +348,8 @@ describe('Requests Component CSS Styling', () => {
     expect(dataGrid).toHaveClass('MuiDataGrid-root');
 
     const styles = getComputedStyle(dataGrid as Element);
-    expect(styles.backgroundColor).toBeDefined();
-    expect(styles.borderRadius).toBeDefined();
+    expect(styles.backgroundColor).toBe('rgb(255, 255, 255)');
+    expect(styles.borderRadius).toBe('16px');
   });
 
   test('Sort button container should have correct spacing', async () => {
