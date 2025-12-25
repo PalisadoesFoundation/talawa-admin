@@ -95,7 +95,9 @@ const AcceptInvitation = (): JSX.Element => {
   };
 
   const handleAccept = async () => {
-    if (!invite) return;
+    if (!invite) {
+      return;
+    }
     setIsSubmitting(true);
     try {
       const input = { invitationToken: invite.invitationToken };
