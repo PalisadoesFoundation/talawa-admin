@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-export { };
+export {};
 
 /** Type definitions for GraphQL signIn response */
 interface SignInUser {
