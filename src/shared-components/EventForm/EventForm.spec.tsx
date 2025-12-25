@@ -189,6 +189,7 @@ const baseValues: IEventFormValues = {
   allDay: true,
   isPublic: true,
   isRegisterable: true,
+  isInviteOnly: false,
   recurrenceRule: null,
   createChat: false,
 };
@@ -718,6 +719,35 @@ describe('EventForm', () => {
     expect(handleSubmit).toHaveBeenCalledWith(
       expect.objectContaining({
         createChat: true,
+      }),
+    );
+  });
+
+  test('toggles invite-only event', async () => {
+    const handleSubmit = vi.fn();
+    render(
+      <EventForm
+        initialValues={{ ...baseValues, isInviteOnly: false }}
+        onSubmit={handleSubmit}
+        onCancel={vi.fn()}
+        submitLabel="Create"
+        t={t}
+        tCommon={tCommon}
+        showInviteOnlyToggle
+      />,
+    );
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('inviteOnlyEventCheck'));
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('createEventBtn'));
+    });
+
+    expect(handleSubmit).toHaveBeenCalledWith(
+      expect.objectContaining({
+        isInviteOnly: true,
       }),
     );
   });
@@ -1653,6 +1683,24 @@ describe('EventForm', () => {
     );
 
     expect(screen.queryByTestId('createChatCheck')).not.toBeInTheDocument();
+  });
+
+  test('does not show invite-only toggle when showInviteOnlyToggle is false', () => {
+    render(
+      <EventForm
+        initialValues={baseValues}
+        onSubmit={vi.fn()}
+        onCancel={vi.fn()}
+        submitLabel="Create"
+        t={t}
+        tCommon={tCommon}
+        showInviteOnlyToggle={false}
+      />,
+    );
+
+    expect(
+      screen.queryByTestId('inviteOnlyEventCheck'),
+    ).not.toBeInTheDocument();
   });
 
   test('creates default recurrence rule when selecting custom without existing rule', async () => {

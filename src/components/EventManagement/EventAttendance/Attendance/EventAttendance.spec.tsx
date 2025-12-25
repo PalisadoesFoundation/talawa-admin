@@ -16,7 +16,7 @@ import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
 import i18n from 'utils/i18nForTest';
 import { MOCKS } from '../EventAttendanceMocks';
-import { vi, describe, afterEach, expect, it } from 'vitest';
+import { vi, describe, afterEach, expect, it, beforeEach } from 'vitest';
 import styles from 'style/app-fixed.module.css';
 import { ApolloError, useLazyQuery } from '@apollo/client';
 import * as ApolloClientModule from '@apollo/client';
@@ -26,6 +26,10 @@ vi.mock('react-chartjs-2', async () => ({
   ...(await vi.importActual('react-chartjs-2')),
   Line: () => null,
   Bar: () => null,
+}));
+
+vi.mock('utils/featureFlags', () => ({
+  isInviteOnlyEnabled: vi.fn(() => false),
 }));
 
 const renderEventAttendance = (): RenderResult => {

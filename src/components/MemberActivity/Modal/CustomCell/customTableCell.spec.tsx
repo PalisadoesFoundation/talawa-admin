@@ -8,6 +8,7 @@ import { CustomTableCell } from './customTableCell';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { vi } from 'vitest';
 import { mocks } from '../../MemberActivityMocks';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -80,7 +81,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event123', includeInviteOnly: false },
+          variables: addInviteOnlyVariable({ eventId: 'event123' }),
         },
         error: new Error('An error occurred'),
       },
@@ -112,7 +113,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event123', includeInviteOnly: false },
+          variables: addInviteOnlyVariable({ eventId: 'event123' }),
         },
         result: {
           data: {
@@ -123,7 +124,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event999', includeInviteOnly: false },
+          variables: addInviteOnlyVariable({ eventId: 'event999' }),
         },
         result: {
           data: {
@@ -161,7 +162,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event456', includeInviteOnly: false },
+          variables: addInviteOnlyVariable({ eventId: 'event456' }),
         },
         result: {
           data: {
@@ -213,7 +214,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event789', includeInviteOnly: false },
+          variables: addInviteOnlyVariable({ eventId: 'event789' }),
         },
         result: {
           data: {
@@ -258,7 +259,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event000', includeInviteOnly: false },
+          variables: addInviteOnlyVariable({ eventId: 'event000' }),
         },
         result: {
           data: {
@@ -303,7 +304,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event111', includeInviteOnly: false },
+          variables: addInviteOnlyVariable({ eventId: 'event111' }),
         },
         result: {
           data: {
@@ -350,7 +351,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event222', includeInviteOnly: false },
+          variables: addInviteOnlyVariable({ eventId: 'event222' }),
         },
         result: {
           data: {

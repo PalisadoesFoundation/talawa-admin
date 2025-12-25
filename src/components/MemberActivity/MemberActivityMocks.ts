@@ -1,4 +1,5 @@
 import { EVENT_DETAILS, EVENT_DETAILS_BASIC } from 'GraphQl/Queries/Queries';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 
 export const mockEventData = {
   event: {
@@ -53,7 +54,7 @@ export const mocks = [
     request: {
       query: EVENT_DETAILS,
       // EVENT_DETAILS query parameter is $eventId
-      variables: { eventId: 'event123', includeInviteOnly: false },
+      variables: addInviteOnlyVariable({ eventId: 'event123' }),
     },
     result: {
       data: mockEventData,

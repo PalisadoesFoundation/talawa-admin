@@ -24,20 +24,24 @@ Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mock
 
 #### request.variables
 
-> **variables**: `object`
+> **variables**: `object` & `object`
 
-#### request.variables.first
+##### Type Declaration
+
+###### first
 
 > **first**: `number` = `30`
 
-#### request.variables.includeInviteOnly
-
-> **includeInviteOnly**: `boolean` = `false`
-
-#### request.variables.organizationId
+###### organizationId
 
 > **organizationId**: `string` = `'orgId'`
 
-#### request.variables.upcomingOnly
+###### upcomingOnly
 
 > **upcomingOnly**: `boolean` = `true`
+
+##### Type Declaration
+
+###### includeInviteOnly
+
+> **includeInviteOnly**: `boolean`

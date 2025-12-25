@@ -6,7 +6,7 @@
 
 > `const` **MOCKDETAIL**: `object`[]
 
-Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L34)
+Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L35)
 
 ## Type Declaration
 
@@ -20,15 +20,19 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 #### request.variables
 
-> **variables**: `object`
+> **variables**: `object` & `object`
 
-#### request.variables.eventId
+##### Type Declaration
+
+###### eventId
 
 > **eventId**: `string` = `'event123'`
 
-#### request.variables.includeInviteOnly
+##### Type Declaration
 
-> **includeInviteOnly**: `boolean` = `false`
+###### includeInviteOnly
+
+> **includeInviteOnly**: `boolean`
 
 ### result
 

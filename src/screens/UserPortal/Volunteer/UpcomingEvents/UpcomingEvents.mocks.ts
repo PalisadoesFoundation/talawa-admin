@@ -17,6 +17,7 @@ import {
   recurringInstanceEvent,
   baseRecurringEvent,
 } from './UpcomingEvents.mockEvents';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 
 // Re-export for backward compatibility
 export { baseRecurringEvent } from './UpcomingEvents.mockEvents';
@@ -25,12 +26,11 @@ export { baseRecurringEvent } from './UpcomingEvents.mockEvents';
 const eventsQuery = {
   request: {
     query: USER_EVENTS_VOLUNTEER,
-    variables: {
+    variables: addInviteOnlyVariable({
       organizationId: 'orgId',
       upcomingOnly: true,
       first: 30,
-      includeInviteOnly: false,
-    },
+    }),
   },
 };
 

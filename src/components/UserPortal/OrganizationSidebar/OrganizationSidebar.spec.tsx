@@ -14,6 +14,11 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import OrganizationSidebar from './OrganizationSidebar';
 import { vi } from 'vitest';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
+
+vi.mock('utils/featureFlags', () => ({
+  isInviteOnlyEnabled: vi.fn(() => false),
+}));
 
 /**
  * Unit tests for the OrganizationSidebar component in the User Portal.
@@ -35,12 +40,11 @@ const MOCKS = [
   {
     request: {
       query: ORGANIZATION_EVENT_CONNECTION_LIST,
-      variables: {
+      variables: addInviteOnlyVariable({
         organization_id: 'events',
         first: 3,
         skip: 0,
-        includeInviteOnly: false,
-      },
+      }),
     },
     result: {
       data: {

@@ -5,8 +5,17 @@ import EventsAttendedByMember from './EventsAttendedByMember';
 import { BrowserRouter } from 'react-router';
 import { EVENT_DETAILS_BASIC } from 'GraphQl/Queries/Queries';
 import { mocks, errorMocks } from './MemberActivityMocks';
+import { vi } from 'vitest';
+
+vi.mock('utils/featureFlags', () => ({
+  isInviteOnlyEnabled: vi.fn(() => false),
+}));
 
 describe('EventsAttendedByMember', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('renders loading state initially', () => {
     render(
       <BrowserRouter>

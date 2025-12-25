@@ -47,6 +47,7 @@ import type {
   InterfaceQueryOrganizationEventListItem,
   InterfaceMemberInfo,
 } from 'utils/interfaces';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 
 export default function OrganizationSidebar(): JSX.Element {
   // Translation functions for different namespaces
@@ -82,11 +83,11 @@ export default function OrganizationSidebar(): JSX.Element {
   const { data: eventsData, loading: eventsLoading } = useQuery(
     ORGANIZATION_EVENT_CONNECTION_LIST,
     {
-      variables: {
+      variables: addInviteOnlyVariable({
         organization_id: organizationId,
         first: 3, // Fetch top 3 upcoming events
         skip: 0, // No offset
-      },
+      }),
     },
   );
 
@@ -120,7 +121,7 @@ export default function OrganizationSidebar(): JSX.Element {
       </div>
       {memberLoading ? (
         <div className={`d-flex flex-row justify-content-center`}>
-          <HourglassBottomIcon /> <span>Loading...</span>
+          <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
         </div>
       ) : (
         <ListGroup variant="flush">
@@ -165,7 +166,7 @@ export default function OrganizationSidebar(): JSX.Element {
       </div>
       {eventsLoading ? (
         <div className={`d-flex flex-row justify-content-center`}>
-          <HourglassBottomIcon /> <span>Loading...</span>
+          <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
         </div>
       ) : (
         <ListGroup variant="flush">
@@ -185,11 +186,12 @@ export default function OrganizationSidebar(): JSX.Element {
                       </div>
                     </div>
                     <div className={`d-flex flex-row ${styles.eventDetails}`}>
-                      Starts{' '}
+                      {t('starts')}{' '}
                       <b> {dayjs(event.startDate).format("D MMMM 'YY")}</b>
                     </div>
                     <div className={`d-flex flex-row ${styles.eventDetails}`}>
-                      Ends <b> {dayjs(event.endDate).format("D MMMM 'YY")}</b>
+                      {t('ends')}{' '}
+                      <b> {dayjs(event.endDate).format("D MMMM 'YY")}</b>
                     </div>
                   </div>
                 </ListGroup.Item>

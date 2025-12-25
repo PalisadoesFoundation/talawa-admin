@@ -34,14 +34,17 @@ import { toast } from 'react-toastify';
 import { Frequency } from 'utils/recurrenceUtils';
 import { green } from '@mui/material/colors';
 
-const { mockToast, mockUseParams } = vi.hoisted(() => ({
-  mockToast: {
-    error: vi.fn(),
-    info: vi.fn(),
-    success: vi.fn(),
-  },
-  mockUseParams: vi.fn(),
-}));
+const { mockToast, mockUseParams, mockIsInviteOnlyEnabled } = vi.hoisted(
+  () => ({
+    mockToast: {
+      error: vi.fn(),
+      info: vi.fn(),
+      success: vi.fn(),
+    },
+    mockUseParams: vi.fn(),
+    mockIsInviteOnlyEnabled: vi.fn(() => false),
+  }),
+);
 
 vi.mock('react-toastify', () => ({
   toast: mockToast,
@@ -115,6 +118,10 @@ vi.mock('react-router', async () => {
     useParams: mockUseParams,
   };
 });
+
+vi.mock('utils/featureFlags', () => ({
+  isInviteOnlyEnabled: mockIsInviteOnlyEnabled,
+}));
 
 vi.mock('components/EventCalender/Monthly/EventCalender', () => ({
   __esModule: true,
@@ -1373,6 +1380,9 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should include isInviteOnly in create event mutation when toggled', async () => {
+    // Enable the invite-only feature flag for this test
+    mockIsInviteOnlyEnabled.mockReturnValue(true);
+
     const computedStartAt = dayjs(new Date())
       .startOf('day')
       .millisecond(0)
@@ -1398,7 +1408,7 @@ describe('Testing Events Screen [User Portal]', () => {
             isRegisterable: true,
             isInviteOnly: true,
           },
-          includeInviteOnly: false,
+          includeInviteOnly: true,
         },
       },
       newData: () => {
@@ -1474,6 +1484,9 @@ describe('Testing Events Screen [User Portal]', () => {
 
     // Verify invite-only was toggled
     expect(inviteOnlyCheckbox).toBeChecked();
+
+    // Reset the feature flag mock
+    mockIsInviteOnlyEnabled.mockReturnValue(false);
   });
 
   it('Should test userRole as administrator', async () => {
