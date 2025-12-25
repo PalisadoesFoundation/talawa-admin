@@ -13,7 +13,12 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import Leaderboard from './Leaderboard';
 import type { ApolloLink } from '@apollo/client';
-import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './Leaderboard.mocks';
+import {
+  MOCKS,
+  EMPTY_MOCKS,
+  ERROR_MOCKS,
+  SEARCH_EMPTY_MOCKS,
+} from './Leaderboard.mocks';
 import { vi } from 'vitest';
 
 /**
@@ -292,8 +297,37 @@ describe('Testing Leaderboard Screen', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByTestId('leaderboard-empty-state')).toBeInTheDocument();
       expect(screen.getByText(t.noVolunteers)).toBeInTheDocument();
     });
+  });
+
+  it('shows empty state when search yields no results', async () => {
+    routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
+    const searchLink = new StaticMockLink(SEARCH_EMPTY_MOCKS);
+    renderLeaderboard(searchLink);
+
+    // Wait for initial data to load
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    // Type search term and trigger search
+    const input = screen.getByTestId('searchBy');
+    await userEvent.clear(input);
+    await userEvent.type(input, 'ZZZDoesNotExist');
+    await debounceWait();
+    fireEvent.click(screen.getByTestId('searchBtn'));
+
+    // Wait for debounced search to update and query to refetch
+    await waitFor(
+      () => {
+        expect(
+          screen.getByTestId('leaderboard-empty-state'),
+        ).toBeInTheDocument();
+      },
+      { timeout: 2000 },
+    );
   });
 
   it('Error while fetching volunteer data', async () => {

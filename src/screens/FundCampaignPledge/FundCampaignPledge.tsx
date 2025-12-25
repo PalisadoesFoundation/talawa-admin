@@ -11,7 +11,7 @@ import { currencySymbols } from 'utils/currency';
 import styles from 'style/app-fixed.module.css';
 import PledgeDeleteModal from './deleteModal/PledgeDeleteModal';
 import PledgeModal from './modal/PledgeModal';
-import { Breadcrumbs, Link, Popover, Stack, Typography } from '@mui/material';
+import { Breadcrumbs, Link, Popover, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
@@ -24,24 +24,12 @@ import type {
 import ProgressBar from 'react-bootstrap/ProgressBar';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 enum ModalState {
   SAME = 'same',
   DELETE = 'delete',
 }
-
-const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
-  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
-};
 
 const fundCampaignPledge = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
@@ -177,7 +165,6 @@ const fundCampaignPledge = (): JSX.Element => {
   useEffect(() => {
     refetchPledge();
   }, [sortBy, refetchPledge]);
-  console.log('campaignInfo', campaignInfo);
 
   const openModal = (modal: ModalState): void => {
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
@@ -227,7 +214,7 @@ const fundCampaignPledge = (): JSX.Element => {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded className={styles.errorIcon} />
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Pledges' })}
             <br />
@@ -241,7 +228,7 @@ const fundCampaignPledge = (): JSX.Element => {
   const columns: GridColDef[] = [
     {
       field: 'pledgers',
-      headerName: 'Pledgers',
+      headerName: t('pledgers'),
       flex: 3,
       minWidth: 50,
       align: 'left',
@@ -254,7 +241,9 @@ const fundCampaignPledge = (): JSX.Element => {
         const extraUsers = users.slice(1);
 
         return (
-          <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
+          <div
+            className={`d-flex ${styles.flexWrapGap} ${styles.maxHeight120}`}
+          >
             {mainUsers.map((user: InterfaceUserInfoPG, index: number) => (
               <div
                 className={styles.pledgerContainer}
@@ -285,7 +274,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 onClick={(event) => handleClick(event, extraUsers)}
                 data-testid={`moreContainer-${params.row.id}`}
               >
-                +{extraUsers.length} more...
+                {t('moreUsers', { count: extraUsers.length })}
               </div>
             )}
           </div>
@@ -294,7 +283,7 @@ const fundCampaignPledge = (): JSX.Element => {
     },
     {
       field: 'pledgeDate',
-      headerName: 'Pledge Date',
+      headerName: t('pledgeDate'),
       flex: 1,
       minWidth: 150,
       align: 'center',
@@ -307,7 +296,7 @@ const fundCampaignPledge = (): JSX.Element => {
     },
     {
       field: 'amount',
-      headerName: 'Pledged',
+      headerName: t('pledged'),
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -332,7 +321,7 @@ const fundCampaignPledge = (): JSX.Element => {
     },
     {
       field: 'donated',
-      headerName: 'Donated',
+      headerName: t('donated'),
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -357,7 +346,7 @@ const fundCampaignPledge = (): JSX.Element => {
     },
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: tCommon('action'),
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -398,7 +387,7 @@ const fundCampaignPledge = (): JSX.Element => {
 
   return (
     <div>
-      <Breadcrumbs aria-label="breadcrumb" className="ms-1">
+      <Breadcrumbs aria-label={tCommon('breadcrumb')} className="ms-1">
         <Link
           underline="hover"
           color="inherit"
@@ -429,7 +418,7 @@ const fundCampaignPledge = (): JSX.Element => {
             <div
               className={`btn-group ${styles.toggleGroup}`}
               role="group"
-              aria-label="Toggle between Pledged and Raised amounts"
+              aria-label={t('togglePledgedRaised')}
             >
               <input
                 type="radio"
@@ -478,9 +467,8 @@ const fundCampaignPledge = (): JSX.Element => {
                 ] || '$'
               }${progressIndicator === 'pledged' ? totalPledged.toLocaleString('en-US') : totalRaised.toLocaleString('en-US')}`}
               max={100}
-              style={{ height: '1.5rem', fontSize: '0.9rem' }}
               data-testid="progressBar"
-              className={`${styles.progressBar}`}
+              className={`${styles.progressBar} ${styles.progressBarHeight}`}
             />
             <div className={styles.endpoints}>
               <div className={styles.start}>
@@ -551,12 +539,24 @@ const fundCampaignPledge = (): JSX.Element => {
         getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noPledges')}
-            </Stack>
+            <EmptyState
+              icon="volunteer_activism"
+              message={t('noPledges')}
+              dataTestId="fund-campaign-pledge-empty-state"
+            />
           ),
         }}
-        sx={dataGridStyle}
+        className={`${styles.dataGridNoHover} ${styles.dataGridRounded}`}
+        sx={{
+          '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+            outline: '2px solid var(--primary-theme-color)',
+            outlineOffset: '-2px',
+          },
+          '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
+            outline: '2px solid var(--primary-theme-color)',
+            outlineOffset: '-2px',
+          },
+        }}
         getRowClassName={() => `${styles.rowBackgroundPledge}`}
         autoHeight
         rowHeight={65}

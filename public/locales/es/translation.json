@@ -9,7 +9,14 @@
     "weekly": "Esta Semana",
     "monthly": "Este Mes",
     "yearly": "Este Año",
-    "noVolunteers": "¡No Se Encontraron Voluntarios!"
+    "noVolunteers": "¡No Se Encontraron Voluntarios!",
+    "goldMedal": "oro",
+    "silverMedal": "plata",
+    "bronzeMedal": "bronce",
+    "rank": "Rango",
+    "volunteer": "Voluntario",
+    "email": "Correo electrónico",
+    "hoursVolunteered": "Horas Voluntarias"
   },
   "loginPage": {
     "title": "Administrador Talawa",
@@ -54,11 +61,7 @@
     "special_char_check": "Al menos un carácter especial",
     "loading": "Cargando...",
     "selectOrg": "Seleccione una organización",
-    "afterRegister": "Registro exitoso. Por favor, espere a que el administrador apruebe su solicitud.",
-    "communityLogo": "Logo de la Comunidad",
-    "organizations": "Organizaciones",
-    "accountLocked": "Su cuenta ha sido bloqueada temporalmente debido a demasiados intentos fallidos de inicio de sesión. Por favor, inténtelo de nuevo más tarde.",
-    "accountLockedWithTimer": "Su cuenta ha sido bloqueada temporalmente. Por favor, inténtelo de nuevo en {{minutes}} minuto(s)."
+    "afterRegister": "Registro exitoso. Por favor, espere a que el administrador apruebe su solicitud."
   },
   "signOut": {
     "retryPrompt": "Error al Cerrar sesión. ¿Reintentar?",
@@ -226,8 +229,7 @@
     "noOrgErrorTitle": "Organizaciones no encontradas",
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
     "profilePictureAlt": "Imagen de perfil de {{name}}",
-    "placeholderAvatarAlt": "Avatar predeterminado",
-    "newMembersWillAppearHere": "Las nuevas solicitudes de membresía aparecerán aquí"
+    "placeholderAvatarAlt": "Avatar predeterminado"
   },
   "users": {
     "membershipStatus": {
@@ -711,8 +713,7 @@
     "viewCampaigns": "Ver campañas",
     "assocCampaigns": "Campañas asociadas",
     "errorLoadingFundsData": "Error al cargar los datos de fondos",
-    "editFund": "Editar fondo",
-    "searchFunds": "Buscar fondos"
+    "editFund": "Editar fondo"
   },
   "fundCampaign": {
     "title": "Campañas de recaudación de fondos",
@@ -736,10 +737,7 @@
     "latestEndDate": "Fecha de finalización más reciente",
     "earliestEndDate": "Fecha de finalización más temprana",
     "lowestGoal": "Meta más baja",
-    "highestGoal": "Meta más alta",
-    "editCampaign": "Editar campaña",
-    "searchCampaigns": "Buscar campañas",
-    "errorLoading": "Error al cargar los datos de la campaña"
+    "highestGoal": "Meta más alta"
   },
   "pledges": {
     "title": "Compromisos de Campaña de Financiamiento",
@@ -772,7 +770,12 @@
     "raisedAmount": "Monto recaudado",
     "pledgedAmount": "Monto comprometido",
     "searchByPlaceholder": "Buscar por {{field}}",
-    "selectPledger": "Por favor seleccione un prometedor"
+    "selectPledger": "Por favor seleccione un prometedor",
+    "moreUsers": "+{{count}} más...",
+    "togglePledgedRaised": "Alternar entre montos Comprometidos y Recaudados",
+    "pledgeDate": "Fecha de Compromiso",
+    "pledged": "Comprometido",
+    "donated": "Donado"
   },
   "orgPost": {
     "title": "Publicaciones de Talawa",
@@ -867,7 +870,8 @@
     "searchByFirstName": "Buscar por nombre de pila",
     "searchByLastName": "Buscar por apellido",
     "noResultsFoundFor": "No se encontraron resultados para ",
-    "noSpammerFound": "No se encontró ningún spammer"
+    "noSpammerFound": "No se encontró ningún spammer",
+    "noUsersFound": "No se encontraron usuarios"
   },
   "eventManagement": {
     "name": "Gestión de eventos",
@@ -1056,8 +1060,7 @@
     "unassignUserTagMessage": "¿Desea eliminar la etiqueta de este usuario?",
     "successfullyUnassigned": "Etiqueta desasignada del usuario",
     "tagsAssigned": "Etiquetas asignadas",
-    "noTagsAssigned": "No se asignaron etiquetas",
-    "actions": "Acciones"
+    "noTagsAssigned": "No se asignaron etiquetas"
   },
   "userLogin": {
     "login": "Acceso",
@@ -1189,8 +1192,7 @@
     "media": "Medios",
     "event": "Evento",
     "article": "Artículo",
-    "postNowVisibleInFeed": "Publicar ahora visible en el feed",
-    "processingPost": "Procesando tu publicación. Por favor espera."
+    "postNowVisibleInFeed": "Publicar ahora visible en el feed"
   },
   "eventAttendance": {
     "historical_statistics": "Estadísticas históricas",
@@ -1595,13 +1597,7 @@
     "viewPledges": "Ver Promesas",
     "noPledges": "No se encontraron promesas",
     "noCampaigns": "No se encontraron campañas",
-    "searchCampaigns": "Buscar campañas",
-    "campaignName": "Nombre de la campaña",
-    "startDate": "Fecha de inicio",
-    "endDate": "Fecha de finalización",
-    "fundingGoal": "Objetivo de financiación",
-    "raised": "Cantidad recaudada",
-    "viewPledge": "Ver compromiso",
+    "raised": "Recaudado",
     "amountRaised": "Monto Recaudado"
   },
   "userPledges": {
@@ -1751,6 +1747,8 @@
   "common": {
     "signOut": "Cerrar sesión",
     "signingOut": "Cerrando sesión...",
-    "retryPrompt": "Error al revocar la sesión. ¿Reintentar?"
+    "retryPrompt": "Error al revocar la sesión. ¿Reintentar?",
+    "breadcrumb": "miga de pan",
+    "action": "Acción"
   }
 }
