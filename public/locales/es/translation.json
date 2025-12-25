@@ -1192,7 +1192,8 @@
     "media": "Medios",
     "event": "Evento",
     "article": "Artículo",
-    "postNowVisibleInFeed": "Publicar ahora visible en el feed"
+    "postNowVisibleInFeed": "Publicar ahora visible en el feed",
+    "processingPost": "Procesando tu publicación. Por favor espera."
   },
   "eventAttendance": {
     "historical_statistics": "Estadísticas históricas",

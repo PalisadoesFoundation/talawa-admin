@@ -14,13 +14,15 @@ import i18nForTest from 'utils/i18nForTest';
 import StartPostModal from './StartPostModal';
 import { vi } from 'vitest';
 
+const toastMock = vi.hoisted(() => ({
+  error: vi.fn(),
+  info: vi.fn(),
+  success: vi.fn(),
+  dismiss: vi.fn(),
+}));
+
 vi.mock('react-toastify', () => ({
-  toast: {
-    error: vi.fn(),
-    info: vi.fn(),
-    success: vi.fn(),
-    dismiss: vi.fn(),
-  },
+  toast: toastMock,
 }));
 
 // Mock utils/i18n to use the test i18n instance for NotificationToast
@@ -154,10 +156,12 @@ describe('Testing StartPostModal Component: User Portal', () => {
     expect(screen.queryByText(randomPostInput)).toBeInTheDocument();
 
     await userEvent.click(screen.getByTestId('createPostBtn'));
-    expect(toast.info).toHaveBeenCalledWith(
-      'Processing your post. Please wait.',
-      expect.any(Object),
-    );
+    await waitFor(() => {
+      expect(toast.info).toHaveBeenCalledWith(
+        'Processing your post. Please wait.',
+        expect.any(Object),
+      );
+    });
   });
 
   it('should display correct username', async () => {
@@ -747,10 +751,10 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await userEvent.type(screen.getByTestId('postInput'), 'Test invalid URL');
     await userEvent.click(screen.getByTestId('createPostBtn'));
 
-    await wait();
-
-    // This should trigger an error because getFileHashFromBase64 expects base64 data
-    expect(toast.error).toHaveBeenCalled();
+    await waitFor(() => {
+      // This should trigger an error because getFileHashFromBase64 expects base64 data
+      expect(toast.error).toHaveBeenCalled();
+    });
   });
 });
 

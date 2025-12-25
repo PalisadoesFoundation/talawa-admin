@@ -1244,7 +1244,8 @@
     "media": "Media",
     "event": "Event",
     "article": "Article",
-    "postNowVisibleInFeed": "Post now visible in feed"
+    "postNowVisibleInFeed": "Post now visible in feed",
+    "processingPost": "Processing your post. Please wait."
   },
   "settings": {
     "eventAttended": "Events Attended",

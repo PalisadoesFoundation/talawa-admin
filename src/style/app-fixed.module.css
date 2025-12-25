@@ -1541,7 +1541,7 @@ form label,
 
 .removeMemberCancel {
   background-color: var(--removeMemberCancel-bg);
-  color: #c8102e;
+  color: var(--removeButton-color);
   border: 1px solid var(--removeMemberCancel-border);
 }
 
