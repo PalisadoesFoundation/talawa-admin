@@ -1,5 +1,8 @@
 /**
- * Type definitions for UserAddressFields component.
+ * Props for the UserAddressFields component.
+ * @param t - Translation function for internationalization
+ * @param handleFieldChange - Callback function to handle address field changes
+ * @param userDetails - Object containing user address information
  */
 
 export interface InterfaceUserAddressFieldsProps {

@@ -1,2 +1,2 @@
 export type { InterfaceUserAddressFieldsProps } from './UserAddressFields';
-export type { InterfaceUser } from './EventsAttendedByUser';
+export type { InterfaceEventsAttendedByUserProps } from './EventsAttendedByUser';

@@ -1,8 +1,10 @@
 /**
- * Type definitions for EventsAttendedByUser component.
+ * Props for the EventsAttendedByUser component.
+ * @param userDetails - Object containing user information and events attended
+ * @param t - Translation function for internationalization
  */
 
-export interface InterfaceUser {
+export interface InterfaceEventsAttendedByUserProps {
   userDetails: {
     firstName: string;
     lastName: string;

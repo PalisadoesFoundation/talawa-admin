@@ -6,7 +6,7 @@
  * attended is displayed. Each event is rendered using the `EventsAttendedByMember` component.
  *
  * @component
- * @param {InterfaceUser} props - The props for the component.
+ * @param {InterfaceEventsAttendedByUserProps} props - The props for the component.
  * @param {Object} props.userDetails - The details of the user.
  * @param {string} props.userDetails.firstName - The first name of the user.
  * @param {string} props.userDetails.lastName - The last name of the user.
@@ -31,8 +31,8 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import styles from './common.module.css';
 import EventsAttendedByMember from 'components/MemberActivity/EventsAttendedByMember';
-import type { InterfaceUser } from 'types/UserPortal/UserProfile';
-export const EventsAttendedByUser: React.FC<InterfaceUser> = ({
+import type { InterfaceEventsAttendedByUserProps } from 'types/UserPortal/UserProfile';
+export const EventsAttendedByUser: React.FC<InterfaceEventsAttendedByUserProps> = ({
   userDetails,
   t,
 }) => {
