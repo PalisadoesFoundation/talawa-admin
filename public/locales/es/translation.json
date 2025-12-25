@@ -651,6 +651,7 @@
     "no": "No",
     "yes": "Sí",
     "editEvent": "Editar evento",
+    "showEventDashboard": "Mostrar Panel de Evento",
     "updateEvent": "Actualizar evento",
     "updateRecurringEventMsg": "Este es un evento recurrente. Elige cómo quieres actualizarlo:",
     "updateThisInstance": "Actualizar solo esta instancia",

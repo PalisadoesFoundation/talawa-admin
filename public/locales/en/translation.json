@@ -648,6 +648,7 @@
     "deleteThisAndFollowing": "Delete this and all following events",
     "deleteAllEvents": "Delete all events in this series",
     "editEvent": "Edit Event",
+    "showEventDashboard": "Show Event Dashboard",
     "updateEvent": "Update Event",
     "updateRecurringEventMsg": "This is a recurring event. Choose how you want to update it:",
     "updateThisInstance": "Update only this instance",

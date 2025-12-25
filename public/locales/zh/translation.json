@@ -648,6 +648,7 @@
     "deleteThisAndFollowing": "删除此事件和所有后续事件",
     "deleteAllEvents": "删除此系列中的所有事件",
     "editEvent": "编辑事件",
+    "showEventDashboard": "显示事件仪表板",
     "updateEvent": "更新事件",
     "updateRecurringEventMsg": "这是一个重复事件。请选择您想要如何更新它：",
     "updateThisInstance": "仅更新此实例",

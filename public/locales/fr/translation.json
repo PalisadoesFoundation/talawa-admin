@@ -648,6 +648,7 @@
     "deleteThisAndFollowing": "Supprimer cet événement et tous les suivants",
     "deleteAllEvents": "Supprimer tous les événements de cette série",
     "editEvent": "Modifier l'événement",
+    "showEventDashboard": "Afficher le tableau de bord de l'événement",
     "updateEvent": "Mettre à jour l'événement",
     "updateRecurringEventMsg": "Il s'agit d'un événement récurrent. Choisissez comment vous souhaitez le mettre à jour :",
     "updateThisInstance": "Mettre à jour uniquement cette instance",

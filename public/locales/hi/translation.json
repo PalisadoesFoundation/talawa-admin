@@ -648,6 +648,7 @@
     "deleteThisAndFollowing": "इस और सभी निम्नलिखित ईवेंट्स को हटाएं",
     "deleteAllEvents": "इस सीरीज़ के सभी ईवेंट्स को हटाएं",
     "editEvent": "इवेंट संपादित करें",
+    "showEventDashboard": "इवेंट डैशबोर्ड दिखाएं",
     "updateEvent": "ईवेंट अपडेट करें",
     "updateRecurringEventMsg": "यह एक आवर्ती ईवेंट है। चुनें कि आप इसे कैसे अपडेट करना चाहते हैं:",
     "updateThisInstance": "केवल इस इंस्टेंस को अपडेट करें",

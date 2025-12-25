@@ -459,8 +459,9 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
               onClick={openEventDashboard}
               data-testid="showEventDashboardBtn"
               className={styles.addButton}
+              aria-label={t('showEventDashboard')}
             >
-              Show Event Dashboard
+              {t('showEventDashboard')}
             </Button>
           )}
           {canEditEvent && (
@@ -470,6 +471,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
               data-testid="previewUpdateEventBtn"
               data-cy="previewUpdateEventBtn"
               onClick={handleEventUpdate}
+              aria-label={t('editEvent')}
             >
               {t('editEvent')}
             </Button>
@@ -481,6 +483,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
               data-cy="deleteEventModalBtn"
               className={styles.removeButton}
               onClick={toggleDeleteModal}
+              aria-label={t('deleteEvent')}
             >
               {t('deleteEvent')}
             </Button>

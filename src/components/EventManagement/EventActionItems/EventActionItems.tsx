@@ -210,7 +210,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
   if (eventInfoError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded className={styles.icon} fontSize="large" />
+        <WarningAmberRounded className={`${styles.icon} ${styles.iconLarge}`} />
         <h6 className="fw-bold text-danger text-center">
           {tErrors('errorLoading', { entity: 'Action Items' })}
         </h6>
@@ -250,9 +250,8 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
 
         return (
           <div
-            className="d-flex fw-bold align-items-center ms-2"
+            className={`d-flex fw-bold align-items-center ms-2 ${styles.assigneeCellContainer}`}
             data-testid="assigneeName"
-            style={{ height: '100%' }}
           >
             <div className={styles.TableImage}>
               <Avatar key={avatarKey} name={displayName} alt={displayName} />
@@ -263,8 +262,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
             {isGroup && (
               <Group
                 fontSize="small"
-                className="ms-1"
-                style={{ color: '#6c757d' }}
+                className={`ms-1 ${styles.groupIconSecondary}`}
                 data-testid="groupIcon"
               />
             )}
@@ -343,10 +341,10 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
           <>
             <Button
               size="sm"
-              style={{ minWidth: '32px' }}
               className={styles.infoButton}
               data-testid={`viewItemBtn${params.row.id}`}
               onClick={() => handleModalClick(params.row, ModalState.VIEW)}
+              aria-label={t('details')}
             >
               <i className="fa fa-info" />
             </Button>
@@ -356,6 +354,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
               className={styles.infoButton}
               data-testid={`editItemBtn${params.row.id}`}
               onClick={() => handleModalClick(params.row, ModalState.SAME)}
+              aria-label={t('editActionItem')}
             >
               <i className="fa fa-edit" />
             </Button>
@@ -365,6 +364,7 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
               className={styles.actionItemDeleteButton}
               data-testid={`deleteItemBtn${params.row.id}`}
               onClick={() => handleModalClick(params.row, ModalState.DELETE)}
+              aria-label={t('deleteActionItem')}
             >
               <i className="fa fa-trash" />
             </Button>
@@ -390,6 +390,11 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
               className={styles.checkboxButton}
               checked={params.row.isCompleted}
               onChange={() => handleModalClick(params.row, ModalState.STATUS)}
+              aria-label={
+                params.row.isCompleted
+                  ? t('actionItemCompleted')
+                  : t('markCompletion')
+              }
             />
           </div>
         );

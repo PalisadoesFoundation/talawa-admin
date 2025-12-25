@@ -8240,6 +8240,7 @@ form {
   color: var(--infoButton-color);
   margin-right: 0.5rem;
   border-radius: 0.25rem;
+  min-width: 32px;
 }
 
 .infoButton:hover {
@@ -8265,6 +8266,14 @@ form {
 
 .checkboxButton input:hover {
   box-shadow: var(--drop-shadow);
+}
+
+.assigneeCellContainer {
+  height: 100%;
+}
+
+.groupIconSecondary {
+  color: var(--view-color);
 }
 
 .checkboxButton input:focus {
@@ -9603,6 +9612,10 @@ form {
 
 .icon {
   margin: 1px;
+}
+
+.iconLarge {
+  font-size: 1.5rem;
 }
 
 .chipIcon {
