@@ -845,6 +845,9 @@
   --dropdown-font-color: #555555;
 
   --input-bg: #f2f7ff;
+
+  --empty-state-bg: #ffffff;
+  --empty-state-border-color: #e7e7e7;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
