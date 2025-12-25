@@ -33,5 +33,6 @@ describe('Test the CardItemLoading component', () => {
     const title = cardItemLoading.querySelector(`.${styles.title}`);
 
     expect(title).toHaveClass(styles['h-1-5rem']);
+    expect(title).not.toHaveStyle({ height: expect.any(String) });
   });
 });
