@@ -29,9 +29,9 @@ Using variableMatcher to match any refresh token string
 
 > **data**: `object`
 
-#### result.data.revokeRefreshTokenForUser
+#### result.data.revokeRefreshToken
 
-> **revokeRefreshTokenForUser**: `boolean` = `true`
+> **revokeRefreshToken**: `boolean` = `true`
 
 ### variableMatcher()
 

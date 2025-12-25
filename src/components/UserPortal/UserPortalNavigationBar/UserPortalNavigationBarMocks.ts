@@ -43,7 +43,7 @@ export const revokeRefreshTokenMock = {
   variableMatcher: () => true, // Match any variables
   result: {
     data: {
-      revokeRefreshTokenForUser: true,
+      revokeRefreshToken: true,
     },
   },
 };
