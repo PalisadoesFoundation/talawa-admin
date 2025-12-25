@@ -71,33 +71,6 @@ const VoteCount = styled(Typography)(() => ({
   minWidth: 20,
   textAlign: 'center',
 }));
-
-const EditModalContent = styled(Box)({
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '90%',
-  maxWidth: 500,
-  backgroundColor: 'white',
-  borderRadius: 8,
-  padding: 24,
-  '& h3': {
-    marginBottom: 16,
-  },
-});
-
-const ModalActions = styled(Box)({
-  display: 'flex',
-  justifyContent: 'space-between',
-  marginTop: 16,
-});
-
-const RightModalActions = styled(Box)({
-  display: 'flex',
-  gap: 8,
-});
-
 interface InterfaceCommentCardProps {
   id: string;
   creator: {
@@ -284,7 +257,6 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
               ref={menuAnchorRef}
               onClick={handleMenuOpen}
               size="small"
-              aria-label="more options"
               data-testid="more-options-button"
             >
               <MoreHoriz />
@@ -322,7 +294,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
         onClose={toggleEditComment}
         data-testid="edit-comment-modal"
       >
-        <EditModalContent>
+        <Box className={commentCardStyles.editModalContent}>
           <Typography variant="h6">{t('editComment')}</Typography>
           <FormControl fullWidth sx={{ mb: 2 }}>
             <Input
@@ -335,9 +307,9 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
             />
           </FormControl>
 
-          <ModalActions>
+          <Box className={commentCardStyles.modalActions}>
             <Box />
-            <RightModalActions>
+            <Box className={commentCardStyles.rightModalActions}>
               <Button variant="outlined" onClick={toggleEditComment}>
                 {tCommon('cancel')}
               </Button>
@@ -359,9 +331,9 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
               >
                 {updatingComment ? tCommon('saving') : tCommon('save')}
               </Button>
-            </RightModalActions>
-          </ModalActions>
-        </EditModalContent>
+            </Box>
+          </Box>
+        </Box>
       </Modal>
     </CommentContainer>
   );
