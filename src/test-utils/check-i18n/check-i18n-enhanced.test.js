@@ -193,7 +193,7 @@ describe.sequential('check-i18n script - enhanced features', () => {
       const file = writeTempFile(
         tmp,
         'promise-type.tsx',
-        'const handler = async (): Promise<void> => { };',
+        'const handler = async (): Promise<void> => {};',
       );
       const res = runScript([file]);
       expect(res.status).toBe(0);

@@ -313,8 +313,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
 
   return (
     <Box
-      className={postCardStyles.postContainer}
-      sx={{ backgroundColor: 'background.paper' }}
+      className={`${postCardStyles.postContainer} ${styles.backgroundPaper}`}
     >
       {/* Post Header */}
 
@@ -423,7 +422,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             <img src={props.image || UserDefault} alt={props.title} />
           ))}
         {props.video && (
-          <video controls style={{ width: '100%' }}>
+          <video controls className={styles.videoFullWidth}>
             <source src={props.video} type="video/mp4" />
           </video>
         )}
@@ -457,7 +456,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             fontSize="small"
             color="primary"
             data-testid="pinned-icon"
-            sx={{ marginLeft: 'auto' }}
+            className={styles.marginLeftAuto}
           />
         )}
       </Box>
@@ -623,8 +622,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
         data-testid="edit-post-button"
       >
         <Box
-          className={postCardStyles.editModalContent}
-          sx={{ backgroundColor: 'background.paper' }}
+          className={`${postCardStyles.editModalContent} ${styles.backgroundPaper}`}
         >
           <Typography variant="h6">{t('editPost')}</Typography>
           <FormControl fullWidth sx={{ mb: 2 }}>
