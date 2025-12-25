@@ -252,16 +252,16 @@ export default function groupChatDetails({
         await chatRefetch({ input: { id: chat.id } });
         toast.success(t('chatImageUpdatedSuccess'));
         // Clean up object URL after successful upload
-        if (selectedImage && selectedImage.startsWith('blob:')) {
-          URL.revokeObjectURL(selectedImage);
+        if (localUrl && localUrl.startsWith('blob:')) {
+          URL.revokeObjectURL(localUrl);
         }
         setSelectedImage('');
       } catch (error) {
         toast.error(t('failedUpdateChatImage'));
         console.error(error);
         // Clean up object URL on error
-        if (selectedImage && selectedImage.startsWith('blob:')) {
-          URL.revokeObjectURL(selectedImage);
+        if (localUrl && localUrl.startsWith('blob:')) {
+          URL.revokeObjectURL(localUrl);
         }
         setSelectedImage('');
       }
@@ -323,9 +323,17 @@ export default function groupChatDetails({
           />
           <div className={styles.groupInfo}>
             {selectedImage ? (
-              <img className={styles.chatImage} src={selectedImage} alt="" />
+              <img
+                className={styles.chatImage}
+                src={selectedImage}
+                alt={chat?.name || ''}
+              />
             ) : chat?.avatarURL ? (
-              <img className={styles.chatImage} src={chat?.avatarURL} alt="" />
+              <img
+                className={styles.chatImage}
+                src={chat?.avatarURL}
+                alt={chat?.name || ''}
+              />
             ) : (
               <Avatar avatarStyle={styles.groupImage} name={chat.name || ''} />
             )}
