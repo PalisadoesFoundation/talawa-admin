@@ -1014,9 +1014,12 @@
   overflow: hidden;
 
   /* Flex properties to make it sit on the same line */
-  flex-grow: 1; /* Allow it to grow to fill space */
-  flex-shrink: 1; /* Allow it to shrink if needed */
-  width: auto; /* Stop forcing 100% width */
+  flex-grow: 1;
+  /* Allow it to grow to fill space */
+  flex-shrink: 1;
+  /* Allow it to shrink if needed */
+  width: auto;
+  /* Stop forcing 100% width */
   min-width: 200px;
   max-width: 100%;
   height: 48px;
@@ -1398,8 +1401,10 @@ form label,
 .calendar__controls {
   display: flex;
   align-items: center;
-  gap: 12px; /* Space between the Sort, Create, and Bell icons */
-  flex-shrink: 0; /* Prevents buttons from getting squished */
+  gap: 12px;
+  /* Space between the Sort, Create, and Bell icons */
+  flex-shrink: 0;
+  /* Prevents buttons from getting squished */
   white-space: nowrap;
 }
 
@@ -7819,7 +7824,8 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 12px; /* bring controls closer together */
+  margin-left: 12px;
+  /* bring controls closer together */
   gap: 12px;
 }
 
@@ -7831,12 +7837,14 @@ form {
 }
 
 .btnsContainerSearchBar .inputOrgList {
-  flex: 1 1 640px; /* make input wider and flexible */
+  flex: 1 1 640px;
+  /* make input wider and flexible */
   max-width: 760px;
   position: relative;
   display: flex;
   align-items: center;
-  margin-left: 18px; /* gap from left */
+  margin-left: 18px;
+  /* gap from left */
 }
 
 .btnsContainerSearchBar input {
@@ -7844,7 +7852,8 @@ form {
 }
 
 .btnsContainerSearchBar .inputOrgList button {
-  width: 44px; /* slightly smaller square button */
+  width: 44px;
+  /* slightly smaller square button */
   height: 38px;
   margin-left: 8px;
   flex: 0 0 44px;
@@ -8328,6 +8337,7 @@ form {
 .switch :global(.form-check-input) {
   margin-inline-start: -1.7em;
 }
+
 .checkboxdiv {
   display: flex;
   margin-bottom: 5px;
@@ -9978,6 +9988,7 @@ form {
   justify-content: flex-end;
   padding-bottom: 10px;
 }
+
 .manageBtn,
 .withdrawBtn,
 .outlineBtn {
@@ -10044,6 +10055,7 @@ form {
   .calendar__header {
     flex-wrap: wrap !important;
   }
+
   .btnsBlock {
     width: 100%;
     justify-content: flex-end;
@@ -10059,6 +10071,7 @@ form {
   align-items: center;
   min-height: 2.4rem;
 }
+
 /* ----------------------------------------------------- */
 .orgListContainer {
   padding-left: 40px;
@@ -10076,4 +10089,148 @@ form {
   font-size: 25px;
   margin-bottom: 2px;
   margin-right: 2px;
+}
+
+/* UploadPluginModal Styles */
+.modalContainer {
+  position: relative;
+  display: flex;
+  min-height: 500px;
+  background: var(--modalHeader-bg);
+  border-radius: 12px;
+}
+
+.leftPanel {
+  width: 50%;
+  padding: 32px;
+  border-right: 1px solid var(--addButton-border);
+}
+
+.rightPanel {
+  width: 50%;
+  padding: 32px;
+}
+
+.headerSection {
+  margin-bottom: 32px;
+}
+
+.headerSection h3 {
+  margin: 0 0 8px;
+}
+
+.headerSection p {
+  margin: 0;
+  color: var(--secondText-color);
+  font-size: 14px;
+}
+
+.uploadArea {
+  border: 2px dashed var(--inputField-border);
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+  background: var(--input-area-color);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.uploadIcon {
+  font-size: 48px;
+  color: #ccc;
+  margin-bottom: 16px;
+}
+
+.uploadText {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.uploadSubText {
+  font-size: 14px;
+  color: var(--secondText-color);
+}
+
+.errorContainer {
+  margin-top: 16px;
+  padding: 12px;
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  color: #856404;
+  font-size: 14px;
+}
+
+.pluginInfoSection {
+  margin-top: 24px;
+}
+
+.pluginInfoSection h5 {
+  margin: 0 0 16px;
+}
+
+.pluginInfoDetails {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.infoRow {
+  margin-bottom: 8px;
+}
+
+.componentList {
+  margin-top: 16px;
+}
+
+.componentItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.successIcon {
+  color: var(--icon-check);
+  margin-right: 8px;
+}
+
+.buttonGroup {
+  margin-top: 32px;
+  display: flex;
+  gap: 12px;
+}
+
+.codeBlockContainer {
+  margin-bottom: 24px;
+}
+
+.codeBlockTitle {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.codeBlockPre {
+  background: var(--input-area-color);
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.errorIcon {
+  margin-right: 8px;
+}
+
+.componentListContainer {
+  margin-top: 8px;
+}
+
+.flexButton {
+  flex: 1;
 }

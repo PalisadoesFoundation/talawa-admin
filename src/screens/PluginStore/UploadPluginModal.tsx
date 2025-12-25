@@ -135,126 +135,73 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
 
   return (
     <Modal show={show} onHide={handleClose} centered dialogClassName="modal-xl">
-      <div
-        style={{
-          position: 'relative',
-          display: 'flex',
-          minHeight: 500,
-          background: '#fff',
-          borderRadius: 12,
-        }}
-      >
+      <div className={styles.modalContainer}>
         {/* Left Panel - Upload */}
-        <div
-          style={{
-            width: '50%',
-            padding: 32,
-            borderRight: '1px solid #e7e7e7',
-          }}
-        >
-          <div style={{ marginBottom: 32 }}>
-            <h3 style={{ margin: 0, marginBottom: 8 }}>Upload Plugin</h3>
-            <p style={{ margin: 0, color: '#666', fontSize: 14 }}>
+        <div className={styles.leftPanel}>
+          <div className={styles.headerSection}>
+            <h3>Upload Plugin</h3>
+            <p>
               Upload a ZIP file to create a plugin entry. The plugin will be
               available for installation after upload.
             </p>
           </div>
 
-          <div
-            style={{
-              border: '2px dashed #ddd',
-              borderRadius: 12,
-              padding: 40,
-              textAlign: 'center',
-              background: '#fafafa',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-            onClick={handleUploadClick}
-          >
-            <FaUpload
-              style={{ fontSize: 48, color: '#ccc', marginBottom: 16 }}
-            />
-            <div style={{ fontSize: 16, fontWeight: 500, marginBottom: 8 }}>
+          <div className={styles.uploadArea} onClick={handleUploadClick}>
+            <FaUpload className={styles.uploadIcon} />
+            <div className={styles.uploadText}>
               {selectedFile ? selectedFile.name : 'Select ZIP file'}
             </div>
-            <div style={{ fontSize: 14, color: '#666' }}>
-              Click to browse files
-            </div>
+            <div className={styles.uploadSubText}>Click to browse files</div>
           </div>
 
           <input
             ref={fileInputRef}
             type="file"
             accept=".zip"
-            style={{ display: 'none' }}
+            className={styles.hiddenInput}
             onChange={handleFileSelect}
           />
 
           {error && (
-            <div
-              style={{
-                marginTop: 16,
-                padding: 12,
-                background: '#fff3cd',
-                border: '1px solid #ffeaa7',
-                borderRadius: 8,
-                color: '#856404',
-                fontSize: 14,
-              }}
-            >
-              <FaExclamationTriangle style={{ marginRight: 8 }} />
+            <div className={styles.errorContainer}>
+              <FaExclamationTriangle className={styles.errorIcon} />
               {error}
             </div>
           )}
 
           {manifest && pluginStructure && (
-            <div style={{ marginTop: 24 }}>
-              <h5 style={{ margin: 0, marginBottom: 16 }}>
-                Plugin Information
-              </h5>
-              <div style={{ fontSize: 14, lineHeight: 1.6 }}>
-                <div style={{ marginBottom: 8 }}>
+            <div className={styles.pluginInfoSection}>
+              <h5>Plugin Information</h5>
+              <div className={styles.pluginInfoDetails}>
+                <div className={styles.infoRow}>
                   <strong>Name:</strong> {manifest.name}
                 </div>
-                <div style={{ marginBottom: 8 }}>
+                <div className={styles.infoRow}>
                   <strong>Version:</strong> {manifest.version}
                 </div>
-                <div style={{ marginBottom: 8 }}>
+                <div className={styles.infoRow}>
                   <strong>Author:</strong> {manifest.author}
                 </div>
-                <div style={{ marginBottom: 8 }}>
+                <div className={styles.infoRow}>
                   <strong>Description:</strong> {manifest.description}
                 </div>
-                <div style={{ marginBottom: 8 }}>
+                <div className={styles.infoRow}>
                   <strong>Plugin ID:</strong> {manifest.pluginId}
                 </div>
 
                 {/* Show detected components */}
-                <div style={{ marginTop: 16 }}>
+                <div className={styles.componentList}>
                   <strong>Components to Install:</strong>
-                  <div style={{ marginTop: 8 }}>
+                  <div className={styles.componentListContainer}>
                     {pluginStructure.hasAdminFolder && (
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          marginBottom: 4,
-                        }}
-                      >
-                        <FaCheck style={{ color: '#28a745', marginRight: 8 }} />
+                      <div className={styles.componentItem}>
+                        <FaCheck className={styles.successIcon} />
                         <span>Admin Dashboard Components</span>
                       </div>
                     )}
                     {pluginStructure.hasApiFolder && (
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          marginBottom: 4,
-                        }}
-                      >
-                        <FaCheck style={{ color: '#28a745', marginRight: 8 }} />
+                      <div className={styles.componentItem}>
+                        <FaCheck className={styles.successIcon} />
                         <span>API Backend Components</span>
                       </div>
                     )}
@@ -264,23 +211,14 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
             </div>
           )}
 
-          <div
-            style={{
-              marginTop: 32,
-              display: 'flex',
-              gap: 12,
-            }}
-          >
+          <div className={styles.buttonGroup}>
             <Button
               variant="outlined"
               color="secondary"
-              className={styles.cancelButton}
+              className={`${styles.cancelButton} ${styles.flexButton}`}
               onClick={handleClose}
               disabled={isInstalling}
               aria-label={t('cancelUploadPlugin')}
-              style={{
-                flex: 1,
-              }}
               data-testid="cancel-upload-plugin-button"
             >
               {t('cancel')}
@@ -291,7 +229,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
               onClick={handleAddPlugin}
               disabled={!selectedFile || !manifest || isInstalling}
               aria-label={isInstalling ? t('uploading') : t('uploadPlugin')}
-              style={{ flex: 1 }}
+              className={styles.flexButton}
               data-testid="upload-plugin-button"
             >
               {isInstalling ? t('uploading') : t('uploadPlugin')}
@@ -300,53 +238,29 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
         </div>
 
         {/* Right Panel - Plugin Structure */}
-        <div style={{ width: '50%', padding: 32 }}>
-          <div style={{ marginBottom: 32 }}>
-            <h3 style={{ margin: 0, marginBottom: 8 }}>Plugin Structure</h3>
-            <p style={{ margin: 0, color: '#666', fontSize: 14 }}>
-              Expected plugin structure with admin and/or API components
-            </p>
+        <div className={styles.rightPanel}>
+          <div className={styles.headerSection}>
+            <h3>Plugin Structure</h3>
+            <p>Expected plugin structure with admin and/or API components</p>
           </div>
 
           {pluginFiles.length > 0 ? (
-            <div style={{ marginBottom: 24 }}>
-              <div style={{ fontWeight: 600, fontSize: 16, marginBottom: 12 }}>
-                Detected Files
-              </div>
-              <div style={{ fontSize: 14, color: '#666' }}>
-                <pre
-                  style={{
-                    background: '#f8f9fa',
-                    padding: 16,
-                    borderRadius: 8,
-                    fontSize: 13,
-                    lineHeight: 1.5,
-                    margin: 0,
-                  }}
-                >
+            <div className={styles.codeBlockContainer}>
+              <div className={styles.codeBlockTitle}>Detected Files</div>
+              <div className={styles.uploadSubText}>
+                <pre className={styles.codeBlockPre}>
                   {pluginFiles.join('\n')}
                 </pre>
               </div>
             </div>
           ) : (
             <>
-              <div style={{ marginBottom: 24 }}>
-                <div
-                  style={{ fontWeight: 600, fontSize: 16, marginBottom: 12 }}
-                >
+              <div className={styles.codeBlockContainer}>
+                <div className={styles.codeBlockTitle}>
                   Expected Directory Structure
                 </div>
-                <div style={{ fontSize: 14, color: '#666' }}>
-                  <pre
-                    style={{
-                      background: '#f8f9fa',
-                      padding: 16,
-                      borderRadius: 8,
-                      fontSize: 13,
-                      lineHeight: 1.5,
-                      margin: 0,
-                    }}
-                  >
+                <div className={styles.uploadSubText}>
+                  <pre className={styles.codeBlockPre}>
                     {`plugin.zip
 ├── admin/ (optional)
 │   ├── manifest.json    
@@ -364,22 +278,11 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
               </div>
 
               <div>
-                <div
-                  style={{ fontWeight: 600, fontSize: 16, marginBottom: 12 }}
-                >
+                <div className={styles.codeBlockTitle}>
                   Required manifest.json Fields
                 </div>
-                <div style={{ fontSize: 14, color: '#666' }}>
-                  <pre
-                    style={{
-                      background: '#f8f9fa',
-                      padding: 16,
-                      borderRadius: 8,
-                      fontSize: 13,
-                      lineHeight: 1.5,
-                      margin: 0,
-                    }}
-                  >
+                <div className={styles.uploadSubText}>
+                  <pre className={styles.codeBlockPre}>
                     {`{
   "name": "Plugin Name",
   "pluginId": "pluginName",
