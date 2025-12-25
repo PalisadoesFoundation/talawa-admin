@@ -83,7 +83,7 @@ describe('Test if errorHandler is working properly', () => {
     );
   });
 
-  it('should call toast.error with the correct message if error message contains "account_locked"', () => {
+  it('should call toast.error with the correct message if error message matches account locked pattern', () => {
     const error = new Error(
       'Account temporarily locked due to too many failed login attempts. Please try again later.',
     );
