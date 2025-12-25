@@ -103,8 +103,8 @@ def find_translation_tags(source: str | Path) -> set[str]:
     return {
         tag.split(":")[-1]
         for tag in tags
-        if ":" not in tag or tag.split(":")[-1].isidentifier()
     }
+
 
 
 def get_target_files(
