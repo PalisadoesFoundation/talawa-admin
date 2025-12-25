@@ -55,7 +55,8 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-global.URL.createObjectURL = vi.fn(() => 'https://minio/test-image.jpg');
+// Mock `URL.createObjectURL` with a spy so it can be restored between tests
+vi.spyOn(global.URL, 'createObjectURL').mockImplementation(() => 'https://minio/test-image.jpg');
 
 i18n.use(initReactI18next).init({
   lng: 'en',
@@ -73,6 +74,8 @@ i18n.use(initReactI18next).init({
 
 describe('GroupChatDetails', () => {
   afterEach(() => {
+    // Restore any spied implementations back to originals to avoid test pollution
+    vi.restoreAllMocks();
     vi.clearAllMocks();
   });
   beforeEach(() => {
@@ -510,13 +513,14 @@ describe('GroupChatDetails', () => {
 
     const removeBtn = screen.queryByText(/userChat.remove/);
     if (removeBtn) {
-      vi.spyOn(window, 'confirm').mockReturnValue(true);
+      const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
       await act(async () => fireEvent.click(removeBtn));
       await waitFor(() =>
         expect(toastSuccess).toHaveBeenCalledWith(
           'userChat.memberRemovedSuccess',
         ),
       );
+      confirmSpy.mockRestore();
     }
   });
 
@@ -587,7 +591,7 @@ describe('GroupChatDetails', () => {
       .spyOn(console, 'error')
       .mockImplementation(() => {});
 
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
 
     const adminChat = withSafeChat({
       ...filledMockChat,
@@ -634,6 +638,7 @@ describe('GroupChatDetails', () => {
       expect(consoleError).toHaveBeenCalled();
     });
 
+    confirmSpy.mockRestore();
     toastError.mockRestore();
     consoleError.mockRestore();
   });
@@ -716,7 +721,7 @@ describe('GroupChatDetails', () => {
       ).toBeTruthy();
     }).catch(() => {});
 
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
     const toastSuccess = vi.spyOn(toast, 'success');
 
     const buttons = screen.getAllByRole('button');
@@ -726,6 +731,7 @@ describe('GroupChatDetails', () => {
     await waitFor(() =>
       expect(toastSuccess).toHaveBeenCalledWith('userChat.chatDeletedSuccess'),
     );
+    confirmSpy.mockRestore();
   });
 
   it('show error toast while deleting chat when current user is administrator and confirms', async () => {
@@ -769,7 +775,7 @@ describe('GroupChatDetails', () => {
       ).toBeTruthy();
     }).catch(() => {});
 
-    vi.spyOn(window, 'confirm').mockReturnValue(true);
+    const confirmSpy = vi.spyOn(window, 'confirm').mockReturnValue(true);
 
     const buttons = screen.getAllByRole('button');
     const trashButton = buttons.find((b) => b.querySelector('svg'));
@@ -779,6 +785,8 @@ describe('GroupChatDetails', () => {
       expect(toastError).toHaveBeenCalledWith('userChat.failedDeleteChat');
       expect(consoleError).toHaveBeenCalled();
     });
+
+    confirmSpy.mockRestore();
     toastError.mockRestore();
     consoleError.mockRestore();
   });
