@@ -499,10 +499,9 @@ describe('Testing Requests screen', () => {
 
     await wait(200);
 
-    const noRequestsText = await screen.findByText(
-      /No Membership Requests Found/i,
-    );
-    expect(noRequestsText).toBeInTheDocument();
+    expect(
+      screen.getByTestId('requests-no-requests-empty'),
+    ).toBeInTheDocument();
   });
 
   test('Should render warning alert when there are no organizations', async () => {
@@ -887,7 +886,7 @@ describe('Testing Requests screen', () => {
     await wait(200);
     // With no previous data and no search term, component renders the empty state message
     expect(
-      screen.getByText(/No Membership Requests Found/i),
+      screen.getByTestId('requests-no-requests-empty'),
     ).toBeInTheDocument();
   });
 
@@ -1325,7 +1324,7 @@ describe('Testing Requests screen', () => {
 
     // Verify appropriate empty state or error handling
     expect(
-      screen.getByText(/No Membership Requests Found/i),
+      screen.getByTestId('requests-no-requests-empty'),
     ).toBeInTheDocument();
   });
 
