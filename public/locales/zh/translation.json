@@ -725,7 +725,8 @@
     "earliestEndDate": "最早结束日期",
     "lowestGoal": "最低目标",
     "highestGoal": "最高目标",
-    "raisedAmount": "募集金額"
+    "raisedAmount": "募集金額",
+    "errorLoadingCampaigns": "加载募捐活动数据时出错"
   },
   "pledges": {
     "title": "基金活动承诺",

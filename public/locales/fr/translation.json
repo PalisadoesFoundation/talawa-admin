@@ -725,7 +725,8 @@
     "earliestEndDate": "Date de fin la plus ancienne",
     "lowestGoal": "Objectif le plus bas",
     "highestGoal": "Objectif le plus élevé",
-    "raisedAmount": "Montant collecté"
+    "raisedAmount": "Montant collecté",
+    "errorLoadingCampaigns": "Erreur lors du chargement des données des campagnes"
   },
   "pledges": {
     "title": "Engagements de campagne de financement",

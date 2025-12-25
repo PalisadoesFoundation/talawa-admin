@@ -725,7 +725,8 @@
     "earliestEndDate": "सबसे पहली समाप्ति तिथि",
     "lowestGoal": "सबसे कम उद्देश्य",
     "highestGoal": "सबसे ऊंचा उद्देश्य",
-    "raisedAmount": "उठाया गया राशि"
+    "raisedAmount": "उठाया गया राशि",
+    "errorLoadingCampaigns": "कैंपेन डेटा लोड करते समय त्रुटि हुई"
   },
   "pledges": {
     "title": "निधि अभियान प्रतिज्ञाएँ",
