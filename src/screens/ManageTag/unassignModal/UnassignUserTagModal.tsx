@@ -29,9 +29,11 @@
  * ```
  */
 import type { TFunction } from 'i18next';
-import React from 'react';
-import { Button, Modal } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
+import { BaseModal } from 'shared-components/BaseModal';
+import { toast } from 'react-toastify';
 
 export interface InterfaceUnassignUserTagModalProps {
   unassignUserTagModalIsOpen: boolean;
@@ -48,33 +50,36 @@ const UnassignUserTagModal: React.FC<InterfaceUnassignUserTagModalProps> = ({
   t,
   tCommon,
 }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onConfirmUnassign = async (): Promise<void> => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    try {
+      await handleUnassignUserTag();
+    } catch (error) {
+      console.error(error);
+      toast.error(t('unassignUserTagError'));
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   return (
-    <>
-      <Modal
-        size="sm"
-        id="unassignTagModal"
-        show={unassignUserTagModalIsOpen}
-        onHide={toggleUnassignUserTagModal}
-        backdrop="static"
-        keyboard={false}
-        centered
-        aria-labelledby="unassignTagModalTitle"
-      >
-        <Modal.Header
-          closeButton
-          className={styles.modalHeader}
-          aria-label={t('closeModal')}
-        >
-          <Modal.Title className="text-white" id={`unassignTag`}>
-            {t('unassignUserTag')}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>{t('unassignUserTagMessage')}</Modal.Body>
-        <Modal.Footer>
+    <BaseModal
+      show={unassignUserTagModalIsOpen}
+      onHide={toggleUnassignUserTagModal}
+      size="sm"
+      backdrop="static"
+      keyboard={false}
+      title={t('unassignUserTag')}
+      headerClassName={`${styles.modalHeader} text-white`}
+      dataTestId="unassign-user-tag-modal"
+      footer={
+        <>
           <Button
             type="button"
             className={`btn btn-danger ${styles.removeButton}`}
-            data-dismiss="modal"
             onClick={toggleUnassignUserTagModal}
             data-testid="unassignTagModalCloseBtn"
             aria-label={tCommon('no')}
@@ -84,23 +89,18 @@ const UnassignUserTagModal: React.FC<InterfaceUnassignUserTagModalProps> = ({
           <Button
             type="button"
             className={`btn ${styles.addButton}`}
-            onClick={async (e) => {
-              const btn = e.currentTarget;
-              btn.disabled = true;
-              try {
-                await handleUnassignUserTag();
-              } finally {
-                btn.disabled = false;
-              }
-            }}
+            onClick={onConfirmUnassign}
+            disabled={isSubmitting}
             data-testid="unassignTagModalSubmitBtn"
             aria-label={tCommon('yes')}
           >
             {tCommon('yes')}
           </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+        </>
+      }
+    >
+      <div>{t('unassignUserTagMessage')}</div>
+    </BaseModal>
   );
 };
 

@@ -1,14 +1,14 @@
 import { useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
-import { Stack, Typography, Breadcrumbs, Link } from '@mui/material';
-import type { GridCellParams, GridPaginationModel } from '@mui/x-data-grid';
-import { Button, Row } from 'react-bootstrap';
+import { Stack, Typography, Box, CircularProgress } from '@mui/material';
+import { type GridCellParams } from '@mui/x-data-grid';
+import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import Loader from 'components/Loader/Loader';
 import TableLoader from 'components/TableLoader/TableLoader';
+import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import CampaignModal from './modal/CampaignModal';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
 import styles from '../../style/app-fixed.module.css';
@@ -17,20 +17,32 @@ import type {
   InterfaceCampaignInfo,
   InterfaceQueryOrganizationFundCampaigns,
 } from 'utils/interfaces';
-import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
-import type {
+import {
   ReportingRow,
   ReportingTableColumn,
   ReportingTableGridProps,
-} from '../../types/ReportingTable/interface';
-import {
-  dataGridStyle,
-  ROW_HEIGHT,
-  COLUMN_BUFFER_PX,
-  PAGE_SIZE,
-} from '../../types/ReportingTable/utils';
+} from 'types/ReportingTable/interface';
+import { PAGE_SIZE, ROW_HEIGHT } from 'types/ReportingTable/utils';
+import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/BreadcrumbsComponent';
+
+const dataGridStyle = {
+  borderRadius: 'var(--table-head-radius)',
+  backgroundColor: 'var(--row-background)',
+  '& .MuiDataGrid-row': {
+    backgroundColor: 'var(--row-background)',
+    cursor: 'pointer',
+    '&:focus-within': { outline: 'none' },
+  },
+  '& .MuiDataGrid-row:hover': {
+    backgroundColor: 'var(--row-hover-bg)',
+  },
+  '& .MuiDataGrid-row.Mui-hovered': {
+    backgroundColor: 'var(--row-hover-bg)',
+  },
+  '& .MuiDataGrid-cell:focus': { outline: 'none' },
+  '& .MuiDataGrid-cell:focus-within': { outline: 'none' },
+};
 
 /**
  * `orgFundCampaign` component displays a list of fundraising campaigns for a specific fund within an organization.
@@ -46,7 +58,6 @@ import {
  * ### State
  * - `campaign`: The current campaign being edited or deleted.
  * - `searchTerm`: The term used for searching campaigns by name.
- * - `sortBy`: The current sorting criteria for campaigns.
  * - `modalState`: An object indicating the visibility of different modals (`same` for create/edit).
  * - `campaignModalMode`: Determines if the modal is in 'edit' or 'create' mode.
  *
@@ -58,35 +69,11 @@ import {
  * - Uses `FUND_CAMPAIGN` query to fetch the list of campaigns based on the provided fund ID, search term, and sorting criteria.
  *
  * ### Rendering
- * - Renders a `DataGrid` component with campaigns information.
+ * - Renders a `ReportingTable` component with campaigns information.
  * - Displays modals for creating and editing campaigns.
  * - Shows error and loading states using `Loader` and error message components.
  *
  * @returns The rendered component including breadcrumbs, search and filter controls, data grid, and modals.
- *
- * ## CSS Strategy Explanation:
- *
- * To ensure consistency across the application and reduce duplication, common styles
- * (such as button styles) have been moved to the global CSS file. Instead of using
- * component-specific classes (e.g., `.greenregbtnOrganizationFundCampaign`, `.greenregbtnPledge`), a single reusable
- * class (e.g., .addButton) is now applied.
- *
- * ### Benefits:
- * - **Reduces redundant CSS code.
- * - **Improves maintainability by centralizing common styles.
- * - **Ensures consistent styling across components.
- *
- * ### Global CSS Classes used:
- * - `.editButton`
- * - `.head`
- * - `.btnsContainer`
- * - `.input`
- * - `.inputField`
- * - `.searchButon`
- * - `.btnsBlock`
- * - `.dropdown`
- *
- * For more details on the reusable classes, refer to the global CSS file.
  */
 const orgFundCampaign = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'fundCampaign' });
@@ -96,21 +83,12 @@ const orgFundCampaign = (): JSX.Element => {
   const { fundId, orgId } = useParams();
 
   const [campaign, setCampaign] = useState<InterfaceCampaignInfo | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [sortBy, setSortBy] = useState<string | null>(null);
+  const [searchText, setSearchText] = useState('');
 
   const [modalState, setModalState] = useState<boolean>(false);
   const [campaignModalMode, setCampaignModalMode] = useState<'edit' | 'create'>(
     'create',
   );
-  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
-    page: 0,
-    pageSize: PAGE_SIZE,
-  });
-
-  const handlePaginationModelChange = (newModel: GridPaginationModel): void => {
-    setPaginationModel(newModel);
-  };
 
   const handleOpenModal = useCallback(
     (campaign: InterfaceCampaignInfo | null, mode: 'edit' | 'create'): void => {
@@ -140,49 +118,15 @@ const orgFundCampaign = (): JSX.Element => {
     skip: !fundId,
   });
 
-  // Set document title based on translation
-  useEffect(() => {
-    document.title = t('title');
-  }, [t]);
-
-  const compaignsData = useMemo(() => {
+  const campaignsData = useMemo(() => {
     return campaignData?.fund?.campaigns?.edges.map((edge) => edge.node) ?? [];
   }, [campaignData]);
 
   const filteredCampaigns = useMemo(() => {
-    return compaignsData.filter((campaign) =>
-      campaign.name.toLowerCase().includes(searchTerm.toLowerCase()),
+    return campaignsData.filter((campaign) =>
+      campaign.name.toLowerCase().includes(searchText.toLowerCase()),
     );
-  }, [compaignsData, searchTerm]);
-
-  const sortedCampaigns = useMemo(() => {
-    const campaigns = [...filteredCampaigns];
-    switch (sortBy) {
-      case 'goalAmount_ASC':
-        campaigns.sort(
-          (a, b) => (a.goalAmount as number) - (b.goalAmount as number),
-        );
-        break;
-      case 'goalAmount_DESC':
-        campaigns.sort(
-          (a, b) => (b.goalAmount as number) - (a.goalAmount as number),
-        );
-        break;
-      case 'endAt_ASC':
-        campaigns.sort(
-          (a, b) => dayjs(a.endAt).valueOf() - dayjs(b.endAt).valueOf(),
-        );
-        break;
-      case 'endAt_DESC':
-        campaigns.sort(
-          (a, b) => dayjs(b.endAt).valueOf() - dayjs(a.endAt).valueOf(),
-        );
-        break;
-      default:
-        break;
-    }
-    return campaigns;
-  }, [filteredCampaigns, sortBy]);
+  }, [campaignsData, searchText]);
 
   const handleClick = (campaignId: string): void => {
     navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);
@@ -198,16 +142,15 @@ const orgFundCampaign = (): JSX.Element => {
     return <Navigate to={'/'} />;
   }
 
-  if (campaignLoading) {
-    return <Loader size="xl" />;
-  }
   if (campaignError) {
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+      <div className={styles.whiteContainer}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} />
+          <WarningAmberRounded
+            className={`${styles.errorIcon} ${styles.errorIconLarge}`}
+          />
           <h6 className="fw-bold text-danger text-center">
-            {t('errorLoadingCampaigns')}
+            {t('errorLoading')}
             <br />
             {campaignError.message}
           </h6>
@@ -216,75 +159,67 @@ const orgFundCampaign = (): JSX.Element => {
     );
   }
 
-  // Header titles for the table
+  // Header titles for the table loader
   const headerTitles: string[] = [
-    tCommon('sl_no'),
+    '#',
     t('campaignName'),
-    tCommon('startDate'),
-    tCommon('endDate'),
+    t('startDate'),
+    t('endDate'),
     t('fundingGoal'),
-    t('raisedAmount'),
+    t('raised'),
+    t('progress'),
     tCommon('action'),
-    t('viewPledges'),
   ];
 
   const columns: ReportingTableColumn[] = [
     {
       field: 'id',
-      headerName: tCommon('sl_no'),
+      headerName: '#',
       flex: 1,
-      minWidth: 100,
+      minWidth: 60,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div>
-            {params.api.getRowIndexRelativeToVisibleRows(params.row.id) + 1}
-          </div>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <span className={styles.requestsTableItemIndex}>
+          {params.api.getRowIndexRelativeToVisibleRows(params.row.id) + 1}
+        </span>
+      ),
     },
     {
       field: 'name',
-      headerName: t('campaignName'),
+      headerName: 'Campaign Name',
       flex: 2,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => (
-        <button
-          type="button"
-          className={styles.hyperlinkText}
-          data-testid="campaignName"
-          onClick={() => handleClick(params.row.id as string)}
-          aria-label={t('campaignName')}
-        >
-          {params.row.name}
-        </button>
+        <div data-testid="campaignName">{params.row.name}</div>
       ),
     },
     {
       field: 'startAt',
-      headerName: tCommon('startDate'),
+      headerName: 'Start Date',
       flex: 1,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
-      sortable: false,
+      sortable: true,
+      sortComparator: (v1, v2) => dayjs(v1).valueOf() - dayjs(v2).valueOf(),
       renderCell: (params: GridCellParams) =>
         dayjs(params.row.startAt).format('DD/MM/YYYY'),
     },
     {
       field: 'endAt',
-      headerName: tCommon('endDate'),
+      headerName: 'End Date',
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       flex: 1,
-      sortable: false,
+      sortable: true,
+      sortComparator: (v1, v2) => dayjs(v1).valueOf() - dayjs(v2).valueOf(),
       renderCell: (params: GridCellParams) => {
         return (
           <div data-testid="endDateCell">
@@ -295,13 +230,13 @@ const orgFundCampaign = (): JSX.Element => {
     },
     {
       field: 'goalAmount',
-      headerName: t('fundingGoal'),
+      headerName: 'Fund Goal',
       flex: 1,
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
-      sortable: false,
+      sortable: true,
       renderCell: (params: GridCellParams) => {
         return (
           <div
@@ -320,7 +255,7 @@ const orgFundCampaign = (): JSX.Element => {
     },
     {
       field: 'fundingRaised',
-      headerName: t('raisedAmount'),
+      headerName: 'Raised',
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -331,7 +266,7 @@ const orgFundCampaign = (): JSX.Element => {
         return (
           <div
             className="d-flex justify-content-center fw-bold"
-            data-testid="goalCell"
+            data-testid="raisedCell"
           >
             {
               currencySymbols[
@@ -344,151 +279,192 @@ const orgFundCampaign = (): JSX.Element => {
       },
     },
     {
+      field: 'percentageRaised',
+      headerName: '% Raised',
+      flex: 1,
+      minWidth: 120,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        const raised = 0; // Currently hardcoded, will be updated when actual data is available
+        const goal = params.row.goalAmount as number;
+        const percentage = goal > 0 ? Math.min((raised / goal) * 100, 100) : 0;
+
+        return (
+          <Box
+            className={styles.progressCellContainer}
+            data-testid="progressCell"
+          >
+            <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+              <CircularProgress
+                variant="determinate"
+                value={100}
+                size={32}
+                thickness={4}
+                sx={{ color: 'var(--progress-track-color)' }}
+              />
+              <CircularProgress
+                variant="determinate"
+                value={percentage}
+                size={32}
+                thickness={4}
+                sx={{
+                  color:
+                    percentage >= 100
+                      ? 'var(--progress-complete-color)'
+                      : percentage >= 50
+                        ? 'var(--progress-half-color)'
+                        : 'var(--progress-low-color)',
+                  position: 'absolute',
+                  left: 0,
+                  top: 0,
+                }}
+              />
+            </Box>
+            <Typography variant="body2" className={styles.progressTypography}>
+              {percentage.toFixed(0)}%
+            </Typography>
+          </Box>
+        );
+      },
+    },
+    {
       field: 'action',
       headerName: 'Action',
-      flex: 1,
-      minWidth: 100,
+      flex: 1.5,
+      minWidth: 120,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => (
         <Button
-          variant="success"
           size="sm"
           className={styles.editButton}
           data-testid="editCampaignBtn"
-          onClick={() =>
-            handleOpenModal(params.row as InterfaceCampaignInfo, 'edit')
-          }
-          aria-label={t('editCampaign')}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleOpenModal(params.row as InterfaceCampaignInfo, 'edit');
+          }}
         >
-          <i className="fa fa-edit" />
+          <i className="fa fa-edit me-1" />
+          {t('editCampaign')}
         </Button>
       ),
-    },
-    {
-      field: 'assocPledge',
-      headerName: 'Associated Pledges',
-      flex: 2,
-      minWidth: 100,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <Button
-            variant="outline-success"
-            size="sm"
-            className={styles.editButton}
-            data-testid="viewBtn"
-            onClick={() => handleClick(params.row.id as string)}
-            aria-label={t('viewPledges')}
-          >
-            <i className="fa fa-eye me-1" />
-            {t('viewPledges')}
-          </Button>
-        );
-      },
     },
   ];
 
   const gridProps: ReportingTableGridProps = {
-    columnBufferPx: COLUMN_BUFFER_PX,
+    sx: { ...dataGridStyle },
     paginationMode: 'client',
-    pagination: true,
-    paginationModel,
-    onPaginationModelChange: handlePaginationModelChange,
-    rowCount: sortedCampaigns.length,
-    pageSizeOptions: [PAGE_SIZE],
-    hideFooterSelectedRowCount: true,
     getRowId: (row: InterfaceCampaignInfo) => row.id,
+    rowCount: filteredCampaigns.length,
+    pageSizeOptions: [PAGE_SIZE],
+    loading: campaignLoading,
+    hideFooter: true,
+    compactColumns: columns.length >= 7,
     slots: {
       noRowsOverlay: () => (
         <Stack height="100%" alignItems="center" justifyContent="center">
           {t('noCampaignsFound')}
         </Stack>
       ),
-      loadingOverlay: () => (
-        <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
-      ),
     },
-    sx: { ...dataGridStyle },
-    getRowClassName: () => `${styles.rowBackgrounds}`,
-    rowHeight: ROW_HEIGHT,
+    getRowClassName: () => `${styles.rowBackgroundOrganizationFundCampaign}`,
     isRowSelectable: () => false,
     disableColumnMenu: true,
+    rowHeight: ROW_HEIGHT,
+    autoHeight: true,
     style: { overflow: 'visible' },
+    onRowClick: (params: { row: { id: string } }) =>
+      handleClick(params.row.id as string),
   };
 
   return (
     <div className={styles.organizationFundCampaignContainer}>
-      <Breadcrumbs aria-label={tCommon('breadcrumbs')} className="ms-1">
-        <Link
-          underline="hover"
-          color="inherit"
-          component="button"
-          data-testid="fundsLink"
-          onClick={() => navigate(`/orgfunds/${orgId}`)}
-          aria-label={t('funds')}
-        >
-          {fundName}
-        </Link>
-        <Typography color="text.primary">{t('title')}</Typography>
-      </Breadcrumbs>
-
-      <Row className={styles.head}>
-        <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-          <SearchBar
-            placeholder={tCommon('searchByName')}
-            onSearch={setSearchTerm}
-            inputTestId="searchFullName"
-            buttonTestId="searchBtn"
-          />
-          <div className={styles.btnsBlock}>
-            <SortingButton
-              sortingOptions={[
-                { label: t('lowestGoal'), value: 'goalAmount_ASC' },
-                { label: t('highestGoal'), value: 'goalAmount_DESC' },
-                { label: t('latestEndDate'), value: 'endAt_DESC' },
-                { label: t('earliestEndDate'), value: 'endAt_ASC' },
-              ]}
-              selectedOption={sortBy ?? ''}
-              onSortChange={(value) =>
-                setSortBy(
-                  value as
-                    | 'goalAmount_ASC'
-                    | 'goalAmount_DESC'
-                    | 'endAt_ASC'
-                    | 'endAt_DESC',
-                )
-              }
-              dataTestIdPrefix="filter"
-              buttonLabel={tCommon('sort')}
-            />
-          </div>
-          <div className={styles.btnsBlock}>
-            <Button
-              variant="success"
-              className={styles.dropdown}
-              onClick={() => handleOpenModal(null, 'create')}
-              data-testid="addCampaignBtn"
-              disabled={isArchived}
-              aria-label={t('addCampaign')}
-            >
-              <i className={'fa fa-plus me-2'} />
-              {t('addCampaign')}
-            </Button>
-          </div>
-        </div>
-      </Row>
-
-      <ReportingTable
-        rows={sortedCampaigns as ReportingRow[]}
-        columns={columns}
-        gridProps={gridProps}
+      <BreadcrumbsComponent
+        aria-label={tCommon('breadcrumb')}
+        items={[
+          {
+            label: fundName,
+            to: `/orgfunds/${orgId}`,
+          },
+          {
+            label: t('title'),
+            to: `/orgfunds/${orgId}/campaigns`,
+          },
+        ]}
       />
+      <div className={styles.searchContainerRow}>
+        <div className={styles.searchBarMarginReset}>
+          <SearchBar
+            placeholder={t('searchCampaigns')}
+            value={searchText}
+            onChange={(value) => setSearchText(value.trim())}
+            onClear={() => setSearchText('')}
+            showSearchButton={false}
+            showTrailingIcon={true}
+            inputTestId="searchFullName"
+            clearButtonTestId="clearSearch"
+          />
+        </div>
+        <Button
+          variant="success"
+          onClick={() => handleOpenModal(null, 'create')}
+          className={`${styles.createButton} ${styles.buttonNoWrap} ${styles.buttonMarginReset}`}
+          data-testid="addCampaignBtn"
+          disabled={isArchived}
+        >
+          <i className={'fa fa-plus me-2'} />
+          {t('addCampaign')}
+        </Button>
+      </div>
+
+      {!campaignLoading &&
+      campaignData &&
+      filteredCampaigns.length === 0 &&
+      searchText.length > 0 ? (
+        <div className={styles.notFound}>
+          <h4 className="m-0">
+            {tCommon('noResultsFoundFor')} &quot;{searchText}&quot;
+          </h4>
+        </div>
+      ) : !campaignLoading && campaignData && filteredCampaigns.length === 0 ? (
+        <div className={styles.notFound}>
+          <h4>{t('noCampaignsFound')}</h4>
+        </div>
+      ) : (
+        <div className={styles.listBox}>
+          {campaignLoading ? (
+            <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
+          ) : (
+            <ReportingTable
+              rows={
+                filteredCampaigns.map((campaign) => ({
+                  ...campaign,
+                })) as ReportingRow[]
+              }
+              columns={columns}
+              gridProps={gridProps}
+              listProps={{
+                loader: <TableLoader noOfCols={8} noOfRows={2} />,
+                className: styles.listTable,
+                ['data-testid']: 'campaigns-list',
+                scrollThreshold: 0.9,
+                style: { overflow: 'visible' },
+                endMessage:
+                  filteredCampaigns.length > 0 ? (
+                    <div className={'w-100 text-center my-4'}>
+                      <h5 className="m-0">{tCommon('endOfResults')}</h5>
+                    </div>
+                  ) : null,
+              }}
+            />
+          )}
+        </div>
+      )}
 
       {/* Create Campaign Modal */}
       <CampaignModal

@@ -54,6 +54,8 @@ export type InfiniteScrollProps = {
 export type ReportingTableGridProps = {
   rows?: readonly ReportingRow[];
   columns?: ReportingTableColumn[];
+  /** When true, applies tighter column widths for tables with many columns (7+) */
+  compactColumns?: boolean;
   [key: string]: unknown;
 };
 

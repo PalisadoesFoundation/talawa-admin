@@ -23,6 +23,12 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+// Mock utils/i18n to use the test i18n instance for NotificationToast
+// This ensures NotificationToast can resolve translation keys correctly in tests
+vi.mock('utils/i18n', () => ({
+  default: i18nForTest,
+}));
+
 const MOCKS = [
   {
     request: {
@@ -135,6 +141,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await userEvent.click(screen.getByTestId('createPostBtn'));
     expect(toastSpy).toHaveBeenCalledWith(
       "Can't create a post with an empty body.",
+      expect.any(Object),
     );
   });
 
@@ -149,6 +156,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await userEvent.click(screen.getByTestId('createPostBtn'));
     expect(toast.info).toHaveBeenCalledWith(
       'Processing your post. Please wait.',
+      expect.any(Object),
     );
   });
 
@@ -415,6 +423,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
 
@@ -440,6 +449,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -497,6 +507,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -514,6 +525,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -531,6 +543,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -591,6 +604,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -607,6 +621,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -623,6 +638,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -639,6 +655,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -655,6 +672,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -671,6 +689,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -687,6 +706,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
   });
@@ -708,6 +728,7 @@ describe('Testing StartPostModal Component: User Portal', () => {
     await waitFor(() => {
       expect(toast.info).toHaveBeenCalledWith(
         'Processing your post. Please wait.',
+        expect.any(Object),
       );
     });
 
