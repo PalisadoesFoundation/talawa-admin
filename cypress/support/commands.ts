@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-export {};
+export { };
 
 /** Type definitions for GraphQL signIn response */
 interface SignInUser {
@@ -73,9 +73,9 @@ Cypress.Commands.add('loginByApi', (role: string) => {
       });
 
       if (role === 'user') {
-        cy.url({ timeout: 60000 }).should('include', '/user/organizations');
+        cy.url({ timeout: 15000 }).should('include', '/user/organizations');
       } else {
-        cy.url({ timeout: 60000 }).should('include', '/orglist');
+        cy.url({ timeout: 15000 }).should('include', '/orglist');
       }
     });
   });
