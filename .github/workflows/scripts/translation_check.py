@@ -100,7 +100,7 @@ def find_translation_tags(source: str | Path) -> set[str]:
     # Extract key from namespace-qualified tags
     # (e.g., "common:hello" -> "hello")
 
-    return {tag.split(":")[-1] for tag in tags if tag.split(":")[-1]}
+    return {key for tag in tags if (key := tag.split(":")[-1])}
 
 
 def get_target_files(
@@ -131,7 +131,14 @@ def get_target_files(
 
     if directories:
         for directory in directories:
-            targets.extend(Path(directory).rglob("*"))
+            dir_path = Path(directory)
+            if dir_path.exists() and dir_path.is_dir():
+                targets.extend(dir_path.rglob("*"))
+            else:
+                print(
+                    f"Warning: Directory not found: {directory}",
+                    file=sys.stderr,
+                )
 
     if not files and not directories:
         targets = list(Path("src").rglob("*"))
