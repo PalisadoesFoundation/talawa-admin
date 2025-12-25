@@ -65,7 +65,7 @@ import UsersIcon from 'assets/svgs/users.svg?react';
 import VenuesIcon from 'assets/svgs/venues.svg?react';
 import DashBoardCard from 'components/AdminPortal/OrganizationDashCards/DashboardCard';
 import DashboardCardLoading from 'components/AdminPortal/OrganizationDashCards/Loader/DashboardCardLoading';
-import styles from '../../style/app-fixed.module.css';
+import styles from '../../../style/app-fixed.module.css';
 
 interface InterfaceDashboardStatsProps {
   memberCount: number;

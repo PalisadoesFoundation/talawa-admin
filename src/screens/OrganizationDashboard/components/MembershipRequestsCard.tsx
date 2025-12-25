@@ -72,7 +72,7 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
   return (
     <Col xl={4}>
       <Row className="mb-4">
-        <Card border="0" className="rounded-4 h-220px">
+        <Card border="0" className={`rounded-4 ${styles['h-220px']}`}>
           <div className={styles.cardHeader}>
             <div className={styles.cardTitle}>{t('membershipRequests')}</div>
             <Button
@@ -84,13 +84,13 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
               {t('viewAll')}
             </Button>
           </div>
-          <Card.Body className={`${styles.containerBody} h-150px`}>
+          <Card.Body className={`${styles.containerBody} ${styles['h-150px']}`}>
             {isLoading ? (
               [...Array(4)].map((_, index) => (
                 <CardItemLoading key={`requestsLoading_${index}`} />
               ))
             ) : pendingRequests.length === 0 ? (
-              <div className={`${styles.emptyContainer} h-150px`}>
+              <div className={`${styles.emptyContainer} ${styles['h-150px']}`}>
                 <h6>{t('noMembershipRequests')}</h6>
               </div>
             ) : (
