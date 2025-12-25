@@ -18,6 +18,20 @@ vi.mock('react-toastify', () => ({
   toast: sharedMocks.toast,
 }));
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        uploadPlugin: 'Upload Plugin',
+        cancel: 'Cancel',
+        uploading: 'Uploading...',
+        cancelUploadPlugin: 'Cancel Upload',
+      };
+      return translations[key] || key;
+    },
+  }),
+}));
+
 vi.mock('jszip', () => ({
   default: vi.fn(),
 }));
@@ -2065,6 +2079,106 @@ describe('UploadPluginModal Component', () => {
           'Plugin uploaded successfully! (Admin components) - You can now install it from the plugin list.',
         );
         expect(defaultProps.onHide).toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('Cancel Button Interactions', () => {
+    it('should call handleClose when Cancel button is clicked', async () => {
+      const mockOnHide = vi.fn();
+
+      render(
+        <MockedProvider>
+          <UploadPluginModal
+            {...defaultProps}
+            show={true}
+            onHide={mockOnHide}
+          />
+        </MockedProvider>,
+      );
+
+      const cancelButton = screen.getByTestId('cancel-upload-plugin-button');
+      fireEvent.click(cancelButton);
+
+      expect(mockOnHide).toHaveBeenCalled();
+    });
+
+    it('should disable Cancel button during installation', async () => {
+      const { validateAdminPluginZip, installAdminPluginFromZip } =
+        await import('../../utils/adminPluginInstaller');
+      (
+        validateAdminPluginZip as unknown as ReturnType<typeof vi.fn>
+      ).mockResolvedValue({
+        hasAdminFolder: true,
+        hasApiFolder: false,
+        adminManifest: {
+          name: 'Test Plugin',
+          version: '1.0.0',
+          description: 'Test',
+          author: 'Test Author',
+          main: 'index.tsx',
+          pluginId: 'test-plugin',
+        },
+        files: {
+          'manifest.json':
+            '{"name":"Test Plugin","version":"1.0.0","description":"Test","author":"Test Author","main":"index.tsx","pluginId":"test-plugin"}',
+          'index.tsx': 'export default {}',
+        },
+      });
+
+      (
+        installAdminPluginFromZip as unknown as ReturnType<typeof vi.fn>
+      ).mockImplementation(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 100)); // Simulate delay
+        return {
+          success: true,
+          pluginId: 'test-plugin',
+          manifest: {
+            name: 'Test Plugin',
+            version: '1.0.0',
+            description: 'Test',
+            author: 'Test Author',
+            main: 'index.tsx',
+            pluginId: 'test-plugin',
+          },
+          installedComponents: ['Admin Dashboard Components'],
+        };
+      });
+
+      render(
+        <MockedProvider>
+          <UploadPluginModal {...defaultProps} />
+        </MockedProvider>,
+      );
+
+      const fileInput = getFileInput();
+      const file = createMockFile('test-plugin.zip', 'mock content');
+      Object.defineProperty(fileInput, 'files', {
+        value: createMockFileList([file]),
+        writable: false,
+      });
+
+      fireEvent.change(fileInput);
+
+      await waitFor(() => {
+        const uploadButton = screen.getByRole('button', {
+          name: /upload plugin/i,
+        });
+        expect(uploadButton).not.toBeDisabled();
+      });
+
+      const cancelButton = screen.getByTestId('cancel-upload-plugin-button');
+      expect(cancelButton).not.toBeDisabled();
+
+      // Click upload
+      fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
+
+      // Cancel button should be disabled during installation
+      expect(cancelButton).toBeDisabled();
+
+      // Wait for completion to avoid act warnings
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalled();
       });
     });
   });

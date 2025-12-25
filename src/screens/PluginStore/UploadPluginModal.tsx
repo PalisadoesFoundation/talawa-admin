@@ -6,6 +6,7 @@ import React, { useRef, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Button } from '@mui/material';
 import styles from '../../style/app-fixed.module.css';
+import { useTranslation } from 'react-i18next';
 import { FaUpload, FaExclamationTriangle, FaCheck } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import {
@@ -29,6 +30,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
   show,
   onHide,
 }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'common' });
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [manifest, setManifest] = useState<IAdminPluginManifest | null>(null);
   const [pluginStructure, setPluginStructure] =
@@ -114,8 +116,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
       } else {
         toast.error(result.error || 'Failed to upload plugin');
       }
-    } catch (error) {
-      console.error('Failed to upload plugin:', error);
+    } catch {
       toast.error('Failed to upload plugin. Please try again.');
     } finally {
       setIsInstalling(false);
@@ -276,22 +277,24 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
               className={styles.cancelButton}
               onClick={handleClose}
               disabled={isInstalling}
+              aria-label={t('cancelUploadPlugin')}
               style={{
                 flex: 1,
               }}
               data-testid="cancel-upload-plugin-button"
             >
-              Cancel
+              {t('cancel')}
             </Button>
             <Button
               variant="contained"
               color="primary"
               onClick={handleAddPlugin}
               disabled={!selectedFile || !manifest || isInstalling}
+              aria-label={isInstalling ? t('uploading') : t('uploadPlugin')}
               style={{ flex: 1 }}
               data-testid="upload-plugin-button"
             >
-              {isInstalling ? 'Uploading...' : 'Upload Plugin'}
+              {isInstalling ? t('uploading') : t('uploadPlugin')}
             </Button>
           </div>
         </div>
