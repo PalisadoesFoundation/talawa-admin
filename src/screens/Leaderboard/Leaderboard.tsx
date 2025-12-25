@@ -55,6 +55,7 @@ import bronze from 'assets/images/bronze.png';
 
 import type { InterfaceVolunteerRank } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
+import leaderboardStyles from './Leaderboard.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
@@ -115,14 +116,43 @@ function leaderboard(): JSX.Element {
     },
   });
 
-  const debouncedSearch = useMemo(
-    () => debounce((value: string) => setSearchTerm(value), 300),
-    [],
-  );
-
   const rankings = useMemo(
     () => rankingsData?.getVolunteerRanks || [],
     [rankingsData],
+  );
+
+  const leaderboardDropdowns = useMemo(
+    () => [
+      {
+        id: 'leaderboard-sort-dropdown',
+        label: tCommon('sort'),
+        type: 'sort' as const,
+        options: [
+          { label: t('mostHours'), value: 'hours_DESC' },
+          { label: t('leastHours'), value: 'hours_ASC' },
+        ],
+        selectedOption: sortBy,
+        onOptionChange: (value: string | number) =>
+          setSortBy(value as 'hours_DESC' | 'hours_ASC'),
+        dataTestIdPrefix: 'sort',
+      },
+      {
+        id: 'leaderboard-timeframe-dropdown',
+        label: t('timeFrame'),
+        type: 'filter' as const,
+        options: [
+          { label: t('allTime'), value: TimeFrame.All },
+          { label: t('weekly'), value: TimeFrame.Weekly },
+          { label: t('monthly'), value: TimeFrame.Monthly },
+          { label: t('yearly'), value: TimeFrame.Yearly },
+        ],
+        selectedOption: timeFrame,
+        onOptionChange: (value: string | number) =>
+          setTimeFrame(value as TimeFrame),
+        dataTestIdPrefix: 'timeFrame',
+      },
+    ],
+    [tCommon, t, sortBy, timeFrame],
   );
 
   if (rankingsLoading) {
@@ -241,7 +271,7 @@ function leaderboard(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center"
+            className={`d-flex justify-content-center ${leaderboardStyles.emailCell}`}
             data-testid="userEmail"
           >
             {params.row.user.email}
@@ -258,51 +288,26 @@ function leaderboard(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        return <div className="fw-bold">{params.row.hoursVolunteered}</div>;
+        return (
+          <div className={`fw-bold ${leaderboardStyles.hoursCell}`}>
+            {params.row.hoursVolunteered}
+          </div>
+        );
       },
     },
   ];
 
   return (
-    <div className="mt-4 mx-2 bg-white p-4 pt-2 rounded-4 shadow">
-      {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <SearchBar
-          placeholder={t('searchByVolunteer')}
-          onSearch={debouncedSearch}
-          inputTestId="searchBy"
-          buttonTestId="searchBtn"
-        />
-        <div className="d-flex gap-3 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-3">
-            <SortingButton
-              sortingOptions={[
-                { label: t('mostHours'), value: 'hours_DESC' },
-                { label: t('leastHours'), value: 'hours_ASC' },
-              ]}
-              selectedOption={sortBy}
-              onSortChange={(value) =>
-                setSortBy(value as 'hours_DESC' | 'hours_ASC')
-              }
-              dataTestIdPrefix="sort"
-              buttonLabel={tCommon('sort')}
-            />
-            <SortingButton
-              sortingOptions={[
-                { label: t('allTime'), value: TimeFrame.All },
-                { label: t('weekly'), value: TimeFrame.Weekly },
-                { label: t('monthly'), value: TimeFrame.Monthly },
-                { label: t('yearly'), value: TimeFrame.Yearly },
-              ]}
-              selectedOption={timeFrame}
-              onSortChange={(value) => setTimeFrame(value as TimeFrame)}
-              dataTestIdPrefix="timeFrame"
-              buttonLabel={t('timeFrame')}
-              type="filter"
-            />
-          </div>
-        </div>
-      </div>
+    <div className={leaderboardStyles.leaderboardContainer}>
+      <AdminSearchFilterBar
+        searchPlaceholder={t('searchByVolunteer')}
+        searchValue={searchTerm}
+        onSearchChange={setSearchTerm}
+        searchInputTestId="searchBy"
+        searchButtonTestId="searchBtn"
+        hasDropdowns={true}
+        dropdowns={leaderboardDropdowns}
+      />
 
       {/* Table with Action Items */}
       <DataGrid

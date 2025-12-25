@@ -105,11 +105,8 @@
   "createdEarliest": "सबसे पहले बनाया गया",
   "searchBy": "{{item}} से खोजें",
   "plugins": "प्लगइन्स",
-  "pluginSettings": "प्लगइन सेटिंग्स",
   "save": "सहेजें",
   "saving": "सहेज रहे हैं...",
-  "unblock": "अनब्लॉक करें",
-  "unblockedSuccessfully": "{{item}} सफलतापूर्वक अनब्लॉक किया गया",
   "breadcrumb": "ब्रेडक्रंब",
   "clearSearch": "खोज साफ़ करें",
   "actions": "क्रियाएं",
@@ -118,6 +115,13 @@
   "profilePicturePlaceholder": "डमी चित्र",
   "userProfileMenu": "उपयोगकर्ता प्रोफ़ाइल मेनू",
   "breadcrumbs": "ब्रेडक्रंब्स",
+  "toggleOptions": "विकल्प टॉगल करें",
+  "filterAndSortOptions": "फिल्टर और सॉर्ट विकल्प",
+  "clear": "साफ़ करें",
+  "noResultsFound": "कोई परिणाम नहीं मिला",
   "loadingAdminPlugin": "व्यवस्थापक प्लगइन लोड हो रहा है...",
-  "loadingUserPlugin": "उपयोगकर्ता प्लगइन लोड हो रहा है..."
+  "loadingUserPlugin": "उपयोगकर्ता प्लगइन लोड हो रहा है...",
+  "unblock": "अनब्लॉक करें",
+  "unblockedSuccessfully": "{{item}} सफलतापूर्वक अनब्लॉक किया गया",
+  "pluginSettings": "प्लगइन सेटिंग्स"
 }
