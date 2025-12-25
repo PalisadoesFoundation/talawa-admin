@@ -501,9 +501,7 @@ describe('PluginStore', () => {
 
       await waitFor(() => {
         expect(screen.getByTestId('plugins-empty-state')).toBeInTheDocument();
-        expect(
-          screen.getByText((content) => content.includes('noInstalledPlugins')),
-        ).toBeInTheDocument();
+        expect(screen.getByText('noInstalledPlugins')).toBeInTheDocument();
       });
     });
   });
