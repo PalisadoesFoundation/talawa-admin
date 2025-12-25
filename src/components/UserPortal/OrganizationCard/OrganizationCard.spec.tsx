@@ -6,9 +6,16 @@ import { toast } from 'react-toastify';
 
 import OrganizationCard from './OrganizationCard';
 
-vi.mock('@apollo/client', () => ({
-  useMutation: () => [vi.fn().mockResolvedValue({}), { loading: false }],
-}));
+const mockMutationFn = vi.fn().mockResolvedValue({ data: {} });
+vi.mock('@apollo/client', async () => {
+  const actual = await vi.importActual<typeof import('@apollo/client')>(
+    '@apollo/client',
+  );
+  return {
+    ...actual,
+    useMutation: () => [mockMutationFn, { loading: false, error: undefined }],
+  };
+});
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -83,15 +90,20 @@ describe('OrganizationCard [PR-2]', () => {
     expect(screen.getByTestId('manageBtn')).toBeInTheDocument();
   });
 
-  it('calls toast on join click', async () => {
-    render(<OrganizationCard {...baseProps} />);
+  it('calls toast and mutation on join click', async () => {
+  render(<OrganizationCard {...baseProps} />);
 
-    fireEvent.click(screen.getByTestId('joinBtn'));
+  fireEvent.click(screen.getByTestId('joinBtn'));
 
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+  await waitFor(() => {
+    expect(mockMutationFn).toHaveBeenCalledWith({
+      variables: { organizationId: 'org-1' },
     });
   });
+
+  expect(toast.success).toHaveBeenCalled();
+});
+
 
   it('calls toast on withdraw click', async () => {
     render(

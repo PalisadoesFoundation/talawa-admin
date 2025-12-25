@@ -78,10 +78,7 @@ const PeopleCard: React.FC<InterfacePeopleCardProps> = ({
   return (
     <UserPortalCard
       variant="compact"
-      dataTestId={t('people.card_test_id', {
-        defaultValue: 'people-card-{{id}}',
-        id,
-      })}
+      dataTestId={`people-card-${id}`}
       imageSlot={imageSlot}
     >
       <div className={styles.content}>

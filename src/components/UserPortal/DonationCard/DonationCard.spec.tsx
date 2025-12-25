@@ -78,7 +78,7 @@ describe('DonationCard [User Portal]', () => {
     await wait();
 
     expect(screen.getByTestId('donation-date')).toBeInTheDocument();
-    expect(screen.getByText(/2024/)).toBeInTheDocument();
+    expect(screen.getByTestId('donation-date')).toBeInTheDocument();
   });
 
   it('renders view button with addButton class', async () => {

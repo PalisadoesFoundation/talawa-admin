@@ -1,17 +1,8 @@
 import React from 'react';
-import { render, act } from '@testing-library/react';
-import { describe, it } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 
 import PeopleCard, { InterfacePeopleCardProps } from './PeopleCard';
-import { TestWrapper } from 'components/test-utils/TestWrapper';
-
-const wait = async (ms = 100): Promise<void> => {
-  await act(async (): Promise<void> => {
-    await new Promise<void>((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-};
 
 const baseProps: InterfacePeopleCardProps = {
   id: '1',
@@ -22,24 +13,38 @@ const baseProps: InterfacePeopleCardProps = {
   sno: '1',
 };
 
-describe('Testing PeopleCard Component [User Portal]', () => {
-  it('Component renders without image', async () => {
-    render(
-      <TestWrapper>
-        <PeopleCard {...baseProps} />
-      </TestWrapper>,
-    );
-
-    await wait();
+describe('PeopleCard [User Portal]', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
-  it('Component renders with image', async () => {
+  it('renders all person details correctly when image is not provided', () => {
+    render(<PeopleCard {...baseProps} />);
+
+    expect(screen.getByTestId('people-card-1')).toBeInTheDocument();
+    expect(screen.getByTestId('people-sno-1')).toHaveTextContent('1');
+    expect(screen.getByTestId('people-name-1')).toHaveTextContent('First Last');
+    expect(screen.getByTestId('people-email-1')).toHaveTextContent(
+      'first@last.com',
+    );
+    expect(screen.getByTestId('people-role-1')).toHaveTextContent('Admin');
+
+    // Avatar fallback should be used
+    expect(
+      screen.queryByTestId('people-1-image'),
+    ).not.toBeInTheDocument();
+  });
+
+  it('renders provided image with correct src when image is passed', () => {
     render(
-      <TestWrapper>
-        <PeopleCard {...baseProps} image="personImage" />
-      </TestWrapper>,
+      <PeopleCard
+        {...baseProps}
+        image="http://example.com/avatar.png"
+      />,
     );
 
-    await wait();
+    const img = screen.getByTestId('people-1-image') as HTMLImageElement;
+    expect(img).toBeInTheDocument();
+    expect(img.src).toContain('avatar.png');
   });
 });

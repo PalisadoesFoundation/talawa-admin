@@ -91,10 +91,7 @@ const ContactCard: React.FC<InterfaceContactCardProps> = ({
   return (
     <UserPortalCard
       variant="compact"
-      dataTestId={t('contact.card_test_id', {
-        defaultValue: 'contact-card-{{id}}',
-        id,
-      })}
+      dataTestId={`contact-card-${id}`}
       ariaLabel={t('contact.card_aria', 'Contact card')}
       imageSlot={imageSlot}
       actionsSlot={actionsSlot}

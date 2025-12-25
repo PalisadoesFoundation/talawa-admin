@@ -84,9 +84,8 @@ describe('ContactCard [User Portal]', () => {
     expect(
       screen.getByTestId(`contact-container-${baseProps.id}`),
     ).toBeInTheDocument();
-    // Avatar component renders an element with role or accessible name depending on implementation;
-    // at minimum we assert the contact image test id is NOT present, and fallback avatar exists by querying title element.
     expect(screen.queryByTestId(`contact-${baseProps.id}-image`)).toBeNull();
+    expect(screen.getByLabelText(baseProps.title)).toBeInTheDocument();
   });
 
   it('renders provided image when image prop exists', async () => {

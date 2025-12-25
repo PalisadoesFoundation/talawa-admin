@@ -6,10 +6,15 @@
   display: flex;
   align-items: center;
   width: 100%;
-  outline: none;
   cursor: pointer;
   padding: 0;
 }
+
+.contentInner:focus-visible {
+  outline: 2px solid var(--focus-color, #007bff);
+  outline-offset: 2px;
+}
+
 
 .selected {
   background-color: var(--contact-selected-bg, rgba(196, 255, 211, 0.3));
