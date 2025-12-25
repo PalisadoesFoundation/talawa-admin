@@ -185,9 +185,10 @@ describe('Testing User Campaigns Screen', () => {
 
   it('renders the empty campaign component', async () => {
     renderCampaigns(link3);
-    await waitFor(() =>
-      expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument(),
-    );
+    await waitFor(() => {
+      expect(screen.getByTestId('campaigns-empty-state')).toBeInTheDocument();
+      expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument();
+    });
   });
 
   it('Should display loading state', () => {
@@ -346,6 +347,7 @@ describe('Testing User Campaigns Screen', () => {
 
     // Should show "No Campaigns Found" message
     await waitFor(() => {
+      expect(screen.getByTestId('campaigns-empty-state')).toBeInTheDocument();
       expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument();
     });
   });
@@ -382,6 +384,7 @@ describe('Testing User Campaigns Screen', () => {
 
     // Should show "No Campaigns Found" message when organization is null
     await waitFor(() => {
+      expect(screen.getByTestId('campaigns-empty-state')).toBeInTheDocument();
       expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument();
     });
   });
@@ -392,6 +395,7 @@ describe('Testing User Campaigns Screen', () => {
 
     // Should show "No Campaigns Found" when campaigns field is undefined
     await waitFor(() => {
+      expect(screen.getByTestId('campaigns-empty-state')).toBeInTheDocument();
       expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument();
     });
   });

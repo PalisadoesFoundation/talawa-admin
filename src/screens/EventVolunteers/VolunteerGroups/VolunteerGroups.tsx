@@ -32,7 +32,7 @@ import {
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { debounce, Stack } from '@mui/material';
+import { debounce } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import styles from 'style/app-fixed.module.css';
 import { GET_EVENT_VOLUNTEER_GROUPS } from 'GraphQl/Queries/EventVolunteerQueries';
@@ -41,6 +41,7 @@ import VolunteerGroupDeleteModal from './deleteModal/VolunteerGroupDeleteModal';
 import VolunteerGroupViewModal from './viewModal/VolunteerGroupViewModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 enum ModalState {
   SAME = 'same',
@@ -391,9 +392,11 @@ function volunteerGroups(): JSX.Element {
         getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noVolunteerGroups')}
-            </Stack>
+            <EmptyState
+              icon="groups"
+              message={t('noVolunteerGroups')}
+              dataTestId="volunteer-groups-empty-state"
+            />
           ),
         }}
         sx={dataGridStyle}

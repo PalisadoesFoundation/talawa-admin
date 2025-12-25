@@ -44,7 +44,6 @@ import {
   AccordionDetails,
   AccordionSummary,
   Chip,
-  Stack,
   debounce,
 } from '@mui/material';
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
@@ -71,6 +70,7 @@ import { FaCheck } from 'react-icons/fa';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import RecurringEventVolunteerModal from './RecurringEventVolunteerModal';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 const UpcomingEvents = (): JSX.Element => {
   // Retrieves translation functions for various namespaces
@@ -469,10 +469,11 @@ const UpcomingEvents = (): JSX.Element => {
       </div>
 
       {events.length < 1 ? (
-        <Stack height="100%" alignItems="center" justifyContent="center">
-          {/* Displayed if no events are found */}
-          {t('noEvents')}
-        </Stack>
+        <EmptyState
+          icon="event"
+          message={t('noEvents')}
+          dataTestId="upcoming-events-empty-state"
+        />
       ) : (
         events.map((event: InterfaceMappedEvent, index: number) => {
           const {
