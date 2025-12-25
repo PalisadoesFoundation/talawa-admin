@@ -73,7 +73,7 @@ i18n.use(initReactI18next).init({
 
 describe('GroupChatDetails', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
   beforeEach(() => {
     vi.resetAllMocks();
@@ -499,22 +499,22 @@ describe('GroupChatDetails', () => {
     if (dropdownToggle) await act(async () => fireEvent.click(dropdownToggle));
 
     const promoteText = await screen.findByText(
-      /Promote to Admin|Demote to Regular/,
+      /userChat.promoteToAdmin|userChat.demoteToRegular/,
     );
     await act(async () => fireEvent.click(promoteText));
 
     // wait for role change toast
     await waitFor(() =>
-      expect(toastSuccess).toHaveBeenCalledWith('Role updated successfully'),
+      expect(toastSuccess).toHaveBeenCalledWith('userChat.roleUpdatedSuccess'),
     );
 
-    const removeBtn = screen.queryByText(/Remove/);
+    const removeBtn = screen.queryByText(/userChat.remove/);
     if (removeBtn) {
       vi.spyOn(window, 'confirm').mockReturnValue(true);
       await act(async () => fireEvent.click(removeBtn));
       await waitFor(() =>
         expect(toastSuccess).toHaveBeenCalledWith(
-          'Member removed successfully',
+          'userChat.memberRemovedSuccess',
         ),
       );
     }
@@ -565,12 +565,14 @@ describe('GroupChatDetails', () => {
 
     if (dropdownToggle) await act(async () => fireEvent.click(dropdownToggle));
 
-    const promoteItem = await screen.findByText(/Promote|Demote/i);
+    const promoteItem = await screen.findByText(
+      /userChat.promoteToAdmin|userChat.demoteToRegular/i,
+    );
 
     await act(async () => fireEvent.click(promoteItem));
 
     await waitFor(() => {
-      expect(toastError).toHaveBeenCalledWith('Failed to update role');
+      expect(toastError).toHaveBeenCalledWith('userChat.failedUpdateRole');
       expect(consoleError).toHaveBeenCalled();
     });
 
@@ -623,12 +625,12 @@ describe('GroupChatDetails', () => {
 
     if (dropdownToggle) await act(async () => fireEvent.click(dropdownToggle));
 
-    const removeItem = await screen.findByText(/Remove/i);
+    const removeItem = await screen.findByText(/userChat.remove/i);
 
     await act(async () => fireEvent.click(removeItem));
 
     await waitFor(() => {
-      expect(toastError).toHaveBeenCalledWith('Failed to remove member');
+      expect(toastError).toHaveBeenCalledWith('userChat.failedRemoveMember');
       expect(consoleError).toHaveBeenCalled();
     });
 
@@ -722,7 +724,7 @@ describe('GroupChatDetails', () => {
     if (trashButton) await act(async () => fireEvent.click(trashButton));
 
     await waitFor(() =>
-      expect(toastSuccess).toHaveBeenCalledWith('Chat deleted successfully'),
+      expect(toastSuccess).toHaveBeenCalledWith('userChat.chatDeletedSuccess'),
     );
   });
 
@@ -774,7 +776,7 @@ describe('GroupChatDetails', () => {
     if (trashButton) await act(async () => fireEvent.click(trashButton));
 
     await waitFor(() => {
-      expect(toastError).toHaveBeenCalledWith('Failed to delete chat');
+      expect(toastError).toHaveBeenCalledWith('userChat.failedDeleteChat');
       expect(consoleError).toHaveBeenCalled();
     });
     toastError.mockRestore();
@@ -815,7 +817,7 @@ describe('GroupChatDetails', () => {
     });
 
     await waitFor(() => {
-      expect(toastError).toHaveBeenCalledWith('Failed to update chat name');
+      expect(toastError).toHaveBeenCalledWith('userChat.failedUpdateChatName');
       expect(consoleError).toHaveBeenCalled();
     });
 
@@ -862,7 +864,7 @@ describe('GroupChatDetails', () => {
     });
 
     await waitFor(() => {
-      expect(toastError).toHaveBeenCalledWith('Failed to update chat image');
+      expect(toastError).toHaveBeenCalledWith('userChat.failedUpdateChatImage');
       expect(consoleError).toHaveBeenCalled();
     });
 

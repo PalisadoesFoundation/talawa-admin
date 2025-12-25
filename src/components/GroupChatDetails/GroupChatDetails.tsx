@@ -96,6 +96,8 @@ export default function groupChatDetails({
   }, [userId, t]);
 
   // Cleanup object URLs on unmount
+  const [selectedImage, setSelectedImage] = useState<string>('');
+
   useEffect(() => {
     return () => {
       if (selectedImage && selectedImage.startsWith('blob:')) {
@@ -115,7 +117,7 @@ export default function groupChatDetails({
         <Modal.Header closeButton data-testid="groupChatDetails">
           <Modal.Title>{t('Error')}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>User not found</Modal.Body>
+        <Modal.Body>{t('userNotFound')}</Modal.Body>
       </Modal>
     );
   }
@@ -125,7 +127,6 @@ export default function groupChatDetails({
   const [userName, setUserName] = useState('');
   const [editChatTitle, setEditChatTitle] = useState<boolean>(false);
   const [chatName, setChatName] = useState<string>(chat?.name || '');
-  const [selectedImage, setSelectedImage] = useState<string>('');
 
   //mutations
 
@@ -151,9 +152,9 @@ export default function groupChatDetails({
         },
       });
       await chatRefetch();
-      toast.success('Role updated successfully');
+      toast.success(t('roleUpdatedSuccess'));
     } catch (error) {
-      toast.error('Failed to update role');
+      toast.error(t('failedUpdateRole'));
       console.error(error);
     }
   };
@@ -169,9 +170,9 @@ export default function groupChatDetails({
         },
       });
       await chatRefetch();
-      toast.success('Member removed successfully');
+      toast.success(t('memberRemovedSuccess'));
     } catch (error) {
-      toast.error('Failed to remove member');
+      toast.error(t('failedRemoveMember'));
       console.error(error);
     }
   };
@@ -249,14 +250,14 @@ export default function groupChatDetails({
           },
         });
         await chatRefetch({ input: { id: chat.id } });
-        toast.success('Chat image updated successfully');
+        toast.success(t('chatImageUpdatedSuccess'));
         // Clean up object URL after successful upload
         if (selectedImage && selectedImage.startsWith('blob:')) {
           URL.revokeObjectURL(selectedImage);
         }
         setSelectedImage('');
       } catch (error) {
-        toast.error('Failed to update chat image');
+        toast.error(t('failedUpdateChatImage'));
         console.error(error);
         // Clean up object URL on error
         if (selectedImage && selectedImage.startsWith('blob:')) {
@@ -296,11 +297,11 @@ export default function groupChatDetails({
                       await deleteChat({
                         variables: { input: { id: chat.id } },
                       });
-                      toast.success('Chat deleted successfully');
+                      toast.success(t('chatDeletedSuccess'));
                       toggleGroupChatDetailsModal();
                       // Maybe navigate away or refetch chats
                     } catch (error) {
-                      toast.error('Failed to delete chat');
+                      toast.error(t('failedDeleteChat'));
                       console.error(error);
                     }
                   }
@@ -360,9 +361,9 @@ export default function groupChatDetails({
                       });
                       setEditChatTitle(false);
                       await chatRefetch({ input: { id: chat.id } });
-                      toast.success('Chat name updated successfully');
+                      toast.success(t('chatNameUpdatedSuccess'));
                     } catch (error) {
-                      toast.error('Failed to update chat name');
+                      toast.error(t('failedUpdateChatName'));
                       console.error(error);
                     }
                   }}
@@ -456,8 +457,8 @@ export default function groupChatDetails({
                               }
                             >
                               {role === 'administrator'
-                                ? 'Demote to Regular'
-                                : 'Promote to Admin'}
+                                ? t('demoteToRegular')
+                                : t('promoteToAdmin')}
                             </Dropdown.Item>
                             {canRemove && (
                               <Dropdown.Item
@@ -465,14 +466,16 @@ export default function groupChatDetails({
                                 onClick={() => {
                                   if (
                                     window.confirm(
-                                      `Remove ${user.name} from the chat?`,
+                                      t('confirmRemoveUser', {
+                                        name: user.name,
+                                      }),
                                     )
                                   ) {
                                     handleRemoveMember(user.id);
                                   }
                                 }}
                               >
-                                Remove
+                                {t('remove')}
                               </Dropdown.Item>
                             )}
                           </Dropdown.Menu>
@@ -493,7 +496,7 @@ export default function groupChatDetails({
         contentClassName={styles.modalContent}
       >
         <Modal.Header closeButton data-testid="pluginNotificationHeader">
-          <Modal.Title>{'Chat'}</Modal.Title>
+          <Modal.Title>{t('chat')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {allUsersLoading ? (
@@ -504,7 +507,7 @@ export default function groupChatDetails({
             <>
               <div className={styles.input}>
                 <SearchBar
-                  placeholder="searchFullName"
+                  placeholder={t('searchFullName')}
                   value={userName}
                   onChange={(value) => {
                     setUserName(value);
@@ -524,7 +527,7 @@ export default function groupChatDetails({
               </div>
 
               <TableContainer className={styles.userData} component={Paper}>
-                <Table aria-label="customized table">
+                <Table aria-label={t('customizedTable')}>
                   <TableHead>
                     <TableRow>
                       <TableCell className={styles.groupChatTableCellHead}>
@@ -534,13 +537,13 @@ export default function groupChatDetails({
                         className={styles.groupChatTableCellHead}
                         align="center"
                       >
-                        {'user'}
+                        {t('user')}
                       </TableCell>
                       <TableCell
                         className={styles.groupChatTableCellHead}
                         align="center"
                       >
-                        {'Chat'}
+                        {t('chat')}
                       </TableCell>
                     </TableRow>
                   </TableHead>

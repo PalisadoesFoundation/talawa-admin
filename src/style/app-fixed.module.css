@@ -7887,7 +7887,7 @@ form {
 
 .btnsContainerSearchBar .inputOrgList button {
   width: 44px;
-  /* slightly smaller square button */
+  /* compact rectangular button */
   height: 38px;
   margin-left: 8px;
   flex: 0 0 44px;
