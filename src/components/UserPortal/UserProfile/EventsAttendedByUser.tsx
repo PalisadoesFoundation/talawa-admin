@@ -31,27 +31,7 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import styles from './common.module.css';
 import EventsAttendedByMember from 'components/MemberActivity/EventsAttendedByMember';
-
-interface InterfaceUser {
-  userDetails: {
-    firstName: string;
-    lastName: string;
-    createdAt: string;
-    gender: string;
-    email: string;
-    phoneNumber: string;
-    birthDate: string;
-    grade: string;
-    empStatus: string;
-    maritalStatus: string;
-    address: string;
-    state: string;
-    country: string;
-    image: string;
-    eventsAttended: { _id: string }[];
-  };
-  t: (key: string) => string;
-}
+import type { InterfaceUser } from 'types/UserPortal/UserProfile';
 export const EventsAttendedByUser: React.FC<InterfaceUser> = ({
   userDetails,
   t,
