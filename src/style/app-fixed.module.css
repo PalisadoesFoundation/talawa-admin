@@ -1609,7 +1609,7 @@ form label,
   transform: scale(1.5);
   color: var(--bs-danger, var(--errorIcon-color));
   margin-bottom: 1rem;
-  font-size: 2.1875rem; /* MUI "large" = 35px = 2.1875rem */
+  font-size: 1.5rem;
 
   /* Add error icon for non-color indication */
   &::before {

@@ -150,7 +150,8 @@
     "allCaughtUp": "आप सभी अपडेट के साथ हैं!",
     "prev": "पिछला",
     "next": "अगला",
-    "markAsRead": "पढ़ा हुआ चिह्नित करें"
+    "markAsRead": "पढ़ा हुआ चिह्नित करें",
+    "markAsReadAriaLabel": "सूचना '{{title}}' को पढ़ा हुआ चिह्नित करें"
   },
   "orgList": {
     "title": "तालावा संगठन",
@@ -1707,6 +1708,8 @@
     "noPluginsAvailable": "कोई प्लगइन उपलब्ध नहीं",
     "installPluginsToSeeHere": "प्लगइन देखने के लिए उन्हें स्थापित करें",
     "checkBackLater": "नए प्लगइन के लिए बाद में जांचें",
+    "tryDifferentSearch": "एक अलग खोज शब्द आज़माएं या सभी प्लगइन ब्राउज़ करें",
+    "explorePluginStore": "नए प्लगइन खोजने के लिए प्लगइन स्टोर का अन्वेषण करें",
     "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला"
   },
   "commentCard": {

@@ -302,10 +302,14 @@ describe('PluginStore', () => {
       fireEvent.click(installedOption);
 
       await waitFor(() => {
-        expect(screen.getByTestId('plugin-list-empty')).toBeInTheDocument();
+        expect(screen.getByTestId('plugins-empty-state')).toBeInTheDocument();
         expect(
-          screen.getByText((content) => content.includes('noInstalledPlugins')),
+          screen.getByTestId('plugins-empty-state-icon'),
         ).toBeInTheDocument();
+        expect(
+          screen.getByTestId('plugins-empty-state-message'),
+        ).toBeInTheDocument();
+        expect(screen.getByText('noInstalledPlugins')).toBeInTheDocument();
       });
     });
   });
@@ -519,7 +523,13 @@ describe('PluginStore', () => {
 
       renderPluginStore();
 
-      expect(screen.getByTestId('plugin-list-empty')).toBeInTheDocument();
+      expect(screen.getByTestId('plugins-empty-state')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('plugins-empty-state-icon'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId('plugins-empty-state-message'),
+      ).toBeInTheDocument();
       expect(screen.getByText('noPluginsAvailable')).toBeInTheDocument();
     });
 
@@ -538,10 +548,16 @@ describe('PluginStore', () => {
       const installedOption = within(document.body).getByTestId('installed');
       await userEvent.click(installedOption);
 
-      expect(screen.getByTestId('plugin-list-empty')).toBeInTheDocument();
-      expect(
-        screen.getByText((content) => content.includes('noInstalledPlugins')),
-      ).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId('plugins-empty-state')).toBeInTheDocument();
+        expect(
+          screen.getByTestId('plugins-empty-state-icon'),
+        ).toBeInTheDocument();
+        expect(
+          screen.getByTestId('plugins-empty-state-message'),
+        ).toBeInTheDocument();
+        expect(screen.getByText('noInstalledPlugins')).toBeInTheDocument();
+      });
     });
   });
 

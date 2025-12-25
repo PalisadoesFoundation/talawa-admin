@@ -3,9 +3,12 @@
  */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { ExtensionOutlined } from '@mui/icons-material';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 import PluginCard from './PluginCard';
 import type { IPluginMeta } from 'plugin';
-import styles from './Plugin.module.css';
+import styles from './PluginList.module.css';
+
 interface IPluginListProps {
   plugins: IPluginMeta[];
   searchTerm: string;
@@ -21,27 +24,34 @@ export default function PluginList({
 }: IPluginListProps) {
   const { t } = useTranslation('translation', { keyPrefix: 'pluginStore' });
 
+  const getEmptyMessage = (): string => {
+    if (searchTerm) return t('noPluginsFound');
+    if (filterOption === 'installed') return t('noInstalledPlugins');
+    return t('noPluginsAvailable');
+  };
+
+  const getEmptyDescription = (): string | undefined => {
+    if (searchTerm) return t('tryDifferentSearch');
+    if (filterOption === 'installed') return t('installPluginsToSeeHere');
+    return t('explorePluginStore');
+  };
+
   if (plugins.length === 0) {
     return (
-      <div className={styles.emptyState} data-testid="plugin-list-empty">
-        <div className={styles.emptyTitle}>
-          {plugins.length === 0 && searchTerm
-            ? t('noPluginsFound')
-            : filterOption === 'installed'
-              ? t('noInstalledPlugins')
-              : t('noPluginsAvailable')}
-        </div>
-        <div className={styles.emptyDescription}>
-          {filterOption === 'installed'
-            ? t('installPluginsToSeeHere')
-            : t('checkBackLater')}
-        </div>
-      </div>
+      <EmptyState
+        icon={<ExtensionOutlined />}
+        message={getEmptyMessage()}
+        description={getEmptyDescription()}
+        dataTestId="plugins-empty-state"
+      />
     );
   }
 
   return (
-    <div className={styles.listContainer} data-testid="plugin-list-container">
+    <div
+      className={styles.pluginListContainer}
+      data-testid="plugin-list-container"
+    >
       {plugins.map((plugin) => (
         <PluginCard key={plugin.id} plugin={plugin} onManage={onManagePlugin} />
       ))}
