@@ -226,7 +226,8 @@
     "noOrgErrorTitle": "Organizaciones no encontradas",
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
     "profilePictureAlt": "Imagen de perfil de {{name}}",
-    "placeholderAvatarAlt": "Avatar predeterminado"
+    "placeholderAvatarAlt": "Avatar predeterminado",
+    "newMembersWillAppearHere": "Las nuevas solicitudes de membresía aparecerán aquí"
   },
   "users": {
     "membershipStatus": {
