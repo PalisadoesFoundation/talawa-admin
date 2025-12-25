@@ -141,7 +141,7 @@ describe('GroupChatDetails', () => {
       </I18nextProvider>,
     );
     expect(screen.getByText('userChat.Error')).toBeInTheDocument();
-    expect(screen.getByText('User not found')).toBeInTheDocument();
+    expect(screen.getByText('userChat.userNotFound')).toBeInTheDocument();
     expect(toastSpy).toHaveBeenCalledTimes(1);
     expect(toastSpy).toHaveBeenCalledWith('userChat.userNotFound');
   });
