@@ -500,7 +500,7 @@ describe('PluginStore', () => {
       fireEvent.click(installedOption);
 
       await waitFor(() => {
-        expect(screen.getByTestId('plugin-list-empty')).toBeInTheDocument();
+        expect(screen.getByTestId('plugins-empty-state')).toBeInTheDocument();
         expect(
           screen.getByText((content) => content.includes('noInstalledPlugins')),
         ).toBeInTheDocument();
