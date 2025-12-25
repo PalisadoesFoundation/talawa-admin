@@ -117,9 +117,7 @@ const CardItem = (props: InterfaceCardItem): JSX.Element => {
           )}
 
           {creator && (
-            <div style={{ fontSize: '12px', fontWeight: 'bold' }}>
-              Author: {creator.name}
-            </div>
+            <div className={styles.creator}>Author: {creator.name}</div>
           )}
 
           <div className={styles.rightCard}>

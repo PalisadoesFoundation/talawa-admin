@@ -48,27 +48,30 @@ vi.mock('react-i18next', () => ({
 }));
 
 // Mock CardItem component
-vi.mock('components/OrganizationDashCards/CardItem/CardItem', () => ({
-  default: ({
-    title,
-    startdate,
-    enddate,
-  }: {
-    title: string;
-    startdate?: string;
-    enddate?: string;
-  }) => (
-    <div data-testid="card-item">
-      <div>{title}</div>
-      <div>{startdate}</div>
-      <div>{enddate}</div>
-    </div>
-  ),
-}));
+vi.mock(
+  'components/AdminPortal/OrganizationDashCards/CardItem/CardItem',
+  () => ({
+    default: ({
+      title,
+      startdate,
+      enddate,
+    }: {
+      title: string;
+      startdate?: string;
+      enddate?: string;
+    }) => (
+      <div data-testid="card-item">
+        <div>{title}</div>
+        <div>{startdate}</div>
+        <div>{enddate}</div>
+      </div>
+    ),
+  }),
+);
 
 // Mock CardItemLoading component
 vi.mock(
-  'components/OrganizationDashCards/CardItem/Loader/CardItemLoading',
+  'components/AdminPortal/OrganizationDashCards/CardItem/Loader/CardItemLoading',
   () => ({
     default: () => <div data-testid="card-item-loading">Loading...</div>,
   }),
