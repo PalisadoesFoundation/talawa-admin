@@ -76,8 +76,6 @@ describe('DonationCard [User Portal]', () => {
   it('renders formatted donation date', async () => {
     renderComponent();
     await wait();
-
-    expect(screen.getByTestId('donation-date')).toBeInTheDocument();
     expect(screen.getByTestId('donation-date')).toBeInTheDocument();
   });
 

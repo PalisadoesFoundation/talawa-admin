@@ -67,9 +67,10 @@
   padding: 0 6px;
 }
 
-button {
+.contentInner > button {
   background: none;
   border: none;
   padding: 0;
   text-align: left;
 }
+

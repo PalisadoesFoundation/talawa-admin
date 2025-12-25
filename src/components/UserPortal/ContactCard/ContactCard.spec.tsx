@@ -41,8 +41,8 @@ const baseProps: InterfaceContactCardProps = {
   selectedContact: '',
   setSelectedContact: vi.fn(),
   isGroup: false,
-  // some interfaces may include additional fields; keep compat
-} as unknown as InterfaceContactCardProps;
+};
+
 
 const renderComponent = (props: InterfaceContactCardProps) =>
   render(

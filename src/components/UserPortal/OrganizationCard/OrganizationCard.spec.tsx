@@ -103,19 +103,25 @@ describe('OrganizationCard [PR-2]', () => {
     expect(toast.success).toHaveBeenCalled();
   });
 
-  it('calls toast on withdraw click', async () => {
-    render(
-      <OrganizationCard
-        {...baseProps}
-        membershipRequestStatus="pending"
-        membershipRequests={[{ id: 'req-1', user: { id: 'u1' } }]}
-      />,
-    );
+  it('calls toast and mutation on withdraw click', async () => {
+  render(
+    <OrganizationCard
+      {...baseProps}
+      membershipRequestStatus="pending"
+      membershipRequests={[{ id: 'req-1', user: { id: 'u1' } }]}
+    />,
+  );
 
-    fireEvent.click(screen.getByTestId('withdrawBtn'));
+  fireEvent.click(screen.getByTestId('withdrawBtn'));
 
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+  await waitFor(() => {
+    expect(mockMutationFn).toHaveBeenCalledWith({
+      variables: {
+        membershipRequestId: 'req-1',
+      },
     });
   });
+
+  expect(toast.success).toHaveBeenCalled();
+});
 });
