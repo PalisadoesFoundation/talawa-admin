@@ -177,7 +177,7 @@ describe('GroupChatDetails', () => {
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}
-            chat={withSafeChat(filledMockChat)}
+            chat={withSafeChat(incompleteMockChat)}
             chatRefetch={vi.fn()}
           />
         </MockedProvider>
