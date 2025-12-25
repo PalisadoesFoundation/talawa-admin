@@ -84,7 +84,9 @@ describe('ContactCard [User Portal]', () => {
       screen.getByTestId(`contact-container-${baseProps.id}`),
     ).toBeInTheDocument();
     expect(screen.queryByTestId(`contact-${baseProps.id}-image`)).toBeNull();
-    expect(screen.getByLabelText(baseProps.title)).toBeInTheDocument();
+    expect(
+      screen.getByRole('img', { name: baseProps.title }),
+    ).toBeInTheDocument();
   });
 
   it('renders provided image when image prop exists', async () => {

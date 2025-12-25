@@ -102,6 +102,7 @@ const ContactCard: React.FC<InterfaceContactCardProps> = ({
         onClick={handleSelect}
         data-testid={`contact-container-${id}`}
         aria-pressed={isSelected}
+        data-selected={String(isSelected)}
         className={`${styles.contentInner} ${
           isSelected ? styles.selected : ''
         }`}
