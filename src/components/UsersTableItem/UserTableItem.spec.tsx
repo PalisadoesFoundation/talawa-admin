@@ -286,8 +286,9 @@ describe('Testing User Table Item', () => {
       target: { value: 'Joined Organization 3' },
     });
     expect(
-      screen.getByText(`No results found for "Joined Organization 3"`),
+      screen.getByText(/no results found for.*Joined Organization 3/i),
     ).toBeInTheDocument();
+
     // Now clear the search box
     fireEvent.change(inputBox, { target: { value: '' } });
     fireEvent.click(searchBtn);
@@ -800,8 +801,9 @@ describe('Testing User Table Item', () => {
       key: 'Enter',
     });
     expect(
-      screen.getByText(`No results found for "Blocked Organization 3"`),
+      screen.getByText(/no results found for.*Blocked Organization 3/i),
     ).toBeInTheDocument();
+
     fireEvent.change(inputBox, { target: { value: '' } });
     fireEvent.keyDown(inputBox, { key: 'Enter' });
     fireEvent.change(inputBox, { target: { value: '' } });

@@ -79,12 +79,13 @@ import styles from '../../style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
-import { Stack } from '@mui/material';
 import {
   dataGridStyle,
   PAGE_SIZE,
   ROW_HEIGHT,
 } from '../../types/ReportingTable/utils';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
+import { Group, Search } from '@mui/icons-material';
 
 interface InterfaceRequestsListItem {
   membershipRequestId: string;
@@ -455,13 +456,6 @@ const Requests = (): JSX.Element => {
     pageSizeOptions: [PAGE_SIZE],
     loading: isLoading || isLoadingMore,
     hideFooter: true,
-    slots: {
-      noRowsOverlay: () => (
-        <Stack height="100%" alignItems="center" justifyContent="center">
-          {t('notFound')}
-        </Stack>
-      ),
-    },
     getRowClassName: () => `${styles.rowBackground}`,
     isRowSelectable: () => false,
     disableColumnMenu: true,
@@ -520,23 +514,31 @@ const Requests = (): JSX.Element => {
       />
 
       {!isLoading && orgsData?.organizations?.length === 0 ? (
-        <div className={styles.notFound}>
-          <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
-          <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
-        </div>
+        <EmptyState
+          icon={<Group />}
+          message={t('noOrgErrorTitle')}
+          description={t('noOrgErrorDescription')}
+          dataTestId="requests-no-orgs-empty"
+        />
       ) : !isLoading &&
         data &&
         displayedRequests.length === 0 &&
         searchByName.length > 0 ? (
-        <div className={styles.notFound}>
-          <h4 className="m-0">
-            {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
-          </h4>
-        </div>
+        <EmptyState
+          icon={<Search />}
+          message={tCommon('noResultsFoundFor', {
+            query: searchByName,
+          })}
+          description={tCommon('tryAdjustingFilters')}
+          dataTestId="requests-search-empty"
+        />
       ) : !isLoading && data && displayedRequests.length === 0 ? (
-        <div className={styles.notFound}>
-          <h4>{t('noRequestsFound')}</h4>
-        </div>
+        <EmptyState
+          icon={<Group />}
+          message={t('noRequestsFound')}
+          description={t('newMembersWillAppearHere')}
+          dataTestId="requests-no-requests-empty"
+        />
       ) : (
         <div className={styles.listBox}>
           {isLoading ? (

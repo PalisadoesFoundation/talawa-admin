@@ -357,9 +357,34 @@ const loginPage = (): JSX.Element => {
     }
 
     try {
-      const { data: signInData } = await signin({
+      const { data: signInData, error: signInError } = await signin({
         variables: { email: formState.email, password: formState.password },
       });
+
+      // Check for GraphQL errors (like account_locked) first
+      if (signInError) {
+        // Check if this is an account_locked error with retryAfter timestamp
+        const graphQLError = signInError.graphQLErrors?.[0];
+        const extensions = graphQLError?.extensions as
+          | { code?: string; retryAfter?: string }
+          | undefined;
+
+        if (extensions?.code === 'account_locked' && extensions?.retryAfter) {
+          // Calculate remaining minutes until unlock
+          const retryAfterDate = new Date(extensions.retryAfter);
+          const now = new Date();
+          const diffMs = retryAfterDate.getTime() - now.getTime();
+          const diffMinutes = Math.max(1, Math.ceil(diffMs / 60000));
+
+          toast.error(
+            tErrors('accountLockedWithTimer', { minutes: diffMinutes }),
+          );
+        } else {
+          errorHandler(t, signInError);
+        }
+        loginRecaptchaRef.current?.reset();
+        return;
+      }
 
       if (signInData) {
         if (signInData.signIn.user.countryCode !== null) {
@@ -453,7 +478,7 @@ const loginPage = (): JSX.Element => {
                 >
                   <img
                     src={data.community.logoURL}
-                    alt="Community Logo"
+                    alt={t('communityLogo')}
                     data-testid="preLoginLogo"
                   />
                   <p className="text-center">{data.community.name}</p>
@@ -906,7 +931,7 @@ const loginPage = (): JSX.Element => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label="Organizations"
+                            label={t('organizations')}
                             className={styles.selectOrgText}
                           />
                         )}

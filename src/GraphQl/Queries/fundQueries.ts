@@ -28,6 +28,8 @@ export const FUND_LIST = gql`
             updater {
               name
             }
+            createdAt
+            isArchived
           }
         }
       }
