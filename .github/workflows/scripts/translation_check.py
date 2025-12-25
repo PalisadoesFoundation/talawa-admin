@@ -99,12 +99,8 @@ def find_translation_tags(source: str | Path) -> set[str]:
 
     # Extract key from namespace-qualified tags
     # (e.g., "common:hello" -> "hello")
-    
-    return {
-        tag.split(":")[-1]
-        for tag in tags
-    }
 
+    return {tag.split(":")[-1] for tag in tags if tag.split(":")[-1]}
 
 
 def get_target_files(
