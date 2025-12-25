@@ -540,7 +540,7 @@ const Requests = (): JSX.Element => {
         />
       ) : !isLoading && data && displayedRequests.length === 0 ? (
         <EmptyState
-          icon="groups"
+          icon={<Group />}
           message={t('noRequestsFound')}
           description={t('newMembersWillAppearHere')}
           dataTestId="requests-no-requests-empty"
