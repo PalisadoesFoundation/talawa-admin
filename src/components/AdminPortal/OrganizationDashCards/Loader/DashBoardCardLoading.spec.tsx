@@ -25,4 +25,13 @@ describe('Testing the DashBoardCardLoading component', () => {
     const secondaryText = Card?.querySelector(`.${styles.secondaryText}`);
     expect(secondaryText).toBeInTheDocument();
   });
+
+  test('should apply height utility classes to text placeholders', () => {
+    const Card = screen.queryByTestId('Card');
+    const primaryText = Card?.querySelector(`.${styles.primaryText}`);
+    const secondaryText = Card?.querySelector(`.${styles.secondaryText}`);
+
+    expect(primaryText).toHaveClass(styles['h-1-75rem']);
+    expect(secondaryText).toHaveClass(styles['h-1-25rem']);
+  });
 });

@@ -20,4 +20,13 @@ describe('Test the CardItemLoading component', () => {
     const title = cardItemLoading.querySelector(`.${styles.title}`);
     expect(title).toBeInTheDocument();
   });
+
+  test('should apply height utility class to title element', () => {
+    render(<CardItemLoading />);
+
+    const cardItemLoading = screen.getByTestId('cardItemLoading');
+    const title = cardItemLoading.querySelector(`.${styles.title}`);
+
+    expect(title).toHaveClass(styles['h-1-5rem']);
+  });
 });
