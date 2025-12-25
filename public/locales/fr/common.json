@@ -114,5 +114,8 @@
   "clear": "Effacer",
   "noResultsFound": "Aucun résultat trouvé",
   "loadingAdminPlugin": "Chargement du plugin administrateur...",
-  "loadingUserPlugin": "Chargement du plugin utilisateur..."
+  "loadingUserPlugin": "Chargement du plugin utilisateur...",
+  "unblock": "Débloquer",
+  "unblockedSuccessfully": "{{item}} débloqué avec succès",
+  "pluginSettings": "Paramètres du plugin"
 }

@@ -114,5 +114,8 @@
   "userProfileMenu": "User Profile Menu",
   "breadcrumbs": "Breadcrumbs",
   "loadingAdminPlugin": "Loading admin plugin...",
-  "loadingUserPlugin": "Loading user plugin..."
+  "loadingUserPlugin": "Loading user plugin...",
+  "unblock": "Unblock",
+  "unblockedSuccessfully": "{{item}} unblocked successfully",
+  "pluginSettings": "Plugin Settings"
 }
