@@ -48,7 +48,9 @@ export const updateEnvFile = (
       .trim();
 
     // Prepare new variable block
-    const newBlock = `# ${finalDescription}\n${key}=${value ?? ''}`;
+    const commentLine = ['#', finalDescription].join(' ');
+    const valueLine = [key, value ?? ''].join('=');
+    const newBlock = [commentLine, valueLine].join('\n');
 
     // Append block with exactly one blank line separation if not empty
     envContent = envContent ? `${envContent}\n\n${newBlock}` : newBlock;

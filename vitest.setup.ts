@@ -1,6 +1,6 @@
 import { TextEncoder, TextDecoder } from 'util';
 import { cleanup } from '@testing-library/react';
-import { afterAll, afterEach, beforeAll, vi } from 'vitest';
+import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest';
 import '@testing-library/jest-dom/vitest';
 import { setupLocalStorageMock } from './src/test-utils/localStorageMock';
 
@@ -27,6 +27,8 @@ const shouldSuppressError = (value: unknown): boolean => {
   );
 };
 
+vi.stubGlobal('localStorage', localStorageMock);
+
 beforeAll(() => {
   console.error = (...args: unknown[]) => {
     if (args.some(shouldSuppressError)) {
@@ -42,11 +44,27 @@ beforeAll(() => {
   };
 });
 
+Object.defineProperty(globalThis, 'localStorage', {
+  configurable: true,
+  get: () => localStorageMock as unknown as Storage,
+  set: () => {
+    // swallow attempts to overwrite window.localStorage from tests
+  },
+});
+
+// Basic cleanup before each test
+beforeEach(() => {
+  const g = globalThis as unknown as { localStorage: unknown };
+  if (g.localStorage !== (localStorageMock as unknown as Storage)) {
+    vi.stubGlobal('localStorage', localStorageMock as unknown as Storage);
+  }
+});
+
 // Basic cleanup after each test
 afterEach(() => {
   cleanup();
-  localStorage.clear();
   vi.clearAllMocks();
+  localStorageMock.clear();
 });
 
 // Global mocks for URL API (needed for file upload tests)

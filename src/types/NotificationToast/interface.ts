@@ -67,6 +67,11 @@ export interface InterfaceNotificationToastHelpers {
    * Show an info toast.
    */
   info: (message: NotificationToastMessage, options?: ToastOptions) => Id;
+
+  /**
+   * Dismiss all active toasts.
+   */
+  dismiss: () => void;
 }
 
 /**

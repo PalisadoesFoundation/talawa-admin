@@ -96,9 +96,11 @@ function organizationEvents(): JSX.Element {
     keyPrefix: 'organizationEvents',
   });
   const { getItem } = useLocalStorage();
-
-  document.title = t('title');
   const { orgId: currentUrl } = useParams();
+
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
 
   // Breadcrumb items for organization -> events navigation
   const breadcrumbItems: IBreadcrumbItem[] = [
@@ -111,6 +113,7 @@ function organizationEvents(): JSX.Element {
       isCurrent: true,
     },
   ];
+
   const [createEventmodalisOpen, setCreateEventmodalisOpen] = useState(false);
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
@@ -137,7 +140,7 @@ function organizationEvents(): JSX.Element {
   } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
     variables: {
       id: currentUrl,
-      first: 150,
+      first: 100,
       after: null,
       startDate: dayjs(new Date(currentYear, currentMonth, 1))
         .startOf('month')
@@ -282,13 +285,7 @@ function organizationEvents(): JSX.Element {
                 data-cy="createEventModalBtn"
               >
                 <div>
-                  <AddIcon
-                    sx={{
-                      fontSize: '25px',
-                      marginBottom: '2px',
-                      marginRight: '2px',
-                    }}
-                  />
+                  <AddIcon className={styles.addIconStyle} />
                   <span>{t('createEvent')}</span>
                 </div>
               </Button>

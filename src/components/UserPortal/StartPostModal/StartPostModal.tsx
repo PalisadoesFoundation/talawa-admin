@@ -30,9 +30,9 @@
 import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, Form, Image, Modal } from 'react-bootstrap';
-import { toast } from 'react-toastify';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 import { errorHandler } from 'utils/errorHandler';
 import UserDefault from '../../../assets/images/defaultImg.png';
@@ -150,7 +150,10 @@ const startPostModal = ({
         throw new Error("Can't create a post with an empty body.");
       }
 
-      toast.info('Processing your post. Please wait.');
+      NotificationToast.info({
+        key: 'home.processingPost',
+        namespace: 'translation',
+      });
 
       let attachment = null;
 
@@ -178,8 +181,8 @@ const startPostModal = ({
       });
 
       if (data) {
-        toast.dismiss();
-        toast.success(t('postNowVisibleInFeed') as string);
+        NotificationToast.dismiss();
+        NotificationToast.success(t('postNowVisibleInFeed'));
         fetchPosts();
         handleHide();
       }
@@ -218,7 +221,7 @@ const startPostModal = ({
           </span>
         </Modal.Title>
       </Modal.Header>
-      <hr style={{ margin: 0 }}></hr>
+      <hr></hr>
       <Form>
         <Modal.Body>
           <Form.Control

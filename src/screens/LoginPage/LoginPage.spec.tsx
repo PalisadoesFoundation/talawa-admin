@@ -27,6 +27,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, expect, it, describe } from 'vitest';
+import { GraphQLError } from 'graphql';
 
 vi.mock('utils/useLocalstorage');
 
@@ -1879,6 +1880,195 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenCalledWith('Not found');
+  });
+
+  /* 13. account_locked error with retryAfter timestamp */
+  it('shows account locked message with countdown when retryAfter is provided', async () => {
+    // Set retryAfter to 15 minutes from now
+    const retryAfterDate = new Date(Date.now() + 15 * 60 * 1000).toISOString();
+
+    const ACCOUNT_LOCKED_MOCK = [
+      {
+        request: {
+          query: RECAPTCHA_MUTATION,
+          variables: { recaptchaToken: 'token' },
+        },
+        result: { data: { recaptcha: true } },
+      },
+      {
+        request: {
+          query: SIGNIN_QUERY,
+          variables: { email: 'locked@test.com', password: 'wrongpass' },
+        },
+        result: {
+          errors: [
+            new GraphQLError('Account temporarily locked', {
+              extensions: {
+                code: 'account_locked',
+                retryAfter: retryAfterDate,
+              },
+            }),
+          ],
+        },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: { data: { organizations: [] } },
+      },
+    ];
+
+    setLocationPath('/');
+    renderLoginPage(ACCOUNT_LOCKED_MOCK);
+    await wait();
+
+    await userEvent.type(screen.getByTestId('loginEmail'), 'locked@test.com');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'wrongpass',
+    );
+    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[0], 'token');
+    await userEvent.click(screen.getByTestId('loginBtn'));
+    await wait();
+
+    // Should show the account locked message with countdown (15 minutes)
+    // Verify the message contains "locked" and a number for minutes
+    expect(toastMocks.error).toHaveBeenCalledWith(
+      expect.stringMatching(/locked.*\d+.*minute|minute.*\d+.*locked/i),
+    );
+
+    // Verify reCAPTCHA is reset to allow retry
+    expect(resetReCAPTCHA).toHaveBeenCalled();
+
+    // Verify navigation does NOT occur (early return on error)
+    expect(routerMocks.navigate).not.toHaveBeenCalled();
+  });
+
+  /* 14. account_locked error without retryAfter timestamp */
+  it('shows generic account locked message when retryAfter is missing', async () => {
+    const ACCOUNT_LOCKED_NO_TIMER_MOCK = [
+      {
+        request: {
+          query: RECAPTCHA_MUTATION,
+          variables: { recaptchaToken: 'token' },
+        },
+        result: { data: { recaptcha: true } },
+      },
+      {
+        request: {
+          query: SIGNIN_QUERY,
+          variables: { email: 'locked@test.com', password: 'wrongpass' },
+        },
+        result: {
+          errors: [
+            new GraphQLError('Account temporarily locked', {
+              extensions: {
+                code: 'account_locked',
+                // No retryAfter provided
+              },
+            }),
+          ],
+        },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: { data: { organizations: [] } },
+      },
+    ];
+
+    setLocationPath('/');
+    renderLoginPage(ACCOUNT_LOCKED_NO_TIMER_MOCK);
+    await wait();
+
+    await userEvent.type(screen.getByTestId('loginEmail'), 'locked@test.com');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'wrongpass',
+    );
+    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[0], 'token');
+    await userEvent.click(screen.getByTestId('loginBtn'));
+    await wait();
+
+    // Should show generic account locked message (without countdown)
+    expect(toastMocks.error).toHaveBeenCalledWith(
+      i18nForTest.t('errors:accountLocked'),
+      expect.any(Object),
+    );
+
+    // Verify reCAPTCHA is reset to allow retry
+    expect(resetReCAPTCHA).toHaveBeenCalled();
+
+    // Verify navigation does NOT occur (early return on error)
+    expect(routerMocks.navigate).not.toHaveBeenCalled();
+  });
+
+  /* 15. Other GraphQL errors should use errorHandler */
+  it('handles non-account_locked GraphQL errors via errorHandler', async () => {
+    const OTHER_GRAPHQL_ERROR_MOCK = [
+      {
+        request: {
+          query: RECAPTCHA_MUTATION,
+          variables: { recaptchaToken: 'token' },
+        },
+        result: { data: { recaptcha: true } },
+      },
+      {
+        request: {
+          query: SIGNIN_QUERY,
+          variables: { email: 'test@test.com', password: 'wrongpass' },
+        },
+        result: {
+          errors: [
+            new GraphQLError('Invalid credentials', {
+              extensions: {
+                code: 'UNAUTHENTICATED',
+              },
+            }),
+          ],
+        },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: { data: { organizations: [] } },
+      },
+    ];
+
+    setLocationPath('/');
+    renderLoginPage(OTHER_GRAPHQL_ERROR_MOCK);
+    await wait();
+
+    await userEvent.type(screen.getByTestId('loginEmail'), 'test@test.com');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'wrongpass',
+    );
+    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[0], 'token');
+    await userEvent.click(screen.getByTestId('loginBtn'));
+    await wait();
+
+    // Should call errorHandler which shows the error message
+    // Note: errorHandler passes raw backend error messages directly without i18n wrapping
+    expect(toastMocks.error).toHaveBeenCalledWith(
+      'Invalid credentials',
+      expect.any(Object),
+    );
+
+    // Verify reCAPTCHA is reset to allow retry
+    expect(resetReCAPTCHA).toHaveBeenCalled();
+
+    // Verify navigation does NOT occur (early return on error)
+    expect(routerMocks.navigate).not.toHaveBeenCalled();
   });
 });
 

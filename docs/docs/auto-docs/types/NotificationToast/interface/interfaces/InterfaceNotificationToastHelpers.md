@@ -10,6 +10,20 @@ Reusable helper API exposed by `NotificationToast`.
 
 ## Properties
 
+### dismiss()
+
+> **dismiss**: () => `void`
+
+Defined in: [src/types/NotificationToast/interface.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/NotificationToast/interface.ts#L74)
+
+Dismiss all active toasts.
+
+#### Returns
+
+`void`
+
+***
+
 ### error()
 
 > **error**: (`message`, `options?`) => `Id`

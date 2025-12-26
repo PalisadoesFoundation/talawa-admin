@@ -77,14 +77,17 @@ import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { ApolloError } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
+import { PersonOff, WarningAmberRounded } from '@mui/icons-material';
 import PageHeader from 'shared-components/Navbar/Navbar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
   const { t: tCommon } = useTranslation('common');
 
-  document.title = t('title');
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
 
   const { getItem } = useLocalStorage();
 
@@ -173,21 +176,13 @@ const Users = (): JSX.Element => {
 
   // Manage loading more state
   useEffect(() => {
-    if (!usersData || usersData.length === 0) {
-      return;
+    let newDisplayedUsers = [...usersData];
+    if (newDisplayedUsers.length > 0) {
+      newDisplayedUsers = sortUsers(newDisplayedUsers, sortingOption);
+      newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
     }
-
-    let newDisplayedUsers = sortUsers(usersData, sortingOption);
-    newDisplayedUsers = filterUsers(newDisplayedUsers, filteringOption);
     setDisplayedUsers(newDisplayedUsers);
   }, [usersData, sortingOption, filteringOption]);
-
-  // To clear the search when the component is unmounted
-  useEffect(() => {
-    return () => {
-      setSearchByName('');
-    };
-  }, []);
 
   // Show a warning if there are no organizations
   useEffect(() => {
@@ -318,9 +313,9 @@ const Users = (): JSX.Element => {
   const usersQueryErrorPanel = UsersError ? (
     <div className={`${styles.container} bg-white rounded-4 my-3`}>
       <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+        <WarningAmberRounded className={styles.errorIcon} />
         <h6 className="fw-bold text-danger text-center">
-          Error occurred while loading Users
+          {t('errorLoadingUsers')}
           <br />
           {UsersError.message}
         </h6>
@@ -336,6 +331,17 @@ const Users = (): JSX.Element => {
     t('blocked_organizations'),
   ];
 
+  /**
+   * Helper function to determine empty state message
+   * @returns {string} - The appropriate empty state message
+   */
+  const getEmptyStateMessage = () => {
+    if (searchByName.length > 0) {
+      return tCommon('noResultsFoundFor', { query: searchByName });
+    }
+    return t('noUserFound');
+  };
+
   return (
     <>
       {/* Buttons Container */}
@@ -349,7 +355,7 @@ const Users = (): JSX.Element => {
           }}
           sorting={[
             {
-              title: 'Sort by',
+              title: t('sortBy'),
               options: [
                 { label: t('Newest'), value: 'newest' },
                 { label: t('Oldest'), value: 'oldest' },
@@ -359,7 +365,7 @@ const Users = (): JSX.Element => {
               testIdPrefix: 'sortUsers',
             },
             {
-              title: 'Filter by role',
+              title: t('filterByRole'),
               options: [
                 { label: tCommon('admin'), value: 'admin' },
                 { label: tCommon('user'), value: 'user' },
@@ -376,31 +382,15 @@ const Users = (): JSX.Element => {
       {/* Error Panel */}
       {usersQueryErrorPanel}
 
-      {isLoading == false &&
-      usersData &&
-      displayedUsers.length === 0 &&
-      searchByName.length > 0 ? (
-        <section
-          className={styles.notFound}
-          role="alert"
-          aria-label="No results found"
-        >
-          <h4>
-            {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
-          </h4>
-        </section>
-      ) : isLoading == false &&
-        usersData &&
-        usersData.length === 0 &&
-        displayedUsers.length === 0 &&
-        searchByName.length === 0 ? (
-        <div
-          className={styles.notFound}
-          role="alert"
-          aria-label="No results found"
-        >
-          <h4>{t('noUserFound')}</h4>
-        </div>
+      {isLoading === false && displayedUsers.length === 0 ? (
+        <EmptyState
+          icon={<PersonOff />}
+          message={getEmptyStateMessage()}
+          description={
+            searchByName.length > 0 ? tCommon('tryAdjustingFilters') : undefined
+          }
+          dataTestId="users-empty-state"
+        />
       ) : (
         <div className={styles.listBox}>
           {isLoading && (
@@ -442,20 +432,19 @@ const Users = (): JSX.Element => {
                 </tr>
               </thead>
               <tbody>
-                {usersData &&
-                  displayedUsers.map(
-                    (user: InterfaceQueryUserListItem, index: number) => {
-                      return (
-                        <UsersTableItem
-                          key={user.id}
-                          index={index}
-                          resetAndRefetch={resetAndRefetch}
-                          user={user}
-                          loggedInUserId={loggedInUserId}
-                        />
-                      );
-                    },
-                  )}
+                {displayedUsers.map(
+                  (user: InterfaceQueryUserListItem, index: number) => {
+                    return (
+                      <UsersTableItem
+                        key={user.id}
+                        index={index}
+                        resetAndRefetch={resetAndRefetch}
+                        user={user}
+                        loggedInUserId={loggedInUserId}
+                      />
+                    );
+                  },
+                )}
               </tbody>
             </Table>
           </InfiniteScroll>

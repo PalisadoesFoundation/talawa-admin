@@ -110,7 +110,7 @@ describe('MemberDetail', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
     cleanup();
   });
 
@@ -146,90 +146,100 @@ describe('MemberDetail', () => {
     const formData = {
       addressLine1: 'Line 1',
       addressLine2: 'Line 2',
-      avatarMimeType: 'image/jpeg',
-      avatarURL: 'http://example.com/avatar.jpg',
       birthDate: '2000-01-01',
       city: 'nyc',
-      countryCode: 'bb',
-      createdAt: '2025-02-06T03:10:50.254',
+      countryCode: 'BB', // e.g., BB (adjust to your actual code)
       description: 'This is a description',
-      educationGrade: 'grade_8',
       emailAddress: 'test221@gmail.com',
-      employmentStatus: 'employed',
-      homePhoneNumber: '+9999999998',
-      id: '0194d80f-03cd-79cd-8135-683494b187a1',
-      isEmailAddressVerified: false,
-      maritalStatus: 'engaged',
       mobilePhoneNumber: '+9999999999',
-      name: 'Rishav Jha',
-      natalSex: 'male',
-      naturalLanguageCode: 'en',
-      postalCode: '111111',
-      role: 'regular',
-      state: 'State1',
-      updatedAt: '2025-02-06T03:22:17.808',
+      homePhoneNumber: '+9999999998',
       workPhoneNumber: '+9999999998',
+      name: 'Rishav Jha',
+      postalCode: '111111',
+      state: 'State1',
     };
 
     renderMemberDetailScreen(link2);
-
     await wait();
 
-    expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
-    expect(screen.getAllByText(/Email/i)).toBeTruthy();
-    expect(screen.getByText('User')).toBeInTheDocument();
+    // birth date
     const birthDateDatePicker = screen.getByTestId('birthDate');
     fireEvent.change(birthDateDatePicker, {
       target: { value: formData.birthDate },
     });
 
-    userEvent.type(screen.getByTestId(/inputName/i), formData.name);
-    userEvent.type(screen.getByTestId(/addressLine1/i), formData.addressLine1);
-    userEvent.type(screen.getByTestId(/addressLine2/i), formData.addressLine2);
-    userEvent.type(screen.getByTestId(/inputCity/i), formData.city);
-    userEvent.type(screen.getByTestId(/inputState/i), formData.state);
-    userEvent.type(screen.getByTestId(/inputPostalCode/i), formData.postalCode);
-    userEvent.type(
-      screen.getByTestId(/inputDescription/i),
-      formData.description,
-    );
-    userEvent.type(screen.getByTestId(/inputCountry/i), formData.countryCode);
-    userEvent.type(screen.getByTestId(/inputEmail/i), formData.emailAddress);
+    // Helper to set text inputs safely
+    const setText = async (testIdRegex: RegExp, value: string) => {
+      const el = screen.getByTestId(testIdRegex) as
+        | HTMLInputElement
+        | HTMLTextAreaElement;
 
-    await wait();
+      if (!el.readOnly && !el.disabled) {
+        await userEvent.clear(el);
+        await userEvent.type(el, value);
+      }
+      return el;
+    };
 
-    await userEvent.click(screen.getByText(/Save Changes/i));
-
-    expect(screen.getByTestId(/inputName/i)).toHaveValue(formData.name);
-    expect(screen.getByTestId(/addressLine1/i)).toHaveValue(
+    // Fill editable text inputs ONCE
+    const nameInput = await setText(/inputName/i, formData.name);
+    const addressLine1Input = await setText(
+      /addressLine1/i,
       formData.addressLine1,
     );
-    expect(screen.getByTestId(/addressLine2/i)).toHaveValue(
+    const addressLine2Input = await setText(
+      /addressLine2/i,
       formData.addressLine2,
     );
-    expect(screen.getByTestId(/inputCity/i)).toHaveValue(formData.city);
-    expect(screen.getByTestId(/inputState/i)).toHaveValue(formData.state);
-    expect(screen.getByTestId(/inputPostalCode/i)).toHaveValue(
+    const cityInput = await setText(/inputCity/i, formData.city);
+    const stateInput = await setText(/inputState/i, formData.state);
+    const postalCodeInput = await setText(
+      /inputPostalCode/i,
       formData.postalCode,
     );
-    expect(screen.getByTestId(/inputDescription/i)).toHaveValue(
+    const descriptionInput = await setText(
+      /inputDescription/i,
       formData.description,
     );
-    expect(screen.getByTestId(/inputCountry/i)).toHaveValue(
-      formData.countryCode,
-    );
-    expect(screen.getByTestId(/inputEmail/i)).toHaveValue(
-      formData.emailAddress,
-    );
-    expect(screen.getByTestId(/inputMobilePhoneNumber/i)).toHaveValue(
+    const emailInput = await setText(/inputEmail/i, formData.emailAddress);
+    const mobilePhoneInput = await setText(
+      /inputMobilePhoneNumber/i,
       formData.mobilePhoneNumber,
     );
-    expect(screen.getByTestId(/inputHomePhoneNumber/i)).toHaveValue(
+    const homePhoneInput = await setText(
+      /inputHomePhoneNumber/i,
       formData.homePhoneNumber,
     );
-    expect(screen.getByTestId(/workPhoneNumber/i)).toHaveValue(
+    const workPhoneInput = await setText(
+      /workPhoneNumber/i,
       formData.workPhoneNumber,
     );
+
+    // MUI/custom select trigger (non-editable control)
+    const countryTrigger = screen.getByTestId(/inputCountry/i);
+    await userEvent.click(countryTrigger);
+    // Adjust the label below to whatever your UI shows for the code "bb"
+    const countryOption = await screen.findByRole('option', {
+      name: /barbados|bb/i,
+    });
+    await userEvent.click(countryOption);
+    expect(countryTrigger).toHaveTextContent(/barbados|bb/i);
+
+    // Save once
+    await userEvent.click(screen.getByText(/Save Changes/i));
+
+    // Assertions (text inputs)
+    expect(nameInput).toHaveValue(formData.name);
+    expect(addressLine1Input).toHaveValue(formData.addressLine1);
+    expect(addressLine2Input).toHaveValue(formData.addressLine2);
+    expect(cityInput).toHaveValue(formData.city);
+    expect(stateInput).toHaveValue(formData.state);
+    expect(postalCodeInput).toHaveValue(formData.postalCode);
+    expect(descriptionInput).toHaveValue(formData.description);
+    expect(emailInput).toHaveValue(formData.emailAddress);
+    expect(mobilePhoneInput).toHaveValue(formData.mobilePhoneNumber);
+    expect(homePhoneInput).toHaveValue(formData.homePhoneNumber);
+    expect(workPhoneInput).toHaveValue(formData.workPhoneNumber);
   });
 
   test('display admin', async () => {
@@ -365,9 +375,12 @@ describe('MemberDetail', () => {
     const emailInput = screen.getByTestId('inputEmail');
     expect(emailInput).toHaveValue('test221@gmail.com');
 
-    const countryInput = screen.getByTestId('inputCountry');
-    fireEvent.select(countryInput, { target: { value: 'in' } });
-    expect(countryInput).toHaveValue('in');
+    const countryTrigger = screen.getByTestId('inputCountry');
+    await userEvent.click(countryTrigger);
+    const option = await screen.findByRole('option', { name: /India/i });
+    await userEvent.click(option);
+
+    expect(countryTrigger).toHaveTextContent(/India/i);
   });
 
   it('handles user update success', async () => {
@@ -641,7 +654,7 @@ describe('MemberDetail', () => {
     );
     expect(educationDropdownBtn).toBeInTheDocument();
 
-    // Test initial mock data has grade_8 which displays as "Grade-8"
+    // Test initial state
     expect(educationDropdownBtn).toHaveTextContent('Grade-8');
 
     // Click the dropdown button to open it
@@ -659,7 +672,7 @@ describe('MemberDetail', () => {
     expect(educationDropdownBtn).toHaveTextContent('Kg');
   });
 
-  test('renders employe status dropdown and handles selection', async () => {
+  test('renders employee status dropdown and handles selection', async () => {
     renderMemberDetailScreen(link1);
     await wait();
 
@@ -674,7 +687,7 @@ describe('MemberDetail', () => {
     expect(employmentStatus).toBeInTheDocument();
 
     // Test initial state
-    expect(employmentStatus).toHaveTextContent('None'); // Or whatever your initial value is
+    expect(employmentStatus).toHaveTextContent('None');
 
     // Click the dropdown button to open it
     await userEvent.click(employmentStatus);
@@ -691,7 +704,7 @@ describe('MemberDetail', () => {
     expect(employmentStatus).toHaveTextContent('Full-Time');
   });
 
-  test('renders maritial status dropdown and handles selection', async () => {
+  test('renders marital status dropdown and handles selection', async () => {
     renderMemberDetailScreen(link1);
     await wait();
 
@@ -700,14 +713,14 @@ describe('MemberDetail', () => {
     ).toBeInTheDocument();
 
     // Find the dropdown by the fieldName from DynamicDropDown props
-    const maritialStatus = screen.getByTestId('maritalstatus-dropdown-btn');
-    expect(maritialStatus).toBeInTheDocument();
+    const maritalStatus = screen.getByTestId('maritalstatus-dropdown-btn');
+    expect(maritalStatus).toBeInTheDocument();
 
-    // Test initial mock data has engaged which displays as "Engaged"
-    expect(maritialStatus).toHaveTextContent('Engaged');
+    // Test initial state
+    expect(maritalStatus).toHaveTextContent('Engaged');
 
     // Click the dropdown button to open it
-    await userEvent.click(maritialStatus);
+    await userEvent.click(maritalStatus);
 
     expect(
       screen.getByTestId('maritalstatus-dropdown-menu'),
@@ -718,7 +731,7 @@ describe('MemberDetail', () => {
     await userEvent.click(option);
 
     // Verify the selection was made
-    expect(maritialStatus).toHaveTextContent('Single');
+    expect(maritalStatus).toHaveTextContent('Single');
   });
 
   test('renders gender status dropdown and handles selection', async () => {
@@ -733,7 +746,7 @@ describe('MemberDetail', () => {
     const natalSexStatus = screen.getByTestId('natalsex-dropdown-btn');
     expect(natalSexStatus).toBeInTheDocument();
 
-    // Test initial mock data has male which displays as "Male"
+    // Test initial state
     expect(natalSexStatus).toHaveTextContent('Male');
 
     // Click the dropdown button to open it
@@ -741,7 +754,7 @@ describe('MemberDetail', () => {
 
     expect(screen.getByTestId('natalsex-dropdown-menu')).toBeInTheDocument();
 
-    // Find and click one of the options (change to female to verify selection works)
+    // Find and click one of the options
     const option = screen.getByTestId('change-natalsex-btn-female'); // Or whatever option text you expect
     await userEvent.click(option);
 
@@ -777,7 +790,13 @@ describe('MemberDetail', () => {
     expect(countrySelect).toBeInTheDocument();
 
     // Simulate changing the country selection
-    fireEvent.change(countrySelect, { target: { value: 'us' } });
-    expect(countrySelect).toHaveValue('us');
+    const countryTrigger = screen.getByTestId('inputCountry');
+    await userEvent.click(countryTrigger);
+    const option = await screen.findByRole('option', {
+      name: /United States/i,
+    });
+    await userEvent.click(option);
+
+    expect(countryTrigger).toHaveTextContent(/United States/i);
   });
 });

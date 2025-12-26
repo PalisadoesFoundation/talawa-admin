@@ -194,13 +194,12 @@ describe('Testing Actions Screen', () => {
 
   it('should render Actions screen', async () => {
     renderActions(link1);
-    await waitFor(async () => {
-      const searchInput = await screen.findByTestId('searchBy');
-      expectVitestToBeInTheDocument(searchInput);
 
-      const assigneeName = await screen.findAllByTestId('assigneeName');
-      expectElementToHaveTextContent(assigneeName[0], 'Teresa Bradley');
-    });
+    const searchInput = await screen.findByTestId('searchBy');
+    expectVitestToBeInTheDocument(searchInput);
+
+    const assigneeName = await screen.findAllByTestId('assigneeName');
+    expectElementToHaveTextContent(assigneeName[0], 'Teresa Bradley');
   });
 
   it('should display all action items for the user', async () => {
