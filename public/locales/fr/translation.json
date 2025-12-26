@@ -1774,6 +1774,7 @@
     "selectLanguage": "Sélectionner la Langue",
     "userMenu": "Menu Utilisateur",
     "settings": "Paramètres",
-    "logout": "Déconnexion"
+    "logout": "Déconnexion",
+    "logoutFailed": "Déconnexion échouée"
   }
 }

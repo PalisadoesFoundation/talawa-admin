@@ -33,6 +33,7 @@ import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import LanguageSelector from './LanguageSelector';
 import UserProfileDropdown from './UserDropdown';
+import { toast } from 'react-toastify';
 
 export const UserPortalNavigationBar = (
   props: InterfaceUserPortalNavbarProps,
@@ -127,9 +128,10 @@ export const UserPortalNavigationBar = (
     } else {
       try {
         revokeRefreshToken();
-      } catch (e) {
-        console.log(e);
+      } catch {
+        toast.error(tCommon('logoutFailed'));
       }
+
       clearAllItems();
       navigate('/');
     }

@@ -1774,6 +1774,7 @@
     "selectLanguage": "Seleccionar Idioma",
     "userMenu": "Menú de Usuario",
     "settings": "Ajustes",
-    "logout": "Cerrar sesión"
+    "logout": "Cerrar sesión",
+    "logoutFailed": "Cerrar sesión fallido"
   }
 }

@@ -1774,6 +1774,7 @@
     "selectLanguage": "选择语言",
     "userMenu": "用户菜单",
     "settings": "设置",
-    "logout": "退出登录"
+    "logout": "退出登录",
+    "logoutFailed": "退出登录失败"
   }
 }

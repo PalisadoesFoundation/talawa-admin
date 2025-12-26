@@ -1776,6 +1776,7 @@
     "selectLanguage": "Select Language",
     "userMenu": "User Menu",
     "settings": "Settings",
-    "logout": "Logout"
+    "logout": "Logout",
+    "logoutFailed": "Logout failed"
   }
 }
