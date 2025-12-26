@@ -116,7 +116,7 @@
   "loadingAdminPlugin": "正在加载行政插件...",
   "loadingUserPlugin": "正在加载用户插件...",
   "tags": "标签",
-  "unassign": "取消分配"
+  "unassign": "取消分配",
   "toggleOptions": "切换选项",
   "filterAndSortOptions": "筛选和排序选项",
   "clear": "清除",

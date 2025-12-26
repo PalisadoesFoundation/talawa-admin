@@ -79,7 +79,7 @@ describe('Testing User List Card', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('Should successfully add admin and show success toast', async () => {

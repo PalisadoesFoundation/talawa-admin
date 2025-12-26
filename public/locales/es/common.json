@@ -120,7 +120,7 @@
   "loadingAdminPlugin": "Cargando complemento de administrador...",
   "loadingUserPlugin": "Cargando complemento de usuario...",
   "tags": "Etiquetas",
-  "unassign": "Desasignar"
+  "unassign": "Desasignar",
   "unblock": "Desbloquear",
   "unblockedSuccessfully": "{{item}} desbloqueado exitosamente",
   "pluginSettings": "Configuración de complementos"
