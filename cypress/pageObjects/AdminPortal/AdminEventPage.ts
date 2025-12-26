@@ -59,13 +59,13 @@ export class AdminEventPage {
       .should('be.visible')
       .clear()
       .type(location);
-    // Wait for submit button to be ready and check for invite-only checkbox if present
-    cy.get(this._previewUpdateEventBtn).should('be.visible');
+    // Check for invite-only checkbox if present
     cy.get('body').then(($body) => {
       if ($body.find(this._updateIsInviteOnly).length > 0) {
         cy.get(this._updateIsInviteOnly).should('be.visible');
       }
     });
+    // Scroll button into view and click (implicitly waits for visibility)
     cy.get(this._previewUpdateEventBtn).scrollIntoView().click();
     cy.assertToast('Event updated successfully.');
   }

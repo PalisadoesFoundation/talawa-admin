@@ -28,8 +28,8 @@ The event start date
 
 `Omit`\<[`InterfaceRecurrenceRule`](../../utils/recurrenceUtils/recurrenceTypes/interfaces/InterfaceRecurrenceRule.md), `"endDate"`\> & `object`
 
-The formatted recurrence string or null
+The API-ready recurrence object (with endDate converted to ISO string if present) or null
 
 ## Throws
 
-Error if the recurrence rule is invalid
+Error if the recurrence rule is invalid (contains validation error messages)

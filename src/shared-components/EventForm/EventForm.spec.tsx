@@ -300,7 +300,7 @@ describe('EventForm', () => {
     expect(call.endAtISO).toContain('13:00:00');
   });
 
-  test('formatRecurrenceForPayload formats recurrence rule', () => {
+  test('formatRecurrenceForPayload formats recurrence rule and returns API-ready object', () => {
     const rule = createDefaultRecurrenceRule(
       new Date('2025-01-01T00:00:00Z'),
       Frequency.WEEKLY,
@@ -309,11 +309,19 @@ describe('EventForm', () => {
       rule,
       new Date('2025-01-01T00:00:00Z'),
     );
+    // Verify it returns an API-ready recurrence object (not a string)
+    expect(result).not.toBeNull();
+    expect(typeof result).toBe('object');
     expect(result).toEqual(
       expect.objectContaining({
         frequency: Frequency.WEEKLY,
+        interval: expect.any(Number),
       }),
     );
+    // Verify endDate is converted to ISO string if present (API-ready format)
+    if (rule.endDate && result) {
+      expect(result.endDate).toBe(dayjs(rule.endDate).toISOString());
+    }
   });
 
   test('formatRecurrenceForPayload returns null for null rule', () => {
@@ -321,7 +329,7 @@ describe('EventForm', () => {
     expect(result).toBeNull();
   });
 
-  test('formatRecurrenceForPayload throws error for invalid rule', () => {
+  test('formatRecurrenceForPayload throws error for invalid rule with validation messages', () => {
     const invalidRule: InterfaceRecurrenceRule = {
       frequency: Frequency.DAILY,
       interval: 0, // Invalid interval
@@ -329,7 +337,16 @@ describe('EventForm', () => {
     };
     expect(() => {
       formatRecurrenceForPayload(invalidRule, new Date('2025-01-01'));
-    }).toThrow();
+    }).toThrow(Error);
+    // Verify the error message contains validation errors
+    try {
+      formatRecurrenceForPayload(invalidRule, new Date('2025-01-01'));
+    } catch (error) {
+      expect(error).toBeInstanceOf(Error);
+      expect((error as Error).message).toBeTruthy();
+      // The error message should contain validation error messages joined by comma
+      expect((error as Error).message).toContain(',');
+    }
   });
 
   test('prevents submission with empty name', async () => {

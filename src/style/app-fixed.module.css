@@ -50,6 +50,24 @@
   --sidebar-option-bg: #d2d3d7;
   --sidebar-option-text-active: #000000;
 
+  /* Chart colors */
+  --chart-green: #008000;
+  --chart-blue: #0000ff;
+  --chart-pink: #ff1493;
+  --chart-gold: #ffd700;
+  --chart-blue-solid: rgba(31, 119, 180, 1);
+  --chart-blue-alpha: rgba(31, 119, 180, 0.2);
+  --chart-orange-solid: rgba(255, 127, 14, 1);
+  --chart-orange-alpha: rgba(255, 127, 14, 0.2);
+  --chart-green-solid: rgba(44, 160, 44, 1);
+  --chart-green-alpha: rgba(44, 160, 44, 0.2);
+  --chart-red-solid: rgba(214, 39, 40, 1);
+  --chart-red-alpha: rgba(214, 39, 40, 0.2);
+  --chart-purple-solid: rgba(148, 103, 189, 1);
+  --chart-purple-alpha: rgba(148, 103, 189, 0.2);
+  --chart-brown-solid: rgba(140, 86, 75, 1);
+  --chart-brown-alpha: rgba(140, 86, 75, 0.2);
+
   /* Sidebar widths */
   --sidebar-collapsed-width: 80px;
   --sidebar-expanded-width: 345px;
@@ -10283,4 +10301,8 @@ form {
 
 .containerBodyNoPadding {
   padding: 0;
+}
+
+.chartContainer {
+  height: 400px;
 }

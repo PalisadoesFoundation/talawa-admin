@@ -513,13 +513,13 @@ const EventForm: React.FC<IEventFormProps> = ({
  * Formats a recurrence rule for API submission.
  * @param recurrenceRule - The recurrence rule to format
  * @param startDate - The event start date
- * @returns The formatted recurrence string or null
- * @throws Error if the recurrence rule is invalid
+ * @returns The API-ready recurrence object (with endDate converted to ISO string if present) or null
+ * @throws Error if the recurrence rule is invalid (contains validation error messages)
  */
 export const formatRecurrenceForPayload = (
   recurrenceRule: InterfaceRecurrenceRule | null,
   startDate: Date,
-) => {
+): ReturnType<typeof formatRecurrenceForApi> | null => {
   if (!recurrenceRule) return null;
   const { isValid, errors } = validateRecurrenceInput(
     recurrenceRule,

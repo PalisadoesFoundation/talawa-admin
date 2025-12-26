@@ -931,7 +931,12 @@
     "noRegistrantsFound": "No Registrants Found.",
     "cannotUnregisterCheckedIn": "Cannot unregister a user who has already checked in",
     "attendeeRemovedSuccessfully": "Attendee removed successfully",
-    "errorRemovingAttendee": "Error removing attendee"
+    "errorRemovingAttendee": "Error removing attendee",
+    "removingAttendee": "Removing the attendee...",
+    "cannotUnregisterCheckedInTitle": "Cannot unregister checked-in user",
+    "unregisterTitle": "Unregister",
+    "checkedIn": "Checked In",
+    "unregister": "Unregister"
   },
   "memberActivity": {
     "unableToLoadEventDetails": "Unable to load event details. Please try again later.",
@@ -1811,5 +1816,9 @@
     "signOut": "Sign out",
     "signingOut": "Signing out...",
     "retryPrompt": "Failed to revoke session. Retry?"
+  },
+  "memberActivity": {
+    "loadingEventDetails": "Loading event details...",
+    "unableToLoadEventDetails": "Unable to load event details. Please try again later."
   }
 }

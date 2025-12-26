@@ -1241,7 +1241,12 @@
     "noRegistrantsFound": "कोई पंजीकृत व्यक्ति नहीं मिला",
     "cannotUnregisterCheckedIn": "एक उपयोगकर्ता को अनपंजीकृत नहीं कर सकते जो पहले से ही चेक-इन हो चुका है",
     "attendeeRemovedSuccessfully": "उपस्थित व्यक्ति सफलतापूर्वक हटाया गया",
-    "errorRemovingAttendee": "उपस्थित व्यक्ति को हटाने में त्रुटि"
+    "errorRemovingAttendee": "उपस्थित व्यक्ति को हटाने में त्रुटि",
+    "removingAttendee": "उपस्थित व्यक्ति को हटाया जा रहा है...",
+    "cannotUnregisterCheckedInTitle": "चेक-इन किए गए उपयोगकर्ता को अनपंजीकृत नहीं कर सकते",
+    "unregisterTitle": "अनपंजीकृत करें",
+    "checkedIn": "चेक-इन",
+    "unregister": "अनपंजीकृत करें"
   },
   "memberActivity": {
     "unableToLoadEventDetails": "इवेंट विवरण लोड करने में असमर्थ। कृपया बाद में पुनः प्रयास करें।",
@@ -1809,5 +1814,9 @@
     "signOut": "साइन आउट",
     "signingOut": "साइन आउट हो रहा है...",
     "retryPrompt": "सेशन रद्द करने में विफल। पुनः प्रयास करें?"
+  },
+  "memberActivity": {
+    "loadingEventDetails": "इवेंट विवरण लोड हो रहे हैं...",
+    "unableToLoadEventDetails": "इवेंट विवरण लोड करने में असमर्थ। कृपया बाद में पुनः प्रयास करें।"
   }
 }

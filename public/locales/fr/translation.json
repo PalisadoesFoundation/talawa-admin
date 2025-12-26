@@ -1241,7 +1241,12 @@
     "noRegistrantsFound": "Aucun inscrit trouvé.",
     "cannotUnregisterCheckedIn": "Impossible d'annuler l'inscription d'un utilisateur déjà enregistré",
     "attendeeRemovedSuccessfully": "Participant supprimé avec succès",
-    "errorRemovingAttendee": "Erreur lors de la suppression du participant"
+    "errorRemovingAttendee": "Erreur lors de la suppression du participant",
+    "removingAttendee": "Suppression du participant...",
+    "cannotUnregisterCheckedInTitle": "Impossible d'annuler l'inscription d'un utilisateur déjà enregistré",
+    "unregisterTitle": "Annuler l'inscription",
+    "checkedIn": "Enregistré",
+    "unregister": "Annuler l'inscription"
   },
   "memberActivity": {
     "unableToLoadEventDetails": "Impossible de charger les détails de l'événement. Veuillez réessayer plus tard.",
@@ -1809,5 +1814,9 @@
     "signOut": "Se déconnecter",
     "signingOut": "Déconnexion en cours...",
     "retryPrompt": "Échec de la révocation de session. Réessayer ?"
+  },
+  "memberActivity": {
+    "loadingEventDetails": "Chargement des détails de l'événement...",
+    "unableToLoadEventDetails": "Impossible de charger les détails de l'événement. Veuillez réessayer plus tard."
   }
 }

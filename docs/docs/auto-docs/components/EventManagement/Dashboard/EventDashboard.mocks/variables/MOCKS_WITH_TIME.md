@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_WITH\_TIME**: `object`[]
 
-Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L3)
+Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/Dashboard/EventDashboard.mocks.ts#L4)
 
 ## Type Declaration
 
@@ -20,15 +20,19 @@ Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:3]
 
 #### request.variables
 
-> **variables**: `object`
+> **variables**: `object` & `object`
 
-#### request.variables.eventId
+##### Type Declaration
+
+###### eventId
 
 > **eventId**: `string` = `'event123'`
 
-#### request.variables.includeInviteOnly
+##### Type Declaration
 
-> **includeInviteOnly**: `boolean` = `false`
+###### includeInviteOnly
+
+> **includeInviteOnly**: `boolean`
 
 ### result
 

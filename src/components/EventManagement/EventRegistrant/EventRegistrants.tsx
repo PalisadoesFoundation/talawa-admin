@@ -144,7 +144,7 @@ function EventRegistrants(): JSX.Element {
         return;
       }
 
-      toast.warn('Removing the attendee...');
+      toast.warn(t('removingAttendee'));
       const removeVariables = isRecurring
         ? { userId, recurringEventInstanceId: eventId }
         : { userId, eventId: eventId };
@@ -165,6 +165,7 @@ function EventRegistrants(): JSX.Element {
       removeRegistrantMutation,
       refreshData,
       checkedInUsers,
+      t,
     ],
   );
   useEffect(() => {
@@ -321,11 +322,11 @@ function EventRegistrants(): JSX.Element {
                       data-testid={`delete-registrant-${index}`}
                       title={
                         data.isCheckedIn
-                          ? 'Cannot unregister checked-in user'
-                          : 'Unregister'
+                          ? t('cannotUnregisterCheckedInTitle')
+                          : t('unregisterTitle')
                       }
                     >
-                      {data.isCheckedIn ? 'Checked In' : 'Unregister'}
+                      {data.isCheckedIn ? t('checkedIn') : t('unregister')}
                     </button>
                   </TableCell>
                 </TableRow>

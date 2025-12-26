@@ -111,7 +111,7 @@ const buildRecurringEventProps = (
 
 describe('EventListCardModals', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
   let mockUpdateStandaloneEvent: Mock;
   let mockUpdateSingleRecurringEvent: Mock;

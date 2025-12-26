@@ -98,18 +98,18 @@ export default function events(): JSX.Element {
     error: eventDataError,
     refetch,
   } = useQuery(GET_ORGANIZATION_EVENTS_USER_PORTAL_PG, {
-    variables: {
+    variables: addInviteOnlyVariable({
       id: organizationId,
       first: 100,
       after: null,
-      startAt: dayjs(new Date(currentYear, currentMonth, 1))
+      startDate: dayjs(new Date(currentYear, currentMonth, 1))
         .startOf('month')
         .toISOString(),
-      endAt: dayjs(new Date(currentYear, currentMonth, 1))
+      endDate: dayjs(new Date(currentYear, currentMonth, 1))
         .endOf('month')
         .toISOString(),
       includeRecurring: true,
-    },
+    }),
     notifyOnNetworkStatusChange: true,
     errorPolicy: 'all',
     fetchPolicy: 'cache-and-network',

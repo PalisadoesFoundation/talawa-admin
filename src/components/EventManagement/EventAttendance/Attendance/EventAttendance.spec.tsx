@@ -59,13 +59,16 @@ const renderEventAttendanceWithSpy = (): RenderResult => {
   );
 };
 
-let useLazyQuerySpy: ReturnType<typeof vi.spyOn> | null = null;
+let useLazyQuerySpy: { mockRestore: () => void } | null = null;
 
 function mockLazyQuery(returned: {
   data?: unknown;
   loading?: boolean;
   error?: ApolloError | null;
 }) {
+  // Restore previous spy if exists
+  useLazyQuerySpy?.mockRestore();
+
   const spy = vi.spyOn(ApolloClientModule, 'useLazyQuery').mockReturnValue([
     () => {},
     {
@@ -78,7 +81,7 @@ function mockLazyQuery(returned: {
       refetch: vi.fn(),
     },
   ] as unknown as ReturnType<typeof useLazyQuery>);
-  useLazyQuerySpy = spy as ReturnType<typeof vi.spyOn>;
+  useLazyQuerySpy = spy as { mockRestore: () => void };
 }
 
 describe('Event Attendance Component', () => {
@@ -308,7 +311,10 @@ describe('Event Attendance Component', () => {
     mockLazyQuery({
       loading: false,
       data: undefined,
-      error: new ApolloError({ errorMessage: 'Network Error' }),
+      error: new ApolloError({
+        graphQLErrors: [],
+        networkError: new Error('Network Error'),
+      }),
     });
 
     renderEventAttendanceWithSpy();

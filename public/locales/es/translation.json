@@ -1241,7 +1241,12 @@
     "noRegistrantsFound": "No se encontraron registrados",
     "cannotUnregisterCheckedIn": "No se puede anular el registro de un usuario que ya se ha registrado",
     "attendeeRemovedSuccessfully": "Asistente eliminado con éxito",
-    "errorRemovingAttendee": "Error al eliminar asistente"
+    "errorRemovingAttendee": "Error al eliminar asistente",
+    "removingAttendee": "Eliminando al asistente...",
+    "cannotUnregisterCheckedInTitle": "No se puede anular el registro de un usuario que ya se ha registrado",
+    "unregisterTitle": "Anular registro",
+    "checkedIn": "Registrado",
+    "unregister": "Anular registro"
   },
   "memberActivity": {
     "unableToLoadEventDetails": "No se pudieron cargar los detalles del evento. Por favor, inténtelo de nuevo más tarde.",
@@ -1809,5 +1814,9 @@
     "signOut": "Cerrar sesión",
     "signingOut": "Cerrando sesión...",
     "retryPrompt": "Error al revocar la sesión. ¿Reintentar?"
+  },
+  "memberActivity": {
+    "loadingEventDetails": "Cargando detalles del evento...",
+    "unableToLoadEventDetails": "No se pudieron cargar los detalles del evento. Por favor, inténtelo de nuevo más tarde."
   }
 }

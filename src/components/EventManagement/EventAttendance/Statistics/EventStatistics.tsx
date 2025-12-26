@@ -62,6 +62,7 @@ import { Bar, Line } from 'react-chartjs-2';
 import { useParams } from 'react-router';
 import { EVENT_DETAILS, RECURRING_EVENTS } from 'GraphQl/Queries/Queries';
 import { useLazyQuery } from '@apollo/client';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 import { exportToCSV } from 'utils/chartToPdf';
 import type { ChartOptions, TooltipItem } from 'chart.js';
 import type {
@@ -80,6 +81,37 @@ ChartJS.register(
   Legend,
   Filler,
 );
+
+// Helper function to get CSS variable values
+const getCSSVariable = (variableName: string): string => {
+  if (typeof window !== 'undefined') {
+    return getComputedStyle(document.documentElement)
+      .getPropertyValue(variableName)
+      .trim();
+  }
+  // Fallback for SSR or when window is not available
+  return '';
+};
+
+// Function to get chart colors from CSS variables (called during render)
+const getChartColors = () => ({
+  green: getCSSVariable('--chart-green'),
+  blue: getCSSVariable('--chart-blue'),
+  pink: getCSSVariable('--chart-pink'),
+  gold: getCSSVariable('--chart-gold'),
+  chartBlue: getCSSVariable('--chart-blue-solid'),
+  chartBlueAlpha: getCSSVariable('--chart-blue-alpha'),
+  chartOrange: getCSSVariable('--chart-orange-solid'),
+  chartOrangeAlpha: getCSSVariable('--chart-orange-alpha'),
+  chartGreen: getCSSVariable('--chart-green-solid'),
+  chartGreenAlpha: getCSSVariable('--chart-green-alpha'),
+  chartRed: getCSSVariable('--chart-red-solid'),
+  chartRedAlpha: getCSSVariable('--chart-red-alpha'),
+  chartPurple: getCSSVariable('--chart-purple-solid'),
+  chartPurpleAlpha: getCSSVariable('--chart-purple-alpha'),
+  chartBrown: getCSSVariable('--chart-brown-solid'),
+  chartBrownAlpha: getCSSVariable('--chart-brown-alpha'),
+});
 
 // Age calculation helper to avoid triggering i18n checker and ensure consistency
 const MIN_ADULT_AGE = 18;
@@ -225,38 +257,38 @@ export const AttendanceStatisticsModal: React.FC<
     [paginatedRecurringEvents],
   );
 
-  const chartData = useMemo(
-    () => ({
+  const chartData = useMemo(() => {
+    const colors = getChartColors();
+    return {
       labels: eventLabels,
       datasets: [
         {
           label: t('attendeeCount'),
           data: attendeeCounts,
           fill: true,
-          borderColor: '#008000',
+          borderColor: colors.green,
         },
         {
           label: t('maleAttendees'),
           data: maleCounts,
           fill: false,
-          borderColor: '#0000FF',
+          borderColor: colors.blue,
         },
         {
           label: t('femaleAttendees'),
           data: femaleCounts,
           fill: false,
-          borderColor: '#FF1493',
+          borderColor: colors.pink,
         },
         {
           label: t('otherAttendees'),
           data: otherCounts,
           fill: false,
-          borderColor: '#FFD700',
+          borderColor: colors.gold,
         },
       ],
-    }),
-    [eventLabels, attendeeCounts, maleCounts, femaleCounts, otherCounts],
-  );
+    };
+  }, [eventLabels, attendeeCounts, maleCounts, femaleCounts, otherCounts, t]);
 
   const handlePreviousPage = useCallback(() => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
@@ -312,6 +344,39 @@ export const AttendanceStatisticsModal: React.FC<
           ],
     [selectedCategory, memberData],
   );
+
+  const barChartData = useMemo(() => {
+    const colors = getChartColors();
+    return {
+      labels: categoryLabels,
+      datasets: [
+        {
+          label:
+            selectedCategory === 'Gender'
+              ? t('genderDistribution')
+              : t('ageDistribution'),
+          data: categoryData,
+          backgroundColor: [
+            colors.chartBlueAlpha,
+            colors.chartOrangeAlpha,
+            colors.chartGreenAlpha,
+            colors.chartRedAlpha,
+            colors.chartPurpleAlpha,
+            colors.chartBrownAlpha,
+          ],
+          borderColor: [
+            colors.chartBlue,
+            colors.chartOrange,
+            colors.chartGreen,
+            colors.chartRed,
+            colors.chartPurple,
+            colors.chartBrown,
+          ],
+          borderWidth: 2,
+        },
+      ],
+    };
+  }, [categoryLabels, categoryData, selectedCategory, t]);
 
   const handleCategoryChange = useCallback((category: string): void => {
     setSelectedCategory(category);
@@ -369,7 +434,9 @@ export const AttendanceStatisticsModal: React.FC<
   };
   useEffect(() => {
     if (eventId) {
-      loadEventDetails({ variables: { eventId: eventId } });
+      loadEventDetails({
+        variables: addInviteOnlyVariable({ eventId: eventId }),
+      });
     }
   }, [eventId, loadEventDetails]);
   useEffect(() => {
@@ -418,9 +485,9 @@ export const AttendanceStatisticsModal: React.FC<
             <div
               className={
                 styles.borderRightGreen +
-                ' text-success position-relative pt-4 align-items-center justify-content-center w-50 border-right-1 border-success'
+                ' text-success position-relative pt-4 align-items-center justify-content-center w-50 border-right-1 border-success ' +
+                styles.chartContainer
               }
-              style={{ height: '400px' }}
             >
               <Line
                 data={chartData}
@@ -532,35 +599,7 @@ export const AttendanceStatisticsModal: React.FC<
             <Bar
               className="mb-3"
               options={{ responsive: true, animation: false }}
-              data={{
-                labels: categoryLabels,
-                datasets: [
-                  {
-                    label:
-                      selectedCategory === 'Gender'
-                        ? t('genderDistribution')
-                        : t('ageDistribution'),
-                    data: categoryData,
-                    backgroundColor: [
-                      'rgba(31, 119, 180, 0.2)', // Blue
-                      'rgba(255, 127, 14, 0.2)', // Orange
-                      'rgba(44, 160, 44, 0.2)', // Green
-                      'rgba(214, 39, 40, 0.2)', // Red
-                      'rgba(148, 103, 189, 0.2)', // Purple
-                      'rgba(140, 86, 75, 0.2)', // Brown
-                    ],
-                    borderColor: [
-                      'rgba(31, 119, 180, 1)',
-                      'rgba(255, 127, 14, 1)',
-                      'rgba(44, 160, 44, 1)',
-                      'rgba(214, 39, 40, 1)',
-                      'rgba(148, 103, 189, 1)',
-                      'rgba(140, 86, 75, 1)',
-                    ],
-                    borderWidth: 2,
-                  },
-                ],
-              }}
+              data={barChartData}
             />
             <div
               className={styles.topLeftCorner + ' px-1 border border-success'}

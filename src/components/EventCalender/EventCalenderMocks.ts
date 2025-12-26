@@ -2,6 +2,7 @@ import {
   DELETE_STANDALONE_EVENT_MUTATION,
   UPDATE_EVENT_MUTATION,
 } from 'GraphQl/Mutations/mutations';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 
 export const eventData = [
   {
@@ -55,7 +56,7 @@ export const MOCKS = [
   {
     request: {
       query: UPDATE_EVENT_MUTATION,
-      variables: {
+      variables: addInviteOnlyVariable({
         input: {
           id: '123',
           name: 'Updated name',
@@ -68,7 +69,7 @@ export const MOCKS = [
           startAt: '2023-05-02T02:00:00Z',
           endAt: '2023-05-02T07:00:00Z',
         },
-      },
+      }),
     },
     result: {
       data: {
