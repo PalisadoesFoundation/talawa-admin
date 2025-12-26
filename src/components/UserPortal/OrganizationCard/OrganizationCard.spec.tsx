@@ -154,4 +154,23 @@ describe('OrganizationCard [PR-2]', () => {
       );
     });
   });
+
+  it('does not call mutation when withdraw clicked but no pending request exists', async () => {
+    renderWithI18n(
+      <OrganizationCard
+        {...baseProps}
+        membershipRequestStatus="pending"
+        membershipRequests={[]}
+      />,
+    );
+
+    fireEvent.click(screen.getByTestId('withdrawBtn'));
+
+    await waitFor(() => {
+      expect(mockMutationFn).not.toHaveBeenCalled();
+    });
+
+    expect(toast.success).not.toHaveBeenCalled();
+    expect(toast.error).not.toHaveBeenCalled();
+  });
 });

@@ -151,4 +151,28 @@ describe('ContactCard [User Portal]', () => {
 
     expect(setSelectedContact).toHaveBeenCalledWith(baseProps.id);
   });
+  it('does not render lastMessage when lastMessage is not provided', async () => {
+    const props = {
+      ...baseProps,
+      lastMessage: '', // falsy
+    };
+
+    renderComponent(props);
+    await wait();
+
+    expect(screen.queryByTestId(`contact-lastMessage-${props.id}`)).toBeNull();
+  });
+  it('marks data-selected false when selectedContact is different from id', async () => {
+    const props = {
+      ...baseProps,
+      id: '1',
+      selectedContact: '2',
+    };
+
+    renderComponent(props);
+    await wait();
+
+    const container = screen.getByTestId(`contact-container-${props.id}`);
+    expect(container).toHaveAttribute('data-selected', 'false');
+  });
 });
