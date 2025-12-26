@@ -17,6 +17,7 @@ import useLocalStorage from '../../../utils/useLocalstorage';
 
 const STORAGE_KEY = 'pendingInvitationToken';
 const AUTH_TOKEN_KEY = 'token';
+const EMAIL_KEY = 'Talawa-admin_email';
 
 const AcceptInvitation = (): JSX.Element => {
   const { token } = useParams<{ token: string }>();
@@ -217,7 +218,7 @@ const AcceptInvitation = (): JSX.Element => {
                         variant="outline-secondary"
                         onClick={() => {
                           removeItem(AUTH_TOKEN_KEY);
-                          removeItem('Talawa-admin_email');
+                          removeItem(EMAIL_KEY);
                           if (invite?.invitationToken) {
                             setItem(STORAGE_KEY, invite.invitationToken);
                           }
