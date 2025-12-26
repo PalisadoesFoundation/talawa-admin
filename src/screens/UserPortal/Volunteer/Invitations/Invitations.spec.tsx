@@ -322,7 +322,9 @@ describe('Testing Invvitations Screen', () => {
     await userEvent.click(acceptBtn[0]);
 
     await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        expect.stringContaining(t.unknownError.split(' {{')[0]),
+      );
     });
   });
 
