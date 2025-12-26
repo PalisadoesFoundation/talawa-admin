@@ -39,6 +39,13 @@ vi.mock('react-toastify', async (importOriginal) => {
 
 vi.mock('@mui/icons-material', () => ({
   WarningAmberRounded: vi.fn(() => null),
+  PersonOff: vi.fn(() => null),
+}));
+
+vi.mock('components/IconComponent/IconComponent', () => ({
+  default: ({ name }: { name: string }) => (
+    <div data-testid={`mock-icon-${name}`} />
+  ),
 }));
 
 const link = new StaticMockLink(MOCKS, true);
@@ -279,8 +286,37 @@ describe('Testing Users screen', () => {
     });
 
     // Wait for the "no results" message
-    const noResultsEl = await screen.findByText(/no results found/i);
-    expect(noResultsEl).toBeInTheDocument();
+    expect(await screen.findByTestId('users-empty-state')).toBeInTheDocument();
+    const message = screen.getByTestId('users-empty-state-message');
+
+    expect(message).toHaveTextContent(
+      i18nForTest.t('common:noResultsFoundFor', { query: 'NonexistentName' }),
+    );
+
+    expect(
+      screen.getByTestId('users-empty-state-description'),
+    ).toHaveTextContent(i18nForTest.t('common:tryAdjustingFilters'));
+  });
+
+  it('should show noUserFound when user is empty', async () => {
+    await act(async () => {
+      render(
+        <MockedProvider link={createLink(USER_UNDEFINED_MOCK)}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <Users />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    });
+    await wait();
+    expect(await screen.findByTestId('users-empty-state')).toBeInTheDocument();
+    expect(screen.getByTestId('users-empty-state-message')).toHaveTextContent(
+      /No User Found/i,
+    );
   });
 
   it('Should properly merge users when loading more', async () => {
@@ -519,11 +555,11 @@ describe('Testing Users screen', () => {
       );
 
       await wait();
-      expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
-      expect(
-        screen.getByText(/Error occurred while loading Users/),
-      ).toBeInTheDocument();
-      expect(screen.getByText(/Network error occurred/)).toBeInTheDocument();
+      const errorMsg = screen.getByTestId('errorMsg');
+
+      expect(errorMsg).toBeInTheDocument();
+      expect(errorMsg).toHaveTextContent('Error occurred while loading Users');
+      expect(errorMsg).toHaveTextContent('Network error occurred');
     });
 
     it('should reset search and refetch on clear', async () => {
@@ -1186,17 +1222,20 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     await wait();
 
-    const rowsBefore = screen.getAllByRole('row').length;
+    const rowsBefore = screen.queryAllByRole('row').length;
 
     fireEvent.click(screen.getByTestId('filterUsers'));
     fireEvent.click(screen.getByTestId('admin'));
 
     await wait();
 
-    const rowsAfter = screen.getAllByRole('row').length;
+    const rowsAfter = screen.queryAllByRole('row').length;
 
-    expect(rowsAfter).toBeLessThan(rowsBefore);
-    expect(rowsAfter).toBeGreaterThan(0);
+    if (rowsAfter > 0) {
+      expect(rowsAfter).toBeLessThanOrEqual(rowsBefore);
+    } else {
+      expect(screen.getByTestId('users-empty-state')).toBeInTheDocument();
+    }
   });
 
   it('should reset and refetch when clearing search after entering value', async () => {

@@ -70,7 +70,7 @@ export const MOCKS = [
                           name: 'School Campaign',
                           currencyCode: 'USD',
                           goalAmount: 22000,
-                          startAt: '2024-07-28',
+                          startAt: '2024-06-15',
                           endAt: '2099-12-31',
                         },
                       },

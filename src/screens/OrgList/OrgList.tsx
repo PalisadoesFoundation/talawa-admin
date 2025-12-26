@@ -74,6 +74,9 @@ import type { ChangeEvent } from 'react';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
+import style from './OrgList.module.css';
+import { Group, Search } from '@mui/icons-material';
 
 const { getItem } = useLocalStorage();
 
@@ -125,7 +128,9 @@ function orgList(): JSX.Element {
   const toggleDialogModal = (): void =>
     setdialogModalIsOpen(!dialogModalisOpen);
 
-  document.title = t('title');
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
 
   const perPageResult = 8;
   const [page, setPage] = useState(0);
@@ -384,18 +389,23 @@ function orgList(): JSX.Element {
       (!sortedOrganizations || sortedOrganizations.length === 0) &&
       searchByName.length === 0 &&
       !userData ? (
-        <div className={styles.notFound}>
-          <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
-          <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
-        </div>
+        <EmptyState
+          icon={<Group />}
+          message={t('noOrgErrorTitle')}
+          description={t('noOrgErrorDescription')}
+          dataTestId="orglist-no-orgs-empty"
+        />
       ) : !isLoading &&
-        sortedOrganizations?.length == 0 &&
+        sortedOrganizations?.length === 0 &&
         searchByName.length > 0 ? (
-        <div className={styles.notFound} data-testid="noResultFound">
-          <h4 className="m-0">
-            {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
-          </h4>
-        </div>
+        <EmptyState
+          icon={<Search />}
+          message={tCommon('noResultsFoundFor', {
+            query: searchByName,
+          })}
+          description={tCommon('tryAdjustingFilters')}
+          dataTestId="orglist-search-empty"
+        />
       ) : (
         <>
           {isLoading && (
@@ -435,7 +445,7 @@ function orgList(): JSX.Element {
             })}
           </div>
           {/* pagination */}
-          <table style={{ width: '100%' }}>
+          <table className={style.table_fullWidth}>
             <tbody>
               <tr>
                 <PaginationList

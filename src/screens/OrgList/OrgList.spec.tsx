@@ -52,7 +52,20 @@ vi.mock('shared-components/OrganizationCard/OrganizationCard', () => ({
   ),
 }));
 
-const { setItem, clearAllItems } = useLocalStorage();
+type LSApi = ReturnType<typeof useLocalStorage>;
+let setItem: LSApi['setItem'];
+let removeItem: LSApi['removeItem'];
+
+beforeEach(() => {
+  const ls = useLocalStorage();
+  setItem = ls.setItem;
+  removeItem = ls.removeItem;
+
+  // Seed guard keys for every test
+  setItem('IsLoggedIn', 'TRUE');
+  setItem('userId', '123'); // if this screen reads it
+  removeItem('AdminFor'); // must be absent (== undefined)
+});
 
 const mockLinks = {
   admin: new StaticMockLink(MOCKS_ADMIN, true),
@@ -562,7 +575,6 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  clearAllItems();
   cleanup();
   vi.clearAllMocks();
 });
@@ -760,10 +772,7 @@ describe('Organisations Page testing as Admin', () => {
     renderWithMocks(mocksNoUser);
 
     await wait();
-    expect(screen.queryByText('Organizations Not Found')).toBeInTheDocument();
-    expect(
-      screen.queryByText('Please create an organization through dashboard'),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('orglist-no-orgs-empty')).toBeInTheDocument();
   });
 
   test('Testing Organization data is not present', async () => {
@@ -1369,7 +1378,7 @@ describe('Advanced Component Functionality Tests', () => {
     await wait();
 
     // Check for "no results found" message
-    expect(screen.getByTestId('noResultFound')).toBeInTheDocument();
+    expect(screen.getByTestId('orglist-search-empty')).toBeInTheDocument();
   });
 
   test('Testing sort by Earliest functionality', async () => {

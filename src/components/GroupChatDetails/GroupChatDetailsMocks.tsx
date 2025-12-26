@@ -161,6 +161,68 @@ export const mocks = [
       },
     },
   },
+  // Organization members mock for name search 'Disha' - duplicate for multiple calls
+  {
+    request: {
+      query: ORGANIZATION_MEMBERS,
+      variables: {
+        input: { id: 'org123' },
+        first: 20,
+        after: null,
+        where: { name_contains: 'Disha' },
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          members: {
+            edges: [
+              {
+                node: {
+                  id: 'user3',
+                  name: 'Disha Smith',
+                  avatarURL: null,
+                  role: 'Member',
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+    },
+  },
+  // Organization members mock for name search 'Smith' - duplicate for multiple calls
+  {
+    request: {
+      query: ORGANIZATION_MEMBERS,
+      variables: {
+        input: { id: 'org123' },
+        first: 20,
+        after: null,
+        where: { name_contains: 'Smith' },
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          members: {
+            edges: [
+              {
+                node: {
+                  id: 'user3',
+                  name: 'Disha Smith',
+                  avatarURL: null,
+                  role: 'Member',
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      },
+    },
+  },
   // Organization members mock for name search 'Smith'
   {
     request: {
@@ -193,6 +255,31 @@ export const mocks = [
     },
   },
   // Mock for ORGANIZATION_MEMBERS used by GroupChatDetails when opening the add-user modal
+  {
+    request: {
+      query: ORGANIZATION_MEMBERS,
+      variables: { input: { id: 'org123' }, first: 20, after: null, where: {} },
+    },
+    result: {
+      data: {
+        organization: {
+          members: {
+            edges: [
+              {
+                node: {
+                  id: 'user3',
+                  name: 'Disha Smith',
+                  avatarURL: null,
+                  role: 'Member',
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  // Mock for ORGANIZATION_MEMBERS used by GroupChatDetails for clearing search (duplicate)
   {
     request: {
       query: ORGANIZATION_MEMBERS,

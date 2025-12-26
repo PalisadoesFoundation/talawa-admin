@@ -31,6 +31,11 @@ import PledgeModal, {
   getMemberLabel,
 } from './PledgeModal';
 
+// Mock utils/i18n to use the test i18n instance for NotificationToast
+vi.mock('utils/i18n', () => ({
+  default: i18nForTest,
+}));
+
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -43,26 +48,25 @@ vi.mock('@mui/x-date-pickers', async () => {
   const actual = await vi.importActual<typeof import('@mui/x-date-pickers')>(
     '@mui/x-date-pickers',
   );
-  interface InterfaceTestDatePickerProps {
-    label?: React.ReactNode;
+  interface InterfaceMockDatePickerProps {
+    label?: string;
     value?: dayjs.Dayjs | null;
     onChange?: (value: dayjs.Dayjs | null) => void;
+    [key: string]: unknown;
   }
 
   return {
     ...actual,
-    DatePicker: ({ label, value, onChange }: InterfaceTestDatePickerProps) => (
-      <div role="group" aria-label={label as string}>
-        <input
-          aria-label={label as string}
-          value={value ? value.format('DD/MM/YYYY') : ''}
-          onChange={(e) =>
-            (onChange as ((value: unknown) => void) | undefined)?.(
-              e.target.value ? dayjs(e.target.value, 'DD/MM/YYYY') : null,
-            )
-          }
-        />
-      </div>
+    DatePicker: ({ label, value, onChange }: InterfaceMockDatePickerProps) => (
+      <input
+        aria-label={label as string}
+        value={value ? value.format('DD/MM/YYYY') : ''}
+        onChange={(e) =>
+          (onChange as ((value: unknown) => void) | undefined)?.(
+            e.target.value ? dayjs(e.target.value, 'DD/MM/YYYY') : null,
+          )
+        }
+      />
     ),
   };
 });
@@ -473,6 +477,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeUpdated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
@@ -553,6 +558,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeUpdated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
@@ -585,6 +591,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeUpdated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
@@ -639,6 +646,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeUpdated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
@@ -674,7 +682,10 @@ describe('PledgeModal', () => {
 
       await waitFor(
         () => {
-          expect(toast.error).toHaveBeenCalledWith(translations.selectPledger);
+          expect(toast.error).toHaveBeenCalledWith(
+            translations.selectPledger,
+            expect.any(Object),
+          );
         },
         { timeout: 2000 },
       );
@@ -814,6 +825,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeCreated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
