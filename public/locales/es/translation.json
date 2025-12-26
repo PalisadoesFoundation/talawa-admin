@@ -353,6 +353,18 @@
     "notFound": "No se encontraron miembros",
     "createUser": "Crear usuario"
   },
+  "organizationCard": {
+    "join": "Unirse",
+    "withdraw": "Retirar",
+    "visit": "Visitar",
+    "manage": "Administrar",
+    "admins": "Administradores",
+    "members": "Miembros",
+    "join_success": "Solicitud de membresía enviada correctamente",
+    "withdraw_success": "Solicitud de membresía retirada correctamente",
+    "join_error": "No se pudo enviar la solicitud de membresía",
+    "withdraw_error": "No se pudo retirar la solicitud de membresía"
+  },
   "organizationTags": {
     "title": "Etiquetas de Organización",
     "createTag": "Crear una nueva etiqueta",
