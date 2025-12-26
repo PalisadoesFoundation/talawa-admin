@@ -38,8 +38,6 @@ vi.mock('utils/useLocalstorage', () => {
   };
 });
 
-
-
 const sharedWindowSpies = vi.hoisted(() => ({
   alertMock: vi.fn(),
 }));
