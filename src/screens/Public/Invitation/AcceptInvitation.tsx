@@ -126,7 +126,12 @@ const AcceptInvitation = (): JSX.Element => {
   };
 
   return (
-    <LoadingState isLoading={loading} variant="spinner" size="xl">
+    <LoadingState
+      isLoading={loading}
+      variant="spinner"
+      size="xl"
+      data-testid="invitation-loading"
+    >
       <div className="container py-5">
         <div className="card p-4">
           <h3>
@@ -237,6 +242,7 @@ const AcceptInvitation = (): JSX.Element => {
                       isLoading={isSubmitting}
                       variant="inline"
                       size="sm"
+                      data-testid="submit-loading"
                     >
                       <Button
                         onClick={handleAccept}
