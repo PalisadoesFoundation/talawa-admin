@@ -31,11 +31,14 @@ interface InterfaceSortingButtonProps {
   buttonLabel?: string;
   /** Type to determine the icon to display: 'sort' or 'filter' */
   type?: 'sort' | 'filter';
+  /** Accessible label for the dropdown button (screen readers) */
+  ariaLabel?: string;
 }
 
 /**
  * SortingButton component renders a Dropdown with sorting options.
  * It allows users to select a sorting option and triggers a callback on selection.
+ * Includes accessibility support for screen readers.
  *
  * @param props - The properties for the SortingButton component.
  * @returns The rendered SortingButton component.
@@ -50,6 +53,7 @@ const SortingButton: React.FC<InterfaceSortingButtonProps> = ({
   className = styles.dropdown,
   buttonLabel,
   type = 'sort',
+  ariaLabel,
 }) => {
   // Determine the icon based on the type
   const IconComponent = type === 'filter' ? FilterAltOutlined : SortIcon;
@@ -60,8 +64,14 @@ const SortingButton: React.FC<InterfaceSortingButtonProps> = ({
         variant={selectedOption === '' ? 'outline-success' : 'success'}
         data-testid={`${dataTestIdPrefix}`}
         className={className}
+        aria-label={ariaLabel}
       >
-        <IconComponent className={'me-1'} data-testid="sorting-icon" />{' '}
+        <IconComponent
+          className={'me-1'}
+          data-testid="sorting-icon"
+          data-icon-type={type}
+          aria-hidden="true"
+        />{' '}
         {/* Use the appropriate icon */}
         {buttonLabel || selectedOption}
         {/* Use buttonLabel if provided, otherwise use selectedOption */}
@@ -87,15 +97,17 @@ SortingButton.propTypes = {
   sortingOptions: PropTypes.arrayOf(
     PropTypes.exact({
       label: PropTypes.string.isRequired,
-      value: PropTypes.string.isRequired,
+      value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+        .isRequired,
     }).isRequired,
   ).isRequired,
-  selectedOption: PropTypes.string,
+  selectedOption: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onSortChange: PropTypes.func.isRequired,
   dataTestIdPrefix: PropTypes.string.isRequired,
   dropdownTestId: PropTypes.string,
   buttonLabel: PropTypes.string, // Optional prop for custom button label
   type: PropTypes.oneOf(['sort', 'filter']), // Type to determine the icon
+  ariaLabel: PropTypes.string, // Accessible label for screen readers
 };
 
 export default SortingButton;

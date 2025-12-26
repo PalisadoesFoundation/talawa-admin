@@ -66,6 +66,14 @@ export const errorHandler = (a: unknown, error: unknown): void => {
       return;
     }
 
+    if (/account.*locked/i.test(errorMessage)) {
+      NotificationToast.error({
+        key: 'accountLocked',
+        namespace: 'errors',
+      });
+      return;
+    }
+
     NotificationToast.error(errorMessage);
     return;
   }
