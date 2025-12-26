@@ -1189,6 +1189,7 @@
     "media": "Médias",
     "event": "Événement",
     "article": "Article",
+    "postNowVisibleInFeed": "Le message est maintenant visible dans le fil d'actualité",
     "processingPost": "Traitement de votre message. Veuillez patienter.",
     "postImagePreview": "Aperçu de l'image du message"
   },

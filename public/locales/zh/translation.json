@@ -395,6 +395,7 @@
     "unassignUserTagMessage": "您想从此用户中删除标签吗？",
     "successfullyUnassigned": "标签已从用户中取消分配",
     "removeUserTagError": "删除标签及其所有子标签时出错",
+    "unassignUserTagError": "取消分配用户标签时出错",
     "addPeople": "添加人员",
     "add": "添加",
     "subTags": "子标签",
@@ -1189,7 +1190,8 @@
     "event": "事件",
     "article": "文章",
     "postNowVisibleInFeed": "帖子现在在动态中可见",
-    "processingPost": "正在处理您的帖子。请稍候。"
+    "processingPost": "正在处理您的帖子。请稍候。",
+    "postImagePreview": "帖子图片预览"
   },
   "eventAttendance": {
     "historical_statistics": "历史统计",

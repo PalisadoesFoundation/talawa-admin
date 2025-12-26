@@ -1191,8 +1191,7 @@
     "article": "लेख",
     "postNowVisibleInFeed": "पोस्ट अब फीड में दिखाई दे रहा है",
     "processingPost": "आपकी पोस्ट प्रोसेस की जा रही है। कृपया इंतजार करें।",
-    "postImagePreview": "पोस्ट छवि पूर्वावलोकन",
-    "postUpdatedSuccess": "पोस्ट सफलतापूर्वक अपडेट की गई"
+    "postImagePreview": "पोस्ट छवि पूर्वावलोकन"
   },
   "eventAttendance": {
     "historical_statistics": "ऐतिहासिक आंकड़े",
