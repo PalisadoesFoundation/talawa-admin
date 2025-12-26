@@ -54,7 +54,11 @@
     "OR": "或",
     "admin": "管理员",
     "user": "用户",
-    "loading": "加载中"
+    "loading": "加载中",
+    "communityLogo": "社区标志",
+    "organizations": "组织",
+    "accountLocked": "由于登录失败次数过多，您的账户已被暂时锁定。请稍后重试。",
+    "accountLockedWithTimer": "您的账户已被暂时锁定。请在 {{minutes}} 分钟后重试。"
   },
   "signOut": {
     "retryPrompt": "撤銷工作階段失敗。要重試嗎？",
@@ -150,7 +154,8 @@
     "allCaughtUp": "全部已读！",
     "prev": "上一页",
     "next": "下一页",
-    "markAsRead": "标记为已读"
+    "markAsRead": "标记为已读",
+    "markAsReadAriaLabel": "将通知'{{title}}'标记为已读"
   },
   "orgList": {
     "title": "塔拉瓦组织",
@@ -221,7 +226,8 @@
     "name": "名称",
     "email": "电子邮件",
     "profilePictureAlt": "{{name}} 的头像",
-    "placeholderAvatarAlt": "占位符头像"
+    "placeholderAvatarAlt": "占位符头像",
+    "newMembersWillAppearHere": "新的会员请求将出现在这里"
   },
   "users": {
     "membershipStatus": {
@@ -243,6 +249,9 @@
     "view": "看法",
     "enterName": "输入名字",
     "loadingUsers": "正在加载用户...",
+    "sortBy": "排序方式",
+    "filterByRole": "按角色筛选",
+    "errorLoadingUsers": "加载用户时出错",
     "noUserFound": "未找到用户",
     "sort": "种类",
     "Newest": "新的先来",
@@ -397,7 +406,9 @@
     "unassignUserTag": "取消分配标签",
     "unassignUserTagMessage": "您想从此用户中删除标签吗？",
     "successfullyUnassigned": "标签已从用户中取消分配",
+    "removeUserTagError": "删除标签及其所有子标签时出错",
     "addPeople": "添加人员",
+    "unassignUserTagError": "从用户移除标签分配时出错",
     "add": "添加",
     "subTags": "子标签",
     "successfullyAssignedToPeople": "标签分配成功",
@@ -712,7 +723,8 @@
     "viewCampaigns": "查看活动",
     "assocCampaigns": "相关活动",
     "errorLoadingFundsData": "加载基金数据时出错",
-    "editFund": "编辑基金"
+    "editFund": "编辑基金",
+    "searchFunds": "搜索基金"
   },
   "fundCampaign": {
     "title": "募捐活动",
@@ -736,7 +748,10 @@
     "latestEndDate": "最新结束日期",
     "earliestEndDate": "最早结束日期",
     "lowestGoal": "最低目标",
-    "highestGoal": "最高目标"
+    "highestGoal": "最高目标",
+    "editCampaign": "编辑活动",
+    "searchCampaigns": "搜索活动",
+    "errorLoading": "加载活动数据时出错"
   },
   "pledges": {
     "title": "基金活动承诺",
@@ -1053,7 +1068,8 @@
     "unassignUserTagMessage": "您想从此用户中删除标签吗？",
     "successfullyUnassigned": "标签已从用户中取消分配",
     "tagsAssigned": "已分配标签",
-    "noTagsAssigned": "未分配标签"
+    "noTagsAssigned": "未分配标签",
+    "actions": "操作"
   },
   "userLogin": {
     "login": "登录",
@@ -1154,6 +1170,7 @@
     "postDeletedSuccess": "帖子删除成功。",
     "postPinnedSuccess": "帖子置顶成功。",
     "postUnpinnedSuccess": "帖子取消置顶成功。",
+    "postUpdatedSuccess": "帖子已成功更新。",
     "viewPost": "查看帖子",
     "editPost": "编辑帖子",
     "pinPost": "置顶帖子",
@@ -1165,7 +1182,8 @@
     "noMoreComments": "没有更多评论了",
     "postedOn": "发布于 {{date}}",
     "emptyCommentError": "请在提交前输入评论。",
-    "unexpectedError": "发生了意外错误。请重试。"
+    "unexpectedError": "发生了意外错误。请重试。",
+    "moreOptions": "更多选项"
   },
   "home": {
     "title": "帖子",
@@ -1183,7 +1201,8 @@
     "media": "媒体",
     "event": "事件",
     "article": "文章",
-    "postNowVisibleInFeed": "帖子现在在动态中可见"
+    "postNowVisibleInFeed": "帖子现在在动态中可见",
+    "processingPost": "正在处理您的帖子。请稍候。"
   },
   "eventAttendance": {
     "historical_statistics": "历史统计",
@@ -1437,6 +1456,7 @@
   },
   "userChat": {
     "title": "聊天",
+    "deleteChat": "删除聊天",
     "add": "添加",
     "chat": "聊天",
     "contacts": "联系方式",
@@ -1447,7 +1467,25 @@
     "newGroupChat": "新群聊",
     "groupInfo": "集团信息",
     "members": "会员",
-    "addMembers": "Add Members"
+    "addMembers": "添加成员",
+    "userNotFound": "未找到用户",
+    "roleUpdatedSuccessfully": "角色更新成功",
+    "failedToUpdateRole": "更新角色失败",
+    "memberRemovedSuccessfully": "成员删除成功",
+    "failedToRemoveMember": "删除成员失败",
+    "chatImageUpdatedSuccessfully": "聊天图片更新成功",
+    "failedToUpdateChatImage": "更新聊天图片失败",
+    "chatDeletedSuccessfully": "聊天删除成功",
+    "failedToDeleteChat": "删除聊天失败",
+    "chatNameUpdatedSuccessfully": "聊天名称更新成功",
+    "failedToUpdateChatName": "更新聊天名称失败",
+    "remove": "删除",
+    "searchFullName": "按全名搜索",
+    "customizedTable": "自定义表格",
+    "demoteToRegular": "降级为普通用户",
+    "promoteToAdmin": "提升为管理员",
+    "user": "用户",
+    "chatAction": "聊天操作"
   },
   "userChatRoom": {
     "selectContact": "选择联系人开始对话",
@@ -1588,7 +1626,13 @@
     "viewPledges": "查看承诺",
     "noPledges": "未找到承诺",
     "noCampaigns": "未找到活动",
-    "raised": "已筹集",
+    "searchCampaigns": "搜索活动",
+    "campaignName": "活动名称",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "fundingGoal": "筹款目标",
+    "raised": "已筹金额",
+    "viewPledge": "查看认捐",
     "amountRaised": "已筹集金额"
   },
   "userPledges": {
@@ -1714,6 +1758,8 @@
     "noPluginsAvailable": "没有可用的插件",
     "installPluginsToSeeHere": "安装插件以在此查看",
     "checkBackLater": "稍后查看新插件",
+    "tryDifferentSearch": "尝试使用不同的搜索词或浏览所有插件",
+    "explorePluginStore": "探索插件商店以发现新插件",
     "noResultsFoundFor": "未找到相关结果"
   },
   "commentCard": {
