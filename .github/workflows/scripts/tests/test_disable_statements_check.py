@@ -8,6 +8,8 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
+# Add parent directory to path to import the main script
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 from disable_statements_check import DisableStatementsChecker, main
 
 
