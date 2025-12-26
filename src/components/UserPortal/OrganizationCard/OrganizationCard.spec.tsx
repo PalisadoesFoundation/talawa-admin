@@ -56,12 +56,12 @@ describe('OrganizationCard [PR-2]', () => {
 
   it('renders admins and members counts', () => {
     renderWithI18n(<OrganizationCard {...baseProps} />);
+    expect(
+      screen.getByText(new RegExp(`Admins\\s*:\\s*${baseProps.adminsCount}`)),
+    ).toBeInTheDocument();
 
     expect(
-      screen.getByText(`${baseProps.adminsCount} Admins`),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(`${baseProps.membersCount} Members`),
+      screen.getByText(new RegExp(`Members\\s*:\\s*${baseProps.membersCount}`)),
     ).toBeInTheDocument();
   });
 
@@ -125,20 +125,6 @@ describe('OrganizationCard [PR-2]', () => {
     expect(toast.success).toHaveBeenCalled();
   });
 
-  it('shows error toast when join mutation fails', async () => {
-    mockMutationFn.mockRejectedValueOnce(new Error('Mutation failed'));
-
-    renderWithI18n(<OrganizationCard {...baseProps} />);
-
-    fireEvent.click(screen.getByTestId('joinBtn'));
-
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
-        i18nForTest.t('organizationCard.join_error'),
-      );
-    });
-  });
-
   it('shows error toast when withdraw mutation fails', async () => {
     mockMutationFn.mockRejectedValueOnce(new Error('Mutation failed'));
 
@@ -155,6 +141,20 @@ describe('OrganizationCard [PR-2]', () => {
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(
         i18nForTest.t('organizationCard.withdraw_error'),
+      );
+    });
+  });
+
+  it('shows error toast when join mutation fails', async () => {
+    mockMutationFn.mockRejectedValueOnce(new Error('Mutation failed'));
+
+    renderWithI18n(<OrganizationCard {...baseProps} />);
+
+    fireEvent.click(screen.getByTestId('joinBtn'));
+
+    await waitFor(() => {
+      expect(toast.error).toHaveBeenCalledWith(
+        i18nForTest.t('organizationCard.join_error'),
       );
     });
   });
