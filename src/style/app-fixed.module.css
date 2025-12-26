@@ -1671,7 +1671,9 @@ form label,
 }
 
 /* Not Found */
-
+/**
+*Pages still using .notFound class are - screens/UserPortal/Campaigns, screens/BlockUser
+*/
 .notFound {
   flex: 1;
   display: flex;
@@ -10271,4 +10273,10 @@ form {
   border-color: var(--grey-border-box-color);
   border-width: 2px;
   width: 85%;
+  }
+
+.addIconStyle {
+  font-size: 25px;
+  margin-bottom: 2px;
+  margin-right: 2px;
 }
