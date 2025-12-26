@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import type { IUsePasswordVisibilityReturn } from '../types/Auth/usePasswordVisibility';
 
-export interface IUsePasswordVisibilityReturn {
-  showPassword: boolean;
-  togglePassword: () => void;
-}
-
+/**
+ * Custom hook to manage password visibility state for authentication inputs.
+ *
+ * @param initialVisible - Optional initial visibility state (defaults to false)
+ * @returns Object containing showPassword state and togglePassword function
+ */
 export function usePasswordVisibility(
   initialVisible: boolean = false,
 ): IUsePasswordVisibilityReturn {

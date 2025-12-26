@@ -4,9 +4,11 @@
 
 # Function: usePasswordVisibility()
 
-> **usePasswordVisibility**(`initialVisible`): [`IUsePasswordVisibilityReturn`](../interfaces/IUsePasswordVisibilityReturn.md)
+> **usePasswordVisibility**(`initialVisible`): [`IUsePasswordVisibilityReturn`](../../../types/Auth/usePasswordVisibility/interfaces/IUsePasswordVisibilityReturn.md)
 
-Defined in: [src/hooks/usePasswordVisibility.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/usePasswordVisibility.ts#L8)
+Defined in: [src/hooks/usePasswordVisibility.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/usePasswordVisibility.ts#L10)
+
+Custom hook to manage password visibility state for authentication inputs.
 
 ## Parameters
 
@@ -14,6 +16,10 @@ Defined in: [src/hooks/usePasswordVisibility.ts:8](https://github.com/Palisadoes
 
 `boolean` = `false`
 
+Optional initial visibility state (defaults to false)
+
 ## Returns
 
-[`IUsePasswordVisibilityReturn`](../interfaces/IUsePasswordVisibilityReturn.md)
+[`IUsePasswordVisibilityReturn`](../../../types/Auth/usePasswordVisibility/interfaces/IUsePasswordVisibilityReturn.md)
+
+Object containing showPassword state and togglePassword function
