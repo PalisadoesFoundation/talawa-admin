@@ -174,12 +174,22 @@ def check_file(path: Path, valid_keys: set[str]) -> list[str]:
 def main() -> None:
     """CLI entry point for translation validation.
 
+    This function parses command-line arguments, loads translation keys,
+    validates translation tag usage across source files, and exits with
+    appropriate status codes based on the results.
+
+    Args:
+        None
+
     Returns:
-        None. Exits with:
-        - 0 on success
-        - 1 if missing translations are found
-        - 2 on configuration errors
+        None
+
+    Raises:
+        SystemExit: Exits with status code 0 on success, 1 if missing
+            translation keys are found, or 2 for configuration errors
+            such as invalid locale directories.
     """
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--files", nargs="*", default=[])
     parser.add_argument("--directories", nargs="*", default=[])
