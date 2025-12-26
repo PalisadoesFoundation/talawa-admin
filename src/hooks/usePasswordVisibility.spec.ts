@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
-import { usePasswordVisibility } from '../../hooks/usePasswordVisibility';
+import { usePasswordVisibility } from './usePasswordVisibility';
 
 describe('usePasswordVisibility', () => {
   it('defaults showPassword to false', () => {
