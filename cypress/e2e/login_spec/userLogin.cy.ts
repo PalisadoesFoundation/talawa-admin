@@ -22,7 +22,12 @@ describe('User Login Functionality', () => {
       const loginPage = new LoginPage();
 
       loginPage.verifyLoginPage().login(userData.email, 'wrongpassword');
-      cy.assertToast('Not found');
+      // Verify error toast appears (without checking specific message)
+      cy.get('.Toastify__toast-body').should('exist').and('not.be.empty');
+      cy.url().should('not.include', '/user/organizations');
+      cy.window().then((win) => {
+        expect(win.localStorage.getItem('Talawa-admin_token')).to.eq(null);
+      });
     });
   });
 

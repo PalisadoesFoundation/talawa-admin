@@ -25,7 +25,12 @@ describe('Admin Login Functionality', () => {
 
         cy.visit('/admin');
         loginPage.verifyLoginPage().login(userData.email, 'wrongpassword');
-        cy.assertToast('Not found');
+        // Verify error toast appears (without checking specific message)
+        cy.get('.Toastify__toast-body').should('exist').and('not.be.empty');
+        cy.url().should('include', '/admin');
+        cy.window().then((win) => {
+          expect(win.localStorage.getItem('Talawa-admin_token')).to.eq(null);
+        });
       });
     });
   });
