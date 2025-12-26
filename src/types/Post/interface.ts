@@ -91,7 +91,37 @@ export interface InterfacePost {
   pinnedAt?: string | null;
   pinned?: boolean;
   creator?: InterfaceCreator | null;
-  attachments?: InterfaceAttachment[];
-  imageUrl?: string | null;
-  videoUrl?: string | null;
+  body?: string;
+  attachmentURL?: string;
+  attachments?: [{ mimeType: string }];
+  hasUserVoted?: {
+    hasVoted: boolean;
+    voteType: 'up_vote' | 'down_vote' | null;
+  } | null;
+  upVotesCount?: number;
+  downVotesCount?: number;
+  commentsCount?: number;
+}
+
+export interface InterfacePinnedPostsLayoutProps {
+  pinnedPosts: InterfacePostEdge[];
+  onStoryClick: (post: InterfacePost) => void;
+  onPostUpdate?: () => void;
+}
+
+export interface InterfacePinnedPostCardProps {
+  pinnedPost: InterfacePostEdge;
+  onStoryClick: (post: InterfacePost) => void;
+  onPostUpdate?: () => void;
+}
+
+export interface ICreatePostModalProps {
+  show: boolean;
+  id?: string;
+  title?: string;
+  body?: string;
+  onHide: () => void;
+  refetch: () => Promise<unknown>;
+  orgId: string | undefined;
+  type: 'create' | 'edit';
 }
