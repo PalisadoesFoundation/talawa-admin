@@ -391,7 +391,7 @@ describe('VenueModal', () => {
     fireEvent.click(screen.getByTestId('closeimage'));
 
     expect(
-      screen.queryByAltText('Venue Image Preview'),
+      screen.queryByAltText('Preview of venue image'),
     ).not.toBeInTheDocument();
   });
 });
@@ -573,7 +573,7 @@ describe('Image Handling', () => {
 
     // Wait for the image preview to appear (local preview, no upload needed)
     await waitFor(() => {
-      expect(screen.getByAltText('Venue Image Preview')).toBeInTheDocument();
+      expect(screen.getByAltText('Preview of venue image')).toBeInTheDocument();
       expect(screen.getByTestId('closeimage')).toBeInTheDocument();
     });
   });
@@ -601,7 +601,7 @@ describe('Image Handling', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByAltText('Venue Image Preview')).toBeInTheDocument();
+      expect(screen.getByAltText('Preview of venue image')).toBeInTheDocument();
     });
 
     // Set ref to null before clearing to test the null check
@@ -612,7 +612,7 @@ describe('Image Handling', () => {
     });
 
     expect(
-      screen.queryByAltText('Venue Image Preview'),
+      screen.queryByAltText('Preview of venue image'),
     ).not.toBeInTheDocument();
     expect(screen.queryByTestId('closeimage')).not.toBeInTheDocument();
 
@@ -727,7 +727,7 @@ describe('Image Handling', () => {
 
     // Verify that no image preview is shown
     expect(
-      screen.queryByAltText('Venue Image Preview'),
+      screen.queryByAltText('Preview of venue image'),
     ).not.toBeInTheDocument();
   });
 });
@@ -1406,7 +1406,9 @@ describe('Validation', () => {
           });
 
           // Should only use the first file
-          expect(screen.getAllByAltText('Venue Image Preview')).toHaveLength(1);
+          expect(screen.getAllByAltText('Preview of venue image')).toHaveLength(
+            1,
+          );
         });
 
         // Validation Edge Cases
@@ -1771,7 +1773,7 @@ describe('Validation', () => {
 
           // Verify that no image preview is shown
           expect(
-            screen.queryByAltText('Venue Image Preview'),
+            screen.queryByAltText('Preview of venue image'),
           ).not.toBeInTheDocument();
         });
 
@@ -1786,7 +1788,7 @@ describe('Validation', () => {
 
           // Verify that no image preview is shown
           expect(
-            screen.queryByAltText('Venue Image Preview'),
+            screen.queryByAltText('Preview of venue image'),
           ).not.toBeInTheDocument();
         });
 
@@ -1805,7 +1807,7 @@ describe('Validation', () => {
 
           await waitFor(() => {
             expect(
-              screen.getByAltText('Venue Image Preview'),
+              screen.getByAltText('Preview of venue image'),
             ).toBeInTheDocument();
           });
 
@@ -1885,7 +1887,7 @@ describe('Validation', () => {
 
           // Verify that no image preview is shown
           expect(
-            screen.queryByAltText('Venue Image Preview'),
+            screen.queryByAltText('Preview of venue image'),
           ).not.toBeInTheDocument();
         });
 
@@ -1910,7 +1912,7 @@ describe('Validation', () => {
 
           // Verify that no image preview is shown
           expect(
-            screen.queryByAltText('Venue Image Preview'),
+            screen.queryByAltText('Preview of venue image'),
           ).not.toBeInTheDocument();
         });
 
@@ -2025,7 +2027,7 @@ describe('Validation', () => {
 
           // Verify that the image preview is removed
           expect(
-            screen.queryByAltText('Venue Image Preview'),
+            screen.queryByAltText('Preview of venue image'),
           ).not.toBeInTheDocument();
         });
 
@@ -3083,7 +3085,7 @@ describe('Validation', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByAltText('Venue Image Preview')).toBeInTheDocument();
+      expect(screen.getByAltText('Preview of venue image')).toBeInTheDocument();
     });
 
     // Clear previous calls
@@ -3323,7 +3325,7 @@ describe('Validation', () => {
     // Verify blob URL was created
     await waitFor(() => {
       expect(createObjectURLMock).toHaveBeenCalledWith(file);
-      expect(screen.getByAltText('Venue Image Preview')).toBeInTheDocument();
+      expect(screen.getByAltText('Preview of venue image')).toBeInTheDocument();
     });
 
     // Now click the clear button to trigger clearImageInput
@@ -3378,7 +3380,7 @@ describe('Validation', () => {
     // Verify blob URL was created
     await waitFor(() => {
       expect(createObjectURLMock).toHaveBeenCalled();
-      expect(screen.getByAltText('Venue Image Preview')).toBeInTheDocument();
+      expect(screen.getByAltText('Preview of venue image')).toBeInTheDocument();
     });
 
     // Clear the mock call history
