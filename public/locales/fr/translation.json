@@ -1189,8 +1189,8 @@
     "media": "Médias",
     "event": "Événement",
     "article": "Article",
-    "postNowVisibleInFeed": "Le post est maintenant visible dans le fil d'actualité",
-    "processingPost": "Traitement de votre publication. Veuillez patienter."
+    "processingPost": "Traitement de votre message. Veuillez patienter.",
+    "postImagePreview": "Aperçu de l'image du message"
   },
   "eventAttendance": {
     "historical_statistics": "Statistiques historiques",
@@ -1760,7 +1760,8 @@
     "editComment": "Modifier le commentaire",
     "deleteComment": "Supprimer le commentaire",
     "deleting": "Suppression…",
-    "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre."
+    "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
+    "moreOptions": "Plus d'options"
   },
   "profileAvatar": {
     "altText": "Photo de profil de {{name}}",

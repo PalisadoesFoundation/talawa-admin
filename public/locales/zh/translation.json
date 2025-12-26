@@ -396,7 +396,6 @@
     "successfullyUnassigned": "标签已从用户中取消分配",
     "removeUserTagError": "删除标签及其所有子标签时出错",
     "addPeople": "添加人员",
-    "unassignUserTagError": "从用户移除标签分配时出错",
     "add": "添加",
     "subTags": "子标签",
     "successfullyAssignedToPeople": "标签分配成功",
@@ -1760,7 +1759,8 @@
     "editComment": "编辑评论",
     "deleteComment": "删除评论",
     "deleting": "删除中…",
-    "emptyCommentError": "请在提交前输入评论。"
+    "emptyCommentError": "请在提交前输入评论。",
+    "moreOptions": "更多选项"
   },
   "profileAvatar": {
     "altText": "{{name}}的个人资料图片",

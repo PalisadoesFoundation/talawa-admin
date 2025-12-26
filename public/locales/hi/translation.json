@@ -1190,7 +1190,9 @@
     "event": "आयोजन",
     "article": "लेख",
     "postNowVisibleInFeed": "पोस्ट अब फीड में दिखाई दे रहा है",
-    "processingPost": "आपकी पोस्ट प्रसंस्करण हो रही है। कृपया प्रतीक्षा करें।"
+    "processingPost": "आपकी पोस्ट प्रोसेस की जा रही है। कृपया इंतजार करें।",
+    "postImagePreview": "पोस्ट छवि पूर्वावलोकन",
+    "postUpdatedSuccess": "पोस्ट सफलतापूर्वक अपडेट की गई"
   },
   "eventAttendance": {
     "historical_statistics": "ऐतिहासिक आंकड़े",
@@ -1760,7 +1762,8 @@
     "editComment": "टिप्पणी संपादित करें",
     "deleteComment": "टिप्पणी हटाएं",
     "deleting": "हटाया जा रहा है…",
-    "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।"
+    "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।",
+    "moreOptions": "और विकल्प"
   },
   "profileAvatar": {
     "altText": "{{name}} की प्रोफ़ाइल तस्वीर",

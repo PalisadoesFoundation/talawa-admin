@@ -1157,7 +1157,6 @@
     "postDeletedSuccess": "Publicación eliminada con éxito.",
     "postPinnedSuccess": "Publicación fijada con éxito.",
     "postUnpinnedSuccess": "Publicación desfijada con éxito.",
-    "postUpdatedSuccess": "Publicación actualizada con éxito.",
     "addComment": "Agregar comentario",
     "viewPost": "Ver publicación",
     "editPost": "Editar publicación",
@@ -1170,6 +1169,7 @@
     "noMoreComments": "No hay más comentarios",
     "postedOn": "Publicado el {{date}}",
     "emptyCommentError": "Por favor ingrese un comentario antes de enviarlo.",
+    "postUpdatedSuccess": "Publicación actualizada con éxito",
     "unexpectedError": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo.",
     "moreOptions": "Más opciones"
   },
@@ -1190,7 +1190,8 @@
     "event": "Evento",
     "article": "Artículo",
     "postNowVisibleInFeed": "Publicar ahora visible en el feed",
-    "processingPost": "Procesando tu publicación. Por favor espera."
+    "processingPost": "Procesando tu publicación. Por favor espera.",
+    "postImagePreview": "Vista previa de imagen de publicación"
   },
   "eventAttendance": {
     "historical_statistics": "Estadísticas históricas",
@@ -1760,7 +1761,8 @@
     "editComment": "Editar comentario",
     "deleteComment": "Eliminar comentario",
     "deleting": "Eliminando...",
-    "emptyCommentError": "Por favor ingrese un comentario antes de enviar."
+    "emptyCommentError": "Por favor ingrese un comentario antes de enviar.",
+    "moreOptions": "Más opciones"
   },
   "profileAvatar": {
     "altText": "Foto de perfil de {{name}}",

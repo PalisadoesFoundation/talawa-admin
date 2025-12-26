@@ -37,8 +37,10 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import { errorHandler } from 'utils/errorHandler';
 import UserDefault from '../../../assets/images/defaultImg.png';
 import styles from '../../../style/app-fixed.module.css';
+import modalStyles from './StartPostModal.module.css';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 interface InterfaceStartPostModalProps {
   show: boolean;
@@ -149,12 +151,10 @@ const startPostModal = ({
       if (!postContent) {
         throw new Error("Can't create a post with an empty body.");
       }
-
       NotificationToast.info({
         key: 'home.processingPost',
         namespace: 'translation',
       });
-
       let attachment = null;
 
       if (img) {
@@ -209,11 +209,12 @@ const startPostModal = ({
         <Modal.Title>
           <span className="d-flex gap-2 align-items-center">
             <span className={styles.userImageUserPost}>
-              <Image
-                crossOrigin="anonymous"
-                src={userData?.avatarURL || UserDefault}
-                roundedCircle
-                className="mt-2"
+              <ProfileAvatarDisplay
+                fallbackName={userData?.name || ''}
+                imageUrl={userData?.avatarURL || UserDefault}
+                size="small"
+                shape="circle"
+                border={false}
                 data-testid="userImage"
               />
             </span>
@@ -221,7 +222,7 @@ const startPostModal = ({
           </span>
         </Modal.Title>
       </Modal.Header>
-      <hr></hr>
+      <hr className={modalStyles.divider}></hr>
       <Form>
         <Modal.Body>
           <Form.Control
@@ -239,7 +240,7 @@ const startPostModal = ({
           />
           {img && (
             <div className={styles.previewImage}>
-              <Image src={img} alt="Post Image Preview" />
+              <Image src={img} alt={t('postImagePreview')} />
             </div>
           )}
         </Modal.Body>

@@ -98,3 +98,7 @@
   gap: 8px;
   margin-top: 16px;
 }
+
+.videoFullWidth {
+  width: 100%;
+}

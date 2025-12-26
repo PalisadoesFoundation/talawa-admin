@@ -25,7 +25,6 @@ import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import {
-  Avatar,
   IconButton,
   Button,
   Modal,
@@ -72,6 +71,7 @@ import CommentCard from '../../components/UserPortal/CommentCard/CommentCard';
 import styles from '../../style/app-fixed.module.css';
 import { PluginInjector } from '../../plugin';
 import useLocalStorage from '../../utils/useLocalstorage';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
@@ -319,16 +319,14 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
 
       <Box className={postCardStyles.postHeader}>
         <Box className={postCardStyles.userInfo}>
-          <Avatar
+          <ProfileAvatarDisplay
             className={styles.userImageUserPost}
-            src={props.creator.avatarURL || UserDefault}
-            alt={props.creator.name}
-            slotProps={{
-              img: {
-                crossOrigin: 'anonymous',
-                loading: 'lazy',
-              },
-            }}
+            imageUrl={props.creator.avatarURL || UserDefault}
+            fallbackName={props.creator.name}
+            shape="circle"
+            size="small"
+            enableEnlarge
+            border={true}
           />
           <Typography variant="subtitle2" fontWeight="bold">
             {props.creator.name}
@@ -422,7 +420,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             <img src={props.image || UserDefault} alt={props.title} />
           ))}
         {props.video && (
-          <video controls className={styles.videoFullWidth}>
+          <video controls className={postCardStyles.videoFullWidth}>
             <source src={props.video} type="video/mp4" />
           </video>
         )}

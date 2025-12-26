@@ -118,8 +118,8 @@
   "clear": "Limpiar",
   "noResultsFound": "No se encontraron resultados",
   "loadingAdminPlugin": "Cargando complemento de administrador...",
-  "loadingUserPlugin": "Cargando complemento de usuario...",
   "unblock": "Desbloquear",
   "unblockedSuccessfully": "{{item}} desbloqueado exitosamente",
-  "pluginSettings": "Configuración de complementos"
+  "pluginSettings": "Configuración de complementos",
+  "loadingUserPlugin": "Cargando complemento de usuario..."
 }
