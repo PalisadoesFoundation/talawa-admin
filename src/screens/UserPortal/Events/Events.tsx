@@ -21,6 +21,7 @@
  * - `eventTitle`, `eventDescription`, `eventLocation`: Input fields for event details.
  * - `startAt`, `endAt`: Start and end dates for the event.
  * - `startTime`, `endTime`: Start and end times for the event.
+ * - `isInviteOnly`: Determines if the event is invite only. Default is false.
  * - `isPublic`, `isRegisterable`, `isRecurring`, `isAllDay`: Event configuration flags.
  * - `viewType`: Current calendar view type (e.g., month, week).
  * - `createEventModal`: Controls visibility of the event creation modal.
@@ -46,6 +47,7 @@
  */
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 import {
   ORGANIZATIONS_LIST,
   GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
@@ -96,18 +98,18 @@ export default function events(): JSX.Element {
     error: eventDataError,
     refetch,
   } = useQuery(GET_ORGANIZATION_EVENTS_USER_PORTAL_PG, {
-    variables: {
+    variables: addInviteOnlyVariable({
       id: organizationId,
       first: 100,
       after: null,
-      startAt: dayjs(new Date(currentYear, currentMonth, 1))
+      startDate: dayjs(new Date(currentYear, currentMonth, 1))
         .startOf('month')
         .toISOString(),
-      endAt: dayjs(new Date(currentYear, currentMonth, 1))
+      endDate: dayjs(new Date(currentYear, currentMonth, 1))
         .endOf('month')
         .toISOString(),
       includeRecurring: true,
-    },
+    }),
     notifyOnNetworkStatusChange: true,
     errorPolicy: 'all',
     fetchPolicy: 'cache-and-network',
@@ -139,6 +141,7 @@ export default function events(): JSX.Element {
       allDay: true,
       isPublic: true,
       isRegisterable: true,
+      isInviteOnly: false,
       recurrenceRule: null,
       createChat: false,
     }),
@@ -164,11 +167,12 @@ export default function events(): JSX.Element {
         location: payload.location,
         isPublic: payload.isPublic,
         isRegisterable: payload.isRegisterable,
+        isInviteOnly: payload.isInviteOnly || false,
         recurrence: recurrenceInput,
       };
 
       const { data: createEventData } = await create({
-        variables: { input },
+        variables: addInviteOnlyVariable({ input }),
       });
       if (createEventData) {
         toast.success(t('eventCreated') as string);
@@ -203,6 +207,7 @@ export default function events(): JSX.Element {
       location: edge.node.location || '',
       isPublic: edge.node.isPublic,
       isRegisterable: edge.node.isRegisterable,
+      isInviteOnly: edge.node.isInviteOnly ?? false,
       // Add recurring event information
       isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
       baseEvent: edge.node.baseEvent,
@@ -308,6 +313,7 @@ export default function events(): JSX.Element {
             showCreateChat
             showRegisterable
             showPublicToggle
+            showInviteOnlyToggle
             showRecurrenceToggle
           />
         </Modal.Body>

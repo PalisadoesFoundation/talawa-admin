@@ -20,9 +20,9 @@ import {
   GET_ORGANIZATION_DATA_PG,
   GET_ORGANIZATION_EVENTS_PG,
 } from 'GraphQl/Queries/Queries';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 import { MOCKS } from './OrganizationEventsMocks';
 import { toast } from 'react-toastify';
-import { green } from '@mui/material/colors';
 
 const mockGetItem = vi.fn((key: string): string | null => {
   if (key === 'role') return 'administrator';
@@ -40,10 +40,24 @@ vi.mock('utils/useLocalstorage', () => {
   };
 });
 
+// Read CSS variable value to avoid hardcoded colors (Material-UI doesn't support CSS variables directly)
+// CSS variable is set in vitest.setup.ts
+const getSuccessColor = (): string => {
+  if (typeof document !== 'undefined' && document.documentElement) {
+    const color = getComputedStyle(document.documentElement)
+      .getPropertyValue('--bs-success')
+      .trim();
+    if (color) return color;
+  }
+  throw new Error(
+    'CSS variable --bs-success not available in test environment',
+  );
+};
+
 const theme = createTheme({
   palette: {
     primary: {
-      main: green[600],
+      main: getSuccessColor(),
     },
   },
 });
@@ -148,6 +162,14 @@ vi.mock('./CreateEventModal', () => ({
     if (!isOpen) return null;
     return (
       <div data-testid="createEventModal">
+        {/* Minimal title input so tests can wait on modal readiness */}
+        <input data-testid="eventTitleInput" />
+
+        {/* Minimal invite-only checkbox matching test IDs */}
+        <label>
+          <input type="checkbox" data-testid="inviteOnlyEventCheck" />
+        </label>
+
         <button
           type="button"
           data-testid="createEventModalCloseBtn"
@@ -430,6 +452,35 @@ describe('Organisation Events Page', () => {
     );
   });
 
+  test('toggles invite-only checkbox in create event modal', async () => {
+    renderWithLink(defaultLink);
+
+    await wait();
+
+    await waitFor(() =>
+      expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
+    );
+
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    await waitFor(() =>
+      expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument(),
+    );
+
+    // Check that invite-only checkbox exists and is not checked by default
+    const inviteOnlyCheckbox = screen.getByTestId('inviteOnlyEventCheck');
+    expect(inviteOnlyCheckbox).toBeInTheDocument();
+    expect(inviteOnlyCheckbox).not.toBeChecked();
+
+    // Toggle invite-only checkbox
+    await userEvent.click(inviteOnlyCheckbox);
+    expect(inviteOnlyCheckbox).toBeChecked();
+
+    // Toggle back
+    await userEvent.click(inviteOnlyCheckbox);
+    expect(inviteOnlyCheckbox).not.toBeChecked();
+  });
+
   test('viewType changes from Month to Day via EventHeader', async () => {
     const { container } = renderWithLink(defaultLink);
 
@@ -471,7 +522,7 @@ describe('Organisation Events Page', () => {
         {
           request: {
             query: GET_ORGANIZATION_EVENTS_PG,
-            variables: buildEventsVariables(),
+            variables: addInviteOnlyVariable(buildEventsVariables()),
           },
           error: new Error('Too Many Requests'),
         },
@@ -514,7 +565,7 @@ describe('Organisation Events Page', () => {
         {
           request: {
             query: GET_ORGANIZATION_EVENTS_PG,
-            variables: buildEventsVariables(),
+            variables: addInviteOnlyVariable(buildEventsVariables()),
           },
           error: new Error('some other apollo error'),
         },
@@ -552,7 +603,7 @@ describe('Organisation Events Page', () => {
         {
           request: {
             query: GET_ORGANIZATION_EVENTS_PG,
-            variables: buildEventsVariables(),
+            variables: addInviteOnlyVariable(buildEventsVariables()),
           },
           result: {
             data: {
@@ -586,7 +637,7 @@ describe('Organisation Events Page', () => {
         {
           request: {
             query: GET_ORGANIZATION_EVENTS_PG,
-            variables: buildEventsVariables(),
+            variables: addInviteOnlyVariable(buildEventsVariables()),
           },
           result: {
             data: {
@@ -624,7 +675,7 @@ describe('Organisation Events Page', () => {
         {
           request: {
             query: GET_ORGANIZATION_EVENTS_PG,
-            variables: buildEventsVariables(),
+            variables: addInviteOnlyVariable(buildEventsVariables()),
           },
           result: {
             data: {
@@ -761,7 +812,7 @@ describe('Organisation Events Page', () => {
       {
         request: {
           query: GET_ORGANIZATION_EVENTS_PG,
-          variables: buildEventsVariables(),
+          variables: addInviteOnlyVariable(buildEventsVariables()),
         },
         result: {
           data: {
@@ -973,13 +1024,13 @@ const ERROR_MOCK = [
   {
     request: {
       query: GET_ORGANIZATION_EVENTS_PG,
-      variables: {
+      variables: addInviteOnlyVariable({
         id: 'orgId',
         first: 32,
         after: null,
         startDate: expect.any(String),
         endDate: expect.any(String),
-      },
+      }),
     },
     result: {
       errors: [new GraphQLError('Failed to fetch organization events')],

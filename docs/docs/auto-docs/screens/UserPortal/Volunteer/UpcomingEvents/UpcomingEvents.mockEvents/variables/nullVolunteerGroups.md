@@ -6,7 +6,7 @@
 
 > `const` **nullVolunteerGroups**: `object`
 
-Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts:111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts#L111)
+Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts#L120)
 
 ## Type Declaration
 
@@ -30,9 +30,21 @@ Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mock
 
 > **id**: `string` = `'nullEventId'`
 
+### isInviteOnly
+
+> **isInviteOnly**: `boolean` = `false`
+
+### isPublic
+
+> **isPublic**: `boolean` = `true`
+
 ### isRecurringEventTemplate
 
 > **isRecurringEventTemplate**: `boolean` = `false`
+
+### isRegisterable
+
+> **isRegisterable**: `boolean` = `true`
 
 ### location
 

@@ -1,10 +1,11 @@
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 
 export const MOCKS_WITH_TIME = [
   {
     request: {
       query: EVENT_DETAILS,
-      variables: { eventId: 'event123' },
+      variables: addInviteOnlyVariable({ eventId: 'event123' }),
     },
     result: {
       data: {
@@ -21,6 +22,7 @@ export const MOCKS_WITH_TIME = [
           location: 'India',
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [{ _id: 'user1' }, { _id: 'user2' }],
           creator: {
             _id: 'creator1',
@@ -37,7 +39,7 @@ export const MOCKS_WITHOUT_TIME = [
   {
     request: {
       query: EVENT_DETAILS,
-      variables: { eventId: 'event123' },
+      variables: addInviteOnlyVariable({ eventId: 'event123' }),
     },
     result: {
       data: {
@@ -54,6 +56,7 @@ export const MOCKS_WITHOUT_TIME = [
           location: 'India',
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [{ _id: 'user1' }, { _id: 'user2' }],
           creator: {
             _id: 'creator1',
@@ -70,7 +73,7 @@ export const MOCKS_NO_EVENT = [
   {
     request: {
       query: EVENT_DETAILS,
-      variables: { eventId: 'event123' },
+      variables: addInviteOnlyVariable({ eventId: 'event123' }),
     },
     result: {
       data: {
@@ -84,7 +87,7 @@ export const MOCKS_MISSING_DATA = [
   {
     request: {
       query: EVENT_DETAILS,
-      variables: { eventId: 'event123' },
+      variables: addInviteOnlyVariable({ eventId: 'event123' }),
     },
     result: {
       data: null,
@@ -96,7 +99,7 @@ export const MOCKS_NO_LOCATION = [
   {
     request: {
       query: EVENT_DETAILS,
-      variables: { eventId: 'event123' },
+      variables: addInviteOnlyVariable({ eventId: 'event123' }),
     },
     result: {
       data: {
@@ -113,6 +116,7 @@ export const MOCKS_NO_LOCATION = [
           location: null,
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {
             _id: 'creator1',
@@ -129,7 +133,7 @@ export const MOCKS_INVALID_DATETIME = [
   {
     request: {
       query: EVENT_DETAILS,
-      variables: { eventId: 'event123' },
+      variables: addInviteOnlyVariable({ eventId: 'event123' }),
     },
     result: {
       data: {
@@ -146,6 +150,7 @@ export const MOCKS_INVALID_DATETIME = [
           location: 'India',
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
           attendees: [],
           creator: {
             _id: 'creator1',

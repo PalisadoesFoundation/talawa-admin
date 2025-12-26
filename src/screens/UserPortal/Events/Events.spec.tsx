@@ -32,16 +32,18 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { vi, beforeEach, afterEach } from 'vitest';
 import { toast } from 'react-toastify';
 import { Frequency } from 'utils/recurrenceUtils';
-import { green } from '@mui/material/colors';
 
-const { mockToast, mockUseParams } = vi.hoisted(() => ({
-  mockToast: {
-    error: vi.fn(),
-    info: vi.fn(),
-    success: vi.fn(),
-  },
-  mockUseParams: vi.fn(),
-}));
+const { mockToast, mockUseParams, mockIsInviteOnlyEnabled } = vi.hoisted(
+  () => ({
+    mockToast: {
+      error: vi.fn(),
+      info: vi.fn(),
+      success: vi.fn(),
+    },
+    mockUseParams: vi.fn(),
+    mockIsInviteOnlyEnabled: vi.fn(() => false),
+  }),
+);
 
 vi.mock('react-toastify', () => ({
   toast: mockToast,
@@ -115,6 +117,10 @@ vi.mock('react-router', async () => {
     useParams: mockUseParams,
   };
 });
+
+vi.mock('utils/featureFlags', () => ({
+  isInviteOnlyEnabled: mockIsInviteOnlyEnabled,
+}));
 
 vi.mock('components/EventCalender/Monthly/EventCalender', () => ({
   __esModule: true,
@@ -207,10 +213,24 @@ vi.mock('components/EventCalender/Header/EventHeader', () => ({
   },
 }));
 
+// Read CSS variable value to avoid hardcoded colors (Material-UI doesn't support CSS variables directly)
+// CSS variable is set in vitest.setup.ts
+const getSuccessColor = (): string => {
+  if (typeof document !== 'undefined' && document.documentElement) {
+    const color = getComputedStyle(document.documentElement)
+      .getPropertyValue('--bs-success')
+      .trim();
+    if (color) return color;
+  }
+  throw new Error(
+    'CSS variable --bs-success not available in test environment',
+  );
+};
+
 const theme = createTheme({
   palette: {
     primary: {
-      main: green[600],
+      main: getSuccessColor(),
     },
   },
 });
@@ -236,9 +256,10 @@ const MOCKS = [
         id: 'org123',
         first: 100,
         after: null,
-        startAt: startDate,
-        endAt: endDate,
+        startDate: startDate,
+        endDate: endDate,
         includeRecurring: true,
+        includeInviteOnly: false,
       },
     },
     result: {
@@ -257,6 +278,7 @@ const MOCKS = [
                   allDay: true,
                   isPublic: true,
                   isRegisterable: true,
+                  isInviteOnly: false,
                   isRecurringEventTemplate: false,
                   baseEvent: null,
                   sequenceNumber: null,
@@ -288,6 +310,7 @@ const MOCKS = [
                   allDay: false,
                   isPublic: false,
                   isRegisterable: false,
+                  isInviteOnly: false,
                   isRecurringEventTemplate: false,
                   baseEvent: null,
                   sequenceNumber: null,
@@ -326,9 +349,10 @@ const MOCKS = [
         id: 'org123',
         first: 100,
         after: null,
-        startAt: '2023-05-31T18:30:00.000Z',
-        endAt: '2023-06-30T18:29:59.999Z',
+        startDate: '2023-05-31T18:30:00.000Z',
+        endDate: '2023-06-30T18:29:59.999Z',
         includeRecurring: true,
+        includeInviteOnly: false,
       },
     },
     result: {
@@ -347,6 +371,7 @@ const MOCKS = [
                   allDay: true,
                   isPublic: true,
                   isRegisterable: true,
+                  isInviteOnly: false,
                   isRecurringEventTemplate: false,
                   baseEvent: null,
                   sequenceNumber: null,
@@ -378,6 +403,7 @@ const MOCKS = [
                   allDay: false,
                   isPublic: false,
                   isRegisterable: false,
+                  isInviteOnly: false,
                   isRecurringEventTemplate: false,
                   baseEvent: null,
                   sequenceNumber: null,
@@ -444,7 +470,6 @@ const MOCKS = [
       },
     },
   },
-
   // Mock for successful CREATE_EVENT_MUTATION (non all-day event)
   {
     request: {
@@ -468,7 +493,9 @@ const MOCKS = [
           location: 'New Test Location',
           isPublic: true,
           isRegisterable: true,
+          // isInviteOnly removed when includeInviteOnly is false
         },
+        includeInviteOnly: false,
       },
     },
     result: {
@@ -490,9 +517,10 @@ const ERROR_MOCKS = [
         id: 'org123',
         first: 100,
         after: null,
-        startAt: startDate,
-        endAt: endDate,
+        startDate: startDate,
+        endDate: endDate,
         includeRecurring: true,
+        includeInviteOnly: false,
       },
     },
     error: new Error('Network error'),
@@ -518,9 +546,10 @@ const RATE_LIMIT_MOCKS = [
         id: 'org123',
         first: 100,
         after: null,
-        startAt: startDate,
-        endAt: endDate,
+        startDate: startDate,
+        endDate: endDate,
         includeRecurring: true,
+        includeInviteOnly: false,
       },
     },
     error: new Error('Too many requests. Please try again later'),
@@ -558,7 +587,9 @@ const CREATE_EVENT_ERROR_MOCKS = [
           location: 'New Test Location',
           isPublic: true,
           isRegisterable: true,
+          // isInviteOnly removed when includeInviteOnly is false
         },
+        includeInviteOnly: false,
       },
     },
     error: new Error('Failed to create event'),
@@ -586,7 +617,9 @@ const CREATE_EVENT_NULL_MOCKS = [
           location: 'New Test Location',
           isPublic: true,
           isRegisterable: true,
+          // isInviteOnly removed when includeInviteOnly is false
         },
+        includeInviteOnly: false,
       },
     },
     result: {},
@@ -612,6 +645,7 @@ const CREATOR_NULL_MOCKS = (() => {
                 allDay: true,
                 isPublic: true,
                 isRegisterable: true,
+                isInviteOnly: false,
                 isRecurringEventTemplate: false,
                 baseEvent: null,
                 sequenceNumber: null,
@@ -754,6 +788,7 @@ describe('Testing Events Screen [User Portal]', () => {
     const endAt = dayjs.utc(today).endOf('day').toISOString();
 
     // Test-specific mock with computed dates
+    // Note: When includeInviteOnly is false, isInviteOnly is removed from input by addInviteOnlyVariable
     const allDayEventMock = {
       request: {
         query: CREATE_EVENT_MUTATION,
@@ -768,8 +803,9 @@ describe('Testing Events Screen [User Portal]', () => {
             location: 'New Test Location',
             isPublic: true,
             isRegisterable: true,
-            recurrence: undefined,
+            // isInviteOnly removed when includeInviteOnly is false
           },
+          includeInviteOnly: false,
         },
       },
       result: {
@@ -864,6 +900,7 @@ describe('Testing Events Screen [User Portal]', () => {
             isPublic: true,
             isRegisterable: true,
           },
+          includeInviteOnly: false,
         },
       },
       result: {
@@ -1074,22 +1111,26 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('publicEventCheck')).toBeInTheDocument();
+      expect(screen.getByTestId('inviteOnlyEventCheck')).toBeInTheDocument();
     });
 
     // Toggle all checkboxes
     await userEvent.click(screen.getByTestId('publicEventCheck'));
     await userEvent.click(screen.getByTestId('registerableEventCheck'));
+    await userEvent.click(screen.getByTestId('inviteOnlyEventCheck'));
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
     await userEvent.click(screen.getByTestId('createChatCheck'));
 
     // Toggle back
     await userEvent.click(screen.getByTestId('publicEventCheck'));
     await userEvent.click(screen.getByTestId('registerableEventCheck'));
+    await userEvent.click(screen.getByTestId('inviteOnlyEventCheck'));
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
     await userEvent.click(screen.getByTestId('createChatCheck'));
 
     // All toggles should work without errors
     expect(screen.getByTestId('publicEventCheck')).toBeInTheDocument();
+    expect(screen.getByTestId('inviteOnlyEventCheck')).toBeInTheDocument();
   });
 
   it('Should handle date picker changes', async () => {
@@ -1335,6 +1376,116 @@ describe('Testing Events Screen [User Portal]', () => {
     expect(titleInput).toHaveValue('Test Title');
     expect(descriptionInput).toHaveValue('Test Description');
     expect(locationInput).toHaveValue('Test Location');
+  });
+
+  it('Should include isInviteOnly in create event mutation when toggled', async () => {
+    // Enable the invite-only feature flag for this test
+    mockIsInviteOnlyEnabled.mockReturnValue(true);
+
+    const computedStartAt = dayjs(new Date())
+      .startOf('day')
+      .millisecond(0)
+      .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+    const computedEndAt = dayjs(new Date())
+      .endOf('day')
+      .millisecond(0)
+      .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
+
+    const inviteOnlyMock = {
+      request: {
+        query: CREATE_EVENT_MUTATION,
+        variables: {
+          input: {
+            name: 'Invite Only Event',
+            description: 'Test Description',
+            startAt: computedStartAt,
+            endAt: computedEndAt,
+            organizationId: 'org123',
+            allDay: true,
+            location: 'Test Location',
+            isPublic: true,
+            isRegisterable: true,
+            isInviteOnly: true,
+          },
+          includeInviteOnly: true,
+        },
+      },
+      newData: () => {
+        return {
+          data: {
+            createEvent: {
+              id: 'inviteOnlyEvent1',
+            },
+          },
+        };
+      },
+    };
+
+    const testMocks = [
+      ...MOCKS.slice(0, 2), // Include the query mocks
+      inviteOnlyMock,
+    ];
+
+    const testLink = new StaticMockLink(testMocks, true);
+
+    render(
+      <MockedProvider link={testLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Open modal
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('inviteOnlyEventCheck')).toBeInTheDocument();
+    });
+
+    // Toggle invite-only checkbox
+    const inviteOnlyCheckbox = screen.getByTestId('inviteOnlyEventCheck');
+    expect(inviteOnlyCheckbox).not.toBeChecked();
+    await userEvent.click(inviteOnlyCheckbox);
+    expect(inviteOnlyCheckbox).toBeChecked();
+
+    // Fill form
+    await userEvent.type(
+      screen.getByTestId('eventTitleInput'),
+      'Invite Only Event',
+    );
+    await userEvent.type(
+      screen.getByTestId('eventDescriptionInput'),
+      'Test Description',
+    );
+    await userEvent.type(
+      screen.getByTestId('eventLocationInput'),
+      'Test Location',
+    );
+
+    // Submit form
+    const form = screen.getByTestId('eventTitleInput').closest('form');
+    if (form) {
+      fireEvent.submit(form);
+    }
+
+    await wait(500);
+
+    // Verify invite-only was toggled
+    expect(inviteOnlyCheckbox).toBeChecked();
+
+    // Reset the feature flag mock
+    mockIsInviteOnlyEnabled.mockReturnValue(false);
   });
 
   it('Should test userRole as administrator', async () => {
@@ -1601,8 +1752,10 @@ describe('Testing Events Screen [User Portal]', () => {
             location: 'Recurring Test Location',
             isPublic: true,
             isRegisterable: true,
+            // isInviteOnly removed when includeInviteOnly is false
             recurrence: expectedRecurrence,
           },
+          includeInviteOnly: false,
         },
       },
       result: {

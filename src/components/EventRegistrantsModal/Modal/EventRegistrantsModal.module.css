@@ -1,0 +1,33 @@
+.modalHeader {
+  background-color: var(--tableHeader-bg);
+}
+
+.addOnspotLink {
+  color: var(--inputField-text-color);
+  text-decoration: underline;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.addOnspotLink:hover {
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+.addOnspotLink:focus {
+  outline: 2px solid var(--bs-primary);
+  outline-offset: 2px;
+}
+
+.inviteButton {
+  background-color: var(--bs-success, #6cc9a6);
+  color: var(--bs-white);
+}
+
+.addRegistrantButton {
+  background-color: var(--addButton-bg);
+  color: var(--inputField-text-color);
+}

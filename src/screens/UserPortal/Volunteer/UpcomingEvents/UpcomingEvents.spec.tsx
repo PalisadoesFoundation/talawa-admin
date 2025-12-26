@@ -65,6 +65,10 @@ vi.mock('react-router', async () => {
   };
 });
 
+vi.mock('utils/featureFlags', () => ({
+  isInviteOnlyEnabled: vi.fn(() => false),
+}));
+
 const { setItem, clearAllItems } = useLocalStorage();
 
 const link1 = new StaticMockLink(MOCKS);

@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import styles from '../../style/app-fixed.module.css';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
 import { errorHandler } from 'utils/errorHandler';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 import EventForm, {
   formatRecurrenceForPayload,
 } from 'shared-components/EventForm/EventForm';
@@ -65,6 +66,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
     allDay: true,
     isPublic: true,
     isRegisterable: false,
+    isInviteOnly: false,
     recurrenceRule: null,
     createChat: false,
   };
@@ -91,11 +93,12 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         location: payload.location,
         isPublic: payload.isPublic,
         isRegisterable: payload.isRegisterable,
+        isInviteOnly: payload.isInviteOnly || false,
         recurrence: recurrenceInput,
       };
 
       const { data: createEventData } = await create({
-        variables: { input },
+        variables: addInviteOnlyVariable({ input }),
       });
 
       if (createEventData) {
@@ -136,6 +139,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
             tCommon={tCommon}
             showRegisterable
             showPublicToggle
+            showInviteOnlyToggle
             showRecurrenceToggle
             submitting={createLoading}
             showCancelButton

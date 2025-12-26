@@ -62,6 +62,7 @@ const mockEventListCardProps = {
   allDay: false,
   isPublic: true,
   isRegisterable: true,
+  isInviteOnly: false,
   attendees: [],
   creator: {
     id: 'creator123',
@@ -100,6 +101,8 @@ const mockDefaultProps = {
   setPublicChecked: vi.fn(),
   registrablechecked: true,
   setRegistrableChecked: vi.fn(),
+  inviteOnlyChecked: false,
+  setInviteOnlyChecked: vi.fn(),
   formState: mockFormState,
   setFormState: vi.fn(),
   registerEventHandler: vi.fn(),
@@ -130,10 +133,9 @@ const renderComponent = (props = {}) => {
 
 describe('EventListCardPreviewModal', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
   beforeEach(() => {
-    vi.clearAllMocks();
     (CustomRecurrenceModal as Mock).mockImplementation(() => (
       <div data-testid="mock-custom-recurrence-modal" />
     ));
@@ -316,6 +318,23 @@ describe('EventListCardPreviewModal', () => {
     await userEvent.click(registrableCheckbox);
 
     expect(mockSetRegistrableChecked).toHaveBeenCalledWith(false);
+  });
+
+  test('toggles invite-only checkbox', async () => {
+    const mockSetInviteOnlyChecked = vi.fn();
+    renderComponent({ setInviteOnlyChecked: mockSetInviteOnlyChecked });
+
+    const inviteOnlyCheckbox = screen.getByTestId('updateIsInviteOnly');
+    await userEvent.click(inviteOnlyCheckbox);
+
+    expect(mockSetInviteOnlyChecked).toHaveBeenCalledWith(true);
+  });
+
+  test('displays correct initial invite-only value', () => {
+    renderComponent({ inviteOnlyChecked: true });
+
+    const inviteOnlyCheckbox = screen.getByTestId('updateIsInviteOnly');
+    expect(inviteOnlyCheckbox).toBeChecked();
   });
 
   test('hides time pickers when all-day is checked', () => {

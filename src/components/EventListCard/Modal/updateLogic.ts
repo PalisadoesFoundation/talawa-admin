@@ -7,6 +7,7 @@ import {
 } from 'GraphQl/Mutations/EventMutations';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import type { InterfaceEvent } from 'types/Event/interface';
@@ -26,6 +27,7 @@ interface IEventUpdateInput {
   location?: string;
   isPublic?: boolean;
   isRegisterable?: boolean;
+  isInviteOnly?: boolean;
   allDay?: boolean;
   startAt?: string;
   endAt?: string;
@@ -47,6 +49,7 @@ interface IUpdateEventHandlerProps {
   alldaychecked: boolean;
   publicchecked: boolean;
   registrablechecked: boolean;
+  inviteOnlyChecked: boolean;
   eventStartDate: Date;
   eventEndDate: Date;
   recurrence: InterfaceRecurrenceRule | null;
@@ -76,6 +79,7 @@ export const useUpdateEventHandler = () => {
     alldaychecked,
     publicchecked,
     registrablechecked,
+    inviteOnlyChecked,
     eventStartDate,
     eventEndDate,
     recurrence,
@@ -109,6 +113,9 @@ export const useUpdateEventHandler = () => {
       }
       if (registrablechecked !== eventListCardProps.isRegisterable) {
         updateInput.isRegisterable = registrablechecked;
+      }
+      if (inviteOnlyChecked !== (eventListCardProps.isInviteOnly ?? false)) {
+        updateInput.isInviteOnly = inviteOnlyChecked;
       }
       if (alldaychecked !== eventListCardProps.allDay) {
         updateInput.allDay = alldaychecked;
@@ -193,21 +200,21 @@ export const useUpdateEventHandler = () => {
 
       if (!isRecurringInstance) {
         const result = await updateStandaloneEvent({
-          variables: { input: updateInput },
+          variables: addInviteOnlyVariable({ input: updateInput }),
         });
         data = result.data;
       } else {
         switch (updateOption) {
           case 'single': {
             const singleResult = await updateSingleRecurringEventInstance({
-              variables: { input: updateInput },
+              variables: addInviteOnlyVariable({ input: updateInput }),
             });
             data = singleResult.data;
             break;
           }
           case 'following': {
             const followingResult = await updateThisAndFollowingEvents({
-              variables: { input: updateInput },
+              variables: addInviteOnlyVariable({ input: updateInput }),
             });
             data = followingResult.data;
             break;
@@ -222,8 +229,19 @@ export const useUpdateEventHandler = () => {
             if (formState.eventdescrip !== eventListCardProps.description) {
               entireSeriesInput.description = formState.eventdescrip;
             }
+            if (publicchecked !== eventListCardProps.isPublic) {
+              entireSeriesInput.isPublic = publicchecked;
+            }
+            if (registrablechecked !== eventListCardProps.isRegisterable) {
+              entireSeriesInput.isRegisterable = registrablechecked;
+            }
+            if (
+              inviteOnlyChecked !== (eventListCardProps.isInviteOnly ?? false)
+            ) {
+              entireSeriesInput.isInviteOnly = inviteOnlyChecked;
+            }
             const entireSeriesResult = await updateEntireRecurringEventSeries({
-              variables: { input: entireSeriesInput },
+              variables: addInviteOnlyVariable({ input: entireSeriesInput }),
             });
             data = entireSeriesResult.data;
             break;

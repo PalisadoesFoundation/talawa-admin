@@ -1,7 +1,16 @@
 import gql from 'graphql-tag';
 import 'style/app-fixed.module.css';
+
 //Query List
 // Check Auth
+
+/**
+ * Note on isInviteOnly field:
+ * The isInviteOnly field is conditionally included in event queries using GraphQL's @include directive.
+ * By default, includeInviteOnly defaults to false, ensuring queries work with backends that don't support this field.
+ * To enable the field, pass includeInviteOnly: true in query variables, or use the addInviteOnlyVariable helper
+ * from utils/graphqlVariables.ts which automatically sets it based on REACT_APP_ENABLE_INVITE_ONLY environment variable.
+ */
 
 // Query to get info about current user
 export const CURRENT_USER = gql`
@@ -295,7 +304,7 @@ export const USER_LIST_FOR_ADMIN = gql`
 `;
 
 export const EVENT_DETAILS = gql`
-  query GetEvent($eventId: String!) {
+  query GetEvent($eventId: String!, $includeInviteOnly: Boolean = false) {
     event(input: { id: $eventId }) {
       id
       name
@@ -304,6 +313,7 @@ export const EVENT_DETAILS = gql`
       allDay
       isPublic
       isRegisterable
+      isInviteOnly @include(if: $includeInviteOnly)
       startAt
       endAt
       createdAt
@@ -549,6 +559,7 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
     $startDate: DateTime
     $endDate: DateTime
     $includeRecurring: Boolean
+    $includeInviteOnly: Boolean = false
   ) {
     organization(input: { id: $id }) {
       eventsCount
@@ -570,6 +581,7 @@ export const GET_ORGANIZATION_EVENTS_PG = gql`
             location
             isPublic
             isRegisterable
+            isInviteOnly @include(if: $includeInviteOnly)
             # Recurring event fields
             isRecurringEventTemplate
             baseEvent {
@@ -631,6 +643,7 @@ export const GET_ORGANIZATION_EVENTS_USER_PORTAL_PG = gql`
     $startDate: DateTime
     $endDate: DateTime
     $includeRecurring: Boolean
+    $includeInviteOnly: Boolean = false
   ) {
     organization(input: { id: $id }) {
       events(
@@ -651,6 +664,7 @@ export const GET_ORGANIZATION_EVENTS_USER_PORTAL_PG = gql`
             location
             isPublic
             isRegisterable
+            isInviteOnly @include(if: $includeInviteOnly)
             # Recurring event fields
             isRecurringEventTemplate
             baseEvent {
@@ -973,6 +987,7 @@ export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`
     $location_contains: String
     $first: Int
     $skip: Int
+    $includeInviteOnly: Boolean = false
   ) {
     eventsByOrganizationConnection(
       where: {
@@ -1017,6 +1032,7 @@ export const ORGANIZATION_EVENT_CONNECTION_LIST = gql`
       isRecurringEventException
       isPublic
       isRegisterable
+      isInviteOnly @include(if: $includeInviteOnly)
     }
   }
 `;

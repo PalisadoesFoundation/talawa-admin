@@ -50,6 +50,24 @@
   --sidebar-option-bg: #d2d3d7;
   --sidebar-option-text-active: #000000;
 
+  /* Chart colors */
+  --chart-green: #008000;
+  --chart-blue: #0000ff;
+  --chart-pink: #ff1493;
+  --chart-gold: #ffd700;
+  --chart-blue-solid: rgba(31, 119, 180, 1);
+  --chart-blue-alpha: rgba(31, 119, 180, 0.2);
+  --chart-orange-solid: rgba(255, 127, 14, 1);
+  --chart-orange-alpha: rgba(255, 127, 14, 0.2);
+  --chart-green-solid: rgba(44, 160, 44, 1);
+  --chart-green-alpha: rgba(44, 160, 44, 0.2);
+  --chart-red-solid: rgba(214, 39, 40, 1);
+  --chart-red-alpha: rgba(214, 39, 40, 0.2);
+  --chart-purple-solid: rgba(148, 103, 189, 1);
+  --chart-purple-alpha: rgba(148, 103, 189, 0.2);
+  --chart-brown-solid: rgba(140, 86, 75, 1);
+  --chart-brown-alpha: rgba(140, 86, 75, 0.2);
+
   /* Sidebar widths */
   --sidebar-collapsed-width: 80px;
   --sidebar-expanded-width: 345px;
@@ -357,7 +375,8 @@
   --memberfontbtn-border: #e8e5e5;
   --memberfont-bg: #eaebef;
   --memberfont-color: #fff;
-  --removeMemberCancel-bg: #f8d6dc --loader-size: 10em;
+  --removeMemberCancel-bg: #f8d6dc;
+  --loader-size: 10em;
   --loader-border: #ffffff33;
   --loader-border-left: #febc59;
 
@@ -1658,10 +1677,9 @@ form label,
 }
 
 .errorIcon {
-  transform: scale(1.5);
   color: var(--bs-danger, var(--errorIcon-color));
   margin-bottom: 1rem;
-  font-size: 1.5rem;
+  font-size: 2.5rem;
 
   /* Add error icon for non-color indication */
   &::before {
@@ -10269,4 +10287,23 @@ form {
   font-size: 25px;
   margin-bottom: 2px;
   margin-right: 2px;
+}
+
+.emptyContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+}
+
+.emptyContainerHeight {
+  height: 150px;
+}
+
+.containerBodyNoPadding {
+  padding: 0;
+}
+
+.chartContainer {
+  height: 400px;
 }

@@ -468,6 +468,7 @@
     "recurringEvent": "重复事件",
     "isPublic": "是公开的",
     "isRegistrable": "可注册",
+    "isInviteOnly": "仅限邀请",
     "createEvent": "创建事件",
     "enterFilter": "输入过滤器",
     "enterName": "输入名称",
@@ -659,6 +660,7 @@
     "recurringEvent": "重复事件",
     "isPublic": "是公开的",
     "isRegistrable": "可注册",
+    "isInviteOnly": "仅限邀请",
     "updatePost": "更新帖子",
     "eventDetails": "活动详情",
     "eventDeleted": "活动删除成功。",
@@ -684,7 +686,8 @@
     "close": "关闭",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
     "done": "完成",
-    "createChat": "创建聊天"
+    "createChat": "创建聊天",
+    "showEventDashboard": "显示活动仪表板"
   },
   "funds": {
     "title": "基金",
@@ -879,7 +882,13 @@
     "agendas": "议程",
     "statistics": "统计数据",
     "to": "到",
-    "volunteers": "志愿者"
+    "volunteers": "志愿者",
+    "eventNotFound": "未找到事件",
+    "noOfRegistrations": "注册数量",
+    "noOfAttendees": "出席人数",
+    "averageFeedback": "平均反馈",
+    "location": "位置：",
+    "registrantsLabel": "注册者："
   },
   "forgotPassword": {
     "title": "塔拉瓦 忘记密码",
@@ -1213,7 +1222,11 @@
     "nextPage": "下一页",
     "goToToday": "转到今天",
     "genderDistribution": "性别分布",
-    "ageDistribution": "年龄分布"
+    "ageDistribution": "年龄分布",
+    "errorLoadingEventDetails": "加载事件详情时出错。请稍后再试。",
+    "attendedEventsList": "参加的活动列表",
+    "eventDate": "活动日期",
+    "eventDateWithName": "活动日期：{{name}}"
   },
   "eventRegistrant": {
     "sort": "排序",
@@ -1225,7 +1238,23 @@
     "createdAt": "创建时间",
     "options": "选项",
     "addRegistrant": "添加注册者",
-    "noRegistrantsFound": "未找到注册者"
+    "noRegistrantsFound": "未找到注册者",
+    "cannotUnregisterCheckedIn": "无法取消已签到的用户的注册",
+    "attendeeRemovedSuccessfully": "参与者已成功移除",
+    "errorRemovingAttendee": "删除参与者时出错",
+    "removingAttendee": "正在移除参与者...",
+    "cannotUnregisterCheckedInTitle": "无法取消已签到用户的注册",
+    "unregisterTitle": "取消注册",
+    "checkedIn": "已签到",
+    "unregister": "取消注册"
+  },
+  "memberActivity": {
+    "loadingEventDetails": "正在加载活动详情...",
+    "unableToLoadEventDetails": "无法加载事件详情。请稍后再试。",
+    "eventNotFoundOrDeleted": "未找到事件或已被删除",
+    "numberOfAttendees": "参与人数",
+    "yes": "是",
+    "no": "否"
   },
   "onSpotAttendee": {
     "title": "现场参与者",
@@ -1376,6 +1405,7 @@
     "enterLocation": "输入位置",
     "publicEvent": "是公开的",
     "registerable": "可注册",
+    "isInviteOnly": "仅限邀请",
     "monthlyCalendarView": "月历",
     "yearlyCalendarView": "年历",
     "search": "搜索",
@@ -1473,7 +1503,11 @@
     "demoteToRegular": "降级为普通用户",
     "promoteToAdmin": "提升为管理员",
     "user": "用户",
-    "chatAction": "聊天操作"
+    "chatAction": "聊天操作",
+    "starredMessages": "星标消息",
+    "all": "全部",
+    "unread": "未读",
+    "groups": "小组"
   },
   "userChatRoom": {
     "selectContact": "选择联系人开始对话",
@@ -1585,11 +1619,21 @@
   },
   "checkIn": {
     "errorCheckingIn": "签到错误",
-    "checkedInSuccessfully": "成功签到"
+    "checkedInSuccessfully": "成功签到",
+    "eventCheckInManagement": "活动签到管理",
+    "searchAttendees": "搜索参与者"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "添加与会者时出错",
-    "errorRemovingAttendee": "删除与会者时出错"
+    "errorRemovingAttendee": "删除与会者时出错",
+    "pleaseChooseUser": "请先选择一个要添加的用户！",
+    "eventRegistrants": "活动注册者",
+    "noRegistrationsFound": "未找到注册",
+    "addOnspotRegistration": "添加现场注册",
+    "addRegistrant": "添加注册者",
+    "chooseUserToAdd": "选择要添加的用户",
+    "inviteByEmail": "通过电子邮件邀请",
+    "addRegistrantButton": "添加注册者"
   },
   "userCampaigns": {
     "title": "筹款活动",

@@ -7,10 +7,19 @@ import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { formatDate } from 'utils/dateFormatter';
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 import { MOCKEVENT, MOCKDETAIL } from '../EventAttendanceMocks';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
+
+vi.mock('utils/featureFlags', () => ({
+  isInviteOnlyEnabled: vi.fn(() => false),
+}));
 
 describe('Testing AttendedEventList', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   const props = {
     id: 'event123',
   };
@@ -40,7 +49,7 @@ describe('Testing AttendedEventList', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event123' },
+          variables: addInviteOnlyVariable({ eventId: 'event123' }),
         },
         error: new Error('An error occurred'),
       },
@@ -86,7 +95,7 @@ describe('Testing AttendedEventList', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event123' },
+          variables: addInviteOnlyVariable({ eventId: 'event123' }),
         },
         result: {
           data: {
@@ -124,7 +133,7 @@ describe('Testing AttendedEventList', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event123' },
+          variables: addInviteOnlyVariable({ eventId: 'event123' }),
         },
         result: {
           data: {

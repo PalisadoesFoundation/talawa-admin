@@ -10,7 +10,7 @@ import { REMOVE_EVENT_ATTENDEE } from 'GraphQl/Mutations/mutations';
 export const EVENT_DETAILS_MOCK: MockedResponse = {
   request: {
     query: EVENT_DETAILS,
-    variables: { eventId: 'event123' },
+    variables: { eventId: 'event123', includeInviteOnly: false },
   },
   result: {
     data: {
@@ -26,7 +26,7 @@ export const EVENT_DETAILS_MOCK: MockedResponse = {
 export const RECURRING_EVENT_DETAILS_MOCK: MockedResponse = {
   request: {
     query: EVENT_DETAILS,
-    variables: { eventId: 'event123' },
+    variables: { eventId: 'event123', includeInviteOnly: false },
   },
   result: {
     data: {

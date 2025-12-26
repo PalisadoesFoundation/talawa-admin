@@ -39,7 +39,16 @@ export class ActionItemPage {
   }
 
   selectFirstEvent() {
-    cy.get(this.eventCard).first().should('be.visible').click();
+    cy.get(this.eventCard)
+      .first()
+      .should('be.visible')
+      .scrollIntoView()
+      .click();
+    // Wait for event modal/preview to fully load (including invite-only toggle if present)
+    cy.get(
+      '[data-testid="updateIsInviteOnly"], [data-testid="showEventDashboardBtn"]',
+      { timeout: 10000 },
+    ).should('exist');
     return this;
   }
 
@@ -81,7 +90,7 @@ export class ActionItemPage {
     cy.get('ul[role="listbox"] li').contains(category).click();
     cy.get(this.volunteerSelect).should('be.visible').click();
     cy.get('ul[role="listbox"] li').first().click();
-    cy.get(this.submitBtn).should('be.visible').click();
+    cy.get(this.submitBtn).should('be.visible').scrollIntoView().click();
     cy.assertToast('Action Item created successfully');
     return this;
   }
@@ -109,7 +118,10 @@ export class ActionItemPage {
   markFirstActionItemAsComplete(completionNotes: string) {
     cy.get(this.statusCheckbox).first().click();
     cy.get(this.postCompletionNotes).type(completionNotes);
-    cy.get(this.completionBtnSeries).should('be.visible').click();
+    cy.get(this.completionBtnSeries)
+      .should('be.visible')
+      .scrollIntoView()
+      .click();
     cy.assertToast('Completed');
     return this;
   }

@@ -30,9 +30,21 @@ Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mock
 
 > **id**: `string` = `'eventId1'`
 
+### isInviteOnly
+
+> **isInviteOnly**: `boolean` = `false`
+
+### isPublic
+
+> **isPublic**: `boolean` = `true`
+
 ### isRecurringEventTemplate
 
 > **isRecurringEventTemplate**: `boolean` = `true`
+
+### isRegisterable
+
+> **isRegisterable**: `boolean` = `true`
 
 ### location
 

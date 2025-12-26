@@ -3,6 +3,7 @@ import {
   GET_ORGANIZATION_EVENTS_PG,
   GET_ORGANIZATION_DATA_PG,
 } from 'GraphQl/Queries/Queries';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -30,7 +31,13 @@ function buildOrgVariables() {
   };
 }
 
-function buildCreateEventVariables() {
+function buildCreateEventVariables(
+  overrides?: Partial<{
+    isPublic: boolean;
+    isRegisterable: boolean;
+    isInviteOnly: boolean;
+  }>,
+) {
   const parsedStartDate = dayjs('03/28/2022', 'MM/DD/YYYY');
   const parsedEndDate = dayjs('03/30/2022', 'MM/DD/YYYY');
   const startDateObj = parsedStartDate.toDate();
@@ -47,8 +54,9 @@ function buildCreateEventVariables() {
       organizationId: '',
       allDay: true,
       location: 'New Delhi',
-      isPublic: false,
-      isRegisterable: true,
+      isPublic: overrides?.isPublic ?? false,
+      isRegisterable: overrides?.isRegisterable ?? true,
+      isInviteOnly: overrides?.isInviteOnly ?? false,
       recurrence: undefined,
     },
   };
@@ -59,7 +67,7 @@ export const MOCKS = [
   {
     request: {
       query: GET_ORGANIZATION_EVENTS_PG,
-      variables: buildEventsVariables(),
+      variables: addInviteOnlyVariable(buildEventsVariables()),
     },
     result: {
       data: {
@@ -78,6 +86,7 @@ export const MOCKS = [
                   location: null,
                   isPublic: true,
                   isRegisterable: true,
+                  isInviteOnly: false,
                   isRecurringEventTemplate: false,
                   baseEvent: null,
                   sequenceNumber: null,
@@ -105,6 +114,7 @@ export const MOCKS = [
                   location: 'Conference Room A',
                   isPublic: false,
                   isRegisterable: false,
+                  isInviteOnly: false,
                   isRecurringEventTemplate: false,
                   baseEvent: null,
                   sequenceNumber: null,
@@ -132,6 +142,7 @@ export const MOCKS = [
                   location: 'Meeting Room B',
                   isPublic: true,
                   isRegisterable: true,
+                  isInviteOnly: false,
                   isRecurringEventTemplate: false,
                   baseEvent: null,
                   sequenceNumber: null,
@@ -145,6 +156,34 @@ export const MOCKS = [
                   organization: { id: '1', name: 'Test Organization' },
                   createdAt: '2030-03-30T00:00:00.000Z',
                   updatedAt: '2030-03-30T00:00:00.000Z',
+                },
+              },
+              {
+                cursor: 'cursor4',
+                node: {
+                  id: '4',
+                  name: 'Invite Only Event',
+                  description: 'This event is invite-only',
+                  startAt: '2030-03-31T14:00:00.000Z',
+                  endAt: '2030-03-31T16:00:00.000Z',
+                  allDay: false,
+                  location: 'Private Venue',
+                  isPublic: false,
+                  isRegisterable: false,
+                  isInviteOnly: true,
+                  isRecurringEventTemplate: false,
+                  baseEvent: null,
+                  sequenceNumber: null,
+                  totalCount: null,
+                  hasExceptions: false,
+                  progressLabel: null,
+                  recurrenceDescription: null,
+                  recurrenceRule: null,
+                  attachments: [],
+                  creator: { id: '4', name: 'Fourth Creator' },
+                  organization: { id: '1', name: 'Test Organization' },
+                  createdAt: '2030-03-31T00:00:00.000Z',
+                  updatedAt: '2030-03-31T00:00:00.000Z',
                 },
               },
             ],
@@ -172,7 +211,10 @@ export const MOCKS = [
   {
     request: {
       query: CREATE_EVENT_MUTATION,
-      variables: buildCreateEventVariables(),
+      variables: {
+        ...buildCreateEventVariables(),
+        includeInviteOnly: false, // Match addInviteOnlyVariable helper output
+      },
     },
     result: {
       data: {
@@ -186,6 +228,50 @@ export const MOCKS = [
           location: 'New Delhi',
           isPublic: false,
           isRegisterable: true,
+          isInviteOnly: false,
+          createdAt: '2030-03-28T00:00:00.000Z',
+          updatedAt: '2030-03-28T00:00:00.000Z',
+          isRecurringTemplate: false,
+          recurringEventId: null,
+          instanceStartTime: null,
+          isMaterialized: false,
+          baseEventId: null,
+          hasExceptions: false,
+          sequenceNumber: 1,
+          totalCount: 1,
+          progressLabel: 'Event 1 of 1',
+          creator: { id: '1', name: 'Admin User' },
+          updater: { id: '1', name: 'Admin User' },
+          organization: { id: '1', name: 'Test Organization' },
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_EVENT_MUTATION,
+      variables: {
+        ...buildCreateEventVariables({
+          isPublic: false,
+          isRegisterable: true,
+          isInviteOnly: true,
+        }),
+        includeInviteOnly: true, // Match addInviteOnlyVariable helper output when isInviteOnly is true
+      },
+    },
+    result: {
+      data: {
+        createEvent: {
+          id: '1',
+          name: 'Dummy Org',
+          description: 'This is a dummy organization',
+          startAt: '2030-03-28T00:00:00.000Z',
+          endAt: '2030-03-30T23:59:59.999Z',
+          allDay: true,
+          location: 'New Delhi',
+          isPublic: false,
+          isRegisterable: true,
+          isInviteOnly: true,
           createdAt: '2030-03-28T00:00:00.000Z',
           updatedAt: '2030-03-28T00:00:00.000Z',
           isRecurringTemplate: false,

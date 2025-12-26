@@ -6,7 +6,7 @@
 
 > `const` **event2**: `object`
 
-Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts#L50)
+Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mockEvents.ts#L53)
 
 ## Type Declaration
 
@@ -30,9 +30,21 @@ Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mock
 
 > **id**: `string` = `'eventId2'`
 
+### isInviteOnly
+
+> **isInviteOnly**: `boolean` = `false`
+
+### isPublic
+
+> **isPublic**: `boolean` = `true`
+
 ### isRecurringEventTemplate
 
 > **isRecurringEventTemplate**: `boolean` = `false`
+
+### isRegisterable
+
+> **isRegisterable**: `boolean` = `true`
 
 ### location
 

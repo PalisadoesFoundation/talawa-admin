@@ -27,6 +27,7 @@ export type Event = {
   endDate?: Date; //Optional
   endTime?: string; //Optional
   feedback: Feedback[];
+  isInviteOnly?: boolean;
   isPublic: boolean;
   isRegisterable: boolean;
   latitude?: number; //Optional
@@ -62,6 +63,7 @@ export type EventInput = {
   description: string;
   endDate?: Date; //Optional
   endTime?: string; //Optional
+  isInviteOnly?: boolean;
   isPublic: boolean;
   isRegisterable: boolean;
   latitude?: number; //Optional

@@ -204,6 +204,14 @@ export default function chat(): JSX.Element {
         setSelectedContact(stored);
         return;
       }
+      // Stored ID is stale, fall back to first chat and persist it
+      const firstChat = chats[0];
+      const firstChatId = isNewChatType(firstChat)
+        ? firstChat.id
+        : firstChat._id;
+      setSelectedContact(firstChatId);
+      setItem('selectedChatId', firstChatId);
+      return;
     }
     if (!selectedContact) {
       const firstChat = chats[0];
@@ -212,7 +220,7 @@ export default function chat(): JSX.Element {
         : firstChat._id;
       setSelectedContact(firstChatId);
     }
-  }, [chats, selectedContact, getItem]);
+  }, [chats, selectedContact, getItem, setItem]);
 
   React.useEffect(() => {
     if (selectedContact) {
@@ -229,7 +237,7 @@ export default function chat(): JSX.Element {
               className={`d-flex justify-content-between ${styles.addChatContainer}`}
             >
               <h4>{t('messages')}</h4>
-              <Dropdown style={{ cursor: 'pointer' }}>
+              <Dropdown className={styles.dropdownToggle}>
                 <Dropdown.Toggle
                   className={styles.customToggle}
                   data-testid={'dropdown'}
@@ -250,7 +258,7 @@ export default function chat(): JSX.Element {
                     {t('newGroupChat')}
                   </Dropdown.Item>
                   <Dropdown.Item href="#/action-3">
-                    Starred Messages
+                    {t('starredMessages')}
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
@@ -278,7 +286,7 @@ export default function chat(): JSX.Element {
                         .filter(Boolean)
                         .join(' ')}
                     >
-                      All
+                      {t('all')}
                     </Button>
                     <Button
                       data-testid="unreadChat"
@@ -292,7 +300,7 @@ export default function chat(): JSX.Element {
                         .filter(Boolean)
                         .join(' ')}
                     >
-                      Unread
+                      {t('unread')}
                     </Button>
                     <Button
                       onClick={() => {
@@ -306,18 +314,13 @@ export default function chat(): JSX.Element {
                         .filter(Boolean)
                         .join(' ')}
                     >
-                      Groups
+                      {t('groups')}
                     </Button>
                   </div>
 
                   <div
                     data-testid="contactCardContainer"
-                    className={styles.contactCardContainer}
-                    style={{
-                      maxHeight: 'calc(100vh - 200px)',
-                      overflowY: 'auto',
-                      flex: 1,
-                    }}
+                    className={`${styles.contactCardContainer} ${styles.contactCardContainerScrollable}`}
                   >
                     {!!chats.length &&
                       chats.map((chat: GroupChat | NewChatType) => {

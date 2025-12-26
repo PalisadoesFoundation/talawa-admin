@@ -7,6 +7,7 @@ import {
   GET_ORGANIZATION_BLOCKED_USERS_COUNT,
   GET_ORGANIZATION_VENUES_COUNT,
 } from 'GraphQl/Queries/Queries';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 
 export const MOCKS = [
   {
@@ -51,7 +52,7 @@ export const MOCKS = [
   {
     request: {
       query: GET_ORGANIZATION_EVENTS_PG,
-      variables: { id: 'orgId', first: 8, after: null },
+      variables: addInviteOnlyVariable({ id: 'orgId', first: 8, after: null }),
     },
     maxUsageCount: 5,
     result: {
@@ -274,7 +275,7 @@ export const EMPTY_MOCKS = [
   {
     request: {
       query: GET_ORGANIZATION_EVENTS_PG,
-      variables: { id: 'orgId', first: 8, after: null },
+      variables: addInviteOnlyVariable({ id: 'orgId', first: 8, after: null }),
     },
     maxUsageCount: 5,
     result: {
@@ -396,7 +397,7 @@ export const ERROR_MOCKS = [
   {
     request: {
       query: GET_ORGANIZATION_EVENTS_PG,
-      variables: { id: 'orgId', first: 8, after: null },
+      variables: addInviteOnlyVariable({ id: 'orgId', first: 8, after: null }),
     },
     error: new Error('Mock GraphQL GET_ORGANIZATION_EVENTS_PG Error'),
   },

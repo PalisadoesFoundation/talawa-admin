@@ -35,10 +35,12 @@ import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from 'style/app-fixed.module.css';
+import componentStyles from './OrganizationScreen.module.css';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useQuery } from '@apollo/client';
 import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 
 const OrganizationScreen = (): JSX.Element => {
   const { getItem, setItem } = useLocalStorage();
@@ -70,11 +72,11 @@ const OrganizationScreen = (): JSX.Element => {
   const dispatch = useAppDispatch();
 
   const { data: eventsData } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
-    variables: {
+    variables: addInviteOnlyVariable({
       id: orgId ?? '',
       first: EVENTS_PAGE_SIZE,
       after: null,
-    },
+    }),
     skip: !shouldFetchEventName,
   });
 
@@ -146,8 +148,8 @@ const OrganizationScreen = (): JSX.Element => {
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
-          <div className={styles.flexContainerColumn}>
-            <h1 className={styles.titleMargin}>{t('title')}</h1>
+          <div className={componentStyles.flexOne}>
+            <h1>{t('title')}</h1>
             {eventName && <h4 className="">{eventName}</h4>}
           </div>
         </div>

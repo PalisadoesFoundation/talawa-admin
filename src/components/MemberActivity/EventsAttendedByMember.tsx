@@ -25,8 +25,10 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
 import { EVENT_DETAILS_BASIC } from 'GraphQl/Queries/Queries';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 import EventAttendedCard from './Card/EventsAttendedCardItem';
 import { Spinner } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceEventsAttendedByMember {
   eventsId: string;
@@ -35,25 +37,26 @@ interface InterfaceEventsAttendedByMember {
 function EventsAttendedByMember({
   eventsId,
 }: InterfaceEventsAttendedByMember): JSX.Element {
+  const { t } = useTranslation('translation', { keyPrefix: 'memberActivity' });
   const {
     data: events,
     loading,
     error,
   } = useQuery(EVENT_DETAILS_BASIC, {
-    variables: { eventId: eventsId },
+    variables: addInviteOnlyVariable({ eventId: eventsId }),
   });
 
   if (loading)
     return (
       <div data-testid="loading" className="loading-state">
         <Spinner />
-        <p>Loading event details...</p>
+        <p>{t('loadingEventDetails')}</p>
       </div>
     );
   if (error)
     return (
       <div data-testid="error" className="error-state">
-        <p>Unable to load event details. Please try again later.</p>
+        <p>{t('unableToLoadEventDetails')}</p>
       </div>
     );
 

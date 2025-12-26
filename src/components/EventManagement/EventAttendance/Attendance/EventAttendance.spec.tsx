@@ -28,6 +28,11 @@ vi.mock('react-chartjs-2', async () => ({
   Bar: () => null,
 }));
 
+vi.mock('react-router', async () => ({
+  ...(await vi.importActual('react-router')),
+  useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
+}));
+
 const renderEventAttendance = (): RenderResult => {
   return render(
     <MockedProvider mocks={MOCKS}>
@@ -54,12 +59,17 @@ const renderEventAttendanceWithSpy = (): RenderResult => {
   );
 };
 
+let useLazyQuerySpy: { mockRestore: () => void } | null = null;
+
 function mockLazyQuery(returned: {
   data?: unknown;
   loading?: boolean;
   error?: ApolloError | null;
 }) {
-  vi.spyOn(ApolloClientModule, 'useLazyQuery').mockReturnValue([
+  // Restore previous spy if exists
+  useLazyQuerySpy?.mockRestore();
+
+  const spy = vi.spyOn(ApolloClientModule, 'useLazyQuery').mockReturnValue([
     () => {},
     {
       data: returned.data,
@@ -71,18 +81,14 @@ function mockLazyQuery(returned: {
       refetch: vi.fn(),
     },
   ] as unknown as ReturnType<typeof useLazyQuery>);
+  useLazyQuerySpy = spy as { mockRestore: () => void };
 }
 
 describe('Event Attendance Component', () => {
-  beforeEach(() => {
-    vi.mock('react-router', async () => ({
-      ...(await vi.importActual('react-router')),
-      useParams: () => ({ eventId: 'event123', orgId: 'org123' }),
-    }));
-  });
-
   afterEach(() => {
-    vi.restoreAllMocks();
+    useLazyQuerySpy?.mockRestore();
+    useLazyQuerySpy = null;
+    vi.clearAllMocks();
     cleanup();
   });
 
@@ -305,7 +311,10 @@ describe('Event Attendance Component', () => {
     mockLazyQuery({
       loading: false,
       data: undefined,
-      error: new ApolloError({ errorMessage: 'Network Error' }),
+      error: new ApolloError({
+        graphQLErrors: [],
+        networkError: new Error('Network Error'),
+      }),
     });
 
     renderEventAttendanceWithSpy();

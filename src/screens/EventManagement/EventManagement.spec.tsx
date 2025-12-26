@@ -22,6 +22,10 @@ vi.mock('@mui/icons-material', () => ({
   Group: vi.fn(() => null),
 }));
 
+vi.mock('utils/featureFlags', () => ({
+  isInviteOnlyEnabled: vi.fn(() => false),
+}));
+
 const MOCKS_WITH_FIXED_TIME = JSON.parse(JSON.stringify(MOCKS_WITH_TIME));
 MOCKS_WITH_FIXED_TIME[0].result.data.event.startTime =
   MOCKS_WITH_TIME[0].result.data.event.startAt;

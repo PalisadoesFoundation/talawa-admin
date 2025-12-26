@@ -2,30 +2,38 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { BrowserRouter } from 'react-router';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
 import { CustomTableCell } from './customTableCell';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { vi } from 'vitest';
 import { mocks } from '../../MemberActivityMocks';
+import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),
   },
 }));
+vi.mock('utils/featureFlags', () => ({
+  isInviteOnlyEnabled: vi.fn(() => false),
+}));
 
 describe('CustomTableCell', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
   it('renders event details correctly', async () => {
     render(
       <MockedProvider mocks={mocks}>
         <BrowserRouter>
-          <table>
-            <tbody>
-              <CustomTableCell eventId="event123" />
-            </tbody>
-          </table>
+          <I18nextProvider i18n={i18nForTest}>
+            <table>
+              <tbody>
+                <CustomTableCell eventId="event123" />
+              </tbody>
+            </table>
+          </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -43,7 +51,9 @@ describe('CustomTableCell', () => {
         }),
       ),
     ).toBeInTheDocument();
-    expect(screen.getByText('Yes')).toBeInTheDocument();
+    expect(
+      screen.getByText(i18nForTest.t('memberActivity.yes')),
+    ).toBeInTheDocument();
     expect(screen.getByText('2')).toBeInTheDocument();
 
     const link = screen.getByRole('link', { name: 'Test Event' });
@@ -53,11 +63,13 @@ describe('CustomTableCell', () => {
   it('displays loading state', () => {
     render(
       <MockedProvider mocks={[]}>
-        <table>
-          <tbody>
-            <CustomTableCell eventId="event123" />
-          </tbody>
-        </table>
+        <I18nextProvider i18n={i18nForTest}>
+          <table>
+            <tbody>
+              <CustomTableCell eventId="event123" />
+            </tbody>
+          </table>
+        </I18nextProvider>
       </MockedProvider>,
     );
 
@@ -69,7 +81,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event999' },
+          variables: addInviteOnlyVariable({ eventId: 'event123' }),
         },
         error: new Error('An error occurred'),
       },
@@ -77,18 +89,20 @@ describe('CustomTableCell', () => {
 
     render(
       <MockedProvider mocks={errorMock}>
-        <table>
-          <tbody>
-            <CustomTableCell eventId="event123" />
-          </tbody>
-        </table>
+        <I18nextProvider i18n={i18nForTest}>
+          <table>
+            <tbody>
+              <CustomTableCell eventId="event123" />
+            </tbody>
+          </table>
+        </I18nextProvider>
       </MockedProvider>,
     );
 
     await waitFor(() => {
       expect(
         screen.getByText(
-          'Unable to load event details. Please try again later.',
+          i18nForTest.t('memberActivity.unableToLoadEventDetails'),
         ),
       ).toBeInTheDocument();
     });
@@ -99,7 +113,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event123' },
+          variables: addInviteOnlyVariable({ eventId: 'event123' }),
         },
         result: {
           data: {
@@ -110,7 +124,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event999' },
+          variables: addInviteOnlyVariable({ eventId: 'event999' }),
         },
         result: {
           data: {
@@ -123,18 +137,22 @@ describe('CustomTableCell', () => {
     render(
       <MockedProvider mocks={noEventMock}>
         <BrowserRouter>
-          <table>
-            <tbody>
-              <CustomTableCell eventId="event999" />
-            </tbody>
-          </table>
+          <I18nextProvider i18n={i18nForTest}>
+            <table>
+              <tbody>
+                <CustomTableCell eventId="event999" />
+              </tbody>
+            </table>
+          </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
     );
 
     await waitFor(() => {
       expect(
-        screen.getByText('Event not found or has been deleted'),
+        screen.getByText(
+          i18nForTest.t('memberActivity.eventNotFoundOrDeleted'),
+        ),
       ).toBeInTheDocument();
     });
   });
@@ -144,7 +162,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event456' },
+          variables: addInviteOnlyVariable({ eventId: 'event456' }),
         },
         result: {
           data: {
@@ -168,11 +186,13 @@ describe('CustomTableCell', () => {
     render(
       <MockedProvider mocks={nonRecurringEventMock}>
         <BrowserRouter>
-          <table>
-            <tbody>
-              <CustomTableCell eventId="event456" />
-            </tbody>
-          </table>
+          <I18nextProvider i18n={i18nForTest}>
+            <table>
+              <tbody>
+                <CustomTableCell eventId="event456" />
+              </tbody>
+            </table>
+          </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -180,7 +200,9 @@ describe('CustomTableCell', () => {
     await waitFor(() => screen.getByTestId('custom-row'));
 
     expect(screen.getByText('Non-Recurring Event')).toBeInTheDocument();
-    expect(screen.getByText('No')).toBeInTheDocument();
+    expect(
+      screen.getByText(i18nForTest.t('memberActivity.no')),
+    ).toBeInTheDocument();
     expect(screen.getByText('3')).toBeInTheDocument();
 
     const link = screen.getByRole('link', { name: 'Non-Recurring Event' });
@@ -192,7 +214,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event789' },
+          variables: addInviteOnlyVariable({ eventId: 'event789' }),
         },
         result: {
           data: {
@@ -212,11 +234,13 @@ describe('CustomTableCell', () => {
     render(
       <MockedProvider mocks={noAttendeesMock}>
         <BrowserRouter>
-          <table>
-            <tbody>
-              <CustomTableCell eventId="event789" />
-            </tbody>
-          </table>
+          <I18nextProvider i18n={i18nForTest}>
+            <table>
+              <tbody>
+                <CustomTableCell eventId="event789" />
+              </tbody>
+            </table>
+          </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -224,7 +248,9 @@ describe('CustomTableCell', () => {
     await waitFor(() => screen.getByTestId('custom-row'));
 
     expect(screen.getByText('Event with No Attendees')).toBeInTheDocument();
-    expect(screen.getByText('Yes')).toBeInTheDocument();
+    expect(
+      screen.getByText(i18nForTest.t('memberActivity.yes')),
+    ).toBeInTheDocument();
     expect(screen.getByText('0')).toBeInTheDocument();
   });
 
@@ -233,7 +259,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event000' },
+          variables: addInviteOnlyVariable({ eventId: 'event000' }),
         },
         result: {
           data: {
@@ -253,11 +279,13 @@ describe('CustomTableCell', () => {
     render(
       <MockedProvider mocks={emptyAttendeesMock}>
         <BrowserRouter>
-          <table>
-            <tbody>
-              <CustomTableCell eventId="event000" />
-            </tbody>
-          </table>
+          <I18nextProvider i18n={i18nForTest}>
+            <table>
+              <tbody>
+                <CustomTableCell eventId="event000" />
+              </tbody>
+            </table>
+          </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -265,7 +293,9 @@ describe('CustomTableCell', () => {
     await waitFor(() => screen.getByTestId('custom-row'));
 
     expect(screen.getByText('Event with Empty Attendees')).toBeInTheDocument();
-    expect(screen.getByText('No')).toBeInTheDocument();
+    expect(
+      screen.getByText(i18nForTest.t('memberActivity.no')),
+    ).toBeInTheDocument();
     expect(screen.getByText('0')).toBeInTheDocument();
   });
 
@@ -274,7 +304,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event111' },
+          variables: addInviteOnlyVariable({ eventId: 'event111' }),
         },
         result: {
           data: {
@@ -294,11 +324,13 @@ describe('CustomTableCell', () => {
     render(
       <MockedProvider mocks={undefinedAttendeesMock}>
         <BrowserRouter>
-          <table>
-            <tbody>
-              <CustomTableCell eventId="event111" />
-            </tbody>
-          </table>
+          <I18nextProvider i18n={i18nForTest}>
+            <table>
+              <tbody>
+                <CustomTableCell eventId="event111" />
+              </tbody>
+            </table>
+          </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
     );
@@ -308,7 +340,9 @@ describe('CustomTableCell', () => {
     expect(
       screen.getByText('Event with Undefined Attendees'),
     ).toBeInTheDocument();
-    expect(screen.getByText('Yes')).toBeInTheDocument();
+    expect(
+      screen.getByText(i18nForTest.t('memberActivity.yes')),
+    ).toBeInTheDocument();
     expect(screen.getByText('0')).toBeInTheDocument();
   });
 
@@ -317,7 +351,7 @@ describe('CustomTableCell', () => {
       {
         request: {
           query: EVENT_DETAILS,
-          variables: { eventId: 'event222' },
+          variables: addInviteOnlyVariable({ eventId: 'event222' }),
         },
         result: {
           data: {
@@ -337,11 +371,13 @@ describe('CustomTableCell', () => {
     render(
       <MockedProvider mocks={dateTestMock}>
         <BrowserRouter>
-          <table>
-            <tbody>
-              <CustomTableCell eventId="event222" />
-            </tbody>
-          </table>
+          <I18nextProvider i18n={i18nForTest}>
+            <table>
+              <tbody>
+                <CustomTableCell eventId="event222" />
+              </tbody>
+            </table>
+          </I18nextProvider>
         </BrowserRouter>
       </MockedProvider>,
     );

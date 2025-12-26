@@ -465,6 +465,7 @@
     "recurringEvent": "Recurring Event",
     "isPublic": "Is Public",
     "isRegistrable": "Is Registrable",
+    "isInviteOnly": "Invite Only",
     "createChat": "Create Chat",
     "createEvent": "Create Event",
     "enterFilter": "Enter Filter",
@@ -657,6 +658,7 @@
     "recurringEvent": "Recurring Event",
     "isPublic": "Is Public",
     "isRegistrable": "Is Registrable",
+    "isInviteOnly": "Invite Only",
     "createChat": "Create Chat",
     "updatePost": "Update Post",
     "eventDetails": "Event Details",
@@ -684,7 +686,8 @@
     "registerEvent": "registerEvent",
     "close": "close",
     "talawaApiUnavailable": "talawaApiUnavailable",
-    "done": "done"
+    "done": "done",
+    "showEventDashboard": "Show Event Dashboard"
   },
   "funds": {
     "title": "Funds",
@@ -880,7 +883,13 @@
     "agendas": "Agendas",
     "statistics": "Statistics",
     "to": "TO",
-    "volunteers": "Volunteers"
+    "volunteers": "Volunteers",
+    "eventNotFound": "Event not found",
+    "noOfRegistrations": "No of Registrations",
+    "noOfAttendees": "No of Attendees",
+    "averageFeedback": "Average Feedback",
+    "location": "Location:",
+    "registrantsLabel": "Registrants:"
   },
   "eventAttendance": {
     "historical_statistics": "Historical Statistics",
@@ -903,7 +912,11 @@
     "nextPage": "Next Page",
     "goToToday": "Go to today",
     "genderDistribution": "Gender Distribution",
-    "ageDistribution": "Age Distribution"
+    "ageDistribution": "Age Distribution",
+    "errorLoadingEventDetails": "Error loading event details. Please try again later.",
+    "attendedEventsList": "Attended events list",
+    "eventDate": "Event Date",
+    "eventDateWithName": "Event date: {{name}}"
   },
   "eventRegistrant": {
     "sort": "Sort",
@@ -915,7 +928,23 @@
     "createdAt": "Created At",
     "options": "Options",
     "addRegistrant": "Add Registrant",
-    "noRegistrantsFound": "No Registrants Found."
+    "noRegistrantsFound": "No Registrants Found.",
+    "cannotUnregisterCheckedIn": "Cannot unregister a user who has already checked in",
+    "attendeeRemovedSuccessfully": "Attendee removed successfully",
+    "errorRemovingAttendee": "Error removing attendee",
+    "removingAttendee": "Removing the attendee...",
+    "cannotUnregisterCheckedInTitle": "Cannot unregister checked-in user",
+    "unregisterTitle": "Unregister",
+    "checkedIn": "Checked In",
+    "unregister": "Unregister"
+  },
+  "memberActivity": {
+    "loadingEventDetails": "Loading event details...",
+    "unableToLoadEventDetails": "Unable to load event details. Please try again later.",
+    "eventNotFoundOrDeleted": "Event not found or has been deleted",
+    "numberOfAttendees": "Number of attendees",
+    "yes": "Yes",
+    "no": "No"
   },
   "onSpotAttendee": {
     "title": "On-spot Attendee",
@@ -1374,6 +1403,7 @@
     "enterDescription": "Enter Description",
     "publicEvent": "Is Public",
     "registerable": "Is Registerable",
+    "isInviteOnly": "Invite Only",
     "createChat": "Create Chat",
     "monthlyCalendarView": "Monthly Calendar",
     "yearlyCalendarView": "Yearly Calender",
@@ -1474,7 +1504,11 @@
     "demoteToRegular": "Demote to Regular",
     "promoteToAdmin": "Promote to Admin",
     "user": "User",
-    "chatAction": "Chat action"
+    "chatAction": "Chat action",
+    "starredMessages": "Starred Messages",
+    "all": "All",
+    "unread": "Unread",
+    "groups": "Groups"
   },
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",
@@ -1586,11 +1620,21 @@
   },
   "checkIn": {
     "errorCheckingIn": "Error checking in",
-    "checkedInSuccessfully": "Checked in successfully"
+    "checkedInSuccessfully": "Checked in successfully",
+    "eventCheckInManagement": "Event Check In Management",
+    "searchAttendees": "Search Attendees"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error adding attendee",
-    "errorRemovingAttendee": "Error removing attendee"
+    "errorRemovingAttendee": "Error removing attendee",
+    "pleaseChooseUser": "Please choose an user to add first!",
+    "eventRegistrants": "Event Registrants",
+    "noRegistrationsFound": "No Registrations found",
+    "addOnspotRegistration": "Add Onspot Registration",
+    "addRegistrant": "Add an Registrant",
+    "chooseUserToAdd": "Choose the user that you want to add",
+    "inviteByEmail": "Invite by Email",
+    "addRegistrantButton": "Add Registrant"
   },
   "userCampaigns": {
     "title": "Fundraising Campaigns",

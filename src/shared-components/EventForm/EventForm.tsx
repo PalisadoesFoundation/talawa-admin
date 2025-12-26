@@ -6,9 +6,8 @@
  */
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Button, Dropdown, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import type {
   IEventFormProps,
@@ -18,89 +17,14 @@ import type {
 import CustomRecurrenceModal from '../Recurrence/CustomRecurrenceModal';
 import {
   Frequency,
-  WeekDays,
   createDefaultRecurrenceRule,
   formatRecurrenceForApi,
   validateRecurrenceInput,
 } from 'utils/recurrenceUtils';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
-
-// Extend dayjs with utc plugin
-dayjs.extend(utc);
-
-const timeToDayJs = (time: string) => {
-  const [hours, minutes, seconds] = time.split(':').map(Number);
-  return dayjs()
-    .hour(hours)
-    .minute(minutes)
-    .second(seconds || 0);
-};
-
-const buildRecurrenceOptions = (
-  startDate: Date,
-  t: (key: string, options?: Record<string, unknown>) => string,
-): Array<{
-  label: string;
-  value: InterfaceRecurrenceRule | 'custom' | null;
-}> => {
-  const eventDate = new Date(startDate);
-  const isValidDate = !Number.isNaN(eventDate.getTime());
-  const safeDate = isValidDate ? eventDate : new Date();
-
-  const dayOfWeek = safeDate.getDay();
-  const dayOfMonth = safeDate.getDate();
-  const month = safeDate.getMonth();
-
-  const locale = navigator.language || 'en-US';
-  const dayName = new Intl.DateTimeFormat(locale, {
-    weekday: 'long',
-  }).format(new Date(2024, 0, 7 + dayOfWeek));
-  const monthName = new Intl.DateTimeFormat(locale, {
-    month: 'long',
-  }).format(new Date(2024, month, 1));
-
-  return [
-    {
-      label: t('doesNotRepeat'),
-      value: null,
-    },
-    {
-      label: t('daily'),
-      value: createDefaultRecurrenceRule(safeDate, Frequency.DAILY),
-    },
-    {
-      label: t('weeklyOn', { day: dayName }),
-      value: createDefaultRecurrenceRule(safeDate, Frequency.WEEKLY),
-    },
-    {
-      label: t('monthlyOnDay', { day: dayOfMonth }),
-      value: createDefaultRecurrenceRule(safeDate, Frequency.MONTHLY),
-    },
-    {
-      label: t('annuallyOn', { month: monthName, day: dayOfMonth }),
-      value: {
-        frequency: Frequency.YEARLY,
-        interval: 1,
-        byMonth: [month + 1],
-        byMonthDay: [dayOfMonth],
-        never: true,
-      },
-    },
-    {
-      label: t('everyWeekday'),
-      value: {
-        frequency: Frequency.WEEKLY,
-        interval: 1,
-        byDay: ['MO', 'TU', 'WE', 'TH', 'FR'] as WeekDays[],
-        never: true,
-      },
-    },
-    {
-      label: t('custom'),
-      value: 'custom',
-    },
-  ];
-};
+import { buildRecurrenceOptions, timeToDayJs } from './utils';
+import { useEventFormHandlers } from './useEventFormHandlers';
+import { RecurrenceSection } from './RecurrenceSection';
 
 const EventForm: React.FC<IEventFormProps> = ({
   initialValues,
@@ -112,6 +36,7 @@ const EventForm: React.FC<IEventFormProps> = ({
   showCreateChat = false,
   showRegisterable = true,
   showPublicToggle = true,
+  showInviteOnlyToggle = false,
   disableRecurrence = false,
   submitting = false,
   showRecurrenceToggle = false,
@@ -138,6 +63,13 @@ const EventForm: React.FC<IEventFormProps> = ({
     () => buildRecurrenceOptions(formState.startDate, t),
     [formState.startDate, t],
   );
+
+  const { toggleAllDay, toggleRecurrence } = useEventFormHandlers({
+    setFormState,
+    disableRecurrence,
+    showRecurrenceToggle,
+    setRecurrenceEnabled,
+  });
 
   const handleRecurrenceSelect = (option: {
     label: string;
@@ -226,6 +158,7 @@ const EventForm: React.FC<IEventFormProps> = ({
       allDay: formState.allDay,
       isPublic: formState.isPublic,
       isRegisterable: formState.isRegisterable,
+      isInviteOnly: formState.isInviteOnly ?? false,
       recurrenceRule:
         recurrenceEnabled && formState.recurrenceRule
           ? formState.recurrenceRule
@@ -238,29 +171,6 @@ const EventForm: React.FC<IEventFormProps> = ({
     };
 
     await onSubmit(payload);
-  };
-
-  const toggleAllDay = (): void => {
-    setFormState((prev) => ({
-      ...prev,
-      allDay: !prev.allDay,
-      startTime: prev.startTime,
-      endTime: prev.endTime,
-    }));
-  };
-
-  const toggleRecurrence = (): void => {
-    if (disableRecurrence || !showRecurrenceToggle) return;
-    setRecurrenceEnabled((prev) => {
-      // Clear recurrence rule when disabling (prev was true, becoming false)
-      if (prev) {
-        setFormState((formPrev) => ({
-          ...formPrev,
-          recurrenceRule: null,
-        }));
-      }
-      return !prev;
-    });
   };
 
   return (
@@ -470,6 +380,25 @@ const EventForm: React.FC<IEventFormProps> = ({
               />
             </div>
           )}
+          {showInviteOnlyToggle && (
+            <div className={styles.dispflexEvents}>
+              <label htmlFor="isinviteonly">{t('isInviteOnly')}?</label>
+              <Form.Switch
+                className={`me-4 ${styles.switch}`}
+                id="isinviteonly"
+                type="checkbox"
+                checked={!!formState.isInviteOnly}
+                data-testid="inviteOnlyEventCheck"
+                onChange={(): void =>
+                  setFormState((prev) => ({
+                    ...prev,
+                    isInviteOnly: !prev.isInviteOnly,
+                  }))
+                }
+                aria-label={t('isInviteOnly')}
+              />
+            </div>
+          )}
           {showRegisterable && (
             <div className={styles.dispflexEvents}>
               <label htmlFor="registrable">{t('registerable')}?</label>
@@ -512,41 +441,14 @@ const EventForm: React.FC<IEventFormProps> = ({
           </div>
         )}
         {!disableRecurrence && recurrenceEnabled && (
-          <div>
-            <Dropdown
-              show={recurrenceDropdownOpen}
-              onToggle={setRecurrenceDropdownOpen}
-            >
-              <Dropdown.Toggle
-                variant="outline-secondary"
-                id="recurrence-dropdown"
-                data-testid="recurrenceDropdown"
-                className={`${styles.dropdown}`}
-                aria-label={t('recurring')}
-              >
-                {currentRecurrenceLabel()}
-              </Dropdown.Toggle>
-              <Dropdown.Menu>
-                {recurrenceOptions.map((option, index) => (
-                  <Dropdown.Item
-                    key={option.label}
-                    onClick={() =>
-                      handleRecurrenceSelect({
-                        ...option,
-                        value: option.value as
-                          | InterfaceRecurrenceRule
-                          | 'custom'
-                          | null,
-                      })
-                    }
-                    data-testid={`recurrenceOption-${index}`}
-                  >
-                    {option.label}
-                  </Dropdown.Item>
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
-          </div>
+          <RecurrenceSection
+            recurrenceOptions={recurrenceOptions}
+            currentRecurrenceLabel={currentRecurrenceLabel}
+            handleRecurrenceSelect={handleRecurrenceSelect}
+            recurrenceDropdownOpen={recurrenceDropdownOpen}
+            setRecurrenceDropdownOpen={setRecurrenceDropdownOpen}
+            t={t}
+          />
         )}
         <Button
           type="submit"
@@ -611,13 +513,13 @@ const EventForm: React.FC<IEventFormProps> = ({
  * Formats a recurrence rule for API submission.
  * @param recurrenceRule - The recurrence rule to format
  * @param startDate - The event start date
- * @returns The formatted recurrence string or null
- * @throws Error if the recurrence rule is invalid
+ * @returns The API-ready recurrence object (with endDate converted to ISO string if present) or null
+ * @throws Error if the recurrence rule is invalid (contains validation error messages)
  */
 export const formatRecurrenceForPayload = (
   recurrenceRule: InterfaceRecurrenceRule | null,
   startDate: Date,
-) => {
+): ReturnType<typeof formatRecurrenceForApi> | null => {
   if (!recurrenceRule) return null;
   const { isValid, errors } = validateRecurrenceInput(
     recurrenceRule,

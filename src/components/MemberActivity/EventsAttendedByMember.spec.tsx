@@ -5,7 +5,6 @@ import EventsAttendedByMember from './EventsAttendedByMember';
 import { BrowserRouter } from 'react-router';
 import { EVENT_DETAILS_BASIC } from 'GraphQl/Queries/Queries';
 import { mocks, errorMocks } from './MemberActivityMocks';
-
 describe('EventsAttendedByMember', () => {
   test('renders loading state initially', () => {
     render(

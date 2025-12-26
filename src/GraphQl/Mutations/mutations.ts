@@ -452,36 +452,6 @@ export const UPDATE_POST_MUTATION = gql`
   }
 `;
 
-export const UPDATE_EVENT_MUTATION = gql`
-  mutation UpdateEvent($input: MutationUpdateEventInput!) {
-    updateEvent(input: $input) {
-      id
-      name
-      description
-      startAt
-      endAt
-      allDay
-      location
-      isPublic
-      isRegisterable
-      createdAt
-      updatedAt
-      creator {
-        id
-        name
-      }
-      updater {
-        id
-        name
-      }
-      organization {
-        id
-        name
-      }
-    }
-  }
-`;
-
 export const UPDATE_POST_VOTE = gql`
   mutation updatePostVote($input: MutationUpdatePostVoteInput!) {
     updatePostVote(input: $input) {
@@ -640,6 +610,7 @@ export {
   DELETE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION,
   DELETE_SINGLE_EVENT_INSTANCE_MUTATION,
   DELETE_THIS_AND_FOLLOWING_EVENTS_MUTATION,
+  UPDATE_EVENT_MUTATION,
 } from './EventMutations';
 
 export const PRESIGNED_URL = gql`

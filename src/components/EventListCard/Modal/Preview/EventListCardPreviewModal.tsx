@@ -19,6 +19,8 @@
  * @param setEventEndDate - Function to update the event end date.
  * @param alldaychecked - Indicates if the event is an all-day event.
  * @param setAllDayChecked - Function to toggle the all-day event setting.
+ * @param inviteOnlyChecked - Indicates if the event is invite only.
+ * @param setInviteOnlyChecked - Function to toggle the invite only event setting.
  * @param publicchecked - Indicates if the event is public.
  * @param setPublicChecked - Function to toggle the public event setting.
  * @param registrablechecked - Indicates if the event is registrable.
@@ -63,6 +65,8 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   setEventEndDate,
   alldaychecked,
   setAllDayChecked,
+  inviteOnlyChecked,
+  setInviteOnlyChecked,
   publicchecked,
   setPublicChecked,
   registrablechecked,
@@ -388,6 +392,20 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                 />
               </div>
               <div className={styles.dispflexOrganizationEvents}>
+                <label htmlFor="isinviteonly">{t('isInviteOnly')}?</label>
+                <Form.Switch
+                  id="isinviteonly"
+                  type="checkbox"
+                  data-testid="updateIsInviteOnly"
+                  className={`me-4 ${styles.switch}`}
+                  checked={inviteOnlyChecked}
+                  onChange={(): void => {
+                    setInviteOnlyChecked(!inviteOnlyChecked);
+                  }}
+                  disabled={!canEditEvent}
+                />
+              </div>
+              <div className={styles.dispflexOrganizationEvents}>
                 <label htmlFor="ispublic">{t('isPublic')}?</label>
                 <Form.Switch
                   id="ispublic"
@@ -460,7 +478,7 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
               data-testid="showEventDashboardBtn"
               className={styles.addButton}
             >
-              Show Event Dashboard
+              {t('showEventDashboard')}
             </Button>
           )}
           {canEditEvent && (

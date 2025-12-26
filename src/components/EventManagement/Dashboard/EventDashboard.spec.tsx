@@ -85,6 +85,9 @@ const mockID = 'event123';
 vi.mock('react-router', async () => ({
   ...(await vi.importActual('react-router')),
 }));
+vi.mock('utils/featureFlags', () => ({
+  isInviteOnlyEnabled: vi.fn(() => false),
+}));
 
 const renderEventDashboard = (mockLink: ApolloLink): RenderResult => {
   return render(
@@ -303,7 +306,7 @@ describe('Testing Event Dashboard Screen', () => {
         {
           request: {
             query: EVENT_DETAILS,
-            variables: { eventId: 'event123' },
+            variables: { eventId: 'event123', includeInviteOnly: false },
           },
           result: {
             data: {
@@ -345,7 +348,7 @@ describe('Testing Event Dashboard Screen', () => {
         {
           request: {
             query: EVENT_DETAILS,
-            variables: { eventId: 'event123' },
+            variables: { eventId: 'event123', includeInviteOnly: false },
           },
           result: {
             data: {

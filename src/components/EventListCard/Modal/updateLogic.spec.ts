@@ -34,6 +34,10 @@ vi.mock('utils/errorHandler', async () => ({
   errorHandler: vi.fn(),
 }));
 
+vi.mock('utils/featureFlags', async () => ({
+  isInviteOnlyEnabled: vi.fn(() => true), // Enable feature flag for tests
+}));
+
 const mockUseMutation = useMutation as Mock;
 const mockT = (key: string) => key;
 
@@ -51,6 +55,7 @@ const mockEventListCardProps: MockEventListCardProps = {
   allDay: false,
   isPublic: true,
   isRegisterable: true,
+  isInviteOnly: false,
   attendees: [],
   creator: {
     id: 'user1',
@@ -93,6 +98,7 @@ const buildHandlerInput = (overrides: HandlerOverrides = {}): HandlerArgs => ({
   alldaychecked: mockEventListCardProps.allDay,
   publicchecked: mockEventListCardProps.isPublic,
   registrablechecked: mockEventListCardProps.isRegisterable,
+  inviteOnlyChecked: mockEventListCardProps.isInviteOnly ?? false,
   eventStartDate: new Date(mockEventListCardProps.startAt),
   eventEndDate: new Date(mockEventListCardProps.endAt),
   recurrence: null as InterfaceRecurrenceRule | null,
@@ -253,6 +259,68 @@ describe('useUpdateEventHandler', () => {
       const calledInputs =
         mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
       expect(calledInputs.isRegisterable).toBe(false);
+    });
+
+    it('handles standalone event update with isInviteOnly change', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          inviteOnlyChecked: true,
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toBeCalledTimes(1);
+      const calledInputs =
+        mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
+      expect(calledInputs.isInviteOnly).toBe(true);
+    });
+
+    it('handles standalone event update with isInviteOnly toggle from true to false', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: {
+            ...mockEventListCardProps,
+            isInviteOnly: true, // Original state is true
+          },
+          inviteOnlyChecked: false, // Toggled to false
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toBeCalledTimes(1);
+      const calledInputs =
+        mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
+      expect(calledInputs.isInviteOnly).toBe(false);
+    });
+
+    it('does not include isInviteOnly in update when unchanged', async () => {
+      mockUpdateStandaloneEvent.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          formState: {
+            ...mockFormState,
+            name: 'Updated Name', // Include a change to trigger the mutation
+          },
+          inviteOnlyChecked: false, // Same as initial value
+        }),
+      );
+
+      expect(mockUpdateStandaloneEvent).toBeCalledTimes(1);
+      const calledInputs =
+        mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
+      expect(calledInputs.isInviteOnly).toBeUndefined();
     });
 
     it('shows success toast, closes modals and refetches on successful update', async () => {
@@ -427,6 +495,110 @@ describe('useUpdateEventHandler', () => {
       const calledInputs =
         mockUpdateEntireRecurringEventSeries.mock.calls[0][0].variables.input;
       expect(calledInputs.description).toContain('Changed event description');
+    });
+
+    it('includes isPublic in entireSeries update when changed', async () => {
+      mockUpdateEntireRecurringEventSeries.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: buildRecurringEventProps({
+            isPublic: true,
+          }),
+          updateOption: 'entireSeries',
+          publicchecked: false,
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+          },
+        }),
+      );
+
+      expect(mockUpdateEntireRecurringEventSeries).toBeCalledTimes(1);
+      const calledInputs =
+        mockUpdateEntireRecurringEventSeries.mock.calls[0][0].variables.input;
+      expect(calledInputs.isPublic).toBe(false);
+    });
+
+    it('includes isRegisterable in entireSeries update when changed', async () => {
+      mockUpdateEntireRecurringEventSeries.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: buildRecurringEventProps({
+            isRegisterable: true,
+          }),
+          updateOption: 'entireSeries',
+          registrablechecked: false,
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name',
+          },
+        }),
+      );
+
+      expect(mockUpdateEntireRecurringEventSeries).toBeCalledTimes(1);
+      const calledInputs =
+        mockUpdateEntireRecurringEventSeries.mock.calls[0][0].variables.input;
+      expect(calledInputs.isRegisterable).toBe(false);
+    });
+
+    it('includes isInviteOnly in entireSeries update when changed', async () => {
+      mockUpdateEntireRecurringEventSeries.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: buildRecurringEventProps({
+            isInviteOnly: false,
+          }),
+          updateOption: 'entireSeries',
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name', // Include a change to trigger the mutation
+          },
+          inviteOnlyChecked: true, // Changed from false to true
+        }),
+      );
+
+      expect(mockUpdateEntireRecurringEventSeries).toBeCalledTimes(1);
+      const calledInputs =
+        mockUpdateEntireRecurringEventSeries.mock.calls[0][0].variables.input;
+      expect(calledInputs.isInviteOnly).toBe(true);
+    });
+
+    it('does not include isInviteOnly in entireSeries update when unchanged', async () => {
+      mockUpdateEntireRecurringEventSeries.mockResolvedValueOnce({
+        data: { updateEvent: {} },
+      });
+      const { updateEventHandler } = useUpdateEventHandler();
+
+      await updateEventHandler(
+        buildHandlerInput({
+          eventListCardProps: buildRecurringEventProps({
+            isInviteOnly: false,
+          }),
+          updateOption: 'entireSeries',
+          formState: {
+            ...mockFormState,
+            name: 'Changed Name', // Include a change to trigger the mutation
+          },
+          inviteOnlyChecked: false, // Same as initial value
+        }),
+      );
+
+      expect(mockUpdateEntireRecurringEventSeries).toBeCalledTimes(1);
+      const calledInputs =
+        mockUpdateEntireRecurringEventSeries.mock.calls[0][0].variables.input;
+      expect(calledInputs.isInviteOnly).toBeUndefined();
     });
   });
 

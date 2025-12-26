@@ -54,6 +54,8 @@ import { useTranslation } from 'react-i18next';
 import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
 import InviteByEmailModal from './InviteByEmail/InviteByEmailModal';
 import type { InterfaceUser } from 'types/User/interface';
+import { isInviteOnlyEnabled } from 'utils/featureFlags';
+import styles from './EventRegistrantsModal.module.css';
 
 type ModalPropType = {
   show: boolean;
@@ -80,7 +82,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
 
   // First, get event details to determine if it's recurring or standalone
   const { data: eventData } = useQuery(EVENT_DETAILS, {
-    variables: { eventId: eventId },
+    variables: { eventId: eventId, includeInviteOnly: isInviteOnlyEnabled() },
     fetchPolicy: 'cache-first',
   });
 
@@ -103,7 +105,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   // Function to add a new registrant to the event
   const addRegistrant = (): void => {
     if (member == null) {
-      toast.warning('Please choose an user to add first!');
+      toast.warning(t('pleaseChooseUser'));
       return;
     }
     toast.warn('Adding the attendee...');
@@ -145,11 +147,8 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
             attendeesRefetch();
           }}
         />
-        <Modal.Header
-          closeButton
-          style={{ backgroundColor: 'var(--tableHeader-bg)' }}
-        >
-          <Modal.Title>Event Registrants</Modal.Title>
+        <Modal.Header closeButton className={styles.modalHeader}>
+          <Modal.Title>{t('eventRegistrants')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Autocomplete
@@ -159,19 +158,17 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
             }}
             noOptionsText={
               <div className="d-flex ">
-                <p className="me-2">No Registrations found</p>
-                <span
-                  className="underline"
-                  style={{
-                    color: '#555',
-                    textDecoration: 'underline',
-                  }}
+                <p className="me-2">{t('noRegistrationsFound')}</p>
+                <button
+                  type="button"
+                  className={`underline ${styles.addOnspotLink}`}
                   onClick={() => {
                     setOpen(true);
                   }}
+                  aria-label={t('addOnspotRegistration')}
                 >
-                  Add Onspot Registration
-                </span>
+                  {t('addOnspotRegistration')}
+                </button>
               </div>
             }
             options={memberData?.usersByOrganizationId || []}
@@ -182,8 +179,8 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
               <TextField
                 {...params}
                 data-testid="autocomplete"
-                label="Add an Registrant"
-                placeholder="Choose the user that you want to add"
+                label={t('addRegistrant')}
+                placeholder={t('chooseUserToAdd')}
               />
             )}
           />
@@ -191,16 +188,16 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
         </Modal.Body>
         <Modal.Footer>
           <Button
-            style={{ backgroundColor: '#6CC9A6', color: '#fff' }}
+            className={styles.inviteButton}
             onClick={() => setInviteOpen(true)}
           >
-            Invite by Email
+            {t('inviteByEmail')}
           </Button>
           <Button
-            style={{ backgroundColor: '#A8C7FA', color: '#555' }}
+            className={styles.addRegistrantButton}
             onClick={addRegistrant}
           >
-            Add Registrant
+            {t('addRegistrantButton')}
           </Button>
         </Modal.Footer>
       </Modal>
