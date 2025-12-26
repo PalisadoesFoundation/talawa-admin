@@ -20,11 +20,11 @@ interface IValidationResult {
 }
 
 const PATTERNS = {
-  color: /#[0-9a-fA-F]{3,6}/g,
+  color: /#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?([0-9a-fA-F]{2})?/g,
   spacingPx:
     /(?:padding|margin|width|height|gap|top|right|bottom|left):\s*\d+px/g,
   fontSize: /font-size:\s*\d+px/g,
-  fontWeight: /font-weight:\s*[4-7]\d0/g,
+  fontWeight: /font-weight:\s*[1-9]00/g,
 };
 
 const args = process.argv.slice(2);
@@ -84,7 +84,13 @@ async function validateFiles(
       continue;
     }
 
-    const content = fs.readFileSync(file, 'utf-8');
+    let content: string;
+    try {
+      content = fs.readFileSync(file, 'utf-8');
+    } catch (error) {
+      console.error(error);
+      continue;
+    }
     const lines = content.split('\n');
 
     lines.forEach((line, index) => {
