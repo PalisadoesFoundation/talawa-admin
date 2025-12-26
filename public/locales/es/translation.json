@@ -2037,16 +2037,9 @@
     "invalidCapacity": "La capacidad debe ser un número positivo"
   },
   "manageTags": {
-    "loadAssignedUsersError": "Ocurrió un error al cargar los usuarios asignados",
+    "loadAssignedUsersError": "Se produjo un error al cargar los usuarios asignados",
     "sortPeople": "Ordenar personas",
-    "viewProfile": "Ver perfil",
     "unassign": "Desasignar",
-    "actions": "Acciones",
-    "tags": "Etiquetas",
-    "noAssignedMembersFound": "No se encontraron miembros asignados",
-    "assignToTags": "Asignar a etiquetas",
-    "removeFromTags": "Eliminar de etiquetas",
-    "addPeopleToTag": "Agregar personas a la etiqueta",
-    "subTags": "Subetiquetas"
+    "tags": "Etiquetas"
   }
 }

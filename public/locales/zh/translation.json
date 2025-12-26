@@ -2039,14 +2039,7 @@
   "manageTags": {
     "loadAssignedUsersError": "加载已分配用户时发生错误",
     "sortPeople": "排序人员",
-    "viewProfile": "查看资料",
     "unassign": "取消分配",
-    "actions": "操作",
-    "tags": "标签",
-    "noAssignedMembersFound": "未找到已分配的成员",
-    "assignToTags": "分配到标签",
-    "removeFromTags": "从标签中移除",
-    "addPeopleToTag": "添加人员到标签",
-    "subTags": "子标签"
+    "tags": "标签"
   }
 }

@@ -2039,14 +2039,7 @@
   "manageTags": {
     "loadAssignedUsersError": "Error occurred while loading assigned users",
     "sortPeople": "Sort People",
-    "viewProfile": "View Profile",
     "unassign": "Unassign",
-    "actions": "Actions",
-    "tags": "Tags",
-    "noAssignedMembersFound": "No assigned members found",
-    "assignToTags": "Assign to tags",
-    "removeFromTags": "Remove from tags",
-    "addPeopleToTag": "Add people to tag",
-    "subTags": "Sub tags"
+    "tags": "Tags"
   }
 }

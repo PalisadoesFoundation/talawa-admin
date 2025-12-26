@@ -2039,14 +2039,7 @@
   "manageTags": {
     "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
     "sortPeople": "Trier les personnes",
-    "viewProfile": "Voir le profil",
-    "unassign": "Désattribuer",
-    "actions": "Actions",
-    "tags": "Tags",
-    "noAssignedMembersFound": "Aucun membre assigné trouvé",
-    "assignToTags": "Attribuer aux tags",
-    "removeFromTags": "Retirer des tags",
-    "addPeopleToTag": "Ajouter des personnes au tag",
-    "subTags": "Sous-tags"
+    "unassign": "Désassigner",
+    "tags": "Tags"
   }
 }
