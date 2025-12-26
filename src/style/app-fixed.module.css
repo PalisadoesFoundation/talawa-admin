@@ -8184,7 +8184,6 @@ form {
 }
 
 .list_box {
-  height: 70vh;
   overflow-y: auto;
   width: auto;
 }
@@ -10269,4 +10268,38 @@ form {
   font-size: 25px;
   margin-bottom: 2px;
   margin-right: 2px;
+}
+
+.postContainer {
+  min-height: 100vh;
+}
+
+.addPost {
+  font-size: 20px;
+  margin-right: 6px;
+}
+
+.noPostsFound {
+  text-align: center;
+}
+
+.postInfiniteScroll {
+  overflow: visible;
+}
+
+.createPostModalContainer {
+  position: absolute;
+}
+
+.pinnedPostModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.pinnedPostModalBody {
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 20px;
+  position: relative;
 }
