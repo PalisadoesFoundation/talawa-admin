@@ -24,11 +24,11 @@
  * - Provides search and sorting functionality using `SearchBar` and `SortingButton` components.
  *
  * @dependencies
- * - `react`, `react-router-dom`, `react-bootstrap`, `react-toastify`
+ * - `react`, `react-router-dom`, `react-bootstrap`
  * - `@apollo/client` for GraphQL queries and mutations
  * - `@mui/icons-material`, `react-icons` for icons
  * - Custom hooks: `useLocalStorage`
- * - Custom components: `Loader`, `SearchBar`, `SortingButton`
+ * - Custom components: `Loader`, `SearchBar`, `SortingButton`, `NotificationToast`
  *
  * @example
  * ```tsx
@@ -104,7 +104,9 @@ const Invitations = (): JSX.Element => {
       );
       refetchInvitations();
     } catch (error: unknown) {
-      NotificationToast.error((error as Error).message);
+      NotificationToast.error(
+        tErrors('unknownError', { msg: (error as Error).message }),
+      );
     }
   };
 
