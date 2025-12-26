@@ -21,6 +21,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { MOCKS } from './OrganizationEventsMocks';
 import { toast } from 'react-toastify';
+import { green } from '@mui/material/colors';
 
 const mockGetItem = vi.fn((key: string): string | null => {
   if (key === 'role') return 'administrator';

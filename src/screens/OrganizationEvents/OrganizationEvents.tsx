@@ -95,7 +95,9 @@ function organizationEvents(): JSX.Element {
   });
   const { getItem } = useLocalStorage();
 
-  document.title = t('title');
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
   const [createEventmodalisOpen, setCreateEventmodalisOpen] = useState(false);
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
