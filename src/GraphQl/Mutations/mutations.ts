@@ -393,13 +393,9 @@ export const CREATE_POST_MUTATION = gql`
     createPost(input: $input) {
       id
       caption
+      body
       pinnedAt
-      attachments {
-        fileHash
-        mimeType
-        name
-        objectName
-      }
+      attachmentURL
     }
   }
 `;
