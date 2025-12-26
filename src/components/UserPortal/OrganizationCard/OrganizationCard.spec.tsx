@@ -1,12 +1,14 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { toast } from 'react-toastify';
+import { I18nextProvider } from 'react-i18next';
 
+import i18nForTest from 'utils/i18nForTest';
 import OrganizationCard from './OrganizationCard';
 
 const mockMutationFn = vi.fn().mockResolvedValue({ data: {} });
+
 vi.mock('@apollo/client', async () => {
   const actual =
     await vi.importActual<typeof import('@apollo/client')>('@apollo/client');
@@ -15,15 +17,6 @@ vi.mock('@apollo/client', async () => {
     useMutation: () => [mockMutationFn, { loading: false, error: undefined }],
   };
 });
-
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (_key: string, fallback?: string | { defaultValue: string }) =>
-      typeof fallback === 'string'
-        ? fallback
-        : (fallback?.defaultValue ?? _key),
-  }),
-}));
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -45,34 +38,39 @@ const baseProps = {
   membershipRequests: [],
 };
 
+const renderWithI18n = (ui: React.ReactElement) =>
+  render(<I18nextProvider i18n={i18nForTest}>{ui}</I18nextProvider>);
+
 describe('OrganizationCard [PR-2]', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
 
   it('renders organization content', () => {
-    render(<OrganizationCard {...baseProps} />);
+    renderWithI18n(<OrganizationCard {...baseProps} />);
 
     expect(screen.getByText('Test Organization')).toBeInTheDocument();
-    expect(screen.getByText('Organization description')).toBeInTheDocument();
+    expect(
+      screen.getByText('Organization description'),
+    ).toBeInTheDocument();
     expect(screen.getByText('Test Address')).toBeInTheDocument();
   });
 
   it('renders admins and members counts', () => {
-    render(<OrganizationCard {...baseProps} />);
+    renderWithI18n(<OrganizationCard {...baseProps} />);
 
     expect(screen.getByText(/Admins/i)).toBeInTheDocument();
     expect(screen.getByText(/Members/i)).toBeInTheDocument();
   });
 
   it('shows Join button when not joined', () => {
-    render(<OrganizationCard {...baseProps} />);
+    renderWithI18n(<OrganizationCard {...baseProps} />);
 
     expect(screen.getByTestId('joinBtn')).toBeInTheDocument();
   });
 
   it('shows Withdraw button when request is pending', () => {
-    render(
+    renderWithI18n(
       <OrganizationCard
         {...baseProps}
         membershipRequestStatus="pending"
@@ -84,13 +82,13 @@ describe('OrganizationCard [PR-2]', () => {
   });
 
   it('shows Visit button when joined', () => {
-    render(<OrganizationCard {...baseProps} isJoined />);
+    renderWithI18n(<OrganizationCard {...baseProps} isJoined />);
 
     expect(screen.getByTestId('manageBtn')).toBeInTheDocument();
   });
 
-  it('calls toast and mutation on join click', async () => {
-    render(<OrganizationCard {...baseProps} />);
+  it('calls mutation and shows success toast on join click', async () => {
+    renderWithI18n(<OrganizationCard {...baseProps} />);
 
     fireEvent.click(screen.getByTestId('joinBtn'));
 
@@ -103,8 +101,8 @@ describe('OrganizationCard [PR-2]', () => {
     expect(toast.success).toHaveBeenCalled();
   });
 
-  it('calls toast and mutation on withdraw click', async () => {
-    render(
+  it('calls mutation and shows success toast on withdraw click', async () => {
+    renderWithI18n(
       <OrganizationCard
         {...baseProps}
         membershipRequestStatus="pending"
@@ -128,13 +126,13 @@ describe('OrganizationCard [PR-2]', () => {
   it('shows error toast when join mutation fails', async () => {
     mockMutationFn.mockRejectedValueOnce(new Error('Mutation failed'));
 
-    render(<OrganizationCard {...baseProps} />);
+    renderWithI18n(<OrganizationCard {...baseProps} />);
 
     fireEvent.click(screen.getByTestId('joinBtn'));
 
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(
-        'Failed to send membership request',
+        i18nForTest.t('organizationCard.join_error'),
       );
     });
   });
@@ -142,7 +140,7 @@ describe('OrganizationCard [PR-2]', () => {
   it('shows error toast when withdraw mutation fails', async () => {
     mockMutationFn.mockRejectedValueOnce(new Error('Mutation failed'));
 
-    render(
+    renderWithI18n(
       <OrganizationCard
         {...baseProps}
         membershipRequestStatus="pending"
@@ -153,7 +151,12 @@ describe('OrganizationCard [PR-2]', () => {
     fireEvent.click(screen.getByTestId('withdrawBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Failed to withdraw request');
+      expect(toast.error).toHaveBeenCalledWith(
+        i18nForTest.t('organizationCard.withdraw_error'),
+      );
     });
   });
+  
+
+  
 });

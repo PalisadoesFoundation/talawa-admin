@@ -315,6 +315,18 @@
     "noVolunteers": "No Volunteers Found!",
     "comingSoon": "Coming soon!"
   },
+  "organizationCard": {
+  "join": "Join",
+  "withdraw": "Withdraw",
+  "visit": "Visit",
+  "manage": "Manage",
+  "admins": "Admins",
+  "members": "Members",
+  "join_success": "Membership request sent successfully",
+  "withdraw_success": "Membership request withdrawn successfully",
+  "join_error": "Failed to send membership request",
+  "withdraw_error": "Failed to withdraw request"
+},
   "organizationPeople": {
     "title": "Talawa Members",
     "filterByName": "Filter by Name",

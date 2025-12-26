@@ -66,7 +66,10 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
   membershipRequestStatus = '',
   membershipRequests = [],
 }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation('translation', {
+      keyPrefix: 'organizationCard',
+  });
+
 
   const [sendRequest, { loading: sendLoading }] = useMutation(
     SEND_MEMBERSHIP_REQUEST,
@@ -80,11 +83,9 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
   const handleJoin = async (): Promise<void> => {
     try {
       await sendRequest({ variables: { organizationId: id } });
-      toast.success(t('organization.join_success', 'Request sent'));
+      toast.success(t('join_success'));
     } catch {
-      toast.error(
-        t('organization.join_error', 'Failed to send membership request'),
-      );
+      toast.error(t('join_error'));
     }
   };
 
@@ -96,10 +97,10 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
         variables: { membershipRequestId: pendingRequest.id },
       });
 
-      toast.success(t('organization.withdraw_success', 'Request withdrawn'));
+      toast.success(t('withdraw_success'));
     } catch {
       toast.error(
-        t('organization.withdraw_error', 'Failed to withdraw request'),
+        t('withdraw_error'),
       );
     }
   };
@@ -108,7 +109,7 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
     if (isJoined) {
       return (
         <Button size="sm" data-testid="manageBtn">
-          {t('organization.visit', 'Visit')}
+          {t('visit')}
         </Button>
       );
     }
@@ -123,7 +124,7 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
           disabled={cancelLoading}
         >
           {t('organization.withdraw', 'Withdraw')}
-        </Button>
+       </Button>
       );
     }
 
@@ -134,7 +135,7 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
         onClick={handleJoin}
         disabled={sendLoading}
       >
-        {t('organization.join', 'Join')}
+        {t('join')}
       </Button>
     );
   })();
@@ -159,10 +160,10 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
 
         <div className={styles.actions}>
           <span>
-            {t('organization.admins', 'Admins')}: {adminsCount}
+            {t('admins')}: {adminsCount}
           </span>
           <span>
-            {t('organization.members', 'Members')}: {membersCount}
+            {t('members')}: {membersCount}
           </span>
         </div>
       </div>
