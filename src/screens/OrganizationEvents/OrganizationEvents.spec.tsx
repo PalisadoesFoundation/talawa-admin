@@ -974,7 +974,7 @@ const ERROR_MOCK = [
       query: GET_ORGANIZATION_EVENTS_PG,
       variables: {
         id: 'orgId',
-        first: 32,
+        first: 100,
         after: null,
         startDate: expect.any(String),
         endDate: expect.any(String),
