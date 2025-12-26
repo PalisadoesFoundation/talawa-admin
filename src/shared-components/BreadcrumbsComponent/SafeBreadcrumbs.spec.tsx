@@ -28,7 +28,7 @@ describe('SafeBreadcrumbs', () => {
 
   afterEach(() => {
     process.env.NODE_ENV = originalEnv;
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('renders BreadcrumbsComponent when inside a Router context', () => {
