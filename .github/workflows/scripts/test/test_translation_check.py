@@ -2,6 +2,7 @@
 
 import unittest
 import os
+import sys
 import json
 import shutil
 import tempfile
@@ -171,7 +172,7 @@ class TestTranslationCheck(unittest.TestCase):
         script_path = SCRIPT_DIR / "translation_check.py"
         result = subprocess.run(
             [
-                os.sys.executable,
+                sys.executable,
                 str(script_path),
                 "--locales-dir",
                 self.en_dir,
