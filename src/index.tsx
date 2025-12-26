@@ -272,7 +272,7 @@ root.render(
           <ThemeProvider theme={theme}>
             <Provider store={store}>
               <App />
-              <ToastContainer limit={5} role="alert" />
+              <ToastContainer limit={5} />
             </Provider>
           </ThemeProvider>
         </LocalizationProvider>
