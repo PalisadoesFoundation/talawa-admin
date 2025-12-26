@@ -30,7 +30,7 @@ import {
 import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
-import { useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
@@ -38,6 +38,8 @@ import CreateEventModal from './CreateEventModal';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import { Button } from 'react-bootstrap';
 import AddIcon from '@mui/icons-material/Add';
+import { BreadcrumbsComponent } from 'shared-components/BreadcrumbsComponent';
+import type { IBreadcrumbItem } from 'types/shared-components/BreadcrumbsComponent/interface';
 
 // Define the type for an event edge
 interface IEventEdge {
@@ -94,16 +96,34 @@ function organizationEvents(): JSX.Element {
     keyPrefix: 'organizationEvents',
   });
   const { getItem } = useLocalStorage();
+  const { orgId: currentUrl } = useParams();
 
   useEffect(() => {
     document.title = t('title');
   }, [t]);
+
+  // Redirect to orglist if orgId is missing
+  if (!currentUrl) {
+    return <Navigate to="/orglist" replace />;
+  }
+
+  // Breadcrumb items for organization -> events navigation
+  const breadcrumbItems: IBreadcrumbItem[] = [
+    {
+      translationKey: 'organization',
+      to: `/orgdash/${currentUrl}`,
+    },
+    {
+      translationKey: 'Events',
+      isCurrent: true,
+    },
+  ];
+
   const [createEventmodalisOpen, setCreateEventmodalisOpen] = useState(false);
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [searchByName, setSearchByName] = useState('');
-  const { orgId: currentUrl } = useParams();
 
   const showInviteModal = (): void => setCreateEventmodalisOpen(true);
   const hideCreateEventModal = (): void => setCreateEventmodalisOpen(false);
@@ -236,6 +256,7 @@ function organizationEvents(): JSX.Element {
 
   return (
     <>
+      <BreadcrumbsComponent items={breadcrumbItems} />
       <div className={styles.mainpageright}>
         <div className={styles.justifyspOrganizationEvents}>
           <PageHeader

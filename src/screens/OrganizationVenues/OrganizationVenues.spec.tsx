@@ -217,6 +217,16 @@ describe('OrganizationVenue with missing orgId', () => {
 });
 
 describe('Organisation Venues', () => {
+  test('renders breadcrumbs navigation', async () => {
+    renderOrganizationVenue(link);
+    await wait();
+
+    // Verify breadcrumbs navigation is present
+    await waitFor(() => {
+      expect(screen.getByRole('navigation')).toBeInTheDocument();
+    });
+  });
+
   test('searches the venue list correctly by Name', async () => {
     renderOrganizationVenue(link);
     await wait();

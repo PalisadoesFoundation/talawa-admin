@@ -81,6 +81,8 @@ import AddMember from './addMember/AddMember';
 // Imports added for manual header construction
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
+import { BreadcrumbsComponent } from 'shared-components/BreadcrumbsComponent';
+import type { IBreadcrumbItem } from 'types/shared-components/BreadcrumbsComponent/interface';
 
 interface IProcessedRow {
   id: string;
@@ -121,6 +123,18 @@ function OrganizationPeople(): JSX.Element {
   const location = useLocation();
   const role = location?.state;
   const { orgId: currentUrl } = useParams();
+
+  // Breadcrumb items for organization -> people navigation
+  const breadcrumbItems: IBreadcrumbItem[] = [
+    {
+      translationKey: 'organization',
+      to: `/orgdash/${currentUrl}`,
+    },
+    {
+      translationKey: 'People',
+      isCurrent: true,
+    },
+  ];
 
   // State
   const [state, setState] = useState(role?.role || 0);
@@ -528,6 +542,7 @@ function OrganizationPeople(): JSX.Element {
 
   return (
     <>
+      <BreadcrumbsComponent items={breadcrumbItems} />
       {/* --- FIX START: Standardized Header using manual structure --- */}
       {/* This structure uses the global 'calendar__header' and 'btnsBlock' which we fixed in CSS to ensure perfect alignment. */}
       <div className={styles.calendar__header}>
