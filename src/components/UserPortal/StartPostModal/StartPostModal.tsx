@@ -175,7 +175,7 @@ const startPostModal = ({
           input: {
             caption: postContent,
             organizationId,
-            ...(attachment && { attachment }),
+            attachments: attachment ? [attachment] : [],
           },
         },
       });

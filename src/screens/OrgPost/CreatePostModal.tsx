@@ -27,7 +27,7 @@ interface ICreatePostInput {
   caption: string;
   organizationId: string;
   isPinned: boolean;
-  attachment?: IFileMetadataInput;
+  attachments: IFileMetadataInput[];
 }
 
 interface ICreatePostData {
@@ -140,7 +140,7 @@ const CreatePostModal: React.FC<ICreatePostModalProps> = ({
             caption: trimmedTitle,
             organizationId: orgId,
             isPinned: postformState.pinPost,
-            ...(attachment && { attachment }),
+            attachments: attachment ? [attachment] : [],
           },
         },
       });
