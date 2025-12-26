@@ -17,7 +17,7 @@ def get_keys(data: dict, prefix: str = "") -> set[str]:
         prefix: Prefix used for nested key traversal.
 
     Returns:
-        A set of flattened translation keys.
+        keys: A set of flattened translation keys.
     """
     keys: set[str] = set()
     for key, value in data.items():
@@ -35,7 +35,7 @@ def get_translation_keys(data: dict) -> set[str]:
         data: Parsed JSON dictionary.
 
     Returns:
-        A set of translation keys.
+        keys: A set of translation keys.
     """
     return get_keys(data)
 
@@ -47,7 +47,7 @@ def load_locale_keys(locales_dir: str | Path) -> set[str]:
         locales_dir: Path to the locale directory.
 
     Returns:
-        A set of all valid translation keys.
+        keys: A set of all valid translation keys.
 
     Raises:
         FileNotFoundError: If the locale directory does not exist.
@@ -67,7 +67,6 @@ def load_locale_keys(locales_dir: str | Path) -> set[str]:
                 )
             except (json.JSONDecodeError, OSError) as e:
                 print(f"Warning: Failed to parse {path}: {e}", file=sys.stderr)
-                continue
 
     if not keys:
         print(f"Warning: No translation keys found in {base}", file=sys.stderr)
@@ -82,7 +81,7 @@ def find_translation_tags(source: str | Path) -> set[str]:
         source: File path or raw source string.
 
     Returns:
-        A set of detected translation keys.
+        tags: A set of detected translation keys.
     """
     if isinstance(source, Path):
         try:
@@ -99,7 +98,6 @@ def find_translation_tags(source: str | Path) -> set[str]:
 
     # Extract key from namespace-qualified tags
     # (e.g., "common:hello" -> "hello")
-
     return {key for tag in tags if (key := tag.split(":")[-1])}
 
 
@@ -116,7 +114,7 @@ def get_target_files(
         exclude: Filename patterns to exclude.
 
     Returns:
-        A list of source file paths.
+        targets: A list of source file paths.
     """
     exclude = exclude or []
     targets: list[Path] = []
@@ -161,7 +159,7 @@ def check_file(path: Path, valid_keys: set[str]) -> list[str]:
         valid_keys: Set of valid translation keys.
 
     Returns:
-        A sorted list of missing translation keys.
+        missing_keys: A sorted list of missing translation keys.
     """
     return sorted(
         tag for tag in find_translation_tags(path) if tag not in valid_keys
@@ -171,9 +169,14 @@ def check_file(path: Path, valid_keys: set[str]) -> list[str]:
 def main() -> None:
     """CLI entry point for translation validation.
 
+    Args:
+        None
+
     Returns:
-        None. Exits with status code 1 if missing translations are found.
+        None: This function does not return a value. It exits with a status
+            code of 1 if missing translations are found.
     """
+
     parser = argparse.ArgumentParser()
     parser.add_argument("--files", nargs="*", default=[])
     parser.add_argument("--directories", nargs="*", default=[])
