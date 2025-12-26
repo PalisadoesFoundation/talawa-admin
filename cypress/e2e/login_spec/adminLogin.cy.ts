@@ -1,3 +1,4 @@
+// SKIP_LOCALSTORAGE_CHECK
 import { LoginPage } from '../../pageObjects/auth/LoginPage';
 
 describe('Admin Login Functionality', () => {
@@ -25,8 +26,8 @@ describe('Admin Login Functionality', () => {
 
         cy.visit('/admin');
         loginPage.verifyLoginPage().login(userData.email, 'wrongpassword');
-        // Verify error toast appears (without checking specific message)
-        cy.get('[role=alert]').should('be.visible');
+        // Verify error toast appears
+        cy.get('.Toastify__toast').should('be.visible');
         cy.url().should('include', '/admin');
         cy.window().then((win) => {
           expect(win.localStorage.getItem('Talawa-admin_token')).to.eq(null);

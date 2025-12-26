@@ -725,9 +725,7 @@ describe('AcceptInvitation', () => {
       await waitFor(() => {
         expect(screen.getByText('Login Page')).toBeInTheDocument();
         expect(mockLocalStorage.removeItem).toHaveBeenCalledWith('token');
-        expect(mockLocalStorage.removeItem).toHaveBeenCalledWith(
-          'Talawa-admin_email',
-        );
+        expect(mockLocalStorage.removeItem).toHaveBeenCalledWith('email');
         expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
           'pendingInvitationToken',
           'test-token',
