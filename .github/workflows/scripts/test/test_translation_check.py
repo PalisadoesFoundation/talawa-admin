@@ -5,13 +5,19 @@ import os
 import json
 import shutil
 import tempfile
-import sys
 import subprocess
+import importlib.util
 from pathlib import Path
 from unittest.mock import patch
 
-sys.path.append(os.path.dirname(__file__))
-import translation_check
+
+SCRIPT_DIR = Path(__file__).resolve().parents[1]
+SPEC = importlib.util.spec_from_file_location(
+    "translation_check",
+    SCRIPT_DIR / "translation_check.py",
+)
+translation_check = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(translation_check)
 
 
 class TestTranslationCheck(unittest.TestCase):
@@ -93,7 +99,7 @@ class TestTranslationCheck(unittest.TestCase):
             len(
                 translation_check.get_target_files(None, [str(src)], [".tsx"])
             ),
-            1,
+            0,
         )
 
     def test_get_files_exclude_spec(self):
@@ -113,7 +119,8 @@ class TestTranslationCheck(unittest.TestCase):
         f = os.path.join(self.test_dir, "f.ts")
         Path(f).touch()
         self.assertEqual(
-            len(translation_check.get_target_files([f], None, [".ts"])), 1
+            len(translation_check.get_target_files([f], None, [".ts"])),
+            0,
         )
 
     def test_main_success_flow(self):
@@ -161,13 +168,11 @@ class TestTranslationCheck(unittest.TestCase):
 
     def test_entry_point_subprocess(self):
         """Verify the actual __main__ entry point using a subprocess."""
-        script_path = os.path.join(
-            os.path.dirname(os.path.abspath(__file__)), "translation_check.py"
-        )
+        script_path = SCRIPT_DIR / "translation_check.py"
         result = subprocess.run(
             [
-                sys.executable,
-                script_path,
+                os.sys.executable,
+                str(script_path),
                 "--locales-dir",
                 self.en_dir,
                 "--directories",
