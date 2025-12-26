@@ -98,7 +98,7 @@ const buildEventsVariables = () => {
 
   return {
     id: undefined,
-    first: 150,
+    first: 100,
     after: null,
     startDate,
     endDate,
