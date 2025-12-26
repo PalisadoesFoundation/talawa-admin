@@ -22,13 +22,13 @@ import Donate from './Donate';
 import userEvent from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
-import { toast } from 'react-toastify';
 import * as errorHandlerModule from 'utils/errorHandler';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
-const { mockErrorHandler, mockUseParams, mockToast } = vi.hoisted(() => ({
+const { mockErrorHandler, mockUseParams, mockNotificationToast } = vi.hoisted(() => ({
   mockErrorHandler: vi.fn(),
   mockUseParams: vi.fn(),
-  mockToast: {
+  mockNotificationToast: {
     error: vi.fn(),
     success: vi.fn(),
   },
@@ -42,8 +42,8 @@ vi.mock('react-router', async () => ({
   useParams: mockUseParams,
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: mockToast,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockNotificationToast,
 }));
 
 const MOCKS = [
@@ -177,8 +177,8 @@ describe('Testing Donate Screen [User Portal]', () => {
     });
     mockUseParams.mockReturnValue({ orgId: '' });
     mockErrorHandler.mockClear();
-    mockToast.error.mockClear();
-    mockToast.success.mockClear();
+    mockNotificationToast.error.mockClear();
+    mockNotificationToast.success.mockClear();
   });
 
   afterEach(() => {
@@ -562,7 +562,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'Donation amount must be between 1 and 10000000.',
     );
   });
@@ -587,7 +587,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'Donation amount must be between 1 and 10000000.',
     );
   });
@@ -611,7 +611,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'Please enter a numerical value for the donation amount.',
     );
   });
@@ -636,7 +636,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     await wait();
 
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'Please enter a numerical value for the donation amount.',
     );
   });
@@ -664,7 +664,7 @@ describe('Testing Donate Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('donateBtn'));
 
     await wait();
-    expect(toast.success).toHaveBeenCalled();
+    expect(mockNotificationToast.success).toHaveBeenCalled();
   });
 
   test('handles null donation data from query', async () => {
@@ -740,7 +740,7 @@ describe('Testing Donate Screen [User Portal]', () => {
     // Leave amount empty
     await userEvent.click(screen.getByTestId('donateBtn'));
 
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'Please enter a numerical value for the donation amount.',
     );
   });
@@ -807,7 +807,7 @@ describe('Testing Donate Screen [User Portal]', () => {
     await userEvent.type(screen.getByTestId('donationAmount'), 'abc');
     await userEvent.click(screen.getByTestId('donateBtn'));
 
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'Please enter a numerical value for the donation amount.',
     );
   });
@@ -830,7 +830,7 @@ describe('Testing Donate Screen [User Portal]', () => {
     await userEvent.type(screen.getByTestId('donationAmount'), '0.5');
     await userEvent.click(screen.getByTestId('donateBtn'));
 
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'Donation amount must be between 1 and 10000000.',
     );
   });
@@ -853,7 +853,7 @@ describe('Testing Donate Screen [User Portal]', () => {
     await userEvent.type(screen.getByTestId('donationAmount'), '10000001');
     await userEvent.click(screen.getByTestId('donateBtn'));
 
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'Donation amount must be between 1 and 10000000.',
     );
   });

@@ -36,7 +36,7 @@ import styles from 'style/app-fixed.module.css';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   FormControl,
   Paper,
@@ -102,14 +102,14 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
           status: status,
         },
       });
-      toast.success(
+      NotificationToast.success(
         t(
           status === 'accepted' ? 'requestAccepted' : 'requestRejected',
         ) as string,
       );
       refetchRequests();
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
     }
   };
 
@@ -175,12 +175,12 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             data: { ...updatedFields, eventId },
           },
         });
-        toast.success(t('volunteerGroupUpdated'));
+        NotificationToast.success(t('volunteerGroupUpdated'));
         refetchGroups();
         hide();
       } catch (error: unknown) {
         console.log(error);
-        toast.error((error as Error).message);
+        NotificationToast.error((error as Error).message);
       }
     },
     [formState, group],

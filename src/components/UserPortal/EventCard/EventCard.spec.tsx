@@ -2,7 +2,7 @@ import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
-import { toast, ToastContainer } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import i18nForTest from 'utils/i18nForTest';
 import EventCard from './EventCard';
 import { render, screen, waitFor } from '@testing-library/react';
@@ -78,7 +78,7 @@ describe('Testing Event Card In User portal', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
+              
               <EventCard {...props} />
             </I18nextProvider>
           </Provider>
@@ -97,7 +97,7 @@ describe('Testing Event Card In User portal', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
+              
               <EventCard {...props} />
             </I18nextProvider>
           </Provider>
@@ -113,7 +113,7 @@ describe('Testing Event Card In User portal', () => {
   });
 
   it('should display an error toast when the register mutation fails', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
     const errorMocks = [
       {
         request: {
@@ -131,7 +131,7 @@ describe('Testing Event Card In User portal', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
+              
               <EventCard {...props} />
             </I18nextProvider>
           </Provider>
@@ -185,7 +185,7 @@ describe('Event card when start and end time are not given', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
+              
               <EventCard {...props} />
             </I18nextProvider>
           </Provider>
