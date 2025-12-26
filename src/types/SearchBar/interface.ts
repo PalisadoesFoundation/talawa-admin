@@ -12,7 +12,7 @@ export interface InterfaceSearchMeta {
   /** The trigger source for the search (button click, enter key, etc.) */
   trigger: SearchBarTrigger;
   /** The original DOM event that triggered the search, if available */
-  event?: KeyboardEvent<HTMLInputElement> | MouseEvent<HTMLButtonElement>;
+  event?: KeyboardEvent<HTMLInputElement> | MouseEvent<HTMLButtonElement>; // i18n-ignore-line
 }
 
 /**
@@ -75,6 +75,8 @@ export interface InterfaceSearchBarProps
   buttonLabel?: string;
   /** Accessible label for the search button. */
   buttonAriaLabel?: string;
+  /** Accessible label for the clear button. */
+  clearButtonAriaLabel?: string;
   /** Renders a loading spinner inside the button when true. */
   isLoading?: boolean;
   /** Optional custom icon rendered inside the input field. */
