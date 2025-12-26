@@ -16,6 +16,7 @@ import {
 import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import { toast } from 'react-toastify';
+import { PAGE_SIZE } from '../../types/ReportingTable/utils';
 
 const sharedMocks = vi.hoisted(() => ({
   toast: {
@@ -824,7 +825,9 @@ describe('OrganizationPeople', () => {
     fireEvent.click(adminOption);
 
     await waitFor(() => {
-      expect(screen.getByText('Admin User')).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: 'Admin User' }),
+      ).toBeInTheDocument();
     });
 
     // Navigate to next page
@@ -833,7 +836,9 @@ describe('OrganizationPeople', () => {
 
     // Wait for next page data to load
     await waitFor(() => {
-      expect(screen.getByText('Admin User 2')).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: 'Admin User 2' }),
+      ).toBeInTheDocument();
     });
 
     // Navigate back to previous page
@@ -844,7 +849,9 @@ describe('OrganizationPeople', () => {
 
     // Wait for previous page data to load
     await waitFor(() => {
-      expect(screen.getByText('Admin User')).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: 'Admin User' }),
+      ).toBeInTheDocument();
     });
   });
 
@@ -1339,5 +1346,101 @@ describe('OrganizationPeople', () => {
       name: /previous page/i,
     });
     fireEvent.click(prevPageButton);
+  });
+
+  test('prevents forward pagination when hasNextPage is false', async () => {
+    vi.resetModules();
+
+    vi.doMock('shared-components/ReportingTable/ReportingTable', () => ({
+      __esModule: true,
+      default: ({
+        rows,
+        gridProps,
+      }: {
+        rows?: unknown[];
+        gridProps?: {
+          onPaginationModelChange?: (model: {
+            page: number;
+            pageSize: number;
+          }) => void;
+        };
+      }) => (
+        <div>
+          <div data-testid="row-count">{rows?.length ?? 0}</div>
+          <button
+            data-testid="trigger-forward"
+            onClick={() =>
+              gridProps?.onPaginationModelChange?.({
+                page: 1,
+                pageSize: PAGE_SIZE,
+              })
+            }
+          >
+            Trigger Forward
+          </button>
+        </div>
+      ),
+    }));
+
+    const singlePageMock = createMemberConnectionMock(
+      {
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      },
+      {
+        edges: [
+          {
+            node: {
+              id: 'member1',
+              name: 'John Doe',
+              emailAddress: 'john@example.com',
+              avatarURL: 'https://example.com/avatar1.jpg',
+              createdAt: '2023-01-01T00:00:00Z',
+            },
+            cursor: 'cursor1',
+          },
+        ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: 'cursor1',
+          endCursor: 'cursor1',
+        },
+      },
+    );
+
+    const link = new StaticMockLink([singlePageMock], true);
+
+    const { default: Component } = await import('./OrganizationPeople');
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route path="/orgpeople/:orgId" element={<Component />} />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('row-count').textContent).toBe('1');
+    });
+
+    fireEvent.click(screen.getByTestId('trigger-forward'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('row-count').textContent).toBe('1');
+    });
+
+    vi.doUnmock('shared-components/ReportingTable/ReportingTable');
+    vi.resetModules();
   });
 });

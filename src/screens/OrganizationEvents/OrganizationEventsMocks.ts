@@ -1,9 +1,12 @@
-import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
+import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
 import {
   GET_ORGANIZATION_EVENTS_PG,
   GET_ORGANIZATION_DATA_PG,
 } from 'GraphQl/Queries/Queries';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 function buildEventsVariables() {
   const now = new Date();
@@ -11,7 +14,7 @@ function buildEventsVariables() {
 
   return {
     id: undefined,
-    first: 150,
+    first: 100,
     after: null,
     startDate: dayjs(firstOfMonth).startOf('month').toISOString(),
     endDate: dayjs(firstOfMonth).endOf('month').toISOString(),
@@ -28,19 +31,25 @@ function buildOrgVariables() {
 }
 
 function buildCreateEventVariables() {
+  const parsedStartDate = dayjs('03/28/2022', 'MM/DD/YYYY');
+  const parsedEndDate = dayjs('03/30/2022', 'MM/DD/YYYY');
+  const startDateObj = parsedStartDate.toDate();
+  const endDateObj = parsedEndDate.toDate();
+  const startAt = dayjs.utc(startDateObj).startOf('day').toISOString();
+  const endAt = dayjs.utc(endDateObj).endOf('day').toISOString();
+
   return {
-    id: undefined,
     input: {
       name: 'Dummy Org',
       description: 'This is a dummy organization',
-      startAt: '2030-03-28T00:00:00.000Z',
-      endAt: '2030-03-30T23:59:59.999Z',
+      startAt,
+      endAt,
+      organizationId: '',
       allDay: true,
       location: 'New Delhi',
       isPublic: false,
       isRegisterable: true,
-      recurrenceRule: null,
-      parentEventId: null,
+      recurrence: undefined,
     },
   };
 }

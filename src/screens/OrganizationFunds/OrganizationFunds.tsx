@@ -1,36 +1,47 @@
 import { useQuery } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
-import { Stack } from '@mui/material';
 import {
-  DataGrid,
-  type GridCellParams,
-  type GridColDef,
-} from '@mui/x-data-grid';
+  AccountBalanceWallet,
+  Search,
+  WarningAmberRounded,
+} from '@mui/icons-material';
+import { Stack } from '@mui/material';
+import { type GridCellParams } from '@mui/x-data-grid';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import Loader from 'components/Loader/Loader';
+import TableLoader from 'components/TableLoader/TableLoader';
+import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import FundModal from './modal/FundModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceFundInfo } from 'utils/interfaces';
-import PageHeader from 'shared-components/Navbar/Navbar';
+import {
+  ReportingRow,
+  ReportingTableColumn,
+  ReportingTableGridProps,
+} from 'types/ReportingTable/interface';
+import {
+  PAGE_SIZE,
+  ROW_HEIGHT,
+  dataGridStyle as baseDataGridStyle,
+} from 'types/ReportingTable/utils';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 const dataGridStyle = {
-  borderRadius: 'var(--table-head-radius)',
-  backgroundColor: 'var(--row-background)',
+  ...baseDataGridStyle,
   '& .MuiDataGrid-row': {
-    backgroundColor: 'var(--row-background)',
-    '&:focus-within': { outline: 'none' },
+    ...baseDataGridStyle['& .MuiDataGrid-row'],
+    cursor: 'pointer',
   },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'var(--row-background)' },
+  '& .MuiDataGrid-row:hover': {
+    backgroundColor: 'var(--row-hover-bg)',
+  },
   '& .MuiDataGrid-row.Mui-hovered': {
-    backgroundColor: 'var(--row-background)',
+    backgroundColor: 'var(--row-hover-bg)',
   },
-  '& .MuiDataGrid-cell:focus': { outline: 'none' },
-  '& .MuiDataGrid-cell:focus-within': { outline: 'none' },
 };
 
 /**
@@ -94,21 +105,10 @@ const organizationFunds = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'funds' });
   const { t: tCommon } = useTranslation('common');
 
-  // Set the document title based on the translation
-  document.title = t('title');
-
   const { orgId } = useParams();
   const navigate = useNavigate();
 
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   const [fund, setFund] = useState<InterfaceFundInfo | null>(null);
-  // const [searchTerm, setSearchTerm] = useState<string>('');
-  const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>(
-    'createdAt_DESC',
-  );
 
   const [modalState, setModalState] = useState<boolean>(false);
   const [fundModalMode, setFundModalMode] = useState<'edit' | 'create'>(
@@ -143,12 +143,22 @@ const organizationFunds = (): JSX.Element => {
     error?: Error | undefined;
     refetch: () => void;
   } = useQuery(FUND_LIST, {
+    skip: !orgId,
     variables: {
       input: {
-        id: orgId,
+        id: orgId ?? '',
       },
     },
   });
+
+  // Set the document title based on the translation
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
+
+  if (!orgId) {
+    return <Navigate to={'/'} replace />;
+  }
 
   const funds = useMemo(() => {
     return (
@@ -173,25 +183,24 @@ const organizationFunds = (): JSX.Element => {
       const dateA = new Date(a.createdAt).getTime();
       const dateB = new Date(b.createdAt).getTime();
 
-      const sortMultiplier = sortBy === 'createdAt_DESC' ? -1 : 1;
+      const sortMultiplier = -1; // Default to createdAt_DESC
       return (dateA - dateB) * sortMultiplier;
     });
-  }, [funds, searchText, sortBy]);
+  }, [funds, searchText]);
 
   const handleClick = (fundId: string): void => {
     navigate(`/orgfundcampaign/${orgId}/${fundId}`);
   };
 
-  if (fundLoading) {
-    return <Loader size="xl" />;
-  }
   if (fundError) {
     return (
-      <div className={`${styles.container} bg-white rounded-4 my-3`}>
+      <div className={styles.whiteContainer}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded
+            className={`${styles.errorIcon} ${styles.errorIconLarge}`}
+          />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading Funds
+            {t('errorLoadingFundsData')}
             <br />
             {fundError.message}
           </h6>
@@ -200,23 +209,35 @@ const organizationFunds = (): JSX.Element => {
     );
   }
 
-  const columns: GridColDef[] = [
+  // Header titles for the funds table
+  const headerTitles: string[] = [
+    tCommon('hash'),
+    t('fundName'),
+    tCommon('createdOn'),
+    tCommon('status'),
+    t('associatedCampaigns'),
+    tCommon('action'),
+  ];
+
+  const columns: ReportingTableColumn[] = [
     {
-      field: 'id',
-      headerName: '#',
+      field: 'sl_no',
+      headerName: tCommon('hash'),
       flex: 1,
-      minWidth: 100,
+      minWidth: 60,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return <div>{params.row.id}</div>;
-      },
+      renderCell: (params: GridCellParams) => (
+        <span className={styles.requestsTableItemIndex}>
+          {params.api.getRowIndexRelativeToVisibleRows(params.row.id) + 1}
+        </span>
+      ),
     },
     {
       field: 'fundName',
-      headerName: 'Fund Name',
+      headerName: t('fundName'),
       flex: 2,
       align: 'center',
       minWidth: 100,
@@ -224,37 +245,17 @@ const organizationFunds = (): JSX.Element => {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className={styles.hyperlinkText}
-            data-testid="fundName"
-            onClick={() => handleClick(params.row.id as string)}
-          >
-            {params.row.name}
-          </div>
-        );
+        return <div data-testid="fundName">{params.row.name}</div>;
       },
     },
     {
-      field: 'createdBy',
-      headerName: 'Created By',
-      flex: 2,
+      field: 'createdAt',
+      headerName: tCommon('createdOn'),
       align: 'center',
       minWidth: 100,
       headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return params.row.creator.name;
-      },
-    },
-    {
-      field: 'createdOn',
-      headerName: 'Created On',
-      align: 'center',
-      minWidth: 100,
-      headerAlign: 'center',
-      sortable: false,
+      sortable: true,
+      sortComparator: (v1, v2) => dayjs(v1).valueOf() - dayjs(v2).valueOf(),
       headerClassName: `${styles.tableHeader}`,
       flex: 2,
       renderCell: (params: GridCellParams) => {
@@ -267,48 +268,20 @@ const organizationFunds = (): JSX.Element => {
     },
     {
       field: 'status',
-      headerName: 'Status',
-      flex: 2,
+      headerName: t('status'),
+      flex: 1,
       align: 'center',
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        return params.row.isArchived ? 'Archived' : 'Active';
-      },
-    },
-    {
-      field: 'action',
-      headerName: 'Action',
-      flex: 2,
-      align: 'center',
-      minWidth: 100,
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <>
-            <Button
-              variant="success"
-              size="sm"
-              // className="me-2 rounded"
-              className={styles.editButton}
-              data-testid="editFundBtn"
-              onClick={() =>
-                handleOpenModal(params.row as InterfaceFundInfo, 'edit')
-              }
-            >
-              <i className="fa fa-edit" />
-            </Button>
-          </>
-        );
+        return params.row.isArchived ? t('archived') : tCommon('active');
       },
     },
     {
       field: 'assocCampaigns',
-      headerName: 'Associated Campaigns',
+      headerName: t('assocCampaigns'),
       flex: 2,
       align: 'center',
       minWidth: 100,
@@ -320,6 +293,7 @@ const organizationFunds = (): JSX.Element => {
           <Button
             size="sm"
             className={styles.editButton}
+            aria-label={t('viewCampaigns')}
             onClick={() => handleClick(params.row.id as string)}
             data-testid="viewBtn"
           >
@@ -329,67 +303,135 @@ const organizationFunds = (): JSX.Element => {
         );
       },
     },
+    {
+      field: 'action',
+      headerName: tCommon('action'),
+      flex: 2,
+      align: 'center',
+      minWidth: 100,
+      headerAlign: 'center',
+      sortable: false,
+      headerClassName: `${styles.tableHeader}`,
+      renderCell: (params: GridCellParams) => {
+        return (
+          <Button
+            size="sm"
+            // className="me-2 rounded"
+            className={styles.editButton}
+            data-testid="editFundBtn"
+            onClick={(e) => {
+              e.stopPropagation();
+              handleOpenModal(params.row as InterfaceFundInfo, 'edit');
+            }}
+          >
+            <i className="fa fa-edit me-1" />
+            {t('editFund')}
+          </Button>
+        );
+      },
+    },
   ];
+
+  const gridProps: ReportingTableGridProps = {
+    sx: { ...dataGridStyle },
+    paginationMode: 'client',
+    getRowId: (row: InterfaceFundInfo) => row.id,
+    rowCount: filteredAndSortedFunds.length,
+    pageSizeOptions: [PAGE_SIZE],
+    loading: fundLoading,
+    hideFooter: true,
+    slots: {
+      noRowsOverlay: () => (
+        <Stack height="100%" alignItems="center" justifyContent="center">
+          {t('notFound')}
+        </Stack>
+      ),
+    },
+    getRowClassName: () => `${styles.rowBackground}`,
+    isRowSelectable: () => false,
+    disableColumnMenu: true,
+    rowHeight: ROW_HEIGHT,
+    autoHeight: true,
+    style: { overflow: 'visible' },
+    onRowClick: (params: { row: { id: string } }) =>
+      handleClick(params.row.id as string),
+  };
 
   return (
     <div>
-      <div className={styles.head}>
-        <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-          <PageHeader
-            search={{
-              placeholder: tCommon('searchByName'),
-              onSearch: (text) => setSearchText(text),
-              inputTestId: 'searchByName',
-              buttonTestId: 'searchBtn',
-            }}
-            sorting={[
-              {
-                title: tCommon('sort'),
-                options: [
-                  { label: t('createdLatest'), value: 'createdAt_DESC' },
-                  { label: t('createdEarliest'), value: 'createdAt_ASC' },
-                ],
-                selected: sortBy,
-                onChange: (value) =>
-                  setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC'),
-                testIdPrefix: 'sort',
-              },
-            ]}
-            actions={
-              <Button
-                variant="success"
-                onClick={() => handleOpenModal(null, 'create')}
-                className={styles.createButton}
-                data-testid="createFundBtn"
-              >
-                <i className="fa fa-plus me-2" />
-                {t('createFund')}
-              </Button>
-            }
+      <div className={styles.searchContainerRowNoTopMargin}>
+        <div className={styles.searchBarMarginReset}>
+          <SearchBar
+            placeholder={t('searchFunds')}
+            value={searchText}
+            onChange={(value) => setSearchText(value.trim())}
+            onClear={() => setSearchText('')}
+            showSearchButton={false}
+            showTrailingIcon={true}
+            inputTestId="searchByName"
+            clearButtonTestId="clearSearch"
           />
         </div>
+        <Button
+          variant="success"
+          onClick={() => handleOpenModal(null, 'create')}
+          className={`${styles.createFundButton} ${styles.buttonNoWrap}`}
+          data-testid="createFundBtn"
+        >
+          <i className="fa fa-plus me-2" />
+          {t('createFund')}
+        </Button>
       </div>
 
-      <DataGrid
-        disableColumnMenu
-        columnBufferPx={7}
-        hideFooter={true}
-        getRowId={(row) => row.id}
-        slots={{
-          noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noFundsFound')}
-            </Stack>
-          ),
-        }}
-        sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackgrounds}`}
-        autoHeight
-        rowHeight={65}
-        rows={filteredAndSortedFunds}
-        columns={columns}
-        isRowSelectable={() => false}
-      />
+      {!fundLoading &&
+      fundData &&
+      filteredAndSortedFunds.length === 0 &&
+      searchText.length > 0 ? (
+        <EmptyState
+          icon={<Search />}
+          message="noResultsFound"
+          description={tCommon('noResultsFoundFor', {
+            query: `"${searchText}"`,
+          })}
+          dataTestId="funds-search-empty"
+        />
+      ) : !fundLoading && fundData && filteredAndSortedFunds.length === 0 ? (
+        <EmptyState
+          icon={<AccountBalanceWallet />}
+          message={t('noFundsFound')}
+          dataTestId="funds-empty"
+        />
+      ) : (
+        <div className={styles.listBox}>
+          {fundLoading ? (
+            <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
+          ) : (
+            <ReportingTable
+              rows={
+                filteredAndSortedFunds.map((fund) => ({
+                  ...fund,
+                })) as ReportingRow[]
+              }
+              columns={columns}
+              gridProps={gridProps}
+              listProps={{
+                loader: <TableLoader noOfCols={6} noOfRows={2} />,
+                className: styles.listTable,
+                ['data-testid']: 'funds-list',
+                scrollThreshold: 0.9,
+                style: { overflow: 'visible' },
+                endMessage:
+                  filteredAndSortedFunds.length > 0 ? (
+                    <div className={'w-100 text-center my-4'}>
+                      <h5 className="m-0">{tCommon('endOfResults')}</h5>
+                    </div>
+                  ) : null,
+              }}
+            />
+          )}
+        </div>
+      )}
+
       <FundModal
         isOpen={modalState}
         hide={() => setModalState(false)}

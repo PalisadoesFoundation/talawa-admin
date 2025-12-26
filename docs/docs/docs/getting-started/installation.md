@@ -38,7 +38,7 @@ First you need a local copy of `talawa-admin`. Run the following command in the 
 
 The next steps will depend on whether you are:
 
-1. an end user installing our software (Production Environments) or 
+1. an end user installing our software (Production Environments) or
 2. one of our open source contributors (Development Environments).
 
 Please follow them closely.
@@ -54,23 +54,23 @@ Follow the steps in this section if you are using Talawa-Admin as an end user.
    ```
 
    1. Proceed to the next section.
-   
+
 #### For Development Environments
 
-If you are one of our open source software developer contributors then 
+If you are one of our open source software developer contributors then
 follow these steps carefully in forking and cloning the `talawa-admin` repository.
 
-   1. Follow the steps in our [Git Guide for Developers](https://developer.palisadoes.org/docs/git-guide/introduction/quickstart)
-   2. As a developer you will be working with our `develop` branch.
-   3. You will    now have a local copy of the code files.
-   4. For more detailed instructions on contributing code, please review the following documents in the root directory of the code:
-      1. CONTRIBUTING.md
-      2. CODE_OF_CONDUCT.md
-      3. CODE_STYLE.md
-      4. DOCUMENTATION.md
-      5. INSTALLATION.md
-      6. ISSUE_GUIDELINES.md
-      7. PR_GUIDELINES.md
+1.  Follow the steps in our [Git Guide for Developers](https://developer.palisadoes.org/docs/git-guide/introduction/quickstart)
+2.  As a developer you will be working with our `develop` branch.
+3.  You will now have a local copy of the code files.
+4.  For more detailed instructions on contributing code, please review the following documents in the root directory of the code:
+    1. CONTRIBUTING.md
+    2. CODE_OF_CONDUCT.md
+    3. CODE_STYLE.md
+    4. DOCUMENTATION.md
+    5. INSTALLATION.md
+    6. ISSUE_GUIDELINES.md
+    7. PR_GUIDELINES.md
 
 Proceed to the next section.
 
@@ -137,14 +137,34 @@ Proceed to the next section.
 
 ### Install The Required Packages
 
+This section covers how to install additional required packages.
+
+1. All users will need to run the `pnpm install` command
+2. If you are a developer, you will additionally need to install packages in the `docs/` directory.
+
+Both steps are outlined below.
+
+#### All Users
+
 Run the following command to install the packages and dependencies required by the app:
 
-```
+```bash
 pnpm install
 ```
 
-The prerequisites are now installed. The next step will be to get the app up and running.
+#### Additional Step for Developers
+
+:::note
+Developers will also need to install packages in the `docs/` directory.
+:::
+
+```bash
+cd docs/
+pnpm install
+```
 
 ## Running Talawa Admin
+
+The prerequisites are now installed. The next step will be to get the app up and running.
 
 - Please go to the [Operation Page](./operation.md) to get Talawa-Admin started

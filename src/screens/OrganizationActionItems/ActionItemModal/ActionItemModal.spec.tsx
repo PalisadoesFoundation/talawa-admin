@@ -702,8 +702,11 @@ describe('ItemModal - Additional Test Cases', () => {
       );
       expect(volunteerGroupSelect).toBeInTheDocument();
 
-      const volunteerGroupInput = screen.getByLabelText(/volunteerGroup/i);
-      expect(volunteerGroupInput).toHaveValue('Test Group 1');
+      // Wait for the input to be populated with the preselected value
+      await waitFor(() => {
+        const input = screen.getByLabelText(/volunteerGroup/i);
+        expect(input).toHaveValue('Test Group 1');
+      });
 
       expect(screen.queryByTestId('volunteerSelect')).not.toBeInTheDocument();
     });

@@ -138,6 +138,7 @@ export const SIGNUP_MUTATION = gql`
         id
       }
       authenticationToken
+      refreshToken
     }
   }
 `;
@@ -236,8 +237,8 @@ export const CREATE_MEMBER_PG = gql`
 export const REFRESH_TOKEN_MUTATION = gql`
   mutation RefreshToken($refreshToken: String!) {
     refreshToken(refreshToken: $refreshToken) {
+      authenticationToken
       refreshToken
-      accessToken
     }
   }
 `;
@@ -245,8 +246,8 @@ export const REFRESH_TOKEN_MUTATION = gql`
 // to revoke a refresh token
 
 export const REVOKE_REFRESH_TOKEN = gql`
-  mutation RevokeRefreshTokenForUser {
-    revokeRefreshTokenForUser
+  mutation RevokeRefreshToken($refreshToken: String!) {
+    revokeRefreshToken(refreshToken: $refreshToken)
   }
 `;
 

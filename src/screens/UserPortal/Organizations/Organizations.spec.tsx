@@ -88,6 +88,53 @@ vi.mock('shared-components/OrganizationCard/OrganizationCard', () => ({
   ),
 }));
 
+// Mock SignOut component to prevent useNavigate() error from Router context
+vi.mock('components/SignOut/SignOut', () => ({
+  default: vi.fn(() => (
+    <button data-testid="signOutBtn" type="button">
+      Sign Out
+    </button>
+  )),
+}));
+
+// Mock useSession to prevent router hook errors
+vi.mock('utils/useSession', () => ({
+  default: vi.fn(() => ({
+    endSession: vi.fn(),
+    startSession: vi.fn(),
+    handleLogout: vi.fn(),
+    extendSession: vi.fn(),
+  })),
+}));
+
+// Mock ProfileCard component to prevent useNavigate() error from Router context
+vi.mock('components/ProfileCard/ProfileCard', () => ({
+  default: vi.fn(() => (
+    <div data-testid="profile-dropdown">
+      <div data-testid="display-name">Test User</div>
+      <div data-testid="display-type">User</div>
+      <button data-testid="profileBtn" type="button">
+        Profile Button
+      </button>
+    </div>
+  )),
+}));
+
+// Mock UserSidebar to prevent all router-related errors from NavLink, useLocation, etc.
+vi.mock('components/UserPortal/UserSidebar/UserSidebar', () => ({
+  default: vi.fn(({ hideDrawer }: { hideDrawer: boolean }) => (
+    <div data-testid="user-sidebar" data-hide-drawer={hideDrawer}>
+      <span>User Portal</span>
+      <button data-testid="orgsBtn" type="button">
+        Organizations
+      </button>
+      <button data-testid="settingsBtn" type="button">
+        Settings
+      </button>
+    </div>
+  )),
+}));
+
 const TEST_USER_ID = '01958985-600e-7cde-94a2-b3fc1ce66cf3';
 const baseOrgFields = {
   addressLine1: 'asdfg',
@@ -663,7 +710,7 @@ test('Mode is changed to joined organizations', async () => {
 
   await userEvent.click(screen.getByTestId('modeChangeBtn'));
   await wait();
-  await userEvent.click(screen.getByTestId('modeBtn1'));
+  await userEvent.click(screen.getByTestId('1'));
   await wait();
 
   expect(screen.queryAllByText('joinedOrganization')).not.toBe([]);
@@ -686,7 +733,7 @@ test('Mode is changed to created organizations', async () => {
 
   await userEvent.click(screen.getByTestId('modeChangeBtn'));
   await wait();
-  await userEvent.click(screen.getByTestId('modeBtn2'));
+  await userEvent.click(screen.getByTestId('2'));
   await wait();
 
   expect(screen.queryAllByText('createdOrganization')).not.toBe([]);
@@ -1093,9 +1140,9 @@ test('should correctly map joined organizations data ', async () => {
   const modeDropdown = screen.getByTestId('modeChangeBtn');
   await userEvent.click(modeDropdown);
   await waitFor(() => {
-    expect(screen.getByTestId('modeBtn1')).toBeInTheDocument();
+    expect(screen.getByTestId('1')).toBeInTheDocument();
   });
-  await userEvent.click(screen.getByTestId('modeBtn1'));
+  await userEvent.click(screen.getByTestId('1'));
 
   await waitFor(
     () => {
@@ -1193,7 +1240,7 @@ test('should set membershipRequestStatus to "created" for created organizations'
 
   const modeBtn = screen.getByTestId('modeChangeBtn');
   fireEvent.click(modeBtn);
-  const createdModeBtn = screen.getByTestId('modeBtn2');
+  const createdModeBtn = screen.getByTestId('2');
   fireEvent.click(createdModeBtn);
 
   await waitFor(() => {
@@ -1290,7 +1337,7 @@ test('correctly map joined organizations data when mode is 1', async () => {
   const modeBtn = screen.getByTestId('modeChangeBtn');
   fireEvent.click(modeBtn);
 
-  const joinedModeBtn = screen.getByTestId('modeBtn1');
+  const joinedModeBtn = screen.getByTestId('1');
   fireEvent.click(joinedModeBtn);
 
   await waitFor(() => {
@@ -1708,7 +1755,7 @@ test('doSearch function should call appropriate refetch based on mode', async ()
     await wait(100);
   });
 
-  const modeBtn1 = screen.getByTestId('modeBtn1');
+  const modeBtn1 = screen.getByTestId('1');
   expect(modeBtn1).toBeInTheDocument();
 
   await act(async () => {
@@ -1727,7 +1774,7 @@ test('doSearch function should call appropriate refetch based on mode', async ()
     await wait(100);
   });
 
-  const modeBtn2 = screen.getByTestId('modeBtn2');
+  const modeBtn2 = screen.getByTestId('2');
   expect(modeBtn2).toBeInTheDocument();
 
   await act(async () => {

@@ -11,6 +11,7 @@ import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import i18nForTest from './utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import 'style/app-fixed.module.css';
+import * as useLSModule from 'utils/useLocalstorage';
 
 vi.mock('@mui/x-charts/PieChart', () => ({
   pieArcLabelClasses: vi.fn(),
@@ -363,15 +364,20 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
+let logSpy: ReturnType<typeof vi.spyOn> | undefined;
+let errorSpy: ReturnType<typeof vi.spyOn> | undefined;
+
 describe('Testing the App Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    console.log = vi.fn();
-    console.error = vi.fn();
+    logSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    errorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
   });
 
   afterEach(() => {
-    vi.restoreAllMocks(); // Restores console spies automatically
+    vi.clearAllMocks();
+    logSpy?.mockRestore();
+    errorSpy?.mockRestore();
   });
 
   it('Component should be rendered properly and user is logged in', async () => {
@@ -671,11 +677,65 @@ describe('Testing the App Component', () => {
   });
 
   it('should navigate to user settings', async () => {
-    renderApp(link, '/user/settings');
+    const { setItem, removeItem } = useLSModule.useLocalStorage();
+    setItem('IsLoggedIn', 'TRUE');
+    removeItem('AdminFor');
 
-    await waitFor(() => {
-      // Should render user screen components
-      expect(screen.getByTestId('mock-settings')).toBeInTheDocument();
-    });
+    renderApp(link, '/user/settings');
+    expect(await screen.findByTestId('mock-settings')).toBeInTheDocument();
+  });
+
+  it('blocks /user/settings when not logged in', async () => {
+    // Force IsLoggedIn !== 'TRUE'
+    const lsSpy = vi.spyOn(useLSModule, 'default').mockImplementation(
+      () =>
+        ({
+          getItem: (key: string) =>
+            key === 'IsLoggedIn' ? 'FALSE' : undefined,
+          setItem: vi.fn(),
+          removeItem: vi.fn(),
+          getStorageKey: (k: string) => `Talawa-admin_${k}`,
+        }) as unknown as ReturnType<typeof useLSModule.default>,
+    );
+
+    try {
+      renderApp(link, '/user/settings');
+
+      // Guard blocks route; mocked Settings must NOT appear
+      await waitFor(() => {
+        expect(screen.queryByTestId('mock-settings')).not.toBeInTheDocument();
+      });
+    } finally {
+      lsSpy.mockRestore();
+    }
+  });
+
+  it('blocks /user/settings when AdminFor is present', async () => {
+    // Force IsLoggedIn === 'TRUE' and AdminFor present
+    const lsSpy = vi.spyOn(useLSModule, 'default').mockImplementation(
+      () =>
+        ({
+          getItem: (key: string) =>
+            key === 'IsLoggedIn'
+              ? 'TRUE'
+              : key === 'AdminFor'
+                ? 'some-org-id'
+                : undefined,
+          setItem: vi.fn(),
+          removeItem: vi.fn(),
+          getStorageKey: (k: string) => `Talawa-admin_${k}`,
+        }) as unknown as ReturnType<typeof useLSModule.default>,
+    );
+
+    try {
+      renderApp(link, '/user/settings');
+
+      // Guard takes "not allowed" branch; mocked Settings must NOT appear
+      await waitFor(() => {
+        expect(screen.queryByTestId('mock-settings')).not.toBeInTheDocument();
+      });
+    } finally {
+      lsSpy.mockRestore();
+    }
   });
 });

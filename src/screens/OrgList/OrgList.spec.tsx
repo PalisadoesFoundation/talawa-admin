@@ -52,7 +52,20 @@ vi.mock('shared-components/OrganizationCard/OrganizationCard', () => ({
   ),
 }));
 
-const { setItem } = useLocalStorage();
+type LSApi = ReturnType<typeof useLocalStorage>;
+let setItem: LSApi['setItem'];
+let removeItem: LSApi['removeItem'];
+
+beforeEach(() => {
+  const ls = useLocalStorage();
+  setItem = ls.setItem;
+  removeItem = ls.removeItem;
+
+  // Seed guard keys for every test
+  setItem('IsLoggedIn', 'TRUE');
+  setItem('userId', '123'); // if this screen reads it
+  removeItem('AdminFor'); // must be absent (== undefined)
+});
 
 const mockLinks = {
   superAdmin: new StaticMockLink(MOCKS, true),
@@ -82,6 +95,7 @@ const mockUsers = {
 const setupUser = (userType: keyof typeof mockUsers) => {
   const user = mockUsers[userType];
   setItem('id', user.id);
+  setItem('token', 'mock-token');
   if ('SuperAdmin' in user) setItem('SuperAdmin', user.SuperAdmin);
   if ('AdminFor' in user) setItem('AdminFor', user.AdminFor);
   if ('role' in user) setItem('role', user.role);
@@ -570,7 +584,6 @@ beforeEach(() => {
 });
 
 afterEach(() => {
-  localStorage.clear();
   cleanup();
   vi.clearAllMocks();
 });
@@ -736,10 +749,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
     renderWithProviders(mockLinks.empty);
 
     await wait();
-    expect(screen.queryByText('Organizations Not Found')).toBeInTheDocument();
-    expect(
-      screen.queryByText('Please create an organization through dashboard'),
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('orglist-no-orgs-empty')).toBeInTheDocument();
   });
 
   test('Testing Organization data is not present', async () => {
@@ -1358,7 +1368,7 @@ describe('Advanced Component Functionality Tests', () => {
     await wait();
 
     // Check for "no results found" message
-    expect(screen.getByTestId('noResultFound')).toBeInTheDocument();
+    expect(screen.getByTestId('orglist-search-empty')).toBeInTheDocument();
   });
 
   test('Testing sort by Earliest functionality', async () => {
@@ -1495,8 +1505,7 @@ describe('Advanced Component Functionality Tests', () => {
     setItem('SuperAdmin', true);
     setItem('role', 'administrator');
 
-    // Mock localStorage.clear and window.location.assign
-    const clearSpy = vi.spyOn(Storage.prototype, 'clear');
+    // Mock window.location.assign
     const assignMock = vi.fn();
     const originalLocation = window.location;
     const originalDescriptor = Object.getOwnPropertyDescriptor(
@@ -1583,7 +1592,6 @@ describe('Advanced Component Functionality Tests', () => {
         writable: true,
       },
     );
-    clearSpy.mockRestore();
   });
 
   test('Testing pagination navigation functionality', async () => {
@@ -2249,5 +2257,54 @@ describe('Advanced Component Functionality Tests', () => {
 
     // Verify that the modal should still be open since the success path wasn't taken
     expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
+  });
+
+  test('Testing missing token scenario', async () => {
+    setItem('id', '123');
+    setItem('role', 'administrator');
+    setItem('SuperAdmin', true);
+    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
+
+    const missingTokenMocks = [
+      {
+        request: {
+          query: CURRENT_USER,
+          variables: { userId: '123' },
+        },
+        error: new Error('Unauthorized: Missing or invalid token'),
+      },
+      {
+        request: {
+          query: GET_USER_NOTIFICATIONS,
+          variables: { userId: '123', input: { first: 5, skip: 0 } },
+        },
+        error: new Error('Unauthorized: Missing or invalid token'),
+      },
+      {
+        request: {
+          query: ORGANIZATION_FILTER_LIST,
+          variables: { filter: '' },
+        },
+        error: new Error('Unauthorized: Missing or invalid token'),
+      },
+    ];
+
+    renderWithMocks(missingTokenMocks);
+    await wait();
+
+    expect(screen.getByTestId('searchInput')).toBeInTheDocument();
+  });
+
+  test('Testing CURRENT_USER query without token in localStorage', async () => {
+    setItem('id', '123');
+    setItem('SuperAdmin', true);
+    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
+    // Explicitly do NOT set token to test the else branch
+
+    renderWithProviders();
+    await wait();
+
+    // Verify component renders without authorization header
+    expect(screen.getByTestId('searchInput')).toBeInTheDocument();
   });
 });
