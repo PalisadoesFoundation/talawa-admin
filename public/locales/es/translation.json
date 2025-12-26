@@ -774,15 +774,22 @@
     "searchByPlaceholder": "Buscar por {{field}}",
     "selectPledger": "Por favor seleccione un prometedor"
   },
-  "orgPost": {
+  "createPostModal": {
     "title": "Publicaciones de Talawa",
+    "titleOfPost": "Título de tu publicación...",
+    "closeCreatePost": "Cerrar Crear Publicación",
+    "close": "Cerca",
+    "selectedImage": "Imagen seleccionada",
+    "bodyOfPost": "Contenido de tu publicación...",
+    "post": "Publicación",
+    "saveChanges": "Guardar Cambios",
+    "addAttachment": "Agregar archivo adjunto",
     "searchPost": "Buscar Publicación",
     "posts": "Publicaciones",
     "createPost": "Crear Publicación",
     "postDetails": "Detalles de la Publicación",
     "postTitle1": "Escribir título de la publicación",
     "postTitle": "Título",
-    "addMedia": "Subir foto o video",
     "information": "Información",
     "information1": "Escribir información de la publicación",
     "addPost": "Agregar Publicación",
@@ -799,7 +806,12 @@
     "sortPost": "Ordenar Publicaciones",
     "tag": "Su navegador no admite la etiqueta de video",
     "postCreatedSuccess": "¡Felicidades! Has publicado algo.",
+    "postUpdatedSuccess": "Publicación actualizada exitosamente",
     "pinPost": "Fijar publicación",
+    "unpinPost": "Desfijar publicación",
+    "postToAnyone": "Publicar a cualquiera",
+    "editPost": "Editar Publicación",
+    "unsupportedFileType": "Tipo de archivo no compatible",
     "Next": "Siguiente página",
     "Previous": "Página anterior",
     "messageTitleError": "¡El título de la publicación no puede estar vacío!",
@@ -824,9 +836,14 @@
     "admin not found!": "Administrador no encontrado!",
     "roles not found!": "roles no encontrados!"
   },
+  "orgPost": {
+    "title": "Organization Posts"
+  },
   "orgPostCard": {
     "author": "Autor",
     "imageURL": "URL de la Imagen",
+    "untitledPost": "Publicación sin título",
+    "noContentAvailable": "No hay contenido disponible",
     "videoURL": "URL del Video",
     "edit": "Editar Publicación",
     "deletePost": "Eliminar Publicación",
@@ -1154,6 +1171,7 @@
   "postCard": {
     "likes": "Gustos",
     "comments": "Comentarios",
+    "view": "Ver",
     "postDeletedSuccess": "Publicación eliminada con éxito.",
     "postPinnedSuccess": "Publicación fijada con éxito.",
     "postUnpinnedSuccess": "Publicación desfijada con éxito.",
@@ -1172,6 +1190,26 @@
     "emptyCommentError": "Por favor ingrese un comentario antes de enviarlo.",
     "unexpectedError": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo.",
     "moreOptions": "Más opciones"
+  },
+  "posts": {
+    "pinnedPosts": "Publicaciones fijadas",
+    "title": "Publicaciones",
+    "latest": "El Más Reciente",
+    "oldest": "El Más Antiguo",
+    "none": "Ninguno",
+    "unknownUser": "Usuario desconocido",
+    "closePinnedPost": "Cerrar publicación fijada",
+    "searchPosts": "Buscar publicaciones",
+    "nothingToShow": "Nada que mostrar aquí.",
+    "noPosts": "No hay publicaciones para mostrar.",
+    "noMorePosts": "No hay más publicaciones para cargar.",
+    "createPost": "Crear publicación",
+    "searchTitle": "Buscar por Título",
+    "noPostsFoundMatching": "No se encontraron publicaciones que coincidan con {{term}}",
+    "pinnedPostsLoadError": "Error al cargar publicaciones fijadas. Por favor, inténtelo de nuevo más tarde.",
+    "errorLoadingPosts": "Error al cargar publicaciones. Por favor, inténtelo de nuevo más tarde.",
+    "loadMorePostsError": "Error al cargar más publicaciones. Por favor, inténtelo de nuevo más tarde.",
+    "sortPost": "Ordenar Publicaciones"
   },
   "home": {
     "posts": "Publicaciones",

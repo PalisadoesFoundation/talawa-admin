@@ -20,6 +20,8 @@ import { useTranslation } from 'react-i18next';
 const OrganizationScreen = lazy(
   () => import('components/OrganizationScreen/OrganizationScreen'),
 );
+const PostsPage = lazy(() => import('shared-components/posts/posts'));
+
 const SuperAdminScreen = lazy(
   () => import('components/SuperAdminScreen/SuperAdminScreen'),
 );
@@ -35,7 +37,6 @@ const OrgContribution = lazy(
   () => import('screens/OrgContribution/OrgContribution'),
 );
 const OrgList = lazy(() => import('screens/OrgList/OrgList'));
-const OrgPost = lazy(() => import('screens/OrgPost/OrgPost'));
 const OrgSettings = lazy(() => import('screens/OrgSettings/OrgSettings'));
 
 const OrganizationDashboard = lazy(
@@ -78,7 +79,6 @@ const Transactions = lazy(
   () => import('screens/UserPortal/Transactions/Transactions'),
 );
 const Events = lazy(() => import('screens/UserPortal/Events/Events'));
-const Posts = lazy(() => import('screens/UserPortal/Posts/Posts'));
 const Organizations = lazy(
   () => import('screens/UserPortal/Organizations/Organizations'),
 );
@@ -248,7 +248,7 @@ function App(): React.ReactElement {
                 element={<FundCampaignPledge />}
               />
               <Route path="/orgcontribution" element={<OrgContribution />} />
-              <Route path="/orgpost/:orgId" element={<OrgPost />} />
+              <Route path="/orgpost/:orgId" element={<PostsPage />} />
               <Route path="/orgsetting/:orgId" element={<OrgSettings />} />
               <Route path="/orgads/:orgId" element={<Advertisements />} />
               <Route path="/blockuser/:orgId" element={<BlockUser />} />
@@ -301,7 +301,7 @@ function App(): React.ReactElement {
             <Route element={<UserScreen />}>
               <Route path="/user/chat/:orgId" element={<Chat />} />
               <Route path="/user/organizations" element={<Organizations />} />
-              <Route path="/user/organization/:orgId" element={<Posts />} />
+              <Route path="/user/organization/:orgId" element={<PostsPage />} />
               <Route path="/user/people/:orgId" element={<People />} />
               <Route path="/user/donate/:orgId" element={<Donate />} />
               <Route
