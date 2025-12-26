@@ -30,7 +30,7 @@ import {
 import dayjs from 'dayjs';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
-import { useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
@@ -101,6 +101,11 @@ function organizationEvents(): JSX.Element {
   useEffect(() => {
     document.title = t('title');
   }, [t]);
+
+  // Redirect to orglist if orgId is missing
+  if (!currentUrl) {
+    return <Navigate to="/orglist" replace />;
+  }
 
   // Breadcrumb items for organization -> events navigation
   const breadcrumbItems: IBreadcrumbItem[] = [
