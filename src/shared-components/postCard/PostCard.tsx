@@ -246,7 +246,8 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
 
   return (
     <Box
-      className={`${postCardStyles.postContainer} ${styles.backgroundPaper}`}
+      className={postCardStyles.postContainer}
+      sx={{ backgroundColor: 'background.paper' }}
     >
       {/* Post Header */}
 
@@ -311,25 +312,27 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                   data-testid="edit-post-button"
                 />
               </MenuItem>
+            )}
 
-              {isAdmin && (
-                <MenuItem
-                  onClick={handleTogglePin}
-                  data-testid="pin-post-menu-item"
-                >
-                  <ListItemIcon>
-                    {isPinned ? (
-                      <PushPin fontSize="small" />
-                    ) : (
-                      <PushPinOutlined fontSize="small" />
-                    )}
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={isPinned ? t('unpinPost') : t('pinPost')}
-                  />
-                </MenuItem>
-              )}
+            {isAdmin && (
+              <MenuItem
+                onClick={handleTogglePin}
+                data-testid="pin-post-menu-item"
+              >
+                <ListItemIcon>
+                  {isPinned ? (
+                    <PushPinOutlined fontSize="small" />
+                  ) : (
+                    <PushPin fontSize="small" />
+                  )}
+                </ListItemIcon>
+                <ListItemText
+                  primary={isPinned ? t('unpinPost') : t('pinPost')}
+                />
+              </MenuItem>
+            )}
 
+            {(isAdmin || isPostCreator) && (
               <MenuItem
                 onClick={handleDeletePost}
                 data-testid="delete-post-menu-item"
@@ -342,9 +345,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                   data-testid="delete-post-button"
                 />
               </MenuItem>
-            </Menu>
-          </>
-        )}
+            )}
+          </Menu>
+        </>
       </Box>
 
       {/* Post Media */}
@@ -361,6 +364,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           {props.mimeType?.split('/')[0] == 'video' && (
             <video controls style={{ width: '100%' }} crossOrigin="anonymous">
               <source src={props.attachmentURL} />
+              <track kind="captions" />
             </video>
           )}
         </Box>
@@ -427,7 +431,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             fontSize="small"
             color="primary"
             data-testid="pinned-icon"
-            className={styles.marginLeftAuto}
+            sx={{ marginLeft: 'auto' }}
           />
         )}
       </Box>

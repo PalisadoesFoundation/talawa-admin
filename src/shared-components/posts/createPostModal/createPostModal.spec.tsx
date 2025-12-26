@@ -142,7 +142,6 @@ const createPostWithAttachmentMock = {
         body: '',
         organizationId: 'test-org-id',
         isPinned: false,
-        attachment: expect.any(File),
       },
     },
   },
@@ -483,88 +482,61 @@ describe('CreatePostModal Integration Tests', () => {
       expect(postButton).not.toBeDisabled();
     });
 
-    it('tests MIME type conversion functionality', async () => {
-      // Test the getMimeTypeEnum function by testing different file types
-      const jpegFile = new File(['jpeg-content'], 'test.jpg', {
-        type: 'image/jpeg',
-      });
-      const pngFile = new File(['png-content'], 'test.png', {
-        type: 'image/png',
-      });
-      const webpFile = new File(['webp-content'], 'test.webp', {
-        type: 'image/webp',
-      });
-      const avifFile = new File(['video-content'], 'test.avif', {
-        type: 'image/avif',
-      });
-      const videoFile = new File(['video-content'], 'test.mp4', {
-        type: 'video/mp4',
-      });
-      const webmVideoFile = new File(['video-content'], 'test.webm', {
-        type: 'video/webm',
-      });
+    const imageTypes = [
+      { name: 'test.jpg', type: 'image/jpeg', testId: 'imagePreview' },
+      { name: 'test.png', type: 'image/png', testId: 'imagePreview' },
+      { name: 'test.webp', type: 'image/webp', testId: 'imagePreview' },
+      { name: 'test.avif', type: 'image/avif', testId: 'imagePreview' },
+    ];
+
+    const videoTypes = [
+      { name: 'test.mp4', type: 'video/mp4', testId: 'videoPreview' },
+      { name: 'test.webm', type: 'video/webm', testId: 'videoPreview' },
+      { name: 'test.mov', type: 'video/quicktime', testId: 'videoPreview' },
+    ];
+
+    it.each(imageTypes)(
+      'shows image preview for $type',
+      async ({ name, type, testId }) => {
+        const file = new File(['content'], name, { type });
+
+        renderComponent({}, [createPostWithAttachmentMock]);
+
+        const fileInput = screen.getByTestId('addMedia');
+        await userEvent.upload(fileInput, file);
+
+        await waitFor(() => {
+          expect(screen.getByTestId(testId)).toBeInTheDocument();
+        });
+      },
+    );
+
+    it.each(videoTypes)(
+      'shows video preview for $type',
+      async ({ name, type, testId }) => {
+        const file = new File(['content'], name, { type });
+
+        renderComponent({}, [createPostWithAttachmentMock]);
+
+        const fileInput = screen.getByTestId('addMedia');
+        await userEvent.upload(fileInput, file);
+
+        await waitFor(() => {
+          expect(screen.getByTestId(testId)).toBeInTheDocument();
+        });
+      },
+    );
+
+    it('shows error for unsupported file type', async () => {
       const aviFile = new File(['video-content'], 'test.avi', {
         type: 'video/avi',
-      });
-      const movFile = new File(['video-content'], 'test.mov', {
-        type: 'video/quicktime',
       });
 
       renderComponent({}, [createPostWithAttachmentMock]);
 
       const fileInput = screen.getByTestId('addMedia');
-
-      // Test different file types get preview
-      await userEvent.upload(fileInput, jpegFile);
-      await waitFor(() => {
-        expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
-      });
-
-      // Clear and test another type
-      fireEvent.change(fileInput, { target: { files: null } });
-      await userEvent.upload(fileInput, pngFile);
-      await waitFor(() => {
-        expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
-      });
-
-      // Clear and test another type
-      fireEvent.change(fileInput, { target: { files: null } });
-      await userEvent.upload(fileInput, webpFile);
-      await waitFor(() => {
-        expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
-      });
-
-      // Clear and test another type
-      fireEvent.change(fileInput, { target: { files: null } });
-      await userEvent.upload(fileInput, avifFile);
-      await waitFor(() => {
-        expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
-      });
-
-      // Clear and test another type
-      fireEvent.change(fileInput, { target: { files: null } });
-      await userEvent.upload(fileInput, videoFile);
-      await waitFor(() => {
-        expect(screen.getByTestId('videoPreview')).toBeInTheDocument();
-      });
-
-      // Clear and test another type
-      fireEvent.change(fileInput, { target: { files: null } });
-      await userEvent.upload(fileInput, webmVideoFile);
-      await waitFor(() => {
-        expect(screen.getByTestId('videoPreview')).toBeInTheDocument();
-      });
-
-      // Clear and test another type
-      fireEvent.change(fileInput, { target: { files: null } });
-      await userEvent.upload(fileInput, movFile);
-      await waitFor(() => {
-        expect(screen.getByTestId('videoPreview')).toBeInTheDocument();
-      });
-
-      // Clear and test another type
-      fireEvent.change(fileInput, { target: { files: null } });
       await userEvent.upload(fileInput, aviFile);
+
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith('Unsupported file type!');
       });

@@ -132,7 +132,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
   };
   console.log('pinnedPost.node', pinnedPost.node);
   return (
-    <Container sx={{ width: '340px', height: '360px' }}>
+    <Container sx={{ width: '340px', height: '380px' }}>
       <Card sx={{ width: '340px', borderRadius: 2, overflow: 'hidden' }}>
         {/* Header with user info and actions */}
         <Box
@@ -246,6 +246,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
                 className={styles.postMedia}
               >
                 <source src={pinnedPost.node.attachmentURL} />
+                <track kind="captions" />
               </video>
             )}
           </Box>

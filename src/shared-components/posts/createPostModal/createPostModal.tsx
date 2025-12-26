@@ -198,7 +198,6 @@ function CreatePostModal({
         });
         if (data?.createPost) {
           onSuccess('created');
-          window.location.reload();
         }
       } else {
         const { data } = await editPost({
@@ -214,7 +213,6 @@ function CreatePostModal({
         });
         if (data.updatePost) {
           onSuccess('edited');
-          window.location.reload();
         }
       }
     } catch (error: unknown) {
