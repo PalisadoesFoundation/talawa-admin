@@ -49,6 +49,9 @@ import { refreshToken } from 'utils/getRefreshToken';
 const { getItem, clearAllItems } = useLocalStorage();
 const BEARER_PREFIX = 'Bearer ';
 
+// In-memory access token for WebSockets (HTTP requests use cookies)
+let accessToken: string | null = null;
+
 // Track if we're currently refreshing to avoid multiple simultaneous refresh attempts
 let isRefreshing = false;
 let pendingRequests: Array<() => void> = [];
@@ -58,16 +61,12 @@ const resolvePendingRequests = (): void => {
   pendingRequests = [];
 };
 
-const authLink = setContext((_, { headers }) => {
-  const lng = i18n.language;
-  const token = getItem('token');
-  const authHeaders = token ? { authorization: BEARER_PREFIX + token } : {};
-
+// Language header link - auth is handled via HTTP-Only cookies (credentials: 'include')
+const languageLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      ...authHeaders,
-      'Accept-Language': lng,
+      'Accept-Language': i18n.language,
     },
   };
 });
@@ -90,9 +89,11 @@ const errorLink = onError(
           errorCode === 'unauthenticated' ||
           error.message === 'You must be authenticated to perform this action.'
         ) {
-          // Don't try to refresh if we don't have a refresh token
-          const storedRefreshToken = getItem('refreshToken');
-          if (!storedRefreshToken) {
+          // For cookie-based auth, we can attempt refresh without checking localStorage
+          // The refresh token is in an HTTP-Only cookie that the browser sends automatically
+          const isLoggedIn = getItem('IsLoggedIn');
+          if (isLoggedIn !== 'TRUE') {
+            // User is not logged in, don't try to refresh
             return;
           }
 
@@ -114,8 +115,9 @@ const errorLink = onError(
 
           return fromPromise(
             refreshToken()
-              .then((success) => {
-                if (success) {
+              .then((token) => {
+                if (token) {
+                  accessToken = token;
                   resolvePendingRequests();
                   return true;
                 } else {
@@ -135,18 +137,8 @@ const errorLink = onError(
               }),
           ).flatMap((success) => {
             if (success) {
-              // Retry the original request with new token
-              const oldHeaders = operation.getContext().headers;
-              const newToken = getItem('token');
-              const authHeaders = newToken
-                ? { authorization: BEARER_PREFIX + newToken }
-                : {};
-              operation.setContext({
-                headers: {
-                  ...oldHeaders,
-                  ...authHeaders,
-                },
-              });
+              // Retry the original request - cookies are already updated by the API
+              // No need to manually attach token header
               return forward(operation);
             }
             return new Observable((observer) => {
@@ -176,9 +168,22 @@ const uploadLink = createUploadLink({
 const wsLink = new GraphQLWsLink(
   createClient({
     url: BACKEND_WEBSOCKET_URL,
-    connectionParams: () => {
-      const token = getItem('token');
-      const authParams = token ? { authorization: BEARER_PREFIX + token } : {};
+    connectionParams: async () => {
+      // If we don't have a token but are logged in, try to get one
+      if (!accessToken && getItem('IsLoggedIn') === 'TRUE') {
+        try {
+          accessToken = await refreshToken();
+        } catch (e) {
+          console.error(
+            'Failed to fetch initial access token for WebSocket',
+            e,
+          );
+        }
+      }
+
+      const authParams = accessToken
+        ? { authorization: BEARER_PREFIX + accessToken }
+        : {};
       return {
         ...authParams,
         'Accept-Language': i18n.language,
@@ -190,9 +195,10 @@ const wsLink = new GraphQLWsLink(
   }),
 );
 
-// Create HTTP link with authentication
+// Create HTTP link with language header
+// Auth is handled via HTTP-Only cookies (credentials: 'include' in uploadLink)
 const httpLink = ApolloLink.from([
-  authLink, // Only apply to HTTP operations
+  languageLink,
   requestMiddleware,
   responseMiddleware,
   uploadLink,

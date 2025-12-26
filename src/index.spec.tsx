@@ -349,20 +349,20 @@ describe('Apollo Client Configuration', () => {
 
     it('should call refreshToken when unauthenticated error occurs', async () => {
       const mockRefreshToken = vi.mocked(refreshToken);
-      mockRefreshToken.mockResolvedValueOnce(true);
+      mockRefreshToken.mockResolvedValueOnce('new-token');
 
       // Simulate the refresh token logic
       const result = await refreshToken();
-      expect(result).toBe(true);
+      expect(result).toBe('new-token');
       expect(mockRefreshToken).toHaveBeenCalled();
     });
 
     it('should handle refreshToken failure', async () => {
       const mockRefreshToken = vi.mocked(refreshToken);
-      mockRefreshToken.mockResolvedValueOnce(false);
+      mockRefreshToken.mockResolvedValueOnce(null);
 
       const result = await refreshToken();
-      expect(result).toBe(false);
+      expect(result).toBeNull();
     });
 
     it('should handle refreshToken throwing an error', async () => {
@@ -374,7 +374,7 @@ describe('Apollo Client Configuration', () => {
 
     it('should clear localStorage on refresh failure', async () => {
       const mockRefreshToken = vi.mocked(refreshToken);
-      mockRefreshToken.mockResolvedValueOnce(false);
+      mockRefreshToken.mockResolvedValueOnce(null);
 
       const success = await refreshToken();
       if (!success) {
@@ -386,7 +386,7 @@ describe('Apollo Client Configuration', () => {
 
     it('should redirect to home on refresh failure', async () => {
       const mockRefreshToken = vi.mocked(refreshToken);
-      mockRefreshToken.mockResolvedValueOnce(false);
+      mockRefreshToken.mockResolvedValueOnce(null);
 
       const success = await refreshToken();
       if (!success) {

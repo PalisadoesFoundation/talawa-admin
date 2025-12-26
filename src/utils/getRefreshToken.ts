@@ -1,49 +1,40 @@
 import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
 import { BACKEND_URL } from 'Constant/constant';
 import { REFRESH_TOKEN_MUTATION } from 'GraphQl/Mutations/mutations';
-import useLocalStorage from './useLocalstorage';
 
 /**
- * Refreshes the access token using the stored refresh token.
+ * Refreshes the access token using the HTTP-Only cookie refresh token.
  * This function is called when the current access token expires.
+ * The refresh token is stored in an HTTP-Only cookie and is sent automatically
+ * by the browser with the request.
  *
- * @returns Returns true if token refresh was successful, false otherwise
+ * @returns Returns the new access token if successful, null otherwise
  */
-export async function refreshToken(): Promise<boolean> {
+export async function refreshToken(): Promise<string | null> {
   const client = new ApolloClient({
     link: new HttpLink({
       uri: BACKEND_URL,
+      credentials: 'include', // Send HTTP-Only cookies with request
     }),
     cache: new InMemoryCache(),
   });
 
-  const { getItem, setItem } = useLocalStorage();
-
-  const storedRefreshToken = getItem('refreshToken');
-
-  if (!storedRefreshToken) {
-    console.error('No refresh token available');
-    return false;
-  }
-
   try {
+    // No need to pass refreshToken variable - API reads it from HTTP-Only cookie
     const { data } = await client.mutate({
       mutation: REFRESH_TOKEN_MUTATION,
-      variables: {
-        refreshToken: storedRefreshToken,
-      },
     });
 
-    if (data?.refreshToken) {
-      setItem('token', data.refreshToken.authenticationToken);
-      setItem('refreshToken', data.refreshToken.refreshToken);
-      return true;
+    if (data?.refreshToken?.authenticationToken) {
+      // Tokens are now set via HTTP-Only cookies by the API
+      // No need to store them in localStorage
+      return data.refreshToken.authenticationToken;
     }
 
-    return false;
+    return null;
   } catch (error) {
     console.error('Failed to refresh token', error);
-    return false;
+    return null;
   }
 }
 
@@ -52,6 +43,8 @@ export async function refreshToken(): Promise<boolean> {
  * Falls back to clearing storage and redirecting to login if refresh fails.
  */
 export async function handleTokenRefresh(): Promise<void> {
+  // Import useLocalStorage dynamically to avoid circular dependency issues
+  const useLocalStorage = (await import('./useLocalstorage')).default;
   const { clearAllItems } = useLocalStorage();
   const success = await refreshToken();
 

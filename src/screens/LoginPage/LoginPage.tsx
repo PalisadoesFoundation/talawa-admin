@@ -310,12 +310,8 @@ const loginPage = (): JSX.Element => {
             SignupRecaptchaRef.current?.reset();
             // If signup returned an authentication token, set session and resume pending invite
             if (signUpData.signUp && signUpData.signUp.authenticationToken) {
-              const authToken = signUpData.signUp.authenticationToken;
-              const refreshToken = signUpData.signUp.refreshToken;
-              setItem('token', authToken);
-              if (refreshToken) {
-                setItem('refreshToken', refreshToken);
-              }
+              // Tokens are now set via HTTP-Only cookies by the API
+              // No need to store them in localStorage
               setItem('IsLoggedIn', 'TRUE');
               setItem('name', signUpData.signUp.user?.name || '');
               setItem('email', signUpData.signUp.user?.emailAddress || '');
@@ -367,7 +363,7 @@ const loginPage = (): JSX.Element => {
         }
 
         const { signIn } = signInData;
-        const { user, authenticationToken, refreshToken } = signIn;
+        const { user } = signIn;
         const isAdmin: boolean = user.role === 'administrator';
         if (role === 'admin' && !isAdmin) {
           toast.warn(tErrors('notAuthorised') as string);
@@ -375,16 +371,13 @@ const loginPage = (): JSX.Element => {
         }
         const loggedInUserId = user.id;
 
-        setItem('token', authenticationToken);
-        setItem('refreshToken', refreshToken);
+        // Note: Tokens are now stored in HTTP-Only cookies by the API
+        // No need to store them in localStorage (protects against XSS)
         setItem('IsLoggedIn', 'TRUE');
         setItem('name', user.name);
         setItem('email', user.emailAddress);
         setItem('role', user.role);
         setItem('UserImage', user.avatarURL || '');
-        // setItem('FirstName', user.firstName);
-        // setItem('LastName', user.lastName);
-        // setItem('UserImage', user.avatarURL);
         if (role === 'admin') {
           setItem('id', loggedInUserId);
         } else {
@@ -453,7 +446,7 @@ const loginPage = (): JSX.Element => {
                 >
                   <img
                     src={data.community.logoURL}
-                    alt="Community Logo"
+                    alt={t('communityLogo')}
                     data-testid="preLoginLogo"
                   />
                   <p className="text-center">{data.community.name}</p>
@@ -906,7 +899,7 @@ const loginPage = (): JSX.Element => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label="Organizations"
+                            label={t('organizations')}
                             className={styles.selectOrgText}
                           />
                         )}
