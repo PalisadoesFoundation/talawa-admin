@@ -2025,5 +2025,27 @@
     "title": "User Portal",
     "talawa": "Talawa",
     "talawaBranding": "Talawa Branding"
+  },
+  "organizationVenuesNotification": {
+    "venueCreated": "Venue created successfully",
+    "venueUpdated": "Venue details updated successfully",
+    "venueNameExists": "Venue name already exists",
+    "venueTitleError": "Venue title cannot be empty!",
+    "venueCapacityError": "Capacity must be a positive number!",
+    "previewUrlError": "Error creating preview URL",
+    "invalidCapacity": "Capacity must be a positive number!"
+  },
+  "manageTags": {
+    "loadAssignedUsersError": "Error occurred while loading assigned users",
+    "sortPeople": "Sort People",
+    "viewProfile": "View Profile",
+    "unassign": "Unassign",
+    "actions": "Actions",
+    "tags": "Tags",
+    "noAssignedMembersFound": "No assigned members found",
+    "assignToTags": "Assign to tags",
+    "removeFromTags": "Remove from tags",
+    "addPeopleToTag": "Add people to tag",
+    "subTags": "Sub tags"
   }
 }

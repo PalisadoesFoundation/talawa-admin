@@ -2025,5 +2025,27 @@
     "title": "उपयोगकर्ता पोर्टल",
     "talawa": "तलावा",
     "talawaBranding": "तालावा ब्रांडिंग"
+  },
+  "organizationVenuesNotification": {
+    "venueCreated": "स्थान सफलतापूर्वक बनाया गया",
+    "venueUpdated": "स्थान का विवरण सफलतापूर्वक अपडेट किया गया",
+    "venueNameExists": "स्थान का नाम पहले से मौजूद है",
+    "venueTitleError": "स्थान का नाम खाली नहीं हो सकता!",
+    "venueCapacityError": "क्षमता एक सकारात्मक संख्या होनी चाहिए!",
+    "previewUrlError": "पूर्वावलोकन URL बनाने में त्रुटि",
+    "invalidCapacity": "क्षमता एक सकारात्मक संख्या होनी चाहिए"
+  },
+  "manageTags": {
+    "loadAssignedUsersError": "निर्दिष्ट उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
+    "sortPeople": "लोगों को क्रमबद्ध करें",
+    "viewProfile": "प्रोफ़ाइल देखें",
+    "unassign": "हटाएँ",
+    "actions": "क्रियाएँ",
+    "tags": "टैग",
+    "noAssignedMembersFound": "कोई निर्दिष्ट सदस्य नहीं मिला",
+    "assignToTags": "टैग में जोड़ें",
+    "removeFromTags": "टैग से हटाएँ",
+    "addPeopleToTag": "टैग में लोग जोड़ें",
+    "subTags": "उप-टैग"
   }
 }

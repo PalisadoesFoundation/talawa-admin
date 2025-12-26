@@ -2025,5 +2025,27 @@
     "title": "用户门户",
     "talawa": "塔拉瓦",
     "talawaBranding": "Talawa 品牌形象"
+  },
+  "organizationVenuesNotification": {
+    "venueCreated": "场地创建成功",
+    "venueUpdated": "场地信息更新成功",
+    "venueNameExists": "场地名称已存在",
+    "venueTitleError": "场地名称不能为空！",
+    "venueCapacityError": "容量必须是正数！",
+    "previewUrlError": "创建预览时出错",
+    "invalidCapacity": "容量必须是正数"
+  },
+  "manageTags": {
+    "loadAssignedUsersError": "加载已分配用户时发生错误",
+    "sortPeople": "排序人员",
+    "viewProfile": "查看资料",
+    "unassign": "取消分配",
+    "actions": "操作",
+    "tags": "标签",
+    "noAssignedMembersFound": "未找到已分配的成员",
+    "assignToTags": "分配到标签",
+    "removeFromTags": "从标签中移除",
+    "addPeopleToTag": "添加人员到标签",
+    "subTags": "子标签"
   }
 }

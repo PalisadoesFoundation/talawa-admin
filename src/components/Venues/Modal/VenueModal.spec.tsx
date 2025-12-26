@@ -6,7 +6,6 @@ import { Provider } from 'react-redux';
 import { BrowserRouter, MemoryRouter } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import userEvent from '@testing-library/user-event';
-import { toast } from 'react-toastify';
 import { vi } from 'vitest';
 import type * as RouterTypes from 'react-router-dom';
 
@@ -20,6 +19,7 @@ import {
   UPDATE_VENUE_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { ApolloLink, Observable } from '@apollo/client';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 // Mock Setup
 const MOCKS = [
@@ -236,8 +236,12 @@ vi.mock('react-router-dom', async () => {
   return { ...actual, useParams: () => ({ orgId: mockId }) };
 });
 
-vi.mock('react-toastify', () => ({
-  toast: { success: vi.fn(), warning: vi.fn(), error: vi.fn() },
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+  },
 }));
 
 global.URL.createObjectURL = vi.fn(() => 'mock-url');
@@ -281,7 +285,7 @@ const renderVenueModal = (
   link: ApolloLink,
 ): RenderResult => {
   return render(
-    <MockedProvider link={link}>
+    <MockedProvider addTypename={false} link={link}>
       <MemoryRouter initialEntries={['/']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -299,13 +303,9 @@ describe('VenueModal', () => {
     vi.resetModules();
   });
 
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
   test('creates a new venue successfully', async () => {
     render(
-      <MockedProvider mocks={MOCKS}>
+      <MockedProvider mocks={MOCKS} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...defaultProps} />
         </I18nextProvider>
@@ -329,9 +329,10 @@ describe('VenueModal', () => {
     });
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
-        'organizationVenues.venueCreated',
-      );
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'venueCreated',
+        namespace: 'translation',
+      });
     });
   });
 
@@ -344,7 +345,7 @@ describe('VenueModal', () => {
       ...originalModule,
       useTranslation: () => ({
         t: (key: string) =>
-          key === 'venueNameExists' ? undefined : `organizationVenues.${key}`,
+          key === 'venueNameExists' ? undefined : `translation.${key}`,
         i18n: { changeLanguage: vi.fn() },
       }),
     }));
@@ -367,13 +368,16 @@ describe('VenueModal', () => {
 
     await waitFor(() => {
       // Should use the fallback message
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
+
+    // Restore original implementation
+    vi.restoreAllMocks();
   });
 
   test('clears image input correctly', async () => {
     render(
-      <MockedProvider mocks={MOCKS}>
+      <MockedProvider mocks={MOCKS} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...editProps} />
         </I18nextProvider>
@@ -390,393 +394,406 @@ describe('VenueModal', () => {
       screen.queryByAltText('Venue Image Preview'),
     ).not.toBeInTheDocument();
   });
+});
 
-  // Basic Rendering Tests
-  describe('Rendering', () => {
-    test('renders correctly when show is true', () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
-      expect(screen.getByText('Venue Details')).toBeInTheDocument();
-    });
-
-    test('does not render when show is false', () => {
-      const props = { ...defaultProps, show: false };
-      const { container } = renderVenueModal(
-        props,
-        new StaticMockLink(MOCKS, true),
-      );
-      expect(container.firstChild).toBeNull();
-    });
-
-    test('calls onHide when close button is clicked', () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
-      fireEvent.click(screen.getByTestId('createVenueModalCloseBtn'));
-      expect(defaultProps.onHide).toHaveBeenCalled();
-    });
+// Basic Rendering Tests
+describe('Rendering', () => {
+  test('renders correctly when show is true', () => {
+    renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+    expect(screen.getByText('Venue Details')).toBeInTheDocument();
   });
 
-  // Form Field Tests
-  describe('Form Fields', () => {
-    test('populates form fields correctly in edit mode', () => {
-      renderVenueModal(editProps, new StaticMockLink(MOCKS, true));
-      expect(screen.getByDisplayValue('Venue 1')).toBeInTheDocument();
-      expect(
-        screen.getByDisplayValue('Updated description for venue 1'),
-      ).toBeInTheDocument();
-      expect(screen.getByDisplayValue('100')).toBeInTheDocument();
+  test('does not render when show is false', () => {
+    const props = { ...defaultProps, show: false };
+    const { container } = renderVenueModal(
+      props,
+      new StaticMockLink(MOCKS, true),
+    );
+    expect(container.firstChild).toBeNull();
+  });
+
+  test('calls onHide when close button is clicked', () => {
+    renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+    fireEvent.click(screen.getByTestId('createVenueModalCloseBtn'));
+    expect(defaultProps.onHide).toHaveBeenCalled();
+  });
+});
+
+// Form Field Tests
+describe('Form Fields', () => {
+  test('populates form fields correctly in edit mode', () => {
+    renderVenueModal(editProps, new StaticMockLink(MOCKS, true));
+    expect(screen.getByDisplayValue('Venue 1')).toBeInTheDocument();
+    expect(
+      screen.getByDisplayValue('Updated description for venue 1'),
+    ).toBeInTheDocument();
+    expect(screen.getByDisplayValue('100')).toBeInTheDocument();
+  });
+
+  test('form fields are empty in create mode', () => {
+    renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+    expect(screen.getByPlaceholderText('Enter Venue Name')).toHaveValue('');
+    expect(screen.getByPlaceholderText('Enter Venue Description')).toHaveValue(
+      '',
+    );
+    expect(screen.getByPlaceholderText('Enter Venue Capacity')).toHaveValue('');
+  });
+
+  test('tests undefined description fallback to empty string', async () => {
+    // Create a spy to capture the mutation variables
+    const mutationSpy = vi.fn().mockImplementation(() => {
+      return {
+        data: { createVenue: { id: 'newVenue' } },
+      };
     });
 
-    test('form fields are empty in create mode', () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
-      expect(screen.getByPlaceholderText('Enter Venue Name')).toHaveValue('');
-      expect(
-        screen.getByPlaceholderText('Enter Venue Description'),
-      ).toHaveValue('');
-      expect(screen.getByPlaceholderText('Enter Venue Capacity')).toHaveValue(
-        '',
-      );
+    // Create a custom mock link that captures the variables
+    const mockLink = new ApolloLink((operation) => {
+      // This will capture the actual variables being sent
+      mutationSpy(operation);
+      return Observable.of({ data: { createVenue: { id: 'newVenue' } } });
     });
 
-    test('tests undefined description fallback to empty string', async () => {
-      // Create a spy to capture the mutation variables
-      const mutationSpy = vi.fn().mockImplementation(() => {
-        return {
-          data: { createVenue: { id: 'newVenue' } },
-        };
-      });
+    // Create a component with the spy link
+    const { unmount } = render(
+      <MockedProvider link={mockLink} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <VenueModal {...defaultProps} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
 
-      // Create a custom mock link that captures the variables
-      const mockLink = new ApolloLink((operation) => {
-        // This will capture the actual variables being sent
-        mutationSpy(operation);
-        return Observable.of({ data: { createVenue: { id: 'newVenue' } } });
-      });
-
-      // Create a component with the spy link
-      const { unmount } = render(
-        <MockedProvider link={mockLink}>
-          <I18nextProvider i18n={i18nForTest}>
-            <VenueModal {...defaultProps} />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      // Set name
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-        target: { value: 'Test Venue' },
-      });
-
-      // Leave description undefined/null by not setting it
-
-      // Set capacity
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-        target: { value: '100' },
-      });
-
-      await act(async () => {
-        fireEvent.click(screen.getByTestId('createVenueBtn'));
-      });
-
-      // Verify success toast
-      await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
-          'organizationVenues.venueCreated',
-        );
-      });
-
-      // Verify the mutation variables
-      await waitFor(() => {
-        expect(mutationSpy).toHaveBeenCalled();
-        // Check that the first call to the spy has the expected variables
-        const operation = mutationSpy.mock.calls[0][0];
-        const variables = operation.variables;
-        expect(variables.description).toBe('');
-      });
-
-      unmount();
+    // Set name
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
+      target: { value: 'Test Venue' },
     });
 
-    test('trims whitespace from name and description before submission', async () => {
-      // Create a mock with empty description to test fallback
-      const emptyDescriptionMock = [
-        {
-          request: {
-            query: CREATE_VENUE_MUTATION,
-            variables: {
-              name: 'Test Venue',
-              description: '', // Test the || '' fallback
-              capacity: 100,
-              organizationId: 'orgId',
-            },
+    // Leave description undefined/null by not setting it
+
+    // Set capacity
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
+      target: { value: '100' },
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('createVenueBtn'));
+    });
+
+    // Verify success toast
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'venueCreated',
+        namespace: 'translation',
+      });
+    });
+
+    // Verify the mutation variables
+    await waitFor(() => {
+      expect(mutationSpy).toHaveBeenCalled();
+      // Check that the first call to the spy has the expected variables
+      const operation = mutationSpy.mock.calls[0][0];
+      const variables = operation.variables;
+      expect(variables.description).toBe('');
+    });
+
+    unmount();
+  });
+
+  test('trims whitespace from name and description before submission', async () => {
+    // Create a mock with empty description to test fallback
+    const emptyDescriptionMock = [
+      {
+        request: {
+          query: CREATE_VENUE_MUTATION,
+          variables: {
+            name: 'Test Venue',
+            description: '', // Test the || '' fallback
+            capacity: 100,
+            organizationId: 'orgId',
           },
-          result: { data: { createVenue: { id: 'newVenue' } } },
         },
-      ];
+        result: { data: { createVenue: { id: 'newVenue' } } },
+      },
+    ];
 
-      renderVenueModal(
-        defaultProps,
-        new StaticMockLink(emptyDescriptionMock, true),
-      );
+    renderVenueModal(
+      defaultProps,
+      new StaticMockLink(emptyDescriptionMock, true),
+    );
 
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-        target: { value: '  Test Venue  ' },
-      });
-      // Leave description empty to test the trim() || '' fallback
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Description'), {
-        target: { value: '   ' }, // Only whitespace
-      });
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-        target: { value: '100' },
-      });
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
+      target: { value: '  Test Venue  ' },
+    });
+    // Leave description empty to test the trim() || '' fallback
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Description'), {
+      target: { value: '   ' }, // Only whitespace
+    });
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
+      target: { value: '100' },
+    });
 
-      await act(async () => {
-        fireEvent.click(screen.getByTestId('createVenueBtn'));
-      });
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('createVenueBtn'));
+    });
 
-      await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
-          'organizationVenues.venueCreated',
-        );
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'venueCreated',
+        namespace: 'translation',
+      });
+    });
+  });
+});
+
+// Image Handling Tests
+describe('Image Handling', () => {
+  let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    // Use a spy instead of overriding console.error
+    consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+  });
+
+  afterEach(() => {
+    // Restore console.error after each test
+    consoleErrorSpy.mockRestore();
+
+    vi.clearAllMocks();
+  });
+
+  test('displays image preview and clear button when an image is selected', async () => {
+    renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+    const file = new File(['test'], 'test.png', { type: 'image/png' });
+    const fileInput = screen.getByTestId('venueImgUrl');
+
+    await act(async () => {
+      await userEvent.upload(fileInput, file);
+    });
+
+    // Wait for the image preview to appear (local preview, no upload needed)
+    await waitFor(() => {
+      expect(screen.getByAltText('Venue Image Preview')).toBeInTheDocument();
+      expect(screen.getByTestId('closeimage')).toBeInTheDocument();
+    });
+  });
+
+  test('removes image preview when clear button is clicked and tests fileInputRef is null', async () => {
+    // Create component with custom fileInputRef mock
+    const originalUseRef = React.useRef;
+    const refValue = { current: document.createElement('input') };
+
+    // Mock useRef to return our controlled ref
+    vi.spyOn(React, 'useRef').mockImplementation((initialValue) => {
+      if (initialValue === null) {
+        return refValue;
+      }
+      return originalUseRef(initialValue);
+    });
+
+    renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+
+    const file = new File(['test'], 'test.png', { type: 'image/png' });
+    const fileInput = screen.getByTestId('venueImgUrl');
+
+    await act(async () => {
+      await userEvent.upload(fileInput, file);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByAltText('Venue Image Preview')).toBeInTheDocument();
+    });
+
+    // Set ref to null before clearing to test the null check
+    refValue.current = null as unknown as HTMLInputElement;
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('closeimage'));
+    });
+
+    expect(
+      screen.queryByAltText('Venue Image Preview'),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByTestId('closeimage')).not.toBeInTheDocument();
+
+    // Restore original
+    vi.restoreAllMocks();
+  });
+
+  test('shows error when uploading file larger than 5MB', async () => {
+    renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+
+    const largeFile = new File(
+      ['x'.repeat(6 * 1024 * 1024)],
+      'large-image.png',
+      { type: 'image/png' },
+    );
+
+    await act(async () => {
+      fireEvent.change(screen.getByTestId('venueImgUrl'), {
+        target: { files: [largeFile] },
+      });
+    });
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith({
+        key: 'fileTooLarge',
+        namespace: 'errors',
       });
     });
   });
 
-  // Image Handling Tests
-  describe('Image Handling', () => {
-    let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
+  test('shows error when uploading non-image file', async () => {
+    renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
-    beforeEach(() => {
-      vi.clearAllMocks();
-      // Use a spy instead of overriding console.error
-      consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const pdfFile = new File(['test content'], 'document.pdf', {
+      type: 'application/pdf',
     });
 
-    afterEach(() => {
-      // Restore console.error after each test
-      consoleErrorSpy.mockRestore();
-      vi.clearAllMocks();
-    });
-
-    test('displays image preview and clear button when an image is selected', async () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
-      const file = new File(['test'], 'test.png', { type: 'image/png' });
-      const fileInput = screen.getByTestId('venueImgUrl');
-
-      await act(async () => {
-        await userEvent.upload(fileInput, file);
-      });
-
-      // Wait for the image preview to appear (local preview, no upload needed)
-      await waitFor(() => {
-        expect(screen.getByAltText('Venue Image Preview')).toBeInTheDocument();
-        expect(screen.getByTestId('closeimage')).toBeInTheDocument();
+    await act(async () => {
+      fireEvent.change(screen.getByTestId('venueImgUrl'), {
+        target: { files: [pdfFile] },
       });
     });
 
-    test('removes image preview when clear button is clicked and tests fileInputRef is null', async () => {
-      // Create component with custom fileInputRef mock
-      const originalUseRef = React.useRef;
-      const refValue = { current: document.createElement('input') };
-
-      // Mock useRef to return our controlled ref
-      vi.spyOn(React, 'useRef').mockImplementation((initialValue) => {
-        if (initialValue === null) {
-          return refValue;
-        }
-        return originalUseRef(initialValue);
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith({
+        key: 'invalidFileType',
+        namespace: 'errors',
       });
-
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
-
-      const file = new File(['test'], 'test.png', { type: 'image/png' });
-      const fileInput = screen.getByTestId('venueImgUrl');
-
-      await act(async () => {
-        await userEvent.upload(fileInput, file);
-      });
-
-      await waitFor(() => {
-        expect(screen.getByAltText('Venue Image Preview')).toBeInTheDocument();
-      });
-
-      // Set ref to null before clearing to test the null check
-      refValue.current = null as unknown as HTMLInputElement;
-
-      await act(async () => {
-        fireEvent.click(screen.getByTestId('closeimage'));
-      });
-
-      expect(
-        screen.queryByAltText('Venue Image Preview'),
-      ).not.toBeInTheDocument();
-      expect(screen.queryByTestId('closeimage')).not.toBeInTheDocument();
-    });
-
-    test('shows error when uploading file larger than 5MB', async () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
-
-      const largeFile = new File(
-        ['x'.repeat(6 * 1024 * 1024)],
-        'large-image.png',
-        { type: 'image/png' },
-      );
-
-      await act(async () => {
-        fireEvent.change(screen.getByTestId('venueImgUrl'), {
-          target: { files: [largeFile] },
-        });
-      });
-
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
-          'File too large: large-image.png',
-        );
-      });
-    });
-
-    test('shows error when uploading non-image file', async () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
-
-      const pdfFile = new File(['test content'], 'document.pdf', {
-        type: 'application/pdf',
-      });
-
-      await act(async () => {
-        fireEvent.change(screen.getByTestId('venueImgUrl'), {
-          target: { files: [pdfFile] },
-        });
-      });
-
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
-          'Invalid file type: document.pdf',
-        );
-      });
-    });
-
-    test('shows error toast when creating preview URL fails', async () => {
-      const urlConstructorSpy = vi
-        .spyOn(global, 'URL')
-        .mockImplementation(() => {
-          throw new Error('Invalid URL');
-        });
-
-      render(
-        <MockedProvider mocks={MOCKS}>
-          <I18nextProvider i18n={i18nForTest}>
-            <VenueModal
-              {...defaultProps}
-              venueData={{
-                node: {
-                  id: '123',
-                  name: 'Test Venue',
-                  description: 'Test Description',
-                  capacity: 100,
-                  image: 'some-image.jpg',
-                },
-              }}
-            />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Error creating preview URL');
-      });
-
-      urlConstructorSpy.mockRestore();
-    });
-
-    test('shows error toast when an empty file is selected', async () => {
-      render(
-        <MockedProvider mocks={MOCKS}>
-          <I18nextProvider i18n={i18nForTest}>
-            <VenueModal {...defaultProps} />
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      // Create an empty file (with size 0)
-      const emptyFile = new File([], 'empty.png', { type: 'image/png' });
-
-      // Get file input and upload the empty file
-      const fileInput = screen.getByTestId('venueImgUrl');
-
-      await act(async () => {
-        fireEvent.change(fileInput, { target: { files: [emptyFile] } });
-      });
-
-      // Check that toast.error was called with the expected message
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Empty file selected');
-      });
-
-      // Verify that no image preview is shown
-      expect(
-        screen.queryByAltText('Venue Image Preview'),
-      ).not.toBeInTheDocument();
     });
   });
 
-  // Validation Tests
-  describe('Validation', () => {
-    test('shows error when venue name is empty', async () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+  test('shows error toast when creating preview URL fails', async () => {
+    const urlConstructorSpy = vi.spyOn(global, 'URL').mockImplementation(() => {
+      throw new Error('Invalid URL');
+    });
 
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-        target: { value: '100' },
-      });
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <VenueModal
+            {...defaultProps}
+            venueData={{
+              node: {
+                id: '123',
+                name: 'Test Venue',
+                description: 'Test Description',
+                capacity: 100,
+                image: 'some-image.jpg',
+              },
+            }}
+          />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
 
-      await act(async () => {
-        fireEvent.click(screen.getByTestId('createVenueBtn'));
-      });
-
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
-          'Venue title cannot be empty!',
-        );
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith({
+        key: 'unknownError',
+        namespace: 'errors',
       });
     });
 
-    test('shows error when venue capacity is not a positive number', async () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+    urlConstructorSpy.mockRestore();
+  });
 
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-        target: { value: 'Test Venue' },
-      });
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-        target: { value: '-1' },
-      });
+  test('shows error toast when an empty file is selected', async () => {
+    render(
+      <MockedProvider mocks={MOCKS} addTypename={false}>
+        <I18nextProvider i18n={i18nForTest}>
+          <VenueModal {...defaultProps} />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
 
-      await act(async () => {
-        fireEvent.click(screen.getByTestId('createVenueBtn'));
-      });
+    // Create an empty file (with size 0)
+    const emptyFile = new File([], 'empty.png', { type: 'image/png' });
 
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
-          'Capacity must be a positive number!',
-        );
+    // Get file input and upload the empty file
+    const fileInput = screen.getByTestId('venueImgUrl');
+
+    await act(async () => {
+      fireEvent.change(fileInput, { target: { files: [emptyFile] } });
+    });
+
+    // Check that toast.error was called with the expected message
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith({
+        key: 'emptyFile',
+        namespace: 'errors',
       });
     });
 
-    test('validates capacity edge cases', async () => {
-      renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+    // Verify that no image preview is shown
+    expect(
+      screen.queryByAltText('Venue Image Preview'),
+    ).not.toBeInTheDocument();
+  });
+});
 
-      // Test zero capacity
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
-        target: { value: 'Test Venue' },
-      });
-      fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
-        target: { value: '0' },
-      });
+// Validation Tests
+describe('Validation', () => {
+  test('shows error when venue name is empty', async () => {
+    renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
 
-      await act(async () => {
-        fireEvent.click(screen.getByTestId('createVenueBtn'));
-      });
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
+      target: { value: '100' },
+    });
 
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
-          'Capacity must be a positive number!',
-        );
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('createVenueBtn'));
+    });
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith({
+        key: 'venueTitleError',
+        namespace: 'translation',
+      });
+    });
+  });
+
+  test('shows error when venue capacity is not a positive number', async () => {
+    renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
+      target: { value: 'Test Venue' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
+      target: { value: '-1' },
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('createVenueBtn'));
+    });
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith({
+        key: 'venueCapacityError',
+        namespace: 'translation',
+      });
+    });
+  });
+
+  test('validates capacity edge cases', async () => {
+    renderVenueModal(defaultProps, new StaticMockLink(MOCKS, true));
+
+    // Test zero capacity
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Name'), {
+      target: { value: 'Test Venue' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('Enter Venue Capacity'), {
+      target: { value: '0' },
+    });
+
+    await act(async () => {
+      fireEvent.click(screen.getByTestId('createVenueBtn'));
+    });
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith({
+        key: 'venueCapacityError',
+        namespace: 'translation',
       });
     });
   });
@@ -818,7 +835,7 @@ describe('VenueModal', () => {
 
       // Use render with cleanup to properly isolate test renders
       const { unmount } = render(
-        <MockedProvider mocks={mockWithoutData}>
+        <MockedProvider mocks={mockWithoutData} addTypename={false}>
           <I18nextProvider i18n={i18nForTest}>
             <VenueModal {...defaultProps} />
           </I18nextProvider>
@@ -840,14 +857,14 @@ describe('VenueModal', () => {
       });
 
       // No success toast should be called with null data
-      expect(toast.success).not.toHaveBeenCalled();
+      expect(NotificationToast.success).not.toHaveBeenCalled();
 
       // Clean up the previous render completely
       unmount();
 
       // Now render with proper data
       render(
-        <MockedProvider mocks={MOCKS}>
+        <MockedProvider mocks={MOCKS} addTypename={false}>
           <I18nextProvider i18n={i18nForTest}>
             <VenueModal {...defaultProps} />
           </I18nextProvider>
@@ -869,9 +886,10 @@ describe('VenueModal', () => {
       });
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
-          'organizationVenues.venueCreated',
-        );
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'venueCreated',
+          namespace: 'translation',
+        });
       });
     });
 
@@ -912,7 +930,7 @@ describe('VenueModal', () => {
       });
 
       // No success toast should be called with null data
-      expect(toast.success).not.toHaveBeenCalled();
+      expect(NotificationToast.success).not.toHaveBeenCalled();
     });
 
     test('handles duplicate venue name error with translation key', async () => {
@@ -949,9 +967,10 @@ describe('VenueModal', () => {
       });
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
-          'organizationVenues.venueNameExists',
-        );
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'venueNameExists',
+          namespace: 'translation',
+        });
       });
     });
 
@@ -973,7 +992,7 @@ describe('VenueModal', () => {
       });
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalled();
+        expect(NotificationToast.error).toHaveBeenCalled();
       });
     });
   });
@@ -999,9 +1018,10 @@ describe('VenueModal', () => {
       });
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
-          'Venue details updated successfully',
-        );
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'venueUpdated',
+          namespace: 'translation',
+        });
       });
     });
 
@@ -1062,9 +1082,10 @@ describe('VenueModal', () => {
       });
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
-          'Venue details updated successfully',
-        );
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'venueUpdated',
+          namespace: 'translation',
+        });
       });
     });
 
@@ -1126,9 +1147,10 @@ describe('VenueModal', () => {
       });
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
-          'Venue details updated successfully',
-        );
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'venueUpdated',
+          namespace: 'translation',
+        });
       });
     });
     // Error Handling Tests
@@ -1165,7 +1187,7 @@ describe('VenueModal', () => {
         });
 
         await waitFor(() => {
-          expect(toast.error).toHaveBeenCalled();
+          expect(NotificationToast.error).toHaveBeenCalled();
         });
       });
     });
@@ -1206,10 +1228,10 @@ describe('VenueModal', () => {
       });
 
       await waitFor(() => {
-        // This test specifically checks for the fallback behavior
-        expect(toast.error).toHaveBeenCalledWith(
-          'organizationVenues.venueNameExists',
-        );
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'venueNameExists',
+          namespace: 'translation',
+        });
       });
     });
 
@@ -1248,7 +1270,7 @@ describe('VenueModal', () => {
         });
 
         await waitFor(() => {
-          expect(toast.error).toHaveBeenCalled();
+          expect(NotificationToast.error).toHaveBeenCalled();
         });
       });
 
@@ -1273,7 +1295,7 @@ describe('VenueModal', () => {
         });
 
         await waitFor(() => {
-          expect(toast.error).toHaveBeenCalled();
+          expect(NotificationToast.error).toHaveBeenCalled();
         });
       });
     });
@@ -1305,7 +1327,10 @@ describe('VenueModal', () => {
       // Completely unmount by setting show to false
       await act(async () => {
         rerender(
-          <MockedProvider link={new StaticMockLink(MOCKS, true)}>
+          <MockedProvider
+            addTypename={false}
+            link={new StaticMockLink(MOCKS, true)}
+          >
             <BrowserRouter>
               <Provider store={store}>
                 <I18nextProvider i18n={i18nForTest}>
@@ -1399,9 +1424,10 @@ describe('VenueModal', () => {
             });
 
             await waitFor(() => {
-              expect(toast.error).toHaveBeenCalledWith(
-                'Venue title cannot be empty!',
-              );
+              expect(NotificationToast.error).toHaveBeenCalledWith({
+                key: 'venueTitleError',
+                namespace: 'translation',
+              });
             });
           });
 
@@ -1436,9 +1462,10 @@ describe('VenueModal', () => {
             });
 
             await waitFor(() => {
-              expect(toast.success).toHaveBeenCalledWith(
-                'organizationVenues.venueCreated',
-              );
+              expect(NotificationToast.success).toHaveBeenCalledWith({
+                key: 'venueCreated',
+                namespace: 'translation',
+              });
             });
           });
 
@@ -1477,9 +1504,10 @@ describe('VenueModal', () => {
             });
 
             await waitFor(() => {
-              expect(toast.success).toHaveBeenCalledWith(
-                'organizationVenues.venueCreated',
-              );
+              expect(NotificationToast.success).toHaveBeenCalledWith({
+                key: 'venueCreated',
+                namespace: 'translation',
+              });
             });
           });
 
@@ -1520,7 +1548,7 @@ describe('VenueModal', () => {
 
             await waitFor(() => {
               // Check that error handling is called for generic errors
-              expect(toast.error).toHaveBeenCalled();
+              expect(NotificationToast.error).toHaveBeenCalled();
             });
           });
         });
@@ -1551,9 +1579,10 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith(
-              'Venue title cannot be empty!',
-            );
+            expect(NotificationToast.error).toHaveBeenCalledWith({
+              key: 'venueTitleError',
+              namespace: 'translation',
+            });
           });
         });
       });
@@ -1611,7 +1640,7 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.success).toHaveBeenCalled();
+            expect(NotificationToast.success).toHaveBeenCalled();
           });
         });
 
@@ -1653,9 +1682,10 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.success).toHaveBeenCalledWith(
-              'Venue details updated successfully',
-            );
+            expect(NotificationToast.success).toHaveBeenCalledWith({
+              key: 'venueUpdated',
+              namespace: 'translation',
+            });
           });
         });
 
@@ -1726,7 +1756,7 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.error).toHaveBeenCalled();
+            expect(NotificationToast.error).toHaveBeenCalled();
           });
         });
 
@@ -1922,9 +1952,10 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.success).toHaveBeenCalledWith(
-              'organizationVenues.venueCreated',
-            );
+            expect(NotificationToast.success).toHaveBeenCalledWith({
+              key: 'venueCreated',
+              namespace: 'translation',
+            });
           });
         });
 
@@ -1960,9 +1991,10 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.success).toHaveBeenCalledWith(
-              'Venue details updated successfully',
-            );
+            expect(NotificationToast.success).toHaveBeenCalledWith({
+              key: 'venueUpdated',
+              namespace: 'translation',
+            });
           });
         });
 
@@ -2017,9 +2049,10 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith(
-              'Capacity must be a positive number!',
-            );
+            expect(NotificationToast.error).toHaveBeenCalledWith({
+              key: 'venueCapacityError',
+              namespace: 'translation',
+            });
           });
         });
 
@@ -2043,9 +2076,10 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith(
-              'Capacity must be a positive number!',
-            );
+            expect(NotificationToast.error).toHaveBeenCalledWith({
+              key: 'venueCapacityError',
+              namespace: 'translation',
+            });
           });
         });
 
@@ -2084,10 +2118,10 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            // The form should submit successfully since 10.5 becomes 10
-            expect(toast.success).toHaveBeenCalledWith(
-              'organizationVenues.venueCreated',
-            );
+            expect(NotificationToast.success).toHaveBeenCalledWith({
+              key: 'venueCreated',
+              namespace: 'translation',
+            });
           });
         });
 
@@ -2111,9 +2145,10 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith(
-              'Capacity must be a positive number!',
-            );
+            expect(NotificationToast.error).toHaveBeenCalledWith({
+              key: 'venueCapacityError',
+              namespace: 'translation',
+            });
           });
         });
 
@@ -2146,9 +2181,10 @@ describe('VenueModal', () => {
           );
 
           await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith(
-              'Error creating preview URL',
-            );
+            expect(NotificationToast.error).toHaveBeenCalledWith({
+              key: 'unknownError',
+              namespace: 'errors',
+            });
           });
 
           // Restore original URL
@@ -2165,10 +2201,9 @@ describe('VenueModal', () => {
             fireEvent.change(fileInput, { target: { files: [file] } });
           });
 
-          await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith(
-              'Invalid file type: test.txt',
-            );
+          expect(NotificationToast.error).toHaveBeenCalledWith({
+            key: 'invalidFileType',
+            namespace: 'errors',
           });
         });
 
@@ -2188,9 +2223,10 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith(
-              'File too large: large.png',
-            );
+            expect(NotificationToast.error).toHaveBeenCalledWith({
+              key: 'fileTooLarge',
+              namespace: 'errors',
+            });
           });
         });
 
@@ -2205,7 +2241,10 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith('Empty file selected');
+            expect(NotificationToast.error).toHaveBeenCalledWith({
+              key: 'emptyFile',
+              namespace: 'errors',
+            });
           });
         });
 
@@ -2236,9 +2275,10 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.success).toHaveBeenCalledWith(
-              'Venue details updated successfully',
-            );
+            expect(NotificationToast.success).toHaveBeenCalledWith({
+              key: 'venueUpdated',
+              namespace: 'translation',
+            });
           });
         });
 
@@ -2371,9 +2411,10 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith(
-              'organizationVenues.venueNameExists',
-            );
+            expect(NotificationToast.error).toHaveBeenCalledWith({
+              key: 'venueNameExists',
+              namespace: 'translation',
+            });
           });
         });
 
@@ -2416,9 +2457,10 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith(
-              'organizationVenues.venueNameExists',
-            );
+            expect(NotificationToast.error).toHaveBeenCalledWith({
+              key: 'venueNameExists',
+              namespace: 'translation',
+            });
           });
         });
 
@@ -2449,9 +2491,10 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.success).toHaveBeenCalledWith(
-              'Venue details updated successfully',
-            );
+            expect(NotificationToast.success).toHaveBeenCalledWith({
+              key: 'venueUpdated',
+              namespace: 'translation',
+            });
           });
         });
 
@@ -2478,9 +2521,10 @@ describe('VenueModal', () => {
           });
 
           // Verify error toast is shown
-          expect(toast.error).toHaveBeenCalledWith(
-            'Capacity must be a positive number!',
-          );
+          expect(NotificationToast.error).toHaveBeenCalledWith({
+            key: 'venueCapacityError',
+            namespace: 'translation',
+          });
         });
 
         test('handles updateVenue mutation with falsy result data', async () => {
@@ -2509,7 +2553,7 @@ describe('VenueModal', () => {
           });
 
           // Should not show success toast when result is falsy
-          expect(toast.success).not.toHaveBeenCalled();
+          expect(NotificationToast.success).not.toHaveBeenCalled();
         });
 
         test('handles createVenue mutation with falsy result data', async () => {
@@ -2551,7 +2595,7 @@ describe('VenueModal', () => {
           });
 
           // Should not show success toast when result is falsy
-          expect(toast.success).not.toHaveBeenCalled();
+          expect(NotificationToast.success).not.toHaveBeenCalled();
         });
 
         test('handles error with fallback message when translation fails', async () => {
@@ -2590,9 +2634,10 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.error).toHaveBeenCalledWith(
-              'organizationVenues.venueNameExists',
-            );
+            expect(NotificationToast.error).toHaveBeenCalledWith({
+              key: 'venueNameExists',
+              namespace: 'translation',
+            });
           });
         });
 
@@ -2626,9 +2671,10 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.success).toHaveBeenCalledWith(
-              'Venue details updated successfully',
-            );
+            expect(NotificationToast.success).toHaveBeenCalledWith({
+              key: 'venueUpdated',
+              namespace: 'translation',
+            });
           });
         });
 
@@ -2685,9 +2731,10 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.success).toHaveBeenCalledWith(
-              'Venue details updated successfully',
-            );
+            expect(NotificationToast.success).toHaveBeenCalledWith({
+              key: 'venueUpdated',
+              namespace: 'translation',
+            });
           });
         });
 
@@ -2730,9 +2777,10 @@ describe('VenueModal', () => {
           });
 
           await waitFor(() => {
-            expect(toast.success).toHaveBeenCalledWith(
-              'organizationVenues.venueCreated',
-            );
+            expect(NotificationToast.success).toHaveBeenCalledWith({
+              key: 'venueCreated',
+              namespace: 'translation',
+            });
           });
         });
       });
@@ -2761,7 +2809,7 @@ describe('VenueModal', () => {
     });
 
     render(
-      <MockedProvider link={flexibleLink}>
+      <MockedProvider link={flexibleLink} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...defaultProps} />
         </I18nextProvider>
@@ -2834,9 +2882,10 @@ describe('VenueModal', () => {
     });
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
-        'Venue details updated successfully',
-      );
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'venueUpdated',
+        namespace: 'translation',
+      });
     });
   });
 
@@ -2871,7 +2920,7 @@ describe('VenueModal', () => {
     });
 
     render(
-      <MockedProvider link={flexibleLink}>
+      <MockedProvider link={flexibleLink} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...editProps} />
         </I18nextProvider>
@@ -2894,9 +2943,10 @@ describe('VenueModal', () => {
     });
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
-        'Venue details updated successfully',
-      );
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'venueUpdated',
+        namespace: 'translation',
+      });
     });
   });
 
@@ -2932,7 +2982,7 @@ describe('VenueModal', () => {
     });
 
     render(
-      <MockedProvider link={flexibleLink}>
+      <MockedProvider link={flexibleLink} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...defaultProps} />
         </I18nextProvider>
@@ -2961,9 +3011,10 @@ describe('VenueModal', () => {
     });
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
-        'organizationVenues.venueCreated',
-      );
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'venueCreated',
+        namespace: 'translation',
+      });
     });
   });
 
@@ -2975,7 +3026,7 @@ describe('VenueModal', () => {
       .mockReturnValue('blob:http://localhost/test-blob');
 
     const { unmount } = render(
-      <MockedProvider mocks={MOCKS}>
+      <MockedProvider mocks={MOCKS} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...defaultProps} />
         </I18nextProvider>
@@ -3016,7 +3067,7 @@ describe('VenueModal', () => {
       .mockReturnValue('blob:http://localhost/unmount-test');
 
     const { unmount } = render(
-      <MockedProvider mocks={MOCKS}>
+      <MockedProvider mocks={MOCKS} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...defaultProps} />
         </I18nextProvider>
@@ -3084,7 +3135,7 @@ describe('VenueModal', () => {
 
     // Should not show success toast when result is falsy
     await waitFor(() => {
-      expect(toast.success).not.toHaveBeenCalled();
+      expect(NotificationToast.success).not.toHaveBeenCalled();
     });
   });
 
@@ -3133,7 +3184,7 @@ describe('VenueModal', () => {
     };
 
     render(
-      <MockedProvider mocks={[updateMock]}>
+      <MockedProvider mocks={[updateMock]} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...editProps} />
         </I18nextProvider>
@@ -3162,7 +3213,7 @@ describe('VenueModal', () => {
 
     // Wait for the success path to execute
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalled();
     });
   });
 
@@ -3200,7 +3251,7 @@ describe('VenueModal', () => {
     };
 
     render(
-      <MockedProvider mocks={[createMock]}>
+      <MockedProvider mocks={[createMock]} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...createProps} />
         </I18nextProvider>
@@ -3231,7 +3282,7 @@ describe('VenueModal', () => {
 
     // Wait for the success to be called
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalled();
     });
   });
 
@@ -3254,7 +3305,7 @@ describe('VenueModal', () => {
     };
 
     const { unmount } = render(
-      <MockedProvider mocks={[]}>
+      <MockedProvider mocks={[]} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...props} />
         </I18nextProvider>
@@ -3309,7 +3360,7 @@ describe('VenueModal', () => {
     };
 
     const { unmount } = render(
-      <MockedProvider mocks={[]}>
+      <MockedProvider mocks={[]} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <VenueModal {...props} />
         </I18nextProvider>

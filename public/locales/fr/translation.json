@@ -2025,5 +2025,28 @@
     "title": "Portail Utilisateur",
     "talawa": "Talawa",
     "talawaBranding": "Image de marque Talawa"
+  },
+  "organizationVenuesNotification": {
+    "venueCreated": "Lieu créé avec succès",
+    "venueUpdated": "Les détails du lieu ont été mis à jour avec succès",
+    "venueNameExists": "Le nom du lieu existe déjà",
+    "venueTitleError": "Le nom du lieu ne peut pas être vide !",
+    "venueCapacityError": "La capacité doit être un nombre positif !",
+    "emptyFile": "Fichier vide sélectionné",
+    "previewUrlError": "Erreur lors de la création de l’aperçu",
+    "invalidCapacity": "La capacité doit être un nombre positif"
+  },
+  "manageTags": {
+    "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
+    "sortPeople": "Trier les personnes",
+    "viewProfile": "Voir le profil",
+    "unassign": "Désattribuer",
+    "actions": "Actions",
+    "tags": "Tags",
+    "noAssignedMembersFound": "Aucun membre assigné trouvé",
+    "assignToTags": "Attribuer aux tags",
+    "removeFromTags": "Retirer des tags",
+    "addPeopleToTag": "Ajouter des personnes au tag",
+    "subTags": "Sous-tags"
   }
 }

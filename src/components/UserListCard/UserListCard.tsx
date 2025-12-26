@@ -81,12 +81,18 @@ function UserListCard({ id }: InterfaceUserListCardProps): JSX.Element {
       });
 
       // Only proceed if mutation succeeded with valid createAdmin result
-      if (result.data?.createAdmin) {
-        NotificationToast.success(t('addedAsAdmin'));
-        reloadTimeoutRef.current = setTimeout(() => {
-          window.location.reload();
-        }, 2000);
-      }
+if (result.data?.createAdmin) {
+  NotificationToast.success({
+    key: 'addedAsAdmin',
+    namespace: 'translation',
+  });
+
+  reloadTimeoutRef.current = setTimeout(() => {
+    window.location.reload();
+  }, 2000);
+}
+
+      
     } catch (error: unknown) {
       errorHandler(t, error);
     }
