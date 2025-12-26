@@ -7,6 +7,11 @@ const SafeBreadcrumbs = (props: IBreadcrumbsComponentProps) => {
   const inRouter = useInRouterContext();
 
   if (!inRouter) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.warn(
+        'SafeBreadcrumbs must be used within a Router. Breadcrumbs were not rendered.',
+      );
+    }
     return null;
   }
 

@@ -124,8 +124,6 @@
   "filterAndSortOptions": "筛选和排序选项",
   "clear": "清除",
   "noResultsFound": "未找到结果",
-  "loadingAdminPlugin": "正在加载管理员插件...",
-  "loadingUserPlugin": "正在加载用户插件...",
   "unblock": "解除封锁",
   "unblockedSuccessfully": "{{item}}已成功解除封锁",
   "pluginSettings": "插件设置"
