@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
+import { Campaign, Search, WarningAmberRounded } from '@mui/icons-material';
 import { Stack, Typography, Box, CircularProgress } from '@mui/material';
 import { type GridCellParams } from '@mui/x-data-grid';
 import { Button } from 'react-bootstrap';
@@ -25,6 +25,7 @@ import {
 } from 'types/ReportingTable/interface';
 import { PAGE_SIZE, ROW_HEIGHT } from 'types/ReportingTable/utils';
 import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/BreadcrumbsComponent';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 const dataGridStyle = {
   borderRadius: 'var(--table-head-radius)',
@@ -426,15 +427,20 @@ const orgFundCampaign = (): JSX.Element => {
       campaignData &&
       filteredCampaigns.length === 0 &&
       searchText.length > 0 ? (
-        <div className={styles.notFound}>
-          <h4 className="m-0">
-            {tCommon('noResultsFoundFor')} &quot;{searchText}&quot;
-          </h4>
-        </div>
+        <EmptyState
+          icon={<Search />}
+          message="noResultsFound"
+          description={tCommon('noResultsFoundFor', {
+            query: `"${searchText}"`,
+          })}
+          dataTestId="campaigns-search-empty"
+        />
       ) : !campaignLoading && campaignData && filteredCampaigns.length === 0 ? (
-        <div className={styles.notFound}>
-          <h4>{t('noCampaignsFound')}</h4>
-        </div>
+        <EmptyState
+          icon={<Campaign />}
+          message={t('noCampaignsFound')}
+          dataTestId="campaigns-empty"
+        />
       ) : (
         <div className={styles.listBox}>
           {campaignLoading ? (
