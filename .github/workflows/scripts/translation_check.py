@@ -144,6 +144,7 @@ def get_target_files(
                 file=sys.stderr,
             )
             sys.exit(2)
+            return
         targets = list(src_path.rglob("*"))
 
     return [
@@ -189,7 +190,6 @@ def main() -> None:
             translation keys are found, or 2 for configuration errors
             such as invalid locale directories.
     """
-
     parser = argparse.ArgumentParser()
     parser.add_argument("--files", nargs="*", default=[])
     parser.add_argument("--directories", nargs="*", default=[])
