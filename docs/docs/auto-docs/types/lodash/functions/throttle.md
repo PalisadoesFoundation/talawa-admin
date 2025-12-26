@@ -6,7 +6,7 @@
 
 > **throttle**\<`T`\>(`func`, `wait?`, `options?`): `T` & `object`
 
-Defined in: [src/types/lodash.d.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/lodash.d.ts#L10)
+Defined in: [src/types/lodash.d.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/lodash.d.ts#L9)
 
 ## Type Parameters
 

@@ -32,7 +32,6 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { vi, beforeEach, afterEach } from 'vitest';
 import { toast } from 'react-toastify';
 import { Frequency } from 'utils/recurrenceUtils';
-import { green } from '@mui/material/colors';
 
 const { mockToast, mockUseParams, mockIsInviteOnlyEnabled } = vi.hoisted(
   () => ({
