@@ -723,6 +723,7 @@
     "selectedImage": "Imagen seleccionada",
     "bodyOfPost": "Contenido de tu publicación...",
     "post": "Publicación",
+    "saveChanges": "Guardar Cambios",
     "addAttachment": "Agregar archivo adjunto",
     "searchPost": "Buscar Publicación",
     "posts": "Publicaciones",
@@ -746,9 +747,11 @@
     "sortPost": "Ordenar Publicaciones",
     "tag": "Su navegador no admite la etiqueta de video",
     "postCreatedSuccess": "¡Felicidades! Has publicado algo.",
+    "postUpdatedSuccess": "Publicación actualizada exitosamente",
     "pinPost": "Fijar publicación",
     "unpinPost": "Desfijar publicación",
     "postToAnyone": "Publicar a cualquiera",
+    "editPost": "Editar Publicación",
     "unsupportedFileType": "Tipo de archivo no compatible",
     "Next": "Siguiente página",
     "Previous": "Página anterior",
@@ -773,6 +776,9 @@
     "member not found!": "Miembro no encontrado!",
     "admin not found!": "Administrador no encontrado!",
     "roles not found!": "roles no encontrados!"
+  },
+  "orgPost": {
+    "title": "Organization Posts"
   },
   "orgPostCard": {
     "author": "Autor",

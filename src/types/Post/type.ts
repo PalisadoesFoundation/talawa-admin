@@ -169,9 +169,10 @@ export interface ICreatePostData {
 
 export interface ICreatePostInput {
   caption: string;
+  body?: string;
   organizationId: string;
   isPinned: boolean;
-  attachments?: IFileMetadataInput[];
+  attachments?: File[];
 }
 
 export interface IFileMetadataInput {

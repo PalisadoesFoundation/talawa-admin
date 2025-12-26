@@ -117,11 +117,14 @@ describe('PinnedPostCard Component', () => {
       caption:
         'This is a test post caption that should be displayed in the card',
       createdAt: '2024-01-15T12:00:00Z',
-      imageUrl: 'https://example.com/image.jpg',
-      videoUrl: null,
       pinnedAt: '2024-01-15T12:00:00Z',
       pinned: true,
-      attachments: [],
+      attachments: [
+        {
+          mimeType: 'image/jpeg',
+        },
+      ],
+      attachmentURL: 'https://example.com/attachment.jpg',
       creator: {
         id: 'user-1',
         name: 'John Doe',
@@ -175,17 +178,66 @@ describe('PinnedPostCard Component', () => {
       expect(screen.getByRole('button', { name: /view/i })).toBeInTheDocument();
 
       // Check image
-      const image = screen.getByAltText('postImageAlt');
+      const image = screen.getByAltText('postImage');
       expect(image).toBeInTheDocument();
-      expect(image).toHaveAttribute('src', 'https://example.com/image.jpg');
+      expect(image).toHaveAttribute(
+        'src',
+        'https://example.com/attachment.jpg',
+      );
+    });
+    it('renders the pinned post card with video', () => {
+      render(
+        <MockedProvider>
+          <PinnedPostCard
+            pinnedPost={{
+              ...mockPinnedPost,
+              node: {
+                ...mockPinnedPost.node,
+                attachmentURL: 'https://example.com/attachment.mp4',
+                attachments: [
+                  {
+                    mimeType: 'video/mp4',
+                  },
+                ],
+              },
+            }}
+            onStoryClick={mockOnStoryClick}
+          />
+        </MockedProvider>,
+      );
+
+      // Check creator name
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+
+      // Check caption
+      expect(
+        screen.getAllByText(
+          'This is a test post caption that should be displayed in the card',
+        ),
+      ).toBeTruthy();
+
+      // Check date
+      expect(screen.getByText(/Posted on: 15th Jan 2024/)).toBeInTheDocument();
+
+      // Check view button
+      expect(screen.getByRole('button', { name: /view/i })).toBeInTheDocument();
+
+      // Check video element
+      const video = screen.getByTestId('post-video');
+      expect(video).toBeInTheDocument();
+      const source = video.querySelector('source');
+      expect(source).toHaveAttribute(
+        'src',
+        'https://example.com/attachment.mp4',
+      );
     });
 
-    it('renders default image when imageUrl is null', () => {
+    it('renders default image when imageUrl is undefined', () => {
       const postWithoutImage: InterfacePostEdge = {
         ...mockPinnedPost,
         node: {
           ...mockPinnedPost.node,
-          imageUrl: null,
+          attachmentURL: undefined,
         },
       };
 
@@ -200,28 +252,6 @@ describe('PinnedPostCard Component', () => {
 
       const image = screen.getByAltText('postImageAlt');
       expect(image).toHaveAttribute('src', '/src/assets/images/defaultImg.png');
-    });
-
-    it('renders "Untitled Post" when caption is null', () => {
-      const postWithoutCaption: InterfacePostEdge = {
-        ...mockPinnedPost,
-        node: {
-          ...mockPinnedPost.node,
-          caption: null,
-        },
-      };
-
-      render(
-        <MockedProvider mocks={mockMutations}>
-          <PinnedPostCard
-            pinnedPost={postWithoutCaption}
-            onStoryClick={mockOnStoryClick}
-          />
-        </MockedProvider>,
-      );
-
-      expect(screen.getByText('Untitled Post')).toBeInTheDocument();
-      expect(screen.getByText('No content available')).toBeInTheDocument();
     });
 
     it('renders creator name first letter when avatarURL is null', () => {

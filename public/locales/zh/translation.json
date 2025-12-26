@@ -724,6 +724,7 @@
     "selectedImage": "所选图像",
     "addAttachment": "添加附件",
     "post": "发帖",
+    "saveChanges": "保存更改",
     "searchPost": "搜索帖子",
     "posts": "帖子",
     "createPost": "创建帖子",
@@ -745,9 +746,11 @@
     "sortPost": "排序帖子",
     "tag": " 您的浏览器不支持video标签",
     "postCreatedSuccess": "恭喜！",
+    "postUpdatedSuccess": "帖子已成功更新",
     "pinPost": "针柱",
     "unpinPost": "取消置顶",
     "postToAnyone": "将帖子发布给任何人",
+    "editPost": "编辑帖子",
     "unsupportedFileType": "不支持的文件类型",
     "Next": "下一页",
     "Previous": "上一页",
@@ -773,6 +776,9 @@
     "admin not found!": "找不到管理员！",
     "roles not found!": "未找到角色！",
     "user": "用户"
+  },
+  "orgPost": {
+    "title": "Organization Posts"
   },
   "orgPostCard": {
     "author": "作者",

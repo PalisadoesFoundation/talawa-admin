@@ -723,6 +723,7 @@
     "selectedImage": "Image sélectionnée",
     "bodyOfPost": "Corps de votre post...",
     "post": "Poste",
+    "saveChanges": "Enregistrer les modifications",
     "searchPost": "Rechercher un article",
     "posts": "Des postes",
     "addAttachment": "Ajouter une pièce jointe",
@@ -745,9 +746,11 @@
     "sortPost": "Trier le message",
     "tag": " Votre navigateur ne prend pas en charge la balise vidéo",
     "postCreatedSuccess": "Toutes nos félicitations! ",
+    "postUpdatedSuccess": "Article mis à jour avec succès",
     "pinPost": "Épingler le message",
     "unpinPost": "Désépingler le message",
     "postToAnyone": "Publier à tout le monde",
+    "editPost": "Modifier le message",
     "unsupportedFileType": "Type de fichier non pris en charge",
     "Next": "Page suivante",
     "Previous": "Page précédente",
@@ -773,6 +776,9 @@
     "admin not found!": "Administrateur introuvable !",
     "roles not found!": "Rôles introuvables !",
     "user": "Utilisateur"
+  },
+  "orgPost": {
+    "title": "Organization Posts"
   },
   "orgPostCard": {
     "author": "Auteur",

@@ -260,11 +260,6 @@ export default function PostsPage() {
     }
   };
 
-  const handleRefetch = async (): Promise<void> => {
-    await refetch();
-  };
-
-  // Helper function to format post data for PostCard
   const formatPostForCard = (post: InterfacePost) => ({
     id: post.id,
     creator: {
@@ -281,14 +276,15 @@ export default function PostsPage() {
       }
     })(),
     pinnedAt: post.pinnedAt ?? null,
-    image: post.imageUrl ?? post.attachments?.[0]?.url ?? null,
-    video: post.videoUrl ?? null,
+    mimeType: post.attachments?.[0]?.mimeType ?? null,
+    attachmentURL: post.attachmentURL ?? null,
     title: post.caption ?? '',
     text: post.caption ?? '',
+    body: post.body,
     commentCount: post.commentsCount ?? 0,
     upVoteCount: post.upVotesCount ?? 0,
     downVoteCount: post.downVotesCount ?? 0,
-    fetchPosts: handleRefetch,
+    fetchPosts: refetch,
   });
 
   // Derive postsToDisplay from allPosts with sorting and filtering
@@ -456,6 +452,7 @@ export default function PostsPage() {
             onHide={hideCreatePostModal}
             refetch={refetch}
             orgId={currentUrl}
+            type="create"
           />
         </div>
       )}

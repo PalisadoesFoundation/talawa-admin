@@ -132,10 +132,7 @@ export const handleLoadMoreComments = async ({
             ...previousQueryResult.post,
             comments: {
               ...previousQueryResult.post.comments,
-              edges: [
-                ...(previousQueryResult.post.comments.edges || []),
-                ...newEdges,
-              ],
+              edges: [...previousQueryResult.post.comments.edges, ...newEdges],
               pageInfo: {
                 ...previousQueryResult.post.comments.pageInfo,
                 ...newPageInfo,

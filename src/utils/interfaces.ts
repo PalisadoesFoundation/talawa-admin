@@ -2240,14 +2240,15 @@ export interface InterfacePostCard {
   hasUserVoted: VoteState;
   postedAt: string;
   pinnedAt?: string | null;
-  image: string | null;
-  video: string | null;
+  mimeType?: string | null;
+  attachmentURL?: string | null;
   title: string;
+  body?: string;
   text: string;
   commentCount: number;
   upVoteCount: number;
   downVoteCount: number;
-  fetchPosts: () => void;
+  fetchPosts: () => Promise<unknown>;
 }
 
 export interface InterfaceComment {

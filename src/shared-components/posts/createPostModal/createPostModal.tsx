@@ -47,15 +47,14 @@ import Avatar from 'components/Avatar/Avatar';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './createPostModal.module.css';
 import { useMutation } from '@apollo/client';
-import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  CREATE_POST_MUTATION,
+  UPDATE_POST_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import { useTranslation } from 'react-i18next';
-import {
-  ICreatePostData,
-  ICreatePostInput,
-  IFileMetadataInput,
-} from 'types/Post/type';
+import { ICreatePostData, ICreatePostInput } from 'types/Post/type';
 import { ICreatePostModalProps } from 'types/Post/interface';
 
 function CreatePostModal({
@@ -63,12 +62,16 @@ function CreatePostModal({
   onHide,
   refetch,
   orgId,
+  type,
+  id,
+  title,
+  body,
 }: ICreatePostModalProps): JSX.Element {
   const { getItem } = useLocalStorage();
   const name = (getItem('name') as string | null) ?? '';
   const { t } = useTranslation('translation', { keyPrefix: 'createPostModal' });
-  const [postTitle, setPostTitle] = useState('');
-  const [postBody, setPostBody] = useState('');
+  const [postTitle, setPostTitle] = useState(title || '');
+  const [postBody, setPostBody] = useState(body || '');
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [isPinned, setIspinned] = useState(false);
@@ -76,6 +79,13 @@ function CreatePostModal({
   const [previewType, setPreviewType] = useState<'image' | 'video' | null>(
     null,
   );
+  const [editPost, { loading: isEditing }] = useMutation(UPDATE_POST_MUTATION);
+  const [create, { loading: isCreating }] = useMutation<
+    ICreatePostData,
+    { input: ICreatePostInput }
+  >(CREATE_POST_MUTATION);
+  const isLoading =
+    (type === 'create' && isCreating) || (type !== 'create' && isEditing);
   const isPostDisabled = postTitle.trim().length === 0;
 
   const handleClose = useCallback((): void => {
@@ -100,17 +110,6 @@ function CreatePostModal({
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [show, handleClose]);
-
-  const [create] = useMutation<ICreatePostData, { input: ICreatePostInput }>(
-    CREATE_POST_MUTATION,
-  );
-
-  async function getFileHashFromFile(fileToHash: File): Promise<string> {
-    const arrayBuffer = await fileToHash.arrayBuffer();
-    const hashBuffer = await crypto.subtle.digest('SHA-256', arrayBuffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
-  }
 
   function getMimeTypeEnum(mime: string): string {
     switch (mime) {
@@ -154,68 +153,69 @@ function CreatePostModal({
     setPreview(previewUrl);
   };
 
+  const onSuccess = async (type: 'edited' | 'created') => {
+    toast.success(
+      type === 'created'
+        ? (t('postCreatedSuccess') as string)
+        : (t('postUpdatedSuccess') as string),
+    );
+    await refetch();
+
+    // Reset all state
+    setPostTitle('');
+    setPostBody('');
+    setFile(null);
+    setPreview(null);
+    setIspinned(false);
+
+    // Clear DOM file inputs
+    const fileInput = document.getElementById('addMedia') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+    onHide();
+  };
+
   const createPostHandler = async (
     e: FormEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
 
     try {
-      let attachment: IFileMetadataInput | null = null;
-      const mediaFile = file;
-
-      if (mediaFile) {
-        // Sanitize filename by handling both forward and backward slashes
-        const sanitizedFileName =
-          mediaFile.name.split(/[/\\]/).pop() || 'defaultFileName';
-        const objectName = 'uploads/' + sanitizedFileName;
-        const fileHash = await getFileHashFromFile(mediaFile);
-
-        attachment = {
-          fileHash,
-          mimetype: getMimeTypeEnum(mediaFile.type),
-          name: sanitizedFileName,
-          objectName,
-        };
-      }
-
       if (!orgId) {
         toast.error(t('organizationIdMissing'));
         return;
       }
-
-      const { data } = await create({
-        variables: {
-          input: {
-            caption: postTitle,
-            organizationId: orgId,
-            isPinned: isPinned,
-            ...(attachment && { attachments: [attachment] }),
+      if (type === 'create') {
+        const { data } = await create({
+          variables: {
+            input: {
+              caption: postTitle,
+              body: postBody,
+              organizationId: orgId,
+              isPinned: isPinned,
+              ...(file && { attachment: file }),
+            },
           },
-        },
-      });
-
-      if (data?.createPost) {
-        toast.success(t('postCreatedSuccess') as string);
-        await refetch();
-
-        // Reset all state
-        setPostTitle('');
-        setPostBody('');
-        setFile(null);
-        setPreview(null);
-        setIspinned(false);
-
-        // Clear DOM file inputs
-        const fileInput = document.getElementById(
-          'addMedia',
-        ) as HTMLInputElement;
-        const videoInput = document.getElementById(
-          'videoAddMedia',
-        ) as HTMLInputElement;
-        if (fileInput) fileInput.value = '';
-        if (videoInput) videoInput.value = '';
-
-        onHide();
+        });
+        if (data?.createPost) {
+          onSuccess('created');
+          window.location.reload();
+        }
+      } else {
+        const { data } = await editPost({
+          variables: {
+            input: {
+              caption: postTitle,
+              body: postBody,
+              id: id,
+              isPinned: isPinned,
+              ...(file && { attachment: file }),
+            },
+          },
+        });
+        if (data.updatePost) {
+          onSuccess('edited');
+          window.location.reload();
+        }
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -227,7 +227,7 @@ function CreatePostModal({
       {/* Backdrop overlay */}
       <button
         className={`${styles.backdrop} ${show ? styles.backdropShow : ''}`}
-        onClick={handleClose}
+        onClick={!isLoading ? handleClose : undefined}
         data-testid="modalBackdrop"
         type="button"
         aria-label={t('closeCreatePost')}
@@ -250,12 +250,14 @@ function CreatePostModal({
             />
             <div className={styles.userInfo}>
               <span className={styles.userName}>{name}</span>
-              <span className={styles.postVisibility}>{t('postToAnyone')}</span>
+              <span className={styles.postVisibility}>
+                {type === 'create' ? t('postToAnyone') : t('editPost')}
+              </span>
             </div>
           </div>
           <button
             className={styles.closeButton}
-            onClick={handleClose}
+            onClick={!isLoading ? handleClose : undefined}
             aria-label={t('close')}
             data-testid="closeBtn"
             type="button"
@@ -363,13 +365,20 @@ function CreatePostModal({
           <div className={styles.postActions}>
             <form onSubmit={createPostHandler}>
               <button
-                className={`${styles.postButton} ${isPostDisabled ? styles.postButtonDisabled : ''}`}
+                className={`${styles.postButton} ${
+                  isPostDisabled || isLoading ? styles.postButtonDisabled : ''
+                }`}
                 type="submit"
-                disabled={isPostDisabled}
+                disabled={isPostDisabled || isLoading}
                 data-testid="createPostBtn"
-                data-cy="createPostBtn"
               >
-                {t('post')}
+                {isLoading ? (
+                  <span className={styles.loader}></span>
+                ) : type === 'create' ? (
+                  t('post')
+                ) : (
+                  t('saveChanges')
+                )}
               </button>
             </form>
           </div>

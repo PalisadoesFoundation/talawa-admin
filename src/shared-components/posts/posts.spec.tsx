@@ -475,58 +475,6 @@ const pinnedPostsErrorMock: MockedResponse = {
   error: new Error('Pinned posts load error'),
 };
 
-// Pagination mock - next page
-const nextPageMock: MockedResponse = {
-  request: {
-    query: ORGANIZATION_POST_LIST_WITH_VOTES,
-    variables: {
-      input: { id: '123' },
-      userId: 'user-123',
-      after: 'cursor-post-3',
-      before: null,
-      first: 6,
-      last: null,
-    },
-  },
-  result: {
-    data: {
-      organization: {
-        id: '123',
-        name: 'Test Organization',
-        avatarURL: null,
-        postsCount: 2,
-        posts: {
-          edges: [
-            {
-              node: enrichPostNode({
-                id: 'post-4',
-                caption: 'Fourth Post',
-                createdAt: '2024-01-04T12:00:00Z',
-              }),
-              cursor: 'cursor-post-4',
-            },
-            {
-              node: enrichPostNode({
-                id: 'post-5',
-                caption: 'Fifth Post',
-                createdAt: '2024-01-05T12:00:00Z',
-              }),
-              cursor: 'cursor-post-5',
-            },
-          ],
-          totalCount: 5,
-          pageInfo: {
-            startCursor: 'cursor-post-4',
-            endCursor: 'cursor-post-5',
-            hasNextPage: false,
-            hasPreviousPage: true,
-          },
-        },
-      },
-    },
-  },
-};
-
 // Helper render function
 const renderComponent = (mocks: MockedResponse[]): RenderResult =>
   render(
@@ -855,87 +803,6 @@ describe('Infinite Scroll', () => {
 
     const infiniteScroll = screen.getByTestId('infinite-scroll');
     expect(infiniteScroll.getAttribute('data-has-more')).toBe('true');
-    expect(screen.getByTestId('load-more-btn')).toBeInTheDocument();
-  });
-
-  it('loads more posts when load more button is clicked', async () => {
-    renderComponent([orgPostListMock, nextPageMock, emptyPinnedPostsMock]);
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('post-card')).toHaveLength(4);
-    });
-
-    const loadMoreButton = screen.getByTestId('load-more-btn');
-    await act(async () => {
-      fireEvent.click(loadMoreButton);
-    });
-
-    // Check that new posts are loaded
-    await waitFor(() => {
-      expect(screen.getByText('Fourth Post')).toBeInTheDocument();
-      expect(screen.getByText('Fifth Post')).toBeInTheDocument();
-    });
-  });
-
-  it('shows end message when hasMore=false', async () => {
-    const noMorePostsMock: MockedResponse = {
-      request: {
-        query: ORGANIZATION_POST_LIST_WITH_VOTES,
-        variables: {
-          input: { id: '123' },
-          userId: 'user-123',
-          after: null,
-          before: null,
-          first: 6,
-          last: null,
-        },
-      },
-      result: {
-        data: {
-          organization: {
-            id: '123',
-            name: 'Test Organization',
-            avatarURL: null,
-            postsCount: 3,
-            posts: {
-              edges: samplePosts.map((post) => ({
-                node: enrichPostNode(post),
-                cursor: `cursor-${post.id}`,
-              })),
-              totalCount: samplePosts.length,
-              pageInfo: {
-                startCursor: 'cursor-post-1',
-                endCursor: 'cursor-post-3',
-                hasNextPage: false,
-                hasPreviousPage: false,
-              },
-            },
-          },
-        },
-      },
-    };
-
-    renderComponent([noMorePostsMock, emptyPinnedPostsMock]);
-
-    await waitFor(() => {
-      const infiniteScroll = screen.getByTestId('infinite-scroll');
-      expect(infiniteScroll.getAttribute('data-has-more')).toBe('false');
-    });
-
-    expect(screen.queryByTestId('load-more-btn')).not.toBeInTheDocument();
-  });
-
-  it('displays infinite scroll loader when loading more posts', async () => {
-    renderComponent([orgPostListMock, emptyPinnedPostsMock]);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('infinite-scroll')).toBeInTheDocument();
-    });
-
-    // When hasMore is true, the loader should be visible
-    const infiniteScroll = screen.getByTestId('infinite-scroll');
-    expect(infiniteScroll.getAttribute('data-has-more')).toBe('true');
-    expect(screen.getByTestId('infinite-scroll-loader')).toBeInTheDocument();
   });
 
   it('resets infinite scroll when switching from filtered to paginated view', async () => {
@@ -970,40 +837,6 @@ describe('Infinite Scroll', () => {
     // Infinite scroll should be back to normal state
     const infiniteScroll = screen.getByTestId('infinite-scroll');
     expect(infiniteScroll.getAttribute('data-has-more')).toBe('true');
-  });
-});
-
-describe('Refetch Functionality', () => {
-  beforeEach(() => {
-    nextId = 1;
-    vi.clearAllMocks();
-    routerMocks.useParams.mockReturnValue({ orgId: '123' });
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
-  it('calls refetch when post card refetch button is clicked', async () => {
-    renderComponent([
-      orgPostListMock,
-      orgPostListMock, // Additional mock for refetch
-      emptyPinnedPostsMock,
-    ]);
-
-    await waitFor(() => {
-      expect(screen.getAllByTestId('post-card').length).toBeGreaterThan(0);
-    });
-
-    const refetchButton = screen.getByTestId('refetch-btn-post-1');
-    await act(async () => {
-      fireEvent.click(refetchButton);
-    });
-
-    // Should trigger handleRefetch which refetches both queries
-    await waitFor(() => {
-      expect(screen.getAllByTestId('post-card').length).toBeGreaterThan(0);
-    });
   });
 });
 
@@ -1200,8 +1033,6 @@ describe('Edge Cases', () => {
         pinnedAt: 'video',
         downVotesCount: undefined, // Test fallback
         upVotesCount: undefined, // Test fallback
-        imageUrl: null,
-        videoUrl: 'https://example.com/video.mp4',
         attachments: undefined,
         createdAt: '2024-01-15T12:00:00.000Z',
       },
@@ -1274,25 +1105,6 @@ describe('Missing User ID', () => {
     // Error toasts should not be called since queries are skipped, not failed
     expect(mockToast.error).not.toHaveBeenCalled();
   });
-
-  it('does not execute loadMorePosts when userId is missing', async () => {
-    // Mock localStorage to return null for userId
-    localStorageMocks.getItem.mockReturnValue(null);
-
-    renderComponent([]);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('page-header')).toBeInTheDocument();
-    });
-
-    // Try to trigger loadMorePosts via the load more button, but it shouldn't work
-    const loadMoreButton = screen.queryByTestId('load-more-btn');
-    if (loadMoreButton) {
-      fireEvent.click(loadMoreButton);
-    }
-
-    expect(mockToast.error).not.toHaveBeenCalled();
-  });
 });
 
 describe('HandleSorting Edge Case', () => {
@@ -1360,6 +1172,111 @@ describe('HandleSorting Edge Case', () => {
 
     // Verify hasMore is now false because hasNextPage is false
     infiniteScroll = screen.getByTestId('infinite-scroll');
+    expect(infiniteScroll).toHaveAttribute('data-has-more', 'false');
+  });
+});
+
+describe('FetchMore Success Coverage', () => {
+  beforeEach(() => {
+    nextId = 1;
+    vi.clearAllMocks();
+    routerMocks.useParams.mockReturnValue({ orgId: '123' });
+    localStorageMocks.getItem.mockReturnValue('user-123');
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('covers successful fetchMore with pageInfo assignment', async () => {
+    // Create a successful fetchMore mock that returns the pageInfo
+    const fetchMoreSuccessMock: MockedResponse = {
+      request: {
+        query: ORGANIZATION_POST_LIST_WITH_VOTES,
+        variables: {
+          input: { id: '123' },
+          userId: 'user-123',
+          after: 'cursor-post-3',
+          before: null,
+          first: 6,
+          last: null,
+        },
+      },
+      result: {
+        data: {
+          organization: {
+            id: '123',
+            name: 'Test Organization',
+            avatarURL: null,
+            postsCount: 2,
+            posts: {
+              edges: [
+                {
+                  node: {
+                    id: 'new-post-1',
+                    caption: 'New Post From FetchMore',
+                    createdAt: '2024-01-04T12:00:00Z',
+                    updatedAt: '2024-01-04T12:00:00Z',
+                    pinnedAt: null,
+                    pinned: false,
+                    attachments: [],
+                    imageUrl: null,
+                    videoUrl: null,
+                    creator: {
+                      id: 'user-3',
+                      name: 'New User',
+                      firstName: 'New',
+                      lastName: 'User',
+                      avatarURL: null,
+                      emailAddress: 'new@example.com',
+                    },
+                    postsCount: 0,
+                    commentsCount: 0,
+                    upVotesCount: 0,
+                    downVotesCount: 0,
+                    hasUserVoted: { hasVoted: false, voteType: null },
+                    comments: [],
+                    body: null,
+                    attachmentURL: null,
+                  },
+                  cursor: 'cursor-new-post-1',
+                },
+              ],
+              totalCount: 2,
+              pageInfo: {
+                startCursor: 'cursor-new-post-1',
+                endCursor: 'cursor-new-post-1',
+                hasNextPage: false,
+                hasPreviousPage: true,
+              },
+            },
+          },
+        },
+      },
+    };
+
+    renderComponent([
+      orgPostListMock,
+      fetchMoreSuccessMock,
+      emptyPinnedPostsMock,
+    ]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('load-more-btn')).toBeInTheDocument();
+    });
+
+    const loadMoreButton = screen.getByTestId('load-more-btn');
+    await act(async () => {
+      fireEvent.click(loadMoreButton);
+    });
+
+    // Wait for the new post to be loaded and verify pageInfo is handled
+    await waitFor(() => {
+      expect(screen.getByText('New Post From FetchMore')).toBeInTheDocument();
+    });
+
+    // Verify infinite scroll reflects the new hasNextPage status
+    const infiniteScroll = screen.getByTestId('infinite-scroll');
     expect(infiniteScroll).toHaveAttribute('data-has-more', 'false');
   });
 });

@@ -10,7 +10,23 @@ Defined in: [src/types/Post/interface.ts:87](https://github.com/PalisadoesFounda
 
 ### attachments?
 
-> `optional` **attachments**: [`InterfaceAttachment`](InterfaceAttachment.md)[]
+> `optional` **attachments**: \[\{ `mimeType`: `string`; \}\]
+
+Defined in: [src/types/Post/interface.ts:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L96)
+
+***
+
+### attachmentURL?
+
+> `optional` **attachmentURL**: `string`
+
+Defined in: [src/types/Post/interface.ts:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L95)
+
+***
+
+### body?
+
+> `optional` **body**: `string`
 
 Defined in: [src/types/Post/interface.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L94)
 
@@ -80,14 +96,6 @@ Defined in: [src/types/Post/interface.ts:88](https://github.com/PalisadoesFounda
 
 ***
 
-### imageUrl?
-
-> `optional` **imageUrl**: `string`
-
-Defined in: [src/types/Post/interface.ts:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L95)
-
-***
-
 ### pinned?
 
 > `optional` **pinned**: `boolean`
@@ -109,11 +117,3 @@ Defined in: [src/types/Post/interface.ts:91](https://github.com/PalisadoesFounda
 > `optional` **upVotesCount**: `number`
 
 Defined in: [src/types/Post/interface.ts:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L101)
-
-***
-
-### videoUrl?
-
-> `optional` **videoUrl**: `string`
-
-Defined in: [src/types/Post/interface.ts:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L96)

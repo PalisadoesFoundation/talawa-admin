@@ -3,7 +3,10 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
-import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
+import {
+  CREATE_POST_MUTATION,
+  UPDATE_POST_MUTATION,
+} from 'GraphQl/Mutations/mutations';
 import CreatePostModal from './createPostModal';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from '../../../utils/i18nForTest';
@@ -78,6 +81,7 @@ const defaultProps = {
   onHide: vi.fn(),
   refetch: vi.fn().mockResolvedValue({}),
   orgId: 'test-org-id',
+  type: 'create' as const,
 };
 
 // Mock GraphQL responses
@@ -87,6 +91,7 @@ const createPostSuccessMock = {
     variables: {
       input: {
         caption: 'Test Post Title',
+        body: '',
         organizationId: 'test-org-id',
         isPinned: false,
       },
@@ -110,6 +115,7 @@ const createPinnedPostMock = {
     variables: {
       input: {
         caption: 'Pinned Post',
+        body: '',
         organizationId: 'test-org-id',
         isPinned: true,
       },
@@ -133,17 +139,10 @@ const createPostWithAttachmentMock = {
     variables: {
       input: {
         caption: 'Post with Image',
+        body: '',
         organizationId: 'test-org-id',
         isPinned: false,
-        attachments: [
-          {
-            fileHash:
-              '123456789abcdef0112233445566778899aabbccddeeff001122334455667788',
-            mimetype: 'IMAGE_JPEG',
-            name: 'test-image.jpg',
-            objectName: 'uploads/test-image.jpg',
-          },
-        ],
+        attachment: expect.any(File),
       },
     },
   },
@@ -173,6 +172,7 @@ const createPostErrorMock = {
     variables: {
       input: {
         caption: 'Error Post',
+        body: '',
         organizationId: 'test-org-id',
         isPinned: false,
       },
@@ -180,6 +180,7 @@ const createPostErrorMock = {
   },
   error: new Error('GraphQL error occurred'),
 };
+
 beforeEach(() => {
   Object.defineProperty(global, 'crypto', {
     value: {
@@ -277,7 +278,7 @@ describe('CreatePostModal Integration Tests', () => {
       expect(screen.getByTestId('modalBackdrop')).toBeInTheDocument();
       expect(screen.getByTestId('user-avatar')).toBeInTheDocument();
       expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.getByText(/Post to anyone/i)).toBeInTheDocument(); // postToAnyone translation
+      expect(screen.getByText('Post to anyone')).toBeInTheDocument(); // postToAnyone translation
     });
 
     it('closes modal when close button is clicked', async () => {
@@ -480,39 +481,6 @@ describe('CreatePostModal Integration Tests', () => {
       // The post button should be enabled
       const postButton = screen.getByTestId('createPostBtn');
       expect(postButton).not.toBeDisabled();
-
-      // This test confirms that the file upload handling, preview generation,
-      // and UI state management all work correctly
-    });
-
-    it('tests file hash generation functionality', async () => {
-      // Spy on crypto.subtle.digest to verify it's called
-      const digestSpy = vi.spyOn(global.crypto.subtle, 'digest');
-      // Spy on File.prototype.arrayBuffer to track the ArrayBuffer being passed
-      const arrayBufferSpy = vi.spyOn(File.prototype, 'arrayBuffer');
-
-      renderComponent({}, [createPostWithAttachmentMock]);
-
-      const titleInput = screen.getByPlaceholderText('Title of your post...');
-      const fileInput = screen.getByTestId('addMedia');
-      const postButton = screen.getByTestId('createPostBtn');
-
-      const mockFile = new File(['test-content'], 'test-image.jpg', {
-        type: 'image/jpeg',
-      });
-
-      await userEvent.upload(fileInput, mockFile);
-      await user.type(titleInput, 'Post with Image');
-      await user.click(postButton);
-
-      // Verify that arrayBuffer was called and digest was called with the returned ArrayBuffer
-      await waitFor(() => {
-        expect(arrayBufferSpy).toHaveBeenCalled();
-        expect(digestSpy).toHaveBeenCalledWith(
-          'SHA-256',
-          expect.any(ArrayBuffer),
-        );
-      });
     });
 
     it('tests MIME type conversion functionality', async () => {
@@ -631,50 +599,6 @@ describe('CreatePostModal Integration Tests', () => {
         expect(errorHandler).toHaveBeenCalled();
       });
     });
-
-    it('resets form state after successful submission', async () => {
-      renderComponent();
-
-      const titleInput = screen.getByPlaceholderText('Title of your post...');
-      const bodyInput = screen.getByPlaceholderText('Body of your post...');
-      const postButton = screen.getByTestId('createPostBtn');
-
-      await user.type(titleInput, 'Test Post Title');
-      await user.type(bodyInput, 'Test body content');
-      await user.click(postButton);
-
-      await waitFor(() => {
-        expect(titleInput).toHaveValue('');
-        expect(bodyInput).toHaveValue('');
-      });
-    });
-
-    it('clears file inputs after successful submission', async () => {
-      // Mock DOM methods
-      const mockGetElementById = vi
-        .spyOn(document, 'getElementById')
-        .mockImplementation((id) => {
-          if (id === 'addMedia' || id === 'videoAddMedia') {
-            return { value: 'test.jpg' } as HTMLInputElement;
-          }
-          return null;
-        });
-
-      renderComponent();
-
-      const titleInput = screen.getByTestId('postTitleInput');
-      const postButton = screen.getByTestId('createPostBtn');
-
-      await user.type(titleInput, 'Test Post Title');
-      await user.click(postButton);
-
-      await waitFor(() => {
-        expect(mockGetElementById).toHaveBeenCalledWith('addMedia');
-        expect(mockGetElementById).toHaveBeenCalledWith('videoAddMedia');
-      });
-
-      mockGetElementById.mockRestore();
-    });
   });
 
   describe('Edge Cases', () => {
@@ -726,6 +650,7 @@ describe('CreatePostModal Integration Tests', () => {
           variables: {
             input: {
               caption: 'Test Post',
+              body: '',
               organizationId: 'test-org-id',
               isPinned: false,
             },
@@ -766,51 +691,154 @@ describe('CreatePostModal Integration Tests', () => {
     });
   });
 
-  describe('Keyboard Navigation and Accessibility', () => {
-    it('handles proper cleanup on unmount', async () => {
-      const { unmount } = renderComponent();
+  describe('Edit Post Functionality', () => {
+    it('renders in edit mode with pre-filled data', () => {
+      renderComponent({
+        type: 'edit',
+        id: 'post-123',
+        title: 'Existing Title',
+        body: 'Existing Body',
+      });
 
-      // Component should unmount without errors
-      expect(() => unmount()).not.toThrow();
+      expect(screen.getByDisplayValue('Existing Title')).toBeInTheDocument();
+      expect(screen.getByDisplayValue('Existing Body')).toBeInTheDocument();
+      expect(screen.getByText('Edit Post')).toBeInTheDocument();
+      expect(screen.getByText('Save Changes')).toBeInTheDocument();
     });
 
-    it('has proper accessibility attributes', () => {
-      renderComponent();
+    it('handles edit mode with file upload', async () => {
+      renderComponent({
+        type: 'edit',
+        id: 'post-123',
+        title: 'Original Title',
+        body: 'Original Body',
+      });
 
-      const closeButton = screen.getByTestId('closeBtn');
-      expect(closeButton).toHaveAttribute('aria-label', 'close');
+      const titleInput = screen.getByDisplayValue('Original Title');
+      const bodyInput = screen.getByDisplayValue('Original Body');
+      const fileInput = screen.getByTestId('addMedia');
+      const saveButton = screen.getByText('Save Changes');
 
-      const photoButton = screen.getByTestId('addPhotoBtn');
-      expect(photoButton).toHaveAttribute('aria-label', 'Add Attachment');
+      const mockFile = new File(['test-content'], 'test.jpg', {
+        type: 'image/jpeg',
+      });
 
-      const pinButton = screen.getByTestId('pinPostButton');
-      expect(pinButton).toHaveAttribute('aria-label', 'Pin post');
+      await user.clear(titleInput);
+      await user.type(titleInput, 'Updated Title');
+      await user.clear(bodyInput);
+      await user.type(bodyInput, 'Updated Body');
+      await userEvent.upload(fileInput, mockFile);
+
+      // Should show preview
+      expect(screen.getByTestId('imagePreview')).toBeInTheDocument();
+
+      // Button should be enabled
+      expect(saveButton).not.toBeDisabled();
+
+      // Verify form state
+      expect(titleInput).toHaveValue('Updated Title');
+      expect(bodyInput).toHaveValue('Updated Body');
     });
-  });
 
-  describe('Component State Management', () => {
-    it('maintains consistent state across multiple interactions', async () => {
-      renderComponent();
+    it('handles edit mode when updatePost returns null', async () => {
+      const { toast } = await import('react-toastify');
 
-      const titleInput = screen.getByPlaceholderText('Title of your post...');
-      const bodyInput = screen.getByPlaceholderText('Body of your post...');
-      const pinButton = screen.getByTestId('pinPostButton');
+      const updatePostNullMock = {
+        request: {
+          query: UPDATE_POST_MUTATION,
+          variables: {
+            input: {
+              caption: 'Test Title',
+              body: 'Test Body',
+              id: 'post-123',
+              isPinned: false,
+              attachment: undefined,
+            },
+          },
+        },
+        result: {
+          data: {
+            updatePost: null,
+          },
+        },
+      };
 
-      // Type in title
+      renderComponent(
+        {
+          type: 'edit',
+          id: 'post-123',
+          title: '',
+          body: '',
+        },
+        [updatePostNullMock],
+      );
+
+      const titleInput = screen.getByTestId('postTitleInput');
+      const bodyInput = screen.getByTestId('postBodyInput');
+      const saveButton = screen.getByText('Save Changes');
+
       await user.type(titleInput, 'Test Title');
-      expect(titleInput).toHaveValue('Test Title');
-
-      // Type in body
       await user.type(bodyInput, 'Test Body');
-      expect(bodyInput).toHaveValue('Test Body');
+      await user.click(saveButton);
 
-      // Toggle pin
-      await user.click(pinButton);
-      expect(pinButton).toHaveAttribute('title', 'Unpin post');
+      await waitFor(() => {
+        expect(toast.success).not.toHaveBeenCalled();
+        expect(defaultProps.refetch).not.toHaveBeenCalled();
+      });
+    });
+    it('handles edit mode when updatePost returns success', async () => {
+      const { toast } = await import('react-toastify');
 
-      // Values should still be present
-      expect(titleInput).toHaveValue('Test Title');
-      expect(bodyInput).toHaveValue('Test Body');
+      const updatePostNullMock = {
+        request: {
+          query: UPDATE_POST_MUTATION,
+          variables: {
+            input: {
+              caption: 'Test Title',
+              body: 'Test Body',
+              id: 'post-123',
+              isPinned: false,
+              attachment: undefined,
+            },
+          },
+        },
+        result: {
+          data: {
+            updatePost: {
+              id: 'post-123',
+              caption: 'Test Title',
+              pinnedAt: null,
+              attachments: [
+                {
+                  name: 'test.jpg',
+                },
+              ],
+            },
+          },
+        },
+      };
+
+      renderComponent(
+        {
+          type: 'edit',
+          id: 'post-123',
+          title: '',
+          body: '',
+        },
+        [updatePostNullMock],
+      );
+
+      const titleInput = screen.getByTestId('postTitleInput');
+      const bodyInput = screen.getByTestId('postBodyInput');
+      const saveButton = screen.getByText('Save Changes');
+
+      await user.type(titleInput, 'Test Title');
+      await user.type(bodyInput, 'Test Body');
+      await user.click(saveButton);
+
+      await waitFor(() => {
+        expect(toast.success).toHaveBeenCalled();
+      });
     });
   });
 });

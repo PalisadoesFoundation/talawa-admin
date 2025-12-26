@@ -91,9 +91,9 @@ export interface InterfacePost {
   pinnedAt?: string | null;
   pinned?: boolean;
   creator?: InterfaceCreator | null;
-  attachments?: InterfaceAttachment[];
-  imageUrl?: string | null;
-  videoUrl?: string | null;
+  body?: string;
+  attachmentURL?: string;
+  attachments?: [{ mimeType: string }];
   hasUserVoted?: {
     hasVoted: boolean;
     voteType: 'up_vote' | 'down_vote' | null;
@@ -117,7 +117,11 @@ export interface InterfacePinnedPostCardProps {
 
 export interface ICreatePostModalProps {
   show: boolean;
+  id?: string;
+  title?: string;
+  body?: string;
   onHide: () => void;
   refetch: () => Promise<unknown>;
   orgId: string | undefined;
+  type: 'create' | 'edit';
 }

@@ -104,3 +104,8 @@
     transform: translateY(-50%);
   }
 }
+
+.postMedia {
+  height: 175px;
+  width: 100%;
+}

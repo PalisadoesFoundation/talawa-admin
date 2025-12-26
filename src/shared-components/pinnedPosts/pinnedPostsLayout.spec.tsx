@@ -58,11 +58,14 @@ const createMockPinnedPost = (
     id,
     caption,
     createdAt: '2024-01-15T12:00:00Z',
-    imageUrl: 'https://example.com/image.jpg',
-    videoUrl: null,
+    attachmentURL: 'https://example.com/image.jpg',
     pinnedAt: '2024-01-15T12:00:00Z',
     pinned: true,
-    attachments: [],
+    attachments: [
+      {
+        mimeType: 'image/jpeg',
+      },
+    ],
     creator: {
       id: creatorId,
       name: creatorName,

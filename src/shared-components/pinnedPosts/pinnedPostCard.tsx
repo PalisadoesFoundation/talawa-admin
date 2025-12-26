@@ -61,6 +61,7 @@ import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutation
 import { errorHandler } from '../../utils/errorHandler';
 import { formatDate } from '../../utils/dateFormatter';
 import useLocalStorage from '../../utils/useLocalstorage';
+import styles from './pinnedPostsLayout.module.css';
 import defaultImg from '../../assets/images/defaultImg.png';
 
 const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
@@ -83,7 +84,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
 
   const [deletePost] = useMutation(DELETE_POST_MUTATION);
   const [togglePinPost] = useMutation(TOGGLE_PINNED_POST);
-
+  const mimeType = pinnedPost.node?.attachments?.[0]?.mimeType;
   // Dropdown menu handlers
   const handleDropdownOpen = (event: React.MouseEvent<HTMLElement>): void => {
     setDropdownAnchor(event.currentTarget);
@@ -111,6 +112,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
         isPinned ? t('postUnpinnedSuccess') : t('postPinnedSuccess'),
       );
       handleDropdownClose();
+      window.location.reload();
     } catch (error) {
       errorHandler(t, error);
     }
@@ -128,9 +130,9 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
       errorHandler(t, error);
     }
   };
-
+  console.log('pinnedPost.node', pinnedPost.node);
   return (
-    <Container sx={{ width: '340px', height: '390px' }}>
+    <Container sx={{ width: '340px', height: '360px' }}>
       <Card sx={{ width: '340px', borderRadius: 2, overflow: 'hidden' }}>
         {/* Header with user info and actions */}
         <Box
@@ -223,19 +225,44 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
           </Box>
         </Box>
 
-        {/* Post Image */}
+        {/* Post Media */}
+        {pinnedPost.node.attachmentURL ? (
+          <Box className={styles.postMedia}>
+            {mimeType?.split('/')[0] == 'image' && (
+              <img
+                src={pinnedPost.node.attachmentURL}
+                alt={t('postImage')}
+                crossOrigin="anonymous"
+                className={styles.postMedia}
+              />
+            )}
 
-        <CardMedia
-          component="img"
-          height="175"
-          image={pinnedPost.node?.imageUrl ?? defaultImg}
-          alt={t('postImageAlt')}
-          sx={{ objectFit: 'cover' }}
-          draggable={false}
-        />
+            {mimeType?.split('/')[0] == 'video' && (
+              <video
+                controls
+                style={{ width: '100%' }}
+                crossOrigin="anonymous"
+                data-testid="post-video"
+                className={styles.postMedia}
+              >
+                <source src={pinnedPost.node.attachmentURL} />
+              </video>
+            )}
+          </Box>
+        ) : (
+          <CardMedia
+            component="img"
+            height="175"
+            image={pinnedPost.node?.attachmentURL ?? defaultImg}
+            crossOrigin="anonymous"
+            alt={t('postImageAlt')}
+            sx={{ objectFit: 'cover' }}
+            draggable={false}
+          />
+        )}
 
         {/* Post Content */}
-        <CardContent sx={{ height: '166px' }}>
+        <CardContent sx={{ height: '136px' }}>
           <Typography
             sx={{
               fontWeight: 500,
@@ -247,7 +274,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
               textOverflow: 'ellipsis',
             }}
           >
-            {pinnedPost.node?.caption || t('untitledPost')}
+            {pinnedPost.node.caption}
           </Typography>
 
           <Typography
@@ -258,22 +285,6 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
             }}
           >
             {t('postedOn', { date: formatDate(pinnedPost.node.createdAt) })}
-          </Typography>
-
-          <Typography
-            color="text.primary"
-            sx={{
-              fontSize: '14px',
-              height: '40px', // Fixed height for exactly 2 lines
-              display: '-webkit-box',
-              WebkitLineClamp: 2,
-              WebkitBoxOrient: 'vertical',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              lineHeight: 1.4,
-            }}
-          >
-            {pinnedPost.node?.caption || t('noContentAvailable')}
           </Typography>
 
           <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>

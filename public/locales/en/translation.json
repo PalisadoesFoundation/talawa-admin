@@ -720,6 +720,7 @@
     "titleOfPost": "Title of your post...",
     "bodyOfPost": "Body of your post...",
     "post": "Post",
+    "saveChanges": "Save Changes",
     "closeCreatePost": "Close Create Post",
     "close": "close",
     "selectedImage": "Selected Image",
@@ -745,10 +746,12 @@
     "sortPost": "Sort Post",
     "tag": " Your browser does not support the video tag",
     "postCreatedSuccess": "Congratulations! You have Posted Something.",
+    "postUpdatedSuccess": "Post updated successfully.",
     "pinPost": "Pin post",
     "unpinPost": "Unpin post",
     "unsupportedFileType": "Unsupported file type!",
     "postToAnyone": "Post to anyone",
+    "editPost": "Edit Post",
     "Next": "Next Page",
     "Previous": "Previous Page",
     "cancel": "cancel",
@@ -773,6 +776,9 @@
     "admin not found!": "Admin Not Found!",
     "roles not found!": "Roles Not Found!",
     "user": "user"
+  },
+  "orgPost": {
+    "title": "Organization Posts"
   },
   "orgPostCard": {
     "author": "Author",

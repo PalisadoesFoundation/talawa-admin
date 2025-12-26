@@ -723,6 +723,7 @@
     "selectedImage": "चयनित छवि",
     "bodyOfPost": "आपकी पोस्ट का मुख्य भाग...",
     "post": " पोस्ट ",
+    "saveChanges": "परिवर्तन सहेजें",
     "addAttachment": "संलग्नक जोड़ें",
     "searchPost": "पोस्ट खोजें",
     "posts": "पदों",
@@ -745,9 +746,11 @@
     "sortPost": "पोस्ट क्रमबद्ध करें",
     "tag": " आपका ब्राउज़र में वीडियो टैग समर्थित नहीं है",
     "postCreatedSuccess": "बधाई हो! ",
+    "postUpdatedSuccess": "पोस्ट सफलतापूर्वक अपडेट हो गई",
     "pinPost": "पिन पद",
     "unpinPost": "पिन हटाएँ",
     "postToAnyone": "किसी को भी पोस्ट करें",
+    "editPost": "पोस्ट संपादित करें",
     "unsupportedFileType": "असमर्थित फ़ाइल प्रकार",
     "Next": "अगला पृष्ठ",
     "Previous": "पिछला पृष्ठ",
@@ -773,6 +776,9 @@
     "admin not found!": "व्यवस्थापक नहीं मिला!",
     "roles not found!": "भूमिकाएँ नहीं मिलीं!",
     "user": "उपयोगकर्ता"
+  },
+  "orgPost": {
+    "title": "Organization Posts"
   },
   "orgPostCard": {
     "author": "लेखक",

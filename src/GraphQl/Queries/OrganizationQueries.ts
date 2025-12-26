@@ -31,6 +31,10 @@ export const ORGANIZATION_PINNED_POST_LIST = gql`
             id
             caption
             commentsCount
+            attachments {
+              mimeType
+            }
+            attachmentURL
             pinnedAt
             downVotesCount
             upVotesCount
@@ -79,9 +83,14 @@ export const ORGANIZATION_POST_LIST_WITH_VOTES = gql`
             }
             id
             caption
+            body
             commentsCount
             pinnedAt
             downVotesCount
+            attachments {
+              mimeType
+            }
+            attachmentURL
             upVotesCount
             creator {
               id
