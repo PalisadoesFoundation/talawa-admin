@@ -67,9 +67,8 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
   membershipRequests = [],
 }) => {
   const { t } = useTranslation('translation', {
-      keyPrefix: 'organizationCard',
+    keyPrefix: 'organizationCard',
   });
-
 
   const [sendRequest, { loading: sendLoading }] = useMutation(
     SEND_MEMBERSHIP_REQUEST,
@@ -99,9 +98,7 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
 
       toast.success(t('withdraw_success'));
     } catch {
-      toast.error(
-        t('withdraw_error'),
-      );
+      toast.error(t('withdraw_error'));
     }
   };
 
@@ -124,7 +121,7 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
           disabled={cancelLoading}
         >
           {t('organization.withdraw', 'Withdraw')}
-       </Button>
+        </Button>
       );
     }
 

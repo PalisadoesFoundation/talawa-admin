@@ -50,9 +50,7 @@ describe('OrganizationCard [PR-2]', () => {
     renderWithI18n(<OrganizationCard {...baseProps} />);
 
     expect(screen.getByText('Test Organization')).toBeInTheDocument();
-    expect(
-      screen.getByText('Organization description'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Organization description')).toBeInTheDocument();
     expect(screen.getByText('Test Address')).toBeInTheDocument();
   });
 
@@ -156,7 +154,4 @@ describe('OrganizationCard [PR-2]', () => {
       );
     });
   });
-  
-
-  
 });

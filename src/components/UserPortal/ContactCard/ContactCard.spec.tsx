@@ -151,5 +151,4 @@ describe('ContactCard [User Portal]', () => {
 
     expect(setSelectedContact).toHaveBeenCalledWith(baseProps.id);
   });
-  
 });
