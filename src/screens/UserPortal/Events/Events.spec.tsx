@@ -233,7 +233,7 @@ const MOCKS = [
       query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
       variables: {
         id: 'org123',
-        first: 150,
+        first: 100,
         after: null,
         startAt: startDate,
         endAt: endDate,
@@ -323,7 +323,7 @@ const MOCKS = [
       query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
       variables: {
         id: 'org123',
-        first: 150,
+        first: 100,
         after: null,
         startAt: '2023-05-31T18:30:00.000Z',
         endAt: '2023-06-30T18:29:59.999Z',
@@ -487,7 +487,7 @@ const ERROR_MOCKS = [
       query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
       variables: {
         id: 'org123',
-        first: 150,
+        first: 100,
         after: null,
         startAt: startDate,
         endAt: endDate,
@@ -515,7 +515,7 @@ const RATE_LIMIT_MOCKS = [
       query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
       variables: {
         id: 'org123',
-        first: 150,
+        first: 100,
         after: null,
         startAt: startDate,
         endAt: endDate,

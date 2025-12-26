@@ -10263,3 +10263,9 @@ form {
 .backgroundPaper {
   background-color: var(--popup-bg, #fff);
 }
+
+.AddIconStyle {
+  font-size: '25px';
+  margin-bottom: '2px';
+  margin-right: '2px';
+}
