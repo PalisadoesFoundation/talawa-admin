@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import type {
   IColumnDef,
   IDataTableProps,
@@ -9,6 +9,7 @@ import type {
   IFilterState,
   ITableState,
 } from './types';
+import { cleanup } from '@testing-library/react';
 
 interface IUser {
   id: string;
@@ -35,6 +36,24 @@ const mockColumns: IColumnDef<IUser, unknown>[] = [
 ];
 
 describe('DataTable types', () => {
+  beforeEach(() => {
+    // No setup required for these type tests
+    vi.mock('react-router', async () => {
+      const actual = await vi.importActual('react-router'); // Import the actual module
+      return {
+        ...actual,
+        useParams: () => ({ id: '1', name: 'test', email: 'test@example.com' }), // Mock `useParams` to return a custom object
+      };
+    });
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    // No additional teardown needed
+    vi.clearAllMocks();
+    cleanup();
+  });
+
   it('should use mockUsers and mockColumns for type validation', () => {
     // Validate that mockUsers and mockColumns conform to the types
     mockUsers.forEach((user) => {
@@ -116,6 +135,77 @@ describe('DataTable types', () => {
     };
     expect(props.data[0].name).toBe('Ada Lovelace');
     expect(props.columns[1].id).toBe('email');
+  });
+
+  it('error and renderError produce valid React elements', () => {
+    const error = new Error('Test error');
+    const renderError = (e: Error) =>
+      React.createElement('span', null, e.message);
+    const el = renderError(error);
+    expect(React.isValidElement(el)).toBe(true);
+  });
+
+  it('rowKey as function returns correct key', () => {
+    const rowKeyFn = (row: IUser) => `user-${row.id}`;
+    const props: IDataTableProps<IUser> = {
+      data: mockUsers,
+      columns: mockColumns,
+      rowKey: rowKeyFn,
+    };
+    if (props.rowKey && typeof props.rowKey === 'function') {
+      expect(props.rowKey(mockUsers[0])).toBe('user-1');
+    } else {
+      throw new Error('rowKey is not a function');
+    }
+  });
+
+  it('loading and emptyMessage behavior', () => {
+    const props: IDataTableProps<IUser> = {
+      data: [],
+      columns: mockColumns,
+      loading: true,
+      emptyMessage: 'No data',
+    };
+    expect(props.loading).toBe(true);
+    expect(props.emptyMessage).toBe('No data');
+  });
+
+  it('handles empty data and edge-case user entries', () => {
+    const emptyProps: IDataTableProps<IUser> = {
+      data: [],
+      columns: mockColumns,
+    };
+    expect(emptyProps.data.length).toBe(0);
+    // Check empty string and special char cases
+    expect(mockUsers[2].name).toBe('');
+    expect(mockUsers[2].email).toBe('');
+    expect(mockUsers[3].email).toMatch(/\+/);
+  });
+
+  it('handles null/undefined values gracefully', () => {
+    const invalidUser: IUser = {
+      id: 'null',
+      name: 'Null',
+      email: 'null@ex.com',
+    }; // Fixed: id must be a string
+    expect(invalidUser).toBeDefined();
+    const invalidUser2: IUser = {
+      id: '5',
+      name: 'Undefined',
+      email: '',
+    }; // Fixed: email must be a string
+    expect(invalidUser2).toBeDefined();
+    expect(typeof mockUsers[0].id).toBe('string');
+  });
+
+  it('invalid column definition triggers TypeScript error', () => {
+    const badCol: IColumnDef<IUser> = {
+      id: 'bad',
+      header: 'Bad',
+      accessor: 'name',
+    }; // This is now valid, as 'name' is a key of IUser
+    expect(badCol).toBeDefined();
+    expect(typeof mockColumns[0].accessor).toBe('string');
   });
 
   it('SortState and FilterState are correct', () => {

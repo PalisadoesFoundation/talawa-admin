@@ -14,8 +14,6 @@ export type HeaderRender = string | React.ReactNode | (() => React.ReactNode);
 export type Accessor<T, TValue = unknown> = keyof T | ((row: T) => TValue);
 
 /**
-
-/**
  * Generic column definition for DataTable
  *
  * @example
