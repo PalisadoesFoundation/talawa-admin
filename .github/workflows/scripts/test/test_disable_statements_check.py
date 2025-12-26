@@ -212,7 +212,9 @@ line 4"""
 
     def test_self_referential_skip(self) -> None:
         """Test that test_disable_statements_check.py is skipped."""
-        violations = self.checker.check_file("test_disable_statements_check.py")
+        violations = self.checker.check_file(
+            "test_disable_statements_check.py"
+        )
         self.assertEqual(len(violations), 0)
 
     def test_empty_file(self) -> None:
