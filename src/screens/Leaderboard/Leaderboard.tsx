@@ -55,18 +55,18 @@ import bronze from 'assets/images/bronze.png';
 
 import type { InterfaceVolunteerRank } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
+import leaderboardStyles from './Leaderboard.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { debounce, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 import { useQuery } from '@apollo/client';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
 enum TimeFrame {
   All = 'allTime',
@@ -74,19 +74,6 @@ enum TimeFrame {
   Monthly = 'monthly',
   Yearly = 'yearly',
 }
-
-const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
-  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
-};
 
 function leaderboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'leaderboard' });
@@ -129,14 +116,43 @@ function leaderboard(): JSX.Element {
     },
   });
 
-  const debouncedSearch = useMemo(
-    () => debounce((value: string) => setSearchTerm(value), 300),
-    [],
-  );
-
   const rankings = useMemo(
     () => rankingsData?.getVolunteerRanks || [],
     [rankingsData],
+  );
+
+  const leaderboardDropdowns = useMemo(
+    () => [
+      {
+        id: 'leaderboard-sort-dropdown',
+        label: tCommon('sort'),
+        type: 'sort' as const,
+        options: [
+          { label: t('mostHours'), value: 'hours_DESC' },
+          { label: t('leastHours'), value: 'hours_ASC' },
+        ],
+        selectedOption: sortBy,
+        onOptionChange: (value: string | number) =>
+          setSortBy(value as 'hours_DESC' | 'hours_ASC'),
+        dataTestIdPrefix: 'sort',
+      },
+      {
+        id: 'leaderboard-timeframe-dropdown',
+        label: t('timeFrame'),
+        type: 'filter' as const,
+        options: [
+          { label: t('allTime'), value: TimeFrame.All },
+          { label: t('weekly'), value: TimeFrame.Weekly },
+          { label: t('monthly'), value: TimeFrame.Monthly },
+          { label: t('yearly'), value: TimeFrame.Yearly },
+        ],
+        selectedOption: timeFrame,
+        onOptionChange: (value: string | number) =>
+          setTimeFrame(value as TimeFrame),
+        dataTestIdPrefix: 'timeFrame',
+      },
+    ],
+    [tCommon, t, sortBy, timeFrame],
   );
 
   if (rankingsLoading) {
@@ -146,7 +162,7 @@ function leaderboard(): JSX.Element {
   if (rankingsError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded className={styles.icon} fontSize="large" />
+        <WarningAmberRounded className={styles.icon} />
         <h6 className="fw-bold text-danger text-center">
           {tErrors('errorLoading', { entity: 'Volunteer Rankings' })}
         </h6>
@@ -168,19 +184,19 @@ function leaderboard(): JSX.Element {
         if (params.row.rank === 1) {
           return (
             <>
-              <img src={gold} alt="gold" className={styles.rankings} />
+              <img src={gold} alt={t('gold')} className={styles.rankings} />
             </>
           );
         } else if (params.row.rank === 2) {
           return (
             <>
-              <img src={silver} alt="silver" className={styles.rankings} />
+              <img src={silver} alt={t('silver')} className={styles.rankings} />
             </>
           );
         } else if (params.row.rank === 3) {
           return (
             <>
-              <img src={bronze} alt="bronze" className={styles.rankings} />
+              <img src={bronze} alt={t('bronze')} className={styles.rankings} />
             </>
           );
         } else return <>{params.row.rank}</>;
@@ -201,8 +217,7 @@ function leaderboard(): JSX.Element {
         return (
           <>
             <div
-              className="d-flex fw-bold align-items-center ms-5 "
-              style={{ cursor: 'pointer' }}
+              className={`align-items-center ms-5 ${leaderboardStyles.volunteerCell}`}
               onClick={() =>
                 navigate(`/member/${orgId}`, { state: { id: _id } })
               }
@@ -211,7 +226,7 @@ function leaderboard(): JSX.Element {
               {image ? (
                 <img
                   src={image}
-                  alt="User"
+                  alt={tCommon('user')}
                   data-testid={`image${_id + 1}`}
                   className={styles.TableImage}
                 />
@@ -244,7 +259,7 @@ function leaderboard(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         return (
           <div
-            className="d-flex justify-content-center"
+            className={`d-flex justify-content-center ${leaderboardStyles.emailCell}`}
             data-testid="userEmail"
           >
             {params.row.user.email}
@@ -261,73 +276,52 @@ function leaderboard(): JSX.Element {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        return <div className="fw-bold">{params.row.hoursVolunteered}</div>;
+        return (
+          <div className={`fw-bold ${leaderboardStyles.hoursCell}`}>
+            {params.row.hoursVolunteered}
+          </div>
+        );
       },
     },
   ];
 
   return (
-    <div className="mt-4 mx-2 bg-white p-4 pt-2 rounded-4 shadow">
-      {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-        <SearchBar
-          placeholder={t('searchByVolunteer')}
-          onSearch={debouncedSearch}
-          inputTestId="searchBy"
-          buttonTestId="searchBtn"
-        />
-        <div className="d-flex gap-3 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-3">
-            <SortingButton
-              sortingOptions={[
-                { label: t('mostHours'), value: 'hours_DESC' },
-                { label: t('leastHours'), value: 'hours_ASC' },
-              ]}
-              selectedOption={sortBy}
-              onSortChange={(value) =>
-                setSortBy(value as 'hours_DESC' | 'hours_ASC')
-              }
-              dataTestIdPrefix="sort"
-              buttonLabel={tCommon('sort')}
-            />
-            <SortingButton
-              sortingOptions={[
-                { label: t('allTime'), value: TimeFrame.All },
-                { label: t('weekly'), value: TimeFrame.Weekly },
-                { label: t('monthly'), value: TimeFrame.Monthly },
-                { label: t('yearly'), value: TimeFrame.Yearly },
-              ]}
-              selectedOption={timeFrame}
-              onSortChange={(value) => setTimeFrame(value as TimeFrame)}
-              dataTestIdPrefix="timeFrame"
-              buttonLabel={t('timeFrame')}
-              type="filter"
-            />
-          </div>
-        </div>
-      </div>
+    <div className={leaderboardStyles.leaderboardContainer}>
+      <AdminSearchFilterBar
+        searchPlaceholder={t('searchByVolunteer')}
+        searchValue={searchTerm}
+        onSearchChange={setSearchTerm}
+        searchInputTestId="searchBy"
+        searchButtonTestId="searchBtn"
+        hasDropdowns={true}
+        dropdowns={leaderboardDropdowns}
+      />
 
       {/* Table with Action Items */}
-      <DataGrid
-        disableColumnMenu
-        columnBufferPx={7}
-        hideFooter={true}
-        getRowId={(row) => row.user._id}
-        slots={{
-          noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noVolunteers')}
-            </Stack>
-          ),
-        }}
-        sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackground}`}
-        autoHeight
-        rowHeight={65}
-        rows={rankings.map((ranking, index) => ({ id: index + 1, ...ranking }))}
-        columns={columns}
-        isRowSelectable={() => false}
-      />
+      <div className={leaderboardStyles.dataGridStyle}>
+        <DataGrid
+          disableColumnMenu
+          columnBufferPx={7}
+          hideFooter={true}
+          getRowId={(row) => row.user._id}
+          slots={{
+            noRowsOverlay: () => (
+              <Stack height="100%" alignItems="center" justifyContent="center">
+                {t('noVolunteers')}
+              </Stack>
+            ),
+          }}
+          getRowClassName={() => `${styles.rowBackground}`}
+          autoHeight
+          rowHeight={65}
+          rows={rankings.map((ranking, index) => ({
+            id: index + 1,
+            ...ranking,
+          }))}
+          columns={columns}
+          isRowSelectable={() => false}
+        />
+      </div>
     </div>
   );
 }
