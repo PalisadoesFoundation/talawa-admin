@@ -128,5 +128,6 @@
   "enterCity": "Introduce el nombre de la ciudad",
   "enterState": "Introduce el nombre del estado",
   "breadcrumbs": "Migas de navegación",
-  "loadingAdminPlugin": "Cargando complemento de administrador..."
+  "loadingAdminPlugin": "Cargando complemento de administrador...",
+  "loadingUserPlugin": "Cargando el complemento de usuario..."
 }
