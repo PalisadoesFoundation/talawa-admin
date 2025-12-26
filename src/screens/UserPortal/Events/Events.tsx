@@ -58,11 +58,11 @@ import { Button } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { toast } from 'react-toastify';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { IEventEdge } from 'types/Event/interface';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import styles from 'style/app-fixed.module.css';
 import EventForm, {
   formatRecurrenceForPayload,
@@ -171,7 +171,7 @@ export default function events(): JSX.Element {
         variables: { input },
       });
       if (createEventData) {
-        toast.success(t('eventCreated') as string);
+        NotificationToast.success(t('eventCreated') as string);
         refetch();
         setFormResetKey((prev) => prev + 1);
         setCreateEventmodalisOpen(false);

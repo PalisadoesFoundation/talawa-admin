@@ -9,20 +9,20 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Settings from './Settings';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import useLocalStorage from 'utils/useLocalstorage';
 import { MOCKS1, MOCKS2 } from './SettingsMocks';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 
 const sharedMocks = vi.hoisted(() => ({
-  toast: { success: vi.fn(), warn: vi.fn(), error: vi.fn() },
+  NotificationToast: { success: vi.fn(), warn: vi.fn(), error: vi.fn() },
   errorHandler: vi.fn(),
   urlToFile: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: sharedMocks.toast,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: sharedMocks.NotificationToast,
 }));
 
 vi.mock('utils/errorHandler', () => ({
@@ -213,7 +213,7 @@ describe('Testing Settings Screen [User Portal]', () => {
   });
 
   it('validates password correctly', async () => {
-    const toastSpy = vi.spyOn(toast, 'error');
+    const toastSpy = vi.spyOn(NotificationToast, 'error');
     await act(async () => {
       render(
         <BrowserRouter>
@@ -275,7 +275,7 @@ describe('Testing Settings Screen [User Portal]', () => {
   });
 
   it('rejects invalid file types', async () => {
-    const toastSpy = vi.spyOn(toast, 'error');
+    const toastSpy = vi.spyOn(NotificationToast, 'error');
 
     await act(async () => {
       render(
@@ -309,7 +309,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     );
   });
   it('validates file size correctly', async () => {
-    const toastSpy = vi.spyOn(toast, 'error');
+    const toastSpy = vi.spyOn(NotificationToast, 'error');
     await act(async () => {
       render(
         <BrowserRouter>
@@ -369,7 +369,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     // No error should be thrown, component should handle gracefully
     expect(screen.getByTestId('inputName')).toBeInTheDocument();
     // Verify no error toast was triggered - confirms no-file case is a no-op
-    expect(sharedMocks.toast.error).not.toHaveBeenCalled();
+    expect(sharedMocks.NotificationToast.error).not.toHaveBeenCalled();
   });
 
   it('resetUserDetails helper is a no-op when currentUser is missing', async () => {
@@ -498,7 +498,7 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     await wait(2500);
 
-    expect(toast.success).toHaveBeenCalled();
+    expect(NotificationToast.success).toHaveBeenCalled();
   });
 
   it('resets changes correctly', async () => {
@@ -586,7 +586,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     // Wait for the 2000ms setTimeout in the code to complete
     await wait(2500);
 
-    expect(toast.success).toHaveBeenCalledWith(
+    expect(NotificationToast.success).toHaveBeenCalledWith(
       expect.stringContaining('Profile updated Successfully'),
     );
 
@@ -638,7 +638,7 @@ describe('Testing Settings Screen [User Portal]', () => {
     await wait(500);
 
     // When data is null, success toast should NOT be called
-    expect(toast.success).not.toHaveBeenCalled();
+    expect(NotificationToast.success).not.toHaveBeenCalled();
   });
 
   it('shows error toast when urlToFile fails during update', async () => {
@@ -673,7 +673,7 @@ describe('Testing Settings Screen [User Portal]', () => {
 
     await wait();
 
-    expect(sharedMocks.toast.error).toHaveBeenCalledWith(
+    expect(sharedMocks.NotificationToast.error).toHaveBeenCalledWith(
       'Failed to process profile picture. Please try uploading again.',
     );
   });
