@@ -167,7 +167,7 @@ describe('Organisation Events Page', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   const renderWithLink = (link: StaticMockLink) =>
