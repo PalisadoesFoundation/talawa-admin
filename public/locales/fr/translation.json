@@ -1711,7 +1711,8 @@
     "edit": "Modifier",
     "delete": "Supprimer",
     "name": "Nom",
-    "desc": "Description"
+    "desc": "Description",
+    "venueImagePreview": "Aperçu de l’image du lieu"
   },
   "addMember": {
     "title": "Ajouter un membre",

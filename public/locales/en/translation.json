@@ -1711,7 +1711,8 @@
     "edit": "edit",
     "delete": "delete",
     "name": "name",
-    "desc": "desc"
+    "desc": "desc",
+    "venueImagePreview": "Preview of venue image"
   },
   "addMember": {
     "title": "Add Member",

@@ -1,0 +1,17 @@
+Script started on Thu Jan  1 17:58:04 2026
+[1m[7m%[27m[1m[0m                                                                                                                                [0m[27m[24m[Jchikuhome@Chirags-Laptop talawa-admin % [K[?2004hppnpm serve[?2004l
+
+> talawa-admin@3.0.0 serve /Users/chikuhome/WebDEvElopment/Talawa/talawa-admin
+> cross-env ESLINT_NO_DEV_ERRORS=true vite --config config/vite.config.ts
+
+vite:istanbul> [33mSourcemaps was automatically enabled for code coverage to be accurate.
+To hide this message set build.sourcemap to true, 'inline' or 'hidden'.[39m
+Internal File Writer Plugin: Initialized
+Base path: src/plugin/available
+[2m5:58:16 PM[22m [36m[1m[vite][22m[39m [90m[2m(client)[22m[39m Re-optimizing dependencies because lockfile has changed
+
+  [32m[1mVITE[22m v7.2.4[39m  [2mready in [0m[1m419[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m4321[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://10.117.39.136:[1m4321[22m/[39m
+[2m[32m  ➜[39m[22m[2m  press [22m[1mh + enter[22m[2m to show help[22m

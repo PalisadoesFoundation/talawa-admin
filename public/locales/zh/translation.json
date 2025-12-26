@@ -1711,7 +1711,8 @@
     "edit": "编辑",
     "delete": "删除",
     "name": "名称",
-    "desc": "描述"
+    "desc": "描述",
+    "venueImagePreview": "场地图片预览"
   },
   "addMember": {
     "title": "添加会员",

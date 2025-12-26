@@ -1711,7 +1711,8 @@
     "venueCapacityError": "¡La capacidad debe ser un número positivo!",
     "searchBy": "Buscar por",
     "name": "Nombre",
-    "desc": "Descripción"
+    "desc": "Descripción",
+    "venueImagePreview": "Vista previa de la imagen del lugar"
   },
   "addMember": {
     "title": "Agregar miembro",
