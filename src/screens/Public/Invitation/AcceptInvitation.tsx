@@ -17,7 +17,7 @@ import useLocalStorage from '../../../utils/useLocalstorage';
 
 const STORAGE_KEY = 'pendingInvitationToken';
 const AUTH_TOKEN_KEY = 'token';
-const EMAIL_KEY = 'Talawa-admin_email';
+const EMAIL_KEY = 'email';
 
 const AcceptInvitation = (): JSX.Element => {
   const { token } = useParams<{ token: string }>();
