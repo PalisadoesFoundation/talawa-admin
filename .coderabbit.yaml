@@ -113,14 +113,20 @@ reviews:
                 - Any bugs, logic errors, or incorrect implementations discovered in the file(s) under test MUST be fixed in this PR before approval
 
         9. **Review Decision:**
-            1. When critical issues are found, clearly state that changes are required in your response but DO NOT append  the APPROVED tag.
-            1.  Only append  the APPROVED tag when ALL criteria are satisfied and zero changes are required:
+            1. When critical issues are found, clearly state that changes are required in your response but DO NOT append the [approve] tag.
+            1. Only append the [approve] tag when ALL criteria are satisfied and zero changes are required:
                 1. Complete test coverage (≥95%)
                 1. No code quality issues, security concerns, or bugs
-                1. No bugs or logic errors in the implementation file(s) under test
                 1. Full implementation of issue requirements
+                1. No bugs or logic errors in the implementation file(s) under test
                 1. Compliance with all previous feedback
                 1. No unnecessary files
+
+        8. **Approvals:**
+            1. Approve the PR by appending the text "APPROVED" below your response only if:
+                1. All criteria above are fully satisfied
+                1. The implementation file(s) under test are correct and bug-free
+                1. No changes, even trivial ones, are required
 
         10. **Focus Areas:**
           - Prioritize substantive issues over minor stylistic suggestions
