@@ -13,6 +13,7 @@ Usage:
 
 import argparse
 import inspect
+import os
 import re
 import sys
 from pathlib import Path
@@ -96,7 +97,7 @@ class DisableStatementsChecker:
             violations: List of violation messages.
         """
         # Skip checking the test file to avoid self-referential issues
-        if file_path.endswith("test_disable_statements_check.py"):
+        if os.path.basename(file_path) == "test_disable_statements_check.py":
             return []
 
         try:

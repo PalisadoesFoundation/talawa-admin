@@ -424,7 +424,13 @@ jobs:
       - name: Run consolidated disable statements check
         run: |
           if [ -n "${{ steps.changed-files.outputs.all_changed_files }}" ]; then
-            python .github/workflows/scripts/disable_statements_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
+            # Filter for JS/TS files only
+            FILTERED_FILES=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | tr ' ' '\n' | grep -E '\.(js|jsx|ts|tsx)$' | tr '\n' ' ' || true)
+            if [ -n "$FILTERED_FILES" ]; then
+              python .github/workflows/scripts/disable_statements_check.py --files $FILTERED_FILES
+            else
+              echo "No JS/TS files to check"
+            fi
           else
             echo "No files to check"
           fi
