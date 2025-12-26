@@ -22,6 +22,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { MOCKS } from './OrganizationEventsMocks';
 import { toast } from 'react-toastify';
+import { green } from '@mui/material/colors';
 
 const mockGetItem = vi.fn((key: string): string | null => {
   if (key === 'role') return 'administrator';
@@ -42,7 +43,7 @@ vi.mock('utils/useLocalstorage', () => {
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#31bb6b',
+      main: green[600],
     },
   },
 });

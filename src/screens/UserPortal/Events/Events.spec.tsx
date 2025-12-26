@@ -32,6 +32,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { vi, beforeEach, afterEach } from 'vitest';
 import { toast } from 'react-toastify';
 import { Frequency } from 'utils/recurrenceUtils';
+import { green } from '@mui/material/colors';
 
 const { mockToast, mockUseParams } = vi.hoisted(() => ({
   mockToast: {
@@ -209,7 +210,7 @@ vi.mock('components/EventCalender/Header/EventHeader', () => ({
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#31bb6b',
+      main: green[600],
     },
   },
 });

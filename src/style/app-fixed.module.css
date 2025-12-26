@@ -1672,7 +1672,7 @@ form label,
 
 /* Not Found */
 /**
-*Pages still using .notFound class are - screen/UserPortal/Campaigns, screen/BlockUser
+*Pages still using .notFound class are - screens/UserPortal/Campaigns, screens/BlockUser
 */
 .notFound {
   flex: 1;
@@ -10265,8 +10265,8 @@ form {
   background-color: var(--popup-bg, #fff);
 }
 
-.AddIconStyle {
-  font-size: '25px';
-  margin-bottom: '2px';
-  margin-right: '2px';
+.addIconStyle {
+  font-size: 25px;
+  margin-bottom: 2px;
+  margin-right: 2px;
 }
