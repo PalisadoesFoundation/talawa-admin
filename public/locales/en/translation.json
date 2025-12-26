@@ -56,7 +56,11 @@
     "user": "user",
     "loading": "loading",
     "userImage": "User Image",
-    "userEditProfilePicture": "Edit profile picture"
+    "userEditProfilePicture": "Edit profile picture",
+    "communityLogo": "Community Logo",
+    "organizations": "Organizations",
+    "accountLocked": "Your account has been temporarily locked due to too many failed login attempts. Please try again later.",
+    "accountLockedWithTimer": "Your account has been temporarily locked. Please try again in {{minutes}} minute(s)."
   },
   "signOut": {
     "retryPrompt": "Failed to revoke session. Retry?",
@@ -152,7 +156,8 @@
     "allCaughtUp": "You're all caught up!",
     "prev": "Prev",
     "next": "Next",
-    "markAsRead": "Mark as Read"
+    "markAsRead": "Mark as Read",
+    "markAsReadAriaLabel": "Mark notification '{{title}}' as read"
   },
   "orgList": {
     "title": "Organizations",
@@ -223,7 +228,8 @@
     "name": "name",
     "email": "email",
     "profilePictureAlt": "User profile picture",
-    "placeholderAvatarAlt": "Placeholder avatar"
+    "placeholderAvatarAlt": "Placeholder avatar",
+    "newMembersWillAppearHere": "New membership requests will appear here"
   },
   "users": {
     "membershipStatus": {
@@ -249,6 +255,8 @@
     "sort": "Sort",
     "Newest": "Newest First",
     "Oldest": "Oldest First",
+    "sortBy": "Sort by",
+    "filterByRole": "Filter by role",
     "noOrgError": "Organizations not found, please create an organization through dashboard",
     "roleUpdated": "Role Updated.",
     "joinNow": "Join Now",
@@ -278,7 +286,8 @@
     "errorOccurred": "An error occurred. Please try again",
     "UserIdNotFound": "User ID not found",
     "MembershipRequestNotFound": "Membership request not found",
-    "MembershipRequestWithdrawn": "Membership request withdrawn successfully"
+    "MembershipRequestWithdrawn": "Membership request withdrawn successfully",
+    "errorLoadingUsers": "Error occurred while loading Users"
   },
   "communityProfile": {
     "title": "Community Profile",
@@ -682,6 +691,7 @@
   "funds": {
     "title": "Funds",
     "createFund": "Create Fund",
+    "searchFunds": "Search Funds",
     "fundName": "Fund Name",
     "fundId": "Fund (Reference) ID",
     "taxDeductible": "Tax Deductible",
@@ -691,6 +701,7 @@
     "fundUpdate": "Update Fund",
     "fundDelete": "Delete Fund",
     "noFundsFound": "No Funds Found",
+    "editFund": "Edit Fund",
     "createdBy": "Created By",
     "createdOn": "Created On",
     "status": "Status",
@@ -708,6 +719,8 @@
   },
   "fundCampaign": {
     "title": "Fundraising Campaigns",
+    "editCampaign": "Edit Campaign",
+    "searchCampaigns": "Search Campaigns",
     "campaignName": "Campaign Name",
     "campaignOptions": "Options",
     "fundingGoal": "Funding Goal",
@@ -728,7 +741,8 @@
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
     "lowestGoal": "Lowest Goal",
-    "highestGoal": "Highest Goal"
+    "highestGoal": "Highest Goal",
+    "errorLoading": "Error occured while loading campaigns data"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
@@ -1078,6 +1092,7 @@
     "eventsAttended": "Events Attended",
     "contactInfoHeading": "Contact Information",
     "actionsHeading": "Actions",
+    "actions": "Action",
     "personalDetailsHeading": "Profile Details",
     "appLanguageCode": "Choose Language",
     "deleteUser": "Delete User",
@@ -1211,6 +1226,7 @@
     "postDeletedSuccess": "Post deleted successfully.",
     "postPinnedSuccess": "Post pinned successfully.",
     "postUnpinnedSuccess": "Post unpinned successfully.",
+    "postUpdatedSuccess": "Post updated successfully.",
     "editPost": "Edit Post",
     "pinPost": "Pin Post",
     "unpinPost": "Unpin Post",
@@ -1221,7 +1237,8 @@
     "noMoreComments": "No more comments",
     "postedOn": "Posted on {{date}}",
     "emptyCommentError": "Please enter a comment before submitting.",
-    "unexpectedError": "An unexpected error occurred. Please try again."
+    "unexpectedError": "An unexpected error occurred. Please try again.",
+    "moreOptions": "More options"
   },
   "home": {
     "posts": "Posts",
@@ -1239,7 +1256,8 @@
     "media": "Media",
     "event": "Event",
     "article": "Article",
-    "postNowVisibleInFeed": "Post now visible in feed"
+    "postNowVisibleInFeed": "Post now visible in feed",
+    "processingPost": "Processing your post. Please wait."
   },
   "settings": {
     "eventAttended": "Events Attended",
@@ -1453,7 +1471,26 @@
     "newGroupChat": "New Group Chat",
     "groupInfo": "Group Info",
     "members": "Members",
-    "addMembers": "Add Members"
+    "addMembers": "Add Members",
+    "userNotFound": "User not found",
+    "roleUpdatedSuccessfully": "Role updated successfully",
+    "failedToUpdateRole": "Failed to update role",
+    "memberRemovedSuccessfully": "Member removed successfully",
+    "failedToRemoveMember": "Failed to remove member",
+    "chatImageUpdatedSuccessfully": "Chat image updated successfully",
+    "failedToUpdateChatImage": "Failed to update chat image",
+    "chatDeletedSuccessfully": "Chat deleted successfully",
+    "failedToDeleteChat": "Failed to delete chat",
+    "chatNameUpdatedSuccessfully": "Chat name updated successfully",
+    "failedToUpdateChatName": "Failed to update chat name",
+    "deleteChat": "Delete Chat",
+    "remove": "Remove",
+    "searchFullName": "Search by Full Name",
+    "customizedTable": "Customized Table",
+    "demoteToRegular": "Demote to Regular",
+    "promoteToAdmin": "Promote to Admin",
+    "user": "User",
+    "chatAction": "Chat action"
   },
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",
@@ -1574,14 +1611,21 @@
   "userCampaigns": {
     "title": "Fundraising Campaigns",
     "searchByName": "Search by Name...",
+    "searchCampaigns": "Search Campaigns",
+    "campaignName": "Campaign Name",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "fundingGoal": "Fund Goal",
+    "raised": "Amount Raised",
+    "progress": "% Raised",
+    "viewPledge": "View Pledge",
     "searchBy": "Search by",
     "pledgers": "Pledgers",
     "pledger": "Pledger",
     "campaigns": "Campaigns",
-    "associatedCampaign": "Associated Campaign",
+    "associatedCampaign": "Associated Campaigns",
     "pledged": "Pledged",
     "donated": "Donated",
-    "progress": "Progress",
     "more": "more",
     "myPledges": "My Pledges",
     "lowestAmount": "Lowest Amount",
@@ -1720,6 +1764,8 @@
     "noPluginsAvailable": "No plugins available",
     "installPluginsToSeeHere": "Install plugins to see them here",
     "checkBackLater": "Check back later for new plugins",
+    "tryDifferentSearch": "Try a different search term or browse all plugins",
+    "explorePluginStore": "Explore the plugin store to discover new plugins",
     "noResultsFoundFor": "No results found for"
   },
   "commentCard": {

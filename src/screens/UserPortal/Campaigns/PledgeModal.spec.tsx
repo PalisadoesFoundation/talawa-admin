@@ -944,3 +944,4 @@ describe('PledgeModal', () => {
     });
   });
 });
+`

@@ -90,9 +90,9 @@ Defined in: [src/types/Event/type.ts:70](https://github.com/PalisadoesFoundation
 
 ***
 
-### recurrance?
+### recurrence?
 
-> `optional` **recurrance**: `string`
+> `optional` **recurrence**: `string`
 
 Defined in: [src/types/Event/type.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L71)
 
