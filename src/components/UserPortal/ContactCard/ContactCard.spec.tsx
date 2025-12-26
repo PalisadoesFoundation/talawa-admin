@@ -179,17 +179,13 @@ describe('ContactCard [User Portal]', () => {
   });
 
   it('uses default unseenMessages value (0) when prop is undefined', async () => {
-    const propsWithoutUnseen = {
+    renderComponent({
       ...baseProps,
-    };
+      unseenMessages: undefined as unknown as number,
+    });
 
-    delete (propsWithoutUnseen as { unseenMessages?: number }).unseenMessages;
-
-    renderComponent(propsWithoutUnseen);
     await wait();
 
-    expect(
-      screen.queryByTestId(`contact-unseen-${propsWithoutUnseen.id}`),
-    ).toBeNull();
+    expect(screen.queryByTestId(`contact-unseen-${baseProps.id}`)).toBeNull();
   });
 });
