@@ -146,11 +146,12 @@ export function usePluginFilters({ pluginData }: IUsePluginFiltersProps) {
   }, [searchTerm, filterState.option, loadedPlugins, pluginData, isInstalled]);
 
   const handleFilterChange = useCallback(
-    (value: string): void => {
+    (value: string | number): void => {
+      const stringValue = String(value);
       setFilterState({
-        option: value,
+        option: stringValue,
         selectedOption:
-          value === 'all' ? t('allPlugins') : t('installedPlugins'),
+          stringValue === 'all' ? t('allPlugins') : t('installedPlugins'),
       });
     },
     [t],
