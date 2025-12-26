@@ -56,7 +56,9 @@ async function wait(ms = 100): Promise<void> {
 }
 
 // Mock `URL.createObjectURL` with a spy so it can be restored between tests
-vi.spyOn(global.URL, 'createObjectURL').mockImplementation(() => 'https://minio/test-image.jpg');
+vi.spyOn(global.URL, 'createObjectURL').mockImplementation(
+  () => 'https://minio/test-image.jpg',
+);
 
 i18n.use(initReactI18next).init({
   lng: 'en',

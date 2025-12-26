@@ -106,6 +106,28 @@ export default function groupChatDetails({
     };
   }, [selectedImage]);
 
+  // Validate image URLs to avoid passing unsafe schemes into `src` (e.g. javascript:)
+  const getSafeImageSrc = (url?: string | null): string | undefined => {
+    if (!url) return undefined;
+    try {
+      // Allow http, https, data, and blob schemes only
+      const parsed = new URL(url, window.location.href);
+      const protocol = parsed.protocol;
+      if (
+        protocol === 'http:' ||
+        protocol === 'https:' ||
+        protocol === 'data:' ||
+        protocol === 'blob:'
+      ) {
+        return url;
+      }
+      return undefined;
+    } catch {
+      // If URL constructor throws, treat as unsafe
+      return undefined;
+    }
+  };
+
   if (!userId) {
     return (
       <Modal
@@ -322,21 +344,34 @@ export default function groupChatDetails({
             data-testid="fileInput"
           />
           <div className={styles.groupInfo}>
-            {selectedImage ? (
-              <img
-                className={styles.chatImage}
-                src={selectedImage}
-                alt={chat?.name || ''}
-              />
-            ) : chat?.avatarURL ? (
-              <img
-                className={styles.chatImage}
-                src={chat?.avatarURL}
-                alt={chat?.name || ''}
-              />
-            ) : (
-              <Avatar avatarStyle={styles.groupImage} name={chat.name || ''} />
-            )}
+            {(() => {
+              const safeSelected = getSafeImageSrc(selectedImage);
+              const safeAvatar = getSafeImageSrc(chat?.avatarURL);
+              if (safeSelected) {
+                return (
+                  <img
+                    className={styles.chatImage}
+                    src={safeSelected}
+                    alt={chat?.name || ''}
+                  />
+                );
+              }
+              if (safeAvatar) {
+                return (
+                  <img
+                    className={styles.chatImage}
+                    src={safeAvatar}
+                    alt={chat?.name || ''}
+                  />
+                );
+              }
+              return (
+                <Avatar
+                  avatarStyle={styles.groupImage}
+                  name={chat.name || ''}
+                />
+              );
+            })()}
             <button
               data-testid="editImageBtn"
               onClick={handleImageClick}
