@@ -4,15 +4,15 @@
 
 # Function: default()
 
-> **default**(`props`): `Element`
+> **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/NotFound/NotFound.tsx:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/NotFound/NotFound.tsx#L40)
+Defined in: [src/components/AdminPortal/NotFound/NotFound.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/AdminPortal/NotFound/NotFound.tsx#L35)
 
 ## Parameters
 
-### props
+### \_\_namedParameters
 
-`InterfaceNotFoundProps`
+[`InterfaceNotFoundProps`](../../../types/AdminPortal/NotFound/interface/interfaces/InterfaceNotFoundProps.md)
 
 ## Returns
 

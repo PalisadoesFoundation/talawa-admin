@@ -1,5 +1,4 @@
 import type { ChangeEvent } from 'react';
-
 export interface InterfaceAgendaItemCategoryInfo {
   _id: string;
   name: string;
