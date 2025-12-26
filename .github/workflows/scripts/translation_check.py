@@ -176,7 +176,6 @@ def main() -> None:
         None: This function does not return a value. It exits with a status
             code of 1 if missing translations are found.
     """
-
     parser = argparse.ArgumentParser()
     parser.add_argument("--files", nargs="*", default=[])
     parser.add_argument("--directories", nargs="*", default=[])
