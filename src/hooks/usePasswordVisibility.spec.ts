@@ -1,7 +1,12 @@
 import { renderHook, act } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { usePasswordVisibility } from './usePasswordVisibility';
 
 describe('usePasswordVisibility', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('defaults showPassword to false', () => {
     const { result } = renderHook(() => usePasswordVisibility());
     expect(result.current.showPassword).toBe(false);
@@ -15,11 +20,17 @@ describe('usePasswordVisibility', () => {
   it('toggles showPassword correctly', () => {
     const { result } = renderHook(() => usePasswordVisibility());
 
+    expect(result.current.showPassword).toBe(false);
+
     act(() => {
       result.current.togglePassword();
     });
-
     expect(result.current.showPassword).toBe(true);
+
+    act(() => {
+      result.current.togglePassword();
+    });
+    expect(result.current.showPassword).toBe(false);
   });
 
   it('keeps multiple hook instances isolated', () => {
