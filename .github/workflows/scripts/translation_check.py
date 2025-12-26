@@ -137,7 +137,14 @@ def get_target_files(
                 )
 
     if not files and not directories:
-        targets = list(Path("src").rglob("*"))
+        src_path = Path("src")
+        if not src_path.exists() or not src_path.is_dir():
+            print(
+                "Error: Default 'src' directory not found",
+                file=sys.stderr,
+            )
+            sys.exit(2)
+        targets = list(src_path.rglob("*"))
 
     return [
         path
@@ -167,14 +174,11 @@ def check_file(path: Path, valid_keys: set[str]) -> list[str]:
 def main() -> None:
     """CLI entry point for translation validation.
 
-    Args:
-        None
-
     Returns:
-        None: Exits with:
-            0 if all translation tags are valid,
-            1 if missing translation keys are found,
-            2 on configuration errors.
+        None. Exits with:
+        - 0 on success
+        - 1 if missing translations are found
+        - 2 on configuration errors
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("--files", nargs="*", default=[])
@@ -208,7 +212,6 @@ def main() -> None:
 
     print("All translation tags validated successfully")
     sys.exit(0)
-    return
 
 
 if __name__ == "__main__":
