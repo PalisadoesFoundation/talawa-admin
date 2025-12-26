@@ -390,9 +390,7 @@ describe('VenueModal', () => {
 
     fireEvent.click(screen.getByTestId('closeimage'));
 
-    expect(
-      screen.queryByAltText('Preview of venue image'),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('img')).not.toBeInTheDocument();
   });
 });
 
@@ -573,7 +571,7 @@ describe('Image Handling', () => {
 
     // Wait for the image preview to appear (local preview, no upload needed)
     await waitFor(() => {
-      expect(screen.getByAltText('Preview of venue image')).toBeInTheDocument();
+      expect(screen.getByRole('img')).toBeInTheDocument();
       expect(screen.getByTestId('closeimage')).toBeInTheDocument();
     });
   });
@@ -601,7 +599,7 @@ describe('Image Handling', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByAltText('Preview of venue image')).toBeInTheDocument();
+      expect(screen.getByRole('img')).toBeInTheDocument();
     });
 
     // Set ref to null before clearing to test the null check
@@ -611,9 +609,7 @@ describe('Image Handling', () => {
       fireEvent.click(screen.getByTestId('closeimage'));
     });
 
-    expect(
-      screen.queryByAltText('Preview of venue image'),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('img')).not.toBeInTheDocument();
     expect(screen.queryByTestId('closeimage')).not.toBeInTheDocument();
 
     // Restore original
@@ -726,9 +722,7 @@ describe('Image Handling', () => {
     });
 
     // Verify that no image preview is shown
-    expect(
-      screen.queryByAltText('Preview of venue image'),
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('img')).not.toBeInTheDocument();
   });
 });
 
@@ -1406,9 +1400,7 @@ describe('Validation', () => {
           });
 
           // Should only use the first file
-          expect(screen.getAllByAltText('Preview of venue image')).toHaveLength(
-            1,
-          );
+          expect(screen.queryByRole('img')).toHaveLength(1);
         });
 
         // Validation Edge Cases
@@ -1772,9 +1764,7 @@ describe('Validation', () => {
           });
 
           // Verify that no image preview is shown
-          expect(
-            screen.queryByAltText('Preview of venue image'),
-          ).not.toBeInTheDocument();
+          expect(screen.queryByRole('img')).not.toBeInTheDocument();
         });
 
         test('handles file input with empty files array', async () => {
@@ -1787,9 +1777,7 @@ describe('Validation', () => {
           });
 
           // Verify that no image preview is shown
-          expect(
-            screen.queryByAltText('Preview of venue image'),
-          ).not.toBeInTheDocument();
+          expect(screen.queryByRole('img')).not.toBeInTheDocument();
         });
 
         test('handles image preview URL cleanup on component unmount', async () => {
@@ -1806,9 +1794,7 @@ describe('Validation', () => {
           });
 
           await waitFor(() => {
-            expect(
-              screen.getByAltText('Preview of venue image'),
-            ).toBeInTheDocument();
+            expect(screen.getByRole('img')).toBeInTheDocument();
           });
 
           // Test that unmounting works without errors
@@ -1886,9 +1872,7 @@ describe('Validation', () => {
           );
 
           // Verify that no image preview is shown
-          expect(
-            screen.queryByAltText('Preview of venue image'),
-          ).not.toBeInTheDocument();
+          expect(screen.queryByRole('img')).not.toBeInTheDocument();
         });
 
         test('handles venueData with empty string image', async () => {
@@ -1911,9 +1895,7 @@ describe('Validation', () => {
           );
 
           // Verify that no image preview is shown
-          expect(
-            screen.queryByAltText('Preview of venue image'),
-          ).not.toBeInTheDocument();
+          expect(screen.queryByRole('img')).not.toBeInTheDocument();
         });
 
         test('handles form submission without attachments in create mode', async () => {
@@ -2026,9 +2008,7 @@ describe('Validation', () => {
           });
 
           // Verify that the image preview is removed
-          expect(
-            screen.queryByAltText('Preview of venue image'),
-          ).not.toBeInTheDocument();
+          expect(screen.queryByRole('img')).not.toBeInTheDocument();
         });
 
         test('handles capacity validation with zero value', async () => {
@@ -3085,7 +3065,7 @@ describe('Validation', () => {
     });
 
     await waitFor(() => {
-      expect(screen.getByAltText('Preview of venue image')).toBeInTheDocument();
+      expect(screen.getByRole('img')).toBeInTheDocument();
     });
 
     // Clear previous calls
@@ -3325,7 +3305,7 @@ describe('Validation', () => {
     // Verify blob URL was created
     await waitFor(() => {
       expect(createObjectURLMock).toHaveBeenCalledWith(file);
-      expect(screen.getByAltText('Preview of venue image')).toBeInTheDocument();
+      expect(screen.getByRole('img')).toBeInTheDocument();
     });
 
     // Now click the clear button to trigger clearImageInput
@@ -3380,7 +3360,7 @@ describe('Validation', () => {
     // Verify blob URL was created
     await waitFor(() => {
       expect(createObjectURLMock).toHaveBeenCalled();
-      expect(screen.getByAltText('Preview of venue image')).toBeInTheDocument();
+      expect(screen.getByRole('img')).toBeInTheDocument();
     });
 
     // Clear the mock call history
