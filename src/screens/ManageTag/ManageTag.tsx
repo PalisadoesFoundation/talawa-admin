@@ -62,7 +62,7 @@ import { Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceQueryUserTagsAssignedMembers } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import { DataGrid } from '@mui/x-data-grid';
@@ -227,10 +227,12 @@ function ManageTag(): JSX.Element {
 
       userTagAssignedMembersRefetch();
       toggleUnassignUserTagModal();
-      toast.success(t('successfullyUnassigned') as string);
+      NotificationToast.success({
+        key: 'successfullyUnassigned',
+      });
     } catch (error: unknown) {
       const errorMessage = getManageTagErrorMessage(error);
-      toast.error(errorMessage);
+      NotificationToast.error(errorMessage);
     }
   };
 
@@ -250,7 +252,7 @@ function ManageTag(): JSX.Element {
     e.preventDefault();
 
     if (newTagName === currentTagName) {
-      toast.info(t('changeNameToEdit'));
+      NotificationToast.info({ key: 'changeNameToEdit' });
       return;
     }
 
@@ -259,12 +261,12 @@ function ManageTag(): JSX.Element {
         variables: { tagId: currentTagId, name: newTagName },
       });
 
-      toast.success(t('tagUpdationSuccess'));
+      NotificationToast.success({ key: 'tagUpdationSuccess' });
       userTagAssignedMembersRefetch();
       setEditUserTagModalIsOpen(false);
     } catch (error: unknown) {
       const errorMessage = getManageTagErrorMessage(error);
-      toast.error(errorMessage);
+      NotificationToast.error(errorMessage);
     }
   };
 
@@ -275,10 +277,10 @@ function ManageTag(): JSX.Element {
 
       navigate(`/orgtags/${orgId}`);
       toggleRemoveUserTagModal();
-      toast.success(t('tagRemovalSuccess') as string);
+      NotificationToast.success({ key: 'tagRemovalSuccess' });
     } catch (error: unknown) {
       const errorMessage = getManageTagErrorMessage(error);
-      toast.error(errorMessage);
+      NotificationToast.error(errorMessage);
     }
   };
 
@@ -286,9 +288,12 @@ function ManageTag(): JSX.Element {
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded
+            className={`${styles.errorIcon} ${styles.manageTagErrorIcon}`}
+          />
+
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading assigned users
+            {t('loadAssignedUsersError')}
           </h6>
         </div>
       </div>
@@ -344,7 +349,7 @@ function ManageTag(): JSX.Element {
     },
     {
       field: 'userName',
-      headerName: 'User Name',
+      headerName: t('userName'),
       flex: 2,
       minWidth: 100,
       sortable: false,
@@ -359,7 +364,7 @@ function ManageTag(): JSX.Element {
     },
     {
       field: 'actions',
-      headerName: 'Actions',
+      headerName: tCommon('actions'),
       flex: 1,
       align: 'center',
       minWidth: 100,
@@ -390,7 +395,7 @@ function ManageTag(): JSX.Element {
               }}
               data-testid="unassignTagBtn"
             >
-              {'Unassign'}
+              {tCommon('unassign')}
             </Button>
           </div>
         );
@@ -416,7 +421,7 @@ function ManageTag(): JSX.Element {
             />
             <div className={styles.btnsBlock}>
               <SortingButton
-                title="Sort People"
+                title={t('sortPeople')}
                 sortingOptions={[
                   { label: tCommon('Latest'), value: 'DESCENDING' },
                   { label: tCommon('Oldest'), value: 'ASCENDING' },
@@ -462,7 +467,8 @@ function ManageTag(): JSX.Element {
                     className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
                     data-testid="allTagsBtn"
                   >
-                    {'Tags'}
+                    {tCommon('tags')}
+
                     <i className={'mx-2 fa fa-caret-right'} />
                   </div>
                   {orgUserTagAncestors?.map((tag, index) => (
@@ -525,7 +531,7 @@ function ManageTag(): JSX.Element {
               </Col>
               <Col className="ms-auto" xs={3}>
                 <div className="bg-secondary text-white rounded-top mb-0 py-2 fw-semibold ms-2">
-                  <div className="ms-3 fs-5">{'Actions'}</div>
+                  <div className="ms-3 fs-5">{tCommon('actions')}</div>
                 </div>
                 <div className="d-flex flex-column align-items-center bg-white rounded-bottom mb-0 py-2 fw-semibold ms-2">
                   <div
@@ -548,13 +554,8 @@ function ManageTag(): JSX.Element {
                   >
                     {t('removeFromTags')}
                   </div>
-                  <hr
-                    style={{
-                      borderColor: 'var(--grey-border-box-color)',
-                      borderWidth: '2px',
-                      width: '85%',
-                    }}
-                  />
+                  <hr className={styles.manageTagDivider} />
+
                   <div
                     onClick={showEditUserTagModal}
                     className={`mt-1 mb-2 btn btn-primary btn-sm w-75 ${styles.editButton}`}

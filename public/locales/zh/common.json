@@ -117,5 +117,7 @@
   "userProfileMenu": "使用者個人資料選單",
   "breadcrumbs": "面包屑导航",
   "loadingAdminPlugin": "正在加载行政插件...",
-  "loadingUserPlugin": "正在加载用户插件..."
+  "loadingUserPlugin": "正在加载用户插件...",
+  "tags": "标签",
+  "unassign": "取消分配"
 }

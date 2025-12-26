@@ -39,7 +39,7 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { useMutation } from '@apollo/client';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -65,7 +65,11 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
       });
 
       if (data) {
-        toast.success(t('addedAsAdmin') as string);
+        NotificationToast.success({
+          key: 'addedAsAdmin',
+          namespace: 'translation',
+        });
+
         setTimeout(() => {
           window.location.reload();
         }, 2000);

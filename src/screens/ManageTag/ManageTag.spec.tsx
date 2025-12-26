@@ -6,7 +6,6 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
-import { toast } from 'react-toastify';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
@@ -38,6 +37,7 @@ import { USER_TAGS_ASSIGNED_MEMBERS } from 'GraphQl/Queries/userTagQueries';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import { type ApolloLink } from '@apollo/client';
 import { vi, beforeEach, afterEach, expect, it, describe } from 'vitest';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 const translations = {
   ...JSON.parse(
@@ -100,11 +100,12 @@ async function wait(ms = 500): Promise<void> {
   });
 }
 
-vi.mock('react-toastify', () => ({
-  toast: {
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn(),
-    info: vi.fn(),
     error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
   },
 }));
 
@@ -743,7 +744,7 @@ describe('Manage Tag Page', () => {
   });
 
   it('handles pagination when edges are null', async () => {
-    const toastErrorMock = vi.mocked(toast.error);
+    const toastErrorMock = vi.mocked(NotificationToast.error);
     toastErrorMock.mockClear();
     renderManageTag(link19);
 
@@ -791,11 +792,9 @@ describe('Manage Tag Page', () => {
 
     await userEvent.click(screen.getByTestId('unassignTagModalSubmitBtn'));
 
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
-        translations.successfullyUnassigned,
-      );
-    });
+    expect(NotificationToast.success).toHaveBeenCalledWith(
+      expect.objectContaining({ key: 'successfullyUnassigned' }),
+    );
   });
 
   it('successfully edits the tag name', async () => {
@@ -810,9 +809,9 @@ describe('Manage Tag Page', () => {
 
     await userEvent.click(screen.getByTestId('editTagSubmitBtn'));
 
-    await waitFor(() => {
-      expect(toast.info).toHaveBeenCalledWith(translations.changeNameToEdit);
-    });
+    expect(NotificationToast.info).toHaveBeenCalledWith(
+      expect.objectContaining({ key: 'changeNameToEdit' }),
+    );
 
     const tagNameInput = screen.getByTestId('tagNameInput');
     await await userEvent.clear(tagNameInput);
@@ -821,11 +820,9 @@ describe('Manage Tag Page', () => {
 
     await userEvent.click(screen.getByTestId('editTagSubmitBtn'));
 
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
-        translations.tagUpdationSuccess,
-      );
-    });
+    expect(NotificationToast.success).toHaveBeenCalledWith(
+      expect.objectContaining({ key: 'tagUpdationSuccess' }),
+    );
   });
 
   it('successfully removes the tag and redirects to orgTags page', async () => {
@@ -840,11 +837,9 @@ describe('Manage Tag Page', () => {
 
     await userEvent.click(screen.getByTestId('removeUserTagSubmitBtn'));
 
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
-        translations.tagRemovalSuccess,
-      );
-    });
+    expect(NotificationToast.success).toHaveBeenCalledWith(
+      expect.objectContaining({ key: 'tagRemovalSuccess' }),
+    );
 
     await waitFor(() => {
       expect(screen.getByTestId('organizationTagsScreen')).toBeInTheDocument();
@@ -934,7 +929,7 @@ describe('Manage Tag Page', () => {
     await userEvent.click(screen.getByTestId('unassignTagModalSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -951,7 +946,9 @@ describe('Manage Tag Page', () => {
     await userEvent.click(screen.getByTestId('editTagSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.info).toHaveBeenCalledWith(translations.changeNameToEdit);
+      expect(NotificationToast.info).toHaveBeenCalledWith(
+        expect.objectContaining({ key: 'changeNameToEdit' }),
+      );
     });
 
     const tagNameInput = screen.getByTestId('tagNameInput');
@@ -962,7 +959,7 @@ describe('Manage Tag Page', () => {
     await userEvent.click(screen.getByTestId('editTagSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -979,7 +976,7 @@ describe('Manage Tag Page', () => {
     await userEvent.click(screen.getByTestId('removeUserTagSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -1011,7 +1008,7 @@ describe('Manage Tag Page', () => {
     await userEvent.click(screen.getByTestId('unassignTagModalSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -1027,11 +1024,9 @@ describe('Manage Tag Page', () => {
 
     await userEvent.click(screen.getByTestId('unassignTagModalSubmitBtn'));
 
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
-        translations.successfullyUnassigned,
-      );
-    });
+    expect(NotificationToast.success).toHaveBeenCalledWith(
+      expect.objectContaining({ key: 'successfullyUnassigned' }),
+    );
   });
 
   it('successfully updates the tag name with success mock', async () => {
@@ -1047,7 +1042,9 @@ describe('Manage Tag Page', () => {
     await userEvent.click(screen.getByTestId('editTagSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.info).toHaveBeenCalledWith(translations.changeNameToEdit);
+      expect(NotificationToast.info).toHaveBeenCalledWith(
+        expect.objectContaining({ key: 'changeNameToEdit' }),
+      );
     });
 
     const tagNameInput = screen.getByTestId('tagNameInput');
@@ -1057,11 +1054,9 @@ describe('Manage Tag Page', () => {
 
     await userEvent.click(screen.getByTestId('editTagSubmitBtn'));
 
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
-        translations.tagUpdationSuccess,
-      );
-    });
+    expect(NotificationToast.success).toHaveBeenCalledWith(
+      expect.objectContaining({ key: 'tagUpdationSuccess' }),
+    );
   });
 
   it('successfully removes the tag with success mock', async () => {
@@ -1076,11 +1071,9 @@ describe('Manage Tag Page', () => {
 
     await userEvent.click(screen.getByTestId('removeUserTagSubmitBtn'));
 
-    await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
-        translations.tagRemovalSuccess,
-      );
-    });
+    expect(NotificationToast.success).toHaveBeenCalledWith(
+      expect.objectContaining({ key: 'tagRemovalSuccess' }),
+    );
 
     await waitFor(() => {
       expect(screen.getByTestId('organizationTagsScreen')).toBeInTheDocument();
