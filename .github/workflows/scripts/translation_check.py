@@ -96,8 +96,6 @@ def find_translation_tags(source: str | Path) -> set[str]:
         content,
     )
 
-    # Extract key from namespace-qualified tags
-    # (e.g., "common:hello" -> "hello")
     return {key for tag in tags if (key := tag.split(":")[-1])}
 
 
@@ -173,8 +171,10 @@ def main() -> None:
         None
 
     Returns:
-        None: This function does not return a value. It exits with a status
-            code of 1 if missing translations are found.
+        None: Exits with:
+            0 if all translation tags are valid,
+            1 if missing translation keys are found,
+            2 on configuration errors.
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("--files", nargs="*", default=[])
@@ -182,7 +182,13 @@ def main() -> None:
     parser.add_argument("--locales-dir", default="public/locales/en")
     args = parser.parse_args()
 
-    valid_keys = load_locale_keys(args.locales_dir)
+    try:
+        valid_keys = load_locale_keys(args.locales_dir)
+    except FileNotFoundError as e:
+        print(f"Error: Locale directory not found: {e}", file=sys.stderr)
+        sys.exit(2)
+        return
+
     targets = get_target_files(args.files, args.directories)
 
     errors = {
@@ -198,9 +204,11 @@ def main() -> None:
                 + "\n".join(f"  - Missing: {tag}" for tag in tags)
             )
         sys.exit(1)
+        return
 
     print("All translation tags validated successfully")
     sys.exit(0)
+    return
 
 
 if __name__ == "__main__":
