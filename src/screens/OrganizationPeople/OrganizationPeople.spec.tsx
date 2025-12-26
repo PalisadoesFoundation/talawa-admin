@@ -825,7 +825,9 @@ describe('OrganizationPeople', () => {
     fireEvent.click(adminOption);
 
     await waitFor(() => {
-      expect(screen.getByText('Admin User')).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: 'Admin User' }),
+      ).toBeInTheDocument();
     });
 
     // Navigate to next page
@@ -834,7 +836,9 @@ describe('OrganizationPeople', () => {
 
     // Wait for next page data to load
     await waitFor(() => {
-      expect(screen.getByText('Admin User 2')).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: 'Admin User 2' }),
+      ).toBeInTheDocument();
     });
 
     // Navigate back to previous page
@@ -845,7 +849,9 @@ describe('OrganizationPeople', () => {
 
     // Wait for previous page data to load
     await waitFor(() => {
-      expect(screen.getByText('Admin User')).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: 'Admin User' }),
+      ).toBeInTheDocument();
     });
   });
 

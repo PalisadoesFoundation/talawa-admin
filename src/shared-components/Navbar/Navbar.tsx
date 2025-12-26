@@ -100,6 +100,7 @@ export default function PageHeader({
         {title && <h2 className={styles.pageHeaderTitle}>{title}</h2>}
 
         {/* ===== Search Bar ===== */}
+
         {search && (
           <SearchBar
             placeholder={search.placeholder}

@@ -75,7 +75,7 @@ const MOCKS = [
   {
     request: {
       query: GET_ORGANIZATION_EVENTS_PG,
-      variables: { id: '123', first: 150, after: null },
+      variables: { id: '123', first: 100, after: null },
     },
     result: {
       data: {

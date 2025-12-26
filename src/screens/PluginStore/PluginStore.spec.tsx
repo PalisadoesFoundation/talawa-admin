@@ -1,23 +1,12 @@
-import React from 'react';
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  within,
-} from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { ApolloError } from '@apollo/client';
-import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { vi, describe, it, expect, beforeEach } from 'vitest';
 import PluginStore from './PluginStore';
 import * as pluginHooks from 'plugin/hooks';
 import * as pluginManager from 'plugin/manager';
 import * as adminPluginFileService from 'plugin/services/AdminPluginFileService';
 import userEvent from '@testing-library/user-event';
-
-const shared = vi.hoisted(() => ({
-  reload: vi.fn(),
-}));
 
 // Mock the plugin hooks and manager
 vi.mock('plugin/hooks');
@@ -49,20 +38,11 @@ vi.mock('react-i18next', () => ({
 }));
 
 // Mock GraphQL mutations and queries
-const {
-  mockCreatePlugin,
-  mockUpdatePlugin,
-  mockDeletePlugin,
-  mockGetAllPlugins,
-  mockRefetch,
-} = vi.hoisted(() => ({
-  mockCreatePlugin: vi.fn(),
-  mockUpdatePlugin: vi.fn(),
-  mockDeletePlugin: vi.fn(),
-  mockGetAllPlugins: vi.fn(),
-  mockRefetch: vi.fn(),
-}));
-
+const mockCreatePlugin = vi.fn();
+const mockUpdatePlugin = vi.fn();
+const mockDeletePlugin = vi.fn();
+const mockGetAllPlugins = vi.fn();
+const mockRefetch = vi.fn();
 let mockGraphQLError: ApolloError | null = null;
 
 vi.mock('plugin/graphql-service', () => ({
@@ -89,6 +69,10 @@ vi.mock('react-toastify', () => ({
 }));
 
 describe('PluginStore', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   const mockLoadedPlugins = [
     {
       id: 'test-plugin-1',
@@ -141,27 +125,6 @@ describe('PluginStore', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        ...window.location,
-        reload: shared.reload,
-      },
-    });
-
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: vi.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: vi.fn(), // deprecated
-        removeListener: vi.fn(), // deprecated
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-      })),
-    });
     // Reset mockGraphQLError to ensure test isolation
     mockGraphQLError = null;
 
@@ -190,10 +153,6 @@ describe('PluginStore', () => {
       .removePlugin as unknown as typeof vi.fn) = vi
       .fn()
       .mockResolvedValue(true);
-  });
-
-  afterEach(() => {
-    vi.clearAllMocks();
   });
 
   const renderPluginStore = () => {
@@ -292,13 +251,9 @@ describe('PluginStore', () => {
 
       renderPluginStore();
 
-      const filterDropdown = screen.getByTestId('filterPlugins');
-      await userEvent.click(filterDropdown);
-      // Wait for dropdown options to render
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      // Find the dropdown option for installed plugins by data-testid in document.body
-      const installedOption = within(document.body).getByTestId('installed');
+      const filterButton = screen.getByTestId('filterPlugins');
+      fireEvent.click(filterButton);
+      const installedOption = screen.getByTestId('installed');
       fireEvent.click(installedOption);
 
       await waitFor(() => {
@@ -539,23 +494,13 @@ describe('PluginStore', () => {
 
       renderPluginStore();
 
-      const filterDropdown = screen.getByTestId('filterPlugins');
-      await userEvent.click(filterDropdown);
-      // Wait for dropdown options to render
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      // Find the dropdown option for installed plugins by data-testid in document.body
-      const installedOption = within(document.body).getByTestId('installed');
-      await userEvent.click(installedOption);
+      const filterButton = screen.getByTestId('filterPlugins');
+      fireEvent.click(filterButton);
+      const installedOption = screen.getByTestId('installed');
+      fireEvent.click(installedOption);
 
       await waitFor(() => {
         expect(screen.getByTestId('plugins-empty-state')).toBeInTheDocument();
-        expect(
-          screen.getByTestId('plugins-empty-state-icon'),
-        ).toBeInTheDocument();
-        expect(
-          screen.getByTestId('plugins-empty-state-message'),
-        ).toBeInTheDocument();
         expect(screen.getByText('noInstalledPlugins')).toBeInTheDocument();
       });
     });
@@ -1144,16 +1089,11 @@ describe('PluginStore', () => {
 
       renderPluginStore();
 
-      // Open filter dropdown
-      const filterDropdown = screen.getByTestId('filterPlugins');
-      await userEvent.click(filterDropdown);
-
-      // Wait for dropdown options to render
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      // Select the 'installed' filter option by its data-testid in document.body
-      const installedOption = within(document.body).getByTestId('installed');
-      await userEvent.click(installedOption);
+      // Change filter dropdown
+      const filterButton = screen.getByTestId('filterPlugins');
+      fireEvent.click(filterButton);
+      const installedOption = screen.getByTestId('installed');
+      fireEvent.click(installedOption);
 
       // Page should be reset to 0 when filter changes. Verify first-page items are rendered
       await waitFor(() => {

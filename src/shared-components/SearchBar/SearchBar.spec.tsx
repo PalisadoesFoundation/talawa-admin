@@ -12,7 +12,13 @@ import type { InterfaceSearchBarRef } from 'types/SearchBar/interface';
 
 describe('SearchBar', () => {
   it('renders with the provided placeholder', () => {
-    render(<SearchBar onSearch={vi.fn()} placeholder="Search records" />);
+    render(
+      <SearchBar
+        onSearch={vi.fn()}
+        placeholder="Search records"
+        clearButtonAriaLabel="clear"
+      />,
+    );
     expect(screen.getByPlaceholderText('Search records')).toBeInTheDocument();
   });
 
@@ -24,6 +30,7 @@ describe('SearchBar', () => {
         onSearch={vi.fn()}
         onChange={handleChange}
         inputTestId="search-input"
+        clearButtonAriaLabel="clear"
       />,
     );
 
@@ -40,6 +47,7 @@ describe('SearchBar', () => {
         onSearch={handleSearch}
         inputTestId="search-input"
         buttonTestId="search-button"
+        clearButtonAriaLabel="clear"
       />,
     );
     await user.type(screen.getByTestId('search-input'), 'volunteer');
@@ -54,7 +62,13 @@ describe('SearchBar', () => {
   it('submits search when Enter key is pressed', async () => {
     const user = userEvent.setup();
     const handleSearch = vi.fn();
-    render(<SearchBar onSearch={handleSearch} inputTestId="search-input" />);
+    render(
+      <SearchBar
+        onSearch={handleSearch}
+        inputTestId="search-input"
+        clearButtonAriaLabel="clear"
+      />,
+    );
     await user.type(screen.getByTestId('search-input'), 'events{enter}');
 
     expect(handleSearch).toHaveBeenCalledWith(
@@ -75,6 +89,7 @@ describe('SearchBar', () => {
         onChange={handleChange}
         inputTestId="search-input"
         clearButtonTestId="clear-search"
+        clearButtonAriaLabel="clear"
       />,
     );
 
@@ -99,6 +114,7 @@ describe('SearchBar', () => {
           onSearch={vi.fn()}
           onChange={(nextValue) => setTerm(nextValue)}
           inputTestId="search-input"
+          clearButtonAriaLabel="clear"
         />
       );
     };
@@ -118,6 +134,7 @@ describe('SearchBar', () => {
         onSearch={handleSearch}
         showSearchButton={false}
         inputTestId="search-input"
+        clearButtonAriaLabel="clear"
       />,
     );
 
@@ -133,7 +150,12 @@ describe('SearchBar', () => {
     const user = userEvent.setup();
     const ref = React.createRef<InterfaceSearchBarRef>();
     render(
-      <SearchBar ref={ref} onSearch={vi.fn()} inputTestId="search-input" />,
+      <SearchBar
+        ref={ref}
+        onSearch={vi.fn()}
+        inputTestId="search-input"
+        clearButtonAriaLabel="clear"
+      />,
     );
 
     expect(ref.current).toBeDefined();
@@ -168,6 +190,7 @@ describe('SearchBar', () => {
         onSearch={handleSearch}
         inputTestId="search-input"
         clearButtonTestId="clear-search"
+        clearButtonAriaLabel="clear"
       />,
     );
 
@@ -194,6 +217,7 @@ describe('SearchBar', () => {
         value="locked"
         inputTestId="search-input"
         clearButtonTestId="clear-search"
+        clearButtonAriaLabel="clear"
       />,
     );
 
@@ -213,6 +237,7 @@ describe('SearchBar', () => {
         disabled={true}
         defaultValue="locked"
         inputTestId="search-input"
+        clearButtonAriaLabel="clear"
       />,
     );
 
@@ -225,14 +250,39 @@ describe('SearchBar', () => {
   });
 
   it('has accessible search button', () => {
-    render(<SearchBar onSearch={vi.fn()} buttonTestId="search-button" />);
+    render(
+      <SearchBar
+        onSearch={vi.fn()}
+        buttonTestId="search-button"
+        clearButtonAriaLabel="clear"
+      />,
+    );
     const button = screen.getByTestId('search-button');
     expect(button).toHaveAttribute('aria-label', 'Search');
   });
 
+  it('uses default aria-label from i18n when clearButtonAriaLabel is undefined', async () => {
+    const user = userEvent.setup();
+    render(
+      <SearchBar
+        onSearch={vi.fn()}
+        inputTestId="search-input"
+        clearButtonTestId="clear-search"
+      />,
+    );
+
+    const input = screen.getByTestId('search-input');
+    await user.type(input, 'test');
+
+    const clearButton = screen.getByTestId('clear-search');
+    expect(clearButton).toHaveAttribute('aria-label', 'clear');
+  });
+
   it('handles missing onSearch prop gracefully', async () => {
     const user = userEvent.setup();
-    render(<SearchBar inputTestId="search-input" />);
+    render(
+      <SearchBar inputTestId="search-input" clearButtonAriaLabel="clear" />,
+    );
 
     const input = screen.getByTestId('search-input');
     await user.type(input, 'test{enter}');
