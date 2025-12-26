@@ -8,13 +8,13 @@ export const FormTextField: React.FC<FormTextFieldProps> = ({
   format,
   ...inputProps
 }) => {
-  if(format==="mui"){
-    return(
+  if (format === 'mui') {
+    return (
       <FormControl>
-        <TextField {...inputProps}/>
+        <TextField {...inputProps} />
         {endAdornment && <>{endAdornment}</>}
       </FormControl>
-    )
+    );
   }
   return (
     <div className="position-relative">
