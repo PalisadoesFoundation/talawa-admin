@@ -267,13 +267,7 @@ function organizationEvents(): JSX.Element {
                 data-cy="createEventModalBtn"
               >
                 <div>
-                  <AddIcon
-                    sx={{
-                      fontSize: '25px',
-                      marginBottom: '2px',
-                      marginRight: '2px',
-                    }}
-                  />
+                  <AddIcon />
                   <span>{t('createEvent')}</span>
                 </div>
               </Button>

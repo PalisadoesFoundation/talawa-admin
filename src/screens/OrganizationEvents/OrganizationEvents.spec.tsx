@@ -8,7 +8,6 @@ import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import dayjs from 'dayjs';
 
@@ -39,13 +38,7 @@ vi.mock('utils/useLocalstorage', () => {
   };
 });
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#31bb6b',
-    },
-  },
-});
+
 
 const sharedWindowSpies = vi.hoisted(() => ({
   alertMock: vi.fn(),
@@ -185,11 +178,9 @@ describe('Organisation Events Page', () => {
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <ThemeProvider theme={theme}>
-                <I18nextProvider i18n={i18n}>
-                  <OrganizationEvents />
-                </I18nextProvider>
-              </ThemeProvider>
+              <I18nextProvider i18n={i18n}>
+                <OrganizationEvents />
+              </I18nextProvider>
             </LocalizationProvider>
           </Provider>
         </BrowserRouter>
@@ -779,11 +770,9 @@ describe('Organisation Events Page', () => {
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <ThemeProvider theme={theme}>
-                <I18nextProvider i18n={i18n}>
-                  <OrganizationEvents />
-                </I18nextProvider>
-              </ThemeProvider>
+              <I18nextProvider i18n={i18n}>
+                <OrganizationEvents />
+              </I18nextProvider>
             </LocalizationProvider>
           </Provider>
         </BrowserRouter>
@@ -996,11 +985,9 @@ describe('OrganizationEvents - Additional Coverage Tests', () => {
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
-              <ThemeProvider theme={theme}>
-                <I18nextProvider i18n={i18n}>
-                  <OrganizationEvents />
-                </I18nextProvider>
-              </ThemeProvider>
+              <I18nextProvider i18n={i18n}>
+                <OrganizationEvents />
+              </I18nextProvider>
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
@@ -1046,11 +1033,9 @@ describe('OrganizationEvents - Additional Coverage Tests', () => {
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
-              <ThemeProvider theme={theme}>
-                <I18nextProvider i18n={i18n}>
-                  <OrganizationEvents />
-                </I18nextProvider>
-              </ThemeProvider>
+              <I18nextProvider i18n={i18n}>
+                <OrganizationEvents />
+              </I18nextProvider>
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
@@ -1087,11 +1072,9 @@ describe('OrganizationEvents - Additional Coverage Tests', () => {
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <Provider store={store}>
-              <ThemeProvider theme={theme}>
-                <I18nextProvider i18n={i18n}>
-                  <OrganizationEvents />
-                </I18nextProvider>
-              </ThemeProvider>
+              <I18nextProvider i18n={i18n}>
+                <OrganizationEvents />
+              </I18nextProvider>
             </Provider>
           </LocalizationProvider>
         </BrowserRouter>
