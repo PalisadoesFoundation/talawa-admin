@@ -286,7 +286,9 @@ describe('Testing Invvitations Screen', () => {
     await userEvent.click(acceptBtn[0]);
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(t.invitationAccepted);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        t.invitationAccepted,
+      );
     });
   });
 
@@ -302,7 +304,9 @@ describe('Testing Invvitations Screen', () => {
     await userEvent.click(rejectBtn[0]);
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(t.invitationRejected);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        t.invitationRejected,
+      );
     });
   });
 
