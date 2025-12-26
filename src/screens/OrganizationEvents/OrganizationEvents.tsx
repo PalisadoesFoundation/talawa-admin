@@ -123,7 +123,7 @@ function organizationEvents(): JSX.Element {
   } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
     variables: {
       id: currentUrl,
-      first: 150,
+      first: 100,
       after: null,
       startDate: dayjs(new Date(currentYear, currentMonth, 1))
         .startOf('month')
