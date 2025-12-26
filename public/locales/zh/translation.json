@@ -1588,6 +1588,7 @@
     "title": "离开组织"
   },
   "eventVolunteers": {
+    "toggleGroupAriaLabel": "志愿者视图选择器",
     "volunteers": "志愿者",
     "volunteer": "志愿者",
     "volunteerGroups": "志愿者小组",

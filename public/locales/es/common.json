@@ -113,5 +113,10 @@
   "userProfileMenu": "Menú de perfil de usuario",
   "breadcrumbs": "Migas de navegación",
   "loadingAdminPlugin": "Cargando complemento de administrador...",
-  "loadingUserPlugin": "Cargando complemento de usuario..."
+  "loadingUserPlugin": "Cargando complemento de usuario...",
+  "organization": "Organización",
+  "events": "Eventos",
+  "event": "Evento",
+  "groups": "Grupos",
+  "Volunteers": "Voluntarios"
 }

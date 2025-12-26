@@ -1588,6 +1588,7 @@
     "title": "Quitter l'organisation"
   },
   "eventVolunteers": {
+    "toggleGroupAriaLabel": "Sélecteur de vue des bénévoles",
     "volunteers": "Bénévoles",
     "volunteer": "Bénévole",
     "volunteerGroups": "Groupes de Bénévoles",

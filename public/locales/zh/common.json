@@ -113,5 +113,10 @@
   "userProfileMenu": "使用者個人資料選單",
   "breadcrumbs": "面包屑导航",
   "loadingAdminPlugin": "正在加载行政插件...",
-  "loadingUserPlugin": "正在加载用户插件..."
+  "loadingUserPlugin": "正在加载用户插件...",
+  "organization": "组织",
+  "events": "活动",
+  "event": "活动",
+  "groups": "群组",
+  "Volunteers": "志愿者"
 }

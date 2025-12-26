@@ -113,5 +113,10 @@
   "userProfileMenu": "User Profile Menu",
   "breadcrumbs": "Breadcrumbs",
   "loadingAdminPlugin": "Loading admin plugin...",
-  "loadingUserPlugin": "Loading user plugin..."
+  "loadingUserPlugin": "Loading user plugin...",
+  "organization": "Organization",
+  "events": "Events",
+  "event": "Event",
+  "groups": "Groups",
+  "Volunteers": "Volunteers"
 }

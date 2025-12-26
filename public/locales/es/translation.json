@@ -1588,6 +1588,7 @@
     "title": "Dejar la organización"
   },
   "eventVolunteers": {
+    "toggleGroupAriaLabel": "Selector de vista de voluntarios",
     "volunteers": "Voluntarios",
     "volunteer": "Voluntario",
     "volunteerGroups": "Grupos de Voluntarios",
