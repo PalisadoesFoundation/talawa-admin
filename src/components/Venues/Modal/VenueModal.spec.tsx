@@ -1400,9 +1400,8 @@ describe('Validation', () => {
           });
 
           // Should only use the first file
-          expect(screen.queryByRole('img')).toHaveLength(1);
+          expect(screen.getAllByRole('img')).toHaveLength(1);
         });
-
         // Validation Edge Cases
         describe('Validation Edge Cases', () => {
           test('handles empty venue name', async () => {
