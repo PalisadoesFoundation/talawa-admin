@@ -57,8 +57,12 @@ describe('OrganizationCard [PR-2]', () => {
   it('renders admins and members counts', () => {
     renderWithI18n(<OrganizationCard {...baseProps} />);
 
-    expect(screen.getByText(/Admins/i)).toBeInTheDocument();
-    expect(screen.getByText(/Members/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(`${baseProps.adminsCount} Admins`),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(`${baseProps.membersCount} Members`),
+    ).toBeInTheDocument();
   });
 
   it('shows Join button when not joined', () => {
@@ -172,5 +176,20 @@ describe('OrganizationCard [PR-2]', () => {
 
     expect(toast.success).not.toHaveBeenCalled();
     expect(toast.error).not.toHaveBeenCalled();
+  });
+
+  it('renders with default values when optional props are missing', () => {
+    const minimalProps = {
+      id: 'org-minimal',
+      name: 'Minimal Org',
+      description: 'Desc',
+      addressLine1: 'Address',
+      role: 'MEMBER',
+      membersCount: 5,
+      adminsCount: 1,
+    };
+    renderWithI18n(<OrganizationCard {...minimalProps} />);
+    expect(screen.getByTestId('joinBtn')).toBeInTheDocument();
+    expect(screen.queryByTestId('withdrawBtn')).toBeNull();
   });
 });

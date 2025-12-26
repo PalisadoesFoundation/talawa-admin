@@ -175,4 +175,13 @@ describe('ContactCard [User Portal]', () => {
     const container = screen.getByTestId(`contact-container-${props.id}`);
     expect(container).toHaveAttribute('data-selected', 'false');
   });
+
+  it('uses default unseenMessages value (0) when prop is undefined', async () => {
+    const { unseenMessages, ...propsWithoutUnseen } = baseProps;
+    renderComponent(propsWithoutUnseen as any);
+    await wait();
+    expect(
+      screen.queryByTestId(`contact-unseen-${propsWithoutUnseen.id}`),
+    ).toBeNull();
+  });
 });
