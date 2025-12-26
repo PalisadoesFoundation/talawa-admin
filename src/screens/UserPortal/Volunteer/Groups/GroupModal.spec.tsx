@@ -231,7 +231,9 @@ describe('Testing GroupModal', () => {
     await userEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(t.volunteerGroupUpdated);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        t.volunteerGroupUpdated,
+      );
       expect(itemProps[0].refetchGroups).toHaveBeenCalled();
       expect(itemProps[0].hide).toHaveBeenCalled();
     });

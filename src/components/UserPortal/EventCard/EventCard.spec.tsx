@@ -78,7 +78,6 @@ describe('Testing Event Card In User portal', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              
               <EventCard {...props} />
             </I18nextProvider>
           </Provider>
@@ -91,13 +90,13 @@ describe('Testing Event Card In User portal', () => {
   });
 
   it('Handle register should work properly', async () => {
+    const toastSuccessSpy = vi.spyOn(NotificationToast, 'success');
     setItem('userId', '456');
-    const { queryByText } = render(
+    render(
       <MockedProvider link={link}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              
               <EventCard {...props} />
             </I18nextProvider>
           </Provider>
@@ -106,9 +105,9 @@ describe('Testing Event Card In User portal', () => {
     );
     await userEvent.click(screen.getByText('Register'));
     await waitFor(() =>
-      expect(
-        queryByText('Successfully registered for Test Event'),
-      ).toBeInTheDocument(),
+      expect(toastSuccessSpy).toHaveBeenCalledWith(
+        'Successfully registered for Test Event',
+      ),
     );
   });
 
@@ -131,7 +130,6 @@ describe('Testing Event Card In User portal', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              
               <EventCard {...props} />
             </I18nextProvider>
           </Provider>
@@ -185,7 +183,6 @@ describe('Event card when start and end time are not given', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              
               <EventCard {...props} />
             </I18nextProvider>
           </Provider>

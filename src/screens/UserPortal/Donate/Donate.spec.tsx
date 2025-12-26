@@ -25,14 +25,16 @@ import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
 import * as errorHandlerModule from 'utils/errorHandler';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
-const { mockErrorHandler, mockUseParams, mockNotificationToast } = vi.hoisted(() => ({
-  mockErrorHandler: vi.fn(),
-  mockUseParams: vi.fn(),
-  mockNotificationToast: {
-    error: vi.fn(),
-    success: vi.fn(),
-  },
-}));
+const { mockErrorHandler, mockUseParams, mockNotificationToast } = vi.hoisted(
+  () => ({
+    mockErrorHandler: vi.fn(),
+    mockUseParams: vi.fn(),
+    mockNotificationToast: {
+      error: vi.fn(),
+      success: vi.fn(),
+    },
+  }),
+);
 // Mock the errorHandler module
 vi.mock('utils/errorHandler', () => ({
   errorHandler: mockErrorHandler,

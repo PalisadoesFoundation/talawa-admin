@@ -940,7 +940,8 @@ describe('Testing Events Screen [User Portal]', () => {
 
     // Verify either success or error toast was called
     expect(
-      mockNotificationToast.success.mock.calls.length + mockNotificationToast.error.mock.calls.length,
+      mockNotificationToast.success.mock.calls.length +
+        mockNotificationToast.error.mock.calls.length,
     ).toBeGreaterThan(0);
   });
 
