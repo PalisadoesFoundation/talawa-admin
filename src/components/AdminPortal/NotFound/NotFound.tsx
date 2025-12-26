@@ -29,24 +29,18 @@
  */
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-
+import type { InterfaceNotFoundProps } from 'types/AdminPortal/NotFound/interface';
 import styles from 'style/app-fixed.module.css';
 
-interface InterfaceNotFoundProps {
-  title: string;
-  keyPrefix: string;
-}
-
-function notFound(props: InterfaceNotFoundProps): JSX.Element {
-  const key = props.keyPrefix.toString();
-  const { t } = useTranslation('translation', { keyPrefix: key });
+function NotFound({ title, keyPrefix }: InterfaceNotFoundProps): JSX.Element {
+  const { t } = useTranslation('translation', { keyPrefix });
   return (
     <>
       <section className={styles.section}>
-        <h2 className={styles.error}> {t(`${props.title} not found!`)} </h2>
+        <h2 className={styles.error}> {t(`${title} not found!`)} </h2>
       </section>
     </>
   );
 }
 
-export default notFound;
+export default NotFound;

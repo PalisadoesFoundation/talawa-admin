@@ -19,7 +19,7 @@ import React, { useState } from 'react';
 import type { ApolloError } from '@apollo/client';
 import { Modal, Button } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
-import NotFound from 'components/NotFound/NotFound';
+import NotFound from 'components/AdminPortal/NotFound/NotFound';
 import PostCard from 'shared-components/postCard/PostCard';
 import type { InterfacePost, InterfacePostEdge } from 'types/Post/interface';
 import type { PostNode } from 'types/Post/type';
