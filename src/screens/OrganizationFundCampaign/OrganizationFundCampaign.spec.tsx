@@ -244,14 +244,13 @@ describe('FundCampaigns Screen', () => {
     });
   });
 
-  it('renders the empty campaign component', async () => {
+  it('renders the empty campaign EmptyState when no campaigns exist', async () => {
     mockRouteParams();
     renderFundCampaign(link3);
-    await waitFor(() =>
-      expect(
-        screen.getByText(translations.noCampaignsFound),
-      ).toBeInTheDocument(),
-    );
+    const emptyState = await screen.findByTestId('campaigns-empty');
+    expect(emptyState).toBeInTheDocument();
+
+    expect(emptyState).toHaveTextContent('No Campaigns Found');
   });
 
   it('Should display loading state', () => {
@@ -425,7 +424,7 @@ describe('FundCampaigns Screen', () => {
     });
   });
 
-  it('should display no results message when search yields no matches', async () => {
+  it('should display no results empty state when search yields no matches', async () => {
     mockRouteParams();
     renderFundCampaign(link1);
 
@@ -436,9 +435,21 @@ describe('FundCampaigns Screen', () => {
       target: { value: 'NonExistentCampaign' },
     });
 
-    await waitFor(() => {
-      expect(screen.getByText(/No results found for/i)).toBeInTheDocument();
-    });
+    // Assert EmptyState is rendered
+    const emptyState = await screen.findByTestId('campaigns-search-empty');
+    expect(emptyState).toBeInTheDocument();
+
+    // Assert primary message (EmptyState message prop)
+    expect(emptyState).toHaveTextContent(
+      i18nForTest.t('common:noResultsFound'),
+    );
+
+    // Assert description with query
+    expect(emptyState).toHaveTextContent(
+      i18nForTest.t('common:noResultsFoundFor', {
+        query: `"NonExistentCampaign"`,
+      }),
+    );
   });
 
   it('should clear search input when clear button is clicked', async () => {
