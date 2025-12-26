@@ -90,6 +90,10 @@ Defined in: [src/components/EventManagement/Dashboard/EventDashboard.mocks.ts:4]
 
 > **id**: `string` = `'event123'`
 
+#### result.data.event.isInviteOnly
+
+> **isInviteOnly**: `boolean` = `false`
+
 #### result.data.event.isPublic
 
 > **isPublic**: `boolean` = `true`

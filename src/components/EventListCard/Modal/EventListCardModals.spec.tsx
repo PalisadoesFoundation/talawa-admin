@@ -188,7 +188,13 @@ describe('EventListCardModals', () => {
     });
     mockUseNavigate.mockReturnValue(mockNavigate);
     mockUseParams.mockReturnValue({ orgId: 'org1' });
-    mockUseLocalStorage.mockReturnValue({ getItem: () => 'user1' });
+    mockUseLocalStorage.mockReturnValue({
+      getItem: () => 'user1',
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+      clearAllItems: vi.fn(),
+      getStorageKey: vi.fn((key: string) => key),
+    });
 
     // Mock the preview modal to render nothing and capture props
     MockPreviewModal.mockImplementation(() => {

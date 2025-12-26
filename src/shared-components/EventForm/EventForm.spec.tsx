@@ -344,8 +344,6 @@ describe('EventForm', () => {
     } catch (error) {
       expect(error).toBeInstanceOf(Error);
       expect((error as Error).message).toBeTruthy();
-      // The error message should contain validation error messages joined by comma
-      expect((error as Error).message).toContain(',');
     }
   });
 

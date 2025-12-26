@@ -939,6 +939,7 @@
     "unregister": "Unregister"
   },
   "memberActivity": {
+    "loadingEventDetails": "Loading event details...",
     "unableToLoadEventDetails": "Unable to load event details. Please try again later.",
     "eventNotFoundOrDeleted": "Event not found or has been deleted",
     "numberOfAttendees": "Number of attendees",
@@ -1816,9 +1817,5 @@
     "signOut": "Sign out",
     "signingOut": "Signing out...",
     "retryPrompt": "Failed to revoke session. Retry?"
-  },
-  "memberActivity": {
-    "loadingEventDetails": "Loading event details...",
-    "unableToLoadEventDetails": "Unable to load event details. Please try again later."
   }
 }

@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { isInviteOnlyEnabled } from './featureFlags';
 
 describe('featureFlags', () => {
@@ -17,6 +17,8 @@ describe('featureFlags', () => {
     } else {
       delete process.env.REACT_APP_ENABLE_INVITE_ONLY;
     }
+    // Standard test isolation for this repo
+    vi.clearAllMocks();
   });
 
   describe('isInviteOnlyEnabled', () => {

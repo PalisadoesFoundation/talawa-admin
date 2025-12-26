@@ -1249,6 +1249,7 @@
     "unregister": "Annuler l'inscription"
   },
   "memberActivity": {
+    "loadingEventDetails": "Chargement des détails de l'événement...",
     "unableToLoadEventDetails": "Impossible de charger les détails de l'événement. Veuillez réessayer plus tard.",
     "eventNotFoundOrDeleted": "Événement introuvable ou supprimé",
     "numberOfAttendees": "Nombre de participants",
@@ -1814,9 +1815,5 @@
     "signOut": "Se déconnecter",
     "signingOut": "Déconnexion en cours...",
     "retryPrompt": "Échec de la révocation de session. Réessayer ?"
-  },
-  "memberActivity": {
-    "loadingEventDetails": "Chargement des détails de l'événement...",
-    "unableToLoadEventDetails": "Impossible de charger les détails de l'événement. Veuillez réessayer plus tard."
   }
 }

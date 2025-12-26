@@ -64,6 +64,10 @@ import { EVENT_DETAILS, RECURRING_EVENTS } from 'GraphQl/Queries/Queries';
 import { useLazyQuery } from '@apollo/client';
 import { addInviteOnlyVariable } from 'utils/graphqlVariables';
 import { exportToCSV } from 'utils/chartToPdf';
+import {
+  buildAttendanceChartData,
+  buildDemographicsChartData,
+} from 'utils/chartDataBuilders';
 import type { ChartOptions, TooltipItem } from 'chart.js';
 import type {
   InterfaceAttendanceStatisticsModalProps,
@@ -81,37 +85,6 @@ ChartJS.register(
   Legend,
   Filler,
 );
-
-// Helper function to get CSS variable values
-const getCSSVariable = (variableName: string): string => {
-  if (typeof window !== 'undefined') {
-    return getComputedStyle(document.documentElement)
-      .getPropertyValue(variableName)
-      .trim();
-  }
-  // Fallback for SSR or when window is not available
-  return '';
-};
-
-// Function to get chart colors from CSS variables (called during render)
-const getChartColors = () => ({
-  green: getCSSVariable('--chart-green'),
-  blue: getCSSVariable('--chart-blue'),
-  pink: getCSSVariable('--chart-pink'),
-  gold: getCSSVariable('--chart-gold'),
-  chartBlue: getCSSVariable('--chart-blue-solid'),
-  chartBlueAlpha: getCSSVariable('--chart-blue-alpha'),
-  chartOrange: getCSSVariable('--chart-orange-solid'),
-  chartOrangeAlpha: getCSSVariable('--chart-orange-alpha'),
-  chartGreen: getCSSVariable('--chart-green-solid'),
-  chartGreenAlpha: getCSSVariable('--chart-green-alpha'),
-  chartRed: getCSSVariable('--chart-red-solid'),
-  chartRedAlpha: getCSSVariable('--chart-red-alpha'),
-  chartPurple: getCSSVariable('--chart-purple-solid'),
-  chartPurpleAlpha: getCSSVariable('--chart-purple-alpha'),
-  chartBrown: getCSSVariable('--chart-brown-solid'),
-  chartBrownAlpha: getCSSVariable('--chart-brown-alpha'),
-});
 
 // Age calculation helper to avoid triggering i18n checker and ensure consistency
 const MIN_ADULT_AGE = 18;
@@ -257,38 +230,18 @@ export const AttendanceStatisticsModal: React.FC<
     [paginatedRecurringEvents],
   );
 
-  const chartData = useMemo(() => {
-    const colors = getChartColors();
-    return {
-      labels: eventLabels,
-      datasets: [
-        {
-          label: t('attendeeCount'),
-          data: attendeeCounts,
-          fill: true,
-          borderColor: colors.green,
-        },
-        {
-          label: t('maleAttendees'),
-          data: maleCounts,
-          fill: false,
-          borderColor: colors.blue,
-        },
-        {
-          label: t('femaleAttendees'),
-          data: femaleCounts,
-          fill: false,
-          borderColor: colors.pink,
-        },
-        {
-          label: t('otherAttendees'),
-          data: otherCounts,
-          fill: false,
-          borderColor: colors.gold,
-        },
-      ],
-    };
-  }, [eventLabels, attendeeCounts, maleCounts, femaleCounts, otherCounts, t]);
+  const chartData = useMemo(
+    () =>
+      buildAttendanceChartData(
+        eventLabels,
+        attendeeCounts,
+        maleCounts,
+        femaleCounts,
+        otherCounts,
+        t,
+      ),
+    [eventLabels, attendeeCounts, maleCounts, femaleCounts, otherCounts, t],
+  );
 
   const handlePreviousPage = useCallback(() => {
     setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
@@ -345,38 +298,16 @@ export const AttendanceStatisticsModal: React.FC<
     [selectedCategory, memberData],
   );
 
-  const barChartData = useMemo(() => {
-    const colors = getChartColors();
-    return {
-      labels: categoryLabels,
-      datasets: [
-        {
-          label:
-            selectedCategory === 'Gender'
-              ? t('genderDistribution')
-              : t('ageDistribution'),
-          data: categoryData,
-          backgroundColor: [
-            colors.chartBlueAlpha,
-            colors.chartOrangeAlpha,
-            colors.chartGreenAlpha,
-            colors.chartRedAlpha,
-            colors.chartPurpleAlpha,
-            colors.chartBrownAlpha,
-          ],
-          borderColor: [
-            colors.chartBlue,
-            colors.chartOrange,
-            colors.chartGreen,
-            colors.chartRed,
-            colors.chartPurple,
-            colors.chartBrown,
-          ],
-          borderWidth: 2,
-        },
-      ],
-    };
-  }, [categoryLabels, categoryData, selectedCategory, t]);
+  const barChartData = useMemo(
+    () =>
+      buildDemographicsChartData(
+        categoryLabels,
+        categoryData,
+        selectedCategory,
+        t,
+      ),
+    [categoryLabels, categoryData, selectedCategory, t],
+  );
 
   const handleCategoryChange = useCallback((category: string): void => {
     setSelectedCategory(category);

@@ -1,5 +1,6 @@
 declare module 'lodash' {
-  export function debounce<T extends (...args: never[]) => unknown>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  export function debounce<T extends (...args: any[]) => any>(
     func: T,
     wait?: number,
     options?: { leading?: boolean; trailing?: boolean; maxWait?: number },

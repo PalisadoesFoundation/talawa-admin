@@ -1249,6 +1249,7 @@
     "unregister": "Anular registro"
   },
   "memberActivity": {
+    "loadingEventDetails": "Cargando detalles del evento...",
     "unableToLoadEventDetails": "No se pudieron cargar los detalles del evento. Por favor, inténtelo de nuevo más tarde.",
     "eventNotFoundOrDeleted": "Evento no encontrado o eliminado",
     "numberOfAttendees": "Número de asistentes",
@@ -1814,9 +1815,5 @@
     "signOut": "Cerrar sesión",
     "signingOut": "Cerrando sesión...",
     "retryPrompt": "Error al revocar la sesión. ¿Reintentar?"
-  },
-  "memberActivity": {
-    "loadingEventDetails": "Cargando detalles del evento...",
-    "unableToLoadEventDetails": "No se pudieron cargar los detalles del evento. Por favor, inténtelo de nuevo más tarde."
   }
 }

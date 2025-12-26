@@ -1249,6 +1249,7 @@
     "unregister": "取消注册"
   },
   "memberActivity": {
+    "loadingEventDetails": "正在加载活动详情...",
     "unableToLoadEventDetails": "无法加载事件详情。请稍后再试。",
     "eventNotFoundOrDeleted": "未找到事件或已被删除",
     "numberOfAttendees": "参与人数",
@@ -1814,9 +1815,5 @@
     "signOut": "退出登录",
     "signingOut": "正在退出...",
     "retryPrompt": "撤销会话失败。重试？"
-  },
-  "memberActivity": {
-    "loadingEventDetails": "正在加载活动详情...",
-    "unableToLoadEventDetails": "无法加载活动详情。请稍后再试。"
   }
 }
