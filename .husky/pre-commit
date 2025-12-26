@@ -10,9 +10,19 @@ if [ -n "$STAGED_SRC" ]; then
 fi
 pnpm run update:toc
 pnpm run check:pom
-npx knip --include files,exports
+npx knip --include files,exports,nsExports,nsTypes
 npx knip --config knip.deps.json --include dependencies
 pnpm run check-mock-cleanup
 pnpm run check-localstorage
+
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM \
+  | grep -v '^src/utils/' \
+  | grep -v '^src/types/' \
+  | grep -v '\.spec\.' \
+  | grep -v '\.test\.' \
+  || true)
+if [ -n "$STAGED_FILES" ]; then
+  python .github/workflows/scripts/css_check.py --files $STAGED_FILES
+fi
 
 git add .

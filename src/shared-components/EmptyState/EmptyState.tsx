@@ -140,6 +140,10 @@ const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
         color="text.secondary"
         textAlign="center"
         data-testid={`${dataTestId}-message`}
+        aria-describedby={
+          descriptionText ? `${dataTestId}-description` : undefined
+        }
+        id={`${dataTestId}-message`}
       >
         {messageText}
       </Typography>
@@ -151,6 +155,7 @@ const EmptyState: React.FC<InterfaceEmptyStateProps> = ({
           color="text.secondary"
           textAlign="center"
           data-testid={`${dataTestId}-description`}
+          id={`${dataTestId}-description`}
         >
           {descriptionText}
         </Typography>

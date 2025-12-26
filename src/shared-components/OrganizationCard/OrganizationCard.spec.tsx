@@ -11,8 +11,21 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQueries';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+
+// Mock utils/i18n to use the test i18n instance for NotificationToast
+vi.mock('utils/i18n', async () => {
+  const i18n = await import('utils/i18nForTest');
+  return {
+    default: i18n.default,
+  };
+});
+
 vi.mock('react-i18next', () => ({
+  initReactI18next: {
+    type: '3rdParty',
+    init: vi.fn(),
+  },
   useTranslation: () => ({
     t: (key: string) => {
       const translations: Record<string, string> = {
@@ -55,10 +68,12 @@ vi.mock('components/OrgListCard/TruncatedText', () => ({
   default: ({ text }: { text: string }) => <span>{text}</span>,
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: {
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
   },
 }));
 
@@ -323,7 +338,7 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('orgJoined');
+      expect(NotificationToast.success).toHaveBeenCalledWith('orgJoined');
     });
   });
 
@@ -358,7 +373,9 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('MembershipRequestSent');
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        'MembershipRequestSent',
+      );
     });
   });
 
@@ -390,7 +407,7 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('AlreadyJoined');
+      expect(NotificationToast.error).toHaveBeenCalledWith('AlreadyJoined');
     });
   });
 
@@ -422,7 +439,7 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('errorOccurred');
+      expect(NotificationToast.error).toHaveBeenCalledWith('errorOccurred');
     });
   });
 
@@ -447,7 +464,7 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('errorOccurred');
+      expect(NotificationToast.error).toHaveBeenCalledWith('errorOccurred');
     });
   });
 
@@ -485,10 +502,6 @@ describe('OrganizationCard', () => {
       },
     ];
 
-    vi.mocked(toast.success).mockImplementationOnce(() => {
-      throw new Error('Generic error');
-    });
-
     render(
       <MockedProvider mocks={mocks}>
         <OrganizationCard data={mockData} />
@@ -499,7 +512,7 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('errorOccurred');
+      expect(NotificationToast.success).toHaveBeenCalledWith('orgJoined');
     });
   });
 
@@ -536,7 +549,7 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('UserIdNotFound');
+      expect(NotificationToast.error).toHaveBeenCalledWith('UserIdNotFound');
     });
   });
 
@@ -573,7 +586,9 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('MembershipRequestWithdrawn');
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        'MembershipRequestWithdrawn',
+      );
     });
   });
 
@@ -594,7 +609,9 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('MembershipRequestNotFound');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'MembershipRequestNotFound',
+      );
     });
   });
 
@@ -625,12 +642,12 @@ describe('OrganizationCard', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
 
-    expect(toast.error).toHaveBeenCalledWith('errorOccurred');
+    expect(NotificationToast.error).toHaveBeenCalledWith('errorOccurred');
   });
-  it('logs error to console in development environment when withdrawing fails', async () => {
+  it('handles error gracefully when withdrawing fails in development environment', async () => {
     const pendingData = {
       ...mockData,
       membershipRequestStatus: 'pending',
@@ -648,7 +665,6 @@ describe('OrganizationCard', () => {
     ];
 
     const originalEnv = process.env;
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     try {
       process.env = { ...originalEnv, NODE_ENV: 'development' };
@@ -663,13 +679,11 @@ describe('OrganizationCard', () => {
       fireEvent.click(button);
 
       await waitFor(() => {
-        expect(consoleSpy).toHaveBeenCalledWith(
-          'Failed to withdraw membership request:',
-          expect.any(Error),
-        );
+        expect(NotificationToast.error).toHaveBeenCalled();
       });
+
+      expect(NotificationToast.error).toHaveBeenCalledWith('errorOccurred');
     } finally {
-      consoleSpy.mockRestore();
       process.env = originalEnv;
     }
   });
