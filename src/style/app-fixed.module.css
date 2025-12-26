@@ -24,6 +24,7 @@
  *   `.searchButton` (for form input field search button)
  *   `.addButton` (for buttons that add/create task)
  *   `.removeButton` (for buttons that remove/delete task)
+ *   `.cancelButton` (for buttons that cancel task)
  *   `.modalHeader` (for header section of any modal)
  *   `.editButton` (for buttons inside table)
  *   `.switch` (for form toggles)
@@ -66,6 +67,13 @@
   --removeButton-border-hover: #ff4d4f;
   --removeButton-border: #f8d6dc;
   --removeButton-color-hover: #ffffff;
+
+  --cancelButton-bg: #f8f9fa;
+  --cancelButton-color: #555555;
+  --cancelButton-bg-hover: #e2e6ea;
+  --cancelButton-border-hover: #dae0e5;
+  --cancelButton-border: #f8f9fa;
+  --cancelButton-color-hover: #333333;
 
   --activeTab-bg: #eaebef;
   --activeTab-color: #808080;
@@ -943,6 +951,22 @@
   color: var(--removeButton-color-hover);
 }
 
+/* Cancel Button */
+
+.cancelButton {
+  margin-bottom: 10px;
+  background-color: var(--cancelButton-bg);
+  color: var(--cancelButton-color);
+  margin-right: 10px;
+  --bs-btn-border-color: var(--cancelButton-border);
+}
+
+.cancelButton:is(:hover, :active, :focus) {
+  background-color: var(--cancelButton-bg-hover) !important;
+  border-color: var(--cancelButton-border-hover);
+  color: var(--cancelButton-color-hover);
+}
+
 /* Active Tab */
 
 .activeTab {
@@ -1013,6 +1037,17 @@
   min-width: 450px;
   max-width: 100%;
   height: 48px;
+}
+
+/* ----------------------------------------------------- */
+.orgListContainer {
+  padding-left: 40px;
+  padding-right: 30px;
+}
+
+/* Button width 8rem - for visit and join buttons */
+.buttonWidth8rem {
+  width: 8rem;
 }
 
 .searchBarContainerWithButton {
@@ -10269,4 +10304,148 @@ form {
   font-size: 25px;
   margin-bottom: 2px;
   margin-right: 2px;
+}
+
+/* UploadPluginModal Styles */
+.modalContainer {
+  position: relative;
+  display: flex;
+  min-height: 500px;
+  background: var(--modalHeader-bg);
+  border-radius: 12px;
+}
+
+.leftPanel {
+  width: 50%;
+  padding: 32px;
+  border-right: 1px solid var(--addButton-border);
+}
+
+.rightPanel {
+  width: 50%;
+  padding: 32px;
+}
+
+.headerSection {
+  margin-bottom: 32px;
+}
+
+.headerSection h3 {
+  margin: 0 0 8px;
+}
+
+.headerSection p {
+  margin: 0;
+  color: var(--secondText-color);
+  font-size: 14px;
+}
+
+.uploadArea {
+  border: 2px dashed var(--inputField-border);
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+  background: var(--input-area-color);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.uploadIcon {
+  font-size: 48px;
+  color: #ccc;
+  margin-bottom: 16px;
+}
+
+.uploadText {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.uploadSubText {
+  font-size: 14px;
+  color: var(--secondText-color);
+}
+
+.errorContainer {
+  margin-top: 16px;
+  padding: 12px;
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  color: #856404;
+  font-size: 14px;
+}
+
+.pluginInfoSection {
+  margin-top: 24px;
+}
+
+.pluginInfoSection h5 {
+  margin: 0 0 16px;
+}
+
+.pluginInfoDetails {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.infoRow {
+  margin-bottom: 8px;
+}
+
+.componentList {
+  margin-top: 16px;
+}
+
+.componentItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.successIcon {
+  color: var(--icon-check);
+  margin-right: 8px;
+}
+
+.buttonGroup {
+  margin-top: 32px;
+  display: flex;
+  gap: 12px;
+}
+
+.codeBlockContainer {
+  margin-bottom: 24px;
+}
+
+.codeBlockTitle {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.codeBlockPre {
+  background: var(--input-area-color);
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.errorIcon {
+  margin-right: 8px;
+}
+
+.componentListContainer {
+  margin-top: 8px;
+}
+
+.flexButton {
+  flex: 1;
 }
