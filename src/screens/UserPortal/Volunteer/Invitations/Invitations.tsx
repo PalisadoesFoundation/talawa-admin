@@ -240,7 +240,7 @@ const Invitations = (): JSX.Element => {
                 {invite.group && invite.group.id && (
                   <>
                     <div>
-                      <FaUserGroup className="mb-1 me-1" color="grey" />
+                      <FaUserGroup className="mb-1 me-1 text-secondary" />
                       <span className="text-muted">{t('group')}:</span>{' '}
                       <span>{invite.group.name} </span>
                     </div>
@@ -249,8 +249,7 @@ const Invitations = (): JSX.Element => {
                 )}
                 <div>
                   <TbCalendarEvent
-                    className="mb-1 me-1"
-                    color="grey"
+                    className="mb-1 me-1 text-secondary"
                     size={20}
                   />
                   <span className="text-muted">{t('event')}:</span>{' '}
@@ -258,7 +257,7 @@ const Invitations = (): JSX.Element => {
                 </div>
                 |
                 <div>
-                  <FaRegClock className="mb-1 me-1" color="grey" />
+                  <FaRegClock className="mb-1 me-1 text-secondary" />
                   <span className="text-muted">{t('received')}:</span>{' '}
                   {new Date(invite.createdAt).toLocaleString()}
                 </div>
