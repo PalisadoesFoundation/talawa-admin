@@ -130,19 +130,19 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
       errorHandler(t, error);
     }
   };
-  console.log('pinnedPost.node', pinnedPost.node);
+
   return (
-    <Container sx={{ width: '340px', height: '380px' }}>
-      <Card sx={{ width: '340px', borderRadius: 2, overflow: 'hidden' }}>
+    <Container className={styles.postCardContainer}>
+      <Card className={styles.card}>
         {/* Header with user info and actions */}
         <Box
+          className={styles.cardHeader}
           sx={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
             p: 2,
             pb: 1,
-            height: '49px',
           }}
         >
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
@@ -152,14 +152,14 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
             >
               {pinnedPost.node?.creator?.name?.[0]}
             </Avatar>
-            <Typography variant="h6" sx={{ fontSize: 14 }}>
+            <Typography className={styles.creatorName}>
               {pinnedPost.node?.creator?.name}
             </Typography>
           </Box>
 
           <Box sx={{ display: 'flex', gap: 0.5 }}>
             <IconButton size="small" aria-label={t('pinnedPost')}>
-              <PushPin sx={{ fontSize: 20 }} />
+              <PushPin className={styles.pushPin} />
             </IconButton>
             {canManage && (
               <>
@@ -171,7 +171,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
                   aria-haspopup="menu"
                   aria-expanded={Boolean(dropdownAnchor)}
                 >
-                  <MoreVert sx={{ fontSize: 20 }} />
+                  <MoreVert className={styles.moreOptionsButton} />
                 </IconButton>
                 <Menu
                   anchorEl={dropdownAnchor}
@@ -240,7 +240,6 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
             {mimeType?.split('/')[0] == 'video' && (
               <video
                 controls
-                style={{ width: '100%' }}
                 crossOrigin="anonymous"
                 data-testid="post-video"
                 className={styles.postMedia}
@@ -263,7 +262,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
         )}
 
         {/* Post Content */}
-        <CardContent sx={{ height: '136px' }}>
+        <CardContent className={styles.cardContent}>
           <Typography
             sx={{
               fontWeight: 500,
@@ -294,19 +293,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
               startIcon={<Visibility />}
               onClick={() => onStoryClick(pinnedPost.node)}
               data-testid="view-post-btn"
-              sx={{
-                backgroundColor: '#A8C7FA',
-                color: 'black',
-                textTransform: 'none',
-                borderRadius: 2,
-                px: 3,
-                py: 1,
-                fontSize: '0.9rem',
-                fontWeight: 500,
-                '&:hover': {
-                  backgroundColor: '#8bb5e8',
-                },
-              }}
+              className={styles.viewPostButton}
             >
               {t('view')}
             </Button>

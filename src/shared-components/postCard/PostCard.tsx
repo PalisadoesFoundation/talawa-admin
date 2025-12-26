@@ -246,8 +246,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
 
   return (
     <Box
-      className={postCardStyles.postContainer}
-      sx={{ backgroundColor: 'background.paper' }}
+      className={`${postCardStyles.postContainer} ${postCardStyles.postContainerBackground}`}
     >
       {/* Post Header */}
 
@@ -362,7 +361,11 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           )}
 
           {props.mimeType?.split('/')[0] == 'video' && (
-            <video controls style={{ width: '100%' }} crossOrigin="anonymous">
+            <video
+              controls
+              className={postCardStyles.video}
+              crossOrigin="anonymous"
+            >
               <source src={props.attachmentURL} />
               <track kind="captions" />
             </video>
@@ -431,7 +434,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             fontSize="small"
             color="primary"
             data-testid="pinned-icon"
-            sx={{ marginLeft: 'auto' }}
+            className={postCardStyles.pinnedIcon}
           />
         )}
       </Box>
@@ -567,7 +570,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       </div>
 
       {/* Edit Post Modal */}
-      <div style={{ position: 'absolute' }}>
+      <div className={postCardStyles.editModalWrapper}>
         <CreatePostModal
           show={showEditPost}
           onHide={toggleEditPost}

@@ -323,7 +323,7 @@ export default function PostsPage() {
 
   return (
     <>
-      <Row className={styles.head} style={{ minHeight: '100vh' }}>
+      <Row className={`${styles.head} ${styles.postContainer}`}>
         <div className={styles.mainpagerightOrgPost}>
           <PageHeader
             search={{
@@ -354,7 +354,7 @@ export default function PostsPage() {
                 data-cy="createPostModalBtn"
                 className={`${styles.createButton} mb-2`}
               >
-                <Add sx={{ fontSize: '20px', marginRight: '6px' }} />
+                <Add className={styles.addPost} />
                 {t('createPost')}
               </Button>
             }
@@ -375,7 +375,7 @@ export default function PostsPage() {
               {/* Pinned Posts Carousel */}
               {pinnedPosts.length > 0 && !isFiltering && (
                 <Box sx={{ mb: 3 }}>
-                  <Typography variant="h6" sx={{ mb: 2, fontWeight: 'bold' }}>
+                  <Typography variant="h5" sx={{ mb: 2 }}>
                     {t('pinnedPosts')}
                   </Typography>
                   <PinnedPostsLayout
@@ -387,7 +387,7 @@ export default function PostsPage() {
 
               {/* Search Results Message */}
               {isFiltering && filteredPosts.length === 0 && searchTerm && (
-                <Box sx={{ textAlign: 'center', py: 4 }}>
+                <Box sx={{ py: 4 }} className={styles.noPostsFound}>
                   <Typography color="text.secondary">
                     {t('noPostsFoundMatching', { term: searchTerm })}
                   </Typography>
@@ -411,7 +411,7 @@ export default function PostsPage() {
                   loader={<InfiniteScrollLoader />}
                   endMessage={
                     postsToDisplay.length > 0 && (
-                      <Box sx={{ textAlign: 'center', py: 2 }}>
+                      <Box sx={{ py: 2 }} className={styles.noPostsFound}>
                         <Typography color="text.secondary">
                           {t('noMorePosts')}
                         </Typography>
@@ -419,7 +419,7 @@ export default function PostsPage() {
                     )
                   }
                   scrollThreshold={0.8}
-                  style={{ overflow: 'visible' }}
+                  className={styles.postInfiniteScroll}
                 >
                   <Box
                     sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
@@ -435,7 +435,7 @@ export default function PostsPage() {
               {postsToDisplay.length === 0 &&
                 !orgPostListLoading &&
                 !isFiltering && (
-                  <Box sx={{ textAlign: 'center', py: 4 }}>
+                  <Box sx={{ py: 4 }} className={styles.noPostsFound}>
                     <Typography color="text.secondary">
                       {t('noPosts')}
                     </Typography>
@@ -446,7 +446,7 @@ export default function PostsPage() {
         </div>
       </Row>
       {userId && (
-        <div style={{ position: 'absolute' }}>
+        <div className={styles.createPostModalContainer}>
           <CreatePostModal
             show={postModalIsOpen}
             onHide={hideCreatePostModal}
@@ -466,36 +466,17 @@ export default function PostsPage() {
           centered
           size="lg"
           backdrop="static"
-          style={{
-            backdropFilter: 'blur(3px)',
-          }}
+          className={styles.pinnedPostModal}
         >
-          <Modal.Body
-            style={{
-              maxHeight: '90vh',
-              overflowY: 'auto',
-              padding: '20px',
-              position: 'relative',
-            }}
-          >
+          <Modal.Body className={styles.pinnedPostModalBody}>
             <Button
               variant="light"
               onClick={handleClosePinnedModal}
               data-testid="close-pinned-post-button"
               aria-label={t('closePinnedPost')}
-              className="position-absolute top-0 end-0 m-2 btn-close-custom"
-              style={{
-                backgroundColor: 'rgba(0,0,0,0.1)',
-                border: 'none',
-                borderRadius: '50%',
-                width: '32px',
-                height: '32px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
+              className={`position-absolute top-0 end-0 m-2 btn-close-custom ${styles.closeButton}`}
             >
-              <Close sx={{ fontSize: 20 }} aria-hidden="true" />
+              <Close className={styles.closeButtonIcon} aria-hidden="true" />
             </Button>
             {/* Render the pinned post */}
             <PostCard {...formatPostForCard(selectedPinnedPost)} />

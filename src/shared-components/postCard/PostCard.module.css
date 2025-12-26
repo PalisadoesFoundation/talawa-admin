@@ -125,3 +125,38 @@
   gap: 8px;
   margin-top: 16px;
 }
+
+.video {
+  width: 100%;
+}
+
+.postContainerBackground {
+  background-color: var(--bs-white);
+}
+
+.pinnedIcon {
+  margin-left: auto;
+}
+
+.editModalWrapper {
+  position: absolute;
+}
+
+.closeButton {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+  border: none !important;
+  border-radius: 50% !important;
+  width: 32px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.closeButton:hover {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+}
+
+.closeButtonIcon {
+  font-size: 20px !important;
+}
