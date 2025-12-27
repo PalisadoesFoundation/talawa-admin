@@ -121,5 +121,8 @@
   "loadingUserPlugin": "Loading user plugin...",
   "unblock": "Unblock",
   "unblockedSuccessfully": "{{item}} unblocked successfully",
-  "pluginSettings": "Plugin Settings"
+  "pluginSettings": "Plugin Settings",
+  "moreOptions": "More options",
+  "scrollLeft": "Scroll left",
+  "scrollRight": "Scroll right"
 }

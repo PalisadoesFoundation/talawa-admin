@@ -11,29 +11,24 @@ describe('Admin Event Tab', () => {
     eventPage.visitEventPage();
   });
 
-  it('create, update, and delete an event', () => {
-    // Create event
+  it('create an event with all fields', () => {
     eventPage.createEvent(
       'Testing Event Creation',
       'This is a test event created during E2E testing.',
       'Test Location',
     );
+  });
 
-    // Visit events page to see the created event
-    eventPage.visitEventPage();
-
-    // Update the event
+  it('update the created event', () => {
     eventPage.updateEvent(
       'Testing Event Creation',
       'Updated Event Name',
       'This is a test event created during E2E testing. Updated.',
       'Updated Location',
     );
+  });
 
-    // Visit events page to see the updated event
-    eventPage.visitEventPage();
-
-    // Delete the event
+  it('delete the created event', () => {
     eventPage.deleteEvent('Updated Event Name');
   });
 

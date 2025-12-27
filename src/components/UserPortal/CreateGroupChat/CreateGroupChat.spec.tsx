@@ -107,6 +107,7 @@ const ORGANIZATION_MEMBERS_MOCK = {
       },
     },
   },
+  maxUsageCount: Number.POSITIVE_INFINITY,
 };
 
 const ORGANIZATION_MEMBERS_SEARCH_MOCK = {

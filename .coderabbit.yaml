@@ -26,106 +26,112 @@ reviews:
   path_instructions:
     - path: '**/*'
       instructions: |
-        Review and reevaluate all resolved items and include the following points:
+        Full review and reevaluate all resolved items and include the following points:
 
         1. **Test Coverage & Quality Validation:**
-          1. Validate whether any updated test files:
-              1. Cover all use cases including edge cases, error scenarios, and success paths
-              2. Have valid, properly structured tests following Jest and React Testing Library best practices
-              3. Provide 100% test code coverage for all modified/added functions, components, and branches
-              4. Include proper mocking of GraphQL queries/mutations, external dependencies, and API calls
-              5. Test both user interactions and state changes comprehensively
-              6. Require any additional tests for uncovered scenarios
-          2. For each modified file with logic or UI, verify corresponding test files exist and are updated
-          3. Check that test files follow naming conventions (*.test.tsx, *.test.ts, *.spec.tsx, *.spec.ts)
-          4. Validate that tests don't include disabled tests (it.skip, describe.skip) unless explicitly documented
-          5. Ensure mock data cleanup is performed (as required by pre-commit hooks)
+            1. Validate whether any updated test files:
+                1. Cover all use cases including edge cases, error scenarios, and success paths
+                2. Have valid, properly structured tests following Jest and React Testing Library best practices
+                3. Provide 100% test code coverage for all modified/added functions, components, and branches
+                4. Include proper mocking of GraphQL queries/mutations, external dependencies, and API calls
+                5. Test both user interactions and state changes comprehensively
+                6. Require any additional tests for uncovered scenarios
+            1. For each modified file with logic or UI, verify corresponding test files exist and are updated:
+                1. Check that test files follow naming conventions (_.test.tsx, _.test.ts, _.spec.tsx, _.spec.ts)
+                1. Validate that tests don't include disabled tests (it.skip, describe.skip) unless explicitly documented
+                1. Ensure mock data cleanup is performed (as required by pre-commit hooks)
 
-        2. **Code Quality & Repository Standards:**
-          1. Verify TypeScript compliance:
-              1. No use of `any` type without explicit justification
-              2. Proper interface/type definitions for all props, state, and function parameters
-              3. No TypeScript errors or warnings
-          2. Validate GraphQL implementation:
-              1. Queries/mutations are properly typed and follow existing patterns in src/GraphQl/
-              2. No duplicate or redundant queries (check for pagination inconsistencies)
-              3. Error handling is implemented for all GraphQL operations
-          3. Check React component best practices:
-              1. Functional components with proper hooks usage
-              2. Material-UI component patterns are followed consistently
-              3. No prop drilling; proper use of context when needed
-              4. Proper cleanup in useEffect hooks
-          4. Verify internationalization (i18n):
-              1. All user-facing strings use i18next translation keys
-              2. New translation keys are added to locale files
-              3. No hardcoded English text in UI components
-          5. Validate accessibility:
-              1. Proper ARIA labels and roles
-              2. Keyboard navigation support
-              3. Screen reader compatibility
+        1. **Code Quality & Repository Standards:**
+            1. Verify TypeScript compliance:
+                1. No use of `any` type without explicit justification
+                2. Proper interface/type definitions for all props, state, and function parameters
+                3. No TypeScript errors or warnings
+            1. Validate GraphQL implementation:
+                1. Queries/mutations are properly typed and follow existing patterns in src/GraphQl/
+                2. No duplicate or redundant queries (check for pagination inconsistencies)
+                3. Error handling is implemented for all GraphQL operations
+            1. Check React component best practices:
+                1. Functional components with proper hooks usage
+                2. Material-UI component patterns are followed consistently
+                3. No prop drilling; proper use of context when needed
+                4. Proper cleanup in useEffect hooks
+            1. Verify internationalization (i18n):
+                1. All user-facing strings use i18next translation keys
+                2. New translation keys are added to locale files
+                3. No hardcoded English text in UI components
+            1. Validate accessibility:
+                1. Proper ARIA labels and roles
+                2. Keyboard navigation support
+                3. Screen reader compatibility
+          
+        1. **Documentation & Code Comments:**
+            1. Verify auto-generated documentation is updated (as enforced by Check-AutoDocs job)
+            2. Check for adequate JSDoc comments on public functions and complex logic
+            3. Ensure README.md or related docs are updated if new features are added
+            4. Validate that Table of Contents is updated (as required by pre-commit hooks)
 
-        3. **Documentation & Code Comments:**
-          1. Verify auto-generated documentation is updated (as enforced by Check-AutoDocs job)
-          2. Check for adequate JSDoc comments on public functions and complex logic
-          3. Ensure README.md or related docs are updated if new features are added
-          4. Validate that Table of Contents is updated (as required by pre-commit hooks)
+        1. **Identify Issues:**
+            1. Lines of code that are missing tests (list specific line numbers)
+            2. Any unnecessary files that have been submitted (build artifacts, node_modules, .env files, IDE configs)
+            3. Unused imports or dead code (as checked by knip)
+            4. Console.log statements or debug code left in production files
+            5. Files that should be excluded from the PR scope
 
-        4. **Identify Issues:**
-          1. Lines of code that are missing tests (list specific line numbers)
-          2. Any unnecessary files that have been submitted (build artifacts, node_modules, .env files, IDE configs)
-          3. Unused imports or dead code (as checked by knip)
-          4. Console.log statements or debug code left in production files
-          5. Files that should be excluded from the PR scope
+        1. **PR Requirements Validation:**
+            1. Verify the PR meets the requirements of the linked issue:
+                1. All acceptance criteria are addressed
+                2. No out-of-scope changes are included
+            2. Validate compliance with all previously suggested improvements and comments:
+                1. All review comments have been addressed
+                2. Requested changes have been implemented correctly
+            3. Check PR metadata:
+                1. Proper title and description
+                2. Linked to appropriate issue(s)
+                3. Target branch is correct (typically `develop`)
+            4. Verify no sensitive information is exposed (as checked by Check-Sensitive-Files job)
 
-        5. **PR Requirements Validation:**
-          1. Verify the PR meets the requirements of the linked issue:
-              1. All acceptance criteria are addressed
-              2. No out-of-scope changes are included
-          2. Validate compliance with all previously suggested improvements and comments:
-              1. All review comments have been addressed
-              2. Requested changes have been implemented correctly
-          3. Check PR metadata:
-              1. Proper title and description
-              2. Linked to appropriate issue(s)
-              3. Target branch is correct (typically `develop`)
-          4. Verify no sensitive information is exposed (as checked by Check-Sensitive-Files job)
+        1. **CI/CD Pipeline Compatibility:**
+            1. Validate that code changes won't break any of the 17+ CI jobs
+            2. Ensure pre-commit hook requirements are met:
+                1. Code formatting (Prettier)
+                2. Linting (ESLint)
+                3. Type checking (TypeScript)
+            3. Check that changes don't introduce performance regressions for the 12-shard test execution
 
-        6. **CI/CD Pipeline Compatibility:**
-          1. Validate that code changes won't break any of the 17+ CI jobs
-          2. Ensure pre-commit hook requirements are met:
-              1. Code formatting (Prettier)
-              2. Linting (ESLint)
-              3. Type checking (TypeScript)
-          3. Check that changes don't introduce performance regressions for the 12-shard test execution
+        1. **Security & Best Practices:**
+            1. No security vulnerabilities introduced
+            2. No exposed API keys, tokens, or credentials
+            3. Proper input validation and sanitization
+            4. No SQL injection or XSS vulnerabilities in any data handling
 
-        7. **Security & Best Practices:**
-          1. No security vulnerabilities introduced
-          2. No exposed API keys, tokens, or credentials
-          3. Proper input validation and sanitization
-          4. No SQL injection or XSS vulnerabilities in any data handling
+        1. **Implementation Correctness:**
+            1. For the specific implementation file(s) being tested:
+                1. Verify the implementation logic is correct and free of bugs
+                1. Validate that queries target the correct database tables/entities
+                1. Check that foreign key relationships are correctly enforced
+                1. Confirm business logic constraints are properly implemented
+                1. Any bugs, logic errors, or incorrect implementations discovered in the file(s) under test MUST be fixed in this PR before approval
 
-        8. **Implementation Correctness:** 
-            - For the specific implementation file(s) being tested:
-                - Verify the implementation logic is correct and free of bugs
-                - Validate that queries target the correct database tables/entities
-                - Check that foreign key relationships are correctly enforced
-                - Confirm business logic constraints are properly implemented
-                - Any bugs, logic errors, or incorrect implementations discovered in the file(s) under test MUST be fixed in this PR before approval
-
-        9. **Review Decision:**
-            1. When critical issues are found, clearly state that changes are required in your response but DO NOT append  the APPROVED tag.
-            1.  Only append  the APPROVED tag when ALL criteria are satisfied and zero changes are required:
+        1. **Review Decision:**
+            1. When critical issues are found, clearly state that changes are required in your response but DO NOT append the [approve] tag.
+            1. Only append the [approve] tag when ALL criteria are satisfied and zero changes are required:
                 1. Complete test coverage (≥95%)
-                1. No code quality issues, security concerns, or bugs
-                1. No bugs or logic errors in the implementation file(s) under test
-                1. Full implementation of issue requirements
-                1. Compliance with all previous feedback
-                1. No unnecessary files
+                2. No code quality issues, security concerns, or bugs
+                3. Full implementation of issue requirements
+                4. No bugs or logic errors in the implementation file(s) under test
+                5. Compliance with all previous feedback
+                6. No unnecessary files
 
-        10. **Focus Areas:**
-          - Prioritize substantive issues over minor stylistic suggestions
-          - Focus on issues that would cause CI pipeline failures or production bugs
-          - Highlight any deviations from established codebase patterns
+        1. **Approvals:**
+            1. Approve the PR by appending the text "APPROVED" below your response only if:
+            2. All criteria above are fully satisfied
+            3. The implementation file(s) under test are correct and bug-free
+            4. No changes, even trivial ones, are required
+
+        1. **Focus Areas:**
+            1. Prioritize substantive issues over minor stylistic suggestions
+            2. Focus on issues that would cause CI pipeline failures or production bugs
+            3. Highlight any deviations from established codebase patterns
 
         **Note:** Test-focused PRs should maintain clear scope boundaries. However, this does NOT exempt bugs in the specific file(s) being tested - those must be fixed in the same PR. Only bugs in unrelated files may be deferred to separate issues.
 

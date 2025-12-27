@@ -121,5 +121,8 @@
   "unblock": "Desbloquear",
   "unblockedSuccessfully": "{{item}} desbloqueado exitosamente",
   "pluginSettings": "Configuración de complementos",
-  "loadingUserPlugin": "Cargando complemento de usuario..."
+  "loadingUserPlugin": "Cargando complemento de usuario...",
+  "moreOptions": "Más opciones",
+  "scrollLeft": "Desplazar a la izquierda",
+  "scrollRight": "Desplazar a la derecha"
 }

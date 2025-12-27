@@ -354,11 +354,8 @@ describe('Organisation Venues', () => {
   test('calls handleDelete when delete button is clicked', async () => {
     renderOrganizationVenue(link);
     await waitFor(() =>
-      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
+      expect(screen.getByTestId('venue-item1')).toBeInTheDocument(),
     );
-
-    // Verify venue is initially present
-    expect(screen.getByTestId('venue-item1')).toBeInTheDocument();
 
     const deleteButton = screen.getByTestId('deleteVenueBtn1');
 
@@ -373,7 +370,7 @@ describe('Organisation Venues', () => {
 
   test('displays loader when data is loading', () => {
     renderOrganizationVenue(link);
-    expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
+    expect(screen.getByTestId('loading-state')).toBeInTheDocument();
   });
 
   // test('renders without crashing', async () => {
@@ -494,7 +491,7 @@ describe('Organisation Venues Error Handling', () => {
     renderOrganizationVenue(link);
 
     // First verify loading state
-    expect(screen.getByTestId('spinner-wrapper')).toBeInTheDocument();
+    expect(screen.getByTestId('loading-state')).toBeInTheDocument();
 
     // Then verify venues are rendered
     await waitFor(() => {
