@@ -61,7 +61,9 @@
     "OR": "或",
     "admin": "管理员",
     "user": "用户",
-    "loading": "加载中"
+    "loading": "加载中",
+    "communityLogo": "社区标志",
+    "organizations": "组织"
   },
   "signOut": {
     "retryPrompt": "撤銷工作階段失敗。要重試嗎？",
