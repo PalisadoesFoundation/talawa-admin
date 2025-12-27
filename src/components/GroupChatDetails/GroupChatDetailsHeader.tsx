@@ -110,20 +110,37 @@ export default function GroupChatDetailsHeader({
                 data-testid="chatNameInput"
                 onChange={(e) => setChatName(e.target.value)}
               />
-              <FaCheck data-testid="updateTitleBtn" onClick={onSaveTitle} />
-              <FaX
+              <button
+                type="button"
+                aria-label={t('saveTitle')}
+                data-testid="updateTitleBtn"
+                className={styles.iconButton}
+                onClick={onSaveTitle}
+              >
+                <FaCheck />
+              </button>
+              <button
+                type="button"
+                aria-label={t('cancelEdit')}
                 data-testid="cancelEditBtn"
-                className={styles.cancelIcon}
+                className={`${styles.iconButton} ${styles.cancelIcon}`}
                 onClick={onCancelEdit}
-              />
+              >
+                <FaX />
+              </button>
             </div>
           ) : (
             <div className={styles.editChatNameContainer}>
               <h3>{chat?.name}</h3>
-              <FiEdit
+              <button
+                type="button"
+                aria-label={t('editTitle')}
                 data-testid="editTitleBtn"
+                className={styles.iconButton}
                 onClick={() => setEditChatTitle(true)}
-              />
+              >
+                <FiEdit />
+              </button>
             </div>
           )}
 

@@ -7,10 +7,11 @@ function debounceFn<TArgs extends unknown[]>(
   wait = 300,
 ): ((...args: TArgs) => void) & { cancel: () => void } {
   let timeout: ReturnType<typeof setTimeout> | null = null;
-  const debounced = ((...args: TArgs) => {
+
+  const debounced = function (...args: TArgs) {
     if (timeout) clearTimeout(timeout);
     timeout = setTimeout(() => func(...args), wait);
-  }) as ((...args: TArgs) => void) & { cancel: () => void };
+  } as ((...args: TArgs) => void) & { cancel?: () => void };
 
   debounced.cancel = () => {
     if (timeout) {
@@ -19,7 +20,7 @@ function debounceFn<TArgs extends unknown[]>(
     }
   };
 
-  return debounced;
+  return debounced as ((...args: TArgs) => void) & { cancel: () => void };
 }
 import { useTranslation } from 'react-i18next';
 import SearchBar from 'shared-components/SearchBar/SearchBar';

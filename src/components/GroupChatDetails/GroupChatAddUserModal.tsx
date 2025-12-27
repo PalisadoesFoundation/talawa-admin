@@ -131,21 +131,9 @@ export default function GroupChatAddUserModal(
                     allUsersData.organization?.members?.edges?.length > 0 &&
                     allUsersData.organization.members.edges
                       .filter(
-                        ({
-                          node: userDetails,
-                        }: {
-                          node: {
-                            id: string;
-                            name: string;
-                            avatarURL?: string;
-                            role: string;
-                          };
-                        }) =>
-                          userDetails.id !==
-                            chat.members.edges.find((e) => e.node.user)?.node
-                              .user.id &&
+                        ({ node: userDetails }: { node: { id: string } }) =>
                           !chat.members.edges.some(
-                            (edge) => edge.node.user.id === userDetails.id,
+                            (edge) => edge.node.user?.id === userDetails.id,
                           ),
                       )
                       .map(
@@ -176,7 +164,7 @@ export default function GroupChatAddUserModal(
                             >
                               {userDetails.name}
                               <br />
-                              {userDetails.role || 'Member'}
+                              {userDetails.role || t('member')}
                             </TableCell>
                             <TableCell
                               align="center"

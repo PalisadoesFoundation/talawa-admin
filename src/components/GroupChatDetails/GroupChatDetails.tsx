@@ -297,6 +297,8 @@ export default function groupChatDetails({
               onClick={() => {
                 openAddUserModal();
               }}
+              role="button"
+              aria-label={t('addMembers')}
             >
               <Add /> {t('addMembers')}
             </ListGroup.Item>
@@ -333,6 +335,7 @@ export default function groupChatDetails({
                           variant="link"
                           id={`dropdown-${user.id}`}
                           className={`btn-sm ${styles.cursorPointer}`}
+                          aria-label={t('memberOptions')}
                         >
                           <BsThreeDotsVertical />
                         </Dropdown.Toggle>
