@@ -1,21 +1,29 @@
 import React from 'react';
-import { FormCheckBoxProps } from 'types/FormFieldGroup/interface';
+import { FormCheckBoxProps } from './types';
 import { Form } from 'react-bootstrap';
 
-const FormCheckbox: React.FC<
-  FormCheckBoxProps & { children: React.ReactNode }
-> = ({
+export const FormCheckbox: React.FC<FormCheckBoxProps> = ({
   containerClass,
   labelText,
-  labelProps,
+  error,
+  touched,
+  id,
   ...checkBoxProps
 }) => {
   return (
     <div className={containerClass}>
-      <label {...labelProps}>{labelText}?</label>
-      <Form.Switch {...checkBoxProps} />
+      <Form.Check 
+        {...checkBoxProps}
+        id={id}
+        type="checkbox"
+        label={labelText}
+        isInvalid={!!(touched && error)}
+      />
+      {touched && error && (
+        <Form.Control.Feedback type="invalid" className="d-block">
+          {error}
+        </Form.Control.Feedback>
+      )}
     </div>
   );
 };
-
-export default FormCheckbox;
