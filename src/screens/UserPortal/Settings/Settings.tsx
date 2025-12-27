@@ -294,11 +294,7 @@ export default function Settings(): React.JSX.Element {
       <div
         className={`d-flex flex-row ${styles.containerHeight} ${
           hideDrawer ? styles.expand : styles.contract
-        }`}
-        style={{
-          marginLeft: hideDrawer ? '100px' : '20px',
-          paddingTop: '20px',
-        }}
+        } pt-4`}
       >
         <div className={styles.mainContainer}>
           <ProfileHeader title={tCommon('settings')} />

@@ -369,7 +369,6 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                               <Button
                                 variant="success"
                                 size="sm"
-                                style={{ minWidth: '32px' }}
                                 className="me-2 rounded"
                                 data-testid={`acceptBtn`}
                                 onClick={() =>
@@ -387,7 +386,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                                   updateMembershipStatus(request.id, 'rejected')
                                 }
                               >
-                                <FaXmark size={18} fontWeight={900} />
+                                <FaXmark size={18} className="fw-bold" />
                               </Button>
                             </div>
                           </TableCell>
