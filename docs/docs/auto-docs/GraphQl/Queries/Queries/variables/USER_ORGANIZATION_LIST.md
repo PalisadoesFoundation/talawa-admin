@@ -2,8 +2,8 @@
 
 ***
 
-# Variable: USER\_ORGANIZATION\_LIST
+# Variable: GET\_COMMUNITY\_DATA\_PG
 
-> `const` **USER\_ORGANIZATION\_LIST**: `DocumentNode`
+> `const` **GET\_COMMUNITY\_DATA\_PG**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/Queries.ts:932](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L932)
+Defined in: [src/GraphQl/Queries/Queries.ts:1133](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L1133)
