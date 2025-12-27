@@ -253,7 +253,6 @@ async function wait(ms = 100): Promise<void> {
 beforeEach(() => {
   setItem('id', 'user1');
   setItem('role', 'administrator');
-  setItem('admin', false);
   vi.clearAllMocks();
 });
 
