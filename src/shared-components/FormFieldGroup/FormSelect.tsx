@@ -1,17 +1,12 @@
 import { Autocomplete } from '@mui/material';
 import React from 'react';
 import { Form } from 'react-bootstrap';
-import { FormSelectProps } from '../../types/FormFieldGroup/interface';
+import { FormSelectProps } from './types';
 
-const FormSelect: React.FC<FormSelectProps> = ({
-  // FormFieldGroupProps
+export const FormSelect: React.FC<FormSelectProps> = ({
   groupClass,
-
-  // CommonInputProps
   disabled,
   className,
-  
-  // Autocomplete-specific props
   options,
   value,
   multiple,
@@ -21,8 +16,6 @@ const FormSelect: React.FC<FormSelectProps> = ({
   getOptionLabel,
   onChange,
   renderInput,
-  
-  // Data attributes
   ...dataAttributes
 }) => {
   return (
@@ -44,5 +37,3 @@ const FormSelect: React.FC<FormSelectProps> = ({
     </Form.Group>
   );
 };
-
-export default FormSelect;
