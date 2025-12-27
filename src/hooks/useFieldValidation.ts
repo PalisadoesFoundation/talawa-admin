@@ -7,6 +7,11 @@ import type {
 
 /**
  * Generic hook to manage field-level validation state.
+ *
+ * @param validator - Function that validates a field value
+ * @param value - Current field value
+ * @param trigger - Validation trigger strategy
+ * @returns Validation error state and helper functions
  */
 export function useFieldValidation<T>(
   validator: (value: T) => IValidationResult,
@@ -21,15 +26,15 @@ export function useFieldValidation<T>(
     return result.isValid;
   }, [validator, value]);
 
-  const clearError = useCallback((): void => {
-    setError(null);
-  }, []);
-
   useEffect(() => {
     if (trigger === 'onChange') {
       validate();
     }
   }, [value, trigger, validate]);
+
+  const clearError = useCallback((): void => {
+    setError(null);
+  }, []);
 
   return {
     error,

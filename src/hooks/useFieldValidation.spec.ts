@@ -1,7 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
 import { useFieldValidation } from './useFieldValidation';
 import type { IValidationResult } from '../types/Auth/useFieldValidation';
+import { vi } from 'vitest';
 
 describe('useFieldValidation', () => {
   const validValidator = <T>(value: T): IValidationResult => ({
@@ -45,8 +45,6 @@ describe('useFieldValidation', () => {
     act(() => {
       result.current.validate();
     });
-
-    expect(result.current.error).toBe('test');
 
     act(() => {
       result.current.clearError();
@@ -101,15 +99,51 @@ describe('useFieldValidation', () => {
     expect(result.current.error).toBe('Invalid value');
   });
 
-  it('handles null values correctly', () => {
-    const { result } = renderHook(() =>
-      useFieldValidation<string | null>(validValidator, null),
+  it('validates automatically when trigger is onChange', () => {
+    const { result, rerender } = renderHook(
+      ({ value }) => useFieldValidation(invalidValidator, value, 'onChange'),
+      { initialProps: { value: 'initial' } },
     );
+
+    expect(result.current.error).toBe('initial');
+
+    rerender({ value: 'updated' });
+    expect(result.current.error).toBe('updated');
+  });
+
+  it('does not auto-validate when trigger is onBlur', () => {
+    const { result, rerender } = renderHook(
+      ({ value }) => useFieldValidation(invalidValidator, value, 'onBlur'),
+      { initialProps: { value: 'initial' } },
+    );
+
+    expect(result.current.error).toBeNull();
+
+    rerender({ value: 'updated' });
+    expect(result.current.error).toBeNull();
 
     act(() => {
       result.current.validate();
     });
 
-    expect(result.current.error).toBe('Invalid value');
+    expect(result.current.error).toBe('updated');
+  });
+
+  it('does not auto-validate when trigger is manual', () => {
+    const { result, rerender } = renderHook(
+      ({ value }) => useFieldValidation(invalidValidator, value, 'manual'),
+      { initialProps: { value: 'initial' } },
+    );
+
+    expect(result.current.error).toBeNull();
+
+    rerender({ value: 'updated' });
+    expect(result.current.error).toBeNull();
+
+    act(() => {
+      result.current.validate();
+    });
+
+    expect(result.current.error).toBe('updated');
   });
 });

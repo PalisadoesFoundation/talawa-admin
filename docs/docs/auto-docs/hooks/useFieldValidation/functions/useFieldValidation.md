@@ -22,7 +22,7 @@ Generic hook to manage field-level validation state.
 
 (`value`) => [`IValidationResult`](../../../types/Auth/useFieldValidation/interfaces/IValidationResult.md)
 
-Validation function for the field value
+Function that validates a field value
 
 ### value
 
