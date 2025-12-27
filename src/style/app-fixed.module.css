@@ -1691,7 +1691,9 @@ form label,
 }
 
 /* Not Found */
-
+/**
+*Pages still using .notFound class are - screens/UserPortal/Campaigns, screens/BlockUser
+*/
 .notFound {
   flex: 1;
   display: flex;
@@ -10654,4 +10656,10 @@ form {
 /* Background paper - matches MUI background.paper */
 .backgroundPaper {
   background-color: var(--popup-bg, #fff);
+}
+
+.addIconStyle {
+  font-size: 25px;
+  margin-bottom: 2px;
+  margin-right: 2px;
 }
