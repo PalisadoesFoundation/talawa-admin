@@ -9,7 +9,14 @@
     "weekly": "इस सप्ताह",
     "monthly": "इस माह",
     "yearly": "इस वर्ष",
-    "noVolunteers": "कोई स्वयंसेवक नहीं मिला!"
+    "noVolunteers": "कोई स्वयंसेवक नहीं मिला",
+    "goldMedal": "सोना",
+    "silverMedal": "चांदी",
+    "bronzeMedal": "कांस्य",
+    "rank": "रैंक",
+    "volunteer": "स्वयंसेवक",
+    "email": "ईमेल",
+    "hoursVolunteered": "स्वयंसेवक घंटे"
   },
   "loginPage": {
     "title": "तालावा व्यवस्थापक",
@@ -54,11 +61,7 @@
     "OR": "या",
     "admin": "व्यवस्थापक",
     "user": "उपयोगकर्ता",
-    "loading": "लोड हो रहा है",
-    "communityLogo": "समुदाय लोगो",
-    "organizations": "संगठन",
-    "accountLocked": "बहुत अधिक असफल लॉगिन प्रयासों के कारण आपका खाता अस्थायी रूप से लॉक कर दिया गया है। कृपया बाद में पुनः प्रयास करें।",
-    "accountLockedWithTimer": "आपका खाता अस्थायी रूप से लॉक कर दिया गया है। कृपया {{minutes}} मिनट में पुनः प्रयास करें।"
+    "loading": "लोड हो रहा है"
   },
   "signOut": {
     "retryPrompt": "सेशन रद्द करने में विफल। पुनः प्रयास करें?",
@@ -226,8 +229,7 @@
     "name": "नाम",
     "email": "ईमेल",
     "profilePictureAlt": "{{name}} की प्रोफ़ाइल छवि",
-    "placeholderAvatarAlt": "प्लेसहोल्डर अवतार",
-    "newMembersWillAppearHere": "नई सदस्यता अनुरोध यहाँ दिखाई देंगे"
+    "placeholderAvatarAlt": "प्लेसहोल्डर अवतार"
   },
   "users": {
     "membershipStatus": {
@@ -658,6 +660,7 @@
     "deleteThisAndFollowing": "इस और सभी निम्नलिखित ईवेंट्स को हटाएं",
     "deleteAllEvents": "इस सीरीज़ के सभी ईवेंट्स को हटाएं",
     "editEvent": "इवेंट संपादित करें",
+    "showEventDashboard": "इवेंट डैशबोर्ड दिखाएं",
     "updateEvent": "ईवेंट अपडेट करें",
     "updateRecurringEventMsg": "यह एक आवर्ती ईवेंट है। चुनें कि आप इसे कैसे अपडेट करना चाहते हैं:",
     "updateThisInstance": "केवल इस इंस्टेंस को अपडेट करें",
@@ -723,8 +726,7 @@
     "viewCampaigns": "कैम्पेंस देखें",
     "assocCampaigns": "संबद्ध अभियान",
     "errorLoadingFundsData": "फंड डेटा लोड करते समय त्रुटि हुई",
-    "editFund": "फंड संपादित करें",
-    "searchFunds": "फंड खोजें"
+    "editFund": "फंड संपादित करें"
   },
   "fundCampaign": {
     "title": "फंडरेजिंग कैंपेन",
@@ -748,10 +750,7 @@
     "latestEndDate": "अंतिम समाप्ति तिथि",
     "earliestEndDate": "सबसे पहली समाप्ति तिथि",
     "lowestGoal": "सबसे कम उद्देश्य",
-    "highestGoal": "सबसे ऊंचा उद्देश्य",
-    "editCampaign": "अभियान संपादित करें",
-    "searchCampaigns": "अभियान खोजें",
-    "errorLoading": "अभियान डेटा लोड करते समय त्रुटि हुई"
+    "highestGoal": "सबसे ऊंचा उद्देश्य"
   },
   "pledges": {
     "title": "निधि अभियान प्रतिज्ञाएँ",
@@ -784,7 +783,12 @@
     "startDate": "प्रारंभ तिथि",
     "endDate": "समाप्ति तिथि",
     "searchByPlaceholder": "{{field}} द्वारा खोजें",
-    "selectPledger": "कृपया एक प्रतिज्ञाकर्ता का चयन करें"
+    "selectPledger": "कृपया एक प्रतिज्ञाकर्ता का चयन करें",
+    "moreUsers": "+{{count}} और...",
+    "togglePledgedRaised": "प्रतिबद्ध और उठाई गई राशि के बीच टॉगल करें",
+    "pledgeDate": "प्रतिज्ञा तिथि",
+    "pledged": "प्रतिबद्ध",
+    "donated": "दान किया गया"
   },
   "createPostModal": {
     "title": "पदों",
@@ -892,6 +896,7 @@
     "searchByFirstName": "प्रथम नाम से खोजें",
     "searchByLastName": "अंतिम नाम से खोजें",
     "noSpammerFound": "कोई स्पैमर नहीं मिला",
+    "noUsersFound": "कोई उपयोगकर्ता नहीं मिला",
     "searchByName": "नाम से खोजें",
     "name": "नाम",
     "email": "ईमेल",
@@ -1085,8 +1090,7 @@
     "unassignUserTagMessage": "क्या आप इस उपयोगकर्ता से टैग हटाना चाहते हैं?",
     "successfullyUnassigned": "उपयोगकर्ता से टैग हटा दिया गया",
     "tagsAssigned": "टैग सौंपे गए",
-    "noTagsAssigned": "कोई टैग सौंपा नहीं गया",
-    "actions": "कार्रवाई"
+    "noTagsAssigned": "कोई टैग सौंपा नहीं गया"
   },
   "people": {
     "title": "लोग",
@@ -1240,7 +1244,7 @@
     "event": "आयोजन",
     "article": "लेख",
     "postNowVisibleInFeed": "पोस्ट अब फीड में दिखाई दे रहा है",
-    "processingPost": "आपकी पोस्ट प्रसंस्करण हो रही है। कृपया प्रतीक्षा करें।"
+    "processingPost": "आपकी पोस्ट प्रसंस्करण कर रहे हैं। कृपया प्रतीक्षा करें।"
   },
   "eventAttendance": {
     "historical_statistics": "ऐतिहासिक आंकड़े",
@@ -1664,13 +1668,7 @@
     "viewPledges": "प्रतिज्ञाएँ देखें",
     "noPledges": "कोई प्रतिज्ञा नहीं मिली",
     "noCampaigns": "कोई अभियान नहीं मिला",
-    "searchCampaigns": "अभियान खोजें",
-    "campaignName": "अभियान का नाम",
-    "startDate": "आरंभ करने की तिथि",
-    "endDate": "अंतिम तिथि",
-    "fundingGoal": "निधि लक्ष्य",
-    "raised": "जुठाई गई राशि",
-    "viewPledge": "प्रतिज्ञा देखें",
+    "raised": "एकत्रित",
     "amountRaised": "एकत्रित राशि"
   },
   "userPledges": {
@@ -1680,6 +1678,7 @@
     "title": "संगठन छोड़ें"
   },
   "eventVolunteers": {
+    "toggleGroupAriaLabel": "स्वयंसेवक दृश्य चयनकर्ता",
     "volunteers": "स्वयंसेवक",
     "volunteer": "स्वयंसेवक",
     "volunteerGroups": "स्वयंसेवक समूह",
@@ -1820,6 +1819,8 @@
   "common": {
     "signOut": "साइन आउट",
     "signingOut": "साइन आउट हो रहा है...",
-    "retryPrompt": "सेशन रद्द करने में विफल। पुनः प्रयास करें?"
+    "retryPrompt": "सेशन रद्द करना विफल रहा। पुनः प्रयास करें?",
+    "breadcrumb": "ब्रेडक्रम्ब",
+    "action": "क्रिया"
   }
 }

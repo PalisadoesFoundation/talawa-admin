@@ -56,17 +56,20 @@ import bronze from 'assets/images/bronze.png';
 import type { InterfaceVolunteerRank } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import leaderboardStyles from './Leaderboard.module.css';
+
 import Loader from 'components/Loader/Loader';
+import Avatar from 'components/Avatar/Avatar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+
 import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Stack } from '@mui/material';
-import Avatar from 'components/Avatar/Avatar';
+
 import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 import { useQuery } from '@apollo/client';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
 enum TimeFrame {
   All = 'allTime',
@@ -75,56 +78,38 @@ enum TimeFrame {
   Yearly = 'yearly',
 }
 
-function leaderboard(): JSX.Element {
+function Leaderboard(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'leaderboard' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
-  // Get the organization ID from URL parameters
   const { orgId } = useParams();
-
-  if (!orgId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   const navigate = useNavigate();
-  const [searchTerm, setSearchTerm] = useState<string>('');
+
+  const [searchTerm, setSearchTerm] = useState('');
   const [sortBy, setSortBy] = useState<'hours_ASC' | 'hours_DESC'>(
     'hours_DESC',
   );
   const [timeFrame, setTimeFrame] = useState<TimeFrame>(TimeFrame.All);
 
-  /**
-   * Query to fetch volunteer rankings.
-   */
-  const {
-    data: rankingsData,
-    loading: rankingsLoading,
-    error: rankingsError,
-  }: {
-    data?: { getVolunteerRanks: InterfaceVolunteerRank[] };
-    loading: boolean;
-    error?: Error | undefined;
-  } = useQuery(VOLUNTEER_RANKING, {
+  const { data, loading, error } = useQuery(VOLUNTEER_RANKING, {
     variables: {
       orgId,
       where: {
         orderBy: sortBy,
-        timeFrame: timeFrame,
+        timeFrame,
         nameContains: searchTerm,
       },
     },
+    skip: !orgId,
   });
 
-  const rankings = useMemo(
-    () => rankingsData?.getVolunteerRanks || [],
-    [rankingsData],
-  );
+  const rankings = useMemo(() => data?.getVolunteerRanks ?? [], [data]);
 
   const leaderboardDropdowns = useMemo(
     () => [
       {
-        id: 'leaderboard-sort-dropdown',
+        id: 'leaderboard-sort',
         label: tCommon('sort'),
         type: 'sort' as const,
         options: [
@@ -133,11 +118,11 @@ function leaderboard(): JSX.Element {
         ],
         selectedOption: sortBy,
         onOptionChange: (value: string | number) =>
-          setSortBy(value as 'hours_DESC' | 'hours_ASC'),
+          setSortBy(value as 'hours_ASC' | 'hours_DESC'),
         dataTestIdPrefix: 'sort',
       },
       {
-        id: 'leaderboard-timeframe-dropdown',
+        id: 'leaderboard-timeframe',
         label: t('timeFrame'),
         type: 'filter' as const,
         options: [
@@ -152,14 +137,18 @@ function leaderboard(): JSX.Element {
         dataTestIdPrefix: 'timeFrame',
       },
     ],
-    [tCommon, t, sortBy, timeFrame],
+    [t, tCommon, sortBy, timeFrame],
   );
 
-  if (rankingsLoading) {
+  if (!orgId) {
+    return <Navigate to="/" replace />;
+  }
+
+  if (loading) {
     return <Loader size="xl" />;
   }
 
-  if (rankingsError) {
+  if (error) {
     return (
       <div className={styles.message} data-testid="errorMsg">
         <WarningAmberRounded className={styles.icon} />
@@ -173,115 +162,82 @@ function leaderboard(): JSX.Element {
   const columns: GridColDef[] = [
     {
       field: 'rank',
-      headerName: 'Rank',
+      headerName: t('rank'),
       flex: 1,
       align: 'center',
-      minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        if (params.row.rank === 1) {
-          return (
-            <>
-              <img src={gold} alt={t('gold')} className={styles.rankings} />
-            </>
-          );
-        } else if (params.row.rank === 2) {
-          return (
-            <>
-              <img src={silver} alt={t('silver')} className={styles.rankings} />
-            </>
-          );
-        } else if (params.row.rank === 3) {
-          return (
-            <>
-              <img src={bronze} alt={t('bronze')} className={styles.rankings} />
-            </>
-          );
-        } else return <>{params.row.rank}</>;
+        if (params.row.rank === 1)
+          return <img src={gold} alt={t('goldMedal')} />;
+        if (params.row.rank === 2)
+          return <img src={silver} alt={t('silverMedal')} />;
+        if (params.row.rank === 3)
+          return <img src={bronze} alt={t('bronzeMedal')} />;
+        return params.row.rank;
       },
     },
     {
       field: 'volunteer',
-      headerName: 'Volunteer',
+      headerName: t('volunteer'),
       flex: 2,
       align: 'center',
-      minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         const { _id, firstName, lastName, image } = params.row.user;
-
+        const handleNavigation = () => {
+          navigate(`/member/${orgId}`, { state: { id: _id } });
+        };
         return (
-          <>
-            <div
-              className={`align-items-center ms-5 ${leaderboardStyles.volunteerCell}`}
-              onClick={() =>
-                navigate(`/member/${orgId}`, { state: { id: _id } })
+          <div
+            className={`${leaderboardStyles.volunteerCell}`}
+            onClick={handleNavigation}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleNavigation();
               }
-              data-testid="userName"
-            >
-              {image ? (
-                <img
-                  src={image}
-                  alt={tCommon('user')}
-                  data-testid={`image${_id + 1}`}
-                  className={styles.TableImage}
-                />
-              ) : (
-                <div className={styles.avatarContainer}>
-                  <Avatar
-                    key={_id + '1'}
-                    containerStyle={styles.imageContainer}
-                    avatarStyle={styles.TableImageSmall}
-                    name={firstName + ' ' + lastName}
-                    alt={firstName + ' ' + lastName}
-                  />
-                </div>
-              )}
-              {firstName + ' ' + lastName}
-            </div>
-          </>
+            }}
+            role="button"
+            tabIndex={0}
+            aria-label={`${tCommon('viewProfile')} ${firstName} ${lastName}`}
+            data-testid="userName"
+          >
+            {image ? (
+              <img src={image} alt={tCommon('user')} />
+            ) : (
+              <Avatar
+                name={`${firstName} ${lastName}`}
+                alt={`${firstName} ${lastName}`}
+              />
+            )}
+            {firstName} {lastName}
+          </div>
         );
       },
     },
     {
       field: 'email',
-      headerName: 'Email',
+      headerName: t('email'),
       flex: 2,
       align: 'center',
-      minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className={`d-flex justify-content-center ${leaderboardStyles.emailCell}`}
-            data-testid="userEmail"
-          >
-            {params.row.user.email}
-          </div>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <div data-testid="userEmail">{params.row.user.email}</div>
+      ),
     },
     {
       field: 'hoursVolunteered',
-      headerName: 'Hours Volunteered',
+      headerName: t('hoursVolunteered'),
       flex: 2,
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div className={`fw-bold ${leaderboardStyles.hoursCell}`}>
-            {params.row.hoursVolunteered}
-          </div>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <strong>{params.row.hoursVolunteered}</strong>
+      ),
     },
   ];
 
@@ -291,39 +247,37 @@ function leaderboard(): JSX.Element {
         searchPlaceholder={t('searchByVolunteer')}
         searchValue={searchTerm}
         onSearchChange={setSearchTerm}
+        onSearchSubmit={setSearchTerm}
         searchInputTestId="searchBy"
         searchButtonTestId="searchBtn"
-        hasDropdowns={true}
+        hasDropdowns
         dropdowns={leaderboardDropdowns}
       />
 
-      {/* Table with Action Items */}
       <div className={leaderboardStyles.dataGridStyle}>
         <DataGrid
-          disableColumnMenu
-          columnBufferPx={7}
-          hideFooter={true}
-          getRowId={(row) => row.user._id}
-          slots={{
-            noRowsOverlay: () => (
-              <Stack height="100%" alignItems="center" justifyContent="center">
-                {t('noVolunteers')}
-              </Stack>
-            ),
-          }}
-          getRowClassName={() => `${styles.rowBackground}`}
+          hideFooter
           autoHeight
-          rowHeight={65}
-          rows={rankings.map((ranking, index) => ({
-            id: index + 1,
-            ...ranking,
+          getRowId={(row) => row.user._id}
+          rows={rankings.map((r: InterfaceVolunteerRank, i: number) => ({
+            id: i + 1,
+            ...r,
           }))}
           columns={columns}
           isRowSelectable={() => false}
+          slots={{
+            noRowsOverlay: () => (
+              <EmptyState
+                icon="emoji_events"
+                message={t('noVolunteers')}
+                dataTestId="leaderboard-empty-state"
+              />
+            ),
+          }}
         />
       </div>
     </div>
   );
 }
 
-export default leaderboard;
+export default Leaderboard;

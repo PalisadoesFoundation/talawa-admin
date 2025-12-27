@@ -1343,5 +1343,50 @@ describe('EventActionItems', () => {
         expect(screen.getByTestId('groupIcon')).toBeInTheDocument();
       });
     });
+
+    it('should have correct aria-label when action item is completed', async () => {
+      const mockDataWithCompleted = {
+        event: {
+          ...mockEventData.event,
+          actionItems: {
+            edges: [
+              {
+                node: {
+                  ...mockActionItem,
+                  isCompleted: true,
+                },
+              },
+            ],
+            pageInfo: { hasNextPage: false, endCursor: null },
+          },
+        },
+      };
+
+      const mocks = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockDataWithCompleted },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocks);
+
+      await waitFor(() => {
+        const checkbox = screen.getByTestId('statusCheckboxactionItemId1');
+        expect(checkbox).toHaveAttribute('aria-label', 'actionItemCompleted');
+      });
+    });
+
+    it('should have correct aria-label when action item is pending', async () => {
+      renderEventActionItems();
+
+      await waitFor(() => {
+        const checkbox = screen.getByTestId('statusCheckboxactionItemId1');
+        expect(checkbox).toHaveAttribute('aria-label', 'markCompletion');
+      });
+    });
   });
 });

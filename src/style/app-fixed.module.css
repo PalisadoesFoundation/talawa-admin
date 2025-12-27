@@ -36,7 +36,6 @@
  */
 :root {
   --primary-theme-color: #1778f2;
-  --success-green-color: #31bb6b;
 
   --addButton-font: #555555;
   --addButton-border: #eaebef;
@@ -120,6 +119,7 @@
 
   --font-size-header: 16px;
   --font-size-table-body: 14px;
+  --avatar-placeholder-bg: #ccc;
 
   --tableHeader-bg: #eaebef;
   --tableHeader-color: #000000;
@@ -179,15 +179,6 @@
   --register-button-border-active: #eaebef;
   --register-button-color: #555555;
   --register-button-color-hover: #555555;
-
-  /* Progress indicator colors */
-  --progress-track-color: #e0e0e0;
-  --progress-complete-color: #4caf50;
-  --progress-half-color: #ff9800;
-  --progress-low-color: #2196f3;
-
-  /* Row hover background */
-  --row-hover-bg: #f0f0f0;
 
   --row-bg: #fff;
   --row-bg-scroll: #00000029;
@@ -356,7 +347,9 @@
   --memberfontbtn-border: #e8e5e5;
   --memberfont-bg: #eaebef;
   --memberfont-color: #fff;
-  --removeMemberCancel-bg: #f8d6dc --loader-size: 10em;
+  --removeMemberCancel-bg: #f8d6dc;
+  --removeMemberCancel-border: #f8d6dc;
+  --loader-size: 10em;
   --loader-border: #ffffff33;
   --loader-border-left: #febc59;
 
@@ -745,7 +738,8 @@
   --primary-theme-color: #1778f2;
   --advertisement-dropdown-border: 1px solid rgba(0, 0, 0, 0.15);
   --advertisement-dropdown-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
-  --advertisement-media-height: 12.5rem --pledgeModal-bg: #ffffff;
+  --advertisement-media-height: 12.5rem;
+  --pledgeModal-bg: #ffffff;
   --pledgeModal-header-text: #000000;
   --pledgeModal-title-text: #4b5563;
   --pledgeModal-close-button-bg: #f8d6dc;
@@ -1003,13 +997,10 @@
   overflow: hidden;
 
   /* Flex properties to make it sit on the same line */
-  flex-grow: 1;
-  /* Allow it to grow to fill space */
-  flex-shrink: 1;
-  /* Allow it to shrink if needed */
-  width: auto;
-  /* Stop forcing 100% width */
-  min-width: 450px;
+  flex-grow: 1; /* Allow it to grow to fill space */
+  flex-shrink: 1; /* Allow it to shrink if needed */
+  width: auto; /* Stop forcing 100% width */
+  min-width: 200px;
   max-width: 100%;
   height: 48px;
 }
@@ -1029,7 +1020,6 @@
   display: flex;
   align-items: center;
   min-height: 48px;
-  min-width: 40rem;
   padding: 0.75rem 2.5rem 0.75rem 1.25rem;
   background-color: transparent;
 }
@@ -1101,21 +1091,6 @@
   display: inline-flex;
   font-size: 1.2rem;
   pointer-events: none;
-}
-
-.searchBarTrailingIcon {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background-color: var(--search-button-bg, #b3ceff);
-  color: #2f3f5f;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 0.75rem;
-  border-top-right-radius: 0.5rem;
-  border-bottom-right-radius: 0.5rem;
 }
 
 .searchBarClearButton {
@@ -1384,26 +1359,6 @@ form label,
   align-items: center;
 }
 
-.searchBarContainer {
-  display: flex;
-  margin: 2.5rem 0;
-  align-items: center;
-  max-width: 600px;
-}
-
-.searchBarContainer {
-  display: flex;
-  margin: 2.5rem 0;
-  align-items: stretch;
-  gap: 0.75rem;
-}
-
-.searchBarContainer > :first-child {
-  flex: 1 1 320px;
-  min-width: 240px;
-  max-width: 100%;
-}
-
 /* Table Header */
 
 .tableHeader {
@@ -1426,10 +1381,8 @@ form label,
 .calendar__controls {
   display: flex;
   align-items: center;
-  gap: 12px;
-  /* Space between the Sort, Create, and Bell icons */
-  flex-shrink: 0;
-  /* Prevents buttons from getting squished */
+  gap: 12px; /* Space between the Sort, Create, and Bell icons */
+  flex-shrink: 0; /* Prevents buttons from getting squished */
   white-space: nowrap;
 }
 
@@ -1588,7 +1541,7 @@ form label,
 
 .removeMemberCancel {
   background-color: var(--removeMemberCancel-bg);
-  color: '#C8102E';
+  color: var(--removeButton-color);
   border: 1px solid var(--removeMemberCancel-border);
 }
 
@@ -1789,15 +1742,6 @@ form label,
   color: var(--createButton-color) !important;
   border: 1px solid var(--createButton-border) !important;
   margin: 5px 10px;
-  width: 10rem;
-  height: 3rem;
-}
-
-.createFundButton {
-  background-color: var(--createButton-bg) !important;
-  color: var(--createButton-color) !important;
-  border: 1px solid var(--createButton-border) !important;
-  margin: 5px 5px;
   width: 10rem;
   height: 3rem;
 }
@@ -5193,6 +5137,7 @@ form label,
 /* -- RequestsTableItem.tsx -- */
 
 .requestsTableItemIndex {
+  padding-inline-start: 2.5rem;
   vertical-align: middle;
 }
 
@@ -7855,8 +7800,7 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 12px;
-  /* bring controls closer together */
+  margin-left: 12px; /* bring controls closer together */
   gap: 12px;
 }
 
@@ -7868,14 +7812,12 @@ form {
 }
 
 .btnsContainerSearchBar .inputOrgList {
-  flex: 1 1 640px;
-  /* make input wider and flexible */
+  flex: 1 1 640px; /* make input wider and flexible */
   max-width: 760px;
   position: relative;
   display: flex;
   align-items: center;
-  margin-left: 18px;
-  /* gap from left */
+  margin-left: 18px; /* gap from left */
 }
 
 .btnsContainerSearchBar input {
@@ -8295,6 +8237,7 @@ form {
   color: var(--infoButton-color);
   margin-right: 0.5rem;
   border-radius: 0.25rem;
+  min-width: 32px;
 }
 
 .infoButton:hover {
@@ -8326,6 +8269,14 @@ form {
   border-color: var(--checkbox-focus-border);
   outline: none;
   box-shadow: none;
+}
+
+.assigneeCellContainer {
+  height: 100%;
+}
+
+.groupIconSecondary {
+  color: var(--view-color);
 }
 
 /* -- OrganizationDashboard.tsx -- */
@@ -8368,7 +8319,6 @@ form {
 .switch :global(.form-check-input) {
   margin-inline-start: -1.7em;
 }
-
 .checkboxdiv {
   display: flex;
   margin-bottom: 5px;
@@ -8434,10 +8384,6 @@ form {
 
 .container {
   min-height: 100vh;
-}
-
-.titleMargin {
-  margin-top: 0.75rem;
 }
 
 .message {
@@ -9665,6 +9611,10 @@ form {
   margin: 1px;
 }
 
+.iconLarge {
+  font-size: 1.5rem;
+}
+
 .chipIcon {
   height: 0.9rem !important;
 }
@@ -10023,7 +9973,6 @@ form {
   justify-content: flex-end;
   padding-bottom: 10px;
 }
-
 .manageBtn,
 .withdrawBtn,
 .outlineBtn {
@@ -10090,7 +10039,6 @@ form {
   .calendar__header {
     flex-wrap: wrap !important;
   }
-
   .btnsBlock {
     width: 100%;
     justify-content: flex-end;
@@ -10098,165 +10046,106 @@ form {
   }
 }
 
-.btnsBlock > * {
-  margin: 0 !important;
-  height: 100% !important;
-  display: flex !important;
-  align-items: center !important;
-  min-height: auto !important;
-}
-
-/* ----------------------------------------------------- */
-
-.whiteContainer {
-  background-color: #ffffff;
-  border-radius: 1rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-}
-
-/* -- Common Layout Classes -- */
-
-/* Flex container for title area in screens */
-.flexContainerColumn {
-  flex: 1;
-}
-
-/* Breadcrumbs margin spacing */
-.breadcrumbsMargin {
-  margin-top: 0.5rem;
-}
-
-/* Search container row layout for fund campaign/funds screens */
-.searchContainerRow {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-  margin-top: 1rem;
-  gap: 1rem;
-}
-
-/* Search container row layout without top margin */
-.searchContainerRowNoTopMargin {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 1rem;
-}
-
-/* Search bar margin reset with flex grow */
-.searchBarMarginReset {
+.btnsBlock > button,
+.btnsBlock > .btn {
   margin: 0;
-}
-
-/* Button style to prevent text wrapping */
-.buttonNoWrap {
-  white-space: nowrap;
-}
-
-/* Button margin reset for flex containers with gap */
-.buttonMarginReset {
-  margin: 0;
-}
-
-/* Search container for Campaigns screen with min/max width */
-.searchContainerCampaigns {
-  max-width: 700px;
-  min-width: 400px;
-  margin: 0;
-}
-
-/* UserScreen main content margin when expanded */
-.userScreenExpandedMargin {
-  margin-left: 100px;
-}
-
-/* -- Progress Indicator Styles for Campaign Tables -- */
-
-/* Progress indicator container */
-.progressIndicatorContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
   height: 100%;
-}
-
-/* Progress indicator wrapper (relative positioning) */
-.progressIndicatorWrapper {
-  position: relative;
   display: inline-flex;
-}
-
-/* Progress indicator base track color */
-.progressIndicatorBase {
-  color: var(--progress-track-color, #e0e0e0);
-}
-
-/* Progress indicator overlay (absolute positioning) */
-.progressIndicatorAbsolute {
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-
-/* Progress indicator color states */
-.progressComplete {
-  color: var(--progress-complete-color, #4caf50);
-}
-
-.progressHalf {
-  color: var(--progress-half-color, #ff9800);
-}
-
-.progressLow {
-  color: var(--progress-low-color, #2196f3);
-}
-
-/* Progress percentage text */
-.progressTypography {
-  font-weight: bold;
-}
-
-/* -- DataGrid Row Hover Styles -- */
-
-/* DataGrid row hover background */
-.dataGridRowHover:hover {
-  background-color: var(--row-hover-bg, #f0f0f0);
-}
-
-/* Error icon large size */
-.errorIconLarge {
-  font-size: 2rem;
-}
-
-/* Progress cell container */
-.progressCellContainer {
-  display: flex;
   align-items: center;
+  min-height: 2.4rem;
+}
+/* ----------------------------------------------------- */
+.orgListContainer {
+  padding-left: 40px;
+  padding-right: 30px;
+}
+
+@media (max-width: 768px) {
+  .orgListContainer {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+.addButtonIcon {
+  font-size: 25px;
+  margin-bottom: 2px;
+  margin-right: 2px;
+}
+
+/* Utility classes for inline style replacements */
+.flexCenter {
+  display: flex;
   justify-content: center;
-  gap: 8px;
+  align-items: center;
+}
+
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.flexWrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flexWrapGap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.maxHeight120 {
+  max-height: 120px;
+}
+
+.cursorPointer {
+  cursor: pointer;
+}
+
+.fullWidthHeight {
+  width: 100%;
   height: 100%;
 }
 
-/* Button width 8rem - for visit and join buttons */
-.buttonWidth8rem {
-  width: 8rem;
+.progressBarHeight {
+  height: 1.5rem;
+  font-size: 0.9rem;
 }
 
-/* Video full width - for video elements */
-.videoFullWidth {
-  width: 100%;
+.memberNameFontSize {
+  font-size: 15px;
 }
 
-/* Margin left auto - for positioning elements to the right */
-.marginLeftAuto {
-  margin-left: auto;
+/* Avatar placeholder background */
+.avatarPlaceholder {
+  background-color: var(--avatar-placeholder-bg, #ccc);
 }
 
-/* Background paper - matches MUI background.paper */
-.backgroundPaper {
-  background-color: var(--popup-bg, #fff);
+.avatarImage {
+  border-radius: 50%;
+  object-fit: cover;
+  width: var(--avatar-size, 40px);
+  height: var(--avatar-size, 40px);
+}
+
+.avatarPlaceholderSize {
+  width: var(--avatar-size, 40px);
+  height: var(--avatar-size, 40px);
+  font-size: calc(var(--avatar-size, 40px) * 0.4);
+  border-radius: 50%;
+}
+
+/* MUI DataGrid styles - using global selectors to target MUI classes */
+.dataGridNoHover :global(.MuiDataGrid-row:hover),
+.dataGridNoHover :global(.MuiDataGrid-row.Mui-hovered) {
+  background-color: transparent;
+}
+
+.dataGridRounded :global(.MuiDataGrid-root),
+.dataGridRounded :global(.MuiDataGrid-main) {
+  border-radius: 0.5rem;
 }
 
 .fullWidth {

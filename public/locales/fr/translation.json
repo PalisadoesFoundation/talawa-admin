@@ -9,7 +9,14 @@
     "weekly": "Cette Semaine",
     "monthly": "Ce Mois",
     "yearly": "Cette Année",
-    "noVolunteers": "Aucun Bénévole Trouvé!"
+    "noVolunteers": "Aucun Bénévole Trouvé!",
+    "goldMedal": "or",
+    "silverMedal": "argent",
+    "bronzeMedal": "bronze",
+    "rank": "Rang",
+    "volunteer": "Bénévole",
+    "email": "E-mail",
+    "hoursVolunteered": "Heures Bénévoles"
   },
   "loginPage": {
     "title": "Administrateur Talawa",
@@ -54,11 +61,7 @@
     "OR": "OU",
     "admin": "Administrateur",
     "user": "Utilisateur",
-    "loading": "Chargement",
-    "communityLogo": "Logo de la Communauté",
-    "organizations": "Organisations",
-    "accountLocked": "Votre compte a été temporairement verrouillé en raison de trop nombreuses tentatives de connexion échouées. Veuillez réessayer plus tard.",
-    "accountLockedWithTimer": "Votre compte a été temporairement verrouillé. Veuillez réessayer dans {{minutes}} minute(s)."
+    "loading": "Chargement"
   },
   "signOut": {
     "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
@@ -226,8 +229,7 @@
     "name": "Nom",
     "email": "E-mail",
     "profilePictureAlt": "Image de profil de {{name}}",
-    "placeholderAvatarAlt": "Avatar par défaut",
-    "newMembersWillAppearHere": "Les nouvelles demandes d'adhésion apparaîtront ici"
+    "placeholderAvatarAlt": "Avatar par défaut"
   },
   "users": {
     "membershipStatus": {
@@ -658,6 +660,7 @@
     "deleteThisAndFollowing": "Supprimer cet événement et tous les suivants",
     "deleteAllEvents": "Supprimer tous les événements de cette série",
     "editEvent": "Modifier l'événement",
+    "showEventDashboard": "Afficher le tableau de bord de l'événement",
     "updateEvent": "Mettre à jour l'événement",
     "updateRecurringEventMsg": "Il s'agit d'un événement récurrent. Choisissez comment vous souhaitez le mettre à jour :",
     "updateThisInstance": "Mettre à jour uniquement cette instance",
@@ -723,8 +726,7 @@
     "viewCampaigns": "Voir les campagnes",
     "assocCampaigns": "Campagnes associées",
     "errorLoadingFundsData": "Erreur lors du chargement des données des fonds",
-    "editFund": "Modifier le fonds",
-    "searchFunds": "Rechercher des fonds"
+    "editFund": "Modifier le fonds"
   },
   "fundCampaign": {
     "title": "Campagnes de collecte de fonds",
@@ -748,10 +750,7 @@
     "latestEndDate": "Dernière date de fin",
     "earliestEndDate": "Date de fin la plus ancienne",
     "lowestGoal": "Objectif le plus bas",
-    "highestGoal": "Objectif le plus élevé",
-    "editCampaign": "Modifier la campagne",
-    "searchCampaigns": "Rechercher des campagnes",
-    "errorLoading": "Erreur lors du chargement des données de la campagne"
+    "highestGoal": "Objectif le plus élevé"
   },
   "pledges": {
     "title": "Engagements de campagne de financement",
@@ -784,7 +783,12 @@
     "startDate": "Date de début",
     "endDate": "Date de fin",
     "searchByPlaceholder": "Rechercher par {{field}}",
-    "selectPledger": "Veuillez sélectionner un donateur"
+    "selectPledger": "Veuillez sélectionner un prometteur",
+    "moreUsers": "+{{count}} de plus...",
+    "togglePledgedRaised": "Basculer entre les montants Promis et Collectés",
+    "pledgeDate": "Date d'Engagement",
+    "pledged": "Promis",
+    "donated": "Donné"
   },
   "createPostModal": {
     "title": "Des postes",
@@ -892,6 +896,7 @@
     "searchByFirstName": "Recherche par prénom",
     "searchByLastName": "Rechercher par nom de famille",
     "noSpammerFound": "Aucun spammeur trouvé",
+    "noUsersFound": "Aucun utilisateur trouvé",
     "searchByName": "Rechercher par nom",
     "name": "Nom",
     "email": "Email",
@@ -1085,8 +1090,7 @@
     "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
     "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
     "tagsAssigned": "étiquettes assignées",
-    "noTagsAssigned": "Aucune étiquette assignée",
-    "actions": "Actions"
+    "noTagsAssigned": "Aucune étiquette assignée"
   },
   "people": {
     "title": "Personnes",
@@ -1664,13 +1668,7 @@
     "viewPledges": "Voir les promesses",
     "noPledges": "Aucune promesse trouvée",
     "noCampaigns": "Aucune campagne trouvée",
-    "searchCampaigns": "Rechercher des campagnes",
-    "campaignName": "Nom de la campagne",
-    "startDate": "Date de début",
-    "endDate": "Date de fin",
-    "fundingGoal": "Objectif de financement",
-    "raised": "Montant collecté",
-    "viewPledge": "Voir l'engagement",
+    "raised": "Collecté",
     "amountRaised": "Montant Collecté"
   },
   "userPledges": {
@@ -1680,6 +1678,7 @@
     "title": "Quitter l'organisation"
   },
   "eventVolunteers": {
+    "toggleGroupAriaLabel": "Sélecteur de vue des bénévoles",
     "volunteers": "Bénévoles",
     "volunteer": "Bénévole",
     "volunteerGroups": "Groupes de Bénévoles",
@@ -1820,6 +1819,8 @@
   "common": {
     "signOut": "Se déconnecter",
     "signingOut": "Déconnexion en cours...",
-    "retryPrompt": "Échec de la révocation de session. Réessayer ?"
+    "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
+    "breadcrumb": "fil d'Ariane",
+    "action": "Action"
   }
 }

@@ -13,7 +13,7 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
@@ -43,10 +43,12 @@ async function wait(ms = 500): Promise<void> {
   });
 }
 
-vi.mock('react-toastify', () => ({
-  toast: {
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
   },
 }));
 
@@ -335,7 +337,7 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('addSubTagSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(NotificationToast.success).toHaveBeenCalledWith(
         translations.tagCreationSuccess,
       );
     });
