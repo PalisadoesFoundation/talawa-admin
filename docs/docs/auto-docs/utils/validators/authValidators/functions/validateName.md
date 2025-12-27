@@ -4,9 +4,9 @@
 
 # Function: validateName()
 
-> **validateName**(`name`): [`InterfaceValidationResult`](../interfaces/InterfaceValidationResult.md)
+> **validateName**(`name`): [`InterfaceValidationResult`](../../../../types/Auth/ValidationInterfaces/interfaces/InterfaceValidationResult.md)
 
-Defined in: [src/utils/validators/authValidators.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/validators/authValidators.ts#L83)
+Defined in: [src/utils/validators/authValidators.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/validators/authValidators.ts#L58)
 
 Validates name field requirements.
 
@@ -20,6 +20,6 @@ Name to validate
 
 ## Returns
 
-[`InterfaceValidationResult`](../interfaces/InterfaceValidationResult.md)
+[`InterfaceValidationResult`](../../../../types/Auth/ValidationInterfaces/interfaces/InterfaceValidationResult.md)
 
 Validation result with error message if invalid

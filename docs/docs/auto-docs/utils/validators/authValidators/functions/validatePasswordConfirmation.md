@@ -4,9 +4,9 @@
 
 # Function: validatePasswordConfirmation()
 
-> **validatePasswordConfirmation**(`password`, `confirmPassword`): [`InterfaceValidationResult`](../interfaces/InterfaceValidationResult.md)
+> **validatePasswordConfirmation**(`password`, `confirmPassword`): [`InterfaceValidationResult`](../../../../types/Auth/ValidationInterfaces/interfaces/InterfaceValidationResult.md)
 
-Defined in: [src/utils/validators/authValidators.ts:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/validators/authValidators.ts#L96)
+Defined in: [src/utils/validators/authValidators.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/validators/authValidators.ts#L73)
 
 Validates password confirmation matches original password.
 
@@ -26,6 +26,6 @@ Confirmation password
 
 ## Returns
 
-[`InterfaceValidationResult`](../interfaces/InterfaceValidationResult.md)
+[`InterfaceValidationResult`](../../../../types/Auth/ValidationInterfaces/interfaces/InterfaceValidationResult.md)
 
 Validation result with error message if passwords don't match

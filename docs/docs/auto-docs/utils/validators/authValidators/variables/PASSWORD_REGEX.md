@@ -6,9 +6,7 @@
 
 > `const` **PASSWORD\_REGEX**: `object`
 
-Defined in: [src/utils/validators/authValidators.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/validators/authValidators.ts#L33)
-
-Regular expressions for password validation.
+Defined in: [src/utils/validators/authValidators.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/validators/authValidators.ts#L6)
 
 ## Type Declaration
 

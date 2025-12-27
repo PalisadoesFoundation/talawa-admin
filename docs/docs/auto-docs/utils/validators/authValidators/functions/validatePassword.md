@@ -4,9 +4,9 @@
 
 # Function: validatePassword()
 
-> **validatePassword**(`password`): [`InterfaceValidationResult`](../interfaces/InterfaceValidationResult.md)
+> **validatePassword**(`password`): [`InterfaceValidationResult`](../../../../types/Auth/ValidationInterfaces/interfaces/InterfaceValidationResult.md)
 
-Defined in: [src/utils/validators/authValidators.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/validators/authValidators.ts#L57)
+Defined in: [src/utils/validators/authValidators.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/validators/authValidators.ts#L31)
 
 Validates password complexity requirements.
 
@@ -20,6 +20,6 @@ Password to validate
 
 ## Returns
 
-[`InterfaceValidationResult`](../interfaces/InterfaceValidationResult.md)
+[`InterfaceValidationResult`](../../../../types/Auth/ValidationInterfaces/interfaces/InterfaceValidationResult.md)
 
 Validation result with error message if invalid
