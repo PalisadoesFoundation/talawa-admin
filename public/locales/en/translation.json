@@ -9,7 +9,14 @@
     "weekly": "This Week",
     "monthly": "This Month",
     "yearly": "This Year",
-    "noVolunteers": "No Volunteers Found!"
+    "noVolunteers": "No Volunteers Found!",
+    "goldMedal": "Gold medal",
+    "silverMedal": "Silver medal",
+    "bronzeMedal": "Bronze medal",
+    "rank": "Rank",
+    "volunteer": "Volunteer",
+    "email": "Email",
+    "hoursVolunteered": "Hours Volunteered"
   },
   "loginPage": {
     "title": "Talawa Admin",
@@ -54,11 +61,7 @@
     "OR": "OR",
     "admin": "admin",
     "user": "user",
-    "loading": "loading",
-    "communityLogo": "Community Logo",
-    "organizations": "Organizations",
-    "accountLocked": "Your account has been temporarily locked due to too many failed login attempts. Please try again later.",
-    "accountLockedWithTimer": "Your account has been temporarily locked. Please try again in {{minutes}} minute(s)."
+    "loading": "loading"
   },
   "signOut": {
     "retryPrompt": "Failed to revoke session. Retry?",
@@ -226,8 +229,7 @@
     "name": "name",
     "email": "email",
     "profilePictureAlt": "User profile picture",
-    "placeholderAvatarAlt": "Placeholder avatar",
-    "newMembersWillAppearHere": "New membership requests will appear here"
+    "placeholderAvatarAlt": "Placeholder avatar"
   },
   "users": {
     "membershipStatus": {
@@ -658,6 +660,7 @@
     "deleteThisAndFollowing": "Delete this and all following events",
     "deleteAllEvents": "Delete all events in this series",
     "editEvent": "Edit Event",
+    "showEventDashboard": "Show Event Dashboard",
     "updateEvent": "Update Event",
     "updateRecurringEventMsg": "This is a recurring event. Choose how you want to update it:",
     "updateThisInstance": "Update only this instance",
@@ -701,7 +704,6 @@
   "funds": {
     "title": "Funds",
     "createFund": "Create Fund",
-    "searchFunds": "Search Funds",
     "fundName": "Fund Name",
     "fundId": "Fund (Reference) ID",
     "taxDeductible": "Tax Deductible",
@@ -711,7 +713,6 @@
     "fundUpdate": "Update Fund",
     "fundDelete": "Delete Fund",
     "noFundsFound": "No Funds Found",
-    "editFund": "Edit Fund",
     "createdBy": "Created By",
     "createdOn": "Created On",
     "status": "Status",
@@ -729,8 +730,6 @@
   },
   "fundCampaign": {
     "title": "Fundraising Campaigns",
-    "editCampaign": "Edit Campaign",
-    "searchCampaigns": "Search Campaigns",
     "campaignName": "Campaign Name",
     "campaignOptions": "Options",
     "fundingGoal": "Funding Goal",
@@ -751,8 +750,7 @@
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
     "lowestGoal": "Lowest Goal",
-    "highestGoal": "Highest Goal",
-    "errorLoading": "Error occured while loading campaigns data"
+    "highestGoal": "Highest Goal"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
@@ -785,7 +783,12 @@
     "startDate": "startDate",
     "endDate": "endDate",
     "searchByPlaceholder": "Search by {{field}}",
-    "selectPledger": "Please select a pledger"
+    "selectPledger": "Please select a pledger",
+    "moreUsers": "+{{count}} more...",
+    "togglePledgedRaised": "Toggle between Pledged and Raised amounts",
+    "pledgeDate": "Pledge Date",
+    "pledged": "Pledged",
+    "donated": "Donated"
   },
   "createPostModal": {
     "title": "Posts",
@@ -893,6 +896,7 @@
     "searchByFirstName": "Search By First Name",
     "searchByLastName": "Search By Last Name",
     "noSpammerFound": "No spammer found",
+    "noUsersFound": "No users found",
     "searchByName": "Search by name...",
     "name": "name",
     "email": "email",
@@ -1118,7 +1122,6 @@
     "eventsAttended": "Events Attended",
     "contactInfoHeading": "Contact Information",
     "actionsHeading": "Actions",
-    "actions": "Action",
     "personalDetailsHeading": "Profile Details",
     "appLanguageCode": "Choose Language",
     "deleteUser": "Delete User",
@@ -1645,21 +1648,14 @@
   "userCampaigns": {
     "title": "Fundraising Campaigns",
     "searchByName": "Search by Name...",
-    "searchCampaigns": "Search Campaigns",
-    "campaignName": "Campaign Name",
-    "startDate": "Start Date",
-    "endDate": "End Date",
-    "fundingGoal": "Fund Goal",
-    "raised": "Amount Raised",
-    "progress": "% Raised",
-    "viewPledge": "View Pledge",
     "searchBy": "Search by",
     "pledgers": "Pledgers",
     "pledger": "Pledger",
     "campaigns": "Campaigns",
-    "associatedCampaign": "Associated Campaigns",
+    "associatedCampaign": "Associated Campaign",
     "pledged": "Pledged",
     "donated": "Donated",
+    "progress": "Progress",
     "more": "more",
     "myPledges": "My Pledges",
     "lowestAmount": "Lowest Amount",
@@ -1682,6 +1678,7 @@
     "title": "Leave Organization"
   },
   "eventVolunteers": {
+    "toggleGroupAriaLabel": "Volunteer view selector",
     "volunteers": "Volunteers",
     "volunteer": "Volunteer",
     "volunteerGroups": "Volunteer Groups",
@@ -1823,6 +1820,8 @@
     "signOut": "Sign out",
     "signingOut": "Signing out...",
     "retryPrompt": "Failed to revoke session. Retry?",
+    "breadcrumb": "Breadcrumb",
+    "action": "Action",
     "selectLanguage": "Select Language",
     "userMenu": "User Menu",
     "settings": "Settings",
