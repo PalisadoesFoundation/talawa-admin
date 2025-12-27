@@ -33,8 +33,8 @@ export class AdminEventPage {
     description: string,
     location: string,
   ): void {
-    cy.get(this._venueTabButton).should('be.visible').click();
-    cy.get(this._eventsTabButton).should('be.visible').click();
+    // Wait for event cards to load (beforeEach already navigated to events page)
+    cy.get('[data-testid="card"]', { timeout: 10000 }).should('be.visible');
     cy.get('[data-testid="card"]').contains(existingName).click();
     cy.get(this._updateNameInput).should('be.visible').clear().type(name);
     cy.get(this._updateDescriptionInput)
@@ -50,9 +50,8 @@ export class AdminEventPage {
   }
 
   deleteEvent(name: string): void {
-    cy.get(this._venueTabButton).should('be.visible').click();
-    cy.get(this._eventsTabButton).should('be.visible').click();
-    cy.get('[data-testid="card"]')
+    // Wait for event cards to load (beforeEach already navigated to events page)
+    cy.get('[data-testid="card"]', { timeout: 10000 })
       .should('be.visible')
       .should('contain.text', name);
     cy.get('[data-testid="card"]').contains(name).click();
