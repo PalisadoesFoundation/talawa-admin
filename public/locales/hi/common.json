@@ -143,5 +143,22 @@
   "Volunteers": "स्वयंसेवक",
   "unblock": "अनब्लॉक करें",
   "unblockedSuccessfully": "{{item}} सफलतापूर्वक अनब्लॉक किया गया",
-  "pluginSettings": "प्लगइन सेटिंग्स"
+  "pluginSettings": "प्लगइन सेटिंग्स",
+  "noeventsAttended": "कोई कार्यक्रम में भाग नहीं लिया",
+  "addressLine1": "पता पंक्ति 1",
+  "addressLine2": "पता पंक्ति 2",
+  "birthDate": "जन्म तिथि",
+  "state": "राज्य",
+  "city": "शहर",
+  "contactInfoHeading": "संपर्क जानकारी",
+  "educationGrade": "शैक्षिक स्तर",
+  "employmentStatus": "रोज़गार स्थिति",
+  "fileTooLarge": "फ़ाइल का आकार बहुत बड़ा है। अधिकतम आकार 5MB है।",
+  "homePhoneNumber": "घर का फोन नंबर",
+  "invalidFileType": "अमान्य फ़ाइल प्रकार। कृपया JPEG, PNG या GIF फ़ाइल अपलोड करें।",
+  "maritalStatus": "वैवाहिक स्थिति",
+  "mobilePhoneNumber": "मोबाइल फोन नंबर",
+  "personalDetailsHeading": "प्रोफ़ाइल विवरण",
+  "workPhoneNumber": "कार्य फोन नंबर",
+  "postalCode": "पिन कोड"
 }

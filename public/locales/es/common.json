@@ -143,5 +143,22 @@
   "loadingUserPlugin": "Cargando complemento de usuario...",
   "unblock": "Desbloquear",
   "unblockedSuccessfully": "{{item}} desbloqueado exitosamente",
-  "pluginSettings": "Configuración de complementos"
+  "pluginSettings": "Configuración de complementos",
+  "noeventsAttended": "No se asistió a ningún evento",
+  "addressLine1": "Dirección Línea 1",
+  "addressLine2": "Dirección Línea 2",
+  "birthDate": "Fecha de nacimiento",
+  "state": "Estado",
+  "city": "Ciudad",
+  "contactInfoHeading": "Información de contacto",
+  "educationGrade": "Nivel educativo",
+  "employmentStatus": "Estado laboral",
+  "fileTooLarge": "El archivo es demasiado grande. El tamaño máximo es de 5 MB.",
+  "homePhoneNumber": "Número de teléfono fijo",
+  "invalidFileType": "Tipo de archivo no válido. Por favor, sube un archivo JPEG, PNG o GIF.",
+  "maritalStatus": "Estado civil",
+  "mobilePhoneNumber": "Número de teléfono móvil",
+  "personalDetailsHeading": "Detalles del perfil",
+  "workPhoneNumber": "Número de teléfono del trabajo",
+  "postalCode": "Código postal"
 }

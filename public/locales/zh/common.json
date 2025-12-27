@@ -143,5 +143,22 @@
   "loadingUserPlugin": "正在加载用户插件...",
   "unblock": "解除封锁",
   "unblockedSuccessfully": "{{item}}已成功解除封锁",
-  "pluginSettings": "插件设置"
+  "pluginSettings": "插件设置",
+  "noeventsAttended": "未参加任何活动",
+  "addressLine1": "地址行 1",
+  "addressLine2": "地址行 2",
+  "birthDate": "出生日期",
+  "state": "州 / 省",
+  "city": "城市",
+  "contactInfoHeading": "联系信息",
+  "educationGrade": "教育程度",
+  "employmentStatus": "就业状态",
+  "fileTooLarge": "文件过大。最大允许大小为 5MB。",
+  "homePhoneNumber": "家庭电话号码",
+  "invalidFileType": "无效的文件类型。请上传 JPEG、PNG 或 GIF 文件。",
+  "maritalStatus": "婚姻状况",
+  "mobilePhoneNumber": "手机号码",
+  "personalDetailsHeading": "个人资料",
+  "workPhoneNumber": "工作电话号码",
+  "postalCode": "邮政编码"
 }

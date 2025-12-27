@@ -143,5 +143,23 @@
   "enterState": "Enter state name",
   "unblock": "Unblock",
   "unblockedSuccessfully": "{{item}} unblocked successfully",
-  "pluginSettings": "Plugin Settings"
+  "pluginSettings": "Plugin Settings",
+  "noeventsAttended": "No Events Attended",
+  "addressLine1": "Address Line 1",
+  "addressLine2": "Address Line 2",
+  "birthDate": "Birth Date",
+  "state": "State",
+  "city": "City",
+  "contactInfoHeading": "Contact Information",
+  "educationGrade": "Educational Grade",
+  "employmentStatus": "Employment Status",
+  "fileTooLarge": "File is too large. Maximum size is 5MB.",
+  "homePhoneNumber": "Home Phone Number",
+
+  "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF.",
+  "maritalStatus": "Marital Status",
+  "mobilePhoneNumber": "Mobile Phone Number",
+  "personalDetailsHeading": "Profile Details",
+  "workPhoneNumber": "Work Phone Number",
+  "postalCode": "Postal Code"
 }
