@@ -1,13 +1,8 @@
-/**
- * Authentication validation utilities for form inputs.
- * Provides centralized, testable validation logic for email, password, and name fields.
- */
+import type {
+  InterfaceValidationResult,
+  InterfacePasswordRequirements,
+} from '../../types/Auth/ValidationInterfaces';
 
-import type { InterfaceValidationResult } from '../../types/Auth/ValidationInterfaces';
-
-/**
- * Regular expressions for password validation.
- */
 export const PASSWORD_REGEX = {
   lowercase: /[a-z]/,
   uppercase: /[A-Z]/,
@@ -17,6 +12,7 @@ export const PASSWORD_REGEX = {
 
 /**
  * Validates email format.
+ * Note: Uses basic regex validation. Does not enforce RFC 5322 compliance.
  * @param email - Email address to validate
  * @returns Validation result with error message if invalid
  */
@@ -24,7 +20,7 @@ export function validateEmail(email: string): InterfaceValidationResult {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email)
     ? { isValid: true }
-    : { isValid: false, error: 'email_invalid' };
+    : { isValid: false, error: 'invalidEmailFormat' };
 }
 
 /**
@@ -32,9 +28,11 @@ export function validateEmail(email: string): InterfaceValidationResult {
  * @param password - Password to validate
  * @returns Validation result with error message if invalid
  */
-export function validatePassword(password: string): InterfaceValidationResult {
+export function validatePassword(
+  password: string | null | undefined,
+): InterfaceValidationResult {
   if (!password || password.length < 8) {
-    return { isValid: false, error: 'atleast_8_char_long' };
+    return { isValid: false, error: 'settings.atleast_8_char_long' };
   }
 
   const hasLowercase = PASSWORD_REGEX.lowercase.test(password);
@@ -48,7 +46,7 @@ export function validatePassword(password: string): InterfaceValidationResult {
 
   return {
     isValid: false,
-    error: 'password_invalid',
+    error: 'settings.password_must_include_all_requirements',
   };
 }
 
@@ -57,11 +55,13 @@ export function validatePassword(password: string): InterfaceValidationResult {
  * @param name - Name to validate
  * @returns Validation result with error message if invalid
  */
-export function validateName(name: string): InterfaceValidationResult {
+export function validateName(
+  name: string | null | undefined,
+): InterfaceValidationResult {
   const trimmedName = (name ?? '').trim();
   return trimmedName.length >= 2
     ? { isValid: true }
-    : { isValid: false, error: 'fillCorrectly' };
+    : { isValid: false, error: 'settings.name_min_length' };
 }
 
 /**
@@ -76,5 +76,21 @@ export function validatePasswordConfirmation(
 ): InterfaceValidationResult {
   return password === confirmPassword
     ? { isValid: true }
-    : { isValid: false, error: 'passwordMismatches' };
+    : { isValid: false, error: 'settings.passwords_do_not_match' };
+}
+
+/**
+ * Checks password requirements status.
+ * @param password - Password to check
+ * @returns Object indicating which requirements are met
+ */
+export function getPasswordRequirements(
+  password: string,
+): InterfacePasswordRequirements {
+  return {
+    lowercase: PASSWORD_REGEX.lowercase.test(password),
+    uppercase: PASSWORD_REGEX.uppercase.test(password),
+    numeric: PASSWORD_REGEX.numeric.test(password),
+    specialChar: PASSWORD_REGEX.specialChar.test(password),
+  };
 }
