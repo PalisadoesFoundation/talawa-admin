@@ -234,8 +234,10 @@ export const CREATE_MEMBER_PG = gql`
 
 // to get the refresh token
 
+// Note: refreshToken variable is now optional - web clients use HTTP-Only cookies
+// Mobile clients can still pass the token as a variable for backward compatibility
 export const REFRESH_TOKEN_MUTATION = gql`
-  mutation RefreshToken($refreshToken: String!) {
+  mutation RefreshToken($refreshToken: String) {
     refreshToken(refreshToken: $refreshToken) {
       authenticationToken
       refreshToken
@@ -243,7 +245,16 @@ export const REFRESH_TOKEN_MUTATION = gql`
   }
 `;
 
-// to revoke a refresh token
+// Logout mutation - uses HTTP-Only cookies, clears auth cookies on server
+export const LOGOUT_MUTATION = gql`
+  mutation Logout {
+    logout {
+      success
+    }
+  }
+`;
+
+// to revoke a refresh token (for mobile clients that need to pass the token explicitly)
 
 export const REVOKE_REFRESH_TOKEN = gql`
   mutation RevokeRefreshToken($refreshToken: String!) {

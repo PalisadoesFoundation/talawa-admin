@@ -146,7 +146,9 @@ function agendaCategoryContainer({
       toast.success(t('agendaCategoryUpdated') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(`Agenda Category Update Failed ${error.message}`);
+        toast.error(
+          t('agendaCategoryUpdateFailed', { message: error.message }) as string,
+        );
       }
     }
   };
@@ -168,7 +170,9 @@ function agendaCategoryContainer({
       toast.success(t('agendaCategoryDeleted') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(`Agenda Category Delete Failed, ${error.message}`);
+        toast.error(
+          t('agendaCategoryDeleteFailed', { message: error.message }) as string,
+        );
       }
     }
   };

@@ -128,5 +128,7 @@
   "Volunteers": "Voluntarios",
   "unblock": "Desbloquear",
   "unblockedSuccessfully": "{{item}} desbloqueado exitosamente",
-  "pluginSettings": "Configuración de complementos"
+  "pluginSettings": "Configuración de complementos",
+  "toggleSidebar": "Alternar barra lateral",
+  "organizationPicture": "Imagen de {{name}}"
 }

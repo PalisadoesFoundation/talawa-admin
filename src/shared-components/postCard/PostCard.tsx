@@ -236,7 +236,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
     try {
       await deletePost({ variables: { input: { id: props.id } } });
       await props.fetchPosts();
-      toast.success(t('postDeletedSuccess'));
+      toast.success(t('postDeleted'));
       setDropdownAnchor(null);
       props.fetchPosts();
     } catch (error) {
@@ -271,7 +271,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           <IconButton
             onClick={handleDropdownOpen}
             size="small"
-            aria-label="more options"
+            aria-label={t('moreOptions')}
             data-testid="post-more-options-button"
           >
             <MoreHoriz />

@@ -74,7 +74,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
   }
 
   if (!eventData || !eventData.event) {
-    return <div data-testid="no-event">Event not found</div>;
+    return <div data-testid="no-event">{t('eventNotFound')}</div>;
   }
 
   const formatTimeFromDateTime = (dateTime: string): string => {
@@ -137,7 +137,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
               <h1>
                 <b data-testid="registrations-count">N/A</b>
               </h1>
-              <span>No of Registrations</span>
+              <span>{t('noOfRegistrations')}</span>
             </div>
           </div>
           <div className={`${styles.ctacards}`} data-testid="attendees-card">
@@ -146,7 +146,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
               <h1>
                 <b data-testid="attendees-count">N/A</b>
               </h1>
-              <span>No of Attendees</span>
+              <span>{t('noOfAttendees')}</span>
             </div>
           </div>
           <div className={`${styles.ctacards}`} data-testid="feedback-card">
@@ -155,7 +155,7 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
               <h1>
                 <b data-testid="feedback-rating">N/A</b>
               </h1>
-              <span>Average Feedback</span>
+              <span>{t('averageFeedback')}</span>
             </div>
           </div>
         </div>
@@ -176,12 +176,12 @@ const EventDashboard = (props: { eventId: string }): JSX.Element => {
                 {eventData.event.description}
               </p>
               <p className={styles.toporgloc} data-testid="event-location">
-                <b>Location:</b>
+                <b>{t('location')}:</b>
                 <span>{eventData.event.location || 'N/A'}</span>
               </p>
               {/* Attendees not available; remove or adjust */}
               <p className={styles.toporgloc} data-testid="event-registrants">
-                <b>Registrants:</b> <span>N/A</span>
+                <b>{t('registrants')}:</b> <span>N/A</span>
               </p>
             </div>
             <div className={styles.time} data-testid="event-time">

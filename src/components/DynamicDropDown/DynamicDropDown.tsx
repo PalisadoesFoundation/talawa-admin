@@ -43,6 +43,7 @@ import React from 'react';
 import { Dropdown } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceDropDownProps } from 'types/DropDown/interface';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceChangeDropDownProps<T> extends InterfaceDropDownProps {
   setFormState: React.Dispatch<React.SetStateAction<T>>;
@@ -61,6 +62,7 @@ const DynamicDropDown = <T extends Record<string, unknown>>({
   fieldName,
   handleChange,
 }: InterfaceChangeDropDownProps<T>): JSX.Element => {
+  const { t } = useTranslation('translation');
   const handleFieldChange = (value: string): void => {
     if (handleChange) {
       const event = {
@@ -81,10 +83,10 @@ const DynamicDropDown = <T extends Record<string, unknown>>({
 
   return (
     <Dropdown
-      title={`Select ${fieldName}`}
+      title={t('selectField', { fieldName }) as string}
       className={`${parentContainerStyle ?? ''} m-2`}
       data-testid={`${fieldName.toLowerCase()}-dropdown-container`}
-      aria-label={`Select ${fieldName}`}
+      aria-label={t('selectField', { fieldName }) as string}
     >
       <Dropdown.Toggle
         className={`${btnStyle ?? 'w-100'} ${styles.dropwdownToggle}`}

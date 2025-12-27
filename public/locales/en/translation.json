@@ -9,14 +9,7 @@
     "weekly": "This Week",
     "monthly": "This Month",
     "yearly": "This Year",
-    "noVolunteers": "No Volunteers Found!",
-    "goldMedal": "Gold medal",
-    "silverMedal": "Silver medal",
-    "bronzeMedal": "Bronze medal",
-    "rank": "Rank",
-    "volunteer": "Volunteer",
-    "email": "Email",
-    "hoursVolunteered": "Hours Volunteered"
+    "noVolunteers": "No Volunteers Found!"
   },
   "loginPage": {
     "title": "Talawa Admin",
@@ -61,7 +54,11 @@
     "OR": "OR",
     "admin": "admin",
     "user": "user",
-    "loading": "loading"
+    "loading": "loading",
+    "communityLogo": "Community Logo",
+    "organizations": "Organizations",
+    "accountLocked": "Your account has been temporarily locked due to too many failed login attempts. Please try again later.",
+    "accountLockedWithTimer": "Your account has been temporarily locked. Please try again in {{minutes}} minute(s)."
   },
   "signOut": {
     "retryPrompt": "Failed to revoke session. Retry?",
@@ -229,7 +226,8 @@
     "name": "name",
     "email": "email",
     "profilePictureAlt": "User profile picture",
-    "placeholderAvatarAlt": "Placeholder avatar"
+    "placeholderAvatarAlt": "Placeholder avatar",
+    "newMembersWillAppearHere": "New membership requests will appear here"
   },
   "users": {
     "membershipStatus": {
@@ -660,7 +658,6 @@
     "deleteThisAndFollowing": "Delete this and all following events",
     "deleteAllEvents": "Delete all events in this series",
     "editEvent": "Edit Event",
-    "showEventDashboard": "Show Event Dashboard",
     "updateEvent": "Update Event",
     "updateRecurringEventMsg": "This is a recurring event. Choose how you want to update it:",
     "updateThisInstance": "Update only this instance",
@@ -704,6 +701,7 @@
   "funds": {
     "title": "Funds",
     "createFund": "Create Fund",
+    "searchFunds": "Search Funds",
     "fundName": "Fund Name",
     "fundId": "Fund (Reference) ID",
     "taxDeductible": "Tax Deductible",
@@ -713,6 +711,7 @@
     "fundUpdate": "Update Fund",
     "fundDelete": "Delete Fund",
     "noFundsFound": "No Funds Found",
+    "editFund": "Edit Fund",
     "createdBy": "Created By",
     "createdOn": "Created On",
     "status": "Status",
@@ -730,6 +729,8 @@
   },
   "fundCampaign": {
     "title": "Fundraising Campaigns",
+    "editCampaign": "Edit Campaign",
+    "searchCampaigns": "Search Campaigns",
     "campaignName": "Campaign Name",
     "campaignOptions": "Options",
     "fundingGoal": "Funding Goal",
@@ -750,7 +751,8 @@
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
     "lowestGoal": "Lowest Goal",
-    "highestGoal": "Highest Goal"
+    "highestGoal": "Highest Goal",
+    "errorLoading": "Error occured while loading campaigns data"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
@@ -783,12 +785,7 @@
     "startDate": "startDate",
     "endDate": "endDate",
     "searchByPlaceholder": "Search by {{field}}",
-    "selectPledger": "Please select a pledger",
-    "moreUsers": "+{{count}} more...",
-    "togglePledgedRaised": "Toggle between Pledged and Raised amounts",
-    "pledgeDate": "Pledge Date",
-    "pledged": "Pledged",
-    "donated": "Donated"
+    "selectPledger": "Please select a pledger"
   },
   "createPostModal": {
     "title": "Posts",
@@ -896,7 +893,6 @@
     "searchByFirstName": "Search By First Name",
     "searchByLastName": "Search By Last Name",
     "noSpammerFound": "No spammer found",
-    "noUsersFound": "No users found",
     "searchByName": "Search by name...",
     "name": "name",
     "email": "email",
@@ -1090,6 +1086,19 @@
     "enterOrganizationDescription": "Enter Organization Description"
   },
   "memberDetail": {
+    "fileTooLarge": "File is too large. Maximum size is 5MB.",
+    "passwordLength": "Password must be at least 8 characters long.",
+    "user": "User",
+    "userImage": "User Image",
+    "editProfilePic": "Edit profile picture",
+    "enterDesc": "Enter description",
+    "exPhone": "Ex. +1234567890",
+    "exLane": "Ex. Lane 2",
+    "exZip": "Ex. 12345",
+    "enterCity": "Enter city name",
+    "enterState": "Enter state name",
+    "selectCountry": "Select {{country}}",
+    "selectCountryLabel": "Select {{label}} as your country",
     "title": "User Details",
     "addAdmin": "Add Admin",
     "noeventsAttended": "No Events Attended",
@@ -1122,6 +1131,7 @@
     "eventsAttended": "Events Attended",
     "contactInfoHeading": "Contact Information",
     "actionsHeading": "Actions",
+    "actions": "Action",
     "personalDetailsHeading": "Profile Details",
     "appLanguageCode": "Choose Language",
     "deleteUser": "Delete User",
@@ -1142,7 +1152,20 @@
     "unassignUserTagMessage": "Do you want to remove the tag from this user?",
     "successfullyUnassigned": "Tag unassigned from user",
     "tagsAssigned": "Tags Assigned",
-    "noTagsAssigned": "No Tags Assigned"
+    "noTagsAssigned": "No Tags Assigned",
+    "fileTooLarge": "File is too large. Maximum size is 5MB.",
+    "passwordLength": "Password must be at least 8 characters long.",
+    "user": "User",
+    "userImage": "User Image",
+    "editProfilePic": "Edit profile picture",
+    "enterDesc": "Enter description",
+    "exPhone": "Ex. +1234567890",
+    "exLane": "Ex. Lane 2",
+    "exZip": "Ex. 12345",
+    "enterCity": "Enter city name",
+    "enterState": "Enter state name",
+    "selectCountry": "Select {{country}}",
+    "selectCountryLabel": "Select {{country}} as your country"
   },
   "people": {
     "title": "People",
@@ -1268,6 +1291,8 @@
     "unknownUser": "Unknown User",
     "closePinnedPost": "Close Pinned Post",
     "searchPosts": "Search posts",
+    "scrollLeft": "Scroll left",
+    "scrollRight": "Scroll right",
     "nothingToShow": "Nothing to show here.",
     "noMorePosts": "No more posts to load.",
     "noPosts": "No posts available.",
@@ -1277,7 +1302,9 @@
     "pinnedPostsLoadError": "Error loading pinned posts",
     "errorLoadingPosts": "Error loading posts",
     "loadMorePostsError": "Error loading more posts",
-    "sortPost": "Sort Post"
+    "sortPost": "Sort Post",
+    "scrollLeft": "Scroll left",
+    "scrollRight": "Scroll right"
   },
   "home": {
     "posts": "Posts",
@@ -1461,6 +1488,18 @@
     "register": "register"
   },
   "advertisement": {
+    "failedToFetch": "Failed to fetch advertisements",
+    "adImageAlt": "Advertisement image #{{index}} for {{name}}",
+    "adMediaAlt": "Advertisement media",
+    "noMedia": "No media available",
+    "invalidFileType": "Invalid file type: {{fileName}}",
+    "fileTooLarge": "File too large: {{fileName}}",
+    "invalidArgs": "Invalid arguments for this action.",
+    "englishCaptions": "English captions",
+    "preview": "Preview",
+    "bannerAd": "Banner Ad",
+    "popupAd": "Popup Ad",
+    "menuAd": "Menu Ad",
     "title": "Advertisements",
     "activeAds": "Active Campaigns",
     "archivedAds": "Completed Campaigns",
@@ -1494,7 +1533,19 @@
     "yes": "yes",
     "edit": "edit",
     "saveChanges": "saveChanges",
-    "endOfResults": "endOfResults"
+    "endOfResults": "endOfResults",
+    "failedToFetch": "Failed to fetch advertisements",
+    "adImageAlt": "Advertisement image #{{index}} for {{name}}",
+    "adMediaAlt": "Advertisement media",
+    "noMedia": "No media available",
+    "invalidFileType": "Invalid file type: {{fileName}}",
+    "fileTooLarge": "File too large: {{fileName}}",
+    "invalidArgs": "Invalid arguments for this action.",
+    "englishCaptions": "English captions",
+    "preview": "Preview",
+    "bannerAd": "Banner Ad",
+    "popupAd": "Popup Ad",
+    "menuAd": "Menu Ad"
   },
   "userChat": {
     "title": "Chats",
@@ -1648,14 +1699,21 @@
   "userCampaigns": {
     "title": "Fundraising Campaigns",
     "searchByName": "Search by Name...",
+    "searchCampaigns": "Search Campaigns",
+    "campaignName": "Campaign Name",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "fundingGoal": "Fund Goal",
+    "raised": "Amount Raised",
+    "progress": "% Raised",
+    "viewPledge": "View Pledge",
     "searchBy": "Search by",
     "pledgers": "Pledgers",
     "pledger": "Pledger",
     "campaigns": "Campaigns",
-    "associatedCampaign": "Associated Campaign",
+    "associatedCampaign": "Associated Campaigns",
     "pledged": "Pledged",
     "donated": "Donated",
-    "progress": "Progress",
     "more": "more",
     "myPledges": "My Pledges",
     "lowestAmount": "Lowest Amount",
@@ -1678,7 +1736,6 @@
     "title": "Leave Organization"
   },
   "eventVolunteers": {
-    "toggleGroupAriaLabel": "Volunteer view selector",
     "volunteers": "Volunteers",
     "volunteer": "Volunteer",
     "volunteerGroups": "Volunteer Groups",
@@ -1797,7 +1854,24 @@
     "checkBackLater": "Check back later for new plugins",
     "tryDifferentSearch": "Try a different search term or browse all plugins",
     "explorePluginStore": "Explore the plugin store to discover new plugins",
-    "noResultsFoundFor": "No results found for"
+    "noResultsFoundFor": "No results found for",
+    "uploadFailed": "Failed to upload plugin. Please try again.",
+    "uploadPlugin": "Upload Plugin",
+    "browseFiles": "Click to browse files",
+    "pluginInfo": "Plugin Information",
+    "name": "Name:",
+    "version": "Version:",
+    "author": "Author:",
+    "description": "Description:",
+    "pluginId": "Plugin ID:",
+    "componentsToInstall": "Components to Install:",
+    "adminComponents": "Admin Dashboard Components",
+    "apiComponents": "API Backend Components",
+    "pluginStructure": "Plugin Structure",
+    "expectedStructure": "Expected plugin structure with admin and/or API components",
+    "detectedFiles": "Detected Files",
+    "expectedDirStructure": "Expected Directory Structure",
+    "requiredManifestFields": "Required manifest.json Fields"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Comment deleted successfully",
@@ -1819,8 +1893,6 @@
   "common": {
     "signOut": "Sign out",
     "signingOut": "Signing out...",
-    "retryPrompt": "Failed to revoke session. Retry?",
-    "breadcrumb": "Breadcrumb",
-    "action": "Action"
+    "retryPrompt": "Failed to revoke session. Retry?"
   }
 }

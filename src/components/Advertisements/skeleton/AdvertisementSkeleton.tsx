@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 
 /**
@@ -20,6 +21,8 @@ import styles from 'style/app-fixed.module.css';
  * @returns {JSX.Element[]} An array of JSX elements representing the skeleton loaders.
  */
 export function AdvertisementSkeleton() {
+  const { t } = useTranslation('translation', { keyPrefix: 'advertisements' });
+
   return [...Array(6)].map((_, index) => (
     <div
       key={index}
@@ -30,8 +33,8 @@ export function AdvertisementSkeleton() {
         <div className={styles.innerContainer}>
           <div className={`${styles.orgImgContainer} shimmer`} />
           <div className={styles.content}>
-            <h5 className="shimmer" title="Name">
-              <span className="visually-hidden">Advertisement Loading</span>
+            <h5 className="shimmer" title={t('name') as string}>
+              <span className="visually-hidden">{t('loading')}</span>
             </h5>
           </div>
         </div>

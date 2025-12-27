@@ -183,7 +183,7 @@ function EventAttendance(): JSX.Element {
             />
           </div>
           <SortingButton
-            title="Filter"
+            title={t('filter') as string}
             sortingOptions={[
               { label: FilterPeriod.ThisMonth, value: FilterPeriod.ThisMonth },
               { label: FilterPeriod.ThisYear, value: FilterPeriod.ThisYear },
@@ -197,10 +197,10 @@ function EventAttendance(): JSX.Element {
             }
             dataTestIdPrefix="filter-dropdown"
             className={`${styles.dropdown} mx-4`}
-            buttonLabel="Filter"
+            buttonLabel={t('filter') as string}
           />
           <SortingButton
-            title="Sort"
+            title={t('sort') as string}
             sortingOptions={[
               { label: 'Ascending', value: 'ascending' },
               { label: 'Descending', value: 'descending' },
@@ -216,8 +216,7 @@ function EventAttendance(): JSX.Element {
       </div>
       <TableContainer
         component={Paper}
-        className="mt-3"
-        sx={{ borderRadius: '16px' }}
+        className={`mt-3 ${styles.roundedTableContainer}`}
       >
         <Table aria-label={t('event_attendance_table')} role="grid">
           <TableHead>
@@ -309,7 +308,7 @@ function EventAttendance(): JSX.Element {
                             scrollbarColor: 'white',
                             border: 'var(--primary-border-solid)',
                             borderRadius: '6px',
-                            boxShadow: '0 0 5px rgba(0,0,0,0.1)',
+                            boxShadow: 'var(--tooltip-box-shadow)',
                           },
                         },
                       }}
@@ -346,7 +345,7 @@ function EventAttendance(): JSX.Element {
                           ) => <div key={tagIndex}>{edge.node.name}</div>,
                         )
                       ) : (
-                        <div>None</div>
+                        <div>{t('none')}</div>
                       )}
                     </TableCell>
                   </TableRow>

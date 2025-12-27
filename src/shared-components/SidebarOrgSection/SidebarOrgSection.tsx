@@ -63,6 +63,7 @@ const SidebarOrgSection = ({
   isProfilePage = false,
 }: ISidebarOrgSectionProps): React.ReactElement | null => {
   const { t: tErrors } = useTranslation('errors');
+  const { t: tCommon } = useTranslation('common');
 
   const { data, loading } = useQuery<{
     organization: IOrganizationData;
@@ -117,7 +118,9 @@ const SidebarOrgSection = ({
               <Avatar
                 name={data.organization.name}
                 containerStyle={styles.avatarContainer}
-                alt={`${data.organization.name} Picture`}
+                alt={tCommon('organizationPicture', {
+                  name: data.organization.name,
+                })}
               />
             )}
           </div>

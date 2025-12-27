@@ -23,6 +23,7 @@
  *
  */
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { CheckInModal } from './Modal/CheckInModal';
 import { Button } from 'react-bootstrap';
 import style from '../../../src/style/app-fixed.module.css';
@@ -37,13 +38,14 @@ export const CheckInWrapper = ({
   onCheckInUpdate,
 }: PropType): JSX.Element => {
   const [showModal, setShowModal] = useState(false);
+  const { t } = useTranslation('translation');
 
   return (
     <>
       <Button
         data-testid="stats-modal"
         className={style.createButton}
-        aria-label="checkInMembers"
+        aria-label={t('checkInMembers') as string}
         onClick={(): void => {
           setShowModal(true);
         }}
@@ -52,9 +54,9 @@ export const CheckInWrapper = ({
           src="/images/svg/options-outline.svg"
           width={30.63}
           height={30.63}
-          alt="Sort"
+          alt={t('sort') as string}
         />
-        Check In Members
+        {t('checkInMembers')}
       </Button>
       {showModal && (
         <CheckInModal

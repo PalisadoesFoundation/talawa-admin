@@ -89,25 +89,19 @@ const SidebarBase = ({
           onClick={handleToggle}
           onKeyDown={handleKeyDown}
           type="button"
-          aria-label="Toggle sidebar"
+          aria-label={tCommon('toggleSidebar')}
         >
           <FaBars
-            className={styles.hamburgerIcon}
+            className={`${styles.hamburgerIcon} ${styles.hamburgerIconWrapper} ${hideDrawer ? styles.hamburgerIconCollapsed : styles.hamburgerIconExpanded}`}
             size={22}
-            style={{
-              cursor: 'pointer',
-              height: '38px',
-              marginLeft: hideDrawer ? '0px' : '10px',
-            }}
           />
         </button>
         <div
-          style={{
-            display: hideDrawer ? 'none' : 'flex',
-            alignItems: 'center',
-            marginRight: 'auto',
-            paddingLeft: '5px',
-          }}
+          className={
+            hideDrawer
+              ? styles.sidebarBrandingHidden
+              : styles.sidebarBrandingWrapper
+          }
         >
           <TalawaLogo className={styles.talawaLogo} />
           <div className={`${styles.talawaText} ${styles.sidebarText}`}>

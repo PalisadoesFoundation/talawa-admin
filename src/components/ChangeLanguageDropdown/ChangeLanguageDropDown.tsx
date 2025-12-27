@@ -42,8 +42,10 @@ import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfaceDropDownProps } from 'types/DropDown/interface';
 import { urlToFile } from 'utils/urlToFile';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
+  const { t } = useTranslation('translation');
   const currentLanguageCode = cookies.get('i18next') || 'en';
   const { getItem } = useLocalStorage();
 
@@ -60,7 +62,7 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
     }
 
     if (!userId) {
-      toast.error('User not found');
+      toast.error(t('userNotFound') as string);
       return;
     }
 
@@ -94,7 +96,10 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
   };
 
   return (
-    <Dropdown title="Change Language" data-testid="language-dropdown-container">
+    <Dropdown
+      title={t('changeLanguage') as string}
+      data-testid="language-dropdown-container"
+    >
       <Dropdown.Toggle
         className={styles.changeLanguageBtn}
         data-testid="language-dropdown-btn"
@@ -104,12 +109,12 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
             key={`dropdown-btn-${index}`}
             data-testid={`dropdown-btn-${index}`}
           >
-            {currentLanguageCode === language.code ? (
+            {currentLanguageCode === language.code && (
               <span className={`${props?.btnTextStyle ?? ''}`}>
                 <span className={`fi fi-${language.country_code} me-2`}></span>
                 {language.name}
               </span>
-            ) : null}
+            )}
           </span>
         ))}
       </Dropdown.Toggle>

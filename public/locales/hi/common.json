@@ -128,5 +128,7 @@
   "Volunteers": "स्वयंसेवक",
   "unblock": "अनब्लॉक करें",
   "unblockedSuccessfully": "{{item}} सफलतापूर्वक अनब्लॉक किया गया",
-  "pluginSettings": "प्लगइन सेटिंग्स"
+  "pluginSettings": "प्लगइन सेटिंग्स",
+  "toggleSidebar": "साइडबार टॉगल करें",
+  "organizationPicture": "{{name}} चित्र"
 }

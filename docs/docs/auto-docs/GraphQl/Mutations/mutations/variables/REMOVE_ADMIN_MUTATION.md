@@ -6,4 +6,4 @@
 
 > `const` **REMOVE\_ADMIN\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:350](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L350)
+Defined in: [src/GraphQl/Mutations/mutations.ts:361](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L361)

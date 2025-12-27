@@ -9,14 +9,7 @@
     "weekly": "本周",
     "monthly": "本月",
     "yearly": "今年",
-    "noVolunteers": "未找到志愿者!",
-    "goldMedal": "金牌",
-    "silverMedal": "银牌",
-    "bronzeMedal": "铜牌",
-    "rank": "排名",
-    "volunteer": "志愿者",
-    "email": "电子邮件",
-    "hoursVolunteered": "志愿服务时数"
+    "noVolunteers": "未找到志愿者!"
   },
   "loginPage": {
     "title": "塔拉瓦管理员",
@@ -61,7 +54,11 @@
     "OR": "或",
     "admin": "管理员",
     "user": "用户",
-    "loading": "加载中"
+    "loading": "加载中",
+    "communityLogo": "社区标志",
+    "organizations": "组织",
+    "accountLocked": "由于登录失败次数过多，您的账户已被暂时锁定。请稍后重试。",
+    "accountLockedWithTimer": "您的账户已被暂时锁定。请在 {{minutes}} 分钟后重试。"
   },
   "signOut": {
     "retryPrompt": "撤銷工作階段失敗。要重試嗎？",
@@ -229,7 +226,8 @@
     "name": "名称",
     "email": "电子邮件",
     "profilePictureAlt": "{{name}} 的头像",
-    "placeholderAvatarAlt": "占位符头像"
+    "placeholderAvatarAlt": "占位符头像",
+    "newMembersWillAppearHere": "新的会员请求将出现在这里"
   },
   "users": {
     "membershipStatus": {
@@ -660,7 +658,6 @@
     "deleteThisAndFollowing": "删除此事件和所有后续事件",
     "deleteAllEvents": "删除此系列中的所有事件",
     "editEvent": "编辑事件",
-    "showEventDashboard": "显示事件仪表板",
     "updateEvent": "更新事件",
     "updateRecurringEventMsg": "这是一个重复事件。请选择您想要如何更新它：",
     "updateThisInstance": "仅更新此实例",
@@ -726,7 +723,8 @@
     "viewCampaigns": "查看活动",
     "assocCampaigns": "相关活动",
     "errorLoadingFundsData": "加载基金数据时出错",
-    "editFund": "编辑基金"
+    "editFund": "编辑基金",
+    "searchFunds": "搜索基金"
   },
   "fundCampaign": {
     "title": "募捐活动",
@@ -750,7 +748,10 @@
     "latestEndDate": "最新结束日期",
     "earliestEndDate": "最早结束日期",
     "lowestGoal": "最低目标",
-    "highestGoal": "最高目标"
+    "highestGoal": "最高目标",
+    "editCampaign": "编辑活动",
+    "searchCampaigns": "搜索活动",
+    "errorLoading": "加载活动数据时出错"
   },
   "pledges": {
     "title": "基金活动承诺",
@@ -783,12 +784,7 @@
     "startDate": "开始日期",
     "endDate": "结束日期",
     "searchByPlaceholder": "按{{field}}搜索",
-    "selectPledger": "请选择一个承诺者",
-    "moreUsers": "+{{count}} 更多...",
-    "togglePledgedRaised": "在承诺金额和募集金额之间切换",
-    "pledgeDate": "承诺日期",
-    "pledged": "已承诺",
-    "donated": "已捐赠"
+    "selectPledger": "请选择一个承诺者"
   },
   "createPostModal": {
     "title": "帖子",
@@ -896,7 +892,6 @@
     "searchByFirstName": "按名字搜索",
     "searchByLastName": "按姓氏搜索",
     "noSpammerFound": "未发现垃圾邮件发送者",
-    "noUsersFound": "未找到用户",
     "searchByName": "按名称搜索",
     "name": "名称",
     "email": "电子邮件",
@@ -1090,7 +1085,20 @@
     "unassignUserTagMessage": "您想从此用户中删除标签吗？",
     "successfullyUnassigned": "标签已从用户中取消分配",
     "tagsAssigned": "已分配标签",
-    "noTagsAssigned": "未分配标签"
+    "noTagsAssigned": "未分配标签",
+    "fileTooLarge": "文件太大",
+    "passwordLength": "密码长度应至少为 8 个字符",
+    "user": "用户",
+    "userImage": "用户图片",
+    "editProfilePic": "编辑个人资料图片",
+    "enterDesc": "输入描述",
+    "exPhone": "例如：+1234567890",
+    "exLane": "例如：Lane 1",
+    "exZip": "例如：123456",
+    "enterCity": "输入城市",
+    "enterState": "输入州",
+    "selectCountry": "选择国家",
+    "selectCountryLabel": "选择国家"
   },
   "userLogin": {
     "login": "登录",
@@ -1216,6 +1224,8 @@
     "unknownUser": "未知用户",
     "closePinnedPost": "关闭置顶帖子",
     "searchPosts": "搜索帖子",
+    "scrollLeft": "Scroll left",
+    "scrollRight": "Scroll right",
     "nothingToShow": "这里没有可显示的内容。",
     "noMorePosts": "没有更多帖子了",
     "noPosts": "未找到帖子",
@@ -1225,7 +1235,9 @@
     "pinnedPostsLoadError": "加载置顶帖子时出错。请重试。",
     "errorLoadingPosts": "加载帖子时出错。请重试。",
     "loadMorePostsError": "加载更多帖子时出错。请重试。",
-    "sortPost": "排序帖子"
+    "sortPost": "排序帖子",
+    "scrollLeft": "向左滚动",
+    "scrollRight": "向右滚动"
   },
   "home": {
     "title": "帖子",
@@ -1494,7 +1506,19 @@
     "edit": "编辑",
     "saveChanges": "保存更改",
     "endOfResults": "结果结束",
-    "noDescription": "没有描述"
+    "noDescription": "没有描述",
+    "failedToFetch": "获取广告失败",
+    "adImageAlt": "广告图片",
+    "adMediaAlt": "广告媒体",
+    "noMedia": "无媒体",
+    "invalidFileType": "无效的文件类型",
+    "fileTooLarge": "文件太大",
+    "invalidArgs": "无效参数",
+    "englishCaptions": "英语字幕",
+    "preview": "预览",
+    "bannerAd": "横幅广告",
+    "popupAd": "弹出广告",
+    "menuAd": "菜单广告"
   },
   "userChat": {
     "title": "聊天",
@@ -1668,7 +1692,13 @@
     "viewPledges": "查看承诺",
     "noPledges": "未找到承诺",
     "noCampaigns": "未找到活动",
-    "raised": "已筹集",
+    "searchCampaigns": "搜索活动",
+    "campaignName": "活动名称",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "fundingGoal": "筹款目标",
+    "raised": "已筹金额",
+    "viewPledge": "查看认捐",
     "amountRaised": "已筹集金额"
   },
   "userPledges": {
@@ -1678,7 +1708,6 @@
     "title": "离开组织"
   },
   "eventVolunteers": {
-    "toggleGroupAriaLabel": "志愿者视图选择器",
     "volunteers": "志愿者",
     "volunteer": "志愿者",
     "volunteerGroups": "志愿者小组",
@@ -1796,6 +1825,23 @@
     "installPluginsToSeeHere": "安装插件以在此查看",
     "checkBackLater": "稍后查看新插件",
     "tryDifferentSearch": "尝试使用不同的搜索词或浏览所有插件",
+    "uploadFailed": "上传失败",
+    "uploadPlugin": "上传插件",
+    "browseFiles": "浏览文件",
+    "pluginInfo": "插件信息",
+    "name": "名称",
+    "version": "版本",
+    "author": "作者",
+    "description": "描述",
+    "pluginId": "插件 ID",
+    "componentsToInstall": "要安装的组件",
+    "adminComponents": "管理组件",
+    "apiComponents": "API 组件",
+    "pluginStructure": "插件结构",
+    "expectedStructure": "预期结构",
+    "detectedFiles": "检测到的文件",
+    "expectedDirStructure": "预期目录结构",
+    "requiredManifestFields": "必需的清单字段",
     "explorePluginStore": "探索插件商店以发现新插件",
     "noResultsFoundFor": "未找到相关结果"
   },
@@ -1819,8 +1865,6 @@
   "common": {
     "signOut": "退出登录",
     "signingOut": "正在退出...",
-    "retryPrompt": "撤销会话失败。重试？",
-    "breadcrumb": "面包屑",
-    "action": "操作"
+    "retryPrompt": "撤销会话失败。重试？"
   }
 }

@@ -27,8 +27,12 @@ export class LoginPage {
     return this;
   }
 
-  verifyErrorToast(timeout = 5000) {
-    cy.get('.Toastify__toast', { timeout }).should('be.visible');
+  verifyErrorToast(expectedMessage?: string) {
+    if (expectedMessage) {
+      cy.contains('[role="alert"]', expectedMessage).should('be.visible');
+    } else {
+      cy.get('[role="alert"]').should('be.visible');
+    }
     return this;
   }
 }

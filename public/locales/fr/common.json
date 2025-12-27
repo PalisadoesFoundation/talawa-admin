@@ -128,5 +128,7 @@
   "Volunteers": "Bénévoles",
   "unblock": "Débloquer",
   "unblockedSuccessfully": "{{item}} débloqué avec succès",
-  "pluginSettings": "Paramètres du plugin"
+  "pluginSettings": "Paramètres du plugin",
+  "toggleSidebar": "Basculer la barre latérale",
+  "organizationPicture": "Image de {{name}}"
 }

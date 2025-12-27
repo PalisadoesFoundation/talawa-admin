@@ -9,14 +9,7 @@
     "weekly": "Cette Semaine",
     "monthly": "Ce Mois",
     "yearly": "Cette Année",
-    "noVolunteers": "Aucun Bénévole Trouvé!",
-    "goldMedal": "or",
-    "silverMedal": "argent",
-    "bronzeMedal": "bronze",
-    "rank": "Rang",
-    "volunteer": "Bénévole",
-    "email": "E-mail",
-    "hoursVolunteered": "Heures Bénévoles"
+    "noVolunteers": "Aucun Bénévole Trouvé!"
   },
   "loginPage": {
     "title": "Administrateur Talawa",
@@ -61,7 +54,11 @@
     "OR": "OU",
     "admin": "Administrateur",
     "user": "Utilisateur",
-    "loading": "Chargement"
+    "loading": "Chargement",
+    "communityLogo": "Logo de la Communauté",
+    "organizations": "Organisations",
+    "accountLocked": "Votre compte a été temporairement verrouillé en raison de trop nombreuses tentatives de connexion échouées. Veuillez réessayer plus tard.",
+    "accountLockedWithTimer": "Votre compte a été temporairement verrouillé. Veuillez réessayer dans {{minutes}} minute(s)."
   },
   "signOut": {
     "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
@@ -229,7 +226,8 @@
     "name": "Nom",
     "email": "E-mail",
     "profilePictureAlt": "Image de profil de {{name}}",
-    "placeholderAvatarAlt": "Avatar par défaut"
+    "placeholderAvatarAlt": "Avatar par défaut",
+    "newMembersWillAppearHere": "Les nouvelles demandes d'adhésion apparaîtront ici"
   },
   "users": {
     "membershipStatus": {
@@ -660,7 +658,6 @@
     "deleteThisAndFollowing": "Supprimer cet événement et tous les suivants",
     "deleteAllEvents": "Supprimer tous les événements de cette série",
     "editEvent": "Modifier l'événement",
-    "showEventDashboard": "Afficher le tableau de bord de l'événement",
     "updateEvent": "Mettre à jour l'événement",
     "updateRecurringEventMsg": "Il s'agit d'un événement récurrent. Choisissez comment vous souhaitez le mettre à jour :",
     "updateThisInstance": "Mettre à jour uniquement cette instance",
@@ -726,7 +723,8 @@
     "viewCampaigns": "Voir les campagnes",
     "assocCampaigns": "Campagnes associées",
     "errorLoadingFundsData": "Erreur lors du chargement des données des fonds",
-    "editFund": "Modifier le fonds"
+    "editFund": "Modifier le fonds",
+    "searchFunds": "Rechercher des fonds"
   },
   "fundCampaign": {
     "title": "Campagnes de collecte de fonds",
@@ -750,7 +748,10 @@
     "latestEndDate": "Dernière date de fin",
     "earliestEndDate": "Date de fin la plus ancienne",
     "lowestGoal": "Objectif le plus bas",
-    "highestGoal": "Objectif le plus élevé"
+    "highestGoal": "Objectif le plus élevé",
+    "editCampaign": "Modifier la campagne",
+    "searchCampaigns": "Rechercher des campagnes",
+    "errorLoading": "Erreur lors du chargement des données de la campagne"
   },
   "pledges": {
     "title": "Engagements de campagne de financement",
@@ -783,12 +784,7 @@
     "startDate": "Date de début",
     "endDate": "Date de fin",
     "searchByPlaceholder": "Rechercher par {{field}}",
-    "selectPledger": "Veuillez sélectionner un prometteur",
-    "moreUsers": "+{{count}} de plus...",
-    "togglePledgedRaised": "Basculer entre les montants Promis et Collectés",
-    "pledgeDate": "Date d'Engagement",
-    "pledged": "Promis",
-    "donated": "Donné"
+    "selectPledger": "Veuillez sélectionner un donateur"
   },
   "createPostModal": {
     "title": "Des postes",
@@ -896,7 +892,6 @@
     "searchByFirstName": "Recherche par prénom",
     "searchByLastName": "Rechercher par nom de famille",
     "noSpammerFound": "Aucun spammeur trouvé",
-    "noUsersFound": "Aucun utilisateur trouvé",
     "searchByName": "Rechercher par nom",
     "name": "Nom",
     "email": "Email",
@@ -1090,7 +1085,8 @@
     "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
     "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
     "tagsAssigned": "étiquettes assignées",
-    "noTagsAssigned": "Aucune étiquette assignée"
+    "noTagsAssigned": "Aucune étiquette assignée",
+    "actions": "Actions"
   },
   "people": {
     "title": "Personnes",
@@ -1216,6 +1212,8 @@
     "closePinnedPost": "Fermer le message épinglé",
     "unknownUser": "Utilisateur inconnu",
     "searchPosts": "Rechercher des messages",
+    "scrollLeft": "Scroll left",
+    "scrollRight": "Scroll right",
     "nothingToShow": "Rien à montrer ici.",
     "noMorePosts": "Plus de messages à charger",
     "noPosts": "Aucun message pour le moment. Créez le premier !",
@@ -1225,7 +1223,9 @@
     "pinnedPostsLoadError": "Erreur lors du chargement des messages épinglés",
     "errorLoadingPosts": "Erreur lors du chargement des messages. Veuillez réessayer.",
     "loadMorePostsError": "Erreur lors du chargement de plus de messages. Veuillez réessayer.",
-    "sortPost": "Trier le message"
+    "sortPost": "Trier le message",
+    "scrollLeft": "Faire défiler vers la gauche",
+    "scrollRight": "Faire défiler vers la droite"
   },
   "home": {
     "posts": "Des postes",
@@ -1494,7 +1494,19 @@
     "edit": "Modifier",
     "saveChanges": "Enregistrer les modifications",
     "endOfResults": "Fin des résultats",
-    "noDescription": "Aucune description"
+    "noDescription": "Aucune description",
+    "failedToFetch": "Échec de la récupération des publicités",
+    "adImageAlt": "Image publicitaire #{{index}} pour {{name}}",
+    "adMediaAlt": "Support publicitaire",
+    "noMedia": "Aucun média disponible",
+    "invalidFileType": "Type de fichier non valide : {{fileName}}",
+    "fileTooLarge": "Fichier trop volumineux : {{fileName}}",
+    "invalidArgs": "Arguments non valides pour cette action.",
+    "englishCaptions": "Sous-titres en anglais",
+    "preview": "Aperçu",
+    "bannerAd": "Bannière publicitaire",
+    "popupAd": "Publicité contextuelle",
+    "menuAd": "Publicité de menu"
   },
   "userChat": {
     "title": "Discussions",
@@ -1668,7 +1680,13 @@
     "viewPledges": "Voir les promesses",
     "noPledges": "Aucune promesse trouvée",
     "noCampaigns": "Aucune campagne trouvée",
-    "raised": "Collecté",
+    "searchCampaigns": "Rechercher des campagnes",
+    "campaignName": "Nom de la campagne",
+    "startDate": "Date de début",
+    "endDate": "Date de fin",
+    "fundingGoal": "Objectif de financement",
+    "raised": "Montant collecté",
+    "viewPledge": "Voir l'engagement",
     "amountRaised": "Montant Collecté"
   },
   "userPledges": {
@@ -1678,7 +1696,6 @@
     "title": "Quitter l'organisation"
   },
   "eventVolunteers": {
-    "toggleGroupAriaLabel": "Sélecteur de vue des bénévoles",
     "volunteers": "Bénévoles",
     "volunteer": "Bénévole",
     "volunteerGroups": "Groupes de Bénévoles",
@@ -1797,7 +1814,24 @@
     "checkBackLater": "Revenez plus tard pour de nouveaux plugins",
     "tryDifferentSearch": "Essayez un autre terme de recherche ou parcourez tous les plugins",
     "explorePluginStore": "Explorez la boutique de plugins pour découvrir de nouveaux plugins",
-    "noResultsFoundFor": "Aucun résultat trouvé pour"
+    "noResultsFoundFor": "Aucun résultat trouvé pour",
+    "uploadFailed": "Échec du téléchargement du plugin. Veuillez réessayer.",
+    "uploadPlugin": "Télécharger le plugin",
+    "browseFiles": "Cliquez pour parcourir les fichiers",
+    "pluginInfo": "Informations sur le plugin",
+    "name": "Nom :",
+    "version": "Version :",
+    "author": "Auteur :",
+    "description": "Description :",
+    "pluginId": "ID du plugin :",
+    "componentsToInstall": "Composants à installer :",
+    "adminComponents": "Composants du tableau de bord d'administration",
+    "apiComponents": "Composants backend API",
+    "pluginStructure": "Structure du plugin",
+    "expectedStructure": "Structure de plugin attendue avec des composants d'administration et/ou d'API",
+    "detectedFiles": "Fichiers détectés",
+    "expectedDirStructure": "Structure de répertoire attendue",
+    "requiredManifestFields": "Champs manifest.json requis"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Commentaire supprimé avec succès",
@@ -1819,8 +1853,6 @@
   "common": {
     "signOut": "Se déconnecter",
     "signingOut": "Déconnexion en cours...",
-    "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
-    "breadcrumb": "fil d'Ariane",
-    "action": "Action"
+    "retryPrompt": "Échec de la révocation de session. Réessayer ?"
   }
 }

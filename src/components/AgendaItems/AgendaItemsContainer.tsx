@@ -379,7 +379,7 @@ function AgendaItemsContainer({
                                   ))
                                 ) : (
                                   <span className={styles.categoryChip}>
-                                    No Category
+                                    {t('noCategory')}
                                   </span>
                                 )}
                               </div>
