@@ -248,7 +248,8 @@ function AdvertisementEntry({
                 <Card.Text
                   data-testid="Ad_desc"
                   className={
-                    advertisement.description && advertisement.description.length > 0
+                    advertisement.description &&
+                    advertisement.description.length > 0
                       ? undefined
                       : localStyles.noDescription
                   }

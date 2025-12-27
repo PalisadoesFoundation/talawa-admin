@@ -145,10 +145,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
             </p>
           </div>
 
-          <div
-            className={styles.dropzone}
-            onClick={handleUploadClick}
-          >
+          <div className={styles.dropzone} onClick={handleUploadClick}>
             <FaUpload className={styles.uploadIcon} />
             <div className={styles.dropzoneTitle}>
               {selectedFile ? selectedFile.name : 'Select ZIP file'}

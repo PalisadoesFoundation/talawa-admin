@@ -333,7 +333,9 @@ function OrganizationDashboard(): JSX.Element {
                     <DashBoardCard
                       count={pendingMembershipRequests.length}
                       title={tCommon('requests')}
-                      icon={<UsersIcon className={dashboardStyles.requestsIcon} />}
+                      icon={
+                        <UsersIcon className={dashboardStyles.requestsIcon} />
+                      }
                     />
                   </button>
                 </Col>
