@@ -246,7 +246,7 @@ export default function groupChatDetails({
   };
 
   const handleDeleteChat = async (): Promise<void> => {
-    if (window.confirm('Are you sure you want to delete this chat?')) {
+    if (window.confirm(t('confirmDeleteChat'))) {
       try {
         await deleteChat({ variables: { input: { id: chat.id } } });
         toast.success(t('chatDeletedSuccess'));
@@ -269,7 +269,6 @@ export default function groupChatDetails({
         <GroupChatDetailsHeader
           chat={chat}
           currentUserRole={currentUserRole}
-          userId={userId}
           selectedImage={selectedImage}
           editChatTitle={editChatTitle}
           chatName={chatName}

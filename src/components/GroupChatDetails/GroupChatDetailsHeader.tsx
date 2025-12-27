@@ -16,7 +16,7 @@ interface InterfaceGroupChatDetailsHeaderProps {
   setChatName: (s: string) => void;
   setEditChatTitle: (b: boolean) => void;
   onImageClick: () => void;
-  fileInputRef?: React.RefObject<HTMLInputElement>;
+  fileInputRef?: React.RefObject<HTMLInputElement | null>;
   onImageChange?: (e: React.ChangeEvent<HTMLInputElement>) => Promise<void>;
   onSaveTitle: () => Promise<void>;
   onCancelEdit: () => void;
@@ -46,7 +46,12 @@ export default function GroupChatDetailsHeader({
         <div className="d-flex justify-content-between w-100">
           <Modal.Title>{t('groupInfo')}</Modal.Title>
           {currentUserRole === 'administrator' && (
-            <Button variant="outline-danger" size="sm" onClick={onDelete}>
+            <Button
+              type="button"
+              variant="outline-danger"
+              size="sm"
+              onClick={onDelete}
+            >
               <FaTrash />
             </Button>
           )}
@@ -89,6 +94,7 @@ export default function GroupChatDetailsHeader({
           })()}
 
           <button
+            type="button"
             data-testid="editImageBtn"
             onClick={onImageClick}
             className={styles.editImgBtn}

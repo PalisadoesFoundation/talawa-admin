@@ -4,6 +4,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_CHAT_MEMBERSHIP } from 'GraphQl/Mutations/OrganizationMutations';
 import Loader from 'components/Loader/Loader';
+import { toast } from 'react-toastify';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -44,12 +45,21 @@ export default function GroupChatAddUserModal(
 
   const [addUser] = useMutation(CREATE_CHAT_MEMBERSHIP);
 
-  const addUserToGroupChat = async (userId: string): Promise<void> => {
-    await addUser({
-      variables: {
-        input: { memberId: userId, chatId: chat.id, role: 'regular' },
-      },
-    });
+  const addUserToGroupChat = async (userId: string): Promise<boolean> => {
+    try {
+      await addUser({
+        variables: {
+          input: { memberId: userId, chatId: chat.id, role: 'regular' },
+        },
+      });
+      toast.success(t('userAddedSuccess'));
+      return true;
+    } catch (error) {
+      toast.error(t('failedAddUser'));
+
+      console.error(error);
+      return false;
+    }
   };
 
   const handleUserModalSearchChange = (value: string): void => {
@@ -173,10 +183,15 @@ export default function GroupChatAddUserModal(
                               className={styles.groupChatTableCellBody}
                             >
                               <Button
+                                type="button"
                                 onClick={async () => {
-                                  await addUserToGroupChat(userDetails.id);
-                                  toggle();
-                                  chatRefetch({ input: { id: chat.id } });
+                                  const ok = await addUserToGroupChat(
+                                    userDetails.id,
+                                  );
+                                  if (ok) {
+                                    toggle();
+                                    chatRefetch({ input: { id: chat.id } });
+                                  }
                                 }}
                                 data-testid="addUserBtn"
                               >

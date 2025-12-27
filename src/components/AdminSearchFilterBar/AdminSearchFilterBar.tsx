@@ -2,15 +2,15 @@ import React, { useState, useEffect, useMemo, useCallback } from 'react';
 
 // Local debounce implementation to avoid a hard dependency on lodash for this
 // small utility (also provides `cancel()` like lodash's debounce).
-function debounceFn<T extends (...args: unknown[]) => void>(
-  func: T,
+function debounceFn<TArgs extends unknown[]>(
+  func: (...args: TArgs) => void,
   wait = 300,
-): T & { cancel: () => void } {
+): ((...args: TArgs) => void) & { cancel: () => void } {
   let timeout: ReturnType<typeof setTimeout> | null = null;
-  const debounced = ((...args: Parameters<T>) => {
+  const debounced = ((...args: TArgs) => {
     if (timeout) clearTimeout(timeout);
-    timeout = setTimeout(() => func(...(args as Parameters<T>)), wait);
-  }) as unknown as T & { cancel: () => void };
+    timeout = setTimeout(() => func(...args), wait);
+  }) as ((...args: TArgs) => void) & { cancel: () => void };
 
   debounced.cancel = () => {
     if (timeout) {
