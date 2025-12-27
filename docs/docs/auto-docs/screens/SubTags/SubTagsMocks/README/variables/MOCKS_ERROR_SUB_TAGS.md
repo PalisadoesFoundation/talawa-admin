@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_ERROR\_SUB\_TAGS**: `object`[]
 
-Defined in: [src/screens/SubTags/SubTagsMocks.ts:489](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/SubTags/SubTagsMocks.ts#L489)
+Defined in: [src/screens/SubTags/SubTagsMocks.ts:246](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/SubTags/SubTagsMocks.ts#L246)
 
 ## Type declaration
 

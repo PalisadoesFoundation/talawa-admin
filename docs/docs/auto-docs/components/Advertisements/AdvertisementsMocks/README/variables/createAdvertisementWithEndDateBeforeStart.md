@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **createAdvertisementWithEndDateBeforeStart**: `IBaseMutationMock`\<\{ `endAt`: `string`; `organizationId`: `string`; `startAt`: `string`; `type`: `string`; \}\>[]
 
-Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:522](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L522)
+Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:492](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/Advertisements/AdvertisementsMocks.ts#L492)

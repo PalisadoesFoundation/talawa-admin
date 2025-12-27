@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **MOCKS**: `object`[]
 
-Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Settings/SettingsMocks.ts#L4)
+Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:4](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/UserPortal/Settings/SettingsMocks.ts#L4)
 
 ## Type declaration
 
@@ -29,6 +29,10 @@ Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:4](https://github.
 #### request.result.data.updateCurrentUser
 
 > **updateCurrentUser**: `object`
+
+#### request.result.data.updateCurrentUser.\_\_typename
+
+> **\_\_typename**: `string` = `'User'`
 
 #### request.result.data.updateCurrentUser.id
 

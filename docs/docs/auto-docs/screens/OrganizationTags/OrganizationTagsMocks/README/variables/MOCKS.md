@@ -1,9 +1,9 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
 # Variable: MOCKS
 
-> `const` **MOCKS**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after`: `string`; `first`: `number`; `input`: \{ `id`: `string`; \}; `name`: `undefined`; `organizationId`: `undefined`; `sortedBy`: \{ `id`: `string`; \}; `where`: \{ `name`: \{ `starts_with`: `string`; \}; \}; \}; \}; `result`: \{ `data`: \{ `createUserTag`: `undefined`; `organizations`: `object`[]; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after`: `undefined`; `first`: `number`; `input`: \{ `id`: `string`; \}; `name`: `undefined`; `organizationId`: `undefined`; `sortedBy`: \{ `id`: `string`; \}; `where`: \{ `name`: \{ `starts_with`: `string`; \}; \}; \}; \}; `result`: \{ `data`: \{ `createUserTag`: `undefined`; `organizations`: `object`[]; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after`: `undefined`; `first`: `undefined`; `input`: `undefined`; `name`: `string`; `organizationId`: `string`; `sortedBy`: `undefined`; `where`: `undefined`; \}; \}; `result`: \{ `data`: \{ `createUserTag`: \{ `_id`: `string`; \}; `organizations`: `undefined`; \}; \}; \})[]
+> `const` **MOCKS**: (`ListMock` \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `name`: `string`; `organizationId`: `string`; \}; \}; `result`: \{ `data`: \{ `createUserTag`: \{ `id`: `string`; \}; \}; \}; \})[] = `MOCK_RESPONSES.DEFAULT`
 
-Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L5)
+Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:311](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L311)

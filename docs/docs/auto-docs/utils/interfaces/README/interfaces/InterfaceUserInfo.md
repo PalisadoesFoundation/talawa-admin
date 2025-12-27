@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
 # Interface: InterfaceUserInfo
 
-Defined in: [src/utils/interfaces.ts:400](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L400)
+Defined in: [src/utils/interfaces.ts:400](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L400)
 
 InterfaceUserInfo
 
@@ -14,40 +14,64 @@ Defines the basic information for a user.
 
 ## Properties
 
-### \_id
+### avatarURL?
 
-> **\_id**: `string`
+> `optional` **avatarURL**: `string`
 
-Defined in: [src/utils/interfaces.ts:403](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L403)
+Defined in: [src/utils/interfaces.ts:404](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L404)
+
+The URL of the user's avatar, or null if not available.
+
+***
+
+### createdAt?
+
+> `optional` **createdAt**: `Date`
+
+Defined in: [src/utils/interfaces.ts:406](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L406)
+
+***
+
+### emailAddress
+
+> **emailAddress**: `string`
+
+Defined in: [src/utils/interfaces.ts:403](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L403)
+
+The email address of the user.
+
+***
+
+### id
+
+> **id**: `string`
+
+Defined in: [src/utils/interfaces.ts:401](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L401)
 
 The unique identifier of the user.
 
 ***
 
-### firstName
+### name
 
-> **firstName**: `string`
+> **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:401](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L401)
+Defined in: [src/utils/interfaces.ts:402](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L402)
 
-The first name of the user.
-
-***
-
-### image?
-
-> `optional` **image**: `string`
-
-Defined in: [src/utils/interfaces.ts:404](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L404)
-
-The URL of the user's image, or null if not available.
+The full name of the user.
 
 ***
 
-### lastName
+### role?
 
-> **lastName**: `string`
+> `optional` **role**: `string`
 
-Defined in: [src/utils/interfaces.ts:402](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L402)
+Defined in: [src/utils/interfaces.ts:405](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L405)
 
-The last name of the user.
+***
+
+### updatedAt?
+
+> `optional` **updatedAt**: `Date`
+
+Defined in: [src/utils/interfaces.ts:407](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L407)

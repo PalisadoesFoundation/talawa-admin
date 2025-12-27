@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,26 +6,30 @@
 
 > `const` **MOCK\_VENUE\_ITEM\_LONG\_TEXT**: `object`
 
-Defined in: [src/components/Venues/VenueCardMocks.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Venues/VenueCardMocks.ts#L19)
+Defined in: [src/components/Venues/VenueCardMocks.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/Venues/VenueCardMocks.ts#L26)
 
 ## Type declaration
 
-### \_id
+### node
 
-> **\_id**: `string` = `'4'`
+> **node**: `object`
 
-### capacity
+#### node.capacity
 
-> **capacity**: `string` = `'300'`
+> **capacity**: `number` = `300`
 
-### description
+#### node.description
 
 > **description**: `string` = `'This is a very long description that should be truncated. It contains more than seventy five characters to ensure we can test the truncation logic properly. This text will be cut off.'`
 
-### image
+#### node.id
+
+> **id**: `string` = `'4'`
+
+#### node.image
 
 > **image**: `any` = `null`
 
-### name
+#### node.name
 
 > **name**: `string` = `'This is a very long venue name that should definitely be truncated in the display'`

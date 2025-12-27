@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **removeItem**(`prefix`, `key`): `void`
 
-Defined in: [src/utils/useLocalstorage.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/useLocalstorage.ts#L51)
+Defined in: [src/utils/useLocalstorage.ts:52](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/useLocalstorage.ts#L52)
 
 Removes the value associated with the given key from local storage.
 

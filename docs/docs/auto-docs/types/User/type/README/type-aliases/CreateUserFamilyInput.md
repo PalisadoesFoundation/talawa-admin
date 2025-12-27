@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **CreateUserFamilyInput** = `object`
 
-Defined in: [src/types/User/type.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L54)
+Defined in: [src/types/User/type.ts:54](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/User/type.ts#L54)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/User/type.ts:54](https://github.com/PalisadoesFoundation/
 
 > **title**: `string`
 
-Defined in: [src/types/User/type.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L55)
+Defined in: [src/types/User/type.ts:55](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/User/type.ts#L55)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/types/User/type.ts:55](https://github.com/PalisadoesFoundation/
 
 > **userIds**: `string`[]
 
-Defined in: [src/types/User/type.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L56)
+Defined in: [src/types/User/type.ts:56](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/User/type.ts#L56)

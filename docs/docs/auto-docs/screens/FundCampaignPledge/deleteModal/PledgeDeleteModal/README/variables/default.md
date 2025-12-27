@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceDeletePledgeModal`](screens\FundCampaignPledge\deleteModal\PledgeDeleteModal\README\interfaces\InterfaceDeletePledgeModal.md)\>
 
-Defined in: [src/screens/FundCampaignPledge/deleteModal/PledgeDeleteModal.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/FundCampaignPledge/deleteModal/PledgeDeleteModal.tsx#L48)
+Defined in: [src/screens/FundCampaignPledge/deleteModal/PledgeDeleteModal.tsx:49](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/FundCampaignPledge/deleteModal/PledgeDeleteModal.tsx#L49)

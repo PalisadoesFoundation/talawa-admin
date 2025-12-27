@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
 # Interface: InterfaceOrganizationCardStartProps
 
-Defined in: [src/types/Organization/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L34)
+Defined in: [src/types/Organization/interface.ts:6](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Organization/interface.ts#L6)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Organization/interface.ts:34](https://github.com/Palisado
 
 > **id**: `string`
 
-Defined in: [src/types/Organization/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L36)
+Defined in: [src/types/Organization/interface.ts:8](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Organization/interface.ts#L8)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Organization/interface.ts:36](https://github.com/Palisado
 
 > **image**: `string`
 
-Defined in: [src/types/Organization/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L35)
+Defined in: [src/types/Organization/interface.ts:7](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Organization/interface.ts#L7)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/types/Organization/interface.ts:35](https://github.com/Palisado
 
 > **name**: `string`
 
-Defined in: [src/types/Organization/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Organization/interface.ts#L37)
+Defined in: [src/types/Organization/interface.ts:9](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Organization/interface.ts#L9)

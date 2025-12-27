@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **SEND\_MESSAGE\_TO\_CHAT**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/OrganizationMutations.ts#L126)
+Defined in: [src/GraphQl/Mutations/OrganizationMutations.ts:149](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/GraphQl/Mutations/OrganizationMutations.ts#L149)

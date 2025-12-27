@@ -1,90 +1,34 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
 # Interface: InterfaceUserEvents
 
-Defined in: [src/utils/interfaces.ts:2448](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2448)
-
-InterfaceUserEvents
-
-## Description
-
-Extends `InterfaceBaseEvent` with additional properties for user-related events.
-
-## Extends
-
-- [`InterfaceBaseEvent`](utils\interfaces\README\interfaces\InterfaceBaseEvent.md)
+Defined in: [src/utils/interfaces.ts:2725](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2725)
 
 ## Properties
-
-### \_id
-
-> **\_id**: `string`
-
-Defined in: [src/utils/interfaces.ts:422](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L422)
-
-The unique identifier of the event.
-
-#### Inherited from
-
-[`InterfaceBaseEvent`](utils\interfaces\README\interfaces\InterfaceBaseEvent.md).[`_id`](utils\interfaces\README\interfaces\InterfaceBaseEvent.md#_id)
-
-***
-
-### allDay
-
-> **allDay**: `boolean`
-
-Defined in: [src/utils/interfaces.ts:430](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L430)
-
-Indicates if the event is an all-day event.
-
-#### Inherited from
-
-[`InterfaceBaseEvent`](utils\interfaces\README\interfaces\InterfaceBaseEvent.md).[`allDay`](utils\interfaces\README\interfaces\InterfaceBaseEvent.md#allday)
-
-***
 
 ### description
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:424](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L424)
-
-The description of the event.
-
-#### Inherited from
-
-[`InterfaceBaseEvent`](utils\interfaces\README\interfaces\InterfaceBaseEvent.md).[`description`](utils\interfaces\README\interfaces\InterfaceBaseEvent.md#description)
+Defined in: [src/utils/interfaces.ts:2728](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2728)
 
 ***
 
-### endDate
+### endAt
 
-> **endDate**: `string`
+> **endAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:426](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L426)
-
-The end date of the event.
-
-#### Inherited from
-
-[`InterfaceBaseEvent`](utils\interfaces\README\interfaces\InterfaceBaseEvent.md).[`endDate`](utils\interfaces\README\interfaces\InterfaceBaseEvent.md#enddate)
+Defined in: [src/utils/interfaces.ts:2730](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2730)
 
 ***
 
-### endTime
+### id
 
-> **endTime**: `string`
+> **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:429](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L429)
-
-The end time of the event.
-
-#### Inherited from
-
-[`InterfaceBaseEvent`](utils\interfaces\README\interfaces\InterfaceBaseEvent.md).[`endTime`](utils\interfaces\README\interfaces\InterfaceBaseEvent.md#endtime)
+Defined in: [src/utils/interfaces.ts:2726](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2726)
 
 ***
 
@@ -92,118 +36,36 @@ The end time of the event.
 
 > **location**: `string`
 
-Defined in: [src/utils/interfaces.ts:427](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L427)
-
-The location of the event.
-
-#### Inherited from
-
-[`InterfaceBaseEvent`](utils\interfaces\README\interfaces\InterfaceBaseEvent.md).[`location`](utils\interfaces\README\interfaces\InterfaceBaseEvent.md#location)
+Defined in: [src/utils/interfaces.ts:2731](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2731)
 
 ***
 
-### recurring
+### name
 
-> **recurring**: `boolean`
+> **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:431](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L431)
-
-Indicates if the event is a recurring event.
-
-#### Inherited from
-
-[`InterfaceBaseEvent`](utils\interfaces\README\interfaces\InterfaceBaseEvent.md).[`recurring`](utils\interfaces\README\interfaces\InterfaceBaseEvent.md#recurring)
+Defined in: [src/utils/interfaces.ts:2727](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2727)
 
 ***
 
-### startDate
+### startAt
 
-> **startDate**: `string`
+> **startAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:425](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L425)
-
-The start date of the event.
-
-#### Inherited from
-
-[`InterfaceBaseEvent`](utils\interfaces\README\interfaces\InterfaceBaseEvent.md).[`startDate`](utils\interfaces\README\interfaces\InterfaceBaseEvent.md#startdate)
-
-***
-
-### startTime
-
-> **startTime**: `string`
-
-Defined in: [src/utils/interfaces.ts:428](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L428)
-
-The start time of the event.
-
-#### Inherited from
-
-[`InterfaceBaseEvent`](utils\interfaces\README\interfaces\InterfaceBaseEvent.md).[`startTime`](utils\interfaces\README\interfaces\InterfaceBaseEvent.md#starttime)
-
-***
-
-### title
-
-> **title**: `string`
-
-Defined in: [src/utils/interfaces.ts:423](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L423)
-
-The title of the event.
-
-#### Inherited from
-
-[`InterfaceBaseEvent`](utils\interfaces\README\interfaces\InterfaceBaseEvent.md).[`title`](utils\interfaces\README\interfaces\InterfaceBaseEvent.md#title)
+Defined in: [src/utils/interfaces.ts:2729](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2729)
 
 ***
 
 ### volunteerGroups
 
-> **volunteerGroups**: `object`[]
+> **volunteerGroups**: [`InterfaceVolunteerGroupInfo`](utils\interfaces\README\interfaces\InterfaceVolunteerGroupInfo.md)[]
 
-Defined in: [src/utils/interfaces.ts:2449](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2449)
-
-An array of volunteer groups associated with the event.
-
-#### \_id
-
-> **\_id**: `string`
-
-#### description
-
-> **description**: `string`
-
-#### name
-
-> **name**: `string`
-
-#### volunteers
-
-> **volunteers**: `object`[]
-
-#### volunteersRequired
-
-> **volunteersRequired**: `number`
+Defined in: [src/utils/interfaces.ts:2732](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2732)
 
 ***
 
 ### volunteers
 
-> **volunteers**: `object`[]
+> **volunteers**: [`InterfaceEventVolunteerInfo`](utils\interfaces\README\interfaces\InterfaceEventVolunteerInfo.md)[]
 
-Defined in: [src/utils/interfaces.ts:2456](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2456)
-
-An array of volunteers associated with the event.
-
-#### \_id
-
-> **\_id**: `string`
-
-#### user
-
-> **user**: `object`
-
-##### user.\_id
-
-> **\_id**: `string`
+Defined in: [src/utils/interfaces.ts:2733](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2733)

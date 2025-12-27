@@ -1,12 +1,22 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
 # Variable: PluginInjector
 
-> `const` **PluginInjector**: `React.FC`\<`PluginInjectorProps`\>
+> `const` **PluginInjector**: `React.FC`\<`IPluginInjectorProps`\>
 
-Defined in: [src/plugin/components/PluginInjector.tsx:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/components/PluginInjector.tsx#L16)
+Defined in: [src/plugin/components/PluginInjector.tsx:26](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/components/PluginInjector.tsx#L26)
 
 PluginInjector - Renders injector extensions for a specific type
 This component loads and renders components specified in injector extensions
+
+## Example
+
+```tsx
+// Pass post content to an AI summarizing plugin
+<PluginInjector
+  injectorType="G1"
+  data={{ content: postContent, postId: post.id }}
+/>
+```

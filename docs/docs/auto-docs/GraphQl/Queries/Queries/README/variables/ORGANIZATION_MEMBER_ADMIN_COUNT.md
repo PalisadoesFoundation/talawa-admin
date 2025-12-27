@@ -1,0 +1,9 @@
+[**talawa-admin**](README.md)
+
+***
+
+# Variable: ORGANIZATION\_MEMBER\_ADMIN\_COUNT
+
+> `const` **ORGANIZATION\_MEMBER\_ADMIN\_COUNT**: `DocumentNode`
+
+Defined in: [src/GraphQl/Queries/Queries.ts:97](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/GraphQl/Queries/Queries.ts#L97)

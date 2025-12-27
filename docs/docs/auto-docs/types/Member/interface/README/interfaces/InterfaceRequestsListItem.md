@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
 # Interface: InterfaceRequestsListItem
 
-Defined in: [src/types/Member/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L10)
+Defined in: [src/types/Member/interface.ts:10](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Member/interface.ts#L10)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Member/interface.ts:10](https://github.com/PalisadoesFoun
 
 > **createdAt**: `string`
 
-Defined in: [src/types/Member/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L12)
+Defined in: [src/types/Member/interface.ts:12](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Member/interface.ts#L12)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Member/interface.ts:12](https://github.com/PalisadoesFoun
 
 > **membershipRequestId**: `string`
 
-Defined in: [src/types/Member/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L11)
+Defined in: [src/types/Member/interface.ts:11](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Member/interface.ts#L11)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Member/interface.ts:11](https://github.com/PalisadoesFoun
 
 > **status**: `string`
 
-Defined in: [src/types/Member/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L13)
+Defined in: [src/types/Member/interface.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Member/interface.ts#L13)
 
 ***
 
@@ -36,7 +36,11 @@ Defined in: [src/types/Member/interface.ts:13](https://github.com/PalisadoesFoun
 
 > **user**: `object`
 
-Defined in: [src/types/Member/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Member/interface.ts#L14)
+Defined in: [src/types/Member/interface.ts:14](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Member/interface.ts#L14)
+
+#### avatarURL?
+
+> `optional` **avatarURL**: `string`
 
 #### emailAddress
 

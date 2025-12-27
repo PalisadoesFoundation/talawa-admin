@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **updateDates**: `object`
 
-Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:141](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L141)
+Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:164](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/Advertisements/AdvertisementsMocks.ts#L164)
 
 ## Type declaration
 

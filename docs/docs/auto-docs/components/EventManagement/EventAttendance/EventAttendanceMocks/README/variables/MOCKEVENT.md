@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,70 +6,102 @@
 
 > `const` **MOCKEVENT**: `object`
 
-Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L3)
+Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:3](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L3)
 
 ## Type declaration
-
-### \_id
-
-> **\_id**: `string` = `'event123'`
 
 ### allDay
 
 > **allDay**: `boolean` = `false`
 
-### attendees
+### createdAt
 
-> **attendees**: `object`[]
+> **createdAt**: `string` = `'2030-04-01T00:00:00.000Z'`
 
-### baseRecurringEvent
+### creator
 
-> **baseRecurringEvent**: `object`
+> **creator**: `object`
 
-#### baseRecurringEvent.\_id
+#### creator.emailAddress
 
-> **\_id**: `string` = `'recurringEvent123'`
+> **emailAddress**: `string` = `'creator@example.com'`
+
+#### creator.id
+
+> **id**: `string` = `'creator123'`
+
+#### creator.name
+
+> **name**: `string` = `'Creator Name'`
 
 ### description
 
 > **description**: `string` = `'This is a test event description'`
 
-### endDate
+### endAt
 
-> **endDate**: `string` = `'2023-05-02'`
+> **endAt**: `string` = `'2030-05-02T17:00:00.000Z'`
 
-### endTime
+### id
 
-> **endTime**: `string` = `'17:00:00'`
+> **id**: `string` = `'event123'`
+
+### isPublic
+
+> **isPublic**: `boolean` = `true`
+
+### isRegisterable
+
+> **isRegisterable**: `boolean` = `true`
 
 ### location
 
 > **location**: `string` = `'Test Location'`
 
+### name
+
+> **name**: `string` = `'Test Event'`
+
 ### organization
 
 > **organization**: `object`
 
-#### organization.\_id
+#### organization.id
 
-> **\_id**: `string` = `'org456'`
+> **id**: `string` = `'org456'`
 
-#### organization.members
+#### organization.name
 
-> **members**: `object`[]
+> **name**: `string` = `'Test Organization'`
 
-### recurring
+### recurrenceRule
 
-> **recurring**: `boolean` = `true`
+> **recurrenceRule**: `object`
 
-### startDate
+#### recurrenceRule.id
 
-> **startDate**: `string` = `'2023-05-01'`
+> **id**: `string` = `'recurringEvent123'`
 
-### startTime
+### startAt
 
-> **startTime**: `string` = `'09:00:00'`
+> **startAt**: `string` = `'2030-05-01T09:00:00.000Z'`
 
-### title
+### updatedAt
 
-> **title**: `string` = `'Test Event'`
+> **updatedAt**: `string` = `'2030-04-01T00:00:00.000Z'`
+
+### updater
+
+> **updater**: `object`
+
+#### updater.emailAddress
+
+> **emailAddress**: `string` = `'updater@example.com'`
+
+#### updater.id
+
+> **id**: `string` = `'updater123'`
+
+#### updater.name
+
+> **name**: `string` = `'Updater Name'`

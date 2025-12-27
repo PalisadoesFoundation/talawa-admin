@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/OrganizationPeople/addMember/AddMember.tsx:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationPeople/addMember/AddMember.tsx#L115)
+Defined in: [src/screens/OrganizationPeople/addMember/AddMember.tsx:89](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationPeople/addMember/AddMember.tsx#L89)
 
 ## Returns
 

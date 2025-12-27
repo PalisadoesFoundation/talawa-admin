@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **EventOrderByInputEnum**: `object`
 
-Defined in: [src/types/Event/type.ts:111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L111)
+Defined in: [src/types/Event/type.ts:116](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/type.ts#L116)
 
 ## Type declaration
 
@@ -58,13 +58,13 @@ Defined in: [src/types/Event/type.ts:111](https://github.com/PalisadoesFoundatio
 
 > `readonly` **location\_DESC**: `"location_DESC"` = `'location_DESC'`
 
-### recurrance\_ASC
+### recurrence\_ASC
 
-> `readonly` **recurrance\_ASC**: `"recurrance_ASC"` = `'recurrance_ASC'`
+> `readonly` **recurrence\_ASC**: `"recurrence_ASC"` = `'recurrence_ASC'`
 
-### recurrance\_DESC
+### recurrence\_DESC
 
-> `readonly` **recurrance\_DESC**: `"recurrance_DESC"` = `'recurrance_DESC'`
+> `readonly` **recurrence\_DESC**: `"recurrence_DESC"` = `'recurrence_DESC'`
 
 ### startDate\_ASC
 

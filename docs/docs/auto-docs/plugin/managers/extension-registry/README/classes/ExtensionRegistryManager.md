@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
 # Class: ExtensionRegistryManager
 
-Defined in: [src/plugin/managers/extension-registry.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/extension-registry.ts#L12)
+Defined in: [src/plugin/managers/extension-registry.ts:12](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/extension-registry.ts#L12)
 
 ## Constructors
 
@@ -20,9 +20,9 @@ Defined in: [src/plugin/managers/extension-registry.ts:12](https://github.com/Pa
 
 ### getExtensionPoints()
 
-> **getExtensionPoints**\<`T`\>(`type`, `userPermissions`, `isAdmin`, `isOrg`?): [`IExtensionRegistry`](plugin\types\README\interfaces\IExtensionRegistry.md)\[`T`\]
+> **getExtensionPoints**\<`T`\>(`type`): [`IExtensionRegistry`](plugin\types\README\interfaces\IExtensionRegistry.md)\[`T`\]
 
-Defined in: [src/plugin/managers/extension-registry.ts:232](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/extension-registry.ts#L232)
+Defined in: [src/plugin/managers/extension-registry.ts:245](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/extension-registry.ts#L245)
 
 #### Type Parameters
 
@@ -36,18 +36,6 @@ Defined in: [src/plugin/managers/extension-registry.ts:232](https://github.com/P
 
 `T`
 
-##### userPermissions
-
-`string`[] = `[]`
-
-##### isAdmin
-
-`boolean` = `false`
-
-##### isOrg?
-
-`boolean`
-
 #### Returns
 
 [`IExtensionRegistry`](plugin\types\README\interfaces\IExtensionRegistry.md)\[`T`\]
@@ -58,7 +46,7 @@ Defined in: [src/plugin/managers/extension-registry.ts:232](https://github.com/P
 
 > **getExtensionRegistry**(): [`IExtensionRegistry`](plugin\types\README\interfaces\IExtensionRegistry.md)
 
-Defined in: [src/plugin/managers/extension-registry.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/extension-registry.ts#L29)
+Defined in: [src/plugin/managers/extension-registry.ts:30](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/extension-registry.ts#L30)
 
 #### Returns
 
@@ -70,7 +58,7 @@ Defined in: [src/plugin/managers/extension-registry.ts:29](https://github.com/Pa
 
 > **registerExtensionPoints**(`pluginId`, `manifest`): `void`
 
-Defined in: [src/plugin/managers/extension-registry.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/extension-registry.ts#L33)
+Defined in: [src/plugin/managers/extension-registry.ts:34](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/extension-registry.ts#L34)
 
 #### Parameters
 
@@ -92,7 +80,7 @@ Defined in: [src/plugin/managers/extension-registry.ts:33](https://github.com/Pa
 
 > **unregisterExtensionPoints**(`pluginId`): `void`
 
-Defined in: [src/plugin/managers/extension-registry.ts:226](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/managers/extension-registry.ts#L226)
+Defined in: [src/plugin/managers/extension-registry.ts:239](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/extension-registry.ts#L239)
 
 #### Parameters
 

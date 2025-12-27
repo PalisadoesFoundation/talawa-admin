@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **ERROR\_MOCKS**: `object`[]
 
-Defined in: [src/screens/Leaderboard/Leaderboard.mocks.ts:183](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Leaderboard/Leaderboard.mocks.ts#L183)
+Defined in: [src/screens/Leaderboard/Leaderboard.mocks.ts:191](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/Leaderboard/Leaderboard.mocks.ts#L191)
 
 ## Type declaration
 

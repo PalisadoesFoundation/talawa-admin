@@ -1,0 +1,63 @@
+[**talawa-admin**](README.md)
+
+***
+
+# Interface: InterfaceCommentEdge
+
+Defined in: [src/utils/interfaces.ts:2308](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2308)
+
+## Properties
+
+### node
+
+> **node**: `object`
+
+Defined in: [src/utils/interfaces.ts:2309](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2309)
+
+#### body
+
+> **body**: `string`
+
+#### createdAt
+
+> **createdAt**: `string`
+
+#### creator
+
+> **creator**: `object`
+
+##### creator.avatarURL?
+
+> `optional` **avatarURL**: `string`
+
+##### creator.id
+
+> **id**: `string`
+
+##### creator.name
+
+> **name**: `string`
+
+#### downVotesCount
+
+> **downVotesCount**: `number`
+
+#### hasUserVoted?
+
+> `optional` **hasUserVoted**: `object`
+
+##### hasUserVoted.hasVoted
+
+> **hasVoted**: `boolean`
+
+##### hasUserVoted.voteType
+
+> **voteType**: [`VoteType`](utils\interfaces\README\interfaces\VoteType.md)
+
+#### id
+
+> **id**: `string`
+
+#### upVotesCount
+
+> **upVotesCount**: `number`

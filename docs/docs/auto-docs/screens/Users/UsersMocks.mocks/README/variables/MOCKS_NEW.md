@@ -1,9 +1,9 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
 # Variable: MOCKS\_NEW
 
-> `const` **MOCKS\_NEW**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `first`: `number`; `firstName_contains`: `string`; `lastName_contains`: `string`; `order`: `string`; `skip`: `number`; \}; \}; `result`: \{ `data`: \{ `organizations`: `undefined`; `users`: (\{ `appUserProfile`: \{ `_id`: `string`; `adminFor`: `object`[]; `createdEvents`: `any`[]; `createdOrganizations`: `any`[]; `eventAdmin`: `any`[]; `isSuperAdmin`: `boolean`; \}; `user`: \{ `_id`: `string`; `createdAt`: `string`; `email`: `string`; `firstName`: `string`; `image`: `any`; `joinedOrganizations`: `object`[]; `lastName`: `string`; `membershipRequests`: `any`[]; `organizationsBlockedBy`: `object`[]; `registeredEvents`: `any`[]; \}; \} \| \{ `appUserProfile`: \{ `_id`: `string`; `adminFor`: `any`[]; `createdEvents`: `any`[]; `createdOrganizations`: `any`[]; `eventAdmin`: `any`[]; `isSuperAdmin`: `boolean`; \}; `user`: \{ `_id`: `string`; `createdAt`: `string`; `email`: `string`; `firstName`: `string`; `image`: `any`; `joinedOrganizations`: `object`[]; `lastName`: `string`; `membershipRequests`: `any`[]; `organizationsBlockedBy`: `object`[]; `registeredEvents`: `any`[]; \}; \})[]; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: `undefined`; \}; `result`: \{ `data`: \{ `organizations`: `any`[]; `users`: `undefined`; \}; \}; \})[]
+> `const` **MOCKS\_NEW**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after`: `any`; `filter`: `undefined`; `first`: `number`; `limit`: `undefined`; `offset`: `undefined`; `orgFirst`: `number`; `where`: `any`; \}; \}; `result`: \{ `data`: \{ `allUsers`: \{ `edges`: `object`[]; `pageInfo`: \{ `endCursor`: `string`; `hasNextPage`: `boolean`; `hasPreviousPage`: `boolean`; `startCursor`: `string`; \}; \}; `organizations`: `undefined`; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after`: `undefined`; `filter`: `string`; `first`: `undefined`; `limit`: `any`; `offset`: `any`; `orgFirst`: `undefined`; `where`: `undefined`; \}; \}; `result`: \{ `data`: \{ `allUsers`: `undefined`; `organizations`: `any`[]; \}; \}; \})[]
 
-Defined in: [src/screens/Users/UsersMocks.mocks.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Users/UsersMocks.mocks.ts#L81)
+Defined in: [src/screens/Users/UsersMocks.mocks.ts:198](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/Users/UsersMocks.mocks.ts#L198)

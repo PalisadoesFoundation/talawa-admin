@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > **InterfaceDeleteEventModalProps** = [`IDeleteEventModalProps`](types\Event\interface\README\interfaces\IDeleteEventModalProps.md)
 
-Defined in: [src/types/Event/interface.ts:211](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L211)
+Defined in: [src/types/Event/interface.ts:243](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/interface.ts#L243)

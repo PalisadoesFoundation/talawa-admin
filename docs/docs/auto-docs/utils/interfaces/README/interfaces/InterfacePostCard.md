@@ -1,16 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
 # Interface: InterfacePostCard
 
-Defined in: [src/utils/interfaces.ts:2098](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2098)
-
-InterfacePostCard
-
-## Description
-
-Defines the structure for a post card.
+Defined in: [src/utils/interfaces.ts:2270](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2270)
 
 ## Properties
 
@@ -18,55 +12,7 @@ Defines the structure for a post card.
 
 > **commentCount**: `number`
 
-Defined in: [src/utils/interfaces.ts:2112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2112)
-
-The number of comments on the post.
-
-***
-
-### comments
-
-> **comments**: `object`[]
-
-Defined in: [src/utils/interfaces.ts:2113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2113)
-
-An array of comments on the post.
-
-#### creator
-
-> **creator**: `object`
-
-##### creator.email
-
-> **email**: `string`
-
-##### creator.firstName
-
-> **firstName**: `string`
-
-##### creator.id
-
-> **id**: `string`
-
-##### creator.lastName
-
-> **lastName**: `string`
-
-#### id
-
-> **id**: `string`
-
-#### likeCount
-
-> **likeCount**: `number`
-
-#### likedBy
-
-> **likedBy**: `object`[]
-
-#### text
-
-> **text**: `string`
+Defined in: [src/utils/interfaces.ts:2285](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2285)
 
 ***
 
@@ -74,25 +20,27 @@ An array of comments on the post.
 
 > **creator**: `object`
 
-Defined in: [src/utils/interfaces.ts:2100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2100)
+Defined in: [src/utils/interfaces.ts:2273](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2273)
 
-The creator of the post.
+#### avatarURL?
 
-#### email
-
-> **email**: `string`
-
-#### firstName
-
-> **firstName**: `string`
+> `optional` **avatarURL**: `string`
 
 #### id
 
 > **id**: `string`
 
-#### lastName
+#### name
 
-> **lastName**: `string`
+> **name**: `string`
+
+***
+
+### downVoteCount
+
+> **downVoteCount**: `number`
+
+Defined in: [src/utils/interfaces.ts:2287](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2287)
 
 ***
 
@@ -100,9 +48,7 @@ The creator of the post.
 
 > **fetchPosts**: () => `void`
 
-Defined in: [src/utils/interfaces.ts:2132](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2132)
-
-A function to fetch posts.
+Defined in: [src/utils/interfaces.ts:2288](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2288)
 
 #### Returns
 
@@ -110,13 +56,19 @@ A function to fetch posts.
 
 ***
 
+### hasUserVoted
+
+> **hasUserVoted**: [`VoteState`](utils\interfaces\README\type-aliases\VoteState.md)
+
+Defined in: [src/utils/interfaces.ts:2278](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2278)
+
+***
+
 ### id
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:2099](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2099)
-
-The unique identifier of the post.
+Defined in: [src/utils/interfaces.ts:2271](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2271)
 
 ***
 
@@ -124,41 +76,23 @@ The unique identifier of the post.
 
 > **image**: `string`
 
-Defined in: [src/utils/interfaces.ts:2107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2107)
-
-The URL of the post's image, or null.
+Defined in: [src/utils/interfaces.ts:2281](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2281)
 
 ***
 
-### likeCount
+### isModalView?
 
-> **likeCount**: `number`
+> `optional` **isModalView**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:2111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2111)
-
-The number of likes on the post.
+Defined in: [src/utils/interfaces.ts:2272](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2272)
 
 ***
 
-### likedBy
+### pinnedAt?
 
-> **likedBy**: `object`[]
+> `optional` **pinnedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:2127](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2127)
-
-An array of users who liked the post.
-
-#### firstName
-
-> **firstName**: `string`
-
-#### id
-
-> **id**: `string`
-
-#### lastName
-
-> **lastName**: `string`
+Defined in: [src/utils/interfaces.ts:2280](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2280)
 
 ***
 
@@ -166,9 +100,7 @@ An array of users who liked the post.
 
 > **postedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:2106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2106)
-
-The date and time the post was created.
+Defined in: [src/utils/interfaces.ts:2279](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2279)
 
 ***
 
@@ -176,9 +108,7 @@ The date and time the post was created.
 
 > **text**: `string`
 
-Defined in: [src/utils/interfaces.ts:2109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2109)
-
-The text content of the post.
+Defined in: [src/utils/interfaces.ts:2284](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2284)
 
 ***
 
@@ -186,9 +116,15 @@ The text content of the post.
 
 > **title**: `string`
 
-Defined in: [src/utils/interfaces.ts:2110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2110)
+Defined in: [src/utils/interfaces.ts:2283](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2283)
 
-The title of the post.
+***
+
+### upVoteCount
+
+> **upVoteCount**: `number`
+
+Defined in: [src/utils/interfaces.ts:2286](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2286)
 
 ***
 
@@ -196,6 +132,4 @@ The title of the post.
 
 > **video**: `string`
 
-Defined in: [src/utils/interfaces.ts:2108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2108)
-
-The URL of the post's video, or null.
+Defined in: [src/utils/interfaces.ts:2282](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2282)

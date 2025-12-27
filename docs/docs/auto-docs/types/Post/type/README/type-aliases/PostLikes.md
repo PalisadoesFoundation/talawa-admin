@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,18 +6,14 @@
 
 > **PostLikes** = `object`[]
 
-Defined in: [src/types/Post/type.ts:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L99)
+Defined in: [src/types/Post/type.ts:96](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/type.ts#L96)
 
 ## Type declaration
-
-### firstName
-
-> **firstName**: `string`
 
 ### id
 
 > **id**: `string`
 
-### lastName
+### name
 
-> **lastName**: `string`
+> **name**: `string`

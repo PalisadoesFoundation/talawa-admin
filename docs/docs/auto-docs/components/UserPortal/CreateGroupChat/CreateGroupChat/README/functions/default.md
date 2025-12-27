@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/UserPortal/CreateGroupChat/CreateGroupChat.tsx:110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateGroupChat/CreateGroupChat.tsx#L110)
+Defined in: [src/components/UserPortal/CreateGroupChat/CreateGroupChat.tsx:112](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/UserPortal/CreateGroupChat/CreateGroupChat.tsx#L112)
 
 ## Parameters
 

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/LoginPage/LoginPage.tsx:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/LoginPage/LoginPage.tsx#L92)
+Defined in: [src/screens/LoginPage/LoginPage.tsx:90](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/LoginPage/LoginPage.tsx#L90)
 
 ## Returns
 

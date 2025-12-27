@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
 # Interface: InterfaceAttachment
 
-Defined in: [src/types/Post/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L72)
+Defined in: [src/types/Post/interface.ts:76](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L76)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/types/Post/interface.ts:72](https://github.com/PalisadoesFounda
 
 > **url**: `string`
 
-Defined in: [src/types/Post/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L73)
+Defined in: [src/types/Post/interface.ts:77](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L77)

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **AttendanceStatisticsModal**: `React.FC`\<[`InterfaceAttendanceStatisticsModalProps`](types\Event\interface\README\type-aliases\InterfaceAttendanceStatisticsModalProps.md)\>
 
-Defined in: [src/components/EventManagement/EventAttendance/Statistics/EventStatistics.tsx:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/Statistics/EventStatistics.tsx#L82)
+Defined in: [src/components/EventManagement/EventAttendance/Statistics/EventStatistics.tsx:99](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/EventManagement/EventAttendance/Statistics/EventStatistics.tsx#L99)

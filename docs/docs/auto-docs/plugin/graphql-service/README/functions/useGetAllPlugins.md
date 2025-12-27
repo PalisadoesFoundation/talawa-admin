@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **useGetAllPlugins**(): `QueryResult`\<\{ `getPlugins`: [`IPlugin`](plugin\graphql-service\README\interfaces\IPlugin.md)[]; \}, `OperationVariables`\>
 
-Defined in: [src/plugin/graphql-service.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L40)
+Defined in: [src/plugin/graphql-service.ts:49](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/graphql-service.ts#L49)
 
 ## Returns
 

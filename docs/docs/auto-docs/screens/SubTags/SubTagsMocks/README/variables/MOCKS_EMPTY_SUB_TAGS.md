@@ -1,0 +1,103 @@
+[**talawa-admin**](README.md)
+
+***
+
+# Variable: MOCKS\_EMPTY\_SUB\_TAGS
+
+> `const` **MOCKS\_EMPTY\_SUB\_TAGS**: `object`[]
+
+Defined in: [src/screens/SubTags/SubTagsMocks.ts:261](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/SubTags/SubTagsMocks.ts#L261)
+
+## Type declaration
+
+### request
+
+> **request**: `object`
+
+#### request.query
+
+> **query**: `DocumentNode` = `USER_TAG_SUB_TAGS`
+
+#### request.variables
+
+> **variables**: `object`
+
+#### request.variables.first
+
+> **first**: `number` = `TAGS_QUERY_DATA_CHUNK_SIZE`
+
+#### request.variables.id
+
+> **id**: `string` = `'1'`
+
+#### request.variables.sortedBy
+
+> **sortedBy**: `object`
+
+#### request.variables.sortedBy.id
+
+> **id**: `string` = `'DESCENDING'`
+
+#### request.variables.where
+
+> **where**: `object`
+
+#### request.variables.where.name
+
+> **name**: `object`
+
+#### request.variables.where.name.starts\_with
+
+> **starts\_with**: `string` = `''`
+
+### result
+
+> **result**: `object`
+
+#### result.data
+
+> **data**: `object`
+
+#### result.data.getChildTags
+
+> **getChildTags**: `object`
+
+#### result.data.getChildTags.ancestorTags
+
+> **ancestorTags**: `any`[] = `[]`
+
+#### result.data.getChildTags.childTags
+
+> **childTags**: `object`
+
+#### result.data.getChildTags.childTags.edges
+
+> **edges**: `any`[] = `[]`
+
+#### result.data.getChildTags.childTags.pageInfo
+
+> **pageInfo**: `object`
+
+#### result.data.getChildTags.childTags.pageInfo.endCursor
+
+> **endCursor**: `any` = `null`
+
+#### result.data.getChildTags.childTags.pageInfo.hasNextPage
+
+> **hasNextPage**: `boolean` = `false`
+
+#### result.data.getChildTags.childTags.pageInfo.hasPreviousPage
+
+> **hasPreviousPage**: `boolean` = `false`
+
+#### result.data.getChildTags.childTags.pageInfo.startCursor
+
+> **startCursor**: `any` = `null`
+
+#### result.data.getChildTags.childTags.totalCount
+
+> **totalCount**: `number` = `0`
+
+#### result.data.getChildTags.name
+
+> **name**: `string` = `'userTag 1'`

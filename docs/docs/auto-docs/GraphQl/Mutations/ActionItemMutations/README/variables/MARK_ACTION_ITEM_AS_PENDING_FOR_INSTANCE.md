@@ -1,0 +1,9 @@
+[**talawa-admin**](README.md)
+
+***
+
+# Variable: MARK\_ACTION\_ITEM\_AS\_PENDING\_FOR\_INSTANCE
+
+> `const` **MARK\_ACTION\_ITEM\_AS\_PENDING\_FOR\_INSTANCE**: `DocumentNode`
+
+Defined in: [src/GraphQl/Mutations/ActionItemMutations.ts:158](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/GraphQl/Mutations/ActionItemMutations.ts#L158)

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **askForDocker**(): `Promise`\<`string`\>
 
-Defined in: [src/setup/askForDocker/askForDocker.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/askForDocker/askForDocker.ts#L12)
+Defined in: [src/setup/askForDocker/askForDocker.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/setup/askForDocker/askForDocker.ts#L13)
 
 ## Returns
 

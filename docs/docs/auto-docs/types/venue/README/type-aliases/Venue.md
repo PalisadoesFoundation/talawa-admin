@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **Venue** = `object`
 
-Defined in: [src/types/venue.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/venue.ts#L3)
+Defined in: [src/types/venue.ts:3](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/venue.ts#L3)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/venue.ts:3](https://github.com/PalisadoesFoundation/talaw
 
 > **\_id**: `string`
 
-Defined in: [src/types/venue.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/venue.ts#L4)
+Defined in: [src/types/venue.ts:4](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/venue.ts#L4)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/venue.ts:4](https://github.com/PalisadoesFoundation/talaw
 
 > **capacity**: `number`
 
-Defined in: [src/types/venue.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/venue.ts#L5)
+Defined in: [src/types/venue.ts:5](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/venue.ts#L5)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/venue.ts:5](https://github.com/PalisadoesFoundation/talaw
 
 > `optional` **description**: `string`
 
-Defined in: [src/types/venue.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/venue.ts#L6)
+Defined in: [src/types/venue.ts:6](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/venue.ts#L6)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/venue.ts:6](https://github.com/PalisadoesFoundation/talaw
 
 > `optional` **imageUrl**: `string`
 
-Defined in: [src/types/venue.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/venue.ts#L7)
+Defined in: [src/types/venue.ts:7](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/venue.ts#L7)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/venue.ts:7](https://github.com/PalisadoesFoundation/talaw
 
 > **name**: `string`
 
-Defined in: [src/types/venue.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/venue.ts#L8)
+Defined in: [src/types/venue.ts:8](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/venue.ts#L8)
 
 ***
 
@@ -54,4 +54,4 @@ Defined in: [src/types/venue.ts:8](https://github.com/PalisadoesFoundation/talaw
 
 > **organization**: [`Organization`](types\Organization\type\README\type-aliases\Organization.md)
 
-Defined in: [src/types/venue.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/venue.ts#L9)
+Defined in: [src/types/venue.ts:9](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/venue.ts#L9)

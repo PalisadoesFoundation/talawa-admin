@@ -1,12 +1,12 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
 # Variable: MOCKS\_UNDEFINED\_USER\_TAGS
 
-> `const` **MOCKS\_UNDEFINED\_USER\_TAGS**: `object`[]
+> `const` **MOCKS\_UNDEFINED\_USER\_TAGS**: `object`[] = `MOCK_RESPONSES.UNDEFINED_USER_TAGS`
 
-Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:376](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L376)
+Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:315](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L315)
 
 ## Type declaration
 
@@ -24,7 +24,7 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:376](https://
 
 #### request.variables.first
 
-> **first**: `number` = `TAGS_QUERY_DATA_CHUNK_SIZE`
+> **first**: `number` = `PAGE_SIZE`
 
 #### request.variables.input
 
@@ -62,6 +62,10 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:376](https://
 
 > **data**: `object`
 
-#### result.data.organizations
+#### result.data.organization
 
-> **organizations**: `object`[]
+> **organization**: `object`
+
+#### result.data.organization.tags
+
+> **tags**: `UserTags`

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **EMPTY\_MOCKS**: `object`[]
 
-Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts:210](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts#L210)
+Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts:374](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mocks.ts#L374)
 
 ## Type declaration
 
@@ -24,23 +24,11 @@ Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mock
 
 #### request.variables.first
 
-> **first**: `any` = `null`
+> **first**: `number` = `30`
 
-#### request.variables.location\_contains
+#### request.variables.organizationId
 
-> **location\_contains**: `string` = `''`
-
-#### request.variables.organization\_id
-
-> **organization\_id**: `string` = `'orgId'`
-
-#### request.variables.skip
-
-> **skip**: `any` = `null`
-
-#### request.variables.title\_contains
-
-> **title\_contains**: `string` = `''`
+> **organizationId**: `string` = `'orgId'`
 
 #### request.variables.upcomingOnly
 
@@ -54,6 +42,18 @@ Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.mock
 
 > **data**: `object`
 
-#### result.data.eventsByOrganizationConnection
+#### result.data.organization
 
-> **eventsByOrganizationConnection**: `any`[] = `[]`
+> **organization**: `object`
+
+#### result.data.organization.events
+
+> **events**: `object`
+
+#### result.data.organization.events.edges
+
+> **edges**: `any`[] = `[]`
+
+#### result.data.organization.id
+
+> **id**: `string` = `'orgId'`

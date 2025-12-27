@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **MOCKS\_UPDATE**: (\{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `organizationId`: `string`; `role`: `string`; `userId`: `string`; \}; \}; `result`: `undefined`; \} \| \{ `error`: `undefined`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `organizationId`: `string`; `role`: `string`; `userId`: `string`; \}; \}; `result`: \{ `data`: \{ `updateUserRoleInOrganization`: \{ `_id`: `string`; \}; \}; \}; \})[]
 
-Defined in: [src/components/UsersTableItem/UserTableItemMocks.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UsersTableItem/UserTableItemMocks.ts#L55)
+Defined in: [src/components/UsersTableItem/UserTableItemMocks.ts:91](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/UsersTableItem/UserTableItemMocks.ts#L91)

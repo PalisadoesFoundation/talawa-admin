@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/UsersTableItem/UsersTableItem.tsx:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UsersTableItem/UsersTableItem.tsx#L63)
+Defined in: [src/components/UsersTableItem/UsersTableItem.tsx:32](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/UsersTableItem/UsersTableItem.tsx#L32)
 
 ## Parameters
 

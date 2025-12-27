@@ -1,12 +1,12 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
 # Function: usePluginInjectors()
 
-> **usePluginInjectors**(`injectorType`): `any`[]
+> **usePluginInjectors**(`injectorType`): [`IInjectorExtension`](plugin\types\README\interfaces\IInjectorExtension.md)[]
 
-Defined in: [src/plugin/hooks.ts:195](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/hooks.ts#L195)
+Defined in: [src/plugin/hooks.ts:155](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/hooks.ts#L155)
 
 Hook to get plugin injector extensions
 
@@ -14,8 +14,8 @@ Hook to get plugin injector extensions
 
 ### injectorType
 
-`"G1"` | `"G2"` | `"G3"`
+`"G1"` | `"G2"` | `"G3"` | `"G4"`
 
 ## Returns
 
-`any`[]
+[`IInjectorExtension`](plugin\types\README\interfaces\IInjectorExtension.md)[]

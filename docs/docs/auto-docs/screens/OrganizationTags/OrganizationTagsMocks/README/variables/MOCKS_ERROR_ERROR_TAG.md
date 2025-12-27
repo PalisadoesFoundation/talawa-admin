@@ -1,12 +1,12 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
 # Variable: MOCKS\_ERROR\_ERROR\_TAG
 
-> `const` **MOCKS\_ERROR\_ERROR\_TAG**: `object`[]
+> `const` **MOCKS\_ERROR\_ERROR\_TAG**: `object`[] = `MOCK_RESPONSES.ERROR_CREATE_TAG`
 
-Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:334](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L334)
+Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:313](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L313)
 
 ## Type declaration
 

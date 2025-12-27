@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<`InterfaceAgendaCategoryUpdateModalProps`\>
 
-Defined in: [src/components/OrgSettings/AgendaItemCategories/Update/AgendaCategoryUpdateModal.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/AgendaItemCategories/Update/AgendaCategoryUpdateModal.tsx#L55)
+Defined in: [src/components/OrgSettings/AgendaItemCategories/Update/AgendaCategoryUpdateModal.tsx:55](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/OrgSettings/AgendaItemCategories/Update/AgendaCategoryUpdateModal.tsx#L55)

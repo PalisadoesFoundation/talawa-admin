@@ -1,9 +1,9 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
 # Variable: UPDATED\_MOCKS
 
-> `const` **UPDATED\_MOCKS**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: `undefined`; \}; `result`: \{ `data`: \{ `organization`: `undefined`; `organizations`: `object`[]; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `first`: `number`; `input`: \{ `id`: `string`; \}; `name_contains`: `string`; `skip`: `number`; \}; \}; `result`: \{ `data`: \{ `organization`: \{ `id`: `string`; `membershipRequests`: `object`[]; \}; `organizations`: `undefined`; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `first`: `number`; `firstName_contains`: `string`; `id`: `string`; `skip`: `number`; \}; \}; `result`: \{ `data`: \{ `organizations`: `object`[]; \}; \}; \})[]
+> `const` **UPDATED\_MOCKS**: (\{ `request`: \{ `query`: `DocumentNode`; \}; `result`: \{ `data`: \{ `organizations`: `object`[]; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `first`: `number`; `input`: \{ `id`: `string`; \}; `name_contains`: `string`; `skip`: `number`; \}; \}; `result`: \{ `data`: \{ `organization`: \{ `id`: `string`; `membershipRequests`: `object`[]; \}; \}; \}; \} \| \{ `maxUsageCount`: `number`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `first`: `number`; `input`: \{ `id`: `string`; \}; `name_contains`: `string`; `skip`: `number`; \}; \}; `result`: \{ `data`: \{ `organization`: \{ `id`: `string`; `membershipRequests`: `object`[]; \}; \}; \}; \})[]
 
-Defined in: [src/screens/Requests/RequestsMocks.ts:361](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Requests/RequestsMocks.ts#L361)
+Defined in: [src/screens/Requests/RequestsMocks.ts:321](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/Requests/RequestsMocks.ts#L321)

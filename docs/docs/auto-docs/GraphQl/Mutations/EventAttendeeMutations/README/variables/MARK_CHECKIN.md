@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **MARK\_CHECKIN**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/EventAttendeeMutations.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/EventAttendeeMutations.ts#L43)
+Defined in: [src/GraphQl/Mutations/EventAttendeeMutations.ts:108](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/GraphQl/Mutations/EventAttendeeMutations.ts#L108)
 
 GraphQL mutation to mark a user's check-in at an event.
 

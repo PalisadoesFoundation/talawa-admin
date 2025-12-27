@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **EMPTY\_MOCKS**: `object`[]
 
-Defined in: [src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts:189](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts#L189)
+Defined in: [src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts:254](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts#L254)
 
 ## Type declaration
 
@@ -25,10 +25,6 @@ Defined in: [src/screens/UserPortal/Volunteer/Invitations/Invitations.mocks.ts:1
 #### request.variables.where
 
 > **where**: `object`
-
-#### request.variables.where.filter
-
-> **filter**: `any` = `null`
 
 #### request.variables.where.status
 

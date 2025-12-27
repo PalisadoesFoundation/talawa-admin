@@ -1,12 +1,18 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
 # Function: default()
 
-> **default**(): `Element`
+> **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/ProfileCard/ProfileCard.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/ProfileCard/ProfileCard.tsx#L49)
+Defined in: [src/components/ProfileCard/ProfileCard.tsx:54](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/ProfileCard/ProfileCard.tsx#L54)
+
+## Parameters
+
+### \_\_namedParameters
+
+`InterfaceProfileCardProps`
 
 ## Returns
 

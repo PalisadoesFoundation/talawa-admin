@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **AdvertisementEdge** = `object`
 
-Defined in: [src/types/Advertisement/type.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L35)
+Defined in: [src/types/Advertisement/type.ts:35](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/type.ts#L35)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Advertisement/type.ts:35](https://github.com/PalisadoesFo
 
 > `optional` **cursor**: `string`
 
-Defined in: [src/types/Advertisement/type.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L36)
+Defined in: [src/types/Advertisement/type.ts:36](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/type.ts#L36)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/types/Advertisement/type.ts:36](https://github.com/PalisadoesFo
 
 > `optional` **node**: [`Advertisement`](types\Advertisement\type\README\type-aliases\Advertisement.md)
 
-Defined in: [src/types/Advertisement/type.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Advertisement/type.ts#L37)
+Defined in: [src/types/Advertisement/type.ts:37](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/type.ts#L37)

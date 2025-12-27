@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **EventVolunteerResponseEnum**: `object`
 
-Defined in: [src/types/Event/type.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L103)
+Defined in: [src/types/Event/type.ts:108](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/type.ts#L108)
 
 ## Type declaration
 

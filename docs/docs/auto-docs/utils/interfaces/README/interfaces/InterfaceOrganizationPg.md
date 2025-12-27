@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
 # Interface: InterfaceOrganizationPg
 
-Defined in: [src/utils/interfaces.ts:1302](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1302)
+Defined in: [src/utils/interfaces.ts:1317](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L1317)
 
 InterfaceOrganizationPg
 
@@ -18,7 +18,7 @@ Defines the structure for an organization with PostgreSQL-specific fields.
 
 > **organization**: `object`
 
-Defined in: [src/utils/interfaces.ts:1303](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1303)
+Defined in: [src/utils/interfaces.ts:1318](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L1318)
 
 The organization object.
 
@@ -29,6 +29,10 @@ The organization object.
 #### addressLine2
 
 > **addressLine2**: `string`
+
+#### adminsCount
+
+> **adminsCount**: `number`
 
 #### advertisements
 
@@ -85,6 +89,10 @@ The organization object.
 #### members
 
 > **members**: [`InterfaceOrganizationMembersConnectionPg`](utils\interfaces\README\interfaces\InterfaceOrganizationMembersConnectionPg.md)
+
+#### membersCount
+
+> **membersCount**: `number`
 
 #### name
 

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **UserPhone** = `object`
 
-Defined in: [src/types/User/type.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L28)
+Defined in: [src/types/User/type.ts:28](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/User/type.ts#L28)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/User/type.ts:28](https://github.com/PalisadoesFoundation/
 
 > `optional` **home**: `string`
 
-Defined in: [src/types/User/type.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L29)
+Defined in: [src/types/User/type.ts:29](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/User/type.ts#L29)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/User/type.ts:29](https://github.com/PalisadoesFoundation/
 
 > `optional` **mobile**: `string`
 
-Defined in: [src/types/User/type.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L30)
+Defined in: [src/types/User/type.ts:30](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/User/type.ts#L30)
 
 ***
 
@@ -30,4 +30,4 @@ Defined in: [src/types/User/type.ts:30](https://github.com/PalisadoesFoundation/
 
 > `optional` **work**: `string`
 
-Defined in: [src/types/User/type.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L31)
+Defined in: [src/types/User/type.ts:31](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/User/type.ts#L31)

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **MOCKS1**: `object`[]
 
-Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Settings/SettingsMocks.ts#L44)
+Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:45](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/UserPortal/Settings/SettingsMocks.ts#L45)
 
 ## Type declaration
 
@@ -64,7 +64,7 @@ Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:44](https://github
 
 #### result.data.currentUser.createdAt
 
-> **createdAt**: `string` = `'2025-02-06T03:10:50.254'`
+> **createdAt**: `string` = `'2025-02-06T03:10:50.254Z'`
 
 #### result.data.currentUser.description
 
@@ -81,6 +81,10 @@ Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:44](https://github
 #### result.data.currentUser.employmentStatus
 
 > **employmentStatus**: `string` = `'employed'`
+
+#### result.data.currentUser.eventsAttended
+
+> **eventsAttended**: `any`[] = `[]`
 
 #### result.data.currentUser.homePhoneNumber
 
@@ -128,7 +132,7 @@ Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:44](https://github
 
 #### result.data.currentUser.updatedAt
 
-> **updatedAt**: `string` = `'2025-02-06T03:22:17.808'`
+> **updatedAt**: `string` = `'2025-02-06T03:22:17.808Z'`
 
 #### result.data.currentUser.workPhoneNumber
 

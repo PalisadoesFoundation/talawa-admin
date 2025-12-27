@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
 # Enumeration: RecurrenceEndOption
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L38)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:39](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/recurrenceUtils/recurrenceTypes.ts#L39)
 
 ## Enumeration Members
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:38](https://github.com
 
 > **after**: `"after"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L41)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:42](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/recurrenceUtils/recurrenceTypes.ts#L42)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:41](https://github.com
 
 > **never**: `"never"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L39)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:40](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/recurrenceUtils/recurrenceTypes.ts#L40)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:39](https://github.com
 
 > **on**: `"on"`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceTypes.ts#L40)
+Defined in: [src/utils/recurrenceUtils/recurrenceTypes.ts:41](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/recurrenceUtils/recurrenceTypes.ts#L41)

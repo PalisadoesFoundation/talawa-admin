@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **PostComments** = `object`[]
 
-Defined in: [src/types/Post/type.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/type.ts#L83)
+Defined in: [src/types/Post/type.ts:83](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/type.ts#L83)
 
 ## Type declaration
 
@@ -37,10 +37,6 @@ Defined in: [src/types/Post/type.ts:83](https://github.com/PalisadoesFoundation/
 ### likeCount
 
 > **likeCount**: `number`
-
-### likedBy
-
-> **likedBy**: `object`[]
 
 ### text
 

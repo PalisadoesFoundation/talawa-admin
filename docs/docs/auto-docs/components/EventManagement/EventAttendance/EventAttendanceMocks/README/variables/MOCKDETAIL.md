@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **MOCKDETAIL**: `object`[]
 
-Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L27)
+Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:34](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L34)
 
 ## Type declaration
 
@@ -22,9 +22,9 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 > **variables**: `object`
 
-#### request.variables.id
+#### request.variables.eventId
 
-> **id**: `string` = `'event123'`
+> **eventId**: `string` = `'event123'`
 
 ### result
 
@@ -38,66 +38,98 @@ Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks
 
 > **event**: `object` = `MOCKEVENT`
 
-#### result.data.event.\_id
-
-> **\_id**: `string` = `'event123'`
-
 #### result.data.event.allDay
 
 > **allDay**: `boolean` = `false`
 
-#### result.data.event.attendees
+#### result.data.event.createdAt
 
-> **attendees**: `object`[]
+> **createdAt**: `string` = `'2030-04-01T00:00:00.000Z'`
 
-#### result.data.event.baseRecurringEvent
+#### result.data.event.creator
 
-> **baseRecurringEvent**: `object`
+> **creator**: `object`
 
-#### result.data.event.baseRecurringEvent.\_id
+#### result.data.event.creator.emailAddress
 
-> **\_id**: `string` = `'recurringEvent123'`
+> **emailAddress**: `string` = `'creator@example.com'`
+
+#### result.data.event.creator.id
+
+> **id**: `string` = `'creator123'`
+
+#### result.data.event.creator.name
+
+> **name**: `string` = `'Creator Name'`
 
 #### result.data.event.description
 
 > **description**: `string` = `'This is a test event description'`
 
-#### result.data.event.endDate
+#### result.data.event.endAt
 
-> **endDate**: `string` = `'2023-05-02'`
+> **endAt**: `string` = `'2030-05-02T17:00:00.000Z'`
 
-#### result.data.event.endTime
+#### result.data.event.id
 
-> **endTime**: `string` = `'17:00:00'`
+> **id**: `string` = `'event123'`
+
+#### result.data.event.isPublic
+
+> **isPublic**: `boolean` = `true`
+
+#### result.data.event.isRegisterable
+
+> **isRegisterable**: `boolean` = `true`
 
 #### result.data.event.location
 
 > **location**: `string` = `'Test Location'`
 
+#### result.data.event.name
+
+> **name**: `string` = `'Test Event'`
+
 #### result.data.event.organization
 
 > **organization**: `object`
 
-#### result.data.event.organization.\_id
+#### result.data.event.organization.id
 
-> **\_id**: `string` = `'org456'`
+> **id**: `string` = `'org456'`
 
-#### result.data.event.organization.members
+#### result.data.event.organization.name
 
-> **members**: `object`[]
+> **name**: `string` = `'Test Organization'`
 
-#### result.data.event.recurring
+#### result.data.event.recurrenceRule
 
-> **recurring**: `boolean` = `true`
+> **recurrenceRule**: `object`
 
-#### result.data.event.startDate
+#### result.data.event.recurrenceRule.id
 
-> **startDate**: `string` = `'2023-05-01'`
+> **id**: `string` = `'recurringEvent123'`
 
-#### result.data.event.startTime
+#### result.data.event.startAt
 
-> **startTime**: `string` = `'09:00:00'`
+> **startAt**: `string` = `'2030-05-01T09:00:00.000Z'`
 
-#### result.data.event.title
+#### result.data.event.updatedAt
 
-> **title**: `string` = `'Test Event'`
+> **updatedAt**: `string` = `'2030-04-01T00:00:00.000Z'`
+
+#### result.data.event.updater
+
+> **updater**: `object`
+
+#### result.data.event.updater.emailAddress
+
+> **emailAddress**: `string` = `'updater@example.com'`
+
+#### result.data.event.updater.id
+
+> **id**: `string` = `'updater123'`
+
+#### result.data.event.updater.name
+
+> **name**: `string` = `'Updater Name'`

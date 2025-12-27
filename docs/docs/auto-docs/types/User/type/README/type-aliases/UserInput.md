@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **UserInput** = `object`
 
-Defined in: [src/types/User/type.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L34)
+Defined in: [src/types/User/type.ts:34](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/User/type.ts#L34)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/User/type.ts:34](https://github.com/PalisadoesFoundation/
 
 > **appLanguageCode**: `string`
 
-Defined in: [src/types/User/type.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L35)
+Defined in: [src/types/User/type.ts:35](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/User/type.ts#L35)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/User/type.ts:35](https://github.com/PalisadoesFoundation/
 
 > **email**: `string`
 
-Defined in: [src/types/User/type.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L36)
+Defined in: [src/types/User/type.ts:36](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/User/type.ts#L36)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/User/type.ts:36](https://github.com/PalisadoesFoundation/
 
 > **firstName**: `string`
 
-Defined in: [src/types/User/type.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L37)
+Defined in: [src/types/User/type.ts:37](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/User/type.ts#L37)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/User/type.ts:37](https://github.com/PalisadoesFoundation/
 
 > **lastName**: `string`
 
-Defined in: [src/types/User/type.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L38)
+Defined in: [src/types/User/type.ts:38](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/User/type.ts#L38)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/User/type.ts:38](https://github.com/PalisadoesFoundation/
 
 > **password**: `string`
 
-Defined in: [src/types/User/type.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L39)
+Defined in: [src/types/User/type.ts:39](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/User/type.ts#L39)
 
 ***
 
@@ -54,4 +54,4 @@ Defined in: [src/types/User/type.ts:39](https://github.com/PalisadoesFoundation/
 
 > **selectedOrganization**: `string`
 
-Defined in: [src/types/User/type.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L40)
+Defined in: [src/types/User/type.ts:40](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/User/type.ts#L40)

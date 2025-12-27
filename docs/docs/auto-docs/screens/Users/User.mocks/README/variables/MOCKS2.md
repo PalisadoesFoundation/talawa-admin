@@ -1,9 +1,9 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
 # Variable: MOCKS2
 
-> `const` **MOCKS2**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `first`: `undefined`; `firstName_contains`: `undefined`; `id`: `string`; `lastName_contains`: `undefined`; `skip`: `undefined`; \}; \}; `result`: \{ `data`: \{ `organizations`: `undefined`; `user`: \{ `email`: `string`; `firstName`: `string`; `image`: `string`; `lastName`: `string`; \}; `users`: `undefined`; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `first`: `number`; `firstName_contains`: `string`; `id`: `undefined`; `lastName_contains`: `string`; `skip`: `number`; \}; \}; `result`: \{ `data`: \{ `organizations`: `undefined`; `user`: `undefined`; `users`: `object`[]; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: `undefined`; \}; `result`: \{ `data`: \{ `organizations`: `object`[]; `user`: `undefined`; `users`: `undefined`; \}; \}; \})[]
+> `const` **MOCKS2**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id`: `string`; `input`: `undefined`; \}; \}; `result`: \{ `data`: \{ `organizations`: `undefined`; `user`: \{ `email`: `string`; `firstName`: `string`; `image`: `string`; `lastName`: `string`; \}; `usersByIds`: `undefined`; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id`: `undefined`; `input`: \{ `ids`: `string`; \}; \}; \}; `result`: \{ `data`: \{ `organizations`: `undefined`; `user`: `undefined`; `usersByIds`: `object`[]; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: `undefined`; \}; `result`: \{ `data`: \{ `organizations`: `object`[]; `user`: `undefined`; `usersByIds`: `undefined`; \}; \}; \})[]
 
-Defined in: [src/screens/Users/User.mocks.ts:242](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Users/User.mocks.ts#L242)
+Defined in: [src/screens/Users/User.mocks.ts:232](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/Users/User.mocks.ts#L232)

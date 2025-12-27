@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
 # Interface: InterfaceMutationCreatePostInput
 
-Defined in: [src/types/Post/interface.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L65)
+Defined in: [src/types/Post/interface.ts:69](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L69)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/interface.ts:65](https://github.com/PalisadoesFounda
 
 > `optional` **attachments**: `File`[]
 
-Defined in: [src/types/Post/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L69)
+Defined in: [src/types/Post/interface.ts:73](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L73)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Post/interface.ts:69](https://github.com/PalisadoesFounda
 
 > **caption**: `string`
 
-Defined in: [src/types/Post/interface.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L66)
+Defined in: [src/types/Post/interface.ts:70](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L70)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Post/interface.ts:66](https://github.com/PalisadoesFounda
 
 > **isPinned**: `boolean`
 
-Defined in: [src/types/Post/interface.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L68)
+Defined in: [src/types/Post/interface.ts:72](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L72)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/types/Post/interface.ts:68](https://github.com/PalisadoesFounda
 
 > **organizationId**: `string`
 
-Defined in: [src/types/Post/interface.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Post/interface.ts#L67)
+Defined in: [src/types/Post/interface.ts:71](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L71)

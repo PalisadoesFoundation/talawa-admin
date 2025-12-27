@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **endsOn**: [`on`](utils\recurrenceUtils\recurrenceTypes\README\enumerations\RecurrenceEndOption.md#on) = `RecurrenceEndOption.on`
 
-Defined in: [src/utils/recurrenceUtils/recurrenceConstants.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/recurrenceUtils/recurrenceConstants.ts#L38)
+Defined in: [src/utils/recurrenceUtils/recurrenceConstants.ts:38](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/recurrenceUtils/recurrenceConstants.ts#L38)

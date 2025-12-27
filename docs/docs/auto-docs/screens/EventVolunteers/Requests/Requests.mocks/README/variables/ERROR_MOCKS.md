@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,4 +6,4 @@
 
 > `const` **ERROR\_MOCKS**: (\{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id`: `undefined`; `orderBy`: `any`; `status`: `undefined`; `where`: \{ `eventId`: `string`; `status`: `string`; `userName`: `any`; \}; \}; \}; \} \| \{ `error`: `Error`; `request`: \{ `query`: `DocumentNode`; `variables`: \{ `id`: `string`; `orderBy`: `undefined`; `status`: `string`; `where`: `undefined`; \}; \}; \})[]
 
-Defined in: [src/screens/EventVolunteers/Requests/Requests.mocks.ts:167](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Requests/Requests.mocks.ts#L167)
+Defined in: [src/screens/EventVolunteers/Requests/Requests.mocks.ts:324](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/EventVolunteers/Requests/Requests.mocks.ts#L324)

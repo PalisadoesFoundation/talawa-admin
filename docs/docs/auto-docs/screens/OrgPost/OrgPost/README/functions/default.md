@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/OrgPost/OrgPost.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPost.tsx#L37)
+Defined in: [src/screens/OrgPost/OrgPost.tsx:33](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrgPost/OrgPost.tsx#L33)
 
 OrgPost Component
 This component is responsible for rendering and managing organization posts.

@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **dateConstants**: `object`
 
-Defined in: [src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts#L27)
+Defined in: [src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts#L27)
 
 ## Type declaration
 

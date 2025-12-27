@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > `const` **actionItemListQuery**: `object`
 
-Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:225](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L225)
+Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:297](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L297)
 
 ## Type declaration
 
@@ -40,4 +40,4 @@ Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts
 
 #### result.data.actionItemsByOrganization
 
-> **actionItemsByOrganization**: (\{ `assignedAt`: `Date`; `assignee`: `any`; `assigneeId`: `any`; `category`: \{ `createdAt`: `string`; `creatorId`: `string`; `id`: `string`; `isDisabled`: `boolean`; `name`: `string`; `organizationId`: `string`; `updatedAt`: `string`; \}; `categoryId`: `string`; `completionAt`: `any`; `createdAt`: `Date`; `creator`: \{ `avatarURL`: `any`; `emailAddress`: `string`; `id`: `string`; `name`: `string`; \}; `creatorId`: `string`; `event`: `any`; `eventId`: `any`; `id`: `string`; `isCompleted`: `boolean`; `organizationId`: `string`; `postCompletionNotes`: `any`; `preCompletionNotes`: `string`; `updatedAt`: `Date`; `updaterId`: `string`; \} \| \{ `assignedAt`: `Date`; `assignee`: \{ `avatarURL`: `string`; `emailAddress`: `string`; `id`: `string`; `name`: `string`; \}; `assigneeId`: `string`; `category`: `any`; `categoryId`: `any`; `completionAt`: `any`; `createdAt`: `Date`; `creator`: \{ `avatarURL`: `any`; `emailAddress`: `string`; `id`: `string`; `name`: `string`; \}; `creatorId`: `string`; `event`: `any`; `eventId`: `any`; `id`: `string`; `isCompleted`: `boolean`; `organizationId`: `string`; `postCompletionNotes`: `any`; `preCompletionNotes`: `string`; `updatedAt`: `Date`; `updaterId`: `string`; \})[]
+> **actionItemsByOrganization**: (\{ `assignedAt`: `Date`; `category`: \{ `createdAt`: `string`; `creatorId`: `string`; `id`: `string`; `isDisabled`: `boolean`; `name`: `string`; `organizationId`: `string`; `updatedAt`: `string`; \}; `categoryId`: `string`; `completionAt`: `any`; `createdAt`: `Date`; `creator`: \{ `avatarURL`: `any`; `emailAddress`: `string`; `id`: `string`; `name`: `string`; \}; `creatorId`: `string`; `event`: `any`; `eventId`: `any`; `id`: `string`; `isCompleted`: `boolean`; `organizationId`: `string`; `postCompletionNotes`: `any`; `preCompletionNotes`: `string`; `recurringEventInstance`: `any`; `recurringEventInstanceId`: `any`; `updatedAt`: `Date`; `updaterId`: `string`; `volunteer`: `any`; `volunteerGroup`: `any`; `volunteerGroupId`: `any`; `volunteerId`: `any`; \} \| \{ `assignedAt`: `Date`; `category`: `any`; `categoryId`: `any`; `completionAt`: `any`; `createdAt`: `Date`; `creator`: \{ `avatarURL`: `any`; `emailAddress`: `string`; `id`: `string`; `name`: `string`; \}; `creatorId`: `string`; `event`: `any`; `eventId`: `any`; `id`: `string`; `isCompleted`: `boolean`; `organizationId`: `string`; `postCompletionNotes`: `any`; `preCompletionNotes`: `string`; `recurringEventInstance`: `any`; `recurringEventInstanceId`: `any`; `updatedAt`: `Date`; `updaterId`: `string`; `volunteer`: \{ `hasAccepted`: `boolean`; `hoursVolunteered`: `number`; `id`: `string`; `isPublic`: `boolean`; `user`: \{ `avatarURL`: `string`; `id`: `string`; `name`: `string`; \}; \}; `volunteerGroup`: `any`; `volunteerGroupId`: `any`; `volunteerId`: `string`; \})[]

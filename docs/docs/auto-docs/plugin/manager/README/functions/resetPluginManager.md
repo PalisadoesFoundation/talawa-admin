@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **resetPluginManager**(): `void`
 
-Defined in: [src/plugin/manager.ts:176](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L176)
+Defined in: [src/plugin/manager.ts:192](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L192)
 
 ## Returns
 

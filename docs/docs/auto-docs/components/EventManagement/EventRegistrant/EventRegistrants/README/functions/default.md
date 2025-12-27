@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/components/EventManagement/EventRegistrant/EventRegistrants.tsx:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventRegistrant/EventRegistrants.tsx#L57)
+Defined in: [src/components/EventManagement/EventRegistrant/EventRegistrants.tsx:62](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/EventManagement/EventRegistrant/EventRegistrants.tsx#L62)
 
 ## Returns
 

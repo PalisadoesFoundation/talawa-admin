@@ -1,10 +1,10 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
 # Interface: InterfaceQueryVenueListItem
 
-Defined in: [src/utils/interfaces.ts:2018](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2018)
+Defined in: [src/utils/interfaces.ts:2180](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2180)
 
 InterfaceQueryVenueListItem
 
@@ -14,50 +14,32 @@ Defines the structure for a venue list item returned from a query.
 
 ## Properties
 
-### \_id
+### node
 
-> **\_id**: `string`
+> **node**: `object`
 
-Defined in: [src/utils/interfaces.ts:2019](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2019)
+Defined in: [src/utils/interfaces.ts:2181](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L2181)
 
-The unique identifier of the venue.
+#### attachments?
 
-***
+> `optional` **attachments**: `object`[]
 
-### capacity
+#### capacity?
 
-> **capacity**: `string`
+> `optional` **capacity**: `number`
 
-Defined in: [src/utils/interfaces.ts:2023](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2023)
-
-The capacity of the venue.
-
-***
-
-### description
+#### description
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:2021](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2021)
+#### id
 
-The description of the venue, or null.
+> **id**: `string`
 
-***
+#### image?
 
-### image
+> `optional` **image**: `string`
 
-> **image**: `string`
-
-Defined in: [src/utils/interfaces.ts:2022](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2022)
-
-The URL of the venue's image, or null.
-
-***
-
-### name
+#### name
 
 > **name**: `string`
-
-Defined in: [src/utils/interfaces.ts:2020](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2020)
-
-The name of the venue.
