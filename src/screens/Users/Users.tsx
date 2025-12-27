@@ -64,7 +64,7 @@ import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 import {
   ORGANIZATION_LIST,
@@ -191,7 +191,7 @@ const Users = (): JSX.Element => {
     }
     // Add null check before accessing organizations.length
     if (dataOrgs.organizations?.length === 0) {
-      toast.warning(t('noOrgError') as string);
+      NotificationToast.warning(t('noOrgError') as string);
     }
   }, [dataOrgs, t]);
 

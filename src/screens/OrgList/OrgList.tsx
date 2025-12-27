@@ -16,7 +16,7 @@
  * - `useTranslation` from `react-i18next` for localization.
  * - `useLocalStorage` for accessing local storage data.
  * - `OrgListCard`, `SortingButton`, `SearchBar`, and `OrganizationModal` for UI components.
- * - `react-toastify` for notifications.
+ * - `NotificationToast` for notifications.
  * - `react-bootstrap` and `@mui/material` for modal and button components.
  *
  * @state
@@ -67,7 +67,7 @@ import styles from 'style/app-fixed.module.css';
 import SortingButton from 'subComponents/SortingButton';
 import { Button } from '@mui/material';
 import OrganizationModal from './modal/OrganizationModal';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Link } from 'react-router';
 import { Modal } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
@@ -278,7 +278,7 @@ function orgList(): JSX.Element {
 
       //     toggleModal;
       if (data) {
-        toast.success(t('congratulationOrgCreated'));
+        NotificationToast.success(t('congratulationOrgCreated'));
         refetchOrgs();
         openDialogModal(data.createOrganization.id);
         setFormState({

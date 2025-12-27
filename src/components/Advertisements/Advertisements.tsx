@@ -45,7 +45,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import type { Advertisement } from 'types/Advertisement/type';
 import Loader from 'components/Loader/Loader';
 import { AdvertisementSkeleton } from './skeleton/AdvertisementSkeleton';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import PageHeader from 'shared-components/Navbar/Navbar';
 
 export default function Advertisements(): JSX.Element {
@@ -90,7 +90,7 @@ export default function Advertisements(): JSX.Element {
   });
 
   if (completedError || activeError) {
-    toast.error('Failed to fetch advertisements');
+    NotificationToast.error('Failed to fetch advertisements');
   }
 
   const [completedAdvertisements, setCompletedAdvertisements] = useState<
