@@ -409,8 +409,8 @@
     "unassignUserTagMessage": "您想从此用户中删除标签吗？",
     "successfullyUnassigned": "标签已从用户中取消分配",
     "removeUserTagError": "删除标签及其所有子标签时出错",
+    "unassignUserTagError": "取消分配用户标签时出错",
     "addPeople": "添加人员",
-    "unassignUserTagError": "从用户移除标签分配时出错",
     "add": "添加",
     "subTags": "子标签",
     "successfullyAssignedToPeople": "标签分配成功",
@@ -1244,7 +1244,8 @@
     "event": "事件",
     "article": "文章",
     "postNowVisibleInFeed": "帖子现在在动态中可见",
-    "processingPost": "正在处理您的帖子。请稍候。"
+    "processingPost": "正在处理您的帖子。请稍候。",
+    "postImagePreview": "帖子图片预览"
   },
   "eventAttendance": {
     "historical_statistics": "历史统计",
@@ -1809,7 +1810,8 @@
     "editComment": "编辑评论",
     "deleteComment": "删除评论",
     "deleting": "删除中…",
-    "emptyCommentError": "请在提交前输入评论。"
+    "emptyCommentError": "请在提交前输入评论。",
+    "moreOptions": "更多选项"
   },
   "profileAvatar": {
     "altText": "{{name}}的个人资料图片",

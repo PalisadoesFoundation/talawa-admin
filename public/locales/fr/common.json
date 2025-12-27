@@ -128,5 +128,9 @@
   "Volunteers": "Bénévoles",
   "unblock": "Débloquer",
   "unblockedSuccessfully": "{{item}} débloqué avec succès",
-  "pluginSettings": "Paramètres du plugin"
+  "pluginSettings": "Paramètres du plugin",
+  "loadingUserPlugin": "Chargement du plugin utilisateur...",
+  "moreOptions": "Plus d'options",
+  "scrollLeft": "Faire défiler vers la gauche",
+  "scrollRight": "Faire défiler vers la droite"
 }

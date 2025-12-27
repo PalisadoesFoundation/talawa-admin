@@ -1270,7 +1270,10 @@ describe('PostCard', () => {
     );
 
     // Check that avatar uses fallback (UserDefault) when avatarURL is null
-    const avatar = screen.getByRole('img', { name: defaultProps.creator.name });
+    // ProfileAvatarDisplay renders a div with role="button" when enableEnlarge is true
+    const avatar = screen.getByRole('button', {
+      name: `Profile picture of ${defaultProps.creator.name}`,
+    });
     expect(avatar).toBeInTheDocument();
   });
 

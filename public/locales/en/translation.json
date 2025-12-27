@@ -725,8 +725,7 @@
     "viewCampaigns": "View Campaigns",
     "searchByName": "Search by Name",
     "assocCampaigns": "Associated Campaigns",
-    "errorLoadingFundsData": "Error loading funds data",
-    "editFund": "Edit Fund"
+    "errorLoadingFundsData": "Error loading funds data"
   },
   "fundCampaign": {
     "title": "Fundraising Campaigns",
@@ -1245,7 +1244,6 @@
     "postDeletedSuccess": "Post deleted successfully.",
     "postPinnedSuccess": "Post pinned successfully.",
     "postUnpinnedSuccess": "Post unpinned successfully.",
-    "postUpdatedSuccess": "Post updated successfully.",
     "editPost": "Edit Post",
     "pinPost": "Pin Post",
     "unpinPost": "Unpin Post",
@@ -1256,6 +1254,7 @@
     "noMoreComments": "No more comments",
     "postedOn": "Posted on {{date}}",
     "emptyCommentError": "Please enter a comment before submitting.",
+    "postUpdatedSuccess": "Post updated successfully",
     "unexpectedError": "An unexpected error occurred. Please try again.",
     "moreOptions": "More options"
   },
@@ -1296,7 +1295,8 @@
     "event": "Event",
     "article": "Article",
     "postNowVisibleInFeed": "Post now visible in feed",
-    "processingPost": "Processing your post. Please wait."
+    "processingPost": "Processing your post. Please wait.",
+    "postImagePreview": "Post Image Preview"
   },
   "settings": {
     "eventAttended": "Events Attended",
@@ -1668,7 +1668,6 @@
     "viewPledges": "View Pledges",
     "noPledges": "No Pledges Found",
     "noCampaigns": "No Campaigns Found",
-    "raised": "Raised",
     "amountRaised": "Amount Raised"
   },
   "userPledges": {
@@ -1809,7 +1808,8 @@
     "editComment": "Edit Comment",
     "deleteComment": "Delete Comment",
     "deleting": "Deleting…",
-    "emptyCommentError": "Please enter a comment before submitting."
+    "emptyCommentError": "Please enter a comment before submitting.",
+    "moreOptions": "More options"
   },
   "profileAvatar": {
     "altText": "Profile picture of {{name}}",

@@ -128,5 +128,8 @@
   "Volunteers": "स्वयंसेवक",
   "unblock": "अनब्लॉक करें",
   "unblockedSuccessfully": "{{item}} सफलतापूर्वक अनब्लॉक किया गया",
-  "pluginSettings": "प्लगइन सेटिंग्स"
+  "pluginSettings": "प्लगइन सेटिंग्स",
+  "moreOptions": "अधिक विकल्प",
+  "scrollLeft": "बाएं स्क्रॉल करें",
+  "scrollRight": "दाएं स्क्रॉल करें"
 }

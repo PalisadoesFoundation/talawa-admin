@@ -128,5 +128,9 @@
   "Volunteers": "Voluntarios",
   "unblock": "Desbloquear",
   "unblockedSuccessfully": "{{item}} desbloqueado exitosamente",
-  "pluginSettings": "Configuración de complementos"
+  "pluginSettings": "Configuración de complementos",
+  "loadingUserPlugin": "Cargando complemento de usuario...",
+  "moreOptions": "Más opciones",
+  "scrollLeft": "Desplazar a la izquierda",
+  "scrollRight": "Desplazar a la derecha"
 }

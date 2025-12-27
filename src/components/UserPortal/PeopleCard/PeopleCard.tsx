@@ -78,7 +78,7 @@ const PeopleCard: React.FC<InterfacePeopleCardProps> = ({
   return (
     <UserPortalCard
       variant="compact"
-      dataTestId={`people-card-${id}`}
+      dataTestId={'people-card-' + id}
       imageSlot={imageSlot}
     >
       <div className={styles.content}>
