@@ -111,6 +111,7 @@ const ORGANIZATION_MEMBERS_MOCK = {
       },
     },
   },
+  maxUsageCount: Number.POSITIVE_INFINITY,
 };
 
 const ORGANIZATION_MEMBERS_SEARCH_MOCK = {
@@ -518,7 +519,7 @@ describe('CreateGroupChat', () => {
     fireEvent.change(searchInput, { target: { value: 'Test User' } });
     expect(searchInput).toHaveValue('Test User');
 
-    const clearBtn = screen.getByLabelText('Clear search');
+    const clearBtn = screen.getByLabelText('Clear');
     fireEvent.click(clearBtn);
 
     expect(searchInput).toHaveValue('');

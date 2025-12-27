@@ -477,11 +477,10 @@ describe('Testing Requests screen', () => {
     await userEvent.keyboard('{Enter}');
     await wait(200);
 
-    // When search returns no results, the DataGrid is still rendered with no rows
-    const grid = screen.getByRole('grid');
-    expect(grid).toBeInTheDocument();
-    // Assert zero data rows (header only) for empty search result
-    expect(grid.getAttribute('aria-rowcount')).toBe('1');
+    // When there are no requests at all, show "no requests found" message
+    expect(
+      screen.getByText(/No Membership Requests Found/i),
+    ).toBeInTheDocument();
   });
 
   test('Testing Request data is not present', async () => {
@@ -891,8 +890,6 @@ describe('Testing Requests screen', () => {
   });
 
   test('shows no results message when search returns no rows', async () => {
-    // Instead of checking for the "no results" message which requires a complex component state,
-    // verify that the DataGrid shows zero data rows (aria-rowcount="1" means only header row)
     const SEARCH_EMPTY_MOCKS = [
       {
         request: {

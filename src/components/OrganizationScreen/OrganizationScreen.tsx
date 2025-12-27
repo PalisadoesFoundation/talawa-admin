@@ -59,7 +59,7 @@ const OrganizationScreen = (): JSX.Element => {
   const isEventPath = useMatch('/event/:orgId/:eventId');
   const eventId = isEventPath?.params.eventId;
   const shouldFetchEventName = Boolean(orgId && eventId);
-  const EVENTS_PAGE_SIZE = 150;
+  const EVENTS_PAGE_SIZE = 100;
 
   // Get the application routes from the Redux store
   const appRoutes: { targets: TargetsType[] } = useSelector(
