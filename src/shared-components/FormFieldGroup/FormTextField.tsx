@@ -19,6 +19,7 @@ export const FormTextField: React.FC<FormTextFieldProps> = ({
   endAdornment,
   format,
   ...formControlProps
+  ...formControlProps
 }) => {
   if (format === 'mui') {
     return (
@@ -41,6 +42,7 @@ export const FormTextField: React.FC<FormTextFieldProps> = ({
       </FormControl>
     );
   }
+
 
   return (
     <FormFieldGroup
