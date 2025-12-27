@@ -9,7 +9,14 @@
     "weekly": "本周",
     "monthly": "本月",
     "yearly": "今年",
-    "noVolunteers": "未找到志愿者!"
+    "noVolunteers": "未找到志愿者!",
+    "goldMedal": "金牌",
+    "silverMedal": "银牌",
+    "bronzeMedal": "铜牌",
+    "rank": "排名",
+    "volunteer": "志愿者",
+    "email": "电子邮件",
+    "hoursVolunteered": "志愿服务时数"
   },
   "loginPage": {
     "title": "塔拉瓦管理员",
@@ -54,11 +61,7 @@
     "OR": "或",
     "admin": "管理员",
     "user": "用户",
-    "loading": "加载中",
-    "communityLogo": "社区标志",
-    "organizations": "组织",
-    "accountLocked": "由于登录失败次数过多，您的账户已被暂时锁定。请稍后重试。",
-    "accountLockedWithTimer": "您的账户已被暂时锁定。请在 {{minutes}} 分钟后重试。"
+    "loading": "加载中"
   },
   "signOut": {
     "retryPrompt": "撤銷工作階段失敗。要重試嗎？",
@@ -226,8 +229,7 @@
     "name": "名称",
     "email": "电子邮件",
     "profilePictureAlt": "{{name}} 的头像",
-    "placeholderAvatarAlt": "占位符头像",
-    "newMembersWillAppearHere": "新的会员请求将出现在这里"
+    "placeholderAvatarAlt": "占位符头像"
   },
   "users": {
     "membershipStatus": {
@@ -658,6 +660,7 @@
     "deleteThisAndFollowing": "删除此事件和所有后续事件",
     "deleteAllEvents": "删除此系列中的所有事件",
     "editEvent": "编辑事件",
+    "showEventDashboard": "显示事件仪表板",
     "updateEvent": "更新事件",
     "updateRecurringEventMsg": "这是一个重复事件。请选择您想要如何更新它：",
     "updateThisInstance": "仅更新此实例",
@@ -723,8 +726,7 @@
     "viewCampaigns": "查看活动",
     "assocCampaigns": "相关活动",
     "errorLoadingFundsData": "加载基金数据时出错",
-    "editFund": "编辑基金",
-    "searchFunds": "搜索基金"
+    "editFund": "编辑基金"
   },
   "fundCampaign": {
     "title": "募捐活动",
@@ -748,10 +750,7 @@
     "latestEndDate": "最新结束日期",
     "earliestEndDate": "最早结束日期",
     "lowestGoal": "最低目标",
-    "highestGoal": "最高目标",
-    "editCampaign": "编辑活动",
-    "searchCampaigns": "搜索活动",
-    "errorLoading": "加载活动数据时出错"
+    "highestGoal": "最高目标"
   },
   "pledges": {
     "title": "基金活动承诺",
@@ -784,7 +783,12 @@
     "startDate": "开始日期",
     "endDate": "结束日期",
     "searchByPlaceholder": "按{{field}}搜索",
-    "selectPledger": "请选择一个承诺者"
+    "selectPledger": "请选择一个承诺者",
+    "moreUsers": "+{{count}} 更多...",
+    "togglePledgedRaised": "在承诺金额和募集金额之间切换",
+    "pledgeDate": "承诺日期",
+    "pledged": "已承诺",
+    "donated": "已捐赠"
   },
   "createPostModal": {
     "title": "帖子",
@@ -892,6 +896,7 @@
     "searchByFirstName": "按名字搜索",
     "searchByLastName": "按姓氏搜索",
     "noSpammerFound": "未发现垃圾邮件发送者",
+    "noUsersFound": "未找到用户",
     "searchByName": "按名称搜索",
     "name": "名称",
     "email": "电子邮件",
@@ -1085,8 +1090,7 @@
     "unassignUserTagMessage": "您想从此用户中删除标签吗？",
     "successfullyUnassigned": "标签已从用户中取消分配",
     "tagsAssigned": "已分配标签",
-    "noTagsAssigned": "未分配标签",
-    "actions": "操作"
+    "noTagsAssigned": "未分配标签"
   },
   "userLogin": {
     "login": "登录",
@@ -1664,13 +1668,7 @@
     "viewPledges": "查看承诺",
     "noPledges": "未找到承诺",
     "noCampaigns": "未找到活动",
-    "searchCampaigns": "搜索活动",
-    "campaignName": "活动名称",
-    "startDate": "开始日期",
-    "endDate": "结束日期",
-    "fundingGoal": "筹款目标",
-    "raised": "已筹金额",
-    "viewPledge": "查看认捐",
+    "raised": "已筹集",
     "amountRaised": "已筹集金额"
   },
   "userPledges": {
@@ -1820,6 +1818,8 @@
   "common": {
     "signOut": "退出登录",
     "signingOut": "正在退出...",
-    "retryPrompt": "撤销会话失败。重试？"
+    "retryPrompt": "撤销会话失败。重试？",
+    "breadcrumb": "面包屑",
+    "action": "操作"
   }
 }
