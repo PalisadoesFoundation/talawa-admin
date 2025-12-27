@@ -186,7 +186,7 @@ jobs:
   Check-AutoDocs:
     name: Generate and Validate Documentation
     needs: [Code-Quality-Checks]
-    uses: PalisadoesFoundation/.github/.github/workflows/autodocs.yml@feature/typescript-code-quality-workflow
+    uses: yashgoyal0110/.github/.github/workflows/autodocs.yml@feature/typescript-code-quality-workflow
     with:
       node-version: '24.x'
   Check-Sensitive-Files:
