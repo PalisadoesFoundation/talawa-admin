@@ -1212,6 +1212,8 @@
     "closePinnedPost": "Fermer le message épinglé",
     "unknownUser": "Utilisateur inconnu",
     "searchPosts": "Rechercher des messages",
+    "scrollLeft": "Scroll left",
+    "scrollRight": "Scroll right",
     "nothingToShow": "Rien à montrer ici.",
     "noMorePosts": "Plus de messages à charger",
     "noPosts": "Aucun message pour le moment. Créez le premier !",
