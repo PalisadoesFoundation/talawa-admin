@@ -5967,43 +5967,37 @@ form {
 }
 
 /* -- CreateGroupChat.tsx -- */
-
+/* Donation card styles */
 /* -- DonationCard.tsx -- */
 
-.mainContainerDonateCard {
-  width: 49%;
-  height: 8rem;
-  min-width: max-content;
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1rem;
-  background-color: var(--mainContainerDonateCard-bg);
-  border: 1px solid var(--mainContainerDonateCard-border);
-  border-radius: 10px;
-  overflow: hidden;
+.donationAvatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: var(--people-card-header-bg);
+  flex-shrink: 0;
 }
 
-.img {
-  height: 100%;
-  aspect-ratio: 1 / 1;
-  background-color: var(--mainContainerDonateCard-bg);
-}
-
-.personDetails {
+.donationDetails {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: 0.25rem;
 }
 
-.btnDonate {
-  display: flex;
-  align-items: flex-end;
+.donationRow {
+  font-size: 14px;
+  color: var(--primaryText-color);
 }
 
-.btnDonate button {
-  padding-inline: 2rem !important;
-  border-radius: 5px;
+/* Donor name */
+.donorName {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.donationMeta {
+  font-size: 13px;
+  color: var(--secondText-color);
 }
 
 /* -- EventCard.tsx -- */
