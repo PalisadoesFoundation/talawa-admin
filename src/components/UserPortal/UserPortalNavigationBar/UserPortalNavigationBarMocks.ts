@@ -70,3 +70,55 @@ export const mockNavigationLinksBase = [
     path: '/events',
   },
 ];
+
+/**
+ * Mock GraphQL error response for fetching organization basic data
+ * Used to test error handling when organization query fails
+ */
+export const organizationDataErrorMock = {
+  request: {
+    query: GET_ORGANIZATION_BASIC_DATA,
+    variables: { id: mockOrganizationId },
+  },
+  error: new Error('Failed to fetch organization data'),
+};
+
+/**
+ * Mock GraphQL error response for revoking refresh token
+ * Used to test error handling during logout
+ */
+export const revokeRefreshTokenErrorMock = {
+  request: {
+    query: REVOKE_REFRESH_TOKEN,
+  },
+  variableMatcher: () => true, // Match any variables
+  error: new Error('Failed to revoke refresh token'),
+};
+
+/**
+ * Mock network error for revoking refresh token
+ * Simulates network failure during logout
+ */
+export const revokeRefreshTokenNetworkErrorMock = {
+  request: {
+    query: REVOKE_REFRESH_TOKEN,
+  },
+  variableMatcher: () => true,
+  error: new Error('Network error'),
+};
+
+/**
+ * Mock GraphQL null data response for organization query
+ * Used to test fallback behavior when data is null
+ */
+export const organizationDataNullMock = {
+  request: {
+    query: GET_ORGANIZATION_BASIC_DATA,
+    variables: { id: mockOrganizationId },
+  },
+  result: {
+    data: {
+      organization: null,
+    },
+  },
+};
