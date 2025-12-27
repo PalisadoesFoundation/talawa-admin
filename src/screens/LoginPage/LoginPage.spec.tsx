@@ -2072,8 +2072,8 @@ describe('Extra coverage for 100 %', () => {
   });
 });
 
-describe('RefreshToken storage verification', () => {
-  it('should store refreshToken in localStorage on successful login', async () => {
+describe('Cookie-based authentication verification', () => {
+  it('should NOT store tokens in localStorage (tokens handled by HTTP-Only cookies)', async () => {
     const SIGNIN_WITH_REFRESH_TOKEN_MOCK = [
       {
         request: {
@@ -2152,19 +2152,36 @@ describe('RefreshToken storage verification', () => {
 
     await wait();
 
-    // Verify that setItem was also called with the auth token
-    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+    // Verify that tokens are NOT stored in localStorage (handled by HTTP-Only cookies)
+    expect(mockUseLocalStorage.setItem).not.toHaveBeenCalledWith(
       'token',
-      'newAuthToken123',
+      expect.any(String),
+    );
+    expect(mockUseLocalStorage.setItem).not.toHaveBeenCalledWith(
+      'refreshToken',
+      expect.any(String),
     );
 
-    // Verify that refreshToken is stored (critical for session renewal)
+    // Verify that user session state IS stored in localStorage
     expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
-      'refreshToken',
-      'newRefreshToken456',
+      'IsLoggedIn',
+      'TRUE',
+    );
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+      'name',
+      'Test User',
+    );
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+      'email',
+      'test@gmail.com',
+    );
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith('role', 'user');
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+      'userId',
+      'userId123',
     );
   });
 
-  // Note: Registration uses the same code path as login for storing refreshToken
-  // The login test above verifies the refreshToken storage behavior
+  // Note: Registration uses the same code path as login for storing session data
+  // The login test above verifies that tokens are handled by cookies, not localStorage
 });
