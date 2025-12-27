@@ -294,7 +294,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       });
       props.fetchPosts();
       toggleEditPost();
-      toast.success('Post updated successfully');
+      toast.success(t('postUpdatedSuccess'));
     } catch (error) {
       errorHandler(t, error);
     }
@@ -313,8 +313,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
 
   return (
     <Box
-      className={postCardStyles.postContainer}
-      sx={{ backgroundColor: 'background.paper' }}
+      className={`${postCardStyles.postContainer} ${styles.backgroundPaper}`}
     >
       {/* Post Header */}
 
@@ -335,38 +334,38 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             {props.creator.name}
           </Typography>
         </Box>
-        <>
-          <IconButton
-            onClick={handleDropdownOpen}
-            size="small"
-            aria-label="more options"
-            data-testid="more-options-button"
-          >
-            <MoreHoriz />
-          </IconButton>
-          <Menu
-            anchorEl={dropdownAnchor}
-            open={Boolean(dropdownAnchor)}
-            onClose={handleDropdownClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'right',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            PaperProps={{
-              sx: {
-                minWidth: '150px',
-                '& .MuiMenuItem-root': {
-                  px: 2,
-                  py: 1,
+        {(isAdmin || isPostCreator) && (
+          <>
+            <IconButton
+              onClick={handleDropdownOpen}
+              size="small"
+              aria-label={t('moreOptions')}
+              data-testid="more-options-button"
+            >
+              <MoreHoriz />
+            </IconButton>
+            <Menu
+              anchorEl={dropdownAnchor}
+              open={Boolean(dropdownAnchor)}
+              onClose={handleDropdownClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+              PaperProps={{
+                sx: {
+                  minWidth: '150px',
+                  '& .MuiMenuItem-root': {
+                    px: 2,
+                    py: 1,
+                  },
                 },
-              },
-            }}
-          >
-            {(isPostCreator || isAdmin) && (
+              }}
+            >
               <MenuItem
                 onClick={toggleEditPost}
                 data-testid="edit-post-menu-item"
@@ -379,27 +378,25 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                   data-testid="edit-post-button"
                 />
               </MenuItem>
-            )}
 
-            {isAdmin && (
-              <MenuItem
-                onClick={handleTogglePin}
-                data-testid="pin-post-menu-item"
-              >
-                <ListItemIcon>
-                  {isPinned ? (
-                    <PushPinOutlined fontSize="small" />
-                  ) : (
-                    <PushPin fontSize="small" />
-                  )}
-                </ListItemIcon>
-                <ListItemText
-                  primary={isPinned ? t('unpinPost') : t('pinPost')}
-                />
-              </MenuItem>
-            )}
+              {isAdmin && (
+                <MenuItem
+                  onClick={handleTogglePin}
+                  data-testid="pin-post-menu-item"
+                >
+                  <ListItemIcon>
+                    {isPinned ? (
+                      <PushPin fontSize="small" />
+                    ) : (
+                      <PushPinOutlined fontSize="small" />
+                    )}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={isPinned ? t('unpinPost') : t('pinPost')}
+                  />
+                </MenuItem>
+              )}
 
-            {(isAdmin || isPostCreator) && (
               <MenuItem
                 onClick={handleDeletePost}
                 data-testid="delete-post-menu-item"
@@ -413,9 +410,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                   primaryTypographyProps={{ color: 'error' }}
                 />
               </MenuItem>
-            )}
-          </Menu>
-        </>
+            </Menu>
+          </>
+        )}
       </Box>
 
       {/* Post Media */}
@@ -425,7 +422,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             <img src={props.image || UserDefault} alt={props.title} />
           ))}
         {props.video && (
-          <video controls style={{ width: '100%' }}>
+          <video controls className={styles.videoFullWidth}>
             <source src={props.video} type="video/mp4" />
           </video>
         )}
@@ -459,7 +456,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             fontSize="small"
             color="primary"
             data-testid="pinned-icon"
-            sx={{ marginLeft: 'auto' }}
+            className={styles.marginLeftAuto}
           />
         )}
       </Box>
@@ -625,8 +622,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
         data-testid="edit-post-button"
       >
         <Box
-          className={postCardStyles.editModalContent}
-          sx={{ backgroundColor: 'background.paper' }}
+          className={`${postCardStyles.editModalContent} ${styles.backgroundPaper}`}
         >
           <Typography variant="h6">{t('editPost')}</Typography>
           <FormControl fullWidth sx={{ mb: 2 }}>
