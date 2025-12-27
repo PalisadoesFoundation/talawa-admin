@@ -78,9 +78,9 @@ const errorLink = onError(
       for (const error of graphQLErrors) {
         const errorCode = error.extensions?.code;
 
-        // Skip token refresh logic for authentication operations (login/signup)
+        // Skip token refresh logic for authentication operations (login/signup/logout)
         const operationName = operation.operationName;
-        const authOperations = ['SignIn', 'SignUp', 'RefreshToken'];
+        const authOperations = ['SignIn', 'SignUp', 'RefreshToken', 'Logout'];
         if (authOperations.includes(operationName)) {
           continue;
         }
@@ -90,9 +90,10 @@ const errorLink = onError(
           errorCode === 'unauthenticated' ||
           error.message === 'You must be authenticated to perform this action.'
         ) {
-          // Don't try to refresh if we don't have a refresh token
-          const storedRefreshToken = getItem('refreshToken');
-          if (!storedRefreshToken) {
+          // Check if user is logged in via localStorage flag
+          // (actual tokens are in HTTP-Only cookies)
+          const isLoggedIn = getItem('IsLoggedIn');
+          if (isLoggedIn !== 'TRUE') {
             return;
           }
 
@@ -135,18 +136,8 @@ const errorLink = onError(
               }),
           ).flatMap((success) => {
             if (success) {
-              // Retry the original request with new token
-              const oldHeaders = operation.getContext().headers;
-              const newToken = getItem('token');
-              const authHeaders = newToken
-                ? { authorization: BEARER_PREFIX + newToken }
-                : {};
-              operation.setContext({
-                headers: {
-                  ...oldHeaders,
-                  ...authHeaders,
-                },
-              });
+              // Retry the original request
+              // No need to set headers - HTTP-Only cookies are automatically included
               return forward(operation);
             }
             return new Observable((observer) => {
