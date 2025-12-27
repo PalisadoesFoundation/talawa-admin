@@ -18,8 +18,8 @@ vi.mock('sanitize-html', () => ({
   default: (content: string) => content,
 }));
 
-vi.mock('components/UserPortal/UserProfile/UserAddressFields', () => ({
-  default: ({
+vi.mock('components/UserPortal/UserProfile/UserAddressFields', () => {
+  const MockComponent = ({
     handleFieldChange,
   }: {
     handleFieldChange: (field: string, value: string) => void;
@@ -30,8 +30,13 @@ vi.mock('components/UserPortal/UserProfile/UserAddressFields', () => ({
         onChange={(e) => handleFieldChange('addressLine1', e.target.value)}
       />
     </div>
-  ),
-}));
+  );
+  
+  return {
+    UserAddressFields: MockComponent,
+    default: MockComponent,
+  };
+});
 
 describe('UserDetailsForm', () => {
   const mockT = (key: string): string => key;
