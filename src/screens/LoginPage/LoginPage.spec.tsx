@@ -2182,6 +2182,126 @@ describe('Cookie-based authentication verification', () => {
     );
   });
 
-  // Note: Registration uses the same code path as login for storing session data
-  // The login test above verifies that tokens are handled by cookies, not localStorage
+  // Test case for registration/signup flow
+  it('registers user and stores tokens in cookies (not localStorage)', async () => {
+    const SIGNUP_SUCCESS_MOCK = [
+      {
+        request: {
+          query: RECAPTCHA_MUTATION,
+          variables: { recaptchaToken: 'validToken' },
+        },
+        result: { data: { recaptcha: true } },
+      },
+      {
+        request: {
+          query: SIGNUP_MUTATION,
+          variables: {
+            ID: '',
+            name: 'New User',
+            email: 'newuser@example.com',
+            password: 'Password@123',
+          },
+        },
+        result: {
+          data: {
+            signUp: {
+              user: {
+                id: 'newUser123',
+                name: 'New User',
+                emailAddress: 'newuser@example.com',
+                role: 'user',
+              },
+              authenticationToken: 'newAuthTokenSignup',
+              refreshToken: 'newRefreshTokenSignup',
+            },
+          },
+        },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: { data: { organizations: [] } },
+      },
+    ];
+
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        reload: vi.fn(),
+        href: 'https://localhost:4321/',
+        origin: 'https://localhost:4321',
+        pathname: '/',
+      },
+    });
+
+    render(
+      <MockedProvider mocks={SIGNUP_SUCCESS_MOCK} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Switch to Register tab
+    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
+
+    // Fill registration form
+    await userEvent.type(screen.getByPlaceholderText(/Name/i), 'New User');
+    await userEvent.type(
+      screen.getByTestId('signInEmail'),
+      'newuser@example.com',
+    );
+    await userEvent.type(
+      screen.getByPlaceholderText('Password'),
+      'Password@123',
+    );
+    await userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      'Password@123',
+    );
+    await userEvent.type(
+      screen.getAllByTestId('mock-recaptcha')[1],
+      'validToken',
+    );
+
+    // Submit registration
+    await userEvent.click(screen.getByTestId('registrationBtn'));
+
+    await wait();
+
+    // Verify that tokens are NOT stored in localStorage (handled by HTTP-Only cookies)
+    expect(mockUseLocalStorage.setItem).not.toHaveBeenCalledWith(
+      'token',
+      expect.any(String),
+    );
+    expect(mockUseLocalStorage.setItem).not.toHaveBeenCalledWith(
+      'refreshToken',
+      expect.any(String),
+    );
+
+    // Verify IsLoggedIn is TRUE
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+      'IsLoggedIn',
+      'TRUE',
+    );
+
+    // Verify user details are stored
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+      'name',
+      'New User',
+    );
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+      'email',
+      'newuser@example.com',
+    );
+  });
 });
