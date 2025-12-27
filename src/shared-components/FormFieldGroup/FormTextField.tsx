@@ -1,25 +1,68 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 import { FormControl, TextField } from '@mui/material';
-import type { FormTextFieldProps } from '../../types/FormFieldGroup/interface';
+import type { FormTextFieldProps } from './types';
+import { FormFieldGroup } from './FormFieldGroup';
 
 export const FormTextField: React.FC<FormTextFieldProps> = ({
+  name,
+  label,
+  groupClass,
+  labelClass,
+  error,
+  touched,
+  helpText,
+  required,
+  ariaLabel,
+  ariaDescribedBy,
+  showCharCount,
   endAdornment,
   format,
-  ...inputProps
+  ...formControlProps
 }) => {
   if (format === 'mui') {
     return (
       <FormControl>
-        <TextField {...inputProps} />
+        <TextField
+          {...formControlProps}
+          label={label}
+          error={!!error}
+          helperText={touched && error ? error : helpText}
+          required={required}
+          aria-label={ariaLabel}
+          aria-describedby={ariaDescribedBy}
+        />
         {endAdornment && <>{endAdornment}</>}
       </FormControl>
     );
   }
+
   return (
-    <div className="position-relative">
-      <Form.Control {...inputProps} />
-      {endAdornment && <>{endAdornment}</>}
-    </div>
+    <FormFieldGroup
+      name={name}
+      label={label}
+      groupClass={groupClass}
+      labelClass={labelClass}
+      error={error}
+      touched={touched}
+      helpText={helpText}
+      required={required}
+    >
+      <div className="position-relative">
+        <Form.Control
+          {...formControlProps}
+          required={required}
+          isInvalid={!!(touched && error)}
+          aria-label={ariaLabel}
+          aria-describedby={ariaDescribedBy}
+        />
+        {endAdornment && <>{endAdornment}</>}
+        {showCharCount && formControlProps.maxLength && (
+          <Form.Text className="text-muted">
+            {formControlProps.value?.length || 0}/{formControlProps.maxLength}
+          </Form.Text>
+        )}
+      </div>
+    </FormFieldGroup>
   );
 };
