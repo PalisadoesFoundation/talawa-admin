@@ -65,6 +65,7 @@ export default function GroupChatDetailsHeader({
           className={styles.displayNone}
           onChange={onImageChange}
           data-testid="fileInput"
+          aria-label={t('uploadImage')}
         />
         <div className={styles.groupInfo}>
           {(() => {
