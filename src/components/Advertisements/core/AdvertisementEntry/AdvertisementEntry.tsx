@@ -38,6 +38,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from 'style/app-fixed.module.css';
+import localStyles from './AdvertisementEntry.module.css';
 import {
   Button,
   Card,
@@ -246,13 +247,11 @@ function AdvertisementEntry({
                 </Card.Title>
                 <Card.Text
                   data-testid="Ad_desc"
-                  style={{
-                    color:
-                      advertisement.description &&
-                      advertisement.description.length > 0
-                        ? 'inherit'
-                        : 'gray',
-                  }}
+                  className={
+                    advertisement.description && advertisement.description.length > 0
+                      ? undefined
+                      : localStyles.noDescription
+                  }
                 >
                   {advertisement.description &&
                   advertisement.description.length > 0

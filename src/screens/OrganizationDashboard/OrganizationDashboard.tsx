@@ -57,6 +57,7 @@ import type {
   InterfaceOrganizationPostsConnectionEdgePg,
 } from 'utils/interfaces';
 import styles from '../../style/app-fixed.module.css';
+import dashboardStyles from './OrganizationDashboard.module.css';
 // import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 
 function OrganizationDashboard(): JSX.Element {
@@ -332,7 +333,7 @@ function OrganizationDashboard(): JSX.Element {
                     <DashBoardCard
                       count={pendingMembershipRequests.length}
                       title={tCommon('requests')}
-                      icon={<UsersIcon fill="#555555" />}
+                      icon={<UsersIcon className={dashboardStyles.requestsIcon} />}
                     />
                   </button>
                 </Col>
@@ -424,8 +425,7 @@ function OrganizationDashboard(): JSX.Element {
                   ))
                 ) : pendingMembershipRequests.length === 0 ? (
                   <div
-                    className={styles.emptyContainer}
-                    style={{ height: '150px' }}
+                    className={`${styles.emptyContainer} ${dashboardStyles.membershipEmptyContainer}`}
                   >
                     <h6>{t('noMembershipRequests')}</h6>
                   </div>
@@ -467,10 +467,7 @@ function OrganizationDashboard(): JSX.Element {
                   {t('viewAll')}
                 </Button>
               </div>
-              <Card.Body
-                className={styles.containerBody}
-                style={{ padding: '0px' }}
-              >
+              <Card.Body className={`${styles.containerBody} p-0`}>
                 {/* {rankingsLoading ? (
                   [...Array(3)].map((_, index) => {
                     return <CardItemLoading key={`rankingLoading_${index}`} />;

@@ -36,6 +36,7 @@ import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 import styles from 'style/app-fixed.module.css';
+import memberDetailStyles from './MemberDetail.module.css';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -278,8 +279,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           {/* Personal Details Card */}
           <Card className={`${styles.allRound}`}>
             <Card.Header
-              className={`py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius}`}
-              style={{ backgroundColor: '#A8C7FA', color: '#555' }}
+              className={`py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius} ${memberDetailStyles.personalDetailsHeader}`}
             >
               <h3 className="m-0">{t('personalDetailsHeading')}</h3>
               <Button
@@ -299,12 +299,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   <div className="position-relative d-inline-block">
                     {formState?.avatarURL ? (
                       <img
-                        className="rounded-circle"
-                        style={{
-                          width: '60px',
-                          height: '60px',
-                          objectFit: 'cover',
-                        }}
+                        className={`rounded-circle ${memberDetailStyles.profileImage}`}
                         src={sanitizeAvatars(
                           selectedAvatar,
                           formState.avatarURL,
@@ -323,10 +318,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       />
                     )}
                     <i
-                      className="fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle"
+                      className={`fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle ${memberDetailStyles.editProfileIcon}`}
                       onClick={() => fileInputRef.current?.click()}
                       data-testid="uploadImageBtn"
-                      style={{ cursor: 'pointer', fontSize: '1.2rem' }}
                       title="Edit profile picture"
                       role="button"
                       aria-label="Edit profile picture"
@@ -342,12 +336,11 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   id="postphoto"
                   name="photo"
                   type="file"
-                  className={styles.cardControl}
+                  className={`${styles.cardControl} ${memberDetailStyles.hiddenFileInput}`}
                   data-testid="fileInput"
                   multiple={false}
                   ref={fileInputRef}
                   onChange={handleFileUpload}
-                  style={{ display: 'none' }}
                 />
               </Col>
               <Row className="g-3">
