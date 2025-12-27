@@ -239,11 +239,12 @@ describe('PluginModal', () => {
   });
 
   describe('Plugin Actions - Not Installed', () => {
-    it('should show Install and Uninstall buttons for non-installed plugin', () => {
+    it('should show Install button for non-installed plugin', () => {
       render(<PluginModal {...defaultProps} />);
 
       expect(screen.getByText('Install')).toBeInTheDocument();
-      expect(screen.getByText('Uninstall')).toBeInTheDocument();
+      // Should NOT have Uninstall button for non-installed plugin
+      expect(screen.queryByText('Uninstall')).not.toBeInTheDocument();
     });
 
     it('should call installPlugin when Install button is clicked', () => {
@@ -254,26 +255,18 @@ describe('PluginModal', () => {
       expect(defaultProps.installPlugin).toHaveBeenCalledWith(mockMeta);
     });
 
-    it('should call uninstallPlugin when Uninstall button is clicked', () => {
-      render(<PluginModal {...defaultProps} />);
-
-      fireEvent.click(screen.getByText('Uninstall'));
-
-      expect(defaultProps.uninstallPlugin).toHaveBeenCalledWith(mockMeta);
-    });
-
     it('should show LoadingState when loading', () => {
       render(<PluginModal {...defaultProps} loading={true} />);
 
       const loadingStates = screen.getAllByTestId('loading-state');
-      // Should have 2 LoadingState components (Install and Uninstall buttons)
-      expect(loadingStates.length).toBeGreaterThanOrEqual(2);
+      // Should have exactly 1 LoadingState component (Install button only)
+      expect(loadingStates.length).toBe(1);
 
-      // Verify they are in loading state
+      // Verify it is in loading state
       const loadingOnes = loadingStates.filter(
         (state) => state.getAttribute('data-is-loading') === 'true',
       );
-      expect(loadingOnes.length).toBeGreaterThanOrEqual(2);
+      expect(loadingOnes.length).toBe(1);
     });
   });
 
@@ -317,14 +310,14 @@ describe('PluginModal', () => {
       render(<PluginModal {...installedActiveProps} loading={true} />);
 
       const loadingStates = screen.getAllByTestId('loading-state');
-      // Should have 2 LoadingState components (Deactivate and Uninstall buttons)
-      expect(loadingStates.length).toBeGreaterThanOrEqual(2);
+      // Should have exactly 2 LoadingState components (Deactivate and Uninstall buttons)
+      expect(loadingStates.length).toBe(2);
 
       // Verify they are in loading state
       const loadingOnes = loadingStates.filter(
         (state) => state.getAttribute('data-is-loading') === 'true',
       );
-      expect(loadingOnes.length).toBeGreaterThanOrEqual(2);
+      expect(loadingOnes.length).toBe(2);
     });
   });
 

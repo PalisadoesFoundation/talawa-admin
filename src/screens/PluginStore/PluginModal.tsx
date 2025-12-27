@@ -203,13 +203,11 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                     }
                   >
                     <FaPowerOff
-                      style={{
-                        fontSize: '14px',
-                        color:
-                          getInstalledPlugin(plugin.name)?.status === 'active'
-                            ? '#6c757d'
-                            : '#fff',
-                      }}
+                      className={
+                        getInstalledPlugin(plugin.name)?.status === 'active'
+                          ? styles.iconPowerOffActive
+                          : styles.iconPowerOffInactive
+                      }
                     />
                     {getInstalledPlugin(plugin.name)?.status === 'active'
                       ? 'Deactivate'
@@ -222,7 +220,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                     className={`w-100 d-flex align-items-center justify-content-center gap-2 ${styles.actionButtonDanger}`}
                     onClick={() => uninstallPlugin(meta)}
                   >
-                    <FaTrash style={{ fontSize: '14px' }} />
+                    <FaTrash className={styles.iconTrash} />
                     Uninstall
                   </Button>
                 </LoadingState>
@@ -239,16 +237,6 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                     {loading
                       ? `Installing${installElapsed ? ` (${installElapsed})` : ''}`
                       : 'Install'}
-                  </Button>
-                </LoadingState>
-                <LoadingState isLoading={loading} variant="inline">
-                  <Button
-                    variant="light"
-                    className={`w-100 d-flex align-items-center justify-content-center gap-2 ${styles.actionButtonDanger}`}
-                    onClick={() => uninstallPlugin(meta)}
-                  >
-                    <FaTrash style={{ fontSize: '14px' }} />
-                    Uninstall
                   </Button>
                 </LoadingState>
               </>
