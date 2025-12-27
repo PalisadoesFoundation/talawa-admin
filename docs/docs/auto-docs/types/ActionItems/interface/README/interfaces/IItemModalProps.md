@@ -4,7 +4,7 @@
 
 # Interface: IItemModalProps
 
-Defined in: [src/types/ActionItems/interface.ts:132](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L132)
+Defined in: [src/types/ActionItems/interface.ts:132](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L132)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/ActionItems/interface.ts:132](https://github.com/SujalTri
 
 > **actionItem**: [`IActionItemInfo`](types\ActionItems\interface\README\interfaces\IActionItemInfo.md)
 
-Defined in: [src/types/ActionItems/interface.ts:139](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L139)
+Defined in: [src/types/ActionItems/interface.ts:139](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L139)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/ActionItems/interface.ts:139](https://github.com/SujalTri
 
 > **actionItemsRefetch**: () => `void`
 
-Defined in: [src/types/ActionItems/interface.ts:137](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L137)
+Defined in: [src/types/ActionItems/interface.ts:137](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L137)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/types/ActionItems/interface.ts:137](https://github.com/SujalTri
 
 > `optional` **baseEvent**: `object`
 
-Defined in: [src/types/ActionItems/interface.ts:142](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L142)
+Defined in: [src/types/ActionItems/interface.ts:142](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L142)
 
 #### id
 
@@ -44,7 +44,7 @@ Defined in: [src/types/ActionItems/interface.ts:142](https://github.com/SujalTri
 
 > **editMode**: `boolean`
 
-Defined in: [src/types/ActionItems/interface.ts:140](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L140)
+Defined in: [src/types/ActionItems/interface.ts:140](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L140)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/ActionItems/interface.ts:140](https://github.com/SujalTri
 
 > **eventId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:136](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L136)
+Defined in: [src/types/ActionItems/interface.ts:136](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L136)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/ActionItems/interface.ts:136](https://github.com/SujalTri
 
 > **hide**: () => `void`
 
-Defined in: [src/types/ActionItems/interface.ts:134](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L134)
+Defined in: [src/types/ActionItems/interface.ts:134](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L134)
 
 #### Returns
 
@@ -72,7 +72,7 @@ Defined in: [src/types/ActionItems/interface.ts:134](https://github.com/SujalTri
 
 > **isOpen**: `boolean`
 
-Defined in: [src/types/ActionItems/interface.ts:133](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L133)
+Defined in: [src/types/ActionItems/interface.ts:133](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L133)
 
 ***
 
@@ -80,7 +80,7 @@ Defined in: [src/types/ActionItems/interface.ts:133](https://github.com/SujalTri
 
 > `optional` **isRecurring**: `boolean`
 
-Defined in: [src/types/ActionItems/interface.ts:141](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L141)
+Defined in: [src/types/ActionItems/interface.ts:141](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L141)
 
 ***
 
@@ -88,7 +88,7 @@ Defined in: [src/types/ActionItems/interface.ts:141](https://github.com/SujalTri
 
 > `optional` **orgActionItemsRefetch**: () => `void`
 
-Defined in: [src/types/ActionItems/interface.ts:138](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L138)
+Defined in: [src/types/ActionItems/interface.ts:138](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L138)
 
 #### Returns
 
@@ -100,4 +100,4 @@ Defined in: [src/types/ActionItems/interface.ts:138](https://github.com/SujalTri
 
 > **orgId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:135](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L135)
+Defined in: [src/types/ActionItems/interface.ts:135](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L135)

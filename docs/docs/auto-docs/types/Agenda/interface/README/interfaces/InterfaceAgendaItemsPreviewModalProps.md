@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAgendaItemsPreviewModalProps
 
-Defined in: [src/types/Agenda/interface.ts:49](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L49)
+Defined in: [src/types/Agenda/interface.ts:49](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L49)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Agenda/interface.ts:49](https://github.com/SujalTripathi/
 
 > **agendaItemPreviewModalIsOpen**: `boolean`
 
-Defined in: [src/types/Agenda/interface.ts:50](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L50)
+Defined in: [src/types/Agenda/interface.ts:50](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L50)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Agenda/interface.ts:50](https://github.com/SujalTripathi/
 
 > **formState**: [`InterfaceFormStateType`](types\Agenda\interface\README\interfaces\InterfaceFormStateType.md)
 
-Defined in: [src/types/Agenda/interface.ts:54](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L54)
+Defined in: [src/types/Agenda/interface.ts:54](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L54)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Agenda/interface.ts:54](https://github.com/SujalTripathi/
 
 > **hidePreviewModal**: () => `void`
 
-Defined in: [src/types/Agenda/interface.ts:51](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L51)
+Defined in: [src/types/Agenda/interface.ts:51](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L51)
 
 #### Returns
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Agenda/interface.ts:51](https://github.com/SujalTripathi/
 
 > **showUpdateModal**: () => `void`
 
-Defined in: [src/types/Agenda/interface.ts:52](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L52)
+Defined in: [src/types/Agenda/interface.ts:52](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L52)
 
 #### Returns
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Agenda/interface.ts:52](https://github.com/SujalTripathi/
 
 > **t**: (`key`) => `string`
 
-Defined in: [src/types/Agenda/interface.ts:55](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L55)
+Defined in: [src/types/Agenda/interface.ts:55](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L55)
 
 #### Parameters
 
@@ -70,7 +70,7 @@ Defined in: [src/types/Agenda/interface.ts:55](https://github.com/SujalTripathi/
 
 > **toggleDeleteModal**: () => `void`
 
-Defined in: [src/types/Agenda/interface.ts:53](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L53)
+Defined in: [src/types/Agenda/interface.ts:53](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L53)
 
 #### Returns
 

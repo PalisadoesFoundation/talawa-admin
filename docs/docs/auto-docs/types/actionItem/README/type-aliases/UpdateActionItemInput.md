@@ -6,7 +6,7 @@
 
 > **UpdateActionItemInput** = `object`
 
-Defined in: [src/types/actionItem.ts:39](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/actionItem.ts#L39)
+Defined in: [src/types/actionItem.ts:39](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/actionItem.ts#L39)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/actionItem.ts:39](https://github.com/SujalTripathi/talawa
 
 > `optional` **assigneeId**: `string`
 
-Defined in: [src/types/actionItem.ts:40](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/actionItem.ts#L40)
+Defined in: [src/types/actionItem.ts:40](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/actionItem.ts#L40)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/actionItem.ts:40](https://github.com/SujalTripathi/talawa
 
 > `optional` **completionDate**: `Date`
 
-Defined in: [src/types/actionItem.ts:41](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/actionItem.ts#L41)
+Defined in: [src/types/actionItem.ts:41](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/actionItem.ts#L41)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/actionItem.ts:41](https://github.com/SujalTripathi/talawa
 
 > `optional` **dueDate**: `Date`
 
-Defined in: [src/types/actionItem.ts:42](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/actionItem.ts#L42)
+Defined in: [src/types/actionItem.ts:42](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/actionItem.ts#L42)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/actionItem.ts:42](https://github.com/SujalTripathi/talawa
 
 > `optional` **isCompleted**: `boolean`
 
-Defined in: [src/types/actionItem.ts:43](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/actionItem.ts#L43)
+Defined in: [src/types/actionItem.ts:43](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/actionItem.ts#L43)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/actionItem.ts:43](https://github.com/SujalTripathi/talawa
 
 > `optional` **postCompletionNotes**: `string`
 
-Defined in: [src/types/actionItem.ts:44](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/actionItem.ts#L44)
+Defined in: [src/types/actionItem.ts:44](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/actionItem.ts#L44)
 
 ***
 
@@ -54,4 +54,4 @@ Defined in: [src/types/actionItem.ts:44](https://github.com/SujalTripathi/talawa
 
 > `optional` **preCompletionNotes**: `string`
 
-Defined in: [src/types/actionItem.ts:45](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/actionItem.ts#L45)
+Defined in: [src/types/actionItem.ts:45](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/actionItem.ts#L45)

@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/SignOut/SignOut.tsx:51](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/SignOut/SignOut.tsx#L51)
+Defined in: [src/components/SignOut/SignOut.tsx:51](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/components/SignOut/SignOut.tsx#L51)
 
 ## Parameters
 

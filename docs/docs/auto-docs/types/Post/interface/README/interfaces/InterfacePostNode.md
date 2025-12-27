@@ -4,7 +4,7 @@
 
 # Interface: InterfacePostNode
 
-Defined in: [src/types/Post/interface.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L23)
+Defined in: [src/types/Post/interface.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L23)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/interface.ts:23](https://github.com/SujalTripathi/ta
 
 > **caption**: `string`
 
-Defined in: [src/types/Post/interface.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L25)
+Defined in: [src/types/Post/interface.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L25)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Post/interface.ts:25](https://github.com/SujalTripathi/ta
 
 > **createdAt**: `string`
 
-Defined in: [src/types/Post/interface.ts:31](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L31)
+Defined in: [src/types/Post/interface.ts:31](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L31)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Post/interface.ts:31](https://github.com/SujalTripathi/ta
 
 > `optional` **creator**: [`InterfacePostCreator`](types\Post\interface\README\interfaces\InterfacePostCreator.md)
 
-Defined in: [src/types/Post/interface.ts:29](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L29)
+Defined in: [src/types/Post/interface.ts:29](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L29)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Post/interface.ts:29](https://github.com/SujalTripathi/ta
 
 > **id**: `string`
 
-Defined in: [src/types/Post/interface.ts:24](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L24)
+Defined in: [src/types/Post/interface.ts:24](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L24)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Post/interface.ts:24](https://github.com/SujalTripathi/ta
 
 > `optional` **imageUrl**: `string`
 
-Defined in: [src/types/Post/interface.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L27)
+Defined in: [src/types/Post/interface.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L27)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Post/interface.ts:27](https://github.com/SujalTripathi/ta
 
 > `optional` **pinned**: `boolean`
 
-Defined in: [src/types/Post/interface.ts:30](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L30)
+Defined in: [src/types/Post/interface.ts:30](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L30)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Post/interface.ts:30](https://github.com/SujalTripathi/ta
 
 > `optional` **text**: `string`
 
-Defined in: [src/types/Post/interface.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L26)
+Defined in: [src/types/Post/interface.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L26)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/types/Post/interface.ts:26](https://github.com/SujalTripathi/ta
 
 > `optional` **videoUrl**: `string`
 
-Defined in: [src/types/Post/interface.ts:28](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L28)
+Defined in: [src/types/Post/interface.ts:28](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L28)

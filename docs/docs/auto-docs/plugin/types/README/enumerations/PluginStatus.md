@@ -4,7 +4,7 @@
 
 # Enumeration: PluginStatus
 
-Defined in: [src/plugin/types.ts:150](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L150)
+Defined in: [src/plugin/types.ts:150](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L150)
 
 ## Enumeration Members
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:150](https://github.com/SujalTripathi/talawa-ad
 
 > **ACTIVE**: `"active"`
 
-Defined in: [src/plugin/types.ts:151](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L151)
+Defined in: [src/plugin/types.ts:151](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L151)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/types.ts:151](https://github.com/SujalTripathi/talawa-ad
 
 > **ERROR**: `"error"`
 
-Defined in: [src/plugin/types.ts:153](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L153)
+Defined in: [src/plugin/types.ts:153](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L153)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/plugin/types.ts:153](https://github.com/SujalTripathi/talawa-ad
 
 > **INACTIVE**: `"inactive"`
 
-Defined in: [src/plugin/types.ts:152](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L152)
+Defined in: [src/plugin/types.ts:152](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L152)

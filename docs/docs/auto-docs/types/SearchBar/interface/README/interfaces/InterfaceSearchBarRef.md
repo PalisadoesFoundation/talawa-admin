@@ -4,7 +4,7 @@
 
 # Interface: InterfaceSearchBarRef
 
-Defined in: [src/types/SearchBar/interface.ts:21](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/SearchBar/interface.ts#L21)
+Defined in: [src/types/SearchBar/interface.ts:21](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/SearchBar/interface.ts#L21)
 
 Methods exposed by the SearchBar ref.
 
@@ -14,7 +14,7 @@ Methods exposed by the SearchBar ref.
 
 > **blur**: () => `void`
 
-Defined in: [src/types/SearchBar/interface.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/SearchBar/interface.ts#L25)
+Defined in: [src/types/SearchBar/interface.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/SearchBar/interface.ts#L25)
 
 Programmatically blur the search input
 
@@ -28,7 +28,7 @@ Programmatically blur the search input
 
 > **clear**: () => `void`
 
-Defined in: [src/types/SearchBar/interface.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/SearchBar/interface.ts#L27)
+Defined in: [src/types/SearchBar/interface.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/SearchBar/interface.ts#L27)
 
 Clear the search input value and trigger onChange
 
@@ -42,7 +42,7 @@ Clear the search input value and trigger onChange
 
 > **focus**: () => `void`
 
-Defined in: [src/types/SearchBar/interface.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/SearchBar/interface.ts#L23)
+Defined in: [src/types/SearchBar/interface.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/SearchBar/interface.ts#L23)
 
 Programmatically focus the search input
 

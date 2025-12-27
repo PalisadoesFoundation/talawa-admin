@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCreateFormStateType
 
-Defined in: [src/types/Agenda/interface.ts:14](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L14)
+Defined in: [src/types/Agenda/interface.ts:14](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L14)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Agenda/interface.ts:14](https://github.com/SujalTripathi/
 
 > **agendaItemCategoryIds**: `string`[]
 
-Defined in: [src/types/Agenda/interface.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L15)
+Defined in: [src/types/Agenda/interface.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L15)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Agenda/interface.ts:15](https://github.com/SujalTripathi/
 
 > **attachments**: `string`[]
 
-Defined in: [src/types/Agenda/interface.ts:19](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L19)
+Defined in: [src/types/Agenda/interface.ts:19](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L19)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Agenda/interface.ts:19](https://github.com/SujalTripathi/
 
 > **description**: `string`
 
-Defined in: [src/types/Agenda/interface.ts:17](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L17)
+Defined in: [src/types/Agenda/interface.ts:17](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L17)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Agenda/interface.ts:17](https://github.com/SujalTripathi/
 
 > **duration**: `string`
 
-Defined in: [src/types/Agenda/interface.ts:18](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L18)
+Defined in: [src/types/Agenda/interface.ts:18](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L18)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Agenda/interface.ts:18](https://github.com/SujalTripathi/
 
 > **title**: `string`
 
-Defined in: [src/types/Agenda/interface.ts:16](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L16)
+Defined in: [src/types/Agenda/interface.ts:16](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L16)
 
 ***
 
@@ -52,4 +52,4 @@ Defined in: [src/types/Agenda/interface.ts:16](https://github.com/SujalTripathi/
 
 > **urls**: `string`[]
 
-Defined in: [src/types/Agenda/interface.ts:20](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L20)
+Defined in: [src/types/Agenda/interface.ts:20](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L20)

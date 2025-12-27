@@ -4,7 +4,7 @@
 
 # Interface: IAdminPluginZipStructure
 
-Defined in: [src/utils/adminPluginInstaller.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/adminPluginInstaller.ts#L27)
+Defined in: [src/utils/adminPluginInstaller.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/utils/adminPluginInstaller.ts#L27)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:27](https://github.com/SujalTripa
 
 > `optional` **adminManifest**: [`IAdminPluginManifest`](utils\adminPluginInstaller\README\interfaces\IAdminPluginManifest.md)
 
-Defined in: [src/utils/adminPluginInstaller.ts:30](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/adminPluginInstaller.ts#L30)
+Defined in: [src/utils/adminPluginInstaller.ts:30](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/utils/adminPluginInstaller.ts#L30)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:30](https://github.com/SujalTripa
 
 > `optional` **apiFiles**: `string`[]
 
-Defined in: [src/utils/adminPluginInstaller.ts:34](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/adminPluginInstaller.ts#L34)
+Defined in: [src/utils/adminPluginInstaller.ts:34](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/utils/adminPluginInstaller.ts#L34)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:34](https://github.com/SujalTripa
 
 > `optional` **apiManifest**: [`IAdminPluginManifest`](utils\adminPluginInstaller\README\interfaces\IAdminPluginManifest.md)
 
-Defined in: [src/utils/adminPluginInstaller.ts:31](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/adminPluginInstaller.ts#L31)
+Defined in: [src/utils/adminPluginInstaller.ts:31](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/utils/adminPluginInstaller.ts#L31)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:31](https://github.com/SujalTripa
 
 > **files**: `Record`\<`string`, `string`\>
 
-Defined in: [src/utils/adminPluginInstaller.ts:33](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/adminPluginInstaller.ts#L33)
+Defined in: [src/utils/adminPluginInstaller.ts:33](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/utils/adminPluginInstaller.ts#L33)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:33](https://github.com/SujalTripa
 
 > **hasAdminFolder**: `boolean`
 
-Defined in: [src/utils/adminPluginInstaller.ts:28](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/adminPluginInstaller.ts#L28)
+Defined in: [src/utils/adminPluginInstaller.ts:28](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/utils/adminPluginInstaller.ts#L28)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/utils/adminPluginInstaller.ts:28](https://github.com/SujalTripa
 
 > **hasApiFolder**: `boolean`
 
-Defined in: [src/utils/adminPluginInstaller.ts:29](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/adminPluginInstaller.ts#L29)
+Defined in: [src/utils/adminPluginInstaller.ts:29](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/utils/adminPluginInstaller.ts#L29)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/utils/adminPluginInstaller.ts:29](https://github.com/SujalTripa
 
 > `optional` **pluginId**: `string`
 
-Defined in: [src/utils/adminPluginInstaller.ts:32](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/adminPluginInstaller.ts#L32)
+Defined in: [src/utils/adminPluginInstaller.ts:32](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/utils/adminPluginInstaller.ts#L32)

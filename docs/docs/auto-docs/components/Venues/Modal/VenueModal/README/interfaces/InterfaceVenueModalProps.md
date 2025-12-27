@@ -4,7 +4,7 @@
 
 # Interface: InterfaceVenueModalProps
 
-Defined in: [src/components/Venues/Modal/VenueModal.tsx:48](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/Venues/Modal/VenueModal.tsx#L48)
+Defined in: [src/components/Venues/Modal/VenueModal.tsx:48](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/components/Venues/Modal/VenueModal.tsx#L48)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/Venues/Modal/VenueModal.tsx:48](https://github.com/S
 
 > **edit**: `boolean`
 
-Defined in: [src/components/Venues/Modal/VenueModal.tsx:54](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/Venues/Modal/VenueModal.tsx#L54)
+Defined in: [src/components/Venues/Modal/VenueModal.tsx:54](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/components/Venues/Modal/VenueModal.tsx#L54)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/components/Venues/Modal/VenueModal.tsx:54](https://github.com/S
 
 > **onHide**: () => `void`
 
-Defined in: [src/components/Venues/Modal/VenueModal.tsx:50](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/Venues/Modal/VenueModal.tsx#L50)
+Defined in: [src/components/Venues/Modal/VenueModal.tsx:50](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/components/Venues/Modal/VenueModal.tsx#L50)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/components/Venues/Modal/VenueModal.tsx:50](https://github.com/S
 
 > **orgId**: `string`
 
-Defined in: [src/components/Venues/Modal/VenueModal.tsx:52](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/Venues/Modal/VenueModal.tsx#L52)
+Defined in: [src/components/Venues/Modal/VenueModal.tsx:52](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/components/Venues/Modal/VenueModal.tsx#L52)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/components/Venues/Modal/VenueModal.tsx:52](https://github.com/S
 
 > **refetchVenues**: () => `void`
 
-Defined in: [src/components/Venues/Modal/VenueModal.tsx:51](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/Venues/Modal/VenueModal.tsx#L51)
+Defined in: [src/components/Venues/Modal/VenueModal.tsx:51](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/components/Venues/Modal/VenueModal.tsx#L51)
 
 #### Returns
 
@@ -52,7 +52,7 @@ Defined in: [src/components/Venues/Modal/VenueModal.tsx:51](https://github.com/S
 
 > **show**: `boolean`
 
-Defined in: [src/components/Venues/Modal/VenueModal.tsx:49](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/Venues/Modal/VenueModal.tsx#L49)
+Defined in: [src/components/Venues/Modal/VenueModal.tsx:49](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/components/Venues/Modal/VenueModal.tsx#L49)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/components/Venues/Modal/VenueModal.tsx:49](https://github.com/S
 
 > `optional` **venueData**: [`InterfaceQueryVenueListItem`](utils\interfaces\README\interfaces\InterfaceQueryVenueListItem.md)
 
-Defined in: [src/components/Venues/Modal/VenueModal.tsx:53](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/Venues/Modal/VenueModal.tsx#L53)
+Defined in: [src/components/Venues/Modal/VenueModal.tsx:53](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/components/Venues/Modal/VenueModal.tsx#L53)

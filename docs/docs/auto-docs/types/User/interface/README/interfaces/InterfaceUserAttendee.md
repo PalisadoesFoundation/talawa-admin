@@ -4,7 +4,7 @@
 
 # Interface: InterfaceUserAttendee
 
-Defined in: [src/types/User/interface.ts:19](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/User/interface.ts#L19)
+Defined in: [src/types/User/interface.ts:19](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/User/interface.ts#L19)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/User/interface.ts:19](https://github.com/SujalTripathi/ta
 
 > **createdAt**: `string`
 
-Defined in: [src/types/User/interface.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/User/interface.ts#L27)
+Defined in: [src/types/User/interface.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/User/interface.ts#L27)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/User/interface.ts:27](https://github.com/SujalTripathi/ta
 
 > **id**: `string`
 
-Defined in: [src/types/User/interface.ts:20](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/User/interface.ts#L20)
+Defined in: [src/types/User/interface.ts:20](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/User/interface.ts#L20)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/User/interface.ts:20](https://github.com/SujalTripathi/ta
 
 > **isRegistered**: `boolean`
 
-Defined in: [src/types/User/interface.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/User/interface.ts#L26)
+Defined in: [src/types/User/interface.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/User/interface.ts#L26)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/User/interface.ts:26](https://github.com/SujalTripathi/ta
 
 > **time**: `string`
 
-Defined in: [src/types/User/interface.ts:28](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/User/interface.ts#L28)
+Defined in: [src/types/User/interface.ts:28](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/User/interface.ts#L28)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/User/interface.ts:28](https://github.com/SujalTripathi/ta
 
 > **user**: `object`
 
-Defined in: [src/types/User/interface.ts:21](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/User/interface.ts#L21)
+Defined in: [src/types/User/interface.ts:21](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/User/interface.ts#L21)
 
 #### emailAddress
 

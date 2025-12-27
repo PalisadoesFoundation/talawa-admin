@@ -4,15 +4,31 @@
 
 # Interface: InterfacePost
 
-Defined in: [src/types/Post/interface.ts:87](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L87)
+Defined in: [src/types/Post/interface.ts:87](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L87)
 
 ## Properties
 
 ### attachments?
 
-> `optional` **attachments**: [`InterfaceAttachment`](types\Post\interface\README\interfaces\InterfaceAttachment.md)[]
+> `optional` **attachments**: \[\{ `mimeType`: `string`; \}\]
 
-Defined in: [src/types/Post/interface.ts:94](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L94)
+Defined in: [src/types/Post/interface.ts:96](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L96)
+
+***
+
+### attachmentURL?
+
+> `optional` **attachmentURL**: `string`
+
+Defined in: [src/types/Post/interface.ts:95](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L95)
+
+***
+
+### body?
+
+> `optional` **body**: `string`
+
+Defined in: [src/types/Post/interface.ts:94](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L94)
 
 ***
 
@@ -20,7 +36,15 @@ Defined in: [src/types/Post/interface.ts:94](https://github.com/SujalTripathi/ta
 
 > `optional` **caption**: `string`
 
-Defined in: [src/types/Post/interface.ts:89](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L89)
+Defined in: [src/types/Post/interface.ts:89](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L89)
+
+***
+
+### commentsCount?
+
+> `optional` **commentsCount**: `number`
+
+Defined in: [src/types/Post/interface.ts:103](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L103)
 
 ***
 
@@ -28,7 +52,7 @@ Defined in: [src/types/Post/interface.ts:89](https://github.com/SujalTripathi/ta
 
 > **createdAt**: `string`
 
-Defined in: [src/types/Post/interface.ts:90](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L90)
+Defined in: [src/types/Post/interface.ts:90](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L90)
 
 ***
 
@@ -36,7 +60,31 @@ Defined in: [src/types/Post/interface.ts:90](https://github.com/SujalTripathi/ta
 
 > `optional` **creator**: [`InterfaceCreator`](types\Post\interface\README\interfaces\InterfaceCreator.md)
 
-Defined in: [src/types/Post/interface.ts:93](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L93)
+Defined in: [src/types/Post/interface.ts:93](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L93)
+
+***
+
+### downVotesCount?
+
+> `optional` **downVotesCount**: `number`
+
+Defined in: [src/types/Post/interface.ts:102](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L102)
+
+***
+
+### hasUserVoted?
+
+> `optional` **hasUserVoted**: `object`
+
+Defined in: [src/types/Post/interface.ts:97](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L97)
+
+#### hasVoted
+
+> **hasVoted**: `boolean`
+
+#### voteType
+
+> **voteType**: `"up_vote"` \| `"down_vote"`
 
 ***
 
@@ -44,15 +92,7 @@ Defined in: [src/types/Post/interface.ts:93](https://github.com/SujalTripathi/ta
 
 > **id**: `string`
 
-Defined in: [src/types/Post/interface.ts:88](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L88)
-
-***
-
-### imageUrl?
-
-> `optional` **imageUrl**: `string`
-
-Defined in: [src/types/Post/interface.ts:95](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L95)
+Defined in: [src/types/Post/interface.ts:88](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L88)
 
 ***
 
@@ -60,7 +100,7 @@ Defined in: [src/types/Post/interface.ts:95](https://github.com/SujalTripathi/ta
 
 > `optional` **pinned**: `boolean`
 
-Defined in: [src/types/Post/interface.ts:92](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L92)
+Defined in: [src/types/Post/interface.ts:92](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L92)
 
 ***
 
@@ -68,12 +108,12 @@ Defined in: [src/types/Post/interface.ts:92](https://github.com/SujalTripathi/ta
 
 > `optional` **pinnedAt**: `string`
 
-Defined in: [src/types/Post/interface.ts:91](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L91)
+Defined in: [src/types/Post/interface.ts:91](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L91)
 
 ***
 
-### videoUrl?
+### upVotesCount?
 
-> `optional` **videoUrl**: `string`
+> `optional` **upVotesCount**: `number`
 
-Defined in: [src/types/Post/interface.ts:96](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L96)
+Defined in: [src/types/Post/interface.ts:101](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L101)

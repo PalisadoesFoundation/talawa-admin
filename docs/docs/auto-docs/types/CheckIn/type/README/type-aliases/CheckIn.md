@@ -6,7 +6,7 @@
 
 > **CheckIn** = `object`
 
-Defined in: [src/types/CheckIn/type.ts:4](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/type.ts#L4)
+Defined in: [src/types/CheckIn/type.ts:4](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/type.ts#L4)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/CheckIn/type.ts:4](https://github.com/SujalTripathi/talaw
 
 > **\_id**: `string`
 
-Defined in: [src/types/CheckIn/type.ts:5](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/type.ts#L5)
+Defined in: [src/types/CheckIn/type.ts:5](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/type.ts#L5)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/CheckIn/type.ts:5](https://github.com/SujalTripathi/talaw
 
 > `optional` **allotedRoom**: `string`
 
-Defined in: [src/types/CheckIn/type.ts:6](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/type.ts#L6)
+Defined in: [src/types/CheckIn/type.ts:6](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/type.ts#L6)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/CheckIn/type.ts:6](https://github.com/SujalTripathi/talaw
 
 > `optional` **allotedSeat**: `string`
 
-Defined in: [src/types/CheckIn/type.ts:7](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/type.ts#L7)
+Defined in: [src/types/CheckIn/type.ts:7](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/type.ts#L7)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/CheckIn/type.ts:7](https://github.com/SujalTripathi/talaw
 
 > **createdAt**: `Date`
 
-Defined in: [src/types/CheckIn/type.ts:8](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/type.ts#L8)
+Defined in: [src/types/CheckIn/type.ts:8](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/type.ts#L8)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/CheckIn/type.ts:8](https://github.com/SujalTripathi/talaw
 
 > **event**: [`Event`](types\Event\type\README\type-aliases\Event.md)
 
-Defined in: [src/types/CheckIn/type.ts:9](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/type.ts#L9)
+Defined in: [src/types/CheckIn/type.ts:9](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/type.ts#L9)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/CheckIn/type.ts:9](https://github.com/SujalTripathi/talaw
 
 > **feedbackSubmitted**: `boolean`
 
-Defined in: [src/types/CheckIn/type.ts:10](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/type.ts#L10)
+Defined in: [src/types/CheckIn/type.ts:10](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/type.ts#L10)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/CheckIn/type.ts:10](https://github.com/SujalTripathi/tala
 
 > **time**: `Date`
 
-Defined in: [src/types/CheckIn/type.ts:11](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/type.ts#L11)
+Defined in: [src/types/CheckIn/type.ts:11](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/type.ts#L11)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/types/CheckIn/type.ts:11](https://github.com/SujalTripathi/tala
 
 > **updatedAt**: `Date`
 
-Defined in: [src/types/CheckIn/type.ts:12](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/type.ts#L12)
+Defined in: [src/types/CheckIn/type.ts:12](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/type.ts#L12)
 
 ***
 
@@ -78,4 +78,4 @@ Defined in: [src/types/CheckIn/type.ts:12](https://github.com/SujalTripathi/tala
 
 > **user**: [`User`](types\User\type\README\type-aliases\User.md)
 
-Defined in: [src/types/CheckIn/type.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/type.ts#L13)
+Defined in: [src/types/CheckIn/type.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/type.ts#L13)

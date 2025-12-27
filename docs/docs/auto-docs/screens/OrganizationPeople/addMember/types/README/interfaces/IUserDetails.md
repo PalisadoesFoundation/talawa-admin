@@ -4,7 +4,7 @@
 
 # Interface: IUserDetails
 
-Defined in: [src/screens/OrganizationPeople/addMember/types.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationPeople/addMember/types.ts#L13)
+Defined in: [src/screens/OrganizationPeople/addMember/types.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/OrganizationPeople/addMember/types.ts#L13)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/OrganizationPeople/addMember/types.ts:13](https://githu
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/screens/OrganizationPeople/addMember/types.ts:17](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationPeople/addMember/types.ts#L17)
+Defined in: [src/screens/OrganizationPeople/addMember/types.ts:17](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/OrganizationPeople/addMember/types.ts#L17)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/OrganizationPeople/addMember/types.ts:17](https://githu
 
 > **emailAddress**: `string`
 
-Defined in: [src/screens/OrganizationPeople/addMember/types.ts:16](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationPeople/addMember/types.ts#L16)
+Defined in: [src/screens/OrganizationPeople/addMember/types.ts:16](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/OrganizationPeople/addMember/types.ts#L16)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/screens/OrganizationPeople/addMember/types.ts:16](https://githu
 
 > **id**: `string`
 
-Defined in: [src/screens/OrganizationPeople/addMember/types.ts:14](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationPeople/addMember/types.ts#L14)
+Defined in: [src/screens/OrganizationPeople/addMember/types.ts:14](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/OrganizationPeople/addMember/types.ts#L14)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/screens/OrganizationPeople/addMember/types.ts:14](https://githu
 
 > **name**: `string`
 
-Defined in: [src/screens/OrganizationPeople/addMember/types.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationPeople/addMember/types.ts#L15)
+Defined in: [src/screens/OrganizationPeople/addMember/types.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/OrganizationPeople/addMember/types.ts#L15)

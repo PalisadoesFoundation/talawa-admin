@@ -4,7 +4,7 @@
 
 # Interface: InterfaceBaseFetchMoreOptions\<T\>
 
-Defined in: [src/types/Tag/interface.ts:45](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L45)
+Defined in: [src/types/Tag/interface.ts:45](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L45)
 
 ## Type Parameters
 
@@ -18,7 +18,7 @@ Defined in: [src/types/Tag/interface.ts:45](https://github.com/SujalTripathi/tal
 
 > `optional` **updateQuery**: (`prev`, `options`) => `T`
 
-Defined in: [src/types/Tag/interface.ts:47](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L47)
+Defined in: [src/types/Tag/interface.ts:47](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L47)
 
 #### Parameters
 
@@ -42,4 +42,4 @@ Defined in: [src/types/Tag/interface.ts:47](https://github.com/SujalTripathi/tal
 
 > **variables**: [`InterfacePaginationVariables`](types\Tag\interface\README\interfaces\InterfacePaginationVariables.md)
 
-Defined in: [src/types/Tag/interface.ts:46](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L46)
+Defined in: [src/types/Tag/interface.ts:46](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L46)

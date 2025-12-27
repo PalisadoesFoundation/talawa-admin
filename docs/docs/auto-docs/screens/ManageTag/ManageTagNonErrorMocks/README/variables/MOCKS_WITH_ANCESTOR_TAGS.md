@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_WITH\_ANCESTOR\_TAGS**: `object`[]
 
-Defined in: [src/screens/ManageTag/ManageTagNonErrorMocks.ts:126](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/ManageTag/ManageTagNonErrorMocks.ts#L126)
+Defined in: [src/screens/ManageTag/ManageTagNonErrorMocks.ts:126](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/ManageTag/ManageTagNonErrorMocks.ts#L126)
 
 ## Type declaration
 

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceFormStateTypes
 
-Defined in: [src/types/Advertisement/interface.ts:21](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/interface.ts#L21)
+Defined in: [src/types/Advertisement/interface.ts:21](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/interface.ts#L21)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Advertisement/interface.ts:21](https://github.com/SujalTr
 
 > **attachments**: `File`[]
 
-Defined in: [src/types/Advertisement/interface.ts:28](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/interface.ts#L28)
+Defined in: [src/types/Advertisement/interface.ts:28](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/interface.ts#L28)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Advertisement/interface.ts:28](https://github.com/SujalTr
 
 > **description**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/interface.ts#L25)
+Defined in: [src/types/Advertisement/interface.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/interface.ts#L25)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Advertisement/interface.ts:25](https://github.com/SujalTr
 
 > **endAt**: `Date`
 
-Defined in: [src/types/Advertisement/interface.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/interface.ts#L26)
+Defined in: [src/types/Advertisement/interface.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/interface.ts#L26)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Advertisement/interface.ts:26](https://github.com/SujalTr
 
 > `optional` **existingAttachments**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:29](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/interface.ts#L29)
+Defined in: [src/types/Advertisement/interface.ts:29](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/interface.ts#L29)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Advertisement/interface.ts:29](https://github.com/SujalTr
 
 > **name**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:22](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/interface.ts#L22)
+Defined in: [src/types/Advertisement/interface.ts:22](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/interface.ts#L22)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Advertisement/interface.ts:22](https://github.com/SujalTr
 
 > `optional` **organizationId**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/interface.ts#L27)
+Defined in: [src/types/Advertisement/interface.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/interface.ts#L27)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Advertisement/interface.ts:27](https://github.com/SujalTr
 
 > **startAt**: `Date`
 
-Defined in: [src/types/Advertisement/interface.ts:24](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/interface.ts#L24)
+Defined in: [src/types/Advertisement/interface.ts:24](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/interface.ts#L24)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/types/Advertisement/interface.ts:24](https://github.com/SujalTr
 
 > **type**: `string`
 
-Defined in: [src/types/Advertisement/interface.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/interface.ts#L23)
+Defined in: [src/types/Advertisement/interface.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/interface.ts#L23)

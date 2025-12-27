@@ -6,7 +6,7 @@
 
 > **ChatInput** = `object`
 
-Defined in: [src/types/Chat/type.ts:35](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/type.ts#L35)
+Defined in: [src/types/Chat/type.ts:35](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/type.ts#L35)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Chat/type.ts:35](https://github.com/SujalTripathi/talawa-
 
 > **isGroup**: `boolean`
 
-Defined in: [src/types/Chat/type.ts:36](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/type.ts#L36)
+Defined in: [src/types/Chat/type.ts:36](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/type.ts#L36)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Chat/type.ts:36](https://github.com/SujalTripathi/talawa-
 
 > `optional` **name**: `string`
 
-Defined in: [src/types/Chat/type.ts:39](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/type.ts#L39)
+Defined in: [src/types/Chat/type.ts:39](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/type.ts#L39)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Chat/type.ts:39](https://github.com/SujalTripathi/talawa-
 
 > `optional` **organizationId**: `string`
 
-Defined in: [src/types/Chat/type.ts:37](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/type.ts#L37)
+Defined in: [src/types/Chat/type.ts:37](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/type.ts#L37)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/types/Chat/type.ts:37](https://github.com/SujalTripathi/talawa-
 
 > **userIds**: `string`[]
 
-Defined in: [src/types/Chat/type.ts:38](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/type.ts#L38)
+Defined in: [src/types/Chat/type.ts:38](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/type.ts#L38)

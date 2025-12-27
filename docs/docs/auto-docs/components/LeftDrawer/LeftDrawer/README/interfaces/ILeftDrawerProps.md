@@ -4,7 +4,7 @@
 
 # Interface: ILeftDrawerProps
 
-Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:30](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/LeftDrawer/LeftDrawer.tsx#L30)
+Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:30](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/components/LeftDrawer/LeftDrawer.tsx#L30)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:30](https://github.com/Suj
 
 > **hideDrawer**: `boolean`
 
-Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:31](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/LeftDrawer/LeftDrawer.tsx#L31)
+Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:31](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/components/LeftDrawer/LeftDrawer.tsx#L31)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:31](https://github.com/Suj
 
 > **setHideDrawer**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:32](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/LeftDrawer/LeftDrawer.tsx#L32)
+Defined in: [src/components/LeftDrawer/LeftDrawer.tsx:32](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/components/LeftDrawer/LeftDrawer.tsx#L32)

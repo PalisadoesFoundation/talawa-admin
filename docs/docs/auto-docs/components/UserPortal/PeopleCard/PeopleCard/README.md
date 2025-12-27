@@ -4,6 +4,10 @@
 
 # components/UserPortal/PeopleCard/PeopleCard
 
-## Functions
+## Interfaces
 
-- [default](components\UserPortal\PeopleCard\PeopleCard\README\functions\default.md)
+- [InterfacePeopleCardProps](components\UserPortal\PeopleCard\PeopleCard\README\interfaces\InterfacePeopleCardProps.md)
+
+## Variables
+
+- [default](components\UserPortal\PeopleCard\PeopleCard\README\variables\default.md)

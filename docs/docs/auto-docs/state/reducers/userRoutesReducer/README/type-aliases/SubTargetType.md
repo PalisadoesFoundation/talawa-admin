@@ -6,7 +6,7 @@
 
 > **SubTargetType** = `object`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:9](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/state/reducers/userRoutesReducer.ts#L9)
+Defined in: [src/state/reducers/userRoutesReducer.ts:9](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/state/reducers/userRoutesReducer.ts#L9)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:9](https://github.com/Sujal
 
 > `optional` **comp\_id**: `string`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/state/reducers/userRoutesReducer.ts#L13)
+Defined in: [src/state/reducers/userRoutesReducer.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/state/reducers/userRoutesReducer.ts#L13)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:13](https://github.com/Suja
 
 > `optional` **icon**: `string`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:12](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/state/reducers/userRoutesReducer.ts#L12)
+Defined in: [src/state/reducers/userRoutesReducer.ts:12](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/state/reducers/userRoutesReducer.ts#L12)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:12](https://github.com/Suja
 
 > `optional` **name**: `string`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:10](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/state/reducers/userRoutesReducer.ts#L10)
+Defined in: [src/state/reducers/userRoutesReducer.ts:10](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/state/reducers/userRoutesReducer.ts#L10)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/state/reducers/userRoutesReducer.ts:10](https://github.com/Suja
 
 > **url**: `string`
 
-Defined in: [src/state/reducers/userRoutesReducer.ts:11](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/state/reducers/userRoutesReducer.ts#L11)
+Defined in: [src/state/reducers/userRoutesReducer.ts:11](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/state/reducers/userRoutesReducer.ts#L11)

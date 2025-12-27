@@ -4,7 +4,7 @@
 
 # Interface: InterfaceEmptyStateProps
 
-Defined in: [src/types/shared-components/EmptyState/interface.ts:7](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/shared-components/EmptyState/interface.ts#L7)
+Defined in: [src/types/shared-components/EmptyState/interface.ts:7](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/shared-components/EmptyState/interface.ts#L7)
 
 Props interface for the EmptyState component.
 
@@ -16,7 +16,7 @@ Props interface for the EmptyState component.
 
 > `optional` **action**: `object`
 
-Defined in: [src/types/shared-components/EmptyState/interface.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/shared-components/EmptyState/interface.ts#L27)
+Defined in: [src/types/shared-components/EmptyState/interface.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/shared-components/EmptyState/interface.ts#L27)
 
 Action button configuration.
 
@@ -42,7 +42,7 @@ Action button configuration.
 
 > `optional` **className**: `string`
 
-Defined in: [src/types/shared-components/EmptyState/interface.ts:36](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/shared-components/EmptyState/interface.ts#L36)
+Defined in: [src/types/shared-components/EmptyState/interface.ts:36](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/shared-components/EmptyState/interface.ts#L36)
 
 Custom CSS class name.
 
@@ -52,7 +52,7 @@ Custom CSS class name.
 
 > `optional` **dataTestId**: `string`
 
-Defined in: [src/types/shared-components/EmptyState/interface.ts:41](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/shared-components/EmptyState/interface.ts#L41)
+Defined in: [src/types/shared-components/EmptyState/interface.ts:41](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/shared-components/EmptyState/interface.ts#L41)
 
 Test identifier.
 
@@ -62,7 +62,7 @@ Test identifier.
 
 > `optional` **description**: `string`
 
-Defined in: [src/types/shared-components/EmptyState/interface.ts:17](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/shared-components/EmptyState/interface.ts#L17)
+Defined in: [src/types/shared-components/EmptyState/interface.ts:17](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/shared-components/EmptyState/interface.ts#L17)
 
 Optional secondary description text.
 
@@ -72,7 +72,7 @@ Optional secondary description text.
 
 > `optional` **icon**: `ReactNode`
 
-Defined in: [src/types/shared-components/EmptyState/interface.ts:22](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/shared-components/EmptyState/interface.ts#L22)
+Defined in: [src/types/shared-components/EmptyState/interface.ts:22](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/shared-components/EmptyState/interface.ts#L22)
 
 Icon to display above the message.
 
@@ -82,7 +82,7 @@ Icon to display above the message.
 
 > **message**: `string`
 
-Defined in: [src/types/shared-components/EmptyState/interface.ts:12](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/shared-components/EmptyState/interface.ts#L12)
+Defined in: [src/types/shared-components/EmptyState/interface.ts:12](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/shared-components/EmptyState/interface.ts#L12)
 
 Primary message to display (i18n key or plain string).
 

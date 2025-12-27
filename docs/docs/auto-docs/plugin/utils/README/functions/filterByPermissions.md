@@ -6,7 +6,7 @@
 
 > **filterByPermissions**\<`T`\>(`items`, `userPermissions`, `isAdmin`): `T`[]
 
-Defined in: [src/plugin/utils.ts:82](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/utils.ts#L82)
+Defined in: [src/plugin/utils.ts:82](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/utils.ts#L82)
 
 ## Type Parameters
 

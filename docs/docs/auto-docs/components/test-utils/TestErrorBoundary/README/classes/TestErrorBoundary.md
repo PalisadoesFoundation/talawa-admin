@@ -4,7 +4,7 @@
 
 # Class: TestErrorBoundary
 
-Defined in: [src/components/test-utils/TestErrorBoundary.tsx:22](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/test-utils/TestErrorBoundary.tsx#L22)
+Defined in: [src/components/test-utils/TestErrorBoundary.tsx:22](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/components/test-utils/TestErrorBoundary.tsx#L22)
 
 ## Extends
 
@@ -16,7 +16,7 @@ Defined in: [src/components/test-utils/TestErrorBoundary.tsx:22](https://github.
 
 > **new TestErrorBoundary**(`props`): `TestErrorBoundary`
 
-Defined in: [src/components/test-utils/TestErrorBoundary.tsx:26](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/test-utils/TestErrorBoundary.tsx#L26)
+Defined in: [src/components/test-utils/TestErrorBoundary.tsx:26](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/components/test-utils/TestErrorBoundary.tsx#L26)
 
 #### Parameters
 
@@ -38,7 +38,7 @@ Defined in: [src/components/test-utils/TestErrorBoundary.tsx:26](https://github.
 
 > **render**(): `ReactNode`
 
-Defined in: [src/components/test-utils/TestErrorBoundary.tsx:43](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/test-utils/TestErrorBoundary.tsx#L43)
+Defined in: [src/components/test-utils/TestErrorBoundary.tsx:43](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/components/test-utils/TestErrorBoundary.tsx#L43)
 
 #### Returns
 
@@ -54,7 +54,7 @@ Defined in: [src/components/test-utils/TestErrorBoundary.tsx:43](https://github.
 
 > `static` **getDerivedStateFromError**(`error`): `TestInterfaceErrorBoundaryState`
 
-Defined in: [src/components/test-utils/TestErrorBoundary.tsx:34](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/test-utils/TestErrorBoundary.tsx#L34)
+Defined in: [src/components/test-utils/TestErrorBoundary.tsx:34](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/components/test-utils/TestErrorBoundary.tsx#L34)
 
 #### Parameters
 

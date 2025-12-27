@@ -6,7 +6,7 @@
 
 > `const` **DELETE\_ACTION\_ITEM\_CATEGORY\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/ActionItemCategoryMutations.ts:65](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/GraphQl/Mutations/ActionItemCategoryMutations.ts#L65)
+Defined in: [src/GraphQl/Mutations/ActionItemCategoryMutations.ts:65](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/GraphQl/Mutations/ActionItemCategoryMutations.ts#L65)
 
 GraphQL mutation to delete an action item category.
 Updated to match new backend schema using input object

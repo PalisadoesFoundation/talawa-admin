@@ -6,7 +6,7 @@
 
 > **CheckInInput** = `object`
 
-Defined in: [src/types/CheckIn/type.ts:16](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/type.ts#L16)
+Defined in: [src/types/CheckIn/type.ts:16](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/type.ts#L16)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/CheckIn/type.ts:16](https://github.com/SujalTripathi/tala
 
 > `optional` **allotedRoom**: `string`
 
-Defined in: [src/types/CheckIn/type.ts:17](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/type.ts#L17)
+Defined in: [src/types/CheckIn/type.ts:17](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/type.ts#L17)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/CheckIn/type.ts:17](https://github.com/SujalTripathi/tala
 
 > `optional` **allotedSeat**: `string`
 
-Defined in: [src/types/CheckIn/type.ts:18](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/type.ts#L18)
+Defined in: [src/types/CheckIn/type.ts:18](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/type.ts#L18)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/CheckIn/type.ts:18](https://github.com/SujalTripathi/tala
 
 > **eventId**: `string`
 
-Defined in: [src/types/CheckIn/type.ts:19](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/type.ts#L19)
+Defined in: [src/types/CheckIn/type.ts:19](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/type.ts#L19)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/types/CheckIn/type.ts:19](https://github.com/SujalTripathi/tala
 
 > **userId**: `string`
 
-Defined in: [src/types/CheckIn/type.ts:20](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/type.ts#L20)
+Defined in: [src/types/CheckIn/type.ts:20](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/type.ts#L20)

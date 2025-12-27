@@ -6,7 +6,7 @@
 
 > **NewChatType** = `object`
 
-Defined in: [src/types/Chat/interface.ts:3](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L3)
+Defined in: [src/types/Chat/interface.ts:3](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L3)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Chat/interface.ts:3](https://github.com/SujalTripathi/tal
 
 > `optional` **avatarMimeType**: `string`
 
-Defined in: [src/types/Chat/interface.ts:7](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L7)
+Defined in: [src/types/Chat/interface.ts:7](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L7)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Chat/interface.ts:7](https://github.com/SujalTripathi/tal
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/types/Chat/interface.ts:8](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L8)
+Defined in: [src/types/Chat/interface.ts:8](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L8)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Chat/interface.ts:8](https://github.com/SujalTripathi/tal
 
 > **createdAt**: `string`
 
-Defined in: [src/types/Chat/interface.ts:10](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L10)
+Defined in: [src/types/Chat/interface.ts:10](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L10)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Chat/interface.ts:10](https://github.com/SujalTripathi/ta
 
 > `optional` **creator**: `object`
 
-Defined in: [src/types/Chat/interface.ts:42](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L42)
+Defined in: [src/types/Chat/interface.ts:42](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L42)
 
 #### avatarMimeType?
 
@@ -62,7 +62,7 @@ Defined in: [src/types/Chat/interface.ts:42](https://github.com/SujalTripathi/ta
 
 > `optional` **description**: `string`
 
-Defined in: [src/types/Chat/interface.ts:6](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L6)
+Defined in: [src/types/Chat/interface.ts:6](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L6)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/types/Chat/interface.ts:6](https://github.com/SujalTripathi/tal
 
 > `optional` **firstUnreadMessageId**: `string`
 
-Defined in: [src/types/Chat/interface.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L15)
+Defined in: [src/types/Chat/interface.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L15)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [src/types/Chat/interface.ts:15](https://github.com/SujalTripathi/ta
 
 > `optional` **hasUnread**: `boolean`
 
-Defined in: [src/types/Chat/interface.ts:14](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L14)
+Defined in: [src/types/Chat/interface.ts:14](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L14)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [src/types/Chat/interface.ts:14](https://github.com/SujalTripathi/ta
 
 > **id**: `string`
 
-Defined in: [src/types/Chat/interface.ts:4](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L4)
+Defined in: [src/types/Chat/interface.ts:4](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L4)
 
 ***
 
@@ -94,7 +94,7 @@ Defined in: [src/types/Chat/interface.ts:4](https://github.com/SujalTripathi/tal
 
 > **isGroup**: `boolean`
 
-Defined in: [src/types/Chat/interface.ts:9](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L9)
+Defined in: [src/types/Chat/interface.ts:9](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L9)
 
 ***
 
@@ -102,7 +102,7 @@ Defined in: [src/types/Chat/interface.ts:9](https://github.com/SujalTripathi/tal
 
 > `optional` **lastMessage**: `object`
 
-Defined in: [src/types/Chat/interface.ts:16](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L16)
+Defined in: [src/types/Chat/interface.ts:16](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L16)
 
 #### body
 
@@ -174,7 +174,7 @@ Defined in: [src/types/Chat/interface.ts:16](https://github.com/SujalTripathi/ta
 
 > **members**: `object`
 
-Defined in: [src/types/Chat/interface.ts:54](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L54)
+Defined in: [src/types/Chat/interface.ts:54](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L54)
 
 #### edges
 
@@ -186,7 +186,7 @@ Defined in: [src/types/Chat/interface.ts:54](https://github.com/SujalTripathi/ta
 
 > **messages**: `object`
 
-Defined in: [src/types/Chat/interface.ts:68](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L68)
+Defined in: [src/types/Chat/interface.ts:68](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L68)
 
 #### edges
 
@@ -198,7 +198,7 @@ Defined in: [src/types/Chat/interface.ts:68](https://github.com/SujalTripathi/ta
 
 > **name**: `string`
 
-Defined in: [src/types/Chat/interface.ts:5](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L5)
+Defined in: [src/types/Chat/interface.ts:5](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L5)
 
 ***
 
@@ -206,7 +206,7 @@ Defined in: [src/types/Chat/interface.ts:5](https://github.com/SujalTripathi/tal
 
 > `optional` **organization**: `object`
 
-Defined in: [src/types/Chat/interface.ts:37](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L37)
+Defined in: [src/types/Chat/interface.ts:37](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L37)
 
 #### countryCode?
 
@@ -226,7 +226,7 @@ Defined in: [src/types/Chat/interface.ts:37](https://github.com/SujalTripathi/ta
 
 > `optional` **unreadMessagesCount**: `number`
 
-Defined in: [src/types/Chat/interface.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L13)
+Defined in: [src/types/Chat/interface.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L13)
 
 ***
 
@@ -234,7 +234,7 @@ Defined in: [src/types/Chat/interface.ts:13](https://github.com/SujalTripathi/ta
 
 > **updatedAt**: `string` \| `null`
 
-Defined in: [src/types/Chat/interface.ts:11](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L11)
+Defined in: [src/types/Chat/interface.ts:11](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L11)
 
 ***
 
@@ -242,7 +242,7 @@ Defined in: [src/types/Chat/interface.ts:11](https://github.com/SujalTripathi/ta
 
 > `optional` **updater**: `object`
 
-Defined in: [src/types/Chat/interface.ts:48](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L48)
+Defined in: [src/types/Chat/interface.ts:48](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L48)
 
 #### avatarMimeType?
 

@@ -4,7 +4,7 @@
 
 # Class: DiscoveryManager
 
-Defined in: [src/plugin/managers/discovery.ts:11](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/discovery.ts#L11)
+Defined in: [src/plugin/managers/discovery.ts:11](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/discovery.ts#L11)
 
 ## Constructors
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/managers/discovery.ts:11](https://github.com/SujalTripat
 
 > **new DiscoveryManager**(`graphqlService`?): `DiscoveryManager`
 
-Defined in: [src/plugin/managers/discovery.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/discovery.ts#L15)
+Defined in: [src/plugin/managers/discovery.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/discovery.ts#L15)
 
 #### Parameters
 
@@ -30,7 +30,7 @@ Defined in: [src/plugin/managers/discovery.ts:15](https://github.com/SujalTripat
 
 > **discoverPlugins**(): `Promise`\<`string`[]\>
 
-Defined in: [src/plugin/managers/discovery.ts:56](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/discovery.ts#L56)
+Defined in: [src/plugin/managers/discovery.ts:56](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/discovery.ts#L56)
 
 #### Returns
 
@@ -42,7 +42,7 @@ Defined in: [src/plugin/managers/discovery.ts:56](https://github.com/SujalTripat
 
 > **findPluginInIndex**(`pluginId`): [`IPlugin`](plugin\graphql-service\README\interfaces\IPlugin.md)
 
-Defined in: [src/plugin/managers/discovery.ts:31](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/discovery.ts#L31)
+Defined in: [src/plugin/managers/discovery.ts:31](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/discovery.ts#L31)
 
 #### Parameters
 
@@ -60,7 +60,7 @@ Defined in: [src/plugin/managers/discovery.ts:31](https://github.com/SujalTripat
 
 > **getPluginIndex**(): [`IPlugin`](plugin\graphql-service\README\interfaces\IPlugin.md)[]
 
-Defined in: [src/plugin/managers/discovery.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/discovery.ts#L23)
+Defined in: [src/plugin/managers/discovery.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/discovery.ts#L23)
 
 #### Returns
 
@@ -72,7 +72,7 @@ Defined in: [src/plugin/managers/discovery.ts:23](https://github.com/SujalTripat
 
 > **isPluginActivated**(`pluginId`): `boolean`
 
-Defined in: [src/plugin/managers/discovery.ts:35](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/discovery.ts#L35)
+Defined in: [src/plugin/managers/discovery.ts:35](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/discovery.ts#L35)
 
 #### Parameters
 
@@ -90,7 +90,7 @@ Defined in: [src/plugin/managers/discovery.ts:35](https://github.com/SujalTripat
 
 > **isPluginInstalled**(`pluginId`): `boolean`
 
-Defined in: [src/plugin/managers/discovery.ts:40](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/discovery.ts#L40)
+Defined in: [src/plugin/managers/discovery.ts:40](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/discovery.ts#L40)
 
 #### Parameters
 
@@ -108,7 +108,7 @@ Defined in: [src/plugin/managers/discovery.ts:40](https://github.com/SujalTripat
 
 > **loadPluginComponents**(`pluginId`, `manifest`): `Promise`\<`Record`\<`string`, `ComponentType`\<\{\}\>\>\>
 
-Defined in: [src/plugin/managers/discovery.ts:116](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/discovery.ts#L116)
+Defined in: [src/plugin/managers/discovery.ts:116](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/discovery.ts#L116)
 
 #### Parameters
 
@@ -130,7 +130,7 @@ Defined in: [src/plugin/managers/discovery.ts:116](https://github.com/SujalTripa
 
 > **loadPluginIndexFromGraphQL**(): `Promise`\<`void`\>
 
-Defined in: [src/plugin/managers/discovery.ts:45](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/discovery.ts#L45)
+Defined in: [src/plugin/managers/discovery.ts:45](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/discovery.ts#L45)
 
 #### Returns
 
@@ -142,7 +142,7 @@ Defined in: [src/plugin/managers/discovery.ts:45](https://github.com/SujalTripat
 
 > **loadPluginManifest**(`pluginId`): `Promise`\<[`IPluginManifest`](plugin\types\README\interfaces\IPluginManifest.md)\>
 
-Defined in: [src/plugin/managers/discovery.ts:79](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/discovery.ts#L79)
+Defined in: [src/plugin/managers/discovery.ts:79](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/discovery.ts#L79)
 
 #### Parameters
 
@@ -160,7 +160,7 @@ Defined in: [src/plugin/managers/discovery.ts:79](https://github.com/SujalTripat
 
 > **removePluginFromGraphQL**(`pluginId`): `Promise`\<`void`\>
 
-Defined in: [src/plugin/managers/discovery.ts:160](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/discovery.ts#L160)
+Defined in: [src/plugin/managers/discovery.ts:160](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/discovery.ts#L160)
 
 #### Parameters
 
@@ -178,7 +178,7 @@ Defined in: [src/plugin/managers/discovery.ts:160](https://github.com/SujalTripa
 
 > **setGraphQLService**(`service`): `void`
 
-Defined in: [src/plugin/managers/discovery.ts:19](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/discovery.ts#L19)
+Defined in: [src/plugin/managers/discovery.ts:19](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/discovery.ts#L19)
 
 #### Parameters
 
@@ -196,7 +196,7 @@ Defined in: [src/plugin/managers/discovery.ts:19](https://github.com/SujalTripat
 
 > **setPluginIndex**(`index`): `void`
 
-Defined in: [src/plugin/managers/discovery.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/discovery.ts#L27)
+Defined in: [src/plugin/managers/discovery.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/discovery.ts#L27)
 
 #### Parameters
 
@@ -214,7 +214,7 @@ Defined in: [src/plugin/managers/discovery.ts:27](https://github.com/SujalTripat
 
 > **syncPluginWithGraphQL**(`pluginId`): `Promise`\<`void`\>
 
-Defined in: [src/plugin/managers/discovery.ts:146](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/discovery.ts#L146)
+Defined in: [src/plugin/managers/discovery.ts:146](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/discovery.ts#L146)
 
 #### Parameters
 
@@ -232,7 +232,7 @@ Defined in: [src/plugin/managers/discovery.ts:146](https://github.com/SujalTripa
 
 > **updatePluginStatusInGraphQL**(`pluginId`, `status`): `Promise`\<`void`\>
 
-Defined in: [src/plugin/managers/discovery.ts:177](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/discovery.ts#L177)
+Defined in: [src/plugin/managers/discovery.ts:177](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/discovery.ts#L177)
 
 #### Parameters
 

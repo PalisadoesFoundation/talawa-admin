@@ -6,7 +6,7 @@
 
 > **AddressInput** = `object`
 
-Defined in: [src/types/address.ts:12](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/address.ts#L12)
+Defined in: [src/types/address.ts:12](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/address.ts#L12)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/address.ts:12](https://github.com/SujalTripathi/talawa-ad
 
 > `optional` **city**: `string`
 
-Defined in: [src/types/address.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/address.ts#L13)
+Defined in: [src/types/address.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/address.ts#L13)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/address.ts:13](https://github.com/SujalTripathi/talawa-ad
 
 > `optional` **countryCode**: `string`
 
-Defined in: [src/types/address.ts:14](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/address.ts#L14)
+Defined in: [src/types/address.ts:14](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/address.ts#L14)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/address.ts:14](https://github.com/SujalTripathi/talawa-ad
 
 > `optional` **dependentLocality**: `string`
 
-Defined in: [src/types/address.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/address.ts#L15)
+Defined in: [src/types/address.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/address.ts#L15)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/address.ts:15](https://github.com/SujalTripathi/talawa-ad
 
 > `optional` **line1**: `string`
 
-Defined in: [src/types/address.ts:16](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/address.ts#L16)
+Defined in: [src/types/address.ts:16](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/address.ts#L16)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/address.ts:16](https://github.com/SujalTripathi/talawa-ad
 
 > `optional` **line2**: `string`
 
-Defined in: [src/types/address.ts:17](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/address.ts#L17)
+Defined in: [src/types/address.ts:17](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/address.ts#L17)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/address.ts:17](https://github.com/SujalTripathi/talawa-ad
 
 > `optional` **postalCode**: `string`
 
-Defined in: [src/types/address.ts:18](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/address.ts#L18)
+Defined in: [src/types/address.ts:18](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/address.ts#L18)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/address.ts:18](https://github.com/SujalTripathi/talawa-ad
 
 > `optional` **sortingCode**: `string`
 
-Defined in: [src/types/address.ts:19](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/address.ts#L19)
+Defined in: [src/types/address.ts:19](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/address.ts#L19)
 
 ***
 
@@ -70,4 +70,4 @@ Defined in: [src/types/address.ts:19](https://github.com/SujalTripathi/talawa-ad
 
 > `optional` **state**: `string`
 
-Defined in: [src/types/address.ts:20](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/address.ts#L20)
+Defined in: [src/types/address.ts:20](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/address.ts#L20)

@@ -6,7 +6,7 @@
 
 > **Advertisement** = `object`
 
-Defined in: [src/types/Advertisement/type.ts:12](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/type.ts#L12)
+Defined in: [src/types/Advertisement/type.ts:12](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/type.ts#L12)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Advertisement/type.ts:12](https://github.com/SujalTripath
 
 > `optional` **attachments**: [`AdvertisementAttachment`](types\Advertisement\type\README\type-aliases\AdvertisementAttachment.md)[]
 
-Defined in: [src/types/Advertisement/type.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/type.ts#L26)
+Defined in: [src/types/Advertisement/type.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/type.ts#L26)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Advertisement/type.ts:26](https://github.com/SujalTripath
 
 > **createdAt**: `Date`
 
-Defined in: [src/types/Advertisement/type.ts:14](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/type.ts#L14)
+Defined in: [src/types/Advertisement/type.ts:14](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/type.ts#L14)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Advertisement/type.ts:14](https://github.com/SujalTripath
 
 > `optional` **creator**: [`User`](types\User\type\README\type-aliases\User.md)
 
-Defined in: [src/types/Advertisement/type.ts:16](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/type.ts#L16)
+Defined in: [src/types/Advertisement/type.ts:16](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/type.ts#L16)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Advertisement/type.ts:16](https://github.com/SujalTripath
 
 > `optional` **description**: `string`
 
-Defined in: [src/types/Advertisement/type.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/type.ts#L15)
+Defined in: [src/types/Advertisement/type.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/type.ts#L15)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Advertisement/type.ts:15](https://github.com/SujalTripath
 
 > **endAt**: `Date`
 
-Defined in: [src/types/Advertisement/type.ts:20](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/type.ts#L20)
+Defined in: [src/types/Advertisement/type.ts:20](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/type.ts#L20)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Advertisement/type.ts:20](https://github.com/SujalTripath
 
 > **id**: `string`
 
-Defined in: [src/types/Advertisement/type.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/type.ts#L13)
+Defined in: [src/types/Advertisement/type.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/type.ts#L13)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/Advertisement/type.ts:13](https://github.com/SujalTripath
 
 > **name**: `string`
 
-Defined in: [src/types/Advertisement/type.ts:21](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/type.ts#L21)
+Defined in: [src/types/Advertisement/type.ts:21](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/type.ts#L21)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/types/Advertisement/type.ts:21](https://github.com/SujalTripath
 
 > **organization**: `object`
 
-Defined in: [src/types/Advertisement/type.ts:17](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/type.ts#L17)
+Defined in: [src/types/Advertisement/type.ts:17](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/type.ts#L17)
 
 #### id
 
@@ -82,7 +82,7 @@ Defined in: [src/types/Advertisement/type.ts:17](https://github.com/SujalTripath
 
 > **orgId**: `string`
 
-Defined in: [src/types/Advertisement/type.ts:22](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/type.ts#L22)
+Defined in: [src/types/Advertisement/type.ts:22](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/type.ts#L22)
 
 ***
 
@@ -90,7 +90,7 @@ Defined in: [src/types/Advertisement/type.ts:22](https://github.com/SujalTripath
 
 > **startAt**: `Date`
 
-Defined in: [src/types/Advertisement/type.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/type.ts#L23)
+Defined in: [src/types/Advertisement/type.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/type.ts#L23)
 
 ***
 
@@ -98,7 +98,7 @@ Defined in: [src/types/Advertisement/type.ts:23](https://github.com/SujalTripath
 
 > **type**: [`AdvertisementType`](types\Advertisement\type\README\enumerations\AdvertisementType.md)
 
-Defined in: [src/types/Advertisement/type.ts:24](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/type.ts#L24)
+Defined in: [src/types/Advertisement/type.ts:24](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/type.ts#L24)
 
 ***
 
@@ -106,4 +106,4 @@ Defined in: [src/types/Advertisement/type.ts:24](https://github.com/SujalTripath
 
 > **updatedAt**: `Date`
 
-Defined in: [src/types/Advertisement/type.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Advertisement/type.ts#L25)
+Defined in: [src/types/Advertisement/type.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Advertisement/type.ts#L25)

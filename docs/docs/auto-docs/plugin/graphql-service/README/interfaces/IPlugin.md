@@ -4,7 +4,7 @@
 
 # Interface: IPlugin
 
-Defined in: [src/plugin/graphql-service.ts:20](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/graphql-service.ts#L20)
+Defined in: [src/plugin/graphql-service.ts:20](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/graphql-service.ts#L20)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/graphql-service.ts:20](https://github.com/SujalTripathi/
 
 > **backup**: `boolean`
 
-Defined in: [src/plugin/graphql-service.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/graphql-service.ts#L25)
+Defined in: [src/plugin/graphql-service.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/graphql-service.ts#L25)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/graphql-service.ts:25](https://github.com/SujalTripathi/
 
 > **createdAt**: `string`
 
-Defined in: [src/plugin/graphql-service.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/graphql-service.ts#L26)
+Defined in: [src/plugin/graphql-service.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/graphql-service.ts#L26)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/plugin/graphql-service.ts:26](https://github.com/SujalTripathi/
 
 > **id**: `string`
 
-Defined in: [src/plugin/graphql-service.ts:21](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/graphql-service.ts#L21)
+Defined in: [src/plugin/graphql-service.ts:21](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/graphql-service.ts#L21)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/plugin/graphql-service.ts:21](https://github.com/SujalTripathi/
 
 > **isActivated**: `boolean`
 
-Defined in: [src/plugin/graphql-service.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/graphql-service.ts#L23)
+Defined in: [src/plugin/graphql-service.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/graphql-service.ts#L23)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/plugin/graphql-service.ts:23](https://github.com/SujalTripathi/
 
 > **isInstalled**: `boolean`
 
-Defined in: [src/plugin/graphql-service.ts:24](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/graphql-service.ts#L24)
+Defined in: [src/plugin/graphql-service.ts:24](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/graphql-service.ts#L24)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/plugin/graphql-service.ts:24](https://github.com/SujalTripathi/
 
 > **pluginId**: `string`
 
-Defined in: [src/plugin/graphql-service.ts:22](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/graphql-service.ts#L22)
+Defined in: [src/plugin/graphql-service.ts:22](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/graphql-service.ts#L22)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/plugin/graphql-service.ts:22](https://github.com/SujalTripathi/
 
 > **updatedAt**: `string`
 
-Defined in: [src/plugin/graphql-service.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/graphql-service.ts#L27)
+Defined in: [src/plugin/graphql-service.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/graphql-service.ts#L27)

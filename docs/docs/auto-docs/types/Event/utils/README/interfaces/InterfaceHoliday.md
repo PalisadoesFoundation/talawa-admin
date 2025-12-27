@@ -4,7 +4,7 @@
 
 # Interface: InterfaceHoliday
 
-Defined in: [src/types/Event/utils.ts:1](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/utils.ts#L1)
+Defined in: [src/types/Event/utils.ts:1](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/utils.ts#L1)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/utils.ts:1](https://github.com/SujalTripathi/talawa
 
 > **date**: `string`
 
-Defined in: [src/types/Event/utils.ts:3](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/utils.ts#L3)
+Defined in: [src/types/Event/utils.ts:3](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/utils.ts#L3)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Event/utils.ts:3](https://github.com/SujalTripathi/talawa
 
 > **month**: `string`
 
-Defined in: [src/types/Event/utils.ts:4](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/utils.ts#L4)
+Defined in: [src/types/Event/utils.ts:4](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/utils.ts#L4)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/types/Event/utils.ts:4](https://github.com/SujalTripathi/talawa
 
 > **name**: `string`
 
-Defined in: [src/types/Event/utils.ts:2](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/utils.ts#L2)
+Defined in: [src/types/Event/utils.ts:2](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/utils.ts#L2)

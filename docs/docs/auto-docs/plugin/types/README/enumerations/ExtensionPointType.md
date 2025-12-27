@@ -4,7 +4,7 @@
 
 # Enumeration: ExtensionPointType
 
-Defined in: [src/plugin/types.ts:156](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L156)
+Defined in: [src/plugin/types.ts:156](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L156)
 
 ## Enumeration Members
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:156](https://github.com/SujalTripathi/talawa-ad
 
 > **DRAWER**: `"drawer"`
 
-Defined in: [src/plugin/types.ts:158](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L158)
+Defined in: [src/plugin/types.ts:158](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L158)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/plugin/types.ts:158](https://github.com/SujalTripathi/talawa-ad
 
 > **ROUTES**: `"routes"`
 
-Defined in: [src/plugin/types.ts:157](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L157)
+Defined in: [src/plugin/types.ts:157](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L157)

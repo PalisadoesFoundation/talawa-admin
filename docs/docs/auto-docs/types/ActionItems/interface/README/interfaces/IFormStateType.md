@@ -4,7 +4,7 @@
 
 # Interface: IFormStateType
 
-Defined in: [src/types/ActionItems/interface.ts:121](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L121)
+Defined in: [src/types/ActionItems/interface.ts:121](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L121)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/ActionItems/interface.ts:121](https://github.com/SujalTri
 
 > **assignedAt**: `Date`
 
-Defined in: [src/types/ActionItems/interface.ts:122](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L122)
+Defined in: [src/types/ActionItems/interface.ts:122](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L122)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/ActionItems/interface.ts:122](https://github.com/SujalTri
 
 > **categoryId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:123](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L123)
+Defined in: [src/types/ActionItems/interface.ts:123](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L123)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/ActionItems/interface.ts:123](https://github.com/SujalTri
 
 > `optional` **eventId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:126](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L126)
+Defined in: [src/types/ActionItems/interface.ts:126](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L126)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/ActionItems/interface.ts:126](https://github.com/SujalTri
 
 > **isCompleted**: `boolean`
 
-Defined in: [src/types/ActionItems/interface.ts:129](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L129)
+Defined in: [src/types/ActionItems/interface.ts:129](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L129)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/ActionItems/interface.ts:129](https://github.com/SujalTri
 
 > **postCompletionNotes**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:128](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L128)
+Defined in: [src/types/ActionItems/interface.ts:128](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L128)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/ActionItems/interface.ts:128](https://github.com/SujalTri
 
 > **preCompletionNotes**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:127](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L127)
+Defined in: [src/types/ActionItems/interface.ts:127](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L127)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/ActionItems/interface.ts:127](https://github.com/SujalTri
 
 > **volunteerGroupId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:125](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L125)
+Defined in: [src/types/ActionItems/interface.ts:125](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L125)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/types/ActionItems/interface.ts:125](https://github.com/SujalTri
 
 > **volunteerId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:124](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L124)
+Defined in: [src/types/ActionItems/interface.ts:124](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L124)

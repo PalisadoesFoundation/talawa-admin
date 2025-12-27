@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<`InterfaceRecurringEventVolunteerModalProps`\>
 
-Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/RecurringEventVolunteerModal.tsx:77](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/UserPortal/Volunteer/UpcomingEvents/RecurringEventVolunteerModal.tsx#L77)
+Defined in: [src/screens/UserPortal/Volunteer/UpcomingEvents/RecurringEventVolunteerModal.tsx:77](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/UserPortal/Volunteer/UpcomingEvents/RecurringEventVolunteerModal.tsx#L77)
 
 RecurringEventVolunteerModal - A modal component for choosing recurring event volunteer scope
 

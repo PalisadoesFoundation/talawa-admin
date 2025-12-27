@@ -4,7 +4,7 @@
 
 # Interface: InterfaceMembersList
 
-Defined in: [src/types/Member/interface.ts:30](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Member/interface.ts#L30)
+Defined in: [src/types/Member/interface.ts:30](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Member/interface.ts#L30)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Member/interface.ts:30](https://github.com/SujalTripathi/
 
 > **organizations**: `object`[]
 
-Defined in: [src/types/Member/interface.ts:31](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Member/interface.ts#L31)
+Defined in: [src/types/Member/interface.ts:31](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Member/interface.ts#L31)
 
 #### id
 

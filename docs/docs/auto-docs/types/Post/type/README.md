@@ -4,6 +4,12 @@
 
 # types/Post/type
 
+## Interfaces
+
+- [ICreatePostData](types\Post\type\README\interfaces\ICreatePostData.md)
+- [ICreatePostInput](types\Post\type\README\interfaces\ICreatePostInput.md)
+- [IFileMetadataInput](types\Post\type\README\interfaces\IFileMetadataInput.md)
+
 ## Type Aliases
 
 - [Post](types\Post\type\README\type-aliases\Post.md)

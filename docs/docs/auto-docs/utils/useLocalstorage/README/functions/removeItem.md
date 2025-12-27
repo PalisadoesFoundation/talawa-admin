@@ -6,7 +6,7 @@
 
 > **removeItem**(`prefix`, `key`): `void`
 
-Defined in: [src/utils/useLocalstorage.ts:52](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/useLocalstorage.ts#L52)
+Defined in: [src/utils/useLocalstorage.ts:52](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/utils/useLocalstorage.ts#L52)
 
 Removes the value associated with the given key from local storage.
 

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCollapsibleDropdown
 
-Defined in: [src/types/DropDown/interface.ts:8](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/DropDown/interface.ts#L8)
+Defined in: [src/types/DropDown/interface.ts:8](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/DropDown/interface.ts#L8)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/DropDown/interface.ts:8](https://github.com/SujalTripathi
 
 > **setShowDropdown**: `Dispatch`\<`SetStateAction`\<`boolean`\>\>
 
-Defined in: [src/types/DropDown/interface.ts:11](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/DropDown/interface.ts#L11)
+Defined in: [src/types/DropDown/interface.ts:11](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/DropDown/interface.ts#L11)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/DropDown/interface.ts:11](https://github.com/SujalTripath
 
 > **showDropdown**: `boolean`
 
-Defined in: [src/types/DropDown/interface.ts:9](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/DropDown/interface.ts#L9)
+Defined in: [src/types/DropDown/interface.ts:9](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/DropDown/interface.ts#L9)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/types/DropDown/interface.ts:9](https://github.com/SujalTripathi
 
 > **target**: [`TargetsType`](state\reducers\routesReducer\README\type-aliases\TargetsType.md)
 
-Defined in: [src/types/DropDown/interface.ts:10](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/DropDown/interface.ts#L10)
+Defined in: [src/types/DropDown/interface.ts:10](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/DropDown/interface.ts#L10)

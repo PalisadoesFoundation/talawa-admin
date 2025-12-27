@@ -4,7 +4,7 @@
 
 # Interface: InterfaceTableCheckIn
 
-Defined in: [src/types/CheckIn/interface.ts:30](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/interface.ts#L30)
+Defined in: [src/types/CheckIn/interface.ts:30](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/interface.ts#L30)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/CheckIn/interface.ts:30](https://github.com/SujalTripathi
 
 > **checkInTime**: `string`
 
-Defined in: [src/types/CheckIn/interface.ts:34](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/interface.ts#L34)
+Defined in: [src/types/CheckIn/interface.ts:34](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/interface.ts#L34)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/CheckIn/interface.ts:34](https://github.com/SujalTripathi
 
 > **checkOutTime**: `string`
 
-Defined in: [src/types/CheckIn/interface.ts:35](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/interface.ts#L35)
+Defined in: [src/types/CheckIn/interface.ts:35](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/interface.ts#L35)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/CheckIn/interface.ts:35](https://github.com/SujalTripathi
 
 > **eventId**: `string`
 
-Defined in: [src/types/CheckIn/interface.ts:38](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/interface.ts#L38)
+Defined in: [src/types/CheckIn/interface.ts:38](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/interface.ts#L38)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/CheckIn/interface.ts:38](https://github.com/SujalTripathi
 
 > **id**: `string`
 
-Defined in: [src/types/CheckIn/interface.ts:31](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/interface.ts#L31)
+Defined in: [src/types/CheckIn/interface.ts:31](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/interface.ts#L31)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/CheckIn/interface.ts:31](https://github.com/SujalTripathi
 
 > **isCheckedIn**: `boolean`
 
-Defined in: [src/types/CheckIn/interface.ts:36](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/interface.ts#L36)
+Defined in: [src/types/CheckIn/interface.ts:36](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/interface.ts#L36)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/CheckIn/interface.ts:36](https://github.com/SujalTripathi
 
 > **isCheckedOut**: `boolean`
 
-Defined in: [src/types/CheckIn/interface.ts:37](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/interface.ts#L37)
+Defined in: [src/types/CheckIn/interface.ts:37](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/interface.ts#L37)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/CheckIn/interface.ts:37](https://github.com/SujalTripathi
 
 > `optional` **isRecurring**: `boolean`
 
-Defined in: [src/types/CheckIn/interface.ts:39](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/interface.ts#L39)
+Defined in: [src/types/CheckIn/interface.ts:39](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/interface.ts#L39)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/types/CheckIn/interface.ts:39](https://github.com/SujalTripathi
 
 > **name**: `string`
 
-Defined in: [src/types/CheckIn/interface.ts:32](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/interface.ts#L32)
+Defined in: [src/types/CheckIn/interface.ts:32](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/interface.ts#L32)
 
 ***
 
@@ -76,4 +76,4 @@ Defined in: [src/types/CheckIn/interface.ts:32](https://github.com/SujalTripathi
 
 > **userId**: `string`
 
-Defined in: [src/types/CheckIn/interface.ts:33](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/interface.ts#L33)
+Defined in: [src/types/CheckIn/interface.ts:33](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/interface.ts#L33)

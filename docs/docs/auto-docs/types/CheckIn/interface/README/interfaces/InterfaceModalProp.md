@@ -4,7 +4,7 @@
 
 # Interface: InterfaceModalProp
 
-Defined in: [src/types/CheckIn/interface.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/interface.ts#L23)
+Defined in: [src/types/CheckIn/interface.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/interface.ts#L23)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/CheckIn/interface.ts:23](https://github.com/SujalTripathi
 
 > **eventId**: `string`
 
-Defined in: [src/types/CheckIn/interface.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/interface.ts#L25)
+Defined in: [src/types/CheckIn/interface.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/interface.ts#L25)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/CheckIn/interface.ts:25](https://github.com/SujalTripathi
 
 > **handleClose**: () => `void`
 
-Defined in: [src/types/CheckIn/interface.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/interface.ts#L26)
+Defined in: [src/types/CheckIn/interface.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/interface.ts#L26)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/types/CheckIn/interface.ts:26](https://github.com/SujalTripathi
 
 > `optional` **onCheckInUpdate**: () => `void`
 
-Defined in: [src/types/CheckIn/interface.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/interface.ts#L27)
+Defined in: [src/types/CheckIn/interface.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/interface.ts#L27)
 
 #### Returns
 
@@ -44,4 +44,4 @@ Defined in: [src/types/CheckIn/interface.ts:27](https://github.com/SujalTripathi
 
 > **show**: `boolean`
 
-Defined in: [src/types/CheckIn/interface.ts:24](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/CheckIn/interface.ts#L24)
+Defined in: [src/types/CheckIn/interface.ts:24](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/CheckIn/interface.ts#L24)

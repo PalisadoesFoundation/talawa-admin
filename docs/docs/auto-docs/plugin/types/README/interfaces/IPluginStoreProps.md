@@ -4,7 +4,7 @@
 
 # Interface: IPluginStoreProps
 
-Defined in: [src/plugin/types.ts:162](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L162)
+Defined in: [src/plugin/types.ts:162](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L162)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:162](https://github.com/SujalTripathi/talawa-ad
 
 > `optional` **isAdmin**: `boolean`
 
-Defined in: [src/plugin/types.ts:164](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L164)
+Defined in: [src/plugin/types.ts:164](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L164)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/plugin/types.ts:164](https://github.com/SujalTripathi/talawa-ad
 
 > `optional` **userPermissions**: `string`[]
 
-Defined in: [src/plugin/types.ts:163](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L163)
+Defined in: [src/plugin/types.ts:163](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L163)

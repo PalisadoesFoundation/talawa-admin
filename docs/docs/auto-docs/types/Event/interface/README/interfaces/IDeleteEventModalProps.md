@@ -4,7 +4,7 @@
 
 # Interface: IDeleteEventModalProps
 
-Defined in: [src/types/Event/interface.ts:123](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/interface.ts#L123)
+Defined in: [src/types/Event/interface.ts:123](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/interface.ts#L123)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:123](https://github.com/SujalTripathi/
 
 > **deleteEventHandler**: (`deleteOption`?) => `Promise`\<`void`\>
 
-Defined in: [src/types/Event/interface.ts:129](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/interface.ts#L129)
+Defined in: [src/types/Event/interface.ts:129](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/interface.ts#L129)
 
 #### Parameters
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Event/interface.ts:129](https://github.com/SujalTripathi/
 
 > **eventDeleteModalIsOpen**: `boolean`
 
-Defined in: [src/types/Event/interface.ts:125](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/interface.ts#L125)
+Defined in: [src/types/Event/interface.ts:125](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/interface.ts#L125)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Event/interface.ts:125](https://github.com/SujalTripathi/
 
 > **eventListCardProps**: `IEventListCard`
 
-Defined in: [src/types/Event/interface.ts:124](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/interface.ts#L124)
+Defined in: [src/types/Event/interface.ts:124](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/interface.ts#L124)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Event/interface.ts:124](https://github.com/SujalTripathi/
 
 > **t**: (`key`) => `string`
 
-Defined in: [src/types/Event/interface.ts:127](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/interface.ts#L127)
+Defined in: [src/types/Event/interface.ts:127](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/interface.ts#L127)
 
 #### Parameters
 
@@ -64,7 +64,7 @@ Defined in: [src/types/Event/interface.ts:127](https://github.com/SujalTripathi/
 
 > **tCommon**: (`key`) => `string`
 
-Defined in: [src/types/Event/interface.ts:128](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/interface.ts#L128)
+Defined in: [src/types/Event/interface.ts:128](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/interface.ts#L128)
 
 #### Parameters
 
@@ -82,7 +82,7 @@ Defined in: [src/types/Event/interface.ts:128](https://github.com/SujalTripathi/
 
 > **toggleDeleteModal**: () => `void`
 
-Defined in: [src/types/Event/interface.ts:126](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/interface.ts#L126)
+Defined in: [src/types/Event/interface.ts:126](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/interface.ts#L126)
 
 #### Returns
 

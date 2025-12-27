@@ -6,7 +6,7 @@
 
 > **makeTagEdge**(`id`, `opts`?): [`TagEdge`](screens\OrganizationTags\OrganizationTagsMocks\README\type-aliases\TagEdge.md)
 
-Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:51](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L51)
+Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:51](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L51)
 
 ## Parameters
 

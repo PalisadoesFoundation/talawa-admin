@@ -4,7 +4,7 @@
 
 # Interface: ISidebarNavItemProps
 
-Defined in: [src/types/SidebarNavItem/interface.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/SidebarNavItem/interface.ts#L15)
+Defined in: [src/types/SidebarNavItem/interface.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/SidebarNavItem/interface.ts#L15)
 
 Interface for SidebarNavItem component props.
 
@@ -16,7 +16,7 @@ Interface for SidebarNavItem component props.
 
 > `optional` **dataCy**: `string`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:24](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/SidebarNavItem/interface.ts#L24)
+Defined in: [src/types/SidebarNavItem/interface.ts:24](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/SidebarNavItem/interface.ts#L24)
 
 Cypress E2E test selector (data-cy attribute)
 
@@ -26,7 +26,7 @@ Cypress E2E test selector (data-cy attribute)
 
 > **hideDrawer**: `boolean`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:20](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/SidebarNavItem/interface.ts#L20)
+Defined in: [src/types/SidebarNavItem/interface.ts:20](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/SidebarNavItem/interface.ts#L20)
 
 Whether the drawer is hidden/collapsed
 
@@ -36,7 +36,7 @@ Whether the drawer is hidden/collapsed
 
 > **icon**: `ReactNode`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:17](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/SidebarNavItem/interface.ts#L17)
+Defined in: [src/types/SidebarNavItem/interface.ts:17](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/SidebarNavItem/interface.ts#L17)
 
 Icon component or element
 
@@ -46,7 +46,7 @@ Icon component or element
 
 > `optional` **iconType**: `"react-icon"` \| `"svg"`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/SidebarNavItem/interface.ts#L23)
+Defined in: [src/types/SidebarNavItem/interface.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/SidebarNavItem/interface.ts#L23)
 
 Type of icon being passed. Use 'react-icon' for icons from react-icons library, 'svg' for SVG components. Defaults to 'svg' if not specified.
 
@@ -56,7 +56,7 @@ Type of icon being passed. Use 'react-icon' for icons from react-icons library, 
 
 > **label**: `string`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:18](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/SidebarNavItem/interface.ts#L18)
+Defined in: [src/types/SidebarNavItem/interface.ts:18](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/SidebarNavItem/interface.ts#L18)
 
 Display label for the navigation item
 
@@ -66,7 +66,7 @@ Display label for the navigation item
 
 > `optional` **onClick**: () => `void`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:21](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/SidebarNavItem/interface.ts#L21)
+Defined in: [src/types/SidebarNavItem/interface.ts:21](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/SidebarNavItem/interface.ts#L21)
 
 Optional click handler
 
@@ -80,7 +80,7 @@ Optional click handler
 
 > **testId**: `string`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:19](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/SidebarNavItem/interface.ts#L19)
+Defined in: [src/types/SidebarNavItem/interface.ts:19](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/SidebarNavItem/interface.ts#L19)
 
 Test ID for testing purposes
 
@@ -90,7 +90,7 @@ Test ID for testing purposes
 
 > **to**: `string`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:16](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/SidebarNavItem/interface.ts#L16)
+Defined in: [src/types/SidebarNavItem/interface.ts:16](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/SidebarNavItem/interface.ts#L16)
 
 Navigation target URL
 
@@ -100,6 +100,6 @@ Navigation target URL
 
 > `optional` **useSimpleButton**: `boolean`
 
-Defined in: [src/types/SidebarNavItem/interface.ts:22](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/SidebarNavItem/interface.ts#L22)
+Defined in: [src/types/SidebarNavItem/interface.ts:22](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/SidebarNavItem/interface.ts#L22)
 
 Use simple button style (for org drawers)

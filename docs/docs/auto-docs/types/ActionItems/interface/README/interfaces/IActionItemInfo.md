@@ -4,7 +4,7 @@
 
 # Interface: IActionItemInfo
 
-Defined in: [src/types/ActionItems/interface.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L25)
+Defined in: [src/types/ActionItems/interface.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L25)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/ActionItems/interface.ts:25](https://github.com/SujalTrip
 
 > **assignedAt**: `Date`
 
-Defined in: [src/types/ActionItems/interface.ts:36](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L36)
+Defined in: [src/types/ActionItems/interface.ts:36](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L36)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/ActionItems/interface.ts:36](https://github.com/SujalTrip
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:29](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L29)
+Defined in: [src/types/ActionItems/interface.ts:29](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L29)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/ActionItems/interface.ts:29](https://github.com/SujalTrip
 
 > **category**: [`IActionItemCategoryInfo`](types\ActionItems\interface\README\interfaces\IActionItemCategoryInfo.md)
 
-Defined in: [src/types/ActionItems/interface.ts:80](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L80)
+Defined in: [src/types/ActionItems/interface.ts:80](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L80)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/ActionItems/interface.ts:80](https://github.com/SujalTrip
 
 > **categoryId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:30](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L30)
+Defined in: [src/types/ActionItems/interface.ts:30](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L30)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/ActionItems/interface.ts:30](https://github.com/SujalTrip
 
 > **completionAt**: `Date`
 
-Defined in: [src/types/ActionItems/interface.ts:37](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L37)
+Defined in: [src/types/ActionItems/interface.ts:37](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L37)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/ActionItems/interface.ts:37](https://github.com/SujalTrip
 
 > **createdAt**: `Date`
 
-Defined in: [src/types/ActionItems/interface.ts:38](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L38)
+Defined in: [src/types/ActionItems/interface.ts:38](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L38)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/ActionItems/interface.ts:38](https://github.com/SujalTrip
 
 > **creator**: `IActionUserInfo`
 
-Defined in: [src/types/ActionItems/interface.ts:77](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L77)
+Defined in: [src/types/ActionItems/interface.ts:77](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L77)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/types/ActionItems/interface.ts:77](https://github.com/SujalTrip
 
 > **creatorId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:34](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L34)
+Defined in: [src/types/ActionItems/interface.ts:34](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L34)
 
 ***
 
@@ -76,7 +76,7 @@ Defined in: [src/types/ActionItems/interface.ts:34](https://github.com/SujalTrip
 
 > **event**: [`IEvent`](types\Event\interface\README\interfaces\IEvent.md)
 
-Defined in: [src/types/ActionItems/interface.ts:78](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L78)
+Defined in: [src/types/ActionItems/interface.ts:78](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L78)
 
 ***
 
@@ -84,7 +84,7 @@ Defined in: [src/types/ActionItems/interface.ts:78](https://github.com/SujalTrip
 
 > **eventId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:31](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L31)
+Defined in: [src/types/ActionItems/interface.ts:31](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L31)
 
 ***
 
@@ -92,7 +92,7 @@ Defined in: [src/types/ActionItems/interface.ts:31](https://github.com/SujalTrip
 
 > `optional` **hasExceptions**: `boolean`
 
-Defined in: [src/types/ActionItems/interface.ts:43](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L43)
+Defined in: [src/types/ActionItems/interface.ts:43](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L43)
 
 ***
 
@@ -100,7 +100,7 @@ Defined in: [src/types/ActionItems/interface.ts:43](https://github.com/SujalTrip
 
 > **id**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L26)
+Defined in: [src/types/ActionItems/interface.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L26)
 
 ***
 
@@ -108,7 +108,7 @@ Defined in: [src/types/ActionItems/interface.ts:26](https://github.com/SujalTrip
 
 > **isCompleted**: `boolean`
 
-Defined in: [src/types/ActionItems/interface.ts:40](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L40)
+Defined in: [src/types/ActionItems/interface.ts:40](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L40)
 
 ***
 
@@ -116,7 +116,7 @@ Defined in: [src/types/ActionItems/interface.ts:40](https://github.com/SujalTrip
 
 > `optional` **isInstanceException**: `boolean`
 
-Defined in: [src/types/ActionItems/interface.ts:44](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L44)
+Defined in: [src/types/ActionItems/interface.ts:44](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L44)
 
 ***
 
@@ -124,7 +124,7 @@ Defined in: [src/types/ActionItems/interface.ts:44](https://github.com/SujalTrip
 
 > `optional` **isTemplate**: `boolean`
 
-Defined in: [src/types/ActionItems/interface.ts:45](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L45)
+Defined in: [src/types/ActionItems/interface.ts:45](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L45)
 
 ***
 
@@ -132,7 +132,7 @@ Defined in: [src/types/ActionItems/interface.ts:45](https://github.com/SujalTrip
 
 > **organizationId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:33](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L33)
+Defined in: [src/types/ActionItems/interface.ts:33](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L33)
 
 ***
 
@@ -140,7 +140,7 @@ Defined in: [src/types/ActionItems/interface.ts:33](https://github.com/SujalTrip
 
 > **postCompletionNotes**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:42](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L42)
+Defined in: [src/types/ActionItems/interface.ts:42](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L42)
 
 ***
 
@@ -148,7 +148,7 @@ Defined in: [src/types/ActionItems/interface.ts:42](https://github.com/SujalTrip
 
 > **preCompletionNotes**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:41](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L41)
+Defined in: [src/types/ActionItems/interface.ts:41](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L41)
 
 ***
 
@@ -156,7 +156,7 @@ Defined in: [src/types/ActionItems/interface.ts:41](https://github.com/SujalTrip
 
 > **recurringEventInstance**: [`IEvent`](types\Event\interface\README\interfaces\IEvent.md)
 
-Defined in: [src/types/ActionItems/interface.ts:79](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L79)
+Defined in: [src/types/ActionItems/interface.ts:79](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L79)
 
 ***
 
@@ -164,7 +164,7 @@ Defined in: [src/types/ActionItems/interface.ts:79](https://github.com/SujalTrip
 
 > **recurringEventInstanceId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:32](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L32)
+Defined in: [src/types/ActionItems/interface.ts:32](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L32)
 
 ***
 
@@ -172,7 +172,7 @@ Defined in: [src/types/ActionItems/interface.ts:32](https://github.com/SujalTrip
 
 > **updatedAt**: `Date`
 
-Defined in: [src/types/ActionItems/interface.ts:39](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L39)
+Defined in: [src/types/ActionItems/interface.ts:39](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L39)
 
 ***
 
@@ -180,7 +180,7 @@ Defined in: [src/types/ActionItems/interface.ts:39](https://github.com/SujalTrip
 
 > **updaterId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:35](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L35)
+Defined in: [src/types/ActionItems/interface.ts:35](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L35)
 
 ***
 
@@ -188,7 +188,7 @@ Defined in: [src/types/ActionItems/interface.ts:35](https://github.com/SujalTrip
 
 > **volunteer**: `object`
 
-Defined in: [src/types/ActionItems/interface.ts:48](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L48)
+Defined in: [src/types/ActionItems/interface.ts:48](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L48)
 
 #### hasAccepted
 
@@ -228,7 +228,7 @@ Defined in: [src/types/ActionItems/interface.ts:48](https://github.com/SujalTrip
 
 > **volunteerGroup**: `object`
 
-Defined in: [src/types/ActionItems/interface.ts:59](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L59)
+Defined in: [src/types/ActionItems/interface.ts:59](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L59)
 
 #### description
 
@@ -272,7 +272,7 @@ Defined in: [src/types/ActionItems/interface.ts:59](https://github.com/SujalTrip
 
 > **volunteerGroupId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:28](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L28)
+Defined in: [src/types/ActionItems/interface.ts:28](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L28)
 
 ***
 
@@ -280,4 +280,4 @@ Defined in: [src/types/ActionItems/interface.ts:28](https://github.com/SujalTrip
 
 > **volunteerId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L27)
+Defined in: [src/types/ActionItems/interface.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L27)

@@ -4,7 +4,7 @@
 
 # Interface: IEdge
 
-Defined in: [src/screens/OrganizationPeople/addMember/types.ts:1](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationPeople/addMember/types.ts#L1)
+Defined in: [src/screens/OrganizationPeople/addMember/types.ts:1](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/OrganizationPeople/addMember/types.ts#L1)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/OrganizationPeople/addMember/types.ts:1](https://github
 
 > **cursor**: `string`
 
-Defined in: [src/screens/OrganizationPeople/addMember/types.ts:2](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationPeople/addMember/types.ts#L2)
+Defined in: [src/screens/OrganizationPeople/addMember/types.ts:2](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/OrganizationPeople/addMember/types.ts#L2)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/OrganizationPeople/addMember/types.ts:2](https://github
 
 > **node**: `object`
 
-Defined in: [src/screens/OrganizationPeople/addMember/types.ts:3](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationPeople/addMember/types.ts#L3)
+Defined in: [src/screens/OrganizationPeople/addMember/types.ts:3](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/OrganizationPeople/addMember/types.ts#L3)
 
 #### avatarURL
 

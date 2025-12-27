@@ -6,4 +6,4 @@
 
 > `const` **incompleteMockChat**: [`GroupChat`](types\Chat\type\README\type-aliases\GroupChat.md)
 
-Defined in: [src/components/GroupChatDetails/GroupChatDetailsMocks.tsx:106](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/components/GroupChatDetails/GroupChatDetailsMocks.tsx#L106)
+Defined in: [src/components/GroupChatDetails/GroupChatDetailsMocks.tsx:106](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/components/GroupChatDetails/GroupChatDetailsMocks.tsx#L106)

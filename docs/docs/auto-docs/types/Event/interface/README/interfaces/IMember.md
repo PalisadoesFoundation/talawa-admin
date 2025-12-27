@@ -4,7 +4,7 @@
 
 # Interface: IMember
 
-Defined in: [src/types/Event/interface.ts:18](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/interface.ts#L18)
+Defined in: [src/types/Event/interface.ts:18](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/interface.ts#L18)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Event/interface.ts:18](https://github.com/SujalTripathi/t
 
 > **birthDate**: `Date`
 
-Defined in: [src/types/Event/interface.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/interface.ts#L26)
+Defined in: [src/types/Event/interface.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/interface.ts#L26)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Event/interface.ts:26](https://github.com/SujalTripathi/t
 
 > **createdAt**: `string`
 
-Defined in: [src/types/Event/interface.ts:19](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/interface.ts#L19)
+Defined in: [src/types/Event/interface.ts:19](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/interface.ts#L19)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Event/interface.ts:19](https://github.com/SujalTripathi/t
 
 > **emailAddress**: `` `${string}@${string}.${string}` ``
 
-Defined in: [src/types/Event/interface.ts:21](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/interface.ts#L21)
+Defined in: [src/types/Event/interface.ts:21](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/interface.ts#L21)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Event/interface.ts:21](https://github.com/SujalTripathi/t
 
 > `optional` **eventsAttended**: `object`[]
 
-Defined in: [src/types/Event/interface.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/interface.ts#L23)
+Defined in: [src/types/Event/interface.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/interface.ts#L23)
 
 #### id
 
@@ -48,7 +48,7 @@ Defined in: [src/types/Event/interface.ts:23](https://github.com/SujalTripathi/t
 
 > **id**: `string`
 
-Defined in: [src/types/Event/interface.ts:28](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/interface.ts#L28)
+Defined in: [src/types/Event/interface.ts:28](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/interface.ts#L28)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [src/types/Event/interface.ts:28](https://github.com/SujalTripathi/t
 
 > **name**: `string`
 
-Defined in: [src/types/Event/interface.ts:20](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/interface.ts#L20)
+Defined in: [src/types/Event/interface.ts:20](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/interface.ts#L20)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [src/types/Event/interface.ts:20](https://github.com/SujalTripathi/t
 
 > **natalSex**: `string`
 
-Defined in: [src/types/Event/interface.ts:22](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/interface.ts#L22)
+Defined in: [src/types/Event/interface.ts:22](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/interface.ts#L22)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: [src/types/Event/interface.ts:22](https://github.com/SujalTripathi/t
 
 > **role**: `string`
 
-Defined in: [src/types/Event/interface.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/interface.ts#L27)
+Defined in: [src/types/Event/interface.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/interface.ts#L27)
 
 ***
 
@@ -80,7 +80,7 @@ Defined in: [src/types/Event/interface.ts:27](https://github.com/SujalTripathi/t
 
 > **tagsAssignedWith**: `object`
 
-Defined in: [src/types/Event/interface.ts:29](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/interface.ts#L29)
+Defined in: [src/types/Event/interface.ts:29](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/interface.ts#L29)
 
 #### edges
 

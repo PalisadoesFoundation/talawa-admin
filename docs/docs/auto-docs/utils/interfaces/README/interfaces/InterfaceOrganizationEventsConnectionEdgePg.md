@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationEventsConnectionEdgePg
 
-Defined in: [src/utils/interfaces.ts:955](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L955)
+Defined in: [src/utils/interfaces.ts:955](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/utils/interfaces.ts#L955)
 
 InterfaceOrganizationEventsConnectionEdgePg
 
@@ -18,7 +18,7 @@ Defines the structure for an edge in the organization events connection with Pos
 
 > **cursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:956](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L956)
+Defined in: [src/utils/interfaces.ts:956](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/utils/interfaces.ts#L956)
 
 The cursor for this edge.
 
@@ -28,6 +28,6 @@ The cursor for this edge.
 
 > **node**: [`IEvent`](utils\interfaces\README\interfaces\IEvent.md)
 
-Defined in: [src/utils/interfaces.ts:957](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/utils/interfaces.ts#L957)
+Defined in: [src/utils/interfaces.ts:957](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/utils/interfaces.ts#L957)
 
 The event node.

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationCardProps
 
-Defined in: [src/types/OrganizationCard/interface.ts:1](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/OrganizationCard/interface.ts#L1)
+Defined in: [src/types/OrganizationCard/interface.ts:1](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/OrganizationCard/interface.ts#L1)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:1](https://github.com/Sujal
 
 > **addressLine1**: `string`
 
-Defined in: [src/types/OrganizationCard/interface.ts:14](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/OrganizationCard/interface.ts#L14)
+Defined in: [src/types/OrganizationCard/interface.ts:14](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/OrganizationCard/interface.ts#L14)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:14](https://github.com/Suja
 
 > `optional` **admins**: `object`[]
 
-Defined in: [src/types/OrganizationCard/interface.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/OrganizationCard/interface.ts#L13)
+Defined in: [src/types/OrganizationCard/interface.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/OrganizationCard/interface.ts#L13)
 
 #### id
 
@@ -32,7 +32,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:13](https://github.com/Suja
 
 > `optional` **adminsCount**: `number`
 
-Defined in: [src/types/OrganizationCard/interface.ts:16](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/OrganizationCard/interface.ts#L16)
+Defined in: [src/types/OrganizationCard/interface.ts:16](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/OrganizationCard/interface.ts#L16)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:16](https://github.com/Suja
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/types/OrganizationCard/interface.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/OrganizationCard/interface.ts#L26)
+Defined in: [src/types/OrganizationCard/interface.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/OrganizationCard/interface.ts#L26)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:26](https://github.com/Suja
 
 > `optional` **createdAt**: `string`
 
-Defined in: [src/types/OrganizationCard/interface.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/OrganizationCard/interface.ts#L27)
+Defined in: [src/types/OrganizationCard/interface.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/OrganizationCard/interface.ts#L27)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:27](https://github.com/Suja
 
 > **description**: `string`
 
-Defined in: [src/types/OrganizationCard/interface.ts:5](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/OrganizationCard/interface.ts#L5)
+Defined in: [src/types/OrganizationCard/interface.ts:5](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/OrganizationCard/interface.ts#L5)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:5](https://github.com/Sujal
 
 > **id**: `string`
 
-Defined in: [src/types/OrganizationCard/interface.ts:2](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/OrganizationCard/interface.ts#L2)
+Defined in: [src/types/OrganizationCard/interface.ts:2](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/OrganizationCard/interface.ts#L2)
 
 ***
 
@@ -72,7 +72,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:2](https://github.com/Sujal
 
 > `optional` **image**: `string`
 
-Defined in: [src/types/OrganizationCard/interface.ts:4](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/OrganizationCard/interface.ts#L4)
+Defined in: [src/types/OrganizationCard/interface.ts:4](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/OrganizationCard/interface.ts#L4)
 
 ***
 
@@ -80,7 +80,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:4](https://github.com/Sujal
 
 > `optional` **isJoined**: `boolean`
 
-Defined in: [src/types/OrganizationCard/interface.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/OrganizationCard/interface.ts#L25)
+Defined in: [src/types/OrganizationCard/interface.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/OrganizationCard/interface.ts#L25)
 
 ***
 
@@ -88,7 +88,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:25](https://github.com/Suja
 
 > `optional` **members**: `object`
 
-Defined in: [src/types/OrganizationCard/interface.ts:6](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/OrganizationCard/interface.ts#L6)
+Defined in: [src/types/OrganizationCard/interface.ts:6](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/OrganizationCard/interface.ts#L6)
 
 #### edges
 
@@ -100,7 +100,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:6](https://github.com/Sujal
 
 > `optional` **membersCount**: `number`
 
-Defined in: [src/types/OrganizationCard/interface.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/OrganizationCard/interface.ts#L15)
+Defined in: [src/types/OrganizationCard/interface.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/OrganizationCard/interface.ts#L15)
 
 ***
 
@@ -108,7 +108,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:15](https://github.com/Suja
 
 > `optional` **membershipRequests**: `object`[]
 
-Defined in: [src/types/OrganizationCard/interface.ts:19](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/OrganizationCard/interface.ts#L19)
+Defined in: [src/types/OrganizationCard/interface.ts:19](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/OrganizationCard/interface.ts#L19)
 
 #### id
 
@@ -128,7 +128,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:19](https://github.com/Suja
 
 > `optional` **membershipRequestStatus**: `string`
 
-Defined in: [src/types/OrganizationCard/interface.ts:17](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/OrganizationCard/interface.ts#L17)
+Defined in: [src/types/OrganizationCard/interface.ts:17](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/OrganizationCard/interface.ts#L17)
 
 ***
 
@@ -136,7 +136,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:17](https://github.com/Suja
 
 > **name**: `string`
 
-Defined in: [src/types/OrganizationCard/interface.ts:3](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/OrganizationCard/interface.ts#L3)
+Defined in: [src/types/OrganizationCard/interface.ts:3](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/OrganizationCard/interface.ts#L3)
 
 ***
 
@@ -144,7 +144,7 @@ Defined in: [src/types/OrganizationCard/interface.ts:3](https://github.com/Sujal
 
 > **role**: `string`
 
-Defined in: [src/types/OrganizationCard/interface.ts:28](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/OrganizationCard/interface.ts#L28)
+Defined in: [src/types/OrganizationCard/interface.ts:28](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/OrganizationCard/interface.ts#L28)
 
 ***
 
@@ -152,4 +152,4 @@ Defined in: [src/types/OrganizationCard/interface.ts:28](https://github.com/Suja
 
 > `optional` **userRegistrationRequired**: `boolean`
 
-Defined in: [src/types/OrganizationCard/interface.ts:18](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/OrganizationCard/interface.ts#L18)
+Defined in: [src/types/OrganizationCard/interface.ts:18](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/OrganizationCard/interface.ts#L18)

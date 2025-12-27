@@ -4,7 +4,7 @@
 
 # Interface: InterfaceMutationCreatePostInput
 
-Defined in: [src/types/Post/interface.ts:69](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L69)
+Defined in: [src/types/Post/interface.ts:69](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L69)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/interface.ts:69](https://github.com/SujalTripathi/ta
 
 > `optional` **attachments**: `File`[]
 
-Defined in: [src/types/Post/interface.ts:73](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L73)
+Defined in: [src/types/Post/interface.ts:73](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L73)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Post/interface.ts:73](https://github.com/SujalTripathi/ta
 
 > **caption**: `string`
 
-Defined in: [src/types/Post/interface.ts:70](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L70)
+Defined in: [src/types/Post/interface.ts:70](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L70)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Post/interface.ts:70](https://github.com/SujalTripathi/ta
 
 > **isPinned**: `boolean`
 
-Defined in: [src/types/Post/interface.ts:72](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L72)
+Defined in: [src/types/Post/interface.ts:72](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L72)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/types/Post/interface.ts:72](https://github.com/SujalTripathi/ta
 
 > **organizationId**: `string`
 
-Defined in: [src/types/Post/interface.ts:71](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L71)
+Defined in: [src/types/Post/interface.ts:71](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L71)

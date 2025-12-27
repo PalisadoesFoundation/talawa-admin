@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCreator
 
-Defined in: [src/types/Post/interface.ts:80](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L80)
+Defined in: [src/types/Post/interface.ts:80](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L80)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/interface.ts:80](https://github.com/SujalTripathi/ta
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/types/Post/interface.ts:84](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L84)
+Defined in: [src/types/Post/interface.ts:84](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L84)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Post/interface.ts:84](https://github.com/SujalTripathi/ta
 
 > **email**: `string`
 
-Defined in: [src/types/Post/interface.ts:83](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L83)
+Defined in: [src/types/Post/interface.ts:83](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L83)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Post/interface.ts:83](https://github.com/SujalTripathi/ta
 
 > **id**: `string`
 
-Defined in: [src/types/Post/interface.ts:81](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L81)
+Defined in: [src/types/Post/interface.ts:81](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L81)
 
 ***
 
@@ -36,4 +36,4 @@ Defined in: [src/types/Post/interface.ts:81](https://github.com/SujalTripathi/ta
 
 > **name**: `string`
 
-Defined in: [src/types/Post/interface.ts:82](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L82)
+Defined in: [src/types/Post/interface.ts:82](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L82)

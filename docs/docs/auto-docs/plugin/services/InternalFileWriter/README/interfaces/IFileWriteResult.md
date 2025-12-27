@@ -4,7 +4,7 @@
 
 # Interface: IFileWriteResult
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:11](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/services/InternalFileWriter.ts#L11)
+Defined in: [src/plugin/services/InternalFileWriter.ts:11](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/services/InternalFileWriter.ts#L11)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/services/InternalFileWriter.ts:11](https://github.com/Su
 
 > `optional` **error**: `string`
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:16](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/services/InternalFileWriter.ts#L16)
+Defined in: [src/plugin/services/InternalFileWriter.ts:16](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/services/InternalFileWriter.ts#L16)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/services/InternalFileWriter.ts:16](https://github.com/Su
 
 > **filesWritten**: `number`
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:14](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/services/InternalFileWriter.ts#L14)
+Defined in: [src/plugin/services/InternalFileWriter.ts:14](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/services/InternalFileWriter.ts#L14)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/plugin/services/InternalFileWriter.ts:14](https://github.com/Su
 
 > **path**: `string`
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/services/InternalFileWriter.ts#L13)
+Defined in: [src/plugin/services/InternalFileWriter.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/services/InternalFileWriter.ts#L13)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/plugin/services/InternalFileWriter.ts:13](https://github.com/Su
 
 > **success**: `boolean`
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:12](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/services/InternalFileWriter.ts#L12)
+Defined in: [src/plugin/services/InternalFileWriter.ts:12](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/services/InternalFileWriter.ts#L12)
 
 ***
 
@@ -44,4 +44,4 @@ Defined in: [src/plugin/services/InternalFileWriter.ts:12](https://github.com/Su
 
 > **writtenFiles**: `string`[]
 
-Defined in: [src/plugin/services/InternalFileWriter.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/services/InternalFileWriter.ts#L15)
+Defined in: [src/plugin/services/InternalFileWriter.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/services/InternalFileWriter.ts#L15)

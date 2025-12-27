@@ -4,7 +4,7 @@
 
 # Class: PluginManager
 
-Defined in: [src/plugin/manager.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L15)
+Defined in: [src/plugin/manager.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/manager.ts#L15)
 
 ## Constructors
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/manager.ts:15](https://github.com/SujalTripathi/talawa-a
 
 > **new PluginManager**(`apolloClient`?): `PluginManager`
 
-Defined in: [src/plugin/manager.ts:22](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L22)
+Defined in: [src/plugin/manager.ts:22](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/manager.ts#L22)
 
 #### Parameters
 
@@ -30,7 +30,7 @@ Defined in: [src/plugin/manager.ts:22](https://github.com/SujalTripathi/talawa-a
 
 > **activatePlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/manager.ts:103](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L103)
+Defined in: [src/plugin/manager.ts:103](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/manager.ts#L103)
 
 #### Parameters
 
@@ -48,7 +48,7 @@ Defined in: [src/plugin/manager.ts:103](https://github.com/SujalTripathi/talawa-
 
 > **deactivatePlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/manager.ts:107](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L107)
+Defined in: [src/plugin/manager.ts:107](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/manager.ts#L107)
 
 #### Parameters
 
@@ -66,7 +66,7 @@ Defined in: [src/plugin/manager.ts:107](https://github.com/SujalTripathi/talawa-
 
 > **getActivePluginCount**(): `number`
 
-Defined in: [src/plugin/manager.ts:143](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L143)
+Defined in: [src/plugin/manager.ts:143](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/manager.ts#L143)
 
 #### Returns
 
@@ -78,7 +78,7 @@ Defined in: [src/plugin/manager.ts:143](https://github.com/SujalTripathi/talawa-
 
 > **getExtensionPoints**\<`T`\>(`type`): [`IExtensionRegistry`](plugin\types\README\interfaces\IExtensionRegistry.md)\[`T`\]
 
-Defined in: [src/plugin/manager.ts:148](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L148)
+Defined in: [src/plugin/manager.ts:148](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/manager.ts#L148)
 
 #### Type Parameters
 
@@ -102,7 +102,7 @@ Defined in: [src/plugin/manager.ts:148](https://github.com/SujalTripathi/talawa-
 
 > **getLoadedPlugin**(`pluginId`): [`ILoadedPlugin`](plugin\types\README\interfaces\ILoadedPlugin.md)
 
-Defined in: [src/plugin/manager.ts:128](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L128)
+Defined in: [src/plugin/manager.ts:128](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/manager.ts#L128)
 
 #### Parameters
 
@@ -120,7 +120,7 @@ Defined in: [src/plugin/manager.ts:128](https://github.com/SujalTripathi/talawa-
 
 > **getLoadedPlugins**(): [`ILoadedPlugin`](plugin\types\README\interfaces\ILoadedPlugin.md)[]
 
-Defined in: [src/plugin/manager.ts:124](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L124)
+Defined in: [src/plugin/manager.ts:124](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/manager.ts#L124)
 
 #### Returns
 
@@ -132,7 +132,7 @@ Defined in: [src/plugin/manager.ts:124](https://github.com/SujalTripathi/talawa-
 
 > **getPluginComponent**(`pluginId`, `componentName`): `ComponentType`\<\{\}\>
 
-Defined in: [src/plugin/manager.ts:132](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L132)
+Defined in: [src/plugin/manager.ts:132](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/manager.ts#L132)
 
 #### Parameters
 
@@ -154,7 +154,7 @@ Defined in: [src/plugin/manager.ts:132](https://github.com/SujalTripathi/talawa-
 
 > **getPluginCount**(): `number`
 
-Defined in: [src/plugin/manager.ts:139](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L139)
+Defined in: [src/plugin/manager.ts:139](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/manager.ts#L139)
 
 #### Returns
 
@@ -166,7 +166,7 @@ Defined in: [src/plugin/manager.ts:139](https://github.com/SujalTripathi/talawa-
 
 > **initializePluginSystem**(): `Promise`\<`void`\>
 
-Defined in: [src/plugin/manager.ts:164](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L164)
+Defined in: [src/plugin/manager.ts:164](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/manager.ts#L164)
 
 #### Returns
 
@@ -178,7 +178,7 @@ Defined in: [src/plugin/manager.ts:164](https://github.com/SujalTripathi/talawa-
 
 > **installPlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/manager.ts:95](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L95)
+Defined in: [src/plugin/manager.ts:95](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/manager.ts#L95)
 
 #### Parameters
 
@@ -196,7 +196,7 @@ Defined in: [src/plugin/manager.ts:95](https://github.com/SujalTripathi/talawa-a
 
 > **isSystemInitialized**(): `boolean`
 
-Defined in: [src/plugin/manager.ts:173](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L173)
+Defined in: [src/plugin/manager.ts:173](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/manager.ts#L173)
 
 #### Returns
 
@@ -208,7 +208,7 @@ Defined in: [src/plugin/manager.ts:173](https://github.com/SujalTripathi/talawa-
 
 > **loadPlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/manager.ts:87](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L87)
+Defined in: [src/plugin/manager.ts:87](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/manager.ts#L87)
 
 #### Parameters
 
@@ -226,7 +226,7 @@ Defined in: [src/plugin/manager.ts:87](https://github.com/SujalTripathi/talawa-a
 
 > **off**(`event`, `callback`): `void`
 
-Defined in: [src/plugin/manager.ts:159](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L159)
+Defined in: [src/plugin/manager.ts:159](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/manager.ts#L159)
 
 #### Parameters
 
@@ -248,7 +248,7 @@ Defined in: [src/plugin/manager.ts:159](https://github.com/SujalTripathi/talawa-
 
 > **on**(`event`, `callback`): `void`
 
-Defined in: [src/plugin/manager.ts:155](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L155)
+Defined in: [src/plugin/manager.ts:155](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/manager.ts#L155)
 
 #### Parameters
 
@@ -270,7 +270,7 @@ Defined in: [src/plugin/manager.ts:155](https://github.com/SujalTripathi/talawa-
 
 > **refreshPluginDiscovery**(): `Promise`\<`void`\>
 
-Defined in: [src/plugin/manager.ts:119](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L119)
+Defined in: [src/plugin/manager.ts:119](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/manager.ts#L119)
 
 #### Returns
 
@@ -282,7 +282,7 @@ Defined in: [src/plugin/manager.ts:119](https://github.com/SujalTripathi/talawa-
 
 > **setApolloClient**(`apolloClient`): `void`
 
-Defined in: [src/plugin/manager.ts:43](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L43)
+Defined in: [src/plugin/manager.ts:43](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/manager.ts#L43)
 
 #### Parameters
 
@@ -300,7 +300,7 @@ Defined in: [src/plugin/manager.ts:43](https://github.com/SujalTripathi/talawa-a
 
 > **togglePluginStatus**(`pluginId`, `status`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/manager.ts:111](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L111)
+Defined in: [src/plugin/manager.ts:111](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/manager.ts#L111)
 
 #### Parameters
 
@@ -322,7 +322,7 @@ Defined in: [src/plugin/manager.ts:111](https://github.com/SujalTripathi/talawa-
 
 > **uninstallPlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/manager.ts:99](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L99)
+Defined in: [src/plugin/manager.ts:99](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/manager.ts#L99)
 
 #### Parameters
 
@@ -340,7 +340,7 @@ Defined in: [src/plugin/manager.ts:99](https://github.com/SujalTripathi/talawa-a
 
 > **unloadPlugin**(`pluginId`): `Promise`\<`boolean`\>
 
-Defined in: [src/plugin/manager.ts:91](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/manager.ts#L91)
+Defined in: [src/plugin/manager.ts:91](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/manager.ts#L91)
 
 #### Parameters
 

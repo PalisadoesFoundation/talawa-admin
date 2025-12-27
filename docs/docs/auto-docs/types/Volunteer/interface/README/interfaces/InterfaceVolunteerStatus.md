@@ -4,7 +4,7 @@
 
 # Interface: InterfaceVolunteerStatus
 
-Defined in: [src/types/Volunteer/interface.ts:164](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Volunteer/interface.ts#L164)
+Defined in: [src/types/Volunteer/interface.ts:164](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Volunteer/interface.ts#L164)
 
 InterfaceVolunteerStatus
 
@@ -18,7 +18,7 @@ Defines the structure for volunteer status button configuration.
 
 > **buttonText**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:166](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Volunteer/interface.ts#L166)
+Defined in: [src/types/Volunteer/interface.ts:166](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Volunteer/interface.ts#L166)
 
 The text to display on the button.
 
@@ -28,7 +28,7 @@ The text to display on the button.
 
 > **buttonVariant**: `"outline-success"` \| `"outline-warning"` \| `"outline-danger"` \| `"outline-secondary"`
 
-Defined in: [src/types/Volunteer/interface.ts:167](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Volunteer/interface.ts#L167)
+Defined in: [src/types/Volunteer/interface.ts:167](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Volunteer/interface.ts#L167)
 
 The Bootstrap variant for the button.
 
@@ -38,7 +38,7 @@ The Bootstrap variant for the button.
 
 > **disabled**: `boolean`
 
-Defined in: [src/types/Volunteer/interface.ts:172](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Volunteer/interface.ts#L172)
+Defined in: [src/types/Volunteer/interface.ts:172](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Volunteer/interface.ts#L172)
 
 Whether the button should be disabled.
 
@@ -48,7 +48,7 @@ Whether the button should be disabled.
 
 > **icon**: `ComponentType`\<\{ `className`: `string`; `size`: `number`; \}\>
 
-Defined in: [src/types/Volunteer/interface.ts:173](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Volunteer/interface.ts#L173)
+Defined in: [src/types/Volunteer/interface.ts:173](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Volunteer/interface.ts#L173)
 
 The icon component to display.
 
@@ -58,6 +58,6 @@ The icon component to display.
 
 > **status**: `string`
 
-Defined in: [src/types/Volunteer/interface.ts:165](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Volunteer/interface.ts#L165)
+Defined in: [src/types/Volunteer/interface.ts:165](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Volunteer/interface.ts#L165)
 
 The status of the volunteer membership.

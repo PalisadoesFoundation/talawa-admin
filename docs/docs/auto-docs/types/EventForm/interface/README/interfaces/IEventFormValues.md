@@ -4,7 +4,7 @@
 
 # Interface: IEventFormValues
 
-Defined in: [src/types/EventForm/interface.ts:22](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/EventForm/interface.ts#L22)
+Defined in: [src/types/EventForm/interface.ts:22](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/EventForm/interface.ts#L22)
 
 Form values interface for event creation/editing.
 Extends base fields with Date objects and time strings for form inputs.
@@ -19,7 +19,7 @@ Extends base fields with Date objects and time strings for form inputs.
 
 > **allDay**: `boolean`
 
-Defined in: [src/types/EventForm/interface.ts:11](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/EventForm/interface.ts#L11)
+Defined in: [src/types/EventForm/interface.ts:11](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/EventForm/interface.ts#L11)
 
 #### Inherited from
 
@@ -31,7 +31,7 @@ Defined in: [src/types/EventForm/interface.ts:11](https://github.com/SujalTripat
 
 > `optional` **createChat**: `boolean`
 
-Defined in: [src/types/EventForm/interface.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/EventForm/interface.ts#L15)
+Defined in: [src/types/EventForm/interface.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/EventForm/interface.ts#L15)
 
 #### Inherited from
 
@@ -43,7 +43,7 @@ Defined in: [src/types/EventForm/interface.ts:15](https://github.com/SujalTripat
 
 > **description**: `string`
 
-Defined in: [src/types/EventForm/interface.ts:9](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/EventForm/interface.ts#L9)
+Defined in: [src/types/EventForm/interface.ts:9](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/EventForm/interface.ts#L9)
 
 #### Inherited from
 
@@ -55,7 +55,7 @@ Defined in: [src/types/EventForm/interface.ts:9](https://github.com/SujalTripath
 
 > **endDate**: `Date`
 
-Defined in: [src/types/EventForm/interface.ts:24](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/EventForm/interface.ts#L24)
+Defined in: [src/types/EventForm/interface.ts:24](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/EventForm/interface.ts#L24)
 
 ***
 
@@ -63,7 +63,7 @@ Defined in: [src/types/EventForm/interface.ts:24](https://github.com/SujalTripat
 
 > **endTime**: `string`
 
-Defined in: [src/types/EventForm/interface.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/EventForm/interface.ts#L26)
+Defined in: [src/types/EventForm/interface.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/EventForm/interface.ts#L26)
 
 ***
 
@@ -71,7 +71,7 @@ Defined in: [src/types/EventForm/interface.ts:26](https://github.com/SujalTripat
 
 > **isPublic**: `boolean`
 
-Defined in: [src/types/EventForm/interface.ts:12](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/EventForm/interface.ts#L12)
+Defined in: [src/types/EventForm/interface.ts:12](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/EventForm/interface.ts#L12)
 
 #### Inherited from
 
@@ -83,7 +83,7 @@ Defined in: [src/types/EventForm/interface.ts:12](https://github.com/SujalTripat
 
 > **isRegisterable**: `boolean`
 
-Defined in: [src/types/EventForm/interface.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/EventForm/interface.ts#L13)
+Defined in: [src/types/EventForm/interface.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/EventForm/interface.ts#L13)
 
 #### Inherited from
 
@@ -95,7 +95,7 @@ Defined in: [src/types/EventForm/interface.ts:13](https://github.com/SujalTripat
 
 > **location**: `string`
 
-Defined in: [src/types/EventForm/interface.ts:10](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/EventForm/interface.ts#L10)
+Defined in: [src/types/EventForm/interface.ts:10](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/EventForm/interface.ts#L10)
 
 #### Inherited from
 
@@ -107,7 +107,7 @@ Defined in: [src/types/EventForm/interface.ts:10](https://github.com/SujalTripat
 
 > **name**: `string`
 
-Defined in: [src/types/EventForm/interface.ts:8](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/EventForm/interface.ts#L8)
+Defined in: [src/types/EventForm/interface.ts:8](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/EventForm/interface.ts#L8)
 
 #### Inherited from
 
@@ -119,7 +119,7 @@ Defined in: [src/types/EventForm/interface.ts:8](https://github.com/SujalTripath
 
 > **recurrenceRule**: [`InterfaceRecurrenceRule`](utils\recurrenceUtils\recurrenceTypes\README\interfaces\InterfaceRecurrenceRule.md)
 
-Defined in: [src/types/EventForm/interface.ts:14](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/EventForm/interface.ts#L14)
+Defined in: [src/types/EventForm/interface.ts:14](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/EventForm/interface.ts#L14)
 
 #### Inherited from
 
@@ -131,7 +131,7 @@ Defined in: [src/types/EventForm/interface.ts:14](https://github.com/SujalTripat
 
 > **startDate**: `Date`
 
-Defined in: [src/types/EventForm/interface.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/EventForm/interface.ts#L23)
+Defined in: [src/types/EventForm/interface.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/EventForm/interface.ts#L23)
 
 ***
 
@@ -139,4 +139,4 @@ Defined in: [src/types/EventForm/interface.ts:23](https://github.com/SujalTripat
 
 > **startTime**: `string`
 
-Defined in: [src/types/EventForm/interface.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/EventForm/interface.ts#L25)
+Defined in: [src/types/EventForm/interface.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/EventForm/interface.ts#L25)

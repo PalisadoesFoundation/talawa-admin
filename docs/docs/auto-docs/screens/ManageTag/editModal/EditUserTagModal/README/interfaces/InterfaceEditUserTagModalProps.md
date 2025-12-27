@@ -4,7 +4,7 @@
 
 # Interface: InterfaceEditUserTagModalProps
 
-Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:39](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/ManageTag/editModal/EditUserTagModal.tsx#L39)
+Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:39](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/ManageTag/editModal/EditUserTagModal.tsx#L39)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:39](https://gi
 
 > **editUserTagModalIsOpen**: `boolean`
 
-Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:40](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/ManageTag/editModal/EditUserTagModal.tsx#L40)
+Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:40](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/ManageTag/editModal/EditUserTagModal.tsx#L40)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:40](https://gi
 
 > **handleEditUserTag**: (`e`) => `Promise`\<`void`\>
 
-Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:44](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/ManageTag/editModal/EditUserTagModal.tsx#L44)
+Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:44](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/ManageTag/editModal/EditUserTagModal.tsx#L44)
 
 #### Parameters
 
@@ -38,7 +38,7 @@ Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:44](https://gi
 
 > **hideEditUserTagModal**: () => `void`
 
-Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:41](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/ManageTag/editModal/EditUserTagModal.tsx#L41)
+Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:41](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/ManageTag/editModal/EditUserTagModal.tsx#L41)
 
 #### Returns
 
@@ -50,7 +50,7 @@ Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:41](https://gi
 
 > **newTagName**: `string`
 
-Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:42](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/ManageTag/editModal/EditUserTagModal.tsx#L42)
+Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:42](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/ManageTag/editModal/EditUserTagModal.tsx#L42)
 
 ***
 
@@ -58,7 +58,7 @@ Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:42](https://gi
 
 > **setNewTagName**: (`state`) => `void`
 
-Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:43](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/ManageTag/editModal/EditUserTagModal.tsx#L43)
+Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:43](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/ManageTag/editModal/EditUserTagModal.tsx#L43)
 
 #### Parameters
 
@@ -76,7 +76,7 @@ Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:43](https://gi
 
 > **t**: `TFunction`\<`"translation"`, `"manageTag"`\>
 
-Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:45](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/ManageTag/editModal/EditUserTagModal.tsx#L45)
+Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:45](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/ManageTag/editModal/EditUserTagModal.tsx#L45)
 
 ***
 
@@ -84,4 +84,4 @@ Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:45](https://gi
 
 > **tCommon**: `TFunction`\<`"common"`, `undefined`\>
 
-Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:46](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/ManageTag/editModal/EditUserTagModal.tsx#L46)
+Defined in: [src/screens/ManageTag/editModal/EditUserTagModal.tsx:46](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/ManageTag/editModal/EditUserTagModal.tsx#L46)

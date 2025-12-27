@@ -4,7 +4,7 @@
 
 # Interface: InterfaceTagUsersToAssignToQuery
 
-Defined in: [src/types/Tag/interface.ts:55](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L55)
+Defined in: [src/types/Tag/interface.ts:55](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L55)
 
 ## Extends
 
@@ -16,7 +16,7 @@ Defined in: [src/types/Tag/interface.ts:55](https://github.com/SujalTripathi/tal
 
 > `optional` **data**: `object`
 
-Defined in: [src/types/Tag/interface.ts:57](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L57)
+Defined in: [src/types/Tag/interface.ts:57](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L57)
 
 #### getUsersToAssignTo
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Tag/interface.ts:57](https://github.com/SujalTripathi/tal
 
 > `optional` **error**: `ApolloError`
 
-Defined in: [src/types/Tag/interface.ts:41](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L41)
+Defined in: [src/types/Tag/interface.ts:41](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L41)
 
 #### Inherited from
 
@@ -40,7 +40,7 @@ Defined in: [src/types/Tag/interface.ts:41](https://github.com/SujalTripathi/tal
 
 > **fetchMore**: (`options`) => `void`
 
-Defined in: [src/types/Tag/interface.ts:60](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L60)
+Defined in: [src/types/Tag/interface.ts:60](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L60)
 
 #### Parameters
 
@@ -58,7 +58,7 @@ Defined in: [src/types/Tag/interface.ts:60](https://github.com/SujalTripathi/tal
 
 > **loading**: `boolean`
 
-Defined in: [src/types/Tag/interface.ts:40](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L40)
+Defined in: [src/types/Tag/interface.ts:40](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L40)
 
 #### Inherited from
 
@@ -70,7 +70,7 @@ Defined in: [src/types/Tag/interface.ts:40](https://github.com/SujalTripathi/tal
 
 > `optional` **refetch**: () => `void`
 
-Defined in: [src/types/Tag/interface.ts:42](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L42)
+Defined in: [src/types/Tag/interface.ts:42](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L42)
 
 #### Returns
 

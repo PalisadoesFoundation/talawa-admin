@@ -4,7 +4,7 @@
 
 # Interface: InterfaceContactCardProps
 
-Defined in: [src/types/Chat/interface.ts:117](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L117)
+Defined in: [src/types/Chat/interface.ts:117](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L117)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Chat/interface.ts:117](https://github.com/SujalTripathi/t
 
 > **id**: `string`
 
-Defined in: [src/types/Chat/interface.ts:118](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L118)
+Defined in: [src/types/Chat/interface.ts:118](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L118)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Chat/interface.ts:118](https://github.com/SujalTripathi/t
 
 > **image**: `string`
 
-Defined in: [src/types/Chat/interface.ts:120](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L120)
+Defined in: [src/types/Chat/interface.ts:120](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L120)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Chat/interface.ts:120](https://github.com/SujalTripathi/t
 
 > **isGroup**: `boolean`
 
-Defined in: [src/types/Chat/interface.ts:123](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L123)
+Defined in: [src/types/Chat/interface.ts:123](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L123)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Chat/interface.ts:123](https://github.com/SujalTripathi/t
 
 > **lastMessage**: `string`
 
-Defined in: [src/types/Chat/interface.ts:125](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L125)
+Defined in: [src/types/Chat/interface.ts:125](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L125)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Chat/interface.ts:125](https://github.com/SujalTripathi/t
 
 > **selectedContact**: `string`
 
-Defined in: [src/types/Chat/interface.ts:121](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L121)
+Defined in: [src/types/Chat/interface.ts:121](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L121)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Chat/interface.ts:121](https://github.com/SujalTripathi/t
 
 > **setSelectedContact**: `Dispatch`\<`SetStateAction`\<`string`\>\>
 
-Defined in: [src/types/Chat/interface.ts:122](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L122)
+Defined in: [src/types/Chat/interface.ts:122](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L122)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/Chat/interface.ts:122](https://github.com/SujalTripathi/t
 
 > **title**: `string`
 
-Defined in: [src/types/Chat/interface.ts:119](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L119)
+Defined in: [src/types/Chat/interface.ts:119](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L119)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/types/Chat/interface.ts:119](https://github.com/SujalTripathi/t
 
 > **unseenMessages**: `number`
 
-Defined in: [src/types/Chat/interface.ts:124](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/interface.ts#L124)
+Defined in: [src/types/Chat/interface.ts:124](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/interface.ts#L124)

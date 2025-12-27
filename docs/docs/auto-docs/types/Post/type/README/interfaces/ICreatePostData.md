@@ -1,0 +1,31 @@
+[**talawa-admin**](README.md)
+
+***
+
+# Interface: ICreatePostData
+
+Defined in: [src/types/Post/type.ts:156](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/type.ts#L156)
+
+## Properties
+
+### createPost
+
+> **createPost**: `object`
+
+Defined in: [src/types/Post/type.ts:157](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/type.ts#L157)
+
+#### attachments?
+
+> `optional` **attachments**: `object`[]
+
+#### caption
+
+> **caption**: `string`
+
+#### id
+
+> **id**: `string`
+
+#### pinnedAt?
+
+> `optional` **pinnedAt**: `string`

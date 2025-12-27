@@ -6,7 +6,7 @@
 
 > **EventVolunteer** = `object`
 
-Defined in: [src/types/Event/type.ts:83](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/type.ts#L83)
+Defined in: [src/types/Event/type.ts:83](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/type.ts#L83)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Event/type.ts:83](https://github.com/SujalTripathi/talawa
 
 > **createdAt**: `Date`
 
-Defined in: [src/types/Event/type.ts:88](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/type.ts#L88)
+Defined in: [src/types/Event/type.ts:88](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/type.ts#L88)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Event/type.ts:88](https://github.com/SujalTripathi/talawa
 
 > `optional` **creator**: [`User`](types\Event\type\README\type-aliases\User.md)
 
-Defined in: [src/types/Event/type.ts:92](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/type.ts#L92)
+Defined in: [src/types/Event/type.ts:92](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/type.ts#L92)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Event/type.ts:92](https://github.com/SujalTripathi/talawa
 
 > `optional` **event**: [`Event`](types\Event\type\README\type-aliases\Event.md)
 
-Defined in: [src/types/Event/type.ts:91](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/type.ts#L91)
+Defined in: [src/types/Event/type.ts:91](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/type.ts#L91)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Event/type.ts:91](https://github.com/SujalTripathi/talawa
 
 > **hasAccepted**: `boolean`
 
-Defined in: [src/types/Event/type.ts:85](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/type.ts#L85)
+Defined in: [src/types/Event/type.ts:85](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/type.ts#L85)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Event/type.ts:85](https://github.com/SujalTripathi/talawa
 
 > **hoursVolunteered**: `number`
 
-Defined in: [src/types/Event/type.ts:86](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/type.ts#L86)
+Defined in: [src/types/Event/type.ts:86](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/type.ts#L86)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Event/type.ts:86](https://github.com/SujalTripathi/talawa
 
 > **id**: `string`
 
-Defined in: [src/types/Event/type.ts:84](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/type.ts#L84)
+Defined in: [src/types/Event/type.ts:84](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/type.ts#L84)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/Event/type.ts:84](https://github.com/SujalTripathi/talawa
 
 > **isPublic**: `boolean`
 
-Defined in: [src/types/Event/type.ts:87](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/type.ts#L87)
+Defined in: [src/types/Event/type.ts:87](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/type.ts#L87)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/types/Event/type.ts:87](https://github.com/SujalTripathi/talawa
 
 > **updatedAt**: `Date`
 
-Defined in: [src/types/Event/type.ts:89](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/type.ts#L89)
+Defined in: [src/types/Event/type.ts:89](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/type.ts#L89)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [src/types/Event/type.ts:89](https://github.com/SujalTripathi/talawa
 
 > `optional` **updater**: [`User`](types\Event\type\README\type-aliases\User.md)
 
-Defined in: [src/types/Event/type.ts:93](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/type.ts#L93)
+Defined in: [src/types/Event/type.ts:93](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/type.ts#L93)
 
 ***
 
@@ -86,4 +86,4 @@ Defined in: [src/types/Event/type.ts:93](https://github.com/SujalTripathi/talawa
 
 > **user**: [`User`](types\Event\type\README\type-aliases\User.md)
 
-Defined in: [src/types/Event/type.ts:90](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/type.ts#L90)
+Defined in: [src/types/Event/type.ts:90](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/type.ts#L90)

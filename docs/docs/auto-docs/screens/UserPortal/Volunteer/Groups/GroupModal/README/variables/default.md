@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceGroupModal`](screens\UserPortal\Volunteer\Groups\GroupModal\README\interfaces\InterfaceGroupModal.md)\>
 
-Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:70](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L70)
+Defined in: [src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx:70](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/UserPortal/Volunteer/Groups/GroupModal.tsx#L70)

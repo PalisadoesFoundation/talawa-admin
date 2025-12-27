@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryUserTagsMembersToAssignTo
 
-Defined in: [src/types/Tag/interface.ts:50](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L50)
+Defined in: [src/types/Tag/interface.ts:50](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L50)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Tag/interface.ts:50](https://github.com/SujalTripathi/tal
 
 > **name**: `string`
 
-Defined in: [src/types/Tag/interface.ts:51](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L51)
+Defined in: [src/types/Tag/interface.ts:51](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L51)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/types/Tag/interface.ts:51](https://github.com/SujalTripathi/tal
 
 > **usersToAssignTo**: [`InterfaceTagMembersData`](types\Tag\interface\README\interfaces\InterfaceTagMembersData.md)
 
-Defined in: [src/types/Tag/interface.ts:52](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L52)
+Defined in: [src/types/Tag/interface.ts:52](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L52)

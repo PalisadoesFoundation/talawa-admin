@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_UNDEFINED\_USER\_TAGS**: `object`[] = `MOCK_RESPONSES.UNDEFINED_USER_TAGS`
 
-Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:315](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L315)
+Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:315](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L315)
 
 ## Type declaration
 

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceMemberData
 
-Defined in: [src/types/Tag/interface.ts:4](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L4)
+Defined in: [src/types/Tag/interface.ts:4](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L4)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Tag/interface.ts:4](https://github.com/SujalTripathi/tala
 
 > **\_id**: `string`
 
-Defined in: [src/types/Tag/interface.ts:5](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L5)
+Defined in: [src/types/Tag/interface.ts:5](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L5)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Tag/interface.ts:5](https://github.com/SujalTripathi/tala
 
 > **firstName**: `string`
 
-Defined in: [src/types/Tag/interface.ts:6](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L6)
+Defined in: [src/types/Tag/interface.ts:6](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L6)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/types/Tag/interface.ts:6](https://github.com/SujalTripathi/tala
 
 > **lastName**: `string`
 
-Defined in: [src/types/Tag/interface.ts:7](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L7)
+Defined in: [src/types/Tag/interface.ts:7](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L7)

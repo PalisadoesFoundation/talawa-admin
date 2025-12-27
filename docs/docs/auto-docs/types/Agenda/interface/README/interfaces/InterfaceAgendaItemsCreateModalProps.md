@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAgendaItemsCreateModalProps
 
-Defined in: [src/types/Agenda/interface.ts:37](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L37)
+Defined in: [src/types/Agenda/interface.ts:37](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L37)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Agenda/interface.ts:37](https://github.com/SujalTripathi/
 
 > **agendaItemCategories**: [`InterfaceAgendaItemCategoryInfo`](types\Agenda\interface\README\interfaces\InterfaceAgendaItemCategoryInfo.md)[]
 
-Defined in: [src/types/Agenda/interface.ts:46](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L46)
+Defined in: [src/types/Agenda/interface.ts:46](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L46)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Agenda/interface.ts:46](https://github.com/SujalTripathi/
 
 > **agendaItemCreateModalIsOpen**: `boolean`
 
-Defined in: [src/types/Agenda/interface.ts:38](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L38)
+Defined in: [src/types/Agenda/interface.ts:38](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L38)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Agenda/interface.ts:38](https://github.com/SujalTripathi/
 
 > **createAgendaItemHandler**: (`e`) => `Promise`\<`void`\>
 
-Defined in: [src/types/Agenda/interface.ts:44](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L44)
+Defined in: [src/types/Agenda/interface.ts:44](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L44)
 
 #### Parameters
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Agenda/interface.ts:44](https://github.com/SujalTripathi/
 
 > **formState**: [`InterfaceCreateFormStateType`](types\Agenda\interface\README\interfaces\InterfaceCreateFormStateType.md)
 
-Defined in: [src/types/Agenda/interface.ts:40](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L40)
+Defined in: [src/types/Agenda/interface.ts:40](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L40)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Agenda/interface.ts:40](https://github.com/SujalTripathi/
 
 > **hideCreateModal**: () => `void`
 
-Defined in: [src/types/Agenda/interface.ts:39](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L39)
+Defined in: [src/types/Agenda/interface.ts:39](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L39)
 
 #### Returns
 
@@ -66,7 +66,7 @@ Defined in: [src/types/Agenda/interface.ts:39](https://github.com/SujalTripathi/
 
 > **setFormState**: (`state`) => `void`
 
-Defined in: [src/types/Agenda/interface.ts:41](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L41)
+Defined in: [src/types/Agenda/interface.ts:41](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L41)
 
 #### Parameters
 
@@ -84,7 +84,7 @@ Defined in: [src/types/Agenda/interface.ts:41](https://github.com/SujalTripathi/
 
 > **t**: (`key`) => `string`
 
-Defined in: [src/types/Agenda/interface.ts:45](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Agenda/interface.ts#L45)
+Defined in: [src/types/Agenda/interface.ts:45](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Agenda/interface.ts#L45)
 
 #### Parameters
 

@@ -4,7 +4,7 @@
 
 # Interface: InterfacePostConnection
 
-Defined in: [src/types/Post/interface.ts:45](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L45)
+Defined in: [src/types/Post/interface.ts:45](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L45)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Post/interface.ts:45](https://github.com/SujalTripathi/ta
 
 > **edges**: [`InterfacePostEdge`](types\Post\interface\README\interfaces\InterfacePostEdge.md)[]
 
-Defined in: [src/types/Post/interface.ts:46](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L46)
+Defined in: [src/types/Post/interface.ts:46](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L46)
 
 ***
 
@@ -20,4 +20,4 @@ Defined in: [src/types/Post/interface.ts:46](https://github.com/SujalTripathi/ta
 
 > **pageInfo**: [`InterfacePageInfo`](types\Post\interface\README\interfaces\InterfacePageInfo.md)
 
-Defined in: [src/types/Post/interface.ts:47](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Post/interface.ts#L47)
+Defined in: [src/types/Post/interface.ts:47](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Post/interface.ts#L47)

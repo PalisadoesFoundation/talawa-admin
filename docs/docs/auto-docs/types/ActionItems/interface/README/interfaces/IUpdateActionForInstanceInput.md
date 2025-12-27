@@ -4,7 +4,7 @@
 
 # Interface: IUpdateActionForInstanceInput
 
-Defined in: [src/types/ActionItems/interface.ts:161](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L161)
+Defined in: [src/types/ActionItems/interface.ts:161](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L161)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/ActionItems/interface.ts:161](https://github.com/SujalTri
 
 > **actionId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:162](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L162)
+Defined in: [src/types/ActionItems/interface.ts:162](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L162)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/ActionItems/interface.ts:162](https://github.com/SujalTri
 
 > `optional` **assignedAt**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:167](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L167)
+Defined in: [src/types/ActionItems/interface.ts:167](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L167)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/ActionItems/interface.ts:167](https://github.com/SujalTri
 
 > `optional` **categoryId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:166](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L166)
+Defined in: [src/types/ActionItems/interface.ts:166](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L166)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/ActionItems/interface.ts:166](https://github.com/SujalTri
 
 > `optional` **eventId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:163](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L163)
+Defined in: [src/types/ActionItems/interface.ts:163](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L163)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/ActionItems/interface.ts:163](https://github.com/SujalTri
 
 > `optional` **preCompletionNotes**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:168](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L168)
+Defined in: [src/types/ActionItems/interface.ts:168](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L168)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/ActionItems/interface.ts:168](https://github.com/SujalTri
 
 > `optional` **volunteerGroupId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:165](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L165)
+Defined in: [src/types/ActionItems/interface.ts:165](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L165)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/types/ActionItems/interface.ts:165](https://github.com/SujalTri
 
 > `optional` **volunteerId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:164](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L164)
+Defined in: [src/types/ActionItems/interface.ts:164](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L164)

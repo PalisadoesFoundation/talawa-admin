@@ -1,4 +1,4 @@
-[Admin Docs](/)
+[**talawa-admin**](README.md)
 
 ***
 
@@ -6,9 +6,9 @@
 
 > `const` **SEARCH\_EMPTY\_MOCKS**: `object`[]
 
-Defined in: [src/screens/Leaderboard/Leaderboard.mocks.ts:208](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Leaderboard/Leaderboard.mocks.ts#L208)
+Defined in: [src/screens/Leaderboard/Leaderboard.mocks.ts:208](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/Leaderboard/Leaderboard.mocks.ts#L208)
 
-## Type Declaration
+## Type declaration
 
 ### request
 

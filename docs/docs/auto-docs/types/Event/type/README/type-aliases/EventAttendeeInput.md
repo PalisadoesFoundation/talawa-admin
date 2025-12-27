@@ -6,7 +6,7 @@
 
 > **EventAttendeeInput** = `object`
 
-Defined in: [src/types/Event/type.ts:78](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/type.ts#L78)
+Defined in: [src/types/Event/type.ts:78](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/type.ts#L78)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Event/type.ts:78](https://github.com/SujalTripathi/talawa
 
 > **eventId**: `string`
 
-Defined in: [src/types/Event/type.ts:79](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/type.ts#L79)
+Defined in: [src/types/Event/type.ts:79](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/type.ts#L79)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/types/Event/type.ts:79](https://github.com/SujalTripathi/talawa
 
 > **userId**: `string`
 
-Defined in: [src/types/Event/type.ts:80](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Event/type.ts#L80)
+Defined in: [src/types/Event/type.ts:80](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Event/type.ts#L80)

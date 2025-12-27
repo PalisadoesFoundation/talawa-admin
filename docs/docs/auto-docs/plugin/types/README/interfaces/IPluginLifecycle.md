@@ -4,7 +4,7 @@
 
 # Interface: IPluginLifecycle
 
-Defined in: [src/plugin/types.ts:198](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L198)
+Defined in: [src/plugin/types.ts:198](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L198)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:198](https://github.com/SujalTripathi/talawa-ad
 
 > `optional` **onActivate**: () => `Promise`\<`void`\>
 
-Defined in: [src/plugin/types.ts:199](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L199)
+Defined in: [src/plugin/types.ts:199](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L199)
 
 #### Returns
 
@@ -24,7 +24,7 @@ Defined in: [src/plugin/types.ts:199](https://github.com/SujalTripathi/talawa-ad
 
 > `optional` **onDeactivate**: () => `Promise`\<`void`\>
 
-Defined in: [src/plugin/types.ts:200](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L200)
+Defined in: [src/plugin/types.ts:200](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L200)
 
 #### Returns
 
@@ -36,7 +36,7 @@ Defined in: [src/plugin/types.ts:200](https://github.com/SujalTripathi/talawa-ad
 
 > `optional` **onInstall**: () => `Promise`\<`void`\>
 
-Defined in: [src/plugin/types.ts:201](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L201)
+Defined in: [src/plugin/types.ts:201](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L201)
 
 #### Returns
 
@@ -48,7 +48,7 @@ Defined in: [src/plugin/types.ts:201](https://github.com/SujalTripathi/talawa-ad
 
 > `optional` **onUninstall**: () => `Promise`\<`void`\>
 
-Defined in: [src/plugin/types.ts:202](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L202)
+Defined in: [src/plugin/types.ts:202](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L202)
 
 #### Returns
 
@@ -60,7 +60,7 @@ Defined in: [src/plugin/types.ts:202](https://github.com/SujalTripathi/talawa-ad
 
 > `optional` **onUpdate**: (`fromVersion`, `toVersion`) => `Promise`\<`void`\>
 
-Defined in: [src/plugin/types.ts:203](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L203)
+Defined in: [src/plugin/types.ts:203](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L203)
 
 #### Parameters
 

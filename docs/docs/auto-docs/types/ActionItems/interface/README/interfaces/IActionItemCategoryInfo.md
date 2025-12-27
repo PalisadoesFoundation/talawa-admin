@@ -4,7 +4,7 @@
 
 # Interface: IActionItemCategoryInfo
 
-Defined in: [src/types/ActionItems/interface.ts:3](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L3)
+Defined in: [src/types/ActionItems/interface.ts:3](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L3)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/ActionItems/interface.ts:3](https://github.com/SujalTripa
 
 > **createdAt**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:8](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L8)
+Defined in: [src/types/ActionItems/interface.ts:8](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L8)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/ActionItems/interface.ts:8](https://github.com/SujalTripa
 
 > `optional` **creatorId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:10](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L10)
+Defined in: [src/types/ActionItems/interface.ts:10](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L10)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/ActionItems/interface.ts:10](https://github.com/SujalTrip
 
 > **description**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:6](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L6)
+Defined in: [src/types/ActionItems/interface.ts:6](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L6)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/ActionItems/interface.ts:6](https://github.com/SujalTripa
 
 > **id**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:4](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L4)
+Defined in: [src/types/ActionItems/interface.ts:4](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L4)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/ActionItems/interface.ts:4](https://github.com/SujalTripa
 
 > **isDisabled**: `boolean`
 
-Defined in: [src/types/ActionItems/interface.ts:7](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L7)
+Defined in: [src/types/ActionItems/interface.ts:7](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L7)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/ActionItems/interface.ts:7](https://github.com/SujalTripa
 
 > **name**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:5](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L5)
+Defined in: [src/types/ActionItems/interface.ts:5](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L5)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/types/ActionItems/interface.ts:5](https://github.com/SujalTripa
 
 > **organizationId**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:11](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L11)
+Defined in: [src/types/ActionItems/interface.ts:11](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L11)
 
 ***
 
@@ -68,4 +68,4 @@ Defined in: [src/types/ActionItems/interface.ts:11](https://github.com/SujalTrip
 
 > `optional` **updatedAt**: `string`
 
-Defined in: [src/types/ActionItems/interface.ts:9](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/ActionItems/interface.ts#L9)
+Defined in: [src/types/ActionItems/interface.ts:9](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/ActionItems/interface.ts#L9)

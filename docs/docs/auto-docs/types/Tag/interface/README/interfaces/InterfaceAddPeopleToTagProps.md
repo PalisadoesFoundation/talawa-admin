@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAddPeopleToTagProps
 
-Defined in: [src/types/Tag/interface.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L27)
+Defined in: [src/types/Tag/interface.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L27)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Tag/interface.ts:27](https://github.com/SujalTripathi/tal
 
 > **addPeopleToTagModalIsOpen**: `boolean`
 
-Defined in: [src/types/Tag/interface.ts:28](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L28)
+Defined in: [src/types/Tag/interface.ts:28](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L28)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Tag/interface.ts:28](https://github.com/SujalTripathi/tal
 
 > **hideAddPeopleToTagModal**: () => `void`
 
-Defined in: [src/types/Tag/interface.ts:29](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L29)
+Defined in: [src/types/Tag/interface.ts:29](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L29)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/types/Tag/interface.ts:29](https://github.com/SujalTripathi/tal
 
 > **refetchAssignedMembersData**: () => `void`
 
-Defined in: [src/types/Tag/interface.ts:30](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L30)
+Defined in: [src/types/Tag/interface.ts:30](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L30)
 
 #### Returns
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Tag/interface.ts:30](https://github.com/SujalTripathi/tal
 
 > **t**: `TFunction`\<`"translation"`, `"manageTag"`\>
 
-Defined in: [src/types/Tag/interface.ts:31](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L31)
+Defined in: [src/types/Tag/interface.ts:31](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L31)
 
 ***
 
@@ -52,4 +52,4 @@ Defined in: [src/types/Tag/interface.ts:31](https://github.com/SujalTripathi/tal
 
 > **tCommon**: `TFunction`\<`"common"`, `undefined`\>
 
-Defined in: [src/types/Tag/interface.ts:32](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Tag/interface.ts#L32)
+Defined in: [src/types/Tag/interface.ts:32](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Tag/interface.ts#L32)

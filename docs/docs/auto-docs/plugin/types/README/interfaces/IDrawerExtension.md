@@ -4,7 +4,7 @@
 
 # Interface: IDrawerExtension
 
-Defined in: [src/plugin/types.ts:72](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L72)
+Defined in: [src/plugin/types.ts:72](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L72)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:72](https://github.com/SujalTripathi/talawa-adm
 
 > **icon**: `string`
 
-Defined in: [src/plugin/types.ts:75](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L75)
+Defined in: [src/plugin/types.ts:75](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L75)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/types.ts:75](https://github.com/SujalTripathi/talawa-adm
 
 > **label**: `string`
 
-Defined in: [src/plugin/types.ts:74](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L74)
+Defined in: [src/plugin/types.ts:74](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L74)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/plugin/types.ts:74](https://github.com/SujalTripathi/talawa-adm
 
 > `optional` **order**: `number`
 
-Defined in: [src/plugin/types.ts:78](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L78)
+Defined in: [src/plugin/types.ts:78](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L78)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/plugin/types.ts:78](https://github.com/SujalTripathi/talawa-adm
 
 > **path**: `string`
 
-Defined in: [src/plugin/types.ts:76](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L76)
+Defined in: [src/plugin/types.ts:76](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L76)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/plugin/types.ts:76](https://github.com/SujalTripathi/talawa-adm
 
 > `optional` **permissions**: `string`[]
 
-Defined in: [src/plugin/types.ts:77](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L77)
+Defined in: [src/plugin/types.ts:77](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L77)
 
 ***
 
@@ -52,4 +52,4 @@ Defined in: [src/plugin/types.ts:77](https://github.com/SujalTripathi/talawa-adm
 
 > `optional` **pluginId**: `string`
 
-Defined in: [src/plugin/types.ts:73](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L73)
+Defined in: [src/plugin/types.ts:73](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L73)

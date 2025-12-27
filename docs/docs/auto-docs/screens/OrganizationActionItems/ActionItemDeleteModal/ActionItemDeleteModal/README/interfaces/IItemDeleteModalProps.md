@@ -4,7 +4,7 @@
 
 # Interface: IItemDeleteModalProps
 
-Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:46](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L46)
+Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:46](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L46)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionIte
 
 > **actionItem**: [`IActionItemInfo`](types\ActionItems\interface\README\interfaces\IActionItemInfo.md)
 
-Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:49](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L49)
+Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:49](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L49)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionIte
 
 > **actionItemsRefetch**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:50](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L50)
+Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:50](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L50)
 
 #### Returns
 
@@ -32,7 +32,7 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionIte
 
 > `optional` **eventId**: `string`
 
-Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:51](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L51)
+Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:51](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L51)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionIte
 
 > **hide**: () => `void`
 
-Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:48](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L48)
+Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:48](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L48)
 
 #### Returns
 
@@ -52,7 +52,7 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionIte
 
 > **isOpen**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:47](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L47)
+Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:47](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L47)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionIte
 
 > `optional` **isRecurring**: `boolean`
 
-Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:52](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L52)
+Defined in: [src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx:52](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/screens/OrganizationActionItems/ActionItemDeleteModal/ActionItemDeleteModal.tsx#L52)

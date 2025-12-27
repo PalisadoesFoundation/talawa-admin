@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationCardStartProps
 
-Defined in: [src/types/Organization/interface.ts:6](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Organization/interface.ts#L6)
+Defined in: [src/types/Organization/interface.ts:6](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Organization/interface.ts#L6)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Organization/interface.ts:6](https://github.com/SujalTrip
 
 > **id**: `string`
 
-Defined in: [src/types/Organization/interface.ts:8](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Organization/interface.ts#L8)
+Defined in: [src/types/Organization/interface.ts:8](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Organization/interface.ts#L8)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Organization/interface.ts:8](https://github.com/SujalTrip
 
 > **image**: `string`
 
-Defined in: [src/types/Organization/interface.ts:7](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Organization/interface.ts#L7)
+Defined in: [src/types/Organization/interface.ts:7](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Organization/interface.ts#L7)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/types/Organization/interface.ts:7](https://github.com/SujalTrip
 
 > **name**: `string`
 
-Defined in: [src/types/Organization/interface.ts:9](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Organization/interface.ts#L9)
+Defined in: [src/types/Organization/interface.ts:9](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Organization/interface.ts#L9)

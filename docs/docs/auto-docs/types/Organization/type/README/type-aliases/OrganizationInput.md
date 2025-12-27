@@ -6,7 +6,7 @@
 
 > **OrganizationInput** = `object`
 
-Defined in: [src/types/Organization/type.ts:54](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Organization/type.ts#L54)
+Defined in: [src/types/Organization/type.ts:54](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Organization/type.ts#L54)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Organization/type.ts:54](https://github.com/SujalTripathi
 
 > **address**: [`AddressInput`](types\address\README\type-aliases\AddressInput.md)
 
-Defined in: [src/types/Organization/type.ts:55](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Organization/type.ts#L55)
+Defined in: [src/types/Organization/type.ts:55](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Organization/type.ts#L55)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Organization/type.ts:55](https://github.com/SujalTripathi
 
 > `optional` **apiUrl**: `string`
 
-Defined in: [src/types/Organization/type.ts:56](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Organization/type.ts#L56)
+Defined in: [src/types/Organization/type.ts:56](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Organization/type.ts#L56)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Organization/type.ts:56](https://github.com/SujalTripathi
 
 > `optional` **attendees**: `string`
 
-Defined in: [src/types/Organization/type.ts:57](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Organization/type.ts#L57)
+Defined in: [src/types/Organization/type.ts:57](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Organization/type.ts#L57)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Organization/type.ts:57](https://github.com/SujalTripathi
 
 > **description**: `string`
 
-Defined in: [src/types/Organization/type.ts:58](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Organization/type.ts#L58)
+Defined in: [src/types/Organization/type.ts:58](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Organization/type.ts#L58)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Organization/type.ts:58](https://github.com/SujalTripathi
 
 > `optional` **image**: `string`
 
-Defined in: [src/types/Organization/type.ts:59](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Organization/type.ts#L59)
+Defined in: [src/types/Organization/type.ts:59](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Organization/type.ts#L59)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Organization/type.ts:59](https://github.com/SujalTripathi
 
 > **name**: `string`
 
-Defined in: [src/types/Organization/type.ts:60](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Organization/type.ts#L60)
+Defined in: [src/types/Organization/type.ts:60](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Organization/type.ts#L60)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/Organization/type.ts:60](https://github.com/SujalTripathi
 
 > `optional` **userRegistrationRequired**: `boolean`
 
-Defined in: [src/types/Organization/type.ts:61](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Organization/type.ts#L61)
+Defined in: [src/types/Organization/type.ts:61](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Organization/type.ts#L61)
 
 ***
 
@@ -70,4 +70,4 @@ Defined in: [src/types/Organization/type.ts:61](https://github.com/SujalTripathi
 
 > `optional` **visibleInSearch**: `boolean`
 
-Defined in: [src/types/Organization/type.ts:62](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Organization/type.ts#L62)
+Defined in: [src/types/Organization/type.ts:62](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Organization/type.ts#L62)

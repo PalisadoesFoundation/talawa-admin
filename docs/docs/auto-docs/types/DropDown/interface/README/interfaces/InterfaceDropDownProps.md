@@ -4,7 +4,7 @@
 
 # Interface: InterfaceDropDownProps
 
-Defined in: [src/types/DropDown/interface.ts:2](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/DropDown/interface.ts#L2)
+Defined in: [src/types/DropDown/interface.ts:2](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/DropDown/interface.ts#L2)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/DropDown/interface.ts:2](https://github.com/SujalTripathi
 
 > `optional` **btnStyle**: `string`
 
-Defined in: [src/types/DropDown/interface.ts:4](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/DropDown/interface.ts#L4)
+Defined in: [src/types/DropDown/interface.ts:4](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/DropDown/interface.ts#L4)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/DropDown/interface.ts:4](https://github.com/SujalTripathi
 
 > `optional` **btnTextStyle**: `string`
 
-Defined in: [src/types/DropDown/interface.ts:5](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/DropDown/interface.ts#L5)
+Defined in: [src/types/DropDown/interface.ts:5](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/DropDown/interface.ts#L5)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/types/DropDown/interface.ts:5](https://github.com/SujalTripathi
 
 > `optional` **parentContainerStyle**: `string`
 
-Defined in: [src/types/DropDown/interface.ts:3](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/DropDown/interface.ts#L3)
+Defined in: [src/types/DropDown/interface.ts:3](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/DropDown/interface.ts#L3)

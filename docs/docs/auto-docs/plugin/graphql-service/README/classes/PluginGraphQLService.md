@@ -4,7 +4,7 @@
 
 # Class: PluginGraphQLService
 
-Defined in: [src/plugin/graphql-service.ts:82](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/graphql-service.ts#L82)
+Defined in: [src/plugin/graphql-service.ts:82](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/graphql-service.ts#L82)
 
 ## Constructors
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/graphql-service.ts:82](https://github.com/SujalTripathi/
 
 > **new PluginGraphQLService**(`apolloClient`): `PluginGraphQLService`
 
-Defined in: [src/plugin/graphql-service.ts:85](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/graphql-service.ts#L85)
+Defined in: [src/plugin/graphql-service.ts:85](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/graphql-service.ts#L85)
 
 #### Parameters
 
@@ -30,7 +30,7 @@ Defined in: [src/plugin/graphql-service.ts:85](https://github.com/SujalTripathi/
 
 > **createPlugin**(`input`): `Promise`\<[`IPlugin`](plugin\graphql-service\README\interfaces\IPlugin.md)\>
 
-Defined in: [src/plugin/graphql-service.ts:102](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/graphql-service.ts#L102)
+Defined in: [src/plugin/graphql-service.ts:102](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/graphql-service.ts#L102)
 
 #### Parameters
 
@@ -48,7 +48,7 @@ Defined in: [src/plugin/graphql-service.ts:102](https://github.com/SujalTripathi
 
 > **deletePlugin**(`input`): `Promise`\<\{ `id`: `string`; `pluginId`: `string`; \}\>
 
-Defined in: [src/plugin/graphql-service.ts:144](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/graphql-service.ts#L144)
+Defined in: [src/plugin/graphql-service.ts:144](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/graphql-service.ts#L144)
 
 #### Parameters
 
@@ -66,7 +66,7 @@ Defined in: [src/plugin/graphql-service.ts:144](https://github.com/SujalTripathi
 
 > **getAllPlugins**(): `Promise`\<[`IPlugin`](plugin\graphql-service\README\interfaces\IPlugin.md)[]\>
 
-Defined in: [src/plugin/graphql-service.ts:89](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/graphql-service.ts#L89)
+Defined in: [src/plugin/graphql-service.ts:89](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/graphql-service.ts#L89)
 
 #### Returns
 
@@ -78,7 +78,7 @@ Defined in: [src/plugin/graphql-service.ts:89](https://github.com/SujalTripathi/
 
 > **installPlugin**(`input`): `Promise`\<[`IPlugin`](plugin\graphql-service\README\interfaces\IPlugin.md)\>
 
-Defined in: [src/plugin/graphql-service.ts:116](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/graphql-service.ts#L116)
+Defined in: [src/plugin/graphql-service.ts:116](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/graphql-service.ts#L116)
 
 #### Parameters
 
@@ -96,7 +96,7 @@ Defined in: [src/plugin/graphql-service.ts:116](https://github.com/SujalTripathi
 
 > **updatePlugin**(`input`): `Promise`\<[`IPlugin`](plugin\graphql-service\README\interfaces\IPlugin.md)\>
 
-Defined in: [src/plugin/graphql-service.ts:130](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/graphql-service.ts#L130)
+Defined in: [src/plugin/graphql-service.ts:130](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/graphql-service.ts#L130)
 
 #### Parameters
 

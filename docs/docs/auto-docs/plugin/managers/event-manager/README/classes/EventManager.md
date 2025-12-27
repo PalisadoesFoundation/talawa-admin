@@ -4,7 +4,7 @@
 
 # Class: EventManager
 
-Defined in: [src/plugin/managers/event-manager.ts:6](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/event-manager.ts#L6)
+Defined in: [src/plugin/managers/event-manager.ts:6](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/event-manager.ts#L6)
 
 Event Manager
 Handles event listeners and event emission for the plugin system
@@ -25,7 +25,7 @@ Handles event listeners and event emission for the plugin system
 
 > **emit**(`event`, ...`args`): `void`
 
-Defined in: [src/plugin/managers/event-manager.ts:45](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/event-manager.ts#L45)
+Defined in: [src/plugin/managers/event-manager.ts:45](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/event-manager.ts#L45)
 
 #### Parameters
 
@@ -47,7 +47,7 @@ Defined in: [src/plugin/managers/event-manager.ts:45](https://github.com/SujalTr
 
 > **getEvents**(): `string`[]
 
-Defined in: [src/plugin/managers/event-manager.ts:76](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/event-manager.ts#L76)
+Defined in: [src/plugin/managers/event-manager.ts:76](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/event-manager.ts#L76)
 
 #### Returns
 
@@ -59,7 +59,7 @@ Defined in: [src/plugin/managers/event-manager.ts:76](https://github.com/SujalTr
 
 > **getListenerCount**(`event`): `number`
 
-Defined in: [src/plugin/managers/event-manager.ts:71](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/event-manager.ts#L71)
+Defined in: [src/plugin/managers/event-manager.ts:71](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/event-manager.ts#L71)
 
 #### Parameters
 
@@ -77,7 +77,7 @@ Defined in: [src/plugin/managers/event-manager.ts:71](https://github.com/SujalTr
 
 > **off**(`event`, `callback`): `void`
 
-Defined in: [src/plugin/managers/event-manager.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/event-manager.ts#L27)
+Defined in: [src/plugin/managers/event-manager.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/event-manager.ts#L27)
 
 #### Parameters
 
@@ -99,7 +99,7 @@ Defined in: [src/plugin/managers/event-manager.ts:27](https://github.com/SujalTr
 
 > **on**(`event`, `callback`): `void`
 
-Defined in: [src/plugin/managers/event-manager.ts:10](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/event-manager.ts#L10)
+Defined in: [src/plugin/managers/event-manager.ts:10](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/event-manager.ts#L10)
 
 #### Parameters
 
@@ -121,7 +121,7 @@ Defined in: [src/plugin/managers/event-manager.ts:10](https://github.com/SujalTr
 
 > **removeAllListeners**(`event`?): `void`
 
-Defined in: [src/plugin/managers/event-manager.ts:63](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/managers/event-manager.ts#L63)
+Defined in: [src/plugin/managers/event-manager.ts:63](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/managers/event-manager.ts#L63)
 
 #### Parameters
 

@@ -4,7 +4,7 @@
 
 # Interface: IInjectorExtension
 
-Defined in: [src/plugin/types.ts:81](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L81)
+Defined in: [src/plugin/types.ts:81](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L81)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:81](https://github.com/SujalTripathi/talawa-adm
 
 > `optional` **description**: `string`
 
-Defined in: [src/plugin/types.ts:84](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L84)
+Defined in: [src/plugin/types.ts:84](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L84)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/types.ts:84](https://github.com/SujalTripathi/talawa-adm
 
 > **injector**: `string`
 
-Defined in: [src/plugin/types.ts:83](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L83)
+Defined in: [src/plugin/types.ts:83](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L83)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/plugin/types.ts:83](https://github.com/SujalTripathi/talawa-adm
 
 > `optional` **order**: `number`
 
-Defined in: [src/plugin/types.ts:86](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L86)
+Defined in: [src/plugin/types.ts:86](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L86)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/plugin/types.ts:86](https://github.com/SujalTripathi/talawa-adm
 
 > `optional` **pluginId**: `string`
 
-Defined in: [src/plugin/types.ts:82](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L82)
+Defined in: [src/plugin/types.ts:82](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L82)
 
 ***
 
@@ -44,4 +44,4 @@ Defined in: [src/plugin/types.ts:82](https://github.com/SujalTripathi/talawa-adm
 
 > `optional` **target**: `string`
 
-Defined in: [src/plugin/types.ts:85](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L85)
+Defined in: [src/plugin/types.ts:85](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L85)

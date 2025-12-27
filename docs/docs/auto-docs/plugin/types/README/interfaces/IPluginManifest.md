@@ -4,7 +4,7 @@
 
 # Interface: IPluginManifest
 
-Defined in: [src/plugin/types.ts:8](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L8)
+Defined in: [src/plugin/types.ts:8](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L8)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/plugin/types.ts:8](https://github.com/SujalTripathi/talawa-admi
 
 > **author**: `string`
 
-Defined in: [src/plugin/types.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L13)
+Defined in: [src/plugin/types.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L13)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/plugin/types.ts:13](https://github.com/SujalTripathi/talawa-adm
 
 > **description**: `string`
 
-Defined in: [src/plugin/types.ts:12](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L12)
+Defined in: [src/plugin/types.ts:12](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L12)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/plugin/types.ts:12](https://github.com/SujalTripathi/talawa-adm
 
 > `optional` **extensionPoints**: [`IExtensionPoints`](plugin\types\README\interfaces\IExtensionPoints.md)
 
-Defined in: [src/plugin/types.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L15)
+Defined in: [src/plugin/types.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L15)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/plugin/types.ts:15](https://github.com/SujalTripathi/talawa-adm
 
 > `optional` **homepage**: `string`
 
-Defined in: [src/plugin/types.ts:17](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L17)
+Defined in: [src/plugin/types.ts:17](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L17)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/plugin/types.ts:17](https://github.com/SujalTripathi/talawa-adm
 
 > `optional` **icon**: `string`
 
-Defined in: [src/plugin/types.ts:16](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L16)
+Defined in: [src/plugin/types.ts:16](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L16)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/plugin/types.ts:16](https://github.com/SujalTripathi/talawa-adm
 
 > `optional` **license**: `string`
 
-Defined in: [src/plugin/types.ts:18](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L18)
+Defined in: [src/plugin/types.ts:18](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L18)
 
 ***
 
@@ -60,7 +60,7 @@ Defined in: [src/plugin/types.ts:18](https://github.com/SujalTripathi/talawa-adm
 
 > **main**: `string`
 
-Defined in: [src/plugin/types.ts:14](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L14)
+Defined in: [src/plugin/types.ts:14](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L14)
 
 ***
 
@@ -68,7 +68,7 @@ Defined in: [src/plugin/types.ts:14](https://github.com/SujalTripathi/talawa-adm
 
 > **name**: `string`
 
-Defined in: [src/plugin/types.ts:9](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L9)
+Defined in: [src/plugin/types.ts:9](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L9)
 
 ***
 
@@ -76,7 +76,7 @@ Defined in: [src/plugin/types.ts:9](https://github.com/SujalTripathi/talawa-admi
 
 > **pluginId**: `string`
 
-Defined in: [src/plugin/types.ts:10](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L10)
+Defined in: [src/plugin/types.ts:10](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L10)
 
 ***
 
@@ -84,7 +84,7 @@ Defined in: [src/plugin/types.ts:10](https://github.com/SujalTripathi/talawa-adm
 
 > `optional` **tags**: `string`[]
 
-Defined in: [src/plugin/types.ts:19](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L19)
+Defined in: [src/plugin/types.ts:19](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L19)
 
 ***
 
@@ -92,4 +92,4 @@ Defined in: [src/plugin/types.ts:19](https://github.com/SujalTripathi/talawa-adm
 
 > **version**: `string`
 
-Defined in: [src/plugin/types.ts:11](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/plugin/types.ts#L11)
+Defined in: [src/plugin/types.ts:11](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/plugin/types.ts#L11)

@@ -6,7 +6,7 @@
 
 > **GroupChat** = `object`
 
-Defined in: [src/types/Chat/type.ts:18](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/type.ts#L18)
+Defined in: [src/types/Chat/type.ts:18](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/type.ts#L18)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/Chat/type.ts:18](https://github.com/SujalTripathi/talawa-
 
 > **\_id**: `string`
 
-Defined in: [src/types/Chat/type.ts:19](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/type.ts#L19)
+Defined in: [src/types/Chat/type.ts:19](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/type.ts#L19)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/Chat/type.ts:19](https://github.com/SujalTripathi/talawa-
 
 > **admins**: [`User`](types\User\type\README\type-aliases\User.md)[]
 
-Defined in: [src/types/Chat/type.ts:24](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/type.ts#L24)
+Defined in: [src/types/Chat/type.ts:24](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/type.ts#L24)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/Chat/type.ts:24](https://github.com/SujalTripathi/talawa-
 
 > **createdAt**: `Date`
 
-Defined in: [src/types/Chat/type.ts:28](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/type.ts#L28)
+Defined in: [src/types/Chat/type.ts:28](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/type.ts#L28)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/Chat/type.ts:28](https://github.com/SujalTripathi/talawa-
 
 > `optional` **creator**: [`User`](types\User\type\README\type-aliases\User.md)
 
-Defined in: [src/types/Chat/type.ts:29](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/type.ts#L29)
+Defined in: [src/types/Chat/type.ts:29](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/type.ts#L29)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [src/types/Chat/type.ts:29](https://github.com/SujalTripathi/talawa-
 
 > **description**: `string`
 
-Defined in: [src/types/Chat/type.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/type.ts#L27)
+Defined in: [src/types/Chat/type.ts:27](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/type.ts#L27)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [src/types/Chat/type.ts:27](https://github.com/SujalTripathi/talawa-
 
 > `optional` **image**: `string`
 
-Defined in: [src/types/Chat/type.ts:22](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/type.ts#L22)
+Defined in: [src/types/Chat/type.ts:22](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/type.ts#L22)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [src/types/Chat/type.ts:22](https://github.com/SujalTripathi/talawa-
 
 > **isGroup**: `boolean`
 
-Defined in: [src/types/Chat/type.ts:20](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/type.ts#L20)
+Defined in: [src/types/Chat/type.ts:20](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/type.ts#L20)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [src/types/Chat/type.ts:20](https://github.com/SujalTripathi/talawa-
 
 > `optional` **lastMessageId**: `string`
 
-Defined in: [src/types/Chat/type.ts:32](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/type.ts#L32)
+Defined in: [src/types/Chat/type.ts:32](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/type.ts#L32)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [src/types/Chat/type.ts:32](https://github.com/SujalTripathi/talawa-
 
 > **messages**: [`DirectMessage`](types\Chat\type\README\type-aliases\DirectMessage.md)[]
 
-Defined in: [src/types/Chat/type.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/type.ts#L23)
+Defined in: [src/types/Chat/type.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/type.ts#L23)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [src/types/Chat/type.ts:23](https://github.com/SujalTripathi/talawa-
 
 > `optional` **name**: `string`
 
-Defined in: [src/types/Chat/type.ts:21](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/type.ts#L21)
+Defined in: [src/types/Chat/type.ts:21](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/type.ts#L21)
 
 ***
 
@@ -94,7 +94,7 @@ Defined in: [src/types/Chat/type.ts:21](https://github.com/SujalTripathi/talawa-
 
 > `optional` **organization**: [`Organization`](types\Organization\type\README\type-aliases\Organization.md)
 
-Defined in: [src/types/Chat/type.ts:30](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/type.ts#L30)
+Defined in: [src/types/Chat/type.ts:30](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/type.ts#L30)
 
 ***
 
@@ -102,7 +102,7 @@ Defined in: [src/types/Chat/type.ts:30](https://github.com/SujalTripathi/talawa-
 
 > **unseenMessagesByUsers**: `string`
 
-Defined in: [src/types/Chat/type.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/type.ts#L26)
+Defined in: [src/types/Chat/type.ts:26](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/type.ts#L26)
 
 ***
 
@@ -110,7 +110,7 @@ Defined in: [src/types/Chat/type.ts:26](https://github.com/SujalTripathi/talawa-
 
 > `optional` **updatedAt**: `Date`
 
-Defined in: [src/types/Chat/type.ts:31](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/type.ts#L31)
+Defined in: [src/types/Chat/type.ts:31](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/type.ts#L31)
 
 ***
 
@@ -118,4 +118,4 @@ Defined in: [src/types/Chat/type.ts:31](https://github.com/SujalTripathi/talawa-
 
 > **users**: [`User`](types\User\type\README\type-aliases\User.md)[]
 
-Defined in: [src/types/Chat/type.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Chat/type.ts#L25)
+Defined in: [src/types/Chat/type.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Chat/type.ts#L25)

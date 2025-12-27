@@ -6,7 +6,7 @@
 
 > **EditVenueInput** = `object`
 
-Defined in: [src/types/venue.ts:20](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/venue.ts#L20)
+Defined in: [src/types/venue.ts:20](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/venue.ts#L20)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/venue.ts:20](https://github.com/SujalTripathi/talawa-admi
 
 > `optional` **capacity**: `number`
 
-Defined in: [src/types/venue.ts:21](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/venue.ts#L21)
+Defined in: [src/types/venue.ts:21](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/venue.ts#L21)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/types/venue.ts:21](https://github.com/SujalTripathi/talawa-admi
 
 > `optional` **description**: `string`
 
-Defined in: [src/types/venue.ts:22](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/venue.ts#L22)
+Defined in: [src/types/venue.ts:22](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/venue.ts#L22)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/types/venue.ts:22](https://github.com/SujalTripathi/talawa-admi
 
 > `optional` **file**: `string`
 
-Defined in: [src/types/venue.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/venue.ts#L23)
+Defined in: [src/types/venue.ts:23](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/venue.ts#L23)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [src/types/venue.ts:23](https://github.com/SujalTripathi/talawa-admi
 
 > **id**: `string`
 
-Defined in: [src/types/venue.ts:24](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/venue.ts#L24)
+Defined in: [src/types/venue.ts:24](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/venue.ts#L24)
 
 ***
 
@@ -46,4 +46,4 @@ Defined in: [src/types/venue.ts:24](https://github.com/SujalTripathi/talawa-admi
 
 > `optional` **name**: `string`
 
-Defined in: [src/types/venue.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/venue.ts#L25)
+Defined in: [src/types/venue.ts:25](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/venue.ts#L25)

@@ -27,8 +27,6 @@
 - [GET\_ORGANIZATION\_POSTS\_PG](GraphQl\Queries\Queries\README\variables\GET_ORGANIZATION_POSTS_PG.md)
 - [GET\_ORGANIZATION\_VENUES\_COUNT](GraphQl\Queries\Queries\README\variables\GET_ORGANIZATION_VENUES_COUNT.md)
 - [GET\_ORGANIZATION\_VENUES\_PG](GraphQl\Queries\Queries\README\variables\GET_ORGANIZATION_VENUES_PG.md)
-- [GET\_POSTS\_BY\_ORG](GraphQl\Queries\Queries\README\variables\GET_POSTS_BY_ORG.md)
-- [GET\_USER\_BY\_ID](GraphQl\Queries\Queries\README\variables\GET_USER_BY_ID.md)
 - [MEMBERS\_LIST](GraphQl\Queries\Queries\README\variables\MEMBERS_LIST.md)
 - [MEMBERS\_LIST\_PG](GraphQl\Queries\Queries\README\variables\MEMBERS_LIST_PG.md)
 - [MEMBERSHIP\_REQUEST\_PG](GraphQl\Queries\Queries\README\variables\MEMBERSHIP_REQUEST_PG.md)
@@ -93,12 +91,6 @@ Re-exports [IS_SAMPLE_ORGANIZATION_QUERY](GraphQl\Queries\PlugInQueries\README\v
 ### ORGANIZATION\_ADVERTISEMENT\_LIST
 
 Re-exports [ORGANIZATION_ADVERTISEMENT_LIST](GraphQl\Queries\AdvertisementQueries\README\variables\ORGANIZATION_ADVERTISEMENT_LIST.md)
-
-***
-
-### ORGANIZATION\_POST\_LIST
-
-Re-exports [ORGANIZATION_POST_LIST](GraphQl\Queries\OrganizationQueries\README\variables\ORGANIZATION_POST_LIST.md)
 
 ***
 

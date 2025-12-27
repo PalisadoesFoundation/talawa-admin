@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrgContriCardsProps
 
-Defined in: [src/types/Contribution/interface.ts:8](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Contribution/interface.ts#L8)
+Defined in: [src/types/Contribution/interface.ts:8](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Contribution/interface.ts#L8)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Contribution/interface.ts:8](https://github.com/SujalTrip
 
 > **contriAmount**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Contribution/interface.ts#L13)
+Defined in: [src/types/Contribution/interface.ts:13](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Contribution/interface.ts#L13)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Contribution/interface.ts:13](https://github.com/SujalTri
 
 > **contriDate**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:12](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Contribution/interface.ts#L12)
+Defined in: [src/types/Contribution/interface.ts:12](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Contribution/interface.ts#L12)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/Contribution/interface.ts:12](https://github.com/SujalTri
 
 > **contriTransactionId**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:14](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Contribution/interface.ts#L14)
+Defined in: [src/types/Contribution/interface.ts:14](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Contribution/interface.ts#L14)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/Contribution/interface.ts:14](https://github.com/SujalTri
 
 > **id**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:10](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Contribution/interface.ts#L10)
+Defined in: [src/types/Contribution/interface.ts:10](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Contribution/interface.ts#L10)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/Contribution/interface.ts:10](https://github.com/SujalTri
 
 > **key**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:9](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Contribution/interface.ts#L9)
+Defined in: [src/types/Contribution/interface.ts:9](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Contribution/interface.ts#L9)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/Contribution/interface.ts:9](https://github.com/SujalTrip
 
 > **userEmail**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Contribution/interface.ts#L15)
+Defined in: [src/types/Contribution/interface.ts:15](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Contribution/interface.ts#L15)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/types/Contribution/interface.ts:15](https://github.com/SujalTri
 
 > **userName**: `string`
 
-Defined in: [src/types/Contribution/interface.ts:11](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/Contribution/interface.ts#L11)
+Defined in: [src/types/Contribution/interface.ts:11](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/types/Contribution/interface.ts#L11)
