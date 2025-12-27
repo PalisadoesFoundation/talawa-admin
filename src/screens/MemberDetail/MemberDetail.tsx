@@ -25,7 +25,7 @@
  * - `@apollo/client` for GraphQL queries and mutations.
  * - `react-bootstrap` for UI components.
  * - `@mui/x-date-pickers` for date selection.
- * - `react-toastify` for toast notifications.
+ * - `NotificationToast` for toast notifications.
  * - `dayjs` for date manipulation.
  *
  *
@@ -38,7 +38,7 @@ import { useLocation } from 'react-router';
 import styles from 'style/app-fixed.module.css';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { languages } from 'utils/languages';
 import { errorHandler } from 'utils/errorHandler';
 import { Card, Row, Col, Form } from 'react-bootstrap';
@@ -133,12 +133,14 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       const maxSize = 5 * 1024 * 1024; // 5MB
 
       if (!validTypes.includes(file.type)) {
-        toast.error('Invalid file type. Please upload a JPEG, PNG, or GIF.');
+        NotificationToast.error(
+          'Invalid file type. Please upload a JPEG, PNG, or GIF.',
+        );
         return;
       }
 
       if (file.size > maxSize) {
-        toast.error('File is too large. Maximum size is 5MB.');
+        NotificationToast.error('File is too large. Maximum size is 5MB.');
         return;
       }
 
@@ -156,7 +158,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     // password validation
     if (fieldName === 'password' && value) {
       if (!validatePassword(value)) {
-        toast.error('Password must be at least 8 characters long.');
+        NotificationToast.error('Password must be at least 8 characters long.');
         return;
       }
     }
@@ -188,7 +190,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         avatarFile = await urlToFile(formState.avatarURL);
       } catch (error) {
         console.log(error);
-        toast.error(
+        NotificationToast.error(
           'Failed to process profile picture. Please try uploading again.',
         );
         return;
@@ -224,7 +226,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       const { data: updateData } = await updateUser({ variables: { input } });
 
       if (updateData) {
-        toast.success(
+        NotificationToast.success(
           tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
         );
         setItem('UserImage', updateData.updateCurrentUser.avatarURL);

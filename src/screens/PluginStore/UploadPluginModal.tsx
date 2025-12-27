@@ -6,7 +6,7 @@ import React, { useRef, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Button } from '@mui/material';
 import { FaUpload, FaExclamationTriangle, FaCheck } from 'react-icons/fa';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   useApolloClient,
   type ApolloClient,
@@ -106,16 +106,16 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
 
       if (result.success) {
         const components = result.installedComponents.join(' and ');
-        toast.success(
+        NotificationToast.success(
           `Plugin uploaded successfully! (${components} components) - You can now install it from the plugin list.`,
         );
         onHide();
       } else {
-        toast.error(result.error || 'Failed to upload plugin');
+        NotificationToast.error(result.error || 'Failed to upload plugin');
       }
     } catch (error) {
       console.error('Failed to upload plugin:', error);
-      toast.error('Failed to upload plugin. Please try again.');
+      NotificationToast.error('Failed to upload plugin. Please try again.');
     } finally {
       setIsInstalling(false);
     }

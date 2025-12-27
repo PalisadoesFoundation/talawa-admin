@@ -52,7 +52,7 @@ import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegister';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Advertisement } from 'types/Advertisement/type';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
 
@@ -127,7 +127,7 @@ function AdvertisementEntry({
           id: advertisement.id,
         },
       });
-      toast.success(t('advertisementDeleted') as string);
+      NotificationToast.success(t('advertisementDeleted') as string);
       setButtonLoading(false);
       setAfterCompleted?.(null);
       setAfterActive?.(null);
@@ -135,7 +135,7 @@ function AdvertisementEntry({
       toggleShowDeleteModal(); // Close the modal after deletion
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(error.message);
+        NotificationToast.error(error.message);
       }
       setButtonLoading(false);
     }

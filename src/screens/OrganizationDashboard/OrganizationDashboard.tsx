@@ -11,7 +11,7 @@
  *
  * @remarks
  * - Uses Apollo Client's `useQuery` to fetch data for members, posts, and events.
- * - Displays loading states and handles errors using `react-toastify`.
+ * - Displays loading states and handles errors using `NotificationToast`.
  * - Utilizes `react-bootstrap` for layout and styling.
  * - Integrates with `react-router-dom` for navigation.
  * - Supports internationalization using `react-i18next`.
@@ -48,7 +48,7 @@ import { Navigate, useNavigate, useParams } from 'react-router';
 // import gold from 'assets/images/gold.png';
 // import silver from 'assets/images/silver.png';
 // import bronze from 'assets/images/bronze.png';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import DashboardStats from './components/DashboardStats';
 import UpcomingEventsCard from './components/UpcomingEventsCard';
 import type {
@@ -260,7 +260,9 @@ function OrganizationDashboard(): JSX.Element {
       orgBlockedUsersError ||
       orgVenuesError
     ) {
-      toast.error(tErrors('errorLoading', { entity: '' }));
+      NotificationToast.error(
+        tErrors('errorLoading', { entity: '' }) as string,
+      );
       navigate('/');
     }
   }, [
@@ -457,7 +459,9 @@ function OrganizationDashboard(): JSX.Element {
                   variant="light"
                   data-testid="viewAllLeadeboard"
                   onClick={async (): Promise<void> => {
-                    await Promise.resolve(toast.success(t('comingSoon')));
+                    await Promise.resolve(
+                      NotificationToast.success(t('comingSoon')),
+                    );
                   }}
                 >
                   {t('viewAll')}
