@@ -20,7 +20,7 @@ export function validateEmail(email: string): InterfaceValidationResult {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email)
     ? { isValid: true }
-    : { isValid: false, error: 'invalidEmailFormat' };
+    : { isValid: false, error: 'settings.invalidEmailFormat' };
 }
 
 /**
@@ -87,6 +87,15 @@ export function validatePasswordConfirmation(
 export function getPasswordRequirements(
   password: string,
 ): InterfacePasswordRequirements {
+  if (!password) {
+    return {
+      lowercase: false,
+      uppercase: false,
+      numeric: false,
+      specialChar: false,
+    };
+  }
+  
   return {
     lowercase: PASSWORD_REGEX.lowercase.test(password),
     uppercase: PASSWORD_REGEX.uppercase.test(password),

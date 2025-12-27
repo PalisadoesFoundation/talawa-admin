@@ -22,7 +22,7 @@ describe('authValidators', () => {
     it('should reject invalid email formats', () => {
       const result = validateEmail('bad');
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe('invalidEmailFormat');
+      expect(result.error).toBe('settings.invalidEmailFormat');
     });
 
     it('should reject emails without @ symbol', () => {
@@ -99,6 +99,14 @@ describe('authValidators', () => {
     it('should identify missing requirements', () => {
       const requirements = getPasswordRequirements('test');
       expect(requirements.lowercase).toBe(true);
+      expect(requirements.uppercase).toBe(false);
+      expect(requirements.numeric).toBe(false);
+      expect(requirements.specialChar).toBe(false);
+    });
+
+    it('should handle empty/null passwords defensively', () => {
+      const requirements = getPasswordRequirements('');
+      expect(requirements.lowercase).toBe(false);
       expect(requirements.uppercase).toBe(false);
       expect(requirements.numeric).toBe(false);
       expect(requirements.specialChar).toBe(false);
