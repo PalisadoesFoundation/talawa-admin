@@ -162,7 +162,7 @@ const UpcomingEvents = (): JSX.Element => {
       await createVolunteerMembership({
         variables: { data: volunteerData },
       });
-      NotificationToast.success(t('volunteerSuccess'));
+      NotificationToast.success(t('volunteerRequestSuccess'));
       // Refetch membership data first, then events with a small delay to prevent rate limiting
       await refetchMemberships();
       setTimeout(() => {
