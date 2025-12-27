@@ -152,3 +152,32 @@ export type PostNode = {
     }[];
   };
 };
+
+export interface ICreatePostData {
+  createPost: {
+    id: string;
+    caption: string;
+    pinnedAt?: string;
+    attachments?: {
+      fileHash: string;
+      mimeType: string;
+      name: string;
+      objectName: string;
+    }[];
+  };
+}
+
+export interface ICreatePostInput {
+  caption: string;
+  body?: string;
+  organizationId: string;
+  isPinned: boolean;
+  attachments?: File[];
+}
+
+export interface IFileMetadataInput {
+  fileHash: string;
+  mimetype: string;
+  name: string;
+  objectName: string;
+}

@@ -22,4 +22,9 @@ export class LoginPage {
     cy.get(this._loginButton, { timeout }).should('be.enabled').click();
     return this;
   }
+
+  verifyErrorToast(timeout = 5000) {
+    cy.get('.Toastify__toast', { timeout }).should('be.visible');
+    return this;
+  }
 }

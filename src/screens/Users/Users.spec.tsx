@@ -10,7 +10,7 @@ import {
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
-import { toast, ToastContainer } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import userEvent from '@testing-library/user-event';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -31,17 +31,14 @@ import {
   USER_LIST_FOR_ADMIN,
 } from 'GraphQl/Queries/Queries';
 
-vi.mock('react-toastify', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('react-toastify')>();
-
-  return {
-    ...actual,
-    toast: {
-      ...actual.toast,
-      warning: vi.fn(),
-    },
-  };
-});
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  },
+}));
 
 vi.mock('@mui/icons-material', () => ({
   WarningAmberRounded: vi.fn(() => null),
@@ -414,7 +411,6 @@ describe('Testing Users screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
               <Users />
             </I18nextProvider>
           </Provider>
@@ -428,7 +424,6 @@ describe('Testing Users screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
               <Users />
             </I18nextProvider>
           </Provider>
@@ -445,7 +440,6 @@ describe('Testing Users screen', () => {
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
-                <ToastContainer />
                 <Users />
               </I18nextProvider>
             </Provider>
@@ -684,7 +678,9 @@ describe('Testing Users screen', () => {
       );
 
       await wait();
-      expect(toast.warning).toHaveBeenCalledWith(expect.any(String));
+      expect(NotificationToast.warning).toHaveBeenCalledWith(
+        expect.any(String),
+      );
     });
 
     it('should display end of results message when hasMore is false', async () => {
@@ -774,7 +770,7 @@ describe('Testing Users screen', () => {
 });
 
 describe('Users screen - no organizations scenario', () => {
-  it('calls toast.warning when organizations list is empty', async () => {
+  it('calls NotificationToast.warning when organizations list is empty', async () => {
     const mocks = [
       {
         request: {
@@ -799,7 +795,7 @@ describe('Users screen - no organizations scenario', () => {
     );
 
     await waitFor(() => {
-      expect(toast.warning).toHaveBeenCalled();
+      expect(NotificationToast.warning).toHaveBeenCalled();
     });
   });
 });

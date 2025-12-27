@@ -1,0 +1,141 @@
+.container {
+  position: relative;
+  display: flex;
+  min-height: 500px;
+  background: #fff;
+  border-radius: 12px;
+}
+
+.panel {
+  width: 50%;
+  padding: 32px;
+}
+
+.leftPanel {
+  border-right: 1px solid #e7e7e7;
+}
+
+.section {
+  margin-bottom: 32px;
+}
+
+.sectionTitle {
+  margin: 0;
+  margin-bottom: 8px;
+}
+
+.sectionDescription {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.dropzone {
+  border: 2px dashed #ddd;
+  border-radius: 12px;
+  padding: 40px;
+  text-align: center;
+  background: #fafafa;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.uploadIcon {
+  font-size: 48px;
+  color: #ccc;
+  margin-bottom: 16px;
+}
+
+.dropzoneTitle {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.dropzoneHint {
+  font-size: 14px;
+  color: #666;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.errorBox {
+  margin-top: 16px;
+  padding: 12px;
+  background: #fff3cd;
+  border: 1px solid #ffeaa7;
+  border-radius: 8px;
+  color: #856404;
+  font-size: 14px;
+}
+
+.inlineIcon {
+  margin-right: 8px;
+}
+
+.pluginInfoSection {
+  margin-top: 24px;
+}
+
+.pluginInfoTitle {
+  margin: 0;
+  margin-bottom: 16px;
+}
+
+.pluginInfoBody {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.infoRow {
+  margin-bottom: 8px;
+}
+
+.componentsSection {
+  margin-top: 16px;
+}
+
+.componentsList {
+  margin-top: 8px;
+}
+
+.componentRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.checkIcon {
+  color: #28a745;
+  margin-right: 8px;
+}
+
+.uploadButtonWrapper {
+  margin-top: 32px;
+}
+
+.codeSection {
+  margin-bottom: 24px;
+}
+
+.codeHeading {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 12px;
+}
+
+.codeText {
+  font-size: 14px;
+  color: #666;
+}
+
+.codeBlock {
+  background: #f8f9fa;
+  padding: 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+}
