@@ -40,9 +40,9 @@ import {
   GET_ORGANIZATION_VENUES_COUNT,
 } from 'GraphQl/Queries/Queries';
 import UsersIcon from 'assets/svgs/users.svg?react';
-import CardItem from 'components/OrganizationDashCards/CardItem/CardItem';
-import CardItemLoading from 'components/OrganizationDashCards/CardItem/Loader/CardItemLoading';
-import DashBoardCard from 'components/OrganizationDashCards/DashboardCard';
+import CardItem from 'components/AdminPortal/OrganizationDashCards/CardItem/CardItem';
+import CardItemLoading from 'components/AdminPortal/OrganizationDashCards/CardItem/Loader/CardItemLoading';
+import DashBoardCard from 'components/AdminPortal/OrganizationDashCards/DashboardCard';
 import { Navigate, useNavigate, useParams } from 'react-router';
 // import { Navigate, useNavigate, useParams } from 'react-router';
 // import gold from 'assets/images/gold.png';
@@ -330,7 +330,7 @@ function OrganizationDashboard(): JSX.Element {
                     <DashBoardCard
                       count={pendingMembershipRequests.length}
                       title={tCommon('requests')}
-                      icon={<UsersIcon fill="#555555" />}
+                      icon={<UsersIcon className={styles['icon-fill']} />}
                     />
                   </button>
                 </Col>
@@ -422,8 +422,7 @@ function OrganizationDashboard(): JSX.Element {
                   ))
                 ) : pendingMembershipRequests.length === 0 ? (
                   <div
-                    className={styles.emptyContainer}
-                    style={{ height: '150px' }}
+                    className={`${styles.emptyContainer} ${styles['h-150px']}`}
                   >
                     <h6>{t('noMembershipRequests')}</h6>
                   </div>
@@ -463,10 +462,7 @@ function OrganizationDashboard(): JSX.Element {
                   {t('viewAll')}
                 </Button>
               </div>
-              <Card.Body
-                className={styles.containerBody}
-                style={{ padding: '0px' }}
-              >
+              <Card.Body className={`${styles.containerBody} p-0`}>
                 {/* {rankingsLoading ? (
                   [...Array(3)].map((_, index) => {
                     return <CardItemLoading key={`rankingLoading_${index}`} />;

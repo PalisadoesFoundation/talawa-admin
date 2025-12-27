@@ -1,11 +1,17 @@
 import DashBoardCardLoading from './DashboardCardLoading';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { vi } from 'vitest';
 import styles from 'style/app-fixed.module.css';
 describe('Testing the DashBoardCardLoading component', () => {
   beforeEach(() => {
     render(<DashBoardCardLoading />);
   });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('should render the component', () => {
     expect(screen.getByTestId('Card')).toBeInTheDocument();
   });
@@ -24,5 +30,14 @@ describe('Testing the DashBoardCardLoading component', () => {
     expect(primaryText).toBeInTheDocument();
     const secondaryText = Card?.querySelector(`.${styles.secondaryText}`);
     expect(secondaryText).toBeInTheDocument();
+  });
+
+  test('should apply height utility classes to text placeholders', () => {
+    const Card = screen.queryByTestId('Card');
+    const primaryText = Card?.querySelector(`.${styles.primaryText}`);
+    const secondaryText = Card?.querySelector(`.${styles.secondaryText}`);
+
+    expect(primaryText).toHaveClass(styles['h-1-75rem']);
+    expect(secondaryText).toHaveClass(styles['h-1-25rem']);
   });
 });

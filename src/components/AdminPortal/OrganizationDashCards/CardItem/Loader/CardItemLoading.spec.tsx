@@ -2,7 +2,12 @@ import CardItemLoading from './CardItemLoading';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import styles from 'style/app-fixed.module.css';
+import { vi, afterEach } from 'vitest';
 describe('Test the CardItemLoading component', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('Should render the component', () => {
     render(<CardItemLoading />);
     expect(screen.getByTestId('cardItemLoading')).toBeInTheDocument();
@@ -19,5 +24,14 @@ describe('Test the CardItemLoading component', () => {
 
     const title = cardItemLoading.querySelector(`.${styles.title}`);
     expect(title).toBeInTheDocument();
+  });
+
+  test('should apply height utility class to title element', () => {
+    render(<CardItemLoading />);
+
+    const cardItemLoading = screen.getByTestId('cardItemLoading');
+    const title = cardItemLoading.querySelector(`.${styles.title}`);
+
+    expect(title).toHaveClass(styles['h-1-5rem']);
   });
 });

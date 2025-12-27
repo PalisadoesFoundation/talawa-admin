@@ -32,7 +32,8 @@
  *   `.subtleBlueGrey` (for blue Text)
  *   `.activeTab` (for tabs which are active)
  *   `.inActiveTab` (for tabs which are not selected)
- *
+ *   `.h-150px`, `.h-220px`, `.h-1-25rem`, `.h-1-5rem`, `.h-1-75rem` (height utilities)
+ *  `.icon-fill` (applies icon color)
  */
 :root {
   --primary-theme-color: #1778f2;
@@ -857,11 +858,39 @@
 
   --input-bg: #f2f7ff;
 
+  --icon-color: #555555;
+
   --empty-state-bg: #ffffff;
   --empty-state-border-color: #e7e7e7;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
+
+.icon-fill {
+  fill: var(--icon-color);
+}
+
+/* Custom Height */
+
+.h-1-25rem {
+  height: 1.25rem !important;
+}
+
+.h-1-5rem {
+  height: 1.5rem !important;
+}
+
+.h-1-75rem {
+  height: 1.75rem !important;
+}
+
+.h-150px {
+  height: 150px !important;
+}
+
+.h-220px {
+  height: 220px !important;
+}
 
 /* Add Button */
 
@@ -4304,6 +4333,8 @@ form label,
   flex-direction: row;
   gap: 0.5rem;
   align-items: center;
+  font-size: 12px;
+  font-weight: bold;
 }
 
 .creator p {
