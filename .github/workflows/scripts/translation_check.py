@@ -139,11 +139,7 @@ def get_target_files(
     if not files and not directories:
         src_path = Path("src")
         if not src_path.exists() or not src_path.is_dir():
-            print(
-                "Error: Default 'src' directory not found",
-                file=sys.stderr,
-            )
-            sys.exit(2)
+            raise FileNotFoundError("Default 'src' directory not found")
         targets = list(src_path.rglob("*"))
 
     return [
@@ -200,14 +196,20 @@ def main() -> None:
     except FileNotFoundError as e:
         print(f"Error: Locale directory not found: {e}", file=sys.stderr)
         sys.exit(2)
+        return  # pylint: disable=unreachable
 
-    targets = get_target_files(args.files, args.directories)
+    try:
+        targets = get_target_files(args.files, args.directories)
+    except FileNotFoundError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(2)
+        return  # pylint: disable=unreachable
 
-    errors = {
-        str(path): missing
-        for path in targets
-        if (missing := check_file(path, valid_keys))
-    }
+    errors = {}
+    for path in targets:
+        missing = check_file(path, valid_keys)
+        if missing:
+            errors[str(path)] = missing
 
     if errors:
         for file, tags in errors.items():
@@ -216,6 +218,7 @@ def main() -> None:
                 + "\n".join(f"  - Missing: {tag}" for tag in tags)
             )
         sys.exit(1)
+        return  # pylint: disable=unreachable
 
     print("All translation tags validated successfully")
     sys.exit(0)
