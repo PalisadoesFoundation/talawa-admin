@@ -3,29 +3,7 @@
  * Provides centralized, testable validation logic for email, password, and name fields.
  */
 
-/**
- * Result of a validation operation.
- */
-export interface InterfaceValidationResult {
-  /** Whether the validation passed */
-  isValid: boolean;
-  /** Error message if validation failed */
-  error?: string;
-}
-
-/**
- * Password complexity requirements status.
- */
-export interface InterfacePasswordRequirements {
-  /** Has lowercase letter */
-  lowercase: boolean;
-  /** Has uppercase letter */
-  uppercase: boolean;
-  /** Has numeric digit */
-  numeric: boolean;
-  /** Has special character */
-  specialChar: boolean;
-}
+import type { InterfaceValidationResult } from '../../types/Auth/ValidationInterfaces';
 
 /**
  * Regular expressions for password validation.
@@ -46,7 +24,7 @@ export function validateEmail(email: string): InterfaceValidationResult {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email)
     ? { isValid: true }
-    : { isValid: false, error: 'Invalid email format' };
+    : { isValid: false, error: 'email_invalid' };
 }
 
 /**
@@ -56,7 +34,7 @@ export function validateEmail(email: string): InterfaceValidationResult {
  */
 export function validatePassword(password: string): InterfaceValidationResult {
   if (!password || password.length < 8) {
-    return { isValid: false, error: 'Password must be at least 8 characters' };
+    return { isValid: false, error: 'atleast_8_char_long' };
   }
 
   const hasLowercase = PASSWORD_REGEX.lowercase.test(password);
@@ -70,8 +48,7 @@ export function validatePassword(password: string): InterfaceValidationResult {
 
   return {
     isValid: false,
-    error:
-      'Password must include lowercase, uppercase, number, and special character',
+    error: 'password_invalid',
   };
 }
 
@@ -84,7 +61,7 @@ export function validateName(name: string): InterfaceValidationResult {
   const trimmedName = (name ?? '').trim();
   return trimmedName.length >= 2
     ? { isValid: true }
-    : { isValid: false, error: 'Name must be at least 2 characters' };
+    : { isValid: false, error: 'fillCorrectly' };
 }
 
 /**
@@ -99,5 +76,5 @@ export function validatePasswordConfirmation(
 ): InterfaceValidationResult {
   return password === confirmPassword
     ? { isValid: true }
-    : { isValid: false, error: 'Passwords do not match' };
+    : { isValid: false, error: 'passwordMismatches' };
 }

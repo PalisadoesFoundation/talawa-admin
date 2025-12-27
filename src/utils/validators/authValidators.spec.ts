@@ -42,7 +42,7 @@ describe('authValidators', () => {
       invalidEmails.forEach((email) => {
         const result = validateEmail(email);
         expect(result.isValid).toBe(false);
-        expect(result.error).toBe('Invalid email format');
+        expect(result.error).toBe('email_invalid');
       });
     });
   });
@@ -69,46 +69,38 @@ describe('authValidators', () => {
       shortPasswords.forEach((password) => {
         const result = validatePassword(password);
         expect(result.isValid).toBe(false);
-        expect(result.error).toBe('Password must be at least 8 characters');
+        expect(result.error).toBe('atleast_8_char_long');
       });
     });
 
     it('should reject passwords missing lowercase letters', () => {
       const result = validatePassword('PASSWORD123!');
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe(
-        'Password must include lowercase, uppercase, number, and special character',
-      );
+      expect(result.error).toBe('password_invalid');
     });
 
     it('should reject passwords missing uppercase letters', () => {
       const result = validatePassword('password123!');
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe(
-        'Password must include lowercase, uppercase, number, and special character',
-      );
+      expect(result.error).toBe('password_invalid');
     });
 
     it('should reject passwords missing numbers', () => {
       const result = validatePassword('Password!');
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe(
-        'Password must include lowercase, uppercase, number, and special character',
-      );
+      expect(result.error).toBe('password_invalid');
     });
 
     it('should reject passwords missing special characters', () => {
       const result = validatePassword('Password123');
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe(
-        'Password must include lowercase, uppercase, number, and special character',
-      );
+      expect(result.error).toBe('password_invalid');
     });
 
     it('should handle null/undefined passwords', () => {
       const result = validatePassword(null as unknown as string);
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe('Password must be at least 8 characters');
+      expect(result.error).toBe('atleast_8_char_long');
     });
   });
 
@@ -136,7 +128,7 @@ describe('authValidators', () => {
       invalidNames.forEach((name) => {
         const result = validateName(name);
         expect(result.isValid).toBe(false);
-        expect(result.error).toBe('Name must be at least 2 characters');
+        expect(result.error).toBe('fillCorrectly');
       });
     });
 
@@ -148,7 +140,7 @@ describe('authValidators', () => {
     it('should handle null/undefined names', () => {
       const result = validateName(null as unknown as string);
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe('Name must be at least 2 characters');
+      expect(result.error).toBe('fillCorrectly');
     });
   });
 
@@ -166,7 +158,7 @@ describe('authValidators', () => {
         'Different123!',
       );
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe('Passwords do not match');
+      expect(result.error).toBe('passwordMismatches');
     });
 
     it('should handle empty passwords', () => {
@@ -180,7 +172,7 @@ describe('authValidators', () => {
         'password123!',
       );
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe('Passwords do not match');
+      expect(result.error).toBe('passwordMismatches');
     });
   });
 
