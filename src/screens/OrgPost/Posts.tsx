@@ -18,6 +18,7 @@
 import React, { useState } from 'react';
 import type { ApolloError } from '@apollo/client';
 import { Modal, Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 import Loader from 'components/Loader/Loader';
 import NotFound from 'components/AdminPortal/NotFound/NotFound';
 import PostCard from 'shared-components/postCard/PostCard';
@@ -63,19 +64,20 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
   displayPosts,
   refetch,
 }): JSX.Element | null => {
+  const { t } = useTranslation();
   const [selectedPinnedPost, setSelectedPinnedPost] =
     useState<InterfacePost | null>(null);
   const [showPinnedPostModal, setShowPinnedPostModal] = useState(false);
 
   if (loading) return <Loader />;
-  if (error) return <div data-testid="error-message">Error loading posts</div>;
+  if (error)
+    return <div data-testid="error-message">{t('errors.loadingPosts')}</div>;
 
   const renderPostCard = (
     post: InterfacePost | PostNode,
   ): JSX.Element | null => {
     if (!post || !post.id) return null;
 
-    // Get image and video from attachments for PostNode, or directly from InterfacePost
     let imageUrl = null;
     let videoUrl = null;
 
@@ -89,7 +91,6 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
     imageUrl = imageAttachment?.name || null;
     videoUrl = videoAttachment?.name || null;
 
-    // Convert to InterfacePostCard format expected by the shared PostCard
     const cardProps: InterfacePostCard = {
       id: post.id,
       creator: {
@@ -133,7 +134,7 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
 
   if (isFiltering) {
     if (!data?.postsByOrganization || data.postsByOrganization.length === 0) {
-      return <NotFound title="post" keyPrefix="postNotFound" />;
+      return <NotFound title={t('post')} keyPrefix="postNotFound" />;
     }
 
     const filtered = data.postsByOrganization
@@ -149,64 +150,49 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
       })) as InterfacePostEdge[];
 
     if (filtered.length === 0) {
-      return <NotFound title="post" keyPrefix="postNotFound" />;
+      return <NotFound title={t('post')} keyPrefix="postNotFound" />;
     }
 
     return (
-      <>
-        <div
-          data-testid="filtered-posts-container"
-          style={{
-            maxWidth: 900,
-            margin: '0 auto',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-            marginTop: '20px',
-          }}
-        >
-          {/* Filtered Posts */}
-          {filtered.map((edge: InterfacePostEdge) => renderPostCard(edge.node))}
-        </div>
-      </>
+      <div
+        data-testid="filtered-posts-container"
+        className="filtered-posts-container"
+      >
+        {filtered.map((edge: InterfacePostEdge) => renderPostCard(edge.node))}
+      </div>
     );
   }
 
   if (sortingOption !== 'None') {
     if (!displayPosts.length) {
-      return <NotFound title="post" keyPrefix="postNotFound" />;
+      return <NotFound title={t('post')} keyPrefix="postNotFound" />;
     }
 
     return (
-      <>
-        <div data-testid="dropdown">
-          {displayPosts.map((post) => renderPostCard(post))}
-        </div>
-      </>
+      <div data-testid="dropdown">
+        {displayPosts.map((post) => renderPostCard(post))}
+      </div>
     );
   }
 
   if (!data?.organization?.posts?.edges?.length) {
-    return <NotFound title="post" keyPrefix="postNotFound" />;
+    return <NotFound title={t('post')} keyPrefix="postNotFound" />;
   }
 
   return (
     <>
-      {/* Pinned Posts Stories */}
       <PinnedPostsStory
         pinnedPosts={pinnedPostData || []}
         onStoryClick={handleStoryClick}
         data-testid="story-pinned-post-1"
       />
 
-      {/* Regular Posts */}
       <div data-testid="regular-posts-container">
         {data.organization.posts.edges
           .map((edge) => renderPostCard(edge.node))
           .filter(Boolean)}
       </div>
 
-      {/* Pinned Post Modal */}
       {selectedPinnedPost && (
         <Modal
           show={showPinnedPostModal}
@@ -215,37 +201,17 @@ const PostsRenderer: React.FC<InterfacePostsRenderer> = ({
           centered
           size="lg"
           backdrop="static"
-          style={{
-            backdropFilter: 'blur(3px)',
-          }}
+          className="pinned-post-modal"
         >
-          <Modal.Body
-            style={{
-              maxHeight: '90vh',
-              overflowY: 'auto',
-              padding: '20px',
-              position: 'relative',
-            }}
-          >
+          <Modal.Body className="pinned-post-modal-body">
             <Button
               variant="light"
               onClick={handleClosePinnedModal}
               data-testid="close-pinned-post-button"
-              className="position-absolute top-0 end-0 m-2 btn-close-custom"
-              style={{
-                backgroundColor: 'rgba(0,0,0,0.1)',
-                border: 'none',
-                borderRadius: '50%',
-                width: '32px',
-                height: '32px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-              }}
+              className="position-absolute top-0 end-0 m-2 btn-close-custom pinned-post-close-btn"
             >
-              <Close sx={{ fontSize: 20 }} />
+              <Close className="pinned-post-close-icon" />
             </Button>
-            {/* Render the pinned post */}
             {renderPostCard(selectedPinnedPost)}
           </Modal.Body>
         </Modal>

@@ -32,7 +32,7 @@ import { useTranslation } from 'react-i18next';
 import type { InterfaceNotFoundProps } from 'types/AdminPortal/NotFound/interface';
 import styles from 'style/app-fixed.module.css';
 
-function NotFound({ title, keyPrefix }: InterfaceNotFoundProps): JSX.Element {
+function notFound({ title, keyPrefix }: InterfaceNotFoundProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix });
   return (
     <>
@@ -43,4 +43,4 @@ function NotFound({ title, keyPrefix }: InterfaceNotFoundProps): JSX.Element {
   );
 }
 
-export default NotFound;
+export default notFound;

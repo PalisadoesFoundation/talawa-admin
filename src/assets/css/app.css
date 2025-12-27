@@ -14237,6 +14237,40 @@ input[type='file']::file-selector-button {
     background-position: 1200px 0;
   }
 }
+.filtered-posts-container {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.pinned-post-modal {
+  backdrop-filter: blur(3px);
+}
+
+.pinned-post-modal-body {
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 20px;
+  position: relative;
+}
+
+.pinned-post-close-btn {
+  background-color: rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pinned-post-close-icon {
+  font-size: 20px;
+}
 
 /*
 
