@@ -23,8 +23,12 @@ export class LoginPage {
     return this;
   }
 
-  verifyErrorToast() {
-    cy.get('.Toastify__toast').should('be.visible');
+  verifyErrorToast(expectedMessage?: string) {
+    if (expectedMessage) {
+      cy.contains('[role="alert"]', expectedMessage).should('be.visible');
+    } else {
+      cy.get('[role="alert"]').should('be.visible');
+    }
     return this;
   }
 }

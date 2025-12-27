@@ -13,8 +13,6 @@
   },
   "loginPage": {
     "title": "Talawa Admin",
-    "communityLogo": "Community Logo",
-    "organizations": "Organizations",
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
     "userLogin": "User Login",
     "adminLogin": "Admin Login",
