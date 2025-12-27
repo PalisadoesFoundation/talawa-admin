@@ -25,8 +25,10 @@ describe('Admin Login Functionality', () => {
         const loginPage = new LoginPage();
 
         cy.visit('/admin');
-        loginPage.verifyLoginPage().login(userData.email, 'wrongpassword');
-        loginPage.verifyToastValid();
+        loginPage
+          .verifyLoginPage()
+          .login(userData.email, 'wrongpassword')
+          .verifyErrorToast();
         cy.url().should('include', '/admin');
         cy.window().then((win) => {
           expect(win.localStorage.getItem('Talawa-admin_token')).to.eq(null);

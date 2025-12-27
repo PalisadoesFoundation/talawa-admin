@@ -23,7 +23,7 @@ export class LoginPage {
     return this;
   }
 
-  verifyToastValid(timeout = 5000) {
+  verifyErrorToast(timeout = 5000) {
     cy.get('.Toastify__toast', { timeout }).should('be.visible');
     return this;
   }
