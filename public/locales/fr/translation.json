@@ -54,7 +54,13 @@
     "OR": "OU",
     "admin": "Administrateur",
     "user": "Utilisateur",
-    "loading": "Chargement"
+    "loading": "Chargement",
+    "userImage": "Image de l'utilisateur",
+    "userEditProfilePicture": "Modifier la photo de profil",
+    "communityLogo": "Logo de la Communauté",
+    "organizations": "Organisations",
+    "accountLocked": "Votre compte a été temporairement verrouillé en raison de trop nombreuses tentatives de connexion échouées. Veuillez réessayer plus tard.",
+    "accountLockedWithTimer": "Votre compte a été temporairement verrouillé. Veuillez réessayer dans {{minutes}} minute(s)."
   },
   "signOut": {
     "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
@@ -150,7 +156,8 @@
     "allCaughtUp": "Vous êtes à jour !",
     "prev": "Précédent",
     "next": "Suivant",
-    "markAsRead": "Marquer comme lues"
+    "markAsRead": "Marquer comme lues",
+    "markAsReadAriaLabel": "Marquer la notification '{{title}}' comme lue"
   },
   "orgList": {
     "title": "Organisations Talawa",
@@ -221,13 +228,22 @@
     "name": "Nom",
     "email": "E-mail",
     "profilePictureAlt": "Image de profil de {{name}}",
-    "placeholderAvatarAlt": "Avatar par défaut"
+    "placeholderAvatarAlt": "Avatar par défaut",
+    "newMembersWillAppearHere": "Les nouvelles demandes d'adhésion apparaîtront ici"
   },
   "users": {
+    "membershipStatus": {
+      "member": "Statut d'adhésion: Membre",
+      "pending": "Statut d'adhésion: En attente",
+      "notMember": "Statut d'adhésion: Non membre"
+    },
     "title": "Rôles Talawa",
     "joined_organizations": "Organisations rejointes",
     "blocked_organizations": "Organisations bloquées",
     "orgJoinedBy": "Organisations rejointes par",
+    "member": "Membre",
+    "pending": "En attente",
+    "notMember": "Non membre",
     "orgThatBlocked": "Organisations qui ont bloqué",
     "hasNotJoinedAnyOrg": "n'a rejoint aucune organisation",
     "isNotBlockedByAnyOrg": "n'est bloqué par aucune organisation",
@@ -236,7 +252,10 @@
     "enterName": "Entrez le nom",
     "loadingUsers": "Chargement des utilisateurs...",
     "noUserFound": "Aucun utilisateur trouvé",
+    "filterByRole": "Filter par rôle",
+    "errorLoadingUsers": "Erreur lors du chargement des utilisateurs",
     "sort": "Trier",
+    "sortBy": "Trier par",
     "Newest": "Le plus récent d'abord",
     "Oldest": "Le plus âgé en premier",
     "noOrgError": "Organisations introuvables, veuillez créer une organisation via le tableau de bord",
@@ -377,6 +396,8 @@
     "unassignUserTag": "Désassigner l'étiquette",
     "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
     "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
+    "unassignUserTagError": "Erreur lors de la suppression de l'affectation d'étiquette",
+    "removeUserTagError": "Erreur lors de la suppression de l'étiquette et de tous ses sous-étiquettes",
     "addPeople": "Ajouter des personnes",
     "add": "Ajouter",
     "subTags": "Sous-étiquettes",
@@ -468,6 +489,17 @@
     "monthlyOn": "Mensuel le",
     "yearlyOn": "Annuel le",
     "yearlyRecurrenceDesc": "Cet événement se répétera chaque année à la même date que la date de début de l'événement.",
+    "doesNotRepeat": "Ne se répète pas",
+    "daily": "Quotidien",
+    "weeklyOn": "Hebdomadaire le {{day}}",
+    "monthlyOnDay": "Mensuel le jour {{day}}",
+    "annuallyOn": "Annuel le {{day}} {{month}}",
+    "everyWeekday": "Chaque jour de semaine (lun–ven)",
+    "custom": "Personnalisé…",
+    "day": "Jour",
+    "week": "Semaine",
+    "month": "Mois",
+    "year": "Année",
     "events": "Événements",
     "description": "Description",
     "location": "Emplacement",
@@ -681,7 +713,8 @@
     "viewCampaigns": "Voir les campagnes",
     "assocCampaigns": "Campagnes associées",
     "errorLoadingFundsData": "Erreur lors du chargement des données des fonds",
-    "editFund": "Modifier le fonds"
+    "editFund": "Modifier le fonds",
+    "searchFunds": "Rechercher des fonds"
   },
   "fundCampaign": {
     "title": "Campagnes de collecte de fonds",
@@ -705,7 +738,10 @@
     "latestEndDate": "Dernière date de fin",
     "earliestEndDate": "Date de fin la plus ancienne",
     "lowestGoal": "Objectif le plus bas",
-    "highestGoal": "Objectif le plus élevé"
+    "highestGoal": "Objectif le plus élevé",
+    "editCampaign": "Modifier la campagne",
+    "searchCampaigns": "Rechercher des campagnes",
+    "errorLoading": "Erreur lors du chargement des données de la campagne"
   },
   "pledges": {
     "title": "Engagements de campagne de financement",
@@ -737,6 +773,7 @@
     "pledgedAmount": "Montant promis",
     "startDate": "Date de début",
     "endDate": "Date de fin",
+    "searchByPlaceholder": "Rechercher par {{field}}",
     "selectPledger": "Veuillez sélectionner un donateur"
   },
   "orgPost": {
@@ -1021,12 +1058,31 @@
     "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
     "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
     "tagsAssigned": "étiquettes assignées",
-    "noTagsAssigned": "Aucune étiquette assignée"
+    "noTagsAssigned": "Aucune étiquette assignée",
+    "to": "À",
+    "overview": "Aperçu",
+    "tags": "Étiquettes",
+    "invalidFileType": "Type de fichier invalide",
+    "fileTooLarge": "Fichier trop volumineux",
+    "memberDetailNumberExample": "Exemple de numéro",
+    "memberDetailExampleLane": "Exemple de rue",
+    "memberDetailPostalExample": "Exemple de code postal",
+    "enterCity": "Entrez la ville",
+    "enterState": "Entrez l'état",
+    "select": "Sélectionner",
+    "asYourCountry": "comme votre pays",
+    "actions": "Actions"
   },
   "people": {
     "title": "Personnes",
     "searchUsers": "Rechercher des utilisateurs",
-    "nothingToShow": "Rien à montrer ici."
+    "nothingToShow": "Rien à montrer ici.",
+    "sNo": "N°",
+    "avatar": "Avatar",
+    "name": "Nom",
+    "email": "E-mail",
+    "role": "Rôle",
+    "loading": "Chargement..."
   },
   "userLogin": {
     "login": "Se connecter",
@@ -1085,7 +1141,8 @@
     "search": "Rechercher",
     "filter": "Filtrer",
     "searchByName": "Rechercher par nom",
-    "searchOrganizations": "Rechercher Organisations"
+    "searchOrganizations": "Rechercher Organisations",
+    "loading": "Chargement..."
   },
   "userSidebarOrg": {
     "yourOrganizations": "Vos organisations",
@@ -1115,6 +1172,7 @@
     "postDeletedSuccess": "Message supprimé avec succès.",
     "postPinnedSuccess": "Message épinglé avec succès.",
     "postUnpinnedSuccess": "Message désépinglé avec succès.",
+    "postUpdatedSuccess": "Message mis à jour avec succès.",
     "viewPost": "Voir le message",
     "editPost": "Modifier le message",
     "pinPost": "Épingler le message",
@@ -1126,7 +1184,8 @@
     "noMoreComments": "Plus de commentaires à charger",
     "postedOn": "Publié le {{date}}",
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
-    "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer."
+    "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer.",
+    "moreOptions": "Plus d'options"
   },
   "home": {
     "posts": "Des postes",
@@ -1144,7 +1203,9 @@
     "media": "Médias",
     "event": "Événement",
     "article": "Article",
-    "postNowVisibleInFeed": "Le post est maintenant visible dans le fil d'actualité"
+    "postNowVisibleInFeed": "Le post est maintenant visible dans le fil d'actualité",
+    "processingPost": "Traitement de votre publication. Veuillez patienter.",
+    "postImagePreview": "Aperçu de l’image de la publication"
   },
   "eventAttendance": {
     "historical_statistics": "Statistiques historiques",
@@ -1309,7 +1370,9 @@
     "latestFirst": "Plus Récent en Premier",
     "earliestFirst": "Plus Ancien en Premier",
     "noTransactionsFound": "Aucune transaction trouvée",
-    "errorLoadingTransactions": "Erreur lors du chargement des transactions"
+    "errorLoadingTransactions": "Erreur lors du chargement des transactions",
+    "eventType": "Type d'événement",
+    "tagCreationFailed": "Échec de la création du tag"
   },
   "userEvents": {
     "title": "Événements",
@@ -1339,7 +1402,18 @@
     "eventLocation": "Lieu de l'événement",
     "startDate": "Date de début",
     "endDate": "Date de fin",
-    "createChat": "Créer une discussion"
+    "createChat": "Créer une discussion",
+    "doesNotRepeat": "Ne se répète pas",
+    "daily": "Quotidien",
+    "weeklyOn": "Hebdomadaire le {{day}}",
+    "monthlyOnDay": "Mensuel le jour {{day}}",
+    "annuallyOn": "Annuel le {{day}} {{month}}",
+    "everyWeekday": "Chaque jour de semaine (lun–ven)",
+    "custom": "Personnalisé…",
+    "day": "Jour",
+    "week": "Semaine",
+    "month": "Mois",
+    "year": "Année"
   },
   "userEventCard": {
     "starts": "Départs",
@@ -1387,6 +1461,7 @@
   },
   "userChat": {
     "title": "Discussions",
+    "deleteChat": "Supprimer le Chat",
     "add": "Ajouter",
     "chat": "Chat",
     "contacts": "Contacts",
@@ -1397,7 +1472,25 @@
     "newGroupChat": "Nouvelle discussion de groupe",
     "groupInfo": "Informations sur le groupe",
     "members": "Membres",
-    "addMembers": "Add Members"
+    "addMembers": "Ajouter des membres",
+    "userNotFound": "Utilisateur non trouvé",
+    "roleUpdatedSuccessfully": "Rôle mis à jour avec succès",
+    "failedToUpdateRole": "Échec de la mise à jour du rôle",
+    "memberRemovedSuccessfully": "Membre supprimé avec succès",
+    "failedToRemoveMember": "Échec de la suppression du membre",
+    "chatImageUpdatedSuccessfully": "Image de chat mise à jour avec succès",
+    "failedToUpdateChatImage": "Échec de la mise à jour de l'image du chat",
+    "chatDeletedSuccessfully": "Chat supprimé avec succès",
+    "failedToDeleteChat": "Échec de la suppression du chat",
+    "chatNameUpdatedSuccessfully": "Nom du chat mis à jour avec succès",
+    "failedToUpdateChatName": "Échec de la mise à jour du nom du chat",
+    "remove": "Supprimer",
+    "searchFullName": "Rechercher par nom complet",
+    "customizedTable": "Table personnalisée",
+    "demoteToRegular": "Rétrograder au rang régulier",
+    "promoteToAdmin": "Promouvoir administrateur",
+    "user": "Utilisateur",
+    "chatAction": "Action de chat"
   },
   "userChatRoom": {
     "selectContact": "Sélectionnez un contact pour démarrer la conversation",
@@ -1537,7 +1630,15 @@
     "addPledge": "Ajouter une promesse",
     "viewPledges": "Voir les promesses",
     "noPledges": "Aucune promesse trouvée",
-    "noCampaigns": "Aucune campagne trouvée"
+    "noCampaigns": "Aucune campagne trouvée",
+    "searchCampaigns": "Rechercher des campagnes",
+    "campaignName": "Nom de la campagne",
+    "startDate": "Date de début",
+    "endDate": "Date de fin",
+    "fundingGoal": "Objectif de financement",
+    "raised": "Montant collecté",
+    "viewPledge": "Voir l'engagement",
+    "amountRaised": "Montant Collecté"
   },
   "userPledges": {
     "title": "Mes Promesses"
@@ -1626,7 +1727,21 @@
     "eventInvitationRecurringSubject": "Invitation à faire du bénévolat pour la série d'événements récurrents",
     "pending": "En attente",
     "accepted": "Accepté",
-    "rejected": "Rejeté"
+    "rejected": "Rejeté",
+    "assignee": "Assigné",
+    "group": "Groupe",
+    "event": "Événement",
+    "received": "Reçu",
+    "location": "Emplacement",
+    "recurrence": "Récurrence",
+    "endDate": "Date de Fin",
+    "description": "Description",
+    "volunteerGroups": "Groupes de Bénévoles",
+    "groupTable": "Tableau des Groupes",
+    "srNo": "N°",
+    "groupName": "Nom du Groupe",
+    "noOfMembers": "Nombre de Membres",
+    "options": "Options"
   },
   "pluginStore": {
     "title": "Boutique de Plugins",
@@ -1648,6 +1763,8 @@
     "noPluginsAvailable": "Aucun plugin disponible",
     "installPluginsToSeeHere": "Installez des plugins pour les voir ici",
     "checkBackLater": "Revenez plus tard pour de nouveaux plugins",
+    "tryDifferentSearch": "Essayez un autre terme de recherche ou parcourez tous les plugins",
+    "explorePluginStore": "Explorez la boutique de plugins pour découvrir de nouveaux plugins",
     "noResultsFoundFor": "Aucun résultat trouvé pour"
   },
   "commentCard": {
@@ -1661,5 +1778,15 @@
     "deleteComment": "Supprimer le commentaire",
     "deleting": "Suppression…",
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre."
+  },
+  "profileAvatar": {
+    "altText": "Photo de profil de {{name}}",
+    "modalTitle": "Photo de profil",
+    "enlargedAltText": "Photo de profil agrandie de {{name}}"
+  },
+  "common": {
+    "signOut": "Se déconnecter",
+    "signingOut": "Déconnexion en cours...",
+    "retryPrompt": "Échec de la révocation de session. Réessayer ?"
   }
 }

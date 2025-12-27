@@ -54,7 +54,13 @@
     "OR": "OR",
     "admin": "admin",
     "user": "user",
-    "loading": "loading"
+    "loading": "loading",
+    "userImage": "User Image",
+    "userEditProfilePicture": "Edit profile picture",
+    "communityLogo": "Community Logo",
+    "organizations": "Organizations",
+    "accountLocked": "Your account has been temporarily locked due to too many failed login attempts. Please try again later.",
+    "accountLockedWithTimer": "Your account has been temporarily locked. Please try again in {{minutes}} minute(s)."
   },
   "signOut": {
     "retryPrompt": "Failed to revoke session. Retry?",
@@ -150,7 +156,8 @@
     "allCaughtUp": "You're all caught up!",
     "prev": "Prev",
     "next": "Next",
-    "markAsRead": "Mark as Read"
+    "markAsRead": "Mark as Read",
+    "markAsReadAriaLabel": "Mark notification '{{title}}' as read"
   },
   "orgList": {
     "title": "Organizations",
@@ -221,9 +228,18 @@
     "name": "name",
     "email": "email",
     "profilePictureAlt": "User profile picture",
-    "placeholderAvatarAlt": "Placeholder avatar"
+    "placeholderAvatarAlt": "Placeholder avatar",
+    "newMembersWillAppearHere": "New membership requests will appear here"
   },
   "users": {
+    "membershipStatus": {
+      "member": "Membership status: Member",
+      "pending": "Membership status: Pending",
+      "notMember": "Membership status: Not a member"
+    },
+    "member": "Member",
+    "pending": "Pending",
+    "notMember": "Not a member",
     "title": "Talawa Roles",
     "joined_organizations": "Joined Organizations",
     "blocked_organizations": "Blocked Organizations",
@@ -239,6 +255,8 @@
     "sort": "Sort",
     "Newest": "Newest First",
     "Oldest": "Oldest First",
+    "sortBy": "Sort by",
+    "filterByRole": "Filter by role",
     "noOrgError": "Organizations not found, please create an organization through dashboard",
     "roleUpdated": "Role Updated.",
     "joinNow": "Join Now",
@@ -268,7 +286,8 @@
     "errorOccurred": "An error occurred. Please try again",
     "UserIdNotFound": "User ID not found",
     "MembershipRequestNotFound": "Membership request not found",
-    "MembershipRequestWithdrawn": "Membership request withdrawn successfully"
+    "MembershipRequestWithdrawn": "Membership request withdrawn successfully",
+    "errorLoadingUsers": "Error occurred while loading Users"
   },
   "communityProfile": {
     "title": "Community Profile",
@@ -378,6 +397,8 @@
     "unassignUserTagMessage": "Do you want to remove the tag from this user?",
     "successfullyUnassigned": "Tag unassigned from user",
     "addPeople": "Add People",
+    "unassignUserTagError": "Error unassigning tag from user",
+    "removeUserTagError": "Error removing tag from user",
     "add": "Add",
     "subTags": "Sub Tags",
     "successfullyAssignedToPeople": "Tag assigned successfully",
@@ -466,6 +487,17 @@
     "monthlyOn": "Monthly On",
     "yearlyOn": "Yearly On",
     "yearlyRecurrenceDesc": "This event will repeat every year on the same date as the event start date.",
+    "doesNotRepeat": "Does not repeat",
+    "daily": "Daily",
+    "weeklyOn": "Weekly on {{day}}",
+    "monthlyOnDay": "Monthly on day {{day}}",
+    "annuallyOn": "Annually on {{month}} {{day}}",
+    "everyWeekday": "Every weekday (Mon–Fri)",
+    "custom": "Custom…",
+    "day": "Day",
+    "week": "Week",
+    "month": "Month",
+    "year": "Year",
     "startTime": "startTime",
     "endTime": "endTime",
     "eventLocation": "eventLocation",
@@ -659,6 +691,7 @@
   "funds": {
     "title": "Funds",
     "createFund": "Create Fund",
+    "searchFunds": "Search Funds",
     "fundName": "Fund Name",
     "fundId": "Fund (Reference) ID",
     "taxDeductible": "Tax Deductible",
@@ -668,6 +701,7 @@
     "fundUpdate": "Update Fund",
     "fundDelete": "Delete Fund",
     "noFundsFound": "No Funds Found",
+    "editFund": "Edit Fund",
     "createdBy": "Created By",
     "createdOn": "Created On",
     "status": "Status",
@@ -685,6 +719,8 @@
   },
   "fundCampaign": {
     "title": "Fundraising Campaigns",
+    "editCampaign": "Edit Campaign",
+    "searchCampaigns": "Search Campaigns",
     "campaignName": "Campaign Name",
     "campaignOptions": "Options",
     "fundingGoal": "Funding Goal",
@@ -705,7 +741,8 @@
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
     "lowestGoal": "Lowest Goal",
-    "highestGoal": "Highest Goal"
+    "highestGoal": "Highest Goal",
+    "errorLoading": "Error occured while loading campaigns data"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
@@ -737,6 +774,7 @@
     "pledgedAmount": "Pledged amount",
     "startDate": "startDate",
     "endDate": "endDate",
+    "searchByPlaceholder": "Search by {{field}}",
     "selectPledger": "Please select a pledger"
   },
   "orgPost": {
@@ -1022,6 +1060,7 @@
   },
   "memberDetail": {
     "title": "User Details",
+    "to": "TO",
     "addAdmin": "Add Admin",
     "noeventsAttended": "No Events Attended",
     "alreadyIsAdmin": "Member is already an Admin",
@@ -1053,6 +1092,7 @@
     "eventsAttended": "Events Attended",
     "contactInfoHeading": "Contact Information",
     "actionsHeading": "Actions",
+    "actions": "Action",
     "personalDetailsHeading": "Profile Details",
     "appLanguageCode": "Choose Language",
     "deleteUser": "Delete User",
@@ -1073,12 +1113,29 @@
     "unassignUserTagMessage": "Do you want to remove the tag from this user?",
     "successfullyUnassigned": "Tag unassigned from user",
     "tagsAssigned": "Tags Assigned",
-    "noTagsAssigned": "No Tags Assigned"
+    "noTagsAssigned": "No Tags Assigned",
+    "overview": "Overview",
+    "tags": "Tags",
+    "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF.",
+    "fileTooLarge": "File is too large. Maximum size is 5MB.",
+    "memberDetailNumberExample": "Ex. +1234567890",
+    "memberDetailExampleLane": "Ex. Lane 2",
+    "memberDetailPostalExample": "Ex. 12345",
+    "enterCity": "Enter city name",
+    "enterState": "Enter state name",
+    "select": "Select",
+    "asYourCountry": "as your country"
   },
   "people": {
     "title": "People",
     "searchUsers": "Search users",
-    "nothingToShow": "Nothing to show here"
+    "nothingToShow": "Nothing to show here",
+    "sNo": "S.No",
+    "avatar": "Avatar",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "loading": "Loading..."
   },
   "userLogin": {
     "login": "Login",
@@ -1137,7 +1194,8 @@
     "search": "search",
     "filter": "filter",
     "searchByName": "Search by Name",
-    "searchOrganizations": "Search Organization"
+    "searchOrganizations": "Search Organization",
+    "loading": "Loading..."
   },
   "userSidebarOrg": {
     "yourOrganizations": "Your Organizations",
@@ -1168,6 +1226,7 @@
     "postDeletedSuccess": "Post deleted successfully.",
     "postPinnedSuccess": "Post pinned successfully.",
     "postUnpinnedSuccess": "Post unpinned successfully.",
+    "postUpdatedSuccess": "Post updated successfully.",
     "editPost": "Edit Post",
     "pinPost": "Pin Post",
     "unpinPost": "Unpin Post",
@@ -1178,7 +1237,8 @@
     "noMoreComments": "No more comments",
     "postedOn": "Posted on {{date}}",
     "emptyCommentError": "Please enter a comment before submitting.",
-    "unexpectedError": "An unexpected error occurred. Please try again."
+    "unexpectedError": "An unexpected error occurred. Please try again.",
+    "moreOptions": "More options"
   },
   "home": {
     "posts": "Posts",
@@ -1196,7 +1256,9 @@
     "media": "Media",
     "event": "Event",
     "article": "Article",
-    "postNowVisibleInFeed": "Post now visible in feed"
+    "postNowVisibleInFeed": "Post now visible in feed",
+    "processingPost": "Processing your post. Please wait.",
+    "postImagePreview": "Post Image Preview"
   },
   "settings": {
     "eventAttended": "Events Attended",
@@ -1309,7 +1371,9 @@
     "latestFirst": "Latest First",
     "earliestFirst": "Earliest First",
     "noTransactionsFound": "No transactions found",
-    "errorLoadingTransactions": "Error loading transactions"
+    "errorLoadingTransactions": "Error loading transactions",
+    "eventType": "Event Type",
+    "tagCreationFailed": "Tag creation failed"
   },
   "userEvents": {
     "title": "Events",
@@ -1339,7 +1403,18 @@
     "eventDescription": "eventDescription",
     "eventLocation": "eventLocation",
     "startDate": "startDate",
-    "endDate": "endDate"
+    "endDate": "endDate",
+    "doesNotRepeat": "Does not repeat",
+    "daily": "Daily",
+    "weeklyOn": "Weekly on {{day}}",
+    "monthlyOnDay": "Monthly on day {{day}}",
+    "annuallyOn": "Annually on {{month}} {{day}}",
+    "everyWeekday": "Every weekday (Mon–Fri)",
+    "custom": "Custom…",
+    "day": "Day",
+    "week": "Week",
+    "month": "Month",
+    "year": "Year"
   },
   "userEventCard": {
     "starts": "Starts",
@@ -1397,7 +1472,26 @@
     "newGroupChat": "New Group Chat",
     "groupInfo": "Group Info",
     "members": "Members",
-    "addMembers": "Add Members"
+    "addMembers": "Add Members",
+    "userNotFound": "User not found",
+    "roleUpdatedSuccessfully": "Role updated successfully",
+    "failedToUpdateRole": "Failed to update role",
+    "memberRemovedSuccessfully": "Member removed successfully",
+    "failedToRemoveMember": "Failed to remove member",
+    "chatImageUpdatedSuccessfully": "Chat image updated successfully",
+    "failedToUpdateChatImage": "Failed to update chat image",
+    "chatDeletedSuccessfully": "Chat deleted successfully",
+    "failedToDeleteChat": "Failed to delete chat",
+    "chatNameUpdatedSuccessfully": "Chat name updated successfully",
+    "failedToUpdateChatName": "Failed to update chat name",
+    "deleteChat": "Delete Chat",
+    "remove": "Remove",
+    "searchFullName": "Search by Full Name",
+    "customizedTable": "Customized Table",
+    "demoteToRegular": "Demote to Regular",
+    "promoteToAdmin": "Promote to Admin",
+    "user": "User",
+    "chatAction": "Chat action"
   },
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",
@@ -1518,14 +1612,21 @@
   "userCampaigns": {
     "title": "Fundraising Campaigns",
     "searchByName": "Search by Name...",
+    "searchCampaigns": "Search Campaigns",
+    "campaignName": "Campaign Name",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "fundingGoal": "Fund Goal",
+    "raised": "Amount Raised",
+    "progress": "% Raised",
+    "viewPledge": "View Pledge",
     "searchBy": "Search by",
     "pledgers": "Pledgers",
     "pledger": "Pledger",
     "campaigns": "Campaigns",
-    "associatedCampaign": "Associated Campaign",
+    "associatedCampaign": "Associated Campaigns",
     "pledged": "Pledged",
     "donated": "Donated",
-    "progress": "Progress",
     "more": "more",
     "myPledges": "My Pledges",
     "lowestAmount": "Lowest Amount",
@@ -1537,7 +1638,9 @@
     "addPledge": "Add Pledge",
     "viewPledges": "View Pledges",
     "noPledges": "No Pledges Found",
-    "noCampaigns": "No Campaigns Found"
+    "noCampaigns": "No Campaigns Found",
+    "raised": "Raised",
+    "amountRaised": "Amount Raised"
   },
   "userPledges": {
     "title": "My Pledges"
@@ -1626,7 +1729,21 @@
     "groupInvitationSubject": "Invitation to join volunteer group",
     "eventInvitationSubject": "Invitation to volunteer for event",
     "groupInvitationRecurringSubject": "Invitation to join volunteer group for recurring event series",
-    "eventInvitationRecurringSubject": "Invitation to volunteer for recurring event series"
+    "eventInvitationRecurringSubject": "Invitation to volunteer for recurring event series",
+    "assignee": "Assignee",
+    "group": "Group",
+    "event": "Event",
+    "received": "Received",
+    "location": "Location",
+    "recurrence": "Recurrence",
+    "endDate": "End Date",
+    "description": "Description",
+    "volunteerGroups": "Volunteer Groups",
+    "groupTable": "Group Table",
+    "srNo": "Sr. No.",
+    "groupName": "Group Name",
+    "noOfMembers": "No. of Members",
+    "options": "Options"
   },
   "pluginStore": {
     "title": "Plugin Store",
@@ -1648,6 +1765,8 @@
     "noPluginsAvailable": "No plugins available",
     "installPluginsToSeeHere": "Install plugins to see them here",
     "checkBackLater": "Check back later for new plugins",
+    "tryDifferentSearch": "Try a different search term or browse all plugins",
+    "explorePluginStore": "Explore the plugin store to discover new plugins",
     "noResultsFoundFor": "No results found for"
   },
   "commentCard": {
@@ -1661,5 +1780,15 @@
     "deleteComment": "Delete Comment",
     "deleting": "Deleting…",
     "emptyCommentError": "Please enter a comment before submitting."
+  },
+  "profileAvatar": {
+    "altText": "Profile picture of {{name}}",
+    "modalTitle": "Profile Picture",
+    "enlargedAltText": "Enlarged profile picture of {{name}}"
+  },
+  "common": {
+    "signOut": "Sign out",
+    "signingOut": "Signing out...",
+    "retryPrompt": "Failed to revoke session. Retry?"
   }
 }

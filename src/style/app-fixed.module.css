@@ -36,6 +36,7 @@
  */
 :root {
   --primary-theme-color: #1778f2;
+  --success-green-color: #31bb6b;
 
   --addButton-font: #555555;
   --addButton-border: #eaebef;
@@ -122,6 +123,7 @@
 
   --tableHeader-bg: #eaebef;
   --tableHeader-color: #000000;
+  --tableHeader-success-bg: var(--success-green-color);
 
   --LoginToggle-button-color: #555555;
   --LoginToggle-button-bg: #eaebef;
@@ -178,6 +180,15 @@
   --register-button-border-active: #eaebef;
   --register-button-color: #555555;
   --register-button-color-hover: #555555;
+
+  /* Progress indicator colors */
+  --progress-track-color: #e0e0e0;
+  --progress-complete-color: #4caf50;
+  --progress-half-color: #ff9800;
+  --progress-low-color: #2196f3;
+
+  /* Row hover background */
+  --row-hover-bg: #f0f0f0;
 
   --row-bg: #fff;
   --row-bg-scroll: #00000029;
@@ -845,6 +856,13 @@
   --dropdown-font-color: #555555;
 
   --input-bg: #f2f7ff;
+
+  --peopleTabUserTagTableBody: #ffffff;
+
+  --peopleTabUserTagTableHeaderCell-color: #000000;
+
+  --empty-state-bg: #ffffff;
+  --empty-state-border-color: #e7e7e7;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -983,15 +1001,22 @@
   border: 1px solid var(--search-border-color, #d0d5dd);
   border-radius: 8px;
   background-color: var(--search-background-color, #fcfcfc);
-  box-shadow: 0 15px 35px rgba(149, 156, 202, 0.2);
+  box-shadow: 0 4px 6px rgba(149, 156, 202, 0.1);
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
   overflow: hidden;
-  flex: 1 1 320px;
-  min-width: 240px;
+
+  /* Flex properties to make it sit on the same line */
+  flex-grow: 1;
+  /* Allow it to grow to fill space */
+  flex-shrink: 1;
+  /* Allow it to shrink if needed */
   width: auto;
+  /* Stop forcing 100% width */
+  min-width: 450px;
   max-width: 100%;
+  height: 57px;
 }
 
 .searchBarContainerWithButton {
@@ -1008,7 +1033,8 @@
   flex: 1;
   display: flex;
   align-items: center;
-  min-height: 55px;
+  min-height: 48px;
+  min-width: 40rem;
   padding: 0.75rem 2.5rem 0.75rem 1.25rem;
   background-color: transparent;
 }
@@ -1033,9 +1059,12 @@
   border: none;
   background: transparent;
   padding: 0;
+  padding-left: 3rem !important;
   font-size: 0.95rem;
   color: var(--search-text-color, #1e293b);
   outline: none;
+  width: 100%;
+  height: 100%;
 }
 
 .searchBarInput::-webkit-search-cancel-button,
@@ -1071,9 +1100,27 @@
 .searchBarIcon {
   position: absolute;
   left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
   color: var(--search-icon-color, #a0aec0);
   display: inline-flex;
-  font-size: 1rem;
+  font-size: 1.2rem;
+  pointer-events: none;
+}
+
+.searchBarTrailingIcon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background-color: var(--search-button-bg, #b3ceff);
+  color: #2f3f5f;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 0.75rem;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
 }
 
 .searchBarClearButton {
@@ -1104,8 +1151,8 @@
   border-radius: 0;
   background-color: var(--search-button-bg, #b3ceff);
   color: #2f3f5f;
-  width: 55px;
-  height: 55px;
+  width: 48px;
+  height: 48px;
   font-weight: 600;
   transition:
     background-color 0.2s ease,
@@ -1342,6 +1389,26 @@ form label,
   align-items: center;
 }
 
+.searchBarContainer {
+  display: flex;
+  margin: 2.5rem 0;
+  align-items: center;
+  max-width: 600px;
+}
+
+.searchBarContainer {
+  display: flex;
+  margin: 2.5rem 0;
+  align-items: stretch;
+  gap: 0.75rem;
+}
+
+.searchBarContainer > :first-child {
+  flex: 1 1 320px;
+  min-width: 240px;
+  max-width: 100%;
+}
+
 /* Table Header */
 
 .tableHeader {
@@ -1360,12 +1427,15 @@ form label,
 
 /* btnsBlock & btnsContainer */
 
-.btnsContainer {
+.btnsContainer,
+.calendar__controls {
   display: flex;
-  margin: 2.5rem 0;
-  align-items: stretch;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  /* Space between the Sort, Create, and Bell icons */
+  flex-shrink: 0;
+  /* Prevents buttons from getting squished */
+  white-space: nowrap;
 }
 
 .btnsContainer > :first-child {
@@ -1400,6 +1470,22 @@ form label,
     display: block;
     margin-top: 1rem;
     margin-right: 0;
+  }
+
+  .peopleTabBtnBlock {
+    height: 100%;
+    padding-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .peopleTabBtnBlock {
+    height: 100%;
+    padding-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
   }
 
   .btnsContainer .btnsBlock div {
@@ -1456,7 +1542,7 @@ form label,
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 1rem;
+  margin-top: 0;
 }
 
 @media (max-width: 1020px) {
@@ -1595,6 +1681,7 @@ form label,
   transform: scale(1.5);
   color: var(--bs-danger, var(--errorIcon-color));
   margin-bottom: 1rem;
+  font-size: 1.5rem;
 
   /* Add error icon for non-color indication */
   &::before {
@@ -1604,7 +1691,9 @@ form label,
 }
 
 /* Not Found */
-
+/**
+*Pages still using .notFound class are - screens/UserPortal/Campaigns, screens/BlockUser
+*/
 .notFound {
   flex: 1;
   display: flex;
@@ -1723,6 +1812,15 @@ form label,
   color: var(--createButton-color) !important;
   border: 1px solid var(--createButton-border) !important;
   margin: 5px 10px;
+  width: 10rem;
+  height: 3rem;
+}
+
+.createFundButton {
+  background-color: var(--createButton-bg) !important;
+  color: var(--createButton-color) !important;
+  border: 1px solid var(--createButton-border) !important;
+  margin: 5px 5px;
   width: 10rem;
   height: 3rem;
 }
@@ -2073,6 +2171,7 @@ form label,
 
 .orgCard .innerContainer {
   display: flex;
+  height: 100%;
 }
 
 .orgCard {
@@ -2712,6 +2811,15 @@ form label,
   margin: 8px;
 }
 
+.peopleTabEventHeader {
+  display: flex;
+  align-items: center;
+  color: grey;
+}
+.peopleTabEventHeader:hover {
+  color: var(--groupsLabel-color);
+}
+
 .calendar__header {
   display: flex;
   align-items: stretch;
@@ -2735,13 +2843,6 @@ form label,
 }
 
 @media (max-width: 520px) {
-  .calendar__header {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
   .space {
     display: block !important;
     text-align: center;
@@ -4109,6 +4210,316 @@ form label,
   align-items: center;
 }
 
+.peopleTabIconWrapper {
+  display: flex;
+  align-items: center;
+  color: grey;
+  border: 1px solid grey;
+  border-radius: 9px;
+  padding: 0 20px;
+}
+
+.peopleTabIcon {
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  color: grey;
+  padding: 1rem 1.2rem;
+}
+
+.peopleTabComponentSection {
+  padding: 0.5rem 0.5rem;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 10px 5px;
+}
+
+.peopleTabUserTagContainer {
+  width: 100%;
+}
+
+.peopleTabUserTagComponentSection {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-radius: 10px;
+}
+
+.peopleTabUserTagColumnHeader {
+  background: #6261613b;
+}
+
+.peopleTabUserTagTableCell {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  white-space: nowrap;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.peopleTabUserTagCreatedByButton {
+  color: #2563eb;
+  cursor: pointer;
+  transition: 0.2s ease;
+  text-decoration: underline #5f5fd9;
+}
+
+.peopleTabUserTagCreatedByButton:hover {
+  text-decoration: underline;
+  color: #1d4ed8;
+}
+
+.peopleTabUserTagTableHeader {
+  background-color: #f9fafb; /* bg-gray-50 */
+  border-top-width: 1px; /* border-y */
+  border-bottom-width: 1px;
+  border-color: #e5e7eb; /* border-gray-200 */
+  border-style: solid;
+}
+
+.peopleTabUserTagTableRow:hover {
+  background-color: #f9fafb;
+}
+
+.peopleTabUserTagTableHeaderCell {
+  padding: 0.75rem 1.5rem;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--peopleTabUserTagTableHeaderCell-color);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  height: 4rem;
+  font-weight: bold;
+}
+
+.peopleTabUserTagTableBody {
+  background: var(--peopleTabUserTagTableBody-bg);
+}
+
+.peopleTabUserTagTable {
+  width: 100%;
+}
+
+.peopleTabIconWrapper:hover {
+  color: var(--groupsLabel-color);
+  border: 1px solid var(--groupsLabel-color);
+  cursor: pointer;
+}
+
+.peopleTabUserEventsContainer {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.peopleTabUserEventContainer {
+  flex: 1 1 calc(50% - 1rem);
+  max-width: 45%;
+  min-width: 300px;
+  background: white;
+  border-radius: 3px;
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 2rem;
+  margin: 0.5rem; /* spacing for flex-wrap */
+  border-left: 6px solid #a8c7fa;
+  border-right: 1px solid #80808036;
+  border-top: 1px solid #80808036;
+  border-bottom: 1px solid #80808036;
+}
+
+.peopleTabUserEventTime {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.peopleTabUserEventDate {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.peopleTabUserEventInfo {
+  flex: 1;
+  margin: 2rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+.peoplePageUserEventCardBody {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1rem 1.2rem;
+}
+
+.peopleTabUserEventActionButton {
+  background-color: #a8c7fa;
+  border: none;
+  border-radius: 4px;
+  padding: 3px 9px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: -1rem -1.8rem;
+  width: 7rem;
+  padding: 4px 11px;
+  height: 2.5rem;
+}
+
+.peopleTabUserEventTimeWrapper {
+  text-align: center;
+  min-width: 80px;
+}
+
+.timeText {
+  margin: 0;
+}
+
+.timeSeparator {
+  margin: 4px 0;
+}
+
+.dateText {
+  margin: 0;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.eventName {
+  margin: 0 0 8px 0;
+}
+
+.eventDescription {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.peopleTabUserEventAction {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+}
+
+.actionIcon {
+  display: flex;
+  align-items: center;
+}
+
+.peopleTabUserEventActionButton:hover {
+  background-color: #92b5f5;
+}
+
+.peopleTabUserOrganizationsCard {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #fff;
+  width: 100%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  width: 700px;
+  height: 250px;
+}
+
+.peopleTabUserOrganizationsCardContent {
+  display: flex;
+  gap: 1rem;
+}
+
+.peopleTabUserOrganizationsCardImage {
+  width: 200px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 6px;
+  background-color: #f0f0f0;
+}
+
+.peopleTabUserOrganizationsCardText {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.peopleTabUserOrganizationsCardTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.peopleTabUserOrganizationsCardDescription {
+  font-size: 0.875rem;
+  color: #666;
+  margin: 0.25rem 0;
+}
+
+.peopleTabUserOrganizationsCardStats {
+  font-size: 0.875rem;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  font-weight: bold;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.peopleTabUserOrganizationsCardAction {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.75rem;
+}
+
+.peopleTabUserOrganizationsEditButton {
+  padding: 0.4rem 0.8rem;
+  background-color: #b0d4ff;
+  border: none;
+  border-radius: 4px;
+  color: #000;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.peopleTabUserOrganizationsEditButton:hover {
+  background-color: #90c1ff;
+}
+
+.peopleTabUserOrganizationsContainer {
+  width: 100%;
+}
+
+.peopleTabUserOrganizationsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px; /* space between cards */
+}
+
+.peopleTabUserEventsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+/* Optional: mobile fallback */
+@media (max-width: 768px) {
+  .peopleTabUserEventsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .cardItem .iconWrapper .themeOverlay {
   background: var(--cardItem-iconWrapper-bg);
   position: absolute;
@@ -5133,7 +5544,6 @@ form label,
 /* -- RequestsTableItem.tsx -- */
 
 .requestsTableItemIndex {
-  padding-inline-start: 2.5rem;
   vertical-align: middle;
 }
 
@@ -7511,6 +7921,8 @@ form {
 .topRadius {
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
+  background-color: '#A8C7FA';
+  color: '#555';
 }
 
 .inputColor {
@@ -7799,7 +8211,8 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 12px; /* bring controls closer together */
+  margin-left: 12px;
+  /* bring controls closer together */
   gap: 12px;
 }
 
@@ -7811,12 +8224,14 @@ form {
 }
 
 .btnsContainerSearchBar .inputOrgList {
-  flex: 1 1 640px; /* make input wider and flexible */
+  flex: 1 1 640px;
+  /* make input wider and flexible */
   max-width: 760px;
   position: relative;
   display: flex;
   align-items: center;
-  margin-left: 18px; /* gap from left */
+  margin-left: 18px;
+  /* gap from left */
 }
 
 .btnsContainerSearchBar input {
@@ -7824,7 +8239,8 @@ form {
 }
 
 .btnsContainerSearchBar .inputOrgList button {
-  width: 44px; /* slightly smaller square button */
+  width: 44px;
+  /* slightly smaller square button */
   height: 38px;
   margin-left: 8px;
   flex: 0 0 44px;
@@ -8308,6 +8724,7 @@ form {
 .switch :global(.form-check-input) {
   margin-inline-start: -1.7em;
 }
+
 .checkboxdiv {
   display: flex;
   margin-bottom: 5px;
@@ -8350,7 +8767,7 @@ form {
 
 /* -- CampaignModal.tsx -- */
 
-/* -- OrganizationFundCampagins.tsx -- */
+/* -- OrganizationFundCampaigns.tsx -- */
 
 .organizationFundCampaignContainer {
   margin: 0.5rem 0;
@@ -8373,6 +8790,10 @@ form {
 
 .container {
   min-height: 100vh;
+}
+
+.titleMargin {
+  margin-top: 0.75rem;
 }
 
 .message {
@@ -8450,8 +8871,6 @@ form {
 .colorWhite {
   color: var(--colorWhite);
 }
-
-/* -- OrganizationPeople.tsx -- */
 
 /* -- OrganizationTags.tsx -- */
 
@@ -8725,21 +9144,18 @@ form {
 /* -- Campaigns.tsx -- */
 
 .outlineBtn {
-  margin-bottom: 10px;
   background-color: var(--outlineBtn-bg);
   color: var(--outlineBtn-color);
   border-color: var(--outlineBtn-border);
 }
 
 .outlineBtn:is(:hover, :active) {
-  margin-bottom: 10px;
   background-color: var(--outlineBtn-hover-bg) !important;
   color: var(--outlineBtn-bg) !important;
   border-color: var(--outlineBtn-hover-bg);
 }
 
 .outlineBtn:disabled {
-  margin-bottom: 10px;
   background-color: var(--outlineBtn-bg);
   color: var(--outlineBtn-disabled);
   border-color: var(--outlineBtn-disabled);
@@ -9069,6 +9485,7 @@ form {
   max-height: 100%;
   width: 100%;
   overflow: auto;
+  overflow-x: 'hidden';
 }
 
 .maxWidth {
@@ -9076,12 +9493,9 @@ form {
 }
 
 .content {
-  height: fit-content;
-  min-height: calc(100% - 40px);
-}
-
-.content {
-  min-height: calc(100% - 40px);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .orgCard .innerContainer .content {
@@ -9150,6 +9564,50 @@ form {
   border-bottom-left-radius: 24px;
   border-bottom-right-radius: 24px;
   background-color: var(--people-card-container-bg);
+}
+
+.userContactDetailPersonalCardHeader {
+  background-color: #a8c7fa;
+  color: #555;
+  background-color: #a8c7fa;
+  padding: 1rem 1.5rem; /* py-3 px-4 */
+  display: flex; /* d-flex */
+  justify-content: space-between; /* justify-content-between */
+  align-items: center; /* align-items-center */
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+
+.userContactDetailContactCardHeader {
+  background-color: #a8c7fa;
+  color: #555;
+}
+
+.userContactDetailProfileImage {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
+.userContactDetailEditAvatarIcon {
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.userContactDetailSaveChangesBtn {
+  background-color: #a8c7fa;
+  color: #555;
+}
+
+.userContactDetailContactAvatarUrl {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+}
+
+.userContactDetailContactAvatarEditIcon {
+  cursor: pointer;
+  font-size: '1.2rem';
 }
 
 .custom_row_center {
@@ -9701,24 +10159,39 @@ form {
 }
 
 .outlineBtn {
-  margin-bottom: 10px;
+  /* SAME layout as manageBtn */
+  display: flex;
+  justify-content: space-around;
+  width: 8rem;
+
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+
+  box-shadow: 0 2px 2px var(--manageBtn-box-shadow);
   background-color: var(--outlineBtn-bg);
   color: var(--outlineBtn-color);
-  border-color: var(--outlineBtn-border);
+  border: 1px solid var(--outlineBtn-border);
+}
+
+.outlineBtnPositioned {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
 }
 
 .outlineBtn:is(:hover, :active) {
-  margin-bottom: 10px;
   background-color: var(--outlineBtn-hover-bg) !important;
-  color: var(--outlineBtn-color-hover) !important;
-  border-color: var(--outlineBtn-hover-border);
+  color: var(--outlineBtn-bg) !important;
+  border-color: var(--outlineBtn-hover-bg);
+  box-shadow: var(--hover-shadow);
 }
 
 .outlineBtn:disabled {
-  margin-bottom: 10px;
-  background-color: var(--outlineBtn-bg-disabled);
-  color: var(--outlineBtn-color-disabled);
-  border-color: var(--outlineBtn-border-disabled);
+  background-color: var(--outlineBtn-bg);
+  color: var(--outlineBtn-disabled);
+  border-color: var(--outlineBtn-disabled);
 }
 
 .modalTable {
@@ -9947,6 +10420,246 @@ form {
   margin-top: auto;
   display: flex;
   justify-content: flex-end;
+  padding-bottom: 10px;
+}
+
+.manageBtn,
+.withdrawBtn,
+.outlineBtn {
+  min-width: 8rem;
+  height: 2.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.statusChip {
+  display: inline-block;
+  margin-top: 0.25rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.member {
+  background-color: #e6f4ea;
+  color: #137333;
+}
+
+.pendingMembership {
+  background-color: #fff4e5;
+  color: #b26a00;
+}
+
+.notMember {
+  background-color: #f1f3f4;
+  color: #5f6368;
+}
+
+.btnsBlock {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  width: auto;
+  flex-shrink: 0;
+  height: 48px;
+  margin: 0;
+}
+
+/* 2. Ensure the header stays in one line and doesn't wrap on Desktop */
+.calendar__header {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: nowrap !important;
+  width: 100%;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  margin-top: 1rem;
+}
+
+/* 3. Mobile responsiveness: Only allow wrapping on actual small screens */
+@media (max-width: 768px) {
+  .calendar__header {
+    flex-wrap: wrap !important;
+  }
+
+  .btnsBlock {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+}
+
+.btnsBlock > * {
+  margin: 0 !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  min-height: auto !important;
 }
 
 /* ----------------------------------------------------- */
+
+.whiteContainer {
+  background-color: #ffffff;
+  border-radius: 1rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* -- Common Layout Classes -- */
+
+/* Flex container for title area in screens */
+.flexContainerColumn {
+  flex: 1;
+}
+
+/* Breadcrumbs margin spacing */
+.breadcrumbsMargin {
+  margin-top: 0.5rem;
+}
+
+/* Search container row layout for fund campaign/funds screens */
+.searchContainerRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+  gap: 1rem;
+}
+
+/* Search container row layout without top margin */
+.searchContainerRowNoTopMargin {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 1rem;
+}
+
+/* Search bar margin reset with flex grow */
+.searchBarMarginReset {
+  margin: 0;
+}
+
+/* Button style to prevent text wrapping */
+.buttonNoWrap {
+  white-space: nowrap;
+}
+
+/* Button margin reset for flex containers with gap */
+.buttonMarginReset {
+  margin: 0;
+}
+
+/* Search container for Campaigns screen with min/max width */
+.searchContainerCampaigns {
+  max-width: 700px;
+  min-width: 400px;
+  margin: 0;
+}
+
+/* UserScreen main content margin when expanded */
+.userScreenExpandedMargin {
+  margin-left: 100px;
+}
+
+/* -- Progress Indicator Styles for Campaign Tables -- */
+
+/* Progress indicator container */
+.progressIndicatorContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
+}
+
+/* Progress indicator wrapper (relative positioning) */
+.progressIndicatorWrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+/* Progress indicator base track color */
+.progressIndicatorBase {
+  color: var(--progress-track-color, #e0e0e0);
+}
+
+/* Progress indicator overlay (absolute positioning) */
+.progressIndicatorAbsolute {
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+/* Progress indicator color states */
+.progressComplete {
+  color: var(--progress-complete-color, #4caf50);
+}
+
+.progressHalf {
+  color: var(--progress-half-color, #ff9800);
+}
+
+.progressLow {
+  color: var(--progress-low-color, #2196f3);
+}
+
+/* Progress percentage text */
+.progressTypography {
+  font-weight: bold;
+}
+
+/* -- DataGrid Row Hover Styles -- */
+
+/* DataGrid row hover background */
+.dataGridRowHover:hover {
+  background-color: var(--row-hover-bg, #f0f0f0);
+}
+
+/* Error icon large size */
+.errorIconLarge {
+  font-size: 2rem;
+}
+
+/* Progress cell container */
+.progressCellContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 100%;
+}
+
+/* Button width 8rem - for visit and join buttons */
+.buttonWidth8rem {
+  width: 8rem;
+}
+
+/* Video full width - for video elements */
+.videoFullWidth {
+  width: 100%;
+}
+
+/* Margin left auto - for positioning elements to the right */
+.marginLeftAuto {
+  margin-left: auto;
+}
+
+/* Background paper - matches MUI background.paper */
+.backgroundPaper {
+  background-color: var(--popup-bg, #fff);
+}
+
+.addIconStyle {
+  font-size: 25px;
+  margin-bottom: 2px;
+  margin-right: 2px;
+}

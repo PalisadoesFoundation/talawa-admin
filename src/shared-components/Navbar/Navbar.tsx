@@ -62,25 +62,8 @@ import React from 'react';
 import styles from 'style/app-fixed.module.css';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
-
-interface InterfacePageHeaderProps {
-  title?: string;
-  search?: {
-    placeholder: string;
-    onSearch: (value: string) => void;
-    inputTestId?: string;
-    buttonTestId?: string;
-  };
-  sorting?: Array<{
-    title: string;
-    options: { label: string; value: string | number }[];
-    selected: string | number;
-    onChange: (value: string | number) => void;
-    testIdPrefix: string;
-  }>;
-  showEventTypeFilter?: boolean;
-  actions?: React.ReactNode;
-}
+import { InterfacePageHeaderProps } from 'types/PeopleTab/interface';
+import { useTranslation } from 'react-i18next';
 
 export default function PageHeader({
   title,
@@ -89,6 +72,8 @@ export default function PageHeader({
   showEventTypeFilter = false,
   actions,
 }: InterfacePageHeaderProps) {
+  const { t: tCommon } = useTranslation('common');
+
   return (
     <div
       className={styles.calendarEventHeader}
@@ -104,40 +89,43 @@ export default function PageHeader({
             onSearch={search.onSearch}
             inputTestId={search.inputTestId}
             buttonTestId={search.buttonTestId}
+            showSearchButton={true} //  true
+            showLeadingIcon={true} //  true (Magnifying glass)
+            showClearButton={true}
           />
         )}
 
         {/* ===== Sorting Props ===== */}
         {sorting &&
-          sorting.map((sort, idx) => (
-            <div key={idx} className={styles.space}>
-              <SortingButton
-                title={sort.title}
-                sortingOptions={sort.options}
-                selectedOption={sort.selected}
-                onSortChange={sort.onChange}
-                dataTestIdPrefix={sort.testIdPrefix}
-                className={styles.dropdown}
-              />
-            </div>
-          ))}
+          sorting.map(
+            (sort: (typeof sorting)[0], idx: React.Key | null | undefined) => (
+              <div key={idx} className={styles.space}>
+                <SortingButton
+                  title={sort.title}
+                  sortingOptions={sort.options}
+                  selectedOption={sort.selected}
+                  onSortChange={sort.onChange}
+                  dataTestIdPrefix={sort.testIdPrefix}
+                  className={styles.dropdown}
+                />
+              </div>
+            ),
+          )}
 
         {/*  Optional Event Type dropdown */}
         {showEventTypeFilter && (
           <div className={styles.btnsBlock}>
             <SortingButton
-              title="Event Type"
+              title={tCommon('eventType')}
               sortingOptions={[
                 { label: 'Events', value: 'Events' },
                 { label: 'Workshops', value: 'Workshops' },
               ]}
               selectedOption={'Events'}
-              onSortChange={(value) =>
-                console.log(`Selected Event Type: ${value}`)
-              }
+              onSortChange={() => {}}
               dataTestIdPrefix="eventType"
               className={styles.dropdown}
-              buttonLabel="Event Type"
+              buttonLabel={tCommon('eventType')}
             />
           </div>
         )}
