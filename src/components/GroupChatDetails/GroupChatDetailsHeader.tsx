@@ -6,6 +6,7 @@ import Avatar from 'components/Avatar/Avatar';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceGroupChatDetailsProps } from 'types/Chat/interface';
 import { getSafeImageSrc } from './GroupChatDetailsUtils';
+import sanitizeHtml from 'sanitize-html';
 
 interface InterfaceGroupChatDetailsHeaderProps {
   chat: InterfaceGroupChatDetailsProps['chat'];
@@ -125,6 +126,7 @@ export default function GroupChatDetailsHeader({
                 type="text"
                 value={chatName}
                 data-testid="chatNameInput"
+                aria-label={t('groupName')}
                 onChange={(e) => setChatName(e.target.value)}
               />
               <button
@@ -164,7 +166,12 @@ export default function GroupChatDetailsHeader({
           <p>
             {chat?.members.edges.length} {t('members')}
           </p>
-          <p>{chat?.description}</p>
+          <p>
+            {sanitizeHtml(chat?.description || '', {
+              allowedTags: [],
+              allowedAttributes: {},
+            })}
+          </p>
         </div>
       </Modal.Body>
     </>

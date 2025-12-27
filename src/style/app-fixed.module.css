@@ -1162,6 +1162,19 @@
   padding: 0;
 }
 
+.iconButton {
+  background: transparent;
+  border: none;
+  padding: 0.25rem;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: inherit;
+}
+
 .searchBarSpinner {
   width: 1rem;
   height: 1rem;
@@ -4982,13 +4995,9 @@ form label,
 }
 
 .opendrawer:hover {
-  transition: background-color 0.5s ease;
-  background-color: var(--bs-primary, #0d6efd);
-}
-
-.collapseSidebarButton:hover {
-  transition: background-color 0.5s ease;
-  background-color: var(--bs-primary, #0d6efd);
+  /* hover background color declarations removed to avoid duplicate/overriding rules
+     (previously set here using var(--bs-primary)). Use the consolidated
+     hover rules elsewhere in the stylesheet to control the final color. */
 }
 
 @media (max-width: 1120px) {

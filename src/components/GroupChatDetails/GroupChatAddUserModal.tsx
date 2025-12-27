@@ -24,6 +24,17 @@ interface InterfaceGroupChatAddUserModalProps {
   t: (k: string, v?: Record<string, unknown>) => string;
 }
 
+/**
+ * GroupChatAddUserModal
+ *
+ * Modal used to add existing organization members to a group chat.
+ *
+ * @param props.show - controls visibility of the modal
+ * @param props.toggle - callback to close the modal
+ * @param props.chat - the chat object to which users will be added
+ * @param props.chatRefetch - refetch function for chat data after mutation
+ * @param props.t - translation function
+ */
 export default function GroupChatAddUserModal(
   props: InterfaceGroupChatAddUserModalProps,
 ) {
