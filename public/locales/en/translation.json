@@ -1373,7 +1373,11 @@
     "postalCode": "Postal Code",
     "city": "City",
     "description": "Description",
-    "enterDescription": "Enter Description"
+    "enterDescription": "Enter Description",
+    "atleast_8_char_long": "Password must be at least 8 characters long",
+    "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF",
+    "fileSizeTooLarge": "File is too large. Maximum size is 5MB",
+    "failedToProcessImage": "Failed to process profile picture. Please try uploading again"
   },
   "donate": {
     "title": "Donations",

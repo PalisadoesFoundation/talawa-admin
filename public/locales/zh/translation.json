@@ -1373,7 +1373,11 @@
     "postalCode": "邮政编码",
     "city": "城市",
     "description": "描述",
-    "enterDescription": "输入描述"
+    "enterDescription": "输入描述",
+    "atleast_8_char_long": "密码必须至少8个字符长",
+    "invalidFileType": "无效的文件类型。请上传JPEG、PNG或GIF",
+    "fileSizeTooLarge": "文件太大。最大大小为5MB",
+    "failedToProcessImage": "处理个人资料图片失败。请尝试重新上传"
   },
   "donate": {
     "title": "捐款",
