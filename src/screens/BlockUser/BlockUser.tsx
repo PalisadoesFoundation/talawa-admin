@@ -67,6 +67,7 @@ import type {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import PageHeader from 'shared-components/Navbar/Navbar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 const BlockUser = (): JSX.Element => {
   // Translation hooks for internationalization
@@ -268,106 +269,87 @@ const BlockUser = (): JSX.Element => {
           </div>
         </div>
         <div className={styles.listBox}>
-          <Table
-            responsive
-            data-testid="userList"
-            className={styles.custom_table}
-          >
-            <thead>
-              <tr>
-                {headerTitles.map((title: string, index: number) => (
-                  <th key={index} scope="col">
-                    {title}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {!showBlockedMembers ? (
-                filteredAllMembers.length > 0 ? (
-                  filteredAllMembers.map((user, index: number) => (
-                    <tr key={user.id}>
-                      <th scope="row">{index + 1}</th>
-                      <td>{user.name}</td>
-                      <td>{user.emailAddress}</td>
-                      <td>
-                        <Button
-                          variant="success"
-                          size="sm"
-                          className={styles.removeButton}
-                          onClick={async (): Promise<void> => {
-                            await handleBlockUser(user);
-                          }}
-                          data-testid={`blockUser${user.id}`}
-                        >
-                          <FontAwesomeIcon
-                            icon={faBan}
-                            className={styles.banIcon}
-                          />
-                          {t('block')}
-                        </Button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan={headerTitles.length}
-                      className={styles.noDataMessage}
-                    >
-                      <div className={styles.notFound}>
-                        <h4>
-                          {searchTerm.length === 0
-                            ? t('noUsersFound')
-                            : `${tCommon('noResultsFoundFor')} "${searchTerm}"`}
-                        </h4>
-                      </div>
-                    </td>
-                  </tr>
-                )
-              ) : filteredBlockedUsers.length > 0 ? (
-                filteredBlockedUsers.map((user, index: number) => (
-                  <tr key={user.id}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{user.name}</td>
-                    <td>{user.emailAddress}</td>
-                    <td>
-                      <Button
-                        variant="success"
-                        size="sm"
-                        className={styles.unblockButton}
-                        onClick={async (): Promise<void> => {
-                          await handleUnBlockUser(user);
-                        }}
-                        data-testid={`blockUser${user.id}`}
-                      >
-                        <FontAwesomeIcon
-                          icon={faUserPlus}
-                          className={styles.unbanIcon}
-                        />
-                        {t('unblock')}
-                      </Button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
+          {(!showBlockedMembers && filteredAllMembers.length > 0) ||
+          (showBlockedMembers && filteredBlockedUsers.length > 0) ? (
+            <Table
+              responsive
+              data-testid="userList"
+              className={styles.custom_table}
+            >
+              <thead>
                 <tr>
-                  <td
-                    colSpan={headerTitles.length}
-                    className={styles.noDataMessage}
-                  >
-                    <div className={styles.notFound}>
-                      <h4>
-                        {searchTerm.length === 0
-                          ? t('noSpammerFound')
-                          : `${tCommon('noResultsFoundFor')} "${searchTerm}"`}
-                      </h4>
-                    </div>
-                  </td>
+                  {headerTitles.map((title: string, index: number) => (
+                    <th key={index} scope="col">
+                      {title}
+                    </th>
+                  ))}
                 </tr>
-              )}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {!showBlockedMembers
+                  ? filteredAllMembers.map((user, index: number) => (
+                      <tr key={user.id}>
+                        <th scope="row">{index + 1}</th>
+                        <td>{user.name}</td>
+                        <td>{user.emailAddress}</td>
+                        <td>
+                          <Button
+                            variant="success"
+                            size="sm"
+                            className={styles.removeButton}
+                            onClick={async (): Promise<void> => {
+                              await handleBlockUser(user);
+                            }}
+                            data-testid={`blockUser${user.id}`}
+                          >
+                            <FontAwesomeIcon
+                              icon={faBan}
+                              className={styles.banIcon}
+                            />
+                            {t('block')}
+                          </Button>
+                        </td>
+                      </tr>
+                    ))
+                  : filteredBlockedUsers.map((user, index: number) => (
+                      <tr key={user.id}>
+                        <th scope="row">{index + 1}</th>
+                        <td>{user.name}</td>
+                        <td>{user.emailAddress}</td>
+                        <td>
+                          <Button
+                            variant="success"
+                            size="sm"
+                            className={styles.unblockButton}
+                            onClick={async (): Promise<void> => {
+                              await handleUnBlockUser(user);
+                            }}
+                            data-testid={`blockUser${user.id}`}
+                          >
+                            <FontAwesomeIcon
+                              icon={faUserPlus}
+                              className={styles.unbanIcon}
+                            />
+                            {t('unblock')}
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+              </tbody>
+            </Table>
+          ) : (
+            <EmptyState
+              icon="person_off"
+              message={
+                searchTerm.length === 0
+                  ? !showBlockedMembers
+                    ? t('noUsersFound')
+                    : t('noSpammerFound')
+                  : tCommon('noResultsFoundFor', { query: searchTerm })
+              }
+              dataTestId="block-user-empty-state"
+            />
+          )}
         </div>
       </div>
     </>
