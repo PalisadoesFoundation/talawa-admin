@@ -1,4 +1,5 @@
 import { renderHook, act } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { useFieldValidation } from './useFieldValidation';
 import type { IValidationResult } from '../types/Auth/useFieldValidation';
 
@@ -10,6 +11,10 @@ describe('useFieldValidation', () => {
   const invalidValidator = <T>(value: T): IValidationResult => ({
     isValid: false,
     error: String(value),
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
   it('returns null error initially', () => {
@@ -78,5 +83,33 @@ describe('useFieldValidation', () => {
 
     expect(isValid).toBe(false);
     expect(result.current.error).toBe('test');
+  });
+
+  it('uses default error message when validator omits error', () => {
+    const noErrorValidator = (): IValidationResult => ({
+      isValid: false,
+    });
+
+    const { result } = renderHook(() =>
+      useFieldValidation(noErrorValidator, 'test'),
+    );
+
+    act(() => {
+      result.current.validate();
+    });
+
+    expect(result.current.error).toBe('Invalid value');
+  });
+
+  it('handles null values correctly', () => {
+    const { result } = renderHook(() =>
+      useFieldValidation<string | null>(validValidator, null),
+    );
+
+    act(() => {
+      result.current.validate();
+    });
+
+    expect(result.current.error).toBe('Invalid value');
   });
 });
