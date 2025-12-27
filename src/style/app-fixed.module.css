@@ -785,9 +785,7 @@
   --whitebtn-border: #e8e5e5;
   --whitebtn-color: #286fe0;
 
-  --mainContainerDonateCard-bg: #ffffff;
   --mainContainerDonateCard-border: #dddddd;
-
   --mainContainerDonateCard-bg: #31bb6b;
   --peopleRole-border: #dee2e6;
   --cardStyles-bg: #ffffff;
@@ -4995,9 +4993,6 @@ form label,
 }
 
 .opendrawer:hover {
-  /* hover background color declarations removed to avoid duplicate/overriding rules
-     (previously set here using var(--bs-primary)). Use the consolidated
-     hover rules elsewhere in the stylesheet to control the final color. */
 }
 
 @media (max-width: 1120px) {
@@ -5977,10 +5972,7 @@ form {
 
 .align_center {
   align-self: center;
-}
 
-.people_role {
-  width: 75%;
   border: 1px solid var(--peopleRole-border);
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -10182,11 +10174,6 @@ form {
 .displayNone {
   display: none;
 }
-
-.cursorPointer {
-  cursor: pointer;
-}
-
 .nowrap {
   white-space: nowrap;
 }
