@@ -464,8 +464,8 @@ describe('OrganizationFunds Screen =>', () => {
 
     // Verify "No results found for" message is displayed
     await waitFor(() => {
-      expect(screen.getByText(/No results found for/i)).toBeInTheDocument();
-      expect(screen.getByText(/"nonexistentfundxyz"/)).toBeInTheDocument();
+      const emptyState = screen.getByTestId('funds-search-empty');
+      expect(emptyState).toBeInTheDocument();
     });
   });
 

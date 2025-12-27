@@ -52,7 +52,7 @@ const t = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-const debounceWait = async (ms = 300): Promise<void> => {
+const debounceWait = async (ms = 400): Promise<void> => {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -62,7 +62,7 @@ const debounceWait = async (ms = 300): Promise<void> => {
 
 const renderLeaderboard = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider link={link}>
+    <MockedProvider addTypename={false} link={link}>
       <MemoryRouter initialEntries={['/leaderboard/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -111,7 +111,7 @@ describe('Testing Leaderboard Screen', () => {
   it('should redirect to fallback URL if URL params are undefined', async () => {
     routerMocks.useParams.mockReturnValue({ orgId: '' });
     render(
-      <MockedProvider link={link1}>
+      <MockedProvider addTypename={false} link={link1}>
         <MemoryRouter initialEntries={['/leaderboard/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
@@ -262,13 +262,18 @@ describe('Testing Leaderboard Screen', () => {
     routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
+    // Wait for component to finish loading
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
 
-    // Search by name on press of ENTER
+    const searchInput = screen.getByTestId('searchBy');
+    const searchButton = screen.getByTestId('searchBtn');
+
+    // Search by name
     await userEvent.type(searchInput, 'T');
     await debounceWait();
-    fireEvent.click(screen.getByTestId('searchBtn'));
+    await userEvent.click(searchButton);
 
     await waitFor(() => {
       const userName = screen.getAllByTestId('userName');
@@ -310,14 +315,16 @@ describe('Testing Leaderboard Screen', () => {
     // Wait for initial data to load
     await waitFor(() => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByTestId('searchBtn')).toBeInTheDocument();
     });
 
     // Type search term and trigger search
     const input = screen.getByTestId('searchBy');
+    const searchButton = screen.getByTestId('searchBtn');
     await userEvent.clear(input);
     await userEvent.type(input, 'ZZZDoesNotExist');
     await debounceWait();
-    fireEvent.click(screen.getByTestId('searchBtn'));
+    await userEvent.click(searchButton);
 
     // Wait for debounced search to update and query to refetch
     await waitFor(

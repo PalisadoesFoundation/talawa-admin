@@ -1,9 +1,0 @@
-[Admin Docs](/)
-
-***
-
-# Variable: mocks1
-
-> `const` **mocks1**: (\{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `input`: \{ `id`: `string`; \}; \}; \}; `result`: \{ `data`: \{ `user`: \{ `id`: `string`; `name`: `string`; \}; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after`: `any`; `before`: `any`; `first`: `number`; `input`: \{ `id`: `string`; \}; `last`: `any`; \}; \}; `result`: \{ `data`: \{ `organization`: \{ `avatarURL`: `any`; `id`: `string`; `name`: `string`; `pinnedPosts`: \{ `edges`: `any`[]; `pageInfo`: \{ `endCursor`: `any`; `hasNextPage`: `boolean`; `hasPreviousPage`: `boolean`; `startCursor`: `any`; \}; \}; `postsCount`: `number`; \}; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after`: `any`; `before`: `any`; `first`: `number`; `input`: \{ `caption?`: `undefined`; `id`: `string`; `isPinned?`: `undefined`; `organizationId?`: `undefined`; \}; `last`: `any`; \}; \}; `result`: \{ `data`: \{ `organization`: \{ `avatarURL`: `any`; `id`: `string`; `name`: `string`; `posts`: \{ `edges`: `object`[]; `pageInfo`: \{ `endCursor`: `string`; `hasNextPage`: `boolean`; `hasPreviousPage`: `boolean`; `startCursor`: `string`; \}; `totalCount`: `number`; \}; `postsCount`: `number`; \}; \}; \}; \} \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `after?`: `undefined`; `before?`: `undefined`; `first?`: `undefined`; `input`: \{ `caption`: `string`; `id?`: `undefined`; `isPinned`: `boolean`; `organizationId`: `string`; \}; `last?`: `undefined`; \}; \}; `result`: \{ `data`: \{ `createPost`: \{ `attachments`: `any`[]; `caption`: `string`; `createdAt`: `string`; `id`: `string`; `pinnedAt`: `any`; `updatedAt`: `string`; \}; \}; \}; \})[]
-
-Defined in: [src/screens/OrgPost/OrgPostMocks.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgPost/OrgPostMocks.ts#L119)

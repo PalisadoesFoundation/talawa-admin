@@ -364,6 +364,18 @@
     "createUser": "Créer un utilisateur",
     "notFound": "Aucun membre trouvé"
   },
+  "organizationCard": {
+    "join": "Rejoindre",
+    "withdraw": "Retirer",
+    "visit": "Visiter",
+    "manage": "Gérer",
+    "admins": "Administrateurs",
+    "members": "Membres",
+    "join_success": "Demande d’adhésion envoyée avec succès",
+    "withdraw_success": "Demande d’adhésion retirée avec succès",
+    "join_error": "Échec de l’envoi de la demande d’adhésion",
+    "withdraw_error": "Échec du retrait de la demande d’adhésion"
+  },
   "organizationTags": {
     "title": "Étiquettes d'Organisation",
     "createTag": "Créer une nouvelle étiquette",
@@ -778,15 +790,22 @@
     "pledged": "Promis",
     "donated": "Donné"
   },
-  "orgPost": {
+  "createPostModal": {
     "title": "Des postes",
+    "titleOfPost": "Titre de votre post...",
+    "closeCreatePost": "Fermer la création de message",
+    "close": "Fermer",
+    "selectedImage": "Image sélectionnée",
+    "bodyOfPost": "Corps de votre post...",
+    "post": "Poste",
+    "saveChanges": "Enregistrer les modifications",
     "searchPost": "Rechercher un article",
     "posts": "Des postes",
+    "addAttachment": "Ajouter une pièce jointe",
     "createPost": "Créer un message",
     "postDetails": "Détails du message",
     "postTitle1": "Écrivez le titre du message",
     "postTitle": "Titre",
-    "addMedia": "Télécharger des médias",
     "information": "Information",
     "information1": "Écrire les informations du message",
     "addPost": "Ajouter un message",
@@ -802,7 +821,12 @@
     "sortPost": "Trier le message",
     "tag": " Votre navigateur ne prend pas en charge la balise vidéo",
     "postCreatedSuccess": "Toutes nos félicitations! ",
+    "postUpdatedSuccess": "Article mis à jour avec succès",
     "pinPost": "Épingler le message",
+    "unpinPost": "Désépingler le message",
+    "postToAnyone": "Publier à tout le monde",
+    "editPost": "Modifier le message",
+    "unsupportedFileType": "Type de fichier non pris en charge",
     "Next": "Page suivante",
     "Previous": "Page précédente",
     "cancel": "Annuler",
@@ -828,8 +852,13 @@
     "roles not found!": "Rôles introuvables !",
     "user": "Utilisateur"
   },
+  "orgPost": {
+    "title": "Organization Posts"
+  },
   "orgPostCard": {
     "author": "Auteur",
+    "untitledPost": "Message sans titre",
+    "noContentAvailable": "Aucun contenu disponible",
     "imageURL": "URL de l'image",
     "videoURL": "URL de la vidéo",
     "deletePost": "Supprimer le message",
@@ -1159,6 +1188,7 @@
     "likes": "J'aime",
     "comments": "Commentaires",
     "addComment": "Ajouter un commentaire",
+    "view": "Voir",
     "postDeletedSuccess": "Message supprimé avec succès.",
     "postPinnedSuccess": "Message épinglé avec succès.",
     "postUnpinnedSuccess": "Message désépinglé avec succès.",
@@ -1176,6 +1206,26 @@
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
     "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer.",
     "moreOptions": "Plus d'options"
+  },
+  "posts": {
+    "pinnedPosts": "Messages épinglés",
+    "title": "Publications",
+    "latest": "Dernier",
+    "oldest": "Le plus ancien",
+    "none": "Aucun",
+    "closePinnedPost": "Fermer le message épinglé",
+    "unknownUser": "Utilisateur inconnu",
+    "searchPosts": "Rechercher des messages",
+    "nothingToShow": "Rien à montrer ici.",
+    "noMorePosts": "Plus de messages à charger",
+    "noPosts": "Aucun message pour le moment. Créez le premier !",
+    "createPost": "Créer un message",
+    "searchTitle": "Recherche par titre",
+    "noPostsFoundMatching": "Aucun message trouvé correspondant à {{term}}",
+    "pinnedPostsLoadError": "Erreur lors du chargement des messages épinglés",
+    "errorLoadingPosts": "Erreur lors du chargement des messages. Veuillez réessayer.",
+    "loadMorePostsError": "Erreur lors du chargement de plus de messages. Veuillez réessayer.",
+    "sortPost": "Trier le message"
   },
   "home": {
     "posts": "Des postes",

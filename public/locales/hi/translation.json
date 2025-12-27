@@ -364,6 +364,18 @@
     "createUser": "उपयोगकर्ता बनाएं",
     "notFound": "कोई सदस्य नहीं मिले"
   },
+  "organizationCard": {
+    "join": "जॉइन करें",
+    "withdraw": "वापस लें",
+    "visit": "देखें",
+    "manage": "प्रबंधित करें",
+    "admins": "प्रशासक",
+    "members": "सदस्य",
+    "join_success": "सदस्यता अनुरोध सफलतापूर्वक भेजा गया",
+    "withdraw_success": "सदस्यता अनुरोध सफलतापूर्वक वापस लिया गया",
+    "join_error": "सदस्यता अनुरोध भेजने में विफल",
+    "withdraw_error": "सदस्यता अनुरोध वापस लेने में विफल"
+  },
   "organizationTags": {
     "title": "संस्थान टैग",
     "createTag": "नया टैग बनाएँ",
@@ -778,15 +790,22 @@
     "pledged": "प्रतिबद्ध",
     "donated": "दान किया गया"
   },
-  "orgPost": {
+  "createPostModal": {
     "title": "पदों",
+    "titleOfPost": "आपकी पोस्ट का शीर्षक...",
+    "closeCreatePost": "पोस्ट बनाना बंद करें",
+    "close": "बंद करें",
+    "selectedImage": "चयनित छवि",
+    "bodyOfPost": "आपकी पोस्ट का मुख्य भाग...",
+    "post": " पोस्ट ",
+    "saveChanges": "परिवर्तन सहेजें",
+    "addAttachment": "संलग्नक जोड़ें",
     "searchPost": "पोस्ट खोजें",
     "posts": "पदों",
     "createPost": "पोस्ट बनाएं",
     "postDetails": "पोस्ट विवरण",
     "postTitle1": "पोस्ट का शीर्षक लिखें",
     "postTitle": "शीर्षक",
-    "addMedia": "मीडिया अपलोड करें",
     "information": "जानकारी",
     "information1": "पोस्ट की जानकारी लिखें",
     "addPost": "पोस्ट जोड़ें",
@@ -802,7 +821,12 @@
     "sortPost": "पोस्ट क्रमबद्ध करें",
     "tag": " आपका ब्राउज़र में वीडियो टैग समर्थित नहीं है",
     "postCreatedSuccess": "बधाई हो! ",
+    "postUpdatedSuccess": "पोस्ट सफलतापूर्वक अपडेट हो गई",
     "pinPost": "पिन पद",
+    "unpinPost": "पिन हटाएँ",
+    "postToAnyone": "किसी को भी पोस्ट करें",
+    "editPost": "पोस्ट संपादित करें",
+    "unsupportedFileType": "असमर्थित फ़ाइल प्रकार",
     "Next": "अगला पृष्ठ",
     "Previous": "पिछला पृष्ठ",
     "cancel": "रद्द करें",
@@ -828,8 +852,13 @@
     "roles not found!": "भूमिकाएँ नहीं मिलीं!",
     "user": "उपयोगकर्ता"
   },
+  "orgPost": {
+    "title": "Organization Posts"
+  },
   "orgPostCard": {
     "author": "लेखक",
+    "untitledPost": "शीर्षक रहित पोस्ट",
+    "noContentAvailable": "कोई सामग्री उपलब्ध नहीं",
     "imageURL": "छवि यूआरएल",
     "videoURL": "वीडियो यूआरएल",
     "deletePost": "पोस्ट को हटाएं",
@@ -1160,6 +1189,7 @@
     "comments": "टिप्पणियाँ",
     "addComment": "टिप्पणी जोड़ें",
     "viewPost": "पोस्ट देखें",
+    "view": "देखें",
     "postDeletedSuccess": "पोस्ट सफलतापूर्वक हटा दी गई।",
     "postPinnedSuccess": "पोस्ट सफलतापूर्वक पिन किया गया।",
     "postUnpinnedSuccess": "पोस्ट सफलतापूर्वक अनपिन किया गया।",
@@ -1176,6 +1206,26 @@
     "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।",
     "unexpectedError": "एक अप्रत्याशित त्रुटि हुई। कृपया फिर से प्रयास करें।",
     "moreOptions": "अधिक विकल्प"
+  },
+  "posts": {
+    "pinnedPosts": "पिन किए गए पोस्ट",
+    "title": "पोस्ट",
+    "latest": "नवीनतम",
+    "oldest": "सबसे पुराना",
+    "none": "कोई नहीं",
+    "unknownUser": "अज्ञात उपयोगकर्ता",
+    "closePinnedPost": "पिन किए गए पोस्ट बंद करें",
+    "searchPosts": "पोस्ट खोजें",
+    "nothingToShow": "यहां दिखाने के लिए कुछ भी नहीं है.",
+    "noMorePosts": "और कोई पोस्ट नहीं है",
+    "noPosts": "कोई पोस्ट नहीं मिली",
+    "createPost": "पोस्ट बनाएं",
+    "searchTitle": "शीर्षक से खोजें",
+    "noPostsFoundMatching": "मिलान करने वाली कोई पोस्ट नहीं मिली {{term}}",
+    "pinnedPostsLoadError": "पिन किए गए पोस्ट लोड करने में त्रुटि हुई। कृपया बाद में पुनः प्रयास करें।",
+    "errorLoadingPosts": "पोस्ट लोड करने में त्रुटि हुई। कृपया बाद में पुनः प्रयास करें।",
+    "loadMorePostsError": "अधिक पोस्ट लोड करने में त्रुटि हुई। कृपया बाद में पुनः प्रयास करें।",
+    "sortPost": "पोस्ट क्रमबद्ध करें"
   },
   "home": {
     "title": "पदों",

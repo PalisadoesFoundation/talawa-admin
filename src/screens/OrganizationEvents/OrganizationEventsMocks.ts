@@ -14,7 +14,7 @@ function buildEventsVariables() {
 
   return {
     id: undefined,
-    first: 150,
+    first: 100,
     after: null,
     startDate: dayjs(firstOfMonth).startOf('month').toISOString(),
     endDate: dayjs(firstOfMonth).endOf('month').toISOString(),
