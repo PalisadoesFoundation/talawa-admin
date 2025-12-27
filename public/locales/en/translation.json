@@ -1678,6 +1678,7 @@
     "title": "Leave Organization"
   },
   "eventVolunteers": {
+    "toggleGroupAriaLabel": "Volunteer view selector",
     "volunteers": "Volunteers",
     "volunteer": "Volunteer",
     "volunteerGroups": "Volunteer Groups",

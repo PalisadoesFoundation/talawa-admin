@@ -121,6 +121,11 @@
   "breadcrumbs": "Breadcrumbs",
   "loadingAdminPlugin": "Loading admin plugin...",
   "loadingUserPlugin": "Loading user plugin...",
+  "organization": "Organization",
+  "events": "Events",
+  "event": "Event",
+  "groups": "Groups",
+  "Volunteers": "Volunteers",
   "unblock": "Unblock",
   "unblockedSuccessfully": "{{item}} unblocked successfully",
   "pluginSettings": "Plugin Settings"

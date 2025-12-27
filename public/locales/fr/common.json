@@ -121,6 +121,11 @@
   "noResultsFound": "Aucun résultat trouvé",
   "loadingAdminPlugin": "Chargement du plugin administrateur...",
   "loadingUserPlugin": "Chargement du plugin utilisateur...",
+  "organization": "Organisation",
+  "events": "Événements",
+  "event": "Événement",
+  "groups": "Groupes",
+  "Volunteers": "Bénévoles",
   "unblock": "Débloquer",
   "unblockedSuccessfully": "{{item}} débloqué avec succès",
   "pluginSettings": "Paramètres du plugin"
