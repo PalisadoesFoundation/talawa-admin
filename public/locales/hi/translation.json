@@ -362,6 +362,18 @@
     "createUser": "उपयोगकर्ता बनाएं",
     "notFound": "कोई सदस्य नहीं मिले"
   },
+  "organizationCard": {
+    "join": "जॉइन करें",
+    "withdraw": "वापस लें",
+    "visit": "देखें",
+    "manage": "प्रबंधित करें",
+    "admins": "प्रशासक",
+    "members": "सदस्य",
+    "join_success": "सदस्यता अनुरोध सफलतापूर्वक भेजा गया",
+    "withdraw_success": "सदस्यता अनुरोध सफलतापूर्वक वापस लिया गया",
+    "join_error": "सदस्यता अनुरोध भेजने में विफल",
+    "withdraw_error": "सदस्यता अनुरोध वापस लेने में विफल"
+  },
   "organizationTags": {
     "title": "संस्थान टैग",
     "createTag": "नया टैग बनाएँ",
