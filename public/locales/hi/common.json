@@ -121,6 +121,11 @@
   "noResultsFound": "कोई परिणाम नहीं मिला",
   "loadingAdminPlugin": "व्यवस्थापक प्लगइन लोड हो रहा है...",
   "loadingUserPlugin": "उपयोगकर्ता प्लगइन लोड हो रहा है...",
+  "organization": "संगठन",
+  "events": "कार्यक्रम",
+  "event": "कार्यक्रम",
+  "groups": "समूह",
+  "Volunteers": "स्वयंसेवक",
   "unblock": "अनब्लॉक करें",
   "unblockedSuccessfully": "{{item}} सफलतापूर्वक अनब्लॉक किया गया",
   "pluginSettings": "प्लगइन सेटिंग्स"

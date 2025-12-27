@@ -121,6 +121,11 @@
   "noResultsFound": "No se encontraron resultados",
   "loadingAdminPlugin": "Cargando complemento de administrador...",
   "loadingUserPlugin": "Cargando complemento de usuario...",
+  "organization": "Organización",
+  "events": "Eventos",
+  "event": "Evento",
+  "groups": "Grupos",
+  "Volunteers": "Voluntarios",
   "unblock": "Desbloquear",
   "unblockedSuccessfully": "{{item}} desbloqueado exitosamente",
   "pluginSettings": "Configuración de complementos"
