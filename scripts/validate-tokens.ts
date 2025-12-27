@@ -11,6 +11,7 @@ import fs from 'fs';
 import path from 'path';
 import { execSync } from 'child_process';
 import { glob } from 'glob';
+import { fileURLToPath } from 'url';
 
 interface IValidationResult {
   file: string;
@@ -19,7 +20,7 @@ interface IValidationResult {
   type: 'color' | 'spacing' | 'font-size' | 'font-weight';
 }
 
-const PATTERNS = {
+export const PATTERNS = {
   color: /#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?([0-9a-fA-F]{2})?/g,
   spacingPx:
     /(?:padding|margin|width|height|gap|top|right|bottom|left):\s*\d+px/g,
@@ -34,7 +35,7 @@ const stagedOnly: boolean = args.includes('--staged') && !scanEntireRepo;
 
 const normalizePath = (file: string): string => file.split(path.sep).join('/');
 
-const shouldSkipFile = (file: string): boolean => {
+export const shouldSkipFile = (file: string): boolean => {
   const normalized = normalizePath(file);
   return (
     normalized.includes('node_modules') ||
@@ -46,10 +47,10 @@ const shouldSkipFile = (file: string): boolean => {
   );
 };
 
-const isSrcFile = (file: string): boolean =>
+export const isSrcFile = (file: string): boolean =>
   normalizePath(file).startsWith('src/');
 
-const getStagedFiles = (): string[] => {
+export const getStagedFiles = (): string[] => {
   try {
     const output = execSync(
       'git diff --cached --name-only --diff-filter=ACMRT',
@@ -67,12 +68,12 @@ const getStagedFiles = (): string[] => {
   }
 };
 
-const filterByExtensions = (
+export const filterByExtensions = (
   files: string[],
   extensions: Set<string>,
 ): string[] => files.filter((file) => extensions.has(path.extname(file)));
 
-async function validateFiles(
+export async function validateFiles(
   pattern: string,
   files?: string[],
 ): Promise<IValidationResult[]> {
@@ -147,7 +148,7 @@ async function validateFiles(
   return results;
 }
 
-async function main() {
+export async function main() {
   console.log('Validating design token usage...\n');
 
   const stagedFiles = stagedOnly ? getStagedFiles() : [];
@@ -201,7 +202,14 @@ async function main() {
   }
 }
 
-main().catch((error) => {
-  console.error('Error running validation:', error);
-  process.exit(1);
-});
+const isExecutedAsScript =
+  process.argv[1] &&
+  normalizePath(path.resolve(process.argv[1])) ===
+    normalizePath(fileURLToPath(import.meta.url));
+
+if (isExecutedAsScript) {
+  main().catch((error) => {
+    console.error('Error running validation:', error);
+    process.exit(1);
+  });
+}
