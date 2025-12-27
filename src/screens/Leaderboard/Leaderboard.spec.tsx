@@ -296,6 +296,38 @@ describe('Testing Leaderboard Screen', () => {
     });
   });
 
+  it('OnKeyDown Enter key on Member navigate to Member Screen', async () => {
+    routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
+    renderLeaderboard(link1);
+
+    const searchInput = await screen.findByTestId('searchBy');
+    expect(searchInput).toBeInTheDocument();
+
+    const userName = screen.getAllByTestId('userName');
+    userName[0].focus();
+    fireEvent.keyDown(userName[0], { key: 'Enter' });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('memberScreen')).toBeInTheDocument();
+    });
+  });
+
+  it('OnKeyDown Space key on Member navigate to Member Screen', async () => {
+    routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
+    renderLeaderboard(link1);
+
+    const searchInput = await screen.findByTestId('searchBy');
+    expect(searchInput).toBeInTheDocument();
+
+    const userName = screen.getAllByTestId('userName');
+    userName[0].focus();
+    fireEvent.keyDown(userName[0], { key: ' ' });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('memberScreen')).toBeInTheDocument();
+    });
+  });
+
   it('should render Leaderboard screen with No Volunteers', async () => {
     routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link3);
