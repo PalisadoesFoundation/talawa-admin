@@ -143,5 +143,22 @@
   "Volunteers": "Bénévoles",
   "unblock": "Débloquer",
   "unblockedSuccessfully": "{{item}} débloqué avec succès",
-  "pluginSettings": "Paramètres du plugin"
+  "pluginSettings": "Paramètres du plugin",
+  "noeventsAttended": "Aucun événement suivi",
+  "addressLine1": "Adresse ligne 1",
+  "addressLine2": "Adresse ligne 2",
+  "birthDate": "Date de naissance",
+  "state": "État",
+  "city": "Ville",
+  "contactInfoHeading": "Informations de contact",
+  "educationGrade": "Niveau d’éducation",
+  "employmentStatus": "Statut professionnel",
+  "fileTooLarge": "Le fichier est trop volumineux. La taille maximale est de 5 Mo.",
+  "homePhoneNumber": "Numéro de téléphone fixe",
+  "invalidFileType": "Type de fichier invalide. Veuillez télécharger un fichier JPEG, PNG ou GIF.",
+  "maritalStatus": "État civil",
+  "mobilePhoneNumber": "Numéro de téléphone portable",
+  "personalDetailsHeading": "Détails du profil",
+  "workPhoneNumber": "Numéro de téléphone professionnel",
+  "postalCode": "Code postal"
 }
