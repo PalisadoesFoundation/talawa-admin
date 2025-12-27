@@ -43,7 +43,8 @@ class TestTranslationCheck(unittest.TestCase):
     def test_get_keys_recursion(self):
         """Verify recursive extraction of nested keys."""
         self.assertEqual(
-            translation_check.get_translation_keys({"a": {"b": "c"}}), {"a.b"}
+            translation_check.get_translation_keys({"a": {"b": "c"}}),
+            {"a.b"},
         )
 
     def test_load_locales_success(self):
@@ -65,19 +66,24 @@ class TestTranslationCheck(unittest.TestCase):
     def test_find_tags_string(self):
         """Verify tag extraction from string."""
         self.assertEqual(
-            translation_check.find_translation_tags("t('key')"), {"key"}
+            translation_check.find_translation_tags("t('key')"),
+            {"key"},
         )
 
     def test_find_tags_path(self):
         """Verify tag extraction from file path."""
         p = Path(self.test_dir) / "t.tsx"
         p.write_text("t('key')", encoding="utf-8")
-        self.assertEqual(translation_check.find_translation_tags(p), {"key"})
+        self.assertEqual(
+            translation_check.find_translation_tags(p),
+            {"key"},
+        )
 
     def test_find_tags_namespace(self):
         """Verify extraction of namespaced keys."""
         self.assertEqual(
-            translation_check.find_translation_tags("t('common:key')"), {"key"}
+            translation_check.find_translation_tags("t('common:key')"),
+            {"key"},
         )
 
     def test_find_tags_io_error(self):
@@ -88,7 +94,8 @@ class TestTranslationCheck(unittest.TestCase):
     def test_find_tags_dynamic_ignored(self):
         """Verify dynamic variables are ignored."""
         self.assertEqual(
-            len(translation_check.find_translation_tags("t(var)")), 0
+            len(translation_check.find_translation_tags("t(var)")),
+            0,
         )
 
     def test_get_files_directory(self):
@@ -136,14 +143,15 @@ class TestTranslationCheck(unittest.TestCase):
                 self.test_dir,
             ],
         ):
-            with patch("sys.exit") as mock_exit:
+            with self.assertRaises(SystemExit) as cm:
                 translation_check.main()
-                mock_exit.assert_called_with(0)
+            self.assertEqual(cm.exception.code, 0)
 
     def test_main_missing_flow(self):
         """Verify exit code 1 when missing keys are found."""
         p = Path(self.test_dir) / "e.tsx"
         p.write_text("t('missing')", encoding="utf-8")
+
         with patch(
             "sys.argv",
             [
@@ -154,18 +162,19 @@ class TestTranslationCheck(unittest.TestCase):
                 str(p),
             ],
         ):
-            with patch("sys.exit") as mock_exit:
+            with self.assertRaises(SystemExit) as cm:
                 translation_check.main()
-                mock_exit.assert_called_with(1)
+            self.assertEqual(cm.exception.code, 1)
 
     def test_main_error_flow(self):
         """Verify exit code 2 on configuration error."""
         with patch(
-            "sys.argv", ["translation_check.py", "--locales-dir", "/invalid"]
+            "sys.argv",
+            ["translation_check.py", "--locales-dir", "/invalid"],
         ):
-            with patch("sys.exit") as mock_exit:
+            with self.assertRaises(SystemExit) as cm:
                 translation_check.main()
-                mock_exit.assert_called_with(2)
+            self.assertEqual(cm.exception.code, 2)
 
     def test_entry_point_subprocess(self):
         """Verify the actual __main__ entry point using a subprocess."""
@@ -185,7 +194,8 @@ class TestTranslationCheck(unittest.TestCase):
         )
         self.assertEqual(result.returncode, 0)
         self.assertIn(
-            "All translation tags validated successfully", result.stdout
+            "All translation tags validated successfully",
+            result.stdout,
         )
 
 

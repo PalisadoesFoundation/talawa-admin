@@ -17,7 +17,7 @@ def get_keys(data: dict, prefix: str = "") -> set[str]:
         prefix: Prefix used for nested key traversal.
 
     Returns:
-        keys: A set of flattened translation keys.
+        A set of flattened translation keys.
     """
     keys: set[str] = set()
     for key, value in data.items():
@@ -35,7 +35,7 @@ def get_translation_keys(data: dict) -> set[str]:
         data: Parsed JSON dictionary.
 
     Returns:
-        keys: A set of translation keys.
+        A set of translation keys.
     """
     return get_keys(data)
 
@@ -47,7 +47,7 @@ def load_locale_keys(locales_dir: str | Path) -> set[str]:
         locales_dir: Path to the locale directory.
 
     Returns:
-        keys: A set of all valid translation keys.
+        A set of all valid translation keys.
 
     Raises:
         FileNotFoundError: If the locale directory does not exist.
@@ -65,11 +65,17 @@ def load_locale_keys(locales_dir: str | Path) -> set[str]:
                 keys.update(
                     get_keys(json.loads(path.read_text(encoding="utf-8")))
                 )
-            except (json.JSONDecodeError, OSError) as e:
-                print(f"Warning: Failed to parse {path}: {e}", file=sys.stderr)
+            except (json.JSONDecodeError, OSError) as exc:
+                print(
+                    f"Warning: Failed to parse {path}: {exc}",
+                    file=sys.stderr,
+                )
 
     if not keys:
-        print(f"Warning: No translation keys found in {base}", file=sys.stderr)
+        print(
+            f"Warning: No translation keys found in {base}",
+            file=sys.stderr,
+        )
 
     return keys
 
@@ -81,7 +87,7 @@ def find_translation_tags(source: str | Path) -> set[str]:
         source: File path or raw source string.
 
     Returns:
-        tags: A set of detected translation keys.
+        A set of detected translation keys.
     """
     if isinstance(source, Path):
         try:
@@ -96,7 +102,7 @@ def find_translation_tags(source: str | Path) -> set[str]:
         content,
     )
 
-    return {key for tag in tags if (key := tag.split(":")[-1])}
+    return {tag.split(":")[-1] for tag in tags}
 
 
 def get_target_files(
@@ -112,18 +118,24 @@ def get_target_files(
         exclude: Filename patterns to exclude.
 
     Returns:
-        targets: A list of source file paths.
+        A list of source file paths.
+
+    Raises:
+        FileNotFoundError: If the default src directory is missing.
     """
     exclude = exclude or []
     targets: list[Path] = []
 
     if files:
-        for f in files:
-            path = Path(f)
+        for file_path in files:
+            path = Path(file_path)
             if path.exists() and path.is_file():
                 targets.append(path)
             else:
-                print(f"Warning: File not found: {f}", file=sys.stderr)
+                print(
+                    f"Warning: File not found: {file_path}",
+                    file=sys.stderr,
+                )
 
     if directories:
         for directory in directories:
@@ -160,7 +172,7 @@ def check_file(path: Path, valid_keys: set[str]) -> list[str]:
         valid_keys: Set of valid translation keys.
 
     Returns:
-        missing_keys: A sorted list of missing translation keys.
+        A sorted list of missing translation keys.
     """
     return sorted(
         tag for tag in find_translation_tags(path) if tag not in valid_keys
@@ -182,8 +194,7 @@ def main() -> None:
 
     Raises:
         SystemExit: Exits with status code 0 on success, 1 if missing
-            translation keys are found, or 2 for configuration errors
-            such as invalid locale directories.
+            translation keys are found, or 2 for configuration errors.
     """
     parser = argparse.ArgumentParser()
     parser.add_argument("--files", nargs="*", default=[])
@@ -193,19 +204,20 @@ def main() -> None:
 
     try:
         valid_keys = load_locale_keys(args.locales_dir)
-    except FileNotFoundError as e:
-        print(f"Error: Locale directory not found: {e}", file=sys.stderr)
+    except FileNotFoundError as exc:
+        print(
+            f"Error: Locale directory not found: {exc}",
+            file=sys.stderr,
+        )
         sys.exit(2)
-        return  # pylint: disable=unreachable
 
     try:
         targets = get_target_files(args.files, args.directories)
-    except FileNotFoundError as e:
-        print(f"Error: {e}", file=sys.stderr)
+    except FileNotFoundError as exc:
+        print(f"Error: {exc}", file=sys.stderr)
         sys.exit(2)
-        return  # pylint: disable=unreachable
 
-    errors = {}
+    errors: dict[str, list[str]] = {}
     for path in targets:
         missing = check_file(path, valid_keys)
         if missing:
@@ -218,7 +230,6 @@ def main() -> None:
                 + "\n".join(f"  - Missing: {tag}" for tag in tags)
             )
         sys.exit(1)
-        return  # pylint: disable=unreachable
 
     print("All translation tags validated successfully")
     sys.exit(0)
