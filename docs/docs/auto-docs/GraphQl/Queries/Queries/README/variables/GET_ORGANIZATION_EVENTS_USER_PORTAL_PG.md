@@ -6,4 +6,8 @@
 
 > `const` **GET\_ORGANIZATION\_EVENTS\_USER\_PORTAL\_PG**: `DocumentNode`
 
+<<<<<<< HEAD:docs/docs/auto-docs/GraphQl/Queries/Queries/README/variables/GET_ORGANIZATION_EVENTS_USER_PORTAL_PG.md
 Defined in: [src/GraphQl/Queries/Queries.ts:626](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/GraphQl/Queries/Queries.ts#L626)
+=======
+Defined in: [src/GraphQl/Queries/Queries.ts:596](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L596)
+>>>>>>> upstream/develop:docs/docs/auto-docs/GraphQl/Queries/Queries/variables/GET_ORGANIZATION_EVENTS_USER_PORTAL_PG.md

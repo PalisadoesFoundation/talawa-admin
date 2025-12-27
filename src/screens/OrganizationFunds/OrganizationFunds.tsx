@@ -1,5 +1,9 @@
 import { useQuery } from '@apollo/client';
-import { WarningAmberRounded } from '@mui/icons-material';
+import {
+  AccountBalanceWallet,
+  Search,
+  WarningAmberRounded,
+} from '@mui/icons-material';
 import { Stack } from '@mui/material';
 import { type GridCellParams } from '@mui/x-data-grid';
 import { Button } from 'react-bootstrap';
@@ -24,6 +28,7 @@ import {
   dataGridStyle as baseDataGridStyle,
 } from 'types/ReportingTable/utils';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 const dataGridStyle = {
   ...baseDataGridStyle,
@@ -382,15 +387,20 @@ const organizationFunds = (): JSX.Element => {
       fundData &&
       filteredAndSortedFunds.length === 0 &&
       searchText.length > 0 ? (
-        <div className={styles.notFound}>
-          <h4 className="m-0">
-            {tCommon('noResultsFoundFor')} &quot;{searchText}&quot;
-          </h4>
-        </div>
+        <EmptyState
+          icon={<Search />}
+          message="noResultsFound"
+          description={tCommon('noResultsFoundFor', {
+            query: `"${searchText}"`,
+          })}
+          dataTestId="funds-search-empty"
+        />
       ) : !fundLoading && fundData && filteredAndSortedFunds.length === 0 ? (
-        <div className={styles.notFound}>
-          <h4>{t('noFundsFound')}</h4>
-        </div>
+        <EmptyState
+          icon={<AccountBalanceWallet />}
+          message={t('noFundsFound')}
+          dataTestId="funds-empty"
+        />
       ) : (
         <div className={styles.listBox}>
           {fundLoading ? (

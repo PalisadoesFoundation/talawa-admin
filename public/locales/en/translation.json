@@ -9,7 +9,14 @@
     "weekly": "This Week",
     "monthly": "This Month",
     "yearly": "This Year",
-    "noVolunteers": "No Volunteers Found!"
+    "noVolunteers": "No Volunteers Found!",
+    "goldMedal": "Gold medal",
+    "silverMedal": "Silver medal",
+    "bronzeMedal": "Bronze medal",
+    "rank": "Rank",
+    "volunteer": "Volunteer",
+    "email": "Email",
+    "hoursVolunteered": "Hours Volunteered"
   },
   "loginPage": {
     "title": "Talawa Admin",
@@ -54,11 +61,7 @@
     "OR": "OR",
     "admin": "admin",
     "user": "user",
-    "loading": "loading",
-    "communityLogo": "Community Logo",
-    "organizations": "Organizations",
-    "accountLocked": "Your account has been temporarily locked due to too many failed login attempts. Please try again later.",
-    "accountLockedWithTimer": "Your account has been temporarily locked. Please try again in {{minutes}} minute(s)."
+    "loading": "loading"
   },
   "signOut": {
     "retryPrompt": "Failed to revoke session. Retry?",
@@ -226,8 +229,7 @@
     "name": "name",
     "email": "email",
     "profilePictureAlt": "User profile picture",
-    "placeholderAvatarAlt": "Placeholder avatar",
-    "newMembersWillAppearHere": "New membership requests will appear here"
+    "placeholderAvatarAlt": "Placeholder avatar"
   },
   "users": {
     "membershipStatus": {
@@ -323,6 +325,18 @@
     "volunteerRankings": "Volunteer Rankings",
     "noVolunteers": "No Volunteers Found!",
     "comingSoon": "Coming soon!"
+  },
+  "organizationCard": {
+    "join": "Join",
+    "withdraw": "Withdraw",
+    "visit": "Visit",
+    "manage": "Manage",
+    "admins": "Admins",
+    "members": "Members",
+    "join_success": "Membership request sent successfully",
+    "withdraw_success": "Membership request withdrawn successfully",
+    "join_error": "Failed to send membership request",
+    "withdraw_error": "Failed to withdraw request"
   },
   "organizationPeople": {
     "title": "Talawa Members",
@@ -646,6 +660,7 @@
     "deleteThisAndFollowing": "Delete this and all following events",
     "deleteAllEvents": "Delete all events in this series",
     "editEvent": "Edit Event",
+    "showEventDashboard": "Show Event Dashboard",
     "updateEvent": "Update Event",
     "updateRecurringEventMsg": "This is a recurring event. Choose how you want to update it:",
     "updateThisInstance": "Update only this instance",
@@ -689,7 +704,6 @@
   "funds": {
     "title": "Funds",
     "createFund": "Create Fund",
-    "searchFunds": "Search Funds",
     "fundName": "Fund Name",
     "fundId": "Fund (Reference) ID",
     "taxDeductible": "Tax Deductible",
@@ -699,7 +713,6 @@
     "fundUpdate": "Update Fund",
     "fundDelete": "Delete Fund",
     "noFundsFound": "No Funds Found",
-    "editFund": "Edit Fund",
     "createdBy": "Created By",
     "createdOn": "Created On",
     "status": "Status",
@@ -717,8 +730,6 @@
   },
   "fundCampaign": {
     "title": "Fundraising Campaigns",
-    "editCampaign": "Edit Campaign",
-    "searchCampaigns": "Search Campaigns",
     "campaignName": "Campaign Name",
     "campaignOptions": "Options",
     "fundingGoal": "Funding Goal",
@@ -739,8 +750,7 @@
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
     "lowestGoal": "Lowest Goal",
-    "highestGoal": "Highest Goal",
-    "errorLoading": "Error occured while loading campaigns data"
+    "highestGoal": "Highest Goal"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
@@ -773,17 +783,29 @@
     "startDate": "startDate",
     "endDate": "endDate",
     "searchByPlaceholder": "Search by {{field}}",
-    "selectPledger": "Please select a pledger"
+    "selectPledger": "Please select a pledger",
+    "moreUsers": "+{{count}} more...",
+    "togglePledgedRaised": "Toggle between Pledged and Raised amounts",
+    "pledgeDate": "Pledge Date",
+    "pledged": "Pledged",
+    "donated": "Donated"
   },
-  "orgPost": {
+  "createPostModal": {
     "title": "Posts",
+    "titleOfPost": "Title of your post...",
+    "bodyOfPost": "Body of your post...",
+    "post": "Post",
+    "saveChanges": "Save Changes",
+    "closeCreatePost": "Close Create Post",
+    "close": "close",
+    "selectedImage": "Selected Image",
     "searchPost": "Search Post",
     "posts": "Posts",
     "createPost": "Create Post",
     "postDetails": "Post Details",
     "postTitle1": "Write title of the post",
     "postTitle": "Title",
-    "addMedia": "Upload Media",
+    "addAttachment": "Add Attachment",
     "information": "Information",
     "information1": "Write information of the post",
     "addPost": "Add Post",
@@ -799,7 +821,12 @@
     "sortPost": "Sort Post",
     "tag": " Your browser does not support the video tag",
     "postCreatedSuccess": "Congratulations! You have Posted Something.",
+    "postUpdatedSuccess": "Post updated successfully.",
     "pinPost": "Pin post",
+    "unpinPost": "Unpin post",
+    "unsupportedFileType": "Unsupported file type!",
+    "postToAnyone": "Post to anyone",
+    "editPost": "Edit Post",
     "Next": "Next Page",
     "Previous": "Previous Page",
     "cancel": "cancel",
@@ -825,6 +852,9 @@
     "roles not found!": "Roles Not Found!",
     "user": "user"
   },
+  "orgPost": {
+    "title": "Organization Posts"
+  },
   "orgPostCard": {
     "author": "Author",
     "imageURL": "Image URL",
@@ -847,7 +877,9 @@
     "no": "no",
     "yes": "yes",
     "close": "close",
-    "talawaApiUnavailable": "talawaApiUnavailable"
+    "talawaApiUnavailable": "talawaApiUnavailable",
+    "untitledPost": "Untitled Post",
+    "noContentAvailable": "No Content Available"
   },
   "blockUnblockUser": {
     "title": "Block/Unblock User",
@@ -864,6 +896,7 @@
     "searchByFirstName": "Search By First Name",
     "searchByLastName": "Search By Last Name",
     "noSpammerFound": "No spammer found",
+    "noUsersFound": "No users found",
     "searchByName": "Search by name...",
     "name": "name",
     "email": "email",
@@ -1089,7 +1122,6 @@
     "eventsAttended": "Events Attended",
     "contactInfoHeading": "Contact Information",
     "actionsHeading": "Actions",
-    "actions": "Action",
     "personalDetailsHeading": "Profile Details",
     "appLanguageCode": "Choose Language",
     "deleteUser": "Delete User",
@@ -1209,6 +1241,7 @@
     "comments": "Comments",
     "addComment": "Add Comment",
     "viewPost": "View Post",
+    "view": "View",
     "postDeletedSuccess": "Post deleted successfully.",
     "postPinnedSuccess": "Post pinned successfully.",
     "postUnpinnedSuccess": "Post unpinned successfully.",
@@ -1225,6 +1258,26 @@
     "emptyCommentError": "Please enter a comment before submitting.",
     "unexpectedError": "An unexpected error occurred. Please try again.",
     "moreOptions": "More options"
+  },
+  "posts": {
+    "pinnedPosts": "Pinned Posts",
+    "title": "Posts",
+    "latest": "Latest",
+    "oldest": "Oldest",
+    "none": "None",
+    "unknownUser": "Unknown User",
+    "closePinnedPost": "Close Pinned Post",
+    "searchPosts": "Search posts",
+    "nothingToShow": "Nothing to show here.",
+    "noMorePosts": "No more posts to load.",
+    "noPosts": "No posts available.",
+    "createPost": "Create Post",
+    "searchTitle": "Search By Title",
+    "noPostsFoundMatching": "No posts found matching {{term}}",
+    "pinnedPostsLoadError": "Error loading pinned posts",
+    "errorLoadingPosts": "Error loading posts",
+    "loadMorePostsError": "Error loading more posts",
+    "sortPost": "Sort Post"
   },
   "home": {
     "posts": "Posts",
@@ -1455,7 +1508,26 @@
     "newGroupChat": "New Group Chat",
     "groupInfo": "Group Info",
     "members": "Members",
-    "addMembers": "Add Members"
+    "addMembers": "Add Members",
+    "userNotFound": "User not found",
+    "roleUpdatedSuccessfully": "Role updated successfully",
+    "failedToUpdateRole": "Failed to update role",
+    "memberRemovedSuccessfully": "Member removed successfully",
+    "failedToRemoveMember": "Failed to remove member",
+    "chatImageUpdatedSuccessfully": "Chat image updated successfully",
+    "failedToUpdateChatImage": "Failed to update chat image",
+    "chatDeletedSuccessfully": "Chat deleted successfully",
+    "failedToDeleteChat": "Failed to delete chat",
+    "chatNameUpdatedSuccessfully": "Chat name updated successfully",
+    "failedToUpdateChatName": "Failed to update chat name",
+    "deleteChat": "Delete Chat",
+    "remove": "Remove",
+    "searchFullName": "Search by Full Name",
+    "customizedTable": "Customized Table",
+    "demoteToRegular": "Demote to Regular",
+    "promoteToAdmin": "Promote to Admin",
+    "user": "User",
+    "chatAction": "Chat action"
   },
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",
@@ -1576,21 +1648,14 @@
   "userCampaigns": {
     "title": "Fundraising Campaigns",
     "searchByName": "Search by Name...",
-    "searchCampaigns": "Search Campaigns",
-    "campaignName": "Campaign Name",
-    "startDate": "Start Date",
-    "endDate": "End Date",
-    "fundingGoal": "Fund Goal",
-    "raised": "Amount Raised",
-    "progress": "% Raised",
-    "viewPledge": "View Pledge",
     "searchBy": "Search by",
     "pledgers": "Pledgers",
     "pledger": "Pledger",
     "campaigns": "Campaigns",
-    "associatedCampaign": "Associated Campaigns",
+    "associatedCampaign": "Associated Campaign",
     "pledged": "Pledged",
     "donated": "Donated",
+    "progress": "Progress",
     "more": "more",
     "myPledges": "My Pledges",
     "lowestAmount": "Lowest Amount",
@@ -1613,6 +1678,7 @@
     "title": "Leave Organization"
   },
   "eventVolunteers": {
+    "toggleGroupAriaLabel": "Volunteer view selector",
     "volunteers": "Volunteers",
     "volunteer": "Volunteer",
     "volunteerGroups": "Volunteer Groups",
@@ -1753,6 +1819,8 @@
   "common": {
     "signOut": "Sign out",
     "signingOut": "Signing out...",
-    "retryPrompt": "Failed to revoke session. Retry?"
+    "retryPrompt": "Failed to revoke session. Retry?",
+    "breadcrumb": "Breadcrumb",
+    "action": "Action"
   }
 }

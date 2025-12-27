@@ -25,7 +25,7 @@
  * - `@apollo/client` for GraphQL queries and mutations.
  * - `react-bootstrap` for UI components.
  * - `@mui/x-date-pickers` for date selection.
- * - `react-toastify` for toast notifications.
+ * - `NotificationToast` for toast notifications.
  * - `dayjs` for date manipulation.
  *
  *
@@ -36,9 +36,10 @@ import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
 import styles from 'style/app-fixed.module.css';
+import memberDetailStyles from './MemberDetail.module.css';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { languages } from 'utils/languages';
 import { errorHandler } from 'utils/errorHandler';
 import { Card, Row, Col, Form } from 'react-bootstrap';
@@ -133,12 +134,14 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       const maxSize = 5 * 1024 * 1024; // 5MB
 
       if (!validTypes.includes(file.type)) {
-        toast.error('Invalid file type. Please upload a JPEG, PNG, or GIF.');
+        NotificationToast.error(
+          'Invalid file type. Please upload a JPEG, PNG, or GIF.',
+        );
         return;
       }
 
       if (file.size > maxSize) {
-        toast.error('File is too large. Maximum size is 5MB.');
+        NotificationToast.error('File is too large. Maximum size is 5MB.');
         return;
       }
 
@@ -156,7 +159,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     // password validation
     if (fieldName === 'password' && value) {
       if (!validatePassword(value)) {
-        toast.error('Password must be at least 8 characters long.');
+        NotificationToast.error('Password must be at least 8 characters long.');
         return;
       }
     }
@@ -188,7 +191,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         avatarFile = await urlToFile(formState.avatarURL);
       } catch (error) {
         console.log(error);
-        toast.error(
+        NotificationToast.error(
           'Failed to process profile picture. Please try uploading again.',
         );
         return;
@@ -224,7 +227,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       const { data: updateData } = await updateUser({ variables: { input } });
 
       if (updateData) {
-        toast.success(
+        NotificationToast.success(
           tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
         );
         setItem('UserImage', updateData.updateCurrentUser.avatarURL);
@@ -276,8 +279,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           {/* Personal Details Card */}
           <Card className={`${styles.allRound}`}>
             <Card.Header
-              className={`py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius}`}
-              style={{ backgroundColor: '#A8C7FA', color: '#555' }}
+              className={`py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius} ${memberDetailStyles.personalDetailsHeader}`}
             >
               <h3 className="m-0">{t('personalDetailsHeading')}</h3>
               <Button
@@ -297,12 +299,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   <div className="position-relative d-inline-block">
                     {formState?.avatarURL ? (
                       <img
-                        className="rounded-circle"
-                        style={{
-                          width: '60px',
-                          height: '60px',
-                          objectFit: 'cover',
-                        }}
+                        className={`rounded-circle ${memberDetailStyles.profileImage}`}
                         src={sanitizeAvatars(
                           selectedAvatar,
                           formState.avatarURL,
@@ -321,10 +318,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       />
                     )}
                     <i
-                      className="fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle"
+                      className={`fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle ${memberDetailStyles.editProfileIcon}`}
                       onClick={() => fileInputRef.current?.click()}
                       data-testid="uploadImageBtn"
-                      style={{ cursor: 'pointer', fontSize: '1.2rem' }}
                       title="Edit profile picture"
                       role="button"
                       aria-label="Edit profile picture"
@@ -340,12 +336,11 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   id="postphoto"
                   name="photo"
                   type="file"
-                  className={styles.cardControl}
+                  className={`${styles.cardControl} ${memberDetailStyles.hiddenFileInput}`}
                   data-testid="fileInput"
                   multiple={false}
                   ref={fileInputRef}
                   onChange={handleFileUpload}
-                  style={{ display: 'none' }}
                 />
               </Col>
               <Row className="g-3">

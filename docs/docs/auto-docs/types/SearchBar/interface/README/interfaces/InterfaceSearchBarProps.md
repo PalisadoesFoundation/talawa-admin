@@ -68,6 +68,16 @@ Additional class applied to the container.
 
 ***
 
+### clearButtonAriaLabel?
+
+> `optional` **clearButtonAriaLabel**: `string`
+
+Defined in: [src/types/SearchBar/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L79)
+
+Accessible label for the clear button.
+
+***
+
 ### clearButtonTestId?
 
 > `optional` **clearButtonTestId**: `string`
@@ -96,7 +106,11 @@ Initial value when used in uncontrolled mode.
 
 > `optional` **icon**: `ReactNode`
 
+<<<<<<< HEAD:docs/docs/auto-docs/types/SearchBar/interface/README/interfaces/InterfaceSearchBarProps.md
 Defined in: [src/types/SearchBar/interface.ts:81](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/SearchBar/interface.ts#L81)
+=======
+Defined in: [src/types/SearchBar/interface.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L83)
+>>>>>>> upstream/develop:docs/docs/auto-docs/types/SearchBar/interface/interfaces/InterfaceSearchBarProps.md
 
 Optional custom icon rendered inside the input field.
 
@@ -126,7 +140,11 @@ Input test id override.
 
 > `optional` **isLoading**: `boolean`
 
+<<<<<<< HEAD:docs/docs/auto-docs/types/SearchBar/interface/README/interfaces/InterfaceSearchBarProps.md
 Defined in: [src/types/SearchBar/interface.ts:79](https://github.com/SujalTripathi/talawa-admin/blob/201c311285eee8900b55c8a032a23046ba8c861b/src/types/SearchBar/interface.ts#L79)
+=======
+Defined in: [src/types/SearchBar/interface.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/SearchBar/interface.ts#L81)
+>>>>>>> upstream/develop:docs/docs/auto-docs/types/SearchBar/interface/interfaces/InterfaceSearchBarProps.md
 
 Renders a loading spinner inside the button when true.
 

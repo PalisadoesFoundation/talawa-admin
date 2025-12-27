@@ -296,7 +296,9 @@ describe('Chat Component', () => {
       expect(chatRoom).toHaveAttribute('data-selected-contact', 'chat-1');
     });
 
-    expect(setItemMock).toHaveBeenCalledWith('selectedChatId', 'chat-1');
+    await waitFor(() => {
+      expect(setItemMock).toHaveBeenCalledWith('selectedChatId', 'chat-1');
+    });
   });
 
   test('should change selected chat on user click', async () => {
