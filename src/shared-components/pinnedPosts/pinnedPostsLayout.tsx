@@ -37,12 +37,14 @@ import {
 import PinnedPostCard from './pinnedPostCard';
 import styles from './pinnedPostsLayout.module.css';
 import { ChevronLeft, ChevronRight } from '@mui/icons-material';
+import { useTranslation } from 'react-i18next';
 
 const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
   pinnedPosts,
   onStoryClick,
   onPostUpdate,
 }) => {
+  const { t } = useTranslation();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -96,7 +98,7 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
           type="button"
           className={`${styles.navButton} ${styles.navButtonLeft}`}
           onClick={scrollLeft}
-          aria-label="Scroll left"
+          aria-label={t('posts.scrollLeft')}
           data-testid="scroll-left-button"
         >
           <ChevronLeft />
@@ -131,7 +133,7 @@ const PinnedPostsLayout: React.FC<InterfacePinnedPostsLayoutProps> = ({
           type="button"
           className={`${styles.navButton} ${styles.navButtonRight}`}
           onClick={scrollRight}
-          aria-label="Scroll right"
+          aria-label={t('posts.scrollRight')}
           data-testid="scroll-right-button"
         >
           <ChevronRight />

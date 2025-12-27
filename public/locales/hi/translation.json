@@ -1090,7 +1090,20 @@
     "unassignUserTagMessage": "क्या आप इस उपयोगकर्ता से टैग हटाना चाहते हैं?",
     "successfullyUnassigned": "उपयोगकर्ता से टैग हटा दिया गया",
     "tagsAssigned": "टैग सौंपे गए",
-    "noTagsAssigned": "कोई टैग सौंपा नहीं गया"
+    "noTagsAssigned": "कोई टैग सौंपा नहीं गया",
+    "fileTooLarge": "फ़ाइल बहुत बड़ी है। अधिकतम आकार 5MB है।",
+    "passwordLength": "पासवर्ड कम से कम 8 अक्षर लंबा होना चाहिए।",
+    "user": "उपयोगकर्ता",
+    "userImage": "उपयोगकर्ता छवि",
+    "editProfilePic": "प्रोफ़ाइल चित्र संपादित करें",
+    "enterDesc": "विवरण दर्ज करें",
+    "exPhone": "उदा. +1234567890",
+    "exLane": "उदा. लेन 2",
+    "exZip": "उदा. 12345",
+    "enterCity": "शहर का नाम दर्ज करें",
+    "enterState": "राज्य का नाम दर्ज करें",
+    "selectCountry": "{{country}} चुनें",
+    "selectCountryLabel": "अपने देश के रूप में {{country}} चुनें"
   },
   "people": {
     "title": "लोग",
@@ -1225,7 +1238,9 @@
     "pinnedPostsLoadError": "पिन किए गए पोस्ट लोड करने में त्रुटि हुई। कृपया बाद में पुनः प्रयास करें।",
     "errorLoadingPosts": "पोस्ट लोड करने में त्रुटि हुई। कृपया बाद में पुनः प्रयास करें।",
     "loadMorePostsError": "अधिक पोस्ट लोड करने में त्रुटि हुई। कृपया बाद में पुनः प्रयास करें।",
-    "sortPost": "पोस्ट क्रमबद्ध करें"
+    "sortPost": "पोस्ट क्रमबद्ध करें",
+    "scrollLeft": "बाईं ओर स्क्रॉल करें",
+    "scrollRight": "दाईं ओर स्क्रॉल करें"
   },
   "home": {
     "title": "पदों",
@@ -1494,7 +1509,19 @@
     "edit": "संपादित करें",
     "saveChanges": "परिवर्तन सहेजें",
     "endOfResults": "परिणाम समाप्त",
-    "noDescription": "कोई विवरण नहीं"
+    "noDescription": "कोई विवरण नहीं",
+    "failedToFetch": "विज्ञापन लाने में विफल",
+    "adImageAlt": "{{name}} के लिए विज्ञापन छवि #{{index}}",
+    "adMediaAlt": "विज्ञापन मीडिया",
+    "noMedia": "कोई मीडिया उपलब्ध नहीं",
+    "invalidFileType": "अमान्य फ़ाइल प्रकार: {{fileName}}",
+    "fileTooLarge": "फ़ाइल बहुत बड़ी है: {{fileName}}",
+    "invalidArgs": "इस कार्रवाई के लिए अमान्य तर्क।",
+    "englishCaptions": "अंग्रेजी कैप्शन",
+    "preview": "पूर्वावलोकन",
+    "bannerAd": "बैनर विज्ञापन",
+    "popupAd": "पॉपअप विज्ञापन",
+    "menuAd": "मेनू विज्ञापन"
   },
   "userChat": {
     "title": "चैट्स",
@@ -1797,7 +1824,24 @@
     "checkBackLater": "नए प्लगइन के लिए बाद में जांचें",
     "tryDifferentSearch": "एक अलग खोज शब्द आज़माएं या सभी प्लगइन ब्राउज़ करें",
     "explorePluginStore": "नए प्लगइन खोजने के लिए प्लगइन स्टोर का अन्वेषण करें",
-    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला"
+    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला",
+    "uploadFailed": "प्लगइन अपलोड करने में विफल। कृपया पुनः प्रयास करें।",
+    "uploadPlugin": "प्लगइन अपलोड करें",
+    "browseFiles": "फ़ाइलें ब्राउज़ करने के लिए क्लिक करें",
+    "pluginInfo": "प्लगइन जानकारी",
+    "name": "नाम:",
+    "version": "संस्करण:",
+    "author": "लेखक:",
+    "description": "विवरण:",
+    "pluginId": "प्लगइन आईडी:",
+    "componentsToInstall": "स्थापित करने के लिए घटक:",
+    "adminComponents": "एडमिन डैशबोर्ड घटक",
+    "apiComponents": "एपीआई बैकएंड घटक",
+    "pluginStructure": "प्लगइन संरचना",
+    "expectedStructure": "एडमिन और/या एपीआई घटकों के साथ अपेक्षित प्लगइन संरचना",
+    "detectedFiles": "पता लगाई गई फ़ाइलें",
+    "expectedDirStructure": "अपेक्षित निर्देशिका संरचना",
+    "requiredManifestFields": "आवश्यक manifest.json फ़ील्ड"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "टिप्पणी सफलतापूर्वक हटा दी गई",

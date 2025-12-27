@@ -90,7 +90,7 @@ export default function Advertisements(): JSX.Element {
   });
 
   if (completedError || activeError) {
-    NotificationToast.error('Failed to fetch advertisements');
+    NotificationToast.error(t('failedToFetch'));
   }
 
   const [completedAdvertisements, setCompletedAdvertisements] = useState<

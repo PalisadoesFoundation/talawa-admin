@@ -43,6 +43,7 @@ import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 interface ISignOutProps {
   hideDrawer?: boolean; // Optional prop to conditionally render the button
@@ -62,6 +63,7 @@ const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
     const handleSignOut = (): void => {
       clearAllItems();
       endSession();
+      NotificationToast.success(t('signOutSuccess'));
       navigate('/');
     };
 
@@ -99,7 +101,9 @@ const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
   };
   return (
     <div
-      className={styles.signOutContainer}
+      className={`${styles.signOutContainer} ${
+        isLoggingOut ? styles.signOutDisabled : ''
+      }`}
       onClick={logout}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {
@@ -112,11 +116,6 @@ const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
       aria-label={t('signOut')}
       aria-disabled={isLoggingOut}
       data-testid="signOutBtn"
-      style={{
-        opacity: isLoggingOut ? 0.5 : 1,
-        pointerEvents: isLoggingOut ? 'none' : 'auto',
-        cursor: isLoggingOut ? 'not-allowed' : 'pointer',
-      }}
     >
       <div data-testid="LogoutIconid">
         <LogoutIcon />

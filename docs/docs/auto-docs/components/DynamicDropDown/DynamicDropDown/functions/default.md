@@ -6,7 +6,7 @@
 
 > **default**\<`T`\>(`__namedParameters`): `Element`
 
-Defined in: [src/components/DynamicDropDown/DynamicDropDown.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/DynamicDropDown/DynamicDropDown.tsx#L55)
+Defined in: [src/components/DynamicDropDown/DynamicDropDown.tsx:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/DynamicDropDown/DynamicDropDown.tsx#L56)
 
 ## Type Parameters
 

@@ -141,7 +141,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       }
 
       if (file.size > maxSize) {
-        NotificationToast.error('File is too large. Maximum size is 5MB.');
+        NotificationToast.error(t('fileTooLarge'));
         return;
       }
 
@@ -159,7 +159,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     // password validation
     if (fieldName === 'password' && value) {
       if (!validatePassword(value)) {
-        NotificationToast.error('Password must be at least 8 characters long.');
+        NotificationToast.error(t('passwordLength'));
         return;
       }
     }
@@ -227,9 +227,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       const { data: updateData } = await updateUser({ variables: { input } });
 
       if (updateData) {
-        NotificationToast.success(
-          tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
-        );
+        NotificationToast.success(t('memberUpdated'));
         setItem('UserImage', updateData.updateCurrentUser.avatarURL);
         setItem('name', updateData.updateCurrentUser.name);
         setItem('email', updateData.updateCurrentUser.emailAddress);
@@ -290,7 +288,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               >
                 {userData?.currentUser?.role === 'administrator'
                   ? 'Admin'
-                  : 'User'}
+                  : t('user')}
               </Button>
             </Card.Header>
             <Card.Body className="py-3 px-3">
@@ -304,14 +302,14 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                           selectedAvatar,
                           formState.avatarURL,
                         )}
-                        alt="User"
+                        alt={t('user') as string}
                         data-testid="profile-picture"
                         crossOrigin="anonymous" // to avoid Cors
                       />
                     ) : (
                       <Avatar
                         name={formState.name}
-                        alt="User Image"
+                        alt={t('userImage') as string}
                         size={60}
                         dataTestId="profile-picture"
                         radius={150}
@@ -321,9 +319,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       className={`fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle ${memberDetailStyles.editProfileIcon}`}
                       onClick={() => fileInputRef.current?.click()}
                       data-testid="uploadImageBtn"
-                      title="Edit profile picture"
+                      title={t('editProfilePic') as string}
                       role="button"
-                      aria-label="Edit profile picture"
+                      aria-label={t('editProfilePic') as string}
                       tabIndex={0}
                       onKeyDown={(e) =>
                         e.key === 'Enter' && fileInputRef.current?.click()
@@ -472,7 +470,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       handleFieldChange('description', e.target.value)
                     }
                     required
-                    placeholder="Enter description"
+                    placeholder={t('enterDesc') as string}
                   />
                 </Col>
               </Row>
@@ -562,7 +560,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     onChange={(e) =>
                       handleFieldChange('mobilePhoneNumber', e.target.value)
                     }
-                    placeholder="Ex. +1234567890"
+                    placeholder={t('exPhone') as string}
                   />
                 </Col>
                 <Col md={12}>
@@ -579,7 +577,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     onChange={(e) =>
                       handleFieldChange('workPhoneNumber', e.target.value)
                     }
-                    placeholder="Ex. +1234567890"
+                    placeholder={t('exPhone') as string}
                   />
                 </Col>
                 <Col md={12}>
@@ -596,7 +594,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     onChange={(e) =>
                       handleFieldChange('homePhoneNumber', e.target.value)
                     }
-                    placeholder="Ex. +1234567890"
+                    placeholder={t('exPhone') as string}
                   />
                 </Col>
                 <Col md={12}>
@@ -613,7 +611,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     onChange={(e) =>
                       handleFieldChange('addressLine1', e.target.value)
                     }
-                    placeholder="Ex. Lane 2"
+                    placeholder={t('exLane') as string}
                   />
                 </Col>
                 <Col md={12}>
@@ -630,7 +628,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     onChange={(e) =>
                       handleFieldChange('addressLine2', e.target.value)
                     }
-                    placeholder="Ex. Lane 2"
+                    placeholder={t('exLane') as string}
                   />
                 </Col>
                 <Col md={12}>
@@ -647,7 +645,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     onChange={(e) =>
                       handleFieldChange('postalCode', e.target.value)
                     }
-                    placeholder="Ex. 12345"
+                    placeholder={t('exZip') as string}
                   />
                 </Col>
                 <Col md={6}>
@@ -662,7 +660,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     name="city"
                     data-testid="inputCity"
                     onChange={(e) => handleFieldChange('city', e.target.value)}
-                    placeholder="Enter city name"
+                    placeholder={t('enterCity') as string}
                   />
                 </Col>
                 <Col md={6}>
@@ -677,7 +675,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     name="state"
                     data-testid="inputState"
                     onChange={(e) => handleFieldChange('state', e.target.value)}
-                    placeholder="Enter state name"
+                    placeholder={t('enterState') as string}
                   />
                 </Col>
                 <Col md={12}>
@@ -694,7 +692,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     }
                   >
                     <option value="" disabled>
-                      Select {tCommon('country')}
+                      {t('selectCountry', { country: tCommon('country') })}
                     </option>
                     {[...countryOptions]
                       .sort((a, b) => a.label.localeCompare(b.label))
@@ -702,7 +700,11 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         <option
                           key={country.value.toUpperCase()}
                           value={country.value.toLowerCase()}
-                          aria-label={`Select ${country.label} as your country`}
+                          aria-label={
+                            t('selectCountryLabel', {
+                              country: country.label,
+                            }) as string
+                          }
                         >
                           {country.label}
                         </option>

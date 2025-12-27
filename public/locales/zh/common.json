@@ -128,5 +128,7 @@
   "noResultsFound": "未找到结果",
   "unblock": "解除封锁",
   "unblockedSuccessfully": "{{item}}已成功解除封锁",
-  "pluginSettings": "插件设置"
+  "pluginSettings": "插件设置",
+  "toggleSidebar": "切换侧边栏",
+  "organizationPicture": "{{name}} 图片"
 }

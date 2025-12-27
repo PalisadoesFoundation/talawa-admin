@@ -43,6 +43,7 @@ import {
   type InterfaceIOrgList,
   UserRole,
 } from 'types/Event/interface';
+import { useTranslation } from 'react-i18next';
 
 const Calendar: React.FC<InterfaceCalendarProps> = ({
   eventData,
@@ -51,6 +52,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
   userRole,
   userId,
 }) => {
+  const { t } = useTranslation('translation');
   const today = new Date();
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
   const [events, setEvents] = useState<InterfaceEvent[] | null>(null);
@@ -232,7 +234,7 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                   {expandedY === expandKey ? (
                     <div className={styles.closebtnYearlyEventCalender}>
                       <br />
-                      <p>Close</p>
+                      <p>{t('close')}</p>
                     </div>
                   ) : (
                     <div className={styles.circularButton}></div>
@@ -248,9 +250,9 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
                     <div className={styles.closebtnYearlyEventCalender}>
                       <br />
                       <br />
-                      No Event Available!
+                      {t('noEventAvailable')}!
                       <br />
-                      <p>Close</p>
+                      <p>{t('close')}</p>
                     </div>
                   ) : (
                     <div className={styles.circularButton}></div>

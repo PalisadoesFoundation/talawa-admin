@@ -55,7 +55,7 @@ const EditOrgCustomFieldDropDown = ({
 
   return (
     <Dropdown
-      title="Edit Custom Field"
+      title={t('editCustomField') as string}
       className={`${parentContainerStyle ?? ''}`}
     >
       <Dropdown.Toggle

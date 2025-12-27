@@ -128,5 +128,7 @@
   "Volunteers": "Volunteers",
   "unblock": "Unblock",
   "unblockedSuccessfully": "{{item}} unblocked successfully",
-  "pluginSettings": "Plugin Settings"
+  "pluginSettings": "Plugin Settings",
+  "toggleSidebar": "Toggle sidebar",
+  "organizationPicture": "{{name}} Picture"
 }

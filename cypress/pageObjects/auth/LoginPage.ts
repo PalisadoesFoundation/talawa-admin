@@ -1,7 +1,3 @@
-/**
- * Page Object Model for the Login Page.
- * Contains selectors and methods for interacting with the login page.
- */
 export class LoginPage {
   private readonly _emailInput: string = '[data-cy=loginEmail]';
   private readonly _passwordInput: string = '[data-cy=loginPassword]';

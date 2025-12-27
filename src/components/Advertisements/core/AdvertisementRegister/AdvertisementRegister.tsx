@@ -156,9 +156,13 @@ function AdvertisementRegister({
 
       Array.from(files).forEach((file) => {
         if (!allowedTypes.includes(file.type)) {
-          NotificationToast.error(`Invalid file type: ${file.name}`);
+          NotificationToast.error(
+            t('invalidFileType', { fileName: file.name }) as string,
+          );
         } else if (file.size > maxFileSize) {
-          NotificationToast.error(`File too large: ${file.name}`);
+          NotificationToast.error(
+            t('fileTooLarge', { fileName: file.name }) as string,
+          );
         } else {
           validFiles.push(file);
         }
@@ -216,7 +220,7 @@ function AdvertisementRegister({
       }
 
       if (!formState.name) {
-        NotificationToast.error('Invalid arguments for this action.');
+        NotificationToast.error(t('invalidArgs') as string);
         return;
       }
 
@@ -434,14 +438,14 @@ function AdvertisementRegister({
                         <track
                           kind="captions"
                           srcLang="en"
-                          label="English captions"
+                          label={t('englishCaptions') as string}
                         />
                       </video>
                     ) : (
                       <img
                         data-testid="mediaPreview"
                         src={encodeURI(URL.createObjectURL(file))}
-                        alt="Preview"
+                        alt={t('preview') as string}
                         className={styles.previewAdvertisementRegister}
                       />
                     )}
@@ -471,9 +475,9 @@ function AdvertisementRegister({
                 className={styles.inputField}
                 data-cy="advertisementTypeSelect"
               >
-                <option value="banner">Banner Ad </option>
-                <option value="pop_up">Popup Ad</option>
-                <option value="menu">Menu Ad</option>
+                <option value="banner">{t('bannerAd')} </option>
+                <option value="pop_up">{t('popupAd')}</option>
+                <option value="menu">{t('menuAd')}</option>
               </Form.Select>
             </Form.Group>
 
