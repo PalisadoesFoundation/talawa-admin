@@ -355,7 +355,6 @@ describe('Testing Requests screen', () => {
   test(`Component should be rendered properly when user is not Admin
   and or userId does not exists in localstorage`, async () => {
     setItem('id', '');
-    removeItem('AdminFor');
     removeItem('Admin');
     setItem('role', 'user');
 
