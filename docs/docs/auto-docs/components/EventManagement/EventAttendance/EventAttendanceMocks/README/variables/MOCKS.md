@@ -1,0 +1,43 @@
+[**talawa-admin**](README.md)
+
+***
+
+# Variable: MOCKS
+
+> `const` **MOCKS**: `object`[]
+
+Defined in: [src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts:48](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/components/EventManagement/EventAttendance/EventAttendanceMocks.ts#L48)
+
+## Type declaration
+
+### request
+
+> **request**: `object`
+
+#### request.query
+
+> **query**: `DocumentNode` = `EVENT_ATTENDEES`
+
+#### request.variables
+
+> **variables**: `object`
+
+#### request.variables.eventId
+
+> **eventId**: `string` = `'event123'`
+
+### result
+
+> **result**: `object`
+
+#### result.data
+
+> **data**: `object`
+
+#### result.data.event
+
+> **event**: `object`
+
+#### result.data.event.attendees
+
+> **attendees**: (\{ `avatarURL`: `any`; `birthDate`: `any`; `createdAt`: `string`; `emailAddress`: `string`; `eventsAttended`: `object`[]; `id`: `string`; `name`: `string`; `natalSex`: `any`; `role`: `string`; `tagsAssignedWith`: `undefined`; \} \| \{ `avatarURL`: `any`; `birthDate`: `any`; `createdAt`: `string`; `emailAddress`: `string`; `eventsAttended`: `any`; `id`: `string`; `name`: `string`; `natalSex`: `any`; `role`: `string`; `tagsAssignedWith`: \{ `edges`: `object`[]; \}; \})[]

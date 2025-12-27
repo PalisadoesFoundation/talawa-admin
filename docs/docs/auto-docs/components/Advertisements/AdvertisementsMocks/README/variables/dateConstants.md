@@ -1,0 +1,91 @@
+[**talawa-admin**](README.md)
+
+***
+
+# Variable: dateConstants
+
+> `const` **dateConstants**: `object`
+
+Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:139](https://github.com/SujalTripathi/talawa-admin/blob/ed913970521689f5a1e8aec0179ffa2d67f07028/src/components/Advertisements/AdvertisementsMocks.ts#L139)
+
+## Type declaration
+
+### create
+
+> **create**: `object`
+
+#### create.endAtCalledWith
+
+> **endAtCalledWith**: `string` = `'2030-02-01T00:00:00.000Z'`
+
+#### create.endAtISO
+
+> **endAtISO**: `string` = `'2030-02-01T18:30:00.000Z'`
+
+#### create.endBeforeStartCalledWith
+
+> **endBeforeStartCalledWith**: `string` = `'2010-02-01T00:00:00.000Z'`
+
+#### create.endBeforeStartISO
+
+> **endBeforeStartISO**: `string` = `'2010-02-01T18:30:00.000Z'`
+
+#### create.endBeforeStartISOReceived
+
+> **endBeforeStartISOReceived**: `string` = `'2010-01-31T18:30:00.000Z'`
+
+#### create.endISOReceived
+
+> **endISOReceived**: `string` = `'2030-01-31T18:30:00.000Z'`
+
+#### create.startAtCalledWith
+
+> **startAtCalledWith**: `string` = `'2024-12-31T00:00:00.000Z'`
+
+#### create.startAtISO
+
+> **startAtISO**: `string` = `'2024-12-31T18:30:00.000Z'`
+
+#### create.startISOReceived
+
+> **startISOReceived**: `string` = `'2024-12-30T18:30:00.000Z'`
+
+### update
+
+> **update**: `object`
+
+#### update.endAtCalledWith
+
+> **endAtCalledWith**: `string` = `'2030-02-01T00:00:00.000Z'`
+
+#### update.endAtISO
+
+> **endAtISO**: `string` = `'2030-02-01T18:30:00.000Z'`
+
+#### update.endBeforeStartCalledWith
+
+> **endBeforeStartCalledWith**: `string` = `'2010-02-01T00:00:00.000Z'`
+
+#### update.endBeforeStartISO
+
+> **endBeforeStartISO**: `string` = `'2010-02-01T18:30:00.000Z'`
+
+#### update.endBeforeStartISOReceived
+
+> **endBeforeStartISOReceived**: `string` = `'2010-01-31T18:30:00.000Z'`
+
+#### update.endISOReceived
+
+> **endISOReceived**: `string` = `'2030-01-31T18:30:00.000Z'`
+
+#### update.startAtCalledWith
+
+> **startAtCalledWith**: `string` = `'2024-12-31T00:00:00.000Z'`
+
+#### update.startAtISO
+
+> **startAtISO**: `string` = `'2024-12-31T18:30:00.000Z'`
+
+#### update.startISOReceived
+
+> **startISOReceived**: `string` = `'2024-12-30T18:30:00.000Z'`

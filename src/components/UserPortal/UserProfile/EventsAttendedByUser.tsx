@@ -6,7 +6,7 @@
  * attended is displayed. Each event is rendered using the `EventsAttendedByMember` component.
  *
  * @component
- * @param {InterfaceUser} props - The props for the component.
+ * @param {InterfaceEventsAttendedByUserProps} props - The props for the component.
  * @param {Object} props.userDetails - The details of the user.
  * @param {string} props.userDetails.name - The full name of the user.
  * @param {string} props.userDetails.emailAddress - The email address of the user.
@@ -29,37 +29,11 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import styles from './common.module.css';
 import EventsAttendedByMember from 'components/MemberActivity/EventsAttendedByMember';
+import type { InterfaceEventsAttendedByUserProps } from 'types/UserPortal/UserProfile';
 
-interface InterfaceUser {
-  userDetails: {
-    name: string;
-    emailAddress: string;
-    natalSex: string;
-    createdAt?: string;
-    birthDate: string | null;
-    educationGrade: string;
-    employmentStatus: string;
-    maritalStatus: string;
-    addressLine1: string;
-    addressLine2: string;
-    state: string;
-    countryCode: string;
-    avatarURL: string;
-    city: string;
-    description: string;
-    homePhoneNumber: string;
-    mobilePhoneNumber: string;
-    workPhoneNumber: string;
-    naturalLanguageCode: string;
-    postalCode: string;
-    eventsAttended?: { id: string }[];
-  };
-  t: (key: string) => string;
-}
-export const EventsAttendedByUser: React.FC<InterfaceUser> = ({
-  userDetails,
-  t,
-}) => {
+export const EventsAttendedByUser: React.FC<
+  InterfaceEventsAttendedByUserProps
+> = ({ userDetails, t }) => {
   return (
     <Card border="0" className="rounded-4 mb-4">
       <div className={`${styles.cardHeader}`}>

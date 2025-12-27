@@ -38,19 +38,7 @@ import React from 'react';
 import { countryOptions } from 'utils/formEnumFields';
 import { Col, Form, Row } from 'react-bootstrap';
 import styles from './common.module.css';
-
-interface InterfaceUserAddressFieldsProps {
-  t: (key: string) => string;
-  handleFieldChange: (field: string, value: string) => void;
-  userDetails: {
-    addressLine1: string;
-    addressLine2: string;
-    state: string;
-    countryCode: string;
-    city: string;
-    postalCode: string;
-  };
-}
+import type { InterfaceUserAddressFieldsProps } from 'types/UserPortal/UserProfile';
 
 export const UserAddressFields: React.FC<InterfaceUserAddressFieldsProps> = ({
   t,

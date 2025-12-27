@@ -49,7 +49,7 @@ import {
   genderEnum,
   maritalStatusEnum,
 } from 'utils/formEnumFields';
-import UserAddressFields from 'components/UserPortal/UserProfile/UserAddressFields';
+import { UserAddressFields } from 'components/UserPortal/UserProfile/UserAddressFields';
 import sanitizeHtml from 'sanitize-html';
 import SyncIcon from '@mui/icons-material/Sync';
 import SaveIcon from '@mui/icons-material/Save';
