@@ -102,6 +102,63 @@ export const EMPTY_MOCKS = [
   },
 ];
 
+export const USER_UNDEFINED_MOCK = [
+  {
+    request: {
+      query: USER_LIST_FOR_ADMIN,
+      variables: {
+        first: 12,
+        after: null,
+        orgFirst: 32,
+        where: undefined,
+      },
+    },
+    result: {
+      data: {
+        allUsers: {
+          pageInfo: {
+            endCursor: null,
+            hasPreviousPage: false,
+            hasNextPage: false,
+            startCursor: null,
+          },
+          edges: [],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: USER_LIST,
+      variables: {
+        input: {
+          ids: [],
+        },
+      },
+    },
+    result: {
+      data: {
+        usersByIds: [],
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_LIST,
+      variables: {
+        filter: '',
+        limit: null,
+        offset: null,
+      },
+    },
+    result: {
+      data: {
+        organizations: [],
+      },
+    },
+  },
+];
+
 export const MOCKS_NEW_2 = [
   {
     request: {
