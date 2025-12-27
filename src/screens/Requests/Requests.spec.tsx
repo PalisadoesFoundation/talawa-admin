@@ -258,8 +258,7 @@ beforeEach(() => {
 
 afterEach(() => {
   for (const key in mockLocalStorageStore) delete mockLocalStorageStore[key];
-  // Restore all mocks
-  vi.restoreAllMocks();
+  vi.clearAllMocks()
 });
 
 describe('Testing Requests screen', () => {
