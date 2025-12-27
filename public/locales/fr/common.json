@@ -119,6 +119,8 @@
   "noResultsFound": "Aucun résultat trouvé",
   "loadingAdminPlugin": "Chargement du plugin administrateur...",
   "loadingUserPlugin": "Chargement du plugin utilisateur...",
+  "tags": "Étiquettes",
+  "unassign": "Désassigner",
   "unblock": "Débloquer",
   "unblockedSuccessfully": "{{item}} débloqué avec succès",
   "pluginSettings": "Paramètres du plugin"

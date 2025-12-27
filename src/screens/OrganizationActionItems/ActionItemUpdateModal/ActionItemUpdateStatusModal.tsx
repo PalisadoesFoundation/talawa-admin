@@ -5,7 +5,7 @@
  * This component allows users to update the completion status of an action item.
  * It provides a form to add post-completion notes when marking an item as completed.
  * The modal uses Apollo Client's `useMutation` hook to perform the update operation
- * and displays success or error messages using `react-toastify`.
+ * and displays success or error messages using NotificationToast.
  *
  * @param props - The props for the `ItemUpdateStatusModal` component.
  * @param props - A boolean indicating whether the modal is open.
@@ -38,7 +38,7 @@ import {
   COMPLETE_ACTION_ITEM_FOR_INSTANCE,
   MARK_ACTION_ITEM_AS_PENDING_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type {
   IActionItemInfo,
   IUpdateActionItemInput,
@@ -124,7 +124,10 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
       } else {
         // Mark as completed
         if (!postCompletionNotes.trim()) {
-          toast.error(t('postCompletionNotesRequired'));
+          NotificationToast.error({
+            key: 'postCompletionNotesRequired',
+            namespace: 'translation',
+          });
           return;
         }
 
@@ -138,20 +141,30 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
           variables: { input },
         });
 
-        toast.success(t('isCompleted'));
+        NotificationToast.success({
+          key: 'isCompleted',
+          namespace: 'translation',
+        });
       }
 
       actionItemsRefetch();
       hide();
-    } catch (error: unknown) {
-      toast.error((error as Error).message);
+    } catch {
+      NotificationToast.error({
+        key: 'unknownError',
+        namespace: 'errors',
+      });
     }
   };
 
   const completeActionForInstanceHandler = async (): Promise<void> => {
     try {
       if (!postCompletionNotes.trim()) {
-        toast.error(t('postCompletionNotesRequired'));
+        NotificationToast.error({
+          key: 'postCompletionNotesRequired',
+          namespace: 'translation',
+        });
+
         return;
       }
 
@@ -165,11 +178,17 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
         },
       });
 
-      toast.success(t('isCompleted'));
+      NotificationToast.success({
+        key: 'isCompleted',
+        namespace: 'translation',
+      });
       actionItemsRefetch();
       hide();
-    } catch (error: unknown) {
-      toast.error((error as Error).message);
+    } catch {
+      NotificationToast.error({
+        key: 'unknownError',
+        namespace: 'errors',
+      });
     }
   };
 
@@ -184,11 +203,17 @@ const ItemUpdateStatusModal: FC<IItemUpdateStatusModalProps> = ({
         },
       });
 
-      toast.success(t('isPending'));
+      NotificationToast.success({
+        key: 'isPending',
+        namespace: 'translation',
+      });
       actionItemsRefetch();
       hide();
-    } catch (error: unknown) {
-      toast.error((error as Error).message);
+    } catch {
+      NotificationToast.error({
+        key: 'unknownError',
+        namespace: 'errors',
+      });
     }
   };
 

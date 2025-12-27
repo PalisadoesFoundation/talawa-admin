@@ -16,5 +16,8 @@
   "organizationNameAlreadyExists": "Una organización con este nombre ya existe",
   "markAsReadError": "Error al marcar las notificaciones como leídas",
   "accountLocked": "La cuenta está temporalmente bloqueada debido a demasiados intentos de inicio de sesión fallidos. Por favor, inténtelo de nuevo más tarde.",
-  "accountLockedWithTimer": "La cuenta está temporalmente bloqueada. Por favor, inténtelo de nuevo en {{minutes}} minuto(s)."
+  "accountLockedWithTimer": "La cuenta está temporalmente bloqueada. Por favor, inténtelo de nuevo en {{minutes}} minuto(s).",
+  "fileTooLarge": "Archivo demasiado grande",
+  "invalidFileType": "Tipo de archivo no válido",
+  "emptyFile": "Archivo vacío seleccionado"
 }

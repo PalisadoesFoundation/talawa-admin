@@ -1578,7 +1578,8 @@
     "edit": "संपादित करें",
     "delete": "हटाएं",
     "name": "नाम",
-    "desc": "विवरण"
+    "desc": "विवरण",
+    "venueImagePreview": "स्थान की छवि का पूर्वावलोकन"
   },
   "addMember": {
     "title": "सदस्य जोड़ें",
@@ -1821,5 +1822,20 @@
     "signOut": "साइन आउट",
     "signingOut": "साइन आउट हो रहा है...",
     "retryPrompt": "सेशन रद्द करने में विफल। पुनः प्रयास करें?"
+  },
+  "organizationVenuesNotification": {
+    "venueCreated": "स्थान सफलतापूर्वक बनाया गया",
+    "venueUpdated": "स्थान का विवरण सफलतापूर्वक अपडेट किया गया",
+    "venueNameExists": "स्थान का नाम पहले से मौजूद है",
+    "venueTitleError": "स्थान का नाम खाली नहीं हो सकता!",
+    "venueCapacityError": "क्षमता एक सकारात्मक संख्या होनी चाहिए!",
+    "previewUrlError": "पूर्वावलोकन URL बनाने में त्रुटि",
+    "invalidCapacity": "क्षमता एक सकारात्मक संख्या होनी चाहिए"
+  },
+  "manageTags": {
+    "loadAssignedUsersError": "निर्दिष्ट उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
+    "sortPeople": "लोगों को क्रमबद्ध करें",
+    "unassign": "हटाएँ",
+    "tags": "टैग"
   }
 }

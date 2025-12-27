@@ -10282,6 +10282,16 @@ form {
   background-color: var(--popup-bg, #fff);
 }
 
+.manageTagErrorIcon {
+  font-size: 2rem;
+}
+
+.manageTagDivider {
+  border-color: var(--grey-border-box-color);
+  border-width: 2px;
+  width: 85%;
+  }
+
 .addIconStyle {
   font-size: 25px;
   margin-bottom: 2px;

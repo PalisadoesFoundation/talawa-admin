@@ -119,6 +119,8 @@
   "breadcrumbs": "Breadcrumbs",
   "loadingAdminPlugin": "Loading admin plugin...",
   "loadingUserPlugin": "Loading user plugin...",
+  "tags": "Tags",
+  "unassign": "Unassign",
   "unblock": "Unblock",
   "unblockedSuccessfully": "{{item}} unblocked successfully",
   "pluginSettings": "Plugin Settings"

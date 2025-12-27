@@ -1578,7 +1578,8 @@
     "edit": "Modifier",
     "delete": "Supprimer",
     "name": "Nom",
-    "desc": "Description"
+    "desc": "Description",
+    "venueImagePreview": "Aperçu de l’image du lieu"
   },
   "addMember": {
     "title": "Ajouter un membre",
@@ -1821,5 +1822,20 @@
     "signOut": "Se déconnecter",
     "signingOut": "Déconnexion en cours...",
     "retryPrompt": "Échec de la révocation de session. Réessayer ?"
+  },
+  "organizationVenuesNotification": {
+    "venueCreated": "Lieu créé avec succès",
+    "venueUpdated": "Les détails du lieu ont été mis à jour avec succès",
+    "venueNameExists": "Le nom du lieu existe déjà",
+    "venueTitleError": "Le nom du lieu ne peut pas être vide !",
+    "venueCapacityError": "La capacité doit être un nombre positif !",
+    "previewUrlError": "Erreur lors de la création de l’aperçu",
+    "invalidCapacity": "La capacité doit être un nombre positif"
+  },
+  "manageTags": {
+    "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
+    "sortPeople": "Trier les personnes",
+    "unassign": "Désassigner",
+    "tags": "Tags"
   }
 }

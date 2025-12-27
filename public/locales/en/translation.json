@@ -1579,7 +1579,8 @@
     "edit": "edit",
     "delete": "delete",
     "name": "name",
-    "desc": "desc"
+    "desc": "desc",
+    "venueImagePreview": "Preview of venue image"
   },
   "addMember": {
     "title": "Add Member",
@@ -1823,5 +1824,20 @@
     "signOut": "Sign out",
     "signingOut": "Signing out...",
     "retryPrompt": "Failed to revoke session. Retry?"
+  },
+  "organizationVenuesNotification": {
+    "venueCreated": "Venue created successfully",
+    "venueUpdated": "Venue details updated successfully",
+    "venueNameExists": "Venue name already exists",
+    "venueTitleError": "Venue title cannot be empty!",
+    "venueCapacityError": "Capacity must be a positive number!",
+    "previewUrlError": "Error creating preview URL",
+    "invalidCapacity": "Capacity must be a positive number!"
+  },
+  "manageTags": {
+    "loadAssignedUsersError": "Error occurred while loading assigned users",
+    "sortPeople": "Sort People",
+    "unassign": "Unassign",
+    "tags": "Tags"
   }
 }
