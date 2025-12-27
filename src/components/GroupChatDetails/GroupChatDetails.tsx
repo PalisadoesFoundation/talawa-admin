@@ -42,35 +42,25 @@
  * - `react-icons`
  *
  */
-import { Paper, TableBody } from '@mui/material';
 import React, { useRef, useState, useEffect } from 'react';
-import { Button, ListGroup, Modal, Dropdown } from 'react-bootstrap';
+import { ListGroup, Modal, Dropdown } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import {
   UPDATE_CHAT,
-  CREATE_CHAT_MEMBERSHIP,
   UPDATE_CHAT_MEMBERSHIP,
   DELETE_CHAT,
   DELETE_CHAT_MEMBERSHIP,
 } from 'GraphQl/Mutations/OrganizationMutations';
-import Table from '@mui/material/Table';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
-import Loader from 'components/Loader/Loader';
 import { Add } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import Avatar from 'components/Avatar/Avatar';
-import { FiEdit } from 'react-icons/fi';
-import { FaCheck, FaX, FaTrash } from 'react-icons/fa6';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import useLocalStorage from 'utils/useLocalstorage';
 import { toast } from 'react-toastify';
 import type { InterfaceGroupChatDetailsProps } from 'types/Chat/interface';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
+import GroupChatDetailsHeader from './GroupChatDetailsHeader';
+import GroupChatAddUserModal from './GroupChatAddUserModal';
 
 // No longer using StyledTableCell and StyledTableRow as they were flagging CSS violations.
 // We'll use standard MUI components with CSS classes instead.
@@ -106,27 +96,7 @@ export default function groupChatDetails({
     };
   }, [selectedImage]);
 
-  // Validate image URLs to avoid passing unsafe schemes into `src` (e.g. javascript:)
-  const getSafeImageSrc = (url?: string | null): string | undefined => {
-    if (!url) return undefined;
-    try {
-      // Allow http, https, data, and blob schemes only
-      const parsed = new URL(url, window.location.href);
-      const protocol = parsed.protocol;
-      if (
-        protocol === 'http:' ||
-        protocol === 'https:' ||
-        protocol === 'data:' ||
-        protocol === 'blob:'
-      ) {
-        return url;
-      }
-      return undefined;
-    } catch {
-      // If URL constructor throws, treat as unsafe
-      return undefined;
-    }
-  };
+  // image URL validation moved to GroupChatDetailsUtils
 
   if (!userId) {
     return (
@@ -145,14 +115,10 @@ export default function groupChatDetails({
   }
 
   //states
-
-  const [userName, setUserName] = useState('');
   const [editChatTitle, setEditChatTitle] = useState<boolean>(false);
   const [chatName, setChatName] = useState<string>(chat?.name || '');
 
   //mutations
-
-  const [addUser] = useMutation(CREATE_CHAT_MEMBERSHIP);
   const [updateChat] = useMutation(UPDATE_CHAT);
   const [updateChatMembership] = useMutation(UPDATE_CHAT_MEMBERSHIP);
   const [deleteChat] = useMutation(DELETE_CHAT);
@@ -210,37 +176,6 @@ export default function groupChatDetails({
   const toggleAddUserModal = (): void =>
     setAddUserModalisOpen(!addUserModalisOpen);
 
-  const {
-    data: allUsersData,
-    loading: allUsersLoading,
-    refetch: allUsersRefetch,
-  } = useQuery(ORGANIZATION_MEMBERS, {
-    variables: {
-      input: { id: chat.organization?.id },
-      first: 20,
-      after: null,
-      where: {},
-    },
-  });
-
-  const addUserToGroupChat = async (userId: string): Promise<void> => {
-    await addUser({
-      variables: {
-        input: { memberId: userId, chatId: chat.id, role: 'regular' },
-      },
-    });
-  };
-
-  const handleUserModalSearchChange = (value: string): void => {
-    const trimmedName = value.trim();
-    allUsersRefetch({
-      input: { id: chat.organization?.id },
-      first: 20,
-      after: null,
-      where: trimmedName ? { name_contains: trimmedName } : {},
-    });
-  };
-
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageClick = (): void => {
@@ -296,6 +231,33 @@ export default function groupChatDetails({
     }
   };
 
+  const handleSaveTitle = async (): Promise<void> => {
+    try {
+      await updateChat({
+        variables: { input: { id: chat.id, name: chatName } },
+      });
+      setEditChatTitle(false);
+      await chatRefetch({ input: { id: chat.id } });
+      toast.success(t('chatNameUpdatedSuccess'));
+    } catch (error) {
+      toast.error(t('failedUpdateChatName'));
+      console.error(error);
+    }
+  };
+
+  const handleDeleteChat = async (): Promise<void> => {
+    if (window.confirm('Are you sure you want to delete this chat?')) {
+      try {
+        await deleteChat({ variables: { input: { id: chat.id } } });
+        toast.success(t('chatDeletedSuccess'));
+        toggleGroupChatDetailsModal();
+      } catch (error) {
+        toast.error(t('failedDeleteChat'));
+        console.error(error);
+      }
+    }
+  };
+
   return (
     <>
       <Modal
@@ -304,367 +266,126 @@ export default function groupChatDetails({
         onHide={toggleGroupChatDetailsModal}
         contentClassName={styles.modalContent}
       >
-        <Modal.Header closeButton data-testid="groupChatDetails">
-          <div className="d-flex justify-content-between w-100">
-            <Modal.Title>{t('groupInfo')}</Modal.Title>
-            {currentUserRole === 'administrator' && (
-              <Button
-                variant="outline-danger"
-                size="sm"
-                onClick={async () => {
-                  if (
-                    window.confirm('Are you sure you want to delete this chat?')
-                  ) {
-                    try {
-                      await deleteChat({
-                        variables: { input: { id: chat.id } },
-                      });
-                      toast.success(t('chatDeletedSuccess'));
-                      toggleGroupChatDetailsModal();
-                      // Maybe navigate away or refetch chats
-                    } catch (error) {
-                      toast.error(t('failedDeleteChat'));
-                      console.error(error);
-                    }
-                  }
-                }}
-              >
-                <FaTrash />
-              </Button>
-            )}
-          </div>
-        </Modal.Header>
-        <Modal.Body>
-          <input
-            type="file"
-            accept="image/*"
-            ref={fileInputRef}
-            className={styles.displayNone}
-            onChange={handleImageChange}
-            data-testid="fileInput"
-          />
-          <div className={styles.groupInfo}>
-            {(() => {
-              const safeSelected = getSafeImageSrc(selectedImage);
-              const safeAvatar = getSafeImageSrc(chat?.avatarURL);
-              if (safeSelected) {
-                return (
-                  <img
-                    className={styles.chatImage}
-                    src={safeSelected}
-                    alt={chat?.name || ''}
-                  />
-                );
-              }
-              if (safeAvatar) {
-                return (
-                  <img
-                    className={styles.chatImage}
-                    src={safeAvatar}
-                    alt={chat?.name || ''}
-                  />
-                );
-              }
-              return (
-                <Avatar
-                  avatarStyle={styles.groupImage}
-                  name={chat.name || ''}
-                />
-              );
-            })()}
-            <button
-              data-testid="editImageBtn"
-              onClick={handleImageClick}
-              className={styles.editImgBtn}
+        <GroupChatDetailsHeader
+          chat={chat}
+          currentUserRole={currentUserRole}
+          userId={userId}
+          selectedImage={selectedImage}
+          editChatTitle={editChatTitle}
+          chatName={chatName}
+          setChatName={setChatName}
+          setEditChatTitle={setEditChatTitle}
+          onImageClick={handleImageClick}
+          fileInputRef={fileInputRef}
+          onImageChange={handleImageChange}
+          onSaveTitle={handleSaveTitle}
+          onCancelEdit={() => {
+            setEditChatTitle(false);
+            setChatName(chat.name || '');
+          }}
+          onDelete={handleDeleteChat}
+          t={t}
+        />
+
+        <div>
+          <h5>
+            {chat.members.edges.length} {t('members')}
+          </h5>
+          <ListGroup className={styles.memberList} variant="flush">
+            <ListGroup.Item
+              data-testid="addMembers"
+              className={styles.listItem}
+              onClick={() => {
+                openAddUserModal();
+              }}
             >
-              <FiEdit />
-            </button>
-
-            {editChatTitle ? (
-              <div className={styles.editChatNameContainer}>
-                <input
-                  type="text"
-                  value={chatName}
-                  data-testid="chatNameInput"
-                  onChange={(e) => {
-                    setChatName(e.target.value);
-                  }}
-                />
-                <FaCheck
-                  data-testid="updateTitleBtn"
-                  onClick={async () => {
-                    try {
-                      await updateChat({
-                        variables: {
-                          input: {
-                            id: chat.id,
-                            name: chatName,
-                          },
-                        },
-                      });
-                      setEditChatTitle(false);
-                      await chatRefetch({ input: { id: chat.id } });
-                      toast.success(t('chatNameUpdatedSuccess'));
-                    } catch (error) {
-                      toast.error(t('failedUpdateChatName'));
-                      console.error(error);
-                    }
-                  }}
-                />
-                <FaX
-                  data-testid="cancelEditBtn"
-                  className={styles.cancelIcon}
-                  onClick={() => {
-                    setEditChatTitle(false);
-                    setChatName(chat.name || '');
-                  }}
-                />
-              </div>
-            ) : (
-              <div className={styles.editChatNameContainer}>
-                <h3>{chat?.name}</h3>
-                <FiEdit
-                  data-testid="editTitleBtn"
-                  onClick={() => {
-                    setEditChatTitle(true);
-                  }}
-                />
-              </div>
-            )}
-
-            <p>
-              {chat?.members.edges.length} {t('members')}
-            </p>
-            <p>{chat?.description}</p>
-          </div>
-
-          <div>
-            <h5>
-              {chat.members.edges.length} {t('members')}
-            </h5>
-            <ListGroup className={styles.memberList} variant="flush">
-              <ListGroup.Item
-                data-testid="addMembers"
-                className={styles.listItem}
-                onClick={() => {
-                  openAddUserModal();
-                }}
-              >
-                <Add /> {t('addMembers')}
-              </ListGroup.Item>
-              {chat.members.edges.map((edge) => {
-                const user = edge.node.user;
-                const role = edge.node.role;
-                const isCurrentUser = user.id === userId;
-                const canManage =
-                  currentUserRole === 'administrator' && !isCurrentUser;
-                const canRemove = canManage && role === 'regular';
-                return (
-                  <ListGroup.Item
-                    className={styles.groupMembersList}
-                    key={user.id}
+              <Add /> {t('addMembers')}
+            </ListGroup.Item>
+            {chat.members.edges.map((edge) => {
+              const user = edge.node.user;
+              const role = edge.node.role;
+              const isCurrentUser = user.id === userId;
+              const canManage =
+                currentUserRole === 'administrator' && !isCurrentUser;
+              const canRemove = canManage && role === 'regular';
+              return (
+                <ListGroup.Item
+                  className={styles.groupMembersList}
+                  key={user.id}
+                >
+                  <div
+                    className={`${styles.chatUserDetails} d-flex align-items-center w-100`}
                   >
-                    <div
-                      className={`${styles.chatUserDetails} d-flex align-items-center w-100`}
-                    >
-                      <div className="d-flex align-items-center flex-grow-1">
-                        <Avatar
-                          avatarStyle={styles.membersImage}
-                          name={user.name}
-                        />
-                        <span className="ms-2">{user.name}</span>
-                        <span
-                          className={`badge bg-success text-dark ms-2 ${styles.fontSize075rem}`}
-                        >
-                          {role}
-                        </span>
-                      </div>
-                      {canManage && (
-                        <Dropdown className="ms-auto">
-                          <Dropdown.Toggle
-                            variant="link"
-                            id={`dropdown-${user.id}`}
-                            className={`btn-sm ${styles.cursorPointer}`}
-                          >
-                            <BsThreeDotsVertical />
-                          </Dropdown.Toggle>
-                          <Dropdown.Menu align="end">
-                            <Dropdown.Item
-                              onClick={() =>
-                                handleRoleChange(
-                                  user.id,
-                                  role === 'administrator'
-                                    ? 'regular'
-                                    : 'administrator',
-                                )
-                              }
-                            >
-                              {role === 'administrator'
-                                ? t('demoteToRegular')
-                                : t('promoteToAdmin')}
-                            </Dropdown.Item>
-                            {canRemove && (
-                              <Dropdown.Item
-                                className={styles.textRed}
-                                onClick={() => {
-                                  if (
-                                    window.confirm(
-                                      t('confirmRemoveUser', {
-                                        name: user.name,
-                                      }),
-                                    )
-                                  ) {
-                                    handleRemoveMember(user.id);
-                                  }
-                                }}
-                              >
-                                {t('remove')}
-                              </Dropdown.Item>
-                            )}
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      )}
+                    <div className="d-flex align-items-center flex-grow-1">
+                      <Avatar
+                        avatarStyle={styles.membersImage}
+                        name={user.name}
+                      />
+                      <span className="ms-2">{user.name}</span>
+                      <span
+                        className={`badge bg-success text-dark ms-2 ${styles.fontSize075rem}`}
+                      >
+                        {role}
+                      </span>
                     </div>
-                  </ListGroup.Item>
-                );
-              })}
-            </ListGroup>
-          </div>
-        </Modal.Body>
+                    {canManage && (
+                      <Dropdown className="ms-auto">
+                        <Dropdown.Toggle
+                          variant="link"
+                          id={`dropdown-${user.id}`}
+                          className={`btn-sm ${styles.cursorPointer}`}
+                        >
+                          <BsThreeDotsVertical />
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu align="end">
+                          <Dropdown.Item
+                            onClick={() =>
+                              handleRoleChange(
+                                user.id,
+                                role === 'administrator'
+                                  ? 'regular'
+                                  : 'administrator',
+                              )
+                            }
+                          >
+                            {role === 'administrator'
+                              ? t('demoteToRegular')
+                              : t('promoteToAdmin')}
+                          </Dropdown.Item>
+                          {canRemove && (
+                            <Dropdown.Item
+                              className={styles.textRed}
+                              onClick={() => {
+                                if (
+                                  window.confirm(
+                                    t('confirmRemoveUser', { name: user.name }),
+                                  )
+                                ) {
+                                  handleRemoveMember(user.id);
+                                }
+                              }}
+                            >
+                              {t('remove')}
+                            </Dropdown.Item>
+                          )}
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    )}
+                  </div>
+                </ListGroup.Item>
+              );
+            })}
+          </ListGroup>
+        </div>
       </Modal>
-      <Modal
-        data-testid="addExistingUserModal"
-        show={addUserModalisOpen}
-        onHide={toggleAddUserModal}
-        contentClassName={styles.modalContent}
-      >
-        <Modal.Header closeButton data-testid="pluginNotificationHeader">
-          <Modal.Title>{t('chat')}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {allUsersLoading ? (
-            <>
-              <Loader />
-            </>
-          ) : (
-            <>
-              <div className={styles.input}>
-                <SearchBar
-                  placeholder={t('searchFullName')}
-                  value={userName}
-                  onChange={(value) => {
-                    setUserName(value);
-                    handleUserModalSearchChange(value);
-                  }}
-                  onSearch={(value) => {
-                    handleUserModalSearchChange(value);
-                  }}
-                  onClear={() => {
-                    // Reset local input; refetch with empty filter explicitly for clarity
-                    setUserName('');
-                    handleUserModalSearchChange('');
-                  }}
-                  inputTestId="searchUser"
-                  buttonTestId="searchBtn"
-                />
-              </div>
 
-              <TableContainer className={styles.userData} component={Paper}>
-                <Table aria-label={t('customizedTable')}>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell className={styles.groupChatTableCellHead}>
-                        #
-                      </TableCell>
-                      <TableCell
-                        className={styles.groupChatTableCellHead}
-                        align="center"
-                      >
-                        {t('user')}
-                      </TableCell>
-                      <TableCell
-                        className={styles.groupChatTableCellHead}
-                        align="center"
-                      >
-                        {t('chat')}
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody data-testid="userList">
-                    {allUsersData &&
-                      allUsersData.organization?.members?.edges?.length > 0 &&
-                      allUsersData.organization.members.edges
-                        .filter(
-                          ({
-                            node: userDetails,
-                          }: {
-                            node: {
-                              id: string;
-                              name: string;
-                              avatarURL?: string;
-                              role: string;
-                            };
-                          }) =>
-                            userDetails.id !== userId &&
-                            !chat.members.edges.some(
-                              (edge) => edge.node.user.id === userDetails.id,
-                            ),
-                        )
-                        .map(
-                          (
-                            {
-                              node: userDetails,
-                            }: {
-                              node: {
-                                id: string;
-                                name: string;
-                                avatarURL?: string;
-                                role: string;
-                              };
-                            },
-                            index: number,
-                          ) => (
-                            <TableRow data-testid="user" key={userDetails.id}>
-                              <TableCell
-                                component="th"
-                                scope="row"
-                                className={styles.groupChatTableCellBody}
-                              >
-                                {index + 1}
-                              </TableCell>
-                              <TableCell
-                                align="center"
-                                className={styles.groupChatTableCellBody}
-                              >
-                                {userDetails.name}
-                                <br />
-                                {userDetails.role || 'Member'}
-                              </TableCell>
-                              <TableCell
-                                align="center"
-                                className={styles.groupChatTableCellBody}
-                              >
-                                <Button
-                                  onClick={async () => {
-                                    await addUserToGroupChat(userDetails.id);
-                                    toggleAddUserModal();
-                                    chatRefetch({ input: { id: chat.id } });
-                                  }}
-                                  data-testid="addUserBtn"
-                                >
-                                  {t('add')}
-                                </Button>
-                              </TableCell>
-                            </TableRow>
-                          ),
-                        )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </>
-          )}
-        </Modal.Body>
-      </Modal>
+      <GroupChatAddUserModal
+        show={addUserModalisOpen}
+        toggle={toggleAddUserModal}
+        chat={chat}
+        chatRefetch={chatRefetch}
+        t={t}
+      />
     </>
   );
 }

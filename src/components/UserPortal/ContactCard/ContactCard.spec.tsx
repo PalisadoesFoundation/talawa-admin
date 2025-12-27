@@ -196,7 +196,7 @@ describe('ContactCard [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ContactCard {...props} image={minioUrl} />
+              <ContactCard {...baseProps} image={minioUrl} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -205,7 +205,7 @@ describe('ContactCard [User Portal]', () => {
 
     await wait();
 
-    const img = screen.getByAltText(props.title);
+    const img = screen.getByAltText(baseProps.title);
     expect(img).toHaveAttribute(
       'src',
       'http://localhost:9000/bucket/image.jpg',
@@ -220,7 +220,7 @@ describe('ContactCard [User Portal]', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ContactCard {...props} image={normalUrl} />
+              <ContactCard {...baseProps} image={normalUrl} />
             </I18nextProvider>
           </Provider>
         </BrowserRouter>
@@ -229,7 +229,7 @@ describe('ContactCard [User Portal]', () => {
 
     await wait();
 
-    const img = screen.getByAltText(props.title);
+    const img = screen.getByAltText(baseProps.title);
     expect(img).toHaveAttribute('src', normalUrl);
     expect(img).toHaveAttribute('crossOrigin', 'anonymous');
   });
