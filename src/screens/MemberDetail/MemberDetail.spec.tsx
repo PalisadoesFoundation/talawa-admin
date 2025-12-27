@@ -27,7 +27,7 @@ import {
 import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { urlToFile } from 'utils/urlToFile';
 
@@ -52,6 +52,15 @@ Object.defineProperty(window, 'location', {
 async function wait(ms = 500): Promise<void> {
   await act(() => new Promise((resolve) => setTimeout(resolve, ms)));
 }
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  },
+}));
 
 vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
   const actual = await vi.importActual(
@@ -103,10 +112,10 @@ describe('MemberDetail', () => {
   global.alert = vi.fn();
 
   beforeEach(() => {
-    vi.spyOn(toast, 'success');
-    vi.spyOn(toast, 'error');
-    vi.spyOn(toast, 'info');
-    vi.spyOn(toast, 'warning');
+    vi.spyOn(NotificationToast, 'success');
+    vi.spyOn(NotificationToast, 'error');
+    vi.spyOn(NotificationToast, 'info');
+    vi.spyOn(NotificationToast, 'warning');
   });
 
   afterEach(() => {
@@ -357,7 +366,7 @@ describe('MemberDetail', () => {
 
     fireEvent.change(passwordInput, { target: { value: 'weak' } });
 
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'Password must be at least 8 characters long.',
     );
   });
@@ -414,7 +423,7 @@ describe('MemberDetail', () => {
     await userEvent.click(saveButton);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -435,7 +444,7 @@ describe('MemberDetail', () => {
     await userEvent.click(saveButton);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
+      expect(NotificationToast.error).toHaveBeenCalledWith(
         'Failed to process profile picture. Please try uploading again.',
       );
     });
@@ -466,7 +475,7 @@ describe('MemberDetail', () => {
     const fileInput = screen.getByTestId('fileInput');
     await userEvent.upload(fileInput, invalidFile);
 
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'Invalid file type. Please upload a JPEG, PNG, or GIF.',
     );
 
@@ -476,7 +485,7 @@ describe('MemberDetail', () => {
     });
     await userEvent.upload(fileInput, largeFile);
 
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'File is too large. Maximum size is 5MB.',
     );
   });
@@ -540,7 +549,7 @@ describe('MemberDetail', () => {
       type: 'image/png',
     });
     await userEvent.upload(fileInput, largeFile);
-    expect(toast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'File is too large. Maximum size is 5MB.',
     );
   });
