@@ -178,9 +178,7 @@ export default function Settings(): React.JSX.Element {
         avatarFile = await urlToFile(userDetails.avatarURL);
       } catch (error) {
         console.log(error);
-        NotificationToast.error(
-          'Failed to process profile picture. Please try uploading again.',
-        );
+        NotificationToast.error(t('failedToProcessImage'));
         return;
       }
     }
@@ -239,7 +237,7 @@ export default function Settings(): React.JSX.Element {
     // check if the password is strong or not
     if (fieldName === 'password' && value) {
       if (!validatePassword(value)) {
-        NotificationToast.error('Password must be at least 8 characters long.');
+        NotificationToast.error(t('atleast_8_char_long'));
         return;
       }
     }
@@ -257,14 +255,12 @@ export default function Settings(): React.JSX.Element {
       const maxSize = 5 * 1024 * 1024; // 5MB
 
       if (!validTypes.includes(file.type)) {
-        NotificationToast.error(
-          'Invalid file type. Please upload a JPEG, PNG, or GIF.',
-        );
+        NotificationToast.error(t('invalidFileType'));
         return;
       }
 
       if (file.size > maxSize) {
-        NotificationToast.error('File is too large. Maximum size is 5MB.');
+        NotificationToast.error(t('fileSizeTooLarge'));
         return;
       }
 
