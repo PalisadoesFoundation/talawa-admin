@@ -4,7 +4,7 @@
 
 # Interface: InterfaceLoadingStateProps
 
-Defined in: src/types/shared-components/LoadingState/interface.ts:31
+Defined in: [src/types/shared-components/LoadingState/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L31)
 
 Interface for LoadingState component props.
 
@@ -31,7 +31,7 @@ const props: InterfaceLoadingStateProps = {
 
 > **children**: `ReactNode`
 
-Defined in: src/types/shared-components/LoadingState/interface.ts:35
+Defined in: [src/types/shared-components/LoadingState/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L35)
 
 Content to display when not loading
 
@@ -41,7 +41,7 @@ Content to display when not loading
 
 > `optional` **data-testid**: `string`
 
-Defined in: src/types/shared-components/LoadingState/interface.ts:36
+Defined in: [src/types/shared-components/LoadingState/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L36)
 
 Test ID for testing purposes
 
@@ -51,7 +51,7 @@ Test ID for testing purposes
 
 > **isLoading**: `boolean`
 
-Defined in: src/types/shared-components/LoadingState/interface.ts:32
+Defined in: [src/types/shared-components/LoadingState/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L32)
 
 Whether the loading state is active
 
@@ -61,7 +61,7 @@ Whether the loading state is active
 
 > `optional` **size**: `"sm"` \| `"lg"` \| `"xl"`
 
-Defined in: src/types/shared-components/LoadingState/interface.ts:34
+Defined in: [src/types/shared-components/LoadingState/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L34)
 
 Size of the loading indicator
   - 'sm': Small
@@ -74,7 +74,7 @@ Size of the loading indicator
 
 > `optional` **variant**: `"spinner"` \| `"inline"`
 
-Defined in: src/types/shared-components/LoadingState/interface.ts:33
+Defined in: [src/types/shared-components/LoadingState/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L33)
 
 The variant of the loading indicator
   - 'spinner': Full-screen loading with overlay (default)

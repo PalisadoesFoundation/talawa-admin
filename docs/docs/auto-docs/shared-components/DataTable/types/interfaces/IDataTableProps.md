@@ -4,7 +4,7 @@
 
 # Interface: IDataTableProps\<T, TValue\>
 
-Defined in: src/shared-components/DataTable/types.ts:53
+Defined in: [src/shared-components/DataTable/types.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L53)
 
 Props for a generic DataTable component
 
@@ -24,7 +24,7 @@ Props for a generic DataTable component
 
 > **columns**: [`IColumnDef`](IColumnDef.md)\<`T`, `TValue`\>[]
 
-Defined in: src/shared-components/DataTable/types.ts:55
+Defined in: [src/shared-components/DataTable/types.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L55)
 
 ***
 
@@ -32,7 +32,7 @@ Defined in: src/shared-components/DataTable/types.ts:55
 
 > **data**: `T`[]
 
-Defined in: src/shared-components/DataTable/types.ts:54
+Defined in: [src/shared-components/DataTable/types.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L54)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: src/shared-components/DataTable/types.ts:54
 
 > `optional` **emptyMessage**: `string`
 
-Defined in: src/shared-components/DataTable/types.ts:58
+Defined in: [src/shared-components/DataTable/types.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L58)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: src/shared-components/DataTable/types.ts:58
 
 > `optional` **error**: `Error`
 
-Defined in: src/shared-components/DataTable/types.ts:59
+Defined in: [src/shared-components/DataTable/types.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L59)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: src/shared-components/DataTable/types.ts:59
 
 > `optional` **loading**: `boolean`
 
-Defined in: src/shared-components/DataTable/types.ts:56
+Defined in: [src/shared-components/DataTable/types.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L56)
 
 ***
 
@@ -64,7 +64,7 @@ Defined in: src/shared-components/DataTable/types.ts:56
 
 > `optional` **renderError**: (`error`) => `ReactNode`
 
-Defined in: src/shared-components/DataTable/types.ts:60
+Defined in: [src/shared-components/DataTable/types.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L60)
 
 #### Parameters
 
@@ -82,4 +82,4 @@ Defined in: src/shared-components/DataTable/types.ts:60
 
 > `optional` **rowKey**: keyof `T` \| (`row`) => `string` \| `number`
 
-Defined in: src/shared-components/DataTable/types.ts:57
+Defined in: [src/shared-components/DataTable/types.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L57)
