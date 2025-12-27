@@ -360,6 +360,36 @@ describe('Testing Campaign Pledge Screen', () => {
     });
   });
 
+  it('renders localized column headers', async () => {
+    renderFundCampaignPledge(link1);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
+    });
+
+    // Get translation values with fallbacks
+    const t = (i18nForTest.getDataByLanguage('en')?.translation?.pledges ??
+      {}) as Record<string, string>;
+    const tCommon = (i18nForTest.getDataByLanguage('en')?.common ??
+      {}) as Record<string, string>;
+
+    // Wait for DataGrid headers to render - may take time to appear
+    await waitFor(
+      () => {
+        expect(screen.getByText(t.pledgers ?? 'Pledgers')).toBeInTheDocument();
+        expect(
+          screen.getByText(t.pledgeDate ?? 'Pledge Date'),
+        ).toBeInTheDocument();
+        expect(screen.getByText(t.pledged ?? 'Pledged')).toBeInTheDocument();
+        expect(screen.getByText(t.donated ?? 'Donated')).toBeInTheDocument();
+        expect(
+          screen.getByText(tCommon.action ?? 'Action'),
+        ).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
+  });
+
   it('open and closes Create Pledge modal', async () => {
     // Set up controlled date for active campaign
     vi.setSystemTime(new Date('2024-06-15'));
@@ -499,6 +529,9 @@ describe('Testing Campaign Pledge Screen', () => {
   it('renders the empty pledge component', async () => {
     renderFundCampaignPledge(link3);
     await waitFor(() => {
+      expect(
+        screen.getByTestId('fund-campaign-pledge-empty-state'),
+      ).toBeInTheDocument();
       expect(screen.getByText(translations.noPledges)).toBeInTheDocument();
     });
   });
@@ -801,6 +834,9 @@ describe('Testing Campaign Pledge Screen', () => {
     await waitFor(() => {
       // Both conditions belong here
       expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('fund-campaign-pledge-empty-state'),
+      ).toBeInTheDocument();
       expect(screen.getByText(translations.noPledges)).toBeInTheDocument();
     });
   });

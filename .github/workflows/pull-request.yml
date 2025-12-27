@@ -434,6 +434,30 @@ jobs:
             echo "No files to check"
           fi
 
+  Translation-Tag-Check:
+    name: Translation Tag Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+      - name: Install dependencies
+        run: pip install -r .github/workflows/requirements.txt
+      - name: Run Translation Checker
+        run: |
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | grep -E '\.(ts|tsx|js|jsx)$' || true)
+
+          if [ -n "$CHANGED_FILES" ]; then
+            python3 .github/workflows/scripts/translation_check.py --files $CHANGED_FILES
+          else
+            echo "No relevant files changed, skipping check."
+          fi
+
   Pre-Test-Checks-Pass:
     name: All Pre-Testing Checks Pass
     runs-on: ubuntu-latest
@@ -445,6 +469,7 @@ jobs:
         Check-Mock-Isolation,
         CSS-Policy-Check,
         Python-Compliance,
+        Translation-Tag-Check,
       ]
     steps:
       - name: This job intentionally does nothing
