@@ -95,7 +95,7 @@ export function getPasswordRequirements(
       specialChar: false,
     };
   }
-  
+
   return {
     lowercase: PASSWORD_REGEX.lowercase.test(password),
     uppercase: PASSWORD_REGEX.uppercase.test(password),
