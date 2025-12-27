@@ -310,7 +310,84 @@ import EmptyState from 'src/shared-components/EmptyState/EmptyState';
 />
 ```
 
+### ErrorBoundaryWrapper
 
+`ErrorBoundaryWrapper` is a error boundary component that catches JavaScript errors in child components, logs them, and displays a fallback UI instead of crashing the entire application.
+
+**Use cases:**
+- Wrapping critical components that might throw render errors
+- Protecting modals, forms, and complex UI sections
+- Providing graceful error recovery for users
+- Integrating with error tracking services (e.g., Sentry, LogRocket)
+
+**Key features:**
+- Catches render errors that try-catch cannot handle
+- Provides default and custom fallback UI options
+- Integrates with toast notification system
+- Supports error recovery via reset mechanism
+- Allows error logging/tracking integration
+- Fully accessible (keyboard navigation, screen reader support)
+- Fully tested with 100% coverage
+
+**Example usage:**
+
+```tsx
+import { ErrorBoundaryWrapper } from 'src/shared-components/ErrorBoundaryWrapper';
+
+// Basic usage with default fallback
+<ErrorBoundaryWrapper>
+  <YourComponent />
+</ErrorBoundaryWrapper>
+
+// With custom error message and logging
+<ErrorBoundaryWrapper
+  errorMessage={t('errors.modalFailed')}
+  onError={(error, info) => logToService(error, info)}
+  onReset={() => navigate('/dashboard')}
+>
+  <ComplexModal />
+</ErrorBoundaryWrapper>
+
+// With custom fallback component
+const CustomErrorFallback = ({ error, onReset }) => (
+  <div>
+    <h2>Custom Error UI</h2>
+    <p>{error?.message}</p>
+    <button onClick={onReset}>Retry</button>
+  </div>
+);
+
+<ErrorBoundaryWrapper fallbackComponent={CustomErrorFallback}>
+  <Modal />
+</ErrorBoundaryWrapper>
+
+// With custom JSX fallback
+<ErrorBoundaryWrapper
+  fallback={<div>Something went wrong. Please refresh.</div>}
+>
+  <ComplexForm />
+</ErrorBoundaryWrapper>
+
+// Disable toast notifications
+<ErrorBoundaryWrapper showToast={false}>
+  <Component />
+</ErrorBoundaryWrapper>
+```
+
+**Props:**
+- `children` (required): Child components to wrap with error boundary
+- `fallback` (optional): Custom JSX fallback UI
+- `fallbackComponent` (optional): Custom fallback component that receives `error` and `onReset` props
+- `errorMessage` (optional): Custom error message for toast notification
+- `showToast` (optional): Whether to show toast notification (default: `true`)
+- `onError` (optional): Callback invoked when error is caught - useful for logging to external services
+- `onReset` (optional): Callback invoked when user clicks reset button
+
+**Accessibility:**
+- Default fallback includes `role="alert"` and `aria-live="assertive"`
+- Reset button is keyboard accessible (Enter and Space keys)
+- Screen reader friendly error messages
+- High contrast and dark mode support
 
 ## Creating Shared Components
 
