@@ -110,15 +110,15 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
       if (result.success) {
         const components = result.installedComponents.join(' and ');
         NotificationToast.success(
-          `Plugin uploaded successfully! (${components} components) - You can now install it from the plugin list.`,
+          t('pluginUploaded', { components }) as string,
         );
         onHide();
       } else {
-        NotificationToast.error(result.error || 'Failed to upload plugin');
+        NotificationToast.error(result.error || t('uploadFailed'));
       }
     } catch (error) {
       console.error('Failed to upload plugin:', error);
-      NotificationToast.error(t('uploadFailed'));
+      NotificationToast.error(t('uploadFailed') as string);
     } finally {
       setIsInstalling(false);
     }
@@ -221,7 +221,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
               fullWidth
               data-testid="upload-plugin-button"
             >
-              {isInstalling ? 'Uploading...' : 'Upload Plugin'}
+              {isInstalling ? 'Uploading...' : t('uploadPlugin')}
             </Button>
           </div>
         </div>

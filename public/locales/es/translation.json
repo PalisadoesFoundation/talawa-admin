@@ -1085,8 +1085,7 @@
     "unassignUserTagMessage": "¿Desea eliminar la etiqueta de este usuario?",
     "successfullyUnassigned": "Etiqueta desasignada del usuario",
     "tagsAssigned": "Etiquetas asignadas",
-    "noTagsAssigned": "No se asignaron etiquetas",
-    "actions": "Acciones"
+    "noTagsAssigned": "No se asignaron etiquetas"
   },
   "userLogin": {
     "login": "Acceso",
@@ -1223,7 +1222,9 @@
     "pinnedPostsLoadError": "Error al cargar publicaciones fijadas. Por favor, inténtelo de nuevo más tarde.",
     "errorLoadingPosts": "Error al cargar publicaciones. Por favor, inténtelo de nuevo más tarde.",
     "loadMorePostsError": "Error al cargar más publicaciones. Por favor, inténtelo de nuevo más tarde.",
-    "sortPost": "Ordenar Publicaciones"
+    "sortPost": "Ordenar Publicaciones",
+    "scrollLeft": "Desplazarse a la izquierda",
+    "scrollRight": "Desplazarse a la derecha"
   },
   "home": {
     "posts": "Publicaciones",
@@ -1492,7 +1493,19 @@
     "EXdesc": "Descripción",
     "EXlink": "Enlace",
     "createAdvertisement": "Crear publicidad",
-    "noDescription": "No hay descripción"
+    "noDescription": "No hay descripción",
+    "failedToFetch": "Error al obtener anuncios",
+    "adImageAlt": "Imagen del anuncio",
+    "adMediaAlt": "Medios del anuncio",
+    "noMedia": "Sin medios",
+    "invalidFileType": "Tipo de archivo no válido",
+    "fileTooLarge": "Archivo demasiado grande",
+    "invalidArgs": "Argumentos no válidos",
+    "englishCaptions": "Subtítulos en inglés",
+    "preview": "Vista previa",
+    "bannerAd": "Anuncio de banner",
+    "popupAd": "Anuncio emergente",
+    "menuAd": "Anuncio de menú"
   },
   "userChat": {
     "title": "Chats",
@@ -1800,7 +1813,24 @@
     "checkBackLater": "Vuelve más tarde para nuevos plugins",
     "tryDifferentSearch": "Prueba con un término de búsqueda diferente o explora todos los plugins",
     "explorePluginStore": "Explora la tienda de plugins para descubrir nuevos plugins",
-    "noResultsFoundFor": "No se encontraron resultados para"
+    "noResultsFoundFor": "No se encontraron resultados para",
+    "uploadFailed": "Error al subir",
+    "uploadPlugin": "Subir plugin",
+    "browseFiles": "Explorar archivos",
+    "pluginInfo": "Información del plugin",
+    "name": "Nombre",
+    "version": "Versión",
+    "author": "Autor",
+    "description": "Descripción",
+    "pluginId": "ID del plugin",
+    "componentsToInstall": "Componentes a instalar",
+    "adminComponents": "Componentes de administración",
+    "apiComponents": "Componentes de API",
+    "pluginStructure": "Estructura del plugin",
+    "expectedStructure": "Estructura esperada",
+    "detectedFiles": "Archivos detectados",
+    "expectedDirStructure": "Estructura de directorio esperada",
+    "requiredManifestFields": "Campos de manifiesto requeridos"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Comentario eliminado exitosamente",

@@ -1223,7 +1223,9 @@
     "pinnedPostsLoadError": "Erreur lors du chargement des messages épinglés",
     "errorLoadingPosts": "Erreur lors du chargement des messages. Veuillez réessayer.",
     "loadMorePostsError": "Erreur lors du chargement de plus de messages. Veuillez réessayer.",
-    "sortPost": "Trier le message"
+    "sortPost": "Trier le message",
+    "scrollLeft": "Faire défiler vers la gauche",
+    "scrollRight": "Faire défiler vers la droite"
   },
   "home": {
     "posts": "Des postes",
@@ -1492,7 +1494,19 @@
     "edit": "Modifier",
     "saveChanges": "Enregistrer les modifications",
     "endOfResults": "Fin des résultats",
-    "noDescription": "Aucune description"
+    "noDescription": "Aucune description",
+    "failedToFetch": "Échec de la récupération des publicités",
+    "adImageAlt": "Image publicitaire #{{index}} pour {{name}}",
+    "adMediaAlt": "Support publicitaire",
+    "noMedia": "Aucun média disponible",
+    "invalidFileType": "Type de fichier non valide : {{fileName}}",
+    "fileTooLarge": "Fichier trop volumineux : {{fileName}}",
+    "invalidArgs": "Arguments non valides pour cette action.",
+    "englishCaptions": "Sous-titres en anglais",
+    "preview": "Aperçu",
+    "bannerAd": "Bannière publicitaire",
+    "popupAd": "Publicité contextuelle",
+    "menuAd": "Publicité de menu"
   },
   "userChat": {
     "title": "Discussions",
@@ -1800,7 +1814,24 @@
     "checkBackLater": "Revenez plus tard pour de nouveaux plugins",
     "tryDifferentSearch": "Essayez un autre terme de recherche ou parcourez tous les plugins",
     "explorePluginStore": "Explorez la boutique de plugins pour découvrir de nouveaux plugins",
-    "noResultsFoundFor": "Aucun résultat trouvé pour"
+    "noResultsFoundFor": "Aucun résultat trouvé pour",
+    "uploadFailed": "Échec du téléchargement du plugin. Veuillez réessayer.",
+    "uploadPlugin": "Télécharger le plugin",
+    "browseFiles": "Cliquez pour parcourir les fichiers",
+    "pluginInfo": "Informations sur le plugin",
+    "name": "Nom :",
+    "version": "Version :",
+    "author": "Auteur :",
+    "description": "Description :",
+    "pluginId": "ID du plugin :",
+    "componentsToInstall": "Composants à installer :",
+    "adminComponents": "Composants du tableau de bord d'administration",
+    "apiComponents": "Composants backend API",
+    "pluginStructure": "Structure du plugin",
+    "expectedStructure": "Structure de plugin attendue avec des composants d'administration et/ou d'API",
+    "detectedFiles": "Fichiers détectés",
+    "expectedDirStructure": "Structure de répertoire attendue",
+    "requiredManifestFields": "Champs manifest.json requis"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Commentaire supprimé avec succès",

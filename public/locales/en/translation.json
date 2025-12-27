@@ -1152,7 +1152,20 @@
     "unassignUserTagMessage": "Do you want to remove the tag from this user?",
     "successfullyUnassigned": "Tag unassigned from user",
     "tagsAssigned": "Tags Assigned",
-    "noTagsAssigned": "No Tags Assigned"
+    "noTagsAssigned": "No Tags Assigned",
+    "fileTooLarge": "File is too large. Maximum size is 5MB.",
+    "passwordLength": "Password must be at least 8 characters long.",
+    "user": "User",
+    "userImage": "User Image",
+    "editProfilePic": "Edit profile picture",
+    "enterDesc": "Enter description",
+    "exPhone": "Ex. +1234567890",
+    "exLane": "Ex. Lane 2",
+    "exZip": "Ex. 12345",
+    "enterCity": "Enter city name",
+    "enterState": "Enter state name",
+    "selectCountry": "Select {{country}}",
+    "selectCountryLabel": "Select {{country}} as your country"
   },
   "people": {
     "title": "People",
@@ -1289,7 +1302,9 @@
     "pinnedPostsLoadError": "Error loading pinned posts",
     "errorLoadingPosts": "Error loading posts",
     "loadMorePostsError": "Error loading more posts",
-    "sortPost": "Sort Post"
+    "sortPost": "Sort Post",
+    "scrollLeft": "Scroll left",
+    "scrollRight": "Scroll right"
   },
   "home": {
     "posts": "Posts",
@@ -1518,7 +1533,19 @@
     "yes": "yes",
     "edit": "edit",
     "saveChanges": "saveChanges",
-    "endOfResults": "endOfResults"
+    "endOfResults": "endOfResults",
+    "failedToFetch": "Failed to fetch advertisements",
+    "adImageAlt": "Advertisement image #{{index}} for {{name}}",
+    "adMediaAlt": "Advertisement media",
+    "noMedia": "No media available",
+    "invalidFileType": "Invalid file type: {{fileName}}",
+    "fileTooLarge": "File too large: {{fileName}}",
+    "invalidArgs": "Invalid arguments for this action.",
+    "englishCaptions": "English captions",
+    "preview": "Preview",
+    "bannerAd": "Banner Ad",
+    "popupAd": "Popup Ad",
+    "menuAd": "Menu Ad"
   },
   "userChat": {
     "title": "Chats",

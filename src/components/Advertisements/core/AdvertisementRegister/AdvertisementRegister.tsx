@@ -157,10 +157,12 @@ function AdvertisementRegister({
       Array.from(files).forEach((file) => {
         if (!allowedTypes.includes(file.type)) {
           NotificationToast.error(
-            t('invalidFileType', { fileName: file.name }),
+            t('invalidFileType', { fileName: file.name }) as string,
           );
         } else if (file.size > maxFileSize) {
-          NotificationToast.error(t('fileTooLarge', { fileName: file.name }));
+          NotificationToast.error(
+            t('fileTooLarge', { fileName: file.name }) as string,
+          );
         } else {
           validFiles.push(file);
         }
@@ -218,7 +220,7 @@ function AdvertisementRegister({
       }
 
       if (!formState.name) {
-        NotificationToast.error(t('invalidArgs'));
+        NotificationToast.error(t('invalidArgs') as string);
         return;
       }
 
@@ -436,14 +438,14 @@ function AdvertisementRegister({
                         <track
                           kind="captions"
                           srcLang="en"
-                          label={t('englishCaptions')}
+                          label={t('englishCaptions') as string}
                         />
                       </video>
                     ) : (
                       <img
                         data-testid="mediaPreview"
                         src={encodeURI(URL.createObjectURL(file))}
-                        alt={t('preview')}
+                        alt={t('preview') as string}
                         className={styles.previewAdvertisementRegister}
                       />
                     )}
@@ -473,7 +475,7 @@ function AdvertisementRegister({
                 className={styles.inputField}
                 data-cy="advertisementTypeSelect"
               >
-                <option value="banner">{t('bannerAd')}</option>
+                <option value="banner">{t('bannerAd')} </option>
                 <option value="pop_up">{t('popupAd')}</option>
                 <option value="menu">{t('menuAd')}</option>
               </Form.Select>

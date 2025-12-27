@@ -212,10 +212,12 @@ function AdvertisementEntry({
                               <img
                                 className={`d-block w-100 ${styles.cardImage}`}
                                 src={attachment.url}
-                                alt={t('adImageAlt', {
-                                  index: index + 1,
-                                  name: advertisement.name ?? 'ad',
-                                })}
+                                alt={
+                                  t('adImageAlt', {
+                                    index: index + 1,
+                                    name: advertisement.name ?? 'ad',
+                                  }) as string
+                                }
                                 data-testid="media"
                                 crossOrigin="anonymous"
                               />
@@ -228,7 +230,7 @@ function AdvertisementEntry({
                         <img
                           className={`d-block w-100 ${styles.cardImage}`}
                           src={advertisement.attachments[0].url}
-                          alt={t('adMediaAlt')}
+                          alt={t('adMediaAlt') as string}
                           data-testid="media"
                           crossOrigin="anonymous"
                         />

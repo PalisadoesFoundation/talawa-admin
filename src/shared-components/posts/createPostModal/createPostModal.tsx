@@ -156,8 +156,8 @@ function CreatePostModal({
   const onSuccess = async (type: 'edited' | 'created') => {
     toast.success(
       type === 'created'
-        ? (t('postCreatedSuccess') as string)
-        : (t('postUpdatedSuccess') as string),
+        ? (t('postCreated') as string)
+        : (t('postUpdated') as string),
     );
     await refetch();
 

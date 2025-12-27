@@ -42,6 +42,7 @@ import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 interface ISignOutProps {
   hideDrawer?: boolean; // Optional prop to conditionally render the button
@@ -62,6 +63,7 @@ const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
     const handleSignOut = (): void => {
       clearAllItems();
       endSession();
+      NotificationToast.success(t('signOutSuccess'));
       navigate('/');
     };
 
@@ -89,7 +91,9 @@ const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
   };
   return (
     <div
-      className={`${styles.signOutContainer} ${isLoggingOut ? styles.signOutDisabled : ''}`}
+      className={`${styles.signOutContainer} ${
+        isLoggingOut ? styles.signOutDisabled : ''
+      }`}
       onClick={handleLogout}
       onKeyDown={(e) => {
         if (e.key === 'Enter' || e.key === ' ') {

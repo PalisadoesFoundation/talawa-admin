@@ -420,6 +420,7 @@ const loginPage = (): JSX.Element => {
           return;
         }
         startSession();
+        toast.success(t('loginSuccess') as string);
         navigate(role === 'admin' ? '/orglist' : '/user/organizations');
       } else {
         toast.warn(tErrors('notFound') as string);

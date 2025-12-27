@@ -33,6 +33,7 @@
  * ```
  */
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { createAvatar } from '@dicebear/core';
 import { initials } from '@dicebear/collection';
 import styles from 'components/Avatar/Avatar.module.css';
@@ -40,13 +41,16 @@ import type { InterfaceAvatarProps } from 'types/Avatar/interface';
 
 const Avatar = ({
   name,
-  alt = 'Dummy Avatar',
+  alt,
   size,
   avatarStyle,
   containerStyle,
   dataTestId,
   radius,
 }: InterfaceAvatarProps): JSX.Element => {
+  const { t } = useTranslation('common');
+  const altText = alt || t('dummyAvatar');
+
   // Memoize the avatar creation to avoid unnecessary recalculations
   const avatar = useMemo(() => {
     return createAvatar(initials, {
@@ -62,7 +66,7 @@ const Avatar = ({
     <div className={`${containerStyle ?? styles.imageContainer}`}>
       <img
         src={svg}
-        alt={alt}
+        alt={altText}
         className={avatarStyle ? avatarStyle : ''}
         data-testid={dataTestId ? dataTestId : ''}
       />
