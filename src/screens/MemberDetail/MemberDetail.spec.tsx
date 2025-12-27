@@ -49,8 +49,8 @@ vi.mock('components/UserDetails/UserTags', () => ({
   default: () => <div data-testid="user-tags" />,
 }));
 
-// mock navbar button
-vi.mock('shared-components/PeopleTab/PeopleTabNavbarButton', () => ({
+// ✅ FIXED mock path (THIS was the bug)
+vi.mock('shared-components/PeopleTabNavButton/PeopleTabNavButton', () => ({
   default: ({
     title,
     action,
@@ -110,5 +110,17 @@ describe('MemberDetail', () => {
     fireEvent.click(screen.getByTestId('tab-tags'));
 
     expect(screen.getByTestId('user-tags')).toBeInTheDocument();
+  });
+
+  it('switches to events tab', () => {
+    render(<MemberDetail />);
+
+    fireEvent.click(screen.getByTestId('tab-events'));
+
+    expect(screen.getByTestId('user-events')).toBeInTheDocument();
+    expect(screen.getByTestId('tab-events')).toHaveAttribute(
+      'data-active',
+      'true',
+    );
   });
 });

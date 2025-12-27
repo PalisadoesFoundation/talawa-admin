@@ -255,8 +255,8 @@ describe('UserContactDetails', () => {
 
     // Verify other fields
     expect(screen.getByTestId('inputEmail')).toHaveValue('john@example.com');
-    expect(screen.getByTestId('addressLine1')).toHaveValue('123 Street');
-    expect(screen.getByTestId('addressLine2')).toHaveValue('Apt 4');
+    expect(screen.getByTestId('inputAddressLine1')).toHaveValue('123 Street');
+    expect(screen.getByTestId('inputAddressLine2')).toHaveValue('Apt 4');
     expect(screen.getByTestId('inputPostalCode')).toHaveValue('12345');
     expect(screen.getByTestId('inputCity')).toHaveValue('City');
     expect(screen.getByTestId('inputState')).toHaveValue('State');
@@ -674,17 +674,20 @@ describe('UserContactDetails', () => {
       state: 'New State',
       description: 'Updated description',
       password: 'StrongPassword123',
-      countryCode: 'us',
     };
 
     for (const [field, value] of Object.entries(fields)) {
       const el = screen.getByTestId(
-        field.startsWith('input')
-          ? `input${field.charAt(0).toUpperCase() + field.slice(1)}`
-          : `input${field.charAt(0).toUpperCase() + field.slice(1)}`,
+        `input${field.charAt(0).toUpperCase() + field.slice(1)}`,
       ) as HTMLInputElement;
+
       fireEvent.change(el, { target: { value } });
       expect(el.value).toBe(value);
     }
+
+    // ✅ country select (NOT DynamicDropDown)
+    const countrySelect = screen.getByTestId('inputCountry');
+    fireEvent.change(countrySelect, { target: { value: 'us' } });
+    expect(countrySelect).toHaveValue('us');
   });
 });

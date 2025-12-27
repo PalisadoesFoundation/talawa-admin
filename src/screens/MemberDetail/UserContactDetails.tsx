@@ -466,7 +466,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                     className={`form-control ${styles.inputColor}`}
                     type="text"
                     name="addressLine1"
-                    data-testid="addressLine1"
+                    data-testid="inputAddressLine1"
                     onChange={(e) =>
                       handleFieldChange('addressLine1', e.target.value)
                     }
@@ -483,7 +483,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                     className={`form-control ${styles.inputColor}`}
                     type="text"
                     name="addressLine2"
-                    data-testid="addressLine2"
+                    data-testid="inputAddressLine2"
                     onChange={(e) =>
                       handleFieldChange('addressLine2', e.target.value)
                     }
@@ -559,9 +559,9 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                         <option
                           key={country.value.toUpperCase()}
                           value={country.value.toLowerCase()}
-                          aria-label={`${tCommon('select')} ${country.label} ${tCommon('asYourCountry')}`}
+                          aria-label={`${tCommon('select')} ${String(country.label)} ${tCommon('asYourCountry')}`}
                         >
-                          {country.label}
+                          {String(country.label)}
                         </option>
                       ))}
                   </Form.Select>
