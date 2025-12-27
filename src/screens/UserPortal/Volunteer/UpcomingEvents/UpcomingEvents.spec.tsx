@@ -221,6 +221,9 @@ describe('Testing Upcoming Events Screen', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('upcoming-events-empty-state'),
+      ).toBeInTheDocument();
       expect(screen.getByText(t.noEvents)).toBeInTheDocument();
     });
   });

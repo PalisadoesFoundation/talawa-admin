@@ -31,6 +31,7 @@ import {
   ReportingTableGridProps,
 } from 'types/ReportingTable/interface';
 import { PAGE_SIZE, ROW_HEIGHT } from 'types/ReportingTable/utils';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 const dataGridStyle = {
   borderRadius: 'var(--table-head-radius)',
@@ -363,9 +364,11 @@ const Campaigns = (): JSX.Element => {
     compactColumns: columns.length >= 7,
     slots: {
       noRowsOverlay: () => (
-        <Stack height="100%" alignItems="center" justifyContent="center">
-          {t('noCampaigns')}
-        </Stack>
+        <EmptyState
+          icon="campaign"
+          message={t('noCampaigns')}
+          dataTestId="campaigns-empty-state"
+        />
       ),
     },
     getRowClassName: () => `${styles.rowBackground}`,
