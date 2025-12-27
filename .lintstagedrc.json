@@ -1,5 +1,8 @@
 {
   "**/*.{ts,tsx,yml}": ["eslint --fix"],
   "**/*.{ts,tsx,json,scss,css,yml}": ["prettier --write"],
-  "**/*.{ts,tsx}": ["npx tsx scripts/githooks/check-localstorage-usage.ts"]
+  "**/*.{ts,tsx}": ["npx tsx scripts/githooks/check-localstorage-usage.ts"],
+  "**/*.{css,scss,tsx}": [
+    "pnpm exec tsx scripts/validate-tokens.ts --staged --warn"
+  ]
 }
