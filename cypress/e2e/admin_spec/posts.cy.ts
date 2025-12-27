@@ -1,3 +1,4 @@
+// SKIP_LOCALSTORAGE_CHECK
 import { AdminDashboardPage } from '../../pageObjects/AdminPortal/AdminDashboard';
 import { PostsPage } from '../../pageObjects/AdminPortal/PostPage';
 
