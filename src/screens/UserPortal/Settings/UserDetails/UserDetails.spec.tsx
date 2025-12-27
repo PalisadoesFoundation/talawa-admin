@@ -31,7 +31,7 @@ vi.mock('components/UserPortal/UserProfile/UserAddressFields', () => {
       />
     </div>
   );
-  
+
   return {
     UserAddressFields: MockComponent,
     default: MockComponent,
