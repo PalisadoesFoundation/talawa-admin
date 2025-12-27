@@ -6,4 +6,4 @@
 
 > `const` **PRESIGNED\_URL**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:656](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L656)
+Defined in: [src/GraphQl/Mutations/mutations.ts:652](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L652)

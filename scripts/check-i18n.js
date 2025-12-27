@@ -40,6 +40,7 @@ const NON_USER_VISIBLE_ATTRS = [
   'src',
   'id',
   'data-testid',
+  'dataTestId',
   'data-test-id',
   'data-cy',
   'data-id',

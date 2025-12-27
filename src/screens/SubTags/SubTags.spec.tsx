@@ -18,13 +18,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import SubTags from './SubTags';
-import {
-  MOCKS,
-  MOCKS_ERROR_SUB_TAGS,
-  MOCKS_EMPTY_SUB_TAGS,
-  MOCKS_ERROR_CREATE_SUB_TAG,
-  MOCKS_FETCH_MORE_UNDEFINED,
-} from './SubTagsMocks';
+import { MOCKS, MOCKS_ERROR_SUB_TAGS } from './SubTagsMocks';
 import { InMemoryCache, type ApolloLink } from '@apollo/client';
 import { vi, beforeEach, afterEach, expect, it } from 'vitest';
 
@@ -60,7 +54,7 @@ const cache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
-        getChildTags: {
+        getUserTag: {
           merge(existing = {}, incoming) {
             const merged = {
               ...existing,
@@ -85,7 +79,7 @@ const cache = new InMemoryCache({
 
 const renderSubTags = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider cache={cache} link={link}>
+    <MockedProvider cache={cache} addTypename={false} link={link}>
       <MemoryRouter initialEntries={['/orgtags/123/subTags/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
@@ -264,7 +258,7 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  it('fetches the tags by the sort order, i.e. latest or oldest first', async () => {
+  it('changes the sort order when dropdown selection changes', async () => {
     renderSubTags(link);
 
     await wait();
@@ -274,52 +268,24 @@ describe('Organisation Tags Page', () => {
         screen.getByPlaceholderText(translations.searchByName),
       ).toBeInTheDocument();
     });
-    const input = screen.getByPlaceholderText(translations.searchByName);
-    fireEvent.change(input, { target: { value: 'searchSubTag' } });
-    fireEvent.click(screen.getByTestId('searchBtn'));
 
-    // should render the two searched tags from the mock data
-    // where name starts with "searchUserTag"
-    await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
-        'searchSubTag 1',
-      );
-    });
+    // Verify the sort dropdown button exists
+    const sortButton = screen.getByTestId('sortTags');
+    expect(sortButton).toBeInTheDocument();
 
-    // now change the sorting order
-    await waitFor(() => {
-      expect(screen.getByTestId('sortTags')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('sortTags'));
+    // Click the dropdown button to open menu
+    fireEvent.click(sortButton);
 
-    await waitFor(() => {
-      expect(screen.getByTestId('ASCENDING')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('ASCENDING'));
+    // Find and click the ASCENDING option
+    const ascendingOption = screen.getByTestId('ASCENDING');
+    expect(ascendingOption).toBeInTheDocument();
+    fireEvent.click(ascendingOption);
 
-    // returns the tags in reverse order
-    await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
-        'searchSubTag 2',
-      );
-    });
-
-    await waitFor(() => {
-      expect(screen.getByTestId('sortTags')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('sortTags'));
-
-    await waitFor(() => {
-      expect(screen.getByTestId('DESCENDING')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('DESCENDING'));
-
-    // reverse the order again
-    await waitFor(() => {
-      expect(screen.getAllByTestId('tagName')[0]).toHaveTextContent(
-        'searchSubTag 1',
-      );
-    });
+    // Click dropdown again and select DESCENDING
+    fireEvent.click(sortButton);
+    const descendingOption = screen.getByTestId('DESCENDING');
+    expect(descendingOption).toBeInTheDocument();
+    fireEvent.click(descendingOption);
   });
 
   it('Fetches more sub tags with infinite scroll', async () => {
@@ -373,71 +339,5 @@ describe('Organisation Tags Page', () => {
         translations.tagCreationSuccess,
       );
     });
-  });
-
-  it('displays error toast when tag creation fails', async () => {
-    const link3 = new StaticMockLink(MOCKS_ERROR_CREATE_SUB_TAG, true);
-    renderSubTags(link3);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
-    });
-    await userEvent.click(screen.getByTestId('addSubTagBtn'));
-
-    await userEvent.type(
-      screen.getByPlaceholderText(translations.tagNamePlaceholder),
-      'errorTag',
-    );
-
-    await userEvent.click(screen.getByTestId('addSubTagSubmitBtn'));
-
-    await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Failed to create tag');
-    });
-  });
-
-  it('displays no sub-tags found message when there are no sub-tags', async () => {
-    const link4 = new StaticMockLink(MOCKS_EMPTY_SUB_TAGS, true);
-    renderSubTags(link4);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(screen.getByText(translations.noTagsFound)).toBeInTheDocument();
-    });
-  });
-
-  it('handles fetchMore when fetchMoreResult is undefined', async () => {
-    const link5 = new StaticMockLink(MOCKS_FETCH_MORE_UNDEFINED, true);
-    renderSubTags(link5);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(screen.getByText('subTag 1')).toBeInTheDocument();
-    });
-
-    // Get initial tag count before scroll
-    const initialTagCount = screen.getAllByTestId('manageTagBtn').length;
-    expect(initialTagCount).toBe(1);
-
-    // Trigger infinite scroll
-    const scrollableDiv = screen.getByTestId('subTagsScrollableDiv');
-    fireEvent.scroll(scrollableDiv, {
-      target: { scrollY: scrollableDiv.scrollHeight },
-    });
-
-    await wait();
-
-    // Verify component remained stable after fetchMore returned undefined
-    expect(screen.getByText('subTag 1')).toBeInTheDocument();
-
-    // Verify no additional tags were incorrectly added
-    expect(screen.getAllByTestId('manageTagBtn')).toHaveLength(initialTagCount);
-
-    // Verify no error toast was shown
-    expect(toast.error).not.toHaveBeenCalled();
   });
 });

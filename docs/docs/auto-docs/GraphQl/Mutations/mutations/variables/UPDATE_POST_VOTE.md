@@ -6,4 +6,4 @@
 
 > `const` **UPDATE\_POST\_VOTE**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:496](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L496)
+Defined in: [src/GraphQl/Mutations/mutations.ts:492](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L492)

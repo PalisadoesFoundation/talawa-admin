@@ -6,4 +6,4 @@
 
 > `const` **FORGOT\_PASSWORD\_MUTATION**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/mutations.ts:434](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L434)
+Defined in: [src/GraphQl/Mutations/mutations.ts:430](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L430)

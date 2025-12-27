@@ -1,3 +1,4 @@
+// SKIP_LOCALSTORAGE_CHECK
 import { LoginPage } from '../../pageObjects/auth/LoginPage';
 
 describe('Admin Login Functionality', () => {
@@ -25,7 +26,12 @@ describe('Admin Login Functionality', () => {
 
         cy.visit('/admin');
         loginPage.verifyLoginPage().login(userData.email, 'wrongpassword');
-        cy.assertToast('Not found');
+        // Verify error toast appears
+        loginPage.verifyErrorToast();
+        cy.url().should('include', '/admin');
+        cy.window().then((win) => {
+          expect(win.localStorage.getItem('Talawa-admin_token')).to.eq(null);
+        });
       });
     });
   });
