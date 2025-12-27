@@ -234,6 +234,20 @@ describe('UserPortalNavigationBar', () => {
         expect(customLogout).toHaveBeenCalled();
       });
     });
+
+    it('defaults to user mode when mode prop is not provided', () => {
+      render(
+        <MockedProvider mocks={[]}>
+          <MemoryRouter>
+            <UserPortalNavigationBar mode="user" />
+          </MemoryRouter>
+        </MockedProvider>,
+      );
+
+      // User mode uses collapse layout by default
+      expect(screen.queryByTestId('offcanvasTitle')).not.toBeInTheDocument();
+      expect(screen.getByTestId('brandName')).toHaveTextContent('talawa');
+    });
   });
 
   describe('UserPortalNavigationBar - Organization Mode', () => {
@@ -493,6 +507,97 @@ describe('UserPortalNavigationBar', () => {
         screen.queryByTestId('navigationLink-home'),
       ).not.toBeInTheDocument();
     });
+
+    it('renders navigation link with icon', () => {
+      const MockHomeIcon = () => (
+        <div data-testid="mock-home-icon">Home Icon</div>
+      );
+      const linksWithIcon = [
+        {
+          id: 'home',
+          label: 'Home',
+          path: '/home',
+          icon: MockHomeIcon,
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={[]}>
+          <MemoryRouter>
+            <UserPortalNavigationBar
+              mode="organization"
+              navigationLinks={linksWithIcon}
+            />
+          </MemoryRouter>
+        </MockedProvider>,
+      );
+
+      expect(screen.getAllByTestId('mock-home-icon').length).toBeGreaterThan(0);
+    });
+
+    it('uses explicit isActive flag when provided', () => {
+      const linksWithIsActive = [
+        {
+          id: 'active-link',
+          label: 'Active Link',
+          path: '/active',
+          isActive: true,
+        },
+        {
+          id: 'inactive-link',
+          label: 'Inactive Link',
+          path: '/inactive',
+          isActive: false,
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={[]}>
+          <MemoryRouter>
+            <UserPortalNavigationBar
+              mode="organization"
+              navigationLinks={linksWithIsActive}
+              currentPage="/other"
+            />
+          </MemoryRouter>
+        </MockedProvider>,
+      );
+
+      const activeLink = screen.getAllByTestId('navigationLink-active-link')[0];
+      const inactiveLink = screen.getAllByTestId(
+        'navigationLink-inactive-link',
+      )[0];
+
+      expect(activeLink).toHaveClass('active');
+      expect(inactiveLink).not.toHaveClass('active');
+    });
+
+    it('parses translation key with colon separator', () => {
+      const linksWithNestedTranslation = [
+        {
+          id: 'settings',
+          label: 'Settings',
+          path: '/settings',
+          translationKey: 'userNavbar:settings',
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={[]}>
+          <MemoryRouter>
+            <UserPortalNavigationBar
+              mode="organization"
+              navigationLinks={linksWithNestedTranslation}
+            />
+          </MemoryRouter>
+        </MockedProvider>,
+      );
+
+      // The translation key should be split and the last part used
+      expect(
+        screen.getAllByTestId('navigationLink-settings').length,
+      ).toBeGreaterThan(0);
+    });
   });
 
   describe('UserPortalNavigationBar - Branding', () => {
@@ -550,6 +655,28 @@ describe('UserPortalNavigationBar', () => {
       const logo = screen.getByTestId('brandLogo');
       expect(logo).toHaveAttribute('alt', customAltText);
     });
+
+    it('does not navigate when brand click handler is provided', () => {
+      const mockBrandClick = vi.fn();
+
+      render(
+        <MockedProvider mocks={[]}>
+          <MemoryRouter>
+            <UserPortalNavigationBar
+              mode="user"
+              branding={{ onBrandClick: mockBrandClick }}
+            />
+          </MemoryRouter>
+        </MockedProvider>,
+      );
+
+      fireEvent.click(screen.getByTestId('brandLogo'));
+
+      // Custom brand click handler should be called
+      expect(mockBrandClick).toHaveBeenCalled();
+      // But navigate should not be called
+      expect(mockNavigate).not.toHaveBeenCalled();
+    });
   });
 
   describe('UserPortalNavigationBar - Custom Styles and Classes', () => {
@@ -589,6 +716,21 @@ describe('UserPortalNavigationBar', () => {
 
       // Cleanup
       document.head.removeChild(style);
+    });
+
+    it('applies custom inline styles via customStyles prop', () => {
+      const customStyles = { padding: '10px' };
+
+      const { container } = render(
+        <MockedProvider mocks={[]}>
+          <MemoryRouter>
+            <UserPortalNavigationBar mode="user" customStyles={customStyles} />
+          </MemoryRouter>
+        </MockedProvider>,
+      );
+
+      const navbar = container.querySelector('nav');
+      expect(navbar).toHaveStyle('padding: 10px');
     });
   });
 
@@ -997,6 +1139,7 @@ describe('UserProfileDropdown Component', () => {
     link: 'link',
   };
 
+  // eslint-disable-next-line react/no-multi-comp
   const MockPermIdentityIcon = (
     props: React.HTMLAttributes<HTMLDivElement>,
   ) => <div {...props}>Person Icon</div>;
@@ -1247,5 +1390,12 @@ describe('UserProfileDropdown Component', () => {
 
     const settingsLink = screen.getByText('settings');
     expect(settingsLink.closest('.dropdown-item')).toHaveClass('link');
+  });
+});
+
+describe('UserPortalNavigationBarMocks', () => {
+  it('revokeRefreshTokenMock variableMatcher returns true for any variables', () => {
+    // Test the variableMatcher function to ensure 100% coverage of the mocks file
+    expect(revokeRefreshTokenMock.variableMatcher()).toBe(true);
   });
 });

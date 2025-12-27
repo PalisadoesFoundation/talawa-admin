@@ -27,7 +27,7 @@ describe('Admin Login Functionality', () => {
         cy.visit('/admin');
         loginPage.verifyLoginPage().login(userData.email, 'wrongpassword');
         // Verify error toast appears
-        cy.get('.Toastify__toast').should('be.visible');
+        loginPage.verifyErrorToast();
         cy.url().should('include', '/admin');
         cy.window().then((win) => {
           expect(win.localStorage.getItem('Talawa-admin_token')).to.eq(null);
