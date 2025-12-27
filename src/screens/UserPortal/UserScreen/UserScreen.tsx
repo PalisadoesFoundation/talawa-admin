@@ -43,12 +43,12 @@ import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from 'style/app-fixed.module.css';
+import localStyles from './UserScreen.module.css';
 import UserSidebarOrg from 'components/UserPortal/UserSidebarOrg/UserSidebarOrg';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
-
 const map: InterfaceMapType = {
   organization: 'home',
   people: 'people',
@@ -163,12 +163,12 @@ const UserScreen = (): React.JSX.Element => {
         )}
       </div>
       <div
-        className={`${hideDrawer ? `${styles.expand} ${styles.userScreenExpandedMargin}` : styles.contract}`}
+        className={`${hideDrawer ? styles.expand : styles.contract} ${hideDrawer ? localStyles.contentContainer : ''}`}
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
-          <div className={styles.flexContainerColumn}>
-            <h1 className={styles.titleMargin}>{t('title')}</h1>
+          <div className={localStyles.titleContainer}>
+            <h1>{t('title')}</h1>
           </div>
           {/* <ProfileDropdown /> */}
         </div>

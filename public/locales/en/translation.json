@@ -1821,6 +1821,11 @@
     "signingOut": "Signing out...",
     "retryPrompt": "Failed to revoke session. Retry?",
     "breadcrumb": "Breadcrumb",
-    "action": "Action"
+    "action": "Action",
+    "selectLanguage": "Select Language",
+    "userMenu": "User Menu",
+    "settings": "Settings",
+    "logout": "Logout",
+    "logoutFailed": "Logout failed"
   }
 }

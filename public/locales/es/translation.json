@@ -1821,6 +1821,11 @@
     "signingOut": "Cerrando sesión...",
     "retryPrompt": "Error al revocar la sesión. ¿Reintentar?",
     "breadcrumb": "miga de pan",
-    "action": "Acción"
+    "action": "Acción",
+    "selectLanguage": "Seleccionar Idioma",
+    "userMenu": "Menú de Usuario",
+    "settings": "Ajustes",
+    "logout": "Cerrar sesión",
+    "logoutFailed": "Cerrar sesión fallido"
   }
 }
