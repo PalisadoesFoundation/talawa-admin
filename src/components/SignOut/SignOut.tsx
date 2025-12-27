@@ -85,21 +85,29 @@ const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
       } else {
         handleSignOut();
       }
+    } finally {
+      // Reset loading state if component is still mounted (e.g., navigation failed)
+      setIsLoggingOut(false);
     }
   };
 
   return (
     <div
       className={`${styles.signOutContainer} ${isLoggingOut ? styles.signOutDisabled : ''}`}
-      onClick={handleLogout}
+      onClick={() => {
+        if (isLoggingOut) return; // Early-return when disabled
+        handleLogout();
+      }}
       onKeyDown={(e) => {
+        // Block keyboard activation when disabled
+        if (isLoggingOut) return;
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
           handleLogout();
         }
       }}
       role="button"
-      tabIndex={0}
+      tabIndex={isLoggingOut ? -1 : 0}
       aria-label={t('signOut')}
       aria-disabled={isLoggingOut}
       data-testid="signOutBtn"
