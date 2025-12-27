@@ -120,10 +120,7 @@ function orgList(): JSX.Element {
 
   // localStorage helper used elsewhere in this component
   const role = getItem('role');
-  const adminFor:
-    | string
-    | { _id: string; name: string; image: string | null }[] =
-    getItem('AdminFor') || [];
+
   function closeDialogModal(): void {
     setdialogModalIsOpen(false);
   }
@@ -391,7 +388,7 @@ function orgList(): JSX.Element {
       {!isLoading &&
       (!sortedOrganizations || sortedOrganizations.length === 0) &&
       searchByName.length === 0 &&
-      (!userData || adminFor.length === 0) ? (
+      !userData ? (
         <EmptyState
           icon={<Group />}
           message={t('noOrgErrorTitle')}

@@ -35,7 +35,7 @@ describe('Testing Page not found component', () => {
     expect(screen.getByText(/Back to Home/i)).toBeInTheDocument();
   });
 
-  it('should render properly for ADMIN or SUPERADMIN', () => {
+  it('should render properly for ADMIN', () => {
     setItem('AdminFor', [
       {
         _id: '6537904485008f171cf29924',

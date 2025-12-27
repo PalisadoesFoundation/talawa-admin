@@ -16,13 +16,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Users from './Users';
-import {
-  EMPTY_MOCKS,
-  MOCKS_NEW,
-  MOCKS_NEW_2,
-  USER_UNDEFINED_MOCK,
-} from './UsersMocks.mocks';
-import { generateMockUser } from './Organization.mocks';
+import { EMPTY_MOCKS, MOCKS_NEW, MOCKS_NEW_2 } from './UsersMocks.mocks';
 import { MOCKS, MOCKS2 } from './User.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
@@ -512,36 +506,6 @@ describe('Testing Users screen', () => {
       });
 
       await wait(500); // Give time for data to load
-    });
-  });
-
-  describe('generateMockUser', () => {
-    it('should set adminFor with an entry when isSuperAdmin is true', () => {
-      const mockUser = generateMockUser(
-        'user1',
-        'John',
-        'Doe',
-        'john@example.com',
-        '2023-04-13T04:53:17.742+00:00',
-        true, // isSuperAdmin
-      );
-
-      expect(mockUser.appUserProfile.adminFor).toEqual([{ _id: '123' }]);
-      expect(mockUser.appUserProfile.isSuperAdmin).toBe(true);
-    });
-
-    it('should set adminFor as an empty array when isSuperAdmin is false', () => {
-      const mockUser = generateMockUser(
-        'user2',
-        'Jane',
-        'Doe',
-        'jane@example.com',
-        '2023-04-17T04:53:17.742+00:00',
-        false, // isSuperAdmin
-      );
-
-      expect(mockUser.appUserProfile.adminFor).toEqual([]);
-      expect(mockUser.appUserProfile.isSuperAdmin).toBe(false);
     });
   });
 

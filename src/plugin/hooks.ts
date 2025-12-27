@@ -67,9 +67,12 @@ export function usePluginDrawerItems(
  * Hook to get plugin routes
  */
 export function usePluginRoutes(
-  userPermissions: string[] = [],
   isAdmin: boolean = false,
   isOrg?: boolean,
+  // userPermissions is currently unused.
+  // Dependency is kept intentionally to avoid breaking changes
+  // when permission-based filtering is introduced.
+  userPermissions: string[] = [],
 ): IRouteExtension[] {
   const [routes, setRoutes] = useState<IRouteExtension[]>([]);
 

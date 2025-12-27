@@ -253,14 +253,12 @@ async function wait(ms = 100): Promise<void> {
 beforeEach(() => {
   setItem('id', 'user1');
   setItem('role', 'administrator');
-  setItem('SuperAdmin', false);
   vi.clearAllMocks();
 });
 
 afterEach(() => {
   for (const key in mockLocalStorageStore) delete mockLocalStorageStore[key];
-  // Restore all mocks
-  vi.restoreAllMocks();
+  vi.clearAllMocks()
 });
 
 describe('Testing Requests screen', () => {
@@ -355,8 +353,7 @@ describe('Testing Requests screen', () => {
   test(`Component should be rendered properly when user is not Admin
   and or userId does not exists in localstorage`, async () => {
     setItem('id', '');
-    removeItem('AdminFor');
-    removeItem('SuperAdmin');
+    removeItem('Admin');
     setItem('role', 'user');
 
     render(
@@ -395,7 +392,7 @@ describe('Testing Requests screen', () => {
   });
 
   test('Redirecting on error', async () => {
-    setItem('SuperAdmin', true);
+    setItem('Admin', true);
     render(
       <MockedProvider link={link5}>
         <BrowserRouter>
@@ -1085,9 +1082,8 @@ describe('Testing Requests screen', () => {
     expect(screen.getByTestId('testComp')).toBeInTheDocument();
   });
 
-  test('Component should be rendered properly when user is SuperAdmin', async () => {
-    setItem('SuperAdmin', true);
-    removeItem('AdminFor');
+  test('Should render searchByName input when user is Admin', async () => {
+    setItem('Admin', true);
 
     render(
       <MockedProvider link={link}>

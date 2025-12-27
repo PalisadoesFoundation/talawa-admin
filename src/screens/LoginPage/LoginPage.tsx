@@ -400,6 +400,12 @@ const loginPage = (): JSX.Element => {
         }
         const loggedInUserId = user.id;
 
+        if (user.role === 'administrator') {
+          setItem('Admin', true);
+        } else {
+          setItem('Admin', false);
+        }
+
         setItem('token', authenticationToken);
         if (refreshToken) {
           setItem('refreshToken', refreshToken);
