@@ -82,7 +82,7 @@ Cypress.Commands.add('loginByApi', (role: string) => {
 });
 
 Cypress.Commands.add('assertToast', (expectedMessage: string | RegExp) => {
-  cy.get('[role=alert]', { timeout: 5000 })
+  cy.get('.Toastify__toast', { timeout: 5000 })
     .should('be.visible')
     .and('contain.text', expectedMessage);
 });

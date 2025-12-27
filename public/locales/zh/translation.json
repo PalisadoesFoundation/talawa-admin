@@ -362,6 +362,18 @@
     "createUser": "创建用户",
     "notFound": "未找到成员"
   },
+  "organizationCard": {
+    "join": "加入",
+    "withdraw": "撤回",
+    "visit": "访问",
+    "manage": "管理",
+    "admins": "管理员",
+    "members": "成员",
+    "join_success": "成员申请已成功发送",
+    "withdraw_success": "成员申请已成功撤回",
+    "join_error": "发送成员申请失败",
+    "withdraw_error": "撤回成员申请失败"
+  },
   "organizationTags": {
     "title": "组织标签",
     "createTag": "创建新标签",

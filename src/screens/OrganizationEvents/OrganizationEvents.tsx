@@ -28,7 +28,7 @@ import {
   GET_ORGANIZATION_DATA_PG,
 } from 'GraphQl/Queries/Queries';
 import dayjs from 'dayjs';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router';
 import type { InterfaceEvent } from 'types/Event/interface';
@@ -232,70 +232,70 @@ function organizationEvents(): JSX.Element {
     }
   }, [eventDataError, orgDataError]);
 
-  if (orgLoading) return <Loader />;
-
   return (
-    <>
-      <div className={styles.mainpageright}>
-        <div className={styles.justifyspOrganizationEvents}>
-          <PageHeader
-            search={{
-              placeholder: t('searchEventName'),
-              onSearch: (value: string) => {
-                setSearchByName(value);
-              },
-              inputTestId: 'searchEvent',
-              buttonTestId: 'searchButton',
-            }}
-            sorting={[
-              {
-                title: t('viewType'),
-                selected: viewType,
-                options: [
-                  { label: ViewType.MONTH, value: ViewType.MONTH },
-                  { label: ViewType.DAY, value: ViewType.DAY },
-                  { label: ViewType.YEAR, value: ViewType.YEAR },
-                ],
-                onChange: (value) => handleChangeView(value.toString()),
-                testIdPrefix: 'selectViewType',
-              },
-            ]}
-            showEventTypeFilter={true}
-            actions={
-              <Button
-                className={styles.dropdown}
-                onClick={showInviteModal}
-                data-testid="createEventModalBtn"
-                data-cy="createEventModalBtn"
-              >
-                <div>
-                  <AddIcon className={styles.addIconStyle} />
-                  <span>{t('createEvent')}</span>
-                </div>
-              </Button>
-            }
-          />
+    <LoadingState isLoading={orgLoading} variant="spinner" size="lg">
+      <>
+        <div className={styles.mainpageright}>
+          <div className={styles.justifyspOrganizationEvents}>
+            <PageHeader
+              search={{
+                placeholder: t('searchEventName'),
+                onSearch: (value: string) => {
+                  setSearchByName(value);
+                },
+                inputTestId: 'searchEvent',
+                buttonTestId: 'searchButton',
+              }}
+              sorting={[
+                {
+                  title: t('viewType'),
+                  selected: viewType,
+                  options: [
+                    { label: ViewType.MONTH, value: ViewType.MONTH },
+                    { label: ViewType.DAY, value: ViewType.DAY },
+                    { label: ViewType.YEAR, value: ViewType.YEAR },
+                  ],
+                  onChange: (value) => handleChangeView(value.toString()),
+                  testIdPrefix: 'selectViewType',
+                },
+              ]}
+              showEventTypeFilter={true}
+              actions={
+                <Button
+                  className={styles.dropdown}
+                  onClick={showInviteModal}
+                  data-testid="createEventModalBtn"
+                  data-cy="createEventModalBtn"
+                >
+                  <div>
+                    <AddIcon className={styles.addIconStyle} />
+                    <span>{t('createEvent')}</span>
+                  </div>
+                </Button>
+              }
+            />
+          </div>
         </div>
-      </div>
-      <EventCalendar
-        eventData={events}
-        refetchEvents={refetchEvents}
-        orgData={orgData?.organization}
-        userId={userId}
-        userRole={userRole}
-        viewType={viewType}
-        onMonthChange={handleMonthChange}
-        currentMonth={currentMonth}
-        currentYear={currentYear}
-      />
+        <EventCalendar
+          eventData={events}
+          refetchEvents={refetchEvents}
+          orgData={orgData?.organization}
+          userId={userId}
+          userRole={userRole}
+          viewType={viewType}
+          onMonthChange={handleMonthChange}
+          currentMonth={currentMonth}
+          currentYear={currentYear}
+        />
 
-      <CreateEventModal
-        isOpen={createEventmodalisOpen}
-        onClose={hideCreateEventModal}
-        onEventCreated={refetchEvents}
-        currentUrl={currentUrl || ''}
-      />
-    </>
+        <CreateEventModal
+          isOpen={createEventmodalisOpen}
+          onClose={hideCreateEventModal}
+          onEventCreated={refetchEvents}
+          currentUrl={currentUrl || ''}
+        />
+      </>
+    </LoadingState>
   );
 }
 

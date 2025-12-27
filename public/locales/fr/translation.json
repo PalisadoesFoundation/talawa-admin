@@ -362,6 +362,18 @@
     "createUser": "Créer un utilisateur",
     "notFound": "Aucun membre trouvé"
   },
+  "organizationCard": {
+    "join": "Rejoindre",
+    "withdraw": "Retirer",
+    "visit": "Visiter",
+    "manage": "Gérer",
+    "admins": "Administrateurs",
+    "members": "Membres",
+    "join_success": "Demande d’adhésion envoyée avec succès",
+    "withdraw_success": "Demande d’adhésion retirée avec succès",
+    "join_error": "Échec de l’envoi de la demande d’adhésion",
+    "withdraw_error": "Échec du retrait de la demande d’adhésion"
+  },
   "organizationTags": {
     "title": "Étiquettes d'Organisation",
     "createTag": "Créer une nouvelle étiquette",

@@ -61,6 +61,7 @@ const checkLocalStorageUsage = (file: string): void => {
     fileName === 'vitest.setup.ts' || // Clears localStorage after each test providing test isolation
     file.endsWith('.md') || // Skip documentation files
     file.startsWith('docs/') || // Skip auto-generated docs
+    file.startsWith('cypress/') || // Skip Cypress E2E tests
     containsSkipComment(file)
   ) {
     console.log(`Skipping file: ${file}`);
