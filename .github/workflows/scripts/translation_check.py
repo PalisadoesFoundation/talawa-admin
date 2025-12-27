@@ -17,7 +17,7 @@ def get_keys(data: dict, prefix: str = "") -> set[str]:
         prefix: Prefix used for nested key traversal.
 
     Returns:
-        A set of flattened translation keys.
+        keys: A set of flattened translation keys.
     """
     keys: set[str] = set()
     for key, value in data.items():
@@ -35,7 +35,7 @@ def get_translation_keys(data: dict) -> set[str]:
         data: Parsed JSON dictionary.
 
     Returns:
-        A set of translation keys.
+        translation_keys: A set of translation keys.
     """
     return get_keys(data)
 
@@ -47,7 +47,7 @@ def load_locale_keys(locales_dir: str | Path) -> set[str]:
         locales_dir: Path to the locale directory.
 
     Returns:
-        A set of all valid translation keys.
+        keys: A set of all valid translation keys.
 
     Raises:
         FileNotFoundError: If the locale directory does not exist.
@@ -87,7 +87,7 @@ def find_translation_tags(source: str | Path) -> set[str]:
         source: File path or raw source string.
 
     Returns:
-        A set of detected translation keys.
+        found_tags: A set of detected translation keys.
     """
     if isinstance(source, Path):
         try:
@@ -118,7 +118,7 @@ def get_target_files(
         exclude: Filename patterns to exclude.
 
     Returns:
-        A list of source file paths.
+        target_files: A list of source file paths.
 
     Raises:
         FileNotFoundError: If the default src directory is missing.
@@ -172,7 +172,7 @@ def check_file(path: Path, valid_keys: set[str]) -> list[str]:
         valid_keys: Set of valid translation keys.
 
     Returns:
-        A sorted list of missing translation keys.
+        missing_keys: A sorted list of missing translation keys.
     """
     return sorted(
         tag for tag in find_translation_tags(path) if tag not in valid_keys
