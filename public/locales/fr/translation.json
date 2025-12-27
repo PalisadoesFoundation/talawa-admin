@@ -61,7 +61,13 @@
     "OR": "OU",
     "admin": "Administrateur",
     "user": "Utilisateur",
-    "loading": "Chargement"
+    "loading": "Chargement",
+    "userImage": "Image de l'utilisateur",
+    "userEditProfilePicture": "Modifier la photo de profil",
+    "communityLogo": "Logo de la Communauté",
+    "organizations": "Organisations",
+    "accountLocked": "Votre compte a été temporairement verrouillé en raison de trop nombreuses tentatives de connexion échouées. Veuillez réessayer plus tard.",
+    "accountLockedWithTimer": "Votre compte a été temporairement verrouillé. Veuillez réessayer dans {{minutes}} minute(s)."
   },
   "signOut": {
     "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
@@ -229,7 +235,8 @@
     "name": "Nom",
     "email": "E-mail",
     "profilePictureAlt": "Image de profil de {{name}}",
-    "placeholderAvatarAlt": "Avatar par défaut"
+    "placeholderAvatarAlt": "Avatar par défaut",
+    "newMembersWillAppearHere": "Les nouvelles demandes d'adhésion apparaîtront ici"
   },
   "users": {
     "membershipStatus": {
@@ -726,7 +733,8 @@
     "viewCampaigns": "Voir les campagnes",
     "assocCampaigns": "Campagnes associées",
     "errorLoadingFundsData": "Erreur lors du chargement des données des fonds",
-    "editFund": "Modifier le fonds"
+    "editFund": "Modifier le fonds",
+    "searchFunds": "Rechercher des fonds"
   },
   "fundCampaign": {
     "title": "Campagnes de collecte de fonds",
@@ -750,7 +758,10 @@
     "latestEndDate": "Dernière date de fin",
     "earliestEndDate": "Date de fin la plus ancienne",
     "lowestGoal": "Objectif le plus bas",
-    "highestGoal": "Objectif le plus élevé"
+    "highestGoal": "Objectif le plus élevé",
+    "editCampaign": "Modifier la campagne",
+    "searchCampaigns": "Rechercher des campagnes",
+    "errorLoading": "Erreur lors du chargement des données de la campagne"
   },
   "pledges": {
     "title": "Engagements de campagne de financement",
@@ -1090,7 +1101,20 @@
     "unassignUserTagMessage": "Voulez-vous retirer l'étiquette de cet utilisateur?",
     "successfullyUnassigned": "Étiquette retirée de l'utilisateur",
     "tagsAssigned": "étiquettes assignées",
-    "noTagsAssigned": "Aucune étiquette assignée"
+    "noTagsAssigned": "Aucune étiquette assignée",
+    "to": "À",
+    "overview": "Aperçu",
+    "tags": "Étiquettes",
+    "invalidFileType": "Type de fichier invalide",
+    "fileTooLarge": "Fichier trop volumineux",
+    "memberDetailNumberExample": "Exemple de numéro",
+    "memberDetailExampleLane": "Exemple de rue",
+    "memberDetailPostalExample": "Exemple de code postal",
+    "enterCity": "Entrez la ville",
+    "enterState": "Entrez l'état",
+    "select": "Sélectionner",
+    "asYourCountry": "comme votre pays",
+    "actions": "Actions"
   },
   "people": {
     "title": "Personnes",
@@ -1244,7 +1268,8 @@
     "event": "Événement",
     "article": "Article",
     "postNowVisibleInFeed": "Le post est maintenant visible dans le fil d'actualité",
-    "processingPost": "Traitement de votre publication. Veuillez patienter."
+    "processingPost": "Traitement de votre publication. Veuillez patienter.",
+    "postImagePreview": "Aperçu de l’image de la publication"
   },
   "eventAttendance": {
     "historical_statistics": "Statistiques historiques",
@@ -1409,7 +1434,9 @@
     "latestFirst": "Plus Récent en Premier",
     "earliestFirst": "Plus Ancien en Premier",
     "noTransactionsFound": "Aucune transaction trouvée",
-    "errorLoadingTransactions": "Erreur lors du chargement des transactions"
+    "errorLoadingTransactions": "Erreur lors du chargement des transactions",
+    "eventType": "Type d'événement",
+    "tagCreationFailed": "Échec de la création du tag"
   },
   "userEvents": {
     "title": "Événements",
@@ -1669,6 +1696,12 @@
     "noPledges": "Aucune promesse trouvée",
     "noCampaigns": "Aucune campagne trouvée",
     "raised": "Collecté",
+    "searchCampaigns": "Rechercher des campagnes",
+    "campaignName": "Nom de la campagne",
+    "startDate": "Date de début",
+    "endDate": "Date de fin",
+    "fundingGoal": "Objectif de financement",
+    "viewPledge": "Voir l'engagement",
     "amountRaised": "Montant Collecté"
   },
   "userPledges": {
