@@ -407,7 +407,9 @@ const loginPage = (): JSX.Element => {
         }
 
         setItem('token', authenticationToken);
-        setItem('refreshToken', refreshToken);
+        if (refreshToken) {
+          setItem('refreshToken', refreshToken);
+        }
         setItem('IsLoggedIn', 'TRUE');
         setItem('name', user.name);
         setItem('email', user.emailAddress);

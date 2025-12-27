@@ -6,4 +6,4 @@
 
 > `const` **ORGANIZATION\_POST\_LIST\_WITH\_VOTES**: `DocumentNode`
 
-Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:138](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L138)
+Defined in: [src/GraphQl/Queries/OrganizationQueries.ts:65](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/OrganizationQueries.ts#L65)

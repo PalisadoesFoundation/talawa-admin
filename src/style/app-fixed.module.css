@@ -3824,6 +3824,33 @@ form label,
   border-width: 0.2rem;
 }
 
+/* -- LoadingState.tsx -- */
+
+/* Container for spinner variant - provides relative positioning context */
+.loadingContainer {
+  position: relative;
+  min-height: 200px;
+}
+
+/* Overlay that blocks interactions during loading */
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Dimmed content underneath the overlay */
+.loadingContent {
+  opacity: 0.5;
+}
+
 /* -- LoginPortalToggle.tsx -- */
 
 .navLinkClass {
@@ -5718,10 +5745,7 @@ form {
 .dropdownItem:hover,
 .dropdownItem:focus,
 .dropdownItem:active {
-  background-color: var(
-    --dropdownItem-hover-bg,
-    #eff1f7 var(--dropdownItem-hover-bg) #e8e5e5
-  ) !important;
+  background-color: var(--dropdownItem-hover-bg, #eff1f7) !important;
   color: var(--dropdownItem-color) !important;
   outline: none !important;
 }
@@ -5943,43 +5967,37 @@ form {
 }
 
 /* -- CreateGroupChat.tsx -- */
-
+/* Donation card styles */
 /* -- DonationCard.tsx -- */
 
-.mainContainerDonateCard {
-  width: 49%;
-  height: 8rem;
-  min-width: max-content;
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1rem;
-  background-color: var(--mainContainerDonateCard-bg);
-  border: 1px solid var(--mainContainerDonateCard-border);
-  border-radius: 10px;
-  overflow: hidden;
+.donationAvatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: var(--people-card-header-bg);
+  flex-shrink: 0;
 }
 
-.img {
-  height: 100%;
-  aspect-ratio: 1 / 1;
-  background-color: var(--mainContainerDonateCard-bg);
-}
-
-.personDetails {
+.donationDetails {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: 0.25rem;
 }
 
-.btnDonate {
-  display: flex;
-  align-items: flex-end;
+.donationRow {
+  font-size: 14px;
+  color: var(--primaryText-color);
 }
 
-.btnDonate button {
-  padding-inline: 2rem !important;
-  border-radius: 5px;
+/* Donor name */
+.donorName {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.donationMeta {
+  font-size: 13px;
+  color: var(--secondText-color);
 }
 
 /* -- EventCard.tsx -- */
@@ -8184,7 +8202,6 @@ form {
 }
 
 .list_box {
-  height: 70vh;
   overflow-y: auto;
   width: auto;
 }
@@ -10269,4 +10286,38 @@ form {
   font-size: 25px;
   margin-bottom: 2px;
   margin-right: 2px;
+}
+
+.postContainer {
+  min-height: 100vh;
+}
+
+.addPost {
+  font-size: 20px;
+  margin-right: 6px;
+}
+
+.noPostsFound {
+  text-align: center;
+}
+
+.postInfiniteScroll {
+  overflow: visible;
+}
+
+.createPostModalContainer {
+  position: absolute;
+}
+
+.pinnedPostModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.pinnedPostModalBody {
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 20px;
+  position: relative;
 }

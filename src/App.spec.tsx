@@ -52,6 +52,219 @@ vi.mock('screens/UserPortal/Settings/Settings', () => ({
   default: () => <div data-testid="mock-settings">Mock Settings</div>,
 }));
 
+// Mock all lazy loaded components
+vi.mock('components/OrganizationScreen/OrganizationScreen', () => ({
+  default: () => (
+    <div data-testid="mock-organization-screen">Mock Organization Screen</div>
+  ),
+}));
+
+vi.mock('shared-components/posts/posts', () => ({
+  default: () => <div data-testid="mock-posts">Mock Posts</div>,
+}));
+
+vi.mock('components/SuperAdminScreen/SuperAdminScreen', () => ({
+  default: () => (
+    <div data-testid="mock-super-admin-screen">Mock Super Admin Screen</div>
+  ),
+}));
+
+vi.mock('screens/BlockUser/BlockUser', () => ({
+  default: () => <div data-testid="mock-block-user">Mock Block User</div>,
+}));
+
+vi.mock('screens/EventManagement/EventManagement', () => ({
+  default: () => (
+    <div data-testid="mock-event-management">Mock Event Management</div>
+  ),
+}));
+
+vi.mock('screens/ForgotPassword/ForgotPassword', () => ({
+  default: () => (
+    <div data-testid="mock-forgot-password">Mock Forgot Password</div>
+  ),
+}));
+
+vi.mock('screens/MemberDetail/MemberDetail', () => ({
+  default: () => <div data-testid="mock-member-detail">Mock Member Detail</div>,
+}));
+
+vi.mock('screens/OrgContribution/OrgContribution', () => ({
+  default: () => (
+    <div data-testid="mock-org-contribution">Mock Org Contribution</div>
+  ),
+}));
+
+vi.mock('screens/OrgList/OrgList', () => ({
+  default: () => <div data-testid="mock-org-list">Mock Org List</div>,
+}));
+
+vi.mock('screens/OrgSettings/OrgSettings', () => ({
+  default: () => <div data-testid="mock-org-settings">Mock Org Settings</div>,
+}));
+
+vi.mock('screens/OrganizationDashboard/OrganizationDashboard', () => ({
+  default: () => (
+    <div data-testid="mock-organization-dashboard">
+      Mock Organization Dashboard
+    </div>
+  ),
+}));
+
+vi.mock('screens/OrganizationEvents/OrganizationEvents', () => ({
+  default: () => (
+    <div data-testid="mock-organization-events">Mock Organization Events</div>
+  ),
+}));
+
+vi.mock('screens/OrganizationFunds/OrganizationFunds', () => ({
+  default: () => (
+    <div data-testid="mock-organization-funds">Mock Organization Funds</div>
+  ),
+}));
+
+vi.mock('screens/OrganizationTransactions/OrganizationTransactions', () => ({
+  default: () => (
+    <div data-testid="mock-organization-transactions">
+      Mock Organization Transactions
+    </div>
+  ),
+}));
+
+vi.mock('screens/FundCampaignPledge/FundCampaignPledge', () => ({
+  default: () => (
+    <div data-testid="mock-fund-campaign-pledge">Mock Fund Campaign Pledge</div>
+  ),
+}));
+
+vi.mock('screens/OrganizationPeople/OrganizationPeople', () => ({
+  default: () => (
+    <div data-testid="mock-organization-people">Mock Organization People</div>
+  ),
+}));
+
+vi.mock('screens/OrganizationTags/OrganizationTags', () => ({
+  default: () => (
+    <div data-testid="mock-organization-tags">Mock Organization Tags</div>
+  ),
+}));
+
+vi.mock('screens/ManageTag/ManageTag', () => ({
+  default: () => <div data-testid="mock-manage-tag">Mock Manage Tag</div>,
+}));
+
+vi.mock('screens/SubTags/SubTags', () => ({
+  default: () => <div data-testid="mock-sub-tags">Mock Sub Tags</div>,
+}));
+
+vi.mock('screens/Requests/Requests', () => ({
+  default: () => <div data-testid="mock-requests">Mock Requests</div>,
+}));
+
+vi.mock('screens/Users/Users', () => ({
+  default: () => <div data-testid="mock-users">Mock Users</div>,
+}));
+
+vi.mock('screens/CommunityProfile/CommunityProfile', () => ({
+  default: () => (
+    <div data-testid="mock-community-profile">Mock Community Profile</div>
+  ),
+}));
+
+vi.mock('screens/OrganizationVenues/OrganizationVenues', () => ({
+  default: () => (
+    <div data-testid="mock-organization-venues">Mock Organization Venues</div>
+  ),
+}));
+
+vi.mock('screens/Leaderboard/Leaderboard', () => ({
+  default: () => <div data-testid="mock-leaderboard">Mock Leaderboard</div>,
+}));
+
+vi.mock('components/Advertisements/Advertisements', () => ({
+  default: () => (
+    <div data-testid="mock-advertisements">Mock Advertisements</div>
+  ),
+}));
+
+vi.mock('screens/UserPortal/Donate/Donate', () => ({
+  default: () => <div data-testid="mock-donate">Mock Donate</div>,
+}));
+
+vi.mock('screens/UserPortal/Transactions/Transactions', () => ({
+  default: () => (
+    <div data-testid="mock-user-transactions">Mock User Transactions</div>
+  ),
+}));
+
+vi.mock('screens/UserPortal/Events/Events', () => ({
+  default: () => <div data-testid="mock-user-events">Mock User Events</div>,
+}));
+
+vi.mock('screens/UserPortal/Organizations/Organizations', () => ({
+  default: () => (
+    <div data-testid="mock-user-organizations">Mock User Organizations</div>
+  ),
+}));
+
+vi.mock('screens/UserPortal/People/People', () => ({
+  default: () => <div data-testid="mock-user-people">Mock User People</div>,
+}));
+
+vi.mock('screens/UserPortal/Chat/Chat', () => ({
+  default: () => <div data-testid="mock-chat">Mock Chat</div>,
+}));
+
+vi.mock('components/EventDashboardScreen/EventDashboardScreen', () => ({
+  default: () => (
+    <div data-testid="mock-event-dashboard-screen">
+      Mock Event Dashboard Screen
+    </div>
+  ),
+}));
+
+vi.mock('screens/Public/Invitation/AcceptInvitation', () => ({
+  default: () => (
+    <div data-testid="mock-accept-invitation">Mock Accept Invitation</div>
+  ),
+}));
+
+vi.mock('screens/UserPortal/Campaigns/Campaigns', () => ({
+  default: () => <div data-testid="mock-campaigns">Mock Campaigns</div>,
+}));
+
+vi.mock('screens/UserPortal/Pledges/Pledges', () => ({
+  default: () => <div data-testid="mock-pledges">Mock Pledges</div>,
+}));
+
+vi.mock('screens/UserPortal/Volunteer/VolunteerManagement', () => ({
+  default: () => (
+    <div data-testid="mock-volunteer-management">Mock Volunteer Management</div>
+  ),
+}));
+
+vi.mock('screens/UserPortal/LeaveOrganization/LeaveOrganization', () => ({
+  default: () => (
+    <div data-testid="mock-leave-organization">Mock Leave Organization</div>
+  ),
+}));
+
+vi.mock('screens/Notification/Notification', () => ({
+  default: () => <div data-testid="mock-notification">Mock Notification</div>,
+}));
+
+vi.mock('screens/PluginStore/PluginStore', () => ({
+  default: () => <div data-testid="mock-plugin-store">Mock Plugin Store</div>,
+}));
+
+vi.mock('screens/OrganizationFundCampaign/OrganizationFundCampagins', () => ({
+  default: () => (
+    <div data-testid="mock-organization-fund-campaign">
+      Mock Organization Fund Campaign
+    </div>
+  ),
+}));
+
 const MOCKS = [
   {
     request: { query: CURRENT_USER },
