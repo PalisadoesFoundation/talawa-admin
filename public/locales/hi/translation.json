@@ -1678,6 +1678,7 @@
     "title": "संगठन छोड़ें"
   },
   "eventVolunteers": {
+    "toggleGroupAriaLabel": "स्वयंसेवक दृश्य चयनकर्ता",
     "volunteers": "स्वयंसेवक",
     "volunteer": "स्वयंसेवक",
     "volunteerGroups": "स्वयंसेवक समूह",
