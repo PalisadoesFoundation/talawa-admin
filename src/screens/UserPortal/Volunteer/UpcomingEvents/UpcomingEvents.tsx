@@ -424,7 +424,7 @@ const UpcomingEvents = (): JSX.Element => {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded className={styles.errorIcon} />
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Events' })}
           </h6>
@@ -575,10 +575,7 @@ const UpcomingEvents = (): JSX.Element => {
                 )}
                 {volunteerGroups && volunteerGroups.length > 0 && (
                   <Form.Group>
-                    <Form.Label
-                      className="fw-lighter ms-2 mb-2 "
-                      style={{ fontSize: '1rem', color: 'grey' }}
-                    >
+                    <Form.Label className="fw-lighter ms-2 mb-2 text-secondary">
                       {t('volunteerGroups')}:
                     </Form.Label>
 
