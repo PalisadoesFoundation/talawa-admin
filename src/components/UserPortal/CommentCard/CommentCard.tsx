@@ -221,12 +221,10 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
       <Stack direction="row" spacing={2} alignItems="flex-start">
         <span className={styles.userImageUserComment}>
           <ProfileAvatarDisplay
-            fallbackName={creator.name}
             imageUrl={creator.avatarURL || defaultAvatar}
+            fallbackName={creator.name}
             size="small"
             shape="circle"
-            border={false}
-            enableEnlarge
           />
         </span>
         <Box sx={{ flexGrow: 1 }}>

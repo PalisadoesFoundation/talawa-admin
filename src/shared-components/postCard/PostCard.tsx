@@ -256,10 +256,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             className={styles.userImageUserPost}
             imageUrl={props.creator.avatarURL || UserDefault}
             fallbackName={props.creator.name}
-            shape="circle"
             size="small"
+            shape="circle"
             enableEnlarge
-            border={true}
           />
           <Typography variant="subtitle2" fontWeight="bold">
             {props.creator.name}
