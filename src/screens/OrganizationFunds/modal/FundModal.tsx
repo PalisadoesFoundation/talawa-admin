@@ -9,7 +9,7 @@ import {
   CREATE_FUND_MUTATION,
   UPDATE_FUND_MUTATION,
 } from 'GraphQl/Mutations/FundMutation';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { FormControl, TextField } from '@mui/material';
 
 export interface InterfaceFundModal {
@@ -120,11 +120,11 @@ const FundModal: React.FC<InterfaceFundModal> = ({
         isTaxDeductible: false,
         isArchived: false,
       });
-      toast.success(t('fundCreated') as string);
+      NotificationToast.success(t('fundCreated') as string);
       refetchFunds();
       hide();
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
     }
   };
 
@@ -161,9 +161,9 @@ const FundModal: React.FC<InterfaceFundModal> = ({
       });
       refetchFunds();
       hide();
-      toast.success(t('fundUpdated') as string);
+      NotificationToast.success(t('fundUpdated') as string);
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
     }
   };
 

@@ -51,7 +51,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import { DataGrid } from '@mui/x-data-grid';
@@ -156,14 +156,14 @@ function SubTags(): JSX.Element {
       });
 
       if (data) {
-        toast.success(t('tagCreationSuccess') as string);
+        NotificationToast.success(t('tagCreationSuccess') as string);
         subTagsRefetch();
         setTagName('');
         setAddSubTagModalIsOpen(false);
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(error.message);
+        NotificationToast.error(error.message);
       }
     }
   };
