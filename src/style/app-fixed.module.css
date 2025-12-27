@@ -362,7 +362,7 @@
   --colorlight-bg: #f5f5f5;
 
   --containerHeight-bg: #f6f8fc;
-  --cardHeader-border: #e9ecef;
+  /* unified --cardHeader-border defined later; removed duplicate */
 
   --collapseSidebarButton-od-bg-hover: #f6f8fc;
   --collapseSidebarButton-od-color-hover: #000000;
@@ -4747,7 +4747,7 @@ form label,
 
 .cardHeader {
   padding: 1.25rem 1rem 1rem 1rem;
-  border-bottom: 1px solid var(--bs-gray-200, #e9ecef);
+  border-bottom: 1px solid var(--cardHeader-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -4904,7 +4904,7 @@ form label,
 
 .cardHeader {
   padding: 1.25rem 1rem 1rem 1rem;
-  border-bottom: 1px solid var(--bs-gray-200, #e9ecef);
+  border-bottom: 1px solid var(--cardHeader-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
