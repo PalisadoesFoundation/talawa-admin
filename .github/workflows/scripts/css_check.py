@@ -213,6 +213,24 @@ def process_typescript_file(
     all_violations.extend(violations)
 
 
+def is_test_path(file_path: str) -> bool:
+    """Return True when a file path points to a test file or directory."""
+    normalized = os.path.normpath(file_path)
+    path_parts = normalized.split(os.sep)
+    if any(part in {"__tests__", "test", "tests"} for part in path_parts):
+        return True
+
+    file_name = os.path.basename(normalized)
+    return any(pattern in file_name for pattern in [".test.", ".spec."])
+
+
+def is_tokens_path(file_path: str) -> bool:
+    """Return True when a file path sits under a tokens directory."""
+    normalized = os.path.normpath(file_path)
+    path_parts = normalized.split(os.sep)
+    return "tokens" in path_parts
+
+
 def check_files(
     directories: list,
     files: list,
@@ -241,30 +259,40 @@ def check_files(
         directory = os.path.abspath(directory)
 
         for root, _, files_in_dir in os.walk(directory):
-            root_dirname = os.path.basename(root)
-
-            if root_dirname in {"__tests__", "test", "tests"} or any(
-                root.startswith(exclude_dir)
-                for exclude_dir in exclude_directories
+            # Skip tests/tokens directories to avoid policy checks on fixtures.
+            if (
+                is_test_path(root)
+                or is_tokens_path(root)
+                or any(
+                    root.startswith(exclude_dir)
+                    for exclude_dir in exclude_directories
+                )
             ):
                 continue
 
             for file in files_in_dir:
                 file_path = os.path.abspath(os.path.join(root, file))
-                if file_path in exclude_files:
+                if (
+                    file_path in exclude_files
+                    or is_test_path(file_path)
+                    or is_tokens_path(file_path)
+                ):
                     continue
 
-                if file.endswith((".ts", ".tsx")) and not any(
-                    pattern in file for pattern in [".test.", ".spec."]
-                ):
+                if file.endswith((".ts", ".tsx")):
                     process_typescript_file(file_path, all_violations)
 
     # Process individual files explicitly listed
     for file_path in files:
         file_path = os.path.abspath(file_path)
-        if file_path not in exclude_files and file_path.endswith(
-            (".ts", ".tsx")
+        # Explicit file lists bypass os.walk filters, so enforce the same skips.
+        if (
+            file_path in exclude_files
+            or is_test_path(file_path)
+            or is_tokens_path(file_path)
         ):
+            continue
+        if file_path.endswith((".ts", ".tsx")):
             process_typescript_file(file_path, all_violations)
 
     return CSSCheckResult(violations=all_violations)

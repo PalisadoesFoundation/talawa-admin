@@ -5,6 +5,11 @@
  * Verifies no hardcoded values remain after migration
  *
  * Usage: pnpm run validate-tokens
+ * Options:
+ *   --files <file...>     Validate specific files (space-separated list)
+ *   --staged             Validate staged files only
+ *   --scan-entire-repo   Ignore file lists and scan all source files
+ *   --warn               Log warnings without failing
  */
 
 import fs from 'fs';
@@ -28,12 +33,48 @@ export const PATTERNS = {
   fontWeight: /font-weight:\s*[1-9]00/g,
 };
 
+const normalizePath = (file: string): string => file.split(path.sep).join('/');
+
+const getFlagValues = (args: string[], flag: string): string[] => {
+  const values: string[] = [];
+
+  for (let i = 0; i < args.length; i += 1) {
+    const arg = args[i];
+    if (arg === flag) {
+      let j = i + 1;
+      for (; j < args.length; j += 1) {
+        const next = args[j];
+        if (next.startsWith('--')) {
+          break;
+        }
+        values.push(next);
+      }
+      i = j - 1;
+      continue;
+    }
+
+    if (arg.startsWith(`${flag}=`)) {
+      const value = arg.slice(flag.length + 1);
+      if (value) {
+        values.push(value);
+      }
+    }
+  }
+
+  return values;
+};
+
 const args = process.argv.slice(2);
 const warnOnly: boolean = args.includes('--warn') || args.includes('--warning');
 const scanEntireRepo: boolean = args.includes('--scan-entire-repo');
-const stagedOnly: boolean = args.includes('--staged') && !scanEntireRepo;
-
-const normalizePath = (file: string): string => file.split(path.sep).join('/');
+const hasFilesFlag: boolean =
+  !scanEntireRepo &&
+  args.some((arg) => arg === '--files' || arg.startsWith('--files='));
+const filesFromArgs: string[] = hasFilesFlag
+  ? getFlagValues(args, '--files')
+  : [];
+const stagedOnly: boolean =
+  args.includes('--staged') && !scanEntireRepo && !hasFilesFlag;
 
 export const shouldSkipFile = (file: string): boolean => {
   const normalized = normalizePath(file);
@@ -151,16 +192,21 @@ export async function validateFiles(
 export async function main() {
   console.log('Validating design token usage...\n');
 
+  const filesFromFlags = hasFilesFlag
+    ? Array.from(new Set(filesFromArgs.filter((file) => file.trim() !== '')))
+    : [];
   const stagedFiles = stagedOnly ? getStagedFiles() : [];
   const tsExtensions = new Set(['.ts', '.tsx']);
   const cssExtensions = new Set(['.css', '.scss', '.sass']);
 
-  const tsFiles =
-    stagedFiles.length > 0
+  const tsFiles = hasFilesFlag
+    ? filterByExtensions(filesFromFlags, tsExtensions)
+    : stagedFiles.length > 0
       ? filterByExtensions(stagedFiles, tsExtensions)
       : undefined;
-  const cssFiles =
-    stagedFiles.length > 0
+  const cssFiles = hasFilesFlag
+    ? filterByExtensions(filesFromFlags, cssExtensions)
+    : stagedFiles.length > 0
       ? filterByExtensions(stagedFiles, cssExtensions)
       : undefined;
 

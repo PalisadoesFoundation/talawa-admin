@@ -264,6 +264,44 @@ describe('validate-tokens', () => {
   });
 
   describe('CLI flags', () => {
+    it('should use --files list when provided', async () => {
+      setArgv([
+        '--files',
+        'src/components/Example.ts',
+        'src/styles/app.css',
+        'README.md',
+      ]);
+      const { main } = await loadModule();
+
+      const execSyncMock = vi.mocked(execSync);
+      const globMock = vi.mocked(glob);
+
+      vi.spyOn(fs, 'readFileSync').mockImplementation((filePath) => {
+        if (filePath === 'src/components/Example.ts') {
+          return 'const value = "token";';
+        }
+        return 'body { color: var(--color-primary); }';
+      });
+
+      const logSpy = vi
+        .spyOn(console, 'log')
+        .mockImplementation(() => undefined);
+      const exitSpy = vi
+        .spyOn(process, 'exit')
+        .mockImplementation((() => undefined) as never);
+
+      await main();
+
+      expect(execSyncMock).not.toHaveBeenCalled();
+      expect(globMock).not.toHaveBeenCalled();
+      expect(exitSpy).toHaveBeenCalledWith(0);
+      expect(
+        logSpy.mock.calls.some((call) =>
+          String(call[0]).includes('No hardcoded values found'),
+        ),
+      ).toBe(true);
+    });
+
     it('should exit 0 when staged files are clean', async () => {
       setArgv(['--staged']);
       const { main } = await loadModule();
