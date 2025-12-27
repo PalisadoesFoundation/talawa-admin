@@ -28,7 +28,7 @@ import {
   MEMBERSHIP_STATUS_MOCKS,
   MEMBERSHIP_LOOKUP_MOCKS,
 } from './UpcomingEvents.mocks';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, afterEach, beforeAll, afterAll } from 'vitest';
 
@@ -41,15 +41,15 @@ import { vi, beforeEach, afterEach, beforeAll, afterAll } from 'vitest';
  */
 
 const sharedMocks = vi.hoisted(() => ({
-  toast: {
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
   },
   useParams: vi.fn(() => ({ orgId: 'orgId' })),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: sharedMocks.toast,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: sharedMocks.NotificationToast,
 }));
 
 vi.mock('@mui/icons-material', () => ({
@@ -240,7 +240,7 @@ describe('Testing Upcoming Events Screen', () => {
     await userEvent.click(volunteerBtn[0]);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -319,7 +319,7 @@ describe('Testing Upcoming Events Screen', () => {
 
       // Verify success toast was called
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalled();
+        expect(NotificationToast.success).toHaveBeenCalled();
       });
     });
 
@@ -350,7 +350,7 @@ describe('Testing Upcoming Events Screen', () => {
 
       // Verify success toast was called
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalled();
+        expect(NotificationToast.success).toHaveBeenCalled();
       });
     });
 
@@ -390,7 +390,7 @@ describe('Testing Upcoming Events Screen', () => {
       });
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalled();
+        expect(NotificationToast.success).toHaveBeenCalled();
       });
     });
 
@@ -435,7 +435,7 @@ describe('Testing Upcoming Events Screen', () => {
       });
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalled();
+        expect(NotificationToast.success).toHaveBeenCalled();
       });
     });
 

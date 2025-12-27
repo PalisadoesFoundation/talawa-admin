@@ -30,12 +30,12 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { vi, beforeEach, afterEach } from 'vitest';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Frequency } from 'utils/recurrenceUtils';
 import { green } from '@mui/material/colors';
 
-const { mockToast, mockUseParams } = vi.hoisted(() => ({
-  mockToast: {
+const { mockNotificationToast, mockUseParams } = vi.hoisted(() => ({
+  mockNotificationToast: {
     error: vi.fn(),
     info: vi.fn(),
     success: vi.fn(),
@@ -43,8 +43,8 @@ const { mockToast, mockUseParams } = vi.hoisted(() => ({
   mockUseParams: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: mockToast,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockNotificationToast,
 }));
 
 vi.mock('@mui/x-date-pickers', async () => {
@@ -827,13 +827,13 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await userEvent.click(screen.getByTestId('createEventBtn'));
     await waitFor(() => {
-      expect(mockToast.success).toHaveBeenCalled();
+      expect(mockNotificationToast.success).toHaveBeenCalled();
     });
   });
 
   it('Should create a non-all-day event successfully', async () => {
     // Ensure toast success mock is reset for this test
-    mockToast.success.mockClear();
+    mockNotificationToast.success.mockClear();
 
     // Create a test-specific link with dynamic variables to avoid ms mismatch
     const computedStartAt = dayjs(new Date())
@@ -941,7 +941,8 @@ describe('Testing Events Screen [User Portal]', () => {
 
     // Verify either success or error toast was called
     expect(
-      mockToast.success.mock.calls.length + mockToast.error.mock.calls.length,
+      mockNotificationToast.success.mock.calls.length +
+        mockNotificationToast.error.mock.calls.length,
     ).toBeGreaterThan(0);
   });
 
@@ -994,7 +995,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait(500);
 
     // Error should be logged (console.error is called in catch block)
-    expect(toast.success).not.toHaveBeenCalled();
+    expect(NotificationToast.success).not.toHaveBeenCalled();
   });
 
   it('Should toggle all-day checkbox and enable/disable time inputs', async () => {
@@ -1491,8 +1492,8 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should handle create event returning null (no data) gracefully', async () => {
     const testLink = new StaticMockLink(CREATE_EVENT_NULL_MOCKS, true);
-    mockToast.success.mockClear();
-    mockToast.error.mockClear();
+    mockNotificationToast.success.mockClear();
+    mockNotificationToast.error.mockClear();
     render(
       <MockedProvider link={testLink}>
         <BrowserRouter>
@@ -1541,7 +1542,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait(500);
 
     // The createEvent mutation returned null data, so no success toast
-    expect(mockToast.success).not.toHaveBeenCalled();
+    expect(mockNotificationToast.success).not.toHaveBeenCalled();
   });
 
   it('Should map missing creator to default (fallback) in eventData mapping', async () => {
@@ -1619,7 +1620,7 @@ describe('Testing Events Screen [User Portal]', () => {
       true,
     );
 
-    mockToast.success.mockClear();
+    mockNotificationToast.success.mockClear();
 
     render(
       <MockedProvider link={testLink}>
@@ -1673,7 +1674,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await wait(500);
     await waitFor(() => {
-      expect(mockToast.success).toHaveBeenCalled();
+      expect(mockNotificationToast.success).toHaveBeenCalled();
     });
   });
 });

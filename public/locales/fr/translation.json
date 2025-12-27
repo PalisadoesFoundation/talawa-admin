@@ -554,8 +554,11 @@
     "selectActionItemCategory": "Sélectionnez une Catégorie d'Action",
     "selectAssignee": "Sélectionner un Attribué",
     "volunteer": "Bénévole",
+    "volunteered": "Bénévole",
     "volunteerGroup": "Groupe de bénévoles",
+    "volunteerGroups": "Groupes de bénévoles",
     "volunteerAssignment": "Affectation de bénévole",
+    "volunteerSuccess": "Bénévole ajouté avec succès",
     "individualVolunteer": "Bénévole individuel",
     "groupAssignment": "Affectation de groupe",
     "hoursVolunteered": "Heures de bénévolat",
@@ -1369,7 +1372,11 @@
     "postalCode": "Code postal",
     "city": "Ville",
     "description": "Description",
-    "enterDescription": "Entrez la description"
+    "enterDescription": "Entrez la description",
+    "atleast_8_char_long": "Le mot de passe doit comporter au moins 8 caractères",
+    "invalidFileType": "Type de fichier invalide. Veuillez télécharger un JPEG, PNG ou GIF",
+    "fileSizeTooLarge": "Le fichier est trop volumineux. La taille maximale est de 5 Mo",
+    "failedToProcessImage": "Échec du traitement de la photo de profil. Veuillez réessayer de la télécharger"
   },
   "donate": {
     "title": "Des dons",
@@ -1751,7 +1758,7 @@
     "receivedEarliest": "Reçu en Premier",
     "invitationAccepted": "Invitation acceptée avec succès",
     "invitationRejected": "Invitation rejetée avec succès",
-    "volunteerSuccess": "Demande de bénévolat envoyée avec succès",
+    "volunteerRequestSuccess": "Demande de bénévolat envoyée avec succès",
     "recurring": "Récurrent",
     "groupInvitationSubject": "Invitation à rejoindre le groupe de bénévoles",
     "eventInvitationSubject": "Invitation à faire du bénévolat pour l'événement",
