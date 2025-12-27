@@ -189,7 +189,6 @@ def main() -> None:
             translation keys are found, or 2 for configuration errors
             such as invalid locale directories.
     """
-
     parser = argparse.ArgumentParser()
     parser.add_argument("--files", nargs="*", default=[])
     parser.add_argument("--directories", nargs="*", default=[])
@@ -201,7 +200,6 @@ def main() -> None:
     except FileNotFoundError as e:
         print(f"Error: Locale directory not found: {e}", file=sys.stderr)
         sys.exit(2)
-        return
 
     targets = get_target_files(args.files, args.directories)
 
@@ -218,7 +216,6 @@ def main() -> None:
                 + "\n".join(f"  - Missing: {tag}" for tag in tags)
             )
         sys.exit(1)
-        return
 
     print("All translation tags validated successfully")
     sys.exit(0)
