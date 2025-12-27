@@ -35,95 +35,62 @@
  * ```
  */
 import React from 'react';
-import { Badge } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
-
-import UserPortalCard from 'components/UserPortal/UserPortalCard/UserPortalCard';
-import Avatar from 'components/Avatar/Avatar';
-import type { InterfaceContactCardProps } from 'types/Chat/interface';
-
 import styles from './ContactCard.module.css';
+import Avatar from 'components/Avatar/Avatar';
+import { Badge } from 'react-bootstrap';
+import type { InterfaceContactCardProps } from 'types/Chat/interface';
+import { normalizeMinioUrl } from 'utils/minioUtils';
 
-const ContactCard: React.FC<InterfaceContactCardProps> = ({
-  id,
-  title,
-  image,
-  lastMessage,
-  unseenMessages = 0,
-  selectedContact,
-  setSelectedContact,
-}) => {
-  const { t } = useTranslation();
-
-  const isSelected = selectedContact === id;
-
-  const handleSelect = (): void => {
-    setSelectedContact(id);
+function contactCard(props: InterfaceContactCardProps): JSX.Element {
+  const handleSelectedContactChange = (): void => {
+    props.setSelectedContact(props.id);
   };
-
-  const avatarAlt = t('contact.avatar_alt', {
-    name: title,
-    defaultValue: title,
-  });
-
-  const imageSlot = image ? (
-    <img
-      src={image}
-      alt={avatarAlt}
-      className={styles.contactImage}
-      data-testid={`contact-${id}-image`}
-    />
-  ) : (
-    <Avatar name={title} alt={avatarAlt} avatarStyle={styles.contactImage} />
+  const [isSelected, setIsSelected] = React.useState(
+    props.selectedContact === props.id,
   );
 
-  const actionsSlot =
-    unseenMessages > 0 ? (
-      <Badge
-        pill
-        className={styles.unseenBadge}
-        data-testid={`contact-unseen-${id}`}
-      >
-        {unseenMessages}
-      </Badge>
-    ) : undefined;
+  // Update selection state when the selected contact changes
+  React.useEffect(() => {
+    setIsSelected(props.selectedContact === props.id);
+  }, [props.selectedContact]);
 
   return (
-    <UserPortalCard
-      variant="compact"
-      dataTestId={`contact-card-${id}`}
-      ariaLabel={t('contact.card_aria', 'Contact card')}
-      imageSlot={imageSlot}
-      actionsSlot={actionsSlot}
-      className={styles.contactCardWrapper}
-    >
-      <button
-        type="button"
-        onClick={handleSelect}
-        data-testid={`contact-container-${id}`}
-        aria-pressed={isSelected}
-        data-selected={String(isSelected)}
-        className={`${styles.contentInner} ${
-          isSelected ? styles.selected : ''
+    <>
+      <div
+        className={`${styles.contact} ${
+          isSelected ? styles.bgGreen : styles.bgWhite
         }`}
+        onClick={handleSelectedContactChange}
+        data-testid="contactContainer"
       >
-        <div className={styles.titleRow}>
-          <div className={styles.titleText} data-testid={`contact-title-${id}`}>
-            <b>{title}</b>
-
-            {lastMessage && (
-              <div
-                className={styles.lastMessage}
-                data-testid={`contact-lastMessage-${id}`}
-              >
-                {lastMessage}
-              </div>
-            )}
+        {props.image ? (
+          <img
+            src={normalizeMinioUrl(props.image)}
+            alt={props.title}
+            className={styles.contactImage}
+            crossOrigin="anonymous"
+          />
+        ) : (
+          <Avatar
+            name={props.title}
+            alt={props.title}
+            avatarStyle={styles.contactImage}
+          />
+        )}
+        <div className={styles.contactNameContainer}>
+          <div>
+            <b>{props.title}</b>{' '}
+            <p className={styles.lastMessage}>{props.lastMessage}</p>
           </div>
+          {!!props.unseenMessages && (
+            <Badge className={styles.unseenMessagesCount}>
+              {props.unseenMessages}
+            </Badge>
+          )}
         </div>
-      </button>
-    </UserPortalCard>
+      </div>
+    </>
   );
-};
+}
 
-export default ContactCard;
+export default contactCard;

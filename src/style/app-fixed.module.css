@@ -123,7 +123,6 @@
 
   --tableHeader-bg: #eaebef;
   --tableHeader-color: #000000;
-  --tableHeader-success-bg: var(--success-green-color);
 
   --LoginToggle-button-color: #555555;
   --LoginToggle-button-bg: #eaebef;
@@ -363,7 +362,7 @@
   --colorlight-bg: #f5f5f5;
 
   --containerHeight-bg: #f6f8fc;
-  --cardHeader-border: #e9ecef;
+  /* unified --cardHeader-border defined later; removed duplicate */
 
   --collapseSidebarButton-od-bg-hover: #f6f8fc;
   --collapseSidebarButton-od-color-hover: #000000;
@@ -786,9 +785,7 @@
   --whitebtn-border: #e8e5e5;
   --whitebtn-color: #286fe0;
 
-  --mainContainerDonateCard-bg: #ffffff;
   --mainContainerDonateCard-border: #dddddd;
-
   --mainContainerDonateCard-bg: #31bb6b;
   --peopleRole-border: #dee2e6;
   --cardStyles-bg: #ffffff;
@@ -1163,6 +1160,19 @@
   padding: 0;
 }
 
+.iconButton {
+  background: transparent;
+  border: none;
+  padding: 0.25rem;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: inherit;
+}
+
 .searchBarSpinner {
   width: 1rem;
   height: 1rem;
@@ -1367,8 +1377,8 @@ form label,
 }
 
 .tableHeaders {
-  background-color: var(--bs-primary-text-emphasis);
-  color: var(--bs-white);
+  background-color: var(--bs-primary-text-emphasis, #052c65);
+  color: var(--bs-white, #fff);
   font-size: 1rem;
 }
 
@@ -1624,9 +1634,7 @@ form label,
 }
 
 /* Not Found */
-/**
-*Pages still using .notFound class are - screens/UserPortal/Campaigns, screens/BlockUser
-*/
+
 .notFound {
   flex: 1;
   display: flex;
@@ -3768,33 +3776,6 @@ form label,
   border-width: 0.2rem;
 }
 
-/* -- LoadingState.tsx -- */
-
-/* Container for spinner variant - provides relative positioning context */
-.loadingContainer {
-  position: relative;
-  min-height: 200px;
-}
-
-/* Overlay that blocks interactions during loading */
-.loadingOverlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(255, 255, 255, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-/* Dimmed content underneath the overlay */
-.loadingContent {
-  opacity: 0.5;
-}
-
 /* -- LoginPortalToggle.tsx -- */
 
 .navLinkClass {
@@ -4766,7 +4747,7 @@ form label,
 
 .cardHeader {
   padding: 1.25rem 1rem 1rem 1rem;
-  border-bottom: 1px solid var(--bs-gray-200);
+  border-bottom: 1px solid var(--cardHeader-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -4923,7 +4904,7 @@ form label,
 
 .cardHeader {
   padding: 1.25rem 1rem 1rem 1rem;
-  border-bottom: 1px solid var(--bs-gray-200);
+  border-bottom: 1px solid var(--cardHeader-border);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -5012,13 +4993,6 @@ form label,
 }
 
 .opendrawer:hover {
-  transition: background-color 0.5s ease;
-  background-color: var(--bs-primary);
-}
-
-.collapseSidebarButton:hover {
-  transition: background-color 0.5s ease;
-  background-color: var(--bs-primary);
 }
 
 @media (max-width: 1120px) {
@@ -5912,37 +5886,61 @@ form {
 }
 
 /* -- CreateGroupChat.tsx -- */
-/* Donation card styles */
+
 /* -- DonationCard.tsx -- */
 
-.donationAvatar {
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  background-color: var(--people-card-header-bg);
-  flex-shrink: 0;
+.mainContainerDonateCard {
+  width: 49%;
+  height: 8rem;
+  min-width: max-content;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--mainContainerDonateCard-bg);
+  border: 1px solid var(--mainContainerDonateCard-border);
+  border-radius: 10px;
+  overflow: hidden;
 }
 
-.donationDetails {
+.img {
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: var(--mainContainerDonateCard-bg);
+}
+
+@media (max-width: 576px) {
+  .mainContainerDonateCard {
+    width: 100%;
+    height: auto;
+    min-width: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+    padding: 0.75rem;
+  }
+  .mainContainerDonateCard .img {
+    height: auto;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+}
+
+.personDetails {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  justify-content: center;
 }
 
-.donationRow {
-  font-size: 14px;
-  color: var(--primaryText-color);
+.btnDonate {
+  display: flex;
+  align-items: flex-end;
 }
 
-/* Donor name */
-.donorName {
-  font-weight: 600;
-  font-size: 15px;
-}
-
-.donationMeta {
-  font-size: 13px;
-  color: var(--secondText-color);
+.btnDonate button {
+  padding-inline: 2rem !important;
+  border-radius: 5px;
 }
 
 /* -- EventCard.tsx -- */
@@ -5974,10 +5972,7 @@ form {
 
 .align_center {
   align-self: center;
-}
 
-.people_role {
-  width: 75%;
   border: 1px solid var(--peopleRole-border);
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -6309,7 +6304,7 @@ form {
   padding: 0.8rem 1rem 0 1rem;
   background-color: var(--leftDrawer-fixedModule-bg) !important;
   transition: 0.5s;
-  font-family: var(--bs-leftDrawer-font-family);
+  font-family: var(--bs-leftDrawer-font-family, inherit);
   overflow-x: hidden !important;
 }
 
@@ -7845,11 +7840,12 @@ form {
 }
 
 .btnsContainerSearchBar input {
-  outline: 1px solid var(--bs-gray-400);
+  outline: 1px solid var(--bs-gray-400, #ced4da);
 }
 
 .btnsContainerSearchBar .inputOrgList button {
-  width: 44px; /* slightly smaller square button */
+  width: 44px;
+  /* compact rectangular button */
   height: 38px;
   margin-left: 8px;
   flex: 0 0 44px;
@@ -7937,12 +7933,12 @@ form {
 }
 
 .itemCardOrgList .loadingWrapper {
-  background-color: var(--bs-white);
+  background-color: var(--bs-white, #fff);
   margin: 0.5rem;
   height: calc(120px + 2rem);
   padding: 1rem;
   border-radius: 8px;
-  outline: 1px solid var(--bs-gray-200, var(--bs-gray-300));
+  outline: 1px solid var(--bs-gray-200, var(--bs-gray-300, #e9ecef));
   position: relative;
 }
 
@@ -8143,6 +8139,7 @@ form {
 }
 
 .list_box {
+  height: 70vh;
   overflow-y: auto;
   width: auto;
 }
@@ -10170,42 +10167,42 @@ form {
   border-radius: 0.5rem;
 }
 
-.addIconStyle {
-  font-size: 25px;
-  margin-bottom: 2px;
-  margin-right: 2px;
+.fullWidth {
+  width: 100%;
 }
 
-.postContainer {
-  min-height: 100vh;
+.displayNone {
+  display: none;
+}
+.nowrap {
+  white-space: nowrap;
 }
 
-.addPost {
-  font-size: 20px;
-  margin-right: 6px;
+.minHeight0 {
+  min-height: 0;
 }
 
-.noPostsFound {
-  text-align: center;
+.fontSize075rem {
+  font-size: 0.75rem;
 }
 
-.postInfiniteScroll {
-  overflow: visible;
+.textRed {
+  color: var(--bs-danger, #dc3545);
 }
 
-.createPostModalContainer {
-  position: absolute;
+.fontSize14 {
+  font-size: 14px;
 }
 
-.pinnedPostModal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
+.tableContainerRounded {
+  border-radius: var(--table-head-radius, 20px);
 }
 
-.pinnedPostModalBody {
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 20px;
-  position: relative;
+.groupChatTableCellHead {
+  background-color: var(--bs-success, #198754) !important;
+  color: white;
+}
+
+.groupChatTableCellBody {
+  font-size: 14px;
 }

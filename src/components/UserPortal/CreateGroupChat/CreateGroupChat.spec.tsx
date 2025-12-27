@@ -7,13 +7,21 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
-import { useMinioUpload } from 'utils/MinioUpload';
 import CreateGroupChat from './CreateGroupChat';
 import {
   CREATE_CHAT,
   CREATE_CHAT_MEMBERSHIP,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
+import { testFile } from '../../GroupChatDetails/GroupChatDetailsMocks';
+import { toast } from 'react-toastify';
+
+vi.mock('react-toastify', () => ({
+  toast: {
+    error: vi.fn(),
+    success: vi.fn(),
+  },
+}));
 
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
@@ -25,13 +33,9 @@ vi.mock('react-router', async () => {
   };
 });
 
-const mockUploadFileToMinio = vi
-  .fn()
-  .mockResolvedValue({ objectName: 'https://minio-test.com/test-image.jpg' });
-
-vi.mock('utils/MinioUpload', () => ({
-  useMinioUpload: vi.fn(() => ({ uploadFileToMinio: mockUploadFileToMinio })),
-}));
+global.URL.createObjectURL = vi.fn(
+  () => 'https://minio-test.com/test-image.jpg',
+);
 
 const { mockLocalStorageStore } = vi.hoisted(() => ({
   mockLocalStorageStore: {} as Record<string, unknown>,
@@ -160,9 +164,8 @@ const CREATE_CHAT_MOCK = {
         organizationId: 'test-org-id',
         name: 'Test Group',
         description: 'Test Description',
-        // The component has a bug and sends `null` instead of the image URL.
-        // The test is changed to reflect the current buggy behavior.
-        avatar: null,
+        // The mutation now expects the raw File object
+        avatar: testFile,
       },
     },
   },
@@ -282,10 +285,7 @@ describe('CreateGroupChat', () => {
 
     // Upload image
     const fileInput = screen.getByTestId('fileInput');
-    const file = new File(['(⌐□_□)'], 'chucknorris.png', {
-      type: 'image/png',
-    });
-    fireEvent.change(fileInput, { target: { files: [file] } });
+    fireEvent.change(fileInput, { target: { files: [testFile] } });
 
     // Wait for the async state update to be reflected in the DOM
     await waitFor(() => {
@@ -472,53 +472,6 @@ describe('CreateGroupChat', () => {
     expect(toggleCreateGroupChatModal).toHaveBeenCalled();
   });
 
-  test('should handle image upload failure', async () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    const mockUploadFileToMinioFailure = vi
-      .fn()
-      .mockRejectedValue(new Error('Upload failed'));
-
-    vi.mocked(useMinioUpload).mockReturnValue({
-      uploadFileToMinio: mockUploadFileToMinioFailure,
-    });
-
-    try {
-      render(
-        <MockedProvider mocks={mocks}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Provider store={store}>
-              <CreateGroupChat
-                createGroupChatModalisOpen={true}
-                toggleCreateGroupChatModal={toggleCreateGroupChatModal}
-                chatsListRefetch={chatsListRefetch}
-              />
-            </Provider>
-          </I18nextProvider>
-        </MockedProvider>,
-      );
-
-      const fileInput = screen.getByTestId('fileInput');
-      const file = new File(['(⌐□_□)'], 'chucknorris.png', {
-        type: 'image/png',
-      });
-      fireEvent.change(fileInput, { target: { files: [file] } });
-
-      await waitFor(() => {
-        expect(consoleSpy).toHaveBeenCalledWith(
-          'Error uploading image to MinIO:',
-          expect.any(Error),
-        );
-      });
-    } finally {
-      consoleSpy.mockRestore();
-
-      // Restore the original mock implementation
-      vi.mocked(useMinioUpload).mockReturnValue({
-        uploadFileToMinio: mockUploadFileToMinio,
-      });
-    }
-  });
-
   test('should handle edit image button click', () => {
     render(
       <MockedProvider mocks={mocks}>
@@ -570,5 +523,151 @@ describe('CreateGroupChat', () => {
     fireEvent.click(clearBtn);
 
     expect(searchInput).toHaveValue('');
+  });
+
+  test('should show error toast when createChat mutation fails', async () => {
+    const CREATE_CHAT_FAIL_MOCK = {
+      request: {
+        query: CREATE_CHAT,
+        variables: {
+          input: {
+            organizationId: 'test-org-id',
+            name: 'Fail Group',
+            description: '',
+            avatar: null,
+          },
+        },
+      },
+      error: new Error('Failed to create chat'),
+    };
+
+    const localMocks = [ORGANIZATION_MEMBERS_MOCK, CREATE_CHAT_FAIL_MOCK];
+
+    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    render(
+      <MockedProvider mocks={localMocks}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Provider store={store}>
+            <CreateGroupChat
+              createGroupChatModalisOpen={true}
+              toggleCreateGroupChatModal={toggleCreateGroupChatModal}
+              chatsListRefetch={chatsListRefetch}
+            />
+          </Provider>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    fireEvent.change(screen.getByTestId('groupTitleInput'), {
+      target: { value: 'Fail Group' },
+    });
+    fireEvent.click(screen.getByTestId('nextBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId('createBtn'));
+
+    await waitFor(() => {
+      expect(toastErrorSpy).toHaveBeenCalledWith('Failed to create group chat');
+      expect(consoleErrorSpy).toHaveBeenCalled();
+    });
+
+    toastErrorSpy.mockRestore();
+    consoleErrorSpy.mockRestore();
+  });
+
+  test('should show error toast when createChatMembership mutation fails', async () => {
+    const CREATE_CHAT_MEMBER_FAIL_MOCK = {
+      request: {
+        query: CREATE_CHAT,
+        variables: {
+          input: {
+            organizationId: 'test-org-id',
+            name: 'Member Fail Group',
+            description: '',
+            avatar: null,
+          },
+        },
+      },
+      result: {
+        data: {
+          createChat: {
+            __typename: 'Chat',
+            id: 'member-fail-chat-id',
+            name: 'Member Fail Group',
+            description: '',
+            organization: {
+              __typename: 'Organization',
+              id: 'test-org-id',
+              name: 'Test Org Name',
+            },
+          },
+        },
+      },
+    };
+
+    const CREATE_CHAT_MEMBERSHIP_FAIL_MOCK = {
+      request: {
+        query: CREATE_CHAT_MEMBERSHIP,
+        variables: {
+          input: {
+            memberId: '1',
+            chatId: 'member-fail-chat-id',
+            role: 'administrator',
+          },
+        },
+      },
+      error: new Error('Failed to create membership'),
+    };
+
+    const localMocks = [
+      ORGANIZATION_MEMBERS_MOCK,
+      CREATE_CHAT_MEMBER_FAIL_MOCK,
+      CREATE_CHAT_MEMBERSHIP_FAIL_MOCK,
+    ];
+
+    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    render(
+      <MockedProvider mocks={localMocks}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Provider store={store}>
+            <CreateGroupChat
+              createGroupChatModalisOpen={true}
+              toggleCreateGroupChatModal={toggleCreateGroupChatModal}
+              chatsListRefetch={chatsListRefetch}
+            />
+          </Provider>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    fireEvent.change(screen.getByTestId('groupTitleInput'), {
+      target: { value: 'Member Fail Group' },
+    });
+    fireEvent.click(screen.getByTestId('nextBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
+    });
+
+    fireEvent.click(screen.getByTestId('createBtn'));
+
+    await waitFor(() => {
+      expect(toastErrorSpy).toHaveBeenCalledWith('Failed to create group chat');
+      expect(consoleErrorSpy).toHaveBeenCalled();
+    });
+
+    toastErrorSpy.mockRestore();
+    consoleErrorSpy.mockRestore();
   });
 });

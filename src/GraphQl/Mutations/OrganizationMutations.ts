@@ -72,6 +72,8 @@ export const CREATE_CHAT = gql`
       id
       name
       description
+      avatarURL
+      avatarMimeType
       organization {
         id
         name
@@ -113,9 +115,8 @@ export const UPDATE_CHAT = gql`
       id
       name
       description
-      avatar {
-        uri
-      }
+      avatarURL
+      avatarMimeType
     }
   }
 `;

@@ -375,9 +375,6 @@ describe('AdminSearchFilterBar', () => {
 
   describe('Debouncing Behavior', () => {
     it('should debounce search changes with default delay', async () => {
-      const { debounce } = await import('lodash');
-      const mockDebounce = debounce as unknown as ReturnType<typeof vi.fn>;
-
       const onSearchChange = vi.fn();
       render(
         <AdminSearchFilterBar
@@ -388,13 +385,19 @@ describe('AdminSearchFilterBar', () => {
         />,
       );
 
-      expect(mockDebounce).toHaveBeenCalledWith(onSearchChange, 300);
+      const searchInput = screen.getByTestId('searchInput');
+      fireEvent.change(searchInput, { target: { value: 'abc' } });
+
+      // not called immediately
+      vi.advanceTimersByTime(299);
+      expect(onSearchChange).not.toHaveBeenCalled();
+
+      // called after debounce delay
+      vi.advanceTimersByTime(1);
+      expect(onSearchChange).toHaveBeenCalledWith('abc');
     });
 
     it('should debounce search changes with custom delay', async () => {
-      const { debounce } = await import('lodash');
-      const mockDebounce = debounce as unknown as ReturnType<typeof vi.fn>;
-
       const onSearchChange = vi.fn();
       render(
         <AdminSearchFilterBar
@@ -406,7 +409,16 @@ describe('AdminSearchFilterBar', () => {
         />,
       );
 
-      expect(mockDebounce).toHaveBeenCalledWith(onSearchChange, 500);
+      const searchInput = screen.getByTestId('searchInput');
+      fireEvent.change(searchInput, { target: { value: 'xyz' } });
+
+      // not called before custom delay
+      vi.advanceTimersByTime(499);
+      expect(onSearchChange).not.toHaveBeenCalled();
+
+      // called after custom delay
+      vi.advanceTimersByTime(1);
+      expect(onSearchChange).toHaveBeenCalledWith('xyz');
     });
 
     it('should update internal state immediately on typing', () => {

@@ -1,6 +1,8 @@
 import { GET_FILE_PRESIGNEDURL } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 
+import { normalizeMinioUrl } from './minioUtils';
+
 interface InterfaceMinioDownload {
   getFileFromMinio: (
     objectName: string,
@@ -36,7 +38,7 @@ export const useMinioDownload = (): InterfaceMinioDownload => {
       const { presignedUrl } = data.createGetfileUrl;
 
       // Return the presigned URL which can be used directly in <img> tags or for display
-      return presignedUrl;
+      return normalizeMinioUrl(presignedUrl);
     } catch (error) {
       console.error('Error fetching file from Minio:', error);
       throw error;

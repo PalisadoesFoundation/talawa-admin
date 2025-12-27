@@ -55,6 +55,7 @@ import { useMinioDownload } from 'utils/MinioDownload';
 import type { GroupChat } from 'types/Chat/type';
 // import { toast } from 'react-toastify';
 // import { validateFile } from 'utils/fileValidation';
+import { normalizeMinioUrl } from 'utils/minioUtils';
 
 interface IChatRoomProps {
   selectedContact: string;
@@ -326,6 +327,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
             input: {
               chatId,
               messageId,
+              userId,
             },
           },
         });
@@ -334,7 +336,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
         setSupportsMarkRead(false);
       }
     },
-    [markChatMessagesAsRead, supportsMarkRead],
+    [markChatMessagesAsRead, supportsMarkRead, userId],
   );
 
   const deleteMessage = async (messageId: string): Promise<void> => {
@@ -363,7 +365,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     skip: !props.selectedContact,
   });
 
-  const loadMoreMessages = async (): Promise<void> => {
+  const loadMoreMessages = useCallback(async (): Promise<void> => {
     if (loadingMoreMessages || !hasMoreMessages || !chat) return;
 
     const pageInfo = chat.messages.pageInfo;
@@ -438,9 +440,15 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     } finally {
       setLoadingMoreMessages(false);
     }
-  };
+  }, [
+    loadingMoreMessages,
+    hasMoreMessages,
+    chat,
+    chatRefetch,
+    props.selectedContact,
+  ]);
 
-  const handleScroll = (): void => {
+  const handleScroll = useCallback((): void => {
     if (!messagesContainerRef.current) return;
 
     const el = messagesContainerRef.current;
@@ -449,7 +457,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     if (scrollTop < 100 && hasMoreMessages && !loadingMoreMessages) {
       loadMoreMessages();
     }
-  };
+  }, [hasMoreMessages, loadingMoreMessages, loadMoreMessages]);
   // const { refetch: chatListRefetch } = useQuery(CHATS_LIST, {
   //   variables: {
   //     id: userId,
@@ -460,18 +468,26 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   // NOTE(caching): With cache policies, unread chats list can be updated via
   // cache.modify on Query.unreadChats instead of refetching.
 
+  const { selectedContact, chatListRefetch } = props;
+
   useEffect(() => {
     if (chatData?.chat?.messages?.edges?.length) {
       const lastMessage =
         chatData.chat.messages.edges[chatData.chat.messages.edges.length - 1];
-      markReadIfSupported(props.selectedContact, lastMessage.node.id)
+      markReadIfSupported(selectedContact, lastMessage.node.id)
         .catch(() => {})
         .finally(() => {
-          props.chatListRefetch();
+          chatListRefetch();
           unreadChatListRefetch();
         });
     }
-  }, [props.selectedContact, chatData]);
+  }, [
+    selectedContact,
+    chatData,
+    markReadIfSupported,
+    chatListRefetch,
+    unreadChatListRefetch,
+  ]);
 
   useEffect(() => {
     if (chatData) {
@@ -490,15 +506,17 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
         if (otherUser) {
           setChatTitle(`${otherUser.name}`);
           setChatSubtitle('');
-          setChatImage(otherUser.avatarURL);
+          setChatImage(
+            otherUser.avatarURL ? normalizeMinioUrl(otherUser.avatarURL) : '',
+          );
         }
-      } else if (chat.members?.edges?.length > 2) {
-        setChatTitle(chat.name);
+      } else {
+        setChatTitle(chat.name || 'Chat');
         setChatSubtitle(`${chat.members?.edges?.length || 0} members`);
-        setChatImage(chat.avatarURL);
+        setChatImage(chat.avatarURL ? normalizeMinioUrl(chat.avatarURL) : '');
       }
     }
-  }, [chatData]);
+  }, [chatData, userId]);
 
   const sendMessage = async (): Promise<void> => {
     let messageBody = newMessage;
@@ -640,7 +658,12 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       backfillAttemptsRef.current += 1;
       loadMoreMessages();
     }
-  }, [chat?.messages?.edges?.length, hasMoreMessages, loadingMoreMessages]);
+  }, [
+    chat?.messages?.edges?.length,
+    hasMoreMessages,
+    loadingMoreMessages,
+    loadMoreMessages,
+  ]);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -689,6 +712,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                   src={chatImage}
                   alt={chatTitle}
                   className={styles.contactImage}
+                  crossOrigin="anonymous"
                 />
               ) : (
                 <Avatar
@@ -707,8 +731,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
             </div>
           </div>
           <div
-            className={`d-flex flex-grow-1 flex-column`}
-            style={{ minHeight: 0 }}
+            className={`d-flex flex-grow-1 flex-column ${styles.minHeight0}`}
           >
             <div
               className={styles.chatMessages}
@@ -754,9 +777,12 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                             message.creator.id !== userId &&
                             (message.creator?.avatarURL ? (
                               <img
-                                src={message.creator.avatarURL}
-                                alt={message.creator.avatarURL}
+                                src={normalizeMinioUrl(
+                                  message.creator.avatarURL,
+                                )}
+                                alt={message.creator.name}
                                 className={styles.contactImage}
+                                crossOrigin="anonymous"
                               />
                             ) : (
                               <Avatar
@@ -805,7 +831,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                             <div className={styles.messageAttributes}>
                               <Dropdown
                                 data-testid="moreOptions"
-                                style={{ cursor: 'pointer' }}
+                                className={styles.cursorPointer}
                               >
                                 <Dropdown.Toggle
                                   className={styles.customToggle}
@@ -840,7 +866,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                                           deleteMessage(message.id)
                                         }
                                         data-testid="deleteMessage"
-                                        style={{ color: 'red' }}
+                                        className={styles.textRed}
                                       >
                                         Delete
                                       </Dropdown.Item>
@@ -871,7 +897,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
               type="file"
               accept="image/*"
               ref={fileInputRef}
-              style={{ display: 'none' }} // Hide the input
+              className={styles.displayNone} // Hide the input
               onChange={handleImageChange}
               data-testid="hidden-file-input"
             />
@@ -925,7 +951,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
               </button>
               <Form.Control
                 placeholder={t('sendMessage')}
-                aria-label="Send Message"
+                aria-label={t('sendMessage')}
                 value={newMessage}
                 data-testid="messageInput"
                 onChange={handleNewMessageChange}

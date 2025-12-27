@@ -1,5 +1,27 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { debounce } from 'lodash';
+
+// Local debounce implementation to avoid a hard dependency on lodash for this
+// small utility (also provides `cancel()` like lodash's debounce).
+function debounceFn<TArgs extends unknown[]>(
+  func: (...args: TArgs) => void,
+  wait = 300,
+): ((...args: TArgs) => void) & { cancel: () => void } {
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+
+  const debounced = function (...args: TArgs) {
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  } as ((...args: TArgs) => void) & { cancel?: () => void };
+
+  debounced.cancel = () => {
+    if (timeout) {
+      clearTimeout(timeout);
+      timeout = null;
+    }
+  };
+
+  return debounced as ((...args: TArgs) => void) & { cancel: () => void };
+}
 import { useTranslation } from 'react-i18next';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
@@ -70,7 +92,7 @@ const AdminSearchFilterBar: React.FC<InterfaceAdminSearchFilterBarProps> = ({
   }, [searchValue]);
 
   const debouncedOnSearchChange = useMemo(
-    () => debounce(onSearchChange, debounceDelay),
+    () => debounceFn(onSearchChange, debounceDelay),
     [onSearchChange, debounceDelay],
   );
 

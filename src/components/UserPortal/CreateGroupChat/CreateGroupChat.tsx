@@ -18,7 +18,7 @@
  * - Uses `useMutation` to create a new chat via the `CREATE_CHAT` GraphQL mutation.
  * - Fetches user data using the `USERS_CONNECTION_LIST` GraphQL query.
  * - Allows users to search for and add members to the group.
- * - Supports image upload functionality using MinIO.
+ * - Supports image upload functionality with direct GraphQL file upload and local preview.
  *
  * @example
  * ```tsx
@@ -61,13 +61,13 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
-import LoadingState from 'shared-components/LoadingState/LoadingState';
+import Loader from 'components/Loader/Loader';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import Avatar from 'components/Avatar/Avatar';
 import { FiEdit } from 'react-icons/fi';
-import { useMinioUpload } from 'utils/MinioUpload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import { toast } from 'react-toastify';
 
 interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
@@ -76,6 +76,13 @@ interface InterfaceCreateGroupChatProps {
     variables?: Partial<{ id: string }> | undefined,
   ) => Promise<ApolloQueryResult<unknown>>;
 }
+
+/**
+ * Styled table container with custom styles.
+ */
+
+// No longer using TableContainer, TableCell, TableRow as they were flagging CSS violations.
+// We'll use standard MUI components with CSS classes instead.
 
 const { getItem } = useLocalStorage();
 
@@ -96,9 +103,9 @@ export default function CreateGroupChat({
 
   const [addUserModalisOpen, setAddUserModalisOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [rawImageFile, setRawImageFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { orgId: currentOrg } = useParams();
-  const { uploadFileToMinio } = useMinioUpload();
 
   function openAddUserModal(): void {
     setAddUserModalisOpen(true);
@@ -110,54 +117,76 @@ export default function CreateGroupChat({
   function reset(): void {
     setTitle('');
     setUserIds([]);
+    // Clean up object URL when resetting
+    if (selectedImage && selectedImage.startsWith('blob:')) {
+      URL.revokeObjectURL(selectedImage);
+    }
+    setSelectedImage(null);
+    setRawImageFile(null);
   }
 
   useEffect(() => {
     setUserIds(userIds);
   }, [userIds]);
 
-  async function handleCreateGroupChat(): Promise<void> {
-    // Create the chat
-    const chatResult = await createChat({
-      variables: {
-        input: {
-          organizationId: currentOrg,
-          name: title,
-          description: description,
-          avatar: null,
-        },
-      },
-    });
-    const chatId = (chatResult.data as { createChat: { id: string } })
-      ?.createChat?.id;
+  // Cleanup object URLs on unmount
+  useEffect(() => {
+    return () => {
+      if (selectedImage && selectedImage.startsWith('blob:')) {
+        URL.revokeObjectURL(selectedImage);
+      }
+    };
+  }, [selectedImage]);
 
-    if (chatId && userId) {
-      await createChatMembership({
+  async function handleCreateGroupChat(): Promise<void> {
+    try {
+      const chatResult = await createChat({
         variables: {
           input: {
-            memberId: userId,
-            chatId,
-            role: 'administrator',
+            organizationId: currentOrg,
+            name: title,
+            description: description,
+            avatar: rawImageFile,
           },
         },
       });
-      for (const memberId of userIds) {
-        await createChatMembership({
-          variables: {
-            input: {
-              memberId,
-              chatId,
-              role: 'regular',
-            },
-          },
-        });
-      }
-    }
+      const chatId = (chatResult.data as { createChat: { id: string } })
+        ?.createChat?.id;
 
-    chatsListRefetch();
-    toggleAddUserModal();
-    toggleCreateGroupChatModal();
-    reset();
+      if (chatId) {
+        if (userId) {
+          await createChatMembership({
+            variables: {
+              input: {
+                memberId: userId,
+                chatId,
+                role: 'administrator',
+              },
+            },
+          });
+        }
+
+        for (const memberId of userIds) {
+          await createChatMembership({
+            variables: {
+              input: {
+                memberId,
+                chatId,
+                role: 'regular',
+              },
+            },
+          });
+        }
+      }
+
+      chatsListRefetch();
+      toggleAddUserModal();
+      toggleCreateGroupChatModal();
+      reset();
+    } catch (error) {
+      console.error('Error creating group chat:', error);
+      toast.error('Failed to create group chat');
+    }
   }
 
   const [userName, setUserName] = useState('');
@@ -194,12 +223,23 @@ export default function CreateGroupChat({
   ): Promise<void> => {
     const file = e.target.files?.[0];
     if (file && currentOrg) {
-      try {
-        const { objectName } = await uploadFileToMinio(file, currentOrg);
-        setSelectedImage(objectName);
-      } catch (error) {
-        console.error('Error uploading image to MinIO:', error);
+      // Clean up previous object URL to prevent memory leaks
+      if (selectedImage && selectedImage.startsWith('blob:')) {
+        URL.revokeObjectURL(selectedImage);
       }
+
+      // Set immediate local preview
+      const localUrl = URL.createObjectURL(file);
+      setSelectedImage(localUrl);
+
+      setRawImageFile(file);
+    } else {
+      // Clean up object URL if file selection is cleared
+      if (selectedImage && selectedImage.startsWith('blob:')) {
+        URL.revokeObjectURL(selectedImage);
+      }
+      setSelectedImage(null);
+      setRawImageFile(null);
     }
   };
 
@@ -212,16 +252,14 @@ export default function CreateGroupChat({
         contentClassName={styles.modalContent}
       >
         <Modal.Header closeButton data-testid="">
-          <Modal.Title>
-            {t('newGroup', { defaultValue: 'New Group' })}
-          </Modal.Title>
+          <Modal.Title>New Group</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <input
             type="file"
             accept="image/*"
             ref={fileInputRef}
-            style={{ display: 'none' }}
+            className={styles.displayNone}
             onChange={handleImageChange}
             data-testid="fileInput"
           />
@@ -241,10 +279,10 @@ export default function CreateGroupChat({
           </div>
           <Form>
             <Form.Group className="mb-3" controlId="registerForm.Rname">
-              <Form.Label>{t('title', { defaultValue: 'Title' })}</Form.Label>
+              <Form.Label>Title</Form.Label>
               <Form.Control
                 type="text"
-                placeholder={t('groupName', { defaultValue: 'Group name' })}
+                placeholder={'Group name'}
                 autoComplete="off"
                 required
                 data-testid="groupTitleInput"
@@ -255,14 +293,10 @@ export default function CreateGroupChat({
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="registerForm.Rname">
-              <Form.Label>
-                {t('description', { defaultValue: 'Description' })}
-              </Form.Label>
+              <Form.Label>Description</Form.Label>
               <Form.Control
                 type="text"
-                placeholder={t('groupDescription', {
-                  defaultValue: 'Group Description',
-                })}
+                placeholder={'Group Description'}
                 autoComplete="off"
                 required
                 data-testid="groupDescriptionInput" //corrected spelling
@@ -278,7 +312,7 @@ export default function CreateGroupChat({
               onClick={openAddUserModal}
               data-testid="nextBtn"
             >
-              {t('next', { defaultValue: 'Next' })}
+              Next
             </Button>
           </Form>
         </Modal.Body>
@@ -290,21 +324,18 @@ export default function CreateGroupChat({
         contentClassName={styles.modalContent}
       >
         <Modal.Header closeButton data-testid="pluginNotificationHeader">
-          <Modal.Title>{t('chat', { defaultValue: 'Chat' })}</Modal.Title>
+          <Modal.Title>{'Chat'}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <LoadingState
-            isLoading={allUsersLoading}
-            variant="inline"
-            size="lg"
-            data-testid="loading-state"
-          >
+          {allUsersLoading ? (
+            <>
+              <Loader />
+            </>
+          ) : (
             <>
               <div className={styles.input}>
                 <SearchBar
-                  placeholder={t('searchFullName', {
-                    defaultValue: 'Search full name',
-                  })}
+                  placeholder={t('searchFullName')}
                   value={userName}
                   onChange={(value) => setUserName(value)}
                   onSearch={(value) => handleUserModalSearchChange(value)}
@@ -318,22 +349,26 @@ export default function CreateGroupChat({
               </div>
 
               <TableContainer
-                className={styles.tableContainer}
+                className={styles.tableContainerRounded}
                 component={Paper}
               >
-                <Table
-                  aria-label={t('organizationMembersTable', {
-                    defaultValue: 'Organization Members Table',
-                  })}
-                >
+                <Table aria-label="customized table">
                   <TableHead>
                     <TableRow>
-                      <TableCell>{t('hash', { defaultValue: '#' })}</TableCell>
-                      <TableCell align="center">
-                        {t('user', { defaultValue: 'User' })}
+                      <TableCell className={styles.groupChatTableCellHead}>
+                        #
                       </TableCell>
-                      <TableCell align="center">
-                        {t('chat', { defaultValue: 'Chat' })}
+                      <TableCell
+                        className={styles.groupChatTableCellHead}
+                        align="center"
+                      >
+                        {'user'}
+                      </TableCell>
+                      <TableCell
+                        className={styles.groupChatTableCellHead}
+                        align="center"
+                      >
+                        {'Chat'}
                       </TableCell>
                     </TableRow>
                   </TableHead>
@@ -368,15 +403,25 @@ export default function CreateGroupChat({
                             index: number,
                           ) => (
                             <TableRow data-testid="user" key={userDetails.id}>
-                              <TableCell component="th" scope="row">
+                              <TableCell
+                                component="th"
+                                scope="row"
+                                className={styles.groupChatTableCellBody}
+                              >
                                 {index + 1}
                               </TableCell>
-                              <TableCell align="center">
+                              <TableCell
+                                align="center"
+                                className={styles.groupChatTableCellBody}
+                              >
                                 {userDetails.name}
                                 <br />
                                 {userDetails.role || 'Member'}
                               </TableCell>
-                              <TableCell align="center">
+                              <TableCell
+                                align="center"
+                                className={styles.groupChatTableCellBody}
+                              >
                                 {userIds.includes(userDetails.id) ? (
                                   <Button
                                     variant="danger"
@@ -388,7 +433,7 @@ export default function CreateGroupChat({
                                     }}
                                     data-testid="removeBtn"
                                   >
-                                    {t('remove', { defaultValue: 'Remove' })}
+                                    Remove
                                   </Button>
                                 ) : (
                                   <Button
@@ -398,7 +443,7 @@ export default function CreateGroupChat({
                                     }}
                                     data-testid="addBtn"
                                   >
-                                    {t('add', { defaultValue: 'Add' })}
+                                    {t('add')}
                                   </Button>
                                 )}
                               </TableCell>
@@ -409,14 +454,14 @@ export default function CreateGroupChat({
                 </Table>
               </TableContainer>
             </>
-          </LoadingState>
+          )}
           <Button
             className={`${styles.colorPrimary} ${styles.borderNone}`}
             variant="success"
             onClick={handleCreateGroupChat}
             data-testid="createBtn"
           >
-            {t('create', { defaultValue: 'Create' })}
+            {t('create')}
           </Button>
         </Modal.Body>
       </Modal>

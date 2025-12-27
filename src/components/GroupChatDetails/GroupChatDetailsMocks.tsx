@@ -13,6 +13,10 @@ import { USERS_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
  * Mocks for the GroupChatDetails component
  */
 
+export const testFile = new File(['content'], 'test.png', {
+  type: 'image/png',
+});
+
 interface InterfaceChatUser {
   _id: string;
   firstName: string;
@@ -327,7 +331,7 @@ export const mocks = [
     request: {
       query: UPDATE_CHAT,
       variables: {
-        input: { id: 'chat1', avatar: { uri: 'object1' }, name: 'Test Group' },
+        input: { id: 'chat1', avatar: testFile, name: 'Test Group' },
       },
     },
     result: { data: { updateChat: { id: 'chat1', success: true } } },
@@ -360,7 +364,7 @@ export const mocks = [
     request: {
       query: UPDATE_CHAT,
       variables: {
-        input: { id: 'chat1', avatar: { uri: '' }, name: 'Group name' },
+        input: { id: 'chat1', avatar: testFile, name: 'Group name' },
       },
     },
     result: { data: { updateChat: { id: 'chat1', success: true } } },
@@ -379,7 +383,7 @@ export const mocks = [
       variables: {
         input: {
           id: 'chat1',
-          avatar: { uri: 'https://example.com/group_image.jpg' },
+          avatar: testFile,
           name: 'New Group name',
         },
       },
@@ -441,7 +445,7 @@ export const failingMocks = [
     request: {
       query: UPDATE_CHAT,
       variables: {
-        input: { id: 'chat1', avatar: { uri: 'object1' }, name: 'Test Group' },
+        input: { id: 'chat1', avatar: testFile, name: 'Test Group' },
       },
     },
     error: new Error('Failed to update chat image'),
