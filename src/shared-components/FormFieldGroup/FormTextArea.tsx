@@ -1,17 +1,15 @@
 import React from 'react';
 import { FormControl, TextField } from '@mui/material';
-import type { FormTextAreaProps } from '../../types/FormFieldGroup/interface';
+import type { FormTextAreaProps } from './types';
 
-const FormTextArea: React.FC<FormTextAreaProps> = ({
+export const FormTextArea: React.FC<FormTextAreaProps> = ({
   endAdornment,
   ...inputProps
 }) => {
   return (
     <FormControl>
-      <TextField {...inputProps} />
+      <TextField {...inputProps} aria-invalid={inputProps.error} />
       {endAdornment && <>{endAdornment}</>}
     </FormControl>
   );
 };
-
-export default FormTextArea;
