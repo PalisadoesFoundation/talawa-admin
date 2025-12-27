@@ -24,6 +24,17 @@ interface InterfaceGroupChatDetailsHeaderProps {
   t: (k: string, v?: Record<string, unknown>) => string;
 }
 
+/**
+ * GroupChatDetailsHeader
+ *
+ * Header for the Group Chat Details modal. Renders the chat image (or avatar),
+ * the chat name with edit controls, member count and description. Shows admin
+ * actions (delete) when `currentUserRole` is `administrator`.
+ *
+ * Props mirror `InterfaceGroupChatDetailsHeaderProps` and include handler
+ * callbacks for image and title editing. All user-facing strings are
+ * internationalized via the `t` function.
+ */
 export default function GroupChatDetailsHeader({
   chat,
   currentUserRole,
@@ -51,6 +62,7 @@ export default function GroupChatDetailsHeader({
               variant="outline-danger"
               size="sm"
               onClick={onDelete}
+              aria-label={t('deleteChat')}
             >
               <FaTrash />
             </Button>
@@ -71,12 +83,14 @@ export default function GroupChatDetailsHeader({
           {(() => {
             const safeSelected = getSafeImageSrc(selectedImage);
             const safeAvatar = getSafeImageSrc(chat?.avatarURL);
+            const imageAlt = chat?.name || t('groupChatImageAlt');
             if (safeSelected) {
               return (
                 <img
                   className={styles.chatImage}
                   src={safeSelected}
-                  alt={chat?.name || ''}
+                  alt={imageAlt}
+                  crossOrigin="anonymous"
                 />
               );
             }
@@ -85,7 +99,8 @@ export default function GroupChatDetailsHeader({
                 <img
                   className={styles.chatImage}
                   src={safeAvatar}
-                  alt={chat?.name || ''}
+                  alt={imageAlt}
+                  crossOrigin="anonymous"
                 />
               );
             }
@@ -99,6 +114,7 @@ export default function GroupChatDetailsHeader({
             data-testid="editImageBtn"
             onClick={onImageClick}
             className={styles.editImgBtn}
+            aria-label={t('editImage')}
           >
             <FiEdit />
           </button>
