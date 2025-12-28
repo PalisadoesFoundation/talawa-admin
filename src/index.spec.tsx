@@ -11,6 +11,7 @@ import {
   ApolloClient,
   InMemoryCache,
   ApolloLink,
+  Observable,
   type Operation,
   type NextLink,
 } from '@apollo/client';
@@ -673,7 +674,12 @@ describe('Apollo Client Configuration', () => {
       mockGetItem.mockReturnValue('TRUE'); // IsLoggedIn
       mockRefreshToken.mockResolvedValue(true);
 
-      const forward = vi.fn().mockReturnValue({ subscribe: vi.fn() });
+      const forward = vi.fn().mockReturnValue(
+        new Observable((observer) => {
+          observer.next({ data: {} });
+          observer.complete();
+        }),
+      );
       const operation = {
         operationName: 'SomeQuery',
         variables: {},
@@ -699,6 +705,7 @@ describe('Apollo Client Configuration', () => {
         observable.subscribe({
           next: () => {},
           error: () => {},
+          complete: () => {},
         });
       }
 
@@ -720,7 +727,12 @@ describe('Apollo Client Configuration', () => {
       });
       mockRefreshToken.mockReturnValue(refreshPromise);
 
-      const forward = vi.fn().mockReturnValue({ subscribe: vi.fn() });
+      const forward = vi.fn().mockReturnValue(
+        new Observable((observer) => {
+          observer.next({ data: {} });
+          observer.complete();
+        }),
+      );
       const operation1 = {
         operationName: 'Query1',
         variables: {},
@@ -748,7 +760,8 @@ describe('Apollo Client Configuration', () => {
         operation: operation1,
         forward,
       });
-      if (obs1 && obs1.subscribe) obs1.subscribe({});
+      if (obs1 && obs1.subscribe)
+        obs1.subscribe({ next: () => {}, error: () => {}, complete: () => {} });
 
       // 2. Trigger second error -> should be queued
       const obs2 = onErrorCallback({
@@ -763,7 +776,8 @@ describe('Apollo Client Configuration', () => {
 
       // We need to subscribe to obs2 to verify it waits
       const nextSpy = vi.fn();
-      if (obs2 && obs2.subscribe) obs2.subscribe({ next: nextSpy });
+      if (obs2 && obs2.subscribe)
+        obs2.subscribe({ next: nextSpy, error: () => {}, complete: () => {} });
 
       expect(mockRefreshToken).toHaveBeenCalledTimes(1);
       expect(nextSpy).not.toHaveBeenCalled();
@@ -788,7 +802,12 @@ describe('Apollo Client Configuration', () => {
       mockGetItem.mockReturnValue('TRUE');
       mockRefreshToken.mockResolvedValue(false);
 
-      const forward = vi.fn();
+      const forward = vi.fn().mockReturnValue(
+        new Observable((observer) => {
+          observer.next({ data: {} });
+          observer.complete();
+        }),
+      );
       const operation = {
         operationName: 'Query',
         variables: {},
@@ -808,7 +827,8 @@ describe('Apollo Client Configuration', () => {
         forward,
       });
 
-      if (obs && obs.subscribe) obs.subscribe({});
+      if (obs && obs.subscribe)
+        obs.subscribe({ next: () => {}, error: () => {}, complete: () => {} });
 
       await new Promise(process.nextTick);
 
