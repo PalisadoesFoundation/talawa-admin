@@ -43,6 +43,7 @@
     "numeric_value_check": "至少设定一个数值",
     "special_char_check": "至少一个特殊字符",
     "selectOrg": "选择一个组织",
+    "backToLogin": "返回登录",
     "afterRegister": "注册成功。",
     "talawa_portal": "塔拉瓦门户",
     "login": "登录",

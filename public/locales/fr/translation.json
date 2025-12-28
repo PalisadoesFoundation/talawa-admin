@@ -43,6 +43,7 @@
     "numeric_value_check": "Au moins une valeur numérique",
     "special_char_check": "Au moins un caractère spécial",
     "selectOrg": "Sélectionnez une organisation",
+    "backToLogin": "Retour à la connexion",
     "afterRegister": "Enregistré avec succès. ",
     "talawa_portal": "Portail Talawa",
     "login": "Connexion",

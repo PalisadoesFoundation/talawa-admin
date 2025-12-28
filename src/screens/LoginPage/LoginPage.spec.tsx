@@ -2165,6 +2165,24 @@ describe('RefreshToken storage verification', () => {
     );
   });
 
+  describe('Checks presence of back to login button', () => {
+    it('shows back to login button on /register path', async () => {
+      setLocationPath('/register');
+      renderLoginPage();
+      await wait();
+      expect(screen.getByTestId('goToLoginPortion')).toBeInTheDocument();
+    });
+
+    it('redirects to login on back to login button click', async () => {
+      setLocationPath('/register');
+      renderLoginPage();
+      await wait();
+      await userEvent.click(screen.getByTestId('goToLoginPortion'));
+      await wait();
+      expect(screen.getByTestId('goToRegisterPortion')).toBeInTheDocument();
+    });
+  });
+
   // Note: Registration uses the same code path as login for storing refreshToken
   // The login test above verifies the refreshToken storage behavior
 });

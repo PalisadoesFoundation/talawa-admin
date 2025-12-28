@@ -43,6 +43,7 @@
     "numeric_value_check": "Atleaset one numeric value",
     "special_char_check": "Atleast one special character",
     "selectOrg": "Select an organization",
+    "backToLogin": "Back to Login",
     "afterRegister": "Successfully registered. Please wait for admin to approve your request.",
     "talawa_portal": "talawa_portal",
     "login": "login",

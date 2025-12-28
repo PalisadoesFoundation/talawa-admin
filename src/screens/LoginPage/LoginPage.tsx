@@ -962,6 +962,22 @@ const loginPage = (): JSX.Element => {
                   >
                     {tCommon('register')}
                   </Button>
+                  <div className="position-relative my-2">
+                    <hr />
+                    <span className={styles.orText}>{tCommon('OR')}</span>
+                  </div>
+                  <Button
+                    variant="outline-secondary"
+                    className={styles.reg_btn}
+                    data-testid="goToLoginPortion"
+                    onClick={(): void => {
+                      setShowTab('LOGIN');
+                    }}
+                  >
+                    <Link to={'/'} className="text-decoration-none">
+                      {t('backToLogin')}
+                    </Link>
+                  </Button>
                 </Form>
               </div>
             </div>
