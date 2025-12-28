@@ -69,7 +69,7 @@ function CreatePostModal({
 }: ICreatePostModalProps): JSX.Element {
   const { getItem } = useLocalStorage();
   const name = (getItem('name') as string | null) ?? '';
-  const { t } = useTranslation('translation', { keyPrefix: 'createPostModal' });
+  const { t } = useTranslation('translation');
   const [postTitle, setPostTitle] = useState(title || '');
   const [postBody, setPostBody] = useState(body || '');
   const [file, setFile] = useState<File | null>(null);
@@ -138,7 +138,7 @@ function CreatePostModal({
     if (getMimeTypeEnum(file.type) === '0') {
       setFile(null);
       setPreview(null);
-      toast.error(t('unsupportedFileType'));
+      toast.error(t('createPostModal.unsupportedFileType'));
       return;
     }
     if (file.type.startsWith('image/')) {
@@ -156,8 +156,8 @@ function CreatePostModal({
   const onSuccess = async (type: 'edited' | 'created') => {
     toast.success(
       type === 'created'
-        ? (t('postCreatedSuccess') as string)
-        : (t('postUpdatedSuccess') as string),
+        ? (t('createPostModal.postCreatedSuccess') as string)
+        : (t('createPostModal.postUpdatedSuccess') as string),
     );
     await refetch();
 
@@ -181,7 +181,7 @@ function CreatePostModal({
 
     try {
       if (!orgId) {
-        toast.error(t('organizationIdMissing'));
+        toast.error(t('createPostModal.organizationIdMissing'));
         return;
       }
       if (type === 'create') {
@@ -228,14 +228,14 @@ function CreatePostModal({
         onClick={!isLoading ? handleClose : undefined}
         data-testid="modalBackdrop"
         type="button"
-        aria-label={t('closeCreatePost')}
+        aria-label={t('createPostModal.closeCreatePost')}
       />
       <div
         className={`${styles.modalDialog} ${show ? styles.modalShow : ''}`}
         data-testid="create-post-modal"
         role="dialog"
         aria-modal="true"
-        aria-label={t('createPost')}
+        aria-label={t('createPostModal.createPost')}
       >
         {/* Header */}
         <div className={styles.modalHeader}>
@@ -249,14 +249,16 @@ function CreatePostModal({
             <div className={styles.userInfo}>
               <span className={styles.userName}>{name}</span>
               <span className={styles.postVisibility}>
-                {type === 'create' ? t('postToAnyone') : t('editPost')}
+                {type === 'create'
+                  ? t('createPostModal.postToAnyone')
+                  : t('createPostModal.editPost')}
               </span>
             </div>
           </div>
           <button
             className={styles.closeButton}
             onClick={!isLoading ? handleClose : undefined}
-            aria-label={t('close')}
+            aria-label={t('createPostModal.close')}
             data-testid="closeBtn"
             type="button"
           >
@@ -268,7 +270,7 @@ function CreatePostModal({
         <div className={styles.modalBody}>
           <textarea
             className={styles.postTextarea}
-            placeholder={t('titleOfPost')}
+            placeholder={t('createPostModal.titleOfPost')}
             data-cy="modalTitle"
             value={postTitle}
             onChange={(e) => {
@@ -278,7 +280,7 @@ function CreatePostModal({
           />
           <textarea
             className={styles.postBodyTextarea}
-            placeholder={t('bodyOfPost')}
+            placeholder={t('createPostModal.bodyOfPost')}
             data-cy="create-post-description"
             value={postBody}
             onChange={(e) => {
@@ -297,7 +299,7 @@ function CreatePostModal({
                   {previewType === 'image' && (
                     <img
                       src={preview}
-                      alt={t('selectedImage')}
+                      alt={t('createPostModal.selectedImage')}
                       className={styles.imagePreview}
                       data-testid="imagePreview"
                     />
@@ -325,10 +327,10 @@ function CreatePostModal({
             <button
               type="button"
               className={styles.mediaButton}
-              aria-label={t('addAttachment')}
+              aria-label={t('createPostModal.addAttachment')}
               data-testid="addPhotoBtn"
               onClick={() => fileInputRef.current?.click()}
-              title={t('addAttachment')}
+              title={t('createPostModal.addAttachment')}
             >
               <InsertPhotoOutlined />
 
@@ -345,11 +347,19 @@ function CreatePostModal({
             <button
               type="button"
               className={styles.mediaButton}
-              aria-label={isPinned ? t('unpinPost') : t('pinPost')}
+              aria-label={
+                isPinned
+                  ? t('createPostModal.unpinPost')
+                  : t('createPostModal.pinPost')
+              }
               data-cy="pinPost"
               data-testid="pinPostButton"
               onClick={() => setIspinned(!isPinned)}
-              title={isPinned ? t('unpinPost') : t('pinPost')}
+              title={
+                isPinned
+                  ? t('createPostModal.unpinPost')
+                  : t('createPostModal.pinPost')
+              }
             >
               <PushPin
                 sx={{
@@ -373,9 +383,9 @@ function CreatePostModal({
                 {isLoading ? (
                   <span className={styles.loader}></span>
                 ) : type === 'create' ? (
-                  t('post')
+                  t('createPostModal.post')
                 ) : (
-                  t('saveChanges')
+                  t('createPostModal.saveChanges')
                 )}
               </button>
             </form>

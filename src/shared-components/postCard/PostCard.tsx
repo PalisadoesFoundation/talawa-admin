@@ -74,7 +74,7 @@ import CreatePostModal from 'shared-components/posts/createPostModal/createPostM
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const [isLikedByUser, setIsLikedByUser] = useState<boolean>(
     props.hasUserVoted?.voteType === 'up_vote',
@@ -223,7 +223,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       });
       await props.fetchPosts();
       toast.success(
-        isPinned ? t('postUnpinnedSuccess') : t('postPinnedSuccess'),
+        isPinned
+          ? t('postCard.postUnpinnedSuccess')
+          : t('postCard.postPinnedSuccess'),
       );
       setDropdownAnchor(null);
       window.location.reload();
@@ -236,7 +238,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
     try {
       await deletePost({ variables: { input: { id: props.id } } });
       await props.fetchPosts();
-      toast.success(t('postDeletedSuccess'));
+      toast.success(t('postCard.postDeletedSuccess'));
       setDropdownAnchor(null);
       props.fetchPosts();
     } catch (error) {
@@ -268,7 +270,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           <IconButton
             onClick={handleDropdownOpen}
             size="small"
-            aria-label={t('moreOptions')}
+            aria-label={t('postCard.moreOptions')}
             data-testid="post-more-options-button"
           >
             <MoreHoriz />
@@ -304,7 +306,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                   <EditOutlined fontSize="small" />
                 </ListItemIcon>
                 <ListItemText
-                  primary={t('editPost')}
+                  primary={t('postCard.editPost')}
                   data-testid="edit-post-button"
                 />
               </MenuItem>
@@ -323,7 +325,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                   )}
                 </ListItemIcon>
                 <ListItemText
-                  primary={isPinned ? t('unpinPost') : t('pinPost')}
+                  primary={
+                    isPinned ? t('postCard.unpinPost') : t('postCard.pinPost')
+                  }
                 />
               </MenuItem>
             )}
@@ -441,7 +445,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           fontWeight="bold"
           data-testid="like-count"
         >
-          {likeCount} {t('likes')}
+          {likeCount} {t('postCard.likes')}
         </Typography>
       </Box>
 
@@ -483,17 +487,17 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                     {loadingMoreComments ? (
                       <>
                         <CircularProgress size={16} sx={{ mr: 1 }} />
-                        {t('loadingComments')}
+                        {t('postCard.loadingComments')}
                       </>
                     ) : (
-                      t('loadMoreComments')
+                      t('postCard.loadMoreComments')
                     )}
                   </Button>
                 </Box>
               ) : (
                 <Box display="flex" justifyContent="center" py={2}>
                   <Typography variant="body2" color="text.secondary">
-                    {t('noMoreComments')}
+                    {t('postCard.noMoreComments')}
                   </Typography>
                 </Box>
               )}
@@ -517,8 +521,8 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           }}
         >
           {showComments
-            ? t('hideComments')
-            : t('viewComments', { count: commentCount })}
+            ? t('postCard.hideComments')
+            : t('postCard.viewComments', { count: commentCount })}
         </Button>
       )}
 
@@ -534,7 +538,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       <div className={postCardStyles.commentFormContainer}>
         <FormControl fullWidth className={postCardStyles.commentForm}>
           <Input
-            placeholder={t('addComment')}
+            placeholder={t('postCard.addComment')}
             value={commentInput}
             onChange={handleCommentInput}
             fullWidth
