@@ -15,6 +15,13 @@ import {
 
 import type { MockedResponse, ResultFunction } from '@apollo/react-testing';
 
+/**
+ * Extended MockedResponse type that supports variableMatcher for flexible matching
+ */
+interface IMockedResponseWithMatcher extends MockedResponse {
+  variableMatcher?: (variables: Record<string, unknown>) => boolean;
+}
+
 function requestToKey(
   request:
     | Operation
@@ -72,8 +79,7 @@ export class StaticMockLink extends ApolloLink {
         const mockedResponseVariables = res.request.variables || {};
 
         // Support variableMatcher function for flexible matching
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const matcher = (res as any).variableMatcher;
+        const matcher = (res as IMockedResponseWithMatcher).variableMatcher;
         if (typeof matcher === 'function') {
           if (matcher(requestVariables)) {
             responseIndex = index;
