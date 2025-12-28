@@ -149,5 +149,8 @@
   "emailInvalid": "电子邮件至少需要8个字符",
   "nameInvalid": "名称只能包含字母、空格和连字符",
   "communityLogo": "社区标志",
-  "organizations": "组织"
+  "organizations": "组织",
+  "createEvent": "创建活动",
+  "eventCreated": "活动创建成功",
+  "eventDetails": "活动详情"
 }

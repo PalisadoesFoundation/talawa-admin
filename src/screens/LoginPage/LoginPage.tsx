@@ -312,8 +312,15 @@ const loginPage = (): JSX.Element => {
             // Note: Tokens are now set via HTTP-Only cookies by the server (XSS protection)
             if (signUpData.signUp && signUpData.signUp.authenticationToken) {
               setItem('IsLoggedIn', 'TRUE');
-              setItem('name', signUpData.signUp.user?.name || '');
-              setItem('email', signUpData.signUp.user?.emailAddress || '');
+              // Use form data for name/email since SIGNUP_MUTATION only returns user.id
+              setItem('name', signName);
+              setItem('email', signEmail);
+              // Persist userId from API response
+              if (signUpData.signUp.user?.id) {
+                setItem('userId', signUpData.signUp.user.id);
+              }
+              // Set default role as 'user' for signup (parity with login flow)
+              setItem('role', 'user');
               if (pendingInvitationToken) {
                 removeItem('pendingInvitationToken');
                 startSession();

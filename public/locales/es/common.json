@@ -149,5 +149,8 @@
   "emailInvalid": "Por favor, introduce una dirección de correo electrónico válida",
   "nameInvalid": "El nombre solo debe contener letras, espacios y guiones",
   "communityLogo": "Logo de la comunidad",
-  "organizations": "Organizaciones"
+  "organizations": "Organizaciones",
+  "createEvent": "Crear Evento",
+  "eventCreated": "Evento creado exitosamente",
+  "eventDetails": "Detalles del Evento"
 }

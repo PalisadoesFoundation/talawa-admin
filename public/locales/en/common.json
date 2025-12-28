@@ -149,5 +149,8 @@
   "emailInvalid": "Please enter a valid email address",
   "nameInvalid": "Name should contain only letters, spaces, and hyphens",
   "communityLogo": "Community Logo",
-  "organizations": "Organizations"
+  "organizations": "Organizations",
+  "createEvent": "Create Event",
+  "eventCreated": "Event created successfully",
+  "eventDetails": "Event Details"
 }

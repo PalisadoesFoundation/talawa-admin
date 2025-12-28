@@ -149,5 +149,8 @@
   "emailInvalid": "ईमेल में कम से कम 8 अक्षर होने चाहिए",
   "nameInvalid": "नाम में केवल अक्षर, रिक्त स्थान और हाइफ़न होने चाहिए",
   "communityLogo": "समुदाय लोगो",
-  "organizations": "संगठन"
+  "organizations": "संगठन",
+  "createEvent": "इवेंट बनाएं",
+  "eventCreated": "इवेंट सफलतापूर्वक बनाया गया",
+  "eventDetails": "इवेंट विवरण"
 }

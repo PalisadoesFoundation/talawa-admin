@@ -149,5 +149,8 @@
   "emailInvalid": "L'email doit avoir au moins 8 caractères",
   "nameInvalid": "Le nom ne doit contenir que des lettres, des espaces et des tirets",
   "communityLogo": "Logo Communautaire",
-  "organizations": "Organisations"
+  "organizations": "Organisations",
+  "createEvent": "Créer un Événement",
+  "eventCreated": "Événement créé avec succès",
+  "eventDetails": "Détails de l'Événement"
 }
