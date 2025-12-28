@@ -16,7 +16,6 @@
  * ```tsx
  * <UserContactDetails id="12345" />
  * ```
-
  * @dependencies
  * - `@apollo/client` for GraphQL queries and mutations
  *
@@ -135,9 +134,11 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
             return null;
           })
         : null;
-    const normalizedBirthDate = formState.birthDate
-      ? dayjs(formState.birthDate).format('YYYY-MM-DD')
-      : null;
+    let normalizedBirthDate: string | null = null;
+    if (formState.birthDate) {
+      const date = dayjs(formState.birthDate);
+      normalizedBirthDate = date.isValid() ? date.format('YYYY-MM-DD') : null;
+    }
     const data: Omit<typeof formState, 'avatarURL' | 'emailAddress'> = {
       addressLine1: formState.addressLine1,
       addressLine2: formState.addressLine2,
@@ -376,7 +377,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                       handleFieldChange('description', e.target.value)
                     }
                     required
-                    placeholder={tCommon('enterDescrip')}
+                    placeholder={tCommon('enterDescription')}
                   />
                 </Col>
               </Row>
@@ -504,7 +505,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                     onChange={(e) =>
                       handleFieldChange('postalCode', e.target.value)
                     }
-                    placeholder={tCommon('memberDetailPostalExample')}
+                    placeholder={tCommon('postalCode')}
                   />
                 </Col>
                 <Col md={6}>

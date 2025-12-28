@@ -112,24 +112,25 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
   });
 
   const allUserOrgs: UserOrg[] = useMemo(() => {
-    const created: UserOrg[] = userData?.user?.createdOrganizations?.map(
-      (org: {
-        id: string;
-        name: string;
-        adminsCount: number;
-        membersCount: number;
-        description?: string;
-        avatarURL?: string;
-      }) => ({
-        id: org.id,
-        name: org.name,
-        relation: 'CREATED' as const,
-        adminsCount: org.adminsCount ?? 0,
-        membersCount: org.membersCount ?? 0,
-        description: org.description || 'No Description',
-        avatarURL: org.avatarURL || '',
-      }),
-    );
+    const created: UserOrg[] =
+      userData?.user?.createdOrganizations?.map(
+        (org: {
+          id: string;
+          name: string;
+          adminsCount: number;
+          membersCount: number;
+          description?: string;
+          avatarURL?: string;
+        }) => ({
+          id: org.id,
+          name: org.name,
+          relation: 'CREATED' as const,
+          adminsCount: org.adminsCount ?? 0,
+          membersCount: org.membersCount ?? 0,
+          description: org.description || 'No Description',
+          avatarURL: org.avatarURL || '',
+        }),
+      ) || [];
 
     const belongTo: UserOrg[] =
       userData?.user?.organizationsWhereMember?.edges?.map(
@@ -151,7 +152,7 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
           description: edge.node.description || 'No Description',
           avatarURL: edge.node.avatarURL || '',
         }),
-      );
+      ) || [];
 
     const joined: UserOrg[] =
       joinedOrganizationsData?.user?.organizationsWhereMember?.edges?.map(
