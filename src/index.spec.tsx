@@ -531,6 +531,7 @@ describe('Apollo Client Configuration', () => {
 
   describe('Application Entry Point', () => {
     let getComputedStyleSpy: { mockRestore: () => void };
+    let getElementByIdSpy: { mockRestore: () => void };
 
     beforeEach(() => {
       vi.resetModules();
@@ -544,6 +545,9 @@ describe('Apollo Client Configuration', () => {
     afterEach(() => {
       vi.clearAllMocks();
       getComputedStyleSpy.mockRestore();
+      if (getElementByIdSpy) {
+        getElementByIdSpy.mockRestore();
+      }
     });
 
     it('should render application when root element exists', async () => {
@@ -555,10 +559,12 @@ describe('Apollo Client Configuration', () => {
       vi.doMock('./state/store', () => ({ store: {} }));
 
       const mockContainer = document.createElement('div');
-      vi.spyOn(document, 'getElementById').mockImplementation((id) => {
-        if (id === 'root') return mockContainer;
-        return null;
-      });
+      getElementByIdSpy = vi
+        .spyOn(document, 'getElementById')
+        .mockImplementation((id) => {
+          if (id === 'root') return mockContainer;
+          return null;
+        });
 
       await import('./index');
 
@@ -578,7 +584,9 @@ describe('Apollo Client Configuration', () => {
       vi.doMock('./App', () => ({ default: () => null }));
       vi.doMock('./state/store', () => ({ store: {} }));
 
-      vi.spyOn(document, 'getElementById').mockReturnValue(null);
+      getElementByIdSpy = vi
+        .spyOn(document, 'getElementById')
+        .mockReturnValue(null);
 
       await expect(import('./index')).rejects.toThrow(
         'Root container missing in the DOM',
