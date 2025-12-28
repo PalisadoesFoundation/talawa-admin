@@ -131,5 +131,14 @@
   "pluginSettings": "प्लगइन सेटिंग्स",
   "volunteer": "स्वयंसेवक",
   "moreCount": "+{{count}} और",
-  "togglePledgedRaised": "प्रतिज्ञा और प्राप्त राशि के बीच टॉगल करें"
+  "togglePledgedRaised": "प्रतिज्ञा और एकत्रित राशि के बीच टॉगल करें",
+  "accept": "स्वीकार करें",
+  "acceptedSuccessfully": "सफलतापूर्वक स्वीकार किया गया",
+  "decline": "अस्वीकार करें",
+  "declinedSuccessfully": "सफलतापूर्वक अस्वीकार किया गया",
+  "reject": "अस्वीकार करें",
+  "rejectedSuccessfully": "सफलतापूर्वक अस्वीकार किया गया",
+  "searchRequests": "अनुरोध खोजें",
+  "title": "शीर्षक",
+  "assignee": "नियुक्त व्यक्ति"
 }

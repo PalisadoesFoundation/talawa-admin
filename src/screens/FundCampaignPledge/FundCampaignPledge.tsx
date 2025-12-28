@@ -15,7 +15,7 @@ import PledgeModal from './modal/PledgeModal';
 import { Breadcrumbs, Link, Popover, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
-import EmptyState from '../../../src/shared-components/EmptyState/EmptyState';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import type {
   InterfacePledgeInfo,

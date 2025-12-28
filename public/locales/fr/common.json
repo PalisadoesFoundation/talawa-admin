@@ -131,5 +131,14 @@
   "pluginSettings": "Paramètres du plugin",
   "volunteer": "Bénévole",
   "moreCount": "+{{count}} de plus",
-  "togglePledgedRaised": "Basculer entre les montants promis et collectés"
+  "togglePledgedRaised": "Basculer entre les montants promis et collectés",
+  "accept": "Accepter",
+  "acceptedSuccessfully": "Accepté avec succès",
+  "decline": "Refuser",
+  "declinedSuccessfully": "Refusé avec succès",
+  "reject": "Rejeter",
+  "rejectedSuccessfully": "Rejeté avec succès",
+  "searchRequests": "Rechercher des demandes",
+  "title": "Titre",
+  "assignee": "Assigné"
 }

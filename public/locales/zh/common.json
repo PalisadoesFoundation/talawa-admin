@@ -131,5 +131,14 @@
   "pluginSettings": "插件设置",
   "volunteer": "志愿者",
   "moreCount": "+{{count}} 更多",
-  "togglePledgedRaised": "在已承诺金额和已筹集金额之间切换"
+  "togglePledgedRaised": "在承诺金额和筹集金额之间切换",
+  "accept": "接受",
+  "acceptedSuccessfully": "成功接受",
+  "decline": "拒绝",
+  "declinedSuccessfully": "成功拒绝",
+  "reject": "拒绝",
+  "rejectedSuccessfully": "成功拒绝",
+  "searchRequests": "搜索请求",
+  "title": "标题",
+  "assignee": "受让人"
 }
