@@ -11,7 +11,7 @@
  * - Mocking GraphQL mutations for venue-related actions and validating their behavior.
  */
 import React from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing';
 import type { RenderResult } from '@testing-library/react';
 import {
   act,

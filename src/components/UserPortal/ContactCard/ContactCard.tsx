@@ -41,72 +41,73 @@ import { Badge } from 'react-bootstrap';
 import type { InterfaceContactCardProps } from 'types/Chat/interface';
 import { normalizeMinioUrl } from 'utils/minioUtils';
 
-function contactCard(props: InterfaceContactCardProps): JSX.Element {
+function ContactCard(props: InterfaceContactCardProps): JSX.Element {
+  const { id, title, image, lastMessage, unseenMessages, selectedContact } =
+    props;
+
   const handleSelectedContactChange = (): void => {
-    props.setSelectedContact(props.id);
+    props.setSelectedContact(id);
   };
+
   const [isSelected, setIsSelected] = React.useState(
-    props.selectedContact === props.id,
+    selectedContact === id,
   );
 
-  // Update selection state when the selected contact changes
+  // Update selection state when the selected contact or id changes
   React.useEffect(() => {
-    setIsSelected(props.selectedContact === props.id);
-  }, [props.selectedContact]);
+    setIsSelected(selectedContact === id);
+  }, [selectedContact, id]);
 
   return (
-    <>
-      <div
-        className={`${styles.contact} ${
-          isSelected ? styles.bgGreen : styles.bgWhite
-        }`}
-        data-testid={`contact-card-${props.id}`}
+    <div
+      className={`${styles.contact} ${
+        isSelected ? styles.bgGreen : styles.bgWhite
+      }`}
+      data-testid={`contact-card-${id}`}
+    >
+      <button
+        type="button"
+        onClick={handleSelectedContactChange}
+        data-testid={`contact-container-${id}`}
+        aria-pressed={isSelected}
+        data-selected={String(isSelected)}
+        className={styles.contentInner}
       >
-        <div
-          onClick={handleSelectedContactChange}
-          data-testid={`contact-container-${props.id}`}
-          data-selected={String(isSelected)}
-        >
-          {props.image ? (
-            <img
-              data-testid={`contact-${props.id}-image`}
-              src={normalizeMinioUrl(props.image)}
-              alt={props.title}
-              className={styles.contactImage}
-              crossOrigin="anonymous"
-            />
-          ) : (
-            <Avatar
-              name={props.title}
-              alt={props.title}
-              avatarStyle={styles.contactImage}
-            />
-          )}
-          <div className={styles.contactNameContainer}>
-            <div>
-              <b data-testid={`contact-title-${props.id}`}>{props.title}</b>{' '}
-              {props.lastMessage ? (
-                <p
-                  data-testid={`contact-lastMessage-${props.id}`}
-                  className={styles.lastMessage}
-                >
-                  {props.lastMessage}
-                </p>
-              ) : null}
-            </div>
-            {!!props.unseenMessages && (
-              <Badge
-                data-testid={`contact-unseen-${props.id}`}
-                className={styles.unseenMessagesCount}
+        {image ? (
+          <img
+            data-testid={`contact-${id}-image`}
+            src={normalizeMinioUrl(image)}
+            alt={title}
+            className={styles.contactImage}
+            crossOrigin="anonymous"
+          />
+        ) : (
+          <Avatar name={title} alt={title} avatarStyle={styles.contactImage} />
+        )}
+        <div className={styles.contactNameContainer}>
+          <div>
+            <b data-testid={`contact-title-${id}`}>{title}</b>{' '}
+            {lastMessage ? (
+              <p
+                data-testid={`contact-lastMessage-${id}`}
+                className={styles.lastMessage}
               >
-                {props.unseenMessages}
-              </Badge>
-            )}
+                {lastMessage}
+              </p>
+            ) : null}
           </div>
+          {!!unseenMessages && (
+            <Badge
+              data-testid={`contact-unseen-${id}`}
+              className={styles.unseenMessagesCount}
+            >
+              {unseenMessages}
+            </Badge>
+          )}
         </div>
-      </div>
-    </>
+      </button>
+    </div>
   );
 }
 
-export default contactCard;
+export default ContactCard;

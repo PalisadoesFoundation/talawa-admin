@@ -55,10 +55,8 @@ async function wait(ms = 100): Promise<void> {
   });
 }
 
-// Mock `URL.createObjectURL` with a spy so it can be restored between tests
-vi.spyOn(global.URL, 'createObjectURL').mockImplementation(
-  () => 'https://minio/test-image.jpg',
-);
+// Note: `URL.createObjectURL` spy is created in `beforeEach` to avoid being
+// restored by `vi.restoreAllMocks()` and disappearing for subsequent tests.
 
 i18n.use(initReactI18next).init({
   lng: 'en',
@@ -82,7 +80,11 @@ describe('GroupChatDetails', () => {
     vi.clearAllMocks();
   });
   beforeEach(() => {
+    // recreate module-level mocks/spies per-test so restoreAllMocks() is safe
     vi.resetAllMocks();
+    vi.spyOn(global.URL, 'createObjectURL').mockImplementation(
+      () => 'https://minio/test-image.jpg',
+    );
     for (const key in mockLocalStorageStore) {
       delete mockLocalStorageStore[key];
     }
