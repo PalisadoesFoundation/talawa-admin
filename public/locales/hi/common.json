@@ -137,7 +137,6 @@
   "userLogin": "उपयोगकर्ता लॉगिन",
   "adminLogin": "व्यवस्थापक लॉगिन",
   "atleast_6_char_long": "कम से कम 6 अक्षर",
-  "Password_and_Confirm_password_mismatches.": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
   "captchaError": "कैप्चा त्रुटि!",
   "Please_check_the_captcha": "कृपया कैप्चा जांचें।",
   "passwordMismatches": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",

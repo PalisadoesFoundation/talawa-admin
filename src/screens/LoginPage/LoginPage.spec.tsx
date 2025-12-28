@@ -1559,7 +1559,7 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
       1,
-      'Password should contain at least one lowercase letter, one uppercase letter, one numeric value and one special character',
+      i18nForTest.t('loginPage.passwordInvalid'),
     );
   });
 
@@ -1838,7 +1838,7 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
       1,
-      'Email should have at least 8 characters',
+      i18nForTest.t('loginPage.emailInvalid'),
     );
   });
 
@@ -2302,6 +2302,11 @@ describe('Cookie-based authentication verification', () => {
     expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
       'email',
       'newuser@example.com',
+    );
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith('role', 'user');
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+      'userId',
+      'newUser123',
     );
   });
 });

@@ -331,13 +331,13 @@ const loginPage = (): JSX.Element => {
       }
     } else {
       if (!isValidName(signName)) {
-        toast.warn(t('name_invalid') as string);
+        toast.warn(t('nameInvalid') as string);
       }
       if (!validatePassword(signPassword)) {
-        toast.warn(t('password_invalid') as string);
+        toast.warn(t('passwordInvalid') as string);
       }
       if (signEmail.length < 8) {
-        toast.warn(t('email_invalid') as string);
+        toast.warn(t('emailInvalid') as string);
       }
     }
   };
@@ -751,7 +751,7 @@ const loginPage = (): JSX.Element => {
                               <span>
                                 <Clear className="" />
                               </span>
-                              {t('atleast_6_char_long')}
+                              {t('atleastSixCharLong')}
                             </p>
                           </div>
                         ) : (
@@ -796,7 +796,7 @@ const loginPage = (): JSX.Element => {
                               <Check />
                             </span>
                           )}
-                          {t('lowercase_check')}
+                          {t('lowercaseCheck')}
                         </p>
                       )}
                       {isInputFocused && (
@@ -816,7 +816,7 @@ const loginPage = (): JSX.Element => {
                               <Check />
                             </span>
                           )}
-                          {t('uppercase_check')}
+                          {t('uppercaseCheck')}
                         </p>
                       )}
                       {isInputFocused && (
@@ -836,7 +836,7 @@ const loginPage = (): JSX.Element => {
                               <Check />
                             </span>
                           )}
-                          {t('numeric_value_check')}
+                          {t('numericValueCheck')}
                         </p>
                       )}
                       {isInputFocused && (
@@ -858,7 +858,7 @@ const loginPage = (): JSX.Element => {
                               <Check />
                             </span>
                           )}
-                          {t('special_char_check')}
+                          {t('specialCharCheck')}
                         </p>
                       )}
                     </div>
@@ -900,7 +900,7 @@ const loginPage = (): JSX.Element => {
                           className="form-text text-danger"
                           data-testid="passwordCheck"
                         >
-                          {t('Password_and_Confirm_password_mismatches.')}
+                          {t('passwordMismatches')}
                         </div>
                       )}
                   </div>

@@ -20,7 +20,7 @@ export function validateEmail(email: string): InterfaceValidationResult {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email)
     ? { isValid: true }
-    : { isValid: false, error: 'settings.invalidEmailFormat' };
+    : { isValid: false, error: 'loginPage.emailInvalid' };
 }
 
 /**
@@ -32,7 +32,7 @@ export function validatePassword(
   password: string | null | undefined,
 ): InterfaceValidationResult {
   if (!password || password.length < 8) {
-    return { isValid: false, error: 'settings.atleast_8_char_long' };
+    return { isValid: false, error: 'loginPage.atleast_8_char_long' };
   }
 
   const hasLowercase = PASSWORD_REGEX.lowercase.test(password);
@@ -46,7 +46,7 @@ export function validatePassword(
 
   return {
     isValid: false,
-    error: 'settings.password_must_include_all_requirements',
+    error: 'loginPage.passwordInvalid',
   };
 }
 
@@ -61,7 +61,7 @@ export function validateName(
   const trimmedName = (name ?? '').trim();
   return trimmedName.length >= 2
     ? { isValid: true }
-    : { isValid: false, error: 'settings.name_min_length' };
+    : { isValid: false, error: 'loginPage.nameInvalid' };
 }
 
 /**
@@ -76,7 +76,7 @@ export function validatePasswordConfirmation(
 ): InterfaceValidationResult {
   return password === confirmPassword
     ? { isValid: true }
-    : { isValid: false, error: 'settings.passwords_do_not_match' };
+    : { isValid: false, error: 'loginPage.passwordMismatches' };
 }
 
 /**
