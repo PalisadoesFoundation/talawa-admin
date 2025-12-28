@@ -624,17 +624,11 @@ describe('EventListCardPreviewModal', () => {
       setEventEndDate: mockSetEventEndDate,
     });
 
-    // MUI DatePicker renders with MM/DD/YYYY placeholder, find the first one (start date)
-    const dateInputs = screen.getAllByPlaceholderText('MM/DD/YYYY');
-    expect(dateInputs.length).toBeGreaterThan(0);
-    const startDateInput = dateInputs[0];
-    const startDatePicker =
-      startDateInput.closest('.MuiFormControl-root') ||
-      startDateInput.parentElement?.parentElement;
-    const calendarButton = within(
-      startDatePicker as HTMLElement,
-    ).getByLabelText(/choose date/i);
-    await userEvent.click(calendarButton);
+    // Get all calendar buttons and select the first one (start date)
+    const calendarButtons = screen.getAllByRole('button', {
+      name: /choose date/i,
+    });
+    await userEvent.click(calendarButtons[0]);
 
     await waitFor(() => {
       expect(screen.getByRole('grid')).toBeInTheDocument();
@@ -654,17 +648,11 @@ describe('EventListCardPreviewModal', () => {
       setEventEndDate: mockSetEventEndDate,
     });
 
-    // MUI DatePicker renders with MM/DD/YYYY placeholder, find the second one (end date)
-    const dateInputs = screen.getAllByPlaceholderText('MM/DD/YYYY');
-    expect(dateInputs.length).toBeGreaterThanOrEqual(2);
-    const endDateInput = dateInputs[1];
-    const endDatePicker =
-      endDateInput.closest('.MuiFormControl-root') ||
-      endDateInput.parentElement?.parentElement;
-    const calendarButton = within(endDatePicker as HTMLElement).getByLabelText(
-      /choose date/i,
-    );
-    await userEvent.click(calendarButton);
+    // Get all calendar buttons and select the second one (end date)
+    const calendarButtons = screen.getAllByRole('button', {
+      name: /choose date/i,
+    });
+    await userEvent.click(calendarButtons[1]);
 
     await waitFor(() => {
       expect(screen.getByRole('grid')).toBeInTheDocument();
@@ -684,17 +672,11 @@ describe('EventListCardPreviewModal', () => {
       setFormState: mockSetFormState,
     });
 
-    // MUI TimePicker renders with hh:mm aa placeholder, find the first one (start time)
-    const timeInputs = screen.getAllByPlaceholderText('hh:mm aa');
-    expect(timeInputs.length).toBeGreaterThan(0);
-    const startTimeInput = timeInputs[0];
-    const startTimePicker =
-      startTimeInput.closest('.MuiFormControl-root') ||
-      startTimeInput.parentElement?.parentElement;
-    const clockButton = within(startTimePicker as HTMLElement).getByLabelText(
-      /choose time/i,
-    );
-    await userEvent.click(clockButton);
+    // Get all clock buttons and select the first one (start time)
+    const clockButtons = screen.getAllByRole('button', {
+      name: /choose time/i,
+    });
+    await userEvent.click(clockButtons[0]);
 
     await waitFor(() => {
       expect(
@@ -717,17 +699,11 @@ describe('EventListCardPreviewModal', () => {
       setFormState: mockSetFormState,
     });
 
-    // MUI TimePicker renders with hh:mm aa placeholder, find the second one (end time)
-    const timeInputs = screen.getAllByPlaceholderText('hh:mm aa');
-    expect(timeInputs.length).toBeGreaterThanOrEqual(2);
-    const endTimeInput = timeInputs[1];
-    const endTimePicker =
-      endTimeInput.closest('.MuiFormControl-root') ||
-      endTimeInput.parentElement?.parentElement;
-    const clockButton = within(endTimePicker as HTMLElement).getByLabelText(
-      /choose time/i,
-    );
-    await userEvent.click(clockButton);
+    // Get all clock buttons and select the second one (end time)
+    const clockButtons = screen.getAllByRole('button', {
+      name: /choose time/i,
+    });
+    await userEvent.click(clockButtons[1]);
 
     await waitFor(() => {
       expect(
@@ -1095,17 +1071,12 @@ describe('EventListCardPreviewModal', () => {
         setEventEndDate: mockSetEventEndDate,
       });
 
-      // MUI DatePicker renders with MM/DD/YYYY placeholder, find the first one (start date)
-      const dateInputs = screen.getAllByPlaceholderText('MM/DD/YYYY');
-      expect(dateInputs.length).toBeGreaterThan(0);
-      const dateInput = dateInputs[0];
-      const datePicker =
-        dateInput.closest('.MuiFormControl-root') ||
-        dateInput.parentElement?.parentElement;
-      const calendarButton = within(datePicker as HTMLElement).getByLabelText(
-        /choose date/i,
-      );
-      fireEvent.click(calendarButton);
+      // Both start and end date are the same, so both calendar buttons have the same label
+      // Get all calendar buttons and select the first one (start date)
+      const calendarButtons = screen.getAllByRole('button', {
+        name: /choose date/i,
+      });
+      fireEvent.click(calendarButtons[0]);
 
       await waitFor(() => {
         const dateToSelect = screen.getByText('20');

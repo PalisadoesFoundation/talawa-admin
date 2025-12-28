@@ -75,7 +75,7 @@ const translations = JSON.parse(
 describe('Testing Agenda Items Components', () => {
   interface InterfaceRenderOptions {
     link?: StaticMockLink;
-    mocks?: GenericMock[];
+    mocks?: InterfaceGenericMock[];
     withLocalization?: boolean;
     eventId?: string;
   }
@@ -128,7 +128,7 @@ describe('Testing Agenda Items Components', () => {
     },
   };
 
-  interface GenericMock {
+  interface InterfaceGenericMock {
     request: {
       query: DocumentNode;
       variables?: Record<string, unknown>;
@@ -142,18 +142,18 @@ describe('Testing Agenda Items Components', () => {
     };
   }
   const [BASE_CATEGORY_MOCK, BASE_AGENDA_MOCK, BASE_MUTATION_MOCK] =
-    MOCKS as GenericMock[];
+    MOCKS as InterfaceGenericMock[];
 
   const agendaErrorBase =
-    (MOCKS_ERROR_QUERY[1] as GenericMock) ?? BASE_AGENDA_MOCK;
+    (MOCKS_ERROR_QUERY[1] as InterfaceGenericMock) ?? BASE_AGENDA_MOCK;
   const emptyAgendaBase =
-    (MOCKS_EMPTY_AGENDA_ITEMS[1] as GenericMock) ?? BASE_AGENDA_MOCK;
+    (MOCKS_EMPTY_AGENDA_ITEMS[1] as InterfaceGenericMock) ?? BASE_AGENDA_MOCK;
   const categoryErrorBase =
-    (MOCKS_CATEGORY_ERROR[1] as GenericMock) ?? BASE_AGENDA_MOCK;
+    (MOCKS_CATEGORY_ERROR[1] as InterfaceGenericMock) ?? BASE_AGENDA_MOCK;
   const categoryErrorRequestBase =
-    (MOCKS_CATEGORY_ERROR[0] as GenericMock) ?? BASE_CATEGORY_MOCK;
+    (MOCKS_CATEGORY_ERROR[0] as InterfaceGenericMock) ?? BASE_CATEGORY_MOCK;
   const mutationErrorRequestBase =
-    (MOCKS_MUTATION_ERROR[2] as GenericMock) ?? BASE_MUTATION_MOCK;
+    (MOCKS_MUTATION_ERROR[2] as InterfaceGenericMock) ?? BASE_MUTATION_MOCK;
 
   function cloneJson<T>(value: T): T {
     const serialized = JSON.stringify(value);
@@ -179,7 +179,7 @@ describe('Testing Agenda Items Components', () => {
     createAgendaItem: { _id: 'agendaItem1' },
   };
 
-  const createCategorySuccessMock = (): GenericMock => ({
+  const createCategorySuccessMock = (): InterfaceGenericMock => ({
     request: {
       query: BASE_CATEGORY_MOCK.request.query,
       variables: { organizationId: formData.organizationId },
@@ -193,7 +193,7 @@ describe('Testing Agenda Items Components', () => {
 
   const createAgendaItemsMock = (
     agendaItems: Array<typeof baseAgendaItem> = cloneJson(baseAgendaItemsList),
-  ): GenericMock => ({
+  ): InterfaceGenericMock => ({
     request: {
       query: BASE_AGENDA_MOCK.request.query,
       variables: { relatedEventId: formData.relatedEventId },
@@ -216,7 +216,7 @@ describe('Testing Agenda Items Components', () => {
       error?: Error;
       onCall?: (variables: { input: typeof formData }) => void;
     } = {},
-  ): GenericMock => {
+  ): InterfaceGenericMock => {
     const input = {
       ...cloneJson(baseMutationInputTemplate),
       title: formData.title,
@@ -255,13 +255,13 @@ describe('Testing Agenda Items Components', () => {
     };
   };
 
-  const createDefaultMocks = (): GenericMock[] => [
+  const createDefaultMocks = (): InterfaceGenericMock[] => [
     createCategorySuccessMock(),
     createAgendaItemsMock(),
     createMutationMock(2),
   ];
 
-  const createAgendaItemsErrorMocks = (): GenericMock[] => [
+  const createAgendaItemsErrorMocks = (): InterfaceGenericMock[] => [
     createCategorySuccessMock(),
     {
       request: {
@@ -272,7 +272,7 @@ describe('Testing Agenda Items Components', () => {
     },
   ];
 
-  const createBlankMessageErrorMocks = (): GenericMock[] => [
+  const createBlankMessageErrorMocks = (): InterfaceGenericMock[] => [
     createCategorySuccessMock(),
     {
       request: {
@@ -283,7 +283,7 @@ describe('Testing Agenda Items Components', () => {
     },
   ];
 
-  const createCategoryErrorMocks = (): GenericMock[] => [
+  const createCategoryErrorMocks = (): InterfaceGenericMock[] => [
     {
       request: {
         query: categoryErrorRequestBase.request.query,
@@ -304,7 +304,7 @@ describe('Testing Agenda Items Components', () => {
     },
   ];
 
-  const createMutationErrorMocks = (): GenericMock[] => [
+  const createMutationErrorMocks = (): InterfaceGenericMock[] => [
     createCategorySuccessMock(),
     createAgendaItemsMock(),
     createMutationMock(2, { error: new Error('Mock Graphql Error') }),
@@ -312,7 +312,7 @@ describe('Testing Agenda Items Components', () => {
 
   const createEmptyAgendaItemsMocks = (
     onCall?: (variables: { input: typeof formData }) => void,
-  ): GenericMock[] => [
+  ): InterfaceGenericMock[] => [
     createCategorySuccessMock(),
     {
       request: {
@@ -330,7 +330,7 @@ describe('Testing Agenda Items Components', () => {
 
   const createInvalidLengthMocks = (
     onCall?: (variables: { input: typeof formData }) => void,
-  ): GenericMock[] => [
+  ): InterfaceGenericMock[] => [
     createCategorySuccessMock(),
     {
       request: {
@@ -449,9 +449,7 @@ describe('Testing Agenda Items Components', () => {
 
   it('displays "Unknown error" when both query error messages are missing', async () => {
     const useQueryMock = vi.mocked(useQuery);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    useQueryMock.mockImplementation((...args) => {
+    useQueryMock.mockImplementation(((...args: unknown[]) => {
       const [query] = args;
 
       if (query === AGENDA_ITEM_CATEGORY_LIST) {
@@ -483,7 +481,7 @@ describe('Testing Agenda Items Components', () => {
         error: undefined,
         refetch: vi.fn(),
       };
-    });
+    }) as unknown as typeof useQuery);
 
     try {
       const { queryByText } = renderEventAgendaItems({});
@@ -695,9 +693,7 @@ describe('Testing Agenda Items Components', () => {
   it('defaults sequence to 1 when agenda item query returns null data', async () => {
     const sequences: number[] = [];
     const useQueryMock = vi.mocked(useQuery);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    useQueryMock.mockImplementation((...args) => {
+    useQueryMock.mockImplementation(((...args: unknown[]) => {
       const [query] = args;
 
       if (query === AGENDA_ITEM_CATEGORY_LIST) {
@@ -727,7 +723,7 @@ describe('Testing Agenda Items Components', () => {
         error: undefined,
         refetch: vi.fn(),
       };
-    });
+    }) as unknown as typeof useQuery);
 
     const link = new StaticMockLink(
       [
@@ -814,9 +810,7 @@ describe('Testing Agenda Items Components', () => {
 
   it('handles non-Error create agenda item rejections gracefully', async () => {
     const useMutationMock = vi.mocked(useMutation);
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    useMutationMock.mockImplementation((...args) => {
+    useMutationMock.mockImplementation((() => {
       // We cannot call actual useMutation within the mock easily if not captured earlier or via importActual pattern inside mockImplementation.
       // However, we can simulate the behavior we need: returning a mutate function that rejects.
       const wrappedMutate = async () => {
@@ -827,7 +821,7 @@ describe('Testing Agenda Items Components', () => {
         wrappedMutate,
         { data: undefined, loading: false, error: undefined, reset: vi.fn() },
       ];
-    });
+    }) as unknown as typeof useMutation);
 
     try {
       renderEventAgendaItems({

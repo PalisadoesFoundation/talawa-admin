@@ -62,7 +62,7 @@ import {
   TextField,
 } from '@mui/material';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
-import type { UserDetailsResult } from 'types/GraphQL/queryResults';
+import type { IUserDetailsResult } from 'types/GraphQL/queryResults';
 
 export interface InterfacePledgeModal {
   isOpen: boolean;
@@ -147,35 +147,37 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   const { pledgeUsers, pledgeAmount, pledgeCurrency } = formState;
 
   // Query to get the user details based on the userId prop
-  const { data: userData } = useQuery<UserDetailsResult>(USER_DETAILS, {
+  const { data: userData } = useQuery<IUserDetailsResult>(USER_DETAILS, {
     variables: { input: { id: userId } },
   });
 
   // Effect to update the pledgers state when user data is fetched
   useEffect(() => {
-    if (userData?.user?.user) {
-      const user = userData.user.user;
-      const firstName = user.firstName || '';
-      const lastName = user.lastName || '';
+    if (userData?.user) {
+      const user = userData.user;
+      const firstName = (user as { firstName?: string }).firstName || '';
+      const lastName = (user as { lastName?: string }).lastName || '';
 
       const currentUser = {
-        id: user._id,
+        id: user.id,
         firstName,
         lastName,
-        name: `${firstName} ${lastName}`.trim(),
-        avatarURL: user.image,
+        name: `${firstName} ${lastName}`.trim() || user.name,
+        avatarURL: user.avatarURL,
       };
 
       setPledgers([currentUser]);
 
-      // Auto-select current user as pledger for regular users
-      // Note: role is not available on the nested user object, so we always set the pledgeUsers
-      setFormState((prevState) => ({
-        ...prevState,
-        pledgeUsers: [currentUser],
-      }));
+      // Only auto-select current user as pledger in create mode
+      // In edit mode, keep the existing pledger from the pledge
+      if (mode === 'create' && !pledge?.pledger) {
+        setFormState((prevState) => ({
+          ...prevState,
+          pledgeUsers: [currentUser],
+        }));
+      }
     }
-  }, [userData]);
+  }, [userData, mode, pledge?.pledger]);
 
   /**
    * Handler function to update an existing pledge.
@@ -279,7 +281,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           className="p-3"
         >
           {/* Show pledger autocomplete for all users */}
-          {userData?.user?.user && (
+          {userData?.user && (
             <Form.Group className="d-flex mb-3 w-100">
               <Autocomplete
                 className={`${styles.noOutline} w-100`}

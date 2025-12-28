@@ -50,8 +50,8 @@ import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import { useMutation, useQuery } from '@apollo/client/react';
 import type {
-  DonationConnectionResult,
-  OrganizationListResult,
+  IDonationConnectionResult,
+  IOrganizationListResult,
 } from 'types/GraphQL/queryResults';
 import SendIcon from '@mui/icons-material/Send';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
@@ -69,10 +69,7 @@ import { errorHandler } from 'utils/errorHandler';
 import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import {
-  InterfaceDonation,
-  InterfaceDonationCardProps,
-} from 'types/Donation/interface';
+import { InterfaceDonationCardProps } from 'types/Donation/interface';
 
 export default function donate(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'donate' });
@@ -106,14 +103,14 @@ export default function donate(): JSX.Element {
     data: donationData,
     loading,
     refetch,
-  } = useQuery<DonationConnectionResult>(
+  } = useQuery<IDonationConnectionResult>(
     ORGANIZATION_DONATION_CONNECTION_LIST,
     {
       variables: { orgId: organizationId },
     },
   );
 
-  const { data } = useQuery<OrganizationListResult>(ORGANIZATION_LIST, {
+  const { data } = useQuery<IOrganizationListResult>(ORGANIZATION_LIST, {
     variables: { id: organizationId },
   });
 
@@ -268,7 +265,7 @@ export default function donate(): JSX.Element {
                     className={`d-flex flex-row justify-content-center`}
                     data-testid="loading-state"
                   >
-                    <HourglassBottomIcon /> <span>Loading...</span>
+                    <HourglassBottomIcon /> <span>{t('loading')}</span>
                   </div>
                 ) : (
                   <>

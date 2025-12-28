@@ -50,7 +50,7 @@ import PledgeModal from './PledgeModal';
 import { USER_FUND_CAMPAIGNS } from 'GraphQl/Queries/fundQueries';
 import { useQuery } from '@apollo/client/react';
 import type { InterfaceUserCampaign } from 'utils/interfaces';
-import type { UserFundCampaignsResult } from 'types/GraphQL/queryResults';
+import type { IUserFundCampaignsResult } from 'types/GraphQL/queryResults';
 import { currencySymbols } from 'utils/currency';
 import Loader from 'components/Loader/Loader';
 import SortingButton from 'subComponents/SortingButton';
@@ -88,7 +88,7 @@ const Campaigns = (): JSX.Element => {
     loading: campaignLoading,
     error: campaignError,
     refetch: refetchCampaigns,
-  } = useQuery<UserFundCampaignsResult>(USER_FUND_CAMPAIGNS, {
+  } = useQuery<IUserFundCampaignsResult>(USER_FUND_CAMPAIGNS, {
     variables: {
       input: { id: orgId as string },
     },

@@ -7,6 +7,7 @@ import type { InterfaceTagData } from '../../../utils/interfaces';
 import type { TFunction } from 'i18next';
 import { MOCKS, MOCKS_ERROR_SUBTAGS_QUERY } from '../TagActionsMocks';
 import { MOCKS_ERROR_SUBTAGS_QUERY1, MOCKS1 } from './TagNodeMocks';
+import { StaticMockLink } from '../../../utils/StaticMockLink';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 
 const mockTag: InterfaceTagData = {
@@ -322,6 +323,7 @@ describe('Edge Cases and Coverage Improvements', () => {
           data: {
             getChildTags: {
               __typename: 'GetChildTagsPayload',
+              name: 'Parent Tag',
               childTags: {
                 __typename: 'ChildTagsConnection',
                 edges: [
@@ -388,6 +390,7 @@ describe('Edge Cases and Coverage Improvements', () => {
           data: {
             getChildTags: {
               __typename: 'GetChildTagsPayload',
+              name: 'Parent Tag',
               childTags: {
                 __typename: 'ChildTagsConnection',
                 edges: [], // Empty array - this will make subTagsList.length = 0
@@ -449,6 +452,7 @@ describe('Edge Cases and Coverage Improvements', () => {
           data: {
             getChildTags: {
               __typename: 'GetChildTagsPayload',
+              name: 'Parent Tag',
               childTags: {
                 __typename: 'ChildTagsConnection',
                 edges: [
@@ -537,6 +541,7 @@ describe('Edge Cases and Coverage Improvements', () => {
           data: {
             getChildTags: {
               __typename: 'GetChildTagsPayload',
+              name: 'Parent Tag',
               childTags: {
                 __typename: 'ChildTagsConnection',
                 edges: [], // Empty edges to simulate no subtags
@@ -556,8 +561,10 @@ describe('Edge Cases and Coverage Improvements', () => {
       },
     ];
 
+    const link = new StaticMockLink(mockWithEmptyData, true);
+
     render(
-      <MockedProvider mocks={mockWithEmptyData}>
+      <MockedProvider link={link}>
         <TagNode
           tag={mockTag}
           checkedTags={mockCheckedTags}
@@ -571,6 +578,10 @@ describe('Edge Cases and Coverage Improvements', () => {
     fireEvent.click(expandIcon);
 
     await waitFor(() => {
+      expect(screen.getByTestId('subTagsLoader')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
       expect(screen.queryByTestId('subTagsLoader')).not.toBeInTheDocument();
     });
 
@@ -582,6 +593,9 @@ describe('Edge Cases and Coverage Improvements', () => {
         screen.queryByTestId(`subTagsScrollableDiv${mockTag._id}`),
       ).not.toBeInTheDocument();
     });
+
+    // Ensure no other operations are pending
+    await new Promise((resolve) => setTimeout(resolve, 10));
   });
 
   it('exercises nullish coalescing operator for hasNextPage with undefined value', async () => {
@@ -597,6 +611,7 @@ describe('Edge Cases and Coverage Improvements', () => {
           data: {
             getChildTags: {
               __typename: 'GetChildTagsPayload',
+              name: 'Parent Tag',
               childTags: {
                 __typename: 'ChildTagsConnection',
                 edges: [

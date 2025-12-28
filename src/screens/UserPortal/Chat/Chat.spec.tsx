@@ -15,6 +15,10 @@ const { mockUseParams } = vi.hoisted(() => ({
   mockUseParams: vi.fn(),
 }));
 
+const flushPromises = async () => {
+  await new Promise((resolve) => setTimeout(resolve, 200));
+};
+
 // Mock child components
 vi.mock('components/UserPortal/ContactCard/ContactCard', () => ({
   default: (props: {
@@ -345,7 +349,10 @@ describe('Chat Component', () => {
     mockUseParams.mockReturnValue({}); // Default: no orgId
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    await React.act(async () => {
+      await flushPromises();
+    });
     vi.restoreAllMocks();
   });
 
@@ -628,6 +635,10 @@ describe('Chat Component', () => {
   test('should open new direct and group chat modals', async () => {
     renderComponent();
 
+    await waitFor(() => {
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    });
+
     const dropdown = screen.getByTestId('dropdown');
     fireEvent.click(dropdown);
 
@@ -640,6 +651,10 @@ describe('Chat Component', () => {
     fireEvent.click(newGroupChat);
 
     expect(screen.getByTestId('create-group-chat-modal')).toBeInTheDocument();
+
+    await React.act(async () => {
+      await flushPromises();
+    });
   });
 
   test('should filter chats by orgId when provided in route params', async () => {
@@ -916,6 +931,10 @@ describe('Chat Component', () => {
     await waitFor(() => {
       expect(screen.getByTestId('contact-card-group-1')).toBeInTheDocument();
     });
+
+    await React.act(async () => {
+      await flushPromises();
+    });
   });
 
   test('should handle NewChatType in second useEffect with orgId filtering', async () => {
@@ -1017,6 +1036,10 @@ describe('Chat Component', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('contact-card-chat-new-1')).toBeInTheDocument();
+    });
+
+    await React.act(async () => {
+      await flushPromises();
     });
   });
 

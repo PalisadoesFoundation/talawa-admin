@@ -10,18 +10,39 @@ import type { InterfaceVolunteerMembership } from 'types/Volunteer/interface';
 // User Queries
 // ============================================
 
-export interface UserDetailsResult {
+export interface IUserDetailsResult {
   user: {
-    user: {
-      _id: string;
-      firstName: string;
-      lastName: string;
-      image: string | null;
+    id: string;
+    name: string;
+    emailAddress: string;
+    avatarURL: string | null;
+    birthDate: string | null;
+    city: string | null;
+    countryCode: string | null;
+    createdAt: string;
+    updatedAt: string;
+    educationGrade: string | null;
+    employmentStatus: string | null;
+    isEmailAddressVerified: boolean;
+    maritalStatus: string | null;
+    natalSex: string | null;
+    naturalLanguageCode: string | null;
+    postalCode: string | null;
+    role: string;
+    state: string | null;
+    mobilePhoneNumber: string | null;
+    homePhoneNumber: string | null;
+    workPhoneNumber: string | null;
+    firstName?: string;
+    lastName?: string;
+    organizationsWhereMember: {
+      edges: Array<{ node: { id: string; name: string } }>;
     };
+    createdOrganizations: Array<{ id: string; name: string }>;
   };
 }
 
-export interface CurrentUserResult {
+export interface ICurrentUserResult {
   currentUser: {
     id: string;
     name: string;
@@ -33,7 +54,7 @@ export interface CurrentUserResult {
 
 // Organization Queries
 
-export interface OrganizationListResult {
+export interface IOrganizationListResult {
   organizations: Array<{
     id: string;
     name: string;
@@ -43,7 +64,7 @@ export interface OrganizationListResult {
   }>;
 }
 
-export interface OrganizationMembersResult {
+export interface IOrganizationMembersResult {
   organization: {
     members: {
       edges: Array<{
@@ -65,7 +86,7 @@ export interface OrganizationMembersResult {
   };
 }
 
-export interface MembershipRequestResult {
+export interface IMembershipRequestResult {
   organization: {
     membershipRequests: Array<{
       membershipRequestId: string;
@@ -83,7 +104,7 @@ export interface MembershipRequestResult {
 
 // Campaign & Fund Queries
 
-export interface CampaignEdge {
+export interface ICampaignEdge {
   node: {
     id: string;
     name: string;
@@ -94,25 +115,25 @@ export interface CampaignEdge {
   };
 }
 
-export interface FundEdge {
+export interface IFundEdge {
   node: {
     campaigns?: {
-      edges: CampaignEdge[];
+      edges: ICampaignEdge[];
     };
   };
 }
 
-export interface UserFundCampaignsResult {
+export interface IUserFundCampaignsResult {
   organization: {
     funds: {
-      edges: FundEdge[];
+      edges: IFundEdge[];
     };
   };
 }
 
 // Donation Queries
 
-export interface DonationConnectionResult {
+export interface IDonationConnectionResult {
   getDonationByOrgIdConnection: Array<{
     _id: string;
     nameOfUser: string;
@@ -125,7 +146,7 @@ export interface DonationConnectionResult {
 
 // Event Queries
 
-export interface OrganizationEventsResult {
+export interface IOrganizationEventsResult {
   organization: {
     events: {
       edges: Array<{
@@ -156,7 +177,7 @@ export interface OrganizationEventsResult {
 
 // Post Queries
 
-export interface OrganizationPostListResult {
+export interface IOrganizationPostListResult {
   organization: {
     posts: {
       edges: Array<{
@@ -187,7 +208,7 @@ export interface OrganizationPostListResult {
   };
 }
 
-export interface OrganizationPinnedPostListResult {
+export interface IOrganizationPinnedPostListResult {
   organization: {
     pinnedPosts: {
       edges: Array<{
@@ -211,7 +232,7 @@ export interface OrganizationPinnedPostListResult {
   };
 }
 
-export interface AdvertisementListResult {
+export interface IAdvertisementListResult {
   organizations: Array<{
     advertisements?: {
       edges: Array<{
@@ -230,20 +251,20 @@ export interface AdvertisementListResult {
 
 // Volunteer Queries
 
-export interface GetVolunteerMembershipResult {
+export interface IGetVolunteerMembershipResult {
   getVolunteerMembership: InterfaceVolunteerMembership[];
 }
 
 // Action Item Queries
 
-export interface ActionItemCategoryResult {
+export interface IActionItemCategoryResult {
   actionItemCategory: {
     id: string;
     name: string;
   };
 }
 
-export interface MembersListResult {
+export interface IMembersListResult {
   usersByOrganizationId: Array<{
     id: string;
     firstName?: string;

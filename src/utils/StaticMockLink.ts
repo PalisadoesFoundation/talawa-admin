@@ -1,6 +1,5 @@
 import { print } from 'graphql';
 import { equal } from '@wry/equality';
-import { invariant } from 'ts-invariant';
 
 import { ApolloLink } from '@apollo/client';
 
@@ -55,8 +54,10 @@ export class StaticMockLink extends ApolloLink {
     mockedResponses.push(normalizedMockedResponse);
   }
 
-  public onError(error: Error | any, observer: any): boolean {
-    // eslint-disable-line @typescript-eslint/no-explicit-any
+  public onError(
+    error: Error,
+    observer: { error: (e: Error) => void } | null,
+  ): boolean {
     if (observer) {
       observer.error(error);
     }
@@ -90,7 +91,11 @@ export class StaticMockLink extends ApolloLink {
         )}, variables: ${JSON.stringify(operation.variables)}`,
       );
     } else {
-      const { newData } = response as any;
+      const { newData } = response as MockedResponse & {
+        newData?: (
+          variables: Record<string, unknown>,
+        ) => MockedResponse['result'];
+      };
       if (newData) {
         response.result = newData(operation.variables);
         this._mockedResponsesByKey[key].push(response);

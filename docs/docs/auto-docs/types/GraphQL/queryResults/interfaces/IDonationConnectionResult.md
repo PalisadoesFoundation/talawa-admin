@@ -2,9 +2,9 @@
 
 ***
 
-# Interface: DonationConnectionResult
+# Interface: IDonationConnectionResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L115)
+Defined in: [src/types/GraphQL/queryResults.ts:136](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L136)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:115](https://github.com/Palisadoe
 
 > **getDonationByOrgIdConnection**: `object`[]
 
-Defined in: [src/types/GraphQL/queryResults.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L116)
+Defined in: [src/types/GraphQL/queryResults.ts:137](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L137)
 
 #### \_id
 

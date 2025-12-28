@@ -79,21 +79,52 @@ const MOCKS = [
     },
     result: {
       data: {
-        eventsByOrganization: [
-          {
-            id: 'event123',
-            name: 'Test Event Title',
-            description: 'Test Description',
-            startDate: '2024-01-01',
-            endDate: '2024-01-02',
-            location: 'Test Location',
-            startTime: '09:00',
-            endTime: '17:00',
-            allDay: false,
-            isPublic: true,
-            isRegisterable: true,
+        organization: {
+          eventsCount: 1,
+          events: {
+            edges: [
+              {
+                node: {
+                  id: 'event123',
+                  name: 'Test Event Title',
+                  description: 'Test Description',
+                  startDate: '2024-01-01',
+                  endDate: '2024-01-02',
+                  location: 'Test Location',
+                  startAt: '2024-01-01T09:00:00Z',
+                  endAt: '2024-01-02T17:00:00Z',
+                  allDay: false,
+                  isPublic: true,
+                  isRegisterable: true,
+                  isRecurringEventTemplate: false,
+                  baseEvent: null,
+                  sequenceNumber: 1,
+                  totalCount: 1,
+                  hasExceptions: false,
+                  progressLabel: null,
+                  recurrenceDescription: null,
+                  recurrenceRule: null,
+                  attachments: [],
+                  creator: {
+                    id: 'creator123',
+                    name: 'Creator Name',
+                  },
+                  organization: {
+                    id: '123',
+                    name: 'Test Org',
+                  },
+                  createdAt: '2024-01-01T00:00:00Z',
+                  updatedAt: '2024-01-01T00:00:00Z',
+                },
+                cursor: 'cursor123',
+              },
+            ],
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: null,
+            },
           },
-        ],
+        },
       },
     },
   },

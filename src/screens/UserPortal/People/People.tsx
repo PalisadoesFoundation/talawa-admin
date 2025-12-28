@@ -50,8 +50,7 @@ import PeopleCard from 'components/UserPortal/PeopleCard/PeopleCard';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client/react';
-import type { OrganizationMembersResult } from 'types/GraphQL/queryResults';
-import { FilterAltOutlined } from '@mui/icons-material';
+import type { IOrganizationMembersResult } from 'types/GraphQL/queryResults';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
@@ -101,7 +100,7 @@ export default function People(): React.JSX.Element {
 
   // Query the current page of members
   const { data, loading, fetchMore, refetch } =
-    useQuery<OrganizationMembersResult>(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
+    useQuery<IOrganizationMembersResult>(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
       variables: {
         orgId: organizationId,
         firstName_contains: searchTerm,

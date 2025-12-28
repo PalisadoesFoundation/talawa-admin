@@ -39,7 +39,7 @@ import type { InterfaceMapType } from 'utils/interfaces';
 import { useQuery } from '@apollo/client/react';
 import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { OrganizationEventsResult } from 'types/GraphQL/queryResults';
+import type { IOrganizationEventsResult } from 'types/GraphQL/queryResults';
 
 const OrganizationScreen = (): JSX.Element => {
   const { getItem, setItem } = useLocalStorage();
@@ -68,7 +68,7 @@ const OrganizationScreen = (): JSX.Element => {
 
   const dispatch = useAppDispatch();
 
-  const { data: eventsData } = useQuery<OrganizationEventsResult>(
+  const { data: eventsData } = useQuery<IOrganizationEventsResult>(
     GET_ORGANIZATION_EVENTS_PG,
     {
       variables: { id: orgId },

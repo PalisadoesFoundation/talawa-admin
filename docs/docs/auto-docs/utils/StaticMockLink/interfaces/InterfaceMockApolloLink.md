@@ -4,7 +4,7 @@
 
 # Interface: InterfaceMockApolloLink
 
-Defined in: [src/utils/StaticMockLink.ts:156](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L156)
+Defined in: [src/utils/StaticMockLink.ts:161](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L161)
 
 ## Extends
 
@@ -16,4 +16,4 @@ Defined in: [src/utils/StaticMockLink.ts:156](https://github.com/PalisadoesFound
 
 > `optional` **operation**: `Operation`
 
-Defined in: [src/utils/StaticMockLink.ts:157](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L157)
+Defined in: [src/utils/StaticMockLink.ts:162](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L162)

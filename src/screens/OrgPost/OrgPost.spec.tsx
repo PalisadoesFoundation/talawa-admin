@@ -642,8 +642,8 @@ describe('OrgPost Component', () => {
       </MockedProvider>,
     );
 
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 0));
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
     });
 
     const openModalBtn = await screen.findByTestId('createPostModalBtn');

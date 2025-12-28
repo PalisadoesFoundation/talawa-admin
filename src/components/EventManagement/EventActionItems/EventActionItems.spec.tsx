@@ -44,6 +44,19 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
+// Mock debounce from @mui/material to avoid window is not defined error
+vi.mock('@mui/material', async () => {
+  const actual = await vi.importActual('@mui/material');
+  return {
+    ...actual,
+    debounce: (fn: (...args: unknown[]) => unknown) => {
+      const debounced = (...args: unknown[]) => fn(...args);
+      debounced.clear = vi.fn();
+      return debounced;
+    },
+  };
+});
+
 // Mock sub-components
 vi.mock('components/Loader/Loader', () => ({
   default: () => <div data-testid="loader">Loading...</div>,

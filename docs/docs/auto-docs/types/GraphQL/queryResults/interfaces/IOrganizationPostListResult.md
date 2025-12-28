@@ -2,9 +2,9 @@
 
 ***
 
-# Interface: OrganizationPostListResult
+# Interface: IOrganizationPostListResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:159](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L159)
+Defined in: [src/types/GraphQL/queryResults.ts:180](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L180)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:159](https://github.com/Palisadoe
 
 > **organization**: `object`
 
-Defined in: [src/types/GraphQL/queryResults.ts:160](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L160)
+Defined in: [src/types/GraphQL/queryResults.ts:181](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L181)
 
 #### posts
 

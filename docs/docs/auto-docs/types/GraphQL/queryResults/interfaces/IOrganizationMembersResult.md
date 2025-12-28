@@ -2,9 +2,9 @@
 
 ***
 
-# Interface: OrganizationMembersResult
+# Interface: IOrganizationMembersResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L46)
+Defined in: [src/types/GraphQL/queryResults.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L67)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:46](https://github.com/Palisadoes
 
 > **organization**: `object`
 
-Defined in: [src/types/GraphQL/queryResults.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L47)
+Defined in: [src/types/GraphQL/queryResults.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L68)
 
 #### members
 
