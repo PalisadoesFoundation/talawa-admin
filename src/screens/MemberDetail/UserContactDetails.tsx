@@ -106,7 +106,6 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     if (!['image/jpeg', 'image/png', 'image/gif'].includes(f.type))
       return toast.error(t('invalidFileType'));
     if (f.size > 5 * 1024 * 1024) return toast.error(t('fileTooLarge'));
-    setFormState((s) => ({ ...s, avatar: f }));
     setSelectedAvatar(f);
     setisUpdated(true);
   };
@@ -120,7 +119,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     ) =>
       Object.fromEntries(
         Object.entries(obj).filter(
-          ([v]) => v != null && (typeof v !== 'string' || v.trim()),
+          ([, v]) => v != null && (typeof v !== 'string' || v.trim()),
         ),
       ) as Partial<T>;
     if (formState.password && validatePassword(formState.password))
@@ -198,7 +197,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
               <Col lg={12} className="mb-2">
                 <div className="text-center mb-3">
                   <div className="position-relative d-inline-block">
-                    {formState?.avatarURL ? (
+                    {selectedAvatar || formState?.avatarURL ? (
                       <img
                         className={`rounded-circle ${styles.userContactDetailContactAvatarUrl}`}
                         src={
