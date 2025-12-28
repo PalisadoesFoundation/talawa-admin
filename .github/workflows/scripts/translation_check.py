@@ -120,7 +120,7 @@ def find_translation_tags(source: str | Path) -> set[str]:
         return set()
 
     # Find keyPrefix from useTranslation calls
-    # Matches patterns like: useTranslation('translation', { keyPrefix: 'namespace' })
+    # Matches: useTranslation('translation', { keyPrefix: 'namespace' })
     key_prefix_pattern = (
         r"useTranslation\s*\([^)]*keyPrefix\s*:\s*['\"]([^'\"]+)['\"]"
     )
@@ -137,8 +137,8 @@ def find_translation_tags(source: str | Path) -> set[str]:
     all_prefixes = key_prefixes + comment_prefixes
 
     # Get the primary keyPrefix (if multiple, use the first one found)
-    # Note: This assumes single keyPrefix per file. Files with multiple components
-    # using different keyPrefixes may have inaccurate results.
+    # Note: This assumes single keyPrefix per file. Files with multiple
+    # components using different keyPrefixes may have inaccurate results.
     if len(all_prefixes) > 1:
         file_name = source if isinstance(source, Path) else "source"
         print(
