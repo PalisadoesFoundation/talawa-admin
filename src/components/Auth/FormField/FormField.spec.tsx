@@ -196,10 +196,10 @@ describe('FormField', () => {
   });
 
   describe('Aria-Live Accessibility', () => {
-    test('error message has role="alert" by default', () => {
+    test('error message has role="status" by default', () => {
       render(<FormField {...defaultProps} error="Error occurred" />);
 
-      const errorElement = screen.getByRole('alert');
+      const errorElement = screen.getByRole('status');
       expect(errorElement).toBeInTheDocument();
       expect(errorElement).toHaveTextContent('Error occurred');
     });
@@ -207,7 +207,7 @@ describe('FormField', () => {
     test('error message has aria-live="polite" by default', () => {
       render(<FormField {...defaultProps} error="Error occurred" />);
 
-      const errorElement = screen.getByRole('alert');
+      const errorElement = screen.getByRole('status');
       expect(errorElement).toHaveAttribute('aria-live', 'polite');
     });
 
@@ -216,7 +216,7 @@ describe('FormField', () => {
         <FormField {...defaultProps} error="Error occurred" ariaLive={false} />,
       );
 
-      expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+      expect(screen.queryByRole('status')).not.toBeInTheDocument();
       const errorElement = screen.getByText('Error occurred');
       expect(errorElement).not.toHaveAttribute('aria-live');
     });

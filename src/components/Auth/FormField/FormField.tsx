@@ -72,7 +72,7 @@ export const FormField: React.FC<InterfaceFormFieldProps> = ({
           type="invalid"
           id={errorId}
           className="d-block"
-          role={ariaLive ? 'alert' : undefined}
+          role={ariaLive ? 'status' : undefined}
           aria-live={ariaLive ? 'polite' : undefined}
         >
           {error}
