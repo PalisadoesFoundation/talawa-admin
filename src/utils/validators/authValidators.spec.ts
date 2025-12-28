@@ -22,7 +22,7 @@ describe('authValidators', () => {
     it('should reject invalid email formats', () => {
       const result = validateEmail('bad');
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe('settings.invalidEmailFormat');
+      expect(result.error).toBe('loginPage.emailInvalid');
     });
 
     it('should reject emails without @ symbol', () => {
@@ -38,7 +38,7 @@ describe('authValidators', () => {
     it('should reject short passwords', () => {
       const result = validatePassword('short');
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe('settings.atleast_8_char_long');
+      expect(result.error).toBe('loginPage.atleastEightCharLong');
     });
 
     it('should reject null/undefined passwords', () => {
@@ -49,9 +49,7 @@ describe('authValidators', () => {
     it('should reject passwords missing requirements', () => {
       const result = validatePassword('password123');
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe(
-        'settings.password_must_include_all_requirements',
-      );
+      expect(result.error).toBe('loginPage.passwordInvalid');
     });
   });
 
@@ -64,7 +62,7 @@ describe('authValidators', () => {
     it('should reject short names', () => {
       const result = validateName(' ');
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe('settings.name_min_length');
+      expect(result.error).toBe('loginPage.nameInvalid');
     });
 
     it('should handle null/undefined names', () => {
@@ -83,7 +81,7 @@ describe('authValidators', () => {
     it('should reject non-matching passwords', () => {
       const result = validatePasswordConfirmation('Abcd123!', 'xxxx');
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe('settings.passwords_do_not_match');
+      expect(result.error).toBe('loginPage.passwordMismatches');
     });
   });
 
