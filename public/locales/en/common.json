@@ -143,7 +143,7 @@
   "reject": "Reject",
   "rejectedSuccessfully": "Rejected successfully",
   "searchRequests": "Search Requests",
-  "title": "Title"
+  "itemTitle": "Title",
   "signOut": "Sign Out",
   "signingOut": "Signing out...",
   "retryPrompt": "Failed to sign out. Retry?",
@@ -167,5 +167,5 @@
   "organizations": "Organizations",
   "createEvent": "Create Event",
   "eventCreated": "Event created successfully",
-  "eventDetails": "Event Details"a
+  "eventDetails": "Event Details"
 }

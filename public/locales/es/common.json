@@ -142,8 +142,8 @@
   "reject": "Rechazar",
   "rejectedSuccessfully": "Rechazado con éxito",
   "searchRequests": "Buscar solicitudes",
-  "title": "Título",
-  "assignee": "Asignado"
+  "itemTitle": "Título",
+  "assignee": "Asignado",
   "signOut": "Cerrar sesión",
   "signingOut": "Cerrando sesión...",
   "retryPrompt": "Error al cerrar sesión. ¿Reintentar?",

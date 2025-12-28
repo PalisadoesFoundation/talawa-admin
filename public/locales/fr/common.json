@@ -142,8 +142,8 @@
   "reject": "Rejeter",
   "rejectedSuccessfully": "Rejeté avec succès",
   "searchRequests": "Rechercher des demandes",
-  "title": "Titre",
-  "assignee": "Assigné"
+  "itemTitle": "Titre",
+  "assignee": "Assigné",
   "signOut": "Se déconnecter",
   "signingOut": "Déconnexion en cours...",
   "retryPrompt": "Échec de la révocation de la session. Réessayer ?",

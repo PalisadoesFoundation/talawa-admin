@@ -142,8 +142,8 @@
   "reject": "अस्वीकार करें",
   "rejectedSuccessfully": "सफलतापूर्वक अस्वीकार किया गया",
   "searchRequests": "अनुरोध खोजें",
-  "title": "शीर्षक",
-  "assignee": "नियुक्त व्यक्ति"
+  "itemTitle": "शीर्षक",
+  "assignee": "नियुक्त व्यक्ति",
   "signOut": "साइन आउट",
   "signingOut": "साइन आउट हो रहा है...",
   "retryPrompt": "सेशन रद्द करना विफल रहा। पुनः प्रयास करें?",

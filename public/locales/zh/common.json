@@ -142,8 +142,8 @@
   "reject": "拒绝",
   "rejectedSuccessfully": "成功拒绝",
   "searchRequests": "搜索请求",
-  "title": "标题",
-  "assignee": "受让人"
+  "itemTitle": "标题",
+  "assignee": "受让人",
   "signOut": "退出登录",
   "signingOut": "正在退出...",
   "retryPrompt": "撤销会话失败。重试？",
