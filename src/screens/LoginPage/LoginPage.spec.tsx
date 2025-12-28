@@ -2291,12 +2291,20 @@ describe('Cookie-based authentication verification', () => {
       'TRUE',
     );
 
-    // Verify user details are stored (from API response)
-    // Note: SIGNUP_MUTATION only queries for user { id }, so name/email come from response
-    // and may be empty if not returned by the mutation
-    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith('name', '');
-    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith('email', '');
-    // Note: role and userId are not stored during signup, only during login
-    // The signup flow stores: IsLoggedIn, name, email (from API response)
+    // Verify user details are stored (name/email from form input, userId from API)
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+      'name',
+      'New User',
+    );
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+      'email',
+      'newuser@example.com',
+    );
+    // Verify userId and role are now stored during signup
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+      'userId',
+      'newUser123',
+    );
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith('role', 'user');
   });
 });
