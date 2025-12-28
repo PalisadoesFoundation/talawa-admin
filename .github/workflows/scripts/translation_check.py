@@ -83,6 +83,20 @@ def load_locale_keys(locales_dir: str | Path) -> set[str]:
 def find_translation_tags(source: str | Path) -> set[str]:
     """Find all translation tags used inside a source file or string.
 
+    Handles keyPrefix option in useTranslation calls by prefixing
+    the extracted keys with the keyPrefix value.
+
+    For components that receive `t` as a prop (not using useTranslation
+    directly), add a comment like:
+    // translation-check-keyPrefix: organizationEvents
+    to specify the keyPrefix used by the parent component.
+
+    Note:
+        This function assumes a single keyPrefix per file. If multiple
+        keyPrefixes are found (from useTranslation calls or comment
+        directives), only the first one is used for all translation tags.
+        A warning is emitted to stderr when this occurs.
+
     Args:
         source: File path or raw source string.
 
@@ -97,37 +111,53 @@ def find_translation_tags(source: str | Path) -> set[str]:
     else:
         content = source
 
-    # Extract keyPrefix from useTranslation calls with variable names
-    # Pattern: const { t: varName } = useTranslation(..., { keyPrefix: 'prefix' })
-    # or: const { t } = useTranslation(..., { keyPrefix: 'prefix' })
-    # More robust pattern that handles nested parentheses and multi-line formatting
-    prefix_pattern = r"const\s*{\s*t(?:\s*:\s*(\w+))?\s*}\s*=\s*useTranslation\s*\([^)]*keyPrefix\s*:\s*['\"]([^'\"]+)['\"]"
-    prefix_matches = re.findall(prefix_pattern, content, re.DOTALL)
-    
-    # Build mapping of t function names to their prefixes
-    # If no alias, use 't' as the function name
-    t_to_prefix = {}
-    for alias, prefix in prefix_matches:
-        func_name = alias if alias else 't'
-        t_to_prefix[func_name] = prefix
-    
-    # Find all t() calls - only match t followed by optional uppercase/lowercase letters
-    # Matches: t('key'), tCommon('key'), tErrors('key')
-    # Avoids: test(), toString(), total(), etc.
-    tag_pattern = r"\b(t(?:[A-Z]\w*)?)\s*\(\s*['\"]([^'\" \n]+)['\"]\s*\)"
-    tag_matches = re.findall(tag_pattern, content)
-    
+    # Find keyPrefix from useTranslation calls
+    # Matches: useTranslation('translation', { keyPrefix: 'namespace' })
+    key_prefix_pattern = (
+        r"useTranslation\s*\([^)]*keyPrefix\s*:\s*['\"]([^'\"]+)['\"]"
+    )
+    key_prefixes = re.findall(key_prefix_pattern, content)
+
+    # Also check for explicit keyPrefix comment directive
+    # Matches: // translation-check-keyPrefix: namespace
+    comment_prefix_pattern = (
+        r"(?://|/\*)\s*translation-check-keyPrefix:\s*(\S+)"
+    )
+    comment_prefixes = re.findall(comment_prefix_pattern, content)
+
+    # Combine prefixes from useTranslation and comments
+    all_prefixes = key_prefixes + comment_prefixes
+
+    # Get the primary keyPrefix (if multiple, use the first one found)
+    # Note: This assumes single keyPrefix per file. Files with multiple
+    # components using different keyPrefixes may have inaccurate results.
+    if len(all_prefixes) > 1:
+        file_name = str(source) if isinstance(source, Path) else "source"
+        print(
+            f"Warning: Multiple keyPrefixes found in {file_name}. "
+            f"Using first: '{all_prefixes[0]}'. Found: {all_prefixes}",
+            file=sys.stderr,
+        )
+    primary_prefix = all_prefixes[0] if all_prefixes else None
+
+    # Find all t('key') calls
+    tags = re.findall(
+        r"(?:(?:\bi18n)\.)?\bt\(\s*['\"]([^'\" \n]+)['\"]",
+        content,
+    )
+
     result = set()
-    for func_name, tag in tag_matches:
-        base_tag = tag.split(":")[-1]
-        
-        # If this t function has a prefix, add the prefixed version
-        if func_name in t_to_prefix:
-            result.add(f"{t_to_prefix[func_name]}.{base_tag}")
+    for tag in tags:
+        # Remove namespace prefix if present (e.g., "translation:key" -> "key")
+        clean_tag = tag.split(":")[-1]
+
+        # If the tag already contains a dot (full path), use it as-is
+        # Otherwise, prefix it with the keyPrefix if one exists
+        if "." in clean_tag or primary_prefix is None:
+            result.add(clean_tag)
         else:
-            # Otherwise add the unprefixed version
-            result.add(base_tag)
-    
+            result.add(f"{primary_prefix}.{clean_tag}")
+
     return result
 
 
