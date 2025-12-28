@@ -11,7 +11,7 @@ import { currencySymbols } from 'utils/currency';
 import styles from 'style/app-fixed.module.css';
 import PledgeDeleteModal from './deleteModal/PledgeDeleteModal';
 import PledgeModal from './modal/PledgeModal';
-import { Breadcrumbs, Link, Popover, Typography } from '@mui/material';
+import { Popover } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
@@ -25,6 +25,7 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
+import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
 
 enum ModalState {
   SAME = 'same',
@@ -90,7 +91,7 @@ const fundCampaignPledge = (): JSX.Element => {
     },
   });
 
-  const { pledges, totalPledged, totalRaised, fundName } = useMemo(() => {
+  const { pledges, totalPledged, totalRaised } = useMemo(() => {
     let totalPledged = 0;
     let totalRaised = 0;
 
@@ -144,10 +145,7 @@ const fundCampaignPledge = (): JSX.Element => {
     });
 
     // Get fund name from the campaign's fund property
-    const fundName =
-      pledgeData?.fundCampaign?.pledges?.edges[0]?.node?.campaign?.fund?.name ??
-      tCommon('funds');
-    return { pledges: sortedPledges, totalPledged, totalRaised, fundName };
+    return { pledges: sortedPledges, totalPledged, totalRaised };
   }, [pledgeData, searchTerm, sortBy, tCommon]);
 
   useEffect(() => {
@@ -387,25 +385,21 @@ const fundCampaignPledge = (): JSX.Element => {
 
   return (
     <div>
-      <Breadcrumbs aria-label={tCommon('breadcrumb')} className="ms-1">
-        <Link
-          underline="hover"
-          color="inherit"
-          component="button"
-          onClick={() => history.go(-2)}
-        >
-          {fundName}
-        </Link>
-        <Link
-          underline="hover"
-          color="inherit"
-          component="button"
-          onClick={() => history.back()}
-        >
-          {campaignInfo?.name}
-        </Link>
-        <Typography color="text.primary">{t('pledges')}</Typography>
-      </Breadcrumbs>
+      <SafeBreadcrumbs
+        items={[
+          {
+            translationKey: 'funds',
+            to: `/orgfunds/${orgId}`,
+          },
+          {
+            label: campaignInfo?.name,
+            to: `/orgfundcampaign/${orgId}/${fundCampaignId}`,
+          },
+          {
+            label: t('pledges'),
+          },
+        ]}
+      />
       <div className={styles.overviewContainer}>
         <div className={styles.titleContainer}>
           <h3>{campaignInfo?.name}</h3>

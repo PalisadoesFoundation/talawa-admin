@@ -24,7 +24,7 @@ import {
   ReportingTableGridProps,
 } from 'types/ReportingTable/interface';
 import { PAGE_SIZE, ROW_HEIGHT } from 'types/ReportingTable/utils';
-import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/BreadcrumbsComponent';
+import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 const dataGridStyle = {
@@ -133,11 +133,10 @@ const orgFundCampaign = (): JSX.Element => {
     navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);
   };
 
-  const { fundName, isArchived } = useMemo(() => {
-    const fundName = campaignData?.fund?.name || 'Fund';
+  const { isArchived } = useMemo(() => {
     const isArchived = false;
-    return { fundName, isArchived };
-  }, [campaignData]);
+    return { isArchived };
+  }, []);
 
   if (!fundId || !orgId) {
     return <Navigate to={'/'} />;
@@ -385,16 +384,16 @@ const orgFundCampaign = (): JSX.Element => {
 
   return (
     <div className={styles.organizationFundCampaignContainer}>
-      <BreadcrumbsComponent
-        aria-label={tCommon('breadcrumb')}
+      <SafeBreadcrumbs
+        ariaLabelTranslationKey="breadcrumb"
         items={[
           {
-            label: fundName,
+            translationKey: 'funds',
             to: `/orgfunds/${orgId}`,
           },
           {
-            label: t('title'),
-            to: `/orgfunds/${orgId}/campaigns`,
+            translationKey: 'title',
+            isCurrent: true,
           },
         ]}
       />

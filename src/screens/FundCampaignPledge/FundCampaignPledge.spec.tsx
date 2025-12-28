@@ -17,6 +17,7 @@ import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import styles from 'style/app-fixed.module.css';
+import { IBreadcrumbItem } from 'shared-components/BreadcrumbsComponent';
 
 const mockParamsState = {
   orgId: 'orgId',
@@ -48,6 +49,35 @@ vi.mock('@mui/x-date-pickers/DateTimePicker', () => {
       .then((module) => module.DesktopDateTimePicker),
   };
 });
+
+vi.mock('shared-components/BreadcrumbsComponent/SafeBreadcrumbs', () => ({
+  __esModule: true,
+  default: ({ items }: { items: IBreadcrumbItem[] }) => {
+    return (
+      <nav data-testid="breadcrumbs">
+        {items.map((item: IBreadcrumbItem, index: number) =>
+          item.to ? (
+            <a
+              key={index}
+              href={item.to}
+              data-testid={
+                item.isCurrent
+                  ? 'pledgesLink'
+                  : item.to.includes('/orgfunds/')
+                    ? 'fundsLink'
+                    : 'campaignLink'
+              }
+            >
+              {item.label}
+            </a>
+          ) : (
+            <span key={index}>{item.label}</span>
+          ),
+        )}
+      </nav>
+    );
+  },
+}));
 
 const EMPTY_MOCK = {
   request: {
@@ -487,36 +517,24 @@ describe('Testing Campaign Pledge Screen', () => {
     });
   });
 
-  it('should handle breadcrumb navigation correctly', async () => {
-    const mockHistoryBack = vi.fn();
-    const mockHistoryGo = vi.fn();
-
-    // Mock window.history
-    Object.defineProperty(window, 'history', {
-      value: {
-        back: mockHistoryBack,
-        go: mockHistoryGo,
-      },
-      writable: true,
-    });
-
+  it('should render breadcrumb links with correct paths', async () => {
     renderFundCampaignPledge(link1);
 
-    // Wait for component to load
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
+      expect(screen.getByTestId('breadcrumbs')).toBeInTheDocument();
     });
 
-    // Find and click breadcrumb links
-    const breadcrumbLinks = screen.getAllByRole('button');
+    const fundsLink = screen.getByTestId('fundsLink');
+    const campaignLink = screen.getByTestId('campaignLink');
 
-    // Click campaign name link (goes back 2 steps)
-    fireEvent.click(breadcrumbLinks[0]);
-    expect(mockHistoryGo).toHaveBeenCalledWith(-2);
+    expect(fundsLink).toHaveAttribute('href', '/orgfunds/orgId');
+    expect(campaignLink).toHaveAttribute(
+      'href',
+      '/orgfundcampaign/orgId/fundCampaignId',
+    );
 
-    // Click fund name link (goes back 1 step)
-    fireEvent.click(breadcrumbLinks[1]);
-    expect(mockHistoryBack).toHaveBeenCalled();
+    // current page – rendered as span, not a link
+    expect(screen.getByText('Pledges')).toBeInTheDocument();
   });
 
   it('should render the Campaign Pledge screen with error', async () => {
