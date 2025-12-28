@@ -1,11 +1,9 @@
 import React, { ReactNode } from 'react';
-// import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'; ---- no need for this, I can remove this as cpdebase mein we can use it without importing, config mein defined hai
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ErrorBoundaryWrapper } from './ErrorBoundaryWrapper';
-import type {
-  InterfaceErrorFallbackProps,
-} from 'types/shared-components/ErrorBoundaryWrapper/interface';
+import type { InterfaceErrorFallbackProps } from 'types/shared-components/ErrorBoundaryWrapper/interface';
 import { toast } from 'react-toastify';
 
 // Mock react-toastify
@@ -16,22 +14,24 @@ vi.mock('react-toastify', () => ({
 }));
 
 // Component that throws an error during render
-const ThrowError = ({ shouldThrow = true }: { shouldThrow?: boolean }) => {
+interface IComponent {
+  shouldThrow?: boolean;
+  message?: string;
+  children?: ReactNode;
+}
+
+const TestErrorComponent = ({
+  shouldThrow = true,
+  message = 'Test error message',
+  children,
+}: IComponent) => {
   if (shouldThrow) {
-    throw new Error('Test error message');
+    throw new Error(message);
   }
-  return <div>No error</div>;
+  return (
+    <div data-testid="normal-component">{children || 'Normal content'}</div>
+  );
 };
-
-// Component that throws an error with a specific message
-const ThrowCustomError = ({ message }: { message: string }) => {
-  throw new Error(message);
-};
-
-// Normal component that doesn't throw
-const NormalComponent = ({ children }: { children?: ReactNode }) => (
-  <div data-testid="normal-component">{children || 'Normal content'}</div>
-);
 
 // spy on console.error to suppress during test
 const consoleErrorSpyFunction = () => {
@@ -54,7 +54,7 @@ describe('ErrorBoundaryWrapper', async () => {
     it('renders children normally when no error occurs', () => {
       render(
         <ErrorBoundaryWrapper>
-          <NormalComponent />
+          <TestErrorComponent shouldThrow={false} />
         </ErrorBoundaryWrapper>,
       );
 
@@ -66,8 +66,8 @@ describe('ErrorBoundaryWrapper', async () => {
     it('renders multiple children normally', () => {
       render(
         <ErrorBoundaryWrapper>
-          <NormalComponent>Child 1</NormalComponent>
-          <NormalComponent>Child 2</NormalComponent>
+          <TestErrorComponent shouldThrow={false}>Child 1</TestErrorComponent>
+          <TestErrorComponent shouldThrow={false}>Child 2</TestErrorComponent>
         </ErrorBoundaryWrapper>,
       );
 
@@ -86,7 +86,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       render(
         <ErrorBoundaryWrapper>
-          <ThrowError />
+          <TestErrorComponent />
         </ErrorBoundaryWrapper>,
       );
 
@@ -103,7 +103,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       render(
         <ErrorBoundaryWrapper>
-          <ThrowError />
+          <TestErrorComponent />
         </ErrorBoundaryWrapper>,
       );
 
@@ -122,7 +122,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       render(
         <ErrorBoundaryWrapper>
-          <ThrowCustomError message="" />
+          <TestErrorComponent message="" />
         </ErrorBoundaryWrapper>,
       );
 
@@ -138,7 +138,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       render(
         <ErrorBoundaryWrapper>
-          <ThrowError />
+          <TestErrorComponent />
         </ErrorBoundaryWrapper>,
       );
 
@@ -152,7 +152,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       render(
         <ErrorBoundaryWrapper errorMessage="Custom error message">
-          <ThrowError />
+          <TestErrorComponent />
         </ErrorBoundaryWrapper>,
       );
 
@@ -166,7 +166,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       render(
         <ErrorBoundaryWrapper>
-          <ThrowCustomError message="" />
+          <TestErrorComponent message="" />
         </ErrorBoundaryWrapper>,
       );
 
@@ -189,7 +189,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       render(
         <ErrorBoundaryWrapper fallback={customFallback}>
-          <ThrowError />
+          <TestErrorComponent />
         </ErrorBoundaryWrapper>,
       );
 
@@ -210,7 +210,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       render(
         <ErrorBoundaryWrapper fallback={customFallback}>
-          <ThrowError />
+          <TestErrorComponent />
         </ErrorBoundaryWrapper>,
       );
 
@@ -227,7 +227,7 @@ describe('ErrorBoundaryWrapper', async () => {
     it('renders custom fallback component when provided', () => {
       const consoleErrorSpy = consoleErrorSpyFunction();
 
-      const CustomFallback = ({
+      const renderCustomFallbackComponent = ({
         error,
         onReset,
       }: InterfaceErrorFallbackProps) => (
@@ -241,8 +241,8 @@ describe('ErrorBoundaryWrapper', async () => {
       );
 
       render(
-        <ErrorBoundaryWrapper fallbackComponent={CustomFallback}>
-          <ThrowError />
+        <ErrorBoundaryWrapper fallbackComponent={renderCustomFallbackComponent}>
+          <TestErrorComponent />
         </ErrorBoundaryWrapper>,
       );
 
@@ -260,7 +260,7 @@ describe('ErrorBoundaryWrapper', async () => {
       const consoleErrorSpy = consoleErrorSpyFunction();
 
       const onResetSpy = vi.fn();
-      const CustomFallback = ({
+      const renderCustomFallbackComponent = ({
         error,
         onReset,
       }: InterfaceErrorFallbackProps) => {
@@ -279,10 +279,10 @@ describe('ErrorBoundaryWrapper', async () => {
 
       render(
         <ErrorBoundaryWrapper
-          fallbackComponent={CustomFallback}
+          fallbackComponent={renderCustomFallbackComponent}
           onReset={onResetSpy}
         >
-          <ThrowError />
+          <TestErrorComponent />
         </ErrorBoundaryWrapper>,
       );
 
@@ -297,7 +297,7 @@ describe('ErrorBoundaryWrapper', async () => {
     it('custom fallback component takes precedence over custom JSX fallback', () => {
       const consoleErrorSpy = consoleErrorSpyFunction();
 
-      const CustomFallback = () => (
+      const renderCustomFallbackComponent = () => (
         <div data-testid="component-fallback">Component Fallback</div>
       );
       const customJSX = <div data-testid="jsx-fallback">JSX Fallback</div>;
@@ -305,9 +305,9 @@ describe('ErrorBoundaryWrapper', async () => {
       render(
         <ErrorBoundaryWrapper
           fallback={customJSX}
-          fallbackComponent={CustomFallback}
+          fallbackComponent={renderCustomFallbackComponent}
         >
-          <ThrowError />
+          <TestErrorComponent />
         </ErrorBoundaryWrapper>,
       );
 
@@ -326,7 +326,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       render(
         <ErrorBoundaryWrapper onError={onErrorSpy}>
-          <ThrowError />
+          <TestErrorComponent />
         </ErrorBoundaryWrapper>,
       );
 
@@ -350,7 +350,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       render(
         <ErrorBoundaryWrapper onError={onErrorSpy}>
-          <ThrowCustomError message={customMessage} />
+          <TestErrorComponent message={customMessage} />
         </ErrorBoundaryWrapper>,
       );
 
@@ -374,7 +374,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       render(
         <ErrorBoundaryWrapper onReset={onResetSpy}>
-          <ThrowError />
+          <TestErrorComponent />
         </ErrorBoundaryWrapper>,
       );
 
@@ -394,7 +394,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       render(
         <ErrorBoundaryWrapper>
-          <ThrowError />
+          <TestErrorComponent />
         </ErrorBoundaryWrapper>,
       );
 
@@ -413,7 +413,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       const { rerender } = render(
         <ErrorBoundaryWrapper onReset={onResetSpy}>
-          <ThrowError shouldThrow={true} />
+          <TestErrorComponent shouldThrow={true} />
         </ErrorBoundaryWrapper>,
       );
 
@@ -424,7 +424,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       rerender(
         <ErrorBoundaryWrapper>
-          <ThrowError shouldThrow={false} />
+          <TestErrorComponent shouldThrow={false} />
         </ErrorBoundaryWrapper>,
       );
 
@@ -442,7 +442,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       render(
         <ErrorBoundaryWrapper showToast={false}>
-          <ThrowError />
+          <TestErrorComponent />
         </ErrorBoundaryWrapper>,
       );
 
@@ -456,7 +456,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       render(
         <ErrorBoundaryWrapper showToast={true}>
-          <ThrowError />
+          <TestErrorComponent />
         </ErrorBoundaryWrapper>,
       );
 
@@ -472,7 +472,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       render(
         <ErrorBoundaryWrapper>
-          <ThrowError />
+          <TestErrorComponent />
         </ErrorBoundaryWrapper>,
       );
 
@@ -487,7 +487,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       render(
         <ErrorBoundaryWrapper>
-          <ThrowError />
+          <TestErrorComponent />
         </ErrorBoundaryWrapper>,
       );
 
@@ -502,7 +502,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       render(
         <ErrorBoundaryWrapper>
-          <ThrowError />
+          <TestErrorComponent />
         </ErrorBoundaryWrapper>,
       );
 
@@ -517,7 +517,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       render(
         <ErrorBoundaryWrapper>
-          <ThrowError />
+          <TestErrorComponent />
         </ErrorBoundaryWrapper>,
       );
 
@@ -537,7 +537,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       render(
         <ErrorBoundaryWrapper onReset={onResetSpy}>
-          <ThrowError />
+          <TestErrorComponent />
         </ErrorBoundaryWrapper>,
       );
 
@@ -558,7 +558,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       render(
         <ErrorBoundaryWrapper onReset={onResetSpy}>
-          <ThrowError />
+          <TestErrorComponent />
         </ErrorBoundaryWrapper>,
       );
 
@@ -580,7 +580,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
       const { rerender } = render(
         <ErrorBoundaryWrapper onError={onErrorSpy}>
-          <ThrowCustomError message="First error" />
+          <TestErrorComponent message="First error" />
         </ErrorBoundaryWrapper>,
       );
 
@@ -589,10 +589,9 @@ describe('ErrorBoundaryWrapper', async () => {
       // Trigger another error
       rerender(
         <ErrorBoundaryWrapper onError={onErrorSpy}>
-          <ThrowCustomError message="Second error" />
+          <TestErrorComponent message="Second error" />
         </ErrorBoundaryWrapper>,
       );
-
 
       expect(screen.getByTestId('error-boundary-fallback')).toBeInTheDocument();
 
