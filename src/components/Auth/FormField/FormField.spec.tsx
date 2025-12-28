@@ -185,13 +185,13 @@ describe('FormField', () => {
     test('does not display error when error is null', () => {
       render(<FormField {...defaultProps} error={null} />);
 
-      expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+      expect(screen.queryByRole('status')).not.toBeInTheDocument();
     });
 
     test('does not display error when error is undefined', () => {
       render(<FormField {...defaultProps} error={undefined} />);
 
-      expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+      expect(screen.queryByRole('status')).not.toBeInTheDocument();
     });
   });
 
