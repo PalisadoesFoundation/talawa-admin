@@ -44,7 +44,6 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material/styles';
-import { Image } from 'react-bootstrap';
 import styles from '../../../style/app-fixed.module.css';
 import commentCardStyles from './CommentCard.module.css';
 import { VoteType } from 'utils/interfaces';
@@ -53,6 +52,7 @@ import {
   DELETE_COMMENT,
   UPDATE_COMMENT,
 } from 'GraphQl/Mutations/CommentMutations';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 const CommentContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1.5),
@@ -220,11 +220,12 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
     <CommentContainer>
       <Stack direction="row" spacing={2} alignItems="flex-start">
         <span className={styles.userImageUserComment}>
-          <Image
-            crossOrigin="anonymous"
-            src={creator.avatarURL || defaultAvatar}
-            alt={creator.name}
-            loading="lazy"
+          <ProfileAvatarDisplay
+            imageUrl={creator.avatarURL || defaultAvatar}
+            fallbackName={creator.name}
+            size="small"
+            dataTestId="user-avatar"
+            enableEnlarge
           />
         </span>
         <Box sx={{ flexGrow: 1 }}>

@@ -43,7 +43,6 @@ import React, {
   useState,
 } from 'react';
 import { Close, InsertPhotoOutlined, PushPin } from '@mui/icons-material';
-import Avatar from 'components/Avatar/Avatar';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './createPostModal.module.css';
 import { useMutation } from '@apollo/client';
@@ -56,6 +55,7 @@ import { errorHandler } from 'utils/errorHandler';
 import { useTranslation } from 'react-i18next';
 import { ICreatePostData, ICreatePostInput } from 'types/Post/type';
 import { ICreatePostModalProps } from 'types/Post/interface';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 function CreatePostModal({
   show,
@@ -240,11 +240,11 @@ function CreatePostModal({
         {/* Header */}
         <div className={styles.modalHeader}>
           <div className={styles.headerLeft}>
-            <Avatar
-              name={name}
-              size={48}
-              radius={50}
+            <ProfileAvatarDisplay
+              fallbackName={name}
+              size="small"
               dataTestId="user-avatar"
+              enableEnlarge={true}
             />
             <div className={styles.userInfo}>
               <span className={styles.userName}>{name}</span>

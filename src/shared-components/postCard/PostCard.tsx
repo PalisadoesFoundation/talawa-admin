@@ -25,7 +25,6 @@ import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import {
-  Avatar,
   IconButton,
   Button,
   FormControl,
@@ -72,6 +71,7 @@ import { PluginInjector } from '../../plugin';
 import useLocalStorage from '../../utils/useLocalstorage';
 import { handleLoadMoreComments as handleLoadMoreCommentsHelper } from './helperFunctions';
 import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
@@ -252,16 +252,13 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
 
       <Box className={postCardStyles.postHeader}>
         <Box className={postCardStyles.userInfo}>
-          <Avatar
+          <ProfileAvatarDisplay
+            fallbackName={props.creator.name}
+            size="small"
+            dataTestId="user-avatar"
             className={styles.userImageUserPost}
-            src={props.creator.avatarURL || UserDefault}
-            alt={props.creator.name}
-            slotProps={{
-              img: {
-                crossOrigin: 'anonymous',
-                loading: 'lazy',
-              },
-            }}
+            imageUrl={props.creator.avatarURL || UserDefault}
+            enableEnlarge
           />
           <Typography variant="subtitle2" fontWeight="bold">
             {props.creator.name}
@@ -271,7 +268,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           <IconButton
             onClick={handleDropdownOpen}
             size="small"
-            aria-label="more options"
+            aria-label={t('moreOptions')}
             data-testid="post-more-options-button"
           >
             <MoreHoriz />

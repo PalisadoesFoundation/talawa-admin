@@ -1258,10 +1258,10 @@
     "loadingComments": "Loading comments…",
     "loadMoreComments": "Load more comments",
     "noMoreComments": "No more comments",
+    "moreOptions": "more options",
     "postedOn": "Posted on {{date}}",
     "emptyCommentError": "Please enter a comment before submitting.",
-    "unexpectedError": "An unexpected error occurred. Please try again.",
-    "moreOptions": "More options"
+    "unexpectedError": "An unexpected error occurred. Please try again."
   },
   "posts": {
     "pinnedPosts": "Pinned Posts",

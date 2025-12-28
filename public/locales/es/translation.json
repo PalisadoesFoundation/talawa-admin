@@ -1209,7 +1209,7 @@
     "postedOn": "Publicado el {{date}}",
     "emptyCommentError": "Por favor ingrese un comentario antes de enviarlo.",
     "unexpectedError": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo.",
-    "moreOptions": "Más opciones"
+    "moreOptions": "más opciones"
   },
   "posts": {
     "pinnedPosts": "Publicaciones fijadas",
