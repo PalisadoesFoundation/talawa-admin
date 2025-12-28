@@ -367,7 +367,6 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               crossOrigin="anonymous"
             >
               <source src={props.attachmentURL} />
-              <track kind="captions" />
             </video>
           )}
         </Box>
