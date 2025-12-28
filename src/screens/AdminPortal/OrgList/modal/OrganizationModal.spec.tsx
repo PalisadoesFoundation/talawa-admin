@@ -10,10 +10,10 @@ import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { BrowserRouter } from 'react-router';
 import { Provider } from 'react-redux';
-import { store } from '../../../state/store'; // Update path based on your project structure
+import { store } from '../../../../state/store'; // Update path based on your project structure
 import { I18nextProvider } from 'react-i18next';
 import OrganizationModal from './OrganizationModal';
-import i18nForTest from '../../../utils/i18nForTest'; // Update path based on your project structure
+import i18nForTest from '../../../../utils/i18nForTest'; // Update path based on your project structure
 
 import { validateFile } from 'utils/fileValidation';
 

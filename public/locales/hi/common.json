@@ -128,5 +128,16 @@
   "Volunteers": "स्वयंसेवक",
   "unblock": "अनब्लॉक करें",
   "unblockedSuccessfully": "{{item}} सफलतापूर्वक अनब्लॉक किया गया",
-  "pluginSettings": "प्लगइन सेटिंग्स"
+  "pluginSettings": "प्लगइन सेटिंग्स",
+  "fileTooLarge": "फ़ाइल बहुत बड़ी है। अधिकतम अनुमत आकार {{size}} एमबी है",
+  "invalidFileType": "अमान्य फ़ाइल प्रकार। कृपया एक {{types}} फ़ाइल अपलोड करें",
+  "enterDescription": "विवरण दर्ज करें",
+  "example": "उदाहरण। {{example}}",
+  "selectCountry": "एक देश चुनें",
+  "enterCityName": "शहर का नाम दर्ज करें",
+  "enterStateName": "राज्य का नाम दर्ज करें",
+  "select": "चुनें",
+  "selectAsYourCountry": "{{country}} को अपने देश के रूप में चुनें",
+  "selectACountry": "एक देश चुनें",
+  "passwordLengthRequirement": "पासवर्ड कम से कम {{length}} अक्षरों का होना चाहिए।"
 }

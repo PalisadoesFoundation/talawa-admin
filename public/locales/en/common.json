@@ -41,6 +41,7 @@
   "email": "Email",
   "name": "Name",
   "desc": "Description",
+  "enterDescription": "Enter Description",
   "enterPassword": "Enter Password",
   "password": "Password",
   "confirmPassword": "Confirm Password",
@@ -128,5 +129,15 @@
   "Volunteers": "Volunteers",
   "unblock": "Unblock",
   "unblockedSuccessfully": "{{item}} unblocked successfully",
-  "pluginSettings": "Plugin Settings"
+  "pluginSettings": "Plugin Settings",
+  "fileTooLarge": "File is too large. Maximum allowed size is {{size}}MB.",
+  "invalidFileType": "Invalid file type. Please upload a {{types}} file.",
+  "example": "Ex. {{example}}",
+  "selectCountry": "Select a country",
+  "enterCityName": "Enter city name",
+  "enterStateName": "Enter state name",
+  "select": "Select",
+  "selectAsYourCountry": "Select {{country}} as your country",
+  "selectACountry": "Select a country",
+  "passwordLengthRequirement": "Password must be at least {{length}} characters long."
 }

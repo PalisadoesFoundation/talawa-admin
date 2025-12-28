@@ -160,7 +160,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 className={`mb-3 ${styles.inputField}`}
               >
                 <option value="" disabled>
-                  Select a country
+                  {tCommon('selectACountry')}
                 </option>
                 {countryOptions.map((country) => (
                   <option

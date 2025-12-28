@@ -59,7 +59,7 @@ import {
 import convertToBase64 from 'utils/convertToBase64';
 import styles from 'style/app-fixed.module.css';
 import { errorHandler } from 'utils/errorHandler';
-import UpdateSession from '../../components/UpdateSession/UpdateSession';
+import UpdateSession from '../../../components/UpdateSession/UpdateSession';
 
 const CommunityProfile = (): JSX.Element => {
   // Translation hooks for internationalization
@@ -68,7 +68,9 @@ const CommunityProfile = (): JSX.Element => {
   });
   const { t: tCommon } = useTranslation('common');
 
-  document.title = t('title'); // Set document title
+  React.useEffect(() => {
+    document.title = t('title'); // Set document title
+  }, [t]);
 
   // Define the type for pre-login imagery data
   type PreLoginImageryDataType = {
@@ -298,7 +300,7 @@ const CommunityProfile = (): JSX.Element => {
               </Form.Label>
               {/* Social media inputs */}
               <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={FacebookLogo} alt="Facebook Logo" />
+                <img src={FacebookLogo} alt={`Facebook ${t('logo')}`} />
                 <Form.Control
                   type="url"
                   id="facebook"
@@ -312,7 +314,7 @@ const CommunityProfile = (): JSX.Element => {
                 />
               </div>
               <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={InstagramLogo} alt="Instagram Logo" />
+                <img src={InstagramLogo} alt={`Instagram ${t('logo')}`} />
                 <Form.Control
                   type="url"
                   id="instagram"
@@ -326,7 +328,7 @@ const CommunityProfile = (): JSX.Element => {
                 />
               </div>
               <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={XLogo} alt="X Logo" />
+                <img src={XLogo} alt={`X ${t('logo')}`} />
                 <Form.Control
                   type="url"
                   id="X"
@@ -340,7 +342,7 @@ const CommunityProfile = (): JSX.Element => {
                 />
               </div>
               <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={LinkedInLogo} alt="LinkedIn Logo" />
+                <img src={LinkedInLogo} alt={`LinkedIn ${t('logo')}`} />
                 <Form.Control
                   type="url"
                   id="linkedIn"
@@ -354,7 +356,7 @@ const CommunityProfile = (): JSX.Element => {
                 />
               </div>
               <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={GithubLogo} alt="Github Logo" />
+                <img src={GithubLogo} alt={`Github ${t('logo')}`} />
                 <Form.Control
                   type="url"
                   id="github"
@@ -368,7 +370,7 @@ const CommunityProfile = (): JSX.Element => {
                 />
               </div>
               <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={YoutubeLogo} alt="Youtube Logo" />
+                <img src={YoutubeLogo} alt={`Youtube ${t('logo')}`} />
                 <Form.Control
                   type="url"
                   id="youtube"
@@ -382,7 +384,7 @@ const CommunityProfile = (): JSX.Element => {
                 />
               </div>
               <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={RedditLogo} alt="Reddit Logo" />
+                <img src={RedditLogo} alt={`Reddit ${t('logo')}`} />
                 <Form.Control
                   type="url"
                   id="reddit"
@@ -396,7 +398,7 @@ const CommunityProfile = (): JSX.Element => {
                 />
               </div>
               <div className="mb-3 d-flex align-items-center gap-3">
-                <img src={SlackLogo} alt="Slack Logo" />
+                <img src={SlackLogo} alt={`Slack ${t('logo')}`} />
                 <Form.Control
                   type="url"
                   id="slack"
