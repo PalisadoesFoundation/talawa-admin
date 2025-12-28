@@ -97,12 +97,36 @@ def find_translation_tags(source: str | Path) -> set[str]:
     else:
         content = source
 
-    tags = re.findall(
-        r"(?:(?:\bi18n)\.)?\bt\(\s*['\"]([^'\" \n]+)['\"]",
-        content,
-    )
-
-    return {tag.split(":")[-1] for tag in tags}
+    # Extract keyPrefix from useTranslation calls with variable names
+    # Pattern: const { t: varName } = useTranslation(..., { keyPrefix: 'prefix' })
+    # or: const { t } = useTranslation(..., { keyPrefix: 'prefix' })
+    prefix_pattern = r"const\s*{\s*t(?:\s*:\s*(\w+))?\s*}\s*=\s*useTranslation\([^)]*keyPrefix\s*:\s*['\"]([^'\"]+)['\"]"
+    prefix_matches = re.findall(prefix_pattern, content)
+    
+    # Build mapping of t function names to their prefixes
+    # If no alias, use 't' as the function name
+    t_to_prefix = {}
+    for alias, prefix in prefix_matches:
+        func_name = alias if alias else 't'
+        t_to_prefix[func_name] = prefix
+    
+    # Find all t() calls - be more specific to avoid false matches
+    # Match: t('key') or tCommon('key') but not things like const t =
+    tag_pattern = r"\b(t\w*)\s*\(\s*['\"]([^'\" \n]+)['\"]\s*\)"
+    tag_matches = re.findall(tag_pattern, content)
+    
+    result = set()
+    for func_name, tag in tag_matches:
+        base_tag = tag.split(":")[-1]
+        
+        # If this t function has a prefix, add the prefixed version
+        if func_name in t_to_prefix:
+            result.add(f"{t_to_prefix[func_name]}.{base_tag}")
+        else:
+            # Otherwise add the unprefixed version
+            result.add(base_tag)
+    
+    return result
 
 
 def get_target_files(
