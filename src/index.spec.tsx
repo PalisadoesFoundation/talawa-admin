@@ -597,6 +597,8 @@ describe('Apollo Client Configuration', () => {
     let mockRefreshToken: Mock<() => Promise<boolean>>;
     let mockGetItem: Mock<() => string | null>;
     let mockClearAllItems: Mock<() => void>;
+    let getComputedStyleSpy: { mockRestore: () => void };
+    let getElementByIdSpy: { mockRestore: () => void };
 
     beforeEach(async () => {
       vi.resetModules();
@@ -657,14 +659,22 @@ describe('Apollo Client Configuration', () => {
       });
 
       // Mock getComputedStyle for MUI theme
-      vi.spyOn(window, 'getComputedStyle').mockReturnValue({
-        getPropertyValue: vi.fn().mockReturnValue('#' + '000000'),
-      } as unknown as CSSStyleDeclaration);
+      getComputedStyleSpy = vi
+        .spyOn(window, 'getComputedStyle')
+        .mockReturnValue({
+          getPropertyValue: vi.fn().mockReturnValue('#' + '000000'),
+        } as unknown as CSSStyleDeclaration);
 
       // Mock document.getElementById to prevent "Root container missing" error
-      vi.spyOn(document, 'getElementById').mockReturnValue(
-        document.createElement('div'),
-      );
+      getElementByIdSpy = vi
+        .spyOn(document, 'getElementById')
+        .mockReturnValue(document.createElement('div'));
+    });
+
+    afterEach(() => {
+      vi.clearAllMocks();
+      getComputedStyleSpy.mockRestore();
+      getElementByIdSpy.mockRestore();
     });
 
     it('should trigger refreshToken on unauthenticated error', async () => {
@@ -709,10 +719,13 @@ describe('Apollo Client Configuration', () => {
         });
       }
 
-      // Wait for promises to resolve
-      await new Promise(process.nextTick);
-
-      expect(mockRefreshToken).toHaveBeenCalled();
+      // Wait for refresh token to be called
+      await vi.waitFor(
+        () => {
+          expect(mockRefreshToken).toHaveBeenCalled();
+        },
+        { timeout: 1000 },
+      );
     });
 
     it('should queue requests when refreshing', async () => {
@@ -787,14 +800,13 @@ describe('Apollo Client Configuration', () => {
         resolveRefresh(true);
       }
 
-      // Wait for promises
-      await new Promise(process.nextTick);
-      await new Promise(process.nextTick);
-
-      // Now the queued request should have been processed (forward called)
-      // Note: The implementation calls forward(operation).subscribe(subscriber)
-      // So forward should be called again for the queued operation
-      expect(forward).toHaveBeenCalledWith(operation2);
+      // Wait for queued request to be processed after refresh resolves
+      await vi.waitFor(
+        () => {
+          expect(forward).toHaveBeenCalledWith(operation2);
+        },
+        { timeout: 1000 },
+      );
     });
 
     it('should clear storage and redirect on refresh failure', async () => {
@@ -830,10 +842,14 @@ describe('Apollo Client Configuration', () => {
       if (obs && obs.subscribe)
         obs.subscribe({ next: () => {}, error: () => {}, complete: () => {} });
 
-      await new Promise(process.nextTick);
-
-      expect(mockClearAllItems).toHaveBeenCalled();
-      expect(window.location.href).toBe('/');
+      // Wait for cleanup actions after refresh failure
+      await vi.waitFor(
+        () => {
+          expect(mockClearAllItems).toHaveBeenCalled();
+          expect(window.location.href).toBe('/');
+        },
+        { timeout: 1000 },
+      );
     });
 
     it('should correctly split subscription operations', async () => {
