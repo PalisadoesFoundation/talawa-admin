@@ -331,7 +331,7 @@ describe('Organisation Venues', () => {
     renderOrganizationVenue(link);
 
     // Wait for venues to load before interacting
-    await screen.findByTestId('venue-item1');
+    await screen.findByTestId('venue-item-venue1');
 
     fireEvent.click(screen.getByTestId('updateVenueBtn-venue1'));
     await waitFor(() => {
