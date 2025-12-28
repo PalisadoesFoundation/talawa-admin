@@ -41,7 +41,7 @@ def load_patterns(config_path):
     """
     patterns = []
     try:
-        with open(config_path, "r", encoding="utf-8") as file:
+        with open(config_path, encoding="utf-8") as file:
             for line in file:
                 pattern = line.strip()
                 if pattern and not pattern.startswith("#"):
@@ -123,11 +123,6 @@ def main():
     if not args.files:
         print("No files provided to check.")
         sys.exit(0)
-
-    # Check if config file exists
-    if not os.path.exists(args.config):
-        print(f"Error: Configuration file does not exist: {args.config}")
-        sys.exit(1)
 
     patterns = load_patterns(args.config)
     sensitive_files = check_files(args.files, patterns)
