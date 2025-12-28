@@ -61,6 +61,7 @@
     "loading": "Cargando...",
     "selectOrg": "Seleccione una organización",
     "afterRegister": "Registro exitoso. Por favor, espere a que el administrador apruebe su solicitud.",
+    "backToLogin": "Volver al inicio de sesión",
     "communityLogo": "Logo de la comunidad",
     "organizations": "Organizaciones"
   },
