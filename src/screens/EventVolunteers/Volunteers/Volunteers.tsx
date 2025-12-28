@@ -66,8 +66,7 @@ import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import VolunteerCreateModal from './createModal/VolunteerCreateModal';
 import VolunteerDeleteModal from './deleteModal/VolunteerDeleteModal';
 import VolunteerViewModal from './viewModal/VolunteerViewModal';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
 enum VolunteerStatus {
   All = 'all',
@@ -182,8 +181,10 @@ function Volunteers(): JSX.Element {
     },
   });
 
-  const debouncedSearch = useMemo(
-    () => debounce((value: string) => setSearchTerm(value), 300),
+  const debouncedSearch = useCallback(
+    debounce((value: string) => {
+      setSearchTerm(value);
+    }, 300),
     [],
   );
 
@@ -421,69 +422,71 @@ function Volunteers(): JSX.Element {
   return (
     <div>
       {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} btncon gap-4 flex-wrap`}>
-        <SearchBar
-          placeholder={tCommon('searchBy', { item: 'Name' })}
-          onSearch={debouncedSearch}
-          inputTestId="searchBy"
-          buttonTestId="searchBtn"
-        />
-        <div className="d-flex gap-3 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-3">
-            <SortingButton
-              sortingOptions={[
-                {
-                  label: t('eventVolunteers.mostHoursVolunteered'),
-                  value: 'hoursVolunteered_DESC',
-                },
-                {
-                  label: t('eventVolunteers.leastHoursVolunteered'),
-                  value: 'hoursVolunteered_ASC',
-                },
-              ]}
-              selectedOption={sortBy ?? ''}
-              onSortChange={(value) =>
-                setSortBy(
-                  value as 'hoursVolunteered_DESC' | 'hoursVolunteered_ASC',
-                )
-              }
-              dataTestIdPrefix="sort"
-              buttonLabel={tCommon('sort')}
-            />
-
-            <SortingButton
-              type="filter"
-              sortingOptions={[
-                { label: tCommon('all'), value: VolunteerStatus.All },
-                { label: tCommon('pending'), value: VolunteerStatus.Pending },
-                {
-                  label: t('eventVolunteers.accepted'),
-                  value: VolunteerStatus.Accepted,
-                },
-                {
-                  label: t('eventVolunteers.rejected'),
-                  value: VolunteerStatus.Rejected,
-                },
-              ]}
-              selectedOption={status}
-              onSortChange={(value) => setStatus(value as VolunteerStatus)}
-              dataTestIdPrefix="filter"
-              buttonLabel={t('eventVolunteers.status')}
-            />
-          </div>
-          <div>
-            <Button
-              variant="success"
-              onClick={() => handleOpenModal(null, ModalState.ADD)}
-              className={`${styles.actionsButton} ${styles.marginTopSm}`}
-              data-testid="addVolunteerBtn"
-            >
-              <i className={'fa fa-plus me-2'} />
-              {t('eventVolunteers.add')}
-            </Button>
-          </div>
-        </div>
-      </div>
+      <AdminSearchFilterBar
+        searchPlaceholder={tCommon('searchBy', { item: tCommon('name') })}
+        searchValue={searchTerm}
+        onSearchChange={debouncedSearch}
+        onSearchSubmit={(value) => setSearchTerm(value)}
+        searchInputTestId="searchBy"
+        searchButtonTestId="searchBtn"
+        hasDropdowns
+        dropdowns={[
+          {
+            id: 'sort',
+            type: 'sort',
+            title: tCommon('sort'),
+            label: tCommon('sort'),
+            dataTestIdPrefix: 'sort',
+            selectedOption: sortBy ?? '',
+            options: [
+              {
+                label: t('eventVolunteers.mostHoursVolunteered'),
+                value: 'hoursVolunteered_DESC',
+              },
+              {
+                label: t('eventVolunteers.leastHoursVolunteered'),
+                value: 'hoursVolunteered_ASC',
+              },
+            ],
+            onOptionChange: (value) =>
+              setSortBy(
+                value as 'hoursVolunteered_DESC' | 'hoursVolunteered_ASC',
+              ),
+          },
+          {
+            id: 'filter',
+            type: 'filter',
+            title: tCommon('filter'),
+            label: t('eventVolunteers.status'),
+            dataTestIdPrefix: 'filter',
+            selectedOption: status,
+            options: [
+              { label: tCommon('all'), value: VolunteerStatus.All },
+              { label: tCommon('pending'), value: VolunteerStatus.Pending },
+              {
+                label: t('eventVolunteers.accepted'),
+                value: VolunteerStatus.Accepted,
+              },
+              {
+                label: t('eventVolunteers.rejected'),
+                value: VolunteerStatus.Rejected,
+              },
+            ],
+            onOptionChange: (value) => setStatus(value as VolunteerStatus),
+          },
+        ]}
+        additionalButtons={
+          <Button
+            variant="success"
+            onClick={() => handleOpenModal(null, ModalState.ADD)}
+            className={styles.actionsButton}
+            data-testid="addVolunteerBtn"
+          >
+            <i className="fa fa-plus me-2" />
+            {t('eventVolunteers.add')}
+          </Button>
+        }
+      />
 
       {/* Table with Volunteers */}
       <DataGrid

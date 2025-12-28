@@ -35,8 +35,9 @@
  * @example
  * <Requests />
  */
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { debounce } from '@mui/material';
 import { Button } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
 import { FaXmark } from 'react-icons/fa6';
@@ -77,6 +78,20 @@ function Requests(): JSX.Element {
   const [filterBy, setFilterBy] = useState<'all' | 'individual' | 'group'>(
     'all',
   );
+
+  const debouncedSearch = useCallback(
+    debounce((value: string) => {
+      setSearchTerm(value);
+    }, 300),
+    [],
+  );
+
+  // Debounce cleanup effect
+  useEffect(() => {
+    return () => {
+      debouncedSearch.clear();
+    };
+  }, [debouncedSearch]);
 
   const [updateMembership] = useMutation(UPDATE_VOLUNTEER_MEMBERSHIP);
 
@@ -284,56 +299,52 @@ function Requests(): JSX.Element {
   return (
     <div>
       {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} btncon gap-4 flex-wrap`}>
-        <AdminSearchFilterBar
-          searchPlaceholder={tCommon('searchBy', { item: tCommon('name') })}
-          searchValue={searchTerm}
-          onSearchChange={(value: string) => {
-            setSearchTerm(value);
-          }}
-          onSearchSubmit={(value: string) => {
-            setSearchTerm(value);
-          }}
-          searchInputTestId="searchBy"
-          searchButtonTestId="searchBtn"
-          hasDropdowns
-          dropdowns={[
-            {
-              id: 'sort',
-              type: 'sort',
-              label: tCommon('sort'),
-              options: [
-                { label: t('eventVolunteers.latest'), value: 'createdAt_DESC' },
-                {
-                  label: t('eventVolunteers.earliest'),
-                  value: 'createdAt_ASC',
-                },
-              ],
-              selectedOption: sortBy ?? '',
-              onOptionChange: (value: string | number) =>
-                setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC'),
-              dataTestIdPrefix: 'sort',
-            },
-            {
-              id: 'filter',
-              type: 'filter',
-              label: tCommon('filter'),
-              options: [
-                { label: tCommon('all'), value: 'all' },
-                {
-                  label: t('eventVolunteers.individuals'),
-                  value: 'individual',
-                },
-                { label: t('eventVolunteers.groups'), value: 'group' },
-              ],
-              selectedOption: filterBy,
-              onOptionChange: (value: string | number) =>
-                setFilterBy(value as 'all' | 'individual' | 'group'),
-              dataTestIdPrefix: 'filter',
-            },
-          ]}
-        />
-      </div>
+      <AdminSearchFilterBar
+        searchPlaceholder={tCommon('searchBy', { item: tCommon('name') })}
+        searchValue={searchTerm}
+        onSearchChange={debouncedSearch}
+        onSearchSubmit={(value: string) => {
+          setSearchTerm(value);
+        }}
+        searchInputTestId="searchBy"
+        searchButtonTestId="searchBtn"
+        hasDropdowns
+        dropdowns={[
+          {
+            id: 'sort',
+            type: 'sort',
+            label: tCommon('sort'),
+            options: [
+              { label: t('eventVolunteers.latest'), value: 'createdAt_DESC' },
+              {
+                label: t('eventVolunteers.earliest'),
+                value: 'createdAt_ASC',
+              },
+            ],
+            selectedOption: sortBy ?? '',
+            onOptionChange: (value: string | number) =>
+              setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC'),
+            dataTestIdPrefix: 'sort',
+          },
+          {
+            id: 'filter',
+            type: 'filter',
+            label: tCommon('filter'),
+            options: [
+              { label: tCommon('all'), value: 'all' },
+              {
+                label: t('eventVolunteers.individuals'),
+                value: 'individual',
+              },
+              { label: t('eventVolunteers.groups'), value: 'group' },
+            ],
+            selectedOption: filterBy,
+            onOptionChange: (value: string | number) =>
+              setFilterBy(value as 'all' | 'individual' | 'group'),
+            dataTestIdPrefix: 'filter',
+          },
+        ]}
+      />
 
       {/* Table with Volunteer Membership Requests */}
 

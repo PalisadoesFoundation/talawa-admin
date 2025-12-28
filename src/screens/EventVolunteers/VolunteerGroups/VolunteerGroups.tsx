@@ -24,6 +24,7 @@ import { Navigate, useParams } from 'react-router';
 import { WarningAmberRounded } from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
+import { debounce, Stack } from '@mui/material';
 
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import Loader from 'components/Loader/Loader';
@@ -32,7 +33,6 @@ import {
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import styles from 'style/app-fixed.module.css';
 import { GET_EVENT_VOLUNTEER_GROUPS } from 'GraphQl/Queries/EventVolunteerQueries';
@@ -90,6 +90,20 @@ function volunteerGroups(): JSX.Element {
     [ModalState.DELETE]: false,
     [ModalState.VIEW]: false,
   });
+
+  const debouncedSearch = useCallback(
+    debounce((value: string) => {
+      setSearchTerm(value);
+    }, 300),
+    [],
+  );
+
+  // Debounce cleanup effect
+  useEffect(() => {
+    return () => {
+      debouncedSearch.clear();
+    };
+  }, [debouncedSearch]);
 
   /**
    * Query to fetch event and volunteer groups for the event.
@@ -323,9 +337,7 @@ function volunteerGroups(): JSX.Element {
           item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
         })}
         searchValue={searchTerm}
-        onSearchChange={(value) => {
-          setSearchTerm(value);
-        }}
+        onSearchChange={debouncedSearch}
         onSearchSubmit={(value) => {
           setSearchTerm(value);
         }}
