@@ -304,9 +304,8 @@ const fundCampaignPledge = (): JSX.Element => {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return dayjs(params.row.pledgeDate).format('DD/MM/YYYY');
-      },
+      renderCell: (params: GridCellParams) =>
+        dayjs(params.row.pledgeDate).format('DD/MM/YYYY'),
     },
     {
       field: 'amount',
@@ -317,21 +316,15 @@ const fundCampaignPledge = (): JSX.Element => {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="amountCell"
-          >
-            {
-              currencySymbols[
-                params.row.currency as keyof typeof currencySymbols
-              ]
-            }
-            {params.row.amount.toLocaleString('en-US')}
-          </div>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <div
+          className="d-flex justify-content-center fw-bold"
+          data-testid="amountCell"
+        >
+          {currencySymbols[params.row.currency as keyof typeof currencySymbols]}
+          {params.row.amount.toLocaleString('en-US')}
+        </div>
+      ),
     },
     {
       field: 'donated',
@@ -342,21 +335,15 @@ const fundCampaignPledge = (): JSX.Element => {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="paidCell"
-          >
-            {
-              currencySymbols[
-                params.row.currency as keyof typeof currencySymbols
-              ]
-            }
-            0
-          </div>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <div
+          className="d-flex justify-content-center fw-bold"
+          data-testid="paidCell"
+        >
+          {currencySymbols[params.row.currency as keyof typeof currencySymbols]}
+          0
+        </div>
+      ),
     },
     {
       field: 'action',
@@ -367,35 +354,30 @@ const fundCampaignPledge = (): JSX.Element => {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <>
-            <Button
-              variant="success"
-              size="sm"
-              className={`me-2 ${styles.editButton}`}
-              data-testid="editPledgeBtn"
-              onClick={() =>
-                handleOpenModal(params.row as InterfacePledgeInfo, 'edit')
-              }
-            >
-              {' '}
-              <i className="fa fa-edit" />
-            </Button>
-            <Button
-              size="sm"
-              variant="danger"
-              className="rounded"
-              data-testid="deletePledgeBtn"
-              onClick={() =>
-                handleDeleteClick(params.row as InterfacePledgeInfo)
-              }
-            >
-              <i className="fa fa-trash" />
-            </Button>
-          </>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <>
+          <Button
+            variant="success"
+            size="sm"
+            className={`me-2 ${styles.editButton}`}
+            data-testid="editPledgeBtn"
+            onClick={() =>
+              handleOpenModal(params.row as InterfacePledgeInfo, 'edit')
+            }
+          >
+            <i className="fa fa-edit" />
+          </Button>
+          <Button
+            size="sm"
+            variant="danger"
+            className="rounded"
+            data-testid="deletePledgeBtn"
+            onClick={() => handleDeleteClick(params.row as InterfacePledgeInfo)}
+          >
+            <i className="fa fa-trash" />
+          </Button>
+        </>
+      ),
     },
   ];
 
