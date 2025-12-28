@@ -528,89 +528,21 @@ describe('Apollo Client Configuration', () => {
     });
   });
 
-  describe('IsLoggedIn Check in Error Handler', () => {
-    it('should check IsLoggedIn flag and return early when not logged in', () => {
-      // This tests the logic checking user login state before refresh
-      // const isLoggedIn = getItem('IsLoggedIn');
-      // if (isLoggedIn !== 'TRUE') { return; }
-
-      const mockGetItem = vi.fn((key: string): string | null => {
-        if (key === 'IsLoggedIn') return 'FALSE';
-        return null;
-      });
-
-      const isLoggedIn = mockGetItem('IsLoggedIn');
-
-      let shouldReturn = false;
-      if (isLoggedIn !== 'TRUE') {
-        shouldReturn = true; // This represents the early return
-      }
-
-      expect(shouldReturn).toBe(true);
-      expect(mockGetItem).toHaveBeenCalledWith('IsLoggedIn');
-    });
-
-    it('should proceed with refresh when IsLoggedIn is TRUE', () => {
-      const mockGetItem = vi.fn((key: string) => {
-        if (key === 'IsLoggedIn') return 'TRUE';
-        return null;
-      });
-
-      const isLoggedIn = mockGetItem('IsLoggedIn');
-
-      let shouldReturn = false;
-      if (isLoggedIn !== 'TRUE') {
-        shouldReturn = true;
-      }
-
-      expect(shouldReturn).toBe(false);
-      expect(mockGetItem).toHaveBeenCalledWith('IsLoggedIn');
-    });
-
-    it('should handle null IsLoggedIn value', () => {
-      const mockGetItem = vi.fn((key: string) => {
-        if (key === 'IsLoggedIn') return null;
-        return null;
-      });
-
-      const isLoggedIn = mockGetItem('IsLoggedIn');
-
-      let shouldReturn = false;
-      if (isLoggedIn !== 'TRUE') {
-        shouldReturn = true;
-      }
-
-      expect(shouldReturn).toBe(true);
-    });
-
-    it('should handle undefined IsLoggedIn value', () => {
-      const mockGetItem = vi.fn((key: string): string | undefined => {
-        // Simulate localStorage returning undefined for any key
-        if (key) return undefined;
-        return undefined;
-      });
-
-      const isLoggedIn = mockGetItem('IsLoggedIn');
-
-      let shouldReturn = false;
-      if (isLoggedIn !== 'TRUE') {
-        shouldReturn = true;
-      }
-
-      expect(shouldReturn).toBe(true);
-    });
-  });
-
   describe('Application Entry Point', () => {
+    let getComputedStyleSpy: { mockRestore: () => void };
+
     beforeEach(() => {
       vi.resetModules();
-      vi.spyOn(window, 'getComputedStyle').mockReturnValue({
-        getPropertyValue: vi.fn().mockReturnValue('#' + '000000'),
-      } as unknown as CSSStyleDeclaration);
+      getComputedStyleSpy = vi
+        .spyOn(window, 'getComputedStyle')
+        .mockReturnValue({
+          getPropertyValue: vi.fn().mockReturnValue('#' + '000000'),
+        } as unknown as CSSStyleDeclaration);
     });
 
     afterEach(() => {
-      vi.restoreAllMocks();
+      vi.clearAllMocks();
+      getComputedStyleSpy.mockRestore();
     });
 
     it('should render application when root element exists', async () => {
