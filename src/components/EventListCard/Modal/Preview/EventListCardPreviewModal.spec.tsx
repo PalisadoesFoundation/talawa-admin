@@ -30,6 +30,23 @@ vi.mock('screens/OrganizationEvents/CustomRecurrenceModal', () => ({
   default: vi.fn(),
 }));
 
+export const getPickerInputByLabel = (label: string): HTMLElement => {
+  const allInputs = screen.getAllByRole('textbox', { hidden: true });
+  for (const input of allInputs) {
+    const formControl = input.closest('.MuiFormControl-root');
+    if (formControl) {
+      const labelEl = formControl.querySelector('label');
+      if (labelEl) {
+        const labelText = labelEl.textContent?.toLowerCase() || '';
+        if (labelText.includes(label.toLowerCase())) {
+          return formControl as HTMLElement;
+        }
+      }
+    }
+  }
+  throw new Error(`Could not find date picker for label: ${label}`);
+};
+
 const mockT = (key: string): string => key;
 const mockTCommon = (key: string): string => key;
 
@@ -110,9 +127,6 @@ const renderComponent = (props = {}) => {
     </MockedProvider>,
   );
 };
-
-const getPickerInputByLabel = (label: string) =>
-  screen.getByLabelText(label, { selector: 'input', exact: true });
 
 describe('EventListCardPreviewModal', () => {
   afterEach(() => {
@@ -353,6 +367,39 @@ describe('EventListCardPreviewModal', () => {
     });
 
     expect(screen.getByTestId('deleteEventModalBtn')).toBeInTheDocument();
+  });
+
+  test('verifies aria-label for show event dashboard button', () => {
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        userRole: UserRole.ADMINISTRATOR,
+      },
+    });
+
+    expect(screen.getByLabelText('showEventDashboard')).toBeInTheDocument();
+  });
+
+  test('verifies aria-label for edit event button', () => {
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        userRole: UserRole.ADMINISTRATOR,
+      },
+    });
+
+    expect(screen.getByLabelText('editEvent')).toBeInTheDocument();
+  });
+
+  test('verifies aria-label for delete event button', () => {
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        userRole: UserRole.ADMINISTRATOR,
+      },
+    });
+
+    expect(screen.getByLabelText('deleteEvent')).toBeInTheDocument();
   });
 
   test('hides action buttons for regular users without edit permissions', () => {

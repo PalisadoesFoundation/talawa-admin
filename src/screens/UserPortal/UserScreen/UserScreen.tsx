@@ -163,13 +163,12 @@ const UserScreen = (): React.JSX.Element => {
         )}
       </div>
       <div
-        className={`${hideDrawer ? styles.expand : styles.contract}`}
-        style={{ marginLeft: hideDrawer ? '100px' : '' }}
+        className={`${hideDrawer ? `${styles.expand} ${styles.userScreenExpandedMargin}` : styles.contract}`}
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
-          <div style={{ flex: 1 }}>
-            <h1>{t('title')}</h1>
+          <div className={styles.flexContainerColumn}>
+            <h1 className={styles.titleMargin}>{t('title')}</h1>
           </div>
           {/* <ProfileDropdown /> */}
         </div>

@@ -48,7 +48,7 @@ jobs:
       - name: Count number of lines
         run: |
           chmod +x ./.github/workflows/scripts/countline.py
-          ./.github/workflows/scripts/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx src/components/OrgPostCard/OrgPostCard.tsx src/components/UsersTableItem/UsersTableItem.tsx src/components/UserPortal/ChatRoom/ChatRoom.tsx src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.tsx src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx src/shared-components/postCard/PostCard.tsx src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.tsx
+          ./.github/workflows/scripts/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx src/components/OrgPostCard/OrgPostCard.tsx src/components/UsersTableItem/UsersTableItem.tsx src/components/UserPortal/ChatRoom/ChatRoom.tsx src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.tsx src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx src/shared-components/postCard/PostCard.tsx src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.tsx src/shared-components/EventForm/EventForm.tsx
 
       - name: Get changed TypeScript files
         id: changed-files
@@ -131,8 +131,42 @@ jobs:
           exit 1
 
       - name: Check for unused files and exports in src/ and docs/src
-        run: pnpm knip --include files,exports
+        run: pnpm knip --include files,exports,nsExports,nsTypes
 
+  CSS-Policy-Check:
+    name: CSS Policy Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.11
+
+      - name: Get PR changed files
+        run: |
+          git diff --name-only --diff-filter=ACMRT \
+            origin/${{ github.base_ref }}...HEAD > pr_files.txt
+
+      - name: Run CSS policy enforcement
+        run: |
+          if [ -s pr_files.txt ]; then
+            FILTERED_FILES=$(grep -Ev '^src/(utils|types)/' pr_files.txt || true)
+
+            if [ -n "$FILTERED_FILES" ]; then
+              python .github/workflows/scripts/css_check.py \
+                --files $FILTERED_FILES
+            else
+              echo "No relevant files after exclusion"
+            fi
+          else
+            echo "No files changed in this PR"
+          fi
   Check-Mock-Isolation:
     name: Check for proper mock cleanup in test files
     needs: [Code-Quality-Checks]
@@ -366,89 +400,63 @@ jobs:
           echo "- Source branch may be incorrect please use develop as source branch."
           exit 1
 
-  Check-ESlint-Disable:
-    name: Check for eslint-disable
+  Check-Disable-Statements:
+    name: Check for disable statements (eslint-disable, istanbul-ignore, it.skip)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetch all history for all branches and tags
+          fetch-depth: 0
 
       - name: Get changed files
         id: changed-files
         run: |
-          # Get the base branch ref
           BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
-
-          # Get all changed files
           ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
           echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: 3.9
+          python-version: 3.11
 
-      - name: Run Python script
+      - name: Run consolidated disable statements check
         run: |
-          python .github/workflows/scripts/eslint_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
+          if [ -n "${{ steps.changed-files.outputs.all_changed_files }}" ]; then
+            FILTERED_FILES=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | tr ' ' '\n' | grep -E '\.(js|jsx|ts|tsx)$' | tr '\n' ' ' || true)
+            if [ -n "$FILTERED_FILES" ]; then
+              python .github/workflows/scripts/disable_statements_check.py --files $FILTERED_FILES
+            else
+              echo "No JS/TS files to check"
+            fi
+          else
+            echo "No files to check"
+          fi
 
-  Check-Code-Coverage-Disable:
-    name: Check for code coverage disable
+  Translation-Tag-Check:
+    name: Translation Tag Check
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetch all history for all branches and tags
-
-      - name: Get changed files
-        id: changed-files
-        run: |
-          # Get the base branch ref
-          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
-
-          # Get all changed files
-          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
-          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
-
-      - name: Set up Python
+          fetch-depth: 0
+      - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
-          python-version: 3.9
-
-      - name: Run Python script
+          python-version: 3.11
+      - name: Install dependencies
+        run: pip install -r .github/workflows/requirements.txt
+      - name: Run Translation Checker
         run: |
-          python .github/workflows/scripts/code_coverage_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
-
-  Check-ItSkip-Disable:
-    name: Check for it.skip commands
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Fetch all history for all branches and tags
-
-      - name: Get changed files
-        id: changed-files
-        run: |
-          # Get the base branch ref
           BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | grep -E '\.(ts|tsx|js|jsx)$' || true)
 
-          # Get all changed files
-          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
-          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.9
-
-      - name: Run Python script
-        run: |
-          python .github/workflows/scripts/itskip_disable_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
+          if [ -n "$CHANGED_FILES" ]; then
+            python3 .github/workflows/scripts/translation_check.py --files $CHANGED_FILES
+          else
+            echo "No relevant files changed, skipping check."
+          fi
 
   Pre-Test-Checks-Pass:
     name: All Pre-Testing Checks Pass
@@ -457,11 +465,11 @@ jobs:
       [
         Code-Quality-Checks,
         Check-AutoDocs,
-        Check-ESlint-Disable,
-        Check-Code-Coverage-Disable,
-        Check-ItSkip-Disable,
+        Check-Disable-Statements,
         Check-Mock-Isolation,
+        CSS-Policy-Check,
         Python-Compliance,
+        Translation-Tag-Check,
       ]
     steps:
       - name: This job intentionally does nothing
@@ -995,6 +1003,10 @@ jobs:
           source venv/bin/activate
           python -m pip install --upgrade pip
           pip install -r .github/workflows/requirements.txt
+      - name: Run Python tests for scripts
+        run: |
+          source venv/bin/activate
+          pytest .github/workflows/scripts/test
 
       - name: Run Black Formatter Check
         run: |

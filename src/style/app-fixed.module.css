@@ -119,9 +119,11 @@
 
   --font-size-header: 16px;
   --font-size-table-body: 14px;
+  --avatar-placeholder-bg: #ccc;
 
   --tableHeader-bg: #eaebef;
   --tableHeader-color: #000000;
+  --tableHeader-success-bg: var(--success-green-color);
 
   --LoginToggle-button-color: #555555;
   --LoginToggle-button-bg: #eaebef;
@@ -346,7 +348,9 @@
   --memberfontbtn-border: #e8e5e5;
   --memberfont-bg: #eaebef;
   --memberfont-color: #fff;
-  --removeMemberCancel-bg: #f8d6dc --loader-size: 10em;
+  --removeMemberCancel-bg: #f8d6dc;
+  --removeMemberCancel-border: #f8d6dc;
+  --loader-size: 10em;
   --loader-border: #ffffff33;
   --loader-border-left: #febc59;
 
@@ -735,7 +739,8 @@
   --primary-theme-color: #1778f2;
   --advertisement-dropdown-border: 1px solid rgba(0, 0, 0, 0.15);
   --advertisement-dropdown-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
-  --advertisement-media-height: 12.5rem --pledgeModal-bg: #ffffff;
+  --advertisement-media-height: 12.5rem;
+  --pledgeModal-bg: #ffffff;
   --pledgeModal-header-text: #000000;
   --pledgeModal-title-text: #4b5563;
   --pledgeModal-close-button-bg: #f8d6dc;
@@ -845,6 +850,9 @@
   --dropdown-font-color: #555555;
 
   --input-bg: #f2f7ff;
+
+  --empty-state-bg: #ffffff;
+  --empty-state-border-color: #e7e7e7;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -1534,7 +1542,7 @@ form label,
 
 .removeMemberCancel {
   background-color: var(--removeMemberCancel-bg);
-  color: '#C8102E';
+  color: var(--removeButton-color);
   border: 1px solid var(--removeMemberCancel-border);
 }
 
@@ -1606,6 +1614,7 @@ form label,
   transform: scale(1.5);
   color: var(--bs-danger, var(--errorIcon-color));
   margin-bottom: 1rem;
+  font-size: 1.5rem;
 
   /* Add error icon for non-color indication */
   &::before {
@@ -1615,7 +1624,9 @@ form label,
 }
 
 /* Not Found */
-
+/**
+*Pages still using .notFound class are - screens/UserPortal/Campaigns, screens/BlockUser
+*/
 .notFound {
   flex: 1;
   display: flex;
@@ -3757,6 +3768,33 @@ form label,
   border-width: 0.2rem;
 }
 
+/* -- LoadingState.tsx -- */
+
+/* Container for spinner variant - provides relative positioning context */
+.loadingContainer {
+  position: relative;
+  min-height: 200px;
+}
+
+/* Overlay that blocks interactions during loading */
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Dimmed content underneath the overlay */
+.loadingContent {
+  opacity: 0.5;
+}
+
 /* -- LoginPortalToggle.tsx -- */
 
 .navLinkClass {
@@ -5652,10 +5690,7 @@ form {
 .dropdownItem:hover,
 .dropdownItem:focus,
 .dropdownItem:active {
-  background-color: var(
-    --dropdownItem-hover-bg,
-    #eff1f7 var(--dropdownItem-hover-bg) #e8e5e5
-  ) !important;
+  background-color: var(--dropdownItem-hover-bg, #eff1f7) !important;
   color: var(--dropdownItem-color) !important;
   outline: none !important;
 }
@@ -5877,43 +5912,37 @@ form {
 }
 
 /* -- CreateGroupChat.tsx -- */
-
+/* Donation card styles */
 /* -- DonationCard.tsx -- */
 
-.mainContainerDonateCard {
-  width: 49%;
-  height: 8rem;
-  min-width: max-content;
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1rem;
-  background-color: var(--mainContainerDonateCard-bg);
-  border: 1px solid var(--mainContainerDonateCard-border);
-  border-radius: 10px;
-  overflow: hidden;
+.donationAvatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: var(--people-card-header-bg);
+  flex-shrink: 0;
 }
 
-.img {
-  height: 100%;
-  aspect-ratio: 1 / 1;
-  background-color: var(--mainContainerDonateCard-bg);
-}
-
-.personDetails {
+.donationDetails {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: 0.25rem;
 }
 
-.btnDonate {
-  display: flex;
-  align-items: flex-end;
+.donationRow {
+  font-size: 14px;
+  color: var(--primaryText-color);
 }
 
-.btnDonate button {
-  padding-inline: 2rem !important;
-  border-radius: 5px;
+/* Donor name */
+.donorName {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.donationMeta {
+  font-size: 13px;
+  color: var(--secondText-color);
 }
 
 /* -- EventCard.tsx -- */
@@ -8114,7 +8143,6 @@ form {
 }
 
 .list_box {
-  height: 70vh;
   overflow-y: auto;
   width: auto;
 }
@@ -8231,6 +8259,7 @@ form {
   color: var(--infoButton-color);
   margin-right: 0.5rem;
   border-radius: 0.25rem;
+  min-width: 32px;
 }
 
 .infoButton:hover {
@@ -8262,6 +8291,14 @@ form {
   border-color: var(--checkbox-focus-border);
   outline: none;
   box-shadow: none;
+}
+
+.assigneeCellContainer {
+  height: 100%;
+}
+
+.groupIconSecondary {
+  color: var(--view-color);
 }
 
 /* -- OrganizationDashboard.tsx -- */
@@ -9596,6 +9633,10 @@ form {
   margin: 1px;
 }
 
+.iconLarge {
+  font-size: 1.5rem;
+}
+
 .chipIcon {
   height: 0.9rem !important;
 }
@@ -10052,4 +10093,119 @@ form {
   font-size: 25px;
   margin-bottom: 2px;
   margin-right: 2px;
+}
+
+/* Utility classes for inline style replacements */
+.flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.flexWrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flexWrapGap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.maxHeight120 {
+  max-height: 120px;
+}
+
+.cursorPointer {
+  cursor: pointer;
+}
+
+.fullWidthHeight {
+  width: 100%;
+  height: 100%;
+}
+
+.progressBarHeight {
+  height: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.memberNameFontSize {
+  font-size: 15px;
+}
+
+/* Avatar placeholder background */
+.avatarPlaceholder {
+  background-color: var(--avatar-placeholder-bg, #ccc);
+}
+
+.avatarImage {
+  border-radius: 50%;
+  object-fit: cover;
+  width: var(--avatar-size, 40px);
+  height: var(--avatar-size, 40px);
+}
+
+.avatarPlaceholderSize {
+  width: var(--avatar-size, 40px);
+  height: var(--avatar-size, 40px);
+  font-size: calc(var(--avatar-size, 40px) * 0.4);
+  border-radius: 50%;
+}
+
+/* MUI DataGrid styles - using global selectors to target MUI classes */
+.dataGridNoHover :global(.MuiDataGrid-row:hover),
+.dataGridNoHover :global(.MuiDataGrid-row.Mui-hovered) {
+  background-color: transparent;
+}
+
+.dataGridRounded :global(.MuiDataGrid-root),
+.dataGridRounded :global(.MuiDataGrid-main) {
+  border-radius: 0.5rem;
+}
+
+.addIconStyle {
+  font-size: 25px;
+  margin-bottom: 2px;
+  margin-right: 2px;
+}
+
+.postContainer {
+  min-height: 100vh;
+}
+
+.addPost {
+  font-size: 20px;
+  margin-right: 6px;
+}
+
+.noPostsFound {
+  text-align: center;
+}
+
+.postInfiniteScroll {
+  overflow: visible;
+}
+
+.createPostModalContainer {
+  position: absolute;
+}
+
+.pinnedPostModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.pinnedPostModalBody {
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 20px;
+  position: relative;
 }

@@ -272,24 +272,32 @@ const OrgCard: React.FC<InterfaceOrgCardProps> = ({
 export default OrgCard;
 ```
 
-
 ## Existing Shared Components
 
 Below are some commonly used shared components available in the codebase.
 
-### EmptyState
+## EmptyState
 
-`EmptyState` is a reusable component for displaying consistent empty or no-data states across the application.
+`EmptyState` is a reusable shared component for displaying consistent empty, no-data, or no-result states across the application.  
+It replaces legacy `.notFound` CSS-based implementations and standardizes empty UI patterns.
+
+#### Component Location
+
+```text
+src/shared-components/EmptyState/
+```
 
 **Use cases:**
+
 - No search results
 - Empty lists or tables
 - No organizations / users / events
 - First-time onboarding states
 
 **Key features:**
+
 - Optional icon, description, and action button
-- Built-in accessibility (`role="alert"`, `aria-label`)
+- Built-in accessibility (`role="status"`, `aria-label`)
 - i18n-ready (supports translation keys and plain strings)
 - Fully tested with 100% coverage
 
@@ -307,9 +315,96 @@ import EmptyState from 'src/shared-components/EmptyState/EmptyState';
     onClick: handleCreate,
     variant: 'primary',
   }}
+/>;
+```
+
+#### When to Use EmptyState
+
+_Use EmptyState for:_
+
+- Empty lists or tables
+- No search results
+- No organizations, users, or events
+- First-time or onboarding states
+- Filtered results returning no data
+
+_Do not use EmptyState for:_
+
+- 404 or route-level errors (use NotFound instead)
+
+### Component API
+
+Import
+
+```ts
+import EmptyState from 'src/shared-components/EmptyState/EmptyState';
+```
+
+#### Props
+
+| Prop          | Type                  | Required | Description                                |
+| ------------- | --------------------- | -------- | ------------------------------------------ |
+| `message`     | `string`              | Yes      | Primary message (i18n key or plain string) |
+| `description` | `string`              | No       | Secondary supporting text                  |
+| `icon`        | `string \| ReactNode` | No       | Icon name or custom icon component         |
+| `action`      | `object`              | No       | Optional action button configuration       |
+| `className`   | `string`              | No       | Custom CSS class                           |
+| `dataTestId`  | `string`              | No       | Test identifier                            |
+
+#### Action Prop Shape
+
+```ts
+interface EmptyStateAction {
+  label: string;
+  onClick: () => void;
+  variant?: 'primary' | 'secondary' | 'outlined';
+}
+```
+
+### Usage Example
+
+**1. Simple Empty State:**
+
+```tsx
+<EmptyState message="noDataFound" />
+```
+
+**2. Empty State With Icon:**
+
+```tsx
+<EmptyState
+  icon="groups"
+  message="noOrganizationsFound"
+  description="createOrganizationToGetStarted"
 />
 ```
 
+**3. Search Empty State:**
+
+```tsx
+<EmptyState
+  icon="search"
+  message="noResultsFound"
+  description={tCommon('noResultsFoundFor', {
+    query: searchTerm,
+  })}
+/>
+```
+
+**4. Empty State With Action Button:**
+
+```tsx
+<EmptyState
+  icon="person_off"
+  message="noUsersFound"
+  description="inviteUsersToGetStarted"
+  action={{
+    label: 'inviteUser',
+    onClick: handleInvite,
+    variant: 'primary',
+  }}
+/>
+```
 ### ErrorBoundaryWrapper
 
 `ErrorBoundaryWrapper` is a error boundary component that catches JavaScript errors in child components, logs them, and displays a fallback UI instead of crashing the entire application.
@@ -374,20 +469,35 @@ const CustomErrorFallback = ({ error, onReset }) => (
 </ErrorBoundaryWrapper>
 ```
 
-**Props:**
-- `children` (required): Child components to wrap with error boundary
-- `fallback` (optional): Custom JSX fallback UI
-- `fallbackComponent` (optional): Custom fallback component that receives `error` and `onReset` props
-- `errorMessage` (optional): Custom error message for toast notification
-- `showToast` (optional): Whether to show toast notification (default: `true`)
-- `onError` (optional): Callback invoked when error is caught - useful for logging to external services
-- `onReset` (optional): Callback invoked when user clicks reset button
+#### Props
+
+| Prop                | Type                                              | Required | Description                                                          |
+| --------------------| --------------------------------------------------| -------- | -------------------------------------------------------------------- |
+| `children`          | `ReactNode`                                       | Yes      | Child components to wrap with error boundary                         |
+| `fallback`          | `ReactNode`                                       | No       | Custom JSX fallback UI                                               |
+| `fallbackComponent` | `React.ComponentType<InterfaceErrorFallbackProps>`| No       | Custom fallback component that receives `error` and `onReset` props  |
+| `errorMessage`      | `string`                                          | No       | Custom error message for toast notification                          |
+| `showToast`         | `boolean`                                         | No       | Whether to show toast notification (default: `true`)                 |
+| `onError`           | `function`                                        | No       | Callback invoked when error is caught                                |
+| `onReset`           | `function`                                        | No       | Callback invoked when user clicks reset button                       |
 
 **Accessibility:**
 - Default fallback includes `role="alert"` and `aria-live="assertive"`
 - Reset button is keyboard accessible (Enter and Space keys)
 - Screen reader friendly error messages
 - High contrast and dark mode support
+
+### Relationship with Loading States
+
+- Use LoadingState while data is being fetched
+- Render EmptyState only after loading completes
+- Never show EmptyState during an active loading state
+
+### Migration Guidance
+
+- Legacy `.notFound` CSS patterns are deprecated
+- All new empty-state implementations must use EmptyState
+- Existing screens should be migrated incrementally
 
 ## Creating Shared Components
 

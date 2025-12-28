@@ -11,7 +11,7 @@
  *
  * @remarks
  * - Uses Apollo Client's `useQuery` to fetch data for members, posts, and events.
- * - Displays loading states and handles errors using `react-toastify`.
+ * - Displays loading states and handles errors using `NotificationToast`.
  * - Utilizes `react-bootstrap` for layout and styling.
  * - Integrates with `react-router-dom` for navigation.
  * - Supports internationalization using `react-i18next`.
@@ -48,7 +48,7 @@ import { Navigate, useNavigate, useParams } from 'react-router';
 // import gold from 'assets/images/gold.png';
 // import silver from 'assets/images/silver.png';
 // import bronze from 'assets/images/bronze.png';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import DashboardStats from './components/DashboardStats';
 import UpcomingEventsCard from './components/UpcomingEventsCard';
 import type {
@@ -57,6 +57,7 @@ import type {
   InterfaceOrganizationPostsConnectionEdgePg,
 } from 'utils/interfaces';
 import styles from '../../style/app-fixed.module.css';
+import dashboardStyles from './OrganizationDashboard.module.css';
 // import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 
 function OrganizationDashboard(): JSX.Element {
@@ -260,7 +261,9 @@ function OrganizationDashboard(): JSX.Element {
       orgBlockedUsersError ||
       orgVenuesError
     ) {
-      toast.error(tErrors('errorLoading', { entity: '' }));
+      NotificationToast.error(
+        tErrors('errorLoading', { entity: '' }) as string,
+      );
       navigate('/');
     }
   }, [
@@ -330,7 +333,9 @@ function OrganizationDashboard(): JSX.Element {
                     <DashBoardCard
                       count={pendingMembershipRequests.length}
                       title={tCommon('requests')}
-                      icon={<UsersIcon fill="#555555" />}
+                      icon={
+                        <UsersIcon className={dashboardStyles.requestsIcon} />
+                      }
                     />
                   </button>
                 </Col>
@@ -422,8 +427,7 @@ function OrganizationDashboard(): JSX.Element {
                   ))
                 ) : pendingMembershipRequests.length === 0 ? (
                   <div
-                    className={styles.emptyContainer}
-                    style={{ height: '150px' }}
+                    className={`${styles.emptyContainer} ${dashboardStyles.membershipEmptyContainer}`}
                   >
                     <h6>{t('noMembershipRequests')}</h6>
                   </div>
@@ -457,16 +461,15 @@ function OrganizationDashboard(): JSX.Element {
                   variant="light"
                   data-testid="viewAllLeadeboard"
                   onClick={async (): Promise<void> => {
-                    await Promise.resolve(toast.success(t('comingSoon')));
+                    await Promise.resolve(
+                      NotificationToast.success(t('comingSoon')),
+                    );
                   }}
                 >
                   {t('viewAll')}
                 </Button>
               </div>
-              <Card.Body
-                className={styles.containerBody}
-                style={{ padding: '0px' }}
-              >
+              <Card.Body className={`${styles.containerBody} p-0`}>
                 {/* {rankingsLoading ? (
                   [...Array(3)].map((_, index) => {
                     return <CardItemLoading key={`rankingLoading_${index}`} />;
