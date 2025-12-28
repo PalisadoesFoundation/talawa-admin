@@ -4,7 +4,10 @@
 
 # Interface: InterfaceFormFieldProps
 
-Defined in: [src/types/Auth/FormField/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L3)
+Defined in: [src/types/Auth/FormField/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L7)
+
+Props interface for the FormField component.
+Defines all available properties for form input fields with validation support.
 
 ## Properties
 
@@ -12,7 +15,7 @@ Defined in: [src/types/Auth/FormField/interface.ts:3](https://github.com/Palisad
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [src/types/Auth/FormField/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L12)
+Defined in: [src/types/Auth/FormField/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L16)
 
 ***
 
@@ -20,7 +23,7 @@ Defined in: [src/types/Auth/FormField/interface.ts:12](https://github.com/Palisa
 
 > `optional` **error**: `string`
 
-Defined in: [src/types/Auth/FormField/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L14)
+Defined in: [src/types/Auth/FormField/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L18)
 
 ***
 
@@ -28,7 +31,7 @@ Defined in: [src/types/Auth/FormField/interface.ts:14](https://github.com/Palisa
 
 > `optional` **label**: `string`
 
-Defined in: [src/types/Auth/FormField/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L4)
+Defined in: [src/types/Auth/FormField/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L8)
 
 ***
 
@@ -36,7 +39,7 @@ Defined in: [src/types/Auth/FormField/interface.ts:4](https://github.com/Palisad
 
 > **name**: `string`
 
-Defined in: [src/types/Auth/FormField/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L5)
+Defined in: [src/types/Auth/FormField/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L9)
 
 ***
 
@@ -44,7 +47,7 @@ Defined in: [src/types/Auth/FormField/interface.ts:5](https://github.com/Palisad
 
 > `optional` **onBlur**: (`e`) => `void`
 
-Defined in: [src/types/Auth/FormField/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L9)
+Defined in: [src/types/Auth/FormField/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L13)
 
 #### Parameters
 
@@ -62,7 +65,7 @@ Defined in: [src/types/Auth/FormField/interface.ts:9](https://github.com/Palisad
 
 > **onChange**: (`e`) => `void`
 
-Defined in: [src/types/Auth/FormField/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L8)
+Defined in: [src/types/Auth/FormField/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L12)
 
 #### Parameters
 
@@ -80,7 +83,7 @@ Defined in: [src/types/Auth/FormField/interface.ts:8](https://github.com/Palisad
 
 > `optional` **placeholder**: `string`
 
-Defined in: [src/types/Auth/FormField/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L10)
+Defined in: [src/types/Auth/FormField/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L14)
 
 ***
 
@@ -88,7 +91,7 @@ Defined in: [src/types/Auth/FormField/interface.ts:10](https://github.com/Palisa
 
 > `optional` **required**: `boolean`
 
-Defined in: [src/types/Auth/FormField/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L11)
+Defined in: [src/types/Auth/FormField/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L15)
 
 ***
 
@@ -96,7 +99,7 @@ Defined in: [src/types/Auth/FormField/interface.ts:11](https://github.com/Palisa
 
 > `optional` **testId**: `string`
 
-Defined in: [src/types/Auth/FormField/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L13)
+Defined in: [src/types/Auth/FormField/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L17)
 
 ***
 
@@ -104,7 +107,7 @@ Defined in: [src/types/Auth/FormField/interface.ts:13](https://github.com/Palisa
 
 > `optional` **type**: `"text"` \| `"email"` \| `"password"` \| `"tel"`
 
-Defined in: [src/types/Auth/FormField/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L6)
+Defined in: [src/types/Auth/FormField/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L10)
 
 ***
 
@@ -112,4 +115,4 @@ Defined in: [src/types/Auth/FormField/interface.ts:6](https://github.com/Palisad
 
 > **value**: `string`
 
-Defined in: [src/types/Auth/FormField/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L7)
+Defined in: [src/types/Auth/FormField/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L11)

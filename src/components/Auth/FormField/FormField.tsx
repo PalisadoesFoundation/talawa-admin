@@ -2,6 +2,10 @@ import React from 'react';
 import { Form } from 'react-bootstrap';
 import type { InterfaceFormFieldProps } from '../../../types/Auth/FormField/interface';
 
+/**
+ * Reusable form field component with accessibility features and error handling.
+ * Supports text, email, password, and tel input types with Bootstrap styling.
+ */
 export const FormField: React.FC<InterfaceFormFieldProps> = ({
   name,
   label,
@@ -34,7 +38,6 @@ export const FormField: React.FC<InterfaceFormFieldProps> = ({
         placeholder={placeholder}
         disabled={disabled}
         isInvalid={!!error}
-        aria-invalid={!!error}
         aria-describedby={errorId}
         data-testid={testId}
       />

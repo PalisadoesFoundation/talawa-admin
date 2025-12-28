@@ -1,5 +1,9 @@
 import type { ChangeEvent, FocusEvent } from 'react';
 
+/**
+ * Props interface for the FormField component.
+ * Defines all available properties for form input fields with validation support.
+ */
 export interface InterfaceFormFieldProps {
   label?: string;
   name: string;

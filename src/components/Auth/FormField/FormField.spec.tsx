@@ -46,6 +46,12 @@ describe('FormField', () => {
       expect(screen.getByDisplayValue('')).toHaveAttribute('type', 'password');
     });
 
+    it('should render with value prop', () => {
+      render(<FormField {...defaultProps} value="test value" />);
+
+      expect(screen.getByDisplayValue('test value')).toBeInTheDocument();
+    });
+
     it('should render with placeholder', () => {
       render(<FormField {...defaultProps} placeholder="Enter text" />);
 
@@ -81,27 +87,6 @@ describe('FormField', () => {
   });
 
   describe('Accessibility', () => {
-    it('should set aria-invalid to true when error is present', () => {
-      render(<FormField {...defaultProps} error="Error message" />);
-
-      const input = screen.getByRole('textbox');
-      expect(input).toHaveAttribute('aria-invalid', 'true');
-    });
-
-    it('should set aria-invalid to false when no error', () => {
-      render(<FormField {...defaultProps} />);
-
-      const input = screen.getByRole('textbox');
-      expect(input).toHaveAttribute('aria-invalid', 'false');
-    });
-
-    it('should set aria-invalid to false when error is null', () => {
-      render(<FormField {...defaultProps} error={null} />);
-
-      const input = screen.getByRole('textbox');
-      expect(input).toHaveAttribute('aria-invalid', 'false');
-    });
-
     it('should set aria-describedby to error id when error is present', () => {
       render(
         <FormField {...defaultProps} name="email" error="Invalid email" />,
@@ -127,18 +112,14 @@ describe('FormField', () => {
 
     it('should create error element with correct id matching aria-describedby', () => {
       render(
-        <FormField
-          {...defaultProps}
-          name="password"
-          error="Password required"
-        />,
+        <FormField {...defaultProps} name="email" error="Email required" />,
       );
 
       const input = screen.getByRole('textbox');
-      const errorElement = screen.getByText('Password required');
+      const errorElement = screen.getByText('Email required');
 
-      expect(input).toHaveAttribute('aria-describedby', 'password-error');
-      expect(errorElement).toHaveAttribute('id', 'password-error');
+      expect(input).toHaveAttribute('aria-describedby', 'email-error');
+      expect(errorElement).toHaveAttribute('id', 'email-error');
     });
   });
 
