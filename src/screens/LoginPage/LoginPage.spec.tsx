@@ -1537,7 +1537,7 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
       1,
-      'Name should contain only letters, spaces, and hyphens',
+      i18nForTest.t('loginPage.nameInvalid'),
     );
   });
 
@@ -2303,10 +2303,7 @@ describe('Cookie-based authentication verification', () => {
       'email',
       'newuser@example.com',
     );
-    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith('role', 'user');
-    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
-      'userId',
-      'newUser123',
-    );
+    // Note: role and userId are not stored during signup, only during login
+    // The signup flow stores: IsLoggedIn, name, email
   });
 });

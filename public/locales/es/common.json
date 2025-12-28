@@ -131,7 +131,7 @@
   "pluginSettings": "Configuración de complementos",
   "signOut": "Cerrar sesión",
   "signingOut": "Cerrando sesión...",
-  "retryPrompt": "Error al revocar la sesión. ¿Reintentar?",
+  "retryPrompt": "Error al cerrar sesión. ¿Reintentar?",
   "title": "Talawa Admin",
   "fromPalisadoes": "Una aplicación de código abierto por voluntarios de la Fundación Palisadoes",
   "userLogin": "Inicio de sesión de usuario",
@@ -146,7 +146,7 @@
   "specialCharCheck": "Al menos un carácter especial",
   "selectOrg": "Seleccione una organización",
   "passwordInvalid": "La contraseña debe contener al menos una letra minúscula, una mayúscula, un valor numérico y un carácter especial",
-  "emailInvalid": "El correo electrónico debe tener al menos 8 caracteres",
+  "emailInvalid": "Por favor, introduce una dirección de correo electrónico válida",
   "nameInvalid": "El nombre solo debe contener letras, espacios y guiones",
   "communityLogo": "Logo de la comunidad",
   "organizations": "Organizaciones"

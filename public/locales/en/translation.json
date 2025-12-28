@@ -72,7 +72,7 @@
   "userLoginPage": {
     "title": "Talawa Admin",
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
-    "atleast_8_char_long": "Atleast 8 Character long",
+    "atleastEightCharLong": "Atleast 8 Character long",
     "doNotOwnAnAccount": "Do not own an account?",
     "captchaError": "Captcha Error!",
     "Please_check_the_captcha": "Please, check the captcha.",
