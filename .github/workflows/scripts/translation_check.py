@@ -1,239 +1,181 @@
-"""Validates i18n translation tags against locale JSON files."""
-
-from __future__ import annotations
-
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 import argparse
 import json
+import os
 import re
 import sys
-from pathlib import Path
+from typing import Dict, Set, List, Tuple, Optional
 
+# Paths to English locale files used as the source of truth
+EN_LOCALES = {
+    "translation": "public/locales/en/translation.json",
+    "common": "public/locales/en/common.json",
+    "errors": "public/locales/en/errors.json",
+}
 
-def get_keys(data: dict, prefix: str = "") -> set[str]:
-    """Flatten nested translation JSON into dot-notation keys.
+# Regexes to detect useTranslation calls and t() usages
+# Matches: useTranslation('translation', { keyPrefix: 'dashboard' })
+USE_T_WITH_PREFIX = re.compile(
+    r"useTranslation\s*\(\s*(?:['\"](?P<ns>translation|common|errors)['\"])?\s*,\s*\{\s*keyPrefix\s*:\s*['\"](?P<prefix>[^'\"\s]+)['\"]\s*\}\s*\)"
+)
+# Matches: useTranslation('translation') or useTranslation() (defaults to 'translation')
+USE_T_NO_PREFIX = re.compile(
+    r"useTranslation\s*\(\s*(?:['\"](?P<ns>translation|common|errors)['\"])?\s*\)"
+)
 
-    Args:
-        data: Parsed JSON dictionary containing translation keys.
-        prefix: Prefix used for nested key traversal.
+# Matches: t('key'), i18n.t('key'), tCommon('key')
+T_LIT = re.compile(r"(?:\bi18n\s*\.\s*)?\bt\s*\(\s*['\"](?P<key>[^'\"\)]+)['\"]")
+T_COMMON_LIT = re.compile(r"\btCommon\s*\(\s*['\"](?P<key>[^'\"\)]+)['\"]")
 
-    Returns:
-        keys: A set of flattened translation keys.
-    """
-    keys: set[str] = set()
-    for key, value in data.items():
-        if isinstance(value, dict):
-            keys.update(get_keys(value, f"{prefix}{key}."))
-        else:
-            keys.add(f"{prefix}{key}")
-    return keys
+def flatten(obj, base="") -> Set[str]:
+    out: Set[str] = set()
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            nb = f"{base}.{k}" if base else k
+            out.add(nb)
+            out |= flatten(v, nb)
+    elif isinstance(obj, list):
+        # Lists do not contribute new dot-keys directly
+        for i, v in enumerate(obj):
+            out |= flatten(v, base)
+    return out
 
-
-def get_translation_keys(data: dict) -> set[str]:
-    """Extract translation keys from parsed locale JSON.
-
-    Args:
-        data: Parsed JSON dictionary.
-
-    Returns:
-        translation_keys: A set of translation keys.
-    """
-    return get_keys(data)
-
-
-def load_locale_keys(locales_dir: str | Path) -> set[str]:
-    """Load all valid translation keys from locale JSON files.
-
-    Args:
-        locales_dir: Path to the locale directory.
-
-    Returns:
-        keys: A set of all valid translation keys.
-
-    Raises:
-        FileNotFoundError: If the locale directory does not exist.
-    """
-    base = Path(locales_dir)
-    if not base.exists():
-        raise FileNotFoundError(locales_dir)
-
-    keys: set[str] = set()
-
-    for name in ("common.json", "translation.json", "errors.json"):
-        path = base / name
-        if path.exists():
-            try:
-                keys.update(
-                    get_keys(json.loads(path.read_text(encoding="utf-8")))
-                )
-            except (json.JSONDecodeError, OSError) as exc:
-                print(
-                    f"Warning: Failed to parse {path}: {exc}",
-                    file=sys.stderr,
-                )
-
-    if not keys:
-        print(
-            f"Warning: No translation keys found in {base}",
-            file=sys.stderr,
-        )
-
-    return keys
-
-
-def find_translation_tags(source: str | Path) -> set[str]:
-    """Find all translation tags used inside a source file or string.
-
-    Args:
-        source: File path or raw source string.
-
-    Returns:
-        found_tags: A set of detected translation keys.
-    """
-    if isinstance(source, Path):
+def load_locale_keys() -> Dict[str, Set[str]]:
+    keys_by_ns: Dict[str, Set[str]] = {}
+    for ns, path in EN_LOCALES.items():
+        if not os.path.exists(path):
+            print(f"[warn] Missing locale file: {path}", file=sys.stderr)
+            keys_by_ns[ns] = set()
+            continue
         try:
-            content = source.read_text(encoding="utf-8")
-        except (OSError, UnicodeDecodeError):
-            return set()
-    else:
-        content = source
+            with open(path, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            keys_by_ns[ns] = flatten(data)
+        except Exception as e:
+            print(f"[error] Failed to read/parse {path}: {e}", file=sys.stderr)
+            keys_by_ns[ns] = set()
+    return keys_by_ns
 
-    tags = re.findall(
-        r"(?:(?:\bi18n)\.)?\bt\(\s*['\"]([^'\" \n]+)['\"]",
-        content,
-    )
-
-    return {tag.split(":")[-1] for tag in tags}
-
-
-def get_target_files(
-    files: list[str] | None = None,
-    directories: list[str] | None = None,
-    exclude: list[str] | None = None,
-) -> list[Path]:
-    """Resolve target source files for translation validation.
-
-    Args:
-        files: Explicit list of files to scan.
-        directories: Directories to recursively scan.
-        exclude: Filename patterns to exclude.
-
-    Returns:
-        target_files: A list of source file paths.
-
-    Raises:
-        FileNotFoundError: If the default src directory is missing.
+def discover_ns_prefixes(src: str) -> List[Tuple[str, Optional[str]]]:
     """
-    exclude = exclude or []
-    targets: list[Path] = []
-
-    if files:
-        for file_path in files:
-            path = Path(file_path)
-            if path.exists() and path.is_file():
-                targets.append(path)
-            else:
-                print(
-                    f"Warning: File not found: {file_path}",
-                    file=sys.stderr,
-                )
-
-    if directories:
-        for directory in directories:
-            dir_path = Path(directory)
-            if dir_path.exists() and dir_path.is_dir():
-                targets.extend(dir_path.rglob("*"))
-            else:
-                print(
-                    f"Warning: Directory not found: {directory}",
-                    file=sys.stderr,
-                )
-
-    if not files and not directories:
-        src_path = Path("src")
-        if not src_path.exists() or not src_path.is_dir():
-            raise FileNotFoundError("Default 'src' directory not found")
-        targets = list(src_path.rglob("*"))
-
-    return [
-        path
-        for path in targets
-        if path.suffix in {".ts", ".tsx", ".js", ".jsx"}
-        and not any(path.name.endswith(x) or x in path.parts for x in exclude)
-        and ".spec." not in path.name
-        and ".test." not in path.name
-    ]
-
-
-def check_file(path: Path, valid_keys: set[str]) -> list[str]:
-    """Check a file for missing translation keys.
-
-    Args:
-        path: File path to check.
-        valid_keys: Set of valid translation keys.
-
-    Returns:
-        missing_keys: A sorted list of missing translation keys.
+    Returns a list of (namespace, keyPrefix or None) discovered in the file.
+    If no namespace is given, default to 'translation'.
     """
-    return sorted(
-        tag for tag in find_translation_tags(path) if tag not in valid_keys
-    )
+    pairs: List[Tuple[str, Optional[str]]] = []
 
+    # useTranslation(..., { keyPrefix: 'x' })
+    for m in USE_T_WITH_PREFIX.finditer(src):
+        ns = m.group("ns") or "translation"
+        prefix = m.group("prefix")
+        pairs.append((ns, prefix))
 
-def main() -> None:
-    """CLI entry point for translation validation.
+    # useTranslation('ns') or useTranslation()
+    for m in USE_T_NO_PREFIX.finditer(src):
+        ns = m.group("ns") or "translation"
+        # Only add a (ns, None) if we didn't already record this ns with any prefix
+        if (ns, None) not in pairs:
+            pairs.append((ns, None))
+    if not pairs:
+        # Default assumption: translation namespace without prefix
+        pairs.append(("translation", None))
+    return pairs
 
-    This function parses command-line arguments, loads translation keys,
-    validates translation tag usage across source files, and exits with
-    appropriate status codes based on the results.
-
-    Args:
-        None
-
-    Returns:
-        None
-
-    Raises:
-        SystemExit: Exits with status code 0 on success, 1 if missing
-            translation keys are found, or 2 for configuration errors.
+def literal_t_keys(src: str) -> List[Tuple[str, str]]:
     """
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--files", nargs="*", default=[])
-    parser.add_argument("--directories", nargs="*", default=[])
-    parser.add_argument("--locales-dir", default="public/locales/en")
-    args = parser.parse_args()
+    Collect (kind, key) where kind in {'t','tCommon'} with only string-literal keys.
+    """
+    out: List[Tuple[str, str]] = []
+    for m in T_LIT.finditer(src):
+        out.append(("t", m.group("key")))
+    for m in T_COMMON_LIT.finditer(src):
+        out.append(("tCommon", m.group("key")))
+    return out
 
+def validate_file(path: str, keys_by_ns: Dict[str, Set[str]]) -> List[str]:
+    """
+    Returns a list of missing-key error strings for this file.
+    """
     try:
-        valid_keys = load_locale_keys(args.locales_dir)
-    except FileNotFoundError as exc:
-        print(
-            f"Error: Locale directory not found: {exc}",
-            file=sys.stderr,
-        )
-        sys.exit(2)
+        with open(path, "r", encoding="utf-8") as f:
+            src = f.read()
+    except Exception as e:
+        return [f"{path}: cannot read file: {e}"]
 
-    try:
-        targets = get_target_files(args.files, args.directories)
-    except FileNotFoundError as exc:
-        print(f"Error: {exc}", file=sys.stderr)
-        sys.exit(2)
+    ns_prefixes = discover_ns_prefixes(src)
+    calls = literal_t_keys(src)
 
-    errors: dict[str, list[str]] = {}
-    for path in targets:
-        missing = check_file(path, valid_keys)
-        if missing:
-            errors[str(path)] = missing
+    errors: List[str] = []
 
-    if errors:
-        for file, tags in errors.items():
-            print(
-                f"File: {file}\n"
-                + "\n".join(f"  - Missing: {tag}" for tag in tags)
+    for kind, key in calls:
+        if kind == "tCommon":
+            # Force common namespace, no prefix handling for tCommon by convention
+            valid = (key in keys_by_ns.get("common", set()))
+            if not valid:
+                errors.append(f"{path}: missing key in common.json -> {key}")
+            continue
+
+        # kind == 't' (default). Try combinations:
+        # 1) any discovered (ns, prefix) → ns + '.' + prefix + '.' + key
+        # 2) any discovered (ns, None)   → ns + '.' + key (top-level)
+        valid = False
+        for ns, prefix in ns_prefixes:
+            ns_keys = keys_by_ns.get(ns, set())
+            if prefix:
+                if f"{prefix}.{key}" in ns_keys:
+                    valid = True
+                    break
+            # also accept exact key at ns root
+            if key in ns_keys:
+                valid = True
+                break
+        if not valid:
+            # Build a helpful hint
+            discovered = ", ".join(
+                [f"{ns}:{p or '(no prefix)'}" for ns, p in ns_prefixes]
             )
-        sys.exit(1)
+            errors.append(
+                f"{path}: missing key for t('{key}'). Checked → [{discovered}]. "
+                f"Hint: if keyPrefix is used, ensure '{keyPrefix_hint(ns_prefixes, key)}' exists."
+            )
 
-    print("All translation tags validated successfully")
-    sys.exit(0)
+    return errors
 
+def keyPrefix_hint(ns_prefixes: List[Tuple[str, Optional[str]]], key: str) -> str:
+    for ns, prefix in ns_prefixes:
+        if prefix:
+            return f"{prefix}.{key}"
+    return key
+
+def main(argv: List[str]) -> int:
+    parser = argparse.ArgumentParser(description="Translation tag check (keyPrefix-aware).")
+    parser.add_argument("--files", nargs="+", help="List of changed files to check", required=True)
+    args = parser.parse_args(argv)
+
+    keys_by_ns = load_locale_keys()
+    all_errors: List[str] = []
+
+    # Only check source files; ignore tests by convention
+    exts = (".ts", ".tsx", ".js", ".jsx")
+    for path in args.files:
+        if not path.endswith(exts):
+            continue
+        if ".spec." in path or ".test." in path:
+            continue
+        if not os.path.exists(path):
+            # The job may list deleted paths; skip safely
+            continue
+        errs = validate_file(path, keys_by_ns)
+        all_errors.extend(errs)
+
+    if all_errors:
+        print("Translation tag check failed:\n", file=sys.stderr)
+        for e in all_errors:
+            print(f"  - {e}", file=sys.stderr)
+        return 1
+
+    print("Translation tag check passed.")
+    return 0
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main(sys.argv[1:]))
