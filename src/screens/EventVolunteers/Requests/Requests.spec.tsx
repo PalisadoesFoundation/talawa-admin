@@ -28,7 +28,6 @@ import {
   UPDATE_ERROR_MOCKS,
   MOCKS_WITH_FILTER_DATA,
 } from './Requests.mocks';
-import { toast } from 'react-toastify';
 import { vi } from 'vitest';
 
 const toastMocks = vi.hoisted(() => ({
@@ -40,13 +39,15 @@ vi.mock('react-toastify', () => ({
   toast: toastMocks,
 }));
 
-const debounceWait = async (ms = 300): Promise<void> => {
+const wait = async (ms = 100): Promise<void> => {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
   });
 };
+
+const debounceWait = (): Promise<void> => wait(300);
 
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(ERROR_MOCKS);
@@ -62,14 +63,6 @@ const t = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
-
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 
 const renderRequests = (link: ApolloLink): RenderResult => {
   return render(
@@ -99,7 +92,7 @@ describe('Testing Requests Screen', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
@@ -241,7 +234,7 @@ describe('Testing Requests Screen', () => {
     await userEvent.click(acceptBtn[0]);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(toastMocks.error).toHaveBeenCalled();
     });
   });
 
