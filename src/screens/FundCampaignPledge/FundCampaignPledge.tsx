@@ -46,7 +46,7 @@ enum ModalState {
  * @returns JSX.Element
  */
 const fundCampaignPledge = (): JSX.Element => {
-  const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -242,7 +242,7 @@ const fundCampaignPledge = (): JSX.Element => {
   const columns: GridColDef[] = [
     {
       field: 'pledgers',
-      headerName: t('pledgers'),
+      headerName: t('pledges.pledgers'),
       flex: 3,
       minWidth: 50,
       align: 'left',
@@ -297,7 +297,7 @@ const fundCampaignPledge = (): JSX.Element => {
     },
     {
       field: 'pledgeDate',
-      headerName: t('pledgeDate'),
+      headerName: t('pledges.pledgeDate'),
       flex: 1,
       minWidth: 150,
       align: 'center',
@@ -310,7 +310,7 @@ const fundCampaignPledge = (): JSX.Element => {
     },
     {
       field: 'amount',
-      headerName: t('pledged'),
+      headerName: t('pledges.pledged'),
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -335,7 +335,7 @@ const fundCampaignPledge = (): JSX.Element => {
     },
     {
       field: 'donated',
-      headerName: t('donated'),
+      headerName: t('pledges.donated'),
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -418,13 +418,14 @@ const fundCampaignPledge = (): JSX.Element => {
         >
           {campaignInfo?.name}
         </Link>
-        <Typography color="text.primary">{t('pledges')}</Typography>
+        <Typography color="text.primary">{t('pledges.pledges')}</Typography>
       </Breadcrumbs>
       <div className={styles.overviewContainer}>
         <div className={styles.titleContainer}>
           <h3>{campaignInfo?.name}</h3>
           <span>
-            {t('endsOn')} {dayjs(campaignInfo?.endDate).format('DD/MM/YYYY')}
+            {t('pledges.endsOn')}{' '}
+            {dayjs(campaignInfo?.endDate).format('DD/MM/YYYY')}
           </span>
         </div>
         <div className={styles.progressContainer}>
@@ -448,7 +449,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
                 htmlFor="pledgedRadio"
               >
-                {t('pledgedAmount')}
+                {t('pledges.pledgedAmount')}
               </label>
 
               <input
@@ -463,7 +464,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
                 htmlFor="raisedRadio"
               >
-                {t('raisedAmount')}
+                {t('pledges.raisedAmount')}
               </label>
             </div>
           </div>
@@ -503,7 +504,7 @@ const fundCampaignPledge = (): JSX.Element => {
       </div>
       <div className={`${styles.btnsContainerPledge} align-items-center`}>
         <AdminSearchFilterBar
-          searchPlaceholder={t('searchPledger')}
+          searchPlaceholder={t('pledges.searchPledger')}
           searchValue={searchTerm}
           onSearchChange={(value) => setSearchTerm(value.trim())}
           searchInputTestId="searchPledger"
@@ -525,10 +526,10 @@ const fundCampaignPledge = (): JSX.Element => {
                     | 'endDate_DESC',
                 ),
               options: [
-                { label: t('lowestAmount'), value: 'amount_ASC' },
-                { label: t('highestAmount'), value: 'amount_DESC' },
-                { label: t('latestEndDate'), value: 'endDate_DESC' },
-                { label: t('earliestEndDate'), value: 'endDate_ASC' },
+                { label: t('pledges.lowestAmount'), value: 'amount_ASC' },
+                { label: t('pledges.highestAmount'), value: 'amount_DESC' },
+                { label: t('pledges.latestEndDate'), value: 'endDate_DESC' },
+                { label: t('pledges.earliestEndDate'), value: 'endDate_ASC' },
               ],
               type: 'sort',
             },
@@ -540,10 +541,12 @@ const fundCampaignPledge = (): JSX.Element => {
               disabled={!isWithinCampaignDates}
               onClick={() => handleOpenModal(null, 'create')}
               data-testid="addPledgeBtn"
-              title={!isWithinCampaignDates ? t('campaignNotActive') : ''}
+              title={
+                !isWithinCampaignDates ? t('pledges.campaignNotActive') : ''
+              }
             >
               <i className={'fa fa-plus me-2'} />
-              {t('addPledge')}
+              {t('pledges.addPledge')}
             </Button>
           }
         />
@@ -557,7 +560,7 @@ const fundCampaignPledge = (): JSX.Element => {
           noRowsOverlay: () => (
             <EmptyState
               icon="volunteer_activism"
-              message={t('noPledges')}
+              message={t('pledges.noPledges')}
               dataTestId="fund-campaign-pledge-empty-state"
             />
           ),

@@ -1720,6 +1720,7 @@
     "groupDetails": "小组详情",
     "creator": "创建者",
     "requests": "请求",
+    "volunteershipRequests": "志愿服务请求",
     "requestType": "请求类型",
     "requestDate": "请求日期",
     "noRequests": "无请求",

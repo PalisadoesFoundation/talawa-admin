@@ -77,8 +77,9 @@ const dataGridStyle = {
  * @returns The rendered component including breadcrumbs, search and filter controls, data grid, and modals.
  */
 const orgFundCampaign = (): JSX.Element => {
-  const { t } = useTranslation('translation', { keyPrefix: 'fundCampaign' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
   const navigate = useNavigate();
 
   const { fundId, orgId } = useParams();
@@ -151,7 +152,7 @@ const orgFundCampaign = (): JSX.Element => {
             className={`${styles.errorIcon} ${styles.errorIconLarge}`}
           />
           <h6 className="fw-bold text-danger text-center">
-            {t('errorLoading')}
+            {tErrors('errorLoading', { entity: 'campaign' })}
             <br />
             {campaignError.message}
           </h6>
@@ -163,12 +164,12 @@ const orgFundCampaign = (): JSX.Element => {
   // Header titles for the table loader
   const headerTitles: string[] = [
     '#',
-    t('campaignName'),
-    t('startDate'),
-    t('endDate'),
-    t('fundingGoal'),
-    t('raised'),
-    t('progress'),
+    t('fundCampaign.campaignName'),
+    tCommon('startDate'),
+    tCommon('endDate'),
+    t('fundCampaign.fundingGoal'),
+    t('fundCampaign.raised'),
+    t('fundCampaign.progress'),
     tCommon('action'),
   ];
 
@@ -351,7 +352,7 @@ const orgFundCampaign = (): JSX.Element => {
           }}
         >
           <i className="fa fa-edit me-1" />
-          {t('editCampaign')}
+          {t('fundCampaign.editCampaign')}
         </Button>
       ),
     },
@@ -369,7 +370,7 @@ const orgFundCampaign = (): JSX.Element => {
     slots: {
       noRowsOverlay: () => (
         <Stack height="100%" alignItems="center" justifyContent="center">
-          {t('noCampaignsFound')}
+          {t('fundCampaign.noCampaignsFound')}
         </Stack>
       ),
     },
@@ -393,14 +394,14 @@ const orgFundCampaign = (): JSX.Element => {
             to: `/orgfunds/${orgId}`,
           },
           {
-            label: t('title'),
+            label: t('fundCampaign.title'),
             to: `/orgfunds/${orgId}/campaigns`,
           },
         ]}
       />
       <div className={styles.searchContainerRow}>
         <AdminSearchFilterBar
-          searchPlaceholder={t('searchCampaigns')}
+          searchPlaceholder={t('fundCampaign.searchCampaigns')}
           searchValue={searchText}
           onSearchChange={(value) => setSearchText(value.trim())}
           searchInputTestId="searchFullName"
@@ -415,7 +416,7 @@ const orgFundCampaign = (): JSX.Element => {
           disabled={isArchived}
         >
           <i className={'fa fa-plus me-2'} />
-          {t('addCampaign')}
+          {t('fundCampaign.addCampaign')}
         </Button>
       </div>
 
@@ -434,7 +435,7 @@ const orgFundCampaign = (): JSX.Element => {
       ) : !campaignLoading && campaignData && filteredCampaigns.length === 0 ? (
         <EmptyState
           icon={<Campaign />}
-          message={t('noCampaignsFound')}
+          message={t('fundCampaign.noCampaignsFound')}
           dataTestId="campaigns-empty"
         />
       ) : (

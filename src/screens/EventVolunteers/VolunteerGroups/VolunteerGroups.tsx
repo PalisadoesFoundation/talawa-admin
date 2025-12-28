@@ -63,7 +63,7 @@ enum ModalState {
  * @returns JSX.Element
  */
 function volunteerGroups(): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -340,8 +340,8 @@ function volunteerGroups(): JSX.Element {
             dataTestIdPrefix: 'searchByToggle',
             selectedOption: searchBy,
             options: [
-              { label: t('leader'), value: 'leader' },
-              { label: t('group'), value: 'group' },
+              { label: t('eventVolunteers.leader'), value: 'leader' },
+              { label: t('eventVolunteers.group'), value: 'group' },
             ],
             onOptionChange: (value) => {
               setSearchBy(value as 'leader' | 'group');
@@ -355,8 +355,14 @@ function volunteerGroups(): JSX.Element {
             dataTestIdPrefix: 'sort',
             selectedOption: sortBy ?? '',
             options: [
-              { label: t('mostVolunteers'), value: 'volunteers_DESC' },
-              { label: t('leastVolunteers'), value: 'volunteers_ASC' },
+              {
+                label: t('eventVolunteers.mostVolunteers'),
+                value: 'volunteers_DESC',
+              },
+              {
+                label: t('eventVolunteers.leastVolunteers'),
+                value: 'volunteers_ASC',
+              },
             ],
             onOptionChange: (value) => {
               setSortBy(value as 'volunteers_DESC' | 'volunteers_ASC');
@@ -386,7 +392,7 @@ function volunteerGroups(): JSX.Element {
         slots={{
           noRowsOverlay: () => (
             <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noVolunteerGroups')}
+              {t('eventVolunteers.noVolunteerGroups')}
             </Stack>
           ),
         }}

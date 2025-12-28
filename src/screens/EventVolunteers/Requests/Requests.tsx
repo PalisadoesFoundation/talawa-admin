@@ -147,7 +147,9 @@ function Requests(): JSX.Element {
             className={`${styles.errorIcon} ${styles.iconLg}`}
           />
           <h6 className="fw-bold text-danger text-center">
-            {tErrors('errorLoading', { entity: 'Volunteership Requests' })}
+            {tErrors('errorLoading', {
+              entity: t('eventVolunteers.volunteershipRequests'),
+            })}
           </h6>
         </div>
       </div>
@@ -284,7 +286,7 @@ function Requests(): JSX.Element {
       {/* Header with search, filter  and Create Button */}
       <div className={`${styles.btnsContainer} btncon gap-4 flex-wrap`}>
         <AdminSearchFilterBar
-          searchPlaceholder={tCommon('searchBy', { item: 'Name' })}
+          searchPlaceholder={tCommon('searchBy', { item: tCommon('name') })}
           searchValue={searchTerm}
           onSearchChange={(value: string) => {
             setSearchTerm(value);
