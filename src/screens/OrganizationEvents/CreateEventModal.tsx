@@ -14,6 +14,7 @@ import type {
   IEventFormSubmitPayload,
   IEventFormValues,
 } from 'types/EventForm/interface';
+import type { ICreateEventInput } from 'types/Event/interface';
 
 interface ICreateEventModalProps {
   /** Whether the modal is currently open/visible */
@@ -54,12 +55,29 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
     CREATE_EVENT_MUTATION,
   );
 
+  // Default to tomorrow at 00:00 UTC to ensure startAt is always in the future
+  // (API requires startAt to be greater than current time)
+  // Using UTC-aware calculation to avoid timezone issues where local midnight
+  // could convert to a past UTC timestamp for users in positive UTC offsets
+  const now = new Date();
+  const tomorrowUTC = new Date(
+    Date.UTC(
+      now.getUTCFullYear(),
+      now.getUTCMonth(),
+      now.getUTCDate() + 1,
+      0,
+      0,
+      0,
+      0,
+    ),
+  );
+
   const defaultValues: IEventFormValues = {
     name: '',
     description: '',
     location: '',
-    startDate: new Date(),
-    endDate: new Date(),
+    startDate: tomorrowUTC,
+    endDate: tomorrowUTC,
     startTime: '08:00:00',
     endTime: '18:00:00',
     allDay: true,
@@ -81,17 +99,18 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         ? formatRecurrenceForPayload(payload.recurrenceRule, payload.startDate)
         : undefined;
 
-      const input = {
+      // Build input object with shared typed interface
+      const input: ICreateEventInput = {
         name: payload.name,
-        description: payload.description,
         startAt: payload.startAtISO,
         endAt: payload.endAtISO,
         organizationId: currentUrl,
         allDay: payload.allDay,
-        location: payload.location,
         isPublic: payload.isPublic,
         isRegisterable: payload.isRegisterable,
-        recurrence: recurrenceInput,
+        ...(payload.description && { description: payload.description }),
+        ...(payload.location && { location: payload.location }),
+        ...(recurrenceInput && { recurrence: recurrenceInput }),
       };
 
       const { data: createEventData } = await create({
