@@ -34,4 +34,8 @@ export class LoginPage {
     }
     return this;
   }
+
+  verifyErrorToast(timeout = 10000) {
+    return this.verifyToastVisible(undefined, timeout);
+  }
 }

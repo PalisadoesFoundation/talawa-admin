@@ -258,4 +258,23 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
     const titleElement = screen.getByRole('heading', { level: 1 });
     expect(titleElement.parentElement).toHaveClass(localStyles.titleContainer);
   });
+
+  it('renders default title "User Portal" for unknown routes', () => {
+    mockLocation = '/user/unknownroute/123';
+
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const titleElement = screen.getByRole('heading', { level: 1 });
+    expect(titleElement).toHaveTextContent('User Portal');
+  });
 });
