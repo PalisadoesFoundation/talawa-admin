@@ -214,7 +214,9 @@ export default function Settings(): React.JSX.Element {
 
       if (updateData) {
         NotificationToast.success(
-          tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
+          tCommon('updatedSuccessfully', {
+            item: tCommon('profile'),
+          }) as string,
         );
         setItem('UserImage', updateData.updateCurrentUser.avatarURL);
         setItem('name', updateData.updateCurrentUser.name);
