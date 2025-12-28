@@ -800,10 +800,13 @@ describe('Apollo Client Configuration', () => {
         resolveRefresh(true);
       }
 
-      // Wait for queued request to be processed after refresh resolves
+      // Wait for both queued requests to be processed after refresh resolves
       await vi.waitFor(
         () => {
+          // Verify both operations were forwarded after successful refresh
+          expect(forward).toHaveBeenCalledWith(operation1);
           expect(forward).toHaveBeenCalledWith(operation2);
+          expect(forward).toHaveBeenCalledTimes(2);
         },
         { timeout: 1000 },
       );
