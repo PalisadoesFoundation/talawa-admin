@@ -12,6 +12,7 @@
  */
 import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import type { RenderResult } from '@testing-library/react';
 import {
   act,
@@ -168,8 +169,13 @@ afterEach(() => {
 });
 
 const renderOrganizationVenue = (link: ApolloLink): RenderResult => {
+  const client = new ApolloClient({
+    link,
+    cache: new InMemoryCache(),
+  });
+
   return render(
-    <MockedProvider link={link}>
+    <ApolloProvider client={client}>
       <MemoryRouter initialEntries={['/orgvenues/orgId']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -186,7 +192,7 @@ const renderOrganizationVenue = (link: ApolloLink): RenderResult => {
           </I18nextProvider>
         </Provider>
       </MemoryRouter>
-    </MockedProvider>,
+    </ApolloProvider>,
   );
 };
 
