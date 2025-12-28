@@ -1017,7 +1017,7 @@ describe('Testing Campaign Pledge Screen', () => {
       expect(addPledgeBtn).toBeDisabled();
       expect(addPledgeBtn).toHaveAttribute(
         'title',
-        'pledges.campaignNotActive',
+        'Campaign is not currently active',
       );
     });
     vi.useRealTimers();
