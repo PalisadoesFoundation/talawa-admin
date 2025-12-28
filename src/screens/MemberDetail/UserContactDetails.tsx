@@ -212,7 +212,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                       />
                     ) : (
                       <Avatar
-                        name={formState.name}
+                        name={formState.name.replace(/[<>]/g, '')}
                         alt={tCommon('userImage')}
                         size={60}
                         dataTestId="profile-picture"
