@@ -364,6 +364,9 @@ const organizationFunds = (): JSX.Element => {
           searchPlaceholder={t('funds.searchFunds')}
           searchValue={searchText}
           onSearchChange={(value) => setSearchText(value.trim())}
+          onSearchSubmit={(value: string) => {
+            setSearchText(value.trim());
+          }}
           searchInputTestId="searchByName"
           searchButtonTestId="searchButton"
           hasDropdowns={false}

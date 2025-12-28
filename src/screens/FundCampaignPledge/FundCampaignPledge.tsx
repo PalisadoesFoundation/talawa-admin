@@ -489,6 +489,9 @@ const fundCampaignPledge = (): JSX.Element => {
           searchPlaceholder={t('pledges.searchPledger')}
           searchValue={searchTerm}
           onSearchChange={(value) => setSearchTerm(value.trim())}
+          onSearchSubmit={(value: string) => {
+            setSearchTerm(value.trim());
+          }}
           searchInputTestId="searchPledger"
           searchButtonTestId="searchBtn"
           hasDropdowns={true}

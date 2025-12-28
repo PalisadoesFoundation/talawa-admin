@@ -170,6 +170,22 @@ describe('Testing Requests Screen', () => {
     });
   });
 
+  it('Search Requests by volunteer name using submit (Enter key)', async () => {
+    renderRequests(link1);
+
+    const searchInput = await screen.findByTestId('searchBy');
+    expect(searchInput).toBeInTheDocument();
+
+    // Search by name using Enter key to trigger onSearchSubmit
+    await userEvent.type(searchInput, 'T{Enter}');
+    await debounceWait();
+
+    await waitFor(() => {
+      const volunteerName = screen.getAllByTestId('volunteerName');
+      expect(volunteerName[0]).toHaveTextContent('Teresa Bradley');
+    });
+  });
+
   it('should render screen with No Requests', async () => {
     renderRequests(link3);
 

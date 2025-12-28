@@ -404,6 +404,9 @@ const orgFundCampaign = (): JSX.Element => {
           searchPlaceholder={t('fundCampaign.searchCampaigns')}
           searchValue={searchText}
           onSearchChange={(value) => setSearchText(value.trim())}
+          onSearchSubmit={(value: string) => {
+            setSearchText(value.trim());
+          }}
           searchInputTestId="searchFullName"
           searchButtonTestId="searchButton"
           hasDropdowns={false}
