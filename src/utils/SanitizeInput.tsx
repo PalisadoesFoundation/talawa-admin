@@ -37,14 +37,9 @@ export const sanitizeInput = (input: string): string => {
     previousLength = sanitized.length;
 
     sanitized = sanitized
-      // Remove script tags and content (case-insensitive, handles whitespace/newlines)
-      .replace(/<script[^>]*>[\s\S]*?<\/script\s*>/gi, '')
 
       // Remove all HTML tags
       .replace(/<[^>]*>/g, '')
-
-      // Remove event handlers more aggressively (handles spaces, quotes, etc.)
-      .replace(/\s+on\w+\s*=\s*["']?[^"'>\s]*["']?/gi, '')
 
       // Remove dangerous protocols
       .replace(/(?:javascript|data|vbscript|file|about):/gi, '')
