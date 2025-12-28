@@ -24,10 +24,11 @@ vi.mock('components/Avatar/Avatar', () => ({
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string, options?: { name?: string }) => {
-      if (key === 'altText') return `Profile picture of ${options?.name}`;
-      if (key === 'enlargedAltText')
+      if (key === 'profileAvatar.altText')
+        return `Profile picture of ${options?.name}`;
+      if (key === 'profileAvatar.enlargedAltText')
         return `Enlarged profile picture of ${options?.name}`;
-      if (key === 'modalTitle') return 'Profile Picture';
+      if (key === 'profileAvatar.modalTitle') return 'Profile Picture';
       return key;
     },
   }),
