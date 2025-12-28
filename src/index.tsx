@@ -205,7 +205,7 @@ const splitLink = split(
 // Simplified combined link
 const combinedLink = ApolloLink.from([errorLink, splitLink]);
 
-const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache({
     typePolicies: {
       Query: {

@@ -2318,8 +2318,37 @@ describe('Cookie-based authentication verification', () => {
         error: new Error('Network Error'),
       },
       {
-        request: { query: GET_COMMUNITY_DATA_PG },
-        result: { data: { community: null } },
+        request: {
+          query: RECAPTCHA_MUTATION,
+          variables: { recaptchaToken: 'test-token' },
+        },
+        result: { data: { recaptcha: true } },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG, variables: {} },
+        result: {
+          data: {
+            community: {
+              id: '1',
+              name: 'Test Community',
+              logoURL: 'http://example.com/logo.png',
+              websiteURL: 'http://example.com',
+              facebookURL: 'http://facebook.com/test',
+              linkedinURL: 'http://linkedin.com/test',
+              xURL: 'http://twitter.com/test',
+              githubURL: 'http://github.com/test',
+              instagramURL: 'http://instagram.com/test',
+              youtubeURL: 'http://youtube.com/test',
+              slackURL: 'http://slack.com/test',
+              redditURL: 'http://reddit.com/test',
+              inactivityTimeoutDuration: 3600,
+              createdAt: '2023-01-01',
+              updatedAt: '2023-01-01',
+              logoMimeType: 'image/png',
+              __typename: 'Community',
+            },
+          },
+        },
       },
       {
         request: { query: ORGANIZATION_LIST_NO_MEMBERS },
@@ -2351,9 +2380,26 @@ describe('Cookie-based authentication verification', () => {
       'password',
     );
 
+    // Simulate reCAPTCHA completion
+    const recaptcha = screen.getAllByTestId('mock-recaptcha')[0];
+    fireEvent.change(recaptcha, {
+      target: { value: 'test-token' },
+    });
+
+    await wait();
+
     await userEvent.click(screen.getByTestId('loginBtn'));
 
     await wait();
+
+    // Verify error toast is shown
+    expect(toastMocks.error).toHaveBeenCalledWith(
+      expect.stringContaining('Network Error'),
+      expect.any(Object),
+    );
+
+    // Verify ReCAPTCHA is reset on error
+    expect(resetReCAPTCHA).toHaveBeenCalled();
   });
 
   it('Testing Community Data Rendering (social icons and logo)', async () => {
@@ -2367,7 +2413,7 @@ describe('Cookie-based authentication verification', () => {
               logoURL: 'http://example.com/logo.png',
               websiteURL: 'http://example.com',
               facebookURL: 'http://facebook.com/test',
-              linkedInURL: 'http://linkedin.com/test',
+              linkedinURL: 'http://linkedin.com/test',
               xURL: 'http://twitter.com/test',
               githubURL: 'http://github.com/test',
               instagramURL: 'http://instagram.com/test',
