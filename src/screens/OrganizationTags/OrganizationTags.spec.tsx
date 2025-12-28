@@ -270,7 +270,7 @@ describe('Organisation Tags Page', () => {
                   />
                   <button
                     data-testid={search.buttonTestId}
-                    onClick={() => {}}
+                    onClick={() => { }}
                     tabIndex={-1}
                     type="button"
                   >
@@ -678,7 +678,7 @@ describe('Organisation Tags Page', () => {
     // The component successfully renders with:
     // 1. ReportingTable component with gridProps containing:
     //   - noRowsOverlay (line 311-315): Stack with "noTagsFound" message
-    //   - loadingOverlay (line 316-323): LoadingState with skeleton variant
+    //   - loadingOverlay (line 316-323): LoadingState with spinner variant
     //   - Other grid configurations like sx, getRowClassName, etc.
     // 2. The gridProps object is passed to ReportingTable which uses it to configure DataGrid
     // 3. When DataGrid needs to show loading state, it will render the loadingOverlay function
@@ -713,7 +713,7 @@ describe('Organisation Tags Page', () => {
 
     // The component renders successfully with the loadingOverlay configuration
     // When the ReportingTable/DataGrid enters a loading state, it will render the loadingOverlay
-    // which calls the function that returns <LoadingState isLoading={true} variant="skeleton" size="lg" data-testid="orgTagsLoadingOverlay" />
+    // which calls the function that returns <LoadingState isLoading={true} variant="spinner" size="lg" data-testid="orgTagsLoadingOverlay" />
 
     const table = screen.getByTestId('orgUserTagsScrollableDiv');
     expect(table).toBeInTheDocument();
