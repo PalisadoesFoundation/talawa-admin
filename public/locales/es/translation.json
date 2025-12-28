@@ -1826,6 +1826,7 @@
     "userMenu": "Menú de Usuario",
     "settings": "Ajustes",
     "logout": "Cerrar sesión",
-    "logoutFailed": "Cerrar sesión fallido"
+    "logoutFailed": "Falló el cierre de sesión",
+    "title": "Portal de Usuario"
   }
 }

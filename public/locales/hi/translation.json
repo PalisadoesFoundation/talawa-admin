@@ -1825,7 +1825,8 @@
     "selectLanguage": "भाषा चुनें",
     "userMenu": "उपयोगकर्ता मेनू",
     "settings": "समायोजन",
-    "logout": "लॉग आउट करें",
-    "logoutFailed": "लॉग आउट विफल।"
+    "logout": "साइन आउट",
+    "logoutFailed": "साइन आउट विफल रहा",
+    "title": "उपयोगकर्ता पोर्टल"
   }
 }

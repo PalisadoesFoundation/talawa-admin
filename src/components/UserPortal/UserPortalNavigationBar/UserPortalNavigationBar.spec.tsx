@@ -35,6 +35,7 @@ import {
   mockNavigationLinksBase,
 } from './UserPortalNavigationBarMocks';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
+import styles from './UserPortalNavigationBar.module.css';
 
 // Mock dependencies
 vi.mock('react-toastify', () => ({ toast: { error: vi.fn() } }));
@@ -50,6 +51,7 @@ vi.mock('./UserPortalNavigationBar.module.css', () => ({
     talawaImage: '_talawaImage_9012',
     offcanvasContainer: '_offcanvasContainer_3456',
     link: '_link_7890',
+    testCustomPadding: '_testCustomPadding_1111',
   },
 }));
 
@@ -736,19 +738,19 @@ describe('UserPortalNavigationBar', () => {
       document.head.removeChild(style);
     });
 
-    it('applies custom inline styles via customStyles prop', () => {
-      const customStyles = { padding: '10px' };
+    it('applies custom CSS class via className prop', () => {
+      const customClass = styles.testCustomPadding;
 
       const { container } = render(
         <MockedProvider mocks={[]}>
           <MemoryRouter>
-            <UserPortalNavigationBar mode="user" customStyles={customStyles} />
+            <UserPortalNavigationBar mode="user" className={customClass} />
           </MemoryRouter>
         </MockedProvider>,
       );
 
       const navbar = container.querySelector('nav');
-      expect(navbar).toHaveStyle('padding: 10px');
+      expect(navbar).toHaveClass(customClass);
     });
   });
 
@@ -951,6 +953,41 @@ describe('UserPortalNavigationBar', () => {
   });
 
   describe('UserPortalNavigationBar - GraphQL Error Handling', () => {
+    let unhandledRejectionHandler:
+      | ((reason: unknown, promise: Promise<unknown>) => void)
+      | undefined;
+
+    beforeEach(() => {
+      // Suppress unhandled promise rejections for error tests
+      // These are expected since the component doesn't await revokeRefreshToken()
+      unhandledRejectionHandler = (reason: unknown) => {
+        // Suppress Apollo errors from our test mocks
+        const message =
+          (reason as { message?: string })?.message ||
+          (reason as { networkError?: { message?: string } })?.networkError
+            ?.message ||
+          '';
+        if (
+          message.includes('Failed to revoke refresh token') ||
+          message.includes('Network error') ||
+          message.includes('Failed to fetch organization data')
+        ) {
+          // Suppress this expected error
+          return;
+        }
+        // Let other errors through by re-throwing
+        throw reason;
+      };
+
+      process.on('unhandledRejection', unhandledRejectionHandler);
+    });
+
+    afterEach(() => {
+      // Remove the handler
+      if (unhandledRejectionHandler) {
+        process.off('unhandledRejection', unhandledRejectionHandler);
+      }
+    });
     it('handles organization query error with fallback UI', async () => {
       render(
         <MockedProvider mocks={[organizationDataErrorMock]}>

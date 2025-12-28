@@ -1826,6 +1826,7 @@
     "userMenu": "Menu Utilisateur",
     "settings": "Paramètres",
     "logout": "Déconnexion",
-    "logoutFailed": "Déconnexion échouée"
+    "logoutFailed": "Échec de la déconnexion",
+    "title": "Portail Utilisateur"
   }
 }

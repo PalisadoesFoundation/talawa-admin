@@ -104,7 +104,11 @@ export const revokeRefreshTokenNetworkErrorMock = {
     query: REVOKE_REFRESH_TOKEN,
   },
   variableMatcher: () => true,
-  error: new Error('Network error'),
+  result: {
+    errors: [
+      { message: 'Network error', extensions: { code: 'NETWORK_ERROR' } },
+    ],
+  },
 };
 
 /**

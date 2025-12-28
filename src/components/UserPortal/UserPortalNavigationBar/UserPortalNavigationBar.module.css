@@ -25,3 +25,8 @@
   background-color: #31bb6b;
   color: white;
 }
+
+/* Test utility classes */
+.testCustomPadding {
+  padding: 10px;
+}

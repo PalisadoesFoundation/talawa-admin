@@ -13,10 +13,6 @@ Simulates network failure during logout
 
 ## Type Declaration
 
-### error
-
-> **error**: `Error`
-
 ### request
 
 > **request**: `object`
@@ -24,6 +20,14 @@ Simulates network failure during logout
 #### request.query
 
 > **query**: `DocumentNode` = `REVOKE_REFRESH_TOKEN`
+
+### result
+
+> **result**: `object`
+
+#### result.errors
+
+> **errors**: `object`[]
 
 ### variableMatcher()
 
