@@ -6,7 +6,7 @@
 
 > `const` **createCreator**: `object`
 
-Defined in: [src/screens/Users/Organization.mocks.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Users/Organization.mocks.ts#L13)
+Defined in: [src/screens/Users/Organization.mocks.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Users/Organization.mocks.ts#L12)
 
 ## Type Declaration
 

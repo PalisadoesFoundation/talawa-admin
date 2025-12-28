@@ -15,7 +15,7 @@ import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScre
 import Loader from 'components/Loader/Loader';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
-import { useTranslation } from 'react-i18next';
+import PostsPage from 'shared-components/posts/posts';
 
 const OrganizationScreen = lazy(
   () => import('components/OrganizationScreen/OrganizationScreen'),
@@ -120,8 +120,6 @@ const { setItem } = useLocalStorage();
 
 function App(): React.ReactElement {
   const { data, loading } = useQuery(CURRENT_USER);
-
-  const { t } = useTranslation('common');
 
   const apolloClient = useApolloClient();
 

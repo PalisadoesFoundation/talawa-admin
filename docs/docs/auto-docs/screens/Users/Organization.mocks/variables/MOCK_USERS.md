@@ -6,7 +6,7 @@
 
 > `const` **MOCK\_USERS**: `object`[]
 
-Defined in: [src/screens/Users/Organization.mocks.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Users/Organization.mocks.ts#L22)
+Defined in: [src/screens/Users/Organization.mocks.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/Users/Organization.mocks.ts#L21)
 
 ## Type Declaration
 

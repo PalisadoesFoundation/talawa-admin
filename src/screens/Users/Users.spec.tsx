@@ -16,7 +16,12 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 import Users from './Users';
-import { EMPTY_MOCKS, MOCKS_NEW, MOCKS_NEW_2 } from './UsersMocks.mocks';
+import {
+  EMPTY_MOCKS,
+  MOCKS_NEW,
+  MOCKS_NEW_2,
+  USER_UNDEFINED_MOCK,
+} from './UsersMocks.mocks';
 import { MOCKS, MOCKS2 } from './User.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { describe, expect, it, beforeEach, afterEach, vi } from 'vitest';
