@@ -365,7 +365,7 @@ describe('OrgPostCard Component', () => {
 
     it('closes the modal and stops event propagation when the close button is clicked', async () => {
       render(
-        <MockedProvider>
+        <MockedProvider mocks={[userMock as MockedResponse]}>
           <OrgPostCard post={mockPost} />
         </MockedProvider>,
       );
@@ -536,7 +536,10 @@ describe('OrgPostCard Component', () => {
 
     it('deletes a post successfully', async () => {
       render(
-        <MockedProvider mocks={[successMock]} addTypename={false}>
+        <MockedProvider
+          mocks={[successMock, userMock as MockedResponse]}
+          addTypename={false}
+        >
           <I18nextProvider i18n={i18nForTest}>
             <OrgPostCard post={mockPost} />
           </I18nextProvider>
@@ -574,7 +577,10 @@ describe('OrgPostCard Component', () => {
 
     it('handles delete error gracefully', async () => {
       render(
-        <MockedProvider mocks={[errorMock]} addTypename={false}>
+        <MockedProvider
+          mocks={[errorMock, userMock as MockedResponse]}
+          addTypename={false}
+        >
           <I18nextProvider i18n={i18nForTest}>
             <OrgPostCard post={mockPost} />
           </I18nextProvider>
@@ -600,7 +606,10 @@ describe('OrgPostCard Component', () => {
 
     it('handles null response gracefully', async () => {
       render(
-        <MockedProvider mocks={[nullResponseMock]} addTypename={false}>
+        <MockedProvider
+          mocks={[nullResponseMock, userMock as MockedResponse]}
+          addTypename={false}
+        >
           <I18nextProvider i18n={i18nForTest}>
             <OrgPostCard post={mockPost} />
           </I18nextProvider>
@@ -627,7 +636,10 @@ describe('OrgPostCard Component', () => {
 
     it('closes delete modal when cancel is clicked', async () => {
       render(
-        <MockedProvider mocks={[]} addTypename={false}>
+        <MockedProvider
+          mocks={[userMock as MockedResponse]}
+          addTypename={false}
+        >
           <I18nextProvider i18n={i18nForTest}>
             <OrgPostCard post={mockPost} />
           </I18nextProvider>
@@ -740,7 +752,7 @@ describe('OrgPostCard Pin Toggle and update post Functionality ', () => {
       },
     };
 
-    renderComponent([pinMock]);
+    renderComponent([pinMock, userMock as unknown as InterfaceMockedResponse]);
 
     const postItem = screen.getByTestId('post-item');
     await userEvent.click(postItem);
