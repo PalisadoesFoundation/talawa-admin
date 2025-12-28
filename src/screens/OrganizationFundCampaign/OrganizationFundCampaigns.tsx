@@ -77,7 +77,7 @@ const dataGridStyle = {
  * @returns The rendered component including breadcrumbs, search and filter controls, data grid, and modals.
  */
 const orgFundCampaign = (): JSX.Element => {
-  const { t } = useTranslation('translation', { keyPrefix: 'fundCampaign' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const navigate = useNavigate();
 
@@ -159,12 +159,12 @@ const orgFundCampaign = (): JSX.Element => {
   // Header titles for the table loader
   const headerTitles: string[] = [
     '#',
-    t('campaignName'),
+    t('fundCampaign.campaignName'),
     t('startDate'),
     t('endDate'),
-    t('fundingGoal'),
-    t('raised'),
-    t('progress'),
+    t('fundCampaign.fundingGoal'),
+    t('fundCampaign.raised'),
+    t('fundCampaign.progress'),
     tCommon('action'),
   ];
 
@@ -347,7 +347,7 @@ const orgFundCampaign = (): JSX.Element => {
           }}
         >
           <i className="fa fa-edit me-1" />
-          {t('editCampaign')}
+          {t('fundCampaign.editCampaign')}
         </Button>
       ),
     },
@@ -365,7 +365,7 @@ const orgFundCampaign = (): JSX.Element => {
     slots: {
       noRowsOverlay: () => (
         <Stack height="100%" alignItems="center" justifyContent="center">
-          {t('noCampaignsFound')}
+          {t('fundCampaign.noCampaignsFound')}
         </Stack>
       ),
     },
@@ -397,7 +397,7 @@ const orgFundCampaign = (): JSX.Element => {
       <div className={styles.searchContainerRow}>
         <div className={styles.searchBarMarginReset}>
           <SearchBar
-            placeholder={t('searchCampaigns')}
+            placeholder={t('fundCampaign.searchCampaigns')}
             value={searchText}
             onChange={(value) => setSearchText(value.trim())}
             onClear={() => setSearchText('')}
@@ -415,7 +415,7 @@ const orgFundCampaign = (): JSX.Element => {
           disabled={isArchived}
         >
           <i className={'fa fa-plus me-2'} />
-          {t('addCampaign')}
+          {t('fundCampaign.addCampaign')}
         </Button>
       </div>
 
@@ -434,7 +434,7 @@ const orgFundCampaign = (): JSX.Element => {
       ) : !campaignLoading && campaignData && filteredCampaigns.length === 0 ? (
         <EmptyState
           icon={<Campaign />}
-          message={t('noCampaignsFound')}
+          message={t('fundCampaign.noCampaignsFound')}
           dataTestId="campaigns-empty"
         />
       ) : (

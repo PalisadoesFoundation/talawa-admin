@@ -1033,10 +1033,7 @@ describe('Testing Campaign Pledge Screen', () => {
     await waitFor(() => {
       const addPledgeBtn = screen.getByTestId('addPledgeBtn');
       expect(addPledgeBtn).toBeDisabled();
-      expect(addPledgeBtn).toHaveAttribute(
-        'title',
-        'pledges.campaignNotActive',
-      );
+      expect(addPledgeBtn).toHaveAttribute('title', 'Campaign is not active');
     });
     vi.useRealTimers();
   });

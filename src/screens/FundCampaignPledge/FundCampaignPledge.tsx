@@ -33,7 +33,7 @@ enum ModalState {
 }
 
 const fundCampaignPledge = (): JSX.Element => {
-  const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -226,7 +226,7 @@ const fundCampaignPledge = (): JSX.Element => {
   const columns: GridColDef[] = [
     {
       field: 'pledgers',
-      headerName: t('pledgers'),
+      headerName: t('pledges.pledgers'),
       flex: 3,
       minWidth: 50,
       align: 'left',
@@ -272,7 +272,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 onClick={(event) => handleClick(event, extraUsers)}
                 data-testid={`moreContainer-${params.row.id}`}
               >
-                {t('moreUsers', { count: extraUsers.length })}
+                {t('pledges.moreUsers', { count: extraUsers.length })}
               </div>
             )}
           </div>
@@ -281,7 +281,7 @@ const fundCampaignPledge = (): JSX.Element => {
     },
     {
       field: 'pledgeDate',
-      headerName: t('pledgeDate'),
+      headerName: t('pledges.pledgeDate'),
       flex: 1,
       minWidth: 150,
       align: 'center',
@@ -294,7 +294,7 @@ const fundCampaignPledge = (): JSX.Element => {
     },
     {
       field: 'amount',
-      headerName: t('pledged'),
+      headerName: t('pledges.pledged'),
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -319,7 +319,7 @@ const fundCampaignPledge = (): JSX.Element => {
     },
     {
       field: 'donated',
-      headerName: t('donated'),
+      headerName: t('pledges.donated'),
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -396,7 +396,7 @@ const fundCampaignPledge = (): JSX.Element => {
             to: `/orgfundcampaign/${orgId}/${fundCampaignId}`,
           },
           {
-            label: t('pledges'),
+            label: t('pledges.pledges'),
           },
         ]}
       />
@@ -404,7 +404,8 @@ const fundCampaignPledge = (): JSX.Element => {
         <div className={styles.titleContainer}>
           <h3>{campaignInfo?.name}</h3>
           <span>
-            {t('endsOn')} {dayjs(campaignInfo?.endDate).format('DD/MM/YYYY')}
+            {t('pledges.endsOn')}{' '}
+            {dayjs(campaignInfo?.endDate).format('DD/MM/YYYY')}
           </span>
         </div>
         <div className={styles.progressContainer}>
@@ -412,7 +413,7 @@ const fundCampaignPledge = (): JSX.Element => {
             <div
               className={`btn-group ${styles.toggleGroup}`}
               role="group"
-              aria-label={t('togglePledgedRaised')}
+              aria-label={t('pledges.togglePledgedRaised')}
             >
               <input
                 type="radio"
@@ -428,7 +429,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
                 htmlFor="pledgedRadio"
               >
-                {t('pledgedAmount')}
+                {t('pledges.pledgedAmount')}
               </label>
 
               <input
@@ -443,7 +444,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
                 htmlFor="raisedRadio"
               >
-                {t('raisedAmount')}
+                {t('pledges.raisedAmount')}
               </label>
             </div>
           </div>
@@ -483,7 +484,7 @@ const fundCampaignPledge = (): JSX.Element => {
       </div>
       <div className={`${styles.btnsContainerPledge} align-items-center`}>
         <SearchBar
-          placeholder={t('searchPledger')}
+          placeholder={t('pledges.searchPledger')}
           onSearch={setSearchTerm}
           inputTestId="searchPledger"
           buttonTestId="searchBtn"
@@ -492,10 +493,10 @@ const fundCampaignPledge = (): JSX.Element => {
           <div className="d-flex justify-space-between">
             <SortingButton
               sortingOptions={[
-                { label: t('lowestAmount'), value: 'amount_ASC' },
-                { label: t('highestAmount'), value: 'amount_DESC' },
-                { label: t('latestEndDate'), value: 'endDate_DESC' },
-                { label: t('earliestEndDate'), value: 'endDate_ASC' },
+                { label: t('pledges.lowestAmount'), value: 'amount_ASC' },
+                { label: t('pledges.highestAmount'), value: 'amount_DESC' },
+                { label: t('pledges.latestEndDate'), value: 'endDate_DESC' },
+                { label: t('pledges.earliestEndDate'), value: 'endDate_ASC' },
               ]}
               selectedOption={sortBy ?? ''}
               onSortChange={(value) =>
@@ -518,10 +519,12 @@ const fundCampaignPledge = (): JSX.Element => {
               disabled={!isWithinCampaignDates}
               onClick={() => handleOpenModal(null, 'create')}
               data-testid="addPledgeBtn"
-              title={!isWithinCampaignDates ? t('campaignNotActive') : ''}
+              title={
+                !isWithinCampaignDates ? t('pledges.campaignNotActive') : ''
+              }
             >
               <i className={'fa fa-plus me-2'} />
-              {t('addPledge')}
+              {t('pledges.addPledge')}
             </Button>
           </div>
         </div>
@@ -535,7 +538,7 @@ const fundCampaignPledge = (): JSX.Element => {
           noRowsOverlay: () => (
             <EmptyState
               icon="volunteer_activism"
-              message={t('noPledges')}
+              message={t('pledges.noPledges')}
               dataTestId="fund-campaign-pledge-empty-state"
             />
           ),
