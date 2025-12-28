@@ -471,7 +471,7 @@ const UpcomingEvents = (): JSX.Element => {
       {events.length < 1 ? (
         <Stack height="100%" alignItems="center" justifyContent="center">
           {/* Displayed if no events are found */}
-          {t('noEvents')}
+          {tCommon('noEvents')}
         </Stack>
       ) : (
         events.map((event: InterfaceMappedEvent, index: number) => {

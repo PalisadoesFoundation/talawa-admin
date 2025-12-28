@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
 
-// Local debounce implementation to avoid a hard dependency on lodash for this
-// small utility (also provides `cancel()` like lodash's debounce).
+// Local debounce implementation (provides `cancel()` similar to lodash)
 function debounceFn<TArgs extends unknown[]>(
   func: (...args: TArgs) => void,
   wait = 300,

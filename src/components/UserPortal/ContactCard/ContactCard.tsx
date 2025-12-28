@@ -60,33 +60,49 @@ function contactCard(props: InterfaceContactCardProps): JSX.Element {
         className={`${styles.contact} ${
           isSelected ? styles.bgGreen : styles.bgWhite
         }`}
-        onClick={handleSelectedContactChange}
-        data-testid="contactContainer"
+        data-testid={`contact-card-${props.id}`}
       >
-        {props.image ? (
-          <img
-            src={normalizeMinioUrl(props.image)}
-            alt={props.title}
-            className={styles.contactImage}
-            crossOrigin="anonymous"
-          />
-        ) : (
-          <Avatar
-            name={props.title}
-            alt={props.title}
-            avatarStyle={styles.contactImage}
-          />
-        )}
-        <div className={styles.contactNameContainer}>
-          <div>
-            <b>{props.title}</b>{' '}
-            <p className={styles.lastMessage}>{props.lastMessage}</p>
-          </div>
-          {!!props.unseenMessages && (
-            <Badge className={styles.unseenMessagesCount}>
-              {props.unseenMessages}
-            </Badge>
+        <div
+          onClick={handleSelectedContactChange}
+          data-testid={`contact-container-${props.id}`}
+          data-selected={String(isSelected)}
+        >
+          {props.image ? (
+            <img
+              data-testid={`contact-${props.id}-image`}
+              src={normalizeMinioUrl(props.image)}
+              alt={props.title}
+              className={styles.contactImage}
+              crossOrigin="anonymous"
+            />
+          ) : (
+            <Avatar
+              name={props.title}
+              alt={props.title}
+              avatarStyle={styles.contactImage}
+            />
           )}
+          <div className={styles.contactNameContainer}>
+            <div>
+              <b data-testid={`contact-title-${props.id}`}>{props.title}</b>{' '}
+              {props.lastMessage ? (
+                <p
+                  data-testid={`contact-lastMessage-${props.id}`}
+                  className={styles.lastMessage}
+                >
+                  {props.lastMessage}
+                </p>
+              ) : null}
+            </div>
+            {!!props.unseenMessages && (
+              <Badge
+                data-testid={`contact-unseen-${props.id}`}
+                className={styles.unseenMessagesCount}
+              >
+                {props.unseenMessages}
+              </Badge>
+            )}
+          </div>
         </div>
       </div>
     </>

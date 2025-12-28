@@ -23,13 +23,13 @@ vi.mock('shared-components/SearchBar/SearchBar', () => ({
           placeholder={placeholder}
           value={value}
           onChange={(e) => onChange?.(e.target.value)}
-          data-testid={inputTestId}
+          data-testid={inputTestId || 'searchInput'}
         />
         <button
           type="button"
           onClick={() => onSearch?.(value)}
-          data-testid={buttonTestId}
-          aria-label={buttonAriaLabel}
+          data-testid={buttonTestId || 'searchButton'}
+          aria-label={buttonAriaLabel || 'Search'}
         >
           Search
         </button>
@@ -69,9 +69,19 @@ vi.mock('lodash', async () => {
   const actual = await vi.importActual('lodash');
   return {
     ...actual,
-    debounce: vi.fn((fn) => {
-      const debounced = (...args: unknown[]) => fn(...args);
-      debounced.cancel = vi.fn();
+    debounce: vi.fn((fn: (...args: unknown[]) => unknown, wait = 0) => {
+      let timer: ReturnType<typeof setTimeout> | null = null;
+      const debounced = (...args: unknown[]) => {
+        if (timer) clearTimeout(timer);
+        timer = setTimeout(() => {
+          fn(...args);
+          timer = null;
+        }, wait);
+      };
+      debounced.cancel = () => {
+        if (timer) clearTimeout(timer);
+        timer = null;
+      };
       return debounced;
     }),
   };
@@ -145,6 +155,8 @@ describe('AdminSearchFilterBar', () => {
       const searchInput = screen.getByTestId('searchInput');
       fireEvent.change(searchInput, { target: { value: 'test' } });
 
+      // advance timers to allow debounce to flush
+      vi.advanceTimersByTime(300);
       expect(onSearchChange).toHaveBeenCalledWith('test');
     });
 
@@ -712,6 +724,7 @@ describe('AdminSearchFilterBar', () => {
 
       const searchInput = screen.getByTestId('searchInput');
       fireEvent.change(searchInput, { target: { value: 'John' } });
+      vi.advanceTimersByTime(300);
       expect(onSearchChange).toHaveBeenCalledWith('John');
 
       const sortDropdown = screen.getByTestId('sort-select');
@@ -762,6 +775,7 @@ describe('AdminSearchFilterBar', () => {
 
       const searchInput = screen.getByTestId('searchInput');
       fireEvent.change(searchInput, { target: { value: 'auth' } });
+      vi.advanceTimersByTime(300);
       expect(onSearchChange).toHaveBeenCalledWith('auth');
 
       const filterDropdown = screen.getByTestId('filterPlugins-select');
@@ -789,6 +803,7 @@ describe('AdminSearchFilterBar', () => {
 
       const searchInput = screen.getByTestId('searchInput');
       fireEvent.change(searchInput, { target: { value: 'pending' } });
+      vi.advanceTimersByTime(300);
       expect(onSearchChange).toHaveBeenCalledWith('pending');
 
       const searchButton = screen.getByTestId('searchButton');
