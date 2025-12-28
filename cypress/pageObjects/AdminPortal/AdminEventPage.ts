@@ -13,8 +13,12 @@ export class AdminEventPage {
   }
 
   createEvent(title: string, description: string, location: string): this {
-    // Set up intercept for events query before any actions
-    cy.intercept('POST', '**/graphql').as('graphql');
+    // Set up intercept for specific events query (not all GraphQL operations)
+    cy.intercept('POST', '**/graphql', (req) => {
+      if (req.body.operationName === 'GetOrganizationEvents') {
+        req.alias = 'eventsQuery';
+      }
+    });
 
     // Click create event button and wait for modal to appear
     cy.get(this._createEventModalButton).should('be.visible').click();
@@ -41,9 +45,9 @@ export class AdminEventPage {
     // Wait for modal to close
     cy.get(this._eventTitleInput).should('not.exist');
 
-    // Reload to ensure fresh data and wait for GraphQL query to complete
+    // Reload to ensure fresh data and wait for specific events query to complete
     cy.reload();
-    cy.wait('@graphql', { timeout: 15000 });
+    cy.wait('@eventsQuery', { timeout: 15000 });
 
     // Wait for page to fully load
     cy.get(this._createEventModalButton, { timeout: 10000 }).should(

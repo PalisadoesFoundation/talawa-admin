@@ -775,7 +775,11 @@ describe('StaticMockLink variableMatcher', () => {
   ): Promise<{ data: { node: { id: string } } }> {
     return new Promise((resolve, reject) => {
       const observable = link.request(createMatcherOperation(variables));
-      observable?.subscribe({
+      if (!observable) {
+        reject(new Error('No observable returned from link.request'));
+        return;
+      }
+      observable.subscribe({
         next: (response) =>
           resolve(response as { data: { node: { id: string } } }),
         error: reject,
