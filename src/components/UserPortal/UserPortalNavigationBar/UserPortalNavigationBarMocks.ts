@@ -38,8 +38,9 @@ const GenericIcon = (
  * Uses bind to create component functions dynamically.
  */
 export const getMockIcon = (type: 'home' | 'permIdentity') => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return GenericIcon.bind(null, type) as React.FC<any>;
+  return GenericIcon.bind(null, type) as React.FC<
+    React.HTMLAttributes<HTMLDivElement>
+  >;
 };
 
 /**

@@ -4,7 +4,7 @@
 
 # Function: getMockIcon()
 
-> **getMockIcon**(`type`): `FC`\<`any`\>
+> **getMockIcon**(`type`): `FC`\<`HTMLAttributes`\<`HTMLDivElement`\>\>
 
 Defined in: [src/components/UserPortal/UserPortalNavigationBar/UserPortalNavigationBarMocks.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserPortalNavigationBar/UserPortalNavigationBarMocks.ts#L40)
 
@@ -19,4 +19,4 @@ Uses bind to create component functions dynamically.
 
 ## Returns
 
-`FC`\<`any`\>
+`FC`\<`HTMLAttributes`\<`HTMLDivElement`\>\>

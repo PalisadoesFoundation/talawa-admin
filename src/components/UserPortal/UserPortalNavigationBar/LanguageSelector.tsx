@@ -58,7 +58,7 @@ const LanguageSelector = (
     handleLanguageChange,
     currentLanguageCode,
   } = props;
-  const { t } = useTranslation();
+  const { t: tCommon } = useTranslation('common');
   if (!showLanguageSelector) return null;
 
   return (
@@ -71,7 +71,7 @@ const LanguageSelector = (
         id="dropdown-basic"
         data-testid={`${testIdPrefix || ''}languageDropdownToggle`}
         className={styles.colorWhite}
-        aria-label={t('selectLanguage')}
+        aria-label={tCommon('selectLanguage')}
       >
         <LanguageIcon
           className={styles.colorWhite}

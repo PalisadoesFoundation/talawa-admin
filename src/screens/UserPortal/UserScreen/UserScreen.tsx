@@ -78,7 +78,11 @@ const UserScreen = (): React.JSX.Element => {
   // don't include an `orgId`. In that case render the global user sidebar
   // instead of redirecting to home.
 
-  const titleKey: string | undefined = map[location.pathname.split('/')[2]];
+  /* titleKey defaults to 'common' when the path segment is not found in the map.
+   * This allows using the existing 'common.title' ("User Portal") from translation.json
+   * without adding a new root-level title key.
+   */
+  const titleKey: string = map[location.pathname.split('/')[2]] || 'common';
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
 
   const userRoutes: { targets: TargetsType[] } = useSelector(
