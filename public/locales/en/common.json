@@ -81,6 +81,7 @@
   "removeUser": "Remove User",
   "remove": "Remove",
   "viewProfile": "View Profile",
+  "assignee": "Assignee",
   "profile": "Profile",
   "noFiltersApplied": "No filters applied",
   "manage": "Manage",
@@ -128,5 +129,8 @@
   "Volunteers": "Volunteers",
   "unblock": "Unblock",
   "unblockedSuccessfully": "{{item}} unblocked successfully",
-  "pluginSettings": "Plugin Settings"
+  "pluginSettings": "Plugin Settings",
+  "volunteer": "Volunteer",
+  "moreCount": "+{{count}} more",
+  "togglePledgedRaised": "Toggle between pledged and raised amounts"
 }

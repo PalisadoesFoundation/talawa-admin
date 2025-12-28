@@ -684,7 +684,7 @@ describe('Testing Campaign Pledge Screen', () => {
     // Find more container and check text
     const moreContainer = screen.getByTestId('moreContainer-1');
     expect(moreContainer).toBeInTheDocument();
-    expect(moreContainer).toHaveTextContent('+6 more...');
+    expect(moreContainer).toHaveTextContent('+6 more');
 
     // Click to show popup
     await userEvent.click(moreContainer);
@@ -1227,7 +1227,7 @@ describe('Testing Campaign Pledge Screen', () => {
 
     // Click on more container to open popup
     const moreContainer = screen.getByTestId('moreContainer-extraAvatarPledge');
-    expect(moreContainer).toHaveTextContent('+1 more...');
+    expect(moreContainer).toHaveTextContent('+1 more');
     await userEvent.click(moreContainer);
 
     // Check popup is open and extra user with avatar is rendered

@@ -128,5 +128,8 @@
   "Volunteers": "Bénévoles",
   "unblock": "Débloquer",
   "unblockedSuccessfully": "{{item}} débloqué avec succès",
-  "pluginSettings": "Paramètres du plugin"
+  "pluginSettings": "Paramètres du plugin",
+  "volunteer": "Bénévole",
+  "moreCount": "+{{count}} de plus",
+  "togglePledgedRaised": "Basculer entre les montants promis et collectés"
 }

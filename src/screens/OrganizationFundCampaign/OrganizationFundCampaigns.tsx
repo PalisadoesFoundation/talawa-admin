@@ -17,7 +17,7 @@ import type {
   InterfaceCampaignInfo,
   InterfaceQueryOrganizationFundCampaigns,
 } from 'utils/interfaces';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import {
   ReportingRow,
   ReportingTableColumn,
@@ -399,18 +399,14 @@ const orgFundCampaign = (): JSX.Element => {
         ]}
       />
       <div className={styles.searchContainerRow}>
-        <div className={styles.searchBarMarginReset}>
-          <SearchBar
-            placeholder={t('searchCampaigns')}
-            value={searchText}
-            onChange={(value) => setSearchText(value.trim())}
-            onClear={() => setSearchText('')}
-            showSearchButton={false}
-            showTrailingIcon={true}
-            inputTestId="searchFullName"
-            clearButtonTestId="clearSearch"
-          />
-        </div>
+        <AdminSearchFilterBar
+          searchPlaceholder={t('searchCampaigns')}
+          searchValue={searchText}
+          onSearchChange={(value) => setSearchText(value.trim())}
+          searchInputTestId="searchFullName"
+          searchButtonTestId="searchButton"
+          hasDropdowns={false}
+        />
         <Button
           variant="success"
           onClick={() => handleOpenModal(null, 'create')}

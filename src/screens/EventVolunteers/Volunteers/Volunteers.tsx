@@ -100,7 +100,7 @@ const dataGridStyle = {
   '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
 };
 
-function volunteers(): JSX.Element {
+function Volunteers(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
@@ -190,6 +190,13 @@ function volunteers(): JSX.Element {
     [],
   );
 
+  // Debounce cleanup effect
+  useEffect(() => {
+    return () => {
+      debouncedSearch.clear();
+    };
+  }, [debouncedSearch]);
+
   // Effect to set recurring event info similar to EventActionItems
   useEffect(() => {
     if (eventData && eventData.event) {
@@ -271,7 +278,7 @@ function volunteers(): JSX.Element {
             {avatarURL ? (
               <img
                 src={avatarURL}
-                alt="volunteer"
+                alt={tCommon('volunteer')}
                 data-testid="volunteer_image"
                 className={styles.TableImages}
               />
@@ -532,4 +539,4 @@ function volunteers(): JSX.Element {
   );
 }
 
-export default volunteers;
+export default Volunteers;

@@ -192,7 +192,7 @@ function requests(): JSX.Element {
     },
     {
       field: 'volunteer',
-      headerName: 'Volunteer',
+      headerName: tCommon('volunteer'),
       flex: 3,
       align: 'center',
       minWidth: 100,
@@ -209,7 +209,7 @@ function requests(): JSX.Element {
             {avatarURL ? (
               <img
                 src={avatarURL}
-                alt="volunteer"
+                alt={tCommon('volunteer')}
                 data-testid={`volunteer_image`}
                 className={styles.TableImages}
               />

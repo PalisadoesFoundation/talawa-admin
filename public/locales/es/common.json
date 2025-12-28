@@ -128,5 +128,8 @@
   "Volunteers": "Voluntarios",
   "unblock": "Desbloquear",
   "unblockedSuccessfully": "{{item}} desbloqueado exitosamente",
-  "pluginSettings": "Configuración de complementos"
+  "pluginSettings": "Configuración de complementos",
+  "volunteer": "Voluntario",
+  "moreCount": "+{{count}} más",
+  "togglePledgedRaised": "Alternar entre montos comprometidos y recaudados"
 }

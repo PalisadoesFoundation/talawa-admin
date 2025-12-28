@@ -27,7 +27,7 @@ import {
   ROW_HEIGHT,
   dataGridStyle as baseDataGridStyle,
 } from 'types/ReportingTable/utils';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 const dataGridStyle = {
@@ -360,18 +360,15 @@ const organizationFunds = (): JSX.Element => {
   return (
     <div>
       <div className={styles.searchContainerRowNoTopMargin}>
-        <div className={styles.searchBarMarginReset}>
-          <SearchBar
-            placeholder={t('searchFunds')}
-            value={searchText}
-            onChange={(value) => setSearchText(value.trim())}
-            onClear={() => setSearchText('')}
-            showSearchButton={false}
-            showTrailingIcon={true}
-            inputTestId="searchByName"
-            clearButtonTestId="clearSearch"
-          />
-        </div>
+        <AdminSearchFilterBar
+          searchPlaceholder={t('searchFunds')}
+          searchValue={searchText}
+          onSearchChange={(value) => setSearchText(value.trim())}
+          searchInputTestId="searchByName"
+          searchButtonTestId="searchButton"
+          hasDropdowns={false}
+        />
+
         <Button
           variant="success"
           onClick={() => handleOpenModal(null, 'create')}

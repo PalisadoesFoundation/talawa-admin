@@ -508,6 +508,7 @@ const Requests = (): JSX.Element => {
         searchPlaceholder={t('searchRequests')}
         searchValue={searchByName}
         onSearchChange={handleSearch}
+        onSearchSubmit={handleSearch}
         searchInputTestId="searchByName"
         searchButtonTestId="searchButton"
         hasDropdowns={false}

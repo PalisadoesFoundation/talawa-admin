@@ -128,5 +128,8 @@
   "Volunteers": "स्वयंसेवक",
   "unblock": "अनब्लॉक करें",
   "unblockedSuccessfully": "{{item}} सफलतापूर्वक अनब्लॉक किया गया",
-  "pluginSettings": "प्लगइन सेटिंग्स"
+  "pluginSettings": "प्लगइन सेटिंग्स",
+  "volunteer": "स्वयंसेवक",
+  "moreCount": "+{{count}} और",
+  "togglePledgedRaised": "प्रतिज्ञा और प्राप्त राशि के बीच टॉगल करें"
 }

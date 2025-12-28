@@ -128,5 +128,8 @@
   "noResultsFound": "未找到结果",
   "unblock": "解除封锁",
   "unblockedSuccessfully": "{{item}}已成功解除封锁",
-  "pluginSettings": "插件设置"
+  "pluginSettings": "插件设置",
+  "volunteer": "志愿者",
+  "moreCount": "+{{count}} 更多",
+  "togglePledgedRaised": "在已承诺金额和已筹集金额之间切换"
 }

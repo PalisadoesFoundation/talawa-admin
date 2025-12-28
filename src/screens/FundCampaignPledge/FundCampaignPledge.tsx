@@ -2,6 +2,7 @@ import { useQuery, type ApolloQueryResult } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
@@ -22,9 +23,6 @@ import type {
   InterfaceCampaignInfoPG,
 } from 'utils/interfaces';
 import ProgressBar from 'react-bootstrap/ProgressBar';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
-import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 enum ModalState {
   SAME = 'same',
@@ -274,7 +272,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 onClick={(event) => handleClick(event, extraUsers)}
                 data-testid={`moreContainer-${params.row.id}`}
               >
-                {t('moreUsers', { count: extraUsers.length })}
+                {tCommon('moreCount', { count: extraUsers.length })}
               </div>
             )}
           </div>
@@ -418,7 +416,7 @@ const fundCampaignPledge = (): JSX.Element => {
             <div
               className={`btn-group ${styles.toggleGroup}`}
               role="group"
-              aria-label={t('togglePledgedRaised')}
+              aria-label={tCommon('togglePledgedRaised')}
             >
               <input
                 type="radio"
@@ -488,36 +486,38 @@ const fundCampaignPledge = (): JSX.Element => {
         </div>
       </div>
       <div className={`${styles.btnsContainerPledge} align-items-center`}>
-        <SearchBar
-          placeholder={t('searchPledger')}
-          onSearch={setSearchTerm}
-          inputTestId="searchPledger"
-          buttonTestId="searchBtn"
-        />
-        <div className="d-flex gap-4 mb-1">
-          <div className="d-flex justify-space-between">
-            <SortingButton
-              sortingOptions={[
-                { label: t('lowestAmount'), value: 'amount_ASC' },
-                { label: t('highestAmount'), value: 'amount_DESC' },
-                { label: t('latestEndDate'), value: 'endDate_DESC' },
-                { label: t('earliestEndDate'), value: 'endDate_ASC' },
-              ]}
-              selectedOption={sortBy ?? ''}
-              onSortChange={(value) =>
+        <AdminSearchFilterBar
+          searchPlaceholder={t('searchPledger')}
+          searchValue={searchTerm}
+          onSearchChange={(value) => setSearchTerm(value.trim())}
+          searchInputTestId="searchPledger"
+          searchButtonTestId="searchBtn"
+          hasDropdowns={true}
+          dropdowns={[
+            {
+              id: 'sort-pledges',
+              label: tCommon('sort'),
+              title: tCommon('sort'),
+              dataTestIdPrefix: 'filter',
+              selectedOption: sortBy,
+              onOptionChange: (value) =>
                 setSortBy(
                   value as
                     | 'amount_ASC'
                     | 'amount_DESC'
                     | 'endDate_ASC'
                     | 'endDate_DESC',
-                )
-              }
-              dataTestIdPrefix="filter"
-              buttonLabel={tCommon('sort')}
-            />
-          </div>
-          <div>
+                ),
+              options: [
+                { label: t('lowestAmount'), value: 'amount_ASC' },
+                { label: t('highestAmount'), value: 'amount_DESC' },
+                { label: t('latestEndDate'), value: 'endDate_DESC' },
+                { label: t('earliestEndDate'), value: 'endDate_ASC' },
+              ],
+              type: 'sort',
+            },
+          ]}
+          additionalButtons={
             <Button
               variant="success"
               className={styles.dropdown}
@@ -529,8 +529,8 @@ const fundCampaignPledge = (): JSX.Element => {
               <i className={'fa fa-plus me-2'} />
               {t('addPledge')}
             </Button>
-          </div>
-        </div>
+          }
+        />
       </div>
       <DataGrid
         disableColumnMenu

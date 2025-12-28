@@ -32,15 +32,14 @@ import {
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { debounce, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import styles from 'style/app-fixed.module.css';
 import { GET_EVENT_VOLUNTEER_GROUPS } from 'GraphQl/Queries/EventVolunteerQueries';
 import VolunteerGroupModal from './modal/VolunteerGroupModal';
 import VolunteerGroupDeleteModal from './deleteModal/VolunteerGroupDeleteModal';
 import VolunteerGroupViewModal from './viewModal/VolunteerGroupViewModal';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
 enum ModalState {
   SAME = 'same',
@@ -145,11 +144,6 @@ function volunteerGroups(): JSX.Element {
     [openModal],
   );
 
-  const debouncedSearch = useMemo(
-    () => debounce((value: string) => setSearchTerm(value), 300),
-    [],
-  );
-
   // Effect to set recurring event info similar to Volunteers component
   useEffect(() => {
     if (eventData && eventData.event) {
@@ -248,7 +242,7 @@ function volunteerGroups(): JSX.Element {
             {avatarURL ? (
               <img
                 src={avatarURL}
-                alt="Assignee"
+                alt={tCommon('assignee')}
                 data-testid={`image${id + 1}`}
                 className={styles.TableImages}
               />
@@ -333,55 +327,64 @@ function volunteerGroups(): JSX.Element {
   return (
     <div>
       {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} btncon gap-4 flex-wrap`}>
-        <SearchBar
-          placeholder={tCommon('searchBy', {
-            item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
-          })}
-          onSearch={debouncedSearch}
-          inputTestId="searchBy"
-          buttonTestId="searchBtn"
-        />
-        <div className="d-flex gap-3 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-3">
-            <SortingButton
-              sortingOptions={[
-                { label: t('leader'), value: 'leader' },
-                { label: t('group'), value: 'group' },
-              ]}
-              selectedOption={searchBy}
-              onSortChange={(value) => setSearchBy(value as 'leader' | 'group')}
-              dataTestIdPrefix="searchByToggle"
-              buttonLabel={tCommon('searchBy', { item: '' })}
-            />
-            <SortingButton
-              title={tCommon('sort')}
-              sortingOptions={[
-                { label: t('mostVolunteers'), value: 'volunteers_DESC' },
-                { label: t('leastVolunteers'), value: 'volunteers_ASC' },
-              ]}
-              selectedOption={sortBy ?? ''}
-              onSortChange={(value) =>
-                setSortBy(value as 'volunteers_DESC' | 'volunteers_ASC')
-              }
-              dataTestIdPrefix="sort"
-              buttonLabel={tCommon('sort')}
-            />
-          </div>
-          <div>
-            <Button
-              variant="success"
-              onClick={() => handleModalClick(null, ModalState.SAME)}
-              style={{ marginTop: '11px' }}
-              className={styles.actionsButton}
-              data-testid="createGroupBtn"
-            >
-              <i className={'fa fa-plus me-2'} />
-              {tCommon('create')}
-            </Button>
-          </div>
-        </div>
-      </div>
+      <AdminSearchFilterBar
+        searchPlaceholder={tCommon('searchBy', {
+          item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
+        })}
+        searchValue={searchTerm}
+        onSearchChange={(value) => {
+          setSearchTerm(value);
+        }}
+        onSearchSubmit={(value) => {
+          setSearchTerm(value);
+        }}
+        searchInputTestId="searchBy"
+        searchButtonTestId="searchBtn"
+        hasDropdowns
+        dropdowns={[
+          {
+            id: 'searchBy',
+            title: tCommon('searchBy'),
+            label: tCommon('searchBy', { item: '' }),
+            dataTestIdPrefix: 'searchByToggle',
+            selectedOption: searchBy,
+            options: [
+              { label: t('leader'), value: 'leader' },
+              { label: t('group'), value: 'group' },
+            ],
+            onOptionChange: (value) => {
+              setSearchBy(value as 'leader' | 'group');
+            },
+            type: 'filter',
+          },
+          {
+            id: 'sort',
+            title: tCommon('sort'),
+            label: tCommon('sort'),
+            dataTestIdPrefix: 'sort',
+            selectedOption: sortBy ?? '',
+            options: [
+              { label: t('mostVolunteers'), value: 'volunteers_DESC' },
+              { label: t('leastVolunteers'), value: 'volunteers_ASC' },
+            ],
+            onOptionChange: (value) => {
+              setSortBy(value as 'volunteers_DESC' | 'volunteers_ASC');
+            },
+            type: 'sort',
+          },
+        ]}
+        additionalButtons={
+          <Button
+            variant="success"
+            onClick={() => handleModalClick(null, ModalState.SAME)}
+            className={styles.actionsButton}
+            data-testid="createGroupBtn"
+          >
+            <i className="fa fa-plus me-2" />
+            {tCommon('create')}
+          </Button>
+        }
+      />
 
       {/* Table with Volunteer Groups */}
       <DataGrid
