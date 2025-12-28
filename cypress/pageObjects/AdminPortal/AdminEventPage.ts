@@ -13,6 +13,9 @@ export class AdminEventPage {
   }
 
   createEvent(title: string, description: string, location: string): this {
+    // Set up intercept for events query before any actions
+    cy.intercept('POST', '**/graphql').as('graphql');
+
     // Click create event button and wait for modal to appear
     cy.get(this._createEventModalButton).should('be.visible').click();
 
@@ -34,6 +37,35 @@ export class AdminEventPage {
 
     // Assert success toast
     cy.assertToast('Congratulations! The Event is created.');
+
+    // Wait for modal to close
+    cy.get(this._eventTitleInput).should('not.exist');
+
+    // Reload to ensure fresh data and wait for GraphQL query to complete
+    cy.reload();
+    cy.wait('@graphql', { timeout: 15000 });
+
+    // Wait for page to fully load
+    cy.get(this._createEventModalButton, { timeout: 10000 }).should(
+      'be.visible',
+    );
+
+    // Click all "View all" buttons to expand calendar days
+    // This ensures events hidden behind the 2-per-day limit are visible
+    cy.get('[data-testid="more"]').then(($buttons) => {
+      const viewAllButtons = $buttons.filter((_, el) =>
+        el.textContent?.includes('View all'),
+      );
+      if (viewAllButtons.length > 0) {
+        // Use Cypress.Promise to ensure all clicks complete before continuing
+        cy.wrap(viewAllButtons).each(($btn) => {
+          cy.wrap($btn).click();
+        });
+      }
+    });
+
+    // Now verify the event exists
+    cy.contains(this._eventCard, title, { timeout: 30000 }).should('exist');
 
     return this;
   }

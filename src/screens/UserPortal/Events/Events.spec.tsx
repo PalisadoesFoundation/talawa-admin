@@ -949,10 +949,9 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await wait(500);
 
-    // Verify either success or error toast was called
-    expect(
-      mockToast.success.mock.calls.length + mockToast.error.mock.calls.length,
-    ).toBeGreaterThan(0);
+    await waitFor(() => {
+      expect(mockToast.success).toHaveBeenCalled();
+    });
   });
 
   it('Should handle create event error', async () => {

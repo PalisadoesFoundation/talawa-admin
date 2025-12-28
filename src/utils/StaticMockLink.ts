@@ -79,13 +79,12 @@ export class StaticMockLink extends ApolloLink {
         const mockedResponseVariables = res.request.variables || {};
 
         // Support variableMatcher function for flexible matching
+        // If matcher exists and returns true, use this mock
+        // If matcher returns false, fall back to deep-equal check
         const matcher = (res as IMockedResponseWithMatcher).variableMatcher;
-        if (typeof matcher === 'function') {
-          if (matcher(requestVariables)) {
-            responseIndex = index;
-            return true;
-          }
-          return false;
+        if (typeof matcher === 'function' && matcher(requestVariables)) {
+          responseIndex = index;
+          return true;
         }
 
         if (equal(requestVariables, mockedResponseVariables)) {
