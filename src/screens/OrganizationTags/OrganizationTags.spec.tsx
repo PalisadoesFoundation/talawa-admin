@@ -677,8 +677,8 @@ describe('Organisation Tags Page', () => {
 
     // The component successfully renders with:
     // 1. ReportingTable component with gridProps containing:
-    //   - noRowsOverlay (line 311-315): Stack with "noTagsFound" message
-    //   - loadingOverlay (line 316-323): LoadingState with spinner variant
+    //   - noRowsOverlay (line 305-308): Stack with "noTagsFound" message
+    //   - loadingOverlay (line 309-318): LoadingState with spinner variant
     //   - Other grid configurations like sx, getRowClassName, etc.
     // 2. The gridProps object is passed to ReportingTable which uses it to configure DataGrid
     // 3. When DataGrid needs to show loading state, it will render the loadingOverlay function
@@ -696,8 +696,8 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('gridProps includes loadingOverlay slot for LoadingState display during loading (line 316)', async () => {
-    // This test specifically targets lines 315-323 which define the loadingOverlay slot function
+  test('gridProps includes loadingOverlay slot for LoadingState display during loading (line 309)', async () => {
+    // This test specifically targets lines 309-318 which define the loadingOverlay slot function
     // The loadingOverlay: () => (<LoadingState isLoading={true} variant="spinner" size="lg" data-testid="orgTagsLoadingOverlay" />)
     // is part of the slots object in gridProps passed to ReportingTable
 
