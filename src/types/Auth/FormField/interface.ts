@@ -6,7 +6,7 @@ import type { ChangeEvent, FocusEvent } from 'react';
  * @remarks
  * Supports optional validator callbacks and aria-live behaviors for accessibility.
  */
-export interface FormFieldProps {
+export interface InterfaceFormFieldProps {
   /** Optional label text displayed above the input */
   label?: string;
 

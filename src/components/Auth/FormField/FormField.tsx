@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
-import type { FormFieldProps } from '../../../types/Auth/FormField/interface';
+import type { InterfaceFormFieldProps } from '../../../types/Auth/FormField/interface';
 
 /**
  * Reusable form field component with validation and accessibility support.
@@ -23,7 +23,7 @@ import type { FormFieldProps } from '../../../types/Auth/FormField/interface';
  * />
  * ```
  */
-export const FormField: React.FC<FormFieldProps> = ({
+export const FormField: React.FC<InterfaceFormFieldProps> = ({
   label,
   name,
   type = 'text',
