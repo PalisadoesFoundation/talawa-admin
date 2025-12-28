@@ -173,5 +173,16 @@
   "selectLanguage": "Seleccionar idioma",
   "talawa": "Talawa",
   "talawaBranding": "Marca Talawa",
-  "unableToLoadData": "No se pudo cargar los datos."
+  "unableToLoadData": "No se pudo cargar los datos.",
+  "fileTooLarge": "El archivo es demasiado grande. El tamaño máximo permitido es de {{size}}MB.",
+  "invalidFileType": "Tipo de archivo inválido. Por favor, suba un archivo {{types}}.",
+  "enterDescription": "Ingrese Descripción",
+  "example": "Ej. {{example}}",
+  "selectCountry": "Seleccione un país",
+  "enterCityName": "Ingrese el nombre de la ciudad",
+  "enterStateName": "Ingrese el nombre del estado",
+  "select": "Seleccionar",
+  "selectAsYourCountry": "Seleccione {{country}} como su país",
+  "selectACountry": "Seleccione un país",
+  "passwordLengthRequirement": "La contraseña debe tener al menos {{length}} caracteres."
 }

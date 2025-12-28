@@ -44,6 +44,7 @@
   "email": "Email",
   "name": "Name",
   "desc": "Description",
+  "enterDescription": "Enter Description",
   "enterPassword": "Enter Password",
   "password": "Password",
   "confirmPassword": "Confirm Password",
@@ -173,5 +174,15 @@
   "selectLanguage": "Select Language",
   "talawa": "Talawa",
   "talawaBranding": "Talawa Branding",
-  "unableToLoadData": "Unable to load data."
+  "unableToLoadData": "Unable to load data.",
+  "fileTooLarge": "File is too large. Maximum allowed size is {{size}}MB.",
+  "invalidFileType": "Invalid file type. Please upload a {{types}} file.",
+  "example": "Ex. {{example}}",
+  "selectCountry": "Select a country",
+  "enterCityName": "Enter city name",
+  "enterStateName": "Enter state name",
+  "select": "Select",
+  "selectAsYourCountry": "Select {{country}} as your country",
+  "selectACountry": "Select a country",
+  "passwordLengthRequirement": "Password must be at least {{length}} characters long."
 }

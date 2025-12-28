@@ -46,8 +46,8 @@ import { Card, Row, Col, Form } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
-import EventsAttendedByMember from '../../components/MemberActivity/EventsAttendedByMember';
-import MemberAttendedEventsModal from '../../components/MemberActivity/Modal/EventsAttendedMemberModal';
+import EventsAttendedByMember from '../../../components/MemberActivity/EventsAttendedByMember';
+import MemberAttendedEventsModal from '../../../components/MemberActivity/Modal/EventsAttendedMemberModal';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
@@ -79,7 +79,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const originalImageState = React.useRef<string>('');
   const [selectedAvatar, setSelectedAvatar] = useState<File | null>(null);
 
-  document.title = t('title');
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
 
   const [formState, setFormState] = useState({
     addressLine1: '',
@@ -135,13 +137,13 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
 
       if (!validTypes.includes(file.type)) {
         NotificationToast.error(
-          'Invalid file type. Please upload a JPEG, PNG, or GIF.',
+          tCommon('invalidFileType', { types: 'JPEG, PNG, or GIF' }) as string,
         );
         return;
       }
 
       if (file.size > maxSize) {
-        NotificationToast.error('File is too large. Maximum size is 5MB.');
+        NotificationToast.error(tCommon('fileTooLarge', { size: 5 }) as string);
         return;
       }
 
@@ -159,7 +161,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     // password validation
     if (fieldName === 'password' && value) {
       if (!validatePassword(value)) {
-        NotificationToast.error('Password must be at least 8 characters long.');
+        NotificationToast.error(
+          tCommon('passwordLengthRequirement', { length: 8 }) as string,
+        );
         return;
       }
     }
@@ -304,14 +308,14 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                           selectedAvatar,
                           formState.avatarURL,
                         )}
-                        alt="User"
+                        alt={tCommon('user')}
                         data-testid="profile-picture"
                         crossOrigin="anonymous" // to avoid Cors
                       />
                     ) : (
                       <Avatar
                         name={formState.name}
-                        alt="User Image"
+                        alt={tCommon('displayImage')}
                         size={60}
                         dataTestId="profile-picture"
                         radius={150}
@@ -321,9 +325,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       className={`fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle ${memberDetailStyles.editProfileIcon}`}
                       onClick={() => fileInputRef.current?.click()}
                       data-testid="uploadImageBtn"
-                      title="Edit profile picture"
+                      title={`${tCommon('edit')} ${tCommon('profilePicture')}`}
                       role="button"
-                      aria-label="Edit profile picture"
+                      aria-label={`${tCommon('edit')} ${tCommon('profilePicture')}`}
                       tabIndex={0}
                       onKeyDown={(e) =>
                         e.key === 'Enter' && fileInputRef.current?.click()
@@ -472,7 +476,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       handleFieldChange('description', e.target.value)
                     }
                     required
-                    placeholder="Enter description"
+                    placeholder={tCommon('enterDescription')}
                   />
                 </Col>
               </Row>
@@ -562,7 +566,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     onChange={(e) =>
                       handleFieldChange('mobilePhoneNumber', e.target.value)
                     }
-                    placeholder="Ex. +1234567890"
+                    placeholder={
+                      tCommon('example', { example: '+1234567890' }) as string
+                    }
                   />
                 </Col>
                 <Col md={12}>
@@ -579,7 +585,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     onChange={(e) =>
                       handleFieldChange('workPhoneNumber', e.target.value)
                     }
-                    placeholder="Ex. +1234567890"
+                    placeholder={
+                      tCommon('example', { example: '+1234567890' }) as string
+                    }
                   />
                 </Col>
                 <Col md={12}>
@@ -596,7 +604,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     onChange={(e) =>
                       handleFieldChange('homePhoneNumber', e.target.value)
                     }
-                    placeholder="Ex. +1234567890"
+                    placeholder={
+                      tCommon('example', { example: '+1234567890' }) as string
+                    }
                   />
                 </Col>
                 <Col md={12}>
@@ -613,7 +623,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     onChange={(e) =>
                       handleFieldChange('addressLine1', e.target.value)
                     }
-                    placeholder="Ex. Lane 2"
+                    placeholder={
+                      tCommon('example', { example: 'Lane 1' }) as string
+                    }
                   />
                 </Col>
                 <Col md={12}>
@@ -630,7 +642,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     onChange={(e) =>
                       handleFieldChange('addressLine2', e.target.value)
                     }
-                    placeholder="Ex. Lane 2"
+                    placeholder={
+                      tCommon('example', { example: 'Lane 2' }) as string
+                    }
                   />
                 </Col>
                 <Col md={12}>
@@ -647,7 +661,11 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     onChange={(e) =>
                       handleFieldChange('postalCode', e.target.value)
                     }
-                    placeholder="Ex. 12345"
+                    placeholder={
+                      tCommon('example', {
+                        example: '12345',
+                      }) as string
+                    }
                   />
                 </Col>
                 <Col md={6}>
@@ -662,7 +680,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     name="city"
                     data-testid="inputCity"
                     onChange={(e) => handleFieldChange('city', e.target.value)}
-                    placeholder="Enter city name"
+                    placeholder={tCommon('enterCityName')}
                   />
                 </Col>
                 <Col md={6}>
@@ -677,7 +695,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     name="state"
                     data-testid="inputState"
                     onChange={(e) => handleFieldChange('state', e.target.value)}
-                    placeholder="Enter state name"
+                    placeholder={tCommon('enterStateName')}
                   />
                 </Col>
                 <Col md={12}>
@@ -694,7 +712,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     }
                   >
                     <option value="" disabled>
-                      Select {tCommon('country')}
+                      {tCommon('select')} {tCommon('country')}
                     </option>
                     {[...countryOptions]
                       .sort((a, b) => a.label.localeCompare(b.label))
@@ -702,7 +720,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         <option
                           key={country.value.toUpperCase()}
                           value={country.value.toLowerCase()}
-                          aria-label={`Select ${country.label} as your country`}
+                          aria-label={tCommon('selectAsYourCountry', {
+                            country: country.label,
+                          })}
                         >
                           {country.label}
                         </option>

@@ -476,7 +476,7 @@ describe('MemberDetail', () => {
     await userEvent.upload(fileInput, invalidFile);
 
     expect(NotificationToast.error).toHaveBeenCalledWith(
-      'Invalid file type. Please upload a JPEG, PNG, or GIF.',
+      'Invalid file type. Please upload a JPEG, PNG, or GIF file.',
     );
 
     // Test file size limit
@@ -486,7 +486,7 @@ describe('MemberDetail', () => {
     await userEvent.upload(fileInput, largeFile);
 
     expect(NotificationToast.error).toHaveBeenCalledWith(
-      'File is too large. Maximum size is 5MB.',
+      'File is too large. Maximum allowed size is 5MB.',
     );
   });
 
@@ -550,7 +550,7 @@ describe('MemberDetail', () => {
     });
     await userEvent.upload(fileInput, largeFile);
     expect(NotificationToast.error).toHaveBeenCalledWith(
-      'File is too large. Maximum size is 5MB.',
+      'File is too large. Maximum allowed size is 5MB.',
     );
   });
 

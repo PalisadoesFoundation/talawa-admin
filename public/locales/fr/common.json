@@ -131,8 +131,6 @@
   "Volunteers": "Bénévoles",
   "unblock": "Débloquer",
   "unblockedSuccessfully": "{{item}} débloqué avec succès",
-
-  "pluginSettings": "Paramètres du plugin",
   "showPassword": "Afficher le mot de passe",
   "hidePassword": "Masquer le mot de passe",
   "volunteer": "Bénévole",
@@ -175,5 +173,17 @@
   "selectLanguage": "Choisir la langue",
   "talawa": "Talawa",
   "talawaBranding": "Image de marque Talawa",
-  "unableToLoadData": "Impossible de charger les données."
+  "unableToLoadData": "Impossible de charger les données.",
+  "pluginSettings": "Paramètres du plugin",
+  "fileTooLarge": "Le fichier est trop volumineux. La taille maximale autorisée est de {{size}}Mo",
+  "invalidFileType": "Type de fichier invalide. Veuillez télécharger un fichier {{types}}",
+  "enterDescription": "Entrez la description",
+  "example": "Ex. {{example}}",
+  "selectCountry": "Sélectionnez un pays",
+  "enterCityName": "Entrez le nom de la ville",
+  "enterStateName": "Entrez le nom de l'état",
+  "select": "Sélectionner",
+  "selectAsYourCountry": "Sélectionnez {{country}} comme votre pays",
+  "selectACountry": "Sélectionnez un pays",
+  "passwordLengthRequirement": "Le mot de passe doit comporter au moins {{length}} caractères."
 }
