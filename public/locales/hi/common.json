@@ -167,5 +167,8 @@
   "organizations": "संगठन",
   "createEvent": "इवेंट बनाएं",
   "eventCreated": "इवेंट सफलतापूर्वक बनाया गया",
-  "eventDetails": "इवेंट विवरण"
+  "eventDetails": "इवेंट विवरण",
+  "selectLanguage": "भाषा चुनें",
+  "talawa": "Talawa",
+  "talawaBranding": "तलावा ब्रांडिंग"
 }
