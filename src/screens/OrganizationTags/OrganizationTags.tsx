@@ -45,7 +45,7 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import IconComponent from 'components/IconComponent/IconComponent';
-import TableLoader from 'components/TableLoader/TableLoader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type { InterfaceTagDataPG } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import type { GridCellParams } from '@mui/x-data-grid';
@@ -168,13 +168,6 @@ function OrganizationTags(): JSX.Element {
   const redirectToSubTags = (tagId: string): void => {
     navigate(`/orgtags/${orgId}/subTags/${tagId}`);
   };
-  const headerTitles: string[] = [
-    tCommon('sl_no'),
-    t('tagName'),
-    t('totalSubTags'),
-    t('totalAssignedUsers'),
-    tCommon('actions'),
-  ];
 
   const renderCountLink = (
     params: GridCellParams,
@@ -314,7 +307,14 @@ function OrganizationTags(): JSX.Element {
         </Stack>
       ),
       loadingOverlay: () => (
-        <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
+        <LoadingState
+          isLoading={true}
+          variant="spinner"
+          size="lg"
+          data-testid="orgTagsLoadingOverlay"
+        >
+          <></>
+        </LoadingState>
       ),
     },
     sx: { ...dataGridStyle },

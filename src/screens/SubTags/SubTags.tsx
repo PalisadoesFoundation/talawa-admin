@@ -41,8 +41,8 @@
  */
 import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
-import Loader from 'components/Loader/Loader';
 import IconComponent from 'components/IconComponent/IconComponent';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useNavigate, useParams, Link } from 'react-router';
 import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
@@ -68,7 +68,6 @@ import { Stack } from '@mui/material';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
 function SubTags(): JSX.Element {
@@ -350,9 +349,12 @@ function SubTags(): JSX.Element {
             additionalButtons={additionalActionButtons}
           />
 
-          {subTagsLoading || createUserTagLoading ? (
-            <Loader />
-          ) : (
+          <LoadingState
+            isLoading={subTagsLoading || createUserTagLoading}
+            variant="spinner"
+            size="lg"
+            data-testid="subTagsLoadingState"
+          >
             <div className="mb-2 ">
               <div className="bg-white light border rounded-top mb-0 py-2 d-flex align-items-center">
                 <div className="ms-3 my-1">
@@ -395,7 +397,16 @@ function SubTags(): JSX.Element {
                     subTagsData?.getChildTags.childTags.pageInfo.hasNextPage ??
                     false
                   }
-                  loader={<InfiniteScrollLoader />}
+                  loader={
+                    <LoadingState
+                      isLoading={true}
+                      variant="inline"
+                      size="sm"
+                      data-testid="infiniteScrollLoader"
+                    >
+                      <></>
+                    </LoadingState>
+                  }
                   scrollableTarget="subTagsScrollableDiv"
                 >
                   <DataGrid
@@ -427,7 +438,7 @@ function SubTags(): JSX.Element {
                 </InfiniteScroll>
               </div>
             </div>
-          )}
+          </LoadingState>
         </div>
       </Row>
 

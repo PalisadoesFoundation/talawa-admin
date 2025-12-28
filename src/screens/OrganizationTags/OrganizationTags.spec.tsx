@@ -664,7 +664,7 @@ describe('Organisation Tags Page', () => {
     expect(screen.getByTestId('orgUserTagsScrollableDiv')).toBeInTheDocument();
   });
 
-  test('loads and renders all necessary table components and configuration (including loading overlay at line 309)', async () => {
+  test('loads and renders all necessary table components and configuration (including loading overlay at line 316)', async () => {
     renderOrganizationTags(link);
 
     await wait();
@@ -677,8 +677,8 @@ describe('Organisation Tags Page', () => {
 
     // The component successfully renders with:
     // 1. ReportingTable component with gridProps containing:
-    //   - noRowsOverlay (line 305-307): Stack with "noTagsFound" message
-    //   - loadingOverlay (line 308-310): TableLoader with headerTitles and PAGE_SIZE
+    //   - noRowsOverlay (line 311-315): Stack with "noTagsFound" message
+    //   - loadingOverlay (line 316-323): LoadingState with skeleton variant
     //   - Other grid configurations like sx, getRowClassName, etc.
     // 2. The gridProps object is passed to ReportingTable which uses it to configure DataGrid
     // 3. When DataGrid needs to show loading state, it will render the loadingOverlay function
@@ -696,9 +696,9 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('gridProps includes loadingOverlay slot for TableLoader display during loading (line 309)', async () => {
-    // This test specifically targets lines 308-310 which define the loadingOverlay slot function
-    // The loadingOverlay: () => (<TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />)
+  test('gridProps includes loadingOverlay slot for LoadingState display during loading (line 316)', async () => {
+    // This test specifically targets lines 315-323 which define the loadingOverlay slot function
+    // The loadingOverlay: () => (<LoadingState isLoading={true} variant="skeleton" size="lg" data-testid="orgTagsLoadingOverlay" />)
     // is part of the slots object in gridProps passed to ReportingTable
 
     renderOrganizationTags(link);
@@ -713,7 +713,7 @@ describe('Organisation Tags Page', () => {
 
     // The component renders successfully with the loadingOverlay configuration
     // When the ReportingTable/DataGrid enters a loading state, it will render the loadingOverlay
-    // which calls the function that returns <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
+    // which calls the function that returns <LoadingState isLoading={true} variant="skeleton" size="lg" data-testid="orgTagsLoadingOverlay" />
 
     const table = screen.getByTestId('orgUserTagsScrollableDiv');
     expect(table).toBeInTheDocument();
