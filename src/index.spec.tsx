@@ -485,13 +485,13 @@ describe('Apollo Client Configuration', () => {
       let shouldRefresh = true;
       if (isLoggedIn !== 'TRUE') {
         shouldRefresh = false;
-        // This is the early return path (line 97 in index.tsx)
+        // This is the early return path when user is not logged in
       }
 
       expect(shouldRefresh).toBe(false);
     });
 
-    it('should handle refreshToken catch block (line 129-132)', async () => {
+    it('should handle refreshToken catch block', async () => {
       const mockRefreshToken = vi.mocked(refreshToken);
       mockRefreshToken.mockRejectedValueOnce(new Error('Network failure'));
 
@@ -501,7 +501,7 @@ describe('Apollo Client Configuration', () => {
       try {
         await refreshToken();
       } catch {
-        // This simulates the catch block in index.tsx lines 129-132
+        // This simulates the catch block in handling refresh failures
         clearCalled = true;
         redirected = true;
       }
@@ -510,13 +510,13 @@ describe('Apollo Client Configuration', () => {
       expect(redirected).toBe(true);
     });
 
-    it('should return Observable error when refresh fails (lines 143-145)', async () => {
+    it('should return Observable error when refresh fails', async () => {
       const mockRefreshToken = vi.mocked(refreshToken);
       mockRefreshToken.mockResolvedValueOnce(false);
 
       const success = await refreshToken();
 
-      // When success is false, the code creates Observable that emits error (lines 143-145)
+      // When success is false, the code creates Observable that emits error
       let emittedError = false;
       if (!success) {
         // Simulating: return new Observable((observer) => { observer.error(error); });
@@ -530,7 +530,7 @@ describe('Apollo Client Configuration', () => {
 
   describe('IsLoggedIn Check in Error Handler', () => {
     it('should check IsLoggedIn flag and return early when not logged in', () => {
-      // This tests the logic at lines 95-97 in index.tsx
+      // This tests the logic checking user login state before refresh
       // const isLoggedIn = getItem('IsLoggedIn');
       // if (isLoggedIn !== 'TRUE') { return; }
 
