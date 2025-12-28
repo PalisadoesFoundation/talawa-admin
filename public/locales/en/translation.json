@@ -23,26 +23,26 @@
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
     "userLogin": "User Login",
     "adminLogin": "Admin Login",
-    "atleast_8_char_long": "Atleast 8 Character long",
-    "atleast_6_char_long": "Atleast 6 Character long",
+    "atleastEightCharLong": "At least 8 characters long",
+    "atleastSixCharLong": "At least 6 characters long",
     "firstName_invalid": "First name should contain only lower and upper case letters",
     "lastName_invalid": "Last name should contain only lower and upper case letters",
-    "name_invalid": "Name should contain only letters, spaces, and hyphens",
-    "password_invalid": "Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character",
-    "email_invalid": "Email should have atleast 8 characters",
-    "Password_and_Confirm_password_mismatches.": "Password and Confirm password mismatches.",
+    "nameInvalid": "Name should contain only letters, spaces, and hyphens",
+    "passwordInvalid": "Password should contain at least one lowercase letter, one uppercase letter, one numeric value and one special character",
+    "emailInvalid": "Please enter a valid email address",
     "doNotOwnAnAccount": "Do not own an account?",
     "captchaError": "Captcha Error!",
     "Please_check_the_captcha": "Please, check the captcha.",
     "Something_went_wrong": "Something went wrong, Please try after sometime.",
-    "passwordMismatches": "Password and Confirm password mismatches.",
+    "passwordMismatches": "Password and confirm password do not match.",
     "fillCorrectly": "Fill all the Details Correctly.",
     "successfullyRegistered": "Successfully Registered. Please wait until you will be approved.",
-    "lowercase_check": "Atleast one lowercase letter",
-    "uppercase_check": "Atleast one uppercase letter",
-    "numeric_value_check": "Atleaset one numeric value",
-    "special_char_check": "Atleast one special character",
+    "lowercaseCheck": "At least one lowercase letter",
+    "uppercaseCheck": "At least one uppercase letter",
+    "numericValueCheck": "At least one numeric value",
+    "specialCharCheck": "At least one special character",
     "selectOrg": "Select an organization",
+    "backToLogin": "Back to Login",
     "afterRegister": "Successfully registered. Please wait for admin to approve your request.",
     "talawa_portal": "talawa_portal",
     "login": "login",
@@ -61,7 +61,9 @@
     "OR": "OR",
     "admin": "admin",
     "user": "user",
-    "loading": "loading"
+    "loading": "Loading...",
+    "communityLogo": "Community Logo",
+    "organizations": "Organizations"
   },
   "signOut": {
     "retryPrompt": "Failed to revoke session. Retry?",
@@ -71,8 +73,7 @@
   "userLoginPage": {
     "title": "Talawa Admin",
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
-    "atleast_8_char_long": "Atleast 8 Character long",
-    "Password_and_Confirm_password_mismatches.": "Password and Confirm password mismatches.",
+    "atleastEightCharLong": "At least 8 characters long",
     "doNotOwnAnAccount": "Do not own an account?",
     "captchaError": "Captcha Error!",
     "Please_check_the_captcha": "Please, check the captcha.",
@@ -477,13 +478,17 @@
     "eventName": "Name",
     "allDay": "All Day",
     "recurringEvent": "Recurring Event",
+    "recurring": "Recurring",
     "isPublic": "Is Public",
+    "publicEvent": "Is Public",
     "isRegistrable": "Is Registrable",
+    "registerable": "Is Registerable",
     "createChat": "Create Chat",
     "createEvent": "Create Event",
     "enterFilter": "Enter Filter",
     "enterName": "Enter Name",
     "enterDescrip": "Enter Description",
+    "enterDescription": "Enter Description",
     "searchEventName": "Search Event Name",
     "searchMemberName": "Search Member Name",
     "eventType": "Event Type",
@@ -987,10 +992,10 @@
     "talawaApiUnavailable": "talawaApiUnavailable"
   },
   "pageNotFound": {
+    "404": "404",
     "title": "404 Not Found",
     "talawaAdmin": "Talawa Admin",
     "talawaUser": "Talawa User",
-    "404": "404",
     "notFoundMsg": "Oops! The Page you requested was not found!",
     "backToHome": "Back to Home"
   },
@@ -1213,7 +1218,8 @@
     "filter": "filter",
     "searchByName": "Search by Name",
     "searchOrganizations": "Search Organization",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "title": "Organizations"
   },
   "userSidebarOrg": {
     "yourOrganizations": "Your Organizations",
@@ -1369,7 +1375,8 @@
     "postalCode": "Postal Code",
     "city": "City",
     "description": "Description",
-    "enterDescription": "Enter Description"
+    "enterDescription": "Enter Description",
+    "title": "Settings"
   },
   "donate": {
     "title": "Donations",
@@ -1821,6 +1828,14 @@
     "signingOut": "Signing out...",
     "retryPrompt": "Failed to revoke session. Retry?",
     "breadcrumb": "Breadcrumb",
-    "action": "Action"
+    "action": "Action",
+    "selectLanguage": "Select Language",
+    "userMenu": "User Menu",
+    "settings": "Settings",
+    "logout": "Logout",
+    "logoutFailed": "Logout failed",
+    "title": "User Portal",
+    "talawa": "Talawa",
+    "talawaBranding": "Talawa Branding"
   }
 }
