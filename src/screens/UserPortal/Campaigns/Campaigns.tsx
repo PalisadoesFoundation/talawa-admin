@@ -13,7 +13,7 @@ import styles from '../../../style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import { WarningAmberRounded } from '@mui/icons-material';
-import { Stack, Box, CircularProgress, Typography } from '@mui/material';
+import { Box, CircularProgress, Typography } from '@mui/material';
 import { type GridCellParams } from '@mui/x-data-grid';
 import useLocalStorage from 'utils/useLocalstorage';
 import PledgeModal from './PledgeModal';
