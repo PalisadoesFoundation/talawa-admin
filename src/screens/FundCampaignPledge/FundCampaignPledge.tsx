@@ -386,6 +386,7 @@ const fundCampaignPledge = (): JSX.Element => {
   return (
     <div>
       <SafeBreadcrumbs
+        ariaLabelTranslationKey="breadcrumb"
         items={[
           {
             translationKey: 'funds',

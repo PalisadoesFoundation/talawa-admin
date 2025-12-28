@@ -128,5 +128,6 @@
   "Volunteers": "Bénévoles",
   "unblock": "Débloquer",
   "unblockedSuccessfully": "{{item}} débloqué avec succès",
-  "pluginSettings": "Paramètres du plugin"
+  "pluginSettings": "Paramètres du plugin",
+  "fundCampaigns": "Campagnes de Fonds"
 }

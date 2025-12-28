@@ -299,9 +299,8 @@ const mockWithExtraUsers = {
 const link1 = new StaticMockLink([updatedMocks]);
 const link2 = new StaticMockLink(MOCKS_FUND_CAMPAIGN_PLEDGE_ERROR);
 const link3 = new StaticMockLink([EMPTY_MOCK]);
-const translations = JSON.parse(
-  JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
-);
+const translations = (i18nForTest.getDataByLanguage('en')?.translation
+  ?.pledges ?? {}) as Record<string, string>;
 
 vi.mock('react-router', async () => {
   const actual =
@@ -1033,7 +1032,10 @@ describe('Testing Campaign Pledge Screen', () => {
     await waitFor(() => {
       const addPledgeBtn = screen.getByTestId('addPledgeBtn');
       expect(addPledgeBtn).toBeDisabled();
-      expect(addPledgeBtn).toHaveAttribute('title', 'Campaign is not active');
+      expect(addPledgeBtn).toHaveAttribute(
+        'title',
+        translations.campaignNotActive,
+      );
     });
     vi.useRealTimers();
   });

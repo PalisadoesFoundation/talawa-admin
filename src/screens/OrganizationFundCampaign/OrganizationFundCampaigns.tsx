@@ -133,6 +133,9 @@ const orgFundCampaign = (): JSX.Element => {
     navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);
   };
 
+  // isArchived is currently hardcoded because the FUND_CAMPAIGN
+  // GraphQL query does not expose this field yet.
+  // This will be updated once backend support is available.
   const isArchived = false;
 
   if (!fundId || !orgId) {
@@ -389,7 +392,7 @@ const orgFundCampaign = (): JSX.Element => {
             to: `/orgfunds/${orgId}`,
           },
           {
-            translationKey: 'title',
+            translationKey: 'fundCampaigns',
             isCurrent: true,
           },
         ]}
