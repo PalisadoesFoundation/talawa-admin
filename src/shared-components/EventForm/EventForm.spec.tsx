@@ -178,12 +178,17 @@ vi.mock('shared-components/Recurrence/CustomRecurrenceModal', () => ({
   },
 }));
 
+// Use future dates to ensure tests don't break when hardcoded dates become past dates
+// These dates are calculated dynamically to always be in the future
+const futureStartDate = dayjs().add(30, 'day').startOf('day').toDate();
+const futureEndDate = dayjs().add(31, 'day').startOf('day').toDate();
+
 const baseValues: IEventFormValues = {
   name: 'Test Event',
   description: 'Desc',
   location: 'Hall',
-  startDate: new Date('2025-01-01T00:00:00Z'),
-  endDate: new Date('2025-01-02T00:00:00Z'),
+  startDate: futureStartDate,
+  endDate: futureEndDate,
   startTime: '08:00:00',
   endTime: '10:00:00',
   allDay: true,
@@ -200,7 +205,7 @@ describe('EventForm', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
-  test('submits with computed ISO dates for all-day event', async () => {
+  test('submits with computed ISO dates for all-day event with future dates', async () => {
     const handleSubmit = vi.fn();
     render(
       <EventForm
@@ -217,13 +222,212 @@ describe('EventForm', () => {
     expect(handleSubmit).toHaveBeenCalledWith(
       expect.objectContaining({
         name: 'Test Event',
-        startAtISO: dayjs
-          .utc(baseValues.startDate)
-          .startOf('day')
-          .toISOString(),
-        endAtISO: dayjs.utc(baseValues.endDate).endOf('day').toISOString(),
+        // For future dates, startAtISO should be at midnight (start of day)
+        startAtISO: dayjs.utc(futureStartDate).startOf('day').toISOString(),
+        endAtISO: dayjs.utc(futureEndDate).endOf('day').toISOString(),
       }),
     );
+  });
+
+  describe('all-day event edge cases for today/past dates', () => {
+    test('uses current time + buffer for all-day event when startDate is today and start of day is past', async () => {
+      const handleSubmit = vi.fn();
+      // Use today's date to trigger the "start of day is in the past" condition
+      const today = new Date();
+      const todayValues: IEventFormValues = {
+        ...baseValues,
+        startDate: today,
+        endDate: today, // Same day event
+        allDay: true,
+      };
+
+      const beforeRender = dayjs.utc();
+
+      render(
+        <EventForm
+          initialValues={todayValues}
+          onSubmit={handleSubmit}
+          onCancel={vi.fn()}
+          submitLabel="Create"
+          t={t}
+          tCommon={tCommon}
+        />,
+      );
+
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('createEventBtn'));
+      });
+
+      expect(handleSubmit).toHaveBeenCalled();
+      const call = handleSubmit.mock.calls[0][0];
+
+      // Verify startAtISO is near current time (not midnight)
+      const startAt = dayjs(call.startAtISO);
+      const startOfDay = dayjs.utc(today).startOf('day');
+
+      // If start of day is in the past, startAtISO should be near now (not at midnight)
+      if (startOfDay.isBefore(beforeRender)) {
+        // startAtISO should be close to "now" (within a reasonable window)
+        expect(startAt.isAfter(beforeRender.subtract(1, 'minute'))).toBe(true);
+        // It should also be in the future (now + buffer)
+        expect(startAt.isAfter(beforeRender)).toBe(true);
+      }
+
+      // endAtISO should be end of the end date
+      const endAt = dayjs(call.endAtISO);
+      const expectedEnd = dayjs.utc(today).endOf('day');
+      expect(endAt.isSame(expectedEnd, 'minute')).toBe(true);
+    });
+
+    test('all-day event for today late at night results in short duration (known limitation)', async () => {
+      // This test documents the current behavior when creating an all-day event
+      // for "today" late in the day. The startAtISO gets adjusted to now + 10s,
+      // but endAtISO remains endOf('day'), resulting in a potentially short event.
+      //
+      // IMPORTANT: This is a known limitation. If user creates an "all-day" event
+      // at 11 PM for today:
+      //   - startAtISO = ~11:00:10 PM
+      //   - endAtISO = ~11:59:59 PM
+      //   - Duration = ~1 hour (not a full day)
+      //
+      // This behavior is intentional to allow the API validation to pass
+      // (startAt must be in the future). The alternative would be to push
+      // the event to start the next day, but that changes user intent.
+
+      const handleSubmit = vi.fn();
+      const today = new Date();
+      const todayValues: IEventFormValues = {
+        ...baseValues,
+        startDate: today,
+        endDate: today,
+        allDay: true,
+      };
+
+      render(
+        <EventForm
+          initialValues={todayValues}
+          onSubmit={handleSubmit}
+          onCancel={vi.fn()}
+          submitLabel="Create"
+          t={t}
+          tCommon={tCommon}
+        />,
+      );
+
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('createEventBtn'));
+      });
+
+      expect(handleSubmit).toHaveBeenCalled();
+      const call = handleSubmit.mock.calls[0][0];
+
+      const startAt = dayjs(call.startAtISO);
+      const endAt = dayjs(call.endAtISO);
+
+      // Verify end is after start (event is valid)
+      expect(endAt.isAfter(startAt)).toBe(true);
+
+      // Document: the duration may be less than a full day
+      // when start of day has already passed
+      const durationHours = endAt.diff(startAt, 'hour');
+      // Duration will be <= 24 hours (could be much less if created late in day)
+      expect(durationHours).toBeLessThanOrEqual(24);
+    });
+
+    test('all-day event for future date uses midnight start time', async () => {
+      const handleSubmit = vi.fn();
+      // Use a future date that's definitely not today
+      const futureDate = dayjs().add(7, 'day').toDate();
+      const futureValues: IEventFormValues = {
+        ...baseValues,
+        startDate: futureDate,
+        endDate: futureDate,
+        allDay: true,
+      };
+
+      render(
+        <EventForm
+          initialValues={futureValues}
+          onSubmit={handleSubmit}
+          onCancel={vi.fn()}
+          submitLabel="Create"
+          t={t}
+          tCommon={tCommon}
+        />,
+      );
+
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('createEventBtn'));
+      });
+
+      expect(handleSubmit).toHaveBeenCalled();
+      const call = handleSubmit.mock.calls[0][0];
+
+      const startAt = dayjs(call.startAtISO);
+      const expectedStart = dayjs.utc(futureDate).startOf('day');
+
+      // For future dates, start should be at midnight (start of day)
+      expect(startAt.isSame(expectedStart)).toBe(true);
+
+      // End should be end of the day
+      const endAt = dayjs(call.endAtISO);
+      const expectedEnd = dayjs.utc(futureDate).endOf('day');
+      expect(endAt.isSame(expectedEnd, 'minute')).toBe(true);
+
+      // Duration should be ~24 hours for a full day event
+      const durationHours = endAt.diff(startAt, 'hour');
+      expect(durationHours).toBeGreaterThanOrEqual(23); // Allow for slight rounding
+    });
+
+    test('all-day event spanning multiple days with past start adjusts only start time', async () => {
+      const handleSubmit = vi.fn();
+      const today = new Date();
+      const tomorrow = dayjs(today).add(1, 'day').toDate();
+      const multiDayValues: IEventFormValues = {
+        ...baseValues,
+        startDate: today, // Start today (past start of day)
+        endDate: tomorrow, // End tomorrow
+        allDay: true,
+      };
+
+      const beforeRender = dayjs.utc();
+
+      render(
+        <EventForm
+          initialValues={multiDayValues}
+          onSubmit={handleSubmit}
+          onCancel={vi.fn()}
+          submitLabel="Create"
+          t={t}
+          tCommon={tCommon}
+        />,
+      );
+
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('createEventBtn'));
+      });
+
+      expect(handleSubmit).toHaveBeenCalled();
+      const call = handleSubmit.mock.calls[0][0];
+
+      const startAt = dayjs(call.startAtISO);
+      const endAt = dayjs(call.endAtISO);
+
+      // Start should be adjusted if today's midnight has passed
+      const startOfToday = dayjs.utc(today).startOf('day');
+      if (startOfToday.isBefore(beforeRender)) {
+        // startAtISO should be near "now", not at midnight
+        expect(startAt.isAfter(beforeRender.subtract(1, 'minute'))).toBe(true);
+      }
+
+      // End should be end of tomorrow regardless
+      const expectedEnd = dayjs.utc(tomorrow).endOf('day');
+      expect(endAt.isSame(expectedEnd, 'minute')).toBe(true);
+
+      // Event should span more than 24 hours when spanning to next day
+      const durationHours = endAt.diff(startAt, 'hour');
+      expect(durationHours).toBeGreaterThan(12); // At least half a day to next day's end
+    });
   });
 
   test('enables recurrence toggle and opens custom modal', async () => {
