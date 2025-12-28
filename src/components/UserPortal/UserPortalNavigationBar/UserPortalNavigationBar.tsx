@@ -98,7 +98,7 @@ export const UserPortalNavigationBar = (
   const finalOrganizationName =
     organizationName ||
     orgData?.organization?.name ||
-    (mode === 'user' ? t('talawa') : '');
+    (mode === 'user' ? tCommon('talawa') : '');
 
   const dropDirection: DropDirection = 'start';
   const homeLink = finalOrganizationId
@@ -167,7 +167,7 @@ export const UserPortalNavigationBar = (
 
   // Logo source
   const logoSource = branding?.logo || TalawaImage;
-  const logoAltText = branding?.logoAltText || t('talawaBranding');
+  const logoAltText = branding?.logoAltText || tCommon('talawaBranding');
   const brandNameText = branding?.brandName || finalOrganizationName;
 
   // Render navigation links
@@ -292,7 +292,7 @@ export const UserPortalNavigationBar = (
           >
             <Offcanvas.Header closeButton>
               <Offcanvas.Title data-testid="offcanvasTitle">
-                {t('talawa')}
+                {tCommon('talawa')}
               </Offcanvas.Title>
             </Offcanvas.Header>
             <Offcanvas.Body>{renderMobileContent()}</Offcanvas.Body>

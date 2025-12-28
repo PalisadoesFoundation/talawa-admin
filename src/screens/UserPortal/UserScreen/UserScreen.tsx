@@ -61,6 +61,8 @@ const map: InterfaceMapType = {
   volunteer: 'userVolunteer',
   leaveorg: 'leaveOrganization',
   notification: 'notification',
+  organizations: 'userOrganizations',
+  settings: 'settings',
 };
 
 const UserScreen = (): React.JSX.Element => {
@@ -83,7 +85,7 @@ const UserScreen = (): React.JSX.Element => {
    * without adding a new root-level title key.
    */
   const titleKey: string = map[location.pathname.split('/')[2]] || 'common';
-  const { t } = useTranslation('translation', { keyPrefix: titleKey });
+  const { t: tScoped } = useTranslation('translation', { keyPrefix: titleKey });
 
   const userRoutes: { targets: TargetsType[] } = useSelector(
     (state: RootState) => state.userRoutes,
@@ -172,7 +174,7 @@ const UserScreen = (): React.JSX.Element => {
       >
         <div className="d-flex justify-content-between align-items-center">
           <div className={localStyles.titleContainer}>
-            <h1>{t('title')}</h1>
+            <h1>{tScoped('title')}</h1>
           </div>
           {/* <ProfileDropdown /> */}
         </div>

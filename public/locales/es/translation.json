@@ -935,10 +935,10 @@
     "OTPsent": "OTP se envía a su correo electrónico registrado"
   },
   "pageNotFound": {
+    "404": "404",
     "title": "404 No encontrado",
     "talawaAdmin": "Administrador de Talawa",
     "talawaUser": "Usuario de Talawa",
-    "404": "404",
     "notFoundMsg": "¡Ups! ¡No se encontró la página que solicitaste!",
     "backToHome": "De vuelta a casa"
   },
@@ -1161,7 +1161,8 @@
     "searchByName": "Buscar por nombre",
     "searchUsers": "Buscar usuarios",
     "searchOrganizations": "Buscar Organizaciones",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "title": "Organizaciones"
   },
   "userSidebarOrg": {
     "yourOrganizations": "Tus Organizaciones",
@@ -1369,7 +1370,8 @@
     "postalCode": "Código Postal",
     "city": "Ciudad",
     "description": "Descripción",
-    "enterDescription": "Ingrese descripción"
+    "enterDescription": "Ingrese descripción",
+    "title": "Ajustes"
   },
   "donate": {
     "title": "Donaciones",
@@ -1827,6 +1829,8 @@
     "settings": "Ajustes",
     "logout": "Cerrar sesión",
     "logoutFailed": "Falló el cierre de sesión",
-    "title": "Portal de Usuario"
+    "title": "Portal de Usuario",
+    "talawa": "Talawa",
+    "talawaBranding": "Marca Talawa"
   }
 }

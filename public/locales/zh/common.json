@@ -129,5 +129,7 @@
   "unblock": "解除封锁",
   "unblockedSuccessfully": "{{item}}已成功解除封锁",
   "pluginSettings": "插件设置",
-  "selectLanguage": "选择语言"
+  "selectLanguage": "选择语言",
+  "talawa": "塔拉瓦",
+  "talawaBranding": "Talawa 品牌形象"
 }

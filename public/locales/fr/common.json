@@ -129,5 +129,7 @@
   "unblock": "Débloquer",
   "unblockedSuccessfully": "{{item}} débloqué avec succès",
   "pluginSettings": "Paramètres du plugin",
-  "selectLanguage": "Choisir la langue"
+  "selectLanguage": "Choisir la langue",
+  "talawa": "Talawa",
+  "talawaBranding": "Image de marque Talawa"
 }

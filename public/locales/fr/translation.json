@@ -1161,7 +1161,8 @@
     "filter": "Filtrer",
     "searchByName": "Rechercher par nom",
     "searchOrganizations": "Rechercher Organisations",
-    "loading": "Chargement..."
+    "loading": "Chargement...",
+    "title": "Organisations"
   },
   "userSidebarOrg": {
     "yourOrganizations": "Vos organisations",
@@ -1369,7 +1370,8 @@
     "postalCode": "Code postal",
     "city": "Ville",
     "description": "Description",
-    "enterDescription": "Entrez la description"
+    "enterDescription": "Entrez la description",
+    "title": "Paramètres"
   },
   "donate": {
     "title": "Des dons",
@@ -1827,6 +1829,8 @@
     "settings": "Paramètres",
     "logout": "Déconnexion",
     "logoutFailed": "Échec de la déconnexion",
-    "title": "Portail Utilisateur"
+    "title": "Portail Utilisateur",
+    "talawa": "Talawa",
+    "talawaBranding": "Image de marque Talawa"
   }
 }
