@@ -14,6 +14,7 @@ import type {
   IEventFormSubmitPayload,
   IEventFormValues,
 } from 'types/EventForm/interface';
+import type { ICreateEventInput } from 'types/Event/interface';
 
 interface ICreateEventModalProps {
   /** Whether the modal is currently open/visible */
@@ -98,17 +99,18 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         ? formatRecurrenceForPayload(payload.recurrenceRule, payload.startDate)
         : undefined;
 
-      const input = {
+      // Build input object with shared typed interface
+      const input: ICreateEventInput = {
         name: payload.name,
-        description: payload.description,
         startAt: payload.startAtISO,
         endAt: payload.endAtISO,
         organizationId: currentUrl,
         allDay: payload.allDay,
-        location: payload.location,
         isPublic: payload.isPublic,
         isRegisterable: payload.isRegisterable,
-        recurrence: recurrenceInput,
+        ...(payload.description && { description: payload.description }),
+        ...(payload.location && { location: payload.location }),
+        ...(recurrenceInput && { recurrence: recurrenceInput }),
       };
 
       const { data: createEventData } = await create({
