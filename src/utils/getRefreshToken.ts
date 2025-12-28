@@ -4,7 +4,8 @@ import { REFRESH_TOKEN_MUTATION } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from './useLocalstorage';
 
 /**
- * Refreshes the access token using the stored refresh token.
+ * Refreshes the access token using HTTP-Only cookies.
+ * The refresh token is automatically sent via cookies by the browser.
  * This function is called when the current access token expires.
  *
  * @returns Returns true if token refresh was successful, false otherwise
@@ -13,30 +14,20 @@ export async function refreshToken(): Promise<boolean> {
   const client = new ApolloClient({
     link: new HttpLink({
       uri: BACKEND_URL,
+      credentials: 'include', // Required for HTTP-Only cookies
     }),
     cache: new InMemoryCache(),
   });
 
-  const { getItem, setItem } = useLocalStorage();
-
-  const storedRefreshToken = getItem('refreshToken');
-
-  if (!storedRefreshToken) {
-    console.error('No refresh token available');
-    return false;
-  }
-
   try {
+    // No need to pass refreshToken variable - API reads from HTTP-Only cookie
     const { data } = await client.mutate({
       mutation: REFRESH_TOKEN_MUTATION,
-      variables: {
-        refreshToken: storedRefreshToken,
-      },
     });
 
     if (data?.refreshToken) {
-      setItem('token', data.refreshToken.authenticationToken);
-      setItem('refreshToken', data.refreshToken.refreshToken);
+      // Tokens are now set via HTTP-Only cookies by the API
+      // No need to store in localStorage
       return true;
     }
 
