@@ -17,4 +17,4 @@ export const getSafeImageSrc = (url?: string | null): string | undefined => {
   }
 };
 
-export default {};
+// No default export required — all exports are named
