@@ -1,63 +1,106 @@
 export class AdminEventPage {
   private readonly _eventsTabButton = '[data-cy="leftDrawerButton-Events"]';
-  private readonly _venueTabButton = '[data-cy="leftDrawerButton-Events"]';
   private readonly _createEventModalButton = '[data-cy="createEventModalBtn"]';
   private readonly _eventTitleInput = '[data-cy="eventTitleInput"]';
   private readonly _eventDescriptionInput = '[data-cy="eventDescriptionInput"]';
   private readonly _eventLocationInput = '[data-cy="eventLocationInput"]';
   private readonly _createEventBtn = '[data-cy="createEventBtn"]';
-  private readonly _updateNameInput = '[data-cy="updateName"]';
-  private readonly _updateDescriptionInput = '[data-cy="updateDescription"]';
-  private readonly _updateLocationInput = '[data-cy="updateLocation"]';
-  private readonly _previewUpdateEventBtn = '[data-cy="previewUpdateEventBtn"]';
-  private readonly _deleteEventModalBtn = '[data-cy="deleteEventModalBtn"]';
-  private readonly _deleteEventBtn = '[data-testid="deleteEventBtn"]';
+  private readonly _eventCard = '[data-testid="card"]';
 
   visitEventPage(): void {
     cy.get(this._eventsTabButton).should('be.visible').click();
     cy.url().should('match', /\/orgevents\/[a-f0-9-]+/);
   }
 
-  createEvent(title: string, description: string, location: string): void {
+  createEvent(title: string, description: string, location: string): this {
+    // Click create event button and wait for modal to appear
     cy.get(this._createEventModalButton).should('be.visible').click();
-    cy.get(this._eventTitleInput).should('be.visible').type(title);
-    cy.get(this._eventDescriptionInput).should('be.visible').type(description);
-    cy.get(this._eventLocationInput).should('be.visible').type(location);
-    cy.get(this._createEventBtn).should('be.visible').click();
+
+    // Wait for modal form to be fully rendered
+    cy.get(this._eventTitleInput).should('be.visible').and('be.enabled');
+
+    // Clear and type each field, then verify the value was set
+    cy.get(this._eventTitleInput).clear().type(title);
+    cy.get(this._eventTitleInput).should('have.value', title);
+
+    cy.get(this._eventDescriptionInput).clear().type(description);
+    cy.get(this._eventDescriptionInput).should('have.value', description);
+
+    cy.get(this._eventLocationInput).clear().type(location);
+    cy.get(this._eventLocationInput).should('have.value', location);
+
+    // Submit the form
+    cy.get(this._createEventBtn).should('be.visible').and('be.enabled').click();
+
+    // Assert success toast
     cy.assertToast('Congratulations! The Event is created.');
+
+    return this;
+  }
+
+  findEventCard(eventName: string): Cypress.Chainable {
+    // Wait for events to load and find the specific event card
+    return cy
+      .get(this._eventCard, { timeout: 30000 })
+      .contains(eventName, { timeout: 30000 });
+  }
+
+  openEventDetails(eventName: string): this {
+    this.findEventCard(eventName).click();
+    return this;
   }
 
   updateEvent(
     existingName: string,
-    name: string,
-    description: string,
-    location: string,
-  ): void {
-    cy.get(this._venueTabButton).should('be.visible').click();
-    cy.get(this._eventsTabButton).should('be.visible').click();
-    cy.get('[data-testid="card"]').contains(existingName).click();
-    cy.get(this._updateNameInput).should('be.visible').clear().type(name);
-    cy.get(this._updateDescriptionInput)
+    newName: string,
+    newDescription: string,
+    newLocation: string,
+  ): this {
+    // Find and click on the event card
+    this.openEventDetails(existingName);
+
+    // Wait for edit form to load and update fields
+    cy.get('[data-cy="updateName"]', { timeout: 10000 })
       .should('be.visible')
       .clear()
-      .type(description);
-    cy.get(this._updateLocationInput)
+      .type(newName);
+    cy.get('[data-cy="updateName"]').should('have.value', newName);
+
+    cy.get('[data-cy="updateDescription"]')
       .should('be.visible')
       .clear()
-      .type(location);
-    cy.get(this._previewUpdateEventBtn).should('be.visible').click();
+      .type(newDescription);
+
+    cy.get('[data-cy="updateLocation"]')
+      .should('be.visible')
+      .clear()
+      .type(newLocation);
+
+    // Click update button
+    cy.get('[data-cy="previewUpdateEventBtn"]')
+      .should('be.visible')
+      .and('be.enabled')
+      .click();
+
     cy.assertToast('Event updated successfully.');
+
+    return this;
   }
 
-  deleteEvent(name: string): void {
-    cy.get(this._venueTabButton).should('be.visible').click();
-    cy.get(this._eventsTabButton).should('be.visible').click();
-    cy.get('[data-testid="card"]')
+  deleteEvent(eventName: string): this {
+    // Find and click on the event card
+    this.openEventDetails(eventName);
+
+    // Click delete button in event details
+    cy.get('[data-cy="deleteEventModalBtn"]', { timeout: 10000 })
       .should('be.visible')
-      .should('contain.text', name);
-    cy.get('[data-testid="card"]').contains(name).click();
-    cy.get(this._deleteEventModalBtn).should('be.visible').click();
-    cy.get(this._deleteEventBtn).should('be.visible').click();
+      .click();
+
+    // Confirm deletion
+    cy.get('[data-testid="deleteEventBtn"]').should('be.visible').click();
+
     cy.assertToast('Event deleted successfully.');
+
+    return this;
   }
 }

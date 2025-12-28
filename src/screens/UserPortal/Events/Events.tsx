@@ -154,18 +154,27 @@ export default function events(): JSX.Element {
         ? formatRecurrenceForPayload(payload.recurrenceRule, payload.startDate)
         : undefined;
 
-      const input = {
+      // Build input object, only including optional fields if they have values
+      const input: Record<string, unknown> = {
         name: payload.name,
-        description: payload.description,
         startAt: payload.startAtISO,
         endAt: payload.endAtISO,
         organizationId,
         allDay: payload.allDay,
-        location: payload.location,
         isPublic: payload.isPublic,
         isRegisterable: payload.isRegisterable,
-        recurrence: recurrenceInput,
       };
+
+      // Only include optional string fields if they have non-empty values
+      if (payload.description) {
+        input.description = payload.description;
+      }
+      if (payload.location) {
+        input.location = payload.location;
+      }
+      if (recurrenceInput) {
+        input.recurrence = recurrenceInput;
+      }
 
       const { data: createEventData } = await create({
         variables: { input },
