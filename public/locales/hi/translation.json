@@ -1165,7 +1165,8 @@
     "filter": "फ़िल्टर",
     "searchByName": "नाम से खोजें",
     "searchOrganizations": "संगठनों खोजें",
-    "loading": "लोड हो रहा है..."
+    "loading": "लोड हो रहा है...",
+    "title": "संगठनों"
   },
   "userSidebarOrg": {
     "yourOrganizations": "आपके संगठन",
@@ -1373,7 +1374,8 @@
     "postalCode": "पिन कोड",
     "city": "शहर",
     "description": "विवरण",
-    "enterDescription": "विवरण दर्ज करें"
+    "enterDescription": "विवरण दर्ज करें",
+    "title": "समायोजन"
   },
   "donate": {
     "title": "दान",
@@ -1825,6 +1827,14 @@
     "signingOut": "साइन आउट हो रहा है...",
     "retryPrompt": "सेशन रद्द करना विफल रहा। पुनः प्रयास करें?",
     "breadcrumb": "ब्रेडक्रम्ब",
-    "action": "क्रिया"
+    "action": "क्रिया",
+    "selectLanguage": "भाषा चुनें",
+    "userMenu": "उपयोगकर्ता मेनू",
+    "settings": "समायोजन",
+    "logout": "साइन आउट",
+    "logoutFailed": "साइन आउट विफल रहा",
+    "title": "उपयोगकर्ता पोर्टल",
+    "talawa": "तलावा",
+    "talawaBranding": "तालावा ब्रांडिंग"
   }
 }

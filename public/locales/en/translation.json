@@ -991,10 +991,10 @@
     "talawaApiUnavailable": "talawaApiUnavailable"
   },
   "pageNotFound": {
+    "404": "404",
     "title": "404 Not Found",
     "talawaAdmin": "Talawa Admin",
     "talawaUser": "Talawa User",
-    "404": "404",
     "notFoundMsg": "Oops! The Page you requested was not found!",
     "backToHome": "Back to Home"
   },
@@ -1217,7 +1217,8 @@
     "filter": "filter",
     "searchByName": "Search by Name",
     "searchOrganizations": "Search Organization",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "title": "Organizations"
   },
   "userSidebarOrg": {
     "yourOrganizations": "Your Organizations",
@@ -1373,7 +1374,8 @@
     "postalCode": "Postal Code",
     "city": "City",
     "description": "Description",
-    "enterDescription": "Enter Description"
+    "enterDescription": "Enter Description",
+    "title": "Settings"
   },
   "donate": {
     "title": "Donations",
@@ -1825,6 +1827,14 @@
     "signingOut": "Signing out...",
     "retryPrompt": "Failed to revoke session. Retry?",
     "breadcrumb": "Breadcrumb",
-    "action": "Action"
+    "action": "Action",
+    "selectLanguage": "Select Language",
+    "userMenu": "User Menu",
+    "settings": "Settings",
+    "logout": "Logout",
+    "logoutFailed": "Logout failed",
+    "title": "User Portal",
+    "talawa": "Talawa",
+    "talawaBranding": "Talawa Branding"
   }
 }

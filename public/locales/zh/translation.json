@@ -1165,7 +1165,8 @@
     "filter": "筛选",
     "searchByName": "按名称搜索",
     "searchOrganizations": "搜索组织",
-    "loading": "加载中..."
+    "loading": "加载中...",
+    "title": "组织机构"
   },
   "userSidebarOrg": {
     "yourOrganizations": "您的组织",
@@ -1373,7 +1374,8 @@
     "postalCode": "邮政编码",
     "city": "城市",
     "description": "描述",
-    "enterDescription": "输入描述"
+    "enterDescription": "输入描述",
+    "title": "设置"
   },
   "donate": {
     "title": "捐款",
@@ -1823,8 +1825,16 @@
   "common": {
     "signOut": "退出登录",
     "signingOut": "正在退出...",
-    "retryPrompt": "撤销会话失败。重试？",
     "breadcrumb": "面包屑",
-    "action": "操作"
+    "action": "操作",
+    "retryPrompt": "撤销会话失败。重试？",
+    "selectLanguage": "选择语言",
+    "userMenu": "用户菜单",
+    "settings": "设置",
+    "logout": "退出登录",
+    "logoutFailed": "退出登录失败",
+    "title": "用户门户",
+    "talawa": "塔拉瓦",
+    "talawaBranding": "Talawa 品牌形象"
   }
 }
