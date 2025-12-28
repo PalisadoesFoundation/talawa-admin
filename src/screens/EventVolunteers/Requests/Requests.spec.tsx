@@ -20,6 +20,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 const i18n = i18nForTest;
 import Requests from './Requests';
+import styles from 'style/app-fixed.module.css';
 import type { ApolloLink } from '@apollo/client';
 import {
   MOCKS,
@@ -357,10 +358,12 @@ describe('Requests Component CSS Styling', () => {
 
     // CSS variables are resolved in the browser; in tests we assert
     // that the DataGrid container element (styled via CSS modules) is present
+    // Use CSS module class name for the data-grid container
     const dataGridContainerEl = container.querySelector(
-      '[class*="dataGridContainer"], [class*="data-grid-container"]',
+      `.${styles.dataGridContainer}`,
     );
     expect(dataGridContainerEl).toBeInTheDocument();
+    expect(dataGridContainerEl).toHaveClass(styles.dataGridContainer);
   });
 
   test('Sort controls should be rendered', async () => {
@@ -370,9 +373,7 @@ describe('Requests Component CSS Styling', () => {
     const hasDataGrid = container.querySelector('.MuiDataGrid-root');
     expect(hasDataGrid).toBeInTheDocument();
 
-    const sortElements = container.querySelectorAll(
-      '[data-testid*="sort"], button',
-    );
-    expect(sortElements.length).toBeGreaterThan(0);
+    const sortButton = await screen.findByTestId('sort');
+    expect(sortButton).toBeInTheDocument();
   });
 });
