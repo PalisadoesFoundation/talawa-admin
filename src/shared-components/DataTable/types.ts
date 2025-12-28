@@ -54,10 +54,18 @@ export interface IDataTableProps<T, TValue = unknown> {
   data: T[];
   columns: Array<IColumnDef<T, TValue>>;
   loading?: boolean;
+  /**
+   * rowKey: A property name (keyof T) or a function to uniquely identify each row.
+   * If a property name is provided, its value will be coerced to string or number.
+   */
   rowKey?: keyof T | ((row: T) => string | number);
   emptyMessage?: string;
   error?: Error | null;
   renderError?: (error: Error) => React.ReactNode;
+  /** Optional accessible label for the table, used for aria-label and caption */
+  ariaLabel?: string;
+  /** Number of skeleton rows to show when loading (default: 6) */
+  skeletonRows?: number;
 }
 
 /** Sorting state */
