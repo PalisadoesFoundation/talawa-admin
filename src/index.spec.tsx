@@ -605,7 +605,7 @@ describe('Apollo Client Configuration', () => {
     beforeEach(() => {
       vi.resetModules();
       vi.spyOn(window, 'getComputedStyle').mockReturnValue({
-        getPropertyValue: vi.fn().mockReturnValue('var(--mock-color)'),
+        getPropertyValue: vi.fn().mockReturnValue('#' + '000000'),
       } as unknown as CSSStyleDeclaration);
     });
 
@@ -725,7 +725,7 @@ describe('Apollo Client Configuration', () => {
 
       // Mock getComputedStyle for MUI theme
       vi.spyOn(window, 'getComputedStyle').mockReturnValue({
-        getPropertyValue: vi.fn().mockReturnValue('var(--mock-color)'),
+        getPropertyValue: vi.fn().mockReturnValue('#' + '000000'),
       } as unknown as CSSStyleDeclaration);
 
       // Mock document.getElementById to prevent "Root container missing" error
