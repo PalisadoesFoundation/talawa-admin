@@ -5,9 +5,6 @@
  *
  * @component
  * @param {MemberDetailProps} props - The props for the component.
- * @param {string} [props.id] - Optional user ID used to fetch profile details.
- *
- * @returns {JSX.Element} The rendered UserContactDetails component.
  *
  * @remarks
  * - Prevents invalid password updates using custom validation logic.
@@ -16,9 +13,6 @@
  * ```tsx
  * <UserContactDetails id="12345" />
  * ```
- * @dependencies
- * - `@apollo/client` for GraphQL queries and mutations
- *
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
@@ -36,6 +30,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { sanitizeInput } from './SanitizeInput';
 import {
   countryOptions,
   educationGradeEnum,
@@ -101,17 +96,22 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     }));
   }, [data]);
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const f = e.target?.files?.[0];
-    if (!f) return;
-    if (!['image/jpeg', 'image/png', 'image/gif'].includes(f.type))
+    const file = e.target?.files?.[0];
+    if (!file) return;
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (!allowedTypes.includes(file.type))
       return toast.error(t('invalidFileType'));
-    if (f.size > 5 * 1024 * 1024) return toast.error(t('fileTooLarge'));
-    setSelectedAvatar(f);
+    if (file.size > 5 * 1024 * 1024) return toast.error(t('fileTooLarge'));
+    const sanitizedFileName = file.name.replace(/[^a-z0-9.-_]/gi, '_');
+    const sanitizedFile = new File([file], sanitizedFileName, {
+      type: file.type,
+    });
+    setSelectedAvatar(sanitizedFile);
     setisUpdated(true);
   };
   const handleFieldChange = (fieldName: string, value: string) => {
     setisUpdated(true);
-    setFormState((prev) => ({ ...prev, [fieldName]: value }));
+    setFormState((prev) => ({ ...prev, [fieldName]: sanitizeInput(value) }));
   };
   const handleUserUpdate = async (): Promise<void> => {
     const removeEmptyFields = <T extends Record<string, string | File | null>>(
@@ -139,24 +139,24 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
       normalizedBirthDate = date.isValid() ? date.format('YYYY-MM-DD') : null;
     }
     const data: Omit<typeof formState, 'avatarURL' | 'emailAddress'> = {
-      addressLine1: formState.addressLine1,
-      addressLine2: formState.addressLine2,
+      addressLine1: sanitizeInput(formState.addressLine1),
+      addressLine2: sanitizeInput(formState.addressLine2),
       birthDate: normalizedBirthDate,
-      city: formState.city,
-      countryCode: formState.countryCode,
-      description: formState.description,
-      educationGrade: formState.educationGrade,
-      employmentStatus: formState.employmentStatus,
-      homePhoneNumber: formState.homePhoneNumber,
-      maritalStatus: formState.maritalStatus,
-      mobilePhoneNumber: formState.mobilePhoneNumber,
-      name: formState.name,
-      natalSex: formState.natalSex,
-      naturalLanguageCode: formState.naturalLanguageCode,
-      password: formState.password,
-      postalCode: formState.postalCode,
-      state: formState.state,
-      workPhoneNumber: formState.workPhoneNumber,
+      city: sanitizeInput(formState.city),
+      countryCode: sanitizeInput(formState.countryCode),
+      description: sanitizeInput(formState.description),
+      educationGrade: sanitizeInput(formState.educationGrade),
+      employmentStatus: sanitizeInput(formState.employmentStatus),
+      homePhoneNumber: sanitizeInput(formState.homePhoneNumber),
+      maritalStatus: sanitizeInput(formState.maritalStatus),
+      mobilePhoneNumber: sanitizeInput(formState.mobilePhoneNumber),
+      name: sanitizeInput(formState.name),
+      natalSex: sanitizeInput(formState.natalSex),
+      naturalLanguageCode: sanitizeInput(formState.naturalLanguageCode),
+      password: sanitizeInput(formState.password),
+      postalCode: sanitizeInput(formState.postalCode),
+      state: sanitizeInput(formState.state),
+      workPhoneNumber: sanitizeInput(formState.workPhoneNumber),
       avatar: selectedAvatar ? selectedAvatar : avatarFile,
     };
     const input = removeEmptyFields(data);
@@ -211,7 +211,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
                       />
                     ) : (
                       <Avatar
-                        name={formState.name.replace(/[<>]/g, '')}
+                        name={sanitizeInput(formState.name)}
                         alt={tCommon('userImage')}
                         size={60}
                         dataTestId="profile-picture"
