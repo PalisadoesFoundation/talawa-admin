@@ -240,7 +240,6 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       await props.fetchPosts();
       toast.success(t('postCard.postDeletedSuccess'));
       setDropdownAnchor(null);
-      props.fetchPosts();
     } catch (error) {
       errorHandler(t, error);
     }
