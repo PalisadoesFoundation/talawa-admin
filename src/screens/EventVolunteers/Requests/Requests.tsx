@@ -59,7 +59,7 @@ import { toast } from 'react-toastify';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
 function Requests(): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -209,7 +209,7 @@ function Requests(): JSX.Element {
     },
     {
       field: 'requestType',
-      headerName: t('requestType'),
+      headerName: t('eventVolunteers.requestType'),
       flex: 2,
       minWidth: 150,
       align: 'center',
@@ -221,7 +221,9 @@ function Requests(): JSX.Element {
         return (
           <div className="d-flex flex-column align-items-center">
             <span className="fw-bold">
-              {group ? t('groups') : t('individuals')}
+              {group
+                ? t('eventVolunteers.groups')
+                : t('eventVolunteers.individuals')}
             </span>
             {group && <small className="text-muted">{group.name}</small>}
           </div>
@@ -230,7 +232,7 @@ function Requests(): JSX.Element {
     },
     {
       field: 'requestDate',
-      headerName: t('requestDate'),
+      headerName: t('eventVolunteers.requestDate'),
       flex: 2,
       minWidth: 150,
       align: 'center',
@@ -299,8 +301,11 @@ function Requests(): JSX.Element {
               type: 'sort',
               label: tCommon('sort'),
               options: [
-                { label: t('latest'), value: 'createdAt_DESC' },
-                { label: t('earliest'), value: 'createdAt_ASC' },
+                { label: t('eventVolunteers.latest'), value: 'createdAt_DESC' },
+                {
+                  label: t('eventVolunteers.earliest'),
+                  value: 'createdAt_ASC',
+                },
               ],
               selectedOption: sortBy ?? '',
               onOptionChange: (value: string | number) =>
@@ -313,8 +318,11 @@ function Requests(): JSX.Element {
               label: tCommon('filter'),
               options: [
                 { label: tCommon('all'), value: 'all' },
-                { label: t('individuals'), value: 'individual' },
-                { label: t('groups'), value: 'group' },
+                {
+                  label: t('eventVolunteers.individuals'),
+                  value: 'individual',
+                },
+                { label: t('eventVolunteers.groups'), value: 'group' },
               ],
               selectedOption: filterBy,
               onOptionChange: (value: string | number) =>
@@ -343,7 +351,7 @@ function Requests(): JSX.Element {
         />
       ) : (
         <div className="d-flex justify-content-center align-items-center mt-5">
-          <h5>{t('noRequests')}</h5>
+          <h5>{t('eventVolunteers.noRequests')}</h5>
         </div>
       )}
     </div>
