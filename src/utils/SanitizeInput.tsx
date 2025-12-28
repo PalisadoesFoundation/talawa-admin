@@ -38,9 +38,6 @@ export const sanitizeInput = (input: string): string => {
 
     sanitized = sanitized
 
-      // Remove all HTML tags
-      .replace(/<[^>]*>/g, '')
-
       // Remove dangerous protocols
       .replace(/(?:javascript|data|vbscript|file|about):/gi, '')
 
