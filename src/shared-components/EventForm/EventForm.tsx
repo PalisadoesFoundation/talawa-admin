@@ -4,6 +4,7 @@
  *
  * @module EventForm
  */
+// translation-check-keyPrefix: organizationEvents
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';

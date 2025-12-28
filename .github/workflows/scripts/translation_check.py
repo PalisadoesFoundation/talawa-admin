@@ -83,6 +83,18 @@ def load_locale_keys(locales_dir: str | Path) -> set[str]:
 def find_translation_tags(source: str | Path) -> set[str]:
     """Find all translation tags used inside a source file or string.
 
+    Handles keyPrefix option in useTranslation calls by prefixing
+    the extracted keys with the keyPrefix value.
+
+    Supports skip directive: Add "// translation-check-skip" or
+    "/* translation-check-skip */" at the top of a file to skip
+    the entire file from translation checking.
+
+    For components that receive `t` as a prop (not using useTranslation
+    directly), add a comment like:
+    // translation-check-keyPrefix: organizationEvents
+    to specify the keyPrefix used by the parent component.
+
     Args:
         source: File path or raw source string.
 
@@ -97,12 +109,45 @@ def find_translation_tags(source: str | Path) -> set[str]:
     else:
         content = source
 
+    # Check for skip directive - skip entire file if found
+    if re.search(r"(?://|/\*)\s*translation-check-skip", content):
+        return set()
+
+    # Find keyPrefix from useTranslation calls
+    # Matches patterns like: useTranslation('translation', { keyPrefix: 'namespace' })
+    key_prefix_pattern = r"useTranslation\s*\([^)]*keyPrefix\s*:\s*['\"]([^'\"]+)['\"]"
+    key_prefixes = re.findall(key_prefix_pattern, content)
+
+    # Also check for explicit keyPrefix comment directive
+    # Matches: // translation-check-keyPrefix: namespace
+    comment_prefix_pattern = r"(?://|/\*)\s*translation-check-keyPrefix:\s*(\S+)"
+    comment_prefixes = re.findall(comment_prefix_pattern, content)
+
+    # Combine prefixes from useTranslation and comments
+    all_prefixes = key_prefixes + comment_prefixes
+
+    # Get the primary keyPrefix (if multiple, use the first one found)
+    primary_prefix = all_prefixes[0] if all_prefixes else None
+
+    # Find all t('key') calls
     tags = re.findall(
         r"(?:(?:\bi18n)\.)?\bt\(\s*['\"]([^'\" \n]+)['\"]",
         content,
     )
 
-    return {tag.split(":")[-1] for tag in tags}
+    result = set()
+    for tag in tags:
+        # Remove namespace prefix if present (e.g., "translation:key" -> "key")
+        clean_tag = tag.split(":")[-1]
+
+        # If the tag already contains a dot (full path), use it as-is
+        # Otherwise, prefix it with the keyPrefix if one exists
+        if "." in clean_tag or primary_prefix is None:
+            result.add(clean_tag)
+        else:
+            result.add(f"{primary_prefix}.{clean_tag}")
+
+    return result
 
 
 def get_target_files(

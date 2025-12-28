@@ -81,8 +81,19 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         ? formatRecurrenceForPayload(payload.recurrenceRule, payload.startDate)
         : undefined;
 
-      // Build input object, only including optional fields if they have values
-      const input: Record<string, unknown> = {
+      // Build input object with typed interface
+      const input: {
+        name: string;
+        startAt: string;
+        endAt: string;
+        organizationId: string | undefined;
+        allDay: boolean;
+        isPublic: boolean;
+        isRegisterable: boolean;
+        description?: string;
+        location?: string;
+        recurrence?: ReturnType<typeof formatRecurrenceForPayload>;
+      } = {
         name: payload.name,
         startAt: payload.startAtISO,
         endAt: payload.endAtISO,
@@ -90,18 +101,10 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         allDay: payload.allDay,
         isPublic: payload.isPublic,
         isRegisterable: payload.isRegisterable,
+        ...(payload.description && { description: payload.description }),
+        ...(payload.location && { location: payload.location }),
+        ...(recurrenceInput && { recurrence: recurrenceInput }),
       };
-
-      // Only include optional string fields if they have non-empty values
-      if (payload.description) {
-        input.description = payload.description;
-      }
-      if (payload.location) {
-        input.location = payload.location;
-      }
-      if (recurrenceInput) {
-        input.recurrence = recurrenceInput;
-      }
 
       const { data: createEventData } = await create({
         variables: { input },

@@ -103,4 +103,11 @@ export class AdminEventPage {
 
     return this;
   }
+
+  verifyEventNotInList(eventTitle: string, timeout = 40000): this {
+    // Verify the event doesn't appear in the event list
+    // Using should('not.exist') handles the case where no cards exist
+    cy.contains(this._eventCard, eventTitle, { timeout }).should('not.exist');
+    return this;
+  }
 }
