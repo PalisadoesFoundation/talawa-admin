@@ -13,9 +13,21 @@ export const sanitizeInput = (input: string): string => {
 
   // Decode HTML entities first to prevent encoded attacks
   const decodeHtmlEntities = (str: string): string => {
-    const textarea = document.createElement('textarea');
-    textarea.innerHTML = str;
-    return textarea.value;
+    const entityMap: { [key: string]: string } = {
+      '&amp;': '&',
+      '&lt;': '<',
+      '&gt;': '>',
+      '&quot;': '"',
+      '&#39;': "'",
+      '&#x27;': "'",
+      '&#x2F;': '/',
+      '&#x60;': '`',
+      '&#x3D;': '=',
+    };
+    return str.replace(
+      /&[a-zA-Z0-9#]+;/g,
+      (entity) => entityMap[entity] || entity,
+    );
   };
 
   sanitized = decodeHtmlEntities(sanitized);
@@ -26,14 +38,13 @@ export const sanitizeInput = (input: string): string => {
 
     sanitized = sanitized
       // Remove script tags and content (case-insensitive, handles whitespace/newlines)
-      .replace(/<script[\s\S]*?<\/script>/gi, '')
-      .replace(/<script[\s\S]*?>/gi, '')
+      .replace(/<script[^>]*>[\s\S]*?<\/script\s*>/gi, '')
 
       // Remove all HTML tags
       .replace(/<[^>]*>/g, '')
 
       // Remove event handlers more aggressively (handles spaces, quotes, etc.)
-      .replace(/\bon\w+\s*=\s*["']?[^"'>\s]*["']?/gi, '')
+      .replace(/\s+on\w+\s*=\s*["']?[^"'>\s]*["']?/gi, '')
 
       // Remove dangerous protocols
       .replace(/(?:javascript|data|vbscript|file|about):/gi, '')
