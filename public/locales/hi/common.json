@@ -117,7 +117,6 @@
   "to": "को",
   "loadingOrganizations": "संगठन लोड हो रहे हैं...",
   "noOrganizationsFound": "कोई संगठन नहीं मिला",
-  "title": "शीर्षक",
   "assignedTo": "सौंपा गया",
   "eventType": "कार्यक्रम प्रकार",
   "overview": "अवलोकन",
@@ -160,7 +159,7 @@
   "mobilePhoneNumber": "मोबाइल फोन नंबर",
   "personalDetailsHeading": "प्रोफ़ाइल विवरण",
   "workPhoneNumber": "कार्य फोन नंबर",
-  "postalCode": "पिन कोड"
+  "postalCode": "पिन कोड",
   "signOut": "साइन आउट",
   "signingOut": "साइन आउट हो रहा है...",
   "retryPrompt": "सेशन रद्द करना विफल रहा। पुनः प्रयास करें?",
@@ -181,7 +180,6 @@
   "emailInvalid": "ईमेल में कम से कम 8 अक्षर होने चाहिए",
   "nameInvalid": "नाम में केवल अक्षर, रिक्त स्थान और हाइफ़न होने चाहिए",
   "communityLogo": "समुदाय लोगो",
-  "organizations": "संगठन",
   "createEvent": "इवेंट बनाएं",
   "eventCreated": "इवेंट सफलतापूर्वक बनाया गया",
   "eventDetails": "इवेंट विवरण"

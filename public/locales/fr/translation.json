@@ -67,8 +67,6 @@
     "organizations": "Organisations",
     "accountLocked": "Votre compte a été temporairement verrouillé en raison de trop nombreuses tentatives de connexion échouées. Veuillez réessayer plus tard.",
     "accountLockedWithTimer": "Votre compte a été temporairement verrouillé. Veuillez réessayer dans {{minutes}} minute(s)."
-    "communityLogo": "Logo Communautaire",
-    "organizations": "Organisations"
   },
   "signOut": {
     "retryPrompt": "Échec de la révocation de la session. Réessayer ?",

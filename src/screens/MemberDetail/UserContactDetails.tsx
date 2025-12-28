@@ -30,7 +30,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { sanitizeInput } from './SanitizeInput';
+import { sanitizeInput } from '../../utils/SanitizeInput';
 import {
   countryOptions,
   educationGradeEnum,
@@ -102,7 +102,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
     if (!allowedTypes.includes(file.type))
       return toast.error(t('invalidFileType'));
     if (file.size > 5 * 1024 * 1024) return toast.error(t('fileTooLarge'));
-    const sanitizedFileName = file.name.replace(/[^a-z0-9.-_]/gi, '_');
+    const sanitizedFileName = file.name.replace(/[^a-z0-9._-]/gi, '_');
     const sanitizedFile = new File([file], sanitizedFileName, {
       type: file.type,
     });

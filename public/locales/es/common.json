@@ -160,11 +160,10 @@
   "mobilePhoneNumber": "Número de teléfono móvil",
   "personalDetailsHeading": "Detalles del perfil",
   "workPhoneNumber": "Número de teléfono del trabajo",
-  "postalCode": "Código postal"
+  "postalCode": "Código postal",
   "signOut": "Cerrar sesión",
   "signingOut": "Cerrando sesión...",
   "retryPrompt": "Error al cerrar sesión. ¿Reintentar?",
-  "title": "Talawa Admin",
   "fromPalisadoes": "Una aplicación de código abierto por voluntarios de la Fundación Palisadoes",
   "userLogin": "Inicio de sesión de usuario",
   "adminLogin": "Inicio de sesión de administrador",
@@ -181,7 +180,6 @@
   "emailInvalid": "Por favor, introduce una dirección de correo electrónico válida",
   "nameInvalid": "El nombre solo debe contener letras, espacios y guiones",
   "communityLogo": "Logo de la comunidad",
-  "organizations": "Organizaciones",
   "createEvent": "Crear Evento",
   "eventCreated": "Evento creado exitosamente",
   "eventDetails": "Detalles del Evento"
