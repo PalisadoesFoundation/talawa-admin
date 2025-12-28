@@ -9,7 +9,14 @@
     "weekly": "Esta Semana",
     "monthly": "Este Mes",
     "yearly": "Este Año",
-    "noVolunteers": "¡No Se Encontraron Voluntarios!"
+    "noVolunteers": "¡No Se Encontraron Voluntarios!",
+    "goldMedal": "oro",
+    "silverMedal": "plata",
+    "bronzeMedal": "bronce",
+    "rank": "Rango",
+    "volunteer": "Voluntario",
+    "email": "Correo electrónico",
+    "hoursVolunteered": "Horas Voluntarias"
   },
   "loginPage": {
     "title": "Administrador Talawa",
@@ -23,13 +30,13 @@
     "lastName": "Apellido",
     "email": "Correo electrónico",
     "password": "Clave",
-    "atleast_8_char_long": "Al menos 8 caracteres de largo",
-    "atleast_6_char_long": "Al menos 6 caracteres de largo",
+    "atleastEightCharLong": "Al menos 8 caracteres de largo",
+    "atleastSixCharLong": "Al menos 6 caracteres de largo",
     "firstName_invalid": "El nombre debe contener solo letras minúsculas y mayúsculas.",
     "lastName_invalid": "El apellido debe contener solo letras minúsculas y mayúsculas.",
-    "password_invalid": "La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un valor numérico y un carácter especial.",
-    "email_invalid": "El correo electrónico debe tener al menos 8 caracteres.",
-    "Password_and_Confirm_password_mismatches.": "Contraseña y Confirmar contraseña no coinciden.",
+    "nameInvalid": "El nombre solo debe contener letras, espacios y guiones.",
+    "passwordInvalid": "La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un valor numérico y un carácter especial.",
+    "emailInvalid": "Por favor, introduce una dirección de correo electrónico válida",
     "confirmPassword": "Confirmar contraseña",
     "forgotPassword": "Has olvidado tu contraseña ?",
     "enterEmail": "ingrese correo electrónico",
@@ -47,13 +54,20 @@
     "OR": "O",
     "admin": "ADMINISTRACIÓN",
     "user": "USUARIO",
-    "lowercase_check": "Al menos una letra mayuscula",
-    "uppercase_check": "Al menos una letra minúscula",
-    "numeric_value_check": "Al menos un valor numérico",
-    "special_char_check": "Al menos un carácter especial",
+    "lowercaseCheck": "Al menos una letra minúscula",
+    "uppercaseCheck": "Al menos una letra mayúscula",
+    "numericValueCheck": "Al menos un valor numérico",
+    "specialCharCheck": "Al menos un carácter especial",
     "loading": "Cargando...",
     "selectOrg": "Seleccione una organización",
-    "afterRegister": "Registro exitoso. Por favor, espere a que el administrador apruebe su solicitud."
+    "afterRegister": "Registro exitoso. Por favor, espere a que el administrador apruebe su solicitud.",
+    "communityLogo": "Logo de la comunidad",
+    "organizations": "Organizaciones"
+  },
+  "signOut": {
+    "retryPrompt": "Error al Cerrar sesión. ¿Reintentar?",
+    "signingOut": "Cerrando sesión...",
+    "signOut": "Cerrar sesión"
   },
   "userLoginPage": {
     "title": "Administrador Talawa",
@@ -65,8 +79,7 @@
     "lastName": "Apellido",
     "email": "Correo electrónico",
     "password": "Clave",
-    "atleast_8_char_long": "Al menos 8 caracteres de largo",
-    "Password_and_Confirm_password_mismatches.": "Contraseña y Confirmar contraseña no coinciden.",
+    "atleastEightCharLong": "Al menos 8 caracteres de largo",
     "confirmPassword": "Confirmar contraseña",
     "forgotPassword": "Has olvidado tu contraseña ?",
     "enterEmail": "ingrese correo electrónico",
@@ -140,7 +153,12 @@
     "close": "Cerrar"
   },
   "notification": {
-    "title": "Notificaciones"
+    "title": "Notificaciones",
+    "allCaughtUp": "¡Estás al día!",
+    "prev": "Anterior",
+    "next": "Siguiente",
+    "markAsRead": "Marcar como leído",
+    "markAsReadAriaLabel": "Marcar notificación '{{title}}' como leída"
   },
   "orgList": {
     "title": "Organizaciones Talawa",
@@ -204,20 +222,28 @@
     "accept": "Aceptar",
     "reject": "Rechazar",
     "searchRequests": "Buscar solicitudes",
-    "endOfResults": "Fin de los resultados",
     "noOrgError": "Organizaciones no encontradas, por favor crea una organización a través del panel",
-    "noResultsFoundFor": "No se encontraron resultados para ",
     "noRequestsFound": "No se encontraron solicitudes",
     "acceptedSuccessfully": "Solicitud aceptada exitosamente",
     "rejectedSuccessfully": "Solicitud rechazada exitosamente",
     "noOrgErrorTitle": "Organizaciones no encontradas",
-    "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control"
+    "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
+    "profilePictureAlt": "Imagen de perfil de {{name}}",
+    "placeholderAvatarAlt": "Avatar predeterminado"
   },
   "users": {
+    "membershipStatus": {
+      "member": "Estado de membresía: Miembro",
+      "pending": "Estado de membresía: Pendiente",
+      "notMember": "Estado de membresía: No es miembro"
+    },
     "title": "Roles Talawa",
     "searchByName": "Buscar por nombre",
     "users": "Usuarios",
     "name": "Nombre",
+    "member": "Miembro",
+    "pending": "Pendiente",
+    "notMember": "No es miembro",
     "email": "Correo electrónico",
     "joined_organizations": "Organizaciones unidas",
     "blocked_organizations": "Organizaciones bloqueadas",
@@ -234,9 +260,12 @@
     "enterName": "Ingrese su nombre",
     "loadingUsers": "Cargando usuarios ...",
     "noUserFound": "No se encontró ningún usuario.",
+    "errorLoadingUsers": "Se produjo un error al cargar los usuarios",
     "sort": "Ordenar",
     "Oldest": "Más Antiguas Primero",
     "Newest": "Más Recientes Primero",
+    "sortBy": "Ordenar por",
+    "filterByRole": "Filtrar por rol",
     "filter": "Filtrar",
     "roleUpdated": "Rol actualizado.",
     "noResultsFoundFor": "No se encontraron resultados para ",
@@ -250,7 +279,10 @@
     "orgJoined": "Unido a la organización exitosamente",
     "MembershipRequestSent": "Solicitud de membresía enviada exitosamente",
     "AlreadyJoined": "Ya eres miembro de esta organización.",
-    "errorOccured": "Se produjo un error. Por favor, inténtalo de nuevo más tarde.",
+    "errorOccurred": "Se produjo un error. Por favor, inténtalo de nuevo más tarde.",
+    "UserIdNotFound": "ID de usuario no encontrada",
+    "MembershipRequestNotFound": "Solicitud de membresía no encontrada",
+    "MembershipRequestWithdrawn": "Solicitud de membresía retirada exitosamente",
     "removeUserFrom": "Eliminar Usuario de {{org}}",
     "unblockUserFrom": "¿Desbloquear al usuario de {{org}}?",
     "unblockConfirmation": "¿Estás seguro de que deseas desbloquear a {{name}} de {{org}}?",
@@ -308,7 +340,6 @@
     "searchLastName": "Introduzca el apellido",
     "people": "Personas",
     "sort": "Ordenar por Rol",
-    "actions": "Acciones",
     "existingUser": "Usuario existente",
     "newUser": "Nuevo usuario",
     "firstName": "Nombre de pila",
@@ -328,8 +359,22 @@
     "addMembers": "Agregar miembros",
     "searchFullName": "Ingrese el nombre completo",
     "user": "Usuario",
+    "actions": "Acciones",
     "profile": "Perfil",
+    "notFound": "No se encontraron miembros",
     "createUser": "Crear usuario"
+  },
+  "organizationCard": {
+    "join": "Unirse",
+    "withdraw": "Retirar",
+    "visit": "Visitar",
+    "manage": "Administrar",
+    "admins": "Administradores",
+    "members": "Miembros",
+    "join_success": "Solicitud de membresía enviada correctamente",
+    "withdraw_success": "Solicitud de membresía retirada correctamente",
+    "join_error": "No se pudo enviar la solicitud de membresía",
+    "withdraw_error": "No se pudo retirar la solicitud de membresía"
   },
   "organizationTags": {
     "title": "Etiquetas de Organización",
@@ -348,7 +393,12 @@
     "removeUserTag": "Eliminar Etiqueta",
     "removeUserTagMessage": "¿Desea eliminar esta etiqueta?",
     "addChildTag": "Agregar una Sub Etiqueta",
-    "enterTagName": "Ingrese el nombre de la etiqueta"
+    "enterTagName": "Ingrese el nombre de la etiqueta",
+    "totalSubTags": "Total de sub-etiquetas",
+    "totalAssignedUsers": "Total de usuarios asignados",
+    "tagCreationFailed": "Error al crear la etiqueta",
+    "errorLoadingTagsData": "Se produjo un error al cargar los datos de las etiquetas de la organización",
+    "sortTags": "Ordenar Etiquetas"
   },
   "manageTag": {
     "title": "Detalles de la Etiqueta",
@@ -356,6 +406,8 @@
     "viewProfile": "Ver",
     "noAssignedMembersFound": "Ningún miembro asignado",
     "unassignUserTag": "Desasignar Etiqueta",
+    "unassignUserTagError": "Error al desasignar la etiqueta del usuario",
+    "removeUserTagError": "Error al eliminar la etiqueta del usuario",
     "unassignUserTagMessage": "¿Desea eliminar la etiqueta de este usuario?",
     "successfullyUnassigned": "Etiqueta desasignada del usuario",
     "addPeople": "Agregar Personas",
@@ -433,12 +485,16 @@
     "endTime": "Hora de finalización",
     "allDay": "Todo el dia",
     "recurringEvent": "Evento recurrente",
+    "recurring": "Recurrente",
     "isPublic": "Es público",
+    "publicEvent": "Es público",
     "isRegistrable": "Es registrable",
+    "registerable": "Es registrable",
     "createEvent": "Crear evento",
     "enterFilter": "Introducir filtro",
     "enterName": "Introducir nombre",
     "enterDescrip": "Introduce la descripción",
+    "enterDescription": "Introduce la descripción",
     "eventLocation": "Introducir ubicación",
     "eventCreated": "¡Felicidades! Se crea el Evento.",
     "eventType": "Tipo de evento",
@@ -455,6 +511,17 @@
     "monthlyOn": "Mensual en",
     "yearlyOn": "Anual en",
     "yearlyRecurrenceDesc": "Este evento se repetirá cada año en la misma fecha que la fecha de inicio del evento.",
+    "doesNotRepeat": "No se repite",
+    "daily": "Diariamente",
+    "weeklyOn": "Semanal los {{day}}",
+    "monthlyOnDay": "Mensual el día {{day}}",
+    "annuallyOn": "Anual el {{day}} de {{month}}",
+    "everyWeekday": "Cada día laborable (lun–vie)",
+    "custom": "Personalizado…",
+    "day": "Día",
+    "week": "Semana",
+    "month": "Mes",
+    "year": "Año",
     "done": "Hecho",
     "createChat": "Crear chat"
   },
@@ -600,6 +667,7 @@
     "no": "No",
     "yes": "Sí",
     "editEvent": "Editar evento",
+    "showEventDashboard": "Mostrar Panel de Evento",
     "updateEvent": "Actualizar evento",
     "updateRecurringEventMsg": "Este es un evento recurrente. Elige cómo quieres actualizarlo:",
     "updateThisInstance": "Actualizar solo esta instancia",
@@ -659,7 +727,10 @@
     "deleteFundMsg": "¿Está seguro de que desea eliminar este fondo?",
     "createdLatest": "Creado más reciente",
     "createdEarliest": "Creado más temprano",
-    "viewCampaigns": "Ver campañas"
+    "viewCampaigns": "Ver campañas",
+    "assocCampaigns": "Campañas asociadas",
+    "errorLoadingFundsData": "Error al cargar los datos de fondos",
+    "editFund": "Editar fondo"
   },
   "fundCampaign": {
     "title": "Campañas de recaudación de fondos",
@@ -705,6 +776,7 @@
     "deletePledgeMsg": "¿Estás seguro de que quieres eliminar este compromiso?",
     "noPledges": "No se encontraron compromisos",
     "searchPledger": "Buscar por compromisos",
+    "pledgers": "Prometedores",
     "highestAmount": "Cantidad más alta",
     "lowestAmount": "Cantidad más baja",
     "latestEndDate": "Fecha de finalización más reciente",
@@ -713,17 +785,31 @@
     "pledges": "Compromisos",
     "endsOn": "Finaliza el",
     "raisedAmount": "Monto recaudado",
-    "pledgedAmount": "Monto comprometido"
+    "pledgedAmount": "Monto comprometido",
+    "searchByPlaceholder": "Buscar por {{field}}",
+    "selectPledger": "Por favor seleccione un prometedor",
+    "moreUsers": "+{{count}} más...",
+    "togglePledgedRaised": "Alternar entre montos Comprometidos y Recaudados",
+    "pledgeDate": "Fecha de Compromiso",
+    "pledged": "Comprometido",
+    "donated": "Donado"
   },
-  "orgPost": {
+  "createPostModal": {
     "title": "Publicaciones de Talawa",
+    "titleOfPost": "Título de tu publicación...",
+    "closeCreatePost": "Cerrar Crear Publicación",
+    "close": "Cerca",
+    "selectedImage": "Imagen seleccionada",
+    "bodyOfPost": "Contenido de tu publicación...",
+    "post": "Publicación",
+    "saveChanges": "Guardar Cambios",
+    "addAttachment": "Agregar archivo adjunto",
     "searchPost": "Buscar Publicación",
     "posts": "Publicaciones",
     "createPost": "Crear Publicación",
     "postDetails": "Detalles de la Publicación",
     "postTitle1": "Escribir título de la publicación",
     "postTitle": "Título",
-    "addMedia": "Subir foto o video",
     "information": "Información",
     "information1": "Escribir información de la publicación",
     "addPost": "Agregar Publicación",
@@ -740,7 +826,12 @@
     "sortPost": "Ordenar Publicaciones",
     "tag": "Su navegador no admite la etiqueta de video",
     "postCreatedSuccess": "¡Felicidades! Has publicado algo.",
+    "postUpdatedSuccess": "Publicación actualizada exitosamente",
     "pinPost": "Fijar publicación",
+    "unpinPost": "Desfijar publicación",
+    "postToAnyone": "Publicar a cualquiera",
+    "editPost": "Editar Publicación",
+    "unsupportedFileType": "Tipo de archivo no compatible",
     "Next": "Siguiente página",
     "Previous": "Página anterior",
     "messageTitleError": "¡El título de la publicación no puede estar vacío!",
@@ -765,9 +856,14 @@
     "admin not found!": "Administrador no encontrado!",
     "roles not found!": "roles no encontrados!"
   },
+  "orgPost": {
+    "title": "Organization Posts"
+  },
   "orgPostCard": {
     "author": "Autor",
     "imageURL": "URL de la Imagen",
+    "untitledPost": "Publicación sin título",
+    "noContentAvailable": "No hay contenido disponible",
     "videoURL": "URL del Video",
     "edit": "Editar Publicación",
     "deletePost": "Eliminar Publicación",
@@ -808,7 +904,8 @@
     "searchByFirstName": "Buscar por nombre de pila",
     "searchByLastName": "Buscar por apellido",
     "noResultsFoundFor": "No se encontraron resultados para ",
-    "noSpammerFound": "No se encontró ningún spammer"
+    "noSpammerFound": "No se encontró ningún spammer",
+    "noUsersFound": "No se encontraron usuarios"
   },
   "eventManagement": {
     "name": "Gestión de eventos",
@@ -1016,7 +1113,13 @@
   "people": {
     "title": "Gente",
     "searchUsers": "Buscar usuarios",
-    "nothingToShow": "Nada que mostrar aquí."
+    "nothingToShow": "Nada que mostrar aquí.",
+    "sNo": "N.º",
+    "avatar": "Avatar",
+    "name": "Nombre",
+    "email": "Correo Electrónico",
+    "role": "Rol",
+    "loading": "Cargando..."
   },
   "userRegister": {
     "register": "Registro",
@@ -1047,7 +1150,8 @@
     "settings": "Ajustes",
     "language": "Idioma",
     "logout": "Cerrar sesión",
-    "close": "Cerca"
+    "close": "Cerrar",
+    "talawaBranding": "Marca Talawa"
   },
   "userOrganizations": {
     "allOrganizations": "Todas las organizaciones",
@@ -1060,7 +1164,8 @@
     "organizations": "Organizaciones",
     "searchByName": "Buscar por nombre",
     "searchUsers": "Buscar usuarios",
-    "searchOrganizations": "Buscar Organizaciones"
+    "searchOrganizations": "Buscar Organizaciones",
+    "loading": "Cargando..."
   },
   "userSidebarOrg": {
     "yourOrganizations": "Tus Organizaciones",
@@ -1086,9 +1191,11 @@
   "postCard": {
     "likes": "Gustos",
     "comments": "Comentarios",
+    "view": "Ver",
     "postDeletedSuccess": "Publicación eliminada con éxito.",
     "postPinnedSuccess": "Publicación fijada con éxito.",
     "postUnpinnedSuccess": "Publicación desfijada con éxito.",
+    "postUpdatedSuccess": "Publicación actualizada con éxito.",
     "addComment": "Agregar comentario",
     "viewPost": "Ver publicación",
     "editPost": "Editar publicación",
@@ -1101,7 +1208,28 @@
     "noMoreComments": "No hay más comentarios",
     "postedOn": "Publicado el {{date}}",
     "emptyCommentError": "Por favor ingrese un comentario antes de enviarlo.",
-    "unexpectedError": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo."
+    "unexpectedError": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo.",
+    "moreOptions": "Más opciones"
+  },
+  "posts": {
+    "pinnedPosts": "Publicaciones fijadas",
+    "title": "Publicaciones",
+    "latest": "El Más Reciente",
+    "oldest": "El Más Antiguo",
+    "none": "Ninguno",
+    "unknownUser": "Usuario desconocido",
+    "closePinnedPost": "Cerrar publicación fijada",
+    "searchPosts": "Buscar publicaciones",
+    "nothingToShow": "Nada que mostrar aquí.",
+    "noPosts": "No hay publicaciones para mostrar.",
+    "noMorePosts": "No hay más publicaciones para cargar.",
+    "createPost": "Crear publicación",
+    "searchTitle": "Buscar por Título",
+    "noPostsFoundMatching": "No se encontraron publicaciones que coincidan con {{term}}",
+    "pinnedPostsLoadError": "Error al cargar publicaciones fijadas. Por favor, inténtelo de nuevo más tarde.",
+    "errorLoadingPosts": "Error al cargar publicaciones. Por favor, inténtelo de nuevo más tarde.",
+    "loadMorePostsError": "Error al cargar más publicaciones. Por favor, inténtelo de nuevo más tarde.",
+    "sortPost": "Ordenar Publicaciones"
   },
   "home": {
     "posts": "Publicaciones",
@@ -1119,7 +1247,8 @@
     "media": "Medios",
     "event": "Evento",
     "article": "Artículo",
-    "postNowVisibleInFeed": "Publicar ahora visible en el feed"
+    "postNowVisibleInFeed": "Publicar ahora visible en el feed",
+    "processingPost": "Procesando tu publicación. Por favor espera."
   },
   "eventAttendance": {
     "historical_statistics": "Estadísticas históricas",
@@ -1131,7 +1260,18 @@
     "Member": "Miembro",
     "Admin": "Administrador",
     "loading": "Cargando...",
-    "noAttendees": "No se encontraron asistentes"
+    "noAttendees": "No se encontraron asistentes",
+    "attendeeCount": "Número de asistentes",
+    "maleAttendees": "Asistentes masculinos",
+    "femaleAttendees": "Asistentes femeninas",
+    "otherAttendees": "Otros asistentes",
+    "currentEvent": "Evento actual",
+    "chartPageNavigation": "Navegación de página del gráfico",
+    "previousPage": "Página anterior",
+    "nextPage": "Página siguiente",
+    "goToToday": "Ir a hoy",
+    "genderDistribution": "Distribución por género",
+    "ageDistribution": "Distribución por edad"
   },
   "eventRegistrant": {
     "sort": "Ordenar",
@@ -1276,6 +1416,7 @@
     "errorLoadingTransactions": "Error al cargar transacciones"
   },
   "userEvents": {
+    "title": "Eventos",
     "name": "Eventos",
     "nothingToShow": "No hay nada que mostrar aquí.",
     "search": "Buscar",
@@ -1302,7 +1443,18 @@
     "registerable": "Es registrable",
     "monthlyCalendarView": "Calendario mensual",
     "yearlyCalendarView": "Calendario anual",
-    "createChat": "Crear chat"
+    "createChat": "Crear chat",
+    "doesNotRepeat": "No se repite",
+    "daily": "Diariamente",
+    "weeklyOn": "Semanal los {{day}}",
+    "monthlyOnDay": "Mensual el día {{day}}",
+    "annuallyOn": "Anual el {{day}} de {{month}}",
+    "everyWeekday": "Cada día laborable (lun–vie)",
+    "custom": "Personalizado…",
+    "day": "Día",
+    "week": "Semana",
+    "month": "Mes",
+    "year": "Año"
   },
   "userEventCard": {
     "location": "Ubicación",
@@ -1350,17 +1502,36 @@
   },
   "userChat": {
     "title": "Chats",
+    "deleteChat": "Eliminar Chat",
     "add": "Agregar",
     "chat": "Charlar",
     "search": "Buscar",
-    "contacts": "Contactos",
     "messages": "Mensajes",
+    "contacts": "Contactos",
     "create": "crear",
     "newChat": "nueva charla",
     "newGroupChat": "Nuevo chat grupal",
     "groupInfo": "Información del grupo",
     "members": "Miembros",
-    "addMembers": "Add Members"
+    "addMembers": "Agregar miembros",
+    "userNotFound": "Usuario no encontrado",
+    "roleUpdatedSuccessfully": "Rol actualizado exitosamente",
+    "failedToUpdateRole": "Error al actualizar el rol",
+    "memberRemovedSuccessfully": "Miembro eliminado exitosamente",
+    "failedToRemoveMember": "Error al eliminar miembro",
+    "chatImageUpdatedSuccessfully": "Imagen del chat actualizada exitosamente",
+    "failedToUpdateChatImage": "Error al actualizar la imagen del chat",
+    "chatDeletedSuccessfully": "Chat eliminado exitosamente",
+    "failedToDeleteChat": "Error al eliminar el chat",
+    "chatNameUpdatedSuccessfully": "Nombre del chat actualizado exitosamente",
+    "failedToUpdateChatName": "Error al actualizar el nombre del chat",
+    "remove": "Eliminar",
+    "searchFullName": "Buscar por nombre completo",
+    "customizedTable": "Tabla personalizada",
+    "demoteToRegular": "Degradar a regular",
+    "promoteToAdmin": "Promover a administrador",
+    "user": "Usuario",
+    "chatAction": "Acción del chat"
   },
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",
@@ -1482,8 +1653,14 @@
     "title": "Campañas de recaudación de fondos",
     "searchByName": "Buscar por nombre...",
     "searchBy": "Buscar por",
-    "pledgers": "Contribuyentes",
+    "pledgers": "Prometedores",
+    "pledger": "Prometedor",
     "campaigns": "Campañas",
+    "associatedCampaign": "Campaña asociada",
+    "pledged": "Prometido",
+    "donated": "Donado",
+    "progress": "Progreso",
+    "more": "más",
     "myPledges": "Mis Promesas",
     "lowestAmount": "Monto más bajo",
     "highestAmount": "Monto más alto",
@@ -1494,7 +1671,9 @@
     "addPledge": "Añadir Promesa",
     "viewPledges": "Ver Promesas",
     "noPledges": "No se encontraron promesas",
-    "noCampaigns": "No se encontraron campañas"
+    "noCampaigns": "No se encontraron campañas",
+    "raised": "Recaudado",
+    "amountRaised": "Monto Recaudado"
   },
   "userPledges": {
     "title": "Mis Promesas"
@@ -1503,6 +1682,7 @@
     "title": "Dejar la organización"
   },
   "eventVolunteers": {
+    "toggleGroupAriaLabel": "Selector de vista de voluntarios",
     "volunteers": "Voluntarios",
     "volunteer": "Voluntario",
     "volunteerGroups": "Grupos de Voluntarios",
@@ -1583,7 +1763,21 @@
     "eventInvitationRecurringSubject": "Invitación a ser voluntario para serie de eventos recurrentes",
     "pending": "Pendiente",
     "accepted": "Aceptado",
-    "rejected": "Rechazado"
+    "rejected": "Rechazado",
+    "assignee": "Asignado",
+    "group": "Grupo",
+    "event": "Evento",
+    "received": "Recibido",
+    "location": "Ubicación",
+    "recurrence": "Recurrencia",
+    "endDate": "Fecha de Fin",
+    "description": "Descripción",
+    "volunteerGroups": "Grupos de Voluntarios",
+    "groupTable": "Tabla de Grupos",
+    "srNo": "N.º",
+    "groupName": "Nombre del Grupo",
+    "noOfMembers": "Número de Miembros",
+    "options": "Opciones"
   },
   "pluginStore": {
     "title": "Tienda de Plugins",
@@ -1605,6 +1799,8 @@
     "noPluginsAvailable": "No hay plugins disponibles",
     "installPluginsToSeeHere": "Instala plugins para verlos aquí",
     "checkBackLater": "Vuelve más tarde para nuevos plugins",
+    "tryDifferentSearch": "Prueba con un término de búsqueda diferente o explora todos los plugins",
+    "explorePluginStore": "Explora la tienda de plugins para descubrir nuevos plugins",
     "noResultsFoundFor": "No se encontraron resultados para"
   },
   "commentCard": {
@@ -1618,5 +1814,17 @@
     "deleteComment": "Eliminar comentario",
     "deleting": "Eliminando...",
     "emptyCommentError": "Por favor ingrese un comentario antes de enviar."
+  },
+  "profileAvatar": {
+    "altText": "Foto de perfil de {{name}}",
+    "modalTitle": "Foto de perfil",
+    "enlargedAltText": "Foto de perfil ampliada de {{name}}"
+  },
+  "common": {
+    "signOut": "Cerrar sesión",
+    "signingOut": "Cerrando sesión...",
+    "retryPrompt": "Error al revocar la sesión. ¿Reintentar?",
+    "breadcrumb": "miga de pan",
+    "action": "Acción"
   }
 }

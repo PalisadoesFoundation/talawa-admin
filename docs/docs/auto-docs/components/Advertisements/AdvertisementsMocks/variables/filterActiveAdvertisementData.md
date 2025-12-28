@@ -6,4 +6,4 @@
 
 > `const` **filterActiveAdvertisementData**: `IAdvertisementListMock`[]
 
-Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:386](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L386)
+Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:425](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L425)

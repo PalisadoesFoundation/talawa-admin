@@ -9,7 +9,6 @@ import Modal from 'react-bootstrap/Modal';
 import {
   FaPowerOff,
   FaTrash,
-  FaSpinner,
   FaChevronLeft,
   FaChevronRight,
 } from 'react-icons/fa';
@@ -17,6 +16,7 @@ import { AdminPluginFileService } from '../../plugin/services/AdminPluginFileSer
 import type { IPluginDetails, IPluginModalProps } from 'plugin';
 import styles from './PluginModal.module.css';
 import { useInstallTimer } from './hooks/useInstallTimer';
+import LoadingState from '../../shared-components/LoadingState/LoadingState';
 
 const TABS = ['Details', 'Features', 'Changelog'] as const;
 type TabType = (typeof TABS)[number];
@@ -181,89 +181,64 @@ const PluginModal: React.FC<IPluginModalProps> = ({
           <div className={styles.actionButtons}>
             {plugin && isInstalled(plugin.name) && meta && (
               <>
-                <Button
-                  variant={
-                    getInstalledPlugin(plugin.name)?.status === 'active'
-                      ? 'light'
-                      : 'primary'
-                  }
-                  className={`w-100 mb-2 d-flex align-items-center justify-content-center gap-2 ${
-                    getInstalledPlugin(plugin.name)?.status === 'active'
-                      ? styles.actionButtonLight
-                      : styles.actionButton
-                  }`}
-                  onClick={() =>
-                    togglePluginStatus(
-                      meta,
+                <LoadingState isLoading={loading} variant="inline">
+                  <Button
+                    variant={
                       getInstalledPlugin(plugin.name)?.status === 'active'
-                        ? 'inactive'
-                        : 'active',
-                    )
-                  }
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <FaSpinner className="animate-spin" />
-                  ) : (
+                        ? 'light'
+                        : 'primary'
+                    }
+                    className={`w-100 mb-2 d-flex align-items-center justify-content-center gap-2 ${
+                      getInstalledPlugin(plugin.name)?.status === 'active'
+                        ? styles.actionButtonLight
+                        : styles.actionButton
+                    }`}
+                    onClick={() =>
+                      togglePluginStatus(
+                        meta,
+                        getInstalledPlugin(plugin.name)?.status === 'active'
+                          ? 'inactive'
+                          : 'active',
+                      )
+                    }
+                  >
                     <FaPowerOff
-                      style={{
-                        fontSize: '14px',
-                        color:
-                          getInstalledPlugin(plugin.name)?.status === 'active'
-                            ? '#6c757d'
-                            : '#fff',
-                      }}
+                      className={
+                        getInstalledPlugin(plugin.name)?.status === 'active'
+                          ? styles.iconPowerOffActive
+                          : styles.iconPowerOffInactive
+                      }
                     />
-                  )}
-                  {getInstalledPlugin(plugin.name)?.status === 'active'
-                    ? 'Deactivate'
-                    : 'Activate'}
-                </Button>
-                <Button
-                  variant="light"
-                  className={`w-100 d-flex align-items-center justify-content-center gap-2 ${styles.actionButtonDanger}`}
-                  onClick={() => uninstallPlugin(meta)}
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <FaSpinner className="animate-spin" />
-                  ) : (
-                    <FaTrash style={{ fontSize: '14px' }} />
-                  )}
-                  Uninstall
-                </Button>
+                    {getInstalledPlugin(plugin.name)?.status === 'active'
+                      ? 'Deactivate'
+                      : 'Activate'}
+                  </Button>
+                </LoadingState>
+                <LoadingState isLoading={loading} variant="inline">
+                  <Button
+                    variant="light"
+                    className={`w-100 d-flex align-items-center justify-content-center gap-2 ${styles.actionButtonDanger}`}
+                    onClick={() => uninstallPlugin(meta)}
+                  >
+                    <FaTrash className={styles.iconTrash} />
+                    Uninstall
+                  </Button>
+                </LoadingState>
               </>
             )}
             {plugin && !isInstalled(plugin.name) && meta && (
               <>
-                <Button
-                  variant="primary"
-                  className="w-100 d-flex align-items-center justify-content-center gap-2"
-                  onClick={() => installPlugin(meta)}
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <>
-                      <FaSpinner className="animate-spin" />
-                      Installing{installElapsed ? ` (${installElapsed})` : ''}
-                    </>
-                  ) : (
-                    'Install'
-                  )}
-                </Button>
-                <Button
-                  variant="light"
-                  className={`w-100 d-flex align-items-center justify-content-center gap-2 ${styles.actionButtonDanger}`}
-                  onClick={() => uninstallPlugin(meta)}
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <FaSpinner className="animate-spin" />
-                  ) : (
-                    <FaTrash style={{ fontSize: '14px' }} />
-                  )}
-                  Uninstall
-                </Button>
+                <LoadingState isLoading={loading} variant="inline">
+                  <Button
+                    variant="primary"
+                    className="w-100 d-flex align-items-center justify-content-center gap-2"
+                    onClick={() => installPlugin(meta)}
+                  >
+                    {loading
+                      ? `Installing${installElapsed ? ` (${installElapsed})` : ''}`
+                      : 'Install'}
+                  </Button>
+                </LoadingState>
               </>
             )}
           </div>

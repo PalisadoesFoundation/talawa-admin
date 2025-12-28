@@ -13,32 +13,33 @@ import type { MockedResponse } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import OrganizationDashboard from './OrganizationDashboard';
+import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './OrganizationDashboardMocks';
+import { MOCKS_ORG2 } from './OrganizationDashboardSecondaryMocks';
 import {
-  MOCKS,
-  EMPTY_MOCKS,
-  ERROR_MOCKS,
-  MIXED_REQUESTS_MOCK,
-} from './OrganizationDashboardMocks';
-import {
-  MEMBERSHIP_REQUEST,
+  MEMBERSHIP_REQUEST_PG,
   GET_ORGANIZATION_BLOCKED_USERS_PG,
 } from 'GraphQl/Queries/Queries';
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-    tCommon: (key: string) => key,
-    tErrors: (key: string) => key,
-  }),
-}));
+vi.mock('react-i18next', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-i18next')>();
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+    }),
+  };
+});
 
 const { routerMocks, toastMocks } = vi.hoisted(() => ({
   routerMocks: {
     navigate: vi.fn(),
+    params: { orgId: 'orgId' },
   },
   toastMocks: {
     error: vi.fn(),
     success: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
   },
 }));
 
@@ -47,22 +48,28 @@ vi.mock('react-router', async () => {
   return {
     ...actual,
     useNavigate: () => routerMocks.navigate,
+    useParams: () => routerMocks.params,
   };
 });
 
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: toastMocks,
 }));
 
 interface InterfaceRenderOptions {
   mocks: MockedResponse[];
   initialRoute?: string;
+  initialParams?: { orgId: string };
 }
 
 function renderWithProviders({
   mocks,
   initialRoute = '/orgdash/orgId',
+  initialParams,
 }: InterfaceRenderOptions): RenderResult {
+  if (initialParams) {
+    routerMocks.params = initialParams;
+  }
   return render(
     <MockedProvider mocks={mocks}>
       <MemoryRouter initialEntries={[initialRoute]}>
@@ -80,11 +87,14 @@ describe('OrganizationDashboard', () => {
     routerMocks.navigate.mockReset();
     toastMocks.error.mockReset();
     toastMocks.success.mockReset();
+    routerMocks.params = { orgId: 'orgId' };
   });
 
   afterEach(() => {
     vi.restoreAllMocks();
+    routerMocks.params = { orgId: 'orgId' };
   });
+  // ... existing tests ...
 
   it('navigates to requests page when clicking on membership requests card', async () => {
     renderWithProviders({ mocks: MOCKS });
@@ -194,6 +204,7 @@ describe('OrganizationDashboard', () => {
   });
 
   it('redirects to "/" when orgId is missing from URL params', () => {
+    routerMocks.params = { orgId: '' };
     render(
       <MockedProvider mocks={MOCKS}>
         <MemoryRouter initialEntries={['/orgdash/']}>
@@ -212,6 +223,7 @@ describe('OrganizationDashboard', () => {
   });
 
   it('redirects to "/" when orgId is undefined', () => {
+    routerMocks.params = { orgId: '' };
     render(
       <MockedProvider mocks={MOCKS}>
         <MemoryRouter initialEntries={['/orgdash']}>
@@ -303,7 +315,7 @@ describe('OrganizationDashboard', () => {
 
   it('renders membership requests section with proper states', async () => {
     const LOADING_MOCKS = MOCKS.map((mock) =>
-      mock.request.query === MEMBERSHIP_REQUEST
+      mock.request.query === MEMBERSHIP_REQUEST_PG
         ? { ...mock, delay: 500 }
         : mock,
     );
@@ -316,7 +328,7 @@ describe('OrganizationDashboard', () => {
     });
 
     const EMPTY_REQUESTS_MOCK = MOCKS.map((mock) =>
-      mock.request.query === MEMBERSHIP_REQUEST
+      mock.request.query === MEMBERSHIP_REQUEST_PG
         ? {
             ...mock,
             result: {
@@ -353,7 +365,86 @@ describe('OrganizationDashboard', () => {
   });
 
   it('correctly displays pending membership requests and filters out non-pending ones', async () => {
-    renderWithProviders({ mocks: MIXED_REQUESTS_MOCK });
+    // Define a local mock with unique user IDs to avoid cache collision with Post mocks
+    const SAFE_MIXED_REQUESTS_MOCK = [
+      {
+        request: {
+          query: MEMBERSHIP_REQUEST_PG,
+          variables: {
+            input: { id: 'orgId' },
+            skip: 0,
+            first: 8,
+            name_contains: '',
+          },
+        },
+        maxUsageCount: 3,
+        result: {
+          data: {
+            organization: {
+              id: 'orgId',
+              membershipRequests: [
+                {
+                  membershipRequestId: 'request1',
+                  createdAt: '2023-01-01T00:00:00Z',
+                  status: 'pending',
+                  user: {
+                    id: 'pendingUser1',
+                    name: 'Pending User 1',
+                    emailAddress: 'user1@example.com',
+                    avatarURL: 'https://example.com/avatar1.jpg',
+                    __typename: 'User',
+                  },
+                  __typename: 'MembershipRequest',
+                },
+                {
+                  membershipRequestId: 'request2',
+                  createdAt: '2023-01-02T00:00:00Z',
+                  status: 'pending',
+                  user: {
+                    id: 'pendingUser2',
+                    name: 'Pending User 2',
+                    emailAddress: 'user2@example.com',
+                    avatarURL: 'https://example.com/avatar1.jpg',
+                    __typename: 'User',
+                  },
+                  __typename: 'MembershipRequest',
+                },
+                {
+                  membershipRequestId: 'request3',
+                  createdAt: '2023-01-03T00:00:00Z',
+                  status: 'pending',
+                  user: {
+                    id: 'pendingUser3',
+                    name: 'Pending User 3',
+                    emailAddress: 'user3@example.com',
+                    avatarURL: null,
+                    __typename: 'User',
+                  },
+                  __typename: 'MembershipRequest',
+                },
+                {
+                  membershipRequestId: 'request4',
+                  createdAt: '2023-01-04T00:00:00Z',
+                  status: 'rejected',
+                  user: {
+                    id: 'rejectedUser4',
+                    name: 'Rejected User',
+                    emailAddress: 'rejected@example.com',
+                    avatarURL: null,
+                    __typename: 'User',
+                  },
+                  __typename: 'MembershipRequest',
+                },
+              ],
+              __typename: 'Organization',
+            },
+          },
+        },
+      },
+      ...MOCKS.filter((mock) => mock.request.query !== MEMBERSHIP_REQUEST_PG),
+    ];
+
+    renderWithProviders({ mocks: SAFE_MIXED_REQUESTS_MOCK });
 
     await waitFor(() => {
       expect(screen.queryAllByTestId('fallback-ui').length).toBe(0);
@@ -373,10 +464,6 @@ describe('OrganizationDashboard', () => {
 
       const { getAllByTestId } = within(membershipRequestsCard as HTMLElement);
       const membershipCardItems = getAllByTestId('cardItem');
-
-      membershipCardItems.forEach((item, i) => {
-        console.log(`Membership Card ${i + 1}:`, item.textContent);
-      });
 
       expect(membershipCardItems.length).toBe(3);
 
@@ -601,6 +688,126 @@ describe('OrganizationDashboard', () => {
         fireEvent.click(viewAllRequestsButton);
         await new Promise((resolve) => setTimeout(resolve, 0));
         expect(routerMocks.navigate).toHaveBeenCalledWith('/requests/orgId');
+      });
+    });
+  });
+
+  describe('Organization Navigation', () => {
+    it('updates dashboard data when navigating from one organization to another', async () => {
+      const combinedMocks = [...MOCKS, ...MOCKS_ORG2];
+
+      const { unmount } = renderWithProviders({
+        mocks: combinedMocks,
+        initialRoute: '/orgdash/orgId',
+      });
+
+      // Verify org1 data is loaded
+      await waitFor(() => {
+        expect(screen.getByTestId('membersCount')).toHaveTextContent('2');
+        expect(screen.getByTestId('adminsCount')).toHaveTextContent('1');
+        expect(screen.getByTestId('eventsCount')).toHaveTextContent('1');
+        expect(screen.getByTestId('venuesCount')).toHaveTextContent('10');
+        expect(screen.getByTestId('blockedUsersCount')).toHaveTextContent('2');
+        expect(screen.getByTestId('postsCount')).toHaveTextContent('10');
+
+        expect(screen.getByText('members')).toBeInTheDocument();
+        expect(screen.getByText('admins')).toBeInTheDocument();
+        expect(screen.getByText('events')).toBeInTheDocument();
+        expect(screen.getByText('venues')).toBeInTheDocument();
+        expect(screen.getByText('blockedUsers')).toBeInTheDocument();
+        expect(screen.getByText('posts')).toBeInTheDocument();
+        expect(screen.getByText('membershipRequests')).toBeInTheDocument();
+      });
+
+      unmount();
+
+      // Render again with new organization ID
+      // This simulates visiting the page for a different organization
+      renderWithProviders({
+        mocks: combinedMocks,
+        initialRoute: '/orgdash/orgId2',
+        initialParams: { orgId: 'orgId2' },
+      });
+
+      // Verify org2 data is loaded
+      await waitFor(() => {
+        expect(screen.getByTestId('membersCount')).toHaveTextContent('5');
+        expect(screen.getByTestId('adminsCount')).toHaveTextContent('2');
+        expect(screen.getByTestId('eventsCount')).toHaveTextContent('3');
+        expect(screen.getByTestId('venuesCount')).toHaveTextContent('5');
+        expect(screen.getByTestId('blockedUsersCount')).toHaveTextContent('0');
+        expect(screen.getByTestId('postsCount')).toHaveTextContent('20');
+
+        expect(screen.getByText('members')).toBeInTheDocument();
+        expect(screen.getByText('admins')).toBeInTheDocument();
+        expect(screen.getByText('events')).toBeInTheDocument();
+        expect(screen.getByText('venues')).toBeInTheDocument();
+        expect(screen.getByText('blockedUsers')).toBeInTheDocument();
+        expect(screen.getByText('posts')).toBeInTheDocument();
+        expect(screen.getByText('noMembershipRequests')).toBeInTheDocument();
+      });
+    });
+
+    it('updates dashboard data when route parameter changes without unmounting', async () => {
+      const combinedMocks = [...MOCKS, ...MOCKS_ORG2];
+
+      const { rerender } = renderWithProviders({
+        mocks: combinedMocks,
+        initialRoute: '/orgdash/orgId',
+      });
+
+      // Verify org1 data is loaded
+      await waitFor(() => {
+        expect(screen.getByTestId('membersCount')).toHaveTextContent('2');
+        expect(screen.getByTestId('adminsCount')).toHaveTextContent('1');
+        expect(screen.getByTestId('eventsCount')).toHaveTextContent('1');
+        expect(screen.getByTestId('venuesCount')).toHaveTextContent('10');
+        expect(screen.getByTestId('blockedUsersCount')).toHaveTextContent('2');
+        expect(screen.getByTestId('postsCount')).toHaveTextContent('10');
+
+        expect(screen.getByText('members')).toBeInTheDocument();
+        expect(screen.getByText('admins')).toBeInTheDocument();
+        expect(screen.getByText('events')).toBeInTheDocument();
+        expect(screen.getByText('venues')).toBeInTheDocument();
+        expect(screen.getByText('blockedUsers')).toBeInTheDocument();
+        expect(screen.getByText('posts')).toBeInTheDocument();
+        expect(screen.getByText('membershipRequests')).toBeInTheDocument();
+      });
+
+      // Update params to simulate route change
+      routerMocks.params = { orgId: 'orgId2' };
+
+      // Rerender with new route to trigger update
+      rerender(
+        <MockedProvider mocks={combinedMocks}>
+          <MemoryRouter initialEntries={['/orgdash/orgId2']}>
+            <Routes>
+              <Route
+                path="/orgdash/:orgId"
+                element={<OrganizationDashboard />}
+              />
+              <Route path="/orglist" element={<div>Home Page</div>} />
+            </Routes>
+          </MemoryRouter>
+        </MockedProvider>,
+      );
+
+      // Verify org2 data is loaded
+      await waitFor(() => {
+        expect(screen.getByTestId('membersCount')).toHaveTextContent('5');
+        expect(screen.getByTestId('adminsCount')).toHaveTextContent('2');
+        expect(screen.getByTestId('eventsCount')).toHaveTextContent('3');
+        expect(screen.getByTestId('venuesCount')).toHaveTextContent('5');
+        expect(screen.getByTestId('blockedUsersCount')).toHaveTextContent('0');
+        expect(screen.getByTestId('postsCount')).toHaveTextContent('20');
+
+        expect(screen.getByText('members')).toBeInTheDocument();
+        expect(screen.getByText('admins')).toBeInTheDocument();
+        expect(screen.getByText('events')).toBeInTheDocument();
+        expect(screen.getByText('venues')).toBeInTheDocument();
+        expect(screen.getByText('blockedUsers')).toBeInTheDocument();
+        expect(screen.getByText('posts')).toBeInTheDocument();
+        expect(screen.getByText('noMembershipRequests')).toBeInTheDocument();
       });
     });
   });

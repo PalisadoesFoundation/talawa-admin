@@ -15,8 +15,12 @@ import {
 import useLocalStorage from 'utils/useLocalstorage';
 import { Link } from 'react-router-dom';
 import { ListGroup, Button } from 'react-bootstrap';
+import { NotificationsNone } from '@mui/icons-material';
 import styles from './Notification.module.css';
 import { FaUserCircle } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 interface InterfaceNotification {
   id: string;
@@ -27,6 +31,8 @@ interface InterfaceNotification {
 }
 
 const Notification: React.FC = () => {
+  const { t } = useTranslation('translation', { keyPrefix: 'notification' });
+  const { t: tErrors } = useTranslation('errors');
   const { getItem } = useLocalStorage();
   const userId = getItem('id');
 
@@ -57,8 +63,8 @@ const Notification: React.FC = () => {
         },
       });
       await refetch({ userId, input: { first: pageSize, skip } });
-    } catch (error) {
-      console.error('Error marking notifications as read:', error);
+    } catch {
+      toast.error(tErrors('markAsReadError'));
     }
   };
 
@@ -91,11 +97,15 @@ const Notification: React.FC = () => {
                   <div className={styles.skeletonTitle} />
                   <div className={styles.skeletonBody} />
                 </div>
-                <div style={{ width: 92 }} />
+                <div className={styles.buttonSpacer} />
               </ListGroup.Item>
             ))
           ) : notifications.length === 0 ? (
-            <div className={styles.noNotifications}>You're all caught up!</div>
+            <EmptyState
+              icon={<NotificationsNone />}
+              message={t('allCaughtUp')}
+              dataTestId="notifications-empty-state"
+            />
           ) : (
             Array.from({ length: pageSize }).map((_, idx) => {
               const notification = notifications[idx];
@@ -105,13 +115,14 @@ const Notification: React.FC = () => {
                     key={notification.id}
                     className={`${styles.notificationItem} ${!notification.isRead ? styles.unread : ''}`}
                   >
-                    <div className={styles.profileSection}>
-                      <FaUserCircle size={28} color="#8a99b3" />
+                    <div
+                      className={`${styles.profileSection} ${styles.userIconWrapper}`}
+                    >
+                      <FaUserCircle size={28} />
                     </div>
                     <Link
                       to={notification.navigation || '#'}
-                      className={styles.notificationLink}
-                      style={{ flex: 1, minWidth: 0 }}
+                      className={`${styles.notificationLink} ${styles.notificationLinkContent}`}
                     >
                       <div className={styles.notificationContent}>
                         <div className={styles.notificationTitle}>
@@ -126,10 +137,13 @@ const Notification: React.FC = () => {
                       <Button
                         variant="primary"
                         size="sm"
+                        aria-label={t('markAsReadAriaLabel', {
+                          title: notification.title,
+                        })}
                         className={styles.markButton}
                         onClick={() => handleMarkAsRead([notification.id])}
                       >
-                        Mark as Read
+                        {t('markAsRead')}
                       </Button>
                     )}
                   </ListGroup.Item>
@@ -143,32 +157,33 @@ const Notification: React.FC = () => {
                 >
                   <div className={styles.profileSection} />
                   <div className={styles.notificationContent}>
-                    <div className={styles.notificationTitle}>&nbsp;</div>
-                    <div className={styles.notificationBody}>&nbsp;</div>
+                    <div className={styles.notificationTitle}>{'\u00A0'}</div>
+                    <div className={styles.notificationBody}>{'\u00A0'}</div>
                   </div>
-                  <div style={{ width: 92 }} />
+                  <div className={styles.buttonSpacer} />
                 </ListGroup.Item>
               );
             })
           )}
         </ListGroup>
-
-        <div className={styles.paginationFooter}>
-          <button
-            className={styles.paginationButton}
-            onClick={handlePrev}
-            disabled={page === 0}
-          >
-            Prev
-          </button>
-          <button
-            className={styles.paginationButton}
-            onClick={handleNext}
-            disabled={notifications.length < pageSize}
-          >
-            Next
-          </button>
-        </div>
+        {(page > 0 || notifications.length > 1) && (
+          <div className={styles.paginationFooter}>
+            <button
+              className={styles.paginationButton}
+              onClick={handlePrev}
+              disabled={page === 0}
+            >
+              {t('prev')}
+            </button>
+            <button
+              className={styles.paginationButton}
+              onClick={handleNext}
+              disabled={notifications.length < pageSize}
+            >
+              {t('next')}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,3 +1,30 @@
+/**
+ * AdvertisementsMocks module is responsible for providing the necessary mock data,
+ * Apollo Client configuration, and utilities for testing the Advertisements component.
+ * It simulates various backend responses to facilitate isolated frontend testing.
+ *
+ * @remarks
+ * - Configures a mock `ApolloClient` with `authLink` to simulate bearer token headers.
+ * - Defines `dateConstants` to ensure consistent date assertions across timezones.
+ * - Provides tailored mock scenarios: Active/Completed lists, Infinite Scrolling, and Error states.
+ * - Includes mutation mocks for Creating, Updating, and Deleting advertisements.
+ * - Uses `act` wrappers in utility functions to handle async React state updates.
+ *
+ * @example
+ * ```tsx
+ * import { getActiveAdvertisementMocks } from './AdvertisementsMocks';
+ * import { MockedProvider } from '@apollo/client/testing';
+ *
+ * render(
+ * <MockedProvider mocks={getActiveAdvertisementMocks} addTypename={false}>
+ * <Advertisements />
+ * </MockedProvider>
+ * );
+ * ```
+ *
+ * @file AdvertisementsMocks.ts
+ * @category Mocks
+ */
 import { act } from 'react';
 import type { NormalizedCacheObject, DocumentNode } from '@apollo/client';
 import { BACKEND_URL } from 'Constant/constant';
@@ -8,6 +35,7 @@ import {
   ApolloLink,
   HttpLink,
 } from '@apollo/client';
+import { setContext } from '@apollo/client/link/context';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
 import {
   ADD_ADVERTISEMENT_MUTATION,
@@ -135,14 +163,25 @@ export const dateConstants = {
 
 export const { create: createDates, update: updateDates } = dateConstants;
 
-export const httpLink = new HttpLink({
+const httpLink = new HttpLink({
   uri: BACKEND_URL,
-  headers: { authorization: 'Bearer ' + getItem('token') || '' },
 });
+
+const authLink = setContext((_, { headers }) => {
+  const token = getItem('token');
+  return {
+    headers: {
+      ...headers,
+      ...(token ? { authorization: `Bearer ${token}` } : {}),
+    },
+  };
+});
+
+export const link = ApolloLink.from([authLink, httpLink]);
 
 export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
   cache: new InMemoryCache(),
-  link: ApolloLink.from([httpLink]),
+  link,
 });
 
 export async function wait(ms = 100): Promise<void> {

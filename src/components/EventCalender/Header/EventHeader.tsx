@@ -43,7 +43,7 @@ import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import type { InterfaceEventHeaderProps } from 'types/Event/interface';
 
-function eventHeader({
+function EventHeader({
   viewType,
   handleChangeView,
   showInviteModal,
@@ -51,7 +51,7 @@ function eventHeader({
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationEvents',
   });
-
+  const { t: tCommon } = useTranslation('common');
   return (
     <div
       className={styles.calendarEventHeader}
@@ -64,9 +64,15 @@ function eventHeader({
             onSearch={() => {}}
             inputTestId="searchEvent"
             buttonTestId="searchButton"
+            showSearchButton={true}
+            showLeadingIcon={true}
+            showClearButton={true}
+            buttonAriaLabel={t('search')}
           />
         </div>
-        <div className={styles.calendar__controls}>
+
+        {/* 2. Controls Section: Wrapped in btnsBlock for alignment */}
+        <div className={styles.btnsBlock}>
           <SortingButton
             title={t('viewType')}
             sortingOptions={[
@@ -91,29 +97,20 @@ function eventHeader({
             className={styles.dropdown}
             buttonLabel={t('eventType')}
           />
-          <div className={styles.selectTypeEventHeader}>
-            <Button
-              className={styles.dropdown}
-              onClick={showInviteModal}
-              data-testid="createEventModalBtn"
-              data-cy="createEventModalBtn"
-            >
-              <div>
-                <AddIcon
-                  sx={{
-                    fontSize: '25px',
-                    marginBottom: '2px',
-                    marginRight: '2px',
-                  }}
-                />
-                <span>Create</span>
-              </div>
-            </Button>
-          </div>
+
+          <Button
+            className={styles.dropdown}
+            onClick={showInviteModal}
+            data-testid="createEventModalBtn"
+            data-cy="createEventModalBtn"
+          >
+            <AddIcon className={styles.addButtonIcon} />
+            <span>{tCommon('create')}</span>
+          </Button>
         </div>
       </div>
     </div>
   );
 }
 
-export default eventHeader;
+export default EventHeader;

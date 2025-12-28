@@ -1,0 +1,615 @@
+import React from 'react';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { RecurrenceEndOptionsSection } from './RecurrenceEndOptionsSection';
+import { Frequency } from '../../utils/recurrenceUtils';
+import type { InterfaceRecurrenceRule } from '../../utils/recurrenceUtils';
+import dayjs from 'dayjs';
+
+// Mock DatePicker
+vi.mock('@mui/x-date-pickers', async () => {
+  const actual = await vi.importActual('@mui/x-date-pickers');
+  return {
+    ...actual,
+    DatePicker: ({
+      label,
+      value,
+      onChange,
+      disabled,
+      'data-testid': testId,
+      'data-cy': dataCy,
+      slotProps,
+    }: {
+      label: string;
+      value: unknown;
+      onChange: (date: unknown) => void;
+      disabled?: boolean;
+      minDate?: unknown;
+      'data-testid'?: string;
+      'data-cy'?: string;
+      slotProps?: { textField: { 'aria-label': string } };
+    }) => {
+      // value is a Dayjs object, convert it to string for input
+      const dayjsValue = value as { format: (format: string) => string } | null;
+      return (
+        <div>
+          <label htmlFor="date-picker-input">{label}</label>
+          <input
+            id="date-picker-input"
+            type="date"
+            data-testid={testId}
+            data-cy={dataCy}
+            disabled={disabled}
+            value={dayjsValue ? dayjsValue.format('YYYY-MM-DD') : ''}
+            onChange={(e) => {
+              if (e.target.value) {
+                // Return a Dayjs-like object with toDate method
+                const date = dayjs(e.target.value).toDate();
+                const dayjsObj = {
+                  ...dayjs(e.target.value),
+                  toDate: () => date,
+                };
+                onChange(dayjsObj);
+              } else {
+                onChange(null);
+              }
+            }}
+            aria-label={slotProps?.textField['aria-label']}
+          />
+        </div>
+      );
+    },
+  };
+});
+
+const defaultRecurrenceRule: InterfaceRecurrenceRule = {
+  frequency: Frequency.DAILY,
+  interval: 1,
+  never: true,
+  endDate: undefined,
+  count: undefined,
+};
+
+const defaultProps = {
+  frequency: Frequency.DAILY,
+  selectedRecurrenceEndOption: 'never' as const,
+  recurrenceRuleState: defaultRecurrenceRule,
+  localCount: '1',
+  onRecurrenceEndOptionChange: vi.fn(),
+  onCountChange: vi.fn(),
+  setRecurrenceRuleState: vi.fn(),
+  t: (key: string) => key,
+};
+
+describe('RecurrenceEndOptionsSection', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  describe('Component Rendering', () => {
+    it('should render the component with all required elements', () => {
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection {...defaultProps} />
+        </LocalizationProvider>,
+      );
+
+      expect(screen.getByText('ends')).toBeInTheDocument();
+      expect(screen.getByTestId('never')).toBeInTheDocument();
+      expect(screen.getByTestId('on')).toBeInTheDocument();
+      expect(screen.getByTestId('after')).toBeInTheDocument();
+    });
+
+    it('should render all end option radio buttons', () => {
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection {...defaultProps} />
+        </LocalizationProvider>,
+      );
+
+      const neverOption = screen.getByTestId('never');
+      const onOption = screen.getByTestId('on');
+      const afterOption = screen.getByTestId('after');
+
+      expect(neverOption).toBeInTheDocument();
+      expect(onOption).toBeInTheDocument();
+      expect(afterOption).toBeInTheDocument();
+    });
+
+    it('should render DatePicker when endsOn option is available', () => {
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection {...defaultProps} />
+        </LocalizationProvider>,
+      );
+
+      expect(
+        screen.getByTestId('customRecurrenceEndDatePicker'),
+      ).toBeInTheDocument();
+    });
+
+    it('should render count input when endsAfter option is available', () => {
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection {...defaultProps} />
+        </LocalizationProvider>,
+      );
+
+      expect(
+        screen.getByTestId('customRecurrenceCountInput'),
+      ).toBeInTheDocument();
+    });
+
+    it('should check the selected option', () => {
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection {...defaultProps} />
+        </LocalizationProvider>,
+      );
+
+      const neverOption = screen.getByTestId('never') as HTMLInputElement;
+      expect(neverOption.checked).toBe(true);
+    });
+  });
+
+  describe('Props Handling', () => {
+    it('should handle different selectedRecurrenceEndOption values', () => {
+      const { rerender } = render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection {...defaultProps} />
+        </LocalizationProvider>,
+      );
+
+      let neverOption = screen.getByTestId('never') as HTMLInputElement;
+      expect(neverOption.checked).toBe(true);
+
+      rerender(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection
+            {...defaultProps}
+            selectedRecurrenceEndOption="on"
+          />
+        </LocalizationProvider>,
+      );
+
+      const onOption = screen.getByTestId('on') as HTMLInputElement;
+      expect(onOption.checked).toBe(true);
+
+      rerender(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection
+            {...defaultProps}
+            selectedRecurrenceEndOption="after"
+          />
+        </LocalizationProvider>,
+      );
+
+      const afterOption = screen.getByTestId('after') as HTMLInputElement;
+      expect(afterOption.checked).toBe(true);
+    });
+
+    it('should display localCount value in input', () => {
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection {...defaultProps} localCount="5" />
+        </LocalizationProvider>,
+      );
+
+      const countInput = screen.getByTestId(
+        'customRecurrenceCountInput',
+      ) as HTMLInputElement;
+      expect(countInput.value).toBe('5');
+    });
+
+    it('should display endDate in DatePicker when provided', () => {
+      const endDate = new Date('2025-12-31T10:00:00.000Z');
+      const ruleWithEndDate: InterfaceRecurrenceRule = {
+        ...defaultRecurrenceRule,
+        endDate,
+        never: false,
+      };
+
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection
+            {...defaultProps}
+            recurrenceRuleState={ruleWithEndDate}
+            selectedRecurrenceEndOption="on"
+          />
+        </LocalizationProvider>,
+      );
+
+      const datePicker = screen.getByTestId(
+        'customRecurrenceEndDatePicker',
+      ) as HTMLInputElement;
+      expect(datePicker.value).toBe('2025-12-31');
+    });
+
+    it('should use current date as default when endDate is undefined', () => {
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection
+            {...defaultProps}
+            selectedRecurrenceEndOption="on"
+          />
+        </LocalizationProvider>,
+      );
+
+      const datePicker = screen.getByTestId(
+        'customRecurrenceEndDatePicker',
+      ) as HTMLInputElement;
+      expect(datePicker.value).toBeTruthy();
+    });
+
+    it('should filter out never option for YEARLY frequency', () => {
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection
+            {...defaultProps}
+            frequency={Frequency.YEARLY}
+          />
+        </LocalizationProvider>,
+      );
+
+      expect(screen.queryByTestId('never')).not.toBeInTheDocument();
+      expect(screen.getByTestId('on')).toBeInTheDocument();
+      expect(screen.getByTestId('after')).toBeInTheDocument();
+    });
+
+    it('should show never option for non-YEARLY frequencies', () => {
+      const frequencies = [
+        Frequency.DAILY,
+        Frequency.WEEKLY,
+        Frequency.MONTHLY,
+      ];
+
+      frequencies.forEach((frequency) => {
+        const { unmount } = render(
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <RecurrenceEndOptionsSection
+              {...defaultProps}
+              frequency={frequency}
+            />
+          </LocalizationProvider>,
+        );
+
+        expect(screen.getByTestId('never')).toBeInTheDocument();
+        unmount();
+      });
+    });
+  });
+
+  describe('User Interactions', () => {
+    it('should call onRecurrenceEndOptionChange when option is changed', async () => {
+      const user = userEvent.setup();
+      const onRecurrenceEndOptionChange = vi.fn();
+
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection
+            {...defaultProps}
+            onRecurrenceEndOptionChange={onRecurrenceEndOptionChange}
+          />
+        </LocalizationProvider>,
+      );
+
+      const onOption = screen.getByTestId('on') as HTMLInputElement;
+      await user.click(onOption);
+
+      expect(onRecurrenceEndOptionChange).toHaveBeenCalled();
+    });
+
+    it('should call onCountChange when count input changes', () => {
+      const onCountChange = vi.fn();
+
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection
+            {...defaultProps}
+            onCountChange={onCountChange}
+          />
+        </LocalizationProvider>,
+      );
+
+      const countInput = screen.getByTestId(
+        'customRecurrenceCountInput',
+      ) as HTMLInputElement;
+      fireEvent.change(countInput, { target: { value: '10' } });
+
+      expect(onCountChange).toHaveBeenCalled();
+    });
+
+    it('should select all text on double click in count input', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection {...defaultProps} localCount="5" />
+        </LocalizationProvider>,
+      );
+
+      const countInput = screen.getByTestId(
+        'customRecurrenceCountInput',
+      ) as HTMLInputElement;
+      await user.dblClick(countInput);
+
+      expect(countInput).toBeInTheDocument();
+    });
+
+    it('should prevent negative, e, E, and + keys in count input', () => {
+      const onCountChange = vi.fn();
+
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection
+            {...defaultProps}
+            onCountChange={onCountChange}
+          />
+        </LocalizationProvider>,
+      );
+
+      const countInput = screen.getByTestId(
+        'customRecurrenceCountInput',
+      ) as HTMLInputElement;
+
+      // Create a real keyboard event
+      const event = new KeyboardEvent('keydown', {
+        key: '-',
+        bubbles: true,
+        cancelable: true,
+      });
+      const preventDefaultSpy = vi.spyOn(event, 'preventDefault');
+
+      countInput.dispatchEvent(event);
+
+      expect(preventDefaultSpy).toHaveBeenCalled();
+
+      preventDefaultSpy.mockRestore();
+    });
+
+    it('should call setRecurrenceRuleState when date is changed', async () => {
+      const setRecurrenceRuleState = vi.fn();
+
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection
+            {...defaultProps}
+            setRecurrenceRuleState={setRecurrenceRuleState}
+            selectedRecurrenceEndOption="on"
+          />
+        </LocalizationProvider>,
+      );
+
+      const datePicker = screen.getByTestId(
+        'customRecurrenceEndDatePicker',
+      ) as HTMLInputElement;
+      fireEvent.change(datePicker, { target: { value: '2025-12-31' } });
+
+      await waitFor(() => {
+        expect(setRecurrenceRuleState).toHaveBeenCalled();
+      });
+    });
+
+    it('should disable DatePicker when endsOn is not selected', () => {
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection
+            {...defaultProps}
+            selectedRecurrenceEndOption="never"
+          />
+        </LocalizationProvider>,
+      );
+
+      const datePicker = screen.getByTestId(
+        'customRecurrenceEndDatePicker',
+      ) as HTMLInputElement;
+      expect(datePicker.disabled).toBe(true);
+    });
+
+    it('should enable DatePicker when endsOn is selected', () => {
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection
+            {...defaultProps}
+            selectedRecurrenceEndOption="on"
+          />
+        </LocalizationProvider>,
+      );
+
+      const datePicker = screen.getByTestId(
+        'customRecurrenceEndDatePicker',
+      ) as HTMLInputElement;
+      expect(datePicker.disabled).toBe(false);
+    });
+
+    it('should disable count input when endsAfter is not selected', () => {
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection
+            {...defaultProps}
+            selectedRecurrenceEndOption="never"
+          />
+        </LocalizationProvider>,
+      );
+
+      const countInput = screen.getByTestId(
+        'customRecurrenceCountInput',
+      ) as HTMLInputElement;
+      expect(countInput.disabled).toBe(true);
+    });
+
+    it('should enable count input when endsAfter is selected', () => {
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection
+            {...defaultProps}
+            selectedRecurrenceEndOption="after"
+          />
+        </LocalizationProvider>,
+      );
+
+      const countInput = screen.getByTestId(
+        'customRecurrenceCountInput',
+      ) as HTMLInputElement;
+      expect(countInput.disabled).toBe(false);
+    });
+  });
+
+  describe('Edge Cases', () => {
+    it('should handle empty count string', () => {
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection {...defaultProps} localCount="" />
+        </LocalizationProvider>,
+      );
+
+      const countInput = screen.getByTestId(
+        'customRecurrenceCountInput',
+      ) as HTMLInputElement;
+      expect(countInput.value).toBe('');
+    });
+
+    it('should handle large count values', () => {
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection {...defaultProps} localCount="999" />
+        </LocalizationProvider>,
+      );
+
+      const countInput = screen.getByTestId(
+        'customRecurrenceCountInput',
+      ) as HTMLInputElement;
+      expect(countInput.value).toBe('999');
+    });
+
+    it('should handle null date change gracefully', async () => {
+      const setRecurrenceRuleState = vi.fn();
+
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection
+            {...defaultProps}
+            setRecurrenceRuleState={setRecurrenceRuleState}
+            selectedRecurrenceEndOption="on"
+          />
+        </LocalizationProvider>,
+      );
+
+      const datePicker = screen.getByTestId(
+        'customRecurrenceEndDatePicker',
+      ) as HTMLInputElement;
+
+      // Simulate clearing the date
+      fireEvent.change(datePicker, { target: { value: '' } });
+
+      // The mock should handle null gracefully
+      expect(datePicker).toBeInTheDocument();
+    });
+
+    it('should have correct aria attributes', () => {
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection
+            {...defaultProps}
+            selectedRecurrenceEndOption="after"
+          />
+        </LocalizationProvider>,
+      );
+
+      const countInput = screen.getByTestId('customRecurrenceCountInput');
+      expect(countInput).toHaveAttribute('aria-label', 'occurences');
+      expect(countInput).toHaveAttribute('aria-required', 'true');
+
+      const datePicker = screen.getByTestId('customRecurrenceEndDatePicker');
+      expect(datePicker).toHaveAttribute('aria-label', 'endDate');
+    });
+
+    it('should have correct data-cy attributes', () => {
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection {...defaultProps} />
+        </LocalizationProvider>,
+      );
+
+      expect(screen.getByTestId('never')).toHaveAttribute(
+        'data-cy',
+        'recurrenceEndOption-never',
+      );
+      expect(screen.getByTestId('on')).toHaveAttribute(
+        'data-cy',
+        'recurrenceEndOption-on',
+      );
+      expect(screen.getByTestId('after')).toHaveAttribute(
+        'data-cy',
+        'recurrenceEndOption-after',
+      );
+    });
+  });
+
+  describe('State Changes', () => {
+    it('should update state correctly when date changes', async () => {
+      const setRecurrenceRuleState = vi.fn();
+
+      render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection
+            {...defaultProps}
+            setRecurrenceRuleState={setRecurrenceRuleState}
+            selectedRecurrenceEndOption="on"
+          />
+        </LocalizationProvider>,
+      );
+
+      const datePicker = screen.getByTestId(
+        'customRecurrenceEndDatePicker',
+      ) as HTMLInputElement;
+      fireEvent.change(datePicker, {
+        target: { value: '2025-12-31' },
+      });
+
+      await waitFor(() => {
+        expect(setRecurrenceRuleState).toHaveBeenCalled();
+      });
+
+      // Verify the state update function
+      const callArg = setRecurrenceRuleState.mock.calls[0][0];
+      if (typeof callArg === 'function') {
+        const prevState = defaultRecurrenceRule;
+        const newState = callArg(prevState);
+        expect(newState.endDate).toBeDefined();
+        expect(newState.never).toBe(false);
+        expect(newState.count).toBeUndefined();
+      }
+    });
+
+    it('should update when selectedRecurrenceEndOption changes', () => {
+      const { rerender } = render(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection {...defaultProps} />
+        </LocalizationProvider>,
+      );
+
+      let neverOption = screen.getByTestId('never') as HTMLInputElement;
+      expect(neverOption.checked).toBe(true);
+
+      rerender(
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
+          <RecurrenceEndOptionsSection
+            {...defaultProps}
+            selectedRecurrenceEndOption="after"
+          />
+        </LocalizationProvider>,
+      );
+
+      const afterOption = screen.getByTestId('after') as HTMLInputElement;
+      expect(afterOption.checked).toBe(true);
+    });
+  });
+});

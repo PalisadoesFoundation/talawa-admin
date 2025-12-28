@@ -208,4 +208,15 @@ export const createAdvertisement = [
   ]),
 
   createAdvertisementListResponse(true),
+
+  createAdvertisementListResponse(true, [], {
+    startCursor: 'custom-start',
+    endCursor: 'custom-end',
+    hasNextPage: true,
+    hasPreviousPage: true,
+  }),
+
+  createAdvertisementListResponse(true, [], {}),
+
+  createAdvertisementListResponse(false, [], {}),
 ];

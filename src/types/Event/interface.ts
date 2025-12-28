@@ -233,6 +233,30 @@ export interface IEventEdge {
   cursor: string;
 }
 
+/**
+ * Input interface for creating events via CREATE_EVENT_MUTATION.
+ * Used by both Admin Portal (CreateEventModal) and User Portal (Events).
+ *
+ * Note: The recurrence property type matches the return type of
+ * formatRecurrenceForPayload from EventForm.tsx
+ */
+export interface ICreateEventInput {
+  name: string;
+  startAt: string;
+  endAt: string;
+  organizationId: string | undefined;
+  allDay: boolean;
+  isPublic: boolean;
+  isRegisterable: boolean;
+  description?: string;
+  location?: string;
+  recurrence?:
+    | (Omit<InterfaceRecurrenceRule, 'endDate'> & {
+        endDate?: string;
+      })
+    | null;
+}
+
 // Legacy interface exports for backward compatibility
 export type InterfaceMember = IMember;
 export type InterfaceEvent = IEvent;

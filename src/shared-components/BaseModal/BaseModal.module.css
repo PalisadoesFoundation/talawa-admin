@@ -1,0 +1,32 @@
+.closeButton {
+  background: none !important;
+  border: none !important;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  transition:
+    opacity 0.2s ease,
+    color 0.2s ease;
+  opacity: 1 !important;
+  /* Use Bootstrap's variant background color as text color since we removed the background */
+  color: var(--bs-btn-bg, #333) !important;
+}
+
+.closeButton:hover {
+  opacity: 0.7 !important;
+  /* Use hover background color on hover */
+  color: var(--bs-btn-hover-bg, var(--bs-btn-bg, #333)) !important;
+}
+
+.closeButton:focus {
+  outline: 2px solid var(--primary-color, #007bff);
+  outline-offset: 2px;
+  color: var(--bs-btn-bg, #333) !important;
+}
+
+.closeButton i {
+  color: inherit;
+}

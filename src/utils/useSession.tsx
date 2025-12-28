@@ -5,8 +5,9 @@ import { t } from 'i18next';
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
-import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
+import useLocalStorage from './useLocalstorage';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 type UseSessionReturnType = {
   startSession: () => void;
@@ -43,6 +44,8 @@ const useSession = (): UseSessionReturnType => {
     GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
   );
 
+  const { clearAllItems } = useLocalStorage();
+
   useEffect(() => {
     if (queryError) {
       errorHandler(t, queryError as Error);
@@ -73,10 +76,10 @@ const useSession = (): UseSessionReturnType => {
       console.error('Error revoking refresh token:', error);
       // toast.error('Failed to revoke session. Please try again.');
     }
-    localStorage.clear();
+    clearAllItems();
     endSession();
     navigate('/');
-    toast.warning(tCommon('sessionLogout'), { autoClose: false });
+    NotificationToast.warning(tCommon('sessionLogOut'), { autoClose: false });
   };
 
   const initializeTimers = (
@@ -92,7 +95,7 @@ const useSession = (): UseSessionReturnType => {
     startTime = Date.now();
 
     warningTimerRef.current = setTimeout(() => {
-      toast.warning(tCommon('sessionWarning'));
+      NotificationToast.warning(tCommon('sessionWarning'));
     }, warningTimeInMilliseconds);
 
     sessionTimerRef.current = setTimeout(async () => {

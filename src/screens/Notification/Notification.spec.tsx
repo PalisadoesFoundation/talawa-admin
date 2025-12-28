@@ -8,6 +8,8 @@ import {
   MARK_NOTIFICATION_AS_READ,
 } from 'GraphQl/Queries/NotificationQueries';
 import { describe, it, expect, vi, afterEach } from 'vitest';
+import { toast } from 'react-toastify';
+import i18nForTest from 'utils/i18nForTest';
 
 vi.mock('utils/useLocalstorage', () => ({
   __esModule: true,
@@ -132,7 +134,7 @@ const generateNotifications = (
   }));
 
 afterEach(() => {
-  vi.restoreAllMocks();
+  vi.clearAllMocks();
 });
 
 describe('Notification Component', () => {
@@ -159,7 +161,13 @@ describe('Notification Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText("You're all caught up!")).toBeInTheDocument();
+      expect(
+        screen.getByTestId('notifications-empty-state'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId('notifications-empty-state-icon'),
+      ).toBeInTheDocument();
+      expect(screen.getByText(/you're all caught up!/i)).toBeInTheDocument();
     });
   });
 
@@ -223,13 +231,13 @@ describe('Notification Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Mark as Read')).toBeInTheDocument();
+      expect(screen.getByText(/mark as read/i)).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Mark as Read'));
+    fireEvent.click(screen.getByText(/mark as read/i));
 
     await waitFor(() => {
-      expect(screen.queryByText('Mark as Read')).not.toBeInTheDocument();
+      expect(screen.queryByText(/mark as read/i)).not.toBeInTheDocument();
     });
   });
 
@@ -245,12 +253,12 @@ describe('Notification Component', () => {
     // wait for first page to load
     await screen.findByText('Notification 1');
 
-    fireEvent.click(await screen.findByText('Next'));
+    fireEvent.click(await screen.findByText(/next/i));
 
     // second page should contain Notification 8 (index 6)
     await screen.findByText('Notification 8');
 
-    fireEvent.click(await screen.findByText('Prev'));
+    fireEvent.click(await screen.findByText(/prev/i));
 
     await screen.findByText('Notification 1');
   });
@@ -266,8 +274,8 @@ describe('Notification Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Prev')).toBeDisabled();
-      expect(screen.getByText('Next')).toBeDisabled();
+      expect(screen.getByText(/prev/i)).toBeDisabled();
+      expect(screen.getByText(/next/i)).toBeDisabled();
     });
   });
 
@@ -293,9 +301,7 @@ describe('Notification Component', () => {
 
   it('should handle error when marking notification as read', async () => {
     const notifications = generateNotifications(1, false);
-    const consoleErrorSpy = vi
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
+    const toastErrorSpy = vi.spyOn(toast, 'error').mockImplementation(() => 1);
 
     render(
       <MockedProvider mocks={mocks(notifications, true)}>
@@ -306,18 +312,113 @@ describe('Notification Component', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Mark as Read')).toBeInTheDocument();
+      expect(screen.getByText(/mark as read/i)).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByText('Mark as Read'));
+    fireEvent.click(screen.getByText(/mark as read/i));
 
     await waitFor(() => {
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        'Error marking notifications as read:',
-        expect.any(Error),
+      expect(toastErrorSpy).toHaveBeenCalledWith(
+        i18nForTest.t('markAsReadError', { ns: 'errors' }),
       );
     });
 
-    consoleErrorSpy.mockRestore();
+    toastErrorSpy.mockRestore();
+  });
+});
+
+describe('Pagination Visibility', () => {
+  it('should hide pagination when there are 0 notifications', async () => {
+    render(
+      <MockedProvider mocks={mocks([])}>
+        <MemoryRouter>
+          <Notification />
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('notifications-empty-state'),
+      ).toBeInTheDocument();
+      expect(screen.getByText(/you're all caught up!/i)).toBeInTheDocument();
+    });
+
+    expect(screen.queryByText(/prev/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/next/i)).not.toBeInTheDocument();
+  });
+
+  it('should hide pagination when there is exactly 1 notification and page is 0', async () => {
+    const notifications = generateNotifications(1, false);
+    render(
+      <MockedProvider mocks={mocks(notifications)}>
+        <MemoryRouter>
+          <Notification />
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Notification 1')).toBeInTheDocument();
+    });
+
+    expect(screen.queryByText(/prev/i)).not.toBeInTheDocument();
+    expect(screen.queryByText(/next/i)).not.toBeInTheDocument();
+  });
+
+  it('should show pagination when there are more than 1 notifications', async () => {
+    const notifications = generateNotifications(3, false);
+    render(
+      <MockedProvider mocks={mocks(notifications)}>
+        <MemoryRouter>
+          <Notification />
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Notification 1')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText(/prev/i)).toBeInTheDocument();
+    expect(screen.getByText(/next/i)).toBeInTheDocument();
+  });
+
+  it('should keep pagination visible when navigating beyond first page', async () => {
+    const notifications = generateNotifications(10, false);
+    render(
+      <MockedProvider mocks={mocks(notifications)}>
+        <MemoryRouter>
+          <Notification />
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Navigate to page 2
+    await screen.findByText('Notification 1');
+    fireEvent.click(await screen.findByText(/next/i));
+    await screen.findByText('Notification 7');
+
+    // Pagination should still be visible
+    expect(screen.getByText(/prev/i)).toBeInTheDocument();
+    expect(screen.getByText(/next/i)).toBeInTheDocument();
+  });
+
+  it('should show pagination when there are exactly 2 notifications', async () => {
+    const notifications = generateNotifications(2, false);
+    render(
+      <MockedProvider mocks={mocks(notifications)}>
+        <MemoryRouter>
+          <Notification />
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Notification 1')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText(/prev/i)).toBeInTheDocument();
+    expect(screen.getByText(/next/i)).toBeInTheDocument();
   });
 });

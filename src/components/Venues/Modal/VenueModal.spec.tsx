@@ -299,6 +299,10 @@ describe('VenueModal', () => {
     vi.resetModules();
   });
 
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   test('creates a new venue successfully', async () => {
     render(
       <MockedProvider mocks={MOCKS}>
@@ -365,9 +369,6 @@ describe('VenueModal', () => {
       // Should use the fallback message
       expect(toast.error).toHaveBeenCalled();
     });
-
-    // Restore original implementation
-    vi.restoreAllMocks();
   });
 
   test('clears image input correctly', async () => {
@@ -552,6 +553,7 @@ describe('VenueModal', () => {
     afterEach(() => {
       // Restore console.error after each test
       consoleErrorSpy.mockRestore();
+      vi.clearAllMocks();
     });
 
     test('displays image preview and clear button when an image is selected', async () => {
@@ -607,9 +609,6 @@ describe('VenueModal', () => {
         screen.queryByAltText('Venue Image Preview'),
       ).not.toBeInTheDocument();
       expect(screen.queryByTestId('closeimage')).not.toBeInTheDocument();
-
-      // Restore original
-      vi.restoreAllMocks();
     });
 
     test('shows error when uploading file larger than 5MB', async () => {

@@ -17,6 +17,57 @@ All our workflows use Linux based commands, therefore if you are a developer who
 
 If you have loaded the API sample database, then you can login using the credentials found on the [testing page of the API documentation website](https://docs-api.talawa.io/docs/developer-resources/testing/)
 
+## Pre-commit Hooks
+
+To ensure the quality of the code in our pull requests, we have implemented hooks that run a series of scripts with each commit. These include scripts that:
+
+1. Generate dooumentation from TypeDoc for the https://docs-admin.talawa.io website for easy cross referenced documentation for all methods, functions and classes
+2. Fix formatting using `prettier`
+3. Lints the code
+4. Validate types using typecheck
+5. Update markdown table of contents
+6. Check for unused exports
+7. Check for unused dependencies
+8. Validate that testing uses mock cleanup correctly
+9. Check for Page Object Model (POM) compliance for E2E tests
+10. Check for hard coded text in screens that should be translated.
+
+The full list of checks can be found in this file:
+
+```
+.husky/pre-commit
+```
+
+If violations are found, the commit is blocked with clear fix instructions.
+
+:::warning
+
+Our pull request checks also validate whether the pre-commit hooks have been applied and will fail if they were not. It is highly advised not to bypass the pre-commit hooks.
+
+Make sure your last `git commit` before a `git push` does not bypass the hooks, and that all errors are corrected.
+
+Only `git push` when the `git commit` checks pass.
+
+:::
+
+### Bypassing Hooks
+
+You can bypass the pre-commit checks using the `--no-verify` flag with the `git commit` command.
+
+```bash
+git commit -m "message" --no-verify
+```
+
+:::warning
+
+Our pull request checks also validate whether the pre-commit hooks have been applied and will fail if they were not. It is highly advised not to bypass the pre-commit hooks.
+
+Make sure your last `git commit` before a `git push` does not bypass the hooks, and that all errors are corrected.
+
+Only `git push` when the `git commit` checks pass.
+
+:::
+
 ## Linting and Formatting
 
 All pull requests must have code that is properly linted and formatted to ensure uniformity across the repository.
@@ -43,11 +94,13 @@ This project uses [Vitest](https://vitest.dev/) as the testing framework.
 ### Running Tests
 
 - **Run all tests:**
+
   ```bash
   pnpm run test
   ```
 
 - **Run a single test file:**
+
   ```bash
   pnpm run test /path/to/test/file
   ```
@@ -61,11 +114,13 @@ This project uses [Vitest](https://vitest.dev/) as the testing framework.
 ### Test Coverage
 
 - **View coverage for all test files:**
+
   ```bash
   pnpm run test:coverage
   ```
 
 - **View coverage for a single test file:**
+
   ```bash
   pnpm run test:coverage /path/to/test/file
   ```
@@ -92,6 +147,7 @@ SHARD_INDEX=1 SHARD_COUNT=4 pnpm run test:shard
 ```
 
 This divides the test suite into 4 parts and runs the 1st part. This is particularly useful for:
+
 - Running tests in parallel across multiple CI jobs
 - Faster test execution on multi-core systems
 - Reducing overall test suite runtime
@@ -121,6 +177,7 @@ describe('YourComponent', () => {
 ```
 
 > **Why This Matters:** Without proper cleanup, mocks from one test can leak into others, causing:
+>
 > - Flaky tests that pass/fail randomly
 > - Tests that fail when run in different orders
 > - Hard-to-debug test failures in CI
@@ -130,33 +187,21 @@ describe('YourComponent', () => {
 
 We enforce mock isolation through **three layers** to catch issues as early as possible:
 
-##### 1. ESLint (Real-time IDE Feedback)
+##### ESLint (Real-time IDE Feedback)
 
 A custom ESLint rule (`vitest-isolation/require-aftereach-cleanup`) detects missing mock cleanup **as you type**. Your IDE will show inline errors when:
+
 - Test files use `vi.fn()`, `vi.mock()`, or `vi.spyOn()` without `afterEach` cleanup
 - `afterEach` exists but is missing cleanup methods
 
 The rule provides **autofix** capability - your IDE can automatically insert the proper `afterEach` block.
 
-##### 2. Pre-commit Hook
-
-Before each commit, the pre-commit hook runs `check-mock-cleanup.sh` to validate:
-- All test files with mocks have proper cleanup
-- Files using `vi.useFakeTimers()` include timer cleanup
-- Window/document manipulation is properly cleaned up (warnings)
-
-If violations are found, the commit is blocked with clear fix instructions.
-
-**Bypass if needed:**
-```bash
-git commit -m "message" --no-verify
-```
-
-##### 3. CI Check (GitHub Actions)
+##### CI Check (GitHub Actions)
 
 The `Check-Mock-Isolation` job runs on every PR to ensure repository-wide compliance.
 
 **Run locally before pushing:**
+
 ```bash
 pnpm run check-mock-cleanup
 ```
@@ -164,6 +209,7 @@ pnpm run check-mock-cleanup
 #### Best Practices
 
 **DO:**
+
 ```typescript
 // Good: Cleanup after each test
 describe('MyComponent', () => {
@@ -196,11 +242,12 @@ describe('MyComponent', () => {
 afterEach(() => {
   cleanup(); // React Testing Library cleanup
   vi.restoreAllMocks(); // Mock cleanup
-  localStorage.clear(); // LocalStorage cleanup
+  clearAllItems(); // LocalStorage cleanup 
 });
 ```
 
 **DON'T:**
+
 ```typescript
 // Bad: No cleanup - mocks leak between tests
 describe('MyComponent', () => {
@@ -230,6 +277,7 @@ describe('MyComponent', () => {
 #### Common Patterns
 
 **Pattern 1: Component with Module Mocks**
+
 ```typescript
 // Top of file
 vi.mock('react-router', () => ({
@@ -251,6 +299,7 @@ describe('MyComponent', () => {
 ```
 
 **Pattern 2: Spy on Functions**
+
 ```typescript
 describe('MyComponent', () => {
   afterEach(() => {
@@ -266,6 +315,7 @@ describe('MyComponent', () => {
 ```
 
 **Pattern 3: Function Mocks**
+
 ```typescript
 describe('MyComponent', () => {
   const mockCallback = vi.fn();
@@ -283,25 +333,26 @@ describe('MyComponent', () => {
 
 #### When to Use Each Cleanup Method
 
-| Method | Use Case | What It Does |
-|--------|----------|--------------|
+| Method                 | Use Case                       | What It Does                                   |
+| ---------------------- | ------------------------------ | ---------------------------------------------- |
 | `vi.restoreAllMocks()` | **Default - use in afterEach** | Restores all mocks to original implementations |
-| `vi.clearAllMocks()` | In beforeEach if needed | Clears call history but keeps mocks active |
-| `vi.resetAllMocks()` | Rarely needed | Clears history AND resets return values |
-| `vi.resetModules()` | For `vi.mock()` of modules | Clears module cache (less common) |
+| `vi.clearAllMocks()`   | In beforeEach if needed        | Clears call history but keeps mocks active     |
+| `vi.resetAllMocks()`   | Rarely needed                  | Clears history AND resets return values        |
+| `vi.resetModules()`    | For `vi.mock()` of modules     | Clears module cache (less common)              |
 
 > **Rule of Thumb:** Use `vi.restoreAllMocks()` in `afterEach` for 99% of cases.
 
 #### Advanced: Global State Cleanup
 
 **Timer Cleanup:**
+
 ```typescript
 describe('Component with timers', () => {
   afterEach(() => {
     vi.clearAllTimers();
     vi.useRealTimers();
   });
-  
+
   it('uses fake timers', () => {
     vi.useFakeTimers();
     // test code
@@ -310,16 +361,17 @@ describe('Component with timers', () => {
 ```
 
 **Window/Document Cleanup:**
+
 ```typescript
 describe('Component modifying globals', () => {
   const originalLocation = window.location;
-  
+
   afterEach(() => {
     window.location = originalLocation;
     // Remove any added event listeners
     document.removeEventListener('click', handler);
   });
-  
+
   it('modifies window', () => {
     window.location.href = 'test';
   });
@@ -329,29 +381,35 @@ describe('Component modifying globals', () => {
 #### Troubleshooting
 
 **ESLint Error: "Test file uses mocks but is missing afterEach cleanup"**
+
 - Your IDE detected missing cleanup in real-time
 - Apply ESLint autofix or manually add `afterEach(() => { vi.restoreAllMocks(); })`
 
 **Pre-commit Hook Failed: "Check Mock Cleanup"**
+
 - The script found test files with missing cleanup
 - Review the error output for specific files and fix suggestions
 - Bypass if absolutely needed: `git commit --no-verify`
 
 **CI Error: "Check Mock Isolation failed"**
+
 - Same validation as pre-commit but caught in CI
 - Add `afterEach(() => { vi.restoreAllMocks(); })` to flagged files
 
 **Tests pass locally but fail in CI:**
+
 - Likely mock leakage - ensure all test files have `afterEach` cleanup
 - Run tests in shuffle mode: `pnpm run test -- --sequence.shuffle`
 - Check for window/document/timer manipulation without cleanup
 
 **Tests fail in different order or when run together:**
+
 - Classic sign of mock leakage
 - Add `afterEach(() => { vi.restoreAllMocks(); })` to affected files
 - If using fake timers, add `vi.clearAllTimers()` and `vi.useRealTimers()`
 
 **Warning about window/document/timer usage:**
+
 - These are non-blocking warnings to improve test isolation
 - While they don't fail builds, addressing them prevents flaky tests
 - Follow the fix suggestions in the warning output
@@ -375,6 +433,7 @@ pnpm run test:watch
 ```
 
 This opens an interactive UI where you can:\n- View test results in real-time
+
 - Debug failing tests
 - Re-run specific tests
 - View detailed error messages and stack traces

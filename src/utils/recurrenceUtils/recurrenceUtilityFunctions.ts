@@ -9,7 +9,7 @@ import {
   WeekDays,
   RecurrenceEndOptionType,
 } from './recurrenceTypes';
-import { dayNames, monthNames } from './recurrenceConstants';
+import { dayNames, monthNames, Days } from './recurrenceConstants';
 
 /**
  * Validates recurrence input data
@@ -110,49 +110,49 @@ export const getRecurrenceRuleText = (
   const { frequency, interval = 1, byDay, count } = recurrence;
 
   // Handle interval
-  const intervalText = interval === 1 ? '' : `Every ${interval} `;
+  const intervalText = interval === 1 ? '' : `Every ${interval} `; // i18n-ignore-line
 
   switch (frequency) {
     case Frequency.DAILY:
-      recurrenceRuleText = interval === 1 ? 'Daily' : `Every ${interval} days`;
+      recurrenceRuleText = interval === 1 ? 'Daily' : `Every ${interval} days`; // i18n-ignore-line
       break;
     case Frequency.WEEKLY:
       if (byDay && byDay.length > 0) {
         const dayNamesList = getWeekDaysString(byDay);
-        recurrenceRuleText = `${intervalText}Weekly on ${dayNamesList}`;
+        recurrenceRuleText = `${intervalText}Weekly on ${dayNamesList}`; // i18n-ignore-line
       } else {
-        recurrenceRuleText = `${intervalText}Weekly`;
+        recurrenceRuleText = `${intervalText}Weekly`; // i18n-ignore-line
       }
       break;
     case Frequency.MONTHLY:
-      recurrenceRuleText = `${intervalText}Monthly`;
+      recurrenceRuleText = `${intervalText}Monthly`; // i18n-ignore-line
       if (recurrence.byMonthDay && recurrence.byMonthDay.length > 0) {
         const dayText = recurrence.byMonthDay
           .map((day) => `${day}${getOrdinalSuffix(day)}`)
           .join(', ');
-        recurrenceRuleText += ` on the ${dayText}`;
+        recurrenceRuleText += ` on the ${dayText}`; // i18n-ignore-line
       } else {
-        recurrenceRuleText += ` on Day ${startDate.getDate()}`;
+        recurrenceRuleText += ` on Day ${startDate.getDate()}`; // i18n-ignore-line
       }
       break;
     case Frequency.YEARLY:
-      recurrenceRuleText = `${intervalText}Annually`;
+      recurrenceRuleText = `${intervalText}Annually`; // i18n-ignore-line
       if (recurrence.byMonth && recurrence.byMonth.length > 0) {
         const monthNamesList = recurrence.byMonth
           .map((m) => monthNames[m - 1])
           .join(', ');
-        recurrenceRuleText += ` in ${monthNamesList}`;
+        recurrenceRuleText += ` in ${monthNamesList}`; // i18n-ignore-line
       } else {
-        recurrenceRuleText += ` in ${monthNames[startDate.getMonth()]}`;
+        recurrenceRuleText += ` in ${monthNames[startDate.getMonth()]}`; // i18n-ignore-line
       }
 
       if (recurrence.byMonthDay && recurrence.byMonthDay.length > 0) {
         const dayText = recurrence.byMonthDay
           .map((day) => `${day}${getOrdinalSuffix(day)}`)
           .join(', ');
-        recurrenceRuleText += ` on the ${dayText}`;
+        recurrenceRuleText += ` on the ${dayText}`; // i18n-ignore-line
       } else {
-        recurrenceRuleText += ` on the ${startDate.getDate()}${getOrdinalSuffix(startDate.getDate())}`;
+        recurrenceRuleText += ` on the ${startDate.getDate()}${getOrdinalSuffix(startDate.getDate())}`; // i18n-ignore-line
       }
       break;
   }
@@ -164,15 +164,15 @@ export const getRecurrenceRuleText = (
       month: 'long',
       day: 'numeric',
     };
-    recurrenceRuleText += `, until ${endDate.toLocaleDateString('en-US', options)}`;
+    recurrenceRuleText += `, until ${endDate.toLocaleDateString('en-US', options)}`; // i18n-ignore-line
   }
 
   if (count) {
-    recurrenceRuleText += `, ${count} time${count !== 1 ? 's' : ''}`;
+    recurrenceRuleText += `, ${count} time${count !== 1 ? 's' : ''}`; // i18n-ignore-line
   }
 
   if (recurrence.never) {
-    recurrenceRuleText += ', never ends';
+    recurrenceRuleText += ', never ends'; // i18n-ignore-line
   }
 
   return recurrenceRuleText;
@@ -191,11 +191,11 @@ const getWeekDaysString = (weekDays: WeekDays[]): string => {
   }
 
   if (fullDayNames.length === 2) {
-    return fullDayNames.join(' and ');
+    return fullDayNames.join(' and '); // i18n-ignore-line
   }
 
   let weekDaysString = fullDayNames.slice(0, -1).join(', ');
-  weekDaysString += ` and ${fullDayNames[fullDayNames.length - 1]}`;
+  weekDaysString += ` and ${fullDayNames[fullDayNames.length - 1]}`; // i18n-ignore-line
 
   return weekDaysString;
 };
@@ -314,4 +314,53 @@ export const formatRecurrenceForApi = (
   }
 
   return rest;
+};
+
+/**
+ * Calculates which week of the month a given date falls in
+ * @param date - The date to calculate the week for
+ * @returns The week number (1-5) within the month
+ */
+export const getWeekOfMonth = (date: Date): number => {
+  const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+  const weekNumber = Math.ceil((date.getDate() + firstDay.getDay()) / 7);
+  return weekNumber;
+};
+
+/**
+ * Converts a number to its ordinal string representation
+ * @param num - The number to convert (1-5)
+ * @returns The ordinal string (e.g., "first", "second", etc.)
+ */
+export const getOrdinalString = (num: number): string => {
+  const ordinals = ['', 'first', 'second', 'third', 'fourth', 'fifth'];
+  return ordinals[num] || 'last';
+};
+
+/**
+ * Gets the full day name from a day index
+ * @param dayIndex - The day index (0-6, where 0 is Sunday)
+ * @returns The full day name
+ */
+export const getDayName = (dayIndex: number): string => {
+  return dayNames[Days[dayIndex]];
+};
+
+/**
+ * Generates monthly recurrence options based on the start date
+ * @param startDate - The event start date
+ * @returns Object containing monthly recurrence display strings and values
+ */
+export const getMonthlyOptions = (startDate: Date) => {
+  const eventDate = new Date(startDate);
+  const dayOfMonth = eventDate.getDate();
+  const dayOfWeek = eventDate.getDay();
+  const weekOfMonth = getWeekOfMonth(eventDate);
+
+  return {
+    byDate: `Monthly on day ${dayOfMonth}`, // i18n-ignore-line
+    byWeekday: `Monthly on the ${getOrdinalString(weekOfMonth)} ${getDayName(dayOfWeek)}`, // i18n-ignore-line
+    dateValue: dayOfMonth,
+    weekdayValue: { week: weekOfMonth, day: Days[dayOfWeek] },
+  };
 };

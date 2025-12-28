@@ -39,8 +39,8 @@ const pledgeProps: InterfaceDeletePledgeModal = {
     id: '1',
     amount: 100,
     currency: 'USD',
-    startDate: '2024-01-01',
-    endDate: '2024-01-10',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-10T00:00:00.000Z',
     pledger: {
       id: '1',
       firstName: 'John',
@@ -93,12 +93,13 @@ describe('PledgeDeleteModal', () => {
 
   it('should render PledgeDeleteModal', () => {
     renderPledgeDeleteModal(link, pledgeProps);
-    expect(screen.getByTestId('deletePledgeCloseBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('pledge-delete-modal')).toBeInTheDocument();
+    expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
   });
 
   it('should successfully Delete pledge', async () => {
     renderPledgeDeleteModal(link, pledgeProps);
-    expect(screen.getByTestId('deletePledgeCloseBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('pledge-delete-modal')).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('deleteyesbtn'));
 
@@ -111,7 +112,7 @@ describe('PledgeDeleteModal', () => {
 
   it('should fail to Delete pledge', async () => {
     renderPledgeDeleteModal(link2, pledgeProps);
-    expect(screen.getByTestId('deletePledgeCloseBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('pledge-delete-modal')).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('deleteyesbtn'));
 

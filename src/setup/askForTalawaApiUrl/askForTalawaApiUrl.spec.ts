@@ -77,4 +77,21 @@ describe('askForTalawaApiUrl', () => {
 
     expect(result).toBe('http://localhost:4000/graphql');
   });
+
+  it('should use Docker host as default when useDocker is true', async () => {
+    const dockerDefault = 'http://host.docker.internal:4000/graphql';
+    vi.spyOn(inquirer, 'prompt').mockResolvedValueOnce({
+      endpoint: dockerDefault,
+    });
+
+    const result = await askForTalawaApiUrl(true);
+
+    expect(inquirer.prompt).toHaveBeenCalledWith([
+      expect.objectContaining({
+        default: dockerDefault,
+      }),
+    ]);
+
+    expect(result).toBe(dockerDefault);
+  });
 });

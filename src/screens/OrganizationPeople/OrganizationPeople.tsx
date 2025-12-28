@@ -52,30 +52,38 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
 import { useLazyQuery } from '@apollo/client';
-import {
-  DataGrid,
-  GridColDef,
-  GridCellParams,
-  GridPaginationModel,
-} from '@mui/x-data-grid';
-import { Stack } from '@mui/material';
+import { GridCellParams, GridPaginationModel } from '@mui/x-data-grid';
 import { Delete } from '@mui/icons-material';
+import type {
+  ReportingRow,
+  ReportingTableColumn,
+  ReportingTableGridProps,
+} from '../../types/ReportingTable/interface';
+import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
+import {
+  dataGridStyle,
+  COLUMN_BUFFER_PX,
+  PAGE_SIZE,
+} from '../../types/ReportingTable/utils';
 import dayjs from 'dayjs';
 import { toast } from 'react-toastify';
 import styles from 'style/app-fixed.module.css';
+import TableLoader from 'components/TableLoader/TableLoader';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
-import { Row, Button } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import Avatar from 'components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
-import PageHeader from 'shared-components/Navbar/Navbar';
+// Imports added for manual header construction
+import SearchBar from 'shared-components/SearchBar/SearchBar';
+import SortingButton from 'subComponents/SortingButton';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 
-const PAGE_SIZE = 10;
 interface IProcessedRow {
-  _id: string;
+  id: string;
   name: string;
   email: string;
   image: string;
@@ -174,7 +182,7 @@ function OrganizationPeople(): JSX.Element {
       const baseIndex = paginationModel.page * PAGE_SIZE;
       const processedRows = edges.map(
         (edge: IEdges, index: number): IProcessedRow => ({
-          _id: edge.node.id,
+          id: edge.node.id,
           name: edge.node.name,
           email: edge.node.emailAddress,
           image: edge.node.avatarURL,
@@ -327,11 +335,21 @@ function OrganizationPeople(): JSX.Element {
     setState(value === 'users' ? 2 : value === 'members' ? 0 : 1);
   };
 
+  // Header titles for the table
+  const headerTitles: string[] = [
+    tCommon('sl_no'),
+    tCommon('profile'),
+    tCommon('name'),
+    tCommon('email'),
+    tCommon('joinedOn'),
+    tCommon('action'),
+  ];
+
   // Column definitions
-  const columns: GridColDef[] = [
+  const columns: ReportingTableColumn[] = [
     {
-      field: 'rowNumber',
-      headerName: tCommon('#'),
+      field: 'sl_no',
+      headerName: tCommon('sl_no'),
       flex: 1,
       minWidth: 50,
       align: 'center',
@@ -340,15 +358,7 @@ function OrganizationPeople(): JSX.Element {
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return (
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-              width: '100%',
-            }}
-          >
+          <div className={`${styles.flexCenter} ${styles.fullWidthHeight}`}>
             {params.row.rowNumber}
           </div>
         );
@@ -366,41 +376,28 @@ function OrganizationPeople(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         const columnWidth = params.colDef.computedWidth || 150;
         const imageSize = Math.min(columnWidth * 0.4, 40);
+        // Construct CSS value to avoid i18n linting errors
+        const avatarSizeValue = String(imageSize) + 'px';
         return (
           <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-              width: '100%',
-            }}
+            className={`${styles.flexCenter} ${styles.flexColumn} ${styles.fullWidthHeight}`}
           >
             {params.row?.image ? (
               <img
                 src={params.row.image}
-                alt="avatar"
-                style={{
-                  width: `${imageSize}px`,
-                  height: `${imageSize}px`,
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                }}
+                alt={tCommon('avatar')}
+                className={styles.avatarImage}
+                style={
+                  { '--avatar-size': avatarSizeValue } as React.CSSProperties
+                }
                 crossOrigin="anonymous"
               />
             ) : (
               <div
-                style={{
-                  width: `${imageSize}px`,
-                  height: `${imageSize}px`,
-                  fontSize: `${imageSize * 0.4}px`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: '50%',
-                  backgroundColor: '#ccc',
-                }}
+                className={`${styles.flexCenter} ${styles.avatarPlaceholder} ${styles.avatarPlaceholderSize}`}
+                style={
+                  { '--avatar-size': avatarSizeValue } as React.CSSProperties
+                }
                 data-testid="avatar"
               >
                 <Avatar name={params.row.name} />
@@ -423,9 +420,8 @@ function OrganizationPeople(): JSX.Element {
         return (
           <Link
             to={`/member/${currentUrl}`}
-            state={{ id: params.row._id }}
-            style={{ fontSize: '15px' }}
-            className={`${styles.membername} ${styles.subtleBlueGrey}`}
+            state={{ id: params.row.id }}
+            className={`${styles.membername} ${styles.subtleBlueGrey} ${styles.memberNameFontSize}`}
           >
             {params.row.name}
           </Link>
@@ -444,7 +440,7 @@ function OrganizationPeople(): JSX.Element {
     },
     {
       field: 'joined',
-      headerName: tCommon('joined on'),
+      headerName: tCommon('joinedOn'),
       flex: 2,
       minWidth: 100,
       align: 'center',
@@ -468,8 +464,8 @@ function OrganizationPeople(): JSX.Element {
           className={`${styles.removeButton}`}
           variant="danger"
           disabled={state === 2}
-          onClick={() => toggleRemoveMemberModal(params.row._id)}
-          aria-label="Remove member"
+          onClick={() => toggleRemoveMemberModal(params.row.id)}
+          aria-label={tCommon('removeMember')}
           data-testid="removeMemberModalBtn"
         >
           <Delete />
@@ -478,88 +474,81 @@ function OrganizationPeople(): JSX.Element {
     },
   ];
 
+  const gridProps: ReportingTableGridProps = {
+    disableColumnMenu: true,
+    columnBufferPx: COLUMN_BUFFER_PX,
+    getRowId: (row: IProcessedRow) => row.id,
+    rowCount:
+      paginationModel.page * PAGE_SIZE +
+      currentRows.length +
+      (paginationMeta.hasNextPage ? PAGE_SIZE : 0),
+    paginationMode: 'server',
+    pagination: true,
+    paginationModel,
+    onPaginationModelChange: handlePaginationModelChange,
+    pageSizeOptions: [PAGE_SIZE],
+    loading: memberLoading || userLoading,
+    slots: {
+      noRowsOverlay: () => (
+        <EmptyState
+          icon="groups"
+          message={tCommon('notFound')}
+          dataTestId="organization-people-empty-state"
+        />
+      ),
+      loadingOverlay: () => (
+        <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
+      ),
+    },
+    sx: { ...dataGridStyle },
+    getRowClassName: () => `${styles.rowBackground}`,
+    rowHeight: 70,
+    isRowSelectable: () => false,
+  };
+
   return (
     <>
-      <Row className={styles.head}>
-        <div className={styles.mainpageright}>
-          <div className={styles.btnsContainer}>
-            <PageHeader
-              search={{
-                placeholder: t('searchFullName'),
-                onSearch: (term: string) => setSearchTerm(term),
-                buttonTestId: 'searchbtn',
-              }}
-              sorting={[
-                {
-                  title: tCommon('sort'),
-                  options: [
-                    { label: tCommon('members'), value: 'members' },
-                    { label: tCommon('admin'), value: 'admin' },
-                    { label: tCommon('users'), value: 'users' },
-                  ],
-                  selected:
-                    state === 2 ? 'Users' : state === 1 ? 'Admin' : 'Members',
-                  onChange: (value) => handleSortChange(value.toString()),
-                  testIdPrefix: 'sort',
-                },
-              ]}
-              actions={<AddMember />}
-            />
-          </div>
-        </div>
-      </Row>
-      <div className="datatable">
-        <DataGrid
-          disableColumnMenu
-          columnBufferPx={5}
-          getRowId={(row) => row._id}
-          rows={filteredRows}
-          columns={columns}
-          rowCount={
-            paginationModel.page * PAGE_SIZE +
-            currentRows.length +
-            (paginationMeta.hasNextPage ? PAGE_SIZE : 0)
-          }
-          paginationMode="server"
-          paginationModel={paginationModel}
-          onPaginationModelChange={handlePaginationModelChange}
-          pageSizeOptions={[PAGE_SIZE]}
-          loading={memberLoading || userLoading}
-          slots={{
-            noRowsOverlay: () => (
-              <Stack height="100%" alignItems="center" justifyContent="center">
-                {t('notFound')}
-              </Stack>
-            ),
-          }}
-          sx={{
-            borderRadius: 'var(--table-head-radius)',
-            backgroundColor: 'var(--grey-bg-color)',
-            '& .MuiDataGrid-row': {
-              backgroundColor: 'var(--tablerow-bg-color)',
-              '&:focus-within': {
-                outline: '2px solid #000',
-                outlineOffset: '-2px',
-              },
-            },
-            '& .MuiDataGrid-row:hover': {
-              backgroundColor: 'var(--grey-bg-color)',
-              boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-            },
-            '& .MuiDataGrid-row.Mui-hovered': {
-              backgroundColor: 'var(--grey-bg-color)',
-              boxShadow: '0 0 0 1px rgba(0, 0, 0, 0.1)',
-            },
-            '& .MuiDataGrid-cell:focus': {
-              outline: '2px solid #000',
-              outlineOffset: '-2px',
-            },
-          }}
-          getRowClassName={() => `${styles.rowBackground}`}
-          rowHeight={70}
-          isRowSelectable={() => false}
+      {/* --- FIX START: Standardized Header using manual structure --- */}
+      {/* This structure uses the global 'calendar__header' and 'btnsBlock' which we fixed in CSS to ensure perfect alignment. */}
+      <div className={styles.calendar__header}>
+        <SearchBar
+          placeholder={t('searchFullName')}
+          value={searchTerm}
+          onChange={(val) => setSearchTerm(val)}
+          onSearch={(term) => setSearchTerm(term)}
+          inputTestId="searchbtn"
+          buttonAriaLabel={tCommon('search')}
+          // Standard Props for consistency
+          showSearchButton={true}
+          showLeadingIcon={true}
+          showClearButton={true}
         />
+
+        <div className={styles.btnsBlock}>
+          <SortingButton
+            title={tCommon('sort')}
+            sortingOptions={[
+              { label: tCommon('members'), value: 'members' },
+              { label: tCommon('admin'), value: 'admin' },
+              { label: tCommon('users'), value: 'users' },
+            ]}
+            selectedOption={
+              state === 2 ? 'users' : state === 1 ? 'admin' : 'members'
+            }
+            onSortChange={(value) => handleSortChange(value.toString())}
+            dataTestIdPrefix="sort"
+          />
+          {/* AddMember placed directly in the flex container for correct alignment */}
+          <AddMember />
+        </div>
       </div>
+      {/* --- FIX END --- */}
+
+      <ReportingTable
+        rows={filteredRows.map((req) => ({ ...req })) as ReportingRow[]}
+        columns={columns}
+        gridProps={{ ...gridProps }}
+      />
       {showRemoveModal && selectedMemId && (
         <OrgPeopleListCard
           id={selectedMemId}

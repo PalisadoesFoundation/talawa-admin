@@ -17,7 +17,7 @@ describe('SecuredRoute', () => {
   // Test elements
   const testComponent = <div>Test Protected Content</div>;
   const homeComponent = <div>Home Page</div>;
-  const { setItem } = useLocalStorage();
+  const { setItem, clearAllItems } = useLocalStorage();
 
   const originalLocation = window.location;
 
@@ -25,7 +25,7 @@ describe('SecuredRoute', () => {
     // Clear all mocks before each test
     vi.clearAllMocks();
     // Clear localStorage before each test
-    localStorage.clear();
+    clearAllItems();
     // Use fake timers for controlling time-based operations
     vi.useFakeTimers();
     // Mock window.location.href

@@ -38,6 +38,7 @@ import Volunteers from './Volunteers/Volunteers';
 import VolunteerGroups from './VolunteerGroups/VolunteerGroups';
 import { FaRegFile } from 'react-icons/fa6';
 import Requests from './Requests/Requests';
+import SafeBreadcrumbs from 'shared-components/BreadcrumbsComponent/SafeBreadcrumbs';
 
 function volunteerContainer(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
@@ -52,15 +53,52 @@ function volunteerContainer(): JSX.Element {
   const [dataType, setDataType] = useState<'individual' | 'group' | 'requests'>(
     'individual',
   );
-
   return (
     <div>
+      <SafeBreadcrumbs
+        items={[
+          {
+            translationKey: 'organization',
+            to: `/user/organization/${orgId}`,
+          },
+          {
+            translationKey: 'events',
+            to: `/user/events/${orgId}`,
+          },
+          {
+            translationKey: 'event',
+          },
+          {
+            translationKey: 'Volunteers',
+            to:
+              dataType === 'individual'
+                ? undefined
+                : `/event/${orgId}/${eventId}`,
+            isCurrent: dataType === 'individual',
+          },
+          ...(dataType === 'group'
+            ? [
+                {
+                  translationKey: 'groups',
+                  isCurrent: true,
+                },
+              ]
+            : dataType === 'requests'
+              ? [
+                  {
+                    translationKey: 'requests',
+                    isCurrent: true,
+                  },
+                ]
+              : []),
+        ]}
+      />
       <div className="mt-2 mb-4 d-flex justify-content-between">
         <div className="ms-auto">
           <div
             className={`btn-group ${styles.toggleGroup}`}
             role="group"
-            aria-label="Basic radio toggle button group"
+            aria-label={t('toggleGroupAriaLabel')}
           >
             <input
               type="radio"

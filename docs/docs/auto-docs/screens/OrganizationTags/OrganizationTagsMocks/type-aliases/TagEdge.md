@@ -24,10 +24,6 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:18](https://g
 
 Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationTags/OrganizationTagsMocks.ts#L10)
 
-#### \_id
-
-> **\_id**: `string`
-
 #### ancestorTags
 
 > **ancestorTags**: `TagAncestor`[]
@@ -40,13 +36,17 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:10](https://g
 
 > **totalCount**: `number`
 
+#### id
+
+> **id**: `string`
+
 #### name
 
 > **name**: `string`
 
 #### parentTag
 
-> **parentTag**: \{ `_id`: `string`; \} \| `null`
+> **parentTag**: \{ `id`: `string`; \} \| `null`
 
 #### usersAssignedTo
 

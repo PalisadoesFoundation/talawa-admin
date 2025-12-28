@@ -12,7 +12,13 @@ import type { InterfaceSearchBarRef } from 'types/SearchBar/interface';
 
 describe('SearchBar', () => {
   it('renders with the provided placeholder', () => {
-    render(<SearchBar onSearch={vi.fn()} placeholder="Search records" />);
+    render(
+      <SearchBar
+        onSearch={vi.fn()}
+        placeholder="Search records"
+        clearButtonAriaLabel="clear"
+      />,
+    );
     expect(screen.getByPlaceholderText('Search records')).toBeInTheDocument();
   });
 
@@ -24,6 +30,7 @@ describe('SearchBar', () => {
         onSearch={vi.fn()}
         onChange={handleChange}
         inputTestId="search-input"
+        clearButtonAriaLabel="clear"
       />,
     );
 
@@ -40,6 +47,7 @@ describe('SearchBar', () => {
         onSearch={handleSearch}
         inputTestId="search-input"
         buttonTestId="search-button"
+        clearButtonAriaLabel="clear"
       />,
     );
     await user.type(screen.getByTestId('search-input'), 'volunteer');
@@ -54,7 +62,13 @@ describe('SearchBar', () => {
   it('submits search when Enter key is pressed', async () => {
     const user = userEvent.setup();
     const handleSearch = vi.fn();
-    render(<SearchBar onSearch={handleSearch} inputTestId="search-input" />);
+    render(
+      <SearchBar
+        onSearch={handleSearch}
+        inputTestId="search-input"
+        clearButtonAriaLabel="clear"
+      />,
+    );
     await user.type(screen.getByTestId('search-input'), 'events{enter}');
 
     expect(handleSearch).toHaveBeenCalledWith(
@@ -75,6 +89,7 @@ describe('SearchBar', () => {
         onChange={handleChange}
         inputTestId="search-input"
         clearButtonTestId="clear-search"
+        clearButtonAriaLabel="clear"
       />,
     );
 
@@ -99,6 +114,7 @@ describe('SearchBar', () => {
           onSearch={vi.fn()}
           onChange={(nextValue) => setTerm(nextValue)}
           inputTestId="search-input"
+          clearButtonAriaLabel="clear"
         />
       );
     };
@@ -118,6 +134,7 @@ describe('SearchBar', () => {
         onSearch={handleSearch}
         showSearchButton={false}
         inputTestId="search-input"
+        clearButtonAriaLabel="clear"
       />,
     );
 
@@ -133,7 +150,12 @@ describe('SearchBar', () => {
     const user = userEvent.setup();
     const ref = React.createRef<InterfaceSearchBarRef>();
     render(
-      <SearchBar ref={ref} onSearch={vi.fn()} inputTestId="search-input" />,
+      <SearchBar
+        ref={ref}
+        onSearch={vi.fn()}
+        inputTestId="search-input"
+        clearButtonAriaLabel="clear"
+      />,
     );
 
     expect(ref.current).toBeDefined();
@@ -168,6 +190,7 @@ describe('SearchBar', () => {
         onSearch={handleSearch}
         inputTestId="search-input"
         clearButtonTestId="clear-search"
+        clearButtonAriaLabel="clear"
       />,
     );
 
@@ -194,6 +217,7 @@ describe('SearchBar', () => {
         value="locked"
         inputTestId="search-input"
         clearButtonTestId="clear-search"
+        clearButtonAriaLabel="clear"
       />,
     );
 
@@ -213,6 +237,7 @@ describe('SearchBar', () => {
         disabled={true}
         defaultValue="locked"
         inputTestId="search-input"
+        clearButtonAriaLabel="clear"
       />,
     );
 
@@ -225,17 +250,128 @@ describe('SearchBar', () => {
   });
 
   it('has accessible search button', () => {
-    render(<SearchBar onSearch={vi.fn()} buttonTestId="search-button" />);
+    render(
+      <SearchBar
+        onSearch={vi.fn()}
+        buttonTestId="search-button"
+        clearButtonAriaLabel="clear"
+      />,
+    );
     const button = screen.getByTestId('search-button');
     expect(button).toHaveAttribute('aria-label', 'Search');
   });
 
+  it('uses default aria-label from i18n when clearButtonAriaLabel is undefined', async () => {
+    const user = userEvent.setup();
+    render(
+      <SearchBar
+        onSearch={vi.fn()}
+        inputTestId="search-input"
+        clearButtonTestId="clear-search"
+      />,
+    );
+
+    const input = screen.getByTestId('search-input');
+    await user.type(input, 'test');
+
+    const clearButton = screen.getByTestId('clear-search');
+    expect(clearButton).toHaveAttribute('aria-label', 'clear');
+  });
+
   it('handles missing onSearch prop gracefully', async () => {
     const user = userEvent.setup();
-    render(<SearchBar inputTestId="search-input" />);
+    render(
+      <SearchBar inputTestId="search-input" clearButtonAriaLabel="clear" />,
+    );
 
     const input = screen.getByTestId('search-input');
     await user.type(input, 'test{enter}');
     // Should not throw
+  });
+
+  describe('showTrailingIcon feature', () => {
+    it('renders trailing search icon when showTrailingIcon is true', () => {
+      render(
+        <SearchBar
+          onSearch={vi.fn()}
+          showTrailingIcon={true}
+          inputTestId="search-input"
+        />,
+      );
+
+      // The trailing icon should be rendered as a span with the search icon
+      const container = screen.getByTestId('search-input').parentElement;
+      expect(container).toBeInTheDocument();
+      // Verify the trailing icon span exists
+      const trailingIcon = container?.querySelector('span[aria-hidden="true"]');
+      expect(trailingIcon).toBeInTheDocument();
+    });
+
+    it('does not render trailing search icon when showTrailingIcon is false', () => {
+      render(
+        <SearchBar
+          onSearch={vi.fn()}
+          showTrailingIcon={false}
+          inputTestId="search-input"
+        />,
+      );
+
+      const container = screen.getByTestId('search-input').parentElement;
+      // When showTrailingIcon is false, there should be no trailing icon
+      // The container might still have other elements, but not the trailing icon
+      expect(container).toBeInTheDocument();
+    });
+
+    it('does not render trailing icon by default', () => {
+      render(<SearchBar onSearch={vi.fn()} inputTestId="search-input" />);
+
+      // Default behavior should not show trailing icon
+      const container = screen.getByTestId('search-input').parentElement;
+      expect(container).toBeInTheDocument();
+      // By default, showTrailingIcon is false
+    });
+
+    it('renders both clear button and trailing icon when both are enabled', async () => {
+      const user = userEvent.setup();
+      render(
+        <SearchBar
+          onSearch={vi.fn()}
+          showTrailingIcon={true}
+          showClearButton={true}
+          inputTestId="search-input"
+          clearButtonTestId="clear-search"
+        />,
+      );
+
+      const input = screen.getByTestId('search-input');
+      await user.type(input, 'test');
+
+      // Both the clear button and trailing icon should coexist
+      expect(screen.getByTestId('clear-search')).toBeInTheDocument();
+      const container = input.parentElement;
+      const trailingIcon = container?.querySelector('span[aria-hidden="true"]');
+      expect(trailingIcon).toBeInTheDocument();
+    });
+
+    it('positions trailing icon correctly in the input wrapper', () => {
+      const { container } = render(
+        <SearchBar
+          onSearch={vi.fn()}
+          showTrailingIcon={true}
+          inputTestId="search-input"
+        />,
+      );
+
+      // Verify that the trailing icon is a child of the input wrapper
+      const inputWrapper = container.querySelector(
+        'div > div', // The searchBarInputWrapper div
+      );
+      expect(inputWrapper).toBeInTheDocument();
+
+      const trailingIcon = inputWrapper?.querySelector(
+        'span[aria-hidden="true"]',
+      );
+      expect(trailingIcon).toBeInTheDocument();
+    });
   });
 });

@@ -14,7 +14,7 @@ import userEvent from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, it } from 'vitest';
 
-const { setItem } = useLocalStorage();
+const { setItem, clearAllItems } = useLocalStorage();
 
 const MOCKS = [
   {
@@ -37,7 +37,7 @@ const MOCKS = [
 const link = new StaticMockLink(MOCKS, true);
 
 afterEach(() => {
-  localStorage.clear();
+  clearAllItems();
   vi.restoreAllMocks();
 });
 

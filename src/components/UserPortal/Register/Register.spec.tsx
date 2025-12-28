@@ -161,7 +161,10 @@ describe('Testing Register Component [User Portal]', () => {
 
     await userEvent.click(screen.getByTestId('registerBtn'));
 
-    expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
+    expect(toast.error).toHaveBeenCalledWith(
+      'Please enter valid details.',
+      expect.any(Object),
+    );
   });
 
   it('Expect toast.error to be called if password input is empty', async () => {
@@ -182,7 +185,10 @@ describe('Testing Register Component [User Portal]', () => {
     await userEvent.type(screen.getByTestId('emailInput'), formData.email);
     await userEvent.click(screen.getByTestId('registerBtn'));
 
-    expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
+    expect(toast.error).toHaveBeenCalledWith(
+      'Please enter valid details.',
+      expect.any(Object),
+    );
   });
 
   it('Expect toast.error to be called if first name input is empty', async () => {
@@ -207,7 +213,10 @@ describe('Testing Register Component [User Portal]', () => {
     await userEvent.type(screen.getByTestId('emailInput'), formData.email);
     await userEvent.click(screen.getByTestId('registerBtn'));
 
-    expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
+    expect(toast.error).toHaveBeenCalledWith(
+      'Please enter valid details.',
+      expect.any(Object),
+    );
   });
 
   it('Expect toast.error to be called if last name input is empty', async () => {
@@ -236,7 +245,10 @@ describe('Testing Register Component [User Portal]', () => {
     );
     await userEvent.click(screen.getByTestId('registerBtn'));
 
-    expect(toast.error).toHaveBeenCalledWith('Please enter valid details.');
+    expect(toast.error).toHaveBeenCalledWith(
+      'Please enter valid details.',
+      expect.any(Object),
+    );
   });
 
   it("Expect toast.error to be called if confirmPassword doesn't match with password", async () => {
@@ -271,6 +283,7 @@ describe('Testing Register Component [User Portal]', () => {
 
     expect(toast.error).toHaveBeenCalledWith(
       "Password doesn't match. Confirm Password and try again.",
+      expect.any(Object),
     );
   });
 
@@ -312,6 +325,7 @@ describe('Testing Register Component [User Portal]', () => {
 
     expect(toast.success).toHaveBeenCalledWith(
       'Successfully registered. Please wait for admin to approve your request.',
+      expect.any(Object),
     );
   });
 
@@ -345,6 +359,9 @@ describe('Testing Register Component [User Portal]', () => {
     await waitForAsync();
 
     // Assert that toast.error is called with the error message
-    expect(toast.error).toHaveBeenCalledWith('GraphQL error occurred');
+    expect(toast.error).toHaveBeenCalledWith(
+      'GraphQL error occurred',
+      expect.any(Object),
+    );
   });
 });

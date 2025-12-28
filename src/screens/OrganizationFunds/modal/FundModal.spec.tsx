@@ -17,14 +17,19 @@ import { store } from 'state/store';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from '../../../utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { MOCKS, MOCKS_ERROR } from '../OrganizationFundsMocks';
 import type { InterfaceFundModal } from './FundModal';
 import FundModal from './FundModal';
 import { vi } from 'vitest';
 
-vi.mock('react-toastify', () => ({
-  toast: { success: vi.fn(), error: vi.fn() },
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  },
 }));
 
 const link1 = new StaticMockLink(MOCKS);
@@ -207,7 +212,9 @@ describe('PledgeModal', () => {
     fireEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(translations.fundCreated);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.fundCreated,
+      );
       expect(fundProps[0].refetchFunds).toHaveBeenCalled();
       expect(fundProps[0].hide).toHaveBeenCalled();
     });
@@ -238,7 +245,7 @@ describe('PledgeModal', () => {
     fireEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.success).not.toHaveBeenCalled();
+      expect(NotificationToast.success).not.toHaveBeenCalled();
       expect(fundProps[1].refetchFunds).not.toHaveBeenCalled();
       expect(fundProps[1].hide).not.toHaveBeenCalled();
     });
@@ -256,7 +263,9 @@ describe('PledgeModal', () => {
     fireEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(translations.fundUpdated);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.fundUpdated,
+      );
       expect(fundProps[1].refetchFunds).toHaveBeenCalled();
       expect(fundProps[1].hide).toHaveBeenCalled();
     });
@@ -280,7 +289,9 @@ describe('PledgeModal', () => {
     fireEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Mock graphql error');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Mock graphql error',
+      );
     });
   });
 
@@ -305,7 +316,9 @@ describe('PledgeModal', () => {
     fireEvent.click(screen.getByTestId('createFundFormSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Mock graphql error');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Mock graphql error',
+      );
     });
   });
 });

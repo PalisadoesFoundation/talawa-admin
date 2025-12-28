@@ -16,7 +16,7 @@
  * - `useTranslation` from `react-i18next` for localization.
  * - `useLocalStorage` for accessing local storage data.
  * - `OrgListCard`, `SortingButton`, `SearchBar`, and `OrganizationModal` for UI components.
- * - `react-toastify` for notifications.
+ * - `NotificationToast` for notifications.
  * - `react-bootstrap` and `@mui/material` for modal and button components.
  *
  * @state
@@ -67,13 +67,16 @@ import styles from 'style/app-fixed.module.css';
 import SortingButton from 'subComponents/SortingButton';
 import { Button } from '@mui/material';
 import OrganizationModal from './modal/OrganizationModal';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Link } from 'react-router';
 import { Modal } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
+import style from './OrgList.module.css';
+import { Group, Search } from '@mui/icons-material';
 
 const { getItem } = useLocalStorage();
 
@@ -128,7 +131,9 @@ function orgList(): JSX.Element {
   const toggleDialogModal = (): void =>
     setdialogModalIsOpen(!dialogModalisOpen);
 
-  document.title = t('title');
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
 
   const perPageResult = 8;
   const [page, setPage] = useState(0);
@@ -163,7 +168,10 @@ function orgList(): JSX.Element {
   const [createMembership] = useMutation(
     CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
   );
-
+  const token = getItem('token');
+  const context = token
+    ? { headers: { authorization: 'Bearer ' + token } }
+    : { headers: {} };
   const {
     data: userData,
   }: {
@@ -172,7 +180,7 @@ function orgList(): JSX.Element {
     error?: Error | undefined;
   } = useQuery(CURRENT_USER, {
     variables: { userId: getItem('id') },
-    context: { headers: { authorization: `Bearer ${getItem('token')}` } },
+    context,
   });
 
   const {
@@ -220,7 +228,7 @@ function orgList(): JSX.Element {
     setIsLoading(loadingAll);
   }, [loadingAll]);
 
-  const createOrg = async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+  const createOrg = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const {
@@ -270,7 +278,7 @@ function orgList(): JSX.Element {
 
       //     toggleModal;
       if (data) {
-        toast.success('Congratulation the Organization is created');
+        NotificationToast.success(t('congratulationOrgCreated'));
         refetchOrgs();
         openDialogModal(data.createOrganization.id);
         setFormState({
@@ -326,56 +334,55 @@ function orgList(): JSX.Element {
     setPage(0);
   };
 
+  const shimmerClass = styles.orgImgContainer + ' shimmer';
+  const shimmerBtnClass = 'shimmer ' + styles.button;
+  const pluginBtnClass = 'btn  btn-primary ' + styles.pluginStoreBtn;
+  const storeUrl = `orgstore/id=${dialogRedirectOrgId}`;
+
   return (
-    <div style={{ paddingLeft: '40px', paddingRight: '30px' }}>
+    <div className={styles.orgListContainer}>
       {/* Buttons Container */}
-      <div className={styles.btnsContainerSearchBar}>
-        <div className={styles.searchWrapper}>
-          <div className={styles.inputOrgList}>
-            <SearchBar
-              placeholder={t('searchOrganizations')}
-              value={typedValue}
-              onChange={handleChangeFilter}
-              onSearch={doSearch}
-              className={styles.maxWidth}
-              inputTestId="searchInput"
-              buttonTestId="searchBtn"
-              buttonAriaLabel={t('search')}
-            />
-          </div>
+      <div className={styles.calendar__header}>
+        {/* 1. Search Bar (Standardized) */}
+        <SearchBar
+          placeholder={t('searchOrganizations')}
+          value={typedValue}
+          onChange={handleChangeFilter}
+          onSearch={doSearch}
+          inputTestId="searchInput"
+          buttonTestId="searchBtn"
+          buttonAriaLabel={tCommon('search')}
+          showSearchButton={true}
+          showLeadingIcon={true}
+          showClearButton={true}
+        />
 
-          <div className={styles.btnsBlock}>
-            <NotificationIcon />
+        {/* 2. Action Buttons (Aligned to Right) */}
+        <div className={styles.btnsBlock}>
+          <NotificationIcon />
 
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <div className={styles.btnsBlockSearchBar}>
-                <SortingButton
-                  title={t('sortOrganizations')}
-                  sortingOptions={[
-                    { label: t('Latest'), value: 'Latest' },
-                    { label: t('Earliest'), value: 'Earliest' },
-                  ]}
-                  selectedOption={sortingState.selectedOption}
-                  onSortChange={handleSortChange}
-                  dataTestIdPrefix="sortOrgs"
-                  dropdownTestId="sort"
-                />
-              </div>
+          <SortingButton
+            title={t('sortOrganizations')}
+            sortingOptions={[
+              { label: t('Latest'), value: 'Latest' },
+              { label: t('Earliest'), value: 'Earliest' },
+            ]}
+            selectedOption={sortingState.selectedOption}
+            onSortChange={handleSortChange}
+            dataTestIdPrefix="sortOrgs"
+            dropdownTestId="sort"
+          />
 
-              {role === 'administrator' && (
-                <div className={styles.btnsBlock}>
-                  <Button
-                    className={`${styles.dropdown} ${styles.createorgdropdown}`}
-                    onClick={toggleModal}
-                    data-testid="createOrganizationBtn"
-                  >
-                    <i className="fa fa-plus me-2" />
-                    {t('createOrganization')}
-                  </Button>
-                </div>
-              )}
-            </div>
-          </div>
+          {role === 'administrator' && (
+            <Button
+              className={`${styles.dropdown} ${styles.createorgdropdown}`}
+              onClick={toggleModal}
+              data-testid="createOrganizationBtn"
+            >
+              <i className="fa fa-plus me-2" />
+              {t('createOrganization')}
+            </Button>
+          )}
         </div>
       </div>
 
@@ -385,18 +392,23 @@ function orgList(): JSX.Element {
       (!sortedOrganizations || sortedOrganizations.length === 0) &&
       searchByName.length === 0 &&
       (!userData || adminFor.length === 0) ? (
-        <div className={styles.notFound}>
-          <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
-          <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
-        </div>
+        <EmptyState
+          icon={<Group />}
+          message={t('noOrgErrorTitle')}
+          description={t('noOrgErrorDescription')}
+          dataTestId="orglist-no-orgs-empty"
+        />
       ) : !isLoading &&
-        sortedOrganizations?.length == 0 &&
+        sortedOrganizations?.length === 0 &&
         searchByName.length > 0 ? (
-        <div className={styles.notFound} data-testid="noResultFound">
-          <h4 className="m-0">
-            {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
-          </h4>
-        </div>
+        <EmptyState
+          icon={<Search />}
+          message={tCommon('noResultsFoundFor', {
+            query: searchByName,
+          })}
+          description={tCommon('tryAdjustingFilters')}
+          dataTestId="orglist-search-empty"
+        />
       ) : (
         <>
           {isLoading && (
@@ -405,16 +417,16 @@ function orgList(): JSX.Element {
                 <div key={index} className={styles.itemCardOrgList}>
                   <div className={styles.loadingWrapper}>
                     <div className={styles.innerContainer}>
-                      <div className={`${styles.orgImgContainer} shimmer`} />
+                      <div className={shimmerClass} />
 
                       <div className={styles.content}>
-                        <h5 className="shimmer" title="Org name"></h5>
-                        <h6 className="shimmer" title="Location"></h6>
-                        <h6 className="shimmer" title="Admins"></h6>
-                        <h6 className="shimmer" title="Members"></h6>
+                        <h5 className="shimmer" title={t('orgName')}></h5>
+                        <h6 className="shimmer" title={t('location')}></h6>
+                        <h6 className="shimmer" title={t('admins')}></h6>
+                        <h6 className="shimmer" title={t('members')}></h6>
                       </div>
                     </div>
-                    <div className={`shimmer ${styles.button}`} />
+                    <div className={shimmerBtnClass} />
                   </div>
                 </div>
               ))}
@@ -436,7 +448,7 @@ function orgList(): JSX.Element {
             })}
           </div>
           {/* pagination */}
-          <table style={{ width: '100%' }}>
+          <table className={style.table_fullWidth}>
             <tbody>
               <tr>
                 <PaginationList
@@ -495,9 +507,9 @@ function orgList(): JSX.Element {
 
               <div className={styles.pluginStoreBtnContainer}>
                 <Link
-                  className={`btn  btn-primary ${styles.pluginStoreBtn}`}
+                  className={pluginBtnClass}
                   data-testid="goToStore"
-                  to={`orgstore/id=${dialogRedirectOrgId}`}
+                  to={storeUrl}
                 >
                   {t('goToStore')}
                 </Link>

@@ -16,7 +16,7 @@ Defined in: [src/screens/OrganizationTags/OrganizationTagsMocks.ts:107](https://
 
 ### DEFAULT
 
-> **DEFAULT**: (`ListMock` \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `name`: `string`; `organizationId`: `string`; \}; \}; `result`: \{ `data`: \{ `createUserTag`: \{ `_id`: `string`; \}; \}; \}; \})[]
+> **DEFAULT**: (`ListMock` \| \{ `request`: \{ `query`: `DocumentNode`; `variables`: \{ `name`: `string`; `organizationId`: `string`; \}; \}; `result`: \{ `data`: \{ `createUserTag`: \{ `id`: `string`; \}; \}; \}; \})[]
 
 ### EMPTY
 

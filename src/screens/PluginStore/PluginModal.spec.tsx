@@ -12,6 +12,22 @@ vi.mock('../../plugin/services/AdminPluginFileService', () => ({
   },
 }));
 
+// Mock LoadingState
+vi.mock('../../shared-components/LoadingState/LoadingState', () => ({
+  default: ({
+    isLoading,
+    children,
+  }: {
+    isLoading: boolean;
+    children: React.ReactNode;
+  }) => (
+    <div data-testid="loading-state" data-is-loading={isLoading}>
+      {children}
+      {isLoading && <div data-testid="spinner">Loading...</div>}
+    </div>
+  ),
+}));
+
 describe('PluginModal', () => {
   const mockMeta: IPluginMeta = {
     id: 'test-plugin',
@@ -223,11 +239,12 @@ describe('PluginModal', () => {
   });
 
   describe('Plugin Actions - Not Installed', () => {
-    it('should show Install and Uninstall buttons for non-installed plugin', () => {
+    it('should show Install button for non-installed plugin', () => {
       render(<PluginModal {...defaultProps} />);
 
       expect(screen.getByText('Install')).toBeInTheDocument();
-      expect(screen.getByText('Uninstall')).toBeInTheDocument();
+      // Should NOT have Uninstall button for non-installed plugin
+      expect(screen.queryByText('Uninstall')).not.toBeInTheDocument();
     });
 
     it('should call installPlugin when Install button is clicked', () => {
@@ -238,20 +255,18 @@ describe('PluginModal', () => {
       expect(defaultProps.installPlugin).toHaveBeenCalledWith(mockMeta);
     });
 
-    it('should call uninstallPlugin when Uninstall button is clicked', () => {
-      render(<PluginModal {...defaultProps} />);
-
-      fireEvent.click(screen.getByText('Uninstall'));
-
-      expect(defaultProps.uninstallPlugin).toHaveBeenCalledWith(mockMeta);
-    });
-
-    it('should disable Install and Uninstall buttons when loading', () => {
+    it('should show LoadingState when loading', () => {
       render(<PluginModal {...defaultProps} loading={true} />);
 
-      const buttons = screen.getAllByRole('button');
-      const disabledButtons = buttons.filter((b) => b.hasAttribute('disabled'));
-      expect(disabledButtons.length).toBeGreaterThanOrEqual(2);
+      const loadingStates = screen.getAllByTestId('loading-state');
+      // Should have exactly 1 LoadingState component (Install button only)
+      expect(loadingStates.length).toBe(1);
+
+      // Verify it is in loading state
+      const loadingOnes = loadingStates.filter(
+        (state) => state.getAttribute('data-is-loading') === 'true',
+      );
+      expect(loadingOnes.length).toBe(1);
     });
   });
 
@@ -291,20 +306,18 @@ describe('PluginModal', () => {
       expect(defaultProps.uninstallPlugin).toHaveBeenCalledWith(mockMeta);
     });
 
-    it('should disable buttons when loading', () => {
+    it('should show LoadingState when loading', () => {
       render(<PluginModal {...installedActiveProps} loading={true} />);
 
-      expect(screen.getByText('Deactivate')).toBeDisabled();
-      expect(screen.getByText('Uninstall')).toBeDisabled();
-    });
+      const loadingStates = screen.getAllByTestId('loading-state');
+      // Should have exactly 2 LoadingState components (Deactivate and Uninstall buttons)
+      expect(loadingStates.length).toBe(2);
 
-    it('should show spinner icons when loading', () => {
-      render(<PluginModal {...installedActiveProps} loading={true} />);
-
-      const spinners = screen.getAllByText((content, element) => {
-        return element?.classList.contains('animate-spin') || false;
-      });
-      expect(spinners.length).toBeGreaterThan(0);
+      // Verify they are in loading state
+      const loadingOnes = loadingStates.filter(
+        (state) => state.getAttribute('data-is-loading') === 'true',
+      );
+      expect(loadingOnes.length).toBe(2);
     });
   });
 

@@ -162,9 +162,9 @@ Defined in: [src/types/Event/type.ts:35](https://github.com/PalisadoesFoundation
 
 ***
 
-### recurrance?
+### recurrence?
 
-> `optional` **recurrance**: `string`
+> `optional` **recurrence**: `string`
 
 Defined in: [src/types/Event/type.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L36)
 

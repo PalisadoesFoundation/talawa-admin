@@ -39,6 +39,18 @@ export const MOCKS = [
                   createdAt: '2024-06-21T00:00:00Z', // Earlier date
                 },
               },
+              // Add extra funds to enable pagination (dates earlier than Fund 2)
+              ...Array.from({ length: 12 }).map((_, i) => ({
+                node: {
+                  creator: { name: 'Auto' },
+                  id: `extra-${i + 1}`,
+                  isTaxDeductible: false,
+                  name: `Extra Fund ${i + 1}`,
+                  organization: { name: 'Org 1' },
+                  updater: null,
+                  createdAt: `2024-01-${String((i % 28) + 1).padStart(2, '0')}T00:00:00Z`,
+                },
+              })),
             ],
           },
         },
@@ -79,6 +91,18 @@ export const MOCKS = [
                   createdAt: '2024-06-22T00:00:00Z', // Later date
                 },
               },
+              // Include same extra funds to keep data shape consistent
+              ...Array.from({ length: 12 }).map((_, i) => ({
+                node: {
+                  creator: { name: 'Auto' },
+                  id: `extra2-${i + 1}`,
+                  isTaxDeductible: false,
+                  name: `Extra B Fund ${i + 1}`,
+                  organization: { name: 'Org 1' },
+                  updater: null,
+                  createdAt: `2024-01-${String((i % 28) + 1).padStart(2, '0')}T00:00:00Z`,
+                },
+              })),
             ],
           },
         },

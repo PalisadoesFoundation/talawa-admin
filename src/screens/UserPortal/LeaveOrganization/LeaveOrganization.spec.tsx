@@ -23,16 +23,6 @@ vi.mock('react-toastify', () => ({
   toast: toastMocks,
 }));
 
-Object.defineProperty(window, 'localStorage', {
-  value: {
-    getItem: vi.fn(),
-    setItem: vi.fn(),
-    removeItem: vi.fn(),
-    clear: vi.fn(),
-  },
-  writable: true,
-});
-
 // Mock useParams to return a test organization ID
 
 vi.mock('react-router', async () => {
@@ -181,7 +171,6 @@ const errorMocks = [
 
 describe('LeaveOrganization Component', () => {
   beforeEach(() => {
-    localStorage.clear();
     vi.clearAllMocks();
     routerMocks.params.mockReset();
     routerMocks.navigate.mockReset();
