@@ -270,7 +270,7 @@ describe('Organisation Tags Page', () => {
                   />
                   <button
                     data-testid={search.buttonTestId}
-                    onClick={() => { }}
+                    onClick={() => {}}
                     tabIndex={-1}
                     type="button"
                   >
@@ -698,7 +698,7 @@ describe('Organisation Tags Page', () => {
 
   test('gridProps includes loadingOverlay slot for LoadingState display during loading (line 316)', async () => {
     // This test specifically targets lines 315-323 which define the loadingOverlay slot function
-    // The loadingOverlay: () => (<LoadingState isLoading={true} variant="skeleton" size="lg" data-testid="orgTagsLoadingOverlay" />)
+    // The loadingOverlay: () => (<LoadingState isLoading={true} variant="spinner" size="lg" data-testid="orgTagsLoadingOverlay" />)
     // is part of the slots object in gridProps passed to ReportingTable
 
     renderOrganizationTags(link);
