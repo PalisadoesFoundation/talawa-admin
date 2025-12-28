@@ -95,6 +95,12 @@ def find_translation_tags(source: str | Path) -> set[str]:
     // translation-check-keyPrefix: organizationEvents
     to specify the keyPrefix used by the parent component.
 
+    Note:
+        This function assumes a single keyPrefix per file. If multiple
+        keyPrefixes are found (from useTranslation calls or comment
+        directives), only the first one is used for all translation tags.
+        A warning is emitted to stderr when this occurs.
+
     Args:
         source: File path or raw source string.
 
@@ -115,18 +121,31 @@ def find_translation_tags(source: str | Path) -> set[str]:
 
     # Find keyPrefix from useTranslation calls
     # Matches patterns like: useTranslation('translation', { keyPrefix: 'namespace' })
-    key_prefix_pattern = r"useTranslation\s*\([^)]*keyPrefix\s*:\s*['\"]([^'\"]+)['\"]"
+    key_prefix_pattern = (
+        r"useTranslation\s*\([^)]*keyPrefix\s*:\s*['\"]([^'\"]+)['\"]"
+    )
     key_prefixes = re.findall(key_prefix_pattern, content)
 
     # Also check for explicit keyPrefix comment directive
     # Matches: // translation-check-keyPrefix: namespace
-    comment_prefix_pattern = r"(?://|/\*)\s*translation-check-keyPrefix:\s*(\S+)"
+    comment_prefix_pattern = (
+        r"(?://|/\*)\s*translation-check-keyPrefix:\s*(\S+)"
+    )
     comment_prefixes = re.findall(comment_prefix_pattern, content)
 
     # Combine prefixes from useTranslation and comments
     all_prefixes = key_prefixes + comment_prefixes
 
     # Get the primary keyPrefix (if multiple, use the first one found)
+    # Note: This assumes single keyPrefix per file. Files with multiple components
+    # using different keyPrefixes may have inaccurate results.
+    if len(all_prefixes) > 1:
+        file_name = source if isinstance(source, Path) else "source"
+        print(
+            f"Warning: Multiple keyPrefixes found in {file_name}. "
+            f"Using first: '{all_prefixes[0]}'. Found: {all_prefixes}",
+            file=sys.stderr,
+        )
     primary_prefix = all_prefixes[0] if all_prefixes else None
 
     # Find all t('key') calls

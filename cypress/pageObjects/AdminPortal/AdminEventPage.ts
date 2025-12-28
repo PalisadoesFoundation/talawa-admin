@@ -39,10 +39,9 @@ export class AdminEventPage {
   }
 
   findEventCard(eventName: string): Cypress.Chainable {
-    // Wait for events to load and find the specific event card
-    return cy
-      .get(this._eventCard, { timeout: 30000 })
-      .contains(eventName, { timeout: 30000 });
+    // Find the specific event card containing the event name
+    // This pattern retries until an element matching both selector AND text is found
+    return cy.contains(this._eventCard, eventName, { timeout: 30000 });
   }
 
   openEventDetails(eventName: string): this {

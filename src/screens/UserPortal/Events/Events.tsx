@@ -62,7 +62,7 @@ import { toast } from 'react-toastify';
 import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { IEventEdge } from 'types/Event/interface';
+import type { IEventEdge, ICreateEventInput } from 'types/Event/interface';
 import styles from 'style/app-fixed.module.css';
 import EventForm, {
   formatRecurrenceForPayload,
@@ -154,19 +154,8 @@ export default function events(): JSX.Element {
         ? formatRecurrenceForPayload(payload.recurrenceRule, payload.startDate)
         : undefined;
 
-      // Build input object with typed interface
-      const input: {
-        name: string;
-        startAt: string;
-        endAt: string;
-        organizationId: string | undefined;
-        allDay: boolean;
-        isPublic: boolean;
-        isRegisterable: boolean;
-        description?: string;
-        location?: string;
-        recurrence?: ReturnType<typeof formatRecurrenceForPayload>;
-      } = {
+      // Build input object with shared typed interface
+      const input: ICreateEventInput = {
         name: payload.name,
         startAt: payload.startAtISO,
         endAt: payload.endAtISO,
