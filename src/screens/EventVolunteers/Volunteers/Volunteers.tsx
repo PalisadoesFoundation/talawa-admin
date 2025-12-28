@@ -82,24 +82,21 @@ enum ModalState {
   VIEW = 'view',
 }
 
-const dataGridStyle = {
-  backgroundColor: 'white',
-  borderRadius: '16px',
-  '& .MuiDataGrid-columnHeaders': { border: 'none' },
-  '& .MuiDataGrid-cell': { border: 'none' },
-  '& .MuiDataGrid-columnSeparator': { display: 'none' },
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
-  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
-};
-
+/**
+ * Renders the Event Volunteers screen.
+ *
+ * Responsibilities:
+ * - Displays volunteer listings with status chips
+ * - Supports search and filter via AdminSearchFilterBar
+ * - Shows volunteer avatars and hours volunteered
+ * - Handles add, view, and delete volunteer flows
+ * - Integrates with DataGrid for table display
+ *
+ * Localization:
+ * - Uses `common` and `eventVolunteers` namespaces
+ *
+ * @returns JSX.Element
+ */
 function Volunteers(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
@@ -250,7 +247,7 @@ function Volunteers(): JSX.Element {
   if (volunteersError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded className={styles.icon} fontSize="large" />
+        <WarningAmberRounded className={`${styles.icon} ${styles.iconLg}`} />
         <h6 className="fw-bold text-danger text-center">
           {tErrors('errorLoading', { entity: 'Volunteers' })}
         </h6>
@@ -400,8 +397,7 @@ function Volunteers(): JSX.Element {
             <Button
               variant="success"
               size="sm"
-              style={{ minWidth: '32px' }}
-              className="me-2 rounded"
+              className={`me-2 rounded ${styles.iconButton}`}
               data-testid="viewItemBtn"
               onClick={() => handleOpenModal(params.row, ModalState.VIEW)}
             >
@@ -473,8 +469,7 @@ function Volunteers(): JSX.Element {
             <Button
               variant="success"
               onClick={() => handleOpenModal(null, ModalState.ADD)}
-              style={{ marginTop: '11px' }}
-              className={styles.actionsButton}
+              className={`${styles.actionsButton} ${styles.marginTopSm}`}
               data-testid="addVolunteerBtn"
             >
               <i className={'fa fa-plus me-2'} />
@@ -498,7 +493,7 @@ function Volunteers(): JSX.Element {
             </Stack>
           ),
         }}
-        sx={dataGridStyle}
+        className={styles.dataGridContainer}
         getRowClassName={() => `${styles.rowBackgrounds}`}
         autoHeight
         rowHeight={65}

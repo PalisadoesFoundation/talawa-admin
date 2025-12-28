@@ -47,28 +47,20 @@ enum ModalState {
   VIEW = 'view',
 }
 
-const dataGridStyle = {
-  backgroundColor: 'white',
-  borderRadius: '16px',
-  '& .MuiDataGrid-columnHeaders': { border: 'none' },
-  '& .MuiDataGrid-cell': { border: 'none' },
-  '& .MuiDataGrid-columnSeparator': { display: 'none' },
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
-  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
-};
-
 /**
- * Component for managing volunteer groups for an event.
- * This component allows users to view, filter, sort, and create action items. It also provides a modal for creating and editing action items.
- * @returns The rendered component.
+ * Renders the Volunteer Groups management screen.
+ *
+ * Responsibilities:
+ * - Displays volunteer groups for an event
+ * - Supports searching by group name or leader via AdminSearchFilterBar
+ * - Enables sorting by volunteer count
+ * - Handles create, edit, view, and delete group flows
+ * - Renders assignee avatars and volunteer counts
+ *
+ * Localization:
+ * - Uses `common` and `eventVolunteers` namespaces
+ *
+ * @returns JSX.Element
  */
 function volunteerGroups(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
@@ -194,7 +186,7 @@ function volunteerGroups(): JSX.Element {
   if (groupsError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded className={styles.icon} fontSize="large" />
+        <WarningAmberRounded className={`${styles.icon} ${styles.iconLg}`} />
         <h6 className="fw-bold text-danger text-center">
           {tErrors('errorLoading', { entity: 'Volunteer Groups' })}
         </h6>
@@ -293,8 +285,7 @@ function volunteerGroups(): JSX.Element {
             <Button
               variant="success"
               size="sm"
-              style={{ minWidth: '32px' }}
-              className="me-2 rounded"
+              className={`me-2 rounded ${styles.iconButton}`}
               data-testid="viewGroupBtn"
               onClick={() => handleModalClick(params.row, ModalState.VIEW)}
             >
@@ -399,7 +390,7 @@ function volunteerGroups(): JSX.Element {
             </Stack>
           ),
         }}
-        sx={dataGridStyle}
+        className={styles.dataGridContainer}
         getRowClassName={() => `${styles.rowBackgrounds}`}
         autoHeight
         rowHeight={65}

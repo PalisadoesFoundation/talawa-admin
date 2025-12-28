@@ -15,6 +15,7 @@ import PledgeModal from './modal/PledgeModal';
 import { Breadcrumbs, Link, Popover, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
+import EmptyState from '../../../src/shared-components/EmptyState/EmptyState';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import type {
   InterfacePledgeInfo,
@@ -29,6 +30,21 @@ enum ModalState {
   DELETE = 'delete',
 }
 
+/**
+ * Renders the Fund Campaign Pledges screen.
+ *
+ * Responsibilities:
+ * - Displays all pledges for a fund campaign
+ * - Supports searching and sorting via AdminSearchFilterBar
+ * - Shows pledge progress toggle (pledged vs raised amounts)
+ * - Renders popover for extra users when multiple pledgers exist
+ * - Handles create, edit, and delete pledge flows
+ *
+ * Localization:
+ * - Uses `common` and `pledges` namespaces
+ *
+ * @returns JSX.Element
+ */
 const fundCampaignPledge = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
   const { t: tCommon } = useTranslation('common');

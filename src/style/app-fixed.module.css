@@ -10209,3 +10209,38 @@ form {
   padding: 20px;
   position: relative;
 }
+
+.dataGridContainer {
+  background-color: var(--color-white);
+  border-radius: 16px;
+}
+
+.dataGridContainer :global(.MuiDataGrid-columnHeaders),
+.dataGridContainer :global(.MuiDataGrid-cell) {
+  border: none;
+}
+
+.dataGridContainer :global(.MuiDataGrid-columnSeparator) {
+  display: none;
+}
+
+.dataGridContainer :global(.MuiDataGrid-row:hover),
+.dataGridContainer :global(.MuiDataGrid-row.Mui-hovered) {
+  background-color: transparent;
+}
+
+.iconButton {
+  min-width: 32px;
+}
+
+.smallText {
+  font-size: var(--font-size-sm);
+}
+
+.marginTopSm {
+  margin-top: 11px;
+}
+
+.iconLg {
+  font-size: 2rem;
+}
