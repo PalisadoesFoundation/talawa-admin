@@ -398,7 +398,10 @@
     "totalAssignedUsers": "Total des utilisateurs assignés",
     "tagCreationFailed": "Échec de la création de l'étiquette",
     "errorLoadingTagsData": "Une erreur s'est produite lors du chargement des données des étiquettes de l'organisation",
-    "sortTags": "Trier les étiquettes"
+    "sortTags": "Trier les étiquettes",
+    "tags": "Étiquettes",
+    "Latest": "Le Plus Récent",
+    "Oldest": "Le Plus Ancien"
   },
   "manageTag": {
     "title": "Détails de l'étiquette",

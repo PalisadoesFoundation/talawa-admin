@@ -398,7 +398,10 @@
     "totalAssignedUsers": "分配的总用户数",
     "tagCreationFailed": "标签创建失败",
     "errorLoadingTagsData": "加载组织标签数据时出错",
-    "sortTags": "排序标签"
+    "sortTags": "排序标签",
+    "tags": "标签",
+    "Latest": "最新",
+    "Oldest": "最旧"
   },
   "manageTag": {
     "title": "标签详情",

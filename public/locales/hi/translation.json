@@ -398,7 +398,10 @@
     "totalAssignedUsers": "कुल नियुक्त उपयोगकर्ता",
     "tagCreationFailed": "टैग निर्माण विफल",
     "errorLoadingTagsData": "संगठन टैग डेटा लोड करते समय त्रुटि हुई",
-    "sortTags": "टैग सॉर्ट करें"
+    "sortTags": "टैग सॉर्ट करें",
+    "tags": "टैग",
+    "Latest": "नवीनतम",
+    "Oldest": "सबसे पुराना"
   },
   "manageTag": {
     "title": "टैग विवरण",
