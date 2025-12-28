@@ -140,7 +140,7 @@ def find_translation_tags(source: str | Path) -> set[str]:
     # Note: This assumes single keyPrefix per file. Files with multiple
     # components using different keyPrefixes may have inaccurate results.
     if len(all_prefixes) > 1:
-        file_name = source if isinstance(source, Path) else "source"
+        file_name = str(source) if isinstance(source, Path) else "source"
         print(
             f"Warning: Multiple keyPrefixes found in {file_name}. "
             f"Using first: '{all_prefixes[0]}'. Found: {all_prefixes}",

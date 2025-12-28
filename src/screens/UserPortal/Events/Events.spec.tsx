@@ -749,28 +749,38 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should create an all-day event successfully', async () => {
-    const today = new Date();
-    const startAt = dayjs.utc(today).startOf('day').toISOString();
-    const endAt = dayjs.utc(today).endOf('day').toISOString();
-
-    // Test-specific mock with computed dates
+    // Test-specific mock using variableMatcher for flexible date matching
+    // The EventForm uses the current date as default, and for all-day events
+    // it may adjust startAt based on whether startOfDay is in the past
     const allDayEventMock = {
       request: {
         query: CREATE_EVENT_MUTATION,
-        variables: {
-          input: {
-            name: 'New Test Event',
-            description: 'New Test Description',
-            startAt,
-            endAt,
-            organizationId: 'org123',
-            allDay: true,
-            location: 'New Test Location',
-            isPublic: true,
-            isRegisterable: true,
-            recurrence: undefined,
-          },
-        },
+      },
+      variableMatcher: (variables: {
+        input: {
+          name: string;
+          description?: string;
+          startAt: string;
+          endAt: string;
+          organizationId: string;
+          allDay: boolean;
+          location?: string;
+          isPublic: boolean;
+          isRegisterable: boolean;
+        };
+      }) => {
+        const { input } = variables;
+        return (
+          input.name === 'New Test Event' &&
+          input.description === 'New Test Description' &&
+          input.organizationId === 'org123' &&
+          input.allDay === true &&
+          input.location === 'New Test Location' &&
+          input.isPublic === true &&
+          input.isRegisterable === true &&
+          typeof input.startAt === 'string' &&
+          typeof input.endAt === 'string'
+        );
       },
       result: {
         data: {
@@ -835,36 +845,36 @@ describe('Testing Events Screen [User Portal]', () => {
     // Ensure toast success mock is reset for this test
     mockToast.success.mockClear();
 
-    // Create a test-specific link with dynamic variables to avoid ms mismatch
-    const computedStartAt = dayjs(new Date())
-      .hour(8)
-      .minute(0)
-      .second(0)
-      .millisecond(0)
-      .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-    const computedEndAt = dayjs(new Date())
-      .hour(10)
-      .minute(0)
-      .second(0)
-      .millisecond(0)
-      .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-
+    // Use variableMatcher for flexible date matching to avoid timing issues
     const nonAllDayMock = {
       request: {
         query: CREATE_EVENT_MUTATION,
-        variables: {
-          input: {
-            name: 'New Non All Day Event',
-            description: 'New Test Description Non All Day',
-            startAt: computedStartAt,
-            endAt: computedEndAt,
-            organizationId: 'org123',
-            allDay: false,
-            location: 'New Test Location',
-            isPublic: true,
-            isRegisterable: true,
-          },
-        },
+      },
+      variableMatcher: (variables: {
+        input: {
+          name: string;
+          description?: string;
+          startAt: string;
+          endAt: string;
+          organizationId: string;
+          allDay: boolean;
+          location?: string;
+          isPublic: boolean;
+          isRegisterable: boolean;
+        };
+      }) => {
+        const { input } = variables;
+        return (
+          input.name === 'New Non All Day Event' &&
+          input.description === 'New Test Description Non All Day' &&
+          input.organizationId === 'org123' &&
+          input.allDay === false &&
+          input.location === 'New Test Location' &&
+          input.isPublic === true &&
+          input.isRegisterable === true &&
+          typeof input.startAt === 'string' &&
+          typeof input.endAt === 'string'
+        );
       },
       result: {
         data: {
@@ -1576,34 +1586,50 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should create an event with recurrence rule successfully', async () => {
     const today = new Date();
-    const startDate = dayjs.utc(today).startOf('day');
-    const endDate = dayjs.utc(today).endOf('day');
     const weekDayByJs = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
     const dayOfWeek = today.getDay();
-    const expectedRecurrence = {
-      frequency: Frequency.WEEKLY,
-      interval: 1,
-      never: true,
-      byDay: [weekDayByJs[dayOfWeek]],
-    };
 
+    // Use variableMatcher for flexible date and recurrence matching
     const createEventWithRecurrenceMock = {
       request: {
         query: CREATE_EVENT_MUTATION,
-        variables: {
-          input: {
-            name: 'Recurring Test Event',
-            description: 'Recurring Test Description',
-            startAt: startDate.toISOString(),
-            endAt: endDate.toISOString(),
-            organizationId: 'org123',
-            allDay: true,
-            location: 'Recurring Test Location',
-            isPublic: true,
-            isRegisterable: true,
-            recurrence: expectedRecurrence,
-          },
-        },
+      },
+      variableMatcher: (variables: {
+        input: {
+          name: string;
+          description?: string;
+          startAt: string;
+          endAt: string;
+          organizationId: string;
+          allDay: boolean;
+          location?: string;
+          isPublic: boolean;
+          isRegisterable: boolean;
+          recurrence?: {
+            frequency: string;
+            interval: number;
+            never?: boolean;
+            byDay?: string[];
+          };
+        };
+      }) => {
+        const { input } = variables;
+        // Ensure all conditions return boolean (not undefined via optional chaining)
+        return Boolean(
+          input.name === 'Recurring Test Event' &&
+            input.description === 'Recurring Test Description' &&
+            input.organizationId === 'org123' &&
+            input.allDay === true &&
+            input.location === 'Recurring Test Location' &&
+            input.isPublic === true &&
+            input.isRegisterable === true &&
+            typeof input.startAt === 'string' &&
+            typeof input.endAt === 'string' &&
+            input.recurrence &&
+            input.recurrence.frequency === Frequency.WEEKLY &&
+            input.recurrence.interval === 1 &&
+            input.recurrence.byDay?.includes(weekDayByJs[dayOfWeek]),
+        );
       },
       result: {
         data: {

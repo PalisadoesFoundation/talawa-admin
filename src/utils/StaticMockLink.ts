@@ -70,6 +70,18 @@ export class StaticMockLink extends ApolloLink {
       (res, index) => {
         const requestVariables = operation.variables || {};
         const mockedResponseVariables = res.request.variables || {};
+
+        // Support variableMatcher function for flexible matching
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const matcher = (res as any).variableMatcher;
+        if (typeof matcher === 'function') {
+          if (matcher(requestVariables)) {
+            responseIndex = index;
+            return true;
+          }
+          return false;
+        }
+
         if (equal(requestVariables, mockedResponseVariables)) {
           responseIndex = index;
           return true;
