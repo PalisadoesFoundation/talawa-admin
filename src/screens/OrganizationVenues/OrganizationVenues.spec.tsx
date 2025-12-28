@@ -329,9 +329,9 @@ describe('Organisation Venues', () => {
 
   test('Render modal to edit venue', async () => {
     renderOrganizationVenue(link);
-    await waitFor(() =>
-      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
-    );
+
+    // Wait for venues to load before interacting
+    await screen.findByTestId('venue-item1');
 
     fireEvent.click(screen.getByTestId('updateVenueBtn-venue1'));
     await waitFor(() => {
