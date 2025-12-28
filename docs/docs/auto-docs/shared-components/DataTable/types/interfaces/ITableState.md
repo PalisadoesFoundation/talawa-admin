@@ -4,7 +4,7 @@
 
 # Interface: ITableState
 
-Defined in: [src/shared-components/DataTable/types.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L78)
+Defined in: [src/shared-components/DataTable/types.ts:86](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L86)
 
 Shared table UI state
 
@@ -14,7 +14,7 @@ Shared table UI state
 
 > `optional` **filters**: [`IFilterState`](IFilterState.md)[]
 
-Defined in: [src/shared-components/DataTable/types.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L80)
+Defined in: [src/shared-components/DataTable/types.ts:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L88)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [src/shared-components/DataTable/types.ts:80](https://github.com/Pal
 
 > `optional` **globalSearch**: `string`
 
-Defined in: [src/shared-components/DataTable/types.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L81)
+Defined in: [src/shared-components/DataTable/types.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L89)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [src/shared-components/DataTable/types.ts:81](https://github.com/Pal
 
 > `optional` **selectedRows**: `Set`\<`string` \| `number`\>
 
-Defined in: [src/shared-components/DataTable/types.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L82)
+Defined in: [src/shared-components/DataTable/types.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L90)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [src/shared-components/DataTable/types.ts:82](https://github.com/Pal
 
 > `optional` **sorting**: [`ISortState`](ISortState.md)[]
 
-Defined in: [src/shared-components/DataTable/types.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L79)
+Defined in: [src/shared-components/DataTable/types.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L87)

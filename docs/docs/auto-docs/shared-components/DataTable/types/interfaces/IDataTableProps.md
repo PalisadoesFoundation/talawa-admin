@@ -20,6 +20,16 @@ Props for a generic DataTable component
 
 ## Properties
 
+### ariaLabel?
+
+> `optional` **ariaLabel**: `string`
+
+Defined in: [src/shared-components/DataTable/types.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L66)
+
+Optional accessible label for the table, used for aria-label and caption
+
+***
+
 ### columns
 
 > **columns**: [`IColumnDef`](IColumnDef.md)\<`T`, `TValue`\>[]
@@ -40,7 +50,7 @@ Defined in: [src/shared-components/DataTable/types.ts:54](https://github.com/Pal
 
 > `optional` **emptyMessage**: `string`
 
-Defined in: [src/shared-components/DataTable/types.ts:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L58)
+Defined in: [src/shared-components/DataTable/types.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L62)
 
 ***
 
@@ -48,7 +58,7 @@ Defined in: [src/shared-components/DataTable/types.ts:58](https://github.com/Pal
 
 > `optional` **error**: `Error`
 
-Defined in: [src/shared-components/DataTable/types.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L59)
+Defined in: [src/shared-components/DataTable/types.ts:63](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L63)
 
 ***
 
@@ -64,7 +74,7 @@ Defined in: [src/shared-components/DataTable/types.ts:56](https://github.com/Pal
 
 > `optional` **renderError**: (`error`) => `ReactNode`
 
-Defined in: [src/shared-components/DataTable/types.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L60)
+Defined in: [src/shared-components/DataTable/types.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L64)
 
 #### Parameters
 
@@ -82,4 +92,17 @@ Defined in: [src/shared-components/DataTable/types.ts:60](https://github.com/Pal
 
 > `optional` **rowKey**: keyof `T` \| (`row`) => `string` \| `number`
 
-Defined in: [src/shared-components/DataTable/types.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L57)
+Defined in: [src/shared-components/DataTable/types.ts:61](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L61)
+
+rowKey: A property name (keyof T) or a function to uniquely identify each row.
+If a property name is provided, its value will be coerced to string or number.
+
+***
+
+### skeletonRows?
+
+> `optional` **skeletonRows**: `number`
+
+Defined in: [src/shared-components/DataTable/types.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L68)
+
+Number of skeleton rows to show when loading (default: 6)
