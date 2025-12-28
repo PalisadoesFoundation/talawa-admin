@@ -1537,7 +1537,7 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
       1,
-      'Name should contain only letters, spaces, and hyphens',
+      i18nForTest.t('loginPage.nameInvalid'),
     );
   });
 
@@ -1559,7 +1559,7 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
       1,
-      'Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character',
+      i18nForTest.t('loginPage.passwordInvalid'),
     );
   });
 
@@ -1838,7 +1838,7 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
       1,
-      'Email should have atleast 8 characters',
+      i18nForTest.t('loginPage.emailInvalid'),
     );
   });
 
@@ -2072,8 +2072,8 @@ describe('Extra coverage for 100 %', () => {
   });
 });
 
-describe('RefreshToken storage verification', () => {
-  it('should store refreshToken in localStorage on successful login', async () => {
+describe('Cookie-based authentication verification', () => {
+  it('should NOT store tokens in localStorage (tokens handled by HTTP-Only cookies)', async () => {
     const SIGNIN_WITH_REFRESH_TOKEN_MOCK = [
       {
         request: {
@@ -2152,17 +2152,254 @@ describe('RefreshToken storage verification', () => {
 
     await wait();
 
-    // Verify that setItem was also called with the auth token
-    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+    // Verify that tokens are NOT stored in localStorage (handled by HTTP-Only cookies)
+    expect(mockUseLocalStorage.setItem).not.toHaveBeenCalledWith(
       'token',
-      'newAuthToken123',
+      expect.any(String),
+    );
+    expect(mockUseLocalStorage.setItem).not.toHaveBeenCalledWith(
+      'refreshToken',
+      expect.any(String),
     );
 
-    // Verify that refreshToken is stored (critical for session renewal)
+    // Verify that user session state IS stored in localStorage
     expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
-      'refreshToken',
-      'newRefreshToken456',
+      'IsLoggedIn',
+      'TRUE',
     );
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+      'name',
+      'Test User',
+    );
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+      'email',
+      'test@gmail.com',
+    );
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith('role', 'user');
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+      'userId',
+      'userId123',
+    );
+  });
+
+  // Test case for registration/signup flow
+  it('registers user without storing tokens in localStorage (cookie-based auth)', async () => {
+    const SIGNUP_SUCCESS_MOCK = [
+      {
+        request: {
+          query: RECAPTCHA_MUTATION,
+          variables: { recaptchaToken: 'validToken' },
+        },
+        result: { data: { recaptcha: true } },
+      },
+      {
+        request: {
+          query: SIGNUP_MUTATION,
+          variables: {
+            ID: '',
+            name: 'New User',
+            email: 'newuser@example.com',
+            password: 'Password@123',
+          },
+        },
+        result: {
+          data: {
+            signUp: {
+              user: {
+                id: 'newUser123',
+              },
+              authenticationToken: 'newAuthTokenSignup',
+              refreshToken: 'newRefreshTokenSignup',
+            },
+          },
+        },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: { data: { organizations: [] } },
+      },
+    ];
+
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        reload: vi.fn(),
+        href: 'https://localhost:4321/',
+        origin: 'https://localhost:4321',
+        pathname: '/',
+      },
+    });
+
+    render(
+      <MockedProvider mocks={SIGNUP_SUCCESS_MOCK} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Switch to Register tab
+    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
+
+    // Fill registration form
+    await userEvent.type(screen.getByPlaceholderText(/Name/i), 'New User');
+    await userEvent.type(
+      screen.getByTestId('signInEmail'),
+      'newuser@example.com',
+    );
+    await userEvent.type(
+      screen.getByPlaceholderText('Password'),
+      'Password@123',
+    );
+    await userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      'Password@123',
+    );
+    await userEvent.type(
+      screen.getAllByTestId('mock-recaptcha')[1],
+      'validToken',
+    );
+
+    // Submit registration
+    await userEvent.click(screen.getByTestId('registrationBtn'));
+
+    await wait();
+
+    // Verify that tokens are NOT stored in localStorage (handled by HTTP-Only cookies)
+    expect(mockUseLocalStorage.setItem).not.toHaveBeenCalledWith(
+      'token',
+      expect.any(String),
+    );
+    expect(mockUseLocalStorage.setItem).not.toHaveBeenCalledWith(
+      'refreshToken',
+      expect.any(String),
+    );
+
+    // Verify IsLoggedIn is TRUE
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+      'IsLoggedIn',
+      'TRUE',
+    );
+
+    // Verify user details are stored (name/email from form input, userId from API)
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+      'name',
+      'New User',
+    );
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+      'email',
+      'newuser@example.com',
+    );
+    // Verify userId and role are now stored during signup
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith(
+      'userId',
+      'newUser123',
+    );
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith('role', 'user');
+  });
+
+  it('Testing login error handling (catch block)', async () => {
+    const ERROR_MOCKS = [
+      {
+        request: {
+          query: SIGNIN_QUERY,
+          variables: { email: 'error@gmail.com', password: 'password' },
+        },
+        error: new Error('Network Error'),
+      },
+      {
+        request: {
+          query: RECAPTCHA_MUTATION,
+          variables: { recaptchaToken: 'test-token' },
+        },
+        result: { data: { recaptcha: true } },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG, variables: {} },
+        result: {
+          data: {
+            community: {
+              id: '1',
+              name: 'Test Community',
+              logoURL: 'http://example.com/logo.png',
+              websiteURL: 'http://example.com',
+              facebookURL: 'http://facebook.com/test',
+              linkedinURL: 'http://linkedin.com/test',
+              xURL: 'http://twitter.com/test',
+              githubURL: 'http://github.com/test',
+              instagramURL: 'http://instagram.com/test',
+              youtubeURL: 'http://youtube.com/test',
+              slackURL: 'http://slack.com/test',
+              redditURL: 'http://reddit.com/test',
+              inactivityTimeoutDuration: 3600,
+              createdAt: '2023-01-01',
+              updatedAt: '2023-01-01',
+              logoMimeType: 'image/png',
+              __typename: 'Community',
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: {
+          data: {
+            organizations: [],
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider link={new StaticMockLink(ERROR_MOCKS, true)}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await userEvent.type(screen.getByTestId(/loginEmail/i), 'error@gmail.com');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'password',
+    );
+
+    // Simulate reCAPTCHA completion
+    const recaptcha = screen.getAllByTestId('mock-recaptcha')[0];
+    fireEvent.change(recaptcha, {
+      target: { value: 'test-token' },
+    });
+
+    await wait();
+
+    await userEvent.click(screen.getByTestId('loginBtn'));
+
+    await wait();
+
+    // Verify error toast is shown
+    expect(toastMocks.error).toHaveBeenCalledWith(
+      expect.stringContaining('Network Error'),
+      expect.any(Object),
+    );
+
+    // Verify ReCAPTCHA is reset on error
+    expect(resetReCAPTCHA).toHaveBeenCalled();
   });
 
   describe('Checks presence of back to login button', () => {
@@ -2185,4 +2422,59 @@ describe('RefreshToken storage verification', () => {
 
   // Note: Registration uses the same code path as login for storing refreshToken
   // The login test above verifies the refreshToken storage behavior
+  it('Testing Community Data Rendering (social icons and logo)', async () => {
+    const COMMUNITY_MOCKS = [
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: {
+          data: {
+            community: {
+              name: 'Test Community',
+              logoURL: 'http://example.com/logo.png',
+              websiteURL: 'http://example.com',
+              facebookURL: 'http://facebook.com/test',
+              linkedinURL: 'http://linkedin.com/test',
+              xURL: 'http://twitter.com/test',
+              githubURL: 'http://github.com/test',
+              instagramURL: 'http://instagram.com/test',
+              youtubeURL: 'http://youtube.com/test',
+              slackURL: 'http://slack.com/test',
+              redditURL: 'http://reddit.com/test',
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: {
+          data: {
+            organizations: [],
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider link={new StaticMockLink(COMMUNITY_MOCKS, true)}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Verify community logo is rendered
+    expect(screen.getByTestId('preLoginLogo')).toBeInTheDocument();
+    expect(screen.getByText('Test Community')).toBeInTheDocument();
+
+    // Verify social media icons are rendered (checking for at least one)
+    const socialLinks = screen.getAllByTestId('preLoginSocialMedia');
+    expect(socialLinks.length).toBeGreaterThan(0);
+    expect(socialLinks[0]).toHaveAttribute('href');
+  });
 });
