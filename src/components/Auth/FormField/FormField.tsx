@@ -1,34 +1,46 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
-import type { FormFieldProps } from '../../../types/Auth/FormField/interface';
+import type { InterfaceFormFieldProps } from '../../../types/Auth/FormField/interface';
 
-export const FormField: React.FC<FormFieldProps> = (p) => {
-  const errorId = p.error ? `${p.name}-error` : undefined;
+export const FormField: React.FC<InterfaceFormFieldProps> = ({
+  name,
+  label,
+  type = 'text',
+  value,
+  onChange,
+  onBlur,
+  placeholder,
+  required,
+  disabled,
+  error,
+  testId,
+}) => {
+  const errorId = error ? `${name}-error` : undefined;
 
   return (
-    <Form.Group className="mb-3" controlId={p.name}>
-      {p.label && (
+    <Form.Group className="mb-3" controlId={name}>
+      {label && (
         <Form.Label>
-          {p.label}
-          {p.required && <span className="text-danger"> *</span>}
+          {label}
+          {required && <span className="text-danger"> *</span>}
         </Form.Label>
       )}
       <Form.Control
-        type={p.type ?? 'text'}
-        name={p.name}
-        value={p.value}
-        onChange={p.onChange}
-        onBlur={p.onBlur}
-        placeholder={p.placeholder}
-        disabled={p.disabled}
-        isInvalid={!!p.error}
-        aria-invalid={!!p.error}
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        placeholder={placeholder}
+        disabled={disabled}
+        isInvalid={!!error}
+        aria-invalid={!!error}
         aria-describedby={errorId}
-        data-testid={p.testId}
+        data-testid={testId}
       />
-      {p.error && (
+      {error && (
         <Form.Control.Feedback type="invalid" id={errorId} className="d-block">
-          {p.error}
+          {error}
         </Form.Control.Feedback>
       )}
     </Form.Group>

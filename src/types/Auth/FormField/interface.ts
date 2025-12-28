@@ -1,6 +1,6 @@
 import type { ChangeEvent, FocusEvent } from 'react';
 
-export interface FormFieldProps {
+export interface InterfaceFormFieldProps {
   label?: string;
   name: string;
   type?: 'text' | 'email' | 'password' | 'tel';

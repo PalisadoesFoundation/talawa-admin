@@ -233,5 +233,5 @@
     ],
     "**/*.{ts, tsx, json}": "eslint --fix"
   },
-  "packageManager": "pnpm@10.4.1"
+  "packageManager": "pnpm@10.26.2"
 }
