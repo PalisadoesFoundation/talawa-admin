@@ -2307,4 +2307,108 @@ describe('Cookie-based authentication verification', () => {
     );
     expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith('role', 'user');
   });
+
+  it('Testing login error handling (catch block)', async () => {
+    const ERROR_MOCKS = [
+      {
+        request: {
+          query: SIGNIN_QUERY,
+          variables: { email: 'error@gmail.com', password: 'password' },
+        },
+        error: new Error('Network Error'),
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: {
+          data: {
+            organizations: [],
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider link={new StaticMockLink(ERROR_MOCKS, true)}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await userEvent.type(screen.getByTestId(/loginEmail/i), 'error@gmail.com');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'password',
+    );
+
+    await userEvent.click(screen.getByTestId('loginBtn'));
+
+    await wait();
+  });
+
+  it('Testing Community Data Rendering (social icons and logo)', async () => {
+    const COMMUNITY_MOCKS = [
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: {
+          data: {
+            community: {
+              name: 'Test Community',
+              logoURL: 'http://example.com/logo.png',
+              websiteURL: 'http://example.com',
+              facebookURL: 'http://facebook.com/test',
+              linkedInURL: 'http://linkedin.com/test',
+              xURL: 'http://twitter.com/test',
+              githubURL: 'http://github.com/test',
+              instagramURL: 'http://instagram.com/test',
+              youtubeURL: 'http://youtube.com/test',
+              slackURL: 'http://slack.com/test',
+              redditURL: 'http://reddit.com/test',
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: {
+          data: {
+            organizations: [],
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider link={new StaticMockLink(COMMUNITY_MOCKS, true)}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Verify community logo is rendered
+    expect(screen.getByTestId('preLoginLogo')).toBeInTheDocument();
+    expect(screen.getByText('Test Community')).toBeInTheDocument();
+
+    // Verify social media icons are rendered (checking for at least one)
+    const socialLinks = screen.getAllByTestId('preLoginSocialMedia');
+    expect(socialLinks.length).toBeGreaterThan(0);
+    expect(socialLinks[0]).toHaveAttribute('href');
+  });
 });
