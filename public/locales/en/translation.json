@@ -750,7 +750,11 @@
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
     "lowestGoal": "Lowest Goal",
-    "highestGoal": "Highest Goal"
+    "highestGoal": "Highest Goal",
+    "editCampaign": "Edit Campaign",
+    "progress": "Progress",
+    "raised": "Raised",
+    "searchCampaigns": "Search campaigns"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
@@ -788,7 +792,8 @@
     "togglePledgedRaised": "Toggle between Pledged and Raised amounts",
     "pledgeDate": "Pledge Date",
     "pledged": "Pledged",
-    "donated": "Donated"
+    "donated": "Donated",
+    "campaignNotActive": "Campaign is not active"
   },
   "createPostModal": {
     "title": "Posts",

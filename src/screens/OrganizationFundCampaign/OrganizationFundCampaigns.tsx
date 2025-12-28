@@ -133,10 +133,7 @@ const orgFundCampaign = (): JSX.Element => {
     navigate(`/fundCampaignPledge/${orgId}/${campaignId}`);
   };
 
-  const { isArchived } = useMemo(() => {
-    const isArchived = false;
-    return { isArchived };
-  }, []);
+  const isArchived = false;
 
   if (!fundId || !orgId) {
     return <Navigate to={'/'} />;

@@ -750,7 +750,11 @@
     "latestEndDate": "最新结束日期",
     "earliestEndDate": "最早结束日期",
     "lowestGoal": "最低目标",
-    "highestGoal": "最高目标"
+    "highestGoal": "最高目标",
+    "editCampaign": "编辑活动",
+    "progress": "进度",
+    "raised": "已筹集",
+    "searchCampaigns": "搜索活动"
   },
   "pledges": {
     "title": "基金活动承诺",
@@ -788,7 +792,8 @@
     "togglePledgedRaised": "在承诺金额和募集金额之间切换",
     "pledgeDate": "承诺日期",
     "pledged": "已承诺",
-    "donated": "已捐赠"
+    "donated": "已捐赠",
+    "campaignNotActive": "活动尚未开始"
   },
   "createPostModal": {
     "title": "帖子",
