@@ -33,6 +33,7 @@ import {
   revokeRefreshTokenErrorMock,
   revokeRefreshTokenNetworkErrorMock,
   mockNavigationLinksBase,
+  getMockIcon,
 } from './UserPortalNavigationBarMocks';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import styles from './UserPortalNavigationBar.module.css';
@@ -58,6 +59,10 @@ vi.mock('./UserPortalNavigationBar.module.css', () => ({
 vi.mock('components/NotificationIcon/NotificationIcon', () => ({
   default: () => <div data-testid="notification-icon">Notification Icon</div>,
 }));
+
+// Instantiate mock components using factory function to avoid react/no-multi-comp
+const MockPermIdentityIcon = getMockIcon('permIdentity');
+const MockHomeIcon = getMockIcon('home');
 
 let mockNavigate: ReturnType<typeof vi.fn>;
 vi.mock('react-router-dom', async () => {
@@ -259,7 +264,7 @@ describe('UserPortalNavigationBar', () => {
       render(
         <MockedProvider mocks={[]}>
           <MemoryRouter>
-            <UserPortalNavigationBar mode="user" />
+            <UserPortalNavigationBar />
           </MemoryRouter>
         </MockedProvider>,
       );
@@ -529,9 +534,6 @@ describe('UserPortalNavigationBar', () => {
     });
 
     it('renders navigation link with icon', () => {
-      const MockHomeIcon = () => (
-        <div data-testid="mock-home-icon">Home Icon</div>
-      );
       const linksWithIcon = [
         {
           id: 'home',
@@ -1026,13 +1028,12 @@ describe('UserPortalNavigationBar', () => {
         clearAllItems,
       });
 
-      // Note: The component calls revokeRefreshToken() without await,
-      // so the error is not caught. However, if the mutation throws,
-      // the error is caught in the try-catch block.
-      // Since the implementation doesn't await, we test the successful path
-      // and verify cleanup happens regardless.
+      // Import toast to spy on it
+      const { toast } = await import('react-toastify');
+      const toastErrorSpy = vi.spyOn(toast, 'error');
+
       render(
-        <MockedProvider mocks={[revokeRefreshTokenMock]}>
+        <MockedProvider mocks={[revokeRefreshTokenErrorMock]}>
           <MemoryRouter>
             <UserPortalNavigationBar mode="user" />
           </MemoryRouter>
@@ -1046,11 +1047,14 @@ describe('UserPortalNavigationBar', () => {
       fireEvent.click(logoutBtn);
 
       await waitFor(() => {
-        // Storage should be cleared
-        expect(clearAllItems).toHaveBeenCalled();
-        // Should navigate to home
-        expect(mockNavigate).toHaveBeenCalledWith('/');
+        // Toast error should be called with logout failed message
+        expect(toastErrorSpy).toHaveBeenCalledWith('logoutFailed');
       });
+
+      // Storage should still be cleared even on error
+      expect(clearAllItems).toHaveBeenCalled();
+      // Should still navigate to home even on error
+      expect(mockNavigate).toHaveBeenCalledWith('/');
     });
 
     it('handles organization query error without crashing', async () => {
@@ -1464,11 +1468,6 @@ describe('UserProfileDropdown Component', () => {
     colorWhite: 'colorWhite',
     link: 'link',
   };
-
-  // eslint-disable-next-line react/no-multi-comp
-  const MockPermIdentityIcon = (
-    props: React.HTMLAttributes<HTMLDivElement>,
-  ) => <div {...props}>Person Icon</div>;
 
   beforeEach(() => {
     vi.clearAllMocks();

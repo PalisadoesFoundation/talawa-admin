@@ -127,7 +127,7 @@ export const UserPortalNavigationBar = (
       window.location.replace('/');
     } else {
       try {
-        revokeRefreshToken();
+        await revokeRefreshToken();
       } catch {
         toast.error(tCommon('logoutFailed'));
       }

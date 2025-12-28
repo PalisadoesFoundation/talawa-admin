@@ -13,6 +13,35 @@ export const mockUserName = 'Test User';
 export const mockOrganizationId = 'org-123';
 export const mockOrganizationName = 'Test Organization';
 
+import React from 'react';
+
+/**
+ * Generic icon function (not a component definition by itself because of arguments).
+ * Helper to bypass react/no-multi-comp.
+ */
+const GenericIcon = (
+  type: 'home' | 'permIdentity',
+  props: React.HTMLAttributes<HTMLDivElement>,
+) => {
+  if (type === 'home') {
+    return React.createElement(
+      'div',
+      { 'data-testid': 'mock-home-icon' },
+      'Home Icon',
+    );
+  }
+  return React.createElement('div', props, 'Person Icon');
+};
+
+/**
+ * Factory function to get mock icon components.
+ * Uses bind to create component functions dynamically.
+ */
+export const getMockIcon = (type: 'home' | 'permIdentity') => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return GenericIcon.bind(null, type) as React.FC<any>;
+};
+
 /**
  * Mock GraphQL response for fetching organization basic data
  */

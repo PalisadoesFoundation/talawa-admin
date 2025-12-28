@@ -58,7 +58,7 @@ export interface InterfaceUserPortalNavbarProps {
    * Navigation mode - determines default behavior and styling
    * @default 'user'
    */
-  mode: 'user' | 'organization';
+  mode?: 'user' | 'organization';
 
   /**
    * Branding configuration for logo and brand name
