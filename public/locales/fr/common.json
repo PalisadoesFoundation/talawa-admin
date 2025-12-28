@@ -185,5 +185,7 @@
   "select": "Sélectionner",
   "selectAsYourCountry": "Sélectionnez {{country}} comme votre pays",
   "selectACountry": "Sélectionnez un pays",
-  "passwordLengthRequirement": "Le mot de passe doit comporter au moins {{length}} caractères."
+  "passwordLengthRequirement": "Le mot de passe doit comporter au moins {{length}} caractères.",
+  "country": "Pays",
+  "profilePictureUploadError": "Échec du traitement de la photo de profil. Veuillez réessayer de télécharger."
 }

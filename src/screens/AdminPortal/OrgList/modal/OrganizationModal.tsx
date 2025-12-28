@@ -287,8 +287,8 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                     await uploadFileToMinio(file, 'organization');
                   setFormState({ ...formState, avatar: avatarobjectName });
                   toast.success(t('imageUploadSuccess'));
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 } catch (error) {
-                  console.error('Error uploading image:', error);
                   toast.error(t('imageUploadError'));
                 }
               }

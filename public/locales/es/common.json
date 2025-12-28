@@ -184,5 +184,7 @@
   "select": "Seleccionar",
   "selectAsYourCountry": "Seleccione {{country}} como su país",
   "selectACountry": "Seleccione un país",
-  "passwordLengthRequirement": "La contraseña debe tener al menos {{length}} caracteres."
+  "passwordLengthRequirement": "La contraseña debe tener al menos {{length}} caracteres.",
+  "country": "País",
+  "profilePictureUploadError": "No se pudo procesar la foto de perfil. Por favor, intente subirla nuevamente."
 }

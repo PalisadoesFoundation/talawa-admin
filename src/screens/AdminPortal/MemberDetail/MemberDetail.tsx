@@ -46,8 +46,8 @@ import { Card, Row, Col, Form } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
 import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
-import EventsAttendedByMember from '../../../components/MemberActivity/EventsAttendedByMember';
-import MemberAttendedEventsModal from '../../../components/MemberActivity/Modal/EventsAttendedMemberModal';
+import EventsAttendedByMember from 'components/MemberActivity/EventsAttendedByMember';
+import MemberAttendedEventsModal from 'components/MemberActivity/Modal/EventsAttendedMemberModal';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import {
@@ -193,11 +193,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     if (!selectedAvatar && formState.avatarURL) {
       try {
         avatarFile = await urlToFile(formState.avatarURL);
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
-        console.log(error);
-        NotificationToast.error(
-          'Failed to process profile picture. Please try uploading again.',
-        );
+        NotificationToast.error(tCommon('avatarConversionError') as string);
         return;
       }
     }
@@ -321,12 +319,12 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         radius={150}
                       />
                     )}
-                    <i
-                      className={`fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle ${memberDetailStyles.editProfileIcon}`}
+                    <button
+                      type="button"
+                      className={`fas fa-edit position-absolute border-0 bottom-0 right-0 p-2 bg-white rounded-circle ${memberDetailStyles.editProfileIcon}`}
                       onClick={() => fileInputRef.current?.click()}
                       data-testid="uploadImageBtn"
                       title={`${tCommon('edit')} ${tCommon('profilePicture')}`}
-                      role="button"
                       aria-label={`${tCommon('edit')} ${tCommon('profilePicture')}`}
                       tabIndex={0}
                       onKeyDown={(e) =>
