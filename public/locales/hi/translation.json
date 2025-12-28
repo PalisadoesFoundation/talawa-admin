@@ -725,6 +725,8 @@
     "createdEarliest": "सबसे जल्दी बनाया",
     "viewCampaigns": "कैम्पेंस देखें",
     "assocCampaigns": "संबद्ध अभियान",
+    "associatedCampaigns": "संबद्ध अभियान",
+    "searchFunds": "फंड खोजें",
     "errorLoadingFundsData": "फंड डेटा लोड करते समय त्रुटि हुई",
     "editFund": "फंड संपादित करें"
   },
@@ -788,7 +790,8 @@
     "togglePledgedRaised": "प्रतिबद्ध और उठाई गई राशि के बीच टॉगल करें",
     "pledgeDate": "प्रतिज्ञा तिथि",
     "pledged": "प्रतिबद्ध",
-    "donated": "दान किया गया"
+    "donated": "दान किया गया",
+    "campaignNotActive": "अभियान वर्तमान में सक्रिय नहीं है"
   },
   "createPostModal": {
     "title": "पदों",

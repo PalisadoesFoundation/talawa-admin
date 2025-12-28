@@ -59,24 +59,6 @@ import { debounce } from '@mui/material';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 
-const dataGridStyle = {
-  backgroundColor: 'white',
-  borderRadius: '16px',
-  '& .MuiDataGrid-columnHeaders': { border: 'none' },
-  '& .MuiDataGrid-cell': { border: 'none' },
-  '& .MuiDataGrid-columnSeparator': { display: 'none' },
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
-  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
-};
-
 function requests(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
   const { t: tCommon } = useTranslation('common');
@@ -167,7 +149,9 @@ function requests(): JSX.Element {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded
+            className={`${styles.errorIcon} ${styles.iconLg}`}
+          />
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Volunteership Requests' })}
           </h6>
@@ -278,8 +262,7 @@ function requests(): JSX.Element {
             <Button
               variant="success"
               size="sm"
-              style={{ minWidth: '32px' }}
-              className="me-2 rounded"
+              className={`${styles.iconButton} me-2 rounded`}
               data-testid="acceptBtn"
               onClick={() => updateMembershipStatus(params.row.id, 'accepted')}
             >
@@ -292,7 +275,7 @@ function requests(): JSX.Element {
               data-testid={`rejectBtn`}
               onClick={() => updateMembershipStatus(params.row.id, 'rejected')}
             >
-              <FaXmark size={18} fontWeight={900} />
+              <FaXmark size={18} />
             </Button>
           </>
         );
@@ -351,7 +334,7 @@ function requests(): JSX.Element {
           columnBufferPx={5}
           hideFooter={true}
           getRowId={(row) => row.id}
-          sx={dataGridStyle}
+          className={styles.dataGridContainer}
           getRowClassName={() => `${styles.rowBackgrounds}`}
           autoHeight
           rowHeight={65}

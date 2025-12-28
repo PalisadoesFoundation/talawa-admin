@@ -725,6 +725,8 @@
     "createdEarliest": "最早创建",
     "viewCampaigns": "查看活动",
     "assocCampaigns": "相关活动",
+    "associatedCampaigns": "相关活动",
+    "searchFunds": "搜索基金",
     "errorLoadingFundsData": "加载基金数据时出错",
     "editFund": "编辑基金"
   },
@@ -788,7 +790,8 @@
     "togglePledgedRaised": "在承诺金额和募集金额之间切换",
     "pledgeDate": "承诺日期",
     "pledged": "已承诺",
-    "donated": "已捐赠"
+    "donated": "已捐赠",
+    "campaignNotActive": "活动当前未激活"
   },
   "createPostModal": {
     "title": "帖子",

@@ -725,6 +725,8 @@
     "createdEarliest": "Créé le plus tôt",
     "viewCampaigns": "Voir les campagnes",
     "assocCampaigns": "Campagnes associées",
+    "associatedCampaigns": "Campagnes associées",
+    "searchFunds": "Rechercher des fonds",
     "errorLoadingFundsData": "Erreur lors du chargement des données des fonds",
     "editFund": "Modifier le fonds"
   },
@@ -788,7 +790,8 @@
     "togglePledgedRaised": "Basculer entre les montants Promis et Collectés",
     "pledgeDate": "Date d'Engagement",
     "pledged": "Promis",
-    "donated": "Donné"
+    "donated": "Donné",
+    "campaignNotActive": "La campagne n'est pas actuellement active"
   },
   "createPostModal": {
     "title": "Des postes",

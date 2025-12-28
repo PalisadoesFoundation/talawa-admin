@@ -725,6 +725,8 @@
     "viewCampaigns": "View Campaigns",
     "searchByName": "Search by Name",
     "assocCampaigns": "Associated Campaigns",
+    "associatedCampaigns": "Associated Campaigns",
+    "searchFunds": "Search Funds",
     "errorLoadingFundsData": "Error loading funds data",
     "editFund": "Edit Fund"
   },
@@ -788,7 +790,8 @@
     "togglePledgedRaised": "Toggle between Pledged and Raised amounts",
     "pledgeDate": "Pledge Date",
     "pledged": "Pledged",
-    "donated": "Donated"
+    "donated": "Donated",
+    "campaignNotActive": "Campaign is not currently active"
   },
   "createPostModal": {
     "title": "Posts",
