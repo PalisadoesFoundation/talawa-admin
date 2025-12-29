@@ -16,7 +16,7 @@ import { ReactNode, ErrorInfo } from 'react';
  * @example
  * ```tsx
  * <ErrorBoundaryWrapper
- *   errorMessage={t('errors.modalFailed')}
+ *   errorMessage={t('errors.defaultErrorMessage')}
  *   onError={(error, info) => logToService(error, info)}
  *   onReset={() => navigate('/dashboard')}
  * >
