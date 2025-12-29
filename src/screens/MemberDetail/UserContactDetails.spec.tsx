@@ -685,9 +685,33 @@ describe('UserContactDetails', () => {
       expect(el.value).toBe(value);
     }
 
-    // ✅ country select (NOT DynamicDropDown)
+    // country select (NOT DynamicDropDown)
     const countrySelect = screen.getByTestId('inputCountry');
     fireEvent.change(countrySelect, { target: { value: 'us' } });
     expect(countrySelect).toHaveValue('us');
+  });
+
+  it('updates maritalStatus when dropdown changes', async () => {
+    renderComponent();
+
+    // Wait for form to load
+    await waitFor(() => {
+      expect(screen.getByTestId('inputName')).toHaveValue('John Doe');
+    });
+
+    // Find maritalStatus dropdown
+    const maritalDropdown = screen.getByTestId('dropdown-maritalStatus');
+    expect(maritalDropdown).toBeInTheDocument();
+
+    // Change value
+    fireEvent.change(maritalDropdown, { target: { value: 'option2' } });
+
+    // Save button should appear after change
+    await waitFor(() => {
+      expect(screen.getByTestId('saveChangesBtn')).toBeInTheDocument();
+    });
+
+    // Verify the dropdown value is updated
+    expect((maritalDropdown as HTMLSelectElement).value).toBe('option2');
   });
 });
