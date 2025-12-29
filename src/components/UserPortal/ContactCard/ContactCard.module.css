@@ -8,6 +8,9 @@
   width: 100%;
   cursor: pointer;
   padding: 0;
+  background: none;
+  border: none;
+  text-align: left;
 }
 
 .contentInner:focus-visible {
@@ -68,9 +71,4 @@
   padding: 0 6px;
 }
 
-.contentInner > button {
-  background: none;
-  border: none;
-  padding: 0;
-  text-align: left;
-}
+/* Removed descendant selector .contentInner > button since .contentInner now applies resets directly */

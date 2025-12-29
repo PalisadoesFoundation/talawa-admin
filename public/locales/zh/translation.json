@@ -1545,11 +1545,11 @@
     "groupChatImageAlt": "群聊图片",
     "user": "用户",
     "chatAction": "聊天操作",
-    "failedAddUser": "Failed to add user",
-    "cancelEdit": "Cancel Edit",
-    "editTitle": "Edit title",
-    "saveTitle": "Save Title",
-    "uploadImage": "Upload Image"
+    "failedAddUser": "添加用户失败",
+    "cancelEdit": "取消编辑",
+    "editTitle": "编辑标题",
+    "saveTitle": "保存标题",
+    "uploadImage": "上传图片"
   },
   "userChatRoom": {
     "selectContact": "选择联系人开始对话",

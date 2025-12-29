@@ -1545,11 +1545,11 @@
     "groupChatImageAlt": "Image du chat de groupe",
     "user": "Utilisateur",
     "chatAction": "Action de chat",
-    "failedAddUser": "Failed to add user",
-    "cancelEdit": "Cancel Edit",
-    "editTitle": "Edit title",
-    "saveTitle": "Save Title",
-    "uploadImage": "Upload Image"
+    "failedAddUser": "Échec de l'ajout de l'utilisateur",
+    "cancelEdit": "Annuler la modification",
+    "editTitle": "Modifier le titre",
+    "saveTitle": "Enregistrer le titre",
+    "uploadImage": "Téléverser l'image"
   },
   "userChatRoom": {
     "selectContact": "Sélectionnez un contact pour démarrer la conversation",

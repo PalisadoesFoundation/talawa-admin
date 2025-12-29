@@ -1545,11 +1545,11 @@
     "groupChatImageAlt": "समूह चैट छवि",
     "user": "उपयोगकर्ता",
     "chatAction": "चैट कार्रवाई",
-    "failedAddUser": "Failed to add user",
-    "cancelEdit": "Cancel Edit",
-    "editTitle": "Edit title",
-    "saveTitle": "Save Title",
-    "uploadImage": "Upload Image"
+    "failedAddUser": "उपयोगकर्ता जोड़ने में विफल",
+    "cancelEdit": "संपादन रद्द करें",
+    "editTitle": "शीर्षक संपादित करें",
+    "saveTitle": "शीर्षक सहेजें",
+    "uploadImage": "छवि अपलोड करें"
   },
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
