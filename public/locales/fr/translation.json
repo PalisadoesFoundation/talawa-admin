@@ -23,14 +23,13 @@
     "fromPalisadoes": "Une application open source réalisée par les bénévoles de la Fondation Palisadoes",
     "userLogin": "Utilisateur en ligne",
     "adminLogin": "Connexion administrateur",
-    "atleast_8_char_long": "Au moins 8 caractères",
-    "atleast_6_char_long": "Au moins 6 caractères",
+    "atleastEightCharLong": "Au moins 8 caractères",
+    "atleastSixCharLong": "Au moins 6 caractères",
     "firstName_invalid": "Le prénom ne doit contenir que des lettres minuscules et majuscules",
     "lastName_invalid": "Le nom de famille ne doit contenir que des lettres minuscules et majuscules",
-    "name_invalid": "Le nom ne doit contenir que des lettres, des espaces et des traits d'union",
-    "password_invalid": "Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule, une valeur numérique et un caractère spécial",
-    "email_invalid": "L'e-mail doit contenir au moins 8 caractères",
-    "Password_and_Confirm_password_mismatches.": "Mot de passe et Confirmer les incompatibilités de mot de passe.",
+    "nameInvalid": "Le nom ne doit contenir que des lettres, des espaces et des traits d'union",
+    "passwordInvalid": "Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule, une valeur numérique et un caractère spécial",
+    "emailInvalid": "L'e-mail doit contenir au moins 8 caractères",
     "doNotOwnAnAccount": "Vous ne possédez pas de compte ?",
     "captchaError": "Erreur CAPTCHA!",
     "Please_check_the_captcha": "S'il vous plaît, vérifiez le captcha.",
@@ -38,11 +37,12 @@
     "passwordMismatches": "Mot de passe et Confirmer les incompatibilités de mot de passe.",
     "fillCorrectly": "Remplissez correctement tous les détails.",
     "successfullyRegistered": "Enregistré avec succès. ",
-    "lowercase_check": "Au moins une lettre minuscule",
-    "uppercase_check": "Au moins une lettre majuscule",
-    "numeric_value_check": "Au moins une valeur numérique",
-    "special_char_check": "Au moins un caractère spécial",
+    "lowercaseCheck": "Au moins une lettre minuscule",
+    "uppercaseCheck": "Au moins une lettre majuscule",
+    "numericValueCheck": "Au moins une valeur numérique",
+    "specialCharCheck": "Au moins un caractère spécial",
     "selectOrg": "Sélectionnez une organisation",
+    "backToLogin": "Retour à la connexion",
     "afterRegister": "Enregistré avec succès. ",
     "talawa_portal": "Portail Talawa",
     "login": "Connexion",
@@ -61,7 +61,9 @@
     "OR": "OU",
     "admin": "Administrateur",
     "user": "Utilisateur",
-    "loading": "Chargement"
+    "loading": "Chargement",
+    "communityLogo": "Logo Communautaire",
+    "organizations": "Organisations"
   },
   "signOut": {
     "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
@@ -71,8 +73,7 @@
   "userLoginPage": {
     "title": "Administrateur Talawa",
     "fromPalisadoes": "Une application open source réalisée par les bénévoles de la Fondation Palisadoes",
-    "atleast_8_char_long": "Au moins 8 caractères",
-    "Password_and_Confirm_password_mismatches.": "Mot de passe et Confirmer les incompatibilités de mot de passe.",
+    "atleastEightCharLong": "Au moins 8 caractères",
     "doNotOwnAnAccount": "Vous ne possédez pas de compte ?",
     "captchaError": "Erreur CAPTCHA!",
     "Please_check_the_captcha": "S'il vous plaît, vérifiez le captcha.",
@@ -479,13 +480,17 @@
     "endTime": "Heure de fin",
     "allDay": "Toute la journée",
     "recurringEvent": "Événement récurrent",
+    "recurring": "Récurrent",
     "searchMemberName": "Rechercher le nom du membre",
     "isPublic": "est public",
+    "publicEvent": "est public",
     "isRegistrable": "Est enregistrable",
+    "registerable": "Est enregistrable",
     "createEvent": "Créer un évènement",
     "enterFilter": "Entrer le filtre",
     "enterName": "Entrez le nom",
     "enterDescrip": "Entrez la description",
+    "enterDescription": "Entrez la description",
     "eventLocation": "Entrez l'emplacement",
     "searchEventName": "Rechercher le nom de l'événement",
     "eventType": "Type d'événement",
@@ -1161,7 +1166,8 @@
     "filter": "Filtrer",
     "searchByName": "Rechercher par nom",
     "searchOrganizations": "Rechercher Organisations",
-    "loading": "Chargement..."
+    "loading": "Chargement...",
+    "title": "Organisations"
   },
   "userSidebarOrg": {
     "yourOrganizations": "Vos organisations",
@@ -1369,7 +1375,8 @@
     "postalCode": "Code postal",
     "city": "Ville",
     "description": "Description",
-    "enterDescription": "Entrez la description"
+    "enterDescription": "Entrez la description",
+    "title": "Paramètres"
   },
   "donate": {
     "title": "Des dons",
@@ -1819,8 +1826,16 @@
   "common": {
     "signOut": "Se déconnecter",
     "signingOut": "Déconnexion en cours...",
-    "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
     "breadcrumb": "fil d'Ariane",
-    "action": "Action"
+    "action": "Action",
+    "retryPrompt": "Échec de la révocation de session. Réessayer ?",
+    "selectLanguage": "Sélectionner la Langue",
+    "userMenu": "Menu Utilisateur",
+    "settings": "Paramètres",
+    "logout": "Déconnexion",
+    "logoutFailed": "Échec de la déconnexion",
+    "title": "Portail Utilisateur",
+    "talawa": "Talawa",
+    "talawaBranding": "Image de marque Talawa"
   }
 }

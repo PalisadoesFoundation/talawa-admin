@@ -308,17 +308,19 @@ const loginPage = (): JSX.Element => {
               signOrg: '',
             });
             SignupRecaptchaRef.current?.reset();
-            // If signup returned an authentication token, set session and resume pending invite
+            // If signup was successful, set session state and resume pending invite
+            // Note: Tokens are now set via HTTP-Only cookies by the server (XSS protection)
             if (signUpData.signUp && signUpData.signUp.authenticationToken) {
-              const authToken = signUpData.signUp.authenticationToken;
-              const refreshToken = signUpData.signUp.refreshToken;
-              setItem('token', authToken);
-              if (refreshToken) {
-                setItem('refreshToken', refreshToken);
-              }
               setItem('IsLoggedIn', 'TRUE');
-              setItem('name', signUpData.signUp.user?.name || '');
-              setItem('email', signUpData.signUp.user?.emailAddress || '');
+              // Use form data for name/email since SIGNUP_MUTATION only returns user.id
+              setItem('name', signName);
+              setItem('email', signEmail);
+              // Persist userId from API response
+              if (signUpData.signUp.user?.id) {
+                setItem('userId', signUpData.signUp.user.id);
+              }
+              // Set default role as 'user' for signup (parity with login flow)
+              setItem('role', 'user');
               if (pendingInvitationToken) {
                 removeItem('pendingInvitationToken');
                 startSession();
@@ -336,13 +338,13 @@ const loginPage = (): JSX.Element => {
       }
     } else {
       if (!isValidName(signName)) {
-        toast.warn(t('name_invalid') as string);
+        toast.warn(t('nameInvalid') as string);
       }
       if (!validatePassword(signPassword)) {
-        toast.warn(t('password_invalid') as string);
+        toast.warn(t('passwordInvalid') as string);
       }
       if (signEmail.length < 8) {
-        toast.warn(t('email_invalid') as string);
+        toast.warn(t('emailInvalid') as string);
       }
     }
   };
@@ -359,6 +361,7 @@ const loginPage = (): JSX.Element => {
     try {
       const { data: signInData, error: signInError } = await signin({
         variables: { email: formState.email, password: formState.password },
+        fetchPolicy: 'network-only', // Always make network request to receive Set-Cookie headers
       });
 
       // Check for GraphQL errors (like account_locked) first
@@ -392,7 +395,8 @@ const loginPage = (): JSX.Element => {
         }
 
         const { signIn } = signInData;
-        const { user, authenticationToken, refreshToken } = signIn;
+        const { user } = signIn;
+        // Note: authenticationToken and refreshToken are now set via HTTP-Only cookies by the server (XSS protection)
         const isAdmin: boolean = user.role === 'administrator';
         if (role === 'admin' && !isAdmin) {
           toast.warn(tErrors('notAuthorised') as string);
@@ -400,18 +404,12 @@ const loginPage = (): JSX.Element => {
         }
         const loggedInUserId = user.id;
 
-        setItem('token', authenticationToken);
-        if (refreshToken) {
-          setItem('refreshToken', refreshToken);
-        }
+        // Store UI state in localStorage (tokens are in HTTP-Only cookies)
         setItem('IsLoggedIn', 'TRUE');
         setItem('name', user.name);
         setItem('email', user.emailAddress);
         setItem('role', user.role);
         setItem('UserImage', user.avatarURL || '');
-        // setItem('FirstName', user.firstName);
-        // setItem('LastName', user.lastName);
-        // setItem('UserImage', user.avatarURL);
         if (role === 'admin') {
           setItem('id', loggedInUserId);
         } else {
@@ -761,7 +759,7 @@ const loginPage = (): JSX.Element => {
                               <span>
                                 <Clear className="" />
                               </span>
-                              {t('atleast_6_char_long')}
+                              {t('atleastSixCharLong')}
                             </p>
                           </div>
                         ) : (
@@ -771,7 +769,7 @@ const loginPage = (): JSX.Element => {
                             <span>
                               <Check />
                             </span>
-                            {t('atleast_6_char_long')}
+                            {t('atleastSixCharLong')}
                           </p>
                         )
                       ) : null}
@@ -786,7 +784,7 @@ const loginPage = (): JSX.Element => {
                             <span>
                               <Check className="size-sm" />
                             </span>
-                            {t('atleast_6_char_long')}
+                            {t('atleastSixCharLong')}
                           </div>
                         )}
                       {isInputFocused && (
@@ -806,7 +804,7 @@ const loginPage = (): JSX.Element => {
                               <Check />
                             </span>
                           )}
-                          {t('lowercase_check')}
+                          {t('lowercaseCheck')}
                         </p>
                       )}
                       {isInputFocused && (
@@ -826,7 +824,7 @@ const loginPage = (): JSX.Element => {
                               <Check />
                             </span>
                           )}
-                          {t('uppercase_check')}
+                          {t('uppercaseCheck')}
                         </p>
                       )}
                       {isInputFocused && (
@@ -846,7 +844,7 @@ const loginPage = (): JSX.Element => {
                               <Check />
                             </span>
                           )}
-                          {t('numeric_value_check')}
+                          {t('numericValueCheck')}
                         </p>
                       )}
                       {isInputFocused && (
@@ -868,7 +866,7 @@ const loginPage = (): JSX.Element => {
                               <Check />
                             </span>
                           )}
-                          {t('special_char_check')}
+                          {t('specialCharCheck')}
                         </p>
                       )}
                     </div>
@@ -910,7 +908,7 @@ const loginPage = (): JSX.Element => {
                           className="form-text text-danger"
                           data-testid="passwordCheck"
                         >
-                          {t('Password_and_Confirm_password_mismatches.')}
+                          {t('passwordMismatches')}
                         </div>
                       )}
                   </div>
@@ -961,6 +959,22 @@ const loginPage = (): JSX.Element => {
                     disabled={signinLoading}
                   >
                     {tCommon('register')}
+                  </Button>
+                  <div className="position-relative my-2">
+                    <hr />
+                    <span className={styles.orText}>{tCommon('OR')}</span>
+                  </div>
+                  <Button
+                    variant="outline-secondary"
+                    className={styles.reg_btn}
+                    data-testid="goToLoginPortion"
+                    onClick={(): void => {
+                      setShowTab('LOGIN');
+                    }}
+                  >
+                    <Link to={'/'} className="text-decoration-none">
+                      {t('backToLogin')}
+                    </Link>
                   </Button>
                 </Form>
               </div>
