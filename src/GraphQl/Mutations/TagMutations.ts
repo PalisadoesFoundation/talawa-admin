@@ -10,18 +10,12 @@ import gql from 'graphql-tag';
  */
 
 export const CREATE_USER_TAG = gql`
-  mutation CreateUserTag(
-    $name: String!
-    $tagColor: String
-    $parentTagId: ID
-    $organizationId: ID!
-  ) {
-    createUserTag(
+  mutation CreateTag($name: String!, $folderId: ID, $organizationId: ID!) {
+    createTag(
       input: {
         name: $name
         organizationId: $organizationId
-        parentTagId: $parentTagId
-        tagColor: $tagColor
+        folderId: $folderId
       }
     ) {
       id
