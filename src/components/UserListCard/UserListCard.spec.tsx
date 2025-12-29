@@ -376,7 +376,7 @@ describe('Testing User List Card', () => {
   it('Should handle GraphQL error in mutation response', async () => {
     // Clear the reload mock at the start to ensure clean state
     reloadMock.mockClear();
-    
+
     const graphQLErrorMock = [
       {
         request: {
@@ -411,13 +411,13 @@ describe('Testing User List Card', () => {
     await wait();
     const button = screen.getByText(/Add Admin/i);
     await userEvent.click(button);
-    
+
     // Wait for mutation to complete
     await wait(500);
 
     // GraphQL errors with data: null should not trigger success flow
     expect(toast.success).not.toHaveBeenCalled();
-    
+
     // The reload should not have been scheduled since data is null
     // Wait a short time to ensure no immediate reload
     await wait(100);

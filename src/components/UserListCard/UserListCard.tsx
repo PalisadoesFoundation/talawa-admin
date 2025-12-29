@@ -75,7 +75,7 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
       // - Data exists (not null/undefined)
       // - No GraphQL errors in result.errors
       // - createAdmin result exists and is truthy
-      
+
       // First check if data is null - this is a clear indicator of failure
       if (!result.data || result.data === null) {
         // No data means mutation failed, don't proceed

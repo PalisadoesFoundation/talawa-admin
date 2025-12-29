@@ -2436,7 +2436,9 @@ describe('Cookie-based authentication verification', () => {
     );
     expect(networkErrorCall).toBeDefined();
     if (networkErrorCall) {
-      expect(networkErrorCall[0]).toEqual(expect.stringContaining('Network Error'));
+      expect(networkErrorCall[0]).toEqual(
+        expect.stringContaining('Network Error'),
+      );
       // errorHandler may call NotificationToast.error with just a string (no options)
       // or with an object, so options is optional
       if (networkErrorCall[1] !== undefined) {
