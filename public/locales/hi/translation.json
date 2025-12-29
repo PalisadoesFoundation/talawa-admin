@@ -1544,7 +1544,12 @@
     "editImage": "छवि संपादित करें",
     "groupChatImageAlt": "समूह चैट छवि",
     "user": "उपयोगकर्ता",
-    "chatAction": "चैट कार्रवाई"
+    "chatAction": "चैट कार्रवाई",
+    "failedAddUser": "Failed to add user",
+    "cancelEdit": "Cancel Edit",
+    "editTitle": "Edit title",
+    "saveTitle": "Save Title",
+    "uploadImage": "Upload Image"
   },
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",

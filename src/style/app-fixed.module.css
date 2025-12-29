@@ -398,6 +398,12 @@
   --outlineBtn-border: #a8c7fa;
   --outlineBtn-hover-bg: #1778f2;
   --outlineBtn-color-hover: #ffffff;
+
+  /* Component specific helpers */
+  .volunteerGroupsLabel {
+    font-size: var(--font-size-header);
+    color: var(--subContainer-color);
+  }
   --outlineBtn-hover-border: #1778f2;
   --outlineBtn-bg-disabled: #ffffff;
   --outlineBtn-color-disabled: #9e9e9e;
@@ -4990,9 +4996,6 @@ form label,
   border-radius: 0px;
   margin-right: 20px;
   color: black;
-}
-
-.opendrawer:hover {
 }
 
 @media (max-width: 1120px) {

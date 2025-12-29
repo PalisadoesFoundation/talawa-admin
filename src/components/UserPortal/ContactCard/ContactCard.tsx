@@ -42,16 +42,21 @@ import type { InterfaceContactCardProps } from 'types/Chat/interface';
 import { normalizeMinioUrl } from 'utils/minioUtils';
 
 function ContactCard(props: InterfaceContactCardProps): JSX.Element {
-  const { id, title, image, lastMessage, unseenMessages, selectedContact } =
-    props;
+  const {
+    id,
+    title,
+    image,
+    lastMessage,
+    unseenMessages,
+    selectedContact,
+    setSelectedContact,
+  } = props;
 
   const handleSelectedContactChange = (): void => {
-    props.setSelectedContact(id);
+    setSelectedContact(id);
   };
 
-  const [isSelected, setIsSelected] = React.useState(
-    selectedContact === id,
-  );
+  const [isSelected, setIsSelected] = React.useState(selectedContact === id);
 
   // Update selection state when the selected contact or id changes
   React.useEffect(() => {
@@ -86,15 +91,15 @@ function ContactCard(props: InterfaceContactCardProps): JSX.Element {
         )}
         <div className={styles.contactNameContainer}>
           <div>
-            <b data-testid={`contact-title-${id}`}>{title}</b>{' '}
-            {lastMessage ? (
+            <b data-testid={`contact-title-${id}`}>{title}</b>
+            {lastMessage && (
               <p
                 data-testid={`contact-lastMessage-${id}`}
                 className={styles.lastMessage}
               >
                 {lastMessage}
               </p>
-            ) : null}
+            )}
           </div>
           {!!unseenMessages && (
             <Badge

@@ -1544,7 +1544,12 @@
     "editImage": "Editar imagen",
     "groupChatImageAlt": "Imagen del chat grupal",
     "user": "Usuario",
-    "chatAction": "Acción del chat"
+    "chatAction": "Acción del chat",
+    "failedAddUser": "Failed to add user",
+    "cancelEdit": "Cancel Edit",
+    "editTitle": "Edit title",
+    "saveTitle": "Save Title",
+    "uploadImage": "Upload Image"
   },
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",

@@ -576,8 +576,7 @@ const UpcomingEvents = (): JSX.Element => {
                 {volunteerGroups && volunteerGroups.length > 0 && (
                   <Form.Group>
                     <Form.Label
-                      className="fw-lighter ms-2 mb-2 "
-                      style={{ fontSize: '1rem', color: 'grey' }}
+                      className={`fw-lighter ms-2 mb-2 ${styles.volunteerGroupsLabel}`}
                     >
                       {t('volunteerGroups')}:
                     </Form.Label>

@@ -1544,7 +1544,12 @@
     "editImage": "编辑图片",
     "groupChatImageAlt": "群聊图片",
     "user": "用户",
-    "chatAction": "聊天操作"
+    "chatAction": "聊天操作",
+    "failedAddUser": "Failed to add user",
+    "cancelEdit": "Cancel Edit",
+    "editTitle": "Edit title",
+    "saveTitle": "Save Title",
+    "uploadImage": "Upload Image"
   },
   "userChatRoom": {
     "selectContact": "选择联系人开始对话",
