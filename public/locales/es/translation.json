@@ -389,6 +389,7 @@
     "manageTag": "Gestionar",
     "editTag": "Editar",
     "removeTag": "Eliminar",
+    "tags": "Etiquetas",
     "tagDetails": "Detalles de la Etiqueta",
     "tagName": "Nombre",
     "tagType": "Tipo",
@@ -399,6 +400,8 @@
     "noTagsFound": "No se encontraron etiquetas",
     "removeUserTag": "Eliminar Etiqueta",
     "removeUserTagMessage": "¿Desea eliminar esta etiqueta?",
+    "Latest": "Más Recientes Primero",
+    "Oldest": "Más Antiguas Primero",
     "addChildTag": "Agregar una Sub Etiqueta",
     "enterTagName": "Ingrese el nombre de la etiqueta",
     "totalSubTags": "Total de sub-etiquetas",
@@ -1003,6 +1006,7 @@
     "cancel": "Cancelar",
     "confirmDelete": "Confirmar eliminación",
     "longDelOrgMsg": "Al hacer clic en el botón Eliminar organización, la organización se eliminará permanentemente junto con sus eventos, etiquetas y todos los datos relacionados.",
+    "deleteSampleOrganization": "Eliminar organización de muestra",
     "successfullyDeletedSampleOrganization": "Organización de muestra eliminada correctamente"
   },
   "userUpdate": {
@@ -1058,7 +1062,32 @@
     "enterNameOrganization": "Ingrese el nombre de la organización",
     "successfulUpdated": "Exitoso actualizado",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
-    "enterOrganizationDescription": "Ingrese la descripción de la organización"
+    "enterOrganizationDescription": "Ingrese la descripción de la organización",
+    "userRegistrationRequired": "Se requiere registro de usuario"
+  },
+  "public": {
+    "invitation": {
+      "title": "Invitación al evento",
+      "previewText": "Has sido invitado a unirte a este evento.",
+      "inviteeEmail": "Correo electrónico del invitado",
+      "anyone": "Cualquier usuario que haya iniciado sesión",
+      "organizationId": "ID de organización",
+      "eventId": "ID del evento",
+      "eventTitle": "Evento {{eventId}}",
+      "expiresAt": "Vence el",
+      "mustLogin": "Por favor inicia sesión o crea una cuenta para aceptar esta invitación.",
+      "login": "Iniciar sesión",
+      "signup": "Registrarse",
+      "invalidToken": "Token de invitación inválido",
+      "invitationNotFound": "Invitación no encontrada o inválida",
+      "verifyError": "Error al verificar la invitación",
+      "accept": "Aceptar invitación",
+      "accepted": "Invitación aceptada",
+      "acceptError": "No se pudo aceptar la invitación",
+      "maskedNotice": "Esta invitación fue emitida a un correo electrónico enmascarado. Asegúrate de ser el destinatario invitado antes de aceptar.",
+      "confirmMatch": "Confirmo que el correo electrónico de mi cuenta coincide con la dirección invitada (mostrada arriba).",
+      "signInAsDifferent": "Iniciar sesión como un usuario diferente"
+    }
   },
   "memberDetail": {
     "title": "Detalles del usuario",

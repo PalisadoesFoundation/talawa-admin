@@ -4,7 +4,6 @@ import { describe, it, expect, vi, afterEach } from 'vitest';
 import RemoveUserTagModal, {
   InterfaceRemoveUserTagModalProps,
 } from './RemoveUserTagModal';
-import type { TFunction } from 'i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 vi.mock('react-i18next', () => ({
@@ -32,22 +31,10 @@ vi.mock('style/app-fixed.module.css', () => ({
 }));
 
 describe('RemoveUserTagModal Component', () => {
-  const mockT = vi.fn((key) => key) as unknown as TFunction<
-    'translation',
-    'manageTag'
-  >;
-
-  const mockTCommon = vi.fn((key) => key) as unknown as TFunction<
-    'common',
-    undefined
-  >;
-
   const defaultProps: InterfaceRemoveUserTagModalProps = {
     removeUserTagModalIsOpen: true,
     toggleRemoveUserTagModal: vi.fn(),
     handleRemoveUserTag: vi.fn().mockResolvedValue(undefined),
-    t: mockT,
-    tCommon: mockTCommon,
   };
   afterEach(() => {
     vi.clearAllMocks();
