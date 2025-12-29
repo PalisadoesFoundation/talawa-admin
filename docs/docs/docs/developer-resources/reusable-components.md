@@ -436,7 +436,7 @@ import { ErrorBoundaryWrapper } from 'src/shared-components/ErrorBoundaryWrapper
 
 // With custom error message and logging
 <ErrorBoundaryWrapper
-  errorMessage={t('errors.modalFailed')}
+  errorMessage={t('errors.defaultErrorMessage')}
   onError={(error, info) => logToService(error, info)}
   onReset={() => navigate('/dashboard')}
 >

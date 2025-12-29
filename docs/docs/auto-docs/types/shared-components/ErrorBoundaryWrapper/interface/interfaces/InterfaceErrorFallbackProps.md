@@ -4,7 +4,7 @@
 
 # Interface: InterfaceErrorFallbackProps
 
-Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L102)
+Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L126)
 
 Props passed to custom fallback components.
 
@@ -29,7 +29,7 @@ const CustomErrorFallback = ({ error, onReset }: InterfaceErrorFallbackProps) =>
 
 > **error**: `Error`
 
-Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L104)
+Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L128)
 
 The error that was caught by the error boundary
 
@@ -39,7 +39,7 @@ The error that was caught by the error boundary
 
 > **onReset**: () => `void`
 
-Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L106)
+Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L130)
 
 Function to reset the error boundary state and attempt to re-render children
 

@@ -82,7 +82,12 @@ export class ErrorBoundaryWrapper extends React.Component<
    * This lifecycle method is called during the commit phase (to log/ report)
    */
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    const { onError, showToast = true, errorMessage } = this.props;
+    const {
+      onError,
+      showToast = true,
+      errorMessage,
+      fallbackErrorMessage = 'An unexpected error occurred',
+    } = this.props;
 
     // Log to console in development
     if (process.env.NODE_ENV === 'development') {
@@ -91,8 +96,7 @@ export class ErrorBoundaryWrapper extends React.Component<
 
     // Show toast notification
     if (showToast) {
-      const message =
-        errorMessage || error.message || 'An unexpected error occurred';
+      const message = errorMessage || error.message || fallbackErrorMessage;
       toast.error(message);
     }
 

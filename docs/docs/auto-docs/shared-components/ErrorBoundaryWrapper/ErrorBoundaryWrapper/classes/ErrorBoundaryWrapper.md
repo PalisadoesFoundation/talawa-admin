@@ -67,7 +67,7 @@ This lifecycle method is called during the commit phase (to log/ report)
 
 > **handleReset**(): `void`
 
-Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L111)
+Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:117](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L117)
 
 Reset error boundary state to recover from error
 
@@ -81,7 +81,7 @@ Reset error boundary state to recover from error
 
 > **render**(): `ReactNode`
 
-Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:130](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L130)
+Defined in: [src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx:136](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper.tsx#L136)
 
 #### Returns
 

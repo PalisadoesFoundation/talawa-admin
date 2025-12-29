@@ -41,7 +41,7 @@ const consoleErrorSpyFunction = () => {
   return consoleErrorSpy;
 };
 
-describe('ErrorBoundaryWrapper', async () => {
+describe('ErrorBoundaryWrapper', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });

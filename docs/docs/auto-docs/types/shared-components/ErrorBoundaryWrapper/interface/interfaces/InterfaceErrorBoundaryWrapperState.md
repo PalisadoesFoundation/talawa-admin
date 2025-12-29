@@ -4,7 +4,7 @@
 
 # Interface: InterfaceErrorBoundaryWrapperState
 
-Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L76)
+Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L100)
 
 Internal state for ErrorBoundaryWrapper component.
 
@@ -17,7 +17,7 @@ in the fallback UI.
 
 > **error**: `Error`
 
-Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L80)
+Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L104)
 
 The error that was caught
 
@@ -27,7 +27,7 @@ The error that was caught
 
 > **errorInfo**: `ErrorInfo`
 
-Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L82)
+Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L106)
 
 Additional error information including component stack
 
@@ -37,6 +37,6 @@ Additional error information including component stack
 
 > **hasError**: `boolean`
 
-Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L78)
+Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L102)
 
 Whether an error has been caught
