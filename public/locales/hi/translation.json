@@ -343,10 +343,23 @@
     "tagUpdationSuccess": "टैग सफलतापूर्वक अपडेट की गई",
     "tagRemovalSuccess": "टैग सफलतापूर्वक हटाई गई",
     "noTagsFound": "कोई टैग नहीं मिला",
+    "noPluginsFound": "कोई प्लगइन नहीं मिला",
     "removeUserTag": "टैग हटाएँ",
     "removeUserTagMessage": "क्या आप इस टैग को हटाना चाहते हैं?",
     "addChildTag": "उप-टैग जोड़ें",
     "enterTagName": "टैग का नाम दर्ज करें"
+  },
+  "statusBadge": {
+    "completed": "पूर्ण",
+    "pending": "लंबित",
+    "active": "सक्रिय",
+    "inactive": "निष्क्रिय",
+    "approved": "स्वीकृत",
+    "rejected": "अस्वीकृत",
+    "disabled": "अक्षम",
+    "accepted": "स्वीकृत",
+    "declined": "अस्वीकृत",
+    "no_response": "कोई प्रतिक्रिया नहीं"
   },
   "manageTag": {
     "title": "टैग विवरण",

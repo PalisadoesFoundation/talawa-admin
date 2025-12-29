@@ -713,7 +713,6 @@
     "raisedAmount": "Monto recaudado",
     "pledgedAmount": "Monto comprometido"
   },
-
   "orgPost": {
     "title": "Publicaciones de Talawa",
     "searchPost": "Buscar Publicación",
@@ -1110,7 +1109,6 @@
     "article": "Artículo",
     "postNowVisibleInFeed": "Publicar ahora visible en el feed"
   },
-
   "eventAttendance": {
     "historical_statistics": "Estadísticas históricas",
     "Search member": "Buscar miembro",
@@ -1123,7 +1121,6 @@
     "loading": "Cargando...",
     "noAttendees": "No se encontraron asistentes"
   },
-
   "eventRegistrant": {
     "sort": "Ordenar",
     "allRegistrants": "Todos los registrados",
@@ -1597,6 +1594,18 @@
     "installPluginsToSeeHere": "Instala plugins para verlos aquí",
     "checkBackLater": "Vuelve más tarde para nuevos plugins",
     "noResultsFoundFor": "No se encontraron resultados para"
+  },
+  "statusBadge": {
+    "completed": "Completado",
+    "pending": "Pendiente",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "approved": "Aprobado",
+    "rejected": "Rechazado",
+    "disabled": "Deshabilitado",
+    "accepted": "Aceptado",
+    "declined": "Rechazado",
+    "no_response": "Sin Respuesta"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Comentario eliminado exitosamente",

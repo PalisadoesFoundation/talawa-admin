@@ -1,0 +1,262 @@
+/**
+ * @file StatusBadge.spec.tsx
+ * @description Unit tests for the StatusBadge component
+ *
+ * This test suite ensures the StatusBadge component renders correctly with various
+ * variants, sizes, and customization options. It also verifies accessibility features
+ * and i18n integration.
+ */
+
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import { describe, it, expect, vi } from 'vitest';
+import StatusBadge from './StatusBadge';
+
+/**
+ * Mock react-i18next to return translation keys for testing
+ */
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
+
+describe('StatusBadge Component', () => {
+  describe('Variant Rendering', () => {
+    it('should render completed variant correctly', () => {
+      render(<StatusBadge variant="completed" />);
+      const badge = screen.getByRole('status');
+      expect(badge).toBeInTheDocument();
+      expect(badge).toHaveTextContent('completed');
+    });
+
+    it('should render pending variant correctly', () => {
+      render(<StatusBadge variant="pending" />);
+      const badge = screen.getByRole('status');
+      expect(badge).toBeInTheDocument();
+      expect(badge).toHaveTextContent('pending');
+    });
+
+    it('should render active variant correctly', () => {
+      render(<StatusBadge variant="active" />);
+      const badge = screen.getByRole('status');
+      expect(badge).toBeInTheDocument();
+      expect(badge).toHaveTextContent('active');
+    });
+
+    it('should render inactive variant correctly', () => {
+      render(<StatusBadge variant="inactive" />);
+      const badge = screen.getByRole('status');
+      expect(badge).toBeInTheDocument();
+      expect(badge).toHaveTextContent('inactive');
+    });
+
+    it('should render approved variant correctly', () => {
+      render(<StatusBadge variant="approved" />);
+      const badge = screen.getByRole('status');
+      expect(badge).toBeInTheDocument();
+      expect(badge).toHaveTextContent('approved');
+    });
+
+    it('should render rejected variant correctly', () => {
+      render(<StatusBadge variant="rejected" />);
+      const badge = screen.getByRole('status');
+      expect(badge).toBeInTheDocument();
+      expect(badge).toHaveTextContent('rejected');
+    });
+
+    it('should render disabled variant correctly', () => {
+      render(<StatusBadge variant="disabled" />);
+      const badge = screen.getByRole('status');
+      expect(badge).toBeInTheDocument();
+      expect(badge).toHaveTextContent('disabled');
+    });
+
+    it('should render accepted variant correctly', () => {
+      render(<StatusBadge variant="accepted" />);
+      const badge = screen.getByRole('status');
+      expect(badge).toBeInTheDocument();
+      expect(badge).toHaveTextContent('accepted');
+    });
+
+    it('should render declined variant correctly', () => {
+      render(<StatusBadge variant="declined" />);
+      const badge = screen.getByRole('status');
+      expect(badge).toBeInTheDocument();
+      expect(badge).toHaveTextContent('declined');
+    });
+
+    it('should render no_response variant correctly', () => {
+      render(<StatusBadge variant="no_response" />);
+      const badge = screen.getByRole('status');
+      expect(badge).toBeInTheDocument();
+      expect(badge).toHaveTextContent('no_response');
+    });
+  });
+
+  describe('Size Variants', () => {
+    it('should render small size', () => {
+      render(<StatusBadge variant="completed" size="sm" />);
+      const badge = screen.getByRole('status');
+      expect(badge.className).toContain('sm');
+    });
+
+    it('should render medium size by default', () => {
+      render(<StatusBadge variant="completed" />);
+      const badge = screen.getByRole('status');
+      expect(badge.className).toContain('md');
+    });
+
+    it('should render large size', () => {
+      render(<StatusBadge variant="completed" size="lg" />);
+      const badge = screen.getByRole('status');
+      expect(badge.className).toContain('lg');
+    });
+  });
+
+  describe('Accessibility', () => {
+    it('should have role="status"', () => {
+      render(<StatusBadge variant="completed" />);
+      expect(screen.getByRole('status')).toBeInTheDocument();
+    });
+
+    it('should use default aria-label', () => {
+      render(<StatusBadge variant="completed" />);
+      const badge = screen.getByRole('status');
+      expect(badge).toHaveAttribute('aria-label', 'completed');
+    });
+
+    it('should use custom aria-label when provided', () => {
+      render(<StatusBadge variant="completed" ariaLabel="Task completed" />);
+      const badge = screen.getByRole('status');
+      expect(badge).toHaveAttribute('aria-label', 'Task completed');
+    });
+  });
+
+  describe('Label Customization', () => {
+    it('should use custom label when provided', () => {
+      render(<StatusBadge variant="completed" label="Done" />);
+      expect(screen.getByText('Done')).toBeInTheDocument();
+    });
+
+    it('should use i18n key as fallback', () => {
+      render(<StatusBadge variant="completed" />);
+      expect(screen.getByText('completed')).toBeInTheDocument();
+    });
+  });
+
+  describe('Icon Support', () => {
+    it('should render icon when provided', () => {
+      const icon = <span data-testid="test-icon">✓</span>;
+      render(<StatusBadge variant="completed" icon={icon} />);
+      expect(screen.getByTestId('test-icon')).toBeInTheDocument();
+    });
+  });
+
+  describe('CSS Classes', () => {
+    it('should apply semantic variant class for completed (success)', () => {
+      render(<StatusBadge variant="completed" />);
+      const badge = screen.getByRole('status');
+      expect(badge.className).toContain('success');
+    });
+
+    it('should apply semantic variant class for pending (warning)', () => {
+      render(<StatusBadge variant="pending" />);
+      const badge = screen.getByRole('status');
+      expect(badge.className).toContain('warning');
+    });
+
+    it('should apply semantic variant class for rejected (error)', () => {
+      render(<StatusBadge variant="rejected" />);
+      const badge = screen.getByRole('status');
+      expect(badge.className).toContain('error');
+    });
+
+    it('should apply semantic variant class for no_response (info)', () => {
+      render(<StatusBadge variant="no_response" />);
+      const badge = screen.getByRole('status');
+      expect(badge.className).toContain('info');
+    });
+
+    it('should apply semantic variant class for inactive (neutral)', () => {
+      render(<StatusBadge variant="inactive" />);
+      const badge = screen.getByRole('status');
+      expect(badge.className).toContain('neutral');
+    });
+
+    it('should apply custom className', () => {
+      render(<StatusBadge variant="completed" className="custom-class" />);
+      const badge = screen.getByRole('status');
+      expect(badge.className).toContain('custom-class');
+    });
+
+    it('should apply base statusBadge class', () => {
+      render(<StatusBadge variant="completed" />);
+      const badge = screen.getByRole('status');
+      expect(badge.className).toContain('statusBadge');
+    });
+  });
+
+  describe('Variant Mapping', () => {
+    it('should map completed to success', () => {
+      render(<StatusBadge variant="completed" />);
+      const badge = screen.getByRole('status');
+      expect(badge.className).toContain('success');
+    });
+
+    it('should map active to success', () => {
+      render(<StatusBadge variant="active" />);
+      const badge = screen.getByRole('status');
+      expect(badge.className).toContain('success');
+    });
+
+    it('should map approved to success', () => {
+      render(<StatusBadge variant="approved" />);
+      const badge = screen.getByRole('status');
+      expect(badge.className).toContain('success');
+    });
+
+    it('should map accepted to success', () => {
+      render(<StatusBadge variant="accepted" />);
+      const badge = screen.getByRole('status');
+      expect(badge.className).toContain('success');
+    });
+
+    it('should map pending to warning', () => {
+      render(<StatusBadge variant="pending" />);
+      const badge = screen.getByRole('status');
+      expect(badge.className).toContain('warning');
+    });
+
+    it('should map rejected to error', () => {
+      render(<StatusBadge variant="rejected" />);
+      const badge = screen.getByRole('status');
+      expect(badge.className).toContain('error');
+    });
+
+    it('should map declined to error', () => {
+      render(<StatusBadge variant="declined" />);
+      const badge = screen.getByRole('status');
+      expect(badge.className).toContain('error');
+    });
+
+    it('should map inactive to neutral', () => {
+      render(<StatusBadge variant="inactive" />);
+      const badge = screen.getByRole('status');
+      expect(badge.className).toContain('neutral');
+    });
+
+    it('should map disabled to neutral', () => {
+      render(<StatusBadge variant="disabled" />);
+      const badge = screen.getByRole('status');
+      expect(badge.className).toContain('neutral');
+    });
+
+    it('should map no_response to info', () => {
+      render(<StatusBadge variant="no_response" />);
+      const badge = screen.getByRole('status');
+      expect(badge.className).toContain('info');
+    });
+  });
+});
