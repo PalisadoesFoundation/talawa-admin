@@ -34,6 +34,9 @@ export default function PostDetailModal({
   const videoAttachment = post.attachments.find((a) =>
     a.mimeType.startsWith('video/'),
   );
+  const captionAttachment = post.attachments.find(
+    (a) => a.mimeType === 'text/vtt',
+  );
 
   /**
    * Handle video play/pause toggle
@@ -127,7 +130,7 @@ export default function PostDetailModal({
                 onClick={togglePostPin}
                 data-testid="pin-post-button"
               >
-                {isPinned ? 'Unpin post' : 'Pin post'}
+                {isPinned ? t('unpinPost') : t('pinPost')}
               </Dropdown.Item>
               <Dropdown.Divider />
               <Dropdown.Item data-testid="close-menu-option">
@@ -178,13 +181,15 @@ export default function PostDetailModal({
                     type={videoAttachment.mimeType}
                   />
                   {/* Caption track - uses corresponding .vtt file from attachment if available, otherwise provides empty track as fallback */}
-                  <track
-                    kind="captions"
-                    src=""
-                    srcLang="en"
-                    label="English captions"
-                    default
-                  />
+                  {captionAttachment && (
+                    <track
+                      kind="captions"
+                      src={captionAttachment.name}
+                      srcLang="en"
+                      label="English captions"
+                      default
+                    />
+                  )}
                   Your browser does not support the video tag.
                 </video>
                 {/* Play/pause overlay button - provides visual hint and accessibility controls */}
@@ -250,7 +255,7 @@ export default function PostDetailModal({
                 <strong>Author:</strong>{' '}
                 {post.creatorId ? (
                   userLoading ? (
-                    <span className="text-muted">{tCommon(' loading ')}</span>
+                    <span className="text-muted">{tCommon('loading')}</span>
                   ) : (
                     userData?.user?.name || 'Unknown'
                   )

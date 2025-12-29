@@ -31,7 +31,7 @@ export default function PostEditModal({
     setPostFormState((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleImageUpload = async (
+  const handleFileUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ): Promise<void> => {
     const file = e.target.files?.[0];
@@ -47,30 +47,7 @@ export default function PostEditModal({
     }
   };
 
-  const handleVideoUpload = async (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ): Promise<void> => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const base64 = await convertToBase64(file);
-      setPostFormState((prev) => ({
-        ...prev,
-        attachments: [
-          ...prev.attachments,
-          { url: base64 as string, mimeType: file.type },
-        ],
-      }));
-    }
-  };
-
-  const clearImage = (url: string): void => {
-    setPostFormState((prev) => ({
-      ...prev,
-      attachments: prev.attachments.filter((a) => a.url !== url),
-    }));
-  };
-
-  const clearVideo = (url: string): void => {
+  const clearAttachment = (url: string): void => {
     setPostFormState((prev) => ({
       ...prev,
       attachments: prev.attachments.filter((a) => a.url !== url),
@@ -115,34 +92,26 @@ export default function PostEditModal({
     return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
   }
 
-  const getMimeTypeEnum = (url: string): string => {
-    const cleanUrl = url.split('?')[0].split('#')[0];
-    const ext = cleanUrl.split('.').pop()?.toLowerCase();
-
-    if (ext === 'jpg' || ext === 'jpeg') {
-      return 'IMAGE_JPEG';
-    } else if (ext === 'png') {
-      return 'IMAGE_PNG';
-    } else if (ext === 'webp') {
-      return 'IMAGE_WEBP';
-    } else if (ext === 'avif') {
-      return 'IMAGE_AVIF';
-    } else if (ext === 'mp4') {
-      return 'VIDEO_MP4';
-    } else if (ext === 'webm') {
-      return 'VIDEO_WEBM';
-    } else {
-      return 'IMAGE_JPEG';
-    }
+  const getMimeTypeEnum = (mimeType: string): string => {
+    const mimeMap: Record<string, string> = {
+      'image/jpeg': 'IMAGE_JPEG',
+      'image/jpg': 'IMAGE_JPEG',
+      'image/png': 'IMAGE_PNG',
+      'image/webp': 'IMAGE_WEBP',
+      'image/avif': 'IMAGE_AVIF',
+      'video/mp4': 'VIDEO_MP4',
+      'video/webm': 'VIDEO_WEBM',
+    };
+    return mimeMap[mimeType.toLowerCase()] || 'IMAGE_JPEG';
   };
 
   const updatePost = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
     let attachment = null;
     if (postFormState.attachments.length > 0) {
-      const fileName =
-        postFormState.attachments[0].url.split('/').pop() || 'defaultFileName';
       const mimeType = postFormState.attachments[0].mimeType;
+      const extension = mimeType.split('/')[1] || 'bin';
+      const fileName = `post-attachment-${Date.now()}.${extension}`;
       const objectName = 'uploads/' + fileName;
       const fileHash = await getFileHashFromBase64(
         postFormState.attachments[0].url,
@@ -212,7 +181,7 @@ export default function PostEditModal({
               type="file"
               data-testid="image-upload"
               accept="image/*"
-              onChange={handleImageUpload}
+              onChange={handleFileUpload}
               className={styles.inputField}
               data-cy="image-upload-input"
             />
@@ -227,7 +196,7 @@ export default function PostEditModal({
                   <button
                     type="button"
                     className={styles.closeButtonP}
-                    onClick={() => clearImage(attachment.url)}
+                    onClick={() => clearAttachment(attachment.url)}
                   >
                     ×
                   </button>
@@ -240,7 +209,7 @@ export default function PostEditModal({
             <Form.Control
               type="file"
               accept="video/*"
-              onChange={handleVideoUpload}
+              onChange={handleFileUpload}
               className={styles.inputField}
               data-testid="video-upload"
             />
@@ -271,7 +240,7 @@ export default function PostEditModal({
                   <button
                     type="button"
                     className={styles.closeButtonP}
-                    onClick={() => clearVideo(attachment.url)}
+                    onClick={() => clearAttachment(attachment.url)}
                   >
                     ×
                   </button>
