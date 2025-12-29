@@ -103,7 +103,7 @@ export default function PostDetailModal({
       data-testid="post-modal"
     >
       <Modal.Header>
-        <Modal.Title>Post Details</Modal.Title>
+        <Modal.Title>{t('postDetails')}</Modal.Title>
         <div className="d-flex align-items-center ms-auto">
           <Dropdown className="me-2">
             <Dropdown.Toggle
@@ -191,7 +191,7 @@ export default function PostDetailModal({
                       default
                     />
                   )}
-                  Your browser does not support the video tag.
+                  {t('videoNotSupported')}
                 </video>
                 {/* Play/pause overlay button - provides visual hint and accessibility controls */}
                 {!isPlaying && (
@@ -201,31 +201,10 @@ export default function PostDetailModal({
                     data-testid="video-play-button"
                     aria-label="Play video"
                     aria-live="polite"
-                    style={{
-                      position: 'absolute',
-                      top: '50%',
-                      left: '50%',
-                      transform: 'translate(-50%, -50%)',
-                      background: 'rgba(0, 0, 0, 0.6)',
-                      border: 'none',
-                      borderRadius: '50%',
-                      width: '64px',
-                      height: '64px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      cursor: 'pointer',
-                      transition: 'background 0.2s ease',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = 'rgba(0, 0, 0, 0.8)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = 'rgba(0, 0, 0, 0.6)';
-                    }}
+                    className={styles.playButtonOverlay}
                   >
                     <PlayArrow
-                      style={{ color: 'white', fontSize: '32px' }}
+                      className={styles.playArrowIcon}
                       aria-hidden="true"
                     />
                   </button>
@@ -234,7 +213,7 @@ export default function PostDetailModal({
             ) : (
               <img
                 src={imageAttachment?.name || AboutImg}
-                alt="Post content"
+                alt={t('postContent')}
                 className="w-100"
                 style={{ borderRadius: '8px' }}
               />
@@ -245,7 +224,7 @@ export default function PostDetailModal({
             <div className={styles.infodiv}>
               <p className="mb-3">{post.caption}</p>
               <p className="mb-3">
-                <strong>Dated:</strong>{' '}
+                <strong>{t('dated')}:</strong>{' '}
                 {new Date(post.createdAt).toLocaleDateString(undefined, {
                   day: '2-digit',
                   month: 'long',
@@ -253,7 +232,7 @@ export default function PostDetailModal({
                 })}
               </p>
               <Card.Text className={styles.creatorInfo}>
-                <strong>Author:</strong>{' '}
+                <strong>{t('author')}:</strong>{' '}
                 {post.creatorId ? (
                   userLoading ? (
                     <span className="text-muted">{tCommon('loading')}</span>
@@ -266,7 +245,7 @@ export default function PostDetailModal({
               </Card.Text>
               {post.updatedAt && (
                 <p className="mt-3">
-                  <strong>Last updated:</strong>{' '}
+                  <strong>{t('lastUpdated')}:</strong>{' '}
                   {new Date(post.updatedAt).toLocaleString()}
                 </p>
               )}

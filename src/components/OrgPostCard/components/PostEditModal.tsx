@@ -107,23 +107,24 @@ export default function PostEditModal({
 
   const updatePost = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
-    let attachment = null;
-    if (postFormState.attachments.length > 0) {
-      const mimeType = postFormState.attachments[0].mimeType;
-      const extension = mimeType.split('/')[1] || 'bin';
-      const fileName = `post-attachment-${Date.now()}.${extension}`;
-      const objectName = 'uploads/' + fileName;
-      const fileHash = await getFileHashFromBase64(
-        postFormState.attachments[0].url,
-      );
+    const attachmentsArray = await Promise.all(
+      postFormState.attachments.map(async (attachment) => {
+        const mimeType = attachment.mimeType;
+        const extension = mimeType.split('/')[1] || 'bin';
+        const fileName = `post-attachment-${Date.now()}-${Math.random()
+          .toString(36)
+          .substring(7)}.${extension}`;
+        const objectName = 'uploads/' + fileName;
+        const fileHash = await getFileHashFromBase64(attachment.url);
 
-      attachment = {
-        fileHash,
-        mimetype: getMimeTypeEnum(mimeType),
-        name: fileName,
-        objectName,
-      };
-    }
+        return {
+          fileHash,
+          mimetype: getMimeTypeEnum(mimeType),
+          name: fileName,
+          objectName,
+        };
+      }),
+    );
 
     try {
       const { data } = await updatePostMutation({
@@ -131,7 +132,7 @@ export default function PostEditModal({
           input: {
             id: post.id,
             caption: postFormState.caption.trim(),
-            attachments: attachment ? [attachment] : [],
+            attachments: attachmentsArray,
           },
         },
       });

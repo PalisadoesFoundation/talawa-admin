@@ -9676,3 +9676,29 @@ form {
 }
 
 /* ----------------------------------------------------- */
+
+.playButtonOverlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.6);
+  border: none;
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.playButtonOverlay:hover {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.playArrowIcon {
+  color: white;
+  font-size: 32px;
+}
