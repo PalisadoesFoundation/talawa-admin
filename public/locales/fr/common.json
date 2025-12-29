@@ -153,5 +153,9 @@
   "organizations": "Organisations",
   "createEvent": "Créer un Événement",
   "eventCreated": "Événement créé avec succès",
-  "eventDetails": "Détails de l'Événement"
+  "eventDetails": "Détails de l'Événement",
+  "pluginSettings": "Paramètres du plugin",
+  "selectLanguage": "Choisir la langue",
+  "talawa": "Talawa",
+  "talawaBranding": "Image de marque Talawa"
 }
