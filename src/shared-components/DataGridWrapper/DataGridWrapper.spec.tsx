@@ -254,4 +254,54 @@ describe('DataGridWrapper', () => {
     btn.focus();
     expect(document.activeElement).toBe(btn);
   });
+
+  test('initializes with default sort configuration', () => {
+    const sortConfig = {
+      defaultSortField: 'name',
+      defaultSortOrder: 'desc' as const,
+      sortingOptions: [
+        { label: 'Name Asc', value: 'name_asc' },
+        { label: 'Name Desc', value: 'name_desc' },
+      ],
+    };
+
+    render(<DataGridWrapper {...defaultProps} sortConfig={sortConfig} />);
+
+    // Default sort is Name Desc -> Charlie, Bob, Alice
+    const rows = screen.getAllByRole('row');
+    // Row 0 is header, Row 1 is first data row
+    expect(within(rows[1]).getByText('Charlie')).toBeInTheDocument();
+  });
+
+  test('handles invalid sort option gracefully', () => {
+    const sortConfig = {
+      sortingOptions: [{ label: 'Invalid Sort', value: 'invalid_sort_value' }],
+    };
+
+    render(<DataGridWrapper {...defaultProps} sortConfig={sortConfig} />);
+
+    // Open sort menu
+    fireEvent.click(screen.getByText('Sort'));
+    // Select invalid option
+    fireEvent.click(screen.getByText('Invalid Sort'));
+
+    // Should default to original order (Empty sort model): Alice, Bob, Charlie
+    const rows = screen.getAllByRole('row');
+    expect(within(rows[1]).getByText('Alice')).toBeInTheDocument();
+  });
+
+  test('updates search term on search submit (Enter key)', () => {
+    render(<DataGridWrapper {...defaultProps} />);
+    const input = screen.getByRole('searchbox');
+
+    // Type value first (triggers onChange, line 81)
+    fireEvent.change(input, { target: { value: 'Bob' } });
+
+    // Press Enter (triggers onSearch, line 82)
+    fireEvent.keyDown(input, { key: 'Enter', code: 'Enter', charCode: 13 });
+
+    // Verify filter is active
+    expect(screen.getByText('Bob')).toBeInTheDocument();
+    expect(screen.queryByText('Alice')).toBeNull();
+  });
 });
