@@ -26,7 +26,7 @@ Props for a generic DataTable component
 
 Defined in: [src/shared-components/DataTable/types.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L69)
 
-Optional accessible label for the table, used for both the visually hidden <caption> and as aria-label on the table element.
+Optional accessible label for the table, used for both the visually hidden table caption and as aria-label on the table element.
 This improves accessibility for screen readers and navigation.
 
 ***

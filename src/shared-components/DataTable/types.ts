@@ -63,7 +63,7 @@ export interface IDataTableProps<T, TValue = unknown> {
   error?: Error | null;
   renderError?: (error: Error) => React.ReactNode;
   /**
-   * Optional accessible label for the table, used for both the visually hidden <caption> and as aria-label on the table element.
+   * Optional accessible label for the table, used for both the visually hidden table caption and as aria-label on the table element.
    * This improves accessibility for screen readers and navigation.
    */
   ariaLabel?: string;
