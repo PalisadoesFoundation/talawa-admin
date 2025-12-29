@@ -14,6 +14,7 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from '../../../utils/useLocalstorage';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 
 const STORAGE_KEY = 'pendingInvitationToken';
 const AUTH_TOKEN_KEY = 'token';
@@ -179,98 +180,97 @@ const AcceptInvitation = (): JSX.Element => {
                 </dd>
               </dl>
 
-              {!isAuthenticated ? (
-                <div>
-                  <p>
-                    {t('mustLogin', {
+            {!isAuthenticated ? (
+              <div>
+                <p>
+                  {t('mustLogin', {
+                    defaultValue:
+                      'Please login or create an account to accept this invitation.',
+                  })}
+                </p>
+                <div className="d-flex gap-2">
+                  <Button onClick={handleLogin}>
+                    {t('login', { defaultValue: 'Log in' })}
+                  </Button>
+                  <Button variant="outline-primary" onClick={handleSignup}>
+                    {t('signup', { defaultValue: 'Sign up' })}
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div>
+                {requiresConfirmation && (
+                  <div className="alert alert-warning">
+                    {t('maskedNotice', {
                       defaultValue:
-                        'Please login or create an account to accept this invitation.',
+                        'This invitation was issued to a masked email address. Please ensure you are the invited recipient before accepting.',
                     })}
-                  </p>
-                  <div className="d-flex gap-2">
-                    <Button onClick={handleLogin}>
-                      {t('login', { defaultValue: 'Log in' })}
-                    </Button>
-                    <Button variant="outline-primary" onClick={handleSignup}>
-                      {t('signup', { defaultValue: 'Sign up' })}
-                    </Button>
                   </div>
-                </div>
-              ) : (
-                <div>
-                  {requiresConfirmation && (
-                    <div className="alert alert-warning">
-                      {t('maskedNotice', {
-                        defaultValue:
-                          'This invitation was issued to a masked email address. Please ensure you are the invited recipient before accepting.',
-                      })}
-                    </div>
-                  )}
+                )}
 
-                  {requiresConfirmation && (
-                    <div className="mb-3 form-check">
-                      <input
-                        id="confirmIsInvitee"
-                        type="checkbox"
-                        className="form-check-input"
-                        checked={confirmIsInvitee}
-                        onChange={(e) => setConfirmIsInvitee(e.target.checked)}
-                      />
-                      <label
-                        htmlFor="confirmIsInvitee"
-                        className="form-check-label"
-                      >
-                        {t('confirmMatch', {
-                          defaultValue:
-                            'I confirm the email address of my account matches the invited address (shown above).',
-                        })}
-                      </label>
-                    </div>
-                  )}
-
-                  {requiresConfirmation && (
-                    <div className="mb-3">
-                      <Button
-                        variant="outline-secondary"
-                        onClick={() => {
-                          removeItem(AUTH_TOKEN_KEY);
-                          removeItem(EMAIL_KEY);
-                          if (invite?.invitationToken) {
-                            setItem(STORAGE_KEY, invite.invitationToken);
-                          }
-                          navigate('/');
-                        }}
-                      >
-                        {t('signInAsDifferent', {
-                          defaultValue: 'Sign in as a different user',
-                        })}
-                      </Button>
-                    </div>
-                  )}
-
-                  <div className="d-flex gap-2">
-                    <LoadingState
-                      isLoading={isSubmitting}
-                      variant="inline"
-                      size="sm"
-                      data-testid="submit-loading"
+                {requiresConfirmation && (
+                  <div className="mb-3 form-check">
+                    <input
+                      id="confirmIsInvitee"
+                      type="checkbox"
+                      className="form-check-input"
+                      checked={confirmIsInvitee}
+                      onChange={(e) => setConfirmIsInvitee(e.target.checked)}
+                    />
+                    <label
+                      htmlFor="confirmIsInvitee"
+                      className="form-check-label"
                     >
-                      <Button
-                        onClick={handleAccept}
-                        disabled={requiresConfirmation && !confirmIsInvitee}
-                        data-testid="accept-invite-btn"
-                      >
-                        {t('accept', { defaultValue: 'Accept Invitation' })}
-                      </Button>
-                    </LoadingState>
+                      {t('confirmMatch', {
+                        defaultValue:
+                          'I confirm the email address of my account matches the invited address (shown above).',
+                      })}
+                    </label>
                   </div>
+                )}
+
+                {requiresConfirmation && (
+                  <div className="mb-3">
+                    <Button
+                      variant="outline-secondary"
+                      onClick={() => {
+                        removeItem(AUTH_TOKEN_KEY);
+                        removeItem(EMAIL_KEY);
+                        if (invite?.invitationToken) {
+                          setItem(STORAGE_KEY, invite.invitationToken);
+                        }
+                        navigate('/');
+                      }}
+                    >
+                      {t('signInAsDifferent', {
+                        defaultValue: 'Sign in as a different user',
+                      })}
+                    </Button>
+                  </div>
+                )}
+
+                <div className="d-flex gap-2">
+                  <LoadingState
+                    isLoading={isSubmitting}
+                    variant="inline"
+                    size="sm"
+                    data-testid="submit-loading"
+                  >
+                    <Button
+                      onClick={handleAccept}
+                      disabled={requiresConfirmation && !confirmIsInvitee}
+                      data-testid="accept-invite-btn"
+                    >
+                      {t('accept', { defaultValue: 'Accept Invitation' })}
+                    </Button>
+                  </LoadingState>
                 </div>
-              )}
-            </>
-          )}
-        </div>
+              </div>
+            )}
+          </>
+        )}
       </div>
-    </LoadingState>
+    </div>
   );
 };
 

@@ -37,6 +37,9 @@
     "nameInvalid": "El nombre solo debe contener letras, espacios y guiones.",
     "passwordInvalid": "La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un valor numérico y un carácter especial.",
     "emailInvalid": "Por favor, introduce una dirección de correo electrónico válida",
+    "name_invalid": "El nombre solo debe contener letras, espacios y guiones.",
+    "password_invalid": "La contraseña debe contener al menos una letra minúscula, una letra mayúscula, un valor numérico y un carácter especial.",
+    "email_invalid": "El correo electrónico debe tener al menos 8 caracteres.",
     "confirmPassword": "Confirmar contraseña",
     "forgotPassword": "Has olvidado tu contraseña ?",
     "enterEmail": "ingrese correo electrónico",
@@ -236,7 +239,8 @@
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
     "newMembersWillAppearHere": "Los nuevos miembros aparecerán aquí",
     "profilePictureAlt": "Imagen de perfil de {{name}}",
-    "placeholderAvatarAlt": "Avatar predeterminado"
+    "placeholderAvatarAlt": "Avatar predeterminado",
+    "newMembersWillAppearHere": "Las nuevas solicitudes de membresía aparecerán aquí"
   },
   "users": {
     "membershipStatus": {
