@@ -554,7 +554,7 @@ describe('OrgUpdate Component', () => {
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
-          'Name and description are required',
+          i18n.t('orgUpdate.nameDescriptionRequired'),
         );
       });
 
@@ -566,7 +566,7 @@ describe('OrgUpdate Component', () => {
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
-          'Name and description are required',
+          i18n.t('orgUpdate.nameDescriptionRequired'),
         );
       });
     });

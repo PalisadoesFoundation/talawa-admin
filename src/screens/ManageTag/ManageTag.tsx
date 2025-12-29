@@ -62,7 +62,7 @@ import { Col } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceQueryUserTagsAssignedMembers } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import manageTagStyles from './ManageTag.module.css';
@@ -228,10 +228,10 @@ function ManageTag(): JSX.Element {
 
       userTagAssignedMembersRefetch();
       toggleUnassignUserTagModal();
-      toast.success(t('successfullyUnassigned') as string);
+      NotificationToast.success(t('successfullyUnassigned') as string);
     } catch (error: unknown) {
       const errorMessage = getManageTagErrorMessage(error);
-      toast.error(errorMessage);
+      NotificationToast.error(errorMessage);
     }
   };
 
@@ -251,7 +251,7 @@ function ManageTag(): JSX.Element {
     e.preventDefault();
 
     if (newTagName === currentTagName) {
-      toast.info(t('changeNameToEdit'));
+      NotificationToast.info(t('changeNameToEdit'));
       return;
     }
 
@@ -260,12 +260,12 @@ function ManageTag(): JSX.Element {
         variables: { tagId: currentTagId, name: newTagName },
       });
 
-      toast.success(t('tagUpdationSuccess'));
+      NotificationToast.success(t('tagUpdationSuccess'));
       userTagAssignedMembersRefetch();
       setEditUserTagModalIsOpen(false);
     } catch (error: unknown) {
       const errorMessage = getManageTagErrorMessage(error);
-      toast.error(errorMessage);
+      NotificationToast.error(errorMessage);
     }
   };
 
@@ -276,10 +276,10 @@ function ManageTag(): JSX.Element {
 
       navigate(`/orgtags/${orgId}`);
       toggleRemoveUserTagModal();
-      toast.success(t('tagRemovalSuccess') as string);
+      NotificationToast.success(t('tagRemovalSuccess') as string);
     } catch (error: unknown) {
       const errorMessage = getManageTagErrorMessage(error);
-      toast.error(errorMessage);
+      NotificationToast.error(errorMessage);
     }
   };
 
