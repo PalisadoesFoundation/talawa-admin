@@ -62,9 +62,6 @@ async function wait(ms = 100): Promise<void> {
 }
 
 describe('Testing User List Card', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
   let reloadMock: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
@@ -83,6 +80,10 @@ describe('Testing User List Card', () => {
     });
     // Clear all mocks before each test
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('Should successfully add admin and show success toast', async () => {
@@ -373,6 +374,9 @@ describe('Testing User List Card', () => {
   });
 
   it('Should handle GraphQL error in mutation response', async () => {
+    // Clear the reload mock at the start to ensure clean state
+    reloadMock.mockClear();
+    
     const graphQLErrorMock = [
       {
         request: {
@@ -383,6 +387,7 @@ describe('Testing User List Card', () => {
           },
         },
         result: {
+          data: null,
           errors: [{ message: 'User not found' }],
         },
       },
@@ -406,10 +411,16 @@ describe('Testing User List Card', () => {
     await wait();
     const button = screen.getByText(/Add Admin/i);
     await userEvent.click(button);
+    
+    // Wait for mutation to complete
     await wait(500);
 
-    // GraphQL errors in the result don't trigger the catch block
+    // GraphQL errors with data: null should not trigger success flow
     expect(toast.success).not.toHaveBeenCalled();
+    
+    // The reload should not have been scheduled since data is null
+    // Wait a short time to ensure no immediate reload
+    await wait(100);
     expect(reloadMock).not.toHaveBeenCalled();
   });
 });

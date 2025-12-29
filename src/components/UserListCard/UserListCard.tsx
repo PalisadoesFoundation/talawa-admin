@@ -36,7 +36,7 @@
  * - The `useTranslation` hook is used for internationalization.
  * - The button reloads the page after a successful operation.
  */
-import React from 'react';
+import React, { useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
@@ -55,18 +55,47 @@ interface InterfaceUserListCardProps {
 function userListCard(props: InterfaceUserListCardProps): JSX.Element {
   const { orgId: currentUrl } = useParams();
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
+  const reloadTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const { t } = useTranslation('translation', { keyPrefix: 'userListCard' });
 
   const addAdmin = async (): Promise<void> => {
+    // Clear any existing timeout
+    if (reloadTimeoutRef.current) {
+      clearTimeout(reloadTimeoutRef.current);
+      reloadTimeoutRef.current = null;
+    }
+
     try {
-      const { data } = await adda({
+      const result = await adda({
         variables: { userid: props.id, orgid: currentUrl },
       });
 
-      if (data) {
+      // Only proceed if mutation succeeded:
+      // - Data exists (not null/undefined)
+      // - No GraphQL errors in result.errors
+      // - createAdmin result exists and is truthy
+      
+      // First check if data is null - this is a clear indicator of failure
+      if (!result.data || result.data === null) {
+        // No data means mutation failed, don't proceed
+        return;
+      }
+
+      // Check for GraphQL errors
+      if (
+        result.errors &&
+        Array.isArray(result.errors) &&
+        result.errors.length > 0
+      ) {
+        // GraphQL errors present, don't proceed
+        return;
+      }
+
+      // Finally, check if we have a valid createAdmin result
+      if (result.data.createAdmin) {
         toast.success(t('addedAsAdmin') as string);
-        setTimeout(() => {
+        reloadTimeoutRef.current = setTimeout(() => {
           window.location.reload();
         }, 2000);
       }

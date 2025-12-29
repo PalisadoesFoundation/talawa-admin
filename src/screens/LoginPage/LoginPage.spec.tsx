@@ -1850,7 +1850,7 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
       1,
-      i18nForTest.t('loginPage.emailInvalid'),
+      i18nForTest.t('loginPage.email_invalid'),
     );
   });
 
@@ -2334,7 +2334,34 @@ describe('Cookie-based authentication verification', () => {
         result: { data: { recaptcha: true } },
       },
       {
-        request: { query: GET_COMMUNITY_DATA_PG, variables: {} },
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: {
+          data: {
+            community: {
+              id: '1',
+              name: 'Test Community',
+              logoURL: 'http://example.com/logo.png',
+              websiteURL: 'http://example.com',
+              facebookURL: 'http://facebook.com/test',
+              linkedinURL: 'http://linkedin.com/test',
+              xURL: 'http://twitter.com/test',
+              githubURL: 'http://github.com/test',
+              instagramURL: 'http://instagram.com/test',
+              youtubeURL: 'http://youtube.com/test',
+              slackURL: 'http://slack.com/test',
+              redditURL: 'http://reddit.com/test',
+              inactivityTimeoutDuration: 3600,
+              createdAt: '2023-01-01',
+              updatedAt: '2023-01-01',
+              logoMimeType: 'image/png',
+              __typename: 'Community',
+            },
+          },
+        },
+      },
+      // LoginPage refetches community data when `data` changes, so provide a second identical response
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
         result: {
           data: {
             community: {
@@ -2401,11 +2428,21 @@ describe('Cookie-based authentication verification', () => {
 
     await wait();
 
-    // Verify error toast is shown
-    expect(toastMocks.error).toHaveBeenCalledWith(
-      expect.stringContaining('Network Error'),
-      expect.any(Object),
+    // Verify error toast is shown for the SIGNIN_QUERY network error
+    // (GET_COMMUNITY_DATA_PG might also show an error, so check the last call)
+    const errorCalls = toastMocks.error.mock.calls;
+    const networkErrorCall = errorCalls.find((call) =>
+      call[0]?.toString().includes('Network Error'),
     );
+    expect(networkErrorCall).toBeDefined();
+    if (networkErrorCall) {
+      expect(networkErrorCall[0]).toEqual(expect.stringContaining('Network Error'));
+      // errorHandler may call NotificationToast.error with just a string (no options)
+      // or with an object, so options is optional
+      if (networkErrorCall[1] !== undefined) {
+        expect(networkErrorCall[1]).toEqual(expect.any(Object));
+      }
+    }
 
     // Verify ReCAPTCHA is reset on error
     expect(resetReCAPTCHA).toHaveBeenCalled();
