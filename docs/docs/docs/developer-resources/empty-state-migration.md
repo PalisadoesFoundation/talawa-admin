@@ -2,13 +2,14 @@
 id: empty-state-migration
 title: EmptyState Migration Tracking
 slug: /developer-resources/empty-state-migration
-sidebar_position: 36
+sidebar_position: 37
 ---
 
 This document tracks the migration of legacy empty-state implementations
 (e.g. `.notFound` CSS-based patterns) to the shared `EmptyState` component.
 
 It serves as a reference for:
+
 - Completed migrations
 - Known exceptions
 - Discovered edge cases
@@ -22,6 +23,7 @@ The following screens have been successfully migrated to use the shared
 `EmptyState` component:
 
 ### Admin Screens
+
 - **Requests**
   - No organizations
   - No membership requests
@@ -42,10 +44,11 @@ The following screens have been successfully migrated to use the shared
 The following screens still use legacy patterns and were intentionally
 left unchanged:
 
-| Screen | Reason |
-|------|--------|
+| Screen                           | Reason                                  |
+| -------------------------------- | --------------------------------------- |
 | src/screens/UserPortal/Campaigns | Will be implemented through Issue #5126 |
-| src/screens/BlockUser | Will be implemented through Issue #5126 |
+| src/screens/BlockUser            | Will be implemented through Issue #5126 |
+
 > Note: Any future exclusions should be documented here with rationale.
 
 ---
@@ -82,6 +85,7 @@ When extending or introducing new EmptyState usage:
   - Search empty state (if applicable)
 
 For new empty state patterns, update:
+
 - `reusable-components.md`
 - This migration tracking document (if relevant)
 
