@@ -40,6 +40,23 @@ vi.mock('utils/useLocalstorage', () => {
   };
 });
 
+const { routerMocks } = vi.hoisted(() => {
+  const useParams = vi.fn();
+  return {
+    routerMocks: {
+      useParams,
+    },
+  };
+});
+
+vi.mock('react-router', async () => {
+  const actual = await vi.importActual<typeof import('react-router')>('react-router');
+  return {
+    ...actual,
+    useParams: routerMocks.useParams,
+  };
+});
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -174,10 +191,12 @@ describe('Organisation Events Page', () => {
   beforeEach(() => {
     sharedWindowSpies.alertMock.mockReset();
     window.alert = sharedWindowSpies.alertMock;
+    // Reset useParams mock to return default orgId for all tests
+    routerMocks.useParams.mockReturnValue({ orgId: 'test-org-123' });
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   const renderWithLink = (link: StaticMockLink) =>

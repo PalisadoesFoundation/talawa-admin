@@ -280,17 +280,14 @@ function organizationVenues(): JSX.Element {
               data-testid="orgvenueslist"
             >
               {venues.length ? (
-                venues.map(
-                  (venueItem: InterfaceQueryVenueListItem, index: number) => (
-                    <VenueCard
-                      venueItem={venueItem}
-                      handleDelete={handleDelete}
-                      showEditVenueModal={showEditVenueModal}
-                      index={index}
-                      key={index}
-                    />
-                  ),
-                )
+                venues.map((venueItem: InterfaceQueryVenueListItem) => (
+                  <VenueCard
+                    key={venueItem.node.id}
+                    venueItem={venueItem}
+                    handleDelete={handleDelete}
+                    showEditVenueModal={showEditVenueModal}
+                  />
+                ))
               ) : (
                 <h6>{t('noVenues')}</h6>
               )}

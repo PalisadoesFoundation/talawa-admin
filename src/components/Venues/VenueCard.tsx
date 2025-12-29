@@ -41,21 +41,19 @@ interface InterfaceVenueCardProps {
   venueItem: InterfaceQueryVenueListItem;
   showEditVenueModal: (venueItem: InterfaceQueryVenueListItem) => void;
   handleDelete: (venueId: string) => void;
-  index: number;
 }
 
 const VenueCard = ({
   venueItem,
   showEditVenueModal,
   handleDelete,
-  index,
 }: InterfaceVenueCardProps): JSX.Element => {
   // Translation hook for internationalization
   const { t: tCommon } = useTranslation('common');
   return (
     <div
       className="col-xl-4 col-lg-4 col-md-6"
-      data-testid={`venue-item-${index}`}
+      data-testid={`venue-item-${venueItem.node.id}`}
       key={venueItem.node.id}
     >
       <div className={styles.cards} data-testid="cardStructure">
