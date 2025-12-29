@@ -100,14 +100,28 @@ describe('PasswordField', () => {
     expect(mockToggle).toHaveBeenCalledTimes(1);
   });
 
-  it('handles keyboard navigation on toggle button', () => {
+  it('handles Enter key on toggle button', () => {
     render(<PasswordField {...defaultProps} />);
 
     const toggleButton = screen.getByRole('button', { name: 'Show password' });
+    const passwordInput = screen.getByDisplayValue('test-value');
 
     fireEvent.keyDown(toggleButton, { key: 'Enter' });
 
     expect(toggleButton).toHaveAttribute('aria-pressed', 'true');
+    expect(passwordInput).toHaveAttribute('type', 'text');
+  });
+
+  it('handles Space key on toggle button', () => {
+    render(<PasswordField {...defaultProps} />);
+
+    const toggleButton = screen.getByRole('button', { name: 'Show password' });
+    const passwordInput = screen.getByDisplayValue('test-value');
+
+    fireEvent.keyDown(toggleButton, { key: ' ' });
+
+    expect(toggleButton).toHaveAttribute('aria-pressed', 'true');
+    expect(passwordInput).toHaveAttribute('type', 'text');
   });
 
   it('calls onChange when input value changes', () => {
