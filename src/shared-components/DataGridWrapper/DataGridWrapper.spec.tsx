@@ -89,7 +89,9 @@ describe('DataGridWrapper', () => {
 
   test('renders action column correctly', () => {
     const actionColumnRenderer = (row: TestRow) => (
-      <button data-testid={`action-${row.id}`}>Action</button>
+      <button type="button" data-testid={`action-${row.id}`}>
+        Action
+      </button>
     );
     render(
       <DataGridWrapper {...defaultProps} actionColumn={actionColumnRenderer} />,
