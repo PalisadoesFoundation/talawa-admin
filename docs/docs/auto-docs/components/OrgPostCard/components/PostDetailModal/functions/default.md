@@ -6,13 +6,13 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/OrgPostCard/components/PostDetailModal.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgPostCard/components/PostDetailModal.tsx#L42)
+Defined in: [src/components/OrgPostCard/components/PostDetailModal.tsx:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgPostCard/components/PostDetailModal.tsx#L14)
 
 ## Parameters
 
 ### \_\_namedParameters
 
-`IPostDetailModalProps`
+[`IPostDetailModalProps`](../../../../../types/Post/interface/interfaces/IPostDetailModalProps.md)
 
 ## Returns
 

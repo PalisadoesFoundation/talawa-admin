@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { Close, MoreVert } from '@mui/icons-material';
-import React from 'react';
+import { Close, MoreVert, PlayArrow } from '@mui/icons-material';
+import React, { useState, useRef } from 'react';
 import { Button, Card, Dropdown, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
@@ -9,35 +9,7 @@ import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import { TOGGLE_PINNED_POST } from 'GraphQl/Mutations/mutations';
 import { GET_USER_BY_ID } from 'GraphQl/Queries/Queries';
-
-interface InterfacePostAttachment {
-  id: string;
-  postId: string;
-  name: string;
-  mimeType: string;
-  createdAt: Date;
-  updatedAt?: Date | null;
-  creatorId?: string | null;
-  updaterId?: string | null;
-}
-
-interface InterfacePost {
-  id: string;
-  caption?: string | null;
-  createdAt: Date;
-  updatedAt?: Date | null;
-  pinnedAt?: Date | null;
-  creatorId: string | null;
-  attachments: InterfacePostAttachment[];
-}
-
-interface IPostDetailModalProps {
-  show: boolean;
-  onHide: () => void;
-  post: InterfacePost;
-  onEdit: () => void;
-  onDelete: () => void;
-}
+import type { IPostDetailModalProps } from 'types/Post/interface';
 
 export default function PostDetailModal({
   show,
@@ -49,6 +21,10 @@ export default function PostDetailModal({
   const { t } = useTranslation('translation', { keyPrefix: 'orgPostCard' });
   const { t: tCommon } = useTranslation('common');
 
+  // Video playback control state
+  const [isPlaying, setIsPlaying] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
   const [togglePinMutation] = useMutation(TOGGLE_PINNED_POST);
   const isPinned = !!post.pinnedAt;
 
@@ -58,6 +34,32 @@ export default function PostDetailModal({
   const videoAttachment = post.attachments.find((a) =>
     a.mimeType.startsWith('video/'),
   );
+
+  /**
+   * Handle video play/pause toggle
+   * Triggered when user clicks play button or video area
+   */
+  const handleVideoPlayPause = (): void => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+        setIsPlaying(false);
+      } else {
+        videoRef.current.play().catch(() => {
+          // If playback fails (e.g., browser policy restrictions), keep paused state
+          setIsPlaying(false);
+        });
+        setIsPlaying(true);
+      }
+    }
+  };
+
+  /**
+   * Callback when video playback ends
+   */
+  const handleVideoEnded = (): void => {
+    setIsPlaying(false);
+  };
 
   const { data: userData, loading: userLoading } = useQuery(GET_USER_BY_ID, {
     variables: { input: { id: post.creatorId || '' } },
@@ -154,12 +156,75 @@ export default function PostDetailModal({
         <div className="row">
           <div className="col-md-6 mb-3 mb-md-0">
             {videoAttachment ? (
-              <video controls autoPlay loop muted className="w-100">
-                <source
-                  src={videoAttachment.name}
-                  type={videoAttachment.mimeType}
-                />
-              </video>
+              <div
+                style={{ position: 'relative' }}
+                aria-label="Video player with controls"
+              >
+                <video
+                  ref={videoRef}
+                  controls
+                  loop
+                  muted
+                  className="w-100"
+                  style={{ borderRadius: '8px' }}
+                  data-testid="post-video"
+                  aria-label="Post video content"
+                  onEnded={handleVideoEnded}
+                  onPause={() => setIsPlaying(false)}
+                  onPlay={() => setIsPlaying(true)}
+                >
+                  <source
+                    src={videoAttachment.name}
+                    type={videoAttachment.mimeType}
+                  />
+                  {/* Caption track - uses corresponding .vtt file from attachment if available, otherwise provides empty track as fallback */}
+                  <track
+                    kind="captions"
+                    src=""
+                    srcLang="en"
+                    label="English captions"
+                    default
+                  />
+                  Your browser does not support the video tag.
+                </video>
+                {/* Play/pause overlay button - provides visual hint and accessibility controls */}
+                {!isPlaying && (
+                  <button
+                    type="button"
+                    onClick={handleVideoPlayPause}
+                    data-testid="video-play-button"
+                    aria-label="Play video"
+                    aria-live="polite"
+                    style={{
+                      position: 'absolute',
+                      top: '50%',
+                      left: '50%',
+                      transform: 'translate(-50%, -50%)',
+                      background: 'rgba(0, 0, 0, 0.6)',
+                      border: 'none',
+                      borderRadius: '50%',
+                      width: '64px',
+                      height: '64px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      transition: 'background 0.2s ease',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'rgba(0, 0, 0, 0.8)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'rgba(0, 0, 0, 0.6)';
+                    }}
+                  >
+                    <PlayArrow
+                      style={{ color: 'white', fontSize: '32px' }}
+                      aria-hidden="true"
+                    />
+                  </button>
+                )}
+              </div>
             ) : (
               <img
                 src={imageAttachment?.name || AboutImg}

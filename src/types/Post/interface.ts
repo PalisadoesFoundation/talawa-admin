@@ -95,3 +95,72 @@ export interface InterfacePost {
   imageUrl?: string | null;
   videoUrl?: string | null;
 }
+
+/**
+ * Post attachment details interface
+ * Used for attachment data structure in OrgPostCard components
+ */
+export interface InterfacePostAttachment {
+  id: string;
+  postId: string;
+  name: string;
+  mimeType: string;
+  createdAt: Date;
+  updatedAt?: Date | null;
+  creatorId?: string | null;
+  updaterId?: string | null;
+}
+
+/**
+ * Post interface with full attachment information
+ * Used in OrgPostCard, PostDetailModal, PostEditModal components
+ */
+export interface InterfacePostWithAttachments {
+  id: string;
+  caption?: string | null;
+  createdAt: Date;
+  updatedAt?: Date | null;
+  pinnedAt?: Date | null;
+  creatorId: string | null;
+  attachments: InterfacePostAttachment[];
+}
+
+/**
+ * PostDetailModal component props interface
+ */
+export interface IPostDetailModalProps {
+  show: boolean;
+  onHide: () => void;
+  post: InterfacePostWithAttachments;
+  onEdit: () => void;
+  onDelete: () => void;
+}
+
+/**
+ * PostEditModal component props interface
+ */
+export interface IPostEditModalProps {
+  show: boolean;
+  onHide: () => void;
+  post: InterfacePostWithAttachments;
+  /**
+   * Callback function after post update success
+   * Used to notify parent component to refresh data, replacing window.location.reload()
+   */
+  onSuccess?: () => void;
+}
+
+/**
+ * OrgPostCard component props interface
+ */
+export interface InterfaceOrgPostCardProps {
+  post: InterfacePostWithAttachments;
+}
+
+/**
+ * PostEditModal internal form state interface
+ */
+export interface InterfacePostFormState {
+  caption: string;
+  attachments: { url: string; mimeType: string }[];
+}

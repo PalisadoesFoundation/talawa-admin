@@ -17,6 +17,7 @@ import { toast } from 'react-toastify';
 import type { DocumentNode } from 'graphql';
 import * as errorHandlerModule from 'utils/errorHandler';
 import type { MockedResponse } from '@apollo/client/testing';
+import type { InterfacePostWithAttachments } from 'types/Post/interface';
 
 // Mock plugin injector similar to Transactions tests
 vi.mock('plugin', () => ({
@@ -59,27 +60,6 @@ beforeAll(() => {
  * - Employs userEvent for realistic interaction simulation
  * - Verifies both UI states and business logic outcomes
  */
-
-interface InterfacePostAttachment {
-  id: string;
-  postId: string;
-  name: string;
-  mimeType: string;
-  createdAt: Date;
-  updatedAt?: Date | null;
-  creatorId?: string | null;
-  updaterId?: string | null;
-}
-
-interface InterfacePost {
-  id: string;
-  caption: string;
-  createdAt: Date;
-  updatedAt: Date | null;
-  pinnedAt: Date | null;
-  creatorId: string | null;
-  attachments: InterfacePostAttachment[];
-}
 
 interface InterfaceMockedResponse {
   request: {
@@ -668,7 +648,7 @@ describe('OrgPostCard Component', () => {
 });
 
 describe('OrgPostCard Pin Toggle and update post Functionality ', () => {
-  const mockPost: InterfacePost = {
+  const mockPost: InterfacePostWithAttachments = {
     id: '12',
     caption: 'Test Caption',
     createdAt: new Date('2024-02-22'),
@@ -712,7 +692,7 @@ describe('OrgPostCard Pin Toggle and update post Functionality ', () => {
 
   const renderComponent = (
     mocks: InterfaceMockedResponse[] = [],
-    post: InterfacePost = mockPost,
+    post: InterfacePostWithAttachments = mockPost,
   ): void => {
     render(
       <MockedProvider mocks={mocks} addTypename={false}>
@@ -850,7 +830,7 @@ describe('OrgPostCard Pin Toggle and update post Functionality ', () => {
   });
 
   it('unpins a pinned post', async () => {
-    const pinnedPost: InterfacePost = {
+    const pinnedPost: InterfacePostWithAttachments = {
       ...mockPost,
       pinnedAt: new Date(),
     };

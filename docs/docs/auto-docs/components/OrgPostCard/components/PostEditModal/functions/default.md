@@ -6,13 +6,13 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/OrgPostCard/components/PostEditModal.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgPostCard/components/PostEditModal.tsx#L43)
+Defined in: [src/components/OrgPostCard/components/PostEditModal.tsx:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgPostCard/components/PostEditModal.tsx#L15)
 
 ## Parameters
 
 ### \_\_namedParameters
 
-`IPostEditModalProps`
+[`IPostEditModalProps`](../../../../../types/Post/interface/interfaces/IPostEditModalProps.md)
 
 ## Returns
 

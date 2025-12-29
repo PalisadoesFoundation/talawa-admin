@@ -7,49 +7,22 @@ import convertToBase64 from 'utils/convertToBase64';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import { UPDATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-
-interface InterfacePostAttachment {
-  id: string;
-  postId: string;
-  name: string;
-  mimeType: string;
-  createdAt: Date;
-  updatedAt?: Date | null;
-  creatorId?: string | null;
-  updaterId?: string | null;
-}
-
-interface InterfacePost {
-  id: string;
-  caption?: string | null;
-  createdAt: Date;
-  updatedAt?: Date | null;
-  pinnedAt?: Date | null;
-  creatorId: string | null;
-  attachments: InterfacePostAttachment[];
-}
-
-interface InterfacePostFormState {
-  caption: string;
-  attachments: { url: string; mimeType: string }[];
-}
-
-interface IPostEditModalProps {
-  show: boolean;
-  onHide: () => void;
-  post: InterfacePost;
-}
+import type {
+  IPostEditModalProps,
+  InterfacePostFormState,
+} from 'types/Post/interface';
 
 export default function PostEditModal({
   show,
   onHide,
   post,
+  onSuccess,
 }: IPostEditModalProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'orgPostCard' });
   const [updatePostMutation] = useMutation(UPDATE_POST_MUTATION);
 
   const [postFormState, setPostFormState] = useState<InterfacePostFormState>({
-    caption: post.caption ?? 'Untitled',
+    caption: post.caption ?? '',
     attachments: [],
   });
 
@@ -102,6 +75,31 @@ export default function PostEditModal({
       ...prev,
       attachments: prev.attachments.filter((a) => a.url !== url),
     }));
+  };
+
+  /**
+   * Validate and sanitize data URL to prevent XSS attacks
+   * Only allows valid base64 encoded data URLs
+   * @param url - URL string to validate
+   * @param expectedMimeType - Expected MIME type prefix (e.g., 'image/' or 'video/')
+   * @returns Original URL if valid, otherwise empty string
+   */
+  const sanitizeDataUrl = (url: string, expectedMimeType: string): string => {
+    // Validate data URL format
+    const dataUrlPattern = /^data:([a-zA-Z0-9]+\/[a-zA-Z0-9.+-]+);base64,/;
+    const match = url.match(dataUrlPattern);
+
+    if (!match) {
+      return '';
+    }
+
+    // Validate MIME type matches expected
+    const mimeType = match[1];
+    if (!mimeType.startsWith(expectedMimeType)) {
+      return '';
+    }
+
+    return url;
   };
 
   async function getFileHashFromBase64(base64String: string): Promise<string> {
@@ -172,9 +170,8 @@ export default function PostEditModal({
       if (data?.updatePost?.id) {
         toast.success(t('postUpdated'));
         onHide();
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
+        // Call onSuccess callback to notify parent component to refresh data
+        onSuccess?.();
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -193,7 +190,7 @@ export default function PostEditModal({
         <Modal.Title>{t('editPost')}</Modal.Title>
       </Modal.Header>
 
-      <Form onSubmit={updatePost} role="form" data-testid="update-post-form">
+      <Form onSubmit={updatePost} data-testid="update-post-form">
         <Modal.Body>
           <Form.Group className="mb-3">
             <Form.Label>Caption</Form.Label>
@@ -223,7 +220,10 @@ export default function PostEditModal({
               .filter((a) => a.mimeType.startsWith('image/'))
               .map((attachment, index) => (
                 <div key={index} className={styles.previewOrgPostCard}>
-                  <img src={attachment.url} alt="Preview" />
+                  <img
+                    src={sanitizeDataUrl(attachment.url, 'image/')}
+                    alt="Preview"
+                  />
                   <button
                     type="button"
                     className={styles.closeButtonP}
@@ -249,10 +249,25 @@ export default function PostEditModal({
               .filter((a) => a.mimeType.startsWith('video/'))
               .map((attachment, index) => (
                 <div key={index} className={styles.previewOrgPostCard}>
-                  <video controls data-testid="video-preview">
-                    <source src={attachment.url} type={attachment.mimeType} />
+                  {/*
+                    Note: Current upload flow does not support caption file uploads, so video preview does not include <track> element.
+                    If captions are supported in the future, add: <track kind="captions" src={captionsUrl} srcLang="en" label="English" default />
+                  */}
+                  <video
+                    controls
+                    data-testid="video-preview"
+                    aria-label="Video preview - captions not available for uploaded videos"
+                  >
+                    <source
+                      src={sanitizeDataUrl(attachment.url, 'video/')}
+                      type={attachment.mimeType}
+                    />
                     {t('videoNotSupported')}
                   </video>
+                  {/* Accessibility notice for screen reader users */}
+                  <span className="visually-hidden">
+                    Note: Captions are not available for this video preview.
+                  </span>
                   <button
                     type="button"
                     className={styles.closeButtonP}

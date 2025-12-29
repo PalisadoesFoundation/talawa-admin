@@ -7,7 +7,7 @@
  * creation date and author information.
  *
  * @param {InterfaceOrgPostCardProps} props - The props for the component.
- * @param {InterfacePost} props.post - The post data to be displayed in the card.
+ * @param {InterfacePostWithAttachments} props.post - The post data to be displayed in the card.
  *
  * @returns {JSX.Element} A React component that renders the organizational post card.
  *
@@ -54,31 +54,7 @@ import PostEditModal from './components/PostEditModal';
 import PostDetailModal from './components/PostDetailModal';
 import { PluginInjector } from 'plugin';
 import { DELETE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
-
-interface InterfacePostAttachment {
-  id: string;
-  postId: string;
-  name: string;
-  mimeType: string;
-  createdAt: Date;
-  updatedAt?: Date | null;
-  creatorId?: string | null;
-  updaterId?: string | null;
-}
-
-interface InterfacePost {
-  id: string;
-  caption?: string | null;
-  createdAt: Date;
-  updatedAt?: Date | null;
-  pinnedAt?: Date | null;
-  creatorId: string | null;
-  attachments: InterfacePostAttachment[];
-}
-
-interface InterfaceOrgPostCardProps {
-  post: InterfacePost;
-}
+import type { InterfaceOrgPostCardProps } from 'types/Post/interface';
 
 export default function OrgPostCard({
   post,
@@ -265,6 +241,11 @@ export default function OrgPostCard({
           show={showEditModal}
           onHide={toggleShowEditModal}
           post={post}
+          onSuccess={() => {
+            // Refresh page to get updated post data
+            // TODO: Can be replaced with Apollo refetchQueries or parent callback in the future
+            window.location.reload();
+          }}
         />
 
         {/* Delete Post Modal */}
