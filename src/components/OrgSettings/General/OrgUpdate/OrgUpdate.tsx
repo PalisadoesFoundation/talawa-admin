@@ -154,7 +154,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const onSaveChangesClicked = async (): Promise<void> => {
     try {
       if (!formState.orgName || !formState.orgDescrip) {
-        NotificationToast.error('Name and description are required');
+        NotificationToast.error(t('nameDescriptionRequired') as string);
         return;
       }
 
@@ -203,7 +203,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         setFormState((prev) => ({ ...prev, avatar: undefined }));
         if (fileInputRef.current) fileInputRef.current.value = '';
       } else {
-        NotificationToast.error('Failed to update organization');
+        NotificationToast.error(t('updateFailed') as string);
       }
     } catch (error: unknown) {
       errorHandler(t, error);

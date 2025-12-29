@@ -33,6 +33,8 @@ i18n.init({
           isUserRegistrationRequired: 'User registration required',
           isVisibleInSearch: 'Is visible in search',
           'Is Public': 'Is Public',
+          nameDescriptionRequired: 'Name and description are required',
+          updateFailed: 'Failed to update organization',
         },
       },
       common: {

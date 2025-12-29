@@ -3,7 +3,6 @@ import { render, screen, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import { toast } from 'react-toastify';
 import { BrowserRouter } from 'react-router-dom';
 
 import UserListCard from './UserListCard';
@@ -12,6 +11,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { vi, describe, it, beforeEach, expect } from 'vitest';
 import * as errorHandlerModule from 'utils/errorHandler';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 // Mock react-router (useParams comes from here in the component)
 vi.mock('react-router', async () => {
@@ -24,11 +24,11 @@ vi.mock('react-router', async () => {
   };
 });
 
-// Mock react-toastify
-vi.mock('react-toastify', () => ({
-  toast: {
+// Mock NotificationToast
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn().mockImplementation((msg) => {
-      console.log('Toast success called with:', msg);
+      console.log('NotificationToast success called with:', msg);
     }),
     error: vi.fn(),
   },
@@ -83,7 +83,7 @@ describe('Testing User List Card', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('Should successfully add admin and show success toast', async () => {
@@ -116,8 +116,8 @@ describe('Testing User List Card', () => {
     await wait(500); // Increased wait time
     console.log('Waited after click');
 
-    // Verify toast.success was called
-    expect(toast.success).toHaveBeenCalled();
+    // Verify NotificationToast.success was called
+    expect(NotificationToast.success).toHaveBeenCalled();
 
     // Wait for setTimeout
     await wait(2100);
@@ -159,7 +159,7 @@ describe('Testing User List Card', () => {
     await userEvent.click(screen.getByText(/Add Admin/i));
     await wait();
 
-    expect(toast.success).not.toHaveBeenCalled();
+    expect(NotificationToast.success).not.toHaveBeenCalled();
     expect(window.location.reload).not.toHaveBeenCalled();
   });
 
@@ -208,7 +208,7 @@ describe('Testing User List Card', () => {
         message: expect.stringContaining('Network error'),
       }),
     );
-    expect(toast.success).not.toHaveBeenCalled();
+    expect(NotificationToast.success).not.toHaveBeenCalled();
     expect(reloadMock).not.toHaveBeenCalled();
 
     errorHandlerSpy.mockRestore();
@@ -250,8 +250,8 @@ describe('Testing User List Card', () => {
     await userEvent.click(button);
     await wait(500);
 
-    // When data is null, toast.success should not be called
-    expect(toast.success).not.toHaveBeenCalled();
+    // When data is null, NotificationToast.success should not be called
+    expect(NotificationToast.success).not.toHaveBeenCalled();
 
     // Wait additional time to ensure reload is not called
     await wait(2100);
@@ -294,8 +294,8 @@ describe('Testing User List Card', () => {
     await userEvent.click(button);
     await wait(500);
 
-    // When data is undefined, toast.success should not be called
-    expect(toast.success).not.toHaveBeenCalled();
+    // When data is undefined, NotificationToast.success should not be called
+    expect(NotificationToast.success).not.toHaveBeenCalled();
 
     // Wait additional time to ensure reload is not called
     await wait(2100);
@@ -370,7 +370,7 @@ describe('Testing User List Card', () => {
     await wait(500);
 
     // If the variables were correct, the mutation should succeed
-    expect(toast.success).toHaveBeenCalled();
+    expect(NotificationToast.success).toHaveBeenCalled();
   });
 
   it('Should handle GraphQL error in mutation response', async () => {
@@ -416,7 +416,7 @@ describe('Testing User List Card', () => {
     await wait(500);
 
     // GraphQL errors with data: null should not trigger success flow
-    expect(toast.success).not.toHaveBeenCalled();
+    expect(NotificationToast.success).not.toHaveBeenCalled();
 
     // The reload should not have been scheduled since data is null
     // Wait a short time to ensure no immediate reload

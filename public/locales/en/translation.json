@@ -456,7 +456,9 @@
     "expand": "Expand",
     "tagNamePlaceholder": "Write the name of the tag",
     "allTags": "All Tags",
-    "noMoreMembersFound": "No more members found"
+    "noMoreMembersFound": "No more members found",
+    "errorLoadingAssignedUsers": "Error occurred while loading assigned users",
+    "sortPeople": "Sort People"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
@@ -1119,7 +1121,9 @@
     "cancel": "cancel",
     "talawaApiUnavailable": "talawaApiUnavailable",
     "enterOrganizationDescription": "Enter Organization Description",
-    "userRegistrationRequired": "User registration required"
+    "userRegistrationRequired": "User registration required",
+    "nameDescriptionRequired": "Name and description are required",
+    "updateFailed": "Failed to update organization"
   },
   "public": {
     "invitation": {

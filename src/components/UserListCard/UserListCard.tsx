@@ -12,7 +12,7 @@
  * @requires React
  * @requires react-bootstrap/Button
  * @requires @apollo/client - For GraphQL mutation handling
- * @requires react-toastify - For displaying toast notifications
+ * @requires components/NotificationToast/NotificationToast - For displaying toast notifications
  * @requires react-i18next - For internationalization and translations
  * @requires react-router-dom - For accessing route parameters
  * @requires utils/errorHandler - For handling errors
@@ -36,10 +36,10 @@
  * - The `useTranslation` hook is used for internationalization.
  * - The button reloads the page after a successful operation.
  */
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useMutation } from '@apollo/client';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -59,6 +59,15 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
 
   const { t } = useTranslation('translation', { keyPrefix: 'userListCard' });
 
+  // Cleanup timeout on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (reloadTimeoutRef.current) {
+        clearTimeout(reloadTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const addAdmin = async (): Promise<void> => {
     // Clear any existing timeout
     if (reloadTimeoutRef.current) {
@@ -77,7 +86,7 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
       // - createAdmin result exists and is truthy
 
       // First check if data is null - this is a clear indicator of failure
-      if (!result.data || result.data === null) {
+      if (!result.data) {
         // No data means mutation failed, don't proceed
         return;
       }
@@ -94,7 +103,7 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
 
       // Finally, check if we have a valid createAdmin result
       if (result.data.createAdmin) {
-        toast.success(t('addedAsAdmin') as string);
+        NotificationToast.success(t('addedAsAdmin') as string);
         reloadTimeoutRef.current = setTimeout(() => {
           window.location.reload();
         }, 2000);

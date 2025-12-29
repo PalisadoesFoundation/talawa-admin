@@ -291,7 +291,7 @@ function ManageTag(): JSX.Element {
             className={`${styles.errorIcon} ${manageTagStyles.errorIcon}`}
           />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading assigned users
+            {t('errorLoadingAssignedUsers')}
           </h6>
         </div>
       </div>
@@ -419,7 +419,7 @@ function ManageTag(): JSX.Element {
             />
             <div className={styles.btnsBlock}>
               <SortingButton
-                title="Sort People"
+                title={t('sortPeople')}
                 sortingOptions={[
                   { label: tCommon('Latest'), value: 'DESCENDING' },
                   { label: tCommon('Oldest'), value: 'ASCENDING' },

@@ -456,7 +456,9 @@
     "expand": "Expandir",
     "tagNamePlaceholder": "Escribe el nombre de la etiqueta",
     "allTags": "Todas las etiquetas",
-    "noMoreMembersFound": "No se encontraron más miembros"
+    "noMoreMembersFound": "No se encontraron más miembros",
+    "errorLoadingAssignedUsers": "Error al cargar los usuarios asignados",
+    "sortPeople": "Ordenar Personas"
   },
   "userListCard": {
     "joined": "Unido",
@@ -1067,7 +1069,9 @@
     "successfulUpdated": "Exitoso actualizado",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
     "enterOrganizationDescription": "Ingrese la descripción de la organización",
-    "userRegistrationRequired": "Se requiere registro de usuario"
+    "userRegistrationRequired": "Se requiere registro de usuario",
+    "nameDescriptionRequired": "El nombre y la descripción son obligatorios",
+    "updateFailed": "Error al actualizar la organización"
   },
   "public": {
     "invitation": {

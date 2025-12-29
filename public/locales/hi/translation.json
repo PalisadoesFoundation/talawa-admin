@@ -456,7 +456,9 @@
     "expand": "विस्तारित करें",
     "tagNamePlaceholder": "टैग का नाम लिखें",
     "allTags": "सभी टैग",
-    "noMoreMembersFound": "कोई और सदस्य नहीं मिला"
+    "noMoreMembersFound": "कोई और सदस्य नहीं मिला",
+    "errorLoadingAssignedUsers": "असाइन किए गए उपयोगकर्ताओं को लोड करने में त्रुटि",
+    "sortPeople": "लोगों को क्रमबद्ध करें"
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
@@ -1067,7 +1069,9 @@
     "cancel": "रद्द करें",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
     "enterOrganizationDescription": "संगठन का विवरण दर्ज करें",
-    "userRegistrationRequired": "उपयोगकर्ता पंजीकरण आवश्यक"
+    "userRegistrationRequired": "उपयोगकर्ता पंजीकरण आवश्यक",
+    "nameDescriptionRequired": "नाम और विवरण आवश्यक हैं",
+    "updateFailed": "संगठन को अपडेट करने में विफल"
   },
   "public": {
     "invitation": {

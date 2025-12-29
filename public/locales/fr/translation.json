@@ -456,7 +456,9 @@
     "expand": "Développer",
     "tagNamePlaceholder": "Écrire le nom de l'étiquette",
     "allTags": "Toutes les étiquettes",
-    "noMoreMembersFound": "Aucun autre membre trouvé"
+    "noMoreMembersFound": "Aucun autre membre trouvé",
+    "errorLoadingAssignedUsers": "Erreur lors du chargement des utilisateurs assignés",
+    "sortPeople": "Trier les personnes"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
@@ -1067,7 +1069,9 @@
     "cancel": "Annuler",
     "talawaApiUnavailable": "API Talawa non disponible",
     "enterOrganizationDescription": "Entrez la description de l'organisation",
-    "userRegistrationRequired": "Inscription utilisateur requise"
+    "userRegistrationRequired": "Inscription utilisateur requise",
+    "nameDescriptionRequired": "Le nom et la description sont requis",
+    "updateFailed": "Échec de la mise à jour de l'organisation"
   },
   "public": {
     "invitation": {
