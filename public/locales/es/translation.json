@@ -61,6 +61,7 @@
     "loading": "Cargando...",
     "selectOrg": "Seleccione una organización",
     "afterRegister": "Registro exitoso. Por favor, espere a que el administrador apruebe su solicitud.",
+    "backToLogin": "Volver al inicio de sesión",
     "communityLogo": "Logo de la comunidad",
     "organizations": "Organizaciones"
   },
@@ -941,10 +942,10 @@
     "OTPsent": "OTP se envía a su correo electrónico registrado"
   },
   "pageNotFound": {
+    "404": "404",
     "title": "404 No encontrado",
     "talawaAdmin": "Administrador de Talawa",
     "talawaUser": "Usuario de Talawa",
-    "404": "404",
     "notFoundMsg": "¡Ups! ¡No se encontró la página que solicitaste!",
     "backToHome": "De vuelta a casa"
   },
@@ -1167,7 +1168,8 @@
     "searchByName": "Buscar por nombre",
     "searchUsers": "Buscar usuarios",
     "searchOrganizations": "Buscar Organizaciones",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "title": "Organizaciones"
   },
   "userSidebarOrg": {
     "yourOrganizations": "Tus Organizaciones",
@@ -1379,7 +1381,8 @@
     "atleast_8_char_long": "La contraseña debe tener al menos 8 caracteres",
     "invalidFileType": "Tipo de archivo inválido. Por favor suba un JPEG, PNG o GIF",
     "fileSizeTooLarge": "El archivo es demasiado grande. El tamaño máximo es 5MB",
-    "failedToProcessImage": "Error al procesar la foto de perfil. Por favor intente subirla nuevamente"
+    "failedToProcessImage": "Error al procesar la foto de perfil. Por favor intente subirla nuevamente",
+    "title": "Ajustes"
   },
   "donate": {
     "title": "Donaciones",
@@ -1832,6 +1835,14 @@
     "signingOut": "Cerrando sesión...",
     "retryPrompt": "Error al revocar la sesión. ¿Reintentar?",
     "breadcrumb": "miga de pan",
-    "action": "Acción"
+    "action": "Acción",
+    "selectLanguage": "Seleccionar Idioma",
+    "userMenu": "Menú de Usuario",
+    "settings": "Ajustes",
+    "logout": "Cerrar sesión",
+    "logoutFailed": "Falló el cierre de sesión",
+    "title": "Portal de Usuario",
+    "talawa": "Talawa",
+    "talawaBranding": "Marca Talawa"
   }
 }

@@ -269,7 +269,6 @@ function organizationVenues(): JSX.Element {
                       venueItem={venueItem}
                       handleDelete={handleDelete}
                       showEditVenueModal={showEditVenueModal}
-                      index={index}
                       key={index}
                     />
                   ),

@@ -42,6 +42,7 @@
     "numericValueCheck": "Au moins une valeur numérique",
     "specialCharCheck": "Au moins un caractère spécial",
     "selectOrg": "Sélectionnez une organisation",
+    "backToLogin": "Retour à la connexion",
     "afterRegister": "Enregistré avec succès. ",
     "talawa_portal": "Portail Talawa",
     "login": "Connexion",
@@ -1167,7 +1168,8 @@
     "filter": "Filtrer",
     "searchByName": "Rechercher par nom",
     "searchOrganizations": "Rechercher Organisations",
-    "loading": "Chargement..."
+    "loading": "Chargement...",
+    "title": "Organisations"
   },
   "userSidebarOrg": {
     "yourOrganizations": "Vos organisations",
@@ -1379,7 +1381,8 @@
     "atleast_8_char_long": "Le mot de passe doit comporter au moins 8 caractères",
     "invalidFileType": "Type de fichier invalide. Veuillez télécharger un JPEG, PNG ou GIF",
     "fileSizeTooLarge": "Le fichier est trop volumineux. La taille maximale est de 5 Mo",
-    "failedToProcessImage": "Échec du traitement de la photo de profil. Veuillez réessayer de la télécharger"
+    "failedToProcessImage": "Échec du traitement de la photo de profil. Veuillez réessayer de la télécharger",
+    "title": "Paramètres"
   },
   "donate": {
     "title": "Des dons",
@@ -1830,8 +1833,16 @@
   "common": {
     "signOut": "Se déconnecter",
     "signingOut": "Déconnexion en cours...",
-    "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
     "breadcrumb": "fil d'Ariane",
-    "action": "Action"
+    "action": "Action",
+    "retryPrompt": "Échec de la révocation de session. Réessayer ?",
+    "selectLanguage": "Sélectionner la Langue",
+    "userMenu": "Menu Utilisateur",
+    "settings": "Paramètres",
+    "logout": "Déconnexion",
+    "logoutFailed": "Échec de la déconnexion",
+    "title": "Portail Utilisateur",
+    "talawa": "Talawa",
+    "talawaBranding": "Image de marque Talawa"
   }
 }

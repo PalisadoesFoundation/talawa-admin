@@ -42,6 +42,7 @@
     "numericValueCheck": "कम से कम एक संख्या",
     "specialCharCheck": "कम से कम एक विशेष अक्षर",
     "selectOrg": "एक संगठन चुनें",
+    "backToLogin": "लॉगिन पर वापस जाएं",
     "afterRegister": "सफलतापूर्वक पंजीकृत।",
     "talawa_portal": "तालावा पोर्टल",
     "login": "लॉगिन",
@@ -1167,7 +1168,8 @@
     "filter": "फ़िल्टर",
     "searchByName": "नाम से खोजें",
     "searchOrganizations": "संगठनों खोजें",
-    "loading": "लोड हो रहा है..."
+    "loading": "लोड हो रहा है...",
+    "title": "संगठनों"
   },
   "userSidebarOrg": {
     "yourOrganizations": "आपके संगठन",
@@ -1379,7 +1381,8 @@
     "atleast_8_char_long": "पासवर्ड कम से कम 8 अक्षर लंबा होना चाहिए",
     "invalidFileType": "अमान्य फ़ाइल प्रकार। कृपया JPEG, PNG, या GIF अपलोड करें",
     "fileSizeTooLarge": "फ़ाइल बहुत बड़ी है। अधिकतम आकार 5MB है",
-    "failedToProcessImage": "प्रोफ़ाइल चित्र को संसाधित करने में विफल। कृपया पुनः अपलोड करने का प्रयास करें"
+    "failedToProcessImage": "प्रोफ़ाइल चित्र को संसाधित करने में विफल। कृपया पुनः अपलोड करने का प्रयास करें",
+    "title": "समायोजन"
   },
   "donate": {
     "title": "दान",
@@ -1832,6 +1835,14 @@
     "signingOut": "साइन आउट हो रहा है...",
     "retryPrompt": "सेशन रद्द करना विफल रहा। पुनः प्रयास करें?",
     "breadcrumb": "ब्रेडक्रम्ब",
-    "action": "क्रिया"
+    "action": "क्रिया",
+    "selectLanguage": "भाषा चुनें",
+    "userMenu": "उपयोगकर्ता मेनू",
+    "settings": "समायोजन",
+    "logout": "साइन आउट",
+    "logoutFailed": "साइन आउट विफल रहा",
+    "title": "उपयोगकर्ता पोर्टल",
+    "talawa": "तलावा",
+    "talawaBranding": "तालावा ब्रांडिंग"
   }
 }

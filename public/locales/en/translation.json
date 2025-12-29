@@ -42,6 +42,7 @@
     "numericValueCheck": "At least one numeric value",
     "specialCharCheck": "At least one special character",
     "selectOrg": "Select an organization",
+    "backToLogin": "Back to Login",
     "afterRegister": "Successfully registered. Please wait for admin to approve your request.",
     "talawa_portal": "talawa_portal",
     "login": "login",
@@ -993,10 +994,10 @@
     "talawaApiUnavailable": "talawaApiUnavailable"
   },
   "pageNotFound": {
+    "404": "404",
     "title": "404 Not Found",
     "talawaAdmin": "Talawa Admin",
     "talawaUser": "Talawa User",
-    "404": "404",
     "notFoundMsg": "Oops! The Page you requested was not found!",
     "backToHome": "Back to Home"
   },
@@ -1219,7 +1220,8 @@
     "filter": "filter",
     "searchByName": "Search by Name",
     "searchOrganizations": "Search Organization",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "title": "Organizations"
   },
   "userSidebarOrg": {
     "yourOrganizations": "Your Organizations",
@@ -1379,7 +1381,8 @@
     "atleast_8_char_long": "Password must be at least 8 characters long.",
     "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF.",
     "fileSizeTooLarge": "File is too large. Maximum size is 5MB.",
-    "failedToProcessImage": "Failed to process profile picture. Please try uploading again."
+    "failedToProcessImage": "Failed to process profile picture. Please try uploading again.",
+    "title": "Settings"
   },
   "donate": {
     "title": "Donations",
@@ -1832,6 +1835,14 @@
     "signingOut": "Signing out...",
     "retryPrompt": "Failed to revoke session. Retry?",
     "breadcrumb": "Breadcrumb",
-    "action": "Action"
+    "action": "Action",
+    "selectLanguage": "Select Language",
+    "userMenu": "User Menu",
+    "settings": "Settings",
+    "logout": "Logout",
+    "logoutFailed": "Logout failed",
+    "title": "User Portal",
+    "talawa": "Talawa",
+    "talawaBranding": "Talawa Branding"
   }
 }
