@@ -17,15 +17,15 @@ import { store } from 'state/store';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from '../../../utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { MOCKS, MOCK_ERROR } from '../OrganizationFundCampaignMocks';
 import type { InterfaceCampaignModal } from './CampaignModal';
 import CampaignModal from './CampaignModal';
 import { vi } from 'vitest';
 import { UPDATE_CAMPAIGN_MUTATION } from 'GraphQl/Mutations/CampaignMutation';
 
-vi.mock('react-toastify', () => ({
-  toast: { success: vi.fn(), error: vi.fn() },
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: { success: vi.fn(), error: vi.fn() },
 }));
 
 vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
@@ -269,7 +269,7 @@ describe('CampaignModal', () => {
     fireEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(translations.createdCampaign);
+      expect(NotificationToast.success).toHaveBeenCalledWith(translations.createdCampaign);
       expect(campaignProps[0].refetchCampaign).toHaveBeenCalled();
       expect(campaignProps[0].hide).toHaveBeenCalled();
     });
@@ -294,7 +294,7 @@ describe('CampaignModal', () => {
 
     fireEvent.click(submitBtn);
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(translations.updatedCampaign);
+      expect(NotificationToast.success).toHaveBeenCalledWith(translations.updatedCampaign);
       expect(campaignProps[1].refetchCampaign).toHaveBeenCalled();
       expect(campaignProps[1].hide).toHaveBeenCalled();
     });
@@ -318,7 +318,7 @@ describe('CampaignModal', () => {
     fireEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Mock graphql error');
+      expect(NotificationToast.error).toHaveBeenCalledWith('Mock graphql error');
     });
   });
 
@@ -341,7 +341,7 @@ describe('CampaignModal', () => {
     fireEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Mock graphql error');
+      expect(NotificationToast.error).toHaveBeenCalledWith('Mock graphql error');
     });
   });
 
@@ -372,7 +372,7 @@ describe('CampaignModal', () => {
 
     // Wait for success message which indicates the mutation was called
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(translations.updatedCampaign);
+      expect(NotificationToast.success).toHaveBeenCalledWith(translations.updatedCampaign);
     });
   });
 
@@ -435,7 +435,7 @@ describe('CampaignModal', () => {
 
     // Wait for success message which indicates the mutation was called
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(translations.updatedCampaign);
+      expect(NotificationToast.success).toHaveBeenCalledWith(translations.updatedCampaign);
     });
   });
 
@@ -542,7 +542,7 @@ describe('CampaignModal', () => {
 
     // Wait for success message which indicates the mutation was called
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(translations.updatedCampaign);
+      expect(NotificationToast.success).toHaveBeenCalledWith(translations.updatedCampaign);
     });
   });
 });

@@ -18,6 +18,7 @@ import {
 import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_POST_MUTATION } from 'GraphQl/Mutations/mutations';
 import { ToastContainer, toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import userEvent from '@testing-library/user-event';
 import i18n from 'utils/i18n';
 import type { RenderResult } from '@testing-library/react';
@@ -26,13 +27,23 @@ import convertToBase64 from 'utils/convertToBase64';
 import type { MockedFunction } from 'vitest';
 import * as convertToBase64Module from 'utils/convertToBase64';
 
-const { mockToast, mockConvertToBase64, mockErrorHandler } = vi.hoisted(() => ({
+const { mockToast, mockConvertToBase64, mockErrorHandler, mockNotificationToast } = vi.hoisted(() => ({
   mockToast: {
     success: vi.fn(),
     error: vi.fn(),
   },
+  mockNotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  },
   mockConvertToBase64: vi.fn().mockResolvedValue('base64-encoded-string'),
   mockErrorHandler: vi.fn(),
+}));
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockNotificationToast,
 }));
 
 vi.mock('utils/convertToBase64', () => ({
@@ -249,7 +260,7 @@ describe('OrgPost Component', () => {
     // This test uses NoOrgId mock which simulates CREATE_POST_MUTATION with organizationId: null
     // The error should be related to the create post mutation, not form validation
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(mockErrorHandler).toHaveBeenCalled();
       // Since this is testing the mutation behavior, not just form validation,
       // we expect the mutation to be attempted and fail
     });
@@ -900,7 +911,7 @@ describe('OrgPost SearchBar functionality', () => {
   });
 
   it('should handle errors during search gracefully', async () => {
-    const toastErrorSpy = vi.spyOn(mockToast, 'error');
+    const toastErrorSpy = vi.spyOn(mockNotificationToast, 'error');
 
     const getPostsByOrgErrorMock: MockedResponse = {
       request: {
@@ -1302,7 +1313,7 @@ describe('OrgPost Edge Cases', () => {
     );
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
+      expect(NotificationToast.error).toHaveBeenCalledWith(
         expect.stringContaining('pinnedPostsLoadError'),
       );
     });
@@ -1395,7 +1406,7 @@ describe('OrgPost Edge Cases', () => {
     );
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
+      expect(NotificationToast.error).toHaveBeenCalledWith(
         expect.stringContaining('pinnedPostsLoadError'),
       );
     });
@@ -2806,7 +2817,7 @@ describe('OrgPost Pinned Posts Functionality', () => {
     renderComponentWithPinnedPosts(pinnedPostsErrorMock);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
+      expect(NotificationToast.error).toHaveBeenCalledWith(
         expect.stringContaining('pinnedPostsLoadError'),
       );
     });

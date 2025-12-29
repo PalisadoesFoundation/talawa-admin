@@ -5,7 +5,7 @@ import {
   UPDATE_THIS_AND_FOLLOWING_EVENTS_MUTATION,
   UPDATE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION,
 } from 'GraphQl/Mutations/EventMutations';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -182,12 +182,12 @@ export const useUpdateEventHandler = () => {
 
       const hasChanges = Object.keys(updateInput).length > 1;
       if (!hasChanges) {
-        toast.info(t('eventListCard.noChangesToUpdate'));
+        NotificationToast.info(t('eventListCard.noChangesToUpdate'));
         return;
       }
 
       if (updateInput.startAt === '' || updateInput.endAt === '') {
-        toast.error(t('invalidDate'));
+        NotificationToast.error(t('invalidDate'));
         return;
       }
 
@@ -232,7 +232,7 @@ export const useUpdateEventHandler = () => {
       }
 
       if (data) {
-        toast.success(t('eventUpdated') as string);
+        NotificationToast.success(t('eventUpdated') as string);
         setEventUpdateModalIsOpen(false);
         hideViewModal();
         if (refetchEvents) {

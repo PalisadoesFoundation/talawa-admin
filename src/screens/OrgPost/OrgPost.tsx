@@ -12,7 +12,7 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import styles from 'style/app-fixed.module.css';
 import PostsRenderer from './Posts';
 import type {
@@ -112,11 +112,11 @@ function OrgPost(): JSX.Element {
   }, [currentPage, sortingOption, sortedPosts]);
 
   useEffect(() => {
-    if (orgPostListError) toast.error('Organization post list error:');
+    if (orgPostListError) NotificationToast.error('Organization post list error:');
   }, [orgPostListError]);
 
   useEffect(() => {
-    if (orgPinnedPostListError) toast.error(t('pinnedPostsLoadError'));
+    if (orgPinnedPostListError) NotificationToast.error(t('pinnedPostsLoadError'));
   }, [orgPinnedPostListError]);
 
   useEffect(() => {
@@ -211,7 +211,7 @@ function OrgPost(): JSX.Element {
         setFilteredPosts(filtered);
       }
     } catch {
-      toast.error('Error searching posts');
+      NotificationToast.error('Error searching posts');
       setIsFiltering(false);
     }
   };

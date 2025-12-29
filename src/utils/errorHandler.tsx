@@ -1,6 +1,6 @@
 type TFunction = (key: string, options?: Record<string, unknown>) => string;
 
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import i18n from './i18n';
 /** 
   This function is used to handle api errors in the application.
@@ -12,23 +12,23 @@ export const errorHandler = (a: unknown, error: unknown): void => {
   if (error instanceof Error) {
     const errorMessage = error.message;
     if (errorMessage === 'Failed to fetch') {
-      toast.error(tErrors('talawaApiUnavailable'));
+      NotificationToast.error(tErrors('talawaApiUnavailable'));
     } else if (errorMessage.match(/value is not a valid phone number/i)) {
-      toast.error(tErrors('invalidPhoneNumber'));
+      NotificationToast.error(tErrors('invalidPhoneNumber'));
     } else if (errorMessage.match(/does not exist in "EducationGrade"/i)) {
-      toast.error(tErrors('invalidEducationGrade'));
+      NotificationToast.error(tErrors('invalidEducationGrade'));
     } else if (errorMessage.match(/does not exist in "EmploymentStatus"/i)) {
-      toast.error(tErrors('invalidEmploymentStatus'));
+      NotificationToast.error(tErrors('invalidEmploymentStatus'));
     } else if (errorMessage.match(/does not exist in "MaritalStatus"/i)) {
-      toast.error(tErrors('invalidMaritalStatus'));
+      NotificationToast.error(tErrors('invalidMaritalStatus'));
     } else if (errorMessage.match(/status code 400/i)) {
-      toast.error(tErrors('error400'));
+      NotificationToast.error(tErrors('error400'));
     } else if (errorMessage.match(/organization name already exists/i)) {
-      toast.error(tErrors('organizationNameAlreadyExists'));
+      NotificationToast.error(tErrors('organizationNameAlreadyExists'));
     } else {
-      toast.error(errorMessage);
+      NotificationToast.error(errorMessage);
     }
   } else {
-    toast.error(tErrors('unknownError', { msg: error }) as string);
+    NotificationToast.error(tErrors('unknownError', { msg: error }) as string);
   }
 };

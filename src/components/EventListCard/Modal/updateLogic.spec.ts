@@ -7,7 +7,7 @@ import {
   UPDATE_THIS_AND_FOLLOWING_EVENTS_MUTATION,
   UPDATE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION,
 } from 'GraphQl/Mutations/EventMutations';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
@@ -22,8 +22,8 @@ vi.mock('@apollo/client', async () => {
   };
 });
 
-vi.mock('react-toastify', async () => ({
-  toast: {
+vi.mock('components/NotificationToast/NotificationToast', async () => ({
+  NotificationToast: {
     info: vi.fn(),
     error: vi.fn(),
     success: vi.fn(),
@@ -147,7 +147,7 @@ describe('useUpdateEventHandler', () => {
     const { updateEventHandler } = useUpdateEventHandler();
     await updateEventHandler(buildHandlerInput());
 
-    expect(toast.info).toHaveBeenCalledWith('eventListCard.noChangesToUpdate');
+    expect(NotificationToast.info).toHaveBeenCalledWith('eventListCard.noChangesToUpdate');
     expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
     expect(mockUpdateSingleRecurringEventInstance).not.toHaveBeenCalled();
     expect(mockUpdateThisAndFollowingEvents).not.toHaveBeenCalled();
@@ -174,7 +174,7 @@ describe('useUpdateEventHandler', () => {
       const calledInputs =
         mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
       expect(calledInputs.name).toContain('Changed Name');
-      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+      expect(NotificationToast.success).toHaveBeenCalledWith('eventUpdated');
     });
 
     it('handles standalone event update with description change', async () => {
@@ -278,7 +278,7 @@ describe('useUpdateEventHandler', () => {
       );
 
       expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
-      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+      expect(NotificationToast.success).toHaveBeenCalledWith('eventUpdated');
       expect(setEventUpdateModalIsOpen).toHaveBeenCalledWith(false);
       expect(hideViewModal).toHaveBeenCalled();
       expect(refetchEvents).toHaveBeenCalled();
@@ -456,7 +456,7 @@ describe('useUpdateEventHandler', () => {
         mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
       expect(calledInputs.startAt).toContain('2024-04-22T00:00:00');
       expect(calledInputs.endAt).toContain('2024-04-23T23:59');
-      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+      expect(NotificationToast.success).toHaveBeenCalledWith('eventUpdated');
     });
 
     it('handles standalone event update with allDay change only', async () => {
@@ -487,7 +487,7 @@ describe('useUpdateEventHandler', () => {
         }),
       );
 
-      expect(toast.error).toHaveBeenCalledWith('invalidDate');
+      expect(NotificationToast.error).toHaveBeenCalledWith('invalidDate');
       expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
     });
 
@@ -506,7 +506,7 @@ describe('useUpdateEventHandler', () => {
         }),
       );
 
-      expect(toast.error).toHaveBeenCalledWith('invalidDate');
+      expect(NotificationToast.error).toHaveBeenCalledWith('invalidDate');
       expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
     });
 
@@ -525,7 +525,7 @@ describe('useUpdateEventHandler', () => {
         }),
       );
 
-      expect(toast.error).toHaveBeenCalledWith('invalidDate');
+      expect(NotificationToast.error).toHaveBeenCalledWith('invalidDate');
       expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
     });
 
@@ -554,7 +554,7 @@ describe('useUpdateEventHandler', () => {
       );
 
       expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
-      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+      expect(NotificationToast.success).toHaveBeenCalledWith('eventUpdated');
     });
 
     it('handles originalEndAt calculation when event is all-day but endAt is invalid', async () => {
@@ -582,7 +582,7 @@ describe('useUpdateEventHandler', () => {
       );
 
       expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
-      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+      expect(NotificationToast.success).toHaveBeenCalledWith('eventUpdated');
     });
 
     it('handles originalStartAt calculation when event is not all-day but constructed date is invalid', async () => {
@@ -614,7 +614,7 @@ describe('useUpdateEventHandler', () => {
       );
 
       expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
-      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+      expect(NotificationToast.success).toHaveBeenCalledWith('eventUpdated');
     });
 
     it('handles originalEndAt calculation when event is not all-day but constructed date is invalid', async () => {
@@ -646,7 +646,7 @@ describe('useUpdateEventHandler', () => {
       );
 
       expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
-      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+      expect(NotificationToast.success).toHaveBeenCalledWith('eventUpdated');
     });
   });
 
@@ -674,7 +674,7 @@ describe('useUpdateEventHandler', () => {
       );
 
       expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
-      expect(toast.success).not.toHaveBeenCalled();
+      expect(NotificationToast.success).not.toHaveBeenCalled();
       expect(setEventUpdateModalIsOpen).not.toHaveBeenCalled();
       expect(hideViewModal).not.toHaveBeenCalled();
       expect(refetchEvents).not.toHaveBeenCalled();
@@ -702,7 +702,7 @@ describe('useUpdateEventHandler', () => {
       );
 
       expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
-      expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+      expect(NotificationToast.success).toHaveBeenCalledWith('eventUpdated');
       expect(setEventUpdateModalIsOpen).toHaveBeenCalledWith(false);
       expect(hideViewModal).toHaveBeenCalled();
     });

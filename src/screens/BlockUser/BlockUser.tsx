@@ -44,7 +44,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import React, { useEffect, useState, useCallback } from 'react';
 import { Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   BLOCK_USER_MUTATION_PG,
   UNBLOCK_USER_MUTATION_PG,
@@ -102,7 +102,7 @@ const BlockUser = (): JSX.Element => {
 
   useEffect(() => {
     if (errorBlockedUsers) {
-      toast.error(errorBlockedUsers.message);
+      NotificationToast.error(errorBlockedUsers.message);
     }
   }, [errorBlockedUsers]);
 
@@ -127,7 +127,7 @@ const BlockUser = (): JSX.Element => {
 
   useEffect(() => {
     if (errorMembers) {
-      toast.error(errorMembers.message);
+      NotificationToast.error(errorMembers.message);
     }
   }, [errorMembers]);
 
@@ -180,7 +180,7 @@ const BlockUser = (): JSX.Element => {
           variables: { userId: user.id, organizationId: currentUrl },
         });
         if (data?.blockUser) {
-          toast.success(t('blockedSuccessfully') as string);
+          NotificationToast.success(t('blockedSuccessfully') as string);
           setAllMembers((prevMembers) =>
             prevMembers.filter((member) => member.id !== user.id),
           );
@@ -200,7 +200,7 @@ const BlockUser = (): JSX.Element => {
           variables: { userId: user.id, organizationId: currentUrl },
         });
         if (data) {
-          toast.success(t('Un-BlockedSuccessfully') as string);
+          NotificationToast.success(t('Un-BlockedSuccessfully') as string);
           setBlockedUsers((prevBlockedUsers) =>
             prevBlockedUsers.filter(
               (blockedUser) => blockedUser.id !== user.id,

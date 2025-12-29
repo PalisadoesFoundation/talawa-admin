@@ -35,7 +35,7 @@ import {
   REGISTER_EVENT,
 } from 'GraphQl/Mutations/EventMutations';
 import { useMutation } from '@apollo/client';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useUpdateEventHandler } from './updateLogic';
 import { errorHandler } from 'utils/errorHandler';
 
@@ -335,7 +335,7 @@ function EventListCardModals({
       }
 
       if (data) {
-        toast.success(t('eventDeleted') as string);
+        NotificationToast.success(t('eventDeleted') as string);
         setEventDeleteModalIsOpen(false);
         hideViewModal();
         if (refetchEvents) {
@@ -371,7 +371,7 @@ function EventListCardModals({
         });
 
         if (data) {
-          toast.success(
+          NotificationToast.success(
             `Successfully registered for ${eventListCardProps.name}`,
           );
           setIsRegistered(true);

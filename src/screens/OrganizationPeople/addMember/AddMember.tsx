@@ -65,7 +65,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, Form, InputGroup, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
@@ -140,7 +140,7 @@ function AddMember(): JSX.Element {
           role: 'regular',
         },
       });
-      toast.success(tCommon('addedSuccessfully', { item: 'Member' }) as string);
+      NotificationToast.success(tCommon('addedSuccessfully', { item: 'Member' }) as string);
     } catch (error: unknown) {
       errorHandler(tCommon, error);
     }
@@ -176,11 +176,11 @@ function AddMember(): JSX.Element {
         createUserVariables.name
       )
     ) {
-      toast.error(translateOrgPeople('invalidDetailsMessage') as string);
+      NotificationToast.error(translateOrgPeople('invalidDetailsMessage') as string);
     } else if (
       createUserVariables.password !== createUserVariables.confirmPassword
     ) {
-      toast.error(translateOrgPeople('passwordNotMatch') as string);
+      NotificationToast.error(translateOrgPeople('passwordNotMatch') as string);
     } else {
       try {
         const registeredUser = await registerMutation({

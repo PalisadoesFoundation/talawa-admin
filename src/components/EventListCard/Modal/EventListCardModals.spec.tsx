@@ -9,7 +9,7 @@ import { describe, test, expect, vi, beforeEach, Mock } from 'vitest';
 import { useMutation } from '@apollo/client';
 import { useNavigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 
 import EventListCardModals from './EventListCardModals';
@@ -45,11 +45,12 @@ vi.mock('react-router', () => ({
 vi.mock('utils/useLocalstorage', () => ({
   default: vi.fn(),
 }));
-vi.mock('react-toastify', () => ({
-  toast: {
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
     info: vi.fn(),
+    warning: vi.fn(),
   },
 }));
 vi.mock('utils/errorHandler', () => ({
@@ -263,7 +264,7 @@ describe('EventListCardModals', () => {
         },
       },
     });
-    expect(toast.success).toHaveBeenCalledWith('eventUpdated');
+    expect(NotificationToast.success).toHaveBeenCalledWith('eventUpdated');
     expect(mockEventListCardProps.refetchEvents).toHaveBeenCalled();
   });
 
@@ -382,7 +383,7 @@ describe('EventListCardModals', () => {
     });
 
     expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
-    expect(toast.info).toHaveBeenCalledWith('eventListCard.noChangesToUpdate');
+    expect(NotificationToast.info).toHaveBeenCalledWith('eventListCard.noChangesToUpdate');
   });
 
   test('handles event registration', async () => {
@@ -396,7 +397,7 @@ describe('EventListCardModals', () => {
     expect(mockRegisterEvent).toHaveBeenCalledWith({
       variables: { id: 'event1' },
     });
-    expect(toast.success).toHaveBeenCalledWith(
+    expect(NotificationToast.success).toHaveBeenCalledWith(
       'Successfully registered for Test Event',
     );
   });
@@ -742,7 +743,7 @@ describe('EventListCardModals', () => {
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
-      expect(toast.error).toHaveBeenCalledWith('invalidDate');
+      expect(NotificationToast.error).toHaveBeenCalledWith('invalidDate');
     });
 
     test('shows error when end date is invalid and allDay is true', async () => {
@@ -756,7 +757,7 @@ describe('EventListCardModals', () => {
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
-      expect(toast.error).toHaveBeenCalledWith('invalidDate');
+      expect(NotificationToast.error).toHaveBeenCalledWith('invalidDate');
     });
 
     test('shows error when start date is invalid and allDay is false', async () => {
@@ -770,7 +771,7 @@ describe('EventListCardModals', () => {
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
-      expect(toast.error).toHaveBeenCalledWith('invalidDate');
+      expect(NotificationToast.error).toHaveBeenCalledWith('invalidDate');
     });
 
     test('shows error when end date is invalid and allDay is false', async () => {
@@ -784,7 +785,7 @@ describe('EventListCardModals', () => {
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
-      expect(toast.error).toHaveBeenCalledWith('invalidDate');
+      expect(NotificationToast.error).toHaveBeenCalledWith('invalidDate');
     });
 
     test('handles invalid eventStartDate in hasOnlyNameOrDescriptionChanged', async () => {
@@ -802,7 +803,7 @@ describe('EventListCardModals', () => {
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
-      expect(toast.error).toHaveBeenCalledWith('invalidDate');
+      expect(NotificationToast.error).toHaveBeenCalledWith('invalidDate');
     });
 
     test('handles invalid startDate in hasOnlyNameOrDescriptionChanged', async () => {
