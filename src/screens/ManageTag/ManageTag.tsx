@@ -65,6 +65,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import type { InterfaceQueryUserTagsAssignedMembers } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
+import manageTagStyles from './ManageTag.module.css';
 import { DataGrid } from '@mui/x-data-grid';
 import type {
   InterfaceTagAssignedMembersQuery,
@@ -286,7 +287,9 @@ function ManageTag(): JSX.Element {
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded
+            className={`${styles.errorIcon} ${manageTagStyles.errorIcon}`}
+          />
           <h6 className="fw-bold text-danger text-center">
             Error occured while loading assigned users
           </h6>
@@ -548,13 +551,7 @@ function ManageTag(): JSX.Element {
                   >
                     {t('removeFromTags')}
                   </div>
-                  <hr
-                    style={{
-                      borderColor: 'var(--grey-border-box-color)',
-                      borderWidth: '2px',
-                      width: '85%',
-                    }}
-                  />
+                  <hr className={manageTagStyles.horizontalRule} />
                   <div
                     onClick={showEditUserTagModal}
                     className={`mt-1 mb-2 btn btn-primary btn-sm w-75 ${styles.editButton}`}
