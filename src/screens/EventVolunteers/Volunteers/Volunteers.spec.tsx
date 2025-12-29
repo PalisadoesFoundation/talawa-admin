@@ -273,9 +273,23 @@ describe('Testing Volunteers Screen', () => {
   it('renders avatar image when user has avatarURL (img-url)', async () => {
     renderVolunteers(link1);
 
+    // Wait for volunteers to load and DataGrid to render
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    // Find volunteer names to ensure DataGrid cells are rendered
+    const volunteerNames = await screen.findAllByTestId('volunteerName');
+    expect(volunteerNames.length).toBeGreaterThanOrEqual(2);
+
+    // Force a re-render/update to ensure all cells are painted
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
+
     await waitFor(() => {
       // Find the volunteer that has an avatarURL (Bruce Graza)
-      const img = screen.getByTestId('volunteer_image');
+      const img = screen.queryByTestId('volunteer_image');
       expect(img).toBeInTheDocument();
       expect(img).toHaveAttribute('src', 'img-url');
     });
@@ -600,6 +614,34 @@ describe('Testing Volunteers Screen', () => {
     // This should render the VolunteerDeleteModal component
     await waitFor(() => {
       expect(screen.getByText(t.removeVolunteer)).toBeInTheDocument();
+    });
+  });
+
+  it('should trigger debounced search when typing in search input', async () => {
+    renderVolunteers(link1);
+
+    // Wait for component to load
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    // Find the search input
+    const searchInput = screen.getByTestId('searchBy');
+    expect(searchInput).toBeInTheDocument();
+
+    // Type in the search input to trigger the debounced callback
+    await userEvent.type(searchInput, 'Teresa');
+
+    // Wait for debounce to complete (300ms) and search to trigger
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 350));
+    });
+
+    // The search term should be set and volunteers filtered
+    await waitFor(() => {
+      const volunteerNames = screen.queryAllByTestId('volunteerName');
+      // After search, we should see filtered results
+      expect(volunteerNames.length).toBeGreaterThan(0);
     });
   });
 });

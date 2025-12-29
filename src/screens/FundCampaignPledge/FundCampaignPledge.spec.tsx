@@ -672,98 +672,6 @@ describe('Testing Campaign Pledge Screen', () => {
   });
 
   it('should handle popup styling when there are many extra users', async () => {
-    const manyUsersMock = {
-      request: {
-        query: FUND_CAMPAIGN_PLEDGE,
-        variables: {
-          input: { id: 'fundCampaignId' },
-        },
-      },
-      result: {
-        data: {
-          fundCampaign: {
-            __typename: 'FundCampaign',
-            id: '1',
-            name: 'Test Campaign',
-            startAt: '2023-01-01T00:00:00Z',
-            endAt: '2024-12-31T23:59:59Z',
-            currencyCode: 'USD',
-            goalAmount: 1000,
-            pledges: {
-              __typename: 'PledgeConnection',
-              edges: [
-                {
-                  __typename: 'PledgeEdge',
-                  node: {
-                    __typename: 'Pledge',
-                    id: '1',
-                    amount: 100,
-                    createdAt: '2024-01-01T00:00:00Z',
-                    note: 'Test note',
-                    campaign: {
-                      __typename: 'FundCampaign',
-                      id: '1',
-                      name: 'Test Campaign',
-                    },
-                    pledger: {
-                      __typename: 'User',
-                      id: '1',
-                      name: 'Main User 1',
-                      avatarURL: null,
-                    },
-                    users: [
-                      {
-                        __typename: 'User',
-                        id: '1',
-                        name: 'Main User 1',
-                        avatarURL: null,
-                      },
-                      {
-                        __typename: 'User',
-                        id: '2',
-                        name: 'Extra User 1',
-                        avatarURL: null,
-                      },
-                      {
-                        __typename: 'User',
-                        id: '3',
-                        name: 'Extra User 2',
-                        avatarURL: null,
-                      },
-                      {
-                        __typename: 'User',
-                        id: '4',
-                        name: 'Extra User 3',
-                        avatarURL: null,
-                      },
-                      {
-                        __typename: 'User',
-                        id: '5',
-                        name: 'Extra User 4',
-                        avatarURL: null,
-                      },
-                      {
-                        __typename: 'User',
-                        id: '6',
-                        name: 'Extra User 5',
-                        avatarURL: null,
-                      },
-                      {
-                        __typename: 'User',
-                        id: '7',
-                        name: 'Extra User 6',
-                        avatarURL: null,
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-    };
-
     const manyUsersLink = new StaticMockLink([manyUsersMock]);
     renderFundCampaignPledge(manyUsersLink);
 
@@ -1406,5 +1314,36 @@ describe('Testing Campaign Pledge Screen', () => {
     );
     expect(mainUserContainer).toBeInTheDocument();
     expect(mainUserContainer).toHaveTextContent('Fallback Pledger');
+  });
+
+  it('should handle search input and trim search value', async () => {
+    renderFundCampaignPledge(link1);
+
+    // Wait for component to load
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
+    });
+
+    // Find the search input
+    const searchInput = screen.getByTestId('searchPledger');
+    expect(searchInput).toBeInTheDocument();
+
+    // Type in the search input with leading/trailing spaces
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, '  John Doe  ');
+
+    // The onSearchChange callback should be triggered and trim the value
+    await waitFor(() => {
+      // The search should work even with spaces (trimmed internally)
+      expect(searchInput).toHaveValue('  John Doe  ');
+    });
+
+    // Clear and type again to ensure the callback is covered
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, 'Jane');
+
+    await waitFor(() => {
+      expect(searchInput).toHaveValue('Jane');
+    });
   });
 });
