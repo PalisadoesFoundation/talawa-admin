@@ -13,7 +13,7 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-// Component that throws an error during render
+// Test Component
 interface IComponent {
   shouldThrow?: boolean;
   message?: string;
@@ -174,6 +174,30 @@ describe('ErrorBoundaryWrapper', async () => {
 
       consoleErrorSpy.mockRestore();
     });
+
+    it('renders default fallback with custom i18n strings', () => {
+      const consoleErrorSpy = consoleErrorSpyFunction();
+
+      render(
+        <ErrorBoundaryWrapper
+          fallbackTitle="Quelque chose s'est mal passé"
+          fallbackErrorMessage="Une erreur inattendue s'est produite"
+          resetButtonText="Réessayer"
+          resetButtonAriaLabel="Réessayer"
+        >
+          <TestErrorComponent />
+        </ErrorBoundaryWrapper>,
+      );
+
+      expect(
+        screen.getByText("Quelque chose s'est mal passé"),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Réessayer' }),
+      ).toBeInTheDocument();
+
+      consoleErrorSpy.mockRestore();
+    });
   });
 
   describe('Custom JSX Fallback', () => {
@@ -234,7 +258,7 @@ describe('ErrorBoundaryWrapper', async () => {
         <div data-testid="custom-component-fallback">
           <h2>Custom Component Error</h2>
           <p>Error: {error?.message}</p>
-          <button onClick={onReset} data-testid="custom-reset">
+          <button type="button" onClick={onReset} data-testid="custom-reset">
             Reset
           </button>
         </div>
@@ -270,7 +294,7 @@ describe('ErrorBoundaryWrapper', async () => {
 
         return (
           <div>
-            <button onClick={onReset} data-testid="test-reset">
+            <button type="button" onClick={onReset} data-testid="test-reset">
               Test Reset
             </button>
           </div>
@@ -419,17 +443,18 @@ describe('ErrorBoundaryWrapper', async () => {
 
       expect(screen.getByTestId('error-boundary-fallback')).toBeInTheDocument();
 
-      const resetButton = screen.getByRole('button', { name: 'Try again' });
-      await user.click(resetButton);
-
+      // update the children to not throw
       rerender(
         <ErrorBoundaryWrapper>
           <TestErrorComponent shouldThrow={false} />
         </ErrorBoundaryWrapper>,
       );
 
-      waitFor(() => {
-        expect(screen.getByText('No error')).toBeInTheDocument();
+      const resetButton = screen.getByRole('button', { name: 'Try again' });
+      await user.click(resetButton);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('normal-component')).toBeInTheDocument();
       });
 
       consoleErrorSpy.mockRestore();

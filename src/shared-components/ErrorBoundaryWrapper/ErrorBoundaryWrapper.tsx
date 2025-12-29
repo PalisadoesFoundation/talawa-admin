@@ -133,6 +133,10 @@ export class ErrorBoundaryWrapper extends React.Component<
       children,
       fallback,
       fallbackComponent: FallbackComponent,
+      fallbackTitle = 'Something went wrong',
+      fallbackErrorMessage = 'An unexpected error occurred',
+      resetButtonText = 'Try Again',
+      resetButtonAriaLabel = 'Try again',
     } = this.props;
 
     if (hasError) {
@@ -155,16 +159,17 @@ export class ErrorBoundaryWrapper extends React.Component<
           data-testid="error-boundary-fallback"
         >
           <div className={styles.errorContent}>
-            <h3 className={styles.errorTitle}>Something went wrong</h3>
+            <h3 className={styles.errorTitle}>{fallbackTitle}</h3>
             <p className={styles.errorMessage}>
-              {error?.message || 'An unexpected error occurred'}
+              {error?.message || fallbackErrorMessage}
             </p>
             <button
+              type="button"
               onClick={this.handleReset}
               className={styles.resetButton}
-              aria-label="Try again"
+              aria-label={resetButtonAriaLabel}
             >
-              Try Again
+              {resetButtonText}
             </button>
           </div>
         </div>

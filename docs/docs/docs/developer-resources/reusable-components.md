@@ -443,6 +443,16 @@ import { ErrorBoundaryWrapper } from 'src/shared-components/ErrorBoundaryWrapper
   <ComplexModal />
 </ErrorBoundaryWrapper>
 
+// With custom error message in default UI
+<ErrorBoundaryWrapper
+  fallbackTitle={t('errors.title')}
+  fallbackErrorMessage={t('errors.defaultErrorMessage')}
+  resetButtonText={t('errors.resetButton')}
+  resetButtonAriaLabel={t('errors.resetButtonAriaLabel')}
+>
+  <ComplexModal />
+</ErrorBoundaryWrapper>
+
 // With custom fallback component
 const CustomErrorFallback = ({ error, onReset }) => (
   <div>
@@ -471,15 +481,19 @@ const CustomErrorFallback = ({ error, onReset }) => (
 
 #### Props
 
-| Prop                | Type                                              | Required | Description                                                          |
-| --------------------| --------------------------------------------------| -------- | -------------------------------------------------------------------- |
-| `children`          | `ReactNode`                                       | Yes      | Child components to wrap with error boundary                         |
-| `fallback`          | `ReactNode`                                       | No       | Custom JSX fallback UI                                               |
-| `fallbackComponent` | `React.ComponentType<InterfaceErrorFallbackProps>`| No       | Custom fallback component that receives `error` and `onReset` props  |
-| `errorMessage`      | `string`                                          | No       | Custom error message for toast notification                          |
-| `showToast`         | `boolean`                                         | No       | Whether to show toast notification (default: `true`)                 |
-| `onError`           | `function`                                        | No       | Callback invoked when error is caught                                |
-| `onReset`           | `function`                                        | No       | Callback invoked when user clicks reset button                       |
+| Prop                  | Type                                              | Required | Description                                                          |
+| --------------------- | ------------------------------------------------- | -------- | -------------------------------------------------------------------- |
+| `children`            | `ReactNode`                                       | Yes      | Child components to wrap with error boundary                         |
+| `fallback`            | `ReactNode`                                       | No       | Custom JSX fallback UI                                               |
+| `fallbackComponent`   | `React.ComponentType<InterfaceErrorFallbackProps>`| No       | Custom fallback component that receives `error` and `onReset` props  |
+| `errorMessage`        | `string`                                          | No       | Custom error message for toast notification                          |
+| `showToast`           | `boolean`                                         | No       | Whether to show toast notification (default: `true`)                 |
+| `onError`             | `function`                                        | No       | Callback invoked when error is caught                                |
+| `onReset`             | `function`                                        | No       | Callback invoked when user clicks reset button                       |
+| `fallbackTitle`       | `string`                                          | No       | Custom error message for default UI                                  |
+| `fallbackErrorMessage`| `string`                                          | No       | Custom error message for default UI                                  |
+| `resetButtonText`     | `string`                                          | No       | Custom error message for default UI                                  |
+| `resetButtonAriaLabel`| `string`                                          | No       | Custom error message for default UI                                  |
 
 **Accessibility:**
 - Default fallback includes `role="alert"` and `aria-live="assertive"`

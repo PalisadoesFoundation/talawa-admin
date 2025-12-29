@@ -65,6 +65,30 @@ export interface InterfaceErrorBoundaryWrapperProps {
    * Can be used to navigate away, refresh data, or perform cleanup operations.
    */
   onReset?: () => void;
+
+  /**
+   * Translated title text for default fallback UI.
+   * @default "Something went wrong"
+   */
+  fallbackTitle?: string;
+
+  /**
+   * Translated fallback error message when error.message is unavailable.
+   * @default "An unexpected error occurred"
+   */
+  fallbackErrorMessage?: string;
+
+  /**
+   * Translated reset button text.
+   * @default "Try Again"
+   */
+  resetButtonText?: string;
+
+  /**
+   * Translated aria-label for reset button (accessibility).
+   * @default "Try again"
+   */
+  resetButtonAriaLabel?: string;
 }
 
 /**
