@@ -71,7 +71,7 @@ import {
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import {
-  ORGANIZATION_LIST_NO_MEMBERS,
+  ORGANIZATION_LIST_PUBLIC,
   SIGNIN_QUERY,
   GET_COMMUNITY_DATA_PG,
 } from 'GraphQl/Queries/Queries';
@@ -184,7 +184,13 @@ const loginPage = (): JSX.Element => {
   const [signin, { loading: loginLoading }] = useLazyQuery(SIGNIN_QUERY);
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
   const [recaptcha] = useMutation(RECAPTCHA_MUTATION);
-  const { data: orgData } = useQuery(ORGANIZATION_LIST_NO_MEMBERS);
+  const {
+    data: orgData,
+    loading: orgLoading,
+    error: orgError,
+  } = useQuery(ORGANIZATION_LIST_PUBLIC, {
+    fetchPolicy: 'network-only',
+  });
   const { startSession, extendSession } = useSession();
   useEffect(() => {
     if (orgData) {
@@ -201,7 +207,7 @@ const loginPage = (): JSX.Element => {
       );
       setOrganizations(options);
     }
-  }, [orgData]);
+  }, [orgData, orgLoading, orgError]);
 
   useEffect(() => {
     async function loadResource(): Promise<void> {
@@ -913,7 +919,9 @@ const loginPage = (): JSX.Element => {
                       )}
                   </div>
                   <div className="position-relative  my-2">
-                    <Form.Label>{t('selectOrg')}</Form.Label>
+                    <Form.Label>
+                      {t('selectOrg')} ({organizations.length} available)
+                    </Form.Label>
                     <div className="position-relative">
                       <Autocomplete
                         disablePortal
@@ -928,6 +936,10 @@ const loginPage = (): JSX.Element => {
                           });
                         }}
                         options={organizations}
+                        getOptionLabel={(option: {
+                          label: string;
+                          id: string;
+                        }) => option.label || ''}
                         renderInput={(params) => (
                           <TextField
                             {...params}
