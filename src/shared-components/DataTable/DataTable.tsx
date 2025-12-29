@@ -94,6 +94,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
       )}
       <thead>
         <tr>
+          {/* Render table headers */}
           {columns.map((col: IColumnDef<T>) => (
             <th key={col.id} scope="col">
               {renderHeader(col.header)}
@@ -102,6 +103,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
         </tr>
       </thead>
       <tbody>
+        {/* Render table data */}
         {data.map((row: T, idx: number) => (
           <tr key={getKey(row, idx)}>
             {columns.map((col: IColumnDef<T>) => {

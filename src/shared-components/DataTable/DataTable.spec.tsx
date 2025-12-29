@@ -17,6 +17,7 @@ describe('DataTable', () => {
     expect(screen.getByText('TrueRow')).toBeInTheDocument();
     expect(screen.getByText('FalseRow')).toBeInTheDocument();
   });
+
   it('gets cell value using string accessor', () => {
     const cols = [{ id: 'foo', header: 'Foo', accessor: 'foo' as const }];
     const data = [{ foo: 'bar' }];
