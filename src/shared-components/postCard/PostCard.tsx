@@ -348,12 +348,12 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           </Menu>
         </>
       </Box>
-
       {/* Post Media */}
       {props.attachmentURL && (
         <Box className={postCardStyles.postMedia}>
           {props.mimeType?.split('/')[0] == 'image' && (
             <img
+              className={postCardStyles.image}
               src={props.attachmentURL}
               alt={props.title}
               crossOrigin="anonymous"
