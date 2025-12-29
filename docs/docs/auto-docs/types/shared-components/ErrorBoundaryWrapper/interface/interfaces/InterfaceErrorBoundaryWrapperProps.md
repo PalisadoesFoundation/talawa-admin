@@ -76,35 +76,23 @@ Receives error and onReset as props.
 
 ***
 
-### fallbackErrorMessage?
+### fallbackErrorMessage
 
-> `optional` **fallbackErrorMessage**: `string`
+> **fallbackErrorMessage**: `string`
 
-Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L79)
+Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L77)
 
 Translated fallback error message when error.message is unavailable.
 
-#### Default
-
-```ts
-"An unexpected error occurred"
-```
-
 ***
 
-### fallbackTitle?
+### fallbackTitle
 
-> `optional` **fallbackTitle**: `string`
+> **fallbackTitle**: `string`
 
-Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:73](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L73)
+Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L72)
 
 Translated title text for default fallback UI.
-
-#### Default
-
-```ts
-"Something went wrong"
-```
 
 ***
 
@@ -149,35 +137,23 @@ Can be used to navigate away, refresh data, or perform cleanup operations.
 
 ***
 
-### resetButtonAriaLabel?
+### resetButtonAriaLabel
 
-> `optional` **resetButtonAriaLabel**: `string`
+> **resetButtonAriaLabel**: `string`
 
-Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L91)
+Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L87)
 
 Translated aria-label for reset button (accessibility).
 
-#### Default
-
-```ts
-"Try again"
-```
-
 ***
 
-### resetButtonText?
+### resetButtonText
 
-> `optional` **resetButtonText**: `string`
+> **resetButtonText**: `string`
 
-Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L85)
+Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L82)
 
 Translated reset button text.
-
-#### Default
-
-```ts
-"Try Again"
-```
 
 ***
 

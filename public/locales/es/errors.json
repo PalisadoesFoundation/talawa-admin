@@ -17,7 +17,7 @@
   "markAsReadError": "Error al marcar las notificaciones como leídas",
   "accountLocked": "La cuenta está temporalmente bloqueada debido a demasiados intentos de inicio de sesión fallidos. Por favor, inténtelo de nuevo más tarde.",
   "accountLockedWithTimer": "La cuenta está temporalmente bloqueada. Por favor, inténtelo de nuevo en {{minutes}} minuto(s).",
-  "title": "Algo salió mal",
+  "title": "Ha ocurrido un error",
   "defaultErrorMessage": "Ocurrió un error inesperado",
   "resetButton": "Intentar de nuevo",
   "resetButtonAriaLabel": "Intentar de nuevo"

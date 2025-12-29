@@ -4,7 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
+  min-height: 200px;
   width: 100%;
   padding: 2rem;
   background-color: var(--bs-body-bg, #f2f7ff);
@@ -51,6 +51,10 @@
 }
 
 .resetButton:focus {
+  outline: none;
+}
+
+.resetButton:focus-visible {
   outline: 2px solid var(--bs-primary, #0d6efd);
   outline-offset: 2px;
   box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
@@ -61,19 +65,17 @@
   border-color: var(--bs-primary-active, #0a58ca);
 }
 
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .errorBoundaryFallback {
-    background-color: var(--bs-dark-bg, #212529);
-  }
+/* Dark theme support */
+[data-theme='dark'] .errorBoundaryFallback {
+  background-color: var(--bs-dark-bg, #212529);
+}
 
-  .errorTitle {
-    color: var(--bs-danger, #dc3545);
-  }
+[data-theme='dark'] .errorTitle {
+  color: var(--bs-danger, #dc3545);
+}
 
-  .errorMessage {
-    color: var(--bs-light, #f8f9fa);
-  }
+[data-theme='dark'] .errorMessage {
+  color: var(--bs-light, #f8f9fa);
 }
 
 /* High contrast mode support */

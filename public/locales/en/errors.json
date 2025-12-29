@@ -19,6 +19,6 @@
   "accountLockedWithTimer": "Account is temporarily locked. Please try again in {{minutes}} minute(s).",
   "title": "Something went wrong",
   "defaultErrorMessage": "An unexpected error occurred",
-  "resetButton": "Try Again",
+  "resetButton": "Try again",
   "resetButtonAriaLabel": "Try again"
 }

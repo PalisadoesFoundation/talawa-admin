@@ -443,7 +443,7 @@ import { ErrorBoundaryWrapper } from 'src/shared-components/ErrorBoundaryWrapper
   <ComplexModal />
 </ErrorBoundaryWrapper>
 
-// With custom error message in default UI
+// Default fallback with custom i18n strings
 <ErrorBoundaryWrapper
   fallbackTitle={t('errors.title')}
   fallbackErrorMessage={t('errors.defaultErrorMessage')}

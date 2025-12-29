@@ -4,7 +4,7 @@
 
 # Interface: InterfaceErrorBoundaryWrapperState
 
-Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L100)
+Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:96](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L96)
 
 Internal state for ErrorBoundaryWrapper component.
 
@@ -15,9 +15,9 @@ in the fallback UI.
 
 ### error
 
-> **error**: `Error`
+> `readonly` **error**: `Error`
 
-Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L104)
+Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L100)
 
 The error that was caught
 
@@ -25,18 +25,18 @@ The error that was caught
 
 ### errorInfo
 
-> **errorInfo**: `ErrorInfo`
+> `readonly` **errorInfo**: `ErrorInfo`
 
-Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L106)
+Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L102)
 
-Additional error information including component stack
+Additional error information including component stack.
 
 ***
 
 ### hasError
 
-> **hasError**: `boolean`
+> `readonly` **hasError**: `boolean`
 
-Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L102)
+Defined in: [src/types/shared-components/ErrorBoundaryWrapper/interface.ts:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/ErrorBoundaryWrapper/interface.ts#L98)
 
 Whether an error has been caught

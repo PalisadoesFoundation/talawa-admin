@@ -68,27 +68,23 @@ export interface InterfaceErrorBoundaryWrapperProps {
 
   /**
    * Translated title text for default fallback UI.
-   * @default "Something went wrong"
    */
-  fallbackTitle?: string;
+  fallbackTitle: string;
 
   /**
    * Translated fallback error message when error.message is unavailable.
-   * @default "An unexpected error occurred"
    */
-  fallbackErrorMessage?: string;
+  fallbackErrorMessage: string;
 
   /**
    * Translated reset button text.
-   * @default "Try Again"
    */
-  resetButtonText?: string;
+  resetButtonText: string;
 
   /**
    * Translated aria-label for reset button (accessibility).
-   * @default "Try again"
    */
-  resetButtonAriaLabel?: string;
+  resetButtonAriaLabel: string;
 }
 
 /**
@@ -99,11 +95,11 @@ export interface InterfaceErrorBoundaryWrapperProps {
  */
 export interface InterfaceErrorBoundaryWrapperState {
   /** Whether an error has been caught */
-  hasError: boolean;
+  readonly hasError: boolean;
   /** The error that was caught */
-  error: Error | null;
-  /** Additional error information including component stack */
-  errorInfo: ErrorInfo | null;
+  readonly error: Error | null;
+  /** Additional error information including component stack. */
+  readonly errorInfo: ErrorInfo | null;
 }
 
 /**

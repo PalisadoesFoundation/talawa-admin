@@ -1,5 +1,6 @@
 /**
  * ErrorBoundaryWrapper - error boundary for React components
+ * (don't catch errors in event handlers, async code, SSR, or inside the boundary itself)
  *
  * Catches JavaScript errors in child components, logs them, and displays
  * a fallback UI instead of crashing the entire component tree.
@@ -40,11 +41,11 @@
  */
 
 import React, { ReactNode, ErrorInfo } from 'react';
-import { toast } from 'react-toastify';
 import type {
   InterfaceErrorBoundaryWrapperProps,
   InterfaceErrorBoundaryWrapperState,
 } from 'types/shared-components/ErrorBoundaryWrapper/interface';
+import { toast } from 'react-toastify';
 import styles from './ErrorBoundaryWrapper.module.css';
 
 export class ErrorBoundaryWrapper extends React.Component<
@@ -80,12 +81,7 @@ export class ErrorBoundaryWrapper extends React.Component<
    * This lifecycle method is called during the commit phase (to log/ report)
    */
   componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
-    const {
-      onError,
-      showToast = true,
-      errorMessage,
-      fallbackErrorMessage = 'An unexpected error occurred',
-    } = this.props;
+    const { onError, showToast = true, errorMessage } = this.props;
 
     // Log to console in development
     if (process.env.NODE_ENV === 'development') {
@@ -94,7 +90,8 @@ export class ErrorBoundaryWrapper extends React.Component<
 
     // Show toast notification
     if (showToast) {
-      const message = errorMessage || error.message || fallbackErrorMessage;
+      const message =
+        errorMessage || error.message || 'An unexpected error occurred';
       toast.error(message);
     }
 
@@ -135,10 +132,10 @@ export class ErrorBoundaryWrapper extends React.Component<
       children,
       fallback,
       fallbackComponent: FallbackComponent,
-      fallbackTitle = 'Something went wrong',
-      fallbackErrorMessage = 'An unexpected error occurred',
-      resetButtonText = 'Try Again',
-      resetButtonAriaLabel = 'Try again',
+      fallbackTitle,
+      fallbackErrorMessage,
+      resetButtonText,
+      resetButtonAriaLabel,
     } = this.props;
 
     if (hasError) {
