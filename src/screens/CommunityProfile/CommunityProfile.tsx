@@ -14,7 +14,7 @@
  * - Provides form validation and disables buttons when inputs are empty.
  *
  * Dependencies:
- * - React,React-Bootstrap, React-Toastify, Apollo Client, and i18next for translations.
+ * - React,React-Bootstrap, NotificationToast, Apollo Client, and i18next for translations.
  * - Custom components: `Loader` and `UpdateSession`.
  * - Utility functions: `convertToBase64` and `errorHandler`.
  *
@@ -38,7 +38,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Form } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 import Loader from 'components/Loader/Loader';
 import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
@@ -165,7 +165,7 @@ const CommunityProfile = (): JSX.Element => {
           slackURL: profileVariable.slackURL || undefined,
         },
       });
-      toast.success(t('profileChangedMsg') as string);
+      NotificationToast.success(t('profileChangedMsg') as string);
     } catch (error: unknown) {
       errorHandler(t, error as Error);
     }
@@ -195,7 +195,7 @@ const CommunityProfile = (): JSX.Element => {
       await resetPreLoginImagery({
         variables: { resetPreLoginImageryId: preLoginData?.id },
       });
-      toast.success(t(`resetData`) as string);
+      NotificationToast.success(t(`resetData`) as string);
     } catch (error: unknown) {
       errorHandler(t, error as Error);
     }

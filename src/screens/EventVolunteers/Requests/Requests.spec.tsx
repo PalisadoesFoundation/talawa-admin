@@ -29,15 +29,18 @@ import {
   UPDATE_ERROR_MOCKS,
   MOCKS_WITH_FILTER_DATA,
 } from './Requests.mocks';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { vi } from 'vitest';
 
 const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
+  warning: vi.fn(),
+  info: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: toastMocks,
 }));
 
 const wait = async (ms = 100): Promise<void> => {

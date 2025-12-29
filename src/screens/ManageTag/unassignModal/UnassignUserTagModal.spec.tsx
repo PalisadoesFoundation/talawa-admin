@@ -5,6 +5,22 @@ import UnassignUserTagModal, {
   InterfaceUnassignUserTagModalProps,
 } from './UnassignUserTagModal';
 import type { TFunction } from 'i18next';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  },
+}));
 
 // Mock CSS module
 vi.mock('style/app-fixed.module.css', () => ({
@@ -192,6 +208,9 @@ describe('UnassignUserTagModal Component', () => {
     });
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(error);
+    expect(NotificationToast.error).toHaveBeenCalledWith(
+      'unassignUserTagError',
+    );
 
     consoleErrorSpy.mockRestore();
   });

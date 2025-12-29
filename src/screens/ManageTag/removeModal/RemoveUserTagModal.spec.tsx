@@ -5,7 +5,22 @@ import RemoveUserTagModal, {
   InterfaceRemoveUserTagModalProps,
 } from './RemoveUserTagModal';
 import type { TFunction } from 'i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  },
+}));
 
 // Mock CSS module
 vi.mock('style/app-fixed.module.css', () => ({
@@ -153,7 +168,7 @@ describe('RemoveUserTagModal Component', () => {
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
       .mockImplementation(() => {});
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
     render(
       <RemoveUserTagModal

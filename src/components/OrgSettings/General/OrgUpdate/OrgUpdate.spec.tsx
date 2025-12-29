@@ -5,16 +5,18 @@ import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 import OrgUpdate from './OrgUpdate';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
 
-vi.mock('react-toastify', () => ({
-  toast: {
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
   },
 }));
 
@@ -190,7 +192,7 @@ describe('OrgUpdate Component', () => {
     fireEvent.click(saveButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(NotificationToast.success).toHaveBeenCalledWith(
         i18n.t('orgUpdate.successfulUpdated'),
       );
     });
@@ -272,9 +274,8 @@ describe('OrgUpdate Component', () => {
     });
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
+      expect(NotificationToast.error).toHaveBeenCalledWith(
         'Failed to update organization',
-        expect.any(Object),
       );
     });
 
@@ -524,7 +525,7 @@ describe('OrgUpdate Component', () => {
       fireEvent.click(saveButton);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
+        expect(NotificationToast.success).toHaveBeenCalledWith(
           i18n.t('orgUpdate.successfulUpdated'),
         );
       });
@@ -550,7 +551,7 @@ describe('OrgUpdate Component', () => {
       fireEvent.click(saveButton);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
+        expect(NotificationToast.error).toHaveBeenCalledWith(
           'Name and description are required',
         );
       });
@@ -562,7 +563,7 @@ describe('OrgUpdate Component', () => {
       fireEvent.click(saveButton);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
+        expect(NotificationToast.error).toHaveBeenCalledWith(
           'Name and description are required',
         );
       });
@@ -620,9 +621,8 @@ describe('OrgUpdate Component', () => {
       fireEvent.click(saveButton);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
+        expect(NotificationToast.error).toHaveBeenCalledWith(
           'Failed to update organization',
-          expect.any(Object),
         );
       });
     });
@@ -820,7 +820,7 @@ describe('OrgUpdate Component', () => {
 
       await waitFor(
         () => {
-          expect(toast.error).toHaveBeenCalledWith(
+          expect(NotificationToast.error).toHaveBeenCalledWith(
             i18n.t('orgUpdate.failedToUpdateOrg'),
             expect.any(Object),
           );
