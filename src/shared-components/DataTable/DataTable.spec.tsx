@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect } from 'vitest';
 import { DataTable } from './DataTable';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 
 describe('DataTable', () => {
   afterEach(() => {
