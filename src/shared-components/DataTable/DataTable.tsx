@@ -72,11 +72,18 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     );
   if (loading) {
     // Use column headers as headerTitles, and data length or default for rows
-    const headerTitles = columns.map((col: IColumnDef<T>) =>
-      typeof col.header === 'function'
-        ? String(col.header())
-        : String(col.header),
-    );
+    const headerTitles = columns.map((col: IColumnDef<T>) => {
+      let resolvedHeader =
+        typeof col.header === 'function' ? col.header() : col.header;
+      if (
+        typeof resolvedHeader === 'string' ||
+        typeof resolvedHeader === 'number'
+      ) {
+        return String(resolvedHeader);
+      }
+      // If header is JSX or other type, use empty string to avoid [object Object]
+      return '';
+    });
     const noOfRows = skeletonRows ?? DEFAULT_TABLE_SKELETON_ROWS;
     return <TableLoader headerTitles={headerTitles} noOfRows={noOfRows} />;
   }
@@ -84,7 +91,13 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     return <div className={styles.dataEmptyState}>{emptyMessage}</div>;
 
   return (
-    <Table striped hover responsive className={styles.dataTableBase}>
+    <Table
+      striped
+      hover
+      responsive
+      className={styles.dataTableBase}
+      {...(ariaLabel ? { 'aria-label': ariaLabel } : {})}
+    >
       {/*
         The caption provides an accessible table label for screen readers, improving navigation for users with assistive technology.
         It is visually hidden using the .visuallyHidden class from app-fixed.module.css for consistency with other UI elements.

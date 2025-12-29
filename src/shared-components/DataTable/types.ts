@@ -62,7 +62,10 @@ export interface IDataTableProps<T, TValue = unknown> {
   emptyMessage?: string;
   error?: Error | null;
   renderError?: (error: Error) => React.ReactNode;
-  /** Optional accessible label for the table, used for aria-label and caption */
+  /**
+   * Optional accessible label for the table, used for both the visually hidden <caption> and as aria-label on the table element.
+   * This improves accessibility for screen readers and navigation.
+   */
   ariaLabel?: string;
   /** Number of skeleton rows to show when loading (default: 6) */
   skeletonRows?: number;

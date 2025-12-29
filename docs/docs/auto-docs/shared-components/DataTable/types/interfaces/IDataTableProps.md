@@ -24,9 +24,10 @@ Props for a generic DataTable component
 
 > `optional` **ariaLabel**: `string`
 
-Defined in: [src/shared-components/DataTable/types.ts:66](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L66)
+Defined in: [src/shared-components/DataTable/types.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L69)
 
-Optional accessible label for the table, used for aria-label and caption
+Optional accessible label for the table, used for both the visually hidden <caption> and as aria-label on the table element.
+This improves accessibility for screen readers and navigation.
 
 ***
 
@@ -103,6 +104,6 @@ If a property name is provided, its value will be coerced to string or number.
 
 > `optional` **skeletonRows**: `number`
 
-Defined in: [src/shared-components/DataTable/types.ts:68](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L68)
+Defined in: [src/shared-components/DataTable/types.ts:71](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/DataTable/types.ts#L71)
 
 Number of skeleton rows to show when loading (default: 6)

@@ -3,6 +3,9 @@ import { describe, it, expect } from 'vitest';
 import { DataTable } from './DataTable';
 
 describe('DataTable', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
   it('coerces non-string/number rowKey property to string', () => {
     type Row = { boolKey: boolean; name: string };
     const cols = [
@@ -95,6 +98,24 @@ describe('DataTable', () => {
     expect(screen.getByText('Ada')).toBeInTheDocument();
   });
 
+  it('renders loading state with JSX header and does not stringify [object Object]', () => {
+    const cols = [
+      { id: 'jsx', header: <span>JSXHeader</span>, accessor: 'foo' as const },
+      { id: 'str', header: 'StringHeader', accessor: 'bar' as const },
+    ];
+    render(<DataTable data={[]} columns={cols} loading />);
+    // TableLoader should render the string header, but not [object Object] for JSX header
+    expect(screen.getByTestId('TableLoader')).toBeInTheDocument();
+    expect(screen.getByText('StringHeader')).toBeInTheDocument();
+    // The JSX header should not render as [object Object]
+    expect(screen.queryByText('[object Object]')).not.toBeInTheDocument();
+    // The cell for the JSX header should be present but empty
+    const ths = screen.getAllByRole('columnheader');
+    // One should be empty string, one should be 'StringHeader'
+    expect(ths.some((th) => th.textContent === 'StringHeader')).toBe(true);
+    expect(ths.some((th) => th.textContent === '')).toBe(true);
+  });
+
   it('renders loading state with TableLoader', () => {
     const cols = [
       { id: 'name', header: 'Name', accessor: 'name' },
@@ -184,5 +205,20 @@ describe('DataTable', () => {
     ];
     render(<DataTable data={[{ value: 5 }]} columns={cols} />);
     expect(screen.getByText('10')).toBeInTheDocument();
+  });
+  it('renders visually-hidden caption and sets aria-label when ariaLabel is provided', () => {
+    const ariaLabel = 'Accessible Table Caption';
+    // Provide at least one column and one row so the table is rendered
+    const columns = [{ id: 'foo', header: 'Foo', accessor: 'foo' as const }];
+    const data = [{ foo: 'bar' }];
+    const { getByRole } = render(
+      <DataTable ariaLabel={ariaLabel} columns={columns} data={data} />,
+    );
+    // The visually-hidden caption should be present
+    const caption = getByRole('caption');
+    expect(caption).toHaveTextContent(ariaLabel);
+    // The table should have aria-label attribute
+    const table = getByRole('table');
+    expect(table).toHaveAttribute('aria-label', ariaLabel);
   });
 });
