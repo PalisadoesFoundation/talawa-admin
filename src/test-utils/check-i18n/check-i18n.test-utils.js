@@ -31,9 +31,9 @@ export const runScript = (targets, options = {}) => {
   const res = spawnSync(process.execPath, [scriptPath, ...targets], {
     encoding: 'utf-8',
     env: { ...process.env, ...(env ?? {}), FORCE_COLOR: '0', NO_COLOR: '1' },
+    timeout: 30_000,
     ...rest,
   });
-
   if (res.error) throw res.error;
   return res;
 };
