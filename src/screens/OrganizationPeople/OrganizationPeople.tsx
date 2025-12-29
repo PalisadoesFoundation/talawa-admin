@@ -48,11 +48,11 @@
  * - GraphQL Queries: `ORGANIZATIONS_MEMBER_CONNECTION_LIST`, `USER_LIST_FOR_TABLE`.
  * - Styles: `style/app-fixed.module.css`.
  */
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
 import { useLazyQuery } from '@apollo/client';
-import { GridCellParams, GridPaginationModel } from '@mui/x-data-grid';
+import { GridCellParams } from '@mui/x-data-grid';
 import { Delete } from '@mui/icons-material';
 import type {
   ReportingRow,
@@ -82,6 +82,8 @@ import { errorHandler } from 'utils/errorHandler';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
+import { PaginationControl } from 'shared-components/PaginationControl';
+import orgPeopleStyles from './OrganizationPeople.module.css';
 
 interface IProcessedRow {
   id: string;
@@ -130,15 +132,20 @@ function OrganizationPeople(): JSX.Element {
   const [selectedMemId, setSelectedMemId] = useState<string>();
 
   // Pagination state
-  const [paginationModel, setPaginationModel] = useState<GridPaginationModel>({
-    page: 0,
-    pageSize: PAGE_SIZE,
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(PAGE_SIZE);
+  const [totalItems, setTotalItems] = useState(0);
+
+  // Store the current page's cursors from the GraphQL response
+  // These are used for cursor-based pagination navigation
+  const [cursors, setCursors] = useState<{
+    startCursor: string | null;
+    endCursor: string | null;
+  }>({
+    startCursor: null,
+    endCursor: null,
   });
 
-  // Cursor management - properly capturing startCursor and endCursor
-  const pageCursors = useRef<{
-    [page: number]: { startCursor: string; endCursor: string };
-  }>({});
   const [currentRows, setCurrentRows] = useState<IProcessedRow[]>([]);
   const [data, setData] = useState<
     | {
@@ -180,7 +187,7 @@ function OrganizationPeople(): JSX.Element {
   useEffect(() => {
     if (data) {
       const { edges, pageInfo } = data;
-      const baseIndex = paginationModel.page * PAGE_SIZE;
+      const baseIndex = (currentPage - 1) * pageSize;
       const processedRows = edges.map(
         (edge: IEdges, index: number): IProcessedRow => ({
           id: edge.node.id,
@@ -194,12 +201,10 @@ function OrganizationPeople(): JSX.Element {
       );
 
       // Store both start and end cursors for the current page
-      if (pageInfo.startCursor && pageInfo.endCursor) {
-        pageCursors.current[paginationModel.page] = {
-          startCursor: pageInfo.startCursor,
-          endCursor: pageInfo.endCursor,
-        };
-      }
+      setCursors({
+        startCursor: pageInfo.startCursor || null,
+        endCursor: pageInfo.endCursor || null,
+      });
 
       // Update pagination meta information
       setPaginationMeta({
@@ -207,18 +212,25 @@ function OrganizationPeople(): JSX.Element {
         hasPreviousPage: pageInfo.hasPreviousPage,
       });
 
+      // Estimate total items for pagination control
+      if (pageInfo.hasNextPage) {
+        setTotalItems((currentPage + 1) * pageSize);
+      } else {
+        setTotalItems(baseIndex + edges.length);
+      }
+
       setCurrentRows(processedRows);
     }
-  }, [data, paginationModel.page]);
+  }, [data, currentPage, pageSize]);
 
   // Handle tab changes (members, admins, users)
   useEffect(() => {
     // Reset pagination when tab changes
-    setPaginationModel({ page: 0, pageSize: PAGE_SIZE });
-    pageCursors.current = {};
+    setCurrentPage(1);
+    setCursors({ startCursor: null, endCursor: null });
 
     const variables: IQueryVariable = {
-      first: PAGE_SIZE,
+      first: pageSize,
       after: null,
       last: null,
       before: null,
@@ -240,26 +252,32 @@ function OrganizationPeople(): JSX.Element {
       // Users
       fetchUsers({ variables });
     }
-  }, [state, currentUrl, fetchMembers, fetchUsers]);
+  }, [state, currentUrl, pageSize, fetchMembers, fetchUsers]);
 
   // Initial data fetch
   useEffect(() => {
-    fetchMembers({
-      variables: {
-        orgId: currentUrl,
-        first: PAGE_SIZE,
-        after: null,
-        last: null,
-        before: null,
-      },
-    });
-  }, [currentUrl, fetchMembers]);
+    const variables: IQueryVariable = {
+      orgId: currentUrl,
+      first: pageSize,
+      after: null,
+      last: null,
+      before: null,
+    };
+
+    if (state === 1) {
+      variables.where = { role: { equal: 'administrator' } };
+    }
+
+    if (state === 2) {
+      fetchUsers({ variables });
+    } else {
+      fetchMembers({ variables });
+    }
+  }, [currentUrl, fetchMembers, fetchUsers, pageSize, state]);
 
   // Handle pagination changes
-  const handlePaginationModelChange = async (
-    newPaginationModel: GridPaginationModel,
-  ) => {
-    const isForwardNavigation = newPaginationModel.page > paginationModel.page;
+  const handlePaginationChange = async (newPage: number): Promise<void> => {
+    const isForwardNavigation = newPage > currentPage;
 
     // Check if navigation is allowed
     if (isForwardNavigation && !paginationMeta.hasNextPage) {
@@ -269,21 +287,18 @@ function OrganizationPeople(): JSX.Element {
       return; // Prevent navigation if there's no previous page
     }
 
-    const currentPage = paginationModel.page;
-    const currentPageCursors = pageCursors.current[currentPage];
-
     const variables: IQueryVariable = { orgId: currentUrl };
 
     if (isForwardNavigation) {
       // Forward navigation uses "after" with the endCursor of the current page
-      variables.first = PAGE_SIZE;
-      variables.after = currentPageCursors?.endCursor;
+      variables.first = pageSize;
+      variables.after = cursors.endCursor;
       variables.last = null;
       variables.before = null;
     } else {
       // Backward navigation uses "before" with the startCursor of the current page
-      variables.last = PAGE_SIZE;
-      variables.before = currentPageCursors?.startCursor;
+      variables.last = pageSize;
+      variables.before = cursors.startCursor;
       variables.first = null;
       variables.after = null;
     }
@@ -293,13 +308,37 @@ function OrganizationPeople(): JSX.Element {
       variables.where = { role: { equal: 'administrator' } };
     }
 
-    setPaginationModel(newPaginationModel);
+    setCurrentPage(newPage);
 
     // Execute the appropriate query based on the current tab
     if (state === 2) {
       await fetchUsers({ variables });
     } else {
       await fetchMembers({ variables });
+    }
+  };
+
+  const handlePageSizeChange = (newPageSize: number): void => {
+    setPageSize(newPageSize);
+    setCurrentPage(1); // Reset to first page
+    setCursors({ startCursor: null, endCursor: null }); // Reset cursors when page size changes
+
+    const variables: IQueryVariable = {
+      orgId: currentUrl,
+      first: newPageSize,
+      after: null,
+      last: null,
+      before: null,
+    };
+
+    if (state === 1) {
+      variables.where = { role: { equal: 'administrator' } };
+    }
+
+    if (state === 2) {
+      fetchUsers({ variables });
+    } else {
+      fetchMembers({ variables });
     }
   };
 
@@ -359,7 +398,7 @@ function OrganizationPeople(): JSX.Element {
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return (
-          <div className={`${styles.flexCenter} ${styles.fullWidthHeight}`}>
+          <div className={orgPeopleStyles.cellContainer}>
             {params.row.rowNumber}
           </div>
         );
@@ -375,30 +414,18 @@ function OrganizationPeople(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        const columnWidth = params.colDef.computedWidth || 150;
-        const imageSize = Math.min(columnWidth * 0.4, 40);
-        // Construct CSS value to avoid i18n linting errors
-        const avatarSizeValue = String(imageSize) + 'px';
         return (
-          <div
-            className={`${styles.flexCenter} ${styles.flexColumn} ${styles.fullWidthHeight}`}
-          >
+          <div className={orgPeopleStyles.profileCell}>
             {params.row?.image ? (
               <img
                 src={params.row.image}
                 alt={tCommon('avatar')}
-                className={styles.avatarImage}
-                style={
-                  { '--avatar-size': avatarSizeValue } as React.CSSProperties
-                }
+                className={orgPeopleStyles.profileImage}
                 crossOrigin="anonymous"
               />
             ) : (
               <div
-                className={`${styles.flexCenter} ${styles.avatarPlaceholder} ${styles.avatarPlaceholderSize}`}
-                style={
-                  { '--avatar-size': avatarSizeValue } as React.CSSProperties
-                }
+                className={orgPeopleStyles.avatarPlaceholder}
                 data-testid="avatar"
               >
                 <Avatar name={params.row.name} />
@@ -422,7 +449,7 @@ function OrganizationPeople(): JSX.Element {
           <Link
             to={`/member/${currentUrl}`}
             state={{ id: params.row.id }}
-            className={`${styles.membername} ${styles.subtleBlueGrey} ${styles.memberNameFontSize}`}
+            className={`${orgPeopleStyles.nameLink} ${styles.membername} ${styles.subtleBlueGrey}`}
           >
             {params.row.name}
           </Link>
@@ -479,15 +506,6 @@ function OrganizationPeople(): JSX.Element {
     disableColumnMenu: true,
     columnBufferPx: COLUMN_BUFFER_PX,
     getRowId: (row: IProcessedRow) => row.id,
-    rowCount:
-      paginationModel.page * PAGE_SIZE +
-      currentRows.length +
-      (paginationMeta.hasNextPage ? PAGE_SIZE : 0),
-    paginationMode: 'server',
-    pagination: true,
-    paginationModel,
-    onPaginationModelChange: handlePaginationModelChange,
-    pageSizeOptions: [PAGE_SIZE],
     loading: memberLoading || userLoading,
     slots: {
       noRowsOverlay: () => (
@@ -498,7 +516,7 @@ function OrganizationPeople(): JSX.Element {
         />
       ),
       loadingOverlay: () => (
-        <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
+        <TableLoader headerTitles={headerTitles} noOfRows={pageSize} />
       ),
     },
     sx: { ...dataGridStyle },
@@ -506,6 +524,9 @@ function OrganizationPeople(): JSX.Element {
     rowHeight: 70,
     isRowSelectable: () => false,
   };
+
+  // Calculate total pages
+  const totalPages = Math.ceil(totalItems / pageSize) || 1;
 
   return (
     <>
@@ -550,6 +571,20 @@ function OrganizationPeople(): JSX.Element {
         columns={columns}
         gridProps={{ ...gridProps }}
       />
+
+      <div className={orgPeopleStyles.paginationWrapper}>
+        <PaginationControl
+          currentPage={currentPage}
+          totalPages={totalPages}
+          pageSize={pageSize}
+          totalItems={totalItems}
+          onPageChange={handlePaginationChange}
+          onPageSizeChange={handlePageSizeChange}
+          pageSizeOptions={[10, 25, 50, 100]}
+          disabled={memberLoading || userLoading}
+        />
+      </div>
+
       {showRemoveModal && selectedMemId && (
         <OrgPeopleListCard
           id={selectedMemId}

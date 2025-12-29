@@ -52,6 +52,16 @@ export function PaginationControl({
 }: InterfacePaginationControlProps): JSX.Element {
   const { t } = useTranslation();
 
+  const getText = (
+    key: string,
+    fallback: string,
+    options?: Record<string, string | number>,
+  ): string => {
+    const translated = t(key, options);
+    // If translation returns the key itself, it means translation is missing
+    return translated === key ? fallback : translated;
+  };
+
   // Calculate navigation states
   const canPrev = currentPage > 1;
   const canNext = currentPage < totalPages;
@@ -145,10 +155,11 @@ export function PaginationControl({
 
       {/* Current Page Display */}
       <span className={styles.pageInfo} aria-live="polite">
-        {t('pagination.pageInfo', {
-          currentPage,
-          totalPages,
-        })}
+        {getText(
+          'pagination.pageInfo',
+          `Page ${currentPage} of ${totalPages}`,
+          { currentPage, totalPages },
+        )}
       </span>
 
       {/* Next Page Button */}
@@ -179,13 +190,13 @@ export function PaginationControl({
 
       {/* Rows Per Page Selector */}
       <label className={styles.pageSizeLabel}>
-        {t('pagination.rowsPerPage')}
+        {getText('pagination.rowsPerPage', 'Rows per page:')}
         <select
           className={styles.pageSizeSelect}
           value={pageSize}
           onChange={(e) => onPageSizeChange(Number(e.target.value))}
           disabled={disabled}
-          aria-label={t('pagination.rowsPerPage')}
+          aria-label={getText('pagination.rowsPerPage', 'Rows per page')}
           data-testid="pageSizeSelect"
         >
           {pageSizeOptions.map((n) => (
@@ -198,11 +209,11 @@ export function PaginationControl({
 
       {/* Item Range Display */}
       <span className={styles.itemRange}>
-        {t('pagination.showing', {
-          startItem,
-          endItem,
-          totalItems,
-        })}
+        {getText(
+          'pagination.showing',
+          `Showing ${startItem}-${endItem} of ${totalItems}`,
+          { startItem, endItem, totalItems },
+        )}
       </span>
     </div>
   );

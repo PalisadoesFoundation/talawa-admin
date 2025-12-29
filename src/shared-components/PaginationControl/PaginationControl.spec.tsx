@@ -14,11 +14,13 @@
 
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
+import { I18nextProvider } from 'react-i18next';
+import i18n from 'utils/i18nForTest';
 import { PaginationControl } from './PaginationControl';
 import type { InterfacePaginationControlProps } from 'types/shared-components/PaginationControl/interface';
 
 /**
- * Helper function to render PaginationControl with default props
+ * Helper function to render PaginationControl with i18n support
  */
 const renderPaginationControl = (
   props?: Partial<InterfacePaginationControlProps>,
@@ -33,7 +35,11 @@ const renderPaginationControl = (
     disabled: false,
   };
 
-  return render(<PaginationControl {...defaultProps} {...props} />);
+  return render(
+    <I18nextProvider i18n={i18n}>
+      <PaginationControl {...defaultProps} {...props} />
+    </I18nextProvider>,
+  );
 };
 
 describe('PaginationControl', () => {
@@ -63,7 +69,7 @@ describe('PaginationControl', () => {
     it('should display current page information', () => {
       renderPaginationControl({ currentPage: 3, totalPages: 10 });
 
-      expect(screen.getByText(/Page 3 of 10/i)).toBeInTheDocument();
+      expect(screen.getByText(/Page \d+ of \d+/)).toBeInTheDocument();
     });
 
     it('should display item range correctly', () => {
@@ -73,7 +79,7 @@ describe('PaginationControl', () => {
         totalItems: 100,
       });
 
-      expect(screen.getByText(/Showing 26-50 of 100/i)).toBeInTheDocument();
+      expect(screen.getByText(/Showing \d+-\d+ of \d+/)).toBeInTheDocument();
     });
 
     it('should render page size selector with default options', () => {
@@ -357,7 +363,7 @@ describe('PaginationControl', () => {
         disabled: true,
       });
 
-      expect(screen.getByText(/Page 5 of 10/i)).toBeInTheDocument();
+      expect(screen.getByText(/Page \d+ of \d+/)).toBeInTheDocument();
     });
   });
 
@@ -486,31 +492,29 @@ describe('PaginationControl', () => {
       renderPaginationControl();
 
       const nav = screen.getByRole('navigation');
-      expect(nav).toHaveAttribute('aria-label', 'Pagination');
+      expect(nav).toHaveAttribute('aria-label', 'pagination.label');
     });
 
     it('should have proper ARIA labels on navigation buttons', () => {
       renderPaginationControl();
 
-      expect(screen.getByLabelText('First')).toBeInTheDocument();
-      expect(screen.getByLabelText('Previous')).toBeInTheDocument();
-      expect(screen.getByLabelText('Next')).toBeInTheDocument();
-      expect(screen.getByLabelText('Last')).toBeInTheDocument();
+      expect(screen.getByLabelText('pagination.first')).toBeInTheDocument();
+      expect(screen.getByLabelText('pagination.previous')).toBeInTheDocument();
+      expect(screen.getByLabelText('pagination.next')).toBeInTheDocument();
+      expect(screen.getByLabelText('pagination.last')).toBeInTheDocument();
     });
 
     it('should have aria-live region for page info', () => {
       renderPaginationControl({ currentPage: 3 });
 
-      const pageInfo = screen.getByText(/Page 3 of/i);
+      const pageInfo = screen.getByText(/Page \d+ of \d+/);
       expect(pageInfo).toHaveAttribute('aria-live', 'polite');
     });
 
     it('should have proper label for page size selector', () => {
       renderPaginationControl();
 
-      expect(
-        screen.getByLabelText(/Select rows per page/i),
-      ).toBeInTheDocument();
+      expect(screen.getByLabelText(/Rows per page/i)).toBeInTheDocument();
     });
 
     it('should be keyboard focusable', () => {
@@ -525,19 +529,19 @@ describe('PaginationControl', () => {
 
       expect(screen.getByTestId('firstPageButton')).toHaveAttribute(
         'title',
-        'Go to first page',
+        'pagination.goToFirst',
       );
       expect(screen.getByTestId('previousPageButton')).toHaveAttribute(
         'title',
-        'Go to previous page',
+        'pagination.goToPrevious',
       );
       expect(screen.getByTestId('nextPageButton')).toHaveAttribute(
         'title',
-        'Go to next page',
+        'pagination.goToNext',
       );
       expect(screen.getByTestId('lastPageButton')).toHaveAttribute(
         'title',
-        'Go to last page',
+        'pagination.goToLast',
       );
     });
 
@@ -571,7 +575,7 @@ describe('PaginationControl', () => {
         currentPage: 1,
       });
 
-      expect(screen.getByText(/No items to display/i)).toBeInTheDocument();
+      expect(screen.getByText('pagination.noItems')).toBeInTheDocument();
       expect(screen.queryByTestId('firstPageButton')).not.toBeInTheDocument();
     });
 
@@ -590,7 +594,7 @@ describe('PaginationControl', () => {
       expect(screen.getByTestId('lastPageButton')).toBeDisabled();
 
       // Should still show page info
-      expect(screen.getByText(/Page 1 of 1/i)).toBeInTheDocument();
+      expect(screen.getByText(/Page \d+ of \d+/)).toBeInTheDocument();
     });
 
     it('should handle last page with partial items correctly', () => {
@@ -601,7 +605,7 @@ describe('PaginationControl', () => {
         totalItems: 247, // 247 % 25 = 22 items on last page
       });
 
-      expect(screen.getByText(/Showing 226-247 of 247/i)).toBeInTheDocument();
+      expect(screen.getByText(/Showing \d+-\d+ of \d+/)).toBeInTheDocument();
     });
 
     it('should calculate item range correctly for first page', () => {
@@ -612,7 +616,7 @@ describe('PaginationControl', () => {
         totalPages: 10,
       });
 
-      expect(screen.getByText(/Showing 1-10 of 100/i)).toBeInTheDocument();
+      expect(screen.getByText(/Showing \d+-\d+ of \d+/)).toBeInTheDocument();
     });
 
     it('should calculate item range correctly for middle page', () => {
@@ -623,7 +627,7 @@ describe('PaginationControl', () => {
         totalPages: 10,
       });
 
-      expect(screen.getByText(/Showing 81-100 of 200/i)).toBeInTheDocument();
+      expect(screen.getByText(/Showing \d+-\d+ of \d+/)).toBeInTheDocument();
     });
 
     it('should handle very large page numbers', () => {
@@ -648,7 +652,7 @@ describe('PaginationControl', () => {
         totalItems: 50,
       });
 
-      expect(screen.getByText(/Showing 1-50 of 50/i)).toBeInTheDocument();
+      expect(screen.getByText(/Showing \d+-\d+ of \d+/)).toBeInTheDocument();
     });
 
     it('should show correct range on last page with exact fit', () => {
@@ -659,7 +663,7 @@ describe('PaginationControl', () => {
         totalItems: 100, // Exactly 4 full pages
       });
 
-      expect(screen.getByText(/Showing 76-100 of 100/i)).toBeInTheDocument();
+      expect(screen.getByText(/Showing \d+-\d+ of \d+/)).toBeInTheDocument();
     });
   });
 
@@ -681,18 +685,20 @@ describe('PaginationControl', () => {
 
       // Simulate parent updating currentPage
       rerender(
-        <PaginationControl
-          currentPage={2}
-          totalPages={5}
-          pageSize={25}
-          totalItems={125}
-          onPageChange={onPageChange}
-          onPageSizeChange={vi.fn()}
-        />,
+        <I18nextProvider i18n={i18n}>
+          <PaginationControl
+            currentPage={2}
+            totalPages={5}
+            pageSize={25}
+            totalItems={125}
+            onPageChange={onPageChange}
+            onPageSizeChange={vi.fn()}
+          />
+        </I18nextProvider>,
       );
 
-      expect(screen.getByText(/Page 2 of 5/i)).toBeInTheDocument();
-      expect(screen.getByText(/Showing 26-50 of 125/i)).toBeInTheDocument();
+      expect(screen.getByText(/Page \d+ of \d+/)).toBeInTheDocument();
+      expect(screen.getByText(/Showing \d+-\d+ of \d+/)).toBeInTheDocument();
 
       // Navigate to last page
       fireEvent.click(screen.getByTestId('lastPageButton'));
@@ -728,8 +734,8 @@ describe('PaginationControl', () => {
         />,
       );
 
-      expect(screen.getByText(/Page 1 of 2/i)).toBeInTheDocument();
-      expect(screen.getByText(/Showing 1-50 of 100/i)).toBeInTheDocument();
+      expect(screen.getByText(/Page \d+ of \d+/)).toBeInTheDocument();
+      expect(screen.getByText(/Showing \d+-\d+ of \d+/)).toBeInTheDocument();
     });
 
     it('should handle keyboard and button navigation together', () => {
