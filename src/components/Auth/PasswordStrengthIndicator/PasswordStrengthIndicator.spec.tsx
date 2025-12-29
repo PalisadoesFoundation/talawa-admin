@@ -1,9 +1,30 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { describe, test, expect } from 'vitest';
+import { describe, test, expect, afterEach, vi } from 'vitest';
+
+// Mock i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        requirement_min_length: 'At least 8 characters',
+        requirement_lowercase: 'Contains lowercase',
+        requirement_uppercase: 'Contains uppercase',
+        requirement_number: 'Contains a number',
+        requirement_special_char: 'Contains a special character',
+      };
+      return translations[key] || key;
+    },
+  }),
+}));
+
 import { PasswordStrengthIndicator } from './PasswordStrengthIndicator';
 
 describe('PasswordStrengthIndicator', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   describe('Basic Rendering', () => {
     test('renders all 5 requirement indicators', () => {
       render(<PasswordStrengthIndicator password="" />);
