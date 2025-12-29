@@ -695,13 +695,18 @@ describe('PostCard', () => {
     const editButton = await screen.findByTestId('edit-post-menu-item');
     await userEvent.click(editButton);
 
-    expect(screen.getByText('Edit Post')).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { name: 'Edit Post' }),
+    ).toBeInTheDocument();
 
     const cancelButton = screen.getByRole('button', { name: 'close' });
     await userEvent.click(cancelButton);
 
-    // Just verify that the test completes without throwing errors
-    // The modal closing behavior might vary depending on implementation
+    await waitFor(() => {
+      expect(
+        screen.queryByRole('heading', { name: 'Edit Post' }),
+      ).not.toBeInTheDocument();
+    });
   });
 
   test('deletes post when delete button is clicked', async () => {

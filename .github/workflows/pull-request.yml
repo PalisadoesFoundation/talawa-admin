@@ -273,16 +273,16 @@ jobs:
           HEAD_SHA="${{ github.event.pull_request.head.sha || github.sha }}"
           BASE_SHA=$(git merge-base "${{ github.event.pull_request.base.sha }}" "$HEAD_SHA")
 
-          # Get all changed files
-          CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRD "$BASE_SHA" "$HEAD_SHA" | tr '\n' ' ')
+          # Get all changed files (null-terminated for safety)
+          git diff --name-only -z --diff-filter=ACMRT "$BASE_SHA" "$HEAD_SHA" > /tmp/changed_files.txt
 
-          if [ -z "$CHANGED_FILES" ]; then
+          if [ ! -s /tmp/changed_files.txt ]; then
              echo "No files changed."
              exit 0
           fi
 
           # Run the sensitive file check script
-          python .github/workflows/scripts/sensitive_file_check.py --config .github/workflows/config/sensitive_files.txt --files $CHANGED_FILES
+          python .github/workflows/scripts/sensitive_file_check.py --config .github/workflows/config/sensitive_files.txt --files-from /tmp/changed_files.txt
 
   Count-Changed-Files:
     if: ${{ github.actor != 'dependabot[bot]' }}
@@ -905,8 +905,8 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python 3.9
-        uses: actions/setup-python@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: 3.9
 

@@ -21,7 +21,6 @@ Note:
 
 """
 import argparse
-import os
 import re
 import sys
 
@@ -82,9 +81,7 @@ def arg_parser_resolver():
     Returns:
         result: Parsed argument object
     """
-    parser = argparse.ArgumentParser(
-        description="Check for sensitive file changes."
-    )
+    parser = argparse.ArgumentParser(description="Check for sensitive file changes.")
     parser.add_argument(
         "--config",
         type=str,
@@ -97,6 +94,11 @@ def arg_parser_resolver():
         nargs="+",
         default=[],
         help="List of files to check.",
+    )
+    parser.add_argument(
+        "--files-from",
+        type=str,
+        help="Path to a file containing a list of files to check (null-terminated or newline-separated).",
     )
     return parser.parse_args()
 
@@ -120,12 +122,35 @@ def main():
     """
     args = arg_parser_resolver()
 
-    if not args.files:
+    files_to_check = []
+    if args.files:
+        # Flatten file list and handle newlines (fix for shell quoting)
+        for item in args.files:
+            files_to_check.extend([f.strip() for f in item.split("\n") if f.strip()])
+    elif args.files_from:
+        try:
+            with open(args.files_from, "rb") as f:
+                content = f.read()
+                # Check if content has null bytes, implying null-terminated (-z)
+                if b"\0" in content:
+                    files_to_check = [
+                        f.decode("utf-8") for f in content.split(b"\0") if f
+                    ]
+                else:
+                    files_to_check = [
+                        f.decode("utf-8").strip()
+                        for f in content.split(b"\n")
+                        if f.strip()
+                    ]
+        except FileNotFoundError:
+            print(f"Error: File list file not found at {args.files_from}")
+            sys.exit(1)
+    else:
         print("No files provided to check.")
         sys.exit(0)
 
     patterns = load_patterns(args.config)
-    sensitive_files = check_files(args.files, patterns)
+    sensitive_files = check_files(files_to_check, patterns)
 
     if sensitive_files:
         print("::error::Unauthorized changes detected in sensitive files:")
