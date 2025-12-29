@@ -262,6 +262,53 @@ This command installs TypeScript globally on your system so that it can be acces
 
 Proceed to the next section.
 
+### Install Python (Required for Contributors)
+
+Talawa Admin uses several Python scripts for code quality checks that run:
+
+- In GitHub Actions (CI)
+- Locally via Husky pre-commit hooks
+
+To avoid pre-commit failures and CI errors, contributors **must install Python and
+the required dependencies before committing code**.
+
+```note
+This step is required only for contributors. End users running Talawa Admin do not need Python.
+```
+
+#### Prerequisites
+
+- Python **3.10 or later**
+- `pip` available in PATH
+
+You can verify your Python installation by running:
+
+```bash
+python --version
+pip --version
+```
+
+#### Install required Python dependencies
+
+From the repository root, run:
+
+```bash
+pip install -r .github/workflows/requirements.txt
+```
+
+If these dependencies are missing, Husky pre-commit checks will fail
+and prevent commits.
+
+#### Verify installation (optional)
+
+You can verify your setup by running:
+
+```bash
+python .github/workflows/scripts/check_python_deps.py
+```
+
+If no output is shown, your Python environment is correctly configured.
+
 ### Install The Required Packages
 
 This section covers how to install additional required packages.
