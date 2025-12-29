@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
-import { MemoryRouter, Routes, Route } from 'react-router';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -1495,5 +1495,73 @@ describe('OrganizationPeople', () => {
 
     vi.doUnmock('shared-components/ReportingTable/ReportingTable');
     vi.resetModules();
+  });
+
+  test('renders breadcrumbs navigation with correct items', async () => {
+    const mocks = [
+      createMemberConnectionMock({
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      }),
+    ];
+    const link = new StaticMockLink(mocks, true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Routes>
+            <Route path="/orgpeople/:orgId" element={
+              <Provider store={store}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <OrganizationPeople />
+                </I18nextProvider>
+              </Provider>
+            } />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      // Verify breadcrumbs navigation is present
+      expect(screen.getByRole('navigation')).toBeInTheDocument();
+    });
+  });
+
+  test('redirects to /orglist when orgId is missing', async () => {
+    const mocks = [
+      createMemberConnectionMock({
+        orgId: '',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      }),
+    ];
+    const link = new StaticMockLink(mocks, true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/orgpeople/']}>
+          <Routes>
+            <Route path="/orgpeople/:orgId?" element={
+              <Provider store={store}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <OrganizationPeople />
+                </I18nextProvider>
+              </Provider>
+            } />
+            <Route path="/orglist" element={<div>Org List Page</div>} />
+          </Routes>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Org List Page')).toBeInTheDocument();
+    });
   });
 });

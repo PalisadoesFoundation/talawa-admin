@@ -8404,7 +8404,7 @@ form {
 
 .breadcrumbsContainer {
   margin: 1rem 0 0.5rem 0;
-  padding: 0;
+  padding-left: 0.5rem;
 }
 
 .breadcrumbsContainer nav {

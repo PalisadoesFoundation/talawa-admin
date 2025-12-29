@@ -21,7 +21,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import { Provider } from 'react-redux';
-import { MemoryRouter, Route, Routes } from 'react-router';
+import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import OrganizationVenues from './OrganizationVenues';
 import { store } from 'state/store';
@@ -501,5 +501,31 @@ describe('Organisation Venues Error Handling', () => {
       const venues = screen.getAllByTestId(/^venue-item/);
       expect(venues).toHaveLength(3);
     });
+  });
+
+  test('renders breadcrumbs navigation with correct items', () => {
+    const link: ApolloLink = new StaticMockLink(MOCKS, true);
+
+    const renderOrganizationVenue = (): RenderResult =>
+      render(
+        <MockedProvider link={link} addTypename={false}>
+          <MemoryRouter initialEntries={['/orgvenues/orgId']}>
+            <Routes>
+              <Route path="/orgvenues/:orgId" element={
+                <Provider store={store}>
+                  <I18nextProvider i18n={i18nForTest}>
+                    <OrganizationVenues />
+                  </I18nextProvider>
+                </Provider>
+              } />
+            </Routes>
+          </MemoryRouter>
+        </MockedProvider>,
+      );
+
+    renderOrganizationVenue();
+
+    // Verify breadcrumbs navigation is present
+    expect(screen.getByRole('navigation')).toBeInTheDocument();
   });
 });

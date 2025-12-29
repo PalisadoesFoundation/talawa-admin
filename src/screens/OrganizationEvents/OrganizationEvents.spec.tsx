@@ -49,9 +49,9 @@ const { routerMocks } = vi.hoisted(() => {
   };
 });
 
-vi.mock('react-router', async () => {
+vi.mock('react-router-dom', async () => {
   const actual =
-    await vi.importActual<typeof import('react-router')>('react-router');
+    await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
   return {
     ...actual,
     useParams: routerMocks.useParams,
@@ -1034,6 +1034,30 @@ describe('OrganizationEvents - Additional Coverage Tests', () => {
     });
 
     consoleSpy.mockRestore();
+  });
+
+  test('redirects to /orglist when orgId is missing', async () => {
+    routerMocks.useParams.mockReturnValue({});
+
+    const { container } = render(
+      <MockedProvider link={defaultLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18n}>
+                  <OrganizationEvents />
+                </I18nextProvider>
+              </ThemeProvider>
+            </Provider>
+          </LocalizationProvider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(window.location.pathname).toBe('/orglist');
+    });
   });
 
   // Test for empty events array handling
