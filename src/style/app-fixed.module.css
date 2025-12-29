@@ -32,6 +32,10 @@
  *   `.subtleBlueGrey` (for blue Text)
  *   `.activeTab` (for tabs which are active)
  *   `.inActiveTab` (for tabs which are not selected)
+ *   `.dataTableBase` (for styling data tables)
+ *   `.dataEmptyState` (for empty state displays)
+ *   `.dataErrorState` (for error state displays)
+ *   `.visuallyHidden` (for accessibility, hides content visually but keeps it accessible to screen readers)
  *
  */
 :root {
@@ -307,6 +311,7 @@
   --colorWhite: #555555;
 
   --errorIcon-color: #ff4d4f;
+  --errorState-color: #b00020;
 
   --tagsBreadCrumbs-color-hover: #0000ff;
   --tagsBreadCrumbs-color: #808080;
