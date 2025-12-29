@@ -67,6 +67,9 @@
     "organizations": "Organizaciones",
     "accountLocked": "Su cuenta ha sido bloqueada temporalmente debido a demasiados intentos fallidos de inicio de sesión. Por favor, inténtelo de nuevo más tarde.",
     "accountLockedWithTimer": "Su cuenta ha sido bloqueada temporalmente. Por favor, inténtelo de nuevo en {{minutes}} minuto(s)."
+    "backToLogin": "Volver al inicio de sesión",
+    "communityLogo": "Logo de la comunidad",
+    "organizations": "Organizaciones"
   },
   "signOut": {
     "retryPrompt": "Error al Cerrar sesión. ¿Reintentar?",
@@ -948,10 +951,10 @@
     "OTPsent": "OTP se envía a su correo electrónico registrado"
   },
   "pageNotFound": {
+    "404": "404",
     "title": "404 No encontrado",
     "talawaAdmin": "Administrador de Talawa",
     "talawaUser": "Usuario de Talawa",
-    "404": "404",
     "notFoundMsg": "¡Ups! ¡No se encontró la página que solicitaste!",
     "backToHome": "De vuelta a casa"
   },
@@ -1187,7 +1190,8 @@
     "searchByName": "Buscar por nombre",
     "searchUsers": "Buscar usuarios",
     "searchOrganizations": "Buscar Organizaciones",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "title": "Organizaciones"
   },
   "userSidebarOrg": {
     "yourOrganizations": "Tus Organizaciones",
@@ -1396,7 +1400,8 @@
     "postalCode": "Código Postal",
     "city": "Ciudad",
     "description": "Descripción",
-    "enterDescription": "Ingrese descripción"
+    "enterDescription": "Ingrese descripción",
+    "title": "Ajustes"
   },
   "donate": {
     "title": "Donaciones",
@@ -1856,6 +1861,14 @@
     "signingOut": "Cerrando sesión...",
     "retryPrompt": "Error al revocar la sesión. ¿Reintentar?",
     "breadcrumb": "miga de pan",
-    "action": "Acción"
+    "action": "Acción",
+    "selectLanguage": "Seleccionar Idioma",
+    "userMenu": "Menú de Usuario",
+    "settings": "Ajustes",
+    "logout": "Cerrar sesión",
+    "logoutFailed": "Falló el cierre de sesión",
+    "title": "Portal de Usuario",
+    "talawa": "Talawa",
+    "talawaBranding": "Marca Talawa"
   }
 }

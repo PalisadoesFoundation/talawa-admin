@@ -4,18 +4,40 @@
 
 # Interface: InterfaceFormFieldProps
 
-Defined in: [src/types/Auth/FormField/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L7)
+Defined in: [src/types/Auth/FormField/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L9)
 
-Props interface for the FormField component.
-Defines all available properties for form input fields with validation support.
+Props for the FormField component.
+
+## Remarks
+
+Supports optional validator callbacks and aria-live behaviors for accessibility.
 
 ## Properties
+
+### ariaLive?
+
+> `optional` **ariaLive**: `boolean`
+
+Defined in: [src/types/Auth/FormField/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L51)
+
+Whether to use aria-live for dynamic error announcements.
+When true, error messages are announced to screen readers.
+
+#### Default
+
+```ts
+true
+```
+
+***
 
 ### disabled?
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [src/types/Auth/FormField/interface.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L16)
+Defined in: [src/types/Auth/FormField/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L35)
+
+Whether the input is disabled
 
 ***
 
@@ -23,7 +45,19 @@ Defined in: [src/types/Auth/FormField/interface.ts:16](https://github.com/Palisa
 
 > `optional` **error**: `string`
 
-Defined in: [src/types/Auth/FormField/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L18)
+Defined in: [src/types/Auth/FormField/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L41)
+
+Error message to display - null or undefined means no error
+
+***
+
+### helperText?
+
+> `optional` **helperText**: `string`
+
+Defined in: [src/types/Auth/FormField/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L44)
+
+Helper text to display below the input when no error
 
 ***
 
@@ -31,7 +65,9 @@ Defined in: [src/types/Auth/FormField/interface.ts:18](https://github.com/Palisa
 
 > `optional` **label**: `string`
 
-Defined in: [src/types/Auth/FormField/interface.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L8)
+Defined in: [src/types/Auth/FormField/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L11)
+
+Optional label text displayed above the input
 
 ***
 
@@ -39,7 +75,9 @@ Defined in: [src/types/Auth/FormField/interface.ts:8](https://github.com/Palisad
 
 > **name**: `string`
 
-Defined in: [src/types/Auth/FormField/interface.ts:9](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L9)
+Defined in: [src/types/Auth/FormField/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L14)
+
+Name attribute for the input field (required for form handling)
 
 ***
 
@@ -47,7 +85,9 @@ Defined in: [src/types/Auth/FormField/interface.ts:9](https://github.com/Palisad
 
 > `optional` **onBlur**: (`e`) => `void`
 
-Defined in: [src/types/Auth/FormField/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L13)
+Defined in: [src/types/Auth/FormField/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L26)
+
+Blur handler called when input loses focus
 
 #### Parameters
 
@@ -65,7 +105,9 @@ Defined in: [src/types/Auth/FormField/interface.ts:13](https://github.com/Palisa
 
 > **onChange**: (`e`) => `void`
 
-Defined in: [src/types/Auth/FormField/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L12)
+Defined in: [src/types/Auth/FormField/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L23)
+
+Change handler called when input value changes
 
 #### Parameters
 
@@ -83,7 +125,9 @@ Defined in: [src/types/Auth/FormField/interface.ts:12](https://github.com/Palisa
 
 > `optional` **placeholder**: `string`
 
-Defined in: [src/types/Auth/FormField/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L14)
+Defined in: [src/types/Auth/FormField/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L29)
+
+Placeholder text for the input
 
 ***
 
@@ -91,7 +135,9 @@ Defined in: [src/types/Auth/FormField/interface.ts:14](https://github.com/Palisa
 
 > `optional` **required**: `boolean`
 
-Defined in: [src/types/Auth/FormField/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L15)
+Defined in: [src/types/Auth/FormField/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L32)
+
+Whether the field is required - shows asterisk if true
 
 ***
 
@@ -99,7 +145,9 @@ Defined in: [src/types/Auth/FormField/interface.ts:15](https://github.com/Palisa
 
 > `optional` **testId**: `string`
 
-Defined in: [src/types/Auth/FormField/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L17)
+Defined in: [src/types/Auth/FormField/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L38)
+
+Test ID for testing purposes
 
 ***
 
@@ -107,7 +155,9 @@ Defined in: [src/types/Auth/FormField/interface.ts:17](https://github.com/Palisa
 
 > `optional` **type**: `"text"` \| `"email"` \| `"password"` \| `"tel"`
 
-Defined in: [src/types/Auth/FormField/interface.ts:10](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L10)
+Defined in: [src/types/Auth/FormField/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L17)
+
+Input type - defaults to 'text'
 
 ***
 
@@ -115,4 +165,6 @@ Defined in: [src/types/Auth/FormField/interface.ts:10](https://github.com/Palisa
 
 > **value**: `string`
 
-Defined in: [src/types/Auth/FormField/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L11)
+Defined in: [src/types/Auth/FormField/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Auth/FormField/interface.ts#L20)
+
+Current input value

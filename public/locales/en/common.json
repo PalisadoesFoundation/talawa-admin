@@ -182,5 +182,8 @@
   "organizations": "Organizations",
   "createEvent": "Create Event",
   "eventCreated": "Event created successfully",
-  "eventDetails": "Event Details"
+  "eventDetails": "Event Details",
+  "selectLanguage": "Select Language",
+  "talawa": "Talawa",
+  "talawaBranding": "Talawa Branding"
 }
