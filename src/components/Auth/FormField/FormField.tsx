@@ -3,23 +3,45 @@ import { Form } from 'react-bootstrap';
 import type { InterfaceFormFieldProps } from '../../../types/Auth/FormField/interface';
 
 /**
- * Reusable form field component with accessibility features and error handling.
- * Supports text, email, password, and tel input types with Bootstrap styling.
+ * Reusable form field component with validation and accessibility support.
+ *
+ * @remarks
+ * This component integrates with Phase 1 validators via the `error` prop
+ * and provides aria-live announcements for screen readers.
+ *
+ * @example
+ * ```tsx
+ * <FormField
+ *   label="Email"
+ *   name="email"
+ *   type="email"
+ *   value={email}
+ *   onChange={handleChange}
+ *   onBlur={handleBlur}
+ *   error={emailError}
+ *   required
+ * />
+ * ```
  */
 export const FormField: React.FC<InterfaceFormFieldProps> = ({
-  name,
   label,
+  name,
   type = 'text',
   value,
   onChange,
   onBlur,
   placeholder,
-  required,
-  disabled,
-  error,
+  required = false,
+  disabled = false,
   testId,
+  error,
+  helperText,
+  ariaLive = true,
 }) => {
-  const errorId = error ? `${name}-error` : undefined;
+  const hasError = !!error;
+  const errorId = hasError ? `${name}-error` : undefined;
+  const helperId = helperText && !hasError ? `${name}-helper` : undefined;
+  const describedBy = errorId || helperId || undefined;
 
   return (
     <Form.Group className="mb-3" controlId={name}>
@@ -29,6 +51,7 @@ export const FormField: React.FC<InterfaceFormFieldProps> = ({
           {required && <span className="text-danger"> *</span>}
         </Form.Label>
       )}
+
       <Form.Control
         type={type}
         name={name}
@@ -37,15 +60,33 @@ export const FormField: React.FC<InterfaceFormFieldProps> = ({
         onBlur={onBlur}
         placeholder={placeholder}
         disabled={disabled}
-        isInvalid={!!error}
-        aria-describedby={errorId}
+        isInvalid={hasError}
+        aria-invalid={hasError}
+        aria-describedby={describedBy}
         data-testid={testId}
       />
-      {error && (
-        <Form.Control.Feedback type="invalid" id={errorId} className="d-block">
+
+      {/* Error message with aria-live for screen reader announcements */}
+      {hasError && (
+        <Form.Control.Feedback
+          type="invalid"
+          id={errorId}
+          className="d-block"
+          role={ariaLive ? 'status' : undefined}
+          aria-live={ariaLive ? 'polite' : undefined}
+        >
           {error}
         </Form.Control.Feedback>
+      )}
+
+      {/* Helper text displayed when no error */}
+      {helperText && !hasError && (
+        <Form.Text id={helperId} className="text-muted">
+          {helperText}
+        </Form.Text>
       )}
     </Form.Group>
   );
 };
+
+export default FormField;
