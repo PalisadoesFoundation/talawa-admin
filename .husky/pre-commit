@@ -20,7 +20,16 @@ pnpm run check-localstorage
 # as they cannot contain UI styling code
 CSS_STAGED=$(git diff --cached --name-only --diff-filter=ACMRT | grep -v '^src/utils/' | grep -v '^src/types/' || true)
 if [ -n "$CSS_STAGED" ]; then
-  echo "$CSS_STAGED" | xargs python3 .github/workflows/scripts/css_check.py --files
+  # Find python3 or fallback to python
+  if command -v python3 >/dev/null 2>&1; then
+    PYTHON_CMD=python3
+  elif command -v python >/dev/null 2>&1; then
+    PYTHON_CMD=python
+  else
+    echo "Error: Python is not installed." >&2
+    exit 1
+  fi
+  echo "$CSS_STAGED" | xargs $PYTHON_CMD .github/workflows/scripts/css_check.py --files
 fi
 
 git add .
