@@ -266,6 +266,96 @@ const mockWithExtraUsers = {
   },
 };
 
+const manyUsersMock = {
+  request: {
+    query: FUND_CAMPAIGN_PLEDGE,
+    variables: { input: { id: 'fundCampaignId' } },
+  },
+  result: {
+    data: {
+      fundCampaign: {
+        __typename: 'FundCampaign',
+        id: '1',
+        name: 'Test Campaign',
+        startAt: '2023-01-01T00:00:00Z',
+        endAt: '2024-12-31T23:59:59Z',
+        currencyCode: 'USD',
+        goalAmount: 1000,
+        pledges: {
+          __typename: 'PledgeConnection',
+          edges: [
+            {
+              __typename: 'PledgeEdge',
+              node: {
+                __typename: 'Pledge',
+                id: '1',
+                amount: 100,
+                createdAt: '2024-01-01T00:00:00Z',
+                note: 'Test note',
+                campaign: {
+                  __typename: 'FundCampaign',
+                  id: '1',
+                  name: 'Test Campaign',
+                },
+                pledger: {
+                  __typename: 'User',
+                  id: '1',
+                  name: 'Main User 1',
+                  avatarURL: null,
+                },
+                users: [
+                  {
+                    __typename: 'User',
+                    id: '1',
+                    name: 'Main User 1',
+                    avatarURL: null,
+                  },
+                  {
+                    __typename: 'User',
+                    id: '2',
+                    name: 'Extra User 1',
+                    avatarURL: null,
+                  },
+                  {
+                    __typename: 'User',
+                    id: '3',
+                    name: 'Extra User 2',
+                    avatarURL: null,
+                  },
+                  {
+                    __typename: 'User',
+                    id: '4',
+                    name: 'Extra User 3',
+                    avatarURL: null,
+                  },
+                  {
+                    __typename: 'User',
+                    id: '5',
+                    name: 'Extra User 4',
+                    avatarURL: null,
+                  },
+                  {
+                    __typename: 'User',
+                    id: '6',
+                    name: 'Extra User 5',
+                    avatarURL: null,
+                  },
+                  {
+                    __typename: 'User',
+                    id: '7',
+                    name: 'Extra User 6',
+                    avatarURL: null,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    },
+  },
+};
+
 const link1 = new StaticMockLink([updatedMocks]);
 const link2 = new StaticMockLink(MOCKS_FUND_CAMPAIGN_PLEDGE_ERROR);
 const link3 = new StaticMockLink([EMPTY_MOCK]);
@@ -703,6 +793,18 @@ describe('Testing Campaign Pledge Screen', () => {
     await userEvent.keyboard('{Escape}');
     await waitFor(() => {
       expect(screen.queryByTestId('extra-users-popup')).not.toBeInTheDocument();
+    });
+  });
+
+  it('renders pledge row when note is present', async () => {
+    const manyUsersLink = new StaticMockLink([manyUsersMock]);
+    renderFundCampaignPledge(manyUsersLink);
+
+    // Wait for the amount cell to be rendered for the pledge
+    await waitFor(async () => {
+      const amountCells = await screen.findAllByTestId('amountCell');
+      expect(amountCells.length).toBeGreaterThan(0);
+      expect(amountCells[0]).toHaveTextContent('$100');
     });
   });
 

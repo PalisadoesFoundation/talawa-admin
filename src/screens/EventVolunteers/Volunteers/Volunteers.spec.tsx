@@ -270,6 +270,17 @@ describe('Testing Volunteers Screen', () => {
     expect(volunteerName[0]).toHaveTextContent('Teresa Bradley');
   });
 
+  it('renders avatar image when user has avatarURL (img-url)', async () => {
+    renderVolunteers(link1);
+
+    await waitFor(() => {
+      // Find the volunteer that has an avatarURL (Bruce Graza)
+      const img = screen.getByTestId('volunteer_image');
+      expect(img).toBeInTheDocument();
+      expect(img).toHaveAttribute('src', 'img-url');
+    });
+  });
+
   it('should render screen with No Volunteers', async () => {
     renderVolunteers(link3);
 
