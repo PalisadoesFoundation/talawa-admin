@@ -8400,6 +8400,24 @@ form {
   max-height: 120px;
 }
 
+/* -- Breadcrumbs Container -- */
+
+.breadcrumbsContainer {
+  margin: 1rem 0 0.5rem 0;
+  padding: 0;
+}
+
+.breadcrumbsContainer nav {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.breadcrumbsContainer nav ol {
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+}
+
 /* -- FundModal.tsx -- */
 
 .fundModal {

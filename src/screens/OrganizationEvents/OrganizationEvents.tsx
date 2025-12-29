@@ -30,7 +30,7 @@ import {
 import dayjs from 'dayjs';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import useLocalStorage from 'utils/useLocalstorage';
-import { useParams } from 'react-router';
+import { Navigate, useParams } from 'react-router';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
@@ -38,6 +38,8 @@ import CreateEventModal from './CreateEventModal';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import { Button } from 'react-bootstrap';
 import AddIcon from '@mui/icons-material/Add';
+import { BreadcrumbsComponent } from 'shared-components/BreadcrumbsComponent';
+import type { IBreadcrumbItem } from 'types/shared-components/BreadcrumbsComponent/interface';
 
 // Define the type for an event edge
 interface IEventEdge {
@@ -94,16 +96,34 @@ function organizationEvents(): JSX.Element {
     keyPrefix: 'organizationEvents',
   });
   const { getItem } = useLocalStorage();
+  const { orgId: currentUrl } = useParams();
 
   useEffect(() => {
     document.title = t('title');
   }, [t]);
+
+  // Redirect to orglist if orgId is missing
+  if (!currentUrl) {
+    return <Navigate to="/orglist" replace />;
+  }
+
+  // Breadcrumb items for organization -> events navigation
+  const breadcrumbItems: IBreadcrumbItem[] = [
+    {
+      translationKey: 'organization',
+      to: `/orgdash/${currentUrl}`,
+    },
+    {
+      translationKey: 'Events',
+      isCurrent: true,
+    },
+  ];
+
   const [createEventmodalisOpen, setCreateEventmodalisOpen] = useState(false);
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
   const [searchByName, setSearchByName] = useState('');
-  const { orgId: currentUrl } = useParams();
 
   const showInviteModal = (): void => setCreateEventmodalisOpen(true);
   const hideCreateEventModal = (): void => setCreateEventmodalisOpen(false);
@@ -235,46 +255,47 @@ function organizationEvents(): JSX.Element {
   return (
     <LoadingState isLoading={orgLoading} variant="spinner" size="lg">
       <>
-        <div className={styles.mainpageright}>
-          <div className={styles.justifyspOrganizationEvents}>
-            <PageHeader
-              search={{
-                placeholder: t('searchEventName'),
-                onSearch: (value: string) => {
-                  setSearchByName(value);
-                },
-                inputTestId: 'searchEvent',
-                buttonTestId: 'searchButton',
-              }}
-              sorting={[
-                {
-                  title: t('viewType'),
-                  selected: viewType,
-                  options: [
-                    { label: ViewType.MONTH, value: ViewType.MONTH },
-                    { label: ViewType.DAY, value: ViewType.DAY },
-                    { label: ViewType.YEAR, value: ViewType.YEAR },
-                  ],
-                  onChange: (value) => handleChangeView(value.toString()),
-                  testIdPrefix: 'selectViewType',
-                },
-              ]}
-              showEventTypeFilter={true}
-              actions={
-                <Button
-                  className={styles.dropdown}
-                  onClick={showInviteModal}
-                  data-testid="createEventModalBtn"
-                  data-cy="createEventModalBtn"
-                >
-                  <div>
-                    <AddIcon className={styles.addIconStyle} />
-                    <span>{t('createEvent')}</span>
-                  </div>
-                </Button>
-              }
-            />
-          </div>
+        <div className={styles.breadcrumbsContainer}>
+          <BreadcrumbsComponent items={breadcrumbItems} />
+        </div>
+        <div className={styles.justifyspOrganizationEvents}>
+          <PageHeader
+            search={{
+              placeholder: t('searchEventName'),
+              onSearch: (value: string) => {
+                setSearchByName(value);
+              },
+              inputTestId: 'searchEvent',
+              buttonTestId: 'searchButton',
+            }}
+            sorting={[
+              {
+                title: t('viewType'),
+                selected: viewType,
+                options: [
+                  { label: ViewType.MONTH, value: ViewType.MONTH },
+                  { label: ViewType.DAY, value: ViewType.DAY },
+                  { label: ViewType.YEAR, value: ViewType.YEAR },
+                ],
+                onChange: (value) => handleChangeView(value.toString()),
+                testIdPrefix: 'selectViewType',
+              },
+            ]}
+            showEventTypeFilter={true}
+            actions={
+              <Button
+                className={styles.dropdown}
+                onClick={showInviteModal}
+                data-testid="createEventModalBtn"
+                data-cy="createEventModalBtn"
+              >
+                <div>
+                  <AddIcon className={styles.addIconStyle} />
+                  <span>{t('createEvent')}</span>
+                </div>
+              </Button>
+            }
+          />
         </div>
         <EventCalendar
           eventData={events}
@@ -292,7 +313,7 @@ function organizationEvents(): JSX.Element {
           isOpen={createEventmodalisOpen}
           onClose={hideCreateEventModal}
           onEventCreated={refetchEvents}
-          currentUrl={currentUrl || ''}
+          currentUrl={currentUrl}
         />
       </>
     </LoadingState>

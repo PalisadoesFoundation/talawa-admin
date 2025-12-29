@@ -50,7 +50,7 @@
  */
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useParams, Link } from 'react-router';
+import { useLocation, useParams, Link, Navigate } from 'react-router';
 import { useLazyQuery } from '@apollo/client';
 import { GridCellParams, GridPaginationModel } from '@mui/x-data-grid';
 import { Delete } from '@mui/icons-material';
@@ -81,6 +81,8 @@ import AddMember from './addMember/AddMember';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
+import { BreadcrumbsComponent } from 'shared-components/BreadcrumbsComponent';
+import type { IBreadcrumbItem } from 'types/shared-components/BreadcrumbsComponent/interface';
 
 interface IProcessedRow {
   id: string;
@@ -121,6 +123,22 @@ function OrganizationPeople(): JSX.Element {
   const location = useLocation();
   const role = location?.state;
   const { orgId: currentUrl } = useParams();
+
+  if (!currentUrl) {
+    return <Navigate to="/orglist" replace />;
+  }
+
+  // Breadcrumb items for organization -> people navigation
+  const breadcrumbItems: IBreadcrumbItem[] = [
+    {
+      translationKey: 'organization',
+      to: `/orgdash/${currentUrl}`,
+    },
+    {
+      translationKey: 'People',
+      isCurrent: true,
+    },
+  ];
 
   // State
   const [state, setState] = useState(role?.role || 0);
@@ -508,6 +526,9 @@ function OrganizationPeople(): JSX.Element {
 
   return (
     <>
+      <div className={styles.breadcrumbsContainer}>
+        <BreadcrumbsComponent items={breadcrumbItems} />
+      </div>
       {/* --- FIX START: Standardized Header using manual structure --- */}
       {/* This structure uses the global 'calendar__header' and 'btnsBlock' which we fixed in CSS to ensure perfect alignment. */}
       <div className={styles.calendar__header}>

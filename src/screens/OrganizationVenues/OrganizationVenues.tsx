@@ -60,6 +60,8 @@ import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import VenueCard from 'components/Venues/VenueCard';
 import PageHeader from 'shared-components/Navbar/Navbar';
+import { BreadcrumbsComponent } from 'shared-components/BreadcrumbsComponent';
+import type { IBreadcrumbItem } from 'types/shared-components/BreadcrumbsComponent/interface';
 
 function organizationVenues(): JSX.Element {
   // Translation hooks for i18n support
@@ -70,6 +72,24 @@ function organizationVenues(): JSX.Element {
 
   // Setting the document title using the translation hook
   document.title = t('title');
+
+  // Getting the organization ID from the URL parameters
+  const { orgId } = useParams();
+  if (!orgId) {
+    return <Navigate to="/orglist" />;
+  }
+
+  // Breadcrumb items for organization -> venues navigation
+  const breadcrumbItems: IBreadcrumbItem[] = [
+    {
+      translationKey: 'organization',
+      to: `/orgdash/${orgId}`,
+    },
+    {
+      translationKey: 'Venues',
+      isCurrent: true,
+    },
+  ];
 
   // State hooks for managing component state
   const [venueModal, setVenueModal] = useState<boolean>(false);
@@ -82,12 +102,6 @@ function organizationVenues(): JSX.Element {
   const [editVenueData, setEditVenueData] =
     useState<InterfaceQueryVenueListItem | null>(null);
   const [venues, setVenues] = useState<InterfaceQueryVenueListItem[]>([]);
-
-  // Getting the organization ID from the URL parameters
-  const { orgId } = useParams();
-  if (!orgId) {
-    return <Navigate to="/orglist" />;
-  }
 
   // GraphQL query for fetching venue data
   const {
@@ -212,6 +226,9 @@ function organizationVenues(): JSX.Element {
 
   return (
     <>
+      <div className={styles.breadcrumbsContainer}>
+        <BreadcrumbsComponent items={breadcrumbItems} />
+      </div>
       <div className={`${styles.btnsContainer} gap-3 flex-wrap`}>
         <PageHeader
           search={{
@@ -269,6 +286,7 @@ function organizationVenues(): JSX.Element {
                       venueItem={venueItem}
                       handleDelete={handleDelete}
                       showEditVenueModal={showEditVenueModal}
+                      index={index}
                       key={index}
                     />
                   ),
