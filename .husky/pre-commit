@@ -1,4 +1,4 @@
-
+#!/usr/bin/env sh
 pnpm run generate-docs
 pnpm run format:fix
 # pnpm run lint:fix
@@ -16,38 +16,40 @@ pnpm run check-mock-cleanup
 pnpm run check-localstorage
 
 # FIND Python binary based on environment
-PYTHON_BIN=${PYTHON_BIN:-python}
-
-# Check if Python is installed
-if command -v "$PYTHON_BIN" >/dev/null 2>&1; then
-
-  # Check if required Python packages are installed
-  $PYTHON_BIN .github/workflows/scripts/check_python_deps.py
-
-  echo "Running Python CI parity checks..."
-  # Python CI Parity Checks
-  $PYTHON_BIN .github/workflows/scripts/check_docstrings.py --directories .github
-  $PYTHON_BIN .github/workflows/scripts/compare_translations.py --directory public/locales
-
-  # Check staged source files for various checks
-  if [ -n "$STAGED_SRC" ]; then
-      echo "$STAGED_SRC" | xargs $PYTHON_BIN .github/workflows/scripts/countline.py --lines 600
-      echo "$STAGED_SRC" | xargs $PYTHON_BIN .github/workflows/scripts/translation_check.py --files
-      echo "$STAGED_SRC" | xargs $PYTHON_BIN .github/workflows/scripts/disable_statements_check.py --files
-  fi
-
-  # 3. CSS Policy Check
-  # Exclude src/utils/ (utility/helper functions) and src/types/ (type definitions) 
-  # as they cannot contain UI styling code
-  CSS_STAGED=$(git diff --cached --name-only --diff-filter=ACMRT | grep -v '^src/utils/' | grep -v '^src/types/' || true)
-  if [ -n "$CSS_STAGED" ]; then
-    echo "$CSS_STAGED" | xargs $PYTHON_BIN .github/workflows/scripts/css_check.py --files
-  fi
-
+if command -v python >/dev/null 2>&1; then
+    PYTHON_BIN=python
+elif command -v python3 >/dev/null 2>&1; then
+    PYTHON_BIN=python3
 else
-  echo "Python binary could not be found"
+    echo "Error: Python not found in PATH"
+    exit 1
 fi
 
+# List of files to be excluded from countline.py checks
+COUNTLINE_EXCLUDED_FILES="src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.tsx src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx src/components/OrgPostCard/OrgPostCard.tsx src/components/UsersTableItem/UsersTableItem.tsx src/components/UserPortal/ChatRoom/ChatRoom.tsx src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.tsx src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx src/shared-components/postCard/PostCard.tsx src/shared-components/EventForm/EventForm.tsx"
+
+# Check if required Python packages are installed
+$PYTHON_BIN .github/workflows/scripts/check_python_deps.py
+
+echo "Running Python CI parity checks..."
+# Python CI Parity Checks
+$PYTHON_BIN .github/workflows/scripts/check_docstrings.py --directories .github
+$PYTHON_BIN .github/workflows/scripts/compare_translations.py --directory public/locales
+$PYTHON_BIN .github/workflows/scripts/countline.py --lines 600 --exclude_files $COUNTLINE_EXCLUDED_FILES
+
+# Check staged source files for various checks
+if [ -n "$STAGED_SRC" ]; then
+  echo "$STAGED_SRC" | xargs $PYTHON_BIN .github/workflows/scripts/translation_check.py --files
+  echo "$STAGED_SRC" | xargs $PYTHON_BIN .github/workflows/scripts/disable_statements_check.py --files
+fi
+
+# 3. CSS Policy Check
+# Exclude src/utils/ (utility/helper functions) and src/types/ (type definitions) 
+# as they cannot contain UI styling code
+CSS_STAGED=$(git diff --cached --name-only --diff-filter=ACMRT | grep -v '^src/utils/' | grep -v '^src/types/' || true)
+if [ -n "$CSS_STAGED" ]; then
+  echo "$CSS_STAGED" | xargs $PYTHON_BIN .github/workflows/scripts/css_check.py --files
+fi
 
 
 git add .

@@ -234,7 +234,7 @@ def main():
     # Iterate and analyze each directory
     for filepath in repo_filepath_list:
         # Skip excluded files
-        if filepath in exclude_list:
+        if os.path.normpath(filepath) in map(os.path.normpath, exclude_list):
             continue
 
         # Skip /node_modules/ sub directories

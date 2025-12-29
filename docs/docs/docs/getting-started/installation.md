@@ -225,6 +225,10 @@ Follow these steps:
       6. Exit `notepad`
       7. Exit PowerShell
       8. This will ensure that you are always using the correct version of `node.js`
+3. Install `python` from https://www.python.org
+   1. Ensure Python 3.10 or later is installed.
+   2. Verify installation by running `python --version` in your terminal.
+   3. Install required Python dependencies by running: `pip install -r .github/workflows/requirements.txt`
 
 Proceed to the next section.
 
