@@ -511,13 +511,16 @@ describe('Organisation Venues Error Handling', () => {
         <MockedProvider link={link} addTypename={false}>
           <MemoryRouter initialEntries={['/orgvenues/orgId']}>
             <Routes>
-              <Route path="/orgvenues/:orgId" element={
-                <Provider store={store}>
-                  <I18nextProvider i18n={i18nForTest}>
-                    <OrganizationVenues />
-                  </I18nextProvider>
-                </Provider>
-              } />
+              <Route
+                path="/orgvenues/:orgId"
+                element={
+                  <Provider store={store}>
+                    <I18nextProvider i18n={i18nForTest}>
+                      <OrganizationVenues />
+                    </I18nextProvider>
+                  </Provider>
+                }
+              />
             </Routes>
           </MemoryRouter>
         </MockedProvider>,

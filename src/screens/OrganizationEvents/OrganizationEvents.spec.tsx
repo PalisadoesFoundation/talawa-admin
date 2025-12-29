@@ -51,7 +51,9 @@ const { routerMocks } = vi.hoisted(() => {
 
 vi.mock('react-router-dom', async () => {
   const actual =
-    await vi.importActual<typeof import('react-router-dom')>('react-router-dom');
+    await vi.importActual<typeof import('react-router-dom')>(
+      'react-router-dom',
+    );
   return {
     ...actual,
     useParams: routerMocks.useParams,
@@ -1039,7 +1041,7 @@ describe('OrganizationEvents - Additional Coverage Tests', () => {
   test('redirects to /orglist when orgId is missing', async () => {
     routerMocks.useParams.mockReturnValue({});
 
-    const { container } = render(
+    render(
       <MockedProvider link={defaultLink}>
         <BrowserRouter>
           <Provider store={store}>
@@ -1049,8 +1051,8 @@ describe('OrganizationEvents - Additional Coverage Tests', () => {
                   <OrganizationEvents />
                 </I18nextProvider>
               </ThemeProvider>
-            </Provider>
-          </LocalizationProvider>
+            </LocalizationProvider>
+          </Provider>
         </BrowserRouter>
       </MockedProvider>,
     );

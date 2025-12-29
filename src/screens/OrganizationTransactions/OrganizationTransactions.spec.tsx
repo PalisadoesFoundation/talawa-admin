@@ -64,9 +64,18 @@ describe('OrganizationTransactions', () => {
       <I18nextProvider i18n={i18nForTest}>
         <MemoryRouter initialEntries={['/org/transactions']}>
           <Routes>
-            <Route path="/org/:orgId/transactions" element={<OrganizationTransactions />} />
-            <Route path="/org/transactions" element={<OrganizationTransactions />} />
-            <Route path="/orglist" element={<div data-testid="orglist-page">Org List Page</div>} />
+            <Route
+              path="/org/:orgId/transactions"
+              element={<OrganizationTransactions />}
+            />
+            <Route
+              path="/org/transactions"
+              element={<OrganizationTransactions />}
+            />
+            <Route
+              path="/orglist"
+              element={<div data-testid="orglist-page">Org List Page</div>}
+            />
           </Routes>
         </MemoryRouter>
       </I18nextProvider>,

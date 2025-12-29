@@ -1513,13 +1513,16 @@ describe('OrganizationPeople', () => {
       <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Routes>
-            <Route path="/orgpeople/:orgId" element={
-              <Provider store={store}>
-                <I18nextProvider i18n={i18nForTest}>
-                  <OrganizationPeople />
-                </I18nextProvider>
-              </Provider>
-            } />
+            <Route
+              path="/orgpeople/:orgId"
+              element={
+                <Provider store={store}>
+                  <I18nextProvider i18n={i18nForTest}>
+                    <OrganizationPeople />
+                  </I18nextProvider>
+                </Provider>
+              }
+            />
           </Routes>
         </MemoryRouter>
       </MockedProvider>,
@@ -1547,13 +1550,16 @@ describe('OrganizationPeople', () => {
       <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/orgpeople/']}>
           <Routes>
-            <Route path="/orgpeople/:orgId?" element={
-              <Provider store={store}>
-                <I18nextProvider i18n={i18nForTest}>
-                  <OrganizationPeople />
-                </I18nextProvider>
-              </Provider>
-            } />
+            <Route
+              path="/orgpeople/:orgId?"
+              element={
+                <Provider store={store}>
+                  <I18nextProvider i18n={i18nForTest}>
+                    <OrganizationPeople />
+                  </I18nextProvider>
+                </Provider>
+              }
+            />
             <Route path="/orglist" element={<div>Org List Page</div>} />
           </Routes>
         </MemoryRouter>
