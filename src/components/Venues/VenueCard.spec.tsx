@@ -22,7 +22,6 @@ describe('VenueCard Component', () => {
       <I18nextProvider i18n={i18nForTest}>
         <VenueCard
           venueItem={MOCK_VENUE_ITEM}
-          index={0}
           showEditVenueModal={MOCK_HANDLE_EDIT}
           handleDelete={MOCK_HANDLE_DELETE}
         />
@@ -39,7 +38,6 @@ describe('VenueCard Component', () => {
       <I18nextProvider i18n={i18nForTest}>
         <VenueCard
           venueItem={MOCK_VENUE_ITEM}
-          index={0}
           showEditVenueModal={MOCK_HANDLE_EDIT}
           handleDelete={MOCK_HANDLE_DELETE}
         />
@@ -57,7 +55,6 @@ describe('VenueCard Component', () => {
       <I18nextProvider i18n={i18nForTest}>
         <VenueCard
           venueItem={MOCK_VENUE_ITEM_WITH_IMAGE}
-          index={0}
           showEditVenueModal={MOCK_HANDLE_EDIT}
           handleDelete={MOCK_HANDLE_DELETE}
         />
@@ -75,13 +72,12 @@ describe('VenueCard Component', () => {
       <I18nextProvider i18n={i18nForTest}>
         <VenueCard
           venueItem={MOCK_VENUE_ITEM}
-          index={0}
           showEditVenueModal={MOCK_HANDLE_EDIT}
           handleDelete={MOCK_HANDLE_DELETE}
         />
       </I18nextProvider>,
     );
-    const editButton = screen.getByTestId('updateVenueBtn1');
+    const editButton = screen.getByTestId('updateVenueBtn-1');
     fireEvent.click(editButton);
     expect(MOCK_HANDLE_EDIT).toHaveBeenCalledWith(MOCK_VENUE_ITEM);
   });
@@ -91,13 +87,12 @@ describe('VenueCard Component', () => {
       <I18nextProvider i18n={i18nForTest}>
         <VenueCard
           venueItem={MOCK_VENUE_ITEM}
-          index={0}
           showEditVenueModal={MOCK_HANDLE_EDIT}
           handleDelete={MOCK_HANDLE_DELETE}
         />
       </I18nextProvider>,
     );
-    const deleteButton = screen.getByTestId('deleteVenueBtn1');
+    const deleteButton = screen.getByTestId('deleteVenueBtn-1');
     fireEvent.click(deleteButton);
     expect(MOCK_HANDLE_DELETE).toHaveBeenCalledWith('1');
   });
@@ -107,7 +102,6 @@ describe('VenueCard Component', () => {
       <I18nextProvider i18n={i18nForTest}>
         <VenueCard
           venueItem={MOCK_VENUE_ITEM_LONG_TEXT}
-          index={0}
           showEditVenueModal={MOCK_HANDLE_EDIT}
           handleDelete={MOCK_HANDLE_DELETE}
         />
@@ -129,7 +123,6 @@ describe('VenueCard Component', () => {
       <I18nextProvider i18n={i18nForTest}>
         <VenueCard
           venueItem={MOCK_VENUE_ITEM}
-          index={0}
           showEditVenueModal={MOCK_HANDLE_EDIT}
           handleDelete={MOCK_HANDLE_DELETE}
         />

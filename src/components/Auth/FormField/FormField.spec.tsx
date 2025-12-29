@@ -1,159 +1,283 @@
-import { vi, describe, it, expect, afterEach } from 'vitest';
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { FormField } from './FormField';
-import type { InterfaceFormFieldProps } from '../../../types/Auth/FormField/interface';
 
 describe('FormField', () => {
-  afterEach(() => {
-    vi.clearAllMocks();
-  });
-
-  const defaultProps: InterfaceFormFieldProps = {
-    name: 'test-field',
+  const defaultProps = {
+    name: 'testField',
     value: '',
     onChange: vi.fn(),
   };
 
-  describe('Rendering', () => {
-    it('should render basic input field', () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  describe('Basic Rendering', () => {
+    test('renders input with name attribute', () => {
       render(<FormField {...defaultProps} />);
 
       const input = screen.getByRole('textbox');
       expect(input).toBeInTheDocument();
-      expect(input).toHaveAttribute('name', 'test-field');
-      expect(input).toHaveAttribute('type', 'text');
+      expect(input).toHaveAttribute('name', 'testField');
     });
 
-    it('should render with label when provided', () => {
+    test('renders with label when provided', () => {
       render(<FormField {...defaultProps} label="Test Label" />);
 
-      expect(screen.getByLabelText('Test Label')).toBeInTheDocument();
+      const label = screen.getByText('Test Label');
+      expect(label).toBeInTheDocument();
     });
 
-    it('should render required indicator when required', () => {
-      render(<FormField {...defaultProps} label="Test Label" required />);
+    test('does not render label when not provided', () => {
+      render(<FormField {...defaultProps} />);
 
-      expect(screen.getByText('*')).toBeInTheDocument();
-      expect(screen.getByText('*')).toHaveClass('text-danger');
+      expect(screen.queryByText('Test Label')).not.toBeInTheDocument();
     });
 
-    it('should render with different input types', () => {
-      const { rerender } = render(<FormField {...defaultProps} type="email" />);
-      expect(screen.getByRole('textbox')).toHaveAttribute('type', 'email');
+    test('renders required indicator when required is true', () => {
+      render(<FormField {...defaultProps} label="Required Field" required />);
 
-      rerender(<FormField {...defaultProps} type="password" />);
-      expect(screen.getByDisplayValue('')).toHaveAttribute('type', 'password');
+      const asterisk = screen.getByText('*');
+      expect(asterisk).toBeInTheDocument();
+      expect(asterisk).toHaveClass('text-danger');
     });
 
-    it('should render with value prop', () => {
-      render(<FormField {...defaultProps} value="test value" />);
+    test('renders with placeholder', () => {
+      render(<FormField {...defaultProps} placeholder="Enter value" />);
 
-      expect(screen.getByDisplayValue('test value')).toBeInTheDocument();
+      const input = screen.getByPlaceholderText('Enter value');
+      expect(input).toBeInTheDocument();
     });
 
-    it('should render with placeholder', () => {
-      render(<FormField {...defaultProps} placeholder="Enter text" />);
+    test('renders with correct input type', () => {
+      render(<FormField {...defaultProps} type="email" testId="email-input" />);
 
-      expect(screen.getByPlaceholderText('Enter text')).toBeInTheDocument();
+      const input = screen.getByTestId('email-input');
+      expect(input).toHaveAttribute('type', 'email');
     });
 
-    it('should render with test id', () => {
-      render(<FormField {...defaultProps} testId="custom-test-id" />);
+    test('renders with password type', () => {
+      render(
+        <FormField {...defaultProps} type="password" testId="password-input" />,
+      );
 
-      expect(screen.getByTestId('custom-test-id')).toBeInTheDocument();
+      const input = screen.getByTestId('password-input');
+      expect(input).toHaveAttribute('type', 'password');
+    });
+
+    test('renders disabled input when disabled is true', () => {
+      render(<FormField {...defaultProps} disabled testId="disabled-input" />);
+
+      const input = screen.getByTestId('disabled-input');
+      expect(input).toBeDisabled();
     });
   });
 
-  describe('Error Display', () => {
-    it('should display error message when error prop is provided', () => {
+  describe('Value and Change Handling', () => {
+    test('displays provided value', () => {
+      render(
+        <FormField {...defaultProps} value="test value" testId="value-input" />,
+      );
+
+      const input = screen.getByTestId('value-input');
+      expect(input).toHaveValue('test value');
+    });
+
+    test('calls onChange when input value changes', () => {
+      const onChange = vi.fn();
+      render(
+        <FormField
+          {...defaultProps}
+          onChange={onChange}
+          testId="change-input"
+        />,
+      );
+
+      const input = screen.getByTestId('change-input');
+      fireEvent.change(input, { target: { value: 'new value' } });
+
+      expect(onChange).toHaveBeenCalledTimes(1);
+    });
+
+    test('calls onBlur when input loses focus', () => {
+      const onBlur = vi.fn();
+      render(
+        <FormField {...defaultProps} onBlur={onBlur} testId="blur-input" />,
+      );
+
+      const input = screen.getByTestId('blur-input');
+      fireEvent.blur(input);
+
+      expect(onBlur).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Error State and Validation', () => {
+    test('displays error message when error is provided', () => {
       render(<FormField {...defaultProps} error="This field is required" />);
 
-      expect(screen.getByText('This field is required')).toBeInTheDocument();
+      const errorMessage = screen.getByText('This field is required');
+      expect(errorMessage).toBeInTheDocument();
     });
 
-    it('should not display error when error is null', () => {
-      render(<FormField {...defaultProps} error={null} />);
+    test('sets aria-invalid to true when error exists', () => {
+      render(
+        <FormField
+          {...defaultProps}
+          error="Invalid email"
+          testId="invalid-input"
+        />,
+      );
 
-      expect(screen.queryByText(/error/i)).not.toBeInTheDocument();
+      const input = screen.getByTestId('invalid-input');
+      expect(input).toHaveAttribute('aria-invalid', 'true');
     });
 
-    it('should apply invalid styling when error exists', () => {
-      render(<FormField {...defaultProps} error="Error message" />);
+    test('sets aria-invalid to false when no error', () => {
+      render(<FormField {...defaultProps} testId="valid-input" />);
 
-      const input = screen.getByRole('textbox');
-      expect(input).toHaveClass('is-invalid');
+      const input = screen.getByTestId('valid-input');
+      expect(input).toHaveAttribute('aria-invalid', 'false');
     });
-  });
 
-  describe('Accessibility', () => {
-    it('should set aria-describedby to error id when error is present', () => {
+    test('sets aria-describedby to error element id', () => {
+      render(
+        <FormField
+          {...defaultProps}
+          name="email"
+          error="Invalid email"
+          testId="error-input"
+        />,
+      );
+
+      const input = screen.getByTestId('error-input');
+      expect(input).toHaveAttribute('aria-describedby', 'email-error');
+    });
+
+    test('error element has correct id for aria-describedby', () => {
       render(
         <FormField {...defaultProps} name="email" error="Invalid email" />,
       );
 
-      const input = screen.getByRole('textbox');
-      expect(input).toHaveAttribute('aria-describedby', 'email-error');
+      const errorElement = screen.getByText('Invalid email');
+      expect(errorElement).toHaveAttribute('id', 'email-error');
     });
 
-    it('should not have aria-describedby when no error', () => {
-      render(<FormField {...defaultProps} />);
-
-      const input = screen.getByRole('textbox');
-      expect(input).not.toHaveAttribute('aria-describedby');
-    });
-
-    it('should not have aria-describedby when error is null', () => {
-      render(<FormField {...defaultProps} error={null} />);
-
-      const input = screen.getByRole('textbox');
-      expect(input).not.toHaveAttribute('aria-describedby');
-    });
-
-    it('should create error element with correct id matching aria-describedby', () => {
+    test('applies invalid styling when error exists', () => {
       render(
-        <FormField {...defaultProps} name="email" error="Email required" />,
+        <FormField
+          {...defaultProps}
+          error="Error message"
+          testId="styled-input"
+        />,
       );
 
-      const input = screen.getByRole('textbox');
-      const errorElement = screen.getByText('Email required');
+      const input = screen.getByTestId('styled-input');
+      expect(input).toHaveClass('is-invalid');
+    });
 
-      expect(input).toHaveAttribute('aria-describedby', 'email-error');
-      expect(errorElement).toHaveAttribute('id', 'email-error');
+    test('does not display error when error is null', () => {
+      render(<FormField {...defaultProps} error={null} />);
+
+      expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    });
+
+    test('does not display error when error is undefined', () => {
+      render(<FormField {...defaultProps} error={undefined} />);
+
+      expect(screen.queryByRole('status')).not.toBeInTheDocument();
     });
   });
 
-  describe('Interactions', () => {
-    it('should call onChange when input value changes', async () => {
-      const user = userEvent.setup();
-      const mockOnChange = vi.fn();
+  describe('Aria-Live Accessibility', () => {
+    test('error message has role="status" by default', () => {
+      render(<FormField {...defaultProps} error="Error occurred" />);
 
-      render(<FormField {...defaultProps} onChange={mockOnChange} />);
-
-      const input = screen.getByRole('textbox');
-      await user.type(input, 'test');
-
-      expect(mockOnChange).toHaveBeenCalled();
+      const errorElement = screen.getByRole('status');
+      expect(errorElement).toBeInTheDocument();
+      expect(errorElement).toHaveTextContent('Error occurred');
     });
 
-    it('should call onBlur when input loses focus', async () => {
-      const user = userEvent.setup();
-      const mockOnBlur = vi.fn();
+    test('error message has aria-live="polite" by default', () => {
+      render(<FormField {...defaultProps} error="Error occurred" />);
 
-      render(<FormField {...defaultProps} onBlur={mockOnBlur} />);
-
-      const input = screen.getByRole('textbox');
-      await user.click(input);
-      await user.tab();
-
-      expect(mockOnBlur).toHaveBeenCalled();
+      const errorElement = screen.getByRole('status');
+      expect(errorElement).toHaveAttribute('aria-live', 'polite');
     });
 
-    it('should be disabled when disabled prop is true', () => {
-      render(<FormField {...defaultProps} disabled />);
+    test('does not add role/aria-live when ariaLive is false', () => {
+      render(
+        <FormField {...defaultProps} error="Error occurred" ariaLive={false} />,
+      );
 
-      const input = screen.getByRole('textbox');
-      expect(input).toBeDisabled();
+      expect(screen.queryByRole('status')).not.toBeInTheDocument();
+      const errorElement = screen.getByText('Error occurred');
+      expect(errorElement).not.toHaveAttribute('aria-live');
+    });
+  });
+
+  describe('Helper Text', () => {
+    test('displays helper text when provided and no error', () => {
+      render(
+        <FormField {...defaultProps} helperText="Enter your email address" />,
+      );
+
+      const helperText = screen.getByText('Enter your email address');
+      expect(helperText).toBeInTheDocument();
+      expect(helperText).toHaveClass('text-muted');
+    });
+
+    test('does not display helper text when error exists', () => {
+      render(
+        <FormField
+          {...defaultProps}
+          helperText="Enter your email address"
+          error="Invalid email"
+        />,
+      );
+
+      expect(
+        screen.queryByText('Enter your email address'),
+      ).not.toBeInTheDocument();
+      expect(screen.getByText('Invalid email')).toBeInTheDocument();
+    });
+
+    test('aria-describedby points to helper text when no error', () => {
+      render(
+        <FormField
+          {...defaultProps}
+          name="email"
+          helperText="Helper text"
+          testId="helper-input"
+        />,
+      );
+
+      const input = screen.getByTestId('helper-input');
+      expect(input).toHaveAttribute('aria-describedby', 'email-helper');
+    });
+
+    test('helper text element has correct id', () => {
+      render(
+        <FormField {...defaultProps} name="email" helperText="Helper text" />,
+      );
+
+      const helperElement = screen.getByText('Helper text');
+      expect(helperElement).toHaveAttribute('id', 'email-helper');
+    });
+  });
+
+  describe('Test ID', () => {
+    test('applies data-testid attribute', () => {
+      render(<FormField {...defaultProps} testId="custom-test-id" />);
+
+      const input = screen.getByTestId('custom-test-id');
+      expect(input).toBeInTheDocument();
     });
   });
 });
