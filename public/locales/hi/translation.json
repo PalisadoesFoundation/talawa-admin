@@ -23,14 +23,13 @@
     "fromPalisadoes": "Palisadoes फाउंडेशन स्वयंसेवकों द्वारा विकसित एक ओपन-सोर्स एप्लिकेशन",
     "userLogin": "उपयोगकर्ता लॉगिन",
     "adminLogin": "एडमिन लॉगिन",
-    "atleast_8_char_long": "कम से कम 8 अक्षर लंबे",
-    "atleast_6_char_long": "कम से कम 6 अक्षर लंबे",
+    "atleastEightCharLong": "कम से कम 8 अक्षर लंबे",
+    "atleastSixCharLong": "कम से कम 6 अक्षर लंबे",
     "firstName_invalid": "पहला नाम केवल छोटे और बड़े अक्षरों को शामिल कर सकता है",
     "lastName_invalid": "अंतिम नाम केवल छोटे और बड़े अक्षरों को शामिल कर सकता है",
-    "name_invalid": "नाम में केवल अक्षर, रिक्त स्थान और हाइफ़न होने चाहिए",
-    "password_invalid": "पासवर्ड में कम से कम 1 छोटा अक्षर, 1 बड़ा अक्षर, 1 संख्या और 1 विशेष अक्षर होना चाहिए",
-    "email_invalid": "ईमेल में कम से कम 8 अक्षर होने चाहिए",
-    "Password_and_Confirm_password_mismatches.": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
+    "nameInvalid": "नाम में केवल अक्षर, रिक्त स्थान और हाइफ़न होने चाहिए",
+    "passwordInvalid": "पासवर्ड में कम से कम 1 छोटा अक्षर, 1 बड़ा अक्षर, 1 संख्या और 1 विशेष अक्षर होना चाहिए",
+    "emailInvalid": "ईमेल में कम से कम 8 अक्षर होने चाहिए",
     "doNotOwnAnAccount": "कोई खाता नहीं है?",
     "captchaError": "कैप्चा त्रुटि!",
     "Please_check_the_captcha": "कृपया कैप्चा जांचें।",
@@ -38,11 +37,12 @@
     "passwordMismatches": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
     "fillCorrectly": "सभी विवरण सही ढंग से भरें।",
     "successfullyRegistered": "सफलतापूर्वक पंजीकृत।",
-    "lowercase_check": "कम से कम एक छोटा अक्षर",
-    "uppercase_check": "कम से कम एक बड़ा अक्षर",
-    "numeric_value_check": "कम से कम एक संख्या",
-    "special_char_check": "कम से कम एक विशेष अक्षर",
+    "lowercaseCheck": "कम से कम एक छोटा अक्षर",
+    "uppercaseCheck": "कम से कम एक बड़ा अक्षर",
+    "numericValueCheck": "कम से कम एक संख्या",
+    "specialCharCheck": "कम से कम एक विशेष अक्षर",
     "selectOrg": "एक संगठन चुनें",
+    "backToLogin": "लॉगिन पर वापस जाएं",
     "afterRegister": "सफलतापूर्वक पंजीकृत।",
     "talawa_portal": "तालावा पोर्टल",
     "login": "लॉगिन",
@@ -61,7 +61,9 @@
     "OR": "या",
     "admin": "व्यवस्थापक",
     "user": "उपयोगकर्ता",
-    "loading": "लोड हो रहा है"
+    "loading": "लोड हो रहा है",
+    "communityLogo": "समुदाय लोगो",
+    "organizations": "संगठन"
   },
   "signOut": {
     "retryPrompt": "सेशन रद्द करने में विफल। पुनः प्रयास करें?",
@@ -71,8 +73,7 @@
   "userLoginPage": {
     "title": "तालावा व्यवस्थापक",
     "fromPalisadoes": "Palisadoes फाउंडेशन स्वयंसेवकों द्वारा विकसित एक ओपन-सोर्स एप्लिकेशन",
-    "atleast_8_char_long": "कम से कम 8 अक्षर लंबे",
-    "Password_and_Confirm_password_mismatches.": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
+    "atleastEightCharLong": "कम से कम 8 अक्षर लंबे",
     "doNotOwnAnAccount": "कोई खाता नहीं है?",
     "captchaError": "कैप्चा त्रुटि!",
     "Please_check_the_captcha": "कृपया कैप्चा जांचें।",
@@ -1163,7 +1164,8 @@
     "filter": "फ़िल्टर",
     "searchByName": "नाम से खोजें",
     "searchOrganizations": "संगठनों खोजें",
-    "loading": "लोड हो रहा है..."
+    "loading": "लोड हो रहा है...",
+    "title": "संगठनों"
   },
   "userSidebarOrg": {
     "yourOrganizations": "आपके संगठन",
@@ -1371,7 +1373,8 @@
     "postalCode": "पिन कोड",
     "city": "शहर",
     "description": "विवरण",
-    "enterDescription": "विवरण दर्ज करें"
+    "enterDescription": "विवरण दर्ज करें",
+    "title": "समायोजन"
   },
   "donate": {
     "title": "दान",
@@ -1823,6 +1826,14 @@
     "signingOut": "साइन आउट हो रहा है...",
     "retryPrompt": "सेशन रद्द करना विफल रहा। पुनः प्रयास करें?",
     "breadcrumb": "ब्रेडक्रम्ब",
-    "action": "क्रिया"
+    "action": "क्रिया",
+    "selectLanguage": "भाषा चुनें",
+    "userMenu": "उपयोगकर्ता मेनू",
+    "settings": "समायोजन",
+    "logout": "साइन आउट",
+    "logoutFailed": "साइन आउट विफल रहा",
+    "title": "उपयोगकर्ता पोर्टल",
+    "talawa": "तलावा",
+    "talawaBranding": "तालावा ब्रांडिंग"
   }
 }
