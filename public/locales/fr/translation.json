@@ -755,7 +755,11 @@
     "latestEndDate": "Dernière date de fin",
     "earliestEndDate": "Date de fin la plus ancienne",
     "lowestGoal": "Objectif le plus bas",
-    "highestGoal": "Objectif le plus élevé"
+    "highestGoal": "Objectif le plus élevé",
+    "editCampaign": "Modifier la campagne",
+    "progress": "Progression",
+    "raised": "Collecté",
+    "searchCampaigns": "Rechercher des campagnes"
   },
   "pledges": {
     "title": "Engagements de campagne de financement",
@@ -793,7 +797,8 @@
     "togglePledgedRaised": "Basculer entre les montants Promis et Collectés",
     "pledgeDate": "Date d'Engagement",
     "pledged": "Promis",
-    "donated": "Donné"
+    "donated": "Donné",
+    "campaignNotActive": "La campagne n'est pas active"
   },
   "createPostModal": {
     "title": "Des postes",

@@ -755,7 +755,11 @@
     "latestEndDate": "अंतिम समाप्ति तिथि",
     "earliestEndDate": "सबसे पहली समाप्ति तिथि",
     "lowestGoal": "सबसे कम उद्देश्य",
-    "highestGoal": "सबसे ऊंचा उद्देश्य"
+    "highestGoal": "सबसे ऊंचा उद्देश्य",
+    "editCampaign": "अभियान संपादित करें",
+    "progress": "प्रगति",
+    "raised": "एकत्रित",
+    "searchCampaigns": "अभियान खोजें"
   },
   "pledges": {
     "title": "निधि अभियान प्रतिज्ञाएँ",
@@ -793,7 +797,8 @@
     "togglePledgedRaised": "प्रतिबद्ध और उठाई गई राशि के बीच टॉगल करें",
     "pledgeDate": "प्रतिज्ञा तिथि",
     "pledged": "प्रतिबद्ध",
-    "donated": "दान किया गया"
+    "donated": "दान किया गया",
+    "campaignNotActive": "अभियान सक्रिय नहीं है"
   },
   "createPostModal": {
     "title": "पदों",

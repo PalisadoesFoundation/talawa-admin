@@ -129,6 +129,7 @@
   "unblock": "Unblock",
   "unblockedSuccessfully": "{{item}} unblocked successfully",
   "pluginSettings": "Plugin Settings",
+  "fundCampaigns": "fundCampaigns",
   "signOut": "Sign Out",
   "signingOut": "Signing out...",
   "retryPrompt": "Failed to sign out. Retry?",

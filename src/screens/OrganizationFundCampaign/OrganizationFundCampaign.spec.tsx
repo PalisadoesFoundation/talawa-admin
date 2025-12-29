@@ -41,31 +41,44 @@ vi.mock('react-router', async () => {
 });
 
 // Mock BreadcrumbsComponent with simple static content
-vi.mock('shared-components/BreadcrumbsComponent/BreadcrumbsComponent', () => ({
+vi.mock('shared-components/BreadcrumbsComponent/SafeBreadcrumbs', () => ({
   __esModule: true,
-  default: function MockBreadcrumbs({
+  default: function MockSafeBreadcrumbs({
     items,
   }: {
-    items: Array<{ label?: string; to?: string }>;
+    items: Array<{
+      label?: string;
+      translationKey?: string;
+      to?: string;
+      isCurrent?: boolean;
+    }>;
   }) {
     return (
       <nav data-testid="breadcrumbs">
         {items.map((item, index) => {
           const testId = item.to?.includes('/orgfunds/')
-            ? item.to?.includes('/campaigns')
+            ? 'fundsLink'
+            : item.isCurrent
               ? 'campaignsLink'
-              : 'fundsLink'
-            : 'breadcrumbLink';
+              : 'breadcrumbLink';
 
-          return (
+          return item.to ? (
             <a
               key={index}
-              href={item.to || '#'}
+              href={item.to}
               data-testid={testId}
               data-to={item.to}
             >
-              {item.label}
+              {item.label ?? item.translationKey}
             </a>
+          ) : (
+            <span
+              key={index}
+              data-testid={testId}
+              aria-current={item.isCurrent ? 'page' : undefined}
+            >
+              {item.label ?? item.translationKey}
+            </span>
           );
         })}
       </nav>
@@ -350,6 +363,15 @@ describe('FundCampaigns Screen', () => {
     // Verify the breadcrumb link has the correct href to the funds page
     expect(fundBreadcrumb).toHaveAttribute('href', '/orgfunds/orgId');
     expect(fundBreadcrumb).toHaveAttribute('data-to', '/orgfunds/orgId');
+  });
+
+  it('should mark the current breadcrumb with aria-current for a11y', async () => {
+    mockRouteParams();
+    renderFundCampaign(link1);
+
+    const currentCrumb = await screen.findByTestId('campaignsLink');
+    expect(currentCrumb).toBeInTheDocument();
+    expect(currentCrumb).toHaveAttribute('aria-current', 'page');
   });
 
   it('should sort campaigns by start date when clicking start date column header', async () => {

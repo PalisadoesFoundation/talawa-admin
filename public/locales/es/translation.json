@@ -755,7 +755,11 @@
     "latestEndDate": "Fecha de finalización más reciente",
     "earliestEndDate": "Fecha de finalización más temprana",
     "lowestGoal": "Meta más baja",
-    "highestGoal": "Meta más alta"
+    "highestGoal": "Meta más alta",
+    "editCampaign": "Editar campaña",
+    "progress": "Progreso",
+    "raised": "Recaudado",
+    "searchCampaigns": "Buscar campañas"
   },
   "pledges": {
     "title": "Compromisos de Campaña de Financiamiento",
@@ -793,7 +797,8 @@
     "togglePledgedRaised": "Alternar entre montos Comprometidos y Recaudados",
     "pledgeDate": "Fecha de Compromiso",
     "pledged": "Comprometido",
-    "donated": "Donado"
+    "donated": "Donado",
+    "campaignNotActive": "La campaña no está activa"
   },
   "createPostModal": {
     "title": "Publicaciones de Talawa",
