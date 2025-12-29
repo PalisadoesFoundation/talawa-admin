@@ -410,9 +410,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y ripgrep
 
-      - name: Install tsx (minimal deps)
-        run: pnpm add -g tsx
-
       - name: Run pagination pattern check
         run: tsx scripts/githooks/check-pagination-patterns.ts
 

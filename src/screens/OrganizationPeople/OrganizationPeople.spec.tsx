@@ -18,6 +18,7 @@ import { store } from 'state/store';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 import { PAGE_SIZE } from '../../types/ReportingTable/utils';
+import { toast } from 'react-toastify';
 
 const sharedMocks = vi.hoisted(() => ({
   toast: {
@@ -1421,39 +1422,6 @@ describe('OrganizationPeople', () => {
   });
 
   test('prevents forward pagination when hasNextPage is false', async () => {
-    vi.resetModules();
-
-    vi.doMock('shared-components/ReportingTable/ReportingTable', () => ({
-      __esModule: true,
-      default: ({
-        rows,
-        gridProps,
-      }: {
-        rows?: unknown[];
-        gridProps?: {
-          onPaginationModelChange?: (model: {
-            page: number;
-            pageSize: number;
-          }) => void;
-        };
-      }) => (
-        <div>
-          <div data-testid="row-count">{rows?.length ?? 0}</div>
-          <button
-            data-testid="trigger-forward"
-            onClick={() =>
-              gridProps?.onPaginationModelChange?.({
-                page: 1,
-                pageSize: PAGE_SIZE,
-              })
-            }
-          >
-            Trigger Forward
-          </button>
-        </div>
-      ),
-    }));
-
     const singlePageMock = createMemberConnectionMock(
       {
         orgId: 'orgid',
@@ -1486,15 +1454,16 @@ describe('OrganizationPeople', () => {
 
     const link = new StaticMockLink([singlePageMock], true);
 
-    const { default: Component } = await import('./OrganizationPeople');
-
     render(
       <MockedProvider link={link}>
         <MemoryRouter initialEntries={['/orgpeople/orgid']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
-                <Route path="/orgpeople/:orgId" element={<Component />} />
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
               </Routes>
             </I18nextProvider>
           </Provider>
@@ -1502,18 +1471,19 @@ describe('OrganizationPeople', () => {
       </MockedProvider>,
     );
 
+    // Initial row rendered
     await waitFor(() => {
-      expect(screen.getByTestId('row-count').textContent).toBe('1');
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByTestId('trigger-forward'));
+    // Try to paginate forward
+    const nextButton = screen.getByTestId('nextPageButton');
+    fireEvent.click(nextButton);
 
+    // Still the same row
     await waitFor(() => {
-      expect(screen.getByTestId('row-count').textContent).toBe('1');
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
-
-    vi.doUnmock('shared-components/ReportingTable/ReportingTable');
-    vi.resetModules();
   });
 
   test('handles page size change via PaginationControl select', async () => {

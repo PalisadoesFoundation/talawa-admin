@@ -16,8 +16,10 @@
  * import { PaginationControl } from 'shared-components/PaginationControl';
  */
 
-import { execSync } from 'child_process';
+import { spawnSync } from 'child_process';
 import { existsSync } from 'fs';
+
+const targetPaths = process.argv.slice(2);
 
 // ANSI color codes for terminal output
 const colors = {
@@ -49,7 +51,7 @@ const DEPRECATED_PATTERNS = [
     example: 'PaginationControl has built-in "Rows per page" label',
   },
   {
-    pattern: '<Pagination\\b',
+    pattern: '<Pagination[\\s/>]',
     description: 'Old MUI Pagination component',
     example: 'Use PaginationControl component instead',
   },
@@ -60,8 +62,8 @@ const DEPRECATED_PATTERNS = [
  */
 function isRipgrepAvailable(): boolean {
   try {
-    execSync('rg --version', { stdio: 'ignore' });
-    return true;
+    const result = spawnSync('rg', ['--version'], { stdio: 'ignore' });
+    return result.status === 0;
   } catch {
     return false;
   }
@@ -98,19 +100,25 @@ function checkPaginationPatterns(): {
 
   for (const { pattern, description } of DEPRECATED_PATTERNS) {
     try {
-      // Use ripgrep to find patterns
-      // -n: show line numbers
-      // --glob: only search in src/screens/**
-      // -e: pattern to search
-      const command = `rg -n --glob 'src/screens/**' -e '${pattern}'`;
+      // Build arguments array for ripgrep
+      const args = ['-n', '-e', pattern];
 
-      const output = execSync(command, {
+      if (targetPaths.length > 0) {
+        // If specific files provided, search only those files
+        args.push(...targetPaths);
+      } else {
+        // Otherwise, search all files in src/screens
+        args.push('--glob', 'src/screens/**');
+      }
+
+      const result = spawnSync('rg', args, {
         encoding: 'utf-8',
         stdio: ['pipe', 'pipe', 'pipe'],
-      }).trim();
+      });
 
-      if (output) {
-        const lines = output.split('\n');
+      // Status 0 means matches found
+      if (result.status === 0 && result.stdout) {
+        const lines = result.stdout.trim().split('\n');
 
         for (const line of lines) {
           // Parse ripgrep output: filename:lineNumber:content
@@ -132,16 +140,21 @@ function checkPaginationPatterns(): {
             totalViolations++;
           }
         }
+      } else if (result.status !== 1) {
+        // Status 1 = no matches found, which is OK
+        // Any other non-zero status is an error
+        if (result.status !== undefined && result.status !== 1) {
+          console.error(
+            `${colors.red}Error running ripgrep:${colors.reset}`,
+            result.stderr || 'Unknown error',
+          );
+        }
       }
     } catch (error) {
-      // ripgrep exits with code 1 if no matches found (this is OK)
-      const execError = error as { status?: number; message?: string };
-      if (execError.status !== 1) {
-        console.error(
-          `${colors.red}Error running ripgrep:${colors.reset}`,
-          execError.message || String(error),
-        );
-      }
+      console.error(
+        `${colors.red}Error running ripgrep:${colors.reset}`,
+        error,
+      );
     }
   }
 

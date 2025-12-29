@@ -32,14 +32,14 @@
  * @state
  * - `state` (number): Current tab state (0: members, 1: administrators, 2: users).
  * - `searchTerm` (string): Search input for filtering rows.
- * - `paginationModel` (GridPaginationModel): Pagination state for the table.
  * - `currentRows` (ProcessedRow[]): Processed rows for the current page.
  * - `paginationMeta` (object): Metadata for pagination (hasNextPage, hasPreviousPage).
  * - `showRemoveModal` (boolean): Controls visibility of the remove member modal.
  * - `selectedMemId` (string | undefined): ID of the member selected for removal.
  *
  * @methods
- * - `handlePaginationModelChange`: Handles pagination changes and fetches data accordingly.
+ * - `handlePaginationChange`: Handles forward/backward pagination using GraphQL cursors.
+ * - `handlePageSizeChange`: Updates page size and refetches data.
  * - `handleSortChange`: Updates the tab state based on sorting selection.
  * - `toggleRemoveModal`: Toggles the visibility of the remove member modal.
  * - `toggleRemoveMemberModal`: Sets the selected member ID and toggles the modal.
