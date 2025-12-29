@@ -7850,21 +7850,20 @@ form {
   margin-left: 18px; /* gap from left */
 }
 
-/* Remove the default outline box around search inputs inside the admin search bar
-     Use targeted selectors so other input fields are unaffected */
-.btnsContainerSearchBar input {
+/* Scope reset to the SearchBar input only so other inputs are unaffected */
+.btnsContainerSearchBar .searchBarInput,
+.btnsContainerSearchBar input[type='search'] {
   outline: none;
   box-shadow: none;
   border: none;
   background: transparent;
 }
 
-/* Ensure our specific SearchBar input (CSS module .searchBarInput) is explicit */
-.btnsContainerSearchBar .searchBarInput {
-  outline: none !important;
-  box-shadow: none !important;
-  border: none !important;
-  background: transparent !important;
+/* The wrapper provides focus-visible ring (see .searchBarContainer:focus-within) */
+.btnsContainerSearchBar .searchBarInput:focus,
+.btnsContainerSearchBar input[type='search']:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 .btnsContainerSearchBar .inputOrgList button {
