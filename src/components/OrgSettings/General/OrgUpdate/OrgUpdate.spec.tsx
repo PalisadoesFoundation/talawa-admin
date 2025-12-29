@@ -824,7 +824,6 @@ describe('OrgUpdate Component', () => {
         () => {
           expect(NotificationToast.error).toHaveBeenCalledWith(
             i18n.t('orgUpdate.failedToUpdateOrg'),
-            expect.any(Object),
           );
         },
         { timeout: 2000 },
