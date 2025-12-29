@@ -2184,7 +2184,7 @@ describe('UploadPluginModal Component', () => {
 
       // Wait for completion to avoid act warnings
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalled();
+        expect(NotificationToast.success).toHaveBeenCalled();
       });
     });
   });

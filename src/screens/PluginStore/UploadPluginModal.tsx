@@ -9,7 +9,6 @@ import styles from '../../style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { FaUpload, FaExclamationTriangle, FaCheck } from 'react-icons/fa';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import styles from './UploadPluginModal.module.css';
 import {
   useApolloClient,
   type ApolloClient,
@@ -118,7 +117,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
         NotificationToast.error(result.error || 'Failed to upload plugin');
       }
     } catch {
-      toast.error('Failed to upload plugin. Please try again.');
+      NotificationToast.error('Failed to upload plugin. Please try again.');
     } finally {
       setIsInstalling(false);
     }
