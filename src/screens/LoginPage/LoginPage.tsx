@@ -361,6 +361,7 @@ const loginPage = (): JSX.Element => {
     try {
       const { data: signInData, error: signInError } = await signin({
         variables: { email: formState.email, password: formState.password },
+        fetchPolicy: 'network-only', // Always make network request to receive Set-Cookie headers
       });
 
       // Check for GraphQL errors (like account_locked) first
