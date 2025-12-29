@@ -14,7 +14,6 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from '../../../utils/useLocalstorage';
-import LoadingState from 'shared-components/LoadingState/LoadingState';
 
 const STORAGE_KEY = 'pendingInvitationToken';
 const AUTH_TOKEN_KEY = 'token';
@@ -136,6 +135,10 @@ const AcceptInvitation = (): JSX.Element => {
       setIsSubmitting(false);
     }
   };
+
+  if (loading) {
+    return <Loader size="xl" />;
+  }
 
   return (
     <LoadingState

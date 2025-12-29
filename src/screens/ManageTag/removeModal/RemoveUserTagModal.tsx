@@ -30,7 +30,6 @@
  * />
  * ```
  */
-import type { TFunction } from 'i18next';
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';

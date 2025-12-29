@@ -1978,7 +1978,7 @@ describe('useEffect loadMoreUsers trigger', () => {
           query: USER_LIST_FOR_ADMIN,
         },
         // Be tolerant of `where` being omitted vs `undefined` depending on Apollo's variable normalization.
-        variableMatcher: (vars) =>
+        variableMatcher: (vars: Record<string, unknown> | null | undefined) =>
           vars?.first === 12 && vars?.after === null && vars?.orgFirst === 32,
         result: {
           data: {
@@ -2013,7 +2013,7 @@ describe('useEffect loadMoreUsers trigger', () => {
         request: {
           query: USER_LIST_FOR_ADMIN,
         },
-        variableMatcher: (vars) =>
+        variableMatcher: (vars: Record<string, unknown> | null | undefined) =>
           vars?.first === 12 && vars?.after === null && vars?.orgFirst === 32,
         result: {
           data: {
