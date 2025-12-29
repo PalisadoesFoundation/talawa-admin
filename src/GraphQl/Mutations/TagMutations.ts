@@ -4,8 +4,7 @@ import gql from 'graphql-tag';
  * GraphQL mutation to create a user tag.
  *
  * @param name - Name of the tag.
- * @param tagColor - Color of the tag.
- * @param parentTagId - Id of the parent tag.
+ * @param folderId - Id of the folder/parent tag to organize tags.
  * @param organizationId - Organization to which the tag belongs.
  */
 

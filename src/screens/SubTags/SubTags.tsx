@@ -151,7 +151,11 @@ function SubTags(): JSX.Element {
 
     try {
       const { data } = await create({
-        variables: { name: tagName, organizationId: orgId },
+        variables: {
+          name: tagName,
+          organizationId: orgId,
+          folderId: parentTagId,
+        },
       });
 
       if (data) {
@@ -350,8 +354,8 @@ function SubTags(): JSX.Element {
           />
 
           <LoadingState
-            isLoading={subTagsLoading || createUserTagLoading}
-            variant="spinner"
+            isLoading={subTagsLoading}
+            variant="skeleton"
             size="lg"
             data-testid="subTagsLoadingState"
           >
@@ -489,8 +493,9 @@ function SubTags(): JSX.Element {
               value="add"
               data-testid="addSubTagSubmitBtn"
               className={styles.addButton}
+              disabled={createUserTagLoading}
             >
-              {tCommon('create')}
+              {createUserTagLoading ? tCommon('creating') : tCommon('create')}
             </Button>
           </Modal.Footer>
         </Form>

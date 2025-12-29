@@ -335,7 +335,7 @@ function OrganizationTags(): JSX.Element {
       loadingOverlay: () => (
         <LoadingState
           isLoading={true}
-          variant="spinner"
+          variant="skeleton"
           size="lg"
           data-testid="orgTagsLoadingOverlay"
         >
@@ -422,7 +422,7 @@ function OrganizationTags(): JSX.Element {
                       size="sm"
                       data-testid="infiniteScrollLoader"
                     >
-                      <></>
+                      {null}
                     </LoadingState>
                   }
                   scrollableTarget="orgUserTagsScrollableDiv"
