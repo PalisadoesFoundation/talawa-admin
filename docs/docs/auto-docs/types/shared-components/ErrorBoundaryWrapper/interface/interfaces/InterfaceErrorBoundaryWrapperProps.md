@@ -22,7 +22,7 @@ logs those errors, and displays a fallback UI instead of crashing the entire app
 
 ```tsx
 <ErrorBoundaryWrapper
-  errorMessage={t('errors.defaultErrorMessage')}
+  errorMessage={translatedErrorMessage}
   onError={(error, info) => logToService(error, info)}
   onReset={() => navigate('/dashboard')}
 >

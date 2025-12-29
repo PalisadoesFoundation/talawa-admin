@@ -25,7 +25,7 @@
  * @example
  * // With custom error message and logging
  * <ErrorBoundaryWrapper
- *   errorMessage={t('errors.defaultErrorMessage')}
+ *   errorMessage={translatedErrorMessage}
  *   onError={(error, info) => logToService(error, info)}
  *   onReset={() => navigate('/dashboard')}
  * >
@@ -51,10 +51,8 @@ export class ErrorBoundaryWrapper extends React.Component<
   InterfaceErrorBoundaryWrapperProps,
   InterfaceErrorBoundaryWrapperState
 > {
-  // The constructor runs before your class component mounts
+  // Initialize error boundary state
   constructor(props: InterfaceErrorBoundaryWrapperProps) {
-    // you need to call super(props) before any other statement.
-    // If you don’t do that, this.props will be undefined
     super(props);
     this.state = {
       hasError: false,
