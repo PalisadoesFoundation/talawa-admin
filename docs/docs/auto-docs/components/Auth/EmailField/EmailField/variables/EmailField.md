@@ -6,7 +6,7 @@
 
 > `const` **EmailField**: `React.FC`\<[`InterfaceEmailFieldProps`](../../../../../types/Auth/EmailField/interface/interfaces/InterfaceEmailFieldProps.md)\>
 
-Defined in: src/components/Auth/EmailField/EmailField.tsx:24
+Defined in: [src/components/Auth/EmailField/EmailField.tsx:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Auth/EmailField/EmailField.tsx#L24)
 
 Reusable email input field component.
 
