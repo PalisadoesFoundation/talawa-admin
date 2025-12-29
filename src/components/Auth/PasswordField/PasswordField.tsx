@@ -42,6 +42,12 @@ export const PasswordField: React.FC<InterfacePasswordFieldProps> = ({
           as="button"
           type="button"
           onClick={togglePassword}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              togglePassword();
+            }
+          }}
           aria-label={showPassword ? t('hidePassword') : t('showPassword')}
           aria-pressed={showPassword}
           className="bg-white"

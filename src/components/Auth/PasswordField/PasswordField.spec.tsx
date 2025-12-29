@@ -18,7 +18,7 @@ vi.mock('react-i18next', () => ({
 
 describe('PasswordField', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   const defaultProps = {
@@ -106,7 +106,6 @@ describe('PasswordField', () => {
     const toggleButton = screen.getByRole('button', { name: 'Show password' });
 
     fireEvent.keyDown(toggleButton, { key: 'Enter' });
-    fireEvent.click(toggleButton);
 
     expect(toggleButton).toHaveAttribute('aria-pressed', 'true');
   });
