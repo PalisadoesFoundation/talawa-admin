@@ -22,7 +22,7 @@ The type of each row in the data array.
 
 ### props
 
-[`IDataTableProps`](../../types/interfaces/IDataTableProps.md)\<`T`\>
+[`IDataTableProps`](../../../../types/shared-components/DataTable/interface/interfaces/IDataTableProps.md)\<`T`\>
 
 The props for the DataTable component.
   - columns: Array of column definitions (id, header, accessor, optional render).

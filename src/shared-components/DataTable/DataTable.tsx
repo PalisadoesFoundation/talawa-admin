@@ -1,6 +1,10 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
-import type { IDataTableProps, IColumnDef, HeaderRender } from './types';
+import type {
+  IDataTableProps,
+  IColumnDef,
+  HeaderRender,
+} from '../../types/shared-components/DataTable/interface';
 import styles from 'style/app-fixed.module.css';
 import TableLoader from '../../components/TableLoader/TableLoader';
 import { useTranslation } from 'react-i18next';
