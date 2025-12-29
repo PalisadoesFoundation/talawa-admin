@@ -210,7 +210,9 @@ describe('Testing VolunteerGroupModal', () => {
     await userEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(t.volunteerGroupCreated);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        t.volunteerGroupCreated,
+      );
       expect(modalProps[0].refetchGroups).toHaveBeenCalled();
       expect(modalProps[0].hide).toHaveBeenCalled();
     });
@@ -288,7 +290,9 @@ describe('Testing VolunteerGroupModal', () => {
     await userEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(t.volunteerGroupUpdated);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        t.volunteerGroupUpdated,
+      );
       expect(modalProps[1].refetchGroups).toHaveBeenCalled();
       expect(modalProps[1].hide).toHaveBeenCalled();
     });
@@ -422,7 +426,9 @@ describe('Testing VolunteerGroupModal', () => {
       await userEvent.click(submitBtn);
 
       await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalledWith(t.volunteerGroupCreated);
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.volunteerGroupCreated,
+        );
         expect(recurringEventProps.refetchGroups).toHaveBeenCalled();
         expect(recurringEventProps.hide).toHaveBeenCalled();
       });
@@ -469,7 +475,9 @@ describe('Testing VolunteerGroupModal', () => {
       await userEvent.click(submitBtn);
 
       await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalledWith(t.volunteerGroupCreated);
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          t.volunteerGroupCreated,
+        );
         expect(recurringEventProps.refetchGroups).toHaveBeenCalled();
         expect(recurringEventProps.hide).toHaveBeenCalled();
       });

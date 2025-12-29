@@ -269,7 +269,9 @@ describe('CampaignModal', () => {
     fireEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(translations.createdCampaign);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.createdCampaign,
+      );
       expect(campaignProps[0].refetchCampaign).toHaveBeenCalled();
       expect(campaignProps[0].hide).toHaveBeenCalled();
     });
@@ -294,7 +296,9 @@ describe('CampaignModal', () => {
 
     fireEvent.click(submitBtn);
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(translations.updatedCampaign);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.updatedCampaign,
+      );
       expect(campaignProps[1].refetchCampaign).toHaveBeenCalled();
       expect(campaignProps[1].hide).toHaveBeenCalled();
     });
@@ -318,7 +322,9 @@ describe('CampaignModal', () => {
     fireEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith('Mock graphql error');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Mock graphql error',
+      );
     });
   });
 
@@ -341,7 +347,9 @@ describe('CampaignModal', () => {
     fireEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalledWith('Mock graphql error');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Mock graphql error',
+      );
     });
   });
 
@@ -372,7 +380,9 @@ describe('CampaignModal', () => {
 
     // Wait for success message which indicates the mutation was called
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(translations.updatedCampaign);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.updatedCampaign,
+      );
     });
   });
 
@@ -435,7 +445,9 @@ describe('CampaignModal', () => {
 
     // Wait for success message which indicates the mutation was called
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(translations.updatedCampaign);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.updatedCampaign,
+      );
     });
   });
 
@@ -542,7 +554,9 @@ describe('CampaignModal', () => {
 
     // Wait for success message which indicates the mutation was called
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith(translations.updatedCampaign);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.updatedCampaign,
+      );
     });
   });
 });

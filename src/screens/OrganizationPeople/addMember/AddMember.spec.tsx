@@ -508,7 +508,9 @@ describe('AddMember Component', () => {
 
     // Verify success toast was shown
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith('Member added Successfully');
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        'Member added Successfully',
+      );
     });
 
     // Click the close button
@@ -797,7 +799,9 @@ describe('AddMember Component', () => {
 
     // Check for success message
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalledWith('Member added Successfully');
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        'Member added Successfully',
+      );
     });
   });
 

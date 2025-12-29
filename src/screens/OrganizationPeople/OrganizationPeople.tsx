@@ -18,7 +18,7 @@
  * - `react`, `react-router-dom` for routing and state management.
  * - `@apollo/client` for GraphQL queries.
  * - `@mui/x-data-grid` for table rendering.
- * - `react-toastify` for error notifications.
+ * - `NotificationToast` for notification messages (especially backend errors).
  * - `dayjs` for date formatting.
  * - Custom components: `SearchBar`, `SortingButton`, `Avatar`, `AddMember`, `OrgPeopleListCard`.
  *

@@ -140,7 +140,9 @@ function AddMember(): JSX.Element {
           role: 'regular',
         },
       });
-      NotificationToast.success(tCommon('addedSuccessfully', { item: 'Member' }) as string);
+      NotificationToast.success(
+        tCommon('addedSuccessfully', { item: 'Member' }) as string,
+      );
     } catch (error: unknown) {
       errorHandler(tCommon, error);
     }
@@ -176,7 +178,9 @@ function AddMember(): JSX.Element {
         createUserVariables.name
       )
     ) {
-      NotificationToast.error(translateOrgPeople('invalidDetailsMessage') as string);
+      NotificationToast.error(
+        translateOrgPeople('invalidDetailsMessage') as string,
+      );
     } else if (
       createUserVariables.password !== createUserVariables.confirmPassword
     ) {

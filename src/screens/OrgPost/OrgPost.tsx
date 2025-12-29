@@ -112,11 +112,12 @@ function OrgPost(): JSX.Element {
   }, [currentPage, sortingOption, sortedPosts]);
 
   useEffect(() => {
-    if (orgPostListError) NotificationToast.error('Organization post list error:');
+    if (orgPostListError) NotificationToast.error(t('orgPostListError'));
   }, [orgPostListError]);
 
   useEffect(() => {
-    if (orgPinnedPostListError) NotificationToast.error(t('pinnedPostsLoadError'));
+    if (orgPinnedPostListError)
+      NotificationToast.error(t('pinnedPostsLoadError'));
   }, [orgPinnedPostListError]);
 
   useEffect(() => {
@@ -211,7 +212,7 @@ function OrgPost(): JSX.Element {
         setFilteredPosts(filtered);
       }
     } catch {
-      NotificationToast.error('Error searching posts');
+      NotificationToast.error(t('errorSearchingPosts'));
       setIsFiltering(false);
     }
   };

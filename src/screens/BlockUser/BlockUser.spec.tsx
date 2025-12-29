@@ -248,13 +248,14 @@ describe('BlockUser Component', () => {
         <MockedProvider mocks={createMocks({ membersQueryError: true })}>
           <BrowserRouter>
             <BlockUser />
-
           </BrowserRouter>
         </MockedProvider>,
       );
 
       await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith('Failed to fetch members');
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'Failed to fetch members',
+        );
       });
     });
 
@@ -263,7 +264,6 @@ describe('BlockUser Component', () => {
         <MockedProvider mocks={createMocks({ blockedUsersQueryError: true })}>
           <BrowserRouter>
             <BlockUser />
-
           </BrowserRouter>
         </MockedProvider>,
       );
@@ -737,7 +737,6 @@ describe('BlockUser Component', () => {
         <MockedProvider mocks={createMocks()}>
           <BrowserRouter>
             <BlockUser />
-
           </BrowserRouter>
         </MockedProvider>,
       );
@@ -756,7 +755,9 @@ describe('BlockUser Component', () => {
       });
 
       await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalledWith('blockedSuccessfully');
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          'blockedSuccessfully',
+        );
       });
     });
 
@@ -765,7 +766,6 @@ describe('BlockUser Component', () => {
         <MockedProvider mocks={createMocks()}>
           <BrowserRouter>
             <BlockUser />
-
           </BrowserRouter>
         </MockedProvider>,
       );
@@ -794,7 +794,9 @@ describe('BlockUser Component', () => {
       });
 
       await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalledWith('Un-BlockedSuccessfully');
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          'Un-BlockedSuccessfully',
+        );
       });
     });
 
@@ -867,7 +869,6 @@ describe('BlockUser Component', () => {
         <MockedProvider mocks={createMocks()}>
           <BrowserRouter>
             <BlockUser />
-
           </BrowserRouter>
         </MockedProvider>,
       );
@@ -888,7 +889,9 @@ describe('BlockUser Component', () => {
       });
 
       await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalledWith('blockedSuccessfully');
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          'blockedSuccessfully',
+        );
       });
 
       // Block second user
@@ -898,7 +901,9 @@ describe('BlockUser Component', () => {
       });
 
       await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalledWith('blockedSuccessfully');
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          'blockedSuccessfully',
+        );
       });
 
       // Verify both users are no longer in the list
@@ -914,7 +919,6 @@ describe('BlockUser Component', () => {
         <MockedProvider mocks={createMocks()}>
           <BrowserRouter>
             <BlockUser />
-
           </BrowserRouter>
         </MockedProvider>,
       );
@@ -935,7 +939,9 @@ describe('BlockUser Component', () => {
       });
 
       await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalledWith('blockedSuccessfully');
+        expect(NotificationToast.success).toHaveBeenCalledWith(
+          'blockedSuccessfully',
+        );
       });
 
       // Switch to blocked users view
@@ -1019,7 +1025,6 @@ describe('BlockUser Component', () => {
         <MockedProvider mocks={customMocks}>
           <BrowserRouter>
             <BlockUser />
-
           </BrowserRouter>
         </MockedProvider>,
       );
@@ -1038,7 +1043,9 @@ describe('BlockUser Component', () => {
       await flushPromises();
 
       await waitFor(() => {
-        expect(NotificationToast.success).not.toHaveBeenCalledWith('blockedSuccessfully');
+        expect(NotificationToast.success).not.toHaveBeenCalledWith(
+          'blockedSuccessfully',
+        );
         expect(screen.getByText('John Doe')).toBeInTheDocument();
       });
     });
@@ -1099,7 +1106,6 @@ describe('BlockUser Component', () => {
         <MockedProvider mocks={customMocks}>
           <BrowserRouter>
             <BlockUser />
-
           </BrowserRouter>
         </MockedProvider>,
       );

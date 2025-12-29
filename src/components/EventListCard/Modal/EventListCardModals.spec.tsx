@@ -383,7 +383,9 @@ describe('EventListCardModals', () => {
     });
 
     expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
-    expect(NotificationToast.info).toHaveBeenCalledWith('eventListCard.noChangesToUpdate');
+    expect(NotificationToast.info).toHaveBeenCalledWith(
+      'eventListCard.noChangesToUpdate',
+    );
   });
 
   test('handles event registration', async () => {

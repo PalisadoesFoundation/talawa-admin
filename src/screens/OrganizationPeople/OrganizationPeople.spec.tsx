@@ -1094,7 +1094,9 @@ describe('OrganizationPeople', () => {
 
     // Wait for error handling
     await waitFor(() => {
-      expect(vi.mocked(NotificationToast.error)).toHaveBeenCalledWith('An error occurred');
+      expect(vi.mocked(NotificationToast.error)).toHaveBeenCalledWith(
+        'An error occurred',
+      );
     });
   });
 
@@ -1154,7 +1156,9 @@ describe('OrganizationPeople', () => {
 
     // Wait for error handling
     await waitFor(() => {
-      expect(vi.mocked(NotificationToast.error)).toHaveBeenCalledWith('An error occurred');
+      expect(vi.mocked(NotificationToast.error)).toHaveBeenCalledWith(
+        'An error occurred',
+      );
     });
   });
 

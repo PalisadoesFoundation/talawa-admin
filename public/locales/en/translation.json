@@ -780,7 +780,10 @@
     "organizationIdMissing": "Organization ID is missing!",
     "messageDescription": "Post Description",
     "addVideo": "Add Video",
-    "creatingMessage": "Creating Post..."
+    "creatingMessage": "Creating Post...",
+    "orgPostListError": "Organization post list error:",
+    "pinnedPostsLoadError": "Error loading pinned posts",
+    "errorSearchingPosts": "Error searching posts"
   },
   "postNotFound": {
     "post": "Post",

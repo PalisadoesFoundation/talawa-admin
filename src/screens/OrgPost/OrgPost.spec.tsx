@@ -27,7 +27,12 @@ import convertToBase64 from 'utils/convertToBase64';
 import type { MockedFunction } from 'vitest';
 import * as convertToBase64Module from 'utils/convertToBase64';
 
-const { mockToast, mockConvertToBase64, mockErrorHandler, mockNotificationToast } = vi.hoisted(() => ({
+const {
+  mockToast,
+  mockConvertToBase64,
+  mockErrorHandler,
+  mockNotificationToast,
+} = vi.hoisted(() => ({
   mockToast: {
     success: vi.fn(),
     error: vi.fn(),
@@ -937,7 +942,7 @@ describe('OrgPost SearchBar functionality', () => {
 
     await waitFor(() => {
       expect(toastErrorSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Organization post list error:'),
+        expect.stringContaining('orgPostListError'),
       );
       const postsRenderer = screen.getByTestId('posts-renderer');
       expect(postsRenderer.getAttribute('data-is-filtering')).toBe('false');

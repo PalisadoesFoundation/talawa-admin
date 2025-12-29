@@ -147,7 +147,9 @@ describe('useUpdateEventHandler', () => {
     const { updateEventHandler } = useUpdateEventHandler();
     await updateEventHandler(buildHandlerInput());
 
-    expect(NotificationToast.info).toHaveBeenCalledWith('eventListCard.noChangesToUpdate');
+    expect(NotificationToast.info).toHaveBeenCalledWith(
+      'eventListCard.noChangesToUpdate',
+    );
     expect(mockUpdateStandaloneEvent).not.toHaveBeenCalled();
     expect(mockUpdateSingleRecurringEventInstance).not.toHaveBeenCalled();
     expect(mockUpdateThisAndFollowingEvents).not.toHaveBeenCalled();
