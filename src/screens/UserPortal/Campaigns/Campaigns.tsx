@@ -423,6 +423,7 @@ const Campaigns = (): JSX.Element => {
               rows={
                 filteredCampaigns.map((campaign) => ({
                   ...campaign,
+                  id: campaign._id,
                 })) as ReportingRow[]
               }
               columns={columns}

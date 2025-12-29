@@ -1,0 +1,10 @@
+.toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.errorMessage {
+  color: red;
+  padding: 10px;
+}
