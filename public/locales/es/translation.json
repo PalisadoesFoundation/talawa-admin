@@ -230,7 +230,8 @@
     "noOrgErrorTitle": "Organizaciones no encontradas",
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
     "profilePictureAlt": "Imagen de perfil de {{name}}",
-    "placeholderAvatarAlt": "Avatar predeterminado"
+    "placeholderAvatarAlt": "Avatar predeterminado",
+    "newMembersWillAppearHere": "New members will appear here"
   },
   "users": {
     "membershipStatus": {
@@ -1676,7 +1677,13 @@
     "noPledges": "No se encontraron promesas",
     "noCampaigns": "No se encontraron campañas",
     "raised": "Recaudado",
-    "amountRaised": "Monto Recaudado"
+    "amountRaised": "Monto Recaudado",
+    "campaignName": "Campaign Name",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "fundingGoal": "Funding Goal",
+    "searchCampaigns": "Search Campaigns",
+    "viewPledge": "View Pledge"
   },
   "userPledges": {
     "title": "Mis Promesas"
