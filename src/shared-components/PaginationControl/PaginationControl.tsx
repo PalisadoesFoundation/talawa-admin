@@ -109,20 +109,18 @@ export function PaginationControl({
   // Handle empty state
   if (totalItems === 0) {
     return (
-      <div
+      <nav
         className={styles.paginationContainer}
-        role="navigation"
         aria-label={t('pagination.label')}
       >
         <span className={styles.emptyState}>{t('pagination.noItems')}</span>
-      </div>
+      </nav>
     );
   }
 
   return (
-    <div
+    <nav
       className={styles.paginationContainer}
-      role="navigation"
       aria-label={t('pagination.label')}
       onKeyDown={handleKeyDown}
       tabIndex={0}
@@ -215,6 +213,6 @@ export function PaginationControl({
           { startItem, endItem, totalItems },
         )}
       </span>
-    </div>
+    </nav>
   );
 }
