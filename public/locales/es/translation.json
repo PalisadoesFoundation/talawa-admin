@@ -66,10 +66,8 @@
     "communityLogo": "Logo de la Comunidad",
     "organizations": "Organizaciones",
     "accountLocked": "Su cuenta ha sido bloqueada temporalmente debido a demasiados intentos fallidos de inicio de sesión. Por favor, inténtelo de nuevo más tarde.",
-    "accountLockedWithTimer": "Su cuenta ha sido bloqueada temporalmente. Por favor, inténtelo de nuevo en {{minutes}} minuto(s)."
-    "backToLogin": "Volver al inicio de sesión",
-    "communityLogo": "Logo de la comunidad",
-    "organizations": "Organizaciones"
+    "accountLockedWithTimer": "Su cuenta ha sido bloqueada temporalmente. Por favor, inténtelo de nuevo en {{minutes}} minuto(s).",
+    "backToLogin": "Volver al inicio de sesión"
   },
   "signOut": {
     "retryPrompt": "Error al Cerrar sesión. ¿Reintentar?",
