@@ -18,7 +18,7 @@ Defined in: [src/shared-components/DataGridWrapper/DataGridWrapper.tsx:12](https
 
 ### props
 
-[`InterfaceDataGridWrapperProps`](../../interface/interfaces/InterfaceDataGridWrapperProps.md)\<`T`\>
+[`InterfaceDataGridWrapperProps`](../../../../types/DataGridWrapper/interface/interfaces/InterfaceDataGridWrapperProps.md)\<`T`\>
 
 ## Returns
 

@@ -5,6 +5,6 @@
 }
 
 .errorMessage {
-  color: red;
+  color: var(--bs-danger);
   padding: 10px;
 }

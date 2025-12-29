@@ -230,7 +230,8 @@
     "name": "name",
     "email": "email",
     "profilePictureAlt": "User profile picture",
-    "placeholderAvatarAlt": "Placeholder avatar"
+    "placeholderAvatarAlt": "Placeholder avatar",
+    "newMembersWillAppearHere": "New members will appear here"
   },
   "users": {
     "membershipStatus": {
@@ -1676,7 +1677,13 @@
     "noPledges": "No Pledges Found",
     "noCampaigns": "No Campaigns Found",
     "raised": "Raised",
-    "amountRaised": "Amount Raised"
+    "amountRaised": "Amount Raised",
+    "campaignName": "Campaign Name",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "fundingGoal": "Funding Goal",
+    "searchCampaigns": "Search Campaigns",
+    "viewPledge": "View Pledge"
   },
   "userPledges": {
     "title": "My Pledges"

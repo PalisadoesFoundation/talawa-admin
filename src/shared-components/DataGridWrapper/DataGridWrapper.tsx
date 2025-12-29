@@ -2,7 +2,7 @@
 import React, { useMemo, useState } from 'react';
 import { DataGrid, GridRenderCellParams } from '@mui/x-data-grid';
 import { useTranslation } from 'react-i18next';
-import type { InterfaceDataGridWrapperProps } from './interface';
+import type { InterfaceDataGridWrapperProps } from '../../types/DataGridWrapper/interface';
 import styles from './DataGridWrapper.module.css';
 
 import SearchBar from '../SearchBar/SearchBar';
@@ -26,8 +26,14 @@ export function DataGridWrapper<T extends { id: string | number }>(
   } = props;
   const { t: tCommon } = useTranslation('common');
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedSort, setSelectedSort] = useState<string | number>('');
+  const [selectedSort, setSelectedSort] = useState<string | number>(() => {
+    if (sortConfig?.defaultSortField && sortConfig?.defaultSortOrder) {
+      return `${sortConfig.defaultSortField}_${sortConfig.defaultSortOrder}`;
+    }
+    return '';
+  });
   const [page, setPage] = useState(0);
+
   const [pageSize, setPageSize] = useState(
     paginationConfig?.defaultPageSize ?? 10,
   );
@@ -113,9 +119,7 @@ export function DataGridWrapper<T extends { id: string | number }>(
         </div>
       )}
       {!loading && !error && filtered.length === 0 && (
-        <div role="status">
-          {emptyStateMessage || tCommon('noResultsFound')}
-        </div>
+        <output>{emptyStateMessage || tCommon('noResultsFound')}</output>
       )}
     </div>
   );
