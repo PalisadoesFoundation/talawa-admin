@@ -181,7 +181,7 @@ Enables the search bar in the toolbar.
 
 #### fields
 
-> **fields**: `string`[]
+> **fields**: keyof `T` & `string`[]
 
 The fields (keys of T) to include in the search filter.
 

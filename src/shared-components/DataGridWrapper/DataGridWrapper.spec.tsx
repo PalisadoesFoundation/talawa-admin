@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, within, act } from '@testing-library/react';
+import { render, screen, fireEvent, within } from '@testing-library/react';
 import { DataGridWrapper } from './index';
 import { vi } from 'vitest';
 
@@ -38,7 +38,7 @@ const defaultProps = {
     { field: 'role', headerName: 'Role', width: 150 },
     { field: 'age', headerName: 'Age', width: 100 },
   ],
-  searchConfig: { enabled: true, fields: ['name'] },
+  searchConfig: { enabled: true, fields: ['name'] as (keyof TestRow)[] },
 };
 
 describe('DataGridWrapper', () => {
@@ -99,17 +99,11 @@ describe('DataGridWrapper', () => {
     expect(screen.getByTestId('action-2')).toBeInTheDocument();
   });
 
-  test('search filters rows with simulated debounce/time advance', () => {
-    vi.useFakeTimers();
+  test('search filters rows immediately', () => {
     render(<DataGridWrapper {...defaultProps} />);
     const input = screen.getByRole('searchbox');
 
     fireEvent.change(input, { target: { value: 'Alice' } });
-
-    // Simulate time advance if there was debounce (currently immediate, but good practice)
-    act(() => {
-      vi.advanceTimersByTime(500);
-    });
 
     expect(screen.getByText('Alice')).toBeInTheDocument();
     expect(screen.queryByText('Bob')).toBeNull();
@@ -215,7 +209,10 @@ describe('DataGridWrapper', () => {
       <DataGridWrapper
         {...defaultProps}
         rows={rowsWithNull}
-        searchConfig={{ enabled: true, fields: ['name', 'role'] }}
+        searchConfig={{
+          enabled: true,
+          fields: ['name', 'role'] as (keyof TestRow)[],
+        }}
       />,
     );
 

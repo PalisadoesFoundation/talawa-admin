@@ -48,7 +48,7 @@ export interface InterfaceDataGridWrapperProps<
     /** Enables the search bar in the toolbar. */
     enabled: boolean;
     /** The fields (keys of T) to include in the search filter. */
-    fields: string[];
+    fields: Array<keyof T & string>;
     /** Custom placeholder text for the search input. */
     placeholder?: string;
     /** Delay in milliseconds for search debounce (if implemented). */

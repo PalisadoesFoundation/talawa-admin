@@ -231,7 +231,7 @@
     "email": "电子邮件",
     "profilePictureAlt": "{{name}} 的头像",
     "placeholderAvatarAlt": "占位符头像",
-    "newMembersWillAppearHere": "New members will appear here"
+    "newMembersWillAppearHere": "新成员会显示在这里"
   },
   "users": {
     "membershipStatus": {
@@ -1678,12 +1678,12 @@
     "noCampaigns": "未找到活动",
     "raised": "已筹集",
     "amountRaised": "已筹集金额",
-    "campaignName": "Campaign Name",
-    "startDate": "Start Date",
-    "endDate": "End Date",
-    "fundingGoal": "Funding Goal",
-    "searchCampaigns": "Search Campaigns",
-    "viewPledge": "View Pledge"
+    "campaignName": "活动名称",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "fundingGoal": "资金目标",
+    "searchCampaigns": "搜索活动",
+    "viewPledge": "查看承诺"
   },
   "userPledges": {
     "title": "我的承诺"

@@ -231,7 +231,7 @@
     "email": "E-mail",
     "profilePictureAlt": "Image de profil de {{name}}",
     "placeholderAvatarAlt": "Avatar par défaut",
-    "newMembersWillAppearHere": "New members will appear here"
+    "newMembersWillAppearHere": "Les nouveaux membres apparaîtront ici"
   },
   "users": {
     "membershipStatus": {
@@ -1678,12 +1678,12 @@
     "noCampaigns": "Aucune campagne trouvée",
     "raised": "Collecté",
     "amountRaised": "Montant Collecté",
-    "campaignName": "Campaign Name",
-    "startDate": "Start Date",
-    "endDate": "End Date",
-    "fundingGoal": "Funding Goal",
-    "searchCampaigns": "Search Campaigns",
-    "viewPledge": "View Pledge"
+    "campaignName": "Nom de la campagne",
+    "startDate": "Date de début",
+    "endDate": "Date de fin",
+    "fundingGoal": "Objectif de financement",
+    "searchCampaigns": "Rechercher des campagnes",
+    "viewPledge": "Voir la promesse de don"
   },
   "userPledges": {
     "title": "Mes Promesses"
