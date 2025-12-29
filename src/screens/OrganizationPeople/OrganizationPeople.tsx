@@ -124,22 +124,6 @@ function OrganizationPeople(): JSX.Element {
   const role = location?.state;
   const { orgId: currentUrl } = useParams();
 
-  if (!currentUrl) {
-    return <Navigate to="/orglist" replace />;
-  }
-
-  // Breadcrumb items for organization -> people navigation
-  const breadcrumbItems: IBreadcrumbItem[] = [
-    {
-      translationKey: 'organization',
-      to: `/orgdash/${currentUrl}`,
-    },
-    {
-      translationKey: 'People',
-      isCurrent: true,
-    },
-  ];
-
   // State
   const [state, setState] = useState(role?.role || 0);
   const [searchTerm, setSearchTerm] = useState('');
@@ -523,6 +507,23 @@ function OrganizationPeople(): JSX.Element {
     rowHeight: 70,
     isRowSelectable: () => false,
   };
+
+  // Redirect to orglist if currentUrl is missing (after all hooks)
+  if (!currentUrl) {
+    return <Navigate to="/orglist" replace />;
+  }
+
+  // Breadcrumb items for organization -> people navigation
+  const breadcrumbItems: IBreadcrumbItem[] = [
+    {
+      translationKey: 'organization',
+      to: `/orgdash/${currentUrl}`,
+    },
+    {
+      translationKey: 'People',
+      isCurrent: true,
+    },
+  ];
 
   return (
     <>

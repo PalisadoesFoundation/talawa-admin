@@ -75,21 +75,6 @@ function organizationVenues(): JSX.Element {
 
   // Getting the organization ID from the URL parameters
   const { orgId } = useParams();
-  if (!orgId) {
-    return <Navigate to="/orglist" />;
-  }
-
-  // Breadcrumb items for organization -> venues navigation
-  const breadcrumbItems: IBreadcrumbItem[] = [
-    {
-      translationKey: 'organization',
-      to: `/orgdash/${orgId}`,
-    },
-    {
-      translationKey: 'Venues',
-      isCurrent: true,
-    },
-  ];
 
   // State hooks for managing component state
   const [venueModal, setVenueModal] = useState<boolean>(false);
@@ -113,6 +98,7 @@ function organizationVenues(): JSX.Element {
     variables: {
       orgId: orgId,
     },
+    skip: !orgId,
   });
 
   // GraphQL mutation for deleting a venue
@@ -223,6 +209,23 @@ function organizationVenues(): JSX.Element {
       setVenues(filteredVenues);
     }
   }, [venueData, searchTerm, searchBy, sortOrder]);
+
+  // Redirect to orglist if orgId is missing (after all hooks)
+  if (!orgId) {
+    return <Navigate to="/orglist" />;
+  }
+
+  // Breadcrumb items for organization -> venues navigation
+  const breadcrumbItems: IBreadcrumbItem[] = [
+    {
+      translationKey: 'organization',
+      to: `/orgdash/${orgId}`,
+    },
+    {
+      translationKey: 'Venues',
+      isCurrent: true,
+    },
+  ];
 
   return (
     <>
