@@ -82,12 +82,12 @@ export default function PostDetailModal({
 
       if (response.data?.updatePost) {
         onHide();
-        toast.success(isPinned ? 'Post unpinned' : 'Post pinned');
+        toast.success(isPinned ? t('postUnpinned') : t('postPinned'));
         setTimeout(() => {
           window.location.reload();
         }, 2000);
       } else {
-        toast.error('Failed to toggle pin');
+        toast.error(t('pinToggleFailed'));
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -161,6 +161,7 @@ export default function PostDetailModal({
             {videoAttachment ? (
               <div
                 style={{ position: 'relative' }}
+                role="region"
                 aria-label="Video player with controls"
               >
                 <video
