@@ -94,6 +94,17 @@ export const ORGANIZATION_LIST_NO_MEMBERS = gql`
   }
 `;
 
+// Query for unauthenticated users (e.g., registration page)
+export const ORGANIZATION_LIST_PUBLIC = gql`
+  query {
+    organizations {
+      id
+      name
+      addressLine1
+    }
+  }
+`;
+
 export const ORGANIZATION_MEMBER_ADMIN_COUNT = gql`
   query OrganizationMemberAdminCounts($id: String!) {
     organization(input: { id: $id }) {
