@@ -153,6 +153,8 @@
   "eventCreated": "活动创建成功",
   "eventDetails": "活动详情",
   "pluginSettings": "插件设置",
+  "showPassword": "显示密码",
+  "hidePassword": "隐藏密码",
   "selectLanguage": "选择语言",
   "talawa": "塔拉瓦",
   "talawaBranding": "Talawa 品牌形象"

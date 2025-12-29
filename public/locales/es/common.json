@@ -153,6 +153,8 @@
   "eventCreated": "Evento creado exitosamente",
   "eventDetails": "Detalles del Evento",
   "pluginSettings": "Configuración de complementos",
+  "showPassword": "Mostrar contraseña",
+  "hidePassword": "Ocultar contraseña",
   "selectLanguage": "Seleccionar idioma",
   "talawa": "Talawa",
   "talawaBranding": "Marca Talawa"
