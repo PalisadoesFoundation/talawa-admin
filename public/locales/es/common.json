@@ -128,7 +128,6 @@
   "Volunteers": "Voluntarios",
   "unblock": "Desbloquear",
   "unblockedSuccessfully": "{{item}} desbloqueado exitosamente",
-  "pluginSettings": "Configuración de complementos",
   "signOut": "Cerrar sesión",
   "signingOut": "Cerrando sesión...",
   "retryPrompt": "Error al cerrar sesión. ¿Reintentar?",
@@ -152,5 +151,9 @@
   "organizations": "Organizaciones",
   "createEvent": "Crear Evento",
   "eventCreated": "Evento creado exitosamente",
-  "eventDetails": "Detalles del Evento"
+  "eventDetails": "Detalles del Evento",
+  "pluginSettings": "Configuración de complementos",
+  "selectLanguage": "Seleccionar idioma",
+  "talawa": "Talawa",
+  "talawaBranding": "Marca Talawa"
 }

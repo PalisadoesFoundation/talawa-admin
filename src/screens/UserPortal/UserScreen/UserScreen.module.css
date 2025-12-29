@@ -171,3 +171,11 @@
     right: 0;
   }
 }
+
+.contentContainer {
+  margin-left: 100px;
+}
+
+.titleContainer {
+  flex: 1;
+}
