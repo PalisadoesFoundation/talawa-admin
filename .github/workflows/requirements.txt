@@ -12,3 +12,4 @@ pydocstyle
 flake8
 flake8-docstrings
 docstring_parser
+pytest

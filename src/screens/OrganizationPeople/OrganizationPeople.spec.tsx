@@ -826,7 +826,9 @@ describe('OrganizationPeople', () => {
     fireEvent.click(adminOption);
 
     await waitFor(() => {
-      expect(screen.getByText('Admin User')).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: 'Admin User' }),
+      ).toBeInTheDocument();
     });
 
     // Navigate to next page
@@ -835,7 +837,9 @@ describe('OrganizationPeople', () => {
 
     // Wait for next page data to load
     await waitFor(() => {
-      expect(screen.getByText('Admin User 2')).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: 'Admin User 2' }),
+      ).toBeInTheDocument();
     });
 
     // Navigate back to previous page
@@ -846,7 +850,9 @@ describe('OrganizationPeople', () => {
 
     // Wait for previous page data to load
     await waitFor(() => {
-      expect(screen.getByText('Admin User')).toBeInTheDocument();
+      expect(
+        screen.getByRole('link', { name: 'Admin User' }),
+      ).toBeInTheDocument();
     });
   });
 
@@ -1160,6 +1166,59 @@ describe('OrganizationPeople', () => {
         'An error occurred',
       );
     });
+  });
+
+  test('displays localized notFound message in empty state', async () => {
+    const emptyMock = createMemberConnectionMock(
+      {
+        orgId: 'orgid',
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      },
+      {
+        edges: [],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: undefined,
+          endCursor: undefined,
+        },
+      },
+    );
+
+    const link = new StaticMockLink([emptyMock], true);
+
+    render(
+      <MockedProvider link={link}>
+        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Routes>
+                <Route
+                  path="/orgpeople/:orgId"
+                  element={<OrganizationPeople />}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    // Wait for loading to finish and empty state to appear
+    await waitFor(
+      () => {
+        expect(
+          screen.getByTestId('organization-people-empty-state'),
+        ).toBeInTheDocument();
+        const msg =
+          i18nForTest.getDataByLanguage('en')?.common?.notFound ?? 'Not Found';
+        expect(screen.getByText(msg)).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 
   test('handles member removal modal correctly', async () => {

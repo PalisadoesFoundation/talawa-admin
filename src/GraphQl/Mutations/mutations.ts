@@ -138,6 +138,7 @@ export const SIGNUP_MUTATION = gql`
         id
       }
       authenticationToken
+      refreshToken
     }
   }
 `;
@@ -232,21 +233,33 @@ export const CREATE_MEMBER_PG = gql`
 // to login in the talawa admin
 
 // to get the refresh token
+// Note: refreshToken variable is optional - the API will read from HTTP-Only cookie if not provided
 
 export const REFRESH_TOKEN_MUTATION = gql`
-  mutation RefreshToken($refreshToken: String!) {
+  mutation RefreshToken($refreshToken: String) {
     refreshToken(refreshToken: $refreshToken) {
+      authenticationToken
       refreshToken
-      accessToken
     }
   }
 `;
 
-// to revoke a refresh token
+// Logout mutation - clears HTTP-Only cookies on the server
+// This is preferred over REVOKE_REFRESH_TOKEN for web clients using cookie-based auth
+
+export const LOGOUT_MUTATION = gql`
+  mutation Logout {
+    logout {
+      success
+    }
+  }
+`;
+
+// to revoke a refresh token (legacy - use LOGOUT_MUTATION for cookie-based auth)
 
 export const REVOKE_REFRESH_TOKEN = gql`
-  mutation RevokeRefreshTokenForUser {
-    revokeRefreshTokenForUser
+  mutation RevokeRefreshToken($refreshToken: String!) {
+    revokeRefreshToken(refreshToken: $refreshToken)
   }
 `;
 
@@ -392,13 +405,9 @@ export const CREATE_POST_MUTATION = gql`
     createPost(input: $input) {
       id
       caption
+      body
       pinnedAt
-      attachments {
-        fileHash
-        mimeType
-        name
-        objectName
-      }
+      attachmentURL
     }
   }
 `;

@@ -54,7 +54,7 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQueries';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import useLocalStorage from 'utils/useLocalstorage';
 
 export interface InterfaceOrganizationCardPropsPG {
@@ -122,24 +122,24 @@ function OrganizationCard({
     try {
       if (userRegistrationRequired) {
         await sendMembershipRequest({ variables: { organizationId: id } });
-        toast.success(t('users.MembershipRequestSent') as string);
+        NotificationToast.success(t('users.MembershipRequestSent'));
       } else {
         await joinPublicOrganization({
           variables: { input: { organizationId: id } },
         });
-        toast.success(t('users.orgJoined') as string);
+        NotificationToast.success(t('users.orgJoined'));
       }
     } catch (error: unknown) {
       if (error instanceof ApolloError) {
         const apolloError = error;
         const errorCode = apolloError.graphQLErrors?.[0]?.extensions?.code;
         if (errorCode === 'ALREADY_MEMBER') {
-          toast.error(t('users.AlreadyJoined') as string);
+          NotificationToast.error(t('users.AlreadyJoined'));
         } else {
-          toast.error(t('users.errorOccurred') as string);
+          NotificationToast.error(t('users.errorOccurred'));
         }
       } else {
-        toast.error(t('users.errorOccurred') as string);
+        NotificationToast.error(t('users.errorOccurred'));
       }
     }
   }
@@ -150,7 +150,7 @@ function OrganizationCard({
   async function withdrawMembershipRequest(): Promise<void> {
     const currentUserId = userId;
     if (!currentUserId) {
-      toast.error(t('users.UserIdNotFound') as string);
+      NotificationToast.error(t('users.UserIdNotFound'));
       return;
     }
 
@@ -160,7 +160,7 @@ function OrganizationCard({
 
     try {
       if (!membershipRequest) {
-        toast.error(t('users.MembershipRequestNotFound') as string);
+        NotificationToast.error(t('users.MembershipRequestNotFound'));
         return;
       }
 
@@ -168,12 +168,9 @@ function OrganizationCard({
         variables: { membershipRequestId: membershipRequest.id },
       });
 
-      toast.success(t('users.MembershipRequestWithdrawn') as string);
-    } catch (error: unknown) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Failed to withdraw membership request:', error);
-      }
-      toast.error(t('users.errorOccurred') as string);
+      NotificationToast.success(t('users.MembershipRequestWithdrawn'));
+    } catch {
+      NotificationToast.error(t('users.errorOccurred'));
     }
   }
 
@@ -216,7 +213,7 @@ function OrganizationCard({
                   membershipState === 'member'
                     ? styles.member
                     : membershipState === 'pending'
-                      ? styles.pending
+                      ? styles.pendingMembership
                       : styles.notMember,
                 ].join(' ')}
                 data-testid="membershipStatus"
@@ -289,9 +286,8 @@ function OrganizationCard({
                   <Button
                     data-testid="manageBtn"
                     data-cy="manageBtn"
-                    className={styles.manageBtn}
+                    className={`${styles.manageBtn} ${styles.buttonWidth8rem}`}
                     onClick={() => navigate(`/user/organization/${id}`)}
-                    style={{ width: '8rem' }}
                   >
                     {t('users.visit')}
                   </Button>
@@ -309,7 +305,6 @@ function OrganizationCard({
                     onClick={joinOrganization}
                     data-testid="joinBtn"
                     className={styles.outlineBtn}
-                    style={{ width: '8rem' }}
                   >
                     {t('users.joinNow')}
                   </Button>

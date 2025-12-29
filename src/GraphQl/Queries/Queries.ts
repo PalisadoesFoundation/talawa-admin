@@ -449,36 +449,6 @@ export const GET_ORGANIZATION_POSTS_COUNT_PG = gql`
   }
 `;
 
-export const GET_POSTS_BY_ORG = gql`
-  query GetPostsByOrg($input: GetPostsByOrgInput!) {
-    postsByOrganization(input: $input) {
-      id
-      caption
-      pinnedAt
-      createdAt
-      updatedAt
-      attachments {
-        id
-        name
-        mimeType
-        objectName
-      }
-      creator {
-        id
-      }
-    }
-  }
-`;
-
-export const GET_USER_BY_ID = gql`
-  query GetUserById($input: QueryUserInput!) {
-    user(input: $input) {
-      id
-      name
-    }
-  }
-`;
-
 export const GET_ORGANIZATION_MEMBERS_PG = gql`
   query GetOrganizationMembers($id: String!, $first: Int, $after: String) {
     organization(input: { id: $id }) {
@@ -1195,6 +1165,7 @@ export const SIGNIN_QUERY = gql`
         avatarURL
       }
       authenticationToken
+      refreshToken
     }
   }
 `;
@@ -1248,7 +1219,6 @@ export { AGENDA_ITEM_CATEGORY_LIST } from './AgendaCategoryQueries';
 export { IS_SAMPLE_ORGANIZATION_QUERY } from './PlugInQueries';
 
 // display posts
-export { ORGANIZATION_POST_LIST } from './OrganizationQueries';
 export { ORGANIZATION_POST_LIST_WITH_VOTES } from './OrganizationQueries';
 
 // comments

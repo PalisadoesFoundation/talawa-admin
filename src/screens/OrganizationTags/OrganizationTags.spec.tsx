@@ -14,7 +14,7 @@ import { vi } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
@@ -64,10 +64,12 @@ async function wait(ms = 500): Promise<void> {
 
 const loadingOverlaySpy = vi.fn();
 
-vi.mock('react-toastify', () => ({
-  toast: {
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
   },
 }));
 
@@ -83,7 +85,7 @@ vi.mock('shared-components/ReportingTable/ReportingTable', async () => {
     }) => {
       loadingOverlaySpy(props.gridProps?.slots?.loadingOverlay?.());
       const Component = (
-        actual as { default: React.ComponentType<typeof props> }
+        actual as unknown as { default: React.ComponentType<typeof props> }
       ).default;
       return <Component {...props} />;
     },
@@ -399,7 +401,7 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('createTagSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(NotificationToast.success).toHaveBeenCalledWith(
         translations.tagCreationSuccess,
       );
     });
@@ -419,7 +421,9 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('createTagSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Mock Graphql Error',
+      );
     });
   });
   test('renders the no tags found message when there are no tags', async () => {
@@ -490,7 +494,9 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('createTagSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Tag creation failed');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Tag creation failed',
+      );
     });
   });
 
@@ -513,7 +519,9 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('createTagSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(translations.enterTagName);
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.enterTagName,
+      );
     });
   });
 

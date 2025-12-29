@@ -272,6 +272,152 @@ const OrgCard: React.FC<InterfaceOrgCardProps> = ({
 export default OrgCard;
 ```
 
+## Existing Shared Components
+
+Below are some commonly used shared components available in the codebase.
+
+## EmptyState
+
+`EmptyState` is a reusable shared component for displaying consistent empty, no-data, or no-result states across the application.  
+It replaces legacy `.notFound` CSS-based implementations and standardizes empty UI patterns.
+
+#### Component Location
+
+```text
+src/shared-components/EmptyState/
+```
+
+**Use cases:**
+
+- No search results
+- Empty lists or tables
+- No organizations / users / events
+- First-time onboarding states
+
+**Key features:**
+
+- Optional icon, description, and action button
+- Built-in accessibility (`role="status"`, `aria-label`)
+- i18n-ready (supports translation keys and plain strings)
+- Fully tested with 100% coverage
+
+**Example usage:**
+
+```tsx
+import EmptyState from 'src/shared-components/EmptyState/EmptyState';
+
+<EmptyState
+  message="noResults"
+  description="tryAdjustingFilters"
+  icon="person_off"
+  action={{
+    label: 'createNew',
+    onClick: handleCreate,
+    variant: 'primary',
+  }}
+/>;
+```
+
+#### When to Use EmptyState
+
+_Use EmptyState for:_
+
+- Empty lists or tables
+- No search results
+- No organizations, users, or events
+- First-time or onboarding states
+- Filtered results returning no data
+
+_Do not use EmptyState for:_
+
+- 404 or route-level errors (use NotFound instead)
+
+### Component API
+
+Import
+
+```ts
+import EmptyState from 'src/shared-components/EmptyState/EmptyState';
+```
+
+#### Props
+
+| Prop          | Type                  | Required | Description                                |
+| ------------- | --------------------- | -------- | ------------------------------------------ |
+| `message`     | `string`              | Yes      | Primary message (i18n key or plain string) |
+| `description` | `string`              | No       | Secondary supporting text                  |
+| `icon`        | `string \| ReactNode` | No       | Icon name or custom icon component         |
+| `action`      | `object`              | No       | Optional action button configuration       |
+| `className`   | `string`              | No       | Custom CSS class                           |
+| `dataTestId`  | `string`              | No       | Test identifier                            |
+
+#### Action Prop Shape
+
+```ts
+interface EmptyStateAction {
+  label: string;
+  onClick: () => void;
+  variant?: 'primary' | 'secondary' | 'outlined';
+}
+```
+
+### Usage Example
+
+**1. Simple Empty State:**
+
+```tsx
+<EmptyState message="noDataFound" />
+```
+
+**2. Empty State With Icon:**
+
+```tsx
+<EmptyState
+  icon="groups"
+  message="noOrganizationsFound"
+  description="createOrganizationToGetStarted"
+/>
+```
+
+**3. Search Empty State:**
+
+```tsx
+<EmptyState
+  icon="search"
+  message="noResultsFound"
+  description={tCommon('noResultsFoundFor', {
+    query: searchTerm,
+  })}
+/>
+```
+
+**4. Empty State With Action Button:**
+
+```tsx
+<EmptyState
+  icon="person_off"
+  message="noUsersFound"
+  description="inviteUsersToGetStarted"
+  action={{
+    label: 'inviteUser',
+    onClick: handleInvite,
+    variant: 'primary',
+  }}
+/>
+```
+
+### Relationship with Loading States
+
+- Use LoadingState while data is being fetched
+- Render EmptyState only after loading completes
+- Never show EmptyState during an active loading state
+
+### Migration Guidance
+
+- Legacy `.notFound` CSS patterns are deprecated
+- All new empty-state implementations must use EmptyState
+- Existing screens should be migrated incrementally
+
 ## Creating Shared Components
 
 This section provides guidance on our shared components policy.

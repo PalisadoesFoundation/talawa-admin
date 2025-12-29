@@ -1263,11 +1263,9 @@ describe('Testing User Pledge Screen', () => {
       ).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByTestId('deletePledgeCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('deletePledgeCloseBtn'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
   });
 
@@ -1309,6 +1307,7 @@ describe('Testing User Pledge Screen', () => {
   it('should show empty state when server returns no associated resources error', async () => {
     renderMyPledges(link11);
     await waitFor(() => {
+      expect(screen.getByTestId('pledges-empty-state')).toBeInTheDocument();
       expect(
         screen.getByText(translations.userCampaigns.noPledges),
       ).toBeInTheDocument();
@@ -1319,6 +1318,7 @@ describe('Testing User Pledge Screen', () => {
   it('should render empty state', async () => {
     renderMyPledges(link3);
     await waitFor(() => {
+      expect(screen.getByTestId('pledges-empty-state')).toBeInTheDocument();
       expect(
         screen.getByText(translations.userCampaigns.noPledges),
       ).toBeInTheDocument();
@@ -1370,6 +1370,7 @@ describe('Testing User Pledge Screen', () => {
     unmount();
     renderMyPledges(link3);
     await waitFor(() => {
+      expect(screen.getByTestId('pledges-empty-state')).toBeInTheDocument();
       expect(
         screen.getByText(translations.userCampaigns.noPledges),
       ).toBeInTheDocument();

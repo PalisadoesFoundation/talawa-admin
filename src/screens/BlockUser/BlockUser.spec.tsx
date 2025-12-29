@@ -291,6 +291,9 @@ describe('BlockUser Component', () => {
 
       // Should show empty state
       await waitFor(() => {
+        expect(
+          screen.getByTestId('block-user-empty-state'),
+        ).toBeInTheDocument();
         expect(screen.getByText(/noUsersFound/i)).toBeInTheDocument();
       });
     });
@@ -333,6 +336,9 @@ describe('BlockUser Component', () => {
 
       // Should show empty state
       await waitFor(() => {
+        expect(
+          screen.getByTestId('block-user-empty-state'),
+        ).toBeInTheDocument();
         expect(screen.getByText(/noUsersFound/i)).toBeInTheDocument();
       });
 
@@ -349,6 +355,9 @@ describe('BlockUser Component', () => {
 
       // Should show empty state for blocked users
       await waitFor(() => {
+        expect(
+          screen.getByTestId('block-user-empty-state'),
+        ).toBeInTheDocument();
         expect(screen.getByText(/noSpammerFound/i)).toBeInTheDocument();
       });
     });
@@ -421,11 +430,14 @@ describe('BlockUser Component', () => {
       });
 
       await waitFor(() => {
+        expect(
+          screen.getByTestId('block-user-empty-state'),
+        ).toBeInTheDocument();
         expect(screen.getByText(/noUsersFound/i)).toBeInTheDocument();
       });
     });
 
-    it('displays empty state when no blocked users are available', async () => {
+    it('displays empty state with noSpammerFound message when blocked tab is selected and searchTerm is empty', async () => {
       render(
         <MockedProvider mocks={createMocks({ emptyBlockedUsers: true })}>
           <BrowserRouter>
@@ -449,6 +461,9 @@ describe('BlockUser Component', () => {
       });
 
       await waitFor(() => {
+        expect(
+          screen.getByTestId('block-user-empty-state'),
+        ).toBeInTheDocument();
         expect(screen.getByText(/noSpammerFound/i)).toBeInTheDocument();
       });
     });
@@ -910,6 +925,9 @@ describe('BlockUser Component', () => {
       await waitFor(() => {
         expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
         expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
+        expect(
+          screen.getByTestId('block-user-empty-state'),
+        ).toBeInTheDocument();
         expect(screen.getByText(/noUsersFound/i)).toBeInTheDocument();
       });
     });

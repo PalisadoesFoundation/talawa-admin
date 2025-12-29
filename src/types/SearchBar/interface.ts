@@ -12,7 +12,7 @@ export interface InterfaceSearchMeta {
   /** The trigger source for the search (button click, enter key, etc.) */
   trigger: SearchBarTrigger;
   /** The original DOM event that triggered the search, if available */
-  event?: KeyboardEvent<HTMLInputElement> | MouseEvent<HTMLButtonElement>;
+  event?: KeyboardEvent<HTMLInputElement> | MouseEvent<HTMLButtonElement>; // i18n-ignore-line
 }
 
 /**
@@ -67,12 +67,16 @@ export interface InterfaceSearchBarProps
   showSearchButton?: boolean;
   /** Toggle visibility of the inline clear button. Defaults to true. */
   showClearButton?: boolean;
-  /** Toggle the leading search icon visibility. Defaults to true. */
+  /** Toggle the leading search icon visibility. Defaults to false. */
   showLeadingIcon?: boolean;
+  /** Toggle the trailing search icon visibility. Defaults to false. */
+  showTrailingIcon?: boolean;
   /** Optional label shown inside the search button. */
   buttonLabel?: string;
   /** Accessible label for the search button. */
   buttonAriaLabel?: string;
+  /** Accessible label for the clear button. */
+  clearButtonAriaLabel?: string;
   /** Renders a loading spinner inside the button when true. */
   isLoading?: boolean;
   /** Optional custom icon rendered inside the input field. */

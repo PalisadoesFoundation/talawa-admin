@@ -14,10 +14,10 @@ import { store } from 'state/store';
 import { toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import useLocalStorage from 'utils/useLocalstorage';
+import { useLocalStorage } from 'utils/useLocalstorage';
 import { props } from './EventListCardProps';
 import { ERROR_MOCKS, MOCKS } from './Modal/EventListCardMocks';
-import { vi, beforeAll, afterAll, expect, it } from 'vitest';
+import { vi, beforeAll, afterAll, afterEach, expect, it } from 'vitest';
 
 let setItem: ReturnType<typeof useLocalStorage>['setItem'];
 let clearAllItems: ReturnType<typeof useLocalStorage>['clearAllItems'];
@@ -106,7 +106,6 @@ describe('Testing Event List Card', () => {
 
   afterAll(() => {
     clearAllItems();
-    vi.clearAllMocks();
   });
 
   it('Should navigate to "/" if orgId is not defined', async () => {
@@ -312,10 +311,12 @@ describe('Testing Event List Card', () => {
 
     await userEvent.click(screen.getByTestId('card'));
 
+    await waitFor(() =>
+      expect(screen.getByTestId('eventModalCloseBtn')).toBeInTheDocument(),
+    );
+
     await waitFor(() => {
-      expect(
-        screen.getByText(translations.alreadyRegistered),
-      ).toBeInTheDocument();
+      screen.getByText((text) => text.includes(translations.alreadyRegistered));
     });
   });
 });

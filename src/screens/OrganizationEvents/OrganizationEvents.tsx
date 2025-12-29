@@ -18,7 +18,7 @@
  * ```
  */
 
-import React, { useState, useEffect, useRef, JSX } from 'react';
+import React, { useState, useEffect, useMemo, JSX } from 'react';
 import { useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import EventCalendar from 'components/EventCalender/Monthly/EventCalender';
@@ -28,9 +28,9 @@ import {
   GET_ORGANIZATION_DATA_PG,
 } from 'GraphQl/Queries/Queries';
 import dayjs from 'dayjs';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import useLocalStorage from 'utils/useLocalstorage';
-import { useParams, useNavigate } from 'react-router';
+import { useParams } from 'react-router';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils/recurrenceTypes';
@@ -95,14 +95,15 @@ function organizationEvents(): JSX.Element {
   });
   const { getItem } = useLocalStorage();
 
-  document.title = t('title');
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
   const [createEventmodalisOpen, setCreateEventmodalisOpen] = useState(false);
   const [viewType, setViewType] = useState<ViewType>(ViewType.MONTH);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const [searchByName, setSearchByName] = useState('');
   const { orgId: currentUrl } = useParams();
-  const navigate = useNavigate();
-  const queryTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const showInviteModal = (): void => setCreateEventmodalisOpen(true);
   const hideCreateEventModal = (): void => setCreateEventmodalisOpen(false);
@@ -124,7 +125,7 @@ function organizationEvents(): JSX.Element {
   } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
     variables: {
       id: currentUrl,
-      first: 150,
+      first: 100,
       after: null,
       startDate: dayjs(new Date(currentYear, currentMonth, 1))
         .startOf('month')
@@ -157,7 +158,7 @@ function organizationEvents(): JSX.Element {
     storedRole === 'administrator' ? UserRole.ADMINISTRATOR : UserRole.REGULAR;
 
   // Normalize event data for EventCalendar with proper typing
-  const events: InterfaceEvent[] = (
+  const allEvents: InterfaceEvent[] = (
     eventData?.organization?.events?.edges || []
   ).map((edge: IEventEdge) => ({
     id: edge.node.id,
@@ -191,6 +192,24 @@ function organizationEvents(): JSX.Element {
     attendees: [], // Adjust if attendees are added to schema
   }));
 
+  // Filter events based on search term (case-insensitive search across name, description, and location)
+  const events: InterfaceEvent[] = useMemo(() => {
+    if (!searchByName.trim()) {
+      return allEvents;
+    }
+    const lowerSearchTerm = searchByName.toLowerCase();
+    return allEvents.filter((event) => {
+      const matchesName = event.name.toLowerCase().includes(lowerSearchTerm);
+      const matchesDescription = event.description
+        .toLowerCase()
+        .includes(lowerSearchTerm);
+      const matchesLocation = event.location
+        .toLowerCase()
+        .includes(lowerSearchTerm);
+      return matchesName || matchesDescription || matchesLocation;
+    });
+  }, [allEvents, searchByName]);
+
   useEffect(() => {
     // Only navigate away for serious errors, not for empty results or month navigation
     if (eventDataError || orgDataError) {
@@ -211,85 +230,72 @@ function organizationEvents(): JSX.Element {
         orgDataError: orgDataError?.message,
       });
     }
-  }, [eventDataError, orgDataError, navigate]);
-
-  useEffect(() => {
-    // Cleanup timeout on unmount
-    return () => {
-      if (queryTimeoutRef.current) {
-        clearTimeout(queryTimeoutRef.current);
-      }
-    };
-  }, []);
-
-  if (orgLoading) return <Loader />;
+  }, [eventDataError, orgDataError]);
 
   return (
-    <>
-      <div className={styles.mainpageright}>
-        <div className={styles.justifyspOrganizationEvents}>
-          <PageHeader
-            search={{
-              placeholder: t('searchEventName'),
-              onSearch: (value) => console.log(`Search: ${value}`),
-              inputTestId: 'searchEvent',
-              buttonTestId: 'searchButton',
-            }}
-            sorting={[
-              {
-                title: t('viewType'),
-                selected: viewType,
-                options: [
-                  { label: ViewType.MONTH, value: ViewType.MONTH },
-                  { label: ViewType.DAY, value: ViewType.DAY },
-                  { label: ViewType.YEAR, value: ViewType.YEAR },
-                ],
-                onChange: (value) => handleChangeView(value.toString()),
-                testIdPrefix: 'selectViewType',
-              },
-            ]}
-            showEventTypeFilter={true}
-            actions={
-              <Button
-                className={styles.dropdown}
-                onClick={showInviteModal}
-                data-testid="createEventModalBtn"
-                data-cy="createEventModalBtn"
-              >
-                <div>
-                  <AddIcon
-                    sx={{
-                      fontSize: '25px',
-                      marginBottom: '2px',
-                      marginRight: '2px',
-                    }}
-                  />
-                  <span>{t('createEvent')}</span>
-                </div>
-              </Button>
-            }
-          />
+    <LoadingState isLoading={orgLoading} variant="spinner" size="lg">
+      <>
+        <div className={styles.mainpageright}>
+          <div className={styles.justifyspOrganizationEvents}>
+            <PageHeader
+              search={{
+                placeholder: t('searchEventName'),
+                onSearch: (value: string) => {
+                  setSearchByName(value);
+                },
+                inputTestId: 'searchEvent',
+                buttonTestId: 'searchButton',
+              }}
+              sorting={[
+                {
+                  title: t('viewType'),
+                  selected: viewType,
+                  options: [
+                    { label: ViewType.MONTH, value: ViewType.MONTH },
+                    { label: ViewType.DAY, value: ViewType.DAY },
+                    { label: ViewType.YEAR, value: ViewType.YEAR },
+                  ],
+                  onChange: (value) => handleChangeView(value.toString()),
+                  testIdPrefix: 'selectViewType',
+                },
+              ]}
+              showEventTypeFilter={true}
+              actions={
+                <Button
+                  className={styles.dropdown}
+                  onClick={showInviteModal}
+                  data-testid="createEventModalBtn"
+                  data-cy="createEventModalBtn"
+                >
+                  <div>
+                    <AddIcon className={styles.addIconStyle} />
+                    <span>{t('createEvent')}</span>
+                  </div>
+                </Button>
+              }
+            />
+          </div>
         </div>
-      </div>
-      <EventCalendar
-        eventData={events}
-        refetchEvents={refetchEvents}
-        orgData={orgData?.organization}
-        userId={userId}
-        userRole={userRole}
-        viewType={viewType}
-        onMonthChange={handleMonthChange}
-        currentMonth={currentMonth}
-        currentYear={currentYear}
-      />
+        <EventCalendar
+          eventData={events}
+          refetchEvents={refetchEvents}
+          orgData={orgData?.organization}
+          userId={userId}
+          userRole={userRole}
+          viewType={viewType}
+          onMonthChange={handleMonthChange}
+          currentMonth={currentMonth}
+          currentYear={currentYear}
+        />
 
-      <CreateEventModal
-        isOpen={createEventmodalisOpen}
-        onClose={hideCreateEventModal}
-        onEventCreated={refetchEvents}
-        currentUrl={currentUrl || ''}
-      />
-    </>
+        <CreateEventModal
+          isOpen={createEventmodalisOpen}
+          onClose={hideCreateEventModal}
+          onEventCreated={refetchEvents}
+          currentUrl={currentUrl || ''}
+        />
+      </>
+    </LoadingState>
   );
 }
 

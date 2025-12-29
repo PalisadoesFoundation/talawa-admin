@@ -11,7 +11,7 @@ import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import styles from '../../style/app-fixed.module.css';
 import { vi } from 'vitest';
-import useLocalStorage from 'utils/useLocalstorage';
+import { setItem, clearAllItems } from 'utils/useLocalstorage';
 
 // Create mocks for the router hooks
 let mockUseParams: ReturnType<typeof vi.fn>;
@@ -33,14 +33,6 @@ vi.mock('react-router', async () => {
     },
   };
 });
-
-// Mock MUI icon to prevent "too many open files" error on Windows
-// Mock only WarningAmberOutlined as LeftDrawerOrg is importing only that
-vi.mock('@mui/icons-material', () => ({
-  WarningAmberOutlined: () => (
-    <span data-testid="warning-icon">WarningAmberOutlined</span>
-  ),
-}));
 
 // Mock LeftDrawerOrg to prevent router-related errors from NavLink, useLocation, etc.
 vi.mock('components/LeftDrawerOrg/LeftDrawerOrg', () => ({
@@ -81,39 +73,64 @@ vi.mock('components/ProfileCard/ProfileCard', () => ({
 
 const MOCKS = [
   {
-    request: { query: GET_ORGANIZATION_EVENTS_PG, variables: { id: '123' } },
+    request: {
+      query: GET_ORGANIZATION_EVENTS_PG,
+      variables: { id: '123', first: 100, after: null },
+    },
     result: {
       data: {
-        eventsByOrganization: [
-          {
-            id: 'event123',
-            title: 'Test Event Title',
-            description: 'Test Description',
-            startDate: '2024-01-01',
-            endDate: '2024-01-02',
-            location: 'Test Location',
-            startTime: '09:00',
-            endTime: '17:00',
-            allDay: false,
-            isPublic: true,
-            isRegisterable: true,
+        organization: {
+          eventsCount: 1,
+          events: {
+            edges: [
+              {
+                cursor: 'cursor-1',
+                node: {
+                  id: 'event123',
+                  name: 'Test Event Title',
+                  description: 'Test Description',
+                  startAt: '2024-01-01T09:00:00.000Z',
+                  endAt: '2024-01-02T17:00:00.000Z',
+                  allDay: false,
+                  location: 'Test Location',
+                  isPublic: true,
+                  isRegisterable: true,
+                  isRecurringEventTemplate: false,
+                  baseEvent: null,
+                  sequenceNumber: null,
+                  totalCount: null,
+                  hasExceptions: false,
+                  progressLabel: null,
+                  recurrenceDescription: null,
+                  recurrenceRule: null,
+                  attachments: [],
+                  creator: { id: 'u1', name: 'Test User' },
+                  organization: { id: '123', name: 'Test Org' },
+                  createdAt: '2024-01-01T00:00:00.000Z',
+                  updatedAt: '2024-01-01T00:00:00.000Z',
+                },
+              },
+            ],
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: null,
+            },
           },
-        ],
+        },
       },
     },
   },
 ];
 
 const link = new StaticMockLink(MOCKS, true);
-const { setItem, clearAllItems } = useLocalStorage();
 
 describe('Testing OrganizationScreen', () => {
   beforeAll(() => {
-    setItem('name', 'John Doe');
+    setItem('Talawa-admin', 'name', 'John Doe');
   });
 
   afterAll(() => {
-    clearAllItems();
+    clearAllItems('Talawa-admin');
   });
 
   beforeEach(() => {
@@ -226,5 +243,51 @@ describe('Testing OrganizationScreen', () => {
       expect(eventNameElement).toBeInTheDocument();
       expect(eventNameElement.tagName).toBe('H4');
     });
+  });
+
+  test('sets eventName to null when eventId is not provided', async () => {
+    // Set up mocks for valid orgId but no eventId (not on event path)
+    mockUseParams.mockReturnValue({ orgId: '123' });
+    // Return null to simulate not being on an event path
+    mockUseMatch.mockReturnValue(null);
+
+    renderComponent();
+
+    await waitFor(() => {
+      const mainPage = screen.getByTestId('mainpageright');
+      expect(mainPage).toBeInTheDocument();
+    });
+
+    // Verify that no event name is displayed (eventName should be null)
+    const eventNameElement = screen.queryByText(/Test Event Title/i);
+    expect(eventNameElement).not.toBeInTheDocument();
+
+    // Verify that the main page renders without event name
+    const h4Elements = screen.queryAllByRole('heading', { level: 4 });
+    expect(h4Elements.length).toBe(0);
+  });
+
+  test('sets eventName to null when eventId is undefined in match params', async () => {
+    // Set up mocks for valid orgId but eventId is undefined in params
+    mockUseParams.mockReturnValue({ orgId: '123' });
+    // Return a match object but with undefined eventId
+    mockUseMatch.mockReturnValue({
+      params: { orgId: '123', eventId: undefined },
+    });
+
+    renderComponent();
+
+    await waitFor(() => {
+      const mainPage = screen.getByTestId('mainpageright');
+      expect(mainPage).toBeInTheDocument();
+    });
+
+    // Verify that no event name is displayed (eventName should be null)
+    const eventNameElement = screen.queryByText(/Test Event Title/i);
+    expect(eventNameElement).not.toBeInTheDocument();
+
+    // Verify that the main page renders without event name
+    const h4Elements = screen.queryAllByRole('heading', { level: 4 });
+    expect(h4Elements.length).toBe(0);
   });
 });

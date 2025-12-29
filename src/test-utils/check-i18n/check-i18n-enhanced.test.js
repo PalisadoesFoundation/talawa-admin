@@ -12,7 +12,7 @@ afterEach(() => {
   cleanupTempDirs();
 });
 
-describe('check-i18n script - enhanced features', () => {
+describe.sequential('check-i18n script - enhanced features', () => {
   describe('Ignore comments', () => {
     it('skips violations with // i18n-ignore-line comment', () => {
       const tmp = makeTempDir();
@@ -193,7 +193,7 @@ describe('check-i18n script - enhanced features', () => {
       const file = writeTempFile(
         tmp,
         'promise-type.tsx',
-        'const handler = async (): Promise<void> => { };',
+        'const handler = async (): Promise<void> => {};',
       );
       const res = runScript([file]);
       expect(res.status).toBe(0);

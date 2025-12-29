@@ -11,21 +11,22 @@ import type {
 
 const DEFAULT_NAMESPACE: NotificationToastNamespace = 'common';
 
-const DEFAULT_TOAST_OPTIONS: ToastOptions = {
-  position: 'top-right',
-  autoClose: 5000,
+const SHARED_DEFAULTS = {
+  position: 'top-right' as const,
   closeOnClick: true,
   pauseOnHover: true,
   draggable: true,
 };
 
+const DEFAULT_TOAST_OPTIONS: ToastOptions = {
+  ...SHARED_DEFAULTS,
+  autoClose: 5000,
+};
+
 const DEFAULT_CONTAINER_PROPS: ToastContainerProps = {
-  position: 'top-right',
+  ...SHARED_DEFAULTS,
   limit: 5,
   newestOnTop: false,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
   theme: 'colored',
 };
 
@@ -68,12 +69,16 @@ function showToast(
  *
  * @example
  * NotificationToast.error({ key: 'unknownError', namespace: 'errors' });
+ *
+ * @example
+ * NotificationToast.dismiss(); // Dismiss all active toasts
  */
 export const NotificationToast: InterfaceNotificationToastHelpers = {
   success: (message, options) => showToast('success', message, options),
   error: (message, options) => showToast('error', message, options),
   warning: (message, options) => showToast('warning', message, options),
   info: (message, options) => showToast('info', message, options),
+  dismiss: () => toast.dismiss(),
 };
 
 /**
@@ -83,7 +88,7 @@ export const NotificationToast: InterfaceNotificationToastHelpers = {
  * any prop via `props`.
  */
 export function NotificationToastContainer(
-  props: ToastContainerProps,
+  props: ToastContainerProps = {},
 ): React.ReactElement {
   return <ToastContainer {...DEFAULT_CONTAINER_PROPS} {...props} />;
 }

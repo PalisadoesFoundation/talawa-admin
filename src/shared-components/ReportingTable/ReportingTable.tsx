@@ -1,7 +1,50 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import type { ReportingTableProps } from '../../types/ReportingTable/interface';
+import type {
+  ReportingTableProps,
+  ReportingTableColumn,
+} from '../../types/ReportingTable/interface';
+
+/**
+ * Adjusts column widths for compact display mode.
+ * In compact mode:
+ * - First column gets flex: 0.5 and minWidth: 50 (typically for row numbers)
+ * - Second column gets flex capped at 1.5 (typically for names)
+ * - Remaining columns are unchanged
+ *
+ * @param columns - Original column definitions
+ * @param compactMode - Whether to apply compact adjustments
+ * @returns Adjusted column definitions
+ */
+export const adjustColumnsForCompactMode = (
+  columns: ReportingTableColumn[],
+  compactMode: boolean,
+): ReportingTableColumn[] => {
+  if (!compactMode) {
+    return columns;
+  }
+
+  // Adjust column widths for compact mode
+  return columns.map((col, index): ReportingTableColumn => {
+    if (index === 0) {
+      // First column (usually #) - reduce width
+      return {
+        ...col,
+        flex: 0.5,
+        minWidth: 50,
+      };
+    }
+    if (index === 1) {
+      // Second column (usually name) - reduce width slightly
+      return {
+        ...col,
+        flex: col.flex ? Math.min(col.flex, 1.5) : 1.5,
+      };
+    }
+    return col;
+  });
+};
 
 /**
  * A flexible reporting table component that wraps MUI DataGrid with optional infinite scroll.
@@ -11,6 +54,7 @@ import type { ReportingTableProps } from '../../types/ReportingTable/interface';
  * - Standard DataGrid rendering for static data
  * - Infinite scroll wrapper for paginated/lazy-loaded data
  * - Customizable grid and scroll container properties
+ * - Compact column mode for tables with many columns (7+)
  *
  * @param rows - Array of data rows to display in the table
  * @param columns - Column definitions following ReportingTableColumn structure
@@ -44,9 +88,16 @@ const ReportingTable: React.FC<ReportingTableProps> = ({
   infiniteProps,
   listProps,
 }) => {
+  // Apply compact column widths when compactColumns is enabled (for tables with 7 or more columns)
+  const adjustedColumns = useMemo(
+    () =>
+      adjustColumnsForCompactMode(columns, gridProps?.compactColumns ?? false),
+    [columns, gridProps?.compactColumns],
+  );
+
   const grid = (
     <div className="datatable">
-      <DataGrid {...(gridProps ?? {})} rows={rows} columns={columns} />
+      <DataGrid {...(gridProps ?? {})} rows={rows} columns={adjustedColumns} />
     </div>
   );
 
