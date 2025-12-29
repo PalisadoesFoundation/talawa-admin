@@ -20,13 +20,15 @@ import {
   GET_ORGANIZATION_BLOCKED_USERS_PG,
 } from 'GraphQl/Queries/Queries';
 
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-    tCommon: (key: string) => key,
-    tErrors: (key: string) => key,
-  }),
-}));
+vi.mock('react-i18next', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('react-i18next')>();
+  return {
+    ...actual,
+    useTranslation: () => ({
+      t: (key: string) => key,
+    }),
+  };
+});
 
 const { routerMocks, toastMocks } = vi.hoisted(() => ({
   routerMocks: {
@@ -36,6 +38,8 @@ const { routerMocks, toastMocks } = vi.hoisted(() => ({
   toastMocks: {
     error: vi.fn(),
     success: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
   },
 }));
 
@@ -48,8 +52,8 @@ vi.mock('react-router', async () => {
   };
 });
 
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: toastMocks,
 }));
 
 interface InterfaceRenderOptions {

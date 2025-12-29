@@ -53,7 +53,7 @@ import { errorHandler } from 'utils/errorHandler';
 import { useMutation, useQuery } from '@apollo/client';
 import Col from 'react-bootstrap/Col';
 import { VENUE_LIST } from 'GraphQl/Queries/OrganizationQueries';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { Navigate, useParams } from 'react-router';
 import VenueModal from 'components/Venues/Modal/VenueModal';
 import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
@@ -257,11 +257,7 @@ function organizationVenues(): JSX.Element {
 
       <Col>
         <div className={styles.mainpageright}>
-          {venueLoading ? (
-            <>
-              <Loader />
-            </>
-          ) : (
+          <LoadingState isLoading={venueLoading} variant="spinner" size="lg">
             <div
               className={`${styles.list_box} row `}
               data-testid="orgvenueslist"
@@ -273,7 +269,6 @@ function organizationVenues(): JSX.Element {
                       venueItem={venueItem}
                       handleDelete={handleDelete}
                       showEditVenueModal={showEditVenueModal}
-                      index={index}
                       key={index}
                     />
                   ),
@@ -282,7 +277,7 @@ function organizationVenues(): JSX.Element {
                 <h6>{t('noVenues')}</h6>
               )}
             </div>
-          )}
+          </LoadingState>
         </div>
       </Col>
       <VenueModal
