@@ -714,4 +714,26 @@ describe('UserContactDetails', () => {
     // Verify the dropdown value is updated
     expect((maritalDropdown as HTMLSelectElement).value).toBe('option2');
   });
+  it('triggers file input click when edit icon is clicked or Enter key pressed', async () => {
+    renderComponent();
+
+    // Wait for the profile picture to render
+    const editIcon = await screen.findByTestId('uploadImageBtn');
+    const fileInput = screen.getByTestId('fileInput');
+
+    // Mock fileInputRef click
+    const clickSpy = vi.spyOn(fileInput, 'click');
+
+    // Trigger click event
+    fireEvent.click(editIcon);
+    expect(clickSpy).toHaveBeenCalledTimes(1);
+
+    // Trigger keyDown event with Enter key
+    fireEvent.keyDown(editIcon, { key: 'Enter', code: 'Enter' });
+    expect(clickSpy).toHaveBeenCalledTimes(2);
+
+    // Trigger keyDown with other key should NOT trigger click
+    fireEvent.keyDown(editIcon, { key: 'Space', code: 'Space' });
+    expect(clickSpy).toHaveBeenCalledTimes(2);
+  });
 });
