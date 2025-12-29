@@ -181,11 +181,14 @@ function Volunteers(): JSX.Element {
     },
   });
 
-  const debouncedSearch = useCallback(
-    debounce((value: string) => {
-      setSearchTerm(value);
-    }, 300),
-    [],
+  // Extracted callback for proper coverage instrumentation
+  const handleSearchChange = useCallback((value: string): void => {
+    setSearchTerm(value);
+  }, []);
+
+  const debouncedSearch = useMemo(
+    () => debounce(handleSearchChange, 300),
+    [handleSearchChange],
   );
 
   // Debounce cleanup effect

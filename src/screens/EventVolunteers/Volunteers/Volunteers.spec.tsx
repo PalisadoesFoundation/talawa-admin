@@ -620,9 +620,15 @@ describe('Testing Volunteers Screen', () => {
   it('should trigger debounced search when typing in search input', async () => {
     renderVolunteers(link1);
 
-    // Wait for component to load
+    // Wait for component to load and all volunteers to be displayed
     await waitFor(() => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    // Verify initial state shows multiple volunteers
+    await waitFor(() => {
+      expect(screen.getByText('Teresa Bradley')).toBeInTheDocument();
+      expect(screen.getByText('Bruce Graza')).toBeInTheDocument();
     });
 
     // Find the search input
@@ -630,18 +636,23 @@ describe('Testing Volunteers Screen', () => {
     expect(searchInput).toBeInTheDocument();
 
     // Type in the search input to trigger the debounced callback
+    await userEvent.clear(searchInput);
     await userEvent.type(searchInput, 'Teresa');
 
-    // Wait for debounce to complete (300ms) and search to trigger
+    // Wait for debounce to complete (300ms) - the handleSearchChange callback should execute
     await act(async () => {
       await new Promise((resolve) => setTimeout(resolve, 350));
     });
 
-    // The search term should be set and volunteers filtered
-    await waitFor(() => {
-      const volunteerNames = screen.queryAllByTestId('volunteerName');
-      // After search, we should see filtered results
-      expect(volunteerNames.length).toBeGreaterThan(0);
-    });
+    // The search term should be set by handleSearchChange callback and query refetched
+    // After debounced search with 'Teresa', only Teresa Bradley should appear
+    await waitFor(
+      () => {
+        expect(screen.getByText('Teresa Bradley')).toBeInTheDocument();
+        // Bruce Graza should no longer be visible after filtering by 'Teresa'
+        expect(screen.queryByText('Bruce Graza')).not.toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 });

@@ -2,7 +2,13 @@ import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -1319,9 +1325,15 @@ describe('Testing Campaign Pledge Screen', () => {
   it('should handle search input and trim search value', async () => {
     renderFundCampaignPledge(link1);
 
-    // Wait for component to load
+    // Wait for component to load and pledges to appear
     await waitFor(() => {
       expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
+    });
+
+    // Wait for pledges to load
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.getByText('Jane Doe')).toBeInTheDocument();
     });
 
     // Find the search input
@@ -1332,18 +1344,34 @@ describe('Testing Campaign Pledge Screen', () => {
     await userEvent.clear(searchInput);
     await userEvent.type(searchInput, '  John Doe  ');
 
-    // The onSearchChange callback should be triggered and trim the value
-    await waitFor(() => {
-      // The search should work even with spaces (trimmed internally)
-      expect(searchInput).toHaveValue('  John Doe  ');
+    // Wait for debounce (300ms default) to complete
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 350));
     });
+
+    // The onSearchChange callback should have been called with trimmed value and filtered results
+    await waitFor(
+      () => {
+        // Search uses trimmed value - John Doe should still be visible
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+        // Jane Doe should be filtered out (proves search filters correctly with trimmed value)
+        expect(screen.queryByText('Jane Doe')).not.toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     // Clear and type again to ensure the callback is covered
     await userEvent.clear(searchInput);
     await userEvent.type(searchInput, 'Jane');
 
+    // Wait for debounce again
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 350));
+    });
+
     await waitFor(() => {
-      expect(searchInput).toHaveValue('Jane');
+      // Jane Doe should now be visible
+      expect(screen.getByText('Jane Doe')).toBeInTheDocument();
     });
   });
 });
