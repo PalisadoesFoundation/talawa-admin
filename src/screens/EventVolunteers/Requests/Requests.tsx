@@ -12,7 +12,7 @@
  * @requires @apollo/client
  * @requires @mui/x-data-grid
  * @requires dayjs
- * @requires react-toastify
+ * @requires NotificationToast
  * @requires components/Loader/Loader
  * @requires components/Avatar/Avatar
  * @requires subComponents/SortingButton
@@ -54,28 +54,11 @@ import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import dayjs from 'dayjs';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { debounce } from '@mui/material';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-
-const dataGridStyle = {
-  backgroundColor: 'white',
-  borderRadius: '16px',
-  '& .MuiDataGrid-columnHeaders': { border: 'none' },
-  '& .MuiDataGrid-cell': { border: 'none' },
-  '& .MuiDataGrid-columnSeparator': { display: 'none' },
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
-  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
-};
+import { dataGridStyle } from '../../../types/ReportingTable/utils';
 
 function requests(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
@@ -110,14 +93,14 @@ function requests(): JSX.Element {
   ): Promise<void> => {
     try {
       await updateMembership({ variables: { id: id, status: status } });
-      toast.success(
+      NotificationToast.success(
         t(
           status === 'accepted' ? 'requestAccepted' : 'requestRejected',
         ) as string,
       );
       refetchRequests();
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
     }
   };
 
@@ -167,7 +150,7 @@ function requests(): JSX.Element {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded fontSize="large" className={styles.errorIcon} />
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Volunteership Requests' })}
           </h6>
@@ -278,7 +261,6 @@ function requests(): JSX.Element {
             <Button
               variant="success"
               size="sm"
-              style={{ minWidth: '32px' }}
               className="me-2 rounded"
               data-testid="acceptBtn"
               onClick={() => updateMembershipStatus(params.row.id, 'accepted')}
@@ -292,7 +274,7 @@ function requests(): JSX.Element {
               data-testid={`rejectBtn`}
               onClick={() => updateMembershipStatus(params.row.id, 'rejected')}
             >
-              <FaXmark size={18} fontWeight={900} />
+              <FaXmark size={18} />
             </Button>
           </>
         );

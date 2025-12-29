@@ -4,12 +4,16 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 import SecuredRoute from './SecuredRoute';
 import useLocalStorage from 'utils/useLocalstorage';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
-// Mock react-toastify
-vi.mock('react-toastify', () => ({
-  toast: {
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    warning: vi.fn(),
+    // Backward-compat in case any older code/tests still assert `warn`
     warn: vi.fn(),
+    success: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
   },
 }));
 
@@ -159,7 +163,7 @@ describe('SecuredRoute', () => {
       const storage = useLocalStorage();
       expect(storage.getItem('IsLoggedIn')).toBe('TRUE');
       expect(storage.getItem('token')).toBe('test-token');
-      expect(toast.warn).not.toHaveBeenCalled();
+      expect(NotificationToast.warning).not.toHaveBeenCalled();
       expect(screen.getByText('Test Protected Content')).toBeInTheDocument();
     });
   });
@@ -190,7 +194,7 @@ describe('SecuredRoute', () => {
       // Fast-forward through the setInterval check (1 minute)
       vi.advanceTimersByTime(1 * 60 * 1000);
 
-      expect(toast.warn).toHaveBeenCalledWith(
+      expect(NotificationToast.warning).toHaveBeenCalledWith(
         'Kindly relogin as sessison has expired',
       );
 

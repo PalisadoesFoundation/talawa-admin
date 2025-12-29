@@ -32,10 +32,6 @@ react-i18next
 
 ## Requires
 
-react-toastify
-
-## Requires
-
 react-router-dom
 
 ## Requires

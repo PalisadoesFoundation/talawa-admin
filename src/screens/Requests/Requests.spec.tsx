@@ -4,7 +4,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
-import { ToastContainer } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import userEvent from '@testing-library/user-event';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -89,21 +89,14 @@ Object.defineProperty(window, 'location', {
   writable: true,
 });
 
-// Mock react-toastify
-vi.mock('react-toastify', async () => {
-  const actual =
-    await vi.importActual<typeof import('react-toastify')>('react-toastify');
-  return {
-    ...actual,
-    toast: {
-      ...actual.toast,
-      warning: vi.fn(),
-      error: vi.fn(),
-      success: vi.fn(),
-      info: vi.fn(),
-    },
-  };
-});
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  },
+}));
 
 // Create mock links
 const link = new StaticMockLink(UPDATED_MOCKS, true);
@@ -509,7 +502,6 @@ describe('Testing Requests screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
               <Requests />
             </I18nextProvider>
           </Provider>
@@ -530,7 +522,6 @@ describe('Testing Requests screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
               <Requests />
             </I18nextProvider>
           </Provider>
@@ -550,7 +541,6 @@ describe('Testing Requests screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
               <Requests />
             </I18nextProvider>
           </Provider>
@@ -567,7 +557,6 @@ describe('Testing Requests screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
               <Requests />
             </I18nextProvider>
           </Provider>
@@ -581,7 +570,6 @@ describe('Testing Requests screen', () => {
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
               <Requests />
             </I18nextProvider>
           </Provider>
@@ -592,14 +580,11 @@ describe('Testing Requests screen', () => {
   });
 
   test('Shows warning toast when there are no organizations', async () => {
-    const { toast } = await import('react-toastify');
-
     render(
       <MockedProvider link={link2}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
-              <ToastContainer />
               <Requests />
             </I18nextProvider>
           </Provider>
@@ -609,8 +594,8 @@ describe('Testing Requests screen', () => {
 
     await wait(200);
 
-    expect(toast.warning).toHaveBeenCalledWith(expect.any(String));
-    expect(toast.warning).toHaveBeenCalledTimes(1);
+    expect(NotificationToast.warning).toHaveBeenCalledWith(expect.any(String));
+    expect(NotificationToast.warning).toHaveBeenCalledTimes(1);
   });
 
   test('should handle loading more requests successfully', async () => {
@@ -2703,8 +2688,7 @@ describe('Testing Requests screen', () => {
   });
 
   describe('Accept request - success flow', () => {
-    test('should call toast.success and refetch after successful accept', async () => {
-      const { toast } = await import('react-toastify');
+    test('should call NotificationToast.success and refetch after successful accept', async () => {
       const ACCEPT_SUCCESS_MOCKS = [
         makeOrgListMock(),
         makeMembershipRequestsMock([
@@ -2761,7 +2745,7 @@ describe('Testing Requests screen', () => {
 
       await waitFor(
         () => {
-          expect(toast.success).toHaveBeenCalled();
+          expect(NotificationToast.success).toHaveBeenCalled();
         },
         { timeout: 3000 },
       );
@@ -2769,8 +2753,7 @@ describe('Testing Requests screen', () => {
   });
 
   describe('Reject request - success flow', () => {
-    test('should call toast.success and refetch after successful reject', async () => {
-      const { toast } = await import('react-toastify');
+    test('should call NotificationToast.success and refetch after successful reject', async () => {
       const REJECT_SUCCESS_MOCKS = [
         makeOrgListMock(),
         makeMembershipRequestsMock([
@@ -2827,7 +2810,7 @@ describe('Testing Requests screen', () => {
 
       await waitFor(
         () => {
-          expect(toast.success).toHaveBeenCalled();
+          expect(NotificationToast.success).toHaveBeenCalled();
         },
         { timeout: 3000 },
       );

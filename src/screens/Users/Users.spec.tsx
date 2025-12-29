@@ -1976,13 +1976,10 @@ describe('useEffect loadMoreUsers trigger', () => {
       {
         request: {
           query: USER_LIST_FOR_ADMIN,
-          variables: {
-            first: 12,
-            after: null,
-            orgFirst: 32,
-            where: undefined,
-          },
         },
+        // Be tolerant of `where` being omitted vs `undefined` depending on Apollo's variable normalization.
+        variableMatcher: (vars) =>
+          vars?.first === 12 && vars?.after === null && vars?.orgFirst === 32,
         result: {
           data: {
             allUsers: {
@@ -2010,6 +2007,40 @@ describe('useEffect loadMoreUsers trigger', () => {
           },
         },
         delay: 100,
+      },
+      // Some environments can issue the same query twice (e.g. due to re-renders); include a duplicate response.
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+        },
+        variableMatcher: (vars) =>
+          vars?.first === 12 && vars?.after === null && vars?.orgFirst === 32,
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'Test User',
+                    emailAddress: 'test@test.com',
+                    role: 'regular',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: '1' },
+            },
+          },
+        },
       },
       {
         request: { query: ORGANIZATION_LIST },

@@ -20,7 +20,6 @@ import 'react-datepicker/dist/react-datepicker.css'; // React Datepicker Styles
 import 'flag-icons/css/flag-icons.min.css'; // Flag Icons Styles
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { Provider } from 'react-redux';
-import { ToastContainer, toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
@@ -32,6 +31,7 @@ import { ApolloLink } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
 import './assets/css/scrollStyles.css';
 import './style/app-fixed.module.css';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 const theme = createTheme({
   palette: {
     primary: {
@@ -158,7 +158,7 @@ const errorLink = onError(
     }
 
     if (networkError) {
-      toast.error(
+      NotificationToast.error(
         'API server unavailable. Check your connection or try again later',
         { toastId: 'apiServer' },
       );
@@ -272,7 +272,6 @@ root.render(
           <ThemeProvider theme={theme}>
             <Provider store={store}>
               <App />
-              <ToastContainer limit={5} />
             </Provider>
           </ThemeProvider>
         </LocalizationProvider>

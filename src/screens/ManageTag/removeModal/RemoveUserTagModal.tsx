@@ -35,7 +35,7 @@ import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { BaseModal } from 'shared-components/BaseModal';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 export interface InterfaceRemoveUserTagModalProps {
   removeUserTagModalIsOpen: boolean;
@@ -62,7 +62,7 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
       await handleRemoveUserTag();
     } catch (error) {
       console.error(error);
-      toast.error(t('removeUserTagError'));
+      NotificationToast.error(t('removeUserTagError'));
     } finally {
       setIsSubmitting(false);
     }

@@ -18,7 +18,7 @@
  * - `react`, `react-router-dom` for routing and state management.
  * - `@apollo/client` for GraphQL queries.
  * - `@mui/x-data-grid` for table rendering.
- * - `react-toastify` for error notifications.
+ * - `NotificationToast` for error notifications.
  * - `dayjs` for date formatting.
  * - Custom components: `SearchBar`, `SortingButton`, `Avatar`, `AddMember`, `OrgPeopleListCard`.
  *
@@ -67,7 +67,7 @@ import {
   PAGE_SIZE,
 } from '../../types/ReportingTable/utils';
 import dayjs from 'dayjs';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import styles from 'style/app-fixed.module.css';
 import TableLoader from 'components/TableLoader/TableLoader';
 import {
@@ -305,10 +305,10 @@ function OrganizationPeople(): JSX.Element {
   // Error handling
   useEffect(() => {
     if (memberError) {
-      toast.error(memberError.message);
+      NotificationToast.error(memberError.message);
     }
     if (userError) {
-      toast.error(userError.message);
+      NotificationToast.error(userError.message);
     }
   }, [memberError, userError]);
 
@@ -358,15 +358,7 @@ function OrganizationPeople(): JSX.Element {
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return (
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-              width: '100%',
-            }}
-          >
+          <div className="d-flex justify-content-center align-items-center h-100 w-100">
             {params.row.rowNumber}
           </div>
         );
@@ -382,47 +374,23 @@ function OrganizationPeople(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        const columnWidth = params.colDef.computedWidth || 150;
-        const imageSize = Math.min(columnWidth * 0.4, 40);
         return (
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-              width: '100%',
-            }}
-          >
+          <div className="d-flex justify-content-center align-items-center h-100 w-100">
             {params.row?.image ? (
               <img
                 src={params.row.image}
                 alt={tCommon('avatar')}
-                style={{
-                  width: `${imageSize}px`,
-                  height: `${imageSize}px`,
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                }}
+                className={styles.TableImages}
                 crossOrigin="anonymous"
               />
             ) : (
-              <div
-                style={{
-                  width: `${imageSize}px`,
-                  height: `${imageSize}px`,
-                  fontSize: `${imageSize * 0.4}px`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: '50%',
-                  backgroundColor: '#ccc',
-                }}
-                data-testid="avatar"
-              >
-                <Avatar name={params.row.name} />
-              </div>
+              <Avatar
+                name={params.row.name}
+                alt={tCommon('avatar')}
+                containerStyle={styles.imageContainer}
+                avatarStyle={styles.TableImages}
+                dataTestId="avatar"
+              />
             )}
           </div>
         );
@@ -442,8 +410,7 @@ function OrganizationPeople(): JSX.Element {
           <Link
             to={`/member/${currentUrl}`}
             state={{ id: params.row.id }}
-            style={{ fontSize: '15px' }}
-            className={`${styles.membername} ${styles.subtleBlueGrey}`}
+            className={`${styles.membername} ${styles.subtleBlueGrey} fs-6`}
           >
             {params.row.name}
           </Link>
