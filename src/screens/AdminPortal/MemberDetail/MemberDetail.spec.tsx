@@ -470,9 +470,10 @@ describe('MemberDetail', () => {
 
     await wait();
 
+    // Wait for the file input to appear
+    const fileInput = await screen.findByTestId('fileInput');
     // Test invalid file type
     const invalidFile = new File(['test'], 'test.md', { type: 'image/plain' });
-    const fileInput = screen.getByTestId('fileInput');
     await userEvent.upload(fileInput, invalidFile);
 
     expect(NotificationToast.error).toHaveBeenCalledWith(

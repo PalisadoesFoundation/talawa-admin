@@ -2499,7 +2499,7 @@ describe('Organization dropdown data fetching', () => {
             ],
           },
         },
-        delay: 100, // Simulate network delay
+        delay: 500, // Simulate network delay
       },
       {
         request: { query: GET_COMMUNITY_DATA_PG },
@@ -2524,15 +2524,7 @@ describe('Organization dropdown data fetching', () => {
     const registerButton = screen.queryByTestId('goToRegisterPortion');
     if (registerButton) {
       await userEvent.click(registerButton);
-
-      // Wait for the loading text to appear
-      await waitFor(
-        () => {
-          const loadingText = screen.queryByText(/loading organizations/i);
-          expect(loadingText).toBeInTheDocument();
-        },
-        { timeout: 200 },
-      );
+      await wait(50); // Brief wait for the component to update
 
       // Verify the Autocomplete shows loading helper text
       const helperText = screen.getByText(/loading organizations/i);
