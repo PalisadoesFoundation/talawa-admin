@@ -18,6 +18,7 @@
  * - Uses Apollo Client mutations for updating and deleting events.
  *
  */
+// translation-check-keyPrefix: eventListCard
 import React, { useEffect, useMemo, useState } from 'react';
 import type { JSX } from 'react';
 import dayjs from 'dayjs';

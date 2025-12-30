@@ -682,6 +682,7 @@
     "eventDetails": "Event Details",
     "eventDeleted": "Event deleted successfully.",
     "eventUpdated": "Event updated successfully.",
+    "noChangesToUpdate": "No changes to update",
     "thisInstance": "This Instance",
     "thisAndFollowingInstances": "This & Following Instances",
     "allInstances": "All Instances",
@@ -704,7 +705,8 @@
     "registerEvent": "registerEvent",
     "close": "close",
     "talawaApiUnavailable": "talawaApiUnavailable",
-    "done": "done"
+    "done": "done",
+    "invalidDate": "Invalid Date"
   },
   "funds": {
     "title": "Funds",
@@ -835,6 +837,7 @@
     "Next": "Next Page",
     "Previous": "Previous Page",
     "cancel": "cancel",
+    "invalidDate": "Invalid Date",
     "messageTitleError": "Post title cannot be empty!",
     "organizationIdMissing": "Organization ID is missing!",
     "messageDescription": "Post Description",
@@ -909,7 +912,8 @@
     "name": "name",
     "email": "email",
     "talawaApiUnavailable": "talawaApiUnavailable",
-    "noResultsFoundFor": "noResultsFoundFor"
+    "noResultsFoundFor": "noResultsFoundFor",
+    "sortOrganizations": "Sort Organizations"
   },
   "eventManagement": {
     "name": "Event Management Dashboard",

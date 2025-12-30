@@ -683,6 +683,7 @@
     "eventDetails": "Détails de l'évènement",
     "eventDeleted": "Événement supprimé avec succès.",
     "eventUpdated": "Événement mis à jour avec succès.",
+    "noChangesToUpdate": "No changes to update",
     "thisInstance": "Cette instance",
     "thisAndFollowingInstances": "Instances présentes et suivantes",
     "allInstances": "Toutes les instances",
@@ -704,6 +705,7 @@
     "close": "Fermer",
     "talawaApiUnavailable": "API Talawa non disponible",
     "done": "Terminé",
+    "invalidDate": "Invalid Date",
     "createChat": "Créer une discussion"
   },
   "funds": {
@@ -835,11 +837,15 @@
     "Next": "Page suivante",
     "Previous": "Page précédente",
     "cancel": "Annuler",
+    "invalidDate": "Invalid Date",
     "messageTitleError": "Le titre du message ne peut pas être vide !",
     "organizationIdMissing": "L'ID de l'organisation est manquant !",
     "messageDescription": "Description du message",
     "addVideo": "Ajouter une vidéo",
-    "creatingMessage": "Création du message..."
+    "creatingMessage": "Création du message...",
+    "orgPostListError": "Organization post list error:",
+    "pinnedPostsLoadError": "Error loading pinned posts",
+    "errorSearchingPosts": "Error searching posts"
   },
   "postNotFound": {
     "post": "Poste",
@@ -906,7 +912,8 @@
     "name": "Nom",
     "email": "Email",
     "talawaApiUnavailable": "API Talawa non disponible",
-    "noResultsFoundFor": "Aucun résultat trouvé pour"
+    "noResultsFoundFor": "Aucun résultat trouvé pour",
+    "sortOrganizations": "Sort Organizations"
   },
   "eventManagement": {
     "name": "Gestion d'événements",

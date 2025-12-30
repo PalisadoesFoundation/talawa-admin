@@ -683,6 +683,7 @@
     "eventDetails": "घटना की जानकारी",
     "eventDeleted": "ईवेंट सफलतापूर्वक हटा दिया गया.",
     "eventUpdated": "इवेंट सफलतापूर्वक अपडेट किया गया.",
+    "noChangesToUpdate": "No changes to update",
     "thisInstance": "यह उदाहरण",
     "thisAndFollowingInstances": "यह और निम्नलिखित उदाहरण",
     "allInstances": "सभी उदाहरण",
@@ -704,6 +705,7 @@
     "close": "बंद करें",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
     "done": "समाप्त",
+    "invalidDate": "Invalid Date",
     "createChat": "चैट बनाएं"
   },
   "funds": {
@@ -835,11 +837,15 @@
     "Next": "अगला पृष्ठ",
     "Previous": "पिछला पृष्ठ",
     "cancel": "रद्द करें",
+    "invalidDate": "Invalid Date",
     "messageTitleError": "पोस्ट का शीर्षक खाली नहीं हो सकता!",
     "organizationIdMissing": "संगठन आईडी गायब है!",
     "messageDescription": "पोस्ट विवरण",
     "addVideo": "वीडियो जोड़ें",
-    "creatingMessage": "पोस्ट बनाई जा रही है..."
+    "creatingMessage": "पोस्ट बनाई जा रही है...",
+    "orgPostListError": "Organization post list error:",
+    "pinnedPostsLoadError": "Error loading pinned posts",
+    "errorSearchingPosts": "Error searching posts"
   },
   "postNotFound": {
     "post": "डाक",
@@ -906,7 +912,8 @@
     "name": "नाम",
     "email": "ईमेल",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
-    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला"
+    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला",
+    "sortOrganizations": "Sort Organizations"
   },
   "eventManagement": {
     "name": "इवेंट मैनेजमेंट",

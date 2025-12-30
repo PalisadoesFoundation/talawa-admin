@@ -1,4 +1,5 @@
 import { useMutation } from '@apollo/client';
+// translation-check-keyPrefix: eventListCard
 import {
   UPDATE_EVENT_MUTATION,
   UPDATE_SINGLE_RECURRING_EVENT_INSTANCE_MUTATION,
@@ -182,7 +183,7 @@ export const useUpdateEventHandler = () => {
 
       const hasChanges = Object.keys(updateInput).length > 1;
       if (!hasChanges) {
-        NotificationToast.info(t('eventListCard.noChangesToUpdate'));
+        NotificationToast.info(t('noChangesToUpdate'));
         return;
       }
 
