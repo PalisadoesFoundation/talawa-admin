@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 import { FormControl, TextField } from '@mui/material';
-import type { FormTextFieldProps } from './types';
+import type { FormTextFieldProps } from 'types/shared-components/FormFieldGroup/interface';
 import { FormFieldGroup } from './FormFieldGroup';
 
 export const FormTextField: React.FC<FormTextFieldProps> = ({

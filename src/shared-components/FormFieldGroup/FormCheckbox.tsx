@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormCheckBoxProps } from './types';
+import { FormCheckBoxProps } from 'types/shared-components/FormFieldGroup/interface';
 import { Form } from 'react-bootstrap';
 
 export const FormCheckbox: React.FC<FormCheckBoxProps> = ({

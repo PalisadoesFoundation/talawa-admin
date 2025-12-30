@@ -1,6 +1,6 @@
 import { Autocomplete, TextField } from '@mui/material';
 import React from 'react';
-import { FormSelectProps } from './types';
+import { FormSelectProps } from 'types/shared-components/FormFieldGroup/interface';
 
 export const FormSelect: React.FC<FormSelectProps> = ({
   name,
