@@ -158,5 +158,6 @@
   "talawaBranding": "Talawa Branding",
   "uploadPlugin": "Upload Plugin",
   "uploading": "Uploading...",
-  "cancelUploadPlugin": "Cancel upload plugin"
+  "cancelUploadPlugin": "Cancel upload plugin",
+  "unableToLoadData": "Unable to load data."
 }

@@ -1027,9 +1027,12 @@
   overflow: hidden;
 
   /* Flex properties to make it sit on the same line */
-  flex-grow: 1; /* Allow it to grow to fill space */
-  flex-shrink: 1; /* Allow it to shrink if needed */
-  width: auto; /* Stop forcing 100% width */
+  flex-grow: 1;
+  /* Allow it to grow to fill space */
+  flex-shrink: 1;
+  /* Allow it to shrink if needed */
+  width: auto;
+  /* Stop forcing 100% width */
   min-width: 200px;
   max-width: 100%;
   height: 48px;
@@ -1422,8 +1425,10 @@ form label,
 .calendar__controls {
   display: flex;
   align-items: center;
-  gap: 12px; /* Space between the Sort, Create, and Bell icons */
-  flex-shrink: 0; /* Prevents buttons from getting squished */
+  gap: 12px;
+  /* Space between the Sort, Create, and Bell icons */
+  flex-shrink: 0;
+  /* Prevents buttons from getting squished */
   white-space: nowrap;
 }
 
@@ -7870,7 +7875,8 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 12px; /* bring controls closer together */
+  margin-left: 12px;
+  /* bring controls closer together */
   gap: 12px;
 }
 
@@ -7882,12 +7888,14 @@ form {
 }
 
 .btnsContainerSearchBar .inputOrgList {
-  flex: 1 1 640px; /* make input wider and flexible */
+  flex: 1 1 640px;
+  /* make input wider and flexible */
   max-width: 760px;
   position: relative;
   display: flex;
   align-items: center;
-  margin-left: 18px; /* gap from left */
+  margin-left: 18px;
+  /* gap from left */
 }
 
 .btnsContainerSearchBar input {
@@ -7895,7 +7903,8 @@ form {
 }
 
 .btnsContainerSearchBar .inputOrgList button {
-  width: 44px; /* slightly smaller square button */
+  width: 44px;
+  /* slightly smaller square button */
   height: 38px;
   margin-left: 8px;
   flex: 0 0 44px;
@@ -8387,6 +8396,7 @@ form {
 .switch :global(.form-check-input) {
   margin-inline-start: -1.7em;
 }
+
 .checkboxdiv {
   display: flex;
   margin-bottom: 5px;
@@ -10041,6 +10051,7 @@ form {
   justify-content: flex-end;
   padding-bottom: 10px;
 }
+
 .manageBtn,
 .withdrawBtn,
 .outlineBtn {
@@ -10107,6 +10118,7 @@ form {
   .calendar__header {
     flex-wrap: wrap !important;
   }
+
   .btnsBlock {
     width: 100%;
     justify-content: flex-end;
@@ -10122,6 +10134,7 @@ form {
   align-items: center;
   min-height: 2.4rem;
 }
+
 /* ----------------------------------------------------- */
 .orgListContainer {
   padding-left: 40px;
@@ -10220,40 +10233,6 @@ form {
   font-size: 25px;
   margin-bottom: 2px;
   margin-right: 2px;
-}
-
-.postContainer {
-  min-height: 100vh;
-}
-
-.addPost {
-  font-size: 20px;
-  margin-right: 6px;
-}
-
-.noPostsFound {
-  text-align: center;
-}
-
-.postInfiniteScroll {
-  overflow: visible;
-}
-
-.createPostModalContainer {
-  position: absolute;
-}
-
-.pinnedPostModal {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-}
-
-.pinnedPostModalBody {
-  max-height: 90vh;
-  overflow-y: auto;
-  padding: 20px;
-  position: relative;
 }
 
 /* UploadPluginModal Styles */
@@ -10433,14 +10412,60 @@ form {
   overflow-y: auto;
   padding: 20px;
   position: relative;
+}
+
+.dataGridContainer {
+  background-color: #ffffff;
+  border-radius: 16px;
+}
+
+.dataGridContainer :global(.MuiDataGrid-columnHeaders),
+.dataGridContainer :global(.MuiDataGrid-cell) {
+  border: none;
+}
+
+.dataGridContainer :global(.MuiDataGrid-columnSeparator) {
+  display: none;
+}
+
+.dataGridContainer :global(.MuiDataGrid-row:hover),
+.dataGridContainer :global(.MuiDataGrid-row.Mui-hovered) {
+  background-color: transparent;
+}
+
+.iconButton {
+  min-width: 32px;
+}
+
+.smallText {
+  font-size: var(--font-size-sm);
+}
+
+.marginTopSm {
+  margin-top: 11px;
+}
+
+.iconLg {
+  font-size: 2rem;
+}
+
+/* -- DataTable Component Styles -- */
+
+.dataTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
 .dataTableBase {
   font-size: 0.95rem;
 }
+
 .dataEmptyState,
 .dataErrorState {
   padding: 16px;
   text-align: center;
 }
+
 .dataErrorState {
   color: var(--errorState-color);
 }
