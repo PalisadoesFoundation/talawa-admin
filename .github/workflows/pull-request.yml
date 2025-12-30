@@ -1208,3 +1208,36 @@ jobs:
           if [ -f .pidfile_dev ]; then
             kill "$(cat .pidfile_dev)"
           fi
+  lint-form-usage:
+    name: Check for deprecated Form usage
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Check for deprecated Form.Group/Control/Label in src/screens
+        run: |
+          echo "Checking for deprecated Form usage in src/screens/..."
+
+          if [ ! -d "src/screens" ]; then
+            echo "src/screens directory not found, skipping check"
+            exit 0
+          fi
+
+          DEPRECATED=$(grep -rn 'Form\.\(Group\|Control\|Label\)' src/screens/ 2>/dev/null || true)
+
+          if [ -n "$DEPRECATED" ]; then
+            echo ""
+            echo "ERROR: Found deprecated Form.Group/Control/Label usage in src/screens/:"
+            echo "$DEPRECATED"
+            echo ""
+            echo "Please migrate to FormFieldGroup components:"
+            echo "  • Form.Group + Form.Control → FormTextField"
+            echo "  • Form.Group + Form.Control[as=textarea] → FormTextArea"
+            echo "  • Form.Check → FormCheckbox"
+            echo ""
+            echo "See: src/shared-components/FormFieldGroup/README.md"
+            exit 1
+          fi
+
+          echo "No deprecated Form usage found in src/screens/"

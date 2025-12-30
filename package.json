@@ -98,7 +98,8 @@
     "check-mock-cleanup": "bash scripts/githooks/check-mock-cleanup.sh",
     "check:pom": "node scripts/githooks/check_pom.js",
     "check-i18n": "node scripts/check-i18n.js",
-    "lint:datagrid": "./scripts/lint-datagrid.sh"
+    "lint:datagrid": "./scripts/lint-datagrid.sh",
+    "lint:forms": "node scripts/check-form-usage.js"
   },
   "eslintConfig": {
     "extends": [
