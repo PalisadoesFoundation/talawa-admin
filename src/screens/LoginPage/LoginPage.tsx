@@ -394,8 +394,7 @@ const loginPage = (): JSX.Element => {
         const { signIn } = signInData;
         const { user, authenticationToken, refreshToken } = signIn;
         const isAdmin: boolean = user.role === 'administrator';
-        // setting localstorage Admin
-        setItem('isAdmin', isAdmin);
+        setItem('Admin', isAdmin);
         if (role === 'admin' && !isAdmin) {
           toast.warn(tErrors('notAuthorised') as string);
           return;

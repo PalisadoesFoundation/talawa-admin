@@ -2070,6 +2070,75 @@ describe('Extra coverage for 100 %', () => {
     // Verify navigation does NOT occur (early return on error)
     expect(routerMocks.navigate).not.toHaveBeenCalled();
   });
+
+  /* 16. Admin flag tests */
+  it('sets Admin flag to true when user is administrator', async () => {
+    setLocationPath('/admin');
+    renderLoginPage();
+    await wait();
+    await userEvent.type(screen.getByTestId('loginEmail'), 'johndoe@gmail.com');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'johndoe',
+    );
+    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[0], 'token');
+    await userEvent.click(screen.getByTestId('loginBtn'));
+    await wait();
+    // Should set Admin to true for administrator
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith('Admin', true);
+  });
+
+  it('sets Admin flag to false when user is not administrator', async () => {
+    setLocationPath('/admin');
+    const NON_ADMIN_MOCK = [
+      ...MOCKS.filter(
+        (m) =>
+          m.request.query !== SIGNIN_QUERY &&
+          m.request.query !== RECAPTCHA_MUTATION,
+      ),
+      {
+        request: {
+          query: RECAPTCHA_MUTATION,
+          variables: { recaptchaToken: 'token' },
+        },
+        result: { data: { recaptcha: true } },
+      },
+      {
+        request: {
+          query: SIGNIN_QUERY,
+          variables: { email: 'user@example.com', password: 'pass' },
+        },
+        result: {
+          data: {
+            signIn: {
+              user: {
+                id: '1',
+                role: 'user',
+                name: 'U',
+                emailAddress: 'user@example.com',
+                countryCode: null,
+                avatarURL: null,
+              },
+              authenticationToken: 'token',
+              refreshToken: 'refreshToken',
+            },
+          },
+        },
+      },
+    ];
+    renderLoginPage(NON_ADMIN_MOCK);
+    await wait();
+    await userEvent.type(screen.getByTestId('loginEmail'), 'user@example.com');
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'pass',
+    );
+    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[0], 'token');
+    await userEvent.click(screen.getByTestId('loginBtn'));
+    await wait();
+    // Should set Admin to false for non-admin
+    expect(mockUseLocalStorage.setItem).toHaveBeenCalledWith('Admin', false);
+  });
 });
 
 describe('Cookie-based authentication verification', () => {
