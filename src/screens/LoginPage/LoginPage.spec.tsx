@@ -1850,7 +1850,7 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
       1,
-      i18nForTest.t('loginPage.email_invalid'),
+      i18nForTest.t('loginPage.emailInvalid'),
     );
   });
 
