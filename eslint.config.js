@@ -219,6 +219,30 @@ export default [
           message: 'Use FormCheck instead of Form.Check',
         },
       ],
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector:
+            "MemberExpression[object.name='Form'][property.name='Group']",
+          message: 'Use FormFieldGroup instead of Form.Group',
+        },
+        {
+          selector:
+            "MemberExpression[object.name='Form'][property.name='Control']",
+          message:
+            'Use FormTextField, FormTextArea, or FormSelect instead of Form.Control',
+        },
+        {
+          selector:
+            "MemberExpression[object.name='Form'][property.name='Label']",
+          message: 'Labels are built into FormFieldGroup components',
+        },
+        {
+          selector:
+            "MemberExpression[object.name='Form'][property.name='Check']",
+          message: 'Use FormCheck instead of Form.Check',
+        },
+      ],
     },
   },
   {
