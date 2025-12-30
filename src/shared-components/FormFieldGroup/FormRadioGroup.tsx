@@ -1,25 +1,44 @@
+// FormRadioGroup.tsx
 import React from 'react';
 import { FormRadioGroupProps } from './types';
 import { Form } from 'react-bootstrap';
+import { FormFieldGroup } from './FormFieldGroup';
 
 export const FormRadioGroup: React.FC<FormRadioGroupProps> = ({
+  name,
   label,
+  options,
+  value,
+  onChange,
   error,
   touched,
-  ...radioGroupProps
+  required,
+  groupClass,
+  labelClass,
 }) => {
   return (
-    <>
-      <Form.Check
-        {...radioGroupProps}
-        label={label}
-        isInvalid={!!(touched && error)}
-      />
-      {touched && error && (
-        <Form.Control.Feedback type="invalid" className="d-block">
-          {error}
-        </Form.Control.Feedback>
-      )}
-    </>
+    <FormFieldGroup
+      name={name}
+      label={label}
+      error={error}
+      touched={touched}
+      required={required}
+      groupClass={groupClass}
+      labelClass={labelClass}
+    >
+      {options.map((option) => (
+        <Form.Check
+          key={option.value}
+          type="radio"
+          id={`${name}-${option.value}`}
+          name={name}
+          label={option.label}
+          value={option.value}
+          checked={value === option.value}
+          onChange={onChange}
+          isInvalid={!!(touched && error)}
+        />
+      ))}
+    </FormFieldGroup>
   );
 };

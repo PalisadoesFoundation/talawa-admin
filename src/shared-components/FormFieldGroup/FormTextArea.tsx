@@ -3,13 +3,38 @@ import { FormControl, TextField } from '@mui/material';
 import type { FormTextAreaProps } from './types';
 
 export const FormTextArea: React.FC<FormTextAreaProps> = ({
+  name,
+  label,
+  error,
+  touched,
+  helpText,
+  required,
+  ariaLabel,
+  ariaDescribedBy,
   endAdornment,
+  rows,
   ...inputProps
 }) => {
+  const showError = !!(touched && error);
+  const errorMessage = showError ? String(error) : '';
+
   return (
-    <FormControl>
-      <TextField {...inputProps} aria-invalid={inputProps.error} />
-      {endAdornment && <>{endAdornment}</>}
+    <FormControl fullWidth error={showError}>
+      <TextField
+        {...inputProps}
+        label={label}
+        multiline
+        rows={rows}
+        error={showError}
+        helperText={errorMessage || helpText}
+        required={required}
+        InputProps={{
+          endAdornment: endAdornment,
+        }}
+        aria-label={ariaLabel}
+        aria-describedby={ariaDescribedBy}
+        aria-invalid={showError}
+      />
     </FormControl>
   );
 };
