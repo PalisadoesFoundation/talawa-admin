@@ -30,8 +30,9 @@
  * />
  */
 import React from 'react';
-import { Modal, Form, Button } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
+import { BaseModal } from 'shared-components/BaseModal';
 
 interface InterfaceFormStateType {
   name: string;
@@ -60,23 +61,17 @@ const AgendaCategoryPreviewModal: React.FC<
   t,
 }) => {
   return (
-    <Modal
+    <BaseModal
       className={styles.campaignModal}
       show={agendaCategoryPreviewModalIsOpen}
       onHide={hidePreviewModal}
-    >
-      <Modal.Header>
+      headerContent={
         <p className={styles.titlemodalOrganizationEvents}>
           {t('agendaCategoryDetails')}
         </p>
-        <Button
-          onClick={hidePreviewModal}
-          data-testid="previewAgendaCategoryModalCloseBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
-      </Modal.Header>
-      <Modal.Body>
+      }
+      dataTestId="agendaCategoryPreviewModal"
+    >     
         <Form>
           <div>
             <p className={styles.preview}>
@@ -115,8 +110,7 @@ const AgendaCategoryPreviewModal: React.FC<
             </Button>
           </div>
         </Form>
-      </Modal.Body>
-    </Modal>
+    </BaseModal>
   );
 };
 
