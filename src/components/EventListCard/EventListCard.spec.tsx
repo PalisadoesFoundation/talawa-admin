@@ -235,7 +235,10 @@ describe('Testing Event List Card', () => {
     await userEvent.click(screen.getByTestId('deleteEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(translations.eventDeleted);
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.eventDeleted,
+        expect.any(Object),
+      );
     });
 
     await waitFor(() => {
@@ -295,6 +298,7 @@ describe('Testing Event List Card', () => {
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
         `Successfully registered for ${props[2].name}`,
+        expect.any(Object),
       );
     });
 
