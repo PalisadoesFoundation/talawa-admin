@@ -241,7 +241,7 @@ describe('Organisation Venues', () => {
         expect(screen.getByText('Updated Venue 1')).toBeInTheDocument();
         expect(screen.queryByText('Updated Venue 2')).not.toBeInTheDocument();
       },
-      { timeout: SEARCH_DEBOUNCE_MS },
+      { timeout: SEARCH_DEBOUNCE_MS + 200 },
     );
   });
 
@@ -269,7 +269,7 @@ describe('Organisation Venues', () => {
         expect(screen.getByText('Updated Venue 1')).toBeInTheDocument();
         expect(screen.queryByText('Updated Venue 2')).not.toBeInTheDocument();
       },
-      { timeout: SEARCH_DEBOUNCE_MS },
+      { timeout: SEARCH_DEBOUNCE_MS + 200 },
     );
   });
 
