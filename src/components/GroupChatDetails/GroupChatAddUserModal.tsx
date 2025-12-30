@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useQuery, useMutation } from '@apollo/client';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
@@ -44,6 +44,7 @@ export default function GroupChatAddUserModal(
   const {
     data: allUsersData,
     loading: allUsersLoading,
+    error: allUsersError,
     refetch: allUsersRefetch,
   } = useQuery(ORGANIZATION_MEMBERS, {
     variables: {
@@ -53,6 +54,14 @@ export default function GroupChatAddUserModal(
       where: {},
     },
   });
+
+  useEffect(() => {
+    if (allUsersError) {
+      toast.error(t('failedFetchingMembers'));
+      // eslint-disable-next-line no-console
+      console.error(allUsersError);
+    }
+  }, [allUsersError, t]);
 
   const [addUser] = useMutation(CREATE_CHAT_MEMBERSHIP);
 

@@ -20,6 +20,7 @@ import {
   failingMocks,
   testFile,
 } from './GroupChatDetailsMocks';
+import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import type { NewChatType } from 'types/Chat/interface';
 
 const { mockLocalStorageStore } = vi.hoisted(() => ({
@@ -427,6 +428,50 @@ describe('GroupChatDetails', () => {
     await waitFor(() => {
       expect(searchInput).toHaveValue('');
     });
+  });
+
+  it('shows error when fetching organization members fails', async () => {
+    useLocalStorage().setItem('userId', 'user1');
+
+    const toastError = vi.spyOn(toast, 'error');
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+
+    const orgMembersErrorMock = {
+      request: {
+        query: ORGANIZATION_MEMBERS,
+        variables: { input: { id: 'org123' }, first: 20, after: null, where: {} },
+      },
+      error: new Error('Failed to fetch members'),
+    };
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={[orgMembersErrorMock, ...mocks]}> 
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={withSafeChat(filledMockChat)}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    await wait();
+
+    // open add members modal
+    await act(async () => {
+      fireEvent.click(await screen.findByTestId('addMembers'));
+    });
+
+    // wait for error handling from the modal's ORGANIZATION_MEMBERS query
+    await waitFor(() => {
+      expect(toastError).toHaveBeenCalledWith(expect.any(String));
+      expect(consoleError).toHaveBeenCalled();
+    });
+
+    toastError.mockRestore();
+    consoleError.mockRestore();
   });
 
   it('handling invalid image type', async () => {
