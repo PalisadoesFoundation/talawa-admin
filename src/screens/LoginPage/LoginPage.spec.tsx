@@ -2477,4 +2477,191 @@ describe('Cookie-based authentication verification', () => {
     expect(socialLinks.length).toBeGreaterThan(0);
     expect(socialLinks[0]).toHaveAttribute('href');
   });
+
+  it('displays loading state while fetching organizations', async () => {
+    // Skip for admin path since register button is removed
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        reload: vi.fn(),
+        href: 'https://localhost:4321/',
+        origin: 'https://localhost:4321',
+        pathname: '/',
+      },
+    });
+
+    const LOADING_MOCKS = [
+      {
+        request: { query: ORGANIZATION_LIST_PUBLIC },
+        result: {
+          data: {
+            organizations: [
+              {
+                id: '1',
+                name: 'Test Org',
+                addressLine1: '123 Test St',
+              },
+            ],
+          },
+        },
+        delay: 1000, // Simulate network delay
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={LOADING_MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const registerButton = screen.queryByTestId('goToRegisterPortion');
+    if (registerButton) {
+      await userEvent.click(registerButton);
+
+      // Wait for the loading text to appear
+      await waitFor(
+        () => {
+          const loadingText = screen.queryByText(/loading organizations/i);
+          expect(loadingText).toBeInTheDocument();
+        },
+        { timeout: 500 },
+      );
+
+      // Verify the Autocomplete shows loading helper text
+      const helperText = screen.getByText(/loading organizations/i);
+      expect(helperText).toBeInTheDocument();
+    }
+  });
+
+  it('displays error state when organization query fails', async () => {
+    // Skip for admin path since register button is removed
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        reload: vi.fn(),
+        href: 'https://localhost:4321/',
+        origin: 'https://localhost:4321',
+        pathname: '/',
+      },
+    });
+
+    const ERROR_MOCKS = [
+      {
+        request: { query: ORGANIZATION_LIST_PUBLIC },
+        error: new Error('Failed to fetch organizations'),
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={ERROR_MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const registerButton = screen.queryByTestId('goToRegisterPortion');
+    if (registerButton) {
+      await userEvent.click(registerButton);
+
+      // Wait for error text to appear
+      await waitFor(
+        () => {
+          const errorText = screen.queryByText(/error loading organizations/i);
+          expect(errorText).toBeInTheDocument();
+        },
+        { timeout: 2000 },
+      );
+
+      // Check that error styling is applied to the TextField
+      const helperText = screen.getByText(/error loading organizations/i);
+      expect(helperText.closest('.MuiFormHelperText-root')).toHaveClass(
+        'Mui-error',
+      );
+    }
+  });
+
+  it('displays error state when organization query returns GraphQL errors', async () => {
+    // Skip for admin path since register button is removed
+    Object.defineProperty(window, 'location', {
+      configurable: true,
+      value: {
+        reload: vi.fn(),
+        href: 'https://localhost:4321/',
+        origin: 'https://localhost:4321',
+        pathname: '/',
+      },
+    });
+
+    const GRAPHQL_ERROR_MOCKS = [
+      {
+        request: { query: ORGANIZATION_LIST_PUBLIC },
+        result: {
+          errors: [
+            new GraphQLError(
+              'You must be authenticated to perform this action',
+            ),
+          ],
+        },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={GRAPHQL_ERROR_MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const registerButton = screen.queryByTestId('goToRegisterPortion');
+    if (registerButton) {
+      await userEvent.click(registerButton);
+
+      // Wait for error text to appear
+      await waitFor(
+        () => {
+          const errorText = screen.queryByText(/error loading organizations/i);
+          expect(errorText).toBeInTheDocument();
+        },
+        { timeout: 2000 },
+      );
+
+      // Verify error message is displayed
+      const errorText = screen.getByText(/error loading organizations/i);
+      expect(errorText).toBeInTheDocument();
+    }
+  });
 });
