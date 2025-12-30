@@ -115,7 +115,7 @@ const AcceptInvitation = (): JSX.Element => {
       const { data } = await accept({ variables: { input } });
       if (data && data.acceptEventInvitation) {
         NotificationToast.success(
-          t('accepted', { defaultValue: 'Invitation accepted' }) as string,
+          t('accepted', { defaultValue: 'Invitation accepted' }),
         );
         removeItem(STORAGE_KEY);
         if (invite.eventId) {

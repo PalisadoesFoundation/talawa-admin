@@ -52,7 +52,7 @@ interface InterfaceUserListCardProps {
   id: string;
 }
 
-function userListCard(props: InterfaceUserListCardProps): JSX.Element {
+function UserListCard({ id }: InterfaceUserListCardProps): JSX.Element {
   const { orgId: currentUrl } = useParams();
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
   const reloadTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -77,12 +77,12 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
 
     try {
       const result = await adda({
-        variables: { userid: props.id, orgid: currentUrl },
+        variables: { userid: id, orgid: currentUrl },
       });
 
       // Only proceed if mutation succeeded with valid createAdmin result
       if (result.data?.createAdmin) {
-        NotificationToast.success(t('addedAsAdmin') as string);
+        NotificationToast.success(t('addedAsAdmin'));
         reloadTimeoutRef.current = setTimeout(() => {
           window.location.reload();
         }, 2000);
@@ -104,4 +104,4 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
   );
 }
 export {};
-export default userListCard;
+export default UserListCard;
