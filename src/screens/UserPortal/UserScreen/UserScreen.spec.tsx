@@ -23,6 +23,7 @@ import UserScreen from './UserScreen';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import '@testing-library/dom';
+import localStyles from './UserScreen.module.css';
 let mockID: string | undefined = '123';
 let mockLocation: string | undefined = '/user/organization/123';
 
@@ -239,5 +240,41 @@ describe('UserScreen tests with LeftDrawer functionality', () => {
     expect(screen.getByTestId('leftDrawerContainer')).toBeInTheDocument();
     expect(screen.queryByTestId('OrgBtn')).not.toBeInTheDocument();
     expect(routerSpies.navigate).not.toHaveBeenCalled();
+  });
+
+  it('renders title within titleContainer div', () => {
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const titleElement = screen.getByRole('heading', { level: 1 });
+    expect(titleElement.parentElement).toHaveClass(localStyles.titleContainer);
+  });
+
+  it('renders default title "User Portal" for unknown routes', () => {
+    mockLocation = '/user/unknownroute/123';
+
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserScreen />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    const titleElement = screen.getByRole('heading', { level: 1 });
+    expect(titleElement).toHaveTextContent('User Portal');
   });
 });

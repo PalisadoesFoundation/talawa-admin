@@ -8,7 +8,7 @@ import type {
   ISortState,
   IFilterState,
   ITableState,
-} from './types';
+} from '../../types/shared-components/DataTable/interface';
 import { cleanup } from '@testing-library/react';
 
 interface IUser {

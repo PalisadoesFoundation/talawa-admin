@@ -128,7 +128,6 @@
   "noResultsFound": "未找到结果",
   "unblock": "解除封锁",
   "unblockedSuccessfully": "{{item}}已成功解除封锁",
-  "pluginSettings": "插件设置",
   "signOut": "退出登录",
   "signingOut": "正在退出...",
   "retryPrompt": "撤销会话失败。重试？",
@@ -152,5 +151,9 @@
   "organizations": "组织",
   "createEvent": "创建活动",
   "eventCreated": "活动创建成功",
-  "eventDetails": "活动详情"
+  "eventDetails": "活动详情",
+  "pluginSettings": "插件设置",
+  "selectLanguage": "选择语言",
+  "talawa": "塔拉瓦",
+  "talawaBranding": "Talawa 品牌形象"
 }

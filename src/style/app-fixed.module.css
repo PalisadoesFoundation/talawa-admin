@@ -32,6 +32,10 @@
  *   `.subtleBlueGrey` (for blue Text)
  *   `.activeTab` (for tabs which are active)
  *   `.inActiveTab` (for tabs which are not selected)
+ *   `.dataTableBase` (for styling data tables)
+ *   `.dataEmptyState` (for empty state displays)
+ *   `.dataErrorState` (for error state displays)
+ *   `.visuallyHidden` (for accessibility, hides content visually but keeps it accessible to screen readers)
  *
  */
 :root {
@@ -307,6 +311,7 @@
   --colorWhite: #555555;
 
   --errorIcon-color: #ff4d4f;
+  --errorState-color: #b00020;
 
   --tagsBreadCrumbs-color-hover: #0000ff;
   --tagsBreadCrumbs-color: #808080;
@@ -10214,4 +10219,27 @@ form {
   overflow-y: auto;
   padding: 20px;
   position: relative;
+}
+
+.dataTableBase {
+  font-size: 0.95rem;
+}
+.dataEmptyState,
+.dataErrorState {
+  padding: 16px;
+  text-align: center;
+}
+.dataErrorState {
+  color: var(--errorState-color);
+}
+
+.visuallyHidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
 }
