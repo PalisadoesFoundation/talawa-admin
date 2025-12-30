@@ -2,6 +2,7 @@ import { useQuery, type ApolloQueryResult } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
@@ -14,6 +15,7 @@ import PledgeModal from './modal/PledgeModal';
 import { Breadcrumbs, Link, Popover, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import type {
   InterfacePledgeInfo,
@@ -22,17 +24,29 @@ import type {
   InterfaceCampaignInfoPG,
 } from 'utils/interfaces';
 import ProgressBar from 'react-bootstrap/ProgressBar';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
-import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 enum ModalState {
   SAME = 'same',
   DELETE = 'delete',
 }
 
+/**
+ * Renders the Fund Campaign Pledges screen.
+ *
+ * Responsibilities:
+ * - Displays all pledges for a fund campaign
+ * - Supports searching and sorting via AdminSearchFilterBar
+ * - Shows pledge progress toggle (pledged vs raised amounts)
+ * - Renders popover for extra users when multiple pledgers exist
+ * - Handles create, edit, and delete pledge flows
+ *
+ * Localization:
+ * - Uses `common` and `pledges` namespaces
+ *
+ * @returns JSX.Element
+ */
 const fundCampaignPledge = (): JSX.Element => {
-  const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -228,7 +242,7 @@ const fundCampaignPledge = (): JSX.Element => {
   const columns: GridColDef[] = [
     {
       field: 'pledgers',
-      headerName: t('pledgers'),
+      headerName: t('pledges.pledgers'),
       flex: 3,
       minWidth: 50,
       align: 'left',
@@ -274,7 +288,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 onClick={(event) => handleClick(event, extraUsers)}
                 data-testid={`moreContainer-${params.row.id}`}
               >
-                {t('moreUsers', { count: extraUsers.length })}
+                {tCommon('moreCount', { count: extraUsers.length })}
               </div>
             )}
           </div>
@@ -283,66 +297,53 @@ const fundCampaignPledge = (): JSX.Element => {
     },
     {
       field: 'pledgeDate',
-      headerName: t('pledgeDate'),
+      headerName: t('pledges.pledgeDate'),
       flex: 1,
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return dayjs(params.row.pledgeDate).format('DD/MM/YYYY');
-      },
+      renderCell: (params: GridCellParams) =>
+        dayjs(params.row.pledgeDate).format('DD/MM/YYYY'),
     },
     {
       field: 'amount',
-      headerName: t('pledged'),
+      headerName: t('pledges.pledged'),
       flex: 1,
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="amountCell"
-          >
-            {
-              currencySymbols[
-                params.row.currency as keyof typeof currencySymbols
-              ]
-            }
-            {params.row.amount.toLocaleString('en-US')}
-          </div>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <div
+          className="d-flex justify-content-center fw-bold"
+          data-testid="amountCell"
+        >
+          {currencySymbols[params.row.currency as keyof typeof currencySymbols]}
+          {params.row.amount.toLocaleString('en-US')}
+        </div>
+      ),
     },
     {
       field: 'donated',
-      headerName: t('donated'),
+      headerName: t('pledges.donated'),
       flex: 1,
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="paidCell"
-          >
-            {
-              currencySymbols[
-                params.row.currency as keyof typeof currencySymbols
-              ]
-            }
-            0
-          </div>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <div
+          className="d-flex justify-content-center fw-bold"
+          data-testid="paidCell"
+        >
+          {currencySymbols[params.row.currency as keyof typeof currencySymbols]}
+          0
+        </div>
+      ),
     },
     {
       field: 'action',
@@ -353,35 +354,30 @@ const fundCampaignPledge = (): JSX.Element => {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <>
-            <Button
-              variant="success"
-              size="sm"
-              className={`me-2 ${styles.editButton}`}
-              data-testid="editPledgeBtn"
-              onClick={() =>
-                handleOpenModal(params.row as InterfacePledgeInfo, 'edit')
-              }
-            >
-              {' '}
-              <i className="fa fa-edit" />
-            </Button>
-            <Button
-              size="sm"
-              variant="danger"
-              className="rounded"
-              data-testid="deletePledgeBtn"
-              onClick={() =>
-                handleDeleteClick(params.row as InterfacePledgeInfo)
-              }
-            >
-              <i className="fa fa-trash" />
-            </Button>
-          </>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <>
+          <Button
+            variant="success"
+            size="sm"
+            className={`me-2 ${styles.editButton}`}
+            data-testid="editPledgeBtn"
+            onClick={() =>
+              handleOpenModal(params.row as InterfacePledgeInfo, 'edit')
+            }
+          >
+            <i className="fa fa-edit" />
+          </Button>
+          <Button
+            size="sm"
+            variant="danger"
+            className="rounded"
+            data-testid="deletePledgeBtn"
+            onClick={() => handleDeleteClick(params.row as InterfacePledgeInfo)}
+          >
+            <i className="fa fa-trash" />
+          </Button>
+        </>
+      ),
     },
   ];
 
@@ -404,13 +400,14 @@ const fundCampaignPledge = (): JSX.Element => {
         >
           {campaignInfo?.name}
         </Link>
-        <Typography color="text.primary">{t('pledges')}</Typography>
+        <Typography color="text.primary">{t('pledges.pledges')}</Typography>
       </Breadcrumbs>
       <div className={styles.overviewContainer}>
         <div className={styles.titleContainer}>
           <h3>{campaignInfo?.name}</h3>
           <span>
-            {t('endsOn')} {dayjs(campaignInfo?.endDate).format('DD/MM/YYYY')}
+            {t('pledges.endsOn')}{' '}
+            {dayjs(campaignInfo?.endDate).format('DD/MM/YYYY')}
           </span>
         </div>
         <div className={styles.progressContainer}>
@@ -418,7 +415,7 @@ const fundCampaignPledge = (): JSX.Element => {
             <div
               className={`btn-group ${styles.toggleGroup}`}
               role="group"
-              aria-label={t('togglePledgedRaised')}
+              aria-label={tCommon('togglePledgedRaised')}
             >
               <input
                 type="radio"
@@ -434,7 +431,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
                 htmlFor="pledgedRadio"
               >
-                {t('pledgedAmount')}
+                {t('pledges.pledgedAmount')}
               </label>
 
               <input
@@ -449,7 +446,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
                 htmlFor="raisedRadio"
               >
-                {t('raisedAmount')}
+                {t('pledges.raisedAmount')}
               </label>
             </div>
           </div>
@@ -488,49 +485,56 @@ const fundCampaignPledge = (): JSX.Element => {
         </div>
       </div>
       <div className={`${styles.btnsContainerPledge} align-items-center`}>
-        <SearchBar
-          placeholder={t('searchPledger')}
-          onSearch={setSearchTerm}
-          inputTestId="searchPledger"
-          buttonTestId="searchBtn"
-        />
-        <div className="d-flex gap-4 mb-1">
-          <div className="d-flex justify-space-between">
-            <SortingButton
-              sortingOptions={[
-                { label: t('lowestAmount'), value: 'amount_ASC' },
-                { label: t('highestAmount'), value: 'amount_DESC' },
-                { label: t('latestEndDate'), value: 'endDate_DESC' },
-                { label: t('earliestEndDate'), value: 'endDate_ASC' },
-              ]}
-              selectedOption={sortBy ?? ''}
-              onSortChange={(value) =>
+        <AdminSearchFilterBar
+          searchPlaceholder={t('pledges.searchPledger')}
+          searchValue={searchTerm}
+          onSearchChange={(value) => setSearchTerm(value.trim())}
+          onSearchSubmit={(value: string) => {
+            setSearchTerm(value.trim());
+          }}
+          searchInputTestId="searchPledger"
+          searchButtonTestId="searchBtn"
+          hasDropdowns={true}
+          dropdowns={[
+            {
+              id: 'sort-pledges',
+              label: tCommon('sort'),
+              title: tCommon('sort'),
+              dataTestIdPrefix: 'filter',
+              selectedOption: sortBy,
+              onOptionChange: (value) =>
                 setSortBy(
                   value as
                     | 'amount_ASC'
                     | 'amount_DESC'
                     | 'endDate_ASC'
                     | 'endDate_DESC',
-                )
-              }
-              dataTestIdPrefix="filter"
-              buttonLabel={tCommon('sort')}
-            />
-          </div>
-          <div>
+                ),
+              options: [
+                { label: t('pledges.lowestAmount'), value: 'amount_ASC' },
+                { label: t('pledges.highestAmount'), value: 'amount_DESC' },
+                { label: t('pledges.latestEndDate'), value: 'endDate_DESC' },
+                { label: t('pledges.earliestEndDate'), value: 'endDate_ASC' },
+              ],
+              type: 'sort',
+            },
+          ]}
+          additionalButtons={
             <Button
               variant="success"
               className={styles.dropdown}
               disabled={!isWithinCampaignDates}
               onClick={() => handleOpenModal(null, 'create')}
               data-testid="addPledgeBtn"
-              title={!isWithinCampaignDates ? t('campaignNotActive') : ''}
+              title={
+                !isWithinCampaignDates ? t('pledges.campaignNotActive') : ''
+              }
             >
               <i className={'fa fa-plus me-2'} />
-              {t('addPledge')}
+              {t('pledges.addPledge')}
             </Button>
-          </div>
-        </div>
+          }
+        />
       </div>
       <DataGrid
         disableColumnMenu
@@ -541,7 +545,7 @@ const fundCampaignPledge = (): JSX.Element => {
           noRowsOverlay: () => (
             <EmptyState
               icon="volunteer_activism"
-              message={t('noPledges')}
+              message={t('pledges.noPledges')}
               dataTestId="fund-campaign-pledge-empty-state"
             />
           ),
