@@ -75,6 +75,11 @@
     "signingOut": "साइन आउट हो रहा है...",
     "signOut": "साइन आउट"
   },
+  "orgSelector": {
+    "organization": "संगठन",
+    "selectOrganization": "एक संगठन चुनें",
+    "noOrganizationsAvailable": "कोई संगठन उपलब्ध नहीं है"
+  },
   "userLoginPage": {
     "title": "तालावा व्यवस्थापक",
     "fromPalisadoes": "Palisadoes फाउंडेशन स्वयंसेवकों द्वारा विकसित एक ओपन-सोर्स एप्लिकेशन",
