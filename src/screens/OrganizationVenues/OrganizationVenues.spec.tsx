@@ -290,7 +290,7 @@ describe('Organisation Venues', () => {
   test('renders venue name with ellipsis if name is longer than 25 characters', async () => {
     renderOrganizationVenue(link);
 
-    await screen.findByTestId('venue-item3');
+    await screen.findByTestId('venue-item-venue3');
 
     const longNameVenue = await screen.findByText(/Venue with a name longer/i);
     expect(longNameVenue).toBeInTheDocument();
@@ -299,7 +299,7 @@ describe('Organisation Venues', () => {
   test('renders full venue name if name is less than or equal to 25 characters', async () => {
     renderOrganizationVenue(link);
 
-    await screen.findByTestId('venue-item1');
+    await screen.findByTestId('venue-item-venue1');
 
     const shortNameVenue1 = await screen.findByText('Updated Venue 1');
     const shortNameVenue2 = await screen.findByText('Updated Venue 2');
@@ -310,7 +310,7 @@ describe('Organisation Venues', () => {
   test('renders venue description with ellipsis if description is longer than 40 characters', async () => {
     renderOrganizationVenue(link);
 
-    await screen.findByTestId('venue-item3');
+    await screen.findByTestId('venue-item-venue3');
 
     const longDescText = await screen.findByText(
       /Venue description that should be truncat.../i,
@@ -321,7 +321,7 @@ describe('Organisation Venues', () => {
   test('renders full venue description if description is less than or equal to 75 characters', async () => {
     renderOrganizationVenue(link);
 
-    await screen.findByTestId('venue-item1');
+    await screen.findByTestId('venue-item-venue1');
 
     const shortDesc1 = await screen.findByText(
       'Updated description for venue 1',
@@ -335,9 +335,6 @@ describe('Organisation Venues', () => {
 
   test('Render modal to edit venue', async () => {
     renderOrganizationVenue(link);
-    await waitFor(() =>
-      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
-    );
 
     const updateBtn = await screen.findByTestId('updateVenueBtn1');
     fireEvent.click(updateBtn);
@@ -361,10 +358,10 @@ describe('Organisation Venues', () => {
   test('calls handleDelete when delete button is clicked', async () => {
     renderOrganizationVenue(link);
     await waitFor(() =>
-      expect(screen.getByTestId('venue-item1')).toBeInTheDocument(),
+      expect(screen.getByTestId('venue-item-venue1')).toBeInTheDocument(),
     );
 
-    const deleteButton = screen.getByTestId('deleteVenueBtn1');
+    const deleteButton = screen.getByTestId('deleteVenueBtn-venue1');
 
     // Test that clicking the button doesn't cause any errors
     expect(() => fireEvent.click(deleteButton)).not.toThrow();
@@ -477,10 +474,10 @@ describe('Organisation Venues Error Handling', () => {
     renderOrganizationVenue(errorLink);
 
     await waitFor(() => {
-      expect(screen.getByTestId('deleteVenueBtn1')).toBeInTheDocument();
+      expect(screen.getByTestId('deleteVenueBtn-venue1')).toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByTestId('deleteVenueBtn1'));
+    fireEvent.click(screen.getByTestId('deleteVenueBtn-venue1'));
 
     await waitFor(() => {
       expect(errorHandler).toHaveBeenCalledWith(

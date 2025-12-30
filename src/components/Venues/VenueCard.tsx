@@ -39,14 +39,12 @@ import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 
 interface InterfaceVenueCardProps {
   venueItem: InterfaceQueryVenueListItem;
-  index: number;
   showEditVenueModal: (venueItem: InterfaceQueryVenueListItem) => void;
   handleDelete: (venueId: string) => void;
 }
 
 const VenueCard = ({
   venueItem,
-  index,
   showEditVenueModal,
   handleDelete,
 }: InterfaceVenueCardProps): JSX.Element => {
@@ -55,7 +53,7 @@ const VenueCard = ({
   return (
     <div
       className="col-xl-4 col-lg-4 col-md-6"
-      data-testid={`venue-item${index + 1}`}
+      data-testid={`venue-item-${venueItem.node.id}`}
       key={venueItem.node.id}
     >
       <div className={styles.cards} data-testid="cardStructure">
@@ -100,7 +98,7 @@ const VenueCard = ({
               onClick={() => {
                 showEditVenueModal(venueItem);
               }}
-              data-testid={`updateVenueBtn${index + 1}`}
+              data-testid={`updateVenueBtn-${venueItem.node.id}`}
               className={`btn ${styles.addButton}`}
             >
               <i className="fa fa-pen me-1"></i>
@@ -109,7 +107,7 @@ const VenueCard = ({
             {/* Delete button */}
             <Button
               size="sm"
-              data-testid={`deleteVenueBtn${index + 1}`}
+              data-testid={`deleteVenueBtn-${venueItem.node.id}`}
               onClick={() => handleDelete(venueItem.node.id)}
               className={`btn btn-danger ${styles.removeButton}`}
             >

@@ -66,7 +66,7 @@ import {
   USER_VOLUNTEER_MEMBERSHIP,
 } from 'GraphQl/Queries/EventVolunteerQueries';
 import { CREATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { FaCheck } from 'react-icons/fa';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
@@ -162,14 +162,14 @@ const UpcomingEvents = (): JSX.Element => {
       await createVolunteerMembership({
         variables: { data: volunteerData },
       });
-      toast.success(t('volunteerSuccess'));
+      NotificationToast.success(t('volunteerRequestSuccess'));
       // Refetch membership data first, then events with a small delay to prevent rate limiting
       await refetchMemberships();
       setTimeout(() => {
         refetchEvents();
       }, 500);
     } catch (error) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
     }
   };
 

@@ -2,14 +2,14 @@
  * SignOut Component
  *
  * This component provides a user interface for signing out of the application.
- * It handles the revocation of the user's refresh token and clears the session data.
- * If the token revocation fails, it provides an option to retry or proceed with a local logout.
+ * It handles the logout process by calling the server's logout mutation which
+ * clears HTTP-Only cookies and revokes refresh tokens.
  *
  * @remarks
  * - Uses the `useSession` hook to manage the user's session.
- * - Calls the `REVOKE_REFRESH_TOKEN` mutation via Apollo Client's `useMutation`.
+ * - Calls the `LOGOUT_MUTATION` via Apollo Client's `useMutation`.
  * - Redirects to the homepage using `useNavigate` from React Router.
- * - Handles token revocation errors with a retry mechanism.
+ * - Handles logout errors gracefully with a retry mechanism.
  *
  * ### Dependencies
  * - `@mui/icons-material/Logout`: Logout icon.
@@ -39,7 +39,7 @@ import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import LogoutIcon from '@mui/icons-material/Logout';
 import useSession from 'utils/useSession';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -51,72 +51,66 @@ interface ISignOutProps {
 const SignOut = ({ hideDrawer = false }: ISignOutProps): React.JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'common' });
   const { endSession } = useSession();
-  const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
+  const [logout] = useMutation(LOGOUT_MUTATION);
   const navigate = useNavigate();
-  const { clearAllItems, getItem } = useLocalStorage();
+  const { clearAllItems } = useLocalStorage();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  const logout = async (): Promise<void> => {
+  const handleLogout = async (): Promise<void> => {
     if (isLoggingOut) return; // Prevent multiple clicks
     setIsLoggingOut(true);
+
     const handleSignOut = (): void => {
       clearAllItems();
       endSession();
       navigate('/');
     };
 
-    const storedRefreshToken = getItem('refreshToken');
-
-    // If no refresh token, just do local logout
-    if (!storedRefreshToken) {
-      handleSignOut();
-      return;
-    }
-
     try {
-      await revokeRefreshToken({
-        variables: { refreshToken: storedRefreshToken },
-      });
+      // Call logout mutation - this clears HTTP-Only cookies on the server
+      await logout();
       handleSignOut();
     } catch (error) {
-      console.error('Error revoking refresh token:', error);
-      const retryRevocation = window.confirm(t('retryPrompt'));
-      if (retryRevocation) {
+      console.error('Error during logout:', error);
+      const retryLogout = window.confirm(t('retryPrompt'));
+      if (retryLogout) {
         try {
-          await revokeRefreshToken({
-            variables: { refreshToken: storedRefreshToken },
-          });
+          await logout();
           handleSignOut();
         } catch {
           // Proceed with local logout if retry fails
-          console.error('Token revocation retry failed');
+          console.error('Logout retry failed');
           handleSignOut();
         }
       } else {
         handleSignOut();
       }
+    } finally {
+      // Reset loading state if component is still mounted (e.g., navigation failed)
+      setIsLoggingOut(false);
     }
   };
+
   return (
     <div
-      className={styles.signOutContainer}
-      onClick={logout}
+      className={`${styles.signOutContainer} ${isLoggingOut ? styles.signOutDisabled : ''}`}
+      onClick={() => {
+        if (isLoggingOut) return; // Early-return when disabled
+        handleLogout();
+      }}
       onKeyDown={(e) => {
+        // Block keyboard activation when disabled
+        if (isLoggingOut) return;
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          logout();
+          handleLogout();
         }
       }}
       role="button"
-      tabIndex={0}
+      tabIndex={isLoggingOut ? -1 : 0}
       aria-label={t('signOut')}
       aria-disabled={isLoggingOut}
       data-testid="signOutBtn"
-      style={{
-        opacity: isLoggingOut ? 0.5 : 1,
-        pointerEvents: isLoggingOut ? 'none' : 'auto',
-        cursor: isLoggingOut ? 'not-allowed' : 'pointer',
-      }}
     >
       <div data-testid="LogoutIconid">
         <LogoutIcon />

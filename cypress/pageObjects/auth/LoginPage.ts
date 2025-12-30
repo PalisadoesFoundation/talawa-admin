@@ -1,3 +1,7 @@
+/**
+ * Page Object Model for the Login Page.
+ * Contains selectors and methods for interacting with the login page.
+ */
 export class LoginPage {
   private readonly _emailInput: string = '[data-cy=loginEmail]';
   private readonly _passwordInput: string = '[data-cy=loginPassword]';
@@ -23,8 +27,15 @@ export class LoginPage {
     return this;
   }
 
-  verifyErrorToast(timeout = 5000) {
-    cy.get('.Toastify__toast', { timeout }).should('be.visible');
+  verifyToastVisible(expectedMessage?: string, timeout = 10000) {
+    const toast = cy.get('[role=alert]', { timeout }).should('be.visible');
+    if (expectedMessage) {
+      toast.should('contain.text', expectedMessage);
+    }
     return this;
+  }
+
+  verifyErrorToast(timeout = 10000) {
+    return this.verifyToastVisible(undefined, timeout);
   }
 }
