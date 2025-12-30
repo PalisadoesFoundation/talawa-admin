@@ -1,40 +1,35 @@
 /**
- * @file StatusBadge.tsx
- * @description A reusable status badge component that wraps MUI Chip with consistent styling and i18n support
- *
- * This component provides a standardized way to display status information across the application.
- * It maps domain-specific status variants to semantic visual representations and supports
- * internationalization, accessibility, and customization.
- *
- * @module StatusBadge
- *
- * @example
- * // Basic usage
- * <StatusBadge variant="completed" />
- *
- * @example
- * // With custom size and icon
- * <StatusBadge variant="pending" size="lg" icon={<ClockIcon />} />
- *
- * @example
- * // With custom label
- * <StatusBadge variant="active" label="Currently Active" />
+ * StatusBadge Component
+ * 
+ * A reusable badge component for displaying status information with consistent styling,
+ * accessibility features, and internationalization support.
+ * 
+ * Features:
+ * - Domain-to-semantic variant mapping for consistent visual representation
+ * - Three size variants (sm, md, lg) for different contexts
+ * - Full i18n support with fallback keys
+ * - WCAG-compliant accessibility with role and aria-label
+ * - Optional icon support with type safety
+ * - Customizable labels and styling
+ * 
+ * @module components/StatusBadge
  */
 
 import React from 'react';
 import { Chip } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import styles from './StatusBadge.module.css';
 import type {
   InterfaceStatusBadgeProps,
   SemanticVariant,
+  StatusVariant,
 } from 'types/StatusBadge/interface';
-import styles from './StatusBadge.module.css';
 
 /**
  * Maps domain-specific status variants to semantic visual variants.
- * This provides a consistent mapping between business logic states and UI representations.
+ * This ensures consistent visual representation across the application.
  */
-const variantMapping: Record<string, SemanticVariant> = {
+const variantMapping: Record<StatusVariant, SemanticVariant> = {
   completed: 'success',
   pending: 'warning',
   active: 'success',
@@ -49,9 +44,35 @@ const variantMapping: Record<string, SemanticVariant> = {
 
 /**
  * StatusBadge component for displaying status information with consistent styling.
- *
- * @param {InterfaceStatusBadgeProps} props - Component props
- * @returns {JSX.Element} A styled badge displaying the status
+ * 
+ * This component wraps MUI Chip and provides:
+ * - Domain-to-semantic variant mapping (e.g., 'completed' → 'success')
+ * - Three size variants: sm (20px), md (24px), lg (32px)
+ * - Internationalization support with fallback keys (statusBadge.{variant})
+ * - Accessibility features (role="status", aria-label)
+ * - Optional icon and label customization
+ * 
+ * @param props - Component properties
+ * @param props.variant - Domain-specific status variant (completed, pending, active, etc.)
+ * @param props.size - Size variant: 'sm' | 'md' | 'lg' (default: 'md')
+ * @param props.label - Custom label text (overrides i18n translation)
+ * @param props.icon - Optional icon element (must be a valid ReactElement)
+ * @param props.ariaLabel - Custom aria-label (overrides default label)
+ * @param props.className - Additional CSS classes to apply
+ * 
+ * @returns A styled badge component with semantic coloring
+ * 
+ * @example
+ * ```tsx
+ * // Basic usage
+ * <StatusBadge variant="completed" />
+ * 
+ * // With size and icon
+ * <StatusBadge variant="pending" size="lg" icon={<WarningIcon />} />
+ * 
+ * // With custom label
+ * <StatusBadge variant="approved" label="Verified" />
+ * ```
  */
 const StatusBadge: React.FC<InterfaceStatusBadgeProps> = ({
   variant,
@@ -65,19 +86,22 @@ const StatusBadge: React.FC<InterfaceStatusBadgeProps> = ({
     keyPrefix: 'statusBadge',
   });
 
-  // Map domain variant to semantic variant
+  // Map domain variant to semantic variant for consistent visual representation
   const semanticVariant = variantMapping[variant];
 
-  // Get label from i18n or use provided label
+  // Use custom label or fall back to i18n translation
   const badgeLabel = label || t(variant);
 
-  // Get aria-label
+  // Use custom aria-label or fall back to the badge label
   const ariaLabelText = ariaLabel || badgeLabel;
+
+  // Validate that icon is a proper ReactElement to prevent runtime errors
+  const validIcon = React.isValidElement(icon) ? icon : undefined;
 
   return (
     <Chip
       label={badgeLabel}
-      icon={icon ? (icon as React.ReactElement) : undefined}
+      icon={validIcon}
       role="status"
       aria-label={ariaLabelText}
       className={`${styles.statusBadge} ${styles[semanticVariant]} ${styles[size]} ${className || ''}`}

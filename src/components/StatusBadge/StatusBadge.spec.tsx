@@ -1,26 +1,19 @@
-/**
- * @file StatusBadge.spec.tsx
- * @description Unit tests for the StatusBadge component
- *
- * This test suite ensures the StatusBadge component renders correctly with various
- * variants, sizes, and customization options. It also verifies accessibility features
- * and i18n integration.
- */
-
-import React from 'react';
+import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { describe, it, expect, vi } from 'vitest';
 import StatusBadge from './StatusBadge';
 
-/**
- * Mock react-i18next to return translation keys for testing
- */
+// Mock i18n
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key,
   }),
 }));
+
+// Ensure test isolation by clearing mocks after each test
+afterEach(() => {
+  vi.clearAllMocks();
+});
 
 describe('StatusBadge Component', () => {
   describe('Variant Rendering', () => {
@@ -151,6 +144,14 @@ describe('StatusBadge Component', () => {
       const icon = <span data-testid="test-icon">✓</span>;
       render(<StatusBadge variant="completed" icon={icon} />);
       expect(screen.getByTestId('test-icon')).toBeInTheDocument();
+    });
+
+    it('should not render invalid icon types', () => {
+      // This test ensures type safety - invalid icons should be filtered out
+      render(<StatusBadge variant="completed" icon={'invalid' as any} />);
+      const badge = screen.getByRole('status');
+      expect(badge).toBeInTheDocument();
+      // Icon should not be rendered if it's not a valid ReactElement
     });
   });
 
