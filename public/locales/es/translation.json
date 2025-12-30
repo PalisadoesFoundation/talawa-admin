@@ -66,9 +66,13 @@
     "loading": "Cargando...",
     "selectOrg": "Seleccione una organización",
     "afterRegister": "Registro exitoso. Por favor, espere a que el administrador apruebe su solicitud.",
-    "backToLogin": "Volver al inicio de sesión",
-    "communityLogo": "Logo de la comunidad",
-    "organizations": "Organizaciones"
+    "userImage": "Imagen del usuario",
+    "userEditProfilePicture": "Editar foto de perfil",
+    "communityLogo": "Logo de la Comunidad",
+    "organizations": "Organizaciones",
+    "accountLocked": "Su cuenta ha sido bloqueada temporalmente debido a demasiados intentos fallidos de inicio de sesión. Por favor, inténtelo de nuevo más tarde.",
+    "accountLockedWithTimer": "Su cuenta ha sido bloqueada temporalmente. Por favor, inténtelo de nuevo en {{minutes}} minuto(s).",
+    "backToLogin": "Volver al inicio de sesión"
   },
   "signOut": {
     "retryPrompt": "Error al Cerrar sesión. ¿Reintentar?",
@@ -242,7 +246,8 @@
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
     "newMembersWillAppearHere": "Los nuevos miembros aparecerán aquí",
     "profilePictureAlt": "Imagen de perfil de {{name}}",
-    "placeholderAvatarAlt": "Avatar predeterminado"
+    "placeholderAvatarAlt": "Avatar predeterminado",
+    "newMembersWillAppearHere": "Las nuevas solicitudes de membresía aparecerán aquí"
   },
   "users": {
     "membershipStatus": {
@@ -750,7 +755,8 @@
     "associatedCampaigns": "Campañas asociadas",
     "searchFunds": "Buscar fondos",
     "errorLoadingFundsData": "Error al cargar los datos de fondos",
-    "editFund": "Editar fondo"
+    "editFund": "Editar fondo",
+    "searchFunds": "Buscar fondos"
   },
   "fundCampaign": {
     "title": "Campañas de recaudación de fondos",
@@ -778,7 +784,10 @@
     "latestEndDate": "Fecha de finalización más reciente",
     "earliestEndDate": "Fecha de finalización más temprana",
     "lowestGoal": "Meta más baja",
-    "highestGoal": "Meta más alta"
+    "highestGoal": "Meta más alta",
+    "editCampaign": "Editar campaña",
+    "searchCampaigns": "Buscar campañas",
+    "errorLoading": "Error al cargar los datos de la campaña"
   },
   "pledges": {
     "title": "Compromisos de Campaña de Financiamiento",
@@ -1119,7 +1128,20 @@
     "unassignUserTagMessage": "¿Desea eliminar la etiqueta de este usuario?",
     "successfullyUnassigned": "Etiqueta desasignada del usuario",
     "tagsAssigned": "Etiquetas asignadas",
-    "noTagsAssigned": "No se asignaron etiquetas"
+    "noTagsAssigned": "No se asignaron etiquetas",
+    "to": "a",
+    "overview": "Resumen",
+    "tags": "Etiquetas",
+    "invalidFileType": "Tipo de archivo no válido",
+    "fileTooLarge": "El archivo es demasiado grande",
+    "memberDetailNumberExample": "Ejemplo de número",
+    "memberDetailExampleLane": "Ejemplo de calle",
+    "memberDetailPostalExample": "Ejemplo de código postal",
+    "enterCity": "Ingrese la ciudad",
+    "enterState": "Ingrese el estado",
+    "select": "Seleccionar",
+    "asYourCountry": "Como su país",
+    "actions": "Acciones"
   },
   "userLogin": {
     "login": "Acceso",
@@ -1274,7 +1296,8 @@
     "event": "Evento",
     "article": "Artículo",
     "postNowVisibleInFeed": "Publicar ahora visible en el feed",
-    "processingPost": "Procesando tu publicación. Por favor espera."
+    "processingPost": "Procesando tu publicación. Por favor espera.",
+    "postImagePreview": "Vista previa de la imagen de la publicación"
   },
   "eventAttendance": {
     "historical_statistics": "Estadísticas históricas",
@@ -1444,7 +1467,9 @@
     "latestFirst": "Más Reciente Primero",
     "earliestFirst": "Más Antiguo Primero",
     "noTransactionsFound": "No se encontraron transacciones",
-    "errorLoadingTransactions": "Error al cargar transacciones"
+    "errorLoadingTransactions": "Error al cargar transacciones",
+    "eventType": "Tipo de evento",
+    "tagCreationFailed": "Error al crear la etiqueta"
   },
   "userEvents": {
     "title": "Eventos",
@@ -1704,6 +1729,12 @@
     "noPledges": "No se encontraron promesas",
     "noCampaigns": "No se encontraron campañas",
     "raised": "Recaudado",
+    "searchCampaigns": "Buscar campañas",
+    "campaignName": "Nombre de la campaña",
+    "startDate": "Fecha de inicio",
+    "endDate": "Fecha de finalización",
+    "fundingGoal": "Objetivo de financiación",
+    "viewPledge": "Ver compromiso",
     "amountRaised": "Monto Recaudado"
   },
   "userPledges": {
