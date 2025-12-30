@@ -80,29 +80,8 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
         variables: { userid: props.id, orgid: currentUrl },
       });
 
-      // Only proceed if mutation succeeded:
-      // - Data exists (not null/undefined)
-      // - No GraphQL errors in result.errors
-      // - createAdmin result exists and is truthy
-
-      // First check if data is null - this is a clear indicator of failure
-      if (!result.data) {
-        // No data means mutation failed, don't proceed
-        return;
-      }
-
-      // Check for GraphQL errors
-      if (
-        result.errors &&
-        Array.isArray(result.errors) &&
-        result.errors.length > 0
-      ) {
-        // GraphQL errors present, don't proceed
-        return;
-      }
-
-      // Finally, check if we have a valid createAdmin result
-      if (result.data.createAdmin) {
+      // Only proceed if mutation succeeded with valid createAdmin result
+      if (result.data?.createAdmin) {
         NotificationToast.success(t('addedAsAdmin') as string);
         reloadTimeoutRef.current = setTimeout(() => {
           window.location.reload();
