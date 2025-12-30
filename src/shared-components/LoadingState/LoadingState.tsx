@@ -2,7 +2,7 @@
  * LoadingState Component
  *
  * A reusable component that provides consistent loading experiences across the application.
- * Supports both full-screen spinner with overlay and inline loading indicators.
+ * Supports full-screen spinner with overlay, inline loading indicators, and skeleton placeholders.
  *
  * @component
  * @example
@@ -16,10 +16,16 @@
  * <LoadingState isLoading={loading} variant="inline">
  *   <div>Content</div>
  * </LoadingState>
+ *
+ * // Skeleton loading (for initial content load)
+ * <LoadingState isLoading={loading} variant="skeleton">
+ *   <div>Content</div>
+ * </LoadingState>
  * ```
  *
  * @remarks
  * - When loading, the spinner variant displays an overlay that blocks user interactions
+ * - Skeleton variant shows animated placeholders suitable for initial content loading
  * - Includes proper accessibility attributes (role, aria-live, aria-label)
  * - Supports internationalization for aria-label
  */
@@ -65,6 +71,39 @@ const LoadingState = ({
           variant="primary"
           data-testid="spinner"
         />
+      </div>
+    );
+  }
+
+  // Skeleton variant: animated placeholder for initial loading
+  if (variant === 'skeleton') {
+    return (
+      <div
+        className={styles.skeletonContainer}
+        data-testid={dataTestId}
+        role="status"
+        aria-live="polite"
+        aria-label={t('loading', { defaultValue: 'Loading' })}
+      >
+        <div className={styles.skeletonHeader}>
+          <div className={`${styles.skeletonItem} ${styles.skeletonTitle}`} />
+          <div className={`${styles.skeletonItem} ${styles.skeletonButton}`} />
+        </div>
+        <div className={styles.skeletonContent}>
+          {[...Array(5)].map((_, index) => (
+            <div key={index} className={styles.skeletonRow}>
+              <div
+                className={`${styles.skeletonItem} ${styles.skeletonCell}`}
+              />
+              <div
+                className={`${styles.skeletonItem} ${styles.skeletonCell}`}
+              />
+              <div
+                className={`${styles.skeletonItem} ${styles.skeletonCellSmall}`}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
