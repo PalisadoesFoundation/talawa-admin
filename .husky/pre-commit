@@ -4,6 +4,13 @@ pnpm run format:fix
 # pnpm run lint:fix
 pnpm run lint-staged
 pnpm run typecheck
+
+STAGED_TS=$(git diff --cached --name-only --diff-filter=ACMRT | grep -E '^src/.*\.(ts|tsx)$' | grep -v '.spec.ts' | grep -v '.test.ts' | tr '\n' ' ')
+if [ -n "$STAGED_TS" ]; then
+  echo "📝 Validating TSDoc comments on staged files..."
+  npx eslint $STAGED_TS --rule "tsdoc/syntax: error" --max-warnings=0
+fi
+
 STAGED_SRC=$(git diff --cached --name-only --diff-filter=ACMRT | grep -E '^src/.*\.(ts|tsx|js|jsx)$' | tr '\n' ' ')
 if [ -n "$STAGED_SRC" ]; then
   pnpm run check-i18n -- $STAGED_SRC
