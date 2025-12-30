@@ -335,20 +335,18 @@ describe('Organisation Venues', () => {
 
   test('Render modal to edit venue', async () => {
     renderOrganizationVenue(link);
-<<<<<<< HEAD
-=======
+
     await waitFor(() =>
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
     );
     // Ensure the first venue item has been rendered before querying buttons
-    await screen.findByTestId('venue-item1');
->>>>>>> da3855abe7 (fix(tests): ensure venue item is rendered before querying update button in OrganizationVenues tests)
+    await screen.findByTestId('venue-item-venue1');
 
-    const updateBtn = screen.getByTestId('updateVenueBtn1');
-    fireEvent.click(updateBtn);
-    await waitFor(() => {
-      expect(screen.getByTestId('venueForm')).toBeInTheDocument();
-    });
+    // Click the venue card's edit button to open the edit modal
+    fireEvent.click(screen.getByTestId('updateVenueBtn-venue1'));
+
+    // After clicking the card edit button, the venue edit modal should appear
+    await screen.findByTestId('venueForm');
   });
 
   test('Render Modal to add event', async () => {

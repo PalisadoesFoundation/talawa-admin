@@ -76,13 +76,11 @@ i18n.use(initReactI18next).init({
 
 describe('GroupChatDetails', () => {
   afterEach(() => {
-    // Restore any spied implementations back to originals to avoid test pollution
-    vi.restoreAllMocks();
+    // Clear mock call history between tests to avoid pollution
     vi.clearAllMocks();
   });
   beforeEach(() => {
-    // recreate module-level mocks/spies per-test so restoreAllMocks() is safe
-    vi.resetAllMocks();
+    // Create per-test spy for URL.createObjectURL
     vi.spyOn(global.URL, 'createObjectURL').mockImplementation(
       () => 'https://minio/test-image.jpg',
     );
@@ -434,19 +432,26 @@ describe('GroupChatDetails', () => {
     useLocalStorage().setItem('userId', 'user1');
 
     const toastError = vi.spyOn(toast, 'error');
-    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
 
     const orgMembersErrorMock = {
       request: {
         query: ORGANIZATION_MEMBERS,
-        variables: { input: { id: 'org123' }, first: 20, after: null, where: {} },
+        variables: {
+          input: { id: 'org123' },
+          first: 20,
+          after: null,
+          where: {},
+        },
       },
       error: new Error('Failed to fetch members'),
     };
 
     render(
       <I18nextProvider i18n={i18n}>
-        <MockedProvider mocks={[orgMembersErrorMock, ...mocks]}> 
+        <MockedProvider mocks={[orgMembersErrorMock, ...mocks]}>
           <GroupChatDetails
             toggleGroupChatDetailsModal={vi.fn()}
             groupChatDetailsModalisOpen={true}

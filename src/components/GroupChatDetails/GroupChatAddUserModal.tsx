@@ -58,7 +58,7 @@ export default function GroupChatAddUserModal(
   useEffect(() => {
     if (allUsersError) {
       toast.error(t('failedFetchingMembers'));
-      // eslint-disable-next-line no-console
+
       console.error(allUsersError);
     }
   }, [allUsersError, t]);
