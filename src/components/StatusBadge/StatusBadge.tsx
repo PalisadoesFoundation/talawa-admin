@@ -1,9 +1,9 @@
 /**
  * StatusBadge Component
- * 
+ *
  * A reusable badge component for displaying status information with consistent styling,
  * accessibility features, and internationalization support.
- * 
+ *
  * Features:
  * - Domain-to-semantic variant mapping for consistent visual representation
  * - Three size variants (sm, md, lg) for different contexts
@@ -11,7 +11,7 @@
  * - WCAG-compliant accessibility with role and aria-label
  * - Optional icon support with type safety
  * - Customizable labels and styling
- * 
+ *
  * @module components/StatusBadge
  */
 
@@ -44,14 +44,14 @@ const variantMapping: Record<StatusVariant, SemanticVariant> = {
 
 /**
  * StatusBadge component for displaying status information with consistent styling.
- * 
+ *
  * This component wraps MUI Chip and provides:
  * - Domain-to-semantic variant mapping (e.g., 'completed' → 'success')
  * - Three size variants: sm (20px), md (24px), lg (32px)
  * - Internationalization support with fallback keys (statusBadge.{variant})
  * - Accessibility features (role="status", aria-label)
  * - Optional icon and label customization
- * 
+ *
  * @param props - Component properties
  * @param props.variant - Domain-specific status variant (completed, pending, active, etc.)
  * @param props.size - Size variant: 'sm' | 'md' | 'lg' (default: 'md')
@@ -59,17 +59,17 @@ const variantMapping: Record<StatusVariant, SemanticVariant> = {
  * @param props.icon - Optional icon element (must be a valid ReactElement)
  * @param props.ariaLabel - Custom aria-label (overrides default label)
  * @param props.className - Additional CSS classes to apply
- * 
+ *
  * @returns A styled badge component with semantic coloring
- * 
+ *
  * @example
  * ```tsx
  * // Basic usage
  * <StatusBadge variant="completed" />
- * 
+ *
  * // With size and icon
  * <StatusBadge variant="pending" size="lg" icon={<WarningIcon />} />
- * 
+ *
  * // With custom label
  * <StatusBadge variant="approved" label="Verified" />
  * ```
