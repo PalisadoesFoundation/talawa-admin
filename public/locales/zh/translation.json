@@ -75,6 +75,12 @@
     "signingOut": "正在登出...",
     "signOut": "登出"
   },
+  "orgSelector": {
+    "organization": "组织",
+    "selectOrganization": "选择一个组织",
+    "noOrganizationsAvailable": "没有可用的组织",
+    "noMatchingOrganizations": "未找到匹配的组织"
+  },
   "userLoginPage": {
     "title": "塔拉瓦管理员",
     "fromPalisadoes": "Palisadoes 基金会志愿者开发的开源应用程序",

@@ -863,6 +863,14 @@
 
   --empty-state-bg: #fafafa;
   --empty-state-border-color: #eeeeee;
+
+  /* OrgSelector Component */
+  --orgSelector-dropdown-bg: #ffffff;
+  --orgSelector-dropdown-border: #dee2e6;
+  --orgSelector-dropdown-shadow: rgba(0, 0, 0, 0.075);
+  --orgSelector-option-hover-bg: #f8f9fa;
+  --orgSelector-option-selected-bg: rgba(13, 110, 253, 0.1);
+  --orgSelector-no-results-color: #6c757d;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -10415,4 +10423,41 @@ form {
   100% {
     background-position: calc(200px + 100%) 0;
   }
+}
+
+/* OrgSelector Component Styles */
+.orgSelectorDropdown {
+  position: absolute;
+  width: 100%;
+  background-color: var(--orgSelector-dropdown-bg);
+  border: 1px solid var(--orgSelector-dropdown-border);
+  border-radius: 0.375rem;
+  box-shadow: 0 0.125rem 0.25rem var(--orgSelector-dropdown-shadow);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  top: 100%;
+  margin-top: 2px;
+}
+
+.orgSelectorOption {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+}
+
+.orgSelectorOption:hover {
+  background-color: var(--orgSelector-option-hover-bg);
+}
+
+.orgSelectorOptionHighlighted {
+  background-color: var(--orgSelector-option-hover-bg);
+}
+
+.orgSelectorOptionSelected {
+  background-color: var(--orgSelector-option-selected-bg);
+}
+
+.orgSelectorNoResults {
+  padding: 0.75rem 1rem;
+  color: var(--orgSelector-no-results-color);
 }

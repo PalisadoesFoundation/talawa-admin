@@ -75,6 +75,12 @@
     "signingOut": "Signing out...",
     "signOut": "Sign Out"
   },
+  "orgSelector": {
+    "organization": "Organization",
+    "selectOrganization": "Select an organization",
+    "noOrganizationsAvailable": "No organizations available",
+    "noMatchingOrganizations": "No matching organizations found"
+  },
   "userLoginPage": {
     "title": "Talawa Admin",
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
