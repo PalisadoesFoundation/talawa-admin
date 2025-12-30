@@ -27,7 +27,7 @@ import {
   ROW_HEIGHT,
   dataGridStyle as baseDataGridStyle,
 } from 'types/ReportingTable/utils';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 const dataGridStyle = {
@@ -102,7 +102,7 @@ const dataGridStyle = {
  * For more details on the reusable classes, refer to the global CSS file.
  */
 const organizationFunds = (): JSX.Element => {
-  const { t } = useTranslation('translation', { keyPrefix: 'funds' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   const { orgId } = useParams();
@@ -153,7 +153,7 @@ const organizationFunds = (): JSX.Element => {
 
   // Set the document title based on the translation
   useEffect(() => {
-    document.title = t('title');
+    document.title = t('funds.title');
   }, [t]);
 
   if (!orgId) {
@@ -200,7 +200,7 @@ const organizationFunds = (): JSX.Element => {
             className={`${styles.errorIcon} ${styles.errorIconLarge}`}
           />
           <h6 className="fw-bold text-danger text-center">
-            {t('errorLoadingFundsData')}
+            {t('funds.errorLoadingFundsData')}
             <br />
             {fundError.message}
           </h6>
@@ -212,10 +212,10 @@ const organizationFunds = (): JSX.Element => {
   // Header titles for the funds table
   const headerTitles: string[] = [
     tCommon('hash'),
-    t('fundName'),
+    t('funds.fundName'),
     tCommon('createdOn'),
     tCommon('status'),
-    t('associatedCampaigns'),
+    t('funds.associatedCampaigns'),
     tCommon('action'),
   ];
 
@@ -237,7 +237,7 @@ const organizationFunds = (): JSX.Element => {
     },
     {
       field: 'fundName',
-      headerName: t('fundName'),
+      headerName: t('funds.fundName'),
       flex: 2,
       align: 'center',
       minWidth: 100,
@@ -268,7 +268,7 @@ const organizationFunds = (): JSX.Element => {
     },
     {
       field: 'status',
-      headerName: t('status'),
+      headerName: t('funds.status'),
       flex: 1,
       align: 'center',
       minWidth: 100,
@@ -276,12 +276,12 @@ const organizationFunds = (): JSX.Element => {
       sortable: false,
       headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
-        return params.row.isArchived ? t('archived') : tCommon('active');
+        return params.row.isArchived ? t('funds.archived') : tCommon('active');
       },
     },
     {
       field: 'assocCampaigns',
-      headerName: t('assocCampaigns'),
+      headerName: t('funds.assocCampaigns'),
       flex: 2,
       align: 'center',
       minWidth: 100,
@@ -293,12 +293,12 @@ const organizationFunds = (): JSX.Element => {
           <Button
             size="sm"
             className={styles.editButton}
-            aria-label={t('viewCampaigns')}
+            aria-label={t('funds.viewCampaigns')}
             onClick={() => handleClick(params.row.id as string)}
             data-testid="viewBtn"
           >
             <i className="fa fa-eye me-1" />
-            {t('viewCampaigns')}
+            {t('funds.viewCampaigns')}
           </Button>
         );
       },
@@ -325,7 +325,7 @@ const organizationFunds = (): JSX.Element => {
             }}
           >
             <i className="fa fa-edit me-1" />
-            {t('editFund')}
+            {t('funds.editFund')}
           </Button>
         );
       },
@@ -343,7 +343,7 @@ const organizationFunds = (): JSX.Element => {
     slots: {
       noRowsOverlay: () => (
         <Stack height="100%" alignItems="center" justifyContent="center">
-          {t('notFound')}
+          {t('funds.noFundsFound')}
         </Stack>
       ),
     },
@@ -360,18 +360,18 @@ const organizationFunds = (): JSX.Element => {
   return (
     <div>
       <div className={styles.searchContainerRowNoTopMargin}>
-        <div className={styles.searchBarMarginReset}>
-          <SearchBar
-            placeholder={t('searchFunds')}
-            value={searchText}
-            onChange={(value) => setSearchText(value.trim())}
-            onClear={() => setSearchText('')}
-            showSearchButton={false}
-            showTrailingIcon={true}
-            inputTestId="searchByName"
-            clearButtonTestId="clearSearch"
-          />
-        </div>
+        <AdminSearchFilterBar
+          searchPlaceholder={t('funds.searchFunds')}
+          searchValue={searchText}
+          onSearchChange={(value) => setSearchText(value.trim())}
+          onSearchSubmit={(value: string) => {
+            setSearchText(value.trim());
+          }}
+          searchInputTestId="searchByName"
+          searchButtonTestId="searchButton"
+          hasDropdowns={false}
+        />
+
         <Button
           variant="success"
           onClick={() => handleOpenModal(null, 'create')}
@@ -379,7 +379,7 @@ const organizationFunds = (): JSX.Element => {
           data-testid="createFundBtn"
         >
           <i className="fa fa-plus me-2" />
-          {t('createFund')}
+          {t('funds.createFund')}
         </Button>
       </div>
 
@@ -398,7 +398,7 @@ const organizationFunds = (): JSX.Element => {
       ) : !fundLoading && fundData && filteredAndSortedFunds.length === 0 ? (
         <EmptyState
           icon={<AccountBalanceWallet />}
-          message={t('noFundsFound')}
+          message={t('funds.noFundsFound')}
           dataTestId="funds-empty"
         />
       ) : (

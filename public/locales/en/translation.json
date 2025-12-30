@@ -41,6 +41,11 @@
     "uppercaseCheck": "At least one uppercase letter",
     "numericValueCheck": "At least one numeric value",
     "specialCharCheck": "At least one special character",
+    "requirement_min_length": "At least 8 characters",
+    "requirement_lowercase": "Contains lowercase",
+    "requirement_uppercase": "Contains uppercase",
+    "requirement_number": "Contains a number",
+    "requirement_special_char": "Contains a special character",
     "selectOrg": "Select an organization",
     "backToLogin": "Back to Login",
     "afterRegister": "Successfully registered. Please wait for admin to approve your request.",
@@ -69,6 +74,12 @@
     "retryPrompt": "Failed to revoke session. Retry?",
     "signingOut": "Signing out...",
     "signOut": "Sign Out"
+  },
+  "orgSelector": {
+    "organization": "Organization",
+    "selectOrganization": "Select an organization",
+    "noOrganizationsAvailable": "No organizations available",
+    "noMatchingOrganizations": "No matching organizations found"
   },
   "userLoginPage": {
     "title": "Talawa Admin",
@@ -202,7 +213,16 @@
     "cancel": "cancel",
     "endOfResults": "endOfResults",
     "noResultsFoundFor": "noResultsFoundFor",
-    "OR": "OR"
+    "OR": "OR",
+    "imageUploadError": "Image upload failed. Please try again.",
+    "imageUploadSuccess": "Image uploaded successfully.",
+    "congratulationOrgCreated": "Congratulations! The Organization is created.",
+    "goToStore": "Go to Store",
+    "manageFeaturesInfo": "Manage the features and plugins available for this organization.",
+    "orgName": "Enter Name",
+    "sortOrganizations": "Sort Organizations",
+    "admins": "Admins",
+    "members": "Members"
   },
   "orgListCard": {
     "manage": "Manage",
@@ -227,6 +247,7 @@
     "rejectedSuccessfully": "Request rejected successfully",
     "noOrgErrorTitle": "Organizations Not Found",
     "noOrgErrorDescription": "Please create an organization through dashboard",
+    "newMembersWillAppearHere": "New members will appear here",
     "name": "name",
     "email": "email",
     "profilePictureAlt": "User profile picture",
@@ -398,7 +419,10 @@
     "totalAssignedUsers": "Total Assigned Users",
     "tagCreationFailed": "Tag creation failed",
     "errorLoadingTagsData": "Error occurred while loading Organization Tags Data",
-    "sortTags": "Sort Tags"
+    "sortTags": "Sort Tags",
+    "tags": "Tags",
+    "Latest": "Latest",
+    "Oldest": "Oldest"
   },
   "manageTag": {
     "title": "Tag Details",
@@ -533,8 +557,10 @@
     "assignedTo": "Assigned To",
     "assignTo": "Assign To",
     "volunteer": "Volunteer",
+    "volunteered": "Volunteered",
     "volunteerGroup": "Volunteer Group",
     "volunteerAssignment": "Volunteer Assignment",
+    "volunteerSuccess": "Volunteer added successfully",
     "individualVolunteer": "Individual Volunteer",
     "groupAssignment": "Group Assignment",
     "hoursVolunteered": "Hours Volunteered",
@@ -729,6 +755,8 @@
     "viewCampaigns": "View Campaigns",
     "searchByName": "Search by Name",
     "assocCampaigns": "Associated Campaigns",
+    "associatedCampaigns": "Associated Campaigns",
+    "searchFunds": "Search Funds",
     "errorLoadingFundsData": "Error loading funds data",
     "editFund": "Edit Fund"
   },
@@ -737,7 +765,10 @@
     "campaignName": "Campaign Name",
     "campaignOptions": "Options",
     "fundingGoal": "Funding Goal",
+    "progress": "Progress",
+    "raised": "Raised",
     "addCampaign": "Add Campaign",
+    "editCampaign": "Edit Campaign",
     "createdCampaign": "Campaign created successfully",
     "updatedCampaign": "Campaign updated successfully",
     "deletedCampaign": "Campaign deleted successfully",
@@ -749,6 +780,7 @@
     "currency": "Currency",
     "selectCurrency": "Select Currency",
     "searchFullName": "Search By Name",
+    "searchCampaigns": "Search Campaigns",
     "viewPledges": "View Pledges",
     "noCampaignsFound": "No Campaigns Found",
     "latestEndDate": "Latest End Date",
@@ -792,7 +824,8 @@
     "togglePledgedRaised": "Toggle between Pledged and Raised amounts",
     "pledgeDate": "Pledge Date",
     "pledged": "Pledged",
-    "donated": "Donated"
+    "donated": "Donated",
+    "campaignNotActive": "Campaign is not currently active"
   },
   "createPostModal": {
     "title": "Posts",
@@ -1258,10 +1291,10 @@
     "loadingComments": "Loading comments…",
     "loadMoreComments": "Load more comments",
     "noMoreComments": "No more comments",
+    "moreOptions": "more options",
     "postedOn": "Posted on {{date}}",
     "emptyCommentError": "Please enter a comment before submitting.",
-    "unexpectedError": "An unexpected error occurred. Please try again.",
-    "moreOptions": "More options"
+    "unexpectedError": "An unexpected error occurred. Please try again."
   },
   "posts": {
     "pinnedPosts": "Pinned Posts",
@@ -1374,6 +1407,10 @@
     "city": "City",
     "description": "Description",
     "enterDescription": "Enter Description",
+    "atleast_8_char_long": "Password must be at least 8 characters long.",
+    "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF.",
+    "fileSizeTooLarge": "File is too large. Maximum size is 5MB.",
+    "failedToProcessImage": "Failed to process profile picture. Please try uploading again.",
     "title": "Settings"
   },
   "donate": {
@@ -1696,6 +1733,7 @@
     "mostHoursVolunteered": "Most Hours Volunteered",
     "leastHoursVolunteered": "Least Hours Volunteered",
     "accepted": "Accepted",
+    "rejected": "Rejected",
     "addVolunteer": "Add Volunteer",
     "removeVolunteer": "Remove Volunteer",
     "volunteerAdded": "Volunteer added successfully",
@@ -1716,6 +1754,9 @@
     "groupDetails": "Group Details",
     "creator": "Creator",
     "requests": "Requests",
+    "volunteershipRequests": "Volunteership Requests",
+    "requestType": "Request Type",
+    "requestDate": "Request Date",
     "noRequests": "No Requests",
     "latest": "Latest",
     "earliest": "Earliest",
@@ -1737,6 +1778,7 @@
     "invitations": "Invitations",
     "groups": "Volunteer Groups",
     "actions": "Action Items",
+    "search": "Search",
     "searchByName": "Search by Name",
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
@@ -1759,7 +1801,7 @@
     "receivedEarliest": "Received Earliest",
     "invitationAccepted": "Invitation accepted successfully",
     "invitationRejected": "Invitation rejected successfully",
-    "volunteerSuccess": "Requested to volunteer successfully",
+    "volunteerRequestSuccess": "Requested to volunteer successfully",
     "recurring": "Recurring",
     "groupInvitationSubject": "Invitation to join volunteer group",
     "eventInvitationSubject": "Invitation to volunteer for event",

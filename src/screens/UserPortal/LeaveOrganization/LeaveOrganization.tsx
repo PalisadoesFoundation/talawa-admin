@@ -41,6 +41,7 @@
  * ```
  */
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation } from '@apollo/client';
 import {
   ORGANIZATIONS_LIST_BASIC,
@@ -50,7 +51,7 @@ import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router';
 import { getItem } from 'utils/useLocalstorage';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 const userEmail = (() => {
   try {
@@ -72,6 +73,7 @@ const userId = (() => {
 export { userEmail, userId };
 
 const LeaveOrganization = (): JSX.Element => {
+  const { t } = useTranslation('common');
   const navigate = useNavigate();
   const { orgId: organizationId } = useParams();
   const [email, setEmail] = useState('');
@@ -99,7 +101,7 @@ const LeaveOrganization = (): JSX.Element => {
     onCompleted: () => {
       // Use a toast notification or in-app message
       setShowModal(false);
-      toast.success('You have successfully left the organization!');
+      NotificationToast.success(t('leftOrgSuccess'));
       navigate(`/user/organizations`);
     },
     onError: (err) => {
@@ -156,7 +158,7 @@ const LeaveOrganization = (): JSX.Element => {
     return (
       <div className="text-center mt-4" role="status">
         <Spinner animation="border" />
-        <p>Loading organization details...</p>
+        <p>{t('loadingOrgDetails')}</p>
       </div>
     );
   }
@@ -164,7 +166,7 @@ const LeaveOrganization = (): JSX.Element => {
     return <Alert variant="danger">Error: {orgError.message}</Alert>;
 
   if (!orgData?.organizations?.length) {
-    return <p>Organization not found</p>;
+    return <p>{t('organizationNotFound')}</p>;
   }
 
   const organization = orgData?.organizations[0];
@@ -176,7 +178,7 @@ const LeaveOrganization = (): JSX.Element => {
       <p>{organization?.description}</p>
 
       <Button variant="danger" onClick={() => setShowModal(true)}>
-        Leave Organization
+        {t('leaveOrganization')}
       </Button>
 
       <Modal
@@ -192,13 +194,13 @@ const LeaveOrganization = (): JSX.Element => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="leave-organization-modal">
-            Leave Joined Organization
+            {t('leaveJoinedOrganization')}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {!verificationStep ? (
             <>
-              <p>Are you sure you want to leave this organization?</p>
+              <p>{t('leaveOrgConfirmation')}</p>
               <p>
                 This action cannot be undone, and you may need to request access
                 again if you reconsider.
@@ -208,18 +210,18 @@ const LeaveOrganization = (): JSX.Element => {
             <Form>
               <Form.Group>
                 <Form.Label htmlFor="confirm-email">
-                  Enter your email to confirm:
+                  {t('enterEmailToConfirm')}
                 </Form.Label>
                 <Form.Control
                   id="confirm-email"
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder={t('enterYourEmail')}
                   value={email}
                   required
                   aria-describedby={error ? 'email-error' : undefined}
                   onChange={(e) => setEmail(e.target.value)}
                   onKeyDown={handleKeyPress}
-                  aria-label="confirm-email-input"
+                  aria-label={t('confirmEmailInput')}
                 />
               </Form.Group>
               {error && (
@@ -234,13 +236,13 @@ const LeaveOrganization = (): JSX.Element => {
           {!verificationStep ? (
             <>
               <Button variant="secondary" onClick={() => setShowModal(false)}>
-                Cancel
+                {t('cancel')}
               </Button>
               <Button
                 variant="danger"
                 onClick={() => setVerificationStep(true)}
               >
-                Continue
+                {t('continue')}
               </Button>
             </>
           ) : (
@@ -253,18 +255,18 @@ const LeaveOrganization = (): JSX.Element => {
                   setError('');
                 }}
               >
-                Back
+                {t('back')}
               </Button>
               <Button
                 variant="danger"
                 disabled={loading}
                 onClick={handleVerifyAndLeave}
-                aria-label="confirm-leave-button"
+                aria-label={t('confirmLeaveButton')}
               >
                 {loading ? (
                   <>
                     <Spinner animation="border" size="sm" role="status" />
-                    {' Loading...'}
+                    {` ${t('loading')}`}
                   </>
                 ) : (
                   'Confirm'

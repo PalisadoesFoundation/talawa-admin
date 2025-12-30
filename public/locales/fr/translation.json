@@ -41,6 +41,11 @@
     "uppercaseCheck": "Au moins une lettre majuscule",
     "numericValueCheck": "Au moins une valeur numérique",
     "specialCharCheck": "Au moins un caractère spécial",
+    "requirement_min_length": "Au moins 8 caractères",
+    "requirement_lowercase": "Contient des minuscules",
+    "requirement_uppercase": "Contient des majuscules",
+    "requirement_number": "Contient un chiffre",
+    "requirement_special_char": "Contient un caractère spécial",
     "selectOrg": "Sélectionnez une organisation",
     "backToLogin": "Retour à la connexion",
     "afterRegister": "Enregistré avec succès. ",
@@ -69,6 +74,12 @@
     "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
     "signingOut": "Déconnexion en cours...",
     "signOut": "Se déconnecter"
+  },
+  "orgSelector": {
+    "organization": "Organisation",
+    "selectOrganization": "Sélectionnez une organisation",
+    "noOrganizationsAvailable": "Aucune organisation disponible",
+    "noMatchingOrganizations": "Aucune organisation correspondante trouvée"
   },
   "userLoginPage": {
     "title": "Administrateur Talawa",
@@ -202,7 +213,16 @@
     "cancel": "Annuler",
     "endOfResults": "Fin des résultats",
     "noResultsFoundFor": "Aucun résultat trouvé pour",
-    "OR": "OU"
+    "OR": "OU",
+    "imageUploadError": "Échec du téléchargement de l'image. Veuillez réessayer.",
+    "imageUploadSuccess": "Image téléchargée avec succès.",
+    "congratulationOrgCreated": "Félicitations ! L'organisation est créée.",
+    "goToStore": "Aller au magasin",
+    "manageFeaturesInfo": "Gérez les fonctionnalités et les plugins disponibles pour cette organisation.",
+    "orgName": "Entrez le nom",
+    "sortOrganizations": "Trier les organisations",
+    "admins": "Administrateurs",
+    "members": "Membres"
   },
   "orgListCard": {
     "manage": "Gérer",
@@ -227,6 +247,7 @@
     "rejectedSuccessfully": "Demande rejetée avec succès",
     "noOrgErrorTitle": "Organisations introuvables",
     "noOrgErrorDescription": "Veuillez créer une organisation via le tableau de bord",
+    "newMembersWillAppearHere": "Les nouveaux membres apparaîtront ici",
     "name": "Nom",
     "email": "E-mail",
     "profilePictureAlt": "Image de profil de {{name}}",
@@ -398,7 +419,10 @@
     "totalAssignedUsers": "Total des utilisateurs assignés",
     "tagCreationFailed": "Échec de la création de l'étiquette",
     "errorLoadingTagsData": "Une erreur s'est produite lors du chargement des données des étiquettes de l'organisation",
-    "sortTags": "Trier les étiquettes"
+    "sortTags": "Trier les étiquettes",
+    "tags": "Étiquettes",
+    "Latest": "Le Plus Récent",
+    "Oldest": "Le Plus Ancien"
   },
   "manageTag": {
     "title": "Détails de l'étiquette",
@@ -558,8 +582,10 @@
     "selectActionItemCategory": "Sélectionnez une Catégorie d'Action",
     "selectAssignee": "Sélectionner un Attribué",
     "volunteer": "Bénévole",
+    "volunteered": "Bénévole",
     "volunteerGroup": "Groupe de bénévoles",
     "volunteerAssignment": "Affectation de bénévole",
+    "volunteerSuccess": "Bénévole ajouté avec succès",
     "individualVolunteer": "Bénévole individuel",
     "groupAssignment": "Affectation de groupe",
     "hoursVolunteered": "Heures de bénévolat",
@@ -729,6 +755,8 @@
     "createdEarliest": "Créé le plus tôt",
     "viewCampaigns": "Voir les campagnes",
     "assocCampaigns": "Campagnes associées",
+    "associatedCampaigns": "Campagnes associées",
+    "searchFunds": "Rechercher des fonds",
     "errorLoadingFundsData": "Erreur lors du chargement des données des fonds",
     "editFund": "Modifier le fonds"
   },
@@ -737,7 +765,10 @@
     "campaignName": "Nom de la campagne",
     "campaignOptions": "Options",
     "fundingGoal": "Objectif de financement",
+    "progress": "Progrès",
+    "raised": "Collecté",
     "addCampaign": "Ajouter une campagne",
+    "editCampaign": "Modifier la campagne",
     "createdCampaign": "Campagne créée avec succès",
     "updatedCampaign": "Campagne mise à jour avec succès",
     "deletedCampaign": "Campagne supprimée avec succès",
@@ -749,6 +780,7 @@
     "currency": "Devise",
     "selectCurrency": "Sélectionner la devise",
     "searchFullName": "Rechercher par nom",
+    "searchCampaigns": "Rechercher des campagnes",
     "viewPledges": "Voir les promesses de dons",
     "noCampaignsFound": "Aucune campagne trouvée",
     "latestEndDate": "Dernière date de fin",
@@ -792,7 +824,8 @@
     "togglePledgedRaised": "Basculer entre les montants Promis et Collectés",
     "pledgeDate": "Date d'Engagement",
     "pledged": "Promis",
-    "donated": "Donné"
+    "donated": "Donné",
+    "campaignNotActive": "La campagne n'est pas actuellement active"
   },
   "createPostModal": {
     "title": "Des postes",
@@ -1209,7 +1242,7 @@
     "postedOn": "Publié le {{date}}",
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
     "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer.",
-    "moreOptions": "Plus d'options"
+    "moreOptions": "plus d'options"
   },
   "posts": {
     "pinnedPosts": "Messages épinglés",
@@ -1374,6 +1407,10 @@
     "city": "Ville",
     "description": "Description",
     "enterDescription": "Entrez la description",
+    "atleast_8_char_long": "Le mot de passe doit comporter au moins 8 caractères",
+    "invalidFileType": "Type de fichier invalide. Veuillez télécharger un JPEG, PNG ou GIF",
+    "fileSizeTooLarge": "Le fichier est trop volumineux. La taille maximale est de 5 Mo",
+    "failedToProcessImage": "Échec du traitement de la photo de profil. Veuillez réessayer de la télécharger",
     "title": "Paramètres"
   },
   "donate": {
@@ -1696,6 +1733,7 @@
     "mostHoursVolunteered": "Le Plus d'Heures de Bénévolat",
     "leastHoursVolunteered": "Le Moins d'Heures de Bénévolat",
     "accepted": "Accepté",
+    "rejected": "Rejeté",
     "addVolunteer": "Ajouter un Bénévole",
     "removeVolunteer": "Supprimer le Bénévole",
     "volunteerAdded": "Bénévole ajouté avec succès",
@@ -1716,6 +1754,9 @@
     "groupDetails": "Détails du Groupe",
     "creator": "Créateur",
     "requests": "Demandes",
+    "volunteershipRequests": "Demandes de Bénévolat",
+    "requestType": "Type de Demande",
+    "requestDate": "Date de la Demande",
     "noRequests": "Aucune Demande",
     "latest": "Le Plus Récent",
     "earliest": "Le Plus Ancien",
@@ -1737,6 +1778,7 @@
     "invitations": "Invitations",
     "groups": "Groupes de Bénévoles",
     "actions": "Éléments d'Action",
+    "search": "Rechercher",
     "searchByName": "Rechercher par Nom",
     "latestEndDate": "Date de Fin la Plus Récente",
     "earliestEndDate": "Date de Fin la Plus Ancienne",
@@ -1756,7 +1798,7 @@
     "receivedEarliest": "Reçu en Premier",
     "invitationAccepted": "Invitation acceptée avec succès",
     "invitationRejected": "Invitation rejetée avec succès",
-    "volunteerSuccess": "Demande de bénévolat envoyée avec succès",
+    "volunteerRequestSuccess": "Demande de bénévolat envoyée avec succès",
     "recurring": "Récurrent",
     "groupInvitationSubject": "Invitation à rejoindre le groupe de bénévoles",
     "eventInvitationSubject": "Invitation à faire du bénévolat pour l'événement",

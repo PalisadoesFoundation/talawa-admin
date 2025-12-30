@@ -28,11 +28,13 @@ const EventManagement = lazy(
 const ForgotPassword = lazy(
   () => import('screens/ForgotPassword/ForgotPassword'),
 );
-const MemberDetail = lazy(() => import('screens/MemberDetail/MemberDetail'));
+const MemberDetail = lazy(
+  () => import('screens/AdminPortal/MemberDetail/MemberDetail'),
+);
 const OrgContribution = lazy(
   () => import('screens/OrgContribution/OrgContribution'),
 );
-const OrgList = lazy(() => import('screens/OrgList/OrgList'));
+const OrgList = lazy(() => import('screens/AdminPortal/OrgList/OrgList'));
 const OrgSettings = lazy(() => import('screens/OrgSettings/OrgSettings'));
 
 const OrganizationDashboard = lazy(
@@ -59,9 +61,9 @@ const OrganizationTags = lazy(
 const ManageTag = lazy(() => import('screens/ManageTag/ManageTag'));
 const SubTags = lazy(() => import('screens/SubTags/SubTags'));
 const Requests = lazy(() => import('screens/Requests/Requests'));
-const Users = lazy(() => import('screens/Users/Users'));
+const Users = lazy(() => import('screens/AdminPortal/Users/Users'));
 const CommunityProfile = lazy(
-  () => import('screens/CommunityProfile/CommunityProfile'),
+  () => import('screens/AdminPortal/CommunityProfile/CommunityProfile'),
 );
 const OrganizationVenues = lazy(
   () => import('screens/OrganizationVenues/OrganizationVenues'),
@@ -95,7 +97,9 @@ const VolunteerManagement = lazy(
 const LeaveOrganization = lazy(
   () => import('screens/UserPortal/LeaveOrganization/LeaveOrganization'),
 );
-const Notification = lazy(() => import('screens/Notification/Notification'));
+const Notification = lazy(
+  () => import('screens/AdminPortal/Notification/Notification'),
+);
 
 const PluginStore = lazy(() => import('screens/PluginStore/PluginStore'));
 

@@ -475,9 +475,11 @@ describe('Testing Requests screen', () => {
     await wait(200);
 
     // When there are no requests at all, show "no requests found" message
-    expect(
-      screen.getByText(/No Membership Requests Found/i),
-    ).toBeInTheDocument();
+    const grid = screen.getByRole('grid');
+    expect(grid).toBeInTheDocument();
+
+    const rows = grid.querySelectorAll('[role="row"]');
+    expect(rows.length).toBe(1);
   });
 
   test('Testing Request data is not present', async () => {
