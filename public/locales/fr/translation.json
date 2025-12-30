@@ -709,6 +709,7 @@
     "eventDetails": "Détails de l'évènement",
     "eventDeleted": "Événement supprimé avec succès.",
     "eventUpdated": "Événement mis à jour avec succès.",
+    "registeredSuccessfully": "Successfully registered for {{eventName}}",
     "noChangesToUpdate": "No changes to update",
     "thisInstance": "Cette instance",
     "thisAndFollowingInstances": "Instances présentes et suivantes",

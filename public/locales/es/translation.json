@@ -717,6 +717,7 @@
     "eventDetails": "Detalles del evento",
     "eventDeleted": "Evento eliminado con éxito.",
     "eventUpdated": "Evento actualizado con éxito.",
+    "registeredSuccessfully": "Successfully registered for {{eventName}}",
     "noChangesToUpdate": "No changes to update",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
     "thisInstance": "Esta Instancia",

@@ -709,6 +709,7 @@
     "eventDetails": "活动详情",
     "eventDeleted": "活动删除成功。",
     "eventUpdated": "活动更新成功。",
+    "registeredSuccessfully": "Successfully registered for {{eventName}}",
     "noChangesToUpdate": "No changes to update",
     "thisInstance": "本实例",
     "thisAndFollowingInstances": "本实例及后续实例",

@@ -6,6 +6,8 @@ import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { currencyOptions, currencySymbols } from 'utils/currency';
 import styles from 'style/app-fixed.module.css';
+
+import { errorHandler } from 'utils/errorHandler';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import {
@@ -129,7 +131,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
       refetchCampaign();
       hide();
     } catch (error: unknown) {
-      NotificationToast.error((error as Error).message);
+      errorHandler(t, error);
     }
   };
 
@@ -180,7 +182,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
       hide();
       NotificationToast.success(t('updatedCampaign') as string);
     } catch (error: unknown) {
-      NotificationToast.error((error as Error).message);
+      errorHandler(t, error);
     }
   };
 

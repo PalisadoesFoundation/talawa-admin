@@ -57,6 +57,7 @@ import {
   CREATE_VOLUNTEER_GROUP,
   UPDATE_VOLUNTEER_GROUP,
 } from 'GraphQl/Mutations/EventVolunteerMutation';
+import { errorHandler } from 'utils/errorHandler';
 
 export interface InterfaceVolunteerGroupModal {
   isOpen: boolean;
@@ -184,7 +185,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         refetchGroups();
         hide();
       } catch (error: unknown) {
-        NotificationToast.error((error as Error).message);
+        errorHandler(t, error);
       }
     },
     [formState, group],
@@ -237,7 +238,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         setApplyTo('series'); // Reset to default
         hide();
       } catch (error: unknown) {
-        NotificationToast.error((error as Error).message);
+        errorHandler(t, error);
       }
     },
     [formState, eventId, isRecurring, applyTo, baseEvent],

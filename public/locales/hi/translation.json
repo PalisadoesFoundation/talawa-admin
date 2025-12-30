@@ -709,6 +709,7 @@
     "eventDetails": "घटना की जानकारी",
     "eventDeleted": "ईवेंट सफलतापूर्वक हटा दिया गया.",
     "eventUpdated": "इवेंट सफलतापूर्वक अपडेट किया गया.",
+    "registeredSuccessfully": "Successfully registered for {{eventName}}",
     "noChangesToUpdate": "No changes to update",
     "thisInstance": "यह उदाहरण",
     "thisAndFollowingInstances": "यह और निम्नलिखित उदाहरण",

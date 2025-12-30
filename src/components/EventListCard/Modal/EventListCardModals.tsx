@@ -56,7 +56,7 @@ interface IEventListCardModalProps {
   eventListCardProps: IEventListCard;
   eventModalIsOpen: boolean;
   hideViewModal: () => void;
-  t: (key: string) => string;
+  t: (key: string, options?: Record<string, unknown>) => string;
   tCommon: (key: string) => string;
 }
 
@@ -373,7 +373,7 @@ function EventListCardModals({
 
         if (data) {
           NotificationToast.success(
-            `Successfully registered for ${eventListCardProps.name}`,
+            t('registeredSuccessfully', { eventName: eventListCardProps.name }),
           );
           setIsRegistered(true);
           hideViewModal();
