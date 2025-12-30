@@ -27,7 +27,7 @@ The component is available as a shared component:
 
 ```typescript
 import { PaginationControl } from 'shared-components/PaginationControl/PaginationControl';
-import type { InterfacePaginationControlProps } from 'types/PaginationControl/interface';
+import type { InterfacePaginationControlProps } from 'types/shared-components/PaginationControl/interface';
 ```
 
 ## Basic Usage
@@ -263,7 +263,7 @@ const [searchParams, setSearchParams] = useSearchParams();
 ## Related
 
 - **Issue**: [#5293](https://github.com/PalisadoesFoundation/talawa-admin/issues/5293)
-- **Type Definition**: `src/types/PaginationControl/interface.ts`
+- **Type Definition**: `src/types/shared-components/PaginationControl/interface.ts`
 - **Linter**: `scripts/githooks/check-pagination-patterns.ts`
 
 ## Support

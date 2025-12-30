@@ -298,7 +298,7 @@ function OrganizationPeople(): JSX.Element {
       toast.error(
         error instanceof Error
           ? error.message
-          : tCommon('pagination.pageSizeChangeError'),
+          : tCommon('pagination.pageChangeError'),
       );
     } finally {
       setIsPaginating(false);
@@ -308,6 +308,7 @@ function OrganizationPeople(): JSX.Element {
   const handlePageSizeChange = async (newPageSize: number): Promise<void> => {
     if (isPaginating) return; // Reuse the same guard
 
+    const oldPageSize = pageSize; // Capture for revert
     setIsPaginating(true);
     try {
       setPageSize(newPageSize);
@@ -332,9 +333,9 @@ function OrganizationPeople(): JSX.Element {
         await fetchMembers({ variables });
       }
     } catch {
-      toast.error(tCommon('pagination.pageChangeError'));
+      toast.error(tCommon('pagination.pageSizeChangeError'));
       // Revert on error
-      setPageSize(pageSize);
+      setPageSize(oldPageSize);
     } finally {
       setIsPaginating(false);
     }

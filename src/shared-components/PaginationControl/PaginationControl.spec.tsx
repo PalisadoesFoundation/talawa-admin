@@ -15,9 +15,9 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
-import i18n from 'utils/i18nForTest';
 import { PaginationControl } from './PaginationControl';
 import type { InterfacePaginationControlProps } from 'types/shared-components/PaginationControl/interface';
+import i18nForTest from '../../utils/i18nForTest';
 
 /**
  * Helper function to render PaginationControl with i18n support
@@ -36,7 +36,7 @@ const renderPaginationControl = (
   };
 
   return render(
-    <I18nextProvider i18n={i18n}>
+    <I18nextProvider i18n={i18nForTest}>
       <PaginationControl {...defaultProps} {...props} />
     </I18nextProvider>,
   );
@@ -314,6 +314,7 @@ describe('PaginationControl', () => {
       // The change event fires but in real browser the value wouldn't change
       // We test that the select is disabled which prevents user interaction
       expect(select).toBeDisabled();
+      expect(onPageSizeChange).not.toHaveBeenCalled();
     });
   });
 
@@ -492,16 +493,30 @@ describe('PaginationControl', () => {
       renderPaginationControl();
 
       const nav = screen.getByRole('navigation');
-      expect(nav).toHaveAttribute('aria-label', 'pagination.label');
+      expect(nav).toHaveAttribute(
+        'aria-label',
+        i18nForTest.t('common:pagination.label'),
+      );
     });
 
     it('should have proper ARIA labels on navigation buttons', () => {
       renderPaginationControl();
 
-      expect(screen.getByLabelText('pagination.first')).toBeInTheDocument();
-      expect(screen.getByLabelText('pagination.previous')).toBeInTheDocument();
-      expect(screen.getByLabelText('pagination.next')).toBeInTheDocument();
-      expect(screen.getByLabelText('pagination.last')).toBeInTheDocument();
+      expect(
+        screen.getByLabelText(i18nForTest.t('common:pagination.first')),
+      ).toBeInTheDocument();
+
+      expect(
+        screen.getByLabelText(i18nForTest.t('common:pagination.previous')),
+      ).toBeInTheDocument();
+
+      expect(
+        screen.getByLabelText(i18nForTest.t('common:pagination.next')),
+      ).toBeInTheDocument();
+
+      expect(
+        screen.getByLabelText(i18nForTest.t('common:pagination.last')),
+      ).toBeInTheDocument();
     });
 
     it('should have aria-live region for page info', () => {
@@ -514,7 +529,9 @@ describe('PaginationControl', () => {
     it('should have proper label for page size selector', () => {
       renderPaginationControl();
 
-      expect(screen.getByLabelText(/Rows per page/i)).toBeInTheDocument();
+      expect(
+        screen.getByLabelText(i18nForTest.t('common:pagination.rowsPerPage')),
+      ).toBeInTheDocument();
     });
 
     it('should be keyboard focusable', () => {
@@ -529,19 +546,22 @@ describe('PaginationControl', () => {
 
       expect(screen.getByTestId('firstPageButton')).toHaveAttribute(
         'title',
-        'pagination.goToFirst',
+        i18nForTest.t('common:pagination.goToFirst'),
       );
+
       expect(screen.getByTestId('previousPageButton')).toHaveAttribute(
         'title',
-        'pagination.goToPrevious',
+        i18nForTest.t('common:pagination.goToPrevious'),
       );
+
       expect(screen.getByTestId('nextPageButton')).toHaveAttribute(
         'title',
-        'pagination.goToNext',
+        i18nForTest.t('common:pagination.goToNext'),
       );
+
       expect(screen.getByTestId('lastPageButton')).toHaveAttribute(
         'title',
-        'pagination.goToLast',
+        i18nForTest.t('common:pagination.goToLast'),
       );
     });
 
@@ -575,7 +595,10 @@ describe('PaginationControl', () => {
         currentPage: 1,
       });
 
-      expect(screen.getByText('pagination.noItems')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('common:pagination.noItems')),
+      ).toBeInTheDocument();
+
       expect(screen.queryByTestId('firstPageButton')).not.toBeInTheDocument();
     });
 
@@ -685,7 +708,7 @@ describe('PaginationControl', () => {
 
       // Simulate parent updating currentPage
       rerender(
-        <I18nextProvider i18n={i18n}>
+        <I18nextProvider i18n={i18nForTest}>
           <PaginationControl
             currentPage={2}
             totalPages={5}
@@ -724,14 +747,16 @@ describe('PaginationControl', () => {
 
       // Simulate parent updating pageSize (and recalculating totalPages)
       rerender(
-        <PaginationControl
-          currentPage={1}
-          totalPages={2} // 100 items / 50 per page = 2 pages
-          pageSize={50}
-          totalItems={100}
-          onPageChange={vi.fn()}
-          onPageSizeChange={onPageSizeChange}
-        />,
+        <I18nextProvider i18n={i18nForTest}>
+          <PaginationControl
+            currentPage={1}
+            totalPages={2} // 100 items / 50 per page = 2 pages
+            pageSize={50}
+            totalItems={100}
+            onPageChange={vi.fn()}
+            onPageSizeChange={onPageSizeChange}
+          />
+        </I18nextProvider>,
       );
 
       expect(screen.getByText(/Page \d+ of \d+/)).toBeInTheDocument();
