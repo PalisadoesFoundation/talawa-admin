@@ -103,9 +103,9 @@ const BlockUser = (): JSX.Element => {
 
   useEffect(() => {
     if (errorBlockedUsers) {
-      NotificationToast.error(errorBlockedUsers.message);
+      errorHandler(t, errorBlockedUsers);
     }
-  }, [errorBlockedUsers]);
+  }, [errorBlockedUsers, t]);
 
   useEffect(() => {
     if (blockedUsersData) {
@@ -128,9 +128,9 @@ const BlockUser = (): JSX.Element => {
 
   useEffect(() => {
     if (errorMembers) {
-      NotificationToast.error(errorMembers.message);
+      errorHandler(t, errorMembers);
     }
-  }, [errorMembers]);
+  }, [errorMembers, t]);
 
   useEffect(() => {
     if (memberData) {

@@ -66,7 +66,7 @@ import {
   PAGE_SIZE,
 } from '../../types/ReportingTable/utils';
 import dayjs from 'dayjs';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+
 import styles from 'style/app-fixed.module.css';
 import TableLoader from 'components/TableLoader/TableLoader';
 import {
@@ -77,6 +77,7 @@ import { Button } from 'react-bootstrap';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import Avatar from 'components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
+import { errorHandler } from 'utils/errorHandler';
 // Imports added for manual header construction
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
@@ -305,12 +306,12 @@ function OrganizationPeople(): JSX.Element {
   // Error handling
   useEffect(() => {
     if (memberError) {
-      NotificationToast.error(memberError.message);
+      errorHandler(t, memberError);
     }
     if (userError) {
-      NotificationToast.error(userError.message);
+      errorHandler(t, userError);
     }
-  }, [memberError, userError]);
+  }, [memberError, userError, t]);
 
   // Local search implementation
   const filteredRows = useMemo(() => {

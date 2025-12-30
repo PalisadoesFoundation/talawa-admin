@@ -91,6 +91,7 @@ interface InterfaceGraphQLMock {
   request: InterfaceGraphQLRequest;
   result?: { data: unknown };
   error?: Error;
+  maxUsageCount?: number;
 }
 
 const createMocks = (
@@ -149,6 +150,7 @@ const createMocks = (
                   },
             },
           }),
+      maxUsageCount: Number.POSITIVE_INFINITY,
     },
     {
       request: {
@@ -183,6 +185,7 @@ const createMocks = (
                   },
             },
           }),
+      maxUsageCount: Number.POSITIVE_INFINITY,
     },
     {
       request: {
@@ -212,7 +215,7 @@ const createMocks = (
         : { result: { data: { unblockUser: { success: true } } } }),
     },
   ];
-  return [...mocks, ...mocks];
+  return mocks;
 };
 
 describe('BlockUser Component', () => {
