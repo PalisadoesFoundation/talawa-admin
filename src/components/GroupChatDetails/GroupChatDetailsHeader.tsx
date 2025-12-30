@@ -6,6 +6,7 @@ import Avatar from 'components/Avatar/Avatar';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceGroupChatDetailsProps } from 'types/Chat/interface';
 import { getSafeImageSrc } from './GroupChatDetailsUtils';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceGroupChatDetailsHeaderProps {
   chat: InterfaceGroupChatDetailsProps['chat'];
@@ -21,7 +22,6 @@ interface InterfaceGroupChatDetailsHeaderProps {
   onSaveTitle: () => Promise<void>;
   onCancelEdit: () => void;
   onDelete: () => Promise<void>;
-  t: (k: string, v?: Record<string, unknown>) => string;
 }
 
 /**
@@ -49,8 +49,8 @@ export default function GroupChatDetailsHeader({
   onSaveTitle,
   onCancelEdit,
   onDelete,
-  t,
 }: InterfaceGroupChatDetailsHeaderProps) {
+  const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
   return (
     <>
       <Modal.Header closeButton data-testid="groupChatDetails">

@@ -10209,3 +10209,8 @@ form {
 .groupChatTableCellBody {
   font-size: 14px;
 }
+
+.errorIcon {
+  font-size: 32px !important;
+  color: var(--errorIcon-color);
+}

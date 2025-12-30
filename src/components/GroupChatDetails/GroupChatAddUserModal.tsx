@@ -15,13 +15,13 @@ import TableRow from '@mui/material/TableRow';
 import { Paper } from '@mui/material';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceGroupChatDetailsProps } from 'types/Chat/interface';
+import { useTranslation } from 'react-i18next';
 
 interface InterfaceGroupChatAddUserModalProps {
   show: boolean;
   toggle: () => void;
   chat: InterfaceGroupChatDetailsProps['chat'];
   chatRefetch: InterfaceGroupChatDetailsProps['chatRefetch'];
-  t: (k: string, v?: Record<string, unknown>) => string;
 }
 
 /**
@@ -33,12 +33,12 @@ interface InterfaceGroupChatAddUserModalProps {
  * @param props.toggle - callback to close the modal
  * @param props.chat - the chat object to which users will be added
  * @param props.chatRefetch - refetch function for chat data after mutation
- * @param props.t - translation function
  */
 export default function GroupChatAddUserModal(
   props: InterfaceGroupChatAddUserModalProps,
 ) {
-  const { show, toggle, chat, chatRefetch, t } = props;
+  const { show, toggle, chat, chatRefetch } = props;
+  const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
   const [userName, setUserName] = useState('');
 
   const {

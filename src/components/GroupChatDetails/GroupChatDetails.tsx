@@ -283,7 +283,6 @@ export default function groupChatDetails({
             setChatName(chat.name || '');
           }}
           onDelete={handleDeleteChat}
-          t={t}
         />
 
         <div>
@@ -386,7 +385,6 @@ export default function groupChatDetails({
         toggle={toggleAddUserModal}
         chat={chat}
         chatRefetch={chatRefetch}
-        t={t}
       />
     </>
   );

@@ -339,7 +339,8 @@ describe('Organisation Venues', () => {
       expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
     );
 
-    fireEvent.click(screen.getByTestId('updateVenueBtn1'));
+    const updateBtn = await screen.findByTestId('updateVenueBtn1');
+    fireEvent.click(updateBtn);
     await waitFor(() => {
       expect(screen.getByTestId('venueForm')).toBeInTheDocument();
     });

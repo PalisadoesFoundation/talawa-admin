@@ -1286,7 +1286,11 @@
     "textArea": "Something on your mind?",
     "feed": "Feed",
     "loading": "Loading",
-
+    "pinnedPosts": "Pinned Posts",
+    "yourFeed": "Your Feed",
+    "nothingToShowHere": "Nothing to show here",
+    "somethingOnYourMind": "Something on your mind?",
+    "addPost": "Add Post",
     "startPost": "Start a post",
     "media": "Media",
     "event": "Event",
@@ -1540,7 +1544,12 @@
     "editImage": "Edit image",
     "groupChatImageAlt": "Group chat image",
     "user": "User",
-    "chatAction": "Chat action"
+    "chatAction": "Chat action",
+    "failedAddUser": "Failed to add user",
+    "cancelEdit": "Cancel Edit",
+    "editTitle": "Edit Title",
+    "saveTitle": "Save Title",
+    "uploadImage": "Upload Image"
   },
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",
@@ -1746,6 +1755,7 @@
     "groups": "Volunteer Groups",
     "actions": "Action Items",
     "searchByName": "Search by Name",
+    "search": "Search",
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
     "noEvents": "No Upcoming Events",
