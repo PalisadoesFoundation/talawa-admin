@@ -246,7 +246,9 @@ describe('DataGridWrapper', () => {
 
   test('keyboard navigation on action buttons', () => {
     // Add an action button that can be focused
-    const ActionCol = ({ name }: TestRow) => <button>Edit {name}</button>;
+    const ActionCol = ({ name }: TestRow) => (
+      <button type="button">Edit {name}</button>
+    );
     render(<DataGridWrapper {...defaultProps} actionColumn={ActionCol} />);
 
     // Tab to the first action button
