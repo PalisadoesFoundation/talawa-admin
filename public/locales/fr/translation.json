@@ -75,6 +75,12 @@
     "signingOut": "Déconnexion en cours...",
     "signOut": "Se déconnecter"
   },
+  "orgSelector": {
+    "organization": "Organisation",
+    "selectOrganization": "Sélectionnez une organisation",
+    "noOrganizationsAvailable": "Aucune organisation disponible",
+    "noMatchingOrganizations": "Aucune organisation correspondante trouvée"
+  },
   "userLoginPage": {
     "title": "Administrateur Talawa",
     "fromPalisadoes": "Une application open source réalisée par les bénévoles de la Fondation Palisadoes",

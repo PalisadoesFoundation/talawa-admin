@@ -75,6 +75,12 @@
     "signingOut": "Cerrando sesión...",
     "signOut": "Cerrar sesión"
   },
+  "orgSelector": {
+    "organization": "Organización",
+    "selectOrganization": "Seleccione una organización",
+    "noOrganizationsAvailable": "No hay organizaciones disponibles",
+    "noMatchingOrganizations": "No se encontraron organizaciones coincidentes"
+  },
   "userLoginPage": {
     "title": "Administrador Talawa",
     "fromPalisadoes": "Una aplicación de código abierto de los voluntarios de la Fundación palisados",

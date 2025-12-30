@@ -133,6 +133,8 @@
   "unblockedSuccessfully": "{{item}} 解封成功",
 
   "pluginSettings": "插件设置",
+  "showPassword": "显示密码",
+  "hidePassword": "隐藏密码",
   "volunteer": "志愿者",
   "moreCount": "+{{count}} 更多",
   "togglePledgedRaised": "切换承诺与筹集金额",
@@ -172,5 +174,6 @@
   "eventDetails": "活动详情",
   "selectLanguage": "选择语言",
   "talawa": "Talawa",
-  "talawaBranding": "Talawa 品牌"
+  "talawaBranding": "Talawa 品牌",
+  "unableToLoadData": "无法加载数据"
 }
