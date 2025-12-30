@@ -204,17 +204,36 @@ describe('DataTable', () => {
     expect(screen.getByText('FalseRow')).toBeInTheDocument();
   });
 
+  it('falls back to index when rowKey property is null or undefined', () => {
+    type Row = { id?: number | null; value: string };
+    const columns = [
+      { id: 'value', header: 'Value', accessor: (row: Row) => row.value },
+    ];
+
+    // One row with id: null, one row with id omitted
+    const data: Row[] = [{ id: null, value: 'NullId' }, { value: 'NoId' }];
+
+    render(<DataTable<Row> data={data} columns={columns} rowKey="id" />);
+
+    // Both rows should render their cell text
+    expect(screen.getByText('NullId')).toBeInTheDocument();
+    expect(screen.getByText('NoId')).toBeInTheDocument();
+  });
+
   /* ------------------------------------------------------------------
    * States: error, loading, empty
    * ------------------------------------------------------------------ */
 
-  it('renders error state with default error message', () => {
+  it('renders error state with default error message and accessibility attributes', () => {
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' }];
     const error = new Error('Failure');
 
     render(<DataTable data={[]} columns={columns} error={error} />);
 
-    expect(screen.getByText('Failure')).toBeInTheDocument();
+    const errorDiv = screen.getByTestId('datatable-error');
+    expect(errorDiv).toHaveAttribute('role', 'alert');
+    expect(errorDiv).toHaveAttribute('aria-live', 'assertive');
+    expect(errorDiv).toHaveTextContent('Failure');
   });
 
   it('renders custom error when renderError is provided', () => {
@@ -233,14 +252,31 @@ describe('DataTable', () => {
     expect(screen.getByText('Custom: Boom')).toBeInTheDocument();
   });
 
-  it('renders empty state with custom emptyMessage', () => {
+  it('renders empty state with custom emptyMessage and accessibility attributes', () => {
     const columns = [{ id: 'name', header: 'Name', accessor: 'name' }];
 
     render(
       <DataTable data={[]} columns={columns} emptyMessage="Nothing here!" />,
     );
 
-    expect(screen.getByText('Nothing here!')).toBeInTheDocument();
+    const emptyDiv = screen.getByTestId('datatable-empty');
+    expect(emptyDiv).toHaveAttribute('role', 'status');
+    expect(emptyDiv).toHaveAttribute('aria-live', 'polite');
+    expect(emptyDiv).toHaveTextContent('Nothing here!');
+  });
+  it('renders error state with precedence over loading and empty', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' }];
+    const error = new Error('Boom');
+
+    render(
+      <DataTable data={[]} columns={columns} error={error} loading={true} />,
+    );
+
+    // Error state should be present
+    expect(screen.getByTestId('datatable-error')).toBeInTheDocument();
+    // Table and empty state should not be present
+    expect(screen.queryByRole('table')).toBeNull();
+    expect(screen.queryByTestId('datatable-empty')).toBeNull();
   });
 
   it('renders skeleton table when loading is true', () => {
@@ -248,6 +284,8 @@ describe('DataTable', () => {
 
     render(<DataTable data={[]} columns={columns} loading skeletonRows={3} />);
 
+    const table = screen.getByRole('table');
+    expect(table).toHaveAttribute('aria-busy', 'true');
     expect(screen.getAllByRole('row')).toHaveLength(4); // 1 header + 3 skeleton rows
   });
 
