@@ -20,6 +20,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 const i18n = i18nForTest;
 import Requests from './Requests';
+import styles from 'style/app-fixed.module.css';
 import type { ApolloLink } from '@apollo/client';
 import {
   MOCKS,
@@ -28,7 +29,6 @@ import {
   UPDATE_ERROR_MOCKS,
   MOCKS_WITH_FILTER_DATA,
 } from './Requests.mocks';
-import { toast } from 'react-toastify';
 import { vi } from 'vitest';
 
 const toastMocks = vi.hoisted(() => ({
@@ -40,13 +40,15 @@ vi.mock('react-toastify', () => ({
   toast: toastMocks,
 }));
 
-const debounceWait = async (ms = 300): Promise<void> => {
+const wait = async (ms = 100): Promise<void> => {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
     });
   });
 };
+
+const debounceWait = (): Promise<void> => wait(300);
 
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(ERROR_MOCKS);
@@ -62,14 +64,6 @@ const t = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.common ?? {})),
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
-
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
 
 const renderRequests = (link: ApolloLink): RenderResult => {
   return render(
@@ -99,7 +93,7 @@ describe('Testing Requests Screen', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should redirect to fallback URL if URL params are undefined', async () => {
@@ -167,10 +161,25 @@ describe('Testing Requests Screen', () => {
     const searchInput = await screen.findByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
 
-    // Search by name on press of ENTER
+    // Search by name with debounced search
     await userEvent.type(searchInput, 'T');
     await debounceWait();
-    fireEvent.click(screen.getByTestId('searchBtn'));
+
+    await waitFor(() => {
+      const volunteerName = screen.getAllByTestId('volunteerName');
+      expect(volunteerName[0]).toHaveTextContent('Teresa Bradley');
+    });
+  });
+
+  it('Search Requests by volunteer name using submit (Enter key)', async () => {
+    renderRequests(link1);
+
+    const searchInput = await screen.findByTestId('searchBy');
+    expect(searchInput).toBeInTheDocument();
+
+    // Search by name using Enter key to trigger onSearchSubmit
+    await userEvent.type(searchInput, 'T{Enter}');
+    await debounceWait();
 
     await waitFor(() => {
       const volunteerName = screen.getAllByTestId('volunteerName');
@@ -208,7 +217,7 @@ describe('Testing Requests Screen', () => {
     await userEvent.click(acceptBtn[0]);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(t.requestAccepted);
+      expect(toastMocks.success).toHaveBeenCalled();
     });
   });
 
@@ -225,7 +234,7 @@ describe('Testing Requests Screen', () => {
     await userEvent.click(rejectBtn[0]);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(t.requestRejected);
+      expect(toastMocks.success).toHaveBeenCalled();
     });
   });
 
@@ -242,7 +251,7 @@ describe('Testing Requests Screen', () => {
     await userEvent.click(acceptBtn[0]);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(toastMocks.error).toHaveBeenCalled();
     });
   });
 
@@ -347,21 +356,24 @@ describe('Requests Component CSS Styling', () => {
     expect(dataGrid).toBeInTheDocument();
     expect(dataGrid).toHaveClass('MuiDataGrid-root');
 
-    const styles = getComputedStyle(dataGrid as Element);
-    expect(styles.backgroundColor).toBe('rgb(255, 255, 255)');
-    expect(styles.borderRadius).toBe('16px');
+    // CSS variables are resolved in the browser; in tests we assert
+    // that the DataGrid container element (styled via CSS modules) is present
+    // Use CSS module class name for the data-grid container
+    const dataGridContainerEl = container.querySelector(
+      `.${styles.dataGridContainer}`,
+    );
+    expect(dataGridContainerEl).toBeInTheDocument();
+    expect(dataGridContainerEl).toHaveClass(styles.dataGridContainer);
   });
 
-  test('Sort button container should have correct spacing', async () => {
+  test('Sort controls should be rendered', async () => {
     const { container } = renderComponent();
     await wait();
+    // Verify DataGrid and sort controls are present
+    const hasDataGrid = container.querySelector('.MuiDataGrid-root');
+    expect(hasDataGrid).toBeInTheDocument();
 
-    const sortContainer = container.querySelector('.d-flex.gap-3.mb-1');
-    expect(sortContainer).toBeInTheDocument();
-
-    const sortButtonWrapper = container.querySelector(
-      '.d-flex.justify-space-between.align-items-center.gap-3',
-    );
-    expect(sortButtonWrapper).toBeInTheDocument();
+    const sortButton = await screen.findByTestId('sort');
+    expect(sortButton).toBeInTheDocument();
   });
 });

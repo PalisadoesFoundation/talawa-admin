@@ -1270,7 +1270,9 @@ describe('PostCard', () => {
     );
 
     // Check that avatar uses fallback (UserDefault) when avatarURL is null
-    const avatar = screen.getByRole('img', { name: defaultProps.creator.name });
+    const avatar = screen.getByRole('img', {
+      name: new RegExp(defaultProps.creator.name),
+    });
     expect(avatar).toBeInTheDocument();
   });
 

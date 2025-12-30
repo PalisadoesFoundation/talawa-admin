@@ -198,9 +198,7 @@ describe('Testing VolunteerViewModal', () => {
         },
       };
       renderVolunteerViewModal(rejectedProps);
-      // Check for the rejected status text - it shows the translation key when not resolved
-      const statusField = screen.getByLabelText('Status');
-      expect(statusField).toHaveValue('eventVolunteers.rejected');
+      expect(screen.getByDisplayValue('Rejected')).toBeInTheDocument();
     });
   });
 

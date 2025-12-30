@@ -37,7 +37,6 @@ import { Card, Col, Row } from 'react-bootstrap';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 import { errorHandler } from 'utils/errorHandler';
-import { toast } from 'react-toastify';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
 import OtherSettings from 'components/UserProfileSettings/OtherSetting/OtherSettings';
@@ -47,6 +46,7 @@ import ProfileHeader from './ProfileHeader/ProfileHeader';
 import ProfileImageSection from './ProfileImageSection/ProfileImageSection';
 import UserDetailsForm from './UserDetails/UserDetails';
 import { validatePassword } from 'utils/passwordValidator';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import EventsAttendedByUser from 'components/UserPortal/UserProfile/EventsAttendedByUser';
 
 // Exported helper extracted from component to allow unit testing of reset logic.
@@ -178,9 +178,7 @@ export default function Settings(): React.JSX.Element {
         avatarFile = await urlToFile(userDetails.avatarURL);
       } catch (error) {
         console.log(error);
-        toast.error(
-          'Failed to process profile picture. Please try uploading again.',
-        );
+        NotificationToast.error(t('failedToProcessImage'));
         return;
       }
     }
@@ -215,8 +213,10 @@ export default function Settings(): React.JSX.Element {
       const { data: updateData } = await updateUser({ variables: { input } });
 
       if (updateData) {
-        toast.success(
-          tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
+        NotificationToast.success(
+          tCommon('updatedSuccessfully', {
+            item: tCommon('profile'),
+          }) as string,
         );
         setItem('UserImage', updateData.updateCurrentUser.avatarURL);
         setItem('name', updateData.updateCurrentUser.name);
@@ -239,7 +239,7 @@ export default function Settings(): React.JSX.Element {
     // check if the password is strong or not
     if (fieldName === 'password' && value) {
       if (!validatePassword(value)) {
-        toast.error('Password must be at least 8 characters long.');
+        NotificationToast.error(t('atleast_8_char_long'));
         return;
       }
     }
@@ -257,12 +257,12 @@ export default function Settings(): React.JSX.Element {
       const maxSize = 5 * 1024 * 1024; // 5MB
 
       if (!validTypes.includes(file.type)) {
-        toast.error('Invalid file type. Please upload a JPEG, PNG, or GIF.');
+        NotificationToast.error(t('invalidFileType'));
         return;
       }
 
       if (file.size > maxSize) {
-        toast.error('File is too large. Maximum size is 5MB.');
+        NotificationToast.error(t('fileSizeTooLarge'));
         return;
       }
 
@@ -292,11 +292,7 @@ export default function Settings(): React.JSX.Element {
       <div
         className={`d-flex flex-row ${styles.containerHeight} ${
           hideDrawer ? styles.expand : styles.contract
-        }`}
-        style={{
-          marginLeft: hideDrawer ? '100px' : '20px',
-          paddingTop: '20px',
-        }}
+        } pt-4`}
       >
         <div className={styles.mainContainer}>
           <ProfileHeader title={tCommon('settings')} />

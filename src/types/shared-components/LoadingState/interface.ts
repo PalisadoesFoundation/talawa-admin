@@ -7,9 +7,10 @@
  * @interface InterfaceLoadingStateProps
  *
  * @property {boolean} isLoading - Whether the loading state is active
- * @property {'spinner' | 'inline'} [variant] - The variant of the loading indicator
+ * @property {'spinner' | 'inline' | 'skeleton'} [variant] - The variant of the loading indicator
  *   - 'spinner': Full-screen loading with overlay (default)
  *   - 'inline': Compact inline loading indicator
+ *   - 'skeleton': Skeleton placeholder for initial content loading
  * @property {'sm' | 'lg' | 'xl'} [size] - Size of the loading indicator
  *   - 'sm': Small
  *   - 'lg': Large
@@ -21,7 +22,7 @@
  * ```tsx
  * const props: InterfaceLoadingStateProps = {
  *   isLoading: true,
- *   variant: 'spinner',
+ *   variant: 'skeleton',
  *   size: 'lg',
  *   children: <div>Content</div>,
  *   'data-testid': 'my-loading-state'
@@ -30,7 +31,7 @@
  */
 export interface InterfaceLoadingStateProps {
   isLoading: boolean;
-  variant?: 'spinner' | 'inline';
+  variant?: 'spinner' | 'inline' | 'skeleton';
   size?: 'sm' | 'lg' | 'xl';
   children: React.ReactNode;
   'data-testid'?: string;

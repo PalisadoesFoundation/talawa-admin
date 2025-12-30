@@ -16,5 +16,9 @@
   "organizationNameAlreadyExists": "Une organisation avec ce nom existe déjà",
   "markAsReadError": "Erreur lors du marquage des notifications comme lues",
   "accountLocked": "Le compte est temporairement verrouillé en raison d'un trop grand nombre de tentatives de connexion infructueuses. Veuillez réessayer plus tard.",
-  "accountLockedWithTimer": "Le compte est temporairement verrouillé. Veuillez réessayer dans {{minutes}} minute(s)."
+  "accountLockedWithTimer": "Le compte est temporairement verrouillé. Veuillez réessayer dans {{minutes}} minute(s).",
+  "title": "Une erreur s'est produite",
+  "defaultErrorMessage": "Une erreur inattendue est survenue",
+  "resetButton": "Réessayer",
+  "resetButtonAriaLabel": "Réessayer"
 }

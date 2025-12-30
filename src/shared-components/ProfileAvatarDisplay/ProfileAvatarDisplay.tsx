@@ -58,10 +58,8 @@ export const ProfileAvatarDisplay = ({
 }: InterfaceProfileAvatarDisplayProps): JSX.Element => {
   const [imgError, setImgError] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'profileAvatar',
-  });
-  const altText = t('altText', { name: fallbackName });
+  const { t } = useTranslation('translation');
+  const altText = t('profileAvatar.altText', { name: fallbackName });
   useEffect(() => {
     setImgError(false);
   }, [imageUrl]);
@@ -91,7 +89,8 @@ export const ProfileAvatarDisplay = ({
     styles.container,
     shapeClassMap[shape] || styles.shapeCircle,
     size !== 'custom' ? sizeClassMap[size] || styles.sizeMedium : '',
-    border ? styles.containerWithBorder : '',
+    // Only apply default border if border is true and no custom className is provided
+    border && !className ? styles.containerWithBorder : '',
     enableEnlarge ? styles.clickable : '',
     className,
   ]
@@ -130,13 +129,15 @@ export const ProfileAvatarDisplay = ({
       data-testid={dataTestId ? `${dataTestId}-modal` : 'avatar-modal'}
     >
       <Modal.Header closeButton className={styles.modalHeader}>
-        <Modal.Title>{t('modalTitle')}</Modal.Title>
+        <Modal.Title>
+          {fallbackName ? fallbackName : t('profileAvatar.modalTitle')}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body className={styles.modalBody}>
         {imageUrl && imageUrl !== 'null' && !imgError ? (
           <img
             src={imageUrl}
-            alt={t('enlargedAltText', { name: fallbackName })}
+            alt={t('profileAvatar.enlargedAltText', { name: fallbackName })}
             className={styles.enlargedImage}
             crossOrigin={crossOrigin}
             onLoad={() => (onLoad ? onLoad() : null)}

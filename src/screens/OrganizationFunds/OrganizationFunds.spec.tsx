@@ -436,7 +436,7 @@ describe('OrganizationFunds Screen =>', () => {
     expect(searchField).toHaveValue('testsearch');
 
     // Click the clear button
-    const clearButton = await screen.findByTestId('clearSearch');
+    const clearButton = screen.getByRole('button', { name: /clear/i });
     await userEvent.click(clearButton);
 
     // Verify search input is cleared

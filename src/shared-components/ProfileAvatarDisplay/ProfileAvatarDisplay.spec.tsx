@@ -24,10 +24,11 @@ vi.mock('components/Avatar/Avatar', () => ({
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string, options?: { name?: string }) => {
-      if (key === 'altText') return `Profile picture of ${options?.name}`;
-      if (key === 'enlargedAltText')
+      if (key === 'profileAvatar.altText')
+        return `Profile picture of ${options?.name}`;
+      if (key === 'profileAvatar.enlargedAltText')
         return `Enlarged profile picture of ${options?.name}`;
-      if (key === 'modalTitle') return 'Profile Picture';
+      if (key === 'profileAvatar.modalTitle') return 'Profile Picture';
       return key;
     },
   }),
@@ -150,7 +151,7 @@ describe('ProfileAvatarDisplay Component', () => {
 
     // Modal should be visible
     expect(screen.getByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByText('Profile Picture')).toBeInTheDocument();
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
   });
 
   test('calls onClick instead of opening modal when enableEnlarge is false', () => {
@@ -282,7 +283,7 @@ describe('ProfileAvatarDisplay Component', () => {
 
     // Modal should be visible
     expect(screen.getByRole('dialog')).toBeInTheDocument();
-    expect(screen.getByText('Profile Picture')).toBeInTheDocument();
+    expect(screen.getByText('John Doe')).toBeInTheDocument();
 
     // The modal should render the fallback Avatar, not an image
     const modalFallback = screen.getByTestId('test-avatar-modal-fallback');
@@ -493,5 +494,85 @@ describe('ProfileAvatarDisplay Component', () => {
     fireEvent.error(enlargedImg);
 
     expect(onErrorMock).toHaveBeenCalled();
+  });
+
+  test('opens modal when Enter key is pressed on image avatar', () => {
+    render(
+      <ProfileAvatarDisplay
+        {...defaultProps}
+        imageUrl="https://example.com/image.jpg"
+        enableEnlarge={true}
+      />,
+    );
+
+    const avatarContainer = screen.getByTestId('test-avatar');
+
+    // Press Enter key on the image avatar
+    fireEvent.keyDown(avatarContainer, { key: 'Enter', code: 'Enter' });
+
+    // Modal should be visible
+    expect(screen.getByRole('dialog')).toBeInTheDocument();
+  });
+
+  test('does not throw when enlarged modal image loads without onLoad callback', () => {
+    render(
+      <ProfileAvatarDisplay
+        {...defaultProps}
+        imageUrl="https://example.com/image.jpg"
+        enableEnlarge={true}
+      />,
+    );
+
+    // Open the modal
+    const avatarContainer = screen.getByTestId('test-avatar');
+    fireEvent.click(avatarContainer);
+
+    // Find the enlarged image in the modal
+    const enlargedImg = screen.getByAltText(
+      'Enlarged profile picture of John Doe',
+    );
+
+    // Trigger load event without onLoad callback
+    expect(() => fireEvent.load(enlargedImg)).not.toThrow();
+  });
+
+  test('does not throw when enlarged modal image errors without onError callback', () => {
+    render(
+      <ProfileAvatarDisplay
+        {...defaultProps}
+        imageUrl="https://example.com/image.jpg"
+        enableEnlarge={true}
+      />,
+    );
+
+    // Open the modal
+    const avatarContainer = screen.getByTestId('test-avatar');
+    fireEvent.click(avatarContainer);
+
+    // Find the enlarged image in the modal
+    const enlargedImg = screen.getByAltText(
+      'Enlarged profile picture of John Doe',
+    );
+
+    // Trigger error event without onError callback
+    expect(() => fireEvent.error(enlargedImg)).not.toThrow();
+  });
+
+  test('uses translated modalTitle when fallbackName is empty', () => {
+    render(
+      <ProfileAvatarDisplay
+        fallbackName=""
+        imageUrl="https://example.com/image.jpg"
+        enableEnlarge={true}
+        dataTestId="test-avatar"
+      />,
+    );
+
+    // Open the modal
+    const avatarContainer = screen.getByTestId('test-avatar');
+    fireEvent.click(avatarContainer);
+
+    // Modal should show the translated 'Profile Picture' title
+    expect(screen.getByText('Profile Picture')).toBeInTheDocument();
   });
 });

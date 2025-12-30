@@ -16,5 +16,9 @@
   "organizationNameAlreadyExists": "An organization with this name already exists",
   "markAsReadError": "Error marking notifications as read",
   "accountLocked": "Account is temporarily locked due to too many failed login attempts. Please try again later.",
-  "accountLockedWithTimer": "Account is temporarily locked. Please try again in {{minutes}} minute(s)."
+  "accountLockedWithTimer": "Account is temporarily locked. Please try again in {{minutes}} minute(s).",
+  "title": "Something went wrong",
+  "defaultErrorMessage": "An unexpected error occurred",
+  "resetButton": "Try again",
+  "resetButtonAriaLabel": "Try again"
 }
