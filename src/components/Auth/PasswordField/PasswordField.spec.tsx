@@ -106,10 +106,16 @@ describe('PasswordField', () => {
     const toggleButton = screen.getByRole('button', { name: 'Show password' });
     const passwordInput = screen.getByDisplayValue('test123');
 
+    // Initially password should be masked
+    expect(passwordInput).toHaveAttribute('type', 'password');
+    expect(toggleButton).toHaveAttribute('aria-pressed', 'false');
+
     fireEvent.keyDown(toggleButton, { key: 'Enter' });
 
+    // After Enter key, password should be visible
     expect(toggleButton).toHaveAttribute('aria-pressed', 'true');
     expect(passwordInput).toHaveAttribute('type', 'text');
+    expect(toggleButton).toHaveAttribute('aria-label', 'Hide password');
   });
 
   it('handles Space key on toggle button', () => {
@@ -118,10 +124,16 @@ describe('PasswordField', () => {
     const toggleButton = screen.getByRole('button', { name: 'Show password' });
     const passwordInput = screen.getByDisplayValue('test123');
 
+    // Initially password should be masked
+    expect(passwordInput).toHaveAttribute('type', 'password');
+    expect(toggleButton).toHaveAttribute('aria-pressed', 'false');
+
     fireEvent.keyDown(toggleButton, { key: ' ' });
 
+    // After Space key, password should be visible
     expect(toggleButton).toHaveAttribute('aria-pressed', 'true');
     expect(passwordInput).toHaveAttribute('type', 'text');
+    expect(toggleButton).toHaveAttribute('aria-label', 'Hide password');
   });
 
   it('calls onChange when input value changes', () => {
