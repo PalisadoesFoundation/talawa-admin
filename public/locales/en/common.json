@@ -133,6 +133,8 @@
   "unblock": "Unblock",
   "unblockedSuccessfully": "{{item}} unblocked successfully",
   "pluginSettings": "Plugin Settings",
+  "showPassword": "Show password",
+  "hidePassword": "Hide password",
   "volunteer": "Volunteer",
   "moreCount": "+{{count}} more",
   "togglePledgedRaised": "Toggle between pledged and raised amounts",
