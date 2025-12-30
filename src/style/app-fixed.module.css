@@ -1410,7 +1410,7 @@ form label,
   white-space: nowrap;
 }
 
-.btnsContainer> :first-child {
+.btnsContainer > :first-child {
   flex: 1 1 320px;
   min-width: 240px;
   max-width: 100%;
@@ -1470,7 +1470,7 @@ form label,
     justify-content: center;
   }
 
-  .btnsContainer>div {
+  .btnsContainer > div {
     width: 100% !important;
     max-width: 100% !important;
     box-sizing: border-box;
@@ -1584,13 +1584,15 @@ form label,
   width: auto;
 }
 
-.dropdown:is( :hover,
+.dropdown:is(
+  :hover,
   :focus,
   :active,
   :focus-visible,
   .show,
   :disabled,
-  :checked) {
+  :checked
+) {
   box-shadow: var(--hover-shadow);
   border: 1px solid var(--dropdown-border) !important;
   color: var(--dropdown-font-color) !important;
@@ -1754,7 +1756,7 @@ form label,
   box-shadow: 0 1px 1px var(--input-shadow-color);
 }
 
-.inputField>button {
+.inputField > button {
   padding-top: 10px;
   padding-bottom: 10px;
 }
@@ -1922,7 +1924,7 @@ form label,
   display: block;
 }
 
-.addCard>div:not(.dropdownContainer) {
+.addCard > div:not(.dropdownContainer) {
   flex: 0 0 200px;
 }
 
@@ -2670,7 +2672,7 @@ form label,
   color: var(--fonts-color);
 }
 
-.fonts>span {
+.fonts > span {
   font-weight: 600;
 }
 
@@ -2775,7 +2777,7 @@ form label,
     text-align: center;
   }
 
-  .space>* {
+  .space > * {
     width: 100%;
     margin-bottom: 10px;
   }
@@ -2850,7 +2852,6 @@ form label,
 }
 
 @media only screen and (max-width: var(--breakpoint-tablet)) {
-
   .holidayIndicator,
   .organizationIndicator {
     width: 16px;
@@ -3186,7 +3187,7 @@ form label,
   flex-direction: row;
 }
 
-.yearlyCalendarHeader>div {
+.yearlyCalendarHeader > div {
   font-weight: 600;
   font-size: 2rem;
   padding: 0 10px;
@@ -3276,11 +3277,11 @@ form label,
   justify-content: space-between;
 }
 
-.checkboxdivEventListCardModals>div label {
+.checkboxdivEventListCardModals > div label {
   margin-right: 50px;
 }
 
-.checkboxdivEventListCardModals>label>input {
+.checkboxdivEventListCardModals > label > input {
   margin-left: 10px;
 }
 
@@ -3296,7 +3297,7 @@ form label,
   margin: 10px 5px 5px 0px;
 }
 
-.dispflexEventListCardModals>input {
+.dispflexEventListCardModals > input {
   width: 20%;
   border: none;
   box-shadow: none;
@@ -3330,11 +3331,11 @@ form label,
   font-weight: 500;
 }
 
-.cardsEventListCard>h3 {
+.cardsEventListCard > h3 {
   font-size: 17px;
 }
 
-.cardsEventListCard>p {
+.cardsEventListCard > p {
   font-size: 14px;
   margin-top: 0px;
   margin-bottom: 7px;
@@ -3354,7 +3355,7 @@ form label,
 }
 
 .cardsEventListCard:first-child:nth-last-child(even),
-.cardsEventListCard:first-child:nth-last-child(even)~.box {
+.cardsEventListCard:first-child:nth-last-child(even) ~ .box {
   grid-column: auto / span 1;
 }
 
@@ -3365,7 +3366,7 @@ form label,
   margin: 10px 5px 5px 0px;
 }
 
-.dispflexEventListCard>input {
+.dispflexEventListCard > input {
   width: 20%;
   border: none;
   box-shadow: none;
@@ -3458,7 +3459,6 @@ form label,
 }
 
 @supports (-webkit-line-clamp: 1) {
-
   .cardItem .title,
   .cardItem .location,
   .cardItem .time {
@@ -3844,10 +3844,12 @@ form label,
 }
 
 .skeletonItem {
-  background: linear-gradient(90deg,
-      var(--skeleton-base, #e0e0e0) 25%,
-      var(--skeleton-highlight, #f0f0f0) 50%,
-      var(--skeleton-base, #e0e0e0) 75%);
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-base, #e0e0e0) 25%,
+    var(--skeleton-highlight, #f0f0f0) 50%,
+    var(--skeleton-base, #e0e0e0) 75%
+  );
   background-size: 200% 100%;
   animation: skeletonPulse 1.5s ease-in-out infinite;
   border-radius: 4px;
@@ -3984,7 +3986,7 @@ form label,
   margin-top: 3px;
 }
 
-.memberfont>span {
+.memberfont > span {
   width: 80%;
 }
 
@@ -4160,14 +4162,14 @@ form label,
   padding-top: 10px;
 }
 
-.second_box>h4 {
+.second_box > h4 {
   font-size: 10;
   font-weight: bold;
   text-decoration: none;
   color: var(--secondBox-h4-color);
 }
 
-.second_box>h5 {
+.second_box > h5 {
   text-decoration: none;
   font-size: 10;
   font-weight: 100;
@@ -4253,7 +4255,6 @@ form label,
 }
 
 @supports (-webkit-line-clamp: 1) {
-
   .cardItem .title,
   .cardItem .location,
   .cardItem .time {
@@ -4360,7 +4361,6 @@ form label,
 }
 
 @supports (-webkit-line-clamp: 1) {
-
   .cardItem .title,
   .cardItem .location,
   .cardItem .time {
@@ -4394,15 +4394,15 @@ form label,
 
 /* -- OrgContriCards.tsx -- */
 
-.cards>h2 {
+.cards > h2 {
   font-size: 19px;
 }
 
-.cards>h3 {
+.cards > h3 {
   font-size: 17px;
 }
 
-.cards>p {
+.cards > p {
   font-size: 14px;
   margin-top: -5px;
   margin-bottom: 7px;
@@ -4478,7 +4478,7 @@ form label,
   font-size: 20px;
 }
 
-.cardsOrgPostCard>h3 {
+.cardsOrgPostCard > h3 {
   font-size: 17px;
 }
 
@@ -4495,7 +4495,7 @@ form label,
   mix-blend-mode: normal;
 }
 
-.cardsOrgPostCard>p {
+.cardsOrgPostCard > p {
   font-size: 14px;
   margin-top: 0px;
   margin-bottom: 7px;
@@ -4515,7 +4515,7 @@ form label,
 }
 
 .cardsOrgPostCard:first-child:nth-last-child(even),
-.cardsOrgPostCard:first-child:nth-last-child(even)~.box {
+.cardsOrgPostCard:first-child:nth-last-child(even) ~ .box {
   grid-column: auto / span 1;
 }
 
@@ -4644,7 +4644,7 @@ form label,
   word-wrap: break-word;
 }
 
-.infodiv>p {
+.infodiv > p {
   margin: 0;
 }
 
@@ -5341,7 +5341,6 @@ form label,
 }
 
 @media (max-width: 520px) {
-
   .requestsTableItemIndex,
   .requestsTableItemName,
   .requestsTableItemEmail {
@@ -5939,7 +5938,7 @@ form {
   margin: 0 auto;
 }
 
-.dispflexUserPasswordUpdate>div {
+.dispflexUserPasswordUpdate > div {
   width: 50%;
   margin-right: 50px;
 }
@@ -7226,16 +7225,16 @@ form {
   border-color: var(--toggleBtnPledge-border);
 }
 
-.toggleBtnPledge:is(:focus, :active, :checked)+label {
+.toggleBtnPledge:is(:focus, :active, :checked) + label {
   color: var(--toggleBtnPledge-color-hover) !important;
   border-color: var(--toggleBtnPledge-border-hover) !important;
 }
 
-.toggleBtnPledge:not(:checked)+label {
+.toggleBtnPledge:not(:checked) + label {
   color: var(--toggleBtnPledge-color-notChecked) !important;
 }
 
-.toggleBtnPledge:is(:hover)+label {
+.toggleBtnPledge:is(:hover) + label {
   color: var(--toggleBtnPledge-color-hover) !important;
 }
 
@@ -7843,11 +7842,11 @@ form {
   margin-top: 7px;
 }
 
-.sidebarsticky>p {
+.sidebarsticky > p {
   margin-top: -10px;
 }
 
-.sidebarsticky>input {
+.sidebarsticky > input {
   text-decoration: none;
   margin-bottom: 50px;
   border-color: var(--sidebarsticky-border);
@@ -7906,7 +7905,7 @@ form {
   flex-wrap: wrap;
 }
 
-.btnsContainerSearchBar> :first-child {
+.btnsContainerSearchBar > :first-child {
   flex: 1 1 360px;
   min-width: 260px;
   max-width: 100%;
@@ -8157,7 +8156,7 @@ form {
 
 /* -- OrgPost.tsx -- */
 
-.mainpagerightOrgPost>hr {
+.mainpagerightOrgPost > hr {
   margin-top: 20px;
   width: 100%;
   margin-left: -15px;
@@ -8461,15 +8460,15 @@ form {
   margin-bottom: 5px;
 }
 
-.checkboxdiv>div {
+.checkboxdiv > div {
   width: 50%;
 }
 
-.checkboxdiv>label {
+.checkboxdiv > label {
   margin-right: 50px;
 }
 
-.checkboxdiv>label>input {
+.checkboxdiv > label > input {
   margin-left: 10px;
 }
 
@@ -8479,7 +8478,7 @@ form {
   justify-content: space-between;
 }
 
-.dispflexOrganizationEvents>input {
+.dispflexOrganizationEvents > input {
   border: none;
   box-shadow: none;
   margin-top: 5px;
@@ -8489,7 +8488,7 @@ form {
   display: flex;
 }
 
-.dispflex>input {
+.dispflex > input {
   width: 20%;
   border: none;
   box-shadow: none;
@@ -8673,7 +8672,7 @@ form {
 
 /* -- OrganizationVenues.tsx -- */
 
-.mainpageright>hr {
+.mainpageright > hr {
   margin-top: 20px;
   width: 100%;
   margin-left: -15px;
@@ -9026,7 +9025,7 @@ form {
 }
 
 .cards:first-child:nth-last-child(even),
-.cards:first-child:nth-last-child(even)~.box {
+.cards:first-child:nth-last-child(even) ~ .box {
   grid-column: auto / span 1;
 }
 
@@ -9040,7 +9039,7 @@ form {
 }
 
 .cardsEventListCard:first-child:nth-last-child(even),
-.cardsEventListCard:first-child:nth-last-child(even)~.box {
+.cardsEventListCard:first-child:nth-last-child(even) ~ .box {
   grid-column: auto / span 1;
 }
 
@@ -9156,7 +9155,7 @@ form {
   margin-bottom: 15px;
 }
 
-.datediv>div {
+.datediv > div {
   flex: 1;
 }
 
@@ -9169,22 +9168,22 @@ form {
     flex-direction: column;
   }
 
-  .datediv>div {
+  .datediv > div {
     width: 100%;
     margin-left: 0;
     margin-bottom: 10px;
   }
 
-  .datediv>div p {
+  .datediv > div p {
     margin-bottom: 5px;
   }
 }
 
-.checkboxdivEvents>label {
+.checkboxdivEvents > label {
   margin-right: 50px;
 }
 
-.checkboxdivEvents>label>input {
+.checkboxdivEvents > label > input {
   margin-left: 10px;
 }
 
@@ -9192,7 +9191,7 @@ form {
   display: flex;
 }
 
-.checkboxdivEvents>div {
+.checkboxdivEvents > div {
   width: 50%;
 }
 
@@ -9201,7 +9200,7 @@ form {
   align-items: center;
 }
 
-.dispflexEvents>input {
+.dispflexEvents > input {
   border: none;
   box-shadow: none;
   margin-top: 5px;
@@ -10185,8 +10184,8 @@ form {
   }
 }
 
-.btnsBlock>button,
-.btnsBlock>.btn {
+.btnsBlock > button,
+.btnsBlock > .btn {
   margin: 0;
   height: 100%;
   display: inline-flex;
