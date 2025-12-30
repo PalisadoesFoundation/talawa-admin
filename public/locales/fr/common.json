@@ -133,6 +133,8 @@
   "unblockedSuccessfully": "{{item}} débloqué avec succès",
 
   "pluginSettings": "Paramètres du plugin",
+  "showPassword": "Afficher le mot de passe",
+  "hidePassword": "Masquer le mot de passe",
   "volunteer": "Bénévole",
   "moreCount": "+{{count}} de plus",
   "togglePledgedRaised": "Basculer entre les montants promis et collectés",

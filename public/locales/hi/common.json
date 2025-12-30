@@ -133,6 +133,8 @@
   "unblockedSuccessfully": "{{item}} अनब्लॉक किया गया",
 
   "pluginSettings": "प्लगइन सेटिंग्स",
+  "showPassword": "पासवर्ड दिखाएं",
+  "hidePassword": "पासवर्ड छुपाएं",
   "volunteer": "स्वयंसेवक",
   "moreCount": "+{{count}} और",
   "togglePledgedRaised": "प्रतिज्ञा और संग्रह राशि टॉगल करें",
