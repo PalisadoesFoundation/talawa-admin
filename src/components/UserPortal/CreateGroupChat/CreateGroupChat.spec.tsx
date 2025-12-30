@@ -25,9 +25,10 @@ vi.mock('react-router', async () => {
   };
 });
 
-const mockUploadFileToMinio = vi
-  .fn()
-  .mockResolvedValue({ objectName: 'https://minio-test.com/test-image.jpg' });
+const mockUploadFileToMinio = vi.fn().mockResolvedValue({
+  objectName: 'test-image.jpg',
+  url: 'https://minio-test.com/test-image.jpg',
+});
 
 vi.mock('utils/MinioUpload', () => ({
   useMinioUpload: vi.fn(() => ({ uploadFileToMinio: mockUploadFileToMinio })),
@@ -190,9 +191,7 @@ const CREATE_CHAT_MOCK = {
         organizationId: 'test-org-id',
         name: 'Test Group',
         description: 'Test Description',
-        // The component has a bug and sends `null` instead of the image URL.
-        // The test is changed to reflect the current buggy behavior.
-        avatar: null,
+        avatar: { uri: 'test-image.jpg' },
       },
     },
   },
@@ -269,7 +268,7 @@ const mocks = [
 
 describe('CreateGroupChat', () => {
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
   const { setItem } = useLocalStorage();
   const toggleCreateGroupChatModal = vi.fn();

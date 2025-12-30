@@ -720,7 +720,9 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                     onClick={loadMoreMessages}
                     disabled={loadingMoreMessages}
                   >
-                    {loadingMoreMessages ? 'Loading…' : 'Load older messages'}
+                    {loadingMoreMessages
+                      ? t('loading')
+                      : t('loadOlderMessages')}
                   </Button>
                 </div>
               )}

@@ -224,6 +224,7 @@
     "title": "会员申请",
     "sl_no": "SL。",
     "accept": "接受",
+    "newMembersWillAppearHere": "新成员会显示在这里",
     "reject": "拒绝",
     "searchRequests": "搜索会员请求",
     "noOrgError": "未找到组织，请通过仪表板创建组织",
@@ -232,7 +233,6 @@
     "rejectedSuccessfully": "请求被成功拒绝",
     "noOrgErrorTitle": "未找到组织",
     "noOrgErrorDescription": "请通过仪表板创建组织",
-    "newMembersWillAppearHere": "新成员将显示在此处",
     "name": "名称",
     "email": "电子邮件",
     "profilePictureAlt": "{{name}} 的头像",
@@ -1536,10 +1536,18 @@
     "create": "创造",
     "newChat": "新聊天",
     "newGroupChat": "新群聊",
+    "newGroup": "新群组",
     "groupInfo": "集团信息",
+    "groupName": "组名",
+    "groupDescription": "群组描述",
+    "description": "描述",
+    "hash": "#",
+    "next": "下一步",
+    "organizationMembersTable": "组织成员表",
     "members": "会员",
     "addMembers": "添加成员",
     "userNotFound": "未找到用户",
+    "Error": "错误",
     "roleUpdatedSuccessfully": "角色更新成功",
     "failedToUpdateRole": "更新角色失败",
     "memberRemovedSuccessfully": "成员删除成功",
@@ -1562,10 +1570,12 @@
     "selectContact": "选择联系人开始对话",
     "sendMessage": "发信息",
     "reply": "回复",
+    "loading": "正在加载…",
+    "loadOlderMessages": "加载旧消息",
+    "loadingMoreMessages": "正在加载更多消息…",
     "loadingImage": "正在加载图片…",
     "imageNotAvailable": "图片不可用",
     "attachment": "附件",
-    "loadingMoreMessages": "正在加载更多消息…",
     "edit": "编辑",
     "delete": "删除"
   },
@@ -1855,6 +1865,12 @@
     "altText": "{{name}}的个人资料图片",
     "modalTitle": "个人资料图片",
     "enlargedAltText": "{{name}}的放大个人资料图片"
+  },
+  "contact": {
+    "card_aria": "联系人卡片"
+  },
+  "donation": {
+    "card": "捐赠卡"
   },
   "common": {
     "signOut": "退出登录",

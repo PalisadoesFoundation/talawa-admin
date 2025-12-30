@@ -224,6 +224,7 @@
     "title": "Membership Requests",
     "sl_no": "Sl. No.",
     "accept": "Accept",
+    "newMembersWillAppearHere": "New members will appear here",
     "reject": "Reject",
     "searchRequests": "Search membership requests",
     "noOrgError": "Organizations not found, please create an organization through dashboard",
@@ -232,7 +233,6 @@
     "rejectedSuccessfully": "Request rejected successfully",
     "noOrgErrorTitle": "Organizations Not Found",
     "noOrgErrorDescription": "Please create an organization through dashboard",
-    "newMembersWillAppearHere": "New members will appear here",
     "name": "name",
     "email": "email",
     "profilePictureAlt": "User profile picture",
@@ -1535,10 +1535,18 @@
     "create": "Create",
     "newChat": "New Chat",
     "newGroupChat": "New Group Chat",
+    "newGroup": "New Group",
     "groupInfo": "Group Info",
+    "groupName": "Group name",
+    "groupDescription": "Group Description",
+    "description": "Description",
+    "hash": "#",
+    "next": "Next",
+    "organizationMembersTable": "Organization Members Table",
     "members": "Members",
     "addMembers": "Add Members",
     "userNotFound": "User not found",
+    "Error": "Error",
     "roleUpdatedSuccessfully": "Role updated successfully",
     "failedToUpdateRole": "Failed to update role",
     "memberRemovedSuccessfully": "Member removed successfully",
@@ -1562,10 +1570,12 @@
     "selectContact": "Select a contact to start conversation",
     "sendMessage": "Send Message",
     "reply": "Reply",
+    "loading": "Loading...",
+    "loadOlderMessages": "Load older messages",
+    "loadingMoreMessages": "Loading more messages...",
     "loadingImage": "Loading image...",
     "imageNotAvailable": "Image not available",
     "attachment": "attachment",
-    "loadingMoreMessages": "Loading more messages...",
     "edit": "Edit",
     "delete": "Delete"
   },
@@ -1855,6 +1865,12 @@
     "altText": "Profile picture of {{name}}",
     "modalTitle": "Profile Picture",
     "enlargedAltText": "Enlarged profile picture of {{name}}"
+  },
+  "contact": {
+    "card_aria": "Contact card"
+  },
+  "donation": {
+    "card": "Donation card"
   },
   "common": {
     "signOut": "Sign out",

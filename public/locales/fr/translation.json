@@ -224,6 +224,7 @@
     "title": "Demandes d'adhésion",
     "sl_no": "Sl. ",
     "accept": "Accepter",
+    "newMembersWillAppearHere": "Les nouveaux membres apparaîtront ici",
     "reject": "Rejeter",
     "searchRequests": "Rechercher des demandes d'adhésion",
     "noOrgError": "Organisations introuvables, veuillez créer une organisation via le tableau de bord",
@@ -232,7 +233,6 @@
     "rejectedSuccessfully": "Demande rejetée avec succès",
     "noOrgErrorTitle": "Organisations introuvables",
     "noOrgErrorDescription": "Veuillez créer une organisation via le tableau de bord",
-    "newMembersWillAppearHere": "Les nouveaux membres apparaîtront ici",
     "name": "Nom",
     "email": "E-mail",
     "profilePictureAlt": "Image de profil de {{name}}",
@@ -1536,6 +1536,14 @@
     "create": "créer",
     "newChat": "nouvelle discussion",
     "newGroupChat": "Nouvelle discussion de groupe",
+    "Error": "Erreur",
+    "organizationMembersTable": "Table des membres de l'organisation",
+    "next": "Suivant",
+    "hash": "#",
+    "description": "Description",
+    "groupDescription": "Description du groupe",
+    "groupName": "Nom du groupe",
+    "newGroup": "Nouveau groupe",
     "groupInfo": "Informations sur le groupe",
     "members": "Membres",
     "addMembers": "Ajouter des membres",
@@ -1562,10 +1570,12 @@
     "selectContact": "Sélectionnez un contact pour démarrer la conversation",
     "sendMessage": "Envoyer le message",
     "reply": "répondre",
+    "loading": "Chargement...",
+    "loadOlderMessages": "Charger les messages plus anciens",
+    "loadingMoreMessages": "Chargement d'autres messages...",
     "loadingImage": "Chargement de l'image...",
     "imageNotAvailable": "Image non disponible",
     "attachment": "pièce jointe",
-    "loadingMoreMessages": "Chargement d'autres messages...",
     "edit": "Modifier",
     "delete": "Supprimer"
   },
@@ -1855,6 +1865,12 @@
     "altText": "Photo de profil de {{name}}",
     "modalTitle": "Photo de profil",
     "enlargedAltText": "Photo de profil agrandie de {{name}}"
+  },
+  "contact": {
+    "card_aria": "Carte de contact"
+  },
+  "donation": {
+    "card": "Carte de don"
   },
   "common": {
     "signOut": "Se déconnecter",

@@ -222,10 +222,11 @@
   "requests": {
     "profile": "Perfil",
     "title": "Solicitudes",
-    "sl_no": "Núm.",
+    "sl_no": "Número de serie",
     "name": "Nombre",
     "email": "Correo electrónico",
     "accept": "Aceptar",
+    "newMembersWillAppearHere": "Los nuevos miembros aparecerán aquí",
     "reject": "Rechazar",
     "searchRequests": "Buscar solicitudes",
     "noOrgError": "Organizaciones no encontradas, por favor crea una organización a través del panel",
@@ -234,7 +235,6 @@
     "rejectedSuccessfully": "Solicitud rechazada exitosamente",
     "noOrgErrorTitle": "Organizaciones no encontradas",
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
-    "newMembersWillAppearHere": "Los nuevos miembros aparecerán aquí",
     "profilePictureAlt": "Imagen de perfil de {{name}}",
     "placeholderAvatarAlt": "Avatar predeterminado"
   },
@@ -1536,6 +1536,14 @@
     "create": "crear",
     "newChat": "nueva charla",
     "newGroupChat": "Nuevo chat grupal",
+    "Error": "Error",
+    "organizationMembersTable": "Tabla de miembros de la organización",
+    "next": "Siguiente",
+    "hash": "#",
+    "description": "Descripción",
+    "groupDescription": "Descripción del grupo",
+    "groupName": "Nombre del grupo",
+    "newGroup": "Nuevo grupo",
     "groupInfo": "Información del grupo",
     "members": "Miembros",
     "addMembers": "Agregar miembros",
@@ -1562,10 +1570,12 @@
     "selectContact": "Seleccione un contacto para iniciar una conversación",
     "sendMessage": "Enviar mensaje",
     "reply": "responder",
+    "loading": "Cargando...",
+    "loadOlderMessages": "Cargar mensajes más antiguos",
+    "loadingMoreMessages": "Cargando más mensajes...",
     "loadingImage": "Cargando imagen...",
     "imageNotAvailable": "Imagen no disponible",
     "attachment": "adjunto",
-    "loadingMoreMessages": "Cargando más mensajes...",
     "edit": "Editar",
     "delete": "Eliminar"
   },
@@ -1855,6 +1865,12 @@
     "altText": "Foto de perfil de {{name}}",
     "modalTitle": "Foto de perfil",
     "enlargedAltText": "Foto de perfil ampliada de {{name}}"
+  },
+  "contact": {
+    "card_aria": "Tarjeta de contacto"
+  },
+  "donation": {
+    "card": "Tarjeta de donación"
   },
   "common": {
     "signOut": "Cerrar sesión",
