@@ -1552,7 +1552,13 @@
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
     "sendMessage": "मेसेज भेजें",
-    "reply": "जवाब"
+    "reply": "जवाब",
+    "loadingImage": "इमेज लोड हो रही है...",
+    "imageNotAvailable": "इमेज उपलब्ध नहीं है",
+    "attachment": "अनुलग्नक",
+    "loadingMoreMessages": "और संदेश लोड हो रहे हैं...",
+    "edit": "संपादित करें",
+    "delete": "हटाएं"
   },
   "orgActionItemCategories": {
     "enableButton": "सक्षम",

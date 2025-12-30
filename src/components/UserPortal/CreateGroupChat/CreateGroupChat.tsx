@@ -38,7 +38,7 @@
  * - utils/useLocalstorage
  * - utils/MinioUpload
  * - components/Loader
- * - components/Avatar
+ * - shared-components/ProfileAvatarDisplay
  *
  * @fileoverview
  * This file defines the `CreateGroupChat` component, which is used in the
@@ -64,10 +64,11 @@ import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import Avatar from 'components/Avatar/Avatar';
 import { FiEdit } from 'react-icons/fi';
 import { useMinioUpload } from 'utils/MinioUpload';
+import { useMinioDownload } from 'utils/MinioDownload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
@@ -99,6 +100,7 @@ export default function CreateGroupChat({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { orgId: currentOrg } = useParams();
   const { uploadFileToMinio } = useMinioUpload();
+  const { getFileFromMinio } = useMinioDownload();
 
   function openAddUserModal(): void {
     setAddUserModalisOpen(true);
@@ -196,7 +198,8 @@ export default function CreateGroupChat({
     if (file && currentOrg) {
       try {
         const { objectName } = await uploadFileToMinio(file, currentOrg);
-        setSelectedImage(objectName);
+        const presignedUrl = await getFileFromMinio(objectName, currentOrg);
+        setSelectedImage(presignedUrl);
       } catch (error) {
         console.error('Error uploading image to MinIO:', error);
       }
@@ -226,11 +229,12 @@ export default function CreateGroupChat({
             data-testid="fileInput"
           />
           <div className={styles.groupInfo}>
-            {selectedImage ? (
-              <img className={styles.chatImage} src={selectedImage} alt="" />
-            ) : (
-              <Avatar avatarStyle={styles.groupImage} name={title} />
-            )}
+            <ProfileAvatarDisplay
+              className={styles.chatImage}
+              fallbackName={title}
+              size="large"
+              imageUrl={selectedImage}
+            />
             <button
               data-testid="editImageBtn"
               onClick={handleImageClick}

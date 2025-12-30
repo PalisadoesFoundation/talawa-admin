@@ -30,7 +30,7 @@ Accessibility:
 <UserPortalCard
   variant="compact"
   ariaLabel={t('donation.card')}
-  imageSlot={<Avatar />}
+  imageSlot={<ProfileAvatarDisplay />}
   actionsSlot={<Button />}
 >
   <CardContent />

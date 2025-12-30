@@ -33,6 +33,36 @@ vi.mock('utils/MinioUpload', () => ({
   useMinioUpload: vi.fn(() => ({ uploadFileToMinio: mockUploadFileToMinio })),
 }));
 
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: ({
+    imageUrl,
+    fallbackName,
+  }: {
+    imageUrl?: string;
+    fallbackName: string;
+  }) => (
+    <div data-testid="mock-profile-avatar-display">
+      {imageUrl ? (
+        <img
+          src={imageUrl}
+          alt={fallbackName}
+          data-testid="mock-profile-image"
+        />
+      ) : (
+        <div data-testid="mock-profile-fallback">{fallbackName}</div>
+      )}
+    </div>
+  ),
+}));
+
+vi.mock('utils/MinioDownload', () => ({
+  useMinioDownload: () => ({
+    getFileFromMinio: vi
+      .fn()
+      .mockResolvedValue('https://minio-test.com/test-image.jpg'),
+  }),
+}));
+
 const { mockLocalStorageStore } = vi.hoisted(() => ({
   mockLocalStorageStore: {} as Record<string, unknown>,
 }));
@@ -289,7 +319,7 @@ describe('CreateGroupChat', () => {
 
     // Wait for the async state update to be reflected in the DOM
     await waitFor(() => {
-      const image = screen.getByAltText('');
+      const image = screen.getByTestId('mock-profile-image');
       expect(image).toHaveAttribute(
         'src',
         'https://minio-test.com/test-image.jpg',

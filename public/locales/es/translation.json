@@ -1552,7 +1552,13 @@
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",
     "sendMessage": "Enviar mensaje",
-    "reply": "responder"
+    "reply": "responder",
+    "loadingImage": "Cargando imagen...",
+    "imageNotAvailable": "Imagen no disponible",
+    "attachment": "adjunto",
+    "loadingMoreMessages": "Cargando más mensajes...",
+    "edit": "Editar",
+    "delete": "Eliminar"
   },
   "orgActionItemCategories": {
     "createButton": "Crear",
