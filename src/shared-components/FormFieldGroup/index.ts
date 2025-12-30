@@ -13,4 +13,4 @@ export type {
   FormCheckBoxProps,
   FormRadioGroupProps,
   FormDateFieldProps,
-} from '../../types/shared-components/FormFieldGroup/interface.ts';
+} from '../../types/shared-components/FormFieldGroup/interface';
