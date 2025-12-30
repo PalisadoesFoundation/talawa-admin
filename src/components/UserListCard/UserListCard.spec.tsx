@@ -580,4 +580,65 @@ describe('Testing User List Card', () => {
     await wait(2100);
     expect(reloadMock).not.toHaveBeenCalled();
   });
+
+  it('Should cleanup timeout on component unmount (useEffect cleanup)', async () => {
+    // This test covers lines 65-66: useEffect cleanup function
+    const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout');
+    const successMock = [
+      {
+        request: {
+          query: ADD_ADMIN_MUTATION,
+          variables: {
+            userid: '555',
+            orgid: '554',
+          },
+        },
+        result: {
+          data: {
+            createAdmin: {
+              user: {
+                _id: '555',
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    const successLink = new StaticMockLink(successMock, true);
+    const props = {
+      id: '555',
+    };
+
+    const { unmount } = render(
+      <BrowserRouter>
+        <MockedProvider link={successLink}>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserListCard key={707} {...props} />
+          </I18nextProvider>
+        </MockedProvider>
+      </BrowserRouter>,
+    );
+
+    await wait();
+    const button = screen.getByText(/Add Admin/i);
+
+    // Click to trigger success flow which sets up a timeout
+    await userEvent.click(button);
+    await wait(300); // Wait for mutation to complete but before timeout fires
+
+    // Verify success was called
+    expect(NotificationToast.success).toHaveBeenCalled();
+
+    // Unmount the component while the timeout is still pending
+    unmount();
+
+    // The cleanup function should have called clearTimeout
+    expect(clearTimeoutSpy).toHaveBeenCalled();
+
+    // Reload should not have been called since we unmounted before timeout
+    expect(reloadMock).not.toHaveBeenCalled();
+
+    clearTimeoutSpy.mockRestore();
+  });
 });
