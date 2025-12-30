@@ -9,22 +9,23 @@ Talawa-Admin can be installed using either an [automated one-click installation 
 
 ## Automated Installation
 
+:::warning
+The automated installation is currently only supported on **macOS and Linux**. Windows users should use the [Manual Installation](#manual-installation) method instead.
+:::
+
 The automated installation script provides a zero-prerequisite installation experience. It automatically installs Node.js (via fnm), pnpm, and all required dependencies.
 
 ### Prerequisites
 
-The only prerequisite is having `git` installed on your system:
-
-- **Windows**: Download from [git-scm.com](https://git-scm.com/downloads)
-- **macOS/Linux**: Usually pre-installed, or install via your package manager
+The only prerequisite is having `git` installed on your system (usually pre-installed on macOS/Linux, or install via your package manager).
 
 ### Setting up the repository
 
 First you need a local copy of `talawa-admin`. Run the following command in the directory of choice on your local system.
 
 1. On your computer, navigate to the folder where you want to setup the repository.
-2. Open a `cmd` (Windows) or `terminal` (Linux or MacOS) session in this folder.
-   1. An easy way to do this is to right-click and choose appropriate option based on your OS.
+2. Open a terminal session in this folder.
+   1. An easy way to do this is to right-click and choose the appropriate option based on your OS.
 
 The next steps will depend on whether you are:
 
@@ -95,7 +96,7 @@ The script will:
 2. Prompt you to install project dependencies (`pnpm install`)
 3. Prompt you to run the environment installer (`pnpm run install-deps`) which checks for typescript and optionally docker
 
-#### For Windows
+<!-- #### For Windows
 
 Open PowerShell in the repository directory and run:
 
@@ -111,7 +112,7 @@ Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
 
 Then run the installer again.
 
-The PowerShell script follows the same flow as the bash script, automatically installing Node.js and pnpm if needed.
+The PowerShell script follows the same flow as the bash script, automatically installing Node.js and pnpm if needed. -->
 
 ### What gets installed
 
