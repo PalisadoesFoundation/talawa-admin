@@ -33,6 +33,12 @@ vi.mock('utils/sanitizeAvatar', () => ({
   sanitizeAvatars: sharedMocks.sanitizeAvatars,
 }));
 
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
+
 describe('ProfileImageSection', () => {
   const mockFileInputRef = React.createRef<HTMLInputElement | null>();
   const mockHandleFileUpload = vi.fn();
@@ -85,9 +91,30 @@ describe('ProfileImageSection', () => {
   it('handles file upload button click', async () => {
     render(<ProfileImageSection {...defaultProps} />);
     const uploadButton = screen.getByTestId('uploadImageBtn');
+    const clickSpy = vi.spyOn(HTMLInputElement.prototype, 'click');
     await userEvent.click(uploadButton);
-    expect(uploadButton).toHaveAttribute('role', 'button');
-    expect(uploadButton).toHaveAttribute('tabIndex', '0');
+    expect(uploadButton.tagName).toBe('BUTTON');
+    expect(uploadButton).toHaveAttribute('type', 'button');
+    expect(uploadButton).toHaveAttribute(
+      'aria-label',
+      'settings.uploadProfilePicture',
+    );
+    expect(clickSpy).toHaveBeenCalled();
+    clickSpy.mockRestore();
+  });
+
+  it('triggers file input click when pressing Enter or Space on upload button', () => {
+    render(<ProfileImageSection {...defaultProps} />);
+    const uploadButton = screen.getByTestId('uploadImageBtn');
+    const clickSpy = vi.spyOn(HTMLInputElement.prototype, 'click');
+
+    fireEvent.keyDown(uploadButton, { key: 'Enter' });
+    expect(clickSpy).toHaveBeenCalled();
+
+    fireEvent.keyDown(uploadButton, { key: ' ' });
+    expect(clickSpy).toHaveBeenCalled();
+
+    clickSpy.mockRestore();
   });
 
   it('calls handleFileUpload when file is selected', () => {
@@ -117,18 +144,29 @@ describe('ProfileImageSection', () => {
     expect(avatar).toHaveClass('rounded-circle');
     expect(avatar.style.width).toBe('80px');
     expect(avatar.style.height).toBe('80px');
-    expect(avatar.style.objectFit).toBe('cover');
   });
 
   it('applies correct styling to edit icon', () => {
     render(<ProfileImageSection {...defaultProps} />);
     const editIcon = screen.getByTestId('uploadImageBtn');
-    expect(editIcon).toHaveClass('fas');
-    expect(editIcon).toHaveClass('fa-edit');
     expect(editIcon).toHaveClass('position-absolute');
     expect(editIcon).toHaveClass('bottom-0');
     expect(editIcon).toHaveClass('right-0');
-    expect(editIcon.style.cursor).toBe('pointer');
-    expect(editIcon.style.fontSize).toBe('1.2rem');
+    expect(editIcon).toHaveClass('p-2');
+    expect(editIcon).toHaveClass('bg-white');
+    expect(editIcon).toHaveClass('rounded-circle');
+    expect(editIcon).toHaveClass('border-0');
+    expect(editIcon).toHaveClass('cursor-pointer');
+    expect(editIcon).toHaveClass('d-flex');
+    expect(editIcon).toHaveClass('align-items-center');
+    expect(editIcon).toHaveClass('justify-content-center');
+    const iconElement = editIcon.querySelector('i');
+    expect(iconElement).not.toBeNull();
+    if (iconElement) {
+      expect(iconElement).toHaveClass('fas');
+      expect(iconElement).toHaveClass('fa-edit');
+      expect(iconElement).toHaveClass('fs-5');
+      expect(iconElement).toHaveAttribute('aria-hidden', 'true');
+    }
   });
 });

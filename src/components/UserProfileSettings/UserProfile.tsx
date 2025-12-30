@@ -83,7 +83,6 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
                 customSize={60}
                 border={false}
                 className="rounded-circle"
-                style={{ width: 60, height: 60, objectFit: 'cover' }}
                 dataTestId="profile-avatar"
                 objectFit="cover"
                 enableEnlarge={true}
