@@ -133,6 +133,8 @@
   "unblockedSuccessfully": "{{item}} débloqué avec succès",
 
   "pluginSettings": "Paramètres du plugin",
+  "showPassword": "Afficher le mot de passe",
+  "hidePassword": "Masquer le mot de passe",
   "volunteer": "Bénévole",
   "moreCount": "+{{count}} de plus",
   "togglePledgedRaised": "Basculer entre les montants promis et collectés",
@@ -172,5 +174,6 @@
   "eventDetails": "Détails de l'Événement",
   "selectLanguage": "Choisir la langue",
   "talawa": "Talawa",
-  "talawaBranding": "Image de marque Talawa"
+  "talawaBranding": "Image de marque Talawa",
+  "unableToLoadData": "Impossible de charger les données."
 }
