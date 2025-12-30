@@ -134,9 +134,6 @@ export default [
           message:
             "Security Risk: Do not use getItem('token') directly inside authorization headers. Extract it to a variable first to handle null values.",
         },
-      ],
-      'no-restricted-syntax': [
-        'error',
         {
           selector:
             "MemberExpression[object.name='Form'][property.name='Group']",
