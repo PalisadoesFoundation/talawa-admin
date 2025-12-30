@@ -256,8 +256,9 @@ describe('BlockUser Component', () => {
       );
 
       await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith(
-          'Failed to fetch members',
+        expect(errorHandler).toHaveBeenCalledWith(
+          expect.any(Function),
+          expect.objectContaining({ message: 'Failed to fetch members' }),
         );
       });
     });
@@ -272,8 +273,9 @@ describe('BlockUser Component', () => {
       );
 
       await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalledWith(
-          'Failed to fetch blocked users',
+        expect(errorHandler).toHaveBeenCalledWith(
+          expect.any(Function),
+          expect.objectContaining({ message: 'Failed to fetch blocked users' }),
         );
       });
     });

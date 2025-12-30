@@ -398,7 +398,7 @@ describe('EventListCardModals', () => {
       variables: { id: 'event1' },
     });
     expect(NotificationToast.success).toHaveBeenCalledWith(
-      'Successfully registered for Test Event',
+      'registeredSuccessfully',
     );
   });
 
