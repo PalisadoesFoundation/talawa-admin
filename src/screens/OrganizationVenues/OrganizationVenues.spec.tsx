@@ -247,10 +247,8 @@ describe('Organisation Venues', () => {
     await wait();
 
     // Verify all venues are initially visible
-    await waitFor(() => {
-      expect(screen.getByText('Updated Venue 1')).toBeInTheDocument();
-      expect(screen.getByText('Updated Venue 2')).toBeInTheDocument();
-    });
+    expect(screen.getByText('Updated Venue 1')).toBeInTheDocument();
+    expect(screen.getByText('Updated Venue 2')).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('searchByButton'));
     fireEvent.click(screen.getByTestId('desc'));

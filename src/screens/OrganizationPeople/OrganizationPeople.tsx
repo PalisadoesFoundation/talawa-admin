@@ -82,6 +82,19 @@ import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFil
 // Imports added for manual header construction
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 
+// Helper mapping for state to option conversion
+const STATE_TO_OPTION: Record<number, string> = {
+  0: 'members',
+  1: 'admin',
+  2: 'users',
+};
+
+const OPTION_TO_STATE: Record<string, number> = {
+  members: 0,
+  admin: 1,
+  users: 2,
+};
+
 interface IProcessedRow {
   id: string;
   name: string;
@@ -332,7 +345,7 @@ function OrganizationPeople(): JSX.Element {
   };
 
   const handleSortChange = (value: string): void => {
-    setState(value === 'users' ? 2 : value === 'members' ? 0 : 1);
+    setState(OPTION_TO_STATE[value] ?? 0);
   };
 
   // Header titles for the table
@@ -526,8 +539,7 @@ function OrganizationPeople(): JSX.Element {
               { label: tCommon('admin'), value: 'admin' },
               { label: tCommon('users'), value: 'users' },
             ],
-            selectedOption:
-              state === 2 ? 'users' : state === 1 ? 'admin' : 'members',
+            selectedOption: STATE_TO_OPTION[state] ?? 'members',
             onOptionChange: (value) => handleSortChange(value.toString()),
             dataTestIdPrefix: 'sort',
           },

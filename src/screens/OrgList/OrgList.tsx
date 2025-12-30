@@ -127,7 +127,7 @@ function orgList(): JSX.Element {
   const [filterName, setFilterName] = useState('');
   const [sortingState, setSortingState] = useState({
     option: 'Latest',
-    selectedOption: t('Latest'),
+    selectedOption: 'Latest',
   });
 
   const [searchByName, setSearchByName] = useState('');
@@ -281,6 +281,13 @@ function orgList(): JSX.Element {
     }
   };
 
+  /**
+   * Note: The explicit refetchOrgs({ filter: val }) call is intentional.
+   * While Apollo Client auto-refetches when filterName changes, the explicit
+   * call ensures immediate network request execution and avoids timing issues
+   * from React's batched state updates. This pattern is used consistently
+   * elsewhere (e.g., Organizations.tsx) to prevent UI state race conditions.
+   */
   const handleChangeFilter = (val: string) => {
     setTypedValue(val);
     setSearchByName(val);
@@ -289,9 +296,10 @@ function orgList(): JSX.Element {
   };
 
   const handleSortChange = (value: string | number): void => {
+    const option = String(value);
     setSortingState({
-      option: String(value),
-      selectedOption: t(String(value)),
+      option,
+      selectedOption: option,
     });
   };
 

@@ -213,7 +213,13 @@
     "OR": "O",
     "sampleOrgSuccess": "Organización de ejemplo creada exitosamente",
     "manageFeatures": "Gestionar funciones",
-    "enableEverything": "Habilitar todo"
+    "enableEverything": "Habilitar todo",
+    "admins": "Administradores",
+    "members": "Miembros",
+    "orgName": "Nombre de la Organización",
+    "congratulationOrgCreated": "¡Felicitaciones! La organización ha sido creada exitosamente.",
+    "goToStore": "Ir a la Tienda",
+    "manageFeaturesInfo": "Instala y gestiona funciones desde la Tienda de Complementos para tu Organización. También puedes instalar estos complementos más tarde desde la Tienda de Complementos."
   },
   "orgListCard": {
     "admins": "Administradores",

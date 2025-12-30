@@ -213,7 +213,13 @@
     "cancel": "Annuler",
     "endOfResults": "Fin des résultats",
     "noResultsFoundFor": "Aucun résultat trouvé pour",
-    "OR": "OU"
+    "OR": "OU",
+    "admins": "Administrateurs",
+    "members": "Membres",
+    "orgName": "Nom de l'Organisation",
+    "congratulationOrgCreated": "Félicitations ! L'organisation a été créée avec succès.",
+    "goToStore": "Aller à la Boutique",
+    "manageFeaturesInfo": "Installez et gérez les fonctionnalités depuis la Boutique de Plugins pour votre Organisation. Vous pouvez également installer ces plugins plus tard depuis la Boutique de Plugins."
   },
   "orgListCard": {
     "manage": "Gérer",

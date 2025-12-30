@@ -213,7 +213,13 @@
     "cancel": "取消",
     "endOfResults": "结果结束",
     "noResultsFoundFor": "未找到结果",
-    "OR": "或"
+    "OR": "或",
+    "admins": "管理员",
+    "members": "成员",
+    "orgName": "组织名称",
+    "congratulationOrgCreated": "恭喜！组织已成功创建。",
+    "goToStore": "前往商店",
+    "manageFeaturesInfo": "从插件商店为您的组织安装和管理功能。您也可以稍后从插件商店安装这些插件。"
   },
   "orgListCard": {
     "manage": "管理",
