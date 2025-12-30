@@ -213,7 +213,16 @@
     "cancel": "取消",
     "endOfResults": "结果结束",
     "noResultsFoundFor": "未找到结果",
-    "OR": "或"
+    "OR": "或",
+    "imageUploadError": "图像上传失败。请再试一次。",
+    "imageUploadSuccess": "图像上传成功。",
+    "congratulationOrgCreated": "恭喜！组织已创建。",
+    "goToStore": "前往商店",
+    "manageFeaturesInfo": "管理此组织可用的功能和插件。",
+    "orgName": "输入名称",
+    "sortOrganizations": "排序组织",
+    "admins": "管理员",
+    "members": "成员"
   },
   "orgListCard": {
     "manage": "管理",
