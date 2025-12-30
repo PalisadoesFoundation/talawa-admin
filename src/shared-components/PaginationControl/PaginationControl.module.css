@@ -17,7 +17,7 @@
 
 .navButton {
   background: transparent;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--bs-border-color, #dee2e6);
   border-radius: 4px;
   cursor: pointer;
   padding: 0.25rem 0.5rem;
@@ -30,7 +30,7 @@
 }
 
 .navButton:hover:not(:disabled) {
-  background-color: #f9fafb;
+  background-color: var(--bs-gray-100, #f8f9fa);
 }
 
 .navButton:disabled {
@@ -58,7 +58,7 @@
 
 .pageSizeSelect {
   background: transparent;
-  border: 1px solid #d1d5db;
+  border: 1px solidvar(--bs-border-color, #dee2e6);
   border-radius: 4px;
   cursor: pointer;
   padding: 0.25rem 0.4rem;
@@ -66,7 +66,7 @@
 }
 
 .pageSizeSelect:hover:not(:disabled) {
-  border-color: #9ca3af;
+  border-color: var(--bs-secondary-color, #6c757d);
 }
 
 .pageSizeSelect:disabled {
@@ -76,12 +76,12 @@
 
 .itemRange {
   font-size: 0.875rem;
-  color: #6b7280;
+  color: var(--bs-secondary-color, #6c757d);
   white-space: nowrap;
 }
 
 .emptyState {
-  color: #9ca3af;
+  color: var(--bs-secondary-color, #6c757d);
   font-size: 0.875rem;
 }
 

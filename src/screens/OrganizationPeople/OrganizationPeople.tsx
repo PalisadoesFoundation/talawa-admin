@@ -66,6 +66,7 @@ import {
   PAGE_SIZE,
 } from '../../types/ReportingTable/utils';
 import dayjs from 'dayjs';
+import { toast } from 'react-toastify';
 
 import styles from 'style/app-fixed.module.css';
 import TableLoader from 'components/TableLoader/TableLoader';
@@ -84,6 +85,7 @@ import SortingButton from 'subComponents/SortingButton';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { PaginationControl } from 'shared-components/PaginationControl';
 import orgPeopleStyles from './OrganizationPeople.module.css';
+import { IQueryVariable } from './addMember/types';
 
 interface IProcessedRow {
   id: string;
@@ -105,15 +107,6 @@ interface IEdges {
     emailAddress: string;
     createdAt: string;
   };
-}
-
-interface IQueryVariable {
-  orgId?: string | undefined;
-  first?: number | null;
-  after?: string | null;
-  last?: number | null;
-  before?: string | null;
-  where?: { role: { equal: 'administrator' | 'regular' } };
 }
 
 function OrganizationPeople(): JSX.Element {
@@ -254,29 +247,11 @@ function OrganizationPeople(): JSX.Element {
     }
   }, [state, currentUrl, pageSize, fetchMembers, fetchUsers]);
 
-  // Initial data fetch
-  useEffect(() => {
-    const variables: IQueryVariable = {
-      orgId: currentUrl,
-      first: pageSize,
-      after: null,
-      last: null,
-      before: null,
-    };
-
-    if (state === 1) {
-      variables.where = { role: { equal: 'administrator' } };
-    }
-
-    if (state === 2) {
-      fetchUsers({ variables });
-    } else {
-      fetchMembers({ variables });
-    }
-  }, [currentUrl, fetchMembers, fetchUsers, pageSize, state]);
-
   // Handle pagination changes
+  const [isPaginating, setIsPaginating] = useState(false);
   const handlePaginationChange = async (newPage: number): Promise<void> => {
+    if (isPaginating) return; // Prevent concurrent requests
+
     const isForwardNavigation = newPage > currentPage;
 
     // Check if navigation is allowed
@@ -287,58 +262,79 @@ function OrganizationPeople(): JSX.Element {
       return; // Prevent navigation if there's no previous page
     }
 
+    setIsPaginating(true);
+
     const variables: IQueryVariable = { orgId: currentUrl };
+    try {
+      if (isForwardNavigation) {
+        // Forward navigation uses "after" with the endCursor of the current page
+        variables.first = pageSize;
+        variables.after = cursors.endCursor;
+        variables.last = null;
+        variables.before = null;
+      } else {
+        // Backward navigation uses "before" with the startCursor of the current page
+        variables.last = pageSize;
+        variables.before = cursors.startCursor;
+        variables.first = null;
+        variables.after = null;
+      }
 
-    if (isForwardNavigation) {
-      // Forward navigation uses "after" with the endCursor of the current page
-      variables.first = pageSize;
-      variables.after = cursors.endCursor;
-      variables.last = null;
-      variables.before = null;
-    } else {
-      // Backward navigation uses "before" with the startCursor of the current page
-      variables.last = pageSize;
-      variables.before = cursors.startCursor;
-      variables.first = null;
-      variables.after = null;
-    }
+      // Add role filter if on admin tab
+      if (state === 1) {
+        variables.where = { role: { equal: 'administrator' } };
+      }
 
-    // Add role filter if on admin tab
-    if (state === 1) {
-      variables.where = { role: { equal: 'administrator' } };
-    }
+      // Execute the appropriate query based on the current tab
+      if (state === 2) {
+        await fetchUsers({ variables });
+      } else {
+        await fetchMembers({ variables });
+      }
 
-    setCurrentPage(newPage);
-
-    // Execute the appropriate query based on the current tab
-    if (state === 2) {
-      await fetchUsers({ variables });
-    } else {
-      await fetchMembers({ variables });
+      // Only update page if fetch succeeded
+      setCurrentPage(newPage);
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : tCommon('somethingWentWrong'),
+      );
+    } finally {
+      setIsPaginating(false);
     }
   };
 
-  const handlePageSizeChange = (newPageSize: number): void => {
-    setPageSize(newPageSize);
-    setCurrentPage(1); // Reset to first page
-    setCursors({ startCursor: null, endCursor: null }); // Reset cursors when page size changes
+  const handlePageSizeChange = async (newPageSize: number): Promise<void> => {
+    if (isPaginating) return; // Reuse the same guard
 
-    const variables: IQueryVariable = {
-      orgId: currentUrl,
-      first: newPageSize,
-      after: null,
-      last: null,
-      before: null,
-    };
+    setIsPaginating(true);
+    try {
+      setPageSize(newPageSize);
+      setCurrentPage(1); // Reset to first page
+      setCursors({ startCursor: null, endCursor: null }); // Reset cursors when page size changes
 
-    if (state === 1) {
-      variables.where = { role: { equal: 'administrator' } };
-    }
+      const variables: IQueryVariable = {
+        orgId: currentUrl,
+        first: newPageSize,
+        after: null,
+        last: null,
+        before: null,
+      };
 
-    if (state === 2) {
-      fetchUsers({ variables });
-    } else {
-      fetchMembers({ variables });
+      if (state === 1) {
+        variables.where = { role: { equal: 'administrator' } };
+      }
+
+      if (state === 2) {
+        await fetchUsers({ variables });
+      } else {
+        await fetchMembers({ variables });
+      }
+    } catch {
+      toast.error(tCommon('Failed to change page size. Please try again.'));
+      // Revert on error
+      setPageSize(pageSize);
+    } finally {
+      setIsPaginating(false);
     }
   };
 
@@ -581,7 +577,7 @@ function OrganizationPeople(): JSX.Element {
           onPageChange={handlePaginationChange}
           onPageSizeChange={handlePageSizeChange}
           pageSizeOptions={[10, 25, 50, 100]}
-          disabled={memberLoading || userLoading}
+          disabled={memberLoading || userLoading || isPaginating}
         />
       </div>
 

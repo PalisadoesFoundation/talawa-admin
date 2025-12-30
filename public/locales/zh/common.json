@@ -211,6 +211,6 @@
     "rowsPerPage": "每页行数",
     "pageInfo": "第 {{currentPage}} 页，共 {{totalPages}} 页",
     "showing": "显示第 {{startItem}}-{{endItem}} 项，共 {{totalItems}} 项",
-    "pageSizeChangeError": "无法更改分页大小，请重试。"
+    "pageSizeChangeError": "无法更改页面大小，请重试。"
   }
 }

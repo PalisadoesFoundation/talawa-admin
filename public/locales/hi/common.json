@@ -211,6 +211,6 @@
     "rowsPerPage": "प्रति पृष्ठ पंक्तियाँ",
     "pageInfo": "पृष्ठ {{currentPage}} / {{totalPages}}",
     "showing": "{{totalItems}} में से {{startItem}}-{{endItem}} दिखा रहे हैं",
-    "pageSizeChangeError": "पेज साइज़ बदलने में विफल रहा। कृपया पुनः प्रयास करें।"
+    "pageSizeChangeError": "पृष्ठ आकार बदलने में विफल। कृपया पुनः प्रयास करें।"
   }
 }

@@ -97,7 +97,7 @@
     "check-mock-cleanup": "bash scripts/githooks/check-mock-cleanup.sh",
     "check:pom": "node scripts/githooks/check_pom.js",
     "check-i18n": "node scripts/check-i18n.js",
-    "check-pagination": "tsx scripts/githooks/check-pagination-patterns.ts"
+    "check-pagination": "pnpm exec tsx scripts/githooks/check-pagination-patterns.ts"
   },
   "eslintConfig": {
     "extends": [
@@ -236,7 +236,7 @@
       "eslint --fix"
     ],
     "src/screens/**/*.{ts,tsx}": [
-      "tsx scripts/githooks/check-pagination-patterns.ts"
+      "pnpm exec tsx scripts/githooks/check-pagination-patterns.ts"
     ]
   },
   "packageManager": "pnpm@10.4.1"
