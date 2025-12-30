@@ -273,11 +273,6 @@ const Users = (): JSX.Element => {
 
   const handleSorting = (option: string): void => {
     const sortOption = option as SortingOption;
-    // Validate option is a valid SortingOption
-    if (sortOption !== 'newest' && sortOption !== 'oldest') {
-      console.error(`Invalid sorting option: ${option}`);
-      return;
-    }
     if (sortOption === sortingOption) {
       return;
     }
@@ -306,15 +301,6 @@ const Users = (): JSX.Element => {
 
   const handleFiltering = (option: string): void => {
     const filterOption = option as FilteringOption;
-    // Validate option is a valid FilteringOption
-    if (
-      filterOption !== 'admin' &&
-      filterOption !== 'user' &&
-      filterOption !== 'cancel'
-    ) {
-      console.error(`Invalid filter option: ${option}`);
-      return;
-    }
     if (filterOption !== filteringOption) setFilteringOption(filterOption);
   };
 
