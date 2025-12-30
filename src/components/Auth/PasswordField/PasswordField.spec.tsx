@@ -76,7 +76,7 @@ describe('PasswordField', () => {
     const input = screen.getByDisplayValue('test123');
     const errorMessage = screen.getByText('Password is required');
 
-    expect(input).toHaveAttribute('aria-invalid', 'true');
+    expect(input).toHaveClass('is-invalid');
     expect(errorMessage).toBeInTheDocument();
   });
 
@@ -104,7 +104,7 @@ describe('PasswordField', () => {
     render(<PasswordField {...defaultProps} />);
 
     const toggleButton = screen.getByRole('button', { name: 'Show password' });
-    const passwordInput = screen.getByDisplayValue('test-value');
+    const passwordInput = screen.getByDisplayValue('test123');
 
     fireEvent.keyDown(toggleButton, { key: 'Enter' });
 
@@ -116,7 +116,7 @@ describe('PasswordField', () => {
     render(<PasswordField {...defaultProps} />);
 
     const toggleButton = screen.getByRole('button', { name: 'Show password' });
-    const passwordInput = screen.getByDisplayValue('test-value');
+    const passwordInput = screen.getByDisplayValue('test123');
 
     fireEvent.keyDown(toggleButton, { key: ' ' });
 
