@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/GroupChatDetails/GroupChatAddUserModal.tsx:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/GroupChatDetails/GroupChatAddUserModal.tsx#L38)
+Defined in: [src/components/GroupChatDetails/GroupChatAddUserModal.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/GroupChatDetails/GroupChatAddUserModal.tsx#L37)
 
 GroupChatAddUserModal
 
