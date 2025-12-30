@@ -725,7 +725,7 @@ describe('Organisations Page testing as Admin', () => {
     expect(paginationAfterSearch).toBeInTheDocument();
   });
 
-  test('Should render no organisation warning alert when there are no organization', async () => {
+  test('Should render empty state when user data is unavailable', async () => {
     window.location.assign('/');
     setupUser('admin');
 
@@ -767,6 +767,15 @@ describe('Organisations Page testing as Admin', () => {
     ];
 
     renderWithMocks(mocksNoUser);
+
+    await wait();
+    expect(screen.getByTestId('orglist-no-orgs-empty')).toBeInTheDocument();
+  });
+
+  test('Should render no organisation warning alert when there are no organization', async () => {
+    setupUser('admin');
+
+    renderWithMocks(MOCKS_EMPTY);
 
     await wait();
     expect(screen.getByTestId('orglist-no-orgs-empty')).toBeInTheDocument();

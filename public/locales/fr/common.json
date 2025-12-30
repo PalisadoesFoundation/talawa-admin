@@ -144,7 +144,6 @@
   "searchRequests": "Rechercher des demandes",
   "itemTitle": "Titre",
   "assignee": "Assigné",
-
   "signOut": "Se déconnecter",
   "signingOut": "Déconnexion en cours...",
   "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
@@ -195,5 +194,20 @@
   "imageUploadError": "Échec du téléchargement de l'image",
   "imageUploadSuccess": "Image téléchargée avec succès",
   "postalCode": "Code Postal",
-  "state": "État"
+  "state": "État",
+  "emailPlaceholder": "nom@exemple.com",
+  "failedToRegister": "Échec de l'inscription à l'événement",
+  "leftOrgSuccess": "Vous avez quitté l'organisation avec succès !",
+  "loadingOrgDetails": "Chargement des détails de l'organisation...",
+  "organizationNotFound": "Organisation introuvable",
+  "leaveOrganization": "Quitter l'organisation",
+  "leaveJoinedOrganization": "Quitter l'organisation rejointe",
+  "leaveOrgConfirmation": "Êtes-vous sûr de vouloir quitter cette organisation ?",
+  "enterEmailToConfirm": "Entrez votre e-mail pour confirmer :",
+  "enterYourEmail": "Entrez votre e-mail",
+  "continue": "Continuer",
+  "back": "Retour",
+  "confirmEmailInput": "Confirmer la saisie de l'e-mail",
+  "confirmLeaveButton": "Bouton de confirmation de départ",
+  "groupTable": "Tableau des groupes"
 }

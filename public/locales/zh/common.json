@@ -194,5 +194,20 @@
   "imageUploadError": "图片上传错误",
   "imageUploadSuccess": "图片上传成功",
   "postalCode": "邮政编码",
-  "state": "州"
+  "state": "州",
+  "emailPlaceholder": "name@example.com",
+  "failedToRegister": "无法注册该活动",
+  "leftOrgSuccess": "您已成功离开该组织！",
+  "loadingOrgDetails": "正在加载组织详情...",
+  "organizationNotFound": "未找到组织",
+  "leaveOrganization": "离开组织",
+  "leaveJoinedOrganization": "离开已加入的组织",
+  "leaveOrgConfirmation": "您确定要离开此组织吗？",
+  "enterEmailToConfirm": "输入您的电子邮件以确认：",
+  "enterYourEmail": "输入您的电子邮件",
+  "continue": "继续",
+  "back": "返回",
+  "confirmEmailInput": "确认电子邮件输入",
+  "confirmLeaveButton": "确认离开按钮",
+  "groupTable": "群组表"
 }

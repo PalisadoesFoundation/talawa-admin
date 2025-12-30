@@ -171,6 +171,7 @@ function orgList(): JSX.Element {
     : { headers: {} };
   const {
     data: userData,
+    loading: loadingUser,
   }: {
     data: InterfaceCurrentUserTypePG | undefined;
     loading: boolean;
@@ -222,8 +223,8 @@ function orgList(): JSX.Element {
   }, [orgsData, searchByName, sortingState.option]);
 
   useEffect(() => {
-    setIsLoading(loadingAll);
-  }, [loadingAll]);
+    setIsLoading(loadingAll || loadingUser);
+  }, [loadingAll, loadingUser]);
 
   const createOrg = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -385,10 +386,16 @@ function orgList(): JSX.Element {
 
       {/* Text Infos for list */}
 
-      {!isLoading &&
-      (!sortedOrganizations || sortedOrganizations.length === 0) &&
-      searchByName.length === 0 &&
-      !userData ? (
+      {!isLoading && !userData ? (
+        <EmptyState
+          icon={<Group />}
+          message={t('noOrgErrorTitle')}
+          description={t('noOrgErrorDescription')}
+          dataTestId="orglist-no-orgs-empty"
+        />
+      ) : !isLoading &&
+        (!sortedOrganizations || sortedOrganizations.length === 0) &&
+        searchByName.length === 0 ? (
         <EmptyState
           icon={<Group />}
           message={t('noOrgErrorTitle')}

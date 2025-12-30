@@ -14,7 +14,7 @@ Reusable email input field component.
 
 This component wraps FormField with email-specific defaults including:
 - HTML5 email input type for built-in validation
-- Default label "Email" and placeholder "name@example.com"
+- Default label and placeholder sourced from i18n keys `common:email` and `common:emailPlaceholder` via `useTranslation`
 - Required field marking
 - Support for error display via string or null error prop
 

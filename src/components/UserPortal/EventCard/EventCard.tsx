@@ -56,6 +56,8 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceEvent } from 'types/Event/interface';
 
+// Arbitrary placeholder date used solely to format times (no semantic meaning).
+// Chosen to avoid DST edge cases, though any non-DST date would work.
 const DATE_PREFIX = '2015-03-04T';
 
 function eventCard(props: InterfaceEvent): JSX.Element {
@@ -126,6 +128,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         {`${t('starts')} `}
         {props.startTime ? (
           <b data-testid="startTime">
+            {/* Arbitrary placeholder date used solely to format times (no semantic meaning). Chosen to avoid DST edge cases. */}
             {dayjs(`${DATE_PREFIX}${props.startTime}`).format('h:mm:ss A')}
           </b>
         ) : (
@@ -137,6 +140,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         {`${t('ends')} `}
         {props.endTime ? (
           <b data-testid="endTime">
+            {/* Arbitrary placeholder date used solely to format times (no semantic meaning). Chosen to avoid DST edge cases. */}
             {dayjs(`${DATE_PREFIX}${props.endTime}`).format('h:mm:ss A')}
           </b>
         ) : (

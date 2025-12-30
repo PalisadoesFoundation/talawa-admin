@@ -194,5 +194,20 @@
   "imageUploadError": "छवि अपलोड करने में त्रुटि",
   "imageUploadSuccess": "छवि सफलतापूर्वक अपलोड हुई",
   "postalCode": "डाक कोड",
-  "state": "राज्य"
+  "state": "राज्य",
+  "emailPlaceholder": "name@example.com",
+  "failedToRegister": "इवेंट के लिए पंजीकरण करने में विफल",
+  "leftOrgSuccess": "आपने सफलतापूर्वक संगठन छोड़ दिया है!",
+  "loadingOrgDetails": "संगठन विवरण लोड हो रहा है...",
+  "organizationNotFound": "संगठन नहीं मिला",
+  "leaveOrganization": "संगठन छोड़ें",
+  "leaveJoinedOrganization": "शामिल संगठन छोड़ें",
+  "leaveOrgConfirmation": "क्या आप वाकई इस संगठन को छोड़ना चाहते हैं?",
+  "enterEmailToConfirm": "पुष्टि करने के लिए अपना ईमेल दर्ज करें:",
+  "enterYourEmail": "अपना ईमेल दर्ज करें",
+  "continue": "जारी रखें",
+  "back": "वापस",
+  "confirmEmailInput": "ईमेल इनपुट की पुष्टि करें",
+  "confirmLeaveButton": "छोड़ने की पुष्टि करें बटन",
+  "groupTable": "समूह तालिका"
 }
