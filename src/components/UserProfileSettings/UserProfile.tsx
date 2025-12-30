@@ -36,7 +36,7 @@
  *
  * @module UserProfile
  */
-import Avatar from 'components/Avatar/Avatar';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
@@ -75,14 +75,19 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
         <Card.Body className={styles.cardBody}>
           <div className={`d-flex mb-2 ${styles.profileContainer}`}>
             <div className={styles.imgContianer}>
-              {image && image !== 'null' ? (
-                <img src={image} alt={`profile picture`} />
-              ) : (
-                <Avatar
-                  name={`${firstName} ${lastName}`}
-                  alt={`dummy picture`}
-                />
-              )}
+              <ProfileAvatarDisplay
+                imageUrl={image && image !== 'null' ? image : undefined}
+                fallbackName={`${firstName} ${lastName}`}
+                size="medium"
+                shape="circle"
+                customSize={60}
+                border={false}
+                className="rounded-circle"
+                style={{ width: 60, height: 60, objectFit: 'cover' }}
+                dataTestId="profile-avatar"
+                objectFit="cover"
+                enableEnlarge={true}
+              />
             </div>
             <div className={styles.profileDetails}>
               <span
