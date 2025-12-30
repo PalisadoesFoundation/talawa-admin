@@ -30,10 +30,11 @@
  * @returns {JSX.Element} The rendered modal component.
  */
 import React from 'react';
-import { Modal, Form, Button } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
-
 import styles from 'style/app-fixed.module.css';
+
+import { BaseModal } from 'shared-components/BaseModal';
 
 interface InterfaceFormStateType {
   name: string;
@@ -63,56 +64,49 @@ const AgendaCategoryUpdateModal: React.FC<
   t,
 }) => {
   return (
-    <Modal
+    <BaseModal
       className={styles.campaignModal}
       show={agendaCategoryUpdateModalIsOpen}
       onHide={hideUpdateModal}
-    >
-      <Modal.Header>
+      headerContent={
         <p className={styles.titlemodalOrganizationEvents}>
           {t('updateAgendaCategory')}
         </p>
+      }
+      dataTestId="agendaCategoryUpdateModal"
+    >
+      <Form onSubmit={updateAgendaCategoryHandler}>
+        <Form.Group className="mb-3" controlId="name">
+          <Form.Label>{t('name')}</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder={t('name')}
+            value={formState.name}
+            onChange={(e) =>
+              setFormState({ ...formState, name: e.target.value })
+            }
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="description">
+          <Form.Label>{t('description')}</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder={t('description')}
+            value={formState.description}
+            onChange={(e) =>
+              setFormState({ ...formState, description: e.target.value })
+            }
+          />
+        </Form.Group>
         <Button
-          onClick={hideUpdateModal}
-          data-testid="updateAgendaCategoryModalCloseBtn"
+          type="submit"
+          className={styles.regBtn}
+          data-testid="editAgendaCategoryBtn"
         >
-          <i className="fa fa-times" />
+          {t('update')}
         </Button>
-      </Modal.Header>
-      <Modal.Body>
-        <Form onSubmit={updateAgendaCategoryHandler}>
-          <Form.Group className="mb-3" controlId="name">
-            <Form.Label>{t('name')}</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder={t('name')}
-              value={formState.name}
-              onChange={(e) =>
-                setFormState({ ...formState, name: e.target.value })
-              }
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="description">
-            <Form.Label>{t('description')}</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder={t('description')}
-              value={formState.description}
-              onChange={(e) =>
-                setFormState({ ...formState, description: e.target.value })
-              }
-            />
-          </Form.Group>
-          <Button
-            type="submit"
-            className={styles.regBtn}
-            data-testid="editAgendaCategoryBtn"
-          >
-            {t('update')}
-          </Button>
-        </Form>
-      </Modal.Body>
-    </Modal>
+      </Form>
+    </BaseModal>
   );
 };
 
