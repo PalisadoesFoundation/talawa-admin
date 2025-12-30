@@ -78,7 +78,8 @@
   "orgSelector": {
     "organization": "Organization",
     "selectOrganization": "Select an organization",
-    "noOrganizationsAvailable": "No organizations available"
+    "noOrganizationsAvailable": "No organizations available",
+    "noMatchingOrganizations": "No matching organizations found"
   },
   "userLoginPage": {
     "title": "Talawa Admin",

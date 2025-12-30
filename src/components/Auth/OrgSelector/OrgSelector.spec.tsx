@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../../../utils/i18nForTest';
@@ -31,14 +31,14 @@ describe('OrgSelector', () => {
   });
 
   describe('Basic Rendering', () => {
-    test('renders select element with default label', () => {
+    test('renders input with default label', () => {
       renderWithI18n(<OrgSelector {...defaultProps} />);
 
       const label = screen.getByLabelText(/organization/i);
       expect(label).toBeInTheDocument();
 
-      const select = screen.getByRole('combobox');
-      expect(select).toBeInTheDocument();
+      const input = screen.getByRole('combobox');
+      expect(input).toBeInTheDocument();
     });
 
     test('renders with custom label', () => {
@@ -48,11 +48,11 @@ describe('OrgSelector', () => {
       expect(label).toBeInTheDocument();
     });
 
-    test('renders placeholder option', () => {
+    test('renders placeholder text', () => {
       renderWithI18n(<OrgSelector {...defaultProps} />);
 
-      const placeholder = screen.getByText(/select an organization/i);
-      expect(placeholder).toBeInTheDocument();
+      const input = screen.getByPlaceholderText(/select an organization/i);
+      expect(input).toBeInTheDocument();
     });
 
     test('renders required indicator when required is true', () => {
@@ -75,52 +75,99 @@ describe('OrgSelector', () => {
         <OrgSelector {...defaultProps} testId="org-selector-test" />,
       );
 
-      const select = screen.getByTestId('org-selector-test');
-      expect(select).toBeInTheDocument();
+      const input = screen.getByTestId('org-selector-test');
+      expect(input).toBeInTheDocument();
     });
   });
 
-  describe('Options Rendering', () => {
-    test('renders all organization options', () => {
+  describe('Search and Filtering', () => {
+    test('shows dropdown when input is focused', async () => {
       renderWithI18n(<OrgSelector {...defaultProps} />);
 
-      mockOrganizations.forEach((org) => {
-        const option = screen.getByRole('option', { name: org.name });
-        expect(option).toBeInTheDocument();
-        expect(option).toHaveValue(org._id);
+      const input = screen.getByRole('combobox');
+      fireEvent.focus(input);
+
+      await waitFor(() => {
+        const dropdown = screen.getByTestId('org-selector-dropdown');
+        expect(dropdown).toBeInTheDocument();
       });
     });
 
-    test('renders correct number of options including placeholder', () => {
+    test('filters organizations based on search input', async () => {
       renderWithI18n(<OrgSelector {...defaultProps} />);
 
-      const options = screen.getAllByRole('option');
-      // +1 for placeholder option
-      expect(options).toHaveLength(mockOrganizations.length + 1);
+      const input = screen.getByRole('combobox');
+      fireEvent.focus(input);
+      fireEvent.change(input, { target: { value: 'One' } });
+
+      await waitFor(() => {
+        expect(screen.getByText('Organization One')).toBeInTheDocument();
+        expect(screen.queryByText('Organization Two')).not.toBeInTheDocument();
+        expect(
+          screen.queryByText('Organization Three'),
+        ).not.toBeInTheDocument();
+      });
     });
 
-    test('displays "no organizations available" when options array is empty', () => {
-      renderWithI18n(<OrgSelector {...defaultProps} options={[]} />);
+    test('shows all organizations when search is empty', async () => {
+      renderWithI18n(<OrgSelector {...defaultProps} />);
 
-      const noOrgsMessage = screen.getByText(/no organizations available/i);
-      expect(noOrgsMessage).toBeInTheDocument();
+      const input = screen.getByRole('combobox');
+      fireEvent.focus(input);
+
+      await waitFor(() => {
+        expect(screen.getByText('Organization One')).toBeInTheDocument();
+        expect(screen.getByText('Organization Two')).toBeInTheDocument();
+        expect(screen.getByText('Organization Three')).toBeInTheDocument();
+      });
+    });
+
+    test('shows no results message when no organizations match', async () => {
+      renderWithI18n(<OrgSelector {...defaultProps} />);
+
+      const input = screen.getByRole('combobox');
+      fireEvent.focus(input);
+      fireEvent.change(input, { target: { value: 'NonExistent' } });
+
+      await waitFor(() => {
+        expect(
+          screen.getByText(/no matching organizations found/i),
+        ).toBeInTheDocument();
+      });
+    });
+
+    test('search is case-insensitive', async () => {
+      renderWithI18n(<OrgSelector {...defaultProps} />);
+
+      const input = screen.getByRole('combobox');
+      fireEvent.focus(input);
+      fireEvent.change(input, { target: { value: 'organization one' } });
+
+      await waitFor(() => {
+        expect(screen.getByText('Organization One')).toBeInTheDocument();
+      });
     });
   });
 
   describe('Value and Selection Handling', () => {
-    test('displays selected value when provided', () => {
+    test('displays selected organization name', () => {
       renderWithI18n(<OrgSelector {...defaultProps} value="org2" />);
 
-      const select = screen.getByRole('combobox') as HTMLSelectElement;
-      expect(select.value).toBe('org2');
+      const input = screen.getByRole('combobox') as HTMLInputElement;
+      expect(input.value).toBe('Organization Two');
     });
 
-    test('calls onChange with selected organization ID', () => {
+    test('calls onChange with selected organization ID when option is clicked', async () => {
       const onChange = vi.fn();
       renderWithI18n(<OrgSelector {...defaultProps} onChange={onChange} />);
 
-      const select = screen.getByRole('combobox');
-      fireEvent.change(select, { target: { value: 'org2' } });
+      const input = screen.getByRole('combobox');
+      fireEvent.focus(input);
+
+      await waitFor(() => {
+        const option = screen.getByText('Organization Two');
+        fireEvent.click(option);
+      });
 
       expect(onChange).toHaveBeenCalledTimes(1);
       expect(onChange).toHaveBeenCalledWith('org2');
@@ -129,34 +176,84 @@ describe('OrgSelector', () => {
     test('defaults to empty string when no value is provided', () => {
       renderWithI18n(<OrgSelector {...defaultProps} />);
 
-      const select = screen.getByRole('combobox') as HTMLSelectElement;
-      expect(select.value).toBe('');
+      const input = screen.getByRole('combobox') as HTMLInputElement;
+      expect(input.value).toBe('');
+    });
+  });
+
+  describe('Keyboard Navigation', () => {
+    test('opens dropdown on ArrowDown key', async () => {
+      renderWithI18n(<OrgSelector {...defaultProps} />);
+
+      const input = screen.getByRole('combobox');
+      fireEvent.keyDown(input, { key: 'ArrowDown' });
+
+      await waitFor(() => {
+        expect(screen.getByTestId('org-selector-dropdown')).toBeInTheDocument();
+      });
+    });
+
+    test('selects option on Enter key when highlighted', async () => {
+      const onChange = vi.fn();
+      renderWithI18n(<OrgSelector {...defaultProps} onChange={onChange} />);
+
+      const input = screen.getByRole('combobox');
+      fireEvent.focus(input);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('org-selector-dropdown')).toBeInTheDocument();
+      });
+
+      fireEvent.keyDown(input, { key: 'ArrowDown' });
+      fireEvent.keyDown(input, { key: 'Enter' });
+
+      expect(onChange).toHaveBeenCalledWith('org1');
+    });
+
+    test('closes dropdown on Escape key', async () => {
+      renderWithI18n(<OrgSelector {...defaultProps} />);
+
+      const input = screen.getByRole('combobox');
+      fireEvent.focus(input);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('org-selector-dropdown')).toBeInTheDocument();
+      });
+
+      fireEvent.keyDown(input, { key: 'Escape' });
+
+      await waitFor(() => {
+        expect(
+          screen.queryByTestId('org-selector-dropdown'),
+        ).not.toBeInTheDocument();
+      });
     });
   });
 
   describe('Disabled State', () => {
-    test('renders disabled select when disabled is true', () => {
+    test('renders disabled input when disabled is true', () => {
       renderWithI18n(<OrgSelector {...defaultProps} disabled />);
 
-      const select = screen.getByRole('combobox');
-      expect(select).toBeDisabled();
+      const input = screen.getByRole('combobox');
+      expect(input).toBeDisabled();
     });
 
-    test('renders enabled select when disabled is false', () => {
+    test('renders enabled input when disabled is false', () => {
       renderWithI18n(<OrgSelector {...defaultProps} disabled={false} />);
 
-      const select = screen.getByRole('combobox');
-      expect(select).not.toBeDisabled();
+      const input = screen.getByRole('combobox');
+      expect(input).not.toBeDisabled();
     });
 
-    test('select is disabled and cannot be interacted with', () => {
-      renderWithI18n(
-        <OrgSelector {...defaultProps} disabled testId="disabled-select" />,
-      );
+    test('does not open dropdown when disabled', () => {
+      renderWithI18n(<OrgSelector {...defaultProps} disabled />);
 
-      const select = screen.getByTestId('disabled-select');
-      expect(select).toBeDisabled();
-      expect(select).toHaveAttribute('disabled');
+      const input = screen.getByRole('combobox');
+      fireEvent.focus(input);
+
+      expect(
+        screen.queryByTestId('org-selector-dropdown'),
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -185,30 +282,30 @@ describe('OrgSelector', () => {
       expect(errorElement).toHaveAttribute('aria-live', 'polite');
     });
 
-    test('select has aria-invalid when error is present', () => {
+    test('input has aria-invalid when error is present', () => {
       renderWithI18n(
         <OrgSelector
           {...defaultProps}
           error="Invalid selection"
-          testId="error-select"
+          testId="error-input"
         />,
       );
 
-      const select = screen.getByTestId('error-select');
-      expect(select).toHaveAttribute('aria-invalid', 'true');
+      const input = screen.getByTestId('error-input');
+      expect(input).toHaveAttribute('aria-invalid', 'true');
     });
 
-    test('select has aria-describedby pointing to error element', () => {
+    test('input has aria-describedby pointing to error element', () => {
       renderWithI18n(
         <OrgSelector
           {...defaultProps}
           error="Invalid selection"
-          testId="error-select"
+          testId="error-input"
         />,
       );
 
-      const select = screen.getByTestId('error-select');
-      expect(select).toHaveAttribute('aria-describedby', 'org-selector-error');
+      const input = screen.getByTestId('error-input');
+      expect(input).toHaveAttribute('aria-describedby', 'org-selector-error');
     });
 
     test('does not display error when error is undefined', () => {
@@ -223,84 +320,96 @@ describe('OrgSelector', () => {
       expect(screen.queryByRole('status')).not.toBeInTheDocument();
     });
 
-    test('select has isInvalid class when error is present', () => {
+    test('input has is-invalid class when error is present', () => {
       renderWithI18n(
-        <OrgSelector {...defaultProps} error="Error" testId="invalid-select" />,
+        <OrgSelector {...defaultProps} error="Error" testId="invalid-input" />,
       );
 
-      const select = screen.getByTestId('invalid-select');
-      expect(select).toHaveClass('is-invalid');
+      const input = screen.getByTestId('invalid-input');
+      expect(input).toHaveClass('is-invalid');
     });
   });
 
   describe('Accessibility', () => {
-    test('select has proper controlId', () => {
+    test('input has proper id', () => {
       renderWithI18n(<OrgSelector {...defaultProps} />);
 
-      const select = screen.getByRole('combobox');
-      expect(select).toHaveAttribute('id', 'org-selector');
+      const input = screen.getByRole('combobox');
+      expect(input).toHaveAttribute('id', 'org-selector-input');
     });
 
-    test('label is associated with select element', () => {
+    test('label is associated with input element', () => {
       renderWithI18n(<OrgSelector {...defaultProps} />);
 
-      const select = screen.getByRole('combobox');
+      const input = screen.getByRole('combobox');
       const label = screen.getByLabelText(/organization/i);
 
-      expect(label).toHaveAttribute('id', 'org-selector');
-      expect(select).toHaveAttribute('id', 'org-selector');
+      expect(label).toHaveAttribute('id', 'org-selector-input');
+      expect(input).toHaveAttribute('id', 'org-selector-input');
     });
 
-    test('placeholder option is disabled', () => {
+    test('input has proper ARIA attributes', () => {
       renderWithI18n(<OrgSelector {...defaultProps} />);
 
-      const placeholderOption = screen.getByRole('option', {
-        name: /select an organization/i,
+      const input = screen.getByRole('combobox');
+      expect(input).toHaveAttribute('aria-autocomplete', 'list');
+      expect(input).toHaveAttribute('aria-expanded', 'false');
+      expect(input).toHaveAttribute('aria-controls', 'org-selector-listbox');
+    });
+
+    test('dropdown has proper role and id', async () => {
+      renderWithI18n(<OrgSelector {...defaultProps} />);
+
+      const input = screen.getByRole('combobox');
+      fireEvent.focus(input);
+
+      await waitFor(() => {
+        const dropdown = screen.getByRole('listbox');
+        expect(dropdown).toHaveAttribute('id', 'org-selector-listbox');
       });
-      expect(placeholderOption).toBeDisabled();
     });
   });
 
   describe('Edge Cases', () => {
-    test('handles empty options array gracefully', () => {
+    test('handles empty options array gracefully', async () => {
       renderWithI18n(<OrgSelector {...defaultProps} options={[]} />);
 
-      const select = screen.getByRole('combobox');
-      expect(select).toBeInTheDocument();
+      const input = screen.getByRole('combobox');
+      fireEvent.focus(input);
 
-      const options = screen.getAllByRole('option');
-      // Should have placeholder and "no organizations" option
-      expect(options).toHaveLength(2);
+      await waitFor(() => {
+        expect(
+          screen.getByText(/no organizations available/i),
+        ).toBeInTheDocument();
+      });
     });
 
-    test('handles single organization option', () => {
+    test('handles single organization option', async () => {
       const singleOrg = [{ _id: 'org1', name: 'Only Organization' }];
       renderWithI18n(<OrgSelector {...defaultProps} options={singleOrg} />);
 
-      const options = screen.getAllByRole('option');
-      // Placeholder + 1 organization
-      expect(options).toHaveLength(2);
+      const input = screen.getByRole('combobox');
+      fireEvent.focus(input);
 
-      const orgOption = screen.getByRole('option', {
-        name: 'Only Organization',
+      await waitFor(() => {
+        expect(screen.getByText('Only Organization')).toBeInTheDocument();
       });
-      expect(orgOption).toBeInTheDocument();
     });
 
-    test('handles organizations with special characters in names', () => {
+    test('handles organizations with special characters in names', async () => {
       const specialOrgs = [
         { _id: 'org1', name: "O'Reilly & Associates" },
         { _id: 'org2', name: 'Org <Test>' },
       ];
       renderWithI18n(<OrgSelector {...defaultProps} options={specialOrgs} />);
 
-      const org1 = screen.getByRole('option', {
-        name: "O'Reilly & Associates",
-      });
-      const org2 = screen.getByRole('option', { name: 'Org <Test>' });
+      const input = screen.getByRole('combobox');
+      fireEvent.focus(input);
 
-      expect(org1).toBeInTheDocument();
-      expect(org2).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText("O'Reilly & Associates")).toBeInTheDocument();
+        expect(screen.getByText('Org <Test>')).toBeInTheDocument();
+      });
     });
   });
 });

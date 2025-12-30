@@ -78,7 +78,8 @@
   "orgSelector": {
     "organization": "Organización",
     "selectOrganization": "Seleccione una organización",
-    "noOrganizationsAvailable": "No hay organizaciones disponibles"
+    "noOrganizationsAvailable": "No hay organizaciones disponibles",
+    "noMatchingOrganizations": "No se encontraron organizaciones coincidentes"
   },
   "userLoginPage": {
     "title": "Administrador Talawa",

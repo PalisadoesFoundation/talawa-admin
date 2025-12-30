@@ -78,7 +78,8 @@
   "orgSelector": {
     "organization": "संगठन",
     "selectOrganization": "एक संगठन चुनें",
-    "noOrganizationsAvailable": "कोई संगठन उपलब्ध नहीं है"
+    "noOrganizationsAvailable": "कोई संगठन उपलब्ध नहीं है",
+    "noMatchingOrganizations": "कोई मेल खाने वाला संगठन नहीं मिला"
   },
   "userLoginPage": {
     "title": "तालावा व्यवस्थापक",

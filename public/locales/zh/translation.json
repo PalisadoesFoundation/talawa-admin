@@ -78,7 +78,8 @@
   "orgSelector": {
     "organization": "组织",
     "selectOrganization": "选择一个组织",
-    "noOrganizationsAvailable": "没有可用的组织"
+    "noOrganizationsAvailable": "没有可用的组织",
+    "noMatchingOrganizations": "未找到匹配的组织"
   },
   "userLoginPage": {
     "title": "塔拉瓦管理员",
