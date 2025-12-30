@@ -170,5 +170,6 @@
   "eventDetails": "Detalles del Evento",
   "selectLanguage": "Seleccionar idioma",
   "talawa": "Talawa",
-  "talawaBranding": "Marca Talawa"
+  "talawaBranding": "Marca Talawa",
+  "unableToLoadData": "No se pudo cargar los datos."
 }

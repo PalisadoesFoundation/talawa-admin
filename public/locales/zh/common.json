@@ -172,5 +172,6 @@
   "eventDetails": "活动详情",
   "selectLanguage": "选择语言",
   "talawa": "Talawa",
-  "talawaBranding": "Talawa 品牌"
+  "talawaBranding": "Talawa 品牌",
+  "unableToLoadData": "无法加载数据"
 }

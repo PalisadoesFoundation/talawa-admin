@@ -170,5 +170,6 @@
   "eventDetails": "Event Details",
   "selectLanguage": "Select Language",
   "talawa": "Talawa",
-  "talawaBranding": "Talawa Branding"
+  "talawaBranding": "Talawa Branding",
+  "unableToLoadData": "Unable to load data."
 }
