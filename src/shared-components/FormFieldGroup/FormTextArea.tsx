@@ -1,6 +1,6 @@
 import React from 'react';
 import { FormControl, TextField } from '@mui/material';
-import type { FormTextAreaProps } from './types';
+import type { FormTextAreaProps } from 'types/shared-components/FormFieldGroup/interface';
 
 export const FormTextArea: React.FC<FormTextAreaProps> = ({
   name,

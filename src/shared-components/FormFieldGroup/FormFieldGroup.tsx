@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
-import type { FormFieldGroupProps } from './types';
+import type { FormFieldGroupProps } from 'types/shared-components/FormFieldGroup/interface';
 
 export const FormFieldGroup: React.FC<
   FormFieldGroupProps & { children: React.ReactNode }
