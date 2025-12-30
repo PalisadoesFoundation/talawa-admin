@@ -497,6 +497,7 @@ describe('Testing User List Card', () => {
 
   it('Should not proceed when result has GraphQL errors with valid data structure', async () => {
     // This test covers line 101 - GraphQL errors check return
+    // We need truthy data AND errors to hit the errors check at line 95-102
     const errorWithDataMock = [
       {
         request: {
@@ -507,7 +508,15 @@ describe('Testing User List Card', () => {
           },
         },
         result: {
-          data: { createAdmin: null },
+          // Data is truthy so it passes the first check (!result.data)
+          data: {
+            createAdmin: {
+              user: {
+                _id: '333',
+              },
+            },
+          },
+          // But errors array is also present, so line 101 should be hit
           errors: [{ message: 'Permission denied' }],
         },
       },
@@ -533,7 +542,7 @@ describe('Testing User List Card', () => {
     await userEvent.click(button);
     await wait(500);
 
-    // With GraphQL errors present, even with data object, success should not be called
+    // With GraphQL errors present, even with valid data object, success should not be called
     expect(NotificationToast.success).not.toHaveBeenCalled();
     expect(reloadMock).not.toHaveBeenCalled();
   });
