@@ -19,7 +19,9 @@ interface InterfacePledgeColumnsProps {
   tCommon: TFunction<'common', undefined>;
   id: string | undefined;
   handleClick: (
-    event: React.MouseEvent<HTMLDivElement>,
+    event:
+      | React.MouseEvent<HTMLDivElement>
+      | React.KeyboardEvent<HTMLDivElement>,
     users: InterfaceUserInfoPG[],
   ) => void;
   handleOpenModal: (
@@ -91,10 +93,7 @@ export const getPledgeColumns = ({
               onKeyDown={(event) => {
                 if (event.key === 'Enter' || event.key === ' ') {
                   event.preventDefault();
-                  handleClick(
-                    event as unknown as React.MouseEvent<HTMLDivElement>,
-                    extraUsers,
-                  );
+                  handleClick(event, extraUsers);
                 }
               }}
               data-testid={`moreContainer-${params.row.id}`}

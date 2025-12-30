@@ -195,7 +195,9 @@ const fundCampaignPledge = (): JSX.Element => {
   );
 
   const handleClick = (
-    event: React.MouseEvent<HTMLDivElement>,
+    event:
+      | React.MouseEvent<HTMLDivElement>
+      | React.KeyboardEvent<HTMLDivElement>,
     users: InterfaceUserInfoPG[],
   ): void => {
     setExtraUsers(users);
