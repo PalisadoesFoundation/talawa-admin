@@ -455,7 +455,9 @@
     "expand": "Expand",
     "tagNamePlaceholder": "Write the name of the tag",
     "allTags": "All Tags",
-    "noMoreMembersFound": "No more members found"
+    "noMoreMembersFound": "No more members found",
+    "errorLoadingAssignedMembers": "Error occurred while loading assigned users",
+    "tags": "Tags"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
@@ -927,6 +929,7 @@
     "noSpammerFound": "No spammer found",
     "noUsersFound": "No users found",
     "searchByName": "Search by name...",
+    "view": "View",
     "name": "name",
     "email": "email",
     "talawaApiUnavailable": "talawaApiUnavailable",

@@ -455,7 +455,9 @@
     "expand": "展开",
     "tagNamePlaceholder": "输入标签名称",
     "allTags": "所有标签",
-    "noMoreMembersFound": "未找到更多成员"
+    "noMoreMembersFound": "未找到更多成员",
+    "errorLoadingAssignedMembers": "加载分配的用户时出错",
+    "tags": "标签"
   },
   "userListCard": {
     "addAdmin": "添加管理员",
@@ -927,6 +929,7 @@
     "noSpammerFound": "未发现垃圾邮件发送者",
     "noUsersFound": "未找到用户",
     "searchByName": "按名称搜索",
+    "view": "查看",
     "name": "名称",
     "email": "电子邮件",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",

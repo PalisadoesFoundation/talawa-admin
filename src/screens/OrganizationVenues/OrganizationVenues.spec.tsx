@@ -220,35 +220,56 @@ describe('Organisation Venues', () => {
   test('searches the venue list correctly by Name', async () => {
     renderOrganizationVenue(link);
     await wait();
-    const searchInput = screen.getByTestId('searchBy');
-    fireEvent.change(searchInput, {
-      target: { value: 'Updated Venue 1' },
-    });
-    fireEvent.click(screen.getByTestId('searchBtn'));
 
-    await waitFor(() => {
-      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument();
+    // Verify all venues are initially visible
+    expect(screen.getByText('Updated Venue 1')).toBeInTheDocument();
+    expect(screen.getByText('Updated Venue 2')).toBeInTheDocument();
+
+    const searchInput = screen.getByTestId('searchInput');
+    await act(async () => {
+      fireEvent.change(searchInput, {
+        target: { value: 'Updated Venue 1' },
+      });
     });
+
+    // Wait for debounced search to complete and verify filtering
+    await waitFor(
+      () => {
+        expect(screen.getByText('Updated Venue 1')).toBeInTheDocument();
+        expect(screen.queryByText('Updated Venue 2')).not.toBeInTheDocument();
+      },
+      { timeout: 500 },
+    );
   });
 
   test('searches the venue list correctly by Description', async () => {
     renderOrganizationVenue(link);
-    await waitFor(() =>
-      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
-    );
+    await wait();
+
+    // Verify all venues are initially visible
+    await waitFor(() => {
+      expect(screen.getByText('Updated Venue 1')).toBeInTheDocument();
+      expect(screen.getByText('Updated Venue 2')).toBeInTheDocument();
+    });
 
     fireEvent.click(screen.getByTestId('searchByButton'));
     fireEvent.click(screen.getByTestId('desc'));
 
-    const searchInput = screen.getByTestId('searchBy');
-    fireEvent.change(searchInput, {
-      target: { value: 'Updated description for venue 1' },
+    const searchInput = screen.getByTestId('searchInput');
+    await act(async () => {
+      fireEvent.change(searchInput, {
+        target: { value: 'Updated description for venue 1' },
+      });
     });
-    fireEvent.click(screen.getByTestId('searchBtn'));
 
-    await waitFor(() => {
-      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument();
-    });
+    // Wait for debounced search to complete and verify filtering
+    await waitFor(
+      () => {
+        expect(screen.getByText('Updated Venue 1')).toBeInTheDocument();
+        expect(screen.queryByText('Updated Venue 2')).not.toBeInTheDocument();
+      },
+      { timeout: 500 },
+    );
   });
 
   test('sorts the venue list by lowest capacity correctly', async () => {
@@ -359,12 +380,17 @@ describe('Organisation Venues', () => {
 
     const deleteButton = screen.getByTestId('deleteVenueBtn-venue1');
 
-    // Test that clicking the button doesn't cause any errors
-    expect(() => fireEvent.click(deleteButton)).not.toThrow();
+    // Click delete button and wait for mutation
+    await act(async () => {
+      fireEvent.click(deleteButton);
+    });
+
+    // Wait for mutation to complete and refetch
+    await wait(100);
 
     await waitFor(() => {
-      // Verify the button is still clickable (component hasn't crashed)
-      expect(deleteButton).toBeInTheDocument();
+      // Verify the component is still rendered (mutation succeeded)
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument();
     });
   });
 

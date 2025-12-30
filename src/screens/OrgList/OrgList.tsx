@@ -44,7 +44,7 @@
  * - `OrganizationModal` - For creating new organizations.
  * - `Modal` - For managing features after organization creation.
  */
-import React, { useEffect, useState, useRef, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import {
   CREATE_ORGANIZATION_MUTATION_PG,
@@ -64,7 +64,6 @@ import type {
 } from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
-import SortingButton from 'subComponents/SortingButton';
 import { Button } from '@mui/material';
 import OrganizationModal from './modal/OrganizationModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -73,27 +72,12 @@ import { Modal } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import style from './OrgList.module.css';
 import { Group, Search } from '@mui/icons-material';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
 const { getItem } = useLocalStorage();
-
-function useDebounce<T>(fn: (val: T) => void, delay: number) {
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  function debouncedFn(val: T) {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
-    timerRef.current = setTimeout(() => {
-      fn(val);
-    }, delay);
-  }
-
-  return debouncedFn;
-}
 
 interface InterfaceFormStateType {
   addressLine1: string;
@@ -142,12 +126,10 @@ function orgList(): JSX.Element {
   const [typedValue, setTypedValue] = useState('');
   const [filterName, setFilterName] = useState('');
   const [sortingState, setSortingState] = useState({
-    option: '',
-    selectedOption: t('sort'),
+    option: 'Latest',
+    selectedOption: t('Latest'),
   });
 
-  // const [hasMore, sethasMore] = useState(true);
-  // const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
   const [showModal, setShowModal] = useState(false);
 
@@ -299,17 +281,11 @@ function orgList(): JSX.Element {
     }
   };
 
-  const doSearch = (value: string): void => {
-    setFilterName(value);
-    refetchOrgs({ filter: value });
-  };
-
-  const debouncedSearch = useDebounce(doSearch, 300);
-
   const handleChangeFilter = (val: string) => {
     setTypedValue(val);
     setSearchByName(val);
-    debouncedSearch(val);
+    setFilterName(val);
+    refetchOrgs({ filter: val });
   };
 
   const handleSortChange = (value: string | number): void => {
@@ -343,47 +319,44 @@ function orgList(): JSX.Element {
     <div className={styles.orgListContainer}>
       {/* Buttons Container */}
       <div className={styles.calendar__header}>
-        {/* 1. Search Bar (Standardized) */}
-        <SearchBar
-          placeholder={t('searchOrganizations')}
-          value={typedValue}
-          onChange={handleChangeFilter}
-          onSearch={doSearch}
-          inputTestId="searchInput"
-          buttonTestId="searchBtn"
-          buttonAriaLabel={tCommon('search')}
-          showSearchButton={true}
-          showLeadingIcon={true}
-          showClearButton={true}
+        <AdminSearchFilterBar
+          hasDropdowns={true}
+          searchPlaceholder={t('searchOrganizations')}
+          searchValue={typedValue}
+          onSearchChange={handleChangeFilter}
+          searchInputTestId="searchInput"
+          searchButtonTestId="searchBtn"
+          dropdowns={[
+            {
+              id: 'org-list-dropdown',
+              label: '',
+              type: 'sort',
+              options: [
+                { label: t('Latest'), value: 'Latest' },
+                { label: t('Earliest'), value: 'Earliest' },
+              ],
+              selectedOption: sortingState.selectedOption,
+              onOptionChange: (value) => handleSortChange(value.toString()),
+              dataTestIdPrefix: 'sortOrgs',
+              dropdownTestId: 'sort',
+            },
+          ]}
+          additionalButtons={
+            <>
+              <NotificationIcon />
+              {role === 'administrator' && (
+                <Button
+                  className={`${styles.dropdown} ${styles.createorgdropdown}`}
+                  onClick={toggleModal}
+                  data-testid="createOrganizationBtn"
+                >
+                  <i className="fa fa-plus me-2" />
+                  {t('createOrganization')}
+                </Button>
+              )}
+            </>
+          }
         />
-
-        {/* 2. Action Buttons (Aligned to Right) */}
-        <div className={styles.btnsBlock}>
-          <NotificationIcon />
-
-          <SortingButton
-            title={t('sortOrganizations')}
-            sortingOptions={[
-              { label: t('Latest'), value: 'Latest' },
-              { label: t('Earliest'), value: 'Earliest' },
-            ]}
-            selectedOption={sortingState.selectedOption}
-            onSortChange={handleSortChange}
-            dataTestIdPrefix="sortOrgs"
-            dropdownTestId="sort"
-          />
-
-          {role === 'administrator' && (
-            <Button
-              className={`${styles.dropdown} ${styles.createorgdropdown}`}
-              onClick={toggleModal}
-              data-testid="createOrganizationBtn"
-            >
-              <i className="fa fa-plus me-2" />
-              {t('createOrganization')}
-            </Button>
-          )}
-        </div>
       </div>
 
       {/* Text Infos for list */}

@@ -1361,14 +1361,13 @@ describe('Advanced Component Functionality Tests', () => {
     const searchInput = screen.getByTestId('searchInput');
     await userEvent.type(searchInput, 'NonexistentOrg');
 
-    // Click search button
-    const searchBtn = screen.getByTestId('searchBtn');
-    fireEvent.click(searchBtn);
-
-    await wait();
-
-    // Check for "no results found" message
-    expect(screen.getByTestId('orglist-search-empty')).toBeInTheDocument();
+    // Wait for debounced search to complete
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('orglist-search-empty')).toBeInTheDocument();
+      },
+      { timeout: 500 },
+    );
   });
 
   test('Testing sort by Earliest functionality', async () => {

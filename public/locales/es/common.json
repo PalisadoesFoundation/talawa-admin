@@ -173,5 +173,7 @@
   "selectLanguage": "Seleccionar idioma",
   "talawa": "Talawa",
   "talawaBranding": "Marca Talawa",
-  "unableToLoadData": "No se pudo cargar los datos."
+  "unableToLoadData": "No se pudo cargar los datos.",
+  "unassign": "Desasignar",
+  "userName": "Nombre de usuario"
 }

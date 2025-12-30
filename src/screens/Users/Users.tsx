@@ -78,8 +78,8 @@ import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { ApolloError } from '@apollo/client';
 import { PersonOff, WarningAmberRounded } from '@mui/icons-material';
-import PageHeader from 'shared-components/Navbar/Navbar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
@@ -346,34 +346,38 @@ const Users = (): JSX.Element => {
     <>
       {/* Buttons Container */}
       <div className={styles.btnsContainer} data-testid="testcomp">
-        <PageHeader
-          search={{
-            placeholder: t('enterName'),
-            onSearch: handleSearch,
-            inputTestId: 'searchByName',
-            buttonTestId: 'searchButton',
-          }}
-          sorting={[
+        <AdminSearchFilterBar
+          hasDropdowns={true}
+          searchPlaceholder={t('enterName')}
+          searchValue={searchByName}
+          onSearchChange={handleSearch}
+          searchInputTestId="searchByName"
+          searchButtonTestId="searchButton"
+          dropdowns={[
             {
-              title: t('sortBy'),
+              id: 'users-sort',
+              label: t('sortBy'),
+              type: 'sort',
               options: [
                 { label: t('Newest'), value: 'newest' },
                 { label: t('Oldest'), value: 'oldest' },
               ],
-              selected: sortingOption,
-              onChange: (value) => handleSorting(value.toString()),
-              testIdPrefix: 'sortUsers',
+              selectedOption: sortingOption,
+              onOptionChange: (value) => handleSorting(value.toString()),
+              dataTestIdPrefix: 'sortUsers',
             },
             {
-              title: t('filterByRole'),
+              id: 'users-filter',
+              label: t('filterByRole'),
+              type: 'filter',
               options: [
                 { label: tCommon('admin'), value: 'admin' },
                 { label: tCommon('user'), value: 'user' },
                 { label: tCommon('cancel'), value: 'cancel' },
               ],
-              selected: filteringOption,
-              onChange: (value) => handleFiltering(value.toString()),
-              testIdPrefix: 'filterUsers',
+              selectedOption: filteringOption,
+              onOptionChange: (value) => handleFiltering(value.toString()),
+              dataTestIdPrefix: 'filterUsers',
             },
           ]}
         />

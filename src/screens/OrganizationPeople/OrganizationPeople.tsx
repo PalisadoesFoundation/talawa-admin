@@ -77,9 +77,9 @@ import { Button } from 'react-bootstrap';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import Avatar from 'components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+
 // Imports added for manual header construction
-import SearchBar from 'shared-components/SearchBar/SearchBar';
-import SortingButton from 'subComponents/SortingButton';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 interface IProcessedRow {
@@ -508,41 +508,32 @@ function OrganizationPeople(): JSX.Element {
 
   return (
     <>
-      {/* --- FIX START: Standardized Header using manual structure --- */}
-      {/* This structure uses the global 'calendar__header' and 'btnsBlock' which we fixed in CSS to ensure perfect alignment. */}
-      <div className={styles.calendar__header}>
-        <SearchBar
-          placeholder={t('searchFullName')}
-          value={searchTerm}
-          onChange={(val) => setSearchTerm(val)}
-          onSearch={(term) => setSearchTerm(term)}
-          inputTestId="searchbtn"
-          buttonAriaLabel={tCommon('search')}
-          // Standard Props for consistency
-          showSearchButton={true}
-          showLeadingIcon={true}
-          showClearButton={true}
-        />
-
-        <div className={styles.btnsBlock}>
-          <SortingButton
-            title={tCommon('sort')}
-            sortingOptions={[
+      <AdminSearchFilterBar
+        hasDropdowns={true}
+        searchPlaceholder={t('searchFullName')}
+        searchValue={searchTerm}
+        onSearchChange={(value) => setSearchTerm(value)}
+        searchInputTestId="searchbtn"
+        searchButtonTestId="searchBtn"
+        containerClassName={styles.calendar__header}
+        dropdowns={[
+          {
+            id: 'organization-people-sort',
+            label: tCommon('sort'),
+            type: 'sort',
+            options: [
               { label: tCommon('members'), value: 'members' },
               { label: tCommon('admin'), value: 'admin' },
               { label: tCommon('users'), value: 'users' },
-            ]}
-            selectedOption={
-              state === 2 ? 'users' : state === 1 ? 'admin' : 'members'
-            }
-            onSortChange={(value) => handleSortChange(value.toString())}
-            dataTestIdPrefix="sort"
-          />
-          {/* AddMember placed directly in the flex container for correct alignment */}
-          <AddMember />
-        </div>
-      </div>
-      {/* --- FIX END --- */}
+            ],
+            selectedOption:
+              state === 2 ? 'users' : state === 1 ? 'admin' : 'members',
+            onOptionChange: (value) => handleSortChange(value.toString()),
+            dataTestIdPrefix: 'sort',
+          },
+        ]}
+        additionalButtons={<AddMember />}
+      />
 
       <ReportingTable
         rows={filteredRows.map((req) => ({ ...req })) as ReportingRow[]}

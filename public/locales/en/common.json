@@ -173,5 +173,7 @@
   "selectLanguage": "Select Language",
   "talawa": "Talawa",
   "talawaBranding": "Talawa Branding",
-  "unableToLoadData": "Unable to load data."
+  "unableToLoadData": "Unable to load data.",
+  "unassign": "Unassign",
+  "userName": "User Name"
 }

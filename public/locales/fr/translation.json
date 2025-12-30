@@ -455,7 +455,9 @@
     "expand": "Développer",
     "tagNamePlaceholder": "Écrire le nom de l'étiquette",
     "allTags": "Toutes les étiquettes",
-    "noMoreMembersFound": "Aucun autre membre trouvé"
+    "noMoreMembersFound": "Aucun autre membre trouvé",
+    "errorLoadingAssignedMembers": "Une erreur s'est produite lors du chargement des utilisateurs affectés",
+    "tags": "Étiquettes"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
@@ -927,6 +929,7 @@
     "noSpammerFound": "Aucun spammeur trouvé",
     "noUsersFound": "Aucun utilisateur trouvé",
     "searchByName": "Rechercher par nom",
+    "view": "Vue",
     "name": "Nom",
     "email": "Email",
     "talawaApiUnavailable": "API Talawa non disponible",

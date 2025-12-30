@@ -131,8 +131,6 @@
   "Volunteers": "Bénévoles",
   "unblock": "Débloquer",
   "unblockedSuccessfully": "{{item}} débloqué avec succès",
-
-  "pluginSettings": "Paramètres du plugin",
   "showPassword": "Afficher le mot de passe",
   "hidePassword": "Masquer le mot de passe",
   "volunteer": "Bénévole",
@@ -147,7 +145,6 @@
   "searchRequests": "Rechercher des demandes",
   "itemTitle": "Titre",
   "assignee": "Assigné",
-
   "signOut": "Se déconnecter",
   "signingOut": "Déconnexion en cours...",
   "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
@@ -175,5 +172,8 @@
   "selectLanguage": "Choisir la langue",
   "talawa": "Talawa",
   "talawaBranding": "Image de marque Talawa",
-  "unableToLoadData": "Impossible de charger les données."
+  "unableToLoadData": "Impossible de charger les données.",
+  "pluginSettings": "Paramètres du plugin",
+  "unassign": "Désattribuer",
+  "userName": "Nom d'utilisateur"
 }
