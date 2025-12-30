@@ -7855,8 +7855,20 @@ form {
   margin-left: 18px; /* gap from left */
 }
 
-.btnsContainerSearchBar input {
-  outline: 1px solid var(--bs-gray-400);
+/* Scope reset to the SearchBar input only so other inputs are unaffected */
+.btnsContainerSearchBar .searchBarInput,
+.btnsContainerSearchBar input[type='search'] {
+  outline: none;
+  box-shadow: none;
+  border: none;
+  background: transparent;
+}
+
+/* The wrapper provides focus-visible ring (see .searchBarContainer:focus-within) */
+.btnsContainerSearchBar .searchBarInput:focus,
+.btnsContainerSearchBar input[type='search']:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 .btnsContainerSearchBar .inputOrgList button {
@@ -10219,6 +10231,41 @@ form {
   overflow-y: auto;
   padding: 20px;
   position: relative;
+}
+
+.dataGridContainer {
+  background-color: #ffffff;
+  border-radius: 16px;
+}
+
+.dataGridContainer :global(.MuiDataGrid-columnHeaders),
+.dataGridContainer :global(.MuiDataGrid-cell) {
+  border: none;
+}
+
+.dataGridContainer :global(.MuiDataGrid-columnSeparator) {
+  display: none;
+}
+
+.dataGridContainer :global(.MuiDataGrid-row:hover),
+.dataGridContainer :global(.MuiDataGrid-row.Mui-hovered) {
+  background-color: transparent;
+}
+
+.iconButton {
+  min-width: 32px;
+}
+
+.smallText {
+  font-size: var(--font-size-sm);
+}
+
+.marginTopSm {
+  margin-top: 11px;
+}
+
+.iconLg {
+  font-size: 2rem;
 }
 
 .dataTableBase {

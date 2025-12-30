@@ -234,6 +234,7 @@
     "rejectedSuccessfully": "Solicitud rechazada exitosamente",
     "noOrgErrorTitle": "Organizaciones no encontradas",
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
+    "newMembersWillAppearHere": "Los nuevos miembros aparecerán aquí",
     "profilePictureAlt": "Imagen de perfil de {{name}}",
     "placeholderAvatarAlt": "Avatar predeterminado"
   },
@@ -735,6 +736,8 @@
     "createdEarliest": "Creado más temprano",
     "viewCampaigns": "Ver campañas",
     "assocCampaigns": "Campañas asociadas",
+    "associatedCampaigns": "Campañas asociadas",
+    "searchFunds": "Buscar fondos",
     "errorLoadingFundsData": "Error al cargar los datos de fondos",
     "editFund": "Editar fondo"
   },
@@ -743,7 +746,10 @@
     "campaignName": "Nombre de la campaña",
     "campaignOptions": "Opciones",
     "fundingGoal": "Meta de financiación",
+    "progress": "Progreso",
+    "raised": "Recaudado",
     "addCampaign": "Agregar campaña",
+    "editCampaign": "Editar campaña",
     "createdCampaign": "Campaña creada correctamente",
     "updatedCampaign": "Campaña actualizada correctamente",
     "deletedCampaign": "Campaña eliminada correctamente",
@@ -755,6 +761,7 @@
     "currency": "Moneda",
     "selectCurrency": "Seleccionar moneda",
     "searchFullName": "Buscar por nombre",
+    "searchCampaigns": "Buscar campañas",
     "viewPledges": "Ver compromisos",
     "noCampaignsFound": "No se encontraron campañas",
     "latestEndDate": "Fecha de finalización más reciente",
@@ -798,7 +805,8 @@
     "togglePledgedRaised": "Alternar entre montos Comprometidos y Recaudados",
     "pledgeDate": "Fecha de Compromiso",
     "pledged": "Comprometido",
-    "donated": "Donado"
+    "donated": "Donado",
+    "campaignNotActive": "La campaña no está actualmente activa"
   },
   "createPostModal": {
     "title": "Publicaciones de Talawa",
@@ -1703,6 +1711,7 @@
     "mostHoursVolunteered": "Más Horas de Voluntariado",
     "leastHoursVolunteered": "Menos Horas de Voluntariado",
     "accepted": "Aceptado",
+    "rejected": "Rechazado",
     "addVolunteer": "Agregar Voluntario",
     "removeVolunteer": "Eliminar Voluntario",
     "volunteerAdded": "Voluntario agregado con éxito",
@@ -1723,6 +1732,9 @@
     "groupDetails": "Detalles del Grupo",
     "creator": "Creador",
     "requests": "Solicitudes",
+    "volunteershipRequests": "Solicitudes de Voluntariado",
+    "requestType": "Tipo de Solicitud",
+    "requestDate": "Fecha de Solicitud",
     "noRequests": "No Hay Solicitudes",
     "latest": "Más Reciente",
     "earliest": "Más Antiguo",
