@@ -81,7 +81,9 @@ def arg_parser_resolver():
     Returns:
         result: Parsed argument object
     """
-    parser = argparse.ArgumentParser(description="Check for sensitive file changes.")
+    parser = argparse.ArgumentParser(
+        description="Check for sensitive file changes."
+    )
     parser.add_argument(
         "--config",
         type=str,
@@ -98,7 +100,10 @@ def arg_parser_resolver():
     parser.add_argument(
         "--files-from",
         type=str,
-        help="Path to a file containing a list of files to check (null-terminated or newline-separated).",
+        help=(
+            "Path to a file containing a list of files to check "
+            "(null-terminated or newline-separated)."
+        ),
     )
     return parser.parse_args()
 
@@ -126,7 +131,9 @@ def main():
     if args.files:
         # Flatten file list and handle newlines (fix for shell quoting)
         for item in args.files:
-            files_to_check.extend([f.strip() for f in item.split("\n") if f.strip()])
+            files_to_check.extend(
+                [f.strip() for f in item.split("\n") if f.strip()]
+            )
     elif args.files_from:
         try:
             with open(args.files_from, "rb") as f:
