@@ -28,6 +28,13 @@ function renderCellValue(value: unknown) {
   }
 }
 
+/**
+ * DataTable is a reusable, typed table component for displaying tabular data with loading, empty, and error states.
+ *
+ * @typeParam T - The type of data for each row.
+ * @param props - Table configuration and data.
+ * @returns A table with support for loading skeletons, empty state, and error display.
+ */
 const DEFAULT_SKELETON_ROWS: number = 6;
 export function DataTable<T>(props: IDataTableProps<T>) {
   const { t: tCommon } = useTranslation('common');
