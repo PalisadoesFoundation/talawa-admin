@@ -73,6 +73,7 @@ import {
 import {
   ORGANIZATION_LIST_PUBLIC,
   InterfaceOrganizationListPublicQueryData,
+  InterfaceOrganizationPublic,
   SIGNIN_QUERY,
   GET_COMMUNITY_DATA_PG,
 } from 'GraphQl/Queries/Queries';
@@ -83,7 +84,6 @@ import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
 import styles from '../../style/app-fixed.module.css';
-import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import { Autocomplete, TextField } from '@mui/material';
 import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
@@ -132,7 +132,9 @@ const loginPage = (): JSX.Element => {
     numericValue: true,
     specialChar: true,
   });
-  const [organizations, setOrganizations] = useState([]);
+  const [organizations, setOrganizations] = useState<
+    { label: string; id: string }[]
+  >([]);
   const [pendingInvitationToken] = useState(() =>
     getItem('pendingInvitationToken'),
   );
@@ -199,7 +201,7 @@ const loginPage = (): JSX.Element => {
   useEffect(() => {
     if (orgData) {
       const options = orgData.organizations.map(
-        (org: InterfaceQueryOrganizationListObject) => {
+        (org: InterfaceOrganizationPublic) => {
           const tempObj: { label: string; id: string } | null = {} as {
             label: string;
             id: string;
