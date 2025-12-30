@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, InputGroup } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { usePasswordVisibility } from '../../../hooks/usePasswordVisibility';
 import type { InterfacePasswordFieldProps } from '../../../types/Auth/PasswordField/interface';
 
@@ -35,7 +36,6 @@ export const PasswordField: React.FC<InterfacePasswordFieldProps> = ({
           onChange={onChange}
           placeholder={placeholder}
           isInvalid={!!error}
-          aria-invalid={!!error}
           data-testid={testId}
         />
         <InputGroup.Text
@@ -52,7 +52,7 @@ export const PasswordField: React.FC<InterfacePasswordFieldProps> = ({
           aria-pressed={showPassword}
           className="bg-white"
         >
-          {showPassword ? '🙈' : '👁️'}
+          {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
         </InputGroup.Text>
       </InputGroup>
       {error && (
