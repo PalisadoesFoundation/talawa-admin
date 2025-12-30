@@ -37,6 +37,45 @@ export default defineConfig(({ mode }) => {
     // Production build configuration
     build: {
       outDir: 'build',
+      chunkSizeWarningLimit: 1000,
+      rollupOptions: {
+        output: {
+          manualChunks: (id) => {
+            // Skip non-node_modules files
+            if (!id.includes('node_modules')) return;
+
+            // React core libraries (react, react-dom, react-router)
+            if (
+              id.includes('react') ||
+              id.includes('react-dom') ||
+              id.includes('react-router')
+            ) {
+              return 'vendor-react';
+            }
+
+            // Material-UI components
+            if (id.includes('@mui')) {
+              return 'vendor-mui';
+            }
+
+            // Apollo Client and GraphQL
+            if (id.includes('@apollo') || id.includes('graphql')) {
+              return 'vendor-apollo';
+            }
+
+            // i18next internationalization
+            if (id.includes('i18next')) {
+              return 'vendor-i18n';
+            }
+
+            // All other vendor libraries
+            return 'vendor-others';
+          },
+          chunkFileNames: 'assets/[name]-[hash].js',
+          entryFileNames: 'assets/[name]-[hash].js',
+          assetFileNames: 'assets/[name]-[hash].[ext]',
+        },
+      },
     },
     // Global build definitions
     define: {
