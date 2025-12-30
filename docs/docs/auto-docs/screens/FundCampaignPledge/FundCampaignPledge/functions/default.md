@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/FundCampaignPledge/FundCampaignPledge.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/FundCampaignPledge/FundCampaignPledge.tsx#L48)
+Defined in: [src/screens/FundCampaignPledge/FundCampaignPledge.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/FundCampaignPledge/FundCampaignPledge.tsx#L49)
 
 Renders the Fund Campaign Pledges screen.
 

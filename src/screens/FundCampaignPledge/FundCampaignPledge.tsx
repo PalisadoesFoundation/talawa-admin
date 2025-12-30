@@ -12,7 +12,8 @@ import { currencySymbols } from 'utils/currency';
 import styles from 'style/app-fixed.module.css';
 import PledgeDeleteModal from './deleteModal/PledgeDeleteModal';
 import PledgeModal from './modal/PledgeModal';
-import { Breadcrumbs, Link, Popover, Typography } from '@mui/material';
+import { Popover } from '@mui/material';
+import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/BreadcrumbsComponent';
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
@@ -104,65 +105,75 @@ const fundCampaignPledge = (): JSX.Element => {
     },
   });
 
-  const { pledges, totalPledged, totalRaised, fundName } = useMemo(() => {
-    let totalPledged = 0;
-    let totalRaised = 0;
+  const { pledges, totalPledged, totalRaised, fundName, fundId } =
+    useMemo(() => {
+      let totalPledged = 0;
+      let totalRaised = 0;
 
-    const pledgesList =
-      pledgeData?.fundCampaign?.pledges?.edges.map((edge) => {
-        const amount = edge.node.amount || 0;
-        totalPledged += amount;
-        // Assuming there's no raised amount for now,
-        // this should be updated when raised amount data is available
-        totalRaised += 0;
+      const pledgesList =
+        pledgeData?.fundCampaign?.pledges?.edges.map((edge) => {
+          const amount = edge.node.amount || 0;
+          totalPledged += amount;
+          // Assuming there's no raised amount for now,
+          // this should be updated when raised amount data is available
+          totalRaised += 0;
 
-        const allUsers =
-          'users' in edge.node && Array.isArray(edge.node.users)
-            ? edge.node.users
-            : [edge.node.pledger];
+          const allUsers =
+            'users' in edge.node && Array.isArray(edge.node.users)
+              ? edge.node.users
+              : [edge.node.pledger];
 
-        return {
-          id: edge.node.id,
-          amount: amount,
-          pledgeDate: edge.node.createdAt
-            ? new Date(edge.node.createdAt)
-            : new Date(),
-          endDate: pledgeData.fundCampaign.endAt
-            ? new Date(pledgeData.fundCampaign.endAt)
-            : new Date(),
-          users: allUsers.filter(Boolean),
-          currency: pledgeData.fundCampaign.currencyCode || 'USD',
-        };
-      }) ?? [];
+          return {
+            id: edge.node.id,
+            amount: amount,
+            pledgeDate: edge.node.createdAt
+              ? new Date(edge.node.createdAt)
+              : new Date(),
+            endDate: pledgeData.fundCampaign.endAt
+              ? new Date(pledgeData.fundCampaign.endAt)
+              : new Date(),
+            users: allUsers.filter(Boolean),
+            currency: pledgeData.fundCampaign.currencyCode || 'USD',
+          };
+        }) ?? [];
 
-    const filteredPledges = searchTerm
-      ? pledgesList.filter((pledge) => {
-          const search = searchTerm.toLowerCase();
-          return pledge.users.some((user) =>
-            user.name?.toLowerCase().includes(search),
-          );
-        })
-      : pledgesList;
+      const filteredPledges = searchTerm
+        ? pledgesList.filter((pledge) => {
+            const search = searchTerm.toLowerCase();
+            return pledge.users.some((user) =>
+              user.name?.toLowerCase().includes(search),
+            );
+          })
+        : pledgesList;
 
-    const sortedPledges = [...filteredPledges].sort((a, b) => {
-      switch (sortBy) {
-        case 'amount_ASC':
-          return a.amount - b.amount;
-        case 'amount_DESC':
-          return b.amount - a.amount;
-        case 'endDate_ASC':
-          return a.endDate.getTime() - b.endDate.getTime();
-        case 'endDate_DESC':
-          return b.endDate.getTime() - a.endDate.getTime();
-      }
-    });
+      const sortedPledges = [...filteredPledges].sort((a, b) => {
+        switch (sortBy) {
+          case 'amount_ASC':
+            return a.amount - b.amount;
+          case 'amount_DESC':
+            return b.amount - a.amount;
+          case 'endDate_ASC':
+            return a.endDate.getTime() - b.endDate.getTime();
+          case 'endDate_DESC':
+            return b.endDate.getTime() - a.endDate.getTime();
+        }
+      });
 
-    // Get fund name from the campaign's fund property
-    const fundName =
-      pledgeData?.fundCampaign?.pledges?.edges[0]?.node?.campaign?.fund?.name ??
-      tCommon('funds');
-    return { pledges: sortedPledges, totalPledged, totalRaised, fundName };
-  }, [pledgeData, searchTerm, sortBy, tCommon]);
+      // Get fund info from the campaign's fund property
+      const fundName =
+        pledgeData?.fundCampaign?.pledges?.edges[0]?.node?.campaign?.fund
+          ?.name ?? tCommon('funds');
+      const fundId =
+        pledgeData?.fundCampaign?.pledges?.edges[0]?.node?.campaign?.fund?.id ??
+        null;
+      return {
+        pledges: sortedPledges,
+        totalPledged,
+        totalRaised,
+        fundName,
+        fundId,
+      };
+    }, [pledgeData, searchTerm, sortBy, tCommon]);
 
   useEffect(() => {
     if (pledgeData?.fundCampaign) {
@@ -383,25 +394,30 @@ const fundCampaignPledge = (): JSX.Element => {
 
   return (
     <div>
-      <Breadcrumbs aria-label={tCommon('breadcrumb')} className="ms-1">
-        <Link
-          underline="hover"
-          color="inherit"
-          component="button"
-          onClick={() => history.go(-2)}
-        >
-          {fundName}
-        </Link>
-        <Link
-          underline="hover"
-          color="inherit"
-          component="button"
-          onClick={() => history.back()}
-        >
-          {campaignInfo?.name}
-        </Link>
-        <Typography color="text.primary">{t('pledges.pledges')}</Typography>
-      </Breadcrumbs>
+      <BreadcrumbsComponent
+        items={[
+          {
+            label: fundName,
+            to: `/orgfunds/${orgId}`,
+          },
+          ...(fundId
+            ? [
+                {
+                  label: campaignInfo?.name,
+                  to: `/orgfundcampaign/${orgId}/${fundId}`,
+                },
+              ]
+            : [
+                {
+                  label: campaignInfo?.name,
+                },
+              ]),
+          {
+            translationKey: 'pledges.pledges',
+            isCurrent: true,
+          },
+        ]}
+      />
       <div className={styles.overviewContainer}>
         <div className={styles.titleContainer}>
           <h3>{campaignInfo?.name}</h3>

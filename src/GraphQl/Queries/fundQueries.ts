@@ -90,6 +90,7 @@ export const FUND_CAMPAIGN_PLEDGE = gql`
               id
               name
               fund {
+                id
                 name
               }
             }
