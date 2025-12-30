@@ -171,7 +171,39 @@ afterEach(() => {
 const renderOrganizationVenue = (link: ApolloLink): RenderResult => {
   const client = new ApolloClient({
     link,
-    cache: new InMemoryCache(),
+    cache: new InMemoryCache({
+      typePolicies: {
+        Query: {
+          fields: {
+            organization: {
+              keyArgs: ['input.id'],
+              merge(existing, incoming) {
+                return {
+                  ...existing,
+                  ...incoming,
+                };
+              },
+            },
+          },
+        },
+        Organization: {
+          fields: {
+            events: {
+              keyArgs: ['startDate', 'endDate', 'includeRecurring'],
+              merge(_existing, incoming) {
+                return incoming;
+              },
+            },
+          },
+        },
+        Chat: {
+          keyFields: ['id'],
+        },
+        ChatMessage: {
+          keyFields: ['id'],
+        },
+      },
+    }),
   });
 
   return render(
