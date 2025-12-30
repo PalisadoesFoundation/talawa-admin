@@ -1349,6 +1349,8 @@
     "eventAttended": "Events Attended",
     "noeventsAttended": "No Events Attended",
     "profileSettings": "Profile Settings",
+    "editProfile": "Edit Profile",
+    "uploadProfilePicture": "Upload profile picture for {{name}}",
     "gender": "Gender",
     "phoneNumber": "Phone Number",
     "chooseFile": "Choose File",

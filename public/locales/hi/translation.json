@@ -1349,6 +1349,8 @@
     "noeventsAttended": "कोई कार्यक्रम में उपस्थित नहीं",
     "eventAttended": "भाग लिए गए कार्यक्रम",
     "profileSettings": "पार्श्वचित्र समायोजन",
+    "editProfile": "प्रोफ़ाइल संपादित करें",
+    "uploadProfilePicture": "{{name}} के लिए प्रोफ़ाइल तस्वीर अपलोड करें",
     "gender": "लिंग",
     "phoneNumber": "फ़ोन नंबर",
     "chooseFile": "फाइलें चुनें",

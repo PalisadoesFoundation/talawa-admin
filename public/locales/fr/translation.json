@@ -1349,6 +1349,8 @@
     "eventAttended": "Événements Assistés",
     "noeventsAttended": "Aucun événement assisté",
     "profileSettings": "Paramètres de profil",
+    "editProfile": "Editer le profil",
+    "uploadProfilePicture": "Téléverser la photo de profil de {{name}}",
     "gender": "Genre",
     "phoneNumber": "Numéro de téléphone",
     "chooseFile": "Choisir le fichier",

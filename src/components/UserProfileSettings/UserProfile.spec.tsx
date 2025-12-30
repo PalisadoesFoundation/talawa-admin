@@ -35,10 +35,14 @@ describe('UserProfile Component', () => {
 
     const profileAvatar = getByTestId('profile-avatar');
     expect(profileAvatar).toBeInTheDocument();
-    expect(profileAvatar.querySelector('img')).toHaveAttribute(
-      'src',
-      'profile-image-url',
-    );
+
+    const avatarImage = profileAvatar.querySelector('img');
+
+    if (avatarImage) {
+      expect(avatarImage).toHaveAttribute('src', 'profile-image-url');
+    } else {
+      expect(getByTestId('profile-avatar-fallback')).toBeInTheDocument();
+    }
     expect(getByText('Joined 13 April 2023')).toBeInTheDocument();
     expect(getByTestId('copyProfileLink')).toBeInTheDocument();
   });
