@@ -53,13 +53,13 @@ export default function GroupChatAddUserModal(
       after: null,
       where: {},
     },
+    skip: !chat.organization?.id,
   });
 
   useEffect(() => {
     if (allUsersError) {
       toast.error(t('failedFetchingMembers'));
 
-      // eslint-disable-next-line no-console
       console.error(allUsersError);
     }
   }, [allUsersError, t]);
@@ -78,7 +78,6 @@ export default function GroupChatAddUserModal(
     } catch (error) {
       toast.error(t('failedAddUser'));
 
-      // eslint-disable-next-line no-console
       console.error(error);
       return false;
     }
