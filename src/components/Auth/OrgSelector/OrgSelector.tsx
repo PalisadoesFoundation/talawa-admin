@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useMemo, useRef, useEffect, useId } from 'react';
 import { Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceOrgSelectorProps } from '../../../types/Auth/OrgSelector/interface';
@@ -43,8 +43,12 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
   const dropdownRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const itemId = useId();
+  const inputId = `${itemId}-input`; // i18n-ignore-line
+  const listboxId = `${itemId}-listbox`; // i18n-ignore-line
+  const errorId = `${itemId}-error`; // i18n-ignore-line
+
   const hasError = !!error;
-  const errorId = hasError ? 'org-selector-error' : undefined;
   const displayLabel = label || t('organization');
 
   // Filter organizations based on search term
@@ -93,6 +97,7 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
     setIsOpen(false);
     setSearchTerm('');
     setHighlightedIndex(-1);
+    inputRef.current?.focus();
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
@@ -124,16 +129,21 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
     }
   };
 
+  const activeDescendantId =
+    isOpen && highlightedIndex >= 0 && filteredOptions[highlightedIndex]
+      ? `org-option-${filteredOptions[highlightedIndex]._id}`
+      : undefined;
+
   return (
     <Form.Group className="mb-3" ref={dropdownRef}>
-      <Form.Label htmlFor="org-selector-input">
+      <Form.Label htmlFor={inputId}>
         {displayLabel}
         {required && <span className="text-danger"> *</span>}
       </Form.Label>
 
       <div className="position-relative">
         <Form.Control
-          id="org-selector-input"
+          id={inputId}
           type="text"
           value={isOpen ? searchTerm : displayValue}
           onChange={handleInputChange}
@@ -143,10 +153,11 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
           isInvalid={hasError}
           placeholder={t('selectOrganization')}
           aria-invalid={hasError}
-          aria-describedby={errorId}
+          aria-describedby={hasError ? errorId : undefined}
+          aria-activedescendant={activeDescendantId}
           aria-autocomplete="list"
           aria-expanded={isOpen}
-          aria-controls="org-selector-listbox"
+          aria-controls={listboxId}
           role="combobox"
           data-testid={testId}
           ref={inputRef}
@@ -155,7 +166,7 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
 
         {isOpen && !disabled && (
           <div
-            id="org-selector-listbox"
+            id={listboxId}
             role="listbox"
             className={styles.orgSelectorDropdown}
             data-testid="org-selector-dropdown"
@@ -173,14 +184,22 @@ export const OrgSelector: React.FC<InterfaceOrgSelectorProps> = ({
               filteredOptions.map((org, index) => (
                 <div
                   key={org._id}
+                  id={`org-option-${org._id}`}
                   role="option"
                   aria-selected={org._id === value}
+                  tabIndex={-1}
                   className={`${styles.orgSelectorOption} ${
                     index === highlightedIndex
                       ? styles.orgSelectorOptionHighlighted
                       : ''
                   } ${org._id === value ? styles.orgSelectorOptionSelected : ''}`}
                   onClick={() => handleOptionClick(org._id)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleOptionClick(org._id);
+                    }
+                  }}
                   onMouseEnter={() => setHighlightedIndex(index)}
                   data-testid={`org-option-${org._id}`}
                 >
