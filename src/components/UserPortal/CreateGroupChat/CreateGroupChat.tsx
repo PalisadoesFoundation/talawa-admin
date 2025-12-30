@@ -56,13 +56,12 @@ import {
   CREATE_CHAT_MEMBERSHIP,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { styled } from '@mui/material/styles';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import Avatar from 'components/Avatar/Avatar';
@@ -77,35 +76,6 @@ interface InterfaceCreateGroupChatProps {
     variables?: Partial<{ id: string }> | undefined,
   ) => Promise<ApolloQueryResult<unknown>>;
 }
-
-/**
- * Styled table container with custom styles.
- */
-
-const StyledTableContainer = styled(TableContainer)<{
-  component?: React.ElementType;
-}>(() => ({ borderRadius: 'var(--table-head-radius)' }));
-
-/**
- * Styled table cell with custom styles.
- */
-
-const StyledTableCell = styled(TableCell)(() => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: 'var(--table-head-bg)',
-    color: 'var(--table-header-color)',
-    fontSize: 'var(--font-size-header)',
-  },
-  [`&.${tableCellClasses.body}`]: { fontSize: 'var(--font-size-table-body)' },
-}));
-
-/**
- * Styled table row with custom styles.
- */
-
-const StyledTableRow = styled(TableRow)(() => ({
-  '&:last-child td, &:last-child th': { border: 'var(--table-row-border)' },
-}));
 
 const { getItem } = useLocalStorage();
 
@@ -242,7 +212,9 @@ export default function CreateGroupChat({
         contentClassName={styles.modalContent}
       >
         <Modal.Header closeButton data-testid="">
-          <Modal.Title>New Group</Modal.Title>
+          <Modal.Title>
+            {t('newGroup', { defaultValue: 'New Group' })}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <input
@@ -269,10 +241,10 @@ export default function CreateGroupChat({
           </div>
           <Form>
             <Form.Group className="mb-3" controlId="registerForm.Rname">
-              <Form.Label>Title</Form.Label>
+              <Form.Label>{t('title', { defaultValue: 'Title' })}</Form.Label>
               <Form.Control
                 type="text"
-                placeholder={'Group name'}
+                placeholder={t('groupName', { defaultValue: 'Group name' })}
                 autoComplete="off"
                 required
                 data-testid="groupTitleInput"
@@ -283,10 +255,14 @@ export default function CreateGroupChat({
               />
             </Form.Group>
             <Form.Group className="mb-3" controlId="registerForm.Rname">
-              <Form.Label>Description</Form.Label>
+              <Form.Label>
+                {t('description', { defaultValue: 'Description' })}
+              </Form.Label>
               <Form.Control
                 type="text"
-                placeholder={'Group Description'}
+                placeholder={t('groupDescription', {
+                  defaultValue: 'Group Description',
+                })}
                 autoComplete="off"
                 required
                 data-testid="groupDescriptionInput" //corrected spelling
@@ -302,7 +278,7 @@ export default function CreateGroupChat({
               onClick={openAddUserModal}
               data-testid="nextBtn"
             >
-              Next
+              {t('next', { defaultValue: 'Next' })}
             </Button>
           </Form>
         </Modal.Body>
@@ -314,18 +290,21 @@ export default function CreateGroupChat({
         contentClassName={styles.modalContent}
       >
         <Modal.Header closeButton data-testid="pluginNotificationHeader">
-          <Modal.Title>{'Chat'}</Modal.Title>
+          <Modal.Title>{t('chat', { defaultValue: 'Chat' })}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {allUsersLoading ? (
-            <>
-              <Loader />
-            </>
-          ) : (
+          <LoadingState
+            isLoading={allUsersLoading}
+            variant="inline"
+            size="lg"
+            data-testid="loading-state"
+          >
             <>
               <div className={styles.input}>
                 <SearchBar
-                  placeholder={t('searchFullName')}
+                  placeholder={t('searchFullName', {
+                    defaultValue: 'Search full name',
+                  })}
                   value={userName}
                   onChange={(value) => setUserName(value)}
                   onSearch={(value) => handleUserModalSearchChange(value)}
@@ -338,13 +317,24 @@ export default function CreateGroupChat({
                 />
               </div>
 
-              <StyledTableContainer component={Paper}>
-                <Table aria-label="customized table">
+              <TableContainer
+                className={styles.tableContainer}
+                component={Paper}
+              >
+                <Table
+                  aria-label={t('organizationMembersTable', {
+                    defaultValue: 'Organization Members Table',
+                  })}
+                >
                   <TableHead>
                     <TableRow>
-                      <StyledTableCell>#</StyledTableCell>
-                      <StyledTableCell align="center">{'user'}</StyledTableCell>
-                      <StyledTableCell align="center">{'Chat'}</StyledTableCell>
+                      <TableCell>{t('hash', { defaultValue: '#' })}</TableCell>
+                      <TableCell align="center">
+                        {t('user', { defaultValue: 'User' })}
+                      </TableCell>
+                      <TableCell align="center">
+                        {t('chat', { defaultValue: 'Chat' })}
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -377,19 +367,16 @@ export default function CreateGroupChat({
                             },
                             index: number,
                           ) => (
-                            <StyledTableRow
-                              data-testid="user"
-                              key={userDetails.id}
-                            >
-                              <StyledTableCell component="th" scope="row">
+                            <TableRow data-testid="user" key={userDetails.id}>
+                              <TableCell component="th" scope="row">
                                 {index + 1}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
+                              </TableCell>
+                              <TableCell align="center">
                                 {userDetails.name}
                                 <br />
                                 {userDetails.role || 'Member'}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
+                              </TableCell>
+                              <TableCell align="center">
                                 {userIds.includes(userDetails.id) ? (
                                   <Button
                                     variant="danger"
@@ -401,7 +388,7 @@ export default function CreateGroupChat({
                                     }}
                                     data-testid="removeBtn"
                                   >
-                                    Remove
+                                    {t('remove', { defaultValue: 'Remove' })}
                                   </Button>
                                 ) : (
                                   <Button
@@ -411,25 +398,25 @@ export default function CreateGroupChat({
                                     }}
                                     data-testid="addBtn"
                                   >
-                                    {t('add')}
+                                    {t('add', { defaultValue: 'Add' })}
                                   </Button>
                                 )}
-                              </StyledTableCell>
-                            </StyledTableRow>
+                              </TableCell>
+                            </TableRow>
                           ),
                         )}
                   </TableBody>
                 </Table>
-              </StyledTableContainer>
+              </TableContainer>
             </>
-          )}
+          </LoadingState>
           <Button
             className={`${styles.colorPrimary} ${styles.borderNone}`}
             variant="success"
             onClick={handleCreateGroupChat}
             data-testid="createBtn"
           >
-            {t('create')}
+            {t('create', { defaultValue: 'Create' })}
           </Button>
         </Modal.Body>
       </Modal>

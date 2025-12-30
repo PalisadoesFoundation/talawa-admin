@@ -15,27 +15,29 @@
  * @requires react-toastify
  * @requires components/Loader/Loader
  * @requires components/Avatar/Avatar
- * @requires subComponents/SortingButton
- * @requires shared-components/SearchBar/SearchBar
+ * @requires components/AdminSearchFilterBar/AdminSearchFilterBar
  * @requires GraphQl/Queries/EventVolunteerQueries
  * @requires GraphQl/Mutations/EventVolunteerMutation
  * @requires utils/interfaces
  *
- * @function requests
+ * @function Requests
  * @returns {JSX.Element} A React component that displays a searchable and sortable table of volunteer membership requests.
  *
  * @remarks
  * - Displays a loader while fetching data and handles errors gracefully.
  * - Uses Apollo Client's `useQuery` to fetch data and `useMutation` to update membership status.
- * - Provides search functionality with debouncing and sorting options.
- * - Displays volunteer details, request date, and action buttons for accepting or rejecting requests.
+ * - Uses AdminSearchFilterBar for unified search and filter interface with debouncing.
+ * - Provides sorting by creation date (latest/earliest) and filtering by request type (all/individuals/groups).
+ * - Displays volunteer details with accessible avatar alt text, request type, request date, and action buttons.
+ * - All UI text is internationalized using i18n translation keys.
  * - Redirects to the home page if `orgId` or `eventId` is missing in the URL parameters.
  *
  * @example
  * <Requests />
  */
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { debounce } from '@mui/material';
 import { Button } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
 import { FaXmark } from 'react-icons/fa6';
@@ -55,30 +57,10 @@ import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import dayjs from 'dayjs';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { toast } from 'react-toastify';
-import { debounce } from '@mui/material';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
-const dataGridStyle = {
-  backgroundColor: 'white',
-  borderRadius: '16px',
-  '& .MuiDataGrid-columnHeaders': { border: 'none' },
-  '& .MuiDataGrid-cell': { border: 'none' },
-  '& .MuiDataGrid-columnSeparator': { display: 'none' },
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
-  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
-};
-
-function requests(): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
+function Requests(): JSX.Element {
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -97,10 +79,19 @@ function requests(): JSX.Element {
     'all',
   );
 
-  const debouncedSearch = useMemo(
-    () => debounce((value: string) => setSearchTerm(value), 300),
+  const debouncedSearch = useCallback(
+    debounce((value: string) => {
+      setSearchTerm(value);
+    }, 300),
     [],
   );
+
+  // Debounce cleanup effect
+  useEffect(() => {
+    return () => {
+      debouncedSearch.clear();
+    };
+  }, [debouncedSearch]);
 
   const [updateMembership] = useMutation(UPDATE_VOLUNTEER_MEMBERSHIP);
 
@@ -167,9 +158,13 @@ function requests(): JSX.Element {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded
+            className={`${styles.errorIcon} ${styles.iconLg}`}
+          />
           <h6 className="fw-bold text-danger text-center">
-            {tErrors('errorLoading', { entity: 'Volunteership Requests' })}
+            {tErrors('errorLoading', {
+              entity: t('eventVolunteers.volunteershipRequests'),
+            })}
           </h6>
         </div>
       </div>
@@ -179,7 +174,7 @@ function requests(): JSX.Element {
   const columns: GridColDef[] = [
     {
       field: 'srNo',
-      headerName: 'Sr. No.',
+      headerName: tCommon('serialNumber'),
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -192,7 +187,7 @@ function requests(): JSX.Element {
     },
     {
       field: 'volunteer',
-      headerName: 'Volunteer',
+      headerName: tCommon('volunteer'),
       flex: 3,
       align: 'center',
       minWidth: 100,
@@ -209,7 +204,7 @@ function requests(): JSX.Element {
             {avatarURL ? (
               <img
                 src={avatarURL}
-                alt="volunteer"
+                alt={`${name} ${tCommon('avatar')}`}
                 data-testid={`volunteer_image`}
                 className={styles.TableImages}
               />
@@ -231,7 +226,7 @@ function requests(): JSX.Element {
     },
     {
       field: 'requestType',
-      headerName: 'Request Type',
+      headerName: t('eventVolunteers.requestType'),
       flex: 2,
       minWidth: 150,
       align: 'center',
@@ -243,7 +238,9 @@ function requests(): JSX.Element {
         return (
           <div className="d-flex flex-column align-items-center">
             <span className="fw-bold">
-              {group ? t('groups') : t('individuals')}
+              {group
+                ? t('eventVolunteers.groups')
+                : t('eventVolunteers.individuals')}
             </span>
             {group && <small className="text-muted">{group.name}</small>}
           </div>
@@ -252,7 +249,7 @@ function requests(): JSX.Element {
     },
     {
       field: 'requestDate',
-      headerName: 'Request Date',
+      headerName: t('eventVolunteers.requestDate'),
       flex: 2,
       minWidth: 150,
       align: 'center',
@@ -265,7 +262,7 @@ function requests(): JSX.Element {
     },
     {
       field: 'options',
-      headerName: 'Options',
+      headerName: tCommon('options'),
       align: 'center',
       flex: 2,
       minWidth: 100,
@@ -278,8 +275,7 @@ function requests(): JSX.Element {
             <Button
               variant="success"
               size="sm"
-              style={{ minWidth: '32px' }}
-              className="me-2 rounded"
+              className={`${styles.iconButton} me-2 rounded`}
               data-testid="acceptBtn"
               onClick={() => updateMembershipStatus(params.row.id, 'accepted')}
             >
@@ -292,7 +288,7 @@ function requests(): JSX.Element {
               data-testid={`rejectBtn`}
               onClick={() => updateMembershipStatus(params.row.id, 'rejected')}
             >
-              <FaXmark size={18} fontWeight={900} />
+              <FaXmark size={18} />
             </Button>
           </>
         );
@@ -303,45 +299,52 @@ function requests(): JSX.Element {
   return (
     <div>
       {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} btncon gap-4 flex-wrap`}>
-        <SearchBar
-          placeholder={tCommon('searchBy', { item: 'Name' })}
-          onSearch={debouncedSearch}
-          inputTestId="searchBy"
-          buttonTestId="searchBtn"
-        />
-        <div className="d-flex gap-3 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-3">
-            <SortingButton
-              sortingOptions={[
-                { label: t('latest'), value: 'createdAt_DESC' },
-                { label: t('earliest'), value: 'createdAt_ASC' },
-              ]}
-              selectedOption={sortBy ?? ''}
-              onSortChange={(value) =>
-                setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC')
-              }
-              dataTestIdPrefix="sort"
-              buttonLabel={tCommon('sort')}
-            />
-
-            <SortingButton
-              type="filter"
-              sortingOptions={[
-                { label: tCommon('all'), value: 'all' },
-                { label: t('individuals'), value: 'individual' },
-                { label: t('groups'), value: 'group' },
-              ]}
-              selectedOption={filterBy}
-              onSortChange={(value) =>
-                setFilterBy(value as 'all' | 'individual' | 'group')
-              }
-              dataTestIdPrefix="filter"
-              buttonLabel={tCommon('filter')}
-            />
-          </div>
-        </div>
-      </div>
+      <AdminSearchFilterBar
+        searchPlaceholder={tCommon('searchBy', { item: tCommon('name') })}
+        searchValue={searchTerm}
+        onSearchChange={debouncedSearch}
+        onSearchSubmit={(value: string) => {
+          setSearchTerm(value);
+        }}
+        searchInputTestId="searchBy"
+        searchButtonTestId="searchBtn"
+        hasDropdowns
+        dropdowns={[
+          {
+            id: 'sort',
+            type: 'sort',
+            label: tCommon('sort'),
+            options: [
+              { label: t('eventVolunteers.latest'), value: 'createdAt_DESC' },
+              {
+                label: t('eventVolunteers.earliest'),
+                value: 'createdAt_ASC',
+              },
+            ],
+            selectedOption: sortBy ?? '',
+            onOptionChange: (value: string | number) =>
+              setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC'),
+            dataTestIdPrefix: 'sort',
+          },
+          {
+            id: 'filter',
+            type: 'filter',
+            label: tCommon('filter'),
+            options: [
+              { label: tCommon('all'), value: 'all' },
+              {
+                label: t('eventVolunteers.individuals'),
+                value: 'individual',
+              },
+              { label: t('eventVolunteers.groups'), value: 'group' },
+            ],
+            selectedOption: filterBy,
+            onOptionChange: (value: string | number) =>
+              setFilterBy(value as 'all' | 'individual' | 'group'),
+            dataTestIdPrefix: 'filter',
+          },
+        ]}
+      />
 
       {/* Table with Volunteer Membership Requests */}
 
@@ -351,7 +354,7 @@ function requests(): JSX.Element {
           columnBufferPx={5}
           hideFooter={true}
           getRowId={(row) => row.id}
-          sx={dataGridStyle}
+          className={styles.dataGridContainer}
           getRowClassName={() => `${styles.rowBackgrounds}`}
           autoHeight
           rowHeight={65}
@@ -361,11 +364,11 @@ function requests(): JSX.Element {
         />
       ) : (
         <div className="d-flex justify-content-center align-items-center mt-5">
-          <h5>{t('noRequests')}</h5>
+          <h5>{t('eventVolunteers.noRequests')}</h5>
         </div>
       )}
     </div>
   );
 }
 
-export default requests;
+export default Requests;

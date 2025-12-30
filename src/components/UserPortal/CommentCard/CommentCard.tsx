@@ -41,17 +41,18 @@ import {
 import { useMutation } from '@apollo/client';
 import { LIKE_COMMENT, UNLIKE_COMMENT } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { styled } from '@mui/material/styles';
-import { Image } from 'react-bootstrap';
 import styles from '../../../style/app-fixed.module.css';
+import commentCardStyles from './CommentCard.module.css';
 import { VoteType } from 'utils/interfaces';
 import defaultAvatar from 'assets/images/defaultImg.png';
 import {
   DELETE_COMMENT,
   UPDATE_COMMENT,
 } from 'GraphQl/Mutations/CommentMutations';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 const CommentContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1.5),
@@ -70,33 +71,6 @@ const VoteCount = styled(Typography)(() => ({
   minWidth: 20,
   textAlign: 'center',
 }));
-
-const EditModalContent = styled(Box)({
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: '90%',
-  maxWidth: 500,
-  backgroundColor: 'white',
-  borderRadius: 8,
-  padding: 24,
-  '& h3': {
-    marginBottom: 16,
-  },
-});
-
-const ModalActions = styled(Box)({
-  display: 'flex',
-  justifyContent: 'space-between',
-  marginTop: 16,
-});
-
-const RightModalActions = styled(Box)({
-  display: 'flex',
-  gap: 8,
-});
-
 interface InterfaceCommentCardProps {
   id: string;
   creator: {
@@ -115,7 +89,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
   const { id, creator, hasUserVoted, upVoteCount, text, refetchComments } =
     props;
   const { getItem } = useLocalStorage();
-  const { t } = useTranslation('translation', { keyPrefix: 'commentCard' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const userId = getItem('userId');
 
@@ -156,10 +130,10 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
       await deleteComment({
         variables: { input: { id: id } },
       });
-      toast.success(t('commentDeletedSuccessfully'));
+      NotificationToast.success(t('commentCard.commentDeletedSuccessfully'));
       refetchComments?.();
     } catch (error) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
     } finally {
       handleMenuClose();
     }
@@ -170,12 +144,12 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
       await updateComment({
         variables: { input: { id: id, body: body } },
       });
-      toast.success(t('commentUpdatedSuccessfully'));
+      NotificationToast.success(t('commentCard.commentUpdatedSuccessfully'));
       refetchComments?.();
       handleMenuClose();
       return true;
     } catch (error) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
       return false;
     }
   };
@@ -195,7 +169,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
 
   const handleToggleLike = async (): Promise<void> => {
     if (!userId) {
-      toast.warn(t('pleaseSignInToLikeComments'));
+      NotificationToast.warning(t('commentCard.pleaseSignInToLikeComments'));
       return;
     }
     try {
@@ -211,7 +185,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
           setLikes((prev) => Math.max(prev - 1, 0));
           setIsLiked(false);
         } else {
-          toast.error(t('couldNotRemoveExistingLike'));
+          NotificationToast.error(t('commentCard.couldNotRemoveExistingLike'));
         }
       } else {
         // Like
@@ -233,11 +207,11 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
         }
       )?.graphQLErrors?.[0]?.extensions?.code;
       if (errorCode === 'forbidden_action_on_arguments_associated_resources') {
-        toast.error(t('alreadyLikedComment'));
+        NotificationToast.error(t('commentCard.alreadyLikedComment'));
       } else if (errorCode === 'arguments_associated_resources_not_found') {
-        toast.error(t('noAssociatedVoteFound'));
+        NotificationToast.error(t('commentCard.noAssociatedVoteFound'));
       } else {
-        toast.error((error as Error).message);
+        NotificationToast.error((error as Error).message);
       }
     }
   };
@@ -246,11 +220,12 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
     <CommentContainer>
       <Stack direction="row" spacing={2} alignItems="flex-start">
         <span className={styles.userImageUserComment}>
-          <Image
-            crossOrigin="anonymous"
-            src={creator.avatarURL || defaultAvatar}
-            alt={creator.name}
-            loading="lazy"
+          <ProfileAvatarDisplay
+            imageUrl={creator.avatarURL || defaultAvatar}
+            fallbackName={creator.name}
+            size="small"
+            dataTestId="user-avatar"
+            enableEnlarge
           />
         </span>
         <Box sx={{ flexGrow: 1 }}>
@@ -283,7 +258,6 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
               ref={menuAnchorRef}
               onClick={handleMenuOpen}
               size="small"
-              aria-label="more options"
               data-testid="more-options-button"
             >
               <MoreHoriz />
@@ -299,16 +273,18 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
                 data-testid="update-comment-button"
                 onClick={toggleEditComment}
               >
-                <EditOutlined sx={{ mr: 1 }} fontSize="small" />
-                {t('editComment')}
+                <EditOutlined className={commentCardStyles.iconSmall} />
+                {t('commentCard.editComment')}
               </MenuItem>
               <MenuItem
                 data-testid="delete-comment-button"
                 onClick={handleDeleteComment}
                 disabled={deletingComment}
               >
-                <DeleteOutline sx={{ mr: 1 }} fontSize="small" />
-                {deletingComment ? t('deleting') : t('deleteComment')}
+                <DeleteOutline className={commentCardStyles.iconSmall} />
+                {deletingComment
+                  ? t('commentCard.deleting')
+                  : t('commentCard.deleteComment')}
               </MenuItem>
             </Menu>
           </>
@@ -321,8 +297,8 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
         onClose={toggleEditComment}
         data-testid="edit-comment-modal"
       >
-        <EditModalContent>
-          <Typography variant="h6">{t('editComment')}</Typography>
+        <Box className={commentCardStyles.editModalContent}>
+          <Typography variant="h6">{t('commentCard.editComment')}</Typography>
           <FormControl fullWidth sx={{ mb: 2 }}>
             <Input
               multiline
@@ -334,9 +310,9 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
             />
           </FormControl>
 
-          <ModalActions>
+          <Box className={commentCardStyles.modalActions}>
             <Box />
-            <RightModalActions>
+            <Box className={commentCardStyles.rightModalActions}>
               <Button variant="outlined" onClick={toggleEditComment}>
                 {tCommon('cancel')}
               </Button>
@@ -345,7 +321,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
                 disabled={updatingComment}
                 onClick={async () => {
                   if (!editedCommentText.trim()) {
-                    toast.error(t('emptyCommentError'));
+                    NotificationToast.error(t('commentCard.emptyCommentError'));
                     return;
                   }
                   const updated = await handleUpdateComment(editedCommentText);
@@ -358,9 +334,9 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
               >
                 {updatingComment ? tCommon('saving') : tCommon('save')}
               </Button>
-            </RightModalActions>
-          </ModalActions>
-        </EditModalContent>
+            </Box>
+          </Box>
+        </Box>
       </Modal>
     </CommentContainer>
   );

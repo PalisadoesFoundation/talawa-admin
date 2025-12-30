@@ -51,7 +51,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
@@ -156,9 +156,9 @@ function AdvertisementRegister({
 
       Array.from(files).forEach((file) => {
         if (!allowedTypes.includes(file.type)) {
-          toast.error(`Invalid file type: ${file.name}`);
+          NotificationToast.error(`Invalid file type: ${file.name}`);
         } else if (file.size > maxFileSize) {
-          toast.error(`File too large: ${file.name}`);
+          NotificationToast.error(`File too large: ${file.name}`);
         } else {
           validFiles.push(file);
         }
@@ -211,12 +211,12 @@ function AdvertisementRegister({
       const endDate = dayjs(formState.endAt).startOf('day');
 
       if (!endDate.isAfter(startDate)) {
-        toast.error(t('endDateGreater') as string);
+        NotificationToast.error(t('endDateGreater') as string);
         return;
       }
 
       if (!formState.name) {
-        toast.error('Invalid arguments for this action.');
+        NotificationToast.error('Invalid arguments for this action.');
         return;
       }
 
@@ -248,7 +248,7 @@ function AdvertisementRegister({
         variables,
       });
       if (data) {
-        toast.success(t('advertisementCreated') as string);
+        NotificationToast.success(t('advertisementCreated') as string);
         handleClose();
         setFormState({
           name: '',
@@ -265,7 +265,7 @@ function AdvertisementRegister({
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(
+        NotificationToast.error(
           tErrors('errorOccurredCouldntCreate', {
             entity: 'advertisement',
           }) as string,
@@ -302,7 +302,7 @@ function AdvertisementRegister({
         const endDate = dayjs(updatedFields.endAt).startOf('day');
 
         if (!endDate.isAfter(startDate)) {
-          toast.error(t('endDateGreater') as string);
+          NotificationToast.error(t('endDateGreater') as string);
           return;
         }
       }
@@ -327,7 +327,7 @@ function AdvertisementRegister({
       });
 
       if (data) {
-        toast.success(
+        NotificationToast.success(
           tCommon('updatedSuccessfully', { item: 'Advertisement' }) as string,
         );
         handleClose();
@@ -336,7 +336,7 @@ function AdvertisementRegister({
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(error.message);
+        NotificationToast.error(error.message);
       }
     }
   };

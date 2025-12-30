@@ -12,7 +12,7 @@ import {
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { store } from '../../state/store';
 import i18nForTest from '../../utils/i18nForTest';
 import Advertisement from './Advertisements';
@@ -77,6 +77,15 @@ vi.mock('@apollo/client', async () => {
     useMutation: () => mockUseMutation(),
   };
 });
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  },
+}));
 
 describe('Testing Advertisement Component', () => {
   beforeEach(() => {
@@ -593,7 +602,7 @@ describe('Testing Advertisement Component', () => {
   });
 
   it('creating advertisement without name should throw an error', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -651,7 +660,7 @@ describe('Testing Advertisement Component', () => {
   });
 
   it('creating advertisement with end date before than start date should throw an error', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -715,7 +724,7 @@ describe('Testing Advertisement Component', () => {
   });
 
   it('should handle unknown errors', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -883,7 +892,7 @@ describe('Testing Advertisement Component', () => {
   });
 
   it('validates advertisement update form properly', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
     const updateMock = vi.fn();
     mockUseMutation.mockReturnValue([updateMock]);
 
@@ -967,7 +976,7 @@ describe('Testing Advertisement Component', () => {
   });
 
   it('delete advertisement', async () => {
-    const toastSuccessSpy = vi.spyOn(toast, 'success');
+    const toastSuccessSpy = vi.spyOn(NotificationToast, 'success');
     const { getByTestId } = render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -1004,7 +1013,7 @@ describe('Testing Advertisement Component', () => {
   });
 
   it('handles GraphQL errors when fetching advertisements', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
     render(
       <ApolloProvider client={client}>
@@ -1139,8 +1148,9 @@ describe('Testing Advertisement Component', () => {
   it('authLink adds authorization header when token exists in localStorage', async () => {
     const mockToken = 'test-token-123';
 
+    // Spy on the mock's getItem function directly
     const getItemSpy = vi
-      .spyOn(window.localStorage, 'getItem')
+      .spyOn(localStorage, 'getItem')
       .mockImplementation((key: string) => {
         if (key === 'Talawa-admin_token') return mockToken;
         return null;
@@ -1162,14 +1172,11 @@ describe('Testing Advertisement Component', () => {
 
     expect(getItemSpy).toHaveBeenCalledWith('Talawa-admin_token');
     expect(getItemSpy).toHaveReturnedWith(mockToken);
-
-    getItemSpy.mockRestore();
   });
 
   it('authLink does not add authorization header when token is null in localStorage', async () => {
-    const getItemSpy = vi
-      .spyOn(window.localStorage, 'getItem')
-      .mockImplementation(() => null);
+    // Spy on the mock's getItem function directly
+    const getItemSpy = vi.spyOn(localStorage, 'getItem').mockReturnValue(null);
 
     render(
       <ApolloProvider client={client}>
@@ -1187,7 +1194,5 @@ describe('Testing Advertisement Component', () => {
 
     expect(getItemSpy).toHaveBeenCalledWith('Talawa-admin_token');
     expect(getItemSpy).toHaveReturnedWith(null);
-
-    getItemSpy.mockRestore();
   });
 });

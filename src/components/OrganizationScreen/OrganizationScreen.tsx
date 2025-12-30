@@ -59,7 +59,7 @@ const OrganizationScreen = (): JSX.Element => {
   const isEventPath = useMatch('/event/:orgId/:eventId');
   const eventId = isEventPath?.params.eventId;
   const shouldFetchEventName = Boolean(orgId && eventId);
-  const EVENTS_PAGE_SIZE = 150;
+  const EVENTS_PAGE_SIZE = 100;
 
   // Get the application routes from the Redux store
   const appRoutes: { targets: TargetsType[] } = useSelector(
@@ -146,8 +146,8 @@ const OrganizationScreen = (): JSX.Element => {
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
-          <div style={{ flex: 1 }}>
-            <h1>{t('title')}</h1>
+          <div className={styles.flexContainerColumn}>
+            <h1 className={styles.titleMargin}>{t('title')}</h1>
             {eventName && <h4 className="">{eventName}</h4>}
           </div>
         </div>

@@ -4,6 +4,7 @@
  *
  * @module EventForm
  */
+// translation-check-keyPrefix: organizationEvents
 import { DatePicker, TimePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -191,23 +192,37 @@ const EventForm: React.FC<IEventFormProps> = ({
     const startTimeParts = formState.startTime.split(':');
     const endTimeParts = formState.endTime.split(':');
 
-    const startAtISO = formState.allDay
-      ? dayjs.utc(formState.startDate).startOf('day').toISOString()
-      : dayjs
-          .utc(formState.startDate)
-          .hour(parseInt(startTimeParts[0]))
-          .minute(parseInt(startTimeParts[1]))
-          .second(parseInt(startTimeParts[2]) || 0)
-          .toISOString();
+    // For all-day events, calculate start and end times
+    // For startAt: use start of day, but if that's in the past, use current time + 10 seconds
+    // This handles the case where we're creating an "all day" event for "today"
+    let startAtISO: string;
+    let endAtISO: string;
 
-    const endAtISO = formState.allDay
-      ? dayjs.utc(formState.endDate).endOf('day').toISOString()
-      : dayjs
-          .utc(formState.endDate)
-          .hour(parseInt(endTimeParts[0]))
-          .minute(parseInt(endTimeParts[1]))
-          .second(parseInt(endTimeParts[2]) || 0)
-          .toISOString();
+    if (formState.allDay) {
+      const startOfDay = dayjs.utc(formState.startDate).startOf('day');
+      const now = dayjs.utc();
+
+      // If start of day is in the past, use current time plus a small buffer
+      if (startOfDay.isBefore(now)) {
+        startAtISO = now.add(10, 'second').toISOString();
+      } else {
+        startAtISO = startOfDay.toISOString();
+      }
+      endAtISO = dayjs.utc(formState.endDate).endOf('day').toISOString();
+    } else {
+      startAtISO = dayjs
+        .utc(formState.startDate)
+        .hour(parseInt(startTimeParts[0]))
+        .minute(parseInt(startTimeParts[1]))
+        .second(parseInt(startTimeParts[2]) || 0)
+        .toISOString();
+      endAtISO = dayjs
+        .utc(formState.endDate)
+        .hour(parseInt(endTimeParts[0]))
+        .minute(parseInt(endTimeParts[1]))
+        .second(parseInt(endTimeParts[2]) || 0)
+        .toISOString();
+    }
 
     if (recurrenceEnabled && formState.recurrenceRule) {
       const validation = validateRecurrenceInput(

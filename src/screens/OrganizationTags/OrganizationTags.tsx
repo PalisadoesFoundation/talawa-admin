@@ -43,9 +43,9 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import IconComponent from 'components/IconComponent/IconComponent';
-import TableLoader from 'components/TableLoader/TableLoader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type { InterfaceTagDataPG } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import type { GridCellParams } from '@mui/x-data-grid';
@@ -59,6 +59,7 @@ import type {
   ReportingTableGridProps,
 } from '../../types/ReportingTable/interface';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { Stack } from '@mui/material';
 import {
   dataGridStyle,
@@ -98,6 +99,7 @@ function OrganizationTags(): JSX.Element {
     data: orgUserTagsData,
     error: orgUserTagsError,
     refetch: orgUserTagsRefetch,
+    fetchMore: fetchMoreTags,
   }: InterfaceOrganizationTagsQueryPG = useQuery(
     ORGANIZATION_USER_TAGS_LIST_PG,
     {
@@ -114,13 +116,37 @@ function OrganizationTags(): JSX.Element {
     orgUserTagsRefetch();
   }, []);
 
+  const loadMoreTags = (): void => {
+    if (!orgUserTagsData?.organization?.tags?.pageInfo?.hasNextPage) return;
+    fetchMoreTags({
+      variables: {
+        after: orgUserTagsData?.organization?.tags?.pageInfo?.endCursor,
+      },
+      updateQuery: (prevResult, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prevResult;
+        return {
+          organization: {
+            ...fetchMoreResult.organization,
+            tags: {
+              ...fetchMoreResult.organization.tags,
+              edges: [
+                ...(prevResult.organization?.tags?.edges || []),
+                ...(fetchMoreResult.organization?.tags?.edges || []),
+              ],
+            },
+          },
+        };
+      },
+    });
+  };
+
   const [create, { loading: createTagLoading }] = useMutation(CREATE_USER_TAG);
 
   const createTag = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!tagName.trim()) {
-      toast.error(t('enterTagName'));
+      NotificationToast.error(t('enterTagName'));
       return;
     }
 
@@ -129,15 +155,15 @@ function OrganizationTags(): JSX.Element {
         variables: { name: tagName, organizationId: orgId },
       });
       if (data) {
-        toast.success(t('tagCreationSuccess'));
+        NotificationToast.success(t('tagCreationSuccess'));
         orgUserTagsRefetch();
         setTagName('');
         setCreateTagModalIsOpen(false);
       } else {
-        toast.error(t('tagCreationFailed'));
+        NotificationToast.error(t('tagCreationFailed'));
       }
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
     }
   };
 
@@ -145,7 +171,7 @@ function OrganizationTags(): JSX.Element {
     return (
       <div className={styles.errorContainer + ' bg-white rounded-4 my-3'}>
         <div className={styles.errorMessage}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded fontSize="large" className={styles.errorIcon} />
           <h6 className="fw-bold text-danger text-center">
             {t('errorLoadingTagsData')}
             <br />
@@ -168,13 +194,6 @@ function OrganizationTags(): JSX.Element {
   const redirectToSubTags = (tagId: string): void => {
     navigate(`/orgtags/${orgId}/subTags/${tagId}`);
   };
-  const headerTitles: string[] = [
-    tCommon('sl_no'),
-    t('tagName'),
-    t('totalSubTags'),
-    t('totalAssignedUsers'),
-    tCommon('actions'),
-  ];
 
   const renderCountLink = (
     params: GridCellParams,
@@ -314,7 +333,14 @@ function OrganizationTags(): JSX.Element {
         </Stack>
       ),
       loadingOverlay: () => (
-        <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
+        <LoadingState
+          isLoading={true}
+          variant="skeleton"
+          size="lg"
+          data-testid="orgTagsLoadingOverlay"
+        >
+          <></>
+        </LoadingState>
       ),
     },
     sx: { ...dataGridStyle },
@@ -382,13 +408,33 @@ function OrganizationTags(): JSX.Element {
                 data-testid="orgUserTagsScrollableDiv"
                 className={styles.orgUserTagsScrollableDiv}
               >
-                <ReportingTable
-                  rows={
-                    userTagsList?.map((req) => ({ ...req })) as ReportingRow[]
+                <InfiniteScroll
+                  dataLength={userTagsList?.length ?? 0}
+                  next={loadMoreTags}
+                  hasMore={
+                    orgUserTagsData?.organization?.tags?.pageInfo
+                      ?.hasNextPage ?? false
                   }
-                  columns={columns}
-                  gridProps={{ ...gridProps }}
-                />
+                  loader={
+                    <LoadingState
+                      isLoading={true}
+                      variant="inline"
+                      size="sm"
+                      data-testid="infiniteScrollLoader"
+                    >
+                      {null}
+                    </LoadingState>
+                  }
+                  scrollableTarget="orgUserTagsScrollableDiv"
+                >
+                  <ReportingTable
+                    rows={
+                      userTagsList?.map((req) => ({ ...req })) as ReportingRow[]
+                    }
+                    columns={columns}
+                    gridProps={{ ...gridProps }}
+                  />
+                </InfiniteScroll>
               </div>
             </div>
           )}

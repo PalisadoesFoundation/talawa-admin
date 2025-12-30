@@ -2,7 +2,13 @@ import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -266,6 +272,96 @@ const mockWithExtraUsers = {
   },
 };
 
+const manyUsersMock = {
+  request: {
+    query: FUND_CAMPAIGN_PLEDGE,
+    variables: { input: { id: 'fundCampaignId' } },
+  },
+  result: {
+    data: {
+      fundCampaign: {
+        __typename: 'FundCampaign',
+        id: '1',
+        name: 'Test Campaign',
+        startAt: '2023-01-01T00:00:00Z',
+        endAt: '2024-12-31T23:59:59Z',
+        currencyCode: 'USD',
+        goalAmount: 1000,
+        pledges: {
+          __typename: 'PledgeConnection',
+          edges: [
+            {
+              __typename: 'PledgeEdge',
+              node: {
+                __typename: 'Pledge',
+                id: '1',
+                amount: 100,
+                createdAt: '2024-01-01T00:00:00Z',
+                note: 'Test note',
+                campaign: {
+                  __typename: 'FundCampaign',
+                  id: '1',
+                  name: 'Test Campaign',
+                },
+                pledger: {
+                  __typename: 'User',
+                  id: '1',
+                  name: 'Main User 1',
+                  avatarURL: null,
+                },
+                users: [
+                  {
+                    __typename: 'User',
+                    id: '1',
+                    name: 'Main User 1',
+                    avatarURL: null,
+                  },
+                  {
+                    __typename: 'User',
+                    id: '2',
+                    name: 'Extra User 1',
+                    avatarURL: null,
+                  },
+                  {
+                    __typename: 'User',
+                    id: '3',
+                    name: 'Extra User 2',
+                    avatarURL: null,
+                  },
+                  {
+                    __typename: 'User',
+                    id: '4',
+                    name: 'Extra User 3',
+                    avatarURL: null,
+                  },
+                  {
+                    __typename: 'User',
+                    id: '5',
+                    name: 'Extra User 4',
+                    avatarURL: null,
+                  },
+                  {
+                    __typename: 'User',
+                    id: '6',
+                    name: 'Extra User 5',
+                    avatarURL: null,
+                  },
+                  {
+                    __typename: 'User',
+                    id: '7',
+                    name: 'Extra User 6',
+                    avatarURL: null,
+                  },
+                ],
+              },
+            },
+          ],
+        },
+      },
+    },
+  },
+};
+
 const link1 = new StaticMockLink([updatedMocks]);
 const link2 = new StaticMockLink(MOCKS_FUND_CAMPAIGN_PLEDGE_ERROR);
 const link3 = new StaticMockLink([EMPTY_MOCK]);
@@ -360,6 +456,36 @@ describe('Testing Campaign Pledge Screen', () => {
     });
   });
 
+  it('renders localized column headers', async () => {
+    renderFundCampaignPledge(link1);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
+    });
+
+    // Get translation values with fallbacks
+    const t = (i18nForTest.getDataByLanguage('en')?.translation?.pledges ??
+      {}) as Record<string, string>;
+    const tCommon = (i18nForTest.getDataByLanguage('en')?.common ??
+      {}) as Record<string, string>;
+
+    // Wait for DataGrid headers to render - may take time to appear
+    await waitFor(
+      () => {
+        expect(screen.getByText(t.pledgers ?? 'Pledgers')).toBeInTheDocument();
+        expect(
+          screen.getByText(t.pledgeDate ?? 'Pledge Date'),
+        ).toBeInTheDocument();
+        expect(screen.getByText(t.pledged ?? 'Pledged')).toBeInTheDocument();
+        expect(screen.getByText(t.donated ?? 'Donated')).toBeInTheDocument();
+        expect(
+          screen.getByText(tCommon.action ?? 'Action'),
+        ).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
+  });
+
   it('open and closes Create Pledge modal', async () => {
     // Set up controlled date for active campaign
     vi.setSystemTime(new Date('2024-06-15'));
@@ -436,9 +562,10 @@ describe('Testing Campaign Pledge Screen', () => {
     await waitFor(() =>
       expect(screen.getByText(translations.deletePledge)).toBeInTheDocument(),
     );
-    await userEvent.click(screen.getByTestId('deletePledgeCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
+
     await waitFor(() =>
-      expect(screen.queryByTestId('deletePledgeCloseBtn')).toBeNull(),
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument(),
     );
   });
 
@@ -498,6 +625,9 @@ describe('Testing Campaign Pledge Screen', () => {
   it('renders the empty pledge component', async () => {
     renderFundCampaignPledge(link3);
     await waitFor(() => {
+      expect(
+        screen.getByTestId('fund-campaign-pledge-empty-state'),
+      ).toBeInTheDocument();
       expect(screen.getByText(translations.noPledges)).toBeInTheDocument();
     });
   });
@@ -548,98 +678,6 @@ describe('Testing Campaign Pledge Screen', () => {
   });
 
   it('should handle popup styling when there are many extra users', async () => {
-    const manyUsersMock = {
-      request: {
-        query: FUND_CAMPAIGN_PLEDGE,
-        variables: {
-          input: { id: 'fundCampaignId' },
-        },
-      },
-      result: {
-        data: {
-          fundCampaign: {
-            __typename: 'FundCampaign',
-            id: '1',
-            name: 'Test Campaign',
-            startAt: '2023-01-01T00:00:00Z',
-            endAt: '2024-12-31T23:59:59Z',
-            currencyCode: 'USD',
-            goalAmount: 1000,
-            pledges: {
-              __typename: 'PledgeConnection',
-              edges: [
-                {
-                  __typename: 'PledgeEdge',
-                  node: {
-                    __typename: 'Pledge',
-                    id: '1',
-                    amount: 100,
-                    createdAt: '2024-01-01T00:00:00Z',
-                    note: 'Test note',
-                    campaign: {
-                      __typename: 'FundCampaign',
-                      id: '1',
-                      name: 'Test Campaign',
-                    },
-                    pledger: {
-                      __typename: 'User',
-                      id: '1',
-                      name: 'Main User 1',
-                      avatarURL: null,
-                    },
-                    users: [
-                      {
-                        __typename: 'User',
-                        id: '1',
-                        name: 'Main User 1',
-                        avatarURL: null,
-                      },
-                      {
-                        __typename: 'User',
-                        id: '2',
-                        name: 'Extra User 1',
-                        avatarURL: null,
-                      },
-                      {
-                        __typename: 'User',
-                        id: '3',
-                        name: 'Extra User 2',
-                        avatarURL: null,
-                      },
-                      {
-                        __typename: 'User',
-                        id: '4',
-                        name: 'Extra User 3',
-                        avatarURL: null,
-                      },
-                      {
-                        __typename: 'User',
-                        id: '5',
-                        name: 'Extra User 4',
-                        avatarURL: null,
-                      },
-                      {
-                        __typename: 'User',
-                        id: '6',
-                        name: 'Extra User 5',
-                        avatarURL: null,
-                      },
-                      {
-                        __typename: 'User',
-                        id: '7',
-                        name: 'Extra User 6',
-                        avatarURL: null,
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        },
-      },
-    };
-
     const manyUsersLink = new StaticMockLink([manyUsersMock]);
     renderFundCampaignPledge(manyUsersLink);
 
@@ -650,7 +688,7 @@ describe('Testing Campaign Pledge Screen', () => {
     // Find more container and check text
     const moreContainer = screen.getByTestId('moreContainer-1');
     expect(moreContainer).toBeInTheDocument();
-    expect(moreContainer).toHaveTextContent('+6 more...');
+    expect(moreContainer).toHaveTextContent('+6 more');
 
     // Click to show popup
     await userEvent.click(moreContainer);
@@ -669,6 +707,18 @@ describe('Testing Campaign Pledge Screen', () => {
     await userEvent.keyboard('{Escape}');
     await waitFor(() => {
       expect(screen.queryByTestId('extra-users-popup')).not.toBeInTheDocument();
+    });
+  });
+
+  it('renders pledge row when note is present', async () => {
+    const manyUsersLink = new StaticMockLink([manyUsersMock]);
+    renderFundCampaignPledge(manyUsersLink);
+
+    // Wait for the amount cell to be rendered for the pledge
+    await waitFor(async () => {
+      const amountCells = await screen.findAllByTestId('amountCell');
+      expect(amountCells.length).toBeGreaterThan(0);
+      expect(amountCells[0]).toHaveTextContent('$100');
     });
   });
 
@@ -800,6 +850,9 @@ describe('Testing Campaign Pledge Screen', () => {
     await waitFor(() => {
       // Both conditions belong here
       expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('fund-campaign-pledge-empty-state'),
+      ).toBeInTheDocument();
       expect(screen.getByText(translations.noPledges)).toBeInTheDocument();
     });
   });
@@ -980,7 +1033,7 @@ describe('Testing Campaign Pledge Screen', () => {
       expect(addPledgeBtn).toBeDisabled();
       expect(addPledgeBtn).toHaveAttribute(
         'title',
-        'pledges.campaignNotActive',
+        'Campaign is not currently active',
       );
     });
     vi.useRealTimers();
@@ -1190,7 +1243,7 @@ describe('Testing Campaign Pledge Screen', () => {
 
     // Click on more container to open popup
     const moreContainer = screen.getByTestId('moreContainer-extraAvatarPledge');
-    expect(moreContainer).toHaveTextContent('+1 more...');
+    expect(moreContainer).toHaveTextContent('+1 more');
     await userEvent.click(moreContainer);
 
     // Check popup is open and extra user with avatar is rendered
@@ -1267,5 +1320,58 @@ describe('Testing Campaign Pledge Screen', () => {
     );
     expect(mainUserContainer).toBeInTheDocument();
     expect(mainUserContainer).toHaveTextContent('Fallback Pledger');
+  });
+
+  it('should handle search input and trim search value', async () => {
+    renderFundCampaignPledge(link1);
+
+    // Wait for component to load and pledges to appear
+    await waitFor(() => {
+      expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
+    });
+
+    // Wait for pledges to load
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+      expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+    });
+
+    // Find the search input
+    const searchInput = screen.getByTestId('searchPledger');
+    expect(searchInput).toBeInTheDocument();
+
+    // Type in the search input with leading/trailing spaces
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, '  John Doe  ');
+
+    // Wait for debounce (300ms default) to complete
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 350));
+    });
+
+    // The onSearchChange callback should have been called with trimmed value and filtered results
+    await waitFor(
+      () => {
+        // Search uses trimmed value - John Doe should still be visible
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+        // Jane Doe should be filtered out (proves search filters correctly with trimmed value)
+        expect(screen.queryByText('Jane Doe')).not.toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
+
+    // Clear and type again to ensure the callback is covered
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, 'Jane');
+
+    // Wait for debounce again
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 350));
+    });
+
+    await waitFor(() => {
+      // Jane Doe should now be visible
+      expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+    });
   });
 });

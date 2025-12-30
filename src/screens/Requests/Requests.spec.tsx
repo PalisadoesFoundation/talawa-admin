@@ -477,11 +477,12 @@ describe('Testing Requests screen', () => {
     await userEvent.keyboard('{Enter}');
     await wait(200);
 
-    // When search returns no results, the DataGrid is still rendered with no rows
+    // When there are no requests at all, show "no requests found" message
     const grid = screen.getByRole('grid');
     expect(grid).toBeInTheDocument();
-    // Assert zero data rows (header only) for empty search result
-    expect(grid.getAttribute('aria-rowcount')).toBe('1');
+
+    const rows = grid.querySelectorAll('[role="row"]');
+    expect(rows.length).toBe(1);
   });
 
   test('Testing Request data is not present', async () => {
@@ -499,10 +500,9 @@ describe('Testing Requests screen', () => {
 
     await wait(200);
 
-    const noRequestsText = await screen.findByText(
-      /No Membership Requests Found/i,
-    );
-    expect(noRequestsText).toBeInTheDocument();
+    expect(
+      screen.getByTestId('requests-no-requests-empty'),
+    ).toBeInTheDocument();
   });
 
   test('Should render warning alert when there are no organizations', async () => {
@@ -887,13 +887,11 @@ describe('Testing Requests screen', () => {
     await wait(200);
     // With no previous data and no search term, component renders the empty state message
     expect(
-      screen.getByText(/No Membership Requests Found/i),
+      screen.getByTestId('requests-no-requests-empty'),
     ).toBeInTheDocument();
   });
 
   test('shows no results message when search returns no rows', async () => {
-    // Instead of checking for the "no results" message which requires a complex component state,
-    // verify that the DataGrid shows zero data rows (aria-rowcount="1" means only header row)
     const SEARCH_EMPTY_MOCKS = [
       {
         request: {
@@ -1325,7 +1323,7 @@ describe('Testing Requests screen', () => {
 
     // Verify appropriate empty state or error handling
     expect(
-      screen.getByText(/No Membership Requests Found/i),
+      screen.getByTestId('requests-no-requests-empty'),
     ).toBeInTheDocument();
   });
 

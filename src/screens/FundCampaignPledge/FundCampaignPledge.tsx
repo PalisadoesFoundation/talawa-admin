@@ -2,6 +2,7 @@ import { useQuery, type ApolloQueryResult } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
@@ -11,9 +12,10 @@ import { currencySymbols } from 'utils/currency';
 import styles from 'style/app-fixed.module.css';
 import PledgeDeleteModal from './deleteModal/PledgeDeleteModal';
 import PledgeModal from './modal/PledgeModal';
-import { Breadcrumbs, Link, Popover, Stack, Typography } from '@mui/material';
+import { Breadcrumbs, Link, Popover, Typography } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import type {
   InterfacePledgeInfo,
@@ -22,29 +24,29 @@ import type {
   InterfaceCampaignInfoPG,
 } from 'utils/interfaces';
 import ProgressBar from 'react-bootstrap/ProgressBar';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 enum ModalState {
   SAME = 'same',
   DELETE = 'delete',
 }
 
-const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
-  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
-};
-
+/**
+ * Renders the Fund Campaign Pledges screen.
+ *
+ * Responsibilities:
+ * - Displays all pledges for a fund campaign
+ * - Supports searching and sorting via AdminSearchFilterBar
+ * - Shows pledge progress toggle (pledged vs raised amounts)
+ * - Renders popover for extra users when multiple pledgers exist
+ * - Handles create, edit, and delete pledge flows
+ *
+ * Localization:
+ * - Uses `common` and `pledges` namespaces
+ *
+ * @returns JSX.Element
+ */
 const fundCampaignPledge = (): JSX.Element => {
-  const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -158,7 +160,7 @@ const fundCampaignPledge = (): JSX.Element => {
     // Get fund name from the campaign's fund property
     const fundName =
       pledgeData?.fundCampaign?.pledges?.edges[0]?.node?.campaign?.fund?.name ??
-      tCommon('Funds');
+      tCommon('funds');
     return { pledges: sortedPledges, totalPledged, totalRaised, fundName };
   }, [pledgeData, searchTerm, sortBy, tCommon]);
 
@@ -177,7 +179,6 @@ const fundCampaignPledge = (): JSX.Element => {
   useEffect(() => {
     refetchPledge();
   }, [sortBy, refetchPledge]);
-  console.log('campaignInfo', campaignInfo);
 
   const openModal = (modal: ModalState): void => {
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
@@ -227,7 +228,7 @@ const fundCampaignPledge = (): JSX.Element => {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded className={styles.errorIcon} />
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Pledges' })}
             <br />
@@ -241,7 +242,7 @@ const fundCampaignPledge = (): JSX.Element => {
   const columns: GridColDef[] = [
     {
       field: 'pledgers',
-      headerName: 'Pledgers',
+      headerName: t('pledges.pledgers'),
       flex: 3,
       minWidth: 50,
       align: 'left',
@@ -254,7 +255,9 @@ const fundCampaignPledge = (): JSX.Element => {
         const extraUsers = users.slice(1);
 
         return (
-          <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
+          <div
+            className={`d-flex ${styles.flexWrapGap} ${styles.maxHeight120}`}
+          >
             {mainUsers.map((user: InterfaceUserInfoPG, index: number) => (
               <div
                 className={styles.pledgerContainer}
@@ -285,7 +288,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 onClick={(event) => handleClick(event, extraUsers)}
                 data-testid={`moreContainer-${params.row.id}`}
               >
-                +{extraUsers.length} more...
+                {tCommon('moreCount', { count: extraUsers.length })}
               </div>
             )}
           </div>
@@ -294,111 +297,93 @@ const fundCampaignPledge = (): JSX.Element => {
     },
     {
       field: 'pledgeDate',
-      headerName: 'Pledge Date',
+      headerName: t('pledges.pledgeDate'),
       flex: 1,
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return dayjs(params.row.pledgeDate).format('DD/MM/YYYY');
-      },
+      renderCell: (params: GridCellParams) =>
+        dayjs(params.row.pledgeDate).format('DD/MM/YYYY'),
     },
     {
       field: 'amount',
-      headerName: 'Pledged',
+      headerName: t('pledges.pledged'),
       flex: 1,
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="amountCell"
-          >
-            {
-              currencySymbols[
-                params.row.currency as keyof typeof currencySymbols
-              ]
-            }
-            {params.row.amount.toLocaleString('en-US')}
-          </div>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <div
+          className="d-flex justify-content-center fw-bold"
+          data-testid="amountCell"
+        >
+          {currencySymbols[params.row.currency as keyof typeof currencySymbols]}
+          {params.row.amount.toLocaleString('en-US')}
+        </div>
+      ),
     },
     {
       field: 'donated',
-      headerName: 'Donated',
+      headerName: t('pledges.donated'),
       flex: 1,
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="paidCell"
-          >
-            {
-              currencySymbols[
-                params.row.currency as keyof typeof currencySymbols
-              ]
-            }
-            0
-          </div>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <div
+          className="d-flex justify-content-center fw-bold"
+          data-testid="paidCell"
+        >
+          {currencySymbols[params.row.currency as keyof typeof currencySymbols]}
+          0
+        </div>
+      ),
     },
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: tCommon('action'),
       flex: 1,
       minWidth: 100,
       align: 'center',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <>
-            <Button
-              variant="success"
-              size="sm"
-              className={`me-2 ${styles.editButton}`}
-              data-testid="editPledgeBtn"
-              onClick={() =>
-                handleOpenModal(params.row as InterfacePledgeInfo, 'edit')
-              }
-            >
-              {' '}
-              <i className="fa fa-edit" />
-            </Button>
-            <Button
-              size="sm"
-              variant="danger"
-              className="rounded"
-              data-testid="deletePledgeBtn"
-              onClick={() =>
-                handleDeleteClick(params.row as InterfacePledgeInfo)
-              }
-            >
-              <i className="fa fa-trash" />
-            </Button>
-          </>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <>
+          <Button
+            variant="success"
+            size="sm"
+            className={`me-2 ${styles.editButton}`}
+            data-testid="editPledgeBtn"
+            onClick={() =>
+              handleOpenModal(params.row as InterfacePledgeInfo, 'edit')
+            }
+          >
+            <i className="fa fa-edit" />
+          </Button>
+          <Button
+            size="sm"
+            variant="danger"
+            className="rounded"
+            data-testid="deletePledgeBtn"
+            onClick={() => handleDeleteClick(params.row as InterfacePledgeInfo)}
+          >
+            <i className="fa fa-trash" />
+          </Button>
+        </>
+      ),
     },
   ];
 
   return (
     <div>
-      <Breadcrumbs aria-label="breadcrumb" className="ms-1">
+      <Breadcrumbs aria-label={tCommon('breadcrumb')} className="ms-1">
         <Link
           underline="hover"
           color="inherit"
@@ -415,13 +400,14 @@ const fundCampaignPledge = (): JSX.Element => {
         >
           {campaignInfo?.name}
         </Link>
-        <Typography color="text.primary">{t('pledges')}</Typography>
+        <Typography color="text.primary">{t('pledges.pledges')}</Typography>
       </Breadcrumbs>
       <div className={styles.overviewContainer}>
         <div className={styles.titleContainer}>
           <h3>{campaignInfo?.name}</h3>
           <span>
-            {t('endsOn')} {dayjs(campaignInfo?.endDate).format('DD/MM/YYYY')}
+            {t('pledges.endsOn')}{' '}
+            {dayjs(campaignInfo?.endDate).format('DD/MM/YYYY')}
           </span>
         </div>
         <div className={styles.progressContainer}>
@@ -429,7 +415,7 @@ const fundCampaignPledge = (): JSX.Element => {
             <div
               className={`btn-group ${styles.toggleGroup}`}
               role="group"
-              aria-label="Toggle between Pledged and Raised amounts"
+              aria-label={tCommon('togglePledgedRaised')}
             >
               <input
                 type="radio"
@@ -445,7 +431,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
                 htmlFor="pledgedRadio"
               >
-                {t('pledgedAmount')}
+                {t('pledges.pledgedAmount')}
               </label>
 
               <input
@@ -460,7 +446,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
                 htmlFor="raisedRadio"
               >
-                {t('raisedAmount')}
+                {t('pledges.raisedAmount')}
               </label>
             </div>
           </div>
@@ -478,9 +464,8 @@ const fundCampaignPledge = (): JSX.Element => {
                 ] || '$'
               }${progressIndicator === 'pledged' ? totalPledged.toLocaleString('en-US') : totalRaised.toLocaleString('en-US')}`}
               max={100}
-              style={{ height: '1.5rem', fontSize: '0.9rem' }}
               data-testid="progressBar"
-              className={`${styles.progressBar}`}
+              className={`${styles.progressBar} ${styles.progressBarHeight}`}
             />
             <div className={styles.endpoints}>
               <div className={styles.start}>
@@ -500,49 +485,56 @@ const fundCampaignPledge = (): JSX.Element => {
         </div>
       </div>
       <div className={`${styles.btnsContainerPledge} align-items-center`}>
-        <SearchBar
-          placeholder={t('searchPledger')}
-          onSearch={setSearchTerm}
-          inputTestId="searchPledger"
-          buttonTestId="searchBtn"
-        />
-        <div className="d-flex gap-4 mb-1">
-          <div className="d-flex justify-space-between">
-            <SortingButton
-              sortingOptions={[
-                { label: t('lowestAmount'), value: 'amount_ASC' },
-                { label: t('highestAmount'), value: 'amount_DESC' },
-                { label: t('latestEndDate'), value: 'endDate_DESC' },
-                { label: t('earliestEndDate'), value: 'endDate_ASC' },
-              ]}
-              selectedOption={sortBy ?? ''}
-              onSortChange={(value) =>
+        <AdminSearchFilterBar
+          searchPlaceholder={t('pledges.searchPledger')}
+          searchValue={searchTerm}
+          onSearchChange={(value) => setSearchTerm(value.trim())}
+          onSearchSubmit={(value: string) => {
+            setSearchTerm(value.trim());
+          }}
+          searchInputTestId="searchPledger"
+          searchButtonTestId="searchBtn"
+          hasDropdowns={true}
+          dropdowns={[
+            {
+              id: 'sort-pledges',
+              label: tCommon('sort'),
+              title: tCommon('sort'),
+              dataTestIdPrefix: 'filter',
+              selectedOption: sortBy,
+              onOptionChange: (value) =>
                 setSortBy(
                   value as
                     | 'amount_ASC'
                     | 'amount_DESC'
                     | 'endDate_ASC'
                     | 'endDate_DESC',
-                )
-              }
-              dataTestIdPrefix="filter"
-              buttonLabel={tCommon('sort')}
-            />
-          </div>
-          <div>
+                ),
+              options: [
+                { label: t('pledges.lowestAmount'), value: 'amount_ASC' },
+                { label: t('pledges.highestAmount'), value: 'amount_DESC' },
+                { label: t('pledges.latestEndDate'), value: 'endDate_DESC' },
+                { label: t('pledges.earliestEndDate'), value: 'endDate_ASC' },
+              ],
+              type: 'sort',
+            },
+          ]}
+          additionalButtons={
             <Button
               variant="success"
               className={styles.dropdown}
               disabled={!isWithinCampaignDates}
               onClick={() => handleOpenModal(null, 'create')}
               data-testid="addPledgeBtn"
-              title={!isWithinCampaignDates ? t('campaignNotActive') : ''}
+              title={
+                !isWithinCampaignDates ? t('pledges.campaignNotActive') : ''
+              }
             >
               <i className={'fa fa-plus me-2'} />
-              {t('addPledge')}
+              {t('pledges.addPledge')}
             </Button>
-          </div>
-        </div>
+          }
+        />
       </div>
       <DataGrid
         disableColumnMenu
@@ -551,12 +543,24 @@ const fundCampaignPledge = (): JSX.Element => {
         getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noPledges')}
-            </Stack>
+            <EmptyState
+              icon="volunteer_activism"
+              message={t('pledges.noPledges')}
+              dataTestId="fund-campaign-pledge-empty-state"
+            />
           ),
         }}
-        sx={dataGridStyle}
+        className={`${styles.dataGridNoHover} ${styles.dataGridRounded}`}
+        sx={{
+          '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+            outline: '2px solid var(--primary-theme-color)',
+            outlineOffset: '-2px',
+          },
+          '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
+            outline: '2px solid var(--primary-theme-color)',
+            outlineOffset: '-2px',
+          },
+        }}
         getRowClassName={() => `${styles.rowBackgroundPledge}`}
         autoHeight
         rowHeight={65}

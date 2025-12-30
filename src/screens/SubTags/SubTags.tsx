@@ -41,8 +41,8 @@
  */
 import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
-import Loader from 'components/Loader/Loader';
 import IconComponent from 'components/IconComponent/IconComponent';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useNavigate, useParams, Link } from 'react-router';
 import type { ChangeEvent } from 'react';
 import React, { useState } from 'react';
@@ -51,7 +51,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceQueryUserTagChildTags } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import { DataGrid } from '@mui/x-data-grid';
@@ -68,9 +68,7 @@ import { Stack } from '@mui/material';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
 function SubTags(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -153,18 +151,22 @@ function SubTags(): JSX.Element {
 
     try {
       const { data } = await create({
-        variables: { name: tagName, organizationId: orgId, parentTagId },
+        variables: {
+          name: tagName,
+          organizationId: orgId,
+          folderId: parentTagId,
+        },
       });
 
       if (data) {
-        toast.success(t('tagCreationSuccess') as string);
+        NotificationToast.success(t('tagCreationSuccess') as string);
         subTagsRefetch();
         setTagName('');
         setAddSubTagModalIsOpen(false);
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(error.message);
+        NotificationToast.error(error.message);
       }
     }
   };
@@ -173,9 +175,9 @@ function SubTags(): JSX.Element {
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded className={styles.errorIcon} />
           <h6 className="fw-bold text-danger text-center">
-            Error occured while loading sub tags
+            {tCommon('errorOccured')}
           </h6>
         </div>
       </div>
@@ -201,6 +203,42 @@ function SubTags(): JSX.Element {
   const redirectToSubTags = (tagId: string): void => {
     navigate(`/orgtags/${orgId}/subTags/${tagId}`);
   };
+
+  const sortDropdownConfig = {
+    id: 'subtags-sort-dropdown',
+    label: tCommon('sort'),
+    type: 'sort' as const,
+    options: [
+      { label: t('Latest'), value: 'DESCENDING' },
+      { label: t('Oldest'), value: 'ASCENDING' },
+    ],
+    selectedOption: tagSortOrder,
+    onOptionChange: (value: string | number) =>
+      setTagSortOrder(value as SortedByType),
+    dataTestIdPrefix: 'sortTags',
+  };
+
+  const additionalActionButtons = (
+    <>
+      <Button
+        onClick={() => redirectToManageTag(parentTagId as string)}
+        data-testid="manageCurrentTagBtn"
+        className={`${styles.createButton} mb-3`}
+      >
+        {`${t('manageTag')} ${subTagsData?.getChildTags.name}`}
+      </Button>
+
+      <Button
+        variant="success"
+        onClick={showAddSubTagModal}
+        data-testid="addSubTagBtn"
+        className={`${styles.createButton} mb-3`}
+      >
+        <i className={'fa fa-plus me-2'} />
+        {t('addChildTag')}
+      </Button>
+    </>
+  );
 
   const columns: GridColDef[] = [
     {
@@ -304,47 +342,23 @@ function SubTags(): JSX.Element {
     <>
       <Row>
         <div>
-          <div className={`${styles.btnsContainer} gap-4 flex-wrap`}>
-            <SearchBar
-              placeholder={tCommon('searchByName')}
-              onSearch={(term) => setTagSearchName(term.trim())}
-              inputTestId="searchByName"
-              buttonTestId="searchBtn"
-            />
+          <AdminSearchFilterBar
+            searchPlaceholder={tCommon('searchByName')}
+            searchValue={tagSearchName}
+            onSearchChange={(value) => setTagSearchName(value.trim())}
+            searchInputTestId="searchByName"
+            searchButtonTestId="searchBtn"
+            hasDropdowns={true}
+            dropdowns={[sortDropdownConfig]}
+            additionalButtons={additionalActionButtons}
+          />
 
-            <SortingButton
-              sortingOptions={[
-                { label: tCommon('Latest'), value: 'DESCENDING' },
-                { label: tCommon('Oldest'), value: 'ASCENDING' },
-              ]}
-              selectedOption={tagSortOrder}
-              onSortChange={(value) => setTagSortOrder(value as SortedByType)}
-              dataTestIdPrefix="sortTags"
-              buttonLabel={tCommon('sort')}
-            />
-
-            <Button
-              onClick={() => redirectToManageTag(parentTagId as string)}
-              data-testid="manageCurrentTagBtn"
-              className={`${styles.createButton} mb-3`}
-            >
-              {`${t('manageTag')} ${subTagsData?.getChildTags.name}`}
-            </Button>
-
-            <Button
-              variant="success"
-              onClick={showAddSubTagModal}
-              data-testid="addSubTagBtn"
-              className={`${styles.createButton} mb-3`}
-            >
-              <i className={'fa fa-plus me-2'} />
-              {t('addChildTag')}
-            </Button>
-          </div>
-
-          {subTagsLoading || createUserTagLoading ? (
-            <Loader />
-          ) : (
+          <LoadingState
+            isLoading={subTagsLoading}
+            variant="skeleton"
+            size="lg"
+            data-testid="subTagsLoadingState"
+          >
             <div className="mb-2 ">
               <div className="bg-white light border rounded-top mb-0 py-2 d-flex align-items-center">
                 <div className="ms-3 my-1">
@@ -356,7 +370,7 @@ function SubTags(): JSX.Element {
                   className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
                   data-testid="allTagsBtn"
                 >
-                  {'Tags'}
+                  {t('tags')}
                   <i className={'mx-2 fa fa-caret-right'} />
                 </div>
 
@@ -387,7 +401,16 @@ function SubTags(): JSX.Element {
                     subTagsData?.getChildTags.childTags.pageInfo.hasNextPage ??
                     false
                   }
-                  loader={<InfiniteScrollLoader />}
+                  loader={
+                    <LoadingState
+                      isLoading={true}
+                      variant="inline"
+                      size="sm"
+                      data-testid="infiniteScrollLoader"
+                    >
+                      <></>
+                    </LoadingState>
+                  }
                   scrollableTarget="subTagsScrollableDiv"
                 >
                   <DataGrid
@@ -408,7 +431,6 @@ function SubTags(): JSX.Element {
                     }}
                     sx={dataGridStyle}
                     getRowClassName={() => `${styles.rowBackground}`}
-                    autoHeight
                     rowHeight={65}
                     rows={subTagsList?.map((subTag, index) => ({
                       id: index + 1,
@@ -420,7 +442,7 @@ function SubTags(): JSX.Element {
                 </InfiniteScroll>
               </div>
             </div>
-          )}
+          </LoadingState>
         </div>
       </Row>
 
@@ -471,8 +493,9 @@ function SubTags(): JSX.Element {
               value="add"
               data-testid="addSubTagSubmitBtn"
               className={styles.addButton}
+              disabled={createUserTagLoading}
             >
-              {tCommon('create')}
+              {createUserTagLoading ? tCommon('creating') : tCommon('create')}
             </Button>
           </Modal.Footer>
         </Form>
