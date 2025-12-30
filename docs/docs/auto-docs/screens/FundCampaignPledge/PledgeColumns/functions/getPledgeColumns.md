@@ -4,16 +4,22 @@
 
 # Function: getPledgeColumns()
 
-> **getPledgeColumns**(`__namedParameters`): `GridColDef`[]
+> **getPledgeColumns**(`props`): `GridColDef`[]
 
-Defined in: src/screens/FundCampaignPledge/PledgeColumns.tsx:29
+Defined in: [src/screens/FundCampaignPledge/PledgeColumns.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/FundCampaignPledge/PledgeColumns.tsx#L37)
+
+Returns the column definitions for the pledges DataGrid.
 
 ## Parameters
 
-### \_\_namedParameters
+### props
 
 `InterfacePledgeColumnsProps`
+
+The props containing translation functions and event handlers.
 
 ## Returns
 
 `GridColDef`[]
+
+An array of GridColDef for the pledges table.

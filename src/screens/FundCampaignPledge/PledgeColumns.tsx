@@ -11,6 +11,9 @@ import type {
 } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 
+/**
+ * Props for the getPledgeColumns function.
+ */
 interface InterfacePledgeColumnsProps {
   t: TFunction<'translation', undefined>;
   tCommon: TFunction<'common', undefined>;
@@ -26,6 +29,11 @@ interface InterfacePledgeColumnsProps {
   handleDeleteClick: (pledge: InterfacePledgeInfo) => void;
 }
 
+/**
+ * Returns the column definitions for the pledges DataGrid.
+ * @param props - The props containing translation functions and event handlers.
+ * @returns An array of GridColDef for the pledges table.
+ */
 export const getPledgeColumns = ({
   t,
   tCommon,
@@ -77,7 +85,18 @@ export const getPledgeColumns = ({
             <div
               className={styles.moreContainer}
               aria-describedby={id}
+              role="button"
+              tabIndex={0}
               onClick={(event) => handleClick(event, extraUsers)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  handleClick(
+                    event as unknown as React.MouseEvent<HTMLDivElement>,
+                    extraUsers,
+                  );
+                }
+              }}
               data-testid={`moreContainer-${params.row.id}`}
             >
               {tCommon('moreCount', { count: extraUsers.length })}
@@ -97,7 +116,9 @@ export const getPledgeColumns = ({
     headerClassName: `${styles.tableHeader}`,
     sortable: false,
     renderCell: (params: GridCellParams) =>
-      dayjs(params.row.pledgeDate).format('DD/MM/YYYY'),
+      params.row.pledgeDate
+        ? dayjs(params.row.pledgeDate).format('DD/MM/YYYY')
+        : '-',
   },
   {
     field: 'amount',
@@ -113,8 +134,9 @@ export const getPledgeColumns = ({
         className="d-flex justify-content-center fw-bold"
         data-testid="amountCell"
       >
-        {currencySymbols[params.row.currency as keyof typeof currencySymbols]}
-        {params.row.amount.toLocaleString('en-US')}
+        {currencySymbols[params.row.currency as keyof typeof currencySymbols] ||
+          ''}
+        {params.row.amount?.toLocaleString('en-US') ?? 0}
       </div>
     ),
   },
