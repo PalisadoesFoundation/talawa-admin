@@ -194,20 +194,5 @@
   "imageUploadError": "Failed to upload image",
   "imageUploadSuccess": "Image uploaded successfully",
   "postalCode": "Postal Code",
-  "state": "State",
-  "emailPlaceholder": "name@example.com",
-  "failedToRegister": "Failed to register for the event",
-  "leftOrgSuccess": "You have successfully left the organization!",
-  "loadingOrgDetails": "Loading organization details...",
-  "organizationNotFound": "Organization not found",
-  "leaveOrganization": "Leave Organization",
-  "leaveJoinedOrganization": "Leave Joined Organization",
-  "leaveOrgConfirmation": "Are you sure you want to leave this organization?",
-  "enterEmailToConfirm": "Enter your email to confirm:",
-  "enterYourEmail": "Enter your email",
-  "continue": "Continue",
-  "back": "Back",
-  "confirmEmailInput": "Confirm email input",
-  "confirmLeaveButton": "Confirm leave button",
-  "groupTable": "Group table"
+  "state": "State"
 }

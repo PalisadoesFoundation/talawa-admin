@@ -194,20 +194,5 @@
   "imageUploadError": "Error al subir la imagen",
   "imageUploadSuccess": "Imagen subida con éxito",
   "postalCode": "Código Postal",
-  "state": "Estado",
-  "emailPlaceholder": "nombre@ejemplo.com",
-  "failedToRegister": "Error al registrarse para el evento",
-  "leftOrgSuccess": "¡Has dejado la organización con éxito!",
-  "loadingOrgDetails": "Cargando detalles de la organización...",
-  "organizationNotFound": "Organización no encontrada",
-  "leaveOrganization": "Dejar la organización",
-  "leaveJoinedOrganization": "Dejar la organización unida",
-  "leaveOrgConfirmation": "¿Estás seguro de que quieres dejar esta organización?",
-  "enterEmailToConfirm": "Introduce tu correo electrónico para confirmar:",
-  "enterYourEmail": "Introduce tu correo electrónico",
-  "continue": "Continuar",
-  "back": "Atrás",
-  "confirmEmailInput": "Confirmar entrada de correo electrónico",
-  "confirmLeaveButton": "Botón de confirmar salida",
-  "groupTable": "Tabla de grupos"
+  "state": "Estado"
 }
