@@ -196,5 +196,21 @@
   "imageUploadError": "छवि अपलोड करने में त्रुटि",
   "imageUploadSuccess": "छवि सफलतापूर्वक अपलोड हुई",
   "postalCode": "डाक कोड",
-  "state": "राज्य"
+  "state": "राज्य",
+  "pagination": {
+    "label": "पृष्ठांकन",
+    "noItems": "दिखाने के लिए कोई आइटम नहीं है",
+    "first": "पहला",
+    "previous": "पिछला",
+    "next": "अगला",
+    "last": "आख़िरी",
+    "goToFirst": "पहले पृष्ठ पर जाएँ",
+    "goToPrevious": "पिछले पृष्ठ पर जाएँ",
+    "goToNext": "अगले पृष्ठ पर जाएँ",
+    "goToLast": "आख़िरी पृष्ठ पर जाएँ",
+    "rowsPerPage": "प्रति पृष्ठ पंक्तियाँ",
+    "pageInfo": "पृष्ठ {{currentPage}} / {{totalPages}}",
+    "showing": "{{totalItems}} में से {{startItem}}-{{endItem}} दिखा रहे हैं",
+    "pageSizeChangeError": "पेज साइज़ बदलने में विफल रहा। कृपया पुनः प्रयास करें।"
+  }
 }

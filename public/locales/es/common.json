@@ -195,5 +195,21 @@
   "imageUploadError": "Error al subir la imagen",
   "imageUploadSuccess": "Imagen subida con éxito",
   "postalCode": "Código Postal",
-  "state": "Estado"
+  "state": "Estado",
+  "pagination": {
+    "label": "Paginación",
+    "noItems": "No hay elementos para mostrar",
+    "first": "Primera",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "last": "Última",
+    "goToFirst": "Ir a la primera página",
+    "goToPrevious": "Ir a la página anterior",
+    "goToNext": "Ir a la página siguiente",
+    "goToLast": "Ir a la última página",
+    "rowsPerPage": "Filas por página",
+    "pageInfo": "Página {{currentPage}} de {{totalPages}}",
+    "showing": "Mostrando {{startItem}}-{{endItem}} de {{totalItems}}",
+    "pageSizeChangeError": "No se pudo cambiar el tamaño de página. Inténtalo de nuevo."
+  }
 }

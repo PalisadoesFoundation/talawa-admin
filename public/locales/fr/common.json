@@ -196,5 +196,21 @@
   "imageUploadError": "Échec du téléchargement de l'image",
   "imageUploadSuccess": "Image téléchargée avec succès",
   "postalCode": "Code Postal",
-  "state": "État"
+  "state": "État",
+  "pagination": {
+    "label": "Pagination",
+    "noItems": "Aucun élément à afficher",
+    "first": "Première",
+    "previous": "Précédente",
+    "next": "Suivante",
+    "last": "Dernière",
+    "goToFirst": "Aller à la première page",
+    "goToPrevious": "Aller à la page précédente",
+    "goToNext": "Aller à la page suivante",
+    "goToLast": "Aller à la dernière page",
+    "rowsPerPage": "Lignes par page",
+    "pageInfo": "Page {{currentPage}} sur {{totalPages}}",
+    "showing": "Affichage de {{startItem}} à {{endItem}} sur {{totalItems}}",
+    "pageSizeChangeError": "Impossible de modifier la taille de la page. Veuillez réessayer."
+  }
 }

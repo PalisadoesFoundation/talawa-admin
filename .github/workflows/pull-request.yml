@@ -411,7 +411,7 @@ jobs:
           sudo apt-get install -y ripgrep
 
       - name: Run pagination pattern check
-        run: tsx scripts/githooks/check-pagination-patterns.ts
+        run: pnpm exec tsx scripts/githooks/check-pagination-patterns.ts
 
   Pre-Test-Checks-Pass:
     name: All Pre-Testing Checks Pass

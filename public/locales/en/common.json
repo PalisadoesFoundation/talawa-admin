@@ -137,7 +137,8 @@
     "goToLast": "Go to last page",
     "rowsPerPage": "Rows per page",
     "pageInfo": "Page {{currentPage}} of {{totalPages}}",
-    "showing": "Showing {{startItem}}-{{endItem}} of {{totalItems}}"
+    "showing": "Showing {{startItem}}-{{endItem}} of {{totalItems}}",
+    "pageSizeChangeError": "Failed to change page size. Please try again."
   },
   "loadingAdminPlugin": "Loading admin plugin...",
   "loadingUserPlugin": "Loading user plugin...",
