@@ -68,7 +68,9 @@
     "user": "user",
     "loading": "Loading...",
     "communityLogo": "Community Logo",
-    "organizations": "Organizations"
+    "organizations": "Organizations",
+    "loadingOrganizations": "Loading organizations...",
+    "errorLoadingOrganizations": "Error loading organizations. Please try again."
   },
   "signOut": {
     "retryPrompt": "Failed to revoke session. Retry?",
