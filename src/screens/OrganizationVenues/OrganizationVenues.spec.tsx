@@ -335,8 +335,16 @@ describe('Organisation Venues', () => {
 
   test('Render modal to edit venue', async () => {
     renderOrganizationVenue(link);
+<<<<<<< HEAD
+=======
+    await waitFor(() =>
+      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
+    );
+    // Ensure the first venue item has been rendered before querying buttons
+    await screen.findByTestId('venue-item1');
+>>>>>>> da3855abe7 (fix(tests): ensure venue item is rendered before querying update button in OrganizationVenues tests)
 
-    const updateBtn = await screen.findByTestId('updateVenueBtn1');
+    const updateBtn = screen.getByTestId('updateVenueBtn1');
     fireEvent.click(updateBtn);
     await waitFor(() => {
       expect(screen.getByTestId('venueForm')).toBeInTheDocument();
