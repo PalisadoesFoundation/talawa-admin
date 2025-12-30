@@ -78,6 +78,12 @@
     "signingOut": "साइन आउट हो रहा है...",
     "signOut": "साइन आउट"
   },
+  "orgSelector": {
+    "organization": "संगठन",
+    "selectOrganization": "एक संगठन चुनें",
+    "noOrganizationsAvailable": "कोई संगठन उपलब्ध नहीं है",
+    "noMatchingOrganizations": "कोई मेल खाने वाला संगठन नहीं मिला"
+  },
   "userLoginPage": {
     "title": "तालावा व्यवस्थापक",
     "fromPalisadoes": "Palisadoes फाउंडेशन स्वयंसेवकों द्वारा विकसित एक ओपन-सोर्स एप्लिकेशन",
@@ -210,7 +216,16 @@
     "cancel": "रद्द करें",
     "endOfResults": "परिणाम समाप्त",
     "noResultsFoundFor": "कोई परिणाम नहीं मिला",
-    "OR": "या"
+    "OR": "या",
+    "imageUploadError": "छवि अपलोड विफल। कृपया पुनः प्रयास करें।",
+    "imageUploadSuccess": "छवि सफलतापूर्वक अपलोड की गई।",
+    "congratulationOrgCreated": "बधाई हो! संगठन बनाया गया है।",
+    "goToStore": "स्टोर पर जाएं",
+    "manageFeaturesInfo": "इस संगठन के लिए उपलब्ध सुविधाओं और प्लगइन्स का प्रबंधन करें।",
+    "orgName": "नाम दर्ज करें",
+    "sortOrganizations": "संगठनों को क्रमबद्ध करें",
+    "admins": "प्रशासक",
+    "members": "सदस्य"
   },
   "orgListCard": {
     "manage": "प्रबंधित करें",

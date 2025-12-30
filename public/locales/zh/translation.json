@@ -78,6 +78,12 @@
     "signingOut": "正在登出...",
     "signOut": "登出"
   },
+  "orgSelector": {
+    "organization": "组织",
+    "selectOrganization": "选择一个组织",
+    "noOrganizationsAvailable": "没有可用的组织",
+    "noMatchingOrganizations": "未找到匹配的组织"
+  },
   "userLoginPage": {
     "title": "塔拉瓦管理员",
     "fromPalisadoes": "Palisadoes 基金会志愿者开发的开源应用程序",
@@ -210,7 +216,16 @@
     "cancel": "取消",
     "endOfResults": "结果结束",
     "noResultsFoundFor": "未找到结果",
-    "OR": "或"
+    "OR": "或",
+    "imageUploadError": "图像上传失败。请再试一次。",
+    "imageUploadSuccess": "图像上传成功。",
+    "congratulationOrgCreated": "恭喜！组织已创建。",
+    "goToStore": "前往商店",
+    "manageFeaturesInfo": "管理此组织可用的功能和插件。",
+    "orgName": "输入名称",
+    "sortOrganizations": "排序组织",
+    "admins": "管理员",
+    "members": "成员"
   },
   "orgListCard": {
     "manage": "管理",
