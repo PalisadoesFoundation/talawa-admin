@@ -5,7 +5,7 @@ pnpm run format:fix
 pnpm run lint-staged
 pnpm run typecheck
 
-STAGED_TS=$(git diff --cached --name-only -z --diff-filter=ACMRT | grep -zE '^src/.*\.(ts|tsx)$' | grep -zv '.spec.ts' | grep -zv '.test.ts')
+STAGED_TS=$(git diff --cached --name-only -z --diff-filter=ACMRT | grep -zE '^src/.*\.(ts|tsx)$' | grep -zvE '\.(spec|test)\.ts$')
 if [ -n "$STAGED_TS" ]; then
   echo "📝 Validating TSDoc comments on staged files..."
   echo "$STAGED_TS" | xargs -0 npx eslint --rule "tsdoc/syntax: error" --max-warnings=0
