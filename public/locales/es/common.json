@@ -132,6 +132,8 @@
   "unblock": "Desbloquear",
   "unblockedSuccessfully": "{{item}} desbloqueado exitosamente",
   "pluginSettings": "Configuración de complementos",
+  "showPassword": "Mostrar contraseña",
+  "hidePassword": "Ocultar contraseña",
   "volunteer": "Voluntario",
   "moreCount": "+{{count}} más",
   "togglePledgedRaised": "Alternar entre cantidades prometidas y recaudadas",
@@ -170,5 +172,6 @@
   "eventDetails": "Detalles del Evento",
   "selectLanguage": "Seleccionar idioma",
   "talawa": "Talawa",
-  "talawaBranding": "Marca Talawa"
+  "talawaBranding": "Marca Talawa",
+  "unableToLoadData": "No se pudo cargar los datos."
 }
