@@ -6,7 +6,7 @@
 
 > `const` **CREATE\_USER\_TAG**: `DocumentNode`
 
-Defined in: [src/GraphQl/Mutations/TagMutations.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L12)
+Defined in: [src/GraphQl/Mutations/TagMutations.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/TagMutations.ts#L11)
 
 GraphQL mutation to create a user tag.
 
@@ -16,11 +16,7 @@ Name of the tag.
 
 ## Param
 
-Color of the tag.
-
-## Param
-
-Id of the parent tag.
+Id of the folder/parent tag to organize tags.
 
 ## Param
 
