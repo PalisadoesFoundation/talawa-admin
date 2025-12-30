@@ -10,6 +10,7 @@ import {
   ACCEPT_EVENT_INVITATION,
 } from 'GraphQl/Mutations/mutations';
 import { Button } from 'react-bootstrap';
+import Loader from 'components/Loader/Loader';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
