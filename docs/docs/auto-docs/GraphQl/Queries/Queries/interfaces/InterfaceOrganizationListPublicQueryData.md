@@ -4,24 +4,14 @@
 
 # Interface: InterfaceOrganizationListPublicQueryData
 
-Defined in: [src/GraphQl/Queries/Queries.ts:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L98)
+Defined in: [src/GraphQl/Queries/Queries.ts:109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L109)
+
+TypeScript interface for ORGANIZATION_LIST_PUBLIC query response
 
 ## Properties
 
 ### organizations
 
-> **organizations**: `object`[]
+> **organizations**: [`InterfaceOrganizationPublic`](InterfaceOrganizationPublic.md)[]
 
-Defined in: [src/GraphQl/Queries/Queries.ts:99](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L99)
-
-#### addressLine1
-
-> **addressLine1**: `string`
-
-#### id
-
-> **id**: `string`
-
-#### name
-
-> **name**: `string`
+Defined in: [src/GraphQl/Queries/Queries.ts:110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L110)
