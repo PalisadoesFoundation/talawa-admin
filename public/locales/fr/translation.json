@@ -68,7 +68,9 @@
     "user": "Utilisateur",
     "loading": "Chargement",
     "communityLogo": "Logo Communautaire",
-    "organizations": "Organisations"
+    "organizations": "Organisations",
+    "loadingOrganizations": "Chargement des organisations...",
+    "errorLoadingOrganizations": "Erreur lors du chargement des organisations. Veuillez réessayer."
   },
   "signOut": {
     "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
