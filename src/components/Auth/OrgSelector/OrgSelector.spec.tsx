@@ -1,10 +1,11 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, test, expect, vi, afterEach } from 'vitest';
 import { I18nextProvider } from 'react-i18next';
 import i18n from '../../../utils/i18nForTest';
 import { OrgSelector } from './OrgSelector';
 import type { InterfaceOrgOption } from '../../../types/Auth/OrgSelector/interface';
+import styles from '../../../style/app-fixed.module.css';
 
 describe('OrgSelector', () => {
   const mockOrganizations: InterfaceOrgOption[] = [
@@ -22,12 +23,8 @@ describe('OrgSelector', () => {
     return render(<I18nextProvider i18n={i18n}>{component}</I18nextProvider>);
   };
 
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   describe('Basic Rendering', () => {
@@ -590,7 +587,7 @@ describe('OrgSelector', () => {
 
       await waitFor(() => {
         const selectedOption = screen.getByTestId('org-option-org2');
-        expect(selectedOption).toHaveClass(/orgSelectorOptionSelected/);
+        expect(selectedOption).toHaveClass(styles.orgSelectorOptionSelected);
       });
     });
 
@@ -622,6 +619,7 @@ describe('OrgSelector', () => {
       expect(
         screen.queryByTestId('org-selector-dropdown'),
       ).not.toBeInTheDocument();
+      expect(onChange).not.toHaveBeenCalled();
     });
 
     test('does not close dropdown when clicking inside the component', async () => {
