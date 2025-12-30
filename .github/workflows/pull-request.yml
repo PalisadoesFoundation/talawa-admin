@@ -1215,29 +1215,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Check for deprecated Form.Group/Control/Label in src/screens
-        run: |
-          echo "Checking for deprecated Form usage in src/screens/..."
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
 
-          if [ ! -d "src/screens" ]; then
-            echo "src/screens directory not found, skipping check"
-            exit 0
-          fi
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'pnpm'
 
-          DEPRECATED=$(grep -rn 'Form\.\(Group\|Control\|Label\)' src/screens/ 2>/dev/null || true)
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
 
-          if [ -n "$DEPRECATED" ]; then
-            echo ""
-            echo "ERROR: Found deprecated Form.Group/Control/Label usage in src/screens/:"
-            echo "$DEPRECATED"
-            echo ""
-            echo "Please migrate to FormFieldGroup components:"
-            echo "  • Form.Group + Form.Control → FormTextField"
-            echo "  • Form.Group + Form.Control[as=textarea] → FormTextArea"
-            echo "  • Form.Check → FormCheckbox"
-            echo ""
-            echo "See: src/shared-components/FormFieldGroup/README.md"
-            exit 1
-          fi
-
-          echo "No deprecated Form usage found in src/screens/"
+      - name: Check for deprecated Form usage
+        run: pnpm run lint:forms

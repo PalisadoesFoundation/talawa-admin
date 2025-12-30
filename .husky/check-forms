@@ -3,10 +3,6 @@
 
 echo "Checking for deprecated Form usage..."
 
-node scripts/check-form-usage.js
-
-if [ $? -ne 0 ]; then
-  exit 1
-fi
+node scripts/check-form-usage.js || exit 1
 
 echo "✅ Form usage check passed"
