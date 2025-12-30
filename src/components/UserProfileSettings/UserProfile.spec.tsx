@@ -26,22 +26,23 @@ describe('UserProfile Component', () => {
       image: 'profile-image-url',
     };
 
-    const { getByText, getByAltText, getByTestId } = renderWithProviders(
+    const { getByText, getByTestId } = renderWithProviders(
       <UserProfile {...userDetails} />,
     );
 
     expect(getByText('Chris..')).toBeInTheDocument();
-
     expect(getByText('john..@example.com')).toBeInTheDocument();
 
-    const profileImage = getByAltText('profile picture');
-    expect(profileImage).toBeInTheDocument();
-    expect(profileImage).toHaveAttribute('src', 'profile-image-url');
+    const profileAvatar = getByTestId('profile-avatar');
+    expect(profileAvatar).toBeInTheDocument();
+    expect(profileAvatar.querySelector('img')).toHaveAttribute(
+      'src',
+      'profile-image-url',
+    );
     expect(getByText('Joined 13 April 2023')).toBeInTheDocument();
-
     expect(getByTestId('copyProfileLink')).toBeInTheDocument();
   });
-  it('renders Avatar when image is null', () => {
+  it('renders fallback avatar when image is null', () => {
     const userDetails = {
       firstName: 'Alice',
       lastName: 'Smith',
@@ -49,11 +50,11 @@ describe('UserProfile Component', () => {
       createdAt: new Date('2022-12-12'),
       image: 'null',
     };
-
-    const { getByAltText } = renderWithProviders(
+    const { getByTestId } = renderWithProviders(
       <UserProfile {...userDetails} />,
     );
-    expect(getByAltText('dummy picture')).toBeInTheDocument();
+    // ProfileAvatarDisplay fallback renders a div with data-testid="profile-avatar"
+    expect(getByTestId('profile-avatar')).toBeInTheDocument();
   });
   it('renders full firstName and email when they are short', () => {
     const userDetails = {
@@ -64,10 +65,12 @@ describe('UserProfile Component', () => {
       image: 'https://example.com/image.jpg',
     };
 
-    const { getByText } = renderWithProviders(<UserProfile {...userDetails} />);
-
+    const { getByText, getByTestId } = renderWithProviders(
+      <UserProfile {...userDetails} />,
+    );
     expect(getByText('Bob')).toBeInTheDocument();
     expect(getByText('bob@ex.com')).toBeInTheDocument();
+    expect(getByTestId('profile-avatar')).toBeInTheDocument();
   });
   it('renders formatted join date when createdAt is valid', () => {
     const userDetails = {
@@ -78,8 +81,11 @@ describe('UserProfile Component', () => {
       image: 'https://example.com/lily.jpg',
     };
 
-    const { getByText } = renderWithProviders(<UserProfile {...userDetails} />);
+    const { getByText, getByTestId } = renderWithProviders(
+      <UserProfile {...userDetails} />,
+    );
     expect(getByText('Joined 15 January 2022')).toBeInTheDocument();
+    expect(getByTestId('profile-avatar')).toBeInTheDocument();
   });
   it('renders "Unavailable" when createdAt is invalid', () => {
     const userDetails = {
@@ -90,8 +96,11 @@ describe('UserProfile Component', () => {
       image: 'https://example.com/mark.jpg',
     };
 
-    const { getByText } = renderWithProviders(<UserProfile {...userDetails} />);
+    const { getByText, getByTestId } = renderWithProviders(
+      <UserProfile {...userDetails} />,
+    );
     expect(getByText('Joined Unavailable')).toBeInTheDocument();
+    expect(getByTestId('profile-avatar')).toBeInTheDocument();
   });
   it('handles createdAt passed as a string and formats it correctly', () => {
     const userDetails = {
@@ -106,7 +115,10 @@ describe('UserProfile Component', () => {
       typeof UserProfile
     >[0];
 
-    const { getByText } = renderWithProviders(<UserProfile {...castedUser} />);
+    const { getByText, getByTestId } = renderWithProviders(
+      <UserProfile {...castedUser} />,
+    );
     expect(getByText('Joined 10 February 2023')).toBeInTheDocument();
+    expect(getByTestId('profile-avatar')).toBeInTheDocument();
   });
 });

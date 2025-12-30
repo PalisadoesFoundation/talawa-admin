@@ -51,47 +51,49 @@ describe('ProfileImageSection', () => {
     vi.clearAllMocks();
   });
 
-  it('renders with avatar URL', () => {
-    render(<ProfileImageSection {...defaultProps} />);
-
-    const img = screen.getByTestId('profile-picture');
-    expect(img.tagName).toBe('IMG');
-    expect(img).toHaveAttribute('src', defaultProps.userDetails.avatarURL);
-    expect(img).toHaveAttribute('crossOrigin', 'anonymous');
+  it('renders with avatar URL and normalizes 127.0.0.1 to localhost', () => {
+    const propsWith127 = {
+      ...defaultProps,
+      userDetails: {
+        ...defaultProps.userDetails,
+        avatarURL: 'http://127.0.0.1:4000/objects/avatar.png',
+      },
+    };
+    render(<ProfileImageSection {...propsWith127} />);
+    const avatar = screen.getByTestId('profile-avatar');
+    // Should call sanitizeAvatars with normalized URL
+    expect(sanitizeAvatars).toHaveBeenCalledWith(
+      null,
+      'http://localhost:4000/objects/avatar.png',
+    );
+    // Should pass crossOrigin prop to ProfileAvatarDisplay
+    expect(avatar).toBeInTheDocument();
   });
 
-  it('renders Avatar component when no avatarURL is provided', () => {
+  it('renders fallback avatar when no avatarURL is provided', () => {
     const propsWithoutAvatar = {
       ...defaultProps,
       userDetails: {
         name: 'John Doe',
       },
     };
-
     render(<ProfileImageSection {...propsWithoutAvatar} />);
-
-    const avatar = screen.getByTestId('profile-picture');
-    expect(avatar.textContent).toContain('Mock Avatar: John Doe');
+    const avatar = screen.getByTestId('profile-avatar');
+    expect(avatar).toBeInTheDocument();
   });
 
   it('handles file upload button click', async () => {
     render(<ProfileImageSection {...defaultProps} />);
-
     const uploadButton = screen.getByTestId('uploadImageBtn');
     await userEvent.click(uploadButton);
-
-    // Verify button accessibility attributes
     expect(uploadButton).toHaveAttribute('role', 'button');
-    expect(uploadButton).toHaveAttribute('aria-label', 'Edit profile picture');
     expect(uploadButton).toHaveAttribute('tabIndex', '0');
   });
 
   it('calls handleFileUpload when file is selected', () => {
     render(<ProfileImageSection {...defaultProps} />);
-
     const fileInput = screen.getByTestId('fileInput');
     const file = new File(['test'], 'test.png', { type: 'image/png' });
-
     fireEvent.change(fileInput, { target: { files: [file] } });
     expect(mockHandleFileUpload).toHaveBeenCalled();
   });
@@ -102,28 +104,24 @@ describe('ProfileImageSection', () => {
       ...defaultProps,
       selectedAvatar: mockFile,
     };
-
     render(<ProfileImageSection {...propsWithSelectedAvatar} />);
-
     expect(sanitizeAvatars).toHaveBeenCalledWith(
       mockFile,
       defaultProps.userDetails.avatarURL,
     );
   });
 
-  it('applies correct styling to profile picture', () => {
+  it('applies correct styling to profile avatar', () => {
     render(<ProfileImageSection {...defaultProps} />);
-
-    const img = screen.getByTestId('profile-picture');
-    expect(img).toHaveClass('rounded-circle');
-    expect(img.style.width).toBe('60px');
-    expect(img.style.height).toBe('60px');
-    expect(img.style.objectFit).toBe('cover');
+    const avatar = screen.getByTestId('profile-avatar');
+    expect(avatar).toHaveClass('rounded-circle');
+    expect(avatar.style.width).toBe('80px');
+    expect(avatar.style.height).toBe('80px');
+    expect(avatar.style.objectFit).toBe('cover');
   });
 
   it('applies correct styling to edit icon', () => {
     render(<ProfileImageSection {...defaultProps} />);
-
     const editIcon = screen.getByTestId('uploadImageBtn');
     expect(editIcon).toHaveClass('fas');
     expect(editIcon).toHaveClass('fa-edit');

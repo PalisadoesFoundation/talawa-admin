@@ -25,8 +25,8 @@
  */
 import React from 'react';
 import { Form, Col } from 'react-bootstrap';
-import Avatar from 'components/Avatar/Avatar';
 import { sanitizeAvatars } from 'utils/sanitizeAvatar';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import styles from 'style/app-fixed.module.css';
 
 interface InterfaceProfileImageSectionProps {
@@ -62,53 +62,59 @@ const ProfileImageSection: React.FC<InterfaceProfileImageSectionProps> = ({
   selectedAvatar,
   fileInputRef,
   handleFileUpload,
-}) => (
-  <Col lg={12} className="mb-2">
-    <div className="text-center mb-3">
-      <div className="position-relative d-inline-block">
-        {userDetails?.avatarURL ? (
-          <img
+}) => {
+  const normalizedAvatarUrl =
+    userDetails?.avatarURL && userDetails.avatarURL.includes('127.0.0.1')
+      ? userDetails.avatarURL.replace('127.0.0.1', 'localhost')
+      : userDetails?.avatarURL;
+  return (
+    <Col lg={12} className="mb-2">
+      <div className="text-center mb-3">
+        <div className="position-relative d-inline-block">
+          <ProfileAvatarDisplay
+            imageUrl={
+              normalizedAvatarUrl
+                ? sanitizeAvatars(selectedAvatar, normalizedAvatarUrl)
+                : undefined
+            }
+            fallbackName={userDetails?.name}
+            size="medium"
+            shape="circle"
+            customSize={60}
+            border={false}
             className="rounded-circle"
-            style={{ width: '60px', height: '60px', objectFit: 'cover' }}
-            src={sanitizeAvatars(selectedAvatar, userDetails.avatarURL)}
-            alt="User"
-            data-testid="profile-picture"
+            style={{ width: 80, height: 80, objectFit: 'cover' }}
+            dataTestId="profile-avatar"
+            objectFit="cover"
+            enableEnlarge={true}
             crossOrigin="anonymous"
           />
-        ) : (
-          <Avatar
-            name={userDetails.name}
-            alt="User Image"
-            size={60}
-            dataTestId="profile-picture"
-            radius={150}
+          <i
+            className="fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle"
+            onClick={() => fileInputRef.current?.click()}
+            data-testid="uploadImageBtn"
+            style={{ cursor: 'pointer', fontSize: '1.2rem' }}
+            title={userDetails?.name}
+            role="button"
+            aria-label={userDetails?.name}
+            tabIndex={0}
           />
-        )}
-        <i
-          className="fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle"
-          onClick={() => fileInputRef.current?.click()}
-          data-testid="uploadImageBtn"
-          style={{ cursor: 'pointer', fontSize: '1.2rem' }}
-          title="Edit profile picture"
-          role="button"
-          aria-label="Edit profile picture"
-          tabIndex={0}
-        />
+        </div>
       </div>
-    </div>
-    <Form.Control
-      accept="image/*"
-      id="postphoto"
-      name="photo"
-      type="file"
-      className={styles.cardControl}
-      data-testid="fileInput"
-      multiple={false}
-      ref={fileInputRef}
-      onChange={handleFileUpload}
-      style={{ display: 'none' }}
-    />
-  </Col>
-);
+      <Form.Control
+        accept="image/*"
+        id="postphoto"
+        name="photo"
+        type="file"
+        className={styles.cardControl}
+        data-testid="fileInput"
+        multiple={false}
+        ref={fileInputRef}
+        onChange={handleFileUpload}
+        style={{ display: 'none' }}
+      />
+    </Col>
+  );
+};
 
 export default ProfileImageSection;
