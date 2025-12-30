@@ -49,7 +49,7 @@ jobs:
         run: |
           chmod +x ./.github/workflows/scripts/countline.py
           ./.github/workflows/scripts/countline.py --lines 600 --exclude_files src/screens/LoginPage/LoginPage.tsx src/GraphQl/Queries/Queries.ts src/screens/OrgList/OrgList.tsx src/GraphQl/Mutations/mutations.ts src/components/EventListCard/EventListCardModals.tsx src/components/TagActions/TagActionsMocks.ts src/utils/interfaces.ts src/screens/MemberDetail/MemberDetail.tsx src/components/OrgPostCard/OrgPostCard.tsx src/components/UsersTableItem/UsersTableItem.tsx src/components/UserPortal/ChatRoom/ChatRoom.tsx src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.tsx src/screens/OrganizationActionItems/ActionItemModal/ActionItemModal.tsx src/shared-components/postCard/PostCard.tsx src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.tsx src/shared-components/EventForm/EventForm.tsx
-      
+
       - name: Get changed TypeScript files
         id: changed-files
         run: |
@@ -84,7 +84,7 @@ jobs:
       - name: Check for type errors
         if: steps.changed-files.outputs.only_changed != 'true'
         run: pnpm typecheck
-      
+
       - name: Check for linting errors (including TSDoc)
         if: steps.changed-files.outputs.only_changed != 'true'
         run: pnpm run lint:check
