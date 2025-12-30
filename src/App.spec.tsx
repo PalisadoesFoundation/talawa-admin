@@ -63,10 +63,8 @@ vi.mock('shared-components/posts/posts', () => ({
   default: () => <div data-testid="mock-posts">Mock Posts</div>,
 }));
 
-vi.mock('components/SuperAdminScreen/SuperAdminScreen', () => ({
-  default: () => (
-    <div data-testid="mock-super-admin-screen">Mock Super Admin Screen</div>
-  ),
+vi.mock('components/AdminScreen/AdminScreen', () => ({
+  default: () => <div data-testid="mock-admin-screen">Mock Admin Screen</div>,
 }));
 
 vi.mock('screens/BlockUser/BlockUser', () => ({
@@ -550,9 +548,8 @@ describe('Testing the App Component', () => {
   });
 
   it('should navigate to user settings', async () => {
-    const { setItem, removeItem } = useLSModule.useLocalStorage();
+    const { setItem } = useLSModule.useLocalStorage();
     setItem('IsLoggedIn', 'TRUE');
-    removeItem('AdminFor');
 
     renderApp(link, '/user/settings');
     expect(await screen.findByTestId('mock-settings')).toBeInTheDocument();
@@ -575,35 +572,6 @@ describe('Testing the App Component', () => {
       renderApp(link, '/user/settings');
 
       // Guard blocks route; mocked Settings must NOT appear
-      await waitFor(() => {
-        expect(screen.queryByTestId('mock-settings')).not.toBeInTheDocument();
-      });
-    } finally {
-      lsSpy.mockRestore();
-    }
-  });
-
-  it('blocks /user/settings when AdminFor is present', async () => {
-    // Force IsLoggedIn === 'TRUE' and AdminFor present
-    const lsSpy = vi.spyOn(useLSModule, 'default').mockImplementation(
-      () =>
-        ({
-          getItem: (key: string) =>
-            key === 'IsLoggedIn'
-              ? 'TRUE'
-              : key === 'AdminFor'
-                ? 'some-org-id'
-                : undefined,
-          setItem: vi.fn(),
-          removeItem: vi.fn(),
-          getStorageKey: (k: string) => `Talawa-admin_${k}`,
-        }) as unknown as ReturnType<typeof useLSModule.default>,
-    );
-
-    try {
-      renderApp(link, '/user/settings');
-
-      // Guard takes "not allowed" branch; mocked Settings must NOT appear
       await waitFor(() => {
         expect(screen.queryByTestId('mock-settings')).not.toBeInTheDocument();
       });

@@ -48,7 +48,8 @@ import type { InterfaceMapType } from 'utils/interfaces';
 const EventDashboardScreen = (): React.JSX.Element => {
   const { getItem } = useLocalStorage();
   const isLoggedIn = getItem('IsLoggedIn');
-  const adminFor = getItem('AdminFor');
+  const admin =
+    getItem('Admin') === true || getItem('Admin') === 'true' ? true : false;
   const location = useLocation();
   const titleKey: string | undefined = map[location.pathname.split('/')[2]];
   const { t } = useTranslation('translation', { keyPrefix: titleKey });
@@ -64,7 +65,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
   }
 
   if (isLoggedIn === 'false') return <Navigate to="/" replace />;
-  if (adminFor === null) {
+  if (!admin) {
     return (
       <>
         <div className={`d-flex flex-row ${styles.containerHeightEventDash}`}>
@@ -74,7 +75,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
             <div
               className={`d-flex flex-row justify-content-between flex-wrap ${styles.gap}`}
             >
-              <div style={{ flex: 1 }}>
+              <div className={styles.flexOne}>
                 <h1>{t('title')}</h1>
               </div>
               <Outlet />
@@ -157,7 +158,7 @@ const EventDashboardScreen = (): React.JSX.Element => {
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
-          <div style={{ flex: 1 }}>
+          <div className={styles.flexOne}>
             <h1>{t('title')}</h1>
           </div>
           <ProfileDropdown portal="admin" />

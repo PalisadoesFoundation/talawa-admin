@@ -36,12 +36,6 @@ describe('Testing Page not found component', () => {
   });
 
   it('should render properly for ADMIN', () => {
-    setItem('AdminFor', [
-      {
-        _id: '6537904485008f171cf29924',
-        __typename: 'Organization',
-      },
-    ]);
     setItem('role', 'administrator');
     render(
       <BrowserRouter>

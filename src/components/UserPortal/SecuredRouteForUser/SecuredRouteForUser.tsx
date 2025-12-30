@@ -21,8 +21,7 @@
  *
  * @remarks
  * - The `isLoggedIn` value is retrieved from local storage using the key `'IsLoggedIn'`.
- * - The `adminFor` value is retrieved from local storage using the key `'AdminFor'`.
- * - If `isLoggedIn` is `'TRUE'` and `adminFor` is `undefined`, the child routes are rendered.
+ * - If `isLoggedIn` is `'TRUE'` and `Admin` is `true`, the child routes are rendered.
  * - If `isLoggedIn` is not `'TRUE'`, the user is redirected to the home page.
  *
  * @requires `react-router-dom` for navigation and route handling.
@@ -49,7 +48,8 @@ const SecuredRouteForUser = (): JSX.Element => {
 
   // Check if the user is logged in and the role of the user
   const isLoggedIn = getItem('IsLoggedIn');
-  const adminFor = getItem('AdminFor');
+  const admin =
+    getItem('Admin') === 'true' || getItem('Admin') === true ? true : false;
 
   const updateLastActive = () => {
     lastActiveRef.current = Date.now();
@@ -80,7 +80,7 @@ const SecuredRouteForUser = (): JSX.Element => {
           removeItem('role');
           removeItem('token');
           removeItem('userId');
-          removeItem('AdminFor');
+          removeItem('Admin');
           setTimeout(() => {
             window.location.href = '/';
           }, 1000);
@@ -103,7 +103,7 @@ const SecuredRouteForUser = (): JSX.Element => {
 
   // Conditional rendering based on authentication status and role
   return isLoggedIn === 'TRUE' ? (
-    <>{adminFor == undefined ? <Outlet /> : <PageNotFound />}</>
+    <>{!admin ? <Outlet /> : <PageNotFound />}</>
   ) : (
     <Navigate to="/" replace />
   );

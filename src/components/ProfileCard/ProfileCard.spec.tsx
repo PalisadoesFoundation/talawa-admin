@@ -69,7 +69,6 @@ beforeEach(() => {
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
   );
   setItem('Admin', false);
-  setItem('AdminFor', []);
   setItem('id', '123');
 });
 
@@ -99,7 +98,7 @@ describe('ProfileDropdown Component', () => {
   });
 
   test('renders Admin', () => {
-    setItem('AdminFor', ['123']);
+    setItem('Admin', true);
     render(
       <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
@@ -235,7 +234,6 @@ describe('ProfileDropdown Component', () => {
 describe('Member screen routing testing', () => {
   test('member screen', async () => {
     setItem('Admin', false);
-    setItem('AdminFor', []);
     setItem('role', 'regular');
     render(
       <MockedProvider mocks={MOCKS}>
@@ -256,7 +254,6 @@ describe('Member screen routing testing', () => {
 
   test('navigates to /user/settings for a user', async () => {
     setItem('Admin', false);
-    setItem('AdminFor', []);
     setItem('role', 'regular');
 
     render(

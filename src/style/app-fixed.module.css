@@ -10215,3 +10215,15 @@ form {
   padding: 20px;
   position: relative;
 }
+
+.flexOne {
+  flex: 1;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.noWrap {
+  white-space: nowrap;
+}

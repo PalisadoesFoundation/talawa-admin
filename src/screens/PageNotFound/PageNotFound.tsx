@@ -37,7 +37,7 @@
  * - `pageNotFound.backToHome`: Text for the "Back to Home" button.
  *
  * @localStorage
- * - `AdminFor`: Key used to determine if the user is an admin.
+ * - `Admin`: Key used to determine if the user is an admin.
  */
 import React from 'react';
 import { Link } from 'react-router';
@@ -64,7 +64,7 @@ const PageNotFound = (): JSX.Element => {
     <section className={styles.pageNotFound}>
       <div className="container text-center">
         <div className="brand">
-          <img src={Logo} alt="Logo" className="img-fluid" />
+          <img src={Logo} alt="" className="img-fluid" />
           {/* Display a message based on admin status */}
           {isAdmin ? (
             <h3 className="text-uppercase mt-4">

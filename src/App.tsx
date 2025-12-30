@@ -156,6 +156,7 @@ function App(): React.ReactElement {
       setItem('id', auth.id);
       setItem('name', auth.name);
       setItem('email', auth.emailAddress);
+      setItem('role', auth.role);
       // setItem('UserImage', auth.avatarURL|| "");
     }
   }, [data, loading, setItem]);

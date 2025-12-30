@@ -25,17 +25,14 @@ import { vi, afterEach, beforeEach, describe, it, expect } from 'vitest';
 
 type LSApi = ReturnType<typeof useLocalStorage>;
 let setItem: LSApi['setItem'];
-let removeItem: LSApi['removeItem'];
 
 beforeEach(() => {
   const ls = useLocalStorage();
   setItem = ls.setItem;
-  removeItem = ls.removeItem;
 
   // Seed guard keys for every test
   setItem('IsLoggedIn', 'TRUE');
   setItem('userId', '123'); // if this screen reads it
-  removeItem('AdminFor'); // must be absent (== undefined)
 });
 
 const routerMocks = vi.hoisted(() => ({
