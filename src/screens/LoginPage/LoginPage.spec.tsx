@@ -2374,6 +2374,12 @@ describe('Cookie-based authentication verification', () => {
     expect(socialLinks.length).toBeGreaterThan(0);
     expect(socialLinks[0]).toHaveAttribute('href');
   });
+});
+
+describe('Organization dropdown data fetching', () => {
+  beforeEach(() => {
+    setLocationPath('/');
+  });
 
   it('sets recaptcha token when recaptcha is completed', async () => {
     render(

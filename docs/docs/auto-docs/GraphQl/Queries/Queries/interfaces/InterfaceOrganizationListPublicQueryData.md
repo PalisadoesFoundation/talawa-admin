@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationListPublicQueryData
 
-Defined in: [src/GraphQl/Queries/Queries.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L105)
+Defined in: [src/GraphQl/Queries/Queries.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L94)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/GraphQl/Queries/Queries.ts:105](https://github.com/PalisadoesFo
 
 > **organizations**: [`InterfaceOrganizationPublic`](InterfaceOrganizationPublic.md)[]
 
-Defined in: [src/GraphQl/Queries/Queries.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L106)
+Defined in: [src/GraphQl/Queries/Queries.ts:95](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Queries/Queries.ts#L95)
