@@ -405,7 +405,10 @@
     "totalAssignedUsers": "कुल नियुक्त उपयोगकर्ता",
     "tagCreationFailed": "टैग निर्माण विफल",
     "errorLoadingTagsData": "संगठन टैग डेटा लोड करते समय त्रुटि हुई",
-    "sortTags": "टैग सॉर्ट करें"
+    "sortTags": "टैग सॉर्ट करें",
+    "tags": "टैग",
+    "Latest": "नवीनतम",
+    "Oldest": "सबसे पुराना"
   },
   "manageTag": {
     "title": "टैग विवरण",
@@ -565,8 +568,10 @@
     "selectActionItemCategory": "क्रिया वस्तु श्रेणी चुनें",
     "selectAssignee": "प्राप्तकर्ता चुनें",
     "volunteer": "स्वयंसेवक",
+    "volunteered": "स्वयंसेवा की",
     "volunteerGroup": "स्वयंसेवक समूह",
     "volunteerAssignment": "स्वयंसेवक असाइनमेंट",
+    "volunteerSuccess": "स्वयंसेवक सफलतापूर्वक जोड़ा गया",
     "individualVolunteer": "व्यक्तिगत स्वयंसेवक",
     "groupAssignment": "समूह असाइनमेंट",
     "hoursVolunteered": "स्वयंसेवा के घंटे",
@@ -1389,6 +1394,10 @@
     "city": "शहर",
     "description": "विवरण",
     "enterDescription": "विवरण दर्ज करें",
+    "atleast_8_char_long": "पासवर्ड कम से कम 8 अक्षर लंबा होना चाहिए",
+    "invalidFileType": "अमान्य फ़ाइल प्रकार। कृपया JPEG, PNG, या GIF अपलोड करें",
+    "fileSizeTooLarge": "फ़ाइल बहुत बड़ी है। अधिकतम आकार 5MB है",
+    "failedToProcessImage": "प्रोफ़ाइल चित्र को संसाधित करने में विफल। कृपया पुनः अपलोड करने का प्रयास करें",
     "title": "समायोजन"
   },
   "donate": {
@@ -1762,6 +1771,7 @@
     "invitations": "निमंत्रण",
     "groups": "स्वयंसेवक समूह",
     "actions": "क्रिया वस्तुएँ",
+    "search": "खोजें",
     "searchByName": "नाम से खोजें",
     "latestEndDate": "नवीनतम समाप्ति तिथि",
     "earliestEndDate": "प्रारंभिक समाप्ति तिथि",
@@ -1781,7 +1791,7 @@
     "receivedEarliest": "सबसे पहले प्राप्त",
     "invitationAccepted": "निमंत्रण सफलतापूर्वक स्वीकार किया गया",
     "invitationRejected": "निमंत्रण सफलतापूर्वक अस्वीकृत",
-    "volunteerSuccess": "स्वयंसेवक के रूप में अनुरोध सफलतापूर्वक किया गया",
+    "volunteerRequestSuccess": "स्वयंसेवक के रूप में अनुरोध सफलतापूर्वक किया गया",
     "recurring": "पुनरावृत्ति",
     "groupInvitationSubject": "स्वयंसेवक समूह में शामिल होने के लिए निमंत्रण",
     "eventInvitationSubject": "कार्यक्रम के लिए स्वयंसेवक बनने का निमंत्रण",

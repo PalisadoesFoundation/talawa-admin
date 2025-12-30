@@ -405,7 +405,10 @@
     "totalAssignedUsers": "分配的总用户数",
     "tagCreationFailed": "标签创建失败",
     "errorLoadingTagsData": "加载组织标签数据时出错",
-    "sortTags": "排序标签"
+    "sortTags": "排序标签",
+    "tags": "标签",
+    "Latest": "最新",
+    "Oldest": "最旧"
   },
   "manageTag": {
     "title": "标签详情",
@@ -565,8 +568,10 @@
     "selectActionItemCategory": "选择行动项类别",
     "selectAssignee": "选择受托人",
     "volunteer": "志愿者",
+    "volunteered": "已志愿",
     "volunteerGroup": "志愿者小组",
     "volunteerAssignment": "志愿者分配",
+    "volunteerSuccess": "志愿者添加成功",
     "individualVolunteer": "个人志愿者",
     "groupAssignment": "小组分配",
     "hoursVolunteered": "志愿服务小时数",
@@ -1389,6 +1394,10 @@
     "city": "城市",
     "description": "描述",
     "enterDescription": "输入描述",
+    "atleast_8_char_long": "密码必须至少8个字符长",
+    "invalidFileType": "无效的文件类型。请上传JPEG、PNG或GIF",
+    "fileSizeTooLarge": "文件太大。最大大小为5MB",
+    "failedToProcessImage": "处理个人资料图片失败。请尝试重新上传",
     "title": "设置"
   },
   "donate": {
@@ -1762,6 +1771,7 @@
     "invitations": "邀请",
     "groups": "志愿者小组",
     "actions": "行动项",
+    "search": "搜索",
     "searchByName": "按名称搜索",
     "latestEndDate": "最晚结束日期",
     "earliestEndDate": "最早结束日期",
@@ -1781,7 +1791,7 @@
     "receivedEarliest": "最早收到",
     "invitationAccepted": "邀请已成功接受",
     "invitationRejected": "邀请已成功拒绝",
-    "volunteerSuccess": "志愿请求成功",
+    "volunteerRequestSuccess": "志愿请求成功",
     "recurring": "重复",
     "groupInvitationSubject": "邀请加入志愿者小组",
     "eventInvitationSubject": "邀请参加活动志愿服务",
