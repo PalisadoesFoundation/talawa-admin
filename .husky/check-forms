@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "Checking for deprecated Form usage..."
+
+node scripts/check-form-usage.js
+
+if [ $? -ne 0 ]; then
+  exit 1
+fi
+
+echo "✅ Form usage check passed"
