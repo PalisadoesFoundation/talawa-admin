@@ -186,5 +186,14 @@
   "selectACountry": "Select a country",
   "passwordLengthRequirement": "Password must be at least {{length}} characters long.",
   "country": "Country",
-  "profilePictureUploadError": "Failed to process profile picture. Please try uploading again."
+  "profilePictureUploadError": "Failed to process profile picture. Please try uploading again.",
+  "addressLine1": "Address Line 1",
+  "addressLine2": "Address Line 2",
+  "city": "City",
+  "createOrganization": "Create Organization",
+  "enterName": "Enter name",
+  "imageUploadError": "Failed to upload image",
+  "imageUploadSuccess": "Image uploaded successfully",
+  "postalCode": "Postal Code",
+  "state": "State"
 }

@@ -174,7 +174,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             </Col>
             <Col sm={6} className="mb-1">
               <Form.Control
-                placeholder={t('state')}
+                placeholder={tCommon('state')}
                 data-testid="modalOrganizationState"
                 autoComplete="off"
                 required
@@ -192,7 +192,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           <Row className="mb-1">
             <Col sm={6} className="mb-1">
               <Form.Control
-                placeholder={t('city')}
+                placeholder={tCommon('city')}
                 data-testid="modalOrganizationCity"
                 autoComplete="off"
                 required
@@ -208,7 +208,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             </Col>
             <Col sm={6} className="mb-1">
               <Form.Control
-                placeholder={t('postalCode')}
+                placeholder={tCommon('postalCode')}
                 data-testid="modalOrganizationPostalCode"
                 autoComplete="off"
                 value={formState.postalCode}
@@ -225,7 +225,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           <Row className="mb-1">
             <Col sm={6} className="mb-1">
               <Form.Control
-                placeholder={t('addressLine1')}
+                placeholder={tCommon('addressLine1')}
                 data-testid="modalOrganizationAddressLine1"
                 autoComplete="off"
                 required
@@ -244,7 +244,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             </Col>
             <Col sm={6} className="mb-1">
               <Form.Control
-                placeholder={t('addressLine2')}
+                placeholder={tCommon('addressLine2')}
                 data-testid="modalOrganizationAddressLine2"
                 autoComplete="off"
                 value={formState.addressLine2}
@@ -287,8 +287,8 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                     await uploadFileToMinio(file, 'organization');
                   setFormState({ ...formState, avatar: avatarobjectName });
                   toast.success(t('imageUploadSuccess'));
-                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 } catch (error) {
+                  console.error('Error uploading image:', error);
                   toast.error(t('imageUploadError'));
                 }
               }
@@ -302,7 +302,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               value="invite"
               data-testid="submitOrganizationForm"
             >
-              {t('createOrganization')}
+              {tCommon('createOrganization')}
             </Button>
           </Col>
         </Modal.Body>

@@ -17,3 +17,12 @@
 .hiddenFileInput {
   display: none;
 }
+
+.contact_btn {
+  border-radius: 20px;
+}
+
+.member_details_style {
+  background-color: #a8c7fa;
+  color: #555;
+}

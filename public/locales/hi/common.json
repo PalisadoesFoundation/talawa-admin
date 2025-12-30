@@ -187,5 +187,14 @@
   "selectACountry": "एक देश चुनें",
   "passwordLengthRequirement": "पासवर्ड कम से कम {{length}} अक्षरों का होना चाहिए।",
   "country": "देश",
-  "profilePictureUploadError": "प्रोफ़ाइल चित्र को संसाधित करने में विफल। कृपया पुनः अपलोड करने का प्रयास करें।"
+  "profilePictureUploadError": "प्रोफ़ाइल चित्र को संसाधित करने में विफल। कृपया पुनः अपलोड करने का प्रयास करें।",
+  "addressLine1": "पता पंक्ति 1",
+  "addressLine2": "पता पंक्ति 2",
+  "city": "शहर",
+  "createOrganization": "संगठन बनाएं",
+  "enterName": "नाम दर्ज करें",
+  "imageUploadError": "छवि अपलोड करने में त्रुटि",
+  "imageUploadSuccess": "छवि सफलतापूर्वक अपलोड हुई",
+  "postalCode": "डाक कोड",
+  "state": "राज्य"
 }

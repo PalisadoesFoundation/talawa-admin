@@ -187,5 +187,14 @@
   "selectACountry": "选择一个国家",
   "passwordLengthRequirement": "密码长度必须至少为 {{length}} 个字符。",
   "country": "国家",
-  "profilePictureUploadError": "无法处理个人资料图片。请尝试重新上传。"
+  "profilePictureUploadError": "无法处理个人资料图片。请尝试重新上传。",
+  "addressLine1": "地址行 1",
+  "addressLine2": "地址行 2",
+  "city": "城市",
+  "createOrganization": "创建组织",
+  "enterName": "输入名称",
+  "imageUploadError": "图片上传错误",
+  "imageUploadSuccess": "图片上传成功",
+  "postalCode": "邮政编码",
+  "state": "州"
 }

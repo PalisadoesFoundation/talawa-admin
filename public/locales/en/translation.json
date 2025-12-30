@@ -207,7 +207,16 @@
     "cancel": "cancel",
     "endOfResults": "endOfResults",
     "noResultsFoundFor": "noResultsFoundFor",
-    "OR": "OR"
+    "OR": "OR",
+    "imageUploadError": "Image upload failed. Please try again.",
+    "imageUploadSuccess": "Image uploaded successfully.",
+    "congratulationOrgCreated": "Congratulations! The Organization is created.",
+    "goToStore": "Go to Store",
+    "manageFeaturesInfo": "Manage the features and plugins available for this organization.",
+    "orgName": "Enter Name",
+    "sortOrganizations": "Sort Organizations",
+    "admins": "Admins",
+    "members": "Members"
   },
   "orgListCard": {
     "manage": "Manage",

@@ -207,7 +207,16 @@
     "cancel": "Annuler",
     "endOfResults": "Fin des résultats",
     "noResultsFoundFor": "Aucun résultat trouvé pour",
-    "OR": "OU"
+    "OR": "OU",
+    "imageUploadError": "Échec du téléchargement de l'image. Veuillez réessayer.",
+    "imageUploadSuccess": "Image téléchargée avec succès.",
+    "congratulationOrgCreated": "Félicitations ! L'organisation est créée.",
+    "goToStore": "Aller au magasin",
+    "manageFeaturesInfo": "Gérez les fonctionnalités et les plugins disponibles pour cette organisation.",
+    "orgName": "Entrez le nom",
+    "sortOrganizations": "Trier les organisations",
+    "admins": "Administrateurs",
+    "members": "Membres"
   },
   "orgListCard": {
     "manage": "Gérer",

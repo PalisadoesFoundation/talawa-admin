@@ -193,9 +193,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     if (!selectedAvatar && formState.avatarURL) {
       try {
         avatarFile = await urlToFile(formState.avatarURL);
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      } catch (error) {
-        NotificationToast.error(tCommon('avatarConversionError') as string);
+      } catch {
+        NotificationToast.error(tCommon('profilePictureUploadError') as string);
         return;
       }
     }
@@ -291,8 +290,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 className="rounded-pill fw-bolder"
               >
                 {userData?.currentUser?.role === 'administrator'
-                  ? 'Admin'
-                  : 'User'}
+                  ? tCommon('Admin')
+                  : tCommon('User')}
               </Button>
             </Card.Header>
             <Card.Body className="py-3 px-3">
@@ -483,14 +482,13 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           <Col>
             <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
               <Card.Header
-                className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
-                style={{ backgroundColor: '#A8C7FA', color: '#555' }}
+                className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius} ${memberDetailStyles.member_details_style}`}
               >
                 <h3 className="m-0" data-testid="eventsAttended-title">
                   {t('eventsAttended')}
                 </h3>
                 <Button
-                  style={{ borderRadius: '20px' }}
+                  className={memberDetailStyles.contact_btn}
                   size="sm"
                   variant="light"
                   data-testid="viewAllEvents"
@@ -528,8 +526,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         <Col md={6}>
           <Card className={`${styles.allRound}`}>
             <Card.Header
-              className={`py-3 px-4 ${styles.topRadius}`}
-              style={{ backgroundColor: '#A8C7FA', color: '#555' }}
+              className={`py-3 px-4 ${styles.topRadius} ${memberDetailStyles.member_details_style}`}
             >
               <h3 className="m-0">{t('contactInfoHeading')}</h3>
             </Card.Header>
@@ -551,7 +548,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   />
                 </Col>
                 <Col md={12}>
-                  <label htmlFor="phoneNumber" className="form-label">
+                  <label htmlFor="mobilePhoneNumber" className="form-label">
                     {t('mobilePhoneNumber')}
                   </label>
                   <input
@@ -570,7 +567,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   />
                 </Col>
                 <Col md={12}>
-                  <label htmlFor="phoneNumber" className="form-label">
+                  <label htmlFor="workPhoneNumber" className="form-label">
                     {t('workPhoneNumber')}
                   </label>
                   <input
@@ -589,7 +586,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   />
                 </Col>
                 <Col md={12}>
-                  <label htmlFor="phoneNumber" className="form-label">
+                  <label htmlFor="homePhoneNumber" className="form-label">
                     {t('homePhoneNumber')}
                   </label>
                   <input
@@ -608,7 +605,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   />
                 </Col>
                 <Col md={12}>
-                  <label htmlFor="address" className="form-label">
+                  <label htmlFor="addressLine1" className="form-label">
                     {t('addressLine1')}
                   </label>
                   <input
@@ -627,7 +624,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   />
                 </Col>
                 <Col md={12}>
-                  <label htmlFor="address" className="form-label">
+                  <label htmlFor="addressLine2" className="form-label">
                     {t('addressLine2')}
                   </label>
                   <input
@@ -646,7 +643,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                   />
                 </Col>
                 <Col md={12}>
-                  <label htmlFor="address" className="form-label">
+                  <label htmlFor="postalCode" className="form-label">
                     {t('postalCode')}
                   </label>
                   <input
@@ -743,7 +740,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               </Button>
               <Button
                 variant="outline"
-                style={{ backgroundColor: '#A8C7FA', color: '#555' }}
+                className={memberDetailStyles.member_details_style}
                 onClick={handleUserUpdate}
                 data-testid="saveChangesBtn"
               >
@@ -757,8 +754,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
         <Col xs={12} lg={6}>
           <Card className={`${styles.contact} ${styles.allRound} mt-3`}>
             <Card.Header
-              className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius}`}
-              style={{ backgroundColor: '#A8C7FA', color: '#555' }}
+              className={`d-flex justify-content-between align-items-center py-3 px-4 ${styles.topRadius} ${memberDetailStyles.member_details_style}`}
             >
               <h3 className="m-0" data-testid="tagsAssigned-title">
                 {t('tagsAssigned')}
