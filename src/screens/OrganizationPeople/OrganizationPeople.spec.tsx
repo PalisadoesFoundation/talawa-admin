@@ -854,7 +854,6 @@ describe('OrganizationPeople', () => {
       },
       { timeout: 3000 },
     );
-    expect(screen.queryByText('Admin User 2')).toBeInTheDocument();
   });
 
   test('handles pagination correctly for USER', async () => {

@@ -111,9 +111,11 @@ export function PaginationControl({
     return (
       <nav
         className={styles.paginationContainer}
-        aria-label={t('pagination.label')}
+        aria-label={getText('common:pagination.noItems', 'No items to display')}
       >
-        <span className={styles.emptyState}>{t('pagination.noItems')}</span>
+        <span className={styles.emptyState}>
+          {getText('common:pagination.noItems', 'No items to display')}
+        </span>
       </nav>
     );
   }
@@ -121,7 +123,7 @@ export function PaginationControl({
   return (
     <nav
       className={styles.paginationContainer}
-      aria-label={t('pagination.label')}
+      aria-label={getText('common:pagination.label', 'Pagination')}
       onKeyDown={handleKeyDown}
       tabIndex={0}
     >
@@ -130,8 +132,8 @@ export function PaginationControl({
         className={styles.navButton}
         onClick={() => onPageChange(1)}
         disabled={!canPrev || disabled}
-        aria-label={t('pagination.first')}
-        title={t('pagination.goToFirst')}
+        aria-label={getText('common:pagination.first', 'First')}
+        title={getText('common:pagination.goToFirst', 'Go to first page')}
         type="button"
         data-testid="firstPageButton"
       >
@@ -143,8 +145,8 @@ export function PaginationControl({
         className={styles.navButton}
         onClick={() => onPageChange(currentPage - 1)}
         disabled={!canPrev || disabled}
-        aria-label={t('pagination.previous')}
-        title={t('pagination.goToPrevious')}
+        aria-label={getText('common:pagination.previous', 'Previous')}
+        title={getText('common:pagination.goToPrevious', 'Go to previous page')}
         type="button"
         data-testid="previousPageButton"
       >
@@ -154,7 +156,7 @@ export function PaginationControl({
       {/* Current Page Display */}
       <span className={styles.pageInfo} aria-live="polite">
         {getText(
-          'pagination.pageInfo',
+          'common:pagination.pageInfo',
           `Page ${currentPage} of ${totalPages}`,
           { currentPage, totalPages },
         )}
@@ -165,8 +167,8 @@ export function PaginationControl({
         className={styles.navButton}
         onClick={() => onPageChange(currentPage + 1)}
         disabled={!canNext || disabled}
-        aria-label={t('pagination.next')}
-        title={t('pagination.goToNext')}
+        aria-label={getText('common:pagination.next', 'Next')}
+        title={getText('common:pagination.goToNext', 'Go to next page')}
         type="button"
         data-testid="nextPageButton"
       >
@@ -178,8 +180,8 @@ export function PaginationControl({
         className={styles.navButton}
         onClick={() => onPageChange(totalPages)}
         disabled={!canNext || disabled}
-        aria-label={t('pagination.last')}
-        title={t('pagination.goToLast')}
+        aria-label={getText('common:pagination.last', 'Last')}
+        title={getText('common:pagination.goToLast', 'Go to last page')}
         type="button"
         data-testid="lastPageButton"
       >
@@ -188,13 +190,16 @@ export function PaginationControl({
 
       {/* Rows Per Page Selector */}
       <label className={styles.pageSizeLabel}>
-        {getText('pagination.rowsPerPage', 'Rows per page:')}
+        {getText('common:pagination.rowsPerPage', 'Rows per page')}
         <select
           className={styles.pageSizeSelect}
           value={pageSize}
-          onChange={(e) => onPageSizeChange(Number(e.target.value))}
           disabled={disabled}
-          aria-label={getText('pagination.rowsPerPage', 'Rows per page')}
+          onChange={(e) => {
+            if (disabled) return;
+            onPageSizeChange(Number(e.target.value));
+          }}
+          aria-label={getText('common:pagination.rowsPerPage', 'Rows per page')}
           data-testid="pageSizeSelect"
         >
           {pageSizeOptions.map((n) => (
@@ -208,7 +213,7 @@ export function PaginationControl({
       {/* Item Range Display */}
       <span className={styles.itemRange}>
         {getText(
-          'pagination.showing',
+          'common:pagination.showing',
           `Showing ${startItem}-${endItem} of ${totalItems}`,
           { startItem, endItem, totalItems },
         )}

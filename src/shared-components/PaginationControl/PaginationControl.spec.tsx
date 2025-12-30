@@ -296,7 +296,8 @@ describe('PaginationControl', () => {
     });
 
     it('should disable page size selector when disabled prop is true', () => {
-      renderPaginationControl({ disabled: true });
+      const onPageSizeChange = vi.fn();
+      renderPaginationControl({ disabled: true, onPageSizeChange });
 
       const select = screen.getByTestId('pageSizeSelect');
       expect(select).toBeDisabled();
