@@ -58,6 +58,11 @@
     "uppercaseCheck": "Al menos una letra mayúscula",
     "numericValueCheck": "Al menos un valor numérico",
     "specialCharCheck": "Al menos un carácter especial",
+    "requirement_min_length": "Al menos 8 caracteres",
+    "requirement_lowercase": "Contiene minúsculas",
+    "requirement_uppercase": "Contiene mayúsculas",
+    "requirement_number": "Contiene un número",
+    "requirement_special_char": "Contiene un carácter especial",
     "loading": "Cargando...",
     "selectOrg": "Seleccione una organización",
     "afterRegister": "Registro exitoso. Por favor, espere a que el administrador apruebe su solicitud.",
@@ -69,6 +74,12 @@
     "retryPrompt": "Error al Cerrar sesión. ¿Reintentar?",
     "signingOut": "Cerrando sesión...",
     "signOut": "Cerrar sesión"
+  },
+  "orgSelector": {
+    "organization": "Organización",
+    "selectOrganization": "Seleccione una organización",
+    "noOrganizationsAvailable": "No hay organizaciones disponibles",
+    "noMatchingOrganizations": "No se encontraron organizaciones coincidentes"
   },
   "userLoginPage": {
     "title": "Administrador Talawa",
@@ -202,7 +213,16 @@
     "OR": "O",
     "sampleOrgSuccess": "Organización de ejemplo creada exitosamente",
     "manageFeatures": "Gestionar funciones",
-    "enableEverything": "Habilitar todo"
+    "enableEverything": "Habilitar todo",
+    "imageUploadError": "Error al cargar la imagen",
+    "imageUploadSuccess": "Imagen cargada con éxito",
+    "congratulationOrgCreated": "¡Felicidades! La Organización ha sido creada.",
+    "goToStore": "Ir a la tienda",
+    "manageFeaturesInfo": "Gestiona las funciones y plugins disponibles para esta organización.",
+    "orgName": "Ingrese el nombre",
+    "sortOrganizations": "Ordenar Organizaciones",
+    "admins": "Administradores",
+    "members": "Miembros"
   },
   "orgListCard": {
     "admins": "Administradores",
@@ -229,6 +249,7 @@
     "rejectedSuccessfully": "Solicitud rechazada exitosamente",
     "noOrgErrorTitle": "Organizaciones no encontradas",
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
+    "newMembersWillAppearHere": "Los nuevos miembros aparecerán aquí",
     "profilePictureAlt": "Imagen de perfil de {{name}}",
     "placeholderAvatarAlt": "Avatar predeterminado"
   },
@@ -399,7 +420,10 @@
     "totalAssignedUsers": "Total de usuarios asignados",
     "tagCreationFailed": "Error al crear la etiqueta",
     "errorLoadingTagsData": "Se produjo un error al cargar los datos de las etiquetas de la organización",
-    "sortTags": "Ordenar Etiquetas"
+    "sortTags": "Ordenar Etiquetas",
+    "tags": "Etiquetas",
+    "Latest": "Más Reciente",
+    "Oldest": "Más Antiguo"
   },
   "manageTag": {
     "title": "Detalles de la Etiqueta",
@@ -559,8 +583,10 @@
     "selectActionItemCategory": "Seleccionar una Categoría de Acción",
     "selectAssignee": "Seleccionar Asignado",
     "volunteer": "Voluntario",
+    "volunteered": "Se ofreció como voluntario",
     "volunteerGroup": "Grupo de voluntarios",
     "volunteerAssignment": "Asignación de voluntario",
+    "volunteerSuccess": "Voluntario agregado exitosamente",
     "individualVolunteer": "Voluntario individual",
     "groupAssignment": "Asignación de grupo",
     "hoursVolunteered": "Horas de voluntariado",
@@ -732,6 +758,8 @@
     "createdEarliest": "Creado más temprano",
     "viewCampaigns": "Ver campañas",
     "assocCampaigns": "Campañas asociadas",
+    "associatedCampaigns": "Campañas asociadas",
+    "searchFunds": "Buscar fondos",
     "errorLoadingFundsData": "Error al cargar los datos de fondos",
     "editFund": "Editar fondo"
   },
@@ -740,7 +768,10 @@
     "campaignName": "Nombre de la campaña",
     "campaignOptions": "Opciones",
     "fundingGoal": "Meta de financiación",
+    "progress": "Progreso",
+    "raised": "Recaudado",
     "addCampaign": "Agregar campaña",
+    "editCampaign": "Editar campaña",
     "createdCampaign": "Campaña creada correctamente",
     "updatedCampaign": "Campaña actualizada correctamente",
     "deletedCampaign": "Campaña eliminada correctamente",
@@ -752,6 +783,7 @@
     "currency": "Moneda",
     "selectCurrency": "Seleccionar moneda",
     "searchFullName": "Buscar por nombre",
+    "searchCampaigns": "Buscar campañas",
     "viewPledges": "Ver compromisos",
     "noCampaignsFound": "No se encontraron campañas",
     "latestEndDate": "Fecha de finalización más reciente",
@@ -795,7 +827,8 @@
     "togglePledgedRaised": "Alternar entre montos Comprometidos y Recaudados",
     "pledgeDate": "Fecha de Compromiso",
     "pledged": "Comprometido",
-    "donated": "Donado"
+    "donated": "Donado",
+    "campaignNotActive": "La campaña no está actualmente activa"
   },
   "createPostModal": {
     "title": "Publicaciones de Talawa",
@@ -1383,6 +1416,10 @@
     "city": "Ciudad",
     "description": "Descripción",
     "enterDescription": "Ingrese descripción",
+    "atleast_8_char_long": "La contraseña debe tener al menos 8 caracteres",
+    "invalidFileType": "Tipo de archivo inválido. Por favor suba un JPEG, PNG o GIF",
+    "fileSizeTooLarge": "El archivo es demasiado grande. El tamaño máximo es 5MB",
+    "failedToProcessImage": "Error al procesar la foto de perfil. Por favor intente subirla nuevamente",
     "title": "Ajustes"
   },
   "donate": {
@@ -1705,6 +1742,7 @@
     "mostHoursVolunteered": "Más Horas de Voluntariado",
     "leastHoursVolunteered": "Menos Horas de Voluntariado",
     "accepted": "Aceptado",
+    "rejected": "Rechazado",
     "addVolunteer": "Agregar Voluntario",
     "removeVolunteer": "Eliminar Voluntario",
     "volunteerAdded": "Voluntario agregado con éxito",
@@ -1725,6 +1763,9 @@
     "groupDetails": "Detalles del Grupo",
     "creator": "Creador",
     "requests": "Solicitudes",
+    "volunteershipRequests": "Solicitudes de Voluntariado",
+    "requestType": "Tipo de Solicitud",
+    "requestDate": "Fecha de Solicitud",
     "noRequests": "No Hay Solicitudes",
     "latest": "Más Reciente",
     "earliest": "Más Antiguo",
@@ -1746,6 +1787,7 @@
     "invitations": "Invitaciones",
     "groups": "Grupos de Voluntarios",
     "actions": "Elementos de Acción",
+    "search": "Buscar",
     "searchByName": "Buscar por Nombre",
     "latestEndDate": "Fecha de Finalización Más Reciente",
     "earliestEndDate": "Fecha de Finalización Más Antigua",
@@ -1765,7 +1807,7 @@
     "receivedEarliest": "Recibido en Primer Lugar",
     "invitationAccepted": "Invitación aceptada con éxito",
     "invitationRejected": "Invitación rechazada con éxito",
-    "volunteerSuccess": "Solicitud de voluntariado realizada con éxito",
+    "volunteerRequestSuccess": "Solicitud de voluntariado realizada con éxito",
     "recurring": "Recurrente",
     "groupInvitationSubject": "Invitación a unirse al grupo de voluntarios",
     "eventInvitationSubject": "Invitación a ser voluntario para el evento",
