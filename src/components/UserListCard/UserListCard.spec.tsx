@@ -423,4 +423,161 @@ describe('Testing User List Card', () => {
     await wait(100);
     expect(reloadMock).not.toHaveBeenCalled();
   });
+
+  it('Should handle rapid multiple clicks by clearing previous timeout', async () => {
+    // This test covers lines 74-75 - clearing existing timeout when clicking again
+    const multiClickMock = [
+      {
+        request: {
+          query: ADD_ADMIN_MUTATION,
+          variables: {
+            userid: '222',
+            orgid: '554',
+          },
+        },
+        result: {
+          data: {
+            createAdmin: {
+              user: {
+                _id: '222',
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ADD_ADMIN_MUTATION,
+          variables: {
+            userid: '222',
+            orgid: '554',
+          },
+        },
+        result: {
+          data: {
+            createAdmin: {
+              user: {
+                _id: '222',
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    const multiClickLink = new StaticMockLink(multiClickMock, true);
+    const props = {
+      id: '222',
+    };
+
+    render(
+      <BrowserRouter>
+        <MockedProvider link={multiClickLink}>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserListCard key={404} {...props} />
+          </I18nextProvider>
+        </MockedProvider>
+      </BrowserRouter>,
+    );
+
+    await wait();
+    const button = screen.getByText(/Add Admin/i);
+
+    // First click - sets up the timeout
+    await userEvent.click(button);
+    await wait(300); // Wait less than the 2000ms setTimeout
+
+    // Second click - should clear the previous timeout and set a new one
+    await userEvent.click(button);
+    await wait(500);
+
+    // The success toast should have been called at least once
+    expect(NotificationToast.success).toHaveBeenCalled();
+  });
+
+  it('Should not proceed when result has GraphQL errors with valid data structure', async () => {
+    // This test covers line 101 - GraphQL errors check return
+    const errorWithDataMock = [
+      {
+        request: {
+          query: ADD_ADMIN_MUTATION,
+          variables: {
+            userid: '333',
+            orgid: '554',
+          },
+        },
+        result: {
+          data: { createAdmin: null },
+          errors: [{ message: 'Permission denied' }],
+        },
+      },
+    ];
+
+    const errorWithDataLink = new StaticMockLink(errorWithDataMock, true);
+    const props = {
+      id: '333',
+    };
+
+    render(
+      <BrowserRouter>
+        <MockedProvider link={errorWithDataLink}>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserListCard key={505} {...props} />
+          </I18nextProvider>
+        </MockedProvider>
+      </BrowserRouter>,
+    );
+
+    await wait();
+    const button = screen.getByText(/Add Admin/i);
+    await userEvent.click(button);
+    await wait(500);
+
+    // With GraphQL errors present, even with data object, success should not be called
+    expect(NotificationToast.success).not.toHaveBeenCalled();
+    expect(reloadMock).not.toHaveBeenCalled();
+  });
+
+  it('Should not show success when createAdmin is falsy', async () => {
+    // This test covers the case when data.createAdmin is null/undefined/false
+    const falsyCreateAdminMock = [
+      {
+        request: {
+          query: ADD_ADMIN_MUTATION,
+          variables: {
+            userid: '444',
+            orgid: '554',
+          },
+        },
+        result: {
+          data: { createAdmin: null },
+        },
+      },
+    ];
+
+    const falsyCreateAdminLink = new StaticMockLink(falsyCreateAdminMock, true);
+    const props = {
+      id: '444',
+    };
+
+    render(
+      <BrowserRouter>
+        <MockedProvider link={falsyCreateAdminLink}>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserListCard key={606} {...props} />
+          </I18nextProvider>
+        </MockedProvider>
+      </BrowserRouter>,
+    );
+
+    await wait();
+    const button = screen.getByText(/Add Admin/i);
+    await userEvent.click(button);
+    await wait(500);
+
+    // When createAdmin is null, success toast should not be shown
+    expect(NotificationToast.success).not.toHaveBeenCalled();
+    await wait(2100);
+    expect(reloadMock).not.toHaveBeenCalled();
+  });
 });
