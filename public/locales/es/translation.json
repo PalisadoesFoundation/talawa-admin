@@ -1848,6 +1848,18 @@
     "explorePluginStore": "Explora la tienda de plugins para descubrir nuevos plugins",
     "noResultsFoundFor": "No se encontraron resultados para"
   },
+  "statusBadge": {
+    "completed": "Completado",
+    "pending": "Pendiente",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "approved": "Aprobado",
+    "rejected": "Rechazado",
+    "disabled": "Deshabilitado",
+    "accepted": "Aceptado",
+    "declined": "Rechazado",
+    "no_response": "Sin Respuesta"
+  },
   "commentCard": {
     "commentDeletedSuccessfully": "Comentario eliminado exitosamente",
     "commentUpdatedSuccessfully": "Comentario actualizado exitosamente",

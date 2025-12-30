@@ -1848,6 +1848,18 @@
     "explorePluginStore": "Explore the plugin store to discover new plugins",
     "noResultsFoundFor": "No results found for"
   },
+  "statusBadge": {
+    "completed": "Completed",
+    "pending": "Pending",
+    "active": "Active",
+    "inactive": "Inactive",
+    "approved": "Approved",
+    "rejected": "Rejected",
+    "disabled": "Disabled",
+    "accepted": "Accepted",
+    "declined": "Declined",
+    "no_response": "No Response"
+  },
   "commentCard": {
     "commentDeletedSuccessfully": "Comment deleted successfully",
     "commentUpdatedSuccessfully": "Comment updated successfully",
