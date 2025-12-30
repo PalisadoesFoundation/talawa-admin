@@ -332,7 +332,7 @@ function OrganizationPeople(): JSX.Element {
         await fetchMembers({ variables });
       }
     } catch {
-      toast.error(tCommon('pagination.pageSizeChangeError'));
+      toast.error(tCommon('pagination.pageChangeError'));
       // Revert on error
       setPageSize(pageSize);
     } finally {

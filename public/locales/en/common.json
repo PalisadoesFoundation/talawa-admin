@@ -138,7 +138,8 @@
     "rowsPerPage": "Rows per page",
     "pageInfo": "Page {{currentPage}} of {{totalPages}}",
     "showing": "Showing {{startItem}}-{{endItem}} of {{totalItems}}",
-    "pageSizeChangeError": "Failed to change page size. Please try again."
+    "pageSizeChangeError": "Failed to change page size. Please try again.",
+    "pageChangeError": "Failed to navigate pages. Please try again."
   },
   "loadingAdminPlugin": "Loading admin plugin...",
   "loadingUserPlugin": "Loading user plugin...",

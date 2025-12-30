@@ -211,6 +211,7 @@
     "rowsPerPage": "Lignes par page",
     "pageInfo": "Page {{currentPage}} sur {{totalPages}}",
     "showing": "Affichage de {{startItem}} à {{endItem}} sur {{totalItems}}",
-    "pageSizeChangeError": "Impossible de modifier la taille de la page. Veuillez réessayer."
+    "pageSizeChangeError": "Impossible de modifier la taille de la page. Veuillez réessayer.",
+    "pageChangeError": "Échec de la navigation entre les pages. Veuillez réessayer."
   }
 }

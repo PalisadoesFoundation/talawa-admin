@@ -144,7 +144,6 @@
   "searchRequests": "अनुरोध खोजें",
   "itemTitle": "शीर्षक",
   "assignee": "नियुक्त व्यक्ति",
-
   "signOut": "साइन आउट",
   "signingOut": "साइन आउट हो रहा है...",
   "retryPrompt": "सेशन समाप्त नहीं हुआ। पुनः प्रयास करें?",
@@ -211,6 +210,7 @@
     "rowsPerPage": "प्रति पृष्ठ पंक्तियाँ",
     "pageInfo": "पृष्ठ {{currentPage}} / {{totalPages}}",
     "showing": "{{totalItems}} में से {{startItem}}-{{endItem}} दिखा रहे हैं",
-    "pageSizeChangeError": "पृष्ठ आकार बदलने में विफल। कृपया पुनः प्रयास करें।"
+    "pageSizeChangeError": "पृष्ठ आकार बदलने में विफल। कृपया पुनः प्रयास करें।",
+    "pageChangeError": "पृष्ठ बदलने में विफल रहा। कृपया पुनः प्रयास करें।"
   }
 }

@@ -210,6 +210,7 @@
     "rowsPerPage": "Filas por página",
     "pageInfo": "Página {{currentPage}} de {{totalPages}}",
     "showing": "Mostrando {{startItem}}-{{endItem}} de {{totalItems}}",
-    "pageSizeChangeError": "No se pudo cambiar el tamaño de la página. Inténtalo de nuevo."
+    "pageSizeChangeError": "No se pudo cambiar el tamaño de la página. Inténtalo de nuevo.",
+    "pageChangeError": "No se pudo cambiar de página. Por favor, inténtelo de nuevo."
   }
 }
