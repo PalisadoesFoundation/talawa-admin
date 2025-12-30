@@ -94,6 +94,15 @@ export const ORGANIZATION_LIST_NO_MEMBERS = gql`
   }
 `;
 
+// ORGANIZATION_LIST_PUBLIC query response
+export interface InterfaceOrganizationListPublicQueryData {
+  organizations: {
+    id: string;
+    name: string;
+    addressLine1: string;
+  }[];
+}
+
 // Query for unauthenticated users (e.g., registration page)
 export const ORGANIZATION_LIST_PUBLIC = gql`
   query {

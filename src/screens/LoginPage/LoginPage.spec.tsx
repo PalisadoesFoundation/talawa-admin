@@ -17,7 +17,7 @@ import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   SIGNIN_QUERY,
   GET_COMMUNITY_DATA_PG,
-  ORGANIZATION_LIST_NO_MEMBERS,
+  ORGANIZATION_LIST_PUBLIC,
 } from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -90,7 +90,7 @@ const MOCKS = [
     result: { data: { community: null } },
   },
   {
-    request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+    request: { query: ORGANIZATION_LIST_PUBLIC },
     result: {
       data: {
         organizations: [
@@ -112,7 +112,7 @@ const MOCKS = [
 
 const MOCKS3 = [
   {
-    request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+    request: { query: ORGANIZATION_LIST_PUBLIC },
     result: {
       data: {
         organizations: [
@@ -148,7 +148,7 @@ const MOCKS4 = [
     result: { data: { community: null } },
   },
   {
-    request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+    request: { query: ORGANIZATION_LIST_PUBLIC },
     result: {
       data: {
         organizations: [
@@ -1676,7 +1676,7 @@ describe('Extra coverage for 100 %', () => {
         },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: { data: { organizations: [] } },
       },
     ];
@@ -1725,7 +1725,7 @@ describe('Extra coverage for 100 %', () => {
         result: { data: { community: null } },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: { data: { organizations: [] } },
       },
     ];
@@ -1783,7 +1783,7 @@ describe('Extra coverage for 100 %', () => {
         result: { data: { community: null } },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: { data: { organizations: [] } },
       },
     ];
@@ -1827,7 +1827,7 @@ describe('Extra coverage for 100 %', () => {
         result: { data: { community: null } },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: { data: { organizations: [] } },
       },
     ];
@@ -1878,7 +1878,7 @@ describe('Extra coverage for 100 %', () => {
         result: { data: { community: null } },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: { data: { organizations: [] } },
       },
     ];
@@ -1928,7 +1928,7 @@ describe('Extra coverage for 100 %', () => {
         result: { data: { community: null } },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: { data: { organizations: [] } },
       },
     ];
@@ -1983,7 +1983,7 @@ describe('Cookie-based authentication verification', () => {
         result: { data: { community: null } },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: { data: { organizations: [] } },
       },
     ];
@@ -2082,7 +2082,7 @@ describe('Cookie-based authentication verification', () => {
         result: { data: { community: null } },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: { data: { organizations: [] } },
       },
     ];
@@ -2243,7 +2243,7 @@ describe('Cookie-based authentication verification', () => {
         },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: {
           data: {
             organizations: [],
@@ -2342,7 +2342,7 @@ describe('Cookie-based authentication verification', () => {
         },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: {
           data: {
             organizations: [],

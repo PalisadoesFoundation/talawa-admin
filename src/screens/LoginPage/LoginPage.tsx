@@ -34,6 +34,7 @@ import {
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   ORGANIZATION_LIST_PUBLIC,
+  InterfaceOrganizationListPublicQueryData,
   SIGNIN_QUERY,
   GET_COMMUNITY_DATA_PG,
 } from 'GraphQl/Queries/Queries';
@@ -848,12 +849,11 @@ const loginPage = (): JSX.Element => {
                       )}
                   </div>
                   <div className="position-relative  my-2">
-                    <Form.Label>
-                      {t('selectOrg')} ({organizations.length} available)
-                    </Form.Label>
+                    <Form.Label>{t('selectOrg')}</Form.Label>
                     <div className="position-relative">
                       <Autocomplete
                         disablePortal
+                        disabled={orgLoading || !!orgError}
                         data-testid="selectOrg"
                         onChange={(
                           event,
@@ -874,6 +874,14 @@ const loginPage = (): JSX.Element => {
                             {...params}
                             label={t('organizations')}
                             className={styles.selectOrgText}
+                            helperText={
+                              orgLoading
+                                ? t('loadingOrganizations')
+                                : orgError
+                                  ? t('errorLoadingOrganizations')
+                                  : undefined
+                            }
+                            error={!!orgError}
                           />
                         )}
                       />
