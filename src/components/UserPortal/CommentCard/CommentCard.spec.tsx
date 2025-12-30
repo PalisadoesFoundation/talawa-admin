@@ -683,7 +683,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await wait();
 
     // Check that the image element exists and has the default avatar as src
-    const avatarImg = screen.getByAltText('test user');
+    const avatarImg = screen.getByAltText('Profile picture of test user');
     expect(avatarImg).toBeInTheDocument();
     expect(avatarImg.getAttribute('src')).toContain('defaultImg.png');
   });
