@@ -2477,19 +2477,14 @@ describe('Cookie-based authentication verification', () => {
     expect(socialLinks.length).toBeGreaterThan(0);
     expect(socialLinks[0]).toHaveAttribute('href');
   });
+});
+
+describe('Organization dropdown data fetching', () => {
+  beforeEach(() => {
+    setLocationPath('/');
+  });
 
   it('displays loading state while fetching organizations', async () => {
-    // Skip for admin path since register button is removed
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/',
-        origin: 'https://localhost:4321',
-        pathname: '/',
-      },
-    });
-
     const LOADING_MOCKS = [
       {
         request: { query: ORGANIZATION_LIST_PUBLIC },
@@ -2504,7 +2499,7 @@ describe('Cookie-based authentication verification', () => {
             ],
           },
         },
-        delay: 1000, // Simulate network delay
+        delay: 100, // Simulate network delay
       },
       {
         request: { query: GET_COMMUNITY_DATA_PG },
@@ -2536,7 +2531,7 @@ describe('Cookie-based authentication verification', () => {
           const loadingText = screen.queryByText(/loading organizations/i);
           expect(loadingText).toBeInTheDocument();
         },
-        { timeout: 500 },
+        { timeout: 200 },
       );
 
       // Verify the Autocomplete shows loading helper text
@@ -2546,17 +2541,6 @@ describe('Cookie-based authentication verification', () => {
   });
 
   it('displays error state when organization query fails', async () => {
-    // Skip for admin path since register button is removed
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/',
-        origin: 'https://localhost:4321',
-        pathname: '/',
-      },
-    });
-
     const ERROR_MOCKS = [
       {
         request: { query: ORGANIZATION_LIST_PUBLIC },
@@ -2604,17 +2588,6 @@ describe('Cookie-based authentication verification', () => {
   });
 
   it('displays error state when organization query returns GraphQL errors', async () => {
-    // Skip for admin path since register button is removed
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        reload: vi.fn(),
-        href: 'https://localhost:4321/',
-        origin: 'https://localhost:4321',
-        pathname: '/',
-      },
-    });
-
     const GRAPHQL_ERROR_MOCKS = [
       {
         request: { query: ORGANIZATION_LIST_PUBLIC },

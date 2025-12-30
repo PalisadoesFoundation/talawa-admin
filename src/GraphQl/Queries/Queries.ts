@@ -97,7 +97,7 @@ export interface InterfaceOrganizationListPublicQueryData {
 
 // Query for unauthenticated users (e.g., registration page)
 export const ORGANIZATION_LIST_PUBLIC = gql`
-  query {
+  query GetPublicOrganizations {
     organizations {
       id
       name
