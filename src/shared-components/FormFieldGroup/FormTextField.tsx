@@ -25,14 +25,19 @@ export const FormTextField: React.FC<FormTextFieldProps> = ({
       <FormControl>
         <TextField
           {...formControlProps}
+          name={name}
           label={label}
-          error={!!error}
+          error={!!(touched && error)}
           helperText={touched && error ? error : helpText}
           required={required}
           aria-label={ariaLabel}
           aria-describedby={ariaDescribedBy}
+          slotProps={{
+            input: {
+              endAdornment: endAdornment,
+            },
+          }}
         />
-        {endAdornment && <>{endAdornment}</>}
       </FormControl>
     );
   }
@@ -59,7 +64,8 @@ export const FormTextField: React.FC<FormTextFieldProps> = ({
         {endAdornment && <>{endAdornment}</>}
         {showCharCount && formControlProps.maxLength && (
           <Form.Text className="text-muted">
-            {formControlProps.value?.length || 0}/{formControlProps.maxLength}
+            {String(formControlProps.value ?? '').length}/
+            {formControlProps.maxLength}
           </Form.Text>
         )}
       </div>

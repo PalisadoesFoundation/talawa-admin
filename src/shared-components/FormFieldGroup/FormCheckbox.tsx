@@ -10,17 +10,19 @@ export const FormCheckbox: React.FC<FormCheckBoxProps> = ({
   id,
   ...checkBoxProps
 }) => {
+  const errorId = `${id}-error`;
   return (
     <div className={containerClass}>
-      <Form.Check 
+      <Form.Check
         {...checkBoxProps}
         id={id}
         type="checkbox"
         label={labelText}
         isInvalid={!!(touched && error)}
+        aria-describedby={touched && error ? errorId : undefined}
       />
       {touched && error && (
-        <Form.Control.Feedback type="invalid" className="d-block">
+        <Form.Control.Feedback type="invalid" className="d-block" id={errorId}>
           {error}
         </Form.Control.Feedback>
       )}

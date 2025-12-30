@@ -15,6 +15,8 @@ export const FormFieldGroup: React.FC<
   required,
   helpText,
 }) => {
+  const errorId = `${label}-error`;
+
   return (
     <Form.Group controlId={name} className={groupClass}>
       {label && (
@@ -24,7 +26,11 @@ export const FormFieldGroup: React.FC<
       )}
       {children}
       {touched && error && (
-        <Form.Control.Feedback type="invalid" className="d-block">
+        <Form.Control.Feedback
+          aria-describedby={touched && error ? errorId : undefined}
+          type="invalid"
+          className="d-block"
+        >
           {error}
         </Form.Control.Feedback>
       )}

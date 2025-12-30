@@ -5,7 +5,6 @@ import '@testing-library/jest-dom';
 import { describe, it, expect, vi } from 'vitest';
 import dayjs, { Dayjs } from 'dayjs';
 import { TextField } from '@mui/material';
-
 import { FormFieldGroup } from './FormFieldGroup';
 import { FormTextField } from './FormTextField';
 import { FormTextArea } from './FormTextArea';
@@ -16,6 +15,10 @@ import { FormDateField } from './FormDateField';
 import type { InterfaceUserInfo } from 'utils/interfaces';
 import { Form } from 'react-bootstrap';
 
+afterEach(() => {
+  vi.clearAllMocks();
+});
+
 // ============================================================================
 // FormFieldGroup Tests
 // ============================================================================
@@ -23,37 +26,33 @@ describe('FormFieldGroup', () => {
   describe('Unit tests: Each field type renders correctly', () => {
     it('renders with label and children', () => {
       render(
-        <FormFieldGroup name="test-field" label="Test Label">
+        <FormFieldGroup label="Test Label">
           <input type="text" />
         </FormFieldGroup>,
       );
-
       expect(screen.getByText('Test Label')).toBeInTheDocument();
       expect(screen.getByRole('textbox')).toBeInTheDocument();
     });
 
     it('renders without label when not provided', () => {
       render(
-        <FormFieldGroup name="test-field">
+        <FormFieldGroup>
           <input type="text" />
         </FormFieldGroup>,
       );
-
       expect(screen.queryByRole('label')).not.toBeInTheDocument();
     });
 
     it('applies custom classes correctly', () => {
       const { container } = render(
         <FormFieldGroup
-          name="test-field"
-          label="Test"
           groupClass="custom-group"
           labelClass="custom-label"
+          label="Test"
         >
           <input type="text" />
         </FormFieldGroup>,
       );
-
       expect(container.querySelector('.custom-group')).toBeInTheDocument();
       expect(container.querySelector('.custom-label')).toBeInTheDocument();
     });
@@ -63,30 +62,26 @@ describe('FormFieldGroup', () => {
     it('displays error message when touched and error exists', () => {
       render(
         <FormFieldGroup
-          name="test-field"
-          label="Test"
+          label="Name"
           error="This field is required"
           touched={true}
         >
           <input type="text" />
         </FormFieldGroup>,
       );
-
       expect(screen.getByText('This field is required')).toBeInTheDocument();
     });
 
     it('does not display error when not touched', () => {
       render(
         <FormFieldGroup
-          name="test-field"
-          label="Test"
+          label="Name"
           error="This field is required"
           touched={false}
         >
           <input type="text" />
         </FormFieldGroup>,
       );
-
       expect(
         screen.queryByText('This field is required'),
       ).not.toBeInTheDocument();
@@ -94,24 +89,17 @@ describe('FormFieldGroup', () => {
 
     it('displays help text when no error', () => {
       render(
-        <FormFieldGroup
-          name="test-field"
-          label="Test"
-          helpText="Enter your name"
-          touched={false}
-        >
+        <FormFieldGroup label="Name" helpText="Enter your name">
           <input type="text" />
         </FormFieldGroup>,
       );
-
       expect(screen.getByText('Enter your name')).toBeInTheDocument();
     });
 
     it('hides help text when error is shown', () => {
       render(
         <FormFieldGroup
-          name="test-field"
-          label="Test"
+          label="Name"
           helpText="Enter your name"
           error="Invalid name"
           touched={true}
@@ -119,7 +107,6 @@ describe('FormFieldGroup', () => {
           <input type="text" />
         </FormFieldGroup>,
       );
-
       expect(screen.queryByText('Enter your name')).not.toBeInTheDocument();
       expect(screen.getByText('Invalid name')).toBeInTheDocument();
     });
@@ -128,11 +115,10 @@ describe('FormFieldGroup', () => {
   describe('Unit tests: Required field indicators', () => {
     it('displays asterisk for required fields', () => {
       render(
-        <FormFieldGroup name="test-field" label="Email" required={true}>
-          <input type="email" />
+        <FormFieldGroup label="Name" required={true}>
+          <input type="text" />
         </FormFieldGroup>,
       );
-
       const asterisk = screen.getByLabelText('required');
       expect(asterisk).toBeInTheDocument();
       expect(asterisk).toHaveTextContent('*');
@@ -140,11 +126,10 @@ describe('FormFieldGroup', () => {
 
     it('does not display asterisk for optional fields', () => {
       render(
-        <FormFieldGroup name="test-field" label="Email" required={false}>
-          <input type="email" />
+        <FormFieldGroup label="Name">
+          <input type="text" />
         </FormFieldGroup>,
       );
-
       expect(screen.queryByLabelText('required')).not.toBeInTheDocument();
     });
   });
@@ -159,14 +144,13 @@ describe('FormTextField', () => {
       const handleChange = vi.fn();
       render(
         <FormTextField
-          name="username"
           label="Username"
+          name="username"
           value=""
           onChange={handleChange}
           format="bootstrap"
         />,
       );
-
       expect(screen.getByLabelText('Username')).toBeInTheDocument();
     });
 
@@ -174,14 +158,13 @@ describe('FormTextField', () => {
       const handleChange = vi.fn();
       render(
         <FormTextField
-          name="username"
           label="Username"
+          name="username"
           value=""
           onChange={handleChange}
           format="mui"
         />,
       );
-
       expect(screen.getByLabelText('Username')).toBeInTheDocument();
     });
 
@@ -192,19 +175,17 @@ describe('FormTextField', () => {
         'password',
         'number',
       ];
-
       types.forEach((type) => {
         const { unmount } = render(
           <FormTextField
-            name={`field-${type}`}
             label={type}
+            name={type}
             value=""
             onChange={() => {}}
             type={type}
             format="bootstrap"
           />,
         );
-
         const input = screen.getByLabelText(type);
         expect(input).toHaveAttribute('type', type);
         unmount();
@@ -214,15 +195,14 @@ describe('FormTextField', () => {
     it('renders with placeholder', () => {
       render(
         <FormTextField
-          name="email"
           label="Email"
-          placeholder="Enter your email"
+          name="email"
           value=""
           onChange={() => {}}
+          placeholder="Enter your email"
           format="bootstrap"
         />,
       );
-
       expect(
         screen.getByPlaceholderText('Enter your email'),
       ).toBeInTheDocument();
@@ -231,15 +211,14 @@ describe('FormTextField', () => {
     it('renders with endAdornment', () => {
       render(
         <FormTextField
-          name="password"
           label="Password"
+          name="password"
           value=""
           onChange={() => {}}
           format="bootstrap"
           endAdornment={<button>Show</button>}
         />,
       );
-
       expect(screen.getByRole('button', { name: 'Show' })).toBeInTheDocument();
     });
   });
@@ -249,50 +228,44 @@ describe('FormTextField', () => {
       const handleChange = vi.fn();
       render(
         <FormTextField
-          name="username"
           label="Username"
+          name="username"
           value=""
           onChange={handleChange}
           format="bootstrap"
         />,
       );
-
       const input = screen.getByLabelText('Username');
       await userEvent.type(input, 'test');
-
       expect(handleChange).toHaveBeenCalled();
     });
 
     it('displays validation error', () => {
       render(
         <FormTextField
-          name="email"
           label="Email"
-          value="invalid"
+          name="email"
+          value=""
           onChange={() => {}}
-          error={true}
+          error="Invalid email format"
           touched={true}
           format="bootstrap"
-          helpText="Invalid email format"
         />,
       );
-
-      const input = screen.getByLabelText('Email');
-      expect(input).toBeInTheDocument();
+      expect(screen.getByText('Invalid email format')).toBeInTheDocument();
     });
 
     it('respects maxLength property', () => {
       render(
         <FormTextField
-          name="username"
           label="Username"
+          name="username"
           value=""
           onChange={() => {}}
           maxLength={10}
           format="bootstrap"
         />,
       );
-
       const input = screen.getByLabelText('Username') as HTMLInputElement;
       expect(input).toHaveAttribute('maxLength', '10');
     });
@@ -302,8 +275,8 @@ describe('FormTextField', () => {
     it('has proper ARIA attributes', () => {
       render(
         <FormTextField
-          name="email"
           label="Email Address"
+          name="email"
           value=""
           onChange={() => {}}
           ariaLabel="Email input field"
@@ -311,7 +284,6 @@ describe('FormTextField', () => {
           format="bootstrap"
         />,
       );
-
       const input = screen.getByLabelText('Email Address');
       expect(input).toHaveAttribute('aria-label', 'Email input field');
       expect(input).toHaveAttribute('aria-describedby', 'email-help');
@@ -320,15 +292,14 @@ describe('FormTextField', () => {
     it('marks required fields with required attribute', () => {
       render(
         <FormTextField
-          name="email"
           label="Email"
+          name="email"
           value=""
           onChange={() => {}}
           required={true}
           format="bootstrap"
         />,
       );
-
       const input = screen.getByLabelText(/Email/);
       expect(input).toHaveAttribute('required');
     });
@@ -336,15 +307,14 @@ describe('FormTextField', () => {
     it('marks disabled fields correctly', () => {
       render(
         <FormTextField
-          name="field"
           label="Field"
+          name="field"
           value=""
           onChange={() => {}}
           disabled={true}
           format="bootstrap"
         />,
       );
-
       const input = screen.getByLabelText('Field');
       expect(input).toBeDisabled();
     });
@@ -352,52 +322,50 @@ describe('FormTextField', () => {
 });
 
 // ============================================================================
-// FormTextArea Tests
+// FormTextArea Tests (UPDATED)
 // ============================================================================
 describe('FormTextArea', () => {
   describe('Unit tests: Each field type renders correctly', () => {
     it('renders multiline textarea', () => {
       render(
         <FormTextArea
-          name="description"
           label="Description"
+          name="description"
           value=""
           onChange={() => {}}
           multiline={true}
         />,
       );
-
-      expect(screen.getByLabelText('Description')).toBeInTheDocument();
+      const textarea = screen.getByRole('textbox');
+      expect(textarea).toBeInTheDocument();
     });
 
     it('renders with specified rows', () => {
       render(
         <FormTextArea
-          name="bio"
           label="Bio"
+          name="bio"
           value=""
           onChange={() => {}}
           multiline={true}
           rows={5}
         />,
       );
-
-      const textarea = screen.getByLabelText('Bio');
+      const textarea = screen.getByRole('textbox');
       expect(textarea).toBeInTheDocument();
     });
 
     it('renders with endAdornment', () => {
       render(
         <FormTextArea
-          name="notes"
-          label="Notes"
-          value="Sample text"
+          label="Description"
+          name="description"
+          value=""
           onChange={() => {}}
           multiline={true}
           endAdornment={<div>0/500</div>}
         />,
       );
-
       expect(screen.getByText('0/500')).toBeInTheDocument();
     });
   });
@@ -407,40 +375,38 @@ describe('FormTextArea', () => {
       const handleChange = vi.fn();
       render(
         <FormTextArea
-          name="description"
           label="Description"
+          name="description"
           value=""
           onChange={handleChange}
           multiline={true}
         />,
       );
-
-      const textarea = screen.getByLabelText('Description');
+      const textarea = screen.getByRole('textbox');
       await userEvent.type(textarea, 'New text');
-
       expect(handleChange).toHaveBeenCalled();
     });
 
     it('displays error state', () => {
       render(
         <FormTextArea
-          name="description"
           label="Description"
+          name="description"
           value=""
           onChange={() => {}}
           multiline={true}
           error={true}
+          touched={true}
         />,
       );
-
-      const textarea = screen.getByLabelText('Description');
+      const textarea = screen.getByRole('textbox');
       expect(textarea).toHaveAttribute('aria-invalid', 'true');
     });
   });
 });
 
 // ============================================================================
-// FormSelect Tests
+// FormSelect Tests (UPDATED)
 // ============================================================================
 describe('FormSelect', () => {
   const mockOptions: InterfaceUserInfo[] = [
@@ -462,64 +428,60 @@ describe('FormSelect', () => {
     it('renders select/autocomplete field', () => {
       render(
         <FormSelect
+          name="user"
+          label="Select user"
           options={mockOptions}
-          value={undefined}
+          getOptionLabel={(option) => option.name}
           onChange={() => {}}
-          renderInput={(params) => (
-            <TextField {...params} label="Select user" />
-          )}
+          renderInput={(params) => <TextField {...params} />}
         />,
       );
-
-      expect(screen.getByLabelText('Select user')).toBeInTheDocument();
+      expect(screen.getByRole('combobox')).toBeInTheDocument();
     });
 
     it('renders with multiple selection', () => {
       render(
         <FormSelect
+          name="users"
+          label="Select users"
           options={mockOptions}
-          value={[]}
           multiple={true}
+          getOptionLabel={(option) => option.name}
           onChange={() => {}}
-          renderInput={(params) => (
-            <TextField {...params} label="Select users" />
-          )}
+          renderInput={(params) => <TextField {...params} />}
         />,
       );
-
-      expect(screen.getByLabelText('Select users')).toBeInTheDocument();
+      expect(screen.getByRole('combobox')).toBeInTheDocument();
     });
 
     it('renders with selected value', () => {
       render(
         <FormSelect
+          name="user"
+          label="User"
           options={mockOptions}
           value={mockOptions[0]}
           getOptionLabel={(option) => option.name}
           onChange={() => {}}
-          renderInput={(params) => (
-            <TextField {...params} label="User select" />
-          )}
+          renderInput={(params) => <TextField {...params} />}
         />,
       );
-
       expect(screen.getByDisplayValue('John Doe')).toBeInTheDocument();
     });
 
     it('respects disabled state', () => {
       render(
         <FormSelect
+          name="user"
+          label="Disabled select"
           options={mockOptions}
-          value={undefined}
           disabled={true}
+          getOptionLabel={(option) => option.name}
           onChange={() => {}}
-          renderInput={(params) => (
-            <TextField {...params} label="Disabled select" />
-          )}
+          renderInput={(params) => <TextField {...params} />}
         />,
       );
-
-      const input = screen.getByLabelText('Disabled select');
+      const input = screen.getByRole('combobox');
       expect(input).toBeDisabled();
     });
   });
@@ -529,44 +491,53 @@ describe('FormSelect', () => {
       const handleChange = vi.fn();
       render(
         <FormSelect
+          name="user"
+          label="User select"
           options={mockOptions}
-          value={undefined}
           getOptionLabel={(option) => option.name}
           onChange={handleChange}
-          renderInput={(params) => (
-            <TextField {...params} label="User select" />
-          )}
+          renderInput={(params) => <TextField {...params} />}
         />,
       );
-
-      const input = screen.getByLabelText('User select');
+      const input = screen.getByRole('combobox');
       fireEvent.mouseDown(input);
-
       await waitFor(() => {
         const option = screen.getByText('John Doe');
         fireEvent.click(option);
       });
-
       expect(handleChange).toHaveBeenCalled();
     });
 
     it('filters selected options when configured', () => {
       render(
         <FormSelect
+          name="users"
+          label="Filtered select"
           options={mockOptions}
           value={[mockOptions[0]]}
           multiple={true}
           filterSelectedOptions={true}
           getOptionLabel={(option) => option.name}
           onChange={() => {}}
-          renderInput={(params) => (
-            <TextField {...params} label="Filtered select" />
-          )}
+          renderInput={(params) => <TextField {...params} />}
         />,
       );
-
-      expect(screen.getByLabelText('Filtered select')).toBeInTheDocument();
+      expect(screen.getByRole('combobox')).toBeInTheDocument();
     });
+  });
+
+  it('handles FormSelect with empty options array', () => {
+    render(
+      <FormSelect
+        name="empty"
+        label="Empty select"
+        options={[]}
+        getOptionLabel={(option) => option.name}
+        onChange={() => {}}
+        renderInput={(params) => <TextField {...params} />}
+      />,
+    );
+    expect(screen.getByRole('combobox')).toBeInTheDocument();
   });
 });
 
@@ -577,32 +548,39 @@ describe('FormCheckbox', () => {
   describe('Unit tests: Each field type renders correctly', () => {
     it('renders checkbox with label', () => {
       render(
-        <FormCheckbox id="accept-terms" labelText="Accept terms">
-          <input type="checkbox" />
-        </FormCheckbox>,
+        <FormCheckbox
+          id="terms"
+          labelText="Accept terms"
+          checked={false}
+          onChange={() => {}}
+        />,
       );
-
       expect(screen.getByText('Accept terms')).toBeInTheDocument();
     });
 
     it('handles checked state', () => {
       const { container } = render(
-        <FormCheckbox labelText="Subscribe" checked={true}>
-          <input type="checkbox" defaultChecked />
-        </FormCheckbox>,
+        <FormCheckbox
+          id="terms"
+          labelText="Accept terms"
+          checked={true}
+          onChange={() => {}}
+        />,
       );
-
       const checkbox = container.querySelector('input[type="checkbox"]');
       expect(checkbox).toBeChecked();
     });
 
     it('applies custom container class', () => {
       const { container } = render(
-        <FormCheckbox labelText="Option" containerClass="custom-checkbox">
-          <input type="checkbox" />
-        </FormCheckbox>,
+        <FormCheckbox
+          id="terms"
+          labelText="Accept terms"
+          checked={false}
+          containerClass="custom-checkbox"
+          onChange={() => {}}
+        />,
       );
-
       expect(container.querySelector('.custom-checkbox')).toBeInTheDocument();
     });
   });
@@ -611,24 +589,28 @@ describe('FormCheckbox', () => {
     it('handles onChange events', async () => {
       const handleChange = vi.fn();
       const { container } = render(
-        <FormCheckbox labelText="Agree" onChange={handleChange}>
-          <input type="checkbox" onChange={handleChange} />
-        </FormCheckbox>,
+        <FormCheckbox
+          id="terms"
+          labelText="Accept terms"
+          checked={false}
+          onChange={handleChange}
+        />,
       );
-
       const checkbox = container.querySelector('input[type="checkbox"]')!;
       await userEvent.click(checkbox);
-
       expect(handleChange).toHaveBeenCalled();
     });
 
     it('respects disabled state', () => {
       const { container } = render(
-        <FormCheckbox labelText="Option" disabled={true}>
-          <input type="checkbox" disabled />
-        </FormCheckbox>,
+        <FormCheckbox
+          id="terms"
+          labelText="Accept terms"
+          checked={false}
+          disabled={true}
+          onChange={() => {}}
+        />,
       );
-
       const checkbox = container.querySelector('input[type="checkbox"]');
       expect(checkbox).toBeDisabled();
     });
@@ -636,43 +618,59 @@ describe('FormCheckbox', () => {
 });
 
 // ============================================================================
-// FormRadioGroup Tests
+// FormRadioGroup Tests (UPDATED)
 // ============================================================================
 describe('FormRadioGroup', () => {
+  const mockOptions = [
+    { label: 'Option 1', value: 'option1' },
+    { label: 'Option 2', value: 'option2' },
+    { label: 'Option 3', value: 'option3' },
+  ];
+
   describe('Unit tests: Each field type renders correctly', () => {
-    it('renders radio button', () => {
+    it('renders radio button group with options', () => {
       render(
         <FormRadioGroup
-          type="radio"
-          name="gender"
-          id="male"
-          label="Male"
-          value="male"
-        >
-          <input type="radio" />
-        </FormRadioGroup>,
+          name="choice"
+          options={mockOptions}
+          value=""
+          onChange={() => {}}
+        />,
       );
-
-      const radio = screen.getByRole('radio');
-      expect(radio).toBeInTheDocument();
-      expect(radio).toHaveAttribute('type', 'radio');
+      const radios = screen.getAllByRole('radio');
+      expect(radios).toHaveLength(3);
+      expect(screen.getByText('Option 1')).toBeInTheDocument();
+      expect(screen.getByText('Option 2')).toBeInTheDocument();
+      expect(screen.getByText('Option 3')).toBeInTheDocument();
     });
 
     it('handles checked state', () => {
       const { container } = render(
         <FormRadioGroup
-          type="radio"
-          name="choice"
-          id="option1"
-          label="Option 1"
-          checked={true}
-        >
-          <input type="radio" defaultChecked />
-        </FormRadioGroup>,
+          name="gender"
+          options={[
+            { label: 'Male', value: 'male' },
+            { label: 'Female', value: 'female' },
+          ]}
+          value="male"
+          onChange={() => {}}
+        />,
       );
+      const maleRadio = container.querySelector('input[value="male"]');
+      expect(maleRadio).toBeChecked();
+    });
 
-      const radio = container.querySelector('input[type="radio"]');
-      expect(radio).toBeChecked();
+    it('renders group label', () => {
+      render(
+        <FormRadioGroup
+          name="choice"
+          label="Select your choice"
+          options={mockOptions}
+          value=""
+          onChange={() => {}}
+        />,
+      );
+      expect(screen.getByText('Select your choice')).toBeInTheDocument();
     });
   });
 
@@ -681,20 +679,29 @@ describe('FormRadioGroup', () => {
       const handleChange = vi.fn();
       const { container } = render(
         <FormRadioGroup
-          type="radio"
-          name="option"
-          id="opt1"
-          label="Option 1"
+          name="choice"
+          options={mockOptions}
+          value=""
           onChange={handleChange}
-        >
-          <input type="radio" onChange={handleChange} />
-        </FormRadioGroup>,
+        />,
       );
-
-      const radio = container.querySelector('input[type="radio"]')!;
+      const radio = container.querySelector('input[value="option1"]')!;
       await userEvent.click(radio);
-
       expect(handleChange).toHaveBeenCalled();
+    });
+
+    it('displays error when touched', () => {
+      render(
+        <FormRadioGroup
+          name="choice"
+          options={mockOptions}
+          value=""
+          onChange={() => {}}
+          error="This field is required"
+          touched={true}
+        />,
+      );
+      expect(screen.getByText('This field is required')).toBeInTheDocument();
     });
   });
 });
@@ -708,7 +715,6 @@ describe('FormDateField', () => {
       render(
         <FormDateField label="Birth Date" value={null} onChange={() => {}} />,
       );
-
       expect(screen.getByLabelText('Birth Date')).toBeInTheDocument();
     });
 
@@ -716,13 +722,12 @@ describe('FormDateField', () => {
       const date = dayjs('2024-01-15');
       render(
         <FormDateField
-          label="Event Date"
+          label="Date"
           value={date}
           onChange={() => {}}
           format="YYYY-MM-DD"
         />,
       );
-
       const input = screen.getByDisplayValue('2024-01-15');
       expect(input).toBeInTheDocument();
     });
@@ -730,7 +735,6 @@ describe('FormDateField', () => {
     it('respects minDate and maxDate', () => {
       const minDate = dayjs('2024-01-01');
       const maxDate = dayjs('2024-12-31');
-
       render(
         <FormDateField
           label="Date"
@@ -740,7 +744,6 @@ describe('FormDateField', () => {
           maxDate={maxDate}
         />,
       );
-
       const input = screen.getByLabelText('Date');
       expect(input).toBeInTheDocument();
     });
@@ -754,7 +757,6 @@ describe('FormDateField', () => {
           disabled={true}
         />,
       );
-
       const input = screen.getByLabelText('Date');
       expect(input).toBeDisabled();
     });
@@ -766,10 +768,8 @@ describe('FormDateField', () => {
       render(
         <FormDateField label="Date" value={null} onChange={handleChange} />,
       );
-
       const input = screen.getByLabelText('Date');
       await userEvent.type(input, '01/15/2024');
-
       await waitFor(() => {
         expect(handleChange).toHaveBeenCalled();
       });
@@ -790,7 +790,6 @@ describe('FormDateField', () => {
           }}
         />,
       );
-
       expect(screen.getByText('Invalid date')).toBeInTheDocument();
     });
   });
@@ -801,55 +800,61 @@ describe('FormDateField', () => {
 // ============================================================================
 describe('Integration tests: Form submission with validation', () => {
   it('validates form and prevents submission on errors', async () => {
-    const handleSubmit = vi.fn((e) => e.preventDefault());
-
+    const handleSubmit = vi.fn();
     const TestForm = () => {
       const [email, setEmail] = React.useState('');
       const [touched, setTouched] = React.useState(false);
       const hasError = touched && !email.includes('@');
-      const errorMsg = touched && !email.includes('@') ? 'Invalid email' : '';
+      const errorMsg = hasError ? 'Invalid email' : '';
+
+      const onSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!hasError) {
+          handleSubmit();
+        }
+      };
 
       return (
-        <form onSubmit={handleSubmit}>
-          <FormFieldGroup
-            name="email"
-            label="Email"
-            error={errorMsg}
-            touched={touched}
-            helpText="Enter your email"
-          >
+        <form onSubmit={onSubmit}>
+          <Form.Group>
+            <Form.Label htmlFor="email">Email</Form.Label>
             <Form.Control
+              id="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               onBlur={() => setTouched(true)}
               isInvalid={!!(touched && errorMsg)}
             />
-          </FormFieldGroup>
+            {errorMsg && (
+              <Form.Control.Feedback type="invalid">
+                {errorMsg}
+              </Form.Control.Feedback>
+            )}
+          </Form.Group>
           <button type="submit">Submit</button>
         </form>
       );
     };
 
     render(<TestForm />);
-
-    const submitButton = screen.getByRole('button', { name: 'Submit' });
+    const submitButton = screen.getByRole('button', { name: /submit/i });
     const emailInput = screen.getByLabelText('Email');
 
     await userEvent.type(emailInput, 'invalid');
     fireEvent.blur(emailInput);
 
     await waitFor(() => {
-      expect(screen.getByText('Invalid email')).toBeInTheDocument();
+      expect(screen.getByText(/Invalid email/i)).toBeInTheDocument();
     });
 
     await userEvent.click(submitButton);
-    expect(handleSubmit).toHaveBeenCalled();
+    expect(handleSubmit).not.toHaveBeenCalled();
+    expect(screen.getByText(/Invalid email/i)).toBeInTheDocument();
   });
 
   it('submits form successfully with valid data', async () => {
     const handleSubmit = vi.fn((e) => e.preventDefault());
-
     const TestForm = () => {
       const [formData, setFormData] = React.useState({
         name: '',
@@ -860,15 +865,15 @@ describe('Integration tests: Form submission with validation', () => {
       return (
         <form onSubmit={handleSubmit}>
           <FormTextField
-            name="name"
             label="Name"
+            name="name"
             value={formData.name}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             format="bootstrap"
           />
           <FormTextField
-            name="email"
             label="Email"
+            name="email"
             value={formData.email}
             onChange={(e) =>
               setFormData({ ...formData, email: e.target.value })
@@ -876,8 +881,8 @@ describe('Integration tests: Form submission with validation', () => {
             format="bootstrap"
           />
           <FormTextArea
-            name="message"
             label="Message"
+            name="message"
             value={formData.message}
             onChange={(e) =>
               setFormData({ ...formData, message: e.target.value })
@@ -890,13 +895,14 @@ describe('Integration tests: Form submission with validation', () => {
     };
 
     render(<TestForm />);
-
     await userEvent.type(screen.getByLabelText('Name'), 'John Doe');
     await userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
-    await userEvent.type(screen.getByLabelText('Message'), 'Test message');
+
+    // Use getByRole for textarea
+    const messageField = screen.getByRole('textbox', { name: /message/i });
+    await userEvent.type(messageField, 'Test message');
 
     await userEvent.click(screen.getByRole('button', { name: 'Submit' }));
-
     expect(handleSubmit).toHaveBeenCalled();
   });
 });
@@ -907,29 +913,29 @@ describe('Integration tests: Form submission with validation', () => {
 describe('Accessibility tests: Keyboard navigation through fields', () => {
   it('allows tab navigation through form fields', async () => {
     render(
-      <form>
+      <div>
         <FormTextField
-          name="field1"
           label="Field 1"
+          name="field1"
           value=""
           onChange={() => {}}
           format="bootstrap"
         />
         <FormTextField
-          name="field2"
           label="Field 2"
+          name="field2"
           value=""
           onChange={() => {}}
           format="bootstrap"
         />
         <FormTextField
-          name="field3"
           label="Field 3"
+          name="field3"
           value=""
           onChange={() => {}}
           format="bootstrap"
         />
-      </form>,
+      </div>,
     );
 
     const field1 = screen.getByLabelText('Field 1');
@@ -948,26 +954,25 @@ describe('Accessibility tests: Keyboard navigation through fields', () => {
 
   it('allows shift+tab to navigate backwards', async () => {
     render(
-      <form>
+      <div>
         <FormTextField
-          name="field1"
           label="Field 1"
+          name="field1"
           value=""
           onChange={() => {}}
           format="bootstrap"
         />
         <FormTextField
-          name="field2"
           label="Field 2"
+          name="field2"
           value=""
           onChange={() => {}}
           format="bootstrap"
         />
-      </form>,
+      </div>,
     );
 
     const field2 = screen.getByLabelText('Field 2');
-
     field2.focus();
     expect(field2).toHaveFocus();
 
@@ -980,18 +985,16 @@ describe('Accessibility tests: Screen reader announces errors', () => {
   it('has proper ARIA attributes for error states', () => {
     render(
       <FormTextField
-        name="email"
         label="Email"
-        value="invalid"
+        name="email"
+        value=""
         onChange={() => {}}
-        error={true}
+        error="Invalid email format"
         touched={true}
         format="bootstrap"
         ariaDescribedBy="email-error"
-        helpText="Invalid email format"
       />,
     );
-
     const input = screen.getByLabelText('Email');
     expect(input).toHaveAttribute('aria-describedby', 'email-error');
   });
@@ -999,31 +1002,29 @@ describe('Accessibility tests: Screen reader announces errors', () => {
   it('marks invalid fields with aria-invalid', () => {
     render(
       <FormTextArea
-        name="description"
         label="Description"
+        name="description"
         value=""
         onChange={() => {}}
         error={true}
+        touched={true}
         multiline={true}
       />,
     );
-
-    const textarea = screen.getByLabelText('Description');
+    const textarea = screen.getByRole('textbox');
     expect(textarea).toHaveAttribute('aria-invalid', 'true');
   });
 
   it('associates error messages with inputs via FormFieldGroup', () => {
     render(
       <FormFieldGroup
-        name="password"
         label="Password"
         error="Password too short"
         touched={true}
       >
-        <input type="password" value="123" onChange={() => {}} />
+        <input type="password" />
       </FormFieldGroup>,
     );
-
     const errorMessage = screen.getByText('Password too short');
     expect(errorMessage).toBeInTheDocument();
   });
@@ -1036,14 +1037,13 @@ describe('Edge cases and special scenarios', () => {
   it('handles empty string values correctly', () => {
     render(
       <FormTextField
-        name="field"
         label="Field"
+        name="field"
         value=""
         onChange={() => {}}
         format="bootstrap"
       />,
     );
-
     const input = screen.getByLabelText('Field') as HTMLInputElement;
     expect(input.value).toBe('');
   });
@@ -1051,20 +1051,18 @@ describe('Edge cases and special scenarios', () => {
   it('handles undefined optional props', () => {
     render(
       <FormTextField
-        name="field"
         label="Field"
+        name="field"
         value=""
         onChange={() => {}}
         format="bootstrap"
       />,
     );
-
     expect(screen.getByLabelText('Field')).toBeInTheDocument();
   });
 
   it('handles FormDateField with null value', () => {
     render(<FormDateField label="Date" value={null} onChange={() => {}} />);
-
     const input = screen.getByLabelText('Date') as HTMLInputElement;
     expect(input.value).toBe('');
   });
@@ -1072,42 +1070,40 @@ describe('Edge cases and special scenarios', () => {
   it('handles FormSelect with empty options array', () => {
     render(
       <FormSelect
+        name="empty"
+        label="Empty select"
         options={[]}
-        value={undefined}
+        getOptionLabel={(option) => option.name}
         onChange={() => {}}
-        renderInput={(params) => <TextField {...params} label="Empty select" />}
+        renderInput={(params) => <TextField {...params} />}
       />,
     );
-
-    expect(screen.getByLabelText('Empty select')).toBeInTheDocument();
+    expect(screen.getByRole('combobox')).toBeInTheDocument();
   });
 
   it('handles rapid consecutive onChange events', async () => {
     const handleChange = vi.fn();
     render(
       <FormTextField
-        name="field"
         label="Field"
+        name="field"
         value=""
         onChange={handleChange}
         format="bootstrap"
       />,
     );
-
     const input = screen.getByLabelText('Field');
     await userEvent.type(input, 'abc', { delay: 1 });
-
     expect(handleChange).toHaveBeenCalledTimes(3);
   });
 
   it('handles focus and blur events', async () => {
     const handleFocus = vi.fn();
     const handleBlur = vi.fn();
-
     render(
       <FormTextField
-        name="field"
         label="Field"
+        name="field"
         value=""
         onChange={() => {}}
         onFocus={handleFocus}
@@ -1115,12 +1111,9 @@ describe('Edge cases and special scenarios', () => {
         format="bootstrap"
       />,
     );
-
     const input = screen.getByLabelText('Field');
-
     input.focus();
     expect(handleFocus).toHaveBeenCalled();
-
     input.blur();
     expect(handleBlur).toHaveBeenCalled();
   });

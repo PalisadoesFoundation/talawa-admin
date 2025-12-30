@@ -1,10 +1,14 @@
-import { Autocomplete } from '@mui/material';
+import { Autocomplete, TextField } from '@mui/material';
 import React from 'react';
-import { Form } from 'react-bootstrap';
 import { FormSelectProps } from './types';
 
 export const FormSelect: React.FC<FormSelectProps> = ({
-  groupClass,
+  name,
+  label,
+  error,
+  touched,
+  helpText,
+  required,
   disabled,
   className,
   options,
@@ -18,22 +22,31 @@ export const FormSelect: React.FC<FormSelectProps> = ({
   renderInput,
   ...dataAttributes
 }) => {
+  const showError = !!(touched && error);
+  const errorMessage = showError ? String(error) : '';
+
   return (
-    <Form.Group className={groupClass}>
-      <Autocomplete
-        className={className}
-        multiple={multiple}
-        limitTags={limitTags}
-        options={options || []}
-        value={value}
-        disabled={disabled}
-        isOptionEqualToValue={isOptionEqualToValue}
-        filterSelectedOptions={filterSelectedOptions}
-        getOptionLabel={getOptionLabel}
-        onChange={onChange}
-        renderInput={renderInput}
-        {...dataAttributes}
-      />
-    </Form.Group>
+    <Autocomplete
+      options={options || []}
+      value={value}
+      multiple={multiple}
+      limitTags={limitTags}
+      isOptionEqualToValue={isOptionEqualToValue}
+      filterSelectedOptions={filterSelectedOptions}
+      getOptionLabel={getOptionLabel}
+      onChange={onChange}
+      disabled={disabled}
+      className={className}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label={label}
+          error={showError}
+          helperText={errorMessage || helpText}
+          required={required}
+        />
+      )}
+      {...dataAttributes}
+    />
   );
 };
