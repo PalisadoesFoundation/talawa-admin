@@ -186,14 +186,12 @@ jobs:
   Check-AutoDocs:
     name: Generate and Validate Documentation
     needs: [Code-Quality-Checks]
-    uses: yashgoyal0110/.github/.github/workflows/shared-workflows/autodocs.yml@feature/typescript-code-quality-workflow
-    with:
-      node-version: '24.x'
+    uses: PalisadoesFoundation/.github/.github/workflows/typescript-autodocs.yml@main
   Check-Sensitive-Files:
-    uses: yashgoyal0110/.github/.github/workflows/shared-workflows/check-sensitive-files.yml@feature/typescript-code-quality-workflow
+    uses: PalisadoesFoundation/.github/.github/workflows/check-sensitive-files.yml@main
 
   Count-Changed-Files:
-    uses: yashgoyal0110/.github/.github/workflows/shared-workflows/count-changed-files.yml@feature/typescript-code-quality-workflow
+    uses: PalisadoesFoundation/.github/.github/workflows/count-changed-files.yml@main
 
   Check-Disable-Statements:
     name: Check for disable statements (eslint-disable, istanbul-ignore, it.skip)
