@@ -126,6 +126,9 @@ const MOCKS = [
   },
 ];
 
+// Debounce duration used by AdminSearchFilterBar component (default: 300ms)
+const SEARCH_DEBOUNCE_MS = 300;
+
 const link = new StaticMockLink(MOCKS, true);
 
 async function wait(ms = 100): Promise<void> {
@@ -238,7 +241,7 @@ describe('Organisation Venues', () => {
         expect(screen.getByText('Updated Venue 1')).toBeInTheDocument();
         expect(screen.queryByText('Updated Venue 2')).not.toBeInTheDocument();
       },
-      { timeout: 500 },
+      { timeout: SEARCH_DEBOUNCE_MS },
     );
   });
 
@@ -266,7 +269,7 @@ describe('Organisation Venues', () => {
         expect(screen.getByText('Updated Venue 1')).toBeInTheDocument();
         expect(screen.queryByText('Updated Venue 2')).not.toBeInTheDocument();
       },
-      { timeout: 500 },
+      { timeout: SEARCH_DEBOUNCE_MS },
     );
   });
 

@@ -104,6 +104,8 @@
   "pending": "En attente",
   "completed": "Complété",
   "late": "En retard",
+  "Latest": "Le plus récent",
+  "Oldest": "Le plus ancien",
   "createdLatest": "Créé le plus récemment",
   "createdEarliest": "Créé le plus tôt",
   "searchBy": "Rechercher par {{item}}",

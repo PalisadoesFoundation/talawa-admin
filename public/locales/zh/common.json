@@ -104,6 +104,8 @@
   "pending": "待处理",
   "completed": "已完成",
   "late": "迟到",
+  "Latest": "最新",
+  "Oldest": "最旧",
   "createdLatest": "最近创建",
   "createdEarliest": "最早创建",
   "searchBy": "按 {{item}} 搜索",

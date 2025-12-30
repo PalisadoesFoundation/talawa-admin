@@ -419,7 +419,7 @@ function ManageTag(): JSX.Element {
               dropdowns={[
                 {
                   id: 'manage-tag-sort',
-                  label: '',
+                  label: tCommon('sort'),
                   type: 'sort',
                   options: [
                     { label: tCommon('Latest'), value: 'DESCENDING' },

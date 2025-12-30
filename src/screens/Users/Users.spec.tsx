@@ -51,6 +51,9 @@ vi.mock('components/IconComponent/IconComponent', () => ({
   ),
 }));
 
+// Debounce duration used by AdminSearchFilterBar component (default: 300ms)
+const SEARCH_DEBOUNCE_MS = 300;
+
 const link = new StaticMockLink(MOCKS, true);
 
 const createLink = (
@@ -288,7 +291,7 @@ describe('Testing Users screen', () => {
     });
 
     // Wait for debounced search to complete
-    await wait(500);
+    await wait(SEARCH_DEBOUNCE_MS);
 
     await act(async () => {
       await userEvent.click(searchBtn);
@@ -521,7 +524,7 @@ describe('Testing Users screen', () => {
         fireEvent.scroll(window, { target: { scrollY: 1000 } });
       });
 
-      await wait(500); // Give time for data to load
+      await wait(SEARCH_DEBOUNCE_MS); // Give time for data to load
     });
   });
 
@@ -1768,7 +1771,7 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     // Trigger scroll to load more users while search is active
     fireEvent.scroll(window, { target: { scrollY: 6000 } });
-    await wait(500);
+    await wait(SEARCH_DEBOUNCE_MS);
 
     // Verify pagination worked: both first and second page results are now present
     expect(screen.getByText('John User')).toBeInTheDocument();
@@ -2560,7 +2563,7 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     // Trigger first scroll to load more users
     fireEvent.scroll(window, { target: { scrollY: 6000 } });
-    await wait(500);
+    await wait(SEARCH_DEBOUNCE_MS);
 
     // Both users should now be displayed
     expect(screen.getByText('First User')).toBeInTheDocument();
@@ -2711,7 +2714,7 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     // Trigger scroll to load more (which will return null edges)
     fireEvent.scroll(window, { target: { scrollY: 6000 } });
-    await wait(500);
+    await wait(SEARCH_DEBOUNCE_MS);
 
     // Component should handle null gracefully - initial user still there
     expect(screen.getByText('Initial User')).toBeInTheDocument();

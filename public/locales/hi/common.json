@@ -104,6 +104,8 @@
   "pending": "लंबित",
   "completed": "पूर्ण",
   "late": "देर से",
+  "Latest": "नवीनतम",
+  "Oldest": "सबसे पुराना",
   "createdLatest": "नवीनतम",
   "createdEarliest": "सबसे पुराना",
   "searchBy": "{{item}} से खोजें",

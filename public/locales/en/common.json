@@ -105,6 +105,8 @@
   "pending": "Pending",
   "completed": "Completed",
   "late": "Late",
+  "Latest": "Latest",
+  "Oldest": "Oldest",
   "createdLatest": "Created Latest",
   "createdEarliest": "Created Earliest",
   "searchBy": "Search by {{item}}",

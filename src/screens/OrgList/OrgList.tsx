@@ -337,7 +337,7 @@ function orgList(): JSX.Element {
           dropdowns={[
             {
               id: 'org-list-dropdown',
-              label: '',
+              label: tCommon('sort'),
               type: 'sort',
               options: [
                 { label: t('Latest'), value: 'Latest' },

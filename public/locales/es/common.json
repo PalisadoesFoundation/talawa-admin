@@ -104,6 +104,8 @@
   "pending": "Pendiente",
   "completed": "Completado",
   "late": "Tarde",
+  "Latest": "Más reciente",
+  "Oldest": "Más antiguo",
   "createdLatest": "Creado más reciente",
   "createdEarliest": "Creado más temprano",
   "searchBy": "Buscar por {{item}}",
