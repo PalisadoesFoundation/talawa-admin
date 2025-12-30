@@ -70,12 +70,10 @@
     "admin": "Administrateur",
     "user": "Utilisateur",
     "loading": "Chargement",
-    "userImage": "Image de l'utilisateur",
-    "userEditProfilePicture": "Modifier la photo de profil",
-    "communityLogo": "Logo de la Communauté",
+    "communityLogo": "Logo Communautaire",
     "organizations": "Organisations",
-    "accountLocked": "Votre compte a été temporairement verrouillé en raison de trop nombreuses tentatives de connexion échouées. Veuillez réessayer plus tard.",
-    "accountLockedWithTimer": "Votre compte a été temporairement verrouillé. Veuillez réessayer dans {{minutes}} minute(s)."
+    "loadingOrganizations": "Chargement des organisations...",
+    "errorLoadingOrganizations": "Erreur lors du chargement des organisations. Veuillez réessayer."
   },
   "adminProfile": {
     "title": "Profil Administrateur",

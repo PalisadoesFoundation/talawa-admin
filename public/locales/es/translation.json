@@ -69,13 +69,11 @@
     "loading": "Cargando...",
     "selectOrg": "Seleccione una organización",
     "afterRegister": "Registro exitoso. Por favor, espere a que el administrador apruebe su solicitud.",
-    "userImage": "Imagen del usuario",
-    "userEditProfilePicture": "Editar foto de perfil",
-    "communityLogo": "Logo de la Comunidad",
+    "backToLogin": "Volver al inicio de sesión",
+    "communityLogo": "Logo de la comunidad",
     "organizations": "Organizaciones",
-    "accountLocked": "Su cuenta ha sido bloqueada temporalmente debido a demasiados intentos fallidos de inicio de sesión. Por favor, inténtelo de nuevo más tarde.",
-    "accountLockedWithTimer": "Su cuenta ha sido bloqueada temporalmente. Por favor, inténtelo de nuevo en {{minutes}} minuto(s).",
-    "backToLogin": "Volver al inicio de sesión"
+    "loadingOrganizations": "Cargando organizaciones...",
+    "errorLoadingOrganizations": "Error al cargar organizaciones. Por favor, inténtelo de nuevo."
   },
   "adminProfile": {
     "title": "Perfil de Administrador",

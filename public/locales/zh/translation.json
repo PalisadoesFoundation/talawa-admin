@@ -74,8 +74,8 @@
     "userEditProfilePicture": "编辑用户头像",
     "communityLogo": "社区标志",
     "organizations": "组织",
-    "accountLocked": "由于登录失败次数过多，您的账户已被暂时锁定。请稍后重试。",
-    "accountLockedWithTimer": "您的账户已被暂时锁定。请在 {{minutes}} 分钟后重试。"
+    "loadingOrganizations": "正在加载组织...",
+    "errorLoadingOrganizations": "加载组织时出错。请重试。"
   },
   "adminProfile": {
     "title": "管理员资料",
