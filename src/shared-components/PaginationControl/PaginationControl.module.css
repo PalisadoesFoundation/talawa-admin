@@ -58,7 +58,7 @@
 
 .pageSizeSelect {
   background: transparent;
-  border: 1px solidvar(--bs-border-color, #dee2e6);
+  border: 1px solid var(--bs-border-color, #dee2e6);
   border-radius: 4px;
   cursor: pointer;
   padding: 0.25rem 0.4rem;

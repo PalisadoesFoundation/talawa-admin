@@ -296,7 +296,9 @@ function OrganizationPeople(): JSX.Element {
       setCurrentPage(newPage);
     } catch (error) {
       toast.error(
-        error instanceof Error ? error.message : tCommon('somethingWentWrong'),
+        error instanceof Error
+          ? error.message
+          : tCommon('pagination.pageSizeChangeError'),
       );
     } finally {
       setIsPaginating(false);
@@ -330,7 +332,7 @@ function OrganizationPeople(): JSX.Element {
         await fetchMembers({ variables });
       }
     } catch {
-      toast.error(tCommon('Failed to change page size. Please try again.'));
+      toast.error(tCommon('pagination.pageSizeChangeError'));
       // Revert on error
       setPageSize(pageSize);
     } finally {
