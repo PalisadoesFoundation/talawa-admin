@@ -217,9 +217,12 @@
     "admins": "Admins",
     "members": "Members",
     "orgName": "Organization Name",
-    "congratulationOrgCreated": "Congratulations! The Organization has been created successfully.",
     "goToStore": "Go To Store",
-    "manageFeaturesInfo": "Install and manage features from the Plugin Store for your Organization. You can also install these plugins later from Plugin Store."
+    "manageFeaturesInfo": "Install and manage features from the Plugin Store for your Organization. You can also install these plugins later from Plugin Store.",
+    "imageUploadError": "Image upload failed. Please try again.",
+    "imageUploadSuccess": "Image uploaded successfully.",
+    "congratulationOrgCreated": "Congratulations! The Organization is created.",
+    "sortOrganizations": "Sort Organizations"
   },
   "orgListCard": {
     "manage": "Manage",

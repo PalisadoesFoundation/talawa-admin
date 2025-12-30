@@ -214,12 +214,15 @@
     "sampleOrgSuccess": "Organización de ejemplo creada exitosamente",
     "manageFeatures": "Gestionar funciones",
     "enableEverything": "Habilitar todo",
+    "imageUploadError": "Error al cargar la imagen",
+    "imageUploadSuccess": "Imagen cargada con éxito",
+    "congratulationOrgCreated": "¡Felicidades! La Organización ha sido creada.",
+    "goToStore": "Ir a la tienda",
+    "manageFeaturesInfo": "Gestiona las funciones y plugins disponibles para esta organización.",
+    "orgName": "Ingrese el nombre",
+    "sortOrganizations": "Ordenar Organizaciones",
     "admins": "Administradores",
-    "members": "Miembros",
-    "orgName": "Nombre de la Organización",
-    "congratulationOrgCreated": "¡Felicitaciones! La organización ha sido creada exitosamente.",
-    "goToStore": "Ir a la Tienda",
-    "manageFeaturesInfo": "Instala y gestiona funciones desde la Tienda de Complementos para tu Organización. También puedes instalar estos complementos más tarde desde la Tienda de Complementos."
+    "members": "Miembros"
   },
   "orgListCard": {
     "admins": "Administradores",

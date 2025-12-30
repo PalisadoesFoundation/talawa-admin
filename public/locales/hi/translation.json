@@ -214,12 +214,15 @@
     "endOfResults": "परिणाम समाप्त",
     "noResultsFoundFor": "कोई परिणाम नहीं मिला",
     "OR": "या",
-    "admins": "प्रशासक",
-    "members": "सदस्य",
-    "orgName": "संगठन का नाम",
-    "congratulationOrgCreated": "बधाई हो! संगठन सफलतापूर्वक बनाया गया है।",
+    "imageUploadError": "छवि अपलोड विफल। कृपया पुनः प्रयास करें।",
+    "imageUploadSuccess": "छवि सफलतापूर्वक अपलोड की गई।",
+    "congratulationOrgCreated": "बधाई हो! संगठन बनाया गया है।",
     "goToStore": "स्टोर पर जाएं",
-    "manageFeaturesInfo": "अपने संगठन के लिए प्लगइन स्टोर से सुविधाएं इंस्टॉल और प्रबंधित करें। आप बाद में प्लगइन स्टोर से ये प्लगइन्स भी इंस्टॉल कर सकते हैं।"
+    "manageFeaturesInfo": "इस संगठन के लिए उपलब्ध सुविधाओं और प्लगइन्स का प्रबंधन करें।",
+    "orgName": "नाम दर्ज करें",
+    "sortOrganizations": "संगठनों को क्रमबद्ध करें",
+    "admins": "प्रशासक",
+    "members": "सदस्य"
   },
   "orgListCard": {
     "manage": "प्रबंधित करें",
