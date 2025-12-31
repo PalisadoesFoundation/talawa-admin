@@ -465,7 +465,7 @@
     "tagNamePlaceholder": "टैग का नाम लिखें",
     "allTags": "सभी टैग",
     "noMoreMembersFound": "कोई और सदस्य नहीं मिला",
-    "errorLoadingAssignedMembers": "सौंपे गए उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
+    "errorLoadingAssignedMembers": "सौंपे गए सदस्यों को लोड करते समय त्रुटि हुई",
     "tags": "टैग"
   },
   "userListCard": {
