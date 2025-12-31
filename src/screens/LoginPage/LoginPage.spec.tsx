@@ -2521,15 +2521,13 @@ describe('Organization dropdown data fetching', () => {
 
     await wait();
 
-    const registerButton = screen.queryByTestId('goToRegisterPortion');
-    if (registerButton) {
-      await userEvent.click(registerButton);
-      await wait(50); // Brief wait for the component to update
+    const registerButton = screen.getByTestId('goToRegisterPortion');
+    await userEvent.click(registerButton);
+    await wait(50); // Brief wait for the component to update
 
-      // Verify the Autocomplete shows loading helper text
-      const helperText = screen.getByText(/loading organizations/i);
-      expect(helperText).toBeInTheDocument();
-    }
+    // Verify the Autocomplete shows loading helper text
+    const helperText = screen.getByText(/loading organizations/i);
+    expect(helperText).toBeInTheDocument();
   });
 
   it('displays error state when organization query fails', async () => {
@@ -2558,25 +2556,23 @@ describe('Organization dropdown data fetching', () => {
 
     await wait();
 
-    const registerButton = screen.queryByTestId('goToRegisterPortion');
-    if (registerButton) {
-      await userEvent.click(registerButton);
+    const registerButton = screen.getByTestId('goToRegisterPortion');
+    await userEvent.click(registerButton);
 
-      // Wait for error text to appear
-      await waitFor(
-        () => {
-          const errorText = screen.queryByText(/error loading organizations/i);
-          expect(errorText).toBeInTheDocument();
-        },
-        { timeout: 2000 },
-      );
+    // Wait for error text to appear
+    await waitFor(
+      () => {
+        const errorText = screen.queryByText(/error loading organizations/i);
+        expect(errorText).toBeInTheDocument();
+      },
+      { timeout: 2000 },
+    );
 
-      // Check that error styling is applied to the TextField
-      const helperText = screen.getByText(/error loading organizations/i);
-      expect(helperText.closest('.MuiFormHelperText-root')).toHaveClass(
-        'Mui-error',
-      );
-    }
+    // Check that error styling is applied to the TextField
+    const helperText = screen.getByText(/error loading organizations/i);
+    expect(helperText.closest('.MuiFormHelperText-root')).toHaveClass(
+      'Mui-error',
+    );
   });
 
   it('displays error state when organization query returns GraphQL errors', async () => {
@@ -2611,22 +2607,20 @@ describe('Organization dropdown data fetching', () => {
 
     await wait();
 
-    const registerButton = screen.queryByTestId('goToRegisterPortion');
-    if (registerButton) {
-      await userEvent.click(registerButton);
+    const registerButton = screen.getByTestId('goToRegisterPortion');
+    await userEvent.click(registerButton);
 
-      // Wait for error text to appear
-      await waitFor(
-        () => {
-          const errorText = screen.queryByText(/error loading organizations/i);
-          expect(errorText).toBeInTheDocument();
-        },
-        { timeout: 2000 },
-      );
+    // Wait for error text to appear
+    await waitFor(
+      () => {
+        const errorText = screen.queryByText(/error loading organizations/i);
+        expect(errorText).toBeInTheDocument();
+      },
+      { timeout: 2000 },
+    );
 
-      // Verify error message is displayed
-      const errorText = screen.getByText(/error loading organizations/i);
-      expect(errorText).toBeInTheDocument();
-    }
+    // Verify error message is displayed
+    const errorText = screen.getByText(/error loading organizations/i);
+    expect(errorText).toBeInTheDocument();
   });
 });
