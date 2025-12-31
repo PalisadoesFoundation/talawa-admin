@@ -30,7 +30,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
   show,
   onHide,
 }) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'common' });
+  const { t } = useTranslation('common');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [manifest, setManifest] = useState<IAdminPluginManifest | null>(null);
   const [pluginStructure, setPluginStructure] =
@@ -117,7 +117,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
         NotificationToast.error(result.error || 'Failed to upload plugin');
       }
     } catch {
-      NotificationToast.error('Failed to upload plugin. Please try again.');
+      NotificationToast.error(t('failedToUploadPlugin'));
     } finally {
       setIsInstalling(false);
     }
@@ -139,7 +139,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
         {/* Left Panel - Upload */}
         <div className={styles.leftPanel}>
           <div className={styles.headerSection}>
-            <h3>Upload Plugin</h3>
+            <h3>{t('uploadPlugin')}</h3>
             <p>
               Upload a ZIP file to create a plugin entry. The plugin will be
               available for installation after upload.
@@ -151,7 +151,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
             <div className={styles.uploadText}>
               {selectedFile ? selectedFile.name : 'Select ZIP file'}
             </div>
-            <div className={styles.uploadSubText}>Click to browse files</div>
+            <div className={styles.uploadSubText}>{t('clickToBrowse')}</div>
           </div>
 
           <input
@@ -171,38 +171,38 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
 
           {manifest && pluginStructure && (
             <div className={styles.pluginInfoSection}>
-              <h5>Plugin Information</h5>
+              <h5>{t('pluginInformation')}</h5>
               <div className={styles.pluginInfoDetails}>
                 <div className={styles.infoRow}>
-                  <strong>Name:</strong> {manifest.name}
+                  <strong>{t('name')}:</strong> {manifest.name}
                 </div>
                 <div className={styles.infoRow}>
-                  <strong>Version:</strong> {manifest.version}
+                  <strong>{t('version')}:</strong> {manifest.version}
                 </div>
                 <div className={styles.infoRow}>
-                  <strong>Author:</strong> {manifest.author}
+                  <strong>{t('author')}:</strong> {manifest.author}
                 </div>
                 <div className={styles.infoRow}>
-                  <strong>Description:</strong> {manifest.description}
+                  <strong>{t('desc')}:</strong> {manifest.description}
                 </div>
                 <div className={styles.infoRow}>
-                  <strong>Plugin ID:</strong> {manifest.pluginId}
+                  <strong>{t('pluginId')}:</strong> {manifest.pluginId}
                 </div>
 
                 {/* Show detected components */}
                 <div className={styles.componentList}>
-                  <strong>Components to Install:</strong>
+                  <strong>{t('componentsToInstall')}:</strong>
                   <div className={styles.componentListContainer}>
                     {pluginStructure.hasAdminFolder && (
                       <div className={styles.componentItem}>
                         <FaCheck className={styles.successIcon} />
-                        <span>Admin Dashboard Components</span>
+                        <span>{t('adminDashboardComponents')}</span>
                       </div>
                     )}
                     {pluginStructure.hasApiFolder && (
                       <div className={styles.componentItem}>
                         <FaCheck className={styles.successIcon} />
-                        <span>API Backend Components</span>
+                        <span>{t('apiBackendComponents')}</span>
                       </div>
                     )}
                   </div>
@@ -240,13 +240,13 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
         {/* Right Panel - Plugin Structure */}
         <div className={styles.rightPanel}>
           <div className={styles.headerSection}>
-            <h3>Plugin Structure</h3>
-            <p>Expected plugin structure with admin and/or API components</p>
+            <h3>{t('pluginStructure')}</h3>
+            <p>{t('pluginStructureDesc')}</p>
           </div>
 
           {pluginFiles.length > 0 ? (
             <div className={styles.codeBlockContainer}>
-              <div className={styles.codeBlockTitle}>Detected Files</div>
+              <div className={styles.codeBlockTitle}>{t('detectedFiles')}</div>
               <div className={styles.uploadSubText}>
                 <pre className={styles.codeBlockPre}>
                   {pluginFiles.join('\n')}
@@ -257,7 +257,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
             <>
               <div className={styles.codeBlockContainer}>
                 <div className={styles.codeBlockTitle}>
-                  Expected Directory Structure
+                  {t('expectedDirectoryStructure')}
                 </div>
                 <div className={styles.uploadSubText}>
                   <pre className={styles.codeBlockPre}>
@@ -279,7 +279,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
 
               <div>
                 <div className={styles.codeBlockTitle}>
-                  Required manifest.json Fields
+                  {t('requiredManifestFields')}
                 </div>
                 <div className={styles.uploadSubText}>
                   <pre className={styles.codeBlockPre}>

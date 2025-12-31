@@ -159,5 +159,19 @@
   "uploadPlugin": "Upload Plugin",
   "uploading": "Uploading...",
   "cancelUploadPlugin": "Cancel upload plugin",
-  "unableToLoadData": "Unable to load data."
+  "unableToLoadData": "Unable to load data.",
+  "failedToUploadPlugin": "Failed to upload plugin. Please try again.",
+  "clickToBrowse": "Click to browse files",
+  "pluginInformation": "Plugin Information",
+  "version": "Version",
+  "author": "Author",
+  "pluginId": "Plugin ID",
+  "componentsToInstall": "Components to Install",
+  "adminDashboardComponents": "Admin Dashboard Components",
+  "apiBackendComponents": "API Backend Components",
+  "pluginStructure": "Plugin Structure",
+  "pluginStructureDesc": "Expected plugin structure with admin and/or API components",
+  "detectedFiles": "Detected Files",
+  "expectedDirectoryStructure": "Expected Directory Structure",
+  "requiredManifestFields": "Required manifest.json Fields"
 }
