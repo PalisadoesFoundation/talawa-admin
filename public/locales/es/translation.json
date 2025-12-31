@@ -75,6 +75,12 @@
     "signingOut": "Cerrando sesión...",
     "signOut": "Cerrar sesión"
   },
+  "orgSelector": {
+    "organization": "Organización",
+    "selectOrganization": "Seleccione una organización",
+    "noOrganizationsAvailable": "No hay organizaciones disponibles",
+    "noMatchingOrganizations": "No se encontraron organizaciones coincidentes"
+  },
   "userLoginPage": {
     "title": "Administrador Talawa",
     "fromPalisadoes": "Una aplicación de código abierto de los voluntarios de la Fundación palisados",
@@ -207,7 +213,16 @@
     "OR": "O",
     "sampleOrgSuccess": "Organización de ejemplo creada exitosamente",
     "manageFeatures": "Gestionar funciones",
-    "enableEverything": "Habilitar todo"
+    "enableEverything": "Habilitar todo",
+    "imageUploadError": "Error al cargar la imagen",
+    "imageUploadSuccess": "Imagen cargada con éxito",
+    "congratulationOrgCreated": "¡Felicidades! La Organización ha sido creada.",
+    "goToStore": "Ir a la tienda",
+    "manageFeaturesInfo": "Gestiona las funciones y plugins disponibles para esta organización.",
+    "orgName": "Ingrese el nombre",
+    "sortOrganizations": "Ordenar Organizaciones",
+    "admins": "Administradores",
+    "members": "Miembros"
   },
   "orgListCard": {
     "admins": "Administradores",
@@ -702,6 +717,8 @@
     "eventDetails": "Detalles del evento",
     "eventDeleted": "Evento eliminado con éxito.",
     "eventUpdated": "Evento actualizado con éxito.",
+    "registeredSuccessfully": "Successfully registered for {{eventName}}",
+    "noChangesToUpdate": "No changes to update",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
     "thisInstance": "Esta Instancia",
     "thisAndFollowingInstances": "Esta y las Siguientes Instancias",
@@ -715,6 +732,7 @@
     "after": "Después de",
     "occurences": "ocurrencias",
     "done": "Hecho",
+    "invalidDate": "Invalid Date",
     "createChat": "Crear chat"
   },
   "funds": {
@@ -839,6 +857,7 @@
     "Title": "Título",
     "Text": "Texto",
     "cancel": "Cancelar",
+    "invalidDate": "Invalid Date",
     "searchBy": "Buscar por",
     "Oldest": "Más Antiguas Primero",
     "Latest": "Más Recientes Primero",
@@ -857,7 +876,10 @@
     "organizationIdMissing": "¡Falta el ID de la organización!",
     "messageDescription": "Descripción de la publicación",
     "addVideo": "Añadir video",
-    "creatingMessage": "Creando publicación..."
+    "creatingMessage": "Creando publicación...",
+    "orgPostListError": "Organization post list error:",
+    "pinnedPostsLoadError": "Error loading pinned posts",
+    "errorSearchingPosts": "Error searching posts"
   },
   "postNotFound": {
     "post": "Publicación",
@@ -923,6 +945,7 @@
     "searchByFirstName": "Buscar por nombre de pila",
     "searchByLastName": "Buscar por apellido",
     "noResultsFoundFor": "No se encontraron resultados para ",
+    "sortOrganizations": "Sort Organizations",
     "noSpammerFound": "No se encontró ningún spammer",
     "noUsersFound": "No se encontraron usuarios"
   },

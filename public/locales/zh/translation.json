@@ -75,6 +75,12 @@
     "signingOut": "正在登出...",
     "signOut": "登出"
   },
+  "orgSelector": {
+    "organization": "组织",
+    "selectOrganization": "选择一个组织",
+    "noOrganizationsAvailable": "没有可用的组织",
+    "noMatchingOrganizations": "未找到匹配的组织"
+  },
   "userLoginPage": {
     "title": "塔拉瓦管理员",
     "fromPalisadoes": "Palisadoes 基金会志愿者开发的开源应用程序",
@@ -207,7 +213,16 @@
     "cancel": "取消",
     "endOfResults": "结果结束",
     "noResultsFoundFor": "未找到结果",
-    "OR": "或"
+    "OR": "或",
+    "imageUploadError": "图像上传失败。请再试一次。",
+    "imageUploadSuccess": "图像上传成功。",
+    "congratulationOrgCreated": "恭喜！组织已创建。",
+    "goToStore": "前往商店",
+    "manageFeaturesInfo": "管理此组织可用的功能和插件。",
+    "orgName": "输入名称",
+    "sortOrganizations": "排序组织",
+    "admins": "管理员",
+    "members": "成员"
   },
   "orgListCard": {
     "manage": "管理",
@@ -694,6 +709,8 @@
     "eventDetails": "活动详情",
     "eventDeleted": "活动删除成功。",
     "eventUpdated": "活动更新成功。",
+    "registeredSuccessfully": "Successfully registered for {{eventName}}",
+    "noChangesToUpdate": "No changes to update",
     "thisInstance": "本实例",
     "thisAndFollowingInstances": "本实例及后续实例",
     "allInstances": "所有实例",
@@ -715,6 +732,7 @@
     "close": "关闭",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
     "done": "完成",
+    "invalidDate": "Invalid Date",
     "createChat": "创建聊天"
   },
   "funds": {
@@ -853,11 +871,15 @@
     "Next": "下一页",
     "Previous": "上一页",
     "cancel": "取消",
+    "invalidDate": "Invalid Date",
     "messageTitleError": "帖子标题不能为空！",
     "organizationIdMissing": "组织ID 缺失！",
     "messageDescription": "帖子描述",
     "addVideo": "添加视频",
-    "creatingMessage": "正在创建帖子..."
+    "creatingMessage": "正在创建帖子...",
+    "orgPostListError": "Organization post list error:",
+    "pinnedPostsLoadError": "Error loading pinned posts",
+    "errorSearchingPosts": "Error searching posts"
   },
   "postNotFound": {
     "post": "邮政",
@@ -924,7 +946,8 @@
     "name": "名称",
     "email": "电子邮件",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
-    "noResultsFoundFor": "未找到结果"
+    "noResultsFoundFor": "未找到结果",
+    "sortOrganizations": "Sort Organizations"
   },
   "eventManagement": {
     "name": "事件管理",

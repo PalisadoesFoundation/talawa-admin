@@ -75,6 +75,12 @@
     "signingOut": "साइन आउट हो रहा है...",
     "signOut": "साइन आउट"
   },
+  "orgSelector": {
+    "organization": "संगठन",
+    "selectOrganization": "एक संगठन चुनें",
+    "noOrganizationsAvailable": "कोई संगठन उपलब्ध नहीं है",
+    "noMatchingOrganizations": "कोई मेल खाने वाला संगठन नहीं मिला"
+  },
   "userLoginPage": {
     "title": "तालावा व्यवस्थापक",
     "fromPalisadoes": "Palisadoes फाउंडेशन स्वयंसेवकों द्वारा विकसित एक ओपन-सोर्स एप्लिकेशन",
@@ -207,7 +213,16 @@
     "cancel": "रद्द करें",
     "endOfResults": "परिणाम समाप्त",
     "noResultsFoundFor": "कोई परिणाम नहीं मिला",
-    "OR": "या"
+    "OR": "या",
+    "imageUploadError": "छवि अपलोड विफल। कृपया पुनः प्रयास करें।",
+    "imageUploadSuccess": "छवि सफलतापूर्वक अपलोड की गई।",
+    "congratulationOrgCreated": "बधाई हो! संगठन बनाया गया है।",
+    "goToStore": "स्टोर पर जाएं",
+    "manageFeaturesInfo": "इस संगठन के लिए उपलब्ध सुविधाओं और प्लगइन्स का प्रबंधन करें।",
+    "orgName": "नाम दर्ज करें",
+    "sortOrganizations": "संगठनों को क्रमबद्ध करें",
+    "admins": "प्रशासक",
+    "members": "सदस्य"
   },
   "orgListCard": {
     "manage": "प्रबंधित करें",
@@ -694,6 +709,8 @@
     "eventDetails": "घटना की जानकारी",
     "eventDeleted": "ईवेंट सफलतापूर्वक हटा दिया गया.",
     "eventUpdated": "इवेंट सफलतापूर्वक अपडेट किया गया.",
+    "registeredSuccessfully": "Successfully registered for {{eventName}}",
+    "noChangesToUpdate": "No changes to update",
     "thisInstance": "यह उदाहरण",
     "thisAndFollowingInstances": "यह और निम्नलिखित उदाहरण",
     "allInstances": "सभी उदाहरण",
@@ -715,6 +732,7 @@
     "close": "बंद करें",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
     "done": "समाप्त",
+    "invalidDate": "Invalid Date",
     "createChat": "चैट बनाएं"
   },
   "funds": {
@@ -853,11 +871,15 @@
     "Next": "अगला पृष्ठ",
     "Previous": "पिछला पृष्ठ",
     "cancel": "रद्द करें",
+    "invalidDate": "Invalid Date",
     "messageTitleError": "पोस्ट का शीर्षक खाली नहीं हो सकता!",
     "organizationIdMissing": "संगठन आईडी गायब है!",
     "messageDescription": "पोस्ट विवरण",
     "addVideo": "वीडियो जोड़ें",
-    "creatingMessage": "पोस्ट बनाई जा रही है..."
+    "creatingMessage": "पोस्ट बनाई जा रही है...",
+    "orgPostListError": "Organization post list error:",
+    "pinnedPostsLoadError": "Error loading pinned posts",
+    "errorSearchingPosts": "Error searching posts"
   },
   "postNotFound": {
     "post": "डाक",
@@ -924,7 +946,8 @@
     "name": "नाम",
     "email": "ईमेल",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
-    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला"
+    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला",
+    "sortOrganizations": "Sort Organizations"
   },
   "eventManagement": {
     "name": "इवेंट मैनेजमेंट",
