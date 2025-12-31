@@ -112,6 +112,8 @@ export default defineConfig(({ mode }) => {
         'react-router-dom',
         '@apollo/client',
         '@mui/material',
+        'i18next',
+        'react-i18next',
       ],
       esbuildOptions: {
         target: 'es2020',
