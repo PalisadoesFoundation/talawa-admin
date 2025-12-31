@@ -4,9 +4,9 @@
 
 # Variable: LoginForm
 
-> `const` **LoginForm**: `React.FC`\<[`InterfaceLoginFormProps`](../../../../../../types/Auth/LoginForm/interface/interfaces/InterfaceLoginFormProps.md)\>
+> `const` **LoginForm**: `React.FC`\<[`InterfaceLoginFormProps`](../../../../../types/Auth/LoginForm/interface/interfaces/InterfaceLoginFormProps.md)\>
 
-Defined in: src/screens/LoginPage/components/LoginForm/LoginForm.tsx:30
+Defined in: src/components/Auth/LoginForm/LoginForm.tsx:30
 
 Reusable login form component that composes EmailField and PasswordField.
 

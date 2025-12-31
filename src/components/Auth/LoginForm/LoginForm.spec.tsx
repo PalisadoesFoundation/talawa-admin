@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { LoginForm } from './LoginForm';
-import { SIGNIN_QUERY } from '../../../../GraphQl/Queries/Queries';
+import { SIGNIN_QUERY } from '../../../GraphQl/Queries/Queries';
 import { GraphQLError } from 'graphql';
 
 // Mock i18next

@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { EmailField } from '../../../../components/Auth/EmailField/EmailField';
-import { PasswordField } from '../../../../components/Auth/PasswordField/PasswordField';
-import { SIGNIN_QUERY } from '../../../../GraphQl/Queries/Queries';
+import { EmailField } from '../EmailField/EmailField';
+import { PasswordField } from '../PasswordField/PasswordField';
+import { SIGNIN_QUERY } from '../../../GraphQl/Queries/Queries';
 import type {
   InterfaceLoginFormData,
   InterfaceLoginFormProps,
-} from '../../../../types/Auth/LoginForm/interface';
+} from '../../../types/Auth/LoginForm/interface';
 
 /**
  * Reusable login form component that composes EmailField and PasswordField.
