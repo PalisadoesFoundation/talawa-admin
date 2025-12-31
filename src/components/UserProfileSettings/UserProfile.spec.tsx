@@ -41,12 +41,8 @@ describe('UserProfile Component', () => {
     expect(profileAvatar).toBeInTheDocument();
 
     const avatarImage = profileAvatar.querySelector('img');
-
-    if (avatarImage) {
-      expect(avatarImage).toHaveAttribute('src', 'profile-image-url');
-    } else {
-      expect(getByTestId('profile-avatar-fallback')).toBeInTheDocument();
-    }
+    expect(avatarImage).toBeInTheDocument();
+    expect(avatarImage).toHaveAttribute('src', 'profile-image-url');
     expect(getByText('Joined 13 April 2023')).toBeInTheDocument();
     expect(getByTestId('copyProfileLink')).toBeInTheDocument();
   });
