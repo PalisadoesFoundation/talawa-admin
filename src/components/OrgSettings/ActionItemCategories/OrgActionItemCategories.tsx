@@ -30,6 +30,7 @@ import type { FC } from 'react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
+import componentStyles from './OrgActionItemCategories.module.css';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@apollo/client/react';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
@@ -65,20 +66,6 @@ enum CategoryStatus {
 interface IActionItemCategoryProps {
   orgId: string;
 }
-
-/** DataGrid styling configuration */
-const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
-  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
-};
 
 /**
  * Represents the component for managing organization action item categories.
@@ -387,8 +374,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
             <Button
               variant="success"
               onClick={() => handleOpenModal(null, 'create')}
-              style={{ marginTop: '11px' }}
-              className={styles.createButton}
+              className={`${styles.createButton} ${componentStyles.createButton}`}
               data-testid="createActionItemCategoryBtn"
             >
               <i className={'fa fa-plus me-2'} />
@@ -399,29 +385,30 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
       </div>
 
       {/* Categories DataGrid */}
-      <DataGrid
-        disableColumnMenu
-        columnBufferPx={6}
-        hideFooter={true}
-        getRowId={(row) => row.id}
-        slots={{
-          noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noActionItemCategories')}
-            </Stack>
-          ),
-        }}
-        sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackground}`}
-        autoHeight
-        rowHeight={65}
-        rows={categories.map((category, index) => ({
-          ...category,
-          serialNumber: index + 1,
-        }))}
-        columns={columns}
-        isRowSelectable={() => false}
-      />
+      <div className={componentStyles.dataGridContainer}>
+        <DataGrid
+          disableColumnMenu
+          columnBufferPx={6}
+          hideFooter={true}
+          getRowId={(row) => row.id}
+          slots={{
+            noRowsOverlay: () => (
+              <Stack height="100%" alignItems="center" justifyContent="center">
+                {t('noActionItemCategories')}
+              </Stack>
+            ),
+          }}
+          getRowClassName={() => `${styles.rowBackground}`}
+          autoHeight
+          rowHeight={65}
+          rows={categories.map((category, index) => ({
+            ...category,
+            serialNumber: index + 1,
+          }))}
+          columns={columns}
+          isRowSelectable={() => false}
+        />
+      </div>
 
       {/* Category Modal */}
       <CategoryModal

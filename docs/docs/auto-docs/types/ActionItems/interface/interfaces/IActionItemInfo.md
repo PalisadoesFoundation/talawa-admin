@@ -58,7 +58,7 @@ Defined in: [src/types/ActionItems/interface.ts:44](https://github.com/Palisadoe
 
 ### creator
 
-> **creator**: `IActionUserInfo`
+> **creator**: [`IActionUserInfo`](IActionUserInfo.md)
 
 Defined in: [src/types/ActionItems/interface.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ActionItems/interface.ts#L83)
 

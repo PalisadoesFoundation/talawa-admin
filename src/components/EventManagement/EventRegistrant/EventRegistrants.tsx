@@ -47,6 +47,7 @@ import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import styles from 'style/app-fixed.module.css';
+import componentStyles from './EventRegistrants.module.css';
 import { useLazyQuery, useMutation, useQuery } from '@apollo/client/react';
 import {
   EVENT_REGISTRANTS,
@@ -154,22 +155,22 @@ function EventRegistrants(): JSX.Element {
     (userId: string): void => {
       // Check if user is already checked in
       if (checkedInUsers.includes(userId)) {
-        toast.error('Cannot unregister a user who has already checked in');
+        toast.error(t('cannotUnregisterCheckedIn') as string);
         return;
       }
 
-      toast.warn('Removing the attendee...');
+      toast.warn(t('removingAttendee') as string);
       const removeVariables = isRecurring
         ? { userId, recurringEventInstanceId: eventId }
         : { userId, eventId: eventId };
 
       removeRegistrantMutation({ variables: removeVariables })
         .then(() => {
-          toast.success('Attendee removed successfully');
+          toast.success(t('attendeeRemovedSuccessfully') as string);
           refreshData(); // Refresh the data after removal
         })
         .catch((err) => {
-          toast.error('Error removing attendee');
+          toast.error(t('errorRemovingAttendee') as string);
           toast.error(err.message);
         });
     },
@@ -232,8 +233,7 @@ function EventRegistrants(): JSX.Element {
       </div>
       <TableContainer
         component={Paper}
-        className="mt-3"
-        sx={{ borderRadius: '16px' }}
+        className={`mt-3 ${componentStyles.tableContainer}`}
       >
         <Table aria-label={t('eventRegistrantsTable')} role="grid">
           <TableHead>

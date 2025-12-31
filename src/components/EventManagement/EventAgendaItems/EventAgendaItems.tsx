@@ -57,8 +57,8 @@ import AgendaItemsContainer from 'components/AgendaItems/AgendaItemsContainer';
 import AgendaItemsCreateModal from 'components/AgendaItems/Create/AgendaItemsCreateModal';
 
 import styles from 'style/app-fixed.module.css';
+import componentStyles from './EventAgendaItems.module.css';
 import Loader from 'components/Loader/Loader';
-import { InterfaceAgendaItemCategoryInfo } from 'types/Agenda/interface';
 
 function EventAgendaItems(props: { eventId: string }): JSX.Element {
   const { eventId } = props;
@@ -193,7 +193,9 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded
+            className={`${styles.errorIcon} ${componentStyles.errorIcon}`}
+          />
           <h6 className="fw-bold text-danger text-center">
             Error occurred while loading{' '}
             {agendaCategoryError ? 'Agenda Categories' : 'Agenda Items'} Data
@@ -235,7 +237,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
         <hr />
 
         <AgendaItemsContainer
-          agendaItemConnection={`Event`}
+          agendaItemConnection="Event"
           agendaItemData={agendaItemData?.agendaItemByEvent}
           agendaItemRefetch={refetchAgendaItem}
           agendaItemCategories={

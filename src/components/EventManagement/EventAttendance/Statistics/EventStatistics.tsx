@@ -69,6 +69,7 @@ import type {
   InterfaceEvent,
 } from 'types/Event/interface';
 import styles from 'style/app-fixed.module.css';
+import componentStyles from './EventStatistics.module.css';
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -94,6 +95,18 @@ const calculateAge = (birthDate: Date): number => {
     age--;
   }
   return age;
+};
+
+// Helper function to get CSS variable value
+const getCSSVariable = (variableName: string): string => {
+  if (typeof window !== 'undefined') {
+    return (
+      getComputedStyle(document.documentElement)
+        .getPropertyValue(variableName)
+        .trim() || variableName
+    );
+  }
+  return variableName;
 };
 
 export const AttendanceStatisticsModal: React.FC<
@@ -236,29 +249,29 @@ export const AttendanceStatisticsModal: React.FC<
           label: t('attendeeCount'),
           data: attendeeCounts,
           fill: true,
-          borderColor: '#008000',
+          borderColor: getCSSVariable('--chart-attendee-count-color'),
         },
         {
           label: t('maleAttendees'),
           data: maleCounts,
           fill: false,
-          borderColor: '#0000FF',
+          borderColor: getCSSVariable('--chart-male-attendees-color'),
         },
         {
           label: t('femaleAttendees'),
           data: femaleCounts,
           fill: false,
-          borderColor: '#FF1493',
+          borderColor: getCSSVariable('--chart-female-attendees-color'),
         },
         {
           label: t('otherAttendees'),
           data: otherCounts,
           fill: false,
-          borderColor: '#FFD700',
+          borderColor: getCSSVariable('--chart-other-attendees-color'),
         },
       ],
     }),
-    [eventLabels, attendeeCounts, maleCounts, femaleCounts, otherCounts],
+    [eventLabels, attendeeCounts, maleCounts, femaleCounts, otherCounts, t],
   );
 
   const handlePreviousPage = useCallback(() => {
@@ -419,11 +432,7 @@ export const AttendanceStatisticsModal: React.FC<
         <div className="w-100 border border-success d-flex flex-row rounded">
           {showTrends ? (
             <div
-              className={
-                styles.borderRightGreen +
-                ' text-success position-relative pt-4 align-items-center justify-content-center w-50 border-right-1 border-success'
-              }
-              style={{ height: '400px' }}
+              className={`${styles.borderRightGreen} text-success position-relative pt-4 align-items-center justify-content-center w-50 border-right-1 border-success ${componentStyles.trendsContainer}`}
             >
               <Line
                 data={chartData}
@@ -545,20 +554,20 @@ export const AttendanceStatisticsModal: React.FC<
                         : t('ageDistribution'),
                     data: categoryData,
                     backgroundColor: [
-                      'rgba(31, 119, 180, 0.2)', // Blue
-                      'rgba(255, 127, 14, 0.2)', // Orange
-                      'rgba(44, 160, 44, 0.2)', // Green
-                      'rgba(214, 39, 40, 0.2)', // Red
-                      'rgba(148, 103, 189, 0.2)', // Purple
-                      'rgba(140, 86, 75, 0.2)', // Brown
+                      getCSSVariable('--chart-bg-blue'),
+                      getCSSVariable('--chart-bg-orange'),
+                      getCSSVariable('--chart-bg-green'),
+                      getCSSVariable('--chart-bg-red'),
+                      getCSSVariable('--chart-bg-purple'),
+                      getCSSVariable('--chart-bg-brown'),
                     ],
                     borderColor: [
-                      'rgba(31, 119, 180, 1)',
-                      'rgba(255, 127, 14, 1)',
-                      'rgba(44, 160, 44, 1)',
-                      'rgba(214, 39, 40, 1)',
-                      'rgba(148, 103, 189, 1)',
-                      'rgba(140, 86, 75, 1)',
+                      getCSSVariable('--chart-border-blue'),
+                      getCSSVariable('--chart-border-orange'),
+                      getCSSVariable('--chart-border-green'),
+                      getCSSVariable('--chart-border-red'),
+                      getCSSVariable('--chart-border-purple'),
+                      getCSSVariable('--chart-border-brown'),
                     ],
                     borderWidth: 2,
                   },

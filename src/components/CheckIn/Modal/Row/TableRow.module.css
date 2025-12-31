@@ -1,0 +1,4 @@
+.checkInButton {
+  background-color: var(--addButton-bg);
+  color: var(--addButton-font);
+}

@@ -39,6 +39,7 @@ import { ButtonGroup, Dropdown } from 'react-bootstrap';
 import { useNavigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
+import componentStyles from './ProfileDropdown.module.css';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
@@ -132,7 +133,7 @@ const ProfileDropdown = ({
           {tCommon('viewProfile')}
         </Dropdown.Item>
         <Dropdown.Item
-          style={{ color: 'red' }}
+          className={componentStyles.logoutItem}
           onClick={logout}
           data-testid="logoutBtn"
         >

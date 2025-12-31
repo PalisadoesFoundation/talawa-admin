@@ -88,3 +88,20 @@
   line-height: 1;
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
 }
+
+.iconContainer {
+  position: relative;
+  display: inline-block;
+}
+
+.iconColor {
+  color: var(--secondText-color, #3b3b3b);
+}
+
+.notificationItemCursor {
+  cursor: pointer;
+}
+
+.notificationItemDefault {
+  cursor: default;
+}

@@ -13,6 +13,7 @@ import Loader from 'components/Loader/Loader';
 import { Col, Form, Row } from 'react-bootstrap';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
+import componentStyles from './OrgUpdate.module.css';
 import type { InterfaceAddress } from 'utils/interfaces';
 
 interface InterfaceOrgUpdateProps {
@@ -146,7 +147,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   const onSaveChangesClicked = async (): Promise<void> => {
     try {
       if (!formState.orgName || !formState.orgDescrip) {
-        toast.error('Name and description are required');
+        toast.error(t('nameAndDescriptionRequired') as string);
         return;
       }
 
@@ -195,7 +196,7 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
         setFormState((prev) => ({ ...prev, avatar: undefined }));
         if (fileInputRef.current) fileInputRef.current.value = '';
       } else {
-        toast.error('Failed to update organization');
+        toast.error(t('failedToUpdateOrganization') as string);
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -211,7 +212,9 @@ function OrgUpdate(props: InterfaceOrgUpdateProps): JSX.Element {
   if (error) {
     return (
       <div className={styles.message}>
-        <WarningAmberRounded className={styles.icon} fontSize="large" />
+        <WarningAmberRounded
+          className={`${styles.icon} ${componentStyles.icon}`}
+        />
         <h6 className="fw-bold text-danger text-center">
           Error occured while loading Organization Data
           <br />

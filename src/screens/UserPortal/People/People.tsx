@@ -52,6 +52,7 @@ import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client/react';
 import type { IOrganizationMembersResult } from 'types/GraphQL/queryResults';
 import styles from 'style/app-fixed.module.css';
+import componentStyles from './People.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useParams } from 'react-router';
@@ -238,13 +239,15 @@ export default function People(): React.JSX.Element {
 
         <div className={styles.people_content}>
           <div className={styles.people_card_header}>
-            <span style={{ flex: '1' }} className={styles.display_flex}>
-              <span style={{ flex: '1' }}>{t('sNo')}</span>
-              <span style={{ flex: '1' }}>{t('avatar')}</span>
+            <span
+              className={`${styles.display_flex} ${componentStyles.headerFlex1}`}
+            >
+              <span className={componentStyles.headerFlex1}>{t('sNo')}</span>
+              <span className={componentStyles.headerFlex1}>{t('avatar')}</span>
             </span>
-            <span style={{ flex: '2' }}>{t('name')}</span>
-            <span style={{ flex: '2' }}>{t('email')}</span>
-            <span style={{ flex: '2' }}>{t('role')}</span>
+            <span className={componentStyles.headerFlex2}>{t('name')}</span>
+            <span className={componentStyles.headerFlex2}>{t('email')}</span>
+            <span className={componentStyles.headerFlex2}>{t('role')}</span>
           </div>
 
           <div className={styles.people_card_main_container}>

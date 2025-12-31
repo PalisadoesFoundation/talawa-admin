@@ -1,0 +1,22 @@
+.trendsContainer {
+  height: 400px;
+}
+
+:root {
+  --chart-attendee-count-color: #008000;
+  --chart-male-attendees-color: #0000ff;
+  --chart-female-attendees-color: #ff1493;
+  --chart-other-attendees-color: #ffd700;
+  --chart-bg-blue: rgba(31, 119, 180, 0.2);
+  --chart-bg-orange: rgba(255, 127, 14, 0.2);
+  --chart-bg-green: rgba(44, 160, 44, 0.2);
+  --chart-bg-red: rgba(214, 39, 40, 0.2);
+  --chart-bg-purple: rgba(148, 103, 189, 0.2);
+  --chart-bg-brown: rgba(140, 86, 75, 0.2);
+  --chart-border-blue: rgba(31, 119, 180, 1);
+  --chart-border-orange: rgba(255, 127, 14, 1);
+  --chart-border-green: rgba(44, 160, 44, 1);
+  --chart-border-red: rgba(214, 39, 40, 1);
+  --chart-border-purple: rgba(148, 103, 189, 1);
+  --chart-border-brown: rgba(140, 86, 75, 1);
+}

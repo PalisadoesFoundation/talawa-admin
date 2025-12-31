@@ -7,7 +7,10 @@ import React from 'react';
 import dayjs from 'dayjs';
 import type { FC } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
-import type { IActionItemInfo } from 'types/ActionItems/interface';
+import type {
+  IActionItemInfo,
+  IActionUserInfo,
+} from 'types/ActionItems/interface';
 import type { InterfaceUser } from 'types/User/interface';
 import type { InterfaceEvent } from 'types/Event/interface';
 import styles from 'style/app-fixed.module.css';
@@ -17,6 +20,8 @@ import { TaskAlt, HistoryToggleOff } from '@mui/icons-material';
 import { useQuery } from '@apollo/client/react';
 import { GET_ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
+import type { IActionItemCategoryResult } from 'types/GraphQL/miscQueries';
+import type { IMembersListResult } from 'types/GraphQL/userQueries';
 
 export interface IViewModalProps {
   isOpen: boolean;
@@ -46,15 +51,18 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
   } = item;
 
   // Query to get category details
-  const { data: categoryData } = useQuery<any>(GET_ACTION_ITEM_CATEGORY, {
-    variables: {
-      input: { id: categoryId },
+  const { data: categoryData } = useQuery<IActionItemCategoryResult>(
+    GET_ACTION_ITEM_CATEGORY,
+    {
+      variables: {
+        input: { id: categoryId },
+      },
+      skip: !categoryId,
     },
-    skip: !categoryId,
-  });
+  );
 
   // Query to get organization members to resolve assignee and creator details
-  const { data: membersData } = useQuery<any>(MEMBERS_LIST, {
+  const { data: membersData } = useQuery<IMembersListResult>(MEMBERS_LIST, {
     variables: { organizationId: organizationId },
   });
 
@@ -85,24 +93,32 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
   const assignedInfo = getAssignedInfo();
 
   const creator = creatorId
-    ? members.find(
-        (member: InterfaceUser) =>
-          member.id === creatorId || member.id === creatorId,
-      )
+    ? members.find((member) => member.id === creatorId)
     : item.creator;
 
   const category = categoryData?.actionItemCategory || item.category;
 
   // Helper function to get display name from user object
   const getUserDisplayName = (
-    user: InterfaceUser | null | undefined,
+    user:
+      | InterfaceUser
+      | IMembersListResult['usersByOrganizationId'][0]
+      | IActionUserInfo
+      | null
+      | undefined,
   ): string => {
     if (!user) return 'Unknown';
 
-    if (user.name) {
+    if ('name' in user && user.name) {
       return user.name;
     }
-    return `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Unknown';
+    if ('firstName' in user || 'lastName' in user) {
+      return (
+        `${(user as InterfaceUser).firstName || ''} ${(user as InterfaceUser).lastName || ''}`.trim() ||
+        'Unknown'
+      );
+    }
+    return 'Unknown';
   };
 
   const getEventDisplayName = (
@@ -180,11 +196,17 @@ const ItemViewModal: FC<IViewModalProps> = ({ isOpen, hide, item }) => {
                     )}
                   </>
                 ),
-                style: { color: isCompleted ? 'green' : '#ed6c02' },
+                style: {
+                  color: isCompleted
+                    ? 'var(--success-green-color, green)'
+                    : 'var(--incomplete-color)',
+                },
               }}
               inputProps={{
                 style: {
-                  WebkitTextFillColor: isCompleted ? 'green' : '#ed6c02',
+                  WebkitTextFillColor: isCompleted
+                    ? 'var(--success-green-color, green)'
+                    : 'var(--incomplete-color)',
                 },
               }}
               disabled

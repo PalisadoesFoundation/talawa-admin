@@ -41,6 +41,7 @@ import type {
 import type { InterfaceOrganizationSubTagsQuery } from 'utils/organizationTagsUtils';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import styles from '../../../style/app-fixed.module.css';
+import componentStyles from './TagNode.module.css';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import { WarningAmberRounded } from '@mui/icons-material';
@@ -110,7 +111,9 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded
+            className={`${styles.errorIcon} ${componentStyles.errorIcon}`}
+          />
           <h6 className="fw-bold text-danger text-center">
             {t('errorOccurredWhileLoadingSubTags')}
           </h6>
@@ -139,18 +142,16 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
           <>
             <span
               onClick={handleTagClick}
-              className="me-3"
-              style={{ cursor: 'pointer' }}
+              className={`me-3 ${componentStyles.expandIcon}`}
               data-testid={`expandSubTags${tag._id}`}
               aria-label={expanded ? t('collapse') : t('expand')}
             >
               {expanded ? '▼' : '▶'}
             </span>
             <input
-              style={{ cursor: 'pointer' }}
               type="checkbox"
               checked={checkedTags.has(tag._id)}
-              className="me-2"
+              className={`me-2 ${componentStyles.checkbox}`}
               onChange={handleCheckboxChange}
               data-testid={`checkTag${tag._id}`}
               id={`checkbox-${tag._id}`}
@@ -162,10 +163,9 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
           <>
             <span className="me-3">●</span>
             <input
-              style={{ cursor: 'pointer' }}
               type="checkbox"
               checked={checkedTags.has(tag._id)}
-              className="ms-1 me-2"
+              className={`ms-1 me-2 ${componentStyles.checkbox}`}
               onChange={handleCheckboxChange}
               data-testid={`checkTag${tag._id}`}
               aria-label={tag.name}
@@ -185,11 +185,11 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
         </div>
       )}
       {expanded && subTagsList?.length && (
-        <div style={{ marginLeft: '20px' }}>
+        <div className={componentStyles.subTagsContainer}>
           <div
             id={`subTagsScrollableDiv${tag._id}`}
             data-testid={`subTagsScrollableDiv${tag._id}`}
-            style={{ maxHeight: 300, overflow: 'auto' }}
+            className={componentStyles.subTagsScrollableDiv}
           >
             <InfiniteScroll
               dataLength={subTagsList?.length ?? 0}

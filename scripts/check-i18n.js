@@ -47,6 +47,7 @@ const NON_USER_VISIBLE_ATTRS = [
   'datatestid',
   'key',
   'ref',
+  'scrollableTarget',
   'onClick',
   'onChange',
   'onSubmit',

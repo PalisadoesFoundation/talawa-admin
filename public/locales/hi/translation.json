@@ -548,7 +548,8 @@
     "endDate": "समाप्ति तिथि",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
     "done": "पूर्ण",
-    "createChat": "चैट बनाएं"
+    "createChat": "चैट बनाएं",
+    "viewType": "दृश्य प्रकार"
   },
   "organizationActionItems": {
     "actionItemCategory": "क्रिया वस्तु श्रेणी",
@@ -630,7 +631,9 @@
     "pendingForSeries": "श्रृंखला के लिए लंबित",
     "completeForInstance": "इस उदाहरण के लिए पूर्ण",
     "completeForSeries": "श्रृंखला के लिए पूर्ण",
-    "postCompletionNotesRequired": "पूर्ण होने के बाद के नोट्स आवश्यक हैं"
+    "postCompletionNotesRequired": "पूर्ण होने के बाद के नोट्स आवश्यक हैं",
+    "isPending": "लंबित",
+    "search": "खोजें"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "एजेंडा श्रेणी विवरण",
@@ -681,7 +684,8 @@
     "agendaItemUpdated": "एजेंडा आइटम सफलतापूर्वक अपडेट किया गया",
     "agendaItemDeleted": "एजेंडा आइटम सफलतापूर्वक हटा दिया गया",
     "deleteAgendaItem": "एजेंडा आइटम हटाएं",
-    "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?"
+    "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?",
+    "search": "खोजें"
   },
   "eventListCard": {
     "deleteEvent": "ईवेंट हटाएँ",
@@ -1026,7 +1030,8 @@
     "confirmDelete": "हटाने की पुष्टि करें",
     "longDelOrgMsg": "संगठन हटाएं बटन पर क्लिक करने से संगठन अपने ईवेंट, टैग और सभी संबंधित डेटा के साथ स्थायी रूप से हटा दिया जाएगा।",
     "successfullyDeletedSampleOrganization": "नमूना संगठन सफलतापूर्वक हटा दिया गया",
-    "cancel": "रद्द करें"
+    "cancel": "रद्द करें",
+    "deleteSampleOrganization": "नमूना संगठन हटाएं"
   },
   "userUpdate": {
     "appLanguageCode": "डिफ़ॉल्ट भाषा",
@@ -1081,7 +1086,8 @@
     "saveChanges": "परिवर्तन सहेजें",
     "cancel": "रद्द करें",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
-    "enterOrganizationDescription": "संगठन का विवरण दर्ज करें"
+    "enterOrganizationDescription": "संगठन का विवरण दर्ज करें",
+    "userRegistrationRequired": "उपयोगकर्ता पंजीकरण आवश्यक"
   },
   "memberDetail": {
     "title": "उपयोगकर्ता विवरण",
@@ -1331,7 +1337,21 @@
     "nextPage": "अगला पृष्ठ",
     "goToToday": "आज पर जाएं",
     "genderDistribution": "लिंग वितरण",
-    "ageDistribution": "आयु वितरण"
+    "ageDistribution": "आयु वितरण",
+    "event_attendance_table": "ईवेंट उपस्थिति तालिका",
+    "age": "उम्र",
+    "age18to40": "18 से 40",
+    "attendanceCount": "उपस्थिति गणना",
+    "demographics": "जनसांख्यिकी",
+    "demography": "जनसांख्यिकी",
+    "exportData": "डेटा निर्यात करें",
+    "female": "महिला",
+    "male": "पुरुष",
+    "other": "अन्य",
+    "over40": "40 से अधिक",
+    "today": "आज",
+    "trends": "रुझान",
+    "under18": "18 से कम"
   },
   "eventRegistrant": {
     "sort": "छांटें",
@@ -1453,7 +1473,8 @@
     "invalidAmount": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें.",
     "donationAmountDescription": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें.",
     "donationOutOfRange": "दान राशि {{min}} और {{max}} के बीच होनी चाहिए.",
-    "donateTo": "दान करें"
+    "donateTo": "दान करें",
+    "loading": "लोड हो रहा है..."
   },
   "transactions": {
     "title": "लेन-देन",
@@ -1609,7 +1630,15 @@
     "demoteToRegular": "नियमित में पदावनत करें",
     "promoteToAdmin": "व्यवस्थापक में पदोन्नत करें",
     "user": "उपयोगकर्ता",
-    "chatAction": "चैट कार्रवाई"
+    "chatAction": "चैट कार्रवाई",
+    "Error": "त्रुटि",
+    "hash": "#",
+    "organizationMembersTable": "संगठन सदस्य तालिका",
+    "description": "विवरण",
+    "groupDescription": "समूह विवरण",
+    "groupName": "समूह नाम",
+    "newGroup": "नया समूह",
+    "next": "अगला"
   },
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
@@ -1664,7 +1693,9 @@
     "edit": "संपादित करें",
     "delete": "हटाएं",
     "name": "नाम",
-    "desc": "विवरण"
+    "desc": "विवरण",
+    "venueCreated": "स्थान सफलतापूर्वक बनाया गया",
+    "venueNameExists": "इस नाम के साथ एक स्थान पहले से मौजूद है"
   },
   "addMember": {
     "title": "सदस्य जोड़ें",
@@ -1725,7 +1756,22 @@
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
-    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि"
+    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि",
+    "inviteByEmail": {
+      "addRecipient": "प्राप्तकर्ता जोड़ें",
+      "email": "ईमेल",
+      "emailsHelp": "अल्पविराम से अलग किए गए ईमेल पते दर्ज करें",
+      "emailsLabel": "ईमेल पते",
+      "errorSendingInvites": "आमंत्रण भेजने में त्रुटि",
+      "expiresInDaysLabel": "समाप्त होता है (दिनों में)",
+      "messageLabel": "संदेश",
+      "messagePlaceholder": "अपना संदेश यहाँ दर्ज करें",
+      "name": "नाम",
+      "remove": "हटाएं",
+      "sendInvites": "आमंत्रण भेजें",
+      "sending": "भेज रहे हैं...",
+      "title": "ईमेल द्वारा आमंत्रित करें"
+    }
   },
   "userCampaigns": {
     "title": "धन उगाहने के अभियान",
@@ -1808,7 +1854,8 @@
     "leastVolunteers": "सबसे कम स्वयंसेवक",
     "applyTo": "लागू करें",
     "entireSeries": "पूरी श्रृंखला",
-    "thisEventOnly": "केवल यह घटना"
+    "thisEventOnly": "केवल यह घटना",
+    "assignee": "प्राप्तकर्ता"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",

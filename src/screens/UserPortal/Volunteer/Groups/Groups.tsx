@@ -52,6 +52,10 @@ import { debounce, Stack } from '@mui/material';
 
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import Loader from 'components/Loader/Loader';
+
+interface IEventVolunteerGroupListResult {
+  getEventVolunteerGroups: InterfaceVolunteerGroupInfo[];
+}
 import {
   DataGrid,
   type GridCellParams,
@@ -59,30 +63,19 @@ import {
 } from '@mui/x-data-grid';
 import Avatar from 'components/Avatar/Avatar';
 import styles from 'style/app-fixed.module.css';
+import componentStyles from './Groups.module.css';
 import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
 import VolunteerGroupViewModal from 'screens/EventVolunteers/VolunteerGroups/viewModal/VolunteerGroupViewModal';
 import useLocalStorage from 'utils/useLocalstorage';
 import GroupModal from './GroupModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import { dataGridStyle } from 'types/ReportingTable/utils';
 
 enum ModalState {
   EDIT = 'edit',
   VIEW = 'view',
 }
-
-const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
-  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
-};
 
 function groups(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
@@ -122,7 +115,7 @@ function groups(): JSX.Element {
     loading: groupsLoading,
     error: groupsError,
     refetch: refetchGroups,
-  } = useQuery<any>(EVENT_VOLUNTEER_GROUP_LIST, {
+  } = useQuery<IEventVolunteerGroupListResult>(EVENT_VOLUNTEER_GROUP_LIST, {
     variables: {
       where: {
         eventId: undefined,
@@ -161,7 +154,9 @@ function groups(): JSX.Element {
   if (groupsError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded className={styles.icon} fontSize="large" />
+        <WarningAmberRounded
+          className={`${styles.icon} ${componentStyles.icon}`}
+        />
         <h6 className="fw-bold text-danger text-center">
           {tErrors('errorLoading', { entity: 'Volunteer Groups' })}
         </h6>
@@ -260,8 +255,7 @@ function groups(): JSX.Element {
             <Button
               variant="success"
               size="sm"
-              style={{ minWidth: '32px' }}
-              className="me-2 rounded"
+              className={`${componentStyles.minWidth32} me-2 rounded`}
               data-testid="viewGroupBtn"
               onClick={() => handleModalClick(params.row, ModalState.VIEW)}
             >

@@ -393,10 +393,15 @@
     "manage": "Gérer",
     "admins": "Administrateurs",
     "members": "Membres",
-    "join_success": "Demande d’adhésion envoyée avec succès",
-    "withdraw_success": "Demande d’adhésion retirée avec succès",
-    "join_error": "Échec de l’envoi de la demande d’adhésion",
-    "withdraw_error": "Échec du retrait de la demande d’adhésion"
+    "join_success": "Demande d'adhésion envoyée avec succès",
+    "withdraw_success": "Demande d'adhésion retirée avec succès",
+    "join_error": "Échec de l'envoi de la demande d'adhésion",
+    "withdraw_error": "Échec du retrait de la demande d'adhésion"
+  },
+  "organization": {
+    "card_aria": "Carte d'organisation",
+    "card_test_id": "carte-organisation-{{id}}",
+    "withdraw": "Retirer"
   },
   "organizationTags": {
     "title": "Étiquettes d'Organisation",
@@ -548,7 +553,8 @@
     "endDate": "Date de fin",
     "talawaApiUnavailable": "API Talawa indisponible",
     "done": "Fait",
-    "createChat": "Créer une discussion"
+    "createChat": "Créer une discussion",
+    "viewType": "Type de vue"
   },
   "organizationActionItems": {
     "actionItemCategory": "Catégorie de l'Action",
@@ -630,7 +636,9 @@
     "completeForInstance": "Terminé pour cette instance",
     "completeForSeries": "Terminé pour la série",
     "postCompletionNotesRequired": "Notes post-achèvement requises",
-    "updateThisInstance": "Mettre à jour cette instance"
+    "updateThisInstance": "Mettre à jour cette instance",
+    "isPending": "En attente",
+    "search": "Rechercher"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Détails de la catégorie d'ordre du jour",
@@ -681,7 +689,8 @@
     "agendaItemUpdated": "Point de l'ordre du jour mis à jour avec succès",
     "agendaItemDeleted": "Point de l'ordre du jour supprimé avec succès",
     "deleteAgendaItem": "Supprimer le point de l'ordre du jour",
-    "deleteAgendaItemMsg": "Voulez-vous supprimer ce point de l'ordre du jour ?"
+    "deleteAgendaItemMsg": "Voulez-vous supprimer ce point de l'ordre du jour ?",
+    "search": "Rechercher"
   },
   "eventListCard": {
     "deleteEvent": "Supprimer l'événement",
@@ -1026,7 +1035,8 @@
     "confirmDelete": "Confirmation de la suppression",
     "longDelOrgMsg": "En cliquant sur le bouton Supprimer l'organisation, l'organisation sera définitivement supprimée ainsi que ses événements, balises et toutes les données associées.",
     "successfullyDeletedSampleOrganization": "Exemple d'organisation supprimé avec succès",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "deleteSampleOrganization": "Supprimer l'organisation exemple"
   },
   "userUpdate": {
     "appLanguageCode": "Langage par défaut",
@@ -1081,7 +1091,8 @@
     "saveChanges": "Enregistrer les modifications",
     "cancel": "Annuler",
     "talawaApiUnavailable": "API Talawa non disponible",
-    "enterOrganizationDescription": "Entrez la description de l'organisation"
+    "enterOrganizationDescription": "Entrez la description de l'organisation",
+    "userRegistrationRequired": "Inscription utilisateur requise"
   },
   "memberDetail": {
     "title": "Détails de l'utilisateur",
@@ -1331,7 +1342,21 @@
     "nextPage": "Page suivante",
     "goToToday": "Aller à aujourd'hui",
     "genderDistribution": "Distribution par sexe",
-    "ageDistribution": "Distribution par âge"
+    "ageDistribution": "Distribution par âge",
+    "event_attendance_table": "Tableau de présence de l'événement",
+    "age": "Âge",
+    "age18to40": "18 à 40",
+    "attendanceCount": "Nombre de présences",
+    "demographics": "Démographie",
+    "demography": "Démographie",
+    "exportData": "Exporter les données",
+    "female": "Féminin",
+    "male": "Masculin",
+    "other": "Autre",
+    "over40": "Plus de 40",
+    "today": "Aujourd'hui",
+    "trends": "Tendances",
+    "under18": "Moins de 18"
   },
   "eventRegistrant": {
     "sort": "Trier",
@@ -1453,7 +1478,8 @@
     "invalidAmount": "Veuillez saisir une valeur numérique pour le montant du don.",
     "donationAmountDescription": "Veuillez saisir la valeur numérique du montant du don.",
     "donationOutOfRange": "Le montant du don doit être compris entre {{min}} et {{max}}.",
-    "donateTo": "Faire un don à"
+    "donateTo": "Faire un don à",
+    "loading": "Chargement..."
   },
   "transactions": {
     "title": "Transactions",
@@ -1609,7 +1635,15 @@
     "demoteToRegular": "Rétrograder au rang régulier",
     "promoteToAdmin": "Promouvoir administrateur",
     "user": "Utilisateur",
-    "chatAction": "Action de chat"
+    "chatAction": "Action de chat",
+    "Error": "Erreur",
+    "hash": "#",
+    "organizationMembersTable": "Tableau des membres de l'organisation",
+    "description": "Description",
+    "groupDescription": "Description du groupe",
+    "groupName": "Nom du groupe",
+    "newGroup": "Nouveau groupe",
+    "next": "Suivant"
   },
   "userChatRoom": {
     "selectContact": "Sélectionnez un contact pour démarrer la conversation",
@@ -1664,7 +1698,9 @@
     "edit": "Modifier",
     "delete": "Supprimer",
     "name": "Nom",
-    "desc": "Description"
+    "desc": "Description",
+    "venueCreated": "Lieu créé avec succès",
+    "venueNameExists": "Un lieu avec ce nom existe déjà"
   },
   "addMember": {
     "title": "Ajouter un membre",
@@ -1725,7 +1761,22 @@
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",
-    "errorRemovingAttendee": "Erreur lors de la suppression du participant"
+    "errorRemovingAttendee": "Erreur lors de la suppression du participant",
+    "inviteByEmail": {
+      "addRecipient": "Ajouter un destinataire",
+      "email": "E-mail",
+      "emailsHelp": "Entrez les adresses e-mail séparées par des virgules",
+      "emailsLabel": "Adresses e-mail",
+      "errorSendingInvites": "Erreur lors de l'envoi des invitations",
+      "expiresInDaysLabel": "Expire dans (jours)",
+      "messageLabel": "Message",
+      "messagePlaceholder": "Entrez votre message ici",
+      "name": "Nom",
+      "remove": "Supprimer",
+      "sendInvites": "Envoyer les invitations",
+      "sending": "Envoi en cours...",
+      "title": "Inviter par e-mail"
+    }
   },
   "userCampaigns": {
     "title": "Campagnes de financement",
@@ -1751,7 +1802,13 @@
     "noPledges": "Aucune promesse trouvée",
     "noCampaigns": "Aucune campagne trouvée",
     "raised": "Collecté",
-    "amountRaised": "Montant Collecté"
+    "amountRaised": "Montant Collecté",
+    "campaignName": "Nom de la campagne",
+    "endDate": "Date de fin",
+    "fundingGoal": "Objectif de financement",
+    "searchCampaigns": "Rechercher des campagnes",
+    "startDate": "Date de début",
+    "viewPledge": "Voir la promesse"
   },
   "userPledges": {
     "title": "Mes Promesses"
@@ -1808,7 +1865,8 @@
     "leastVolunteers": "Le moins de bénévoles",
     "applyTo": "Appliquer à",
     "entireSeries": "Série entière",
-    "thisEventOnly": "Cet événement uniquement"
+    "thisEventOnly": "Cet événement uniquement",
+    "assignee": "Attribué à"
   },
   "userVolunteer": {
     "title": "Volontariat",

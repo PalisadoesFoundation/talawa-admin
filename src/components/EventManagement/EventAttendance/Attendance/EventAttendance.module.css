@@ -1,0 +1,14 @@
+.tableContainer {
+  border-radius: 16px;
+}
+
+.tooltip {
+  background-color: var(--bs-white);
+  font-size: 2em;
+  max-height: 170px;
+  overflow-y: scroll;
+  scrollbar-color: white;
+  border: var(--primary-border-solid);
+  border-radius: 6px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}

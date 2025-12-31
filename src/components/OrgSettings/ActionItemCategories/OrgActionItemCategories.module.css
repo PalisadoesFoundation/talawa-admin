@@ -1,0 +1,29 @@
+.createButton {
+  margin-top: 11px;
+}
+
+/* DataGrid styling */
+.dataGridContainer :global(.MuiDataGrid-root .MuiDataGrid-cell:focus-within) {
+  outline: none !important;
+}
+
+.dataGridContainer
+  :global(.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within) {
+  outline: none;
+}
+
+.dataGridContainer :global(.MuiDataGrid-row:hover) {
+  background-color: transparent;
+}
+
+.dataGridContainer :global(.MuiDataGrid-row.Mui-hovered) {
+  background-color: transparent;
+}
+
+.dataGridContainer :global(.MuiDataGrid-root) {
+  border-radius: 0.5rem;
+}
+
+.dataGridContainer :global(.MuiDataGrid-main) {
+  border-radius: 0.5rem;
+}

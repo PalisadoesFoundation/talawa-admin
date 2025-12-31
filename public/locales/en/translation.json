@@ -170,7 +170,13 @@
     "prev": "Prev",
     "next": "Next",
     "markAsRead": "Mark as Read",
-    "markAsReadAriaLabel": "Mark notification '{{title}}' as read"
+    "markAsReadAriaLabel": "Mark notification '{{title}}' as read",
+    "unreadCount": "{{count}} unread",
+    "loading": "Loading...",
+    "errorFetchingNotifications": "Error fetching notifications",
+    "unread": "Unread",
+    "noNewNotifications": "No new notifications",
+    "viewAllNotifications": "View all notifications"
   },
   "orgList": {
     "title": "Organizations",
@@ -363,6 +369,11 @@
     "join_error": "Failed to send membership request",
     "withdraw_error": "Failed to withdraw request"
   },
+  "organization": {
+    "card_aria": "Organization card",
+    "card_test_id": "organization-card-{{id}}",
+    "withdraw": "Withdraw"
+  },
   "organizationPeople": {
     "title": "Talawa Members",
     "filterByName": "Filter by Name",
@@ -472,7 +483,9 @@
     "expand": "Expand",
     "tagNamePlaceholder": "Write the name of the tag",
     "allTags": "All Tags",
-    "noMoreMembersFound": "No more members found"
+    "noMoreMembersFound": "No more members found",
+    "errorOccurredWhileLoadingAssignedUsers": "Error occured while loading assigned users",
+    "sortPeople": "Sort People"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
@@ -556,7 +569,8 @@
     "startDate": "startDate",
     "endDate": "endDate",
     "talawaApiUnavailable": "talawaApiUnavailable",
-    "done": "done"
+    "done": "done",
+    "viewType": "View Type"
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",
@@ -638,7 +652,9 @@
     "pendingForInstance": "Pending for this instance",
     "pendingForSeries": "Pending for series",
     "completeForInstance": "Complete for this instance",
-    "completeForSeries": "Complete for series"
+    "completeForSeries": "Complete for series",
+    "isPending": "Pending",
+    "search": "Search"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Agenda Category Details",
@@ -655,7 +671,8 @@
     "agendaCategoryUpdated": "Agenda Category updated successfully",
     "agendaCategoryDeleted": "Agenda Category deleted successfully",
     "deleteAgendaCategory": "Delete Agenda Category",
-    "deleteAgendaCategoryMsg": "Do you want to remove this agenda category?"
+    "deleteAgendaCategoryMsg": "Do you want to remove this agenda category?",
+    "organization": "Organization"
   },
   "agendaItems": {
     "agendaItemDetails": "Agenda Item Details",
@@ -689,7 +706,9 @@
     "agendaItemUpdated": "Agenda Item updated successfully",
     "agendaItemDeleted": "Agenda Item deleted successfully",
     "deleteAgendaItem": "Delete Agenda Item",
-    "deleteAgendaItemMsg": "Do you want to remove this agenda item?"
+    "deleteAgendaItemMsg": "Do you want to remove this agenda item?",
+    "search": "Search",
+    "event": "Event"
   },
   "eventListCard": {
     "deleteEvent": "Delete Event",
@@ -990,7 +1009,28 @@
     "nextPage": "Next Page",
     "goToToday": "Go to today",
     "genderDistribution": "Gender Distribution",
-    "ageDistribution": "Age Distribution"
+    "ageDistribution": "Age Distribution",
+    "event_attendance_table": "Event Attendance Table",
+    "age": "Age",
+    "age18to40": "18 to 40",
+    "attendanceCount": "Attendance Count",
+    "demographics": "Demographics",
+    "demography": "Demography",
+    "exportData": "Export Data",
+    "female": "Female",
+    "male": "Male",
+    "other": "Other",
+    "over40": "Over 40",
+    "today": "Today",
+    "trends": "Trends",
+    "under18": "Under 18",
+    "filter": "Filter",
+    "sort": "Sort",
+    "none": "None",
+    "errorLoadingEventDetails": "Error loading event details. Please try again later.",
+    "attendedEventsList": "Attended events list",
+    "eventName": "Event: {{name}}",
+    "eventDate": "Event Date"
   },
   "eventRegistrant": {
     "sort": "Sort",
@@ -1002,7 +1042,11 @@
     "createdAt": "Created At",
     "options": "Options",
     "addRegistrant": "Add Registrant",
-    "noRegistrantsFound": "No Registrants Found."
+    "noRegistrantsFound": "No Registrants Found.",
+    "cannotUnregisterCheckedIn": "Cannot unregister a user who has already checked in",
+    "removingAttendee": "Removing the attendee...",
+    "attendeeRemovedSuccessfully": "Attendee removed successfully",
+    "errorRemovingAttendee": "Error removing attendee"
   },
   "onSpotAttendee": {
     "title": "On-spot Attendee",
@@ -1089,7 +1133,8 @@
     "confirmDelete": "Confirm Delete",
     "longDelOrgMsg": "By clicking on Delete Organization button the organization will be permanently deleted along with its events, tags and all related data.",
     "successfullyDeletedSampleOrganization": "Successfully deleted sample Organization",
-    "cancel": "cancel"
+    "cancel": "cancel",
+    "deleteSampleOrganization": "Delete Sample Organization"
   },
   "userUpdate": {
     "appLanguageCode": "Default Language",
@@ -1144,7 +1189,10 @@
     "saveChanges": "saveChanges",
     "cancel": "cancel",
     "talawaApiUnavailable": "talawaApiUnavailable",
-    "enterOrganizationDescription": "Enter Organization Description"
+    "enterOrganizationDescription": "Enter Organization Description",
+    "userRegistrationRequired": "User Registration Required",
+    "nameAndDescriptionRequired": "Name and description are required",
+    "failedToUpdateOrganization": "Failed to update organization"
   },
   "memberDetail": {
     "title": "User Details",
@@ -1324,11 +1372,10 @@
     "loadingComments": "Loading comments…",
     "loadMoreComments": "Load more comments",
     "noMoreComments": "No more comments",
-    "moreOptions": "more options",
+    "moreOptions": "More options",
     "postedOn": "Posted on {{date}}",
     "emptyCommentError": "Please enter a comment before submitting.",
     "unexpectedError": "An unexpected error occurred. Please try again.",
-    "moreOptions": "More options",
     "scrollLeft": "Scroll left",
     "scrollRight": "Scroll right",
     "pinnedPost": "Pinned Post",
@@ -1465,7 +1512,8 @@
     "invalidAmount": "Please enter a numerical value for the donation amount.",
     "donationAmountDescription": "Please enter the numerical value for the donation amount.",
     "donationOutOfRange": "Donation amount must be between {{min}} and {{max}}.",
-    "donateTo": "donateTo"
+    "donateTo": "donateTo",
+    "loading": "Loading..."
   },
   "transactions": {
     "title": "Transactions",
@@ -1622,12 +1670,32 @@
     "demoteToRegular": "Demote to Regular",
     "promoteToAdmin": "Promote to Admin",
     "user": "User",
-    "chatAction": "Chat action"
+    "chatAction": "Chat action",
+    "Error": "Error",
+    "hash": "#",
+    "organizationMembersTable": "Organization Members Table",
+    "description": "Description",
+    "groupDescription": "Group Description",
+    "groupName": "Group Name",
+    "newGroup": "New Group",
+    "next": "Next",
+    "starredMessages": "Starred Messages",
+    "all": "All",
+    "unread": "Unread",
+    "groups": "Groups"
   },
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",
     "sendMessage": "Send Message",
-    "reply": "Reply"
+    "reply": "Reply",
+    "loadingImage": "Loading image...",
+    "imageNotAvailable": "Image not available",
+    "attachment": "attachment",
+    "loadingMoreMessages": "Loading more messages...",
+    "loading": "Loading…",
+    "loadOlderMessages": "Load older messages",
+    "edit": "Edit",
+    "delete": "Delete"
   },
   "orgActionItemCategories": {
     "enableButton": "Enable",
@@ -1666,11 +1734,6 @@
     "fileTooLargeError": "File too large: {{fileName}}",
     "emptyFileSelected": "Empty file selected",
     "venueImagePreview": "Venue Image Preview",
-    "errorCreatingPreviewUrl": "Error creating preview URL",
-    "invalidFileTypeError": "Invalid file type: {{fileName}}",
-    "fileTooLargeError": "File too large: {{fileName}}",
-    "emptyFileSelected": "Empty file selected",
-    "venueImagePreview": "Venue Image Preview",
     "createVenue": "Create Venue",
     "venueAdded": "Venue added Successfully",
     "editVenue": "Update Venue",
@@ -1687,7 +1750,9 @@
     "edit": "edit",
     "delete": "delete",
     "name": "name",
-    "desc": "desc"
+    "desc": "desc",
+    "venueCreated": "Venue created successfully",
+    "venueNameExists": "A venue with this name already exists"
   },
   "addMember": {
     "title": "Add Member",
@@ -1744,11 +1809,45 @@
   },
   "checkIn": {
     "errorCheckingIn": "Error checking in",
-    "checkedInSuccessfully": "Checked in successfully"
+    "checkedInSuccessfully": "Checked in successfully",
+    "eventCheckInManagement": "Event Check In Management",
+    "searchAttendees": "Search Attendees",
+    "pdfGeneratedSuccessfully": "PDF generated successfully!",
+    "errorGeneratingPdf": "Error generating pdf!",
+    "errorGeneratingPdfWithMessage": "Error generating pdf: {{errorMessage}}",
+    "generatingPdf": "Generating pdf...",
+    "checkedIn": "Checked In",
+    "downloadTag": "Download Tag",
+    "checkIn": "Check In"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error adding attendee",
-    "errorRemovingAttendee": "Error removing attendee"
+    "errorRemovingAttendee": "Error removing attendee",
+    "pleaseChooseUser": "Please choose an user to add first!",
+    "eventRegistrants": "Event Registrants",
+    "noRegistrationsFound": "No Registrations found",
+    "addOnspotRegistration": "Add Onspot Registration",
+    "addRegistrant": "Add an Registrant",
+    "chooseUserToAdd": "Choose the user that you want to add",
+    "inviteByEmailButton": "Invite by Email",
+    "addRegistrantButton": "Add Registrant",
+    "inviteByEmail": {
+      "addRecipient": "Add Recipient",
+      "email": "Email",
+      "emailsHelp": "Enter email addresses separated by commas",
+      "emailsLabel": "Email Addresses",
+      "errorSendingInvites": "Error sending invites",
+      "expiresInDaysLabel": "Expires in (days)",
+      "messageLabel": "Message",
+      "messagePlaceholder": "Enter your message here",
+      "name": "Name",
+      "remove": "Remove",
+      "sendInvites": "Send Invites",
+      "sending": "Sending...",
+      "title": "Invite by Email",
+      "pleaseProvideRecipientEmail": "Please provide at least one recipient email",
+      "invalidEmails": "Invalid email(s): {{invalid}}"
+    }
   },
   "userCampaigns": {
     "title": "Fundraising Campaigns",
@@ -1774,7 +1873,13 @@
     "noPledges": "No Pledges Found",
     "noCampaigns": "No Campaigns Found",
     "raised": "Raised",
-    "amountRaised": "Amount Raised"
+    "amountRaised": "Amount Raised",
+    "campaignName": "Campaign Name",
+    "endDate": "End Date",
+    "fundingGoal": "Funding Goal",
+    "searchCampaigns": "Search Campaigns",
+    "startDate": "Start Date",
+    "viewPledge": "View Pledge"
   },
   "userPledges": {
     "title": "My Pledges"
@@ -1848,7 +1953,8 @@
     "leastVolunteers": "Least Volunteers",
     "applyTo": "Apply To",
     "entireSeries": "Entire Series",
-    "thisEventOnly": "This Event Only"
+    "thisEventOnly": "This Event Only",
+    "assignee": "Assignee"
   },
   "userVolunteer": {
     "title": "Volunteership",
@@ -1992,22 +2098,50 @@
     "logoutFailed": "Logout failed",
     "title": "User Portal",
     "talawa": "Talawa",
-    "talawaBranding": "Talawa Branding"
+    "talawaBranding": "Talawa Branding",
+    "name": "name",
+    "description": "description",
+    "Location": "Location",
+    "Enter Organization location": "Enter Organization location",
+    "displayImage": "displayImage",
+    "resetChanges": "Reset Changes",
+    "saving": "Saving...",
+    "saveChanges": "Save Changes",
+    "close": "Close",
+    "searchByName": "Search by Name",
+    "loading": "Loading...",
+    "Latest": "Latest"
   },
-  "leaveOrganization": {
-    "successMessage": "You have successfully left the organization!",
-    "loadingOrganizationDetails": "Loading organization details...",
-    "organizationNotFound": "Organization not found",
-    "leaveOrganization": "Leave Organization",
-    "leaveJoinedOrganization": "Leave Joined Organization",
-    "confirmationMessage": "Are you sure you want to leave this organization?",
-    "irreversibleAction": "This action cannot be undone, and you may need to request access again if you reconsider.",
-    "enterEmailToConfirm": "Enter your email to confirm:",
-    "enterYourEmail": "Enter your email",
-    "confirmEmailInput": "confirm-email-input",
-    "continue": "Continue",
-    "back": "Back",
-    "confirmLeaveButton": "confirm-leave-button",
-    "confirm": "Confirm"
+  "updateSession": {
+    "loginSessionTimeout": "Login Session Timeout",
+    "currentTimeout": "Current Timeout",
+    "minutes": "minutes",
+    "noTimeoutSet": "No timeout set",
+    "updateTimeout": "Update Timeout",
+    "fifteenMin": "15 min",
+    "thirtyMin": "30 min",
+    "fortyFiveMin": "45 min",
+    "sixtyMin": "60 min",
+    "update": "Update"
+  },
+  "public": {
+    "invitation": {
+      "accept": "Accept",
+      "acceptError": "Could not accept invitation",
+      "accepted": "Invitation accepted",
+      "anyone": "Anyone",
+      "confirmMatch": "Confirm Match",
+      "eventId": "Event ID",
+      "expiresAt": "Expires At",
+      "inviteeEmail": "Invitee Email",
+      "login": "Login",
+      "maskedNotice": "Masked Notice",
+      "mustLogin": "Must Login",
+      "organizationId": "Organization ID",
+      "previewText": "Preview Text",
+      "signInAsDifferent": "Sign In As Different",
+      "signup": "Signup",
+      "title": "Title"
+    }
   }
 }
