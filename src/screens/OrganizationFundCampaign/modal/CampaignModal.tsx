@@ -6,13 +6,15 @@ import React, { useEffect, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { currencyOptions, currencySymbols } from 'utils/currency';
 import styles from 'style/app-fixed.module.css';
+
+import { errorHandler } from 'utils/errorHandler';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import {
   CREATE_CAMPAIGN_MUTATION,
   UPDATE_CAMPAIGN_MUTATION,
 } from 'GraphQl/Mutations/CampaignMutation';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   FormControl,
   InputLabel,
@@ -118,7 +120,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
           fundId,
         },
       });
-      toast.success(t('createdCampaign') as string);
+      NotificationToast.success(t('createdCampaign') as string);
       setFormState({
         campaignName: '',
         campaignCurrency: 'USD',
@@ -129,7 +131,7 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
       refetchCampaign();
       hide();
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      errorHandler(t, error);
     }
   };
 
@@ -178,9 +180,9 @@ const CampaignModal: React.FC<InterfaceCampaignModal> = ({
       });
       refetchCampaign();
       hide();
-      toast.success(t('updatedCampaign') as string);
+      NotificationToast.success(t('updatedCampaign') as string);
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      errorHandler(t, error);
     }
   };
 

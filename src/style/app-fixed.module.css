@@ -10402,6 +10402,15 @@ form {
   width: 1px;
 }
 
+.tableBodyCell {
+  font-size: 14px;
+}
+
+.tableHeadCell {
+  background-color: var(--table-head-bg, blue);
+  color: var(--table-header-color, black);
+}
+
 .dataErrorDetails {
   margin-top: 4px;
   font-size: 0.875rem;
@@ -10420,6 +10429,7 @@ form {
   0% {
     background-position: -200px 0;
   }
+
   100% {
     background-position: calc(200px + 100%) 0;
   }
