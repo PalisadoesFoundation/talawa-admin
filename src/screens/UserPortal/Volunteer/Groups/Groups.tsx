@@ -154,6 +154,32 @@ function Groups(): JSX.Element {
     },
     [openModal],
   );
+  const searchByDropdown = {
+    id: 'search-by',
+    label: tCommon('searchBy', { item: '' }),
+    type: 'filter' as const,
+    options: [
+      { label: t('group'), value: 'group' },
+      { label: t('leader'), value: 'leader' },
+    ],
+    selectedOption: searchBy,
+    onOptionChange: (value: string | number) =>
+      setSearchBy(value as 'leader' | 'group'),
+    dataTestIdPrefix: 'searchBy',
+  };
+  const sortDropdown = {
+    id: 'sort',
+    label: tCommon('sort'),
+    type: 'sort' as const,
+    options: [
+      { label: t('mostVolunteers'), value: 'volunteers_DESC' },
+      { label: t('leastVolunteers'), value: 'volunteers_ASC' },
+    ],
+    selectedOption: sortBy,
+    onOptionChange: (value: string | number) =>
+      setSortBy(value as 'volunteers_DESC' | 'volunteers_ASC'),
+    dataTestIdPrefix: 'sort',
+  };
   const groups = useMemo(
     () => groupsData?.getEventVolunteerGroups || [],
     [groupsData],
@@ -284,32 +310,7 @@ function Groups(): JSX.Element {
       },
     },
   ];
-  const searchByDropdown = {
-    id: 'search-by',
-    label: tCommon('searchBy', { item: '' }),
-    type: 'filter' as const,
-    options: [
-      { label: t('group'), value: 'group' },
-      { label: t('leader'), value: 'leader' },
-    ],
-    selectedOption: searchBy,
-    onOptionChange: (value: string | number) =>
-      setSearchBy(value as 'leader' | 'group'),
-    dataTestIdPrefix: 'searchBy',
-  };
-  const sortDropdown = {
-    id: 'sort',
-    label: tCommon('sort'),
-    type: 'sort' as const,
-    options: [
-      { label: t('mostVolunteers'), value: 'volunteers_DESC' },
-      { label: t('leastVolunteers'), value: 'volunteers_ASC' },
-    ],
-    selectedOption: sortBy,
-    onOptionChange: (value: string | number) =>
-      setSortBy(value as 'volunteers_DESC' | 'volunteers_ASC'),
-    dataTestIdPrefix: 'sort',
-  };
+
   return (
     <div>
       <AdminSearchFilterBar

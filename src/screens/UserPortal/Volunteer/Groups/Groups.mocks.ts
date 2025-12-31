@@ -45,6 +45,30 @@ const membership1 = {
   __typename: 'VolunteerMembership',
   id: 'membershipId1',
   status: 'requested',
+  volunteer: {
+    __typename: 'EventVolunteer',
+    user: {
+      __typename: 'User',
+      id: 'volunteerId1',
+      name: 'John Doe',
+      avatarURL: null,
+    },
+  },
+};
+
+const membership2 = {
+  __typename: 'VolunteerMembership',
+  id: 'membershipId2',
+  status: 'requested',
+  volunteer: {
+    __typename: 'EventVolunteer',
+    user: {
+      __typename: 'User',
+      id: 'volunteerId2',
+      name: 'Teresa Bradley',
+      avatarURL: null,
+    },
+  },
 };
 
 export const MOCKS = [
@@ -101,7 +125,7 @@ export const MOCKS = [
     },
     result: {
       data: {
-        getVolunteerMembership: [membership1],
+        getVolunteerMembership: [membership1, membership2],
       },
     },
   },
@@ -119,6 +143,46 @@ export const MOCKS = [
           __typename: 'VolunteerMembership',
           id: 'membershipId1',
           status: 'accepted',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        id: 'membershipId1',
+        status: 'rejected',
+      },
+    },
+    result: {
+      data: {
+        updateVolunteerMembership: {
+          __typename: 'VolunteerMembership',
+          id: 'membershipId1',
+          status: 'rejected',
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_VOLUNTEER_GROUP,
+      variables: {
+        id: 'groupId',
+        data: {
+          name: 'Group 2',
+          description: 'desc new',
+          volunteersRequired: 10,
+          eventId: 'eventId',
+        },
+      },
+    },
+    result: {
+      data: {
+        updateEventVolunteerGroup: {
+          __typename: 'EventVolunteerGroup',
+          id: 'groupId',
         },
       },
     },
@@ -145,6 +209,29 @@ export const MOCKS = [
 ];
 
 export const UPDATE_ERROR_MOCKS = [
+  {
+    request: {
+      query: USER_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        id: 'eventId',
+      },
+    },
+    result: {
+      data: {
+        getVolunteerMembership: [membership1, membership2],
+      },
+    },
+  },
+  {
+    request: {
+      query: UPDATE_VOLUNTEER_MEMBERSHIP,
+      variables: {
+        id: 'membershipId1',
+        status: 'accepted',
+      },
+    },
+    error: new Error('Mock Graphql UPDATE_VOLUNTEER_MEMBERSHIP Error'),
+  },
   {
     request: {
       query: UPDATE_VOLUNTEER_GROUP,

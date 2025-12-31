@@ -1713,10 +1713,12 @@
     "noPledges": "No Pledges Found",
     "noCampaigns": "No Campaigns Found",
     "raised": "Raised",
-    "amountRaised": "Amount Raised"
+    "amountRaised": "Amount Raised",
+    "searchCampaigns": "Search Campaigns"
   },
   "userPledges": {
-    "title": "My Pledges"
+    "title": "My Pledges",
+    "searchPledges": "Search Pledges"
   },
   "leaveOrganization": {
     "title": "Leave Organization"

@@ -332,7 +332,7 @@ const Pledges = (): JSX.Element => {
     <div>
       <AdminSearchFilterBar
         searchPlaceholder={tCommon('searchBy', {
-          item: `${t('pledgers')} / ${t('campaigns')}`,
+          item: `${t('pledgers')} or ${t('campaigns')}`,
         })}
         searchValue={searchTerm}
         onSearchChange={setSearchTerm}
