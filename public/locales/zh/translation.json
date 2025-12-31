@@ -718,6 +718,8 @@
     "eventDetails": "活动详情",
     "eventDeleted": "活动删除成功。",
     "eventUpdated": "活动更新成功。",
+    "registeredSuccessfully": "Successfully registered for {{eventName}}",
+    "noChangesToUpdate": "No changes to update",
     "thisInstance": "本实例",
     "thisAndFollowingInstances": "本实例及后续实例",
     "allInstances": "所有实例",
@@ -739,6 +741,7 @@
     "close": "关闭",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
     "done": "完成",
+    "invalidDate": "Invalid Date",
     "createChat": "创建聊天"
   },
   "funds": {
@@ -877,11 +880,15 @@
     "Next": "下一页",
     "Previous": "上一页",
     "cancel": "取消",
+    "invalidDate": "Invalid Date",
     "messageTitleError": "帖子标题不能为空！",
     "organizationIdMissing": "组织ID 缺失！",
     "messageDescription": "帖子描述",
     "addVideo": "添加视频",
-    "creatingMessage": "正在创建帖子..."
+    "creatingMessage": "正在创建帖子...",
+    "orgPostListError": "Organization post list error:",
+    "pinnedPostsLoadError": "Error loading pinned posts",
+    "errorSearchingPosts": "Error searching posts"
   },
   "postNotFound": {
     "post": "邮政",
@@ -948,7 +955,8 @@
     "name": "名称",
     "email": "电子邮件",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
-    "noResultsFoundFor": "未找到结果"
+    "noResultsFoundFor": "未找到结果",
+    "sortOrganizations": "Sort Organizations"
   },
   "eventManagement": {
     "name": "事件管理",

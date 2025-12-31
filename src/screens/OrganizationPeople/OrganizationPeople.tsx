@@ -77,6 +77,7 @@ import { Button } from 'react-bootstrap';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import Avatar from 'components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
+import { errorHandler } from 'utils/errorHandler';
 // Imports added for manual header construction
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
@@ -310,7 +311,7 @@ function OrganizationPeople(): JSX.Element {
     if (userError) {
       NotificationToast.error(userError.message);
     }
-  }, [memberError, userError]);
+  }, [memberError, userError, t]);
 
   // Local search implementation
   const filteredRows = useMemo(() => {
