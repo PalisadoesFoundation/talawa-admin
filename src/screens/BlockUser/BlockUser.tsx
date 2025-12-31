@@ -40,7 +40,8 @@
  * Returns:
  * - JSX.Element: A table displaying members or blocked users with options to block/unblock.
  */
-import { useQuery, useMutation } from '@apollo/client';
+
+import { useMutation, useQuery } from '@apollo/client/react';
 import React, { useEffect, useState, useCallback } from 'react';
 import { Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
@@ -58,6 +59,7 @@ import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import { useParams } from 'react-router';
+import type { IBlockUserResult } from 'types/GraphQL/queryResults';
 
 import type {
   InterfaceUserPg,
@@ -171,7 +173,7 @@ const BlockUser = (): JSX.Element => {
     }
   }, [searchTerm, allMembers, blockedUsers]);
 
-  const [blockUser] = useMutation(BLOCK_USER_MUTATION_PG);
+  const [blockUser] = useMutation<IBlockUserResult>(BLOCK_USER_MUTATION_PG);
   const [unBlockUser] = useMutation(UNBLOCK_USER_MUTATION_PG);
 
   const handleBlockUser = useCallback(

@@ -4,7 +4,7 @@
 
 # Interface: InterfaceMemberData
 
-Defined in: [src/types/Tag/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L4)
+Defined in: [src/types/Tag/interface.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L3)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/Tag/interface.ts:4](https://github.com/PalisadoesFoundati
 
 > **\_id**: `string`
 
-Defined in: [src/types/Tag/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L5)
+Defined in: [src/types/Tag/interface.ts:4](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L4)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/Tag/interface.ts:5](https://github.com/PalisadoesFoundati
 
 > **firstName**: `string`
 
-Defined in: [src/types/Tag/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L6)
+Defined in: [src/types/Tag/interface.ts:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L5)
 
 ***
 
@@ -28,4 +28,4 @@ Defined in: [src/types/Tag/interface.ts:6](https://github.com/PalisadoesFoundati
 
 > **lastName**: `string`
 
-Defined in: [src/types/Tag/interface.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L7)
+Defined in: [src/types/Tag/interface.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Tag/interface.ts#L6)

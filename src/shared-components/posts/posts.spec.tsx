@@ -5,10 +5,12 @@ import {
   fireEvent,
   waitFor,
   act,
+  waitForElementToBeRemoved,
 } from '@testing-library/react';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { MockedProvider } from '@apollo/client/testing/react';
 import type { MockedResponse } from '@apollo/client/testing';
-import { MockedProvider } from '@apollo/client/testing';
+import { InMemoryCache } from '@apollo/client';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import PostsPage from './posts';
 import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';
@@ -246,6 +248,8 @@ const enrichPostNode = (
 ) => ({
   id: post.id ?? `post-${nextId++}`,
   caption: post.caption ?? 'Test Caption',
+  body: null,
+  attachmentURL: post.imageUrl ?? null,
   createdAt: post.createdAt ?? FIXED_TIMESTAMP,
   updatedAt: post.createdAt ?? FIXED_TIMESTAMP,
   pinnedAt: post.pinnedAt ?? null,
@@ -301,6 +305,7 @@ const samplePosts = [
     pinnedAt: '2024-01-02T12:00:00Z',
     imageUrl: null,
     videoUrl: 'video.mp4',
+    body: null,
     attachments: [],
   },
   {
@@ -317,6 +322,7 @@ const samplePosts = [
     pinnedAt: null,
     imageUrl: null,
     videoUrl: null,
+    body: null,
     attachments: [],
   },
   {
@@ -333,6 +339,7 @@ const samplePosts = [
     pinnedAt: null,
     imageUrl: null,
     videoUrl: null,
+    body: null,
     attachments: [],
   },
 ];
@@ -475,10 +482,11 @@ const pinnedPostsErrorMock: MockedResponse = {
 };
 
 // Helper render function
-const renderComponent = (mocks: MockedResponse[]): RenderResult =>
-  render(
+const renderComponent = (mocks: MockedResponse[]): RenderResult => {
+  const cache = new InMemoryCache();
+  return render(
     <I18nextProvider i18n={i18nForTest}>
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks} cache={cache}>
         <MemoryRouter initialEntries={['/orgpost/123']}>
           <Routes>
             <Route path="/orgpost/:orgId" element={<PostsPage />} />
@@ -487,6 +495,7 @@ const renderComponent = (mocks: MockedResponse[]): RenderResult =>
       </MockedProvider>
     </I18nextProvider>,
   );
+};
 
 describe('PostsPage Component', () => {
   beforeEach(() => {
@@ -725,6 +734,8 @@ describe('Sorting Functionality', () => {
       emptyPinnedPostsMock,
     ]);
 
+    await waitForElementToBeRemoved(() => screen.queryByTestId('loader'));
+
     await waitFor(() => {
       expect(screen.getByTestId('sortpost-toggle-select')).toBeInTheDocument();
     });
@@ -800,6 +811,8 @@ describe('Infinite Scroll', () => {
   it('renders infinite scroll component with hasMore=true initially', async () => {
     renderComponent([orgPostListMock, emptyPinnedPostsMock]);
 
+    await waitForElementToBeRemoved(() => screen.queryByTestId('loader'));
+
     await waitFor(() => {
       expect(screen.getByTestId('infinite-scroll')).toBeInTheDocument();
     });
@@ -810,6 +823,8 @@ describe('Infinite Scroll', () => {
 
   it('resets infinite scroll when switching from filtered to paginated view', async () => {
     renderComponent([orgPostListMock, emptyPinnedPostsMock]);
+
+    await waitForElementToBeRemoved(() => screen.queryByTestId('loader'));
 
     await waitFor(() => {
       expect(screen.getByTestId('searchByName')).toBeInTheDocument();
@@ -1036,10 +1051,13 @@ describe('Edge Cases', () => {
         creator: null, // Test fallback
         commentsCount: undefined, // Test fallback
         pinnedAt: 'video',
+        pinned: false,
         downVotesCount: undefined, // Test fallback
         upVotesCount: undefined, // Test fallback
         attachments: undefined,
+        body: undefined,
         createdAt: '2024-01-15T12:00:00.000Z',
+        attachmentURL: 'video.mp4',
       },
       cursor: 'cursor-video-post-1',
     };
@@ -1055,6 +1073,7 @@ describe('Edge Cases', () => {
             postsCount: 1,
             posts: {
               edges: [postWithVideo],
+              totalCount: 1,
               pageInfo: {
                 startCursor: 'cursor-video-post-1',
                 endCursor: 'cursor-video-post-1',
@@ -1069,12 +1088,16 @@ describe('Edge Cases', () => {
 
     renderComponent([mockWithVideo, emptyPinnedPostsMock]);
 
+    await waitForElementToBeRemoved(() => screen.queryByTestId('loader'));
+
     await waitFor(() => {
       expect(screen.getByTestId('posts-renderer')).toBeInTheDocument();
     });
 
     // Post should still render with fallback values
-    expect(screen.getByText('Video post')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText('Video post')).toBeInTheDocument();
+    });
   });
 });
 
@@ -1145,6 +1168,7 @@ describe('HandleSorting Edge Case', () => {
                   cursor: 'cursor-post-2',
                 },
               ],
+              totalCount: 2,
               pageInfo: {
                 startCursor: 'cursor-post-1',
                 endCursor: 'cursor-post-2',
@@ -1158,6 +1182,8 @@ describe('HandleSorting Edge Case', () => {
     };
 
     renderComponent([mockWithMorePages, emptyPinnedPostsMock]);
+
+    await waitForElementToBeRemoved(() => screen.queryByTestId('loader'));
 
     await waitFor(() => {
       expect(screen.getByTestId('infinite-scroll')).toBeInTheDocument();
@@ -1265,6 +1291,8 @@ describe('FetchMore Success Coverage', () => {
       fetchMoreSuccessMock,
       emptyPinnedPostsMock,
     ]);
+
+    await waitForElementToBeRemoved(() => screen.queryByTestId('loader'));
 
     await waitFor(() => {
       expect(screen.getByTestId('load-more-btn')).toBeInTheDocument();

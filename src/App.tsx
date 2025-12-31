@@ -1,6 +1,6 @@
 import React, { lazy, Suspense, useEffect, useMemo } from 'react';
 import { Route, Routes } from 'react-router';
-import { useQuery, useApolloClient } from '@apollo/client';
+import { useApolloClient, useQuery } from '@apollo/client/react';
 import useLocalStorage from 'utils/useLocalstorage';
 import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
@@ -9,7 +9,6 @@ import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import LoginPage from 'screens/LoginPage/LoginPage';
 import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
 import { getPluginManager } from 'plugin/manager';
-import { discoverAndRegisterAllPlugins } from 'plugin/registry';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScreen';
 import Loader from 'components/Loader/Loader';
@@ -126,8 +125,21 @@ const { setItem } = useLocalStorage();
  * @returns  The rendered routes and components of the application.
  */
 
+interface ICurrentUserData {
+  currentUser?: {
+    id: string;
+    name: string;
+    emailAddress: string;
+    appUserProfile?: {
+      adminFor?: Array<{ _id: string }>;
+    };
+  };
+}
+
 function App(): React.ReactElement {
-  const { data, loading } = useQuery(CURRENT_USER);
+  const { data, loading } = useQuery<ICurrentUserData>(CURRENT_USER, {
+    errorPolicy: 'all',
+  });
 
   const { t } = useTranslation('common');
 
@@ -158,7 +170,9 @@ function App(): React.ReactElement {
         // Initialize plugin manager
         await getPluginManager().initializePluginSystem();
 
-        // Initialize plugin registry
+        // Import and initialize plugin registry
+        const { discoverAndRegisterAllPlugins } =
+          await import('./plugin/registry');
         await discoverAndRegisterAllPlugins();
       } catch (error) {
         console.error('Failed to initialize plugin system:', error);

@@ -21,6 +21,32 @@ const superAdminCurrentUser: InterfaceCurrentUserTypePG = {
     name: 'John Doe',
     role: 'administrator',
     emailAddress: 'john.doe@akatsuki.com',
+    addressLine1: '',
+    addressLine2: '',
+    avatarMimeType: null,
+    avatarURL: null,
+    birthDate: null,
+    city: '',
+    countryCode: '',
+    createdAt: '',
+    description: '',
+    educationGrade: null,
+    employmentStatus: null,
+    homePhoneNumber: '',
+    isEmailAddressVerified: false,
+    maritalStatus: null,
+    mobilePhoneNumber: '',
+    natalSex: null,
+    naturalLanguageCode: '',
+    postalCode: '',
+    state: '',
+    updatedAt: '',
+    workPhoneNumber: '',
+    eventsAttended: {
+      id: 'events-connection-id',
+      edges: [],
+      __typename: 'UserEventsConnection',
+    },
   },
 };
 
@@ -51,7 +77,7 @@ const organizations: InterfaceOrgInfoTypePG[] = [
     },
     addressLine1: 'Texas, USA',
     role: 'admin',
-  },
+  } as InterfaceOrgInfoTypePG,
 ];
 
 // MOCKS FOR SUPERADMIN
@@ -76,9 +102,33 @@ const MOCKS = [
     result: {
       data: {
         user: {
+          id: '123',
+          name: 'John Doe',
           __typename: 'User',
           notifications: [],
         },
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_FILTER_LIST,
+      variables: { filter: 'N' },
+    },
+    result: {
+      data: {
+        organizations: [],
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_FILTER_LIST,
+      variables: { filter: 'D' },
+    },
+    result: {
+      data: {
+        organizations: [],
       },
     },
   },
@@ -249,7 +299,10 @@ const MOCKS_EMPTY = [
       variables: { userId: '123' },
     },
     result: {
-      data: { user: superAdminUser },
+      data: {
+        user: superAdminUser,
+        currentUser: superAdminCurrentUser.currentUser,
+      },
     },
   },
   {
@@ -260,6 +313,8 @@ const MOCKS_EMPTY = [
     result: {
       data: {
         user: {
+          id: '123',
+          name: 'John Doe',
           __typename: 'User',
           notifications: [],
         },
@@ -291,7 +346,10 @@ const MOCKS_WITH_ERROR = [
       variables: { userId: '123' },
     },
     result: {
-      data: { user: superAdminUser },
+      data: {
+        user: superAdminUser,
+        currentUser: superAdminCurrentUser.currentUser,
+      },
     },
   },
   {
@@ -321,7 +379,10 @@ const MOCKS_ADMIN = [
       variables: { userId: '123' },
     },
     result: {
-      data: { user: adminUser },
+      data: {
+        user: adminUser,
+        currentUser: superAdminCurrentUser.currentUser,
+      },
     },
   },
   {
@@ -352,9 +413,33 @@ const MOCKS_ADMIN = [
     result: {
       data: {
         user: {
+          id: '123',
+          name: 'John Doe',
           __typename: 'User',
           notifications: [],
         },
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_FILTER_LIST,
+      variables: { filter: 'N' },
+    },
+    result: {
+      data: {
+        organizations: [],
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_FILTER_LIST,
+      variables: { filter: 'D' },
+    },
+    result: {
+      data: {
+        organizations: [],
       },
     },
   },

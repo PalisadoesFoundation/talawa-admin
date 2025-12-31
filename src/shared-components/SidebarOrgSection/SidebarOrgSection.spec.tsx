@@ -1,12 +1,15 @@
 import React from 'react';
 import { describe, it, vi, expect } from 'vitest';
 import { render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider, type MockedResponse } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
+import type { MockedResponse } from '@apollo/client/testing';
+import { InMemoryCache } from '@apollo/client';
 import { I18nextProvider } from 'react-i18next';
-import i18n from 'i18next';
+import i18nForTest from 'utils/i18nForTest';
 import SidebarOrgSection from './SidebarOrgSection';
 import type { ISidebarOrgSectionProps } from 'types/SidebarOrgSection/interface';
 import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
+import { StaticMockLink } from 'utils/StaticMockLink';
 
 // Mock Avatar component
 vi.mock('components/Avatar/Avatar', () => ({
@@ -24,17 +27,6 @@ vi.mock('assets/svgs/angleRight.svg?react', () => ({
   ),
 }));
 
-// Mock translations
-vi.mock('react-i18next', async () => {
-  const actual = await vi.importActual('react-i18next');
-  return {
-    ...actual,
-    useTranslation: () => ({
-      t: (key: string, options?: { entity?: string }) =>
-        options?.entity ? `Error loading ${options.entity}` : key,
-    }),
-  };
-});
 describe('SidebarOrgSection Component', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -146,17 +138,19 @@ describe('SidebarOrgSection Component', () => {
 
   const renderComponent = (
     props: Partial<ISidebarOrgSectionProps> = {},
-    mocks: ReadonlyArray<MockedResponse> = successMocks,
+    mocks: MockedResponse[] = successMocks,
   ) => {
     const defaultProps = {
       orgId: mockOrgId,
       hideDrawer: false,
       isProfilePage: false,
     };
+    const link = new StaticMockLink(mocks, true);
+    const cache = new InMemoryCache();
 
     return render(
-      <MockedProvider mocks={mocks} addTypename={false}>
-        <I18nextProvider i18n={i18n}>
+      <MockedProvider link={link} cache={cache}>
+        <I18nextProvider i18n={i18nForTest}>
           <SidebarOrgSection {...defaultProps} {...props} />
         </I18nextProvider>
       </MockedProvider>,
@@ -194,7 +188,7 @@ describe('SidebarOrgSection Component', () => {
       renderComponent({ isProfilePage: false }, errorMocks);
       await waitFor(() => {
         expect(
-          screen.getByText(/Error loading Organization/i),
+          screen.getByText(/Error.*loading.*Organization/i),
         ).toBeInTheDocument();
       });
     });
@@ -203,7 +197,7 @@ describe('SidebarOrgSection Component', () => {
       renderComponent({ isProfilePage: true }, errorMocks);
       await waitFor(() => {
         expect(
-          screen.queryByText(/Error loading Organization/i),
+          screen.queryByText(/Error.*loading.*Organization/i),
         ).not.toBeInTheDocument();
       });
     });
@@ -212,7 +206,7 @@ describe('SidebarOrgSection Component', () => {
       renderComponent({ isProfilePage: false }, errorMocks);
       await waitFor(() => {
         const errorContainer = screen
-          .getByText(/Error loading Organization/i)
+          .getByText(/Error.*loading.*Organization/i)
           .closest('button');
         expect(errorContainer).toBeDisabled();
       });
@@ -222,7 +216,7 @@ describe('SidebarOrgSection Component', () => {
       renderComponent({ isProfilePage: false }, errorMocks);
       await waitFor(() => {
         const errorButton = screen
-          .getByText(/Error loading Organization/i)
+          .getByText(/Error.*loading.*Organization/i)
           .closest('button');
         expect(errorButton?.className).toContain('bgDanger');
         expect(errorButton?.className).toContain('text-white');

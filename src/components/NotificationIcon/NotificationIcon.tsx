@@ -6,11 +6,12 @@
  * users can quickly preview or navigate to them.
  */
 import React, { useState, useEffect } from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
 import { Dropdown } from 'react-bootstrap';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useNavigate, useLocation } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import styles from './NotificationIcon.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -22,28 +23,40 @@ interface InterfaceNotification {
   navigation?: string;
 }
 
+interface INotificationsData {
+  user: {
+    id: string;
+    name: string;
+    notifications: InterfaceNotification[];
+  };
+}
+
 const NotificationIcon = () => {
+  const { t } = useTranslation('translation', { keyPrefix: 'notification' });
   const [notifications, setNotifications] = useState<InterfaceNotification[]>(
     [],
   );
   const { getItem } = useLocalStorage();
   const userId = getItem('id');
-  const { loading, error, data } = useQuery(GET_USER_NOTIFICATIONS, {
-    variables: {
-      userId: userId,
-      input: {
-        first: 5,
-        skip: 0,
+  const { loading, error, data } = useQuery<INotificationsData>(
+    GET_USER_NOTIFICATIONS,
+    {
+      variables: {
+        userId: userId,
+        input: {
+          first: 5,
+          skip: 0,
+        },
       },
+      skip: !userId,
     },
-    skip: !userId,
-  });
+  );
   const navigate = useNavigate();
   const location = useLocation();
 
-  const unreadCount: number = (
-    (data?.user?.notifications as InterfaceNotification[]) || []
-  ).filter((n: InterfaceNotification) => !n.isRead).length;
+  const unreadCount: number = (data?.user?.notifications || []).filter(
+    (n) => !n.isRead,
+  ).length;
   useEffect(() => {
     setNotifications(data?.user?.notifications?.slice(0, 5) || []);
   }, [data]);
@@ -55,12 +68,12 @@ const NotificationIcon = () => {
         id="dropdown-basic"
         className={styles.iconButton}
       >
-        <div style={{ position: 'relative', display: 'inline-block' }}>
-          <NotificationsIcon style={{ color: '#3b3b3b' }} />
+        <div className={styles.iconContainer}>
+          <NotificationsIcon className={styles.iconColor} />
           {unreadCount > 0 && (
             <span
               className={styles.unreadBadge}
-              title={`${unreadCount} unread`}
+              title={t('unreadCount', { count: unreadCount })}
             >
               {unreadCount > 9 ? '9+' : unreadCount}
             </span>
@@ -69,13 +82,19 @@ const NotificationIcon = () => {
       </Dropdown.Toggle>
 
       <Dropdown.Menu className={styles.glassMenu}>
-        {loading && <Dropdown.Item>Loading...</Dropdown.Item>}
-        {error && <Dropdown.Item>Error fetching notifications</Dropdown.Item>}
+        {loading && <Dropdown.Item>{t('loading')}</Dropdown.Item>}
+        {error && (
+          <Dropdown.Item>{t('errorFetchingNotifications')}</Dropdown.Item>
+        )}
         {notifications.length > 0 ? (
           notifications.map((notification) => (
             <Dropdown.Item
               key={notification.id}
-              className={styles.notificationItem}
+              className={
+                notification.navigation
+                  ? `${styles.notificationItem} ${styles.notificationItemCursor}`
+                  : `${styles.notificationItem} ${styles.notificationItemDefault}`
+              }
               onClick={() => {
                 if (notification.navigation) {
                   navigate(notification.navigation);
@@ -86,12 +105,9 @@ const NotificationIcon = () => {
                   path.startsWith('/user/') || path.startsWith('/user');
                 navigate(isUserPortal ? '/user/notification' : '/notification');
               }}
-              style={{
-                cursor: notification.navigation ? 'pointer' : 'default',
-              }}
             >
               {!notification.isRead && (
-                <span className={styles.notificationDot} title="Unread" />
+                <span className={styles.notificationDot} title={t('unread')} />
               )}
               <span className={styles.notificationText}>
                 {notification.body.length > 48
@@ -101,7 +117,7 @@ const NotificationIcon = () => {
             </Dropdown.Item>
           ))
         ) : (
-          <Dropdown.Item>No new notifications</Dropdown.Item>
+          <Dropdown.Item>{t('noNewNotifications')}</Dropdown.Item>
         )}
         <Dropdown.Divider />
         <Dropdown.Item
@@ -112,7 +128,7 @@ const NotificationIcon = () => {
             navigate(isUserPortal ? '/user/notification' : '/notification');
           }}
         >
-          View all notifications
+          {t('viewAllNotifications')}
         </Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>

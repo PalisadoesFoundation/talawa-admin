@@ -1,6 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import type { Mock } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
 import PluginModal from './PluginModal';
 import { AdminPluginFileService } from '../../plugin/services/AdminPluginFileService';
 import type { IPluginMeta, IPluginDetails, IInstalledPlugin } from 'plugin';
@@ -554,7 +556,11 @@ describe('PluginModal', () => {
         AdminPluginFileService.getPluginDetails as unknown as Mock
       ).mockResolvedValueOnce(mockDetails);
 
-      render(<PluginModal {...defaultProps} />);
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
 
       await waitFor(() => {
         const screenshots = screen.getAllByAltText(/Screenshot \d+/);
@@ -570,7 +576,11 @@ describe('PluginModal', () => {
         AdminPluginFileService.getPluginDetails as unknown as Mock
       ).mockResolvedValueOnce(mockDetails);
 
-      render(<PluginModal {...defaultProps} />);
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
 
       await waitFor(() => {
         const screenshots = screen.getAllByAltText(/Screenshot \d+/);
@@ -589,7 +599,11 @@ describe('PluginModal', () => {
         AdminPluginFileService.getPluginDetails as unknown as Mock
       ).mockResolvedValueOnce(mockDetails);
 
-      render(<PluginModal {...defaultProps} />);
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
 
       await waitFor(() => {
         const screenshots = screen.getAllByAltText(/Screenshot \d+/);

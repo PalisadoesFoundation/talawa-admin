@@ -2,7 +2,8 @@ import React, { act } from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
+import type { MockedResponse } from '@apollo/client/testing';
 import {
   CREATE_POST_MUTATION,
   UPDATE_POST_MUTATION,
@@ -263,7 +264,7 @@ describe('CreatePostModal Integration Tests', () => {
   ) => {
     return render(
       <I18nextProvider i18n={i18nForTest}>
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <CreatePostModal {...defaultProps} {...props} />
         </MockedProvider>
       </I18nextProvider>,

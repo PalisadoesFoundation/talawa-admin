@@ -31,7 +31,7 @@
  */
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import {

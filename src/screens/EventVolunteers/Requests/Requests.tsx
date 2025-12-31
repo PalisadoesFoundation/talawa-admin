@@ -43,7 +43,7 @@ import { Navigate, useParams } from 'react-router';
 import { FaXmark } from 'react-icons/fa6';
 import { WarningAmberRounded } from '@mui/icons-material';
 
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
@@ -54,6 +54,7 @@ import Avatar from 'components/Avatar/Avatar';
 import styles from '../../../style/app-fixed.module.css';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
+import type { IGetVolunteerMembershipResult } from 'types/GraphQL/queryResults';
 import dayjs from 'dayjs';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { toast } from 'react-toastify';
@@ -120,12 +121,7 @@ function Requests(): JSX.Element {
     loading: requestsLoading,
     error: requestsError,
     refetch: refetchRequests,
-  }: {
-    data?: { getVolunteerMembership: InterfaceVolunteerMembership[] };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(USER_VOLUNTEER_MEMBERSHIP, {
+  } = useQuery<IGetVolunteerMembershipResult>(USER_VOLUNTEER_MEMBERSHIP, {
     variables: {
       where: {
         eventId,
@@ -143,9 +139,13 @@ function Requests(): JSX.Element {
 
     // Apply filter by request type
     if (filterBy === 'individual') {
-      filteredRequests = filteredRequests.filter((request) => !request.group);
+      filteredRequests = filteredRequests.filter(
+        (request: InterfaceVolunteerMembership) => !request.group,
+      );
     } else if (filterBy === 'group') {
-      filteredRequests = filteredRequests.filter((request) => request.group);
+      filteredRequests = filteredRequests.filter(
+        (request: InterfaceVolunteerMembership) => request.group,
+      );
     }
 
     return filteredRequests;

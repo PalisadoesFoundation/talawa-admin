@@ -44,7 +44,8 @@ import {
 } from '@mui/material';
 import { Button, Table } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
-import { useLazyQuery } from '@apollo/client';
+import componentStyles from './EventAttendance.module.css';
+import { useLazyQuery } from '@apollo/client/react';
 import { EVENT_ATTENDEES } from 'GraphQl/Queries/Queries';
 import { useParams, Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -100,15 +101,14 @@ function EventAttendance(): JSX.Element {
   const searchEventAttendees = (value: string): void => {
     const searchValueLower = value.toLowerCase().trim();
 
-    const filtered = (memberData?.event?.attendees ?? []).filter(
-      (attendee: InterfaceMember) => {
-        const name = attendee.name?.toLowerCase() || '';
-        const email = attendee.emailAddress?.toLowerCase() || '';
-        return (
-          name.includes(searchValueLower) || email.includes(searchValueLower)
-        );
-      },
-    );
+    const attendees = (memberData?.event?.attendees ?? []) as InterfaceMember[];
+    const filtered = attendees.filter((attendee: InterfaceMember) => {
+      const name = attendee.name?.toLowerCase() || '';
+      const email = attendee.emailAddress?.toLowerCase() || '';
+      return (
+        name.includes(searchValueLower) || email.includes(searchValueLower)
+      );
+    });
 
     const finalFiltered = filterAndSortAttendees(filtered);
     setFilteredAttendees(finalFiltered);
@@ -130,8 +130,10 @@ function EventAttendance(): JSX.Element {
   }, [filteredAttendees]);
 
   const [getEventAttendees, { data: memberData, loading, error }] =
-    useLazyQuery(EVENT_ATTENDEES, {
-      variables: { eventId: eventId },
+    useLazyQuery<
+      { event: { attendees: InterfaceMember[] } },
+      { eventId: string }
+    >(EVENT_ATTENDEES, {
       fetchPolicy: 'cache-and-network',
       nextFetchPolicy: 'cache-first',
       errorPolicy: 'all',
@@ -140,15 +142,17 @@ function EventAttendance(): JSX.Element {
 
   useEffect(() => {
     if (memberData?.event?.attendees) {
-      const updatedAttendees = filterAndSortAttendees(
-        memberData.event.attendees,
-      );
+      // filtering out any null/undefined attendees if necessary, though InterfaceMember[] implies they are defined
+      const attendees = (memberData.event.attendees || []) as InterfaceMember[];
+      const updatedAttendees = filterAndSortAttendees(attendees);
       setFilteredAttendees(updatedAttendees);
     }
   }, [sortOrder, filteringBy, memberData]);
 
   useEffect(() => {
-    getEventAttendees();
+    if (eventId) {
+      getEventAttendees({ variables: { eventId } });
+    }
   }, [eventId, getEventAttendees]);
 
   if (loading) return <p>{t('loading')}</p>;
@@ -183,7 +187,7 @@ function EventAttendance(): JSX.Element {
             />
           </div>
           <SortingButton
-            title="Filter"
+            title={t('filter')}
             sortingOptions={[
               { label: FilterPeriod.ThisMonth, value: FilterPeriod.ThisMonth },
               { label: FilterPeriod.ThisYear, value: FilterPeriod.ThisYear },
@@ -197,10 +201,10 @@ function EventAttendance(): JSX.Element {
             }
             dataTestIdPrefix="filter-dropdown"
             className={`${styles.dropdown} mx-4`}
-            buttonLabel="Filter"
+            buttonLabel={t('filter')}
           />
           <SortingButton
-            title="Sort"
+            title={t('sort')}
             sortingOptions={[
               { label: 'Ascending', value: 'ascending' },
               { label: 'Descending', value: 'descending' },
@@ -210,14 +214,13 @@ function EventAttendance(): JSX.Element {
               setSortOrder(value as 'ascending' | 'descending')
             }
             dataTestIdPrefix="sort-dropdown"
-            buttonLabel="Sort"
+            buttonLabel={t('sort')}
           />
         </div>
       </div>
       <TableContainer
         component={Paper}
-        className="mt-3"
-        sx={{ borderRadius: '16px' }}
+        className={`mt-3 ${componentStyles.tableContainer}`}
       >
         <Table aria-label={t('event_attendance_table')} role="grid">
           <TableHead>
@@ -309,7 +312,7 @@ function EventAttendance(): JSX.Element {
                             scrollbarColor: 'white',
                             border: 'var(--primary-border-solid)',
                             borderRadius: '6px',
-                            boxShadow: '0 0 5px rgba(0,0,0,0.1)',
+                            boxShadow: 'var(--bs-box-shadow-sm)',
                           },
                         },
                       }}
@@ -346,7 +349,7 @@ function EventAttendance(): JSX.Element {
                           ) => <div key={tagIndex}>{edge.node.name}</div>,
                         )
                       ) : (
-                        <div>None</div>
+                        <div>{t('none')}</div>
                       )}
                     </TableCell>
                   </TableRow>

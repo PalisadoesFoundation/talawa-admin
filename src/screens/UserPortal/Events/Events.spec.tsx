@@ -10,7 +10,7 @@
 // SKIP_LOCALSTORAGE_CHECK
 import React, { act } from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import {
   GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
@@ -1238,10 +1238,6 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle network error gracefully', async () => {
-    const consoleWarnSpy = vi
-      .spyOn(console, 'warn')
-      .mockImplementation(() => {});
-
     render(
       <MockedProvider link={errorLink}>
         <BrowserRouter>
@@ -1260,10 +1256,8 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await wait(500);
 
-    // Should log warning for non-rate-limit errors
-    expect(consoleWarnSpy).toHaveBeenCalled();
-
-    consoleWarnSpy.mockRestore();
+    // Should call toast.error for non-rate-limit errors via errorHandler
+    expect(mockToast.error).toHaveBeenCalled();
   });
 
   it('Should suppress rate limit errors silently', async () => {
@@ -1616,18 +1610,18 @@ describe('Testing Events Screen [User Portal]', () => {
         // Ensure all conditions return boolean (not undefined via optional chaining)
         return Boolean(
           input.name === 'Recurring Test Event' &&
-            input.description === 'Recurring Test Description' &&
-            input.organizationId === 'org123' &&
-            input.allDay === true &&
-            input.location === 'Recurring Test Location' &&
-            input.isPublic === true &&
-            input.isRegisterable === true &&
-            typeof input.startAt === 'string' &&
-            typeof input.endAt === 'string' &&
-            input.recurrence &&
-            input.recurrence.frequency === Frequency.WEEKLY &&
-            input.recurrence.interval === 1 &&
-            input.recurrence.byDay?.includes(weekDayByJs[dayOfWeek]),
+          input.description === 'Recurring Test Description' &&
+          input.organizationId === 'org123' &&
+          input.allDay === true &&
+          input.location === 'Recurring Test Location' &&
+          input.isPublic === true &&
+          input.isRegisterable === true &&
+          typeof input.startAt === 'string' &&
+          typeof input.endAt === 'string' &&
+          input.recurrence &&
+          input.recurrence.frequency === Frequency.WEEKLY &&
+          input.recurrence.interval === 1 &&
+          input.recurrence.byDay?.includes(weekDayByJs[dayOfWeek]),
         );
       },
       result: {

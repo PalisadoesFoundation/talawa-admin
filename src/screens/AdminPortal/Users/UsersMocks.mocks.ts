@@ -92,7 +92,6 @@ export const EMPTY_MOCKS = [
   {
     request: {
       query: ORGANIZATION_LIST,
-      variables: { filter: '', limit: null, offset: null },
     },
     result: {
       data: {
@@ -110,7 +109,6 @@ export const USER_UNDEFINED_MOCK = [
         first: 12,
         after: null,
         orgFirst: 32,
-        where: undefined,
       },
     },
     result: {
@@ -185,7 +183,6 @@ export const MOCKS_NEW_2 = [
   {
     request: {
       query: ORGANIZATION_LIST,
-      variables: { filter: '', limit: null, offset: null },
     },
     result: {
       data: {
@@ -241,7 +238,6 @@ export const MOCKS_NEW = [
   {
     request: {
       query: ORGANIZATION_LIST,
-      variables: { filter: '', limit: null, offset: null },
     },
     result: {
       data: {

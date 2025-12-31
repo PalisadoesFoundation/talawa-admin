@@ -85,7 +85,7 @@ This prevents excessive API calls while the user is actively typing.
 
 > **hasDropdowns**: `false`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:228](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L228)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:227](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L227)
 
 Discriminator property indicating this variant has no dropdowns.
 

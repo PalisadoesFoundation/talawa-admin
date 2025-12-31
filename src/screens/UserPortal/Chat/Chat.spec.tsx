@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockLink } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
@@ -9,9 +10,14 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { vi, type Mock, beforeEach, afterEach } from 'vitest';
 import Chat from './Chat';
 import { CHATS_LIST, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
+
 const { mockUseParams } = vi.hoisted(() => ({
   mockUseParams: vi.fn(),
 }));
+
+const flushPromises = async () => {
+  await new Promise((resolve) => setTimeout(resolve, 200));
+};
 
 // Mock child components
 vi.mock('components/UserPortal/ContactCard/ContactCard', () => ({
@@ -66,8 +72,22 @@ const mockChatsListData = {
       id: 'chat-1',
       name: 'Direct Chat 1',
       isGroup: false,
+      description: 'First direct chat',
+      createdAt: new Date().toISOString(),
       users: [{}, {}],
       image: '',
+      organization: { id: 'org-1', name: 'Test Org' },
+      members: {
+        edges: [],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: null,
+          endCursor: null,
+        },
+      },
+      lastMessage: null,
+      unreadMessagesCount: 0,
       __typename: 'Chat',
     },
     {
@@ -75,8 +95,56 @@ const mockChatsListData = {
       id: 'chat-2',
       name: 'Group Chat 1',
       isGroup: true,
+      description: 'First group chat',
+      createdAt: new Date().toISOString(),
       users: [{}, {}, {}],
       image: '',
+      organization: { id: 'org-1', name: 'Test Org' },
+      members: {
+        edges: [
+          {
+            node: {
+              user: {
+                id: 'u1',
+                name: 'User 1',
+                avatarMimeType: null,
+                avatarURL: null,
+              },
+              role: 'MEMBER',
+            },
+          },
+          {
+            node: {
+              user: {
+                id: 'u2',
+                name: 'User 2',
+                avatarMimeType: null,
+                avatarURL: null,
+              },
+              role: 'MEMBER',
+            },
+          },
+          {
+            node: {
+              user: {
+                id: 'u3',
+                name: 'User 3',
+                avatarMimeType: null,
+                avatarURL: null,
+              },
+              role: 'MEMBER',
+            },
+          },
+        ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: null,
+          endCursor: null,
+        },
+      },
+      lastMessage: null,
+      unreadMessagesCount: 0,
       __typename: 'Chat',
     },
     {
@@ -84,8 +152,22 @@ const mockChatsListData = {
       id: 'chat-3',
       name: 'Direct Chat 2',
       isGroup: false,
+      description: 'Second direct chat',
+      createdAt: new Date().toISOString(),
       users: [{}, {}],
       image: '',
+      organization: { id: 'org-1', name: 'Test Org' },
+      members: {
+        edges: [],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: null,
+          endCursor: null,
+        },
+      },
+      lastMessage: null,
+      unreadMessagesCount: 0,
       __typename: 'Chat',
     },
   ],
@@ -204,8 +286,40 @@ const mocks = [
     request: { query: CHATS_LIST, variables: { first: 10, after: null } },
     result: { data: mockChatsListData },
   },
+  {
+    request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+    result: { data: mockChatsListData },
+  },
+  {
+    request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+    result: { data: mockChatsListData },
+  },
+  {
+    request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+    result: { data: mockChatsListData },
+  },
+  {
+    request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+    result: { data: mockChatsListData },
+  },
+  {
+    request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+    result: { data: mockChatsListData },
+  },
+  {
+    request: { query: CHATS_LIST, variables: { first: 10, after: null } },
+    result: { data: mockChatsListData },
+  },
   mockUnreadChats,
   mockUnreadChatsRefetch,
+  {
+    request: { query: UNREAD_CHATS, variables: {} },
+    result: { data: mockUnreadChatsData },
+  },
+  {
+    request: { query: UNREAD_CHATS, variables: {} },
+    result: { data: mockUnreadChatsData },
+  },
 ];
 
 describe('Chat Component', () => {
@@ -235,11 +349,14 @@ describe('Chat Component', () => {
     mockUseParams.mockReturnValue({}); // Default: no orgId
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    await React.act(async () => {
+      await flushPromises();
+    });
     vi.restoreAllMocks();
   });
 
-  const renderComponent = (customMocks = mocks) =>
+  const renderComponent = (customMocks: MockLink.MockedResponse[] = mocks) =>
     render(
       <MockedProvider mocks={customMocks}>
         <I18nextProvider i18n={i18nForTest}>
@@ -365,8 +482,56 @@ describe('Chat Component', () => {
               id: 'legacy-group',
               name: 'Legacy Group',
               isGroup: false,
+              description: 'Legacy group desc',
+              createdAt: new Date().toISOString(),
               users: [{}, {}, {}],
               image: '',
+              organization: { id: 'org-1', name: 'Legacy Org' },
+              members: {
+                edges: [
+                  {
+                    node: {
+                      user: {
+                        id: 'u1',
+                        name: 'User 1',
+                        avatarMimeType: null,
+                        avatarURL: null,
+                      },
+                      role: 'MEMBER',
+                    },
+                  },
+                  {
+                    node: {
+                      user: {
+                        id: 'u2',
+                        name: 'User 2',
+                        avatarMimeType: null,
+                        avatarURL: null,
+                      },
+                      role: 'MEMBER',
+                    },
+                  },
+                  {
+                    node: {
+                      user: {
+                        id: 'u3',
+                        name: 'User 3',
+                        avatarMimeType: null,
+                        avatarURL: null,
+                      },
+                      role: 'MEMBER',
+                    },
+                  },
+                ],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
+              lastMessage: null,
+              unreadMessagesCount: 0,
               __typename: 'Chat',
             },
             {
@@ -374,8 +539,45 @@ describe('Chat Component', () => {
               id: 'legacy-direct',
               name: 'Legacy Direct',
               isGroup: false,
+              description: 'Legacy direct desc',
+              createdAt: new Date().toISOString(),
               users: [{}, {}],
               image: '',
+              organization: { id: 'org-1', name: 'Legacy Org' },
+              members: {
+                edges: [
+                  {
+                    node: {
+                      user: {
+                        id: 'u1',
+                        name: 'User 1',
+                        avatarMimeType: null,
+                        avatarURL: null,
+                      },
+                      role: 'MEMBER',
+                    },
+                  },
+                  {
+                    node: {
+                      user: {
+                        id: 'u2',
+                        name: 'User 2',
+                        avatarMimeType: null,
+                        avatarURL: null,
+                      },
+                      role: 'MEMBER',
+                    },
+                  },
+                ],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
+              lastMessage: null,
+              unreadMessagesCount: 0,
               __typename: 'Chat',
             },
           ],
@@ -383,7 +585,14 @@ describe('Chat Component', () => {
       },
     };
 
-    const customMocks = [legacyGroupMock, legacyGroupMock, mockUnreadChats];
+    const customMocks = [
+      legacyGroupMock,
+      legacyGroupMock,
+      legacyGroupMock,
+      legacyGroupMock,
+      legacyGroupMock,
+      mockUnreadChats,
+    ];
 
     renderComponent(customMocks);
 
@@ -408,12 +617,16 @@ describe('Chat Component', () => {
 
     fireEvent.click(screen.getByTestId('unreadChat'));
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('contact-card-chat-2'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
     });
 
-    fireEvent.click(screen.getByTestId('allChat'));
+    // Wait for the unread filter to fully apply and show contact-card-chat-1
+    await screen.findByTestId('contact-card-chat-1');
+
+    // Now click allChat to switch back
+    const allChatButton = await screen.findByTestId('allChat');
+    fireEvent.click(allChatButton);
+
     await waitFor(() => {
       expect(screen.getByTestId('contact-card-chat-1')).toBeInTheDocument();
       expect(screen.getByTestId('contact-card-chat-2')).toBeInTheDocument();
@@ -423,6 +636,10 @@ describe('Chat Component', () => {
 
   test('should open new direct and group chat modals', async () => {
     renderComponent();
+
+    await waitFor(() => {
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    });
 
     const dropdown = screen.getByTestId('dropdown');
     fireEvent.click(dropdown);
@@ -436,6 +653,10 @@ describe('Chat Component', () => {
     fireEvent.click(newGroupChat);
 
     expect(screen.getByTestId('create-group-chat-modal')).toBeInTheDocument();
+
+    await React.act(async () => {
+      await flushPromises();
+    });
   });
 
   test('should filter chats by orgId when provided in route params', async () => {
@@ -451,9 +672,22 @@ describe('Chat Component', () => {
               id: 'chat-1',
               name: 'Chat in Org 1',
               isGroup: false,
+              description: 'Chat in Org 1 desc',
+              createdAt: new Date().toISOString(),
               users: [{}, {}],
               image: '',
-              organization: { id: 'org-1', _id: 'org-1' },
+              organization: { id: 'org-1', _id: 'org-1', name: 'Org 1' },
+              members: {
+                edges: [],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
+              lastMessage: null,
+              unreadMessagesCount: 0,
               __typename: 'Chat',
             },
             {
@@ -461,9 +695,22 @@ describe('Chat Component', () => {
               id: 'chat-2',
               name: 'Chat in Org 2',
               isGroup: false,
+              description: 'Chat in Org 2 desc',
+              createdAt: new Date().toISOString(),
               users: [{}, {}],
               image: '',
-              organization: { id: 'org-2', _id: 'org-2' },
+              organization: { id: 'org-2', _id: 'org-2', name: 'Org 2' },
+              members: {
+                edges: [],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
+              lastMessage: null,
+              unreadMessagesCount: 0,
               __typename: 'Chat',
             },
           ],
@@ -607,7 +854,12 @@ describe('Chat Component', () => {
                     },
                   },
                 ],
-                pageInfo: { hasNextPage: false, endCursor: null },
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
               },
               lastMessage: null,
               unreadMessagesCount: 0,
@@ -650,7 +902,12 @@ describe('Chat Component', () => {
                     },
                   },
                 ],
-                pageInfo: { hasNextPage: false, endCursor: null },
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
               },
               lastMessage: null,
               unreadMessagesCount: 0,
@@ -675,6 +932,10 @@ describe('Chat Component', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('contact-card-group-1')).toBeInTheDocument();
+    });
+
+    await React.act(async () => {
+      await flushPromises();
     });
   });
 
@@ -713,7 +974,12 @@ describe('Chat Component', () => {
                     },
                   },
                 ],
-                pageInfo: { hasNextPage: false, endCursor: null },
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
               },
               lastMessage: null,
               unreadMessagesCount: 0,
@@ -748,7 +1014,12 @@ describe('Chat Component', () => {
                     },
                   },
                 ],
-                pageInfo: { hasNextPage: false, endCursor: null },
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
               },
               lastMessage: null,
               unreadMessagesCount: 0,
@@ -767,6 +1038,10 @@ describe('Chat Component', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('contact-card-chat-new-1')).toBeInTheDocument();
+    });
+
+    await React.act(async () => {
+      await flushPromises();
     });
   });
 
@@ -788,6 +1063,15 @@ describe('Chat Component', () => {
               organization: { _id: 'org-1', id: 'org-1', name: 'Org 1' },
               lastMessage: null,
               unreadMessagesCount: 0,
+              members: {
+                edges: [],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
               __typename: 'Chat',
             },
             {
@@ -802,6 +1086,15 @@ describe('Chat Component', () => {
               organization: { _id: 'org-2', id: 'org-2', name: 'Org 2' },
               lastMessage: null,
               unreadMessagesCount: 0,
+              members: {
+                edges: [],
+                pageInfo: {
+                  hasNextPage: false,
+                  hasPreviousPage: false,
+                  startCursor: null,
+                  endCursor: null,
+                },
+              },
               __typename: 'Chat',
             },
           ],

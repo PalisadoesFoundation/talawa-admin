@@ -49,7 +49,7 @@ import {
   Carousel,
 } from 'react-bootstrap';
 import { DELETE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/mutations';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegister';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -212,7 +212,10 @@ function AdvertisementEntry({
                               <img
                                 className={`d-block w-100 ${styles.cardImage}`}
                                 src={attachment.url}
-                                alt={`Advertisement image #${index + 1} for ${advertisement.name ?? 'ad'}`}
+                                alt={t('advertisementImageAlt', {
+                                  index: index + 1,
+                                  name: advertisement.name ?? t('ad'),
+                                })}
                                 data-testid="media"
                                 crossOrigin="anonymous"
                               />
@@ -225,7 +228,7 @@ function AdvertisementEntry({
                         <img
                           className={`d-block w-100 ${styles.cardImage}`}
                           src={advertisement.attachments[0].url}
-                          alt="Advertisement media"
+                          alt={t('advertisementMedia')}
                           data-testid="media"
                           crossOrigin="anonymous"
                         />
@@ -236,7 +239,7 @@ function AdvertisementEntry({
                       className={`${styles.noMediaPlaceholder} ${styles.imageWrapper}`}
                       data-testid="media"
                     >
-                      No media available
+                      {t('noMediaAvailable')}
                     </div>
                   )}
                 </div>

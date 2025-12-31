@@ -5,11 +5,11 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form, Spinner } from 'react-bootstrap';
 import TextField from '@mui/material/TextField';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { SEND_EVENT_INVITATIONS } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import type { ApolloError } from '@apollo/client/errors';
+import styles from './InviteByEmailModal.module.css';
 
 type Props = {
   show: boolean;
@@ -60,13 +60,15 @@ const InviteByEmailModal: React.FC<Props> = ({
       .filter((r) => r.email !== '');
 
     if (cleaned.length === 0) {
-      toast.error('Please provide at least one recipient email');
+      toast.error(t('pleaseProvideRecipientEmail') as string);
       return;
     }
 
     const invalid = validateEmails(cleaned.map((r) => r.email));
     if (invalid.length) {
-      toast.error(`Invalid email(s): ${invalid.join(', ')}`);
+      toast.error(
+        t('invalidEmails', { invalid: invalid.join(', ') }) as string,
+      );
       return;
     }
 
@@ -92,7 +94,7 @@ const InviteByEmailModal: React.FC<Props> = ({
       if (onInvitesSent) onInvitesSent();
       handleClose();
     } catch (err) {
-      const error = err as ApolloError;
+      const error = err as Error;
       toast.error(t('errorSendingInvites') || 'Error sending invites');
       if (error?.message) toast.error(error.message);
     } finally {
@@ -102,10 +104,7 @@ const InviteByEmailModal: React.FC<Props> = ({
 
   return (
     <Modal show={show} onHide={handleClose} backdrop="static" centered>
-      <Modal.Header
-        closeButton
-        style={{ backgroundColor: 'var(--tableHeader-bg)' }}
-      >
+      <Modal.Header closeButton className={styles.modalHeader}>
         <Modal.Title>
           {t('title', { defaultValue: 'Invite by Email' })}
         </Modal.Title>
@@ -129,9 +128,8 @@ const InviteByEmailModal: React.FC<Props> = ({
                     copy[idx] = { ...copy[idx], email: e.target.value };
                     setRecipients(copy);
                   }}
-                  style={{ flex: 1 }}
+                  className={styles.emailField}
                 />
-
                 <TextField
                   label={t('name', { defaultValue: 'Name' })}
                   variant="outlined"
@@ -142,9 +140,8 @@ const InviteByEmailModal: React.FC<Props> = ({
                     copy[idx] = { ...copy[idx], name: e.target.value };
                     setRecipients(copy);
                   }}
-                  style={{ width: 220, marginLeft: 12 }}
+                  className={styles.nameField}
                 />
-
                 {recipients.length > 1 ? (
                   <Button
                     variant="link"
@@ -152,11 +149,12 @@ const InviteByEmailModal: React.FC<Props> = ({
                       const copy = recipients.filter((_, i) => i !== idx);
                       setRecipients(copy);
                     }}
-                    style={{ marginLeft: 8 }}
+                    className={styles.removeButton}
                   >
                     {t('remove', { defaultValue: 'Remove' })}
                   </Button>
-                ) : null}
+                ) : null}{' '}
+                {/* i18n-ignore-line */}
               </div>
             ))}
 

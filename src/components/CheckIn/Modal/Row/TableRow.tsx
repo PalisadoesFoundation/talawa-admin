@@ -37,12 +37,13 @@
 import React from 'react';
 import type { InterfaceTableCheckIn } from 'types/CheckIn/interface';
 import Button from '@mui/material/Button';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { MARK_CHECKIN } from 'GraphQl/Mutations/mutations';
 import { toast } from 'react-toastify';
 import { generate } from '@pdfme/generator';
 import { tagTemplate } from '../../tagTemplate';
 import { useTranslation } from 'react-i18next';
+import styles from './TableRow.module.css';
 
 export const TableRow = ({
   data,
@@ -82,9 +83,9 @@ export const TableRow = ({
    */
   const notify = (): Promise<void> =>
     toast.promise(generateTag, {
-      pending: 'Generating pdf...',
-      success: 'PDF generated successfully!',
-      error: 'Error generating pdf!',
+      pending: t('generatingPdf') as string,
+      success: t('pdfGeneratedSuccessfully') as string,
+      error: t('errorGeneratingPdf') as string,
     });
 
   /**
@@ -106,11 +107,13 @@ export const TableRow = ({
       const url = URL.createObjectURL(blob);
       window.open(url);
 
-      toast.success('PDF generated successfully!');
+      toast.success(t('pdfGeneratedSuccessfully') as string);
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error';
-      toast.error(`Error generating pdf: ${errorMessage}`);
+      toast.error(
+        t('errorGeneratingPdfWithMessage', { errorMessage }) as string,
+      );
     }
   };
 
@@ -119,19 +122,18 @@ export const TableRow = ({
       {data.isCheckedIn ? (
         <div>
           <Button variant="contained" disabled className="m-2 p-2">
-            Checked In
+            {t('checkedIn')}
           </Button>
           <Button variant="contained" className="m-2 p-2" onClick={notify}>
-            Download Tag
+            {t('downloadTag')}
           </Button>
         </div>
       ) : (
         <Button
-          style={{ backgroundColor: '#A8C7FA', color: '#555' }}
           onClick={markCheckIn}
-          className="m-2 p-2"
+          className={`m-2 p-2 ${styles.checkInButton}`}
         >
-          Check In
+          {t('checkIn')}
         </Button>
       )}
     </>

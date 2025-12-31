@@ -39,8 +39,8 @@ import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import LogoutIcon from '@mui/icons-material/Logout';
 import useSession from 'utils/useSession';
+import { useMutation } from '@apollo/client/react';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
-import { useMutation } from '@apollo/client';
 import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 

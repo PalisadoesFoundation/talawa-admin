@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { FormField } from '../FormField/FormField';
 import type { InterfaceEmailFieldProps } from '../../../types/Auth/EmailField/interface';
 
@@ -22,25 +23,28 @@ import type { InterfaceEmailFieldProps } from '../../../types/Auth/EmailField/in
  * ```
  */
 export const EmailField: React.FC<InterfaceEmailFieldProps> = ({
-  label = 'Email',
+  label,
   name = 'email',
   value,
   onChange,
-  placeholder = 'name@example.com',
+  placeholder,
   error,
   testId,
-}) => (
-  <FormField
-    label={label}
-    name={name}
-    type="email"
-    value={value}
-    onChange={onChange}
-    placeholder={placeholder}
-    error={error}
-    testId={testId}
-    required
-  />
-);
+}) => {
+  const { t } = useTranslation('common');
+  return (
+    <FormField
+      label={label ?? t('email')}
+      name={name}
+      type="email"
+      value={value}
+      onChange={onChange}
+      placeholder={placeholder ?? t('emailPlaceholder')}
+      error={error}
+      testId={testId}
+      required
+    />
+  );
+};
 
 export default EmailField;

@@ -36,8 +36,8 @@ import styles from './ChatRoom.module.css';
 import PermContactCalendarIcon from '@mui/icons-material/PermContactCalendar';
 import { useTranslation } from 'react-i18next';
 import { CHAT_BY_ID, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
-import type { ApolloQueryResult } from '@apollo/client';
-import { useMutation, useQuery, useSubscription } from '@apollo/client';
+import type { OperationVariables } from '@apollo/client';
+import { useMutation, useQuery, useSubscription } from '@apollo/client/react';
 import {
   EDIT_CHAT_MESSAGE,
   MESSAGE_SENT_TO_CHAT,
@@ -52,19 +52,14 @@ import GroupChatDetails from 'components/GroupChatDetails/GroupChatDetails';
 import { GrAttachment } from 'react-icons/gr';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
-import type { GroupChat } from 'types/Chat/type';
 // import { toast } from 'react-toastify';
 // import { validateFile } from 'utils/fileValidation';
 
 interface IChatRoomProps {
   selectedContact: string;
   chatListRefetch: (
-    variables?:
-      | Partial<{
-          id: string;
-        }>
-      | undefined,
-  ) => Promise<ApolloQueryResult<{ chatList: GroupChat[] }>>;
+    variables?: Partial<OperationVariables>,
+  ) => Promise<unknown>;
 }
 
 interface INewChat {
@@ -130,6 +125,9 @@ interface INewChat {
             name: string;
           };
         };
+        chat?: {
+          id: string;
+        };
       };
     }>;
     pageInfo: {
@@ -155,6 +153,9 @@ const MessageImageBase: React.FC<IMessageImageProps> = ({
   organizationId,
   getFileFromMinio,
 }) => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userChatRoom',
+  });
   const [imageState, setImageState] = useState<{
     url: string | null;
     loading: boolean;
@@ -192,18 +193,20 @@ const MessageImageBase: React.FC<IMessageImageProps> = ({
   }, [media, organizationId, getFileFromMinio]);
 
   if (imageState.loading) {
-    return <div className={styles.messageAttachment}>Loading image...</div>;
+    return <div className={styles.messageAttachment}>{t('loadingImage')}</div>;
   }
 
   if (imageState.error || !imageState.url) {
-    return <div className={styles.messageAttachment}>Image not available</div>;
+    return (
+      <div className={styles.messageAttachment}>{t('imageNotAvailable')}</div>
+    );
   }
 
   return (
     <img
       className={styles.messageAttachment}
       src={imageState.url}
-      alt="attachment"
+      alt={t('attachment')}
       onError={() => setImageState((prev) => ({ ...prev, error: true }))}
     />
   );
@@ -352,7 +355,18 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     }
   };
 
-  const { data: chatData, refetch: chatRefetch } = useQuery(CHAT_BY_ID, {
+  const { data: chatData, refetch: chatRefetch } = useQuery<
+    {
+      chat: INewChat;
+    },
+    {
+      input: { id: string };
+      first?: number;
+      after?: string | null;
+      lastMessages?: number;
+      beforeMessages?: string | null;
+    }
+  >(CHAT_BY_ID, {
     variables: {
       input: { id: props.selectedContact },
       first: 10,
@@ -488,14 +502,14 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
             edge.node.user.id !== userId,
         )?.node.user;
         if (otherUser) {
-          setChatTitle(`${otherUser.name}`);
+          setChatTitle(`${otherUser.name}` || '');
           setChatSubtitle('');
-          setChatImage(otherUser.avatarURL);
+          setChatImage(otherUser.avatarURL || '');
         }
       } else if (chat.members?.edges?.length > 2) {
-        setChatTitle(chat.name);
+        setChatTitle(chat.name || '');
         setChatSubtitle(`${chat.members?.edges?.length || 0} members`);
-        setChatImage(chat.avatarURL);
+        setChatImage(chat.avatarURL || '');
       }
     }
   }, [chatData]);
@@ -540,7 +554,9 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     }
   };
 
-  useSubscription(MESSAGE_SENT_TO_CHAT, {
+  useSubscription<{
+    chatMessageCreate: INewChat['messages']['edges'][0]['node'];
+  }>(MESSAGE_SENT_TO_CHAT, {
     variables: {
       input: {
         id: props.selectedContact,
@@ -549,8 +565,8 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
     skip: !props.selectedContact,
     onData: async (messageSubscriptionData) => {
       if (
-        messageSubscriptionData?.data.data.chatMessageCreate &&
-        messageSubscriptionData?.data.data.chatMessageCreate.chat?.id ===
+        messageSubscriptionData?.data.data?.chatMessageCreate &&
+        messageSubscriptionData.data.data.chatMessageCreate.chat?.id ===
           props.selectedContact
       ) {
         const newMessage = messageSubscriptionData.data.data.chatMessageCreate;
@@ -707,8 +723,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
             </div>
           </div>
           <div
-            className={`d-flex flex-grow-1 flex-column`}
-            style={{ minHeight: 0 }}
+            className={`d-flex flex-grow-1 flex-column ${styles.chatAreaFlex}`}
           >
             <div
               className={styles.chatMessages}
@@ -723,13 +738,15 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                     onClick={loadMoreMessages}
                     disabled={loadingMoreMessages}
                   >
-                    {loadingMoreMessages ? 'Loading…' : 'Load older messages'}
+                    {loadingMoreMessages
+                      ? t('loading')
+                      : t('loadOlderMessages')}
                   </Button>
                 </div>
               )}
               {loadingMoreMessages && (
                 <div className={styles.loadingMore}>
-                  Loading more messages...
+                  {t('loadingMoreMessages')}
                 </div>
               )}
               {!!chat?.messages?.edges?.length && (
@@ -805,7 +822,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                             <div className={styles.messageAttributes}>
                               <Dropdown
                                 data-testid="moreOptions"
-                                style={{ cursor: 'pointer' }}
+                                className={styles.dropdownCursor}
                               >
                                 <Dropdown.Toggle
                                   className={styles.customToggle}
@@ -832,7 +849,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                                           }}
                                           data-testid="replyToMessage"
                                         >
-                                          Edit
+                                          {t('edit')}
                                         </Dropdown.Item>
                                       )}
                                       <Dropdown.Item
@@ -840,9 +857,9 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                                           deleteMessage(message.id)
                                         }
                                         data-testid="deleteMessage"
-                                        style={{ color: 'red' }}
+                                        className={styles.deleteItem}
                                       >
-                                        Delete
+                                        {t('delete')}
                                       </Dropdown.Item>
                                     </>
                                   )}
@@ -900,7 +917,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
             )}
             {attachment && (
               <div className={styles.attachment}>
-                <img src={attachment} alt="attachment" />
+                <img src={attachment} alt={t('attachment')} />
 
                 <Button
                   data-testid="removeAttachment"
@@ -925,7 +942,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
               </button>
               <Form.Control
                 placeholder={t('sendMessage')}
-                aria-label="Send Message"
+                aria-label={t('sendMessage')}
                 value={newMessage}
                 data-testid="messageInput"
                 onChange={handleNewMessageChange}

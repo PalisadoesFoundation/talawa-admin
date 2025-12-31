@@ -30,7 +30,7 @@
  */
 
 import React from 'react';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import {
@@ -165,7 +165,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
               <>
                 <IconButton
                   size="small"
-                  aria-label="more options"
+                  aria-label={t('moreOptions')}
                   onClick={handleDropdownOpen}
                   data-testid="more-options-button"
                   aria-haspopup="menu"

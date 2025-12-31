@@ -39,7 +39,8 @@
  *
  * @returns {JSX.Element} The rendered SubTags component.
  */
-import { useMutation, useQuery } from '@apollo/client';
+
+import { useMutation, useQuery } from '@apollo/client/react';
 import { WarningAmberRounded } from '@mui/icons-material';
 import IconComponent from 'components/IconComponent/IconComponent';
 import LoadingState from 'shared-components/LoadingState/LoadingState';

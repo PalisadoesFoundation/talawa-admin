@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
@@ -62,7 +62,7 @@ const debounceWait = async (ms = 400): Promise<void> => {
 
 const renderLeaderboard = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <MemoryRouter initialEntries={['/leaderboard/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -111,7 +111,7 @@ describe('Testing Leaderboard Screen', () => {
   it('should redirect to fallback URL if URL params are undefined', async () => {
     routerMocks.useParams.mockReturnValue({ orgId: '' });
     render(
-      <MockedProvider addTypename={false} link={link1}>
+      <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/leaderboard/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>

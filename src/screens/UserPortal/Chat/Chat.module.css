@@ -205,3 +205,13 @@
   background-color: #98e0b6;
   color: rgb(255, 255, 255);
 }
+
+.dropdownCursor {
+  cursor: pointer;
+}
+
+.contactCardScrollable {
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+  flex: 1;
+}

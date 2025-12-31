@@ -50,7 +50,7 @@ import type {
 import styles from '../../../style/app-fixed.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
@@ -63,6 +63,7 @@ import {
   TextField,
 } from '@mui/material';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
+import type { IUserDetailsResult } from 'types/GraphQL/queryResults';
 
 export interface InterfacePledgeModal {
   isOpen: boolean;
@@ -147,7 +148,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   const { pledgeUsers, pledgeAmount, pledgeCurrency } = formState;
 
   // Query to get the user details based on the userId prop
-  const { data: userData } = useQuery(USER_DETAILS, {
+  const { data: userData } = useQuery<IUserDetailsResult>(USER_DETAILS, {
     variables: { input: { id: userId } },
   });
 
@@ -155,28 +156,29 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   useEffect(() => {
     if (userData?.user) {
       const user = userData.user;
-      const nameParts = user.name ? user.name.split(' ') : [''];
-      const firstName = nameParts[0];
-      const lastName = nameParts.slice(1).join(' ');
+      const firstName = (user as { firstName?: string }).firstName || '';
+      const lastName = (user as { lastName?: string }).lastName || '';
 
       const currentUser = {
         id: user.id,
         firstName,
         lastName,
-        name: user.name,
+        name: `${firstName} ${lastName}`.trim() || user.name,
         avatarURL: user.avatarURL,
       };
 
       setPledgers([currentUser]);
 
-      if (user.role === 'regular') {
+      // Only auto-select current user as pledger in create mode
+      // In edit mode, keep the existing pledger from the pledge
+      if (mode === 'create' && !pledge?.pledger) {
         setFormState((prevState) => ({
           ...prevState,
           pledgeUsers: [currentUser],
         }));
       }
     }
-  }, [userData]);
+  }, [userData, mode, pledge?.pledger]);
 
   /**
    * Handler function to update an existing pledge.
@@ -279,7 +281,8 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           }
           className="p-3"
         >
-          {userData?.user?.role !== 'regular' && (
+          {/* Show pledger autocomplete for all users */}
+          {userData?.user && (
             <Form.Group className="d-flex mb-3 w-100">
               <Autocomplete
                 className={`${styles.noOutline} w-100`}
@@ -291,9 +294,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
                 readOnly={mode === 'edit'}
                 isOptionEqualToValue={(option, value) => option.id === value.id}
                 filterSelectedOptions={true}
-                getOptionLabel={(member: InterfaceUserInfoPG): string =>
-                  `${member.firstName} ${member.lastName}`
-                }
+                getOptionLabel={getMemberLabel}
                 onChange={(_, newPledger): void => {
                   setFormState({
                     ...formState,

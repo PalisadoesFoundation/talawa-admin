@@ -47,7 +47,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Button, ListGroup, Modal, Dropdown } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import groupChatStyles from './GroupChatDetails.module.css';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import {
   UPDATE_CHAT,
   CREATE_CHAT_MEMBERSHIP,
@@ -182,11 +182,26 @@ export default function groupChatDetails({
   const toggleAddUserModal = (): void =>
     setAddUserModalisOpen(!addUserModalisOpen);
 
+  interface InterfaceOrganizationMembersData {
+    organization: {
+      members: {
+        edges: {
+          node: {
+            id: string;
+            name: string;
+            avatarURL?: string;
+            role: string;
+          };
+        }[];
+      };
+    };
+  }
+
   const {
     data: allUsersData,
     loading: allUsersLoading,
     refetch: allUsersRefetch,
-  } = useQuery(ORGANIZATION_MEMBERS, {
+  } = useQuery<InterfaceOrganizationMembersData>(ORGANIZATION_MEMBERS, {
     variables: {
       input: { id: chat.organization?.id },
       first: 20,

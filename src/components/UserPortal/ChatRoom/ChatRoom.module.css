@@ -296,3 +296,15 @@ a {
   color: currentColor;
   width: 100%;
 }
+
+.chatAreaFlex {
+  min-height: 0;
+}
+
+.dropdownCursor {
+  cursor: pointer;
+}
+
+.deleteItem {
+  color: var(--closeButton-color, red);
+}

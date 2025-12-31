@@ -41,7 +41,7 @@
  * ```
  */
 import React, { useState } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import {
   ORGANIZATIONS_LIST_BASIC,
   ORGANIZATION_LIST,
@@ -51,6 +51,8 @@ import { Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router';
 import { getItem } from 'utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { useTranslation } from 'react-i18next';
+import type { IOrganizationListResult } from 'types/GraphQL/queryResults';
 
 const userEmail = (() => {
   try {
@@ -72,6 +74,10 @@ const userId = (() => {
 export { userEmail, userId };
 
 const LeaveOrganization = (): JSX.Element => {
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'leaveOrganization',
+  });
+  const { t: tCommon } = useTranslation('common');
   const navigate = useNavigate();
   const { orgId: organizationId } = useParams();
   const [email, setEmail] = useState('');
@@ -87,7 +93,9 @@ const LeaveOrganization = (): JSX.Element => {
     data: orgData,
     loading: orgLoading,
     error: orgError,
-  } = useQuery(ORGANIZATIONS_LIST_BASIC, { variables: { id: organizationId } });
+  } = useQuery<IOrganizationListResult>(ORGANIZATIONS_LIST_BASIC, {
+    variables: { id: organizationId },
+  });
 
   /**
    * Mutation to remove the member from the organization.
@@ -99,11 +107,19 @@ const LeaveOrganization = (): JSX.Element => {
     onCompleted: () => {
       // Use a toast notification or in-app message
       setShowModal(false);
-      NotificationToast.success('You have successfully left the organization!');
+      NotificationToast.success(t('successMessage'));
       navigate(`/user/organizations`);
     },
     onError: (err) => {
-      const isNetworkError = err.networkError !== null;
+      const apolloError = err as {
+        graphQLErrors?: Array<unknown>;
+        errors?: Array<unknown>;
+        networkError?: Error | null;
+      };
+      const hasGraphQLErrors =
+        (apolloError.graphQLErrors?.length ?? 0) > 0 ||
+        (apolloError.errors?.length ?? 0) > 0;
+      const isNetworkError = !!apolloError.networkError || !hasGraphQLErrors;
       setError(
         isNetworkError
           ? 'Unable to process your request. Please check your connection.'
@@ -156,15 +172,19 @@ const LeaveOrganization = (): JSX.Element => {
     return (
       <div className="text-center mt-4" role="status">
         <Spinner animation="border" />
-        <p>Loading organization details...</p>
+        <p>{t('loadingOrganizationDetails')}</p>
       </div>
     );
   }
   if (orgError)
-    return <Alert variant="danger">Error: {orgError.message}</Alert>;
+    return (
+      <Alert variant="danger">
+        {tCommon('error')}: {orgError.message}
+      </Alert>
+    );
 
   if (!orgData?.organizations?.length) {
-    return <p>Organization not found</p>;
+    return <p>{t('organizationNotFound')}</p>;
   }
 
   const organization = orgData?.organizations[0];
@@ -176,7 +196,7 @@ const LeaveOrganization = (): JSX.Element => {
       <p>{organization?.description}</p>
 
       <Button variant="danger" onClick={() => setShowModal(true)}>
-        Leave Organization
+        {t('leaveOrganization')}
       </Button>
 
       <Modal
@@ -192,34 +212,31 @@ const LeaveOrganization = (): JSX.Element => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="leave-organization-modal">
-            Leave Joined Organization
+            {t('leaveJoinedOrganization')}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {!verificationStep ? (
             <>
-              <p>Are you sure you want to leave this organization?</p>
-              <p>
-                This action cannot be undone, and you may need to request access
-                again if you reconsider.
-              </p>
+              <p>{t('confirmationMessage')}</p>
+              <p>{t('irreversibleAction')}</p>
             </>
           ) : (
             <Form>
               <Form.Group>
                 <Form.Label htmlFor="confirm-email">
-                  Enter your email to confirm:
+                  {t('enterEmailToConfirm')}
                 </Form.Label>
                 <Form.Control
                   id="confirm-email"
                   type="email"
-                  placeholder="Enter your email"
+                  placeholder={t('enterYourEmail')}
                   value={email}
                   required
                   aria-describedby={error ? 'email-error' : undefined}
                   onChange={(e) => setEmail(e.target.value)}
                   onKeyDown={handleKeyPress}
-                  aria-label="confirm-email-input"
+                  aria-label={t('confirmEmailInput')}
                 />
               </Form.Group>
               {error && (
@@ -234,13 +251,13 @@ const LeaveOrganization = (): JSX.Element => {
           {!verificationStep ? (
             <>
               <Button variant="secondary" onClick={() => setShowModal(false)}>
-                Cancel
+                {tCommon('cancel')}
               </Button>
               <Button
                 variant="danger"
                 onClick={() => setVerificationStep(true)}
               >
-                Continue
+                {t('continue')}
               </Button>
             </>
           ) : (
@@ -253,21 +270,21 @@ const LeaveOrganization = (): JSX.Element => {
                   setError('');
                 }}
               >
-                Back
+                {t('back')}
               </Button>
               <Button
                 variant="danger"
                 disabled={loading}
                 onClick={handleVerifyAndLeave}
-                aria-label="confirm-leave-button"
+                aria-label={t('confirmLeaveButton')}
               >
                 {loading ? (
                   <>
-                    <Spinner animation="border" size="sm" role="status" />
-                    {' Loading...'}
+                    <Spinner animation="border" size="sm" role="status" />{' '}
+                    {tCommon('loading')}
                   </>
                 ) : (
-                  'Confirm'
+                  t('confirm')
                 )}
               </Button>
             </>

@@ -1,6 +1,6 @@
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { Campaign, Search, WarningAmberRounded } from '@mui/icons-material';
-import { Stack, Typography, Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, Stack, Typography } from '@mui/material';
 import { type GridCellParams } from '@mui/x-data-grid';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -13,10 +13,8 @@ import CampaignModal from './modal/CampaignModal';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
 import styles from '../../style/app-fixed.module.css';
 import { currencySymbols } from 'utils/currency';
-import type {
-  InterfaceCampaignInfo,
-  InterfaceQueryOrganizationFundCampaigns,
-} from 'utils/interfaces';
+import type { InterfaceCampaignInfo } from 'utils/interfaces';
+import type { IFundCampaignResult } from 'types/GraphQL/queryResults';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import {
   ReportingRow,
@@ -106,14 +104,7 @@ const orgFundCampaign = (): JSX.Element => {
     loading: campaignLoading,
     error: campaignError,
     refetch: refetchCampaign,
-  }: {
-    data?: {
-      fund: InterfaceQueryOrganizationFundCampaigns;
-    };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(FUND_CAMPAIGN, {
+  } = useQuery<IFundCampaignResult>(FUND_CAMPAIGN, {
     variables: {
       input: { id: fundId },
     },
@@ -121,12 +112,18 @@ const orgFundCampaign = (): JSX.Element => {
   });
 
   const campaignsData = useMemo(() => {
-    return campaignData?.fund?.campaigns?.edges.map((edge) => edge.node) ?? [];
+    return (
+      campaignData?.fund?.campaigns?.edges.map(
+        (edge: { node: { id: string; name: string; goalAmount?: number } }) =>
+          edge.node,
+      ) ?? []
+    );
   }, [campaignData]);
 
   const filteredCampaigns = useMemo(() => {
-    return campaignsData.filter((campaign) =>
-      campaign.name.toLowerCase().includes(searchText.toLowerCase()),
+    return campaignsData.filter(
+      (campaign: { name: string; goalAmount?: number }) =>
+        campaign.name.toLowerCase().includes(searchText.toLowerCase()),
     );
   }, [campaignsData, searchText]);
 
@@ -448,9 +445,11 @@ const orgFundCampaign = (): JSX.Element => {
           ) : (
             <ReportingTable
               rows={
-                filteredCampaigns.map((campaign) => ({
-                  ...campaign,
-                })) as ReportingRow[]
+                filteredCampaigns.map(
+                  (campaign: (typeof filteredCampaigns)[0]) => ({
+                    ...campaign,
+                  }),
+                ) as ReportingRow[]
               }
               columns={columns}
               gridProps={gridProps}

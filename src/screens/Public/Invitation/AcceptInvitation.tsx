@@ -4,7 +4,7 @@
  */
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import {
   VERIFY_EVENT_INVITATION,
   ACCEPT_EVENT_INVITATION,
@@ -14,6 +14,10 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from '../../../utils/useLocalstorage';
+import type {
+  IVerifyEventInvitationResult,
+  IAcceptEventInvitationResult,
+} from 'types/GraphQL/queryResults';
 
 const STORAGE_KEY = 'pendingInvitationToken';
 const AUTH_TOKEN_KEY = 'token';
@@ -28,8 +32,12 @@ const AcceptInvitation = (): JSX.Element => {
 
   const { getItem, setItem, removeItem } = useLocalStorage();
 
-  const [verify] = useMutation(VERIFY_EVENT_INVITATION);
-  const [accept] = useMutation(ACCEPT_EVENT_INVITATION);
+  const [verifyEventInvitation] = useMutation<IVerifyEventInvitationResult>(
+    VERIFY_EVENT_INVITATION,
+  );
+  const [acceptEventInvitation] = useMutation<IAcceptEventInvitationResult>(
+    ACCEPT_EVENT_INVITATION,
+  );
 
   const [loading, setLoading] = useState(true);
   type InviteMetadata = {
@@ -59,7 +67,7 @@ const AcceptInvitation = (): JSX.Element => {
       }
 
       try {
-        const { data } = await verify({
+        const { data } = await verifyEventInvitation({
           variables: {
             input: {
               invitationToken: tok,
@@ -79,7 +87,7 @@ const AcceptInvitation = (): JSX.Element => {
       }
     };
     run();
-  }, [token, verify]);
+  }, [token, verifyEventInvitation, getItem]);
 
   const [isAuthenticated] = useState(() => Boolean(getItem(AUTH_TOKEN_KEY)));
   const requiresConfirmation = Boolean(invite?.inviteeEmailMasked);
@@ -102,7 +110,7 @@ const AcceptInvitation = (): JSX.Element => {
     setIsSubmitting(true);
     try {
       const input = { invitationToken: invite.invitationToken };
-      const { data } = await accept({ variables: { input } });
+      const { data } = await acceptEventInvitation({ variables: { input } });
       if (data && data.acceptEventInvitation) {
         toast.success(t('accepted', { defaultValue: 'Invitation accepted' }));
         removeItem(STORAGE_KEY);

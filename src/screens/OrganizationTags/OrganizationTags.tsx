@@ -33,7 +33,8 @@
  * @function redirectToSubTags - Navigates to the sub-tags page for a specific tag.
  * @function handleSortChange - Updates the sorting order of tags.
  */
-import { useMutation, useQuery } from '@apollo/client';
+
+import { useMutation, useQuery } from '@apollo/client/react';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { useNavigate, useParams, Link } from 'react-router';
 import type { ChangeEvent } from 'react';
@@ -46,13 +47,19 @@ import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import IconComponent from 'components/IconComponent/IconComponent';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import type { InterfaceTagDataPG } from 'utils/interfaces';
+import type {
+  InterfaceTagDataPG,
+  InterfaceQueryOrganizationUserTags,
+} from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import type { GridCellParams } from '@mui/x-data-grid';
-import type {
-  InterfaceOrganizationTagsQueryPG,
-  SortedByType,
+import {
+  TAGS_QUERY_DATA_CHUNK_SIZE,
+  dataGridStyle,
+  type InterfaceOrganizationTagsQuery,
+  type SortedByType,
 } from 'utils/organizationTagsUtils';
+import { COLUMN_BUFFER_PX } from 'types/ReportingTable/utils';
 import type {
   ReportingRow,
   ReportingTableColumn,
@@ -61,12 +68,7 @@ import type {
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Stack } from '@mui/material';
-import {
-  dataGridStyle,
-  COLUMN_BUFFER_PX,
-  PAGE_SIZE,
-} from '../../types/ReportingTable/utils';
-import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
+import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import PageHeader from 'shared-components/Navbar/Navbar';
 
@@ -99,42 +101,54 @@ function OrganizationTags(): JSX.Element {
     data: orgUserTagsData,
     error: orgUserTagsError,
     refetch: orgUserTagsRefetch,
-    fetchMore: fetchMoreTags,
-  }: InterfaceOrganizationTagsQueryPG = useQuery(
-    ORGANIZATION_USER_TAGS_LIST_PG,
-    {
-      variables: {
-        input: { id: orgId },
-        first: PAGE_SIZE,
-        where: { name: { starts_with: tagSearchName } },
-        sortedBy: { id: tagSortOrder },
-      },
+    fetchMore,
+  }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST, {
+    variables: {
+      id: orgId,
+      first: TAGS_QUERY_DATA_CHUNK_SIZE,
+      where: { name: { starts_with: tagSearchName } },
+      sortedBy: { id: tagSortOrder },
     },
-  );
+  });
 
   useEffect(() => {
     orgUserTagsRefetch();
   }, []);
 
   const loadMoreTags = (): void => {
-    if (!orgUserTagsData?.organization?.tags?.pageInfo?.hasNextPage) return;
-    fetchMoreTags({
+    const currentOrg = orgUserTagsData?.organizations?.[0];
+    if (!currentOrg?.userTags?.pageInfo?.hasNextPage) return;
+    fetchMore({
       variables: {
-        after: orgUserTagsData?.organization?.tags?.pageInfo?.endCursor,
+        after: currentOrg.userTags.pageInfo.endCursor,
       },
-      updateQuery: (prevResult, { fetchMoreResult }) => {
+      updateQuery: (
+        prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
+        {
+          fetchMoreResult,
+        }: {
+          fetchMoreResult: {
+            organizations: InterfaceQueryOrganizationUserTags[];
+          };
+        },
+      ) => {
         if (!fetchMoreResult) return prevResult;
+        const prevOrg = prevResult.organizations[0];
+        const newOrg = fetchMoreResult.organizations[0];
+        if (!prevOrg || !newOrg) return prevResult;
         return {
-          organization: {
-            ...fetchMoreResult.organization,
-            tags: {
-              ...fetchMoreResult.organization.tags,
-              edges: [
-                ...(prevResult.organization?.tags?.edges || []),
-                ...(fetchMoreResult.organization?.tags?.edges || []),
-              ],
+          organizations: [
+            {
+              ...newOrg,
+              userTags: {
+                ...newOrg.userTags,
+                edges: [
+                  ...(prevOrg.userTags?.edges || []),
+                  ...(newOrg.userTags?.edges || []),
+                ],
+              },
             },
-          },
+          ],
         };
       },
     });
@@ -154,7 +168,7 @@ function OrganizationTags(): JSX.Element {
       const { data } = await create({
         variables: { name: tagName, organizationId: orgId },
       });
-      if (data) {
+      if ((data as { createUserTag: unknown })?.createUserTag) {
         NotificationToast.success(t('tagCreationSuccess'));
         orgUserTagsRefetch();
         setTagName('');
@@ -183,8 +197,8 @@ function OrganizationTags(): JSX.Element {
   };
 
   const userTagsList =
-    orgUserTagsData?.organization?.tags?.edges?.map(
-      (edge: { node: InterfaceTagDataPG }) => edge.node,
+    orgUserTagsData?.organizations?.[0]?.userTags?.edges?.map(
+      (edge) => (edge as unknown as { node: InterfaceTagDataPG }).node,
     ) || [];
 
   const redirectToManageTag = (tagId: string): void => {
@@ -412,7 +426,7 @@ function OrganizationTags(): JSX.Element {
                   dataLength={userTagsList?.length ?? 0}
                   next={loadMoreTags}
                   hasMore={
-                    orgUserTagsData?.organization?.tags?.pageInfo
+                    orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo
                       ?.hasNextPage ?? false
                   }
                   loader={

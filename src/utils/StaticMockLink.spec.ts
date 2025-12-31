@@ -1,15 +1,18 @@
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { StaticMockLink, mockSingleLink } from './StaticMockLink';
-import type { Observer } from '@apollo/client';
-import type { MockedResponse } from '@apollo/react-testing';
 import { gql, Observable } from '@apollo/client';
+import type { MockedResponse } from '@apollo/client/testing';
+import { ApolloClient, type Operation, type ApolloLink } from '@apollo/client';
+
 import { print } from 'graphql';
-import type { FetchResult, Operation } from '@apollo/client/link/core';
 import { equal } from '@wry/equality';
 
 class TestableStaticMockLink extends StaticMockLink {
   public setErrorHandler(
-    handler: (error: unknown, observer?: Observer<FetchResult>) => false | void,
+    handler: (
+      error: Error,
+      observer?: { error: (e: Error) => void } | null,
+    ) => boolean,
   ): void {
     this.onError = handler;
   }
@@ -39,27 +42,27 @@ const sampleQuery = gql`
     }
   }
 `;
-const operation: Operation = {
+const operation: ApolloLink.Operation = {
   query: sampleQuery,
   variables: { id: '2' },
   operationName: 'SampleQuery',
   extensions: {},
   setContext: () => {},
   getContext: () => ({}),
-};
-const oper: Operation = {
+} as unknown as ApolloLink.Operation;
+const oper: ApolloLink.Operation = {
   query: sampleQuery,
   variables: { id: '1' },
   operationName: 'SampleQuery',
   extensions: {},
   setContext: () => {},
   getContext: () => ({}),
-};
+} as unknown as ApolloLink.Operation;
 
 function createOperation(
   query: import('graphql').DocumentNode,
   variables: Record<string, unknown> = {},
-): Operation {
+): ApolloLink.Operation {
   return {
     query,
     variables,
@@ -67,9 +70,9 @@ function createOperation(
     extensions: {},
     setContext: () => {},
     getContext: () => ({}),
-  };
+  } as unknown as ApolloLink.Operation;
 }
-const operation2: Operation = {
+const operation2: ApolloLink.Operation = {
   query: gql`
     query TestQuery {
       field
@@ -80,7 +83,7 @@ const operation2: Operation = {
   extensions: {},
   setContext: () => {},
   getContext: () => ({}),
-};
+} as unknown as ApolloLink.Operation;
 const operation3 = {
   query: TEST_QUERY,
   variables: { id: '1' },
@@ -88,7 +91,7 @@ const operation3 = {
   extensions: {},
   setContext: () => {},
   getContext: () => ({}),
-};
+} as unknown as ApolloLink.Operation;
 const sampleResponse = {
   data: {
     user: {
@@ -418,7 +421,12 @@ describe('mockSingleLink', () => {
       getContext: () => ({}),
     };
 
-    const observable = link.request(operation4);
+    const operation4Complete: ApolloLink.Operation = {
+      ...operation4,
+      operationType: 'query',
+      client: {} as unknown as ApolloClient,
+    } as ApolloLink.Operation;
+    const observable = link.request(operation4Complete);
 
     expect(observable).toBeInstanceOf(Observable);
 
@@ -572,14 +580,17 @@ describe('mockSingleLink', () => {
 
     mockLink.addMockedResponse(mockedResponse);
 
-    const observable = mockLink.request({
+    const operation = {
       query: sampleQuery,
       variables: {},
       operationName: '',
       extensions: {},
       setContext: () => {},
       getContext: () => ({}),
-    });
+      operationType: 'query' as const,
+      client: {} as unknown as ApolloClient,
+    } as unknown as ApolloLink.Operation;
+    const observable = mockLink.request(operation);
 
     return new Promise<void>((resolve) => {
       observable?.subscribe({
@@ -766,7 +777,9 @@ describe('StaticMockLink variableMatcher', () => {
       extensions: {},
       setContext: () => {},
       getContext: () => ({}),
-    };
+      operationType: 'query',
+      client: {} as unknown as ApolloClient,
+    } as Operation;
   }
 
   function runOperation(

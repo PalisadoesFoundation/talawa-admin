@@ -39,7 +39,8 @@
  *
  * @returns {JSX.Element} The ForgotPassword component.
  */
-import { useMutation } from '@apollo/client';
+
+import { useMutation } from '@apollo/client/react';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router';
@@ -59,6 +60,10 @@ import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
+import type {
+  IGenerateOtpResult,
+  IForgotPasswordResult,
+} from 'types/GraphQL/queryResults';
 
 const ForgotPassword = (): JSX.Element => {
   // Translation hook for internationalization
@@ -84,10 +89,11 @@ const ForgotPassword = (): JSX.Element => {
   });
 
   // GraphQL mutations
-  const [otp, { loading: otpLoading }] = useMutation(GENERATE_OTP_MUTATION);
-  const [forgotPassword, { loading: forgotPasswordLoading }] = useMutation(
-    FORGOT_PASSWORD_MUTATION,
+  const [otp, { loading: otpLoading }] = useMutation<IGenerateOtpResult>(
+    GENERATE_OTP_MUTATION,
   );
+  const [sendForGotPasswordMail, { loading: forgotPasswordLoading }] =
+    useMutation<IForgotPasswordResult>(FORGOT_PASSWORD_MUTATION);
 
   // Check if the user is already logged in
   const isLoggedIn = getItem('IsLoggedIn');
@@ -111,7 +117,9 @@ const ForgotPassword = (): JSX.Element => {
     try {
       const { data } = await otp({ variables: { email: registeredEmail } });
 
-      setItem('otpToken', data.otp.otpToken);
+      if (data?.otp) {
+        setItem('otpToken', data.otp.otpToken);
+      }
       NotificationToast.success(t('OTPsent'));
       setShowEnterEmail(false);
     } catch (error: unknown) {
@@ -134,7 +142,7 @@ const ForgotPassword = (): JSX.Element => {
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
-    const { userOtp, newPassword, confirmNewPassword } = forgotPassFormData;
+    const { newPassword, confirmNewPassword } = forgotPassFormData;
 
     if (newPassword !== confirmNewPassword) {
       NotificationToast.error(t('passwordMismatches'));
@@ -148,8 +156,12 @@ const ForgotPassword = (): JSX.Element => {
     }
 
     try {
-      const { data } = await forgotPassword({
-        variables: { userOtp, newPassword, otpToken },
+      const { data } = await sendForGotPasswordMail({
+        variables: {
+          email: registeredEmail,
+          password: newPassword,
+          confirmPassword: confirmNewPassword,
+        },
       });
 
       if (data) {

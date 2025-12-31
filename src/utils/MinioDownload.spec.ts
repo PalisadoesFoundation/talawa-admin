@@ -1,10 +1,13 @@
 import { describe, it, expect, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useMinioDownload } from './MinioDownload';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 
-vi.mock('@apollo/client', () => ({
-  useMutation: vi.fn(),
+vi.mock('@apollo/client/react', () => ({
+  useMutation: vi.fn(() => [
+    vi.fn().mockResolvedValue({ data: { downloadFile: 'mock-url' } }),
+    { loading: false, error: null },
+  ]),
 }));
 
 describe('useMinioDownload', () => {

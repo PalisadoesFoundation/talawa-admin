@@ -4,7 +4,7 @@
 
 # Interface: InterfaceAdminSearchFilterBarAdvanced
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:294](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L294)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:293](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L293)
 
 Configuration for AdminSearchFilterBar with search and dropdown functionality.
 
@@ -78,7 +78,7 @@ sorting/filtering dropdowns.
 
 > `optional` **additionalButtons**: `ReactNode`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:336](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L336)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:334](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L334)
 
 Optional additional React elements to render after the dropdowns.
 **Job:** Allows inserting custom buttons or components (e.g., "Upload Plugin" button).
@@ -155,7 +155,7 @@ This prevents excessive API calls while the user is actively typing.
 
 > **dropdowns**: [`InterfaceDropdownConfig`](InterfaceDropdownConfig.md)[]
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:321](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L321)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:319](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L319)
 
 Array of dropdown configurations for sorting and filtering.
 **Job:** Defines all the dropdown controls that appear alongside the search bar.
@@ -183,7 +183,7 @@ dropdowns={[
 
 > **hasDropdowns**: `true`
 
-Defined in: [src/types/AdminSearchFilterBar/interface.ts:300](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L300)
+Defined in: [src/types/AdminSearchFilterBar/interface.ts:298](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminSearchFilterBar/interface.ts#L298)
 
 Discriminator property indicating this variant has dropdowns.
 **Job:** When `true`, the `dropdowns` property must be provided.

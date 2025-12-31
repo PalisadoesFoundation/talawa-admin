@@ -13,7 +13,7 @@ beforeAll(() => {
 
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { PRESIGNED_URL } from 'GraphQl/Mutations/mutations';
 import { useMinioUpload } from './MinioUpload';
 import { vi, type Mock } from 'vitest';

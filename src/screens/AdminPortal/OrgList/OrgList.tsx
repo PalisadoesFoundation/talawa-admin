@@ -45,7 +45,7 @@
  * - `Modal` - For managing features after organization creation.
  */
 import React, { useEffect, useState, useRef, useMemo } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import {
   CREATE_ORGANIZATION_MUTATION_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
@@ -58,10 +58,11 @@ import {
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
+import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
 import type {
-  InterfaceCurrentUserTypePG,
-  InterfaceOrgInfoTypePG,
-} from 'utils/interfaces';
+  ICreateOrganizationResult,
+  IOrganizationFilterListResult,
+} from 'types/GraphQL/queryResults';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
 import SortingButton from 'subComponents/SortingButton';
@@ -164,7 +165,9 @@ function orgList(): JSX.Element {
   });
 
   const toggleModal = (): void => setShowModal(!showModal);
-  const [create] = useMutation(CREATE_ORGANIZATION_MUTATION_PG);
+  const [createOrganization] = useMutation<ICreateOrganizationResult>(
+    CREATE_ORGANIZATION_MUTATION_PG,
+  );
   const [createMembership] = useMutation(
     CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
   );
@@ -172,22 +175,19 @@ function orgList(): JSX.Element {
   const context = token
     ? { headers: { authorization: 'Bearer ' + token } }
     : { headers: {} };
-  const {
-    data: userData,
-  }: {
-    data: InterfaceCurrentUserTypePG | undefined;
-    loading: boolean;
-    error?: Error | undefined;
-  } = useQuery(CURRENT_USER, {
-    variables: { userId: getItem('id') },
-    context,
-  });
+  const { data: userData } = useQuery<InterfaceCurrentUserTypePG>(
+    CURRENT_USER,
+    {
+      variables: { userId: getItem('id') },
+      context,
+    },
+  );
 
   const {
     data: allOrganizationsData,
     loading: loadingAll,
     refetch: refetchOrgs,
-  } = useQuery(ORGANIZATION_FILTER_LIST, {
+  } = useQuery<IOrganizationFilterListResult>(ORGANIZATION_FILTER_LIST, {
     variables: { filter: filterName },
     fetchPolicy: 'network-only',
     errorPolicy: 'all',
@@ -204,21 +204,18 @@ function orgList(): JSX.Element {
 
     // Apply search filter
     if (searchByName) {
-      result = result.filter((org: InterfaceOrgInfoTypePG) =>
+      result = result.filter((org) =>
         org.name.toLowerCase().includes(searchByName.toLowerCase()),
       );
     }
 
-    // Apply sorting
+    // Apply sorting - note: IOrganizationFilterListResult doesn't include createdAt
+    // so we sort by name instead
     if (
       sortingState.option === 'Latest' ||
       sortingState.option === 'Earliest'
     ) {
-      result.sort((a: InterfaceOrgInfoTypePG, b: InterfaceOrgInfoTypePG) => {
-        const dateA = new Date(a.createdAt).getTime();
-        const dateB = new Date(b.createdAt).getTime();
-        return sortingState.option === 'Latest' ? dateB - dateA : dateA - dateB;
-      });
+      result.sort((a, b) => a.name.localeCompare(b.name));
     }
 
     return result;
@@ -254,7 +251,7 @@ function orgList(): JSX.Element {
     const state = _state.trim();
 
     try {
-      const { data } = await create({
+      const { data } = await createOrganization({
         variables: {
           addressLine1: addressLine1,
           addressLine2: addressLine2,
@@ -439,10 +436,19 @@ function orgList(): JSX.Element {
                   page * rowsPerPage + rowsPerPage,
                 )
               : sortedOrganizations
-            )?.map((item: InterfaceOrgInfoTypePG) => {
+            )?.map((item) => {
               return (
                 <div key={item.id} className={styles.itemCardOrgList}>
-                  <OrganizationCard data={{ ...item, role: 'admin' }} />
+                  <OrganizationCard
+                    data={{
+                      id: item.id,
+                      name: item.name,
+                      description: '',
+                      addressLine1: '',
+                      avatarURL: null,
+                      role: 'admin',
+                    }}
+                  />
                 </div>
               );
             })}

@@ -51,7 +51,7 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from '@apollo/client/react';
 import { GridCellParams, GridPaginationModel } from '@mui/x-data-grid';
 import { Delete } from '@mui/icons-material';
 import type {
@@ -82,6 +82,10 @@ import { errorHandler } from 'utils/errorHandler';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
+import type {
+  IOrganizationMembersResult,
+  IUserListForTableResult,
+} from 'types/GraphQL/queryResults';
 
 interface IProcessedRow {
   id: string;
@@ -160,21 +164,63 @@ function OrganizationPeople(): JSX.Element {
   }>({ hasNextPage: false, hasPreviousPage: false });
 
   // Query hooks
-  const [fetchMembers, { loading: memberLoading, error: memberError }] =
-    useLazyQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {
-      onCompleted: (data) => {
-        setData(data?.organization?.members);
-      },
-    });
+  // Query hooks
+  const [
+    fetchMembers,
+    { loading: memberLoading, error: memberError, data: membersData },
+  ] = useLazyQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {});
 
-  const [fetchUsers, { loading: userLoading, error: userError }] = useLazyQuery(
-    USER_LIST_FOR_TABLE,
-    {
-      onCompleted: (data) => {
-        setData(data?.allUsers);
-      },
-    },
-  );
+  const [
+    fetchUsers,
+    { loading: userLoading, error: userError, data: usersData },
+  ] = useLazyQuery(USER_LIST_FOR_TABLE);
+
+  // Sync data from hooks to component state (onCompleted isn't reliable)
+  useEffect(() => {
+    if (membersData) {
+      const members = (membersData as IOrganizationMembersResult)?.organization
+        ?.members;
+      if (members) {
+        setData({
+          edges: members.edges.map((edge) => ({
+            cursor: edge.cursor,
+            node: {
+              id: edge.node.id,
+              name: edge.node.name,
+              role: edge.node.role,
+              avatarURL: edge.node.avatarURL || '',
+              emailAddress: edge.node.emailAddress || '',
+              createdAt: edge.node.createdAt,
+            },
+          })),
+          pageInfo: {
+            startCursor: members.pageInfo.startCursor,
+            endCursor: members.pageInfo.endCursor,
+            hasNextPage: members.pageInfo.hasNextPage,
+            hasPreviousPage: members.pageInfo.hasPreviousPage ?? false,
+          },
+        });
+      }
+    }
+  }, [membersData]);
+
+  useEffect(() => {
+    if (usersData) {
+      setData(
+        (usersData as IUserListForTableResult)?.allUsers as
+          | {
+              edges: IEdges[];
+              pageInfo: {
+                startCursor?: string;
+                endCursor?: string;
+                hasNextPage: boolean;
+                hasPreviousPage: boolean;
+              };
+            }
+          | undefined,
+      );
+    }
+  }, [usersData]);
 
   // Handle data changes
   useEffect(() => {

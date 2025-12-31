@@ -40,7 +40,8 @@
  *
  * @returns {JSX.Element} The rendered AddMember component.
  */
-import { useLazyQuery, useMutation, useQuery } from '@apollo/client';
+
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client/react';
 import { Check, Close } from '@mui/icons-material';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import Paper from '@mui/material/Paper';
@@ -67,12 +68,16 @@ import { Link, useParams } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
+import type {
+  IUserListForTableResult,
+  ICreateOrganizationMembershipResult,
+} from 'types/GraphQL/queryResults';
 import styles from 'style/app-fixed.module.css';
 import Avatar from 'components/Avatar/Avatar';
 import { TablePagination } from '@mui/material';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import type { IEdge, IUserDetails, IQueryVariable } from './types';
+import type { IQueryVariable } from './types';
 
 // Removed StyledTableCell and StyledTableRow in favor of CSS modules
 
@@ -103,9 +108,7 @@ function AddMember(): JSX.Element {
   const [
     fetchUsers,
     { loading: userLoading, error: userError, data: userData },
-  ] = useLazyQuery(USER_LIST_FOR_TABLE, {
-    variables: { first: PAGE_SIZE, after: null, last: null, before: null },
-  });
+  ] = useLazyQuery<IUserListForTableResult>(USER_LIST_FOR_TABLE);
 
   const openAddUserModal = () => setAddUserModalIsOpen(true);
   useEffect(() => {
@@ -118,7 +121,9 @@ function AddMember(): JSX.Element {
     useState(false);
   const openCreateNewUserModal = () => setCreateNewUserModalIsOpen(true);
   const closeCreateNewUserModal = () => setCreateNewUserModalIsOpen(false);
-  const [addMember] = useMutation(CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG);
+  const [addMember] = useMutation<ICreateOrganizationMembershipResult>(
+    CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
+  );
   const createMember = async (userId: string): Promise<void> => {
     try {
       await addMember({
@@ -147,7 +152,9 @@ function AddMember(): JSX.Element {
     data: organizationData,
   }: { data?: { organization: InterfaceQueryOrganizationsListObject } } =
     useQuery(GET_ORGANIZATION_BASIC_DATA, { variables: { id: currentUrl } });
-  const [registerMutation] = useMutation(CREATE_MEMBER_PG);
+  const [registerMutation] = useMutation<{
+    createUser: { user: { id: string } };
+  }>(CREATE_MEMBER_PG);
   const [createUserVariables, setCreateUserVariables] = React.useState({
     name: '',
     email: '',
@@ -184,8 +191,10 @@ function AddMember(): JSX.Element {
             isEmailAddressVerified: true,
           },
         });
-        const createdUserId = registeredUser?.data.createUser.user.id;
-        await createMember(createdUserId);
+        const createdUserId = registeredUser?.data?.createUser.user.id;
+        if (createdUserId) {
+          await createMember(createdUserId);
+        }
         closeCreateNewUserModal();
         setCreateUserVariables({
           name: '',
@@ -246,15 +255,15 @@ function AddMember(): JSX.Element {
     if (userData?.allUsers) {
       const { pageInfo } = userData.allUsers;
       const pageIndex = responsePageRef.current;
-      if (pageInfo.endCursor) {
+      if (pageInfo?.endCursor) {
         mapPageToCursor.current[pageIndex + 1] = pageInfo.endCursor;
       }
-      if (pageIndex > 0 && pageInfo.startCursor) {
+      if (pageIndex > 0 && pageInfo?.startCursor) {
         backwardMapPageToCursor.current[pageIndex - 1] = pageInfo.startCursor;
       }
       setPaginationMeta({
-        hasNextPage: pageInfo.hasNextPage,
-        hasPreviousPage: pageInfo.hasPreviousPage,
+        hasNextPage: pageInfo?.hasNextPage ?? false,
+        hasPreviousPage: pageInfo?.hasPreviousPage ?? false,
       });
     }
   }, [userData]);
@@ -283,7 +292,7 @@ function AddMember(): JSX.Element {
     fetchUsers({ variables });
   };
   const allUsersData =
-    userData?.allUsers?.edges?.map((edge: IEdge) => edge.node) || [];
+    userData?.allUsers?.edges?.map((edge) => edge.node) || [];
   return (
     <>
       <PageHeader
@@ -332,7 +341,7 @@ function AddMember(): JSX.Element {
                 />
               </div>
               <TableContainer component={Paper}>
-                <Table aria-label="customized table">
+                <Table aria-label={translateOrgPeople('customizedTable')}>
                   <TableHead>
                     <TableRow>
                       <TableCell className={styles.tableHeadCell}>#</TableCell>
@@ -364,7 +373,7 @@ function AddMember(): JSX.Element {
                           align="center"
                           className={styles.tableBodyCell}
                         >
-                          Loading...
+                          {tCommon('loading')}
                         </TableCell>
                       </TableRow>
                     ) : userError ? (
@@ -374,7 +383,7 @@ function AddMember(): JSX.Element {
                           align="center"
                           className={styles.tableBodyCell}
                         >
-                          Error loading users.
+                          {translateOrgPeople('errorLoadingUsers')}
                         </TableCell>
                       </TableRow>
                     ) : allUsersData.length === 0 ? (
@@ -384,12 +393,13 @@ function AddMember(): JSX.Element {
                           align="center"
                           className={styles.tableBodyCell}
                         >
-                          No users found.
+                          {translateOrgPeople('noUsersFound')}
                         </TableCell>
                       </TableRow>
                     ) : (
-                      allUsersData.map(
-                        (userDetails: IUserDetails, index: number) => (
+                      allUsersData.map((userDetails, index: number) => {
+                        if (!userDetails) return null;
+                        return (
                           <TableRow
                             className={styles.tableRow}
                             data-testid="user"
@@ -410,7 +420,9 @@ function AddMember(): JSX.Element {
                               {userDetails.avatarURL ? (
                                 <img
                                   src={userDetails.avatarURL}
-                                  alt={`${userDetails.name} avatar`}
+                                  alt={translateOrgPeople('userAvatar', {
+                                    name: userDetails.name,
+                                  })}
                                   className={styles.TableImage}
                                   crossOrigin="anonymous"
                                   loading="lazy"
@@ -442,18 +454,19 @@ function AddMember(): JSX.Element {
                             >
                               <Button
                                 onClick={() => {
-                                  createMember(userDetails.id);
+                                  if (userDetails.id)
+                                    createMember(userDetails.id);
                                 }}
                                 data-testid="addBtn"
                                 className={styles.addButton}
                               >
                                 <i className={'fa fa-plus me-2'} />
-                                Add
+                                {tCommon('add')}
                               </Button>
                             </TableCell>
                           </TableRow>
-                        ),
-                      )
+                        );
+                      })
                     )}
                   </TableBody>
                 </Table>
@@ -473,7 +486,9 @@ function AddMember(): JSX.Element {
                   disabled: !paginationMeta.hasNextPage,
                   'aria-label': 'Next Page',
                 }}
-                labelDisplayedRows={({ page }) => `Page ${page + 1}`}
+                labelDisplayedRows={({ page }) =>
+                  translateOrgPeople('pageNumber', { page: page + 1 })
+                }
               />
             </>
           )}

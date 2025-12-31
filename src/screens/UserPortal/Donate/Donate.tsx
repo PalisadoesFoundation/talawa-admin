@@ -47,7 +47,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
-import { useQuery, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
+import type {
+  IDonationConnectionResult,
+  IOrganizationListResult,
+} from 'types/GraphQL/queryResults';
 import SendIcon from '@mui/icons-material/Send';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useTranslation } from 'react-i18next';
@@ -65,10 +69,7 @@ import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/Organ
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import {
-  InterfaceDonation,
-  InterfaceDonationCardProps,
-} from 'types/Donation/interface';
+import { InterfaceDonationCardProps } from 'types/Donation/interface';
 
 export default function donate(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'donate' });
@@ -82,7 +83,16 @@ export default function donate(): JSX.Element {
   const [organizationDetails, setOrganizationDetails] = useState<{
     name: string;
   }>({ name: '' });
-  const [donations, setDonations] = useState([]);
+  const [donations, setDonations] = useState<
+    Array<{
+      _id: string;
+      nameOfUser: string;
+      amount: number;
+      userId: string;
+      payPalId: string;
+      updatedAt: string;
+    }>
+  >([]);
   const [selectedCurrency, setSelectedCurrency] = useState(0);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -93,11 +103,14 @@ export default function donate(): JSX.Element {
     data: donationData,
     loading,
     refetch,
-  } = useQuery(ORGANIZATION_DONATION_CONNECTION_LIST, {
-    variables: { orgId: organizationId },
-  });
+  } = useQuery<IDonationConnectionResult>(
+    ORGANIZATION_DONATION_CONNECTION_LIST,
+    {
+      variables: { orgId: organizationId },
+    },
+  );
 
-  const { data } = useQuery(ORGANIZATION_LIST, {
+  const { data } = useQuery<IOrganizationListResult>(ORGANIZATION_LIST, {
     variables: { id: organizationId },
   });
 
@@ -252,7 +265,7 @@ export default function donate(): JSX.Element {
                     className={`d-flex flex-row justify-content-center`}
                     data-testid="loading-state"
                   >
-                    <HourglassBottomIcon /> <span>Loading...</span>
+                    <HourglassBottomIcon /> <span>{t('loading')}</span>
                   </div>
                 ) : (
                   <>
@@ -263,11 +276,11 @@ export default function donate(): JSX.Element {
                             page * rowsPerPage + rowsPerPage,
                           )
                         : donations
-                      ).map((donation: InterfaceDonation, index) => {
+                      ).map((donation, index) => {
                         const cardProps: InterfaceDonationCardProps = {
                           name: donation.nameOfUser,
                           id: donation._id,
-                          amount: donation.amount,
+                          amount: String(donation.amount),
                           userId: donation.userId,
                           payPalId: donation.payPalId,
                           updatedAt: donation.updatedAt,

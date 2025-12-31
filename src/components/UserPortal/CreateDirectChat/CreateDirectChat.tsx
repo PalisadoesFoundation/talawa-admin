@@ -34,13 +34,10 @@ import React, { useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import type {
   ApolloCache,
-  ApolloQueryResult,
-  DefaultContext,
-  FetchResult,
-  MutationFunctionOptions,
   OperationVariables,
+  ApolloLink,
 } from '@apollo/client';
-import { useQuery, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
   CREATE_CHAT,
@@ -71,8 +68,8 @@ interface InterfaceCreateDirectChatProps {
   toggleCreateDirectChatModal: () => void;
   createDirectChatModalisOpen: boolean;
   chatsListRefetch: (
-    variables?: Partial<{ id: string }> | undefined,
-  ) => Promise<ApolloQueryResult<unknown>>;
+    variables?: Partial<OperationVariables>,
+  ) => Promise<unknown>;
   chats: GroupChat[];
 }
 
@@ -86,14 +83,13 @@ export const handleCreateDirectChat = async (
   createChat: {
     (
       options?:
-        | MutationFunctionOptions<
+        | useMutation.MutationFunctionOptions<
             unknown,
             OperationVariables,
-            DefaultContext,
-            ApolloCache<unknown>
+            ApolloCache
           >
         | undefined,
-    ): Promise<FetchResult<unknown>>;
+    ): Promise<ApolloLink.Result<unknown>>;
     (arg0: {
       variables: {
         input: {
@@ -108,14 +104,13 @@ export const handleCreateDirectChat = async (
   createChatMembership: {
     (
       options?:
-        | MutationFunctionOptions<
+        | useMutation.MutationFunctionOptions<
             unknown,
             OperationVariables,
-            DefaultContext,
-            ApolloCache<unknown>
+            ApolloCache
           >
         | undefined,
-    ): Promise<FetchResult<unknown>>;
+    ): Promise<ApolloLink.Result<unknown>>;
     (arg0: {
       variables: {
         input: {
@@ -129,12 +124,9 @@ export const handleCreateDirectChat = async (
   organizationId: string | undefined,
   userId: string | null,
   currentUserName: string,
-  chatsListRefetch: {
-    (
-      variables?: Partial<{ id: string }> | undefined,
-    ): Promise<ApolloQueryResult<unknown>>;
-    (): Promise<ApolloQueryResult<unknown>>;
-  },
+  chatsListRefetch: (
+    variables?: Partial<OperationVariables>,
+  ) => Promise<unknown>,
   toggleCreateDirectChatModal: { (): void; (): void },
 ): Promise<void> => {
   const existingChat = chats.find(
@@ -215,7 +207,13 @@ export default function createDirectChatModal({
     data: allUsersData,
     loading: allUsersLoading,
     refetch: allUsersRefetch,
-  } = useQuery(ORGANIZATION_MEMBERS, {
+  } = useQuery<{
+    organization: {
+      members: {
+        edges: { node: InterfaceOrganizationMember }[];
+      };
+    };
+  }>(ORGANIZATION_MEMBERS, {
     variables: {
       input: { id: organizationId },
       first: 20,

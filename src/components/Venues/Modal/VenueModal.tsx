@@ -37,7 +37,7 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import styles from '../../../style/app-fixed.module.css';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import {
   CREATE_VENUE_MUTATION,
   UPDATE_VENUE_MUTATION,
@@ -89,9 +89,10 @@ const VenueModal = ({
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // Mutation function for creating or updating a venue
-  const [mutate, { loading }] = useMutation(
-    edit ? UPDATE_VENUE_MUTATION : CREATE_VENUE_MUTATION,
-  );
+  const [mutate, { loading }] = useMutation<{
+    createVenue?: { id: string };
+    updateVenue?: { id: string };
+  }>(edit ? UPDATE_VENUE_MUTATION : CREATE_VENUE_MUTATION);
 
   /**
    * Handles form submission to create or update a venue.
@@ -243,7 +244,7 @@ const VenueModal = ({
         ).toString();
         setImagePreviewUrl(previewUrl);
       } catch {
-        toast.error('Error creating preview URL');
+        toast.error(t('errorCreatingPreviewUrl'));
         setImagePreviewUrl(null);
       }
     } else {
@@ -272,17 +273,17 @@ const VenueModal = ({
       const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
 
       if (!allowedTypes.includes(file.type)) {
-        toast.error(`Invalid file type: ${file.name}`);
+        toast.error(t('invalidFileTypeError', { fileName: file.name }));
         return;
       }
 
       if (file.size > maxFileSize) {
-        toast.error(`File too large: ${file.name}`);
+        toast.error(t('fileTooLargeError', { fileName: file.name }));
         return;
       }
 
       if (!file.size) {
-        toast.error('Empty file selected');
+        toast.error(t('emptyFileSelected'));
         return;
       }
 
@@ -370,7 +371,7 @@ const VenueModal = ({
           />
           {imagePreviewUrl && (
             <div className={styles.previewVenueModal}>
-              <img src={imagePreviewUrl} alt="Venue Image Preview" />
+              <img src={imagePreviewUrl} alt={t('venueImagePreview')} />
               <button
                 className={styles.closeButtonP}
                 onClick={clearImageInput}

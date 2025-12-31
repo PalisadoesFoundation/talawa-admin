@@ -1,0 +1,7 @@
+.completedColor {
+  color: var(--success-green-color, green);
+}
+
+.incompleteColor {
+  color: var(--incomplete-color, #ed6c02);
+}

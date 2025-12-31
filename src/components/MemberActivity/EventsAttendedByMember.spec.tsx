@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import EventsAttendedByMember from './EventsAttendedByMember';
 import { BrowserRouter } from 'react-router';
 import { EVENT_DETAILS_BASIC } from 'GraphQl/Queries/Queries';

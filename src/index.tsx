@@ -1,16 +1,12 @@
 import React, { Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router';
-import type { NormalizedCacheObject } from '@apollo/client';
-import {
-  ApolloClient,
-  ApolloProvider,
-  InMemoryCache,
-  split,
-  Observable,
-  fromPromise,
-} from '@apollo/client';
+import { ApolloClient, InMemoryCache, ApolloLink } from '@apollo/client';
+
+import { ApolloProvider } from '@apollo/client/react';
 import { getMainDefinition } from '@apollo/client/utilities';
+import { Observable, from as fromPromise, mergeMap } from 'rxjs';
+import type { Observer } from 'rxjs';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { onError } from '@apollo/link-error';
@@ -18,17 +14,16 @@ import './assets/css/app.css';
 import 'bootstrap/dist/js/bootstrap.min.js'; // Bootstrap JS (ensure Bootstrap is installed)
 import 'react-datepicker/dist/react-datepicker.css'; // React Datepicker Styles
 import 'flag-icons/css/flag-icons.min.css'; // Flag Icons Styles
-import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
+import UploadHttpLink from 'apollo-upload-client/UploadHttpLink.mjs';
 import { Provider } from 'react-redux';
 import { ToastContainer, toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import App from './App';
 import { store } from './state/store';
 import { BACKEND_URL, BACKEND_WEBSOCKET_URL } from 'Constant/constant';
 import { ThemeProvider, createTheme } from '@mui/material';
-import { ApolloLink } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
 import './assets/css/scrollStyles.css';
 import './style/app-fixed.module.css';
@@ -80,8 +75,8 @@ const errorLink = onError(
 
         // Skip token refresh logic for authentication operations (login/signup/logout)
         const operationName = operation.operationName;
-        const authOperations = ['SignIn', 'SignUp', 'RefreshToken', 'Logout'];
-        if (authOperations.includes(operationName)) {
+        const authOperations = ['SignIn', 'SignUp', 'RefreshToken'];
+        if (operationName && authOperations.includes(operationName)) {
           continue;
         }
 
@@ -99,7 +94,7 @@ const errorLink = onError(
 
           // If already refreshing, queue this request
           if (isRefreshing) {
-            return new Observable((observer) => {
+            return new Observable((observer: Observer<unknown>) => {
               pendingRequests.push(() => {
                 const subscriber = {
                   next: observer.next.bind(observer),
@@ -134,16 +129,28 @@ const errorLink = onError(
               .finally(() => {
                 isRefreshing = false;
               }),
-          ).flatMap((success) => {
-            if (success) {
-              // Retry the original request
-              // No need to set headers - HTTP-Only cookies are automatically included
-              return forward(operation);
-            }
-            return new Observable((observer) => {
-              observer.error(error);
-            });
-          });
+          ).pipe(
+            mergeMap((success: boolean) => {
+              if (success) {
+                // Retry the original request with new token
+                const oldHeaders = operation.getContext().headers;
+                const newToken = getItem('token');
+                const authHeaders = newToken
+                  ? { authorization: BEARER_PREFIX + newToken }
+                  : {};
+                operation.setContext({
+                  headers: {
+                    ...oldHeaders,
+                    ...authHeaders,
+                  },
+                });
+                return forward(operation);
+              }
+              return new Observable((observer: Observer<unknown>) => {
+                observer.error(error);
+              });
+            }),
+          );
         }
       }
     }
@@ -157,7 +164,7 @@ const errorLink = onError(
   },
 );
 
-const uploadLink = createUploadLink({
+const uploadLink = new UploadHttpLink({
   uri: BACKEND_URL,
   headers: { 'Apollo-Require-Preflight': 'true' },
   credentials: 'include',
@@ -190,7 +197,7 @@ const httpLink = ApolloLink.from([
 ]);
 
 // The split function routes operations correctly
-const splitLink = split(
+const splitLink = ApolloLink.split(
   ({ query }) => {
     const definition = getMainDefinition(query);
     return (
@@ -205,7 +212,7 @@ const splitLink = split(
 // Simplified combined link
 const combinedLink = ApolloLink.from([errorLink, splitLink]);
 
-export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
+const client: ApolloClient = new ApolloClient({
   cache: new InMemoryCache({
     typePolicies: {
       Query: {
@@ -244,6 +251,7 @@ export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
       },
     },
   }),
+
   link: combinedLink,
 });
 const fallbackLoader = <div className="loader"></div>;

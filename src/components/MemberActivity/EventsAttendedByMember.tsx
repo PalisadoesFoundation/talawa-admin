@@ -23,13 +23,30 @@
  * - Shows an error message if the query fails.
  */
 import React from 'react';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { EVENT_DETAILS_BASIC } from 'GraphQl/Queries/Queries';
 import EventAttendedCard from './Card/EventsAttendedCardItem';
 import { Spinner } from 'react-bootstrap';
 
 interface InterfaceEventsAttendedByMember {
   eventsId: string;
+}
+
+interface EventDetailsBasicData {
+  event: {
+    id: string;
+    _id?: string;
+    name: string;
+    title?: string;
+    location: string;
+    startAt: string;
+    startDate?: string;
+    organization: {
+      id: string;
+      _id?: string;
+      name: string;
+    };
+  };
 }
 
 function EventsAttendedByMember({
@@ -39,7 +56,7 @@ function EventsAttendedByMember({
     data: events,
     loading,
     error,
-  } = useQuery(EVENT_DETAILS_BASIC, {
+  } = useQuery<EventDetailsBasicData>(EVENT_DETAILS_BASIC, {
     variables: { eventId: eventsId },
   });
 
@@ -56,6 +73,8 @@ function EventsAttendedByMember({
         <p>Unable to load event details. Please try again later.</p>
       </div>
     );
+
+  if (!events) return <></>;
 
   // Support both legacy and current schema fields from EVENT_DETAILS
   const { organization, id, _id, startAt, startDate, name, title, location } =

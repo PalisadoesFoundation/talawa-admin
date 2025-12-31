@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { store } from 'state/store';
@@ -562,7 +562,7 @@ describe('CreateGroupChat', () => {
       expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
     });
 
-    const searchInput = screen.getByTestId('searchUser');
+    const searchInput = await screen.findByTestId('searchUser');
     fireEvent.change(searchInput, { target: { value: 'Test User' } });
     expect(searchInput).toHaveValue('Test User');
 

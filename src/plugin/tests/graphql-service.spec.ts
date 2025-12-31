@@ -8,12 +8,9 @@ import {
   useUpdatePlugin,
   useDeletePlugin,
 } from '../graphql-service';
-import {
-  type ApolloClient,
-  useQuery,
-  useMutation,
-  type QueryResult,
-} from '@apollo/client';
+import { type ApolloClient } from '@apollo/client';
+
+import { useMutation, useQuery } from '@apollo/client/react';
 
 // Mock Apollo client
 const mockApolloClient = {
@@ -33,10 +30,9 @@ vi.mock('../GraphQl/Mutations/PluginMutations', () => ({
 }));
 
 // Mock Apollo hooks and gql
-vi.mock('@apollo/client', () => ({
+vi.mock('@apollo/client/react', () => ({
   useQuery: vi.fn(),
-  useMutation: vi.fn(),
-  gql: vi.fn((strings: readonly string[]) => strings.join('')),
+  useMutation: vi.fn(() => [vi.fn()]),
 }));
 
 // Mock i18n to prevent initialization errors
@@ -52,7 +48,7 @@ describe('PluginGraphQLService', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     graphqlService = new PluginGraphQLService(
-      mockApolloClient as unknown as ApolloClient<unknown>,
+      mockApolloClient as unknown as ApolloClient,
     );
   });
 
@@ -379,9 +375,7 @@ describe('GraphQL Hooks', () => {
         called: true,
       };
 
-      vi.mocked(useQuery).mockReturnValue(
-        mockQueryResult as unknown as QueryResult,
-      );
+      vi.mocked(useQuery).mockReturnValue(mockQueryResult as any);
 
       const { result } = renderHook(() => useGetAllPlugins());
 
@@ -402,9 +396,7 @@ describe('GraphQL Hooks', () => {
         called: true,
       };
 
-      vi.mocked(useQuery).mockReturnValue(
-        mockQueryResult as unknown as QueryResult,
-      );
+      vi.mocked(useQuery).mockReturnValue(mockQueryResult as any);
 
       const { result } = renderHook(() => useGetAllPlugins());
 
@@ -424,9 +416,7 @@ describe('GraphQL Hooks', () => {
         called: true,
       };
 
-      vi.mocked(useQuery).mockReturnValue(
-        mockQueryResult as unknown as QueryResult,
-      );
+      vi.mocked(useQuery).mockReturnValue(mockQueryResult as any);
 
       const { result } = renderHook(() => useGetAllPlugins());
 

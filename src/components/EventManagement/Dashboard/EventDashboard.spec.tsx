@@ -5,12 +5,12 @@ import { render, act, fireEvent, waitFor } from '@testing-library/react';
 import EventDashboard from './EventDashboard';
 import { BrowserRouter } from 'react-router';
 import { ToastContainer } from 'react-toastify';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import type { ApolloLink, DefaultOptions } from '@apollo/client';
+import type { ApolloLink, ApolloClient } from '@apollo/client';
 
 import {
   MOCKS_WITHOUT_TIME,
@@ -62,7 +62,7 @@ const mockMissingData = new StaticMockLink(MOCKS_MISSING_DATA, true);
 const mockNoLocation = new StaticMockLink(MOCKS_NO_LOCATION, true);
 const mockInvalidDateTime = new StaticMockLink(MOCKS_INVALID_DATETIME, true);
 
-const defaultOptions: DefaultOptions = {
+const defaultOptions: ApolloClient.DefaultOptions = {
   watchQuery: {
     fetchPolicy: 'no-cache',
     errorPolicy: 'ignore',

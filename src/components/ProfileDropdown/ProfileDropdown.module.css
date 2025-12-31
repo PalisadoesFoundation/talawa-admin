@@ -1,0 +1,3 @@
+.logoutItem {
+  color: var(--closeButton-color, red);
+}

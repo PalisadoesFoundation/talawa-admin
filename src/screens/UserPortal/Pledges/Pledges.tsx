@@ -45,11 +45,9 @@ import type {
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
 } from 'utils/interfaces';
-import {
-  type ApolloError,
-  type ApolloQueryResult,
-  useQuery,
-} from '@apollo/client';
+import { CombinedGraphQLErrors } from '@apollo/client';
+
+import { useQuery } from '@apollo/client/react';
 import { USER_PLEDGES } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
 import {
@@ -95,39 +93,22 @@ const Pledges = (): JSX.Element => {
     [key in ModalState]: boolean;
   }>({ [ModalState.UPDATE]: false, [ModalState.DELETE]: false });
 
-  type PledgeQueryResult = ApolloQueryResult<{
-    getPledgesByUserId: InterfacePledgeInfo[];
-  }>;
-  interface IPledgeRefetchFn {
-    (): Promise<PledgeQueryResult>;
-  }
-  const shouldSkip = !orgId || !userId;
   const {
     data: pledgeData,
     loading: pledgeLoading,
     error: pledgeError,
     refetch: refetchPledge,
-  }: {
-    data?: { getPledgesByUserId: InterfacePledgeInfo[] };
-    loading: boolean;
-    error?: ApolloError;
-    refetch: IPledgeRefetchFn;
-  } = useQuery(USER_PLEDGES, {
-    skip: shouldSkip,
-    variables: shouldSkip
-      ? undefined
-      : {
-          input: { userId: userId as string },
-          where: searchTerm
-            ? {
-                ...(searchBy === 'pledgers' && {
-                  firstName_contains: searchTerm,
-                }),
-                ...(searchBy === 'campaigns' && { name_contains: searchTerm }),
-              }
-            : {},
-          orderBy: sortBy,
-        },
+  } = useQuery<{ getPledgesByUserId: InterfacePledgeInfo[] }>(USER_PLEDGES, {
+    variables: {
+      input: { userId: userId },
+      where: searchTerm
+        ? {
+            ...(searchBy === 'pledgers' && { firstName_contains: searchTerm }),
+            ...(searchBy === 'campaigns' && { name_contains: searchTerm }),
+          }
+        : {},
+      orderBy: sortBy,
+    },
   });
 
   if (!orgId || !userId) {
@@ -159,11 +140,13 @@ const Pledges = (): JSX.Element => {
   );
 
   const isNoPledgesFoundError =
-    pledgeError?.graphQLErrors.some((graphQLError) => {
-      const code = (graphQLError.extensions as { code?: string } | undefined)
-        ?.code;
-      return code === 'arguments_associated_resources_not_found';
-    }) ?? false;
+    (pledgeError instanceof CombinedGraphQLErrors &&
+      pledgeError.errors.some((graphQLError) => {
+        const code = (graphQLError.extensions as { code?: string } | undefined)
+          ?.code;
+        return code === 'arguments_associated_resources_not_found';
+      })) ??
+    false;
 
   useEffect(() => {
     if (pledgeData?.getPledgesByUserId) {

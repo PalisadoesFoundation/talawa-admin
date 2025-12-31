@@ -15,6 +15,10 @@ const mockApolloClient = {
   ),
 };
 
+vi.mock('Constant/constant', () => ({
+  BACKEND_URL: 'http://localhost:4000/graphql',
+}));
+
 vi.mock('@apollo/client', async () => {
   const actual = await vi.importActual('@apollo/client');
   return {

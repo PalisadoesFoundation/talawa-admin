@@ -31,7 +31,7 @@
  *
  */
 import React, { useEffect, useRef, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router';
@@ -63,6 +63,8 @@ import { urlToFile } from 'utils/urlToFile';
 import { validatePassword } from 'utils/passwordValidator';
 import { sanitizeAvatars } from 'utils/sanitizeAvatar';
 import type { IEvent } from 'types/Event/interface';
+import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
+import type { IUpdateCurrentUserResult } from 'types/GraphQL/queryResults';
 
 type MemberDetailProps = { id?: string };
 
@@ -83,7 +85,29 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     document.title = t('title');
   }, [t]);
 
-  const [formState, setFormState] = useState({
+  const [formState, setFormState] = useState<{
+    addressLine1: string;
+    addressLine2: string;
+    birthDate: Date | null;
+    emailAddress: string;
+    city: string;
+    avatar: File | null;
+    avatarURL: string;
+    countryCode: string;
+    description: string;
+    educationGrade: string;
+    employmentStatus: string;
+    homePhoneNumber: string;
+    maritalStatus: string;
+    mobilePhoneNumber: string;
+    name: string;
+    natalSex: string;
+    naturalLanguageCode: string;
+    password: string;
+    postalCode: string;
+    state: string;
+    workPhoneNumber: string;
+  }>({
     addressLine1: '',
     addressLine2: '',
     birthDate: null,
@@ -108,15 +132,45 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   });
 
   // Mutation to update the user details
-  const [updateUser] = useMutation(UPDATE_CURRENT_USER_MUTATION);
-  const { data: userData, loading } = useQuery(CURRENT_USER, {
-    variables: { id: currentId },
-  });
+  const [updateUser] = useMutation<IUpdateCurrentUserResult>(
+    UPDATE_CURRENT_USER_MUTATION,
+  );
+  const { data: userData, loading } = useQuery<InterfaceCurrentUserTypePG>(
+    CURRENT_USER,
+    {
+      variables: { id: currentId },
+    },
+  );
 
   useEffect(() => {
     if (userData?.currentUser) {
-      setFormState(userData.currentUser);
-      originalImageState.current = userData.currentUser.avatarURL || '';
+      const currentUser = userData.currentUser;
+      setFormState({
+        addressLine1: currentUser.addressLine1 || '',
+        addressLine2: currentUser.addressLine2 || '',
+        birthDate: currentUser.birthDate
+          ? new Date(currentUser.birthDate)
+          : null,
+        emailAddress: currentUser.emailAddress || '',
+        city: currentUser.city || '',
+        avatar: null,
+        avatarURL: currentUser.avatarURL || '',
+        countryCode: currentUser.countryCode || '',
+        description: currentUser.description || '',
+        educationGrade: currentUser.educationGrade || '',
+        employmentStatus: currentUser.employmentStatus || '',
+        homePhoneNumber: currentUser.homePhoneNumber || '',
+        maritalStatus: currentUser.maritalStatus || '',
+        mobilePhoneNumber: currentUser.mobilePhoneNumber || '',
+        name: currentUser.name || '',
+        natalSex: currentUser.natalSex || '',
+        naturalLanguageCode: currentUser.naturalLanguageCode || '',
+        password: '',
+        postalCode: currentUser.postalCode || '',
+        state: currentUser.state || '',
+        workPhoneNumber: currentUser.workPhoneNumber || '',
+      });
+      originalImageState.current = currentUser.avatarURL || '';
     }
   }, [userData]);
 
@@ -143,7 +197,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       }
 
       if (file.size > maxSize) {
-        NotificationToast.error(tCommon('fileTooLarge', { size: 5 }) as string);
+        NotificationToast.error(t('fileTooLarge'));
         return;
       }
 
@@ -161,9 +215,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     // password validation
     if (fieldName === 'password' && value) {
       if (!validatePassword(value)) {
-        NotificationToast.error(
-          tCommon('passwordLengthRequirement', { length: 8 }) as string,
-        );
+        NotificationToast.error(t('passwordTooShort'));
         return;
       }
     }
@@ -175,9 +227,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   // Function to handle the update of the user details
   const handleUserUpdate = async (): Promise<void> => {
     // Remove empty fields from the form state
-    function removeEmptyFields<T extends Record<string, string | File | null>>(
-      obj: T,
-    ): Partial<T> {
+    function removeEmptyFields<
+      T extends Record<string, string | File | Date | null>,
+    >(obj: T): Partial<T> {
       return Object.fromEntries(
         Object.entries(obj).filter(
           ([, value]) =>
@@ -199,7 +251,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
       }
     }
 
-    const data: Omit<typeof formState, 'avatarURL' | 'emailAddress'> = {
+    const data = {
       addressLine1: formState.addressLine1,
       addressLine2: formState.addressLine2,
       birthDate: formState.birthDate,
@@ -255,9 +307,31 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const resetChanges = (): void => {
     setisUpdated(false);
     if (userData?.currentUser) {
+      const currentUser = userData.currentUser;
       setFormState({
-        ...userData.currentUser,
-        avatar: originalImageState.current,
+        addressLine1: currentUser.addressLine1 || '',
+        addressLine2: currentUser.addressLine2 || '',
+        birthDate: currentUser.birthDate
+          ? new Date(currentUser.birthDate)
+          : null,
+        emailAddress: currentUser.emailAddress || '',
+        city: currentUser.city || '',
+        avatar: null,
+        avatarURL: currentUser.avatarURL || '',
+        countryCode: currentUser.countryCode || '',
+        description: currentUser.description || '',
+        educationGrade: currentUser.educationGrade || '',
+        employmentStatus: currentUser.employmentStatus || '',
+        homePhoneNumber: currentUser.homePhoneNumber || '',
+        maritalStatus: currentUser.maritalStatus || '',
+        mobilePhoneNumber: currentUser.mobilePhoneNumber || '',
+        name: currentUser.name || '',
+        natalSex: currentUser.natalSex || '',
+        naturalLanguageCode: currentUser.naturalLanguageCode || '',
+        password: '',
+        postalCode: currentUser.postalCode || '',
+        state: currentUser.state || '',
+        workPhoneNumber: currentUser.workPhoneNumber || '',
       });
     }
   };
@@ -270,7 +344,17 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       {show && (
         <MemberAttendedEventsModal
-          eventsAttended={userData?.currentUser?.eventsAttended || []}
+          eventsAttended={
+            userData?.currentUser?.eventsAttended?.edges
+              ? (
+                  userData.currentUser.eventsAttended.edges as Array<{
+                    node?: Partial<IEvent>;
+                  }>
+                )
+                  .map((edge) => edge.node)
+                  .filter((node): node is Partial<IEvent> => node !== undefined)
+              : []
+          }
           show={show}
           setShow={setShow}
         />
@@ -290,8 +374,8 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                 className="rounded-pill fw-bolder"
               >
                 {userData?.currentUser?.role === 'administrator'
-                  ? tCommon('Admin')
-                  : tCommon('User')}
+                  ? tCommon('admin')
+                  : tCommon('user')}
               </Button>
             </Card.Header>
             <Card.Body className="py-3 px-3">
@@ -305,14 +389,14 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                           selectedAvatar,
                           formState.avatarURL,
                         )}
-                        alt={tCommon('user')}
+                        alt={t('userImage')}
                         data-testid="profile-picture"
                         crossOrigin="anonymous" // to avoid Cors
                       />
                     ) : (
                       <Avatar
                         name={formState.name}
-                        alt={tCommon('displayImage')}
+                        alt={t('userImage')}
                         size={60}
                         dataTestId="profile-picture"
                         radius={150}
@@ -323,8 +407,9 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       className={`fas fa-edit position-absolute border-0 bottom-0 right-0 p-2 bg-white rounded-circle ${memberDetailStyles.editProfileIcon}`}
                       onClick={() => fileInputRef.current?.click()}
                       data-testid="uploadImageBtn"
-                      title={`${tCommon('edit')} ${tCommon('profilePicture')}`}
-                      aria-label={`${tCommon('edit')} ${tCommon('profilePicture')}`}
+                      title={t('editProfilePicture')}
+                      role="button"
+                      aria-label={t('editProfilePicture')}
                       tabIndex={0}
                       onKeyDown={(e) =>
                         e.key === 'Enter' && fileInputRef.current?.click()
@@ -473,7 +558,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       handleFieldChange('description', e.target.value)
                     }
                     required
-                    placeholder={tCommon('enterDescription')}
+                    placeholder={t('enterDescription')}
                   />
                 </Col>
               </Row>
@@ -500,22 +585,26 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
               <Card.Body
                 className={`${styles.cardBody} px-4 ${styles.scrollableCardBody}`}
               >
-                {!userData?.currentUser?.eventsAttended?.length ? (
+                {!userData?.currentUser?.eventsAttended?.edges?.length ? (
                   <div
                     className={`${styles.emptyContainer} w-100 h-100 d-flex justify-content-center align-items-center fw-semibold text-secondary`}
                   >
                     {t('noeventsAttended')}
                   </div>
                 ) : (
-                  userData.currentUser.eventsAttended.map(
-                    (event: IEvent, index: number) => (
+                  (
+                    userData.currentUser.eventsAttended.edges as Array<{
+                      node?: { id?: string };
+                    }>
+                  ).map((edge, index: number) =>
+                    edge.node?.id ? (
                       <span data-testid="membereventsCard" key={index}>
                         <EventsAttendedByMember
-                          eventsId={event.id}
+                          eventsId={edge.node.id}
                           key={index}
                         />
                       </span>
-                    ),
+                    ) : null,
                   )
                 )}
               </Card.Body>
@@ -561,9 +650,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     onChange={(e) =>
                       handleFieldChange('mobilePhoneNumber', e.target.value)
                     }
-                    placeholder={
-                      tCommon('example', { example: '+1234567890' }) as string
-                    }
+                    placeholder={t('phoneNumberPlaceholder')}
                   />
                 </Col>
                 <Col md={12}>
@@ -580,9 +667,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     onChange={(e) =>
                       handleFieldChange('workPhoneNumber', e.target.value)
                     }
-                    placeholder={
-                      tCommon('example', { example: '+1234567890' }) as string
-                    }
+                    placeholder={t('phoneNumberPlaceholder')}
                   />
                 </Col>
                 <Col md={12}>
@@ -599,9 +684,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     onChange={(e) =>
                       handleFieldChange('homePhoneNumber', e.target.value)
                     }
-                    placeholder={
-                      tCommon('example', { example: '+1234567890' }) as string
-                    }
+                    placeholder={t('phoneNumberPlaceholder')}
                   />
                 </Col>
                 <Col md={12}>
@@ -618,9 +701,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     onChange={(e) =>
                       handleFieldChange('addressLine1', e.target.value)
                     }
-                    placeholder={
-                      tCommon('example', { example: 'Lane 1' }) as string
-                    }
+                    placeholder={t('addressPlaceholder')}
                   />
                 </Col>
                 <Col md={12}>
@@ -637,9 +718,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     onChange={(e) =>
                       handleFieldChange('addressLine2', e.target.value)
                     }
-                    placeholder={
-                      tCommon('example', { example: 'Lane 2' }) as string
-                    }
+                    placeholder={t('addressPlaceholder')}
                   />
                 </Col>
                 <Col md={12}>
@@ -656,11 +735,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     onChange={(e) =>
                       handleFieldChange('postalCode', e.target.value)
                     }
-                    placeholder={
-                      tCommon('example', {
-                        example: '12345',
-                      }) as string
-                    }
+                    placeholder={t('postalCodePlaceholder')}
                   />
                 </Col>
                 <Col md={6}>
@@ -675,7 +750,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     name="city"
                     data-testid="inputCity"
                     onChange={(e) => handleFieldChange('city', e.target.value)}
-                    placeholder={tCommon('enterCityName')}
+                    placeholder={t('cityPlaceholder')}
                   />
                 </Col>
                 <Col md={6}>
@@ -690,7 +765,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     name="state"
                     data-testid="inputState"
                     onChange={(e) => handleFieldChange('state', e.target.value)}
-                    placeholder={tCommon('enterStateName')}
+                    placeholder={t('statePlaceholder')}
                   />
                 </Col>
                 <Col md={12}>
@@ -707,7 +782,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     }
                   >
                     <option value="" disabled>
-                      {tCommon('select')} {tCommon('country')}
+                      {t('selectCountry')}
                     </option>
                     {[...countryOptions]
                       .sort((a, b) => a.label.localeCompare(b.label))
@@ -715,7 +790,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                         <option
                           key={country.value.toUpperCase()}
                           value={country.value.toLowerCase()}
-                          aria-label={tCommon('selectAsYourCountry', {
+                          aria-label={t('selectCountryAriaLabel', {
                             country: country.label,
                           })}
                         >

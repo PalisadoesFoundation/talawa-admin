@@ -44,7 +44,7 @@ import cookies from 'js-cookie';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';
 import { Link, useNavigate, useParams } from 'react-router';
@@ -69,9 +69,12 @@ function organizationNavbar(props: InterfaceNavbarProps): JSX.Element {
 
   const { orgId: organizationId } = useParams();
 
-  const { data } = useQuery(ORGANIZATION_LIST, {
-    variables: { id: organizationId },
-  });
+  const { data } = useQuery<{ organizations: { name: string }[] }>(
+    ORGANIZATION_LIST,
+    {
+      variables: { id: organizationId },
+    },
+  );
 
   const [currentLanguageCode, setCurrentLanguageCode] = React.useState(
     cookies.get('i18next') || 'en',

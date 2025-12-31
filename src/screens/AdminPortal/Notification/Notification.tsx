@@ -7,7 +7,7 @@
  * items than the page size.
  */
 import React, { useState } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import {
   GET_USER_NOTIFICATIONS,
   MARK_NOTIFICATION_AS_READ,
@@ -21,6 +21,7 @@ import { FaUserCircle } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
+import type { IUserNotificationsResult } from 'types/GraphQL/queryResults';
 
 interface InterfaceNotification {
   id: string;
@@ -41,17 +42,20 @@ const Notification: React.FC = () => {
 
   const skip = page * pageSize;
 
-  const { loading, data, refetch } = useQuery(GET_USER_NOTIFICATIONS, {
-    variables: {
-      userId: userId,
-      input: {
-        first: pageSize,
-        skip: skip,
+  const { loading, data, refetch } = useQuery<IUserNotificationsResult>(
+    GET_USER_NOTIFICATIONS,
+    {
+      variables: {
+        userId: userId,
+        input: {
+          first: pageSize,
+          skip: skip,
+        },
       },
+      skip: !userId,
+      fetchPolicy: 'network-only',
     },
-    skip: !userId,
-    fetchPolicy: 'network-only',
-  });
+  );
 
   const [markAsRead] = useMutation(MARK_NOTIFICATION_AS_READ);
 
@@ -69,7 +73,13 @@ const Notification: React.FC = () => {
   };
 
   const notifications: InterfaceNotification[] =
-    data?.user?.notifications || [];
+    data?.user?.notifications?.map((n) => ({
+      id: n.id || n._id,
+      title: n.title,
+      body: n.body,
+      isRead: n.isRead ?? n.read,
+      navigation: n.navigation,
+    })) || [];
 
   const handleNext = async () => {
     if (notifications.length < pageSize) return;

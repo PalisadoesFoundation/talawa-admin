@@ -14,7 +14,7 @@ import { Container, Navbar, Nav, Offcanvas } from 'react-bootstrap';
 import PermIdentityIcon from '@mui/icons-material/PermIdentity';
 import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import cookies from 'js-cookie';
 import i18next from 'i18next';
 import type { DropDirection } from 'react-bootstrap/esm/DropdownContext';
@@ -86,7 +86,9 @@ export const UserPortalNavigationBar = (
     mode === 'organization' && fetchOrganizationData && finalOrganizationId;
 
   // GraphQL query for organization data
-  const { data: orgData } = useQuery(GET_ORGANIZATION_BASIC_DATA, {
+  const { data: orgData } = useQuery<{
+    organization?: { name?: string };
+  }>(GET_ORGANIZATION_BASIC_DATA, {
     variables: { id: finalOrganizationId },
     skip: !shouldFetchOrgData,
   });

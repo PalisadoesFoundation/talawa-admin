@@ -6,7 +6,7 @@ import {
   within,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
@@ -674,13 +674,11 @@ describe('EventListCardPreviewModal', () => {
       setEventEndDate: mockSetEventEndDate,
     });
 
-    const startDateInput = getPickerInputByLabel('startDate');
-    expect(startDateInput.parentElement).toBeTruthy();
-    const startDatePicker = startDateInput.parentElement;
-    const calendarButton = within(
-      startDatePicker as HTMLElement,
-    ).getByLabelText(/choose date/i);
-    await userEvent.click(calendarButton);
+    // Get all calendar buttons and select the first one (start date)
+    const calendarButtons = screen.getAllByRole('button', {
+      name: /choose date/i,
+    });
+    await userEvent.click(calendarButtons[0]);
 
     await waitFor(() => {
       expect(screen.getByRole('grid')).toBeInTheDocument();
@@ -700,13 +698,11 @@ describe('EventListCardPreviewModal', () => {
       setEventEndDate: mockSetEventEndDate,
     });
 
-    const endDateInput = getPickerInputByLabel('endDate');
-    expect(endDateInput.parentElement).toBeTruthy();
-    const endDatePicker = endDateInput.parentElement;
-    const calendarButton = within(endDatePicker as HTMLElement).getByLabelText(
-      /choose date/i,
-    );
-    await userEvent.click(calendarButton);
+    // Get all calendar buttons and select the second one (end date)
+    const calendarButtons = screen.getAllByRole('button', {
+      name: /choose date/i,
+    });
+    await userEvent.click(calendarButtons[1]);
 
     await waitFor(() => {
       expect(screen.getByRole('grid')).toBeInTheDocument();
@@ -726,13 +722,11 @@ describe('EventListCardPreviewModal', () => {
       setFormState: mockSetFormState,
     });
 
-    const startTimeInput = getPickerInputByLabel('startTime');
-    expect(startTimeInput.parentElement).toBeTruthy();
-    const startTimePicker = startTimeInput.parentElement;
-    const clockButton = within(startTimePicker as HTMLElement).getByLabelText(
-      /choose time/i,
-    );
-    await userEvent.click(clockButton);
+    // Get all clock buttons and select the first one (start time)
+    const clockButtons = screen.getAllByRole('button', {
+      name: /choose time/i,
+    });
+    await userEvent.click(clockButtons[0]);
 
     await waitFor(() => {
       expect(
@@ -755,13 +749,11 @@ describe('EventListCardPreviewModal', () => {
       setFormState: mockSetFormState,
     });
 
-    const endTimeInput = getPickerInputByLabel('endTime');
-    expect(endTimeInput.parentElement).toBeTruthy();
-    const endTimePicker = endTimeInput.parentElement;
-    const clockButton = within(endTimePicker as HTMLElement).getByLabelText(
-      /choose time/i,
-    );
-    await userEvent.click(clockButton);
+    // Get all clock buttons and select the second one (end time)
+    const clockButtons = screen.getAllByRole('button', {
+      name: /choose time/i,
+    });
+    await userEvent.click(clockButtons[1]);
 
     await waitFor(() => {
       expect(
@@ -1129,13 +1121,12 @@ describe('EventListCardPreviewModal', () => {
         setEventEndDate: mockSetEventEndDate,
       });
 
-      const dateInput = getPickerInputByLabel('startDate');
-      expect(dateInput.parentElement).toBeDefined();
-      const datePicker = dateInput?.parentElement;
-      const calendarButton = within(datePicker as HTMLElement).getByLabelText(
-        /choose date/i,
-      );
-      fireEvent.click(calendarButton);
+      // Both start and end date are the same, so both calendar buttons have the same label
+      // Get all calendar buttons and select the first one (start date)
+      const calendarButtons = screen.getAllByRole('button', {
+        name: /choose date/i,
+      });
+      fireEvent.click(calendarButtons[0]);
 
       await waitFor(() => {
         const dateToSelect = screen.getByText('20');

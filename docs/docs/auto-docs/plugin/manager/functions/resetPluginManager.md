@@ -6,7 +6,7 @@
 
 > **resetPluginManager**(): `void`
 
-Defined in: [src/plugin/manager.ts:192](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L192)
+Defined in: [src/plugin/manager.ts:190](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/manager.ts#L190)
 
 ## Returns
 

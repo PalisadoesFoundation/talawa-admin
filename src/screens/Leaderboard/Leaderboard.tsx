@@ -69,7 +69,7 @@ import {
 } from '@mui/x-data-grid';
 
 import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 
 enum TimeFrame {
   All = 'allTime',
@@ -92,17 +92,32 @@ function Leaderboard(): JSX.Element {
   );
   const [timeFrame, setTimeFrame] = useState<TimeFrame>(TimeFrame.All);
 
-  const { data, loading, error } = useQuery(VOLUNTEER_RANKING, {
-    variables: {
-      orgId,
-      where: {
-        orderBy: sortBy,
-        timeFrame,
-        nameContains: searchTerm,
+  interface IVolunteerRankingData {
+    getVolunteerRanks?: Array<{
+      rank: number;
+      hoursVolunteered: number;
+      user: {
+        id: string;
+        name: string;
+        avatarURL?: string | null;
+      };
+    }>;
+  }
+
+  const { data, loading, error } = useQuery<IVolunteerRankingData>(
+    VOLUNTEER_RANKING,
+    {
+      variables: {
+        orgId,
+        where: {
+          orderBy: sortBy,
+          timeFrame,
+          nameContains: searchTerm,
+        },
       },
+      skip: !orgId,
     },
-    skip: !orgId,
-  });
+  );
 
   const rankings = useMemo(() => data?.getVolunteerRanks ?? [], [data]);
 

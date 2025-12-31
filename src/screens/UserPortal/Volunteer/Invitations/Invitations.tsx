@@ -46,13 +46,14 @@ import { FaUserGroup } from 'react-icons/fa6';
 import { debounce, Stack } from '@mui/material';
 
 import useLocalStorage from 'utils/useLocalstorage';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import { FaRegClock } from 'react-icons/fa';
 import Loader from 'components/Loader/Loader';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import type { IGetVolunteerMembershipResult } from 'types/GraphQL/queryResults';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 
@@ -115,12 +116,7 @@ const Invitations = (): JSX.Element => {
     loading: invitationLoading,
     error: invitationError,
     refetch: refetchInvitations,
-  }: {
-    data?: { getVolunteerMembership: InterfaceVolunteerMembership[] };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(USER_VOLUNTEER_MEMBERSHIP, {
+  } = useQuery<IGetVolunteerMembershipResult>(USER_VOLUNTEER_MEMBERSHIP, {
     variables: {
       where: {
         userId: userId,

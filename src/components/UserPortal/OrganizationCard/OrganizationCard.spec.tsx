@@ -9,7 +9,7 @@ import OrganizationCard from './OrganizationCard';
 
 const mockMutationFn = vi.fn().mockResolvedValue({ data: {} });
 
-vi.mock('@apollo/client', async () => {
+vi.mock('@apollo/client/react', async () => {
   const actual =
     await vi.importActual<typeof import('@apollo/client')>('@apollo/client');
   return {

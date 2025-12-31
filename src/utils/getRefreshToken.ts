@@ -1,7 +1,9 @@
 import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
+
 import { BACKEND_URL } from 'Constant/constant';
 import { REFRESH_TOKEN_MUTATION } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from './useLocalstorage';
+import type { IRefreshTokenResult } from 'types/GraphQL/queryResults';
 
 /**
  * Refreshes the access token using HTTP-Only cookies.
@@ -20,8 +22,7 @@ export async function refreshToken(): Promise<boolean> {
   });
 
   try {
-    // No need to pass refreshToken variable - API reads from HTTP-Only cookie
-    const { data } = await client.mutate({
+    const { data } = await client.mutate<IRefreshTokenResult>({
       mutation: REFRESH_TOKEN_MUTATION,
     });
 

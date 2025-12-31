@@ -365,6 +365,7 @@ export const RECURRING_EVENTS = gql`
 export const EVENT_ATTENDEES = gql`
   query Event($eventId: String!) {
     event(input: { id: $eventId }) {
+      id
       attendees {
         id
         name

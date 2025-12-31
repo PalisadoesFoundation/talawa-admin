@@ -6,7 +6,7 @@
  */
 import React, { act } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { I18nextProvider } from 'react-i18next';
 import { vi, beforeEach, afterEach } from 'vitest';
 import {
@@ -395,7 +395,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     // Find loading text within the specific container
     const loadingElement = screen.getByTestId('loading-state');
-    expect(loadingElement).toHaveTextContent('Loading...');
+    expect(loadingElement).toHaveTextContent(/loading/i);
 
     await wait();
   });

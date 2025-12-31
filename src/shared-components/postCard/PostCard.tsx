@@ -21,7 +21,7 @@
  * @returns A JSX.Element representing the post card.
  */
 import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import {
@@ -110,7 +110,14 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
     loading: commentsLoading,
     fetchMore: fetchMoreComments,
     refetch: refetchComments,
-  } = useQuery(GET_POST_COMMENTS, {
+  } = useQuery<{
+    post: {
+      comments: {
+        edges: InterfaceCommentEdge[];
+        pageInfo: { endCursor: string; hasNextPage: boolean };
+      };
+    };
+  }>(GET_POST_COMMENTS, {
     skip: shouldSkipComments,
     variables: shouldSkipComments
       ? undefined
@@ -142,7 +149,13 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
 
   const handleLoadMoreComments = async (): Promise<void> => {
     await handleLoadMoreCommentsHelper({
-      fetchMoreComments,
+      fetchMoreComments: fetchMoreComments as (options: {
+        variables?: Record<string, unknown>;
+        updateQuery?: (
+          previousResult: unknown,
+          options: { fetchMoreResult?: unknown },
+        ) => unknown;
+      }) => Promise<unknown>,
       postId: props.id,
       userId: userId as string,
       endCursor,
@@ -269,7 +282,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           <IconButton
             onClick={handleDropdownOpen}
             size="small"
-            aria-label={t('postCard.moreOptions')}
+            aria-label={t('moreOptions')}
             data-testid="post-more-options-button"
           >
             <MoreHoriz />

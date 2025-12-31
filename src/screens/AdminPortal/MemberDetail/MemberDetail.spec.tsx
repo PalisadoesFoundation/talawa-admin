@@ -8,7 +8,7 @@ import {
   screen,
   waitFor,
 } from '@testing-library/react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import userEvent from '@testing-library/user-event';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
 import { Provider } from 'react-redux';
@@ -255,7 +255,7 @@ describe('MemberDetail', () => {
     renderMemberDetailScreen(link1);
     await wait();
     expect(screen.queryByText('Loading data...')).not.toBeInTheDocument();
-    expect(screen.getByText('Admin')).toBeInTheDocument();
+    expect(screen.getByText('ADMIN')).toBeInTheDocument();
   });
 
   test('Should display dicebear image if image is null', async () => {
@@ -486,7 +486,7 @@ describe('MemberDetail', () => {
     await userEvent.upload(fileInput, largeFile);
 
     expect(NotificationToast.error).toHaveBeenCalledWith(
-      'File is too large. Maximum allowed size is 5MB.',
+      'File is too large. Maximum size is 5MB.',
     );
   });
 
@@ -550,7 +550,7 @@ describe('MemberDetail', () => {
     });
     await userEvent.upload(fileInput, largeFile);
     expect(NotificationToast.error).toHaveBeenCalledWith(
-      'File is too large. Maximum allowed size is 5MB.',
+      'File is too large. Maximum size is 5MB.',
     );
   });
 

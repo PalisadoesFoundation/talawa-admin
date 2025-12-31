@@ -35,7 +35,7 @@ import type {
 import styles from 'style/app-fixed.module.css';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   FormControl,
@@ -58,6 +58,7 @@ import { TbListDetails } from 'react-icons/tb';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import Avatar from 'components/Avatar/Avatar';
 import { FaXmark } from 'react-icons/fa6';
+import type { IGetVolunteerMembershipResult } from 'types/GraphQL/queryResults';
 
 export interface InterfaceGroupModal {
   isOpen: boolean;
@@ -116,23 +117,16 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
   /**
    * Query to fetch volunteer Membership requests for the event.
    */
-  const {
-    data: requestsData,
-    refetch: refetchRequests,
-  }: {
-    data?: {
-      getVolunteerMembership: InterfaceVolunteerMembership[];
-    };
-    refetch: () => void;
-  } = useQuery(USER_VOLUNTEER_MEMBERSHIP, {
-    variables: {
-      where: {
-        eventId,
-        groupId: group.id,
-        status: 'requested',
+  const { data: requestsData, refetch: refetchRequests } =
+    useQuery<IGetVolunteerMembershipResult>(USER_VOLUNTEER_MEMBERSHIP, {
+      variables: {
+        where: {
+          eventId,
+          groupId: group.id,
+          status: 'requested',
+        },
       },
-    },
-  });
+    });
 
   const requests = useMemo(() => {
     if (!requestsData) return [];
@@ -321,78 +315,96 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                 variant="outlined"
                 className={styles.modalTable}
               >
-                <Table aria-label="group table">
+                <Table aria-label={t('groupTable')}>
                   <TableHead>
                     <TableRow>
-                      <TableCell className="fw-bold">Name</TableCell>
-                      <TableCell className="fw-bold">Actions</TableCell>
+                      <TableCell className="fw-bold">
+                        {tCommon('name')}
+                      </TableCell>
+                      <TableCell className="fw-bold">
+                        {tCommon('actions')}
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {requests.map((request, index) => {
-                      const { id, name, avatarURL } = request.volunteer.user;
-                      return (
-                        <TableRow
-                          key={index + 1}
-                          sx={{
-                            '&:last-child td, &:last-child th': { border: 0 },
-                          }}
-                        >
-                          <TableCell
-                            component="th"
-                            scope="row"
-                            className="d-flex gap-1 align-items-center"
-                            data-testid="userName"
+                    {requests.map(
+                      (
+                        request: InterfaceVolunteerMembership,
+                        index: number,
+                      ) => {
+                        const { id, name, avatarURL } = request.volunteer.user;
+                        return (
+                          <TableRow
+                            key={index + 1}
+                            sx={{
+                              '&:last-child td, &:last-child th': { border: 0 },
+                            }}
                           >
-                            {avatarURL ? (
-                              <img
-                                src={avatarURL}
-                                alt="volunteer"
-                                data-testid={`image${id + 1}`}
-                                className={styles.TableImage}
-                              />
-                            ) : (
-                              <div className={styles.avatarContainer}>
-                                <Avatar
-                                  key={id + '1'}
-                                  containerStyle={styles.imageContainer}
-                                  avatarStyle={styles.TableImage}
-                                  name={name}
-                                  alt={name}
+                            <TableCell
+                              component="th"
+                              scope="row"
+                              className="d-flex gap-1 align-items-center"
+                              data-testid="userName"
+                            >
+                              {avatarURL ? (
+                                <img
+                                  src={avatarURL}
+                                  alt={tCommon('volunteer')}
+                                  data-testid={`image${id + 1}`}
+                                  className={styles.TableImage}
                                 />
+                              ) : (
+                                <div className={styles.avatarContainer}>
+                                  <Avatar
+                                    key={id + '1'}
+                                    containerStyle={styles.imageContainer}
+                                    avatarStyle={styles.TableImage}
+                                    name={name}
+                                    alt={name}
+                                  />
+                                </div>
+                              )}
+                              {name}
+                            </TableCell>
+                            <TableCell component="th" scope="row">
+                              <div className="d-flex gap-2">
+                                <Button
+                                  variant="success"
+                                  size="sm"
+                                  className={`me-2 rounded ${styles.minWidth32}`}
+                                  data-testid={`acceptBtn`}
+                                  onClick={() =>
+                                    updateMembershipStatus(
+                                      request.id,
+                                      'accepted',
+                                    )
+                                  }
+                                >
+                                  <i className="fa fa-check" />
+                                </Button>
+                                <Button
+                                  size="sm"
+                                  variant="danger"
+                                  className="rounded"
+                                  data-testid={`rejectBtn`}
+                                  onClick={() =>
+                                    updateMembershipStatus(
+                                      request.id,
+                                      'rejected',
+                                    )
+                                  }
+                                >
+                                  <FaXmark
+                                    size={18}
+                                    className={styles.fontWeightBold}
+                                  />
+                                </Button>
                               </div>
-                            )}
-                            {name}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            <div className="d-flex gap-2">
-                              <Button
-                                variant="success"
-                                size="sm"
-                                className="me-2 rounded"
-                                data-testid={`acceptBtn`}
-                                onClick={() =>
-                                  updateMembershipStatus(request.id, 'accepted')
-                                }
-                              >
-                                <i className="fa fa-check" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="danger"
-                                className="rounded"
-                                data-testid={`rejectBtn`}
-                                onClick={() =>
-                                  updateMembershipStatus(request.id, 'rejected')
-                                }
-                              >
-                                <FaXmark size={18} className="fw-bold" />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      },
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>

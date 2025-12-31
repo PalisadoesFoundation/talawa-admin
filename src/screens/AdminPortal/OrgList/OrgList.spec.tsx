@@ -1,6 +1,7 @@
 // SKIP_LOCALSTORAGE_CHECK
 import React from 'react';
-import { MockedProvider, MockedResponse } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
+import type { MockedResponse } from '@apollo/client/testing';
 import {
   act,
   render,
@@ -167,6 +168,10 @@ const mockOrgData = {
       createdAt: '2023-04-13T04:53:17.742+00:00',
       members: { edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: true,
+      membersCount: 0,
+      adminsCount: 0,
+      __typename: 'Organization',
     },
   ],
   multipleOrgs: [
@@ -178,6 +183,10 @@ const mockOrgData = {
       createdAt: '2023-04-13T04:53:17.742+00:00',
       members: { edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: true,
+      membersCount: 0,
+      adminsCount: 0,
+      __typename: 'Organization',
     },
     {
       id: 'xyz2',
@@ -187,6 +196,10 @@ const mockOrgData = {
       createdAt: '2023-04-14T04:53:17.742+00:00',
       members: { edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: true,
+      membersCount: 0,
+      adminsCount: 0,
+      __typename: 'Organization',
     },
     {
       id: 'xyz3',
@@ -196,6 +209,10 @@ const mockOrgData = {
       createdAt: '2023-04-15T04:53:17.742+00:00',
       members: { edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: true,
+      membersCount: 0,
+      adminsCount: 0,
+      __typename: 'Organization',
     },
     {
       id: 'xyz4',
@@ -205,6 +222,10 @@ const mockOrgData = {
       createdAt: '2023-04-16T04:53:17.742+00:00',
       members: { edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: true,
+      membersCount: 0,
+      adminsCount: 0,
+      __typename: 'Organization',
     },
     {
       id: 'xyz5',
@@ -214,6 +235,10 @@ const mockOrgData = {
       createdAt: '2023-04-17T04:53:17.742+00:00',
       members: { edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: true,
+      membersCount: 0,
+      adminsCount: 0,
+      __typename: 'Organization',
     },
     {
       id: 'xyz6',
@@ -223,6 +248,10 @@ const mockOrgData = {
       createdAt: '2023-04-18T04:53:17.742+00:00',
       members: { edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: true,
+      membersCount: 0,
+      adminsCount: 0,
+      __typename: 'Organization',
     },
   ],
   paginationOrgs: Array.from({ length: 15 }, (_, i) => ({
@@ -233,6 +262,10 @@ const mockOrgData = {
     createdAt: `2023-04-${13 + i}T04:53:17.742+00:00`,
     members: { edges: [] },
     addressLine1: 'Test Address',
+    isMember: true,
+    membersCount: 0,
+    adminsCount: 0,
+    __typename: 'Organization',
   })),
   manyOrgs: [
     {
@@ -243,6 +276,10 @@ const mockOrgData = {
       createdAt: '2023-04-13T04:53:17.742+00:00',
       members: { edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: true,
+      membersCount: 0,
+      adminsCount: 0,
+      __typename: 'Organization',
     },
     {
       id: 'xyz2',
@@ -252,6 +289,10 @@ const mockOrgData = {
       createdAt: '2023-04-14T04:53:17.742+00:00',
       members: { edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: true,
+      membersCount: 0,
+      adminsCount: 0,
+      __typename: 'Organization',
     },
     {
       id: 'xyz3',
@@ -261,6 +302,10 @@ const mockOrgData = {
       createdAt: '2023-04-15T04:53:17.742+00:00',
       members: { edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: true,
+      membersCount: 0,
+      adminsCount: 0,
+      __typename: 'Organization',
     },
     {
       id: 'xyz4',
@@ -270,6 +315,10 @@ const mockOrgData = {
       createdAt: '2023-04-16T04:53:17.742+00:00',
       members: { edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: true,
+      membersCount: 0,
+      adminsCount: 0,
+      __typename: 'Organization',
     },
     {
       id: 'xyz5',
@@ -279,6 +328,10 @@ const mockOrgData = {
       createdAt: '2023-04-17T04:53:17.742+00:00',
       members: { edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: true,
+      membersCount: 0,
+      adminsCount: 0,
+      __typename: 'Organization',
     },
     {
       id: 'xyz6',
@@ -288,6 +341,10 @@ const mockOrgData = {
       createdAt: '2023-04-18T04:53:17.742+00:00',
       members: { edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: true,
+      membersCount: 0,
+      adminsCount: 0,
+      __typename: 'Organization',
     },
     {
       id: 'xyz7',
@@ -297,6 +354,10 @@ const mockOrgData = {
       createdAt: '2023-04-19T04:53:17.742+00:00',
       members: { edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: true,
+      membersCount: 0,
+      adminsCount: 0,
+      __typename: 'Organization',
     },
     {
       id: 'xyz8',
@@ -306,6 +367,10 @@ const mockOrgData = {
       createdAt: '2023-04-20T04:53:17.742+00:00',
       members: { edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: true,
+      membersCount: 0,
+      adminsCount: 0,
+      __typename: 'Organization',
     },
   ],
   searchTestOrgs: [
@@ -317,6 +382,10 @@ const mockOrgData = {
       createdAt: '2023-04-13T04:53:17.742+00:00',
       members: { edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: true,
+      membersCount: 0,
+      adminsCount: 0,
+      __typename: 'Organization',
     },
     {
       id: 'xyz2',
@@ -326,6 +395,10 @@ const mockOrgData = {
       createdAt: '2023-04-14T04:53:17.742+00:00',
       members: { edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: true,
+      membersCount: 0,
+      adminsCount: 0,
+      __typename: 'Organization',
     },
     {
       id: 'xyz3',
@@ -335,6 +408,10 @@ const mockOrgData = {
       createdAt: '2023-04-15T04:53:17.742+00:00',
       members: { edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: true,
+      membersCount: 0,
+      adminsCount: 0,
+      __typename: 'Organization',
     },
     {
       id: 'xyz4',
@@ -353,6 +430,7 @@ const mockOrgData = {
       createdAt: '2023-04-17T04:53:17.742+00:00',
       members: { edges: [] },
       addressLine1: 'Texas, USA',
+      isMember: true,
     },
   ],
   scrollOrgs: [
@@ -382,6 +460,7 @@ const mockOrgData = {
         },
         __typename: 'OrganizationMembersConnection',
       },
+      isMember: true,
     },
     {
       id: 'org2',
@@ -409,6 +488,7 @@ const mockOrgData = {
         },
         __typename: 'OrganizationMembersConnection',
       },
+      isMember: true,
     },
   ],
 };
@@ -444,6 +524,10 @@ const mockConfigurations = {
               createdAt: '2023-04-13T04:53:17.742+00:00',
               members: { edges: [] },
               addressLine1: 'Texas, USA',
+              isMember: true,
+              membersCount: 0,
+              adminsCount: 0,
+              __typename: 'Organization',
             },
             {
               id: 'xyz3',
@@ -453,6 +537,10 @@ const mockConfigurations = {
               createdAt: '2023-04-15T04:53:17.742+00:00',
               members: { edges: [] },
               addressLine1: 'Texas, USA',
+              isMember: true,
+              membersCount: 0,
+              adminsCount: 0,
+              __typename: 'Organization',
             },
             {
               id: 'xyz5',
@@ -462,6 +550,10 @@ const mockConfigurations = {
               createdAt: '2023-04-17T04:53:17.742+00:00',
               members: { edges: [] },
               addressLine1: 'Texas, USA',
+              isMember: true,
+              membersCount: 0,
+              adminsCount: 0,
+              __typename: 'Organization',
             },
           ],
         },
@@ -485,6 +577,38 @@ const mockConfigurations = {
               image: null,
             },
           },
+          currentUser: {
+            id: '123',
+            name: 'John Doe',
+            role: 'administrator',
+            emailAddress: 'john.doe@akatsuki.com',
+            addressLine1: '',
+            addressLine2: '',
+            avatarMimeType: null,
+            avatarURL: null,
+            birthDate: null,
+            city: '',
+            countryCode: '',
+            createdAt: '',
+            description: '',
+            educationGrade: null,
+            employmentStatus: null,
+            homePhoneNumber: '',
+            isEmailAddressVerified: false,
+            maritalStatus: null,
+            mobilePhoneNumber: '',
+            natalSex: null,
+            naturalLanguageCode: '',
+            postalCode: '',
+            state: '',
+            updatedAt: '',
+            workPhoneNumber: '',
+            eventsAttended: {
+              id: 'events-connection-id',
+              edges: [],
+              __typename: 'UserEventsConnection',
+            },
+          },
         },
       },
     },
@@ -496,6 +620,8 @@ const mockConfigurations = {
       result: {
         data: {
           user: {
+            id: '123',
+            name: 'John Doe',
             __typename: 'User',
             notifications: [],
           },
@@ -610,7 +736,9 @@ describe('Organisations Page testing as SuperAdmin', () => {
     const searchBar = screen.getByTestId('searchInput');
     const searchBtn = screen.getByTestId('searchBtn');
     await userEvent.type(searchBar, 'Dummy');
-    fireEvent.click(searchBtn);
+    await act(async () => {
+      fireEvent.click(searchBtn);
+    });
   });
 
   test('Testing search functionality by with empty search bar', async () => {
@@ -1622,6 +1750,33 @@ describe('Advanced Component Functionality Tests', () => {
               name: 'Test User',
               role: 'administrator',
               emailAddress: 'test@test.com',
+              addressLine1: '',
+              addressLine2: '',
+              avatarMimeType: null,
+              avatarURL: null,
+              birthDate: null,
+              city: '',
+              countryCode: '',
+              createdAt: '',
+              description: '',
+              educationGrade: null,
+              employmentStatus: null,
+              homePhoneNumber: '',
+              isEmailAddressVerified: false,
+              maritalStatus: null,
+              mobilePhoneNumber: '',
+              natalSex: null,
+              naturalLanguageCode: '',
+              postalCode: '',
+              state: '',
+              updatedAt: '',
+              workPhoneNumber: '',
+              eventsAttended: {
+                id: 'events-connection-id',
+                edges: [],
+                __typename: 'UserEventsConnection',
+              },
+              __typename: 'CurrentUser',
             },
           },
         },
@@ -1650,6 +1805,10 @@ describe('Advanced Component Functionality Tests', () => {
               createdAt: `2023-04-${String(13 + i).padStart(2, '0')}T04:53:17.742+00:00`,
               members: { edges: [] },
               addressLine1: 'Test Address',
+              isMember: true,
+              membersCount: 0,
+              adminsCount: 0,
+              __typename: 'Organization',
             })),
           },
         },
@@ -1723,6 +1882,33 @@ describe('Advanced Component Functionality Tests', () => {
               name: 'Test User',
               role: 'administrator',
               emailAddress: 'test@test.com',
+              addressLine1: '',
+              addressLine2: '',
+              avatarMimeType: null,
+              avatarURL: null,
+              birthDate: null,
+              city: '',
+              countryCode: '',
+              createdAt: '',
+              description: '',
+              educationGrade: null,
+              employmentStatus: null,
+              homePhoneNumber: '',
+              isEmailAddressVerified: false,
+              maritalStatus: null,
+              mobilePhoneNumber: '',
+              natalSex: null,
+              naturalLanguageCode: '',
+              postalCode: '',
+              state: '',
+              updatedAt: '',
+              workPhoneNumber: '',
+              eventsAttended: {
+                id: 'events-connection-id',
+                edges: [],
+                __typename: 'UserEventsConnection',
+              },
+              __typename: 'CurrentUser',
             },
           },
         },
@@ -1752,6 +1938,10 @@ describe('Advanced Component Functionality Tests', () => {
                 createdAt: '2023-04-13T04:53:17.742+00:00',
                 members: { edges: [] },
                 addressLine1: 'Test Address',
+                isMember: true,
+                membersCount: 0,
+                adminsCount: 0,
+                __typename: 'Organization',
               },
             ],
           },
@@ -1905,9 +2095,9 @@ describe('Advanced Component Functionality Tests', () => {
     await wait(300); // Give more time for re-render
 
     // Verify sorting was applied by checking the order of rendered cards
-    const sortedOrgs = [...mockOrgData.multipleOrgs].sort(
-      (a, b) =>
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    // Note: The implementation sorts by name (not createdAt) when "Earliest" or "Latest" is selected
+    const sortedOrgs = [...mockOrgData.multipleOrgs].sort((a, b) =>
+      a.name.localeCompare(b.name),
     );
     // Default pagination is 5, so we expect only the first 5 sorted items
     const expectedNames = sortedOrgs.slice(0, 5).map((org) => org.name);

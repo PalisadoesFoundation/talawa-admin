@@ -45,7 +45,7 @@ import React, {
 import { Close, InsertPhotoOutlined, PushPin } from '@mui/icons-material';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from './createPostModal.module.css';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import {
   CREATE_POST_MUTATION,
   UPDATE_POST_MUTATION,
@@ -211,7 +211,12 @@ function CreatePostModal({
             },
           },
         });
-        if (data.updatePost) {
+        if (
+          data &&
+          typeof data === 'object' &&
+          'updatePost' in data &&
+          data.updatePost
+        ) {
           onSuccess('edited');
         }
       }

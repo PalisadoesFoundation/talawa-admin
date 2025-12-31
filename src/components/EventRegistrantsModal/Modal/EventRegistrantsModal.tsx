@@ -41,7 +41,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import {
   EVENT_ATTENDEES,
   MEMBERS_LIST,
@@ -54,6 +54,7 @@ import { useTranslation } from 'react-i18next';
 import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
 import InviteByEmailModal from './InviteByEmail/InviteByEmailModal';
 import type { InterfaceUser } from 'types/User/interface';
+import styles from './EventRegistrantsModal.module.css';
 
 type ModalPropType = {
   show: boolean;
@@ -61,6 +62,18 @@ type ModalPropType = {
   orgId: string;
   handleClose: () => void;
 };
+
+interface InterfaceEventDetails {
+  event: {
+    recurrenceRule: {
+      id: string;
+    } | null;
+  };
+}
+
+interface InterfaceMembersList {
+  usersByOrganizationId: InterfaceUser[];
+}
 
 export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   const { eventId, orgId, handleClose, show } = props;
@@ -79,7 +92,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   const { t: tCommon } = useTranslation('common');
 
   // First, get event details to determine if it's recurring or standalone
-  const { data: eventData } = useQuery(EVENT_DETAILS, {
+  const { data: eventData } = useQuery<InterfaceEventDetails>(EVENT_DETAILS, {
     variables: { eventId: eventId },
     fetchPolicy: 'cache-first',
   });
@@ -96,14 +109,14 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
     variables: { eventId: eventId },
   });
 
-  const { data: memberData } = useQuery(MEMBERS_LIST, {
+  const { data: memberData } = useQuery<InterfaceMembersList>(MEMBERS_LIST, {
     variables: { organizationId: orgId },
   });
 
   // Function to add a new registrant to the event
   const addRegistrant = (): void => {
     if (member == null) {
-      toast.warning('Please choose an user to add first!');
+      toast.warning(t('pleaseChooseUser') as string);
       return;
     }
     toast.warn('Adding the attendee...');
@@ -145,11 +158,8 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
             attendeesRefetch();
           }}
         />
-        <Modal.Header
-          closeButton
-          style={{ backgroundColor: 'var(--tableHeader-bg)' }}
-        >
-          <Modal.Title>Event Registrants</Modal.Title>
+        <Modal.Header closeButton className={styles.modalHeader}>
+          <Modal.Title>{t('eventRegistrants')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Autocomplete
@@ -159,18 +169,14 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
             }}
             noOptionsText={
               <div className="d-flex ">
-                <p className="me-2">No Registrations found</p>
+                <p className="me-2">{t('noRegistrationsFound')}</p>
                 <span
-                  className="underline"
-                  style={{
-                    color: '#555',
-                    textDecoration: 'underline',
-                  }}
+                  className={`underline ${styles.addOnspotLink}`}
                   onClick={() => {
                     setOpen(true);
                   }}
                 >
-                  Add Onspot Registration
+                  {t('addOnspotRegistration')}
                 </span>
               </div>
             }
@@ -182,8 +188,8 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
               <TextField
                 {...params}
                 data-testid="autocomplete"
-                label="Add an Registrant"
-                placeholder="Choose the user that you want to add"
+                label={t('addRegistrant')}
+                placeholder={t('chooseUserToAdd')}
               />
             )}
           />
@@ -191,16 +197,16 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
         </Modal.Body>
         <Modal.Footer>
           <Button
-            style={{ backgroundColor: '#6CC9A6', color: '#fff' }}
+            className={styles.inviteButton}
             onClick={() => setInviteOpen(true)}
           >
-            Invite by Email
+            {t('inviteByEmailButton')}
           </Button>
           <Button
-            style={{ backgroundColor: '#A8C7FA', color: '#555' }}
+            className={styles.addRegistrantButton}
             onClick={addRegistrant}
           >
-            Add Registrant
+            {t('addRegistrantButton')}
           </Button>
         </Modal.Footer>
       </Modal>

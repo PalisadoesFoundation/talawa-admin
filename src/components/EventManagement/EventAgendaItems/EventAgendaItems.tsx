@@ -42,7 +42,7 @@ import { Button } from 'react-bootstrap';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import {
   AGENDA_ITEM_CATEGORY_LIST,
   AgendaItemByEvent,
@@ -57,6 +57,7 @@ import AgendaItemsContainer from 'components/AgendaItems/AgendaItemsContainer';
 import AgendaItemsCreateModal from 'components/AgendaItems/Create/AgendaItemsCreateModal';
 
 import styles from 'style/app-fixed.module.css';
+import componentStyles from './EventAgendaItems.module.css';
 import Loader from 'components/Loader/Loader';
 
 function EventAgendaItems(props: { eventId: string }): JSX.Element {
@@ -92,7 +93,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
     data: InterfaceAgendaItemCategoryList | undefined;
     loading: boolean;
     error?: Error | undefined;
-  } = useQuery(AGENDA_ITEM_CATEGORY_LIST, {
+  } = useQuery<InterfaceAgendaItemCategoryList>(AGENDA_ITEM_CATEGORY_LIST, {
     variables: { organizationId: orgId },
     notifyOnNetworkStatusChange: true,
   });
@@ -108,7 +109,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
     loading: boolean;
     error?: unknown | undefined;
     refetch: () => void;
-  } = useQuery(AgendaItemByEvent, {
+  } = useQuery<InterfaceAgendaItemList>(AgendaItemByEvent, {
     variables: { relatedEventId: eventId }, //eventId
     notifyOnNetworkStatusChange: true,
   });
@@ -192,7 +193,9 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded
+            className={`${styles.errorIcon} ${componentStyles.errorIcon}`}
+          />
           <h6 className="fw-bold text-danger text-center">
             Error occurred while loading{' '}
             {agendaCategoryError ? 'Agenda Categories' : 'Agenda Items'} Data
@@ -234,7 +237,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
         <hr />
 
         <AgendaItemsContainer
-          agendaItemConnection={`Event`}
+          agendaItemConnection="Event"
           agendaItemData={agendaItemData?.agendaItemByEvent}
           agendaItemRefetch={refetchAgendaItem}
           agendaItemCategories={

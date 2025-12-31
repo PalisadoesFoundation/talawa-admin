@@ -36,7 +36,7 @@
  */
 import React, { useEffect, useState } from 'react';
 import useLocalStorage from 'utils/useLocalstorage';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Button, Dropdown } from 'react-bootstrap';
@@ -105,10 +105,12 @@ export default function chat(): JSX.Element {
     data: chatsListData,
     loading: chatsListLoading,
     refetch: chatsListRefetch,
-  } = useQuery(CHATS_LIST, {
+  } = useQuery<{ chatsByUser: (GroupChat | NewChatType)[] }>(CHATS_LIST, {
     variables: { first: 10, after: cursor },
   });
-  const { refetch: unreadChatListRefetch } = useQuery(UNREAD_CHATS);
+  const { refetch: unreadChatListRefetch } = useQuery<{
+    unreadChats: (GroupChat | NewChatType)[];
+  }>(UNREAD_CHATS);
 
   // TODO: Update markChatMessagesAsRead to match new schema
   // const [markChatMessagesAsRead] = useMutation(MARK_CHAT_MESSAGES_AS_READ, {
@@ -229,7 +231,7 @@ export default function chat(): JSX.Element {
               className={`d-flex justify-content-between ${styles.addChatContainer}`}
             >
               <h4>{t('messages')}</h4>
-              <Dropdown style={{ cursor: 'pointer' }}>
+              <Dropdown className={styles.dropdownCursor}>
                 <Dropdown.Toggle
                   className={styles.customToggle}
                   data-testid={'dropdown'}
@@ -250,7 +252,7 @@ export default function chat(): JSX.Element {
                     {t('newGroupChat')}
                   </Dropdown.Item>
                   <Dropdown.Item href="#/action-3">
-                    Starred Messages
+                    {t('starredMessages')}
                   </Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
@@ -278,7 +280,7 @@ export default function chat(): JSX.Element {
                         .filter(Boolean)
                         .join(' ')}
                     >
-                      All
+                      {t('all')}
                     </Button>
                     <Button
                       data-testid="unreadChat"
@@ -292,7 +294,7 @@ export default function chat(): JSX.Element {
                         .filter(Boolean)
                         .join(' ')}
                     >
-                      Unread
+                      {t('unread')}
                     </Button>
                     <Button
                       onClick={() => {
@@ -306,18 +308,13 @@ export default function chat(): JSX.Element {
                         .filter(Boolean)
                         .join(' ')}
                     >
-                      Groups
+                      {t('groups')}
                     </Button>
                   </div>
 
                   <div
                     data-testid="contactCardContainer"
-                    className={styles.contactCardContainer}
-                    style={{
-                      maxHeight: 'calc(100vh - 200px)',
-                      overflowY: 'auto',
-                      flex: 1,
-                    }}
+                    className={`${styles.contactCardContainer} ${styles.contactCardScrollable}`}
                   >
                     {!!chats.length &&
                       chats.map((chat: GroupChat | NewChatType) => {

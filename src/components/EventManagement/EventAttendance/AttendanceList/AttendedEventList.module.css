@@ -1,0 +1,9 @@
+.eventLink {
+  color: var(--hyperlink-text-color);
+  text-decoration: none;
+}
+
+.eventLink:hover {
+  color: var(--hyperlink-text-color-hover);
+  text-decoration: none;
+}

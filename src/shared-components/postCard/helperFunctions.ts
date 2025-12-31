@@ -26,7 +26,6 @@ import type {
   InterfaceComment,
 } from '../../utils/interfaces';
 import { errorHandler } from '../../utils/errorHandler';
-import type { ApolloQueryResult, FetchMoreQueryOptions } from '@apollo/client';
 
 // Define proper types for GraphQL response
 /**
@@ -66,30 +65,13 @@ interface InterfaceFetchMoreResult {
  * Parameters required for the handleLoadMoreComments function.
  */
 interface InterfaceHandleLoadMoreCommentsParams {
-  fetchMoreComments: (
-    options: FetchMoreQueryOptions<
-      {
-        postId: string;
-        userId: string;
-        first: number;
-        after: string | null;
-      },
-      InterfacePostCommentsData
-    > & {
-      updateQuery: (
-        previousQueryResult: InterfacePostCommentsData,
-        options: {
-          fetchMoreResult?: InterfaceFetchMoreResult;
-          variables?: {
-            postId: string;
-            userId: string;
-            first: number;
-            after: string | null;
-          };
-        },
-      ) => InterfacePostCommentsData;
-    },
-  ) => Promise<ApolloQueryResult<InterfacePostCommentsData>>;
+  fetchMoreComments: (options: {
+    variables?: Record<string, unknown>;
+    updateQuery?: (
+      previousResult: unknown,
+      options: { fetchMoreResult?: unknown },
+    ) => unknown;
+  }) => Promise<unknown>;
   postId: string;
   userId: string;
   endCursor: string | null;
@@ -120,7 +102,14 @@ export const handleLoadMoreComments = async ({
         first: 10,
         after: endCursor,
       },
-      updateQuery: (previousQueryResult, { fetchMoreResult }) => {
+      updateQuery: (
+        previousResult: unknown,
+        options: { fetchMoreResult?: unknown },
+      ) => {
+        const previousQueryResult = previousResult as InterfacePostCommentsData;
+        const fetchMoreResult = options.fetchMoreResult as
+          | InterfaceFetchMoreResult
+          | undefined;
         if (!fetchMoreResult?.post?.comments) return previousQueryResult;
 
         const newEdges = fetchMoreResult.post.comments.edges;
@@ -139,12 +128,13 @@ export const handleLoadMoreComments = async ({
               },
             },
           },
-        };
+        } as unknown;
       },
     });
 
-    const newEdges = result.data?.post?.comments?.edges ?? [];
-    const newPageInfo = result.data?.post?.comments?.pageInfo;
+    const resultData = result as { data?: InterfacePostCommentsData };
+    const newEdges = resultData.data?.post?.comments?.edges ?? [];
+    const newPageInfo = resultData.data?.post?.comments?.pageInfo;
     if (newEdges.length) {
       setComments((prevComments) => [
         ...prevComments,

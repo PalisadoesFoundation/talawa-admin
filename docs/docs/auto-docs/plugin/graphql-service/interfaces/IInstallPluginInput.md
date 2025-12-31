@@ -4,7 +4,7 @@
 
 # Interface: IInstallPluginInput
 
-Defined in: [src/plugin/graphql-service.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L34)
+Defined in: [src/plugin/graphql-service.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L29)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/plugin/graphql-service.ts:34](https://github.com/PalisadoesFoun
 
 > **pluginId**: `string`
 
-Defined in: [src/plugin/graphql-service.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L35)
+Defined in: [src/plugin/graphql-service.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/plugin/graphql-service.ts#L30)

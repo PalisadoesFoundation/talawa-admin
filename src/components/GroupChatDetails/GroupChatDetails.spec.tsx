@@ -7,7 +7,7 @@ import {
   waitFor,
 } from '@testing-library/react';
 import GroupChatDetails from './GroupChatDetails';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { InMemoryCache } from '@apollo/client';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import i18n from 'i18next';
@@ -15,7 +15,7 @@ import { useLocalStorage } from 'utils/useLocalstorage';
 import { vi } from 'vitest';
 import { toast } from 'react-toastify';
 import {
-  mocks,
+  getMocks,
   filledMockChat,
   incompleteMockChat,
   failingMocks,
@@ -24,7 +24,8 @@ import type { NewChatType } from 'types/Chat/interface';
 
 // Standardized cache configuration for Apollo MockedProvider
 // Using addTypename: false for Apollo 4.x compatibility
-const testCache = new InMemoryCache({ addTypename: false });
+const testCache = new InMemoryCache();
+const mocks = getMocks();
 
 // Mock MinIO hooks used for uploading/downloading files
 vi.mock('utils/MinioUpload', () => ({
@@ -459,8 +460,11 @@ describe('GroupChatDetails', () => {
       fireEvent.click(clearBtn);
     });
 
-    await waitFor(() => {
-      expect(searchInput).toHaveValue('');
+    // Clear results in refetch, which triggers loading specific to this component logic (loader replaces input)
+    // So the input unmounts and remounts. We must re-query it.
+    await waitFor(async () => {
+      const newSearchInput = await screen.findByTestId('searchUser');
+      expect(newSearchInput).toHaveValue('');
     });
   });
 

@@ -1,6 +1,7 @@
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
+import type { ICommunitySessionTimeoutResult } from 'types/GraphQL/queryResults';
 import { t } from 'i18next';
 import { useEffect, useState, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -40,7 +41,7 @@ const useSession = (): UseSessionReturnType => {
   const navigate = useNavigate();
 
   const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
-  const { data, error: queryError } = useQuery(
+  const { data, error: queryError } = useQuery<ICommunitySessionTimeoutResult>(
     GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
   );
 
@@ -51,7 +52,10 @@ const useSession = (): UseSessionReturnType => {
       errorHandler(t, queryError as Error);
     } else {
       const sessionTimeoutData = data?.community;
-      if (sessionTimeoutData) {
+      if (
+        sessionTimeoutData &&
+        sessionTimeoutData.inactivityTimeoutDuration !== null
+      ) {
         setSessionTimeout(sessionTimeoutData.inactivityTimeoutDuration);
       }
     }

@@ -398,6 +398,11 @@
     "join_error": "No se pudo enviar la solicitud de membresía",
     "withdraw_error": "No se pudo retirar la solicitud de membresía"
   },
+  "organization": {
+    "card_aria": "Tarjeta de organización",
+    "card_test_id": "tarjeta-organizacion-{{id}}",
+    "withdraw": "Retirar"
+  },
   "organizationTags": {
     "title": "Etiquetas de Organización",
     "createTag": "Crear una nueva etiqueta",
@@ -630,7 +635,9 @@
     "pendingForSeries": "Pendiente para la serie",
     "completeForInstance": "Completo para esta instancia",
     "completeForSeries": "Completo para la serie",
-    "postCompletionNotesRequired": "Se requieren notas posteriores a la finalización"
+    "postCompletionNotesRequired": "Se requieren notas posteriores a la finalización",
+    "isPending": "Pendiente",
+    "search": "Buscar"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "Detalles de la categoría de la agenda",
@@ -681,7 +688,8 @@
     "agendaItemUpdated": "Punto del orden del día actualizado exitosamente",
     "agendaItemDeleted": "Punto del orden del día eliminado exitosamente",
     "deleteAgendaItem": "Eliminar punto del orden del día",
-    "deleteAgendaItemMsg": "¿Desea eliminar este punto del orden del día?"
+    "deleteAgendaItemMsg": "¿Desea eliminar este punto del orden del día?",
+    "search": "Buscar"
   },
   "eventListCard": {
     "location": "Lugar del evento",
@@ -1026,7 +1034,8 @@
     "cancel": "Cancelar",
     "confirmDelete": "Confirmar eliminación",
     "longDelOrgMsg": "Al hacer clic en el botón Eliminar organización, la organización se eliminará permanentemente junto con sus eventos, etiquetas y todos los datos relacionados.",
-    "successfullyDeletedSampleOrganization": "Organización de muestra eliminada correctamente"
+    "successfullyDeletedSampleOrganization": "Organización de muestra eliminada correctamente",
+    "deleteSampleOrganization": "Eliminar Organización de Muestra"
   },
   "userUpdate": {
     "firstName": "Primer nombre",
@@ -1081,7 +1090,8 @@
     "enterNameOrganization": "Ingrese el nombre de la organización",
     "successfulUpdated": "Exitoso actualizado",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
-    "enterOrganizationDescription": "Ingrese la descripción de la organización"
+    "enterOrganizationDescription": "Ingrese la descripción de la organización",
+    "userRegistrationRequired": "Registro de Usuario Requerido"
   },
   "memberDetail": {
     "title": "Detalles del usuario",
@@ -1136,7 +1146,19 @@
     "unassignUserTagMessage": "¿Desea eliminar la etiqueta de este usuario?",
     "successfullyUnassigned": "Etiqueta desasignada del usuario",
     "tagsAssigned": "Etiquetas asignadas",
-    "noTagsAssigned": "No se asignaron etiquetas"
+    "noTagsAssigned": "No se asignaron etiquetas",
+    "fileTooLarge": "El archivo es demasiado grande. El tamaño máximo es 5MB.",
+    "passwordTooShort": "La contraseña debe tener al menos 8 caracteres.",
+    "userImage": "Imagen de usuario",
+    "editProfilePicture": "Editar foto de perfil",
+    "enterDescription": "Ingresar descripción",
+    "phoneNumberPlaceholder": "Ej. +1234567890",
+    "addressPlaceholder": "Ej. Calle 2",
+    "postalCodePlaceholder": "Ej. 12345",
+    "cityPlaceholder": "Ingrese el nombre de la ciudad",
+    "statePlaceholder": "Ingrese el nombre del estado",
+    "selectCountry": "Seleccionar país",
+    "selectCountryAriaLabel": "Seleccionar {{country}} como su país"
   },
   "userLogin": {
     "login": "Acceso",
@@ -1252,7 +1274,12 @@
     "postedOn": "Publicado el {{date}}",
     "emptyCommentError": "Por favor ingrese un comentario antes de enviarlo.",
     "unexpectedError": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo.",
-    "moreOptions": "más opciones"
+    "moreOptions": "Más opciones",
+    "scrollLeft": "Desplazar a la izquierda",
+    "scrollRight": "Desplazar a la derecha",
+    "pinnedPost": "Publicación fijada",
+    "postImage": "Imagen de publicación",
+    "postImageAlt": "Imagen de publicación"
   },
   "posts": {
     "pinnedPosts": "Publicaciones fijadas",
@@ -1314,7 +1341,21 @@
     "nextPage": "Página siguiente",
     "goToToday": "Ir a hoy",
     "genderDistribution": "Distribución por género",
-    "ageDistribution": "Distribución por edad"
+    "ageDistribution": "Distribución por edad",
+    "event_attendance_table": "Tabla de Asistencia del Evento",
+    "age": "Edad",
+    "age18to40": "18 a 40",
+    "attendanceCount": "Recuento de Asistencia",
+    "demographics": "Demografía",
+    "demography": "Demografía",
+    "exportData": "Exportar Datos",
+    "female": "Femenino",
+    "male": "Masculino",
+    "other": "Otro",
+    "over40": "Más de 40",
+    "today": "Hoy",
+    "trends": "Tendencias",
+    "under18": "Menos de 18"
   },
   "eventRegistrant": {
     "sort": "Ordenar",
@@ -1436,7 +1477,8 @@
     "success": "Donación exitosa",
     "invalidAmount": "Ingrese un valor numérico para el monto de la donación.",
     "donationAmountDescription": "Ingrese el valor numérico del monto de la donación.",
-    "donationOutOfRange": "El monto de la donación debe estar entre {{min}} y {{max}}."
+    "donationOutOfRange": "El monto de la donación debe estar entre {{min}} y {{max}}.",
+    "loading": "Cargando..."
   },
   "transactions": {
     "title": "Transacciones",
@@ -1546,7 +1588,20 @@
     "EXdesc": "Descripción",
     "EXlink": "Enlace",
     "createAdvertisement": "Crear publicidad",
-    "noDescription": "No hay descripción"
+    "noDescription": "No hay descripción",
+    "failedToFetch": "Error al obtener anuncios",
+    "advertisementImageAlt": "Imagen de anuncio #{{index}} para {{name}}",
+    "ad": "anuncio",
+    "advertisementMedia": "Media del anuncio",
+    "noMediaAvailable": "No hay medios disponibles",
+    "invalidFileType": "Tipo de archivo no válido: {{fileName}}",
+    "fileTooLarge": "Archivo demasiado grande: {{fileName}}",
+    "invalidArguments": "Argumentos no válidos para esta acción.",
+    "englishCaptions": "Subtítulos en inglés",
+    "preview": "Vista previa",
+    "bannerAd": "Anuncio de banner",
+    "popupAd": "Anuncio emergente",
+    "menuAd": "Anuncio de menú"
   },
   "userChat": {
     "title": "Chats",
@@ -1579,7 +1634,15 @@
     "demoteToRegular": "Degradar a regular",
     "promoteToAdmin": "Promover a administrador",
     "user": "Usuario",
-    "chatAction": "Acción del chat"
+    "chatAction": "Acción del chat",
+    "Error": "Error",
+    "hash": "#",
+    "organizationMembersTable": "Tabla de Miembros de la Organización",
+    "description": "Descripción",
+    "groupDescription": "Descripción del Grupo",
+    "groupName": "Nombre del Grupo",
+    "newGroup": "Nuevo Grupo",
+    "next": "Siguiente"
   },
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",
@@ -1634,7 +1697,9 @@
     "venueCapacityError": "¡La capacidad debe ser un número positivo!",
     "searchBy": "Buscar por",
     "name": "Nombre",
-    "desc": "Descripción"
+    "desc": "Descripción",
+    "venueCreated": "Lugar creado exitosamente",
+    "venueNameExists": "Ya existe un lugar con este nombre"
   },
   "addMember": {
     "title": "Agregar miembro",
@@ -1695,7 +1760,22 @@
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error al agregar asistente",
-    "errorRemovingAttendee": "Error al eliminar asistente"
+    "errorRemovingAttendee": "Error al eliminar asistente",
+    "inviteByEmail": {
+      "addRecipient": "Agregar Destinatario",
+      "email": "Correo electrónico",
+      "emailsHelp": "Ingrese direcciones de correo electrónico separadas por comas",
+      "emailsLabel": "Direcciones de Correo Electrónico",
+      "errorSendingInvites": "Error al enviar invitaciones",
+      "expiresInDaysLabel": "Expira en (días)",
+      "messageLabel": "Mensaje",
+      "messagePlaceholder": "Ingrese su mensaje aquí",
+      "name": "Nombre",
+      "remove": "Eliminar",
+      "sendInvites": "Enviar Invitaciones",
+      "sending": "Enviando...",
+      "title": "Invitar por Correo Electrónico"
+    }
   },
   "userCampaigns": {
     "title": "Campañas de recaudación de fondos",
@@ -1854,7 +1934,43 @@
     "checkBackLater": "Vuelve más tarde para nuevos plugins",
     "tryDifferentSearch": "Prueba con un término de búsqueda diferente o explora todos los plugins",
     "explorePluginStore": "Explora la tienda de plugins para descubrir nuevos plugins",
-    "noResultsFoundFor": "No se encontraron resultados para"
+    "noResultsFoundFor": "No se encontraron resultados para",
+    "close": "Cerrar",
+    "pluginIcon": "Icono del plugin",
+    "backToDetails": "← Volver a los detalles",
+    "previousImage": "Imagen anterior (←)",
+    "nextImage": "Imagen siguiente (→)",
+    "screenshotAlt": "Captura de pantalla {{index}}",
+    "goToScreenshot": "Ir a la captura de pantalla {{index}}",
+    "description": "Descripción",
+    "screenshots": "Capturas de pantalla",
+    "clickToViewFullSize": "Clic para ver a tamaño completo",
+    "loadingDetails": "Cargando detalles...",
+    "features": "Características",
+    "noFeaturesAvailable": "No hay información de características disponible para este plugin.",
+    "loadingFeatures": "Cargando características...",
+    "changelog": "Registro de cambios",
+    "changelogVersion": "v{{version}} - {{date}}",
+    "loadingChangelog": "Cargando registro de cambios...",
+    "uploadPlugin": "Subir plugin",
+    "uploadPluginDesc": "Sube un archivo ZIP para crear una entrada de plugin. El plugin estará disponible para instalación después de subirlo.",
+    "selectZipFile": "Seleccionar archivo ZIP",
+    "clickToBrowseFiles": "Clic para explorar archivos",
+    "pluginInformation": "Información del plugin",
+    "name": "Nombre:",
+    "version": "Versión:",
+    "author": "Autor:",
+    "pluginId": "ID del plugin:",
+    "componentsToInstall": "Componentes a instalar:",
+    "adminDashboardComponents": "Componentes del panel de administración",
+    "apiBackendComponents": "Componentes del backend API",
+    "pluginStructure": "Estructura del plugin",
+    "expectedPluginStructure": "Estructura esperada del plugin con componentes de admin y/o API",
+    "detectedFiles": "Archivos detectados",
+    "expectedDirectoryStructure": "Estructura de directorio esperada",
+    "requiredManifestFields": "Campos requeridos en manifest.json",
+    "failedToUploadPlugin": "Error al subir el plugin. Por favor, inténtalo de nuevo.",
+    "installing": "Instalando"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Comentario eliminado exitosamente",

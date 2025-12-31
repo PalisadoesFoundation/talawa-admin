@@ -37,7 +37,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Form } from 'react-bootstrap';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { toast } from 'react-toastify';
 
 import Loader from 'components/Loader/Loader';
@@ -60,6 +60,7 @@ import convertToBase64 from 'utils/convertToBase64';
 import styles from 'style/app-fixed.module.css';
 import { errorHandler } from 'utils/errorHandler';
 import UpdateSession from '../../../components/UpdateSession/UpdateSession';
+import type { ICommunityDataResult } from 'types/GraphQL/queryResults';
 
 const CommunityProfile = (): JSX.Element => {
   // Translation hooks for internationalization
@@ -75,18 +76,18 @@ const CommunityProfile = (): JSX.Element => {
   // Define the type for pre-login imagery data
   type PreLoginImageryDataType = {
     id: string;
-    name: string | undefined;
-    websiteURL: string | undefined;
-    logo: string | undefined;
-    inactivityTimeoutDuration: number;
-    facebookURL: string | undefined;
-    instagramURL: string | undefined;
-    xURL: string | undefined;
-    linkedinURL: string | undefined;
-    githubURL: string | undefined;
-    youtubeURL: string | undefined;
-    redditURL: string | undefined;
-    slackURL: string | undefined;
+    name?: string | null | undefined;
+    websiteURL?: string | null | undefined;
+    logoURL?: string | null | undefined;
+    inactivityTimeoutDuration?: number | null | undefined;
+    facebookURL?: string | null | undefined;
+    instagramURL?: string | null | undefined;
+    xURL?: string | null | undefined;
+    linkedinURL?: string | null | undefined;
+    githubURL?: string | null | undefined;
+    youtubeURL?: string | null | undefined;
+    redditURL?: string | null | undefined;
+    slackURL?: string | null | undefined;
   };
 
   // State hook for managing profile variables
@@ -106,22 +107,24 @@ const CommunityProfile = (): JSX.Element => {
   });
 
   // Query to fetch community data
-  const { data, loading } = useQuery(GET_COMMUNITY_DATA_PG);
-
+  const { data, loading } = useQuery<ICommunityDataResult>(
+    GET_COMMUNITY_DATA_PG,
+  );
   // Mutations for updating and resetting community data
   const [uploadPreLoginImagery] = useMutation(UPDATE_COMMUNITY_PG);
   const [resetPreLoginImagery] = useMutation(RESET_COMMUNITY);
 
   // Effect to set profile data from fetched data
   React.useEffect(() => {
-    const preLoginData: PreLoginImageryDataType | undefined = data?.community;
+    const preLoginData: PreLoginImageryDataType | undefined =
+      data?.community ?? undefined;
     if (preLoginData) {
       setProfileVariable({
         name: preLoginData.name ?? '',
         websiteURL: preLoginData.websiteURL ?? '',
-        logo: preLoginData.logo ?? '',
+        logo: preLoginData.logoURL ?? '',
         facebookURL: preLoginData.facebookURL ?? '',
-        inactivityTimeoutDuration: preLoginData.inactivityTimeoutDuration,
+        inactivityTimeoutDuration: preLoginData.inactivityTimeoutDuration ?? 0,
         instagramURL: preLoginData.instagramURL ?? '',
         xURL: preLoginData.xURL ?? '',
         linkedInURL: preLoginData.linkedinURL ?? '',
@@ -177,7 +180,8 @@ const CommunityProfile = (): JSX.Element => {
    * Resets profile data to initial values and performs a reset operation.
    */
   const resetData = async (): Promise<void> => {
-    const preLoginData: PreLoginImageryDataType | undefined = data?.community;
+    const preLoginData: PreLoginImageryDataType | undefined =
+      data?.community ?? undefined;
     try {
       setProfileVariable({
         name: '',

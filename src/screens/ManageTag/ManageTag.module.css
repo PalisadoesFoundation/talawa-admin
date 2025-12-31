@@ -1,0 +1,9 @@
+.errorIcon {
+  font-size: 2em;
+}
+
+.hr {
+  border-color: var(--grey-border-box-color);
+  border-width: 2px;
+  width: 85%;
+}

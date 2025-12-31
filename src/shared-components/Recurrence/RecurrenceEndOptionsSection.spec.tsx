@@ -7,11 +7,11 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { RecurrenceEndOptionsSection } from './RecurrenceEndOptionsSection';
 import { Frequency } from '../../utils/recurrenceUtils';
 import type { InterfaceRecurrenceRule } from '../../utils/recurrenceUtils';
-import dayjs from 'dayjs';
 
-// Mock DatePicker
+// Mock DatePicker - using require for dayjs inside the mock factory
 vi.mock('@mui/x-date-pickers', async () => {
   const actual = await vi.importActual('@mui/x-date-pickers');
+  const dayjsLib = (await import('dayjs')).default;
   return {
     ...actual,
     DatePicker: ({
@@ -43,15 +43,11 @@ vi.mock('@mui/x-date-pickers', async () => {
             data-testid={testId}
             data-cy={dataCy}
             disabled={disabled}
-            value={dayjsValue ? dayjsValue.format('YYYY-MM-DD') : ''}
+            defaultValue={dayjsValue ? dayjsValue.format('YYYY-MM-DD') : ''}
             onChange={(e) => {
               if (e.target.value) {
-                // Return a Dayjs-like object with toDate method
-                const date = dayjs(e.target.value).toDate();
-                const dayjsObj = {
-                  ...dayjs(e.target.value),
-                  toDate: () => date,
-                };
+                // Return a proper Dayjs object
+                const dayjsObj = dayjsLib(e.target.value);
                 onChange(dayjsObj);
               } else {
                 onChange(null);
@@ -376,6 +372,7 @@ describe('RecurrenceEndOptionsSection', () => {
 
     it('should call setRecurrenceRuleState when date is changed', async () => {
       const setRecurrenceRuleState = vi.fn();
+      const user = userEvent.setup();
 
       render(
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -390,7 +387,10 @@ describe('RecurrenceEndOptionsSection', () => {
       const datePicker = screen.getByTestId(
         'customRecurrenceEndDatePicker',
       ) as HTMLInputElement;
-      fireEvent.change(datePicker, { target: { value: '2025-12-31' } });
+
+      // Clear the input first and then type a new date
+      await user.clear(datePicker);
+      await user.type(datePicker, '2025-12-31');
 
       await waitFor(() => {
         expect(setRecurrenceRuleState).toHaveBeenCalled();
@@ -556,6 +556,7 @@ describe('RecurrenceEndOptionsSection', () => {
   describe('State Changes', () => {
     it('should update state correctly when date changes', async () => {
       const setRecurrenceRuleState = vi.fn();
+      const user = userEvent.setup();
 
       render(
         <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -570,9 +571,10 @@ describe('RecurrenceEndOptionsSection', () => {
       const datePicker = screen.getByTestId(
         'customRecurrenceEndDatePicker',
       ) as HTMLInputElement;
-      fireEvent.change(datePicker, {
-        target: { value: '2025-12-31' },
-      });
+
+      // Clear the input first and then type a new date
+      await user.clear(datePicker);
+      await user.type(datePicker, '2025-12-31');
 
       await waitFor(() => {
         expect(setRecurrenceRuleState).toHaveBeenCalled();

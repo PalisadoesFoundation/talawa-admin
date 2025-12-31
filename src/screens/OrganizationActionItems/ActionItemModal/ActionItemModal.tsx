@@ -28,13 +28,17 @@ import type {
 
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import {
   CREATE_ACTION_ITEM_MUTATION,
   UPDATE_ACTION_ITEM_MUTATION,
   UPDATE_ACTION_ITEM_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
+import {
+  ACTION_ITEM_LIST,
+  GET_EVENT_ACTION_ITEMS,
+} from 'GraphQl/Queries/ActionItemQueries';
 import {
   Autocomplete,
   FormControl,
@@ -49,12 +53,37 @@ import {
 } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'types/Volunteer/interface';
 
+export interface IEventVolunteersData {
+  event: {
+    id: string;
+    recurrenceRule: { id: string; __typename?: string } | null;
+    baseEvent: { id: string; __typename?: string } | null;
+    volunteers: InterfaceEventVolunteerInfo[];
+    __typename?: string;
+  };
+}
+
+export interface IEventVolunteerGroupsData {
+  event: {
+    id: string;
+    recurrenceRule: { id: string; __typename?: string } | null;
+    baseEvent: { id: string; __typename?: string } | null;
+    volunteerGroups: IEventVolunteerGroup[];
+    __typename?: string;
+  };
+}
+
+export interface IActionItemCategoriesData {
+  actionCategoriesByOrganization: IActionItemCategoryInfo[];
+}
+
 const initializeFormState = (
   actionItem: IActionItemInfo | null,
+  initialDate?: Date,
 ): IFormStateType => ({
   assignedAt: actionItem?.assignedAt
     ? new Date(actionItem.assignedAt)
-    : new Date(),
+    : initialDate || new Date(),
   categoryId: actionItem?.category?.id || '',
   volunteerId: actionItem?.volunteer?.id || '',
   volunteerGroupId: actionItem?.volunteerGroup?.id || '',
@@ -75,6 +104,7 @@ const ItemModal: FC<IItemModalProps> = ({
   isRecurring,
   baseEvent,
   orgActionItemsRefetch,
+  initialDate,
 }) => {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',
@@ -92,7 +122,7 @@ const ItemModal: FC<IItemModalProps> = ({
   >('volunteer');
 
   const [formState, setFormState] = useState<IFormStateType>(
-    initializeFormState(actionItem),
+    initializeFormState(actionItem, initialDate),
   );
 
   const [applyTo, setApplyTo] = useState<'series' | 'instance'>('instance');
@@ -107,31 +137,39 @@ const ItemModal: FC<IItemModalProps> = ({
     isCompleted,
   } = formState;
 
-  const { data: actionItemCategoriesData } = useQuery(
-    ACTION_ITEM_CATEGORY_LIST,
-    {
+  const { data: actionItemCategoriesData } =
+    useQuery<IActionItemCategoriesData>(ACTION_ITEM_CATEGORY_LIST, {
       variables: {
         input: {
           organizationId: orgId,
         },
       },
+      notifyOnNetworkStatusChange: false,
+    });
+
+  const { data: volunteersData } = useQuery<IEventVolunteersData>(
+    GET_EVENT_VOLUNTEERS,
+    {
+      variables: {
+        input: { id: eventId },
+        where: {},
+      },
+      skip: !eventId,
+      notifyOnNetworkStatusChange: false,
     },
   );
 
-  const { data: volunteersData } = useQuery(GET_EVENT_VOLUNTEERS, {
-    variables: {
-      input: { id: eventId },
-      where: {},
+  const { data: volunteerGroupsData } = useQuery<IEventVolunteerGroupsData>(
+    GET_EVENT_VOLUNTEER_GROUPS,
+    {
+      variables: {
+        input: { id: eventId },
+        where: {},
+      },
+      skip: !eventId,
+      notifyOnNetworkStatusChange: false,
     },
-    skip: !eventId,
-  });
-
-  const { data: volunteerGroupsData } = useQuery(GET_EVENT_VOLUNTEER_GROUPS, {
-    variables: {
-      input: { id: eventId },
-    },
-    skip: !eventId,
-  });
+  );
 
   const volunteers = useMemo(() => {
     const allVolunteers = volunteersData?.event?.volunteers || [];
@@ -180,16 +218,49 @@ const ItemModal: FC<IItemModalProps> = ({
   );
 
   const [createActionItem] = useMutation(CREATE_ACTION_ITEM_MUTATION, {
-    refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
+    refetchQueries: [
+      {
+        query: ACTION_ITEM_LIST,
+        variables: { input: { organizationId: orgId } },
+      },
+      ...(eventId
+        ? [
+            {
+              query: GET_EVENT_ACTION_ITEMS,
+              variables: { input: { id: eventId } },
+            },
+          ]
+        : []),
+    ],
   });
   const [updateActionItem] = useMutation(UPDATE_ACTION_ITEM_MUTATION, {
-    refetchQueries: ['ActionItemsByOrganization', 'GetEventActionItems'],
+    refetchQueries: [
+      {
+        query: ACTION_ITEM_LIST,
+        variables: { input: { organizationId: orgId } },
+      },
+      ...(eventId
+        ? [
+            {
+              query: GET_EVENT_ACTION_ITEMS,
+              variables: { input: { id: eventId } },
+            },
+          ]
+        : []),
+    ],
   });
 
   const [updateActionForInstance] = useMutation(
     UPDATE_ACTION_ITEM_FOR_INSTANCE,
     {
-      refetchQueries: ['GetEventActionItems'],
+      refetchQueries: eventId
+        ? [
+            {
+              query: GET_EVENT_ACTION_ITEMS,
+              variables: { input: { id: eventId } },
+            },
+          ]
+        : [],
     },
   );
 
@@ -248,6 +319,7 @@ const ItemModal: FC<IItemModalProps> = ({
 
   const updateActionItemHandler = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
+
     try {
       if (!actionItem?.id) {
         toast.error('Action item ID is missing');
@@ -314,8 +386,10 @@ const ItemModal: FC<IItemModalProps> = ({
   };
 
   useEffect(() => {
-    setFormState(initializeFormState(actionItem));
+    setFormState(initializeFormState(actionItem, initialDate));
+  }, [actionItem, initialDate]);
 
+  useEffect(() => {
     if (actionItem?.category?.id) {
       const foundCategory: IActionItemCategoryInfo | undefined =
         actionItemCategories.find(

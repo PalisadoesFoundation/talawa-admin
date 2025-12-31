@@ -6,4 +6,4 @@
 
 > `const` **default**: `FC`\<`InterfaceAgendaCategoryProps`\>
 
-Defined in: [src/components/OrgSettings/AgendaItemCategories/OrganizationAgendaCategory.tsx:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/AgendaItemCategories/OrganizationAgendaCategory.tsx#L53)
+Defined in: [src/components/OrgSettings/AgendaItemCategories/OrganizationAgendaCategory.tsx:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/AgendaItemCategories/OrganizationAgendaCategory.tsx#L54)

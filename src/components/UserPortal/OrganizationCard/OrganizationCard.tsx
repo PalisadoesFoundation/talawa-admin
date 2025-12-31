@@ -41,7 +41,7 @@
  */
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 

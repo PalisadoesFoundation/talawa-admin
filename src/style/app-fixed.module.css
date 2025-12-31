@@ -129,6 +129,7 @@
   --tableHeader-bg: #eaebef;
   --tableHeader-color: #000000;
   --tableHeader-success-bg: var(--success-green-color);
+  --incomplete-color: #ed6c02;
 
   --LoginToggle-button-color: #555555;
   --LoginToggle-button-bg: #eaebef;
@@ -10267,6 +10268,43 @@ form {
   object-fit: cover;
   width: var(--avatar-size, 40px);
   height: var(--avatar-size, 40px);
+}
+
+/* Utility classes for inline style replacements */
+.modalHeaderWithTableBg {
+  background-color: var(--tableHeader-bg) !important;
+}
+
+.noMargin {
+  margin: 0;
+}
+
+.overflowHiddenX {
+  overflow-x: hidden;
+}
+
+.flexOne {
+  flex: 1;
+}
+
+.minWidth32 {
+  min-width: 32px;
+}
+
+.fontWeightBold {
+  font-weight: 900;
+}
+
+.organizationsContainer {
+  padding-top: 20px;
+}
+
+.organizationsContainerExpanded {
+  margin-left: 40px;
+}
+
+.organizationsContainerContracted {
+  margin-left: 20px;
 }
 
 .avatarPlaceholderSize {

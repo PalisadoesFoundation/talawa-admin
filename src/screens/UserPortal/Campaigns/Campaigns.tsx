@@ -18,7 +18,7 @@ import { type GridCellParams } from '@mui/x-data-grid';
 import useLocalStorage from 'utils/useLocalstorage';
 import PledgeModal from './PledgeModal';
 import { USER_FUND_CAMPAIGNS } from 'GraphQl/Queries/fundQueries';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import type { InterfaceUserCampaign } from 'utils/interfaces';
 import { currencySymbols } from 'utils/currency';
 import TableLoader from 'components/TableLoader/TableLoader';
@@ -31,6 +31,10 @@ import {
   ReportingTableGridProps,
 } from 'types/ReportingTable/interface';
 import { PAGE_SIZE, ROW_HEIGHT } from 'types/ReportingTable/utils';
+import {
+  IUserFundCampaignsResult,
+  ICampaignEdge,
+} from 'types/GraphQL/queryResults';
 
 const dataGridStyle = {
   borderRadius: 'var(--table-head-radius)',
@@ -70,7 +74,7 @@ const Campaigns = (): JSX.Element => {
     loading: campaignLoading,
     error: campaignError,
     refetch: refetchCampaigns,
-  } = useQuery(USER_FUND_CAMPAIGNS, {
+  } = useQuery<IUserFundCampaignsResult>(USER_FUND_CAMPAIGNS, {
     variables: {
       input: { id: orgId as string },
     },
@@ -99,31 +103,15 @@ const Campaigns = (): JSX.Element => {
 
     const allCampaigns: InterfaceUserCampaign[] =
       campaignData.organization.funds.edges
-        .flatMap(
-          (fundEdge: { node: { campaigns?: { edges: unknown[] } } }) =>
-            fundEdge?.node?.campaigns?.edges ?? [],
-        )
-        .map(
-          ({
-            node: campaign,
-          }: {
-            node: {
-              id: string;
-              name: string;
-              currencyCode: string;
-              goalAmount: number;
-              startAt: string;
-              endAt: string;
-            };
-          }) => ({
-            _id: campaign.id,
-            name: campaign.name,
-            fundingGoal: campaign.goalAmount,
-            startDate: new Date(campaign.startAt),
-            endDate: new Date(campaign.endAt),
-            currency: campaign.currencyCode,
-          }),
-        );
+        .flatMap((fundEdge) => fundEdge?.node?.campaigns?.edges ?? [])
+        .map(({ node: campaign }: ICampaignEdge) => ({
+          _id: campaign.id,
+          name: campaign.name,
+          fundingGoal: campaign.goalAmount,
+          startDate: new Date(campaign.startAt),
+          endDate: new Date(campaign.endAt),
+          currency: campaign.currencyCode,
+        }));
 
     return allCampaigns;
   }, [campaignData]);

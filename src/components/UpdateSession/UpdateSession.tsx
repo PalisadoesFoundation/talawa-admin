@@ -39,12 +39,13 @@ import { useTranslation } from 'react-i18next';
 import { Card, Button, Form } from 'react-bootstrap';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import { UPDATE_SESSION_TIMEOUT_PG } from 'GraphQl/Mutations/mutations';
 import styles from 'style/app-fixed.module.css';
+import componentStyles from './UpdateSession.module.css';
 import Loader from 'components/Loader/Loader';
 
 interface TestInterfaceUpdateTimeoutProps {
@@ -63,14 +64,19 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
     30,
   ); // Timeout from database for the community
 
+  type TimeoutDataType = { inactivityTimeoutDuration: number };
+
   const {
     data,
     loading,
     error: queryError,
-  } = useQuery(GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG);
+  } = useQuery<{ community: TimeoutDataType }>(
+    GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
+    {
+      notifyOnNetworkStatusChange: true,
+    },
+  );
   const [uploadSessionTimeout] = useMutation(UPDATE_SESSION_TIMEOUT_PG);
-
-  type TimeoutDataType = { inactivityTimeoutDuration: number };
 
   /**
    * Effect that fetches the current session timeout from the server and sets the initial state.
@@ -154,30 +160,30 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
       <Card className={`${styles.updateTimeoutCard} rounded-4 shadow-sm`}>
         <Card.Header className={styles.updateTimeoutCardHeader}>
           <div className={styles.updateTimeoutCardTitle}>
-            Login Session Timeout
+            {t('loginSessionTimeout')}
           </div>
         </Card.Header>
         <Card.Body className={styles.updateTimeoutCardBody}>
           <Form onSubmit={handleOnSubmit}>
             <div className={styles.updateTimeoutLabelsContainer}>
               <Form.Label className={styles.updateTimeoutCurrent}>
-                Current Timeout:
+                {t('currentTimeout')}:
                 <span
                   className={styles.updateTimeoutValue}
                   data-testid="timeout-value"
                 >
                   {communityTimeout !== undefined
-                    ? ` ${communityTimeout} minutes`
-                    : ' No timeout set'}
+                    ? ` ${communityTimeout} ${t('minutes')}`
+                    : ` ${t('noTimeoutSet')}`}
                 </span>
               </Form.Label>
 
               <Form.Label className={styles.updateTimeoutLabel}>
-                Update Timeout
+                {t('updateTimeout')}
               </Form.Label>
             </div>
 
-            <Box sx={{ width: '100%' }}>
+            <Box className={componentStyles.sliderContainer}>
               <Slider
                 data-testid="slider-thumb"
                 value={timeout}
@@ -194,10 +200,10 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
               className={styles.updateTimeoutSliderLabels}
               data-testid="slider-labels"
             >
-              <span>15 min</span>
-              <span>30 min</span>
-              <span>45 min</span>
-              <span>60 min</span>
+              <span>{t('fifteenMin')}</span>
+              <span>{t('thirtyMin')}</span>
+              <span>{t('fortyFiveMin')}</span>
+              <span>{t('sixtyMin')}</span>
             </div>
             <div className={styles.updateTimeoutButtonContainer}>
               <Button
@@ -205,7 +211,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
                 className={styles.addButton}
                 data-testid="update-button"
               >
-                Update
+                {t('update')}
               </Button>
             </div>
           </Form>

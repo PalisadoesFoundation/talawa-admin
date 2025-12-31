@@ -33,46 +33,52 @@
 import React from 'react';
 import { TableBody, TableCell, TableRow, Table } from '@mui/material';
 import { EVENT_DETAILS } from 'GraphQl/Queries/Queries';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { Link, useParams } from 'react-router';
 import { formatDate } from 'utils/dateFormatter';
+import { useTranslation } from 'react-i18next';
 import DateIcon from 'assets/svgs/cardItemDate.svg?react';
 import type { InterfaceEvent } from 'types/Event/interface';
+import styles from './AttendedEventList.module.css';
 
 const AttendedEventList: React.FC<Partial<InterfaceEvent>> = ({ id }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'eventAttendance' });
   const { orgId: currentOrg } = useParams();
-  const { data, loading, error } = useQuery(EVENT_DETAILS, {
-    variables: { eventId: id },
+  const { data, loading, error } = useQuery<
+    { event: InterfaceEvent },
+    { eventId: string }
+  >(EVENT_DETAILS, {
+    variables: { eventId: id ?? '' },
     fetchPolicy: 'cache-first',
     errorPolicy: 'all',
+    skip: !id,
   });
 
-  if (error || data?.error) {
-    return <p>Error loading event details. Please try again later.</p>;
+  if (error) {
+    return <p>{t('errorLoadingEventDetails')}</p>;
   }
 
   const event = data?.event ?? null;
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p>{t('loading')}</p>;
   return (
     <React.Fragment>
-      <Table className="bg-primary" aria-label="Attended events list">
+      <Table className="bg-primary" aria-label={t('attendedEventsList')}>
         <TableBody className="bg-primary">
           {event && (
             <TableRow
               key={event.id}
               className="bg-white rounded"
               role="row"
-              aria-label={`Event: ${event.name}`}
+              aria-label={t('eventName', { name: event.name })}
             >
               <TableCell>
                 <Link
                   to={`/event/${currentOrg}/${event.id}`}
-                  className="d-flex justify-items-center align-items-center"
-                  style={{ color: 'blue', textDecoration: 'none' }}
+                  className={`d-flex justify-items-center align-items-center ${styles.eventLink}`}
                 >
                   <DateIcon
-                    title="Event Date"
+                    title={t('eventDate')}
                     fill="var(--bs-gray-600)"
                     width={25}
                     height={25}

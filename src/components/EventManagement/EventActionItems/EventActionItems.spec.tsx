@@ -1,5 +1,6 @@
 import React from 'react';
-import { MockedProvider, MockedResponse } from '@apollo/client/testing';
+import { MockLink } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
@@ -42,6 +43,19 @@ vi.mock('react-toastify', () => ({
     error: vi.fn(),
   },
 }));
+
+// Mock debounce from @mui/material to avoid window is not defined error
+vi.mock('@mui/material', async () => {
+  const actual = await vi.importActual('@mui/material');
+  return {
+    ...actual,
+    debounce: (fn: (...args: unknown[]) => unknown) => {
+      const debounced = (...args: unknown[]) => fn(...args);
+      debounced.clear = vi.fn();
+      return debounced;
+    },
+  };
+});
 
 // Mock sub-components
 vi.mock('components/Loader/Loader', () => ({
@@ -167,6 +181,7 @@ const mockActionItem: IActionItemInfo = {
   preCompletionNotes: 'Notes 1',
   postCompletionNotes: 'Post Notes 1',
   isInstanceException: false,
+  isTemplate: false,
 
   volunteer: {
     id: 'volunteerId1',
@@ -333,8 +348,8 @@ const MOCKS_ERROR = [
 
 const renderEventActionItems = (
   eventId: string = 'eventId1',
-  mocks: MockedResponse[] = MOCKS,
-): ReturnType<typeof render> => {
+  mocks: MockLink.MockedResponse[] = MOCKS,
+) => {
   return render(
     <MockedProvider mocks={mocks}>
       <Provider store={store}>
@@ -975,7 +990,25 @@ describe('EventActionItems', () => {
     });
 
     it('should filter to show only completed items', async () => {
-      renderEventActionItems();
+      // Provide multiple mock responses to handle refetches
+      const mocksWithMultipleResponses = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockEventData },
+        },
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: mockEventData },
+        },
+      ];
+
+      renderEventActionItems('eventId1', mocksWithMultipleResponses);
 
       // Initially both items visible
       await waitFor(() => {

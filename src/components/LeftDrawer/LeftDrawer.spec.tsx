@@ -1,8 +1,8 @@
 import React from 'react';
 import { describe, it, vi, expect, beforeEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
-import { MockedProvider } from '@apollo/react-testing';
+import { MemoryRouter } from 'react-router-dom';
+import { MockedProvider } from '@apollo/client/testing/react';
 import LeftDrawer from './LeftDrawer';
 import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
@@ -34,7 +34,7 @@ vi.mock('components/SignOut/SignOut', () => ({
   default: ({ hideDrawer }: { hideDrawer?: boolean }) => (
     <div
       data-testid="sign-out-component"
-      style={{ display: hideDrawer ? 'none' : 'block' }}
+      className={hideDrawer ? 'd-none' : 'd-block'}
     >
       Sign Out Mock
     </div>
@@ -89,26 +89,34 @@ describe('LeftDrawer Component', () => {
   });
   const TestWrapper = ({
     initialHideDrawer = false,
+    initialEntries = ['/'],
   }: {
     initialHideDrawer?: boolean;
+    initialEntries?: string[];
   }) => {
     const [hideDrawer, setHideDrawer] = React.useState(initialHideDrawer);
 
     return (
       <MockedProvider mocks={[]}>
-        <BrowserRouter>
+        <MemoryRouter initialEntries={initialEntries}>
           <I18nextProvider i18n={i18n}>
             <LeftDrawer hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
           </I18nextProvider>
-        </BrowserRouter>
+        </MemoryRouter>
       </MockedProvider>
     );
   };
 
   const renderComponent = (
     initialHideDrawer = false,
+    initialEntries = ['/'],
   ): ReturnType<typeof render> => {
-    return render(<TestWrapper initialHideDrawer={initialHideDrawer} />);
+    return render(
+      <TestWrapper
+        initialHideDrawer={initialHideDrawer}
+        initialEntries={initialEntries}
+      />,
+    );
   };
 
   beforeEach(() => {
@@ -244,9 +252,7 @@ describe('LeftDrawer Component', () => {
         clearAllItems: vi.fn(),
       }));
 
-      window.history.pushState({}, '', '/users');
-
-      renderComponent();
+      renderComponent(false, ['/users']);
       const element = screen.getByTestId('usersBtn');
       expect(element.className).toContain('sidebarBtnActive');
     });
@@ -271,11 +277,8 @@ describe('LeftDrawer Component', () => {
     });
 
     it('applies active styles to the current route button', () => {
-      renderComponent();
+      renderComponent(false, ['/orglist']);
       const organizationsButton = screen.getByTestId('organizationsBtn');
-
-      // Simulate active route
-      window.history.pushState({}, '', '/orglist');
 
       expect(organizationsButton).toHaveClass(`${styles.sidebarBtnActive}`);
     });
@@ -292,11 +295,11 @@ describe('LeftDrawer Component', () => {
 
       render(
         <MockedProvider mocks={[]}>
-          <BrowserRouter>
+          <MemoryRouter>
             <I18nextProvider i18n={i18n}>
               <LeftDrawer hideDrawer={false} setHideDrawer={setHideDrawer} />
             </I18nextProvider>
-          </BrowserRouter>
+          </MemoryRouter>
         </MockedProvider>,
       );
 
@@ -319,11 +322,11 @@ describe('LeftDrawer Component', () => {
 
       render(
         <MockedProvider mocks={[]}>
-          <BrowserRouter>
+          <MemoryRouter>
             <I18nextProvider i18n={i18n}>
               <LeftDrawer hideDrawer={false} setHideDrawer={setHideDrawer} />
             </I18nextProvider>
-          </BrowserRouter>
+          </MemoryRouter>
         </MockedProvider>,
       );
 
@@ -351,11 +354,11 @@ describe('LeftDrawer Component', () => {
       const setHideDrawer = vi.fn();
       render(
         <MockedProvider mocks={[]}>
-          <BrowserRouter>
+          <MemoryRouter>
             <I18nextProvider i18n={i18n}>
               <LeftDrawer hideDrawer={false} setHideDrawer={setHideDrawer} />
             </I18nextProvider>
-          </BrowserRouter>
+          </MemoryRouter>
         </MockedProvider>,
       );
 
@@ -497,13 +500,14 @@ describe('LeftDrawer Component', () => {
       });
 
       const setHideDrawer = vi.fn();
+
       render(
         <MockedProvider mocks={[]}>
-          <BrowserRouter>
+          <MemoryRouter>
             <I18nextProvider i18n={i18n}>
               <LeftDrawer hideDrawer={false} setHideDrawer={setHideDrawer} />
             </I18nextProvider>
-          </BrowserRouter>
+          </MemoryRouter>
         </MockedProvider>,
       );
 

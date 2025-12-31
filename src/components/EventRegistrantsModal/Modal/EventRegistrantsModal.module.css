@@ -1,0 +1,18 @@
+.modalHeader {
+  background-color: var(--tableHeader-bg);
+}
+
+.addOnspotLink {
+  color: var(--addButton-font);
+  text-decoration: underline;
+}
+
+.inviteButton {
+  background-color: #6cc9a6;
+  color: #fff;
+}
+
+.addRegistrantButton {
+  background-color: var(--addButton-bg);
+  color: var(--addButton-font);
+}

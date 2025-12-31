@@ -1,8 +1,8 @@
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import {
+  WarningAmberRounded,
   AccountBalanceWallet,
   Search,
-  WarningAmberRounded,
 } from '@mui/icons-material';
 import { Stack } from '@mui/material';
 import { type GridCellParams } from '@mui/x-data-grid';
@@ -17,6 +17,7 @@ import FundModal from './modal/FundModal';
 import { FUND_LIST } from 'GraphQl/Queries/fundQueries';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceFundInfo } from 'utils/interfaces';
+import type { IFundListResult } from 'types/GraphQL/queryResults';
 import {
   ReportingRow,
   ReportingTableColumn,
@@ -131,19 +132,7 @@ const organizationFunds = (): JSX.Element => {
     loading: fundLoading,
     error: fundError,
     refetch: refetchFunds,
-  }: {
-    data?: {
-      organization: {
-        funds: {
-          edges: { node: InterfaceFundInfo }[];
-        };
-      };
-    };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(FUND_LIST, {
-    skip: !orgId,
+  } = useQuery<IFundListResult>(FUND_LIST, {
     variables: {
       input: {
         id: orgId ?? '',
@@ -162,9 +151,17 @@ const organizationFunds = (): JSX.Element => {
 
   const funds = useMemo(() => {
     return (
-      fundData?.organization?.funds?.edges.map(
-        (edge: { node: InterfaceFundInfo }) => edge.node,
-      ) ?? []
+      fundData?.organization?.funds?.edges.map((edge) => ({
+        id: edge.node.id,
+        name: edge.node.name,
+        refrenceNumber: '',
+        isTaxDeductible: edge.node.isTaxDeductible ?? false,
+        isArchived: false,
+        isDefault: false,
+        createdAt: edge.node.createdAt ?? '',
+        updatedAt: '',
+        organizationId: '',
+      })) ?? []
     );
   }, [fundData]);
 

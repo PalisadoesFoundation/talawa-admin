@@ -35,7 +35,7 @@ import { Button } from 'react-bootstrap';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { toast } from 'react-toastify';
 
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { AGENDA_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
 import { CREATE_AGENDA_ITEM_CATEGORY_MUTATION } from 'GraphQl/Mutations/mutations';
 
@@ -43,6 +43,7 @@ import type { InterfaceAgendaItemCategoryList } from 'utils/interfaces';
 import AgendaCategoryContainer from 'components/AgendaCategory/AgendaCategoryContainer';
 import AgendaCategoryCreateModal from './Create/AgendaCategoryCreateModal';
 import styles from 'style/app-fixed.module.css';
+import componentStyles from './OrganizationAgendaCategory.module.css';
 import Loader from 'components/Loader/Loader';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 
@@ -75,12 +76,7 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
     loading: agendaCategoryLoading,
     error: agendaCategoryError,
     refetch: refetchAgendaCategory,
-  }: {
-    data: InterfaceAgendaItemCategoryList | undefined;
-    loading: boolean;
-    error?: unknown | undefined;
-    refetch: () => void;
-  } = useQuery(AGENDA_ITEM_CATEGORY_LIST, {
+  } = useQuery<InterfaceAgendaItemCategoryList>(AGENDA_ITEM_CATEGORY_LIST, {
     variables: { organizationId: orgId, where: { name_contains: searchTerm } },
     notifyOnNetworkStatusChange: true,
   });
@@ -143,7 +139,9 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
     return (
       <div className={`${styles.container} bg-transparent rounded-4 my-3`}>
         <div className={styles.message}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded
+            className={`${styles.errorIcon} ${componentStyles.errorIcon}`}
+          />
           <h6 className="fw-bold text-danger text-center">
             Error occured while loading{' '}
             {agendaCategoryError && 'Agenda Categories'}
@@ -183,7 +181,7 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
         <hr />
 
         <AgendaCategoryContainer
-          agendaCategoryConnection={`Organization`}
+          agendaCategoryConnection="Organization"
           agendaCategoryData={
             agendaCategoryData?.agendaItemCategoriesByOrganization
           }

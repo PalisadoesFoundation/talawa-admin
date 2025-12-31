@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { MemoryRouter, Routes, Route } from 'react-router';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
@@ -155,7 +155,9 @@ type MemberConnectionVariables = {
 };
 
 type MemberEdge = {
+  __typename: string;
   node: {
+    __typename: string;
     id: string;
     name: string;
     emailAddress: string;
@@ -169,6 +171,7 @@ type MemberEdge = {
 type MemberConnectionOverrides = {
   edges?: MemberEdge[];
   pageInfo?: {
+    __typename?: string;
     hasNextPage?: boolean;
     hasPreviousPage?: boolean;
     startCursor?: string;
@@ -182,10 +185,14 @@ const createMemberConnectionMock = (
 ) => {
   const defaultData = {
     organization: {
+      __typename: 'Organization',
       members: {
+        __typename: 'UserMembersConnection',
         edges: [
           {
+            __typename: 'UserMembersEdge',
             node: {
+              __typename: 'User',
               id: 'member1',
               name: 'John Doe',
               emailAddress: 'john@example.com',
@@ -196,7 +203,9 @@ const createMemberConnectionMock = (
             cursor: 'cursor1',
           },
           {
+            __typename: 'UserMembersEdge',
             node: {
+              __typename: 'User',
               id: 'member2',
               name: 'Jane Smith',
               emailAddress: 'jane@example.com',
@@ -208,6 +217,7 @@ const createMemberConnectionMock = (
           },
         ] as MemberEdge[],
         pageInfo: {
+          __typename: 'PageInfo',
           hasNextPage: true,
           hasPreviousPage: false,
           startCursor: 'cursor1',
@@ -259,7 +269,9 @@ type UserListVariables = {
 };
 
 type UserEdge = {
+  __typename: string;
   node: {
+    __typename: string;
     id: string;
     name: string;
     emailAddress: string;
@@ -273,6 +285,7 @@ type UserEdge = {
 type UserListOverrides = {
   edges?: UserEdge[];
   pageInfo?: {
+    __typename?: string;
     hasNextPage?: boolean;
     hasPreviousPage?: boolean;
     startCursor?: string;
@@ -286,9 +299,12 @@ const createUserListMock = (
 ) => {
   const defaultData = {
     allUsers: {
+      __typename: 'UserConnection',
       edges: [
         {
+          __typename: 'UserEdge',
           node: {
+            __typename: 'User',
             id: 'user1',
             name: 'User One',
             emailAddress: 'user1@example.com',
@@ -299,7 +315,9 @@ const createUserListMock = (
           cursor: 'userCursor1',
         },
         {
+          __typename: 'UserEdge',
           node: {
+            __typename: 'User',
             id: 'user2',
             name: 'User Two',
             emailAddress: 'user2@example.com',
@@ -311,6 +329,7 @@ const createUserListMock = (
         },
       ],
       pageInfo: {
+        __typename: 'PageInfo',
         hasNextPage: true,
         hasPreviousPage: false,
         startCursor: 'userCursor1',
@@ -510,7 +529,9 @@ describe('OrganizationPeople', () => {
       {
         edges: [
           {
+            __typename: 'UserMembersEdge',
             node: {
+              __typename: 'User',
               id: 'admin1',
               name: 'Admin User',
               emailAddress: 'admin@example.com',
@@ -610,7 +631,9 @@ describe('OrganizationPeople', () => {
       {
         edges: [
           {
+            __typename: 'UserMembersEdge',
             node: {
+              __typename: 'User',
               id: 'member3',
               name: 'Bob Johnson',
               emailAddress: 'bob@example.com',
@@ -704,7 +727,9 @@ describe('OrganizationPeople', () => {
       {
         edges: [
           {
+            __typename: 'UserMembersEdge',
             node: {
+              __typename: 'User',
               id: 'admin1',
               name: 'Admin User',
               emailAddress: 'admin@example.com',
@@ -736,7 +761,9 @@ describe('OrganizationPeople', () => {
       {
         edges: [
           {
+            __typename: 'UserMembersEdge',
             node: {
+              __typename: 'User',
               id: 'admin2',
               name: 'Admin User 2',
               emailAddress: 'admin2@example.com',
@@ -768,7 +795,9 @@ describe('OrganizationPeople', () => {
       {
         edges: [
           {
+            __typename: 'UserMembersEdge',
             node: {
+              __typename: 'User',
               id: 'admin1',
               name: 'Admin User',
               emailAddress: 'admin1@example.com',
@@ -884,7 +913,9 @@ describe('OrganizationPeople', () => {
       {
         edges: [
           {
+            __typename: 'UserEdge',
             node: {
+              __typename: 'User',
               id: 'member3',
               name: 'Bob Johnson',
               emailAddress: 'bob@example.com',
@@ -995,7 +1026,9 @@ describe('OrganizationPeople', () => {
       {
         edges: [
           {
+            __typename: 'UserMembersEdge',
             node: {
+              __typename: 'User',
               id: 'admin1',
               name: 'Admin User',
               emailAddress: 'admin@example.com',
@@ -1299,7 +1332,9 @@ describe('OrganizationPeople', () => {
       {
         edges: [
           {
+            __typename: 'UserMembersEdge',
             node: {
+              __typename: 'User',
               id: 'member1',
               name: 'John Doe',
               emailAddress: 'john@example.com',
@@ -1361,16 +1396,61 @@ describe('OrganizationPeople', () => {
       before: null,
     });
 
+    // Mock for forward navigation (when clicking Next Page)
+    const nextPageMock = createMemberConnectionMock(
+      {
+        orgId: 'orgid',
+        first: 10,
+        after: 'cursor2',
+        last: null,
+        before: null,
+      },
+      {
+        edges: [
+          {
+            __typename: 'UserMembersEdge',
+            node: {
+              __typename: 'User',
+              id: 'member3',
+              name: 'Bob Johnson',
+              emailAddress: 'bob@example.com',
+              avatarURL: null,
+              createdAt: '2023-01-03T00:00:00Z',
+            },
+            cursor: 'cursor3',
+          },
+        ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: true,
+          startCursor: 'cursor3',
+          endCursor: 'cursor3',
+        },
+      },
+    );
+
     // Mock for backward navigation without stored cursors
     const backwardMock = createMemberConnectionMock({
       orgId: 'orgid',
       first: null,
       after: null,
       last: 10,
-      before: null, // This will test the fallback to null
+      before: 'cursor3',
     });
 
-    const link = new StaticMockLink([initialMock, backwardMock], true);
+    // Mock for returning to first page
+    const firstPageMock = createMemberConnectionMock({
+      orgId: 'orgid',
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
+
+    const link = new StaticMockLink(
+      [initialMock, nextPageMock, backwardMock, firstPageMock],
+      true,
+    );
 
     render(
       <MockedProvider link={link}>
@@ -1404,6 +1484,10 @@ describe('OrganizationPeople', () => {
       name: /previous page/i,
     });
     fireEvent.click(prevPageButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
   });
 
   test('prevents forward pagination when hasNextPage is false', async () => {
@@ -1451,7 +1535,9 @@ describe('OrganizationPeople', () => {
       {
         edges: [
           {
+            __typename: 'UserMembersEdge',
             node: {
+              __typename: 'User',
               id: 'member1',
               name: 'John Doe',
               emailAddress: 'john@example.com',

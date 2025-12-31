@@ -59,7 +59,7 @@ import type {
 import styles from 'style/app-fixed.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { toast } from 'react-toastify';
 import {
@@ -105,7 +105,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   const [updatePledge] = useMutation(UPDATE_PLEDGE);
   const [createPledge] = useMutation(CREATE_PLEDGE);
 
-  const { data: memberData } = useQuery(MEMBERS_LIST_PG, {
+  const { data: memberData } = useQuery<any>(MEMBERS_LIST_PG, {
     variables: { input: { id: orgId } },
   });
 

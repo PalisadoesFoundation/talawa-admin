@@ -30,7 +30,8 @@
  * ```
  *
  */
-import { useMutation, useQuery } from '@apollo/client';
+
+import { useMutation, useQuery } from '@apollo/client/react';
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
@@ -41,6 +42,7 @@ import type {
   InterfaceTagData,
 } from 'utils/interfaces';
 import styles from '../../style/app-fixed.module.css';
+import componentStyles from './TagActions.module.css';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import {
   ASSIGN_TO_TAGS,
@@ -279,7 +281,9 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded
+            className={`${styles.errorIcon} ${componentStyles.errorIcon}`}
+          />
           <h6 className="fw-bold text-danger text-center">
             {t('errorOccurredWhileLoadingOrganizationUserTags')}
           </h6>
@@ -360,7 +364,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                 <div
                   id="scrollableDiv"
                   data-testid="scrollableDiv"
-                  style={{ height: 300, overflow: 'auto' }}
+                  className={componentStyles.scrollableDiv}
                 >
                   <InfiniteScroll
                     dataLength={userTagsList?.length ?? 0}

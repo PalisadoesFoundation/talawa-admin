@@ -11,7 +11,9 @@ import {
   FaTrash,
   FaChevronLeft,
   FaChevronRight,
+  FaTimes,
 } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import { AdminPluginFileService } from '../../plugin/services/AdminPluginFileService';
 import type { IPluginDetails, IPluginModalProps } from 'plugin';
 import styles from './PluginModal.module.css';
@@ -33,6 +35,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
   togglePluginStatus,
   uninstallPlugin,
 }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'pluginStore' });
   const [details, setDetails] = useState<IPluginDetails | null>(null);
   const [fetching, setFetching] = useState(false);
   const [tab, setTab] = useState<TabType>('Details');
@@ -158,17 +161,17 @@ const PluginModal: React.FC<IPluginModalProps> = ({
         {/* Close Button */}
         <button
           type="button"
-          aria-label="Close"
+          aria-label={t('close')}
           onClick={onHide}
           className={styles.closeButton}
         >
-          &times;
+          <FaTimes />
         </button>
         {/* Sidebar */}
         <div className={styles.sidebar}>
           <img
             src={plugin?.icon}
-            alt="Plugin Icon"
+            alt={t('pluginIcon')}
             className={styles.pluginIcon}
           />
           <div className={styles.pluginName}>{plugin?.name}</div>
@@ -221,7 +224,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                     onClick={() => uninstallPlugin(meta)}
                   >
                     <FaTrash className={styles.iconTrash} />
-                    Uninstall
+                    {t('uninstall')}
                   </Button>
                 </LoadingState>
               </>
@@ -254,7 +257,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                   onClick={closeScreenshotViewer}
                   className={styles.backButton}
                 >
-                  ← Back to Details
+                  {t('backToDetails')}
                 </button>
 
                 {screenshotViewer.screenshots.length > 1 && (
@@ -271,14 +274,14 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                   <button
                     onClick={previousScreenshot}
                     className={styles.navigationButtonLeft}
-                    title="Previous image (←)"
+                    title={t('previousImage')}
                   >
                     <FaChevronLeft />
                   </button>
                   <button
                     onClick={nextScreenshot}
                     className={styles.navigationButtonRight}
-                    title="Next image (→)"
+                    title={t('nextImage')}
                   >
                     <FaChevronRight />
                   </button>
@@ -292,7 +295,9 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                   src={
                     screenshotViewer.screenshots[screenshotViewer.currentIndex]
                   }
-                  alt={`Screenshot ${screenshotViewer.currentIndex + 1}`}
+                  alt={t('screenshotAlt', {
+                    index: screenshotViewer.currentIndex + 1,
+                  })}
                   className={styles.screenshotImage}
                 />
               </div>
@@ -315,7 +320,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                             ? styles.dotIndicatorActive
                             : styles.dotIndicator
                         }
-                        title={`Go to screenshot ${index + 1}`}
+                        title={t('goToScreenshot', { index: index + 1 })}
                       />
                     ))}
                   </div>
@@ -341,25 +346,29 @@ const PluginModal: React.FC<IPluginModalProps> = ({
               <div className={styles.tabContent}>
                 {tab === 'Details' && (
                   <>
-                    <div className={styles.sectionTitle}>Description</div>
+                    <div className={styles.sectionTitle}>
+                      {t('description')}
+                    </div>
                     <div className={styles.description}>
                       {plugin?.description}
                     </div>
 
                     {details?.screenshots && details.screenshots.length > 0 && (
                       <>
-                        <div className={styles.sectionTitle}>Screenshots</div>
+                        <div className={styles.sectionTitle}>
+                          {t('screenshots')}
+                        </div>
                         <div className={styles.screenshotsContainer}>
                           {details.screenshots.map((src, idx) => (
                             <img
                               key={idx}
                               src={src}
-                              alt={`Screenshot ${idx + 1}`}
+                              alt={t('screenshotAlt', { index: idx + 1 })}
                               className={styles.screenshotThumbnail}
                               onClick={() =>
                                 openScreenshotViewer(details.screenshots, idx)
                               }
-                              title="Click to view full size"
+                              title={t('clickToViewFullSize')}
                             />
                           ))}
                         </div>
@@ -367,14 +376,16 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                     )}
                     {fetching && (
                       <div className={styles.loadingText}>
-                        Loading details...
+                        {t('loadingDetails')}
                       </div>
                     )}
                   </>
                 )}
                 {tab === 'Features' && (
                   <>
-                    <div className={styles.sectionTitleLarge}>Features</div>
+                    <div className={styles.sectionTitleLarge}>
+                      {t('features')}
+                    </div>
                     {features && features.length > 0 ? (
                       <ul className={styles.featuresList}>
                         {features.map((f, i) => (
@@ -385,23 +396,28 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                       </ul>
                     ) : (
                       <div className={styles.noFeaturesMessage}>
-                        No features information available for this plugin.
+                        {t('noFeaturesAvailable')}
                       </div>
                     )}
                     {fetching && (
                       <div className={styles.loadingText}>
-                        Loading features...
+                        {t('loadingFeatures')}
                       </div>
                     )}
                   </>
                 )}
                 {tab === 'Changelog' && (
                   <>
-                    <div className={styles.sectionTitleLarge}>Changelog</div>
+                    <div className={styles.sectionTitleLarge}>
+                      {t('changelog')}
+                    </div>
                     {changelog.map((entry, idx) => (
                       <div key={idx} className={styles.changelogEntry}>
                         <div className={styles.changelogVersion}>
-                          v{entry.version} - {entry.date}
+                          {t('changelogVersion', {
+                            version: entry.version,
+                            date: entry.date,
+                          })}
                         </div>
                         <ul className={styles.changelogList}>
                           {entry.changes.map((c, i) => (
@@ -412,7 +428,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                     ))}
                     {fetching && (
                       <div className={styles.loadingText}>
-                        Loading changelog...
+                        {t('loadingChangelog')}
                       </div>
                     )}
                   </>

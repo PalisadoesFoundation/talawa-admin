@@ -1,0 +1,19 @@
+.icon {
+  font-size: 2em;
+}
+
+.assigneeContainer {
+  height: 100%;
+}
+
+.tableImage {
+  vertical-align: middle;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.minWidth32 {
+  min-width: 32px;
+}

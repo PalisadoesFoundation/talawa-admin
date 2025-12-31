@@ -36,11 +36,15 @@ import { Navigate, useParams } from 'react-router';
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
 import dayjs from 'dayjs';
 
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { ACTION_ITEM_LIST } from 'GraphQl/Queries/ActionItemQueries';
 
-import type { IActionItemInfo } from 'types/ActionItems/interface';
+import type {
+  IActionItemInfo,
+  IActionItemList,
+} from 'types/ActionItems/interface';
 import styles from 'style/app-fixed.module.css';
+import componentStyles from './Actions.module.css';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
@@ -54,24 +58,12 @@ import ItemUpdateStatusModal from 'screens/OrganizationActionItems/ActionItemUpd
 import useLocalStorage from 'utils/useLocalstorage';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import { dataGridStyle } from 'types/ReportingTable/utils';
 
 enum ModalState {
   VIEW = 'view',
   STATUS = 'status',
 }
-
-const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
-  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
-};
 
 function actions(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -126,12 +118,7 @@ function actions(): JSX.Element {
     loading: actionItemsLoading,
     error: actionItemsError,
     refetch: actionItemsRefetch,
-  }: {
-    data?: { actionItemsByOrganization: IActionItemInfo[] };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(ACTION_ITEM_LIST, {
+  } = useQuery<IActionItemList>(ACTION_ITEM_LIST, {
     variables: {
       input: {
         organizationId: orgId,
@@ -143,14 +130,13 @@ function actions(): JSX.Element {
     const allActionItems = actionItemsData?.actionItemsByOrganization || [];
 
     // Filter action items where the current user is involved as a volunteer or part of a volunteer group
-    let userActionItems = allActionItems.filter((item) => {
+    let userActionItems = allActionItems.filter((item: IActionItemInfo) => {
       // Check if user is the assigned volunteer
       const isAssignedVolunteer = item.volunteer?.user?.id === userId;
 
       // Check if user is part of the assigned volunteer group
       const isInVolunteerGroup = item.volunteerGroup?.volunteers?.some(
-        (volunteer: { id: string; user: { id: string; name: string } }) =>
-          volunteer.user?.id === userId,
+        (volunteer) => volunteer.user?.id === userId,
       );
 
       return isAssignedVolunteer || isInVolunteerGroup;
@@ -158,7 +144,7 @@ function actions(): JSX.Element {
 
     // Apply search filtering if search term exists
     if (searchTerm) {
-      userActionItems = userActionItems.filter((item) => {
+      userActionItems = userActionItems.filter((item: IActionItemInfo) => {
         if (searchBy === 'assignee') {
           // Search in volunteer name or volunteer group name
           const volunteerName = item.volunteer?.user?.name?.toLowerCase() || '';
@@ -179,9 +165,17 @@ function actions(): JSX.Element {
 
     // Apply sorting if specified
     if (sortBy) {
-      return userActionItems.sort((a, b) => {
-        const dateA = new Date(a.assignedAt || a.createdAt);
-        const dateB = new Date(b.assignedAt || b.createdAt);
+      return userActionItems.sort((a: IActionItemInfo, b: IActionItemInfo) => {
+        const dateA = new Date(
+          a.assignedAt instanceof Date
+            ? a.assignedAt
+            : a.assignedAt || a.createdAt || '',
+        );
+        const dateB = new Date(
+          b.assignedAt instanceof Date
+            ? b.assignedAt
+            : b.assignedAt || b.createdAt || '',
+        );
 
         if (sortBy === 'dueDate_ASC') {
           return dateA.getTime() - dateB.getTime();
@@ -200,7 +194,9 @@ function actions(): JSX.Element {
   if (actionItemsError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded className={styles.icon} fontSize="large" />
+        <WarningAmberRounded
+          className={`${styles.icon} ${componentStyles.icon}`}
+        />
         <h6 className="fw-bold text-danger text-center">
           {tErrors('errorLoading', { entity: 'Action Items' })}
         </h6>
@@ -226,17 +222,15 @@ function actions(): JSX.Element {
             {params.row.volunteer ? (
               <>
                 <div
-                  className="d-flex fw-bold align-items-center justify-content-start ms-2"
+                  className={`d-flex fw-bold align-items-center justify-content-start ms-2 ${componentStyles.assigneeContainer}`}
                   data-testid="assigneeName"
-                  style={{ height: '100%' }}
                 >
                   {avatarURL ? (
                     <img
                       src={avatarURL}
                       alt={t('assignee')}
                       data-testid={`image${id + 1}`}
-                      className={`${styles.TableImage} me-2`}
-                      style={{ verticalAlign: 'middle' }}
+                      className={`${styles.TableImage} me-2 ${componentStyles.tableImage}`}
                     />
                   ) : (
                     <div
@@ -257,9 +251,8 @@ function actions(): JSX.Element {
             ) : (
               <>
                 <div
-                  className="d-flex fw-bold align-items-center justify-content-start ms-2"
+                  className={`d-flex fw-bold align-items-center justify-content-start ms-2 ${componentStyles.assigneeContainer}`}
                   data-testid="assigneeName"
-                  style={{ height: '100%' }}
                 >
                   <div
                     className={`${styles.avatarContainer} me-2 d-flex align-items-center justify-content-center`}
@@ -353,8 +346,7 @@ function actions(): JSX.Element {
             <Button
               variant="success"
               size="sm"
-              style={{ minWidth: '32px' }}
-              className={`me-2 rounded ${styles.editButton}`}
+              className={`me-2 rounded ${styles.editButton} ${componentStyles.minWidth32}`}
               data-testid={`viewItemBtn`}
               onClick={() => handleModalClick(params.row, ModalState.VIEW)}
             >

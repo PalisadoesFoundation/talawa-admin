@@ -51,7 +51,7 @@ import { Navigate, useParams } from 'react-router';
 
 import { Circle, WarningAmberRounded } from '@mui/icons-material';
 
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import Loader from 'components/Loader/Loader';
 import {
   DataGrid,
@@ -63,6 +63,7 @@ import Avatar from 'components/Avatar/Avatar';
 import styles from '../../../style/app-fixed.module.css';
 import { GET_EVENT_VOLUNTEERS } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
+import type { IGetEventVolunteersResult } from 'types/GraphQL/queryResults';
 import VolunteerCreateModal from './createModal/VolunteerCreateModal';
 import VolunteerDeleteModal from './deleteModal/VolunteerDeleteModal';
 import VolunteerViewModal from './viewModal/VolunteerViewModal';
@@ -152,19 +153,7 @@ function Volunteers(): JSX.Element {
     loading: volunteersLoading,
     error: volunteersError,
     refetch: refetchVolunteers,
-  }: {
-    data?: {
-      event: {
-        id: string;
-        recurrenceRule?: { id: string } | null;
-        baseEvent?: { id: string } | null;
-        volunteers: InterfaceEventVolunteerInfo[];
-      };
-    };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(GET_EVENT_VOLUNTEERS, {
+  } = useQuery<IGetEventVolunteersResult>(GET_EVENT_VOLUNTEERS, {
     variables: {
       input: {
         id: eventId,
@@ -214,12 +203,11 @@ function Volunteers(): JSX.Element {
 
     // Filter by search term
     if (searchTerm) {
-      filteredVolunteers = filteredVolunteers.filter(
-        (volunteer: InterfaceEventVolunteerInfo) => {
-          const userName = volunteer.user?.name || '';
-          return userName.toLowerCase().includes(searchTerm.toLowerCase());
-        },
-      );
+      filteredVolunteers = filteredVolunteers.filter((volunteer) => {
+        const userName =
+          (volunteer as InterfaceEventVolunteerInfo).user?.name || '';
+        return userName.toLowerCase().includes(searchTerm.toLowerCase());
+      });
     }
 
     // Filter by status
@@ -227,19 +215,22 @@ function Volunteers(): JSX.Element {
       return filteredVolunteers;
     } else if (status === VolunteerStatus.Pending) {
       return filteredVolunteers.filter(
-        (volunteer: InterfaceEventVolunteerInfo) =>
-          volunteer.volunteerStatus === 'pending',
+        (volunteer) =>
+          (volunteer as InterfaceEventVolunteerInfo).volunteerStatus ===
+          'pending',
       );
     } else if (status === VolunteerStatus.Rejected) {
       return filteredVolunteers.filter(
-        (volunteer: InterfaceEventVolunteerInfo) =>
-          volunteer.volunteerStatus === 'rejected',
+        (volunteer) =>
+          (volunteer as InterfaceEventVolunteerInfo).volunteerStatus ===
+          'rejected',
       );
     } else {
       // VolunteerStatus.Accepted
       return filteredVolunteers.filter(
-        (volunteer: InterfaceEventVolunteerInfo) =>
-          volunteer.volunteerStatus === 'accepted',
+        (volunteer) =>
+          (volunteer as InterfaceEventVolunteerInfo).volunteerStatus ===
+          'accepted',
       );
     }
   }, [eventData, status, searchTerm]);

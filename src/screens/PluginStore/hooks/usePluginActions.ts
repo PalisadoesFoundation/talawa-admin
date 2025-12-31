@@ -131,6 +131,8 @@ export function usePluginActions({
 
         // Remove plugin folder from admin filesystem
         try {
+          const { adminPluginFileService } =
+            await import('../../../plugin/services/AdminPluginFileService');
           const success = await adminPluginFileService.removePlugin(
             pluginToUninstall.id,
           );

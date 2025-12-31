@@ -548,7 +548,8 @@
     "endDate": "समाप्ति तिथि",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
     "done": "पूर्ण",
-    "createChat": "चैट बनाएं"
+    "createChat": "चैट बनाएं",
+    "viewType": "दृश्य प्रकार"
   },
   "organizationActionItems": {
     "actionItemCategory": "क्रिया वस्तु श्रेणी",
@@ -630,7 +631,9 @@
     "pendingForSeries": "श्रृंखला के लिए लंबित",
     "completeForInstance": "इस उदाहरण के लिए पूर्ण",
     "completeForSeries": "श्रृंखला के लिए पूर्ण",
-    "postCompletionNotesRequired": "पूर्ण होने के बाद के नोट्स आवश्यक हैं"
+    "postCompletionNotesRequired": "पूर्ण होने के बाद के नोट्स आवश्यक हैं",
+    "isPending": "लंबित",
+    "search": "खोजें"
   },
   "organizationAgendaCategory": {
     "agendaCategoryDetails": "एजेंडा श्रेणी विवरण",
@@ -681,7 +684,8 @@
     "agendaItemUpdated": "एजेंडा आइटम सफलतापूर्वक अपडेट किया गया",
     "agendaItemDeleted": "एजेंडा आइटम सफलतापूर्वक हटा दिया गया",
     "deleteAgendaItem": "एजेंडा आइटम हटाएं",
-    "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?"
+    "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?",
+    "search": "खोजें"
   },
   "eventListCard": {
     "deleteEvent": "ईवेंट हटाएँ",
@@ -1026,7 +1030,8 @@
     "confirmDelete": "हटाने की पुष्टि करें",
     "longDelOrgMsg": "संगठन हटाएं बटन पर क्लिक करने से संगठन अपने ईवेंट, टैग और सभी संबंधित डेटा के साथ स्थायी रूप से हटा दिया जाएगा।",
     "successfullyDeletedSampleOrganization": "नमूना संगठन सफलतापूर्वक हटा दिया गया",
-    "cancel": "रद्द करें"
+    "cancel": "रद्द करें",
+    "deleteSampleOrganization": "नमूना संगठन हटाएं"
   },
   "userUpdate": {
     "appLanguageCode": "डिफ़ॉल्ट भाषा",
@@ -1081,7 +1086,8 @@
     "saveChanges": "परिवर्तन सहेजें",
     "cancel": "रद्द करें",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
-    "enterOrganizationDescription": "संगठन का विवरण दर्ज करें"
+    "enterOrganizationDescription": "संगठन का विवरण दर्ज करें",
+    "userRegistrationRequired": "उपयोगकर्ता पंजीकरण आवश्यक"
   },
   "memberDetail": {
     "title": "उपयोगकर्ता विवरण",
@@ -1136,7 +1142,19 @@
     "unassignUserTagMessage": "क्या आप इस उपयोगकर्ता से टैग हटाना चाहते हैं?",
     "successfullyUnassigned": "उपयोगकर्ता से टैग हटा दिया गया",
     "tagsAssigned": "टैग सौंपे गए",
-    "noTagsAssigned": "कोई टैग सौंपा नहीं गया"
+    "noTagsAssigned": "कोई टैग सौंपा नहीं गया",
+    "fileTooLarge": "फ़ाइल बहुत बड़ी है। अधिकतम आकार 5MB है।",
+    "passwordTooShort": "पासवर्ड कम से कम 8 वर्णों का होना चाहिए।",
+    "userImage": "उपयोगकर्ता छवि",
+    "editProfilePicture": "प्रोफ़ाइल चित्र संपादित करें",
+    "enterDescription": "विवरण दर्ज करें",
+    "phoneNumberPlaceholder": "उदा. +1234567890",
+    "addressPlaceholder": "उदा. गली 2",
+    "postalCodePlaceholder": "उदा. 12345",
+    "cityPlaceholder": "शहर का नाम दर्ज करें",
+    "statePlaceholder": "राज्य का नाम दर्ज करें",
+    "selectCountry": "देश चुनें",
+    "selectCountryAriaLabel": "{{country}} को अपने देश के रूप में चुनें"
   },
   "people": {
     "title": "लोग",
@@ -1252,7 +1270,12 @@
     "postedOn": "{{date}} को पोस्ट किया गया",
     "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।",
     "unexpectedError": "एक अप्रत्याशित त्रुटि हुई। कृपया फिर से प्रयास करें।",
-    "moreOptions": "अधिक विकल्प"
+    "moreOptions": "अधिक विकल्प",
+    "scrollLeft": "बाएं स्क्रॉल करें",
+    "scrollRight": "दाएं स्क्रॉल करें",
+    "pinnedPost": "पिन की गई पोस्ट",
+    "postImage": "पोस्ट छवि",
+    "postImageAlt": "पोस्ट छवि"
   },
   "posts": {
     "pinnedPosts": "पिन किए गए पोस्ट",
@@ -1314,7 +1337,21 @@
     "nextPage": "अगला पृष्ठ",
     "goToToday": "आज पर जाएं",
     "genderDistribution": "लिंग वितरण",
-    "ageDistribution": "आयु वितरण"
+    "ageDistribution": "आयु वितरण",
+    "event_attendance_table": "ईवेंट उपस्थिति तालिका",
+    "age": "उम्र",
+    "age18to40": "18 से 40",
+    "attendanceCount": "उपस्थिति गणना",
+    "demographics": "जनसांख्यिकी",
+    "demography": "जनसांख्यिकी",
+    "exportData": "डेटा निर्यात करें",
+    "female": "महिला",
+    "male": "पुरुष",
+    "other": "अन्य",
+    "over40": "40 से अधिक",
+    "today": "आज",
+    "trends": "रुझान",
+    "under18": "18 से कम"
   },
   "eventRegistrant": {
     "sort": "छांटें",
@@ -1436,7 +1473,8 @@
     "invalidAmount": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें.",
     "donationAmountDescription": "कृपया दान राशि के लिए संख्यात्मक मान दर्ज करें.",
     "donationOutOfRange": "दान राशि {{min}} और {{max}} के बीच होनी चाहिए.",
-    "donateTo": "दान करें"
+    "donateTo": "दान करें",
+    "loading": "लोड हो रहा है..."
   },
   "transactions": {
     "title": "लेन-देन",
@@ -1546,7 +1584,20 @@
     "edit": "संपादित करें",
     "saveChanges": "परिवर्तन सहेजें",
     "endOfResults": "परिणाम समाप्त",
-    "noDescription": "कोई विवरण नहीं"
+    "noDescription": "कोई विवरण नहीं",
+    "failedToFetch": "विज्ञापन प्राप्त करने में विफल",
+    "advertisementImageAlt": "{{name}} के लिए विज्ञापन छवि #{{index}}",
+    "ad": "विज्ञापन",
+    "advertisementMedia": "विज्ञापन मीडिया",
+    "noMediaAvailable": "कोई मीडिया उपलब्ध नहीं",
+    "invalidFileType": "अमान्य फ़ाइल प्रकार: {{fileName}}",
+    "fileTooLarge": "फ़ाइल बहुत बड़ी: {{fileName}}",
+    "invalidArguments": "इस क्रिया के लिए अमान्य तर्क।",
+    "englishCaptions": "अंग्रेजी कैप्शन",
+    "preview": "पूर्वावलोकन",
+    "bannerAd": "बैनर विज्ञापन",
+    "popupAd": "पॉपअप विज्ञापन",
+    "menuAd": "मेनू विज्ञापन"
   },
   "userChat": {
     "title": "चैट्स",
@@ -1579,7 +1630,15 @@
     "demoteToRegular": "नियमित में पदावनत करें",
     "promoteToAdmin": "व्यवस्थापक में पदोन्नत करें",
     "user": "उपयोगकर्ता",
-    "chatAction": "चैट कार्रवाई"
+    "chatAction": "चैट कार्रवाई",
+    "Error": "त्रुटि",
+    "hash": "#",
+    "organizationMembersTable": "संगठन सदस्य तालिका",
+    "description": "विवरण",
+    "groupDescription": "समूह विवरण",
+    "groupName": "समूह नाम",
+    "newGroup": "नया समूह",
+    "next": "अगला"
   },
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
@@ -1634,7 +1693,9 @@
     "edit": "संपादित करें",
     "delete": "हटाएं",
     "name": "नाम",
-    "desc": "विवरण"
+    "desc": "विवरण",
+    "venueCreated": "स्थान सफलतापूर्वक बनाया गया",
+    "venueNameExists": "इस नाम के साथ एक स्थान पहले से मौजूद है"
   },
   "addMember": {
     "title": "सदस्य जोड़ें",
@@ -1695,7 +1756,22 @@
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
-    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि"
+    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि",
+    "inviteByEmail": {
+      "addRecipient": "प्राप्तकर्ता जोड़ें",
+      "email": "ईमेल",
+      "emailsHelp": "अल्पविराम से अलग किए गए ईमेल पते दर्ज करें",
+      "emailsLabel": "ईमेल पते",
+      "errorSendingInvites": "आमंत्रण भेजने में त्रुटि",
+      "expiresInDaysLabel": "समाप्त होता है (दिनों में)",
+      "messageLabel": "संदेश",
+      "messagePlaceholder": "अपना संदेश यहाँ दर्ज करें",
+      "name": "नाम",
+      "remove": "हटाएं",
+      "sendInvites": "आमंत्रण भेजें",
+      "sending": "भेज रहे हैं...",
+      "title": "ईमेल द्वारा आमंत्रित करें"
+    }
   },
   "userCampaigns": {
     "title": "धन उगाहने के अभियान",
@@ -1778,7 +1854,8 @@
     "leastVolunteers": "सबसे कम स्वयंसेवक",
     "applyTo": "लागू करें",
     "entireSeries": "पूरी श्रृंखला",
-    "thisEventOnly": "केवल यह घटना"
+    "thisEventOnly": "केवल यह घटना",
+    "assignee": "प्राप्तकर्ता"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",
@@ -1854,7 +1931,43 @@
     "checkBackLater": "नए प्लगइन के लिए बाद में जांचें",
     "tryDifferentSearch": "एक अलग खोज शब्द आज़माएं या सभी प्लगइन ब्राउज़ करें",
     "explorePluginStore": "नए प्लगइन खोजने के लिए प्लगइन स्टोर का अन्वेषण करें",
-    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला"
+    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला",
+    "close": "बंद करें",
+    "pluginIcon": "प्लगइन आइकन",
+    "backToDetails": "← विवरण पर वापस जाएं",
+    "previousImage": "पिछली छवि (←)",
+    "nextImage": "अगली छवि (→)",
+    "screenshotAlt": "स्क्रीनशॉट {{index}}",
+    "goToScreenshot": "स्क्रीनशॉट {{index}} पर जाएं",
+    "description": "विवरण",
+    "screenshots": "स्क्रीनशॉट",
+    "clickToViewFullSize": "पूर्ण आकार देखने के लिए क्लिक करें",
+    "loadingDetails": "विवरण लोड हो रहा है...",
+    "features": "सुविधाएं",
+    "noFeaturesAvailable": "इस प्लगइन के लिए कोई सुविधाएं जानकारी उपलब्ध नहीं है।",
+    "loadingFeatures": "सुविधाएं लोड हो रही हैं...",
+    "changelog": "परिवर्तन लॉग",
+    "changelogVersion": "v{{version}} - {{date}}",
+    "loadingChangelog": "परिवर्तन लॉग लोड हो रहा है...",
+    "uploadPlugin": "प्लगइन अपलोड करें",
+    "uploadPluginDesc": "प्लगइन प्रविष्टि बनाने के लिए एक ZIP फ़ाइल अपलोड करें। अपलोड के बाद प्लगइन इंस्टॉलेशन के लिए उपलब्ध होगा।",
+    "selectZipFile": "ZIP फ़ाइल चुनें",
+    "clickToBrowseFiles": "फ़ाइलें ब्राउज़ करने के लिए क्लिक करें",
+    "pluginInformation": "प्लगइन जानकारी",
+    "name": "नाम:",
+    "version": "संस्करण:",
+    "author": "लेखक:",
+    "pluginId": "प्लगइन आईडी:",
+    "componentsToInstall": "इंस्टॉल करने के लिए घटक:",
+    "adminDashboardComponents": "व्यवस्थापक डैशबोर्ड घटक",
+    "apiBackendComponents": "API बैकएंड घटक",
+    "pluginStructure": "प्लगइन संरचना",
+    "expectedPluginStructure": "admin और/या API घटकों के साथ अपेक्षित प्लगइन संरचना",
+    "detectedFiles": "पता लगाई गई फ़ाइलें",
+    "expectedDirectoryStructure": "अपेक्षित निर्देशिका संरचना",
+    "requiredManifestFields": "manifest.json में आवश्यक फ़ील्ड",
+    "failedToUploadPlugin": "प्लगइन अपलोड करने में विफल। कृपया पुनः प्रयास करें।",
+    "installing": "इंस्टॉल हो रहा है"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "टिप्पणी सफलतापूर्वक हटा दी गई",

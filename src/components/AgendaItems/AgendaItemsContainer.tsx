@@ -33,7 +33,7 @@ import type { FormEvent, JSX } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import type { DropResult } from '@hello-pangea/dnd';
 

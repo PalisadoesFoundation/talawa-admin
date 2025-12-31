@@ -49,7 +49,7 @@ import {
   ADD_ADVERTISEMENT_MUTATION,
   UPDATE_ADVERTISEMENT_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import dayjs from 'dayjs';
@@ -156,9 +156,11 @@ function AdvertisementRegister({
 
       Array.from(files).forEach((file) => {
         if (!allowedTypes.includes(file.type)) {
-          NotificationToast.error(`Invalid file type: ${file.name}`);
+          NotificationToast.error(
+            t('invalidFileType', { fileName: file.name }),
+          );
         } else if (file.size > maxFileSize) {
-          NotificationToast.error(`File too large: ${file.name}`);
+          NotificationToast.error(t('fileTooLarge', { fileName: file.name }));
         } else {
           validFiles.push(file);
         }
@@ -216,7 +218,7 @@ function AdvertisementRegister({
       }
 
       if (!formState.name) {
-        NotificationToast.error('Invalid arguments for this action.');
+        NotificationToast.error(t('invalidArguments'));
         return;
       }
 
@@ -276,6 +278,7 @@ function AdvertisementRegister({
 
   // Handles advertisement update.
   const handleUpdate = async (): Promise<void> => {
+    console.log('handleUpdate called', formState, idEdit);
     try {
       const updatedFields: Partial<InterfaceFormStateTypes> = {};
 
@@ -295,6 +298,8 @@ function AdvertisementRegister({
       if (formState.endAt !== endAtEdit) {
         updatedFields.endAt = formState.endAt;
       }
+
+      console.log('handleUpdate fields:', updatedFields);
 
       // if both are updated, check if end date is greater or not
       if (updatedFields.endAt && updatedFields.startAt) {
@@ -434,14 +439,14 @@ function AdvertisementRegister({
                         <track
                           kind="captions"
                           srcLang="en"
-                          label="English captions"
+                          label={t('englishCaptions')}
                         />
                       </video>
                     ) : (
                       <img
                         data-testid="mediaPreview"
                         src={encodeURI(URL.createObjectURL(file))}
-                        alt="Preview"
+                        alt={t('preview')}
                         className={styles.previewAdvertisementRegister}
                       />
                     )}
@@ -471,9 +476,9 @@ function AdvertisementRegister({
                 className={styles.inputField}
                 data-cy="advertisementTypeSelect"
               >
-                <option value="banner">Banner Ad </option>
-                <option value="pop_up">Popup Ad</option>
-                <option value="menu">Menu Ad</option>
+                <option value="banner">{t('bannerAd')}</option>
+                <option value="pop_up">{t('popupAd')}</option>
+                <option value="menu">{t('menuAd')}</option>
               </Form.Select>
             </Form.Group>
 

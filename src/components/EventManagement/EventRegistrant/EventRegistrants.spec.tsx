@@ -1,5 +1,6 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
+import { InMemoryCache } from '@apollo/client';
 import type { RenderResult } from '@testing-library/react';
 import {
   render,
@@ -11,7 +12,7 @@ import {
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
-import type { MockedResponse } from '@apollo/react-testing';
+import type { MockedResponse } from '@apollo/client/testing';
 import EventRegistrants from './EventRegistrants';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
@@ -49,12 +50,25 @@ vi.mock('react-router', async () => {
   };
 });
 
+const createCache = (): InMemoryCache =>
+  new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          event: {
+            merge: true,
+          },
+        },
+      },
+    },
+  });
+
 const renderEventRegistrants = (
   customMocks: MockedResponse[] = COMBINED_MOCKS,
 ): RenderResult => {
   const link = new StaticMockLink(customMocks, true);
   return render(
-    <MockedProvider link={link}>
+    <MockedProvider link={link} cache={createCache()}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
@@ -255,11 +269,11 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
 
     await waitFor(() => {
       const deleteButton = screen.getByTestId('delete-registrant-0');
-      // Simulate programmatic attempt to delete
-      if (!deleteButton.hasAttribute('disabled')) {
-        fireEvent.click(deleteButton);
-      }
+      expect(deleteButton).toBeDisabled();
     });
+
+    const deleteButton = screen.getByTestId('delete-registrant-0');
+    fireEvent.click(deleteButton);
 
     // Should not show warning toast since button is disabled
     expect(toast.warn).not.toHaveBeenCalled();
@@ -282,7 +296,7 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     renderEventRegistrants(RECURRING_EVENT_MOCKS);
 
     await waitFor(() => {
-      expect(screen.getByTestId('no-registrants')).toBeInTheDocument();
+      expect(screen.getByText('Recurring User')).toBeInTheDocument();
     });
   });
 

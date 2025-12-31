@@ -197,6 +197,7 @@ describe('PluginList', () => {
     const emptyState = screen.getByTestId('plugins-empty-state');
     const icon = screen.getByTestId('plugins-empty-state-icon');
 
+    // Verify empty state and icon are rendered
     expect(emptyState).toBeInTheDocument();
     expect(icon).toBeInTheDocument();
   });

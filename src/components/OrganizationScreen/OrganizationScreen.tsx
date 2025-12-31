@@ -36,9 +36,10 @@ import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceMapType } from 'utils/interfaces';
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { GET_ORGANIZATION_EVENTS_PG } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
+import type { IOrganizationEventsResult } from 'types/GraphQL/queryResults';
 
 const OrganizationScreen = (): JSX.Element => {
   const { getItem, setItem } = useLocalStorage();
@@ -58,8 +59,6 @@ const OrganizationScreen = (): JSX.Element => {
 
   const isEventPath = useMatch('/event/:orgId/:eventId');
   const eventId = isEventPath?.params.eventId;
-  const shouldFetchEventName = Boolean(orgId && eventId);
-  const EVENTS_PAGE_SIZE = 100;
 
   // Get the application routes from the Redux store
   const appRoutes: { targets: TargetsType[] } = useSelector(
@@ -69,14 +68,12 @@ const OrganizationScreen = (): JSX.Element => {
 
   const dispatch = useAppDispatch();
 
-  const { data: eventsData } = useQuery(GET_ORGANIZATION_EVENTS_PG, {
-    variables: {
-      id: orgId ?? '',
-      first: EVENTS_PAGE_SIZE,
-      after: null,
+  const { data: eventsData } = useQuery<IOrganizationEventsResult>(
+    GET_ORGANIZATION_EVENTS_PG,
+    {
+      variables: { id: orgId },
     },
-    skip: !shouldFetchEventName,
-  });
+  );
 
   // Update targets whenever the organization ID changes
   useEffect(() => {
@@ -95,25 +92,30 @@ const OrganizationScreen = (): JSX.Element => {
   }
 
   useEffect(() => {
-    if (!eventId) {
+    // Wait until event data has been fetched before attempting lookup
+    if (!eventsData?.organization?.events) {
       setEventName(null);
       return;
     }
-    // Wait until event data has been fetched before attempting lookup
-    if (!eventsData?.organization?.events) {
+
+    if (!isEventPath?.params.eventId) {
+      setEventName(null);
       return;
     }
+
+    const eventId = isEventPath.params.eventId;
     const edges = eventsData.organization.events.edges ?? [];
-    const matched = edges.find((edge: { node?: { id?: string } }) => {
+    const matched = edges.find((edge) => {
       return edge?.node?.id === eventId;
     });
+
     if (!matched?.node?.id) {
       console.warn(`Event with id ${eventId} not found`);
       setEventName(null);
       return;
     }
     setEventName(matched.node.name ?? null);
-  }, [eventId, eventsData]);
+  }, [eventId, eventsData, isEventPath]);
 
   // Handle screen resizing to show/hide the side drawer
   const handleResize = (): void => {

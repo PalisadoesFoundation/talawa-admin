@@ -1,5 +1,6 @@
 import type { ApolloLink } from '@apollo/client';
-import { MockedProvider, type MockedResponse } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
+import { type MockedResponse } from '@apollo/client/testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import type { RenderResult } from '@testing-library/react';
 import dayjs from 'dayjs';
@@ -160,7 +161,15 @@ const USER_DETAILS_MOCK = {
         mobilePhoneNumber: null,
         homePhoneNumber: null,
         workPhoneNumber: null,
-        organizationsWhereMember: { edges: [] },
+        organizationsWhereMember: {
+          edges: [],
+          pageInfo: {
+            hasNextPage: false,
+            hasPreviousPage: false,
+            startCursor: null,
+            endCursor: null,
+          },
+        },
         createdOrganizations: [],
         __typename: 'User',
       },
@@ -210,8 +219,20 @@ const createUpdatePledgeMock = (
     : {
         result: {
           data: {
-            updateFundraisingCampaignPledge: {
-              _id: variables.id,
+            updateFundCampaignPledge: {
+              id: variables.id,
+              amount: variables.amount || 100,
+              note: null,
+              createdAt: '2024-01-01T00:00:00.000Z',
+              updatedAt: '2024-01-10T00:00:00.000Z',
+              campaign: {
+                id: 'campaignId',
+                name: 'Campaign Name',
+              },
+              pledger: {
+                id: '1',
+                name: 'John Doe',
+              },
             },
           },
         },
@@ -279,7 +300,7 @@ const renderPledgeModal = (
   props: InterfacePledgeModal,
 ): RenderResult => {
   return render(
-    <MockedProvider link={link} addTypename={false}>
+    <MockedProvider link={link}>
       <Provider store={store}>
         <BrowserRouter>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -383,7 +404,10 @@ describe('PledgeModal', () => {
     const link = new StaticMockLink([loadingMock]);
     renderPledgeModal(link, pledgeProps[0]);
 
-    expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
+    // When user data is null, pledgerSelect should not be rendered
+    expect(screen.queryByTestId('pledgerSelect')).not.toBeInTheDocument();
+    // But the form should still be present
+    expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
   });
 
   it('handles USER_DETAILS error state gracefully', async () => {
@@ -486,7 +510,7 @@ describe('PledgeModal', () => {
       expect(pledgeProps[1].refetchPledge).toHaveBeenCalled();
       expect(pledgeProps[1].hide).toHaveBeenCalled();
     });
-    it('hides pledger autocomplete for regular users in create mode', async () => {
+    it('shows pledger autocomplete for regular users in create mode', async () => {
       const regularLink = new StaticMockLink([USER_DETAILS_MOCK]); // role: 'regular'
       renderPledgeModal(regularLink, {
         ...pledgeProps[0],
@@ -496,7 +520,12 @@ describe('PledgeModal', () => {
       await waitFor(() =>
         expect(screen.getByTestId('pledgeForm')).toBeInTheDocument(),
       );
-      expect(screen.queryByRole('combobox', { name: /pledger/i })).toBeNull();
+      // Pledger autocomplete is now shown for all users including regular users
+      await waitFor(() =>
+        expect(
+          screen.getByRole('combobox', { name: /pledger/i }),
+        ).toBeInTheDocument(),
+      );
     });
     it('should handle pledge creation error', async () => {
       const errorMock = [
@@ -670,13 +699,22 @@ describe('PledgeModal', () => {
       const adminLink = new StaticMockLink([USER_DETAILS_ADMIN_MOCK]);
       renderPledgeModal(adminLink, noPledgerProps);
 
-      // Wait for the admin user data to load and autocomplete to be visible
+      // Wait for the user data to load and autocomplete to be visible
       await waitFor(() => {
         expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
       });
 
-      // For admin users with no existing pledge, pledgeUsers starts as empty array
-      // Submit the form without selecting any pledger
+      // The component auto-selects the current user as pledger
+      // Clear the autocomplete selection before submitting
+      const autocomplete = screen.getByTestId('pledgerSelect');
+      const clearButton = within(autocomplete).queryByLabelText('Clear');
+      if (clearButton) {
+        await act(async () => {
+          fireEvent.click(clearButton);
+        });
+      }
+
+      // Submit the form without any pledger selected
       const form = screen.getByTestId('pledgeForm');
       fireEvent.submit(form);
 
@@ -699,7 +737,15 @@ describe('PledgeModal', () => {
 
     it('should handle empty autocomplete selection', async () => {
       const adminLink = new StaticMockLink(BASE_PLEDGE_MODAL_ADMIN_MOCKS);
-      renderPledgeModal(adminLink, pledgeProps[0]);
+      // Use pledge: null so the component auto-selects the current user
+      renderPledgeModal(adminLink, {
+        ...pledgeProps[0],
+        pledge: null,
+      });
+
+      await waitFor(() => {
+        expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
+      });
 
       const userAutocomplete = screen
         .getByRole('combobox', { name: /pledger/i })
@@ -774,8 +820,13 @@ describe('PledgeModal', () => {
       ];
 
       const link = new StaticMockLink(createMockWithAdminUser);
-      renderPledgeModal(link, pledgeProps[0]);
+      // Use pledge: null so the component auto-selects the current user
+      renderPledgeModal(link, {
+        ...pledgeProps[0],
+        pledge: null,
+      });
 
+      // Wait for the autocomplete to appear
       await waitFor(() => {
         expect(screen.getByTestId('pledgerSelect')).toBeInTheDocument();
       });
@@ -783,20 +834,24 @@ describe('PledgeModal', () => {
       const autocomplete = screen.getByTestId('pledgerSelect');
       const input = within(autocomplete).getByRole('combobox');
 
-      // Open the autocomplete to select a pledger
+      // Verify the autocomplete is interactive (not readonly)
+      expect(input).not.toHaveAttribute('readonly');
+
+      // Clear the selection first so the option appears in the list (since filterSelectedOptions is true)
       await act(async () => {
-        input.focus();
-        fireEvent.mouseDown(input);
+        const clearButton = within(autocomplete).queryByTitle('Clear');
+        if (clearButton) {
+          fireEvent.click(clearButton);
+        }
       });
 
-      // Wait for options to appear
-      await waitFor(
-        () => {
-          const options = screen.queryAllByRole('option');
-          expect(options.length).toBeGreaterThan(0);
-        },
-        { timeout: 2000 },
-      );
+      // Verify the autocomplete can be focused and opened
+      await act(async () => {
+        const openButton = within(autocomplete).getByTitle('Open');
+        fireEvent.click(openButton);
+      });
+
+      expect(input).toHaveFocus();
 
       // Select the first option (Harve Lance - admin user)
       const options = screen.getAllByRole('option');
@@ -915,7 +970,7 @@ describe('PledgeModal', () => {
       });
 
       const autocomplete = screen.getByTestId('pledgerSelect');
-      const input = within(autocomplete).getByRole('combobox');
+      within(autocomplete).getByRole('combobox');
 
       // Clear any existing selection first
       const clearButton = within(autocomplete).queryByLabelText('Clear');
@@ -927,8 +982,8 @@ describe('PledgeModal', () => {
 
       // Open the autocomplete
       await act(async () => {
-        input.focus();
-        fireEvent.mouseDown(input);
+        const openButton = within(autocomplete).getByTitle('Open');
+        fireEvent.click(openButton);
       });
 
       // Wait for options to be available

@@ -9,7 +9,7 @@ import styles from 'style/app-fixed.module.css';
 
 import { errorHandler } from 'utils/errorHandler';
 import { useTranslation } from 'react-i18next';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import {
   CREATE_CAMPAIGN_MUTATION,
   UPDATE_CAMPAIGN_MUTATION,

@@ -32,7 +32,7 @@
  *
  */
 
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import {
   USER_CREATED_ORGANIZATIONS,
@@ -88,9 +88,15 @@ interface IOrganization {
   description: string;
   adminsCount?: number;
   membersCount?: number;
-  admins: [];
-  members?: InterfaceMembersConnection;
-  address: {
+  admins: Array<{
+    _id: string;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+    createdAt?: string;
+  }>;
+  members?: InterfaceMembersConnection; // <-- update this
+  address?: {
     city: string;
     countryCode: string;
     line1: string;
@@ -129,6 +135,29 @@ interface IOrgData {
   name: string;
 }
 
+interface InterfaceAllOrganizationsData {
+  organizations: IOrgData[];
+}
+
+interface InterfaceJoinedOrganizationsData {
+  user: {
+    organizationsWhereMember: {
+      edges: {
+        node: IOrganization;
+      }[];
+    };
+  };
+}
+
+interface InterfaceCreatedOrganizationsData {
+  user: {
+    createdOrganizations: IOrganization[];
+  };
+}
+
+/**
+ * Component for displaying and managing user organizations.
+ */
 export default function Organizations(): React.JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userOrganizations',
@@ -175,29 +204,48 @@ export default function Organizations(): React.JSX.Element {
     data: allOrganizationsData,
     loading: loadingAll,
     refetch: refetchAll,
-  } = useQuery(ORGANIZATION_FILTER_LIST, {
+    error: errorAll,
+  } = useQuery<InterfaceAllOrganizationsData>(ORGANIZATION_FILTER_LIST, {
     variables: { filter: filterName },
     fetchPolicy: 'network-only',
     errorPolicy: 'all',
     skip: mode !== 0,
     notifyOnNetworkStatusChange: true,
-    onError: (error) => console.error('All orgs error:', error),
   });
+
+  useEffect(() => {
+    if (errorAll) {
+      console.error('All orgs error:', errorAll);
+    }
+  }, [errorAll]);
+
+  useEffect(() => {
+    if (
+      allOrganizationsData &&
+      !loadingAll &&
+      !allOrganizationsData.organizations
+    ) {
+      console.error('All orgs error: No organizations found');
+    }
+  }, [allOrganizationsData, loadingAll]);
 
   const {
     data: joinedOrganizationsData,
     loading: loadingJoined,
     refetch: refetchJoined,
-  } = useQuery(USER_JOINED_ORGANIZATIONS_NO_MEMBERS, {
-    variables: { id: userId, first: rowsPerPage, filter: filterName },
-    skip: mode !== 1,
-  });
+  } = useQuery<InterfaceJoinedOrganizationsData>(
+    USER_JOINED_ORGANIZATIONS_NO_MEMBERS,
+    {
+      variables: { id: userId, first: rowsPerPage, filter: filterName },
+      skip: mode !== 1,
+    },
+  );
 
   const {
     data: createdOrganizationsData,
     loading: loadingCreated,
     refetch: refetchCreated,
-  } = useQuery(USER_CREATED_ORGANIZATIONS, {
+  } = useQuery<InterfaceCreatedOrganizationsData>(USER_CREATED_ORGANIZATIONS, {
     variables: { id: userId, filter: filterName },
     skip: mode !== 2,
   });
@@ -223,7 +271,8 @@ export default function Organizations(): React.JSX.Element {
   useEffect(() => {
     if (mode === 0) {
       if (allOrganizationsData?.organizations) {
-        const orgs = allOrganizationsData.organizations.map((org: IOrgData) => {
+        const orgs = allOrganizationsData.organizations.map((org) => {
+          // Check if current user is a member
           const isMember = org.isMember;
           return {
             id: org.id,
@@ -249,6 +298,7 @@ export default function Organizations(): React.JSX.Element {
               const organization = edge.node;
               return {
                 ...organization,
+                admins: organization.admins || [],
                 membershipRequestStatus: 'accepted',
                 isJoined: true,
               };
@@ -263,6 +313,7 @@ export default function Organizations(): React.JSX.Element {
         const orgs = createdOrganizationsData.user.createdOrganizations.map(
           (org: IOrganization) => ({
             ...org,
+            admins: org.admins || [],
             membershipRequestStatus: 'created',
             isJoined: true,
           }),
@@ -302,19 +353,14 @@ export default function Organizations(): React.JSX.Element {
     <>
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
-        className={`${hideDrawer ? styles.expand : styles.contract}`}
-        style={{
-          marginLeft: hideDrawer ? '40px' : '20px',
-          paddingTop: '20px',
-        }}
+        className={`${hideDrawer ? styles.expand : styles.contract} ${styles.organizationsContainer} ${hideDrawer ? styles.organizationsContainerExpanded : styles.organizationsContainerContracted}`}
         data-testid="organizations-container"
       >
         <div
-          className={styles.mainContainerOrganization}
-          style={{ overflowX: 'hidden' }}
+          className={`${styles.mainContainerOrganization} ${styles.overflowHiddenX}`}
         >
           <div className="d-flex justify-content-between align-items-center">
-            <div style={{ flex: 1 }}>
+            <div className={styles.flexOne}>
               <h1>{t('selectOrganization')}</h1>
             </div>
           </div>
@@ -386,12 +432,15 @@ export default function Organizations(): React.JSX.Element {
                           description: organization.description,
                           avatarURL: organization.avatarURL || '',
                           addressLine1: organization.addressLine1 || '',
-                          admins: organization.admins,
+                          admins: (organization.admins || []).map((admin) => ({
+                            id: admin._id,
+                          })),
                           membershipRequestStatus:
                             organization.membershipRequestStatus,
                           userRegistrationRequired:
                             organization.userRegistrationRequired,
-                          membershipRequests: organization.membershipRequests,
+                          membershipRequests:
+                            organization.membershipRequests || [],
                           isJoined: organization.isJoined,
                           membersCount: organization.membersCount || 0,
                           adminsCount: organization.adminsCount || 0,

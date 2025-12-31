@@ -23,7 +23,7 @@ import { Navigate, useParams } from 'react-router';
 
 import { WarningAmberRounded } from '@mui/icons-material';
 
-import { useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { debounce, Stack } from '@mui/material';
 
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
@@ -36,6 +36,7 @@ import {
 import Avatar from 'components/Avatar/Avatar';
 import styles from 'style/app-fixed.module.css';
 import { GET_EVENT_VOLUNTEER_GROUPS } from 'GraphQl/Queries/EventVolunteerQueries';
+import type { IGetEventVolunteerGroupsResult } from 'types/GraphQL/queryResults';
 import VolunteerGroupModal from './modal/VolunteerGroupModal';
 import VolunteerGroupDeleteModal from './deleteModal/VolunteerGroupDeleteModal';
 import VolunteerGroupViewModal from './viewModal/VolunteerGroupViewModal';
@@ -113,19 +114,7 @@ function volunteerGroups(): JSX.Element {
     loading: groupsLoading,
     error: groupsError,
     refetch: refetchGroups,
-  }: {
-    data?: {
-      event: {
-        id: string;
-        recurrenceRule?: { id: string } | null;
-        baseEvent?: { id: string } | null;
-        volunteerGroups: InterfaceVolunteerGroupInfo[];
-      };
-    };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => void;
-  } = useQuery(GET_EVENT_VOLUNTEER_GROUPS, {
+  } = useQuery<IGetEventVolunteerGroupsResult>(GET_EVENT_VOLUNTEER_GROUPS, {
     variables: {
       input: {
         id: eventId,
@@ -165,17 +154,16 @@ function volunteerGroups(): JSX.Element {
     let filteredGroups = allGroups;
 
     if (searchTerm) {
-      filteredGroups = filteredGroups.filter(
-        (group: InterfaceVolunteerGroupInfo) => {
-          if (searchBy === 'leader') {
-            const leaderName = group.leader?.name || '';
-            return leaderName.toLowerCase().includes(searchTerm.toLowerCase());
-          } else {
-            const groupName = group.name || '';
-            return groupName.toLowerCase().includes(searchTerm.toLowerCase());
-          }
-        },
-      );
+      filteredGroups = filteredGroups.filter((group) => {
+        if (searchBy === 'leader') {
+          const leaderName =
+            (group as InterfaceVolunteerGroupInfo).leader?.name || '';
+          return leaderName.toLowerCase().includes(searchTerm.toLowerCase());
+        } else {
+          const groupName = (group as InterfaceVolunteerGroupInfo).name || '';
+          return groupName.toLowerCase().includes(searchTerm.toLowerCase());
+        }
+      });
     }
 
     // Apply sorting (create a copy to avoid read-only array issues)

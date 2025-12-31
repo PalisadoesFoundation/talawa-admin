@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import AdminSearchFilterBar from './AdminSearchFilterBar';
+import { debounce } from 'lodash';
 import type {
   InterfaceAdminSearchFilterBarProps,
   InterfaceSortingOption,
@@ -375,8 +376,7 @@ describe('AdminSearchFilterBar', () => {
 
   describe('Debouncing Behavior', () => {
     it('should debounce search changes with default delay', async () => {
-      const { debounce } = await import('lodash');
-      const mockDebounce = debounce as unknown as ReturnType<typeof vi.fn>;
+      const mockDebounce = vi.mocked(debounce);
 
       const onSearchChange = vi.fn();
       render(
@@ -392,8 +392,7 @@ describe('AdminSearchFilterBar', () => {
     });
 
     it('should debounce search changes with custom delay', async () => {
-      const { debounce } = await import('lodash');
-      const mockDebounce = debounce as unknown as ReturnType<typeof vi.fn>;
+      const mockDebounce = vi.mocked(debounce);
 
       const onSearchChange = vi.fn();
       render(

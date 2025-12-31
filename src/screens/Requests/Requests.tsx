@@ -48,7 +48,8 @@
  * - Displays appropriate messages when no data is available.
  *
  */
-import { useQuery, useMutation } from '@apollo/client';
+
+import { useQuery, useMutation } from '@apollo/client/react';
 import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -86,6 +87,10 @@ import {
 } from '../../types/ReportingTable/utils';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { Group, Search } from '@mui/icons-material';
+import type {
+  IMembershipRequestResult,
+  IOrganizationListResult,
+} from 'types/GraphQL/queryResults';
 
 interface InterfaceRequestsListItem {
   membershipRequestId: string;
@@ -136,9 +141,8 @@ const Requests = (): JSX.Element => {
   const organizationId = orgId;
 
   // Query to fetch membership requests
-  const { data, loading, fetchMore, refetch } = useQuery(
-    MEMBERSHIP_REQUEST_PG,
-    {
+  const { data, loading, fetchMore, refetch } =
+    useQuery<IMembershipRequestResult>(MEMBERSHIP_REQUEST_PG, {
       variables: {
         input: {
           id: organizationId,
@@ -148,10 +152,10 @@ const Requests = (): JSX.Element => {
         name_contains: '',
       },
       notifyOnNetworkStatusChange: true,
-    },
-  );
+    });
 
-  const { data: orgsData } = useQuery(ORGANIZATION_LIST);
+  const { data: orgsData } =
+    useQuery<IOrganizationListResult>(ORGANIZATION_LIST);
   const [displayedRequests, setDisplayedRequests] = useState<
     InterfaceRequestsListItem[]
   >([]);
@@ -272,7 +276,10 @@ const Requests = (): JSX.Element => {
         skip: currentLength,
         name_contains: searchByName,
       },
-      updateQuery: (prev, { fetchMoreResult }) => {
+      updateQuery: (
+        prev: IMembershipRequestResult,
+        { fetchMoreResult }: { fetchMoreResult?: IMembershipRequestResult },
+      ) => {
         setIsLoadingMore(false);
 
         if (!fetchMoreResult?.organization?.membershipRequests) {

@@ -218,8 +218,7 @@ interface InterfaceAdminSearchFilterBarBase {
  * />
  * ```
  */
-export interface InterfaceAdminSearchFilterBarSimple
-  extends InterfaceAdminSearchFilterBarBase {
+export interface InterfaceAdminSearchFilterBarSimple extends InterfaceAdminSearchFilterBarBase {
   /**
    * Discriminator property indicating this variant has no dropdowns.
    *
@@ -291,8 +290,7 @@ export interface InterfaceAdminSearchFilterBarSimple
  * />
  * ```
  */
-export interface InterfaceAdminSearchFilterBarAdvanced
-  extends InterfaceAdminSearchFilterBarBase {
+export interface InterfaceAdminSearchFilterBarAdvanced extends InterfaceAdminSearchFilterBarBase {
   /**
    * Discriminator property indicating this variant has dropdowns.
    * **Job:** When `true`, the `dropdowns` property must be provided.

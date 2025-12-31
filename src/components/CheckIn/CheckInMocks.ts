@@ -2,13 +2,16 @@ import { EVENT_CHECKINS, EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { MARK_CHECKIN } from 'GraphQl/Mutations/mutations';
 import type { InterfaceAttendeeQueryResponse } from 'types/CheckIn/interface';
 
-const checkInQueryData: InterfaceAttendeeQueryResponse = {
+const checkInQueryData = {
   event: {
+    __typename: 'Event',
     id: 'event123',
     attendeesCheckInStatus: [
       {
+        __typename: 'AttendeeCheckInStatus',
         id: 'eventAttendee1',
         user: {
+          __typename: 'User',
           id: 'user1',
           name: 'John Doe',
           emailAddress: 'john@example.com',
@@ -19,8 +22,10 @@ const checkInQueryData: InterfaceAttendeeQueryResponse = {
         isCheckedOut: false,
       },
       {
+        __typename: 'AttendeeCheckInStatus',
         id: 'eventAttendee2',
         user: {
+          __typename: 'User',
           id: 'user2',
           name: 'John2 Doe2',
           emailAddress: 'john2@example.com',
@@ -43,8 +48,38 @@ export const checkInQueryMock = [
     result: {
       data: {
         event: {
+          __typename: 'Event',
           id: 'event123',
+          name: 'Test Event',
+          description: 'Test Description',
+          location: 'Test Location',
+          allDay: false,
+          isPublic: true,
+          isRegisterable: true,
+          startAt: '2023-01-01T10:00:00Z',
+          endAt: '2023-01-01T12:00:00Z',
+          createdAt: '2023-01-01T09:00:00Z',
+          updatedAt: '2023-01-01T09:00:00Z',
+          isRecurringEventTemplate: false,
+          baseEvent: null,
           recurrenceRule: null,
+          creator: {
+            __typename: 'User',
+            id: 'creator1',
+            name: 'Creator',
+            emailAddress: 'creator@example.com',
+          },
+          updater: {
+            __typename: 'User',
+            id: 'updater1',
+            name: 'Updater',
+            emailAddress: 'updater@example.com',
+          },
+          organization: {
+            __typename: 'Organization',
+            id: 'org1',
+            name: 'Test Org',
+          },
         },
       },
     },

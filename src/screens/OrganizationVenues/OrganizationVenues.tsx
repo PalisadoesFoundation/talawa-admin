@@ -50,7 +50,7 @@ import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import { errorHandler } from 'utils/errorHandler';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import Col from 'react-bootstrap/Col';
 import { VENUE_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
@@ -59,6 +59,7 @@ import VenueModal from 'components/Venues/Modal/VenueModal';
 import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import VenueCard from 'components/Venues/VenueCard';
+import type { IVenueListResult } from 'types/GraphQL/queryResults';
 import PageHeader from 'shared-components/Navbar/Navbar';
 
 function organizationVenues(): JSX.Element {
@@ -95,7 +96,7 @@ function organizationVenues(): JSX.Element {
     loading: venueLoading,
     error: venueError,
     refetch: venueRefetch,
-  } = useQuery(VENUE_LIST, {
+  } = useQuery<IVenueListResult>(VENUE_LIST, {
     variables: {
       orgId: orgId,
     },
@@ -179,34 +180,48 @@ function organizationVenues(): JSX.Element {
 
       // Client-side filtering
       if (searchTerm) {
-        filteredVenues = filteredVenues.filter(
-          (venue: InterfaceQueryVenueListItem) => {
-            if (searchBy === 'name') {
-              return venue.node.name
-                .toLowerCase()
-                .includes(searchTerm.toLowerCase());
-            } else if (searchBy === 'desc') {
-              return venue.node.description
-                ?.toLowerCase()
-                .includes(searchTerm.toLowerCase());
-            }
-            return true;
-          },
-        );
+        filteredVenues = filteredVenues.filter((venue) => {
+          if (searchBy === 'name') {
+            return venue.node.name
+              .toLowerCase()
+              .includes(searchTerm.toLowerCase());
+          } else if (searchBy === 'desc') {
+            return venue.node.description
+              ?.toLowerCase()
+              .includes(searchTerm.toLowerCase());
+          }
+          return true;
+        });
       }
 
       // Client-side sorting by capacity
       if (filteredVenues.length > 0) {
         filteredVenues = [...filteredVenues].sort((a, b) => {
-          const capacityA = parseInt(a.node.capacity || '0');
-          const capacityB = parseInt(b.node.capacity || '0');
+          const capacityA =
+            typeof a.node.capacity === 'number'
+              ? a.node.capacity
+              : parseInt(String(a.node.capacity || '0'), 10);
+          const capacityB =
+            typeof b.node.capacity === 'number'
+              ? b.node.capacity
+              : parseInt(String(b.node.capacity || '0'), 10);
           return sortOrder === 'highest'
             ? capacityB - capacityA
             : capacityA - capacityB;
         });
       }
 
-      setVenues(filteredVenues);
+      setVenues(
+        filteredVenues.map((venue) => ({
+          node: {
+            id: venue.node.id,
+            name: venue.node.name,
+            description: venue.node.description ?? null,
+            image: null,
+            capacity: venue.node.capacity,
+          },
+        })),
+      );
     }
   }, [venueData, searchTerm, searchBy, sortOrder]);
 

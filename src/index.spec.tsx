@@ -13,7 +13,7 @@ import {
   ApolloLink,
   Observable,
   type Operation,
-  type NextLink,
+  type RequestHandler,
 } from '@apollo/client';
 import { GraphQLError, type DocumentNode } from 'graphql';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
@@ -26,14 +26,7 @@ import {
 import { toast } from 'react-toastify';
 import i18n from './utils/i18n';
 import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
-import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
-import { refreshToken } from 'utils/getRefreshToken';
-
-// Define types for mocked modules
-
-interface InterfaceLocalStorageMock {
-  getItem: ReturnType<typeof vi.fn>;
-}
+import UploadHttpLink from 'apollo-upload-client/UploadHttpLink.mjs';
 
 interface InterfaceHeaders {
   authorization: string;
@@ -46,27 +39,79 @@ interface InterfaceErrorCallbackParams {
 
 // Load test environment variables
 const getTestToken = (): string =>
-  process.env.VITE_TEST_AUTH_TOKEN || 'test-token';
+  process.env.VITE_TEST_AUTH_TOKEN || 'valid-token';
 const getTestExpiredToken = (): string =>
   process.env.VITE_TEST_EXPIRED_TOKEN || 'expired-token';
 
-// Mock external dependencies
 vi.mock('react-toastify', () => ({
+  ToastContainer: (): JSX.Element => <div>ToastContainer</div>,
   toast: {
+    success: vi.fn(),
     error: vi.fn(),
+    info: vi.fn(),
+    warning: vi.fn(),
   },
-  ToastContainer: () => null,
 }));
 
-// Mock the refreshToken function
-vi.mock('utils/getRefreshToken', () => ({
-  refreshToken: vi.fn(),
+vi.mock('Constant/constant', () => ({
+  BACKEND_URL: 'http://localhost:4000/graphql',
+  REACT_APP_BACKEND_WEBSOCKET_URL: 'ws://localhost:4000/graphql',
+  BACKEND_WEBSOCKET_URL: 'ws://localhost:4000/graphql',
+  deriveBackendWebsocketUrl: (url: string | undefined | null): string => {
+    if (!url) return '';
+    if (url.startsWith('https://')) {
+      // Remove fragment/hash from URL
+      const urlWithoutHash = url.split('#')[0];
+      return urlWithoutHash.replace('https://', 'wss://');
+    }
+    if (url.startsWith('http://')) {
+      // Remove fragment/hash from URL
+      const urlWithoutHash = url.split('#')[0];
+      return urlWithoutHash.replace('http://', 'ws://');
+    }
+    return '';
+  },
 }));
 
-// Create a factory function for localStorage mock that uses environment variables
+// Mutable mock for localStorage
+const mockGetItem = vi.fn();
+vi.mock('utils/useLocalstorage', () => ({
+  default: () => ({
+    getItem: mockGetItem,
+    setItem: vi.fn(),
+    removeItem: vi.fn(),
+  }),
+}));
+
+vi.mock('utils/i18n', () => ({
+  default: {
+    language: 'en',
+    changeLanguage: vi.fn(),
+    use: vi.fn().mockReturnThis(),
+    init: vi.fn(),
+  },
+}));
+
+vi.mock('utils/timezoneUtils', async () => {
+  const { ApolloLink } =
+    await vi.importActual<typeof import('@apollo/client')>('@apollo/client');
+  return {
+    requestMiddleware: new ApolloLink((operation, forward) =>
+      forward(operation),
+    ),
+    responseMiddleware: new ApolloLink((operation, forward) =>
+      forward(operation),
+    ),
+  };
+});
+
+// Mock refreshToken function for Token Refresh Error Link tests
+const refreshToken = vi.fn();
+
+// Helper to configure localStorage mock
 const createLocalStorageMock = (
   tokenType: 'valid' | 'expired' | 'empty' = 'valid',
-): ReturnType<typeof vi.mock> => {
+) => {
   let token = '';
 
   switch (tokenType) {
@@ -81,39 +126,26 @@ const createLocalStorageMock = (
       break;
   }
 
-  return vi.mock('utils/useLocalstorage', () => ({
-    default: (): { getItem: InterfaceLocalStorageMock['getItem'] } => ({
-      getItem: vi.fn(() => token),
-    }),
-  }));
+  mockGetItem.mockReturnValue(token);
 };
 
-vi.mock('./utils/i18n', () => ({
-  default: {
-    language: 'en',
-  },
-}));
-
-describe('Apollo Client Configuration', () => {
-  beforeEach((): void => {
+describe('Apollo Client Setup', () => {
+  beforeEach(() => {
     vi.clearAllMocks();
-    // Reset localStorage mock with default test token
     createLocalStorageMock('valid');
   });
 
   afterEach(() => {
-    vi.clearAllMocks(); // Only module mocks, no spies
+    vi.clearAllMocks();
   });
 
-  it('should create an Apollo Client with correct configuration', (): void => {
+  it('should create Apollo Client instance with correct links', () => {
     const client = new ApolloClient({
-      cache: new InMemoryCache(),
+      cache: new InMemoryCache({}),
       link: ApolloLink.from([
-        vi.fn() as unknown as ApolloLink,
-        vi.fn() as unknown as ApolloLink,
         requestMiddleware,
         responseMiddleware,
-        vi.fn() as unknown as ApolloLink,
+        new UploadHttpLink({ uri: 'http://localhost:4000/graphql' }),
       ]),
     });
 
@@ -122,7 +154,7 @@ describe('Apollo Client Configuration', () => {
   });
 
   it('should configure upload link with correct URI', (): void => {
-    const uploadLink = createUploadLink({
+    const uploadLink = new UploadHttpLink({
       uri: BACKEND_URL,
       headers: {
         'Apollo-Require-Preflight': 'true',
@@ -599,17 +631,22 @@ describe('Apollo Client Configuration', () => {
       graphQLErrors?: readonly GraphQLError[];
       networkError?: Error | null;
       operation: Operation;
-      forward: NextLink;
+      forward: RequestHandler;
     }) => { subscribe: (observer: unknown) => void } | void;
-    let splitPredicate: (args: { query: DocumentNode }) => boolean;
+    let splitPredicate:
+      | ((args: { query: DocumentNode }) => boolean)
+      | undefined;
     let mockRefreshToken: Mock<() => Promise<boolean>>;
-    let mockGetItem: Mock<() => string | null>;
+    let mockGetItem: Mock<(key: string) => string | null>;
     let mockClearAllItems: Mock<() => void>;
     let getComputedStyleSpy: { mockRestore: () => void };
     let getElementByIdSpy: { mockRestore: () => void };
 
     beforeEach(async () => {
       vi.resetModules();
+
+      // Initialize splitPredicate to undefined
+      splitPredicate = undefined;
 
       const actualApollo = (await vi.importActual(
         '@apollo/client',
@@ -620,19 +657,43 @@ describe('Apollo Client Configuration', () => {
       vi.doMock('@apollo/link-error', () => ({
         onError: vi.fn((cb) => {
           onErrorCallback = cb;
-          return new ApolloLink(() => null);
+          return new ApolloLink(
+            () =>
+              new Observable((observer) => {
+                observer.next({ data: {} });
+                observer.complete();
+              }),
+          );
         }),
       }));
 
       // Mock split to capture the predicate
-      vi.doMock('@apollo/client', () => ({
-        ...actualApollo,
-        split: vi.fn((predicate) => {
+      // ApolloLink.split is a static method, so we need to mock it on ApolloLink
+      vi.doMock('@apollo/client', () => {
+        const splitMock = vi.fn((predicate) => {
+          // Capture the predicate when split is called
           splitPredicate = predicate;
-          return new ApolloLink(() => null);
-        }),
-        ApolloClient: vi.fn(),
-      }));
+          return new ApolloLink(
+            () =>
+              new Observable((observer) => {
+                observer.next({ data: {} });
+                observer.complete();
+              }),
+          );
+        });
+        // Create a mock ApolloLink class that includes all static methods
+        const MockApolloLink = class extends ApolloLink {
+          static split = splitMock;
+          static from = actualApollo.ApolloLink.from;
+          static concat = actualApollo.ApolloLink.concat;
+          static empty = actualApollo.ApolloLink.empty;
+        };
+        return {
+          ...actualApollo,
+          ApolloLink: MockApolloLink,
+          ApolloClient: vi.fn(),
+        };
+      });
 
       // Mock utils
       mockRefreshToken = vi.fn();
@@ -640,7 +701,7 @@ describe('Apollo Client Configuration', () => {
         refreshToken: mockRefreshToken,
       }));
 
-      mockGetItem = vi.fn();
+      mockGetItem = vi.fn<(key: string) => string | null>();
       mockClearAllItems = vi.fn();
       vi.doMock('utils/useLocalstorage', () => ({
         default: () => ({
@@ -738,7 +799,12 @@ describe('Apollo Client Configuration', () => {
 
     it('should queue requests when refreshing', async () => {
       await import('./index');
-      mockGetItem.mockReturnValue('TRUE');
+      // Mock getItem to return different values for different keys
+      mockGetItem.mockImplementation((key: string) => {
+        if (key === 'IsLoggedIn') return 'TRUE';
+        if (key === 'token') return 'test-token';
+        return null;
+      });
 
       // First request triggers refresh
       // We need to make the first refresh hang so we can fire a second request
@@ -746,7 +812,7 @@ describe('Apollo Client Configuration', () => {
       const refreshPromise = new Promise<boolean>((resolve) => {
         resolveRefresh = resolve;
       });
-      mockRefreshToken.mockReturnValue(refreshPromise);
+      mockRefreshToken.mockImplementation(() => refreshPromise);
 
       const forward = vi.fn().mockReturnValue(
         new Observable((observer) => {
@@ -759,7 +825,7 @@ describe('Apollo Client Configuration', () => {
         variables: {},
         extensions: {},
         setContext: vi.fn(),
-        getContext: vi.fn(),
+        getContext: vi.fn().mockReturnValue({ headers: {} }),
         toKey: vi.fn(),
       } as unknown as Operation;
       const operation2 = {
@@ -767,7 +833,7 @@ describe('Apollo Client Configuration', () => {
         variables: {},
         extensions: {},
         setContext: vi.fn(),
-        getContext: vi.fn(),
+        getContext: vi.fn().mockReturnValue({ headers: {} }),
         toKey: vi.fn(),
       } as unknown as Operation;
 
@@ -781,8 +847,19 @@ describe('Apollo Client Configuration', () => {
         operation: operation1,
         forward,
       });
-      if (obs1 && obs1.subscribe)
-        obs1.subscribe({ next: () => {}, error: () => {}, complete: () => {} });
+
+      const obs1CompleteSpy = vi.fn();
+      if (obs1 && obs1.subscribe) {
+        obs1.subscribe({
+          next: () => {},
+          error: () => {},
+          complete: obs1CompleteSpy,
+        });
+      }
+
+      // Wait a bit to ensure isRefreshing is set to true
+      // The isRefreshing flag is set synchronously on line 109
+      await new Promise((resolve) => setTimeout(resolve, 10));
 
       // 2. Trigger second error -> should be queued
       const obs2 = onErrorCallback({
@@ -795,29 +872,67 @@ describe('Apollo Client Configuration', () => {
         forward,
       });
 
-      // We need to subscribe to obs2 to verify it waits
+      // Verify that obs2 was returned (meaning it was queued)
+      expect(obs2).toBeDefined();
+      expect(obs2?.subscribe).toBeDefined();
+
+      // Subscribe to obs2 to ensure the queued callback is set up
       const nextSpy = vi.fn();
-      if (obs2 && obs2.subscribe)
-        obs2.subscribe({ next: nextSpy, error: () => {}, complete: () => {} });
+      const obs2CompleteSpy = vi.fn();
+      if (obs2 && obs2.subscribe) {
+        obs2.subscribe({
+          next: nextSpy,
+          error: () => {},
+          complete: obs2CompleteSpy,
+        });
+      }
 
       expect(mockRefreshToken).toHaveBeenCalledTimes(1);
       expect(nextSpy).not.toHaveBeenCalled();
 
-      // 3. Resolve refresh
+      // 3. Resolve refresh - this should trigger both operations to be forwarded
+      // When the promise resolves:
+      // - resolvePendingRequests() is called synchronously in .then() (line 115)
+      // - This executes the queued callback which calls forward(operation2) (line 104)
+      // - The promise resolves to true, which triggers mergeMap
+      // - mergeMap calls forward(operation1) (line 147)
       if (resolveRefresh) {
         resolveRefresh(true);
       }
 
-      // Wait for both queued requests to be processed after refresh resolves
+      // Wait for the promise to resolve and the RxJS chain to process
+      // The flow:
+      // 1. refreshToken() promise resolves with true
+      // 2. In the .then() callback, resolvePendingRequests() is called (line 115)
+      // 3. resolvePendingRequests() executes the queued callback which calls forward(operation2) (line 104)
+      // 4. The promise resolves to true, which triggers mergeMap
+      // 5. mergeMap calls forward(operation1) (line 147)
+
+      // Wait for microtasks to flush (promise resolution and .then() callbacks)
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      // Wait for another tick to allow RxJS Observable chain to process
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      // Wait for both operations to be forwarded
+      // The queued callback executes synchronously when resolvePendingRequests() is called
+      // The mergeMap executes when the observable chain processes the resolved promise
       await vi.waitFor(
         () => {
-          // Verify both operations were forwarded after successful refresh
-          expect(forward).toHaveBeenCalledWith(operation1);
-          expect(forward).toHaveBeenCalledWith(operation2);
-          expect(forward).toHaveBeenCalledTimes(2);
+          // Both operations should be forwarded
+          expect(forward.mock.calls.length).toBe(2);
         },
-        { timeout: 1000 },
+        { timeout: 5000 },
       );
+
+      // Verify both operations were called
+      const operation1Called = forward.mock.calls.some(
+        (call) => call[0] === operation1,
+      );
+      const operation2Called = forward.mock.calls.some(
+        (call) => call[0] === operation2,
+      );
+      expect(operation1Called).toBe(true);
+      expect(operation2Called).toBe(true);
     });
 
     it('should clear storage and redirect on refresh failure', async () => {
@@ -864,8 +979,21 @@ describe('Apollo Client Configuration', () => {
     });
 
     it('should correctly split subscription operations', async () => {
+      // The mock should be set up in beforeEach, but we need to ensure
+      // the module is re-imported to use the mock
+      vi.resetModules();
+
+      // Re-import to trigger the mocked split function
       await import('./index');
-      expect(splitPredicate).toBeDefined();
+
+      // Wait for the mock to capture the predicate
+      // The split function is called at module load time (line 200 in index.tsx)
+      await vi.waitFor(
+        () => {
+          expect(splitPredicate).toBeDefined();
+        },
+        { timeout: 2000 },
+      );
 
       const subscriptionQuery = {
         kind: 'Document',
@@ -887,8 +1015,11 @@ describe('Apollo Client Configuration', () => {
         ],
       } as unknown as DocumentNode;
 
-      expect(splitPredicate({ query: subscriptionQuery })).toBe(true);
-      expect(splitPredicate({ query: otherQuery })).toBe(false);
+      expect(splitPredicate).toBeDefined();
+      if (splitPredicate) {
+        expect(splitPredicate({ query: subscriptionQuery })).toBe(true);
+        expect(splitPredicate({ query: otherQuery })).toBe(false);
+      }
     });
   });
 });

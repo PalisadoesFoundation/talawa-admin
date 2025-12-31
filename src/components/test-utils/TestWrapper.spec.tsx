@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
-import type { MockedResponse } from '@apollo/client/testing';
+import type { MockLink } from '@apollo/client/testing';
 import { I18nextProvider } from './I18nextProviderMock';
 import { TestErrorBoundary } from './TestErrorBoundary';
 import AsyncComponent from './AsyncComponent';
 import MockBrowserRouter from './MockBrowserRouter';
 
-vi.mock('@apollo/client/testing', async () => {
-  const actual = await vi.importActual('@apollo/client/testing');
+vi.mock('@apollo/client/testing/react', async () => {
+  const actual = await vi.importActual('@apollo/client/testing/react');
   return {
     ...actual,
     MockedProvider: ({
@@ -14,7 +14,7 @@ vi.mock('@apollo/client/testing', async () => {
       mocks = [],
     }: {
       children: ReactNode;
-      mocks?: MockedResponse[];
+      mocks?: MockLink.MockedResponse[];
     }) => (
       <div data-testid="mocked-provider" data-mocks={JSON.stringify(mocks)}>
         {children}
@@ -36,10 +36,9 @@ vi.mock('utils/i18n', () => ({
 }));
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import { TestWrapper } from './TestWrapper';
 import { gql } from '@apollo/client';
-import { act } from 'react-dom/test-utils';
 import { vi } from 'vitest';
 // Mock the imported modules
 describe('TestWrapper', () => {

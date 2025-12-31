@@ -1,4 +1,4 @@
-import { useQuery, type ApolloQueryResult } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
@@ -20,9 +20,9 @@ import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import type {
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
-  InterfaceQueryFundCampaignsPledges,
   InterfaceCampaignInfoPG,
 } from 'utils/interfaces';
+import type { IFundCampaignPledgeResult } from 'types/GraphQL/queryResults';
 import ProgressBar from 'react-bootstrap/ProgressBar';
 
 enum ModalState {
@@ -89,16 +89,7 @@ const fundCampaignPledge = (): JSX.Element => {
     loading: pledgeLoading,
     error: pledgeError,
     refetch: refetchPledge,
-  }: {
-    data?: { fundCampaign: InterfaceQueryFundCampaignsPledges };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => Promise<
-      ApolloQueryResult<{
-        fundCampaign: InterfaceQueryFundCampaignsPledges;
-      }>
-    >;
-  } = useQuery(FUND_CAMPAIGN_PLEDGE, {
+  } = useQuery<IFundCampaignPledgeResult>(FUND_CAMPAIGN_PLEDGE, {
     variables: {
       input: { id: fundCampaignId },
     },
@@ -109,37 +100,47 @@ const fundCampaignPledge = (): JSX.Element => {
     let totalRaised = 0;
 
     const pledgesList =
-      pledgeData?.fundCampaign?.pledges?.edges.map((edge) => {
-        const amount = edge.node.amount || 0;
-        totalPledged += amount;
-        // Assuming there's no raised amount for now,
-        // this should be updated when raised amount data is available
-        totalRaised += 0;
+      pledgeData?.fundCampaign?.pledges?.edges.map(
+        (edge: {
+          node: {
+            id: string;
+            amount?: number;
+            createdAt?: string;
+            users?: Array<{ name?: string }>;
+            pledger?: { name?: string };
+          };
+        }) => {
+          const amount = edge.node.amount || 0;
+          totalPledged += amount;
+          // Assuming there's no raised amount for now,
+          // this should be updated when raised amount data is available
+          totalRaised += 0;
 
-        const allUsers =
-          'users' in edge.node && Array.isArray(edge.node.users)
-            ? edge.node.users
-            : [edge.node.pledger];
+          const allUsers =
+            'users' in edge.node && Array.isArray(edge.node.users)
+              ? edge.node.users
+              : [edge.node.pledger];
 
-        return {
-          id: edge.node.id,
-          amount: amount,
-          pledgeDate: edge.node.createdAt
-            ? new Date(edge.node.createdAt)
-            : new Date(),
-          endDate: pledgeData.fundCampaign.endAt
-            ? new Date(pledgeData.fundCampaign.endAt)
-            : new Date(),
-          users: allUsers.filter(Boolean),
-          currency: pledgeData.fundCampaign.currencyCode || 'USD',
-        };
-      }) ?? [];
+          return {
+            id: edge.node.id,
+            amount: amount,
+            pledgeDate: edge.node.createdAt
+              ? new Date(edge.node.createdAt)
+              : new Date(),
+            endDate: pledgeData.fundCampaign.endAt
+              ? new Date(pledgeData.fundCampaign.endAt)
+              : new Date(),
+            users: allUsers.filter(Boolean),
+            currency: pledgeData.fundCampaign.currencyCode || 'USD',
+          };
+        },
+      ) ?? [];
 
     const filteredPledges = searchTerm
       ? pledgesList.filter((pledge) => {
           const search = searchTerm.toLowerCase();
           return pledge.users.some((user) =>
-            user.name?.toLowerCase().includes(search),
+            user?.name?.toLowerCase().includes(search),
           );
         })
       : pledgesList;
@@ -157,10 +158,10 @@ const fundCampaignPledge = (): JSX.Element => {
       }
     });
 
-    // Get fund name from the campaign's fund property
-    const fundName =
-      pledgeData?.fundCampaign?.pledges?.edges[0]?.node?.campaign?.fund?.name ??
-      tCommon('funds');
+    // Get fund name from the campaign
+    const fundName = pledgeData?.fundCampaign?.name
+      ? `${pledgeData.fundCampaign.name} ${tCommon('funds')}`
+      : tCommon('funds');
     return { pledges: sortedPledges, totalPledged, totalRaised, fundName };
   }, [pledgeData, searchTerm, sortBy, tCommon]);
 
@@ -169,8 +170,12 @@ const fundCampaignPledge = (): JSX.Element => {
       setCampaignInfo({
         name: pledgeData.fundCampaign.name,
         goal: pledgeData.fundCampaign.goalAmount ?? 0,
-        startDate: pledgeData.fundCampaign.startAt ?? new Date(),
-        endDate: pledgeData.fundCampaign.endAt ?? new Date(),
+        startDate: pledgeData.fundCampaign.startAt
+          ? new Date(pledgeData.fundCampaign.startAt)
+          : new Date(),
+        endDate: pledgeData.fundCampaign.endAt
+          ? new Date(pledgeData.fundCampaign.endAt)
+          : new Date(),
         currency: pledgeData.fundCampaign.currencyCode ?? 'USD',
       });
     }
@@ -582,7 +587,11 @@ const fundCampaignPledge = (): JSX.Element => {
         orgId={orgId}
         pledge={pledge}
         refetchPledge={refetchPledge}
-        endDate={pledgeData?.fundCampaign?.endAt as Date}
+        endDate={
+          pledgeData?.fundCampaign?.endAt
+            ? new Date(pledgeData.fundCampaign.endAt)
+            : new Date()
+        }
         mode={pledgeModalMode}
       />
       <PledgeDeleteModal

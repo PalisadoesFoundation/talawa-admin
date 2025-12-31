@@ -46,7 +46,7 @@ import styles from './EventCard.module.css';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import dayjs from 'dayjs';
 import { Button } from 'react-bootstrap';
-import { useMutation } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 
 import { REGISTER_EVENT } from 'GraphQl/Mutations/EventMutations';
@@ -55,6 +55,9 @@ import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceEvent } from 'types/Event/interface';
+
+// Date prefix used for parsing time-only strings into valid ISO date-time format
+const TIME_ONLY_DATE_PREFIX = '1970-01-01T';
 
 function eventCard(props: InterfaceEvent): JSX.Element {
   // Extract the translation functions
@@ -99,7 +102,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
           );
         }
       } catch (error) {
-        NotificationToast.error(`Failed to register for the event`);
+        NotificationToast.error(t('registrationFailed'));
         NotificationToast.error(error as string);
       }
     }
@@ -124,7 +127,9 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         {`${t('starts')} `}
         {props.startTime ? (
           <b data-testid="startTime">
-            {dayjs(`2015-03-04T${props.startTime}`).format('h:mm:ss A')}
+            {dayjs(`${TIME_ONLY_DATE_PREFIX}${props.startTime}`).format(
+              'h:mm:ss A',
+            )}
           </b>
         ) : (
           <></>
@@ -135,7 +140,9 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         {`${t('ends')} `}
         {props.endTime ? (
           <b data-testid="endTime">
-            {dayjs(`2015-03-04T${props.endTime}`).format('h:mm:ss A')}
+            {dayjs(`${TIME_ONLY_DATE_PREFIX}${props.endTime}`).format(
+              'h:mm:ss A',
+            )}
           </b>
         ) : (
           <></>

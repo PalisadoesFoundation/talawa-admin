@@ -1,0 +1,20 @@
+.errorIcon {
+  font-size: 2em;
+}
+
+.expandIcon {
+  cursor: pointer;
+}
+
+.checkbox {
+  cursor: pointer;
+}
+
+.subTagsContainer {
+  margin-left: 20px;
+}
+
+.subTagsScrollableDiv {
+  max-height: 300px;
+  overflow: auto;
+}

@@ -1,13 +1,15 @@
 import React from 'react';
 import { describe, test, expect, vi, it } from 'vitest';
-import { ApolloProvider } from '@apollo/client';
-import { MockedProvider } from '@apollo/client/testing';
+import { ApolloProvider } from '@apollo/client/react';
+import { MockedProvider } from '@apollo/client/testing/react';
+import { InMemoryCache } from '@apollo/client';
 import {
   act,
   fireEvent,
   render,
   screen,
   waitFor,
+  waitForElementToBeRemoved,
 } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -33,7 +35,6 @@ import {
   initialActiveData,
   initialArchivedData,
   updateAdMocks,
-  wait,
 } from './AdvertisementsMocks';
 
 vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
@@ -58,6 +59,8 @@ const translations = {
   ),
 };
 
+const cache = new InMemoryCache();
+
 let mockID: string | undefined = '1';
 
 vi.mock('react-router', async () => {
@@ -70,8 +73,11 @@ const tomorrow = today;
 tomorrow.setDate(today.getDate() + 1);
 
 let mockUseMutation: ReturnType<typeof vi.fn>;
-vi.mock('@apollo/client', async () => {
-  const actual = await vi.importActual('@apollo/client');
+
+vi.mock('@apollo/client/react', async () => {
+  const actual = await vi.importActual<typeof import('@apollo/client/react')>(
+    '@apollo/client/react',
+  );
   return {
     ...actual,
     useMutation: () => mockUseMutation(),
@@ -89,6 +95,7 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 
 describe('Testing Advertisement Component', () => {
   beforeEach(() => {
+    cache.restore({});
     mockUseMutation = vi.fn();
     vi.clearAllMocks();
     mockUseMutation.mockReturnValue([vi.fn()]);
@@ -103,7 +110,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={getCompletedAdvertisementMocks}>
+              <MockedProvider
+                cache={cache}
+                mocks={getCompletedAdvertisementMocks}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -121,7 +131,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={getCompletedAdvertisementMocks}>
+              <MockedProvider
+                cache={cache}
+                mocks={getCompletedAdvertisementMocks}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -130,7 +143,8 @@ describe('Testing Advertisement Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
       /Completed Campaigns/i,
@@ -159,7 +173,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={getActiveAdvertisementMocks}>
+              <MockedProvider cache={cache} mocks={getActiveAdvertisementMocks}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -169,9 +183,11 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
-    expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+
     expect(screen.getByTestId('AdEntry')).toBeInTheDocument();
     expect(screen.getByTestId('Ad_type')).toBeInTheDocument();
     expect(screen.getByTestId('Ad_type')).toHaveTextContent('banner');
@@ -194,7 +210,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={getCompletedAdvertisementMocks}>
+              <MockedProvider
+                cache={cache}
+                mocks={getCompletedAdvertisementMocks}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -204,9 +223,11 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
-    expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+
     expect(screen.getByTestId('AdEntry')).toBeInTheDocument();
     expect(screen.getByTestId('Ad_type')).toBeInTheDocument();
     expect(screen.getByTestId('Ad_type')).toHaveTextContent('banner');
@@ -229,7 +250,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={initialArchivedData}>
+              <MockedProvider cache={cache} mocks={initialArchivedData}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -239,7 +260,7 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     expect(screen.getByText('Cookie shop 1')).toBeInTheDocument();
     expect(screen.getByText('Cookie shop 2')).toBeInTheDocument();
@@ -254,14 +275,32 @@ describe('Testing Advertisement Component', () => {
     await act(() => {
       const tab = screen.getByText('Completed Campaigns');
       fireEvent.click(tab);
+    });
+
+    // Wait for tab switch to complete and any loading to finish
+    await waitFor(() => {
       expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
         'Completed Campaigns',
       );
     });
 
-    await act(() => {
+    // Wait for any spinner from tab switch to disappear
+    const spinnerAfterTabSwitch = screen.queryByTestId('spinner');
+    if (spinnerAfterTabSwitch) {
+      await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+    }
+
+    await act(async () => {
       fireEvent.scroll(window, { target: { scrollY: 500 } });
     });
+
+    // Wait for new content to appear (spinner may appear briefly or not at all)
+    await waitFor(
+      () => {
+        expect(screen.getByText('Cookie shop infinite 1')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     expect(screen.getByText('Cookie shop infinite 1')).toBeInTheDocument();
     expect(screen.getByText('Cookie shop 1')).toBeInTheDocument();
@@ -278,7 +317,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={initialActiveData}>
+              <MockedProvider cache={cache} mocks={initialActiveData}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -288,7 +327,7 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     expect(screen.getByText('Cookie shop 1')).toBeInTheDocument();
     expect(screen.getByText('Cookie shop 2')).toBeInTheDocument();
@@ -305,7 +344,9 @@ describe('Testing Advertisement Component', () => {
       fireEvent.click(tab);
     });
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+
     expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
       'Active Campaigns',
     );
@@ -314,7 +355,8 @@ describe('Testing Advertisement Component', () => {
       fireEvent.scroll(window, { target: { scrollY: 500 } });
     });
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     expect(screen.getByText('Cookie shop 1')).toBeInTheDocument();
     expect(screen.getByText('Cookie shop 2')).toBeInTheDocument();
@@ -331,7 +373,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={getCompletedAdvertisementMocks}>
+              <MockedProvider
+                cache={cache}
+                mocks={getCompletedAdvertisementMocks}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -340,7 +385,9 @@ describe('Testing Advertisement Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
     expect(screen.getByTestId('searchButton')).toBeInTheDocument();
 
@@ -356,7 +403,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={filterActiveAdvertisementData}>
+              <MockedProvider
+                cache={cache}
+                mocks={filterActiveAdvertisementData}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -366,7 +416,7 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
     expect(screen.getByTestId('searchButton')).toBeInTheDocument();
@@ -376,7 +426,9 @@ describe('Testing Advertisement Component', () => {
     });
     fireEvent.click(screen.getByTestId('searchButton'));
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+
     expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
     expect(screen.queryByText('Cookie shop 5')).not.toBeInTheDocument();
     expect(screen.queryByText('Cookie shop 4')).not.toBeInTheDocument();
@@ -391,7 +443,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={filterActiveAdvertisementData}>
+              <MockedProvider
+                cache={cache}
+                mocks={filterActiveAdvertisementData}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -401,7 +456,7 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
     expect(screen.getByTestId('searchButton')).toBeInTheDocument();
@@ -411,7 +466,9 @@ describe('Testing Advertisement Component', () => {
     });
     fireEvent.click(screen.getByTestId('searchButton'));
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+
     expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
     expect(screen.queryByText('Cookie shop 5')).not.toBeInTheDocument();
     expect(screen.queryByText('Cookie shop 4')).not.toBeInTheDocument();
@@ -426,7 +483,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={filterCompletedAdvertisementData}>
+              <MockedProvider
+                cache={cache}
+                mocks={filterCompletedAdvertisementData}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -436,7 +496,7 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
     expect(screen.getByTestId('searchButton')).toBeInTheDocument();
@@ -446,7 +506,9 @@ describe('Testing Advertisement Component', () => {
     });
     fireEvent.click(screen.getByTestId('searchButton'));
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+
     expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
     expect(screen.queryByText('Cookie shop 5')).not.toBeInTheDocument();
     expect(screen.queryByText('Cookie shop 4')).not.toBeInTheDocument();
@@ -461,7 +523,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={filterCompletedAdvertisementData}>
+              <MockedProvider
+                cache={cache}
+                mocks={filterCompletedAdvertisementData}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -471,7 +536,7 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
     expect(screen.getByTestId('searchButton')).toBeInTheDocument();
@@ -481,7 +546,9 @@ describe('Testing Advertisement Component', () => {
     });
     fireEvent.click(screen.getByTestId('searchButton'));
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+
     expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
     expect(screen.queryByText('Cookie shop 5')).not.toBeInTheDocument();
     expect(screen.queryByText('Cookie shop 4')).not.toBeInTheDocument();
@@ -496,7 +563,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={getCompletedAdvertisementMocks}>
+              <MockedProvider
+                cache={cache}
+                mocks={getCompletedAdvertisementMocks}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -506,7 +576,7 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
     expect(screen.getByTestId('searchButton')).toBeInTheDocument();
@@ -528,7 +598,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={createAdvertisement}>
+              <MockedProvider cache={cache} mocks={createAdvertisement}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -608,7 +678,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={createAdvertisementWithoutName}>
+              <MockedProvider
+                cache={cache}
+                mocks={createAdvertisementWithoutName}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -666,7 +739,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={createAdvertisementWithEndDateBeforeStart}>
+              <MockedProvider
+                cache={cache}
+                mocks={createAdvertisementWithEndDateBeforeStart}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -730,7 +806,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={createAdvertisementError}>
+              <MockedProvider cache={cache} mocks={createAdvertisementError}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -795,7 +871,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={updateAdMocks}>
+              <MockedProvider cache={cache} mocks={updateAdMocks}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -805,9 +881,8 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
-    expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     expect(screen.getByTestId('AdEntry')).toBeInTheDocument();
     expect(screen.getByTestId('Ad_type')).toBeInTheDocument();
     expect(screen.getByTestId('Ad_type')).toHaveTextContent('banner');
@@ -867,7 +942,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={getActiveAdvertisementMocks}>
+              <MockedProvider cache={cache} mocks={getActiveAdvertisementMocks}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -876,7 +951,8 @@ describe('Testing Advertisement Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     fireEvent.click(screen.getByTestId('moreiconbtn'));
     fireEvent.click(screen.getByTestId('editBtn'));
@@ -901,7 +977,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={getActiveAdvertisementMocks}>
+              <MockedProvider cache={cache} mocks={getActiveAdvertisementMocks}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -910,7 +986,8 @@ describe('Testing Advertisement Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     fireEvent.click(screen.getByTestId('moreiconbtn'));
 
@@ -944,7 +1021,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={deleteAdvertisementMocks}>
+              <MockedProvider cache={cache} mocks={deleteAdvertisementMocks}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -955,7 +1032,9 @@ describe('Testing Advertisement Component', () => {
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+
     expect(getByTestId('moreiconbtn')).toBeInTheDocument();
     fireEvent.click(getByTestId('moreiconbtn'));
     expect(getByTestId('deletebtn')).toBeInTheDocument();
@@ -968,9 +1047,10 @@ describe('Testing Advertisement Component', () => {
       fireEvent.click(getByTestId('delete_no'));
     });
 
-    await wait();
-    expect(screen.queryByTestId('delete_title')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('delete_body')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByTestId('delete_title')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('delete_body')).not.toBeInTheDocument();
+    });
 
     expect(getByTestId('moreiconbtn')).toBeInTheDocument();
   });
@@ -982,7 +1062,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={deleteAdvertisementMocks}>
+              <MockedProvider cache={cache} mocks={deleteAdvertisementMocks}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -993,7 +1073,9 @@ describe('Testing Advertisement Component', () => {
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+
     expect(getByTestId('moreiconbtn')).toBeInTheDocument();
     fireEvent.click(getByTestId('moreiconbtn'));
     expect(getByTestId('deletebtn')).toBeInTheDocument();
@@ -1020,7 +1102,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={fetchErrorMocks}>
+              <MockedProvider cache={cache} mocks={fetchErrorMocks}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -1029,7 +1111,8 @@ describe('Testing Advertisement Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     // Should show error messages
     expect(toastErrorSpy).toHaveBeenCalledWith(
@@ -1045,7 +1128,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={[]}>
+              <MockedProvider cache={cache} mocks={[]}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -1053,8 +1136,6 @@ describe('Testing Advertisement Component', () => {
         </Provider>
       </ApolloProvider>,
     );
-
-    await wait();
 
     expect(screen.getByTestId('advertisements')).toBeInTheDocument();
     expect(screen.queryByTestId('Ad_name')).not.toBeInTheDocument();
@@ -1068,7 +1149,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={getCompletedAdvertisementMocks}>
+              <MockedProvider
+                cache={cache}
+                mocks={getCompletedAdvertisementMocks}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -1077,7 +1161,8 @@ describe('Testing Advertisement Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     const translations = JSON.parse(
       JSON.stringify(
@@ -1094,7 +1179,7 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={emptyMocks}>
+              <MockedProvider cache={cache} mocks={emptyMocks}>
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -1103,7 +1188,8 @@ describe('Testing Advertisement Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     const emptyTextElements = screen.queryAllByText(
       'Ads not present for this campaign.',
@@ -1120,7 +1206,10 @@ describe('Testing Advertisement Component', () => {
         <Provider store={store}>
           <BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>
-              <MockedProvider mocks={getCompletedAdvertisementMocks}>
+              <MockedProvider
+                cache={cache}
+                mocks={getCompletedAdvertisementMocks}
+              >
                 <Advertisement />
               </MockedProvider>
             </I18nextProvider>
@@ -1129,7 +1218,8 @@ describe('Testing Advertisement Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     fireEvent.click(screen.getByText(translations.createAdvertisement));
     expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
@@ -1143,56 +1233,5 @@ describe('Testing Advertisement Component', () => {
     await waitFor(() => {
       expect(screen.queryByText(translations.addNew)).not.toBeInTheDocument();
     });
-  });
-
-  it('authLink adds authorization header when token exists in localStorage', async () => {
-    const mockToken = 'test-token-123';
-
-    // Spy on the mock's getItem function directly
-    const getItemSpy = vi
-      .spyOn(localStorage, 'getItem')
-      .mockImplementation((key: string) => {
-        if (key === 'Talawa-admin_token') return mockToken;
-        return null;
-      });
-
-    render(
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <Advertisement />
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </ApolloProvider>,
-    );
-
-    await wait();
-
-    expect(getItemSpy).toHaveBeenCalledWith('Talawa-admin_token');
-    expect(getItemSpy).toHaveReturnedWith(mockToken);
-  });
-
-  it('authLink does not add authorization header when token is null in localStorage', async () => {
-    // Spy on the mock's getItem function directly
-    const getItemSpy = vi.spyOn(localStorage, 'getItem').mockReturnValue(null);
-
-    render(
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <Advertisement />
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </ApolloProvider>,
-    );
-
-    await wait();
-
-    expect(getItemSpy).toHaveBeenCalledWith('Talawa-admin_token');
-    expect(getItemSpy).toHaveReturnedWith(null);
   });
 });

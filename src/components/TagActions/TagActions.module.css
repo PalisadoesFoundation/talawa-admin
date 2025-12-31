@@ -1,0 +1,8 @@
+.errorIcon {
+  font-size: 2em;
+}
+
+.scrollableDiv {
+  height: 300px;
+  overflow: auto;
+}

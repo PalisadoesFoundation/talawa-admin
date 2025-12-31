@@ -48,8 +48,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Paper, TableBody } from '@mui/material';
 import { Button, Form, Modal } from 'react-bootstrap';
 import styles from '../../../style/app-fixed.module.css';
-import type { ApolloQueryResult } from '@apollo/client';
-import { useMutation, useQuery } from '@apollo/client';
+import type { OperationVariables } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client/react';
 import useLocalStorage from 'utils/useLocalstorage';
 import {
   CREATE_CHAT,
@@ -73,8 +73,36 @@ interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
   createGroupChatModalisOpen: boolean;
   chatsListRefetch: (
-    variables?: Partial<{ id: string }> | undefined,
-  ) => Promise<ApolloQueryResult<unknown>>;
+    variables?: Partial<OperationVariables>,
+  ) => Promise<unknown>;
+}
+
+interface InterfaceOrganizationMemberNode {
+  id: string;
+  name: string;
+  avatarURL?: string;
+  role?: string;
+}
+
+interface InterfaceOrganizationMembersData {
+  organization: {
+    members: {
+      edges: {
+        node: InterfaceOrganizationMemberNode;
+      }[];
+    };
+  };
+}
+
+interface InterfaceOrganizationMembersVars {
+  input: {
+    id: string;
+  };
+  first?: number;
+  after?: string | null;
+  where?: {
+    name_contains?: string;
+  };
 }
 
 const { getItem } = useLocalStorage();
@@ -166,9 +194,12 @@ export default function CreateGroupChat({
     data: allUsersData,
     loading: allUsersLoading,
     refetch: allUsersRefetch,
-  } = useQuery(ORGANIZATION_MEMBERS, {
+  } = useQuery<
+    InterfaceOrganizationMembersData,
+    InterfaceOrganizationMembersVars
+  >(ORGANIZATION_MEMBERS, {
     variables: {
-      input: { id: currentOrg },
+      input: { id: currentOrg as string },
       first: 20,
       after: null,
       where: {},
@@ -178,7 +209,7 @@ export default function CreateGroupChat({
   const handleUserModalSearchChange = (value: string): void => {
     const trimmedName = value.trim();
     allUsersRefetch({
-      input: { id: currentOrg },
+      input: { id: currentOrg as string },
       first: 20,
       after: null,
       where: trimmedName ? { name_contains: trimmedName } : {},
@@ -342,28 +373,14 @@ export default function CreateGroupChat({
                       allUsersData.organization?.members?.edges?.length > 0 &&
                       allUsersData.organization.members.edges
                         .filter(
-                          ({
-                            node: userDetails,
-                          }: {
-                            node: {
-                              id: string;
-                              name: string;
-                              avatarURL?: string;
-                              role: string;
-                            };
-                          }) => userDetails.id !== userId,
+                          ({ node: userDetails }) => userDetails.id !== userId,
                         )
                         .map(
                           (
                             {
                               node: userDetails,
                             }: {
-                              node: {
-                                id: string;
-                                name: string;
-                                avatarURL?: string;
-                                role: string;
-                              };
+                              node: InterfaceOrganizationMemberNode;
                             },
                             index: number,
                           ) => (

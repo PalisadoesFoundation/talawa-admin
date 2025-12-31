@@ -1,5 +1,5 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import type { RenderResult } from '@testing-library/react';
 import {
   act,
@@ -81,7 +81,7 @@ const cache = new InMemoryCache({
 
 const renderSubTags = (link: ApolloLink): RenderResult => {
   return render(
-    <MockedProvider cache={cache} addTypename={false} link={link}>
+    <MockedProvider cache={cache} link={link}>
       <MemoryRouter initialEntries={['/orgtags/123/subTags/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>

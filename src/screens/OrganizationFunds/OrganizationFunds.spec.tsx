@@ -1,5 +1,5 @@
 import React from 'react';
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import type { RenderResult } from '@testing-library/react';
 import {
   act,
@@ -325,35 +325,62 @@ describe('OrganizationFunds Screen =>', () => {
       expect(screen.getAllByTestId('fundName').length).toBeGreaterThan(0);
     });
 
-    // Find and click on the "Created On" column header to trigger sort (ASC)
+    // Find the "Created On" column header
     const createdOnHeader = container.querySelector(
       '[data-field="createdAt"] .MuiDataGrid-columnHeaderTitle',
     );
 
     expect(createdOnHeader).toBeInTheDocument();
+
+    // The component pre-sorts by createdAt DESC (newest first)
+    // Verify initial order: Fund 1 (2024-06-22, later) should appear before Fund 2 (2024-06-21, earlier)
+    await waitFor(() => {
+      const allFundNames = screen.getAllByTestId('fundName');
+      const fund1Index = allFundNames.findIndex(
+        (row) => row.textContent === 'Fund 1',
+      );
+      const fund2Index = allFundNames.findIndex(
+        (row) => row.textContent === 'Fund 2',
+      );
+
+      // Both funds should be visible
+      expect(fund1Index).toBeGreaterThanOrEqual(0);
+      expect(fund2Index).toBeGreaterThanOrEqual(0);
+
+      // In DESC order (newest first), Fund 1 (later date) appears before Fund 2 (earlier date)
+      expect(fund1Index).toBeLessThan(fund2Index);
+    });
+
+    // Click on the column header to trigger sort (cycles: unsorted -> ASC -> DESC)
     if (createdOnHeader) {
+      // Single click to trigger ASC sort
       fireEvent.click(createdOnHeader);
-      await wait(300);
+      await wait(500);
     }
 
-    const allFundNames = screen.getAllByTestId('fundName');
+    // After clicking once, DataGrid should sort ASC (earliest first)
+    // Fund 2 (2024-06-21, earlier) should now appear before Fund 1 (2024-06-22, later)
+    await waitFor(
+      () => {
+        const allFundNames = screen.getAllByTestId('fundName');
+        const fund1Index = allFundNames.findIndex(
+          (row) => row.textContent === 'Fund 1',
+        );
+        const fund2Index = allFundNames.findIndex(
+          (row) => row.textContent === 'Fund 2',
+        );
 
-    // Find Fund 1 and Fund 2 in the visible list
-    const fund1Index = allFundNames.findIndex(
-      (row) => row.textContent === 'Fund 1',
+        // If both funds are visible on the current page, verify their relative order
+        if (fund1Index >= 0 && fund2Index >= 0) {
+          // Verify Fund 2 (2024-06-21, earlier) appears before Fund 1 (2024-06-22, later) when sorted ASC
+          expect(fund2Index).toBeLessThan(fund1Index);
+        } else {
+          // If they're not both visible (due to pagination), verify that funds are still rendered
+          expect(allFundNames.length).toBeGreaterThan(0);
+        }
+      },
+      { timeout: 3000 },
     );
-    const fund2Index = allFundNames.findIndex(
-      (row) => row.textContent === 'Fund 2',
-    );
-
-    // If both funds are visible on the current page, verify their relative order
-    if (fund1Index >= 0 && fund2Index >= 0) {
-      // Verify Fund 2 (2024-06-21, earlier) appears before Fund 1 (2024-06-22, later) when sorted ASC
-      expect(fund2Index).toBeLessThan(fund1Index);
-    } else {
-      // If they're not both visible (due to pagination), verify that funds are still rendered
-      expect(allFundNames.length).toBeGreaterThan(0);
-    }
   });
 
   it('Click on Fund Name', async () => {

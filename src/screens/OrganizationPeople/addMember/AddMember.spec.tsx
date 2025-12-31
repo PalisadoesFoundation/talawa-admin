@@ -1,5 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
+import { type MockLink } from '@apollo/client/testing';
+import { MockedProvider } from '@apollo/client/testing/react';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -216,6 +217,7 @@ const createMemberConnectionMock = (
   const withRole = (edge: MemberEdge): MemberEdge =>
     ({
       ...edge,
+
       node: {
         ...edge.node,
         role: edge.node.role ?? 'member',
@@ -242,7 +244,7 @@ const createMemberConnectionMock = (
 };
 
 type RenderConfig = {
-  mocks?: MockedResponse[];
+  mocks?: MockLink.MockedResponse[];
   link?: StaticMockLink;
   initialEntry?: string;
 };
@@ -449,8 +451,8 @@ describe('AddMember Component', () => {
     // Wait for the modal to be visible
     await screen.findByTestId('addExistingUserModal');
 
-    // Enter search term
-    const searchInput = screen.getByTestId('searchUser');
+    // Wait for loadingh to complete and search input to appear
+    const searchInput = await screen.findByTestId('searchUser');
     fireEvent.change(searchInput, { target: { value: 'John' } });
     expect(searchInput).toHaveValue('John');
 

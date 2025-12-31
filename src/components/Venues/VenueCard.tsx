@@ -62,7 +62,7 @@ const VenueCard = ({
           <Card.Img
             variant="top"
             src={venueItem.node.attachments?.[0]?.url || defaultImg}
-            alt="image not found"
+            alt={tCommon('imageNotFound')}
             className={styles.venueimage}
             crossOrigin="anonymous"
           />
