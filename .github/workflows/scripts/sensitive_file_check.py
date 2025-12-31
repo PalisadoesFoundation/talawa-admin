@@ -25,7 +25,7 @@ import re
 import sys
 
 
-def load_patterns(config_path):
+def load_patterns(config_path: str) -> list[re.Pattern]:
     """Load regex patterns from a configuration file.
 
     Args:
@@ -51,10 +51,13 @@ def load_patterns(config_path):
     except re.error as e:
         print(f"Error: Invalid regex pattern in config file: {e}")
         sys.exit(1)
+    if not patterns:
+        print(f"Error: No valid patterns found in configuration file: {config_path}")
+        sys.exit(1)
     return patterns
 
 
-def check_files(files, patterns):
+def check_files(files: list[str], patterns: list[re.Pattern]) -> list[str]:
     """Check if any file matches any of the sensitive patterns.
 
     Args:
@@ -73,7 +76,7 @@ def check_files(files, patterns):
     return sensitive_files
 
 
-def arg_parser_resolver():
+def arg_parser_resolver() -> argparse.Namespace:
     """Resolve the CLI arguments provided by the user.
 
     Args: None
@@ -108,7 +111,7 @@ def arg_parser_resolver():
     return parser.parse_args()
 
 
-def main():
+def main() -> None:
     """Execute the script's main functionality.
 
     Args:
@@ -141,11 +144,13 @@ def main():
                 # Check if content has null bytes, implying null-terminated (-z)
                 if b"\0" in content:
                     files_to_check = [
-                        f.decode("utf-8") for f in content.split(b"\0") if f
+                        f.decode("utf-8", errors="surrogateescape")
+                        for f in content.split(b"\0")
+                        if f
                     ]
                 else:
                     files_to_check = [
-                        f.decode("utf-8").strip()
+                        f.decode("utf-8", errors="surrogateescape").strip()
                         for f in content.split(b"\n")
                         if f.strip()
                     ]
