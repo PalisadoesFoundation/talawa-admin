@@ -218,9 +218,6 @@ export default [
             "MemberExpression[object.name='Form'][property.name='Check']",
           message: 'Use FormCheck instead of Form.Check',
         },
-      ],
-      'no-restricted-syntax': [
-        'error',
         {
           selector:
             "MemberExpression[object.name='Form'][property.name='Group']",
