@@ -11,7 +11,7 @@ import { Dayjs } from 'dayjs';
  * Common properties shared across all form input components.
  * Provides standard value, onChange, error, and state management props.
  */
-interface CommonInputProps {
+interface ICommonInputProps {
   value: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: boolean;
@@ -26,7 +26,7 @@ interface CommonInputProps {
  * Bootstrap-specific text field properties.
  * Supports standard HTML input attributes and data-* attributes for testing.
  */
-interface BootstrapTextFieldProps {
+interface IBootstrapTextFieldProps {
   type?: 'text' | 'email' | 'password' | 'number' | 'url' | 'tel';
   placeholder?: string;
   maxLength?: number;
@@ -40,7 +40,7 @@ interface BootstrapTextFieldProps {
  * Material-UI field properties for enhanced form controls.
  * Includes variant and endAdornment for icon/action buttons.
  */
-interface MuiFieldProps {
+interface IMuiFieldProps {
   variant?: TextFieldVariants;
   endAdornment?: React.ReactNode;
 }
@@ -49,7 +49,7 @@ interface MuiFieldProps {
  * Base wrapper component props for form field groups.
  * Manages label, validation error display, help text, and accessibility attributes.
  */
-export interface FormFieldGroupProps {
+export interface IFormFieldGroupProps {
   name?: string;
   label?: string;
   ariaLabel?: string;
@@ -66,11 +66,11 @@ export interface FormFieldGroupProps {
  * Text field component props supporting both Bootstrap and MUI formats.
  * Combines common input, Bootstrap-specific, and MUI properties.
  */
-export interface FormTextFieldProps
-  extends BootstrapTextFieldProps,
-    MuiFieldProps,
-    Omit<FormFieldGroupProps, 'error'>,
-    Omit<CommonInputProps, 'error'> {
+export interface IFormTextFieldProps
+  extends IBootstrapTextFieldProps,
+    IMuiFieldProps,
+    Omit<IFormFieldGroupProps, 'error'>,
+    Omit<ICommonInputProps, 'error'> {
   format: 'bootstrap' | 'mui';
   error?: string;
 }
@@ -79,9 +79,9 @@ export interface FormTextFieldProps
  * Multi-line text area component props using Material-UI TextField.
  * Always renders as multiline with configurable row count.
  */
-export interface FormTextAreaProps
-  extends Omit<CommonInputProps, 'error'>,
-    MuiFieldProps {
+export interface IFormTextAreaProps
+  extends Omit<ICommonInputProps, 'error'>,
+    IMuiFieldProps {
   name?: string;
   multiline: true;
   rows?: number;
@@ -96,10 +96,10 @@ export interface FormTextAreaProps
 
 /**
  * Autocomplete/select component props using Material-UI Autocomplete.
- * Supports single/multiple selection with user data (InterfaceUserInfo).
+ * Supports single/multiple selection with user data (InterfaceUIserInfo).
  */
-export interface FormSelectProps
-  extends Omit<CommonInputProps, 'value' | 'onChange' | 'error'> {
+export interface IFormSelectProps
+  extends Omit<ICommonInputProps, 'value' | 'onChange' | 'error'> {
   options?: InterfaceUserInfo[];
   value?: InterfaceUserInfo | InterfaceUserInfo[];
   multiple?: boolean;
@@ -127,10 +127,10 @@ export interface FormSelectProps
  * Checkbox component props using Bootstrap Form.Check.
  * Provides labeled checkbox with custom container and label attributes.
  */
-export interface FormCheckBoxProps
+export interface IFormCheckBoxProps
   extends Omit<FormCheckProps, 'formAction' | 'type'>,
     Omit<
-      CommonInputProps,
+      ICommonInputProps,
       'onBlur' | 'onFocus' | 'onChange' | 'value' | 'error'
     > {
   type?: 'checkbox';
@@ -149,10 +149,10 @@ export interface FormCheckBoxProps
  * Radio button group component props using Bootstrap Form.Check.
  * Renders individual radio buttons within a named group.
  */
-export interface FormRadioGroupProps
+export interface IFormRadioGroupProps
   extends Omit<FormCheckProps, 'formAction' | 'type'>,
     Omit<
-      CommonInputProps,
+      ICommonInputProps,
       'onBlur' | 'onFocus' | 'onChange' | 'value' | 'error'
     > {
   type?: 'radio';
@@ -172,7 +172,7 @@ export interface FormRadioGroupProps
  * Date picker field component props using MUI DatePicker with Dayjs.
  * Supports min/max date constraints and custom text field props via slotProps.
  */
-export interface FormDateFieldProps {
+export interface IFormDateFieldProps {
   value: Dayjs | null;
   onChange: (date: Dayjs | null) => void;
   format?: string;

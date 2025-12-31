@@ -1,10 +1,10 @@
 import React from 'react';
 import { Form } from 'react-bootstrap';
 import { FormControl, TextField } from '@mui/material';
-import type { FormTextFieldProps } from 'types/shared-components/FormFieldGroup/interface';
+import type { IFormTextFieldProps } from 'types/shared-components/FormFieldGroup/interface';
 import { FormFieldGroup } from './FormFieldGroup';
 
-export const FormTextField: React.FC<FormTextFieldProps> = ({
+export const FormTextField: React.FC<IFormTextFieldProps> = ({
   name,
   label,
   groupClass,
@@ -58,19 +58,20 @@ export const FormTextField: React.FC<FormTextFieldProps> = ({
       <div className="position-relative">
         <Form.Control
           {...formControlProps}
+          id={name}
           required={required}
           isInvalid={!!(touched && error)}
           aria-label={ariaLabel}
           aria-describedby={ariaDescribedBy}
         />
         {endAdornment && <>{endAdornment}</>}
-        {showCharCount && formControlProps.maxLength && (
-          <Form.Text className="text-muted">
-            {String(formControlProps.value ?? '').length}/
-            {formControlProps.maxLength}
-          </Form.Text>
-        )}
       </div>
+      {showCharCount && formControlProps.maxLength && (
+        <Form.Text className="text-muted">
+          {String(formControlProps.value ?? '').length}/
+          {formControlProps.maxLength}
+        </Form.Text>
+      )}
     </FormFieldGroup>
   );
 };

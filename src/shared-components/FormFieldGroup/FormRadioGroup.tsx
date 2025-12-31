@@ -1,10 +1,9 @@
-// FormRadioGroup.tsx
 import React from 'react';
-import { FormRadioGroupProps } from 'types/shared-components/FormFieldGroup/interface';
+import { IFormRadioGroupProps } from 'types/shared-components/FormFieldGroup/interface';
 import { Form } from 'react-bootstrap';
 import { FormFieldGroup } from './FormFieldGroup';
 
-export const FormRadioGroup: React.FC<FormRadioGroupProps> = ({
+export const FormRadioGroup: React.FC<IFormRadioGroupProps> = ({
   name,
   label,
   options,
