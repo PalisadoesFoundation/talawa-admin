@@ -43,11 +43,29 @@ export default defineConfig(({ mode }) => {
       // Target modern browsers for smaller bundle size
       target: ['es2020', 'edge88', 'firefox78', 'chrome87', 'safari14'],
       rollupOptions: {
-        // Advanced tree-shaking configuration
+        // Tree-shaking configuration - preserves side-effectful modules
         treeshake: {
-          moduleSideEffects: false,
-          propertyReadSideEffects: false,
-          tryCatchDeoptimization: false,
+          // Preserve side effects for CSS, Bootstrap, i18n, and other critical imports
+          moduleSideEffects: (id) => {
+            // Preserve all CSS/SCSS files
+            if (/\.(css|scss|sass|less)(\?|$)/.test(id)) return true;
+            // Preserve Bootstrap JS for interactive components
+            if (id.includes('bootstrap/dist/js')) return true;
+            // Preserve i18n initialization modules
+            if (id.includes('i18next') || id.includes('react-i18next'))
+              return true;
+            // Preserve react-datepicker styles and functionality
+            if (id.includes('react-datepicker')) return true;
+            // Preserve flag-icons for country flags
+            if (id.includes('flag-icons')) return true;
+            // Preserve chart.js registration
+            if (id.includes('chart.js')) return true;
+            // Default: allow tree-shaking for other modules
+            return false;
+          },
+          // Keep default safe behavior for property reads and try-catch
+          propertyReadSideEffects: true,
+          tryCatchDeoptimization: true,
         },
         output: {
           manualChunks: (id) => {
