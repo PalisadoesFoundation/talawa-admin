@@ -196,5 +196,13 @@
   "imageUploadError": "图片上传错误",
   "imageUploadSuccess": "图片上传成功",
   "postalCode": "邮政编码",
-  "state": "州"
+  "state": "州",
+  "closeModal": "关闭模态框",
+  "erroLoadingUsers": "加载用户时出错",
+  "noUsersFound": "未找到用户",
+  "clickToBrowseFile": "点击浏览文件",
+  "selectAZipFile": "选择一个 ZIP 文件",
+  "version": "版本",
+  "author": "作者",
+  "removePermanently": "永久删除"
 }

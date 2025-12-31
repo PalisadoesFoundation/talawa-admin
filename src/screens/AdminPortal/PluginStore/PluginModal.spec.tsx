@@ -4,6 +4,8 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import PluginModal from './PluginModal';
 import { AdminPluginFileService } from 'plugin/services/AdminPluginFileService';
 import type { IPluginMeta, IPluginDetails, IInstalledPlugin } from 'plugin';
+import i18nForTest from 'utils/i18nForTest';
+import { I18nextProvider } from 'react-i18next';
 
 // Mock AdminPluginFileService
 vi.mock('plugin/services/AdminPluginFileService', () => ({
@@ -120,7 +122,7 @@ describe('PluginModal', () => {
     it('should call onHide when close button is clicked', () => {
       render(<PluginModal {...defaultProps} />);
 
-      const closeButton = screen.getByLabelText('Close');
+      const closeButton = screen.getByLabelText(i18nForTest.t('common:close'));
       fireEvent.click(closeButton);
 
       expect(defaultProps.onHide).toHaveBeenCalled();
@@ -140,14 +142,20 @@ describe('PluginModal', () => {
       render(<PluginModal {...defaultProps} />);
 
       expect(screen.getByText('Details')).toBeInTheDocument();
-      expect(screen.getByText('Features')).toBeInTheDocument();
-      expect(screen.getByText('Changelog')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.features')),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.changelog')),
+      ).toBeInTheDocument();
     });
 
     it('should default to Details tab', () => {
       render(<PluginModal {...defaultProps} />);
 
-      expect(screen.getByText('Description')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('common:description')),
+      ).toBeInTheDocument();
     });
 
     it('should switch to Features tab when clicked', () => {
@@ -156,17 +164,21 @@ describe('PluginModal', () => {
       fireEvent.click(screen.getByText('Features'));
 
       expect(
-        screen.getByText('No features information available for this plugin.'),
+        screen.getByText(
+          i18nForTest.t('pluginStore.noFeaturesInfoAvailableForThisPlugin'),
+        ),
       ).toBeInTheDocument();
     });
 
     it('should switch to Changelog tab when clicked', () => {
       render(<PluginModal {...defaultProps} />);
 
-      fireEvent.click(screen.getByText('Changelog'));
+      fireEvent.click(screen.getByText(i18nForTest.t('pluginStore.changelog')));
 
       // Should switch to changelog tab - verify content is different from details
-      expect(screen.queryByText('Description')).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(i18nForTest.t('common:description')),
+      ).not.toBeInTheDocument();
     });
   });
 
@@ -234,7 +246,9 @@ describe('PluginModal', () => {
 
       render(<PluginModal {...defaultProps} />);
 
-      expect(screen.getByText('Loading details...')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.loadingDetails')),
+      ).toBeInTheDocument();
     });
   });
 
@@ -242,15 +256,19 @@ describe('PluginModal', () => {
     it('should show Install button for non-installed plugin', () => {
       render(<PluginModal {...defaultProps} />);
 
-      expect(screen.getByText('Install')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.install')),
+      ).toBeInTheDocument();
       // Should NOT have Uninstall button for non-installed plugin
-      expect(screen.queryByText('Uninstall')).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(i18nForTest.t('pluginStore.uninstall')),
+      ).not.toBeInTheDocument();
     });
 
     it('should call installPlugin when Install button is clicked', () => {
       render(<PluginModal {...defaultProps} />);
 
-      fireEvent.click(screen.getByText('Install'));
+      fireEvent.click(screen.getByText(i18nForTest.t('pluginStore.install')));
 
       expect(defaultProps.installPlugin).toHaveBeenCalledWith(mockMeta);
     });
@@ -283,14 +301,20 @@ describe('PluginModal', () => {
     it('should show Deactivate and Uninstall buttons for active installed plugin', () => {
       render(<PluginModal {...installedActiveProps} />);
 
-      expect(screen.getByText('Deactivate')).toBeInTheDocument();
-      expect(screen.getByText('Uninstall')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.deactivate')),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.uninstall')),
+      ).toBeInTheDocument();
     });
 
     it('should call togglePluginStatus with inactive when Deactivate is clicked', () => {
       render(<PluginModal {...installedActiveProps} />);
 
-      fireEvent.click(screen.getByText('Deactivate'));
+      fireEvent.click(
+        screen.getByText(i18nForTest.t('pluginStore.deactivate')),
+      );
 
       expect(defaultProps.togglePluginStatus).toHaveBeenCalledWith(
         mockMeta,
@@ -301,7 +325,7 @@ describe('PluginModal', () => {
     it('should call uninstallPlugin when Uninstall is clicked', () => {
       render(<PluginModal {...installedActiveProps} />);
 
-      fireEvent.click(screen.getByText('Uninstall'));
+      fireEvent.click(screen.getByText(i18nForTest.t('pluginStore.uninstall')));
 
       expect(defaultProps.uninstallPlugin).toHaveBeenCalledWith(mockMeta);
     });
@@ -334,14 +358,18 @@ describe('PluginModal', () => {
     it('should show Activate and Uninstall buttons for inactive installed plugin', () => {
       render(<PluginModal {...installedInactiveProps} />);
 
-      expect(screen.getByText('Activate')).toBeInTheDocument();
-      expect(screen.getByText('Uninstall')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.activate')),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.uninstall')),
+      ).toBeInTheDocument();
     });
 
     it('should call togglePluginStatus with active when Activate is clicked', () => {
       render(<PluginModal {...installedInactiveProps} />);
 
-      fireEvent.click(screen.getByText('Activate'));
+      fireEvent.click(screen.getByText(i18nForTest.t('pluginStore.activate')));
 
       expect(defaultProps.togglePluginStatus).toHaveBeenCalledWith(
         mockMeta,
@@ -363,10 +391,16 @@ describe('PluginModal', () => {
         AdminPluginFileService.getPluginDetails as unknown as Mock
       ).mockResolvedValueOnce(mockDetails);
 
-      render(<PluginModal {...defaultProps} />);
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
 
       await waitFor(() => {
-        expect(screen.getByText('Screenshots')).toBeInTheDocument();
+        expect(
+          screen.getByText(i18nForTest.t('pluginStore.screenshots')),
+        ).toBeInTheDocument();
         const screenshots = screen.getAllByAltText(/Screenshot \d+/);
         expect(screenshots).toHaveLength(2);
       });
@@ -411,7 +445,9 @@ describe('PluginModal', () => {
       render(<PluginModal {...defaultProps} />);
 
       await waitFor(() => {
-        const changelogTabs = screen.getAllByText('Changelog');
+        const changelogTabs = screen.getAllByText(
+          i18nForTest.t('pluginStore.changelog'),
+        );
         fireEvent.click(changelogTabs[0]);
         expect(screen.getByText('v1.2.3')).toBeInTheDocument();
         expect(screen.getByText('Fixed bug X')).toBeInTheDocument();
@@ -425,11 +461,15 @@ describe('PluginModal', () => {
     it('should show no changelog message when no changelog available', () => {
       render(<PluginModal {...defaultProps} />);
 
-      const changelogTabs = screen.getAllByText('Changelog');
+      const changelogTabs = screen.getAllByText(
+        i18nForTest.t('pluginStore.changelog'),
+      );
       fireEvent.click(changelogTabs[0]);
 
       // The actual text shown is "Loading changelog..." when no changelog is available
-      expect(screen.getByText('Loading changelog...')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.loadingChangelog')),
+      ).toBeInTheDocument();
     });
   });
 
@@ -463,7 +503,9 @@ describe('PluginModal', () => {
 
       // Stop loading -> text reverts to Install
       rerender(<PluginModal {...defaultProps} loading={false} />);
-      expect(screen.getByText('Install')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.install')),
+      ).toBeInTheDocument();
 
       // Start loading again -> should show 00:00 initially
       rerender(<PluginModal {...defaultProps} loading={true} />);
@@ -528,13 +570,17 @@ describe('PluginModal', () => {
     it('should have proper ARIA labels', () => {
       render(<PluginModal {...defaultProps} />);
 
-      expect(screen.getByLabelText('Close')).toBeInTheDocument();
+      expect(
+        screen.getByLabelText(i18nForTest.t('common:close')),
+      ).toBeInTheDocument();
     });
 
     it('should have proper button roles', () => {
       render(<PluginModal {...defaultProps} />);
 
-      const installButton = screen.getByText('Install');
+      const installButton = screen.getByText(
+        i18nForTest.t('pluginStore.install'),
+      );
       expect(installButton).toHaveAttribute('type', 'button');
     });
 
@@ -543,8 +589,12 @@ describe('PluginModal', () => {
 
       // The tabs are divs, not actual tab roles, so we check for the tab content instead
       expect(screen.getByText('Details')).toBeInTheDocument();
-      expect(screen.getByText('Features')).toBeInTheDocument();
-      expect(screen.getByText('Changelog')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.features')),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.changelog')),
+      ).toBeInTheDocument();
     });
   });
 
@@ -554,14 +604,20 @@ describe('PluginModal', () => {
         AdminPluginFileService.getPluginDetails as unknown as Mock
       ).mockResolvedValueOnce(mockDetails);
 
-      render(<PluginModal {...defaultProps} />);
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
 
       await waitFor(() => {
         const screenshots = screen.getAllByAltText(/Screenshot \d+/);
         fireEvent.click(screenshots[0]);
       });
 
-      expect(screen.getByText('← Back to Details')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.backToDetails')),
+      ).toBeInTheDocument();
       expect(screen.getByText('1 of 2')).toBeInTheDocument();
     });
 
@@ -570,7 +626,11 @@ describe('PluginModal', () => {
         AdminPluginFileService.getPluginDetails as unknown as Mock
       ).mockResolvedValueOnce(mockDetails);
 
-      render(<PluginModal {...defaultProps} />);
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
 
       await waitFor(() => {
         const screenshots = screen.getAllByAltText(/Screenshot \d+/);
@@ -578,8 +638,12 @@ describe('PluginModal', () => {
       });
 
       // Check for navigation buttons
-      const prevButton = screen.getByTitle('Previous image (←)');
-      const nextButton = screen.getByTitle('Next image (→)');
+      const prevButton = screen.getByTitle(
+        i18nForTest.t('pluginStore.previousImage'),
+      );
+      const nextButton = screen.getByTitle(
+        i18nForTest.t('pluginStore.nextImage'),
+      );
       expect(prevButton).toBeInTheDocument();
       expect(nextButton).toBeInTheDocument();
     });
@@ -589,7 +653,11 @@ describe('PluginModal', () => {
         AdminPluginFileService.getPluginDetails as unknown as Mock
       ).mockResolvedValueOnce(mockDetails);
 
-      render(<PluginModal {...defaultProps} />);
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
 
       await waitFor(() => {
         const screenshots = screen.getAllByAltText(/Screenshot \d+/);
@@ -606,14 +674,20 @@ describe('PluginModal', () => {
         AdminPluginFileService.getPluginDetails as unknown as Mock
       ).mockResolvedValueOnce(mockDetails);
 
-      render(<PluginModal {...defaultProps} />);
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
 
       await waitFor(() => {
         const screenshots = screen.getAllByAltText(/Screenshot \d+/);
         fireEvent.click(screenshots[0]);
       });
 
-      const nextButton = screen.getByTitle('Next image (→)');
+      const nextButton = screen.getByTitle(
+        i18nForTest.t('pluginStore.nextImage'),
+      );
       fireEvent.click(nextButton);
 
       expect(screen.getByText('2 of 2')).toBeInTheDocument();
@@ -624,17 +698,25 @@ describe('PluginModal', () => {
         AdminPluginFileService.getPluginDetails as unknown as Mock
       ).mockResolvedValueOnce(mockDetails);
 
-      render(<PluginModal {...defaultProps} />);
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
 
       await waitFor(() => {
         const screenshots = screen.getAllByAltText(/Screenshot \d+/);
         fireEvent.click(screenshots[0]);
       });
 
-      const nextButton = screen.getByTitle('Next image (→)');
+      const nextButton = screen.getByTitle(
+        i18nForTest.t('pluginStore.nextImage'),
+      );
       fireEvent.click(nextButton); // Go to second screenshot
 
-      const prevButton = screen.getByTitle('Previous image (←)');
+      const prevButton = screen.getByTitle(
+        i18nForTest.t('pluginStore.previousImage'),
+      );
       fireEvent.click(prevButton); // Go back to first
 
       expect(screen.getByText('1 of 2')).toBeInTheDocument();
@@ -645,18 +727,28 @@ describe('PluginModal', () => {
         AdminPluginFileService.getPluginDetails as unknown as Mock
       ).mockResolvedValueOnce(mockDetails);
 
-      render(<PluginModal {...defaultProps} />);
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
 
       await waitFor(() => {
         const screenshots = screen.getAllByAltText(/Screenshot \d+/);
         fireEvent.click(screenshots[0]);
       });
 
-      const backButton = screen.getByText('← Back to Details');
+      const backButton = screen.getByText(
+        i18nForTest.t('pluginStore.backToDetails'),
+      );
       fireEvent.click(backButton);
 
-      expect(screen.queryByText('← Back to Details')).not.toBeInTheDocument();
-      expect(screen.getByText('Description')).toBeInTheDocument();
+      expect(
+        screen.queryByText(i18nForTest.t('pluginStore.backToDetails')),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('common:description')),
+      ).toBeInTheDocument();
     });
 
     it('should navigate to specific screenshot when dot is clicked', async () => {
@@ -664,7 +756,11 @@ describe('PluginModal', () => {
         AdminPluginFileService.getPluginDetails as unknown as Mock
       ).mockResolvedValueOnce(mockDetails);
 
-      render(<PluginModal {...defaultProps} />);
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
 
       await waitFor(() => {
         const screenshots = screen.getAllByAltText(/Screenshot \d+/);
@@ -684,7 +780,11 @@ describe('PluginModal', () => {
         AdminPluginFileService.getPluginDetails as unknown as Mock
       ).mockResolvedValueOnce(mockDetails);
 
-      render(<PluginModal {...defaultProps} />);
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
 
       await waitFor(() => {
         const screenshots = screen.getAllByAltText(/Screenshot \d+/);
@@ -693,7 +793,9 @@ describe('PluginModal', () => {
 
       fireEvent.keyDown(window, { key: 'Escape' });
 
-      expect(screen.queryByText('← Back to Details')).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(i18nForTest.t('pluginStore.backToDetails')),
+      ).not.toBeInTheDocument();
     });
 
     it('should navigate to next screenshot on ArrowRight key', async () => {
@@ -701,7 +803,11 @@ describe('PluginModal', () => {
         AdminPluginFileService.getPluginDetails as unknown as Mock
       ).mockResolvedValueOnce(mockDetails);
 
-      render(<PluginModal {...defaultProps} />);
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
 
       await waitFor(() => {
         const screenshots = screen.getAllByAltText(/Screenshot \d+/);
@@ -718,7 +824,11 @@ describe('PluginModal', () => {
         AdminPluginFileService.getPluginDetails as unknown as Mock
       ).mockResolvedValueOnce(mockDetails);
 
-      render(<PluginModal {...defaultProps} />);
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
 
       await waitFor(() => {
         const screenshots = screen.getAllByAltText(/Screenshot \d+/);
@@ -767,7 +877,11 @@ describe('PluginModal', () => {
         AdminPluginFileService.getPluginDetails as unknown as Mock
       ).mockResolvedValueOnce(mockDetailsWithSingleScreenshot);
 
-      render(<PluginModal {...defaultProps} />);
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
 
       await waitFor(() => {
         const screenshots = screen.getAllByAltText(/Screenshot \d+/);
@@ -775,8 +889,12 @@ describe('PluginModal', () => {
       });
 
       // Should not show navigation buttons for single screenshot
-      expect(screen.queryByTitle('Previous image (←)')).not.toBeInTheDocument();
-      expect(screen.queryByTitle('Next image (→)')).not.toBeInTheDocument();
+      expect(
+        screen.queryByTitle(i18nForTest.t('pluginStore.previousImage')),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByTitle(i18nForTest.t('pluginStore.nextImage')),
+      ).not.toBeInTheDocument();
       expect(screen.queryByText(/of \d+/)).not.toBeInTheDocument();
     });
 
@@ -797,7 +915,11 @@ describe('PluginModal', () => {
         AdminPluginFileService.getPluginDetails as unknown as Mock
       ).mockResolvedValueOnce(mockDetailsWithManyScreenshots);
 
-      render(<PluginModal {...defaultProps} />);
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
 
       await waitFor(() => {
         const screenshots = screen.getAllByAltText(/Screenshot \d+/);
@@ -805,8 +927,12 @@ describe('PluginModal', () => {
       });
 
       // Should show navigation buttons but not dot indicators for >5 screenshots
-      expect(screen.getByTitle('Previous image (←)')).toBeInTheDocument();
-      expect(screen.getByTitle('Next image (→)')).toBeInTheDocument();
+      expect(
+        screen.getByTitle(i18nForTest.t('pluginStore.previousImage')),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTitle(i18nForTest.t('pluginStore.nextImage')),
+      ).toBeInTheDocument();
       expect(
         screen.queryByTitle(/Go to screenshot \d+/),
       ).not.toBeInTheDocument();

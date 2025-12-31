@@ -108,11 +108,11 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-vi.mock('../../components/AddPeopleToTag/AddPeopleToTag', async () => {
+vi.mock('components/AddPeopleToTag/AddPeopleToTag', async () => {
   return await import('./ManageTagMockComponents/MockAddPeopleToTag');
 });
 
-vi.mock('../../components/TagActions/TagActions', async () => {
+vi.mock('components/TagActions/TagActions', async () => {
   return await import('./ManageTagMockComponents/MockTagActions');
 });
 

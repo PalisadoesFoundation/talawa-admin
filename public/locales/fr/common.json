@@ -196,5 +196,13 @@
   "imageUploadError": "Échec du téléchargement de l'image",
   "imageUploadSuccess": "Image téléchargée avec succès",
   "postalCode": "Code Postal",
-  "state": "État"
+  "state": "État",
+  "closeModal": "Fermer la fenêtre modale",
+  "erroLoadingUsers": "Erreur de chargement des utilisateurs",
+  "noUsersFound": "Aucun utilisateur trouvé",
+  "clickToBrowseFile": "Cliquez pour parcourir les fichiers",
+  "selectAZipFile": "Sélectionnez un fichier ZIP",
+  "version": "Version",
+  "author": "Auteur",
+  "removePermanently": "Supprimer définitivement"
 }

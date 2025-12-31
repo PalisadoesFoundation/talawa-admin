@@ -195,7 +195,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
 
                 {/* Show detected components */}
                 <div className={styles.componentsSection}>
-                  <strong>{t('componentsToInstall')}:</strong>
+                  <strong>{t('componentsToInstall')}</strong>
                   <div className={styles.componentsList}>
                     {pluginStructure.hasAdminFolder && (
                       <div className={styles.componentRow}>

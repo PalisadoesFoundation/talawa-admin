@@ -5,6 +5,7 @@ import { MockedProvider } from '@apollo/client/testing';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import UploadPluginModal from './UploadPluginModal';
+import i18nForTest from 'utils/i18nForTest';
 
 const sharedMocks = vi.hoisted(() => ({
   NotificationToast: {
@@ -75,12 +76,12 @@ describe('UploadPluginModal Component', () => {
       );
 
       expect(
-        screen.getByRole('heading', { name: 'Upload Plugin' }),
+        screen.getByRole('heading', {
+          name: i18nForTest.t('pluginStore.uploadPlugin'),
+        }),
       ).toBeInTheDocument();
       expect(
-        screen.getByText(
-          'Upload a ZIP file to create a plugin entry. The plugin will be available for installation after upload.',
-        ),
+        screen.getByText(i18nForTest.t('pluginStore.uploadPluginDescription')),
       ).toBeInTheDocument();
     });
 
@@ -91,8 +92,12 @@ describe('UploadPluginModal Component', () => {
         </MockedProvider>,
       );
 
-      expect(screen.getByText('Select ZIP file')).toBeInTheDocument();
-      expect(screen.getByText('Click to browse files')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('common:selectAZipFile')),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('common:clickToBrowseFile')),
+      ).toBeInTheDocument();
     });
 
     it('should show plugin structure guidelines', () => {
@@ -102,12 +107,16 @@ describe('UploadPluginModal Component', () => {
         </MockedProvider>,
       );
 
-      expect(screen.getByText('Plugin Structure')).toBeInTheDocument();
       expect(
-        screen.getByText('Expected Directory Structure'),
+        screen.getByText(i18nForTest.t('pluginStore.pluginStructure')),
       ).toBeInTheDocument();
       expect(
-        screen.getByText('Required manifest.json Fields'),
+        screen.getByText(
+          i18nForTest.t('pluginStore.expectedDirectoryStructure'),
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.requiredManifestFields')),
       ).toBeInTheDocument();
     });
 
@@ -278,7 +287,9 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        expect(screen.getByText('Plugin Information')).toBeInTheDocument();
+        expect(
+          screen.getByText(i18nForTest.t('pluginStore.pluginInfo')),
+        ).toBeInTheDocument();
         expect(screen.getByText('Test Plugin')).toBeInTheDocument();
         expect(screen.getByText('1.0.0')).toBeInTheDocument();
         expect(screen.getByText('Test Author')).toBeInTheDocument();
@@ -303,9 +314,13 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        expect(screen.getByText('Components to Install:')).toBeInTheDocument();
         expect(
-          screen.getByText('Admin Dashboard Components'),
+          screen.getByText(i18nForTest.t('pluginStore.componentsToInstall')),
+        ).toBeInTheDocument();
+        expect(
+          screen.getByText(
+            i18nForTest.t('pluginStore.adminDashboardComponents'),
+          ),
         ).toBeInTheDocument();
       });
     });
@@ -563,7 +578,7 @@ describe('UploadPluginModal Component', () => {
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
-          'Failed to upload plugin. Please try again.',
+          i18nForTest.t('pluginStore.failedToUploadPlugin'),
         );
       });
     });
@@ -596,7 +611,9 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       // Should not crash and should show appropriate error
-      expect(screen.getByText('Select ZIP file')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('common:selectAZipFile')),
+      ).toBeInTheDocument();
     });
 
     it('should handle empty file selection', async () => {
@@ -615,7 +632,9 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       // Should not crash and should remain in initial state
-      expect(screen.getByText('Select ZIP file')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('common:selectAZipFile')),
+      ).toBeInTheDocument();
     });
 
     it('should handle non-Error exceptions in file selection', async () => {
@@ -700,7 +719,7 @@ describe('UploadPluginModal Component', () => {
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
-          'Failed to upload plugin. Please try again.',
+          i18nForTest.t('pluginStore.failedToUploadPlugin'),
         );
       });
     });
@@ -714,14 +733,16 @@ describe('UploadPluginModal Component', () => {
 
       // Simulate clicking the upload area
       const uploadArea = screen
-        .getByText('Click to browse files')
+        .getByText(i18nForTest.t('common:clickToBrowseFile'))
         .closest('div');
       if (uploadArea) {
         fireEvent.click(uploadArea);
       }
 
       // Should not crash even if fileInputRef.current is null
-      expect(screen.getByText('Select ZIP file')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('common:selectAZipFile')),
+      ).toBeInTheDocument();
     });
 
     it('should handle zip file with neither admin nor api folder', async () => {
@@ -807,7 +828,9 @@ describe('UploadPluginModal Component', () => {
       );
 
       // Verify that the file input is empty and no plugin info is shown
-      expect(screen.getByText('Select ZIP file')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('common:selectAZipFile')),
+      ).toBeInTheDocument();
       expect(screen.queryByText('Test Plugin')).not.toBeInTheDocument();
     });
 
@@ -897,7 +920,7 @@ describe('UploadPluginModal Component', () => {
       // Should handle null result gracefully - it will throw an error before reaching the catch block
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
-          'Failed to upload plugin. Please try again.',
+          i18nForTest.t('pluginStore.failedToUploadPlugin'),
         );
       });
     });
@@ -1025,7 +1048,9 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        expect(screen.getByText('Plugin Information')).toBeInTheDocument();
+        expect(
+          screen.getByText(i18nForTest.t('pluginStore.pluginInfo')),
+        ).toBeInTheDocument();
         expect(screen.getByText('Test API Plugin')).toBeInTheDocument();
         expect(screen.getByText('test-api-plugin')).toBeInTheDocument();
       });
@@ -1080,7 +1105,9 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        expect(screen.getByText('Plugin Information')).toBeInTheDocument();
+        expect(
+          screen.getByText(i18nForTest.t('pluginStore.pluginInfo')),
+        ).toBeInTheDocument();
         expect(screen.getByText('Test Plugin')).toBeInTheDocument();
         expect(screen.getByText('test-plugin')).toBeInTheDocument();
       });
@@ -1095,14 +1122,16 @@ describe('UploadPluginModal Component', () => {
 
       // Simulate clicking the upload area when fileInputRef is null
       const uploadArea = screen
-        .getByText('Click to browse files')
+        .getByText(i18nForTest.t('common:clickToBrowseFile'))
         .closest('div');
       if (uploadArea) {
         fireEvent.click(uploadArea);
       }
 
       // Should not crash even if fileInputRef.current is null
-      expect(screen.getByText('Select ZIP file')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('common:selectAZipFile')),
+      ).toBeInTheDocument();
     });
 
     it('should handle installation with empty installedComponents array', async () => {
@@ -1347,7 +1376,9 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       // Should not crash and should remain in initial state
-      expect(screen.getByText('Select ZIP file')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('common:selectAZipFile')),
+      ).toBeInTheDocument();
     });
 
     it('should handle file selection with null files', () => {
@@ -1366,7 +1397,9 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       // Should not crash and should remain in initial state
-      expect(screen.getByText('Select ZIP file')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('common:selectAZipFile')),
+      ).toBeInTheDocument();
     });
 
     it('should handle file selection with undefined files', () => {
@@ -1385,7 +1418,9 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       // Should not crash and should remain in initial state
-      expect(screen.getByText('Select ZIP file')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('common:selectAZipFile')),
+      ).toBeInTheDocument();
     });
 
     it('should handle installation with missing apolloClient', async () => {
@@ -1510,7 +1545,7 @@ describe('UploadPluginModal Component', () => {
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
-          'Failed to upload plugin. Please try again.',
+          i18nForTest.t('pluginStore.failedToUploadPlugin'),
         );
       });
     });
@@ -1567,7 +1602,7 @@ describe('UploadPluginModal Component', () => {
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
-          'Failed to upload plugin. Please try again.',
+          i18nForTest.t('pluginStore.failedToUploadPlugin'),
         );
       });
     });
@@ -1787,7 +1822,9 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        expect(screen.getByText('Plugin Information')).toBeInTheDocument();
+        expect(
+          screen.getByText(i18nForTest.t('pluginStore.pluginInfo')),
+        ).toBeInTheDocument();
         expect(screen.getByText('Test API Plugin')).toBeInTheDocument();
         expect(screen.getByText('test-api-plugin')).toBeInTheDocument();
       });
@@ -1833,7 +1870,9 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        expect(screen.getByText('Detected Files')).toBeInTheDocument();
+        expect(
+          screen.getByText(i18nForTest.t('pluginStore.detectedFiles')),
+        ).toBeInTheDocument();
         expect(screen.getByText(/admin\//)).toBeInTheDocument();
         expect(screen.getByText(/manifest\.json/)).toBeInTheDocument();
         expect(screen.getByText(/index\.tsx/)).toBeInTheDocument();
@@ -1848,7 +1887,9 @@ describe('UploadPluginModal Component', () => {
       );
 
       expect(
-        screen.getByText('Expected Directory Structure'),
+        screen.getByText(
+          i18nForTest.t('pluginStore.expectedDirectoryStructure'),
+        ),
       ).toBeInTheDocument();
       expect(
         screen.getByText('Required manifest.json Fields'),
@@ -1905,7 +1946,9 @@ describe('UploadPluginModal Component', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText('Admin Dashboard Components'),
+          screen.getByText(
+            i18nForTest.t('pluginStore.adminDashboardComponents'),
+          ),
         ).toBeInTheDocument();
         expect(screen.getByText('API Backend Components')).toBeInTheDocument();
       });
@@ -1951,7 +1994,9 @@ describe('UploadPluginModal Component', () => {
 
       await waitFor(() => {
         expect(
-          screen.getByText('Admin Dashboard Components'),
+          screen.getByText(
+            i18nForTest.t('pluginStore.adminDashboardComponents'),
+          ),
         ).toBeInTheDocument();
         expect(
           screen.queryByText('API Backend Components'),
@@ -1997,9 +2042,13 @@ describe('UploadPluginModal Component', () => {
       fireEvent.change(fileInput);
 
       await waitFor(() => {
-        expect(screen.getByText('API Backend Components')).toBeInTheDocument();
         expect(
-          screen.queryByText('Admin Dashboard Components'),
+          screen.getByText(i18nForTest.t('pluginStore.apiBackendComponents')),
+        ).toBeInTheDocument();
+        expect(
+          screen.queryByText(
+            i18nForTest.t('pluginStore.adminDashboardComponents'),
+          ),
         ).not.toBeInTheDocument();
       });
     });

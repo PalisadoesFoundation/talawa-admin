@@ -276,14 +276,14 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                   <button
                     onClick={previousScreenshot}
                     className={styles.navigationButtonLeft}
-                    title={`${t('previousImage')} (←)`}
+                    title={`${t('previousImage')}`}
                   >
                     <FaChevronLeft />
                   </button>
                   <button
                     onClick={nextScreenshot}
                     className={styles.navigationButtonRight}
-                    title={`${t('nextImage')} (→)`}
+                    title={`${t('nextImage')}`}
                   >
                     <FaChevronRight />
                   </button>
@@ -320,7 +320,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                             ? styles.dotIndicatorActive
                             : styles.dotIndicator
                         }
-                        title={`${t('goTo')} ${t('screenshot', { number: index + 1 })}`}
+                        title={`${t('screenshot', { number: index + 1 })}`}
                       />
                     ))}
                   </div>
@@ -363,7 +363,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                             <img
                               key={idx}
                               src={src}
-                              alt={t('screenshot', { number: idx + 1 })}
+                              alt={`${t('ss')} ${screenshotViewer.currentIndex + 1}`}
                               className={styles.screenshotThumbnail}
                               onClick={() =>
                                 openScreenshotViewer(details.screenshots, idx)

@@ -464,7 +464,10 @@
     "expand": "Expandir",
     "tagNamePlaceholder": "Escribe el nombre de la etiqueta",
     "allTags": "Todas las etiquetas",
-    "noMoreMembersFound": "No se encontraron más miembros"
+    "noMoreMembersFound": "No se encontraron más miembros",
+    "errorOccuredWhileLoadingAssignedUser": "Se produjo un error al cargar los usuarios asignados",
+    "sortPeople": "Ordenar personas",
+    "tagActions": "Acciones de etiqueta"
   },
   "userListCard": {
     "joined": "Unido",
@@ -1657,7 +1660,9 @@
     "passwordNotMatch": "Las contraseñas no coinciden.",
     "user": "Usuario",
     "profile": "Perfil",
-    "addMember": "Agregar miembro"
+    "addMember": "Agregar miembro",
+    "customizedTable": "Tabla personalizada",
+    "page": "Página"
   },
   "eventActionItems": {
     "title": "Elementos de acción",
@@ -1854,7 +1859,38 @@
     "checkBackLater": "Vuelve más tarde para nuevos plugins",
     "tryDifferentSearch": "Prueba con un término de búsqueda diferente o explora todos los plugins",
     "explorePluginStore": "Explora la tienda de plugins para descubrir nuevos plugins",
-    "noResultsFoundFor": "No se encontraron resultados para"
+    "noResultsFoundFor": "No se encontraron resultados para",
+    "pluginIcon": "Icono del Plugin",
+    "backToDetails": "(←) Volver a los detalles",
+    "previousImage": "Imagen Anterior (←)",
+    "nextImage": "Siguiente Imagen (→)",
+    "screenshot": "de {{number}} Captura de Pantalla",
+    "goTo": "Ir a",
+    "screenshots": "Capturas de Pantalla",
+    "ss": "Captura de Pantalla",
+    "loadingDetails": "Cargando Detalles...",
+    "features": "Características",
+    "noFeaturesInfoAvailableForThisPlugin": "No hay información de características disponible para este plugin.",
+    "loadingFeatures": "Cargando Características...",
+    "loadingChangelog": "Cargando Registro de Cambios...",
+    "changelog": "Registro de Cambios",
+    "v": "v",
+    "failedToUploadPlugin": "Error al subir el plugin. Por favor, inténtelo de nuevo.",
+    "uploadPlugin": "Subir Plugin",
+    "uploadPluginDescription": "Sube un archivo .zip de tu plugin para instalarlo en tu instancia de Talawa.",
+    "pulginId": "ID del Plugin",
+    "adminDashboardComponents": "Componentes del Panel de Administración",
+    "componentsToInstall": "Componentes a Instalar:",
+    "apiBackendComponents": "Componentes de Backend API",
+    "pluginStructure": "Estructura del Plugin",
+    "pluginStructureDescription": "La estructura esperada del directorio para un plugin de Talawa es la siguiente:",
+    "detectedFiles": "Archivos Detectados:",
+    "expectedDirectoryStructure": "Estructura de Directorio Esperada:",
+    "requiredManifestFields": "Campos Requeridos en el Manifest:",
+    "uninstallPlugin": "Desinstalar Plugin",
+    "uninstallPluginMsg": "¿Estás seguro de que deseas desinstalar este plugin {{pluginName}}? Esto eliminará todos los datos asociados con el plugin y no se podrá deshacer.",
+    "clickToViewFullSize": "Haz clic para ver en tamaño completo",
+    "pluginInfo": "Información del Plugin"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Comentario eliminado exitosamente",

@@ -7,6 +7,7 @@ import * as pluginHooks from 'plugin/hooks';
 import * as pluginManager from 'plugin/manager';
 import * as adminPluginFileService from 'plugin/services/AdminPluginFileService';
 import userEvent from '@testing-library/user-event';
+import i18nForTest from 'utils/i18nForTest';
 
 // Mock the plugin hooks and manager
 vi.mock('plugin/hooks');
@@ -28,13 +29,6 @@ vi.mock('./UploadPluginModal', () => ({
       </div>
     ) : null;
   },
-}));
-
-// Mock i18n translation
-vi.mock('react-i18next', () => ({
-  useTranslation: () => ({
-    t: (key: string) => key,
-  }),
 }));
 
 // Mock GraphQL mutations and queries
@@ -264,7 +258,9 @@ describe('PluginStore', () => {
         expect(
           screen.getByTestId('plugins-empty-state-message'),
         ).toBeInTheDocument();
-        expect(screen.getByText('noInstalledPlugins')).toBeInTheDocument();
+        expect(
+          screen.getByText(i18nForTest.t('pluginStore.noInstalledPlugins')),
+        ).toBeInTheDocument();
       });
     });
   });
@@ -485,7 +481,9 @@ describe('PluginStore', () => {
       expect(
         screen.getByTestId('plugins-empty-state-message'),
       ).toBeInTheDocument();
-      expect(screen.getByText('noPluginsAvailable')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.noPluginsAvailable')),
+      ).toBeInTheDocument();
     });
 
     it('should show empty state when no installed plugins', async () => {
@@ -501,7 +499,9 @@ describe('PluginStore', () => {
 
       await waitFor(() => {
         expect(screen.getByTestId('plugins-empty-state')).toBeInTheDocument();
-        expect(screen.getByText('noInstalledPlugins')).toBeInTheDocument();
+        expect(
+          screen.getByText(i18nForTest.t('pluginStore.noInstalledPlugins')),
+        ).toBeInTheDocument();
       });
     });
   });
@@ -514,13 +514,17 @@ describe('PluginStore', () => {
       const plugin1Button = screen.getByTestId(
         'plugin-action-btn-test-plugin-1',
       );
-      expect(plugin1Button).toHaveTextContent('Manage');
+      expect(plugin1Button).toHaveTextContent(
+        i18nForTest.t('pluginStore.manage'),
+      );
 
       // Plugin 2 should be installed (inactive status)
       const plugin2Button = screen.getByTestId(
         'plugin-action-btn-test-plugin-2',
       );
-      expect(plugin2Button).toHaveTextContent('Manage');
+      expect(plugin2Button).toHaveTextContent(
+        i18nForTest.t('pluginStore.manage'),
+      );
     });
 
     it('should handle GraphQL plugin status', () => {
