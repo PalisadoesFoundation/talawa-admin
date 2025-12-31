@@ -23,7 +23,7 @@ import type {
   InterfaceStatusBadgeProps,
   SemanticVariant,
   StatusVariant,
-} from 'types/StatusBadge/interface';
+} from 'types/shared-components/StatusBadge/interface';
 
 /**
  * Maps domain-specific status variants to semantic visual variants.
