@@ -54,40 +54,30 @@ vi.mock('shared-components/OrganizationCard/OrganizationCard', () => ({
 
 type LSApi = ReturnType<typeof useLocalStorage>;
 let setItem: LSApi['setItem'];
-let removeItem: LSApi['removeItem'];
 
 beforeEach(() => {
   const ls = useLocalStorage();
   setItem = ls.setItem;
-  removeItem = ls.removeItem;
 
   // Seed guard keys for every test
   setItem('IsLoggedIn', 'TRUE');
   setItem('userId', '123'); // if this screen reads it
-  removeItem('AdminFor'); // must be absent (== undefined)
 });
 
 const mockLinks = {
-  superAdmin: new StaticMockLink(MOCKS, true),
   admin: new StaticMockLink(MOCKS_ADMIN, true),
   empty: new StaticMockLink(MOCKS_EMPTY, true),
 };
 
 // Common test user configurations
 const mockUsers = {
-  superAdmin: {
-    id: '123',
-    SuperAdmin: true,
-    AdminFor: [{ name: 'adi', _id: '1234', image: '' }],
-  },
   admin: {
     id: '123',
-    SuperAdmin: false,
-    AdminFor: [{ name: 'adi', _id: 'a0', image: '' }],
+    role: 'administrator',
   },
   basic: {
     id: '123',
-    role: 'administrator',
+    role: 'regular',
   },
 };
 
@@ -96,13 +86,11 @@ const setupUser = (userType: keyof typeof mockUsers) => {
   const user = mockUsers[userType];
   setItem('id', user.id);
   setItem('token', 'mock-token');
-  if ('SuperAdmin' in user) setItem('SuperAdmin', user.SuperAdmin);
-  if ('AdminFor' in user) setItem('AdminFor', user.AdminFor);
   if ('role' in user) setItem('role', user.role);
 };
 
 // Helper function to render component with common providers.
-const renderWithProviders = (link = mockLinks.superAdmin) => {
+const renderWithProviders = (link = mockLinks.admin) => {
   return render(
     <MockedProvider link={link}>
       <BrowserRouter>
@@ -588,9 +576,9 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-describe('Organisations Page testing as SuperAdmin', () => {
+describe('Organisations Page testing as Admin', () => {
   test('Testing search functionality by pressing enter', async () => {
-    setupUser('superAdmin');
+    setupUser('admin');
 
     renderWithProviders();
     await wait();
@@ -602,7 +590,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing search functionality by Btn click', async () => {
-    setupUser('superAdmin');
+    setupUser('admin');
 
     renderWithProviders();
     await wait();
@@ -626,7 +614,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing debounced search functionality', async () => {
-    setupUser('superAdmin');
+    setupUser('admin');
 
     renderWithProviders();
     await wait();
@@ -644,7 +632,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing immediate search on Enter key press', async () => {
-    setupUser('superAdmin');
+    setupUser('admin');
 
     renderWithProviders();
     await wait();
@@ -658,9 +646,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing pagination component presence', async () => {
-    setupUser('superAdmin');
-    setItem('role', 'administrator');
-
+    setupUser('admin');
     const mockWithOrgData = createOrgMock(mockOrgData.singleOrg);
     renderWithMocks(mockWithOrgData);
     await wait();
@@ -671,7 +657,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing pagination functionality with multiple organizations', async () => {
-    setupUser('superAdmin');
+    setupUser('admin');
 
     const mockWithMultipleOrgs = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mockWithMultipleOrgs);
@@ -687,8 +673,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing pagination page change functionality', async () => {
-    setupUser('superAdmin');
-    setItem('role', 'administrator');
+    setupUser('admin');
 
     const mockWithManyOrgs = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mockWithManyOrgs);
@@ -700,8 +685,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing pagination rows per page change functionality', async () => {
-    setupUser('superAdmin');
-    setItem('role', 'administrator');
+    setupUser('admin');
 
     const mockWithManyOrgs = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mockWithManyOrgs);
@@ -718,8 +702,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('Testing pagination with search integration', async () => {
-    setupUser('superAdmin');
-    setItem('role', 'administrator');
+    setupUser('admin');
 
     renderWithMocks(mockConfigurations.searchableMocks);
     await wait();
@@ -742,18 +725,64 @@ describe('Organisations Page testing as SuperAdmin', () => {
     expect(paginationAfterSearch).toBeInTheDocument();
   });
 
-  test('Should render no organisation warning alert when there are no organization', async () => {
+  test('Should render empty state when user data is unavailable', async () => {
     window.location.assign('/');
-    setupUser('basic');
+    setupUser('admin');
 
-    renderWithProviders(mockLinks.empty);
+    const mocksNoUser = [
+      {
+        request: {
+          query: ORGANIZATION_FILTER_LIST,
+          variables: { filter: '' },
+        },
+        result: {
+          data: {
+            organizations: [],
+          },
+        },
+      },
+      {
+        request: {
+          query: CURRENT_USER,
+          variables: { userId: '123' },
+        },
+        result: {
+          data: null,
+        },
+      },
+      {
+        request: {
+          query: GET_USER_NOTIFICATIONS,
+          variables: { userId: '123', input: { first: 5, skip: 0 } },
+        },
+        result: {
+          data: {
+            user: {
+              __typename: 'User',
+              notifications: [],
+            },
+          },
+        },
+      },
+    ];
+
+    renderWithMocks(mocksNoUser);
+
+    await wait();
+    expect(screen.getByTestId('orglist-no-orgs-empty')).toBeInTheDocument();
+  });
+
+  test('Should render no organisation warning alert when there are no organization', async () => {
+    setupUser('admin');
+
+    renderWithMocks(MOCKS_EMPTY);
 
     await wait();
     expect(screen.getByTestId('orglist-no-orgs-empty')).toBeInTheDocument();
   });
 
   test('Testing Organization data is not present', async () => {
-    setupUser('basic');
+    setupUser('admin');
 
     renderWithProviders(mockLinks.empty);
 
@@ -761,8 +790,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 
   test('testing scroll', async () => {
-    setupUser('superAdmin');
-    setItem('role', 'administrator');
+    setupUser('admin');
 
     renderWithMocks(mockConfigurations.scrollMocks);
 
@@ -778,7 +806,7 @@ describe('Organisations Page testing as SuperAdmin', () => {
   });
 });
 
-describe('Organisations Page testing as Admin', () => {
+describe('Organisations Page sorting tests as Admin', () => {
   test('Testing sort latest and oldest toggle', async () => {
     setupUser('admin');
 
@@ -885,9 +913,7 @@ describe('Plugin Modal Tests', () => {
 describe('Advanced Component Functionality Tests', () => {
   test('Testing pagination edge cases', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', true);
     setItem('role', 'administrator');
-    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
     // Create mock with exactly one organization to test edge case
     const singleOrgMocks = [
@@ -941,9 +967,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing handleChangePage pagination navigation', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', true);
     setItem('role', 'administrator');
-    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
     const mockWithManyOrgs = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mockWithManyOrgs);
@@ -966,9 +990,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing sorting organizations by Latest with multiple orgs', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', true);
     setItem('role', 'administrator');
-    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
     // Use multipleOrgs with different dates to ensure sorting logic is executed
     const mockWithMultipleOrgs = createOrgMock(mockOrgData.multipleOrgs);
@@ -991,9 +1013,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing sorting organizations by Earliest with multiple orgs', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', true);
     setItem('role', 'administrator');
-    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
     // Use multipleOrgs with different dates
     const mockWithMultipleOrgs = createOrgMock(mockOrgData.multipleOrgs);
@@ -1081,9 +1101,6 @@ describe('Advanced Component Functionality Tests', () => {
   test('Testing create organization modal opens and closes', async () => {
     setItem('id', '123');
     setItem('role', 'administrator');
-    setItem('SuperAdmin', true);
-    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
-
     const mockWithOrgs = createOrgMock(mockOrgData.singleOrg);
 
     renderWithMocks(mockWithOrgs);
@@ -1325,8 +1342,7 @@ describe('Advanced Component Functionality Tests', () => {
   });
 
   test('Testing no results found message when search returns empty', async () => {
-    setupUser('superAdmin');
-    setItem('role', 'administrator');
+    setupUser('admin');
 
     const mocksWithSearch = [
       ...MOCKS,
@@ -1373,9 +1389,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing sort by Earliest functionality', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', false);
-    setItem('role', 'admin');
-    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
+    setItem('role', 'administrator');
 
     render(
       <MockedProvider mocks={MOCKS_ADMIN}>
@@ -1411,9 +1425,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing sort by Latest functionality', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', false);
-    setItem('role', 'admin');
-    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
+    setItem('role', 'administrator');
 
     const mockWithMultipleOrgs = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mockWithMultipleOrgs);
@@ -1441,9 +1453,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing date-based sorting with Latest and Earliest', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', false);
-    setItem('role', 'admin');
-    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
+    setItem('role', 'administrator');
 
     const mockWithMultipleOrgs = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mockWithMultipleOrgs);
@@ -1467,9 +1477,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing handleChangeRowsPerPage functionality', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', true);
     setItem('role', 'administrator');
-    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
     render(
       <MockedProvider mocks={MOCKS}>
@@ -1502,7 +1510,6 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing error handler clears localStorage and redirects', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', true);
     setItem('role', 'administrator');
 
     // Mock window.location.assign
@@ -1544,7 +1551,6 @@ describe('Advanced Component Functionality Tests', () => {
               firstName: 'Test',
               lastName: 'User',
               image: null,
-              adminFor: [],
             },
           },
         },
@@ -1596,9 +1602,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing pagination navigation functionality', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', true);
     setItem('role', 'administrator');
-    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
     // Use data with enough items to enable pagination
     const paginationMocks = [
@@ -1873,9 +1877,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing Earliest sorting functionality', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', false); // Set to false so it uses multipleOrgs data
-    setItem('role', 'admin'); // Use 'admin' not 'administrator'
-    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
+    setItem('role', 'administrator');
 
     const mocks = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mocks);
@@ -1921,9 +1923,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing closeDialogModal functionality', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', false);
-    setItem('role', 'administrator'); // Must be 'administrator' to see create button
-    setItem('AdminFor', [{ name: 'Dogs Care', _id: 'xyz', image: '' }]);
+    setItem('role', 'administrator');
 
     // Create complete mocks including mutations
     const completeMocks = [
@@ -2028,9 +2028,7 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing toggleDialogModal functionality', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', false);
-    setItem('role', 'administrator'); // Must be 'administrator' to see create button
-    setItem('AdminFor', [{ name: 'Dogs Care', _id: 'xyz', image: '' }]);
+    setItem('role', 'administrator');
 
     // Create complete mocks including mutations
     const completeMocks = [
@@ -2262,8 +2260,6 @@ describe('Advanced Component Functionality Tests', () => {
   test('Testing missing token scenario', async () => {
     setItem('id', '123');
     setItem('role', 'administrator');
-    setItem('SuperAdmin', true);
-    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
     const missingTokenMocks = [
       {
@@ -2297,8 +2293,6 @@ describe('Advanced Component Functionality Tests', () => {
 
   test('Testing CURRENT_USER query without token in localStorage', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', true);
-    setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
     // Explicitly do NOT set token to test the else branch
 
     renderWithProviders();

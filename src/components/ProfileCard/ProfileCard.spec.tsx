@@ -68,8 +68,7 @@ beforeEach(() => {
     'UserImage',
     'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
   );
-  setItem('SuperAdmin', false);
-  setItem('AdminFor', []);
+  setItem('Admin', false);
   setItem('id', '123');
 });
 
@@ -99,7 +98,7 @@ describe('ProfileDropdown Component', () => {
   });
 
   test('renders Admin', () => {
-    setItem('AdminFor', ['123']);
+    setItem('Admin', true);
     render(
       <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
@@ -234,8 +233,7 @@ describe('ProfileDropdown Component', () => {
 
 describe('Member screen routing testing', () => {
   test('member screen', async () => {
-    setItem('SuperAdmin', false);
-    setItem('AdminFor', []);
+    setItem('Admin', false);
     setItem('role', 'regular');
     render(
       <MockedProvider mocks={MOCKS}>
@@ -255,8 +253,7 @@ describe('Member screen routing testing', () => {
   });
 
   test('navigates to /user/settings for a user', async () => {
-    setItem('SuperAdmin', false);
-    setItem('AdminFor', []);
+    setItem('Admin', false);
     setItem('role', 'regular');
 
     render(
@@ -278,7 +275,7 @@ describe('Member screen routing testing', () => {
 
   test('navigates to /member/:orgId for non-user roles when orgId is not present', async () => {
     window.history.pushState({}, 'Test page', '/orglist');
-    setItem('SuperAdmin', true); // Set as admin
+    setItem('Admin', true); // Set as admin
     setItem('id', '123');
 
     render(
@@ -302,7 +299,7 @@ describe('Member screen routing testing', () => {
 
   test('navigates to /member/:userID for non-user roles', async () => {
     window.history.pushState({}, 'Test page', '/321');
-    setItem('SuperAdmin', true); // Set as admin
+    setItem('Admin', true); // Set as admin
     setItem('id', '123');
 
     render(

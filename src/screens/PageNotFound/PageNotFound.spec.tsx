@@ -35,13 +35,7 @@ describe('Testing Page not found component', () => {
     expect(screen.getByText(/Back to Home/i)).toBeInTheDocument();
   });
 
-  it('should render properly for ADMIN or SUPERADMIN', () => {
-    setItem('AdminFor', [
-      {
-        _id: '6537904485008f171cf29924',
-        __typename: 'Organization',
-      },
-    ]);
+  it('should render properly for ADMIN', () => {
     setItem('role', 'administrator');
     render(
       <BrowserRouter>

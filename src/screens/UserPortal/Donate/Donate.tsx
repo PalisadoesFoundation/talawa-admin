@@ -72,6 +72,7 @@ import {
 
 export default function donate(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'donate' });
+  const { t: tCommon } = useTranslation('common');
 
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
@@ -252,7 +253,7 @@ export default function donate(): JSX.Element {
                     className={`d-flex flex-row justify-content-center`}
                     data-testid="loading-state"
                   >
-                    <HourglassBottomIcon /> <span>Loading...</span>
+                    <HourglassBottomIcon /> <span>{tCommon('loading')}</span>
                   </div>
                 ) : (
                   <>

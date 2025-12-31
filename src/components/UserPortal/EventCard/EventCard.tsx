@@ -56,6 +56,10 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceEvent } from 'types/Event/interface';
 
+// Arbitrary placeholder date used solely to format times (no semantic meaning).
+// Chosen to avoid DST edge cases, though any non-DST date would work.
+const DATE_PREFIX = '2015-03-04T';
+
 function eventCard(props: InterfaceEvent): JSX.Element {
   // Extract the translation functions
   const { t } = useTranslation('translation', {
@@ -99,7 +103,7 @@ function eventCard(props: InterfaceEvent): JSX.Element {
           );
         }
       } catch (error) {
-        NotificationToast.error(`Failed to register for the event`);
+        NotificationToast.error(tCommon('failedToRegister'));
         NotificationToast.error(error as string);
       }
     }
@@ -124,7 +128,8 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         {`${t('starts')} `}
         {props.startTime ? (
           <b data-testid="startTime">
-            {dayjs(`2015-03-04T${props.startTime}`).format('h:mm:ss A')}
+            {/* Arbitrary placeholder date used solely to format times (no semantic meaning). Chosen to avoid DST edge cases. */}
+            {dayjs(`${DATE_PREFIX}${props.startTime}`).format('h:mm:ss A')}
           </b>
         ) : (
           <></>
@@ -135,7 +140,8 @@ function eventCard(props: InterfaceEvent): JSX.Element {
         {`${t('ends')} `}
         {props.endTime ? (
           <b data-testid="endTime">
-            {dayjs(`2015-03-04T${props.endTime}`).format('h:mm:ss A')}
+            {/* Arbitrary placeholder date used solely to format times (no semantic meaning). Chosen to avoid DST edge cases. */}
+            {dayjs(`${DATE_PREFIX}${props.endTime}`).format('h:mm:ss A')}
           </b>
         ) : (
           <></>

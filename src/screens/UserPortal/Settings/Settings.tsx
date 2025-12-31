@@ -153,7 +153,7 @@ export default function Settings(): React.JSX.Element {
   }, [data]);
 
   // wait for the query to complete
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <p>{tCommon('loading')}</p>;
   if (error) return <p>Error: {error.message}</p>;
 
   const handleUpdateUserDetails = async (): Promise<void> => {

@@ -6,7 +6,7 @@
 
 > **CreateUserFamilyInput** = `object`
 
-Defined in: [src/types/User/type.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L54)
+Defined in: [src/types/User/type.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L42)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [src/types/User/type.ts:54](https://github.com/PalisadoesFoundation/
 
 > **title**: `string`
 
-Defined in: [src/types/User/type.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L55)
+Defined in: [src/types/User/type.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L43)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [src/types/User/type.ts:55](https://github.com/PalisadoesFoundation/
 
 > **userIds**: `string`[]
 
-Defined in: [src/types/User/type.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L56)
+Defined in: [src/types/User/type.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/User/type.ts#L44)

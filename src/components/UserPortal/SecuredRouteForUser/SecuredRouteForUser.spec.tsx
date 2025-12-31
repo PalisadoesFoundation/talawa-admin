@@ -101,7 +101,6 @@ describe('SecuredRouteForUser', () => {
   describe('Authentication and Authorization', () => {
     it('renders protected content when user is logged in and not an admin', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
-      // AdminFor is undefined (not set)
 
       renderWithRouter();
 
@@ -127,24 +126,11 @@ describe('SecuredRouteForUser', () => {
 
     it('shows PageNotFound when logged-in user has admin role', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
-      mockStorage['Talawa-admin_AdminFor'] = JSON.stringify([
-        { _id: 'org-123' },
-      ]);
 
       renderWithRouter();
 
       expect(screen.getByTestId('page-not-found')).toBeInTheDocument();
       expect(screen.queryByTestId('protected-content')).not.toBeInTheDocument();
-    });
-
-    it('shows PageNotFound when AdminFor is an empty array', () => {
-      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
-      mockStorage['Talawa-admin_AdminFor'] = JSON.stringify([]);
-
-      renderWithRouter();
-
-      // Empty array is still defined, so PageNotFound should show
-      expect(screen.getByTestId('page-not-found')).toBeInTheDocument();
     });
   });
 
@@ -245,7 +231,6 @@ describe('SecuredRouteForUser', () => {
       expect(mockStorage['Talawa-admin_token']).toBeUndefined();
       expect(mockStorage['Talawa-admin_userId']).toBeUndefined();
       expect(mockStorage['Talawa-admin_role']).toBeUndefined();
-      expect(mockStorage['Talawa-admin_AdminFor']).toBeUndefined();
     });
 
     it('redirects to home page after session timeout', () => {
@@ -347,17 +332,6 @@ describe('SecuredRouteForUser', () => {
   });
 
   describe('Edge Cases', () => {
-    it('handles AdminFor being null', () => {
-      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
-      mockStorage['Talawa-admin_AdminFor'] = JSON.stringify(null);
-
-      renderWithRouter();
-
-      // null should be treated as "no admin role", so protected content should show
-      expect(screen.getByTestId('protected-content')).toBeInTheDocument();
-      expect(screen.queryByTestId('page-not-found')).not.toBeInTheDocument();
-    });
-
     it('handles multiple activity events in quick succession', () => {
       mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
       renderWithRouter();
@@ -398,16 +372,6 @@ describe('SecuredRouteForUser', () => {
       }
 
       expect(toast.warn).not.toHaveBeenCalled();
-    });
-
-    it('handles AdminFor being a string value', () => {
-      mockStorage['Talawa-admin_IsLoggedIn'] = 'TRUE';
-      mockStorage['Talawa-admin_AdminFor'] = 'some-org-id';
-
-      renderWithRouter();
-
-      // String is defined, so PageNotFound should show
-      expect(screen.getByTestId('page-not-found')).toBeInTheDocument();
     });
 
     it('remains logged in with continuous activity before timeout', () => {

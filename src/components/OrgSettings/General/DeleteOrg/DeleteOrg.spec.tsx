@@ -170,7 +170,7 @@ describe('DeleteOrg Component', () => {
     });
 
     render(<DeleteOrg />);
-    // Due to canDelete = getItem('SuperAdmin') || true, it will always render
+    // Due to canDelete = getItem('Admin') || true, it will always render
     expect(screen.getByTestId('openDeleteModalBtn')).toBeInTheDocument();
   });
 

@@ -1,4 +1,3 @@
-import type { Organization } from 'types/Organization/type';
 // types/user.ts
 
 export type User = {
@@ -38,17 +37,6 @@ export type UserInput = {
   lastName: string;
   password: string;
   selectedOrganization: string;
-};
-
-export type AppUserProfile = {
-  _id: string; // ID in GraphQL maps to string in TypeScript
-  adminFor: Organization[];
-  appLanguageCode: string;
-  createdEvents: Event[];
-  createdOrganizations: Organization[];
-  eventAdmin: Event[];
-  isSuperAdmin: boolean;
-  userId: User;
 };
 
 export type CreateUserFamilyInput = {

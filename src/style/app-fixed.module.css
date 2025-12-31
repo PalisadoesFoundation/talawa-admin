@@ -4380,7 +4380,7 @@ form label,
 
 /* -- OrganizationScreen.tsx -- */
 
-/* -- SuperAdminScreen.tsx -- */
+/* -- AdminScreen.tsx -- */
 
 .navContainer {
   display: flex;
@@ -10325,6 +10325,18 @@ form {
   overflow-y: auto;
   padding: 20px;
   position: relative;
+}
+
+.flexOne {
+  flex: 1;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.noWrap {
+  white-space: nowrap;
 }
 
 .dataGridContainer {

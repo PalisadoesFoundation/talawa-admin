@@ -213,24 +213,6 @@ describe('EventAttendedCard', () => {
       });
     });
 
-    describe('Superadmin user', () => {
-      beforeEach(() => {
-        mockGetItem.mockReturnValue('superadmin');
-      });
-
-      it('does not render link for superadmin user', () => {
-        renderComponent();
-        expect(screen.queryByRole('link')).not.toBeInTheDocument();
-      });
-
-      it('does not render chevron right icon for superadmin user', () => {
-        renderComponent();
-        expect(
-          screen.queryByTestId('ChevronRightIcon'),
-        ).not.toBeInTheDocument();
-      });
-    });
-
     describe('User role', () => {
       beforeEach(() => {
         mockGetItem.mockReturnValue('user');

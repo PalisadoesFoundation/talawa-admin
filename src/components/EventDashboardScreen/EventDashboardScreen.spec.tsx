@@ -142,28 +142,8 @@ describe('EventDashboardScreen Component', () => {
     expect(screen.queryByTestId('mainpageright')).not.toBeInTheDocument();
   });
 
-  it('renders correctly when AdminFor is null', async () => {
-    setItem('IsLoggedIn', 'true');
-    setItem('AdminFor', null);
-
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgdash/123']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <EventDashboardScreen />
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    expect(screen.getByText(/title/i)).toBeInTheDocument();
-  });
-
   it('renders and toggles drawer states correctly', async () => {
     setItem('IsLoggedIn', 'true');
-    setItem('AdminFor', [{ _id: '1', __typename: 'Organization' }]);
     setItem('sidebar', false);
 
     render(

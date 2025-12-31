@@ -321,11 +321,15 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                 variant="outlined"
                 className={styles.modalTable}
               >
-                <Table aria-label="group table">
+                <Table aria-label={t('groupTable')}>
                   <TableHead>
                     <TableRow>
-                      <TableCell className="fw-bold">Name</TableCell>
-                      <TableCell className="fw-bold">Actions</TableCell>
+                      <TableCell className="fw-bold">
+                        {tCommon('name')}
+                      </TableCell>
+                      <TableCell className="fw-bold">
+                        {tCommon('actions')}
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -347,7 +351,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                             {avatarURL ? (
                               <img
                                 src={avatarURL}
-                                alt="volunteer"
+                                alt={tCommon('volunteer')}
                                 data-testid={`image${id + 1}`}
                                 className={styles.TableImage}
                               />

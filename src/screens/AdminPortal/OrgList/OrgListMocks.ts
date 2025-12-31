@@ -15,7 +15,7 @@ import type {
   InterfaceCurrentUserTypePG,
 } from 'utils/interfaces';
 
-const superAdminCurrentUser: InterfaceCurrentUserTypePG = {
+const adminCurrentUser: InterfaceCurrentUserTypePG = {
   currentUser: {
     id: '123',
     name: 'John Doe',
@@ -24,18 +24,12 @@ const superAdminCurrentUser: InterfaceCurrentUserTypePG = {
   },
 };
 
-const superAdminUser: InterfaceUserType = {
+const adminUser: InterfaceUserType = {
   user: {
     firstName: 'John',
     lastName: 'Doe',
     email: 'john.doe@akatsuki.com',
     image: null,
-  },
-};
-
-const adminUser: InterfaceUserType = {
-  user: {
-    ...superAdminUser.user,
   },
 };
 
@@ -54,7 +48,7 @@ const organizations: InterfaceOrgInfoTypePG[] = [
   },
 ];
 
-// MOCKS FOR SUPERADMIN
+// MOCKS FOR ADMIN
 const MOCKS = [
   {
     request: {
@@ -63,8 +57,8 @@ const MOCKS = [
     },
     result: {
       data: {
-        user: superAdminUser,
-        currentUser: superAdminCurrentUser.currentUser,
+        user: adminUser,
+        currentUser: adminCurrentUser.currentUser,
       },
     },
   },
@@ -249,7 +243,7 @@ const MOCKS_EMPTY = [
       variables: { userId: '123' },
     },
     result: {
-      data: { user: superAdminUser },
+      data: { user: adminUser },
     },
   },
   {
@@ -291,7 +285,7 @@ const MOCKS_WITH_ERROR = [
       variables: { userId: '123' },
     },
     result: {
-      data: { user: superAdminUser },
+      data: { user: adminUser },
     },
   },
   {
