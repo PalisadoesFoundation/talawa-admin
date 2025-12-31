@@ -1,5 +1,8 @@
 import React from 'react';
 
+/**
+ * User information interface for UserTableRow component
+ */
 export interface InterfaceUserInfo {
   id: string;
   name: string;
@@ -8,12 +11,18 @@ export interface InterfaceUserInfo {
   createdAt?: string | null;
 }
 
+/**
+ * Action button variant types for styling
+ */
 export type InterfaceActionVariant =
   | 'primary'
   | 'success'
   | 'danger'
   | 'default';
 
+/**
+ * Action button configuration interface
+ */
 export interface InterfaceActionButton {
   label: string;
   onClick: (user: InterfaceUserInfo) => void;
@@ -24,6 +33,9 @@ export interface InterfaceActionButton {
   ariaLabel?: string;
 }
 
+/**
+ * Props interface for UserTableRow component
+ */
 export interface InterfaceUserTableRowProps {
   user: InterfaceUserInfo;
   rowNumber?: number;

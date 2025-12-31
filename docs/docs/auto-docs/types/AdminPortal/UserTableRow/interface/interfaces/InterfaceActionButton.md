@@ -4,7 +4,9 @@
 
 # Interface: InterfaceActionButton
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:17](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L17)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L26)
+
+Action button configuration interface
 
 ## Properties
 
@@ -12,7 +14,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:17](https://github.
 
 > `optional` **ariaLabel**: `string`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:24](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L24)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L33)
 
 ***
 
@@ -20,7 +22,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:24](https://github.
 
 > `optional` **disabled**: `boolean`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L23)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L32)
 
 ***
 
@@ -28,7 +30,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:23](https://github.
 
 > `optional` **icon**: `ReactElement`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:20](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L20)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L29)
 
 ***
 
@@ -36,7 +38,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:20](https://github.
 
 > **label**: `string`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:18](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L18)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L27)
 
 ***
 
@@ -44,7 +46,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:18](https://github.
 
 > **onClick**: (`user`) => `void`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:19](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L19)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L28)
 
 #### Parameters
 
@@ -62,7 +64,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:19](https://github.
 
 > `optional` **testId**: `string`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:22](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L22)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L31)
 
 ***
 
@@ -70,4 +72,4 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:22](https://github.
 
 > `optional` **variant**: [`InterfaceActionVariant`](../type-aliases/InterfaceActionVariant.md)
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L21)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L30)

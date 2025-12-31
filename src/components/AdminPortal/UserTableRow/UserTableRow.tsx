@@ -114,7 +114,7 @@ export const UserTableRow: React.FC<InterfaceUserTableRowProps> = memo(
       (e: MouseEvent) => {
         if (!onRowClick) return;
         const target = e.target as HTMLElement;
-        if (target.closest('button')) return;
+        if (target.closest('button') || target.closest('a')) return;
         onRowClick(user);
       },
       [onRowClick, user],

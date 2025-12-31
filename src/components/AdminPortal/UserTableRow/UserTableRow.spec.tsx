@@ -19,6 +19,7 @@ const user: InterfaceUserInfo = {
 
 describe('UserTableRow', () => {
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 

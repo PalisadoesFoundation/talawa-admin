@@ -44,6 +44,7 @@ const NON_USER_VISIBLE_ATTRS = [
   'data-cy',
   'data-id',
   'testid',
+  'dataTestId',
   'key',
   'ref',
   'onClick',

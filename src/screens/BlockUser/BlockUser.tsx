@@ -331,7 +331,7 @@ const BlockUser = (): JSX.Element => {
                             onClick: () => handleUnBlockUser(user),
                             variant: 'success',
                             icon: <FontAwesomeIcon icon={faUserPlus} />,
-                            testId: `unblockUser${user.id}`,
+                            testId: `blockUser${user.id}`,
                           },
                         ]}
                         testIdPrefix="block-user"

@@ -449,8 +449,7 @@ const Users = (): JSX.Element => {
                           {
                             label: t('view'),
                             onClick: () => {
-                              // Placeholder for view action - would need to implement modal functionality
-                              console.log('View user details:', user.id);
+                              // TODO: Implement view user details modal
                             },
                             variant: 'primary',
                             icon: <FontAwesomeIcon icon={faEye} />,

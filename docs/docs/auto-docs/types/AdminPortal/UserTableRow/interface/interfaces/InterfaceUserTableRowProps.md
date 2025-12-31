@@ -4,7 +4,9 @@
 
 # Interface: InterfaceUserTableRowProps
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L27)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L39)
+
+Props interface for UserTableRow component
 
 ## Properties
 
@@ -12,7 +14,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:27](https://github.
 
 > `optional` **actions**: [`InterfaceActionButton`](InterfaceActionButton.md)[]
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L31)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L43)
 
 ***
 
@@ -20,7 +22,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:31](https://github.
 
 > `optional` **compact**: `boolean`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L35)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L47)
 
 ***
 
@@ -28,7 +30,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:35](https://github.
 
 > `optional` **isDataGrid**: `boolean`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L34)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L46)
 
 ***
 
@@ -36,7 +38,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:34](https://github.
 
 > `optional` **linkPath**: `string`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:30](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L30)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L42)
 
 ***
 
@@ -44,7 +46,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:30](https://github.
 
 > `optional` **onRowClick**: (`user`) => `void`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L33)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L45)
 
 #### Parameters
 
@@ -62,7 +64,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:33](https://github.
 
 > `optional` **rowNumber**: `number`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L29)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L41)
 
 ***
 
@@ -70,7 +72,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:29](https://github.
 
 > `optional` **showJoinedDate**: `boolean`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L32)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L44)
 
 ***
 
@@ -78,7 +80,7 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:32](https://github.
 
 > `optional` **testIdPrefix**: `string`
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L36)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L48)
 
 ***
 
@@ -86,4 +88,4 @@ Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:36](https://github.
 
 > **user**: [`InterfaceUserInfo`](InterfaceUserInfo.md)
 
-Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L28)
+Defined in: [src/types/AdminPortal/UserTableRow/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/AdminPortal/UserTableRow/interface.ts#L40)
