@@ -85,15 +85,12 @@ jobs:
         if: steps.changed-files.outputs.only_changed != 'true'
         run: pnpm typecheck
 
-      - name: Check for linting errors (including TSDoc)
+      - name: Check for linting errors in modified files (including TSDoc)
         if: steps.changed-files.outputs.only_changed != 'true'
-        run: pnpm run lint:check
+        env:
+          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: pnpm exec eslint ${CHANGED_FILES} --max-warnings=0
 
-      # - name: Check for linting errors in modified files
-      #   if: steps.changed-files.outputs.only_changed != 'true'
-      #   env:
-      #     CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-      #   run: pnpm exec eslint ${CHANGED_FILES}
 
       - name: Check for TSDoc comments
         run: pnpm check-tsdoc
