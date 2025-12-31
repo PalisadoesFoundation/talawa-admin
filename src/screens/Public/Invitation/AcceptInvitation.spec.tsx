@@ -111,9 +111,11 @@ describe('AcceptInvitation', () => {
             },
           },
         },
+        delay: 100, // Add delay to ensure loading state is visible
       },
     ];
     renderComponent(mocks, '/invitation/test-token');
+    // This should hit the early return at line 140-141: if (loading) { return <Loader size="xl" />; }
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
   });
 

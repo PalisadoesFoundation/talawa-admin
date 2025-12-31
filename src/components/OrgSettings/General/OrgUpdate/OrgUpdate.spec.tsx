@@ -857,4 +857,35 @@ describe('OrgUpdate Component', () => {
 
     expect(addressInput).toHaveValue('New Address Line');
   });
+
+  it('displays error message when query fails', async () => {
+    const errorMock = {
+      request: {
+        query: GET_ORGANIZATION_BASIC_DATA,
+        variables: { id: '1' },
+      },
+      error: new Error('Failed to fetch organization data'),
+    };
+
+    render(
+      <MockedProvider mocks={[errorMock]}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      // The error message is split across a <br /> tag within the h6 element
+      // Check for the error container and verify it contains both text parts
+      const errorContainer = screen.getByText((content, element) => {
+        return (
+          element?.tagName.toLowerCase() === 'h6' &&
+          content.includes('Error occured while loading Organization Data') &&
+          content.includes('Failed to fetch organization data')
+        );
+      });
+      expect(errorContainer).toBeInTheDocument();
+    });
+  });
 });
