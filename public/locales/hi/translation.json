@@ -1701,6 +1701,7 @@
     "title": "धन उगाहने के अभियान",
     "searchByName": "नाम से खोजें...",
     "searchBy": "द्वारा खोजें",
+    "searchCampaigns": "अभियान खोजें",
     "pledgers": "प्रतिज्ञाकर्ता",
     "pledger": "प्रतिज्ञाकर्ता",
     "campaigns": "अभियान",
@@ -1724,7 +1725,8 @@
     "amountRaised": "एकत्रित राशि"
   },
   "userPledges": {
-    "title": "मेरी प्रतिज्ञाएँ"
+    "title": "मेरी प्रतिज्ञाएँ",
+    "searchPledges": "प्रतिज्ञाएँ खोजें"
   },
   "leaveOrganization": {
     "title": "संगठन छोड़ें"
@@ -1755,6 +1757,7 @@
     "deleteVolunteerGroupMsg": "क्या आप वाकई इस स्वयंसेवक समूह को हटाना चाहते हैं?",
     "leader": "नेता",
     "group": "समूह",
+    "groupOrLeader": "समूह या नेता",
     "createGroup": "समूह बनाएं",
     "updateGroup": "समूह अपडेट करें",
     "deleteGroup": "समूह हटाएं",

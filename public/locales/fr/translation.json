@@ -1701,6 +1701,7 @@
     "title": "Campagnes de financement",
     "searchByName": "Rechercher par nom...",
     "searchBy": "Rechercher par",
+    "searchCampaigns": "Rechercher des campagnes",
     "pledgers": "Contributeurs",
     "pledger": "Prometteur",
     "campaigns": "Campagnes",
@@ -1724,7 +1725,8 @@
     "amountRaised": "Montant Collecté"
   },
   "userPledges": {
-    "title": "Mes Promesses"
+    "title": "Mes Promesses",
+    "searchPledges": "Rechercher des engagements"
   },
   "leaveOrganization": {
     "title": "Quitter l'organisation"
@@ -1755,6 +1757,7 @@
     "deleteVolunteerGroupMsg": "Êtes-vous sûr de vouloir supprimer ce groupe de bénévoles?",
     "leader": "Chef",
     "group": "Groupe",
+    "groupOrLeader": "Groupe ou Chef",
     "createGroup": "Créer un Groupe",
     "updateGroup": "Mettre à Jour le Groupe",
     "deleteGroup": "Supprimer le Groupe",

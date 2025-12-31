@@ -237,7 +237,7 @@ function Groups(): JSX.Element {
             {avatarURL ? (
               <img
                 src={avatarURL}
-                alt={t('assignee')}
+                alt={t('leader')}
                 data-testid={`image${id + 1}`}
                 className={styles.TableImage}
               />
