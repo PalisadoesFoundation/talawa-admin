@@ -15,10 +15,13 @@ import {
 import useLocalStorage from 'utils/useLocalstorage';
 import { Link } from 'react-router-dom';
 import { ListGroup, Button } from 'react-bootstrap';
+import { NotificationsNone } from '@mui/icons-material';
 import styles from './Notification.module.css';
 import { FaUserCircle } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
+import type { IUserNotificationsResult } from 'types/GraphQL/queryResults';
 
 interface InterfaceNotification {
   id: string;
@@ -39,17 +42,20 @@ const Notification: React.FC = () => {
 
   const skip = page * pageSize;
 
-  const { loading, data, refetch } = useQuery<any>(GET_USER_NOTIFICATIONS, {
-    variables: {
-      userId: userId,
-      input: {
-        first: pageSize,
-        skip: skip,
+  const { loading, data, refetch } = useQuery<IUserNotificationsResult>(
+    GET_USER_NOTIFICATIONS,
+    {
+      variables: {
+        userId: userId,
+        input: {
+          first: pageSize,
+          skip: skip,
+        },
       },
+      skip: !userId,
+      fetchPolicy: 'network-only',
     },
-    skip: !userId,
-    fetchPolicy: 'network-only',
-  });
+  );
 
   const [markAsRead] = useMutation(MARK_NOTIFICATION_AS_READ);
 
@@ -67,7 +73,13 @@ const Notification: React.FC = () => {
   };
 
   const notifications: InterfaceNotification[] =
-    data?.user?.notifications || [];
+    data?.user?.notifications?.map((n) => ({
+      id: n.id || n._id,
+      title: n.title,
+      body: n.body,
+      isRead: n.isRead ?? n.read,
+      navigation: n.navigation,
+    })) || [];
 
   const handleNext = async () => {
     if (notifications.length < pageSize) return;
@@ -95,11 +107,15 @@ const Notification: React.FC = () => {
                   <div className={styles.skeletonTitle} />
                   <div className={styles.skeletonBody} />
                 </div>
-                <div style={{ width: 92 }} />
+                <div className={styles.buttonSpacer} />
               </ListGroup.Item>
             ))
           ) : notifications.length === 0 ? (
-            <div className={styles.noNotifications}>{t('allCaughtUp')}</div>
+            <EmptyState
+              icon={<NotificationsNone />}
+              message={t('allCaughtUp')}
+              dataTestId="notifications-empty-state"
+            />
           ) : (
             Array.from({ length: pageSize }).map((_, idx) => {
               const notification = notifications[idx];
@@ -109,13 +125,14 @@ const Notification: React.FC = () => {
                     key={notification.id}
                     className={`${styles.notificationItem} ${!notification.isRead ? styles.unread : ''}`}
                   >
-                    <div className={styles.profileSection}>
-                      <FaUserCircle size={28} color="#8a99b3" />
+                    <div
+                      className={`${styles.profileSection} ${styles.userIconWrapper}`}
+                    >
+                      <FaUserCircle size={28} />
                     </div>
                     <Link
                       to={notification.navigation || '#'}
-                      className={styles.notificationLink}
-                      style={{ flex: 1, minWidth: 0 }}
+                      className={`${styles.notificationLink} ${styles.notificationLinkContent}`}
                     >
                       <div className={styles.notificationContent}>
                         <div className={styles.notificationTitle}>
@@ -130,6 +147,9 @@ const Notification: React.FC = () => {
                       <Button
                         variant="primary"
                         size="sm"
+                        aria-label={t('markAsReadAriaLabel', {
+                          title: notification.title,
+                        })}
                         className={styles.markButton}
                         onClick={() => handleMarkAsRead([notification.id])}
                       >
@@ -150,7 +170,7 @@ const Notification: React.FC = () => {
                     <div className={styles.notificationTitle}>{'\u00A0'}</div>
                     <div className={styles.notificationBody}>{'\u00A0'}</div>
                   </div>
-                  <div style={{ width: 92 }} />
+                  <div className={styles.buttonSpacer} />
                 </ListGroup.Item>
               );
             })

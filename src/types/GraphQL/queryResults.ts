@@ -80,7 +80,9 @@ export interface IOrganizationMembersResult {
       }>;
       pageInfo: {
         hasNextPage: boolean;
+        hasPreviousPage?: boolean;
         endCursor: string;
+        startCursor?: string;
       };
     };
   };
@@ -271,4 +273,299 @@ export interface IMembersListResult {
     lastName?: string;
     name?: string;
   }>;
+}
+
+// ============================================
+// Authentication Queries & Mutations
+// ============================================
+
+export interface ISignInResult {
+  signIn: {
+    user: {
+      id: string;
+      name: string;
+      emailAddress: string;
+      role: string;
+      countryCode: string | null;
+      avatarURL?: string | null;
+    };
+    authenticationToken: string;
+    refreshToken: string;
+  };
+}
+
+export interface ISignUpResult {
+  signUp: {
+    user: {
+      id: string;
+      name?: string;
+      emailAddress?: string;
+    };
+    authenticationToken: string;
+    refreshToken: string;
+  };
+}
+
+export interface IRecaptchaResult {
+  recaptcha: boolean;
+}
+
+export interface ICommunityDataResult {
+  community: {
+    id: string;
+    name: string;
+    logoURL: string;
+    websiteURL: string;
+    createdAt: string;
+    updatedAt: string;
+    facebookURL?: string | null;
+    githubURL?: string | null;
+    instagramURL?: string | null;
+    linkedinURL?: string | null;
+    redditURL?: string | null;
+    slackURL?: string | null;
+    xURL?: string | null;
+    youtubeURL?: string | null;
+    inactivityTimeoutDuration?: number | null;
+    logoMimeType?: string | null;
+  } | null;
+}
+
+export interface ICommunitySessionTimeoutResult {
+  community: {
+    inactivityTimeoutDuration: number | null;
+  } | null;
+}
+
+// ============================================
+// User Mutations
+// ============================================
+
+export interface IUpdateCurrentUserResult {
+  updateCurrentUser: {
+    id: string;
+    name: string;
+    emailAddress: string;
+    role: string;
+    avatarURL?: string | null;
+    addressLine1?: string;
+    addressLine2?: string;
+    avatarMimeType?: string | null;
+    birthDate?: string | null;
+    city?: string;
+    countryCode?: string | null;
+    createdAt?: string;
+    description?: string;
+    educationGrade?: string | null;
+    employmentStatus?: string | null;
+    homePhoneNumber?: string;
+    isEmailAddressVerified?: boolean;
+    maritalStatus?: string | null;
+    mobilePhoneNumber?: string;
+    natalSex?: string | null;
+    naturalLanguageCode?: string;
+    postalCode?: string;
+    state?: string;
+    updatedAt?: string;
+    workPhoneNumber?: string;
+  };
+}
+
+// ============================================
+// Notification Queries
+// ============================================
+
+export interface IUserNotificationsResult {
+  user: {
+    notifications: Array<{
+      _id: string;
+      id?: string;
+      title: string;
+      body: string;
+      createdAt: string;
+      read: boolean;
+      isRead?: boolean;
+      navigation?: string;
+    }>;
+  };
+}
+
+// ============================================
+// Organization Queries
+// ============================================
+
+export interface IOrganizationListNoMembersResult {
+  organizations: Array<{
+    id: string;
+    name: string;
+    addressLine1?: string;
+  }>;
+}
+
+export interface ICreateOrganizationResult {
+  createOrganization: {
+    id: string;
+  };
+}
+
+export interface IOrganizationFilterListResult {
+  organizations: Array<{
+    id: string;
+    name: string;
+  }>;
+}
+
+// ============================================
+// Fund Campaign Queries
+// ============================================
+
+export interface IFundCampaignResult {
+  fund: {
+    id: string;
+    name: string;
+    campaigns: {
+      edges: Array<{
+        node: {
+          id: string;
+          name: string;
+          currencyCode: string;
+          goalAmount: number;
+          startAt: string;
+          endAt: string;
+        };
+      }>;
+    };
+  };
+}
+
+export interface IFundListResult {
+  organization: {
+    funds: {
+      edges: Array<{
+        node: {
+          id: string;
+          name: string;
+          isTaxDeductible: boolean;
+          isArchived: boolean;
+          createdAt: string;
+          creator?: {
+            name: string;
+          } | null;
+          organization?: {
+            name: string;
+          } | null;
+          updater?: {
+            name: string;
+          } | null;
+        };
+      }>;
+    };
+  };
+}
+
+export interface IFundCampaignPledgeResult {
+  fundCampaign: {
+    id: string;
+    name: string;
+    goalAmount: number;
+    currencyCode: string;
+    startAt: string;
+    endAt: string;
+    pledges: {
+      edges: Array<{
+        node: {
+          id: string;
+          amount: number;
+          endDate: string;
+          pledger: {
+            id: string;
+            name: string;
+            avatarURL?: string | null;
+          };
+        };
+      }>;
+    };
+    totalPledged: number;
+    totalRaised: number;
+  };
+}
+
+// ============================================
+// Venue Queries
+// ============================================
+
+export interface IVenueListResult {
+  organization: {
+    venues: {
+      edges: Array<{
+        node: {
+          id: string;
+          name: string;
+          description?: string | null;
+          capacity: number;
+        };
+      }>;
+    };
+  };
+}
+
+// ============================================
+// Invitation Mutations
+// ============================================
+
+export interface IVerifyEventInvitationResult {
+  verifyEventInvitation: {
+    invitationToken: string;
+    eventId: string;
+    organizationId: string;
+  };
+}
+
+export interface IAcceptEventInvitationResult {
+  acceptEventInvitation: {
+    id: string;
+  };
+}
+
+// ============================================
+// User List Queries
+// ============================================
+
+export interface IUserListForTableResult {
+  allUsers: {
+    pageInfo: {
+      endCursor: string | null;
+      hasPreviousPage: boolean;
+      hasNextPage: boolean;
+      startCursor: string | null;
+    };
+    edges: Array<{
+      cursor: string;
+      node: {
+        id: string;
+        name: string;
+        role: string;
+        avatarURL?: string | null;
+        emailAddress: string;
+      };
+    }>;
+  };
+}
+
+// ============================================
+// Additional Mutations
+// ============================================
+
+export interface IBlockUserResult {
+  blockUser: boolean;
+}
+
+export interface IGenerateOtpResult {
+  otp: {
+    otpToken: string;
+  };
+}
+
+export interface IForgotPasswordResult {
+  forgotPassword: boolean;
 }

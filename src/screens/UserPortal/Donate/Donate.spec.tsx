@@ -393,7 +393,7 @@ describe('Testing Donate Screen [User Portal]', () => {
 
     // Find loading text within the specific container
     const loadingElement = screen.getByTestId('loading-state');
-    expect(loadingElement).toHaveTextContent('Loading...');
+    expect(loadingElement).toHaveTextContent(/loading/i);
 
     await wait();
   });

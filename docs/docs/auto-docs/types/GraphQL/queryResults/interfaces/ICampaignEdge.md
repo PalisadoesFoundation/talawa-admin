@@ -4,7 +4,7 @@
 
 # Interface: ICampaignEdge
 
-Defined in: [src/types/GraphQL/queryResults.ts:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L107)
+Defined in: [src/types/GraphQL/queryResults.ts:109](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L109)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:107](https://github.com/Palisadoe
 
 > **node**: `object`
 
-Defined in: [src/types/GraphQL/queryResults.ts:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L108)
+Defined in: [src/types/GraphQL/queryResults.ts:110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L110)
 
 #### currencyCode
 

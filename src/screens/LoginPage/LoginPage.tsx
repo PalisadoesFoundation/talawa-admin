@@ -83,10 +83,16 @@ import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
 import styles from '../../style/app-fixed.module.css';
-import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import { Autocomplete, TextField } from '@mui/material';
 import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
+import type {
+  ISignInResult,
+  ISignUpResult,
+  IRecaptchaResult,
+  ICommunityDataResult,
+  IOrganizationListNoMembersResult,
+} from 'types/GraphQL/queryResults';
 
 const loginPage = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
@@ -180,31 +186,30 @@ const loginPage = (): JSX.Element => {
   const toggleConfirmPassword = (): void =>
     setShowConfirmPassword(!showConfirmPassword);
 
-  const { data, refetch } = useQuery<any>(GET_COMMUNITY_DATA_PG);
+  const { data, refetch } = useQuery<ICommunityDataResult>(
+    GET_COMMUNITY_DATA_PG,
+  );
   useEffect(() => {
     refetch();
   }, [data]);
-  const [signin, { loading: loginLoading }] = useLazyQuery<any>(SIGNIN_QUERY);
+  const [signin, { loading: loginLoading }] =
+    useLazyQuery<ISignInResult>(SIGNIN_QUERY);
   const [signup, { loading: signinLoading }] =
-    useMutation<any>(SIGNUP_MUTATION);
-  const [recaptcha] = useMutation<any>(RECAPTCHA_MUTATION);
-  const { data: orgData } = useQuery<{
-    organizations: InterfaceQueryOrganizationListObject[];
-  }>(ORGANIZATION_LIST_NO_MEMBERS);
+    useMutation<ISignUpResult>(SIGNUP_MUTATION);
+  const [recaptcha] = useMutation<IRecaptchaResult>(RECAPTCHA_MUTATION);
+  const { data: orgData } = useQuery<IOrganizationListNoMembersResult>(
+    ORGANIZATION_LIST_NO_MEMBERS,
+  );
   const { startSession, extendSession } = useSession();
   useEffect(() => {
     if (orgData) {
-      const options = orgData.organizations.map(
-        (org: InterfaceQueryOrganizationListObject) => {
-          const tempObj: { label: string; id: string } | null = {} as {
-            label: string;
-            id: string;
-          };
-          tempObj['label'] = `${org.name}(${org.addressLine1})`;
-          tempObj['id'] = org.id;
-          return tempObj;
-        },
-      );
+      const options = orgData.organizations.map((org) => {
+        const tempObj: { label: string; id: string } = {
+          label: `${org.name}${org.addressLine1 ? `(${org.addressLine1})` : ''}`,
+          id: org.id,
+        };
+        return tempObj;
+      });
       setOrganizations(options);
     }
   }, [orgData]);
@@ -243,7 +248,7 @@ const loginPage = (): JSX.Element => {
         },
       });
 
-      return data.recaptcha;
+      return data?.recaptcha ?? false;
     } catch {
       toast.error(t('captchaError') as string);
     }
@@ -363,9 +368,38 @@ const loginPage = (): JSX.Element => {
     }
 
     try {
-      const { data: signInData } = await signin({
+      const { data: signInData, error: signInError } = await signin({
         variables: { email: formState.email, password: formState.password },
       });
+
+      // Check for GraphQL errors (like account_locked) first
+      if (signInError) {
+        // Check if this is an account_locked error with retryAfter timestamp
+        const graphQLError =
+          'graphQLErrors' in signInError &&
+          Array.isArray(signInError.graphQLErrors)
+            ? signInError.graphQLErrors[0]
+            : undefined;
+        const extensions = graphQLError?.extensions as
+          | { code?: string; retryAfter?: string }
+          | undefined;
+
+        if (extensions?.code === 'account_locked' && extensions?.retryAfter) {
+          // Calculate remaining minutes until unlock
+          const retryAfterDate = new Date(extensions.retryAfter);
+          const now = new Date();
+          const diffMs = retryAfterDate.getTime() - now.getTime();
+          const diffMinutes = Math.max(1, Math.ceil(diffMs / 60000));
+
+          toast.error(
+            tErrors('accountLockedWithTimer', { minutes: diffMinutes }),
+          );
+        } else {
+          errorHandler(t, signInError);
+        }
+        loginRecaptchaRef.current?.reset();
+        return;
+      }
 
       if (signInData) {
         if (signInData.signIn.user.countryCode !== null) {
@@ -382,7 +416,9 @@ const loginPage = (): JSX.Element => {
         const loggedInUserId = user.id;
 
         setItem('token', authenticationToken);
-        setItem('refreshToken', refreshToken);
+        if (refreshToken) {
+          setItem('refreshToken', refreshToken);
+        }
         setItem('IsLoggedIn', 'TRUE');
         setItem('name', user.name);
         setItem('email', user.emailAddress);
@@ -418,20 +454,42 @@ const loginPage = (): JSX.Element => {
     }
   };
 
-  const socialIconsList = socialMediaLinks.map(({ href, logo, tag }, index) =>
-    data?.community ? (
-      data.community?.[tag] && (
-        <a
-          key={index}
-          href={data.community?.[tag]}
-          target="_blank"
-          rel="noopener noreferrer"
-          data-testid="preLoginSocialMedia"
-        >
-          <img src={logo} />
-        </a>
-      )
-    ) : (
+  const socialIconsList = socialMediaLinks.map(({ href, logo, tag }, index) => {
+    const community = data?.community;
+    if (community) {
+      const url =
+        tag === 'facebookURL'
+          ? community.facebookURL
+          : tag === 'githubURL'
+            ? community.githubURL
+            : tag === 'instagramURL'
+              ? community.instagramURL
+              : tag === 'linkedInURL'
+                ? community.linkedinURL
+                : tag === 'redditURL'
+                  ? community.redditURL
+                  : tag === 'slackURL'
+                    ? community.slackURL
+                    : tag === 'xURL'
+                      ? community.xURL
+                      : tag === 'youtubeURL'
+                        ? community.youtubeURL
+                        : null;
+      if (url) {
+        return (
+          <a
+            key={index}
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            data-testid="preLoginSocialMedia"
+          >
+            <img src={logo} />
+          </a>
+        );
+      }
+    }
+    return (
       <a
         key={index}
         href={href}
@@ -441,8 +499,8 @@ const loginPage = (): JSX.Element => {
       >
         <img src={logo} />
       </a>
-    ),
-  );
+    );
+  });
 
   return (
     <>
@@ -459,7 +517,7 @@ const loginPage = (): JSX.Element => {
                 >
                   <img
                     src={data.community.logoURL}
-                    alt="Community Logo"
+                    alt={t('communityLogo')}
                     data-testid="preLoginLogo"
                   />
                   <p className="text-center">{data.community.name}</p>
@@ -912,7 +970,7 @@ const loginPage = (): JSX.Element => {
                         renderInput={(params) => (
                           <TextField
                             {...params}
-                            label="Organizations"
+                            label={t('organizations')}
                             className={styles.selectOrgText}
                           />
                         )}

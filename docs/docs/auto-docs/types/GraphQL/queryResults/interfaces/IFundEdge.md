@@ -4,7 +4,7 @@
 
 # Interface: IFundEdge
 
-Defined in: [src/types/GraphQL/queryResults.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L118)
+Defined in: [src/types/GraphQL/queryResults.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L120)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:118](https://github.com/Palisadoe
 
 > **node**: `object`
 
-Defined in: [src/types/GraphQL/queryResults.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L119)
+Defined in: [src/types/GraphQL/queryResults.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L121)
 
 #### campaigns?
 

@@ -32,6 +32,11 @@ import PledgeModal, {
   getMemberLabel,
 } from './PledgeModal';
 
+// Mock utils/i18n to use the test i18n instance for NotificationToast
+vi.mock('utils/i18n', () => ({
+  default: i18nForTest,
+}));
+
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -44,26 +49,25 @@ vi.mock('@mui/x-date-pickers', async () => {
   const actual = await vi.importActual<typeof import('@mui/x-date-pickers')>(
     '@mui/x-date-pickers',
   );
-  interface InterfaceTestDatePickerProps {
-    label?: React.ReactNode;
+  interface InterfaceMockDatePickerProps {
+    label?: string;
     value?: dayjs.Dayjs | null;
     onChange?: (value: dayjs.Dayjs | null) => void;
+    [key: string]: unknown;
   }
 
   return {
     ...actual,
-    DatePicker: ({ label, value, onChange }: InterfaceTestDatePickerProps) => (
-      <div role="group" aria-label={label as string}>
-        <input
-          aria-label={label as string}
-          value={value ? value.format('DD/MM/YYYY') : ''}
-          onChange={(e) =>
-            (onChange as ((value: unknown) => void) | undefined)?.(
-              e.target.value ? dayjs(e.target.value, 'DD/MM/YYYY') : null,
-            )
-          }
-        />
-      </div>
+    DatePicker: ({ label, value, onChange }: InterfaceMockDatePickerProps) => (
+      <input
+        aria-label={label as string}
+        value={value ? value.format('DD/MM/YYYY') : ''}
+        onChange={(e) =>
+          (onChange as ((value: unknown) => void) | undefined)?.(
+            e.target.value ? dayjs(e.target.value, 'DD/MM/YYYY') : null,
+          )
+        }
+      />
     ),
   };
 });
@@ -157,7 +161,15 @@ const USER_DETAILS_MOCK = {
         mobilePhoneNumber: null,
         homePhoneNumber: null,
         workPhoneNumber: null,
-        organizationsWhereMember: { edges: [] },
+        organizationsWhereMember: {
+          edges: [],
+          pageInfo: {
+            hasNextPage: false,
+            hasPreviousPage: false,
+            startCursor: null,
+            endCursor: null,
+          },
+        },
         createdOrganizations: [],
         __typename: 'User',
       },
@@ -207,8 +219,20 @@ const createUpdatePledgeMock = (
     : {
         result: {
           data: {
-            updateFundraisingCampaignPledge: {
-              _id: variables.id,
+            updateFundCampaignPledge: {
+              id: variables.id,
+              amount: variables.amount || 100,
+              note: null,
+              createdAt: '2024-01-01T00:00:00.000Z',
+              updatedAt: '2024-01-10T00:00:00.000Z',
+              campaign: {
+                id: 'campaignId',
+                name: 'Campaign Name',
+              },
+              pledger: {
+                id: '1',
+                name: 'John Doe',
+              },
             },
           },
         },
@@ -477,6 +501,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeUpdated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
@@ -562,6 +587,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeUpdated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
@@ -594,6 +620,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeUpdated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
@@ -648,6 +675,7 @@ describe('PledgeModal', () => {
         () => {
           expect(toast.success).toHaveBeenCalledWith(
             translations.pledgeUpdated,
+            expect.any(Object),
           );
         },
         { timeout: 2000 },
@@ -692,7 +720,10 @@ describe('PledgeModal', () => {
 
       await waitFor(
         () => {
-          expect(toast.error).toHaveBeenCalledWith(translations.selectPledger);
+          expect(toast.error).toHaveBeenCalledWith(
+            translations.selectPledger,
+            expect.any(Object),
+          );
         },
         { timeout: 2000 },
       );
@@ -806,16 +837,54 @@ describe('PledgeModal', () => {
       // Verify the autocomplete is interactive (not readonly)
       expect(input).not.toHaveAttribute('readonly');
 
+      // Clear the selection first so the option appears in the list (since filterSelectedOptions is true)
+      await act(async () => {
+        const clearButton = within(autocomplete).queryByTitle('Clear');
+        if (clearButton) {
+          fireEvent.click(clearButton);
+        }
+      });
+
       // Verify the autocomplete can be focused and opened
       await act(async () => {
-        input.focus();
+        const openButton = within(autocomplete).getByTitle('Open');
+        fireEvent.click(openButton);
       });
 
       expect(input).toHaveFocus();
 
-      // The autocomplete should be connected to the onChange handler
-      // This is verified by the presence of the autocomplete and it being focusable
-      expect(screen.getByLabelText('Amount')).toBeInTheDocument();
+      // Select the first option (Harve Lance - admin user)
+      const options = screen.getAllByRole('option');
+      await act(async () => {
+        // Find the option with text 'Harve Lance' to be safe, or just first one
+        const harveOption =
+          options.find((o) => o.textContent?.includes('Harve Lance')) ||
+          options[0];
+        fireEvent.click(harveOption);
+      });
+
+      // Wait for selection to be applied
+      await waitFor(() => {
+        expect(input).toHaveValue('Harve Lance');
+      });
+
+      // Submit the form with selected pledger
+      fireEvent.change(screen.getByLabelText('Amount'), {
+        target: { value: '150' },
+      });
+
+      const form = screen.getByTestId('pledgeForm');
+      fireEvent.submit(form);
+
+      await waitFor(
+        () => {
+          expect(toast.success).toHaveBeenCalledWith(
+            translations.pledgeCreated,
+            expect.any(Object),
+          );
+        },
+        { timeout: 2000 },
+      );
     });
   });
 
@@ -901,7 +970,7 @@ describe('PledgeModal', () => {
       });
 
       const autocomplete = screen.getByTestId('pledgerSelect');
-      const input = within(autocomplete).getByRole('combobox');
+      within(autocomplete).getByRole('combobox');
 
       // Clear any existing selection first
       const clearButton = within(autocomplete).queryByLabelText('Clear');
@@ -913,8 +982,8 @@ describe('PledgeModal', () => {
 
       // Open the autocomplete
       await act(async () => {
-        input.focus();
-        fireEvent.mouseDown(input);
+        const openButton = within(autocomplete).getByTitle('Open');
+        fireEvent.click(openButton);
       });
 
       // Wait for options to be available

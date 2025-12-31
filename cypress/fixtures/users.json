@@ -1,17 +1,17 @@
 {
   "superAdmin": {
-    "email": "testsuperadmin@example.com",
-    "name": "Wilt Shepherd",
-    "password": "Pass@123"
+    "email": "administrator@email.com",
+    "name": "administrator",
+    "password": "password"
   },
   "admin": {
-    "email": "testadmin1@example.com",
-    "name": "Vyvyan Kerry",
-    "password": "Pass@123"
+    "email": "administrator@email.com",
+    "name": "administrator",
+    "password": "password"
   },
   "user": {
-    "email": "testuser1@example.com",
-    "name": "Harve Lance",
-    "password": "Pass@123"
+    "email": "administrator@email.com",
+    "name": "administrator",
+    "password": "password"
   }
 }

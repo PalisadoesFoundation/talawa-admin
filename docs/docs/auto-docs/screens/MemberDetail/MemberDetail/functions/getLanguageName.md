@@ -6,7 +6,7 @@
 
 > **getLanguageName**(`code`): `string`
 
-Defined in: [src/screens/MemberDetail/MemberDetail.tsx:777](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/MemberDetail.tsx#L777)
+Defined in: [src/screens/MemberDetail/MemberDetail.tsx:863](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/MemberDetail/MemberDetail.tsx#L863)
 
 ## Parameters
 

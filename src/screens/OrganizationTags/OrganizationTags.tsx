@@ -44,7 +44,7 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import IconComponent from 'components/IconComponent/IconComponent';
 import TableLoader from 'components/TableLoader/TableLoader';
 import type { InterfaceTagDataPG } from 'utils/interfaces';
@@ -116,7 +116,7 @@ function OrganizationTags(): JSX.Element {
     e.preventDefault();
 
     if (!tagName.trim()) {
-      toast.error(t('enterTagName'));
+      NotificationToast.error(t('enterTagName'));
       return;
     }
 
@@ -125,15 +125,15 @@ function OrganizationTags(): JSX.Element {
         variables: { name: tagName, organizationId: orgId },
       });
       if ((data as { createUserTag: unknown })?.createUserTag) {
-        toast.success(t('tagCreationSuccess'));
+        NotificationToast.success(t('tagCreationSuccess'));
         orgUserTagsRefetch();
         setTagName('');
         setCreateTagModalIsOpen(false);
       } else {
-        toast.error(t('tagCreationFailed'));
+        NotificationToast.error(t('tagCreationFailed'));
       }
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
     }
   };
 
@@ -141,7 +141,7 @@ function OrganizationTags(): JSX.Element {
     return (
       <div className={styles.errorContainer + ' bg-white rounded-4 my-3'}>
         <div className={styles.errorMessage}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded fontSize="large" className={styles.errorIcon} />
           <h6 className="fw-bold text-danger text-center">
             {t('errorLoadingTagsData')}
             <br />

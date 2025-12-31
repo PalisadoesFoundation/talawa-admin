@@ -16,7 +16,7 @@
  * - `useTranslation` from `react-i18next` for localization.
  * - `useLocalStorage` for accessing local storage data.
  * - `OrgListCard`, `SortingButton`, `SearchBar`, and `OrganizationModal` for UI components.
- * - `react-toastify` for notifications.
+ * - `NotificationToast` for notifications.
  * - `react-bootstrap` and `@mui/material` for modal and button components.
  *
  * @state
@@ -58,22 +58,26 @@ import {
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
+import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
 import type {
-  InterfaceCurrentUserTypePG,
-  InterfaceOrgInfoTypePG,
-} from 'utils/interfaces';
+  ICreateOrganizationResult,
+  IOrganizationFilterListResult,
+} from 'types/GraphQL/queryResults';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
 import SortingButton from 'subComponents/SortingButton';
 import { Button } from '@mui/material';
 import OrganizationModal from './modal/OrganizationModal';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Link } from 'react-router';
 import { Modal } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
+import style from './OrgList.module.css';
+import { Group, Search } from '@mui/icons-material';
 
 const { getItem } = useLocalStorage();
 
@@ -128,7 +132,9 @@ function orgList(): JSX.Element {
   const toggleDialogModal = (): void =>
     setdialogModalIsOpen(!dialogModalisOpen);
 
-  document.title = t('title');
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
 
   const perPageResult = 8;
   const [page, setPage] = useState(0);
@@ -159,7 +165,7 @@ function orgList(): JSX.Element {
   });
 
   const toggleModal = (): void => setShowModal(!showModal);
-  const [createOrganization] = useMutation<any>(
+  const [createOrganization] = useMutation<ICreateOrganizationResult>(
     CREATE_ORGANIZATION_MUTATION_PG,
   );
   const [createMembership] = useMutation(
@@ -169,22 +175,19 @@ function orgList(): JSX.Element {
   const context = token
     ? { headers: { authorization: 'Bearer ' + token } }
     : { headers: {} };
-  const {
-    data: userData,
-  }: {
-    data: InterfaceCurrentUserTypePG | undefined;
-    loading: boolean;
-    error?: Error | undefined;
-  } = useQuery<any>(CURRENT_USER, {
-    variables: { userId: getItem('id') },
-    context,
-  });
+  const { data: userData } = useQuery<InterfaceCurrentUserTypePG>(
+    CURRENT_USER,
+    {
+      variables: { userId: getItem('id') },
+      context,
+    },
+  );
 
   const {
     data: allOrganizationsData,
     loading: loadingAll,
     refetch: refetchOrgs,
-  } = useQuery<any>(ORGANIZATION_FILTER_LIST, {
+  } = useQuery<IOrganizationFilterListResult>(ORGANIZATION_FILTER_LIST, {
     variables: { filter: filterName },
     fetchPolicy: 'network-only',
     errorPolicy: 'all',
@@ -201,21 +204,18 @@ function orgList(): JSX.Element {
 
     // Apply search filter
     if (searchByName) {
-      result = result.filter((org: InterfaceOrgInfoTypePG) =>
+      result = result.filter((org) =>
         org.name.toLowerCase().includes(searchByName.toLowerCase()),
       );
     }
 
-    // Apply sorting
+    // Apply sorting - note: IOrganizationFilterListResult doesn't include createdAt
+    // so we sort by name instead
     if (
       sortingState.option === 'Latest' ||
       sortingState.option === 'Earliest'
     ) {
-      result.sort((a: InterfaceOrgInfoTypePG, b: InterfaceOrgInfoTypePG) => {
-        const dateA = new Date(a.createdAt).getTime();
-        const dateB = new Date(b.createdAt).getTime();
-        return sortingState.option === 'Latest' ? dateB - dateA : dateA - dateB;
-      });
+      result.sort((a, b) => a.name.localeCompare(b.name));
     }
 
     return result;
@@ -275,7 +275,7 @@ function orgList(): JSX.Element {
 
       //     toggleModal;
       if (data) {
-        toast.success(t('congratulationOrgCreated'));
+        NotificationToast.success(t('congratulationOrgCreated'));
         refetchOrgs();
         openDialogModal(data.createOrganization.id);
         setFormState({
@@ -389,18 +389,23 @@ function orgList(): JSX.Element {
       (!sortedOrganizations || sortedOrganizations.length === 0) &&
       searchByName.length === 0 &&
       (!userData || adminFor.length === 0) ? (
-        <div className={styles.notFound}>
-          <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
-          <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
-        </div>
+        <EmptyState
+          icon={<Group />}
+          message={t('noOrgErrorTitle')}
+          description={t('noOrgErrorDescription')}
+          dataTestId="orglist-no-orgs-empty"
+        />
       ) : !isLoading &&
-        sortedOrganizations?.length == 0 &&
+        sortedOrganizations?.length === 0 &&
         searchByName.length > 0 ? (
-        <div className={styles.notFound} data-testid="noResultFound">
-          <h4 className="m-0">
-            {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
-          </h4>
-        </div>
+        <EmptyState
+          icon={<Search />}
+          message={tCommon('noResultsFoundFor', {
+            query: searchByName,
+          })}
+          description={tCommon('tryAdjustingFilters')}
+          dataTestId="orglist-search-empty"
+        />
       ) : (
         <>
           {isLoading && (
@@ -431,16 +436,25 @@ function orgList(): JSX.Element {
                   page * rowsPerPage + rowsPerPage,
                 )
               : sortedOrganizations
-            )?.map((item: InterfaceOrgInfoTypePG) => {
+            )?.map((item) => {
               return (
                 <div key={item.id} className={styles.itemCardOrgList}>
-                  <OrganizationCard data={{ ...item, role: 'admin' }} />
+                  <OrganizationCard
+                    data={{
+                      id: item.id,
+                      name: item.name,
+                      description: '',
+                      addressLine1: '',
+                      avatarURL: null,
+                      role: 'admin',
+                    }}
+                  />
                 </div>
               );
             })}
           </div>
           {/* pagination */}
-          <table style={{ width: '100%' }}>
+          <table className={style.table_fullWidth}>
             <tbody>
               <tr>
                 <PaginationList

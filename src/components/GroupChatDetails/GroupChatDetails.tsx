@@ -46,6 +46,7 @@ import { Paper, TableBody } from '@mui/material';
 import React, { useRef, useState, useEffect } from 'react';
 import { Button, ListGroup, Modal, Dropdown } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
+import groupChatStyles from './GroupChatDetails.module.css';
 import { useMutation, useQuery } from '@apollo/client/react';
 import {
   UPDATE_CHAT,
@@ -55,11 +56,10 @@ import {
   DELETE_CHAT_MEMBERSHIP,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import Table from '@mui/material/Table';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { styled } from '@mui/material/styles';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
 import { Add } from '@mui/icons-material';
@@ -75,18 +75,6 @@ import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: ['#31bb6b', '!important'],
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: { fontSize: 14 },
-}));
-
-const StyledTableRow = styled(TableRow)(() => ({
-  '&:last-child td, &:last-child th': { border: 0 },
-}));
-
 export default function groupChatDetails({
   toggleGroupChatDetailsModal,
   groupChatDetailsModalisOpen,
@@ -94,6 +82,7 @@ export default function groupChatDetails({
   chatRefetch,
 }: InterfaceGroupChatDetailsProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
+  const { t: tCommon } = useTranslation('common');
 
   //storage
 
@@ -118,7 +107,7 @@ export default function groupChatDetails({
         <Modal.Header closeButton data-testid="groupChatDetails">
           <Modal.Title>{t('Error')}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>User not found</Modal.Body>
+        <Modal.Body>{t('userNotFound')}</Modal.Body>
       </Modal>
     );
   }
@@ -157,9 +146,9 @@ export default function groupChatDetails({
         },
       });
       await chatRefetch();
-      toast.success('Role updated successfully');
+      toast.success(t('roleUpdatedSuccessfully'));
     } catch (error) {
-      toast.error('Failed to update role');
+      toast.error(t('failedToUpdateRole'));
       console.error(error);
     }
   };
@@ -175,9 +164,9 @@ export default function groupChatDetails({
         },
       });
       await chatRefetch();
-      toast.success('Member removed successfully');
+      toast.success(t('memberRemovedSuccessfully'));
     } catch (error) {
-      toast.error('Failed to remove member');
+      toast.error(t('failedToRemoveMember'));
       console.error(error);
     }
   };
@@ -267,10 +256,10 @@ export default function groupChatDetails({
           },
         });
         await chatRefetch({ input: { id: chat.id } });
-        toast.success('Chat image updated successfully');
+        toast.success(t('chatImageUpdatedSuccessfully'));
         setSelectedImage('');
       } catch (error) {
-        toast.error('Failed to update chat image');
+        toast.error(t('failedToUpdateChatImage'));
         console.error(error);
         setSelectedImage('');
       }
@@ -294,6 +283,7 @@ export default function groupChatDetails({
               <Button
                 variant="outline-danger"
                 size="sm"
+                aria-label={t('deleteChat')}
                 onClick={async () => {
                   if (
                     window.confirm('Are you sure you want to delete this chat?')
@@ -302,11 +292,11 @@ export default function groupChatDetails({
                       await deleteChat({
                         variables: { input: { id: chat.id } },
                       });
-                      toast.success('Chat deleted successfully');
+                      toast.success(t('chatDeletedSuccessfully'));
                       toggleGroupChatDetailsModal();
                       // Maybe navigate away or refetch chats
                     } catch (error) {
-                      toast.error('Failed to delete chat');
+                      toast.error(t('failedToDeleteChat'));
                       console.error(error);
                     }
                   }
@@ -322,7 +312,7 @@ export default function groupChatDetails({
             type="file"
             accept="image/*"
             ref={fileInputRef}
-            style={{ display: 'none' }} // Hide the input
+            className={groupChatStyles.hiddenInput}
             onChange={handleImageChange}
             data-testid="fileInput"
           />
@@ -364,9 +354,9 @@ export default function groupChatDetails({
                       });
                       setEditChatTitle(false);
                       await chatRefetch({ input: { id: chat.id } });
-                      toast.success('Chat name updated successfully');
+                      toast.success(t('chatNameUpdatedSuccessfully'));
                     } catch (error) {
-                      toast.error('Failed to update chat name');
+                      toast.error(t('failedToUpdateChatName'));
                       console.error(error);
                     }
                   }}
@@ -434,8 +424,7 @@ export default function groupChatDetails({
                         />
                         <span className="ms-2">{user.name}</span>
                         <span
-                          className="badge bg-success text-dark ms-2"
-                          style={{ fontSize: '0.75rem' }}
+                          className={`badge bg-success text-dark ms-2 ${groupChatStyles.roleBadge}`}
                         >
                           {role}
                         </span>
@@ -445,14 +434,7 @@ export default function groupChatDetails({
                           <Dropdown.Toggle
                             variant="link"
                             id={`dropdown-${user.id}`}
-                            style={{
-                              color: 'black',
-                              border: 'none',
-                              padding: '0',
-                              background: 'none',
-                              boxShadow: 'none',
-                            }}
-                            className="btn-sm"
+                            className={`btn-sm ${groupChatStyles.dropdownToggle}`}
                           >
                             <BsThreeDotsVertical />
                           </Dropdown.Toggle>
@@ -468,12 +450,12 @@ export default function groupChatDetails({
                               }
                             >
                               {role === 'administrator'
-                                ? 'Demote to Regular'
-                                : 'Promote to Admin'}
+                                ? t('demoteToRegular')
+                                : t('promoteToAdmin')}
                             </Dropdown.Item>
                             {canRemove && (
                               <Dropdown.Item
-                                style={{ color: 'red' }}
+                                className={groupChatStyles.removeItem}
                                 onClick={() => {
                                   if (
                                     window.confirm(
@@ -484,7 +466,7 @@ export default function groupChatDetails({
                                   }
                                 }}
                               >
-                                Remove
+                                {t('remove')}
                               </Dropdown.Item>
                             )}
                           </Dropdown.Menu>
@@ -505,7 +487,7 @@ export default function groupChatDetails({
         contentClassName={styles.modalContent}
       >
         <Modal.Header closeButton data-testid="pluginNotificationHeader">
-          <Modal.Title>{'Chat'}</Modal.Title>
+          <Modal.Title>{t('chat')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {allUsersLoading ? (
@@ -516,7 +498,7 @@ export default function groupChatDetails({
             <>
               <div className={styles.input}>
                 <SearchBar
-                  placeholder="searchFullName"
+                  placeholder={t('searchFullName')}
                   value={userName}
                   onChange={(value) => {
                     setUserName(value);
@@ -532,16 +514,29 @@ export default function groupChatDetails({
                   }}
                   inputTestId="searchUser"
                   buttonTestId="searchBtn"
+                  clearButtonAriaLabel={tCommon('clear')}
                 />
               </div>
 
               <TableContainer className={styles.userData} component={Paper}>
-                <Table aria-label="customized table">
+                <Table aria-label={t('customizedTable')}>
                   <TableHead>
                     <TableRow>
-                      <StyledTableCell>#</StyledTableCell>
-                      <StyledTableCell align="center">{'user'}</StyledTableCell>
-                      <StyledTableCell align="center">{'Chat'}</StyledTableCell>
+                      <TableCell className={groupChatStyles.tableHeader}>
+                        #
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        className={groupChatStyles.tableHeader}
+                      >
+                        {t('user')}
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        className={groupChatStyles.tableHeader}
+                      >
+                        {t('chatAction')}
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody data-testid="userList">
@@ -578,19 +573,26 @@ export default function groupChatDetails({
                             },
                             index: number,
                           ) => (
-                            <StyledTableRow
-                              data-testid="user"
-                              key={userDetails.id}
-                            >
-                              <StyledTableCell component="th" scope="row">
+                            <TableRow key={userDetails.id} data-testid="user">
+                              <TableCell
+                                component="th"
+                                scope="row"
+                                className={groupChatStyles.tableBody}
+                              >
                                 {index + 1}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
+                              </TableCell>
+                              <TableCell
+                                align="center"
+                                className={groupChatStyles.tableBody}
+                              >
                                 {userDetails.name}
                                 <br />
                                 {userDetails.role || 'Member'}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
+                              </TableCell>
+                              <TableCell
+                                align="center"
+                                className={groupChatStyles.tableBody}
+                              >
                                 <Button
                                   onClick={async () => {
                                     await addUserToGroupChat(userDetails.id);
@@ -601,8 +603,8 @@ export default function groupChatDetails({
                                 >
                                   {t('add')}
                                 </Button>
-                              </StyledTableCell>
-                            </StyledTableRow>
+                              </TableCell>
+                            </TableRow>
                           ),
                         )}
                   </TableBody>

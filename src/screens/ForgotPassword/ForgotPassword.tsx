@@ -44,7 +44,7 @@ import { useMutation } from '@apollo/client/react';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 import {
   FORGOT_PASSWORD_MUTATION,
@@ -60,6 +60,10 @@ import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
+import type {
+  IGenerateOtpResult,
+  IForgotPasswordResult,
+} from 'types/GraphQL/queryResults';
 
 const ForgotPassword = (): JSX.Element => {
   // Translation hook for internationalization
@@ -85,11 +89,11 @@ const ForgotPassword = (): JSX.Element => {
   });
 
   // GraphQL mutations
-  const [otp, { loading: otpLoading }] = useMutation<any>(
+  const [otp, { loading: otpLoading }] = useMutation<IGenerateOtpResult>(
     GENERATE_OTP_MUTATION,
   );
-  const [sendForGotPasswordMail, { loading: forgotPasswordLoading, data }] =
-    useMutation<any>(FORGOT_PASSWORD_MUTATION);
+  const [sendForGotPasswordMail, { loading: forgotPasswordLoading }] =
+    useMutation<IForgotPasswordResult>(FORGOT_PASSWORD_MUTATION);
 
   // Check if the user is already logged in
   const isLoggedIn = getItem('IsLoggedIn');
@@ -113,16 +117,18 @@ const ForgotPassword = (): JSX.Element => {
     try {
       const { data } = await otp({ variables: { email: registeredEmail } });
 
-      setItem('otpToken', data.otp.otpToken);
-      toast.success(t('OTPsent'));
+      if (data?.otp) {
+        setItem('otpToken', data.otp.otpToken);
+      }
+      NotificationToast.success(t('OTPsent'));
       setShowEnterEmail(false);
     } catch (error: unknown) {
       if ((error as Error).message === 'User not found') {
-        toast.warn(tErrors('emailNotRegistered'));
+        NotificationToast.warning(tErrors('emailNotRegistered'));
       } else if ((error as Error).message === 'Failed to fetch') {
-        toast.error(tErrors('talawaApiUnavailable'));
+        NotificationToast.error(tErrors('talawaApiUnavailable'));
       } else {
-        toast.error(tErrors('errorSendingMail'));
+        NotificationToast.error(tErrors('errorSendingMail'));
       }
     }
   };
@@ -136,10 +142,10 @@ const ForgotPassword = (): JSX.Element => {
     e: ChangeEvent<HTMLFormElement>,
   ): Promise<void> => {
     e.preventDefault();
-    const { userOtp, newPassword, confirmNewPassword } = forgotPassFormData;
+    const { newPassword, confirmNewPassword } = forgotPassFormData;
 
     if (newPassword !== confirmNewPassword) {
-      toast.error(t('passwordMismatches') as string);
+      NotificationToast.error(t('passwordMismatches'));
       return;
     }
 
@@ -159,7 +165,7 @@ const ForgotPassword = (): JSX.Element => {
       });
 
       if (data) {
-        toast.success(t('passwordChanges') as string);
+        NotificationToast.success(t('passwordChanges'));
         setShowEnterEmail(true);
         setForgotPassFormData({
           userOtp: '',
@@ -293,7 +299,7 @@ const ForgotPassword = (): JSX.Element => {
                 >
                   <ArrowRightAlt
                     fontSize="medium"
-                    style={{ transform: 'rotate(180deg)' }}
+                    sx={{ transform: 'rotate(180deg)' }}
                   />
                   {t('backToLogin')}
                 </Link>

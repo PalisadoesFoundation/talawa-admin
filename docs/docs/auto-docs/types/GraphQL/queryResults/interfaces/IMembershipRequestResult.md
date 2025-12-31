@@ -4,7 +4,7 @@
 
 # Interface: IMembershipRequestResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:89](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L89)
+Defined in: [src/types/GraphQL/queryResults.ts:91](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L91)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:89](https://github.com/Palisadoes
 
 > **organization**: `object`
 
-Defined in: [src/types/GraphQL/queryResults.ts:90](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L90)
+Defined in: [src/types/GraphQL/queryResults.ts:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L92)
 
 #### membershipRequests
 

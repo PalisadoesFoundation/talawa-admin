@@ -4,7 +4,7 @@
 
 # Interface: InterfaceVolunteerMembership
 
-Defined in: [src/utils/interfaces.ts:2691](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2691)
+Defined in: [src/utils/interfaces.ts:2692](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2692)
 
 InterfaceVolunteerMembership
 
@@ -18,7 +18,7 @@ Defines the structure for volunteer membership information.
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:2694](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2694)
+Defined in: [src/utils/interfaces.ts:2695](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2695)
 
 The creation date of the volunteer membership record.
 
@@ -28,7 +28,7 @@ The creation date of the volunteer membership record.
 
 > **createdBy**: `object`
 
-Defined in: [src/utils/interfaces.ts:2720](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2720)
+Defined in: [src/utils/interfaces.ts:2721](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2721)
 
 #### id
 
@@ -44,7 +44,7 @@ Defined in: [src/utils/interfaces.ts:2720](https://github.com/PalisadoesFoundati
 
 > **event**: `object`
 
-Defined in: [src/utils/interfaces.ts:2696](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2696)
+Defined in: [src/utils/interfaces.ts:2697](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2697)
 
 The event associated with the volunteer membership.
 
@@ -78,7 +78,7 @@ The event associated with the volunteer membership.
 
 > `optional` **group**: `object`
 
-Defined in: [src/utils/interfaces.ts:2716](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2716)
+Defined in: [src/utils/interfaces.ts:2717](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2717)
 
 The group associated with the membership.
 
@@ -96,7 +96,7 @@ The group associated with the membership.
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:2692](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2692)
+Defined in: [src/utils/interfaces.ts:2693](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2693)
 
 ***
 
@@ -104,7 +104,7 @@ Defined in: [src/utils/interfaces.ts:2692](https://github.com/PalisadoesFoundati
 
 > **status**: `string`
 
-Defined in: [src/utils/interfaces.ts:2693](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2693)
+Defined in: [src/utils/interfaces.ts:2694](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2694)
 
 The status of the volunteer membership.
 
@@ -114,7 +114,7 @@ The status of the volunteer membership.
 
 > **updatedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:2695](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2695)
+Defined in: [src/utils/interfaces.ts:2696](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2696)
 
 ***
 
@@ -122,7 +122,7 @@ Defined in: [src/utils/interfaces.ts:2695](https://github.com/PalisadoesFoundati
 
 > **updatedBy**: `object`
 
-Defined in: [src/utils/interfaces.ts:2724](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2724)
+Defined in: [src/utils/interfaces.ts:2725](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2725)
 
 #### id
 
@@ -138,7 +138,7 @@ Defined in: [src/utils/interfaces.ts:2724](https://github.com/PalisadoesFoundati
 
 > **volunteer**: `object`
 
-Defined in: [src/utils/interfaces.ts:2705](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2705)
+Defined in: [src/utils/interfaces.ts:2706](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2706)
 
 The volunteer associated with the membership.
 

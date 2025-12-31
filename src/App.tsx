@@ -9,15 +9,18 @@ import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import LoginPage from 'screens/LoginPage/LoginPage';
 import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
 import { getPluginManager } from 'plugin/manager';
-import { discoverAndRegisterAllPlugins } from 'plugin/registry';
 import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScreen';
 import Loader from 'components/Loader/Loader';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
+import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
+import { useTranslation } from 'react-i18next';
 
 const OrganizationScreen = lazy(
   () => import('components/OrganizationScreen/OrganizationScreen'),
 );
+const PostsPage = lazy(() => import('shared-components/posts/posts'));
+
 const SuperAdminScreen = lazy(
   () => import('components/SuperAdminScreen/SuperAdminScreen'),
 );
@@ -33,7 +36,6 @@ const OrgContribution = lazy(
   () => import('screens/OrgContribution/OrgContribution'),
 );
 const OrgList = lazy(() => import('screens/OrgList/OrgList'));
-const OrgPost = lazy(() => import('screens/OrgPost/OrgPost'));
 const OrgSettings = lazy(() => import('screens/OrgSettings/OrgSettings'));
 
 const OrganizationDashboard = lazy(
@@ -76,7 +78,6 @@ const Transactions = lazy(
   () => import('screens/UserPortal/Transactions/Transactions'),
 );
 const Events = lazy(() => import('screens/UserPortal/Events/Events'));
-const Posts = lazy(() => import('screens/UserPortal/Posts/Posts'));
 const Organizations = lazy(
   () => import('screens/UserPortal/Organizations/Organizations'),
 );
@@ -120,8 +121,24 @@ const { setItem } = useLocalStorage();
  * @returns  The rendered routes and components of the application.
  */
 
+interface ICurrentUserData {
+  currentUser?: {
+    id: string;
+    name: string;
+    emailAddress: string;
+    appUserProfile?: {
+      adminFor?: Array<{ _id: string }>;
+    };
+  };
+}
+
 function App(): React.ReactElement {
-  const { data, loading } = useQuery<any>(CURRENT_USER);
+  const { data, loading } = useQuery<ICurrentUserData>(CURRENT_USER, {
+    errorPolicy: 'all',
+  });
+
+  const { t } = useTranslation('common');
+
   const apolloClient = useApolloClient();
 
   // Get user permissions and admin status (memoized to prevent infinite loops)
@@ -175,6 +192,7 @@ function App(): React.ReactElement {
   return (
     <>
       <Suspense fallback={<Loader />}>
+        <NotificationToastContainer />
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/register" element={<LoginPage />} />
@@ -195,7 +213,7 @@ function App(): React.ReactElement {
                   element={
                     <PluginRouteRenderer
                       route={route}
-                      fallback={<div>Loading admin plugin...</div>}
+                      fallback={<div>{t('loadingAdminPlugin')}</div>}
                     />
                   }
                 />
@@ -244,7 +262,7 @@ function App(): React.ReactElement {
                 element={<FundCampaignPledge />}
               />
               <Route path="/orgcontribution" element={<OrgContribution />} />
-              <Route path="/orgpost/:orgId" element={<OrgPost />} />
+              <Route path="/orgpost/:orgId" element={<PostsPage />} />
               <Route path="/orgsetting/:orgId" element={<OrgSettings />} />
               <Route path="/orgads/:orgId" element={<Advertisements />} />
               <Route path="/blockuser/:orgId" element={<BlockUser />} />
@@ -262,7 +280,7 @@ function App(): React.ReactElement {
                   element={
                     <PluginRouteRenderer
                       route={route}
-                      fallback={<div>Loading admin plugin...</div>}
+                      fallback={<div>{t('loadingAdminPlugin')}</div>}
                     />
                   }
                 />
@@ -288,7 +306,7 @@ function App(): React.ReactElement {
                   element={
                     <PluginRouteRenderer
                       route={route}
-                      fallback={<div>Loading user plugin...</div>}
+                      fallback={<div>{t('loadingUserPlugin')}</div>}
                     />
                   }
                 />
@@ -297,7 +315,7 @@ function App(): React.ReactElement {
             <Route element={<UserScreen />}>
               <Route path="/user/chat/:orgId" element={<Chat />} />
               <Route path="/user/organizations" element={<Organizations />} />
-              <Route path="/user/organization/:orgId" element={<Posts />} />
+              <Route path="/user/organization/:orgId" element={<PostsPage />} />
               <Route path="/user/people/:orgId" element={<People />} />
               <Route path="/user/donate/:orgId" element={<Donate />} />
               <Route
@@ -324,7 +342,7 @@ function App(): React.ReactElement {
                   element={
                     <PluginRouteRenderer
                       route={route}
-                      fallback={<div>Loading user plugin...</div>}
+                      fallback={<div>{t('loadingUserPlugin')}</div>}
                     />
                   }
                 />

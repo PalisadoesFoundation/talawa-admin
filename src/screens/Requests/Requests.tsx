@@ -79,13 +79,18 @@ import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import styles from '../../style/app-fixed.module.css';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useParams } from 'react-router';
-import { Stack } from '@mui/material';
-import PageHeader from 'shared-components/Navbar/Navbar';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import {
   dataGridStyle,
   PAGE_SIZE,
   ROW_HEIGHT,
 } from '../../types/ReportingTable/utils';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
+import { Group, Search } from '@mui/icons-material';
+import type {
+  IMembershipRequestResult,
+  IOrganizationListResult,
+} from 'types/GraphQL/queryResults';
 
 interface InterfaceRequestsListItem {
   membershipRequestId: string;
@@ -121,9 +126,8 @@ const Requests = (): JSX.Element => {
   const organizationId = orgId;
 
   // Query to fetch membership requests
-  const { data, loading, fetchMore, refetch } = useQuery<any>(
-    MEMBERSHIP_REQUEST_PG,
-    {
+  const { data, loading, fetchMore, refetch } =
+    useQuery<IMembershipRequestResult>(MEMBERSHIP_REQUEST_PG, {
       variables: {
         input: {
           id: organizationId,
@@ -133,10 +137,10 @@ const Requests = (): JSX.Element => {
         name_contains: '',
       },
       notifyOnNetworkStatusChange: true,
-    },
-  );
+    });
 
-  const { data: orgsData } = useQuery<any>(ORGANIZATION_LIST);
+  const { data: orgsData } =
+    useQuery<IOrganizationListResult>(ORGANIZATION_LIST);
   const [displayedRequests, setDisplayedRequests] = useState<
     InterfaceRequestsListItem[]
   >([]);
@@ -257,7 +261,10 @@ const Requests = (): JSX.Element => {
         skip: currentLength,
         name_contains: searchByName,
       },
-      updateQuery: (prev, { fetchMoreResult }) => {
+      updateQuery: (
+        prev: IMembershipRequestResult,
+        { fetchMoreResult }: { fetchMoreResult?: IMembershipRequestResult },
+      ) => {
         setIsLoadingMore(false);
 
         if (!fetchMoreResult?.organization?.membershipRequests) {
@@ -456,13 +463,6 @@ const Requests = (): JSX.Element => {
     pageSizeOptions: [PAGE_SIZE],
     loading: isLoading || isLoadingMore,
     hideFooter: true,
-    slots: {
-      noRowsOverlay: () => (
-        <Stack height="100%" alignItems="center" justifyContent="center">
-          {t('notFound')}
-        </Stack>
-      ),
-    },
     getRowClassName: () => `${styles.rowBackground}`,
     isRowSelectable: () => false,
     disableColumnMenu: true,
@@ -510,40 +510,42 @@ const Requests = (): JSX.Element => {
   };
 
   return (
-    <>
-      {/* Buttons Container */}
-      <div
-        className={styles.btnsContainer + ' gap-4 flex-wrap'}
-        data-testid="testComp"
-      >
-        <PageHeader
-          search={{
-            placeholder: t('searchRequests'),
-            onSearch: handleSearch,
-            inputTestId: 'searchByName',
-            buttonTestId: 'searchButton',
-          }}
-        />
-      </div>
+    <div data-testid="testComp">
+      <AdminSearchFilterBar
+        searchPlaceholder={t('searchRequests')}
+        searchValue={searchByName}
+        onSearchChange={handleSearch}
+        searchInputTestId="searchByName"
+        searchButtonTestId="searchButton"
+        hasDropdowns={false}
+      />
 
       {!isLoading && orgsData?.organizations?.length === 0 ? (
-        <div className={styles.notFound}>
-          <h3 className="m-0">{t('noOrgErrorTitle')}</h3>
-          <h6 className="text-secondary">{t('noOrgErrorDescription')}</h6>
-        </div>
+        <EmptyState
+          icon={<Group />}
+          message={t('noOrgErrorTitle')}
+          description={t('noOrgErrorDescription')}
+          dataTestId="requests-no-orgs-empty"
+        />
       ) : !isLoading &&
         data &&
         displayedRequests.length === 0 &&
         searchByName.length > 0 ? (
-        <div className={styles.notFound}>
-          <h4 className="m-0">
-            {tCommon('noResultsFoundFor')} &quot;{searchByName}&quot;
-          </h4>
-        </div>
+        <EmptyState
+          icon={<Search />}
+          message={tCommon('noResultsFoundFor', {
+            query: searchByName,
+          })}
+          description={tCommon('tryAdjustingFilters')}
+          dataTestId="requests-search-empty"
+        />
       ) : !isLoading && data && displayedRequests.length === 0 ? (
-        <div className={styles.notFound}>
-          <h4>{t('noRequestsFound')}</h4>
-        </div>
+        <EmptyState
+          icon={<Group />}
+          message={t('noRequestsFound')}
+          description={t('newMembersWillAppearHere')}
+          dataTestId="requests-no-requests-empty"
+        />
       ) : (
         <div className={styles.listBox}>
           {isLoading ? (
@@ -573,7 +575,7 @@ const Requests = (): JSX.Element => {
           )}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

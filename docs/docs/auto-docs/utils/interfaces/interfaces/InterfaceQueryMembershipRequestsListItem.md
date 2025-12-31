@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryMembershipRequestsListItem
 
-Defined in: [src/utils/interfaces.ts:2378](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2378)
+Defined in: [src/utils/interfaces.ts:2379](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2379)
 
 InterfaceQueryMembershipRequestsListItem
 
@@ -18,7 +18,7 @@ Defines the structure for a membership requests list item returned from a query.
 
 > **organizations**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:2379](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2379)
+Defined in: [src/utils/interfaces.ts:2380](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2380)
 
 An array of organization objects.
 

@@ -13,7 +13,12 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import Leaderboard from './Leaderboard';
 import type { ApolloLink } from '@apollo/client';
-import { MOCKS, EMPTY_MOCKS, ERROR_MOCKS } from './Leaderboard.mocks';
+import {
+  MOCKS,
+  EMPTY_MOCKS,
+  ERROR_MOCKS,
+  SEARCH_EMPTY_MOCKS,
+} from './Leaderboard.mocks';
 import { vi } from 'vitest';
 
 /**
@@ -47,7 +52,7 @@ const t = {
   ...JSON.parse(JSON.stringify(i18n.getDataByLanguage('en')?.errors ?? {})),
 };
 
-const debounceWait = async (ms = 300): Promise<void> => {
+const debounceWait = async (ms = 400): Promise<void> => {
   await act(() => {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);
@@ -257,13 +262,18 @@ describe('Testing Leaderboard Screen', () => {
     routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
+    // Wait for component to finish loading
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
 
-    // Search by name on press of ENTER
+    const searchInput = screen.getByTestId('searchBy');
+    const searchButton = screen.getByTestId('searchBtn');
+
+    // Search by name
     await userEvent.type(searchInput, 'T');
     await debounceWait();
-    fireEvent.click(screen.getByTestId('searchBtn'));
+    await userEvent.click(searchButton);
 
     await waitFor(() => {
       const userName = screen.getAllByTestId('userName');
@@ -286,14 +296,77 @@ describe('Testing Leaderboard Screen', () => {
     });
   });
 
+  it('OnKeyDown Enter key on Member navigate to Member Screen', async () => {
+    routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
+    renderLeaderboard(link1);
+
+    const searchInput = await screen.findByTestId('searchBy');
+    expect(searchInput).toBeInTheDocument();
+
+    const userName = screen.getAllByTestId('userName');
+    userName[0].focus();
+    fireEvent.keyDown(userName[0], { key: 'Enter' });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('memberScreen')).toBeInTheDocument();
+    });
+  });
+
+  it('OnKeyDown Space key on Member navigate to Member Screen', async () => {
+    routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
+    renderLeaderboard(link1);
+
+    const searchInput = await screen.findByTestId('searchBy');
+    expect(searchInput).toBeInTheDocument();
+
+    const userName = screen.getAllByTestId('userName');
+    userName[0].focus();
+    fireEvent.keyDown(userName[0], { key: ' ' });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('memberScreen')).toBeInTheDocument();
+    });
+  });
+
   it('should render Leaderboard screen with No Volunteers', async () => {
     routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link3);
 
     await waitFor(() => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByTestId('leaderboard-empty-state')).toBeInTheDocument();
       expect(screen.getByText(t.noVolunteers)).toBeInTheDocument();
     });
+  });
+
+  it('shows empty state when search yields no results', async () => {
+    routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
+    const searchLink = new StaticMockLink(SEARCH_EMPTY_MOCKS);
+    renderLeaderboard(searchLink);
+
+    // Wait for initial data to load
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByTestId('searchBtn')).toBeInTheDocument();
+    });
+
+    // Type search term and trigger search
+    const input = screen.getByTestId('searchBy');
+    const searchButton = screen.getByTestId('searchBtn');
+    await userEvent.clear(input);
+    await userEvent.type(input, 'ZZZDoesNotExist');
+    await debounceWait();
+    await userEvent.click(searchButton);
+
+    // Wait for debounced search to update and query to refetch
+    await waitFor(
+      () => {
+        expect(
+          screen.getByTestId('leaderboard-empty-state'),
+        ).toBeInTheDocument();
+      },
+      { timeout: 2000 },
+    );
   });
 
   it('Error while fetching volunteer data', async () => {

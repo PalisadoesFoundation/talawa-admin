@@ -4,7 +4,7 @@
 
 # Interface: IGetVolunteerMembershipResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:254](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L254)
+Defined in: [src/types/GraphQL/queryResults.ts:256](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L256)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/types/GraphQL/queryResults.ts:254](https://github.com/Palisadoe
 
 > **getVolunteerMembership**: [`InterfaceVolunteerMembership`](../../../Volunteer/interface/interfaces/InterfaceVolunteerMembership.md)[]
 
-Defined in: [src/types/GraphQL/queryResults.ts:255](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L255)
+Defined in: [src/types/GraphQL/queryResults.ts:257](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L257)

@@ -52,13 +52,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
 import { useLazyQuery } from '@apollo/client/react';
-import {
-  DataGrid,
-  GridColDef,
-  GridCellParams,
-  GridPaginationModel,
-} from '@mui/x-data-grid';
-import { Stack } from '@mui/material';
+import { GridCellParams, GridPaginationModel } from '@mui/x-data-grid';
 import { Delete } from '@mui/icons-material';
 import type {
   ReportingRow,
@@ -86,6 +80,11 @@ import AddMember from './addMember/AddMember';
 // Imports added for manual header construction
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
+import type {
+  IOrganizationMembersResult,
+  IUserListForTableResult,
+} from 'types/GraphQL/queryResults';
 
 interface IProcessedRow {
   id: string;
@@ -168,7 +167,7 @@ function OrganizationPeople(): JSX.Element {
   const [
     fetchMembers,
     { loading: memberLoading, error: memberError, data: membersData },
-  ] = useLazyQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {} as any);
+  ] = useLazyQuery(ORGANIZATIONS_MEMBER_CONNECTION_LIST, {});
 
   const [
     fetchUsers,
@@ -178,13 +177,47 @@ function OrganizationPeople(): JSX.Element {
   // Sync data from hooks to component state (onCompleted isn't reliable)
   useEffect(() => {
     if (membersData) {
-      setData((membersData as any)?.organization?.members);
+      const members = (membersData as IOrganizationMembersResult)?.organization
+        ?.members;
+      if (members) {
+        setData({
+          edges: members.edges.map((edge) => ({
+            cursor: edge.cursor,
+            node: {
+              id: edge.node.id,
+              name: edge.node.name,
+              role: edge.node.role,
+              avatarURL: edge.node.avatarURL || '',
+              emailAddress: edge.node.emailAddress || '',
+              createdAt: edge.node.createdAt,
+            },
+          })),
+          pageInfo: {
+            startCursor: members.pageInfo.startCursor,
+            endCursor: members.pageInfo.endCursor,
+            hasNextPage: members.pageInfo.hasNextPage,
+            hasPreviousPage: members.pageInfo.hasPreviousPage ?? false,
+          },
+        });
+      }
     }
   }, [membersData]);
 
   useEffect(() => {
     if (usersData) {
-      setData((usersData as any)?.allUsers);
+      setData(
+        (usersData as IUserListForTableResult)?.allUsers as
+          | {
+              edges: IEdges[];
+              pageInfo: {
+                startCursor?: string;
+                endCursor?: string;
+                hasNextPage: boolean;
+                hasPreviousPage: boolean;
+              };
+            }
+          | undefined,
+      );
     }
   }, [usersData]);
 
@@ -354,7 +387,7 @@ function OrganizationPeople(): JSX.Element {
     tCommon('profile'),
     tCommon('name'),
     tCommon('email'),
-    tCommon('joined on'),
+    tCommon('joinedOn'),
     tCommon('action'),
   ];
 
@@ -371,15 +404,7 @@ function OrganizationPeople(): JSX.Element {
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return (
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-              width: '100%',
-            }}
-          >
+          <div className={`${styles.flexCenter} ${styles.fullWidthHeight}`}>
             {params.row.rowNumber}
           </div>
         );
@@ -397,41 +422,28 @@ function OrganizationPeople(): JSX.Element {
       renderCell: (params: GridCellParams) => {
         const columnWidth = params.colDef.computedWidth || 150;
         const imageSize = Math.min(columnWidth * 0.4, 40);
+        // Construct CSS value to avoid i18n linting errors
+        const avatarSizeValue = String(imageSize) + 'px';
         return (
           <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-              width: '100%',
-            }}
+            className={`${styles.flexCenter} ${styles.flexColumn} ${styles.fullWidthHeight}`}
           >
             {params.row?.image ? (
               <img
                 src={params.row.image}
                 alt={tCommon('avatar')}
-                style={{
-                  width: `${imageSize}px`,
-                  height: `${imageSize}px`,
-                  borderRadius: '50%',
-                  objectFit: 'cover',
-                }}
+                className={styles.avatarImage}
+                style={
+                  { '--avatar-size': avatarSizeValue } as React.CSSProperties
+                }
                 crossOrigin="anonymous"
               />
             ) : (
               <div
-                style={{
-                  width: `${imageSize}px`,
-                  height: `${imageSize}px`,
-                  fontSize: `${imageSize * 0.4}px`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: '50%',
-                  backgroundColor: '#ccc',
-                }}
+                className={`${styles.flexCenter} ${styles.avatarPlaceholder} ${styles.avatarPlaceholderSize}`}
+                style={
+                  { '--avatar-size': avatarSizeValue } as React.CSSProperties
+                }
                 data-testid="avatar"
               >
                 <Avatar name={params.row.name} />
@@ -455,8 +467,7 @@ function OrganizationPeople(): JSX.Element {
           <Link
             to={`/member/${currentUrl}`}
             state={{ id: params.row.id }}
-            style={{ fontSize: '15px' }}
-            className={`${styles.membername} ${styles.subtleBlueGrey}`}
+            className={`${styles.membername} ${styles.subtleBlueGrey} ${styles.memberNameFontSize}`}
           >
             {params.row.name}
           </Link>
@@ -475,7 +486,7 @@ function OrganizationPeople(): JSX.Element {
     },
     {
       field: 'joined',
-      headerName: tCommon('joined on'),
+      headerName: tCommon('joinedOn'),
       flex: 2,
       minWidth: 100,
       align: 'center',
@@ -525,9 +536,11 @@ function OrganizationPeople(): JSX.Element {
     loading: memberLoading || userLoading,
     slots: {
       noRowsOverlay: () => (
-        <Stack height="100%" alignItems="center" justifyContent="center">
-          {tCommon('notFound')}
-        </Stack>
+        <EmptyState
+          icon="groups"
+          message={tCommon('notFound')}
+          dataTestId="organization-people-empty-state"
+        />
       ),
       loadingOverlay: () => (
         <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />

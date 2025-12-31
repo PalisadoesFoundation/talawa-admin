@@ -28,11 +28,17 @@ interface InterfaceGraphQLErrorWithCode extends Error {
   }>;
 }
 
+// Mock utils/i18n to use the test i18n instance for NotificationToast
+vi.mock('utils/i18n', () => ({
+  default: i18nForTest,
+}));
+
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
     error: vi.fn(),
     warn: vi.fn(),
+    warning: vi.fn(),
   },
 }));
 
@@ -178,6 +184,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await act(async () => {
       await i18nForTest.changeLanguage('en');
     });
+
     vi.clearAllMocks();
   });
 
@@ -531,7 +538,10 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
-    expect(toast.warn).toHaveBeenCalledWith('Please sign in to like comments.');
+    expect(toast.warning).toHaveBeenCalledWith(
+      'Please sign in to like comments.',
+      expect.any(Object),
+    );
   });
 
   it('should handle specific GraphQL error codes correctly', async () => {
@@ -590,6 +600,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
     expect(toast.error).toHaveBeenCalledWith(
       'You have already liked this comment.',
+      expect.any(Object),
     );
   });
 
@@ -638,6 +649,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
     expect(toast.error).toHaveBeenCalledWith(
       'No associated vote found to remove.',
+      expect.any(Object),
     );
   });
 
@@ -712,7 +724,10 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.click(screen.getByTestId('likeCommentBtn'));
     await wait();
 
-    expect(toast.error).toHaveBeenCalledWith('Network error occurred');
+    expect(toast.error).toHaveBeenCalledWith(
+      'Network error occurred',
+      expect.any(Object),
+    );
   });
 
   it('should show error when trying to remove non-existent like', async () => {
@@ -754,6 +769,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
 
     expect(toast.error).toHaveBeenCalledWith(
       'Could not find an existing like to remove.',
+      expect.any(Object),
     );
   });
 
@@ -780,7 +796,10 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.click(screen.getByTestId('delete-comment-button'));
     await wait();
     expect(defaultProps.refetchComments).toHaveBeenCalled();
-    expect(toast.success).toHaveBeenCalledWith('Comment deleted successfully');
+    expect(toast.success).toHaveBeenCalledWith(
+      'Comment deleted successfully',
+      expect.any(Object),
+    );
   });
 
   it('comment gets updated when user updates comment', async () => {
@@ -812,7 +831,10 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.click(screen.getByTestId('save-comment-button'));
     await wait();
     expect(defaultProps.refetchComments).toHaveBeenCalled();
-    expect(toast.success).toHaveBeenCalledWith('Comment updated successfully');
+    expect(toast.success).toHaveBeenCalledWith(
+      'Comment updated successfully',
+      expect.any(Object),
+    );
   });
 
   it('should throw empty comment error when updating comment with empty body', async () => {
@@ -840,6 +862,7 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await wait();
     expect(toast.error).toHaveBeenCalledWith(
       'Please enter a comment before submitting.',
+      expect.any(Object),
     );
   });
 
@@ -871,7 +894,10 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.type(textArea, 'Updated comment text');
     await userEvent.click(screen.getByTestId('save-comment-button'));
     await wait();
-    expect(toast.error).toHaveBeenCalledWith('Failed to update comment');
+    expect(toast.error).toHaveBeenCalledWith(
+      'Failed to update comment',
+      expect.any(Object),
+    );
   });
 
   it('should handle delete comment error correctly', async () => {
@@ -896,7 +922,10 @@ describe('Testing CommentCard Component [User Portal]', () => {
     await userEvent.click(screen.getByTestId('more-options-button'));
     await userEvent.click(screen.getByTestId('delete-comment-button'));
     await wait();
-    expect(toast.error).toHaveBeenCalledWith('Failed to delete comment');
+    expect(toast.error).toHaveBeenCalledWith(
+      'Failed to delete comment',
+      expect.any(Object),
+    );
   });
 
   it('should not update state when createCommentVote returns null id', async () => {

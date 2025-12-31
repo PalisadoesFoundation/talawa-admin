@@ -7,7 +7,6 @@ import type { InterfaceTagData } from '../../../utils/interfaces';
 import type { TFunction } from 'i18next';
 import { MOCKS, MOCKS_ERROR_SUBTAGS_QUERY } from '../TagActionsMocks';
 import { MOCKS_ERROR_SUBTAGS_QUERY1, MOCKS1 } from './TagNodeMocks';
-import { StaticMockLink } from '../../../utils/StaticMockLink';
 import { USER_TAG_SUB_TAGS } from 'GraphQl/Queries/userTagQueries';
 
 const mockTag: InterfaceTagData = {
@@ -492,7 +491,7 @@ describe('Edge Cases and Coverage Improvements', () => {
       },
     ];
 
-    render(
+    const { unmount } = render(
       <MockedProvider mocks={mockWithFetchMoreUndefined}>
         <TagNode
           tag={mockTag}
@@ -526,6 +525,9 @@ describe('Edge Cases and Coverage Improvements', () => {
         screen.queryByTestId(`subTagsScrollableDiv${mockTag._id}`),
       ).toBeInTheDocument();
     });
+
+    // Unmount explicitly to prevent "QueryManager stopped while query was in flight" error
+    unmount();
   });
 
   it('handles nullish coalescing operator for subTagsList length when data is null', async () => {
@@ -561,10 +563,8 @@ describe('Edge Cases and Coverage Improvements', () => {
       },
     ];
 
-    const link = new StaticMockLink(mockWithEmptyData, true);
-
-    render(
-      <MockedProvider link={link}>
+    const { unmount } = render(
+      <MockedProvider mocks={mockWithEmptyData}>
         <TagNode
           tag={mockTag}
           checkedTags={mockCheckedTags}
@@ -594,8 +594,8 @@ describe('Edge Cases and Coverage Improvements', () => {
       ).not.toBeInTheDocument();
     });
 
-    // Ensure no other operations are pending
-    await new Promise((resolve) => setTimeout(resolve, 10));
+    // Unmount explicitly to prevent "QueryManager stopped while query was in flight" error
+    unmount();
   });
 
   it('exercises nullish coalescing operator for hasNextPage with undefined value', async () => {
@@ -642,7 +642,7 @@ describe('Edge Cases and Coverage Improvements', () => {
       },
     ];
 
-    render(
+    const { unmount } = render(
       <MockedProvider mocks={mockWithUndefinedHasNextPage}>
         <TagNode
           tag={mockTag}
@@ -663,5 +663,8 @@ describe('Edge Cases and Coverage Improvements', () => {
         screen.queryByTestId(`subTagsScrollableDiv${mockTag._id}`),
       ).toBeInTheDocument();
     });
+
+    // Unmount explicitly to prevent "QueryManager stopped while query was in flight" error
+    unmount();
   });
 });

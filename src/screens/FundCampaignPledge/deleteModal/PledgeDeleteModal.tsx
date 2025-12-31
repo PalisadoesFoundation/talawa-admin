@@ -29,14 +29,15 @@
  * />
  * ```
  */
-import { Button, Modal } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
-import React from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client/react';
 import { DELETE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import type { InterfacePledgeInfo } from 'utils/interfaces';
 import { toast } from 'react-toastify';
+import { BaseModal } from 'shared-components/BaseModal';
 
 export interface InterfaceDeletePledgeModal {
   isOpen: boolean;
@@ -56,7 +57,12 @@ const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
 
   const [deletePledge] = useMutation(DELETE_PLEDGE);
 
-  const deleteHandler = async (): Promise<void> => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const onConfirmDelete = async (): Promise<void> => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
     try {
       await deletePledge({ variables: { id: pledge?.id } });
       refetchPledge();
@@ -64,40 +70,39 @@ const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
       toast.success(t('pledgeDeleted') as string);
     } catch (error: unknown) {
       toast.error((error as Error).message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
+
   return (
-    <>
-      <Modal className={styles.pledgeModal} onHide={hide} show={isOpen}>
-        <Modal.Header>
-          <p className={styles.titlemodal}> {t('deletePledge')}</p>
+    <BaseModal
+      show={isOpen}
+      onHide={hide}
+      title={t('deletePledge')}
+      className={styles.pledgeModal}
+      closeButtonVariant="danger"
+      dataTestId="pledge-delete-modal"
+      footer={
+        <>
           <Button
             variant="danger"
-            onClick={hide}
-            className={styles.modalCloseBtn}
-            data-testid="deletePledgeCloseBtn"
-          >
-            {' '}
-            <i className="fa fa-times"></i>
-          </Button>
-        </Modal.Header>
-        <Modal.Body>
-          <p> {t('deletePledgeMsg')}</p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="danger"
-            onClick={deleteHandler}
+            onClick={onConfirmDelete}
+            disabled={isSubmitting}
             data-testid="deleteyesbtn"
           >
             {tCommon('yes')}
           </Button>
+
           <Button variant="secondary" onClick={hide} data-testid="deletenobtn">
             {tCommon('no')}
           </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+        </>
+      }
+    >
+      <p>{t('deletePledgeMsg')}</p>
+    </BaseModal>
   );
 };
+
 export default PledgeDeleteModal;

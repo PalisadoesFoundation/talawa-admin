@@ -1355,24 +1355,24 @@ describe('Calendar Component', () => {
   });
 
   it('collapses previously expanded day when a new day is expanded', async () => {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
+    const year = new Date().getFullYear();
+    const dayA = new Date(year, 5, 15, 12, 0, 0);
+    const dayB = new Date(year, 5, 16, 12, 0, 0);
 
     const eventA = {
       ...mockEventData[0],
       id: 'A',
       name: 'Event A',
-      startAt: today.toISOString(),
-      endAt: today.toISOString(),
+      startAt: dayA.toISOString(),
+      endAt: dayA.toISOString(),
     };
 
     const eventB = {
       ...mockEventData[0],
       id: 'B',
       name: 'Event B',
-      startAt: tomorrow.toISOString(),
-      endAt: tomorrow.toISOString(),
+      startAt: dayB.toISOString(),
+      endAt: dayB.toISOString(),
     };
 
     const { container } = renderWithRouterAndPath(
@@ -1389,19 +1389,22 @@ describe('Calendar Component', () => {
       expect(screen.getAllByTestId('day').length).toBeGreaterThan(0),
     );
 
-    const btnA = await clickExpandForDate(container, new Date(eventA.startAt));
+    const btnA = await clickExpandForDate(container, dayA);
     expect(btnA).toBeTruthy();
     await waitFor(() =>
       expect(screen.queryByText('Event A')).toBeInTheDocument(),
     );
 
-    const btnB = await clickExpandForDate(container, new Date(eventB.startAt));
+    const btnB = await clickExpandForDate(container, dayB);
     expect(btnB).toBeTruthy();
     await waitFor(() =>
       expect(screen.queryByText('Event B')).toBeInTheDocument(),
     );
 
-    expect(screen.queryByText('Event A')).toBeNull();
+    // Wait for Event A to be collapsed (removed from DOM)
+    await waitFor(() => {
+      expect(screen.queryByText('Event A')).not.toBeInTheDocument();
+    });
   });
 
   it('handles month layout correctly when month starts on Sunday', async () => {

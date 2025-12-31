@@ -4,7 +4,7 @@
 
 # Interface: IOrganizationEventsResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:149](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L149)
+Defined in: [src/types/GraphQL/queryResults.ts:151](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L151)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:149](https://github.com/Palisadoe
 
 > **organization**: `object`
 
-Defined in: [src/types/GraphQL/queryResults.ts:150](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L150)
+Defined in: [src/types/GraphQL/queryResults.ts:152](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L152)
 
 #### events
 

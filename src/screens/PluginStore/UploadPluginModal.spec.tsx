@@ -1,21 +1,23 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import UploadPluginModal from './UploadPluginModal';
 
 const sharedMocks = vi.hoisted(() => ({
-  toast: {
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
   },
 }));
 
 // Mock dependencies
-vi.mock('react-toastify', () => ({
-  toast: sharedMocks.toast,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: sharedMocks.NotificationToast,
 }));
 
 vi.mock('jszip', () => ({
@@ -460,7 +462,7 @@ describe('UploadPluginModal Component', () => {
       fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
+        expect(NotificationToast.success).toHaveBeenCalledWith(
           'Plugin uploaded successfully! (Admin Dashboard Components components) - You can now install it from the plugin list.',
         );
         expect(defaultProps.onHide).toHaveBeenCalled();
@@ -512,7 +514,9 @@ describe('UploadPluginModal Component', () => {
       fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Failed to upload plugin');
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'Failed to upload plugin',
+        );
       });
     });
 
@@ -548,7 +552,7 @@ describe('UploadPluginModal Component', () => {
       fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
+        expect(NotificationToast.error).toHaveBeenCalledWith(
           'Failed to upload plugin. Please try again.',
         );
       });
@@ -684,7 +688,7 @@ describe('UploadPluginModal Component', () => {
       fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
+        expect(NotificationToast.error).toHaveBeenCalledWith(
           'Failed to upload plugin. Please try again.',
         );
       });
@@ -879,7 +883,7 @@ describe('UploadPluginModal Component', () => {
 
       // Should handle null result gracefully - it will throw an error before reaching the catch block
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
+        expect(NotificationToast.error).toHaveBeenCalledWith(
           'Failed to upload plugin. Please try again.',
         );
       });
@@ -939,7 +943,9 @@ describe('UploadPluginModal Component', () => {
       fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Failed to upload plugin');
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'Failed to upload plugin',
+        );
       });
     });
   });
@@ -1147,7 +1153,7 @@ describe('UploadPluginModal Component', () => {
       fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
+        expect(NotificationToast.success).toHaveBeenCalledWith(
           'Plugin uploaded successfully! ( components) - You can now install it from the plugin list.',
         );
         expect(defaultProps.onHide).toHaveBeenCalled();
@@ -1217,7 +1223,7 @@ describe('UploadPluginModal Component', () => {
       fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
+        expect(NotificationToast.success).toHaveBeenCalledWith(
           'Plugin uploaded successfully! (Admin components) - You can now install it from the plugin list.',
         );
         expect(defaultProps.onHide).toHaveBeenCalled();
@@ -1287,7 +1293,7 @@ describe('UploadPluginModal Component', () => {
       fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
+        expect(NotificationToast.success).toHaveBeenCalledWith(
           'Plugin uploaded successfully! (Admin and API components) - You can now install it from the plugin list.',
         );
         expect(defaultProps.onHide).toHaveBeenCalled();
@@ -1430,7 +1436,7 @@ describe('UploadPluginModal Component', () => {
       fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
+        expect(NotificationToast.success).toHaveBeenCalledWith(
           'Plugin uploaded successfully! (Admin components) - You can now install it from the plugin list.',
         );
         expect(defaultProps.onHide).toHaveBeenCalled();
@@ -1488,7 +1494,7 @@ describe('UploadPluginModal Component', () => {
       fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
+        expect(NotificationToast.error).toHaveBeenCalledWith(
           'Failed to upload plugin. Please try again.',
         );
       });
@@ -1545,7 +1551,7 @@ describe('UploadPluginModal Component', () => {
       fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
+        expect(NotificationToast.error).toHaveBeenCalledWith(
           'Failed to upload plugin. Please try again.',
         );
       });
@@ -2039,7 +2045,7 @@ describe('UploadPluginModal Component', () => {
       fireEvent.click(screen.getByRole('button', { name: /upload plugin/i }));
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
+        expect(NotificationToast.success).toHaveBeenCalledWith(
           'Plugin uploaded successfully! (Admin components) - You can now install it from the plugin list.',
         );
         expect(defaultProps.onHide).toHaveBeenCalled();

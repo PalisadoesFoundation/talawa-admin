@@ -184,7 +184,7 @@ describe('Testing Advertisement Entry Component', () => {
       });
     });
 
-    // When error is not an Error instance, toast.error should not be called
+    // When error is not an Error instance, NotificationToast.error should not be called
     // (no way to easily assert that, but the branch will be covered)
   });
 

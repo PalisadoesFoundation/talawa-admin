@@ -4,7 +4,7 @@
 
 # Interface: IAdvertisementListResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:235](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L235)
+Defined in: [src/types/GraphQL/queryResults.ts:237](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L237)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:235](https://github.com/Palisadoe
 
 > **organizations**: `object`[]
 
-Defined in: [src/types/GraphQL/queryResults.ts:236](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L236)
+Defined in: [src/types/GraphQL/queryResults.ts:238](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L238)
 
 #### advertisements?
 

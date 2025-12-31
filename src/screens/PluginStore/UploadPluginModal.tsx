@@ -6,8 +6,10 @@ import React, { useRef, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Button } from '@mui/material';
 import { FaUpload, FaExclamationTriangle, FaCheck } from 'react-icons/fa';
-import { toast } from 'react-toastify';
-import { type ApolloClient, type NormalizedCacheObject } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import styles from './UploadPluginModal.module.css';
+import { type ApolloClient } from '@apollo/client';
 import { useApolloClient } from '@apollo/client/react';
 import {
   installAdminPluginFromZip,
@@ -25,6 +27,8 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
   show,
   onHide,
 }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'pluginStore' });
+  const { t: tCommon } = useTranslation('common');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [manifest, setManifest] = useState<IAdminPluginManifest | null>(null);
   const [pluginStructure, setPluginStructure] =
@@ -103,16 +107,16 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
 
       if (result.success) {
         const components = result.installedComponents.join(' and ');
-        toast.success(
+        NotificationToast.success(
           `Plugin uploaded successfully! (${components} components) - You can now install it from the plugin list.`,
         );
         onHide();
       } else {
-        toast.error(result.error || 'Failed to upload plugin');
+        NotificationToast.error(result.error || 'Failed to upload plugin');
       }
     } catch (error) {
       console.error('Failed to upload plugin:', error);
-      toast.error('Failed to upload plugin. Please try again.');
+      NotificationToast.error(t('failedToUploadPlugin'));
     } finally {
       setIsInstalling(false);
     }
@@ -130,127 +134,74 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
 
   return (
     <Modal show={show} onHide={handleClose} centered dialogClassName="modal-xl">
-      <div
-        style={{
-          position: 'relative',
-          display: 'flex',
-          minHeight: 500,
-          background: '#fff',
-          borderRadius: 12,
-        }}
-      >
+      <div className={styles.container}>
         {/* Left Panel - Upload */}
-        <div
-          style={{
-            width: '50%',
-            padding: 32,
-            borderRight: '1px solid #e7e7e7',
-          }}
-        >
-          <div style={{ marginBottom: 32 }}>
-            <h3 style={{ margin: 0, marginBottom: 8 }}>Upload Plugin</h3>
-            <p style={{ margin: 0, color: '#666', fontSize: 14 }}>
-              Upload a ZIP file to create a plugin entry. The plugin will be
-              available for installation after upload.
-            </p>
+        <div className={`${styles.panel} ${styles.leftPanel}`}>
+          <div className={styles.section}>
+            <h3 className={styles.sectionTitle}>{t('uploadPlugin')}</h3>
+            <p className={styles.sectionDescription}>{t('uploadPluginDesc')}</p>
           </div>
 
-          <div
-            style={{
-              border: '2px dashed #ddd',
-              borderRadius: 12,
-              padding: 40,
-              textAlign: 'center',
-              background: '#fafafa',
-              cursor: 'pointer',
-              transition: 'all 0.2s',
-            }}
-            onClick={handleUploadClick}
-          >
-            <FaUpload
-              style={{ fontSize: 48, color: '#ccc', marginBottom: 16 }}
-            />
-            <div style={{ fontSize: 16, fontWeight: 500, marginBottom: 8 }}>
-              {selectedFile ? selectedFile.name : 'Select ZIP file'}
+          <div className={styles.dropzone} onClick={handleUploadClick}>
+            <FaUpload className={styles.uploadIcon} />
+            <div className={styles.dropzoneTitle}>
+              {selectedFile ? selectedFile.name : t('selectZipFile')}
             </div>
-            <div style={{ fontSize: 14, color: '#666' }}>
-              Click to browse files
-            </div>
+            <div className={styles.dropzoneHint}>{t('clickToBrowseFiles')}</div>
           </div>
 
           <input
             ref={fileInputRef}
             type="file"
             accept=".zip"
-            style={{ display: 'none' }}
+            className={styles.hiddenInput}
             onChange={handleFileSelect}
           />
 
           {error && (
-            <div
-              style={{
-                marginTop: 16,
-                padding: 12,
-                background: '#fff3cd',
-                border: '1px solid #ffeaa7',
-                borderRadius: 8,
-                color: '#856404',
-                fontSize: 14,
-              }}
-            >
-              <FaExclamationTriangle style={{ marginRight: 8 }} />
+            <div className={styles.errorBox}>
+              <FaExclamationTriangle className={styles.inlineIcon} />
               {error}
             </div>
           )}
 
           {manifest && pluginStructure && (
-            <div style={{ marginTop: 24 }}>
-              <h5 style={{ margin: 0, marginBottom: 16 }}>
-                Plugin Information
+            <div className={styles.pluginInfoSection}>
+              <h5 className={styles.pluginInfoTitle}>
+                {t('pluginInformation')}
               </h5>
-              <div style={{ fontSize: 14, lineHeight: 1.6 }}>
-                <div style={{ marginBottom: 8 }}>
-                  <strong>Name:</strong> {manifest.name}
+              <div className={styles.pluginInfoBody}>
+                <div className={styles.infoRow}>
+                  <strong>{t('name')}</strong> {manifest.name}
                 </div>
-                <div style={{ marginBottom: 8 }}>
-                  <strong>Version:</strong> {manifest.version}
+                <div className={styles.infoRow}>
+                  <strong>{t('version')}</strong> {manifest.version}
                 </div>
-                <div style={{ marginBottom: 8 }}>
-                  <strong>Author:</strong> {manifest.author}
+                <div className={styles.infoRow}>
+                  <strong>{t('author')}</strong> {manifest.author}
                 </div>
-                <div style={{ marginBottom: 8 }}>
-                  <strong>Description:</strong> {manifest.description}
+                <div className={styles.infoRow}>
+                  <strong>{tCommon('description')}:</strong>{' '}
+                  {manifest.description}
                 </div>
-                <div style={{ marginBottom: 8 }}>
-                  <strong>Plugin ID:</strong> {manifest.pluginId}
+                <div className={styles.infoRow}>
+                  <strong>{t('pluginId')}</strong> {manifest.pluginId}
                 </div>
 
                 {/* Show detected components */}
-                <div style={{ marginTop: 16 }}>
-                  <strong>Components to Install:</strong>
-                  <div style={{ marginTop: 8 }}>
+                <div className={styles.componentsSection}>
+                  <strong>{t('componentsToInstall')}</strong>
+                  <div className={styles.componentsList}>
                     {pluginStructure.hasAdminFolder && (
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          marginBottom: 4,
-                        }}
-                      >
-                        <FaCheck style={{ color: '#28a745', marginRight: 8 }} />
-                        <span>Admin Dashboard Components</span>
+                      <div className={styles.componentRow}>
+                        <FaCheck className={styles.checkIcon} />
+                        <span>{t('adminDashboardComponents')}</span>
                       </div>
                     )}
                     {pluginStructure.hasApiFolder && (
-                      <div
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          marginBottom: 4,
-                        }}
-                      >
-                        <FaCheck style={{ color: '#28a745', marginRight: 8 }} />
-                        <span>API Backend Components</span>
+                      <div className={styles.componentRow}>
+                        <FaCheck className={styles.checkIcon} />
+                        <span>{t('apiBackendComponents')}</span>
                       </div>
                     )}
                   </div>
@@ -259,13 +210,13 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
             </div>
           )}
 
-          <div style={{ marginTop: 32 }}>
+          <div className={styles.uploadButtonWrapper}>
             <Button
               variant="contained"
               color="primary"
               onClick={handleAddPlugin}
               disabled={!selectedFile || !manifest || isInstalling}
-              style={{ width: '100%' }}
+              fullWidth
               data-testid="upload-plugin-button"
             >
               {isInstalling ? 'Uploading...' : 'Upload Plugin'}
@@ -274,53 +225,29 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
         </div>
 
         {/* Right Panel - Plugin Structure */}
-        <div style={{ width: '50%', padding: 32 }}>
-          <div style={{ marginBottom: 32 }}>
-            <h3 style={{ margin: 0, marginBottom: 8 }}>Plugin Structure</h3>
-            <p style={{ margin: 0, color: '#666', fontSize: 14 }}>
-              Expected plugin structure with admin and/or API components
+        <div className={styles.panel}>
+          <div className={styles.section}>
+            <h3 className={styles.sectionTitle}>{t('pluginStructure')}</h3>
+            <p className={styles.sectionDescription}>
+              {t('expectedPluginStructure')}
             </p>
           </div>
 
           {pluginFiles.length > 0 ? (
-            <div style={{ marginBottom: 24 }}>
-              <div style={{ fontWeight: 600, fontSize: 16, marginBottom: 12 }}>
-                Detected Files
-              </div>
-              <div style={{ fontSize: 14, color: '#666' }}>
-                <pre
-                  style={{
-                    background: '#f8f9fa',
-                    padding: 16,
-                    borderRadius: 8,
-                    fontSize: 13,
-                    lineHeight: 1.5,
-                    margin: 0,
-                  }}
-                >
-                  {pluginFiles.join('\n')}
-                </pre>
+            <div className={styles.codeSection}>
+              <div className={styles.codeHeading}>{t('detectedFiles')}</div>
+              <div className={styles.codeText}>
+                <pre className={styles.codeBlock}>{pluginFiles.join('\n')}</pre>
               </div>
             </div>
           ) : (
             <>
-              <div style={{ marginBottom: 24 }}>
-                <div
-                  style={{ fontWeight: 600, fontSize: 16, marginBottom: 12 }}
-                >
-                  Expected Directory Structure
+              <div className={styles.codeSection}>
+                <div className={styles.codeHeading}>
+                  {t('expectedDirectoryStructure')}
                 </div>
-                <div style={{ fontSize: 14, color: '#666' }}>
-                  <pre
-                    style={{
-                      background: '#f8f9fa',
-                      padding: 16,
-                      borderRadius: 8,
-                      fontSize: 13,
-                      lineHeight: 1.5,
-                      margin: 0,
-                    }}
-                  >
+                <div className={styles.codeText}>
+                  <pre className={styles.codeBlock}>
                     {`plugin.zip
 ├── admin/ (optional)
 │   ├── manifest.json    
@@ -338,22 +265,11 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
               </div>
 
               <div>
-                <div
-                  style={{ fontWeight: 600, fontSize: 16, marginBottom: 12 }}
-                >
-                  Required manifest.json Fields
+                <div className={styles.codeHeading}>
+                  {t('requiredManifestFields')}
                 </div>
-                <div style={{ fontSize: 14, color: '#666' }}>
-                  <pre
-                    style={{
-                      background: '#f8f9fa',
-                      padding: 16,
-                      borderRadius: 8,
-                      fontSize: 13,
-                      lineHeight: 1.5,
-                      margin: 0,
-                    }}
-                  >
+                <div className={styles.codeText}>
+                  <pre className={styles.codeBlock}>
                     {`{
   "name": "Plugin Name",
   "pluginId": "pluginName",

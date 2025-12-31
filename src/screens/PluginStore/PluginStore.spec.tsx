@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-  within,
-} from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing/react';
 
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
@@ -14,10 +8,6 @@ import * as pluginHooks from 'plugin/hooks';
 import * as pluginManager from 'plugin/manager';
 import * as adminPluginFileService from 'plugin/services/AdminPluginFileService';
 import userEvent from '@testing-library/user-event';
-
-const shared = vi.hoisted(() => ({
-  reload: vi.fn(),
-}));
 
 // Mock the plugin hooks and manager
 vi.mock('plugin/hooks');
@@ -89,6 +79,10 @@ vi.mock('react-toastify', () => ({
 }));
 
 describe('PluginStore', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   const mockLoadedPlugins = [
     {
       id: 'test-plugin-1',
@@ -141,27 +135,6 @@ describe('PluginStore', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: {
-        ...window.location,
-        reload: shared.reload,
-      },
-    });
-
-    Object.defineProperty(window, 'matchMedia', {
-      writable: true,
-      value: vi.fn().mockImplementation((query) => ({
-        matches: false,
-        media: query,
-        onchange: null,
-        addListener: vi.fn(), // deprecated
-        removeListener: vi.fn(), // deprecated
-        addEventListener: vi.fn(),
-        removeEventListener: vi.fn(),
-        dispatchEvent: vi.fn(),
-      })),
-    });
     // Reset mockGraphQLError to ensure test isolation
     mockGraphQLError = null;
 
@@ -190,10 +163,6 @@ describe('PluginStore', () => {
       .removePlugin as unknown as typeof vi.fn) = vi
       .fn()
       .mockResolvedValue(true);
-  });
-
-  afterEach(() => {
-    vi.restoreAllMocks();
   });
 
   const renderPluginStore = () => {
@@ -292,20 +261,20 @@ describe('PluginStore', () => {
 
       renderPluginStore();
 
-      const filterDropdown = screen.getByTestId('filterPlugins');
-      await userEvent.click(filterDropdown);
-      // Wait for dropdown options to render
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      // Find the dropdown option for installed plugins by data-testid in document.body
-      const installedOption = within(document.body).getByTestId('installed');
+      const filterButton = screen.getByTestId('filterPlugins');
+      fireEvent.click(filterButton);
+      const installedOption = screen.getByTestId('installed');
       fireEvent.click(installedOption);
 
       await waitFor(() => {
-        expect(screen.getByTestId('plugin-list-empty')).toBeInTheDocument();
+        expect(screen.getByTestId('plugins-empty-state')).toBeInTheDocument();
         expect(
-          screen.getByText((content) => content.includes('noInstalledPlugins')),
+          screen.getByTestId('plugins-empty-state-icon'),
         ).toBeInTheDocument();
+        expect(
+          screen.getByTestId('plugins-empty-state-message'),
+        ).toBeInTheDocument();
+        expect(screen.getByText('noInstalledPlugins')).toBeInTheDocument();
       });
     });
   });
@@ -519,7 +488,13 @@ describe('PluginStore', () => {
 
       renderPluginStore();
 
-      expect(screen.getByTestId('plugin-list-empty')).toBeInTheDocument();
+      expect(screen.getByTestId('plugins-empty-state')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('plugins-empty-state-icon'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTestId('plugins-empty-state-message'),
+      ).toBeInTheDocument();
       expect(screen.getByText('noPluginsAvailable')).toBeInTheDocument();
     });
 
@@ -529,19 +504,15 @@ describe('PluginStore', () => {
 
       renderPluginStore();
 
-      const filterDropdown = screen.getByTestId('filterPlugins');
-      await userEvent.click(filterDropdown);
-      // Wait for dropdown options to render
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      const filterButton = screen.getByTestId('filterPlugins');
+      fireEvent.click(filterButton);
+      const installedOption = screen.getByTestId('installed');
+      fireEvent.click(installedOption);
 
-      // Find the dropdown option for installed plugins by data-testid in document.body
-      const installedOption = within(document.body).getByTestId('installed');
-      await userEvent.click(installedOption);
-
-      expect(screen.getByTestId('plugin-list-empty')).toBeInTheDocument();
-      expect(
-        screen.getByText((content) => content.includes('noInstalledPlugins')),
-      ).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByTestId('plugins-empty-state')).toBeInTheDocument();
+        expect(screen.getByText('noInstalledPlugins')).toBeInTheDocument();
+      });
     });
   });
 
@@ -1126,16 +1097,11 @@ describe('PluginStore', () => {
 
       renderPluginStore();
 
-      // Open filter dropdown
-      const filterDropdown = screen.getByTestId('filterPlugins');
-      await userEvent.click(filterDropdown);
-
-      // Wait for dropdown options to render
-      await new Promise((resolve) => setTimeout(resolve, 100));
-
-      // Select the 'installed' filter option by its data-testid in document.body
-      const installedOption = within(document.body).getByTestId('installed');
-      await userEvent.click(installedOption);
+      // Change filter dropdown
+      const filterButton = screen.getByTestId('filterPlugins');
+      fireEvent.click(filterButton);
+      const installedOption = screen.getByTestId('installed');
+      fireEvent.click(installedOption);
 
       // Page should be reset to 0 when filter changes. Verify first-page items are rendered
       await waitFor(() => {
@@ -1236,61 +1202,50 @@ describe('PluginStore', () => {
 
   describe('Upload Modal Close with Reload', () => {
     it('should execute closeUploadModal async operations correctly', async () => {
-      // This test specifically targets the closeUploadModal function (lines 105-109)
       const reloadMock = vi.fn();
+      const originalLocation = global.location;
 
       try {
-        // Use vi.stubGlobal to mock location.reload
-        vi.stubGlobal('location', {
-          ...window.location,
-          reload: reloadMock,
-        });
+        // Stub only what we use, and restore it explicitly
+        vi.stubGlobal('location', { ...originalLocation, reload: reloadMock });
 
         mockRefetch.mockClear();
         mockRefetch.mockResolvedValue({});
 
         renderPluginStore();
 
-        await waitFor(() => {
-          expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument();
-        });
+        await waitFor(() =>
+          expect(screen.getByTestId('plugin-store-page')).toBeInTheDocument(),
+        );
 
         // Open the upload modal
         const uploadButton = screen.getByTestId('uploadPluginBtn');
+        // If you switch to userEvent, remember to await:
+        // await userEvent.click(uploadButton);
         fireEvent.click(uploadButton);
 
-        await waitFor(() => {
-          expect(screen.getByTestId('upload-plugin-modal')).toBeInTheDocument();
-        });
-
-        // The closeUploadModal function (lines 105-109) performs:
-        // 1. setShowUploadModal(false)
-        // 2. await refetch()
-        // 3. window.location.reload()
+        await waitFor(() =>
+          expect(screen.getByTestId('upload-plugin-modal')).toBeInTheDocument(),
+        );
 
         // Trigger closeUploadModal by clicking the close button
         const closeButton = screen.getByTestId('mock-close-upload-modal');
+        // await userEvent.click(closeButton);
         fireEvent.click(closeButton);
 
-        // Verify refetch was called
-        await waitFor(() => {
-          expect(mockRefetch).toHaveBeenCalled();
-        });
+        // Verify the async steps performed by closeUploadModal
+        await waitFor(() => expect(mockRefetch).toHaveBeenCalled());
+        await waitFor(() => expect(reloadMock).toHaveBeenCalled());
 
-        // Verify reload was called
-        await waitFor(() => {
-          expect(reloadMock).toHaveBeenCalled();
-        });
-
-        // Verify modal is closed
-        await waitFor(() => {
+        // Modal should be closed
+        await waitFor(() =>
           expect(
             screen.queryByTestId('upload-plugin-modal'),
-          ).not.toBeInTheDocument();
-        });
+          ).not.toBeInTheDocument(),
+        );
       } finally {
-        // Restore original location even if test fails
-        vi.unstubAllGlobals();
+        // Restore only the global we stubbed
+        vi.stubGlobal('location', originalLocation);
       }
     });
   });

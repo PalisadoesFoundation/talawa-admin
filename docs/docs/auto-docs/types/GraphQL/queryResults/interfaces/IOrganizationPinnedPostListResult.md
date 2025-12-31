@@ -4,7 +4,7 @@
 
 # Interface: IOrganizationPinnedPostListResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:211](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L211)
+Defined in: [src/types/GraphQL/queryResults.ts:213](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L213)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:211](https://github.com/Palisadoe
 
 > **organization**: `object`
 
-Defined in: [src/types/GraphQL/queryResults.ts:212](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L212)
+Defined in: [src/types/GraphQL/queryResults.ts:214](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L214)
 
 #### pinnedPosts
 

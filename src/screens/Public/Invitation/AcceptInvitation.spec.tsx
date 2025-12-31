@@ -541,8 +541,9 @@ describe('AcceptInvitation', () => {
         'auth-token',
       );
       await waitFor(() => {
-        fireEvent.click(screen.getByTestId('accept-invite-btn'));
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
+      fireEvent.click(screen.getByTestId('accept-invite-btn'));
       await waitFor(() => {
         expect(screen.getByText('Event Page')).toBeInTheDocument();
         expect(toast.success).toHaveBeenCalledWith('Invitation accepted');
@@ -563,8 +564,8 @@ describe('AcceptInvitation', () => {
           data: {
             verifyEventInvitation: {
               invitationToken: 'test-token',
-              organizationId: 'org-1',
               eventId: null,
+              organizationId: 'org-1',
               inviteeName: 'Test Invitee',
               status: 'PENDING',
               expiresAt: '2025-12-31T23:59:59Z',
@@ -581,8 +582,9 @@ describe('AcceptInvitation', () => {
         'auth-token',
       );
       await waitFor(() => {
-        fireEvent.click(screen.getByTestId('accept-invite-btn'));
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
+      fireEvent.click(screen.getByTestId('accept-invite-btn'));
       await waitFor(() => {
         expect(screen.getByText('Organizations Page')).toBeInTheDocument();
       });
@@ -606,8 +608,9 @@ describe('AcceptInvitation', () => {
         'auth-token',
       );
       await waitFor(() => {
-        fireEvent.click(screen.getByTestId('accept-invite-btn'));
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
+      fireEvent.click(screen.getByTestId('accept-invite-btn'));
       await waitFor(() => {
         expect(screen.queryByText('Event Page')).not.toBeInTheDocument();
         expect(toast.success).not.toHaveBeenCalled();
@@ -629,8 +632,9 @@ describe('AcceptInvitation', () => {
         'auth-token',
       );
       await waitFor(() => {
-        fireEvent.click(screen.getByTestId('accept-invite-btn'));
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
+      fireEvent.click(screen.getByTestId('accept-invite-btn'));
       await waitFor(() => {
         expect(toast.error).toHaveBeenCalledWith('Acceptance failed');
       });
@@ -652,8 +656,9 @@ describe('AcceptInvitation', () => {
         'auth-token',
       );
       await waitFor(() => {
-        fireEvent.click(screen.getByTestId('accept-invite-btn'));
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
+      fireEvent.click(screen.getByTestId('accept-invite-btn'));
       await waitFor(() => {
         // Apollo Client returns "Error message not found." for empty error messages
         expect(toast.error).toHaveBeenCalledWith('Could not accept invitation');
@@ -672,12 +677,15 @@ describe('AcceptInvitation', () => {
         expect(screen.getByTestId('accept-invite-btn')).toBeInTheDocument();
       });
 
+      await waitFor(() => {
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+      });
       const button = screen.getByTestId('accept-invite-btn');
       fireEvent.click(button);
 
       // Wait for the loading state to appear
       await waitFor(() => {
-        expect(screen.getByText('Accepting...')).toBeInTheDocument();
+        expect(screen.getByTestId('spinner')).toBeInTheDocument();
       });
     });
 
@@ -789,9 +797,7 @@ describe('AcceptInvitation', () => {
       await waitFor(() => {
         expect(screen.getByText('Login Page')).toBeInTheDocument();
         expect(mockLocalStorage.removeItem).toHaveBeenCalledWith('token');
-        expect(mockLocalStorage.removeItem).toHaveBeenCalledWith(
-          'Talawa-admin_email',
-        );
+        expect(mockLocalStorage.removeItem).toHaveBeenCalledWith('email');
         expect(mockLocalStorage.setItem).toHaveBeenCalledWith(
           'pendingInvitationToken',
           'test-token',

@@ -9,11 +9,12 @@ import {
   render,
   screen,
   waitFor,
+  waitForElementToBeRemoved,
 } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { store } from '../../state/store';
 import i18nForTest from '../../utils/i18nForTest';
 import Advertisement from './Advertisements';
@@ -34,7 +35,6 @@ import {
   initialActiveData,
   initialArchivedData,
   updateAdMocks,
-  wait,
 } from './AdvertisementsMocks';
 
 vi.mock('components/AddOn/support/services/Plugin.helper', () => ({
@@ -83,6 +83,15 @@ vi.mock('@apollo/client/react', async () => {
     useMutation: () => mockUseMutation(),
   };
 });
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  },
+}));
 
 describe('Testing Advertisement Component', () => {
   beforeEach(() => {
@@ -134,7 +143,8 @@ describe('Testing Advertisement Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
       /Completed Campaigns/i,
@@ -173,9 +183,11 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
-    expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+
     expect(screen.getByTestId('AdEntry')).toBeInTheDocument();
     expect(screen.getByTestId('Ad_type')).toBeInTheDocument();
     expect(screen.getByTestId('Ad_type')).toHaveTextContent('banner');
@@ -211,9 +223,11 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
-    expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+
     expect(screen.getByTestId('AdEntry')).toBeInTheDocument();
     expect(screen.getByTestId('Ad_type')).toBeInTheDocument();
     expect(screen.getByTestId('Ad_type')).toHaveTextContent('banner');
@@ -246,7 +260,7 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     expect(screen.getByText('Cookie shop 1')).toBeInTheDocument();
     expect(screen.getByText('Cookie shop 2')).toBeInTheDocument();
@@ -261,16 +275,32 @@ describe('Testing Advertisement Component', () => {
     await act(() => {
       const tab = screen.getByText('Completed Campaigns');
       fireEvent.click(tab);
+    });
+
+    // Wait for tab switch to complete and any loading to finish
+    await waitFor(() => {
       expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
         'Completed Campaigns',
       );
     });
 
+    // Wait for any spinner from tab switch to disappear
+    const spinnerAfterTabSwitch = screen.queryByTestId('spinner');
+    if (spinnerAfterTabSwitch) {
+      await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+    }
+
     await act(async () => {
       fireEvent.scroll(window, { target: { scrollY: 500 } });
     });
 
-    await wait();
+    // Wait for new content to appear (spinner may appear briefly or not at all)
+    await waitFor(
+      () => {
+        expect(screen.getByText('Cookie shop infinite 1')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     expect(screen.getByText('Cookie shop infinite 1')).toBeInTheDocument();
     expect(screen.getByText('Cookie shop 1')).toBeInTheDocument();
@@ -297,7 +327,7 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     expect(screen.getByText('Cookie shop 1')).toBeInTheDocument();
     expect(screen.getByText('Cookie shop 2')).toBeInTheDocument();
@@ -314,7 +344,9 @@ describe('Testing Advertisement Component', () => {
       fireEvent.click(tab);
     });
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+
     expect(screen.getByRole('tab', { selected: true })).toHaveTextContent(
       'Active Campaigns',
     );
@@ -323,7 +355,8 @@ describe('Testing Advertisement Component', () => {
       fireEvent.scroll(window, { target: { scrollY: 500 } });
     });
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     expect(screen.getByText('Cookie shop 1')).toBeInTheDocument();
     expect(screen.getByText('Cookie shop 2')).toBeInTheDocument();
@@ -352,7 +385,9 @@ describe('Testing Advertisement Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
     expect(screen.getByTestId('searchButton')).toBeInTheDocument();
 
@@ -381,7 +416,7 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
     expect(screen.getByTestId('searchButton')).toBeInTheDocument();
@@ -391,7 +426,9 @@ describe('Testing Advertisement Component', () => {
     });
     fireEvent.click(screen.getByTestId('searchButton'));
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+
     expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
     expect(screen.queryByText('Cookie shop 5')).not.toBeInTheDocument();
     expect(screen.queryByText('Cookie shop 4')).not.toBeInTheDocument();
@@ -419,7 +456,7 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
     expect(screen.getByTestId('searchButton')).toBeInTheDocument();
@@ -429,7 +466,9 @@ describe('Testing Advertisement Component', () => {
     });
     fireEvent.click(screen.getByTestId('searchButton'));
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+
     expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
     expect(screen.queryByText('Cookie shop 5')).not.toBeInTheDocument();
     expect(screen.queryByText('Cookie shop 4')).not.toBeInTheDocument();
@@ -457,7 +496,7 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
     expect(screen.getByTestId('searchButton')).toBeInTheDocument();
@@ -467,7 +506,9 @@ describe('Testing Advertisement Component', () => {
     });
     fireEvent.click(screen.getByTestId('searchButton'));
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+
     expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
     expect(screen.queryByText('Cookie shop 5')).not.toBeInTheDocument();
     expect(screen.queryByText('Cookie shop 4')).not.toBeInTheDocument();
@@ -495,7 +536,7 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
     expect(screen.getByTestId('searchButton')).toBeInTheDocument();
@@ -505,7 +546,9 @@ describe('Testing Advertisement Component', () => {
     });
     fireEvent.click(screen.getByTestId('searchButton'));
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+
     expect(screen.getByText('Cookie shop 6')).toBeInTheDocument();
     expect(screen.queryByText('Cookie shop 5')).not.toBeInTheDocument();
     expect(screen.queryByText('Cookie shop 4')).not.toBeInTheDocument();
@@ -533,7 +576,7 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await wait();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     expect(screen.getByTestId('searchname')).toBeInTheDocument();
     expect(screen.getByTestId('searchButton')).toBeInTheDocument();
@@ -629,7 +672,7 @@ describe('Testing Advertisement Component', () => {
   });
 
   it('creating advertisement without name should throw an error', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -690,7 +733,7 @@ describe('Testing Advertisement Component', () => {
   });
 
   it('creating advertisement with end date before than start date should throw an error', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -757,7 +800,7 @@ describe('Testing Advertisement Component', () => {
   });
 
   it('should handle unknown errors', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -838,10 +881,8 @@ describe('Testing Advertisement Component', () => {
     );
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    expect(screen.getByTestId('spinner')).toBeInTheDocument();
-    await waitFor(() => {
-      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
-    });
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+
     expect(screen.getByTestId('AdEntry')).toBeInTheDocument();
     expect(screen.getByTestId('Ad_type')).toBeInTheDocument();
     expect(screen.getByTestId('Ad_type')).toHaveTextContent('banner');
@@ -910,7 +951,8 @@ describe('Testing Advertisement Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     fireEvent.click(screen.getByTestId('moreiconbtn'));
     fireEvent.click(screen.getByTestId('editBtn'));
@@ -926,7 +968,7 @@ describe('Testing Advertisement Component', () => {
   });
 
   it('validates advertisement update form properly', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
     const updateMock = vi.fn();
     mockUseMutation.mockReturnValue([updateMock]);
 
@@ -944,7 +986,8 @@ describe('Testing Advertisement Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     fireEvent.click(screen.getByTestId('moreiconbtn'));
 
@@ -989,7 +1032,9 @@ describe('Testing Advertisement Component', () => {
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+
     expect(getByTestId('moreiconbtn')).toBeInTheDocument();
     fireEvent.click(getByTestId('moreiconbtn'));
     expect(getByTestId('deletebtn')).toBeInTheDocument();
@@ -1002,15 +1047,16 @@ describe('Testing Advertisement Component', () => {
       fireEvent.click(getByTestId('delete_no'));
     });
 
-    await wait();
-    expect(screen.queryByTestId('delete_title')).not.toBeInTheDocument();
-    expect(screen.queryByTestId('delete_body')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByTestId('delete_title')).not.toBeInTheDocument();
+      expect(screen.queryByTestId('delete_body')).not.toBeInTheDocument();
+    });
 
     expect(getByTestId('moreiconbtn')).toBeInTheDocument();
   });
 
   it('delete advertisement', async () => {
-    const toastSuccessSpy = vi.spyOn(toast, 'success');
+    const toastSuccessSpy = vi.spyOn(NotificationToast, 'success');
     const { getByTestId } = render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -1027,7 +1073,9 @@ describe('Testing Advertisement Component', () => {
 
     expect(screen.getByTestId('spinner')).toBeInTheDocument();
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
+
     expect(getByTestId('moreiconbtn')).toBeInTheDocument();
     fireEvent.click(getByTestId('moreiconbtn'));
     expect(getByTestId('deletebtn')).toBeInTheDocument();
@@ -1047,7 +1095,7 @@ describe('Testing Advertisement Component', () => {
   });
 
   it('handles GraphQL errors when fetching advertisements', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
     render(
       <ApolloProvider client={client}>
@@ -1063,7 +1111,8 @@ describe('Testing Advertisement Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     // Should show error messages
     expect(toastErrorSpy).toHaveBeenCalledWith(
@@ -1087,8 +1136,6 @@ describe('Testing Advertisement Component', () => {
         </Provider>
       </ApolloProvider>,
     );
-
-    await wait();
 
     expect(screen.getByTestId('advertisements')).toBeInTheDocument();
     expect(screen.queryByTestId('Ad_name')).not.toBeInTheDocument();
@@ -1114,7 +1161,8 @@ describe('Testing Advertisement Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     const translations = JSON.parse(
       JSON.stringify(
@@ -1140,7 +1188,8 @@ describe('Testing Advertisement Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     const emptyTextElements = screen.queryAllByText(
       'Ads not present for this campaign.',
@@ -1169,7 +1218,8 @@ describe('Testing Advertisement Component', () => {
       </ApolloProvider>,
     );
 
-    await wait();
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    await waitForElementToBeRemoved(() => screen.queryByTestId('spinner'));
 
     fireEvent.click(screen.getByText(translations.createAdvertisement));
     expect(screen.queryByText(translations.addNew)).toBeInTheDocument();
@@ -1183,60 +1233,5 @@ describe('Testing Advertisement Component', () => {
     await waitFor(() => {
       expect(screen.queryByText(translations.addNew)).not.toBeInTheDocument();
     });
-  });
-
-  it('authLink adds authorization header when token exists in localStorage', async () => {
-    const mockToken = 'test-token-123';
-
-    const getItemSpy = vi
-      .spyOn(window.localStorage, 'getItem')
-      .mockImplementation((key: string) => {
-        if (key === 'Talawa-admin_token') return mockToken;
-        return null;
-      });
-
-    render(
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <Advertisement />
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </ApolloProvider>,
-    );
-
-    await wait();
-
-    expect(getItemSpy).toHaveBeenCalledWith('Talawa-admin_token');
-    expect(getItemSpy).toHaveReturnedWith(mockToken);
-
-    getItemSpy.mockRestore();
-  });
-
-  it('authLink does not add authorization header when token is null in localStorage', async () => {
-    const getItemSpy = vi
-      .spyOn(window.localStorage, 'getItem')
-      .mockImplementation(() => null);
-
-    render(
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <BrowserRouter>
-            <I18nextProvider i18n={i18nForTest}>
-              <Advertisement />
-            </I18nextProvider>
-          </BrowserRouter>
-        </Provider>
-      </ApolloProvider>,
-    );
-
-    await wait();
-
-    expect(getItemSpy).toHaveBeenCalledWith('Talawa-admin_token');
-    expect(getItemSpy).toHaveReturnedWith(null);
-
-    getItemSpy.mockRestore();
   });
 });

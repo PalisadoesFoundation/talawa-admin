@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
 import { MockedProvider } from '@apollo/client/testing/react';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import userEvent from '@testing-library/user-event';
 import { vi, it } from 'vitest';
 import { client, wait } from 'components/Advertisements/AdvertisementsMocks';
@@ -34,11 +34,12 @@ vi.mock('react-router', async () => {
 
 global.URL.createObjectURL = vi.fn(() => 'mocked-url');
 
-vi.mock('react-toastify', () => ({
-  toast: {
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn(),
-    warn: vi.fn(),
     error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
   },
 }));
 
@@ -112,7 +113,7 @@ describe('Testing Advertisement Register Component', () => {
 
   test('Logs error to the console and shows error toast when advertisement creation fails', async () => {
     const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
     await act(async () => {
       render(
@@ -161,7 +162,7 @@ describe('Testing Advertisement Register Component', () => {
 
   test('Throws error at creation when the end date is less than the start date', async () => {
     const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
     const { getByText, queryByText, getByLabelText } = render(
       <MockedProvider>
         <Provider store={store}>
@@ -289,7 +290,7 @@ describe('Testing Advertisement Register Component', () => {
   });
 
   test('Throws error when the end date is less than the start date while editing the advertisement', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
     const { getByText, getByLabelText, queryByText } = render(
       <MockedProvider mocks={[updateAdFailMock]}>
         <Provider store={store}>
@@ -719,7 +720,7 @@ describe('Testing Advertisement Register Component', () => {
   });
 
   it('throw error while uploading attachment of more than 5 mb', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -819,7 +820,7 @@ describe('Testing Advertisement Register Component', () => {
   });
 
   it('Validates file types during upload', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
     render(
       <ApolloProvider client={client}>
@@ -853,7 +854,7 @@ describe('Testing Advertisement Register Component', () => {
   });
 
   it('Validates that name is required', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
     render(
       <ApolloProvider client={client}>
@@ -1046,7 +1047,7 @@ describe('Testing Advertisement Register Component', () => {
     const createError = new Error('Creation failed due to server error');
     const createMock = vi.fn().mockRejectedValue(createError);
     mockUseMutation.mockReturnValue([createMock]);
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
     render(
       <ApolloProvider client={client}>
@@ -1085,7 +1086,7 @@ describe('Testing Advertisement Register Component', () => {
     const updateError = new Error('Update failed due to server error');
     const updateMock = vi.fn().mockRejectedValue(updateError);
     mockUseMutation.mockReturnValue([updateMock]);
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
     render(
       <ApolloProvider client={client}>
@@ -1383,7 +1384,7 @@ describe('Testing Advertisement Register Component', () => {
 
     const setAfterActiveMock = vi.fn();
     const setAfterCompletedMock = vi.fn();
-    const toastSuccessSpy = vi.spyOn(toast, 'success');
+    const toastSuccessSpy = vi.spyOn(NotificationToast, 'success');
 
     render(
       <ApolloProvider client={client}>
@@ -1439,7 +1440,7 @@ describe('Testing Advertisement Register Component', () => {
   it('Does not show toast when create error is not an Error instance', async () => {
     const createMock = vi.fn().mockRejectedValue('string error');
     mockUseMutation.mockReturnValue([createMock]);
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
     render(
       <ApolloProvider client={client}>
@@ -1486,7 +1487,7 @@ describe('Testing Advertisement Register Component', () => {
     mockUseMutation.mockReturnValue([updateMock]);
     const setAfterActiveMock = vi.fn();
     const setAfterCompletedMock = vi.fn();
-    const toastSuccessSpy = vi.spyOn(toast, 'success');
+    const toastSuccessSpy = vi.spyOn(NotificationToast, 'success');
 
     render(
       <ApolloProvider client={client}>
@@ -1528,7 +1529,7 @@ describe('Testing Advertisement Register Component', () => {
   it('Handles update error that is not an Error instance', async () => {
     const updateMock = vi.fn().mockRejectedValue('string error');
     mockUseMutation.mockReturnValue([updateMock]);
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
     render(
       <ApolloProvider client={client}>

@@ -4,7 +4,7 @@
 
 # Interface: IUserFundCampaignsResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L126)
+Defined in: [src/types/GraphQL/queryResults.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L128)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:126](https://github.com/Palisadoe
 
 > **organization**: `object`
 
-Defined in: [src/types/GraphQL/queryResults.ts:127](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L127)
+Defined in: [src/types/GraphQL/queryResults.ts:129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L129)
 
 #### funds
 

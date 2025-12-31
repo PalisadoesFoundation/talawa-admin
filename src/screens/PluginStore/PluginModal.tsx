@@ -9,14 +9,16 @@ import Modal from 'react-bootstrap/Modal';
 import {
   FaPowerOff,
   FaTrash,
-  FaSpinner,
   FaChevronLeft,
   FaChevronRight,
+  FaTimes,
 } from 'react-icons/fa';
+import { useTranslation } from 'react-i18next';
 import { AdminPluginFileService } from '../../plugin/services/AdminPluginFileService';
 import type { IPluginDetails, IPluginModalProps } from 'plugin';
 import styles from './PluginModal.module.css';
 import { useInstallTimer } from './hooks/useInstallTimer';
+import LoadingState from '../../shared-components/LoadingState/LoadingState';
 
 const TABS = ['Details', 'Features', 'Changelog'] as const;
 type TabType = (typeof TABS)[number];
@@ -33,6 +35,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
   togglePluginStatus,
   uninstallPlugin,
 }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'pluginStore' });
   const [details, setDetails] = useState<IPluginDetails | null>(null);
   const [fetching, setFetching] = useState(false);
   const [tab, setTab] = useState<TabType>('Details');
@@ -158,17 +161,17 @@ const PluginModal: React.FC<IPluginModalProps> = ({
         {/* Close Button */}
         <button
           type="button"
-          aria-label="Close"
+          aria-label={t('close')}
           onClick={onHide}
           className={styles.closeButton}
         >
-          &times;
+          <FaTimes />
         </button>
         {/* Sidebar */}
         <div className={styles.sidebar}>
           <img
             src={plugin?.icon}
-            alt="Plugin Icon"
+            alt={t('pluginIcon')}
             className={styles.pluginIcon}
           />
           <div className={styles.pluginName}>{plugin?.name}</div>
@@ -181,89 +184,64 @@ const PluginModal: React.FC<IPluginModalProps> = ({
           <div className={styles.actionButtons}>
             {plugin && isInstalled(plugin.name) && meta && (
               <>
-                <Button
-                  variant={
-                    getInstalledPlugin(plugin.name)?.status === 'active'
-                      ? 'light'
-                      : 'primary'
-                  }
-                  className={`w-100 mb-2 d-flex align-items-center justify-content-center gap-2 ${
-                    getInstalledPlugin(plugin.name)?.status === 'active'
-                      ? styles.actionButtonLight
-                      : styles.actionButton
-                  }`}
-                  onClick={() =>
-                    togglePluginStatus(
-                      meta,
+                <LoadingState isLoading={loading} variant="inline">
+                  <Button
+                    variant={
                       getInstalledPlugin(plugin.name)?.status === 'active'
-                        ? 'inactive'
-                        : 'active',
-                    )
-                  }
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <FaSpinner className="animate-spin" />
-                  ) : (
+                        ? 'light'
+                        : 'primary'
+                    }
+                    className={`w-100 mb-2 d-flex align-items-center justify-content-center gap-2 ${
+                      getInstalledPlugin(plugin.name)?.status === 'active'
+                        ? styles.actionButtonLight
+                        : styles.actionButton
+                    }`}
+                    onClick={() =>
+                      togglePluginStatus(
+                        meta,
+                        getInstalledPlugin(plugin.name)?.status === 'active'
+                          ? 'inactive'
+                          : 'active',
+                      )
+                    }
+                  >
                     <FaPowerOff
-                      style={{
-                        fontSize: '14px',
-                        color:
-                          getInstalledPlugin(plugin.name)?.status === 'active'
-                            ? '#6c757d'
-                            : '#fff',
-                      }}
+                      className={
+                        getInstalledPlugin(plugin.name)?.status === 'active'
+                          ? styles.iconPowerOffActive
+                          : styles.iconPowerOffInactive
+                      }
                     />
-                  )}
-                  {getInstalledPlugin(plugin.name)?.status === 'active'
-                    ? 'Deactivate'
-                    : 'Activate'}
-                </Button>
-                <Button
-                  variant="light"
-                  className={`w-100 d-flex align-items-center justify-content-center gap-2 ${styles.actionButtonDanger}`}
-                  onClick={() => uninstallPlugin(meta)}
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <FaSpinner className="animate-spin" />
-                  ) : (
-                    <FaTrash style={{ fontSize: '14px' }} />
-                  )}
-                  Uninstall
-                </Button>
+                    {getInstalledPlugin(plugin.name)?.status === 'active'
+                      ? 'Deactivate'
+                      : 'Activate'}
+                  </Button>
+                </LoadingState>
+                <LoadingState isLoading={loading} variant="inline">
+                  <Button
+                    variant="light"
+                    className={`w-100 d-flex align-items-center justify-content-center gap-2 ${styles.actionButtonDanger}`}
+                    onClick={() => uninstallPlugin(meta)}
+                  >
+                    <FaTrash className={styles.iconTrash} />
+                    {t('uninstall')}
+                  </Button>
+                </LoadingState>
               </>
             )}
             {plugin && !isInstalled(plugin.name) && meta && (
               <>
-                <Button
-                  variant="primary"
-                  className="w-100 d-flex align-items-center justify-content-center gap-2"
-                  onClick={() => installPlugin(meta)}
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <>
-                      <FaSpinner className="animate-spin" />
-                      Installing{installElapsed ? ` (${installElapsed})` : ''}
-                    </>
-                  ) : (
-                    'Install'
-                  )}
-                </Button>
-                <Button
-                  variant="light"
-                  className={`w-100 d-flex align-items-center justify-content-center gap-2 ${styles.actionButtonDanger}`}
-                  onClick={() => uninstallPlugin(meta)}
-                  disabled={loading}
-                >
-                  {loading ? (
-                    <FaSpinner className="animate-spin" />
-                  ) : (
-                    <FaTrash style={{ fontSize: '14px' }} />
-                  )}
-                  Uninstall
-                </Button>
+                <LoadingState isLoading={loading} variant="inline">
+                  <Button
+                    variant="primary"
+                    className="w-100 d-flex align-items-center justify-content-center gap-2"
+                    onClick={() => installPlugin(meta)}
+                  >
+                    {loading
+                      ? `Installing${installElapsed ? ` (${installElapsed})` : ''}`
+                      : 'Install'}
+                  </Button>
+                </LoadingState>
               </>
             )}
           </div>
@@ -279,7 +257,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                   onClick={closeScreenshotViewer}
                   className={styles.backButton}
                 >
-                  ← Back to Details
+                  {t('backToDetails')}
                 </button>
 
                 {screenshotViewer.screenshots.length > 1 && (
@@ -296,14 +274,14 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                   <button
                     onClick={previousScreenshot}
                     className={styles.navigationButtonLeft}
-                    title="Previous image (←)"
+                    title={t('previousImage')}
                   >
                     <FaChevronLeft />
                   </button>
                   <button
                     onClick={nextScreenshot}
                     className={styles.navigationButtonRight}
-                    title="Next image (→)"
+                    title={t('nextImage')}
                   >
                     <FaChevronRight />
                   </button>
@@ -317,7 +295,9 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                   src={
                     screenshotViewer.screenshots[screenshotViewer.currentIndex]
                   }
-                  alt={`Screenshot ${screenshotViewer.currentIndex + 1}`}
+                  alt={t('screenshotAlt', {
+                    index: screenshotViewer.currentIndex + 1,
+                  })}
                   className={styles.screenshotImage}
                 />
               </div>
@@ -340,7 +320,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                             ? styles.dotIndicatorActive
                             : styles.dotIndicator
                         }
-                        title={`Go to screenshot ${index + 1}`}
+                        title={t('goToScreenshot', { index: index + 1 })}
                       />
                     ))}
                   </div>
@@ -366,25 +346,29 @@ const PluginModal: React.FC<IPluginModalProps> = ({
               <div className={styles.tabContent}>
                 {tab === 'Details' && (
                   <>
-                    <div className={styles.sectionTitle}>Description</div>
+                    <div className={styles.sectionTitle}>
+                      {t('description')}
+                    </div>
                     <div className={styles.description}>
                       {plugin?.description}
                     </div>
 
                     {details?.screenshots && details.screenshots.length > 0 && (
                       <>
-                        <div className={styles.sectionTitle}>Screenshots</div>
+                        <div className={styles.sectionTitle}>
+                          {t('screenshots')}
+                        </div>
                         <div className={styles.screenshotsContainer}>
                           {details.screenshots.map((src, idx) => (
                             <img
                               key={idx}
                               src={src}
-                              alt={`Screenshot ${idx + 1}`}
+                              alt={t('screenshotAlt', { index: idx + 1 })}
                               className={styles.screenshotThumbnail}
                               onClick={() =>
                                 openScreenshotViewer(details.screenshots, idx)
                               }
-                              title="Click to view full size"
+                              title={t('clickToViewFullSize')}
                             />
                           ))}
                         </div>
@@ -392,14 +376,16 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                     )}
                     {fetching && (
                       <div className={styles.loadingText}>
-                        Loading details...
+                        {t('loadingDetails')}
                       </div>
                     )}
                   </>
                 )}
                 {tab === 'Features' && (
                   <>
-                    <div className={styles.sectionTitleLarge}>Features</div>
+                    <div className={styles.sectionTitleLarge}>
+                      {t('features')}
+                    </div>
                     {features && features.length > 0 ? (
                       <ul className={styles.featuresList}>
                         {features.map((f, i) => (
@@ -410,23 +396,28 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                       </ul>
                     ) : (
                       <div className={styles.noFeaturesMessage}>
-                        No features information available for this plugin.
+                        {t('noFeaturesAvailable')}
                       </div>
                     )}
                     {fetching && (
                       <div className={styles.loadingText}>
-                        Loading features...
+                        {t('loadingFeatures')}
                       </div>
                     )}
                   </>
                 )}
                 {tab === 'Changelog' && (
                   <>
-                    <div className={styles.sectionTitleLarge}>Changelog</div>
+                    <div className={styles.sectionTitleLarge}>
+                      {t('changelog')}
+                    </div>
                     {changelog.map((entry, idx) => (
                       <div key={idx} className={styles.changelogEntry}>
                         <div className={styles.changelogVersion}>
-                          v{entry.version} - {entry.date}
+                          {t('changelogVersion', {
+                            version: entry.version,
+                            date: entry.date,
+                          })}
                         </div>
                         <ul className={styles.changelogList}>
                           {entry.changes.map((c, i) => (
@@ -437,7 +428,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                     ))}
                     {fetching && (
                       <div className={styles.loadingText}>
-                        Loading changelog...
+                        {t('loadingChangelog')}
                       </div>
                     )}
                   </>

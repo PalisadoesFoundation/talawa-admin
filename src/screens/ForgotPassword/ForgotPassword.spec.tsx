@@ -24,7 +24,16 @@ const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
   warn: vi.fn(),
+  warning: vi.fn(),
 }));
+
+// Mock utils/i18n to use the test i18n instance for NotificationToast
+vi.mock('utils/i18n', async () => {
+  const i18n = await import('utils/i18nForTest');
+  return {
+    default: i18n.default,
+  };
+});
 
 vi.mock('react-toastify', () => ({
   toast: toastMocks,
@@ -359,7 +368,10 @@ describe('Testing Forgot Password screen', () => {
 
     await userEvent.click(screen.getByText('Get OTP'));
     await waitFor(() => {
-      expect(toast.warn).toHaveBeenCalledWith(translations.emailNotRegistered);
+      expect(toast.warning).toHaveBeenCalledWith(
+        translations.emailNotRegistered,
+        expect.any(Object),
+      );
     });
   });
 
@@ -386,7 +398,10 @@ describe('Testing Forgot Password screen', () => {
     );
     await userEvent.click(screen.getByText('Get OTP'));
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(translations.errorSendingMail);
+      expect(toast.error).toHaveBeenCalledWith(
+        translations.errorSendingMail,
+        expect.any(Object),
+      );
     });
   });
 
@@ -416,6 +431,7 @@ describe('Testing Forgot Password screen', () => {
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(
         translations.talawaApiUnavailable,
+        expect.any(Object),
       );
     });
   });

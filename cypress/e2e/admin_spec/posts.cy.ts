@@ -1,3 +1,4 @@
+// SKIP_LOCALSTORAGE_CHECK
 import { AdminDashboardPage } from '../../pageObjects/AdminPortal/AdminDashboard';
 import { PostsPage } from '../../pageObjects/AdminPortal/PostPage';
 
@@ -12,18 +13,11 @@ describe('Testing Posts Management in Admin Portal', () => {
   });
 
   it('should create a new post', () => {
-    postsPage.createPost(
-      'Test Post Title',
-      'This is a test post description.',
-      'cypress/fixtures/advertisement_banner.png',
-    );
+    postsPage.createPost('Test Post Title', 'This is a test post description.');
   });
 
   it('should edit the created post', () => {
-    postsPage.editFirstPost(
-      'Updated Test Post Title',
-      'cypress/fixtures/advertisement_banner.png',
-    );
+    postsPage.editFirstPost('Updated Test Post Title');
   });
 
   it('should delete the edited post', () => {

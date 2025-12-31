@@ -55,7 +55,6 @@ import {
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import dayjs from 'dayjs';
 import { currencySymbols } from 'utils/currency';
@@ -64,19 +63,7 @@ import { Navigate, useParams } from 'react-router';
 import PledgeModal from '../Campaigns/PledgeModal';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-
-const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
-  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
-};
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 enum ModalState {
   UPDATE = 'update',
@@ -177,7 +164,7 @@ const Pledges = (): JSX.Element => {
     return (
       <div className={styles.container + ' bg-white rounded-4 my-3'}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded className={styles.errorIcon} />
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Pledges' })}
             <br />
@@ -202,7 +189,9 @@ const Pledges = (): JSX.Element => {
         const pledger = params.row.pledger;
         const users = params.row.users || (pledger ? [pledger] : []);
         return (
-          <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
+          <div
+            className={`d-flex ${styles.flexWrapGap} ${styles.maxHeight120}`}
+          >
             {users
               .slice(0, 2)
               .map((user: InterfaceUserInfoPG, index: number) => (
@@ -442,12 +431,24 @@ const Pledges = (): JSX.Element => {
         getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noPledges')}
-            </Stack>
+            <EmptyState
+              icon="assignment"
+              message={t('noPledges')}
+              dataTestId="pledges-empty-state"
+            />
           ),
         }}
-        sx={dataGridStyle}
+        className={`${styles.dataGridNoHover} ${styles.dataGridRounded}`}
+        sx={{
+          '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+            outline: '2px solid var(--primary-theme-color)',
+            outlineOffset: '-2px',
+          },
+          '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
+            outline: '2px solid var(--primary-theme-color)',
+            outlineOffset: '-2px',
+          },
+        }}
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}

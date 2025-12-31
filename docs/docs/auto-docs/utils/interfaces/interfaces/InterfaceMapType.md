@@ -4,7 +4,7 @@
 
 # Interface: InterfaceMapType
 
-Defined in: [src/utils/interfaces.ts:2528](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2528)
+Defined in: [src/utils/interfaces.ts:2529](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2529)
 
 InterfaceMapType
 

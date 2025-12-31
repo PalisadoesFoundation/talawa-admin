@@ -176,7 +176,7 @@ describe('Event Attendance Component', () => {
     expect(searchInput).toHaveValue('Bruce');
 
     // SearchBar renders a clear button when value is not empty
-    const clearBtn = screen.getByLabelText('Clear search');
+    const clearBtn = screen.getByLabelText('Clear');
     fireEvent.click(clearBtn);
 
     expect(searchInput).toHaveValue('');

@@ -44,6 +44,7 @@ const NON_USER_VISIBLE_ATTRS = [
   'data-cy',
   'data-id',
   'testid',
+  'datatestid',
   'key',
   'ref',
   'onClick',
@@ -531,6 +532,18 @@ const collectViolations = (filePath) => {
         // Only match type annotations, not JSX attributes or other patterns
         (/\w+\s*:\s*\w+\s*[=,;]/.test(fullContext) && !/</.test(beforeMatch)) // Don't match if there's a < before (likely JSX)
       ) {
+        continue;
+      }
+
+      // Skip TypeScript generic function calls like functionName<Type>(...) or variable<Type>
+      // Pattern: if beforeMatch ends with word<word (generic type), this is TypeScript not JSX
+      if (/\w+<\w+$/.test(beforeMatch)) {
+        continue;
+      }
+
+      // Skip TypeScript function return type annotations like (param): ReturnType<T>
+      // The matched text contains ): TypeName pattern
+      if (/\):\s*\w+/.test(text)) {
         continue;
       }
 

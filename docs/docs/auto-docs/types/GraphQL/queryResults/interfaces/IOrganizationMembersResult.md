@@ -33,3 +33,11 @@ Defined in: [src/types/GraphQL/queryResults.ts:68](https://github.com/Palisadoes
 ##### members.pageInfo.hasNextPage
 
 > **hasNextPage**: `boolean`
+
+##### members.pageInfo.hasPreviousPage?
+
+> `optional` **hasPreviousPage**: `boolean`
+
+##### members.pageInfo.startCursor?
+
+> `optional` **startCursor**: `string`

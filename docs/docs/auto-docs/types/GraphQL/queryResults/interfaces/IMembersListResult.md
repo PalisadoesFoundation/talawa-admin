@@ -4,7 +4,7 @@
 
 # Interface: IMembersListResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:267](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L267)
+Defined in: [src/types/GraphQL/queryResults.ts:269](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L269)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:267](https://github.com/Palisadoe
 
 > **usersByOrganizationId**: `object`[]
 
-Defined in: [src/types/GraphQL/queryResults.ts:268](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L268)
+Defined in: [src/types/GraphQL/queryResults.ts:270](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L270)
 
 #### firstName?
 

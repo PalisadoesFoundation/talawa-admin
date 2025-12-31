@@ -456,7 +456,7 @@ describe('AddMember Component', () => {
     expect(searchInput).toHaveValue('John');
 
     // Click clear button
-    const clearButton = await screen.findByLabelText('Clear search');
+    const clearButton = await screen.findByLabelText('Clear');
     fireEvent.click(clearButton);
 
     await waitFor(() => {
