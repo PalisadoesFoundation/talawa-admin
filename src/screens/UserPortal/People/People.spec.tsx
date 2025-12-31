@@ -310,6 +310,7 @@ const fiveMembersMock = {
 };
 
 // Debounce duration used by AdminSearchFilterBar component (default: 300ms)
+// NOTE: This value must be manually kept in sync with AdminSearchFilterBar's debounceDelay default
 const SEARCH_DEBOUNCE_MS = 300;
 
 async function wait(ms = 100): Promise<void> {
