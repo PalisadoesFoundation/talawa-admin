@@ -79,7 +79,6 @@ import Avatar from 'components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
-// Imports added for manual header construction
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { errorHandler } from 'utils/errorHandler';
 
