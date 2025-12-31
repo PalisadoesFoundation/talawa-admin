@@ -429,7 +429,9 @@ describe('OrganizationPeople', () => {
     });
 
     expect(screen.getByText('jane@example.com')).toBeInTheDocument();
-    expect(screen.getByText('01/01/2023')).toBeInTheDocument(); // Formatted date
+
+    // The new component includes a "Joined:" label and a different date format.
+    expect(screen.getByText(/Joined: 2023-01-01/i)).toBeInTheDocument();
   });
 
   test('handles search functionality correctly', async () => {
@@ -826,9 +828,7 @@ describe('OrganizationPeople', () => {
     fireEvent.click(adminOption);
 
     await waitFor(() => {
-      expect(
-        screen.getByRole('link', { name: 'Admin User' }),
-      ).toBeInTheDocument();
+      expect(screen.getByText('Admin User')).toBeInTheDocument();
     });
 
     // Navigate to next page
@@ -837,9 +837,7 @@ describe('OrganizationPeople', () => {
 
     // Wait for next page data to load
     await waitFor(() => {
-      expect(
-        screen.getByRole('link', { name: 'Admin User 2' }),
-      ).toBeInTheDocument();
+      expect(screen.getByText('Admin User 2')).toBeInTheDocument();
     });
 
     // Navigate back to previous page
@@ -850,9 +848,7 @@ describe('OrganizationPeople', () => {
 
     // Wait for previous page data to load
     await waitFor(() => {
-      expect(
-        screen.getByRole('link', { name: 'Admin User' }),
-      ).toBeInTheDocument();
+      expect(screen.getByText('Admin User')).toBeInTheDocument();
     });
   });
 
@@ -946,8 +942,8 @@ describe('OrganizationPeople', () => {
     const sortingButton = screen.getByTestId('sort');
     fireEvent.click(sortingButton);
 
-    const adminOption = screen.getByText(/user/i);
-    fireEvent.click(adminOption);
+    const usersOption = screen.getByTestId('users');
+    fireEvent.click(usersOption);
 
     await waitFor(() => {
       expect(screen.getByText('User One')).toBeInTheDocument();
@@ -1153,12 +1149,12 @@ describe('OrganizationPeople', () => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    // Switch to admin tab
+    // Switch to users tab
     const sortingButton = screen.getByTestId('sort');
     fireEvent.click(sortingButton);
 
-    const adminOption = screen.getByText(/user/i);
-    fireEvent.click(adminOption);
+    const usersOption = screen.getByTestId('users');
+    fireEvent.click(usersOption);
 
     // Wait for error handling
     await waitFor(() => {
