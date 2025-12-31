@@ -75,6 +75,12 @@
     "signingOut": "Signing out...",
     "signOut": "Sign Out"
   },
+  "orgSelector": {
+    "organization": "Organization",
+    "selectOrganization": "Select an organization",
+    "noOrganizationsAvailable": "No organizations available",
+    "noMatchingOrganizations": "No matching organizations found"
+  },
   "userLoginPage": {
     "title": "Talawa Admin",
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
@@ -207,7 +213,16 @@
     "cancel": "cancel",
     "endOfResults": "endOfResults",
     "noResultsFoundFor": "noResultsFoundFor",
-    "OR": "OR"
+    "OR": "OR",
+    "imageUploadError": "Image upload failed. Please try again.",
+    "imageUploadSuccess": "Image uploaded successfully.",
+    "congratulationOrgCreated": "Congratulations! The Organization is created.",
+    "goToStore": "Go to Store",
+    "manageFeaturesInfo": "Manage the features and plugins available for this organization.",
+    "orgName": "Enter Name",
+    "sortOrganizations": "Sort Organizations",
+    "admins": "Admins",
+    "members": "Members"
   },
   "orgListCard": {
     "manage": "Manage",
@@ -406,7 +421,10 @@
     "totalAssignedUsers": "Total Assigned Users",
     "tagCreationFailed": "Tag creation failed",
     "errorLoadingTagsData": "Error occurred while loading Organization Tags Data",
-    "sortTags": "Sort Tags"
+    "sortTags": "Sort Tags",
+    "tags": "Tags",
+    "Latest": "Latest",
+    "Oldest": "Oldest"
   },
   "manageTag": {
     "title": "Tag Details",
@@ -541,8 +559,10 @@
     "assignedTo": "Assigned To",
     "assignTo": "Assign To",
     "volunteer": "Volunteer",
+    "volunteered": "Volunteered",
     "volunteerGroup": "Volunteer Group",
     "volunteerAssignment": "Volunteer Assignment",
+    "volunteerSuccess": "Volunteer added successfully",
     "individualVolunteer": "Individual Volunteer",
     "groupAssignment": "Group Assignment",
     "hoursVolunteered": "Hours Volunteered",
@@ -689,6 +709,8 @@
     "eventDetails": "Event Details",
     "eventDeleted": "Event deleted successfully.",
     "eventUpdated": "Event updated successfully.",
+    "registeredSuccessfully": "Successfully registered for {{eventName}}",
+    "noChangesToUpdate": "No changes to update",
     "thisInstance": "This Instance",
     "thisAndFollowingInstances": "This & Following Instances",
     "allInstances": "All Instances",
@@ -711,7 +733,8 @@
     "registerEvent": "registerEvent",
     "close": "close",
     "talawaApiUnavailable": "talawaApiUnavailable",
-    "done": "done"
+    "done": "done",
+    "invalidDate": "Invalid Date"
   },
   "funds": {
     "title": "Funds",
@@ -849,11 +872,15 @@
     "Next": "Next Page",
     "Previous": "Previous Page",
     "cancel": "cancel",
+    "invalidDate": "Invalid Date",
     "messageTitleError": "Post title cannot be empty!",
     "organizationIdMissing": "Organization ID is missing!",
     "messageDescription": "Post Description",
     "addVideo": "Add Video",
-    "creatingMessage": "Creating Post..."
+    "creatingMessage": "Creating Post...",
+    "orgPostListError": "Organization post list error:",
+    "pinnedPostsLoadError": "Error loading pinned posts",
+    "errorSearchingPosts": "Error searching posts"
   },
   "postNotFound": {
     "post": "Post",
@@ -920,7 +947,8 @@
     "name": "name",
     "email": "email",
     "talawaApiUnavailable": "talawaApiUnavailable",
-    "noResultsFoundFor": "noResultsFoundFor"
+    "noResultsFoundFor": "noResultsFoundFor",
+    "sortOrganizations": "Sort Organizations"
   },
   "eventManagement": {
     "name": "Event Management Dashboard",
@@ -1390,6 +1418,10 @@
     "city": "City",
     "description": "Description",
     "enterDescription": "Enter Description",
+    "atleast_8_char_long": "Password must be at least 8 characters long.",
+    "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF.",
+    "fileSizeTooLarge": "File is too large. Maximum size is 5MB.",
+    "failedToProcessImage": "Failed to process profile picture. Please try uploading again.",
     "title": "Settings"
   },
   "donate": {
@@ -1763,6 +1795,7 @@
     "invitations": "Invitations",
     "groups": "Volunteer Groups",
     "actions": "Action Items",
+    "search": "Search",
     "searchByName": "Search by Name",
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
@@ -1785,7 +1818,7 @@
     "receivedEarliest": "Received Earliest",
     "invitationAccepted": "Invitation accepted successfully",
     "invitationRejected": "Invitation rejected successfully",
-    "volunteerSuccess": "Requested to volunteer successfully",
+    "volunteerRequestSuccess": "Requested to volunteer successfully",
     "recurring": "Recurring",
     "groupInvitationSubject": "Invitation to join volunteer group",
     "eventInvitationSubject": "Invitation to volunteer for event",

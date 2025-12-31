@@ -75,6 +75,12 @@
     "signingOut": "साइन आउट हो रहा है...",
     "signOut": "साइन आउट"
   },
+  "orgSelector": {
+    "organization": "संगठन",
+    "selectOrganization": "एक संगठन चुनें",
+    "noOrganizationsAvailable": "कोई संगठन उपलब्ध नहीं है",
+    "noMatchingOrganizations": "कोई मेल खाने वाला संगठन नहीं मिला"
+  },
   "userLoginPage": {
     "title": "तालावा व्यवस्थापक",
     "fromPalisadoes": "Palisadoes फाउंडेशन स्वयंसेवकों द्वारा विकसित एक ओपन-सोर्स एप्लिकेशन",
@@ -207,7 +213,16 @@
     "cancel": "रद्द करें",
     "endOfResults": "परिणाम समाप्त",
     "noResultsFoundFor": "कोई परिणाम नहीं मिला",
-    "OR": "या"
+    "OR": "या",
+    "imageUploadError": "छवि अपलोड विफल। कृपया पुनः प्रयास करें।",
+    "imageUploadSuccess": "छवि सफलतापूर्वक अपलोड की गई।",
+    "congratulationOrgCreated": "बधाई हो! संगठन बनाया गया है।",
+    "goToStore": "स्टोर पर जाएं",
+    "manageFeaturesInfo": "इस संगठन के लिए उपलब्ध सुविधाओं और प्लगइन्स का प्रबंधन करें।",
+    "orgName": "नाम दर्ज करें",
+    "sortOrganizations": "संगठनों को क्रमबद्ध करें",
+    "admins": "प्रशासक",
+    "members": "सदस्य"
   },
   "orgListCard": {
     "manage": "प्रबंधित करें",
@@ -406,7 +421,10 @@
     "totalAssignedUsers": "कुल नियुक्त उपयोगकर्ता",
     "tagCreationFailed": "टैग निर्माण विफल",
     "errorLoadingTagsData": "संगठन टैग डेटा लोड करते समय त्रुटि हुई",
-    "sortTags": "टैग सॉर्ट करें"
+    "sortTags": "टैग सॉर्ट करें",
+    "tags": "टैग",
+    "Latest": "नवीनतम",
+    "Oldest": "सबसे पुराना"
   },
   "manageTag": {
     "title": "टैग विवरण",
@@ -566,8 +584,10 @@
     "selectActionItemCategory": "क्रिया वस्तु श्रेणी चुनें",
     "selectAssignee": "प्राप्तकर्ता चुनें",
     "volunteer": "स्वयंसेवक",
+    "volunteered": "स्वयंसेवा की",
     "volunteerGroup": "स्वयंसेवक समूह",
     "volunteerAssignment": "स्वयंसेवक असाइनमेंट",
+    "volunteerSuccess": "स्वयंसेवक सफलतापूर्वक जोड़ा गया",
     "individualVolunteer": "व्यक्तिगत स्वयंसेवक",
     "groupAssignment": "समूह असाइनमेंट",
     "hoursVolunteered": "स्वयंसेवा के घंटे",
@@ -690,6 +710,8 @@
     "eventDetails": "घटना की जानकारी",
     "eventDeleted": "ईवेंट सफलतापूर्वक हटा दिया गया.",
     "eventUpdated": "इवेंट सफलतापूर्वक अपडेट किया गया.",
+    "registeredSuccessfully": "Successfully registered for {{eventName}}",
+    "noChangesToUpdate": "No changes to update",
     "thisInstance": "यह उदाहरण",
     "thisAndFollowingInstances": "यह और निम्नलिखित उदाहरण",
     "allInstances": "सभी उदाहरण",
@@ -711,6 +733,7 @@
     "close": "बंद करें",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
     "done": "समाप्त",
+    "invalidDate": "Invalid Date",
     "createChat": "चैट बनाएं"
   },
   "funds": {
@@ -849,11 +872,15 @@
     "Next": "अगला पृष्ठ",
     "Previous": "पिछला पृष्ठ",
     "cancel": "रद्द करें",
+    "invalidDate": "Invalid Date",
     "messageTitleError": "पोस्ट का शीर्षक खाली नहीं हो सकता!",
     "organizationIdMissing": "संगठन आईडी गायब है!",
     "messageDescription": "पोस्ट विवरण",
     "addVideo": "वीडियो जोड़ें",
-    "creatingMessage": "पोस्ट बनाई जा रही है..."
+    "creatingMessage": "पोस्ट बनाई जा रही है...",
+    "orgPostListError": "Organization post list error:",
+    "pinnedPostsLoadError": "Error loading pinned posts",
+    "errorSearchingPosts": "Error searching posts"
   },
   "postNotFound": {
     "post": "डाक",
@@ -920,7 +947,8 @@
     "name": "नाम",
     "email": "ईमेल",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
-    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला"
+    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला",
+    "sortOrganizations": "Sort Organizations"
   },
   "eventManagement": {
     "name": "इवेंट मैनेजमेंट",
@@ -1390,6 +1418,10 @@
     "city": "शहर",
     "description": "विवरण",
     "enterDescription": "विवरण दर्ज करें",
+    "atleast_8_char_long": "पासवर्ड कम से कम 8 अक्षर लंबा होना चाहिए",
+    "invalidFileType": "अमान्य फ़ाइल प्रकार। कृपया JPEG, PNG, या GIF अपलोड करें",
+    "fileSizeTooLarge": "फ़ाइल बहुत बड़ी है। अधिकतम आकार 5MB है",
+    "failedToProcessImage": "प्रोफ़ाइल चित्र को संसाधित करने में विफल। कृपया पुनः अपलोड करने का प्रयास करें",
     "title": "समायोजन"
   },
   "donate": {
@@ -1763,6 +1795,7 @@
     "invitations": "निमंत्रण",
     "groups": "स्वयंसेवक समूह",
     "actions": "क्रिया वस्तुएँ",
+    "search": "खोजें",
     "searchByName": "नाम से खोजें",
     "latestEndDate": "नवीनतम समाप्ति तिथि",
     "earliestEndDate": "प्रारंभिक समाप्ति तिथि",
@@ -1782,7 +1815,7 @@
     "receivedEarliest": "सबसे पहले प्राप्त",
     "invitationAccepted": "निमंत्रण सफलतापूर्वक स्वीकार किया गया",
     "invitationRejected": "निमंत्रण सफलतापूर्वक अस्वीकृत",
-    "volunteerSuccess": "स्वयंसेवक के रूप में अनुरोध सफलतापूर्वक किया गया",
+    "volunteerRequestSuccess": "स्वयंसेवक के रूप में अनुरोध सफलतापूर्वक किया गया",
     "recurring": "पुनरावृत्ति",
     "groupInvitationSubject": "स्वयंसेवक समूह में शामिल होने के लिए निमंत्रण",
     "eventInvitationSubject": "कार्यक्रम के लिए स्वयंसेवक बनने का निमंत्रण",

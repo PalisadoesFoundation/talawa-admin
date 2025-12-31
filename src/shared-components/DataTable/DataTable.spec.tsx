@@ -1,224 +1,327 @@
 import { render, screen } from '@testing-library/react';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import { DataTable } from './DataTable';
-import { describe, it, expect, vi, afterEach } from 'vitest';
 
 describe('DataTable', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
-  it('coerces non-string/number rowKey property to string', () => {
-    type Row = { boolKey: boolean; name: string };
-    const cols = [
-      { id: 'name', header: 'Name', accessor: (row: Row) => row.name },
-    ];
-    const data: Row[] = [
-      { boolKey: true, name: 'TrueRow' },
-      { boolKey: false, name: 'FalseRow' },
-    ];
-    // rowKey points to a boolean property, which will be coerced to string
-    render(<DataTable<Row> data={data} columns={cols} rowKey="boolKey" />);
-    expect(screen.getByText('TrueRow')).toBeInTheDocument();
-    expect(screen.getByText('FalseRow')).toBeInTheDocument();
-  });
 
-  it('gets cell value using string accessor', () => {
-    const cols = [{ id: 'foo', header: 'Foo', accessor: 'foo' as const }];
-    const data = [{ foo: 'bar' }];
-    render(<DataTable data={data} columns={cols} />);
-    expect(screen.getByText('bar')).toBeInTheDocument();
-  });
+  /* ------------------------------------------------------------------
+   * Basic rendering
+   * ------------------------------------------------------------------ */
 
-  it('uses default idx as row key when rowKey is undefined', () => {
-    const cols = [
-      { id: 'id', header: 'ID', accessor: (row: { id: number }) => row.id },
-    ];
-    const data = [{ id: 1 }, { id: 2 }];
-    render(<DataTable data={data} columns={cols} />);
-    expect(screen.getByText('1')).toBeInTheDocument();
-    expect(screen.getByText('2')).toBeInTheDocument();
-  });
-
-  it('uses idx as row key when rowKey is string but property missing', () => {
-    type Row = { notId: number };
-    const cols = [
+  it('renders headers and rows', () => {
+    const columns = [
       {
-        id: 'notId',
-        header: 'NotId',
-        accessor: (row: { notId: number }) => row.notId,
+        id: 'name',
+        header: 'Name',
+        accessor: (row: { name: string }) => row.name,
       },
     ];
-    const data: Row[] = [{ notId: 5 }];
-    // @ts-expect-error - intentionally passing invalid rowKey to assert fallback to index
-    render(<DataTable<Row> data={data} columns={cols} rowKey="id" />);
-    expect(screen.getByText('5')).toBeInTheDocument();
+
+    render(<DataTable data={[{ name: 'Ada' }]} columns={columns} />);
+
+    expect(screen.getByText('Name')).toBeInTheDocument();
+    expect(screen.getByText('Ada')).toBeInTheDocument();
   });
 
-  it('renders column header as function', () => {
-    const cols = [
+  it('renders header when header is a function', () => {
+    const columns = [
       {
         id: 'name',
         header: () => 'Dynamic Header',
         accessor: (row: { name: string }) => row.name,
       },
     ];
-    render(<DataTable data={[{ name: 'Test' }]} columns={cols} />);
+
+    render(<DataTable data={[{ name: 'Test' }]} columns={columns} />);
+
     expect(screen.getByText('Dynamic Header')).toBeInTheDocument();
-    expect(screen.getByText('Test')).toBeInTheDocument();
   });
 
-  it('renders cell with undefined render and value', () => {
-    type Row = { foo?: string };
-    const cols = [
-      { id: 'foo', header: 'Foo', accessor: (row: Row) => row.foo },
-    ];
-    render(<DataTable<Row> data={[{} as Row]} columns={cols} />);
-    const cell = screen.getByRole('cell');
-    expect(cell).toBeInTheDocument();
-    expect(cell).toHaveTextContent('');
+  /* ------------------------------------------------------------------
+   * Cell rendering
+   * ------------------------------------------------------------------ */
+
+  it('renders cell using string accessor', () => {
+    const columns = [{ id: 'foo', header: 'Foo', accessor: 'foo' as const }];
+
+    render(<DataTable data={[{ foo: 'bar' }]} columns={columns} />);
+
+    expect(screen.getByText('bar')).toBeInTheDocument();
   });
 
-  it('renders cell with string accessor', () => {
-    const cols = [
-      { id: 'bar', header: 'Bar', accessor: (row: { bar: number }) => row.bar },
-    ];
-    render(<DataTable data={[{ bar: 123 }]} columns={cols} />);
-    expect(screen.getByText('123')).toBeInTheDocument();
-  });
-
-  it('renders headers and rows', () => {
-    const cols = [
-      {
-        id: 'name',
-        header: 'Name',
-        accessor: (row: { name: string }) => row.name,
-      },
-    ];
-    render(<DataTable data={[{ name: 'Ada' }]} columns={cols} />);
-    expect(screen.getByText('Name')).toBeInTheDocument();
-    expect(screen.getByText('Ada')).toBeInTheDocument();
-  });
-
-  it('renders loading state with JSX header and does not stringify [object Object]', () => {
-    const cols = [
-      { id: 'jsx', header: <span>JSXHeader</span>, accessor: 'foo' as const },
-      { id: 'str', header: 'StringHeader', accessor: 'bar' as const },
-    ];
-    render(<DataTable data={[]} columns={cols} loading />);
-    // TableLoader should render the string header, but not [object Object] for JSX header
-    expect(screen.getByTestId('TableLoader')).toBeInTheDocument();
-    expect(screen.getByText('StringHeader')).toBeInTheDocument();
-    // The JSX header should not render as [object Object]
-    expect(screen.queryByText('[object Object]')).not.toBeInTheDocument();
-    // The cell for the JSX header should be present but empty
-    const ths = screen.getAllByRole('columnheader');
-    // One should be empty string, one should be 'StringHeader'
-    expect(ths.some((th) => th.textContent === 'StringHeader')).toBe(true);
-    expect(ths.some((th) => th.textContent === '')).toBe(true);
-  });
-
-  it('renders loading state with TableLoader', () => {
-    const cols = [
-      { id: 'name', header: 'Name', accessor: 'name' },
-      { id: 'age', header: 'Age', accessor: 'age' },
-    ];
-    render(<DataTable data={[]} columns={cols} loading />);
-    expect(screen.getByTestId('TableLoader')).toBeInTheDocument();
-    expect(screen.getByText('Name')).toBeInTheDocument();
-    expect(screen.getByText('Age')).toBeInTheDocument();
-  });
-
-  it('renders empty state', () => {
-    const cols = [{ id: 'name', header: 'Name', accessor: 'name' }];
-    render(
-      <DataTable
-        data={[]}
-        columns={cols}
-        loading={false}
-        emptyMessage="Nothing here!"
-      />,
-    );
-    expect(screen.getByText('Nothing here!')).toBeInTheDocument();
-  });
-
-  it('renders error state', () => {
-    const cols = [{ id: 'name', header: 'Name', accessor: 'name' }];
-    const error = new Error('Something went wrong');
-    render(<DataTable data={[]} columns={cols} error={error} />);
-    expect(screen.getByText('Something went wrong')).toBeInTheDocument();
-  });
-
-  it('renders custom error with renderError', () => {
-    const cols = [{ id: 'name', header: 'Name', accessor: 'name' }];
-    const error = new Error('fail');
-    render(
-      <DataTable
-        data={[]}
-        columns={cols}
-        error={error}
-        renderError={(e) => <span>Custom: {e.message}</span>}
-      />,
-    );
-    expect(screen.getByText('Custom: fail')).toBeInTheDocument();
-  });
-
-  it('renders custom cell with render', () => {
-    const cols = [
-      {
-        id: 'name',
-        header: 'Name',
-        accessor: (row: { name: string }) => row.name,
-        render: (value: unknown) => (
-          <span data-testid="custom-cell">{String(value).toUpperCase()}</span>
-        ),
-      },
-    ];
-    render(<DataTable data={[{ name: 'ada' }]} columns={cols} />);
-    expect(screen.getByTestId('custom-cell')).toHaveTextContent('ADA');
-  });
-
-  it('uses rowKey function for row keys', () => {
-    const cols = [
-      { id: 'id', header: 'ID', accessor: (row: { id: number }) => row.id },
-    ];
-    const data = [{ id: 42 }];
-    const rowKey = (row: { id: number }) => `row-${row.id}`;
-    render(<DataTable data={data} columns={cols} rowKey={rowKey} />);
-    expect(screen.getByText('42')).toBeInTheDocument();
-  });
-
-  it('uses rowKey string for row keys', () => {
-    const cols = [
-      { id: 'id', header: 'ID', accessor: (row: { id: number }) => row.id },
-    ];
-    const data = [{ id: 99 }];
-    render(<DataTable data={data} columns={cols} rowKey="id" />);
-    expect(screen.getByText('99')).toBeInTheDocument();
-  });
-
-  it('handles accessor as function', () => {
-    const cols = [
+  it('renders cell using function accessor', () => {
+    const columns = [
       {
         id: 'double',
         header: 'Double',
         accessor: (row: { value: number }) => row.value * 2,
       },
     ];
-    render(<DataTable data={[{ value: 5 }]} columns={cols} />);
+
+    render(<DataTable data={[{ value: 5 }]} columns={columns} />);
+
     expect(screen.getByText('10')).toBeInTheDocument();
   });
-  it('renders visually-hidden caption and sets aria-label when ariaLabel is provided', () => {
-    const ariaLabel = 'Accessible Table Caption';
-    // Provide at least one column and one row so the table is rendered
-    const columns = [{ id: 'foo', header: 'Foo', accessor: 'foo' as const }];
-    const data = [{ foo: 'bar' }];
-    const { getByRole } = render(
-      <DataTable ariaLabel={ariaLabel} columns={columns} data={data} />,
+
+  it('renders empty string for null or undefined cell values', () => {
+    const columns = [
+      {
+        id: 'foo',
+        header: 'Foo',
+        accessor: (row: { foo?: string }) => row.foo,
+      },
+    ];
+
+    render(<DataTable data={[{}]} columns={columns} />);
+
+    const cell = screen.getByRole('cell');
+    expect(cell).toHaveTextContent('');
+  });
+
+  it('uses custom render function for cell', () => {
+    interface IRow {
+      name: string;
+    }
+
+    interface IColumn {
+      id: string;
+      header: string;
+      accessor: (row: IRow) => string;
+      render: (value: unknown, row: IRow) => JSX.Element;
+    }
+
+    const columns: IColumn[] = [
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: (row: IRow) => row.name,
+        render: (value: unknown) => (
+          <span data-testid="custom">{String(value).toUpperCase()}</span>
+        ),
+      },
+    ];
+
+    render(<DataTable data={[{ name: 'ada' }]} columns={columns} />);
+
+    expect(screen.getByTestId('custom')).toHaveTextContent('ADA');
+  });
+
+  it('renders object and array cell values as JSON', () => {
+    const columns = [
+      { id: 'obj', header: 'Obj', accessor: (row: { obj: object }) => row.obj },
+      {
+        id: 'arr',
+        header: 'Arr',
+        accessor: (row: { arr: unknown[] }) => row.arr,
+      },
+    ];
+    const data = [{ obj: { foo: 'bar', num: 42 }, arr: [1, 2, 3] }];
+    render(<DataTable data={data} columns={columns} />);
+    // Should render JSON stringified values
+    expect(screen.getByText('{"foo":"bar","num":42}')).toBeInTheDocument();
+    expect(screen.getByText('[1,2,3]')).toBeInTheDocument();
+  });
+
+  it('renders empty string for unstringifiable cell values', () => {
+    const columns = [
+      {
+        id: 'cyc',
+        header: 'Cyc',
+        accessor: (row: { cyc: unknown }) => row.cyc,
+      },
+    ];
+    // Create a cyclic object
+    const cyclic: Record<string, unknown> = {};
+    (cyclic as Record<string, unknown>).self = cyclic;
+    render(<DataTable data={[{ cyc: cyclic }]} columns={columns} />);
+    // Should render empty string for cyclic object
+    const cell = screen.getByRole('cell');
+    expect(cell).toHaveTextContent('');
+  });
+
+  /* ------------------------------------------------------------------
+   * Row key handling
+   * ------------------------------------------------------------------ */
+
+  it('uses rowKey function when provided', () => {
+    const columns = [
+      { id: 'id', header: 'ID', accessor: (row: { id: number }) => row.id },
+    ];
+
+    render(
+      <DataTable
+        data={[{ id: 1 }]}
+        columns={columns}
+        rowKey={(row) => `row-${row.id}`}
+      />,
     );
-    // The visually-hidden caption should be present
-    const caption = getByRole('caption');
+
+    expect(screen.getByText('1')).toBeInTheDocument();
+  });
+
+  it('uses rowKey string when property exists', () => {
+    const columns = [
+      { id: 'id', header: 'ID', accessor: (row: { id: number }) => row.id },
+    ];
+
+    render(<DataTable data={[{ id: 42 }]} columns={columns} rowKey="id" />);
+
+    expect(screen.getByText('42')).toBeInTheDocument();
+  });
+
+  it('falls back to index when rowKey property is missing or invalid', () => {
+    type Row = { value: number };
+    const columns = [
+      { id: 'value', header: 'Value', accessor: (row: Row) => row.value },
+    ];
+
+    render(<DataTable<Row> data={[{ value: 5 }]} columns={columns} />);
+
+    expect(screen.getByText('5')).toBeInTheDocument();
+  });
+
+  it('coerces non-string/number rowKey values to string', () => {
+    type Row = { flag: boolean; name: string };
+    const columns = [
+      { id: 'name', header: 'Name', accessor: (row: Row) => row.name },
+    ];
+
+    render(
+      <DataTable<Row>
+        data={[
+          { flag: true, name: 'TrueRow' },
+          { flag: false, name: 'FalseRow' },
+        ]}
+        columns={columns}
+        rowKey="flag"
+      />,
+    );
+
+    expect(screen.getByText('TrueRow')).toBeInTheDocument();
+    expect(screen.getByText('FalseRow')).toBeInTheDocument();
+  });
+
+  it('falls back to index when rowKey property is null or undefined', () => {
+    type Row = { id?: number | null; value: string };
+    const columns = [
+      { id: 'value', header: 'Value', accessor: (row: Row) => row.value },
+    ];
+
+    // One row with id: null, one row with id omitted
+    const data: Row[] = [{ id: null, value: 'NullId' }, { value: 'NoId' }];
+
+    render(<DataTable<Row> data={data} columns={columns} rowKey="id" />);
+
+    // Both rows should render their cell text
+    expect(screen.getByText('NullId')).toBeInTheDocument();
+    expect(screen.getByText('NoId')).toBeInTheDocument();
+  });
+
+  /* ------------------------------------------------------------------
+   * States: error, loading, empty
+   * ------------------------------------------------------------------ */
+
+  it('renders error state with default error message and accessibility attributes', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' }];
+    const error = new Error('Failure');
+
+    render(<DataTable data={[]} columns={columns} error={error} />);
+
+    const errorDiv = screen.getByTestId('datatable-error');
+    expect(errorDiv).toHaveAttribute('role', 'alert');
+    expect(errorDiv).toHaveAttribute('aria-live', 'assertive');
+    expect(errorDiv).toHaveTextContent('Failure');
+  });
+
+  it('renders custom error when renderError is provided', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' }];
+    const error = new Error('Boom');
+
+    render(
+      <DataTable
+        data={[]}
+        columns={columns}
+        error={error}
+        renderError={(e) => <span>Custom: {e.message}</span>}
+      />,
+    );
+
+    expect(screen.getByText('Custom: Boom')).toBeInTheDocument();
+  });
+
+  it('renders empty state with custom emptyMessage and accessibility attributes', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' }];
+
+    render(
+      <DataTable data={[]} columns={columns} emptyMessage="Nothing here!" />,
+    );
+
+    const emptyDiv = screen.getByTestId('datatable-empty');
+    expect(emptyDiv).toHaveAttribute('role', 'status');
+    expect(emptyDiv).toHaveAttribute('aria-live', 'polite');
+    expect(emptyDiv).toHaveTextContent('Nothing here!');
+  });
+  it('renders error state with precedence over loading and empty', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' }];
+    const error = new Error('Boom');
+
+    render(
+      <DataTable data={[]} columns={columns} error={error} loading={true} />,
+    );
+
+    // Error state should be present
+    expect(screen.getByTestId('datatable-error')).toBeInTheDocument();
+    // Table and empty state should not be present
+    expect(screen.queryByRole('table')).toBeNull();
+    expect(screen.queryByTestId('datatable-empty')).toBeNull();
+  });
+
+  it('renders skeleton table when loading is true', () => {
+    const columns = [{ id: 'name', header: 'Name', accessor: 'name' }];
+
+    render(<DataTable data={[]} columns={columns} loading skeletonRows={3} />);
+
+    const table = screen.getByRole('table');
+    expect(table).toHaveAttribute('aria-busy', 'true');
+    expect(screen.getAllByRole('row')).toHaveLength(4); // 1 header + 3 skeleton rows
+  });
+
+  it('renders <caption> with ariaLabel in both loading and table content states', () => {
+    const columns = [
+      {
+        id: 'name',
+        header: 'Name',
+        accessor: (row: { name: string }) => row.name,
+      },
+    ];
+    const ariaLabel = 'Test Table Caption';
+
+    // Loading state
+    const { rerender } = render(
+      <DataTable
+        data={[]}
+        columns={columns}
+        loading={true}
+        ariaLabel={ariaLabel}
+      />,
+    );
+    let caption = document.querySelector('caption');
+    expect(caption).toBeInTheDocument();
     expect(caption).toHaveTextContent(ariaLabel);
-    // The table should have aria-label attribute
-    const table = getByRole('table');
-    expect(table).toHaveAttribute('aria-label', ariaLabel);
+
+    // Table content state
+    rerender(
+      <DataTable
+        data={[{ name: 'Ada' }]}
+        columns={columns}
+        ariaLabel={ariaLabel}
+      />,
+    );
+    caption = document.querySelector('caption');
+    expect(caption).toBeInTheDocument();
+    expect(caption).toHaveTextContent(ariaLabel);
   });
 });

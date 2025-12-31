@@ -75,6 +75,12 @@
     "signingOut": "Cerrando sesión...",
     "signOut": "Cerrar sesión"
   },
+  "orgSelector": {
+    "organization": "Organización",
+    "selectOrganization": "Seleccione una organización",
+    "noOrganizationsAvailable": "No hay organizaciones disponibles",
+    "noMatchingOrganizations": "No se encontraron organizaciones coincidentes"
+  },
   "userLoginPage": {
     "title": "Administrador Talawa",
     "fromPalisadoes": "Una aplicación de código abierto de los voluntarios de la Fundación palisados",
@@ -207,7 +213,16 @@
     "OR": "O",
     "sampleOrgSuccess": "Organización de ejemplo creada exitosamente",
     "manageFeatures": "Gestionar funciones",
-    "enableEverything": "Habilitar todo"
+    "enableEverything": "Habilitar todo",
+    "imageUploadError": "Error al cargar la imagen",
+    "imageUploadSuccess": "Imagen cargada con éxito",
+    "congratulationOrgCreated": "¡Felicidades! La Organización ha sido creada.",
+    "goToStore": "Ir a la tienda",
+    "manageFeaturesInfo": "Gestiona las funciones y plugins disponibles para esta organización.",
+    "orgName": "Ingrese el nombre",
+    "sortOrganizations": "Ordenar Organizaciones",
+    "admins": "Administradores",
+    "members": "Miembros"
   },
   "orgListCard": {
     "admins": "Administradores",
@@ -406,7 +421,10 @@
     "totalAssignedUsers": "Total de usuarios asignados",
     "tagCreationFailed": "Error al crear la etiqueta",
     "errorLoadingTagsData": "Se produjo un error al cargar los datos de las etiquetas de la organización",
-    "sortTags": "Ordenar Etiquetas"
+    "sortTags": "Ordenar Etiquetas",
+    "tags": "Etiquetas",
+    "Latest": "Más Reciente",
+    "Oldest": "Más Antiguo"
   },
   "manageTag": {
     "title": "Detalles de la Etiqueta",
@@ -566,8 +584,10 @@
     "selectActionItemCategory": "Seleccionar una Categoría de Acción",
     "selectAssignee": "Seleccionar Asignado",
     "volunteer": "Voluntario",
+    "volunteered": "Se ofreció como voluntario",
     "volunteerGroup": "Grupo de voluntarios",
     "volunteerAssignment": "Asignación de voluntario",
+    "volunteerSuccess": "Voluntario agregado exitosamente",
     "individualVolunteer": "Voluntario individual",
     "groupAssignment": "Asignación de grupo",
     "hoursVolunteered": "Horas de voluntariado",
@@ -698,6 +718,8 @@
     "eventDetails": "Detalles del evento",
     "eventDeleted": "Evento eliminado con éxito.",
     "eventUpdated": "Evento actualizado con éxito.",
+    "registeredSuccessfully": "Successfully registered for {{eventName}}",
+    "noChangesToUpdate": "No changes to update",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
     "thisInstance": "Esta Instancia",
     "thisAndFollowingInstances": "Esta y las Siguientes Instancias",
@@ -711,6 +733,7 @@
     "after": "Después de",
     "occurences": "ocurrencias",
     "done": "Hecho",
+    "invalidDate": "Invalid Date",
     "createChat": "Crear chat"
   },
   "funds": {
@@ -835,6 +858,7 @@
     "Title": "Título",
     "Text": "Texto",
     "cancel": "Cancelar",
+    "invalidDate": "Invalid Date",
     "searchBy": "Buscar por",
     "Oldest": "Más Antiguas Primero",
     "Latest": "Más Recientes Primero",
@@ -853,7 +877,10 @@
     "organizationIdMissing": "¡Falta el ID de la organización!",
     "messageDescription": "Descripción de la publicación",
     "addVideo": "Añadir video",
-    "creatingMessage": "Creando publicación..."
+    "creatingMessage": "Creando publicación...",
+    "orgPostListError": "Organization post list error:",
+    "pinnedPostsLoadError": "Error loading pinned posts",
+    "errorSearchingPosts": "Error searching posts"
   },
   "postNotFound": {
     "post": "Publicación",
@@ -919,6 +946,7 @@
     "searchByFirstName": "Buscar por nombre de pila",
     "searchByLastName": "Buscar por apellido",
     "noResultsFoundFor": "No se encontraron resultados para ",
+    "sortOrganizations": "Sort Organizations",
     "noSpammerFound": "No se encontró ningún spammer",
     "noUsersFound": "No se encontraron usuarios"
   },
@@ -1390,6 +1418,10 @@
     "city": "Ciudad",
     "description": "Descripción",
     "enterDescription": "Ingrese descripción",
+    "atleast_8_char_long": "La contraseña debe tener al menos 8 caracteres",
+    "invalidFileType": "Tipo de archivo inválido. Por favor suba un JPEG, PNG o GIF",
+    "fileSizeTooLarge": "El archivo es demasiado grande. El tamaño máximo es 5MB",
+    "failedToProcessImage": "Error al procesar la foto de perfil. Por favor intente subirla nuevamente",
     "title": "Ajustes"
   },
   "donate": {
@@ -1763,6 +1795,7 @@
     "invitations": "Invitaciones",
     "groups": "Grupos de Voluntarios",
     "actions": "Elementos de Acción",
+    "search": "Buscar",
     "searchByName": "Buscar por Nombre",
     "latestEndDate": "Fecha de Finalización Más Reciente",
     "earliestEndDate": "Fecha de Finalización Más Antigua",
@@ -1782,7 +1815,7 @@
     "receivedEarliest": "Recibido en Primer Lugar",
     "invitationAccepted": "Invitación aceptada con éxito",
     "invitationRejected": "Invitación rechazada con éxito",
-    "volunteerSuccess": "Solicitud de voluntariado realizada con éxito",
+    "volunteerRequestSuccess": "Solicitud de voluntariado realizada con éxito",
     "recurring": "Recurrente",
     "groupInvitationSubject": "Invitación a unirse al grupo de voluntarios",
     "eventInvitationSubject": "Invitación a ser voluntario para el evento",
