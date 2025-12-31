@@ -78,7 +78,7 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
               <ProfileAvatarDisplay
                 imageUrl={image && image !== 'null' ? image : undefined}
                 fallbackName={`${firstName} ${lastName}`}
-                size="medium"
+                size="custom"
                 shape="circle"
                 customSize={60}
                 border={false}
