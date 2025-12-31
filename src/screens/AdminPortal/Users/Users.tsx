@@ -65,17 +65,18 @@ import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
 
 import {
   ORGANIZATION_LIST,
   USER_LIST_FOR_ADMIN,
 } from 'GraphQl/Queries/Queries';
 import TableLoader from 'components/TableLoader/TableLoader';
-import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
+import { UserTableRow } from 'components/AdminPortal/UserTableRow/UserTableRow';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
-import useLocalStorage from 'utils/useLocalstorage';
 import type { ApolloError } from '@apollo/client';
 import { PersonOff, WarningAmberRounded } from '@mui/icons-material';
 import PageHeader from 'shared-components/Navbar/Navbar';
@@ -89,8 +90,6 @@ const Users = (): JSX.Element => {
     document.title = t('title');
   }, [t]);
 
-  const { getItem } = useLocalStorage();
-
   const perPageResult = 12;
   const tableLoaderRowLength = 4;
   const [isLoading, setIsLoading] = useState(true);
@@ -99,7 +98,7 @@ const Users = (): JSX.Element => {
   const [searchByName, setSearchByName] = useState('');
   const [sortingOption, setSortingOption] = useState('newest');
   const [filteringOption, setFilteringOption] = useState('cancel');
-  const loggedInUserId = getItem('id') as string;
+
   const [usersData, setUsersData] = useState<InterfaceQueryUserListItem[]>([]);
 
   const {
@@ -325,10 +324,9 @@ const Users = (): JSX.Element => {
 
   const headerTitles: string[] = [
     '#',
-    tCommon('name'),
-    tCommon('email'),
-    t('joined_organizations'),
-    t('blocked_organizations'),
+    tCommon('user'),
+    t('joined'),
+    t('actions'),
   ];
 
   /**
@@ -435,12 +433,31 @@ const Users = (): JSX.Element => {
                 {displayedUsers.map(
                   (user: InterfaceQueryUserListItem, index: number) => {
                     return (
-                      <UsersTableItem
+                      <UserTableRow
                         key={user.id}
-                        index={index}
-                        resetAndRefetch={resetAndRefetch}
-                        user={user}
-                        loggedInUserId={loggedInUserId}
+                        user={{
+                          id: String(user.id),
+                          name: user.name || '',
+                          emailAddress: user.emailAddress,
+                          avatarURL: user.avatarURL,
+                          createdAt: user.createdAt,
+                        }}
+                        rowNumber={index + 1}
+                        isDataGrid={false}
+                        showJoinedDate={true}
+                        actions={[
+                          {
+                            label: t('view'),
+                            onClick: () => {
+                              // Placeholder for view action - would need to implement modal functionality
+                              console.log('View user details:', user.id);
+                            },
+                            variant: 'primary',
+                            icon: <FontAwesomeIcon icon={faEye} />,
+                            testId: `viewUser${user.id}`,
+                          },
+                        ]}
+                        testIdPrefix="user"
                       />
                     );
                   },

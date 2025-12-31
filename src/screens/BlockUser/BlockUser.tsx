@@ -221,7 +221,12 @@ const BlockUser = (): JSX.Element => {
   }, []);
 
   // Header titles for the table
-  const headerTitles: string[] = [tCommon('user'), t('block_unblock')];
+  const headerTitles: string[] = [
+    '#',
+    tCommon('user'),
+    t('joined'),
+    t('block_unblock'),
+  ];
 
   if (loadingMembers || loadingBlockedUsers) {
     return (
@@ -294,7 +299,7 @@ const BlockUser = (): JSX.Element => {
                         }}
                         rowNumber={index + 1}
                         isDataGrid={false}
-                        showJoinedDate={false}
+                        showJoinedDate={true}
                         actions={[
                           {
                             label: t('block'),
@@ -319,14 +324,14 @@ const BlockUser = (): JSX.Element => {
                         }}
                         rowNumber={index + 1}
                         isDataGrid={false}
-                        showJoinedDate={false}
+                        showJoinedDate={true}
                         actions={[
                           {
                             label: t('unblock'),
                             onClick: () => handleUnBlockUser(user),
                             variant: 'success',
                             icon: <FontAwesomeIcon icon={faUserPlus} />,
-                            testId: `blockUser${user.id}`,
+                            testId: `unblockUser${user.id}`,
                           },
                         ]}
                         testIdPrefix="block-user"
