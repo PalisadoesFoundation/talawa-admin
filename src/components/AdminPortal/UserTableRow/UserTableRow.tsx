@@ -152,13 +152,9 @@ export const UserTableRow: React.FC<InterfaceUserTableRowProps> = memo(
         <Box
           onClick={onRowClick ? handleRowClick : undefined}
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
             gap: compact ? 1 : 2,
-            cursor: onRowClick ? 'pointer' : 'default',
           }}
-          className={styles.gridCell}
+          className={`${styles.gridCell} ${onRowClick ? styles.gridCellPointer : ''}`}
           data-testid={`${testIdPrefix}-gridcell-${user.id}`}
           aria-label={t('user_row', 'User row')}
         >
@@ -171,7 +167,7 @@ export const UserTableRow: React.FC<InterfaceUserTableRowProps> = memo(
     return (
       <tr
         onClick={onRowClick ? handleRowClick : undefined}
-        className={onRowClick ? styles.tableRow : undefined}
+        className={onRowClick ? styles.tableRowPointer : undefined}
         data-testid={`${testIdPrefix}-tr-${user.id}`}
         aria-label={t('user_row', 'User row')}
       >

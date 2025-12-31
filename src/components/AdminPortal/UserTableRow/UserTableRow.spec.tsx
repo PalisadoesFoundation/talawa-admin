@@ -84,6 +84,26 @@ describe('UserTableRow', () => {
     expect(onAction).toHaveBeenCalledWith(user);
   });
 
+  it('renders action button with default variant', () => {
+    const onAction = vi.fn();
+    render(
+      <MockedProvider>
+        <UserTableRow
+          user={user}
+          actions={[
+            {
+              label: 'Default Action',
+              onClick: onAction,
+              testId: 'defaultBtn',
+            },
+          ]}
+          testIdPrefix="spec"
+        />
+      </MockedProvider>,
+    );
+    expect(screen.getByTestId('defaultBtn')).toBeInTheDocument();
+  });
+
   it('renders table row view with row number', () => {
     render(
       <MockedProvider>
