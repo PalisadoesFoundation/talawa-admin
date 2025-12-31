@@ -11,6 +11,7 @@ interface IEventFormBase {
   allDay: boolean;
   isPublic: boolean;
   isRegisterable: boolean;
+  isInviteOnly?: boolean;
   recurrenceRule: InterfaceRecurrenceRule | null;
   createChat?: boolean;
 }
@@ -65,6 +66,7 @@ export interface IEventFormProps {
   showCreateChat?: boolean;
   showRegisterable?: boolean;
   showPublicToggle?: boolean;
+  showInviteOnlyToggle?: boolean;
   disableRecurrence?: boolean;
   submitting?: boolean;
   showRecurrenceToggle?: boolean;

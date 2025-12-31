@@ -513,6 +513,7 @@
     "publicEvent": "सार्वजनिक है",
     "isRegistrable": "पंजीकरण योग्य है",
     "registerable": "पंजीकरण योग्य है",
+    "isInviteOnly": "केवल आमंत्रित",
     "createEvent": "कार्यक्रम बनाएँ",
     "enterFilter": "फ़िल्टर दर्ज करें",
     "enterName": "नाम दर्ज करें",
@@ -1315,6 +1316,7 @@
     "chartPageNavigation": "चार्ट पृष्ठ नेविगेशन",
     "previousPage": "पिछला पृष्ठ",
     "nextPage": "अगला पृष्ठ",
+    "pageNumber": "पृष्ठ {{page}}",
     "goToToday": "आज पर जाएं",
     "genderDistribution": "लिंग वितरण",
     "ageDistribution": "आयु वितरण"
@@ -1674,7 +1676,8 @@
     "user": "उपयोगकर्ता",
     "profile": "प्रोफ़ाइल",
     "customizedTable": "कस्टमाइज़्ड टेबल",
-    "page": "पृष्ठ"
+    "page": "पृष्ठ",
+    "add": "जोड़ें"
   },
   "eventActionItems": {
     "title": "एक्शन आइटम्स",

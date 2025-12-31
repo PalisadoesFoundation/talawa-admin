@@ -513,6 +513,7 @@
     "publicEvent": "是公开的",
     "isRegistrable": "可注册",
     "registerable": "可注册",
+    "isInviteOnly": "仅限邀请",
     "createEvent": "创建事件",
     "enterFilter": "输入过滤器",
     "enterName": "输入名称",
@@ -1315,6 +1316,7 @@
     "chartPageNavigation": "图表页面导航",
     "previousPage": "上一页",
     "nextPage": "下一页",
+    "pageNumber": "第 {{page}} 页",
     "goToToday": "转到今天",
     "genderDistribution": "性别分布",
     "ageDistribution": "年龄分布"
@@ -1674,7 +1676,8 @@
     "user": "用户",
     "profile": "个人资料",
     "customizedTable": "自定义表格",
-    "page": "页"
+    "page": "页",
+    "add": "添加"
   },
   "eventActionItems": {
     "title": "行动项目",
