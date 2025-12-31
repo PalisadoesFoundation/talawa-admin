@@ -229,6 +229,7 @@ describe('LoginForm', () => {
       await waitFor(() => {
         expect(onSuccess).toHaveBeenCalledWith('test-auth-token');
       });
+      expect(onSuccess).toHaveBeenCalledTimes(1);
     });
 
     test('calls onSuccess for admin login', async () => {
@@ -251,6 +252,7 @@ describe('LoginForm', () => {
       await waitFor(() => {
         expect(onSuccess).toHaveBeenCalledWith('admin-auth-token');
       });
+      expect(onSuccess).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -275,6 +277,7 @@ describe('LoginForm', () => {
       await waitFor(() => {
         expect(onError).toHaveBeenCalled();
       });
+      expect(onError).toHaveBeenCalledTimes(1);
     });
 
     test('calls onError when login fails with GraphQL error', async () => {
@@ -297,6 +300,7 @@ describe('LoginForm', () => {
       await waitFor(() => {
         expect(onError).toHaveBeenCalled();
       });
+      expect(onError).toHaveBeenCalledTimes(1);
     });
 
     test('does not throw when onError is not provided', async () => {
@@ -343,6 +347,7 @@ describe('LoginForm', () => {
       // Button should be disabled immediately after click
       await waitFor(() => {
         expect(submitButton).toBeDisabled();
+        expect(submitButton).toHaveTextContent('Loading...');
       });
     });
 

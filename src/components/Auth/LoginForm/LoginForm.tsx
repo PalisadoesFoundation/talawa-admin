@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -36,6 +36,19 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
   const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
   const { t: tCommon } = useTranslation('common');
 
+  // Stable refs for callbacks to prevent multiple invocations on parent re-renders
+  const onSuccessRef = useRef(onSuccess);
+  const onErrorRef = useRef(onError);
+
+  // Keep refs in sync with latest callbacks
+  useEffect(() => {
+    onSuccessRef.current = onSuccess;
+  }, [onSuccess]);
+
+  useEffect(() => {
+    onErrorRef.current = onError;
+  }, [onError]);
+
   const [formData, setFormData] = useState<InterfaceLoginFormData>({
     email: '',
     password: '',
@@ -48,16 +61,16 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
   // Handle successful login
   useEffect(() => {
     if (data?.signIn?.authenticationToken) {
-      onSuccess?.(data.signIn.authenticationToken);
+      onSuccessRef.current?.(data.signIn.authenticationToken);
     }
-  }, [data, onSuccess]);
+  }, [data]);
 
   // Handle login error
   useEffect(() => {
     if (error) {
-      onError?.(error);
+      onErrorRef.current?.(error);
     }
-  }, [error, onError]);
+  }, [error]);
 
   const handleSubmit = async (
     e: React.FormEvent<HTMLFormElement>,
