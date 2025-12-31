@@ -1,8 +1,8 @@
 import { Autocomplete, TextField } from '@mui/material';
 import React from 'react';
-import { FormSelectProps } from 'types/shared-components/FormFieldGroup/interface';
+import { IFormSelectProps } from 'types/shared-components/FormFieldGroup/interface';
 
-export const FormSelect: React.FC<FormSelectProps> = ({
+export const FormSelect: React.FC<IFormSelectProps> = ({
   name,
   label,
   error,
@@ -37,15 +37,19 @@ export const FormSelect: React.FC<FormSelectProps> = ({
       onChange={onChange}
       disabled={disabled}
       className={className}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label={label}
-          error={showError}
-          helperText={errorMessage || helpText}
-          required={required}
-        />
-      )}
+      renderInput={
+        renderInput ??
+        ((params) => (
+          <TextField
+            {...params}
+            name={name}
+            label={label}
+            error={showError}
+            helperText={errorMessage || helpText}
+            required={required}
+          />
+        ))
+      }
       {...dataAttributes}
     />
   );

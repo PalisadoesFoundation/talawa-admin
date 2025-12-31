@@ -6,11 +6,11 @@ export { FormCheckbox } from './FormCheckbox';
 export { FormRadioGroup } from './FormRadioGroup';
 export { FormDateField } from './FormDateField';
 export type {
-  FormFieldGroupProps,
-  FormTextFieldProps,
-  FormTextAreaProps,
-  FormSelectProps,
-  FormCheckBoxProps,
-  FormRadioGroupProps,
-  FormDateFieldProps,
+  IFormFieldGroupProps,
+  IFormTextFieldProps,
+  IFormTextAreaProps,
+  IFormSelectProps,
+  IFormCheckBoxProps,
+  IFormRadioGroupProps,
+  IFormDateFieldProps,
 } from '../../types/shared-components/FormFieldGroup/interface';
