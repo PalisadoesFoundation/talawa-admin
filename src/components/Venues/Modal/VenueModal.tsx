@@ -90,8 +90,8 @@ const VenueModal = ({
 
   // Mutation function for creating or updating a venue
   const [mutate, { loading }] = useMutation<{
-    createVenue?: any;
-    updateVenue?: any;
+    createVenue?: { id: string };
+    updateVenue?: { id: string };
   }>(edit ? UPDATE_VENUE_MUTATION : CREATE_VENUE_MUTATION);
 
   /**
@@ -244,7 +244,7 @@ const VenueModal = ({
         ).toString();
         setImagePreviewUrl(previewUrl);
       } catch {
-        toast.error('Error creating preview URL');
+        toast.error(t('errorCreatingPreviewUrl'));
         setImagePreviewUrl(null);
       }
     } else {
@@ -273,17 +273,17 @@ const VenueModal = ({
       const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
 
       if (!allowedTypes.includes(file.type)) {
-        toast.error(`Invalid file type: ${file.name}`);
+        toast.error(t('invalidFileTypeError', { fileName: file.name }));
         return;
       }
 
       if (file.size > maxFileSize) {
-        toast.error(`File too large: ${file.name}`);
+        toast.error(t('fileTooLargeError', { fileName: file.name }));
         return;
       }
 
       if (!file.size) {
-        toast.error('Empty file selected');
+        toast.error(t('emptyFileSelected'));
         return;
       }
 
@@ -371,7 +371,7 @@ const VenueModal = ({
           />
           {imagePreviewUrl && (
             <div className={styles.previewVenueModal}>
-              <img src={imagePreviewUrl} alt="Venue Image Preview" />
+              <img src={imagePreviewUrl} alt={t('venueImagePreview')} />
               <button
                 className={styles.closeButtonP}
                 onClick={clearImageInput}

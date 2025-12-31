@@ -4,7 +4,7 @@
 
 # Interface: IActionItemCategoryResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:262](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L262)
+Defined in: [src/types/GraphQL/queryResults.ts:405](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L405)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:262](https://github.com/Palisadoe
 
 > **actionItemCategory**: `object`
 
-Defined in: [src/types/GraphQL/queryResults.ts:263](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L263)
+Defined in: [src/types/GraphQL/queryResults.ts:406](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L406)
 
 #### id
 

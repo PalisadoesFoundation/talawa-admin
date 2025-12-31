@@ -4,7 +4,7 @@
 
 # Interface: IOrganizationListNoMembersResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:397](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L397)
+Defined in: [src/types/GraphQL/queryResults.ts:543](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L543)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:397](https://github.com/Palisadoe
 
 > **organizations**: `object`[]
 
-Defined in: [src/types/GraphQL/queryResults.ts:398](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L398)
+Defined in: [src/types/GraphQL/queryResults.ts:544](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L544)
 
 #### addressLine1?
 

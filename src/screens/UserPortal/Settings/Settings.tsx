@@ -37,9 +37,12 @@ import { Card, Col, Row } from 'react-bootstrap';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useMutation, useQuery } from '@apollo/client/react';
 import { errorHandler } from 'utils/errorHandler';
-import { toast } from 'react-toastify';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import useLocalStorage from 'utils/useLocalstorage';
+import type {
+  ICurrentUserResult,
+  IUpdateCurrentUserResult,
+} from 'types/GraphQL/queryResults';
 import OtherSettings from 'components/UserProfileSettings/OtherSetting/OtherSettings';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import { urlToFile } from 'utils/urlToFile';
@@ -47,6 +50,7 @@ import ProfileHeader from './ProfileHeader/ProfileHeader';
 import ProfileImageSection from './ProfileImageSection/ProfileImageSection';
 import UserDetailsForm from './UserDetails/UserDetails';
 import { validatePassword } from 'utils/passwordValidator';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import EventsAttendedByUser from 'components/UserPortal/UserProfile/EventsAttendedByUser';
 
 // Exported helper extracted from component to allow unit testing of reset logic.
@@ -141,20 +145,67 @@ export default function Settings(): React.JSX.Element {
   }, [hideDrawer, setItem]);
 
   // Query and mutation setup
-  const { data, loading, error } = useQuery<any>(CURRENT_USER);
-  const [updateUser] = useMutation<any>(UPDATE_CURRENT_USER_MUTATION);
+  const { data, loading, error } = useQuery<ICurrentUserResult>(CURRENT_USER);
+  const [updateUser] = useMutation<IUpdateCurrentUserResult>(
+    UPDATE_CURRENT_USER_MUTATION,
+  );
 
   // set the initial data
   useEffect(() => {
     if (data?.currentUser) {
-      setUserDetails(data.currentUser);
-      originalImageState.current = data.currentUser.avatar || '';
+      const currentUser = data.currentUser as typeof data.currentUser & {
+        addressLine1?: string;
+        addressLine2?: string;
+        birthDate?: string | null;
+        city?: string;
+        countryCode?: string;
+        description?: string;
+        educationGrade?: string | null;
+        employmentStatus?: string | null;
+        homePhoneNumber?: string;
+        maritalStatus?: string | null;
+        mobilePhoneNumber?: string;
+        natalSex?: string | null;
+        naturalLanguageCode?: string;
+        postalCode?: string;
+        state?: string;
+        workPhoneNumber?: string;
+      };
+      setUserDetails({
+        addressLine1: currentUser.addressLine1 || '',
+        addressLine2: currentUser.addressLine2 || '',
+        emailAddress: currentUser.emailAddress,
+        birthDate: null,
+        city: currentUser.city || '',
+        avatarURL: currentUser.avatarURL || '',
+        avatar: null,
+        countryCode: currentUser.countryCode || '',
+        description: currentUser.description || '',
+        educationGrade: currentUser.educationGrade || '',
+        employmentStatus: currentUser.employmentStatus || '',
+        homePhoneNumber: currentUser.homePhoneNumber || '',
+        maritalStatus: currentUser.maritalStatus || '',
+        mobilePhoneNumber: currentUser.mobilePhoneNumber || '',
+        name: currentUser.name,
+        natalSex: currentUser.natalSex || '',
+        naturalLanguageCode: currentUser.naturalLanguageCode || '',
+        password: '',
+        postalCode: currentUser.postalCode || '',
+        state: currentUser.state || '',
+        workPhoneNumber: currentUser.workPhoneNumber || '',
+      });
+      originalImageState.current = currentUser.avatarURL || '';
     }
   }, [data]);
 
   // wait for the query to complete
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
+  if (loading) return <p>{tCommon('loading')}</p>;
+  if (error)
+    return (
+      <p>
+        {tCommon('error')}: {error.message}
+      </p>
+    );
 
   const handleUpdateUserDetails = async (): Promise<void> => {
     // Function to remove empty fields from the object
@@ -178,9 +229,7 @@ export default function Settings(): React.JSX.Element {
         avatarFile = await urlToFile(userDetails.avatarURL);
       } catch (error) {
         console.log(error);
-        toast.error(
-          'Failed to process profile picture. Please try uploading again.',
-        );
+        NotificationToast.error(t('failedToProcessImage'));
         return;
       }
     }
@@ -215,8 +264,10 @@ export default function Settings(): React.JSX.Element {
       const { data: updateData } = await updateUser({ variables: { input } });
 
       if (updateData) {
-        toast.success(
-          tCommon('updatedSuccessfully', { item: 'Profile' }) as string,
+        NotificationToast.success(
+          tCommon('updatedSuccessfully', {
+            item: tCommon('profile'),
+          }) as string,
         );
         setItem('UserImage', updateData.updateCurrentUser.avatarURL);
         setItem('name', updateData.updateCurrentUser.name);
@@ -239,7 +290,7 @@ export default function Settings(): React.JSX.Element {
     // check if the password is strong or not
     if (fieldName === 'password' && value) {
       if (!validatePassword(value)) {
-        toast.error('Password must be at least 8 characters long.');
+        NotificationToast.error(t('atleast_8_char_long'));
         return;
       }
     }
@@ -257,12 +308,12 @@ export default function Settings(): React.JSX.Element {
       const maxSize = 5 * 1024 * 1024; // 5MB
 
       if (!validTypes.includes(file.type)) {
-        toast.error('Invalid file type. Please upload a JPEG, PNG, or GIF.');
+        NotificationToast.error(t('invalidFileType'));
         return;
       }
 
       if (file.size > maxSize) {
-        toast.error('File is too large. Maximum size is 5MB.');
+        NotificationToast.error(t('fileSizeTooLarge'));
         return;
       }
 
@@ -275,15 +326,62 @@ export default function Settings(): React.JSX.Element {
 
   // Reset the changes of form fields
   const handleResetChanges = (): void => {
-    // call helper with current values
-    resetUserDetails(
-      data?.currentUser,
-      fileInputRef.current,
-      setSelectedAvatar,
-      setIsUpdated,
-      setUserDetails,
-      originalImageState.current,
-    );
+    if (data?.currentUser) {
+      const currentUser = data.currentUser as typeof data.currentUser & {
+        addressLine1?: string;
+        addressLine2?: string;
+        birthDate?: string | null;
+        city?: string;
+        countryCode?: string;
+        description?: string;
+        educationGrade?: string | null;
+        employmentStatus?: string | null;
+        homePhoneNumber?: string;
+        maritalStatus?: string | null;
+        mobilePhoneNumber?: string;
+        natalSex?: string | null;
+        naturalLanguageCode?: string;
+        postalCode?: string;
+        state?: string;
+        workPhoneNumber?: string;
+      };
+      const userDetailsToReset = {
+        addressLine1: currentUser.addressLine1 || '',
+        addressLine2: currentUser.addressLine2 || '',
+        emailAddress: currentUser.emailAddress,
+        birthDate: null,
+        city: currentUser.city || '',
+        avatarURL: currentUser.avatarURL || '',
+        avatar: null,
+        countryCode: currentUser.countryCode || '',
+        description: currentUser.description || '',
+        educationGrade: currentUser.educationGrade || '',
+        employmentStatus: currentUser.employmentStatus || '',
+        homePhoneNumber: currentUser.homePhoneNumber || '',
+        maritalStatus: currentUser.maritalStatus || '',
+        mobilePhoneNumber: currentUser.mobilePhoneNumber || '',
+        name: currentUser.name,
+        natalSex: currentUser.natalSex || '',
+        naturalLanguageCode: currentUser.naturalLanguageCode || '',
+        password: '',
+        postalCode: currentUser.postalCode || '',
+        state: currentUser.state || '',
+        workPhoneNumber: currentUser.workPhoneNumber || '',
+      };
+      setIsUpdated(false);
+      setSelectedAvatar(null);
+      setUserDetails({
+        ...userDetailsToReset,
+        avatar: originalImageState.current ? null : null,
+      });
+      if (fileInputRef.current) {
+        try {
+          fileInputRef.current.value = '';
+        } catch {
+          // ignore - best effort to reset input
+        }
+      }
+    }
   };
 
   return (
@@ -292,11 +390,7 @@ export default function Settings(): React.JSX.Element {
       <div
         className={`d-flex flex-row ${styles.containerHeight} ${
           hideDrawer ? styles.expand : styles.contract
-        }`}
-        style={{
-          marginLeft: hideDrawer ? '100px' : '20px',
-          paddingTop: '20px',
-        }}
+        } pt-4`}
       >
         <div className={styles.mainContainer}>
           <ProfileHeader title={tCommon('settings')} />

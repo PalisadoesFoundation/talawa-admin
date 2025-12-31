@@ -4,7 +4,7 @@
 
 # Interface: IOrganizationFilterListResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:411](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L411)
+Defined in: [src/types/GraphQL/queryResults.ts:557](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L557)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:411](https://github.com/Palisadoe
 
 > **organizations**: `object`[]
 
-Defined in: [src/types/GraphQL/queryResults.ts:412](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L412)
+Defined in: [src/types/GraphQL/queryResults.ts:558](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L558)
 
 #### id
 

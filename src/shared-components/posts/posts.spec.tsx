@@ -21,18 +21,17 @@ import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'components/test-utils/I18nextProviderMock';
 
 // Hoisted mocks (must be before vi.mock calls)
-const { mockToast } = vi.hoisted(() => ({
-  mockToast: {
+const { mockNotificationToast } = vi.hoisted(() => ({
+  mockNotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
+    info: vi.fn(),
+    warning: vi.fn(),
   },
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: mockToast,
-  ToastContainer: ({ children }: { children: React.ReactNode }) => (
-    <div>{children}</div>
-  ),
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockNotificationToast,
 }));
 
 // Hoisted router mock
@@ -514,7 +513,9 @@ describe('PostsPage Component', () => {
       renderComponent([orgPostListErrorMock, emptyPinnedPostsMock]);
 
       await waitFor(() => {
-        expect(mockToast.error).toHaveBeenCalledWith('Error loading posts');
+        expect(mockNotificationToast.error).toHaveBeenCalledWith(
+          'Error loading posts',
+        );
       });
     });
 
@@ -522,7 +523,7 @@ describe('PostsPage Component', () => {
       renderComponent([orgPostListMock, pinnedPostsErrorMock]);
 
       await waitFor(() => {
-        expect(mockToast.error).toHaveBeenCalledWith(
+        expect(mockNotificationToast.error).toHaveBeenCalledWith(
           'Error loading pinned posts',
         );
       });
@@ -630,7 +631,9 @@ describe('PostsPage Component', () => {
 
     // Should show error toast for GraphQL error
     await waitFor(() => {
-      expect(mockToast.error).toHaveBeenCalledWith('Error loading posts');
+      expect(mockNotificationToast.error).toHaveBeenCalledWith(
+        'Error loading posts',
+      );
     });
 
     // For GraphQL errors, the filtering state should remain as is
@@ -1033,7 +1036,9 @@ describe('Edge Cases', () => {
     });
 
     await waitFor(() => {
-      expect(mockToast.error).toHaveBeenCalledWith('Error loading more posts');
+      expect(mockNotificationToast.error).toHaveBeenCalledWith(
+        'Error loading more posts',
+      );
     });
   });
 
@@ -1126,7 +1131,7 @@ describe('Missing User ID', () => {
     expect(screen.queryAllByTestId('post-card')).toHaveLength(0);
 
     // Error toasts should not be called since queries are skipped, not failed
-    expect(mockToast.error).not.toHaveBeenCalled();
+    expect(mockNotificationToast.error).not.toHaveBeenCalled();
   });
 });
 

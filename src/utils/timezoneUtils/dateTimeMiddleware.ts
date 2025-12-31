@@ -1,4 +1,5 @@
 import { ApolloLink, Observable } from '@apollo/client';
+import type { Observer } from 'rxjs';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
@@ -93,7 +94,7 @@ export const requestMiddleware = new ApolloLink((operation, forward) => {
 // Response middleware to convert UTC time to local time
 // Response middleware to convert UTC time to local time
 export const responseMiddleware = new ApolloLink((operation, forward) => {
-  return new Observable((observer: any) => {
+  return new Observable((observer: Observer<ApolloLink.Result>) => {
     const subscription = forward(operation).subscribe({
       next: (response) => {
         if (response.data) {

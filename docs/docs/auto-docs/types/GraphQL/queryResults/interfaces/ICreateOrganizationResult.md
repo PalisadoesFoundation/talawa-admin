@@ -4,7 +4,7 @@
 
 # Interface: ICreateOrganizationResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:405](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L405)
+Defined in: [src/types/GraphQL/queryResults.ts:551](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L551)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:405](https://github.com/Palisadoe
 
 > **createOrganization**: `object`
 
-Defined in: [src/types/GraphQL/queryResults.ts:406](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L406)
+Defined in: [src/types/GraphQL/queryResults.ts:552](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L552)
 
 #### id
 

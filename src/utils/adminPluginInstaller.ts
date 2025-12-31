@@ -1,5 +1,5 @@
 import JSZip from 'jszip';
-import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import { ApolloClient } from '@apollo/client';
 
 import {
   UPLOAD_PLUGIN_ZIP_MUTATION,
@@ -321,7 +321,12 @@ export async function installAdminPluginFromZip({
           },
         });
 
-        if ((result.data as any)?.uploadPluginZip) {
+        if (
+          result.data &&
+          typeof result.data === 'object' &&
+          'uploadPluginZip' in result.data &&
+          result.data.uploadPluginZip
+        ) {
           installedComponents.push('API');
         }
       } catch (error) {

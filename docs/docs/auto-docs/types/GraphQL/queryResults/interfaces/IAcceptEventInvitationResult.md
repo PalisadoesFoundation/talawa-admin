@@ -4,7 +4,7 @@
 
 # Interface: IAcceptEventInvitationResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:524](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L524)
+Defined in: [src/types/GraphQL/queryResults.ts:670](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L670)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:524](https://github.com/Palisadoe
 
 > **acceptEventInvitation**: `object`
 
-Defined in: [src/types/GraphQL/queryResults.ts:525](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L525)
+Defined in: [src/types/GraphQL/queryResults.ts:671](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L671)
 
 #### id
 

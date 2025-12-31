@@ -41,6 +41,7 @@ import type { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import type {
   InterfaceCreateVolunteerGroup,
+  InterfaceUserInfo,
   InterfaceUserInfoPG,
   InterfaceVolunteerGroupInfo,
 } from 'utils/interfaces';
@@ -49,7 +50,7 @@ import styles from 'style/app-fixed.module.css';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client/react';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Autocomplete, FormControl, TextField } from '@mui/material';
 
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
@@ -57,6 +58,8 @@ import {
   CREATE_VOLUNTEER_GROUP,
   UPDATE_VOLUNTEER_GROUP,
 } from 'GraphQl/Mutations/EventVolunteerMutation';
+import { errorHandler } from 'utils/errorHandler';
+import type { IMembersListResult } from 'types/GraphQL/queryResults';
 
 export interface InterfaceVolunteerGroupModal {
   isOpen: boolean;
@@ -133,14 +136,23 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
   const [updateVolunteerGroup] = useMutation(UPDATE_VOLUNTEER_GROUP);
   const [createVolunteerGroup] = useMutation(CREATE_VOLUNTEER_GROUP);
 
-  const { data: membersData } = useQuery<any>(MEMBERS_LIST, {
+  const { data: membersData } = useQuery<IMembersListResult>(MEMBERS_LIST, {
     variables: { organizationId: orgId },
   });
 
-  const members = useMemo(
-    () => membersData?.usersByOrganizationId || [],
-    [membersData],
-  );
+  const members = useMemo(() => {
+    const users = membersData?.usersByOrganizationId || [];
+    // Filter and map to ensure all members have required fields for InterfaceUserInfoPG
+    return users
+      .filter((user) => user.name) // Filter out users without names
+      .map((user) => ({
+        id: user.id,
+        name: user.name || '',
+        firstName: user.firstName,
+        lastName: user.lastName,
+        avatarURL: user.avatarURL,
+      })) as InterfaceUserInfoPG[];
+  }, [membersData]);
 
   useEffect(() => {
     setFormState({
@@ -180,11 +192,11 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             data: { ...updatedFields, eventId },
           },
         });
-        toast.success(t('volunteerGroupUpdated'));
+        NotificationToast.success(t('volunteerGroupUpdated'));
         refetchGroups();
         hide();
       } catch (error: unknown) {
-        toast.error((error as Error).message);
+        errorHandler(t, error);
       }
     },
     [formState, group],
@@ -225,7 +237,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           },
         });
 
-        toast.success(t('volunteerGroupCreated'));
+        NotificationToast.success(t('volunteerGroupCreated'));
         refetchGroups();
         setFormState({
           name: '',
@@ -237,7 +249,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         setApplyTo('series'); // Reset to default
         hide();
       } catch (error: unknown) {
-        toast.error((error as Error).message);
+        errorHandler(t, error);
       }
     },
     [formState, eventId, isRecurring, applyTo, baseEvent],
@@ -335,9 +347,19 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
               }
               onChange={(_, newLeader): void => {
                 if (newLeader) {
+                  // Convert InterfaceUserInfoPG to InterfaceUserInfo for leader
+                  const leaderUser = membersData?.usersByOrganizationId.find(
+                    (u) => u.id === newLeader.id,
+                  );
+                  const leaderInfo: InterfaceUserInfo = {
+                    id: newLeader.id,
+                    name: newLeader.name,
+                    emailAddress: leaderUser?.emailAddress || '',
+                    avatarURL: newLeader.avatarURL,
+                  };
                   setFormState({
                     ...formState,
-                    leader: newLeader,
+                    leader: leaderInfo,
                     volunteerUsers: [...volunteerUsers, newLeader],
                   });
                 } else {
@@ -351,7 +373,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
                 }
               }}
               renderInput={(params) => (
-                <TextField {...params} label="Leader *" />
+                <TextField {...params} label={t('leaderRequired')} />
               )}
             />
           </Form.Group>
@@ -378,7 +400,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
                 });
               }}
               renderInput={(params) => (
-                <TextField {...params} label="Invite Volunteers *" />
+                <TextField {...params} label={t('inviteVolunteersRequired')} />
               )}
             />
           </Form.Group>

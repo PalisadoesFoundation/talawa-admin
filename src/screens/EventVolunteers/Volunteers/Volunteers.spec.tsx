@@ -270,6 +270,31 @@ describe('Testing Volunteers Screen', () => {
     expect(volunteerName[0]).toHaveTextContent('Teresa Bradley');
   });
 
+  it('renders avatar image when user has avatarURL (img-url)', async () => {
+    renderVolunteers(link1);
+
+    // Wait for volunteers to load and DataGrid to render
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    // Find volunteer names to ensure DataGrid cells are rendered
+    const volunteerNames = await screen.findAllByTestId('volunteerName');
+    expect(volunteerNames.length).toBeGreaterThanOrEqual(2);
+
+    // Force a re-render/update to ensure all cells are painted
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    });
+
+    await waitFor(() => {
+      // Find the volunteer that has an avatarURL (Bruce Graza)
+      const img = screen.queryByTestId('volunteer_image');
+      expect(img).toBeInTheDocument();
+      expect(img).toHaveAttribute('src', 'img-url');
+    });
+  });
+
   it('should render screen with No Volunteers', async () => {
     renderVolunteers(link3);
 
@@ -590,5 +615,44 @@ describe('Testing Volunteers Screen', () => {
     await waitFor(() => {
       expect(screen.getByText(t.removeVolunteer)).toBeInTheDocument();
     });
+  });
+
+  it('should trigger debounced search when typing in search input', async () => {
+    renderVolunteers(link1);
+
+    // Wait for component to load and all volunteers to be displayed
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
+
+    // Verify initial state shows multiple volunteers
+    await waitFor(() => {
+      expect(screen.getByText('Teresa Bradley')).toBeInTheDocument();
+      expect(screen.getByText('Bruce Graza')).toBeInTheDocument();
+    });
+
+    // Find the search input
+    const searchInput = screen.getByTestId('searchBy');
+    expect(searchInput).toBeInTheDocument();
+
+    // Type in the search input to trigger the debounced callback
+    await userEvent.clear(searchInput);
+    await userEvent.type(searchInput, 'Teresa');
+
+    // Wait for debounce to complete (300ms) - the handleSearchChange callback should execute
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 350));
+    });
+
+    // The search term should be set by handleSearchChange callback and query refetched
+    // After debounced search with 'Teresa', only Teresa Bradley should appear
+    await waitFor(
+      () => {
+        expect(screen.getByText('Teresa Bradley')).toBeInTheDocument();
+        // Bruce Graza should no longer be visible after filtering by 'Teresa'
+        expect(screen.queryByText('Bruce Graza')).not.toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
   });
 });

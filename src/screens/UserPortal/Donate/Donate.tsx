@@ -47,7 +47,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
-import { toast } from 'react-toastify';
 import { useMutation, useQuery } from '@apollo/client/react';
 import type {
   IDonationConnectionResult,
@@ -67,6 +66,7 @@ import DonationCard from 'components/UserPortal/DonationCard/DonationCard';
 import useLocalStorage from 'utils/useLocalstorage';
 import { errorHandler } from 'utils/errorHandler';
 import OrganizationSidebar from 'components/UserPortal/OrganizationSidebar/OrganizationSidebar';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { InterfaceDonationCardProps } from 'types/Donation/interface';
@@ -147,7 +147,7 @@ export default function donate(): JSX.Element {
   const donateToOrg = async (): Promise<void> => {
     // check if the amount is non empty and is a number
     if (amount === '' || Number.isNaN(Number(amount))) {
-      toast.error(t(`invalidAmount`));
+      NotificationToast.error(t(`invalidAmount`));
       return;
     }
 
@@ -159,7 +159,7 @@ export default function donate(): JSX.Element {
       Number(amount) < minDonation ||
       Number(amount) > maxDonation
     ) {
-      toast.error(
+      NotificationToast.error(
         t(`donationOutOfRange`, { min: minDonation, max: maxDonation }),
       );
       return;
@@ -179,7 +179,7 @@ export default function donate(): JSX.Element {
         },
       });
       refetch();
-      toast.success(t(`success`) as string);
+      NotificationToast.success(t(`success`) as string);
     } catch (error: unknown) {
       errorHandler(t, error);
     }

@@ -1,9 +1,0 @@
-[Admin Docs](/)
-
-***
-
-# Variable: MOCKS\_WITH\_ERROR
-
-> `const` **MOCKS\_WITH\_ERROR**: (\{ `error?`: `undefined`; `request`: \{ `notifyOnNetworkStatusChange`: `boolean`; `query`: `DocumentNode`; `variables`: \{ `filter`: `string`; `first`: `number`; `orderBy`: `string`; `skip`: `number`; `userId?`: `undefined`; \}; \}; `result`: \{ `data`: \{ `currentUser?`: `undefined`; `organizations`: `any`[]; `user?`: `undefined`; \}; \}; \} \| \{ `error?`: `undefined`; `request`: \{ `notifyOnNetworkStatusChange?`: `undefined`; `query`: `DocumentNode`; `variables`: \{ `filter?`: `undefined`; `first?`: `undefined`; `orderBy?`: `undefined`; `skip?`: `undefined`; `userId`: `string`; \}; \}; `result`: \{ `data`: \{ `currentUser`: \{ `addressLine1?`: `string`; `addressLine2?`: `string`; `avatarMimeType?`: `string`; `avatarURL?`: `string`; `birthDate?`: `string`; `city?`: `string`; `countryCode?`: `string`; `createdAt?`: `string`; `description?`: `string`; `educationGrade?`: `string`; `emailAddress`: `string`; `employmentStatus?`: `string`; `eventsAttended?`: \{ `__typename`: `string`; `edges`: `unknown`[]; `id`: `string`; \}; `homePhoneNumber?`: `string`; `id`: `string`; `isEmailAddressVerified?`: `boolean`; `maritalStatus?`: `string`; `mobilePhoneNumber?`: `string`; `name`: `string`; `natalSex?`: `string`; `naturalLanguageCode?`: `string`; `postalCode?`: `string`; `role`: `string`; `state?`: `string`; `updatedAt?`: `string`; `workPhoneNumber?`: `string`; \}; `organizations?`: `undefined`; `user`: [`InterfaceUserType`](../../../../utils/interfaces/interfaces/InterfaceUserType.md); \}; \}; \} \| \{ `error`: `Error`; `request`: \{ `notifyOnNetworkStatusChange?`: `undefined`; `query`: `DocumentNode`; `variables?`: `undefined`; \}; `result?`: `undefined`; \})[]
-
-Defined in: [src/screens/OrgList/OrgListMocks.ts:329](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrgList/OrgListMocks.ts#L329)

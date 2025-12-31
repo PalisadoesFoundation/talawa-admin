@@ -73,7 +73,7 @@ const errorLink = onError(
       for (const error of graphQLErrors) {
         const errorCode = error.extensions?.code;
 
-        // Skip token refresh logic for authentication operations (login/signup)
+        // Skip token refresh logic for authentication operations (login/signup/logout)
         const operationName = operation.operationName;
         const authOperations = ['SignIn', 'SignUp', 'RefreshToken'];
         if (operationName && authOperations.includes(operationName)) {
@@ -85,9 +85,10 @@ const errorLink = onError(
           errorCode === 'unauthenticated' ||
           error.message === 'You must be authenticated to perform this action.'
         ) {
-          // Don't try to refresh if we don't have a refresh token
-          const storedRefreshToken = getItem('refreshToken');
-          if (!storedRefreshToken) {
+          // Check if user is logged in via localStorage flag
+          // (actual tokens are in HTTP-Only cookies)
+          const isLoggedIn = getItem('IsLoggedIn');
+          if (isLoggedIn !== 'TRUE') {
             return;
           }
 

@@ -52,26 +52,26 @@ vi.mock('utils/errorHandler', () => ({
   errorHandler: vi.fn(),
 }));
 
-// Mock Avatar component
-vi.mock('components/Avatar/Avatar', () => ({
-  default: ({
-    name,
+// Update the Avatar mock to ProfileAvatarDisplay mock
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: ({
+    fallbackName,
     size,
-    radius,
+    enableEnlarge,
     dataTestId,
   }: {
-    name: string;
-    size: number;
-    radius: number;
+    fallbackName: string;
+    size: string;
+    enableEnlarge: boolean;
     dataTestId: string;
   }) => (
     <div
       data-testid={dataTestId || 'mock-avatar'}
-      data-name={name}
+      data-fallbackname={fallbackName}
       data-size={size}
-      data-radius={radius}
+      data-enableenlarge={enableEnlarge.toString()}
     >
-      Avatar: {name}
+      Avatar: {fallbackName}
     </div>
   ),
 }));
@@ -280,7 +280,21 @@ describe('CreatePostModal Integration Tests', () => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
       expect(screen.getByText('Post to anyone')).toBeInTheDocument(); // postToAnyone translation
     });
+    it('renders ProfileAvatarDisplay with correct props', () => {
+      render(
+        <MockedProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <CreatePostModal {...defaultProps} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
 
+      const avatar = screen.getByTestId('user-avatar');
+      expect(avatar).toBeInTheDocument();
+      expect(avatar.getAttribute('data-fallbackname')).toBe('John Doe');
+      expect(avatar.getAttribute('data-size')).toBe('small');
+      expect(avatar.getAttribute('data-enableenlarge')).toBe('true');
+    });
     it('closes modal when close button is clicked', async () => {
       const onHide = vi.fn();
       renderComponent({ onHide });

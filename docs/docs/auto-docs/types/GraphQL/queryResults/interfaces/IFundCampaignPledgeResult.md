@@ -4,7 +4,7 @@
 
 # Interface: IFundCampaignPledgeResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:466](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L466)
+Defined in: [src/types/GraphQL/queryResults.ts:612](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L612)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:466](https://github.com/Palisadoe
 
 > **fundCampaign**: `object`
 
-Defined in: [src/types/GraphQL/queryResults.ts:467](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L467)
+Defined in: [src/types/GraphQL/queryResults.ts:613](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L613)
 
 #### currencyCode
 

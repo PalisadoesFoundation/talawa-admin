@@ -4,7 +4,7 @@
 
 # Interface: IBlockUserResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:559](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L559)
+Defined in: [src/types/GraphQL/queryResults.ts:705](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L705)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/types/GraphQL/queryResults.ts:559](https://github.com/Palisadoe
 
 > **blockUser**: `boolean`
 
-Defined in: [src/types/GraphQL/queryResults.ts:560](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L560)
+Defined in: [src/types/GraphQL/queryResults.ts:706](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L706)

@@ -4,7 +4,7 @@
 
 # Interface: IRecaptchaResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:309](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L309)
+Defined in: [src/types/GraphQL/queryResults.ts:455](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L455)
 
 ## Properties
 
@@ -12,4 +12,4 @@ Defined in: [src/types/GraphQL/queryResults.ts:309](https://github.com/Palisadoe
 
 > **recaptcha**: `boolean`
 
-Defined in: [src/types/GraphQL/queryResults.ts:310](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L310)
+Defined in: [src/types/GraphQL/queryResults.ts:456](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L456)

@@ -46,8 +46,11 @@ import Row from 'react-bootstrap/Row';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import IconComponent from 'components/IconComponent/IconComponent';
-import TableLoader from 'components/TableLoader/TableLoader';
-import type { InterfaceTagDataPG } from 'utils/interfaces';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
+import type {
+  InterfaceTagDataPG,
+  InterfaceQueryOrganizationUserTags,
+} from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import type { GridCellParams } from '@mui/x-data-grid';
 import {
@@ -56,13 +59,14 @@ import {
   type InterfaceOrganizationTagsQuery,
   type SortedByType,
 } from 'utils/organizationTagsUtils';
-import { PAGE_SIZE, COLUMN_BUFFER_PX } from 'types/ReportingTable/utils';
+import { COLUMN_BUFFER_PX } from 'types/ReportingTable/utils';
 import type {
   ReportingRow,
   ReportingTableColumn,
   ReportingTableGridProps,
 } from '../../types/ReportingTable/interface';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { Stack } from '@mui/material';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
@@ -97,6 +101,7 @@ function OrganizationTags(): JSX.Element {
     data: orgUserTagsData,
     error: orgUserTagsError,
     refetch: orgUserTagsRefetch,
+    fetchMore,
   }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST, {
     variables: {
       id: orgId,
@@ -109,6 +114,45 @@ function OrganizationTags(): JSX.Element {
   useEffect(() => {
     orgUserTagsRefetch();
   }, []);
+
+  const loadMoreTags = (): void => {
+    const currentOrg = orgUserTagsData?.organizations?.[0];
+    if (!currentOrg?.userTags?.pageInfo?.hasNextPage) return;
+    fetchMore({
+      variables: {
+        after: currentOrg.userTags.pageInfo.endCursor,
+      },
+      updateQuery: (
+        prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
+        {
+          fetchMoreResult,
+        }: {
+          fetchMoreResult: {
+            organizations: InterfaceQueryOrganizationUserTags[];
+          };
+        },
+      ) => {
+        if (!fetchMoreResult) return prevResult;
+        const prevOrg = prevResult.organizations[0];
+        const newOrg = fetchMoreResult.organizations[0];
+        if (!prevOrg || !newOrg) return prevResult;
+        return {
+          organizations: [
+            {
+              ...newOrg,
+              userTags: {
+                ...newOrg.userTags,
+                edges: [
+                  ...(prevOrg.userTags?.edges || []),
+                  ...(newOrg.userTags?.edges || []),
+                ],
+              },
+            },
+          ],
+        };
+      },
+    });
+  };
 
   const [create, { loading: createTagLoading }] = useMutation(CREATE_USER_TAG);
 
@@ -164,13 +208,6 @@ function OrganizationTags(): JSX.Element {
   const redirectToSubTags = (tagId: string): void => {
     navigate(`/orgtags/${orgId}/subTags/${tagId}`);
   };
-  const headerTitles: string[] = [
-    tCommon('sl_no'),
-    t('tagName'),
-    t('totalSubTags'),
-    t('totalAssignedUsers'),
-    tCommon('actions'),
-  ];
 
   const renderCountLink = (
     params: GridCellParams,
@@ -310,7 +347,14 @@ function OrganizationTags(): JSX.Element {
         </Stack>
       ),
       loadingOverlay: () => (
-        <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
+        <LoadingState
+          isLoading={true}
+          variant="skeleton"
+          size="lg"
+          data-testid="orgTagsLoadingOverlay"
+        >
+          <></>
+        </LoadingState>
       ),
     },
     sx: { ...dataGridStyle },
@@ -378,13 +422,33 @@ function OrganizationTags(): JSX.Element {
                 data-testid="orgUserTagsScrollableDiv"
                 className={styles.orgUserTagsScrollableDiv}
               >
-                <ReportingTable
-                  rows={
-                    userTagsList?.map((req) => ({ ...req })) as ReportingRow[]
+                <InfiniteScroll
+                  dataLength={userTagsList?.length ?? 0}
+                  next={loadMoreTags}
+                  hasMore={
+                    orgUserTagsData?.organizations?.[0]?.userTags?.pageInfo
+                      ?.hasNextPage ?? false
                   }
-                  columns={columns}
-                  gridProps={{ ...gridProps }}
-                />
+                  loader={
+                    <LoadingState
+                      isLoading={true}
+                      variant="inline"
+                      size="sm"
+                      data-testid="infiniteScrollLoader"
+                    >
+                      {null}
+                    </LoadingState>
+                  }
+                  scrollableTarget="orgUserTagsScrollableDiv"
+                >
+                  <ReportingTable
+                    rows={
+                      userTagsList?.map((req) => ({ ...req })) as ReportingRow[]
+                    }
+                    columns={columns}
+                    gridProps={{ ...gridProps }}
+                  />
+                </InfiniteScroll>
               </div>
             </div>
           )}

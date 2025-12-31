@@ -25,7 +25,6 @@ import { useMutation, useQuery } from '@apollo/client/react';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import {
-  Avatar,
   IconButton,
   Button,
   FormControl,
@@ -72,9 +71,10 @@ import { PluginInjector } from '../../plugin';
 import useLocalStorage from '../../utils/useLocalstorage';
 import { handleLoadMoreComments as handleLoadMoreCommentsHelper } from './helperFunctions';
 import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const [isLikedByUser, setIsLikedByUser] = useState<boolean>(
     props.hasUserVoted?.voteType === 'up_vote',
@@ -236,7 +236,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       });
       await props.fetchPosts();
       toast.success(
-        isPinned ? t('postUnpinnedSuccess') : t('postPinnedSuccess'),
+        isPinned
+          ? t('postCard.postUnpinnedSuccess')
+          : t('postCard.postPinnedSuccess'),
       );
       setDropdownAnchor(null);
       window.location.reload();
@@ -249,9 +251,8 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
     try {
       await deletePost({ variables: { input: { id: props.id } } });
       await props.fetchPosts();
-      toast.success(t('postDeletedSuccess'));
+      toast.success(t('postCard.postDeletedSuccess'));
       setDropdownAnchor(null);
-      props.fetchPosts();
     } catch (error) {
       errorHandler(t, error);
     }
@@ -265,16 +266,13 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
 
       <Box className={postCardStyles.postHeader}>
         <Box className={postCardStyles.userInfo}>
-          <Avatar
+          <ProfileAvatarDisplay
+            fallbackName={props.creator.name}
+            size="small"
+            dataTestId="user-avatar"
             className={styles.userImageUserPost}
-            src={props.creator.avatarURL || UserDefault}
-            alt={props.creator.name}
-            slotProps={{
-              img: {
-                crossOrigin: 'anonymous',
-                loading: 'lazy',
-              },
-            }}
+            imageUrl={props.creator.avatarURL || UserDefault}
+            enableEnlarge
           />
           <Typography variant="subtitle2" fontWeight="bold">
             {props.creator.name}
@@ -320,7 +318,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                   <EditOutlined fontSize="small" />
                 </ListItemIcon>
                 <ListItemText
-                  primary={t('editPost')}
+                  primary={t('postCard.editPost')}
                   data-testid="edit-post-button"
                 />
               </MenuItem>
@@ -339,7 +337,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                   )}
                 </ListItemIcon>
                 <ListItemText
-                  primary={isPinned ? t('unpinPost') : t('pinPost')}
+                  primary={
+                    isPinned ? t('postCard.unpinPost') : t('postCard.pinPost')
+                  }
                 />
               </MenuItem>
             )}
@@ -361,12 +361,12 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           </Menu>
         </>
       </Box>
-
       {/* Post Media */}
       {props.attachmentURL && (
         <Box className={postCardStyles.postMedia}>
           {props.mimeType?.split('/')[0] == 'image' && (
             <img
+              className={postCardStyles.image}
               src={props.attachmentURL}
               alt={props.title}
               crossOrigin="anonymous"
@@ -380,7 +380,6 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               crossOrigin="anonymous"
             >
               <source src={props.attachmentURL} />
-              <track kind="captions" />
             </video>
           )}
         </Box>
@@ -457,7 +456,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           fontWeight="bold"
           data-testid="like-count"
         >
-          {likeCount} {t('likes')}
+          {likeCount} {t('postCard.likes')}
         </Typography>
       </Box>
 
@@ -499,17 +498,17 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                     {loadingMoreComments ? (
                       <>
                         <CircularProgress size={16} sx={{ mr: 1 }} />
-                        {t('loadingComments')}
+                        {t('postCard.loadingComments')}
                       </>
                     ) : (
-                      t('loadMoreComments')
+                      t('postCard.loadMoreComments')
                     )}
                   </Button>
                 </Box>
               ) : (
                 <Box display="flex" justifyContent="center" py={2}>
                   <Typography variant="body2" color="text.secondary">
-                    {t('noMoreComments')}
+                    {t('postCard.noMoreComments')}
                   </Typography>
                 </Box>
               )}
@@ -533,8 +532,8 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           }}
         >
           {showComments
-            ? t('hideComments')
-            : t('viewComments', { count: commentCount })}
+            ? t('postCard.hideComments')
+            : t('postCard.viewComments', { count: commentCount })}
         </Button>
       )}
 
@@ -550,7 +549,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       <div className={postCardStyles.commentFormContainer}>
         <FormControl fullWidth className={postCardStyles.commentForm}>
           <Input
-            placeholder={t('addComment')}
+            placeholder={t('postCard.addComment')}
             value={commentInput}
             onChange={handleCommentInput}
             fullWidth

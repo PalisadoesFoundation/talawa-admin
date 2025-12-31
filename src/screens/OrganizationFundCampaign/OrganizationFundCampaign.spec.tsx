@@ -468,7 +468,7 @@ describe('FundCampaigns Screen', () => {
     });
 
     // Click the clear button
-    const clearButton = screen.getByTestId('clearSearch');
+    const clearButton = screen.getByRole('button', { name: /clear/i });
     await userEvent.click(clearButton);
 
     await waitFor(() => {

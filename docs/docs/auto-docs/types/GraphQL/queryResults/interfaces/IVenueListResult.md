@@ -4,7 +4,7 @@
 
 # Interface: IVenueListResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:497](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L497)
+Defined in: [src/types/GraphQL/queryResults.ts:643](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L643)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:497](https://github.com/Palisadoe
 
 > **organization**: `object`
 
-Defined in: [src/types/GraphQL/queryResults.ts:498](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L498)
+Defined in: [src/types/GraphQL/queryResults.ts:644](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L644)
 
 #### venues
 

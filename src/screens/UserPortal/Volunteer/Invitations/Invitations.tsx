@@ -24,11 +24,11 @@
  * - Provides search and sorting functionality using `SearchBar` and `SortingButton` components.
  *
  * @dependencies
- * - `react`, `react-router-dom`, `react-bootstrap`, `react-toastify`
+ * - `react`, `react-router-dom`, `react-bootstrap`
  * - `@apollo/client` for GraphQL queries and mutations
  * - `@mui/icons-material`, `react-icons` for icons
  * - Custom hooks: `useLocalStorage`
- * - Custom components: `Loader`, `SearchBar`, `SortingButton`
+ * - Custom components: `Loader`, `SearchBar`, `SortingButton`, `NotificationToast`
  *
  * @example
  * ```tsx
@@ -52,7 +52,8 @@ import { FaRegClock } from 'react-icons/fa';
 import Loader from 'components/Loader/Loader';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import type { IGetVolunteerMembershipResult } from 'types/GraphQL/queryResults';
 import SortingButton from 'subComponents/SortingButton';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 
@@ -97,14 +98,16 @@ const Invitations = (): JSX.Element => {
   ): Promise<void> => {
     try {
       await updateMembership({ variables: { id: id, status: status } });
-      toast.success(
+      NotificationToast.success(
         t(
           status === 'accepted' ? 'invitationAccepted' : 'invitationRejected',
         ) as string,
       );
       refetchInvitations();
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.error(
+        tErrors('unknownError', { msg: (error as Error).message }),
+      );
     }
   };
 
@@ -113,7 +116,7 @@ const Invitations = (): JSX.Element => {
     loading: invitationLoading,
     error: invitationError,
     refetch: refetchInvitations,
-  } = useQuery<any>(USER_VOLUNTEER_MEMBERSHIP, {
+  } = useQuery<IGetVolunteerMembershipResult>(USER_VOLUNTEER_MEMBERSHIP, {
     variables: {
       where: {
         userId: userId,
@@ -137,7 +140,7 @@ const Invitations = (): JSX.Element => {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded className={styles.errorIcon} />
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Volunteership Invitations' })}
           </h6>
@@ -233,7 +236,7 @@ const Invitations = (): JSX.Element => {
                 {invite.group && invite.group.id && (
                   <>
                     <div>
-                      <FaUserGroup className="mb-1 me-1" color="grey" />
+                      <FaUserGroup className="mb-1 me-1 text-secondary" />
                       <span className="text-muted">{t('group')}:</span>{' '}
                       <span>{invite.group.name} </span>
                     </div>
@@ -242,8 +245,7 @@ const Invitations = (): JSX.Element => {
                 )}
                 <div>
                   <TbCalendarEvent
-                    className="mb-1 me-1"
-                    color="grey"
+                    className="mb-1 me-1 text-secondary"
                     size={20}
                   />
                   <span className="text-muted">{t('event')}:</span>{' '}
@@ -251,7 +253,7 @@ const Invitations = (): JSX.Element => {
                 </div>
                 |
                 <div>
-                  <FaRegClock className="mb-1 me-1" color="grey" />
+                  <FaRegClock className="mb-1 me-1 text-secondary" />
                   <span className="text-muted">{t('received')}:</span>{' '}
                   {new Date(invite.createdAt).toLocaleString()}
                 </div>

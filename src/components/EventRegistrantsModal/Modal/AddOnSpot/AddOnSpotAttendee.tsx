@@ -65,7 +65,14 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   const { t: tCommon } = useTranslation('common');
   const { orgId } = useParams<{ orgId: string }>();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [addSignUp] = useMutation<{ signUp: any }>(SIGNUP_MUTATION);
+  const [addSignUp] = useMutation<{
+    signUp: {
+      user: {
+        id: string;
+        name?: string;
+      };
+    };
+  }>(SIGNUP_MUTATION);
   const validateForm = (): boolean => {
     if (!formData.firstName || !formData.lastName || !formData.email) {
       toast.error(t('invalidDetailsMessage'));
@@ -135,10 +142,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   return (
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" centered>
-        <Modal.Header
-          closeButton
-          style={{ backgroundColor: 'var(--tableHeader-bg)' }}
-        >
+        <Modal.Header closeButton className={styles.modalHeaderWithTableBg}>
           <Modal.Title>{t('title')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -154,7 +158,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
-                  placeholder="John"
+                  placeholder={t('firstNamePlaceholder')}
                 />
               </Form.Group>
               <Form.Group className="mb-1">
@@ -167,7 +171,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleChange}
-                  placeholder="Doe"
+                  placeholder={t('lastNamePlaceholder')}
                 />
               </Form.Group>
             </div>
@@ -191,7 +195,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                placeholder="abc@gmail.com"
+                placeholder={t('emailPlaceholder')}
               />
             </Form.Group>
 

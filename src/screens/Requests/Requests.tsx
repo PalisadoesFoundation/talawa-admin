@@ -104,13 +104,28 @@ interface InterfaceRequestsListItem {
   };
 }
 
+/**
+ * Renders the Membership Requests screen.
+ *
+ * Responsibilities:
+ * - Displays membership requests with infinite scroll support
+ * - Supports search submission via AdminSearchFilterBar
+ * - Shows user avatars and request details
+ * - Handles accept and reject request actions
+ * - Shows empty state via DataGrid overlay when no requests exist
+ *
+ * Localization:
+ * - Uses `common` and `requests` namespaces
+ *
+ * @returns JSX.Element
+ */
 const Requests = (): JSX.Element => {
-  const { t } = useTranslation('translation', { keyPrefix: 'requests' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
 
   // Set the document title to the translated title for the requests page
   useEffect(() => {
-    document.title = t('title');
+    document.title = t('requests.title');
   }, [t]);
 
   // Hook for managing local storage
@@ -182,7 +197,7 @@ const Requests = (): JSX.Element => {
 
     // Add null check before accessing organizations.length
     if (orgsData.organizations?.length === 0) {
-      toast.warning(t('noOrgError') as string);
+      toast.warning(t('requests.noOrgError') as string);
     }
   }, [orgsData, t]);
 
@@ -294,19 +309,19 @@ const Requests = (): JSX.Element => {
 
   // Header titles for the table
   const headerTitles: string[] = [
-    t('sl_no'),
-    t('profile'),
+    t('requests.sl_no'),
+    t('requests.profile'),
     tCommon('name'),
     tCommon('email'),
-    t('accept'),
-    t('reject'),
+    t('requests.accept'),
+    t('requests.reject'),
   ];
 
   // Columns for ReportingTable (DataGrid)
   const columns: ReportingTableColumn[] = [
     {
       field: 'sl_no',
-      headerName: t('sl_no'),
+      headerName: t('requests.sl_no'),
       display: 'flex',
       flex: 0.5,
       minWidth: 50,
@@ -325,7 +340,7 @@ const Requests = (): JSX.Element => {
     },
     {
       field: 'profile',
-      headerName: t('profile'),
+      headerName: t('requests.profile'),
       display: 'flex',
       flex: 1,
       minWidth: 80,
@@ -340,7 +355,7 @@ const Requests = (): JSX.Element => {
             <img
               src={user.avatarURL}
               className={styles.userAvatar}
-              alt={t('profilePictureAlt')}
+              alt={t('requests.profilePictureAlt')}
               data-testid="display-img"
               crossOrigin="anonymous"
               onError={(e) => {
@@ -356,7 +371,7 @@ const Requests = (): JSX.Element => {
             size={45}
             avatarStyle={styles.avatarStyle}
             name={user.name || ''}
-            alt={t('placeholderAvatarAlt')}
+            alt={t('requests.placeholderAvatarAlt')}
           />
         );
       },
@@ -395,7 +410,7 @@ const Requests = (): JSX.Element => {
     },
     {
       field: 'accept',
-      headerName: t('accept'),
+      headerName: t('requests.accept'),
       display: 'flex',
       flex: 1,
       minWidth: 100,
@@ -412,7 +427,7 @@ const Requests = (): JSX.Element => {
             'acceptMembershipRequestBtn' +
             (params?.row?.membershipRequestId ?? '')
           }
-          aria-label={t('accept')}
+          aria-label={t('requests.accept')}
           onClick={async () => {
             if (params?.row?.membershipRequestId) {
               await handleAcceptUser(params.row.membershipRequestId);
@@ -425,7 +440,7 @@ const Requests = (): JSX.Element => {
     },
     {
       field: 'reject',
-      headerName: t('reject'),
+      headerName: t('requests.reject'),
       display: 'flex',
       flex: 1,
       minWidth: 100,
@@ -442,7 +457,7 @@ const Requests = (): JSX.Element => {
             'rejectMembershipRequestBtn' +
             (params?.row?.membershipRequestId ?? '')
           }
-          aria-label={t('reject')}
+          aria-label={t('requests.reject')}
           onClick={async () => {
             if (params?.row?.membershipRequestId) {
               await handleRejectUser(params.row.membershipRequestId);
@@ -487,7 +502,7 @@ const Requests = (): JSX.Element => {
         variables: { input: { membershipRequestId } },
       });
       if (acceptData) {
-        toast.success(t('acceptedSuccessfully') as string);
+        toast.success(t('requests.acceptedSuccessfully') as string);
         resetAndRefetch();
       }
     } catch (error: unknown) {
@@ -501,7 +516,7 @@ const Requests = (): JSX.Element => {
         variables: { input: { membershipRequestId } },
       });
       if (rejectData) {
-        toast.success(t('rejectedSuccessfully') as string);
+        toast.success(t('requests.rejectedSuccessfully') as string);
         resetAndRefetch();
       }
     } catch (error: unknown) {
@@ -512,9 +527,10 @@ const Requests = (): JSX.Element => {
   return (
     <div data-testid="testComp">
       <AdminSearchFilterBar
-        searchPlaceholder={t('searchRequests')}
+        searchPlaceholder={t('requests.searchRequests')}
         searchValue={searchByName}
         onSearchChange={handleSearch}
+        onSearchSubmit={handleSearch}
         searchInputTestId="searchByName"
         searchButtonTestId="searchButton"
         hasDropdowns={false}
@@ -523,8 +539,8 @@ const Requests = (): JSX.Element => {
       {!isLoading && orgsData?.organizations?.length === 0 ? (
         <EmptyState
           icon={<Group />}
-          message={t('noOrgErrorTitle')}
-          description={t('noOrgErrorDescription')}
+          message={t('requests.noOrgErrorTitle')}
+          description={t('requests.noOrgErrorDescription')}
           dataTestId="requests-no-orgs-empty"
         />
       ) : !isLoading &&
@@ -542,8 +558,8 @@ const Requests = (): JSX.Element => {
       ) : !isLoading && data && displayedRequests.length === 0 ? (
         <EmptyState
           icon={<Group />}
-          message={t('noRequestsFound')}
-          description={t('newMembersWillAppearHere')}
+          message={t('requests.noRequestsFound')}
+          description={t('requests.newMembersWillAppearHere')}
           dataTestId="requests-no-requests-empty"
         />
       ) : (

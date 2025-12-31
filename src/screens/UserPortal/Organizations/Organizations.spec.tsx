@@ -1335,12 +1335,26 @@ test('correctly map joined organizations data when mode is 1', async () => {
   });
 
   const modeBtn = screen.getByTestId('modeChangeBtn');
-  fireEvent.click(modeBtn);
-
-  const joinedModeBtn = screen.getByTestId('1');
-  fireEvent.click(joinedModeBtn);
+  await userEvent.click(modeBtn);
 
   await waitFor(() => {
+    expect(screen.getByTestId('1')).toBeInTheDocument();
+  });
+
+  const joinedModeBtn = screen.getByTestId('1');
+  await userEvent.click(joinedModeBtn);
+
+  await waitFor(
+    () => {
+      expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument();
+    },
+    { timeout: 2000 },
+  );
+
+  await waitFor(() => {
+    const organizationsList = screen.getByTestId('organizations-list');
+    expect(organizationsList).toBeInTheDocument();
+
     const cards = screen.getAllByTestId('organization-card');
     expect(cards.length).toBeGreaterThan(0);
 
@@ -1349,14 +1363,13 @@ test('correctly map joined organizations data when mode is 1', async () => {
         card.getAttribute('data-organization-name') === 'Test Organization',
     );
 
-    if (card) {
-      expect(card.getAttribute('data-membership-status')).toBe('accepted');
+    expect(card).toBeTruthy();
+    expect(card?.getAttribute('data-membership-status')).toBe('accepted');
 
-      const statusElement = screen.getByTestId(
-        'membership-status-Test Organization',
-      );
-      expect(statusElement.getAttribute('data-status')).toBe('accepted');
-    }
+    const statusElement = screen.getByTestId(
+      'membership-status-Test Organization',
+    );
+    expect(statusElement.getAttribute('data-status')).toBe('accepted');
   });
 });
 

@@ -4,7 +4,7 @@
 
 # Interface: IUserListForTableResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:534](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L534)
+Defined in: [src/types/GraphQL/queryResults.ts:680](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L680)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:534](https://github.com/Palisadoe
 
 > **allUsers**: `object`
 
-Defined in: [src/types/GraphQL/queryResults.ts:535](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L535)
+Defined in: [src/types/GraphQL/queryResults.ts:681](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L681)
 
 #### edges
 

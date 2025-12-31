@@ -4,7 +4,7 @@
 
 # Class: StaticMockLink
 
-Defined in: [src/utils/StaticMockLink.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L27)
+Defined in: [src/utils/StaticMockLink.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L34)
 
 Similar to the standard Apollo MockLink, but doesn't consume a mock
 when it is used allowing it to be used in places like Storybook.
@@ -19,7 +19,7 @@ when it is used allowing it to be used in places like Storybook.
 
 > **new StaticMockLink**(`mockedResponses`, `addTypename`): `StaticMockLink`
 
-Defined in: [src/utils/StaticMockLink.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L32)
+Defined in: [src/utils/StaticMockLink.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L39)
 
 #### Parameters
 
@@ -45,7 +45,7 @@ readonly `MockedResponse`[]
 
 > **addTypename**: `boolean` = `true`
 
-Defined in: [src/utils/StaticMockLink.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L29)
+Defined in: [src/utils/StaticMockLink.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L36)
 
 ***
 
@@ -53,7 +53,7 @@ Defined in: [src/utils/StaticMockLink.ts:29](https://github.com/PalisadoesFounda
 
 > `optional` **operation**: `Operation`
 
-Defined in: [src/utils/StaticMockLink.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L28)
+Defined in: [src/utils/StaticMockLink.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L35)
 
 ## Methods
 
@@ -61,7 +61,7 @@ Defined in: [src/utils/StaticMockLink.ts:28](https://github.com/PalisadoesFounda
 
 > **addMockedResponse**(`mockedResponse`): `void`
 
-Defined in: [src/utils/StaticMockLink.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L42)
+Defined in: [src/utils/StaticMockLink.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L49)
 
 #### Parameters
 
@@ -79,7 +79,7 @@ Defined in: [src/utils/StaticMockLink.ts:42](https://github.com/PalisadoesFounda
 
 > **onError**(`error`, `observer`): `boolean`
 
-Defined in: [src/utils/StaticMockLink.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L57)
+Defined in: [src/utils/StaticMockLink.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L64)
 
 #### Parameters
 
@@ -103,7 +103,7 @@ Defined in: [src/utils/StaticMockLink.ts:57](https://github.com/PalisadoesFounda
 
 > **request**(`operation`): `Observable`\<`FormattedExecutionResult`\<`Record`\<`string`, `any`\>, `Record`\<`string`, `any`\>\>\>
 
-Defined in: [src/utils/StaticMockLink.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L67)
+Defined in: [src/utils/StaticMockLink.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L74)
 
 Runs the request handler for the provided operation.
 

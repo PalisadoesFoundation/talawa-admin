@@ -4,7 +4,7 @@
 
 # Interface: IGenerateOtpResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:563](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L563)
+Defined in: [src/types/GraphQL/queryResults.ts:722](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L722)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:563](https://github.com/Palisadoe
 
 > **otp**: `object`
 
-Defined in: [src/types/GraphQL/queryResults.ts:564](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L564)
+Defined in: [src/types/GraphQL/queryResults.ts:723](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L723)
 
 #### otpToken
 

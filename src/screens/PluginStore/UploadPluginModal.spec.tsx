@@ -3,6 +3,8 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { ApolloClient } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { I18nextProvider } from 'react-i18next';
+import i18nForTest from 'utils/i18nForTest';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import UploadPluginModal from './UploadPluginModal';
 
@@ -858,9 +860,11 @@ describe('UploadPluginModal Component', () => {
       ).mockResolvedValue(null);
 
       render(
-        <MockedProvider>
-          <UploadPluginModal {...defaultProps} />
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider>
+            <UploadPluginModal {...defaultProps} />
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       const fileInput = getFileInput();
@@ -996,9 +1000,11 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
-          <UploadPluginModal {...defaultProps} />
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider>
+            <UploadPluginModal {...defaultProps} />
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       const fileInput = getFileInput();
@@ -1754,9 +1760,11 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
-          <UploadPluginModal {...defaultProps} />
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider>
+            <UploadPluginModal {...defaultProps} />
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       const fileInput = getFileInput();
@@ -1799,9 +1807,11 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
-          <UploadPluginModal {...defaultProps} />
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider>
+            <UploadPluginModal {...defaultProps} />
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       const fileInput = getFileInput();
@@ -1914,9 +1924,11 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
-          <UploadPluginModal {...defaultProps} />
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider>
+            <UploadPluginModal {...defaultProps} />
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       const fileInput = getFileInput();
@@ -1960,9 +1972,11 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
-          <UploadPluginModal {...defaultProps} />
-        </MockedProvider>,
+        <I18nextProvider i18n={i18nForTest}>
+          <MockedProvider>
+            <UploadPluginModal {...defaultProps} />
+          </MockedProvider>
+        </I18nextProvider>,
       );
 
       const fileInput = getFileInput();

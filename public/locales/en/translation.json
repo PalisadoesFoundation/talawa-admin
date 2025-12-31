@@ -23,26 +23,31 @@
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
     "userLogin": "User Login",
     "adminLogin": "Admin Login",
-    "atleast_8_char_long": "Atleast 8 Character long",
-    "atleast_6_char_long": "Atleast 6 Character long",
+    "atleastEightCharLong": "At least 8 characters long",
+    "atleastSixCharLong": "At least 6 characters long",
     "firstName_invalid": "First name should contain only lower and upper case letters",
     "lastName_invalid": "Last name should contain only lower and upper case letters",
-    "name_invalid": "Name should contain only letters, spaces, and hyphens",
-    "password_invalid": "Password should contain atleast one lowercase letter, one uppercase letter, one numeric value and one special character",
-    "email_invalid": "Email should have atleast 8 characters",
-    "Password_and_Confirm_password_mismatches.": "Password and Confirm password mismatches.",
+    "nameInvalid": "Name should contain only letters, spaces, and hyphens",
+    "passwordInvalid": "Password should contain at least one lowercase letter, one uppercase letter, one numeric value and one special character",
+    "emailInvalid": "Please enter a valid email address",
     "doNotOwnAnAccount": "Do not own an account?",
     "captchaError": "Captcha Error!",
     "Please_check_the_captcha": "Please, check the captcha.",
     "Something_went_wrong": "Something went wrong, Please try after sometime.",
-    "passwordMismatches": "Password and Confirm password mismatches.",
+    "passwordMismatches": "Password and confirm password do not match.",
     "fillCorrectly": "Fill all the Details Correctly.",
     "successfullyRegistered": "Successfully Registered. Please wait until you will be approved.",
-    "lowercase_check": "Atleast one lowercase letter",
-    "uppercase_check": "Atleast one uppercase letter",
-    "numeric_value_check": "Atleaset one numeric value",
-    "special_char_check": "Atleast one special character",
+    "lowercaseCheck": "At least one lowercase letter",
+    "uppercaseCheck": "At least one uppercase letter",
+    "numericValueCheck": "At least one numeric value",
+    "specialCharCheck": "At least one special character",
+    "requirement_min_length": "At least 8 characters",
+    "requirement_lowercase": "Contains lowercase",
+    "requirement_uppercase": "Contains uppercase",
+    "requirement_number": "Contains a number",
+    "requirement_special_char": "Contains a special character",
     "selectOrg": "Select an organization",
+    "backToLogin": "Back to Login",
     "afterRegister": "Successfully registered. Please wait for admin to approve your request.",
     "talawa_portal": "talawa_portal",
     "login": "login",
@@ -61,18 +66,25 @@
     "OR": "OR",
     "admin": "admin",
     "user": "user",
-    "loading": "loading"
+    "loading": "Loading...",
+    "communityLogo": "Community Logo",
+    "organizations": "Organizations"
   },
   "signOut": {
     "retryPrompt": "Failed to revoke session. Retry?",
     "signingOut": "Signing out...",
     "signOut": "Sign Out"
   },
+  "orgSelector": {
+    "organization": "Organization",
+    "selectOrganization": "Select an organization",
+    "noOrganizationsAvailable": "No organizations available",
+    "noMatchingOrganizations": "No matching organizations found"
+  },
   "userLoginPage": {
     "title": "Talawa Admin",
     "fromPalisadoes": "An open source application by Palisadoes Foundation volunteers",
-    "atleast_8_char_long": "Atleast 8 Character long",
-    "Password_and_Confirm_password_mismatches.": "Password and Confirm password mismatches.",
+    "atleastEightCharLong": "At least 8 characters long",
     "doNotOwnAnAccount": "Do not own an account?",
     "captchaError": "Captcha Error!",
     "Please_check_the_captcha": "Please, check the captcha.",
@@ -201,7 +213,16 @@
     "cancel": "cancel",
     "endOfResults": "endOfResults",
     "noResultsFoundFor": "noResultsFoundFor",
-    "OR": "OR"
+    "OR": "OR",
+    "imageUploadError": "Image upload failed. Please try again.",
+    "imageUploadSuccess": "Image uploaded successfully.",
+    "congratulationOrgCreated": "Congratulations! The Organization is created.",
+    "goToStore": "Go to Store",
+    "manageFeaturesInfo": "Manage the features and plugins available for this organization.",
+    "orgName": "Enter Name",
+    "sortOrganizations": "Sort Organizations",
+    "admins": "Admins",
+    "members": "Members"
   },
   "orgListCard": {
     "manage": "Manage",
@@ -226,12 +247,16 @@
     "rejectedSuccessfully": "Request rejected successfully",
     "noOrgErrorTitle": "Organizations Not Found",
     "noOrgErrorDescription": "Please create an organization through dashboard",
+    "newMembersWillAppearHere": "New members will appear here",
     "name": "name",
     "email": "email",
     "profilePictureAlt": "User profile picture",
     "placeholderAvatarAlt": "Placeholder avatar"
   },
   "users": {
+    "profilePageComingSoon": "Profile Page Coming Soon !",
+    "orgImage": "orgImage",
+    "creator": "creator",
     "membershipStatus": {
       "member": "Membership status: Member",
       "pending": "Membership status: Pending",
@@ -349,6 +374,11 @@
     "createUser": "Create User",
     "people": "People",
     "sort": "Search by Role",
+    "customizedTable": "customized table",
+    "errorLoadingUsers": "Error loading users.",
+    "noUsersFound": "No users found.",
+    "userAvatar": "{{name}} avatar",
+    "pageNumber": "Page {{page}}",
     "addMembers": "Add Members",
     "existingUser": "Existing User",
     "newUser": "New User",
@@ -398,7 +428,10 @@
     "totalAssignedUsers": "Total Assigned Users",
     "tagCreationFailed": "Tag creation failed",
     "errorLoadingTagsData": "Error occurred while loading Organization Tags Data",
-    "sortTags": "Sort Tags"
+    "sortTags": "Sort Tags",
+    "tags": "Tags",
+    "Latest": "Latest",
+    "Oldest": "Oldest"
   },
   "manageTag": {
     "title": "Tag Details",
@@ -477,13 +510,17 @@
     "eventName": "Name",
     "allDay": "All Day",
     "recurringEvent": "Recurring Event",
+    "recurring": "Recurring",
     "isPublic": "Is Public",
+    "publicEvent": "Is Public",
     "isRegistrable": "Is Registrable",
+    "registerable": "Is Registerable",
     "createChat": "Create Chat",
     "createEvent": "Create Event",
     "enterFilter": "Enter Filter",
     "enterName": "Enter Name",
     "enterDescrip": "Enter Description",
+    "enterDescription": "Enter Description",
     "searchEventName": "Search Event Name",
     "searchMemberName": "Search Member Name",
     "eventType": "Event Type",
@@ -529,8 +566,10 @@
     "assignedTo": "Assigned To",
     "assignTo": "Assign To",
     "volunteer": "Volunteer",
+    "volunteered": "Volunteered",
     "volunteerGroup": "Volunteer Group",
     "volunteerAssignment": "Volunteer Assignment",
+    "volunteerSuccess": "Volunteer added successfully",
     "individualVolunteer": "Individual Volunteer",
     "groupAssignment": "Group Assignment",
     "hoursVolunteered": "Hours Volunteered",
@@ -677,6 +716,8 @@
     "eventDetails": "Event Details",
     "eventDeleted": "Event deleted successfully.",
     "eventUpdated": "Event updated successfully.",
+    "registeredSuccessfully": "Successfully registered for {{eventName}}",
+    "noChangesToUpdate": "No changes to update",
     "thisInstance": "This Instance",
     "thisAndFollowingInstances": "This & Following Instances",
     "allInstances": "All Instances",
@@ -699,7 +740,8 @@
     "registerEvent": "registerEvent",
     "close": "close",
     "talawaApiUnavailable": "talawaApiUnavailable",
-    "done": "done"
+    "done": "done",
+    "invalidDate": "Invalid Date"
   },
   "funds": {
     "title": "Funds",
@@ -725,6 +767,8 @@
     "viewCampaigns": "View Campaigns",
     "searchByName": "Search by Name",
     "assocCampaigns": "Associated Campaigns",
+    "associatedCampaigns": "Associated Campaigns",
+    "searchFunds": "Search Funds",
     "errorLoadingFundsData": "Error loading funds data",
     "editFund": "Edit Fund"
   },
@@ -733,7 +777,10 @@
     "campaignName": "Campaign Name",
     "campaignOptions": "Options",
     "fundingGoal": "Funding Goal",
+    "progress": "Progress",
+    "raised": "Raised",
     "addCampaign": "Add Campaign",
+    "editCampaign": "Edit Campaign",
     "createdCampaign": "Campaign created successfully",
     "updatedCampaign": "Campaign updated successfully",
     "deletedCampaign": "Campaign deleted successfully",
@@ -745,6 +792,7 @@
     "currency": "Currency",
     "selectCurrency": "Select Currency",
     "searchFullName": "Search By Name",
+    "searchCampaigns": "Search Campaigns",
     "viewPledges": "View Pledges",
     "noCampaignsFound": "No Campaigns Found",
     "latestEndDate": "Latest End Date",
@@ -788,7 +836,8 @@
     "togglePledgedRaised": "Toggle between Pledged and Raised amounts",
     "pledgeDate": "Pledge Date",
     "pledged": "Pledged",
-    "donated": "Donated"
+    "donated": "Donated",
+    "campaignNotActive": "Campaign is not currently active"
   },
   "createPostModal": {
     "title": "Posts",
@@ -830,11 +879,15 @@
     "Next": "Next Page",
     "Previous": "Previous Page",
     "cancel": "cancel",
+    "invalidDate": "Invalid Date",
     "messageTitleError": "Post title cannot be empty!",
     "organizationIdMissing": "Organization ID is missing!",
     "messageDescription": "Post Description",
     "addVideo": "Add Video",
-    "creatingMessage": "Creating Post..."
+    "creatingMessage": "Creating Post...",
+    "orgPostListError": "Organization post list error:",
+    "pinnedPostsLoadError": "Error loading pinned posts",
+    "errorSearchingPosts": "Error searching posts"
   },
   "postNotFound": {
     "post": "Post",
@@ -901,7 +954,8 @@
     "name": "name",
     "email": "email",
     "talawaApiUnavailable": "talawaApiUnavailable",
-    "noResultsFoundFor": "noResultsFoundFor"
+    "noResultsFoundFor": "noResultsFoundFor",
+    "sortOrganizations": "Sort Organizations"
   },
   "eventManagement": {
     "name": "Event Management Dashboard",
@@ -965,7 +1019,10 @@
     "addingAttendee": "Adding...",
     "male": "Male",
     "female": "Female",
-    "other": "Other"
+    "other": "Other",
+    "firstNamePlaceholder": "John",
+    "lastNamePlaceholder": "Doe",
+    "emailPlaceholder": "abc@gmail.com"
   },
   "forgotPassword": {
     "title": "Talawa Forgot Password",
@@ -987,10 +1044,10 @@
     "talawaApiUnavailable": "talawaApiUnavailable"
   },
   "pageNotFound": {
+    "404": "404",
     "title": "404 Not Found",
     "talawaAdmin": "Talawa Admin",
     "talawaUser": "Talawa User",
-    "404": "404",
     "notFoundMsg": "Oops! The Page you requested was not found!",
     "backToHome": "Back to Home"
   },
@@ -1225,7 +1282,8 @@
     "filter": "filter",
     "searchByName": "Search by Name",
     "searchOrganizations": "Search Organization",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "title": "Organizations"
   },
   "userSidebarOrg": {
     "yourOrganizations": "Your Organizations",
@@ -1266,6 +1324,7 @@
     "loadingComments": "Loading comments…",
     "loadMoreComments": "Load more comments",
     "noMoreComments": "No more comments",
+    "moreOptions": "more options",
     "postedOn": "Posted on {{date}}",
     "emptyCommentError": "Please enter a comment before submitting.",
     "unexpectedError": "An unexpected error occurred. Please try again.",
@@ -1386,7 +1445,12 @@
     "postalCode": "Postal Code",
     "city": "City",
     "description": "Description",
-    "enterDescription": "Enter Description"
+    "enterDescription": "Enter Description",
+    "atleast_8_char_long": "Password must be at least 8 characters long.",
+    "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF.",
+    "fileSizeTooLarge": "File is too large. Maximum size is 5MB.",
+    "failedToProcessImage": "Failed to process profile picture. Please try uploading again.",
+    "title": "Settings"
   },
   "donate": {
     "title": "Donations",
@@ -1475,7 +1539,8 @@
     "creator": "Creator",
     "alreadyRegistered": "Already registered",
     "location": "location",
-    "register": "register"
+    "register": "register",
+    "registrationFailed": "Failed to register for the event"
   },
   "advertisement": {
     "title": "Advertisements",
@@ -1596,6 +1661,16 @@
     "enterVenueCapacity": "Enter Venue Capacity",
     "image": "Venue Image",
     "uploadVenueImage": "Upload Venue Image",
+    "errorCreatingPreviewUrl": "Error creating preview URL",
+    "invalidFileTypeError": "Invalid file type: {{fileName}}",
+    "fileTooLargeError": "File too large: {{fileName}}",
+    "emptyFileSelected": "Empty file selected",
+    "venueImagePreview": "Venue Image Preview",
+    "errorCreatingPreviewUrl": "Error creating preview URL",
+    "invalidFileTypeError": "Invalid file type: {{fileName}}",
+    "fileTooLargeError": "File too large: {{fileName}}",
+    "emptyFileSelected": "Empty file selected",
+    "venueImagePreview": "Venue Image Preview",
     "createVenue": "Create Venue",
     "venueAdded": "Venue added Successfully",
     "editVenue": "Update Venue",
@@ -1705,7 +1780,21 @@
     "title": "My Pledges"
   },
   "leaveOrganization": {
-    "title": "Leave Organization"
+    "title": "Leave Organization",
+    "successMessage": "You have successfully left the organization!",
+    "loadingOrganizationDetails": "Loading organization details...",
+    "organizationNotFound": "Organization not found",
+    "leaveOrganization": "Leave Organization",
+    "leaveJoinedOrganization": "Leave Joined Organization",
+    "confirmationMessage": "Are you sure you want to leave this organization?",
+    "irreversibleAction": "This action cannot be undone, and you may need to request access again if you reconsider.",
+    "enterEmailToConfirm": "Enter your email to confirm:",
+    "enterYourEmail": "Enter your email",
+    "confirmEmailInput": "confirm-email-input",
+    "continue": "Continue",
+    "back": "Back",
+    "confirmLeaveButton": "confirm-leave-button",
+    "confirm": "Confirm"
   },
   "eventVolunteers": {
     "toggleGroupAriaLabel": "Volunteer view selector",
@@ -1718,9 +1807,13 @@
     "noVolunteers": "No Volunteers",
     "noVolunteerGroups": "No Volunteer Groups",
     "add": "Add",
+    "leaderRequired": "Leader *",
+    "inviteVolunteersRequired": "Invite Volunteers *",
+    "groupTable": "group table",
     "mostHoursVolunteered": "Most Hours Volunteered",
     "leastHoursVolunteered": "Least Hours Volunteered",
     "accepted": "Accepted",
+    "rejected": "Rejected",
     "addVolunteer": "Add Volunteer",
     "removeVolunteer": "Remove Volunteer",
     "volunteerAdded": "Volunteer added successfully",
@@ -1741,6 +1834,9 @@
     "groupDetails": "Group Details",
     "creator": "Creator",
     "requests": "Requests",
+    "volunteershipRequests": "Volunteership Requests",
+    "requestType": "Request Type",
+    "requestDate": "Request Date",
     "noRequests": "No Requests",
     "latest": "Latest",
     "earliest": "Earliest",
@@ -1762,6 +1858,7 @@
     "invitations": "Invitations",
     "groups": "Volunteer Groups",
     "actions": "Action Items",
+    "search": "Search",
     "searchByName": "Search by Name",
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
@@ -1784,7 +1881,7 @@
     "receivedEarliest": "Received Earliest",
     "invitationAccepted": "Invitation accepted successfully",
     "invitationRejected": "Invitation rejected successfully",
-    "volunteerSuccess": "Requested to volunteer successfully",
+    "volunteerRequestSuccess": "Requested to volunteer successfully",
     "recurring": "Recurring",
     "groupInvitationSubject": "Invitation to join volunteer group",
     "eventInvitationSubject": "Invitation to volunteer for event",
@@ -1887,6 +1984,30 @@
     "signingOut": "Signing out...",
     "retryPrompt": "Failed to revoke session. Retry?",
     "breadcrumb": "Breadcrumb",
-    "action": "Action"
+    "action": "Action",
+    "selectLanguage": "Select Language",
+    "userMenu": "User Menu",
+    "settings": "Settings",
+    "logout": "Logout",
+    "logoutFailed": "Logout failed",
+    "title": "User Portal",
+    "talawa": "Talawa",
+    "talawaBranding": "Talawa Branding"
+  },
+  "leaveOrganization": {
+    "successMessage": "You have successfully left the organization!",
+    "loadingOrganizationDetails": "Loading organization details...",
+    "organizationNotFound": "Organization not found",
+    "leaveOrganization": "Leave Organization",
+    "leaveJoinedOrganization": "Leave Joined Organization",
+    "confirmationMessage": "Are you sure you want to leave this organization?",
+    "irreversibleAction": "This action cannot be undone, and you may need to request access again if you reconsider.",
+    "enterEmailToConfirm": "Enter your email to confirm:",
+    "enterYourEmail": "Enter your email",
+    "confirmEmailInput": "confirm-email-input",
+    "continue": "Continue",
+    "back": "Back",
+    "confirmLeaveButton": "confirm-leave-button",
+    "confirm": "Confirm"
   }
 }

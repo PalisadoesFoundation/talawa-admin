@@ -33,7 +33,7 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useMutation } from '@apollo/client/react';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import { useParams, Navigate } from 'react-router';
@@ -68,7 +68,7 @@ function orgPeopleListCard(
         variables: { memberId: props.id, organizationId: currentUrl },
       });
       if (data) {
-        toast.success(t('memberRemoved') as string);
+        NotificationToast.success(t('memberRemoved') as string);
         props.toggleRemoveModal();
       }
     } catch (error: unknown) {

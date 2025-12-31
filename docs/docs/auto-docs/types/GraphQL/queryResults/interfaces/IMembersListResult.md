@@ -4,7 +4,7 @@
 
 # Interface: IMembersListResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:269](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L269)
+Defined in: [src/types/GraphQL/queryResults.ts:412](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L412)
 
 ## Properties
 
@@ -12,7 +12,15 @@ Defined in: [src/types/GraphQL/queryResults.ts:269](https://github.com/Palisadoe
 
 > **usersByOrganizationId**: `object`[]
 
-Defined in: [src/types/GraphQL/queryResults.ts:270](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L270)
+Defined in: [src/types/GraphQL/queryResults.ts:413](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L413)
+
+#### avatarURL?
+
+> `optional` **avatarURL**: `string`
+
+#### emailAddress?
+
+> `optional` **emailAddress**: `string`
 
 #### firstName?
 
@@ -29,3 +37,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:270](https://github.com/Palisadoe
 #### name?
 
 > `optional` **name**: `string`
+
+#### role?
+
+> `optional` **role**: `string`

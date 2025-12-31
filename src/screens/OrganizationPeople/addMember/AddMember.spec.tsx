@@ -3,7 +3,7 @@ import { type MockLink } from '@apollo/client/testing';
 import { MockedProvider } from '@apollo/client/testing/react';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import userEvent from '@testing-library/user-event';
 import AddMember from './AddMember';
 import i18nForTest from 'utils/i18nForTest';
@@ -24,8 +24,9 @@ const sharedMocks = vi.hoisted(() => ({
   toast: { success: vi.fn(), error: vi.fn() },
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: sharedMocks.toast,
+// Mock NotificationToast
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: sharedMocks.toast,
 }));
 
 // Setup mock window.location
@@ -509,7 +510,9 @@ describe('AddMember Component', () => {
 
     // Verify success toast was shown
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('Member added Successfully');
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        'Member added Successfully',
+      );
     });
 
     // Click the close button
@@ -798,7 +801,9 @@ describe('AddMember Component', () => {
 
     // Check for success message
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('Member added Successfully');
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        'Member added Successfully',
+      );
     });
   });
 
@@ -1045,7 +1050,7 @@ describe('AddMember Component', () => {
 
     // Wait for error toast to be called
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
   test('handles error when creating new user fails', async () => {
@@ -1101,7 +1106,7 @@ describe('AddMember Component', () => {
 
     // Wait for error toast to be called
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 });

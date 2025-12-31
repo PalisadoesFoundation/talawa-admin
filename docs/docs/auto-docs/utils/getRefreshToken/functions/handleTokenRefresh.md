@@ -6,7 +6,7 @@
 
 > **handleTokenRefresh**(): `Promise`\<`void`\>
 
-Defined in: [src/utils/getRefreshToken.ts:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/getRefreshToken.ts#L55)
+Defined in: [src/utils/getRefreshToken.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/getRefreshToken.ts#L46)
 
 Attempts to refresh the token and reload the page if successful.
 Falls back to clearing storage and redirecting to login if refresh fails.

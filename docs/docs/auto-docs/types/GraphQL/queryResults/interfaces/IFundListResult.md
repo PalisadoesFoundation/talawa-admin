@@ -4,7 +4,7 @@
 
 # Interface: IFundListResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:441](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L441)
+Defined in: [src/types/GraphQL/queryResults.ts:587](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L587)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:441](https://github.com/Palisadoe
 
 > **organization**: `object`
 
-Defined in: [src/types/GraphQL/queryResults.ts:442](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L442)
+Defined in: [src/types/GraphQL/queryResults.ts:588](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L588)
 
 #### funds
 

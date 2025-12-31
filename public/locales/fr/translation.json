@@ -23,14 +23,13 @@
     "fromPalisadoes": "Une application open source réalisée par les bénévoles de la Fondation Palisadoes",
     "userLogin": "Utilisateur en ligne",
     "adminLogin": "Connexion administrateur",
-    "atleast_8_char_long": "Au moins 8 caractères",
-    "atleast_6_char_long": "Au moins 6 caractères",
+    "atleastEightCharLong": "Au moins 8 caractères",
+    "atleastSixCharLong": "Au moins 6 caractères",
     "firstName_invalid": "Le prénom ne doit contenir que des lettres minuscules et majuscules",
     "lastName_invalid": "Le nom de famille ne doit contenir que des lettres minuscules et majuscules",
-    "name_invalid": "Le nom ne doit contenir que des lettres, des espaces et des traits d'union",
-    "password_invalid": "Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule, une valeur numérique et un caractère spécial",
-    "email_invalid": "L'e-mail doit contenir au moins 8 caractères",
-    "Password_and_Confirm_password_mismatches.": "Mot de passe et Confirmer les incompatibilités de mot de passe.",
+    "nameInvalid": "Le nom ne doit contenir que des lettres, des espaces et des traits d'union",
+    "passwordInvalid": "Le mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule, une valeur numérique et un caractère spécial",
+    "emailInvalid": "L'e-mail doit contenir au moins 8 caractères",
     "doNotOwnAnAccount": "Vous ne possédez pas de compte ?",
     "captchaError": "Erreur CAPTCHA!",
     "Please_check_the_captcha": "S'il vous plaît, vérifiez le captcha.",
@@ -38,11 +37,17 @@
     "passwordMismatches": "Mot de passe et Confirmer les incompatibilités de mot de passe.",
     "fillCorrectly": "Remplissez correctement tous les détails.",
     "successfullyRegistered": "Enregistré avec succès. ",
-    "lowercase_check": "Au moins une lettre minuscule",
-    "uppercase_check": "Au moins une lettre majuscule",
-    "numeric_value_check": "Au moins une valeur numérique",
-    "special_char_check": "Au moins un caractère spécial",
+    "lowercaseCheck": "Au moins une lettre minuscule",
+    "uppercaseCheck": "Au moins une lettre majuscule",
+    "numericValueCheck": "Au moins une valeur numérique",
+    "specialCharCheck": "Au moins un caractère spécial",
+    "requirement_min_length": "Au moins 8 caractères",
+    "requirement_lowercase": "Contient des minuscules",
+    "requirement_uppercase": "Contient des majuscules",
+    "requirement_number": "Contient un chiffre",
+    "requirement_special_char": "Contient un caractère spécial",
     "selectOrg": "Sélectionnez une organisation",
+    "backToLogin": "Retour à la connexion",
     "afterRegister": "Enregistré avec succès. ",
     "talawa_portal": "Portail Talawa",
     "login": "Connexion",
@@ -61,18 +66,25 @@
     "OR": "OU",
     "admin": "Administrateur",
     "user": "Utilisateur",
-    "loading": "Chargement"
+    "loading": "Chargement",
+    "communityLogo": "Logo Communautaire",
+    "organizations": "Organisations"
   },
   "signOut": {
     "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
     "signingOut": "Déconnexion en cours...",
     "signOut": "Se déconnecter"
   },
+  "orgSelector": {
+    "organization": "Organisation",
+    "selectOrganization": "Sélectionnez une organisation",
+    "noOrganizationsAvailable": "Aucune organisation disponible",
+    "noMatchingOrganizations": "Aucune organisation correspondante trouvée"
+  },
   "userLoginPage": {
     "title": "Administrateur Talawa",
     "fromPalisadoes": "Une application open source réalisée par les bénévoles de la Fondation Palisadoes",
-    "atleast_8_char_long": "Au moins 8 caractères",
-    "Password_and_Confirm_password_mismatches.": "Mot de passe et Confirmer les incompatibilités de mot de passe.",
+    "atleastEightCharLong": "Au moins 8 caractères",
     "doNotOwnAnAccount": "Vous ne possédez pas de compte ?",
     "captchaError": "Erreur CAPTCHA!",
     "Please_check_the_captcha": "S'il vous plaît, vérifiez le captcha.",
@@ -201,7 +213,16 @@
     "cancel": "Annuler",
     "endOfResults": "Fin des résultats",
     "noResultsFoundFor": "Aucun résultat trouvé pour",
-    "OR": "OU"
+    "OR": "OU",
+    "imageUploadError": "Échec du téléchargement de l'image. Veuillez réessayer.",
+    "imageUploadSuccess": "Image téléchargée avec succès.",
+    "congratulationOrgCreated": "Félicitations ! L'organisation est créée.",
+    "goToStore": "Aller au magasin",
+    "manageFeaturesInfo": "Gérez les fonctionnalités et les plugins disponibles pour cette organisation.",
+    "orgName": "Entrez le nom",
+    "sortOrganizations": "Trier les organisations",
+    "admins": "Administrateurs",
+    "members": "Membres"
   },
   "orgListCard": {
     "manage": "Gérer",
@@ -226,6 +247,7 @@
     "rejectedSuccessfully": "Demande rejetée avec succès",
     "noOrgErrorTitle": "Organisations introuvables",
     "noOrgErrorDescription": "Veuillez créer une organisation via le tableau de bord",
+    "newMembersWillAppearHere": "Les nouveaux membres apparaîtront ici",
     "name": "Nom",
     "email": "E-mail",
     "profilePictureAlt": "Image de profil de {{name}}",
@@ -398,7 +420,10 @@
     "totalAssignedUsers": "Total des utilisateurs assignés",
     "tagCreationFailed": "Échec de la création de l'étiquette",
     "errorLoadingTagsData": "Une erreur s'est produite lors du chargement des données des étiquettes de l'organisation",
-    "sortTags": "Trier les étiquettes"
+    "sortTags": "Trier les étiquettes",
+    "tags": "Étiquettes",
+    "Latest": "Le Plus Récent",
+    "Oldest": "Le Plus Ancien"
   },
   "manageTag": {
     "title": "Détails de l'étiquette",
@@ -479,13 +504,17 @@
     "endTime": "Heure de fin",
     "allDay": "Toute la journée",
     "recurringEvent": "Événement récurrent",
+    "recurring": "Récurrent",
     "searchMemberName": "Rechercher le nom du membre",
     "isPublic": "est public",
+    "publicEvent": "est public",
     "isRegistrable": "Est enregistrable",
+    "registerable": "Est enregistrable",
     "createEvent": "Créer un évènement",
     "enterFilter": "Entrer le filtre",
     "enterName": "Entrez le nom",
     "enterDescrip": "Entrez la description",
+    "enterDescription": "Entrez la description",
     "eventLocation": "Entrez l'emplacement",
     "searchEventName": "Rechercher le nom de l'événement",
     "eventType": "Type d'événement",
@@ -554,8 +583,10 @@
     "selectActionItemCategory": "Sélectionnez une Catégorie d'Action",
     "selectAssignee": "Sélectionner un Attribué",
     "volunteer": "Bénévole",
+    "volunteered": "Bénévole",
     "volunteerGroup": "Groupe de bénévoles",
     "volunteerAssignment": "Affectation de bénévole",
+    "volunteerSuccess": "Bénévole ajouté avec succès",
     "individualVolunteer": "Bénévole individuel",
     "groupAssignment": "Affectation de groupe",
     "hoursVolunteered": "Heures de bénévolat",
@@ -678,6 +709,8 @@
     "eventDetails": "Détails de l'évènement",
     "eventDeleted": "Événement supprimé avec succès.",
     "eventUpdated": "Événement mis à jour avec succès.",
+    "registeredSuccessfully": "Successfully registered for {{eventName}}",
+    "noChangesToUpdate": "No changes to update",
     "thisInstance": "Cette instance",
     "thisAndFollowingInstances": "Instances présentes et suivantes",
     "allInstances": "Toutes les instances",
@@ -699,6 +732,7 @@
     "close": "Fermer",
     "talawaApiUnavailable": "API Talawa non disponible",
     "done": "Terminé",
+    "invalidDate": "Invalid Date",
     "createChat": "Créer une discussion"
   },
   "funds": {
@@ -725,6 +759,8 @@
     "createdEarliest": "Créé le plus tôt",
     "viewCampaigns": "Voir les campagnes",
     "assocCampaigns": "Campagnes associées",
+    "associatedCampaigns": "Campagnes associées",
+    "searchFunds": "Rechercher des fonds",
     "errorLoadingFundsData": "Erreur lors du chargement des données des fonds",
     "editFund": "Modifier le fonds"
   },
@@ -733,7 +769,10 @@
     "campaignName": "Nom de la campagne",
     "campaignOptions": "Options",
     "fundingGoal": "Objectif de financement",
+    "progress": "Progrès",
+    "raised": "Collecté",
     "addCampaign": "Ajouter une campagne",
+    "editCampaign": "Modifier la campagne",
     "createdCampaign": "Campagne créée avec succès",
     "updatedCampaign": "Campagne mise à jour avec succès",
     "deletedCampaign": "Campagne supprimée avec succès",
@@ -745,6 +784,7 @@
     "currency": "Devise",
     "selectCurrency": "Sélectionner la devise",
     "searchFullName": "Rechercher par nom",
+    "searchCampaigns": "Rechercher des campagnes",
     "viewPledges": "Voir les promesses de dons",
     "noCampaignsFound": "Aucune campagne trouvée",
     "latestEndDate": "Dernière date de fin",
@@ -788,7 +828,8 @@
     "togglePledgedRaised": "Basculer entre les montants Promis et Collectés",
     "pledgeDate": "Date d'Engagement",
     "pledged": "Promis",
-    "donated": "Donné"
+    "donated": "Donné",
+    "campaignNotActive": "La campagne n'est pas actuellement active"
   },
   "createPostModal": {
     "title": "Des postes",
@@ -830,11 +871,15 @@
     "Next": "Page suivante",
     "Previous": "Page précédente",
     "cancel": "Annuler",
+    "invalidDate": "Invalid Date",
     "messageTitleError": "Le titre du message ne peut pas être vide !",
     "organizationIdMissing": "L'ID de l'organisation est manquant !",
     "messageDescription": "Description du message",
     "addVideo": "Ajouter une vidéo",
-    "creatingMessage": "Création du message..."
+    "creatingMessage": "Création du message...",
+    "orgPostListError": "Organization post list error:",
+    "pinnedPostsLoadError": "Error loading pinned posts",
+    "errorSearchingPosts": "Error searching posts"
   },
   "postNotFound": {
     "post": "Poste",
@@ -901,7 +946,8 @@
     "name": "Nom",
     "email": "Email",
     "talawaApiUnavailable": "API Talawa non disponible",
-    "noResultsFoundFor": "Aucun résultat trouvé pour"
+    "noResultsFoundFor": "Aucun résultat trouvé pour",
+    "sortOrganizations": "Sort Organizations"
   },
   "eventManagement": {
     "name": "Gestion d'événements",
@@ -1173,7 +1219,8 @@
     "filter": "Filtrer",
     "searchByName": "Rechercher par nom",
     "searchOrganizations": "Rechercher Organisations",
-    "loading": "Chargement..."
+    "loading": "Chargement...",
+    "title": "Organisations"
   },
   "userSidebarOrg": {
     "yourOrganizations": "Vos organisations",
@@ -1386,7 +1433,12 @@
     "postalCode": "Code postal",
     "city": "Ville",
     "description": "Description",
-    "enterDescription": "Entrez la description"
+    "enterDescription": "Entrez la description",
+    "atleast_8_char_long": "Le mot de passe doit comporter au moins 8 caractères",
+    "invalidFileType": "Type de fichier invalide. Veuillez télécharger un JPEG, PNG ou GIF",
+    "fileSizeTooLarge": "Le fichier est trop volumineux. La taille maximale est de 5 Mo",
+    "failedToProcessImage": "Échec du traitement de la photo de profil. Veuillez réessayer de la télécharger",
+    "title": "Paramètres"
   },
   "donate": {
     "title": "Des dons",
@@ -1721,6 +1773,7 @@
     "mostHoursVolunteered": "Le Plus d'Heures de Bénévolat",
     "leastHoursVolunteered": "Le Moins d'Heures de Bénévolat",
     "accepted": "Accepté",
+    "rejected": "Rejeté",
     "addVolunteer": "Ajouter un Bénévole",
     "removeVolunteer": "Supprimer le Bénévole",
     "volunteerAdded": "Bénévole ajouté avec succès",
@@ -1741,6 +1794,9 @@
     "groupDetails": "Détails du Groupe",
     "creator": "Créateur",
     "requests": "Demandes",
+    "volunteershipRequests": "Demandes de Bénévolat",
+    "requestType": "Type de Demande",
+    "requestDate": "Date de la Demande",
     "noRequests": "Aucune Demande",
     "latest": "Le Plus Récent",
     "earliest": "Le Plus Ancien",
@@ -1762,6 +1818,7 @@
     "invitations": "Invitations",
     "groups": "Groupes de Bénévoles",
     "actions": "Éléments d'Action",
+    "search": "Rechercher",
     "searchByName": "Rechercher par Nom",
     "latestEndDate": "Date de Fin la Plus Récente",
     "earliestEndDate": "Date de Fin la Plus Ancienne",
@@ -1781,7 +1838,7 @@
     "receivedEarliest": "Reçu en Premier",
     "invitationAccepted": "Invitation acceptée avec succès",
     "invitationRejected": "Invitation rejetée avec succès",
-    "volunteerSuccess": "Demande de bénévolat envoyée avec succès",
+    "volunteerRequestSuccess": "Demande de bénévolat envoyée avec succès",
     "recurring": "Récurrent",
     "groupInvitationSubject": "Invitation à rejoindre le groupe de bénévoles",
     "eventInvitationSubject": "Invitation à faire du bénévolat pour l'événement",
@@ -1885,8 +1942,16 @@
   "common": {
     "signOut": "Se déconnecter",
     "signingOut": "Déconnexion en cours...",
-    "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
     "breadcrumb": "fil d'Ariane",
-    "action": "Action"
+    "action": "Action",
+    "retryPrompt": "Échec de la révocation de session. Réessayer ?",
+    "selectLanguage": "Sélectionner la Langue",
+    "userMenu": "Menu Utilisateur",
+    "settings": "Paramètres",
+    "logout": "Déconnexion",
+    "logoutFailed": "Échec de la déconnexion",
+    "title": "Portail Utilisateur",
+    "talawa": "Talawa",
+    "talawaBranding": "Image de marque Talawa"
   }
 }

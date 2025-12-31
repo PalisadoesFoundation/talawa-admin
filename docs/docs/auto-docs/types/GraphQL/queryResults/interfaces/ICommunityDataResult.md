@@ -4,7 +4,7 @@
 
 # Interface: ICommunityDataResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:313](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L313)
+Defined in: [src/types/GraphQL/queryResults.ts:459](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L459)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:313](https://github.com/Palisadoe
 
 > **community**: `object`
 
-Defined in: [src/types/GraphQL/queryResults.ts:314](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L314)
+Defined in: [src/types/GraphQL/queryResults.ts:460](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L460)
 
 #### createdAt
 

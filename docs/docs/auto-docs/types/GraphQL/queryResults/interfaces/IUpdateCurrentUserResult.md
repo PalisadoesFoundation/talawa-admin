@@ -4,7 +4,7 @@
 
 # Interface: IUpdateCurrentUserResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:344](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L344)
+Defined in: [src/types/GraphQL/queryResults.ts:490](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L490)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:344](https://github.com/Palisadoe
 
 > **updateCurrentUser**: `object`
 
-Defined in: [src/types/GraphQL/queryResults.ts:345](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L345)
+Defined in: [src/types/GraphQL/queryResults.ts:491](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L491)
 
 #### addressLine1?
 

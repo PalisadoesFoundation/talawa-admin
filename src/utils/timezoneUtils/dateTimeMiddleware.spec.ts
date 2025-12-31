@@ -5,6 +5,7 @@ import {
   type Operation,
   type ApolloLink,
 } from '@apollo/client';
+import { ApolloClient } from '@apollo/client';
 import type { DocumentNode } from 'graphql';
 import { describe, it, expect, vi } from 'vitest';
 
@@ -31,7 +32,7 @@ describe('Date Time Middleware Tests', () => {
         setContext: vi.fn(),
         extensions: {},
         operationType: 'query',
-        client: {} as any,
+        client: {} as unknown as ApolloClient,
       } as unknown as Operation;
 
       const forward = vi.fn(
@@ -68,7 +69,7 @@ describe('Date Time Middleware Tests', () => {
         setContext: vi.fn(),
         extensions: {},
         operationType: 'query',
-        client: {} as any,
+        client: {} as unknown as ApolloClient,
       } as unknown as Operation;
 
       const forward = vi.fn(
@@ -113,7 +114,7 @@ describe('Date Time Middleware Tests', () => {
         setContext: vi.fn(),
         extensions: {},
         operationType: 'query',
-        client: {} as any,
+        client: {} as unknown as ApolloClient,
       } as unknown as Operation;
 
       const forward = vi.fn(
@@ -146,7 +147,7 @@ describe('Date Time Middleware Tests', () => {
         setContext: vi.fn(),
         extensions: {},
         operationType: 'query',
-        client: {} as any,
+        client: {} as unknown as ApolloClient,
       } as unknown as Operation;
 
       const forward = vi.fn(
@@ -206,7 +207,7 @@ describe('Date Time Middleware Tests', () => {
         setContext: vi.fn(),
         extensions: {},
         operationType: 'query',
-        client: {} as any,
+        client: {} as unknown as ApolloClient,
       } as unknown as Operation;
 
       const forward = vi.fn(

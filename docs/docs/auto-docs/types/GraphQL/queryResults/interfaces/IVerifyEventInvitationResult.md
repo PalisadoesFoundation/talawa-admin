@@ -4,7 +4,7 @@
 
 # Interface: IVerifyEventInvitationResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:516](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L516)
+Defined in: [src/types/GraphQL/queryResults.ts:662](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L662)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:516](https://github.com/Palisadoe
 
 > **verifyEventInvitation**: `object`
 
-Defined in: [src/types/GraphQL/queryResults.ts:517](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L517)
+Defined in: [src/types/GraphQL/queryResults.ts:663](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L663)
 
 #### eventId
 

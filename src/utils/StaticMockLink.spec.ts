@@ -2,14 +2,17 @@ import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { StaticMockLink, mockSingleLink } from './StaticMockLink';
 import { gql, Observable } from '@apollo/client';
 import type { MockedResponse } from '@apollo/client/testing';
+import { ApolloClient, type Operation, type ApolloLink } from '@apollo/client';
 
 import { print } from 'graphql';
-import { type ApolloLink } from '@apollo/client';
 import { equal } from '@wry/equality';
 
 class TestableStaticMockLink extends StaticMockLink {
   public setErrorHandler(
-    handler: (error: any, observer?: any) => boolean,
+    handler: (
+      error: Error,
+      observer?: { error: (e: Error) => void } | null,
+    ) => boolean,
   ): void {
     this.onError = handler;
   }
@@ -418,7 +421,12 @@ describe('mockSingleLink', () => {
       getContext: () => ({}),
     };
 
-    const observable = link.request(operation4 as any);
+    const operation4Complete: ApolloLink.Operation = {
+      ...operation4,
+      operationType: 'query',
+      client: {} as unknown as ApolloClient,
+    } as ApolloLink.Operation;
+    const observable = link.request(operation4Complete);
 
     expect(observable).toBeInstanceOf(Observable);
 
@@ -572,14 +580,17 @@ describe('mockSingleLink', () => {
 
     mockLink.addMockedResponse(mockedResponse);
 
-    const observable = mockLink.request({
+    const operation = {
       query: sampleQuery,
       variables: {},
       operationName: '',
       extensions: {},
       setContext: () => {},
       getContext: () => ({}),
-    } as any);
+      operationType: 'query' as const,
+      client: {} as unknown as ApolloClient,
+    } as unknown as ApolloLink.Operation;
+    const observable = mockLink.request(operation);
 
     return new Promise<void>((resolve) => {
       observable?.subscribe({
@@ -744,5 +755,123 @@ describe('mockSingleLink', () => {
         error: reject,
       });
     });
+  });
+});
+
+describe('StaticMockLink variableMatcher', () => {
+  const MATCHER_QUERY = gql`
+    query MatcherQuery($id: ID!, $flag: Boolean) {
+      node(id: $id) @include(if: $flag) {
+        id
+      }
+    }
+  `;
+
+  function createMatcherOperation(
+    variables: Record<string, unknown>,
+  ): Operation {
+    return {
+      query: MATCHER_QUERY,
+      variables,
+      operationName: 'MatcherQuery',
+      extensions: {},
+      setContext: () => {},
+      getContext: () => ({}),
+      operationType: 'query',
+      client: {} as unknown as ApolloClient,
+    } as Operation;
+  }
+
+  function runOperation(
+    link: StaticMockLink,
+    variables: Record<string, unknown>,
+  ): Promise<{ data: { node: { id: string } } }> {
+    return new Promise((resolve, reject) => {
+      const observable = link.request(createMatcherOperation(variables));
+      if (!observable) {
+        reject(new Error('No observable returned from link.request'));
+        return;
+      }
+      observable.subscribe({
+        next: (response) =>
+          resolve(response as { data: { node: { id: string } } }),
+        error: reject,
+      });
+    });
+  }
+
+  test('uses variableMatcher when it returns true', async () => {
+    const link = new StaticMockLink([
+      {
+        request: { query: MATCHER_QUERY },
+        variableMatcher: () => false,
+        result: { data: { node: { id: 'X', __typename: 'Node' } } },
+      } as MockedResponse & {
+        variableMatcher: (v: Record<string, unknown>) => boolean;
+      },
+      {
+        request: { query: MATCHER_QUERY },
+        variableMatcher: (v: Record<string, unknown>) =>
+          v.id === '1' && v.flag === true,
+        result: { data: { node: { id: '1', __typename: 'Node' } } },
+      } as MockedResponse & {
+        variableMatcher: (v: Record<string, unknown>) => boolean;
+      },
+    ]);
+
+    const res = await runOperation(link, { id: '1', flag: true });
+    expect(res.data.node.id).toBe('1');
+  });
+
+  test('falls back to deep-equal when matcher returns false', async () => {
+    const link = new StaticMockLink([
+      {
+        request: {
+          query: MATCHER_QUERY,
+          variables: { id: '2', flag: false },
+        },
+        variableMatcher: () => false,
+        result: { data: { node: { id: '2', __typename: 'Node' } } },
+      } as MockedResponse & {
+        variableMatcher: (v: Record<string, unknown>) => boolean;
+      },
+    ]);
+
+    const res = await runOperation(link, { id: '2', flag: false });
+    expect(res.data.node.id).toBe('2');
+  });
+
+  test('matches by deep-equal when no matcher is present', async () => {
+    const link = new StaticMockLink([
+      {
+        request: {
+          query: MATCHER_QUERY,
+          variables: { id: '3', flag: true },
+        },
+        result: { data: { node: { id: '3', __typename: 'Node' } } },
+      },
+    ]);
+
+    const res = await runOperation(link, { id: '3', flag: true });
+    expect(res.data.node.id).toBe('3');
+  });
+
+  test('variableMatcher takes precedence over variables in request', async () => {
+    // Even though request.variables doesn't match, variableMatcher returns true
+    const link = new StaticMockLink([
+      {
+        request: {
+          query: MATCHER_QUERY,
+          variables: { id: 'wrong', flag: false },
+        },
+        variableMatcher: (v: Record<string, unknown>) => v.id === '4',
+        result: { data: { node: { id: '4', __typename: 'Node' } } },
+      } as MockedResponse & {
+        variableMatcher: (v: Record<string, unknown>) => boolean;
+      },
+    ]);
+
+    const res = await runOperation(link, { id: '4', flag: true });
+    expect(res.data.node.id).toBe('4');
   });
 });

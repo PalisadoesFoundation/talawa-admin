@@ -53,7 +53,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   const [searchByNameJoinedOrgs, setSearchByNameJoinedOrgs] = useState('');
   const [searchByNameBlockedOrgs, setSearchByNameBlockedOrgs] = useState('');
   const [removeUser] = useMutation(REMOVE_MEMBER_MUTATION);
-  const [unblockUser] = useMutation<{ unblockUser: any }>(
+  const [unblockUser] = useMutation<{ unblockUser: boolean }>(
     UNBLOCK_USER_MUTATION_PG,
   );
   const [updateUserInOrgType] = useMutation(UPDATE_USER_ROLE_IN_ORG_MUTATION);
@@ -128,7 +128,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   }
 
   function handleCreator(): void {
-    toast.success('Profile Page Coming Soon !');
+    toast.success(t('profilePageComingSoon'));
   }
 
   const searchJoinedOrgs = (value: string): void => {
@@ -261,9 +261,9 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             onClick={() => goToOrg(org.id)}
                           >
                             {org.avatarURL ? (
-                              <img src={org.avatarURL} alt="orgImage" />
+                              <img src={org.avatarURL} alt={t('orgImage')} />
                             ) : (
-                              <Avatar name={org.name} alt="orgImage" />
+                              <Avatar name={org.name} alt={t('orgImage')} />
                             )}
                             {org.name}
                           </Button>
@@ -278,14 +278,23 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             data-testid={`creator${org.id}`}
                           >
                             {org.creator.avatarURL ? (
-                              <img src={org.creator.avatarURL} alt="creator" />
+                              <img
+                                src={org.creator.avatarURL}
+                                alt={t('creator')}
+                              />
                             ) : (
-                              <Avatar name={org.creator.name} alt="creator" />
+                              <Avatar
+                                name={org.creator.name}
+                                alt={t('creator')}
+                              />
                             )}
                             {org.creator.name}
                           </Button>
                         </td>
-                        <td> {isAdmin ? 'ADMIN' : 'USER'} </td>
+                        <td>
+                          {' '}
+                          {isAdmin ? tCommon('admin') : tCommon('user')}{' '}
+                        </td>
                         <td>
                           <Form.Select
                             size="sm"
@@ -298,18 +307,30 @@ const UsersTableItem = (props: Props): JSX.Element => {
                           >
                             {isAdmin ? (
                               <>
-                                <option value={`ADMIN?${org.id}`}>ADMIN</option>
-                                <option value={`USER?${org.id}`}>USER</option>
+                                <option value={`ADMIN?${org.id}`}>
+                                  {tCommon('admin')}
+                                </option>
+                                <option value={`USER?${org.id}`}>
+                                  {tCommon('user')}
+                                </option>
                               </>
                             ) : isAdmin ? (
                               <>
-                                <option value={`ADMIN?${org.id}`}>ADMIN</option>
-                                <option value={`USER?${org.id}`}>USER</option>
+                                <option value={`ADMIN?${org.id}`}>
+                                  {tCommon('admin')}
+                                </option>
+                                <option value={`USER?${org.id}`}>
+                                  {tCommon('user')}
+                                </option>
                               </>
                             ) : (
                               <>
-                                <option value={`USER?${org.id}`}>USER</option>
-                                <option value={`ADMIN?${org.id}`}>ADMIN</option>
+                                <option value={`USER?${org.id}`}>
+                                  {tCommon('user')}
+                                </option>
+                                <option value={`ADMIN?${org.id}`}>
+                                  {tCommon('admin')}
+                                </option>
                               </>
                             )}
                           </Form.Select>
@@ -361,7 +382,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             {t('removeUserFrom', { org: removeUserProps.orgName })}
           </Modal.Title>
         </Modal.Header>
-        <hr style={{ margin: 0 }} />
+        <hr className={styles.noMargin} />
         <Modal.Body>
           <p>
             {t('removeConfirmation', {
@@ -449,12 +470,12 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             {org.organization.avatarURL ? (
                               <img
                                 src={org.organization.avatarURL}
-                                alt="orgImage"
+                                alt={t('orgImage')}
                               />
                             ) : (
                               <Avatar
                                 name={org.organization.name}
-                                alt="orgImage"
+                                alt={t('orgImage')}
                               />
                             )}
                             {org.organization.name}
@@ -472,18 +493,21 @@ const UsersTableItem = (props: Props): JSX.Element => {
                             {org.organization.avatarURL ? (
                               <img
                                 src={org.organization.avatarURL}
-                                alt="creator"
+                                alt={t('creator')}
                               />
                             ) : (
                               <Avatar
                                 name={org.organization.name}
-                                alt="creator"
+                                alt={t('creator')}
                               />
                             )}
                             {org.organization.creator.name}
                           </Button>
                         </td>
-                        <td> {isAdmin ? 'ADMIN' : 'USER'} </td>
+                        <td>
+                          {' '}
+                          {isAdmin ? tCommon('admin') : tCommon('user')}{' '}
+                        </td>
                         <td>
                           <Button
                             className={`btn btn-danger ${styles.removeButton}`}
@@ -531,7 +555,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             {t('unblockUserFrom', { org: removeUserProps.orgName })}
           </Modal.Title>
         </Modal.Header>
-        <hr style={{ margin: 0 }} />
+        <hr className={styles.noMargin} />
         <Modal.Body>
           <p>
             {t('unblockConfirmation', {

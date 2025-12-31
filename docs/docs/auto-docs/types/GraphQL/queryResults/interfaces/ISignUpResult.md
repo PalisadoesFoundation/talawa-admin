@@ -4,7 +4,7 @@
 
 # Interface: ISignUpResult
 
-Defined in: [src/types/GraphQL/queryResults.ts:297](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L297)
+Defined in: [src/types/GraphQL/queryResults.ts:443](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L443)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/GraphQL/queryResults.ts:297](https://github.com/Palisadoe
 
 > **signUp**: `object`
 
-Defined in: [src/types/GraphQL/queryResults.ts:298](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L298)
+Defined in: [src/types/GraphQL/queryResults.ts:444](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/GraphQL/queryResults.ts#L444)
 
 #### authenticationToken
 

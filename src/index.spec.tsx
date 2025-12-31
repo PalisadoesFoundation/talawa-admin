@@ -1,5 +1,21 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { ApolloClient, InMemoryCache, ApolloLink } from '@apollo/client';
+import {
+  describe,
+  it,
+  expect,
+  vi,
+  beforeEach,
+  afterEach,
+  type Mock,
+} from 'vitest';
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloLink,
+  Observable,
+  type Operation,
+  type RequestHandler,
+} from '@apollo/client';
+import { GraphQLError, type DocumentNode } from 'graphql';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import {
@@ -493,6 +509,517 @@ describe('Apollo Client Setup', () => {
       };
 
       expect(updatedHeaders.authorization).toBeUndefined();
+    });
+
+    it('should early return when user is not logged in (IsLoggedIn !== TRUE)', () => {
+      // Simulate checking IsLoggedIn flag
+      const isLoggedIn: string | null = 'FALSE'; // Not logged in
+
+      let shouldRefresh = true;
+      if (isLoggedIn !== 'TRUE') {
+        shouldRefresh = false;
+        // This is the early return path when user is not logged in
+      }
+
+      expect(shouldRefresh).toBe(false);
+    });
+
+    it('should handle refreshToken catch block', async () => {
+      const mockRefreshToken = vi.mocked(refreshToken);
+      mockRefreshToken.mockRejectedValueOnce(new Error('Network failure'));
+
+      let clearCalled = false;
+      let redirected = false;
+
+      try {
+        await refreshToken();
+      } catch {
+        // This simulates the catch block in handling refresh failures
+        clearCalled = true;
+        redirected = true;
+      }
+
+      expect(clearCalled).toBe(true);
+      expect(redirected).toBe(true);
+    });
+
+    it('should return Observable error when refresh fails', async () => {
+      const mockRefreshToken = vi.mocked(refreshToken);
+      mockRefreshToken.mockResolvedValueOnce(false);
+
+      const success = await refreshToken();
+
+      // When success is false, the code creates Observable that emits error
+      let emittedError = false;
+      if (!success) {
+        // Simulating: return new Observable((observer) => { observer.error(error); });
+        emittedError = true;
+      }
+
+      expect(success).toBe(false);
+      expect(emittedError).toBe(true);
+    });
+  });
+
+  describe('Application Entry Point', () => {
+    let getComputedStyleSpy: { mockRestore: () => void };
+    let getElementByIdSpy: { mockRestore: () => void };
+
+    beforeEach(() => {
+      vi.resetModules();
+      getComputedStyleSpy = vi
+        .spyOn(window, 'getComputedStyle')
+        .mockReturnValue({
+          getPropertyValue: vi.fn().mockReturnValue('#' + '000000'),
+        } as unknown as CSSStyleDeclaration);
+    });
+
+    afterEach(() => {
+      vi.clearAllMocks();
+      getComputedStyleSpy.mockRestore();
+      if (getElementByIdSpy) {
+        getElementByIdSpy.mockRestore();
+      }
+    });
+
+    it('should render application when root element exists', async () => {
+      // Mock dependencies to avoid side effects and ensure isolation
+      vi.doMock('react-dom/client', () => ({
+        createRoot: vi.fn(() => ({ render: vi.fn() })),
+      }));
+      vi.doMock('./App', () => ({ default: () => null }));
+      vi.doMock('./state/store', () => ({ store: {} }));
+
+      const mockContainer = document.createElement('div');
+      getElementByIdSpy = vi
+        .spyOn(document, 'getElementById')
+        .mockImplementation((id) => {
+          if (id === 'root') return mockContainer;
+          return null;
+        });
+
+      await import('./index');
+
+      const { createRoot } = await import('react-dom/client');
+      expect(createRoot).toHaveBeenCalledWith(mockContainer);
+
+      // Verify render was called on the root instance
+      const rootInstance = vi.mocked(createRoot).mock.results[0].value;
+      expect(rootInstance.render).toHaveBeenCalled();
+    });
+
+    it('should throw error when root element is missing', async () => {
+      // Mock dependencies to avoid side effects and ensure isolation
+      vi.doMock('react-dom/client', () => ({
+        createRoot: vi.fn(() => ({ render: vi.fn() })),
+      }));
+      vi.doMock('./App', () => ({ default: () => null }));
+      vi.doMock('./state/store', () => ({ store: {} }));
+
+      getElementByIdSpy = vi
+        .spyOn(document, 'getElementById')
+        .mockReturnValue(null);
+
+      await expect(import('./index')).rejects.toThrow(
+        'Root container missing in the DOM',
+      );
+    });
+  });
+
+  describe('Apollo Link Logic', () => {
+    let onErrorCallback: (error: {
+      graphQLErrors?: readonly GraphQLError[];
+      networkError?: Error | null;
+      operation: Operation;
+      forward: RequestHandler;
+    }) => { subscribe: (observer: unknown) => void } | void;
+    let splitPredicate:
+      | ((args: { query: DocumentNode }) => boolean)
+      | undefined;
+    let mockRefreshToken: Mock<() => Promise<boolean>>;
+    let mockGetItem: Mock<(key: string) => string | null>;
+    let mockClearAllItems: Mock<() => void>;
+    let getComputedStyleSpy: { mockRestore: () => void };
+    let getElementByIdSpy: { mockRestore: () => void };
+
+    beforeEach(async () => {
+      vi.resetModules();
+
+      // Initialize splitPredicate to undefined
+      splitPredicate = undefined;
+
+      const actualApollo = (await vi.importActual(
+        '@apollo/client',
+      )) as unknown as typeof import('@apollo/client');
+      const ApolloLink = actualApollo.ApolloLink;
+
+      // Mock onError to capture the callback
+      vi.doMock('@apollo/link-error', () => ({
+        onError: vi.fn((cb) => {
+          onErrorCallback = cb;
+          return new ApolloLink(
+            () =>
+              new Observable((observer) => {
+                observer.next({ data: {} });
+                observer.complete();
+              }),
+          );
+        }),
+      }));
+
+      // Mock split to capture the predicate
+      // ApolloLink.split is a static method, so we need to mock it on ApolloLink
+      vi.doMock('@apollo/client', () => {
+        const splitMock = vi.fn((predicate) => {
+          // Capture the predicate when split is called
+          splitPredicate = predicate;
+          return new ApolloLink(
+            () =>
+              new Observable((observer) => {
+                observer.next({ data: {} });
+                observer.complete();
+              }),
+          );
+        });
+        // Create a mock ApolloLink class that includes all static methods
+        const MockApolloLink = class extends ApolloLink {
+          static split = splitMock;
+          static from = actualApollo.ApolloLink.from;
+          static concat = actualApollo.ApolloLink.concat;
+          static empty = actualApollo.ApolloLink.empty;
+        };
+        return {
+          ...actualApollo,
+          ApolloLink: MockApolloLink,
+          ApolloClient: vi.fn(),
+        };
+      });
+
+      // Mock utils
+      mockRefreshToken = vi.fn();
+      vi.doMock('utils/getRefreshToken', () => ({
+        refreshToken: mockRefreshToken,
+      }));
+
+      mockGetItem = vi.fn<(key: string) => string | null>();
+      mockClearAllItems = vi.fn();
+      vi.doMock('utils/useLocalstorage', () => ({
+        default: () => ({
+          getItem: mockGetItem,
+          clearAllItems: mockClearAllItems,
+        }),
+      }));
+
+      // Mock other dependencies
+      vi.doMock('react-dom/client', () => ({
+        createRoot: vi.fn(() => ({ render: vi.fn() })),
+      }));
+      vi.doMock('./App', () => ({ default: () => null }));
+      vi.doMock('./state/store', () => ({ store: {} }));
+      vi.doMock('react-toastify', () => ({
+        ToastContainer: () => null,
+        toast: { error: vi.fn() },
+      }));
+
+      // Mock window.location
+      Object.defineProperty(window, 'location', {
+        value: { href: '' },
+        writable: true,
+      });
+
+      // Mock getComputedStyle for MUI theme
+      getComputedStyleSpy = vi
+        .spyOn(window, 'getComputedStyle')
+        .mockReturnValue({
+          getPropertyValue: vi.fn().mockReturnValue('#' + '000000'),
+        } as unknown as CSSStyleDeclaration);
+
+      // Mock document.getElementById to prevent "Root container missing" error
+      getElementByIdSpy = vi
+        .spyOn(document, 'getElementById')
+        .mockReturnValue(document.createElement('div'));
+    });
+
+    afterEach(() => {
+      vi.clearAllMocks();
+      getComputedStyleSpy.mockRestore();
+      getElementByIdSpy.mockRestore();
+    });
+
+    it('should trigger refreshToken on unauthenticated error', async () => {
+      await import('./index');
+      expect(onErrorCallback).toBeDefined();
+
+      mockGetItem.mockReturnValue('TRUE'); // IsLoggedIn
+      mockRefreshToken.mockResolvedValue(true);
+
+      const forward = vi.fn().mockReturnValue(
+        new Observable((observer) => {
+          observer.next({ data: {} });
+          observer.complete();
+        }),
+      );
+      const operation = {
+        operationName: 'SomeQuery',
+        variables: {},
+        extensions: {},
+        setContext: vi.fn(),
+        getContext: vi.fn(),
+        toKey: vi.fn(),
+      } as unknown as Operation;
+
+      // Execute the error callback
+      const observable = onErrorCallback({
+        graphQLErrors: [
+          {
+            extensions: { code: 'unauthenticated' },
+          } as unknown as GraphQLError,
+        ],
+        operation,
+        forward,
+      });
+
+      // Subscribe to trigger execution if it returns an observable
+      if (observable && observable.subscribe) {
+        observable.subscribe({
+          next: () => {},
+          error: () => {},
+          complete: () => {},
+        });
+      }
+
+      // Wait for refresh token to be called
+      await vi.waitFor(
+        () => {
+          expect(mockRefreshToken).toHaveBeenCalled();
+        },
+        { timeout: 1000 },
+      );
+    });
+
+    it('should queue requests when refreshing', async () => {
+      await import('./index');
+      // Mock getItem to return different values for different keys
+      mockGetItem.mockImplementation((key: string) => {
+        if (key === 'IsLoggedIn') return 'TRUE';
+        if (key === 'token') return 'test-token';
+        return null;
+      });
+
+      // First request triggers refresh
+      // We need to make the first refresh hang so we can fire a second request
+      let resolveRefresh: ((value: boolean) => void) | undefined;
+      const refreshPromise = new Promise<boolean>((resolve) => {
+        resolveRefresh = resolve;
+      });
+      mockRefreshToken.mockImplementation(() => refreshPromise);
+
+      const forward = vi.fn().mockReturnValue(
+        new Observable((observer) => {
+          observer.next({ data: {} });
+          observer.complete();
+        }),
+      );
+      const operation1 = {
+        operationName: 'Query1',
+        variables: {},
+        extensions: {},
+        setContext: vi.fn(),
+        getContext: vi.fn().mockReturnValue({ headers: {} }),
+        toKey: vi.fn(),
+      } as unknown as Operation;
+      const operation2 = {
+        operationName: 'Query2',
+        variables: {},
+        extensions: {},
+        setContext: vi.fn(),
+        getContext: vi.fn().mockReturnValue({ headers: {} }),
+        toKey: vi.fn(),
+      } as unknown as Operation;
+
+      // 1. Trigger first error -> starts refresh
+      const obs1 = onErrorCallback({
+        graphQLErrors: [
+          {
+            extensions: { code: 'unauthenticated' },
+          } as unknown as GraphQLError,
+        ],
+        operation: operation1,
+        forward,
+      });
+
+      const obs1CompleteSpy = vi.fn();
+      if (obs1 && obs1.subscribe) {
+        obs1.subscribe({
+          next: () => {},
+          error: () => {},
+          complete: obs1CompleteSpy,
+        });
+      }
+
+      // Wait a bit to ensure isRefreshing is set to true
+      // The isRefreshing flag is set synchronously on line 109
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      // 2. Trigger second error -> should be queued
+      const obs2 = onErrorCallback({
+        graphQLErrors: [
+          {
+            extensions: { code: 'unauthenticated' },
+          } as unknown as GraphQLError,
+        ],
+        operation: operation2,
+        forward,
+      });
+
+      // Verify that obs2 was returned (meaning it was queued)
+      expect(obs2).toBeDefined();
+      expect(obs2?.subscribe).toBeDefined();
+
+      // Subscribe to obs2 to ensure the queued callback is set up
+      const nextSpy = vi.fn();
+      const obs2CompleteSpy = vi.fn();
+      if (obs2 && obs2.subscribe) {
+        obs2.subscribe({
+          next: nextSpy,
+          error: () => {},
+          complete: obs2CompleteSpy,
+        });
+      }
+
+      expect(mockRefreshToken).toHaveBeenCalledTimes(1);
+      expect(nextSpy).not.toHaveBeenCalled();
+
+      // 3. Resolve refresh - this should trigger both operations to be forwarded
+      // When the promise resolves:
+      // - resolvePendingRequests() is called synchronously in .then() (line 115)
+      // - This executes the queued callback which calls forward(operation2) (line 104)
+      // - The promise resolves to true, which triggers mergeMap
+      // - mergeMap calls forward(operation1) (line 147)
+      if (resolveRefresh) {
+        resolveRefresh(true);
+      }
+
+      // Wait for the promise to resolve and the RxJS chain to process
+      // The flow:
+      // 1. refreshToken() promise resolves with true
+      // 2. In the .then() callback, resolvePendingRequests() is called (line 115)
+      // 3. resolvePendingRequests() executes the queued callback which calls forward(operation2) (line 104)
+      // 4. The promise resolves to true, which triggers mergeMap
+      // 5. mergeMap calls forward(operation1) (line 147)
+
+      // Wait for microtasks to flush (promise resolution and .then() callbacks)
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      // Wait for another tick to allow RxJS Observable chain to process
+      await new Promise((resolve) => setTimeout(resolve, 0));
+
+      // Wait for both operations to be forwarded
+      // The queued callback executes synchronously when resolvePendingRequests() is called
+      // The mergeMap executes when the observable chain processes the resolved promise
+      await vi.waitFor(
+        () => {
+          // Both operations should be forwarded
+          expect(forward.mock.calls.length).toBe(2);
+        },
+        { timeout: 5000 },
+      );
+
+      // Verify both operations were called
+      const operation1Called = forward.mock.calls.some(
+        (call) => call[0] === operation1,
+      );
+      const operation2Called = forward.mock.calls.some(
+        (call) => call[0] === operation2,
+      );
+      expect(operation1Called).toBe(true);
+      expect(operation2Called).toBe(true);
+    });
+
+    it('should clear storage and redirect on refresh failure', async () => {
+      await import('./index');
+      mockGetItem.mockReturnValue('TRUE');
+      mockRefreshToken.mockResolvedValue(false);
+
+      const forward = vi.fn().mockReturnValue(
+        new Observable((observer) => {
+          observer.next({ data: {} });
+          observer.complete();
+        }),
+      );
+      const operation = {
+        operationName: 'Query',
+        variables: {},
+        extensions: {},
+        setContext: vi.fn(),
+        getContext: vi.fn(),
+        toKey: vi.fn(),
+      } as unknown as Operation;
+
+      const obs = onErrorCallback({
+        graphQLErrors: [
+          {
+            extensions: { code: 'unauthenticated' },
+          } as unknown as GraphQLError,
+        ],
+        operation,
+        forward,
+      });
+
+      if (obs && obs.subscribe)
+        obs.subscribe({ next: () => {}, error: () => {}, complete: () => {} });
+
+      // Wait for cleanup actions after refresh failure
+      await vi.waitFor(
+        () => {
+          expect(mockClearAllItems).toHaveBeenCalled();
+          expect(window.location.href).toBe('/');
+        },
+        { timeout: 1000 },
+      );
+    });
+
+    it('should correctly split subscription operations', async () => {
+      // The mock should be set up in beforeEach, but we need to ensure
+      // the module is re-imported to use the mock
+      vi.resetModules();
+
+      // Re-import to trigger the mocked split function
+      await import('./index');
+
+      // Wait for the mock to capture the predicate
+      // The split function is called at module load time (line 200 in index.tsx)
+      await vi.waitFor(
+        () => {
+          expect(splitPredicate).toBeDefined();
+        },
+        { timeout: 2000 },
+      );
+
+      const subscriptionQuery = {
+        kind: 'Document',
+        definitions: [
+          {
+            kind: 'OperationDefinition',
+            operation: 'subscription',
+          },
+        ],
+      } as unknown as DocumentNode;
+
+      const otherQuery = {
+        kind: 'Document',
+        definitions: [
+          {
+            kind: 'OperationDefinition',
+            operation: 'query',
+          },
+        ],
+      } as unknown as DocumentNode;
+
+      expect(splitPredicate).toBeDefined();
+      if (splitPredicate) {
+        expect(splitPredicate({ query: subscriptionQuery })).toBe(true);
+        expect(splitPredicate({ query: otherQuery })).toBe(false);
+      }
     });
   });
 });

@@ -503,6 +503,12 @@ const collectViolations = (filePath) => {
     const importLike = /^\s*(import|require)\b/.test(line);
     if (importLike) return;
 
+    // Skip if the line is a function declaration (including export, generics, arrow functions)
+    const functionDeclOrArrowPattern = /^(export\s+)?(async\s+)?function\s*\w*\s*(<[^>]*>)?\s*\([^)]*\)\s*\{|^(export\s+)?(const|let|var)\s+\w+\s*(?::[^=]*)?=\s*\([^)]*\)\s*=>/;
+    if (functionDeclOrArrowPattern.test(line.trim())) {
+      return;
+    }
+
     // JSX text between tags - improved to avoid matching TypeScript types
     // Only match if it's clearly JSX (has < and > with text between)
     // Exclude patterns that look like TypeScript generics or function signatures
