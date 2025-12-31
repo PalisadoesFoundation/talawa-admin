@@ -96,7 +96,7 @@ const ProfileImageSection: React.FC<InterfaceProfileImageSectionProps> = ({
                 ? sanitizeAvatars(selectedAvatar, normalizedAvatarUrl)
                 : undefined
             }
-            fallbackName={userDetails?.name}
+            fallbackName={userDetails?.name ?? ''}
             size="custom"
             shape="circle"
             customSize={80}
