@@ -1147,7 +1147,8 @@
     "name": "Nom",
     "email": "E-mail",
     "role": "Rôle",
-    "loading": "Chargement..."
+    "loading": "Chargement...",
+    "emailNotAvailable": "E-mail non disponible"
   },
   "userLogin": {
     "login": "Se connecter",

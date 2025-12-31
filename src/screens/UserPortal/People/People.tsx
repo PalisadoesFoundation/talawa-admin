@@ -54,8 +54,7 @@ import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useParams } from 'react-router';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
-import SortingButton from 'subComponents/SortingButton';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
 interface IMemberNode {
   id: string;
@@ -205,47 +204,47 @@ export default function People(): React.JSX.Element {
       <div className={`${styles.mainContainer_people}`}>
         {/* Refactored Header Structure */}
         <div className={styles.calendar__header}>
-          {/* 1. Search Bar Section */}
-          <div className={styles.calendar__search}>
-            <SearchBar
-              placeholder={t('searchUsers')}
-              onSearch={handleSearch}
-              onClear={() => handleSearch('')}
-              inputTestId="searchInput"
-              buttonTestId="searchBtn"
-              // Standardized props
-              showSearchButton={true}
-              showLeadingIcon={true}
-              showClearButton={true}
-              buttonAriaLabel={tCommon('search')}
-            />
-          </div>
-
-          {/* 2. Controls Section (Converted Dropdown to SortingButton) */}
-          <div className={styles.btnsBlock}>
-            <SortingButton
-              sortingOptions={modes.map((value, index) => ({
-                label: value,
-                value: index,
-              }))}
-              selectedOption={modes[mode]}
-              onSortChange={(value) => setMode(value as number)}
-              dataTestIdPrefix="modeChangeBtn"
-              buttonLabel={tCommon('filter')}
-              type="filter" // Adds the filter icon automatically
-            />
-          </div>
+          <AdminSearchFilterBar
+            searchPlaceholder={t('searchUsers')}
+            searchValue={searchTerm}
+            onSearchChange={handleSearch}
+            searchInputTestId="searchInput"
+            searchButtonTestId="searchBtn"
+            hasDropdowns={true}
+            dropdowns={[
+              {
+                id: 'people-filter',
+                label: tCommon('filter'),
+                type: 'filter',
+                options: modes.map((value, index) => ({
+                  label: value,
+                  value: index,
+                })),
+                selectedOption: mode,
+                onOptionChange: (value) => setMode(value as number),
+                dataTestIdPrefix: 'modeChangeBtn',
+              },
+            ]}
+          />
         </div>
 
         <div className={styles.people_content}>
           <div className={styles.people_card_header}>
-            <span style={{ flex: '1' }} className={styles.display_flex}>
-              <span style={{ flex: '1' }}>{t('sNo')}</span>
-              <span style={{ flex: '1' }}>{t('avatar')}</span>
+            <span
+              className={`${styles.display_flex} ${styles.people_card_header_col_1}`}
+            >
+              <span className={styles.people_card_header_col_1}>
+                {t('sNo')}
+              </span>
+              <span className={styles.people_card_header_col_1}>
+                {t('avatar')}
+              </span>
             </span>
-            <span style={{ flex: '2' }}>{t('name')}</span>
-            <span style={{ flex: '2' }}>{t('email')}</span>
-            <span style={{ flex: '2' }}>{t('role')}</span>
+            <span className={styles.people_card_header_col_2}>{t('name')}</span>
+            <span className={styles.people_card_header_col_2}>
+              {t('email')}
+            </span>
+            <span className={styles.people_card_header_col_2}>{t('role')}</span>
           </div>
 
           <div className={styles.people_card_main_container}>
@@ -262,8 +261,7 @@ export default function People(): React.JSX.Element {
                       name,
                       image: member.node.avatarURL ?? '',
                       id: member.node.id ?? '',
-                      email:
-                        member.node.emailAddress ?? '***********************',
+                      email: member.node.emailAddress ?? t('emailNotAvailable'),
                       role: member.userType ?? '',
                       sno: (index + 1 + currentPage * rowsPerPage).toString(),
                     };

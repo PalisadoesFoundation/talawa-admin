@@ -309,6 +309,9 @@ const fiveMembersMock = {
   },
 };
 
+// Debounce duration used by AdminSearchFilterBar component (default: 300ms)
+const SEARCH_DEBOUNCE_MS = 300;
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -388,7 +391,7 @@ describe('Testing People Screen [User Portal]', () => {
     await wait();
 
     await userEvent.type(screen.getByTestId('searchInput'), 'Ad{enter}');
-    await wait();
+    await wait(SEARCH_DEBOUNCE_MS);
 
     expect(screen.queryByText('Admin User')).toBeInTheDocument();
     expect(screen.queryByText('Test User')).not.toBeInTheDocument();
@@ -412,6 +415,7 @@ describe('Testing People Screen [User Portal]', () => {
     await userEvent.clear(screen.getByTestId('searchInput'));
     await userEvent.click(searchBtn);
     await userEvent.type(screen.getByTestId('searchInput'), 'Admin');
+    await wait(SEARCH_DEBOUNCE_MS);
     await userEvent.click(searchBtn);
     await wait();
 
@@ -557,6 +561,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
     );
 
     await userEvent.type(screen.getByTestId('searchInput'), 'Admin');
+    await wait(SEARCH_DEBOUNCE_MS);
     await userEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
