@@ -85,12 +85,18 @@ jobs:
         if: steps.changed-files.outputs.only_changed != 'true'
         run: pnpm typecheck
 
-      - name: Check for linting errors in modified files (including TSDoc)
+      - name: Check for linting errors in TypeScript files (including TSDoc)
         if: steps.changed-files.outputs.only_changed != 'true'
-        env:
-          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
-        run: pnpm exec eslint ${CHANGED_FILES} --max-warnings=0
-
+        run: |
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          TS_FILES=$(git diff --name-only --diff-filter=ACMRT "$BASE_SHA" ${{ github.event.pull_request.head.sha }} | grep -E '\.(ts|tsx)$' | tr '\n' ' ' || true)
+          
+          if [ -n "$TS_FILES" ]; then
+            echo "Linting TypeScript files: $TS_FILES"
+            git diff --name-only --diff-filter=ACMRT "$BASE_SHA" ${{ github.event.pull_request.head.sha }} | grep -E '\.(ts|tsx)$' | xargs -r pnpm exec eslint --max-warnings=0
+          else
+            echo "No TypeScript files changed, skipping ESLint"
+          fi
 
       - name: Check for TSDoc comments
         run: pnpm check-tsdoc
