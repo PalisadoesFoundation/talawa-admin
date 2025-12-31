@@ -25,7 +25,7 @@ export const fixturesDir = path.resolve(
 );
 
 const tempDirs = [];
-const tempFiles = [];
+
 
 const sleepSync = (ms) => {
   if (ms <= 0) return;
@@ -37,13 +37,11 @@ const sleepSync = (ms) => {
 export const runScript = (targets, options = {}) => {
   const { env, scriptContent, ...rest } = options;
   let targetScript = scriptPath;
-  let tempScriptPath = null;
+
 
   if (scriptContent) {
     const tempDir = makeTempDir();
     targetScript = path.join(tempDir, 'script.js');
-    tempScriptPath = targetScript;
-    tempFiles.push(tempScriptPath); // Track for later cleanup
     fs.writeFileSync(targetScript, scriptContent);
   }
 
@@ -52,7 +50,7 @@ export const runScript = (targets, options = {}) => {
   let attempts = 0;
   const maxAttempts = 8;
   const backoffBaseMs = 25;
-  
+
   while (attempts < maxAttempts) {
     res = spawnSync(process.execPath, [targetScript, ...targets], {
       encoding: 'utf-8',
@@ -60,7 +58,7 @@ export const runScript = (targets, options = {}) => {
       timeout: 30_000,
       ...rest,
     });
-    
+
     // If EBADF error, wait a bit and retry
     if (res.error && res.error.code === 'EBADF' && attempts < maxAttempts - 1) {
       attempts++;
@@ -69,13 +67,13 @@ export const runScript = (targets, options = {}) => {
       sleepSync(waitMs);
       continue;
     }
-    
+
     break;
   }
-  
+
   // Don't cleanup immediately - let cleanupTempDirs handle it
   // This prevents EBADF errors from file descriptor race conditions
-  
+
   if (res.error) throw res.error;
   return res;
 };
@@ -99,5 +97,4 @@ export const cleanupTempDirs = () => {
     fs.rmSync(dir, { recursive: true, force: true });
   });
   tempDirs.length = 0;
-  tempFiles.length = 0;
 };

@@ -18,7 +18,7 @@
  * - `react`, `react-router-dom` for routing and state management.
  * - `@apollo/client` for GraphQL queries.
  * - `@mui/x-data-grid` for table rendering.
- * - `react-toastify` for error notifications.
+ * - `NotificationToast` for notification messages (especially backend errors).
  * - `dayjs` for date formatting.
  * - Custom components: `SearchBar`, `SortingButton`, `Avatar`, `AddMember`, `OrgPeopleListCard`.
  *
@@ -66,7 +66,7 @@ import {
   PAGE_SIZE,
 } from '../../types/ReportingTable/utils';
 import dayjs from 'dayjs';
-import { toast } from 'react-toastify';
+
 import styles from 'style/app-fixed.module.css';
 import TableLoader from 'components/TableLoader/TableLoader';
 import {
@@ -318,12 +318,12 @@ function OrganizationPeople(): JSX.Element {
   // Error handling
   useEffect(() => {
     if (memberError) {
-      toast.error(memberError.message);
+      errorHandler(t, memberError);
     }
     if (userError) {
-      toast.error(userError.message);
+      errorHandler(t, userError);
     }
-  }, [memberError, userError]);
+  }, [memberError, userError, t]);
 
   // Local search implementation
   const filteredRows = useMemo(() => {
