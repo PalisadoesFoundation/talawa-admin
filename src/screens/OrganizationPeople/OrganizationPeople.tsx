@@ -81,6 +81,7 @@ import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFil
 
 // Imports added for manual header construction
 import EmptyState from 'shared-components/EmptyState/EmptyState';
+import { errorHandler } from 'utils/errorHandler';
 
 // Helper mapping for state to option conversion
 const STATE_TO_OPTION: Record<number, string> = {
