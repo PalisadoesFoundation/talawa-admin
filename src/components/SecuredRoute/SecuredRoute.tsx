@@ -72,7 +72,7 @@ const SecuredRoute = (): JSX.Element => {
 
         // If inactive for longer than the timeout period, show a warning and log out
         if (timeSinceLastActive > timeoutMilliseconds) {
-          NotificationToast.warning('Kindly relogin as sessison has expired');
+          NotificationToast.warning('Kindly relogin as session has expired');
 
           setItem('IsLoggedIn', 'FALSE');
           removeItem('email');

@@ -250,7 +250,6 @@
     "rejectedSuccessfully": "Request rejected successfully",
     "noOrgErrorTitle": "Organizations Not Found",
     "noOrgErrorDescription": "Please create an organization through dashboard",
-    "newMembersWillAppearHere": "New members will appear here",
     "name": "name",
     "email": "email",
     "profilePictureAlt": "User profile picture",

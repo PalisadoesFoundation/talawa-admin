@@ -14,6 +14,7 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
     success: vi.fn(),
     error: vi.fn(),
     info: vi.fn(),
+    dismiss: vi.fn(),
   },
 }));
 
@@ -195,7 +196,7 @@ describe('SecuredRoute', () => {
       vi.advanceTimersByTime(1 * 60 * 1000);
 
       expect(NotificationToast.warning).toHaveBeenCalledWith(
-        'Kindly relogin as sessison has expired',
+        'Kindly relogin as session has expired',
       );
 
       const storage = useLocalStorage();

@@ -24,6 +24,7 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
     error: vi.fn(),
     warning: vi.fn(),
     info: vi.fn(),
+    dismiss: vi.fn(),
   },
 }));
 

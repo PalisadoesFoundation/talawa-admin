@@ -250,7 +250,6 @@
     "rejectedSuccessfully": "अनुरोध सफलतापूर्वक अस्वीकार किया गया",
     "noOrgErrorTitle": "संगठन नहीं मिला",
     "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से संगठन बनाएं",
-    "newMembersWillAppearHere": "नए सदस्य यहां दिखाई देंगे",
     "name": "नाम",
     "email": "ईमेल",
     "profilePictureAlt": "{{name}} की प्रोफ़ाइल छवि",
