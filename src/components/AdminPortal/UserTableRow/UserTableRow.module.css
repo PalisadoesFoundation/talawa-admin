@@ -1,0 +1,8 @@
+.gridCell {
+  width: 100%;
+  cursor: pointer;
+}
+
+.tableRow {
+  cursor: pointer;
+}
