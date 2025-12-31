@@ -180,6 +180,6 @@ The user information of the volunteer.
 
 ### volunteerStatus
 
-> **volunteerStatus**: `"accepted"` \| `"rejected"` \| `"pending"`
+> **volunteerStatus**: `"pending"` \| `"accepted"` \| `"rejected"`
 
 Defined in: [src/utils/interfaces.ts:2543](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2543)

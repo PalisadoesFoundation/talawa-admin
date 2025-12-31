@@ -10471,3 +10471,9 @@ form {
   padding: 0.75rem 1rem;
   color: var(--orgSelector-no-results-color);
 }
+
+.divider {
+  border-color: 'var(--grey-border-box-color)';
+  border-width: 2px;
+  width: 85%;
+}
