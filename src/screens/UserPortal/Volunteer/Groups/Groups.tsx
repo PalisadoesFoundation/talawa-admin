@@ -314,7 +314,7 @@ function Groups(): JSX.Element {
   return (
     <div>
       <AdminSearchFilterBar
-        searchPlaceholder={tCommon('searchBy', { item: 'Group or Leader' })}
+        searchPlaceholder={tCommon('searchBy', { item: t('groupOrLeader') })}
         searchValue={searchTerm}
         onSearchChange={setSearchTerm}
         searchInputTestId="searchByInput"

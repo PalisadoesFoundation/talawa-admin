@@ -252,6 +252,8 @@ describe('Testing Upcoming Events Screen', () => {
       btn.classList.contains('MuiAccordionSummary-root'),
     );
 
+    expect(firstAccordionButton).toBeDefined();
+
     if (firstAccordionButton) {
       await userEvent.click(firstAccordionButton);
 

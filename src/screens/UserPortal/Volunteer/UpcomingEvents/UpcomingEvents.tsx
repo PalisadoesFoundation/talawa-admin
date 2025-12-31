@@ -3,16 +3,11 @@ import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Stack,
-} from '@mui/material';
+import { Accordion, AccordionSummary, Stack } from '@mui/material';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { GridExpandMoreIcon } from '@mui/x-data-grid';
 import useLocalStorage from 'utils/useLocalstorage';
-import { useMutation, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import {
   InterfaceVolunteerMembership,
   InterfaceEventEdge,
@@ -25,7 +20,6 @@ import {
   USER_EVENTS_VOLUNTEER,
   USER_VOLUNTEER_MEMBERSHIP,
 } from 'GraphQl/Queries/EventVolunteerQueries';
-import { CREATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { FaCheck } from 'react-icons/fa';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import RecurringEventVolunteerModal from './RecurringEventVolunteerModal';
@@ -63,8 +57,6 @@ const UpcomingEvents = (): JSX.Element => {
     isRecurring: boolean;
   } | null>(null);
   const pendingVolunteerRequest = pendingVolunteerRequestState[0];
-
-  useMutation(CREATE_VOLUNTEER_MEMBERSHIP);
 
   const {
     data: eventsData,
@@ -290,7 +282,6 @@ const UpcomingEvents = (): JSX.Element => {
                   </Button>
                 </div>
               </AccordionSummary>
-              <AccordionDetails />
             </Accordion>
           );
         })

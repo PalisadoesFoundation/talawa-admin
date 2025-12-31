@@ -74,10 +74,6 @@ const Campaigns = (): JSX.Element => {
     skip: !orgId || !userId,
   });
 
-  if (!orgId || !userId) {
-    return <Navigate to="/" replace />;
-  }
-
   const openModal = useCallback((campaign: InterfaceUserCampaign): void => {
     setSelectedCampaign(campaign);
     setModalState(true);
@@ -126,6 +122,10 @@ const Campaigns = (): JSX.Element => {
       campaign.name.toLowerCase().includes(searchText.toLowerCase()),
     );
   }, [campaigns, searchText]);
+
+  if (!orgId || !userId) {
+    return <Navigate to="/" replace />;
+  }
 
   if (campaignError) {
     return (

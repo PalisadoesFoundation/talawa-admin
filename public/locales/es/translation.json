@@ -1701,6 +1701,7 @@
     "title": "Campañas de recaudación de fondos",
     "searchByName": "Buscar por nombre...",
     "searchBy": "Buscar por",
+    "searchCampaigns": "Buscar campañas",
     "pledgers": "Prometedores",
     "pledger": "Prometedor",
     "campaigns": "Campañas",
@@ -1724,7 +1725,8 @@
     "amountRaised": "Monto Recaudado"
   },
   "userPledges": {
-    "title": "Mis Promesas"
+    "title": "Mis Promesas",
+    "searchPledges": "Buscar promesas"
   },
   "leaveOrganization": {
     "title": "Dejar la organización"
@@ -1755,6 +1757,7 @@
     "deleteVolunteerGroupMsg": "¿Está seguro de que desea eliminar este Grupo de Voluntarios?",
     "leader": "Líder",
     "group": "Grupo",
+    "groupOrLeader": "Grupo o Líder",
     "createGroup": "Crear Grupo",
     "updateGroup": "Actualizar Grupo",
     "deleteGroup": "Eliminar Grupo",

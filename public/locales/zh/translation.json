@@ -1701,6 +1701,7 @@
     "title": "筹款活动",
     "searchByName": "按名字搜索...",
     "searchBy": "按...搜索",
+    "searchCampaigns": "搜索活动",
     "pledgers": "承诺者",
     "pledger": "承诺者",
     "campaigns": "活动",
@@ -1724,7 +1725,8 @@
     "amountRaised": "已筹集金额"
   },
   "userPledges": {
-    "title": "我的承诺"
+    "title": "我的承诺",
+    "searchPledges": "搜索承诺"
   },
   "leaveOrganization": {
     "title": "离开组织"
@@ -1755,6 +1757,7 @@
     "deleteVolunteerGroupMsg": "您确定要删除此志愿者小组吗？",
     "leader": "领导",
     "group": "小组",
+    "groupOrLeader": "小组或领导",
     "createGroup": "创建小组",
     "updateGroup": "更新小组",
     "deleteGroup": "删除小组",

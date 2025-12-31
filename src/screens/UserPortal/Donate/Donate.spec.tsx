@@ -2,7 +2,7 @@
  * Unit tests for the Donate component.
  */
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
 import { vi } from 'vitest';
@@ -141,6 +141,50 @@ const EMPTY_DONATIONS_MOCK = [
 const DONATION_ERROR_MOCK = [
   {
     request: {
+      query: ORGANIZATION_DONATION_CONNECTION_LIST,
+      variables: {
+        orgId: '',
+      },
+    },
+    result: {
+      data: {
+        getDonationByOrgIdConnection: [],
+      },
+    },
+  },
+  {
+    request: {
+      query: ORGANIZATION_LIST,
+      variables: {
+        id: '',
+      },
+    },
+    result: {
+      data: {
+        organizations: [
+          {
+            _id: '6401ff65ce8e8406b8f07af3',
+            name: 'anyOrganization2',
+            description: 'desc',
+            address: {
+              city: 'abc',
+              countryCode: '123',
+              postalCode: '456',
+              state: 'def',
+            },
+            userRegistrationRequired: true,
+            createdAt: '12345678900',
+            creator: { firstName: 'John', lastName: 'Doe' },
+            members: [],
+            admins: [],
+            membershipRequests: [],
+          },
+        ],
+      },
+    },
+  },
+  {
+    request: {
       query: DONATE_TO_ORGANIZATION,
       variables: {
         userId: '123',
@@ -153,7 +197,6 @@ const DONATION_ERROR_MOCK = [
     },
     error: new Error('Donation failed'),
   },
-  ...MOCKS.slice(1),
 ];
 
 const emptyLink = new StaticMockLink(EMPTY_DONATIONS_MOCK, true);
@@ -183,7 +226,7 @@ describe('Donate Component', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders Donate screen with essential elements', async () => {
@@ -269,6 +312,10 @@ describe('Donate Component', () => {
 
     await userEvent.type(screen.getByTestId('donationAmount'), '100');
     await userEvent.click(screen.getByTestId('donateBtn'));
+
+    await waitFor(() => {
+      expect(mockToast.success).toHaveBeenCalled();
+    });
   });
 
   test('handles donation mutation error', async () => {
@@ -291,10 +338,9 @@ describe('Donate Component', () => {
     await userEvent.type(screen.getByTestId('donationAmount'), '100');
     await userEvent.click(screen.getByTestId('donateBtn'));
 
-    // Wait for mutation to complete
-    await new Promise((resolve) => setTimeout(resolve, 100));
-
-    expect(mockErrorHandler).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(mockErrorHandler).toHaveBeenCalled();
+    });
   });
 
   test('shows empty state when no donations exist', async () => {
@@ -311,8 +357,8 @@ describe('Donate Component', () => {
     );
 
     // Wait for data to load
-    await new Promise((resolve) => setTimeout(resolve, 100));
-
-    expect(screen.getByText(/nothing to show/i)).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByText(/nothing to show/i)).toBeInTheDocument();
+    });
   });
 });

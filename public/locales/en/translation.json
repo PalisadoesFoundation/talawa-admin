@@ -1757,6 +1757,7 @@
     "deleteVolunteerGroupMsg": "Are you sure you want to delete this Volunteer Group?",
     "leader": "Leader",
     "group": "Group",
+    "groupOrLeader": "Group or Leader",
     "createGroup": "Create Group",
     "updateGroup": "Update Group",
     "deleteGroup": "Delete Group",
