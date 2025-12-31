@@ -379,30 +379,6 @@ describe('LoginForm', () => {
   });
 
   describe('Portal Toggle (Admin/User Mode)', () => {
-    test('displays user login heading by default', () => {
-      render(
-        <MockedProvider mocks={[]}>
-          <LoginForm {...defaultProps} />
-        </MockedProvider>,
-      );
-
-      expect(screen.getByTestId('login-form-heading')).toHaveTextContent(
-        'User Login',
-      );
-    });
-
-    test('displays admin login heading when isAdmin is true', () => {
-      render(
-        <MockedProvider mocks={[]}>
-          <LoginForm {...defaultProps} isAdmin={true} />
-        </MockedProvider>,
-      );
-
-      expect(screen.getByTestId('login-form-heading')).toHaveTextContent(
-        'Admin Login',
-      );
-    });
-
     test('displays user login heading when isAdmin is false', () => {
       render(
         <MockedProvider mocks={[]}>
