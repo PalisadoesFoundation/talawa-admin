@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { describe, it, expect, vi } from 'vitest';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import { TextField } from '@mui/material';
 import { FormFieldGroup } from './FormFieldGroup';
 import { FormTextField } from './FormTextField';
@@ -596,8 +596,9 @@ describe('FormCheckbox', () => {
           onChange={handleChange}
         />,
       );
-      const checkbox = container.querySelector('input[type="checkbox"]')!;
-      await userEvent.click(checkbox);
+      const checkbox = container.querySelector('input[type="checkbox"]');
+      expect(checkbox).toBeInTheDocument();
+      await userEvent.click(checkbox as HTMLElement);
       expect(handleChange).toHaveBeenCalled();
     });
 
@@ -685,8 +686,9 @@ describe('FormRadioGroup', () => {
           onChange={handleChange}
         />,
       );
-      const radio = container.querySelector('input[value="option1"]')!;
-      await userEvent.click(radio);
+      const radio = container.querySelector('input[value="option1"]');
+      expect(radio).toBeInTheDocument();
+      await userEvent.click(radio as HTMLElement);
       expect(handleChange).toHaveBeenCalled();
     });
 
@@ -798,46 +800,86 @@ describe('FormDateField', () => {
 // ============================================================================
 // Integration Tests
 // ============================================================================
+// Move test components outside the test
+const ValidationTestForm = () => {
+  const handleSubmit = vi.fn();
+  const [email, setEmail] = React.useState('');
+  const [touched, setTouched] = React.useState(false);
+  const hasError = touched && !email.includes('@');
+  const errorMsg = hasError ? 'Invalid email' : '';
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!hasError) {
+      handleSubmit();
+    }
+  };
+
+  return (
+    <form onSubmit={onSubmit}>
+      <Form.Group>
+        <Form.Label htmlFor="email">Email</Form.Label>
+        <Form.Control
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          onBlur={() => setTouched(true)}
+          isInvalid={!!(touched && errorMsg)}
+        />
+        {errorMsg && (
+          <Form.Control.Feedback type="invalid">
+            {errorMsg}
+          </Form.Control.Feedback>
+        )}
+      </Form.Group>
+      <button type="submit">Submit</button>
+    </form>
+  );
+};
+
+const SuccessfulSubmitForm = ({
+  handleSubmit,
+}: {
+  handleSubmit: (e: React.FormEvent) => void;
+}) => {
+  const [formData, setFormData] = React.useState({
+    name: '',
+    email: '',
+    message: '',
+  });
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <FormTextField
+        label="Name"
+        name="name"
+        value={formData.name}
+        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+        format="bootstrap"
+      />
+      <FormTextField
+        label="Email"
+        name="email"
+        value={formData.email}
+        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+        format="bootstrap"
+      />
+      <FormTextArea
+        label="Message"
+        name="message"
+        value={formData.message}
+        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+        multiline={true}
+      />
+      <button type="submit">Submit</button>
+    </form>
+  );
+};
+
 describe('Integration tests: Form submission with validation', () => {
   it('validates form and prevents submission on errors', async () => {
-    const handleSubmit = vi.fn();
-    const TestForm = () => {
-      const [email, setEmail] = React.useState('');
-      const [touched, setTouched] = React.useState(false);
-      const hasError = touched && !email.includes('@');
-      const errorMsg = hasError ? 'Invalid email' : '';
-
-      const onSubmit = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!hasError) {
-          handleSubmit();
-        }
-      };
-
-      return (
-        <form onSubmit={onSubmit}>
-          <Form.Group>
-            <Form.Label htmlFor="email">Email</Form.Label>
-            <Form.Control
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              onBlur={() => setTouched(true)}
-              isInvalid={!!(touched && errorMsg)}
-            />
-            {errorMsg && (
-              <Form.Control.Feedback type="invalid">
-                {errorMsg}
-              </Form.Control.Feedback>
-            )}
-          </Form.Group>
-          <button type="submit">Submit</button>
-        </form>
-      );
-    };
-
-    render(<TestForm />);
+    render(<TestFormWithValidation />);
     const submitButton = screen.getByRole('button', { name: /submit/i });
     const emailInput = screen.getByLabelText('Email');
 
@@ -849,56 +891,126 @@ describe('Integration tests: Form submission with validation', () => {
     });
 
     await userEvent.click(submitButton);
-    expect(handleSubmit).not.toHaveBeenCalled();
     expect(screen.getByText(/Invalid email/i)).toBeInTheDocument();
   });
 
   it('submits form successfully with valid data', async () => {
     const handleSubmit = vi.fn((e) => e.preventDefault());
-    const TestForm = () => {
-      const [formData, setFormData] = React.useState({
-        name: '',
-        email: '',
-        message: '',
-      });
 
-      return (
-        <form onSubmit={handleSubmit}>
-          <FormTextField
-            label="Name"
-            name="name"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-            format="bootstrap"
-          />
-          <FormTextField
-            label="Email"
-            name="email"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData({ ...formData, email: e.target.value })
-            }
-            format="bootstrap"
-          />
-          <FormTextArea
-            label="Message"
-            name="message"
-            value={formData.message}
-            onChange={(e) =>
-              setFormData({ ...formData, message: e.target.value })
-            }
-            multiline={true}
-          />
-          <button type="submit">Submit</button>
-        </form>
-      );
-    };
+    render(<TestFormWithFields handleSubmit={handleSubmit} />);
 
-    render(<TestForm />);
     await userEvent.type(screen.getByLabelText('Name'), 'John Doe');
     await userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
 
-    // Use getByRole for textarea
+    const messageField = screen.getByRole('textbox', { name: /message/i });
+    await userEvent.type(messageField, 'Test message');
+
+    await userEvent.click(screen.getByRole('button', { name: 'Submit' }));
+    expect(handleSubmit).toHaveBeenCalled();
+  });
+});
+
+const TestFormWithValidation = () => {
+  const handleSubmit = vi.fn();
+  const [email, setEmail] = React.useState('');
+  const [touched, setTouched] = React.useState(false);
+  const hasError = touched && !email.includes('@');
+  const errorMsg = hasError ? 'Invalid email' : '';
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!hasError) {
+      handleSubmit();
+    }
+  };
+
+  return (
+    <form onSubmit={onSubmit}>
+      <Form.Group>
+        <Form.Label htmlFor="email">Email</Form.Label>
+        <Form.Control
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          onBlur={() => setTouched(true)}
+          isInvalid={!!(touched && errorMsg)}
+        />
+        {errorMsg && (
+          <Form.Control.Feedback type="invalid">
+            {errorMsg}
+          </Form.Control.Feedback>
+        )}
+      </Form.Group>
+      <button type="submit">Submit</button>
+    </form>
+  );
+};
+
+const TestFormWithFields = ({
+  handleSubmit,
+}: {
+  handleSubmit: (e: React.FormEvent) => void;
+}) => {
+  const [formData, setFormData] = React.useState({
+    name: '',
+    email: '',
+    message: '',
+  });
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <FormTextField
+        label="Name"
+        name="name"
+        value={formData.name}
+        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+        format="bootstrap"
+      />
+      <FormTextField
+        label="Email"
+        name="email"
+        value={formData.email}
+        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+        format="bootstrap"
+      />
+      <FormTextArea
+        label="Message"
+        name="message"
+        value={formData.message}
+        onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+        multiline={true}
+      />
+      <button type="submit">Submit</button>
+    </form>
+  );
+};
+
+describe('Integration tests: Form submission with validation', () => {
+  it('validates form and prevents submission on errors', async () => {
+    render(<TestFormWithValidation />);
+    const submitButton = screen.getByRole('button', { name: /submit/i });
+    const emailInput = screen.getByLabelText('Email');
+
+    await userEvent.type(emailInput, 'invalid');
+    fireEvent.blur(emailInput);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Invalid email/i)).toBeInTheDocument();
+    });
+
+    await userEvent.click(submitButton);
+    expect(screen.getByText(/Invalid email/i)).toBeInTheDocument();
+  });
+
+  it('submits form successfully with valid data', async () => {
+    const handleSubmit = vi.fn((e) => e.preventDefault());
+
+    render(<TestFormWithFields handleSubmit={handleSubmit} />);
+
+    await userEvent.type(screen.getByLabelText('Name'), 'John Doe');
+    await userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
+
     const messageField = screen.getByRole('textbox', { name: /message/i });
     await userEvent.type(messageField, 'Test message');
 
