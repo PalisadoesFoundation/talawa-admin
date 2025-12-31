@@ -43,7 +43,6 @@
 import { useQuery, useMutation } from '@apollo/client';
 import React, { useEffect, useState, useCallback } from 'react';
 import { Table } from 'react-bootstrap';
-import Button from 'react-bootstrap/Button';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   BLOCK_USER_MUTATION_PG,
@@ -58,6 +57,7 @@ import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
 import { useParams } from 'react-router';
+import { UserTableRow } from 'components/AdminPortal/UserTableRow/UserTableRow';
 
 import type {
   InterfaceUserPg,
@@ -178,7 +178,7 @@ const BlockUser = (): JSX.Element => {
     async (user: InterfaceUserPg): Promise<void> => {
       try {
         const { data } = await blockUser({
-          variables: { userId: user.id, organizationId: currentUrl },
+          variables: { userId: String(user.id), organizationId: currentUrl },
         });
         if (data?.blockUser) {
           NotificationToast.success(t('blockedSuccessfully') as string);
@@ -198,7 +198,7 @@ const BlockUser = (): JSX.Element => {
     async (user: InterfaceUserPg): Promise<void> => {
       try {
         const { data } = await unBlockUser({
-          variables: { userId: user.id, organizationId: currentUrl },
+          variables: { userId: String(user.id), organizationId: currentUrl },
         });
         if (data) {
           NotificationToast.success(t('Un-BlockedSuccessfully') as string);
@@ -221,12 +221,7 @@ const BlockUser = (): JSX.Element => {
   }, []);
 
   // Header titles for the table
-  const headerTitles: string[] = [
-    '#',
-    tCommon('name'),
-    tCommon('email'),
-    t('block_unblock'),
-  ];
+  const headerTitles: string[] = [tCommon('user'), t('block_unblock')];
 
   if (loadingMembers || loadingBlockedUsers) {
     return (
@@ -288,52 +283,54 @@ const BlockUser = (): JSX.Element => {
               <tbody>
                 {!showBlockedMembers
                   ? filteredAllMembers.map((user, index: number) => (
-                      <tr key={user.id}>
-                        <th scope="row">{index + 1}</th>
-                        <td>{user.name}</td>
-                        <td>{user.emailAddress}</td>
-                        <td>
-                          <Button
-                            variant="success"
-                            size="sm"
-                            className={styles.removeButton}
-                            onClick={async (): Promise<void> => {
-                              await handleBlockUser(user);
-                            }}
-                            data-testid={`blockUser${user.id}`}
-                          >
-                            <FontAwesomeIcon
-                              icon={faBan}
-                              className={styles.banIcon}
-                            />
-                            {t('block')}
-                          </Button>
-                        </td>
-                      </tr>
+                      <UserTableRow
+                        key={user.id}
+                        user={{
+                          id: String(user.id),
+                          name: user.name || '',
+                          emailAddress: user.emailAddress,
+                          avatarURL: user.avatarURL,
+                          createdAt: user.createdAt,
+                        }}
+                        rowNumber={index + 1}
+                        isDataGrid={false}
+                        showJoinedDate={false}
+                        actions={[
+                          {
+                            label: t('block'),
+                            onClick: () => handleBlockUser(user),
+                            variant: 'success',
+                            icon: <FontAwesomeIcon icon={faBan} />,
+                            testId: `blockUser${user.id}`,
+                          },
+                        ]}
+                        testIdPrefix="block-user"
+                      />
                     ))
                   : filteredBlockedUsers.map((user, index: number) => (
-                      <tr key={user.id}>
-                        <th scope="row">{index + 1}</th>
-                        <td>{user.name}</td>
-                        <td>{user.emailAddress}</td>
-                        <td>
-                          <Button
-                            variant="success"
-                            size="sm"
-                            className={styles.unblockButton}
-                            onClick={async (): Promise<void> => {
-                              await handleUnBlockUser(user);
-                            }}
-                            data-testid={`blockUser${user.id}`}
-                          >
-                            <FontAwesomeIcon
-                              icon={faUserPlus}
-                              className={styles.unbanIcon}
-                            />
-                            {t('unblock')}
-                          </Button>
-                        </td>
-                      </tr>
+                      <UserTableRow
+                        key={user.id}
+                        user={{
+                          id: String(user.id),
+                          name: user.name || '',
+                          emailAddress: user.emailAddress,
+                          avatarURL: user.avatarURL,
+                          createdAt: user.createdAt,
+                        }}
+                        rowNumber={index + 1}
+                        isDataGrid={false}
+                        showJoinedDate={false}
+                        actions={[
+                          {
+                            label: t('unblock'),
+                            onClick: () => handleUnBlockUser(user),
+                            variant: 'success',
+                            icon: <FontAwesomeIcon icon={faUserPlus} />,
+                            testId: `blockUser${user.id}`,
+                          },
+                        ]}
+                        testIdPrefix="block-user"
+                      />
                     ))}
               </tbody>
             </Table>
