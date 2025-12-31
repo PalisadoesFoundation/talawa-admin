@@ -50,7 +50,7 @@
  */
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useParams, Link } from 'react-router';
+import { useLocation, useParams, useNavigate } from 'react-router';
 import { useLazyQuery } from '@apollo/client';
 import { GridCellParams, GridPaginationModel } from '@mui/x-data-grid';
 import { Delete } from '@mui/icons-material';
@@ -59,13 +59,14 @@ import type {
   ReportingTableColumn,
   ReportingTableGridProps,
 } from '../../types/ReportingTable/interface';
+import { UserTableRow } from '../../components/AdminPortal/UserTableRow/UserTableRow';
+import type { InterfaceUserInfo } from '../../types/AdminPortal/UserTableRow/interface';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import {
   dataGridStyle,
   COLUMN_BUFFER_PX,
   PAGE_SIZE,
 } from '../../types/ReportingTable/utils';
-import dayjs from 'dayjs';
 
 import styles from 'style/app-fixed.module.css';
 import TableLoader from 'components/TableLoader/TableLoader';
@@ -73,9 +74,7 @@ import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
 } from 'GraphQl/Queries/Queries';
-import { Button } from 'react-bootstrap';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
-import Avatar from 'components/Avatar/Avatar';
 import AddMember from './addMember/AddMember';
 import { errorHandler } from 'utils/errorHandler';
 // Imports added for manual header construction
@@ -122,6 +121,7 @@ function OrganizationPeople(): JSX.Element {
   const location = useLocation();
   const role = location?.state;
   const { orgId: currentUrl } = useParams();
+  const navigate = useNavigate();
 
   // State
   const [state, setState] = useState(role?.role || 0);
@@ -337,141 +337,53 @@ function OrganizationPeople(): JSX.Element {
   };
 
   // Header titles for the table
-  const headerTitles: string[] = [
-    tCommon('sl_no'),
-    tCommon('profile'),
-    tCommon('name'),
-    tCommon('email'),
-    tCommon('joinedOn'),
-    tCommon('action'),
-  ];
+  const headerTitles: string[] = [tCommon('user')];
 
   // Column definitions
   const columns: ReportingTableColumn[] = [
     {
-      field: 'sl_no',
-      headerName: tCommon('sl_no'),
+      field: 'user',
+      headerName: tCommon('user'),
       flex: 1,
-      minWidth: 50,
-      align: 'center',
+      minWidth: 400,
+      align: 'left',
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
+        const user: InterfaceUserInfo = {
+          id: params.row.id,
+          name: params.row.name,
+          emailAddress: params.row.email,
+          avatarURL: params.row.image,
+          createdAt: params.row.createdAt,
+        };
+
         return (
-          <div className={`${styles.flexCenter} ${styles.fullWidthHeight}`}>
-            {params.row.rowNumber}
-          </div>
+          <UserTableRow
+            user={user}
+            rowNumber={params.row.rowNumber}
+            isDataGrid={true}
+            showJoinedDate={true}
+            onRowClick={(user) => {
+              // Navigate with state like the original Link
+              navigate(`/member/${currentUrl}`, { state: { id: user.id } });
+            }}
+            actions={[
+              {
+                label: tCommon('remove'),
+                onClick: () => toggleRemoveMemberModal(params.row.id),
+                variant: 'danger',
+                icon: <Delete />,
+                disabled: state === 2,
+                testId: 'removeMemberModalBtn',
+                ariaLabel: tCommon('removeMember'),
+              },
+            ]}
+            testIdPrefix="org-people"
+          />
         );
       },
-    },
-    {
-      field: 'profile',
-      headerName: tCommon('profile'),
-      flex: 1,
-      minWidth: 50,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        const columnWidth = params.colDef.computedWidth || 150;
-        const imageSize = Math.min(columnWidth * 0.4, 40);
-        // Construct CSS value to avoid i18n linting errors
-        const avatarSizeValue = String(imageSize) + 'px';
-        return (
-          <div
-            className={`${styles.flexCenter} ${styles.flexColumn} ${styles.fullWidthHeight}`}
-          >
-            {params.row?.image ? (
-              <img
-                src={params.row.image}
-                alt={tCommon('avatar')}
-                className={styles.avatarImage}
-                style={
-                  { '--avatar-size': avatarSizeValue } as React.CSSProperties
-                }
-                crossOrigin="anonymous"
-              />
-            ) : (
-              <div
-                className={`${styles.flexCenter} ${styles.avatarPlaceholder} ${styles.avatarPlaceholderSize}`}
-                style={
-                  { '--avatar-size': avatarSizeValue } as React.CSSProperties
-                }
-                data-testid="avatar"
-              >
-                <Avatar name={params.row.name} />
-              </div>
-            )}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'name',
-      headerName: tCommon('name'),
-      flex: 2,
-      minWidth: 150,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <Link
-            to={`/member/${currentUrl}`}
-            state={{ id: params.row.id }}
-            className={`${styles.membername} ${styles.subtleBlueGrey} ${styles.memberNameFontSize}`}
-          >
-            {params.row.name}
-          </Link>
-        );
-      },
-    },
-    {
-      field: 'email',
-      headerName: tCommon('email'),
-      minWidth: 150,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      flex: 2,
-      sortable: false,
-    },
-    {
-      field: 'joined',
-      headerName: tCommon('joinedOn'),
-      flex: 2,
-      minWidth: 100,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) =>
-        dayjs(params.row.createdAt).format('DD/MM/YYYY'),
-    },
-    {
-      field: 'action',
-      headerName: tCommon('action'),
-      flex: 1,
-      minWidth: 100,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => (
-        <Button
-          className={`${styles.removeButton}`}
-          variant="danger"
-          disabled={state === 2}
-          onClick={() => toggleRemoveMemberModal(params.row.id)}
-          aria-label={tCommon('removeMember')}
-          data-testid="removeMemberModalBtn"
-        >
-          <Delete />
-        </Button>
-      ),
     },
   ];
 
