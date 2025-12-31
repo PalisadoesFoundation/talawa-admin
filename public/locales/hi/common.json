@@ -196,5 +196,9 @@
   "imageUploadError": "छवि अपलोड करने में त्रुटि",
   "imageUploadSuccess": "छवि सफलतापूर्वक अपलोड हुई",
   "postalCode": "डाक कोड",
-  "state": "राज्य"
+  "state": "राज्य",
+  "no_email": "कोई ईमेल नहीं",
+  "no_name": "कोई नाम नहीं",
+  "na": "N/A",
+  "user_row": "उपयोगकर्ता पंक्ति"
 }

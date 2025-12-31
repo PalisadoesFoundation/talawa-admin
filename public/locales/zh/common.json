@@ -196,5 +196,9 @@
   "imageUploadError": "图片上传错误",
   "imageUploadSuccess": "图片上传成功",
   "postalCode": "邮政编码",
-  "state": "州"
+  "state": "州",
+  "no_email": "无邮箱",
+  "no_name": "无姓名",
+  "na": "N/A",
+  "user_row": "用户行"
 }

@@ -308,6 +308,8 @@
     "errorOccurred": "An error occurred. Please try again",
     "UserIdNotFound": "User ID not found",
     "MembershipRequestNotFound": "Membership request not found",
+    "joined": "Joined",
+    "actions": "Actions",
     "MembershipRequestWithdrawn": "Membership request withdrawn successfully",
     "errorLoadingUsers": "Error occurred while loading Users"
   },
@@ -947,7 +949,8 @@
     "email": "email",
     "talawaApiUnavailable": "talawaApiUnavailable",
     "noResultsFoundFor": "noResultsFoundFor",
-    "sortOrganizations": "Sort Organizations"
+    "sortOrganizations": "Sort Organizations",
+    "joined": "Joined"
   },
   "eventManagement": {
     "name": "Event Management Dashboard",

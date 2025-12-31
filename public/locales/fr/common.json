@@ -196,5 +196,9 @@
   "imageUploadError": "Échec du téléchargement de l'image",
   "imageUploadSuccess": "Image téléchargée avec succès",
   "postalCode": "Code Postal",
-  "state": "État"
+  "state": "État",
+  "no_email": "Pas d'email",
+  "no_name": "Pas de nom",
+  "na": "N/A",
+  "user_row": "Ligne utilisateur"
 }

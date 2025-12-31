@@ -309,6 +309,8 @@
     "errorOccurred": "एक त्रुटि हुई। कृपया पुनः प्रयास करें",
     "UserIdNotFound": "उपयोगकर्ता ID नहीं मिली",
     "MembershipRequestNotFound": "सदस्यता अनुरोध नहीं मिला",
+    "joined": "Joined",
+    "actions": "Actions",
     "MembershipRequestWithdrawn": "सदस्यता अनुरोध सफलतापूर्वक वापस लिया गया"
   },
   "communityProfile": {
@@ -942,6 +944,7 @@
     "searchByLastName": "अंतिम नाम से खोजें",
     "noSpammerFound": "कोई स्पैमर नहीं मिला",
     "noUsersFound": "कोई उपयोगकर्ता नहीं मिला",
+    "joined": "Joined",
     "searchByName": "नाम से खोजें",
     "name": "नाम",
     "email": "ईमेल",

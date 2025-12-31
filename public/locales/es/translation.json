@@ -304,6 +304,8 @@
     "errorOccurred": "Se produjo un error. Por favor, inténtalo de nuevo más tarde.",
     "UserIdNotFound": "ID de usuario no encontrada",
     "MembershipRequestNotFound": "Solicitud de membresía no encontrada",
+    "joined": "Unido",
+    "actions": "Acciones",
     "MembershipRequestWithdrawn": "Solicitud de membresía retirada exitosamente",
     "removeUserFrom": "Eliminar Usuario de {{org}}",
     "unblockUserFrom": "¿Desbloquear al usuario de {{org}}?",
@@ -947,7 +949,8 @@
     "noResultsFoundFor": "No se encontraron resultados para ",
     "sortOrganizations": "Sort Organizations",
     "noSpammerFound": "No se encontró ningún spammer",
-    "noUsersFound": "No se encontraron usuarios"
+    "noUsersFound": "No se encontraron usuarios",
+    "joined": "Unido"
   },
   "eventManagement": {
     "name": "Gestión de eventos",

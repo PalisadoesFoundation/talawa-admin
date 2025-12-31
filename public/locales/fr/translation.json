@@ -309,6 +309,8 @@
     "errorOccurred": "Une erreur s'est produite. Veuillez réessayer.",
     "UserIdNotFound": "ID utilisateur non trouvée",
     "MembershipRequestNotFound": "Demande d'adhésion non trouvée",
+    "joined": "Joined",
+    "actions": "Actions",
     "MembershipRequestWithdrawn": "Demande d'adhésion annulée avec succès"
   },
   "communityProfile": {
@@ -942,6 +944,7 @@
     "searchByLastName": "Rechercher par nom de famille",
     "noSpammerFound": "Aucun spammeur trouvé",
     "noUsersFound": "Aucun utilisateur trouvé",
+    "joined": "Joined",
     "searchByName": "Rechercher par nom",
     "name": "Nom",
     "email": "Email",
