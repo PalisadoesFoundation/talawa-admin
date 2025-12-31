@@ -1,4 +1,4 @@
-import { checkVersion, commandExists, execCommand } from '../utils/exec';
+import { checkVersion, execCommand } from '../utils/exec';
 import { createSpinner, logError, logInfo, logWarning } from '../utils/logger';
 
 export async function installTypeScript(): Promise<void> {
@@ -43,47 +43,25 @@ export async function installTypeScript(): Promise<void> {
 }
 
 export async function installDocker(): Promise<void> {
-  const spinner = createSpinner('Installing Docker Desktop...');
-  spinner.start();
+  logInfo(
+    'Docker installation requires manual setup to choose your preferred edition.',
+  );
+  logInfo('');
+  logInfo('Docker offers two editions:');
+  logInfo('  • Docker Community Edition (CE) - Free and open-source');
+  logInfo(
+    '  • Docker Enterprise Edition (EE) - Commercial with additional features',
+  );
+  logInfo('');
+  logInfo('Please install Docker manually:');
+  logInfo('  Docker Desktop: https://www.docker.com/products/docker-desktop');
+  logInfo(
+    '  Documentation: https://docs.docker.com/desktop/install/windows-install/',
+  );
+  logInfo('');
+  logInfo('After installation, run this setup script again.');
 
-  try {
-    await execCommand(
-      'winget',
-      [
-        'install',
-        '--id',
-        'Docker.DockerDesktop',
-        '-e',
-        '--accept-source-agreements',
-        '--accept-package-agreements',
-      ],
-      {
-        silent: true,
-      },
-    );
-    spinner.succeed('Docker installed successfully');
-    logWarning(
-      'Docker Desktop requires a restart. Please restart your computer after installation.',
-    );
-
-    // Verify installation (may fail until Docker Desktop is started)
-    const dockerExists = await commandExists('docker');
-    if (!dockerExists) {
-      logWarning(
-        'Docker installation completed but verification failed. Docker Desktop may need to be started or PATH may need to be refreshed.',
-      );
-    } else {
-      const version = await checkVersion('docker');
-      if (version) {
-        logInfo(`Docker version: ${version}`);
-      }
-    }
-  } catch (error) {
-    spinner.fail('Failed to install Docker');
-    logError(`Docker installation failed: ${error}`);
-    logInfo(
-      'Please install Docker Desktop manually from https://www.docker.com/products/docker-desktop',
-    );
-    throw error;
-  }
+  throw new Error(
+    'Docker must be installed manually. Please follow the instructions above.',
+  );
 }
