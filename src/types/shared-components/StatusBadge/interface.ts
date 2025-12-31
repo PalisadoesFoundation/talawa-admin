@@ -1,3 +1,4 @@
+import type React from 'react';
 /**
  * @file interface.ts
  * @description Type definitions for the StatusBadge component
