@@ -561,14 +561,14 @@ describe('RecurrenceEndOptionsSection', () => {
         </LocalizationProvider>,
       );
 
-      const datePicker = screen.getByTestId(
-        'customRecurrenceEndDatePicker',
-      ) as HTMLInputElement;
-      fireEvent.change(datePicker, {
-        target: { value: '2025-12-31' },
-      });
+      // First click the "on" radio button to enable the date picker
+      const onRadioButton = screen.getByTestId('on');
+      fireEvent.click(onRadioButton);
 
-      await waitFor(() => {
+      // Wait for the date picker to be enabled and interact with it
+      await waitFor(async () => {
+        const dateInput = screen.getByDisplayValue(/\d{2}\/\d{2}\/\d{4}/);
+        fireEvent.change(dateInput, { target: { value: '12/31/2025' } });
         expect(setRecurrenceRuleState).toHaveBeenCalled();
       });
 
