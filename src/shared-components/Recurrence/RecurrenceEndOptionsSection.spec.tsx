@@ -46,13 +46,7 @@ vi.mock('@mui/x-date-pickers', async () => {
             value={dayjsValue ? dayjsValue.format('YYYY-MM-DD') : ''}
             onChange={(e) => {
               if (e.target.value) {
-                // Return a Dayjs-like object with toDate method
-                const date = dayjs(e.target.value).toDate();
-                const dayjsObj = {
-                  ...dayjs(e.target.value),
-                  toDate: () => date,
-                };
-                onChange(dayjsObj);
+                onChange(dayjs(e.target.value));
               } else {
                 onChange(null);
               }

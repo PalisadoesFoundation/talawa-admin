@@ -19,30 +19,26 @@ function getToggleButtonForDate(
   container: HTMLElement,
   date: Date,
 ): HTMLButtonElement | null {
-  const monthIdx = date.getMonth();
-  const monthStart = new Date(date.getFullYear(), monthIdx, 1);
-  const dayOfWeek = monthStart.getDay();
-  const diff = monthStart.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Monday start
-  const gridStart = new Date(monthStart);
-  gridStart.setDate(diff);
-  const msPerDay = 24 * 60 * 60 * 1000;
-  const dayIdx = Math.floor(
-    (new Date(date.toDateString()).getTime() -
-      new Date(gridStart.toDateString()).getTime()) /
-      msPerDay,
-  );
+  const targetDayStr = String(date.getDate());
+  const dayNodes = Array.from(
+    container.querySelectorAll('[data-testid="day"]'),
+  ) as HTMLElement[];
 
-  const expandSelector = `[data-testid="expand-btn-${monthIdx}-${dayIdx}"]`;
-  const expandButton = container.querySelector(
-    expandSelector,
-  ) as HTMLButtonElement | null;
-
-  if (expandButton) {
-    return expandButton;
+  for (const dayNode of dayNodes) {
+    const text = dayNode.textContent ?? '';
+    if (text.includes(targetDayStr)) {
+      const expand = dayNode.querySelector(
+        '[data-testid^="expand-btn-"]',
+      ) as HTMLButtonElement | null;
+      if (expand) return expand;
+      const noEvents = dayNode.querySelector(
+        '[data-testid^="no-events-btn-"]',
+      ) as HTMLButtonElement | null;
+      if (noEvents) return noEvents;
+    }
   }
 
-  const noEventsSelector = `[data-testid="no-events-btn-${monthIdx}-${dayIdx}"]`;
-  return container.querySelector(noEventsSelector) as HTMLButtonElement | null;
+  return null;
 }
 
 async function clickExpandForDate(
@@ -1355,15 +1351,23 @@ describe('Calendar Component', () => {
 
   it('collapses previously expanded day when a new day is expanded', async () => {
     const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
+    const todayMidday = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate(),
+      12,
+      0,
+      0,
+    );
+    const tomorrow = new Date(todayMidday);
+    tomorrow.setDate(todayMidday.getDate() + 1);
 
     const eventA = {
       ...mockEventData[0],
       id: 'A',
       name: 'Event A',
-      startAt: today.toISOString(),
-      endAt: today.toISOString(),
+      startAt: todayMidday.toISOString(),
+      endAt: todayMidday.toISOString(),
     };
 
     const eventB = {
@@ -1391,13 +1395,13 @@ describe('Calendar Component', () => {
     const btnA = await clickExpandForDate(container, new Date(eventA.startAt));
     expect(btnA).toBeTruthy();
     await waitFor(() =>
-      expect(screen.queryByText('Event A')).toBeInTheDocument(),
+      expect(screen.getByText('Event A')).toBeInTheDocument(),
     );
 
     const btnB = await clickExpandForDate(container, new Date(eventB.startAt));
     expect(btnB).toBeTruthy();
     await waitFor(() =>
-      expect(screen.queryByText('Event B')).toBeInTheDocument(),
+      expect(screen.getByText('Event B')).toBeInTheDocument(),
     );
 
     expect(screen.queryByText('Event A')).toBeNull();
