@@ -38,7 +38,17 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: 'build',
       chunkSizeWarningLimit: 1000,
+      // Use esbuild for fast minification
+      minify: 'esbuild',
+      // Target modern browsers for smaller bundle size
+      target: ['es2020', 'edge88', 'firefox78', 'chrome87', 'safari14'],
       rollupOptions: {
+        // Advanced tree-shaking configuration
+        treeshake: {
+          moduleSideEffects: false,
+          propertyReadSideEffects: false,
+          tryCatchDeoptimization: false,
+        },
         output: {
           manualChunks: (id) => {
             // Skip non-node_modules files
@@ -85,6 +95,26 @@ export default defineConfig(({ mode }) => {
           entryFileNames: 'assets/[name]-[hash].js',
           assetFileNames: 'assets/[name]-[hash].[ext]',
         },
+      },
+    },
+    // Esbuild configuration for production optimizations
+    esbuild: {
+      // Drop console and debugger statements in production
+      drop: mode === 'production' ? ['console', 'debugger'] : [],
+      // Remove legal comments to reduce bundle size
+      legalComments: 'none',
+    },
+    // Optimize dependency pre-bundling
+    optimizeDeps: {
+      include: [
+        'react',
+        'react-dom',
+        'react-router-dom',
+        '@apollo/client',
+        '@mui/material',
+      ],
+      esbuildOptions: {
+        target: 'es2020',
       },
     },
     // Global build definitions
