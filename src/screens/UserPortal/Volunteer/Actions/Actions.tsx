@@ -26,6 +26,12 @@ enum ModalState {
   STATUS = 'status',
 }
 
+/**
+ * Component for displaying and managing action items assigned to the current volunteer.
+ * Provides functionality to view action details and update completion status.
+ *
+ * @returns The Actions component.
+ */
 function Actions(): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationActionItems',

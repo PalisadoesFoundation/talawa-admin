@@ -24,6 +24,12 @@ import {
   InterfaceDonationCardProps,
 } from 'types/Donation/interface';
 
+/**
+ * Component for handling donations to an organization.
+ * Allows users to make donations and view their donation history.
+ *
+ * @returns The Donate component.
+ */
 export default function Donate(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'donate' });
 

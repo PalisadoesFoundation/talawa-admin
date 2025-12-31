@@ -30,6 +30,12 @@ import { FaCheck } from 'react-icons/fa';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import RecurringEventVolunteerModal from './RecurringEventVolunteerModal';
 
+/**
+ * Component for displaying upcoming volunteer events for an organization.
+ * Allows users to volunteer for events and groups, and tracks their membership status.
+ *
+ * @returns The UpcomingEvents component.
+ */
 const UpcomingEvents = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'userVolunteer' });
   const { t: tCommon } = useTranslation('common');
