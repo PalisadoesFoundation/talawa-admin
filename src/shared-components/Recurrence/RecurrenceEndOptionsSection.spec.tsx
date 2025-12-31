@@ -390,7 +390,10 @@ describe('RecurrenceEndOptionsSection', () => {
       const datePicker = screen.getByTestId(
         'customRecurrenceEndDatePicker',
       ) as HTMLInputElement;
-      fireEvent.change(datePicker, { target: { value: '2025-12-31' } });
+      // Use a deterministic "different from today" date to avoid flakiness when tests
+      // run on the same day as the hardcoded value (e.g., Dec 31).
+      const nextDay = dayjs().add(1, 'day').format('YYYY-MM-DD');
+      fireEvent.change(datePicker, { target: { value: nextDay } });
 
       await waitFor(() => {
         expect(setRecurrenceRuleState).toHaveBeenCalled();
@@ -570,8 +573,9 @@ describe('RecurrenceEndOptionsSection', () => {
       const datePicker = screen.getByTestId(
         'customRecurrenceEndDatePicker',
       ) as HTMLInputElement;
+      const nextDay = dayjs().add(1, 'day').format('YYYY-MM-DD');
       fireEvent.change(datePicker, {
-        target: { value: '2025-12-31' },
+        target: { value: nextDay },
       });
 
       await waitFor(() => {

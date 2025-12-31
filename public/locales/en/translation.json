@@ -427,10 +427,7 @@
     "totalAssignedUsers": "Total Assigned Users",
     "tagCreationFailed": "Tag creation failed",
     "errorLoadingTagsData": "Error occurred while loading Organization Tags Data",
-    "sortTags": "Sort Tags",
-    "tags": "Tags",
-    "Latest": "Latest",
-    "Oldest": "Oldest"
+    "sortTags": "Sort Tags"
   },
   "manageTag": {
     "title": "Tag Details",

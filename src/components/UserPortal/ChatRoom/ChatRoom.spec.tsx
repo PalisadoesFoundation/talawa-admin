@@ -792,6 +792,10 @@ describe('ChatRoom Component', () => {
 
     await waitFor(() => {
       expect(chatListRefetch).toHaveBeenCalled();
+    });
+
+    // Wait for the input to be cleared after state update
+    await waitFor(() => {
       const inputEl = screen.getByTestId('messageInput') as HTMLInputElement;
       expect(inputEl.value).toBe('');
     });

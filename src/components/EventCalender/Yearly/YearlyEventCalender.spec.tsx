@@ -1354,9 +1354,11 @@ describe('Calendar Component', () => {
   });
 
   it('collapses previously expanded day when a new day is expanded', async () => {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
+    // Use stable, non-year-boundary dates. Using "today/tomorrow" is flaky on Dec 31
+    // because "tomorrow" becomes next year while the calendar renders the current year.
+    const year = new Date().getFullYear();
+    const today = new Date(year, 5, 15, 12); // Jun 15, noon
+    const tomorrow = new Date(year, 5, 16, 12); // Jun 16, noon
 
     const eventA = {
       ...mockEventData[0],
@@ -1391,13 +1393,13 @@ describe('Calendar Component', () => {
     const btnA = await clickExpandForDate(container, new Date(eventA.startAt));
     expect(btnA).toBeTruthy();
     await waitFor(() =>
-      expect(screen.queryByText('Event A')).toBeInTheDocument(),
+      expect(screen.getByText('Event A')).toBeInTheDocument(),
     );
 
     const btnB = await clickExpandForDate(container, new Date(eventB.startAt));
     expect(btnB).toBeTruthy();
     await waitFor(() =>
-      expect(screen.queryByText('Event B')).toBeInTheDocument(),
+      expect(screen.getByText('Event B')).toBeInTheDocument(),
     );
 
     expect(screen.queryByText('Event A')).toBeNull();

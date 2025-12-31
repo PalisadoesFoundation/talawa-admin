@@ -247,6 +247,12 @@ describe('Testing Actions Screen', () => {
   it('Search by Assignee name', async () => {
     renderActions(link1);
 
+    // Wait for initial data to load
+    await waitFor(async () => {
+      const assigneeNames = await screen.findAllByTestId('assigneeName');
+      expect(assigneeNames.length).toBeGreaterThan(0);
+    });
+
     const searchInput = await screen.findByTestId('searchBy');
     expectVitestToBeInTheDocument(searchInput);
 
@@ -258,15 +264,21 @@ describe('Testing Actions Screen', () => {
     expectVitestToBeInTheDocument(searchByAssignee);
     await userEvent.click(searchByAssignee);
 
+    await userEvent.clear(searchInput);
     await userEvent.type(searchInput, '1');
 
     await debounceWait();
     fireEvent.click(screen.getByTestId('searchBtn'));
 
-    await waitFor(async () => {
-      const assigneeName = await screen.findAllByTestId('assigneeName');
-      expectElementToHaveTextContent(assigneeName[0], 'Group 1');
-    });
+    // Wait for search to filter results
+    await waitFor(
+      async () => {
+        const assigneeName = await screen.findAllByTestId('assigneeName');
+        expect(assigneeName.length).toBe(1);
+        expectElementToHaveTextContent(assigneeName[0], 'Group 1');
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('Search by Assignee name - volunteer', async () => {

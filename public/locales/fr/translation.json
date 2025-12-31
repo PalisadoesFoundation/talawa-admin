@@ -419,18 +419,15 @@
     "noTagsFound": "Aucune étiquette trouvée",
     "removeUserTag": "Supprimer l'Étiquette",
     "removeUserTagMessage": "Voulez-vous supprimer cette étiquette ?",
-    "Latest": "Dernier premier",
-    "Oldest": "Le plus âgé en premier",
+    "Latest": "Le Plus Récent",
+    "Oldest": "Le Plus Ancien",
     "addChildTag": "Ajouter une Sous-Étiquette",
     "enterTagName": "Entrez le nom de l'étiquette",
     "totalSubTags": "Total des sous-étiquettes",
     "totalAssignedUsers": "Total des utilisateurs assignés",
     "tagCreationFailed": "Échec de la création de l'étiquette",
     "errorLoadingTagsData": "Une erreur s'est produite lors du chargement des données des étiquettes de l'organisation",
-    "sortTags": "Trier les étiquettes",
-    "tags": "Étiquettes",
-    "Latest": "Le Plus Récent",
-    "Oldest": "Le Plus Ancien"
+    "sortTags": "Trier les étiquettes"
   },
   "manageTag": {
     "title": "Détails de l'étiquette",

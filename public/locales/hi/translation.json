@@ -419,18 +419,15 @@
     "noTagsFound": "कोई टैग नहीं मिला",
     "removeUserTag": "टैग हटाएँ",
     "removeUserTagMessage": "क्या आप इस टैग को हटाना चाहते हैं?",
-    "Latest": "नवीनतम प्रथम",
-    "Oldest": "सबसे पुराना पहले",
+    "Latest": "नवीनतम",
+    "Oldest": "सबसे पुराना",
     "addChildTag": "उप-टैग जोड़ें",
     "enterTagName": "टैग का नाम दर्ज करें",
     "totalSubTags": "कुल उप-टैग",
     "totalAssignedUsers": "कुल नियुक्त उपयोगकर्ता",
     "tagCreationFailed": "टैग निर्माण विफल",
     "errorLoadingTagsData": "संगठन टैग डेटा लोड करते समय त्रुटि हुई",
-    "sortTags": "टैग सॉर्ट करें",
-    "tags": "टैग",
-    "Latest": "नवीनतम",
-    "Oldest": "सबसे पुराना"
+    "sortTags": "टैग सॉर्ट करें"
   },
   "manageTag": {
     "title": "टैग विवरण",

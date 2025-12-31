@@ -66,7 +66,6 @@ import {
   PAGE_SIZE,
 } from '../../types/ReportingTable/utils';
 import dayjs from 'dayjs';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import styles from 'style/app-fixed.module.css';
 import TableLoader from 'components/TableLoader/TableLoader';
 import {
@@ -306,10 +305,10 @@ function OrganizationPeople(): JSX.Element {
   // Error handling
   useEffect(() => {
     if (memberError) {
-      NotificationToast.error(memberError.message);
+      errorHandler(t, memberError);
     }
     if (userError) {
-      NotificationToast.error(userError.message);
+      errorHandler(t, userError);
     }
   }, [memberError, userError, t]);
 

@@ -419,18 +419,15 @@
     "noTagsFound": "未找到标签",
     "removeUserTag": "删除标签",
     "removeUserTagMessage": "您确定要删除此标签吗？",
-    "Latest": "最新第一",
-    "Oldest": "最旧的在前",
+    "Latest": "最新",
+    "Oldest": "最旧",
     "addChildTag": "添加子标签",
     "enterTagName": "输入标签名称",
     "totalSubTags": "总子标签",
     "totalAssignedUsers": "分配的总用户数",
     "tagCreationFailed": "标签创建失败",
     "errorLoadingTagsData": "加载组织标签数据时出错",
-    "sortTags": "排序标签",
-    "tags": "标签",
-    "Latest": "最新",
-    "Oldest": "最旧"
+    "sortTags": "排序标签"
   },
   "manageTag": {
     "title": "标签详情",
