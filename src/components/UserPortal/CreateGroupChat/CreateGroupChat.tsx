@@ -97,6 +97,7 @@ export default function CreateGroupChat({
 
   const [addUserModalisOpen, setAddUserModalisOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [avatarUri, setAvatarUri] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { orgId: currentOrg } = useParams();
   const { uploadFileToMinio } = useMinioUpload();
@@ -126,7 +127,7 @@ export default function CreateGroupChat({
           organizationId: currentOrg,
           name: title,
           description: description,
-          avatar: null,
+          avatar: avatarUri ? { uri: avatarUri } : null,
         },
       },
     });
@@ -198,6 +199,7 @@ export default function CreateGroupChat({
     if (file && currentOrg) {
       try {
         const { objectName } = await uploadFileToMinio(file, currentOrg);
+        setAvatarUri(objectName);
         const presignedUrl = await getFileFromMinio(objectName, currentOrg);
         setSelectedImage(presignedUrl);
       } catch (error) {

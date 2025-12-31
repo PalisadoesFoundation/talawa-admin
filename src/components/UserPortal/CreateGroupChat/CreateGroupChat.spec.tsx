@@ -279,7 +279,6 @@ describe('CreateGroupChat', () => {
       delete mockLocalStorageStore[key];
     }
     setItem('userId', '1');
-    vi.clearAllMocks();
   });
 
   test('should create a group chat successfully, allowing adding/removing members', async () => {
