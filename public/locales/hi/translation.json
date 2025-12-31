@@ -1878,7 +1878,7 @@
     "failedToUploadPlugin": "प्लगइन अपलोड करने में विफल रहा। कृपया पुनः प्रयास करें।",
     "uploadPlugin": "प्लगइन अपलोड करें",
     "uploadPluginDescription": "अपलोड करने के लिए एक ज़िप फ़ाइल चुनें या ड्रॉप करें",
-    "pulginId": "प्लगइन आईडी",
+    "pluginId": "प्लगइन आईडी",
     "adminDashboardComponents": "एडमिन डैशबोर्ड कंपोनेंट्स",
     "componentsToInstall": "इंस्टॉल करने के लिए कंपोनेंट्स",
     "apiBackendComponents": "API बैकएंड कंपोनेंट्स",
@@ -1890,7 +1890,8 @@
     "uninstallPlugin": "प्लगइन अनइंस्टॉल करें",
     "uninstallPluginMsg": "क्या आप वाकई इस {{pluginName}} को अनइंस्टॉल करना चाहते हैं?",
     "clickToViewFullSize": "पूर्ण आकार देखने के लिए क्लिक करें",
-    "pluginInfo": "प्लगइन जानकारी"
+    "pluginInfo": "प्लगइन जानकारी",
+    "filterPlugins": "फिल्टर प्लगइन्स"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "टिप्पणी सफलतापूर्वक हटा दी गई",

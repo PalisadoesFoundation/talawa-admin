@@ -197,7 +197,7 @@
   "postalCode": "Código Postal",
   "state": "Estado",
   "closeModal": "Cerrar modal",
-  "erroLoadingUsers": "Error al cargar usuarios",
+  "errorLoadingUsers": "Error al cargar usuarios",
   "noUsersFound": "No se encontraron usuarios",
   "clickToBrowseFile": "Haga clic para buscar archivos",
   "selectAZipFile": "Seleccione un archivo ZIP",

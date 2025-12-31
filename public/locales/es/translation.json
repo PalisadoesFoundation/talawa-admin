@@ -1878,7 +1878,7 @@
     "failedToUploadPlugin": "Error al subir el plugin. Por favor, inténtelo de nuevo.",
     "uploadPlugin": "Subir Plugin",
     "uploadPluginDescription": "Sube un archivo .zip de tu plugin para instalarlo en tu instancia de Talawa.",
-    "pulginId": "ID del Plugin",
+    "pluginId": "ID del Plugin",
     "adminDashboardComponents": "Componentes del Panel de Administración",
     "componentsToInstall": "Componentes a Instalar:",
     "apiBackendComponents": "Componentes de Backend API",
@@ -1890,7 +1890,8 @@
     "uninstallPlugin": "Desinstalar Plugin",
     "uninstallPluginMsg": "¿Estás seguro de que deseas desinstalar este plugin {{pluginName}}? Esto eliminará todos los datos asociados con el plugin y no se podrá deshacer.",
     "clickToViewFullSize": "Haz clic para ver en tamaño completo",
-    "pluginInfo": "Información del Plugin"
+    "pluginInfo": "Información del Plugin",
+    "filterPlugins": "Filtrar Plugins"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Comentario eliminado exitosamente",

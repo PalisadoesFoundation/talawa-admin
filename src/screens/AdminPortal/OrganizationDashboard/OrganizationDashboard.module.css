@@ -3,15 +3,15 @@
 }
 
 .membershipEmptyContainer {
-  height: 150px;
+  min-height: 150px;
 }
 
 .memReqCard {
-  height: 220px;
+  min-height: 220px;
 }
 
 .memReqCardBody {
-  height: 150px;
+  min-height: 150px;
 }
 
 .p0 {
@@ -20,4 +20,8 @@
 
 .flex {
   display: flex;
+}
+
+.iconGrey {
+  fill: #555555;
 }

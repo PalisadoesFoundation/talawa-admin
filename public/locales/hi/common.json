@@ -198,7 +198,7 @@
   "postalCode": "डाक कोड",
   "state": "राज्य",
   "closeModal": "मोडल बंद करें",
-  "erroLoadingUsers": "उपयोगकर्ताओं को लोड करने में त्रुटि",
+  "errorLoadingUsers": "उपयोगकर्ताओं को लोड करने में त्रुटि",
   "noUsersFound": "कोई उपयोगकर्ता नहीं मिला",
   "clickToBrowseFile": "फ़ाइल ब्राउज़ करने के लिए क्लिक करें",
   "selectAZipFile": "एक ज़िप फ़ाइल चुनें",

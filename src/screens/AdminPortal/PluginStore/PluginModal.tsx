@@ -363,7 +363,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                             <img
                               key={idx}
                               src={src}
-                              alt={`${t('ss')} ${screenshotViewer.currentIndex + 1}`}
+                              alt={`${t('ss')} ${idx + 1}`}
                               className={styles.screenshotThumbnail}
                               onClick={() =>
                                 openScreenshotViewer(details.screenshots, idx)

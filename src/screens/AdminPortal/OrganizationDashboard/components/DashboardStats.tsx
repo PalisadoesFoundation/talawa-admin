@@ -131,7 +131,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
           <DashBoardCard
             count={memberCount}
             title={tCommon('members')}
-            icon={<UsersIcon fill="grey" />}
+            icon={<UsersIcon className={orgStyles.iconGrey} />}
           />
         </button>
       </Col>
@@ -146,7 +146,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
           <DashBoardCard
             count={adminCount}
             title={tCommon('admins')}
-            icon={<AdminsIcon fill="grey" />}
+            icon={<AdminsIcon className={orgStyles.iconGrey} />}
           />
         </button>
       </Col>
@@ -161,7 +161,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
           <DashBoardCard
             count={postsCount ?? 0}
             title={tCommon('posts')}
-            icon={<PostsIcon fill="grey" />}
+            icon={<PostsIcon className={orgStyles.iconGrey} />}
           />
         </button>
       </Col>
@@ -176,7 +176,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
           <DashBoardCard
             count={eventCount}
             title={tCommon('events')}
-            icon={<EventsIcon fill="grey" />}
+            icon={<EventsIcon className={orgStyles.iconGrey} />}
           />
         </button>
       </Col>
@@ -191,7 +191,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
           <DashBoardCard
             count={blockedCount}
             title={tCommon('blockedUsers')}
-            icon={<BlockedUsersIcon fill="grey" />}
+            icon={<BlockedUsersIcon className={orgStyles.iconGrey} />}
           />
         </button>
       </Col>
@@ -206,7 +206,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
           <DashBoardCard
             count={venueCount}
             title={tCommon('venues')}
-            icon={<VenuesIcon fill="grey" />}
+            icon={<VenuesIcon className={orgStyles.iconGrey} />}
           />
         </button>
       </Col>

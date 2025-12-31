@@ -49,6 +49,7 @@ const MockTagActions: React.FC<InterfaceTagActionsProps> = ({
             {t('tagActions')}
           </h2>
           <button
+            type="button"
             data-testid="closeTagActionsModalBtn"
             aria-label={tCommon('closeModal')}
             onClick={hideTagActionsModal}

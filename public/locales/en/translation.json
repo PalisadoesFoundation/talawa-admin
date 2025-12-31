@@ -1878,7 +1878,7 @@
     "failedToUploadPlugin": "Failed to upload plugin. Please try again.",
     "uploadPlugin": "Upload Plugin",
     "uploadPluginDescription": "Upload a ZIP file to create a plugin entry. The plugin will be available for installation after upload.",
-    "pulginId": "Plugin ID",
+    "pluginId": "Plugin ID",
     "adminDashboardComponents": "Admin Dashboard Components",
     "componentsToInstall": "Components to Install:",
     "apiBackendComponents": "API Backend Components",
@@ -1890,7 +1890,8 @@
     "uninstallPlugin": "Uninstall Plugin",
     "uninstallPluginMsg": "Are you sure you want to uninstall {{pluginName}}?",
     "clickToViewFullSize": "Click to view full size",
-    "pluginInfo": "Plugin Information"
+    "pluginInfo": "Plugin Information",
+    "filterPlugins": "Filter Plugins"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Comment deleted successfully",

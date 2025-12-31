@@ -73,7 +73,7 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
   return (
     <Col xl={4}>
       <Row className="mb-4">
-        <Card border="0" className={'rounded-4' + orgStyle.memReqCard}>
+        <Card border="0" className={`rounded-4 ${orgStyle.memReqCard}`}>
           <div className={styles.cardHeader}>
             <div className={styles.cardTitle}>{t('membershipRequests')}</div>
             <Button
@@ -85,13 +85,17 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
               {t('viewAll')}
             </Button>
           </div>
-          <Card.Body className={styles.containerBody + orgStyle.memReqCardBody}>
+          <Card.Body
+            className={`${styles.emptyContainer} ${orgStyle.memReqCardBody}`}
+          >
             {isLoading ? (
               [...Array(4)].map((_, index) => (
                 <CardItemLoading key={`requestsLoading_${index}`} />
               ))
             ) : pendingRequests.length === 0 ? (
-              <div className={styles.emptyContainer + orgStyle.memReqCardBody}>
+              <div
+                className={`${styles.emptyContainer} ${orgStyle.memReqCardBody}`}
+              >
                 <h6>{t('noMembershipRequests')}</h6>
               </div>
             ) : (
@@ -129,7 +133,7 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
               {t('viewAll')}
             </Button>
           </div>
-          <Card.Body className={styles.containerBody + orgStyle.p0}>
+          <Card.Body className={`${styles.containerBody} ${orgStyle.p0}`}>
             <div className={styles.emptyContainer}>
               <h6>{t('comingSoon')}</h6>
             </div>

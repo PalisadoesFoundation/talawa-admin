@@ -2,7 +2,7 @@ import {
   MEMBERSHIP_REQUEST_PG,
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import { PAGE_SIZE } from '../../../types/ReportingTable/utils';
+import { PAGE_SIZE } from 'types/ReportingTable/utils';
 
 // Helper functions for mocks
 

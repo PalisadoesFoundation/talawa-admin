@@ -1878,7 +1878,7 @@
     "failedToUploadPlugin": "Échec du téléchargement du plugin. Veuillez réessayer.",
     "uploadPlugin": "Télécharger le Plugin",
     "uploadPluginDescription": "Téléchargez un fichier ZIP de votre plugin pour l'installer dans votre organisation.",
-    "pulginId": "ID du Plugin",
+    "pluginId": "ID du Plugin",
     "adminDashboardComponents": "Composants du Tableau de Bord Admin",
     "componentsToInstall": "Composants à Installer:",
     "apiBackendComponents": "Composants Backend API",
@@ -1890,7 +1890,8 @@
     "uninstallPlugin": "Désinstaller le Plugin",
     "uninstallPluginMsg": "Êtes-vous sûr de vouloir désinstaller ce {{pluginName}} ? Toutes les données associées au plugin seront supprimées et l'action ne peut pas être annulée.",
     "clickToViewFullSize": "Cliquez pour voir en taille réelle",
-    "pluginInfo": "Informations sur le Plugin"
+    "pluginInfo": "Informations sur le Plugin",
+    "filterPlugins": "Filtrer les Plugins"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Commentaire supprimé avec succès",

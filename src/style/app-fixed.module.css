@@ -10473,7 +10473,7 @@ form {
 }
 
 .divider {
-  border-color: 'var(--grey-border-box-color)';
+  border: 2px solid var(--addButton-border);
   border-width: 2px;
   width: 85%;
 }
