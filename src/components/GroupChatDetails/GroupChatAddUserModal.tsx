@@ -34,10 +34,12 @@ interface InterfaceGroupChatAddUserModalProps {
  * @param props.chat - the chat object to which users will be added
  * @param props.chatRefetch - refetch function for chat data after mutation
  */
-export default function GroupChatAddUserModal(
-  props: InterfaceGroupChatAddUserModalProps,
-) {
-  const { show, toggle, chat, chatRefetch } = props;
+export default function GroupChatAddUserModal({
+  show,
+  toggle,
+  chat,
+  chatRefetch,
+}: InterfaceGroupChatAddUserModalProps) {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
   const [userName, setUserName] = useState('');
 

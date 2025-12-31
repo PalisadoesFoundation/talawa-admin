@@ -14,13 +14,7 @@ import React from 'react';
 import { MockedProvider } from '@apollo/client/testing';
 import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
 import type { RenderResult } from '@testing-library/react';
-import {
-  act,
-  render,
-  screen,
-  fireEvent,
-  waitFor,
-} from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
@@ -129,13 +123,7 @@ const MOCKS = [
 
 const link = new StaticMockLink(MOCKS, true);
 
-async function wait(ms = 100): Promise<void> {
-  await act(() => {
-    return new Promise((resolve) => {
-      setTimeout(resolve, ms);
-    });
-  });
-}
+// No custom wait function needed, use RTL's findBy* or waitFor instead.
 
 const sharedMocks = vi.hoisted(() => ({
   toast: {
@@ -247,17 +235,16 @@ describe('OrganizationVenue with missing orgId', () => {
         </MemoryRouter>
       </MockedProvider>,
     );
-    await waitFor(() => {
-      const paramsError = screen.getByTestId('paramsError');
-      expect(paramsError).toBeInTheDocument();
-    });
+    const paramsError = await screen.findByTestId('paramsError');
+    expect(paramsError).toBeInTheDocument();
   });
 });
 
 describe('Organisation Venues', () => {
   test('searches the venue list correctly by Name', async () => {
     renderOrganizationVenue(link);
-    await wait();
+    await screen.findByTestId('orgvenueslist');
+
     const searchInput = screen.getByTestId('searchBy');
     fireEvent.change(searchInput, {
       target: { value: 'Updated Venue 1' },
@@ -265,7 +252,8 @@ describe('Organisation Venues', () => {
     fireEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument();
+      expect(screen.getByTestId('venue-item-venue1')).toBeInTheDocument();
+      expect(screen.queryByTestId('venue-item-venue2')).not.toBeInTheDocument();
     });
   });
 
@@ -291,31 +279,33 @@ describe('Organisation Venues', () => {
 
   test('sorts the venue list by lowest capacity correctly', async () => {
     renderOrganizationVenue(link);
-    await waitFor(() =>
-      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
-    );
+    await screen.findByTestId('orgvenueslist');
 
     fireEvent.click(screen.getByTestId('sortVenues'));
     fireEvent.click(screen.getByTestId('lowest'));
+
     await waitFor(() => {
-      // Since sorting might not be working with current query structure,
-      // just verify the list is rendered
-      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument();
+      const venues = screen.getAllByTestId(/^venue-item/);
+      // Capacity order: 1000 (venue1), 1500 (venue2), 2000 (venue3)
+      expect(venues[0]).toHaveAttribute('data-testid', 'venue-item-venue1');
+      expect(venues[1]).toHaveAttribute('data-testid', 'venue-item-venue2');
+      expect(venues[2]).toHaveAttribute('data-testid', 'venue-item-venue3');
     });
   });
 
   test('sorts the venue list by highest capacity correctly', async () => {
     renderOrganizationVenue(link);
-    await waitFor(() =>
-      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument(),
-    );
+    await screen.findByTestId('orgvenueslist');
 
     fireEvent.click(screen.getByTestId('sortVenues'));
     fireEvent.click(screen.getByTestId('highest'));
+
     await waitFor(() => {
-      // Since sorting might not be working with current query structure,
-      // just verify the list is rendered
-      expect(screen.getByTestId('orgvenueslist')).toBeInTheDocument();
+      const venues = screen.getAllByTestId(/^venue-item/);
+      // Capacity order: 2000 (venue3), 1500 (venue2), 1000 (venue1)
+      expect(venues[0]).toHaveAttribute('data-testid', 'venue-item-venue3');
+      expect(venues[1]).toHaveAttribute('data-testid', 'venue-item-venue2');
+      expect(venues[2]).toHaveAttribute('data-testid', 'venue-item-venue1');
     });
   });
 
@@ -394,19 +384,38 @@ describe('Organisation Venues', () => {
   });
 
   test('calls handleDelete when delete button is clicked', async () => {
-    renderOrganizationVenue(link);
-    await waitFor(() =>
-      expect(screen.getByTestId('venue-item-venue1')).toBeInTheDocument(),
-    );
+    // We use a custom mock for the delete mutation to track calls
+    const deleteMutationMock = vi.fn().mockResolvedValue({
+      data: {
+        deleteVenue: {
+          _id: 'venue1',
+          __typename: 'Venue',
+        },
+      },
+    });
+
+    const customMocks = [
+      MOCKS[0], // Fetch query
+      {
+        request: {
+          query: DELETE_VENUE_MUTATION,
+          variables: { id: 'venue1' },
+        },
+        result: deleteMutationMock,
+      },
+    ];
+
+    const customLink = new StaticMockLink(customMocks, true);
+    renderOrganizationVenue(customLink);
+
+    const venueItem = await screen.findByTestId('venue-item-venue1');
+    expect(venueItem).toBeInTheDocument();
 
     const deleteButton = screen.getByTestId('deleteVenueBtn-venue1');
-
-    // Test that clicking the button doesn't cause any errors
-    expect(() => fireEvent.click(deleteButton)).not.toThrow();
+    fireEvent.click(deleteButton);
 
     await waitFor(() => {
-      // Verify the button is still clickable (component hasn't crashed)
-      expect(deleteButton).toBeInTheDocument();
+      expect(deleteMutationMock).toHaveBeenCalled();
     });
   });
 
@@ -415,12 +424,7 @@ describe('Organisation Venues', () => {
     expect(screen.getByTestId('loading-state')).toBeInTheDocument();
   });
 
-  // test('renders without crashing', async () => {
-  //   renderOrganizationVenue(link);
-  //   waitFor(() => {
-  //     expect(screen.findByTestId('orgvenueslist')).toBeInTheDocument();
-  //   });
-  // });
+  // Removed commented-out tests to keep codebase clean.
 
   test('renders the venue list correctly', async () => {
     renderOrganizationVenue(link);

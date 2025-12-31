@@ -61,7 +61,7 @@ import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import VenueCard from 'components/Venues/VenueCard';
 import PageHeader from 'shared-components/Navbar/Navbar';
 
-function organizationVenues(): JSX.Element {
+function OrganizationVenues(): JSX.Element {
   // Translation hooks for i18n support
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationVenues',
@@ -69,7 +69,9 @@ function organizationVenues(): JSX.Element {
   const { t: tCommon } = useTranslation('common');
 
   // Setting the document title using the translation hook
-  document.title = t('title');
+  useEffect(() => {
+    document.title = t('title');
+  }, [t]);
 
   // State hooks for managing component state
   const [venueModal, setVenueModal] = useState<boolean>(false);
@@ -292,4 +294,4 @@ function organizationVenues(): JSX.Element {
   );
 }
 
-export default organizationVenues;
+export default OrganizationVenues;
