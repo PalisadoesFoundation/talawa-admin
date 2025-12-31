@@ -19,7 +19,6 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
   endAdornment,
   format,
   ...formControlProps
-  ...formControlProps
 }) => {
   if (format === 'mui') {
     return (
