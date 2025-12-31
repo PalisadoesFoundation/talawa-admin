@@ -96,7 +96,7 @@ export interface IFormTextAreaProps
 
 /**
  * Autocomplete/select component props using Material-UI Autocomplete.
- * Supports single/multiple selection with user data (InterfaceUIserInfo).
+ * Supports single/multiple selection with user data (InterfaceUserInfo).
  */
 export interface IFormSelectProps
   extends Omit<ICommonInputProps, 'value' | 'onChange' | 'error'> {
