@@ -1,6 +1,10 @@
-/** DataGridWrapper: standardized grid with search/sort/pagination */
 import React, { useMemo, useState } from 'react';
-import { DataGrid, GridRenderCellParams } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridLoadingOverlayProps,
+  GridRenderCellParams,
+  LoadingOverlayPropsOverrides,
+} from '@mui/x-data-grid';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceDataGridWrapperProps } from '../../types/DataGridWrapper/interface';
 import styles from './DataGridWrapper.module.css';
@@ -8,6 +12,7 @@ import styles from './DataGridWrapper.module.css';
 import SearchBar from '../SearchBar/SearchBar';
 
 import SortingButton from '../../subComponents/SortingButton';
+import LoadingState from '../LoadingState/LoadingState';
 
 export function DataGridWrapper<T extends { id: string | number }>(
   props: InterfaceDataGridWrapperProps<T>,
@@ -101,6 +106,17 @@ export function DataGridWrapper<T extends { id: string | number }>(
         rows={filtered}
         columns={[...columns, ...actionCol]}
         loading={loading}
+        slots={{
+          loadingOverlay:
+            LoadingState as React.JSXElementConstructor<GridLoadingOverlayProps>,
+        }}
+        slotProps={{
+          loadingOverlay: {
+            isLoading: true,
+            variant: 'spinner',
+            size: 'lg',
+          } as LoadingOverlayPropsOverrides,
+        }}
         sortModel={sortModel}
         pagination={paginationConfig?.enabled ? true : undefined}
         paginationModel={{ page, pageSize }}

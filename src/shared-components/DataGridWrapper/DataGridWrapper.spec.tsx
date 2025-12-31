@@ -47,9 +47,9 @@ describe('DataGridWrapper', () => {
     vi.useRealTimers();
   });
 
-  test('renders loading state (progressbar)', () => {
+  test('renders loading state (spinner)', () => {
     render(<DataGridWrapper {...defaultProps} loading={true} />);
-    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    expect(screen.getByTestId('loading-state')).toBeInTheDocument();
   });
 
   test('renders empty state message when no rows', () => {
