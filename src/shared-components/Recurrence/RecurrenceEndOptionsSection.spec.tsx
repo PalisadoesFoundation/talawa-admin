@@ -318,27 +318,29 @@ describe('RecurrenceEndOptionsSection', () => {
       const originalSelect = HTMLInputElement.prototype.select;
       HTMLInputElement.prototype.select = selectSpy;
 
-      render(
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <RecurrenceEndOptionsSection
-            {...defaultProps}
-            localCount="5"
-            selectedRecurrenceEndOption="after"
-          />
-        </LocalizationProvider>,
-      );
+      try {
+        render(
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <RecurrenceEndOptionsSection
+              {...defaultProps}
+              localCount="5"
+              selectedRecurrenceEndOption="after"
+            />
+          </LocalizationProvider>,
+        );
 
-      const countInput = screen.getByTestId(
-        'customRecurrenceCountInput',
-      ) as HTMLInputElement;
+        const countInput = screen.getByTestId(
+          'customRecurrenceCountInput',
+        ) as HTMLInputElement;
 
-      // Fire double click event
-      fireEvent.dblClick(countInput);
+        // Fire double click event
+        fireEvent.dblClick(countInput);
 
-      expect(selectSpy).toHaveBeenCalled();
-
-      // Restore original
-      HTMLInputElement.prototype.select = originalSelect;
+        expect(selectSpy).toHaveBeenCalled();
+      } finally {
+        // Restore original
+        HTMLInputElement.prototype.select = originalSelect;
+      }
     });
 
     it('should prevent negative, e, E, and + keys in count input', () => {
