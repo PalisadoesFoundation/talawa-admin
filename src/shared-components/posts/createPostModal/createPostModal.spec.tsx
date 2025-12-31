@@ -263,7 +263,7 @@ describe('CreatePostModal Integration Tests', () => {
   ) => {
     return render(
       <I18nextProvider i18n={i18nForTest}>
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <CreatePostModal {...defaultProps} {...props} />
         </MockedProvider>
       </I18nextProvider>,
