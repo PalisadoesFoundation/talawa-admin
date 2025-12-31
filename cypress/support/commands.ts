@@ -66,7 +66,7 @@ Cypress.Commands.add('loginByApi', (role: string) => {
               .should('be.visible')
               .click();
           });
-        cy.wait(1000); // wait for 1 seconds to simulate recaptcha completion
+        cy.wait(1000); // wait for 1 second to simulate recaptcha completion
       }
       cy.get('[data-cy="loginBtn"]').click();
 

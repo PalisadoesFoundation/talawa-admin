@@ -33,7 +33,7 @@ export class LoginPage {
             .should('be.visible')
             .click();
         });
-      cy.wait(1000); // wait for 1 seconds to simulate recaptcha completion
+      cy.wait(1000); // wait for 1 second to simulate recaptcha completion
     }
     cy.get(this._loginButton, { timeout }).should('be.enabled').click();
     return this;

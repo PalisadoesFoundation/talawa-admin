@@ -260,7 +260,7 @@ const loginPage = (): JSX.Element => {
               name: signName,
               email: signEmail,
               password: signPassword,
-              ...(recaptchaToken && { recaptchaToken: recaptchaToken }),
+              ...(recaptchaToken && { recaptchaToken }),
             },
           });
 
@@ -327,7 +327,7 @@ const loginPage = (): JSX.Element => {
         variables: {
           email: formState.email,
           password: formState.password,
-          ...(recaptchaToken && { recaptchaToken: recaptchaToken }),
+          ...(recaptchaToken && { recaptchaToken }),
         },
         fetchPolicy: 'network-only', // Always make network request to receive Set-Cookie headers
       });

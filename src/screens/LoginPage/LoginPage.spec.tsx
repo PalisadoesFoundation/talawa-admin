@@ -176,7 +176,7 @@ const link = new StaticMockLink(MOCKS, true);
 const link3 = new StaticMockLink(MOCKS3, true);
 const link4 = new StaticMockLink(MOCKS4, true);
 
-const { toastMocks, routerMocks } = vi.hoisted(() => ({
+const { toastMocks, routerMocks, resetReCAPTCHA } = vi.hoisted(() => ({
   toastMocks: {
     success: vi.fn(),
     warn: vi.fn(),
@@ -185,6 +185,7 @@ const { toastMocks, routerMocks } = vi.hoisted(() => ({
   routerMocks: {
     navigate: vi.fn(),
   },
+  resetReCAPTCHA: vi.fn(),
 }));
 
 async function wait(ms = 100): Promise<void> {
@@ -205,6 +206,7 @@ const mockUseLocalStorage = {
 beforeEach(() => {
   vi.clearAllMocks();
   routerMocks.navigate.mockReset();
+  resetReCAPTCHA.mockClear();
   mockUseLocalStorage.getItem.mockReset();
   mockUseLocalStorage.setItem.mockReset();
   mockUseLocalStorage.removeItem.mockReset();
@@ -226,7 +228,7 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 
 vi.mock('Constant/constant.ts', async () => ({
   ...(await vi.importActual('Constant/constant.ts')),
-  REACT_APP_USE_RECAPTCHA: 'yes',
+  REACT_APP_USE_RECAPTCHA: 'YES',
   RECAPTCHA_SITE_KEY: 'xxx',
   BACKEND_URL: 'http://localhost:4000/graphql',
 }));
@@ -246,6 +248,10 @@ vi.mock('react-google-recaptcha', async () => {
       ref: React.LegacyRef<HTMLInputElement> | undefined,
     ): JSX.Element => {
       const { onChange, ...otherProps } = props;
+
+      Object.defineProperty(ref, 'current', {
+        value: { reset: resetReCAPTCHA },
+      });
 
       const handleChange = (
         event: React.ChangeEvent<HTMLInputElement>,
@@ -1627,6 +1633,74 @@ describe('Extra coverage for 100 %', () => {
     } finally {
       fetchSpy.mockRestore();
     }
+  });
+
+  it('resets signup recaptcha when signup fails', async () => {
+    const FAIL_MOCK = [
+      {
+        request: {
+          query: SIGNUP_MUTATION,
+          variables: {
+            ID: '',
+            name: 'John Doe',
+            email: 'johndoe@gmail.com',
+            password: 'Johndoe@123',
+          },
+        },
+        error: new Error('Signup failed'),
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: {
+          data: {
+            community: {
+              createdAt: '2023-01-01',
+              facebookURL: null,
+              githubURL: null,
+              id: '1',
+              inactivityTimeoutDuration: 3600,
+              instagramURL: null,
+              linkedinURL: null,
+              logoMimeType: null,
+              logoURL: null,
+              name: 'Test Community',
+              redditURL: null,
+              slackURL: null,
+              updatedAt: '2023-01-01',
+              websiteURL: null,
+              xURL: null,
+              youtubeURL: null,
+            },
+          },
+        },
+      },
+      {
+        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        result: { data: { organizations: [] } },
+      },
+    ];
+    setLocationPath('/');
+    renderLoginPage(FAIL_MOCK);
+    await wait();
+    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
+    await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
+    await userEvent.type(
+      screen.getByTestId('signInEmail'),
+      'johndoe@gmail.com',
+    );
+    await userEvent.type(
+      screen.getByPlaceholderText('Password'),
+      'Johndoe@123',
+    );
+    await userEvent.type(
+      screen.getByPlaceholderText('Confirm Password'),
+      'Johndoe@123',
+    );
+    // reCAPTCHA is now integrated directly in the mutation
+    await userEvent.click(screen.getByTestId('registrationBtn'));
+    await wait();
+
+    expect(resetReCAPTCHA).toHaveBeenCalled();
   });
 
   it('shows error toast when recaptcha verification fails during signup', async () => {
