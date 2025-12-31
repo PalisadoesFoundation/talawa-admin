@@ -156,4 +156,12 @@ describe('NotificationToastContainer', () => {
     expect(container).toHaveAttribute('data-position', 'top-right');
     expect(toastContainerSpy).toHaveBeenCalled();
   });
+
+  it('uses default container props when none are provided', () => {
+    render(<NotificationToastContainer />);
+
+    const container = screen.getByTestId('toast-container');
+    expect(container).toHaveAttribute('data-limit', '5');
+    expect(container).toHaveAttribute('data-position', 'top-right');
+  });
 });
