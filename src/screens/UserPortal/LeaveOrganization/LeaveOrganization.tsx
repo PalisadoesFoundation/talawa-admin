@@ -50,7 +50,7 @@ import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router';
 import { getItem } from 'utils/useLocalstorage';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 const userEmail = (() => {
   try {
@@ -99,7 +99,7 @@ const LeaveOrganization = (): JSX.Element => {
     onCompleted: () => {
       // Use a toast notification or in-app message
       setShowModal(false);
-      toast.success('You have successfully left the organization!');
+      NotificationToast.success('You have successfully left the organization!');
       navigate(`/user/organizations`);
     },
     onError: (err) => {
