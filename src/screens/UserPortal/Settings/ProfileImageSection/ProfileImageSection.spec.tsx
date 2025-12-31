@@ -103,13 +103,21 @@ describe('ProfileImageSection', () => {
     clickSpy.mockRestore();
   });
 
-  it('triggers file input click when pressing Enter or Space on upload button', () => {
+  it('triggers file input click when pressing Enter on upload button', () => {
     render(<ProfileImageSection {...defaultProps} />);
     const uploadButton = screen.getByTestId('uploadImageBtn');
     const clickSpy = vi.spyOn(HTMLInputElement.prototype, 'click');
 
     fireEvent.keyDown(uploadButton, { key: 'Enter' });
     expect(clickSpy).toHaveBeenCalled();
+
+    clickSpy.mockRestore();
+  });
+
+  it('triggers file input click when pressing Space on upload button', () => {
+    render(<ProfileImageSection {...defaultProps} />);
+    const uploadButton = screen.getByTestId('uploadImageBtn');
+    const clickSpy = vi.spyOn(HTMLInputElement.prototype, 'click');
 
     fireEvent.keyDown(uploadButton, { key: ' ' });
     expect(clickSpy).toHaveBeenCalled();
