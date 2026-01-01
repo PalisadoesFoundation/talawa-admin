@@ -1,4 +1,6 @@
 {
+  "ends": "Ends",
+  "occurrences": "Occurrences",
   "leaderboard": {
     "title": "Leaderboard",
     "searchByVolunteer": "Search By Volunteer",
@@ -1790,7 +1792,8 @@
     "leastVolunteers": "Least Volunteers",
     "applyTo": "Apply To",
     "entireSeries": "Entire Series",
-    "thisEventOnly": "This Event Only"
+    "thisEventOnly": "This Event Only",
+    "volunteerAlt": "Volunteer profile picture"
   },
   "userVolunteer": {
     "title": "Volunteership",

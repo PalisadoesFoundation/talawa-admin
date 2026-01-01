@@ -1,4 +1,6 @@
 {
+  "ends": "समाप्त होता है",
+  "occurrences": "घटनाओं",
   "leaderboard": {
     "title": "लीडरबोर्ड",
     "searchByVolunteer": "स्वयंसेवक द्वारा खोजें",
@@ -1790,7 +1792,8 @@
     "leastVolunteers": "सबसे कम स्वयंसेवक",
     "applyTo": "लागू करें",
     "entireSeries": "पूरी श्रृंखला",
-    "thisEventOnly": "केवल यह घटना"
+    "thisEventOnly": "केवल यह घटना",
+    "volunteerAlt": "स्वयंसेवक प्रोफ़ाइल चित्र"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",

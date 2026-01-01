@@ -1,4 +1,6 @@
 {
+  "ends": "Prend fin",
+  "occurrences": "Occurrences",
   "leaderboard": {
     "title": "Tableau des Leaders",
     "searchByVolunteer": "Recherche par Bénévole",
@@ -1790,7 +1792,8 @@
     "leastVolunteers": "Le moins de bénévoles",
     "applyTo": "Appliquer à",
     "entireSeries": "Série entière",
-    "thisEventOnly": "Cet événement uniquement"
+    "thisEventOnly": "Cet événement uniquement",
+    "volunteerAlt": "Photo de profil du bénévole"
   },
   "userVolunteer": {
     "title": "Volontariat",

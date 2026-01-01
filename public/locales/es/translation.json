@@ -1,4 +1,6 @@
 {
+  "ends": "Finaliza",
+  "occurrences": "Ocurrencias",
   "leaderboard": {
     "title": "Tabla de Clasificación",
     "searchByVolunteer": "Buscar por Voluntario",
@@ -1790,7 +1792,8 @@
     "leastVolunteers": "Menos voluntarios",
     "applyTo": "Aplicar a",
     "entireSeries": "Serie completa",
-    "thisEventOnly": "Solo este evento"
+    "thisEventOnly": "Solo este evento",
+    "volunteerAlt": "Imagen de perfil del voluntario"
   },
   "userVolunteer": {
     "title": "Voluntariado",

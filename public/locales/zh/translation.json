@@ -1,4 +1,6 @@
 {
+  "ends": "结束",
+  "occurrences": "次",
   "leaderboard": {
     "title": "排行榜",
     "searchByVolunteer": "按志愿者搜索",
@@ -1790,7 +1792,8 @@
     "leastVolunteers": "最少的志愿者",
     "applyTo": "适用于",
     "entireSeries": "整个系列",
-    "thisEventOnly": "仅限本次活动"
+    "thisEventOnly": "仅限本次活动",
+    "volunteerAlt": "志愿者头像"
   },
   "userVolunteer": {
     "title": "志愿服务",
