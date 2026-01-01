@@ -336,13 +336,14 @@ const PluginModal: React.FC<IPluginModalProps> = ({
               {/* Tabs */}
               <div className={styles.tabsContainer}>
                 {TABS.map((tName) => (
-                  <div
+                  <button
                     key={tName}
+                    type="button"
                     onClick={() => setTab(tName)}
                     className={tab === tName ? styles.tabActive : styles.tab}
                   >
                     {t(tName)}
-                  </div>
+                  </button>
                 ))}
               </div>
 
