@@ -1595,13 +1595,13 @@
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",
     "sendMessage": "Enviar mensaje",
-    "reply": "responder",
+    "reply": "Responder",
     "loading": "Cargando...",
     "loadOlderMessages": "Cargar mensajes más antiguos",
     "loadingMoreMessages": "Cargando más mensajes...",
     "loadingImage": "Cargando imagen...",
     "imageNotAvailable": "Imagen no disponible",
-    "attachment": "adjunto",
+    "attachment": "Adjunto",
     "edit": "Editar",
     "delete": "Eliminar"
   },

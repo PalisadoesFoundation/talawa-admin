@@ -23,7 +23,7 @@ import styles from './UserPortalCard.module.css';
  * <UserPortalCard
  *   variant="compact"
  *   ariaLabel={t('donation.card_aria')}
- *   imageSlot={<ProfileAvatarDisplay />}
+ *   imageSlot={<ProfileAvatarDisplay fallbackName="User Name" />}
  *   actionsSlot={<Button />}
  * >
  *   <CardContent />
