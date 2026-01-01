@@ -10492,6 +10492,7 @@ form {
 .organizationsFlexContainer {
   flex: 1;
 }
+
 /* Groups page styles */
 .groupsViewButton {
   min-width: 32px;
@@ -10520,4 +10521,10 @@ form {
 
 .dataGridColumnHeader:focus-within {
   outline: none;
+}
+
+.divider {
+  border: 2px solid var(--addButton-border);
+  border-width: 2px;
+  width: 85%;
 }

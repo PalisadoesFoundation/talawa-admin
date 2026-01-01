@@ -55,6 +55,59 @@ vi.mock('@mui/x-date-pickers/DateTimePicker', () => {
   };
 });
 
+// Mock BreadcrumbsComponent with simple static content
+vi.mock('shared-components/BreadcrumbsComponent/BreadcrumbsComponent', () => ({
+  __esModule: true,
+  default: function MockBreadcrumbs({
+    items,
+  }: {
+    items: Array<{
+      label?: string;
+      to?: string;
+      translationKey?: string;
+      isCurrent?: boolean;
+    }>;
+  }) {
+    return (
+      <nav data-testid="breadcrumbs">
+        {items.map((item, index) => {
+          const isLast = index === items.length - 1;
+          const label = item.translationKey || item.label || '';
+
+          if (isLast || item.isCurrent || !item.to) {
+            return (
+              <span
+                key={index}
+                aria-current={isLast ? 'page' : undefined}
+                data-testid="breadcrumb-current"
+              >
+                {label}
+              </span>
+            );
+          }
+
+          const testId = item.to?.includes('/orgfunds/')
+            ? 'fundsLink'
+            : item.to?.includes('/orgfundcampaign/')
+              ? 'campaignsLink'
+              : 'breadcrumbLink';
+
+          return (
+            <a
+              key={index}
+              href={item.to}
+              data-testid={testId}
+              data-to={item.to}
+            >
+              {label}
+            </a>
+          );
+        })}
+      </nav>
+    );
+  },
+}));
+
 const EMPTY_MOCK = {
   request: {
     query: FUND_CAMPAIGN_PLEDGE,
@@ -107,6 +160,16 @@ const updatedMocks = {
                 __typename: 'Pledge',
                 id: '1',
                 amount: 100,
+                campaign: {
+                  __typename: 'FundCampaign',
+                  id: '1',
+                  name: 'Test Campaign',
+                  fund: {
+                    __typename: 'Fund',
+                    id: 'fundId123',
+                    name: 'Test Fund',
+                  },
+                },
                 pledger: {
                   __typename: 'User',
                   id: '1',
@@ -583,19 +646,7 @@ describe('Testing Campaign Pledge Screen', () => {
     });
   });
 
-  it('should handle breadcrumb navigation correctly', async () => {
-    const mockHistoryBack = vi.fn();
-    const mockHistoryGo = vi.fn();
-
-    // Mock window.history
-    Object.defineProperty(window, 'history', {
-      value: {
-        back: mockHistoryBack,
-        go: mockHistoryGo,
-      },
-      writable: true,
-    });
-
+  it('should render breadcrumbs with correct navigation links', async () => {
     renderFundCampaignPledge(link1);
 
     // Wait for component to load
@@ -603,16 +654,29 @@ describe('Testing Campaign Pledge Screen', () => {
       expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
     });
 
-    // Find and click breadcrumb links
-    const breadcrumbLinks = screen.getAllByRole('button');
+    // Verify breadcrumbs are rendered
+    const breadcrumbs = screen.getByTestId('breadcrumbs');
+    expect(breadcrumbs).toBeInTheDocument();
 
-    // Click campaign name link (goes back 2 steps)
-    fireEvent.click(breadcrumbLinks[0]);
-    expect(mockHistoryGo).toHaveBeenCalledWith(-2);
+    // Verify fund link is present with correct href
+    const fundsLink = screen.getByTestId('fundsLink');
+    expect(fundsLink).toBeInTheDocument();
+    expect(fundsLink).toHaveAttribute('href', '/orgfunds/orgId');
+    expect(fundsLink).toHaveTextContent('Test Fund');
 
-    // Click fund name link (goes back 1 step)
-    fireEvent.click(breadcrumbLinks[1]);
-    expect(mockHistoryBack).toHaveBeenCalled();
+    // Verify campaign link is present with correct href
+    const campaignsLink = screen.getByTestId('campaignsLink');
+    expect(campaignsLink).toBeInTheDocument();
+    expect(campaignsLink).toHaveAttribute(
+      'href',
+      '/orgfundcampaign/orgId/fundId123',
+    );
+    expect(campaignsLink).toHaveTextContent('Test Campaign');
+
+    // Verify current page breadcrumb (Pledges) has aria-current
+    const currentBreadcrumb = screen.getByTestId('breadcrumb-current');
+    expect(currentBreadcrumb).toBeInTheDocument();
+    expect(currentBreadcrumb).toHaveAttribute('aria-current', 'page');
   });
 
   it('should render the Campaign Pledge screen with error', async () => {
