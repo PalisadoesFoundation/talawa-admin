@@ -130,6 +130,10 @@ def main() -> None:
     """
     args = arg_parser_resolver()
 
+    if args.files and args.files_from:
+        print("Error: Arguments --files and --files-from are mutually exclusive.")
+        sys.exit(1)
+
     files_to_check = []
     if args.files:
         # Flatten file list and handle newlines (fix for shell quoting)
