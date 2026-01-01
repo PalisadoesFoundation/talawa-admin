@@ -201,15 +201,12 @@ const loginPage = (): JSX.Element => {
   useEffect(() => {
     if (orgData) {
       const options = orgData.organizations.map(
-        (org: InterfaceOrganizationPublic) => {
-          const tempObj: { label: string; id: string } | null = {} as {
-            label: string;
-            id: string;
-          };
-          tempObj['label'] = `${org.name}(${org.addressLine1})`;
-          tempObj['id'] = org.id;
-          return tempObj;
-        },
+        (org: InterfaceOrganizationPublic) => ({
+          label: org.addressLine1
+            ? `${org.name} (${org.addressLine1})`
+            : org.name,
+          id: org.id,
+        }),
       );
       setOrganizations(options);
     }

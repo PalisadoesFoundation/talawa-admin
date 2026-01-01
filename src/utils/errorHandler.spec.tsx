@@ -1,6 +1,6 @@
 import { errorHandler } from './errorHandler';
 import { toast } from 'react-toastify';
-import { describe, it, expect, vi, beforeEach, afterEach, test } from 'vitest';
+import { describe, it, expect, vi, afterEach, test } from 'vitest';
 import { ApolloError } from '@apollo/client';
 
 vi.mock('react-toastify', () => ({
@@ -24,12 +24,8 @@ vi.mock('utils/i18n', () => ({
 }));
 
 describe('Test if errorHandler is working properly', () => {
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('should call toast.error with the correct message if error message is "Failed to fetch"', async () => {

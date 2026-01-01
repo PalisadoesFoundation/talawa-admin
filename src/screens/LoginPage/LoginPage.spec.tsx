@@ -2392,9 +2392,9 @@ describe('Cookie-based authentication verification', () => {
 
     await wait();
 
-    // Verify error toast is shown
+    // Verify error toast is shown with the improved error message
     expect(toastMocks.error).toHaveBeenCalledWith(
-      expect.stringContaining('Network Error'),
+      'Talawa-API service is unavailable!. Is it running? Check your network connectivity too.',
       expect.any(Object),
     );
 
