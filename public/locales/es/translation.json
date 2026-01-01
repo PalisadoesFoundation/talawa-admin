@@ -520,6 +520,7 @@
     "publicEvent": "Es público",
     "isRegistrable": "Es registrable",
     "registerable": "Es registrable",
+
     "createEvent": "Crear evento",
     "enterFilter": "Introducir filtro",
     "enterName": "Introducir nombre",
@@ -1318,6 +1319,7 @@
     "chartPageNavigation": "Navegación de página del gráfico",
     "previousPage": "Página anterior",
     "nextPage": "Página siguiente",
+    "pageNumber": "Página {{page}}",
     "goToToday": "Ir a hoy",
     "genderDistribution": "Distribución por género",
     "ageDistribution": "Distribución por edad"
@@ -1684,7 +1686,8 @@
     "profile": "Perfil",
     "addMember": "Agregar miembro",
     "customizedTable": "Tabla personalizada",
-    "page": "Página"
+    "page": "Página",
+    "add": "Añadir"
   },
   "eventActionItems": {
     "title": "Elementos de acción",

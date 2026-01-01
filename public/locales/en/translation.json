@@ -512,6 +512,7 @@
     "publicEvent": "Is Public",
     "isRegistrable": "Is Registrable",
     "registerable": "Is Registerable",
+
     "createChat": "Create Chat",
     "createEvent": "Create Event",
     "enterFilter": "Enter Filter",
@@ -986,6 +987,7 @@
     "chartPageNavigation": "Chart page navigation",
     "previousPage": "Previous Page",
     "nextPage": "Next Page",
+    "pageNumber": "Page {{page}}",
     "goToToday": "Go to today",
     "genderDistribution": "Gender Distribution",
     "ageDistribution": "Age Distribution"
@@ -1684,7 +1686,8 @@
     "user": "user",
     "profile": "profile",
     "customizedTable": "Customized Table",
-    "page": "Page"
+    "page": "Page",
+    "add": "Add"
   },
   "eventActionItems": {
     "title": "Action Items",

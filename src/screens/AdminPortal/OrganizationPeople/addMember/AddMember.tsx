@@ -332,7 +332,7 @@ function AddMember(): JSX.Element {
                 />
               </div>
               <TableContainer component={Paper}>
-                <Table aria-label={translateAddMember('customizedTable')}>
+                <Table aria-label={translateOrgPeople('users')}>
                   <TableHead>
                     <TableRow>
                       <TableCell className={styles.tableHeadCell}>#</TableCell>
@@ -374,7 +374,7 @@ function AddMember(): JSX.Element {
                           align="center"
                           className={styles.tableBodyCell}
                         >
-                          {translateAddMember('errorLoadingUsers')}
+                          {translateAddMember('users.errorLoadingUsers')}
                         </TableCell>
                       </TableRow>
                     ) : allUsersData.length === 0 ? (
@@ -384,7 +384,7 @@ function AddMember(): JSX.Element {
                           align="center"
                           className={styles.tableBodyCell}
                         >
-                          {translateAddMember('noUsersFound')}
+                          {translateOrgPeople('notFound')}
                         </TableCell>
                       </TableRow>
                     ) : (
@@ -448,7 +448,7 @@ function AddMember(): JSX.Element {
                                 className={styles.addButton}
                               >
                                 <i className={'fa fa-plus me-2'} />
-                                {translateAddMember('addMember')}
+                                {translateAddMember('addMember.add')}
                               </Button>
                             </TableCell>
                           </TableRow>
@@ -467,14 +467,14 @@ function AddMember(): JSX.Element {
                 rowsPerPageOptions={[PAGE_SIZE]}
                 backIconButtonProps={{
                   disabled: !paginationMeta.hasPreviousPage,
-                  'aria-label': 'Previous Page',
+                  'aria-label': tCommon('previousPage'),
                 }}
                 nextIconButtonProps={{
                   disabled: !paginationMeta.hasNextPage,
-                  'aria-label': 'Next Page',
+                  'aria-label': tCommon('nextPage'),
                 }}
                 labelDisplayedRows={({ page }) =>
-                  `${translateAddMember('page')} ${page + 1}`
+                  tCommon('pageNumber', { page: page + 1 })
                 }
               />
             </>
