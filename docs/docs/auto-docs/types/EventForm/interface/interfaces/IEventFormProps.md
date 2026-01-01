@@ -85,14 +85,6 @@ Whether to show the "Create Chat" toggle
 
 ***
 
-### showInviteOnlyToggle?
-
-> `optional` **showInviteOnlyToggle**: `boolean`
-
-Defined in: [src/types/EventForm/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L69)
-
-***
-
 ### showPublicToggle?
 
 > `optional` **showPublicToggle**: `boolean`

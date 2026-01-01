@@ -513,7 +513,7 @@
     "publicEvent": "是公开的",
     "isRegistrable": "可注册",
     "registerable": "可注册",
-    "isInviteOnly": "仅限邀请",
+
     "createEvent": "创建事件",
     "enterFilter": "输入过滤器",
     "enterName": "输入名称",

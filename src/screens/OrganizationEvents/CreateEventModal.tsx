@@ -81,7 +81,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
     allDay: true,
     isPublic: true,
     isRegisterable: false,
-    isInviteOnly: false,
+
     recurrenceRule: null,
     createChat: false,
   };
@@ -107,9 +107,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         allDay: payload.allDay,
         isPublic: payload.isPublic,
         isRegisterable: payload.isRegisterable,
-        ...(payload.isInviteOnly !== undefined && {
-          isInviteOnly: payload.isInviteOnly,
-        }),
+
         ...(payload.description && { description: payload.description }),
         ...(payload.location && { location: payload.location }),
         ...(recurrenceInput && { recurrence: recurrenceInput }),
@@ -157,7 +155,6 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
             tCommon={tCommon}
             showRegisterable
             showPublicToggle
-            showInviteOnlyToggle
             showRecurrenceToggle
             submitting={createLoading}
             showCancelButton
@@ -167,5 +164,4 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
     </>
   );
 };
-
 export default CreateEventModal;

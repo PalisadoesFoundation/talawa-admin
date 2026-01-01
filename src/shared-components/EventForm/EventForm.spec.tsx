@@ -1956,36 +1956,4 @@ describe('EventForm', () => {
       }),
     );
   });
-
-  test('toggles isInviteOnly when showInviteOnlyToggle is enabled', async () => {
-    const handleSubmit = vi.fn();
-    render(
-      <EventForm
-        initialValues={{ ...baseValues, isInviteOnly: false }}
-        onSubmit={handleSubmit}
-        onCancel={vi.fn()}
-        submitLabel="Create"
-        t={t}
-        tCommon={tCommon}
-        showInviteOnlyToggle
-      />,
-    );
-
-    // Toggle isInviteOnly on
-    const inviteOnlyCheckbox = screen.getByTestId('inviteOnlyEventCheck');
-    await act(async () => {
-      fireEvent.click(inviteOnlyCheckbox);
-    });
-
-    // Submit and verify isInviteOnly is true
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('createEventBtn'));
-    });
-
-    expect(handleSubmit).toHaveBeenCalledWith(
-      expect.objectContaining({
-        isInviteOnly: true,
-      }),
-    );
-  });
 });
