@@ -2335,4 +2335,41 @@ describe('Cookie-based authentication verification', () => {
     expect(socialLinks.length).toBeGreaterThan(0);
     expect(socialLinks[0]).toHaveAttribute('href');
   });
+
+  it('sets recaptcha token when recaptcha is completed', async () => {
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const [loginRecaptcha] = screen.getAllByTestId('mock-recaptcha');
+
+    await userEvent.type(loginRecaptcha, 'fake-recaptcha-token');
+
+    await userEvent.type(
+      screen.getByTestId('loginEmail'),
+      'testadmin2@example.com',
+    );
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'Pass@123',
+    );
+
+    await userEvent.click(screen.getByTestId('loginBtn'));
+
+    await wait();
+
+    expect(link.operation?.variables?.recaptchaToken).toBe(
+      'fake-recaptcha-token',
+    );
+  });
 });
