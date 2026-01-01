@@ -414,14 +414,17 @@ describe('Testing Register Component [User Portal]', () => {
     await waitForAsync();
 
     // Fill out the form with duplicate email
-    await userEvent.type(screen.getByTestId('passwordInput'), 'password123');
+    await userEvent.type(screen.getByTestId('passwordInput'), 'testPass123');
     await userEvent.type(
       screen.getByTestId('confirmPasswordInput'),
-      'password123',
+      'testPass123',
     );
-    await userEvent.type(screen.getByTestId('emailInput'), 'umar@gmail.com');
-    await userEvent.type(screen.getByTestId('firstNameInput'), 'John');
-    await userEvent.type(screen.getByTestId('lastNameInput'), 'Doe');
+    await userEvent.type(
+      screen.getByTestId('emailInput'),
+      'testuser@example.com',
+    );
+    await userEvent.type(screen.getByTestId('firstNameInput'), 'Jane');
+    await userEvent.type(screen.getByTestId('lastNameInput'), 'Smith');
     await userEvent.click(screen.getByTestId('registerBtn'));
 
     await waitForAsync();
