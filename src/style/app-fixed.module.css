@@ -49,6 +49,10 @@
   --addButton-border-hover: #555555;
   --disabled-btn: #e7f0fe;
 
+  /** pagination styles **/
+  --pagination-btn-color-hover: #ffffff;
+  --pagination-border-top: #e5e7eb;
+
   --sidebar-option-text-inactive: #000000;
   --sidebar-option-bg-hover: #eaebef;
   --sidebar-option-bg: #d2d3d7;
@@ -10470,4 +10474,49 @@ form {
 .orgSelectorNoResults {
   padding: 0.75rem 1rem;
   color: var(--orgSelector-no-results-color);
+}
+
+/* DataTable Pagination Styles */
+.paginationWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  border-top: 1px solid var(--pagination-border-top);
+}
+
+.paginationRange {
+  font-size: 0.875rem;
+  color: var(--row-color);
+  min-width: 120px;
+  text-align: center;
+}
+
+.pageBtn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--addButton-border);
+  border-radius: 0.375rem;
+  background-color: var(--addButton-bg);
+  color: var(--addButton-font);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pageBtn:hover:not(:disabled) {
+  background-color: var(--addButton-bg-hover);
+  border-color: var(--addButton-border-hover);
+  color: var(--pagination-btn-color-hover);
+}
+
+.pageBtn:disabled {
+  opacity: 0.6;
+  background-color: var(--disabled-btn);
+  cursor: not-allowed;
+}
+
+.pageBtn:focus {
+  outline: 2px solid var(--primary-theme-color);
+  outline-offset: 2px;
 }

@@ -196,5 +196,10 @@
   "imageUploadError": "छवि अपलोड करने में त्रुटि",
   "imageUploadSuccess": "छवि सफलतापूर्वक अपलोड हुई",
   "postalCode": "डाक कोड",
-  "state": "राज्य"
+  "state": "राज्य",
+  "paginationPrev": "पिछला \u2039",
+  "paginationNext": "अगला \u203a",
+  "tablePagination": "तालिका पृष्ठांकन",
+  "paginationPrevLabel": "पिछला पृष्ठ",
+  "paginationNextLabel": "अगला पृष्ठ"
 }
