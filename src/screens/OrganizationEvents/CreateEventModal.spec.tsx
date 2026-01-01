@@ -1451,7 +1451,7 @@ describe('CreateEventModal', () => {
       vi.useRealTimers();
     });
 
-    it('sets default start date to tomorrow 00:00 UTC (standard case)', () => {
+    it('sets default start date to today 00:00 UTC (standard case)', () => {
       // Mock time: 2023-10-10T12:00:00.000Z
       const mockDate = new Date(Date.UTC(2023, 9, 10, 12, 0, 0));
       vi.setSystemTime(mockDate);
@@ -1465,15 +1465,15 @@ describe('CreateEventModal', () => {
         />,
       );
 
-      // Expect 2023-10-11
+      // Expect 2023-10-10 (today)
       const startDateInput = screen.getByTestId('eventStartAt');
-      expect(startDateInput).toHaveValue('2023-10-11');
+      expect(startDateInput).toHaveValue('2023-10-10');
 
       const endDateInput = screen.getByTestId('eventEndAt');
-      expect(endDateInput).toHaveValue('2023-10-11');
+      expect(endDateInput).toHaveValue('2023-10-10');
     });
 
-    it('sets default start date correctly crossing month boundary', () => {
+    it('sets default start date to today (no month crossing)', () => {
       // Mock time: 2023-10-31T23:00:00.000Z
       const mockDate = new Date(Date.UTC(2023, 9, 31, 23, 0, 0)); // Oct 31
       vi.setSystemTime(mockDate);
@@ -1487,12 +1487,12 @@ describe('CreateEventModal', () => {
         />,
       );
 
-      // Expect 2023-11-01
+      // Expect 2023-10-31 (today, stays in current month)
       const startDateInput = screen.getByTestId('eventStartAt');
-      expect(startDateInput).toHaveValue('2023-11-01');
+      expect(startDateInput).toHaveValue('2023-10-31');
     });
 
-    it('sets default start date correctly crossing year boundary', () => {
+    it('sets default start date to today (no year crossing)', () => {
       // Mock time: 2023-12-31T10:00:00.000Z
       const mockDate = new Date(Date.UTC(2023, 11, 31, 10, 0, 0)); // Dec 31
       vi.setSystemTime(mockDate);
@@ -1506,19 +1506,19 @@ describe('CreateEventModal', () => {
         />,
       );
 
-      // Expect 2024-01-01
+      // Expect 2023-12-31 (today, stays in current year)
       const startDateInput = screen.getByTestId('eventStartAt');
-      expect(startDateInput).toHaveValue('2024-01-01');
+      expect(startDateInput).toHaveValue('2023-12-31');
     });
 
-    it('calculates Tomorrow UTC correctly even if local time is different day', () => {
+    it('calculates Today UTC correctly even if local time is different day', () => {
       // Intention: Simulate a case where "Now UTC" is Day X, but "Now Local" might be Day X-1 or X+1.
-      // Since we use Date.UTC logic in the component, the local timezone shouldn't matter for the "Tomorrow UTC" calculation result.
+      // Since we use Date.UTC logic in the component, the local timezone shouldn't matter for the "Today UTC" calculation result.
 
       // Mock time: 2023-01-01T23:00:00.000Z
       // If Local is UTC-2, it's Jan 1 21:00.
       // If Local is UTC+2, it's Jan 2 01:00.
-      // Logic uses getUTCDate() -> 1. +1 -> 2. Result -> Jan 2 00:00 UTC.
+      // Logic uses getUTCDate() -> 1. Result -> Jan 1 00:00 UTC (today).
       const mockDate = new Date(Date.UTC(2023, 0, 1, 23, 0, 0));
       vi.setSystemTime(mockDate);
 
@@ -1531,9 +1531,9 @@ describe('CreateEventModal', () => {
         />,
       );
 
-      // Should be Jan 2nd
+      // Should be Jan 1st (today)
       const startDateInput = screen.getByTestId('eventStartAt');
-      expect(startDateInput).toHaveValue('2023-01-02');
+      expect(startDateInput).toHaveValue('2023-01-01');
     });
   });
 });

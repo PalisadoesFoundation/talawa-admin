@@ -225,28 +225,28 @@ function orgList(): JSX.Element {
       state: _state,
     } = formState;
 
-    const addressLine1 = _addressLine1.trim();
-    const addressLine2 = _addressLine2.trim();
+    const addressLine1 = _addressLine1.trim() || undefined;
+    const addressLine2 = _addressLine2.trim() || undefined;
     const avatar = _avatar;
-    const city = _city.trim();
-    const countryCode = _countryCode.trim();
-    const description = _description.trim();
+    const city = _city.trim() || undefined;
+    const countryCode = _countryCode.trim() || undefined;
+    const description = _description.trim() || undefined;
     const name = _name.trim();
-    const postalCode = _postalCode.trim();
-    const state = _state.trim();
+    const postalCode = _postalCode.trim() || undefined;
+    const state = _state.trim() || undefined;
 
     try {
       const { data } = await create({
         variables: {
-          addressLine1: addressLine1,
-          addressLine2: addressLine2,
-          avatar: avatar,
-          city: city,
-          countryCode: countryCode,
-          description: description,
-          name: name,
-          postalCode: postalCode,
-          state: state,
+          addressLine1,
+          addressLine2,
+          avatar,
+          city,
+          countryCode,
+          description,
+          name,
+          postalCode,
+          state,
         },
       });
 
