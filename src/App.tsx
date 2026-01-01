@@ -4,7 +4,7 @@ import { useQuery, useApolloClient } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
-import OrganizationFundCampaign from 'screens/OrganizationFundCampaign/OrganizationFundCampaigns';
+import OrganizationFundCampaign from 'screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaigns';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import LoginPage from 'screens/LoginPage/LoginPage';
 import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
@@ -28,7 +28,7 @@ const SuperAdminScreen = lazy(
 );
 const BlockUser = lazy(() => import('screens/BlockUser/BlockUser'));
 const EventManagement = lazy(
-  () => import('screens/EventManagement/EventManagement'),
+  () => import('screens/AdminPortal/EventManagement/EventManagement'),
 );
 const ForgotPassword = lazy(
   () => import('screens/ForgotPassword/ForgotPassword'),
@@ -47,13 +47,16 @@ const OrganizationDashboard = lazy(
     import('screens/AdminPortal/OrganizationDashboard/OrganizationDashboard'),
 );
 const OrganizationEvents = lazy(
-  () => import('screens/OrganizationEvents/OrganizationEvents'),
+  () => import('screens/AdminPortal/OrganizationEvents/OrganizationEvents'),
 );
 const OrganizationFunds = lazy(
-  () => import('screens/OrganizationFunds/OrganizationFunds'),
+  () => import('screens/AdminPortal/OrganizationFunds/OrganizationFunds'),
 );
 const OrganizationTransactions = lazy(
-  () => import('screens/OrganizationTransactions/OrganizationTransactions'),
+  () =>
+    import(
+      'screens/AdminPortal/OrganizationTransactions/OrganizationTransactions'
+    ),
 );
 const FundCampaignPledge = lazy(
   () => import('screens/FundCampaignPledge/FundCampaignPledge'),
@@ -62,10 +65,10 @@ const OrganizationPeople = lazy(
   () => import('screens/AdminPortal/OrganizationPeople/OrganizationPeople'),
 );
 const OrganizationTags = lazy(
-  () => import('screens/OrganizationTags/OrganizationTags'),
+  () => import('screens/AdminPortal/OrganizationTags/OrganizationTags'),
 );
 const ManageTag = lazy(() => import('screens/AdminPortal/ManageTag/ManageTag'));
-const SubTags = lazy(() => import('screens/SubTags/SubTags'));
+const SubTags = lazy(() => import('screens/AdminPortal/SubTags/SubTags'));
 const Requests = lazy(() => import('screens/AdminPortal/Requests/Requests'));
 const Users = lazy(() => import('screens/AdminPortal/Users/Users'));
 const CommunityProfile = lazy(
