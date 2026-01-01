@@ -58,7 +58,7 @@ import { WarningAmberRounded } from '@mui/icons-material';
 import TagNode from './Node/TagNode';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import type { TFunction } from 'i18next';
-import componentStyles from './TagActions.module.css';
+import componentStyles from './TagAction.module.css';
 
 interface InterfaceUserTagsAncestorData {
   _id: string;
