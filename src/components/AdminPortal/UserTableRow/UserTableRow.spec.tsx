@@ -105,6 +105,41 @@ describe('UserTableRow', () => {
     expect(screen.getByTestId('defaultBtn')).toBeInTheDocument();
   });
 
+  it('renders action buttons with all variant types', () => {
+    const onAction = vi.fn();
+    render(
+      <MockedProvider>
+        <UserTableRow
+          user={user}
+          actions={[
+            {
+              label: 'Danger Action',
+              onClick: onAction,
+              testId: 'dangerBtn',
+              variant: 'danger',
+            },
+            {
+              label: 'Success Action',
+              onClick: onAction,
+              testId: 'successBtn',
+              variant: 'success',
+            },
+            {
+              label: 'Primary Action',
+              onClick: onAction,
+              testId: 'primaryBtn',
+              variant: 'primary',
+            },
+          ]}
+          testIdPrefix="spec"
+        />
+      </MockedProvider>,
+    );
+    expect(screen.getByTestId('dangerBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('successBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('primaryBtn')).toBeInTheDocument();
+  });
+
   it('renders table row view with row number', () => {
     render(
       <MockedProvider>
