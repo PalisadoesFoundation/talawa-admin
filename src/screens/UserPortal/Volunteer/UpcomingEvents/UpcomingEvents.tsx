@@ -246,7 +246,7 @@ const UpcomingEvents = (): JSX.Element => {
   return (
     <>
       <AdminSearchFilterBar
-        searchPlaceholder={tCommon('searchBy', { item: 'Title or Location' })}
+        searchPlaceholder={tCommon('searchBy', { item: t('titleOrLocation') })}
         searchValue={searchTerm}
         onSearchChange={setSearchTerm}
         searchInputTestId="searchByInput"

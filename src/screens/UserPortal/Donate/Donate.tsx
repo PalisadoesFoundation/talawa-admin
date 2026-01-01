@@ -66,7 +66,7 @@ export default function Donate(): JSX.Element {
   const [donate] = useMutation(DONATE_TO_ORGANIZATION);
 
   useEffect(() => {
-    if (data?.organizations?.[0]) {
+    if (data?.organizations) {
       setOrganizationDetails(data.organizations[0]);
     }
   }, [data]);

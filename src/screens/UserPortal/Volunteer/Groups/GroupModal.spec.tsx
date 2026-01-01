@@ -156,9 +156,9 @@ describe('Testing GroupModal', () => {
     renderGroupModal(link1, itemProps[0]);
     expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
 
-    const requestsBtn = screen.getByText(t.requests);
-    expect(requestsBtn).toBeInTheDocument();
-    await userEvent.click(requestsBtn);
+    const requestsRadio = screen.getByLabelText(t.requests);
+    expect(requestsRadio).toBeInTheDocument();
+    await userEvent.click(requestsRadio);
 
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(2);
@@ -177,9 +177,9 @@ describe('Testing GroupModal', () => {
     renderGroupModal(link1, itemProps[0]);
     expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
 
-    const requestsBtn = screen.getByText(t.requests);
-    expect(requestsBtn).toBeInTheDocument();
-    await userEvent.click(requestsBtn);
+    const requestsRadio = screen.getByLabelText(t.requests);
+    expect(requestsRadio).toBeInTheDocument();
+    await userEvent.click(requestsRadio);
 
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(2);
@@ -198,13 +198,13 @@ describe('Testing GroupModal', () => {
     renderGroupModal(link1, itemProps[0]);
     expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
 
-    const requestsBtn = screen.getByText(t.requests);
-    expect(requestsBtn).toBeInTheDocument();
-    await userEvent.click(requestsBtn);
+    const requestsRadio = screen.getByLabelText(t.requests);
+    expect(requestsRadio).toBeInTheDocument();
+    await userEvent.click(requestsRadio);
 
-    const detailsBtn = await screen.findByText(t.details);
-    expect(detailsBtn).toBeInTheDocument();
-    await userEvent.click(detailsBtn);
+    const detailsRadio = screen.getByLabelText(t.details);
+    expect(detailsRadio).toBeInTheDocument();
+    await userEvent.click(detailsRadio);
   });
 
   it('GroupModal -> Details -> Update', async () => {
@@ -271,14 +271,20 @@ describe('Testing GroupModal', () => {
     renderGroupModal(link2, itemProps[0]);
     expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
 
-    const requestsBtn = screen.getByText(t.requests);
-    expect(requestsBtn).toBeInTheDocument();
-    await userEvent.click(requestsBtn);
+    const requestsRadio = screen.getByTestId('requestsRadio');
+    expect(requestsRadio).toBeInTheDocument();
+    await userEvent.click(requestsRadio);
 
-    const userName = await screen.findAllByTestId('userName');
-    expect(userName).toHaveLength(2);
-    expect(userName[0]).toHaveTextContent('John Doe');
-    expect(userName[1]).toHaveTextContent('Teresa Bradley');
+    await waitFor(() => {
+      expect(screen.getByText('Name')).toBeInTheDocument();
+    });
+
+    await waitFor(() => {
+      const userNameElements = screen.getAllByTestId('userName');
+      expect(userNameElements).toHaveLength(2);
+      expect(userNameElements[0]).toHaveTextContent('John Doe');
+      expect(userNameElements[1]).toHaveTextContent('Teresa Bradley');
+    });
 
     const acceptBtn = screen.getAllByTestId('acceptBtn');
     expect(acceptBtn).toHaveLength(2);

@@ -88,6 +88,14 @@ export const RecurrenceEndOptionsSection: React.FC<
                             never: false,
                             count: undefined,
                           }));
+                        } else {
+                          // When date is cleared, also update the state accordingly
+                          setRecurrenceRuleState((prev) => ({
+                            ...prev,
+                            endDate: undefined,
+                            never: false,
+                            count: undefined,
+                          }));
                         }
                       }}
                       minDate={dayjs()}

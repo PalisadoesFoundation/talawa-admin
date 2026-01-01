@@ -213,7 +213,11 @@ export const UPDATE_ERROR_MOCKS = [
     request: {
       query: USER_VOLUNTEER_MEMBERSHIP,
       variables: {
-        id: 'eventId',
+        where: {
+          eventId: 'eventId',
+          groupId: 'groupId',
+          status: 'requested',
+        },
       },
     },
     result: {

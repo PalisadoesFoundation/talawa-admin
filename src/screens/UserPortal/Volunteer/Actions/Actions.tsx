@@ -217,7 +217,7 @@ function Actions(): JSX.Element {
     <div>
       <AdminSearchFilterBar
         searchPlaceholder={tCommon('searchBy', {
-          item: 'Assignee or Category',
+          item: t('assigneeOrCategory'),
         })}
         searchValue={searchTerm}
         onSearchChange={setSearchTerm}

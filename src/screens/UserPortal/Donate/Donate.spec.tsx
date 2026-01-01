@@ -42,6 +42,17 @@ vi.mock('react-toastify', () => ({
   toast: mockToast,
 }));
 
+vi.mock('utils/useLocalstorage', () => ({
+  default: vi.fn(() => ({
+    getItem: vi.fn((key) => {
+      if (key === 'userId') return '123';
+      if (key === 'name') return 'name';
+      return null;
+    }),
+    setItem: vi.fn(),
+  })),
+}));
+
 const MOCKS = [
   {
     request: {
@@ -60,8 +71,10 @@ const MOCKS = [
             userId: '6391a15bcb738c181d238952',
             payPalId: 'payPalId',
             updatedAt: '2024-04-03T16:43:01.514Z',
+            __typename: 'Donation',
           },
         ],
+        __typename: 'Query',
       },
     },
   },
@@ -84,15 +97,18 @@ const MOCKS = [
               countryCode: '123',
               postalCode: '456',
               state: 'def',
+              __typename: 'Address',
             },
             userRegistrationRequired: true,
             createdAt: '12345678900',
-            creator: { firstName: 'John', lastName: 'Doe' },
+            creator: { firstName: 'John', lastName: 'Doe', __typename: 'User' },
             members: [],
             admins: [],
             membershipRequests: [],
+            __typename: 'Organization',
           },
         ],
+        __typename: 'Query',
       },
     },
   },
@@ -115,7 +131,9 @@ const MOCKS = [
           amount: 100,
           nameOfUser: 'name',
           nameOfOrg: 'anyOrganization2',
+          __typename: 'Donation',
         },
+        __typename: 'Mutation',
       },
     },
   },
@@ -203,9 +221,8 @@ const emptyLink = new StaticMockLink(EMPTY_DONATIONS_MOCK, true);
 const errorLink = new StaticMockLink(DONATION_ERROR_MOCK, true);
 
 const renderDonate = (mocks = MOCKS) => {
-  const testLink = new StaticMockLink(mocks, true);
   return render(
-    <MockedProvider link={testLink}>
+    <MockedProvider mocks={mocks} addTypename={false}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -304,11 +321,14 @@ describe('Donate Component', () => {
   });
 
   test('successful donation shows success toast', async () => {
-    const { setItem } = useLocalStorage();
-    setItem('userId', '123');
-    setItem('name', 'name');
-
     renderDonate();
+
+    // Wait for organization data to load
+    await waitFor(() => {
+      expect(
+        screen.getByText('Donate for the anyOrganization2'),
+      ).toBeInTheDocument();
+    });
 
     await userEvent.type(screen.getByTestId('donationAmount'), '100');
     await userEvent.click(screen.getByTestId('donateBtn'));
