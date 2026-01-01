@@ -221,4 +221,151 @@ describe('UserTableRow', () => {
     expect(gridCell).toHaveTextContent('No email');
     expect(gridCell).toHaveTextContent('N/A');
   });
+
+  it('renders name as Link when linkPath is provided', () => {
+    render(
+      <MockedProvider>
+        <UserTableRow
+          user={user}
+          linkPath="/member/u1"
+          isDataGrid
+          testIdPrefix="spec"
+        />
+      </MockedProvider>,
+    );
+    const nameLink = screen.getByRole('link', { name: 'Admin User' });
+    expect(nameLink).toBeInTheDocument();
+    expect(nameLink).toHaveAttribute('href', '/member/u1');
+  });
+
+  it('renders disabled action button', () => {
+    const onAction = vi.fn();
+    render(
+      <MockedProvider>
+        <UserTableRow
+          user={user}
+          actions={[
+            {
+              label: 'Disabled Action',
+              onClick: onAction,
+              disabled: true,
+              testId: 'disabledBtn',
+            },
+          ]}
+          testIdPrefix="spec"
+        />
+      </MockedProvider>,
+    );
+    const button = screen.getByTestId('disabledBtn');
+    expect(button).toBeDisabled();
+    fireEvent.click(button);
+    expect(onAction).not.toHaveBeenCalled();
+  });
+
+  it('renders action button with icon', () => {
+    const onAction = vi.fn();
+    render(
+      <MockedProvider>
+        <UserTableRow
+          user={user}
+          actions={[
+            {
+              label: 'Action with Icon',
+              onClick: onAction,
+              icon: <span data-testid="test-icon">Icon</span>,
+              testId: 'iconBtn',
+            },
+          ]}
+          testIdPrefix="spec"
+        />
+      </MockedProvider>,
+    );
+    expect(screen.getByTestId('iconBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('test-icon')).toBeInTheDocument();
+  });
+
+  it('uses custom ariaLabel for action button', () => {
+    const onAction = vi.fn();
+    render(
+      <MockedProvider>
+        <UserTableRow
+          user={user}
+          actions={[
+            {
+              label: 'Action',
+              onClick: onAction,
+              ariaLabel: 'Custom aria label',
+              testId: 'ariaBtn',
+            },
+          ]}
+          testIdPrefix="spec"
+        />
+      </MockedProvider>,
+    );
+    const button = screen.getByTestId('ariaBtn');
+    expect(button).toHaveAttribute('aria-label', 'Custom aria label');
+  });
+
+  it('sets aria-label on grid cell for accessibility', () => {
+    render(
+      <MockedProvider>
+        <UserTableRow user={user} isDataGrid testIdPrefix="spec" />
+      </MockedProvider>,
+    );
+    const gridCell = screen.getByTestId('spec-gridcell-u1');
+    expect(gridCell).toHaveAttribute('aria-label', 'User row');
+  });
+
+  it('sets aria-label on table row for accessibility', () => {
+    render(
+      <MockedProvider>
+        <table>
+          <tbody>
+            <UserTableRow user={user} isDataGrid={false} testIdPrefix="spec" />
+          </tbody>
+        </table>
+      </MockedProvider>,
+    );
+    const tableRow = screen.getByTestId('spec-tr-u1');
+    expect(tableRow).toHaveAttribute('aria-label', 'User row');
+  });
+
+  it('does not fire onRowClick when clicking a link', () => {
+    const onRowClick = vi.fn();
+    render(
+      <MockedProvider>
+        <UserTableRow
+          user={user}
+          linkPath="/member/u1"
+          onRowClick={onRowClick}
+          isDataGrid
+          testIdPrefix="spec"
+        />
+      </MockedProvider>,
+    );
+    const nameLink = screen.getByRole('link', { name: 'Admin User' });
+    fireEvent.click(nameLink);
+    expect(onRowClick).not.toHaveBeenCalled();
+  });
+
+  it('renders without actions when actions array is empty', () => {
+    render(
+      <MockedProvider>
+        <UserTableRow user={user} actions={[]} isDataGrid testIdPrefix="spec" />
+      </MockedProvider>,
+    );
+    expect(screen.getByTestId('spec-gridcell-u1')).toBeInTheDocument();
+    // Should not have any action buttons
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+  });
+
+  it('handles undefined actions prop', () => {
+    render(
+      <MockedProvider>
+        <UserTableRow user={user} isDataGrid testIdPrefix="spec" />
+      </MockedProvider>,
+    );
+    expect(screen.getByTestId('spec-gridcell-u1')).toBeInTheDocument();
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+  });
 });
