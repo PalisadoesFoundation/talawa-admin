@@ -1795,6 +1795,7 @@
     "actions": "行动项",
     "search": "搜索",
     "searchByName": "按名称搜索",
+    "startDate": "开始日期",
     "latestEndDate": "最晚结束日期",
     "earliestEndDate": "最早结束日期",
     "noEvents": "无即将举行的活动",

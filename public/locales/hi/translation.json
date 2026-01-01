@@ -1795,6 +1795,7 @@
     "actions": "क्रिया वस्तुएँ",
     "search": "खोजें",
     "searchByName": "नाम से खोजें",
+    "startDate": "प्रारंभिक तिथि",
     "latestEndDate": "नवीनतम समाप्ति तिथि",
     "earliestEndDate": "प्रारंभिक समाप्ति तिथि",
     "noEvents": "कोई आगामी कार्यक्रम नहीं",

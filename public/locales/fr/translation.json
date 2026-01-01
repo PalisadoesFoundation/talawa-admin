@@ -1795,6 +1795,7 @@
     "actions": "Éléments d'Action",
     "search": "Rechercher",
     "searchByName": "Rechercher par Nom",
+    "startDate": "Date de début",
     "latestEndDate": "Date de Fin la Plus Récente",
     "earliestEndDate": "Date de Fin la Plus Ancienne",
     "noEvents": "Aucun Événement à Venir",
