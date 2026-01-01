@@ -493,8 +493,8 @@ describe('RecurrenceEndOptionsSection', () => {
 
     it('should handle null date change gracefully', async () => {
       const setRecurrenceRuleState = vi.fn();
-      const defaultRecurrenceRule = {
-        frequency: 'WEEKLY' as const,
+      const testRecurrenceRule: InterfaceRecurrenceRule = {
+        frequency: Frequency.WEEKLY,
         interval: 1,
         endDate: new Date('2024-12-31'),
         never: false,
@@ -505,9 +505,7 @@ describe('RecurrenceEndOptionsSection', () => {
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <RecurrenceEndOptionsSection
             {...defaultProps}
-            recurrenceRuleState={
-              defaultRecurrenceRule as InterfaceRecurrenceRule
-            }
+            recurrenceRuleState={testRecurrenceRule}
             setRecurrenceRuleState={setRecurrenceRuleState}
             selectedRecurrenceEndOption="on"
           />
@@ -526,7 +524,7 @@ describe('RecurrenceEndOptionsSection', () => {
 
       // Extract the callback function and verify the resulting state
       const callArg = setRecurrenceRuleState.mock.calls[0][0];
-      const newState = callArg(defaultRecurrenceRule);
+      const newState = callArg(testRecurrenceRule);
       expect(newState.endDate).toBeUndefined();
       expect(newState.never).toBe(false);
       expect(newState.count).toBeUndefined();

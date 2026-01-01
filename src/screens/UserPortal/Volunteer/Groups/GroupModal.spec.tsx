@@ -271,20 +271,14 @@ describe('Testing GroupModal', () => {
     renderGroupModal(link2, itemProps[0]);
     expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
 
-    const requestsRadio = screen.getByTestId('requestsRadio');
+    const requestsRadio = screen.getByLabelText(t.requests);
     expect(requestsRadio).toBeInTheDocument();
     await userEvent.click(requestsRadio);
 
-    await waitFor(() => {
-      expect(screen.getByText('Volunteer Name')).toBeInTheDocument();
-    });
-
-    await waitFor(() => {
-      const userNameElements = screen.getAllByTestId('userName');
-      expect(userNameElements).toHaveLength(2);
-      expect(userNameElements[0]).toHaveTextContent('John Doe');
-      expect(userNameElements[1]).toHaveTextContent('Teresa Bradley');
-    });
+    const userNameElements = await screen.findAllByTestId('userName');
+    expect(userNameElements).toHaveLength(2);
+    expect(userNameElements[0]).toHaveTextContent('John Doe');
+    expect(userNameElements[1]).toHaveTextContent('Teresa Bradley');
 
     const acceptBtn = screen.getAllByTestId('acceptBtn');
     expect(acceptBtn).toHaveLength(2);

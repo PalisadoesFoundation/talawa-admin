@@ -141,13 +141,13 @@ describe('Volunteer Management', () => {
     const backButton = screen
       .getByTestId('chevron-left-icon')
       .closest('button');
-    if (backButton) {
-      await userEvent.click(backButton);
-      await waitFor(() => {
-        const orgHome = screen.getByTestId('orgHome');
-        expect(orgHome).toBeInTheDocument();
-      });
-    }
+    expect(backButton).toBeInTheDocument();
+
+    await userEvent.click(backButton as HTMLButtonElement);
+    await waitFor(() => {
+      const orgHome = screen.getByTestId('orgHome');
+      expect(orgHome).toBeInTheDocument();
+    });
   });
 
   test('Testing volunteer management tab switching', async () => {
