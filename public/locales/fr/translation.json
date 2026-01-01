@@ -309,7 +309,7 @@
     "errorOccurred": "Une erreur s'est produite. Veuillez réessayer.",
     "UserIdNotFound": "ID utilisateur non trouvée",
     "MembershipRequestNotFound": "Demande d'adhésion non trouvée",
-    "joined": "Joined",
+    "joined": "Rejoint",
     "actions": "Actions",
     "MembershipRequestWithdrawn": "Demande d'adhésion annulée avec succès"
   },
@@ -944,7 +944,7 @@
     "searchByLastName": "Rechercher par nom de famille",
     "noSpammerFound": "Aucun spammeur trouvé",
     "noUsersFound": "Aucun utilisateur trouvé",
-    "joined": "Joined",
+    "joined": "Rejoint",
     "searchByName": "Rechercher par nom",
     "name": "Nom",
     "email": "Email",

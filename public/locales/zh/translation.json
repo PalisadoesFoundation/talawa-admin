@@ -309,8 +309,8 @@
     "errorOccurred": "发生错误，请重试",
     "UserIdNotFound": "未找到用户ID",
     "MembershipRequestNotFound": "未找到会员请求",
-    "joined": "Joined",
-    "actions": "Actions",
+    "joined": "已加入",
+    "actions": "操作",
     "MembershipRequestWithdrawn": "会员请求已成功撤回"
   },
   "communityProfile": {
@@ -944,7 +944,7 @@
     "searchByLastName": "按姓氏搜索",
     "noSpammerFound": "未发现垃圾邮件发送者",
     "noUsersFound": "未找到用户",
-    "joined": "Joined",
+    "joined": "已加入",
     "searchByName": "按名称搜索",
     "name": "名称",
     "email": "电子邮件",
