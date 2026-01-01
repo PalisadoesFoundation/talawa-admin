@@ -1896,7 +1896,8 @@
     "installing": "Installation ({{elapsed}})",
     "uploading": "Téléchargement...",
     "screenshotCounter": "{{current}} sur {{total}}",
-    "uninstallWarning": "Cette action supprimera définitivement le plugin et toutes ses données. Cette action ne peut pas être annulée."
+    "uninstallWarning": "Cette action supprimera définitivement le plugin et toutes ses données. Cette action ne peut pas être annulée.",
+    "errorInstalling": "Échec du chargement des détails du plugin"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Commentaire supprimé avec succès",

@@ -1896,7 +1896,8 @@
     "installing": "Installing ({{elapsed}})",
     "uploading": "Uploading...",
     "screenshotCounter": "{{current}} of {{total}}",
-    "uninstallWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone."
+    "uninstallWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone.",
+    "errorInstalling": "Failed to load plugin details"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Comment deleted successfully",
