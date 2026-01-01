@@ -1021,7 +1021,7 @@ describe('ChatRoom Component', () => {
 
       expect(getByText('Loading image...')).toBeInTheDocument();
 
-      const img = await findByAltText('attachment');
+      const img = await findByAltText('Attachment');
       expect(img).toBeTruthy();
       expect(img).toHaveAttribute('src', 'https://example.com/presigned.jpg');
     });
@@ -1050,7 +1050,7 @@ describe('ChatRoom Component', () => {
         />,
       );
 
-      const img = await findByAltText('attachment');
+      const img = await findByAltText('Attachment');
       fireEvent.error(img);
 
       const err = await findByText('Image not available');
@@ -1168,14 +1168,14 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(screen.getByAltText('attachment')).toBeInTheDocument();
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
     });
 
     const removeBtn = screen.getByTestId('removeAttachment');
     fireEvent.click(removeBtn);
 
     await waitFor(() => {
-      expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+      expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
     });
   });
 
@@ -1342,7 +1342,7 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() =>
-      expect(screen.getByAltText('attachment')).toBeInTheDocument(),
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument(),
     );
 
     const sendBtn = screen.getByTestId('sendMessage');
@@ -1864,7 +1864,7 @@ describe('ChatRoom Component', () => {
         'Error uploading file:',
         expect.any(Error),
       );
-      expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+      expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
     });
 
     // Reset the mock for other tests
@@ -2319,7 +2319,7 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(screen.getByAltText('attachment')).toBeInTheDocument();
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
     });
 
     // Mock fileInputRef.current to be null
@@ -2328,7 +2328,7 @@ describe('ChatRoom Component', () => {
     fireEvent.click(removeBtn);
 
     await waitFor(() => {
-      expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+      expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
     });
   });
 
@@ -2522,7 +2522,7 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     // Should not crash and should not show attachment
-    expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+    expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
   });
 
   it('uses default organization when chat organization is undefined', async () => {
@@ -2561,7 +2561,7 @@ describe('ChatRoom Component', () => {
 
     // Should use 'organization' as default
     await waitFor(() => {
-      expect(screen.getByAltText('attachment')).toBeInTheDocument();
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
     });
   });
 
@@ -2606,7 +2606,7 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(screen.getByAltText('attachment')).toBeInTheDocument();
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
     });
   });
 
@@ -2671,7 +2671,7 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(screen.getByAltText('attachment')).toBeInTheDocument();
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
     });
   });
 
@@ -2689,7 +2689,7 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(screen.getByAltText('attachment')).toBeInTheDocument();
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
     });
 
     // Test the branch at line 908 where fileInputRef.current might be null
@@ -2697,7 +2697,7 @@ describe('ChatRoom Component', () => {
     fireEvent.click(removeBtn);
 
     await waitFor(() => {
-      expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+      expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
     });
   });
 
@@ -2943,7 +2943,7 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(screen.getByAltText('attachment')).toBeInTheDocument();
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
     });
 
     // Remove attachment - tests line 908
@@ -2951,7 +2951,7 @@ describe('ChatRoom Component', () => {
     fireEvent.click(removeBtn);
 
     await waitFor(() => {
-      expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+      expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
     });
   });
   describe('Issue #5011: Skip query and subscription when selectedContact is empty', () => {
