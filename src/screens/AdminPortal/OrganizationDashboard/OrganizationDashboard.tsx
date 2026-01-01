@@ -44,10 +44,6 @@ import CardItem from 'components/OrganizationDashCards/CardItem/CardItem';
 import CardItemLoading from 'components/OrganizationDashCards/CardItem/Loader/CardItemLoading';
 import DashBoardCard from 'components/OrganizationDashCards/DashboardCard';
 import { Navigate, useNavigate, useParams } from 'react-router';
-// import { Navigate, useNavigate, useParams } from 'react-router';
-// import gold from 'assets/images/gold.png';
-// import silver from 'assets/images/silver.png';
-// import bronze from 'assets/images/bronze.png';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import DashboardStats from './components/DashboardStats';
 import UpcomingEventsCard from './components/UpcomingEventsCard';
@@ -56,7 +52,7 @@ import type {
   InterfaceOrganizationPg,
   InterfaceOrganizationPostsConnectionEdgePg,
 } from 'utils/interfaces';
-import styles from '../../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import dashboardStyles from './OrganizationDashboard.module.css';
 // import { VOLUNTEER_RANKING } from 'GraphQl/Queries/EventVolunteerQueries';
 

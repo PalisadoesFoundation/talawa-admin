@@ -141,7 +141,9 @@ describe('PluginModal', () => {
     it('should render all tabs (Details, Features, Changelog)', () => {
       render(<PluginModal {...defaultProps} />);
 
-      expect(screen.getByText('Details')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.details')),
+      ).toBeInTheDocument();
       expect(
         screen.getByText(i18nForTest.t('pluginStore.features')),
       ).toBeInTheDocument();
@@ -161,7 +163,7 @@ describe('PluginModal', () => {
     it('should switch to Features tab when clicked', () => {
       render(<PluginModal {...defaultProps} />);
 
-      fireEvent.click(screen.getByText('Features'));
+      fireEvent.click(screen.getByText(i18nForTest.t('pluginStore.features')));
 
       expect(
         screen.getByText(
@@ -285,6 +287,25 @@ describe('PluginModal', () => {
         (state) => state.getAttribute('data-is-loading') === 'true',
       );
       expect(loadingOnes.length).toBe(1);
+    });
+
+    it('should show Installing with elapsed time when loading', async () => {
+      const propsWithLoading = {
+        ...defaultProps,
+        loading: true,
+      };
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...propsWithLoading} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(
+          screen.getByRole('button', { name: /Installing\s*\(\d{2}:\d{2}\)/ }),
+        ).toBeInTheDocument();
+      });
     });
   });
 
@@ -417,7 +438,9 @@ describe('PluginModal', () => {
 
       await waitFor(() => {
         // Use getAllByText and click the first one (the tab button)
-        const featuresTabs = screen.getAllByText('Features');
+        const featuresTabs = screen.getAllByText(
+          i18nForTest.t('pluginStore.features'),
+        );
         fireEvent.click(featuresTabs[0]);
         expect(screen.getByText('Feature 1')).toBeInTheDocument();
         expect(screen.getByText('Feature 2')).toBeInTheDocument();
@@ -427,7 +450,9 @@ describe('PluginModal', () => {
     it('should show no features message when no features available', () => {
       render(<PluginModal {...defaultProps} />);
 
-      const featuresTabs = screen.getAllByText('Features');
+      const featuresTabs = screen.getAllByText(
+        i18nForTest.t('pluginStore.features'),
+      );
       fireEvent.click(featuresTabs[0]);
 
       expect(
@@ -540,7 +565,9 @@ describe('PluginModal', () => {
       render(<PluginModal {...propsWithoutMeta} />);
 
       // Should still render without crashing
-      expect(screen.getByText('Details')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.details')),
+      ).toBeInTheDocument();
     });
 
     it('should handle missing plugin details gracefully', async () => {
@@ -588,7 +615,9 @@ describe('PluginModal', () => {
       render(<PluginModal {...defaultProps} />);
 
       // The tabs are divs, not actual tab roles, so we check for the tab content instead
-      expect(screen.getByText('Details')).toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.details')),
+      ).toBeInTheDocument();
       expect(
         screen.getByText(i18nForTest.t('pluginStore.features')),
       ).toBeInTheDocument();
@@ -646,6 +675,54 @@ describe('PluginModal', () => {
       );
       expect(prevButton).toBeInTheDocument();
       expect(nextButton).toBeInTheDocument();
+    });
+
+    it('should open screenshot viewer when Enter key is pressed on screenshot thumbnail', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshotButtons = screen.getAllByTitle(
+          i18nForTest.t('pluginStore.clickToViewFullSize'),
+        );
+        fireEvent.keyDown(screenshotButtons[0], { key: 'Enter' });
+      });
+
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.backToDetails')),
+      ).toBeInTheDocument();
+      expect(screen.getByText('1 of 2')).toBeInTheDocument();
+    });
+
+    it('should open screenshot viewer when Space key is pressed on screenshot thumbnail', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshotButtons = screen.getAllByTitle(
+          i18nForTest.t('pluginStore.clickToViewFullSize'),
+        );
+        fireEvent.keyDown(screenshotButtons[0], { key: ' ' });
+      });
+
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.backToDetails')),
+      ).toBeInTheDocument();
+      expect(screen.getByText('1 of 2')).toBeInTheDocument();
     });
 
     it('should show dot indicators for multiple screenshots', async () => {
@@ -720,6 +797,31 @@ describe('PluginModal', () => {
       fireEvent.click(prevButton); // Go back to first
 
       expect(screen.getByText('1 of 2')).toBeInTheDocument();
+    });
+
+    it('should wrap to last screenshot when pressing ArrowLeft on first screenshot', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getAllByAltText(/Screenshot \d+/)).toHaveLength(2);
+      });
+
+      const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+      fireEvent.click(screenshots[0]);
+
+      fireEvent.keyDown(window, { key: 'ArrowLeft' });
+
+      await waitFor(() => {
+        expect(screen.getByText('2 of 2')).toBeInTheDocument();
+      });
     });
 
     it('should close screenshot viewer when back button is clicked', async () => {
@@ -842,6 +944,72 @@ describe('PluginModal', () => {
       // Then go back to first
       fireEvent.keyDown(window, { key: 'ArrowLeft' });
       expect(screen.getByText('1 of 2')).toBeInTheDocument();
+    });
+
+    it('should open screenshot viewer when Enter key is pressed on screenshot thumbnail', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(
+          screen.getAllByTitle(
+            i18nForTest.t('pluginStore.clickToViewFullSize'),
+          ),
+        ).toHaveLength(2);
+      });
+
+      // Fire keyDown OUTSIDE waitFor
+      const screenshotButtons = screen.getAllByTitle(
+        i18nForTest.t('pluginStore.clickToViewFullSize'),
+      );
+      fireEvent.keyDown(screenshotButtons[0], { key: 'Enter' });
+
+      await waitFor(() => {
+        expect(
+          screen.getByText(i18nForTest.t('pluginStore.backToDetails')),
+        ).toBeInTheDocument();
+        expect(screen.getByText('1 of 2')).toBeInTheDocument();
+      });
+    });
+
+    it('should open screenshot viewer when Space key is pressed on screenshot thumbnail', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      // Wait for screenshots to load
+      await waitFor(() => {
+        expect(
+          screen.getAllByTitle(
+            i18nForTest.t('pluginStore.clickToViewFullSize'),
+          ),
+        ).toHaveLength(2);
+      });
+
+      const screenshotButtons = screen.getAllByTitle(
+        i18nForTest.t('pluginStore.clickToViewFullSize'),
+      );
+      fireEvent.keyDown(screenshotButtons[0], { key: ' ' });
+
+      await waitFor(() => {
+        expect(
+          screen.getByText(i18nForTest.t('pluginStore.backToDetails')),
+        ).toBeInTheDocument();
+        expect(screen.getByText('1 of 2')).toBeInTheDocument();
+      });
     });
   });
 

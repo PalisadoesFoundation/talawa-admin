@@ -465,7 +465,7 @@
     "tagNamePlaceholder": "Write the name of the tag",
     "allTags": "All Tags",
     "noMoreMembersFound": "No more members found",
-    "errorOccurredWhileLoadingAssignedUser": "Error occured while loading assigned users",
+    "errorOccurredWhileLoadingAssignedUser": "Error occurred while loading assigned users",
     "sortPeople": "Sort People",
     "tagActions": "Tag Actions"
   },
@@ -1891,7 +1891,12 @@
     "uninstallPluginMsg": "Are you sure you want to uninstall {{pluginName}}?",
     "clickToViewFullSize": "Click to view full size",
     "pluginInfo": "Plugin Information",
-    "filterPlugins": "Filter Plugins"
+    "filterPlugins": "Filter Plugins",
+    "details": "Details",
+    "installing": "Installing ({{elapsed}})",
+    "uploading": "Uploading...",
+    "screenshotCounter": "{{current}} of {{total}}",
+    "uninstallWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone."
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Comment deleted successfully",

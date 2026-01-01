@@ -1891,7 +1891,12 @@
     "uninstallPluginMsg": "¿Estás seguro de que deseas desinstalar este plugin {{pluginName}}? Esto eliminará todos los datos asociados con el plugin y no se podrá deshacer.",
     "clickToViewFullSize": "Haz clic para ver en tamaño completo",
     "pluginInfo": "Información del Plugin",
-    "filterPlugins": "Filtrar Plugins"
+    "filterPlugins": "Filtrar Plugins",
+    "details": "Detalles",
+    "installing": "Instalando ({{elapsed}})",
+    "uploading": "Subiendo...",
+    "screenshotCounter": "{{current}} de {{total}}",
+    "uninstallWarning": "Esta acción eliminará permanentemente el plugin y todos sus datos. Esta acción no se puede deshacer."
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Comentario eliminado exitosamente",

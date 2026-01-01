@@ -147,7 +147,11 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
             </p>
           </div>
 
-          <div className={styles.dropzone} onClick={handleUploadClick}>
+          <button
+            type="button"
+            className={styles.dropzone}
+            onClick={handleUploadClick}
+          >
             <FaUpload className={styles.uploadIcon} />
             <div className={styles.dropzoneTitle}>
               {selectedFile ? selectedFile.name : tCommon('selectAZipFile')}
@@ -155,7 +159,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
             <div className={styles.dropzoneHint}>
               {tCommon('clickToBrowseFile')}
             </div>
-          </div>
+          </button>
 
           <input
             ref={fileInputRef}
@@ -224,7 +228,7 @@ const UploadPluginModal: React.FC<IUploadPluginModalProps> = ({
               fullWidth
               data-testid="upload-plugin-button"
             >
-              {isInstalling ? 'Uploading...' : 'Upload Plugin'}
+              {isInstalling ? t('uploading') : t('uploadPlugin')}
             </Button>
           </div>
         </div>

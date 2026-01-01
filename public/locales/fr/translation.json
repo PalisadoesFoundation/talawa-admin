@@ -1891,7 +1891,12 @@
     "uninstallPluginMsg": "Êtes-vous sûr de vouloir désinstaller ce {{pluginName}} ? Toutes les données associées au plugin seront supprimées et l'action ne peut pas être annulée.",
     "clickToViewFullSize": "Cliquez pour voir en taille réelle",
     "pluginInfo": "Informations sur le Plugin",
-    "filterPlugins": "Filtrer les Plugins"
+    "filterPlugins": "Filtrer les Plugins",
+    "details": "Détails",
+    "installing": "Installation ({{elapsed}})",
+    "uploading": "Téléchargement...",
+    "screenshotCounter": "{{current}} sur {{total}}",
+    "uninstallWarning": "Cette action supprimera définitivement le plugin et toutes ses données. Cette action ne peut pas être annulée."
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Commentaire supprimé avec succès",

@@ -102,7 +102,7 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
 
   if (isLoading) {
     return (
-      <Row className="d-flex">
+      <Row className={orgStyles.flex}>
         {[...Array(6)].map((_, index) => (
           <Col
             xs={6}

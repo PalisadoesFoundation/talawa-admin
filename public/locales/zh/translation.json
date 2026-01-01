@@ -1891,7 +1891,12 @@
     "uninstallPluginMsg": "您确定要卸载此插件吗 {{pluginName}}？",
     "clickToViewFullSize": "点击查看全尺寸",
     "pluginInfo": "插件信息",
-    "filterPlugins": "筛选插件"
+    "filterPlugins": "筛选插件",
+    "details": "详情",
+    "installing": "安装中 ({{elapsed}})",
+    "uploading": "上传中...",
+    "screenshotCounter": "{{current}} / {{total}}",
+    "uninstallWarning": "此操作将永久删除该插件及其所有数据。此操作无法撤销。"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "评论删除成功",

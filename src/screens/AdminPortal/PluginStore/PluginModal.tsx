@@ -19,8 +19,9 @@ import { useInstallTimer } from './hooks/useInstallTimer';
 import LoadingState from '../../../shared-components/LoadingState/LoadingState';
 import { useTranslation } from 'react-i18next';
 import { X } from '@mui/icons-material';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
-const TABS = ['Details', 'Features', 'Changelog'] as const;
+const TABS = ['details', 'features', 'changelog'] as const;
 type TabType = (typeof TABS)[number];
 
 const PluginModal: React.FC<IPluginModalProps> = ({
@@ -40,7 +41,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
 
   const [details, setDetails] = useState<IPluginDetails | null>(null);
   const [fetching, setFetching] = useState(false);
-  const [tab, setTab] = useState<TabType>('Details');
+  const [tab, setTab] = useState<TabType>('details');
   const installElapsed = useInstallTimer(loading);
   const [screenshotViewer, setScreenshotViewer] = useState<{
     open: boolean;
@@ -56,7 +57,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
   useEffect(() => {
     if (show && pluginId) {
       setFetching(true);
-      setTab('Details');
+      setTab('details');
       setScreenshotViewer({ open: false, currentIndex: 0, screenshots: [] }); // Reset screenshot viewer
 
       const loadPluginDetails = async () => {
@@ -66,6 +67,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
           setDetails(pluginDetails);
         } catch (error) {
           console.error('Failed to load plugin details:', error);
+          NotificationToast.error(t('errorInstalling'));
           setDetails(null);
         } finally {
           setFetching(false);
@@ -215,8 +217,8 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                       }
                     />
                     {getInstalledPlugin(plugin.name)?.status === 'active'
-                      ? 'Deactivate'
-                      : 'Activate'}
+                      ? t('deactivate')
+                      : t('activate')}
                   </Button>
                 </LoadingState>
                 <LoadingState isLoading={loading} variant="inline">
@@ -240,8 +242,8 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                     onClick={() => installPlugin(meta)}
                   >
                     {loading
-                      ? `Installing${installElapsed ? ` (${installElapsed})` : ''}`
-                      : 'Install'}
+                      ? t('installing', { elapsed: installElapsed })
+                      : t('install')}
                   </Button>
                 </LoadingState>
               </>
@@ -264,8 +266,10 @@ const PluginModal: React.FC<IPluginModalProps> = ({
 
                 {screenshotViewer.screenshots.length > 1 && (
                   <div className={styles.screenshotCounter}>
-                    {screenshotViewer.currentIndex + 1} of{' '}
-                    {screenshotViewer.screenshots.length}
+                    {t('screenshotCounter', {
+                      current: screenshotViewer.currentIndex + 1,
+                      total: screenshotViewer.screenshots.length,
+                    })}
                   </div>
                 )}
               </div>
@@ -331,20 +335,20 @@ const PluginModal: React.FC<IPluginModalProps> = ({
             <>
               {/* Tabs */}
               <div className={styles.tabsContainer}>
-                {TABS.map((t) => (
+                {TABS.map((tName) => (
                   <div
-                    key={t}
-                    onClick={() => setTab(t)}
-                    className={tab === t ? styles.tabActive : styles.tab}
+                    key={tName}
+                    onClick={() => setTab(tName)}
+                    className={tab === tName ? styles.tabActive : styles.tab}
                   >
-                    {t}
+                    {t(tName)}
                   </div>
                 ))}
               </div>
 
               {/* Tab Content */}
               <div className={styles.tabContent}>
-                {tab === 'Details' && (
+                {tab === 'details' && (
                   <>
                     <div className={styles.sectionTitle}>
                       {tCommon('description')}
@@ -395,7 +399,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                     )}
                   </>
                 )}
-                {tab === 'Features' && (
+                {tab === 'features' && (
                   <>
                     <div className={styles.sectionTitleLarge}>
                       {t('features')}
@@ -420,7 +424,7 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                     )}
                   </>
                 )}
-                {tab === 'Changelog' && (
+                {tab === 'changelog' && (
                   <>
                     <div className={styles.sectionTitleLarge}>
                       {t('changelog')}

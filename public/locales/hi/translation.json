@@ -1891,7 +1891,12 @@
     "uninstallPluginMsg": "क्या आप वाकई इस {{pluginName}} को अनइंस्टॉल करना चाहते हैं?",
     "clickToViewFullSize": "पूर्ण आकार देखने के लिए क्लिक करें",
     "pluginInfo": "प्लगइन जानकारी",
-    "filterPlugins": "फिल्टर प्लगइन्स"
+    "filterPlugins": "फिल्टर प्लगइन्स",
+    "details": "विवरण",
+    "installing": "इंस्टॉल हो रहा है ({{elapsed}})",
+    "uploading": "अपलोड हो रहा है...",
+    "screenshotCounter": "{{current}} में से {{total}}",
+    "uninstallWarning": "यह क्रिया प्लगइन और उसके सभी डेटा को स्थायी रूप से हटा देगी। इस क्रिया को पूर्ववत नहीं किया जा सकता।"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "टिप्पणी सफलतापूर्वक हटा दी गई",
