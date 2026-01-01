@@ -59,6 +59,26 @@ describe('UserTableRow', () => {
     expect(onRowClick).toHaveBeenCalledWith(user);
   });
 
+  it('fires onRowClick when clicking non-button area (table mode)', () => {
+    const onRowClick = vi.fn();
+    render(
+      <MockedProvider>
+        <table>
+          <tbody>
+            <UserTableRow
+              user={user}
+              isDataGrid={false}
+              onRowClick={onRowClick}
+              testIdPrefix="spec"
+            />
+          </tbody>
+        </table>
+      </MockedProvider>,
+    );
+    fireEvent.click(screen.getByTestId('spec-tr-u1'));
+    expect(onRowClick).toHaveBeenCalledWith(user);
+  });
+
   it('does not fire onRowClick when clicking an action button', () => {
     const onRowClick = vi.fn();
     const onAction = vi.fn();
@@ -195,6 +215,10 @@ describe('UserTableRow', () => {
         <UserTableRow user={incompleteUser} isDataGrid testIdPrefix="spec" />
       </MockedProvider>,
     );
-    expect(screen.getByTestId('spec-gridcell-u2')).toBeInTheDocument();
+    const gridCell = screen.getByTestId('spec-gridcell-u2');
+    expect(gridCell).toBeInTheDocument();
+    expect(gridCell).toHaveTextContent('No name');
+    expect(gridCell).toHaveTextContent('No email');
+    expect(gridCell).toHaveTextContent('N/A');
   });
 });
