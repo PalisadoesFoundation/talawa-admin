@@ -1,3 +1,4 @@
+import { ApolloError } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 /** 
@@ -7,6 +8,49 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 */
 
 export const errorHandler = (a: unknown, error: unknown): void => {
+  // Handle Apollo GraphQL errors first
+  if (error instanceof ApolloError) {
+    const graphQLError = error.graphQLErrors?.[0];
+    if (graphQLError) {
+      const extensions = graphQLError.extensions as {
+        code?: string;
+        issues?: Array<{ message: string }>;
+      };
+
+      // Check for forbidden action with specific issue message
+      if (
+        extensions?.code ===
+          'forbidden_action_on_arguments_associated_resources' &&
+        extensions?.issues?.[0]?.message
+      ) {
+        NotificationToast.error(extensions.issues[0].message);
+        return;
+      }
+
+      // Check for account locked error
+      if (extensions?.code === 'account_locked') {
+        NotificationToast.error({
+          key: 'accountLocked',
+          namespace: 'errors',
+        });
+        return;
+      }
+
+      // Use the GraphQL error message for other cases
+      NotificationToast.error(graphQLError.message);
+      return;
+    }
+
+    // Handle network errors
+    if (error.networkError) {
+      NotificationToast.error({
+        key: 'talawaApiUnavailable',
+        namespace: 'errors',
+      });
+      return;
+    }
+  }
+
   if (error instanceof Error) {
     const errorMessage = error.message;
 

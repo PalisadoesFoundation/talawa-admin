@@ -1,6 +1,7 @@
 import { errorHandler } from './errorHandler';
 import { toast } from 'react-toastify';
 import { describe, it, expect, vi, beforeEach, afterEach, test } from 'vitest';
+import { ApolloError } from '@apollo/client';
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -153,6 +154,84 @@ describe('Test if errorHandler is working properly', () => {
 
     expect(toast.error).toHaveBeenCalledWith(
       'errors:unknownError:"null"',
+      expect.any(Object),
+    );
+  });
+
+  // ApolloError tests
+  it('should handle ApolloError with forbidden_action_on_arguments_associated_resources and show specific message', () => {
+    const apolloError = new ApolloError({
+      graphQLErrors: [
+        {
+          message:
+            'This action is forbidden on the resources associated to the provided arguments.',
+          extensions: {
+            code: 'forbidden_action_on_arguments_associated_resources',
+            issues: [
+              {
+                argumentPath: ['input', 'emailAddress'],
+                message: 'This email address is already registered.',
+              },
+            ],
+          },
+        },
+      ],
+    });
+
+    errorHandler(null, apolloError);
+
+    expect(toast.error).toHaveBeenCalledWith(
+      'This email address is already registered.',
+      expect.any(Object),
+    );
+  });
+
+  it('should handle ApolloError with account_locked code', () => {
+    const apolloError = new ApolloError({
+      graphQLErrors: [
+        {
+          message: 'Account locked',
+          extensions: {
+            code: 'account_locked',
+          },
+        },
+      ],
+    });
+
+    errorHandler(null, apolloError);
+
+    expect(toast.error).toHaveBeenCalledWith(
+      'errors:accountLocked',
+      expect.any(Object),
+    );
+  });
+
+  it('should handle ApolloError with network error', () => {
+    const apolloError = new ApolloError({
+      networkError: new Error('Network error'),
+    });
+
+    errorHandler(null, apolloError);
+
+    expect(toast.error).toHaveBeenCalledWith(
+      'errors:talawaApiUnavailable',
+      expect.any(Object),
+    );
+  });
+
+  it('should handle ApolloError with generic GraphQL error message', () => {
+    const apolloError = new ApolloError({
+      graphQLErrors: [
+        {
+          message: 'Some generic GraphQL error',
+        },
+      ],
+    });
+
+    errorHandler(null, apolloError);
+
+    expect(toast.error).toHaveBeenCalledWith(
+      'Some generic GraphQL error',
       expect.any(Object),
     );
   });

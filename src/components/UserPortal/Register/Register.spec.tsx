@@ -13,6 +13,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import Register from './Register';
 import { toast } from 'react-toastify';
 import { vi } from 'vitest';
+import { ApolloError } from '@apollo/client';
 
 /**
  * Unit tests for the Register component.
@@ -358,9 +359,76 @@ describe('Testing Register Component [User Portal]', () => {
 
     await waitForAsync();
 
-    // Assert that toast.error is called with the error message
+    // Assert that toast.error is called with the error message (network error)
     expect(toast.error).toHaveBeenCalledWith(
-      'GraphQL error occurred',
+      'Talawa-API service is unavailable!. Is it running? Check your network connectivity too.',
+      expect.any(Object),
+    );
+  });
+
+  // Test forbidden error with specific message
+  it('Expect toast.error to show specific message for duplicate email instead of forbidden error', async () => {
+    const DUPLICATE_EMAIL_MOCKS = [
+      {
+        request: {
+          query: SIGNUP_MUTATION,
+          variables: {
+            firstName: 'John',
+            lastName: 'Doe',
+            email: 'umar@gmail.com',
+            password: 'password123',
+          },
+        },
+        error: new ApolloError({
+          graphQLErrors: [
+            {
+              message:
+                'This action is forbidden on the resources associated to the provided arguments.',
+              extensions: {
+                code: 'forbidden_action_on_arguments_associated_resources',
+                issues: [
+                  {
+                    argumentPath: ['input', 'emailAddress'],
+                    message: 'This email address is already registered.',
+                  },
+                ],
+              },
+            },
+          ],
+        }),
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={DUPLICATE_EMAIL_MOCKS}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Register {...props} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitForAsync();
+
+    // Fill out the form with duplicate email
+    await userEvent.type(screen.getByTestId('passwordInput'), 'password123');
+    await userEvent.type(
+      screen.getByTestId('confirmPasswordInput'),
+      'password123',
+    );
+    await userEvent.type(screen.getByTestId('emailInput'), 'umar@gmail.com');
+    await userEvent.type(screen.getByTestId('firstNameInput'), 'John');
+    await userEvent.type(screen.getByTestId('lastNameInput'), 'Doe');
+    await userEvent.click(screen.getByTestId('registerBtn'));
+
+    await waitForAsync();
+
+    // Assert that toast.error is called with the specific message, not the forbidden error
+    expect(toast.error).toHaveBeenCalledWith(
+      'This email address is already registered.',
       expect.any(Object),
     );
   });
