@@ -6,22 +6,10 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/FundCampaignPledge/FundCampaignPledge.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/FundCampaignPledge/FundCampaignPledge.tsx#L48)
+Defined in: [src/screens/FundCampaignPledge/FundCampaignPledge.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/FundCampaignPledge/FundCampaignPledge.tsx#L37)
 
-Renders the Fund Campaign Pledges screen.
-
-Responsibilities:
-- Displays all pledges for a fund campaign
-- Supports searching and sorting via AdminSearchFilterBar
-- Shows pledge progress toggle (pledged vs raised amounts)
-- Renders popover for extra users when multiple pledgers exist
-- Handles create, edit, and delete pledge flows
-
-Localization:
-- Uses `common` and `pledges` namespaces
+Renders the Fund Campaign Pledges screen with pledge management, search/sort, and progress tracking.
 
 ## Returns
 
 `Element`
-
-JSX.Element
