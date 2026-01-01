@@ -379,7 +379,7 @@ const organizationFunds = (): JSX.Element => {
           className={`${styles.createFundButton} ${styles.buttonNoWrap}`}
           data-testid="createFundBtn"
         >
-          <i className="fa fa-plus me-2" aria-hiden="true" />
+          <i className="fa fa-plus me-2" aria-hidden="true" />
           {t('funds.createFund')}
         </Button>
       </div>

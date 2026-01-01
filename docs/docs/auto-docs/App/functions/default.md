@@ -6,7 +6,7 @@
 
 > **default**(): `ReactElement`
 
-Defined in: [src/App.tsx:135](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/App.tsx#L135)
+Defined in: [src/App.tsx:136](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/App.tsx#L136)
 
 This is the main function for our application. It sets up all the routes and components,
 defining how the user can navigate through the app. The function uses React Router's `Routes`

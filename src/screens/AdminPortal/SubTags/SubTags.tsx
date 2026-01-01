@@ -391,7 +391,7 @@ function SubTags(): JSX.Element {
                     onClick={() => redirectToSubTags(tag._id as string)}
                     onKeyDown={(e) => {
                       if (e.key === 'Enter' || e.key === ' ') {
-                        navigate(`/orgtags/${orgId}`);
+                        redirectToSubTags(tag._id as string);
                       }
                     }}
                     data-testid="redirectToSubTags"

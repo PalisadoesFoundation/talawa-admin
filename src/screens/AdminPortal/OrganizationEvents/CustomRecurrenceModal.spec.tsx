@@ -17,6 +17,7 @@ import {
   WeekDays,
   createDefaultRecurrenceRule,
 } from 'utils/recurrenceUtils';
+import { green } from '@mui/material/colors';
 
 // Mock the DatePicker to capture its onChange prop
 interface ITestMockDatePickerProps {
@@ -50,7 +51,7 @@ vi.mock('@mui/x-date-pickers', async () => {
 const theme = createTheme({
   palette: {
     primary: {
-      main: 'var(--bs-success)',
+      main: green[600],
     },
   },
 });
