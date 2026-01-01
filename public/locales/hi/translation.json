@@ -1793,7 +1793,9 @@
     "applyTo": "लागू करें",
     "entireSeries": "पूरी श्रृंखला",
     "thisEventOnly": "केवल यह घटना",
-    "volunteerAlt": "स्वयंसेवक प्रोफ़ाइल चित्र"
+    "volunteerAlt": "स्वयंसेवक प्रोफ़ाइल चित्र",
+    "groupTable": "समूह तालिका",
+    "volunteerActions": "स्वयंसेवक क्रियाएँ"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",

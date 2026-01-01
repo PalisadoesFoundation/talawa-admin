@@ -1793,7 +1793,9 @@
     "applyTo": "Apply To",
     "entireSeries": "Entire Series",
     "thisEventOnly": "This Event Only",
-    "volunteerAlt": "Volunteer profile picture"
+    "volunteerAlt": "Volunteer profile picture",
+    "groupTable": "Group Table",
+    "volunteerActions": "Volunteer Actions"
   },
   "userVolunteer": {
     "title": "Volunteership",

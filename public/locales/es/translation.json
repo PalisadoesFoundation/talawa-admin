@@ -1793,7 +1793,9 @@
     "applyTo": "Aplicar a",
     "entireSeries": "Serie completa",
     "thisEventOnly": "Solo este evento",
-    "volunteerAlt": "Imagen de perfil del voluntario"
+    "volunteerAlt": "Imagen de perfil del voluntario",
+    "groupTable": "Tabla de Grupos",
+    "volunteerActions": "Acciones de Voluntarios"
   },
   "userVolunteer": {
     "title": "Voluntariado",

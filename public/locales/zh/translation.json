@@ -1793,7 +1793,9 @@
     "applyTo": "适用于",
     "entireSeries": "整个系列",
     "thisEventOnly": "仅限本次活动",
-    "volunteerAlt": "志愿者头像"
+    "volunteerAlt": "志愿者头像",
+    "groupTable": "小组表",
+    "volunteerActions": "志愿者操作"
   },
   "userVolunteer": {
     "title": "志愿服务",
