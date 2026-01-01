@@ -1,4 +1,4 @@
-import { useQuery, type ApolloQueryResult } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
@@ -12,11 +12,11 @@ import { currencySymbols } from 'utils/currency';
 import styles from 'style/app-fixed.module.css';
 import PledgeDeleteModal from './deleteModal/PledgeDeleteModal';
 import PledgeModal from './modal/PledgeModal';
-import { Breadcrumbs, Link, Popover, Typography } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { Popover } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
+import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/BreadcrumbsComponent';
+import { DataGrid } from '@mui/x-data-grid';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
-import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import type {
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
@@ -24,6 +24,7 @@ import type {
   InterfaceCampaignInfoPG,
 } from 'utils/interfaces';
 import ProgressBar from 'react-bootstrap/ProgressBar';
+import { getPledgeColumns } from './PledgeColumns';
 
 enum ModalState {
   SAME = 'same',
@@ -31,19 +32,7 @@ enum ModalState {
 }
 
 /**
- * Renders the Fund Campaign Pledges screen.
- *
- * Responsibilities:
- * - Displays all pledges for a fund campaign
- * - Supports searching and sorting via AdminSearchFilterBar
- * - Shows pledge progress toggle (pledged vs raised amounts)
- * - Renders popover for extra users when multiple pledgers exist
- * - Handles create, edit, and delete pledge flows
- *
- * Localization:
- * - Uses `common` and `pledges` namespaces
- *
- * @returns JSX.Element
+ * Renders the Fund Campaign Pledges screen with pledge management, search/sort, and progress tracking.
  */
 const fundCampaignPledge = (): JSX.Element => {
   const { t } = useTranslation('translation');
@@ -89,80 +78,80 @@ const fundCampaignPledge = (): JSX.Element => {
     loading: pledgeLoading,
     error: pledgeError,
     refetch: refetchPledge,
-  }: {
-    data?: { fundCampaign: InterfaceQueryFundCampaignsPledges };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => Promise<
-      ApolloQueryResult<{
-        fundCampaign: InterfaceQueryFundCampaignsPledges;
-      }>
-    >;
-  } = useQuery(FUND_CAMPAIGN_PLEDGE, {
-    variables: {
-      input: { id: fundCampaignId },
+  } = useQuery<{ fundCampaign: InterfaceQueryFundCampaignsPledges }>(
+    FUND_CAMPAIGN_PLEDGE,
+    {
+      variables: { input: { id: fundCampaignId } },
     },
-  });
+  );
 
-  const { pledges, totalPledged, totalRaised, fundName } = useMemo(() => {
-    let totalPledged = 0;
-    let totalRaised = 0;
+  const { pledges, totalPledged, totalRaised, fundName, fundId } =
+    useMemo(() => {
+      let totalPledged = 0;
+      let totalRaised = 0;
 
-    const pledgesList =
-      pledgeData?.fundCampaign?.pledges?.edges.map((edge) => {
-        const amount = edge.node.amount || 0;
-        totalPledged += amount;
-        // Assuming there's no raised amount for now,
-        // this should be updated when raised amount data is available
-        totalRaised += 0;
+      const pledgesList =
+        pledgeData?.fundCampaign?.pledges?.edges.map((edge) => {
+          const amount = edge.node.amount || 0;
+          totalPledged += amount;
+          // Assuming there's no raised amount for now,
+          // this should be updated when raised amount data is available
+          totalRaised += 0;
 
-        const allUsers =
-          'users' in edge.node && Array.isArray(edge.node.users)
-            ? edge.node.users
-            : [edge.node.pledger];
+          const allUsers =
+            'users' in edge.node && Array.isArray(edge.node.users)
+              ? edge.node.users
+              : [edge.node.pledger];
 
-        return {
-          id: edge.node.id,
-          amount: amount,
-          pledgeDate: edge.node.createdAt
-            ? new Date(edge.node.createdAt)
-            : new Date(),
-          endDate: pledgeData.fundCampaign.endAt
-            ? new Date(pledgeData.fundCampaign.endAt)
-            : new Date(),
-          users: allUsers.filter(Boolean),
-          currency: pledgeData.fundCampaign.currencyCode || 'USD',
-        };
-      }) ?? [];
+          return {
+            id: edge.node.id,
+            amount: amount,
+            pledgeDate: edge.node.createdAt
+              ? new Date(edge.node.createdAt)
+              : new Date(),
+            endDate: pledgeData.fundCampaign.endAt
+              ? new Date(pledgeData.fundCampaign.endAt)
+              : new Date(),
+            users: allUsers.filter(Boolean),
+            currency: pledgeData.fundCampaign.currencyCode || 'USD',
+          };
+        }) ?? [];
 
-    const filteredPledges = searchTerm
-      ? pledgesList.filter((pledge) => {
-          const search = searchTerm.toLowerCase();
-          return pledge.users.some((user) =>
-            user.name?.toLowerCase().includes(search),
-          );
-        })
-      : pledgesList;
+      const filteredPledges = searchTerm
+        ? pledgesList.filter((pledge) => {
+            const search = searchTerm.toLowerCase();
+            return pledge.users.some((user) =>
+              user.name?.toLowerCase().includes(search),
+            );
+          })
+        : pledgesList;
 
-    const sortedPledges = [...filteredPledges].sort((a, b) => {
-      switch (sortBy) {
-        case 'amount_ASC':
-          return a.amount - b.amount;
-        case 'amount_DESC':
-          return b.amount - a.amount;
-        case 'endDate_ASC':
-          return a.endDate.getTime() - b.endDate.getTime();
-        case 'endDate_DESC':
-          return b.endDate.getTime() - a.endDate.getTime();
-      }
-    });
+      const sortedPledges = [...filteredPledges].sort((a, b) => {
+        switch (sortBy) {
+          case 'amount_ASC':
+            return a.amount - b.amount;
+          case 'amount_DESC':
+            return b.amount - a.amount;
+          case 'endDate_ASC':
+            return a.endDate.getTime() - b.endDate.getTime();
+          case 'endDate_DESC':
+            return b.endDate.getTime() - a.endDate.getTime();
+        }
+      });
 
-    // Get fund name from the campaign's fund property
-    const fundName =
-      pledgeData?.fundCampaign?.pledges?.edges[0]?.node?.campaign?.fund?.name ??
-      tCommon('funds');
-    return { pledges: sortedPledges, totalPledged, totalRaised, fundName };
-  }, [pledgeData, searchTerm, sortBy, tCommon]);
+      // Get fund info from the campaign's fund property
+      const fundInfo =
+        pledgeData?.fundCampaign?.pledges?.edges[0]?.node?.campaign?.fund;
+      const fundName = fundInfo?.name ?? tCommon('funds');
+      const fundId = fundInfo?.id ?? null;
+      return {
+        pledges: sortedPledges,
+        totalPledged,
+        totalRaised,
+        fundName,
+        fundId,
+      };
+    }, [pledgeData, searchTerm, sortBy, tCommon]);
 
   useEffect(() => {
     if (pledgeData?.fundCampaign) {
@@ -206,7 +195,9 @@ const fundCampaignPledge = (): JSX.Element => {
   );
 
   const handleClick = (
-    event: React.MouseEvent<HTMLDivElement>,
+    event:
+      | React.MouseEvent<HTMLDivElement>
+      | React.KeyboardEvent<HTMLDivElement>,
     users: InterfaceUserInfoPG[],
   ): void => {
     setExtraUsers(users);
@@ -239,169 +230,29 @@ const fundCampaignPledge = (): JSX.Element => {
     );
   }
 
-  const columns: GridColDef[] = [
-    {
-      field: 'pledgers',
-      headerName: t('pledges.pledgers'),
-      flex: 3,
-      minWidth: 50,
-      align: 'left',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        const users = params.row.users || [];
-        const mainUsers = users.slice(0, 1);
-        const extraUsers = users.slice(1);
-
-        return (
-          <div
-            className={`d-flex ${styles.flexWrapGap} ${styles.maxHeight120}`}
-          >
-            {mainUsers.map((user: InterfaceUserInfoPG, index: number) => (
-              <div
-                className={styles.pledgerContainer}
-                key={`${params.row.id}-main-${index}`}
-                data-testid={`mainUser-${params.row.id}-${index}`}
-              >
-                {user.avatarURL ? (
-                  <img
-                    src={user.avatarURL}
-                    alt={user.name}
-                    className={styles.TableImagePledge}
-                  />
-                ) : (
-                  <Avatar
-                    containerStyle={styles.imageContainerPledge}
-                    avatarStyle={styles.TableImagePledge}
-                    name={user.name}
-                    alt={user.name}
-                  />
-                )}
-                <span>{user.name}</span>
-              </div>
-            ))}
-            {extraUsers.length > 0 && (
-              <div
-                className={styles.moreContainer}
-                aria-describedby={id}
-                onClick={(event) => handleClick(event, extraUsers)}
-                data-testid={`moreContainer-${params.row.id}`}
-              >
-                {tCommon('moreCount', { count: extraUsers.length })}
-              </div>
-            )}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'pledgeDate',
-      headerName: t('pledges.pledgeDate'),
-      flex: 1,
-      minWidth: 150,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) =>
-        dayjs(params.row.pledgeDate).format('DD/MM/YYYY'),
-    },
-    {
-      field: 'amount',
-      headerName: t('pledges.pledged'),
-      flex: 1,
-      minWidth: 100,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => (
-        <div
-          className="d-flex justify-content-center fw-bold"
-          data-testid="amountCell"
-        >
-          {currencySymbols[params.row.currency as keyof typeof currencySymbols]}
-          {params.row.amount.toLocaleString('en-US')}
-        </div>
-      ),
-    },
-    {
-      field: 'donated',
-      headerName: t('pledges.donated'),
-      flex: 1,
-      minWidth: 100,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => (
-        <div
-          className="d-flex justify-content-center fw-bold"
-          data-testid="paidCell"
-        >
-          {currencySymbols[params.row.currency as keyof typeof currencySymbols]}
-          0
-        </div>
-      ),
-    },
-    {
-      field: 'action',
-      headerName: tCommon('action'),
-      flex: 1,
-      minWidth: 100,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => (
-        <>
-          <Button
-            variant="success"
-            size="sm"
-            className={`me-2 ${styles.editButton}`}
-            data-testid="editPledgeBtn"
-            onClick={() =>
-              handleOpenModal(params.row as InterfacePledgeInfo, 'edit')
-            }
-          >
-            <i className="fa fa-edit" />
-          </Button>
-          <Button
-            size="sm"
-            variant="danger"
-            className="rounded"
-            data-testid="deletePledgeBtn"
-            onClick={() => handleDeleteClick(params.row as InterfacePledgeInfo)}
-          >
-            <i className="fa fa-trash" />
-          </Button>
-        </>
-      ),
-    },
-  ];
+  const columns = getPledgeColumns({
+    t,
+    tCommon,
+    id,
+    handleClick,
+    handleOpenModal,
+    handleDeleteClick,
+  });
 
   return (
     <div>
-      <Breadcrumbs aria-label={tCommon('breadcrumb')} className="ms-1">
-        <Link
-          underline="hover"
-          color="inherit"
-          component="button"
-          onClick={() => history.go(-2)}
-        >
-          {fundName}
-        </Link>
-        <Link
-          underline="hover"
-          color="inherit"
-          component="button"
-          onClick={() => history.back()}
-        >
-          {campaignInfo?.name}
-        </Link>
-        <Typography color="text.primary">{t('pledges.pledges')}</Typography>
-      </Breadcrumbs>
+      <BreadcrumbsComponent
+        items={[
+          { label: fundName, to: `/orgfunds/${orgId}` },
+          fundId
+            ? {
+                label: campaignInfo?.name,
+                to: `/orgfundcampaign/${orgId}/${fundId}`,
+              }
+            : { label: campaignInfo?.name },
+          { translationKey: 'pledges.pledges', isCurrent: true },
+        ]}
+      />
       <div className={styles.overviewContainer}>
         <div className={styles.titleContainer}>
           <h3>{campaignInfo?.name}</h3>
