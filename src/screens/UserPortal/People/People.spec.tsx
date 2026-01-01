@@ -66,6 +66,7 @@ const makeQueryVars = (overrides = {}) => ({
   orgId: DEFAULT_ORG_ID,
   firstName_contains: DEFAULT_SEARCH,
   first: DEFAULT_FIRST,
+  after: undefined,
   ...overrides,
 });
 
@@ -455,7 +456,7 @@ describe('Testing People Screen [User Portal]', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.getByTestId('loading-state')).toBeInTheDocument();
     await wait();
   });
 

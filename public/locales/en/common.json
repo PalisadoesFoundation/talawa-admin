@@ -199,5 +199,13 @@
   "imageUploadError": "Failed to upload image",
   "imageUploadSuccess": "Image uploaded successfully",
   "postalCode": "Postal Code",
-  "state": "State"
+  "state": "State",
+  "closeModal": "Close modal",
+  "errorLoadingUsers": "Error loading users",
+  "noUsersFound": "No users found",
+  "clickToBrowseFile": "Click to browse files",
+  "selectAZipFile": "Select ZIP file",
+  "version": "Version",
+  "author": "Author",
+  "removePermanently": "Remove Permanently"
 }
