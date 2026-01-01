@@ -3,9 +3,13 @@ import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
-import { Accordion, AccordionSummary, Stack } from '@mui/material';
-import { WarningAmberRounded } from '@mui/icons-material';
-import { GridExpandMoreIcon } from '@mui/x-data-grid';
+import {
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Stack,
+} from '@mui/material';
+import { WarningAmberRounded, ExpandMore } from '@mui/icons-material';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useQuery } from '@apollo/client';
 import {
@@ -14,6 +18,7 @@ import {
   InterfaceMappedEvent,
   InterfaceVolunteerStatus,
 } from 'types/Volunteer/interface';
+import { IoLocationOutline } from 'react-icons/io5';
 import { IoIosHand } from 'react-icons/io';
 import Loader from 'components/Loader/Loader';
 import {
@@ -57,6 +62,28 @@ const UpcomingEvents = (): JSX.Element => {
     isRecurring: boolean;
   } | null>(null);
   const pendingVolunteerRequest = pendingVolunteerRequestState[0];
+  const setPendingVolunteerRequest = pendingVolunteerRequestState[1];
+
+  const handleVolunteerClick = (
+    eventId: string,
+    eventName: string,
+    eventDate: string,
+    groupId?: string,
+    groupName?: string,
+    status?: string,
+    isRecurring?: boolean,
+  ): void => {
+    setPendingVolunteerRequest({
+      eventId,
+      eventName,
+      eventDate,
+      groupId,
+      groupName,
+      status: status || 'requested',
+      isRecurring: isRecurring || false,
+    });
+    setShowRecurringModal(true);
+  };
 
   const {
     data: eventsData,
@@ -266,22 +293,83 @@ const UpcomingEvents = (): JSX.Element => {
 
           return (
             <Accordion key={event._id} className="mt-3 rounded">
-              <AccordionSummary expandIcon={<GridExpandMoreIcon />}>
+              <AccordionSummary expandIcon={<ExpandMore />}>
                 <div
                   className={styles.titleContainerVolunteer}
                   data-testid={`detailContainer${index + 1}`}
                 >
                   <h3 data-testid="eventTitle">{event.title}</h3>
+                </div>
+              </AccordionSummary>
+              <AccordionDetails className="d-flex gap-3 flex-column">
+                <div className="d-flex justify-content-between align-items-center">
+                  <div className="d-flex gap-3 flex-column">
+                    {event.description && (
+                      <div className="d-flex gap-3">
+                        <span>{t('description')}: </span>
+                        <span>{event.description}</span>
+                      </div>
+                    )}
+                    <div className="d-flex gap-3">
+                      <span>
+                        <IoLocationOutline className="me-1 mb-1" />
+                        {tCommon('location')}:{' '}
+                        {event.location || t('notSpecified')}
+                      </span>
+                    </div>
+                    {event.recurring ? (
+                      <div className="d-flex gap-3">
+                        <span>
+                          {t('recurrence')}: {event.recurrenceRule?.frequency}
+                        </span>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="d-flex gap-3">
+                          <span>
+                            {t('startDate')}:{' '}
+                            {new Date(event.startDate).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <div className="d-flex gap-3">
+                          <span>
+                            {t('endDate')}:{' '}
+                            {new Date(event.endDate).toLocaleDateString()}
+                          </span>
+                        </div>
+                      </>
+                    )}
+                    {event.volunteerGroups &&
+                      event.volunteerGroups.length > 0 && (
+                        <div className="d-flex gap-3">
+                          <span>
+                            {t('volunteerGroups')}:{' '}
+                            {event.volunteerGroups.length} groups available
+                          </span>
+                        </div>
+                      )}
+                  </div>
                   <Button
                     variant={status.buttonVariant}
                     data-testid="volunteerBtn"
                     disabled={status.disabled}
+                    onClick={() =>
+                      handleVolunteerClick(
+                        event._id,
+                        event.title,
+                        event.startDate,
+                        undefined,
+                        undefined,
+                        'requested',
+                        event.recurring,
+                      )
+                    }
                   >
                     <Icon className="me-1" />
                     {status.buttonText}
                   </Button>
                 </div>
-              </AccordionSummary>
+              </AccordionDetails>
             </Accordion>
           );
         })

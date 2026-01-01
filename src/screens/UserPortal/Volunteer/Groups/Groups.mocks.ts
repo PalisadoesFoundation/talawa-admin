@@ -49,7 +49,7 @@ const membership1 = {
     __typename: 'EventVolunteer',
     user: {
       __typename: 'User',
-      id: 'volunteerId1',
+      id: 'userId1',
       name: 'John Doe',
       avatarURL: null,
     },
@@ -64,7 +64,7 @@ const membership2 = {
     __typename: 'EventVolunteer',
     user: {
       __typename: 'User',
-      id: 'volunteerId2',
+      id: 'userId2',
       name: 'Teresa Bradley',
       avatarURL: null,
     },

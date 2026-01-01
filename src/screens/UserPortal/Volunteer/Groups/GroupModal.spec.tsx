@@ -276,7 +276,7 @@ describe('Testing GroupModal', () => {
     await userEvent.click(requestsRadio);
 
     await waitFor(() => {
-      expect(screen.getByText('Name')).toBeInTheDocument();
+      expect(screen.getByText('Volunteer Name')).toBeInTheDocument();
     });
 
     await waitFor(() => {

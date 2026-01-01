@@ -493,11 +493,21 @@ describe('RecurrenceEndOptionsSection', () => {
 
     it('should handle null date change gracefully', async () => {
       const setRecurrenceRuleState = vi.fn();
+      const defaultRecurrenceRule = {
+        frequency: 'WEEKLY' as const,
+        interval: 1,
+        endDate: new Date('2024-12-31'),
+        never: false,
+        count: 10,
+      };
 
       render(
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <RecurrenceEndOptionsSection
             {...defaultProps}
+            recurrenceRuleState={
+              defaultRecurrenceRule as InterfaceRecurrenceRule
+            }
             setRecurrenceRuleState={setRecurrenceRuleState}
             selectedRecurrenceEndOption="on"
           />
@@ -511,8 +521,15 @@ describe('RecurrenceEndOptionsSection', () => {
       // Simulate clearing the date
       fireEvent.change(datePicker, { target: { value: '' } });
 
-      // The mock should handle null gracefully
-      expect(datePicker).toBeInTheDocument();
+      // Verify setRecurrenceRuleState was called
+      expect(setRecurrenceRuleState).toHaveBeenCalledTimes(1);
+
+      // Extract the callback function and verify the resulting state
+      const callArg = setRecurrenceRuleState.mock.calls[0][0];
+      const newState = callArg(defaultRecurrenceRule);
+      expect(newState.endDate).toBeUndefined();
+      expect(newState.never).toBe(false);
+      expect(newState.count).toBeUndefined();
     });
 
     it('should have correct aria attributes', () => {
@@ -526,7 +543,7 @@ describe('RecurrenceEndOptionsSection', () => {
       );
 
       const countInput = screen.getByTestId('customRecurrenceCountInput');
-      expect(countInput).toHaveAttribute('aria-label', 'occurences');
+      expect(countInput).toHaveAttribute('aria-label', 'occurrences');
       expect(countInput).toHaveAttribute('aria-required', 'true');
 
       const datePicker = screen.getByTestId('customRecurrenceEndDatePicker');

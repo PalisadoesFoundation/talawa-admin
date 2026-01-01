@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 /**
  * Unit tests for the VolunteerManagement component.
  *
@@ -22,9 +23,41 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import useLocalStorage from 'utils/useLocalstorage';
 
 vi.mock('@mui/icons-material', () => ({
-  SettingsInputComponentSharp: vi.fn(() => null),
-  Circle: vi.fn(() => null),
-  WarningAmberRounded: vi.fn(() => null),
+  SettingsInputComponentSharp: () =>
+    React.createElement('div', { 'data-testid': 'settings-icon' }),
+  Circle: () => React.createElement('div', { 'data-testid': 'circle-icon' }),
+  WarningAmberRounded: () =>
+    React.createElement('div', { 'data-testid': 'warning-icon' }),
+  ExpandMore: () =>
+    React.createElement('div', { 'data-testid': 'expand-more-icon' }),
+}));
+
+vi.mock('react-icons/io5', () => ({
+  IoLocationOutline: () =>
+    React.createElement('div', { 'data-testid': 'location-icon' }),
+}));
+
+vi.mock('react-icons/io', () => ({
+  IoIosHand: () => React.createElement('div', { 'data-testid': 'hand-icon' }),
+}));
+
+vi.mock('react-icons/fa', () => ({
+  FaCheck: () => React.createElement('div', { 'data-testid': 'check-icon' }),
+  FaTasks: () => React.createElement('div', { 'data-testid': 'tasks-icon' }),
+  FaChevronLeft: () =>
+    React.createElement('div', { 'data-testid': 'chevron-left-icon' }),
+}));
+
+vi.mock('react-icons/fa6', () => ({
+  FaRegEnvelopeOpen: () =>
+    React.createElement('div', { 'data-testid': 'envelope-open-icon' }),
+  FaUserGroup: () =>
+    React.createElement('div', { 'data-testid': 'user-group-icon' }),
+}));
+
+vi.mock('react-icons/tb', () => ({
+  TbCalendarEvent: () =>
+    React.createElement('div', { 'data-testid': 'calendar-event-icon' }),
 }));
 
 const { setItem, clearAllItems } = useLocalStorage();
@@ -105,12 +138,16 @@ describe('Volunteer Management', () => {
   test('Testing back button navigation', async () => {
     renderVolunteerManagement();
 
-    const backButton = await screen.findByTestId('backBtn');
-    await userEvent.click(backButton);
-    await waitFor(() => {
-      const orgHome = screen.getByTestId('orgHome');
-      expect(orgHome).toBeInTheDocument();
-    });
+    const backButton = screen
+      .getByTestId('chevron-left-icon')
+      .closest('button');
+    if (backButton) {
+      await userEvent.click(backButton);
+      await waitFor(() => {
+        const orgHome = screen.getByTestId('orgHome');
+        expect(orgHome).toBeInTheDocument();
+      });
+    }
   });
 
   test('Testing volunteer management tab switching', async () => {

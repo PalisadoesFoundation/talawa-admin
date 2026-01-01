@@ -1,3 +1,4 @@
+/* eslint-disable react/no-multi-comp */
 import React from 'react';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -46,8 +47,24 @@ vi.mock('react-toastify', () => ({
 }));
 
 vi.mock('@mui/icons-material', () => ({
-  Circle: vi.fn(() => null),
-  WarningAmberRounded: vi.fn(() => null),
+  Circle: () => React.createElement('div', { 'data-testid': 'circle-icon' }),
+  WarningAmberRounded: () =>
+    React.createElement('div', { 'data-testid': 'warning-icon' }),
+  ExpandMore: () =>
+    React.createElement('div', { 'data-testid': 'expand-more-icon' }),
+}));
+
+vi.mock('react-icons/io5', () => ({
+  IoLocationOutline: () =>
+    React.createElement('div', { 'data-testid': 'location-icon' }),
+}));
+
+vi.mock('react-icons/io', () => ({
+  IoIosHand: () => React.createElement('div', { 'data-testid': 'hand-icon' }),
+}));
+
+vi.mock('react-icons/fa', () => ({
+  FaCheck: () => React.createElement('div', { 'data-testid': 'check-icon' }),
 }));
 
 vi.mock('react-router', async () => {
