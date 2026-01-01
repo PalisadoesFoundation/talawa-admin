@@ -28,7 +28,7 @@ interface IValidationResult {
 export const PATTERNS = {
   color: /#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?([0-9a-fA-F]{2})?/g,
   spacingPx:
-    /(?:padding|margin|width|height|gap|top|right|bottom|left):\s*\d+px/g,
+    /(?:padding|margin|width|height|gap|top|right|bottom|left):\s*(?:\d+px\s*)+/g,
   fontSize: /font-size:\s*\d+px/g,
   fontWeight: /font-weight:\s*[1-9]00/g,
 };
