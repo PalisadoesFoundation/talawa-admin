@@ -19,7 +19,8 @@ import { USER_CREATED_ORGANIZATIONS } from 'GraphQl/Queries/OrganizationQueries'
 import Organizations from './Organizations';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
-const { setItem, clearAllItems } = useLocalStorage();
+let setItem: ReturnType<typeof useLocalStorage>['setItem'];
+let clearAllItems: ReturnType<typeof useLocalStorage>['clearAllItems'];
 
 const paginationMock = vi.hoisted(() => ({
   default: ({
@@ -339,6 +340,10 @@ async function wait(ms = 100): Promise<void> {
 }
 
 beforeEach(() => {
+  const { setItem: setItemLocal, clearAllItems: clearAllItemsLocal } =
+    useLocalStorage();
+  setItem = setItemLocal;
+  clearAllItems = clearAllItemsLocal;
   setItem('name', 'Test User');
   setItem('userId', TEST_USER_ID);
   clearAllItems();

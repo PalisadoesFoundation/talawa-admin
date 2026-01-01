@@ -372,7 +372,7 @@ describe('Actions Screen', () => {
 
     await waitFor(() => {
       const completedChips = screen.queryAllByText('Completed');
-      expect(completedChips.length).toBeGreaterThanOrEqual(0);
+      expect(completedChips.length).toBeGreaterThan(0);
     });
   });
 
@@ -592,7 +592,7 @@ describe('Actions Screen', () => {
 
     await waitFor(() => {
       const assignees = screen.getAllByTestId('assigneeName');
-      expect(assignees.length).toBeGreaterThanOrEqual(0);
+      expect(assignees.length).toBeGreaterThan(0);
     });
   });
 

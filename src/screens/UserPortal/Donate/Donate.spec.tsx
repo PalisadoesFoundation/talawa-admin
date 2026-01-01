@@ -14,7 +14,6 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Donate from './Donate';
 import userEvent from '@testing-library/user-event';
-import useLocalStorage from 'utils/useLocalstorage';
 import { DONATE_TO_ORGANIZATION } from 'GraphQl/Mutations/mutations';
 
 const { mockErrorHandler, mockUseParams, mockToast } = vi.hoisted(() => ({
@@ -69,12 +68,14 @@ vi.mock('components/Pagination/PaginationList/PaginationList', () => ({
       <span data-testid="current-page">{page}</span>
       <span data-testid="rows-per-page">{rowsPerPage}</span>
       <button
+        type="button"
         data-testid="next-page-btn"
         onClick={(e) => onPageChange(e, page + 1)}
       >
         Next
       </button>
       <button
+        type="button"
         data-testid="prev-page-btn"
         onClick={(e) => onPageChange(e, page - 1)}
       >
@@ -255,15 +256,18 @@ const DONATION_ERROR_MOCK = [
               countryCode: '123',
               postalCode: '456',
               state: 'def',
+              __typename: 'Address',
             },
             userRegistrationRequired: true,
             createdAt: '12345678900',
-            creator: { firstName: 'John', lastName: 'Doe' },
+            creator: { firstName: 'John', lastName: 'Doe', __typename: 'User' },
             members: [],
             admins: [],
             membershipRequests: [],
+            __typename: 'Organization',
           },
         ],
+        __typename: 'Query',
       },
     },
   },
@@ -406,10 +410,6 @@ describe('Donate Component', () => {
   });
 
   test('handles donation mutation error', async () => {
-    const { setItem } = useLocalStorage();
-    setItem('userId', '123');
-    setItem('name', 'name');
-
     render(
       <MockedProvider link={errorLink}>
         <BrowserRouter>

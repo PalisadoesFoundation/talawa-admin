@@ -35,12 +35,27 @@ vi.mock('@mui/icons-material', () => ({
 }));
 
 vi.mock('./GroupModal', () => ({
-  default: ({ isOpen, hide }: { isOpen: boolean; hide: () => void }) =>
+  default: ({
+    isOpen,
+    hide,
+    refetchGroups,
+  }: {
+    isOpen: boolean;
+    hide: () => void;
+    refetchGroups?: () => void;
+  }) =>
     isOpen ? (
       <div data-testid="groupModal">
         <div>Manage Group</div>
-        <button data-testid="modalCloseBtn" onClick={hide}>
+        <button type="button" data-testid="modalCloseBtn" onClick={hide}>
           Close
+        </button>
+        <button
+          type="button"
+          data-testid="triggerRefetch"
+          onClick={() => refetchGroups?.()}
+        >
+          Trigger Refetch
         </button>
       </div>
     ) : null,
@@ -181,6 +196,7 @@ const CUSTOM_MOCKS = [
         getEventVolunteerGroups: [group1],
       },
     },
+    maxUsageCount: 2,
   },
   {
     request: {
@@ -217,6 +233,7 @@ const CUSTOM_MOCKS = [
         getEventVolunteerGroups: [group1],
       },
     },
+    maxUsageCount: 2,
   },
 ];
 
@@ -592,7 +609,7 @@ describe('Groups Screen [User Portal]', () => {
 
     // Edit buttons should be visible only for groups where user is leader
     const editButtons = screen.getAllByTestId('editGroupBtn');
-    expect(editButtons.length).toBeGreaterThanOrEqual(0);
+    expect(editButtons.length).toBe(1);
   });
 
   it('can sort groups by number of volunteers', async () => {
@@ -646,9 +663,8 @@ describe('Groups Screen [User Portal]', () => {
 
     // Open modal
     const viewButtons = screen.getAllByTestId('viewGroupBtn');
-    if (viewButtons.length > 0) {
-      await userEvent.click(viewButtons[0]);
-    }
+    expect(viewButtons.length).toBeGreaterThan(0);
+    await userEvent.click(viewButtons[0]);
 
     // Search text should still be there
     await waitFor(() => {
@@ -700,15 +716,18 @@ describe('Groups Screen [User Portal]', () => {
     });
 
     const viewButtons = screen.getAllByTestId('viewGroupBtn');
-    if (viewButtons.length > 0) {
-      await userEvent.click(viewButtons[0]);
-    }
+    expect(viewButtons.length).toBeGreaterThan(0);
+    await userEvent.click(viewButtons[0]);
 
-    // Click close button if available
-    const closeButton = screen.queryByTestId('volunteerViewModalCloseBtn');
-    if (closeButton) {
-      await userEvent.click(closeButton);
-    }
+    const closeButton = await screen.findByTestId('volunteerViewModalCloseBtn');
+    await userEvent.click(closeButton);
+
+    // Verify modal is closed
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('volunteerViewModal'),
+      ).not.toBeInTheDocument();
+    });
   });
 
   it('calls refetchGroups when triggered from GroupModal', async () => {
@@ -771,9 +790,14 @@ describe('Groups Screen [User Portal]', () => {
       expect(screen.getByText(/manage group/i)).toBeInTheDocument();
     });
 
-    // GroupModal receives refetchGroups prop which can be called
-    // This verifies the prop is passed correctly
-    expect(screen.getByTestId('groupModal')).toBeInTheDocument();
+    // Trigger refetch through the mock
+    const refetchButton = screen.getByTestId('triggerRefetch');
+    await userEvent.click(refetchButton);
+
+    // Verify refetch was called
+    await waitFor(() => {
+      expect(refetchSpy).toHaveBeenCalledTimes(2);
+    });
   });
 
   it('handles empty search term correctly', async () => {
