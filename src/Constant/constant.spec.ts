@@ -10,6 +10,10 @@ import {
 } from './constant';
 
 describe('constants', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
   it('AUTH_TOKEN should be an empty string', () => {
     expect(typeof AUTH_TOKEN).toEqual('string');
     expect(AUTH_TOKEN).toEqual('');
@@ -107,8 +111,4 @@ describe('constants', () => {
       expect(typeof BACKEND_WEBSOCKET_URL).toBe('string');
     });
   });
-});
-
-afterEach(() => {
-  vi.clearAllMocks();
 });
