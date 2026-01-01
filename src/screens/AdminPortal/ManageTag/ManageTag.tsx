@@ -293,7 +293,7 @@ function ManageTag(): JSX.Element {
           />
 
           <h6 className="fw-bold text-danger text-center">
-            {t('loadAssignedUsersError')}
+            {t('manageTag.loadAssignedUsersError')}
           </h6>
         </div>
       </div>
@@ -421,7 +421,7 @@ function ManageTag(): JSX.Element {
             />
             <div className={styles.btnsBlock}>
               <SortingButton
-                title={t('sortPeople')}
+                title={t('manageTag.sortPeople')}
                 sortingOptions={[
                   { label: tCommon('Latest'), value: 'DESCENDING' },
                   { label: tCommon('Oldest'), value: 'ASCENDING' },

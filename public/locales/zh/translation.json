@@ -475,7 +475,8 @@
     "noMoreMembersFound": "未找到更多成员",
     "errorOccurredWhileLoadingAssignedUser": "加载已分配用户时出错",
     "sortPeople": "排序人员",
-    "tagActions": "标签操作"
+    "tagActions": "标签操作",
+    "loadAssignedUsersError": "加载已分配用户时发生错误"
   },
   "userListCard": {
     "addAdmin": "添加管理员",

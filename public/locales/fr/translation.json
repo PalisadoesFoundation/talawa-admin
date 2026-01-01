@@ -474,8 +474,9 @@
     "allTags": "Toutes les étiquettes",
     "noMoreMembersFound": "Aucun autre membre trouvé",
     "errorOccurredWhileLoadingAssignedUser": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
-    "sortPeople": "Trier les personnes",
-    "tagActions": "Actions d'étiquette"
+    "tagActions": "Actions d'étiquette",
+    "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
+    "sortPeople": "Trier les personnes"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",

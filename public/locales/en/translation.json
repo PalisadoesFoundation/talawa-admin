@@ -474,8 +474,9 @@
     "allTags": "All Tags",
     "noMoreMembersFound": "No more members found",
     "errorOccurredWhileLoadingAssignedUser": "Error occurred while loading assigned users",
-    "sortPeople": "Sort People",
-    "tagActions": "Tag Actions"
+    "tagActions": "Tag Actions",
+    "loadAssignedUsersError": "Error occurred while loading assigned users",
+    "sortPeople": "Sort People"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
