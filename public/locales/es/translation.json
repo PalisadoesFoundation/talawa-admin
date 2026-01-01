@@ -1,6 +1,6 @@
 {
   "ends": "Finaliza",
-  "occurrences": "Ocurrencias",
+  "occurrences": "ocurrencias",
   "leaderboard": {
     "title": "Tabla de Clasificación",
     "searchByVolunteer": "Buscar por Voluntario",
@@ -1815,7 +1815,7 @@
     "volunteered": "Voluntariado",
     "volunteerName": "Nombre",
     "volunteerActions": "Acciones",
-    "volunteerAlt": "Voluntario",
+    "volunteerAlt": "Imagen de perfil del voluntario",
     "join": "Unirse",
     "joined": "Unido",
     "searchByEventName": "Buscar por Título del Evento",

@@ -1,3 +1,4 @@
+// upcomingevents.tsx
 import React, { useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
@@ -28,7 +29,6 @@ import {
 import { FaCheck } from 'react-icons/fa';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import RecurringEventVolunteerModal from './RecurringEventVolunteerModal';
-
 /**
  * Component for displaying upcoming volunteer events for an organization.
  * Allows users to volunteer for events and groups, and tracks their membership status.
@@ -39,18 +39,14 @@ const UpcomingEvents = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'userVolunteer' });
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
-
   const { getItem } = useLocalStorage();
   const userId = getItem('userId');
   const { orgId } = useParams();
-
   const [searchTerm, setSearchTerm] = useState('');
   const [searchBy, setSearchBy] = useState<'title' | 'location'>('title');
-
   if (!orgId || !userId) {
     return <Navigate to="/" replace />;
   }
-
   const [showRecurringModal, setShowRecurringModal] = useState(false);
   const pendingVolunteerRequestState = useState<{
     eventId: string;
@@ -63,7 +59,6 @@ const UpcomingEvents = (): JSX.Element => {
   } | null>(null);
   const pendingVolunteerRequest = pendingVolunteerRequestState[0];
   const setPendingVolunteerRequest = pendingVolunteerRequestState[1];
-
   const handleVolunteerClick = (
     eventId: string,
     eventName: string,
@@ -84,7 +79,6 @@ const UpcomingEvents = (): JSX.Element => {
     });
     setShowRecurringModal(true);
   };
-
   const {
     data: eventsData,
     loading: eventsLoading,
@@ -96,7 +90,6 @@ const UpcomingEvents = (): JSX.Element => {
       first: 30,
     },
   });
-
   const { data: membershipData, loading: membershipLoading } = useQuery(
     USER_VOLUNTEER_MEMBERSHIP,
     {
@@ -104,7 +97,6 @@ const UpcomingEvents = (): JSX.Element => {
       skip: !userId,
     },
   );
-
   const basicMembershipLookup = useMemo(() => {
     const lookup: Record<string, InterfaceVolunteerMembership> = {};
     membershipData?.getVolunteerMembership?.forEach(
@@ -117,18 +109,15 @@ const UpcomingEvents = (): JSX.Element => {
     );
     return lookup;
   }, [membershipData]);
-
   const events = useMemo<InterfaceMappedEvent[]>(() => {
     if (!eventsData?.organization?.events?.edges) {
       return [];
     }
-
     const mapped = eventsData.organization.events.edges.map(
       (edge: InterfaceEventEdge) => {
         const isRecurringInstance =
           edge.node.baseEvent?.isRecurringEventTemplate;
         const isRecurringTemplate = edge.node.isRecurringEventTemplate;
-
         return {
           ...edge.node,
           _id: edge.node.id,
@@ -150,11 +139,9 @@ const UpcomingEvents = (): JSX.Element => {
         };
       },
     );
-
     if (!searchTerm.trim()) {
       return mapped;
     }
-
     const value = searchTerm.toLowerCase();
     return mapped.filter((event: InterfaceMappedEvent) => {
       if (searchBy === 'title') {
@@ -163,10 +150,8 @@ const UpcomingEvents = (): JSX.Element => {
       return (event.location || '').toLowerCase().includes(value);
     });
   }, [eventsData, searchTerm, searchBy]);
-
   const membershipLookup = useMemo(() => {
     const lookup = { ...basicMembershipLookup };
-
     events.forEach((event: InterfaceMappedEvent) => {
       Object.values(basicMembershipLookup).forEach(
         (membership: InterfaceVolunteerMembership) => {
@@ -181,17 +166,14 @@ const UpcomingEvents = (): JSX.Element => {
         },
       );
     });
-
     return lookup;
   }, [basicMembershipLookup, events]);
-
   const getVolunteerStatus = (
     eventId: string,
     groupId?: string,
   ): InterfaceVolunteerStatus => {
     const key = groupId ? `${eventId}-${groupId}` : eventId;
     const membership = membershipLookup[key];
-
     if (!membership) {
       return {
         status: 'none',
@@ -201,7 +183,6 @@ const UpcomingEvents = (): JSX.Element => {
         icon: IoIosHand,
       };
     }
-
     switch (membership.status) {
       case 'requested':
       case 'invited':
@@ -238,11 +219,9 @@ const UpcomingEvents = (): JSX.Element => {
         };
     }
   };
-
   if (eventsLoading || membershipLoading) {
-    return <Loader size="xl" />;
+    return <Loader size="xl" data-testid="loader" />;
   }
-
   if (eventsError) {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
@@ -255,7 +234,6 @@ const UpcomingEvents = (): JSX.Element => {
       </div>
     );
   }
-
   const searchByDropdown = {
     id: 'search-by',
     label: tCommon('searchBy', { item: '' }),
@@ -269,7 +247,6 @@ const UpcomingEvents = (): JSX.Element => {
       setSearchBy(v as 'title' | 'location'),
     dataTestIdPrefix: 'searchBy',
   };
-
   return (
     <>
       <AdminSearchFilterBar
@@ -281,16 +258,18 @@ const UpcomingEvents = (): JSX.Element => {
         hasDropdowns={true}
         dropdowns={[searchByDropdown]}
       />
-
       {events.length === 0 ? (
-        <Stack alignItems="center" justifyContent="center">
+        <Stack
+          alignItems="center"
+          justifyContent="center"
+          data-testid="noEventsMsg"
+        >
           {t('noEvents')}
         </Stack>
       ) : (
         events.map((event, index) => {
           const status = getVolunteerStatus(event._id);
           const Icon = status.icon;
-
           return (
             <Accordion key={event._id} className="mt-3 rounded">
               <AccordionSummary expandIcon={<ExpandMore />}>
@@ -351,7 +330,7 @@ const UpcomingEvents = (): JSX.Element => {
                   </div>
                   <Button
                     variant={status.buttonVariant}
-                    data-testid="volunteerBtn"
+                    data-testid={`eventVolunteerBtn-${index}`}
                     disabled={status.disabled}
                     onClick={() =>
                       handleVolunteerClick(
@@ -369,24 +348,72 @@ const UpcomingEvents = (): JSX.Element => {
                     {status.buttonText}
                   </Button>
                 </div>
+                {event.volunteerGroups?.length > 0 && (
+                  <div className="mt-3">
+                    <h6 className="fw-bold">{t('volunteerGroups')}</h6>
+                    {event.volunteerGroups.map((group) => {
+                      const groupStatus = getVolunteerStatus(
+                        event._id,
+                        group._id,
+                      );
+                      const GroupIcon = groupStatus.icon;
+                      return (
+                        <div
+                          key={group._id}
+                          className="d-flex justify-content-between align-items-center p-2 border rounded mb-2"
+                        >
+                          <div className="d-flex flex-column gap-1">
+                            <span className="fw-semibold">{group.name}</span>
+                            {group.description && (
+                              <span className="text-muted">
+                                {group.description}
+                              </span>
+                            )}
+                            <span className="text-muted">
+                              Required: {group.volunteersRequired}, Signed up:{' '}
+                              {group.volunteers.length}
+                            </span>
+                          </div>
+                          <Button
+                            variant={groupStatus.buttonVariant}
+                            data-testid={`groupVolunteerBtn-${group._id}`}
+                            disabled={groupStatus.disabled}
+                            onClick={() =>
+                              handleVolunteerClick(
+                                event._id,
+                                event.title,
+                                event.startDate,
+                                group._id,
+                                group.name,
+                                undefined,
+                                event.recurring,
+                              )
+                            }
+                          >
+                            <GroupIcon className="me-1" />
+                            {groupStatus.buttonText}
+                          </Button>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </AccordionDetails>
             </Accordion>
           );
         })
       )}
-
       <RecurringEventVolunteerModal
         show={showRecurringModal}
         onHide={() => setShowRecurringModal(false)}
         eventName={pendingVolunteerRequest?.eventName || ''}
         eventDate={pendingVolunteerRequest?.eventDate || ''}
         isForGroup={!!pendingVolunteerRequest?.groupId}
-        groupName={pendingVolunteerRequest?.groupName}
+        groupName={pendingVolunteerRequest?.groupName || ''}
         onSelectSeries={() => {}}
         onSelectInstance={() => {}}
       />
     </>
   );
 };
-
 export default UpcomingEvents;

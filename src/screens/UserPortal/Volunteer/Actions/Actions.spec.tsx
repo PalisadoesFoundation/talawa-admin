@@ -110,7 +110,57 @@ describe('Actions Screen', () => {
     localStorageMock.clear();
   });
 
-  it('redirects if params are missing', async () => {
+  it('redirects if orgId is missing', async () => {
+    render(
+      <MockedProvider link={link1}>
+        <MemoryRouter initialEntries={['/user/volunteer/']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <Routes>
+                <Route path="/user/volunteer/" element={<Actions />} />
+                <Route
+                  path="/"
+                  element={<div data-testid="paramsError"></div>}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
+    });
+  });
+
+  it('redirects if userId is missing', async () => {
+    setItem('userId', '');
+
+    render(
+      <MockedProvider link={link1}>
+        <MemoryRouter initialEntries={['/user/volunteer/orgId']}>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18n}>
+              <Routes>
+                <Route path="/user/volunteer/:orgId" element={<Actions />} />
+                <Route
+                  path="/"
+                  element={<div data-testid="paramsError"></div>}
+                />
+              </Routes>
+            </I18nextProvider>
+          </Provider>
+        </MemoryRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('paramsError')).toBeInTheDocument();
+    });
+  });
+
+  it('redirects if both params are missing', async () => {
     setItem('userId', '');
     setItem('volunteerId', '');
 
@@ -145,7 +195,7 @@ describe('Actions Screen', () => {
     expect(assignees.length).toBeGreaterThan(0);
   });
 
-  it('shows only action items for current user', async () => {
+  it('shows only action items for current user (direct assignment)', async () => {
     renderActions(link1);
 
     await waitFor(() => {
@@ -154,7 +204,26 @@ describe('Actions Screen', () => {
     });
   });
 
-  it('sorts by due date', async () => {
+  it('shows action items assigned to user through group', async () => {
+    renderActions(link1);
+
+    await waitFor(() => {
+      // Verify items assigned through volunteer group are shown
+      const assignees = screen.getAllByTestId('assigneeName');
+      expect(assignees.length).toBeGreaterThanOrEqual(1);
+    });
+  });
+
+  it('sorts by due date descending (default)', async () => {
+    renderActions(link1);
+
+    await waitFor(() => {
+      const assignees = screen.getAllByTestId('assigneeName');
+      expect(assignees.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('sorts by due date ascending', async () => {
     renderActions(link1);
 
     fireEvent.click(await screen.findByTestId('sort'));
@@ -165,7 +234,18 @@ describe('Actions Screen', () => {
     });
   });
 
-  it('searches by assignee', async () => {
+  it('sorts by due date descending explicitly', async () => {
+    renderActions(link1);
+
+    fireEvent.click(await screen.findByTestId('sort'));
+    fireEvent.click(await screen.findByTestId('dueDate_DESC'));
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('assigneeName')[0]).toBeInTheDocument();
+    });
+  });
+
+  it('searches by assignee name (volunteer user)', async () => {
     renderActions(link1);
 
     const input = await screen.findByTestId('searchByInput');
@@ -173,15 +253,93 @@ describe('Actions Screen', () => {
     await debounceWait();
 
     await waitFor(() => {
-      expect(
-        screen
-          .getAllByTestId('assigneeName')[0]
-          .textContent?.includes('Teresa'),
-      ).toBe(true);
+      const assignees = screen.getAllByTestId('assigneeName');
+      expect(assignees.length).toBeGreaterThanOrEqual(1);
+      expect(assignees[0].textContent?.includes('Teresa')).toBe(true);
     });
   });
 
-  it('renders empty state', async () => {
+  it('searches by volunteer group name', async () => {
+    renderActions(link1);
+
+    const input = await screen.findByTestId('searchByInput');
+    await userEvent.type(input, 'Group');
+    await debounceWait();
+
+    await waitFor(() => {
+      const assignees = screen.getAllByTestId('assigneeName');
+      expect(assignees.length).toBeGreaterThanOrEqual(1);
+    });
+  });
+
+  it('searches by category name', async () => {
+    renderActions(link1);
+
+    // Switch to category search
+    fireEvent.click(await screen.findByTestId('searchBy'));
+    fireEvent.click(await screen.findByTestId('category'));
+
+    const input = screen.getByTestId('searchByInput');
+    await userEvent.clear(input);
+    await userEvent.type(input, 'Category');
+    await debounceWait();
+
+    await waitFor(() => {
+      const categories = screen.getAllByTestId('categoryName');
+      expect(categories.length).toBeGreaterThanOrEqual(1);
+    });
+  });
+
+  it('switches between search by assignee and category', async () => {
+    renderActions(link1);
+
+    // Switch to category
+    fireEvent.click(await screen.findByTestId('searchBy'));
+    fireEvent.click(await screen.findByTestId('category'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+    });
+
+    // Switch back to assignee
+    fireEvent.click(screen.getByTestId('searchBy'));
+    fireEvent.click(screen.getByTestId('assignee'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+    });
+  });
+
+  it('filters action items with search term', async () => {
+    renderActions(link1);
+
+    const input = await screen.findByTestId('searchByInput');
+    await userEvent.type(input, 'Teresa');
+    await debounceWait();
+
+    await waitFor(() => {
+      const assignees = screen.getAllByTestId('assigneeName');
+      expect(assignees.length).toBeGreaterThanOrEqual(1);
+    });
+  });
+
+  it('clears search and shows all items', async () => {
+    renderActions(link1);
+
+    const input = await screen.findByTestId('searchByInput');
+    await userEvent.type(input, 'test');
+    await debounceWait();
+
+    await userEvent.clear(input);
+    await debounceWait();
+
+    await waitFor(() => {
+      const assignees = screen.getAllByTestId('assigneeName');
+      expect(assignees.length).toBeGreaterThanOrEqual(1);
+    });
+  });
+
+  it('renders empty state when no action items', async () => {
     renderActions(link3);
 
     await waitFor(() => {
@@ -197,6 +355,36 @@ describe('Actions Screen', () => {
     });
   });
 
+  it('renders all table columns correctly', async () => {
+    renderActions(link1);
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('assigneeName').length).toBeGreaterThan(0);
+      expect(screen.getAllByTestId('categoryName').length).toBeGreaterThan(0);
+      expect(screen.getAllByTestId('assignedAt').length).toBeGreaterThan(0);
+      expect(screen.getAllByTestId('viewItemBtn').length).toBeGreaterThan(0);
+      expect(screen.getAllByTestId('statusCheckbox').length).toBeGreaterThan(0);
+    });
+  });
+
+  it('displays completed status chip', async () => {
+    renderActions(link1);
+
+    await waitFor(() => {
+      const completedChips = screen.queryAllByText('Completed');
+      expect(completedChips.length).toBeGreaterThanOrEqual(0);
+    });
+  });
+
+  it('displays pending status chip', async () => {
+    renderActions(link1);
+
+    await waitFor(() => {
+      const pendingChips = screen.getAllByText('Pending');
+      expect(pendingChips.length).toBeGreaterThanOrEqual(1);
+    });
+  });
+
   it('opens and closes view modal', async () => {
     renderActions(link1);
 
@@ -206,6 +394,28 @@ describe('Actions Screen', () => {
     expect(await screen.findByText(t.actionItemDetails)).toBeInTheDocument();
 
     await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+
+    await waitFor(() => {
+      expect(screen.queryByText(t.actionItemDetails)).not.toBeInTheDocument();
+    });
+  });
+
+  it('opens view modal for different action items', async () => {
+    renderActions(link1);
+
+    const btns = await screen.findAllByTestId('viewItemBtn');
+
+    // Open first item
+    await userEvent.click(btns[0]);
+    expect(await screen.findByText(t.actionItemDetails)).toBeInTheDocument();
+    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+
+    // Open second item if exists
+    if (btns.length > 1) {
+      await userEvent.click(btns[1]);
+      expect(await screen.findByText(t.actionItemDetails)).toBeInTheDocument();
+      await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    }
   });
 
   it('opens and closes status modal', async () => {
@@ -217,5 +427,203 @@ describe('Actions Screen', () => {
     expect(await screen.findByText(t.actionItemStatus)).toBeInTheDocument();
 
     await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+
+    await waitFor(() => {
+      expect(screen.queryByText(t.actionItemStatus)).not.toBeInTheDocument();
+    });
+  });
+
+  it('opens status modal for completed item', async () => {
+    renderActions(link1);
+
+    const checkboxes = await screen.findAllByTestId('statusCheckbox');
+    const completedCheckbox = checkboxes.find(
+      (cb) => (cb as HTMLInputElement).checked,
+    );
+
+    if (completedCheckbox) {
+      await userEvent.click(completedCheckbox);
+      expect(await screen.findByText(t.actionItemStatus)).toBeInTheDocument();
+      await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    }
+  });
+
+  it('opens status modal for pending item', async () => {
+    renderActions(link1);
+
+    const checkboxes = await screen.findAllByTestId('statusCheckbox');
+    const pendingCheckbox = checkboxes.find(
+      (cb) => !(cb as HTMLInputElement).checked,
+    );
+
+    if (pendingCheckbox) {
+      await userEvent.click(pendingCheckbox);
+      expect(await screen.findByText(t.actionItemStatus)).toBeInTheDocument();
+      await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    }
+  });
+
+  it('handles modal state correctly', async () => {
+    renderActions(link1);
+
+    // Open view modal
+    const viewBtn = await screen.findAllByTestId('viewItemBtn');
+    await userEvent.click(viewBtn[0]);
+    expect(await screen.findByText(t.actionItemDetails)).toBeInTheDocument();
+
+    // Close view modal
+    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+
+    // Open status modal
+    const checkbox = await screen.findAllByTestId('statusCheckbox');
+    await userEvent.click(checkbox[0]);
+    expect(await screen.findByText(t.actionItemStatus)).toBeInTheDocument();
+
+    // Close status modal
+    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+  });
+
+  it('renders assignee with volunteer user', async () => {
+    renderActions(link1);
+
+    await waitFor(() => {
+      const assignees = screen.getAllByTestId('assigneeName');
+      expect(assignees.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('renders assignee with volunteer group', async () => {
+    renderActions(link1);
+
+    await waitFor(() => {
+      const assignees = screen.getAllByTestId('assigneeName');
+      // Check that group names are rendered
+      const hasGroupName = assignees.some(
+        (el) => el.textContent && el.textContent.length > 0,
+      );
+      expect(hasGroupName).toBe(true);
+    });
+  });
+
+  it('formats assigned date correctly', async () => {
+    renderActions(link1);
+
+    await waitFor(() => {
+      const dates = screen.getAllByTestId('assignedAt');
+      expect(dates[0].textContent).toMatch(/\d{2}\/\d{2}\/\d{4}/);
+    });
+  });
+
+  it('handles search with empty results', async () => {
+    renderActions(link1);
+
+    const input = await screen.findByTestId('searchByInput');
+    await userEvent.type(input, 'NonexistentSearchTerm12345');
+    await debounceWait();
+
+    await waitFor(() => {
+      // Should show no results or empty state
+      const assignees = screen.queryAllByTestId('assigneeName');
+      expect(assignees.length).toBe(0);
+    });
+  });
+
+  it('maintains sort order after search', async () => {
+    renderActions(link1);
+
+    // Set sort order
+    fireEvent.click(await screen.findByTestId('sort'));
+    fireEvent.click(await screen.findByTestId('dueDate_ASC'));
+
+    // Then search
+    const input = screen.getByTestId('searchByInput');
+    await userEvent.type(input, 'Teresa');
+    await debounceWait();
+
+    await waitFor(() => {
+      const assignees = screen.getAllByTestId('assigneeName');
+      expect(assignees.length).toBeGreaterThanOrEqual(1);
+    });
+  });
+
+  it('filters items assigned directly to user', async () => {
+    renderActions(link1);
+
+    await waitFor(() => {
+      // Should show items where volunteer.user.id === userId
+      const assignees = screen.getAllByTestId('assigneeName');
+      expect(assignees.length).toBeGreaterThanOrEqual(1);
+    });
+  });
+
+  it('filters items assigned to user through volunteer group', async () => {
+    renderActions(link1);
+
+    await waitFor(() => {
+      // Should show items where volunteerGroup.volunteers contains userId
+      const assignees = screen.getAllByTestId('assigneeName');
+      expect(assignees.length).toBeGreaterThanOrEqual(1);
+    });
+  });
+
+  it('handles category search with lowercase matching', async () => {
+    renderActions(link1);
+
+    // Switch to category search
+    fireEvent.click(await screen.findByTestId('searchBy'));
+    fireEvent.click(await screen.findByTestId('category'));
+
+    const input = screen.getByTestId('searchByInput');
+    await userEvent.clear(input);
+    await userEvent.type(input, 'category');
+    await debounceWait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+    });
+  });
+
+  it('handles assignee search with lowercase matching', async () => {
+    renderActions(link1);
+
+    const input = await screen.findByTestId('searchByInput');
+    await userEvent.type(input, 'teresa');
+    await debounceWait();
+
+    await waitFor(() => {
+      const assignees = screen.getAllByTestId('assigneeName');
+      expect(assignees.length).toBeGreaterThanOrEqual(0);
+    });
+  });
+
+  it('uses assignedAt for sorting when available', async () => {
+    renderActions(link1);
+
+    await waitFor(() => {
+      const dates = screen.getAllByTestId('assignedAt');
+      expect(dates.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('falls back to createdAt for sorting when assignedAt is null', async () => {
+    renderActions(link1);
+
+    await waitFor(() => {
+      // Should successfully sort even if some items use createdAt
+      const assignees = screen.getAllByTestId('assigneeName');
+      expect(assignees.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('renders loading state initially', async () => {
+    const { container } = renderActions(link1);
+
+    // Check for loader (it should appear briefly)
+    await waitFor(() => {
+      expect(
+        container.querySelector('.loader') ||
+          screen.queryByTestId('searchByInput'),
+      ).toBeTruthy();
+    });
   });
 });

@@ -101,42 +101,6 @@ export const MEMBERSHIP_LOOKUP_MOCKS = [
   },
 ];
 
-export const MEMBERSHIP_STATUS_MOCKS = [
-  {
-    ...eventsQuery,
-    result: {
-      data: {
-        organization: {
-          id: 'orgId',
-          events: {
-            edges: [{ node: event1 }, { node: event2 }],
-          },
-        },
-      },
-    },
-  },
-  {
-    ...membershipQuery,
-    result: {
-      data: {
-        getVolunteerMembership: [
-          createMembershipRecord({
-            id: 'accepted',
-            status: 'accepted',
-            eventId: 'eventId1',
-          }),
-          createMembershipRecord({
-            id: 'rejected',
-            status: 'rejected',
-            eventId: 'eventId2',
-            groupId: 'groupId2',
-          }),
-        ],
-      },
-    },
-  },
-];
-
 export const EMPTY_MOCKS = [
   {
     ...eventsQuery,
