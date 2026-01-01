@@ -27,7 +27,7 @@ import LoadingState from '../LoadingState/LoadingState';
  * A generic wrapper around MUI DataGrid with built-in search, sorting, and pagination.
  *
  * @template T - The row data type (must include `id: string | number`)
- * @param props - Component props defined by InterfaceDataGridWrapperProps<T>
+ * @param props - Component props defined by InterfaceDataGridWrapperProps\<T\>
  * @returns A data grid with optional toolbar controls (search, sort) and enhanced features
  *
  * @example

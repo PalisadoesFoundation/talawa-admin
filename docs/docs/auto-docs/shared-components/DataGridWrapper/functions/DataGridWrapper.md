@@ -24,7 +24,7 @@ The row data type (must include `id: string | number`)
 
 [`InterfaceDataGridWrapperProps`](../../../types/DataGridWrapper/interface/interfaces/InterfaceDataGridWrapperProps.md)\<`T`\>
 
-Component props defined by InterfaceDataGridWrapperProps<T>
+Component props defined by InterfaceDataGridWrapperProps\<T\>
 
 ## Returns
 
