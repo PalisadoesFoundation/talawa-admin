@@ -36,10 +36,10 @@ const MOCKS = [
     request: {
       query: SIGNUP_MUTATION,
       variables: {
-        firstName: 'John',
-        lastName: 'Doe',
-        email: 'johndoe@gmail.com',
-        password: 'johnDoe',
+        firstName: 'Jane',
+        lastName: 'Smith',
+        email: 'testuser@example.com',
+        password: 'testPass123',
       },
     },
     result: {
@@ -58,11 +58,11 @@ const MOCKS = [
 
 // Form Data
 const formData = {
-  firstName: 'John',
-  lastName: 'Doe',
-  email: 'johndoe@gmail.com',
-  password: 'johnDoe',
-  confirmPassword: 'johnDoe',
+  firstName: 'Jane',
+  lastName: 'Smith',
+  email: 'testuser@example.com',
+  password: 'testPass123',
+  confirmPassword: 'testPass123',
 };
 
 // Additional GraphQL Mock Data for Error Handling
@@ -373,10 +373,10 @@ describe('Testing Register Component [User Portal]', () => {
         request: {
           query: SIGNUP_MUTATION,
           variables: {
-            firstName: 'John',
-            lastName: 'Doe',
-            email: 'umar@gmail.com',
-            password: 'password123',
+            firstName: 'Jane',
+            lastName: 'Smith',
+            email: 'testuser@example.com',
+            password: 'testPass123',
           },
         },
         error: new ApolloError({
