@@ -1503,7 +1503,14 @@
     "day": "दिन",
     "week": "सप्ताह",
     "month": "महीना",
-    "year": "वर्ष"
+    "year": "वर्ष",
+    "ends": "समाप्त होता है",
+    "occurrences": "घटनाओं",
+    "never": "कभी नहीं",
+    "on": "पर",
+    "after": "के बाद",
+    "customRecurrence": "कस्टम पुनरावृत्ति",
+    "repeatsEvery": "हर बार दोहराता है"
   },
   "userEventCard": {
     "starts": "प्रारंभ होगा",
@@ -1840,7 +1847,8 @@
     "srNo": "क्र.सं.",
     "groupName": "समूह का नाम",
     "noOfMembers": "सदस्यों की संख्या",
-    "options": "विकल्प"
+    "options": "विकल्प",
+    "notSpecified": "निर्दिष्ट नहीं"
   },
   "pluginStore": {
     "title": "प्लगइन स्टोर",

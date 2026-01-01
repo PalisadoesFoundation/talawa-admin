@@ -1503,7 +1503,14 @@
     "day": "Day",
     "week": "Week",
     "month": "Month",
-    "year": "Year"
+    "year": "Year",
+    "ends": "Ends",
+    "occurrences": "Occurrences",
+    "never": "Never",
+    "on": "On",
+    "after": "After",
+    "customRecurrence": "Custom Recurrence",
+    "repeatsEvery": "Repeats Every"
   },
   "userEventCard": {
     "starts": "Starts",
@@ -1840,7 +1847,8 @@
     "srNo": "Sr. No.",
     "groupName": "Group Name",
     "noOfMembers": "No. of Members",
-    "options": "Options"
+    "options": "Options",
+    "notSpecified": "Not Specified"
   },
   "pluginStore": {
     "title": "Plugin Store",

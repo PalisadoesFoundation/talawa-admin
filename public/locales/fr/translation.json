@@ -1503,7 +1503,14 @@
     "day": "Jour",
     "week": "Semaine",
     "month": "Mois",
-    "year": "Année"
+    "year": "Année",
+    "ends": "Prend fin",
+    "occurrences": "Occurrences",
+    "never": "Jamais",
+    "on": "Le",
+    "after": "Après",
+    "customRecurrence": "Récurrence Personnalisée",
+    "repeatsEvery": "Se répète tous les"
   },
   "userEventCard": {
     "starts": "Départs",
@@ -1840,7 +1847,8 @@
     "srNo": "N°",
     "groupName": "Nom du Groupe",
     "noOfMembers": "Nombre de Membres",
-    "options": "Options"
+    "options": "Options",
+    "notSpecified": "Non Spécifié"
   },
   "pluginStore": {
     "title": "Boutique de Plugins",

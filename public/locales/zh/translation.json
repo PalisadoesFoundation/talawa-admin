@@ -1503,7 +1503,14 @@
     "day": "天",
     "week": "周",
     "month": "月",
-    "year": "年"
+    "year": "年",
+    "ends": "结束",
+    "occurrences": "次",
+    "never": "从不",
+    "on": "在",
+    "after": "之后",
+    "customRecurrence": "自定义重复",
+    "repeatsEvery": "重复周期"
   },
   "userEventCard": {
     "starts": "开始",
@@ -1840,7 +1847,8 @@
     "srNo": "序号",
     "groupName": "小组名称",
     "noOfMembers": "成员数量",
-    "options": "选项"
+    "options": "选项",
+    "notSpecified": "未指定"
   },
   "pluginStore": {
     "title": "插件商店",
