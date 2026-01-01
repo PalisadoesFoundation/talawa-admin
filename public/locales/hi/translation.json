@@ -556,7 +556,8 @@
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
     "done": "पूर्ण",
     "createChat": "चैट बनाएं",
-    "viewType": "दृश्य प्रकार"
+    "viewType": "दृश्य प्रकार",
+    "search": "खोज"
   },
   "organizationActionItems": {
     "actionItemCategory": "क्रिया वस्तु श्रेणी",

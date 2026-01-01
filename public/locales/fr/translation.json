@@ -556,7 +556,8 @@
     "talawaApiUnavailable": "API Talawa indisponible",
     "done": "Fait",
     "createChat": "Créer une discussion",
-    "viewType": "Type de Vue"
+    "viewType": "Type de Vue",
+    "search": "rechercher"
   },
   "organizationActionItems": {
     "actionItemCategory": "Catégorie de l'Action",

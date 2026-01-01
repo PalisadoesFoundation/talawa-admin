@@ -556,7 +556,8 @@
     "endDate": "endDate",
     "talawaApiUnavailable": "talawaApiUnavailable",
     "done": "done",
-    "viewType": "View Type"
+    "viewType": "View Type",
+    "search": "Search"
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",

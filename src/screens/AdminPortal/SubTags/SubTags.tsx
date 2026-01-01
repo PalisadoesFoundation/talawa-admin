@@ -372,7 +372,10 @@ function SubTags(): JSX.Element {
                   type="button"
                   onClick={() => navigate(`/orgtags/${orgId}`)}
                   onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
+                    if (e.key === 'Enter') {
+                      navigate(`/orgtags/${orgId}`);
+                    } else if (e.key === ' ') {
+                      e.preventDefault();
                       navigate(`/orgtags/${orgId}`);
                     }
                   }}
@@ -390,7 +393,10 @@ function SubTags(): JSX.Element {
                     className={`ms-2  ${tag._id === parentTagId ? `fs-4 fw-semibold text-secondary` : `${styles.tagsBreadCrumbs} fs-6`}`}
                     onClick={() => redirectToSubTags(tag._id as string)}
                     onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
+                      if (e.key === 'Enter') {
+                        redirectToSubTags(tag._id as string);
+                      } else if (e.key === ' ') {
+                        e.preventDefault();
                         redirectToSubTags(tag._id as string);
                       }
                     }}

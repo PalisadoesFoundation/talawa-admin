@@ -556,7 +556,8 @@
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
     "done": "完成",
     "createChat": "创建聊天",
-    "viewType": "视图类型"
+    "viewType": "视图类型",
+    "search": "搜索"
   },
   "organizationActionItems": {
     "actionItemCategory": "行动项类别",
