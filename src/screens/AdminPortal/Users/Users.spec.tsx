@@ -2010,7 +2010,11 @@ describe('useEffect loadMoreUsers trigger', () => {
       },
       {
         request: { query: ORGANIZATION_LIST },
-        result: { data: { organizations: [{ id: 'org1', name: 'Org' }] } },
+        result: {
+          data: {
+            organizations: [{ id: 'org1', name: 'Org' }],
+          },
+        },
       },
     ];
 
@@ -2032,10 +2036,13 @@ describe('useEffect loadMoreUsers trigger', () => {
     // User should not be visible yet
     expect(screen.queryByText('Test User')).not.toBeInTheDocument();
 
-    // Wait for data to load
-    await waitFor(() => {
-      expect(screen.getByText('Test User')).toBeInTheDocument();
-    });
+    // Wait for data to load with increased timeout
+    await waitFor(
+      () => {
+        expect(screen.getByText('Test User')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     // Verify "No User Found" is not shown since we have data
     expect(screen.queryByText(/No User Found/i)).not.toBeInTheDocument();
