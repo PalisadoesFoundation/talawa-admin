@@ -55,16 +55,14 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
     CREATE_EVENT_MUTATION,
   );
 
-  // Default to tomorrow at 00:00 UTC to ensure startAt is always in the future
-  // (API requires startAt to be greater than current time)
-  // Using UTC-aware calculation to avoid timezone issues where local midnight
-  // could convert to a past UTC timestamp for users in positive UTC offsets
+  // Default to today's date for better UX - form submission handles past times
+  // by adding a buffer when needed (see EventForm.handleSubmit)
   const now = new Date();
-  const tomorrowUTC = new Date(
+  const todayUTC = new Date(
     Date.UTC(
       now.getUTCFullYear(),
       now.getUTCMonth(),
-      now.getUTCDate() + 1,
+      now.getUTCDate(),
       0,
       0,
       0,
@@ -76,8 +74,8 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
     name: '',
     description: '',
     location: '',
-    startDate: tomorrowUTC,
-    endDate: tomorrowUTC,
+    startDate: todayUTC,
+    endDate: todayUTC,
     startTime: '08:00:00',
     endTime: '18:00:00',
     allDay: true,
