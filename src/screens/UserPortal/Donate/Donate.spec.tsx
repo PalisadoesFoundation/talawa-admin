@@ -217,6 +217,7 @@ const EMPTY_DONATIONS_MOCK = [
     result: {
       data: {
         getDonationByOrgIdConnection: [],
+        __typename: 'Query',
       },
     },
   },
@@ -234,6 +235,7 @@ const DONATION_ERROR_MOCK = [
     result: {
       data: {
         getDonationByOrgIdConnection: [],
+        __typename: 'Query',
       },
     },
   },

@@ -344,13 +344,14 @@ beforeEach(() => {
     useLocalStorage();
   setItem = setItemLocal;
   clearAllItems = clearAllItemsLocal;
+  clearAllItems(); // Clear first to ensure clean slate
   setItem('name', 'Test User');
   setItem('userId', TEST_USER_ID);
-  clearAllItems();
 });
 
 afterEach(() => {
-  vi.restoreAllMocks();
+  vi.clearAllMocks();
+  clearAllItems();
 });
 
 test('Screen should be rendered properly', async () => {
@@ -648,23 +649,25 @@ test('should handle GraphQL error in all organizations query', async () => {
     .spyOn(console, 'error')
     .mockImplementation(() => {});
 
-  render(
-    <MockedProvider link={errorLink}>
-      <BrowserRouter>
-        <Provider store={store}>
-          <I18nextProvider i18n={i18nForTest}>
-            <Organizations />
-          </I18nextProvider>
-        </Provider>
-      </BrowserRouter>
-    </MockedProvider>,
-  );
+  try {
+    render(
+      <MockedProvider link={errorLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Organizations />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
-  await waitFor(() => {
-    expect(consoleErrorSpy).toHaveBeenCalled();
-  });
-
-  consoleErrorSpy.mockRestore();
+    await waitFor(() => {
+      expect(consoleErrorSpy).toHaveBeenCalled();
+    });
+  } finally {
+    consoleErrorSpy.mockRestore();
+  }
 });
 
 test('should handle organizations with null/undefined fields', async () => {
@@ -1138,11 +1141,8 @@ test('should display organizations with complete data fields', async () => {
 
   const orgCards = screen.getAllByTestId('organization-card');
   expect(orgCards.length).toBeGreaterThan(0);
-  // Find the outer card (first one with data-organization-name attribute)
-  const outerCard = orgCards.find((card) =>
-    card.hasAttribute('data-membership-status'),
-  );
-  expect(outerCard).toHaveAttribute(
+  // Check the first organization card
+  expect(orgCards[0]).toHaveAttribute(
     'data-organization-name',
     'Complete Organization',
   );

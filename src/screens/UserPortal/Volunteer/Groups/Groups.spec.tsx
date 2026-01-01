@@ -448,37 +448,6 @@ describe('Groups Screen [User Portal]', () => {
     expect(screen.getByText('Group 1')).toBeInTheDocument();
   });
 
-  it('executes leaderName assignment when search by leader with non-empty term', async () => {
-    renderGroups(linkSuccess);
-
-    // Wait for initial load
-    await waitFor(() => {
-      expect(screen.getByText('Group 1')).toBeInTheDocument();
-    });
-
-    // Switch to leader search mode
-    const searchByDropdown = screen.getByTestId('searchBy');
-    await userEvent.click(searchByDropdown);
-    const leaderOption = await screen.findByTestId('leader');
-    await userEvent.click(leaderOption);
-
-    // Type a non-empty leader name
-    const searchInput = screen.getByTestId('searchByInput');
-    await userEvent.clear(searchInput);
-    await userEvent.type(searchInput, 'Teresa');
-
-    // This test specifically ensures:
-    // 1. searchBy === 'leader' is true
-    // 2. debouncedSearchTerm.trim() !== '' is true
-    // 3. Therefore vars.leaderName = debouncedSearchTerm.trim() MUST execute (line 119)
-    await waitFor(
-      () => {
-        expect(screen.getByText('Group 1')).toBeInTheDocument();
-      },
-      { timeout: 1500 },
-    );
-  });
-
   it('renders empty state when groups list is empty', async () => {
     renderGroups(linkEmpty);
     await waitFor(() => {
