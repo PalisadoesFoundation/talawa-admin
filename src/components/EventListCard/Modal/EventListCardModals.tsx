@@ -82,6 +82,9 @@ function EventListCardModals({
   const [registrablechecked, setRegistrableChecked] = useState(
     eventListCardProps.isRegisterable,
   );
+  const [inviteOnlyChecked, setInviteOnlyChecked] = useState(
+    eventListCardProps.isInviteOnly ?? false,
+  );
   const [eventDeleteModalIsOpen, setEventDeleteModalIsOpen] = useState(false);
   const [eventUpdateModalIsOpen, setEventUpdateModalIsOpen] = useState(false);
   const [updateOption, setUpdateOption] = useState<
@@ -165,6 +168,8 @@ function EventListCardModals({
     const publicChanged = publicchecked !== eventListCardProps.isPublic;
     const registrableChanged =
       registrablechecked !== eventListCardProps.isRegisterable;
+    const inviteOnlyChanged =
+      inviteOnlyChecked !== (eventListCardProps.isInviteOnly ?? false);
     const allDayChanged = alldaychecked !== eventListCardProps.allDay;
     const recurrenceChanged = hasRecurrenceChanged();
 
@@ -174,6 +179,7 @@ function EventListCardModals({
       !locationChanged &&
       !publicChanged &&
       !registrableChanged &&
+      !inviteOnlyChanged &&
       !allDayChanged &&
       !recurrenceChanged
     );
@@ -212,6 +218,7 @@ function EventListCardModals({
     formState,
     publicchecked,
     registrablechecked,
+    inviteOnlyChecked,
     alldaychecked,
     eventStartDate,
     eventEndDate,
@@ -234,6 +241,25 @@ function EventListCardModals({
     }
   }, [availableUpdateOptions, updateOption]);
 
+  // Sync state with props when modal opens or props change
+  useEffect(() => {
+    if (eventModalIsOpen) {
+      setAllDayChecked(eventListCardProps.allDay);
+      setPublicChecked(eventListCardProps.isPublic);
+      setRegistrableChecked(eventListCardProps.isRegisterable);
+      setInviteOnlyChecked(eventListCardProps.isInviteOnly ?? false);
+      setEventStartDate(new Date(eventListCardProps.startAt));
+      setEventEndDate(new Date(eventListCardProps.endAt));
+      setFormState({
+        name: eventListCardProps.name,
+        eventdescrip: eventListCardProps.description,
+        location: eventListCardProps.location,
+        startTime: eventListCardProps.startTime?.split('.')[0] || '08:00:00',
+        endTime: eventListCardProps.endTime?.split('.')[0] || '08:00:00',
+      });
+    }
+  }, [eventListCardProps, eventModalIsOpen]);
+
   const { updateEventHandler } = useUpdateEventHandler();
 
   // This function is called when the update button is clicked
@@ -251,6 +277,7 @@ function EventListCardModals({
         alldaychecked,
         publicchecked,
         registrablechecked,
+        inviteOnlyChecked,
         eventStartDate,
         eventEndDate,
         recurrence,
@@ -411,6 +438,8 @@ function EventListCardModals({
         setPublicChecked={setPublicChecked}
         registrablechecked={registrablechecked}
         setRegistrableChecked={setRegistrableChecked}
+        inviteOnlyChecked={inviteOnlyChecked}
+        setInviteOnlyChecked={setInviteOnlyChecked}
         formState={formState}
         setFormState={setFormState}
         registerEventHandler={registerEventHandler}
@@ -515,6 +544,7 @@ function EventListCardModals({
                 alldaychecked,
                 publicchecked,
                 registrablechecked,
+                inviteOnlyChecked,
                 eventStartDate,
                 eventEndDate,
                 recurrence,

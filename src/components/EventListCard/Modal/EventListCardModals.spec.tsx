@@ -249,7 +249,8 @@ describe('EventListCardModals', () => {
     });
 
     // After the state update, the component re-renders, and the mock is called again with new props.
-    const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+    const updatedPreviewProps =
+      MockPreviewModal.mock.calls[MockPreviewModal.mock.calls.length - 1][0];
 
     // Trigger the update using the handler from the new props
     await act(async () => {
@@ -277,7 +278,8 @@ describe('EventListCardModals', () => {
         eventdescrip: 'Updated Description',
       });
     });
-    const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+    const updatedPreviewProps =
+      MockPreviewModal.mock.calls[MockPreviewModal.mock.calls.length - 1][0];
     await act(async () => {
       await updatedPreviewProps.handleEventUpdate();
     });
@@ -300,7 +302,8 @@ describe('EventListCardModals', () => {
         location: 'Updated Location',
       });
     });
-    const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+    const updatedPreviewProps =
+      MockPreviewModal.mock.calls[MockPreviewModal.mock.calls.length - 1][0];
     await act(async () => {
       await updatedPreviewProps.handleEventUpdate();
     });
@@ -320,7 +323,8 @@ describe('EventListCardModals', () => {
     act(() => {
       initialPreviewProps.setPublicChecked(false);
     });
-    const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+    const updatedPreviewProps =
+      MockPreviewModal.mock.calls[MockPreviewModal.mock.calls.length - 1][0];
     await act(async () => {
       await updatedPreviewProps.handleEventUpdate();
     });
@@ -340,7 +344,8 @@ describe('EventListCardModals', () => {
     act(() => {
       initialPreviewProps.setRegistrableChecked(false);
     });
-    const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+    const updatedPreviewProps =
+      MockPreviewModal.mock.calls[MockPreviewModal.mock.calls.length - 1][0];
     await act(async () => {
       await updatedPreviewProps.handleEventUpdate();
     });
@@ -360,7 +365,8 @@ describe('EventListCardModals', () => {
     act(() => {
       initialPreviewProps.setAllDayChecked(true);
     });
-    const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+    const updatedPreviewProps =
+      MockPreviewModal.mock.calls[MockPreviewModal.mock.calls.length - 1][0];
     await act(async () => {
       await updatedPreviewProps.handleEventUpdate();
     });
@@ -426,7 +432,10 @@ describe('EventListCardModals', () => {
 
     // After toggling, delete modal should be open
     // The component re-renders, so we check the latest call to MockDeleteModal
-    expect(MockDeleteModal.mock.calls[1][0].eventDeleteModalIsOpen).toBe(true);
+    expect(
+      MockDeleteModal.mock.calls[MockDeleteModal.mock.calls.length - 1][0]
+        .eventDeleteModalIsOpen,
+    ).toBe(true);
   });
 
   test('opens and closes update modal for recurring events', async () => {
@@ -633,7 +642,8 @@ describe('EventListCardModals', () => {
         initialPreviewProps.setEventEndDate(newEndDate);
       });
 
-      const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+      const updatedPreviewProps =
+        MockPreviewModal.mock.calls[MockPreviewModal.mock.calls.length - 1][0];
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
@@ -665,7 +675,8 @@ describe('EventListCardModals', () => {
           name: 'Updated Name',
         });
       });
-      const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+      const updatedPreviewProps =
+        MockPreviewModal.mock.calls[MockPreviewModal.mock.calls.length - 1][0];
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
@@ -699,7 +710,8 @@ describe('EventListCardModals', () => {
           name: 'Updated Name',
         });
       });
-      const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+      const updatedPreviewProps =
+        MockPreviewModal.mock.calls[MockPreviewModal.mock.calls.length - 1][0];
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
@@ -723,7 +735,8 @@ describe('EventListCardModals', () => {
           name: 'Updated Name',
         });
       });
-      const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+      const updatedPreviewProps =
+        MockPreviewModal.mock.calls[MockPreviewModal.mock.calls.length - 1][0];
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
@@ -739,7 +752,8 @@ describe('EventListCardModals', () => {
         initialPreviewProps.setAllDayChecked(true);
         initialPreviewProps.setEventStartDate(new Date('invalid date'));
       });
-      const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+      const updatedPreviewProps =
+        MockPreviewModal.mock.calls[MockPreviewModal.mock.calls.length - 1][0];
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
@@ -753,7 +767,8 @@ describe('EventListCardModals', () => {
         initialPreviewProps.setAllDayChecked(true);
         initialPreviewProps.setEventEndDate(new Date('invalid date'));
       });
-      const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+      const updatedPreviewProps =
+        MockPreviewModal.mock.calls[MockPreviewModal.mock.calls.length - 1][0];
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
@@ -767,7 +782,8 @@ describe('EventListCardModals', () => {
         initialPreviewProps.setAllDayChecked(false);
         initialPreviewProps.setEventStartDate(new Date('invalid date'));
       });
-      const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+      const updatedPreviewProps =
+        MockPreviewModal.mock.calls[MockPreviewModal.mock.calls.length - 1][0];
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
@@ -781,7 +797,8 @@ describe('EventListCardModals', () => {
         initialPreviewProps.setAllDayChecked(false);
         initialPreviewProps.setEventEndDate(new Date('invalid date'));
       });
-      const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+      const updatedPreviewProps =
+        MockPreviewModal.mock.calls[MockPreviewModal.mock.calls.length - 1][0];
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
@@ -799,7 +816,8 @@ describe('EventListCardModals', () => {
       act(() => {
         initialPreviewProps.setEventStartDate(new Date('invalid date'));
       });
-      const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+      const updatedPreviewProps =
+        MockPreviewModal.mock.calls[MockPreviewModal.mock.calls.length - 1][0];
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
@@ -821,7 +839,8 @@ describe('EventListCardModals', () => {
           name: 'Updated Name',
         });
       });
-      const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+      const updatedPreviewProps =
+        MockPreviewModal.mock.calls[MockPreviewModal.mock.calls.length - 1][0];
       await act(async () => {
         await updatedPreviewProps.handleEventUpdate();
       });
@@ -908,7 +927,8 @@ describe('EventListCardModals', () => {
     });
 
     // After the state update, the component re-renders, and the mock is called again with new props.
-    const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+    const updatedPreviewProps =
+      MockPreviewModal.mock.calls[MockPreviewModal.mock.calls.length - 1][0];
 
     await act(async () => {
       await updatedPreviewProps.handleEventUpdate();
@@ -940,7 +960,8 @@ describe('EventListCardModals', () => {
 
       // After the state update, the component re-renders.
       // The `useEffect` should have switched the updateOption to 'following'.
-      const updatedPreviewProps = MockPreviewModal.mock.calls[1][0];
+      const updatedPreviewProps =
+        MockPreviewModal.mock.calls[MockPreviewModal.mock.calls.length - 1][0];
 
       // Now, open the update modal to check the result
       await act(async () => {

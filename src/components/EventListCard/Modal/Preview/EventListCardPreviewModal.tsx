@@ -67,6 +67,8 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
   setPublicChecked,
   registrablechecked,
   setRegistrableChecked,
+  inviteOnlyChecked,
+  setInviteOnlyChecked,
   formState,
   setFormState,
   registerEventHandler,
@@ -411,6 +413,20 @@ const PreviewModal: React.FC<InterfacePreviewEventModalProps> = ({
                   checked={registrablechecked}
                   onChange={(): void => {
                     setRegistrableChecked(!registrablechecked);
+                  }}
+                  disabled={!canEditEvent}
+                />
+              </div>
+              <div className={styles.dispflexOrganizationEvents}>
+                <label htmlFor="inviteonly">{t('isInviteOnly')}?</label>
+                <Form.Switch
+                  id="inviteonly"
+                  type="checkbox"
+                  data-testid="updateInviteOnly"
+                  className={`me-4 ${styles.switch}`}
+                  checked={inviteOnlyChecked}
+                  onChange={(): void => {
+                    setInviteOnlyChecked(!inviteOnlyChecked);
                   }}
                   disabled={!canEditEvent}
                 />

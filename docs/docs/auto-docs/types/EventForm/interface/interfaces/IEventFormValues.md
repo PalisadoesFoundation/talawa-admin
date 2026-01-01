@@ -67,6 +67,18 @@ Defined in: [src/types/EventForm/interface.ts:27](https://github.com/PalisadoesF
 
 ***
 
+### isInviteOnly?
+
+> `optional` **isInviteOnly**: `boolean`
+
+Defined in: [src/types/EventForm/interface.ts:14](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/EventForm/interface.ts#L14)
+
+#### Inherited from
+
+`IEventFormBase.isInviteOnly`
+
+***
+
 ### isPublic
 
 > **isPublic**: `boolean`

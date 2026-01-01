@@ -139,6 +139,7 @@ export default function events(): JSX.Element {
       allDay: true,
       isPublic: true,
       isRegisterable: true,
+      isInviteOnly: false,
       recurrenceRule: null,
       createChat: false,
     }),
@@ -163,6 +164,9 @@ export default function events(): JSX.Element {
         allDay: payload.allDay,
         isPublic: payload.isPublic,
         isRegisterable: payload.isRegisterable,
+        ...(payload.isInviteOnly !== undefined && {
+          isInviteOnly: payload.isInviteOnly,
+        }),
         ...(payload.description && { description: payload.description }),
         ...(payload.location && { location: payload.location }),
         ...(recurrenceInput && { recurrence: recurrenceInput }),
@@ -204,6 +208,7 @@ export default function events(): JSX.Element {
       location: edge.node.location || '',
       isPublic: edge.node.isPublic,
       isRegisterable: edge.node.isRegisterable,
+      isInviteOnly: edge.node.isInviteOnly,
       // Add recurring event information
       isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
       baseEvent: edge.node.baseEvent,
@@ -309,6 +314,7 @@ export default function events(): JSX.Element {
             showCreateChat
             showRegisterable
             showPublicToggle
+            showInviteOnlyToggle
             showRecurrenceToggle
           />
         </Modal.Body>

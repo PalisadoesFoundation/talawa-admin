@@ -512,7 +512,7 @@
     "publicEvent": "Is Public",
     "isRegistrable": "Is Registrable",
     "registerable": "Is Registerable",
-
+    "isInviteOnly": "Invite Only",
     "createChat": "Create Chat",
     "createEvent": "Create Event",
     "enterFilter": "Enter Filter",
@@ -554,7 +554,13 @@
     "startDate": "startDate",
     "endDate": "endDate",
     "talawaApiUnavailable": "talawaApiUnavailable",
-    "done": "done"
+    "done": "done",
+    "noEventsAvailable": "No events available",
+    "holidays": "Holidays",
+    "eventsCreatedByOrganization": "Events Created by Organization",
+    "today": "Today",
+    "close": "Close",
+    "viewType": "View Type"
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",
@@ -710,6 +716,7 @@
     "recurringEvent": "Recurring Event",
     "isPublic": "Is Public",
     "isRegistrable": "Is Registrable",
+    "isInviteOnly": "Invite Only",
     "createChat": "Create Chat",
     "updatePost": "Update Post",
     "eventDetails": "Event Details",
@@ -1487,6 +1494,7 @@
     "enterDescription": "Enter Description",
     "publicEvent": "Is Public",
     "registerable": "Is Registerable",
+    "isInviteOnly": "Invite Only",
     "createChat": "Create Chat",
     "monthlyCalendarView": "Monthly Calendar",
     "yearlyCalendarView": "Yearly Calender",

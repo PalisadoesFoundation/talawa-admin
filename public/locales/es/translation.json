@@ -520,7 +520,7 @@
     "publicEvent": "Es público",
     "isRegistrable": "Es registrable",
     "registerable": "Es registrable",
-
+    "isInviteOnly": "Solo por invitación",
     "createEvent": "Crear evento",
     "enterFilter": "Introducir filtro",
     "enterName": "Introducir nombre",
@@ -554,7 +554,13 @@
     "month": "Mes",
     "year": "Año",
     "done": "Hecho",
-    "createChat": "Crear chat"
+    "createChat": "Crear chat",
+    "noEventsAvailable": "No hay eventos disponibles",
+    "holidays": "Días festivos",
+    "eventsCreatedByOrganization": "Eventos creados por la organización",
+    "today": "Hoy",
+    "close": "Cerrar",
+    "viewType": "Tipo de vista"
   },
   "organizationActionItems": {
     "actionItemCategory": "Categoría de Acción",
@@ -719,6 +725,7 @@
     "recurringEvent": "Evento recurrente",
     "isPublic": "Es público",
     "isRegistrable": "Es registrable",
+    "isInviteOnly": "Solo por invitación",
     "close": "Cerca",
     "updatePost": "Actualizar publicación",
     "eventDetails": "Detalles del evento",
@@ -1497,6 +1504,7 @@
     "endDate": "Fecha de finalización",
     "publicEvent": "Es público",
     "registerable": "Es registrable",
+    "isInviteOnly": "Solo por invitación",
     "monthlyCalendarView": "Calendario mensual",
     "yearlyCalendarView": "Calendario anual",
     "createChat": "Crear chat",

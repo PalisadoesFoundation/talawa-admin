@@ -929,6 +929,11 @@ type Event {
   isRegisterable: Boolean
 
   """
+  Indicates whether the event is invite only.
+  """
+  isInviteOnly: Boolean
+
+  """
   The physical or virtual location where the event will take place.
   """
   location: String
@@ -3019,6 +3024,11 @@ input MutationCreateEventInput {
   isRegisterable: Boolean
 
   """
+  Indicates whether the event is invite only.
+  """
+  isInviteOnly: Boolean
+
+  """
   Physical or virtual location of the event
   """
   location: String
@@ -4430,6 +4440,11 @@ input MutationUpdateEventInput {
   Indicates if users can register for this event.
   """
   isRegisterable: Boolean
+
+  """
+  Indicates whether the event is invite only.
+  """
+  isInviteOnly: Boolean
 
   """
   Physical or virtual location of the event.

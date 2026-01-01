@@ -732,7 +732,7 @@ describe('Calendar Component', () => {
     }
 
     await waitFor(() => {
-      expect(screen.getByText('No Event Available!')).toBeInTheDocument();
+      expect(screen.getByText('noEventsAvailable')).toBeInTheDocument();
     });
 
     expect(screen.queryByText('NonMember Private Event')).toBeNull();
@@ -760,7 +760,7 @@ describe('Calendar Component', () => {
     }
 
     await waitFor(() => {
-      expect(screen.getByText('No Event Available!')).toBeInTheDocument();
+      expect(screen.getByText('noEventsAvailable')).toBeInTheDocument();
     });
   });
 
@@ -1324,7 +1324,7 @@ describe('Calendar Component', () => {
     }
 
     await waitFor(() => {
-      expect(screen.getByText('No Event Available!')).toBeInTheDocument();
+      expect(screen.getByText('noEventsAvailable')).toBeInTheDocument();
     });
   });
 
@@ -1348,7 +1348,7 @@ describe('Calendar Component', () => {
     if (noEventsBtn) {
       await act(async () => fireEvent.click(noEventsBtn));
       await waitFor(() =>
-        expect(screen.getByText('No Event Available!')).toBeInTheDocument(),
+        expect(screen.getByText('noEventsAvailable')).toBeInTheDocument(),
       );
     }
   });
@@ -1484,7 +1484,7 @@ describe('Calendar Component', () => {
     if (noEventsBtn) {
       await act(async () => fireEvent.click(noEventsBtn));
       await waitFor(() =>
-        expect(screen.getByText('No Event Available!')).toBeInTheDocument(),
+        expect(screen.getByText('noEventsAvailable')).toBeInTheDocument(),
       );
     }
 

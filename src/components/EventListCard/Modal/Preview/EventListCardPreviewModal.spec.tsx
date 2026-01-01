@@ -109,6 +109,8 @@ const mockDefaultProps = {
   setRecurrence: vi.fn(),
   customRecurrenceModalIsOpen: false,
   setCustomRecurrenceModalIsOpen: vi.fn(),
+  inviteOnlyChecked: false,
+  setInviteOnlyChecked: vi.fn(),
 };
 
 const renderComponent = (props = {}) => {
@@ -316,6 +318,16 @@ describe('EventListCardPreviewModal', () => {
     await userEvent.click(registrableCheckbox);
 
     expect(mockSetRegistrableChecked).toHaveBeenCalledWith(false);
+  });
+
+  test('toggles invite only checkbox', async () => {
+    const mockSetInviteOnlyChecked = vi.fn();
+    renderComponent({ setInviteOnlyChecked: mockSetInviteOnlyChecked });
+
+    const inviteOnlyCheckbox = screen.getByTestId('updateInviteOnly');
+    await userEvent.click(inviteOnlyCheckbox);
+
+    expect(mockSetInviteOnlyChecked).toHaveBeenCalledWith(true);
   });
 
   test('hides time pickers when all-day is checked', () => {

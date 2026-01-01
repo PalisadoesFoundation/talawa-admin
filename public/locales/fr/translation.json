@@ -515,7 +515,7 @@
     "publicEvent": "est public",
     "isRegistrable": "Est enregistrable",
     "registerable": "Est enregistrable",
-
+    "isInviteOnly": "Sur invitation uniquement",
     "createEvent": "Créer un évènement",
     "enterFilter": "Entrer le filtre",
     "enterName": "Entrez le nom",
@@ -554,7 +554,13 @@
     "endDate": "Date de fin",
     "talawaApiUnavailable": "API Talawa indisponible",
     "done": "Fait",
-    "createChat": "Créer une discussion"
+    "createChat": "Créer une discussion",
+    "noEventsAvailable": "Aucun événement disponible",
+    "holidays": "Jours fériés",
+    "eventsCreatedByOrganization": "Événements créés par l'organisation",
+    "today": "Aujourd'hui",
+    "close": "Fermer",
+    "viewType": "Type de vue"
   },
   "organizationActionItems": {
     "actionItemCategory": "Catégorie de l'Action",
@@ -712,6 +718,7 @@
     "recurringEvent": "Événement récurrent",
     "isPublic": "est public",
     "isRegistrable": "Est enregistrable",
+    "isInviteOnly": "Sur invitation uniquement",
     "updatePost": "Mettre à jour le message",
     "eventDetails": "Détails de l'évènement",
     "eventDeleted": "Événement supprimé avec succès.",
@@ -1490,6 +1497,7 @@
     "enterLocation": "Entrez l'emplacement",
     "publicEvent": "est public",
     "registerable": "Est enregistrable",
+    "isInviteOnly": "Sur invitation uniquement",
     "monthlyCalendarView": "Calendrier mensuel",
     "yearlyCalendarView": "Calendrier annuel",
     "search": "Rechercher",

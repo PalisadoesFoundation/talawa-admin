@@ -257,6 +257,7 @@ const MOCKS = [
                   allDay: true,
                   isPublic: true,
                   isRegisterable: true,
+                  isInviteOnly: false,
                   isRecurringEventTemplate: false,
                   baseEvent: null,
                   sequenceNumber: null,
@@ -288,6 +289,7 @@ const MOCKS = [
                   allDay: false,
                   isPublic: false,
                   isRegisterable: false,
+                  isInviteOnly: false,
                   isRecurringEventTemplate: false,
                   baseEvent: null,
                   sequenceNumber: null,
@@ -347,6 +349,7 @@ const MOCKS = [
                   allDay: true,
                   isPublic: true,
                   isRegisterable: true,
+                  isInviteOnly: false,
                   isRecurringEventTemplate: false,
                   baseEvent: null,
                   sequenceNumber: null,
@@ -378,6 +381,7 @@ const MOCKS = [
                   allDay: false,
                   isPublic: false,
                   isRegisterable: false,
+                  isInviteOnly: false,
                   isRecurringEventTemplate: false,
                   baseEvent: null,
                   sequenceNumber: null,
@@ -475,6 +479,85 @@ const MOCKS = [
       data: {
         createEvent: {
           id: 'newEvent2',
+          name: 'New Non All Day Event',
+          description: 'New Test Description Non All Day',
+          startAt: '2024-03-05T08:00:00.000Z',
+          endAt: '2024-03-05T10:00:00.000Z',
+          allDay: false,
+          location: 'New Test Location',
+          isPublic: true,
+          isRegisterable: true,
+          isInviteOnly: false,
+          createdAt: '2024-03-05T08:00:00.000Z',
+          updatedAt: '2024-03-05T08:00:00.000Z',
+          isRecurringEventTemplate: false,
+          hasExceptions: false,
+          sequenceNumber: null,
+          totalCount: null,
+          progressLabel: null,
+          attachments: [],
+          creator: { id: 'user1', name: 'Test User' },
+          organization: { id: 'org123', name: 'Test Org' },
+          baseEvent: null,
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
+      variables: {
+        id: 'org123',
+        first: 100,
+        after: null,
+        startAt: startDate,
+        endAt: endDate,
+        includeRecurring: true,
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          events: {
+            edges: [
+              {
+                node: {
+                  id: 'event-invite-only',
+                  name: 'Invite Only Event',
+                  description: 'Description',
+                  startAt: startDate,
+                  endAt: endDate,
+                  location: 'Location',
+                  allDay: false,
+                  isPublic: false,
+                  isRegisterable: true,
+                  isInviteOnly: true,
+                  isRecurringEventTemplate: false,
+                  baseEvent: null,
+                  sequenceNumber: null,
+                  totalCount: null,
+                  hasExceptions: false,
+                  progressLabel: null,
+                  recurrenceDescription: null,
+                  recurrenceRule: null,
+                  creator: {
+                    id: 'user1',
+                    name: 'Test User',
+                  },
+                  attachments: [],
+                  organization: {
+                    id: 'org123',
+                    name: 'Test Org',
+                  },
+                },
+                cursor: 'cursor1',
+              },
+            ],
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: 'cursor1',
+            },
+          },
         },
       },
     },
@@ -612,6 +695,7 @@ const CREATOR_NULL_MOCKS = (() => {
                 allDay: true,
                 isPublic: true,
                 isRegisterable: true,
+                isInviteOnly: false,
                 isRecurringEventTemplate: false,
                 baseEvent: null,
                 sequenceNumber: null,
@@ -667,6 +751,7 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   beforeEach(() => {
+    vi.clearAllMocks();
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
       value: vi.fn().mockImplementation((query) => ({
@@ -685,7 +770,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   afterEach(() => {
     localStorage.clear();
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('Should render the Events screen properly', async () => {
@@ -709,6 +794,41 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('calendar-view-type')).toBeInTheDocument();
+    });
+  });
+
+  it('Should correctly map isInviteOnly property', async () => {
+    // Only use the invite-only mock for this test to avoid confusion
+    const inviteOnlyMock = MOCKS[MOCKS.length - 1];
+    const testLink = new StaticMockLink([inviteOnlyMock, MOCKS[2]], true); // MOCKS[2] is ORG_LIST
+
+    render(
+      <MockedProvider link={testLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await waitFor(() => {
+      const jsonElement = screen.getByTestId('event-data-json');
+      const eventData = JSON.parse(jsonElement.textContent || '[]');
+      const inviteOnlyEvent = eventData.find(
+        (e: { id: string; isInviteOnly?: boolean }) =>
+          e.id === 'event-invite-only',
+      );
+      expect(inviteOnlyEvent).toBeDefined();
+      expect(inviteOnlyEvent.isInviteOnly).toBe(true);
     });
   });
 
@@ -786,6 +906,26 @@ describe('Testing Events Screen [User Portal]', () => {
         data: {
           createEvent: {
             id: 'newEvent1',
+            name: 'New Test Event',
+            description: 'New Test Description',
+            startAt: '2024-03-05T00:00:00.000Z',
+            endAt: '2024-03-05T00:00:00.000Z',
+            allDay: true,
+            location: 'New Test Location',
+            isPublic: true,
+            isRegisterable: true,
+            isInviteOnly: false,
+            createdAt: '2024-03-05T00:00:00.000Z',
+            updatedAt: '2024-03-05T00:00:00.000Z',
+            isRecurringEventTemplate: false,
+            hasExceptions: false,
+            sequenceNumber: null,
+            totalCount: null,
+            progressLabel: null,
+            attachments: [],
+            creator: { id: 'user1', name: 'Test User' },
+            organization: { id: 'org123', name: 'Test Org' },
+            baseEvent: null,
           },
         },
       },
@@ -880,6 +1020,26 @@ describe('Testing Events Screen [User Portal]', () => {
         data: {
           createEvent: {
             id: 'newEvent2',
+            name: 'New Non All Day Event',
+            description: 'New Test Description Non All Day',
+            startAt: '2024-03-05T08:00:00.000Z',
+            endAt: '2024-03-05T10:00:00.000Z',
+            allDay: false,
+            location: 'New Test Location',
+            isPublic: true,
+            isRegisterable: true,
+            isInviteOnly: false,
+            createdAt: '2024-03-05T08:00:00.000Z',
+            updatedAt: '2024-03-05T08:00:00.000Z',
+            isRecurringEventTemplate: false,
+            hasExceptions: false,
+            sequenceNumber: null,
+            totalCount: null,
+            progressLabel: null,
+            attachments: [],
+            creator: { id: 'user1', name: 'Test User' },
+            organization: { id: 'org123', name: 'Test Org' },
+            baseEvent: null,
           },
         },
       },

@@ -114,6 +114,14 @@ Defined in: [src/types/Event/type.ts:29](https://github.com/PalisadoesFoundation
 
 ***
 
+### isInviteOnly?
+
+> `optional` **isInviteOnly**: `boolean`
+
+Defined in: [src/types/Event/type.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L32)
+
+***
+
 ### isPublic
 
 > **isPublic**: `boolean`
@@ -134,7 +142,7 @@ Defined in: [src/types/Event/type.ts:31](https://github.com/PalisadoesFoundation
 
 > `optional` **latitude**: `number`
 
-Defined in: [src/types/Event/type.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L32)
+Defined in: [src/types/Event/type.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L33)
 
 ***
 
@@ -142,7 +150,7 @@ Defined in: [src/types/Event/type.ts:32](https://github.com/PalisadoesFoundation
 
 > `optional` **location**: `string`
 
-Defined in: [src/types/Event/type.ts:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L33)
+Defined in: [src/types/Event/type.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L34)
 
 ***
 
@@ -150,7 +158,7 @@ Defined in: [src/types/Event/type.ts:33](https://github.com/PalisadoesFoundation
 
 > `optional` **longitude**: `number`
 
-Defined in: [src/types/Event/type.ts:34](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L34)
+Defined in: [src/types/Event/type.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L35)
 
 ***
 
@@ -158,7 +166,7 @@ Defined in: [src/types/Event/type.ts:34](https://github.com/PalisadoesFoundation
 
 > `optional` **organization**: [`Organization`](../../../Organization/type/type-aliases/Organization.md)
 
-Defined in: [src/types/Event/type.ts:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L35)
+Defined in: [src/types/Event/type.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L36)
 
 ***
 
@@ -166,7 +174,7 @@ Defined in: [src/types/Event/type.ts:35](https://github.com/PalisadoesFoundation
 
 > `optional` **recurrence**: `string`
 
-Defined in: [src/types/Event/type.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L36)
+Defined in: [src/types/Event/type.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L37)
 
 ***
 
@@ -174,7 +182,7 @@ Defined in: [src/types/Event/type.ts:36](https://github.com/PalisadoesFoundation
 
 > **recurring**: `boolean`
 
-Defined in: [src/types/Event/type.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L37)
+Defined in: [src/types/Event/type.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L38)
 
 ***
 
@@ -182,7 +190,7 @@ Defined in: [src/types/Event/type.ts:37](https://github.com/PalisadoesFoundation
 
 > **startDate**: `Date`
 
-Defined in: [src/types/Event/type.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L38)
+Defined in: [src/types/Event/type.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L39)
 
 ***
 
@@ -190,7 +198,7 @@ Defined in: [src/types/Event/type.ts:38](https://github.com/PalisadoesFoundation
 
 > **startTime**: `string`
 
-Defined in: [src/types/Event/type.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L39)
+Defined in: [src/types/Event/type.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L40)
 
 ***
 
@@ -198,7 +206,7 @@ Defined in: [src/types/Event/type.ts:39](https://github.com/PalisadoesFoundation
 
 > **status**: `string`
 
-Defined in: [src/types/Event/type.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L40)
+Defined in: [src/types/Event/type.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L41)
 
 ***
 
@@ -206,7 +214,7 @@ Defined in: [src/types/Event/type.ts:40](https://github.com/PalisadoesFoundation
 
 > **title**: `string`
 
-Defined in: [src/types/Event/type.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L41)
+Defined in: [src/types/Event/type.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L42)
 
 ***
 
@@ -214,4 +222,4 @@ Defined in: [src/types/Event/type.ts:41](https://github.com/PalisadoesFoundation
 
 > **updatedAt**: `Date`
 
-Defined in: [src/types/Event/type.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L42)
+Defined in: [src/types/Event/type.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/type.ts#L43)

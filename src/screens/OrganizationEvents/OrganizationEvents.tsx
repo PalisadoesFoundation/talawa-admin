@@ -51,6 +51,7 @@ interface IEventEdge {
     location?: string | null;
     isPublic: boolean;
     isRegisterable: boolean;
+    isInviteOnly?: boolean;
     // Recurring event fields
     isRecurringEventTemplate?: boolean;
     baseEvent?: {
@@ -176,6 +177,7 @@ function organizationEvents(): JSX.Element {
     location: edge.node.location || '',
     isPublic: edge.node.isPublic,
     isRegisterable: edge.node.isRegisterable,
+    isInviteOnly: edge.node.isInviteOnly,
     // Add recurring event information
     isRecurringEventTemplate: edge.node.isRecurringEventTemplate,
     baseEvent: edge.node.baseEvent,
