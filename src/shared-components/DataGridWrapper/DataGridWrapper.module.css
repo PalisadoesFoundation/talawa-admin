@@ -1,10 +1,10 @@
 .toolbar {
   display: flex;
-  gap: 8px;
-  margin-bottom: 8px;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
 }
 
 .errorMessage {
   color: var(--bs-danger);
-  padding: 10px;
+  padding: var(--space-4);
 }
