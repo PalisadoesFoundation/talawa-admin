@@ -10479,3 +10479,9 @@ form {
   padding: 0.75rem 1rem;
   color: var(--orgSelector-no-results-color);
 }
+
+.divider {
+  border: 2px solid var(--addButton-border);
+  border-width: 2px;
+  width: 85%;
+}

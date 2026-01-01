@@ -52,7 +52,7 @@ import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+
 import { useParams } from 'react-router';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
@@ -249,11 +249,12 @@ export default function People(): React.JSX.Element {
           </div>
 
           <div className={styles.people_card_main_container}>
-            {loading ? (
-              <div className={styles.custom_row_center}>
-                <HourglassBottomIcon /> <span>{t('loading')}</span>
-              </div>
-            ) : (
+            <LoadingState
+              isLoading={loading}
+              variant="skeleton"
+              skeletonRows={rowsPerPage}
+              skeletonCols={4}
+            >
               <>
                 {members && members.length > 0 ? (
                   members.map((member: IMemberWithUserType, index) => {
@@ -272,7 +273,7 @@ export default function People(): React.JSX.Element {
                   <span>{t('nothingToShow')}</span>
                 )}
               </>
-            )}
+            </LoadingState>
           </div>
           <PaginationList
             count={
