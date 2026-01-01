@@ -583,8 +583,8 @@ describe('PostCard', () => {
     },
     title: 'Test Post',
     text: 'This is a test post',
-    attachmentURL: 'test-image.jpg',
-    mimeType: 'image/jpeg',
+    image: 'test-image.jpg',
+    video: '',
     postedAt: '2023-01-01T00:00:00Z',
     upVoteCount: 5,
     downVoteCount: 0,
@@ -862,7 +862,7 @@ describe('PostCard', () => {
   });
 
   it('renders video when video prop is provided', () => {
-    renderPostCard({ attachmentURL: 'test-video.mp4', mimeType: 'video/mp4' });
+    renderPostCard({ video: 'test-video.mp4', image: null });
 
     const video = document.querySelector('video');
     expect(video).toBeInTheDocument();
@@ -870,7 +870,7 @@ describe('PostCard', () => {
   });
 
   it('renders post without image or video', () => {
-    renderPostCard({ attachmentURL: null, mimeType: null });
+    renderPostCard({ image: null, video: null });
 
     // Should render without throwing errors
     expect(screen.getByText('Test Post')).toBeInTheDocument();
