@@ -74,7 +74,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
 }) => {
   const { tagId: currentTagId } = useParams();
 
-  const { t: tErrors } = useTranslation('error');
+  const { t: tErrors } = useTranslation('errors');
 
   const [assignToMembers, setAssignToMembers] = useState<InterfaceMemberData[]>(
     [],
