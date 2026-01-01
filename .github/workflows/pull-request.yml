@@ -405,6 +405,12 @@ jobs:
           node-version: '24.x'
           cache: 'pnpm'
 
+      - name: Prepare dependency store
+        run: pnpm fetch
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile --prefer-offline
+
       - name: Install ripgrep
         run: |
           sudo apt-get update

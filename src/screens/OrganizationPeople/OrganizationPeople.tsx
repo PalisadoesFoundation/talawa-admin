@@ -309,6 +309,8 @@ function OrganizationPeople(): JSX.Element {
     if (isPaginating) return; // Reuse the same guard
 
     const oldPageSize = pageSize; // Capture for revert
+    const oldCurrentPage = currentPage;
+    const oldCursors = { ...cursors };
     setIsPaginating(true);
     try {
       setPageSize(newPageSize);
@@ -334,8 +336,9 @@ function OrganizationPeople(): JSX.Element {
       }
     } catch {
       toast.error(tCommon('pagination.pageSizeChangeError'));
-      // Revert on error
       setPageSize(oldPageSize);
+      setCurrentPage(oldCurrentPage);
+      setCursors(oldCursors);
     } finally {
       setIsPaginating(false);
     }

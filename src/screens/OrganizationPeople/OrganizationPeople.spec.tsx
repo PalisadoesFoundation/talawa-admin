@@ -356,11 +356,10 @@ const createUserListMock = (
 describe('OrganizationPeople', () => {
   beforeEach(() => {
     setupLocationMock();
-    vi.clearAllMocks();
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders loading state initially', async () => {
@@ -1068,13 +1067,11 @@ describe('OrganizationPeople', () => {
     });
 
     // Navigate to next page
-    const nextPageButton = screen.getByRole('button', { name: /next page/i });
+    const nextPageButton = screen.getByTestId('nextPageButton');
     fireEvent.click(nextPageButton);
 
     // Navigate back to previous page
-    const prevPageButton = screen.getByRole('button', {
-      name: /previous page/i,
-    });
+    const prevPageButton = screen.getByTestId('previousPageButton');
     fireEvent.click(prevPageButton);
   });
 
@@ -1357,7 +1354,7 @@ describe('OrganizationPeople', () => {
     });
 
     // Try to navigate to next page (should not work)
-    const nextPageButton = screen.getByRole('button', { name: /next page/i });
+    const nextPageButton = screen.getByTestId('nextPageButton');
     fireEvent.click(nextPageButton);
 
     // Should still show the same data
@@ -1410,13 +1407,11 @@ describe('OrganizationPeople', () => {
 
     // Manually trigger pagination to page 1 to simulate being on a later page
     // without having proper cursor data stored
-    const nextPageButton = screen.getByRole('button', { name: /next page/i });
+    const nextPageButton = screen.getByTestId('nextPageButton');
     fireEvent.click(nextPageButton);
 
     // Now try to go back - this should trigger the fallback to null
-    const prevPageButton = screen.getByRole('button', {
-      name: /previous page/i,
-    });
+    const prevPageButton = screen.getByTestId('previousPageButton');
     fireEvent.click(prevPageButton);
   });
 
@@ -1797,68 +1792,6 @@ describe('OrganizationPeople', () => {
       },
       { timeout: 3000 },
     );
-  });
-
-  test('explicitly prevents forward navigation when hasNextPage is false', async () => {
-    const singlePageMock = createMemberConnectionMock(
-      {
-        orgId: 'orgid',
-        first: 10,
-        after: null,
-        last: null,
-        before: null,
-      },
-      {
-        edges: [
-          {
-            node: {
-              id: 'member1',
-              name: 'Single Member',
-              emailAddress: 'single@example.com',
-              avatarURL: null,
-              createdAt: '2023-01-01T00:00:00Z',
-            },
-            cursor: 'cursor1',
-          },
-        ],
-        pageInfo: {
-          hasNextPage: false,
-          hasPreviousPage: false,
-          startCursor: 'cursor1',
-          endCursor: 'cursor1',
-        },
-      },
-    );
-
-    const link = new StaticMockLink([singlePageMock], true);
-
-    render(
-      <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgpeople/orgid']}>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <Routes>
-                <Route
-                  path="/orgpeople/:orgId"
-                  element={<OrganizationPeople />}
-                />
-              </Routes>
-            </I18nextProvider>
-          </Provider>
-        </MemoryRouter>
-      </MockedProvider>,
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText('Single Member')).toBeInTheDocument();
-    });
-
-    const nextButton = screen.getByTestId('nextPageButton');
-    fireEvent.click(nextButton);
-
-    await waitFor(() => {
-      expect(screen.getByText('Single Member')).toBeInTheDocument();
-    });
   });
 
   test('explicitly prevents backward navigation when hasPreviousPage is false', async () => {
