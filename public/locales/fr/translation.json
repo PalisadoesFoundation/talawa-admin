@@ -1549,7 +1549,19 @@
     "edit": "Modifier",
     "saveChanges": "Enregistrer les modifications",
     "endOfResults": "Fin des résultats",
-    "noDescription": "Aucune description"
+    "noDescription": "Aucune description",
+    "failedToFetchAdvertisements": "Échec de la récupération des annonces",
+    "advertisementMedia": "Média publicitaire",
+    "noMediaAvailable": "Aucun média disponible",
+    "advertisementImageAlt": "Image publicitaire #{{index}} pour {{name}}",
+    "invalidFileType": "Type de fichier invalide : {{fileName}}",
+    "fileTooLarge": "Fichier trop volumineux : {{fileName}}",
+    "invalidArgumentsForAction": "Arguments invalides pour cette action.",
+    "englishCaptions": "Légendes en anglais",
+    "preview": "Aperçu",
+    "bannerAd": "Bannière publicitaire",
+    "popupAd": "Annonce popup",
+    "menuAd": "Annonce de menu"
   },
   "userChat": {
     "title": "Discussions",
