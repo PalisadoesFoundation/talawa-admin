@@ -408,12 +408,6 @@
   --outlineBtn-border: #a8c7fa;
   --outlineBtn-hover-bg: #1778f2;
   --outlineBtn-color-hover: #ffffff;
-
-  /* Component specific helpers */
-  .volunteerGroupsLabel {
-    font-size: var(--font-size-header);
-    color: var(--subContainer-color);
-  }
   --outlineBtn-hover-border: #1778f2;
   --outlineBtn-bg-disabled: #ffffff;
   --outlineBtn-color-disabled: #9e9e9e;
@@ -878,6 +872,12 @@
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
 
+/* Component specific helpers */
+.volunteerGroupsLabel {
+  font-size: var(--font-size-header);
+  color: var(--subContainer-color);
+}
+
 /* Add Button */
 
 .addButton {
@@ -1193,6 +1193,7 @@
   padding: 0.25rem;
   width: 36px;
   height: 36px;
+  min-width: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -10268,10 +10269,6 @@ form {
 .dataGridContainer :global(.MuiDataGrid-row:hover),
 .dataGridContainer :global(.MuiDataGrid-row.Mui-hovered) {
   background-color: transparent;
-}
-
-.iconButton {
-  min-width: 32px;
 }
 
 .smallText {

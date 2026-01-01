@@ -34,7 +34,7 @@ vi.mock('@mui/x-date-pickers', async () => {
             data-testid={testId}
             data-cy={dataCy}
             disabled={disabled}
-            defaultValue={dayjsValue ? dayjsValue.format('YYYY-MM-DD') : ''}
+            value={dayjsValue ? dayjsValue.format('YYYY-MM-DD') : ''}
             onChange={(e) => {
               const val = e.target.value;
               if (val) {
@@ -391,8 +391,8 @@ describe('RecurrenceEndOptionsSection', () => {
         'customRecurrenceEndDatePicker',
       ) as HTMLInputElement;
 
-      // Use fireEvent.input for HTML5 date inputs in JSDOM
-      fireEvent.input(datePicker, { target: { value: '2026-01-15' } });
+      // Use fireEvent.change for HTML5 date inputs in JSDOM
+      fireEvent.change(datePicker, { target: { value: '2026-01-15' } });
 
       await waitFor(() => {
         expect(setRecurrenceRuleState).toHaveBeenCalled();
@@ -573,8 +573,8 @@ describe('RecurrenceEndOptionsSection', () => {
         'customRecurrenceEndDatePicker',
       ) as HTMLInputElement;
 
-      // Use fireEvent.input for HTML5 date inputs in JSDOM
-      fireEvent.input(datePicker, { target: { value: '2026-01-15' } });
+      // Use fireEvent.change for HTML5 date inputs in JSDOM
+      fireEvent.change(datePicker, { target: { value: '2026-01-15' } });
 
       await waitFor(() => {
         expect(setRecurrenceRuleState).toHaveBeenCalled();

@@ -5,7 +5,7 @@ import { FaCheck, FaX, FaTrash } from 'react-icons/fa6';
 import Avatar from 'components/Avatar/Avatar';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceGroupChatDetailsProps } from 'types/Chat/interface';
-import { getSafeImageSrc } from './GroupChatDetailsUtils';
+import { getSafeImageSrc, sanitizeText } from './GroupChatDetailsUtils';
 import { useTranslation } from 'react-i18next';
 
 interface InterfaceGroupChatDetailsHeaderProps {
@@ -83,7 +83,8 @@ export default function GroupChatDetailsHeader({
           {(() => {
             const safeSelected = getSafeImageSrc(selectedImage);
             const safeAvatar = getSafeImageSrc(chat?.avatarURL);
-            const imageAlt = chat?.name || t('groupChatImageAlt');
+            const safeName = sanitizeText(chat?.name);
+            const imageAlt = safeName || t('groupChatImageAlt');
             if (safeSelected) {
               return (
                 <img
@@ -104,9 +105,7 @@ export default function GroupChatDetailsHeader({
                 />
               );
             }
-            return (
-              <Avatar avatarStyle={styles.groupImage} name={chat.name || ''} />
-            );
+            return <Avatar avatarStyle={styles.groupImage} name={safeName} />;
           })()}
 
           <button
@@ -149,7 +148,7 @@ export default function GroupChatDetailsHeader({
             </div>
           ) : (
             <div className={styles.editChatNameContainer}>
-              <h3>{chat?.name}</h3>
+              <h3>{sanitizeText(chat?.name)}</h3>
               <button
                 type="button"
                 aria-label={t('editTitle')}
@@ -165,7 +164,7 @@ export default function GroupChatDetailsHeader({
           <p>
             {chat?.members.edges.length} {t('members')}
           </p>
-          <p>{chat?.description || ''}</p>
+          <p>{sanitizeText(chat?.description)}</p>
         </div>
       </Modal.Body>
     </>

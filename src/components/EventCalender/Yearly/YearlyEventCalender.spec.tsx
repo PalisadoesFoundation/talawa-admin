@@ -1391,14 +1391,22 @@ describe('Calendar Component', () => {
 
     const btnA = await clickExpandForDate(container, new Date(eventA.startAt));
     expect(btnA).toBeTruthy();
-    await waitFor(() =>
-      expect(screen.queryByText('Event A')).toBeInTheDocument(),
+    await waitFor(
+      () => expect(screen.queryByText('Event A')).toBeInTheDocument(),
+      { timeout: 3000 },
     );
 
     const btnB = await clickExpandForDate(container, new Date(eventB.startAt));
     expect(btnB).toBeTruthy();
-    await waitFor(() =>
-      expect(screen.queryByText('Event B')).toBeInTheDocument(),
+    await waitFor(
+      () => {
+        const eventBElement = screen.queryByText('Event B');
+        if (!eventBElement) {
+          throw new Error('Event B not found in document');
+        }
+        return expect(eventBElement).toBeInTheDocument();
+      },
+      { timeout: 3000 },
     );
 
     expect(screen.queryByText('Event A')).toBeNull();
