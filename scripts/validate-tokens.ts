@@ -84,6 +84,7 @@ export const shouldSkipFile = (file: string): boolean => {
     normalized.includes('dist') ||
     normalized.includes('/tokens/') ||
     normalized === 'src/assets/css/app.css' ||
+    normalized === 'src/style/app-fixed.module.css' ||
     normalized.startsWith('src/style/tokens/')
   );
 };
