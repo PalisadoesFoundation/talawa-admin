@@ -92,9 +92,11 @@ const ProfileImageSection: React.FC<InterfaceProfileImageSectionProps> = ({
         <div className="position-relative d-inline-block">
           <ProfileAvatarDisplay
             imageUrl={
-              normalizedAvatarUrl
-                ? sanitizeAvatars(selectedAvatar, normalizedAvatarUrl)
-                : undefined
+              selectedAvatar
+                ? sanitizeAvatars(selectedAvatar, normalizedAvatarUrl || '')
+                : normalizedAvatarUrl
+                  ? sanitizeAvatars(null, normalizedAvatarUrl)
+                  : undefined
             }
             fallbackName={userDetails?.name}
             size="custom"
