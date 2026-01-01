@@ -10520,3 +10520,9 @@ form {
   outline: 2px solid var(--primary-theme-color);
   outline-offset: 2px;
 }
+
+.divider {
+  border: 2px solid var(--addButton-border);
+  border-width: 2px;
+  width: 85%;
+}

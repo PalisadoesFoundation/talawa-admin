@@ -200,5 +200,13 @@
   "paginationNext": "Siguiente \u203a",
   "tablePagination": "Paginación de la tabla",
   "paginationPrevLabel": "Página anterior",
-  "paginationNextLabel": "Página siguiente"
+  "paginationNextLabel": "Página siguiente",
+  "closeModal": "Cerrar modal",
+  "errorLoadingUsers": "Error al cargar usuarios",
+  "noUsersFound": "No se encontraron usuarios",
+  "clickToBrowseFile": "Haga clic para buscar archivos",
+  "selectAZipFile": "Seleccione un archivo ZIP",
+  "version": "Versión",
+  "author": "Autor",
+  "removePermanently": "Eliminar permanentemente"
 }

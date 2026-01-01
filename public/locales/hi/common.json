@@ -201,5 +201,13 @@
   "paginationNext": "अगला \u203a",
   "tablePagination": "तालिका पृष्ठांकन",
   "paginationPrevLabel": "पिछला पृष्ठ",
-  "paginationNextLabel": "अगला पृष्ठ"
+  "paginationNextLabel": "अगला पृष्ठ",
+  "closeModal": "मोडल बंद करें",
+  "errorLoadingUsers": "उपयोगकर्ताओं को लोड करने में त्रुटि",
+  "noUsersFound": "कोई उपयोगकर्ता नहीं मिला",
+  "clickToBrowseFile": "फ़ाइल ब्राउज़ करने के लिए क्लिक करें",
+  "selectAZipFile": "एक ज़िप फ़ाइल चुनें",
+  "version": "संस्करण",
+  "author": "लेखक",
+  "removePermanently": "स्थायी रूप से हटाएं"
 }

@@ -201,5 +201,13 @@
   "paginationNext": "Suiv \u203a",
   "tablePagination": "Pagination du tableau",
   "paginationPrevLabel": "Page précédente",
-  "paginationNextLabel": "Page suivante"
+  "paginationNextLabel": "Page suivante",
+  "closeModal": "Fermer la fenêtre modale",
+  "errorLoadingUsers": "Erreur de chargement des utilisateurs",
+  "noUsersFound": "Aucun utilisateur trouvé",
+  "clickToBrowseFile": "Cliquez pour parcourir les fichiers",
+  "selectAZipFile": "Sélectionnez un fichier ZIP",
+  "version": "Version",
+  "author": "Auteur",
+  "removePermanently": "Supprimer définitivement"
 }
