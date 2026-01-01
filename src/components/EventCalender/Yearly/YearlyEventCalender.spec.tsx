@@ -14,73 +14,55 @@ import { BrowserRouter, MemoryRouter, useParams } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { UserRole, type InterfaceCalendarProps } from 'types/Event/interface';
 
+// Helper to get toggle button (expand or no-events) for a given Date
+function getToggleButtonForDate(
+  container: HTMLElement,
+  date: Date,
+): HTMLButtonElement | null {
+  const monthIdx = date.getMonth();
+  const monthStart = new Date(date.getFullYear(), monthIdx, 1);
+  const dayOfWeek = monthStart.getDay();
+  const diff = monthStart.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1); // Monday start
+  const gridStart = new Date(monthStart);
+  gridStart.setDate(diff);
+  const msPerDay = 24 * 60 * 60 * 1000;
+  const dayIdx = Math.floor(
+    (new Date(date.toDateString()).getTime() -
+      new Date(gridStart.toDateString()).getTime()) /
+      msPerDay,
+  );
+
+  const expandSelector = `[data-testid="expand-btn-${monthIdx}-${dayIdx}"]`;
+  const expandButton = container.querySelector(
+    expandSelector,
+  ) as HTMLButtonElement | null;
+
+  if (expandButton) {
+    return expandButton;
+  }
+
+  const noEventsSelector = `[data-testid="no-events-btn-${monthIdx}-${dayIdx}"]`;
+  return container.querySelector(noEventsSelector) as HTMLButtonElement | null;
+}
+
 async function clickExpandForDate(
   container: HTMLElement,
   date: Date,
-  expectedEventName?: string, // optional: name to wait for after clicking
 ): Promise<HTMLButtonElement> {
-  const dayStr = String(date.getDate());
-
-  // collect day nodes that contain the day number
-  const dayNodes = Array.from(
-    container.querySelectorAll('[data-testid="day"]'),
-  ) as HTMLElement[];
-
-  // collect candidate buttons from matching day nodes in order
-  const candidateButtons: HTMLButtonElement[] = [];
-  for (const dayNode of dayNodes) {
-    if ((dayNode.textContent ?? '').includes(dayStr)) {
-      const expand = dayNode.querySelector(
-        '[data-testid^="expand-btn-"]',
-      ) as HTMLButtonElement | null;
-      if (expand) candidateButtons.push(expand);
-      const noEvents = dayNode.querySelector(
-        '[data-testid^="no-events-btn-"]',
-      ) as HTMLButtonElement | null;
-      if (noEvents) candidateButtons.push(noEvents);
-    }
-  }
-
-  if (candidateButtons.length === 0) {
-    throw new Error(
-      `No expand/no-events buttons found for date ${date.toISOString()}`,
-    );
-  }
-
-  // If no expected event name, just click the first button and return
-  if (!expectedEventName) {
-    const btn = candidateButtons[0];
-    await act(async () => {
-      fireEvent.click(btn);
-    });
-    return btn;
-  }
-
-  // Try clicking candidates until expected text shows up
-  for (const btn of candidateButtons) {
-    await act(async () => {
-      fireEvent.click(btn);
-    });
-
-    try {
-      // small timeout to pick the right one fast but allow rendering
-      await waitFor(
-        () => {
-          expect(screen.getByText(expectedEventName)).toBeInTheDocument();
-        },
-        { timeout: 1000 },
+  const btn = await waitFor(() => {
+    const found = getToggleButtonForDate(container, date);
+    if (!found) {
+      throw new Error(
+        `Unable to find expand button for ${date.toISOString()} yet`,
       );
-      return btn; // found expected event after clicking this button
-    } catch {
-      // not found, try next candidate
-      continue;
     }
-  }
 
-  // If we reach here, no candidate revealed the expected event
-  throw new Error(
-    `Unable to reveal event "${expectedEventName}" for date ${date.toISOString()}`,
-  );
+    return found as HTMLButtonElement;
+  });
+  await act(async () => {
+    fireEvent.click(btn);
+  });
+  return btn;
 }
 
 // Helper type for Calendar event items
@@ -136,15 +118,9 @@ vi.mock('react-router', async () => {
 vi.mock('components/EventListCard/EventListCard', () => {
   return {
     __esModule: true,
-    default: (props: Record<string, unknown>) => {
-      const title =
-        (props.name as string) ??
-        ((props.event as Record<string, unknown>)?.name as string) ??
-        (props?.children as string) ??
-        (props?.title as string) ??
-        'event-card';
-      return <div data-testid="event-list-card">{String(title)}</div>;
-    },
+    default: (props: { name?: string } & Record<string, unknown>) => (
+      <div data-testid="event-list-card">{props.name}</div>
+    ),
   };
 });
 
@@ -1378,32 +1354,25 @@ describe('Calendar Component', () => {
   });
 
   it('collapses previously expanded day when a new day is expanded', async () => {
-    const today = new Date();
-    const todayMidday = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate(),
-      12,
-      0,
-      0,
-    );
-    const tomorrow = new Date(todayMidday);
-    tomorrow.setDate(todayMidday.getDate() + 1);
+    // Use fixed mid-month dates to avoid month boundary issues
+    const currentYear = new Date().getFullYear();
+    const dayOne = new Date(currentYear, 5, 10, 12, 0, 0); // June 10
+    const dayTwo = new Date(currentYear, 5, 11, 12, 0, 0); // June 11
 
     const eventA = {
       ...mockEventData[0],
       id: 'A',
       name: 'Event A',
-      startAt: todayMidday.toISOString(),
-      endAt: todayMidday.toISOString(),
+      startAt: dayOne.toISOString(),
+      endAt: dayOne.toISOString(),
     };
 
     const eventB = {
       ...mockEventData[0],
       id: 'B',
       name: 'Event B',
-      startAt: tomorrow.toISOString(),
-      endAt: tomorrow.toISOString(),
+      startAt: dayTwo.toISOString(),
+      endAt: dayTwo.toISOString(),
     };
 
     const { container } = renderWithRouterAndPath(
@@ -1420,24 +1389,16 @@ describe('Calendar Component', () => {
       expect(screen.getAllByTestId('day').length).toBeGreaterThan(0),
     );
 
-    const btnA = await clickExpandForDate(
-      container,
-      new Date(eventA.startAt),
-      'Event A',
-    );
+    const btnA = await clickExpandForDate(container, new Date(eventA.startAt));
     expect(btnA).toBeTruthy();
     await waitFor(() =>
-      expect(screen.getByText('Event A')).toBeInTheDocument(),
+      expect(screen.queryByText('Event A')).toBeInTheDocument(),
     );
 
-    const btnB = await clickExpandForDate(
-      container,
-      new Date(eventB.startAt),
-      'Event B',
-    );
+    const btnB = await clickExpandForDate(container, new Date(eventB.startAt));
     expect(btnB).toBeTruthy();
     await waitFor(() =>
-      expect(screen.getByText('Event B')).toBeInTheDocument(),
+      expect(screen.queryByText('Event B')).toBeInTheDocument(),
     );
 
     expect(screen.queryByText('Event A')).toBeNull();
@@ -1481,11 +1442,7 @@ describe('Calendar Component', () => {
       expect(screen.getAllByTestId('day').length).toBeGreaterThan(0),
     );
 
-    const expandBtn = await clickExpandForDate(
-      container,
-      specialDate,
-      'SundayStartEvent',
-    );
+    const expandBtn = await clickExpandForDate(container, specialDate);
     expect(expandBtn).toBeTruthy();
 
     await waitFor(() =>
