@@ -55,6 +55,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useParams } from 'react-router';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 
 interface IMemberNode {
   id: string;
