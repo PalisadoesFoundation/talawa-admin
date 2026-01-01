@@ -89,8 +89,8 @@ export default function register(props: InterfaceRegisterProps): JSX.Element {
       try {
         await registerMutation({
           variables: {
-            firstName: registerVariables.firstName,
-            lastName: registerVariables.lastName,
+            ID: '',
+            name: `${registerVariables.firstName} ${registerVariables.lastName}`,
             email: registerVariables.email,
             password: registerVariables.password,
           },

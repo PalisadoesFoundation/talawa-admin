@@ -36,8 +36,8 @@ const MOCKS = [
     request: {
       query: SIGNUP_MUTATION,
       variables: {
-        firstName: 'Jane',
-        lastName: 'Smith',
+        ID: '',
+        name: 'Jane Smith',
         email: 'testuser@example.com',
         password: 'testPass123',
       },
@@ -46,9 +46,9 @@ const MOCKS = [
       data: {
         signUp: {
           user: {
-            _id: '1',
+            id: '1',
           },
-          accessToken: 'accessToken',
+          authenticationToken: 'accessToken',
           refreshToken: 'refreshToken',
         },
       },
@@ -71,8 +71,8 @@ const ERROR_MOCKS = [
     request: {
       query: SIGNUP_MUTATION,
       variables: {
-        firstName: 'Error',
-        lastName: 'Test',
+        ID: '',
+        name: 'Error Test',
         email: 'error@test.com',
         password: 'password',
       },
@@ -373,8 +373,8 @@ describe('Testing Register Component [User Portal]', () => {
         request: {
           query: SIGNUP_MUTATION,
           variables: {
-            firstName: 'Jane',
-            lastName: 'Smith',
+            ID: '',
+            name: 'Jane Smith',
             email: 'testuser@example.com',
             password: 'testPass123',
           },
