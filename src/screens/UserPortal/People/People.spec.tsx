@@ -742,4 +742,61 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
 
     expect(searchInput).toHaveValue('');
   });
+
+  it('displays localized emailNotAvailable when email is missing', async () => {
+    // Create a mock with a member that has null email
+    const mockWithNullEmail = {
+      request: {
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: makeQueryVars(),
+      },
+      result: {
+        data: {
+          organization: {
+            members: {
+              edges: [
+                {
+                  cursor: 'cursor1',
+                  node: {
+                    id: 'user-null-email',
+                    name: 'Test User No Email',
+                    role: 'member',
+                    avatarURL: null,
+                    emailAddress: null,
+                    createdAt: '2023-03-02T03:22:08.101Z',
+                  },
+                },
+              ],
+              pageInfo: {
+                endCursor: 'cursor1',
+                hasPreviousPage: false,
+                hasNextPage: false,
+                startCursor: 'cursor1',
+              },
+            },
+          },
+        },
+      },
+    };
+
+    render(
+      <MockedProvider mocks={[mockWithNullEmail]}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Verify member is rendered
+    expect(screen.getByText('Test User No Email')).toBeInTheDocument();
+    // Verify emailNotAvailable translation is displayed
+    const emailElement = screen.getByTestId('people-email-user-null-email');
+    expect(emailElement).toHaveTextContent('Email not available');
+  });
 });
