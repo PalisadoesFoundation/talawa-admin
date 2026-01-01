@@ -208,5 +208,8 @@
   "selectAZipFile": "Seleccione un archivo ZIP",
   "version": "Versión",
   "author": "Autor",
-  "removePermanently": "Eliminar permanentemente"
+  "removePermanently": "Eliminar permanentemente",
+  "previousPage": "Página anterior",
+  "nextPage": "Siguiente página",
+  "pageNumber": "Página {{page}}"
 }
