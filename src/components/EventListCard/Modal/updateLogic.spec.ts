@@ -113,7 +113,7 @@ describe('useUpdateEventHandler', () => {
   let mockUpdateEntireRecurringEventSeries: Mock;
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   beforeEach(() => {

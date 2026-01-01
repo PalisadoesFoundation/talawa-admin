@@ -1988,4 +1988,22 @@ describe('EventForm', () => {
       }),
     );
   });
+
+  test('does not show invite-only toggle when showInviteOnlyToggle is false', () => {
+    render(
+      <EventForm
+        initialValues={baseValues}
+        onSubmit={vi.fn()}
+        onCancel={vi.fn()}
+        submitLabel="Create"
+        t={t}
+        tCommon={tCommon}
+        showInviteOnlyToggle={false}
+      />,
+    );
+
+    expect(
+      screen.queryByTestId('inviteOnlyEventCheck'),
+    ).not.toBeInTheDocument();
+  });
 });

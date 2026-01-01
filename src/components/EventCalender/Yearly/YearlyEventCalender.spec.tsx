@@ -178,6 +178,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: true,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [
         { id: 'user1', name: 'User 1', emailAddress: 'user1@example.com' },
       ],
@@ -199,6 +200,7 @@ describe('Calendar Component', () => {
       allDay: false,
       isPublic: false,
       isRegisterable: true,
+      isInviteOnly: false,
       attendees: [
         { id: 'user2', name: 'User 2', emailAddress: 'user2@example.com' },
       ],
@@ -421,7 +423,7 @@ describe('Calendar Component', () => {
       await act(async () => {
         fireEvent.click(expandButton);
       });
-      expect(await findByText('No Event Available!')).toBeInTheDocument();
+      expect(await findByText('noEventsAvailable')).toBeInTheDocument();
     }
   });
 
@@ -1489,5 +1491,311 @@ describe('Calendar Component', () => {
     }
 
     expect(screen.queryByText('BadDateEvent')).toBeNull();
+  });
+
+  describe('Invite-Only Event Visibility', () => {
+    // Use fixed mid-day date to avoid midnight boundary flakiness
+    const testDate = new Date(new Date().getFullYear(), 5, 15, 12, 0, 0);
+
+    const inviteOnlyEvent: CalendarEventItem = {
+      id: 'invite-only-event',
+      location: 'Secret Location',
+      name: 'Secret Party',
+      description: 'Invite only',
+      startAt: testDate.toISOString(),
+      endAt: testDate.toISOString(),
+      startTime: '18:00:00',
+      endTime: '22:00:00',
+      allDay: false,
+      isPublic: true,
+      isRegisterable: true,
+      isInviteOnly: true,
+      attendees: [
+        {
+          id: 'invited1',
+          name: 'Invited User',
+          emailAddress: 'invited@example.com',
+        },
+      ],
+      creator: {
+        id: 'creator1',
+        name: 'Event Creator',
+        emailAddress: 'creator@example.com',
+      },
+    };
+
+    it('shows invite-only event to creator (REGULAR role)', async () => {
+      const { container } = renderWithRouterAndPath(
+        <Calendar
+          eventData={[inviteOnlyEvent]}
+          refetchEvents={vi.fn()}
+          userRole={UserRole.REGULAR}
+          userId="creator1"
+          orgData={mockOrgData}
+        />,
+      );
+
+      await waitFor(() =>
+        expect(screen.getAllByTestId('day').length).toBeGreaterThan(0),
+      );
+      await clickExpandForDate(container, testDate);
+      expect(screen.getByText('Secret Party')).toBeInTheDocument();
+    });
+
+    it('shows invite-only event to invited user (REGULAR role)', async () => {
+      const { container } = renderWithRouterAndPath(
+        <Calendar
+          eventData={[inviteOnlyEvent]}
+          refetchEvents={vi.fn()}
+          userRole={UserRole.REGULAR}
+          userId="invited1"
+          orgData={mockOrgData}
+        />,
+      );
+
+      await waitFor(() =>
+        expect(screen.getAllByTestId('day').length).toBeGreaterThan(0),
+      );
+      await clickExpandForDate(container, testDate);
+      expect(screen.getByText('Secret Party')).toBeInTheDocument();
+    });
+
+    it('hides invite-only event from non-invited user (REGULAR role)', async () => {
+      const { container } = renderWithRouterAndPath(
+        <Calendar
+          eventData={[inviteOnlyEvent]}
+          refetchEvents={vi.fn()}
+          userRole={UserRole.REGULAR}
+          userId="random-user"
+          orgData={mockOrgData}
+        />,
+      );
+
+      await waitFor(() =>
+        expect(screen.getAllByTestId('day').length).toBeGreaterThan(0),
+      );
+
+      const expandBtn = container.querySelector('[data-testid^="expand-btn-"]');
+      expect(expandBtn).toBeNull();
+      expect(screen.queryByText('Secret Party')).toBeNull();
+    });
+
+    it('shows invite-only event to ADMINISTRATOR regardless of invitation', async () => {
+      const { container } = renderWithRouterAndPath(
+        <Calendar
+          eventData={[inviteOnlyEvent]}
+          refetchEvents={vi.fn()}
+          userRole={UserRole.ADMINISTRATOR}
+          userId="admin-not-invited"
+          orgData={mockOrgData}
+        />,
+      );
+
+      await waitFor(() =>
+        expect(screen.getAllByTestId('day').length).toBeGreaterThan(0),
+      );
+      await clickExpandForDate(container, testDate);
+      expect(screen.getByText('Secret Party')).toBeInTheDocument();
+    });
+
+    it('handles mixed public, private, and invite-only events correctly', async () => {
+      const publicEvent = {
+        ...mockEventData[0],
+        startAt: testDate.toISOString(),
+        endAt: testDate.toISOString(),
+        isInviteOnly: false,
+      };
+      const privateEvent = {
+        ...mockEventData[1],
+        startAt: testDate.toISOString(),
+        endAt: testDate.toISOString(),
+        isInviteOnly: false,
+      };
+
+      const { container } = renderWithRouterAndPath(
+        <Calendar
+          eventData={[publicEvent, privateEvent, inviteOnlyEvent]}
+          refetchEvents={vi.fn()}
+          userRole={UserRole.REGULAR}
+          userId="random-user"
+          orgData={mockOrgData}
+        />,
+      );
+
+      await waitFor(() =>
+        expect(screen.getAllByTestId('day').length).toBeGreaterThan(0),
+      );
+
+      // Non-invited REGULAR user should see public event, but not private or invite-only
+      await clickExpandForDate(container, testDate);
+      expect(screen.getByText('Test Event')).toBeInTheDocument();
+      expect(screen.queryByText('Private Event')).toBeNull();
+      expect(screen.queryByText('Secret Party')).toBeNull();
+    });
+
+    it('handles invite-only event with empty attendees array', async () => {
+      const inviteOnlyNoAttendees: CalendarEventItem = {
+        ...inviteOnlyEvent,
+        id: 'invite-only-no-attendees',
+        name: 'No Attendees Invite Event',
+        attendees: [],
+      };
+
+      const { container } = renderWithRouterAndPath(
+        <Calendar
+          eventData={[inviteOnlyNoAttendees]}
+          refetchEvents={vi.fn()}
+          userRole={UserRole.REGULAR}
+          userId="random-user"
+          orgData={mockOrgData}
+        />,
+      );
+
+      await waitFor(() =>
+        expect(screen.getAllByTestId('day').length).toBeGreaterThan(0),
+      );
+
+      // Non-invited user should not see invite-only event even with empty attendees
+      const expandBtn = container.querySelector('[data-testid^="expand-btn-"]');
+      expect(expandBtn).toBeNull();
+      expect(screen.queryByText('No Attendees Invite Event')).toBeNull();
+    });
+
+    it('handles invite-only event with undefined attendees', async () => {
+      const inviteOnlyUndefinedAttendees: CalendarEventItem = {
+        ...inviteOnlyEvent,
+        id: 'invite-only-undefined-attendees',
+        name: 'Undefined Attendees Event',
+        attendees: undefined as unknown as CalendarEventItem['attendees'],
+      };
+
+      const { container } = renderWithRouterAndPath(
+        <Calendar
+          eventData={[inviteOnlyUndefinedAttendees]}
+          refetchEvents={vi.fn()}
+          userRole={UserRole.REGULAR}
+          userId="random-user"
+          orgData={mockOrgData}
+        />,
+      );
+
+      await waitFor(() =>
+        expect(screen.getAllByTestId('day').length).toBeGreaterThan(0),
+      );
+
+      // Should handle gracefully without crashing
+      const expandBtn = container.querySelector('[data-testid^="expand-btn-"]');
+      expect(expandBtn).toBeNull();
+      expect(screen.queryByText('Undefined Attendees Event')).toBeNull();
+    });
+
+    it('shows invite-only event to creator even with undefined role', async () => {
+      const { container } = renderWithRouterAndPath(
+        <Calendar
+          eventData={[inviteOnlyEvent]}
+          refetchEvents={vi.fn()}
+          userRole={undefined}
+          userId="creator1"
+          orgData={mockOrgData}
+        />,
+      );
+
+      await waitFor(() =>
+        expect(screen.getAllByTestId('day').length).toBeGreaterThan(0),
+      );
+
+      // Creator should see their event even with undefined role
+      await clickExpandForDate(container, testDate);
+      expect(screen.getByText('Secret Party')).toBeInTheDocument();
+    });
+
+    it('hides invite-only event from non-invited user with undefined role', async () => {
+      const { container } = renderWithRouterAndPath(
+        <Calendar
+          eventData={[inviteOnlyEvent]}
+          refetchEvents={vi.fn()}
+          userRole={undefined}
+          userId="random-user"
+          orgData={mockOrgData}
+        />,
+      );
+
+      await waitFor(() =>
+        expect(screen.getAllByTestId('day').length).toBeGreaterThan(0),
+      );
+
+      // Non-invited user with undefined role should not see invite-only event
+      const expandBtn = container.querySelector('[data-testid^="expand-btn-"]');
+      expect(expandBtn).toBeNull();
+      expect(screen.queryByText('Secret Party')).toBeNull();
+    });
+
+    it('shows multiple invite-only events when user is invited to all', async () => {
+      const inviteOnlyEvent2: CalendarEventItem = {
+        ...inviteOnlyEvent,
+        id: 'invite-only-event-2',
+        name: 'Another Secret Party',
+        attendees: [
+          {
+            id: 'invited1',
+            name: 'Invited User',
+            emailAddress: 'invited@example.com',
+          },
+        ],
+      };
+
+      const { container } = renderWithRouterAndPath(
+        <Calendar
+          eventData={[inviteOnlyEvent, inviteOnlyEvent2]}
+          refetchEvents={vi.fn()}
+          userRole={UserRole.REGULAR}
+          userId="invited1"
+          orgData={mockOrgData}
+        />,
+      );
+
+      await waitFor(() =>
+        expect(screen.getAllByTestId('day').length).toBeGreaterThan(0),
+      );
+
+      await clickExpandForDate(container, testDate);
+      expect(screen.getByText('Secret Party')).toBeInTheDocument();
+      expect(screen.getByText('Another Secret Party')).toBeInTheDocument();
+    });
+
+    it('filters invite-only events correctly when user is invited to only some', async () => {
+      const inviteOnlyEvent2: CalendarEventItem = {
+        ...inviteOnlyEvent,
+        id: 'invite-only-event-2',
+        name: 'Another Secret Party',
+        attendees: [
+          {
+            id: 'other-user',
+            name: 'Other User',
+            emailAddress: 'other@example.com',
+          },
+        ],
+      };
+
+      const { container } = renderWithRouterAndPath(
+        <Calendar
+          eventData={[inviteOnlyEvent, inviteOnlyEvent2]}
+          refetchEvents={vi.fn()}
+          userRole={UserRole.REGULAR}
+          userId="invited1"
+          orgData={mockOrgData}
+        />,
+      );
+
+      await waitFor(() =>
+        expect(screen.getAllByTestId('day').length).toBeGreaterThan(0),
+      );
+
+      await clickExpandForDate(container, testDate);
+      // Should see the event they're invited to
+      expect(screen.getByText('Secret Party')).toBeInTheDocument();
+      // Should NOT see the event they're not invited to
+      expect(screen.queryByText('Another Secret Party')).toBeNull();
+    });
   });
 });

@@ -95,26 +95,47 @@ const Calendar: React.FC<InterfaceCalendarProps> = ({
 
     if (!eventData) return filteredEvents;
 
-    if (!userRole || !userId) {
-      return eventData.filter((event) => event.isPublic);
+    // If no userId, only show public non-invite-only events
+    if (!userId) {
+      return eventData.filter((event) => event.isPublic && !event.isInviteOnly);
     }
 
     if (userRole === UserRole.ADMINISTRATOR) {
       return eventData; // Administrators see all events
     }
 
-    // For REGULAR users
+    // For REGULAR users or undefined role (but with userId)
     eventData.forEach((event) => {
+      // Check if event is invite-only
+      if (event.isInviteOnly) {
+        // User can see invite-only event if they are the creator
+        const isCreator = event.creator?.id === userId;
+
+        // User can see invite-only event if they are in the attendees list
+        const isInvited = event.attendees?.some(
+          (attendee) => attendee.id === userId,
+        );
+
+        if (isCreator || isInvited) {
+          filteredEvents.push(event);
+        }
+        return;
+      }
+
+      // For non-invite-only events, apply existing logic
       if (event.isPublic) {
         filteredEvents.push(event);
         return;
       }
 
-      const isMember = orgData?.members?.edges.some(
-        (edge) => edge.node.id === userId,
-      );
-      if (isMember) {
-        filteredEvents.push(event);
+      // For private events, check if user is a member (only if orgData available)
+      if (userRole) {
+        const isMember = orgData?.members?.edges.some(
+          (edge) => edge.node.id === userId,
+        );
+        if (isMember) {
+          filteredEvents.push(event);
+        }
       }
     });
 

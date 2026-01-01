@@ -751,7 +751,6 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   beforeEach(() => {
-    vi.clearAllMocks();
     Object.defineProperty(window, 'matchMedia', {
       writable: true,
       value: vi.fn().mockImplementation((query) => ({
@@ -770,7 +769,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   afterEach(() => {
     localStorage.clear();
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('Should render the Events screen properly', async () => {

@@ -31,6 +31,7 @@
  *
  * @returns A modal for previewing and managing event details.
  */
+// translation-check-keyPrefix: eventListCard
 import React from 'react';
 import { Button, Form, Modal, Dropdown } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
