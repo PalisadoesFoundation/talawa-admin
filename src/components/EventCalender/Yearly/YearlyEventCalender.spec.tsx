@@ -1354,26 +1354,25 @@ describe('Calendar Component', () => {
   });
 
   it('collapses previously expanded day when a new day is expanded', async () => {
-    // Use stable, non-year-boundary dates. Using "today/tomorrow" is flaky on Dec 31
-    // because "tomorrow" becomes next year while the calendar renders the current year.
-    const year = new Date().getFullYear();
-    const today = new Date(year, 5, 15, 12); // Jun 15, noon
-    const tomorrow = new Date(year, 5, 16, 12); // Jun 16, noon
+    // Use fixed mid-month dates to avoid month boundary issues
+    const currentYear = new Date().getFullYear();
+    const dayOne = new Date(currentYear, 5, 10, 12, 0, 0); // June 10
+    const dayTwo = new Date(currentYear, 5, 11, 12, 0, 0); // June 11
 
     const eventA = {
       ...mockEventData[0],
       id: 'A',
       name: 'Event A',
-      startAt: today.toISOString(),
-      endAt: today.toISOString(),
+      startAt: dayOne.toISOString(),
+      endAt: dayOne.toISOString(),
     };
 
     const eventB = {
       ...mockEventData[0],
       id: 'B',
       name: 'Event B',
-      startAt: tomorrow.toISOString(),
-      endAt: tomorrow.toISOString(),
+      startAt: dayTwo.toISOString(),
+      endAt: dayTwo.toISOString(),
     };
 
     const { container } = renderWithRouterAndPath(

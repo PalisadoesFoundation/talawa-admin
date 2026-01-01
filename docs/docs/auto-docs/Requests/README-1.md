@@ -4,15 +4,16 @@
 
 # Requests
 
+**`Function`**
+
 ## File
 
 Requests.tsx
 
 ## Description
 
-This file contains the implementation of the Requests component, which displays
-             a list of membership requests for an organization. It includes features like
-             infinite scrolling, search functionality, and role-based access control.
+This component renders a table displaying volunteer membership requests for a specific event.
+It allows administrators to search, sort, and manage these requests by accepting or rejecting them.
 
 ## Requires
 
@@ -20,7 +21,7 @@ react
 
 ## Requires
 
-@apollo/client
+react-i18next
 
 ## Requires
 
@@ -28,69 +29,65 @@ react-bootstrap
 
 ## Requires
 
-react-i18next
-
-## Requires
-
 react-router-dom
 
 ## Requires
 
-@mui/material
+@apollo/client
 
 ## Requires
 
-GraphQl/Queries/Queries
+@mui/x-data-grid
 
 ## Requires
 
-components/TableLoader/TableLoader
+dayjs
 
 ## Requires
 
-components/RequestsTableItem/RequestsTableItem
+react-toastify
 
 ## Requires
 
-subComponents/SearchBar
+components/Loader/Loader
+
+## Requires
+
+components/Avatar/Avatar
+
+## Requires
+
+components/AdminSearchFilterBar/AdminSearchFilterBar
+
+## Requires
+
+GraphQl/Queries/EventVolunteerQueries
+
+## Requires
+
+GraphQl/Mutations/EventVolunteerMutation
 
 ## Requires
 
 utils/interfaces
 
-## Requires
+ Requests
 
-utils/useLocalstorage
+## Remarks
 
-## Requires
-
-style/app-fixed.module.css
-
-## Component
-
-## Name
-
-Requests
-
-## Description
-
-Displays a list of membership requests for an organization. Includes search,
-             infinite scrolling, and role-based access control. Redirects unauthorized users
-             to the organization list page.
+- Displays a loader while fetching data and handles errors gracefully.
+- Uses Apollo Client's `useQuery` to fetch data and `useMutation` to update membership status.
+- Uses AdminSearchFilterBar for unified search and filter interface with debouncing.
+- Provides sorting by creation date (latest/earliest) and filtering by request type (all/individuals/groups).
+- Displays volunteer details with accessible avatar alt text, request type, request date, and action buttons.
+- All UI text is internationalized using i18n translation keys.
+- Redirects to the home page if `orgId` or `eventId` is missing in the URL parameters.
 
 ## Example
 
 ```ts
 <Requests />
 ```
-
-## Remarks
-
-- Uses Apollo Client's `useQuery` for fetching data.
-- Implements infinite scrolling using `react-infinite-scroll-component`.
-- Displays a search bar for filtering requests by user name.
-- Handles role-based access control for `ADMIN` and `SUPERADMIN` roles.
-- Displays appropriate messages when no data is available.
 
 ## Functions
 

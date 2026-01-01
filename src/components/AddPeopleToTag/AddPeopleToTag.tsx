@@ -37,7 +37,7 @@
  * This component is used in the context of managing tags and their associated members.
  * It is designed to be displayed as a modal and requires integration with GraphQL APIs.
  */
-
+// translation-check-keyPrefix: manageTag
 import { useMutation, useQuery } from '@apollo/client';
 import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
 import { DataGrid } from '@mui/x-data-grid';
@@ -62,6 +62,7 @@ import type {
 } from 'types/Tag/interface';
 import { TAGS_QUERY_DATA_CHUNK_SIZE, dataGridStyle } from 'types/Tag/utils';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import componentStyles from './AddPeopleToTag.module.css';
 
 const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   addPeopleToTagModalIsOpen,
@@ -209,7 +210,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded className={`${styles.errorIcon} fs-1`} />
           <h6 className="fw-bold text-danger text-center">
             {t('errorOccurredWhileLoadingMembers')}
             <br />
@@ -361,7 +362,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                 <div
                   id="addPeopleToTagScrollableDiv"
                   data-testid="addPeopleToTagScrollableDiv"
-                  style={{ height: 300, overflow: 'auto' }}
+                  className={componentStyles.dataGridContainer}
                 >
                   <InfiniteScroll
                     dataLength={userTagMembersToAssignTo?.length ?? 0} // This is important field to render the next data

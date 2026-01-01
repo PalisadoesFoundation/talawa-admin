@@ -42,7 +42,8 @@ const OrgList = lazy(() => import('screens/AdminPortal/OrgList/OrgList'));
 const OrgSettings = lazy(() => import('screens/OrgSettings/OrgSettings'));
 
 const OrganizationDashboard = lazy(
-  () => import('screens/OrganizationDashboard/OrganizationDashboard'),
+  () =>
+    import('screens/AdminPortal/OrganizationDashboard/OrganizationDashboard'),
 );
 const OrganizationEvents = lazy(
   () => import('screens/OrganizationEvents/OrganizationEvents'),
@@ -57,14 +58,14 @@ const FundCampaignPledge = lazy(
   () => import('screens/FundCampaignPledge/FundCampaignPledge'),
 );
 const OrganizationPeople = lazy(
-  () => import('screens/OrganizationPeople/OrganizationPeople'),
+  () => import('screens/AdminPortal/OrganizationPeople/OrganizationPeople'),
 );
 const OrganizationTags = lazy(
   () => import('screens/OrganizationTags/OrganizationTags'),
 );
-const ManageTag = lazy(() => import('screens/ManageTag/ManageTag'));
+const ManageTag = lazy(() => import('screens/AdminPortal/ManageTag/ManageTag'));
 const SubTags = lazy(() => import('screens/SubTags/SubTags'));
-const Requests = lazy(() => import('screens/Requests/Requests'));
+const Requests = lazy(() => import('screens/AdminPortal/Requests/Requests'));
 const Users = lazy(() => import('screens/AdminPortal/Users/Users'));
 const CommunityProfile = lazy(
   () => import('screens/AdminPortal/CommunityProfile/CommunityProfile'),
@@ -105,7 +106,9 @@ const Notification = lazy(
   () => import('screens/AdminPortal/Notification/Notification'),
 );
 
-const PluginStore = lazy(() => import('screens/PluginStore/PluginStore'));
+const PluginStore = lazy(
+  () => import('screens/AdminPortal/PluginStore/PluginStore'),
+);
 
 const { setItem } = useLocalStorage();
 
