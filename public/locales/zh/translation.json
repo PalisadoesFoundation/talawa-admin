@@ -1550,7 +1550,19 @@
     "edit": "编辑",
     "saveChanges": "保存更改",
     "endOfResults": "结果结束",
-    "noDescription": "没有描述"
+    "noDescription": "没有描述",
+    "failedToFetchAdvertisements": "無法獲取廣告",
+    "advertisementMedia": "廣告媒體",
+    "noMediaAvailable": "無可用媒體",
+    "advertisementImageAlt": "廣告圖片 #{{index}} 用於 {{name}}",
+    "invalidFileType": "無效的文件類型：{{fileName}}",
+    "fileTooLarge": "文件太大：{{fileName}}",
+    "invalidArgumentsForAction": "此操作的參數無效。",
+    "englishCaptions": "英文字幕",
+    "preview": "預覽",
+    "bannerAd": "橫幅廣告",
+    "popupAd": "彈出廣告",
+    "menuAd": "菜單廣告"
   },
   "userChat": {
     "title": "聊天",
