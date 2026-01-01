@@ -465,7 +465,7 @@
     "tagNamePlaceholder": "Write the name of the tag",
     "allTags": "All Tags",
     "noMoreMembersFound": "No more members found",
-    "errorOccuredWhileLoadingAssignedUser": "Error occured while loading assigned users",
+    "errorOccurredWhileLoadingAssignedUser": "Error occured while loading assigned users",
     "sortPeople": "Sort People",
     "tagActions": "Tag Actions"
   },

@@ -30,6 +30,7 @@
  * />
  * ```
  */
+// translation-check-keyPrefix: manageTag
 import type { TFunction } from 'i18next';
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';

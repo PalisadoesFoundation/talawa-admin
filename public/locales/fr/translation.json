@@ -465,7 +465,7 @@
     "tagNamePlaceholder": "Écrire le nom de l'étiquette",
     "allTags": "Toutes les étiquettes",
     "noMoreMembersFound": "Aucun autre membre trouvé",
-    "errorOccuredWhileLoadingAssignedUser": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
+    "errorOccurredWhileLoadingAssignedUser": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
     "sortPeople": "Trier les personnes",
     "tagActions": "Actions d'étiquette"
   },

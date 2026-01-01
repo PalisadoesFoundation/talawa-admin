@@ -30,6 +30,7 @@
  * />
  * ```
  */
+// translation-check-keyPrefix: manageTag
 import type { TFunction } from 'i18next';
 import type { FormEvent } from 'react';
 import React from 'react';

@@ -465,7 +465,7 @@
     "tagNamePlaceholder": "Escribe el nombre de la etiqueta",
     "allTags": "Todas las etiquetas",
     "noMoreMembersFound": "No se encontraron más miembros",
-    "errorOccuredWhileLoadingAssignedUser": "Se produjo un error al cargar los usuarios asignados",
+    "errorOccurredWhileLoadingAssignedUser": "Se produjo un error al cargar los usuarios asignados",
     "sortPeople": "Ordenar personas",
     "tagActions": "Acciones de etiqueta"
   },

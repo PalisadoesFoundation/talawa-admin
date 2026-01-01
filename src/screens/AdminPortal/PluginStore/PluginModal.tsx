@@ -360,16 +360,30 @@ const PluginModal: React.FC<IPluginModalProps> = ({
                         </div>
                         <div className={styles.screenshotsContainer}>
                           {details.screenshots.map((src, idx) => (
-                            <img
+                            <button
                               key={idx}
-                              src={src}
-                              alt={`${t('ss')} ${idx + 1}`}
-                              className={styles.screenshotThumbnail}
+                              type="button"
+                              className={styles.screenshotThumbnailButton}
                               onClick={() =>
                                 openScreenshotViewer(details.screenshots, idx)
                               }
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                  e.preventDefault();
+                                  openScreenshotViewer(
+                                    details.screenshots,
+                                    idx,
+                                  );
+                                }
+                              }}
                               title={t('clickToViewFullSize')}
-                            />
+                            >
+                              <img
+                                src={src}
+                                alt={`${t('ss')} ${idx + 1}`}
+                                className={styles.screenshotThumbnail}
+                              />
+                            </button>
                           ))}
                         </div>
                       </>

@@ -288,7 +288,7 @@ function ManageTag(): JSX.Element {
         <div className={styles.errorMessage}>
           <WarningAmberRounded className={styles.errorIcon + ' lead'} />
           <h6 className="fw-bold text-danger text-center">
-            {t('errorOccuredWhileLoadingAssignedUser')}
+            {t('errorOccurredWhileLoadingAssignedUser')}
           </h6>
         </div>
       </div>
