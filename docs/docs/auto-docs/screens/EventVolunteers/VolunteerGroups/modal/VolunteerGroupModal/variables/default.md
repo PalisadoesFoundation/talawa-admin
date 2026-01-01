@@ -6,7 +6,7 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceVolunteerGroupModal`](../interfaces/InterfaceVolunteerGroupModal.md)\>
 
-Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx#L107)
+Defined in: [src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx:108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/VolunteerGroups/modal/VolunteerGroupModal.tsx#L108)
 
 A modal dialog for creating or editing a volunteer group.
 

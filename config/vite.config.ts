@@ -37,6 +37,55 @@ export default defineConfig(({ mode }) => {
     // Production build configuration
     build: {
       outDir: 'build',
+      chunkSizeWarningLimit: 1000,
+      rollupOptions: {
+        output: {
+          manualChunks: (id) => {
+            // Skip non-node_modules files
+            if (!id.includes('node_modules')) return;
+
+            const hasPackage = (pkg: string) =>
+              id.includes(`/node_modules/${pkg}/`) ||
+              id.includes(`\\node_modules\\${pkg}\\`);
+
+            // React core libraries (react, react-dom, react-router)
+            if (
+              hasPackage('react') ||
+              hasPackage('react-dom') ||
+              hasPackage('react-router-dom') ||
+              hasPackage('react-router')
+            ) {
+              return 'vendor-react';
+            }
+
+            if (
+              id.includes('/node_modules/@mui/') ||
+              id.includes('\\node_modules\\@mui\\')
+            ) {
+              return 'vendor-mui';
+            }
+
+            if (
+              id.includes('/node_modules/@apollo/') ||
+              id.includes('\\node_modules\\@apollo\\') ||
+              hasPackage('graphql')
+            ) {
+              return 'vendor-apollo';
+            }
+
+            // i18next internationalization (includes react-i18next)
+            if (id.includes('i18next')) {
+              return 'vendor-i18n';
+            }
+
+            // All other vendor libraries
+            return 'vendor-others';
+          },
+          chunkFileNames: 'assets/[name]-[hash].js',
+          entryFileNames: 'assets/[name]-[hash].js',
+          assetFileNames: 'assets/[name]-[hash].[ext]',
+        },
+      },
     },
     // Global build definitions
     define: {

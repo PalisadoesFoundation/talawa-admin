@@ -18,6 +18,7 @@
  * - Uses Apollo Client mutations for updating and deleting events.
  *
  */
+// translation-check-keyPrefix: eventListCard
 import React, { useEffect, useMemo, useState } from 'react';
 import type { JSX } from 'react';
 import dayjs from 'dayjs';
@@ -35,7 +36,7 @@ import {
   REGISTER_EVENT,
 } from 'GraphQl/Mutations/EventMutations';
 import { useMutation } from '@apollo/client';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useUpdateEventHandler } from './updateLogic';
 import { errorHandler } from 'utils/errorHandler';
 
@@ -55,7 +56,7 @@ interface IEventListCardModalProps {
   eventListCardProps: IEventListCard;
   eventModalIsOpen: boolean;
   hideViewModal: () => void;
-  t: (key: string) => string;
+  t: (key: string, options?: Record<string, unknown>) => string;
   tCommon: (key: string) => string;
 }
 
@@ -335,7 +336,7 @@ function EventListCardModals({
       }
 
       if (data) {
-        toast.success(t('eventDeleted') as string);
+        NotificationToast.success(t('eventDeleted') as string);
         setEventDeleteModalIsOpen(false);
         hideViewModal();
         if (refetchEvents) {
@@ -371,8 +372,8 @@ function EventListCardModals({
         });
 
         if (data) {
-          toast.success(
-            `Successfully registered for ${eventListCardProps.name}`,
+          NotificationToast.success(
+            t('registeredSuccessfully', { eventName: eventListCardProps.name }),
           );
           setIsRegistered(true);
           hideViewModal();

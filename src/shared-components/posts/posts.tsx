@@ -44,7 +44,7 @@ import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueri
 import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useParams } from 'react-router';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   InterfaceOrganizationPostListData,
   InterfacePost,
@@ -159,12 +159,13 @@ export default function PostsPage() {
   // Handle error toasts
   useEffect(() => {
     if (orgPostListError) {
-      toast.error(t('errorLoadingPosts'));
+      NotificationToast.error(t('errorLoadingPosts'));
     }
   }, [orgPostListError, t]);
 
   useEffect(() => {
-    if (orgPinnedPostListError) toast.error(t('pinnedPostsLoadError'));
+    if (orgPinnedPostListError)
+      NotificationToast.error(t('pinnedPostsLoadError'));
   }, [orgPinnedPostListError, t]);
 
   // Infinite scroll - load more posts
@@ -220,7 +221,7 @@ export default function PostsPage() {
         setIsFetchingMore(false);
       })
       .catch(() => {
-        toast.error(t('loadMorePostsError'));
+        NotificationToast.error(t('loadMorePostsError'));
         setIsFetchingMore(false);
       });
   }, [
