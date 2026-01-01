@@ -1936,7 +1936,7 @@
     "card_aria": "Tarjeta de contacto"
   },
   "donation": {
-    "card": "Tarjeta de donación"
+    "card_aria": "Tarjeta de donación"
   },
   "common": {
     "signOut": "Cerrar sesión",

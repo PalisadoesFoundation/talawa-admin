@@ -1936,7 +1936,7 @@
     "card_aria": "Contact card"
   },
   "donation": {
-    "card": "Donation card"
+    "card_aria": "Donation card"
   },
   "common": {
     "signOut": "Sign out",

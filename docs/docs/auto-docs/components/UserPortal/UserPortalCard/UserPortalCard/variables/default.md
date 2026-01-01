@@ -29,7 +29,7 @@ Accessibility:
 ```ts
 <UserPortalCard
   variant="compact"
-  ariaLabel={t('donation.card')}
+  ariaLabel={t('donation.card_aria')}
   imageSlot={<ProfileAvatarDisplay />}
   actionsSlot={<Button />}
 >
