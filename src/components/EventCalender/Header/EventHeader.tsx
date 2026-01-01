@@ -33,6 +33,7 @@
  * />
  * ```
  */
+// translation-check-keyPrefix: userEvents
 import React from 'react';
 import { Button } from 'react-bootstrap';
 import AddIcon from '@mui/icons-material/Add';
