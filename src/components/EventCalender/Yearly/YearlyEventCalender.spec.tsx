@@ -1354,24 +1354,25 @@ describe('Calendar Component', () => {
   });
 
   it('collapses previously expanded day when a new day is expanded', async () => {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
+    // Use fixed mid-month dates to avoid month boundary issues
+    const currentYear = new Date().getFullYear();
+    const dayOne = new Date(currentYear, 5, 10, 12, 0, 0); // June 10
+    const dayTwo = new Date(currentYear, 5, 11, 12, 0, 0); // June 11
 
     const eventA = {
       ...mockEventData[0],
       id: 'A',
       name: 'Event A',
-      startAt: today.toISOString(),
-      endAt: today.toISOString(),
+      startAt: dayOne.toISOString(),
+      endAt: dayOne.toISOString(),
     };
 
     const eventB = {
       ...mockEventData[0],
       id: 'B',
       name: 'Event B',
-      startAt: tomorrow.toISOString(),
-      endAt: tomorrow.toISOString(),
+      startAt: dayTwo.toISOString(),
+      endAt: dayTwo.toISOString(),
     };
 
     const { container } = renderWithRouterAndPath(
