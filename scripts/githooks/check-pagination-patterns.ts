@@ -143,7 +143,7 @@ function checkPaginationPatterns(): {
       } else if (result.status !== 1) {
         // Status 1 = no matches found, which is OK
         // Any other non-zero status is an error
-        if (result.status !== undefined && result.status !== 1) {
+        if (result.status !== undefined) {
           console.error(
             `${colors.red}Error running ripgrep:${colors.reset}`,
             result.stderr || 'Unknown error',
@@ -151,6 +151,7 @@ function checkPaginationPatterns(): {
         }
       }
     } catch (error) {
+      // Unexpected error - ripgrep should be available and spawnSync should not throw
       console.error(
         `${colors.red}Error running ripgrep:${colors.reset}`,
         error,
