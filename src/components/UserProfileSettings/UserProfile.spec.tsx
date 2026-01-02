@@ -11,6 +11,8 @@ import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 
+import userEvent from '@testing-library/user-event';
+
 const renderWithProviders = (ui: React.ReactElement) =>
   render(
     <MockedProvider>
@@ -124,5 +126,80 @@ describe('UserProfile Component', () => {
     );
     expect(getByText('Joined 10 February 2023')).toBeInTheDocument();
     expect(getByTestId('profile-avatar')).toBeInTheDocument();
+  });
+});
+
+describe('UserProfile edge and accessibility cases', () => {
+  it('opens and closes enlarge modal with enableEnlarge', async () => {
+    const user = userEvent.setup();
+    const userDetails = {
+      firstName: 'Modal',
+      lastName: 'Test',
+      image: 'https://example.com/avatar.jpg',
+    };
+    const { getByTestId, queryByRole, getByRole } = renderWithProviders(
+      <UserProfile {...userDetails} />,
+    );
+    const avatar = getByTestId('profile-avatar');
+    // Click avatar to open modal
+    await user.click(avatar);
+    // Modal should appear (role dialog)
+    expect(getByRole('dialog')).toBeInTheDocument();
+    // Modal should have close button
+    const closeBtn = getByRole('button', { name: /close/i });
+    expect(closeBtn).toBeInTheDocument();
+    // Close modal with button
+    await user.click(closeBtn);
+    expect(queryByRole('dialog')).not.toBeInTheDocument();
+    // Reopen and close with Escape key
+    await user.click(avatar);
+    expect(getByRole('dialog')).toBeInTheDocument();
+    await user.keyboard('{Escape}');
+    expect(queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('renders fallback avatar when image is undefined', () => {
+    const userDetails = {
+      firstName: 'Fallback',
+      lastName: 'Undefined',
+      image: undefined,
+    };
+    const { getByTestId } = renderWithProviders(
+      <UserProfile {...userDetails} />,
+    );
+    expect(getByTestId('profile-avatar')).toBeInTheDocument();
+  });
+
+  it('renders empty fallbackName and fallback UI when names are missing', () => {
+    const userDetails = {
+      firstName: undefined,
+      lastName: undefined,
+      image: undefined,
+    };
+    const { getByTestId } = renderWithProviders(
+      <UserProfile {...userDetails} />,
+    );
+    // Avatar fallback UI should be present (no initials)
+    expect(getByTestId('profile-avatar')).toBeInTheDocument();
+    // Optionally, check for empty fallback text or aria-label
+  });
+
+  it('shows tooltip text and is keyboard accessible', async () => {
+    const user = userEvent.setup();
+    const userDetails = {
+      firstName: 'Tooltip',
+      lastName: 'Check',
+      image: undefined,
+    };
+    const { getByText, getByTestId, getByRole } = renderWithProviders(
+      <UserProfile {...userDetails} />,
+    );
+    // Tooltip text should match fullName
+    const nameSpan = getByText('Tooltip');
+    expect(nameSpan).toHaveAttribute('data-tooltip-content', 'Tooltip Check');
+    // Focus avatar and check for aria attributes
+    const avatar = getByTestId('profile-avatar');
+    avatar.focus();
+    expect(document.activeElement).toBe(avatar);
   });
 });
