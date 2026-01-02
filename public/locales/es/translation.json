@@ -1803,7 +1803,15 @@
     "noPledges": "No se encontraron promesas",
     "noCampaigns": "No se encontraron campañas",
     "raised": "Recaudado",
-    "amountRaised": "Monto Recaudado"
+    "amountRaised": "Monto Recaudado",
+    "campaignIndex": "#",
+    "campaignName": "Nombre de la Campaña",
+    "startDate": "Fecha de Inicio",
+    "endDate": "Fecha de Finalización",
+    "fundGoal": "Meta de Financiación",
+    "percentRaised": "% Recaudado",
+    "createFirstCampaign": "Crea tu primera campaña de recaudación de fondos para verla aquí.",
+    "campaignEnded": "Campaña finalizada"
   },
   "userPledges": {
     "title": "Mis Promesas",
@@ -1866,7 +1874,19 @@
     "thisEventOnly": "Solo este evento",
     "volunteerAlt": "Imagen de perfil del voluntario",
     "groupTable": "Tabla de Grupos",
-    "volunteerActions": "Acciones de Voluntarios"
+    "volunteerActions": "Acciones de Voluntarios",
+    "volunteerHeader": "Voluntario",
+    "statusHeader": "Estado",
+    "hoursVolunteeredHeader": "Horas de Voluntariado",
+    "optionsHeader": "Opciones",
+    "groupHeader": "Grupo",
+    "leaderHeader": "Líder",
+    "numVolunteersHeader": "Número de Voluntarios",
+    "pending": "Pendiente",
+    "viewDetails": "Ver detalles de {{name}}",
+    "editVolunteerGroup": "Editar grupo de voluntarios {{name}}",
+    "deleteVolunteerGroup": "Eliminar grupo de voluntarios {{name}}",
+    "deleteVolunteerEntry": "Eliminar entrada de voluntario {{name}}"
   },
   "userVolunteer": {
     "title": "Voluntariado",

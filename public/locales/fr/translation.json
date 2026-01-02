@@ -1803,7 +1803,15 @@
     "noPledges": "Aucune promesse trouvée",
     "noCampaigns": "Aucune campagne trouvée",
     "raised": "Collecté",
-    "amountRaised": "Montant Collecté"
+    "amountRaised": "Montant Collecté",
+    "campaignIndex": "#",
+    "campaignName": "Nom de la Campagne",
+    "startDate": "Date de Début",
+    "endDate": "Date de Fin",
+    "fundGoal": "Objectif de Financement",
+    "percentRaised": "% Collecté",
+    "createFirstCampaign": "Créez votre première campagne de financement pour la voir ici.",
+    "campaignEnded": "Campagne terminée"
   },
   "userPledges": {
     "title": "Mes Promesses",
@@ -1866,7 +1874,19 @@
     "thisEventOnly": "Cet événement uniquement",
     "volunteerAlt": "Photo de profil du bénévole",
     "groupTable": "Tableau des Groupes",
-    "volunteerActions": "Actions des Bénévoles"
+    "volunteerActions": "Actions des Bénévoles",
+    "volunteerHeader": "Bénévole",
+    "statusHeader": "Statut",
+    "hoursVolunteeredHeader": "Heures de Bénévolat",
+    "optionsHeader": "Options",
+    "groupHeader": "Groupe",
+    "leaderHeader": "Chef",
+    "numVolunteersHeader": "Nombre de Bénévoles",
+    "pending": "En attente",
+    "viewDetails": "Voir les détails de {{name}}",
+    "editVolunteerGroup": "Modifier le groupe de bénévoles {{name}}",
+    "deleteVolunteerGroup": "Supprimer le groupe de bénévoles {{name}}",
+    "deleteVolunteerEntry": "Supprimer l'entrée bénévole {{name}}"
   },
   "userVolunteer": {
     "title": "Volontariat",

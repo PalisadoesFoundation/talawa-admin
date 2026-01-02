@@ -4,13 +4,8 @@ import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
-import {
-  Accordion,
-  AccordionSummary,
-  AccordionDetails,
-  Stack,
-} from '@mui/material';
-import { WarningAmberRounded, ExpandMore } from '@mui/icons-material';
+import { Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import { WarningAmberRounded, ExpandMore, Event } from '@mui/icons-material';
 import useLocalStorage from 'utils/useLocalstorage';
 import { useQuery } from '@apollo/client';
 import {
@@ -29,6 +24,7 @@ import {
 import { FaCheck } from 'react-icons/fa';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import RecurringEventVolunteerModal from './RecurringEventVolunteerModal';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 /**
  * Component for displaying upcoming volunteer events for an organization.
  * Allows users to volunteer for events and groups, and tracks their membership status.
@@ -226,7 +222,10 @@ const UpcomingEvents = (): JSX.Element => {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} />
+          <WarningAmberRounded
+            className={styles.errorIcon}
+            aria-hidden="true"
+          />
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Events' })}
           </h6>
@@ -259,13 +258,11 @@ const UpcomingEvents = (): JSX.Element => {
         dropdowns={[searchByDropdown]}
       />
       {events.length === 0 ? (
-        <Stack
-          alignItems="center"
-          justifyContent="center"
-          data-testid="noEventsMsg"
-        >
-          {t('noEvents')}
-        </Stack>
+        <EmptyState
+          icon={<Event />}
+          message={t('noEvents')}
+          dataTestId="events-empty-state"
+        />
       ) : (
         events.map((event, index) => {
           const status = getVolunteerStatus(event._id);

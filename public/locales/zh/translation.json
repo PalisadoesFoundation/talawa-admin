@@ -1803,7 +1803,15 @@
     "noPledges": "未找到承诺",
     "noCampaigns": "未找到活动",
     "raised": "已筹集",
-    "amountRaised": "已筹集金额"
+    "amountRaised": "已筹集金额",
+    "campaignIndex": "#",
+    "campaignName": "活动名称",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "fundGoal": "筹款目标",
+    "percentRaised": "% 已筹集",
+    "createFirstCampaign": "创建您的第一个筹款活动以在此处查看。",
+    "campaignEnded": "活动已结束"
   },
   "userPledges": {
     "title": "我的承诺",
@@ -1866,7 +1874,19 @@
     "thisEventOnly": "仅限本次活动",
     "volunteerAlt": "志愿者头像",
     "groupTable": "小组表",
-    "volunteerActions": "志愿者操作"
+    "volunteerActions": "志愿者操作",
+    "volunteerHeader": "志愿者",
+    "statusHeader": "状态",
+    "hoursVolunteeredHeader": "志愿时数",
+    "optionsHeader": "选项",
+    "groupHeader": "小组",
+    "leaderHeader": "领导",
+    "numVolunteersHeader": "志愿者数量",
+    "pending": "待审核",
+    "viewDetails": "查看 {{name}} 详情",
+    "editVolunteerGroup": "编辑 {{name}} 志愿者小组",
+    "deleteVolunteerGroup": "删除 {{name}} 志愿者小组",
+    "deleteVolunteerEntry": "删除 {{name}} 志愿者条目"
   },
   "userVolunteer": {
     "title": "志愿服务",
