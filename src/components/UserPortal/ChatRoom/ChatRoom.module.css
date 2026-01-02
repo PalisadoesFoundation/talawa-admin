@@ -291,6 +291,10 @@
   cursor: pointer;
 }
 
+.hiddenInput {
+  display: none;
+}
+
 @keyframes test {
   from {
     background-color: white;

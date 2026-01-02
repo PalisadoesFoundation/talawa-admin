@@ -897,7 +897,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                 type="file"
                 accept="image/*"
                 ref={fileInputRef}
-                style={{ display: 'none' }} // Hide the input
+                className={styles.hiddenInput} // Hide the input
                 onChange={handleImageChange}
                 data-testid="hidden-file-input"
               />

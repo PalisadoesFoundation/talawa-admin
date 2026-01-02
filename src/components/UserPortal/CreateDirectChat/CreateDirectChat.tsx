@@ -203,6 +203,7 @@ export default function createDirectChatModal({
 }: InterfaceCreateDirectChatProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
   const { t: tErrors } = useTranslation('errors');
+  const { t: tCommon } = useTranslation('common');
   const { orgId: organizationId } = useParams();
 
   // Support both 'userId' (for regular users) and 'id' (for admins)
@@ -294,7 +295,9 @@ export default function createDirectChatModal({
                 >
                   <TableHead>
                     <TableRow>
-                      <TableCell>{t('hash', { defaultValue: '#' })}</TableCell>
+                      <TableCell>
+                        {tCommon('hash', { defaultValue: '#' })}
+                      </TableCell>
                       <TableCell align="center">
                         {t('user', { defaultValue: 'User' })}
                       </TableCell>
