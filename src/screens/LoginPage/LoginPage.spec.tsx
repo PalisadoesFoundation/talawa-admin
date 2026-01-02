@@ -20,7 +20,7 @@ import {
 import {
   SIGNIN_QUERY,
   GET_COMMUNITY_DATA_PG,
-  ORGANIZATION_LIST_NO_MEMBERS,
+  ORGANIZATION_LIST_PUBLIC,
 } from 'GraphQl/Queries/Queries';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
@@ -98,7 +98,7 @@ const MOCKS = [
     result: { data: { community: null } },
   },
   {
-    request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+    request: { query: ORGANIZATION_LIST_PUBLIC },
     result: {
       data: {
         organizations: [
@@ -124,7 +124,7 @@ const MOCKS = [
 
 const MOCKS3 = [
   {
-    request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+    request: { query: ORGANIZATION_LIST_PUBLIC },
     result: {
       data: {
         organizations: [
@@ -164,7 +164,7 @@ const MOCKS4 = [
     result: { data: { community: null } },
   },
   {
-    request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+    request: { query: ORGANIZATION_LIST_PUBLIC },
     result: {
       data: {
         organizations: [
@@ -1686,7 +1686,7 @@ describe('Extra coverage for 100 %', () => {
         result: { data: { community: null } },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: { data: { organizations: [] } },
       },
     ];
@@ -1722,7 +1722,7 @@ describe('Extra coverage for 100 %', () => {
         result: { data: { community: null } },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: { data: { organizations: [] } },
       },
     ];
@@ -1760,7 +1760,7 @@ describe('Extra coverage for 100 %', () => {
         result: { data: { community: null } },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: { data: { organizations: [] } },
       },
     ];
@@ -1799,7 +1799,7 @@ describe('Extra coverage for 100 %', () => {
         result: { data: { community: null } },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: { data: { organizations: [] } },
       },
     ];
@@ -1864,7 +1864,7 @@ describe('Extra coverage for 100 %', () => {
         result: { data: { community: null } },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: { data: { organizations: [] } },
       },
     ];
@@ -1916,7 +1916,7 @@ describe('Extra coverage for 100 %', () => {
         result: { data: { community: null } },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: { data: { organizations: [] } },
       },
     ];
@@ -1978,7 +1978,7 @@ describe('Extra coverage for 100 %', () => {
         result: { data: { community: null } },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: { data: { organizations: [] } },
       },
     ];
@@ -2039,7 +2039,7 @@ describe('Extra coverage for 100 %', () => {
         result: { data: { community: null } },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: { data: { organizations: [] } },
       },
     ];
@@ -2107,7 +2107,7 @@ describe('Cookie-based authentication verification', () => {
         result: { data: { community: null } },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: { data: { organizations: [] } },
       },
     ];
@@ -2216,7 +2216,7 @@ describe('Cookie-based authentication verification', () => {
         result: { data: { community: null } },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: { data: { organizations: [] } },
       },
     ];
@@ -2348,7 +2348,7 @@ describe('Cookie-based authentication verification', () => {
         },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: {
           data: {
             organizations: [],
@@ -2389,9 +2389,9 @@ describe('Cookie-based authentication verification', () => {
 
     await wait();
 
-    // Verify error toast is shown
+    // Verify error toast is shown with the improved error message
     expect(toastMocks.error).toHaveBeenCalledWith(
-      expect.stringContaining('Network Error'),
+      'Talawa-API service is unavailable!. Is it running? Check your network connectivity too.',
       expect.any(Object),
     );
 
@@ -2442,7 +2442,7 @@ describe('Cookie-based authentication verification', () => {
         },
       },
       {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
+        request: { query: ORGANIZATION_LIST_PUBLIC },
         result: {
           data: {
             organizations: [],
@@ -2473,5 +2473,151 @@ describe('Cookie-based authentication verification', () => {
     const socialLinks = screen.getAllByTestId('preLoginSocialMedia');
     expect(socialLinks.length).toBeGreaterThan(0);
     expect(socialLinks[0]).toHaveAttribute('href');
+  });
+});
+
+describe('Organization dropdown data fetching', () => {
+  beforeEach(() => {
+    setLocationPath('/');
+  });
+
+  it('displays loading state while fetching organizations', async () => {
+    const LOADING_MOCKS = [
+      {
+        request: { query: ORGANIZATION_LIST_PUBLIC },
+        result: {
+          data: {
+            organizations: [
+              {
+                id: '1',
+                name: 'Test Org',
+                addressLine1: '123 Test St',
+              },
+            ],
+          },
+        },
+        delay: 200, // Simulate network delay
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={LOADING_MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const registerButton = screen.getByTestId('goToRegisterPortion');
+    await userEvent.click(registerButton);
+
+    // Verify the Autocomplete shows loading helper text
+    await waitFor(() => {
+      expect(screen.getByText(/loading organizations/i)).toBeInTheDocument();
+    });
+  });
+
+  it('displays error state when organization query fails', async () => {
+    const ERROR_MOCKS = [
+      {
+        request: { query: ORGANIZATION_LIST_PUBLIC },
+        error: new Error('Failed to fetch organizations'),
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={ERROR_MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const registerButton = screen.getByTestId('goToRegisterPortion');
+    await userEvent.click(registerButton);
+
+    // Wait for error text to appear
+    await waitFor(
+      () => {
+        const errorText = screen.queryByText(/error loading organizations/i);
+        expect(errorText).toBeInTheDocument();
+      },
+      { timeout: 2000 },
+    );
+
+    // Check that error styling is applied to the TextField
+    const helperText = screen.getByText(/error loading organizations/i);
+    expect(helperText.closest('.MuiFormHelperText-root')).toHaveClass(
+      'Mui-error',
+    );
+  });
+
+  it('displays error state when organization query returns GraphQL errors', async () => {
+    const GRAPHQL_ERROR_MOCKS = [
+      {
+        request: { query: ORGANIZATION_LIST_PUBLIC },
+        result: {
+          errors: [
+            new GraphQLError(
+              'You must be authenticated to perform this action',
+            ),
+          ],
+        },
+      },
+      {
+        request: { query: GET_COMMUNITY_DATA_PG },
+        result: { data: { community: null } },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={GRAPHQL_ERROR_MOCKS} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const registerButton = screen.getByTestId('goToRegisterPortion');
+    await userEvent.click(registerButton);
+
+    // Wait for error text to appear
+    await waitFor(
+      () => {
+        const errorText = screen.queryByText(/error loading organizations/i);
+        expect(errorText).toBeInTheDocument();
+      },
+      { timeout: 2000 },
+    );
+
+    // Verify error message is displayed
+    const errorText = screen.getByText(/error loading organizations/i);
+    expect(errorText).toBeInTheDocument();
   });
 });

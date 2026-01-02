@@ -83,15 +83,27 @@ export const ORGANIZATION_FILTER_LIST = gql`
   ${ORG_FIELDS}
 `;
 
-// Lightweight version without members
-export const ORGANIZATION_LIST_NO_MEMBERS = gql`
-  query {
+// public organization data (minimal fields, no auth required)
+export interface InterfaceOrganizationPublic {
+  id: string;
+  name: string;
+  addressLine1: string | null;
+}
+
+// ORGANIZATION_LIST_PUBLIC query response
+export interface InterfaceOrganizationListPublicQueryData {
+  organizations: InterfaceOrganizationPublic[];
+}
+
+// Query for unauthenticated users (e.g., registration page)
+export const ORGANIZATION_LIST_PUBLIC = gql`
+  query GetPublicOrganizations {
     organizations {
-      ...OrgFields
-      isMember
+      id
+      name
+      addressLine1
     }
   }
-  ${ORG_FIELDS}
 `;
 
 export const ORGANIZATION_MEMBER_ADMIN_COUNT = gql`

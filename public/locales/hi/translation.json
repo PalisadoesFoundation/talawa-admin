@@ -70,7 +70,9 @@
     "user": "उपयोगकर्ता",
     "loading": "लोड हो रहा है",
     "communityLogo": "समुदाय लोगो",
-    "organizations": "संगठन"
+    "organizations": "संगठन",
+    "loadingOrganizations": "संगठन लोड हो रहे हैं...",
+    "errorLoadingOrganizations": "संगठन लोड करने में त्रुटि। कृपया पुनः प्रयास करें।"
   },
   "signOut": {
     "retryPrompt": "सेशन रद्द करने में विफल। पुनः प्रयास करें?",

@@ -70,7 +70,9 @@
     "user": "用户",
     "loading": "加载中",
     "communityLogo": "社区标志",
-    "organizations": "组织"
+    "organizations": "组织",
+    "loadingOrganizations": "正在加载组织...",
+    "errorLoadingOrganizations": "加载组织时出错。请重试。"
   },
   "signOut": {
     "retryPrompt": "撤銷工作階段失敗。要重試嗎？",

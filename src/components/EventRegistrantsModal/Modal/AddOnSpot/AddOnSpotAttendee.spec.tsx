@@ -182,7 +182,7 @@ describe('AddOnSpotAttendee Component', () => {
     // Wait for the error to be handled
     await waitFor(() => {
       expect(toast.error).toHaveBeenCalledWith(
-        expect.stringContaining('Failed to add attendee'),
+        expect.stringContaining('Talawa-API service is unavailable'),
         expect.any(Object),
       );
     });

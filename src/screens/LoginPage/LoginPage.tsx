@@ -71,7 +71,9 @@ import {
   SIGNUP_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import {
-  ORGANIZATION_LIST_NO_MEMBERS,
+  ORGANIZATION_LIST_PUBLIC,
+  InterfaceOrganizationListPublicQueryData,
+  InterfaceOrganizationPublic,
   SIGNIN_QUERY,
   GET_COMMUNITY_DATA_PG,
 } from 'GraphQl/Queries/Queries';
@@ -82,7 +84,6 @@ import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
 import styles from '../../style/app-fixed.module.css';
-import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
 import { Autocomplete, TextField } from '@mui/material';
 import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
@@ -131,7 +132,9 @@ const loginPage = (): JSX.Element => {
     numericValue: true,
     specialChar: true,
   });
-  const [organizations, setOrganizations] = useState([]);
+  const [organizations, setOrganizations] = useState<
+    { label: string; id: string }[]
+  >([]);
   const [pendingInvitationToken] = useState(() =>
     getItem('pendingInvitationToken'),
   );
@@ -184,24 +187,30 @@ const loginPage = (): JSX.Element => {
   const [signin, { loading: loginLoading }] = useLazyQuery(SIGNIN_QUERY);
   const [signup, { loading: signinLoading }] = useMutation(SIGNUP_MUTATION);
   const [recaptcha] = useMutation(RECAPTCHA_MUTATION);
-  const { data: orgData } = useQuery(ORGANIZATION_LIST_NO_MEMBERS);
+  const {
+    data: orgData,
+    loading: orgLoading,
+    error: orgError,
+  } = useQuery<InterfaceOrganizationListPublicQueryData>(
+    ORGANIZATION_LIST_PUBLIC,
+    {
+      fetchPolicy: 'network-only',
+    },
+  );
   const { startSession, extendSession } = useSession();
   useEffect(() => {
     if (orgData) {
       const options = orgData.organizations.map(
-        (org: InterfaceQueryOrganizationListObject) => {
-          const tempObj: { label: string; id: string } | null = {} as {
-            label: string;
-            id: string;
-          };
-          tempObj['label'] = `${org.name}(${org.addressLine1})`;
-          tempObj['id'] = org.id;
-          return tempObj;
-        },
+        (org: InterfaceOrganizationPublic) => ({
+          label: org.addressLine1
+            ? `${org.name} (${org.addressLine1})`
+            : org.name,
+          id: org.id,
+        }),
       );
       setOrganizations(options);
     }
-  }, [orgData]);
+  }, [orgData, orgLoading, orgError]);
 
   useEffect(() => {
     async function loadResource(): Promise<void> {
@@ -917,6 +926,7 @@ const loginPage = (): JSX.Element => {
                     <div className="position-relative">
                       <Autocomplete
                         disablePortal
+                        disabled={orgLoading || !!orgError}
                         data-testid="selectOrg"
                         onChange={(
                           event,
@@ -928,11 +938,23 @@ const loginPage = (): JSX.Element => {
                           });
                         }}
                         options={organizations}
+                        getOptionLabel={(option: {
+                          label: string;
+                          id: string;
+                        }) => option.label || ''}
                         renderInput={(params) => (
                           <TextField
                             {...params}
                             label={t('organizations')}
                             className={styles.selectOrgText}
+                            helperText={
+                              orgLoading
+                                ? t('loadingOrganizations')
+                                : orgError
+                                  ? t('errorLoadingOrganizations')
+                                  : undefined
+                            }
+                            error={!!orgError}
                           />
                         )}
                       />
