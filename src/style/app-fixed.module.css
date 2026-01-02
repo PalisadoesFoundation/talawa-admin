@@ -32,11 +32,15 @@
  *   `.subtleBlueGrey` (for blue Text)
  *   `.activeTab` (for tabs which are active)
  *   `.inActiveTab` (for tabs which are not selected)
+ *   `.dataTableBase` (for styling data tables)
+ *   `.dataEmptyState` (for empty state displays)
+ *   `.dataErrorState` (for error state displays)
+ *   `.visuallyHidden` (for accessibility, hides content visually but keeps it accessible to screen readers)
  *
  */
 :root {
+  --errorState-border: #f5c2c7;
   --primary-theme-color: #1778f2;
-  --success-green-color: #31bb6b;
 
   --addButton-font: #555555;
   --addButton-border: #eaebef;
@@ -44,6 +48,17 @@
   --addButton-bg-hover: #1778f2;
   --addButton-border-hover: #555555;
   --disabled-btn: #e7f0fe;
+
+  /** pagination styles **/
+  --pagination-btn-color: var(--addButton-font, #555555);
+  --pagination-btn-bg: var(--addButton-bg, #a8c7fa);
+  --pagination-btn-border: var(--addButton-border, #eaebef);
+  --pagination-btn-bg-hover: var(--addButton-bg-hover, #1778f2);
+  --pagination-btn-border-hover: var(--addButton-border-hover, #555555);
+  --pagination-btn-bg-disabled: var(--disabled-btn, #e7f0fe);
+  --pagination-btn-bg-focus: var(--primary-theme-color, #1778f2);
+  --pagination-btn-color-hover: #ffffff;
+  --pagination-border-top: #e5e7eb;
 
   --sidebar-option-text-inactive: #000000;
   --sidebar-option-bg-hover: #eaebef;
@@ -120,6 +135,7 @@
 
   --font-size-header: 16px;
   --font-size-table-body: 14px;
+  --avatar-placeholder-bg: #ccc;
 
   --tableHeader-bg: #eaebef;
   --tableHeader-color: #000000;
@@ -180,15 +196,6 @@
   --register-button-border-active: #eaebef;
   --register-button-color: #555555;
   --register-button-color-hover: #555555;
-
-  /* Progress indicator colors */
-  --progress-track-color: #e0e0e0;
-  --progress-complete-color: #4caf50;
-  --progress-half-color: #ff9800;
-  --progress-low-color: #2196f3;
-
-  /* Row hover background */
-  --row-hover-bg: #f0f0f0;
 
   --row-bg: #fff;
   --row-bg-scroll: #00000029;
@@ -316,7 +323,8 @@
   --colorWhite: #555555;
 
   --errorIcon-color: #ff4d4f;
-
+  --errorState-color: #b00020;
+  --errorState-bg: #f8d7da;
   --tagsBreadCrumbs-color-hover: #0000ff;
   --tagsBreadCrumbs-color: #808080;
 
@@ -357,9 +365,15 @@
   --memberfontbtn-border: #e8e5e5;
   --memberfont-bg: #eaebef;
   --memberfont-color: #fff;
-  --removeMemberCancel-bg: #f8d6dc --loader-size: 10em;
+  --removeMemberCancel-bg: #f8d6dc;
+  --removeMemberCancel-border: #f8d6dc;
+  --loader-size: 10em;
   --loader-border: #ffffff33;
   --loader-border-left: #febc59;
+
+  /* Skeleton loading theme variables */
+  --skeleton-base: #e0e0e0;
+  --skeleton-highlight: #f0f0f0;
 
   --pledgeContainer-bg: #31bb6b33;
   --popup-border: #e2e8f0;
@@ -746,7 +760,8 @@
   --primary-theme-color: #1778f2;
   --advertisement-dropdown-border: 1px solid rgba(0, 0, 0, 0.15);
   --advertisement-dropdown-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
-  --advertisement-media-height: 12.5rem --pledgeModal-bg: #ffffff;
+  --advertisement-media-height: 12.5rem;
+  --pledgeModal-bg: #ffffff;
   --pledgeModal-header-text: #000000;
   --pledgeModal-title-text: #4b5563;
   --pledgeModal-close-button-bg: #f8d6dc;
@@ -857,8 +872,16 @@
 
   --input-bg: #f2f7ff;
 
-  --empty-state-bg: #ffffff;
-  --empty-state-border-color: #e7e7e7;
+  --empty-state-bg: #fafafa;
+  --empty-state-border-color: #eeeeee;
+
+  /* OrgSelector Component */
+  --orgSelector-dropdown-bg: #ffffff;
+  --orgSelector-dropdown-border: #dee2e6;
+  --orgSelector-dropdown-shadow: rgba(0, 0, 0, 0.075);
+  --orgSelector-option-hover-bg: #f8f9fa;
+  --orgSelector-option-selected-bg: rgba(13, 110, 253, 0.1);
+  --orgSelector-no-results-color: #6c757d;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -1010,7 +1033,7 @@
   /* Allow it to shrink if needed */
   width: auto;
   /* Stop forcing 100% width */
-  min-width: 450px;
+  min-width: 200px;
   max-width: 100%;
   height: 48px;
 }
@@ -1030,7 +1053,6 @@
   display: flex;
   align-items: center;
   min-height: 48px;
-  min-width: 40rem;
   padding: 0.75rem 2.5rem 0.75rem 1.25rem;
   background-color: transparent;
 }
@@ -1102,21 +1124,6 @@
   display: inline-flex;
   font-size: 1.2rem;
   pointer-events: none;
-}
-
-.searchBarTrailingIcon {
-  position: absolute;
-  right: 0;
-  top: 0;
-  bottom: 0;
-  background-color: var(--search-button-bg, #b3ceff);
-  color: #2f3f5f;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 0.75rem;
-  border-top-right-radius: 0.5rem;
-  border-bottom-right-radius: 0.5rem;
 }
 
 .searchBarClearButton {
@@ -1385,26 +1392,6 @@ form label,
   align-items: center;
 }
 
-.searchBarContainer {
-  display: flex;
-  margin: 2.5rem 0;
-  align-items: center;
-  max-width: 600px;
-}
-
-.searchBarContainer {
-  display: flex;
-  margin: 2.5rem 0;
-  align-items: stretch;
-  gap: 0.75rem;
-}
-
-.searchBarContainer > :first-child {
-  flex: 1 1 320px;
-  min-width: 240px;
-  max-width: 100%;
-}
-
 /* Table Header */
 
 .tableHeader {
@@ -1589,7 +1576,7 @@ form label,
 
 .removeMemberCancel {
   background-color: var(--removeMemberCancel-bg);
-  color: '#C8102E';
+  color: var(--removeButton-color);
   border: 1px solid var(--removeMemberCancel-border);
 }
 
@@ -1792,15 +1779,6 @@ form label,
   color: var(--createButton-color) !important;
   border: 1px solid var(--createButton-border) !important;
   margin: 5px 10px;
-  width: 10rem;
-  height: 3rem;
-}
-
-.createFundButton {
-  background-color: var(--createButton-bg) !important;
-  color: var(--createButton-color) !important;
-  border: 1px solid var(--createButton-border) !important;
-  margin: 5px 5px;
   width: 10rem;
   height: 3rem;
 }
@@ -3851,6 +3829,74 @@ form label,
   opacity: 0.5;
 }
 
+/* Skeleton loading styles */
+.skeletonContainer {
+  padding: 1rem;
+  width: 100%;
+}
+
+.skeletonHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.skeletonContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.skeletonRow {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.skeletonItem {
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-base, #e0e0e0) 25%,
+    var(--skeleton-highlight, #f0f0f0) 50%,
+    var(--skeleton-base, #e0e0e0) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+.skeletonTitle {
+  height: 2rem;
+  width: 40%;
+}
+
+.skeletonButton {
+  height: 2.5rem;
+  width: 8rem;
+  border-radius: 6px;
+}
+
+.skeletonCell {
+  height: 3rem;
+  flex: 1;
+}
+
+.skeletonCellSmall {
+  height: 2rem;
+  width: 6rem;
+}
+
+@keyframes skeletonPulse {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 /* -- LoginPortalToggle.tsx -- */
 
 .navLinkClass {
@@ -5223,6 +5269,7 @@ form label,
 /* -- RequestsTableItem.tsx -- */
 
 .requestsTableItemIndex {
+  padding-inline-start: 2.5rem;
   vertical-align: middle;
 }
 
@@ -5726,6 +5773,12 @@ form {
   border: none !important;
   border-radius: 5px !important;
   margin-left: 10px;
+}
+
+.signOutDisabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
 }
 
 /* SortingButton.tsx */
@@ -6913,6 +6966,7 @@ form {
   color: var(--eventManagementSelectedBtn-color);
   background-color: var(--eventManagementSelectedBtn-bg) !important;
   border: 1px solid var(--eventManagementSelectedBtn-border) !important;
+  height: 2.5rem;
 }
 
 .eventManagementSelectedBtn:hover {
@@ -6924,6 +6978,7 @@ form {
   color: var(--eventManagementBtn-color);
   background-color: var(--eventManagementBtn-bg) !important;
   border-color: var(--eventManagementBtn-border) !important;
+  height: 2.5rem;
 }
 
 .eventManagementBtn:hover {
@@ -7902,8 +7957,20 @@ form {
   /* gap from left */
 }
 
-.btnsContainerSearchBar input {
-  outline: 1px solid var(--bs-gray-400);
+/* Scope reset to the SearchBar input only so other inputs are unaffected */
+.btnsContainerSearchBar .searchBarInput,
+.btnsContainerSearchBar input[type='search'] {
+  outline: none;
+  box-shadow: none;
+  border: none;
+  background: transparent;
+}
+
+/* The wrapper provides focus-visible ring (see .searchBarContainer:focus-within) */
+.btnsContainerSearchBar .searchBarInput:focus,
+.btnsContainerSearchBar input[type='search']:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 .btnsContainerSearchBar .inputOrgList button {
@@ -8318,6 +8385,7 @@ form {
   color: var(--infoButton-color);
   margin-right: 0.5rem;
   border-radius: 0.25rem;
+  min-width: 32px;
 }
 
 .infoButton:hover {
@@ -8349,6 +8417,14 @@ form {
   border-color: var(--checkbox-focus-border);
   outline: none;
   box-shadow: none;
+}
+
+.assigneeCellContainer {
+  height: 100%;
+}
+
+.groupIconSecondary {
+  color: var(--view-color);
 }
 
 /* -- OrganizationDashboard.tsx -- */
@@ -8457,10 +8533,6 @@ form {
 
 .container {
   min-height: 100vh;
-}
-
-.titleMargin {
-  margin-top: 0.75rem;
 }
 
 .message {
@@ -9688,6 +9760,10 @@ form {
   margin: 1px;
 }
 
+.iconLarge {
+  font-size: 1.5rem;
+}
+
 .chipIcon {
   height: 0.9rem !important;
 }
@@ -10121,165 +10197,107 @@ form {
   }
 }
 
-.btnsBlock > * {
-  margin: 0 !important;
-  height: 100% !important;
-  display: flex !important;
-  align-items: center !important;
-  min-height: auto !important;
+.btnsBlock > button,
+.btnsBlock > .btn {
+  margin: 0;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.4rem;
 }
 
 /* ----------------------------------------------------- */
-
-.whiteContainer {
-  background-color: #ffffff;
-  border-radius: 1rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+.orgListContainer {
+  padding-left: 40px;
+  padding-right: 30px;
 }
 
-/* -- Common Layout Classes -- */
-
-/* Flex container for title area in screens */
-.flexContainerColumn {
-  flex: 1;
+@media (max-width: 768px) {
+  .orgListContainer {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 }
 
-/* Breadcrumbs margin spacing */
-.breadcrumbsMargin {
-  margin-top: 0.5rem;
+.addButtonIcon {
+  font-size: 25px;
+  margin-bottom: 2px;
+  margin-right: 2px;
 }
 
-/* Search container row layout for fund campaign/funds screens */
-.searchContainerRow {
+/* Utility classes for inline style replacements */
+.flexCenter {
   display: flex;
-  align-items: center;
-  margin-bottom: 1rem;
-  margin-top: 1rem;
-  gap: 1rem;
-}
-
-/* Search container row layout without top margin */
-.searchContainerRowNoTopMargin {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 1rem;
-}
-
-/* Search bar margin reset with flex grow */
-.searchBarMarginReset {
-  margin: 0;
-}
-
-/* Button style to prevent text wrapping */
-.buttonNoWrap {
-  white-space: nowrap;
-}
-
-/* Button margin reset for flex containers with gap */
-.buttonMarginReset {
-  margin: 0;
-}
-
-/* Search container for Campaigns screen with min/max width */
-.searchContainerCampaigns {
-  max-width: 700px;
-  min-width: 400px;
-  margin: 0;
-}
-
-/* UserScreen main content margin when expanded */
-.userScreenExpandedMargin {
-  margin-left: 100px;
-}
-
-/* -- Progress Indicator Styles for Campaign Tables -- */
-
-/* Progress indicator container */
-.progressIndicatorContainer {
-  display: flex;
-  align-items: center;
   justify-content: center;
-  gap: 8px;
-  height: 100%;
-}
-
-/* Progress indicator wrapper (relative positioning) */
-.progressIndicatorWrapper {
-  position: relative;
-  display: inline-flex;
-}
-
-/* Progress indicator base track color */
-.progressIndicatorBase {
-  color: var(--progress-track-color, #e0e0e0);
-}
-
-/* Progress indicator overlay (absolute positioning) */
-.progressIndicatorAbsolute {
-  position: absolute;
-  left: 0;
-  top: 0;
-}
-
-/* Progress indicator color states */
-.progressComplete {
-  color: var(--progress-complete-color, #4caf50);
-}
-
-.progressHalf {
-  color: var(--progress-half-color, #ff9800);
-}
-
-.progressLow {
-  color: var(--progress-low-color, #2196f3);
-}
-
-/* Progress percentage text */
-.progressTypography {
-  font-weight: bold;
-}
-
-/* -- DataGrid Row Hover Styles -- */
-
-/* DataGrid row hover background */
-.dataGridRowHover:hover {
-  background-color: var(--row-hover-bg, #f0f0f0);
-}
-
-/* Error icon large size */
-.errorIconLarge {
-  font-size: 2rem;
-}
-
-/* Progress cell container */
-.progressCellContainer {
-  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: 100%;
 }
 
-/* Button width 8rem - for visit and join buttons */
-.buttonWidth8rem {
-  width: 8rem;
+.flexColumn {
+  display: flex;
+  flex-direction: column;
 }
 
-/* Video full width - for video elements */
-.videoFullWidth {
+.flexWrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flexWrapGap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.maxHeight120 {
+  max-height: 120px;
+}
+
+.cursorPointer {
+  cursor: pointer;
+}
+
+.fullWidthHeight {
   width: 100%;
+  height: 100%;
 }
 
-/* Margin left auto - for positioning elements to the right */
-.marginLeftAuto {
-  margin-left: auto;
+.progressBarHeight {
+  height: 1.5rem;
+  font-size: 0.9rem;
 }
 
-/* Background paper - matches MUI background.paper */
-.backgroundPaper {
-  background-color: var(--popup-bg, #fff);
+.memberNameFontSize {
+  font-size: 15px;
+}
+
+/* Avatar placeholder background */
+.avatarPlaceholder {
+  background-color: var(--avatar-placeholder-bg, #ccc);
+}
+
+.avatarImage {
+  border-radius: 50%;
+  object-fit: cover;
+  width: var(--avatar-size, 40px);
+  height: var(--avatar-size, 40px);
+}
+
+.avatarPlaceholderSize {
+  width: var(--avatar-size, 40px);
+  height: var(--avatar-size, 40px);
+  font-size: calc(var(--avatar-size, 40px) * 0.4);
+  border-radius: 50%;
+}
+
+/* MUI DataGrid styles - using global selectors to target MUI classes */
+.dataGridNoHover :global(.MuiDataGrid-row:hover),
+.dataGridNoHover :global(.MuiDataGrid-row.Mui-hovered) {
+  background-color: transparent;
+}
+
+.dataGridRounded :global(.MuiDataGrid-root),
+.dataGridRounded :global(.MuiDataGrid-main) {
+  border-radius: 0.5rem;
 }
 
 .addIconStyle {
@@ -10320,4 +10338,266 @@ form {
   overflow-y: auto;
   padding: 20px;
   position: relative;
+}
+
+.dataGridContainer {
+  background-color: #ffffff;
+  border-radius: 16px;
+}
+
+.dataGridContainer :global(.MuiDataGrid-columnHeaders),
+.dataGridContainer :global(.MuiDataGrid-cell) {
+  border: none;
+}
+
+.dataGridContainer :global(.MuiDataGrid-columnSeparator) {
+  display: none;
+}
+
+.dataGridContainer :global(.MuiDataGrid-row:hover),
+.dataGridContainer :global(.MuiDataGrid-row.Mui-hovered) {
+  background-color: transparent;
+}
+
+.iconButton {
+  min-width: 32px;
+}
+
+.smallText {
+  font-size: var(--font-size-sm);
+}
+
+.marginTopSm {
+  margin-top: 11px;
+}
+
+.iconLg {
+  font-size: 2rem;
+}
+
+/* -- DataTable Component Styles -- */
+
+.dataTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.dataTableBase {
+  font-size: 0.95rem;
+}
+
+.dataEmptyState {
+  padding: 16px;
+  text-align: center;
+  color: var(--secondText-color);
+  background: var(--empty-state-bg);
+  border: 1px solid var(--empty-state-border-color);
+  border-radius: 6px;
+}
+
+.dataErrorState {
+  padding: 16px;
+  text-align: left;
+  color: var(--errorState-color);
+  background: var(--errorState-bg);
+  border: 1px solid var(--errorState-border);
+  border-radius: 6px;
+}
+
+.visuallyHidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.tableBodyCell {
+  font-size: 14px;
+}
+
+.tableHeadCell {
+  background-color: var(--table-head-bg, blue);
+  color: var(--table-header-color, black);
+}
+
+.dataErrorDetails {
+  margin-top: 4px;
+  font-size: 0.875rem;
+  opacity: 0.85;
+}
+
+.dataSkeletonCell {
+  height: 1em;
+  width: 100%;
+  background: linear-gradient(90deg, #eee 25%, #f5f5f5 50%, #eee 75%);
+  border-radius: 4px;
+  animation: skeleton-loading 1.2s ease-in-out infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200px 0;
+  }
+
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+/* OrgSelector Component Styles */
+.orgSelectorDropdown {
+  position: absolute;
+  width: 100%;
+  background-color: var(--orgSelector-dropdown-bg);
+  border: 1px solid var(--orgSelector-dropdown-border);
+  border-radius: 0.375rem;
+  box-shadow: 0 0.125rem 0.25rem var(--orgSelector-dropdown-shadow);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  top: 100%;
+  margin-top: 2px;
+}
+
+.orgSelectorOption {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+}
+
+.orgSelectorOption:hover {
+  background-color: var(--orgSelector-option-hover-bg);
+}
+
+.orgSelectorOptionHighlighted {
+  background-color: var(--orgSelector-option-hover-bg);
+}
+
+.orgSelectorOptionSelected {
+  background-color: var(--orgSelector-option-selected-bg);
+}
+
+.orgSelectorNoResults {
+  padding: 0.75rem 1rem;
+  color: var(--orgSelector-no-results-color);
+}
+
+/* DataTable Pagination Styles */
+.paginationWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  border-top: 1px solid var(--pagination-border-top);
+}
+
+.paginationRange {
+  font-size: 0.875rem;
+  color: var(--row-color);
+  min-width: 120px;
+  text-align: center;
+}
+
+.pageBtn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--pagination-btn-border);
+  border-radius: 0.375rem;
+  background-color: var(--pagination-btn-bg);
+  color: var(--pagination-btn-color);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s,
+    opacity 0.2s;
+}
+
+.pageBtn:hover:not(:disabled) {
+  background-color: var(--pagination-btn-bg-hover);
+  border-color: var(--pagination-btn-border-hover);
+  color: var(--pagination-btn-color-hover);
+}
+
+.pageBtn:disabled {
+  opacity: 0.6;
+  background-color: var(--pagination-btn-bg-disabled);
+  cursor: not-allowed;
+}
+
+.pageBtn:focus {
+  outline: 2px solid var(--pagination-btn-bg-focus);
+  outline-offset: 2px;
+}
+
+/* Organizations page styles */
+.organizationsContainer {
+  padding-top: 20px;
+}
+
+.organizationsContainerExpanded {
+  margin-left: 40px;
+}
+
+.organizationsContainerContracted {
+  margin-left: 20px;
+}
+
+.organizationsMainContainer {
+  overflow-x: hidden;
+}
+
+.organizationsFlexContainer {
+  flex: 1;
+}
+
+/* Groups page styles */
+.groupsViewButton {
+  min-width: 32px;
+}
+
+/* DataGrid styles */
+.dataGridRoot {
+  border-radius: 0.5rem;
+}
+
+.dataGridMain {
+  border-radius: 0.5rem;
+}
+
+.dataGridRow:hover {
+  background-color: transparent;
+}
+
+.dataGridRow.Mui-hovered {
+  background-color: transparent;
+}
+
+.dataGridCell:focus-within {
+  outline: none;
+}
+
+.dataGridColumnHeader:focus-within {
+  outline: none;
+}
+
+.divider {
+  border: 2px solid var(--pagination-btn-border);
+  border-width: 2px;
+  width: 85%;
+}
+
+@media (max-width: 768px) {
+  .paginationWrap {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .pageBtn {
+    width: 100%;
+  }
 }

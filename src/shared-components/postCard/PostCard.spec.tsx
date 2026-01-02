@@ -695,7 +695,7 @@ describe('PostCard', () => {
     const editButton = await screen.findByTestId('edit-post-menu-item');
     await userEvent.click(editButton);
 
-    expect(screen.getByText('Edit Post')).toBeInTheDocument();
+    expect(await screen.findByText('Edit Post')).toBeInTheDocument();
 
     const cancelButton = screen.getByRole('button', { name: 'close' });
     await userEvent.click(cancelButton);
@@ -1270,7 +1270,9 @@ describe('PostCard', () => {
     );
 
     // Check that avatar uses fallback (UserDefault) when avatarURL is null
-    const avatar = screen.getByRole('img', { name: defaultProps.creator.name });
+    const avatar = screen.getByRole('img', {
+      name: new RegExp(defaultProps.creator.name),
+    });
     expect(avatar).toBeInTheDocument();
   });
 

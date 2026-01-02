@@ -17,7 +17,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
 import dayjs, { type Dayjs } from 'dayjs';
-import CustomRecurrenceModal from 'screens/OrganizationEvents/CustomRecurrenceModal';
+import CustomRecurrenceModal from 'screens/AdminPortal/OrganizationEvents/CustomRecurrenceModal';
 
 import PreviewModal from './EventListCardPreviewModal';
 import { UserRole } from 'types/Event/interface';
@@ -26,7 +26,7 @@ import {
   InterfaceRecurrenceRule,
 } from 'utils/recurrenceUtils/recurrenceTypes';
 
-vi.mock('screens/OrganizationEvents/CustomRecurrenceModal', () => ({
+vi.mock('screens/AdminPortal/OrganizationEvents/CustomRecurrenceModal', () => ({
   default: vi.fn(),
 }));
 
@@ -367,6 +367,39 @@ describe('EventListCardPreviewModal', () => {
     });
 
     expect(screen.getByTestId('deleteEventModalBtn')).toBeInTheDocument();
+  });
+
+  test('verifies aria-label for show event dashboard button', () => {
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        userRole: UserRole.ADMINISTRATOR,
+      },
+    });
+
+    expect(screen.getByLabelText('showEventDashboard')).toBeInTheDocument();
+  });
+
+  test('verifies aria-label for edit event button', () => {
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        userRole: UserRole.ADMINISTRATOR,
+      },
+    });
+
+    expect(screen.getByLabelText('editEvent')).toBeInTheDocument();
+  });
+
+  test('verifies aria-label for delete event button', () => {
+    renderComponent({
+      eventListCardProps: {
+        ...mockEventListCardProps,
+        userRole: UserRole.ADMINISTRATOR,
+      },
+    });
+
+    expect(screen.getByLabelText('deleteEvent')).toBeInTheDocument();
   });
 
   test('hides action buttons for regular users without edit permissions', () => {

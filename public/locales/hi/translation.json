@@ -1,4 +1,6 @@
 {
+  "ends": "समाप्त होता है",
+  "occurrences": "घटनाओं",
   "leaderboard": {
     "title": "लीडरबोर्ड",
     "searchByVolunteer": "स्वयंसेवक द्वारा खोजें",
@@ -9,21 +11,27 @@
     "weekly": "इस सप्ताह",
     "monthly": "इस माह",
     "yearly": "इस वर्ष",
-    "noVolunteers": "कोई स्वयंसेवक नहीं मिला!"
+    "noVolunteers": "कोई स्वयंसेवक नहीं मिला",
+    "goldMedal": "सोना",
+    "silverMedal": "चांदी",
+    "bronzeMedal": "कांस्य",
+    "rank": "रैंक",
+    "volunteer": "स्वयंसेवक",
+    "email": "ईमेल",
+    "hoursVolunteered": "स्वयंसेवक घंटे"
   },
   "loginPage": {
     "title": "तालावा व्यवस्थापक",
     "fromPalisadoes": "Palisadoes फाउंडेशन स्वयंसेवकों द्वारा विकसित एक ओपन-सोर्स एप्लिकेशन",
     "userLogin": "उपयोगकर्ता लॉगिन",
     "adminLogin": "एडमिन लॉगिन",
-    "atleast_8_char_long": "कम से कम 8 अक्षर लंबे",
-    "atleast_6_char_long": "कम से कम 6 अक्षर लंबे",
+    "atleastEightCharLong": "कम से कम 8 अक्षर लंबे",
+    "atleastSixCharLong": "कम से कम 6 अक्षर लंबे",
     "firstName_invalid": "पहला नाम केवल छोटे और बड़े अक्षरों को शामिल कर सकता है",
     "lastName_invalid": "अंतिम नाम केवल छोटे और बड़े अक्षरों को शामिल कर सकता है",
-    "name_invalid": "नाम में केवल अक्षर, रिक्त स्थान और हाइफ़न होने चाहिए",
-    "password_invalid": "पासवर्ड में कम से कम 1 छोटा अक्षर, 1 बड़ा अक्षर, 1 संख्या और 1 विशेष अक्षर होना चाहिए",
-    "email_invalid": "ईमेल में कम से कम 8 अक्षर होने चाहिए",
-    "Password_and_Confirm_password_mismatches.": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
+    "nameInvalid": "नाम में केवल अक्षर, रिक्त स्थान और हाइफ़न होने चाहिए",
+    "passwordInvalid": "पासवर्ड में कम से कम 1 छोटा अक्षर, 1 बड़ा अक्षर, 1 संख्या और 1 विशेष अक्षर होना चाहिए",
+    "emailInvalid": "ईमेल में कम से कम 8 अक्षर होने चाहिए",
     "doNotOwnAnAccount": "कोई खाता नहीं है?",
     "captchaError": "कैप्चा त्रुटि!",
     "Please_check_the_captcha": "कृपया कैप्चा जांचें।",
@@ -31,11 +39,17 @@
     "passwordMismatches": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
     "fillCorrectly": "सभी विवरण सही ढंग से भरें।",
     "successfullyRegistered": "सफलतापूर्वक पंजीकृत।",
-    "lowercase_check": "कम से कम एक छोटा अक्षर",
-    "uppercase_check": "कम से कम एक बड़ा अक्षर",
-    "numeric_value_check": "कम से कम एक संख्या",
-    "special_char_check": "कम से कम एक विशेष अक्षर",
+    "lowercaseCheck": "कम से कम एक छोटा अक्षर",
+    "uppercaseCheck": "कम से कम एक बड़ा अक्षर",
+    "numericValueCheck": "कम से कम एक संख्या",
+    "specialCharCheck": "कम से कम एक विशेष अक्षर",
+    "requirement_min_length": "कम से कम 8 अक्षर",
+    "requirement_lowercase": "कम से कम एक छोटा अक्षर",
+    "requirement_uppercase": "कम से कम एक बड़ा अक्षर",
+    "requirement_number": "कम से कम एक संख्या",
+    "requirement_special_char": "कम से कम एक विशेष अक्षर",
     "selectOrg": "एक संगठन चुनें",
+    "backToLogin": "लॉगिन पर वापस जाएं",
     "afterRegister": "सफलतापूर्वक पंजीकृत।",
     "talawa_portal": "तालावा पोर्टल",
     "login": "लॉगिन",
@@ -56,20 +70,23 @@
     "user": "उपयोगकर्ता",
     "loading": "लोड हो रहा है",
     "communityLogo": "समुदाय लोगो",
-    "organizations": "संगठन",
-    "accountLocked": "बहुत अधिक असफल लॉगिन प्रयासों के कारण आपका खाता अस्थायी रूप से लॉक कर दिया गया है। कृपया बाद में पुनः प्रयास करें।",
-    "accountLockedWithTimer": "आपका खाता अस्थायी रूप से लॉक कर दिया गया है। कृपया {{minutes}} मिनट में पुनः प्रयास करें।"
+    "organizations": "संगठन"
   },
   "signOut": {
     "retryPrompt": "सेशन रद्द करने में विफल। पुनः प्रयास करें?",
     "signingOut": "साइन आउट हो रहा है...",
     "signOut": "साइन आउट"
   },
+  "orgSelector": {
+    "organization": "संगठन",
+    "selectOrganization": "एक संगठन चुनें",
+    "noOrganizationsAvailable": "कोई संगठन उपलब्ध नहीं है",
+    "noMatchingOrganizations": "कोई मेल खाने वाला संगठन नहीं मिला"
+  },
   "userLoginPage": {
     "title": "तालावा व्यवस्थापक",
     "fromPalisadoes": "Palisadoes फाउंडेशन स्वयंसेवकों द्वारा विकसित एक ओपन-सोर्स एप्लिकेशन",
-    "atleast_8_char_long": "कम से कम 8 अक्षर लंबे",
-    "Password_and_Confirm_password_mismatches.": "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।",
+    "atleastEightCharLong": "कम से कम 8 अक्षर लंबे",
     "doNotOwnAnAccount": "कोई खाता नहीं है?",
     "captchaError": "कैप्चा त्रुटि!",
     "Please_check_the_captcha": "कृपया कैप्चा जांचें।",
@@ -198,7 +215,16 @@
     "cancel": "रद्द करें",
     "endOfResults": "परिणाम समाप्त",
     "noResultsFoundFor": "कोई परिणाम नहीं मिला",
-    "OR": "या"
+    "OR": "या",
+    "imageUploadError": "छवि अपलोड विफल। कृपया पुनः प्रयास करें।",
+    "imageUploadSuccess": "छवि सफलतापूर्वक अपलोड की गई।",
+    "congratulationOrgCreated": "बधाई हो! संगठन बनाया गया है।",
+    "goToStore": "स्टोर पर जाएं",
+    "manageFeaturesInfo": "इस संगठन के लिए उपलब्ध सुविधाओं और प्लगइन्स का प्रबंधन करें।",
+    "orgName": "नाम दर्ज करें",
+    "sortOrganizations": "संगठनों को क्रमबद्ध करें",
+    "admins": "प्रशासक",
+    "members": "सदस्य"
   },
   "orgListCard": {
     "manage": "प्रबंधित करें",
@@ -223,11 +249,11 @@
     "rejectedSuccessfully": "अनुरोध सफलतापूर्वक अस्वीकार किया गया",
     "noOrgErrorTitle": "संगठन नहीं मिला",
     "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से संगठन बनाएं",
+    "newMembersWillAppearHere": "नए सदस्य यहां दिखाई देंगे",
     "name": "नाम",
     "email": "ईमेल",
     "profilePictureAlt": "{{name}} की प्रोफ़ाइल छवि",
-    "placeholderAvatarAlt": "प्लेसहोल्डर अवतार",
-    "newMembersWillAppearHere": "नई सदस्यता अनुरोध यहाँ दिखाई देंगे"
+    "placeholderAvatarAlt": "प्लेसहोल्डर अवतार"
   },
   "users": {
     "membershipStatus": {
@@ -396,7 +422,11 @@
     "totalAssignedUsers": "कुल नियुक्त उपयोगकर्ता",
     "tagCreationFailed": "टैग निर्माण विफल",
     "errorLoadingTagsData": "संगठन टैग डेटा लोड करते समय त्रुटि हुई",
-    "sortTags": "टैग सॉर्ट करें"
+    "sortTags": "टैग सॉर्ट करें",
+    "tags": "टैग",
+    "Latest": "नवीनतम",
+    "Oldest": "सबसे पुराना",
+    "viewSubTags": "{{count}} उप-टैग देखें"
   },
   "manageTag": {
     "title": "टैग विवरण",
@@ -437,7 +467,10 @@
     "expand": "विस्तारित करें",
     "tagNamePlaceholder": "टैग का नाम लिखें",
     "allTags": "सभी टैग",
-    "noMoreMembersFound": "कोई और सदस्य नहीं मिला"
+    "noMoreMembersFound": "कोई और सदस्य नहीं मिला",
+    "errorOccurredWhileLoadingAssignedUser": "असाइन किए गए उपयोगकर्ता को लोड करते समय त्रुटि हुई",
+    "sortPeople": "लोगों को सॉर्ट करें",
+    "tagActions": "टैग क्रियाएँ"
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
@@ -478,12 +511,17 @@
     "endTime": "अंत समय",
     "allDay": "पूरे दिन",
     "recurringEvent": "पुनरावर्ती ईवेंट",
+    "recurring": "पुनरावर्ती",
     "isPublic": "सार्वजनिक है",
+    "publicEvent": "सार्वजनिक है",
     "isRegistrable": "पंजीकरण योग्य है",
+    "registerable": "पंजीकरण योग्य है",
+
     "createEvent": "कार्यक्रम बनाएँ",
     "enterFilter": "फ़िल्टर दर्ज करें",
     "enterName": "नाम दर्ज करें",
     "enterDescrip": "विवरण दर्ज करें",
+    "enterDescription": "विवरण दर्ज करें",
     "eventLocation": "स्थान दर्ज करें",
     "searchEventName": "ईवेंट का नाम खोजें",
     "eventType": "घटना प्रकार",
@@ -495,7 +533,7 @@
     "never": "कभी नहीं",
     "on": "पर",
     "after": "बाद",
-    "occurences": "घटनाओं",
+    "occurrences": "घटनाओं",
     "monthlyOn": "मासिक पर",
     "yearlyOn": "वार्षिक पर",
     "yearlyRecurrenceDesc": "यह घटना हर साल घटना की शुरुआत की तारीख को ही दोहराई जाएगी।",
@@ -517,13 +555,16 @@
     "endDate": "समाप्ति तिथि",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
     "done": "पूर्ण",
-    "createChat": "चैट बनाएं"
+    "createChat": "चैट बनाएं",
+    "viewType": "दृश्य प्रकार",
+    "search": "खोज"
   },
   "organizationActionItems": {
     "actionItemCategory": "क्रिया वस्तु श्रेणी",
     "actionItemDetails": "क्रिया वस्तु विवरण",
     "actionItemCompleted": "क्रिया वस्तु पूरी",
     "assignee": "प्राप्तकर्ता",
+    "assigneeOrCategory": "प्राप्तकर्ता या श्रेणी",
     "assignedTo": "किसे सौंपा गया",
     "assigner": "सौंपने वाला",
     "assignmentDate": "आवंटन तिथि",
@@ -552,8 +593,10 @@
     "selectActionItemCategory": "क्रिया वस्तु श्रेणी चुनें",
     "selectAssignee": "प्राप्तकर्ता चुनें",
     "volunteer": "स्वयंसेवक",
+    "volunteered": "स्वयंसेवा की",
     "volunteerGroup": "स्वयंसेवक समूह",
     "volunteerAssignment": "स्वयंसेवक असाइनमेंट",
+    "volunteerSuccess": "स्वयंसेवक सफलतापूर्वक जोड़ा गया",
     "individualVolunteer": "व्यक्तिगत स्वयंसेवक",
     "groupAssignment": "समूह असाइनमेंट",
     "hoursVolunteered": "स्वयंसेवा के घंटे",
@@ -658,6 +701,7 @@
     "deleteThisAndFollowing": "इस और सभी निम्नलिखित ईवेंट्स को हटाएं",
     "deleteAllEvents": "इस सीरीज़ के सभी ईवेंट्स को हटाएं",
     "editEvent": "इवेंट संपादित करें",
+    "showEventDashboard": "इवेंट डैशबोर्ड दिखाएं",
     "updateEvent": "ईवेंट अपडेट करें",
     "updateRecurringEventMsg": "यह एक आवर्ती ईवेंट है। चुनें कि आप इसे कैसे अपडेट करना चाहते हैं:",
     "updateThisInstance": "केवल इस इंस्टेंस को अपडेट करें",
@@ -675,6 +719,8 @@
     "eventDetails": "घटना की जानकारी",
     "eventDeleted": "ईवेंट सफलतापूर्वक हटा दिया गया.",
     "eventUpdated": "इवेंट सफलतापूर्वक अपडेट किया गया.",
+    "registeredSuccessfully": "Successfully registered for {{eventName}}",
+    "noChangesToUpdate": "No changes to update",
     "thisInstance": "यह उदाहरण",
     "thisAndFollowingInstances": "यह और निम्नलिखित उदाहरण",
     "allInstances": "सभी उदाहरण",
@@ -685,7 +731,7 @@
     "never": "कभी नहीं",
     "on": "पर",
     "after": "बाद",
-    "occurences": "घटनाओं",
+    "occurrences": "घटनाओं",
     "location": "स्थान",
     "no": "नहीं",
     "yes": "हाँ",
@@ -696,6 +742,7 @@
     "close": "बंद करें",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
     "done": "समाप्त",
+    "invalidDate": "Invalid Date",
     "createChat": "चैट बनाएं"
   },
   "funds": {
@@ -722,16 +769,20 @@
     "createdEarliest": "सबसे जल्दी बनाया",
     "viewCampaigns": "कैम्पेंस देखें",
     "assocCampaigns": "संबद्ध अभियान",
+    "associatedCampaigns": "संबद्ध अभियान",
+    "searchFunds": "फंड खोजें",
     "errorLoadingFundsData": "फंड डेटा लोड करते समय त्रुटि हुई",
-    "editFund": "फंड संपादित करें",
-    "searchFunds": "फंड खोजें"
+    "editFund": "फंड संपादित करें"
   },
   "fundCampaign": {
     "title": "फंडरेजिंग कैंपेन",
     "campaignName": "कैंपेन का नाम",
     "campaignOptions": "विकल्प",
     "fundingGoal": "फंडिंग उद्देश्य",
+    "progress": "प्रगति",
+    "raised": "जुटाया गया",
     "addCampaign": "कैंपेन जोड़ें",
+    "editCampaign": "कैंपेन संपादित करें",
     "createdCampaign": "कैंपेन सफलतापूर्वक बनाई गई",
     "updatedCampaign": "कैंपेन सफलतापूर्वक अपडेट की गई",
     "deletedCampaign": "कैंपेन सफलतापूर्वक हटा दी गई",
@@ -743,15 +794,15 @@
     "currency": "मुद्रा",
     "selectCurrency": "मुद्रा का चयन करें",
     "searchFullName": "नाम से खोजें",
+    "searchCampaigns": "कैंपेन खोजें",
     "viewPledges": "प्लेज देखें",
     "noCampaignsFound": "कोई कैंपेन नहीं मिली",
     "latestEndDate": "अंतिम समाप्ति तिथि",
     "earliestEndDate": "सबसे पहली समाप्ति तिथि",
     "lowestGoal": "सबसे कम उद्देश्य",
     "highestGoal": "सबसे ऊंचा उद्देश्य",
-    "editCampaign": "अभियान संपादित करें",
-    "searchCampaigns": "अभियान खोजें",
-    "errorLoading": "अभियान डेटा लोड करते समय त्रुटि हुई"
+    "percentageRaised": "% एकत्रित",
+    "campaignProgress": "अभियान प्रगति: {{percentage}}%"
   },
   "pledges": {
     "title": "निधि अभियान प्रतिज्ञाएँ",
@@ -784,7 +835,13 @@
     "startDate": "प्रारंभ तिथि",
     "endDate": "समाप्ति तिथि",
     "searchByPlaceholder": "{{field}} द्वारा खोजें",
-    "selectPledger": "कृपया एक प्रतिज्ञाकर्ता का चयन करें"
+    "selectPledger": "कृपया एक प्रतिज्ञाकर्ता का चयन करें",
+    "moreUsers": "+{{count}} और...",
+    "togglePledgedRaised": "प्रतिबद्ध और उठाई गई राशि के बीच टॉगल करें",
+    "pledgeDate": "प्रतिज्ञा तिथि",
+    "pledged": "प्रतिबद्ध",
+    "donated": "दान किया गया",
+    "campaignNotActive": "अभियान वर्तमान में सक्रिय नहीं है"
   },
   "createPostModal": {
     "title": "पदों",
@@ -826,11 +883,15 @@
     "Next": "अगला पृष्ठ",
     "Previous": "पिछला पृष्ठ",
     "cancel": "रद्द करें",
+    "invalidDate": "Invalid Date",
     "messageTitleError": "पोस्ट का शीर्षक खाली नहीं हो सकता!",
     "organizationIdMissing": "संगठन आईडी गायब है!",
     "messageDescription": "पोस्ट विवरण",
     "addVideo": "वीडियो जोड़ें",
-    "creatingMessage": "पोस्ट बनाई जा रही है..."
+    "creatingMessage": "पोस्ट बनाई जा रही है...",
+    "orgPostListError": "Organization post list error:",
+    "pinnedPostsLoadError": "Error loading pinned posts",
+    "errorSearchingPosts": "Error searching posts"
   },
   "postNotFound": {
     "post": "डाक",
@@ -892,11 +953,13 @@
     "searchByFirstName": "प्रथम नाम से खोजें",
     "searchByLastName": "अंतिम नाम से खोजें",
     "noSpammerFound": "कोई स्पैमर नहीं मिला",
+    "noUsersFound": "कोई उपयोगकर्ता नहीं मिला",
     "searchByName": "नाम से खोजें",
     "name": "नाम",
     "email": "ईमेल",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
-    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला"
+    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला",
+    "sortOrganizations": "Sort Organizations"
   },
   "eventManagement": {
     "name": "इवेंट मैनेजमेंट",
@@ -908,7 +971,8 @@
     "agendas": "एजेंडे",
     "statistics": "आँकड़े",
     "to": "को",
-    "volunteers": "स्वयंसेवक"
+    "volunteers": "स्वयंसेवक",
+    "backToEvents": "इवेंट्स पर वापस जाएं"
   },
   "forgotPassword": {
     "title": "तलावा पासवर्ड भूल गए",
@@ -1085,8 +1149,7 @@
     "unassignUserTagMessage": "क्या आप इस उपयोगकर्ता से टैग हटाना चाहते हैं?",
     "successfullyUnassigned": "उपयोगकर्ता से टैग हटा दिया गया",
     "tagsAssigned": "टैग सौंपे गए",
-    "noTagsAssigned": "कोई टैग सौंपा नहीं गया",
-    "actions": "कार्रवाई"
+    "noTagsAssigned": "कोई टैग सौंपा नहीं गया"
   },
   "people": {
     "title": "लोग",
@@ -1157,7 +1220,8 @@
     "filter": "फ़िल्टर",
     "searchByName": "नाम से खोजें",
     "searchOrganizations": "संगठनों खोजें",
-    "loading": "लोड हो रहा है..."
+    "loading": "लोड हो रहा है...",
+    "title": "संगठनों"
   },
   "userSidebarOrg": {
     "yourOrganizations": "आपके संगठन",
@@ -1240,7 +1304,7 @@
     "event": "आयोजन",
     "article": "लेख",
     "postNowVisibleInFeed": "पोस्ट अब फीड में दिखाई दे रहा है",
-    "processingPost": "आपकी पोस्ट प्रसंस्करण हो रही है। कृपया प्रतीक्षा करें।"
+    "processingPost": "आपकी पोस्ट प्रसंस्करण कर रहे हैं। कृपया प्रतीक्षा करें।"
   },
   "eventAttendance": {
     "historical_statistics": "ऐतिहासिक आंकड़े",
@@ -1261,6 +1325,7 @@
     "chartPageNavigation": "चार्ट पृष्ठ नेविगेशन",
     "previousPage": "पिछला पृष्ठ",
     "nextPage": "अगला पृष्ठ",
+    "pageNumber": "पृष्ठ {{page}}",
     "goToToday": "आज पर जाएं",
     "genderDistribution": "लिंग वितरण",
     "ageDistribution": "आयु वितरण"
@@ -1365,7 +1430,12 @@
     "postalCode": "पिन कोड",
     "city": "शहर",
     "description": "विवरण",
-    "enterDescription": "विवरण दर्ज करें"
+    "enterDescription": "विवरण दर्ज करें",
+    "atleast_8_char_long": "पासवर्ड कम से कम 8 अक्षर लंबा होना चाहिए",
+    "invalidFileType": "अमान्य फ़ाइल प्रकार। कृपया JPEG, PNG, या GIF अपलोड करें",
+    "fileSizeTooLarge": "फ़ाइल बहुत बड़ी है। अधिकतम आकार 5MB है",
+    "failedToProcessImage": "प्रोफ़ाइल चित्र को संसाधित करने में विफल। कृपया पुनः अपलोड करने का प्रयास करें",
+    "title": "समायोजन"
   },
   "donate": {
     "title": "दान",
@@ -1446,7 +1516,14 @@
     "day": "दिन",
     "week": "सप्ताह",
     "month": "महीना",
-    "year": "वर्ष"
+    "year": "वर्ष",
+    "ends": "समाप्त होता है",
+    "occurrences": "घटनाओं",
+    "never": "कभी नहीं",
+    "on": "पर",
+    "after": "के बाद",
+    "customRecurrence": "कस्टम पुनरावृत्ति",
+    "repeatsEvery": "हर बार दोहराता है"
   },
   "userEventCard": {
     "starts": "प्रारंभ होगा",
@@ -1490,7 +1567,19 @@
     "edit": "संपादित करें",
     "saveChanges": "परिवर्तन सहेजें",
     "endOfResults": "परिणाम समाप्त",
-    "noDescription": "कोई विवरण नहीं"
+    "noDescription": "कोई विवरण नहीं",
+    "failedToFetchAdvertisements": "विज्ञापन लाने में विफल",
+    "advertisementMedia": "विज्ञापन मीडिया",
+    "noMediaAvailable": "कोई मीडिया उपलब्ध नहीं",
+    "advertisementImageAlt": "विज्ञापन छवि #{{index}} {{name}} के लिए",
+    "invalidFileType": "अमान्य फ़ाइल प्रकार: {{fileName}}",
+    "fileTooLarge": "फ़ाइल बहुत बड़ी है: {{fileName}}",
+    "invalidArgumentsForAction": "इस क्रिया के लिए अमान्य तर्क।",
+    "englishCaptions": "अंग्रेज़ी कैप्शन",
+    "preview": "पूर्वावलोकन",
+    "bannerAd": "बैनर विज्ञापन",
+    "popupAd": "पॉपअप विज्ञापन",
+    "menuAd": "मेनू विज्ञापन"
   },
   "userChat": {
     "title": "चैट्स",
@@ -1601,7 +1690,10 @@
     "cancel": "रद्द करें",
     "create": "बनाएं",
     "user": "उपयोगकर्ता",
-    "profile": "प्रोफ़ाइल"
+    "profile": "प्रोफ़ाइल",
+    "customizedTable": "कस्टमाइज़्ड टेबल",
+    "page": "पृष्ठ",
+    "add": "जोड़ें"
   },
   "eventActionItems": {
     "title": "एक्शन आइटम्स",
@@ -1645,6 +1737,7 @@
     "title": "धन उगाहने के अभियान",
     "searchByName": "नाम से खोजें...",
     "searchBy": "द्वारा खोजें",
+    "searchCampaigns": "अभियान खोजें",
     "pledgers": "प्रतिज्ञाकर्ता",
     "pledger": "प्रतिज्ञाकर्ता",
     "campaigns": "अभियान",
@@ -1664,24 +1757,21 @@
     "viewPledges": "प्रतिज्ञाएँ देखें",
     "noPledges": "कोई प्रतिज्ञा नहीं मिली",
     "noCampaigns": "कोई अभियान नहीं मिला",
-    "searchCampaigns": "अभियान खोजें",
-    "campaignName": "अभियान का नाम",
-    "startDate": "आरंभ करने की तिथि",
-    "endDate": "अंतिम तिथि",
-    "fundingGoal": "निधि लक्ष्य",
-    "raised": "जुठाई गई राशि",
-    "viewPledge": "प्रतिज्ञा देखें",
+    "raised": "एकत्रित",
     "amountRaised": "एकत्रित राशि"
   },
   "userPledges": {
-    "title": "मेरी प्रतिज्ञाएँ"
+    "title": "मेरी प्रतिज्ञाएँ",
+    "searchPledges": "प्रतिज्ञाएँ खोजें"
   },
   "leaveOrganization": {
     "title": "संगठन छोड़ें"
   },
   "eventVolunteers": {
+    "toggleGroupAriaLabel": "स्वयंसेवक दृश्य चयनकर्ता",
     "volunteers": "स्वयंसेवक",
     "volunteer": "स्वयंसेवक",
+    "volunteerName": "स्वयंसेवक का नाम",
     "volunteerGroups": "स्वयंसेवक समूह",
     "individuals": "व्यक्ति",
     "groups": "समूह",
@@ -1692,6 +1782,7 @@
     "mostHoursVolunteered": "सबसे अधिक घंटे स्वयंसेवा",
     "leastHoursVolunteered": "सबसे कम घंटे स्वयंसेवा",
     "accepted": "स्वीकृत",
+    "rejected": "अस्वीकृत",
     "addVolunteer": "स्वयंसेवक जोड़ें",
     "removeVolunteer": "स्वयंसेवक हटाएं",
     "volunteerAdded": "स्वयंसेवक सफलतापूर्वक जोड़ा गया",
@@ -1703,6 +1794,7 @@
     "deleteVolunteerGroupMsg": "क्या आप वाकई इस स्वयंसेवक समूह को हटाना चाहते हैं?",
     "leader": "नेता",
     "group": "समूह",
+    "groupOrLeader": "समूह या नेता",
     "createGroup": "समूह बनाएं",
     "updateGroup": "समूह अपडेट करें",
     "deleteGroup": "समूह हटाएं",
@@ -1712,6 +1804,9 @@
     "groupDetails": "समूह विवरण",
     "creator": "निर्माता",
     "requests": "अनुरोध",
+    "volunteershipRequests": "स्वयंसेवा अनुरोध",
+    "requestType": "अनुरोध प्रकार",
+    "requestDate": "अनुरोध तिथि",
     "noRequests": "कोई अनुरोध नहीं",
     "latest": "नवीनतम",
     "earliest": "प्रारंभिक",
@@ -1723,7 +1818,10 @@
     "leastVolunteers": "सबसे कम स्वयंसेवक",
     "applyTo": "लागू करें",
     "entireSeries": "पूरी श्रृंखला",
-    "thisEventOnly": "केवल यह घटना"
+    "thisEventOnly": "केवल यह घटना",
+    "volunteerAlt": "स्वयंसेवक प्रोफ़ाइल चित्र",
+    "groupTable": "समूह तालिका",
+    "volunteerActions": "स्वयंसेवक क्रियाएँ"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",
@@ -1733,12 +1831,17 @@
     "invitations": "निमंत्रण",
     "groups": "स्वयंसेवक समूह",
     "actions": "क्रिया वस्तुएँ",
+    "search": "खोजें",
     "searchByName": "नाम से खोजें",
+    "startDate": "प्रारंभिक तिथि",
     "latestEndDate": "नवीनतम समाप्ति तिथि",
     "earliestEndDate": "प्रारंभिक समाप्ति तिथि",
     "noEvents": "कोई आगामी कार्यक्रम नहीं",
     "volunteer": "स्वयंसेवक",
     "volunteered": "स्वयंसेवित",
+    "volunteerName": "नाम",
+    "volunteerActions": "क्रियाएँ",
+    "volunteerAlt": "स्वयंसेवक",
     "join": "शामिल हों",
     "joined": "शामिल हुआ",
     "searchByEventName": "कार्यक्रम शीर्षक से खोजें",
@@ -1752,7 +1855,7 @@
     "receivedEarliest": "सबसे पहले प्राप्त",
     "invitationAccepted": "निमंत्रण सफलतापूर्वक स्वीकार किया गया",
     "invitationRejected": "निमंत्रण सफलतापूर्वक अस्वीकृत",
-    "volunteerSuccess": "स्वयंसेवक के रूप में अनुरोध सफलतापूर्वक किया गया",
+    "volunteerRequestSuccess": "स्वयंसेवक के रूप में अनुरोध सफलतापूर्वक किया गया",
     "recurring": "पुनरावृत्ति",
     "groupInvitationSubject": "स्वयंसेवक समूह में शामिल होने के लिए निमंत्रण",
     "eventInvitationSubject": "कार्यक्रम के लिए स्वयंसेवक बनने का निमंत्रण",
@@ -1766,6 +1869,7 @@
     "event": "कार्यक्रम",
     "received": "प्राप्त",
     "location": "स्थान",
+    "titleOrLocation": "शीर्षक या स्थान",
     "recurrence": "पुनरावृत्ति",
     "endDate": "समाप्ति तिथि",
     "description": "विवरण",
@@ -1774,7 +1878,8 @@
     "srNo": "क्र.सं.",
     "groupName": "समूह का नाम",
     "noOfMembers": "सदस्यों की संख्या",
-    "options": "विकल्प"
+    "options": "विकल्प",
+    "notSpecified": "निर्दिष्ट नहीं"
   },
   "pluginStore": {
     "title": "प्लगइन स्टोर",
@@ -1798,7 +1903,45 @@
     "checkBackLater": "नए प्लगइन के लिए बाद में जांचें",
     "tryDifferentSearch": "एक अलग खोज शब्द आज़माएं या सभी प्लगइन ब्राउज़ करें",
     "explorePluginStore": "नए प्लगइन खोजने के लिए प्लगइन स्टोर का अन्वेषण करें",
-    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला"
+    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला",
+    "pluginIcon": "प्लगइन आइकन",
+    "backToDetails": "विवरण पर वापस जाएं",
+    "previousImage": "Previous Image (←)",
+    "nextImage": "Next Image (→)",
+    "screenshot": "स्क्रीनशॉट {{number}}",
+    "goTo": "पर जाएं",
+    "screenshots": "Screenshots",
+    "ss": "Screenshot",
+    "loadingDetails": "लोड हो रहा है विवरण...",
+    "features": "Features",
+    "noFeaturesInfoAvailableForThisPlugin": "इस प्लगइन के लिए कोई फीचर जानकारी उपलब्ध नहीं है।",
+    "loadingFeatures": "लोड हो रहा है फीचर्स...",
+    "loadingChangelog": "लोड हो रहा है चेंजलॉग...",
+    "changelog": "Changelog",
+    "v": "v",
+    "failedToUploadPlugin": "प्लगइन अपलोड करने में विफल रहा। कृपया पुनः प्रयास करें।",
+    "uploadPlugin": "प्लगइन अपलोड करें",
+    "uploadPluginDescription": "अपलोड करने के लिए एक ज़िप फ़ाइल चुनें या ड्रॉप करें",
+    "pluginId": "प्लगइन आईडी",
+    "adminDashboardComponents": "एडमिन डैशबोर्ड कंपोनेंट्स",
+    "componentsToInstall": "इंस्टॉल करने के लिए कंपोनेंट्स",
+    "apiBackendComponents": "API बैकएंड कंपोनेंट्स",
+    "pluginStructure": "प्लगइन संरचना",
+    "pluginStructureDescription": "प्लगइन को सही ढंग से काम करने के लिए निम्नलिखित निर्देशिका संरचना का पालन करना चाहिए:",
+    "detectedFiles": "पता चला फ़ाइलें",
+    "expectedDirectoryStructure": "अपेक्षित निर्देशिका संरचना",
+    "requiredManifestFields": "आवश्यक मैनिफेस्ट फ़ील्ड",
+    "uninstallPlugin": "प्लगइन अनइंस्टॉल करें",
+    "uninstallPluginMsg": "क्या आप वाकई इस {{pluginName}} को अनइंस्टॉल करना चाहते हैं?",
+    "clickToViewFullSize": "पूर्ण आकार देखने के लिए क्लिक करें",
+    "pluginInfo": "प्लगइन जानकारी",
+    "filterPlugins": "फिल्टर प्लगइन्स",
+    "details": "विवरण",
+    "installing": "इंस्टॉल हो रहा है ({{elapsed}})",
+    "uploading": "अपलोड हो रहा है...",
+    "screenshotCounter": "{{current}} में से {{total}}",
+    "uninstallWarning": "यह क्रिया प्लगइन और उसके सभी डेटा को स्थायी रूप से हटा देगी। इस क्रिया को पूर्ववत नहीं किया जा सकता।",
+    "errorInstalling": "प्लगइन विवरण लोड करने में विफल"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "टिप्पणी सफलतापूर्वक हटा दी गई",
@@ -1817,9 +1960,26 @@
     "modalTitle": "प्रोफ़ाइल तस्वीर",
     "enlargedAltText": "{{name}} की बड़ी प्रोफ़ाइल तस्वीर"
   },
+  "eventCalendar": {
+    "noEventsAvailable": "कोई इवेंट उपलब्ध नहीं है",
+    "holidays": "छुट्टियाँ",
+    "events": "इवेंट्स",
+    "eventsCreatedByOrganization": "संगठन द्वारा बनाए गए इवेंट्स",
+    "today": "आज"
+  },
   "common": {
     "signOut": "साइन आउट",
     "signingOut": "साइन आउट हो रहा है...",
-    "retryPrompt": "सेशन रद्द करने में विफल। पुनः प्रयास करें?"
+    "retryPrompt": "सेशन रद्द करना विफल रहा। पुनः प्रयास करें?",
+    "breadcrumb": "ब्रेडक्रम्ब",
+    "action": "क्रिया",
+    "selectLanguage": "भाषा चुनें",
+    "userMenu": "उपयोगकर्ता मेनू",
+    "settings": "समायोजन",
+    "logout": "साइन आउट",
+    "logoutFailed": "साइन आउट विफल रहा",
+    "title": "उपयोगकर्ता पोर्टल",
+    "talawa": "तलावा",
+    "talawaBranding": "तालावा ब्रांडिंग"
   }
 }

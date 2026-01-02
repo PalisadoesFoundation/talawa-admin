@@ -2,7 +2,7 @@
  * LoadingState Component
  *
  * A reusable component that provides consistent loading experiences across the application.
- * Supports both full-screen spinner with overlay and inline loading indicators.
+ * Supports full-screen spinner with overlay, inline loading indicators, and skeleton placeholders.
  *
  * @component
  * @example
@@ -16,10 +16,16 @@
  * <LoadingState isLoading={loading} variant="inline">
  *   <div>Content</div>
  * </LoadingState>
+ *
+ * // Skeleton loading (for initial content load)
+ * <LoadingState isLoading={loading} variant="skeleton">
+ *   <div>Content</div>
+ * </LoadingState>
  * ```
  *
  * @remarks
  * - When loading, the spinner variant displays an overlay that blocks user interactions
+ * - Skeleton variant shows animated placeholders suitable for initial content loading
  * - Includes proper accessibility attributes (role, aria-live, aria-label)
  * - Supports internationalization for aria-label
  */
@@ -28,6 +34,7 @@ import { Spinner } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceLoadingStateProps } from 'types/shared-components/LoadingState/interface';
+import TableLoader from 'components/TableLoader/TableLoader';
 
 const LoadingState = ({
   isLoading,
@@ -35,6 +42,10 @@ const LoadingState = ({
   size = 'xl',
   children,
   'data-testid': dataTestId = 'loading-state',
+  tableHeaderTitles,
+  noOfRows,
+  skeletonRows = 5,
+  skeletonCols = 4,
 }: InterfaceLoadingStateProps): JSX.Element => {
   const { t } = useTranslation('common');
 
@@ -65,6 +76,41 @@ const LoadingState = ({
           variant="primary"
           data-testid="spinner"
         />
+      </div>
+    );
+  }
+
+  // Table variant: renders TableLoader
+  if (variant === 'table') {
+    return (
+      <TableLoader
+        noOfRows={noOfRows || 5}
+        headerTitles={tableHeaderTitles}
+        data-testid={dataTestId}
+      />
+    );
+  }
+
+  // Skeleton variant: renders skeleton-like rows
+  if (variant === 'skeleton') {
+    const safeRows = Math.max(0, skeletonRows);
+    const safeCols = Math.max(0, skeletonCols);
+
+    return (
+      <div
+        data-testid={dataTestId}
+        className="w-100"
+        role="status"
+        aria-live="polite"
+        aria-label={t('loading', { defaultValue: 'Loading' })}
+      >
+        {[...Array(safeRows)].map((_, rowIndex) => (
+          <div key={rowIndex} className="d-flex mb-3 gap-3">
+            {[...Array(safeCols)].map((_, colIndex) => (
+              <div key={colIndex} className={`${styles.loadingItem} shimmer`} />
+            ))}
+          </div>
+        ))}
       </div>
     );
   }

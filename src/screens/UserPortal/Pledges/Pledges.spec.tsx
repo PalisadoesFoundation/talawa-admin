@@ -61,7 +61,6 @@ Object.defineProperty(window, 'localStorage', {
   value: localStorageMock,
 });
 
-// Mock for missing campaign data
 const MOCKS_WITH_MISSING_CAMPAIGN = [
   {
     request: {
@@ -99,7 +98,6 @@ const MOCKS_WITH_MISSING_CAMPAIGN = [
   },
 ];
 
-// Mock for invalid date
 const MOCKS_WITH_INVALID_DATE = [
   {
     request: {
@@ -145,7 +143,6 @@ const MOCKS_WITH_INVALID_DATE = [
   },
 ];
 
-// Existing mocks from previous input (reusing for completeness)
 const MOCKS_WITH_MORE_USERS = [
   {
     request: {
@@ -514,7 +511,6 @@ const SEARCH_MOCKS = [
         input: { userId: 'userId' },
         where: {
           firstName_contains: 'Harve',
-          name_contains: undefined,
         },
         orderBy: 'endDate_DESC',
       },
@@ -558,7 +554,6 @@ const SEARCH_MOCKS = [
       variables: {
         input: { userId: 'userId' },
         where: {
-          firstName_contains: '',
           name_contains: 'School',
         },
         orderBy: 'endDate_DESC',
@@ -714,9 +709,7 @@ const SEARCH_MOCKS = [
       query: USER_PLEDGES,
       variables: {
         input: { userId: 'userId' },
-        where: {
-          name_contains: '',
-        },
+        where: {},
         orderBy: 'endDate_DESC',
       },
     },
@@ -1042,7 +1035,7 @@ describe('Testing User Pledge Screen', () => {
   it('should render the Campaign Pledge screen', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
@@ -1081,7 +1074,7 @@ describe('Testing User Pledge Screen', () => {
   it('should render user image when avatarURL is provided', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByTestId('image-pledger-userId')).toHaveAttribute(
         'src',
         'image-url',
@@ -1092,7 +1085,7 @@ describe('Testing User Pledge Screen', () => {
   it('should render avatar when no avatarURL is provided', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByTestId('avatar-pledger-userId5')).toHaveAttribute(
         'alt',
         'John Doe',
@@ -1103,30 +1096,28 @@ describe('Testing User Pledge Screen', () => {
   it('should handle missing campaign data', async () => {
     renderMyPledges(link8);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    // The component should render without crashing even with missing campaign data
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
   it('should handle invalid end date', async () => {
     renderMyPledges(link9);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    // The component should render without crashing even with invalid dates
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
   it('should sort pledges by lowest amount', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('sort'));
     await userEvent.click(screen.getByTestId('amount_ASC'));
     await waitFor(() => {
       expect(screen.getAllByTestId('amountCell')[0]).toHaveTextContent('$100');
@@ -1136,10 +1127,10 @@ describe('Testing User Pledge Screen', () => {
   it('should sort pledges by highest amount', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('sort'));
     await userEvent.click(screen.getByTestId('amount_DESC'));
     await waitFor(() => {
       expect(screen.getAllByTestId('amountCell')[0]).toHaveTextContent('$700');
@@ -1149,14 +1140,13 @@ describe('Testing User Pledge Screen', () => {
   it('should sort pledges by earliest end date', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('sort'));
     await userEvent.click(screen.getByTestId('endDate_ASC'));
 
-    // Just verify the component doesn't crash and data is still visible
     await waitFor(() => {
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
     });
@@ -1165,14 +1155,13 @@ describe('Testing User Pledge Screen', () => {
   it('should sort pledges by latest end date', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByTestId('filter'));
+    await userEvent.click(screen.getByTestId('sort'));
     await userEvent.click(screen.getByTestId('endDate_DESC'));
 
-    // Just verify the component doesn't crash and data is still visible
     await waitFor(() => {
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
     });
@@ -1181,12 +1170,12 @@ describe('Testing User Pledge Screen', () => {
   it('should search pledges by user name', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByTestId('searchByDrpdwn'));
+    await userEvent.click(screen.getByTestId('searchBy'));
     await userEvent.click(screen.getByTestId('pledgers'));
-    await userEvent.type(screen.getByTestId('searchPledges'), 'Harve');
+    await userEvent.type(screen.getByTestId('searchByInput'), 'Harve');
     await userEvent.click(screen.getByTestId('searchBtn'));
     await waitFor(() => {
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
@@ -1197,12 +1186,12 @@ describe('Testing User Pledge Screen', () => {
   it('should search pledges by campaign name', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    await userEvent.click(screen.getByTestId('searchByDrpdwn'));
+    await userEvent.click(screen.getByTestId('searchBy'));
     await userEvent.click(screen.getByTestId('campaigns'));
-    await userEvent.type(screen.getByTestId('searchPledges'), 'School');
+    await userEvent.type(screen.getByTestId('searchByInput'), 'School');
     await userEvent.click(screen.getByTestId('searchBtn'));
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
@@ -1213,7 +1202,7 @@ describe('Testing User Pledge Screen', () => {
   it('should render all pledges as separate rows', async () => {
     renderMyPledges(link10);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
       expect(screen.getByText('John Doe')).toBeInTheDocument();
       expect(screen.getByText('Jeramy Gracia')).toBeInTheDocument();
@@ -1224,7 +1213,7 @@ describe('Testing User Pledge Screen', () => {
   it('should display single pledger correctly', async () => {
     renderMyPledges(link4);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
       expect(screen.getByTestId('amountCell')).toHaveTextContent('$700');
@@ -1235,7 +1224,7 @@ describe('Testing User Pledge Screen', () => {
   it('should render correct currency symbol', async () => {
     renderMyPledges(link5);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByTestId('amountCell')).toHaveTextContent('€700');
       expect(screen.getByTestId('paidCell')).toHaveTextContent('€0');
     });
@@ -1244,7 +1233,7 @@ describe('Testing User Pledge Screen', () => {
   it('should render ProgressBar with zero goal amount', async () => {
     renderMyPledges(link6);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByTestId('progressBar')).toHaveTextContent('0%');
     });
   });
@@ -1252,7 +1241,7 @@ describe('Testing User Pledge Screen', () => {
   it('should open and close delete pledge modal', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
     const deletePledgeBtn = await screen.findAllByTestId('deletePledgeBtn');
@@ -1272,7 +1261,7 @@ describe('Testing User Pledge Screen', () => {
   it('should open and close update pledge modal', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
     const editPledgeBtn = await screen.findAllByTestId('editPledgeBtn');
@@ -1299,7 +1288,6 @@ describe('Testing User Pledge Screen', () => {
         screen.getByText(/Error occured while loading Pledges data/i),
       ).toBeInTheDocument();
     });
-    // Check that the error message is displayed (it's in the same element)
     const errorElement = screen.getByTestId('errorMsg');
     expect(errorElement).toHaveTextContent('Mock Graphql USER_PLEDGES Error');
   });
@@ -1326,10 +1314,10 @@ describe('Testing User Pledge Screen', () => {
   it('should handle empty search input', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    const searchInput = screen.getByTestId('searchPledges');
+    const searchInput = screen.getByTestId('searchByInput');
     const searchButton = screen.getByTestId('searchBtn');
     await userEvent.clear(searchInput);
     await userEvent.click(searchButton);
@@ -1343,7 +1331,7 @@ describe('Testing User Pledge Screen', () => {
   it('should render DataGrid with correct styling', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       const dataGrid = document.querySelector('.MuiDataGrid-root');
       expect(dataGrid).toBeInTheDocument();
       expect(dataGrid).toHaveClass('MuiDataGrid-root');
@@ -1353,10 +1341,10 @@ describe('Testing User Pledge Screen', () => {
   it('should handle component unmounting', async () => {
     const { unmount } = renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
     unmount();
-    expect(screen.queryByTestId('searchPledges')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('searchByInput')).not.toBeInTheDocument();
   });
 
   it('should update pledges on pledgeData change', async () => {
@@ -1379,10 +1367,10 @@ describe('Testing User Pledge Screen', () => {
   it('should handle search input changes', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    const searchInput = screen.getByTestId('searchPledges');
+    const searchInput = screen.getByTestId('searchByInput');
     await userEvent.type(searchInput, 'test search');
     expect(searchInput).toHaveValue('test search');
 
@@ -1393,18 +1381,15 @@ describe('Testing User Pledge Screen', () => {
   it('should handle dropdown interactions', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    // Test search by dropdown
-    const searchByDropdown = screen.getByTestId('searchByDrpdwn');
+    const searchByDropdown = screen.getByTestId('searchBy');
     await userEvent.click(searchByDropdown);
 
-    // Test filter dropdown
-    const filterDropdown = screen.getByTestId('filter');
+    const filterDropdown = screen.getByTestId('sort');
     await userEvent.click(filterDropdown);
 
-    // Verify dropdown options are visible
     expect(screen.getByTestId('amount_ASC')).toBeInTheDocument();
     expect(screen.getByTestId('amount_DESC')).toBeInTheDocument();
     expect(screen.getByTestId('endDate_ASC')).toBeInTheDocument();
@@ -1414,29 +1399,27 @@ describe('Testing User Pledge Screen', () => {
   it('should handle pledge with null campaign gracefully', async () => {
     renderMyPledges(link8);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
     });
 
-    // The component should render without crashing even with null campaign
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
   it('should handle invalid date formatting', async () => {
     renderMyPledges(link9);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
     });
 
-    // The component should render without crashing even with invalid dates
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
   it('should display progress bar correctly', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       const progressBars = screen.getAllByTestId('progressBar');
       expect(progressBars.length).toBeGreaterThan(0);
       expect(progressBars[0]).toBeInTheDocument();
@@ -1445,7 +1428,7 @@ describe('Testing User Pledge Screen', () => {
   it('should handle different currency codes', async () => {
     renderMyPledges(link5);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByTestId('amountCell')).toBeInTheDocument();
       expect(screen.getByTestId('paidCell')).toBeInTheDocument();
     });
@@ -1454,11 +1437,10 @@ describe('Testing User Pledge Screen', () => {
   it('should render pledges with pledger data', async () => {
     renderMyPledges(link10);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
     expect(screen.getByRole('grid')).toBeInTheDocument();
 
-    // Verify pledger is rendered
     await waitFor(() => {
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
     });
@@ -1467,7 +1449,7 @@ describe('Testing User Pledge Screen', () => {
   it('should handle zero goal amount', async () => {
     renderMyPledges(link6);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
@@ -1475,10 +1457,9 @@ describe('Testing User Pledge Screen', () => {
   it('should display pledger avatar when available', async () => {
     renderMyPledges(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    // Check for avatar image element
     expect(screen.getByTestId('image-pledger-userId')).toHaveAttribute(
       'src',
       'image-url',
@@ -1488,11 +1469,10 @@ describe('Testing User Pledge Screen', () => {
   it('should handle campaign with missing data gracefully', async () => {
     renderMyPledges(link8);
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
     expect(screen.getByRole('grid')).toBeInTheDocument();
 
-    // Verify the pledge row renders with missing campaign handled appropriately
     await waitFor(() => {
       expect(screen.getByText('Harve Lance')).toBeInTheDocument();
     });
@@ -1542,10 +1522,9 @@ describe('Testing User Pledge Screen', () => {
     renderMyPledges(mockWithNullPledger);
 
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    // The component should render without crashing even with null pledger
     expect(screen.getByRole('grid')).toBeInTheDocument();
   });
 
@@ -1601,7 +1580,6 @@ describe('Testing User Pledge Screen', () => {
       expect(screen.getByText('Avatar Pledger')).toBeInTheDocument();
     });
 
-    // Check that the pledger image is rendered with the avatarURL
     const pledgerImage = screen.getByTestId(
       'image-pledger-avatarPledgerUserId',
     );
@@ -1660,13 +1638,11 @@ describe('Testing User Pledge Screen', () => {
     renderMyPledges(mockWithPledger);
 
     await waitFor(() => {
-      expect(screen.getByTestId('searchPledges')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
 
-    // The component should render without crashing
     expect(screen.getByRole('grid')).toBeInTheDocument();
 
-    // Check that pledger is rendered
     await waitFor(() => {
       expect(screen.getByText('Pledger User')).toBeInTheDocument();
     });

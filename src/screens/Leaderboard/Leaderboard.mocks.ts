@@ -204,3 +204,42 @@ export const ERROR_MOCKS = [
     error: new Error('Mock Graphql VOLUNTEER_RANKING Error'),
   },
 ];
+
+export const SEARCH_EMPTY_MOCKS = [
+  {
+    request: {
+      query: VOLUNTEER_RANKING,
+      variables: {
+        orgId: 'orgId',
+        where: {
+          orderBy: 'hours_DESC',
+          timeFrame: 'allTime',
+          nameContains: '',
+        },
+      },
+    },
+    result: {
+      data: {
+        getVolunteerRanks: [rank1, rank2, rank3, rank4],
+      },
+    },
+  },
+  {
+    request: {
+      query: VOLUNTEER_RANKING,
+      variables: {
+        orgId: 'orgId',
+        where: {
+          orderBy: 'hours_DESC',
+          timeFrame: 'allTime',
+          nameContains: 'ZZZDoesNotExist',
+        },
+      },
+    },
+    result: {
+      data: {
+        getVolunteerRanks: [],
+      },
+    },
+  },
+];

@@ -59,10 +59,10 @@ import Modal from 'react-bootstrap/Modal';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { toast } from 'react-toastify';
-import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
+import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
-import type { IEventEdge } from 'types/Event/interface';
+import type { IEventEdge, ICreateEventInput } from 'types/Event/interface';
 import styles from 'style/app-fixed.module.css';
 import EventForm, {
   formatRecurrenceForPayload,
@@ -154,17 +154,18 @@ export default function events(): JSX.Element {
         ? formatRecurrenceForPayload(payload.recurrenceRule, payload.startDate)
         : undefined;
 
-      const input = {
+      // Build input object with shared typed interface
+      const input: ICreateEventInput = {
         name: payload.name,
-        description: payload.description,
         startAt: payload.startAtISO,
         endAt: payload.endAtISO,
         organizationId,
         allDay: payload.allDay,
-        location: payload.location,
         isPublic: payload.isPublic,
         isRegisterable: payload.isRegisterable,
-        recurrence: recurrenceInput,
+        ...(payload.description && { description: payload.description }),
+        ...(payload.location && { location: payload.location }),
+        ...(recurrenceInput && { recurrence: recurrenceInput }),
       };
 
       const { data: createEventData } = await create({

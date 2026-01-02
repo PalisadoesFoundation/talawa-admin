@@ -44,7 +44,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import React, { useEffect, useState, useCallback } from 'react';
 import { Table } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   BLOCK_USER_MUTATION_PG,
   UNBLOCK_USER_MUTATION_PG,
@@ -67,6 +67,7 @@ import type {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan, faUserPlus } from '@fortawesome/free-solid-svg-icons';
 import PageHeader from 'shared-components/Navbar/Navbar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 const BlockUser = (): JSX.Element => {
   // Translation hooks for internationalization
@@ -102,9 +103,9 @@ const BlockUser = (): JSX.Element => {
 
   useEffect(() => {
     if (errorBlockedUsers) {
-      toast.error(errorBlockedUsers.message);
+      errorHandler(t, errorBlockedUsers);
     }
-  }, [errorBlockedUsers]);
+  }, [errorBlockedUsers, t]);
 
   useEffect(() => {
     if (blockedUsersData) {
@@ -127,9 +128,9 @@ const BlockUser = (): JSX.Element => {
 
   useEffect(() => {
     if (errorMembers) {
-      toast.error(errorMembers.message);
+      errorHandler(t, errorMembers);
     }
-  }, [errorMembers]);
+  }, [errorMembers, t]);
 
   useEffect(() => {
     if (memberData) {
@@ -180,7 +181,7 @@ const BlockUser = (): JSX.Element => {
           variables: { userId: user.id, organizationId: currentUrl },
         });
         if (data?.blockUser) {
-          toast.success(t('blockedSuccessfully') as string);
+          NotificationToast.success(t('blockedSuccessfully') as string);
           setAllMembers((prevMembers) =>
             prevMembers.filter((member) => member.id !== user.id),
           );
@@ -200,7 +201,7 @@ const BlockUser = (): JSX.Element => {
           variables: { userId: user.id, organizationId: currentUrl },
         });
         if (data) {
-          toast.success(t('Un-BlockedSuccessfully') as string);
+          NotificationToast.success(t('Un-BlockedSuccessfully') as string);
           setBlockedUsers((prevBlockedUsers) =>
             prevBlockedUsers.filter(
               (blockedUser) => blockedUser.id !== user.id,
@@ -268,106 +269,87 @@ const BlockUser = (): JSX.Element => {
           </div>
         </div>
         <div className={styles.listBox}>
-          <Table
-            responsive
-            data-testid="userList"
-            className={styles.custom_table}
-          >
-            <thead>
-              <tr>
-                {headerTitles.map((title: string, index: number) => (
-                  <th key={index} scope="col">
-                    {title}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {!showBlockedMembers ? (
-                filteredAllMembers.length > 0 ? (
-                  filteredAllMembers.map((user, index: number) => (
-                    <tr key={user.id}>
-                      <th scope="row">{index + 1}</th>
-                      <td>{user.name}</td>
-                      <td>{user.emailAddress}</td>
-                      <td>
-                        <Button
-                          variant="success"
-                          size="sm"
-                          className={styles.removeButton}
-                          onClick={async (): Promise<void> => {
-                            await handleBlockUser(user);
-                          }}
-                          data-testid={`blockUser${user.id}`}
-                        >
-                          <FontAwesomeIcon
-                            icon={faBan}
-                            className={styles.banIcon}
-                          />
-                          {t('block')}
-                        </Button>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan={headerTitles.length}
-                      className={styles.noDataMessage}
-                    >
-                      <div className={styles.notFound}>
-                        <h4>
-                          {searchTerm.length === 0
-                            ? t('noUsersFound')
-                            : `${tCommon('noResultsFoundFor')} "${searchTerm}"`}
-                        </h4>
-                      </div>
-                    </td>
-                  </tr>
-                )
-              ) : filteredBlockedUsers.length > 0 ? (
-                filteredBlockedUsers.map((user, index: number) => (
-                  <tr key={user.id}>
-                    <th scope="row">{index + 1}</th>
-                    <td>{user.name}</td>
-                    <td>{user.emailAddress}</td>
-                    <td>
-                      <Button
-                        variant="success"
-                        size="sm"
-                        className={styles.unblockButton}
-                        onClick={async (): Promise<void> => {
-                          await handleUnBlockUser(user);
-                        }}
-                        data-testid={`blockUser${user.id}`}
-                      >
-                        <FontAwesomeIcon
-                          icon={faUserPlus}
-                          className={styles.unbanIcon}
-                        />
-                        {t('unblock')}
-                      </Button>
-                    </td>
-                  </tr>
-                ))
-              ) : (
+          {(!showBlockedMembers && filteredAllMembers.length > 0) ||
+          (showBlockedMembers && filteredBlockedUsers.length > 0) ? (
+            <Table
+              responsive
+              data-testid="userList"
+              className={styles.custom_table}
+            >
+              <thead>
                 <tr>
-                  <td
-                    colSpan={headerTitles.length}
-                    className={styles.noDataMessage}
-                  >
-                    <div className={styles.notFound}>
-                      <h4>
-                        {searchTerm.length === 0
-                          ? t('noSpammerFound')
-                          : `${tCommon('noResultsFoundFor')} "${searchTerm}"`}
-                      </h4>
-                    </div>
-                  </td>
+                  {headerTitles.map((title: string, index: number) => (
+                    <th key={index} scope="col">
+                      {title}
+                    </th>
+                  ))}
                 </tr>
-              )}
-            </tbody>
-          </Table>
+              </thead>
+              <tbody>
+                {!showBlockedMembers
+                  ? filteredAllMembers.map((user, index: number) => (
+                      <tr key={user.id}>
+                        <th scope="row">{index + 1}</th>
+                        <td>{user.name}</td>
+                        <td>{user.emailAddress}</td>
+                        <td>
+                          <Button
+                            variant="success"
+                            size="sm"
+                            className={styles.removeButton}
+                            onClick={async (): Promise<void> => {
+                              await handleBlockUser(user);
+                            }}
+                            data-testid={`blockUser${user.id}`}
+                          >
+                            <FontAwesomeIcon
+                              icon={faBan}
+                              className={styles.banIcon}
+                            />
+                            {t('block')}
+                          </Button>
+                        </td>
+                      </tr>
+                    ))
+                  : filteredBlockedUsers.map((user, index: number) => (
+                      <tr key={user.id}>
+                        <th scope="row">{index + 1}</th>
+                        <td>{user.name}</td>
+                        <td>{user.emailAddress}</td>
+                        <td>
+                          <Button
+                            variant="success"
+                            size="sm"
+                            className={styles.unblockButton}
+                            onClick={async (): Promise<void> => {
+                              await handleUnBlockUser(user);
+                            }}
+                            data-testid={`blockUser${user.id}`}
+                          >
+                            <FontAwesomeIcon
+                              icon={faUserPlus}
+                              className={styles.unbanIcon}
+                            />
+                            {t('unblock')}
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+              </tbody>
+            </Table>
+          ) : (
+            <EmptyState
+              icon="person_off"
+              message={
+                searchTerm.length === 0
+                  ? !showBlockedMembers
+                    ? t('noUsersFound')
+                    : t('noSpammerFound')
+                  : tCommon('noResultsFoundFor', { query: searchTerm })
+              }
+              dataTestId="block-user-empty-state"
+            />
+          )}
         </div>
       </div>
     </>

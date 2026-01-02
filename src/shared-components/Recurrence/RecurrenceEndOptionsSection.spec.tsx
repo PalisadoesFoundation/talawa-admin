@@ -14,26 +14,17 @@ vi.mock('@mui/x-date-pickers', async () => {
   const actual = await vi.importActual('@mui/x-date-pickers');
   return {
     ...actual,
-    DatePicker: ({
-      label,
-      value,
-      onChange,
-      disabled,
-      'data-testid': testId,
-      'data-cy': dataCy,
-      slotProps,
-    }: {
-      label: string;
-      value: unknown;
-      onChange: (date: unknown) => void;
-      disabled?: boolean;
-      minDate?: unknown;
-      'data-testid'?: string;
-      'data-cy'?: string;
-      slotProps?: { textField: { 'aria-label': string } };
-    }) => {
+    /* eslint-disable @typescript-eslint/no-explicit-any, react/destructuring-assignment */
+    DatePicker: (props: any) => {
+      const { label, value, onChange, disabled, slotProps } = props;
+      // These props have hyphens so cannot be destructured directly
+      const testId = props['data-testid'];
+      const dataCy = props['data-cy'];
+      /* eslint-enable @typescript-eslint/no-explicit-any, react/destructuring-assignment */
+
       // value is a Dayjs object, convert it to string for input
       const dayjsValue = value as { format: (format: string) => string } | null;
+
       return (
         <div>
           <label htmlFor="date-picker-input">{label}</label>
@@ -43,21 +34,16 @@ vi.mock('@mui/x-date-pickers', async () => {
             data-testid={testId}
             data-cy={dataCy}
             disabled={disabled}
-            value={dayjsValue ? dayjsValue.format('YYYY-MM-DD') : ''}
+            defaultValue={dayjsValue ? dayjsValue.format('YYYY-MM-DD') : ''}
             onChange={(e) => {
-              if (e.target.value) {
-                // Return a Dayjs-like object with toDate method
-                const date = dayjs(e.target.value).toDate();
-                const dayjsObj = {
-                  ...dayjs(e.target.value),
-                  toDate: () => date,
-                };
-                onChange(dayjsObj);
+              const val = e.target.value;
+              if (val) {
+                onChange(dayjs(val));
               } else {
                 onChange(null);
               }
             }}
-            aria-label={slotProps?.textField['aria-label']}
+            aria-label={slotProps?.textField?.['aria-label']}
           />
         </div>
       );
@@ -327,20 +313,34 @@ describe('RecurrenceEndOptionsSection', () => {
     });
 
     it('should select all text on double click in count input', async () => {
-      const user = userEvent.setup();
+      const selectSpy = vi.fn();
+      // Override HTMLInputElement.prototype.select to track calls
+      const originalSelect = HTMLInputElement.prototype.select;
+      HTMLInputElement.prototype.select = selectSpy;
 
-      render(
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <RecurrenceEndOptionsSection {...defaultProps} localCount="5" />
-        </LocalizationProvider>,
-      );
+      try {
+        render(
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <RecurrenceEndOptionsSection
+              {...defaultProps}
+              localCount="5"
+              selectedRecurrenceEndOption="after"
+            />
+          </LocalizationProvider>,
+        );
 
-      const countInput = screen.getByTestId(
-        'customRecurrenceCountInput',
-      ) as HTMLInputElement;
-      await user.dblClick(countInput);
+        const countInput = screen.getByTestId(
+          'customRecurrenceCountInput',
+        ) as HTMLInputElement;
 
-      expect(countInput).toBeInTheDocument();
+        // Fire double click event
+        fireEvent.dblClick(countInput);
+
+        expect(selectSpy).toHaveBeenCalled();
+      } finally {
+        // Restore original
+        HTMLInputElement.prototype.select = originalSelect;
+      }
     });
 
     it('should prevent negative, e, E, and + keys in count input', () => {
@@ -390,7 +390,9 @@ describe('RecurrenceEndOptionsSection', () => {
       const datePicker = screen.getByTestId(
         'customRecurrenceEndDatePicker',
       ) as HTMLInputElement;
-      fireEvent.change(datePicker, { target: { value: '2025-12-31' } });
+
+      // Use fireEvent.input for HTML5 date inputs in JSDOM
+      fireEvent.input(datePicker, { target: { value: '2026-01-15' } });
 
       await waitFor(() => {
         expect(setRecurrenceRuleState).toHaveBeenCalled();
@@ -491,11 +493,19 @@ describe('RecurrenceEndOptionsSection', () => {
 
     it('should handle null date change gracefully', async () => {
       const setRecurrenceRuleState = vi.fn();
+      const testRecurrenceRule: InterfaceRecurrenceRule = {
+        frequency: Frequency.WEEKLY,
+        interval: 1,
+        endDate: new Date('2024-12-31'),
+        never: false,
+        count: 10,
+      };
 
       render(
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <RecurrenceEndOptionsSection
             {...defaultProps}
+            recurrenceRuleState={testRecurrenceRule}
             setRecurrenceRuleState={setRecurrenceRuleState}
             selectedRecurrenceEndOption="on"
           />
@@ -509,8 +519,15 @@ describe('RecurrenceEndOptionsSection', () => {
       // Simulate clearing the date
       fireEvent.change(datePicker, { target: { value: '' } });
 
-      // The mock should handle null gracefully
-      expect(datePicker).toBeInTheDocument();
+      // Verify setRecurrenceRuleState was called
+      expect(setRecurrenceRuleState).toHaveBeenCalledTimes(1);
+
+      // Extract the callback function and verify the resulting state
+      const callArg = setRecurrenceRuleState.mock.calls[0][0];
+      const newState = callArg(testRecurrenceRule);
+      expect(newState.endDate).toBeUndefined();
+      expect(newState.never).toBe(false);
+      expect(newState.count).toBeUndefined();
     });
 
     it('should have correct aria attributes', () => {
@@ -524,7 +541,7 @@ describe('RecurrenceEndOptionsSection', () => {
       );
 
       const countInput = screen.getByTestId('customRecurrenceCountInput');
-      expect(countInput).toHaveAttribute('aria-label', 'occurences');
+      expect(countInput).toHaveAttribute('aria-label', 'occurrences');
       expect(countInput).toHaveAttribute('aria-required', 'true');
 
       const datePicker = screen.getByTestId('customRecurrenceEndDatePicker');
@@ -570,9 +587,9 @@ describe('RecurrenceEndOptionsSection', () => {
       const datePicker = screen.getByTestId(
         'customRecurrenceEndDatePicker',
       ) as HTMLInputElement;
-      fireEvent.change(datePicker, {
-        target: { value: '2025-12-31' },
-      });
+
+      // Use fireEvent.input for HTML5 date inputs in JSDOM
+      fireEvent.input(datePicker, { target: { value: '2026-01-15' } });
 
       await waitFor(() => {
         expect(setRecurrenceRuleState).toHaveBeenCalled();

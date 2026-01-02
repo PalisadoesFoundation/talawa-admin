@@ -22,9 +22,10 @@ describe('User Login Functionality', () => {
       const userData = users['user'];
       const loginPage = new LoginPage();
 
-      loginPage.verifyLoginPage().login(userData.email, 'wrongpassword');
-      // Verify error toast appears
-      cy.get('.Toastify__toast').should('be.visible');
+      loginPage
+        .verifyLoginPage()
+        .login(userData.email, 'wrongpassword')
+        .verifyErrorToast();
       cy.url().should('not.include', '/user/organizations');
       cy.window().then((win) => {
         expect(win.localStorage.getItem('Talawa-admin_token')).to.eq(null);

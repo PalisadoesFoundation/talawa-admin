@@ -7,21 +7,27 @@
  * @interface InterfaceLoadingStateProps
  *
  * @property {boolean} isLoading - Whether the loading state is active
- * @property {'spinner' | 'inline'} [variant] - The variant of the loading indicator
+ * @property {'spinner' | 'inline' | 'table' | 'skeleton'} [variant] - The variant of the loading indicator
  *   - 'spinner': Full-screen loading with overlay (default)
  *   - 'inline': Compact inline loading indicator
+ *   - 'table': Table placeholder for tabular data loading
+ *   - 'skeleton': Skeleton placeholder for initial content loading
  * @property {'sm' | 'lg' | 'xl'} [size] - Size of the loading indicator
  *   - 'sm': Small
  *   - 'lg': Large
  *   - 'xl': Extra large (default)
  * @property {React.ReactNode} children - Content to display when not loading
  * @property {string} [data-testid] - Test ID for testing purposes
+ * @property {string[]} [tableHeaderTitles] - Array of header titles for the table variant
+ * @property {number} [noOfRows] - Number of rows to render for the table variant
+ * @property {number} [skeletonRows] - Number of rows to render for the skeleton variant
+ * @property {number} [skeletonCols] - Number of columns to render for the skeleton variant
  *
  * @example
  * ```tsx
  * const props: InterfaceLoadingStateProps = {
  *   isLoading: true,
- *   variant: 'spinner',
+ *   variant: 'skeleton',
  *   size: 'lg',
  *   children: <div>Content</div>,
  *   'data-testid': 'my-loading-state'
@@ -30,8 +36,12 @@
  */
 export interface InterfaceLoadingStateProps {
   isLoading: boolean;
-  variant?: 'spinner' | 'inline';
+  variant?: 'spinner' | 'inline' | 'table' | 'skeleton';
   size?: 'sm' | 'lg' | 'xl';
   children: React.ReactNode;
   'data-testid'?: string;
+  tableHeaderTitles?: string[];
+  noOfRows?: number;
+  skeletonRows?: number;
+  skeletonCols?: number;
 }

@@ -51,26 +51,26 @@ vi.mock('utils/errorHandler', () => ({
   errorHandler: vi.fn(),
 }));
 
-// Mock Avatar component
-vi.mock('components/Avatar/Avatar', () => ({
-  default: ({
-    name,
+// Update the Avatar mock to ProfileAvatarDisplay mock
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: ({
+    fallbackName,
     size,
-    radius,
+    enableEnlarge,
     dataTestId,
   }: {
-    name: string;
-    size: number;
-    radius: number;
+    fallbackName: string;
+    size: string;
+    enableEnlarge: boolean;
     dataTestId: string;
   }) => (
     <div
       data-testid={dataTestId || 'mock-avatar'}
-      data-name={name}
+      data-fallbackname={fallbackName}
       data-size={size}
-      data-radius={radius}
+      data-enableenlarge={enableEnlarge.toString()}
     >
-      Avatar: {name}
+      Avatar: {fallbackName}
     </div>
   ),
 }));
@@ -100,10 +100,11 @@ const createPostSuccessMock = {
   result: {
     data: {
       createPost: {
+        __typename: 'Post',
         id: 'test-post-id',
         caption: 'Test Post Title',
         pinnedAt: null,
-        attachments: [],
+        attachmentURL: null,
       },
     },
   },
@@ -124,10 +125,11 @@ const createPinnedPostMock = {
   result: {
     data: {
       createPost: {
+        __typename: 'Post',
         id: 'test-post-id',
         caption: 'Pinned Post',
         pinnedAt: '2023-01-01T00:00:00Z',
-        attachments: [],
+        attachmentURL: null,
       },
     },
   },
@@ -148,18 +150,11 @@ const createPostWithAttachmentMock = {
   result: {
     data: {
       createPost: {
+        __typename: 'Post',
         id: 'test-post-id',
         caption: 'Post with Image',
         pinnedAt: null,
-        attachments: [
-          {
-            fileHash:
-              '123456789abcdef0112233445566778899aabbccddeeff001122334455667788',
-            mimeType: 'IMAGE_JPEG',
-            name: 'test-image.jpg',
-            objectName: 'uploads/test-image.jpg',
-          },
-        ],
+        attachmentURL: 'https://example.com/uploads/test-image.jpg',
       },
     },
   },
@@ -263,7 +258,7 @@ describe('CreatePostModal Integration Tests', () => {
   ) => {
     return render(
       <I18nextProvider i18n={i18nForTest}>
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <CreatePostModal {...defaultProps} {...props} />
         </MockedProvider>
       </I18nextProvider>,
@@ -279,7 +274,21 @@ describe('CreatePostModal Integration Tests', () => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
       expect(screen.getByText('Post to anyone')).toBeInTheDocument(); // postToAnyone translation
     });
+    it('renders ProfileAvatarDisplay with correct props', () => {
+      render(
+        <MockedProvider>
+          <I18nextProvider i18n={i18nForTest}>
+            <CreatePostModal {...defaultProps} />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
 
+      const avatar = screen.getByTestId('user-avatar');
+      expect(avatar).toBeInTheDocument();
+      expect(avatar.getAttribute('data-fallbackname')).toBe('John Doe');
+      expect(avatar.getAttribute('data-size')).toBe('small');
+      expect(avatar.getAttribute('data-enableenlarge')).toBe('true');
+    });
     it('closes modal when close button is clicked', async () => {
       const onHide = vi.fn();
       renderComponent({ onHide });
