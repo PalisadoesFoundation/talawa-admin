@@ -222,6 +222,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChatRoom',
   });
+  const { t: tErrors } = useTranslation('errors');
   const isMountedRef = useRef<boolean>(true);
 
   useEffect(() => {
@@ -677,10 +678,10 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
 
   return (
     <ErrorBoundaryWrapper
-      fallbackTitle={t('errorBoundary.title')}
-      fallbackErrorMessage={t('errorBoundary.message')}
-      resetButtonText={t('errorBoundary.resetButton')}
-      resetButtonAriaLabel={t('errorBoundary.resetButtonAriaLabel')}
+      fallbackTitle={tErrors('title')}
+      fallbackErrorMessage={tErrors('message')}
+      resetButtonText={tErrors('resetButton')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
     >
       <div
         className={`d-flex flex-column ${styles.chatAreaContainer}`}
@@ -927,6 +928,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
 
               <InputGroup>
                 <button
+                  type="button"
                   onClick={handleAddAttachment}
                   className={styles.addAttachmentBtn}
                 >
