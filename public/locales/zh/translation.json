@@ -249,11 +249,11 @@
     "rejectedSuccessfully": "请求被成功拒绝",
     "noOrgErrorTitle": "未找到组织",
     "noOrgErrorDescription": "请通过仪表板创建组织",
-    "newMembersWillAppearHere": "新成员将显示在此处",
     "name": "名称",
     "email": "电子邮件",
     "profilePictureAlt": "{{name}} 的头像",
-    "placeholderAvatarAlt": "占位符头像"
+    "placeholderAvatarAlt": "占位符头像",
+    "newMembersWillAppearHere": "新的会员请求将出现在这里"
   },
   "users": {
     "membershipStatus": {
@@ -406,6 +406,7 @@
     "manageTag": "管理",
     "editTag": "编辑",
     "removeTag": "删除",
+    "tags": "标签",
     "tagDetails": "标签详情",
     "tagName": "名称",
     "tagType": "类型",
@@ -416,6 +417,8 @@
     "noTagsFound": "未找到标签",
     "removeUserTag": "删除标签",
     "removeUserTagMessage": "您确定要删除此标签吗？",
+    "Latest": "最新",
+    "Oldest": "最旧",
     "addChildTag": "添加子标签",
     "enterTagName": "输入标签名称",
     "totalSubTags": "总子标签",
@@ -1038,6 +1041,7 @@
     "deleteMsg": "您想删除该组织吗？",
     "confirmDelete": "确认删除",
     "longDelOrgMsg": "通过单击\"删除组织\"按钮，该组织及其事件、标签和所有相关数据将被永久删除。",
+    "deleteSampleOrganization": "删除示例组织",
     "successfullyDeletedSampleOrganization": "已成功删除样本组织",
     "cancel": "取消"
   },
@@ -1094,7 +1098,34 @@
     "saveChanges": "保存更改",
     "cancel": "取消",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
-    "enterOrganizationDescription": "输入组织描述"
+    "enterOrganizationDescription": "输入组织描述",
+    "userRegistrationRequired": "需要用户注册",
+    "nameDescriptionRequired": "名称和描述为必填项",
+    "updateFailed": "更新组织失败"
+  },
+  "public": {
+    "invitation": {
+      "title": "活动邀请",
+      "previewText": "您已被邀请加入此活动。",
+      "inviteeEmail": "受邀者邮箱",
+      "anyone": "任何已登录用户",
+      "organizationId": "组织 ID",
+      "eventId": "活动 ID",
+      "eventTitle": "活动 {{eventId}}",
+      "expiresAt": "到期时间",
+      "mustLogin": "请登录或创建账号以接受此邀请。",
+      "login": "登录",
+      "signup": "注册",
+      "invalidToken": "无效的邀请令牌",
+      "invitationNotFound": "邀请不存在或无效",
+      "verifyError": "验证邀请时出错",
+      "accept": "接受邀请",
+      "accepted": "邀请已接受",
+      "acceptError": "无法接受邀请",
+      "maskedNotice": "此邀请发给了一个被遮罩的邮箱地址。接受前请确认您是受邀者。",
+      "confirmMatch": "我确认我的账户邮箱与受邀邮箱（如上所示）一致。",
+      "signInAsDifferent": "以其他用户登录"
+    }
   },
   "memberDetail": {
     "title": "用户详细信息",
