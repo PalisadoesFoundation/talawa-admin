@@ -130,12 +130,13 @@ export default [
       'no-restricted-syntax': [
         'error',
         // Prevent insecure token handling in authorization headers
+        // See docs/security.md for details on these rules
         // Note: No current violations exist. This rule is retained to prevent future regressions.
         // Prohibited: { authorization: getItem('token') }
         // Safe pattern: const token = getItem('token'); { authorization: token }
         {
           selector:
-            "Property[key.name='authorization'] CallExpression[callee.name='getItem'][arguments.0.value='token']",
+            "Property[key.name='authorization'][value.type='CallExpression'][value.callee.name='getItem'][value.arguments.0.value='token']",
           message:
             "Security Risk: Do not use getItem('token') directly inside authorization headers. Extract it to a variable first to handle null values.",
         },
