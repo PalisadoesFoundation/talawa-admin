@@ -695,7 +695,7 @@ describe('PostCard', () => {
     const editButton = await screen.findByTestId('edit-post-menu-item');
     await userEvent.click(editButton);
 
-    expect(screen.getByText('Edit Post')).toBeInTheDocument();
+    expect(await screen.findByText('Edit Post')).toBeInTheDocument();
 
     const cancelButton = screen.getByRole('button', { name: 'close' });
     await userEvent.click(cancelButton);

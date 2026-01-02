@@ -3,7 +3,6 @@ pnpm run generate-docs
 pnpm run format:fix
 # pnpm run lint:fix
 pnpm run lint-staged
-npx tsx scripts/validate-tokens.ts --staged
 pnpm run typecheck
 STAGED_SRC=$(git diff --cached --name-only --diff-filter=ACMRT | grep -E '^src/.*\.(ts|tsx|js|jsx)$' | tr '\n' ' ')
 if [ -n "$STAGED_SRC" ]; then

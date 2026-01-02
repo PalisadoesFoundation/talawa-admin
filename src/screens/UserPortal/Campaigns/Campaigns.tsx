@@ -4,8 +4,6 @@
  * This component renders a list of fundraising campaigns for a specific organization.
  * It provides functionality for searching, sorting, and viewing pledges for campaigns.
  * The component uses ReportingTable for consistent table display.
- *
- * @component
  */
 import React, { useCallback, useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
@@ -13,7 +11,7 @@ import styles from '../../../style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import { WarningAmberRounded } from '@mui/icons-material';
-import { Stack, Box, CircularProgress, Typography } from '@mui/material';
+import { Stack, Box, Typography } from '@mui/material';
 import { type GridCellParams } from '@mui/x-data-grid';
 import useLocalStorage from 'utils/useLocalstorage';
 import PledgeModal from './PledgeModal';
@@ -21,8 +19,7 @@ import { USER_FUND_CAMPAIGNS } from 'GraphQl/Queries/fundQueries';
 import { useQuery } from '@apollo/client';
 import type { InterfaceUserCampaign } from 'utils/interfaces';
 import { currencySymbols } from 'utils/currency';
-import TableLoader from 'components/TableLoader/TableLoader';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import dayjs from 'dayjs';
 import {
@@ -51,7 +48,6 @@ const dataGridStyle = {
 
 const Campaigns = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'userCampaigns' });
-  const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
   const { getItem } = useLocalStorage();
@@ -78,10 +74,6 @@ const Campaigns = (): JSX.Element => {
     skip: !orgId || !userId,
   });
 
-  if (!orgId || !userId) {
-    return <Navigate to={'/'} replace />;
-  }
-
   const openModal = useCallback((campaign: InterfaceUserCampaign): void => {
     setSelectedCampaign(campaign);
     setModalState(true);
@@ -97,42 +89,43 @@ const Campaigns = (): JSX.Element => {
       return [];
     }
 
-    const allCampaigns: InterfaceUserCampaign[] =
-      campaignData.organization.funds.edges
-        .flatMap(
-          (fundEdge: { node: { campaigns?: { edges: unknown[] } } }) =>
-            fundEdge?.node?.campaigns?.edges ?? [],
-        )
-        .map(
-          ({
-            node: campaign,
-          }: {
-            node: {
-              id: string;
-              name: string;
-              currencyCode: string;
-              goalAmount: number;
-              startAt: string;
-              endAt: string;
-            };
-          }) => ({
-            _id: campaign.id,
-            name: campaign.name,
-            fundingGoal: campaign.goalAmount,
-            startDate: new Date(campaign.startAt),
-            endDate: new Date(campaign.endAt),
-            currency: campaign.currencyCode,
-          }),
-        );
-
-    return allCampaigns;
+    return campaignData.organization.funds.edges
+      .flatMap(
+        (fundEdge: { node: { campaigns?: { edges: unknown[] } } }) =>
+          fundEdge?.node?.campaigns?.edges ?? [],
+      )
+      .map(
+        ({
+          node: campaign,
+        }: {
+          node: {
+            id: string;
+            name: string;
+            currencyCode: string;
+            goalAmount: number;
+            startAt: string;
+            endAt: string;
+          };
+        }) => ({
+          _id: campaign.id,
+          name: campaign.name,
+          fundingGoal: campaign.goalAmount,
+          startDate: new Date(campaign.startAt),
+          endDate: new Date(campaign.endAt),
+          currency: campaign.currencyCode,
+        }),
+      );
   }, [campaignData]);
 
   const filteredCampaigns = useMemo(() => {
-    return campaigns.filter((campaign) =>
+    return campaigns.filter((campaign: InterfaceUserCampaign) =>
       campaign.name.toLowerCase().includes(searchText.toLowerCase()),
     );
   }, [campaigns, searchText]);
+
+  if (!orgId || !userId) {
+    return <Navigate to="/" replace />;
+  }
 
   if (campaignError) {
     return (
@@ -150,17 +143,6 @@ const Campaigns = (): JSX.Element => {
       </div>
     );
   }
-
-  const headerTitles: string[] = [
-    '#',
-    t('campaignName'),
-    t('startDate'),
-    t('endDate'),
-    t('fundingGoal'),
-    t('raised'),
-    t('progress'),
-    t('viewPledge'),
-  ];
 
   const columns: ReportingTableColumn[] = [
     {
@@ -226,21 +208,12 @@ const Campaigns = (): JSX.Element => {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: true,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="goalCell"
-          >
-            {
-              currencySymbols[
-                params.row.currency as keyof typeof currencySymbols
-              ]
-            }
-            {params.row.fundingGoal as number}
-          </div>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <div className="fw-bold" data-testid="goalCell">
+          {currencySymbols[params.row.currency]}
+          {params.row.fundingGoal}
+        </div>
+      ),
     },
     {
       field: 'amountRaised',
@@ -251,21 +224,11 @@ const Campaigns = (): JSX.Element => {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="raisedCell"
-          >
-            {
-              currencySymbols[
-                params.row.currency as keyof typeof currencySymbols
-              ]
-            }
-            0
-          </div>
-        );
-      },
+      renderCell: (params: GridCellParams) => (
+        <div className="fw-bold" data-testid="raisedCell">
+          {currencySymbols[params.row.currency]}0
+        </div>
+      ),
     },
     {
       field: 'percentageRaised',
@@ -276,48 +239,11 @@ const Campaigns = (): JSX.Element => {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => {
-        const raised = 0; // Currently hardcoded, will be updated when actual data is available
-        const goal = params.row.fundingGoal as number;
-        const percentage = goal > 0 ? Math.min((raised / goal) * 100, 100) : 0;
-
-        return (
-          <Box
-            className={styles.progressCellContainer}
-            data-testid="progressCell"
-          >
-            <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-              <CircularProgress
-                variant="determinate"
-                value={100}
-                size={32}
-                thickness={4}
-                sx={{ color: 'var(--progress-track-color)' }}
-              />
-              <CircularProgress
-                variant="determinate"
-                value={percentage}
-                size={32}
-                thickness={4}
-                sx={{
-                  color:
-                    percentage >= 100
-                      ? 'var(--progress-complete-color)'
-                      : percentage >= 50
-                        ? 'var(--progress-half-color)'
-                        : 'var(--progress-low-color)',
-                  position: 'absolute',
-                  left: 0,
-                  top: 0,
-                }}
-              />
-            </Box>
-            <Typography variant="body2" className={styles.progressTypography}>
-              {percentage.toFixed(0)}%
-            </Typography>
-          </Box>
-        );
-      },
+      renderCell: () => (
+        <Box data-testid="progressCell">
+          <Typography>0%</Typography>
+        </Box>
+      ),
     },
     {
       field: 'action',
@@ -336,7 +262,6 @@ const Campaigns = (): JSX.Element => {
           <Button
             size="sm"
             variant={isEnded ? 'outline-secondary' : 'outline-success'}
-            className={styles.editButton}
             data-testid="addPledgeBtn"
             disabled={isEnded}
             onClick={(e) => {
@@ -373,80 +298,34 @@ const Campaigns = (): JSX.Element => {
     disableColumnMenu: true,
     rowHeight: ROW_HEIGHT,
     autoHeight: true,
-    style: { overflow: 'visible' },
   };
 
   return (
     <>
-      <div className={styles.searchContainerRowNoTopMargin}>
-        <div className={styles.searchContainerCampaigns}>
-          <SearchBar
-            placeholder={t('searchCampaigns')}
-            value={searchText}
-            onChange={(value) => setSearchText(value.trim())}
-            onClear={() => setSearchText('')}
-            showSearchButton={false}
-            showTrailingIcon={true}
-            inputTestId="searchCampaigns"
-            clearButtonTestId="clearSearch"
-          />
-        </div>
-        <Button
-          variant="success"
-          data-testid="myPledgesBtn"
-          className={`${styles.createFundButton} ${styles.buttonNoWrap}`}
-          onClick={() => navigate(`/user/pledges/${orgId}`, { replace: true })}
-        >
-          {t('myPledges')}
-        </Button>
-      </div>
+      <AdminSearchFilterBar
+        searchPlaceholder={t('searchCampaigns')}
+        searchValue={searchText}
+        onSearchChange={setSearchText}
+        searchInputTestId="searchByInput"
+        searchButtonTestId="searchBtn"
+        hasDropdowns={false}
+      />
 
-      {!campaignLoading &&
-      campaignData &&
-      filteredCampaigns.length === 0 &&
-      searchText.length > 0 ? (
-        <div className={styles.notFound}>
-          <h4 className="m-0">
-            {tCommon('noResultsFoundFor')} &quot;{searchText}&quot;
-          </h4>
-        </div>
-      ) : !campaignLoading && campaignData && filteredCampaigns.length === 0 ? (
-        <div className={styles.notFound}>
-          <h4>{t('noCampaigns')}</h4>
-        </div>
-      ) : (
-        <div className={styles.listBox}>
-          {campaignLoading ? (
-            <TableLoader headerTitles={headerTitles} noOfRows={PAGE_SIZE} />
-          ) : (
-            <ReportingTable
-              rows={
-                filteredCampaigns.map((campaign) => ({
-                  ...campaign,
-                  id: campaign._id,
-                })) as ReportingRow[]
-              }
-              columns={columns}
-              gridProps={gridProps}
-              listProps={{
-                loader: <TableLoader noOfCols={8} noOfRows={2} />,
-                className: styles.listTable,
-                ['data-testid']: 'campaigns-list',
-                scrollThreshold: 0.9,
-                style: { overflow: 'visible' },
-                endMessage:
-                  filteredCampaigns.length > 0 ? (
-                    <div className={'w-100 text-center my-4'}>
-                      <h5 className="m-0">{tCommon('endOfResults')}</h5>
-                    </div>
-                  ) : null,
-              }}
-            />
-          )}
-        </div>
-      )}
+      <Button
+        variant="success"
+        data-testid="myPledgesBtn"
+        onClick={() => navigate(`/user/pledges/${orgId}`, { replace: true })}
+      >
+        {t('myPledges')}
+      </Button>
 
-      {/* Modal for adding pledges to campaigns */}
+      <ReportingTable
+        rows={filteredCampaigns as ReportingRow[]}
+        columns={columns}
+        gridProps={gridProps}
+        listProps={{ ['data-testid']: 'campaigns-list' }}
+      />
+
       <PledgeModal
         isOpen={modalState}
         hide={closeModal}

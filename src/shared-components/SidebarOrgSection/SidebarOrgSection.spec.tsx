@@ -155,7 +155,7 @@ describe('SidebarOrgSection Component', () => {
     };
 
     return render(
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <I18nextProvider i18n={i18n}>
           <SidebarOrgSection {...defaultProps} {...props} />
         </I18nextProvider>
