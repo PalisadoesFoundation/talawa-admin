@@ -130,7 +130,7 @@ export default [
       'no-restricted-syntax': [
         'error',
         // Prevent insecure token handling in authorization headers
-        // See docs/security.md for details on these rules
+        // See docs/docs/docs/developer-resources/security.md for details on these rules
         // Note: No current violations exist. This rule is retained to prevent future regressions.
         // Prohibited: { authorization: localStorage.getItem('token') }
         // Safe pattern: const token = localStorage.getItem('token'); { authorization: token }
