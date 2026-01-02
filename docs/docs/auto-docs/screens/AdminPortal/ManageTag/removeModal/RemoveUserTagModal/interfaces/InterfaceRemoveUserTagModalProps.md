@@ -28,22 +28,6 @@ Defined in: [src/screens/AdminPortal/ManageTag/removeModal/RemoveUserTagModal.ts
 
 ***
 
-### t
-
-> **t**: `TFunction`\<`"translation"`, `"manageTag"`\>
-
-Defined in: [src/screens/AdminPortal/ManageTag/removeModal/RemoveUserTagModal.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/removeModal/RemoveUserTagModal.tsx#L45)
-
-***
-
-### tCommon
-
-> **tCommon**: `TFunction`\<`"common"`, `undefined`\>
-
-Defined in: [src/screens/AdminPortal/ManageTag/removeModal/RemoveUserTagModal.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/removeModal/RemoveUserTagModal.tsx#L46)
-
-***
-
 ### toggleRemoveUserTagModal()
 
 > **toggleRemoveUserTagModal**: () => `void`

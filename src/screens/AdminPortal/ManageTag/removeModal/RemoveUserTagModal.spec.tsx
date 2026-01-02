@@ -4,8 +4,22 @@ import { describe, it, expect, vi, afterEach } from 'vitest';
 import RemoveUserTagModal, {
   InterfaceRemoveUserTagModalProps,
 } from './RemoveUserTagModal';
-import type { TFunction } from 'i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  },
+}));
 
 // Mock CSS module
 vi.mock('style/app-fixed.module.css', () => ({
@@ -17,22 +31,10 @@ vi.mock('style/app-fixed.module.css', () => ({
 }));
 
 describe('RemoveUserTagModal Component', () => {
-  const mockT = vi.fn((key) => key) as unknown as TFunction<
-    'translation',
-    'manageTag'
-  >;
-
-  const mockTCommon = vi.fn((key) => key) as unknown as TFunction<
-    'common',
-    undefined
-  >;
-
   const defaultProps: InterfaceRemoveUserTagModalProps = {
     removeUserTagModalIsOpen: true,
     toggleRemoveUserTagModal: vi.fn(),
     handleRemoveUserTag: vi.fn().mockResolvedValue(undefined),
-    t: mockT,
-    tCommon: mockTCommon,
   };
   afterEach(() => {
     vi.clearAllMocks();
@@ -153,7 +155,7 @@ describe('RemoveUserTagModal Component', () => {
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
       .mockImplementation(() => {});
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
     render(
       <RemoveUserTagModal

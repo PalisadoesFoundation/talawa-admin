@@ -18,7 +18,7 @@
  * - `react`, `react-router-dom` for routing and state management.
  * - `@apollo/client` for GraphQL queries.
  * - `@mui/x-data-grid` for table rendering.
- * - `NotificationToast` for notification messages (especially backend errors).
+ * - `NotificationToast` for error notifications.
  * - `dayjs` for date formatting.
  * - Custom components: `SearchBar`, `SortingButton`, `Avatar`, `AddMember`, `OrgPeopleListCard`.
  *
@@ -66,7 +66,6 @@ import {
   PAGE_SIZE,
 } from 'types/ReportingTable/utils';
 import dayjs from 'dayjs';
-
 import styles from 'style/app-fixed.module.css';
 import TableLoader from 'components/TableLoader/TableLoader';
 import {

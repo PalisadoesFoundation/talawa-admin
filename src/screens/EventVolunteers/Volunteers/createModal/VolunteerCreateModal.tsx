@@ -17,7 +17,7 @@
  * - Uses `@apollo/client` for GraphQL queries and mutations.
  * - Fetches the list of members from the organization using the `MEMBERS_LIST` query.
  * - Adds a volunteer to the event using the `ADD_VOLUNTEER` mutation.
- * - Displays success or error messages using `react-toastify`.
+ * - Displays success or error messages using `NotificationToast`.
  *
  * @example
  * ```tsx
@@ -37,7 +37,7 @@ import styles from 'style/app-fixed.module.css';
 import React, { useCallback, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Autocomplete, TextField } from '@mui/material';
 
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
@@ -114,13 +114,13 @@ const VolunteerCreateModal: React.FC<InterfaceVolunteerCreateModal> = ({
 
         await addVolunteer({ variables: { data: mutationData } });
 
-        toast.success(t('volunteerAdded'));
+        NotificationToast.success(t('volunteerAdded'));
         refetchVolunteers();
         setUserId('');
         setApplyTo('series'); // Reset to default
         hide();
       } catch (error: unknown) {
-        toast.error((error as Error).message);
+        NotificationToast.error((error as Error).message);
       }
     },
     [userId, eventId, isRecurring, applyTo, baseEvent],

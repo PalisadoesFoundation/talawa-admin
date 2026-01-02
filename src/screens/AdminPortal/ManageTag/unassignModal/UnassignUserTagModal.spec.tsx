@@ -4,7 +4,22 @@ import { describe, it, expect, vi, afterEach } from 'vitest';
 import UnassignUserTagModal, {
   InterfaceUnassignUserTagModalProps,
 } from './UnassignUserTagModal';
-import type { TFunction } from 'i18next';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => key,
+  }),
+}));
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  },
+}));
 
 // Mock CSS module
 vi.mock('style/app-fixed.module.css', () => ({
@@ -16,22 +31,10 @@ vi.mock('style/app-fixed.module.css', () => ({
 }));
 
 describe('UnassignUserTagModal Component', () => {
-  const mockT = vi.fn((key) => key) as unknown as TFunction<
-    'translation',
-    'manageTag' | 'memberDetail'
-  >;
-
-  const mockTCommon = vi.fn((key) => key) as unknown as TFunction<
-    'common',
-    undefined
-  >;
-
   const defaultProps: InterfaceUnassignUserTagModalProps = {
     unassignUserTagModalIsOpen: true,
     toggleUnassignUserTagModal: vi.fn(),
     handleUnassignUserTag: vi.fn().mockResolvedValue(undefined),
-    t: mockT,
-    tCommon: mockTCommon,
   };
 
   afterEach(() => {
@@ -192,6 +195,9 @@ describe('UnassignUserTagModal Component', () => {
     });
 
     expect(consoleErrorSpy).toHaveBeenCalledWith(error);
+    expect(NotificationToast.error).toHaveBeenCalledWith(
+      'unassignUserTagError',
+    );
 
     consoleErrorSpy.mockRestore();
   });

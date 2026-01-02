@@ -28,7 +28,7 @@
  * - `tagSortOrder`: Stores the sorting order for sub-tags (ascending/descending).
  *
  * Dependencies:
- * - React, React Router, Apollo Client, Material-UI, React-Bootstrap, React-Toastify.
+ * - React, React Router, Apollo Client, Material-UI, React-Bootstrap, NotificationToast.
  *
  * Error Handling:
  * - Displays an error message if the sub-tags query fails.

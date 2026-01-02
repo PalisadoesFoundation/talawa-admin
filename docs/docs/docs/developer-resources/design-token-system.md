@@ -7,9 +7,9 @@ sidebar_position: 40
 
 ## Overview
 
-Using the tokens instead of the hardcoded values for the 
-spacing, typography, and breakpoints to ensure there is 
-UI consistency in all the pages.
+The Design Token System has been introduced, if you want to use any colour or any dimensional values you must refer to the `src/style/tokens` and use tokens from there.
+If the desired color or sizes are not present in the token files then you may add that in the token 
+file with proper naming convention, then reference it via `var(--token-name)`.
 
 ## Token Files
 
@@ -18,8 +18,17 @@ UI consistency in all the pages.
 - `src/style/tokens/typography.css`
 - `src/style/tokens/breakpoints.css`
 
-Tokens files are imported in `src/style/tokens/index.css`
-Tokens are imported globally in `src/index.tsx`
+Token files are imported in `src/style/tokens/index.css`.
+Tokens are imported globally in `src/index.tsx`.
+
+## Naming Convention
+
+- Colors: `--color-<family>-<scale>` (example: `--color-gray-100`) or `--color-<name>` for base colors.
+- Spacing: `--space-<step>` (example: `--space-4`).
+- Typography: `--font-size-<size>`, `--line-height-<name>`, `--font-weight-<name>`, `--letter-spacing-<name>`.
+- Breakpoints: `--breakpoint-<size>` (example: `--breakpoint-md`).
+
+Follow the existing scale order and units in each file when adding new tokens.
 
 ## Usage
 
@@ -46,21 +55,31 @@ Tokens are imported globally in `src/index.tsx`
 </button>
 ```
 
-## Linter Reference
+## Validation and CI/CD Checks
 
-The repository enforces token usage in CSS and TSX via:
+Token usage is enforced by `scripts/validate-tokens.ts`, which scans `src/` CSS/TS/TSX files (excluding token files and `src/assets/css/app.css`) for hardcoded values:
 
-The validator runs in the warning mode until the complete migration for the
-token is not implemented. Pass `--warn` to log issues without failing. Remove `--warn` to enforce errors after migration.
+- Hex colors (for example: `#ffffff`)
+- `px` values in spacing-related declarations (`margin`, `padding`, `width`, `height`, `gap`, `top`, `right`, `bottom`, `left`)
+- `font-size` in `px`
+- Numeric `font-weight` values (for example: `600`)
 
-- `scripts/validate-tokens.ts`
-- Pre-commit and lint-staged (staged files)
-- CI (changed files in PRs)
+Local checks:
+
+- `lint-staged` runs `npx tsx scripts/validate-tokens.ts --files` on staged `*.ts`, `*.tsx`, `*.css`, `*.scss`, `*.sass`.
+- `.husky/pre-commit` runs `lint-staged`, so violations fail the commit before it is created.
+
+CI/CD checks:
+
+- The PR workflow runs `pnpm exec tsx scripts/validate-tokens.ts --files $CHANGED_FILES` to scan only the files changed in the PR, and the job fails if hardcoded values are found.
+
+These guardrails catch new hardcoded values before merge and keep token usage consistent without slowing down CI with full-repo scans.
 
 Run locally:
 
-- `pnpm exec tsx scripts/validate-tokens.ts --staged --warn`
-- `pnpm exec tsx scripts/validate-tokens.ts --scan-entire-repo --warn`
+- `pnpm exec tsx scripts/validate-tokens.ts --staged`
+- `pnpm exec tsx scripts/validate-tokens.ts --files src/path/to/file.tsx`
+- `pnpm exec tsx scripts/validate-tokens.ts --scan-entire-repo`
 
 ### Current Limitations
 
@@ -75,6 +94,6 @@ Run locally:
 
 ## Notes
 
-- Hex colors should only exist in token files.
+- Hex colors and raw unit values should only exist in token files.
 - Use the token scales for spacing and typography instead of raw values.
-- Any sort of token values should only be present in the `src/style/tokens`
+- If a needed value does not exist, add it in `src/style/tokens` following the naming conventions above.

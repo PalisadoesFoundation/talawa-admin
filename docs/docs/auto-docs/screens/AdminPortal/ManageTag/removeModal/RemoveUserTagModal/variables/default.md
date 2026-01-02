@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceRemoveUserTagModalProps`](../interfaces/InterfaceRemoveUserTagModalProps.md)\>
 
-Defined in: [src/screens/AdminPortal/ManageTag/removeModal/RemoveUserTagModal.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/removeModal/RemoveUserTagModal.tsx#L49)
+Defined in: [src/screens/AdminPortal/ManageTag/removeModal/RemoveUserTagModal.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/ManageTag/removeModal/RemoveUserTagModal.tsx#L47)

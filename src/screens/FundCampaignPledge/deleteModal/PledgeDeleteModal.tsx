@@ -17,7 +17,7 @@
  * - The component uses `react-bootstrap` for modal and button styling.
  * - It utilizes the `useTranslation` hook from `react-i18next` for internationalization.
  * - The `useMutation` hook from `@apollo/client` is used to perform the `DELETE_PLEDGE` GraphQL mutation.
- * - Notifications are displayed using `react-toastify` to indicate success or error during the deletion process.
+ * - Notifications are displayed using `NotificationToast` to indicate success or error during the deletion process.
  *
  * @example
  * ```tsx
@@ -36,7 +36,7 @@ import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import { DELETE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import type { InterfacePledgeInfo } from 'utils/interfaces';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { BaseModal } from 'shared-components/BaseModal';
 
 export interface InterfaceDeletePledgeModal {
@@ -67,9 +67,9 @@ const PledgeDeleteModal: React.FC<InterfaceDeletePledgeModal> = ({
       await deletePledge({ variables: { id: pledge?.id } });
       refetchPledge();
       hide();
-      toast.success(t('pledgeDeleted') as string);
+      NotificationToast.success(t('pledgeDeleted') as string);
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
     } finally {
       setIsSubmitting(false);
     }

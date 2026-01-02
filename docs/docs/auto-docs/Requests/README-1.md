@@ -45,7 +45,7 @@ dayjs
 
 ## Requires
 
-react-toastify
+NotificationToast
 
 ## Requires
 

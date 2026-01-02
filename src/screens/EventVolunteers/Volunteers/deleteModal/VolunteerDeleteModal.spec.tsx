@@ -12,7 +12,7 @@ import { store } from 'state/store';
 import i18n from 'utils/i18nForTest';
 import { MOCKS, MOCKS_ERROR } from '../Volunteers.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceDeleteVolunteerModal } from './VolunteerDeleteModal';
 import VolunteerDeleteModal from './VolunteerDeleteModal';
 import userEvent from '@testing-library/user-event';
@@ -20,18 +20,20 @@ import { vi } from 'vitest';
 import { DELETE_VOLUNTEER_FOR_INSTANCE } from 'GraphQl/Mutations/EventVolunteerMutation';
 
 /**
- * Mock implementation of the `react-toastify` module.
- * Mocks the `toast` object with `success` and `error` methods to allow testing
+ * Mock implementation of the `NotificationToast` module.
+ * Mocks the `NotificationToast` object with `success` and `error` methods to allow testing
  * without triggering actual toast notifications.
  */
 
 const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
+  warning: vi.fn(),
+  info: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: toastMocks,
 }));
 
 const link1 = new StaticMockLink(MOCKS);
@@ -176,7 +178,9 @@ describe('Testing Volunteer Delete Modal', () => {
     await waitFor(() => {
       expect(itemProps[0].refetchVolunteers).toHaveBeenCalled();
       expect(itemProps[0].hide).toHaveBeenCalled();
-      expect(toast.success).toHaveBeenCalledWith(t.volunteerRemoved);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        t.volunteerRemoved,
+      );
     });
   });
 
@@ -202,7 +206,7 @@ describe('Testing Volunteer Delete Modal', () => {
     await userEvent.click(yesBtn);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -232,7 +236,9 @@ describe('Testing Volunteer Delete Modal', () => {
     await waitFor(() => {
       expect(recurringItemProps.refetchVolunteers).toHaveBeenCalled();
       expect(recurringItemProps.hide).toHaveBeenCalled();
-      expect(toast.success).toHaveBeenCalledWith(t.volunteerRemoved);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        t.volunteerRemoved,
+      );
     });
   });
 
@@ -264,7 +270,7 @@ describe('Testing Volunteer Delete Modal', () => {
     await userEvent.click(yesBtn);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
+      expect(NotificationToast.error).toHaveBeenCalledWith(
         'Failed to delete volunteer for instance',
       );
     });

@@ -10,11 +10,13 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-// Mock NotificationToast
+
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
   },
 }));
 

@@ -3,7 +3,7 @@ import { Button, Card, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { errorHandler } from 'utils/errorHandler';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   DELETE_ORGANIZATION_MUTATION,
   REMOVE_SAMPLE_ORGANIZATION_MUTATION,
@@ -67,13 +67,15 @@ function deleteOrg(): JSX.Element {
       // If it's a sample organization, use a specific mutation
       removeSampleOrganization()
         .then(() => {
-          toast.success(t('successfullyDeletedSampleOrganization') as string);
+          NotificationToast.success(
+            t('successfullyDeletedSampleOrganization') as string,
+          );
           setTimeout(() => {
             navigate('/orglist');
           }, 1000);
         })
         .catch((error) => {
-          toast.error(error.message);
+          NotificationToast.error(error.message);
         });
     } else {
       // For regular organizations, use a different mutation

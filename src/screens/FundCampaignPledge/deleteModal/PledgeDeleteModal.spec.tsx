@@ -14,16 +14,18 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from '../../../utils/i18nForTest';
 import { MOCKS_DELETE_PLEDGE_ERROR, MOCKS } from '../PledgesMocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { vi } from 'vitest';
 
 const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
+  warning: vi.fn(),
+  info: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: toastMocks,
 }));
 
 const link = new StaticMockLink(MOCKS);
@@ -106,7 +108,9 @@ describe('PledgeDeleteModal', () => {
     await waitFor(() => {
       expect(pledgeProps.refetchPledge).toHaveBeenCalled();
       expect(pledgeProps.hide).toHaveBeenCalled();
-      expect(toast.success).toHaveBeenCalledWith(translations.pledgeDeleted);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.pledgeDeleted,
+      );
     });
   });
 
@@ -117,7 +121,9 @@ describe('PledgeDeleteModal', () => {
     fireEvent.click(screen.getByTestId('deleteyesbtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Error deleting pledge');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Error deleting pledge',
+      );
     });
   });
 });

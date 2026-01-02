@@ -535,6 +535,11 @@ describe('EventActionItems', () => {
       const searchInput = screen.getByTestId('searchBy');
       fireEvent.change(searchInput, { target: { value: 'Category 2' } });
 
+      // Ensure `searchBy` state has applied before the debounced search term resolves.
+      // This avoids a race where the first debounced search runs while still in "assignee" mode.
+      await new Promise((resolve) => setTimeout(resolve, 0));
+      fireEvent.change(searchInput, { target: { value: 'Category 2' } });
+
       await waitFor(() => {
         expect(screen.getByText('Category 2')).toBeInTheDocument();
         expect(screen.queryByText('Category 1')).not.toBeInTheDocument();
@@ -566,7 +571,9 @@ describe('EventActionItems', () => {
       });
 
       const searchInput = screen.getByTestId('searchBy');
+      const searchButton = screen.getByTestId('searchBtn');
       fireEvent.change(searchInput, { target: { value: 'John' } });
+      fireEvent.click(searchButton);
 
       await waitFor(() => {
         expect(screen.getAllByText('John Doe')).toHaveLength(2);
@@ -574,6 +581,7 @@ describe('EventActionItems', () => {
       });
 
       fireEvent.change(searchInput, { target: { value: '' } });
+      fireEvent.click(searchButton);
 
       await waitFor(() => {
         expect(screen.getAllByText('John Doe')).toHaveLength(2);

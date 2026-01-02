@@ -10,7 +10,6 @@
  * @requires @apollo/client
  * @requires react-bootstrap
  * @requires react-i18next
- * @requires react-toastify
  * @requires react-router-dom
  * @requires @mui/material
  * @requires GraphQl/Queries/Queries
@@ -52,7 +51,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   ACCEPT_ORGANIZATION_REQUEST_MUTATION,
   REJECT_ORGANIZATION_REQUEST_MUTATION,
@@ -193,7 +192,7 @@ const Requests = (): JSX.Element => {
 
     // Add null check before accessing organizations.length
     if (orgsData.organizations?.length === 0) {
-      toast.warning(t('requests.noOrgError') as string);
+      NotificationToast.warning(t('requests.noOrgError') as string);
     }
   }, [orgsData, t]);
 
@@ -495,7 +494,7 @@ const Requests = (): JSX.Element => {
         variables: { input: { membershipRequestId } },
       });
       if (acceptData) {
-        toast.success(t('requests.acceptedSuccessfully') as string);
+        NotificationToast.success(t('requests.acceptedSuccessfully') as string);
         resetAndRefetch();
       }
     } catch (error: unknown) {
@@ -509,7 +508,7 @@ const Requests = (): JSX.Element => {
         variables: { input: { membershipRequestId } },
       });
       if (rejectData) {
-        toast.success(t('requests.rejectedSuccessfully') as string);
+        NotificationToast.success(t('requests.rejectedSuccessfully') as string);
         resetAndRefetch();
       }
     } catch (error: unknown) {

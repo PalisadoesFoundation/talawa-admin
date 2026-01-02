@@ -8,8 +8,18 @@ import {
   MARK_NOTIFICATION_AS_READ,
 } from 'GraphQl/Queries/NotificationQueries';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import i18nForTest from 'utils/i18nForTest';
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
+  },
+}));
 
 vi.mock('utils/useLocalstorage', () => ({
   __esModule: true,
@@ -301,7 +311,6 @@ describe('Notification Component', () => {
 
   it('should handle error when marking notification as read', async () => {
     const notifications = generateNotifications(1, false);
-    const toastErrorSpy = vi.spyOn(toast, 'error').mockImplementation(() => 1);
 
     render(
       <MockedProvider mocks={mocks(notifications, true)}>
@@ -318,12 +327,10 @@ describe('Notification Component', () => {
     fireEvent.click(screen.getByText(/mark as read/i));
 
     await waitFor(() => {
-      expect(toastErrorSpy).toHaveBeenCalledWith(
+      expect(NotificationToast.error).toHaveBeenCalledWith(
         i18nForTest.t('markAsReadError', { ns: 'errors' }),
       );
     });
-
-    toastErrorSpy.mockRestore();
   });
 });
 

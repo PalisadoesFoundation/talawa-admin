@@ -3,7 +3,6 @@ import { render, screen, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import { toast } from 'react-toastify';
 import { BrowserRouter } from 'react-router-dom';
 
 import UserListCard from './UserListCard';
@@ -12,6 +11,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { vi, describe, it, beforeEach, expect } from 'vitest';
 import * as errorHandlerModule from 'utils/errorHandler';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 // Mock react-router (useParams comes from here in the component)
 vi.mock('react-router', async () => {
@@ -24,11 +24,11 @@ vi.mock('react-router', async () => {
   };
 });
 
-// Mock react-toastify
-vi.mock('react-toastify', () => ({
-  toast: {
+// Mock NotificationToast
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn().mockImplementation((msg) => {
-      console.log('Toast success called with:', msg);
+      console.log('NotificationToast success called with:', msg);
     }),
     error: vi.fn(),
   },
@@ -62,9 +62,6 @@ async function wait(ms = 100): Promise<void> {
 }
 
 describe('Testing User List Card', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
   let reloadMock: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
@@ -82,6 +79,10 @@ describe('Testing User List Card', () => {
       writable: true,
     });
     // Clear all mocks before each test
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
     vi.clearAllMocks();
   });
 
@@ -115,8 +116,8 @@ describe('Testing User List Card', () => {
     await wait(500); // Increased wait time
     console.log('Waited after click');
 
-    // Verify toast.success was called
-    expect(toast.success).toHaveBeenCalled();
+    // Verify NotificationToast.success was called
+    expect(NotificationToast.success).toHaveBeenCalled();
 
     // Wait for setTimeout
     await wait(2100);
@@ -158,7 +159,7 @@ describe('Testing User List Card', () => {
     await userEvent.click(screen.getByText(/Add Admin/i));
     await wait();
 
-    expect(toast.success).not.toHaveBeenCalled();
+    expect(NotificationToast.success).not.toHaveBeenCalled();
     expect(window.location.reload).not.toHaveBeenCalled();
   });
 
@@ -207,7 +208,7 @@ describe('Testing User List Card', () => {
         message: expect.stringContaining('Network error'),
       }),
     );
-    expect(toast.success).not.toHaveBeenCalled();
+    expect(NotificationToast.success).not.toHaveBeenCalled();
     expect(reloadMock).not.toHaveBeenCalled();
 
     errorHandlerSpy.mockRestore();
@@ -249,8 +250,8 @@ describe('Testing User List Card', () => {
     await userEvent.click(button);
     await wait(500);
 
-    // When data is null, toast.success should not be called
-    expect(toast.success).not.toHaveBeenCalled();
+    // When data is null, NotificationToast.success should not be called
+    expect(NotificationToast.success).not.toHaveBeenCalled();
 
     // Wait additional time to ensure reload is not called
     await wait(2100);
@@ -293,8 +294,8 @@ describe('Testing User List Card', () => {
     await userEvent.click(button);
     await wait(500);
 
-    // When data is undefined, toast.success should not be called
-    expect(toast.success).not.toHaveBeenCalled();
+    // When data is undefined, NotificationToast.success should not be called
+    expect(NotificationToast.success).not.toHaveBeenCalled();
 
     // Wait additional time to ensure reload is not called
     await wait(2100);
@@ -369,10 +370,13 @@ describe('Testing User List Card', () => {
     await wait(500);
 
     // If the variables were correct, the mutation should succeed
-    expect(toast.success).toHaveBeenCalled();
+    expect(NotificationToast.success).toHaveBeenCalled();
   });
 
   it('Should handle GraphQL error in mutation response', async () => {
+    // Clear the reload mock at the start to ensure clean state
+    reloadMock.mockClear();
+
     const graphQLErrorMock = [
       {
         request: {
@@ -383,6 +387,7 @@ describe('Testing User List Card', () => {
           },
         },
         result: {
+          data: null,
           errors: [{ message: 'User not found' }],
         },
       },
@@ -406,10 +411,243 @@ describe('Testing User List Card', () => {
     await wait();
     const button = screen.getByText(/Add Admin/i);
     await userEvent.click(button);
+
+    // Wait for mutation to complete
     await wait(500);
 
-    // GraphQL errors in the result don't trigger the catch block
-    expect(toast.success).not.toHaveBeenCalled();
+    // GraphQL errors with data: null should not trigger success flow
+    expect(NotificationToast.success).not.toHaveBeenCalled();
+
+    // The reload should not have been scheduled since data is null
+    // Wait a short time to ensure no immediate reload
+    await wait(100);
     expect(reloadMock).not.toHaveBeenCalled();
+  });
+
+  it('Should handle rapid multiple clicks by clearing previous timeout', async () => {
+    // This test covers lines 74-75 - clearing existing timeout when clicking again
+    const multiClickMock = [
+      {
+        request: {
+          query: ADD_ADMIN_MUTATION,
+          variables: {
+            userid: '222',
+            orgid: '554',
+          },
+        },
+        result: {
+          data: {
+            createAdmin: {
+              user: {
+                _id: '222',
+              },
+            },
+          },
+        },
+      },
+      {
+        request: {
+          query: ADD_ADMIN_MUTATION,
+          variables: {
+            userid: '222',
+            orgid: '554',
+          },
+        },
+        result: {
+          data: {
+            createAdmin: {
+              user: {
+                _id: '222',
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    const multiClickLink = new StaticMockLink(multiClickMock, true);
+    const props = {
+      id: '222',
+    };
+
+    render(
+      <BrowserRouter>
+        <MockedProvider link={multiClickLink}>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserListCard key={404} {...props} />
+          </I18nextProvider>
+        </MockedProvider>
+      </BrowserRouter>,
+    );
+
+    await wait();
+    const button = screen.getByText(/Add Admin/i);
+
+    // First click - sets up the timeout
+    await userEvent.click(button);
+    await wait(300); // Wait less than the 2000ms setTimeout
+
+    // Second click - should clear the previous timeout and set a new one
+    await userEvent.click(button);
+    await wait(500);
+
+    // The success toast should have been called at least once
+    expect(NotificationToast.success).toHaveBeenCalled();
+  });
+
+  it('Should not proceed when result has GraphQL errors with valid data structure', async () => {
+    // This test covers line 101 - GraphQL errors check return
+    // We need truthy data AND errors to hit the errors check at line 95-102
+    const errorWithDataMock = [
+      {
+        request: {
+          query: ADD_ADMIN_MUTATION,
+          variables: {
+            userid: '333',
+            orgid: '554',
+          },
+        },
+        result: {
+          // Data is truthy so it passes the first check (!result.data)
+          data: {
+            createAdmin: {
+              user: {
+                _id: '333',
+              },
+            },
+          },
+          // But errors array is also present, so line 101 should be hit
+          errors: [{ message: 'Permission denied' }],
+        },
+      },
+    ];
+
+    const errorWithDataLink = new StaticMockLink(errorWithDataMock, true);
+    const props = {
+      id: '333',
+    };
+
+    render(
+      <BrowserRouter>
+        <MockedProvider link={errorWithDataLink}>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserListCard key={505} {...props} />
+          </I18nextProvider>
+        </MockedProvider>
+      </BrowserRouter>,
+    );
+
+    await wait();
+    const button = screen.getByText(/Add Admin/i);
+    await userEvent.click(button);
+    await wait(500);
+
+    // With GraphQL errors present, even with valid data object, success should not be called
+    expect(NotificationToast.success).not.toHaveBeenCalled();
+    expect(reloadMock).not.toHaveBeenCalled();
+  });
+
+  it('Should not show success when createAdmin is falsy', async () => {
+    // This test covers the case when data.createAdmin is null/undefined/false
+    const falsyCreateAdminMock = [
+      {
+        request: {
+          query: ADD_ADMIN_MUTATION,
+          variables: {
+            userid: '444',
+            orgid: '554',
+          },
+        },
+        result: {
+          data: { createAdmin: null },
+        },
+      },
+    ];
+
+    const falsyCreateAdminLink = new StaticMockLink(falsyCreateAdminMock, true);
+    const props = {
+      id: '444',
+    };
+
+    render(
+      <BrowserRouter>
+        <MockedProvider link={falsyCreateAdminLink}>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserListCard key={606} {...props} />
+          </I18nextProvider>
+        </MockedProvider>
+      </BrowserRouter>,
+    );
+
+    await wait();
+    const button = screen.getByText(/Add Admin/i);
+    await userEvent.click(button);
+    await wait(500);
+
+    // When createAdmin is null, success toast should not be shown
+    expect(NotificationToast.success).not.toHaveBeenCalled();
+    await wait(2100);
+    expect(reloadMock).not.toHaveBeenCalled();
+  });
+
+  it('Should cleanup timeout on component unmount (useEffect cleanup)', async () => {
+    // This test covers lines 65-66: useEffect cleanup function
+    const clearTimeoutSpy = vi.spyOn(global, 'clearTimeout');
+    const successMock = [
+      {
+        request: {
+          query: ADD_ADMIN_MUTATION,
+          variables: {
+            userid: '555',
+            orgid: '554',
+          },
+        },
+        result: {
+          data: {
+            createAdmin: {
+              user: {
+                _id: '555',
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    const successLink = new StaticMockLink(successMock, true);
+    const props = {
+      id: '555',
+    };
+
+    const { unmount } = render(
+      <BrowserRouter>
+        <MockedProvider link={successLink}>
+          <I18nextProvider i18n={i18nForTest}>
+            <UserListCard key={707} {...props} />
+          </I18nextProvider>
+        </MockedProvider>
+      </BrowserRouter>,
+    );
+
+    await wait();
+    const button = screen.getByText(/Add Admin/i);
+
+    // Click to trigger success flow which sets up a timeout
+    await userEvent.click(button);
+    await wait(300); // Wait for mutation to complete but before timeout fires
+
+    // Verify success was called
+    expect(NotificationToast.success).toHaveBeenCalled();
+
+    // Unmount the component while the timeout is still pending
+    unmount();
+
+    // The cleanup function should have called clearTimeout
+    expect(clearTimeoutSpy).toHaveBeenCalled();
+
+    // Reload should not have been called since we unmounted before timeout
+    expect(reloadMock).not.toHaveBeenCalled();
+
+    clearTimeoutSpy.mockRestore();
   });
 });
