@@ -793,7 +793,10 @@ describe('Manage Tag Page', () => {
     await userEvent.click(screen.getByTestId('unassignTagModalSubmitBtn'));
 
     expect(NotificationToast.success).toHaveBeenCalledWith(
-      expect.objectContaining({ key: 'successfullyUnassigned' }),
+      expect.objectContaining({
+        key: 'successfullyUnassigned',
+        namespace: 'translation',
+      }),
     );
   });
 
@@ -810,7 +813,10 @@ describe('Manage Tag Page', () => {
     await userEvent.click(screen.getByTestId('editTagSubmitBtn'));
 
     expect(NotificationToast.info).toHaveBeenCalledWith(
-      expect.objectContaining({ key: 'changeNameToEdit' }),
+      expect.objectContaining({
+        key: 'changeNameToEdit',
+        namespace: 'translation',
+      }),
     );
 
     const tagNameInput = screen.getByTestId('tagNameInput');
@@ -821,7 +827,10 @@ describe('Manage Tag Page', () => {
     await userEvent.click(screen.getByTestId('editTagSubmitBtn'));
 
     expect(NotificationToast.success).toHaveBeenCalledWith(
-      expect.objectContaining({ key: 'tagUpdationSuccess' }),
+      expect.objectContaining({
+        key: 'tagUpdationSuccess',
+        namespace: 'translation',
+      }),
     );
   });
 
@@ -838,7 +847,10 @@ describe('Manage Tag Page', () => {
     await userEvent.click(screen.getByTestId('removeUserTagSubmitBtn'));
 
     expect(NotificationToast.success).toHaveBeenCalledWith(
-      expect.objectContaining({ key: 'tagRemovalSuccess' }),
+      expect.objectContaining({
+        key: 'tagRemovalSuccess',
+        namespace: 'translation',
+      }),
     );
 
     await waitFor(() => {
@@ -947,7 +959,10 @@ describe('Manage Tag Page', () => {
 
     await waitFor(() => {
       expect(NotificationToast.info).toHaveBeenCalledWith(
-        expect.objectContaining({ key: 'changeNameToEdit' }),
+        expect.objectContaining({
+          key: 'changeNameToEdit',
+          namespace: 'translation',
+        }),
       );
     });
 
@@ -1025,7 +1040,10 @@ describe('Manage Tag Page', () => {
     await userEvent.click(screen.getByTestId('unassignTagModalSubmitBtn'));
 
     expect(NotificationToast.success).toHaveBeenCalledWith(
-      expect.objectContaining({ key: 'successfullyUnassigned' }),
+      expect.objectContaining({
+        key: 'successfullyUnassigned',
+        namespace: 'translation',
+      }),
     );
   });
 
@@ -1043,7 +1061,10 @@ describe('Manage Tag Page', () => {
 
     await waitFor(() => {
       expect(NotificationToast.info).toHaveBeenCalledWith(
-        expect.objectContaining({ key: 'changeNameToEdit' }),
+        expect.objectContaining({
+          key: 'changeNameToEdit',
+          namespace: 'translation',
+        }),
       );
     });
 
@@ -1055,7 +1076,10 @@ describe('Manage Tag Page', () => {
     await userEvent.click(screen.getByTestId('editTagSubmitBtn'));
 
     expect(NotificationToast.success).toHaveBeenCalledWith(
-      expect.objectContaining({ key: 'tagUpdationSuccess' }),
+      expect.objectContaining({
+        key: 'tagUpdationSuccess',
+        namespace: 'translation',
+      }),
     );
   });
 
@@ -1072,7 +1096,10 @@ describe('Manage Tag Page', () => {
     await userEvent.click(screen.getByTestId('removeUserTagSubmitBtn'));
 
     expect(NotificationToast.success).toHaveBeenCalledWith(
-      expect.objectContaining({ key: 'tagRemovalSuccess' }),
+      expect.objectContaining({
+        key: 'tagRemovalSuccess',
+        namespace: 'translation',
+      }),
     );
 
     await waitFor(() => {

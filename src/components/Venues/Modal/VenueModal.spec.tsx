@@ -345,7 +345,9 @@ describe('VenueModal', () => {
       ...originalModule,
       useTranslation: () => ({
         t: (key: string) =>
-          key === 'venueNameExists' ? undefined : `translation.${key}`,
+          key === 'organizationVenuesNotification.venueNameExists'
+            ? undefined
+            : `translation.${key}`,
         i18n: { changeLanguage: vi.fn() },
       }),
     }));
@@ -962,7 +964,7 @@ describe('Validation', () => {
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith({
-          key: 'venueNameExists',
+          key: 'organizationVenuesNotification.venueNameExists',
           namespace: 'translation',
         });
       });
@@ -1013,7 +1015,7 @@ describe('Validation', () => {
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith({
-          key: 'venueUpdated',
+          key: 'organizationVenues.venueUpdated',
           namespace: 'translation',
         });
       });
@@ -1077,7 +1079,7 @@ describe('Validation', () => {
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith({
-          key: 'venueUpdated',
+          key: 'organizationVenues.venueUpdated',
           namespace: 'translation',
         });
       });
@@ -1142,7 +1144,7 @@ describe('Validation', () => {
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith({
-          key: 'venueUpdated',
+          key: 'organizationVenues.venueUpdated',
           namespace: 'translation',
         });
       });
@@ -1223,7 +1225,7 @@ describe('Validation', () => {
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith({
-          key: 'venueNameExists',
+          key: 'organizationVenuesNotification.venueNameExists',
           namespace: 'translation',
         });
       });
@@ -1676,7 +1678,7 @@ describe('Validation', () => {
 
           await waitFor(() => {
             expect(NotificationToast.success).toHaveBeenCalledWith({
-              key: 'venueUpdated',
+              key: 'organizationVenues.venueUpdated',
               namespace: 'translation',
             });
           });
@@ -1975,7 +1977,7 @@ describe('Validation', () => {
 
           await waitFor(() => {
             expect(NotificationToast.success).toHaveBeenCalledWith({
-              key: 'venueUpdated',
+              key: 'organizationVenues.venueUpdated',
               namespace: 'translation',
             });
           });
@@ -2257,7 +2259,7 @@ describe('Validation', () => {
 
           await waitFor(() => {
             expect(NotificationToast.success).toHaveBeenCalledWith({
-              key: 'venueUpdated',
+              key: 'organizationVenues.venueUpdated',
               namespace: 'translation',
             });
           });
@@ -2393,7 +2395,7 @@ describe('Validation', () => {
 
           await waitFor(() => {
             expect(NotificationToast.error).toHaveBeenCalledWith({
-              key: 'venueNameExists',
+              key: 'organizationVenuesNotification.venueNameExists',
               namespace: 'translation',
             });
           });
@@ -2439,7 +2441,7 @@ describe('Validation', () => {
 
           await waitFor(() => {
             expect(NotificationToast.error).toHaveBeenCalledWith({
-              key: 'venueNameExists',
+              key: 'organizationVenuesNotification.venueNameExists',
               namespace: 'translation',
             });
           });
@@ -2473,7 +2475,7 @@ describe('Validation', () => {
 
           await waitFor(() => {
             expect(NotificationToast.success).toHaveBeenCalledWith({
-              key: 'venueUpdated',
+              key: 'organizationVenues.venueUpdated',
               namespace: 'translation',
             });
           });
@@ -2616,7 +2618,7 @@ describe('Validation', () => {
 
           await waitFor(() => {
             expect(NotificationToast.error).toHaveBeenCalledWith({
-              key: 'venueNameExists',
+              key: 'organizationVenuesNotification.venueNameExists',
               namespace: 'translation',
             });
           });
@@ -2653,7 +2655,7 @@ describe('Validation', () => {
 
           await waitFor(() => {
             expect(NotificationToast.success).toHaveBeenCalledWith({
-              key: 'venueUpdated',
+              key: 'organizationVenues.venueUpdated',
               namespace: 'translation',
             });
           });
@@ -2713,7 +2715,7 @@ describe('Validation', () => {
 
           await waitFor(() => {
             expect(NotificationToast.success).toHaveBeenCalledWith({
-              key: 'venueUpdated',
+              key: 'organizationVenues.venueUpdated',
               namespace: 'translation',
             });
           });
@@ -2864,7 +2866,7 @@ describe('Validation', () => {
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith({
-        key: 'venueUpdated',
+        key: 'organizationVenues.venueUpdated',
         namespace: 'translation',
       });
     });
@@ -2925,7 +2927,7 @@ describe('Validation', () => {
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith({
-        key: 'venueUpdated',
+        key: 'organizationVenues.venueUpdated',
         namespace: 'translation',
       });
     });

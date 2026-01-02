@@ -139,7 +139,7 @@ const VenueModal = ({
 
         if (result?.data?.updateVenue) {
           NotificationToast.success({
-            key: 'venueUpdated',
+            key: 'organizationVenues.venueUpdated',
             namespace: 'translation',
           });
           refetchVenues();
@@ -180,7 +180,7 @@ const VenueModal = ({
 
         if (result?.data?.updateVenue) {
           NotificationToast.success({
-            key: 'venueUpdated',
+            key: 'organizationVenues.venueUpdated',
             namespace: 'translation',
           });
           refetchVenues();
@@ -213,7 +213,7 @@ const VenueModal = ({
       console.error('Mutation error:', error);
       if (error instanceof Error && error.message.includes('alreadyExists')) {
         NotificationToast.error({
-          key: 'venueNameExists',
+          key: 'organizationVenuesNotification.venueNameExists',
           namespace: 'translation',
         });
       } else {

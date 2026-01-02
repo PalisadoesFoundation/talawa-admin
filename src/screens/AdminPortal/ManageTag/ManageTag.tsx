@@ -229,6 +229,7 @@ function ManageTag(): JSX.Element {
       toggleUnassignUserTagModal();
       NotificationToast.success({
         key: 'successfullyUnassigned',
+        namespace: 'translation',
       });
     } catch (error: unknown) {
       const errorMessage = getManageTagErrorMessage(error);
@@ -252,7 +253,10 @@ function ManageTag(): JSX.Element {
     e.preventDefault();
 
     if (newTagName === currentTagName) {
-      NotificationToast.info({ key: 'changeNameToEdit' });
+      NotificationToast.info({
+        key: 'changeNameToEdit',
+        namespace: 'translation',
+      });
       return;
     }
 
@@ -261,7 +265,10 @@ function ManageTag(): JSX.Element {
         variables: { tagId: currentTagId, name: newTagName },
       });
 
-      NotificationToast.success({ key: 'tagUpdationSuccess' });
+      NotificationToast.success({
+        key: 'tagUpdationSuccess',
+        namespace: 'translation',
+      });
       userTagAssignedMembersRefetch();
       setEditUserTagModalIsOpen(false);
     } catch (error: unknown) {
@@ -277,7 +284,10 @@ function ManageTag(): JSX.Element {
 
       navigate(`/orgtags/${orgId}`);
       toggleRemoveUserTagModal();
-      NotificationToast.success({ key: 'tagRemovalSuccess' });
+      NotificationToast.success({
+        key: 'tagRemovalSuccess',
+        namespace: 'translation',
+      });
     } catch (error: unknown) {
       const errorMessage = getManageTagErrorMessage(error);
       NotificationToast.error(errorMessage);
@@ -293,7 +303,7 @@ function ManageTag(): JSX.Element {
           />
 
           <h6 className="fw-bold text-danger text-center">
-            {t('manageTag.loadAssignedUsersError')}
+            {t('loadAssignedUsersError')}
           </h6>
         </div>
       </div>
