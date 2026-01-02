@@ -1661,6 +1661,7 @@
     "loadingImage": "Cargando imagen...",
     "imageNotAvailable": "Imagen no disponible",
     "attachment": "Adjunto",
+    "reply": "Responder",
     "edit": "Editar",
     "delete": "Eliminar"
   },

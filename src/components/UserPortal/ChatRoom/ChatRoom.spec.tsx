@@ -1400,7 +1400,7 @@ describe('ChatRoom Component', () => {
 
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
 
     renderChatRoom([ERROR_LOAD_MORE_MOCK]);
 
@@ -1846,7 +1846,7 @@ describe('ChatRoom Component', () => {
   it('handles error in handleImageChange when file upload fails', async () => {
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
 
     // Override the mock to throw an error for this test
     mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
@@ -2794,7 +2794,7 @@ describe('ChatRoom Component', () => {
   it('handles fileInputRef.current being null in error catch block', async () => {
     const consoleErrorSpy = vi
       .spyOn(console, 'error')
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
 
     // Override the mock to throw an error
     mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
@@ -3137,7 +3137,7 @@ describe('ChatRoom Component', () => {
       // Mock console.error to catch any error logs
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => { });
+        .mockImplementation(() => {});
 
       render(
         <MockedProvider mocks={[]}>
@@ -3319,7 +3319,7 @@ describe('ChatRoom Component', () => {
       // Mock network errors that would occur without the skip fix
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => { });
+        .mockImplementation(() => {});
 
       render(
         <MockedProvider mocks={[]}>
