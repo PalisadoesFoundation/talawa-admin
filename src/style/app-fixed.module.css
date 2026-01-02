@@ -1657,18 +1657,6 @@ form label,
   }
 }
 
-/* Not Found */
-/**
-*Pages still using .notFound class are - screens/UserPortal/Campaigns, screens/BlockUser
-*/
-.notFound {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
 /* Row Background */
 
 .rowBackground {
@@ -9290,6 +9278,14 @@ form {
   margin-top: 1.5rem;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
+}
+
+.people_card_header_col_1 {
+  flex: 1;
+}
+
+.people_card_header_col_2 {
+  flex: 2;
 }
 
 .people_card_main_container {

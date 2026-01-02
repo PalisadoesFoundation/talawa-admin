@@ -31,28 +31,26 @@
  * ```
  */
 // translation-check-keyPrefix: manageTag
-import type { TFunction } from 'i18next';
 import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { BaseModal } from 'shared-components/BaseModal';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { useTranslation } from 'react-i18next';
 
 export interface InterfaceRemoveUserTagModalProps {
   removeUserTagModalIsOpen: boolean;
   toggleRemoveUserTagModal: () => void;
   handleRemoveUserTag: () => Promise<void>;
-  t: TFunction<'translation', 'manageTag'>;
-  tCommon: TFunction<'common', undefined>;
 }
 
 const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
   removeUserTagModalIsOpen,
   toggleRemoveUserTagModal,
   handleRemoveUserTag,
-  t,
-  tCommon,
 }) => {
+  const { t } = useTranslation('translation', { keyPrefix: 'manageTag' });
+  const { t: tCommon } = useTranslation('common');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onConfirmRemove = async (): Promise<void> => {
@@ -63,7 +61,7 @@ const RemoveUserTagModal: React.FC<InterfaceRemoveUserTagModalProps> = ({
       await handleRemoveUserTag();
     } catch (error) {
       console.error(error);
-      toast.error(t('removeUserTagError'));
+      NotificationToast.error(t('removeUserTagError'));
     } finally {
       setIsSubmitting(false);
     }

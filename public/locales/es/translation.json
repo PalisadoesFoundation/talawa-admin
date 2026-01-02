@@ -253,7 +253,7 @@
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
     "profilePictureAlt": "Imagen de perfil de {{name}}",
     "placeholderAvatarAlt": "Avatar predeterminado",
-    "newMembersWillAppearHere": "Los nuevos miembros aparecerán aquí"
+    "newMembersWillAppearHere": "Las nuevas solicitudes de membresía aparecerán aquí"
   },
   "users": {
     "membershipStatus": {
@@ -398,7 +398,9 @@
     "join_success": "Solicitud de membresía enviada correctamente",
     "withdraw_success": "Solicitud de membresía retirada correctamente",
     "join_error": "No se pudo enviar la solicitud de membresía",
-    "withdraw_error": "No se pudo retirar la solicitud de membresía"
+    "withdraw_error": "No se pudo retirar la solicitud de membresía",
+    "card_aria": "Tarjeta de organización",
+    "card_test_id": "organization-card-{{id}}"
   },
   "organizationTags": {
     "title": "Etiquetas de Organización",
@@ -1038,6 +1040,7 @@
     "cancel": "Cancelar",
     "confirmDelete": "Confirmar eliminación",
     "longDelOrgMsg": "Al hacer clic en el botón Eliminar organización, la organización se eliminará permanentemente junto con sus eventos, etiquetas y todos los datos relacionados.",
+    "deleteSampleOrganization": "Eliminar organización de muestra",
     "successfullyDeletedSampleOrganization": "Organización de muestra eliminada correctamente"
   },
   "userUpdate": {
@@ -1093,7 +1096,34 @@
     "enterNameOrganization": "Ingrese el nombre de la organización",
     "successfulUpdated": "Exitoso actualizado",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red.",
-    "enterOrganizationDescription": "Ingrese la descripción de la organización"
+    "enterOrganizationDescription": "Ingrese la descripción de la organización",
+    "userRegistrationRequired": "Se requiere registro de usuario",
+    "nameDescriptionRequired": "El nombre y la descripción son obligatorios",
+    "updateFailed": "Error al actualizar la organización"
+  },
+  "public": {
+    "invitation": {
+      "title": "Invitación al evento",
+      "previewText": "Has sido invitado a unirte a este evento.",
+      "inviteeEmail": "Correo electrónico del invitado",
+      "anyone": "Cualquier usuario que haya iniciado sesión",
+      "organizationId": "ID de organización",
+      "eventId": "ID del evento",
+      "eventTitle": "Evento {{eventId}}",
+      "expiresAt": "Vence el",
+      "mustLogin": "Por favor inicia sesión o crea una cuenta para aceptar esta invitación.",
+      "login": "Iniciar sesión",
+      "signup": "Registrarse",
+      "invalidToken": "Token de invitación inválido",
+      "invitationNotFound": "Invitación no encontrada o inválida",
+      "verifyError": "Error al verificar la invitación",
+      "accept": "Aceptar invitación",
+      "accepted": "Invitación aceptada",
+      "acceptError": "No se pudo aceptar la invitación",
+      "maskedNotice": "Esta invitación fue emitida a un correo electrónico enmascarado. Asegúrate de ser el destinatario invitado antes de aceptar.",
+      "confirmMatch": "Confirmo que el correo electrónico de mi cuenta coincide con la dirección invitada (mostrada arriba).",
+      "signInAsDifferent": "Iniciar sesión como un usuario diferente"
+    }
   },
   "memberDetail": {
     "title": "Detalles del usuario",
@@ -1173,7 +1203,8 @@
     "name": "Nombre",
     "email": "Correo Electrónico",
     "role": "Rol",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "emailNotAvailable": "Correo electrónico no disponible"
   },
   "userRegister": {
     "register": "Registro",
@@ -1611,12 +1642,23 @@
     "demoteToRegular": "Degradar a regular",
     "promoteToAdmin": "Promover a administrador",
     "user": "Usuario",
-    "chatAction": "Acción del chat"
+    "chatAction": "Acción del chat",
+    "organizationMembersTable": "Tabla de miembros de la organización",
+    "newGroup": "Nuevo Grupo",
+    "groupName": "Nombre del grupo",
+    "groupDescription": "Descripción del Grupo",
+    "next": "Siguiente"
   },
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",
     "sendMessage": "Enviar mensaje",
-    "reply": "responder"
+    "reply": "responder",
+    "loadingImage": "Cargando imagen...",
+    "imageNotAvailable": "Imagen no disponible",
+    "attachment": "Adjunto",
+    "loadingMoreMessages": "Cargando más mensajes...",
+    "loading": "Cargando...",
+    "loadOlderMessages": "Cargar mensajes anteriores"
   },
   "orgActionItemCategories": {
     "createButton": "Crear",
@@ -1757,9 +1799,14 @@
     "noCampaigns": "No se encontraron campañas",
     "raised": "Recaudado",
     "amountRaised": "Monto Recaudado",
-    "campaignName": "Nombre de la campaña",
-    "startDate": "Fecha de inicio",
-    "endDate": "Fecha de finalización",
+    "campaignIndex": "#",
+    "campaignName": "Nombre de la Campaña",
+    "startDate": "Fecha de Inicio",
+    "endDate": "Fecha de Finalización",
+    "fundGoal": "Meta de Financiación",
+    "percentRaised": "% Recaudado",
+    "createFirstCampaign": "Crea tu primera campaña de recaudación de fondos para verla aquí.",
+    "campaignEnded": "Campaña finalizada",
     "fundingGoal": "Meta de financiación",
     "searchCampaigns": "Buscar campañas",
     "viewPledge": "Ver promesa"
@@ -1825,7 +1872,19 @@
     "thisEventOnly": "Solo este evento",
     "volunteerAlt": "Imagen de perfil del voluntario",
     "groupTable": "Tabla de Grupos",
-    "volunteerActions": "Acciones de Voluntarios"
+    "volunteerActions": "Acciones de Voluntarios",
+    "volunteerHeader": "Voluntario",
+    "statusHeader": "Estado",
+    "hoursVolunteeredHeader": "Horas de Voluntariado",
+    "optionsHeader": "Opciones",
+    "groupHeader": "Grupo",
+    "leaderHeader": "Líder",
+    "numVolunteersHeader": "Número de Voluntarios",
+    "pending": "Pendiente",
+    "viewDetails": "Ver detalles de {{name}}",
+    "editVolunteerGroup": "Editar grupo de voluntarios {{name}}",
+    "deleteVolunteerGroup": "Eliminar grupo de voluntarios {{name}}",
+    "deleteVolunteerEntry": "Eliminar entrada de voluntario {{name}}"
   },
   "userVolunteer": {
     "title": "Voluntariado",

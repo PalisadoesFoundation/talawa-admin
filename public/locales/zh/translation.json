@@ -249,12 +249,11 @@
     "rejectedSuccessfully": "请求被成功拒绝",
     "noOrgErrorTitle": "未找到组织",
     "noOrgErrorDescription": "请通过仪表板创建组织",
-    "newMembersWillAppearHere": "新成员将显示在此处",
     "name": "名称",
     "email": "电子邮件",
     "profilePictureAlt": "{{name}} 的头像",
     "placeholderAvatarAlt": "占位符头像",
-    "newMembersWillAppearHere": "新成员会显示在这里"
+    "newMembersWillAppearHere": "新的会员请求将出现在这里"
   },
   "users": {
     "membershipStatus": {
@@ -399,7 +398,9 @@
     "join_success": "成员申请已成功发送",
     "withdraw_success": "成员申请已成功撤回",
     "join_error": "发送成员申请失败",
-    "withdraw_error": "撤回成员申请失败"
+    "withdraw_error": "撤回成员申请失败",
+    "card_aria": "組織卡片",
+    "card_test_id": "organization-card-{{id}}"
   },
   "organizationTags": {
     "title": "组织标签",
@@ -407,6 +408,7 @@
     "manageTag": "管理",
     "editTag": "编辑",
     "removeTag": "删除",
+    "tags": "标签",
     "tagDetails": "标签详情",
     "tagName": "名称",
     "tagType": "类型",
@@ -424,7 +426,6 @@
     "tagCreationFailed": "标签创建失败",
     "errorLoadingTagsData": "加载组织标签数据时出错",
     "sortTags": "排序标签",
-    "tags": "标签",
     "Latest": "最新",
     "Oldest": "最旧",
     "viewSubTags": "查看 {{count}} 个子标签"
@@ -517,7 +518,6 @@
     "publicEvent": "是公开的",
     "isRegistrable": "可注册",
     "registerable": "可注册",
-
     "createEvent": "创建事件",
     "enterFilter": "输入过滤器",
     "enterName": "输入名称",
@@ -1039,6 +1039,7 @@
     "deleteMsg": "您想删除该组织吗？",
     "confirmDelete": "确认删除",
     "longDelOrgMsg": "通过单击\"删除组织\"按钮，该组织及其事件、标签和所有相关数据将被永久删除。",
+    "deleteSampleOrganization": "删除示例组织",
     "successfullyDeletedSampleOrganization": "已成功删除样本组织",
     "cancel": "取消"
   },
@@ -1095,7 +1096,34 @@
     "saveChanges": "保存更改",
     "cancel": "取消",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
-    "enterOrganizationDescription": "输入组织描述"
+    "enterOrganizationDescription": "输入组织描述",
+    "userRegistrationRequired": "需要用户注册",
+    "nameDescriptionRequired": "名称和描述为必填项",
+    "updateFailed": "更新组织失败"
+  },
+  "public": {
+    "invitation": {
+      "title": "活动邀请",
+      "previewText": "您已被邀请加入此活动。",
+      "inviteeEmail": "受邀者邮箱",
+      "anyone": "任何已登录用户",
+      "organizationId": "组织 ID",
+      "eventId": "活动 ID",
+      "eventTitle": "活动 {{eventId}}",
+      "expiresAt": "到期时间",
+      "mustLogin": "请登录或创建账号以接受此邀请。",
+      "login": "登录",
+      "signup": "注册",
+      "invalidToken": "无效的邀请令牌",
+      "invitationNotFound": "邀请不存在或无效",
+      "verifyError": "验证邀请时出错",
+      "accept": "接受邀请",
+      "accepted": "邀请已接受",
+      "acceptError": "无法接受邀请",
+      "maskedNotice": "此邀请发给了一个被遮罩的邮箱地址。接受前请确认您是受邀者。",
+      "confirmMatch": "我确认我的账户邮箱与受邀邮箱（如上所示）一致。",
+      "signInAsDifferent": "以其他用户登录"
+    }
   },
   "memberDetail": {
     "title": "用户详细信息",
@@ -1175,7 +1203,8 @@
     "name": "姓名",
     "email": "邮箱",
     "role": "角色",
-    "loading": "加载中..."
+    "loading": "加载中...",
+    "emailNotAvailable": "邮箱不可用"
   },
   "userRegister": {
     "enterFirstName": "输入您的名字",
@@ -1613,12 +1642,23 @@
     "demoteToRegular": "降级为普通用户",
     "promoteToAdmin": "提升为管理员",
     "user": "用户",
-    "chatAction": "聊天操作"
+    "chatAction": "聊天操作",
+    "organizationMembersTable": "组织成员表",
+    "newGroup": "新群組",
+    "groupName": "群組名稱",
+    "groupDescription": "群組描述",
+    "next": "下一步"
   },
   "userChatRoom": {
     "selectContact": "选择联系人开始对话",
     "sendMessage": "发信息",
-    "reply": "回复"
+    "reply": "回复",
+    "loadingImage": "加载图片中...",
+    "imageNotAvailable": "图片不可用",
+    "attachment": "附件",
+    "loadingMoreMessages": "加载更多消息中...",
+    "loading": "加载中...",
+    "loadOlderMessages": "加载更早的消息"
   },
   "orgActionItemCategories": {
     "enableButton": "使能够",
@@ -1759,12 +1799,16 @@
     "noPledges": "未找到承诺",
     "noCampaigns": "未找到活动",
     "raised": "已筹集",
+    "campaignIndex": "#",
+    "fundGoal": "筹款目标",
+    "percentRaised": "% 已筹集",
+    "createFirstCampaign": "创建您的第一个筹款活动以在此处查看。",
+    "campaignEnded": "活动已结束",
     "amountRaised": "已筹集金额",
     "campaignName": "活动名称",
     "startDate": "开始日期",
     "endDate": "结束日期",
     "fundingGoal": "资金目标",
-    "searchCampaigns": "搜索活动",
     "viewPledge": "查看承诺"
   },
   "userPledges": {
@@ -1828,7 +1872,19 @@
     "thisEventOnly": "仅限本次活动",
     "volunteerAlt": "志愿者头像",
     "groupTable": "小组表",
-    "volunteerActions": "志愿者操作"
+    "volunteerActions": "志愿者操作",
+    "volunteerHeader": "志愿者",
+    "statusHeader": "状态",
+    "hoursVolunteeredHeader": "志愿时数",
+    "optionsHeader": "选项",
+    "groupHeader": "小组",
+    "leaderHeader": "领导",
+    "numVolunteersHeader": "志愿者数量",
+    "pending": "待审核",
+    "viewDetails": "查看 {{name}} 详情",
+    "editVolunteerGroup": "编辑 {{name}} 志愿者小组",
+    "deleteVolunteerGroup": "删除 {{name}} 志愿者小组",
+    "deleteVolunteerEntry": "删除 {{name}} 志愿者条目"
   },
   "userVolunteer": {
     "title": "志愿服务",
