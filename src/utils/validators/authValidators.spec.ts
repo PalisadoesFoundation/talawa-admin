@@ -38,7 +38,7 @@ describe('authValidators', () => {
     it('should reject short passwords', () => {
       const result = validatePassword('short');
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe('loginPage.atleastEightCharLong');
+      expect(result.error).toBe('loginPage.atLeastEightCharLong');
     });
 
     it('should reject null/undefined passwords', () => {

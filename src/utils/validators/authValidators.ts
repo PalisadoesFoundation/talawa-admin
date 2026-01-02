@@ -32,7 +32,7 @@ export function validatePassword(
   password: string | null | undefined,
 ): InterfaceValidationResult {
   if (!password || password.length < 8) {
-    return { isValid: false, error: 'loginPage.atleastEightCharLong' };
+    return { isValid: false, error: 'loginPage.atLeastEightCharLong' };
   }
 
   const hasLowercase = PASSWORD_REGEX.lowercase.test(password);

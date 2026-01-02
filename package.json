@@ -72,7 +72,7 @@
     "serve": "cross-env ESLINT_NO_DEV_ERRORS=true vite --config config/vite.config.ts",
     "build": "tsc && vite build --config config/vite.config.ts",
     "preview": "vite preview --config config/vite.config.ts",
-    "test": "NODE_OPTIONS=--max-old-space-size=4096 vitest run --maxWorkers=1",
+    "test": "vitest run",
     "test:watch": "vitest --ui",
     "test:coverage": "vitest run --coverage",
     "test:shard": "node scripts/run-shard.js",

@@ -725,7 +725,7 @@ const loginPage = (): JSX.Element => {
                               <span>
                                 <Clear className="" />
                               </span>
-                              {t('atleastSixCharLong')}
+                              {t('atLeastSixCharLong')}
                             </p>
                           </div>
                         ) : (
@@ -735,7 +735,7 @@ const loginPage = (): JSX.Element => {
                             <span>
                               <Check />
                             </span>
-                            {t('atleastSixCharLong')}
+                            {t('atLeastSixCharLong')}
                           </p>
                         )
                       ) : null}
@@ -750,7 +750,7 @@ const loginPage = (): JSX.Element => {
                             <span>
                               <Check className="size-sm" />
                             </span>
-                            {t('atleastSixCharLong')}
+                            {t('atLeastSixCharLong')}
                           </div>
                         )}
                       {isInputFocused && (

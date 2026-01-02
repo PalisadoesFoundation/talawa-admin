@@ -1535,7 +1535,7 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
       1,
-      'Name should contain only letters, spaces, and hyphens',
+      i18nForTest.t('auth:nameInvalid'),
     );
   });
 
@@ -1556,7 +1556,7 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
       1,
-      'Password should contain at least one lowercase letter, one uppercase letter, one numeric value and one special character',
+      i18nForTest.t('auth:passwordInvalid'),
     );
   });
 
@@ -1770,7 +1770,7 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
       1,
-      'Please enter a valid email address',
+      i18nForTest.t('auth:emailInvalid'),
     );
   });
 

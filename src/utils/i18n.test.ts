@@ -91,7 +91,7 @@ describe('i18n Configuration', () => {
     expect(i18n.t('specialCharCheck', { ns: 'auth' })).toBe(
       'At least one special character',
     );
-    expect(i18n.t('atleastSixCharLong', { ns: 'auth' })).toBe(
+    expect(i18n.t('atLeastSixCharLong', { ns: 'auth' })).toBe(
       'At least 6 characters long',
     );
   });
