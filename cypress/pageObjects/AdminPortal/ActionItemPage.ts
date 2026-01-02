@@ -60,10 +60,6 @@ export class ActionItemPage {
     // After selecting event, click "Show Event Dashboard" button
     this.clickShowEventDashboard();
 
-    // WAIT until event dashboard + org context is ready
-    cy.get('[data-testid="actionsBtn"]', { timeout: 15000 }).should(
-      'be.visible',
-    );
     // Now click the action items tab within the event dashboard
     this.navigateToEventActionItemsTab();
     return this;
