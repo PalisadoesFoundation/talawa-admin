@@ -1068,7 +1068,10 @@ describe('ItemModal - Additional Test Cases', () => {
 
       // Should not throw an unhandled exception
       await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalled();
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'selectCategoryAndAssignment',
+          namespace: 'translation',
+        });
       });
     });
   });
@@ -1111,7 +1114,10 @@ describe('ItemModal - Additional Test Cases', () => {
 
       // Add await here to properly wait for the toast error
       await waitFor(() => {
-        expect(NotificationToast.error).toHaveBeenCalled();
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
       });
     });
   });

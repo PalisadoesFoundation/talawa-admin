@@ -480,7 +480,6 @@
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
-    "addedAsAdmin": "उपयोगकर्ता को व्यवस्थापक के रूप में जोड़ा गया है.",
     "joined": "शामिल हुए",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },

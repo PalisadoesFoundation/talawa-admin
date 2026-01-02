@@ -481,7 +481,6 @@
   "userListCard": {
     "joined": "Unido",
     "addAdmin": "Agregar administrador",
-    "addedAsAdmin": "El usuario se agrega como administrador.",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
   "orgAdminListCard": {

@@ -480,7 +480,6 @@
   },
   "userListCard": {
     "addAdmin": "添加管理员",
-    "addedAsAdmin": "用户被添加为管理员。",
     "joined": "已加入",
     "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
