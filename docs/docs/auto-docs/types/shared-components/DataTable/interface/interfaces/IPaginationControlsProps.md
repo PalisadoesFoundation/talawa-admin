@@ -16,7 +16,7 @@ TYPE SAFETY AUDIT:
 
 CALL SITE VERIFICATION:
 - DataTable.tsx: pageSize = 10 (default numeric), totalItems = (totalItems ?? data.length)
-- All props destructured from typed IDataTableProps<T> interface
+- All props destructured from typed IDataTableProps&lt;T&gt; interface
 - No URL parameters or form inputs directly coerced to number here
 
 Future consideration: If external callers provide string pageSize/totalItems,
