@@ -19,7 +19,7 @@ import { NotificationsNone } from '@mui/icons-material';
 import styles from './Notification.module.css';
 import { FaUserCircle } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 interface InterfaceNotification {
@@ -64,7 +64,7 @@ const Notification: React.FC = () => {
       });
       await refetch({ userId, input: { first: pageSize, skip } });
     } catch {
-      toast.error(tErrors('markAsReadError'));
+      NotificationToast.error(tErrors('markAsReadError'));
     }
   };
 

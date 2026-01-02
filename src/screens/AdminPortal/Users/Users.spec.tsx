@@ -195,7 +195,7 @@ describe('Testing Users screen', () => {
     ];
 
     render(
-      <MockedProvider mocks={noNextPageMocks} addTypename={false}>
+      <MockedProvider mocks={noNextPageMocks}>
         <BrowserRouter>
           <Provider store={store}>
             <Users />
@@ -583,7 +583,7 @@ describe('Testing Users screen', () => {
       ];
 
       render(
-        <MockedProvider mocks={errorMock} addTypename={false}>
+        <MockedProvider mocks={errorMock}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -604,7 +604,7 @@ describe('Testing Users screen', () => {
 
     it('should reset search and refetch on clear', async () => {
       render(
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider link={link}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -634,7 +634,7 @@ describe('Testing Users screen', () => {
     it('should set document title correctly', () => {
       const spy = vi.spyOn(document, 'title', 'set');
       render(
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider link={link}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -676,7 +676,7 @@ describe('Testing Users screen', () => {
       ];
 
       render(
-        <MockedProvider addTypename={false} mocks={noOrgsMock}>
+        <MockedProvider mocks={noOrgsMock}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -734,7 +734,7 @@ describe('Testing Users screen', () => {
       ];
 
       render(
-        <MockedProvider addTypename={false} mocks={endMock}>
+        <MockedProvider mocks={endMock}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -755,7 +755,7 @@ describe('Testing Users screen', () => {
     it('should handle search with same value without refetch', async () => {
       vi.spyOn(console, 'log').mockImplementation(() => {});
       render(
-        <MockedProvider addTypename={false} link={link}>
+        <MockedProvider link={link}>
           <BrowserRouter>
             <Provider store={store}>
               <I18nextProvider i18n={i18nForTest}>
@@ -984,7 +984,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     ];
 
     render(
-      <MockedProvider mocks={filterMock} addTypename={false}>
+      <MockedProvider mocks={filterMock}>
         <BrowserRouter>
           <Provider store={store}>
             <Users />
@@ -1008,7 +1008,7 @@ describe('useEffect loadMoreUsers trigger', () => {
 
   it('should return all users when filter is cancel', async () => {
     render(
-      <MockedProvider mocks={MOCKS_NEW} addTypename={false}>
+      <MockedProvider mocks={MOCKS_NEW}>
         <BrowserRouter>
           <Provider store={store}>
             <Users />
@@ -1086,7 +1086,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     ];
 
     render(
-      <MockedProvider mocks={newestMock} addTypename={false}>
+      <MockedProvider mocks={newestMock}>
         <BrowserRouter>
           <Provider store={store}>
             <Users />
@@ -1172,7 +1172,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     ];
 
     render(
-      <MockedProvider mocks={emptySearchMock} addTypename={false}>
+      <MockedProvider mocks={emptySearchMock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1261,7 +1261,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     ];
 
     render(
-      <MockedProvider mocks={slowMocks} addTypename={false}>
+      <MockedProvider mocks={slowMocks}>
         <BrowserRouter>
           <Provider store={store}>
             <Users />
@@ -1283,7 +1283,7 @@ describe('useEffect loadMoreUsers trigger', () => {
 
   it('should filter only admin users (by row count change)', async () => {
     render(
-      <MockedProvider mocks={MOCKS_NEW} addTypename={false}>
+      <MockedProvider mocks={MOCKS_NEW}>
         <BrowserRouter>
           <Provider store={store}>
             <Users />
@@ -1411,7 +1411,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     ];
 
     render(
-      <MockedProvider mocks={safeMocks} addTypename={false}>
+      <MockedProvider mocks={safeMocks}>
         <BrowserRouter>
           <Provider store={store}>
             <Users />
@@ -1530,7 +1530,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     ];
 
     render(
-      <MockedProvider mocks={delayedFetchMoreMocks} addTypename={false}>
+      <MockedProvider mocks={delayedFetchMoreMocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1743,7 +1743,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     ];
 
     render(
-      <MockedProvider mocks={searchMocks} addTypename={false}>
+      <MockedProvider mocks={searchMocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1823,7 +1823,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     ];
 
     render(
-      <MockedProvider mocks={nullOrgsMock} addTypename={false}>
+      <MockedProvider mocks={nullOrgsMock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1924,7 +1924,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     ];
 
     render(
-      <MockedProvider mocks={slowLoadMoreMocks} addTypename={false}>
+      <MockedProvider mocks={slowLoadMoreMocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1988,7 +1988,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     ];
 
     render(
-      <MockedProvider mocks={emptyUsersMock} addTypename={false}>
+      <MockedProvider mocks={emptyUsersMock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -2016,13 +2016,10 @@ describe('useEffect loadMoreUsers trigger', () => {
       {
         request: {
           query: USER_LIST_FOR_ADMIN,
-          variables: {
-            first: 12,
-            after: null,
-            orgFirst: 32,
-            where: undefined,
-          },
         },
+        // Be tolerant of `where` being omitted vs `undefined` depending on Apollo's variable normalization.
+        variableMatcher: (vars: Record<string, unknown> | null | undefined) =>
+          vars?.first === 12 && vars?.after === null && vars?.orgFirst === 32,
         result: {
           data: {
             allUsers: {
@@ -2051,6 +2048,40 @@ describe('useEffect loadMoreUsers trigger', () => {
         },
         delay: 100,
       },
+      // Some environments can issue the same query twice (e.g. due to re-renders); include a duplicate response.
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+        },
+        variableMatcher: (vars: Record<string, unknown> | null | undefined) =>
+          vars?.first === 12 && vars?.after === null && vars?.orgFirst === 32,
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: 'Test User',
+                    emailAddress: 'test@test.com',
+                    role: 'regular',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: { hasNextPage: false, endCursor: '1' },
+            },
+          },
+        },
+      },
       {
         request: { query: ORGANIZATION_LIST },
         result: { data: { organizations: [{ id: 'org1', name: 'Org' }] } },
@@ -2058,7 +2089,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     ];
 
     render(
-      <MockedProvider mocks={loadingMock} addTypename={false}>
+      <MockedProvider mocks={loadingMock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -2112,7 +2143,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     ];
 
     render(
-      <MockedProvider mocks={zeroUsersMock} addTypename={false}>
+      <MockedProvider mocks={zeroUsersMock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -2173,7 +2204,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     ];
 
     render(
-      <MockedProvider mocks={filterMock} addTypename={false}>
+      <MockedProvider mocks={filterMock}>
         <BrowserRouter>
           <Provider store={store}>
             <Users />
@@ -2236,7 +2267,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     ];
 
     render(
-      <MockedProvider mocks={noNextPageMock} addTypename={false}>
+      <MockedProvider mocks={noNextPageMock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -2324,7 +2355,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     ];
 
     render(
-      <MockedProvider mocks={multipleUsersMock} addTypename={false}>
+      <MockedProvider mocks={multipleUsersMock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -2427,7 +2458,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     ];
 
     render(
-      <MockedProvider mocks={usersMock} addTypename={false}>
+      <MockedProvider mocks={usersMock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -2542,7 +2573,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     ];
 
     render(
-      <MockedProvider mocks={paginatedMock} addTypename={false}>
+      <MockedProvider mocks={paginatedMock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -2608,7 +2639,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     ];
 
     render(
-      <MockedProvider mocks={emptyUsersMock} addTypename={false}>
+      <MockedProvider mocks={emptyUsersMock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -2693,7 +2724,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     ];
 
     render(
-      <MockedProvider mocks={nullEdgesMock} addTypename={false}>
+      <MockedProvider mocks={nullEdgesMock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -2765,7 +2796,7 @@ describe('useEffect loadMoreUsers trigger', () => {
     ];
 
     render(
-      <MockedProvider mocks={falseHasNextPageMock} addTypename={false}>
+      <MockedProvider mocks={falseHasNextPageMock}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

@@ -49,6 +49,17 @@
   --addButton-border-hover: #555555;
   --disabled-btn: #e7f0fe;
 
+  /** pagination styles **/
+  --pagination-btn-color: var(--addButton-font, #555555);
+  --pagination-btn-bg: var(--addButton-bg, #a8c7fa);
+  --pagination-btn-border: var(--addButton-border, #eaebef);
+  --pagination-btn-bg-hover: var(--addButton-bg-hover, #1778f2);
+  --pagination-btn-border-hover: var(--addButton-border-hover, #555555);
+  --pagination-btn-bg-disabled: var(--disabled-btn, #e7f0fe);
+  --pagination-btn-bg-focus: var(--primary-theme-color, #1778f2);
+  --pagination-btn-color-hover: #ffffff;
+  --pagination-border-top: #e5e7eb;
+
   --sidebar-option-text-inactive: #000000;
   --sidebar-option-bg-hover: #eaebef;
   --sidebar-option-bg: #d2d3d7;
@@ -6954,6 +6965,7 @@ form {
   color: var(--eventManagementSelectedBtn-color);
   background-color: var(--eventManagementSelectedBtn-bg) !important;
   border: 1px solid var(--eventManagementSelectedBtn-border) !important;
+  height: 2.5rem;
 }
 
 .eventManagementSelectedBtn:hover {
@@ -6965,6 +6977,7 @@ form {
   color: var(--eventManagementBtn-color);
   background-color: var(--eventManagementBtn-bg) !important;
   border-color: var(--eventManagementBtn-border) !important;
+  height: 2.5rem;
 }
 
 .eventManagementBtn:hover {
@@ -9278,6 +9291,14 @@ form {
   border-top-right-radius: 16px;
 }
 
+.people_card_header_col_1 {
+  flex: 1;
+}
+
+.people_card_header_col_2 {
+  flex: 2;
+}
+
 .people_card_main_container {
   display: flex;
   flex-direction: column;
@@ -10477,8 +10498,119 @@ form {
   }
 }
 
+/* DataTable Pagination Styles */
+.paginationWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  border-top: 1px solid var(--pagination-border-top);
+}
+
+.paginationRange {
+  font-size: 0.875rem;
+  color: var(--row-color);
+  min-width: 120px;
+  text-align: center;
+}
+
+.pageBtn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--pagination-btn-border);
+  border-radius: 0.375rem;
+  background-color: var(--pagination-btn-bg);
+  color: var(--pagination-btn-color);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s,
+    opacity 0.2s;
+}
+
+.pageBtn:hover:not(:disabled) {
+  background-color: var(--pagination-btn-bg-hover);
+  border-color: var(--pagination-btn-border-hover);
+  color: var(--pagination-btn-color-hover);
+}
+
+.pageBtn:disabled {
+  opacity: 0.6;
+  background-color: var(--pagination-btn-bg-disabled);
+  cursor: not-allowed;
+}
+
+.pageBtn:focus {
+  outline: 2px solid var(--pagination-btn-bg-focus);
+  outline-offset: 2px;
+}
+
+/* Organizations page styles */
+.organizationsContainer {
+  padding-top: 20px;
+}
+
+.organizationsContainerExpanded {
+  margin-left: 40px;
+}
+
+.organizationsContainerContracted {
+  margin-left: 20px;
+}
+
+.organizationsMainContainer {
+  overflow-x: hidden;
+}
+
+.organizationsFlexContainer {
+  flex: 1;
+}
+
+/* Groups page styles */
+.groupsViewButton {
+  min-width: 32px;
+}
+
+/* DataGrid styles */
+.dataGridRoot {
+  border-radius: 0.5rem;
+}
+
+.dataGridMain {
+  border-radius: 0.5rem;
+}
+
+.dataGridRow:hover {
+  background-color: transparent;
+}
+
+.dataGridRow.Mui-hovered {
+  background-color: transparent;
+}
+
+.dataGridCell:focus-within {
+  outline: none;
+}
+
+.dataGridColumnHeader:focus-within {
+  outline: none;
+}
+
 .divider {
-  border: 2px solid var(--addButton-border);
+  border: 2px solid var(--pagination-btn-border);
   border-width: 2px;
   width: 85%;
+}
+
+@media (max-width: 768px) {
+  .paginationWrap {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .pageBtn {
+    width: 100%;
+  }
 }

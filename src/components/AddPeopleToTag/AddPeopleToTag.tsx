@@ -63,6 +63,7 @@ import type {
 import { TAGS_QUERY_DATA_CHUNK_SIZE, dataGridStyle } from 'types/Tag/utils';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import componentStyles from './AddPeopleToTag.module.css';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   addPeopleToTagModalIsOpen,
@@ -73,7 +74,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
 }) => {
   const { tagId: currentTagId } = useParams();
 
-  const { t: tErrors } = useTranslation('error');
+  const { t: tErrors } = useTranslation('errors');
 
   const [assignToMembers, setAssignToMembers] = useState<InterfaceMemberData[]>(
     [],
@@ -283,7 +284,13 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   ];
 
   return (
-    <>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+      onReset={hideAddPeopleToTagModal}
+    >
       <Modal
         show={addPeopleToTagModalIsOpen}
         onHide={hideAddPeopleToTagModal}
@@ -434,7 +441,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
           </Modal.Footer>
         </Form>
       </Modal>
-    </>
+    </ErrorBoundaryWrapper>
   );
 };
 

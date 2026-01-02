@@ -200,6 +200,11 @@
   "imageUploadSuccess": "छवि सफलतापूर्वक अपलोड हुई",
   "postalCode": "डाक कोड",
   "state": "राज्य",
+  "paginationPrev": "पिछला \u2039",
+  "paginationNext": "अगला \u203a",
+  "tablePagination": "तालिका पृष्ठांकन",
+  "paginationPrevLabel": "पिछला पृष्ठ",
+  "paginationNextLabel": "अगला पृष्ठ",
   "closeModal": "मोडल बंद करें",
   "errorLoadingUsers": "उपयोगकर्ताओं को लोड करने में त्रुटि",
   "noUsersFound": "कोई उपयोगकर्ता नहीं मिला",
@@ -207,5 +212,8 @@
   "selectAZipFile": "एक ज़िप फ़ाइल चुनें",
   "version": "संस्करण",
   "author": "लेखक",
-  "removePermanently": "स्थायी रूप से हटाएं"
+  "removePermanently": "स्थायी रूप से हटाएं",
+  "previousPage": "पिछला पृष्ठ",
+  "nextPage": "अगला पृष्ठ",
+  "pageNumber": "पृष्ठ {{page}}"
 }
