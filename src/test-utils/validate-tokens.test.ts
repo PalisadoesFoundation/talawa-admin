@@ -130,6 +130,13 @@ describe('toRepoRelativePath', () => {
 });
 
 describe('getStagedAddedLines', () => {
+  test('returns empty set for empty file path', () => {
+    const result = getStagedAddedLines('');
+
+    expect(result.size).toBe(0);
+    expect(spawnSyncMock).not.toHaveBeenCalled();
+  });
+
   test('returns line numbers from the staged diff', () => {
     const diff = ['@@ -1,0 +1,2 @@', '+first', '+second'].join('\n');
     spawnSyncMock.mockReturnValue({
