@@ -1,4 +1,6 @@
 {
+  "ends": "Prend fin",
+  "occurrences": "Occurrences",
   "leaderboard": {
     "title": "Tableau des Leaders",
     "searchByVolunteer": "Recherche par Bénévole",
@@ -513,6 +515,7 @@
     "publicEvent": "est public",
     "isRegistrable": "Est enregistrable",
     "registerable": "Est enregistrable",
+
     "createEvent": "Créer un évènement",
     "enterFilter": "Entrer le filtre",
     "enterName": "Entrez le nom",
@@ -529,7 +532,7 @@
     "never": "Jamais",
     "on": "Sur",
     "after": "Après",
-    "occurences": "événements",
+    "occurrences": "événements",
     "monthlyOn": "Mensuel le",
     "yearlyOn": "Annuel le",
     "yearlyRecurrenceDesc": "Cet événement se répétera chaque année à la même date que la date de début de l'événement.",
@@ -558,6 +561,7 @@
     "actionItemDetails": "Détails de l'Action",
     "actionItemCompleted": "Action Terminée",
     "assignee": "Attribué à",
+    "assigneeOrCategory": "Attribué ou Catégorie",
     "assignedTo": "Assigné à",
     "assigner": "Assignateur",
     "assignmentDate": "Date d'Attribution",
@@ -724,7 +728,7 @@
     "never": "Jamais",
     "on": "Sur",
     "after": "Après",
-    "occurences": "événements",
+    "occurrences": "événements",
     "location": "Lieu",
     "no": "Non",
     "yes": "Oui",
@@ -1315,6 +1319,7 @@
     "chartPageNavigation": "Navigation de la page du graphique",
     "previousPage": "Page précédente",
     "nextPage": "Page suivante",
+    "pageNumber": "Page {{page}}",
     "goToToday": "Aller à aujourd'hui",
     "genderDistribution": "Distribution par sexe",
     "ageDistribution": "Distribution par âge"
@@ -1505,7 +1510,14 @@
     "day": "Jour",
     "week": "Semaine",
     "month": "Mois",
-    "year": "Année"
+    "year": "Année",
+    "ends": "Prend fin",
+    "occurrences": "Occurrences",
+    "never": "Jamais",
+    "on": "Le",
+    "after": "Après",
+    "customRecurrence": "Récurrence Personnalisée",
+    "repeatsEvery": "Se répète tous les"
   },
   "userEventCard": {
     "starts": "Départs",
@@ -1674,7 +1686,8 @@
     "user": "Utilisateur",
     "profile": "Profil",
     "customizedTable": "Table personnalisée",
-    "page": "Page"
+    "page": "Page",
+    "add": "Ajouter"
   },
   "eventActionItems": {
     "title": "Éléments d'action",
@@ -1718,6 +1731,7 @@
     "title": "Campagnes de financement",
     "searchByName": "Rechercher par nom...",
     "searchBy": "Rechercher par",
+    "searchCampaigns": "Rechercher des campagnes",
     "pledgers": "Contributeurs",
     "pledger": "Prometteur",
     "campaigns": "Campagnes",
@@ -1741,7 +1755,8 @@
     "amountRaised": "Montant Collecté"
   },
   "userPledges": {
-    "title": "Mes Promesses"
+    "title": "Mes Promesses",
+    "searchPledges": "Rechercher des engagements"
   },
   "leaveOrganization": {
     "title": "Quitter l'organisation"
@@ -1750,6 +1765,7 @@
     "toggleGroupAriaLabel": "Sélecteur de vue des bénévoles",
     "volunteers": "Bénévoles",
     "volunteer": "Bénévole",
+    "volunteerName": "Nom du Bénévole",
     "volunteerGroups": "Groupes de Bénévoles",
     "individuals": "Individus",
     "groups": "Groupes",
@@ -1772,6 +1788,7 @@
     "deleteVolunteerGroupMsg": "Êtes-vous sûr de vouloir supprimer ce groupe de bénévoles?",
     "leader": "Chef",
     "group": "Groupe",
+    "groupOrLeader": "Groupe ou Chef",
     "createGroup": "Créer un Groupe",
     "updateGroup": "Mettre à Jour le Groupe",
     "deleteGroup": "Supprimer le Groupe",
@@ -1795,7 +1812,10 @@
     "leastVolunteers": "Le moins de bénévoles",
     "applyTo": "Appliquer à",
     "entireSeries": "Série entière",
-    "thisEventOnly": "Cet événement uniquement"
+    "thisEventOnly": "Cet événement uniquement",
+    "volunteerAlt": "Photo de profil du bénévole",
+    "groupTable": "Tableau des Groupes",
+    "volunteerActions": "Actions des Bénévoles"
   },
   "userVolunteer": {
     "title": "Volontariat",
@@ -1807,11 +1827,15 @@
     "actions": "Éléments d'Action",
     "search": "Rechercher",
     "searchByName": "Rechercher par Nom",
+    "startDate": "Date de début",
     "latestEndDate": "Date de Fin la Plus Récente",
     "earliestEndDate": "Date de Fin la Plus Ancienne",
     "noEvents": "Aucun Événement à Venir",
     "volunteer": "Bénévole",
     "volunteered": "A Bénévolé",
+    "volunteerName": "Nom",
+    "volunteerActions": "Actions",
+    "volunteerAlt": "bénévole",
     "join": "Rejoindre",
     "joined": "Rejoint",
     "searchByEventName": "Rechercher par Titre d'Événement",
@@ -1839,6 +1863,7 @@
     "event": "Événement",
     "received": "Reçu",
     "location": "Emplacement",
+    "titleOrLocation": "Titre ou Emplacement",
     "recurrence": "Récurrence",
     "endDate": "Date de Fin",
     "description": "Description",
@@ -1847,7 +1872,8 @@
     "srNo": "N°",
     "groupName": "Nom du Groupe",
     "noOfMembers": "Nombre de Membres",
-    "options": "Options"
+    "options": "Options",
+    "notSpecified": "Non Spécifié"
   },
   "pluginStore": {
     "title": "Boutique de Plugins",

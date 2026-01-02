@@ -24,11 +24,11 @@
  * - Provides search and sorting functionality using `SearchBar` and `SortingButton` components.
  *
  * @dependencies
- * - `react`, `react-router-dom`, `react-bootstrap`
+ * - `react`, `react-router-dom`, `react-bootstrap`, `react-toastify`
  * - `@apollo/client` for GraphQL queries and mutations
  * - `@mui/icons-material`, `react-icons` for icons
  * - Custom hooks: `useLocalStorage`
- * - Custom components: `Loader`, `SearchBar`, `SortingButton`, `NotificationToast`
+ * - Custom components: `Loader`, `SearchBar`, `SortingButton`
  *
  * @example
  * ```tsx
@@ -43,7 +43,7 @@ import { Navigate, useParams } from 'react-router';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { TbCalendarEvent } from 'react-icons/tb';
 import { FaUserGroup } from 'react-icons/fa6';
-import { debounce, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 
 import useLocalStorage from 'utils/useLocalstorage';
 import { useMutation, useQuery } from '@apollo/client';
@@ -52,9 +52,8 @@ import { FaRegClock } from 'react-icons/fa';
 import Loader from 'components/Loader/Loader';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
+import { toast } from 'react-toastify';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
 enum ItemFilter {
   Group = 'group',
@@ -78,16 +77,12 @@ const Invitations = (): JSX.Element => {
     return <Navigate to={'/'} replace />;
   }
 
-  const debouncedSearch = useMemo(
-    () => debounce((value: string) => setSearchTerm(value), 300),
-    [],
-  );
-
   const [searchTerm, setSearchTerm] = useState<string>('');
-  const [filter, setFilter] = useState<ItemFilter | null>(null);
-  const [sortBy, setSortBy] = useState<
-    'createdAt_ASC' | 'createdAt_DESC' | null
-  >(null);
+  const [appliedSearch, setAppliedSearch] = useState<string>('');
+  const [filter, setFilter] = useState<ItemFilter | 'all'>('all');
+  const [sortBy, setSortBy] = useState<'createdAt_ASC' | 'createdAt_DESC'>(
+    'createdAt_DESC',
+  );
 
   const [updateMembership] = useMutation(UPDATE_VOLUNTEER_MEMBERSHIP);
 
@@ -97,16 +92,14 @@ const Invitations = (): JSX.Element => {
   ): Promise<void> => {
     try {
       await updateMembership({ variables: { id: id, status: status } });
-      NotificationToast.success(
+      toast.success(
         t(
           status === 'accepted' ? 'invitationAccepted' : 'invitationRejected',
         ) as string,
       );
       refetchInvitations();
     } catch (error: unknown) {
-      NotificationToast.error(
-        tErrors('unknownError', { msg: (error as Error).message }),
-      );
+      toast.error((error as Error).message);
     }
   };
 
@@ -125,17 +118,27 @@ const Invitations = (): JSX.Element => {
       where: {
         userId: userId,
         status: 'invited',
-        ...(filter && { filter }),
-        eventTitle: searchTerm ? searchTerm : undefined,
+        eventTitle: appliedSearch || undefined,
       },
-      orderBy: sortBy ? sortBy : undefined,
+      orderBy: sortBy,
     },
   });
 
   const invitations = useMemo(() => {
     if (!invitationData) return [];
-    return invitationData.getVolunteerMembership;
-  }, [invitationData]);
+
+    let data = invitationData.getVolunteerMembership;
+
+    if (filter === 'group') {
+      data = data.filter((i) => i.group && i.group.id);
+    }
+
+    if (filter === 'individual') {
+      data = data.filter((i) => !i.group || !i.group.id);
+    }
+
+    return data;
+  }, [invitationData, filter]);
 
   // loads the invitations when the component mounts
   if (invitationLoading) return <Loader size="xl" />;
@@ -154,54 +157,49 @@ const Invitations = (): JSX.Element => {
   }
 
   // Renders the invitations list and UI elements for searching, sorting, and accepting/rejecting invites
+  const sortDropdown = {
+    id: 'sort',
+    label: tCommon('sort'),
+    type: 'sort' as const,
+    options: [
+      { label: t('receivedLatest'), value: 'createdAt_DESC' },
+      { label: t('receivedEarliest'), value: 'createdAt_ASC' },
+    ],
+    selectedOption: sortBy,
+    onOptionChange: (value: string | number) =>
+      setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC'),
+    dataTestIdPrefix: 'sort',
+  };
+
+  const filterDropdown = {
+    id: 'filter',
+    label: t('filter'),
+    type: 'filter' as const,
+    options: [
+      { label: tCommon('all'), value: 'all' },
+      { label: t('groupInvite'), value: 'group' },
+      { label: t('individualInvite'), value: 'individual' },
+    ],
+    selectedOption: filter,
+    onOptionChange: (value: string | number) =>
+      setFilter(value === 'all' ? 'all' : (value as ItemFilter)),
+    dataTestIdPrefix: 'filter',
+  };
+
   return (
     <>
-      {/* Refactored Header Structure */}
-      <div className={styles.calendar__header}>
-        {/* 1. Search Bar Section */}
-        <div className={styles.calendar__search}>
-          <SearchBar
-            placeholder={t('searchByEventName')}
-            onSearch={debouncedSearch}
-            inputTestId="searchBy"
-            buttonTestId="searchBtn"
-            showSearchButton={true}
-            showLeadingIcon={true}
-            showClearButton={true}
-            buttonAriaLabel={tCommon('search')}
-          />
-        </div>
-
-        {/* 2. Controls Section (Sorting & Filtering) */}
-        <div className={styles.btnsBlock}>
-          <SortingButton
-            sortingOptions={[
-              { label: t('receivedLatest'), value: 'createdAt_DESC' },
-              { label: t('receivedEarliest'), value: 'createdAt_ASC' },
-            ]}
-            selectedOption={sortBy ?? undefined}
-            onSortChange={(value) =>
-              setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC')
-            }
-            dataTestIdPrefix="sort"
-            buttonLabel={tCommon('sort')}
-          />
-          <SortingButton
-            sortingOptions={[
-              { label: tCommon('all'), value: 'all' },
-              { label: t('groupInvite'), value: 'group' },
-              { label: t('individualInvite'), value: 'individual' },
-            ]}
-            selectedOption={filter ?? 'all'}
-            onSortChange={(value) =>
-              setFilter(value === 'all' ? null : (value as ItemFilter))
-            }
-            dataTestIdPrefix="filter"
-            buttonLabel={t('filter')}
-            type="filter"
-          />
-        </div>
-      </div>
+      <AdminSearchFilterBar
+        searchPlaceholder={t('searchByEventName')}
+        searchValue={searchTerm}
+        onSearchChange={setSearchTerm}
+        onSearchSubmit={() => {
+          setAppliedSearch(searchTerm);
+        }}
+        searchInputTestId="searchByInput"
+        searchButtonTestId="searchBtn"
+        hasDropdowns={true}
+        dropdowns={[sortDropdown, filterDropdown]}
+      />
 
       {invitations.length < 1 ? (
         <Stack height="100%" alignItems="center" justifyContent="center">
@@ -240,7 +238,7 @@ const Invitations = (): JSX.Element => {
                 {invite.group && invite.group.id && (
                   <>
                     <div>
-                      <FaUserGroup className="mb-1 me-1 text-secondary" />
+                      <FaUserGroup className="mb-1 me-1" color="grey" />
                       <span className="text-muted">{t('group')}:</span>{' '}
                       <span>{invite.group.name} </span>
                     </div>
@@ -249,7 +247,8 @@ const Invitations = (): JSX.Element => {
                 )}
                 <div>
                   <TbCalendarEvent
-                    className="mb-1 me-1 text-secondary"
+                    className="mb-1 me-1"
+                    color="grey"
                     size={20}
                   />
                   <span className="text-muted">{t('event')}:</span>{' '}
@@ -257,7 +256,7 @@ const Invitations = (): JSX.Element => {
                 </div>
                 |
                 <div>
-                  <FaRegClock className="mb-1 me-1 text-secondary" />
+                  <FaRegClock className="mb-1 me-1" color="grey" />
                   <span className="text-muted">{t('received')}:</span>{' '}
                   {new Date(invite.createdAt).toLocaleString()}
                 </div>

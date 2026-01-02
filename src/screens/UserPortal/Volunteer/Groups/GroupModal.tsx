@@ -227,6 +227,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             id="groupsRadio"
             onChange={() => setModalType('requests')}
             checked={modalType === 'requests'}
+            data-testid="requestsRadio"
           />
           <label
             className={`btn btn-outline-primary ${styles.toggleBtn}`}
@@ -321,11 +322,15 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                 variant="outlined"
                 className={styles.modalTable}
               >
-                <Table aria-label="group table">
+                <Table aria-label={t('groupTable')}>
                   <TableHead>
                     <TableRow>
-                      <TableCell className="fw-bold">Name</TableCell>
-                      <TableCell className="fw-bold">Actions</TableCell>
+                      <TableCell className="fw-bold">
+                        {t('volunteerName')}
+                      </TableCell>
+                      <TableCell className="fw-bold">
+                        {t('volunteerActions')}
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -347,7 +352,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                             {avatarURL ? (
                               <img
                                 src={avatarURL}
-                                alt="volunteer"
+                                alt={t('volunteerAlt')}
                                 data-testid={`image${id + 1}`}
                                 className={styles.TableImage}
                               />
