@@ -209,5 +209,8 @@
   "selectAZipFile": "选择一个 ZIP 文件",
   "version": "版本",
   "author": "作者",
-  "removePermanently": "永久删除"
+  "removePermanently": "永久删除",
+  "previousPage": "上一页",
+  "nextPage": "下一页",
+  "pageNumber": "第 {{page}} 页"
 }
