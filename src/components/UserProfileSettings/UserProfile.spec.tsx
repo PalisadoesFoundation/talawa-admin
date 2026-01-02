@@ -207,7 +207,7 @@ describe('UserProfile edge and accessibility cases', () => {
       lastName: 'Check',
       image: undefined,
     };
-    const { getByText, getByTestId, getByRole } = renderWithProviders(
+    const { getByText, getByTestId } = renderWithProviders(
       <UserProfile {...userDetails} />,
     );
     // Tooltip text should match fullName
