@@ -77,9 +77,6 @@ importers:
       '@remix-run/router':
         specifier: ^1.23.0
         version: 1.23.0
-      '@storybook/react':
-        specifier: ^10.1.11
-        version: 10.1.11(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(storybook@10.1.11(@testing-library/dom@10.4.1)(prettier@3.6.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(typescript@5.9.3)
       '@wry/equality':
         specifier: ^0.5.7
         version: 0.5.7
@@ -213,6 +210,9 @@ importers:
       '@graphql-eslint/eslint-plugin':
         specifier: ^4.3.0
         version: 4.4.0(@types/node@24.10.1)(eslint@9.39.1(jiti@2.6.1))(graphql@16.12.0)(typescript@5.9.3)
+      '@storybook/react':
+        specifier: ^10.1.11
+        version: 10.1.11(react-dom@19.2.0(react@19.2.0))(react@19.2.0)(storybook@10.1.11(@testing-library/dom@10.4.1)(prettier@3.6.2)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(typescript@5.9.3)
       '@testing-library/dom':
         specifier: ^10.4.0
         version: 10.4.1
