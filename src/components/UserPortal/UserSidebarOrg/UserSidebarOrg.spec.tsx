@@ -11,7 +11,6 @@ import { MockedProvider } from '@apollo/react-testing';
 import { store } from 'state/store';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, it } from 'vitest';
 import { usePluginDrawerItems } from 'plugin';
@@ -97,16 +96,6 @@ const props: InterfaceUserSidebarOrgProps = {
 };
 
 const MOCKS = [
-  {
-    request: {
-      query: LOGOUT_MUTATION,
-    },
-    result: {
-      data: {
-        logout: { success: true },
-      },
-    },
-  },
   {
     request: {
       query: ORGANIZATIONS_LIST,

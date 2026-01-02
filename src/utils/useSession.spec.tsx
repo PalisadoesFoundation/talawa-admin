@@ -485,7 +485,7 @@ describe('useSession Hook', () => {
     vi.useRealTimers();
   });
 
-  test('should handle logout and revoke token', async () => {
+  test('should handle logout', async () => {
     vi.useFakeTimers();
 
     const { result } = renderHook(() => useSession(), {

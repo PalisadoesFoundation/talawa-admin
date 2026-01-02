@@ -318,7 +318,7 @@ describe('ProfileDropdown Component', () => {
       'Error during logout:',
       expect.any(Error),
     );
-    // Verify that navigation still happens even when revokeRefreshToken fails
+    // Verify that navigation still happens even when logout mutation fails
     expect(mockNavigate).toHaveBeenCalledWith('/');
     consoleSpy.mockRestore();
   });

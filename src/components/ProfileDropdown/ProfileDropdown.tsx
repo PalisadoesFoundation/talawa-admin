@@ -26,7 +26,7 @@
  * - `useNavigate`, `useParams`: Handles navigation and route parameters.
  *
  * @internal
- * - The `logout` function clears local storage, revokes the refresh token, and navigates to the home page.
+ * - The `handleLogout` function calls the logout mutation, clears local storage, and navigates to the home page.
  * - The `displayedName` truncates the user's name if it exceeds the maximum length.
  *
  * @accessibility

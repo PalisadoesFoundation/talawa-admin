@@ -961,7 +961,7 @@ describe('UserPortalNavigationBar', () => {
 
     beforeEach(() => {
       // Suppress unhandled promise rejections for error tests
-      // These are expected since the component doesn't await revokeRefreshToken()
+      // These are expected since the component doesn't await logout()
       unhandledRejectionHandler = (reason: unknown) => {
         // Suppress Apollo errors from our test mocks
         const message =
@@ -970,7 +970,7 @@ describe('UserPortalNavigationBar', () => {
             ?.message ||
           '';
         if (
-          message.includes('Failed to revoke refresh token') ||
+          message.includes('Failed to logout') ||
           message.includes('Network error') ||
           message.includes('Failed to fetch organization data')
         ) {
@@ -1014,7 +1014,7 @@ describe('UserPortalNavigationBar', () => {
       expect(screen.getByTestId('offcanvasTitle')).toBeInTheDocument();
     });
 
-    it('handles revoke refresh token mutation error and shows toast', async () => {
+    it('handles logout mutation error and shows toast', async () => {
       const clearAllItems = vi.fn();
 
       (useLocalStorage as Mock).mockReturnValue({
@@ -1095,7 +1095,7 @@ describe('UserPortalNavigationBar', () => {
       );
     });
 
-    it('handles revoke refresh token GraphQL error - side effects still run', async () => {
+    it('handles logout GraphQL error - side effects still run', async () => {
       const clearAllItems = vi.fn();
 
       (useLocalStorage as Mock).mockReturnValue({
@@ -1124,14 +1124,14 @@ describe('UserPortalNavigationBar', () => {
       fireEvent.click(logoutBtn);
 
       await waitFor(() => {
-        // Note: Component calls revokeRefreshToken() without await (line 130)
+        // Note: Component calls logout() without await
         // so the try-catch block doesn't catch errors. Side effects still run.
         expect(clearAllItems).toHaveBeenCalled();
         expect(mockNavigate).toHaveBeenCalledWith('/');
       });
     });
 
-    it('handles revoke refresh token network error - side effects still run', async () => {
+    it('handles logout network error - side effects still run', async () => {
       const clearAllItems = vi.fn();
 
       (useLocalStorage as Mock).mockReturnValue({
