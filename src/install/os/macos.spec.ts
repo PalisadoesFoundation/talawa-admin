@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { execCommand } from '../utils/exec';
-import { createSpinner, logError, logInfo, logWarning } from '../utils/logger';
+import { createSpinner, logError, logInfo } from '../utils/logger';
 import { installDocker, installTypeScript } from './macos';
 
 vi.mock('../utils/exec');
@@ -71,38 +71,28 @@ describe('macOS installers', () => {
   });
 
   describe('installDocker', () => {
-    it('installs Docker via brew cask', async () => {
-      vi.mocked(execCommand).mockResolvedValue({ stdout: '', stderr: '' });
-
-      await installDocker();
-
-      expect(createSpinner).toHaveBeenCalledWith('Installing Docker...');
-      expect(spinnerMock.start).toHaveBeenCalled();
-      expect(execCommand).toHaveBeenCalledWith(
-        'brew',
-        ['install', '--cask', 'docker'],
-        expect.objectContaining({ silent: true }),
+    it('throws error and logs installation instructions', async () => {
+      await expect(installDocker()).rejects.toThrow(
+        'Docker must be installed manually. Please follow the instructions above.',
       );
-      expect(spinnerMock.succeed).toHaveBeenCalledWith(
-        'Docker installed successfully',
-      );
-      expect(logWarning).toHaveBeenCalledWith(
-        expect.stringContaining('Please open Docker Desktop from Applications'),
-      );
-    });
 
-    it('logs and rethrows on failure', async () => {
-      const error = new Error('brew failed');
-      vi.mocked(execCommand).mockRejectedValue(error);
-
-      await expect(installDocker()).rejects.toThrow(error);
-
-      expect(spinnerMock.fail).toHaveBeenCalledWith('Failed to install Docker');
-      expect(logError).toHaveBeenCalledWith(
-        expect.stringContaining('Docker installation failed'),
+      expect(logInfo).toHaveBeenCalledWith(
+        'Docker installation requires manual setup to choose your preferred edition.',
       );
       expect(logInfo).toHaveBeenCalledWith(
-        expect.stringContaining('Please install Docker Desktop manually'),
+        '  • Docker Community Edition (CE) - Free and open-source',
+      );
+      expect(logInfo).toHaveBeenCalledWith(
+        '  • Docker Enterprise Edition (EE) - Commercial with additional features',
+      );
+      expect(logInfo).toHaveBeenCalledWith(
+        '  Docker Desktop: https://www.docker.com/products/docker-desktop',
+      );
+      expect(logInfo).toHaveBeenCalledWith(
+        '  Documentation: https://docs.docker.com/desktop/install/mac-install/',
+      );
+      expect(logInfo).toHaveBeenCalledWith(
+        'After installation, run this setup script again.',
       );
     });
   });

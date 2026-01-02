@@ -107,63 +107,28 @@ describe('Windows installers', () => {
   });
 
   describe('installDocker', () => {
-    it('installs Docker Desktop via winget and verifies installation', async () => {
-      vi.mocked(execCommand).mockResolvedValue({ stdout: '', stderr: '' });
-      vi.mocked(commandExists).mockResolvedValue(true);
-      vi.mocked(checkVersion).mockResolvedValue('27.0.0');
-
-      await installDocker();
-
-      expect(createSpinner).toHaveBeenCalledWith(
-        'Installing Docker Desktop...',
+    it('throws error and logs installation instructions', async () => {
+      await expect(installDocker()).rejects.toThrow(
+        'Docker must be installed manually. Please follow the instructions above.',
       );
-      expect(spinnerMock.start).toHaveBeenCalled();
-      expect(execCommand).toHaveBeenCalledWith(
-        'winget',
-        [
-          'install',
-          '--id',
-          'Docker.DockerDesktop',
-          '-e',
-          '--accept-source-agreements',
-          '--accept-package-agreements',
-        ],
-        expect.objectContaining({ silent: true }),
-      );
-      expect(spinnerMock.succeed).toHaveBeenCalledWith(
-        'Docker installed successfully',
-      );
-      expect(logWarning).toHaveBeenCalledWith(
-        expect.stringContaining('Docker Desktop requires a restart'),
-      );
-      expect(commandExists).toHaveBeenCalledWith('docker');
-      expect(checkVersion).toHaveBeenCalledWith('docker');
-      expect(logInfo).toHaveBeenCalledWith('Docker version: 27.0.0');
-    });
 
-    it('warns when verification fails after installation', async () => {
-      vi.mocked(execCommand).mockResolvedValue({ stdout: '', stderr: '' });
-      vi.mocked(commandExists).mockResolvedValueOnce(false); // docker doesn't exist
-
-      await installDocker();
-
-      expect(logWarning).toHaveBeenCalledWith(
-        'Docker installation completed but verification failed. Docker Desktop may need to be started or PATH may need to be refreshed.',
-      );
-    });
-
-    it('logs and rethrows on failure', async () => {
-      const error = new Error('winget failed');
-      vi.mocked(execCommand).mockRejectedValue(error);
-
-      await expect(installDocker()).rejects.toThrow(error);
-
-      expect(spinnerMock.fail).toHaveBeenCalledWith('Failed to install Docker');
-      expect(logError).toHaveBeenCalledWith(
-        expect.stringContaining('Docker installation failed'),
+      expect(logInfo).toHaveBeenCalledWith(
+        'Docker installation requires manual setup to choose your preferred edition.',
       );
       expect(logInfo).toHaveBeenCalledWith(
-        expect.stringContaining('Please install Docker Desktop manually'),
+        '  • Docker Community Edition (CE) - Free and open-source',
+      );
+      expect(logInfo).toHaveBeenCalledWith(
+        '  • Docker Enterprise Edition (EE) - Commercial with additional features',
+      );
+      expect(logInfo).toHaveBeenCalledWith(
+        '  Docker Desktop: https://www.docker.com/products/docker-desktop',
+      );
+      expect(logInfo).toHaveBeenCalledWith(
+        '  Documentation: https://docs.docker.com/desktop/install/windows-install/',
+      );
+      expect(logInfo).toHaveBeenCalledWith(
+        'After installation, run this setup script again.',
       );
     });
   });

@@ -66,83 +66,54 @@ describe('linux OS installers', () => {
   });
 
   describe('installDocker', () => {
-    it('installs Docker on Ubuntu/Debian with apt and Docker repo setup', async () => {
+    it('throws error and logs installation instructions for Ubuntu', async () => {
       const os: IOSInfo = { name: 'linux', distro: 'ubuntu' };
-      vi.mocked(execCommand).mockResolvedValue({ stdout: '', stderr: '' });
 
-      await installDocker(os);
+      await expect(installDocker(os)).rejects.toThrow(
+        'Docker must be installed manually. Please follow the instructions above.',
+      );
 
-      expect(createSpinner).toHaveBeenCalledWith('Installing Docker...');
-      expect(spinnerMock.start).toHaveBeenCalled();
-      expect(execCommand).toHaveBeenCalledWith(
-        'apt-get',
-        expect.arrayContaining(['update']),
-        expect.objectContaining({ sudo: true, silent: true }),
-      );
-      expect(execCommand).toHaveBeenCalledWith(
-        'curl',
-        expect.arrayContaining([
-          'https://download.docker.com/linux/ubuntu/gpg',
-        ]),
-        expect.objectContaining({ sudo: true, silent: true }),
-      );
-      expect(execCommand).toHaveBeenCalledWith(
-        'apt-get',
-        expect.arrayContaining(['install', '-y', 'docker-ce']),
-        expect.objectContaining({ sudo: true, silent: true }),
-      );
-      expect(spinnerMock.succeed).toHaveBeenCalledWith(
-        'Docker installed successfully',
+      expect(logInfo).toHaveBeenCalledWith(
+        'Docker installation requires manual setup to choose your preferred edition.',
       );
       expect(logInfo).toHaveBeenCalledWith(
-        expect.stringContaining('Add your user to the docker group'),
+        '  • Docker Community Edition (CE) - Free and open-source',
+      );
+      expect(logInfo).toHaveBeenCalledWith(
+        '  Ubuntu: https://docs.docker.com/engine/install/ubuntu/',
+      );
+      expect(logInfo).toHaveBeenCalledWith(
+        'After installation, run this setup script again.',
       );
     });
 
-    it('throws for unsupported distros and logs guidance', async () => {
+    it('throws error and logs installation instructions for Debian', async () => {
+      const os: IOSInfo = { name: 'linux', distro: 'debian' };
+
+      await expect(installDocker(os)).rejects.toThrow(
+        'Docker must be installed manually. Please follow the instructions above.',
+      );
+
+      expect(logInfo).toHaveBeenCalledWith(
+        'Docker installation requires manual setup to choose your preferred edition.',
+      );
+      expect(logInfo).toHaveBeenCalledWith(
+        '  Debian: https://docs.docker.com/engine/install/debian/',
+      );
+    });
+
+    it('throws error and logs generic installation instructions for other distros', async () => {
       const os: IOSInfo = { name: 'linux', distro: 'other' };
 
       await expect(installDocker(os)).rejects.toThrow(
-        'Automatic Docker installation in this script is currently implemented only for Ubuntu and Debian.',
+        'Docker must be installed manually. Please follow the instructions above.',
       );
 
-      expect(spinnerMock.fail).toHaveBeenCalledWith('Failed to install Docker');
-      expect(logError).toHaveBeenCalledWith(
-        expect.stringContaining('Docker installation failed'),
+      expect(logInfo).toHaveBeenCalledWith(
+        'Docker installation requires manual setup to choose your preferred edition.',
       );
       expect(logInfo).toHaveBeenCalledWith(
-        expect.stringContaining('Automatic Docker installation in this script'),
-      );
-    });
-
-    it('logs and rethrows when apt-based install fails', async () => {
-      const os: IOSInfo = { name: 'linux', distro: 'debian' };
-      const error = new Error('apt-get install failed');
-      vi.mocked(execCommand)
-        // First remove call is ignored with catch(() => {}), so let it succeed
-        .mockResolvedValueOnce({ stdout: '', stderr: '' })
-        // update
-        .mockResolvedValueOnce({ stdout: '', stderr: '' })
-        // ca-certificates/curl
-        .mockResolvedValueOnce({ stdout: '', stderr: '' })
-        // mkdir keyrings
-        .mockResolvedValueOnce({ stdout: '', stderr: '' })
-        // curl gpg
-        .mockResolvedValueOnce({ stdout: '', stderr: '' })
-        // chmod
-        .mockResolvedValueOnce({ stdout: '', stderr: '' })
-        // bash repo script
-        .mockResolvedValueOnce({ stdout: '', stderr: '' })
-        // apt-get update
-        .mockResolvedValueOnce({ stdout: '', stderr: '' })
-        // final install fails
-        .mockRejectedValueOnce(error);
-
-      await expect(installDocker(os)).rejects.toThrow(error);
-
-      expect(spinnerMock.fail).toHaveBeenCalledWith('Failed to install Docker');
-      expect(logError).toHaveBeenCalledWith(
-        expect.stringContaining('Docker installation failed'),
+        '  other: https://docs.docker.com/engine/install/',
       );
     });
   });
