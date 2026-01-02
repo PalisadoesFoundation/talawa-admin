@@ -138,8 +138,7 @@ export default [
         },
         // Prevent using deprecated REVOKE_REFRESH_TOKEN mutation
         {
-          selector:
-            "ImportSpecifier[imported.name='REVOKE_REFRESH_TOKEN']",
+          selector: "ImportSpecifier[imported.name='REVOKE_REFRESH_TOKEN']",
           message:
             'HTTP-Only Cookie Violation: Do not use REVOKE_REFRESH_TOKEN for logout. Use LOGOUT_MUTATION instead, which correctly reads refresh tokens from HTTP-only cookies.',
         },
