@@ -91,6 +91,12 @@ jobs:
           CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
         run: pnpm exec eslint ${CHANGED_FILES}
 
+      - name: Validate design tokens in modified files
+        if: steps.changed-files.outputs.any_changed == 'true'
+        env:
+          CHANGED_FILES: ${{ steps.changed-files.outputs.all_changed_files }}
+        run: pnpm exec tsx scripts/validate-tokens.ts --files $CHANGED_FILES
+
       - name: Check for TSDoc comments
         run: pnpm check-tsdoc
 

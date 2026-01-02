@@ -31,6 +31,7 @@
  *
  * @returns A modal for previewing and managing event details.
  */
+// translation-check-keyPrefix: eventListCard
 import React from 'react';
 import { Button, Form, Modal, Dropdown } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
@@ -43,7 +44,7 @@ import {
   InterfaceRecurrenceRule,
 } from 'utils/recurrenceUtils/recurrenceTypes';
 import { createDefaultRecurrenceRule } from 'utils/recurrenceUtils/recurrenceUtilityFunctions';
-import CustomRecurrenceModal from 'screens/OrganizationEvents/CustomRecurrenceModal';
+import CustomRecurrenceModal from 'screens/AdminPortal/OrganizationEvents/CustomRecurrenceModal';
 
 import type { InterfacePreviewEventModalProps } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';

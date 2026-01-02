@@ -1,4 +1,6 @@
 {
+  "ends": "Ends",
+  "occurrences": "Occurrences",
   "leaderboard": {
     "title": "Leaderboard",
     "searchByVolunteer": "Search By Volunteer",
@@ -247,11 +249,11 @@
     "rejectedSuccessfully": "Request rejected successfully",
     "noOrgErrorTitle": "Organizations Not Found",
     "noOrgErrorDescription": "Please create an organization through dashboard",
-    "newMembersWillAppearHere": "New members will appear here",
     "name": "name",
     "email": "email",
     "profilePictureAlt": "User profile picture",
-    "placeholderAvatarAlt": "Placeholder avatar"
+    "placeholderAvatarAlt": "Placeholder avatar",
+    "newMembersWillAppearHere": "New membership requests will appear here"
   },
   "users": {
     "membershipStatus": {
@@ -358,7 +360,9 @@
     "join_success": "Membership request sent successfully",
     "withdraw_success": "Membership request withdrawn successfully",
     "join_error": "Failed to send membership request",
-    "withdraw_error": "Failed to withdraw request"
+    "withdraw_error": "Failed to withdraw request",
+    "card_aria": "Organization card",
+    "card_test_id": "organization-card-{{id}}"
   },
   "organizationPeople": {
     "title": "Talawa Members",
@@ -404,6 +408,7 @@
     "manageTag": "Manage",
     "editTag": "Edit",
     "removeTag": "Remove",
+    "tags": "Tags",
     "tagDetails": "Tag Details",
     "tagName": "Name",
     "tagType": "Type",
@@ -414,6 +419,8 @@
     "noTagsFound": "No tags found",
     "removeUserTag": "Delete Tag",
     "removeUserTagMessage": "Do you want to delete this tag?",
+    "Latest": "Latest",
+    "Oldest": "Oldest",
     "addChildTag": "Add a Sub Tag",
     "enterTagName": "Enter Tag Name",
     "totalSubTags": "Total Sub Tags",
@@ -423,7 +430,8 @@
     "sortTags": "Sort Tags",
     "tags": "Tags",
     "Latest": "Latest",
-    "Oldest": "Oldest"
+    "Oldest": "Oldest",
+    "viewSubTags": "View {{count}} sub tags"
   },
   "manageTag": {
     "title": "Tag Details",
@@ -464,7 +472,10 @@
     "expand": "Expand",
     "tagNamePlaceholder": "Write the name of the tag",
     "allTags": "All Tags",
-    "noMoreMembersFound": "No more members found"
+    "noMoreMembersFound": "No more members found",
+    "errorOccurredWhileLoadingAssignedUser": "Error occurred while loading assigned users",
+    "sortPeople": "Sort People",
+    "tagActions": "Tag Actions"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
@@ -507,6 +518,7 @@
     "publicEvent": "Is Public",
     "isRegistrable": "Is Registrable",
     "registerable": "Is Registerable",
+
     "createChat": "Create Chat",
     "createEvent": "Create Event",
     "enterFilter": "Enter Filter",
@@ -524,7 +536,7 @@
     "never": "Never",
     "on": "On",
     "after": "After",
-    "occurences": "occurences",
+    "occurrences": "Occurrences",
     "monthlyOn": "Monthly On",
     "yearlyOn": "Yearly On",
     "yearlyRecurrenceDesc": "This event will repeat every year on the same date as the event start date.",
@@ -548,13 +560,16 @@
     "startDate": "startDate",
     "endDate": "endDate",
     "talawaApiUnavailable": "talawaApiUnavailable",
-    "done": "done"
+    "done": "done",
+    "viewType": "View Type",
+    "search": "Search"
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",
     "actionItemDetails": "Action Item Details",
     "actionItemCompleted": "Action Item Completed",
     "assignee": "Assignee",
+    "assigneeOrCategory": "Assignee or Category",
     "assignedTo": "Assigned To",
     "assignTo": "Assign To",
     "volunteer": "Volunteer",
@@ -708,6 +723,8 @@
     "eventDetails": "Event Details",
     "eventDeleted": "Event deleted successfully.",
     "eventUpdated": "Event updated successfully.",
+    "registeredSuccessfully": "Successfully registered for {{eventName}}",
+    "noChangesToUpdate": "No changes to update",
     "thisInstance": "This Instance",
     "thisAndFollowingInstances": "This & Following Instances",
     "allInstances": "All Instances",
@@ -718,7 +735,7 @@
     "never": "Never",
     "on": "On",
     "after": "After",
-    "occurences": "occurences",
+    "occurrences": "Occurrences",
     "startTime": "startTime",
     "endTime": "endTime",
     "location": "location",
@@ -730,7 +747,8 @@
     "registerEvent": "registerEvent",
     "close": "close",
     "talawaApiUnavailable": "talawaApiUnavailable",
-    "done": "done"
+    "done": "done",
+    "invalidDate": "Invalid Date"
   },
   "funds": {
     "title": "Funds",
@@ -787,7 +805,9 @@
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
     "lowestGoal": "Lowest Goal",
-    "highestGoal": "Highest Goal"
+    "highestGoal": "Highest Goal",
+    "percentageRaised": "% Raised",
+    "campaignProgress": "Campaign progress: {{percentage}}%"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
@@ -868,11 +888,15 @@
     "Next": "Next Page",
     "Previous": "Previous Page",
     "cancel": "cancel",
+    "invalidDate": "Invalid Date",
     "messageTitleError": "Post title cannot be empty!",
     "organizationIdMissing": "Organization ID is missing!",
     "messageDescription": "Post Description",
     "addVideo": "Add Video",
-    "creatingMessage": "Creating Post..."
+    "creatingMessage": "Creating Post...",
+    "orgPostListError": "Organization post list error:",
+    "pinnedPostsLoadError": "Error loading pinned posts",
+    "errorSearchingPosts": "Error searching posts"
   },
   "postNotFound": {
     "post": "Post",
@@ -939,7 +963,8 @@
     "name": "name",
     "email": "email",
     "talawaApiUnavailable": "talawaApiUnavailable",
-    "noResultsFoundFor": "noResultsFoundFor"
+    "noResultsFoundFor": "noResultsFoundFor",
+    "sortOrganizations": "Sort Organizations"
   },
   "eventManagement": {
     "name": "Event Management Dashboard",
@@ -951,7 +976,8 @@
     "agendas": "Agendas",
     "statistics": "Statistics",
     "to": "TO",
-    "volunteers": "Volunteers"
+    "volunteers": "Volunteers",
+    "backToEvents": "Back to Events"
   },
   "eventAttendance": {
     "historical_statistics": "Historical Statistics",
@@ -972,6 +998,7 @@
     "chartPageNavigation": "Chart page navigation",
     "previousPage": "Previous Page",
     "nextPage": "Next Page",
+    "pageNumber": "Page {{page}}",
     "goToToday": "Go to today",
     "genderDistribution": "Gender Distribution",
     "ageDistribution": "Age Distribution"
@@ -1069,6 +1096,7 @@
     "deleteMsg": "Do you want to delete this organization?",
     "confirmDelete": "Confirm Delete",
     "longDelOrgMsg": "By clicking on Delete Organization button the organization will be permanently deleted along with its events, tags and all related data.",
+    "deleteSampleOrganization": "Delete Sample Organization",
     "successfullyDeletedSampleOrganization": "Successfully deleted sample Organization",
     "cancel": "cancel"
   },
@@ -1125,7 +1153,34 @@
     "saveChanges": "saveChanges",
     "cancel": "cancel",
     "talawaApiUnavailable": "talawaApiUnavailable",
-    "enterOrganizationDescription": "Enter Organization Description"
+    "enterOrganizationDescription": "Enter Organization Description",
+    "userRegistrationRequired": "User registration required",
+    "nameDescriptionRequired": "Name and description are required",
+    "updateFailed": "Failed to update organization"
+  },
+  "public": {
+    "invitation": {
+      "title": "Event Invitation",
+      "previewText": "You have been invited to join this event.",
+      "inviteeEmail": "Invitee Email",
+      "anyone": "Any logged in user",
+      "organizationId": "Organization Id",
+      "eventId": "Event Id",
+      "eventTitle": "Event {{eventId}}",
+      "expiresAt": "Expires At",
+      "mustLogin": "Please login or create an account to accept this invitation.",
+      "login": "Log in",
+      "signup": "Sign up",
+      "invalidToken": "Invalid invitation token",
+      "invitationNotFound": "Invitation not found or invalid",
+      "verifyError": "Error verifying invitation",
+      "accept": "Accept invitation",
+      "accepted": "Invitation accepted",
+      "acceptError": "Could not accept invitation",
+      "maskedNotice": "This invitation was issued to a masked email address. Please ensure you are the invited recipient before accepting.",
+      "confirmMatch": "I confirm the email address of my account matches the invited address (shown above).",
+      "signInAsDifferent": "Sign in as a different user"
+    }
   },
   "memberDetail": {
     "title": "User Details",
@@ -1191,7 +1246,8 @@
     "name": "Name",
     "email": "Email",
     "role": "Role",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "emailNotAvailable": "Email not available"
   },
   "userLogin": {
     "login": "Login",
@@ -1494,7 +1550,14 @@
     "day": "Day",
     "week": "Week",
     "month": "Month",
-    "year": "Year"
+    "year": "Year",
+    "ends": "Ends",
+    "occurrences": "Occurrences",
+    "never": "Never",
+    "on": "On",
+    "after": "After",
+    "customRecurrence": "Custom Recurrence",
+    "repeatsEvery": "Repeats Every"
   },
   "userEventCard": {
     "starts": "Starts",
@@ -1538,7 +1601,19 @@
     "yes": "yes",
     "edit": "edit",
     "saveChanges": "saveChanges",
-    "endOfResults": "endOfResults"
+    "endOfResults": "endOfResults",
+    "failedToFetchAdvertisements": "Failed to fetch advertisements",
+    "advertisementMedia": "Advertisement media",
+    "noMediaAvailable": "No media available",
+    "advertisementImageAlt": "Advertisement image #{{index}} for {{name}}",
+    "invalidFileType": "Invalid file type: {{fileName}}",
+    "fileTooLarge": "File too large: {{fileName}}",
+    "invalidArgumentsForAction": "Invalid arguments for this action.",
+    "englishCaptions": "English captions",
+    "preview": "Preview",
+    "bannerAd": "Banner Ad",
+    "popupAd": "Popup Ad",
+    "menuAd": "Menu Ad"
   },
   "userChat": {
     "title": "Chats",
@@ -1571,12 +1646,23 @@
     "demoteToRegular": "Demote to Regular",
     "promoteToAdmin": "Promote to Admin",
     "user": "User",
-    "chatAction": "Chat action"
+    "chatAction": "Chat action",
+    "organizationMembersTable": "Organization Members Table",
+    "newGroup": "New Group",
+    "groupName": "Group name",
+    "groupDescription": "Group Description",
+    "next": "Next"
   },
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",
     "sendMessage": "Send Message",
-    "reply": "Reply"
+    "reply": "Reply",
+    "loadingImage": "Loading image...",
+    "imageNotAvailable": "Image not available",
+    "attachment": "attachment",
+    "loadingMoreMessages": "Loading more messages...",
+    "loading": "Loading...",
+    "loadOlderMessages": "Load older messages"
   },
   "orgActionItemCategories": {
     "enableButton": "Enable",
@@ -1649,7 +1735,10 @@
     "cancel": "cancel",
     "create": "create",
     "user": "user",
-    "profile": "profile"
+    "profile": "profile",
+    "customizedTable": "Customized Table",
+    "page": "Page",
+    "add": "Add"
   },
   "eventActionItems": {
     "title": "Action Items",
@@ -1713,10 +1802,12 @@
     "noPledges": "No Pledges Found",
     "noCampaigns": "No Campaigns Found",
     "raised": "Raised",
-    "amountRaised": "Amount Raised"
+    "amountRaised": "Amount Raised",
+    "searchCampaigns": "Search Campaigns"
   },
   "userPledges": {
-    "title": "My Pledges"
+    "title": "My Pledges",
+    "searchPledges": "Search Pledges"
   },
   "leaveOrganization": {
     "title": "Leave Organization"
@@ -1725,6 +1816,7 @@
     "toggleGroupAriaLabel": "Volunteer view selector",
     "volunteers": "Volunteers",
     "volunteer": "Volunteer",
+    "volunteerName": "Volunteer Name",
     "volunteerGroups": "Volunteer Groups",
     "individuals": "Individuals",
     "groups": "Groups",
@@ -1747,6 +1839,7 @@
     "deleteVolunteerGroupMsg": "Are you sure you want to delete this Volunteer Group?",
     "leader": "Leader",
     "group": "Group",
+    "groupOrLeader": "Group or Leader",
     "createGroup": "Create Group",
     "updateGroup": "Update Group",
     "deleteGroup": "Delete Group",
@@ -1770,7 +1863,10 @@
     "leastVolunteers": "Least Volunteers",
     "applyTo": "Apply To",
     "entireSeries": "Entire Series",
-    "thisEventOnly": "This Event Only"
+    "thisEventOnly": "This Event Only",
+    "volunteerAlt": "Volunteer profile picture",
+    "groupTable": "Group Table",
+    "volunteerActions": "Volunteer Actions"
   },
   "userVolunteer": {
     "title": "Volunteership",
@@ -1782,11 +1878,15 @@
     "actions": "Action Items",
     "search": "Search",
     "searchByName": "Search by Name",
+    "startDate": "Start Date",
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
     "noEvents": "No Upcoming Events",
     "volunteer": "Volunteer",
     "volunteered": "Volunteered",
+    "volunteerName": "Name",
+    "volunteerActions": "Actions",
+    "volunteerAlt": "volunteer",
     "join": "Join",
     "joined": "Joined",
     "pending": "Pending",
@@ -1814,6 +1914,7 @@
     "event": "Event",
     "received": "Received",
     "location": "Location",
+    "titleOrLocation": "Title or Location",
     "recurrence": "Recurrence",
     "endDate": "End Date",
     "description": "Description",
@@ -1822,7 +1923,8 @@
     "srNo": "Sr. No.",
     "groupName": "Group Name",
     "noOfMembers": "No. of Members",
-    "options": "Options"
+    "options": "Options",
+    "notSpecified": "Not Specified"
   },
   "pluginStore": {
     "title": "Plugin Store",
@@ -1846,7 +1948,45 @@
     "checkBackLater": "Check back later for new plugins",
     "tryDifferentSearch": "Try a different search term or browse all plugins",
     "explorePluginStore": "Explore the plugin store to discover new plugins",
-    "noResultsFoundFor": "No results found for"
+    "noResultsFoundFor": "No results found for",
+    "pluginIcon": "Plugin Icon",
+    "backToDetails": "(←) Back to Details",
+    "previousImage": "Previous Image (←)",
+    "nextImage": "Next Image (→)",
+    "screenshot": "Go to screenshot {{number}}",
+    "goTo": "Go to",
+    "screenshots": "Screenshots",
+    "ss": "Screenshot",
+    "loadingDetails": "Loading Details...",
+    "features": "Features",
+    "noFeaturesInfoAvailableForThisPlugin": "No features information available for this plugin.",
+    "loadingFeatures": "Loading Features...",
+    "loadingChangelog": "Loading Changelog...",
+    "changelog": "Changelog",
+    "v": "v",
+    "failedToUploadPlugin": "Failed to upload plugin. Please try again.",
+    "uploadPlugin": "Upload Plugin",
+    "uploadPluginDescription": "Upload a ZIP file to create a plugin entry. The plugin will be available for installation after upload.",
+    "pluginId": "Plugin ID",
+    "adminDashboardComponents": "Admin Dashboard Components",
+    "componentsToInstall": "Components to Install:",
+    "apiBackendComponents": "API Backend Components",
+    "pluginStructure": "Plugin Structure",
+    "pluginStructureDescription": "Expected plugin structure with admin and/or API components",
+    "detectedFiles": "Detected Files",
+    "expectedDirectoryStructure": "Expected Directory Structure",
+    "requiredManifestFields": "Required manifest.json Fields",
+    "uninstallPlugin": "Uninstall Plugin",
+    "uninstallPluginMsg": "Are you sure you want to uninstall {{pluginName}}?",
+    "clickToViewFullSize": "Click to view full size",
+    "pluginInfo": "Plugin Information",
+    "filterPlugins": "Filter Plugins",
+    "details": "Details",
+    "installing": "Installing ({{elapsed}})",
+    "uploading": "Uploading...",
+    "screenshotCounter": "{{current}} of {{total}}",
+    "uninstallWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone.",
+    "errorInstalling": "Failed to load plugin details"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Comment deleted successfully",
@@ -1864,6 +2004,13 @@
     "altText": "Profile picture of {{name}}",
     "modalTitle": "Profile Picture",
     "enlargedAltText": "Enlarged profile picture of {{name}}"
+  },
+  "eventCalendar": {
+    "noEventsAvailable": "No events available",
+    "holidays": "Holidays",
+    "events": "Events",
+    "eventsCreatedByOrganization": "Events Created by Organization",
+    "today": "Today"
   },
   "common": {
     "signOut": "Sign out",
