@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import { render, screen, fireEvent, within, act } from '@testing-library/react';
 import { DataGridWrapper } from './index';
 import { vi } from 'vitest';
 
@@ -78,7 +78,8 @@ describe('DataGridWrapper', () => {
       />,
     );
     expect(screen.getByRole('alert')).toHaveTextContent('Error fetching data');
-    expect(screen.queryByRole('status')).toBeNull();
+    // Empty state should still be visible when there's an error
+    expect(screen.getByTestId('empty-state')).toBeInTheDocument();
   });
 
   test('handles row click', () => {
@@ -101,22 +102,32 @@ describe('DataGridWrapper', () => {
     expect(screen.getByTestId('action-2')).toBeInTheDocument();
   });
 
-  test('search filters rows immediately', () => {
+  test('search filters rows immediately', async () => {
+    vi.useFakeTimers();
     render(<DataGridWrapper {...defaultProps} />);
     const input = screen.getByRole('searchbox');
 
     fireEvent.change(input, { target: { value: 'Alice' } });
+
+    // Wait for debounce (300ms)
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
 
     expect(screen.getByText('Alice')).toBeInTheDocument();
     expect(screen.queryByText('Bob')).toBeNull();
   });
 
   test('clears search when clear button is clicked', () => {
+    vi.useFakeTimers();
     render(<DataGridWrapper {...defaultProps} />);
     const input = screen.getByRole('searchbox');
 
     // Type something
     fireEvent.change(input, { target: { value: 'Alice' } });
+    act(() => {
+      vi.advanceTimersByTime(300); // Wait for debounce
+    });
     expect(screen.queryByText('Bob')).toBeNull(); // confirmed filtered
 
     // Click clear (SearchBar should render clear button when value exists)
@@ -130,6 +141,9 @@ describe('DataGridWrapper', () => {
     // We mocked 'clear' to 'Clear'.
 
     fireEvent.click(clearBtn);
+    act(() => {
+      vi.advanceTimersByTime(300); // Wait for debounce after clear
+    });
 
     expect(screen.getByText('Bob')).toBeInTheDocument();
     expect(input).toHaveValue('');
@@ -202,6 +216,7 @@ describe('DataGridWrapper', () => {
   });
 
   test('handles edge cases: null values in fields', () => {
+    vi.useFakeTimers();
     const rowsWithNull: TestRow[] = [
       { id: 1, name: 'Alice', role: null },
       { id: 2, name: null, role: 'User' },
@@ -221,10 +236,16 @@ describe('DataGridWrapper', () => {
     // Search for 'User'
     const input = screen.getByRole('searchbox');
     fireEvent.change(input, { target: { value: 'User' } });
+    act(() => {
+      vi.advanceTimersByTime(300); // Wait for debounce
+    });
     expect(screen.queryByText('User')).toBeInTheDocument(); // Saved row 2
 
     // Search for 'Null' -> shouldn't crash, returns nothing probably
     fireEvent.change(input, { target: { value: 'Something' } });
+    act(() => {
+      vi.advanceTimersByTime(300); // Wait for debounce
+    });
     expect(screen.queryByText('User')).toBeNull();
   });
 
@@ -295,6 +316,7 @@ describe('DataGridWrapper', () => {
   });
 
   test('updates search term on search submit (Enter key)', () => {
+    vi.useFakeTimers();
     render(<DataGridWrapper {...defaultProps} />);
     const input = screen.getByRole('searchbox');
 
@@ -303,6 +325,11 @@ describe('DataGridWrapper', () => {
 
     // Press Enter (triggers onSearch, line 82)
     fireEvent.keyDown(input, { key: 'Enter', code: 'Enter', charCode: 13 });
+
+    // Wait for debounce
+    act(() => {
+      vi.advanceTimersByTime(300);
+    });
 
     // Verify filter is active
     expect(screen.getByText('Bob')).toBeInTheDocument();

@@ -8,13 +8,8 @@
  * primary component for rendering data tables throughout the Talawa Admin application.
  */
 
-import React, { useMemo, useState } from 'react';
-import {
-  DataGrid,
-  GridLoadingOverlayProps,
-  GridRenderCellParams,
-  LoadingOverlayPropsOverrides,
-} from '@mui/x-data-grid';
+import React, { useMemo, useState, useEffect } from 'react';
+import { DataGrid, GridRenderCellParams } from '@mui/x-data-grid';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceDataGridWrapperProps } from '../../types/DataGridWrapper/interface';
 import styles from './DataGridWrapper.module.css';
@@ -22,7 +17,8 @@ import styles from './DataGridWrapper.module.css';
 import SearchBar from '../SearchBar/SearchBar';
 
 import SortingButton from '../../subComponents/SortingButton';
-import LoadingState from '../LoadingState/LoadingState';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
+import { DataGridLoadingOverlay } from './DataGridLoadingOverlay';
 /**
  * A generic wrapper around MUI DataGrid with built-in search, sorting, and pagination.
  *
@@ -57,6 +53,7 @@ export function DataGridWrapper<T extends { id: string | number }>(
   } = props;
   const { t: tCommon } = useTranslation('common');
   const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const [selectedSort, setSelectedSort] = useState<string | number>(() => {
     if (sortConfig?.defaultSortField && sortConfig?.defaultSortOrder) {
       return `${sortConfig.defaultSortField}_${sortConfig.defaultSortOrder}`;
@@ -69,16 +66,27 @@ export function DataGridWrapper<T extends { id: string | number }>(
     paginationConfig?.defaultPageSize ?? 10,
   );
 
+  // Debounce search term to improve performance
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [searchTerm]);
+
   const filtered = useMemo(() => {
-    if (!searchConfig?.enabled || !searchTerm) return rows;
+    if (!searchConfig?.enabled || !debouncedSearchTerm) return rows;
     return rows.filter((r: T) =>
       searchConfig.fields.some((f) =>
         String(r[f as keyof T] ?? '')
           .toLowerCase()
-          .includes(searchTerm.toLowerCase()),
+          .includes(debouncedSearchTerm.toLowerCase()),
       ),
     );
-  }, [rows, searchTerm, searchConfig]);
+  }, [rows, debouncedSearchTerm, searchConfig]);
 
   const sortModel = useMemo(() => {
     if (!selectedSort) return [];
@@ -133,18 +141,15 @@ export function DataGridWrapper<T extends { id: string | number }>(
         columns={[...columns, ...actionCol]}
         loading={loading}
         slots={{
-          loadingOverlay:
-            LoadingState as React.JSXElementConstructor<GridLoadingOverlayProps>,
-        }}
-        slotProps={{
-          loadingOverlay: {
-            isLoading: true,
-            variant: 'spinner',
-            size: 'lg',
-          } as LoadingOverlayPropsOverrides,
+          loadingOverlay: DataGridLoadingOverlay,
+          noRowsOverlay: () => (
+            <EmptyState
+              message={emptyStateMessage || tCommon('noResultsFound')}
+            />
+          ),
         }}
         sortModel={sortModel}
-        pagination={paginationConfig?.enabled ? true : undefined}
+        pagination={paginationConfig?.enabled == true ? true : undefined}
         paginationModel={{ page, pageSize }}
         onPaginationModelChange={({ page, pageSize }) => {
           setPage(page);
@@ -159,9 +164,6 @@ export function DataGridWrapper<T extends { id: string | number }>(
         <div role="alert" className={styles.errorMessage}>
           {error}
         </div>
-      )}
-      {!loading && !error && filtered.length === 0 && (
-        <output>{emptyStateMessage || tCommon('noResultsFound')}</output>
       )}
     </div>
   );

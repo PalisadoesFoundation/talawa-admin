@@ -251,7 +251,6 @@
     "rejectedSuccessfully": "Solicitud rechazada exitosamente",
     "noOrgErrorTitle": "Organizaciones no encontradas",
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
-    "newMembersWillAppearHere": "Los nuevos miembros aparecerán aquí",
     "profilePictureAlt": "Imagen de perfil de {{name}}",
     "placeholderAvatarAlt": "Avatar predeterminado",
     "newMembersWillAppearHere": "Los nuevos miembros aparecerán aquí"
@@ -521,7 +520,6 @@
     "publicEvent": "Es público",
     "isRegistrable": "Es registrable",
     "registerable": "Es registrable",
-
     "createEvent": "Crear evento",
     "enterFilter": "Introducir filtro",
     "enterName": "Introducir nombre",
@@ -1732,7 +1730,6 @@
     "title": "Campañas de recaudación de fondos",
     "searchByName": "Buscar por nombre...",
     "searchBy": "Buscar por",
-    "searchCampaigns": "Buscar campañas",
     "pledgers": "Prometedores",
     "pledger": "Prometedor",
     "campaigns": "Campañas",
