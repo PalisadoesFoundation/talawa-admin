@@ -2741,4 +2741,67 @@ describe('useEffect loadMoreUsers trigger', () => {
     // With hasNextPage false, pagination is complete and "End of results" is shown
     expect(screen.getByText(/End of results/i)).toBeInTheDocument();
   });
+
+  test('should handle user with null name gracefully', async () => {
+    const mockWithNullName = [
+      {
+        request: {
+          query: USER_LIST_FOR_ADMIN,
+          variables: {
+            first: 12,
+            after: null,
+            orgFirst: 32,
+            where: undefined,
+          },
+        },
+        result: {
+          data: {
+            allUsers: {
+              edges: [
+                {
+                  cursor: '1',
+                  node: {
+                    id: '1',
+                    name: null,
+                    emailAddress: 'test@example.com',
+                    role: 'regular',
+                    createdAt: new Date().toISOString(),
+                    city: '',
+                    state: '',
+                    countryCode: '',
+                    postalCode: '',
+                    avatarURL: '',
+                    orgsWhereUserIsBlocked: { edges: [] },
+                    organizationsWhereMember: { edges: [] },
+                  },
+                },
+              ],
+              pageInfo: {
+                startCursor: '1',
+                endCursor: '1',
+                hasNextPage: false,
+                hasPreviousPage: false,
+              },
+            },
+          },
+        },
+      },
+    ];
+
+    render(
+      <MockedProvider mocks={mockWithNullName} addTypename={false}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <Users />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('test@example.com')).toBeInTheDocument();
+    });
+  });
 });

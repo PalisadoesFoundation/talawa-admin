@@ -503,4 +503,36 @@ describe('UserTableRow', () => {
     // No assertion needed - just ensuring no errors occur
     expect(gridCell).toBeInTheDocument();
   });
+
+  it('handles table mode without row number', () => {
+    render(
+      <MockedProvider>
+        <table>
+          <tbody>
+            <UserTableRow user={user} isDataGrid={false} testIdPrefix="spec" />
+          </tbody>
+        </table>
+      </MockedProvider>,
+    );
+    expect(screen.queryByTestId('spec-no-u1')).not.toBeInTheDocument();
+    expect(screen.getByTestId('spec-tr-u1')).toBeInTheDocument();
+  });
+
+  it('handles table mode with joined date column', () => {
+    render(
+      <MockedProvider>
+        <table>
+          <tbody>
+            <UserTableRow
+              user={user}
+              isDataGrid={false}
+              showJoinedDate={true}
+              testIdPrefix="spec"
+            />
+          </tbody>
+        </table>
+      </MockedProvider>,
+    );
+    expect(screen.getByText('2024-01-15')).toBeInTheDocument();
+  });
 });
