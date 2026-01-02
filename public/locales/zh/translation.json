@@ -1,4 +1,6 @@
 {
+  "ends": "结束",
+  "occurrences": "次",
   "leaderboard": {
     "title": "排行榜",
     "searchByVolunteer": "按志愿者搜索",
@@ -530,7 +532,7 @@
     "never": "绝不",
     "on": "在",
     "after": "后",
-    "occurences": "事件",
+    "occurrences": "次",
     "monthlyOn": "每月开",
     "yearlyOn": "每年开",
     "yearlyRecurrenceDesc": "此事件将在每年的事件开始日期的同一天重复。",
@@ -559,6 +561,7 @@
     "actionItemDetails": "行动项详情",
     "actionItemCompleted": "行动项已完成",
     "assignee": "受托人",
+    "assigneeOrCategory": "受托人或类别",
     "assignedTo": "分配给",
     "assigner": "分配人",
     "assignmentDate": "分配日期",
@@ -725,7 +728,7 @@
     "never": "绝不",
     "on": "在",
     "after": "后",
-    "occurences": "事件",
+    "occurrences": "次",
     "location": "位置",
     "no": "否",
     "yes": "是",
@@ -1507,7 +1510,14 @@
     "day": "天",
     "week": "周",
     "month": "月",
-    "year": "年"
+    "year": "年",
+    "ends": "结束",
+    "occurrences": "次",
+    "never": "从不",
+    "on": "在",
+    "after": "之后",
+    "customRecurrence": "自定义重复",
+    "repeatsEvery": "重复周期"
   },
   "userEventCard": {
     "starts": "开始",
@@ -1721,6 +1731,7 @@
     "title": "筹款活动",
     "searchByName": "按名字搜索...",
     "searchBy": "按...搜索",
+    "searchCampaigns": "搜索活动",
     "pledgers": "承诺者",
     "pledger": "承诺者",
     "campaigns": "活动",
@@ -1744,7 +1755,8 @@
     "amountRaised": "已筹集金额"
   },
   "userPledges": {
-    "title": "我的承诺"
+    "title": "我的承诺",
+    "searchPledges": "搜索承诺"
   },
   "leaveOrganization": {
     "title": "离开组织"
@@ -1753,6 +1765,7 @@
     "toggleGroupAriaLabel": "志愿者视图选择器",
     "volunteers": "志愿者",
     "volunteer": "志愿者",
+    "volunteerName": "志愿者姓名",
     "volunteerGroups": "志愿者小组",
     "individuals": "个人",
     "groups": "小组",
@@ -1775,6 +1788,7 @@
     "deleteVolunteerGroupMsg": "您确定要删除此志愿者小组吗？",
     "leader": "领导",
     "group": "小组",
+    "groupOrLeader": "小组或领导",
     "createGroup": "创建小组",
     "updateGroup": "更新小组",
     "deleteGroup": "删除小组",
@@ -1798,7 +1812,10 @@
     "leastVolunteers": "最少的志愿者",
     "applyTo": "适用于",
     "entireSeries": "整个系列",
-    "thisEventOnly": "仅限本次活动"
+    "thisEventOnly": "仅限本次活动",
+    "volunteerAlt": "志愿者头像",
+    "groupTable": "小组表",
+    "volunteerActions": "志愿者操作"
   },
   "userVolunteer": {
     "title": "志愿服务",
@@ -1810,11 +1827,15 @@
     "actions": "行动项",
     "search": "搜索",
     "searchByName": "按名称搜索",
+    "startDate": "开始日期",
     "latestEndDate": "最晚结束日期",
     "earliestEndDate": "最早结束日期",
     "noEvents": "无即将举行的活动",
     "volunteer": "志愿者",
     "volunteered": "已志愿",
+    "volunteerName": "姓名",
+    "volunteerActions": "操作",
+    "volunteerAlt": "志愿者",
     "join": "加入",
     "joined": "已加入",
     "searchByEventName": "按活动标题搜索",
@@ -1842,6 +1863,7 @@
     "event": "活动",
     "received": "已收到",
     "location": "位置",
+    "titleOrLocation": "标题或位置",
     "recurrence": "重复",
     "endDate": "结束日期",
     "description": "描述",
@@ -1850,7 +1872,8 @@
     "srNo": "序号",
     "groupName": "小组名称",
     "noOfMembers": "成员数量",
-    "options": "选项"
+    "options": "选项",
+    "notSpecified": "未指定"
   },
   "pluginStore": {
     "title": "插件商店",

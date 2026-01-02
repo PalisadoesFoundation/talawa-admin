@@ -10472,6 +10472,57 @@ form {
   color: var(--orgSelector-no-results-color);
 }
 
+/* Organizations page styles */
+.organizationsContainer {
+  padding-top: 20px;
+}
+
+.organizationsContainerExpanded {
+  margin-left: 40px;
+}
+
+.organizationsContainerContracted {
+  margin-left: 20px;
+}
+
+.organizationsMainContainer {
+  overflow-x: hidden;
+}
+
+.organizationsFlexContainer {
+  flex: 1;
+}
+
+/* Groups page styles */
+.groupsViewButton {
+  min-width: 32px;
+}
+
+/* DataGrid styles */
+.dataGridRoot {
+  border-radius: 0.5rem;
+}
+
+.dataGridMain {
+  border-radius: 0.5rem;
+}
+
+.dataGridRow:hover {
+  background-color: transparent;
+}
+
+.dataGridRow.Mui-hovered {
+  background-color: transparent;
+}
+
+.dataGridCell:focus-within {
+  outline: none;
+}
+
+.dataGridColumnHeader:focus-within {
+  outline: none;
+}
+
 .divider {
   border: 2px solid var(--addButton-border);
   border-width: 2px;

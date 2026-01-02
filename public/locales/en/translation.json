@@ -1,4 +1,6 @@
 {
+  "ends": "Ends",
+  "occurrences": "Occurrences",
   "leaderboard": {
     "title": "Leaderboard",
     "searchByVolunteer": "Search By Volunteer",
@@ -528,7 +530,7 @@
     "never": "Never",
     "on": "On",
     "after": "After",
-    "occurences": "occurences",
+    "occurrences": "Occurrences",
     "monthlyOn": "Monthly On",
     "yearlyOn": "Yearly On",
     "yearlyRecurrenceDesc": "This event will repeat every year on the same date as the event start date.",
@@ -559,6 +561,7 @@
     "actionItemDetails": "Action Item Details",
     "actionItemCompleted": "Action Item Completed",
     "assignee": "Assignee",
+    "assigneeOrCategory": "Assignee or Category",
     "assignedTo": "Assigned To",
     "assignTo": "Assign To",
     "volunteer": "Volunteer",
@@ -724,7 +727,7 @@
     "never": "Never",
     "on": "On",
     "after": "After",
-    "occurences": "occurences",
+    "occurrences": "Occurrences",
     "startTime": "startTime",
     "endTime": "endTime",
     "location": "location",
@@ -1507,7 +1510,14 @@
     "day": "Day",
     "week": "Week",
     "month": "Month",
-    "year": "Year"
+    "year": "Year",
+    "ends": "Ends",
+    "occurrences": "Occurrences",
+    "never": "Never",
+    "on": "On",
+    "after": "After",
+    "customRecurrence": "Custom Recurrence",
+    "repeatsEvery": "Repeats Every"
   },
   "userEventCard": {
     "starts": "Starts",
@@ -1741,10 +1751,12 @@
     "noPledges": "No Pledges Found",
     "noCampaigns": "No Campaigns Found",
     "raised": "Raised",
-    "amountRaised": "Amount Raised"
+    "amountRaised": "Amount Raised",
+    "searchCampaigns": "Search Campaigns"
   },
   "userPledges": {
-    "title": "My Pledges"
+    "title": "My Pledges",
+    "searchPledges": "Search Pledges"
   },
   "leaveOrganization": {
     "title": "Leave Organization"
@@ -1753,6 +1765,7 @@
     "toggleGroupAriaLabel": "Volunteer view selector",
     "volunteers": "Volunteers",
     "volunteer": "Volunteer",
+    "volunteerName": "Volunteer Name",
     "volunteerGroups": "Volunteer Groups",
     "individuals": "Individuals",
     "groups": "Groups",
@@ -1775,6 +1788,7 @@
     "deleteVolunteerGroupMsg": "Are you sure you want to delete this Volunteer Group?",
     "leader": "Leader",
     "group": "Group",
+    "groupOrLeader": "Group or Leader",
     "createGroup": "Create Group",
     "updateGroup": "Update Group",
     "deleteGroup": "Delete Group",
@@ -1798,7 +1812,10 @@
     "leastVolunteers": "Least Volunteers",
     "applyTo": "Apply To",
     "entireSeries": "Entire Series",
-    "thisEventOnly": "This Event Only"
+    "thisEventOnly": "This Event Only",
+    "volunteerAlt": "Volunteer profile picture",
+    "groupTable": "Group Table",
+    "volunteerActions": "Volunteer Actions"
   },
   "userVolunteer": {
     "title": "Volunteership",
@@ -1810,11 +1827,15 @@
     "actions": "Action Items",
     "search": "Search",
     "searchByName": "Search by Name",
+    "startDate": "Start Date",
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
     "noEvents": "No Upcoming Events",
     "volunteer": "Volunteer",
     "volunteered": "Volunteered",
+    "volunteerName": "Name",
+    "volunteerActions": "Actions",
+    "volunteerAlt": "volunteer",
     "join": "Join",
     "joined": "Joined",
     "pending": "Pending",
@@ -1842,6 +1863,7 @@
     "event": "Event",
     "received": "Received",
     "location": "Location",
+    "titleOrLocation": "Title or Location",
     "recurrence": "Recurrence",
     "endDate": "End Date",
     "description": "Description",
@@ -1850,7 +1872,8 @@
     "srNo": "Sr. No.",
     "groupName": "Group Name",
     "noOfMembers": "No. of Members",
-    "options": "Options"
+    "options": "Options",
+    "notSpecified": "Not Specified"
   },
   "pluginStore": {
     "title": "Plugin Store",
