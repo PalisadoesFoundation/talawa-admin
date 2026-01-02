@@ -1207,7 +1207,8 @@
     "name": "Nombre",
     "email": "Correo Electrónico",
     "role": "Rol",
-    "loading": "Cargando..."
+    "loading": "Cargando...",
+    "emailNotAvailable": "Correo electrónico no disponible"
   },
   "userRegister": {
     "register": "Registro",
