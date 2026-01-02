@@ -3320,7 +3320,7 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith({
-          key: 'successfulUpdation',
+          key: 'eventActionItems.successfulUpdation',
           namespace: 'translation',
         });
         expect(mockRefetch).toHaveBeenCalledTimes(1);

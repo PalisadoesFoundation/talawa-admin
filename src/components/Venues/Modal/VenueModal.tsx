@@ -107,7 +107,7 @@ const VenueModal = ({
     // Validate name
     if (formState.name.trim().length === 0) {
       NotificationToast.error({
-        key: 'venueTitleError',
+        key: 'organizationVenues.venueTitleError',
         namespace: 'translation',
       });
       return;
@@ -119,7 +119,7 @@ const VenueModal = ({
       const capacityNum = parseInt(formState.capacity, 10);
       if (Number.isNaN(capacityNum) || capacityNum <= 0) {
         NotificationToast.error({
-          key: 'venueCapacityError',
+          key: 'organizationVenues.venueCapacityError',
           namespace: 'translation',
         });
         return;
@@ -156,7 +156,7 @@ const VenueModal = ({
     const capacityNum = parseInt(formState.capacity, 10);
     if (Number.isNaN(capacityNum) || capacityNum <= 0) {
       NotificationToast.error({
-        key: 'venueCapacityError',
+        key: 'organizationVenues.venueCapacityError',
         namespace: 'translation',
       });
       return;
@@ -202,7 +202,7 @@ const VenueModal = ({
 
         if (result?.data?.createVenue) {
           NotificationToast.success({
-            key: 'venueCreated',
+            key: 'organizationVenuesNotification.venueCreated',
             namespace: 'translation',
           });
           refetchVenues();

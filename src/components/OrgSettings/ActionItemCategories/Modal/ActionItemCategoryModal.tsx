@@ -145,7 +145,7 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
       refetchCategories();
       hide();
       NotificationToast.success({
-        key: 'successfulUpdation',
+        key: 'eventActionItems.successfulUpdation',
         namespace: 'translation',
       });
     } catch {

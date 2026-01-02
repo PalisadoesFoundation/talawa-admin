@@ -324,7 +324,7 @@ describe('Testing Action Item Category Modal', () => {
         expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[1].hide).toHaveBeenCalled();
         expect(NotificationToast.success).toHaveBeenCalledWith({
-          key: 'successfulUpdation',
+          key: 'eventActionItems.successfulUpdation',
           namespace: 'translation',
         });
       });
@@ -344,7 +344,7 @@ describe('Testing Action Item Category Modal', () => {
         expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[1].hide).toHaveBeenCalled();
         expect(NotificationToast.success).toHaveBeenCalledWith({
-          key: 'successfulUpdation',
+          key: 'eventActionItems.successfulUpdation',
           namespace: 'translation',
         });
       });
@@ -362,7 +362,7 @@ describe('Testing Action Item Category Modal', () => {
         expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[1].hide).toHaveBeenCalled();
         expect(NotificationToast.success).toHaveBeenCalledWith({
-          key: 'successfulUpdation',
+          key: 'eventActionItems.successfulUpdation',
           namespace: 'translation',
         });
       });
@@ -380,7 +380,7 @@ describe('Testing Action Item Category Modal', () => {
         expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[1].hide).toHaveBeenCalled();
         expect(NotificationToast.success).toHaveBeenCalledWith({
-          key: 'successfulUpdation',
+          key: 'eventActionItems.successfulUpdation',
           namespace: 'translation',
         });
       });
@@ -404,7 +404,7 @@ describe('Testing Action Item Category Modal', () => {
         expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[1].hide).toHaveBeenCalled();
         expect(NotificationToast.success).toHaveBeenCalledWith({
-          key: 'successfulUpdation',
+          key: 'eventActionItems.successfulUpdation',
           namespace: 'translation',
         });
       });
@@ -424,7 +424,7 @@ describe('Testing Action Item Category Modal', () => {
         expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[1].hide).toHaveBeenCalled();
         expect(NotificationToast.success).toHaveBeenCalledWith({
-          key: 'successfulUpdation',
+          key: 'eventActionItems.successfulUpdation',
           namespace: 'translation',
         });
       });
@@ -446,7 +446,7 @@ describe('Testing Action Item Category Modal', () => {
         expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[1].hide).toHaveBeenCalled();
         expect(NotificationToast.success).toHaveBeenCalledWith({
-          key: 'successfulUpdation',
+          key: 'eventActionItems.successfulUpdation',
           namespace: 'translation',
         });
       });
@@ -464,7 +464,7 @@ describe('Testing Action Item Category Modal', () => {
         expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[1].hide).toHaveBeenCalled();
         expect(NotificationToast.success).toHaveBeenCalledWith({
-          key: 'successfulUpdation',
+          key: 'eventActionItems.successfulUpdation',
           namespace: 'translation',
         });
       });

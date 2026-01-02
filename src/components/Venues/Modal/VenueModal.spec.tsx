@@ -330,7 +330,7 @@ describe('VenueModal', () => {
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith({
-        key: 'venueCreated',
+        key: 'organizationVenuesNotification.venueCreated',
         namespace: 'translation',
       });
     });
@@ -480,7 +480,7 @@ describe('Form Fields', () => {
     // Verify success toast
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith({
-        key: 'venueCreated',
+        key: 'organizationVenuesNotification.venueCreated',
         namespace: 'translation',
       });
     });
@@ -536,7 +536,7 @@ describe('Form Fields', () => {
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith({
-        key: 'venueCreated',
+        key: 'organizationVenuesNotification.venueCreated',
         namespace: 'translation',
       });
     });
@@ -741,7 +741,7 @@ describe('Validation', () => {
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith({
-        key: 'venueTitleError',
+        key: 'organizationVenues.venueTitleError',
         namespace: 'translation',
       });
     });
@@ -763,7 +763,7 @@ describe('Validation', () => {
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith({
-        key: 'venueCapacityError',
+        key: 'organizationVenues.venueCapacityError',
         namespace: 'translation',
       });
     });
@@ -786,7 +786,7 @@ describe('Validation', () => {
 
     await waitFor(() => {
       expect(NotificationToast.error).toHaveBeenCalledWith({
-        key: 'venueCapacityError',
+        key: 'organizationVenues.venueCapacityError',
         namespace: 'translation',
       });
     });
@@ -881,7 +881,7 @@ describe('Validation', () => {
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith({
-          key: 'venueCreated',
+          key: 'organizationVenuesNotification.venueCreated',
           namespace: 'translation',
         });
       });
@@ -1418,7 +1418,7 @@ describe('Validation', () => {
 
             await waitFor(() => {
               expect(NotificationToast.error).toHaveBeenCalledWith({
-                key: 'venueTitleError',
+                key: 'organizationVenues.venueTitleError',
                 namespace: 'translation',
               });
             });
@@ -1456,7 +1456,7 @@ describe('Validation', () => {
 
             await waitFor(() => {
               expect(NotificationToast.success).toHaveBeenCalledWith({
-                key: 'venueCreated',
+                key: 'organizationVenuesNotification.venueCreated',
                 namespace: 'translation',
               });
             });
@@ -1498,7 +1498,7 @@ describe('Validation', () => {
 
             await waitFor(() => {
               expect(NotificationToast.success).toHaveBeenCalledWith({
-                key: 'venueCreated',
+                key: 'organizationVenuesNotification.venueCreated',
                 namespace: 'translation',
               });
             });
@@ -1573,7 +1573,7 @@ describe('Validation', () => {
 
           await waitFor(() => {
             expect(NotificationToast.error).toHaveBeenCalledWith({
-              key: 'venueTitleError',
+              key: 'organizationVenues.venueTitleError',
               namespace: 'translation',
             });
           });
@@ -1936,7 +1936,7 @@ describe('Validation', () => {
 
           await waitFor(() => {
             expect(NotificationToast.success).toHaveBeenCalledWith({
-              key: 'venueCreated',
+              key: 'organizationVenuesNotification.venueCreated',
               namespace: 'translation',
             });
           });
@@ -2031,7 +2031,7 @@ describe('Validation', () => {
 
           await waitFor(() => {
             expect(NotificationToast.error).toHaveBeenCalledWith({
-              key: 'venueCapacityError',
+              key: 'organizationVenues.venueCapacityError',
               namespace: 'translation',
             });
           });
@@ -2058,7 +2058,7 @@ describe('Validation', () => {
 
           await waitFor(() => {
             expect(NotificationToast.error).toHaveBeenCalledWith({
-              key: 'venueCapacityError',
+              key: 'organizationVenues.venueCapacityError',
               namespace: 'translation',
             });
           });
@@ -2100,7 +2100,7 @@ describe('Validation', () => {
 
           await waitFor(() => {
             expect(NotificationToast.success).toHaveBeenCalledWith({
-              key: 'venueCreated',
+              key: 'organizationVenuesNotification.venueCreated',
               namespace: 'translation',
             });
           });
@@ -2127,7 +2127,7 @@ describe('Validation', () => {
 
           await waitFor(() => {
             expect(NotificationToast.error).toHaveBeenCalledWith({
-              key: 'venueCapacityError',
+              key: 'organizationVenues.venueCapacityError',
               namespace: 'translation',
             });
           });
@@ -2503,7 +2503,7 @@ describe('Validation', () => {
 
           // Verify error toast is shown
           expect(NotificationToast.error).toHaveBeenCalledWith({
-            key: 'venueCapacityError',
+            key: 'organizationVenues.venueCapacityError',
             namespace: 'translation',
           });
         });
@@ -2759,7 +2759,7 @@ describe('Validation', () => {
 
           await waitFor(() => {
             expect(NotificationToast.success).toHaveBeenCalledWith({
-              key: 'venueCreated',
+              key: 'organizationVenuesNotification.venueCreated',
               namespace: 'translation',
             });
           });
@@ -2993,7 +2993,7 @@ describe('Validation', () => {
 
     await waitFor(() => {
       expect(NotificationToast.success).toHaveBeenCalledWith({
-        key: 'venueCreated',
+        key: 'organizationVenuesNotification.venueCreated',
         namespace: 'translation',
       });
     });

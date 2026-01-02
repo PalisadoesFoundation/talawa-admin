@@ -284,7 +284,7 @@ const ItemModal: FC<IItemModalProps> = ({
       runRefetches();
       hide();
       NotificationToast.success({
-        key: 'successfulUpdation',
+        key: 'eventActionItems.successfulUpdation',
         namespace: 'translation',
       });
     } catch {
@@ -329,7 +329,7 @@ const ItemModal: FC<IItemModalProps> = ({
       runRefetches();
       hide();
       NotificationToast.success({
-        key: 'successfulUpdation',
+        key: 'eventActionItems.successfulUpdation',
         namespace: 'translation',
       });
     } catch {

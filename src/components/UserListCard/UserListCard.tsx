@@ -80,8 +80,7 @@ function UserListCard({ id }: InterfaceUserListCardProps): JSX.Element {
         variables: { userid: id, orgid: currentUrl },
       });
 
-      // Only proceed if mutation succeeded with valid createAdmin result
-if (result.data?.createAdmin) {
+      if (result.data?.createAdmin) {
   NotificationToast.success({
     key: 'addedAsAdmin',
     namespace: 'translation',
