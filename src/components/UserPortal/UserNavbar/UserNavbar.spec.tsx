@@ -371,4 +371,64 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     consoleSpy.mockRestore();
   });
+
+  it('handles logout GraphQL error and still clears local storage', async () => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const { mockClearAllItems } = createMock();
+
+    const graphQLErrorMocks = [
+      {
+        request: { query: LOGOUT_MUTATION },
+        result: {
+          errors: [{ message: 'Logout failed' }],
+        },
+      },
+      {
+        request: {
+          query: GET_USER_NOTIFICATIONS,
+          variables: { userId: '123', input: { first: 5, skip: 0 } },
+        },
+        result: {
+          data: {
+            user: {
+              __typename: 'User',
+              notifications: [],
+            },
+          },
+        },
+      },
+    ];
+
+    const errorLink = new StaticMockLink(graphQLErrorMocks, true);
+
+    render(
+      <MockedProvider link={errorLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserNavbar />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await userEvent.click(screen.getByTestId('logoutDropdown'));
+    await userEvent.click(screen.getByTestId('logoutBtn'));
+
+    await wait();
+
+    // Verify error was logged
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'Error during logout:',
+      expect.any(Error),
+    );
+    // Verify cleanup still happens even on error
+    expect(mockClearAllItems).toHaveBeenCalled();
+    expect(window.location.pathname).toBe('/');
+
+    consoleSpy.mockRestore();
+  });
 });

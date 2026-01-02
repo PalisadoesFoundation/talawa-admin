@@ -23,8 +23,15 @@ const headers = {
 ```javascript
 // Safe: Extract to variable first
 const token = localStorage.getItem('token');
+
+// Option 1: With null check
 const headers = {
   authorization: token ? `Bearer ${token}` : '',
+};
+
+// Option 2: With fallback
+const headers = {
+  authorization: `Bearer ${token || ''}`,
 };
 ```
 
