@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.9.2">
 <title data-rh="true">EmptyState Migration Tracking | Talawa-Admin Documentation</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://docs-admin.talawa.io/docs/developer-resources/empty-state-migration"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="EmptyState Migration Tracking | Talawa-Admin Documentation"><meta data-rh="true" name="description" content="This document tracks the migration of legacy empty-state implementations"><meta data-rh="true" property="og:description" content="This document tracks the migration of legacy empty-state implementations"><link data-rh="true" rel="icon" href="/img/icons/favicon_palisadoes.ico"><link data-rh="true" rel="canonical" href="https://docs-admin.talawa.io/docs/developer-resources/empty-state-migration"><link data-rh="true" rel="alternate" href="https://docs-admin.talawa.io/docs/developer-resources/empty-state-migration" hreflang="en"><link data-rh="true" rel="alternate" href="https://docs-admin.talawa.io/docs/developer-resources/empty-state-migration" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"EmptyState Migration Tracking","item":"https://docs-admin.talawa.io/docs/developer-resources/empty-state-migration"}]}</script><link rel="stylesheet" href="https://docs.talawa.io/css/styles-latest.css"><link rel="stylesheet" href="/assets/css/styles.36e011b5.css">
-<script src="/assets/js/runtime~main.7a4842ac.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.2ffa9883.js" defer="defer"></script>
 <script src="/assets/js/main.c9b55ef4.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -24,28 +24,164 @@
 <h2 class="anchor anchorTargetStickyNavbar_g03t" id="screens-migrated-to-emptystate">Screens Migrated to <code>EmptyState</code><a href="#screens-migrated-to-emptystate" class="hash-link" aria-label="Direct link to screens-migrated-to-emptystate" title="Direct link to screens-migrated-to-emptystate" translate="no">​</a></h2>
 <p>The following screens have been successfully migrated to use the shared
 <code>EmptyState</code> component:</p>
-<h3 class="anchor anchorTargetStickyNavbar_g03t" id="admin-screens">Admin Screens<a href="#admin-screens" class="hash-link" aria-label="Direct link to Admin Screens" title="Direct link to Admin Screens" translate="no">​</a></h3>
+<h3 class="anchor anchorTargetStickyNavbar_g03t" id="admin-portal-screens-8-screens">Admin Portal Screens (8 screens)<a href="#admin-portal-screens-8-screens" class="hash-link" aria-label="Direct link to Admin Portal Screens (8 screens)" title="Direct link to Admin Portal Screens (8 screens)" translate="no">​</a></h3>
+<h4 class="anchor anchorTargetStickyNavbar_g03t" id="core-management-screens">Core Management Screens<a href="#core-management-screens" class="hash-link" aria-label="Direct link to Core Management Screens" title="Direct link to Core Management Screens" translate="no">​</a></h4>
 <ul>
 <li class="">
-<p><strong>Requests</strong></p>
-<ul>
-<li class="">No organizations</li>
-<li class="">No membership requests</li>
-<li class="">No search results</li>
-</ul>
-</li>
-<li class="">
-<p><strong>OrgList</strong></p>
-<ul>
-<li class="">No organizations available</li>
-<li class="">No search results (admin / non-admin aware)</li>
-</ul>
-</li>
-<li class="">
-<p><strong>Users</strong></p>
+<p><strong>Users</strong> (<code>src/screens/AdminPortal/Users/Users.tsx</code>)</p>
 <ul>
 <li class="">Empty user list</li>
-<li class="">Empty search results</li>
+<li class="">Icon: Material-UI component (dynamic)</li>
+<li class="">Translations: Uses <code>common</code> namespace</li>
+<li class="">Status: Implemented &amp; Verified</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Requests</strong> (<code>src/screens/AdminPortal/Requests/Requests.tsx</code>)</p>
+<ul>
+<li class="">No membership requests</li>
+<li class="">Icon: Material-UI component (dynamic)</li>
+<li class="">Translations: Uses <code>common</code> namespace</li>
+<li class="">Status: Implemented &amp; Verified</li>
+</ul>
+</li>
+<li class="">
+<p><strong>OrgList</strong> (<code>src/screens/AdminPortal/OrgList/OrgList.tsx</code>)</p>
+<ul>
+<li class="">No organizations available</li>
+<li class="">Icon: Material-UI component (dynamic)</li>
+<li class="">Translations: Uses <code>common</code> namespace</li>
+<li class="">Notes: Admin / non-admin aware messaging</li>
+<li class="">Status: Implemented &amp; Verified</li>
+</ul>
+</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_g03t" id="fund--campaign-management">Fund &amp; Campaign Management<a href="#fund--campaign-management" class="hash-link" aria-label="Direct link to Fund &amp; Campaign Management" title="Direct link to Fund &amp; Campaign Management" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><strong>Organization Fund Campaigns</strong> (<code>src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaigns.tsx</code>)</p>
+<ul>
+<li class=""><strong>Multiple EmptyStates (2):</strong>
+<ul>
+<li class="">No campaigns found<!-- -->
+<ul>
+<li class="">Icon: <code>Campaign</code> (Material-UI)</li>
+<li class="">Translation: <code>orgFundCampaign.noCampaignsFound</code></li>
+<li class="">Test ID: <code>campaigns-empty</code></li>
+</ul>
+</li>
+<li class="">No search results<!-- -->
+<ul>
+<li class="">Icon: <code>Search</code> (Material-UI)</li>
+<li class="">Translation: <code>noResultsFound</code> + dynamic query</li>
+<li class="">Test ID: <code>campaigns-search-empty</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="">Status: Implemented &amp; Verified</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Organization Funds</strong> (<code>src/screens/AdminPortal/OrganizationFunds/OrganizationFunds.tsx</code>)</p>
+<ul>
+<li class=""><strong>Multiple EmptyStates (2):</strong>
+<ul>
+<li class="">No funds found<!-- -->
+<ul>
+<li class="">Icon: <code>AccountBalanceWallet</code> (Material-UI)</li>
+<li class="">Translation: <code>funds.noFundsFound</code></li>
+<li class="">Test ID: <code>funds-empty</code></li>
+</ul>
+</li>
+<li class="">No search results<!-- -->
+<ul>
+<li class="">Icon: <code>Search</code> (Material-UI)</li>
+<li class="">Translation: <code>noResultsFound</code> + dynamic query</li>
+<li class="">Test ID: <code>funds-search-empty</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="">Status: Implemented &amp; Verified</li>
+</ul>
+</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_g03t" id="people--organization-management">People &amp; Organization Management<a href="#people--organization-management" class="hash-link" aria-label="Direct link to People &amp; Organization Management" title="Direct link to People &amp; Organization Management" translate="no">​</a></h4>
+<ul>
+<li class=""><strong>Organization People</strong> (<code>src/screens/AdminPortal/OrganizationPeople/OrganizationPeople.tsx</code>)<!-- -->
+<ul>
+<li class="">Organization members list</li>
+<li class="">Icon: Material-UI component (dynamic)</li>
+<li class="">Status: Implemented &amp; Verified</li>
+</ul>
+</li>
+</ul>
+<h4 class="anchor anchorTargetStickyNavbar_g03t" id="plugin--notification-management">Plugin &amp; Notification Management<a href="#plugin--notification-management" class="hash-link" aria-label="Direct link to Plugin &amp; Notification Management" title="Direct link to Plugin &amp; Notification Management" translate="no">​</a></h4>
+<ul>
+<li class="">
+<p><strong>Plugin Store</strong> (<code>src/screens/AdminPortal/PluginStore/components/PluginList.tsx</code>)</p>
+<ul>
+<li class="">No plugins available/installed</li>
+<li class="">Icon: <code>ExtensionOutlined</code> (Material-UI)</li>
+<li class="">Translations: <code>pluginStore</code> namespace</li>
+<li class="">Test ID: <code>plugins-empty-state</code></li>
+<li class="">Notes: Dynamic message based on filter (all/installed/not-installed)</li>
+<li class="">Status: Implemented &amp; Verified</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Notifications</strong> (<code>src/screens/AdminPortal/Notification/Notification.tsx</code>)</p>
+<ul>
+<li class="">All notifications read/caught up</li>
+<li class="">Icon: <code>NotificationsNone</code> (Material-UI)</li>
+<li class="">Translation: <code>notifications.allCaughtUp</code></li>
+<li class="">Test ID: <code>notifications-empty-state</code></li>
+<li class="">Status: Implemented &amp; Verified</li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_g03t" id="user-portal-screens">User Portal Screens<a href="#user-portal-screens" class="hash-link" aria-label="Direct link to User Portal Screens" title="Direct link to User Portal Screens" translate="no">​</a></h3>
+<ul>
+<li class="">
+<p><strong>Campaigns</strong> (<code>src/screens/UserPortal/Campaigns/Campaigns.tsx</code>)</p>
+<ul>
+<li class="">No campaigns found</li>
+<li class="">Icon: <code>Campaign</code></li>
+<li class="">EmptyState provides view-only state (no create action - campaigns are admin-only)</li>
+<li class="">Translations: <code>userCampaigns.noCampaigns</code>, <code>userCampaigns.createFirstCampaign</code></li>
+<li class="">Test ID: <code>campaigns-empty-state</code></li>
+</ul>
+</li>
+<li class="">
+<p><strong>Upcoming Events</strong> (<code>src/screens/UserPortal/Volunteer/UpcomingEvents/UpcomingEvents.tsx</code>)</p>
+<ul>
+<li class="">No upcoming events</li>
+<li class="">Icon: <code>Event</code></li>
+<li class="">Translations: <code>userVolunteer.noEvents</code></li>
+<li class="">Test ID: <code>events-empty-state</code></li>
+<li class="">All hardcoded text replaced with translations</li>
+</ul>
+</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_g03t" id="event-volunteer-screens">Event Volunteer Screens<a href="#event-volunteer-screens" class="hash-link" aria-label="Direct link to Event Volunteer Screens" title="Direct link to Event Volunteer Screens" translate="no">​</a></h3>
+<ul>
+<li class="">
+<p><strong>Volunteers</strong> (<code>src/screens/EventVolunteers/Volunteers/Volunteers.tsx</code>)</p>
+<ul>
+<li class="">No volunteers for event</li>
+<li class="">Icon: <code>VolunteerActivism</code></li>
+<li class="">Translations: <code>eventVolunteers.noVolunteers</code></li>
+<li class="">Test ID: <code>volunteers-empty-state</code></li>
+</ul>
+</li>
+<li class="">
+<p><strong>Volunteer Groups</strong> (<code>src/screens/EventVolunteers/VolunteerGroups/VolunteerGroups.tsx</code>)</p>
+<ul>
+<li class="">No volunteer groups for event</li>
+<li class="">Icon: <code>Groups</code></li>
+<li class="">Translations: <code>eventVolunteers.noVolunteerGroups</code></li>
+<li class="">Test ID: <code>volunteerGroups-empty-state</code></li>
 </ul>
 </li>
 </ul>
@@ -53,7 +189,7 @@
 <h2 class="anchor anchorTargetStickyNavbar_g03t" id="screens-not-migrated-with-reasons">Screens Not Migrated (With Reasons)<a href="#screens-not-migrated-with-reasons" class="hash-link" aria-label="Direct link to Screens Not Migrated (With Reasons)" title="Direct link to Screens Not Migrated (With Reasons)" translate="no">​</a></h2>
 <p>The following screens still use legacy patterns and were intentionally
 left unchanged:</p>
-<table><thead><tr><th>Screen</th><th>Reason</th></tr></thead><tbody><tr><td>src/screens/UserPortal/Campaigns</td><td>Will be implemented through Issue #5126</td></tr><tr><td>src/screens/BlockUser</td><td>Will be implemented through Issue #5126</td></tr></tbody></table>
+<table><thead><tr><th>Screen</th><th>Reason</th></tr></thead><tbody><tr><td></td><td></td></tr><tr><td></td><td></td></tr></tbody></table>
 <blockquote>
 <p>Note: Any future exclusions should be documented here with rationale.</p>
 </blockquote>
@@ -109,6 +245,6 @@ left unchanged:</p>
 <ul>
 <li class=""><strong>Parent Issue:</strong> Phase 1: Create EmptyState Migration (#5087)</li>
 <li class=""><strong>Component Docs:</strong> Reusable Components → EmptyState</li>
-</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_t3wW"><a href="https://github.com/PalisadoesFoundation/talawa-admin/edit/develop/docs/docs/docs/developer-resources/empty-state-migration.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_K08S" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_koZS"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/developer-resources/reusable-components"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Reusable Components</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/developer-resources/design-token-system"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Design Token System</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_K1hx thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#screens-migrated-to-emptystate" class="table-of-contents__link toc-highlight">Screens Migrated to <code>EmptyState</code></a><ul><li><a href="#admin-screens" class="table-of-contents__link toc-highlight">Admin Screens</a></li></ul></li><li><a href="#screens-not-migrated-with-reasons" class="table-of-contents__link toc-highlight">Screens Not Migrated (With Reasons)</a></li><li><a href="#edge-cases-discovered" class="table-of-contents__link toc-highlight">Edge Cases Discovered</a></li><li><a href="#guidance-for-future-emptystate-extensions" class="table-of-contents__link toc-highlight">Guidance for Future EmptyState Extensions</a></li><li><a href="#related-references" class="table-of-contents__link toc-highlight">Related References</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://community.talawa.io/" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__news">Forums</a></li><li class="footer__item"><a href="https://www.palisadoes.org/news/" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__news">News</a></li><li class="footer__item"><a href="https://www.palisadoes.org/contact/" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__contact">Contact Us</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Social Media</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://twitter.com/palisadoesorg?lang=en" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__twitter"> Twitter</a></li><li class="footer__item"><a href="https://www.facebook.com/palisadoesproject/" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__facebook"> Facebook</a></li><li class="footer__item"><a href="https://www.instagram.com/palisadoes/?hl=en" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__instagram"> Instagram</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Development</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/PalisadoesFoundation" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__github"> GitHub</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 The Palisadoes Foundation, LLC. Built with Docusaurus.</div></div></div></footer></div>
+</ul></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_t3wW"><a href="https://github.com/PalisadoesFoundation/talawa-admin/edit/develop/docs/docs/docs/developer-resources/empty-state-migration.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_K08S" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_koZS"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/developer-resources/reusable-components"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Reusable Components</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/developer-resources/design-token-system"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Design Token System</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_K1hx thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#screens-migrated-to-emptystate" class="table-of-contents__link toc-highlight">Screens Migrated to <code>EmptyState</code></a><ul><li><a href="#admin-portal-screens-8-screens" class="table-of-contents__link toc-highlight">Admin Portal Screens (8 screens)</a></li><li><a href="#user-portal-screens" class="table-of-contents__link toc-highlight">User Portal Screens</a></li><li><a href="#event-volunteer-screens" class="table-of-contents__link toc-highlight">Event Volunteer Screens</a></li></ul></li><li><a href="#screens-not-migrated-with-reasons" class="table-of-contents__link toc-highlight">Screens Not Migrated (With Reasons)</a></li><li><a href="#edge-cases-discovered" class="table-of-contents__link toc-highlight">Edge Cases Discovered</a></li><li><a href="#guidance-for-future-emptystate-extensions" class="table-of-contents__link toc-highlight">Guidance for Future EmptyState Extensions</a></li><li><a href="#related-references" class="table-of-contents__link toc-highlight">Related References</a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="row footer__links"><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Community</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://community.talawa.io/" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__news">Forums</a></li><li class="footer__item"><a href="https://www.palisadoes.org/news/" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__news">News</a></li><li class="footer__item"><a href="https://www.palisadoes.org/contact/" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__contact">Contact Us</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Social Media</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://twitter.com/palisadoesorg?lang=en" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__twitter"> Twitter</a></li><li class="footer__item"><a href="https://www.facebook.com/palisadoesproject/" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__facebook"> Facebook</a></li><li class="footer__item"><a href="https://www.instagram.com/palisadoes/?hl=en" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__instagram"> Instagram</a></li></ul></div><div class="theme-layout-footer-column col footer__col"><div class="footer__title">Development</div><ul class="footer__items clean-list"><li class="footer__item"><a href="https://github.com/PalisadoesFoundation" target="_blank" rel="noopener noreferrer" class="footer__link-item footer__icon footer__github"> GitHub</a></li></ul></div></div><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 The Palisadoes Foundation, LLC. Built with Docusaurus.</div></div></div></footer></div>
 </body>
 </html>
