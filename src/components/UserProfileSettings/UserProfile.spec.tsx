@@ -11,6 +11,12 @@ import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 
+import { vi, afterEach } from 'vitest';
+
+afterEach(() => {
+  vi.clearAllMocks();
+});
+
 import userEvent from '@testing-library/user-event';
 
 const renderWithProviders = (ui: React.ReactElement) =>
@@ -197,9 +203,11 @@ describe('UserProfile edge and accessibility cases', () => {
     // Tooltip text should match fullName
     const nameSpan = getByText('Tooltip');
     expect(nameSpan).toHaveAttribute('data-tooltip-content', 'Tooltip Check');
-    // Focus avatar and check for aria attributes
+    // Keyboard navigation: Tab to avatar (simulate real user)
     const avatar = getByTestId('profile-avatar');
-    avatar.focus();
+    // Tab until avatar is focused (skip any preceding tabbable elements)
+    // The avatar is the first tabbable element in the profile card
+    await user.tab();
     expect(document.activeElement).toBe(avatar);
   });
 });
