@@ -1,10 +1,15 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import i18n from './i18n';
 
 describe('i18n Configuration', () => {
   beforeEach(async () => {
     // Reset i18n instance before each test
     await i18n.init();
+  });
+
+  afterEach(() => {
+    // Clear all mocks to ensure test isolation
+    vi.clearAllMocks();
   });
 
   it('should have auth namespace as default', () => {
