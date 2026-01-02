@@ -1,3 +1,50 @@
+## Pagination
+
+The DataTable supports both client-side and server-side pagination for consistent UX across screens.
+
+### Client-side Pagination
+
+Use for small datasets. Data is sliced in memory.
+
+```tsx
+import { DataTable } from 'src/shared-components/DataTable/DataTable';
+
+<DataTable<User>
+  data={users}
+  columns={[nameCol, emailCol]}
+  rowKey="id"
+  paginationMode="client"
+  pageSize={10}
+/>;
+```
+
+### Server-side Pagination (GraphQL cursor)
+
+Use for large datasets. Relies on GraphQL-style `pageInfo` and `onLoadMore`.
+
+```tsx
+<DataTable<User>
+  data={rows}
+  columns={[nameCol]}
+  rowKey="id"
+  paginationMode="server"
+  pageInfo={pageInfo}
+  loadingMore={loadingMore}
+  onLoadMore={() => fetchMore({ variables: { after: pageInfo?.endCursor } })}
+/>;
+```
+
+### Accessibility notes
+
+- Pagination controls use `aria-label` and `aria-live` for screen reader support.
+- Disabled states are set for prev/next buttons on first/last page.
+- The "Load more" button in server mode uses `aria-busy` and disables while loading.
+
+:::note Trade-offs
+- Client mode: simple and fast for small datasets; slices in memory.
+- Server mode: required for large lists; relies on pageInfo and onLoadMore.
+:::
+
 ---
 id: tablefix-tables
 title: Data Tables

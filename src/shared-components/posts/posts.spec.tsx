@@ -478,7 +478,7 @@ const pinnedPostsErrorMock: MockedResponse = {
 const renderComponent = (mocks: MockedResponse[]): RenderResult =>
   render(
     <I18nextProvider i18n={i18nForTest}>
-      <MockedProvider mocks={mocks} addTypename={false}>
+      <MockedProvider mocks={mocks}>
         <MemoryRouter initialEntries={['/orgpost/123']}>
           <Routes>
             <Route path="/orgpost/:orgId" element={<PostsPage />} />

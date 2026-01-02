@@ -142,11 +142,11 @@ const VolunteerManagement = (): JSX.Element => {
               size="sm"
               variant="light"
               className="d-flex text-secondary bg-white align-items-center px-3 shadow-sm rounded-3"
+              onClick={handleBack}
             >
               <FaChevronLeft
                 cursor={'pointer'}
-                data-testid="backBtn"
-                onClick={handleBack}
+                data-testid="chevron-left-icon"
               />
             </Button>
             {volunteerDashboardTabs.map(renderButton)}

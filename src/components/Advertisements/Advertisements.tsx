@@ -47,10 +47,12 @@ import Loader from 'components/Loader/Loader';
 import { AdvertisementSkeleton } from './skeleton/AdvertisementSkeleton';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import PageHeader from 'shared-components/Navbar/Navbar';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 export default function Advertisements(): JSX.Element {
   const { orgId: currentOrgId } = useParams<{ orgId: string }>();
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
+  const { t: tErrors } = useTranslation('errors');
 
   document.title = t('title');
 
@@ -90,7 +92,7 @@ export default function Advertisements(): JSX.Element {
   });
 
   if (completedError || activeError) {
-    NotificationToast.error('Failed to fetch advertisements');
+    NotificationToast.error(t('failedToFetchAdvertisements'));
   }
 
   const [completedAdvertisements, setCompletedAdvertisements] = useState<
@@ -181,7 +183,12 @@ export default function Advertisements(): JSX.Element {
 
   const loading = activeLoading || completedLoading; // if any of them is in loading state
   return (
-    <>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
       <Row data-testid="advertisements" className={styles.rowAdvertisements}>
         <Col md={8} className={styles.containerAdvertisements}>
           {loading && <Loader />}
@@ -300,6 +307,6 @@ export default function Advertisements(): JSX.Element {
           </Tabs>
         </Col>
       </Row>
-    </>
+    </ErrorBoundaryWrapper>
   );
 }

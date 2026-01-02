@@ -52,10 +52,11 @@ import { ORGANIZATIONS_MEMBER_CONNECTION_LIST } from 'GraphQl/Queries/Queries';
 import { useQuery } from '@apollo/client';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
-import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
+
 import { useParams } from 'react-router';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import SortingButton from 'subComponents/SortingButton';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 
 interface IMemberNode {
   id: string;
@@ -239,21 +240,22 @@ export default function People(): React.JSX.Element {
 
         <div className={styles.people_content}>
           <div className={styles.people_card_header}>
-            <span style={{ flex: '1' }} className={styles.display_flex}>
-              <span style={{ flex: '1' }}>{t('sNo')}</span>
-              <span style={{ flex: '1' }}>{t('avatar')}</span>
+            <span className={`${styles.display_flex} ${styles.peopleCol1}`}>
+              <span className={styles.peopleCol1}>{t('sNo')}</span>
+              <span className={styles.peopleCol1}>{t('avatar')}</span>
             </span>
-            <span style={{ flex: '2' }}>{t('name')}</span>
-            <span style={{ flex: '2' }}>{t('email')}</span>
-            <span style={{ flex: '2' }}>{t('role')}</span>
+            <span className={styles.peopleCol2}>{t('name')}</span>
+            <span className={styles.peopleCol2}>{t('email')}</span>
+            <span className={styles.peopleCol2}>{t('role')}</span>
           </div>
 
           <div className={styles.people_card_main_container}>
-            {loading ? (
-              <div className={styles.custom_row_center}>
-                <HourglassBottomIcon /> <span>{t('loading')}</span>
-              </div>
-            ) : (
+            <LoadingState
+              isLoading={loading}
+              variant="skeleton"
+              skeletonRows={rowsPerPage}
+              skeletonCols={4}
+            >
               <>
                 {members && members.length > 0 ? (
                   members.map((member: IMemberWithUserType, index) => {
@@ -273,7 +275,7 @@ export default function People(): React.JSX.Element {
                   <span>{t('nothingToShow')}</span>
                 )}
               </>
-            )}
+            </LoadingState>
           </div>
           <PaginationList
             count={

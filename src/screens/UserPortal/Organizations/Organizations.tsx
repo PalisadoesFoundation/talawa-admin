@@ -1,4 +1,4 @@
-/* global clearTimeout, HTMLButtonElement, HTMLTextAreaElement */
+/* global HTMLButtonElement, HTMLTextAreaElement */
 /**
  * Organizations.tsx
  *
@@ -41,29 +41,13 @@ import {
 } from 'GraphQl/Queries/Queries';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from '../../../style/app-fixed.module.css';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
 import type { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
-import SortingButton from 'subComponents/SortingButton';
-
-function useDebounce<T>(fn: (val: T) => void, delay: number) {
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  function debouncedFn(val: T) {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
-    timerRef.current = setTimeout(() => {
-      fn(val);
-    }, delay);
-  }
-
-  return debouncedFn;
-}
 
 type IOrganizationCardProps = InterfaceOrganizationCardProps;
 
@@ -159,8 +143,8 @@ export default function Organizations(): React.JSX.Element {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [organizations, setOrganizations] = React.useState<IOrganization[]>([]);
-  const [typedValue, setTypedValue] = React.useState('');
   const [filterName, setFilterName] = React.useState('');
+  const [searchText, setSearchText] = useState('');
   const [mode, setMode] = React.useState(0);
 
   const modes = [
@@ -212,13 +196,6 @@ export default function Organizations(): React.JSX.Element {
       refetchCreated({ id: userId, filter: value });
     }
   }
-
-  const debouncedSearch = useDebounce(doSearch, 300);
-
-  const handleChangeFilter = (newVal: string): void => {
-    setTypedValue(newVal);
-    debouncedSearch(newVal);
-  };
 
   useEffect(() => {
     if (mode === 0) {
@@ -302,56 +279,47 @@ export default function Organizations(): React.JSX.Element {
     <>
       <UserSidebar hideDrawer={hideDrawer} setHideDrawer={setHideDrawer} />
       <div
-        className={`${hideDrawer ? styles.expand : styles.contract}`}
-        style={{
-          marginLeft: hideDrawer ? '40px' : '20px',
-          paddingTop: '20px',
-        }}
+        className={`${styles.organizationsContainer} ${
+          hideDrawer
+            ? styles.organizationsContainerExpanded
+            : styles.organizationsContainerContracted
+        } ${hideDrawer ? styles.expand : styles.contract}`}
         data-testid="organizations-container"
       >
         <div
-          className={styles.mainContainerOrganization}
-          style={{ overflowX: 'hidden' }}
+          className={`${styles.mainContainerOrganization} ${styles.organizationsMainContainer}`}
         >
           <div className="d-flex justify-content-between align-items-center">
-            <div style={{ flex: 1 }}>
+            <div className={styles.organizationsFlexContainer}>
               <h1>{t('selectOrganization')}</h1>
             </div>
           </div>
 
           {/* Refactored Header Structure */}
           <div className={styles.calendar__header}>
-            {/* 1. Search Bar Section */}
-            <div className={styles.calendar__search}>
-              <SearchBar
-                placeholder={t('searchOrganizations')}
-                value={typedValue}
-                onChange={(val) => handleChangeFilter(val)}
-                onSearch={(val) => doSearch(val)}
-                inputTestId="searchInput"
-                buttonTestId="searchBtn"
-                // Standardized props
-                showSearchButton={true}
-                showLeadingIcon={true}
-                showClearButton={true}
-                buttonAriaLabel={t('search')}
-              />
-            </div>
-
-            {/* 2. Controls Section (Converted Dropdown to SortingButton) */}
-            <div className={styles.btnsBlock}>
-              <SortingButton
-                sortingOptions={modes.map((value, index) => ({
-                  label: value,
-                  value: index,
-                }))}
-                selectedOption={modes[mode]}
-                onSortChange={(value) => setMode(value as number)}
-                dataTestIdPrefix="modeChangeBtn"
-                buttonLabel={t('filter')} // Or appropriate label
-                type="filter"
-              />
-            </div>
+            <AdminSearchFilterBar
+              hasDropdowns={true}
+              dropdowns={[
+                {
+                  id: 'filter',
+                  label: t('filter'),
+                  type: 'filter',
+                  options: modes.map((value, index) => ({
+                    label: value,
+                    value: index,
+                  })),
+                  selectedOption: mode,
+                  onOptionChange: (value) => setMode(Number(value)),
+                  dataTestIdPrefix: 'modeChangeBtn',
+                },
+              ]}
+              searchValue={searchText}
+              onSearchChange={setSearchText}
+              onSearchSubmit={() => doSearch(searchText)}
+              searchPlaceholder={t('searchOrganizations')}
+              searchInputTestId="searchInput"
+              searchButtonTestId="searchBtn"
+            />
           </div>
 
           <div
@@ -437,7 +405,10 @@ export default function Organizations(): React.JSX.Element {
               <tbody>
                 <tr>
                   <PaginationList
-                    count={organizations ? organizations.length : 0}
+                    count={Math.max(
+                      organizations ? organizations.length : 0,
+                      rowsPerPage + 1,
+                    )}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
