@@ -1193,7 +1193,8 @@
     "name": "नाम",
     "email": "ईमेल",
     "role": "भूमिका",
-    "loading": "लोड हो रहा है..."
+    "loading": "लोड हो रहा है...",
+    "emailNotAvailable": "ईमेल उपलब्ध नहीं है"
   },
   "userLogin": {
     "login": "लॉग इन करें",

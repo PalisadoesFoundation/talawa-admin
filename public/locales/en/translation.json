@@ -1246,7 +1246,8 @@
     "name": "Name",
     "email": "Email",
     "role": "Role",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "emailNotAvailable": "Email not available"
   },
   "userLogin": {
     "login": "Login",
