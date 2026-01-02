@@ -52,6 +52,7 @@ import { GrAttachment } from 'react-icons/gr';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import type { GroupChat } from 'types/Chat/type';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 // import { toast } from 'react-toastify';
 // import { validateFile } from 'utils/fileValidation';
@@ -61,8 +62,8 @@ interface IChatRoomProps {
   chatListRefetch: (
     variables?:
       | Partial<{
-          id: string;
-        }>
+        id: string;
+      }>
       | undefined,
   ) => Promise<ApolloQueryResult<{ chatList: GroupChat[] }>>;
 }
@@ -155,9 +156,6 @@ const MessageImageBase: React.FC<IMessageImageProps> = ({
   organizationId,
   getFileFromMinio,
 }) => {
-  const { t } = useTranslation('translation', {
-    keyPrefix: 'userChatRoom',
-  });
   const [imageState, setImageState] = useState<{
     url: string | null;
     loading: boolean;
@@ -166,6 +164,10 @@ const MessageImageBase: React.FC<IMessageImageProps> = ({
     url: null,
     loading: !!media,
     error: false,
+  });
+
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userChatRoom',
   });
 
   useEffect(() => {
@@ -196,9 +198,13 @@ const MessageImageBase: React.FC<IMessageImageProps> = ({
 
   if (imageState.loading) {
     return <div className={styles.messageAttachment}>{t('loadingImage')}</div>;
+    return <div className={styles.messageAttachment}>{t('loadingImage')}</div>;
   }
 
   if (imageState.error || !imageState.url) {
+    return (
+      <div className={styles.messageAttachment}>{t('imageNotAvailable')}</div>
+    );
     return (
       <div className={styles.messageAttachment}>{t('imageNotAvailable')}</div>
     );
@@ -220,6 +226,8 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChatRoom',
   });
+  const { t: tErrors } = useTranslation('errors');
+  const { t: tCommon } = useTranslation('common');
   const isMountedRef = useRef<boolean>(true);
 
   useEffect(() => {
@@ -470,7 +478,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       const lastMessage =
         chatData.chat.messages.edges[chatData.chat.messages.edges.length - 1];
       markReadIfSupported(props.selectedContact, lastMessage.node.id)
-        .catch(() => {})
+        .catch(() => { })
         .finally(() => {
           props.chatListRefetch();
           unreadChatListRefetch();
@@ -556,14 +564,14 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
       if (
         messageSubscriptionData?.data.data.chatMessageCreate &&
         messageSubscriptionData?.data.data.chatMessageCreate.chat?.id ===
-          props.selectedContact
+        props.selectedContact
       ) {
         const newMessage = messageSubscriptionData.data.data.chatMessageCreate;
         if (newMessage?.creator?.id === userId) {
           shouldAutoScrollRef.current = true;
         }
         await markReadIfSupported(props.selectedContact, newMessage.id).catch(
-          () => {},
+          () => { },
         );
 
         // Soft-append the new message to local state to avoid pagination issues.
@@ -587,14 +595,14 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                 },
                 parentMessage: newMessage.parentMessage
                   ? {
-                      id: newMessage.parentMessage.id,
-                      body: newMessage.parentMessage.body,
-                      createdAt: newMessage.parentMessage.createdAt,
-                      creator: {
-                        id: newMessage.parentMessage.creator.id,
-                        name: newMessage.parentMessage.creator.name,
-                      },
-                    }
+                    id: newMessage.parentMessage.id,
+                    body: newMessage.parentMessage.body,
+                    createdAt: newMessage.parentMessage.createdAt,
+                    creator: {
+                      id: newMessage.parentMessage.creator.id,
+                      name: newMessage.parentMessage.creator.name,
+                    },
+                  }
                   : undefined,
               },
             } as INewChat['messages']['edges'][0];

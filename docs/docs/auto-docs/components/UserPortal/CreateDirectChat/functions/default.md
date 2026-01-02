@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:197](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx#L197)
+Defined in: [src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx:198](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/CreateDirectChat/CreateDirectChat.tsx#L198)
 
 ## Parameters
 

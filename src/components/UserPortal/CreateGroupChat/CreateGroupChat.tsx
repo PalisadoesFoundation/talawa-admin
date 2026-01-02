@@ -68,6 +68,7 @@ import { FiEdit } from 'react-icons/fi';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 interface InterfaceCreateGroupChatProps {
@@ -87,6 +88,8 @@ export default function CreateGroupChat({
 }: InterfaceCreateGroupChatProps): JSX.Element {
   const userId: string | null = getItem('userId') || getItem('id');
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
+  const { t: tErrors } = useTranslation('errors');
+  const { t: tCommon } = useTranslation('common');
 
   const [createChat] = useMutation(CREATE_CHAT);
   const [createChatMembership] = useMutation(CREATE_CHAT_MEMBERSHIP);
@@ -209,7 +212,13 @@ export default function CreateGroupChat({
   };
 
   return (
-    <>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+      onReset={chatsListRefetch}
+    >
       <Modal
         data-testid="createGroupChatModal"
         show={createGroupChatModalisOpen}
@@ -262,7 +271,7 @@ export default function CreateGroupChat({
             </Form.Group>
             <Form.Group className="mb-3" controlId="registerForm.Rname">
               <Form.Label>
-                {t('description', { defaultValue: 'Description' })}
+                {tCommon('description', { defaultValue: 'Description' })}
               </Form.Label>
               <Form.Control
                 type="text"
@@ -334,7 +343,9 @@ export default function CreateGroupChat({
                 >
                   <TableHead>
                     <TableRow>
-                      <TableCell>{t('hash', { defaultValue: '#' })}</TableCell>
+                      <TableCell>
+                        {tCommon('hash', { defaultValue: '#' })}
+                      </TableCell>
                       <TableCell align="center">
                         {t('user', { defaultValue: 'User' })}
                       </TableCell>
@@ -426,6 +437,6 @@ export default function CreateGroupChat({
           </Button>
         </Modal.Body>
       </Modal>
-    </>
+    </ErrorBoundaryWrapper>
   );
 }

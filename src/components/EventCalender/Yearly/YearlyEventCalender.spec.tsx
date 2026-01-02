@@ -1392,13 +1392,13 @@ describe('Calendar Component', () => {
     const btnA = await clickExpandForDate(container, new Date(eventA.startAt));
     expect(btnA).toBeTruthy();
     await waitFor(() =>
-      expect(screen.queryByText('Event A')).toBeInTheDocument(),
+      expect(screen.getByText('Event A')).toBeInTheDocument(),
     );
 
     const btnB = await clickExpandForDate(container, new Date(eventB.startAt));
     expect(btnB).toBeTruthy();
     await waitFor(() =>
-      expect(screen.queryByText('Event B')).toBeInTheDocument(),
+      expect(screen.getByText('Event B')).toBeInTheDocument(),
     );
 
     expect(screen.queryByText('Event A')).toBeNull();

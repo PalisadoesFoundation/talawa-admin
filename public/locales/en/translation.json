@@ -241,7 +241,6 @@
     "title": "Membership Requests",
     "sl_no": "Sl. No.",
     "accept": "Accept",
-    "newMembersWillAppearHere": "New members will appear here",
     "reject": "Reject",
     "searchRequests": "Search membership requests",
     "noOrgError": "Organizations not found, please create an organization through dashboard",
@@ -253,7 +252,8 @@
     "name": "name",
     "email": "email",
     "profilePictureAlt": "User profile picture",
-    "placeholderAvatarAlt": "Placeholder avatar"
+    "placeholderAvatarAlt": "Placeholder avatar",
+    "newMembersWillAppearHere": "New membership requests will appear here"
   },
   "users": {
     "membershipStatus": {
@@ -360,7 +360,9 @@
     "join_success": "Membership request sent successfully",
     "withdraw_success": "Membership request withdrawn successfully",
     "join_error": "Failed to send membership request",
-    "withdraw_error": "Failed to withdraw request"
+    "withdraw_error": "Failed to withdraw request",
+    "card_aria": "Organization card",
+    "card_test_id": "organization-card-{{id}}"
   },
   "organizationPeople": {
     "title": "Talawa Members",
@@ -406,6 +408,7 @@
     "manageTag": "Manage",
     "editTag": "Edit",
     "removeTag": "Remove",
+    "tags": "Tags",
     "tagDetails": "Tag Details",
     "tagName": "Name",
     "tagType": "Type",
@@ -423,7 +426,6 @@
     "tagCreationFailed": "Tag creation failed",
     "errorLoadingTagsData": "Error occurred while loading Organization Tags Data",
     "sortTags": "Sort Tags",
-    "tags": "Tags",
     "Latest": "Latest",
     "Oldest": "Oldest",
     "viewSubTags": "View {{count}} sub tags"
@@ -1090,6 +1092,7 @@
     "deleteMsg": "Do you want to delete this organization?",
     "confirmDelete": "Confirm Delete",
     "longDelOrgMsg": "By clicking on Delete Organization button the organization will be permanently deleted along with its events, tags and all related data.",
+    "deleteSampleOrganization": "Delete Sample Organization",
     "successfullyDeletedSampleOrganization": "Successfully deleted sample Organization",
     "cancel": "cancel"
   },
@@ -1146,7 +1149,34 @@
     "saveChanges": "saveChanges",
     "cancel": "cancel",
     "talawaApiUnavailable": "talawaApiUnavailable",
-    "enterOrganizationDescription": "Enter Organization Description"
+    "enterOrganizationDescription": "Enter Organization Description",
+    "userRegistrationRequired": "User registration required",
+    "nameDescriptionRequired": "Name and description are required",
+    "updateFailed": "Failed to update organization"
+  },
+  "public": {
+    "invitation": {
+      "title": "Event Invitation",
+      "previewText": "You have been invited to join this event.",
+      "inviteeEmail": "Invitee Email",
+      "anyone": "Any logged in user",
+      "organizationId": "Organization Id",
+      "eventId": "Event Id",
+      "eventTitle": "Event {{eventId}}",
+      "expiresAt": "Expires At",
+      "mustLogin": "Please login or create an account to accept this invitation.",
+      "login": "Log in",
+      "signup": "Sign up",
+      "invalidToken": "Invalid invitation token",
+      "invitationNotFound": "Invitation not found or invalid",
+      "verifyError": "Error verifying invitation",
+      "accept": "Accept invitation",
+      "accepted": "Invitation accepted",
+      "acceptError": "Could not accept invitation",
+      "maskedNotice": "This invitation was issued to a masked email address. Please ensure you are the invited recipient before accepting.",
+      "confirmMatch": "I confirm the email address of my account matches the invited address (shown above).",
+      "signInAsDifferent": "Sign in as a different user"
+    }
   },
   "memberDetail": {
     "title": "User Details",
@@ -1212,7 +1242,8 @@
     "name": "Name",
     "email": "Email",
     "role": "Role",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "emailNotAvailable": "Email not available"
   },
   "userLogin": {
     "login": "Login",
@@ -1590,14 +1621,9 @@
     "create": "Create",
     "newChat": "New Chat",
     "newGroupChat": "New Group Chat",
-    "newGroup": "New Group",
     "groupInfo": "Group Info",
-    "groupName": "Group name",
-    "groupDescription": "Group Description",
     "description": "Description",
     "hash": "#",
-    "next": "Next",
-    "organizationMembersTable": "Organization Members Table",
     "members": "Members",
     "addMembers": "Add Members",
     "userNotFound": "User not found",
@@ -1619,12 +1645,16 @@
     "demoteToRegular": "Demote to Regular",
     "promoteToAdmin": "Promote to Admin",
     "user": "User",
-    "chatAction": "Chat action"
+    "chatAction": "Chat action",
+    "organizationMembersTable": "Organization Members Table",
+    "newGroup": "New Group",
+    "groupName": "Group name",
+    "groupDescription": "Group Description",
+    "next": "Next"
   },
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",
     "sendMessage": "Send Message",
-    "reply": "Reply",
     "loading": "Loading...",
     "loadOlderMessages": "Load older messages",
     "loadingMoreMessages": "Loading more messages...",
