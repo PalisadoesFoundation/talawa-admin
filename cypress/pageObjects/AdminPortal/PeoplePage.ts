@@ -62,8 +62,7 @@ export class PeoplePage {
   deleteMember(name: string, timeout = 40000) {
     this.searchMemberByName(name, timeout);
     this.verifyMemberInList(name, timeout);
-    cy.get(this._searchResult, { timeout })
-      .contains(name)
+    cy.contains(this._searchResult, name, { timeout })
       .parents('tr')
       .find(this._removeModalBtn)
       .should('be.visible')

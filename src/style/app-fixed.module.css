@@ -1645,7 +1645,7 @@ form label,
 }
 
 .errorIcon {
-  font-size: 40px;
+  font-size: var(--error-icon-size, 40px);
   color: var(--bs-danger, var(--errorIcon-color));
   margin-bottom: 1rem;
 
