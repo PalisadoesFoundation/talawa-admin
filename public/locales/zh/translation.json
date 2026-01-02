@@ -398,7 +398,9 @@
     "join_success": "成员申请已成功发送",
     "withdraw_success": "成员申请已成功撤回",
     "join_error": "发送成员申请失败",
-    "withdraw_error": "撤回成员申请失败"
+    "withdraw_error": "撤回成员申请失败",
+    "card_aria": "組織卡片",
+    "card_test_id": "organization-card-{{id}}"
   },
   "organizationTags": {
     "title": "组织标签",
@@ -1606,16 +1608,23 @@
     "demoteToRegular": "降级为普通用户",
     "promoteToAdmin": "提升为管理员",
     "user": "用户",
-    "chatAction": "聊天操作"
+    "chatAction": "聊天操作",
+    "organizationMembersTable": "组织成员表",
+    "newGroup": "新群組",
+    "groupName": "群組名稱",
+    "groupDescription": "群組描述",
+    "next": "下一步"
   },
   "userChatRoom": {
     "selectContact": "选择联系人开始对话",
     "sendMessage": "发信息",
     "reply": "回复",
-    "loadingImage": "載入圖片中...",
-    "imageNotAvailable": "圖片不可用",
+    "loadingImage": "加载图片中...",
+    "imageNotAvailable": "图片不可用",
     "attachment": "附件",
-    "loadingMoreMessages": "載入更多訊息中..."
+    "loadingMoreMessages": "加载更多消息中...",
+    "loading": "加载中...",
+    "loadOlderMessages": "加载更早的消息"
   },
   "orgActionItemCategories": {
     "enableButton": "使能够",

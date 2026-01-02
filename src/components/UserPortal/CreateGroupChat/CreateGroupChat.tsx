@@ -88,6 +88,7 @@ export default function CreateGroupChat({
   const userId: string | null = getItem('userId') || getItem('id');
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
   const { t: tErrors } = useTranslation('errors');
+  const { t: tCommon } = useTranslation('common');
 
   const [createChat] = useMutation(CREATE_CHAT);
   const [createChatMembership] = useMutation(CREATE_CHAT_MEMBERSHIP);
@@ -264,7 +265,7 @@ export default function CreateGroupChat({
             </Form.Group>
             <Form.Group className="mb-3" controlId="registerForm.Rname">
               <Form.Label>
-                {t('description', { defaultValue: 'Description' })}
+                {tCommon('description', { defaultValue: 'Description' })}
               </Form.Label>
               <Form.Control
                 type="text"
@@ -336,7 +337,9 @@ export default function CreateGroupChat({
                 >
                   <TableHead>
                     <TableRow>
-                      <TableCell>{t('hash', { defaultValue: '#' })}</TableCell>
+                      <TableCell>
+                        {tCommon('hash', { defaultValue: '#' })}
+                      </TableCell>
                       <TableCell align="center">
                         {t('user', { defaultValue: 'User' })}
                       </TableCell>

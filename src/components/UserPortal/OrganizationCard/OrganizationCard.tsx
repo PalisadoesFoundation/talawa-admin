@@ -123,7 +123,7 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
           onClick={handleWithdraw}
           disabled={cancelLoading}
         >
-          {t('organization.withdraw', 'Withdraw')}
+          {t('withdraw', 'Withdraw')}
         </Button>
       );
     }
@@ -149,8 +149,8 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
     >
       <UserPortalCard
         variant="compact"
-        ariaLabel={t('organization.card_aria', 'Organization card')}
-        dataTestId={t('organization.card_test_id', {
+        ariaLabel={t('card_aria', 'Organization card')}
+        dataTestId={t('card_test_id', {
           defaultValue: 'organization-card-{{id}}',
           id,
         })}

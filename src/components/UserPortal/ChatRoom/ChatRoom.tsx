@@ -728,8 +728,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
               </div>
             </div>
             <div
-              className={`d-flex flex-grow-1 flex-column`}
-              style={{ minHeight: 0 }}
+              className={`d-flex flex-grow-1 flex-column ${styles.flexContainer}`}
             >
               <div
                 className={styles.chatMessages}
@@ -744,7 +743,9 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                       onClick={loadMoreMessages}
                       disabled={loadingMoreMessages}
                     >
-                      {loadingMoreMessages ? 'Loading…' : 'Load older messages'}
+                      {loadingMoreMessages
+                        ? t('loading')
+                        : t('loadOlderMessages')}
                     </Button>
                   </div>
                 )}
@@ -828,7 +829,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                               <div className={styles.messageAttributes}>
                                 <Dropdown
                                   data-testid="moreOptions"
-                                  style={{ cursor: 'pointer' }}
+                                  className={styles.dropdownContainer}
                                 >
                                   <Dropdown.Toggle
                                     className={styles.customToggle}
@@ -865,7 +866,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                                             deleteMessage(message.id)
                                           }
                                           data-testid="deleteMessage"
-                                          style={{ color: 'red' }}
+                                          className="text-danger"
                                         >
                                           {tCommon('delete')}
                                         </Dropdown.Item>
@@ -943,6 +944,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
 
               <InputGroup>
                 <button
+                  type="button"
                   onClick={handleAddAttachment}
                   className={styles.addAttachmentBtn}
                 >
