@@ -1,14 +1,11 @@
 import path from 'path';
 import { beforeEach, describe, expect, test, vi } from 'vitest';
 
-const execSyncMock = vi.hoisted(() => vi.fn());
 const spawnSyncMock = vi.hoisted(() => vi.fn());
 
 vi.mock('child_process', () => ({
-  execSync: execSyncMock,
   spawnSync: spawnSyncMock,
   default: {
-    execSync: execSyncMock,
     spawnSync: spawnSyncMock,
   },
 }));
@@ -23,11 +20,50 @@ import {
 
 beforeEach(() => {
   spawnSyncMock.mockReset();
+  vi.clearAllMocks();
 });
 
 describe('parseAddedLineNumbers', () => {
   afterEach(() => {
     vi.clearAllMocks();
+  });
+
+  test('handles empty diff', () => {
+    const result = parseAddedLineNumbers('');
+
+    expect(Array.from(result)).toEqual([]);
+  });
+
+  test('handles diff with only removed lines', () => {
+    const diff = ['@@ -1,3 +1,1 @@', '-removed1', '-removed2', ' context'].join(
+      '\n',
+    );
+
+    const result = parseAddedLineNumbers(diff);
+
+    expect(Array.from(result)).toEqual([]);
+  });
+
+  test('handles malformed hunk headers gracefully', () => {
+    const diff = ['@@ invalid @@', '+should be ignored'].join('\n');
+
+    const result = parseAddedLineNumbers(diff);
+
+    expect(Array.from(result)).toEqual([]);
+  });
+
+  test('tracks consecutive context lines before an addition', () => {
+    const diff = [
+      '@@ -1,3 +10,3 @@',
+      ' line1',
+      ' line2',
+      ' line3',
+      '+added',
+    ].join('\n');
+
+    const result = parseAddedLineNumbers(diff);
+
+    expect(Array.from(result)).toEqual([13]);
   });
 
   test('captures added lines across multiple hunks', () => {
@@ -116,9 +152,44 @@ describe('getStagedAddedLines', () => {
       { encoding: 'utf-8' },
     );
   });
+
+  test('exits with error code when git command fails', () => {
+    const exitSpy = vi.spyOn(process, 'exit').mockImplementation(() => {
+      throw new Error('process.exit called');
+    });
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    spawnSyncMock.mockReturnValue({
+      stdout: '',
+      error: new Error('git command failed'),
+    });
+
+    const absolutePath = path.join(process.cwd(), 'src', 'test.css');
+
+    expect(() => getStagedAddedLines(absolutePath)).toThrow(
+      'process.exit called',
+    );
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      expect.stringContaining('Error reading staged diff'),
+      'git command failed',
+    );
+    expect(exitSpy).toHaveBeenCalledWith(1);
+
+    exitSpy.mockRestore();
+    consoleErrorSpy.mockRestore();
+  });
 });
 
 describe('getAddedLinesByFile', () => {
+  test('returns empty map for empty file array', () => {
+    const result = getAddedLinesByFile([]);
+
+    expect(result.size).toBe(0);
+    expect(spawnSyncMock).not.toHaveBeenCalled();
+  });
+
   test('maps files to their added line numbers', () => {
     const files = [
       path.join('src', 'style', 'a.css'),
