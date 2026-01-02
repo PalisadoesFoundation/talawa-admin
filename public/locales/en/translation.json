@@ -427,7 +427,8 @@
     "sortTags": "Sort Tags",
     "tags": "Tags",
     "Latest": "Latest",
-    "Oldest": "Oldest"
+    "Oldest": "Oldest",
+    "viewSubTags": "View {{count}} sub tags"
   },
   "manageTag": {
     "title": "Tag Details",
@@ -556,7 +557,9 @@
     "startDate": "startDate",
     "endDate": "endDate",
     "talawaApiUnavailable": "talawaApiUnavailable",
-    "done": "done"
+    "done": "done",
+    "viewType": "View Type",
+    "search": "Search"
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",
@@ -799,7 +802,9 @@
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
     "lowestGoal": "Lowest Goal",
-    "highestGoal": "Highest Goal"
+    "highestGoal": "Highest Goal",
+    "percentageRaised": "% Raised",
+    "campaignProgress": "Campaign progress: {{percentage}}%"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
@@ -968,7 +973,8 @@
     "agendas": "Agendas",
     "statistics": "Statistics",
     "to": "TO",
-    "volunteers": "Volunteers"
+    "volunteers": "Volunteers",
+    "backToEvents": "Back to Events"
   },
   "eventAttendance": {
     "historical_statistics": "Historical Statistics",
@@ -1966,6 +1972,13 @@
     "altText": "Profile picture of {{name}}",
     "modalTitle": "Profile Picture",
     "enlargedAltText": "Enlarged profile picture of {{name}}"
+  },
+  "eventCalendar": {
+    "noEventsAvailable": "No events available",
+    "holidays": "Holidays",
+    "events": "Events",
+    "eventsCreatedByOrganization": "Events Created by Organization",
+    "today": "Today"
   },
   "common": {
     "signOut": "Sign out",
