@@ -360,7 +360,9 @@
     "join_success": "Membership request sent successfully",
     "withdraw_success": "Membership request withdrawn successfully",
     "join_error": "Failed to send membership request",
-    "withdraw_error": "Failed to withdraw request"
+    "withdraw_error": "Failed to withdraw request",
+    "card_aria": "Organization card",
+    "card_test_id": "organization-card-{{id}}"
   },
   "organizationPeople": {
     "title": "Talawa Members",
@@ -1643,12 +1645,23 @@
     "demoteToRegular": "Demote to Regular",
     "promoteToAdmin": "Promote to Admin",
     "user": "User",
-    "chatAction": "Chat action"
+    "chatAction": "Chat action",
+    "organizationMembersTable": "Organization Members Table",
+    "newGroup": "New Group",
+    "groupName": "Group name",
+    "groupDescription": "Group Description",
+    "next": "Next"
   },
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",
     "sendMessage": "Send Message",
-    "reply": "Reply"
+    "reply": "Reply",
+    "loadingImage": "Loading image...",
+    "imageNotAvailable": "Image not available",
+    "attachment": "attachment",
+    "loadingMoreMessages": "Loading more messages...",
+    "loading": "Loading...",
+    "loadOlderMessages": "Load older messages"
   },
   "orgActionItemCategories": {
     "enableButton": "Enable",

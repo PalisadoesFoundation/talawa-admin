@@ -53,6 +53,7 @@ import {
   UPDATE_COMMENT,
 } from 'GraphQl/Mutations/CommentMutations';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 const CommentContainer = styled(Box)(({ theme }) => ({
   padding: theme.spacing(1.5),
@@ -91,6 +92,7 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
   const { getItem } = useLocalStorage();
   const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
   const userId = getItem('userId');
 
   const [likes, setLikes] = React.useState(upVoteCount);
@@ -217,128 +219,139 @@ function CommentCard(props: InterfaceCommentCardProps): JSX.Element {
   };
 
   return (
-    <CommentContainer>
-      <Stack direction="row" spacing={2} alignItems="flex-start">
-        <span className={styles.userImageUserComment}>
-          <ProfileAvatarDisplay
-            imageUrl={creator.avatarURL || defaultAvatar}
-            fallbackName={creator.name}
-            size="small"
-            dataTestId="user-avatar"
-            enableEnlarge
-          />
-        </span>
-        <Box sx={{ flexGrow: 1 }}>
-          <Typography variant="subtitle2" fontWeight="bold">
-            {creator.name}
-          </Typography>
-          <CommentContent variant="body2">{text}</CommentContent>
-
-          <Stack direction="row" spacing={1} alignItems="center">
-            <IconButton
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+      onReset={refetchComments}
+    >
+      <CommentContainer>
+        <Stack direction="row" spacing={2} alignItems="flex-start">
+          <span className={styles.userImageUserComment}>
+            <ProfileAvatarDisplay
+              imageUrl={creator.avatarURL || defaultAvatar}
+              fallbackName={creator.name}
               size="small"
-              onClick={handleToggleLike}
-              color={isLiked ? 'primary' : 'default'}
-              data-testid="likeCommentBtn"
-            >
-              {liking || unliking ? (
-                <CircularProgress size={20} />
-              ) : isLiked ? (
-                <ThumbUp fontSize="small" />
-              ) : (
-                <ThumbUpOutlined fontSize="small" />
-              )}
-            </IconButton>
-            <VoteCount>{likes}</VoteCount>
-          </Stack>
-        </Box>
-        {userId === creator.id && (
-          <>
-            <IconButton
-              ref={menuAnchorRef}
-              onClick={handleMenuOpen}
-              size="small"
-              data-testid="more-options-button"
-            >
-              <MoreHoriz />
-            </IconButton>
-            <Menu
-              anchorEl={menuAnchorRef.current}
-              open={showCommentOptions}
-              onClose={handleMenuClose}
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-            >
-              <MenuItem
-                data-testid="update-comment-button"
-                onClick={toggleEditComment}
-              >
-                <EditOutlined className={commentCardStyles.iconSmall} />
-                {t('commentCard.editComment')}
-              </MenuItem>
-              <MenuItem
-                data-testid="delete-comment-button"
-                onClick={handleDeleteComment}
-                disabled={deletingComment}
-              >
-                <DeleteOutline className={commentCardStyles.iconSmall} />
-                {deletingComment
-                  ? t('commentCard.deleting')
-                  : t('commentCard.deleteComment')}
-              </MenuItem>
-            </Menu>
-          </>
-        )}
-      </Stack>
-
-      {/* Edit Comment Modal */}
-      <Modal
-        open={showEditComment}
-        onClose={toggleEditComment}
-        data-testid="edit-comment-modal"
-      >
-        <Box className={commentCardStyles.editModalContent}>
-          <Typography variant="h6">{t('commentCard.editComment')}</Typography>
-          <FormControl fullWidth sx={{ mb: 2 }}>
-            <Input
-              multiline
-              rows={4}
-              value={editedCommentText}
-              onChange={handleEditCommentInput}
-              fullWidth
-              data-testid="edit-comment-input"
+              dataTestId="user-avatar"
+              enableEnlarge
             />
-          </FormControl>
+          </span>
+          <Box sx={{ flexGrow: 1 }}>
+            <Typography variant="subtitle2" fontWeight="bold">
+              {creator.name}
+            </Typography>
+            <CommentContent variant="body2">{text}</CommentContent>
 
-          <Box className={commentCardStyles.modalActions}>
-            <Box />
-            <Box className={commentCardStyles.rightModalActions}>
-              <Button variant="outlined" onClick={toggleEditComment}>
-                {tCommon('cancel')}
-              </Button>
-              <Button
-                variant="contained"
-                disabled={updatingComment}
-                onClick={async () => {
-                  if (!editedCommentText.trim()) {
-                    NotificationToast.error(t('commentCard.emptyCommentError'));
-                    return;
-                  }
-                  const updated = await handleUpdateComment(editedCommentText);
-                  if (updated) {
-                    toggleEditComment();
-                  }
-                }}
-                data-testid="save-comment-button"
-                startIcon={<EditOutlined />}
+            <Stack direction="row" spacing={1} alignItems="center">
+              <IconButton
+                size="small"
+                onClick={handleToggleLike}
+                color={isLiked ? 'primary' : 'default'}
+                data-testid="likeCommentBtn"
               >
-                {updatingComment ? tCommon('saving') : tCommon('save')}
-              </Button>
+                {liking || unliking ? (
+                  <CircularProgress size={20} />
+                ) : isLiked ? (
+                  <ThumbUp fontSize="small" />
+                ) : (
+                  <ThumbUpOutlined fontSize="small" />
+                )}
+              </IconButton>
+              <VoteCount>{likes}</VoteCount>
+            </Stack>
+          </Box>
+          {userId === creator.id && (
+            <>
+              <IconButton
+                ref={menuAnchorRef}
+                onClick={handleMenuOpen}
+                size="small"
+                data-testid="more-options-button"
+              >
+                <MoreHoriz />
+              </IconButton>
+              <Menu
+                anchorEl={menuAnchorRef.current}
+                open={showCommentOptions}
+                onClose={handleMenuClose}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+              >
+                <MenuItem
+                  data-testid="update-comment-button"
+                  onClick={toggleEditComment}
+                >
+                  <EditOutlined className={commentCardStyles.iconSmall} />
+                  {t('commentCard.editComment')}
+                </MenuItem>
+                <MenuItem
+                  data-testid="delete-comment-button"
+                  onClick={handleDeleteComment}
+                  disabled={deletingComment}
+                >
+                  <DeleteOutline className={commentCardStyles.iconSmall} />
+                  {deletingComment
+                    ? t('commentCard.deleting')
+                    : t('commentCard.deleteComment')}
+                </MenuItem>
+              </Menu>
+            </>
+          )}
+        </Stack>
+
+        {/* Edit Comment Modal */}
+        <Modal
+          open={showEditComment}
+          onClose={toggleEditComment}
+          data-testid="edit-comment-modal"
+        >
+          <Box className={commentCardStyles.editModalContent}>
+            <Typography variant="h6">{t('commentCard.editComment')}</Typography>
+            <FormControl fullWidth sx={{ mb: 2 }}>
+              <Input
+                multiline
+                rows={4}
+                value={editedCommentText}
+                onChange={handleEditCommentInput}
+                fullWidth
+                data-testid="edit-comment-input"
+              />
+            </FormControl>
+
+            <Box className={commentCardStyles.modalActions}>
+              <Box />
+              <Box className={commentCardStyles.rightModalActions}>
+                <Button variant="outlined" onClick={toggleEditComment}>
+                  {tCommon('cancel')}
+                </Button>
+                <Button
+                  variant="contained"
+                  disabled={updatingComment}
+                  onClick={async () => {
+                    if (!editedCommentText.trim()) {
+                      NotificationToast.error(
+                        t('commentCard.emptyCommentError'),
+                      );
+                      return;
+                    }
+                    const updated =
+                      await handleUpdateComment(editedCommentText);
+                    if (updated) {
+                      toggleEditComment();
+                    }
+                  }}
+                  data-testid="save-comment-button"
+                  startIcon={<EditOutlined />}
+                >
+                  {updatingComment ? tCommon('saving') : tCommon('save')}
+                </Button>
+              </Box>
             </Box>
           </Box>
-        </Box>
-      </Modal>
-    </CommentContainer>
+        </Modal>
+      </CommentContainer>
+    </ErrorBoundaryWrapper>
   );
 }
 

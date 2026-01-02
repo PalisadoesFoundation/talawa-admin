@@ -398,7 +398,9 @@
     "join_success": "Solicitud de membresía enviada correctamente",
     "withdraw_success": "Solicitud de membresía retirada correctamente",
     "join_error": "No se pudo enviar la solicitud de membresía",
-    "withdraw_error": "No se pudo retirar la solicitud de membresía"
+    "withdraw_error": "No se pudo retirar la solicitud de membresía",
+    "card_aria": "Tarjeta de organización",
+    "card_test_id": "organization-card-{{id}}"
   },
   "organizationTags": {
     "title": "Etiquetas de Organización",
@@ -1643,12 +1645,23 @@
     "demoteToRegular": "Degradar a regular",
     "promoteToAdmin": "Promover a administrador",
     "user": "Usuario",
-    "chatAction": "Acción del chat"
+    "chatAction": "Acción del chat",
+    "organizationMembersTable": "Tabla de miembros de la organización",
+    "newGroup": "Nuevo Grupo",
+    "groupName": "Nombre del grupo",
+    "groupDescription": "Descripción del Grupo",
+    "next": "Siguiente"
   },
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",
     "sendMessage": "Enviar mensaje",
-    "reply": "responder"
+    "reply": "responder",
+    "loadingImage": "Cargando imagen...",
+    "imageNotAvailable": "Imagen no disponible",
+    "attachment": "Adjunto",
+    "loadingMoreMessages": "Cargando más mensajes...",
+    "loading": "Cargando...",
+    "loadOlderMessages": "Cargar mensajes anteriores"
   },
   "orgActionItemCategories": {
     "createButton": "Crear",

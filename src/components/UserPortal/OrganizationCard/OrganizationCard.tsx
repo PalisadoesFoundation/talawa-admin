@@ -54,6 +54,7 @@ import {
 
 import styles from './OrganizationCard.module.css';
 import type { InterfaceOrganizationCardProps } from 'types/OrganizationCard/interface';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
   id,
@@ -69,6 +70,8 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
   const { t } = useTranslation('translation', {
     keyPrefix: 'organizationCard',
   });
+
+  const { t: tErrors } = useTranslation('errors');
 
   const [sendRequest, { loading: sendLoading }] = useMutation(
     SEND_MEMBERSHIP_REQUEST,
@@ -120,7 +123,7 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
           onClick={handleWithdraw}
           disabled={cancelLoading}
         >
-          {t('organization.withdraw', 'Withdraw')}
+          {t('withdraw', 'Withdraw')}
         </Button>
       );
     }
@@ -138,33 +141,40 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
   })();
 
   return (
-    <UserPortalCard
-      variant="compact"
-      ariaLabel={t('organization.card_aria', 'Organization card')}
-      dataTestId={t('organization.card_test_id', {
-        defaultValue: 'organization-card-{{id}}',
-        id,
-      })}
-      imageSlot={<div className={styles.orgAvatar} aria-hidden="true" />}
-      actionsSlot={actionsSlot}
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
     >
-      <div className={styles.content}>
-        <div className={styles.name}>{name}</div>
+      <UserPortalCard
+        variant="compact"
+        ariaLabel={t('card_aria', 'Organization card')}
+        dataTestId={t('card_test_id', {
+          defaultValue: 'organization-card-{{id}}',
+          id,
+        })}
+        imageSlot={<div className={styles.orgAvatar} aria-hidden="true" />}
+        actionsSlot={actionsSlot}
+      >
+        <div className={styles.content}>
+          <div className={styles.name}>{name}</div>
 
-        <div className={styles.description}>{description}</div>
+          <div className={styles.description}>{description}</div>
 
-        <div className={styles.address}>{addressLine1}</div>
+          <div className={styles.address}>{addressLine1}</div>
 
-        <div className={styles.actions}>
-          <span>
-            {t('admins')}: {adminsCount}
-          </span>
-          <span>
-            {t('members')}: {membersCount}
-          </span>
+          <div className={styles.actions}>
+            <span>
+              {t('admins')}: {adminsCount}
+            </span>
+            <span>
+              {t('members')}: {membersCount}
+            </span>
+          </div>
         </div>
-      </div>
-    </UserPortalCard>
+      </UserPortalCard>
+    </ErrorBoundaryWrapper>
   );
 };
 
