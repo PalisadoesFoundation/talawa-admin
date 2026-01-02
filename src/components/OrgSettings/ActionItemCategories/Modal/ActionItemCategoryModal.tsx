@@ -84,7 +84,7 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
       hide();
       setFormState({ name: '', description: '', isDisabled: false });
       NotificationToast.success({
-        key: 'successfulCreation',
+        key: 'eventActionItems.successfulCreation',
         namespace: 'translation',
       });
     } catch {

@@ -421,7 +421,7 @@ function ManageTag(): JSX.Element {
             />
             <div className={styles.btnsBlock}>
               <SortingButton
-                title={t('manageTag.sortPeople')}
+                title={t('sortPeople')}
                 sortingOptions={[
                   { label: tCommon('Latest'), value: 'DESCENDING' },
                   { label: tCommon('Oldest'), value: 'ASCENDING' },

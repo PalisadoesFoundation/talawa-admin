@@ -244,7 +244,7 @@ const ItemModal: FC<IItemModalProps> = ({
       runRefetches();
       hide();
       NotificationToast.success({
-        key: 'successfulCreation',
+        key: 'eventActionItems.successfulCreation',
         namespace: 'translation',
       });
     } catch {

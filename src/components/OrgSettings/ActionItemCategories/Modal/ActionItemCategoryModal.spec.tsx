@@ -252,7 +252,7 @@ describe('Testing Action Item Category Modal', () => {
         expect(categoryProps[0].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[0].hide).toHaveBeenCalled();
         expect(NotificationToast.success).toHaveBeenCalledWith({
-          key: 'successfulCreation',
+          key: 'eventActionItems.successfulCreation',
           namespace: 'translation',
         });
       });
@@ -266,7 +266,7 @@ describe('Testing Action Item Category Modal', () => {
         expect(categoryProps[0].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[0].hide).toHaveBeenCalled();
         expect(NotificationToast.success).toHaveBeenCalledWith({
-          key: 'successfulCreation',
+          key: 'eventActionItems.successfulCreation',
           namespace: 'translation',
         });
       });
@@ -292,7 +292,7 @@ describe('Testing Action Item Category Modal', () => {
         expect(categoryProps[0].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[0].hide).toHaveBeenCalled();
         expect(NotificationToast.success).toHaveBeenCalledWith({
-          key: 'successfulCreation',
+          key: 'eventActionItems.successfulCreation',
           namespace: 'translation',
         });
       });
