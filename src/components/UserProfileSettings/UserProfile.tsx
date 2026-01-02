@@ -79,7 +79,7 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
                 imageUrl={image && image !== 'null' ? image : undefined}
                 fallbackName={(() => {
                   const name = `${firstName ?? ''} ${lastName ?? ''}`.trim();
-                  return name ? name : undefined;
+                  return name || '';
                 })()}
                 size="custom"
                 shape="circle"
@@ -94,7 +94,10 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
               <span
                 className={styles.profileName}
                 data-tooltip-id="name"
-                data-tooltip-content={`${firstName} ${lastName}`}
+                data-tooltip-content={(() => {
+                  const label = `${firstName ?? ''} ${lastName ?? ''}`.trim();
+                  return label || undefined;
+                })()}
               >
                 {firstName && firstName.length > 10
                   ? firstName?.slice(0, 5) + '..'
