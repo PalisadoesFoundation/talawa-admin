@@ -4,5 +4,3 @@ src/components/CheckIn/tagTemplate.ts
 vitest.config.ts
 docs/pnpm-lock.yaml
 pnpm-lock.yaml
-# Large legacy CSS file - will be refactored and removed soon
-src/style/app-fixed.module.css
