@@ -428,9 +428,6 @@
     "tagCreationFailed": "标签创建失败",
     "errorLoadingTagsData": "加载组织标签数据时出错",
     "sortTags": "排序标签",
-    "tags": "标签",
-    "Latest": "最新",
-    "Oldest": "最旧",
     "viewSubTags": "查看 {{count}} 个子标签"
   },
   "manageTag": {
@@ -473,7 +470,7 @@
     "tagNamePlaceholder": "输入标签名称",
     "allTags": "所有标签",
     "noMoreMembersFound": "未找到更多成员",
-    "errorLoadingAssignedMembers": "加载分配的用户时出错",
+    "errorLoadingAssignedMembers": "加载分配的成员时出错",
     "tags": "标签",
     "errorOccurredWhileLoadingAssignedUser": "加载已分配用户时出错",
     "sortPeople": "排序人员",

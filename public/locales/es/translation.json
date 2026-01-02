@@ -428,9 +428,6 @@
     "tagCreationFailed": "Error al crear la etiqueta",
     "errorLoadingTagsData": "Se produjo un error al cargar los datos de las etiquetas de la organización",
     "sortTags": "Ordenar Etiquetas",
-    "tags": "Etiquetas",
-    "Latest": "Más Reciente",
-    "Oldest": "Más Antiguo",
     "viewSubTags": "Ver {{count}} sub-etiquetas"
   },
   "manageTag": {

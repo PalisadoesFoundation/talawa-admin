@@ -428,9 +428,6 @@
     "tagCreationFailed": "Tag creation failed",
     "errorLoadingTagsData": "Error occurred while loading Organization Tags Data",
     "sortTags": "Sort Tags",
-    "tags": "Tags",
-    "Latest": "Latest",
-    "Oldest": "Oldest",
     "viewSubTags": "View {{count}} sub tags"
   },
   "manageTag": {

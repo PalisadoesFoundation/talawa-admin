@@ -355,7 +355,10 @@ function OrganizationTags(): JSX.Element {
     <>
       <Row>
         <div>
-          <div className={styles.btnsContainer} data-testid="testcomp">
+          <div
+            className={styles.btnsContainer}
+            data-testid="organizationTags-header"
+          >
             <AdminSearchFilterBar
               hasDropdowns={true}
               searchPlaceholder={tCommon('searchByName')}

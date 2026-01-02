@@ -81,13 +81,34 @@ import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFil
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { errorHandler } from 'utils/errorHandler';
 
-// Helper mapping for state to option conversion
+/**
+ * Maps numeric filter state to string option identifiers.
+ * @type {Record<number, string>}
+ * @description Converts internal numeric state values to their corresponding string filter options:
+ * - 0 = 'members': Regular organization members
+ * - 1 = 'admin': Organization administrators
+ * - 2 = 'users': All users
+ * @example
+ * const option = STATE_TO_OPTION[0]; // 'members'
+ * @note This mapping must stay in sync with OPTION_TO_STATE. Any changes to one require updating the other.
+ */
 const STATE_TO_OPTION: Record<number, string> = {
   0: 'members',
   1: 'admin',
   2: 'users',
 };
 
+/**
+ * Maps string option identifiers to numeric filter state.
+ * @type {Record<string, number>}
+ * @description Converts string filter options to their corresponding internal numeric state values:
+ * - 'members' = 0: Regular organization members
+ * - 'admin' = 1: Organization administrators
+ * - 'users' = 2: All users
+ * @example
+ * const state = OPTION_TO_STATE['admin']; // 1
+ * @note This mapping must stay in sync with STATE_TO_OPTION. Any changes to one require updating the other.
+ */
 const OPTION_TO_STATE: Record<string, number> = {
   members: 0,
   admin: 1,

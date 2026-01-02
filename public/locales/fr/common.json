@@ -176,7 +176,7 @@
   "talawaBranding": "Image de marque Talawa",
   "unableToLoadData": "Impossible de charger les données.",
   "pluginSettings": "Paramètres du plugin",
-  "unassign": "Désattribuer",
+  "unassign": "Désassigner",
   "userName": "Nom d'utilisateur",
   "fileTooLarge": "Le fichier est trop volumineux. La taille maximale autorisée est de {{size}}Mo",
   "invalidFileType": "Type de fichier invalide. Veuillez télécharger un fichier {{types}}",

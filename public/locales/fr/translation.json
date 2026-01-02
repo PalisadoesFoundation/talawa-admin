@@ -428,9 +428,6 @@
     "tagCreationFailed": "Échec de la création de l'étiquette",
     "errorLoadingTagsData": "Une erreur s'est produite lors du chargement des données des étiquettes de l'organisation",
     "sortTags": "Trier les étiquettes",
-    "tags": "Étiquettes",
-    "Latest": "Le Plus Récent",
-    "Oldest": "Le Plus Ancien",
     "viewSubTags": "Voir {{count}} sous-étiquettes"
   },
   "manageTag": {
