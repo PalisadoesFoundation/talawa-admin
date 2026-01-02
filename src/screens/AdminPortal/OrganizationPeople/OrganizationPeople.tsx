@@ -362,7 +362,6 @@ function OrganizationPeople(): JSX.Element {
         return (
           <UserTableRow
             user={user}
-            rowNumber={params.row.rowNumber}
             isDataGrid={true}
             showJoinedDate={true}
             onRowClick={(user) => {

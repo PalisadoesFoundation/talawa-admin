@@ -65,8 +65,6 @@ import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye } from '@fortawesome/free-solid-svg-icons';
 
 import {
   ORGANIZATION_LIST,
@@ -447,17 +445,7 @@ const Users = (): JSX.Element => {
                           rowNumber={index + 1}
                           isDataGrid={false}
                           showJoinedDate={true}
-                          actions={[
-                            {
-                              label: t('view'),
-                              onClick: () => {
-                                // TODO: Implement view user details modal
-                              },
-                              variant: 'primary',
-                              icon: <FontAwesomeIcon icon={faEye} />,
-                              testId: `viewUser${user.id}`,
-                            },
-                          ]}
+                          actions={[]}
                           testIdPrefix="user"
                         />
                       );
