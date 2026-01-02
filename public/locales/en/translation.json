@@ -1810,7 +1810,15 @@
     "noCampaigns": "No Campaigns Found",
     "raised": "Raised",
     "amountRaised": "Amount Raised",
-    "searchCampaigns": "Search Campaigns"
+    "searchCampaigns": "Search Campaigns",
+    "campaignIndex": "#",
+    "campaignName": "Campaign Name",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "fundGoal": "Fund Goal",
+    "percentRaised": "% Raised",
+    "createFirstCampaign": "Create your first fundraising campaign to see it here.",
+    "campaignEnded": "Campaign Ended"
   },
   "userPledges": {
     "title": "My Pledges",
@@ -1873,7 +1881,19 @@
     "thisEventOnly": "This Event Only",
     "volunteerAlt": "Volunteer profile picture",
     "groupTable": "Group Table",
-    "volunteerActions": "Volunteer Actions"
+    "volunteerActions": "Volunteer Actions",
+    "volunteerHeader": "Volunteer",
+    "statusHeader": "Status",
+    "hoursVolunteeredHeader": "Hours Volunteered",
+    "optionsHeader": "Options",
+    "groupHeader": "Group",
+    "leaderHeader": "Leader",
+    "numVolunteersHeader": "No. of Volunteers",
+    "pending": "Pending",
+    "viewDetails": "View {{name}} details",
+    "editVolunteerGroup": "Edit {{name}} volunteer group",
+    "deleteVolunteerGroup": "Delete {{name}} volunteer group",
+    "deleteVolunteerEntry": "Delete {{name}} volunteer entry"
   },
   "userVolunteer": {
     "title": "Volunteership",

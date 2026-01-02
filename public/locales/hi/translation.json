@@ -1810,7 +1810,15 @@
     "noPledges": "कोई प्रतिज्ञा नहीं मिली",
     "noCampaigns": "कोई अभियान नहीं मिला",
     "raised": "एकत्रित",
-    "amountRaised": "एकत्रित राशि"
+    "amountRaised": "एकत्रित राशि",
+    "campaignIndex": "#",
+    "campaignName": "अभियान का नाम",
+    "startDate": "शुरुआत तिथि",
+    "endDate": "अंतिम तिथि",
+    "fundGoal": "वित्त पोषण लक्ष्य",
+    "percentRaised": "% एकत्रित",
+    "createFirstCampaign": "इसे यहाँ देखने के लिए अपना पहला धन उगाहने का अभियान बनाएं।",
+    "campaignEnded": "अभियान समाप्त हो गया"
   },
   "userPledges": {
     "title": "मेरी प्रतिज्ञाएँ",
@@ -1873,7 +1881,19 @@
     "thisEventOnly": "केवल यह घटना",
     "volunteerAlt": "स्वयंसेवक प्रोफ़ाइल चित्र",
     "groupTable": "समूह तालिका",
-    "volunteerActions": "स्वयंसेवक क्रियाएँ"
+    "volunteerActions": "स्वयंसेवक क्रियाएँ",
+    "volunteerHeader": "स्वयंसेवक",
+    "statusHeader": "स्थिति",
+    "hoursVolunteeredHeader": "स्वयंसेवा घंटे",
+    "optionsHeader": "विकल्प",
+    "groupHeader": "समूह",
+    "leaderHeader": "नेता",
+    "numVolunteersHeader": "स्वयंसेवकों की संख्या",
+    "pending": "लंबित",
+    "viewDetails": "{{name}} का विवरण देखें",
+    "editVolunteerGroup": "{{name}} स्वयंसेवक समूह संपादित करें",
+    "deleteVolunteerGroup": "{{name}} स्वयंसेवक समूह हटाएं",
+    "deleteVolunteerEntry": "{{name}} स्वयंसेवक प्रविष्टि हटाएं"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",
