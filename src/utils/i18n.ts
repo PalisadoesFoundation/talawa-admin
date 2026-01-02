@@ -10,8 +10,10 @@ i18n
   .use(LanguageDetector)
   .use(HttpApi)
   .init({
-    ns: ['translation', 'errors', 'common'],
-    defaultNS: 'translation',
+    // Only preload essential namespaces for unauthenticated users
+    // Other namespaces will be loaded on-demand via HTTP backend
+    ns: ['common', 'errors'],
+    defaultNS: 'common',
     fallbackLng: 'en',
     supportedLngs: languageArray,
     detection: {
@@ -21,6 +23,8 @@ i18n
     backend: {
       loadPath: '/locales/{{lng}}/{{ns}}.json',
     },
+    // Lazy load namespaces that aren't preloaded
+    partialBundledLanguages: true,
     // debug: true,
   });
 
