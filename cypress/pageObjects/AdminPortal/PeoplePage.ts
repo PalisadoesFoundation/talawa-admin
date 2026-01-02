@@ -62,10 +62,23 @@ export class PeoplePage {
   deleteMember(name: string, timeout = 40000) {
     this.searchMemberByName(name, timeout);
     this.verifyMemberInList(name, timeout);
-    cy.contains('tr', name, { timeout })
-      .find(this._removeModalBtn)
-      .should('be.visible')
-      .click();
+
+    // Wait for table to stabilize after search
+    cy.wait(500); // Allow debounce/render to complete
+
+    // Ensure we're working with a stable table
+    cy.get('tr', { timeout })
+      .should('have.length.greaterThan', 0)
+      .then(() => {
+        // Now find the specific row and click remove
+        cy.contains('tr', name, { timeout })
+          .should('be.visible')
+          .find(this._removeModalBtn)
+          .should('be.visible')
+          .should('have.length', 1) // Verify only ONE button found
+          .click();
+      });
+
     cy.get(this._confirmRemoveBtn, { timeout }).should('be.visible').click();
     cy.get(this._alert, { timeout })
       .should('be.visible')
