@@ -91,7 +91,6 @@ function UserListCard({ id }: InterfaceUserListCardProps): JSX.Element {
   }, 2000);
 }
 
-      
     } catch (error: unknown) {
       errorHandler(t, error);
     }
