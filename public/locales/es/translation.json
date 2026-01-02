@@ -425,7 +425,8 @@
     "sortTags": "Ordenar Etiquetas",
     "tags": "Etiquetas",
     "Latest": "Más Reciente",
-    "Oldest": "Más Antiguo"
+    "Oldest": "Más Antiguo",
+    "viewSubTags": "Ver {{count}} sub-etiquetas"
   },
   "manageTag": {
     "title": "Detalles de la Etiqueta",
@@ -520,7 +521,6 @@
     "publicEvent": "Es público",
     "isRegistrable": "Es registrable",
     "registerable": "Es registrable",
-
     "createEvent": "Crear evento",
     "enterFilter": "Introducir filtro",
     "enterName": "Introducir nombre",
@@ -554,7 +554,9 @@
     "month": "Mes",
     "year": "Año",
     "done": "Hecho",
-    "createChat": "Crear chat"
+    "createChat": "Crear chat",
+    "viewType": "Tipo de Vista",
+    "search": "Buscar usuarios"
   },
   "organizationActionItems": {
     "actionItemCategory": "Categoría de Acción",
@@ -797,7 +799,9 @@
     "latestEndDate": "Fecha de finalización más reciente",
     "earliestEndDate": "Fecha de finalización más temprana",
     "lowestGoal": "Meta más baja",
-    "highestGoal": "Meta más alta"
+    "highestGoal": "Meta más alta",
+    "percentageRaised": "% Recaudado",
+    "campaignProgress": "Progreso de la campaña: {{percentage}}%"
   },
   "pledges": {
     "title": "Compromisos de Campaña de Financiamiento",
@@ -966,7 +970,8 @@
     "agendas": "Agendas",
     "statistics": "Estadísticas",
     "to": "A",
-    "volunteers": "Voluntarios"
+    "volunteers": "Voluntarios",
+    "backToEvents": "Volver a Eventos"
   },
   "forgotPassword": {
     "title": "Talawa olvidó su contraseña",
@@ -1969,6 +1974,13 @@
     "altText": "Foto de perfil de {{name}}",
     "modalTitle": "Foto de perfil",
     "enlargedAltText": "Foto de perfil ampliada de {{name}}"
+  },
+  "eventCalendar": {
+    "noEventsAvailable": "No hay eventos disponibles",
+    "holidays": "Días festivos",
+    "events": "Eventos",
+    "eventsCreatedByOrganization": "Eventos creados por la organización",
+    "today": "Hoy"
   },
   "contact": {
     "card_aria": "Tarjeta de contacto"

@@ -425,7 +425,8 @@
     "sortTags": "Trier les étiquettes",
     "tags": "Étiquettes",
     "Latest": "Le Plus Récent",
-    "Oldest": "Le Plus Ancien"
+    "Oldest": "Le Plus Ancien",
+    "viewSubTags": "Voir {{count}} sous-étiquettes"
   },
   "manageTag": {
     "title": "Détails de l'étiquette",
@@ -515,7 +516,6 @@
     "publicEvent": "est public",
     "isRegistrable": "Est enregistrable",
     "registerable": "Est enregistrable",
-
     "createEvent": "Créer un évènement",
     "enterFilter": "Entrer le filtre",
     "enterName": "Entrez le nom",
@@ -554,7 +554,9 @@
     "endDate": "Date de fin",
     "talawaApiUnavailable": "API Talawa indisponible",
     "done": "Fait",
-    "createChat": "Créer une discussion"
+    "createChat": "Créer une discussion",
+    "viewType": "Type de Vue",
+    "search": "rechercher"
   },
   "organizationActionItems": {
     "actionItemCategory": "Catégorie de l'Action",
@@ -797,7 +799,9 @@
     "latestEndDate": "Dernière date de fin",
     "earliestEndDate": "Date de fin la plus ancienne",
     "lowestGoal": "Objectif le plus bas",
-    "highestGoal": "Objectif le plus élevé"
+    "highestGoal": "Objectif le plus élevé",
+    "percentageRaised": "% Collecté",
+    "campaignProgress": "Progression de la campagne: {{percentage}}%"
   },
   "pledges": {
     "title": "Engagements de campagne de financement",
@@ -966,7 +970,8 @@
     "agendas": "Ordres du jour",
     "statistics": "Statistiques",
     "to": "À",
-    "volunteers": "Bénévoles"
+    "volunteers": "Bénévoles",
+    "backToEvents": "Retour aux Événements"
   },
   "forgotPassword": {
     "title": "Talawa Mot de passe oublié",
@@ -1969,6 +1974,13 @@
     "altText": "Photo de profil de {{name}}",
     "modalTitle": "Photo de profil",
     "enlargedAltText": "Photo de profil agrandie de {{name}}"
+  },
+  "eventCalendar": {
+    "noEventsAvailable": "Aucun événement disponible",
+    "holidays": "Jours fériés",
+    "events": "Événements",
+    "eventsCreatedByOrganization": "Événements créés par l'organisation",
+    "today": "Aujourd'hui"
   },
   "contact": {
     "card_aria": "Carte de contact"

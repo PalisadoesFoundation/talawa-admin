@@ -6966,6 +6966,7 @@ form {
   color: var(--eventManagementSelectedBtn-color);
   background-color: var(--eventManagementSelectedBtn-bg) !important;
   border: 1px solid var(--eventManagementSelectedBtn-border) !important;
+  height: 2.5rem;
 }
 
 .eventManagementSelectedBtn:hover {
@@ -6977,6 +6978,7 @@ form {
   color: var(--eventManagementBtn-color);
   background-color: var(--eventManagementBtn-bg) !important;
   border-color: var(--eventManagementBtn-border) !important;
+  height: 2.5rem;
 }
 
 .eventManagementBtn:hover {
