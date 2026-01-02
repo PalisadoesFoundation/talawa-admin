@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider, MockedResponse } from '@apollo/react-testing';
 import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -317,15 +317,12 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     expect(window.location.pathname).toBe('/');
   });
 
-  it('handles logout error and still clears local storage', async () => {
+  const testLogoutError = async (logoutMock: MockedResponse) => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const { mockClearAllItems } = createMock();
 
-    const errorMocks = [
-      {
-        request: { query: LOGOUT_MUTATION },
-        error: new Error('Network error'),
-      },
+    const mocks = [
+      logoutMock,
       {
         request: {
           query: GET_USER_NOTIFICATIONS,
@@ -342,7 +339,7 @@ describe('Testing UserNavbar Component [User Portal]', () => {
       },
     ];
 
-    const errorLink = new StaticMockLink(errorMocks, true);
+    const errorLink = new StaticMockLink(mocks, true);
 
     render(
       <MockedProvider link={errorLink}>
@@ -375,67 +372,25 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     expect(window.location.pathname).toBe('/');
 
     consoleSpy.mockRestore();
+  };
+
+  it('handles logout error and still clears local storage', async () => {
+    const logoutMock = {
+      request: { query: LOGOUT_MUTATION },
+      error: new Error('Network error'),
+    };
+
+    await testLogoutError(logoutMock);
   });
 
   it('handles logout GraphQL error and still clears local storage', async () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    const { mockClearAllItems } = createMock();
-
-    const graphQLErrorMocks = [
-      {
-        request: { query: LOGOUT_MUTATION },
-        result: {
-          errors: [{ message: 'Logout failed' }],
-        },
+    const logoutMock = {
+      request: { query: LOGOUT_MUTATION },
+      result: {
+        errors: [{ message: 'Logout failed' }],
       },
-      {
-        request: {
-          query: GET_USER_NOTIFICATIONS,
-          variables: { userId: '123', input: { first: 5, skip: 0 } },
-        },
-        result: {
-          data: {
-            user: {
-              __typename: 'User',
-              notifications: [],
-            },
-          },
-        },
-      },
-    ];
+    };
 
-    const errorLink = new StaticMockLink(graphQLErrorMocks, true);
-
-    render(
-      <MockedProvider link={errorLink}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <UserNavbar />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
-    await wait();
-
-    await userEvent.click(screen.getByTestId('logoutDropdown'));
-    await userEvent.click(screen.getByTestId('logoutBtn'));
-
-    await wait();
-
-    // Verify error was logged
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'Error during logout:',
-      expect.any(Error),
-    );
-    // Verify toast was shown
-    expect(toast.error).toHaveBeenCalledWith('errorOccurred');
-    // Verify cleanup still happens even on error
-    expect(mockClearAllItems).toHaveBeenCalled();
-    expect(window.location.pathname).toBe('/');
-
-    consoleSpy.mockRestore();
+    await testLogoutError(logoutMock);
   });
 });
