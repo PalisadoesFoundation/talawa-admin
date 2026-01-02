@@ -28,6 +28,101 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: sharedMocks.toast,
 }));
 
+// Mock MUI TablePagination to expose onPageChange
+vi.mock('@mui/material', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@mui/material')>();
+  return {
+    ...actual,
+    TablePagination: ({
+      backIconButtonProps,
+      nextIconButtonProps,
+      onPageChange,
+      page,
+      labelDisplayedRows,
+    }: {
+      backIconButtonProps?: { disabled?: boolean };
+      nextIconButtonProps?: { disabled?: boolean };
+      onPageChange: (
+        event: React.MouseEvent<HTMLButtonElement> | null,
+        newPage: number,
+      ) => void;
+      page: number;
+      labelDisplayedRows?: ({ page }: { page: number }) => React.ReactNode;
+    }) => (
+      <div data-testid="mock-table-pagination">
+        <button
+          type="button"
+          aria-label="Previous Page"
+          disabled={backIconButtonProps?.disabled}
+          onClick={(e) => onPageChange(e, page - 1)}
+        >
+          Previous Page
+        </button>
+        <button
+          type="button"
+          aria-label="Next Page"
+          disabled={nextIconButtonProps?.disabled}
+          onClick={(e) => onPageChange(e, page + 1)}
+        >
+          Next Page
+        </button>
+        <span data-testid="page-info">
+          {labelDisplayedRows
+            ? labelDisplayedRows({ page })
+            : `Page ${page + 1}`}
+        </span>
+        {/* Force buttons to bypass disabled checks for coverage */}
+        <button
+          type="button"
+          data-testid="force-next"
+          onClick={(e) => onPageChange(e, page + 1)}
+        >
+          Force Next
+        </button>
+        <button
+          type="button"
+          data-testid="force-prev"
+          onClick={(e) => onPageChange(e, page - 1)}
+        >
+          Force Prev
+        </button>
+      </div>
+    ),
+  };
+});
+
+// Mock PageHeader to expose sorting options
+vi.mock('shared-components/Navbar/Navbar', () => ({
+  default: ({
+    sorting,
+  }: {
+    sorting: Array<{
+      testIdPrefix: string;
+      options: Array<{ value: string; label: string }>;
+      onChange: (value: string) => void;
+    }>;
+  }) => (
+    <div data-testid="page-header">
+      {sorting.map((sort, index) => (
+        <div key={index} data-testid={sort.testIdPrefix}>
+          {sort.options.map((opt) => (
+            <button
+              type="button"
+              key={opt.value}
+              onClick={() => sort.onChange(opt.value)}
+            >
+              {opt.label}
+            </button>
+          ))}
+          <button type="button" onClick={() => sort.onChange('invalid')}>
+            Invalid Sort
+          </button>
+        </div>
+      ))}
+    </div>
+  ),
+}));
+
 // Setup mock window.location
 const setupLocationMock = () => {
   Object.defineProperty(window, 'location', {
@@ -271,14 +366,14 @@ const renderAddMemberView = ({
   return render(<MockedProvider mocks={mocks}>{content}</MockedProvider>);
 };
 
-describe('AddMember Component', () => {
+describe('AddMember Screen', () => {
   beforeEach(() => {
     setupLocationMock();
     vi.clearAllMocks();
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   test('renders the add member button correctly', async () => {
@@ -526,11 +621,17 @@ describe('AddMember Component', () => {
       before: null,
     });
 
-    const addMemberMock = createAddMemberMutationMock({
-      memberId: 'user1',
-      organizationId: orgId,
-      role: 'regular',
-    });
+    const addMemberMock = {
+      request: {
+        query: CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
+        variables: {
+          memberId: 'user1',
+          organizationId: orgId,
+          role: 'regular',
+        },
+      },
+      error: new Error('Failed to add member'),
+    };
 
     const mocks = [createOrganizationsMock(orgId), userListMock, addMemberMock];
 
@@ -560,6 +661,11 @@ describe('AddMember Component', () => {
     // Click add button for first user
     const addButtons = await screen.findAllByTestId('addBtn');
     fireEvent.click(addButtons[0]);
+
+    // Verify error toast was shown
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalled();
+    });
   });
 
   test('handles pagination in user list', async () => {
@@ -808,12 +914,19 @@ describe('AddMember Component', () => {
   test('creates a new user error', async () => {
     const orgId = 'org123';
 
-    const registerMock = createRegisterMutationMock({
-      name: 'New User',
-      email: 'newuser@example.com',
-      password: 'password123',
-      isEmailAddressVerified: true,
-    });
+    const registerMock = {
+      request: {
+        query: CREATE_MEMBER_PG,
+        variables: {
+          name: 'New User',
+          email: 'newuser@example.com',
+          password: 'password123',
+          role: 'regular',
+          isEmailAddressVerified: true,
+        },
+      },
+      error: new Error('Failed to create user'),
+    };
 
     const addMemberMock = createAddMemberMutationMock({
       memberId: 'newUser1',
@@ -849,6 +962,11 @@ describe('AddMember Component', () => {
     // Submit the form
     const createButton = screen.getByTestId('createBtn');
     fireEvent.click(createButton);
+
+    // Verify error toast was shown
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalled();
+    });
   });
 
   test('creates a new user wrong confirm password error', async () => {
@@ -895,9 +1013,14 @@ describe('AddMember Component', () => {
     // Submit the form
     const createButton = screen.getByTestId('createBtn');
     fireEvent.click(createButton);
+
+    // Verify error toast was shown
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalled();
+    });
   });
 
-  test('creates a new no password error', async () => {
+  test('shows error when required fields are missing', async () => {
     const orgId = 'org123';
 
     const registerMock = createRegisterMutationMock({
@@ -941,6 +1064,11 @@ describe('AddMember Component', () => {
     // Submit the form
     const createButton = screen.getByTestId('createBtn');
     fireEvent.click(createButton);
+
+    // Verify error toast was shown
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalled();
+    });
   });
 
   test('missing endCursor condition', async () => {
@@ -970,6 +1098,7 @@ describe('AddMember Component', () => {
           hasNextPage: true,
           hasPreviousPage: false,
           startCursor: 'cursor1',
+          endCursor: null, // Force null
         },
       },
     );
@@ -990,10 +1119,141 @@ describe('AddMember Component', () => {
     const existingUserOption = screen.getByText('Existing User');
     fireEvent.click(existingUserOption);
 
-    // Wait for users to load - this will trigger the useEffect that processes endCursor
-    await waitFor(() => {
-      expect(screen.getByTestId('user')).toBeInTheDocument();
+    // Wait for users to load
+    await screen.findAllByTestId('user');
+
+    // Try to navigate to next page - it should return early because endCursor was missing
+    const nextPageButton = screen.getByLabelText('Next Page');
+    // Even if it's not disabled (due to hasNextPage: true), it should return early
+    fireEvent.click(nextPageButton);
+
+    // page should still be 0 (Page 1)
+    expect(screen.getByText('Page 1')).toBeInTheDocument();
+  });
+
+  test('missing startCursor condition', async () => {
+    const orgId = 'org123';
+
+    // First page and Second page setup
+    const page1Mock = createUserListMock({
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
     });
+
+    const page2MockWithoutStartCursor = createUserListMock(
+      { first: 10, after: 'cursor1', last: null, before: null },
+      {
+        edges: [
+          {
+            cursor: 'cursor3',
+            node: {
+              id: 'user3',
+              name: 'Bob Johnson',
+              emailAddress: 'bob@example.com',
+              avatarURL: null,
+            },
+          },
+        ],
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: true,
+          startCursor: null, // Force null
+          endCursor: 'cursor3',
+        },
+      },
+    );
+
+    const mocks = [
+      createOrganizationsMock(orgId),
+      page1Mock,
+      page2MockWithoutStartCursor,
+    ];
+    const link = new StaticMockLink(mocks, true);
+
+    renderAddMemberView({
+      link,
+      initialEntry: `/orgpeople/${orgId}`,
+    });
+
+    // Open modal
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+    const existingUserOption = screen.getByText('Existing User');
+    fireEvent.click(existingUserOption);
+
+    // Go to next page
+    const nextPageButton = await screen.findByLabelText('Next Page');
+    await waitFor(() => expect(nextPageButton).not.toBeDisabled());
+    fireEvent.click(nextPageButton);
+
+    // Wait for page 2
+    await screen.findByText(/Bob Johnson/);
+    expect(screen.getByText('Page 2')).toBeInTheDocument();
+
+    // Try to go back - it should return early because startCursor was missing
+    const prevPageButton = screen.getByLabelText('Previous Page');
+    fireEvent.click(prevPageButton);
+    // page should still be 1 (Page 2)
+    expect(screen.getByText('Page 2')).toBeInTheDocument();
+  });
+
+  test('handles early returns in handleChangePage when paginationMeta prevents navigation', async () => {
+    const orgId = 'org123';
+    const userListMock = createUserListMock(
+      {
+        first: 10,
+        after: null,
+        last: null,
+        before: null,
+      },
+      {
+        pageInfo: {
+          hasNextPage: false,
+          hasPreviousPage: false,
+        },
+      },
+    );
+
+    const mocks = [createOrganizationsMock(orgId), userListMock];
+    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
+
+    // Open modal
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+    const existingUserOption = screen.getByText('Existing User');
+    fireEvent.click(existingUserOption);
+
+    await screen.findAllByTestId('user');
+
+    // Manually trigger click using our special "force" buttons to bypass disabled state
+    // This allows us to hit the guard clauses in lines 263-264
+    const forceNext = screen.getByTestId('force-next');
+    const forcePrev = screen.getByTestId('force-prev');
+
+    fireEvent.click(forceNext);
+    fireEvent.click(forcePrev);
+
+    // Page should still be 1 (index 0) because of the guard clauses
+    expect(screen.getByTestId('page-info')).toHaveTextContent('Page 1');
+  });
+
+  test('ignores invalid sort option', async () => {
+    const orgId = 'org123';
+    const mocks = [createOrganizationsMock(orgId)];
+
+    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
+
+    // Click invalid sort option
+    const invalidSort = await screen.findByText('Invalid Sort');
+    fireEvent.click(invalidSort);
+
+    // Verify nothing happened (modals shouldn't match)
+    expect(
+      screen.queryByTestId('addExistingUserModal'),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByTestId('addNewUserModal')).not.toBeInTheDocument();
   });
 
   test('handles error when adding member to organization fails', async () => {
@@ -1107,61 +1367,127 @@ describe('AddMember Component', () => {
       expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
-});
 
-test('calls setUserName, resetPagination and fetchUsers on search', async () => {
-  const orgId = 'org123';
+  test('shows "No users found" when the user list is empty', async () => {
+    const orgId = 'org123';
 
-  const initialUserListMock = createUserListMock({
-    first: 10,
-    after: null,
-    last: null,
-    before: null,
+    // Exact variables as they would be sent by the component
+    const emptyUserListMock = {
+      request: {
+        query: USER_LIST_FOR_TABLE,
+        variables: { first: 10, after: null, last: null, before: null },
+      },
+      result: {
+        data: {
+          allUsers: {
+            edges: [],
+            pageInfo: {
+              hasNextPage: false,
+              hasPreviousPage: false,
+              startCursor: null,
+              endCursor: null,
+            },
+          },
+        },
+      },
+    };
+
+    const mocks = [createOrganizationsMock(orgId), emptyUserListMock];
+    const link = new StaticMockLink(mocks, true);
+
+    renderAddMemberView({ link, initialEntry: `/orgpeople/${orgId}` });
+
+    // Open the add member modal
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    // Select existing user option
+    const existingUserOption = await screen.findByText('Existing User');
+    fireEvent.click(existingUserOption);
+
+    // Wait for the loader to disappear and "No users found" message to appear
+    await waitFor(() => {
+      expect(screen.queryByText(/loading/i)).not.toBeInTheDocument();
+    });
+
+    expect(await screen.findByText(/No Members Found/i)).toBeInTheDocument();
   });
 
-  const searchMock = createUserListMock({
-    first: 10,
-    where: { name: 'Alex' },
-    after: null,
-    last: null,
-    before: null,
+  test('shows "Error loading users" when the user list query fails', async () => {
+    const orgId = 'org123';
+    const errorUserListMock = {
+      request: {
+        query: USER_LIST_FOR_TABLE,
+        variables: { first: 10, after: null, last: null, before: null },
+      },
+      error: new Error('GraphQL error'),
+    };
+
+    const mocks = [createOrganizationsMock(orgId), errorUserListMock];
+    const link = new StaticMockLink(mocks, true);
+
+    renderAddMemberView({ link, initialEntry: `/orgpeople/${orgId}` });
+
+    // Open the add member modal
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
+
+    // Select existing user option
+    const existingUserOption = await screen.findByText('Existing User');
+    fireEvent.click(existingUserOption);
+
+    // Wait for "Error loading users" message
+    expect(
+      await screen.findByText(/Error occurred while loading Users/i),
+    ).toBeInTheDocument();
   });
 
-  const mocks = [
-    createOrganizationsMock(orgId),
-    initialUserListMock,
-    searchMock,
-  ];
+  test('calls setUserName, resetPagination and fetchUsers on search', async () => {
+    const orgId = 'org123';
 
-  render(
-    <MockedProvider mocks={mocks}>
-      <MemoryRouter initialEntries={[`/orgpeople/${orgId}`]}>
-        <I18nextProvider i18n={i18nForTest}>
-          <AddMember />
-        </I18nextProvider>
-      </MemoryRouter>
-    </MockedProvider>,
-  );
+    const initialUserListMock = createUserListMock({
+      first: 10,
+      after: null,
+      last: null,
+      before: null,
+    });
 
-  // open modal
-  const addMembersButton = await screen.findByTestId('addMembers');
-  fireEvent.click(addMembersButton);
+    const searchMock = createUserListMock({
+      first: 10,
+      where: { name: 'Alex' },
+      after: null,
+      last: null,
+      before: null,
+    });
 
-  const existingUserOption = screen.getByText('Existing User');
-  fireEvent.click(existingUserOption);
+    const mocks = [
+      createOrganizationsMock(orgId),
+      initialUserListMock,
+      searchMock,
+    ];
 
-  // Wait for initial results
-  await screen.findAllByTestId('user');
+    renderAddMemberView({ mocks, initialEntry: `/orgpeople/${orgId}` });
 
-  // 🔍 search action
-  const searchInput = screen.getByTestId('searchUser');
-  fireEvent.change(searchInput, { target: { value: 'Alex' } });
+    // open modal
+    const addMembersButton = await screen.findByTestId('addMembers');
+    fireEvent.click(addMembersButton);
 
-  const submitButton = screen.getByTestId('submitBtn');
-  fireEvent.click(submitButton);
+    const existingUserOption = screen.getByText('Existing User');
+    fireEvent.click(existingUserOption);
 
-  // → If setUserName, resetPagination & fetchUsers were called,
-  //    the list refreshes to show only the search result.
-  const users = await screen.findAllByTestId('user');
-  expect(users.length).toBe(2);
+    // Wait for initial results
+    await screen.findAllByTestId('user');
+
+    // 🔍 search action
+    const searchInput = screen.getByTestId('searchUser');
+    fireEvent.change(searchInput, { target: { value: 'Alex' } });
+
+    const submitButton = screen.getByTestId('submitBtn');
+    fireEvent.click(submitButton);
+
+    // → If setUserName, resetPagination & fetchUsers were called,
+    //    the list refreshes to show only the search result.
+    const users = await screen.findAllByTestId('user');
+    expect(users.length).toBe(2);
+  });
 });

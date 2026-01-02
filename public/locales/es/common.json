@@ -196,6 +196,11 @@
   "imageUploadSuccess": "Imagen subida con éxito",
   "postalCode": "Código Postal",
   "state": "Estado",
+  "paginationPrev": "Anterior \u2039",
+  "paginationNext": "Siguiente \u203a",
+  "tablePagination": "Paginación de la tabla",
+  "paginationPrevLabel": "Página anterior",
+  "paginationNextLabel": "Página siguiente",
   "closeModal": "Cerrar modal",
   "errorLoadingUsers": "Error al cargar usuarios",
   "noUsersFound": "No se encontraron usuarios",
@@ -203,5 +208,8 @@
   "selectAZipFile": "Seleccione un archivo ZIP",
   "version": "Versión",
   "author": "Autor",
-  "removePermanently": "Eliminar permanentemente"
+  "removePermanently": "Eliminar permanentemente",
+  "previousPage": "Página anterior",
+  "nextPage": "Siguiente página",
+  "pageNumber": "Página {{page}}"
 }

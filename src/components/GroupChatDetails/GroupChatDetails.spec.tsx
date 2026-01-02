@@ -23,8 +23,7 @@ import {
 import type { NewChatType } from 'types/Chat/interface';
 
 // Standardized cache configuration for Apollo MockedProvider
-// Using addTypename: false for Apollo 4.x compatibility
-const testCache = new InMemoryCache({ addTypename: false });
+const testCache = new InMemoryCache();
 
 // Mock MinIO hooks used for uploading/downloading files
 vi.mock('utils/MinioUpload', () => ({

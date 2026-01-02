@@ -1,4 +1,6 @@
 {
+  "ends": "结束",
+  "occurrences": "次",
   "leaderboard": {
     "title": "排行榜",
     "searchByVolunteer": "按志愿者搜索",
@@ -247,11 +249,11 @@
     "rejectedSuccessfully": "请求被成功拒绝",
     "noOrgErrorTitle": "未找到组织",
     "noOrgErrorDescription": "请通过仪表板创建组织",
-    "newMembersWillAppearHere": "新成员将显示在此处",
     "name": "名称",
     "email": "电子邮件",
     "profilePictureAlt": "{{name}} 的头像",
-    "placeholderAvatarAlt": "占位符头像"
+    "placeholderAvatarAlt": "占位符头像",
+    "newMembersWillAppearHere": "新的会员请求将出现在这里"
   },
   "users": {
     "membershipStatus": {
@@ -404,6 +406,7 @@
     "manageTag": "管理",
     "editTag": "编辑",
     "removeTag": "删除",
+    "tags": "标签",
     "tagDetails": "标签详情",
     "tagName": "名称",
     "tagType": "类型",
@@ -414,6 +417,8 @@
     "noTagsFound": "未找到标签",
     "removeUserTag": "删除标签",
     "removeUserTagMessage": "您确定要删除此标签吗？",
+    "Latest": "最新",
+    "Oldest": "最旧",
     "addChildTag": "添加子标签",
     "enterTagName": "输入标签名称",
     "totalSubTags": "总子标签",
@@ -423,7 +428,8 @@
     "sortTags": "排序标签",
     "tags": "标签",
     "Latest": "最新",
-    "Oldest": "最旧"
+    "Oldest": "最旧",
+    "viewSubTags": "查看 {{count}} 个子标签"
   },
   "manageTag": {
     "title": "标签详情",
@@ -513,6 +519,7 @@
     "publicEvent": "是公开的",
     "isRegistrable": "可注册",
     "registerable": "可注册",
+
     "createEvent": "创建事件",
     "enterFilter": "输入过滤器",
     "enterName": "输入名称",
@@ -529,7 +536,7 @@
     "never": "绝不",
     "on": "在",
     "after": "后",
-    "occurences": "事件",
+    "occurrences": "次",
     "monthlyOn": "每月开",
     "yearlyOn": "每年开",
     "yearlyRecurrenceDesc": "此事件将在每年的事件开始日期的同一天重复。",
@@ -551,13 +558,16 @@
     "endDate": "结束日期",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
     "done": "完成",
-    "createChat": "创建聊天"
+    "createChat": "创建聊天",
+    "viewType": "视图类型",
+    "search": "搜索"
   },
   "organizationActionItems": {
     "actionItemCategory": "行动项类别",
     "actionItemDetails": "行动项详情",
     "actionItemCompleted": "行动项已完成",
     "assignee": "受托人",
+    "assigneeOrCategory": "受托人或类别",
     "assignedTo": "分配给",
     "assigner": "分配人",
     "assignmentDate": "分配日期",
@@ -724,7 +734,7 @@
     "never": "绝不",
     "on": "在",
     "after": "后",
-    "occurences": "事件",
+    "occurrences": "次",
     "location": "位置",
     "no": "否",
     "yes": "是",
@@ -793,7 +803,9 @@
     "latestEndDate": "最新结束日期",
     "earliestEndDate": "最早结束日期",
     "lowestGoal": "最低目标",
-    "highestGoal": "最高目标"
+    "highestGoal": "最高目标",
+    "percentageRaised": "% 已筹集",
+    "campaignProgress": "活动进度: {{percentage}}%"
   },
   "pledges": {
     "title": "基金活动承诺",
@@ -962,7 +974,8 @@
     "agendas": "议程",
     "statistics": "统计数据",
     "to": "到",
-    "volunteers": "志愿者"
+    "volunteers": "志愿者",
+    "backToEvents": "返回活动"
   },
   "forgotPassword": {
     "title": "塔拉瓦 忘记密码",
@@ -1028,6 +1041,7 @@
     "deleteMsg": "您想删除该组织吗？",
     "confirmDelete": "确认删除",
     "longDelOrgMsg": "通过单击\"删除组织\"按钮，该组织及其事件、标签和所有相关数据将被永久删除。",
+    "deleteSampleOrganization": "删除示例组织",
     "successfullyDeletedSampleOrganization": "已成功删除样本组织",
     "cancel": "取消"
   },
@@ -1084,7 +1098,34 @@
     "saveChanges": "保存更改",
     "cancel": "取消",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
-    "enterOrganizationDescription": "输入组织描述"
+    "enterOrganizationDescription": "输入组织描述",
+    "userRegistrationRequired": "需要用户注册",
+    "nameDescriptionRequired": "名称和描述为必填项",
+    "updateFailed": "更新组织失败"
+  },
+  "public": {
+    "invitation": {
+      "title": "活动邀请",
+      "previewText": "您已被邀请加入此活动。",
+      "inviteeEmail": "受邀者邮箱",
+      "anyone": "任何已登录用户",
+      "organizationId": "组织 ID",
+      "eventId": "活动 ID",
+      "eventTitle": "活动 {{eventId}}",
+      "expiresAt": "到期时间",
+      "mustLogin": "请登录或创建账号以接受此邀请。",
+      "login": "登录",
+      "signup": "注册",
+      "invalidToken": "无效的邀请令牌",
+      "invitationNotFound": "邀请不存在或无效",
+      "verifyError": "验证邀请时出错",
+      "accept": "接受邀请",
+      "accepted": "邀请已接受",
+      "acceptError": "无法接受邀请",
+      "maskedNotice": "此邀请发给了一个被遮罩的邮箱地址。接受前请确认您是受邀者。",
+      "confirmMatch": "我确认我的账户邮箱与受邀邮箱（如上所示）一致。",
+      "signInAsDifferent": "以其他用户登录"
+    }
   },
   "memberDetail": {
     "title": "用户详细信息",
@@ -1316,6 +1357,7 @@
     "chartPageNavigation": "图表页面导航",
     "previousPage": "上一页",
     "nextPage": "下一页",
+    "pageNumber": "第 {{page}} 页",
     "goToToday": "转到今天",
     "genderDistribution": "性别分布",
     "ageDistribution": "年龄分布"
@@ -1506,7 +1548,14 @@
     "day": "天",
     "week": "周",
     "month": "月",
-    "year": "年"
+    "year": "年",
+    "ends": "结束",
+    "occurrences": "次",
+    "never": "从不",
+    "on": "在",
+    "after": "之后",
+    "customRecurrence": "自定义重复",
+    "repeatsEvery": "重复周期"
   },
   "userEventCard": {
     "starts": "开始",
@@ -1675,7 +1724,8 @@
     "user": "用户",
     "profile": "个人资料",
     "customizedTable": "自定义表格",
-    "page": "页"
+    "page": "页",
+    "add": "添加"
   },
   "eventActionItems": {
     "title": "行动项目",
@@ -1719,6 +1769,7 @@
     "title": "筹款活动",
     "searchByName": "按名字搜索...",
     "searchBy": "按...搜索",
+    "searchCampaigns": "搜索活动",
     "pledgers": "承诺者",
     "pledger": "承诺者",
     "campaigns": "活动",
@@ -1742,7 +1793,8 @@
     "amountRaised": "已筹集金额"
   },
   "userPledges": {
-    "title": "我的承诺"
+    "title": "我的承诺",
+    "searchPledges": "搜索承诺"
   },
   "leaveOrganization": {
     "title": "离开组织"
@@ -1751,6 +1803,7 @@
     "toggleGroupAriaLabel": "志愿者视图选择器",
     "volunteers": "志愿者",
     "volunteer": "志愿者",
+    "volunteerName": "志愿者姓名",
     "volunteerGroups": "志愿者小组",
     "individuals": "个人",
     "groups": "小组",
@@ -1773,6 +1826,7 @@
     "deleteVolunteerGroupMsg": "您确定要删除此志愿者小组吗？",
     "leader": "领导",
     "group": "小组",
+    "groupOrLeader": "小组或领导",
     "createGroup": "创建小组",
     "updateGroup": "更新小组",
     "deleteGroup": "删除小组",
@@ -1796,7 +1850,10 @@
     "leastVolunteers": "最少的志愿者",
     "applyTo": "适用于",
     "entireSeries": "整个系列",
-    "thisEventOnly": "仅限本次活动"
+    "thisEventOnly": "仅限本次活动",
+    "volunteerAlt": "志愿者头像",
+    "groupTable": "小组表",
+    "volunteerActions": "志愿者操作"
   },
   "userVolunteer": {
     "title": "志愿服务",
@@ -1808,11 +1865,15 @@
     "actions": "行动项",
     "search": "搜索",
     "searchByName": "按名称搜索",
+    "startDate": "开始日期",
     "latestEndDate": "最晚结束日期",
     "earliestEndDate": "最早结束日期",
     "noEvents": "无即将举行的活动",
     "volunteer": "志愿者",
     "volunteered": "已志愿",
+    "volunteerName": "姓名",
+    "volunteerActions": "操作",
+    "volunteerAlt": "志愿者",
     "join": "加入",
     "joined": "已加入",
     "searchByEventName": "按活动标题搜索",
@@ -1840,6 +1901,7 @@
     "event": "活动",
     "received": "已收到",
     "location": "位置",
+    "titleOrLocation": "标题或位置",
     "recurrence": "重复",
     "endDate": "结束日期",
     "description": "描述",
@@ -1848,7 +1910,8 @@
     "srNo": "序号",
     "groupName": "小组名称",
     "noOfMembers": "成员数量",
-    "options": "选项"
+    "options": "选项",
+    "notSpecified": "未指定"
   },
   "pluginStore": {
     "title": "插件商店",
@@ -1928,6 +1991,13 @@
     "altText": "{{name}}的个人资料图片",
     "modalTitle": "个人资料图片",
     "enlargedAltText": "{{name}}的放大个人资料图片"
+  },
+  "eventCalendar": {
+    "noEventsAvailable": "没有可用的活动",
+    "holidays": "节假日",
+    "events": "活动",
+    "eventsCreatedByOrganization": "组织创建的活动",
+    "today": "今天"
   },
   "common": {
     "signOut": "退出登录",

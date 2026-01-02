@@ -48,9 +48,59 @@ export interface IColumnDef<T, TValue = unknown> {
 }
 
 /**
+ * PageInfo for DataTable component with server-side pagination
+ */
+
+export interface IPageInfo {
+  /**
+   * Indicates if there is a next page available
+   */
+  hasNextPage: boolean;
+  /**
+   *  Indicates if there is a previous page available
+   */
+  hasPreviousPage: boolean;
+  /**
+   * Cursor for the start of the current page
+   */
+  startCursor?: string;
+  /**
+   * Cursor for the end of the current page
+   */
+  endCursor?: string;
+}
+/**
+ * Props for pagination controls (minimal API used by current component)
+ *
+ * TYPE SAFETY AUDIT:
+ * - page, pageSize, totalItems are strictly typed as number (not string | number | any)
+ * - TypeScript prevents string/unknown types at compile-time
+ * - All callers (DataTable.tsx verified as only caller) provide numeric values
+ * - No string-to-number coercion needed; Number.isFinite() checks are defensive only
+ *
+ * CALL SITE VERIFICATION:
+ * - DataTable.tsx: pageSize = 10 (default numeric), totalItems = (totalItems ?? data.length)
+ * - All props destructured from typed IDataTableProps&lt;T&gt; interface
+ * - No URL parameters or form inputs directly coerced to number here
+ *
+ * Future consideration: If external callers provide string pageSize/totalItems,
+ * restore explicit coercion: Number.isFinite(Number(totalItems)) && Number.isFinite(Number(pageSize))
+ */
+export interface IPaginationControlsProps {
+  /** Current page number (1-indexed) */
+  page: number;
+  /** Number of items per page */
+  pageSize: number;
+  /** Total number of items across all pages */
+  totalItems: number;
+  /** Callback when page changes */
+  onPageChange: (page: number) => void;
+}
+/**
  * Props for a generic DataTable component
  */
-export interface IDataTableProps<T, TValue = unknown> {
+
+export interface IBaseDataTableProps<T, TValue = unknown> {
   data: T[];
   columns: Array<IColumnDef<T, TValue>>;
   loading?: boolean;
@@ -70,6 +120,62 @@ export interface IDataTableProps<T, TValue = unknown> {
   /** Number of skeleton rows to show when loading (default: 6) */
   skeletonRows?: number;
 }
+
+type ClientPaginationProps = {
+  paginationMode: 'client';
+  pageSize?: number; // default: 10
+  currentPage?: number; // controlled page (1-indexed)
+  onPageChange?: (page: number) => void;
+  totalItems?: number; // default: data.length (client mode)
+  pageInfo?: never;
+  onLoadMore?: never;
+  loadingMore?: never;
+};
+// Server pagination requires both pageInfo and onLoadMore together (or neither).
+type ServerPaginationProps =
+  | {
+      paginationMode: 'server';
+      pageSize?: never;
+      currentPage?: never;
+      onPageChange?: (page: number) => void;
+      totalItems?: number;
+      pageInfo: IPageInfo; // GraphQL-style page info
+      onLoadMore: () => void; // called to fetch next page
+      loadingMore?: boolean; // true while fetching more
+    }
+  | {
+      paginationMode: 'server';
+      pageSize?: never;
+      currentPage?: never;
+      onPageChange?: (page: number) => void;
+      totalItems?: number;
+      pageInfo?: undefined;
+      onLoadMore?: undefined;
+      loadingMore?: undefined;
+    };
+
+type NoPaginationProps = {
+  paginationMode?: undefined;
+  pageSize?: never;
+  currentPage?: never;
+  onPageChange?: never;
+  totalItems?: never;
+  pageInfo?: never;
+  onLoadMore?: never;
+  loadingMore?: never;
+};
+
+type PaginationProps =
+  | ClientPaginationProps
+  | ServerPaginationProps
+  | NoPaginationProps;
+
+// i18n-ignore-next-line
+export type IDataTableProps<T, TValue = unknown> = IBaseDataTableProps<
+  T,
+  TValue
+> &
+  PaginationProps;
 
 /** Sorting state */
 export interface ISortState {

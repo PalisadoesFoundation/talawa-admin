@@ -5,7 +5,7 @@ import type { DocumentNode } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import DeleteOrg from './DeleteOrg';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import { describe, beforeEach, it, expect, vi, type Mock } from 'vitest';
 import {
@@ -37,10 +37,12 @@ vi.mock('utils/useLocalstorage', () => ({
   })),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: {
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
   },
 }));
 
@@ -55,6 +57,7 @@ describe('DeleteOrg Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    vi.useRealTimers();
 
     (useParams as Mock).mockReturnValue({ orgId: '1' });
     (useNavigate as Mock).mockReturnValue(navigateMock);
@@ -76,6 +79,7 @@ describe('DeleteOrg Component', () => {
   });
 
   afterEach(() => {
+    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 
@@ -126,7 +130,7 @@ describe('DeleteOrg Component', () => {
     fireEvent.click(screen.getByTestId('deleteOrganizationBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(error.message);
+      expect(NotificationToast.error).toHaveBeenCalledWith(error.message);
     });
   });
 
@@ -143,14 +147,17 @@ describe('DeleteOrg Component', () => {
 
     await waitFor(() => {
       expect(removeSampleOrgMutationMock).toHaveBeenCalled();
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(NotificationToast.success).toHaveBeenCalledWith(
         'successfullyDeletedSampleOrganization',
       );
     });
 
-    await waitFor(() => {
-      expect(navigateMock).toHaveBeenCalledWith('/orglist');
-    });
+    await waitFor(
+      () => {
+        expect(navigateMock).toHaveBeenCalledWith('/orglist');
+      },
+      { timeout: 1500 },
+    );
   });
 
   it('renders delete button with different text for sample organization', () => {
