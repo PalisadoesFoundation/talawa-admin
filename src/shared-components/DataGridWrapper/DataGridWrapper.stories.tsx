@@ -355,14 +355,14 @@ export const CompleteExample: Story = {
     actionColumn: (row: User) => (
       <>
         <IconButton
-          onClick={() => console.log('Edit:', row)}
+          onClick={() => alert('Edit user' + row.name)}
           aria-label={'Edit ' + row.name}
           size="small"
         >
           <EditIcon fontSize="small" />
         </IconButton>
         <IconButton
-          onClick={() => console.log('Delete:', row)}
+          onClick={() => alert('Delete user: ' + row.name)}
           aria-label={'Delete ' + row.name}
           size="small"
           color="error"
@@ -371,7 +371,7 @@ export const CompleteExample: Story = {
         </IconButton>
       </>
     ),
-    onRowClick: (row: User) => console.log('Row clicked:', row),
+    onRowClick: (row: User) => alert(`Row clicked: ${row.name}`),
   },
   parameters: {
     docs: {
