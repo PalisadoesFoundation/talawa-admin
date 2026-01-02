@@ -68,6 +68,7 @@ import Avatar from 'components/Avatar/Avatar';
 import { FiEdit } from 'react-icons/fi';
 import { useMinioUpload } from 'utils/MinioUpload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
@@ -86,6 +87,7 @@ export default function CreateGroupChat({
 }: InterfaceCreateGroupChatProps): JSX.Element {
   const userId: string | null = getItem('userId') || getItem('id');
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
+  const { t: tErrors } = useTranslation('errors');
 
   const [createChat] = useMutation(CREATE_CHAT);
   const [createChatMembership] = useMutation(CREATE_CHAT_MEMBERSHIP);
@@ -204,7 +206,13 @@ export default function CreateGroupChat({
   };
 
   return (
-    <>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+      onReset={chatsListRefetch}
+    >
       <Modal
         data-testid="createGroupChatModal"
         show={createGroupChatModalisOpen}
@@ -420,6 +428,6 @@ export default function CreateGroupChat({
           </Button>
         </Modal.Body>
       </Modal>
-    </>
+    </ErrorBoundaryWrapper>
   );
 }

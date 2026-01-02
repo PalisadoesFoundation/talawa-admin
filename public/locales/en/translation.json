@@ -1611,7 +1611,11 @@
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",
     "sendMessage": "Send Message",
-    "reply": "Reply"
+    "reply": "Reply",
+    "loadingImage": "Loading image...",
+    "imageNotAvailable": "Image not available",
+    "attachment": "attachment",
+    "loadingMoreMessages": "Loading more messages..."
   },
   "orgActionItemCategories": {
     "enableButton": "Enable",

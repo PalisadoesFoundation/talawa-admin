@@ -60,6 +60,7 @@ import { errorHandler } from 'utils/errorHandler';
 import type { TFunction } from 'i18next';
 import { type GroupChat } from 'types/Chat/type';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 interface InterfaceOrganizationMember {
   id: string;
@@ -201,6 +202,7 @@ export default function createDirectChatModal({
   chats,
 }: InterfaceCreateDirectChatProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
+  const { t: tErrors } = useTranslation('errors');
   const { orgId: organizationId } = useParams();
 
   // Support both 'userId' (for regular users) and 'id' (for admins)
@@ -240,7 +242,13 @@ export default function createDirectChatModal({
   };
 
   return (
-    <>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+      onReset={chatsListRefetch}
+    >
       <Modal
         data-testid="createDirectChatModal"
         show={createDirectChatModalisOpen}
@@ -354,6 +362,6 @@ export default function createDirectChatModal({
           </LoadingState>
         </Modal.Body>
       </Modal>
-    </>
+    </ErrorBoundaryWrapper>
   );
 }

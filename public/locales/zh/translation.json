@@ -1611,7 +1611,11 @@
   "userChatRoom": {
     "selectContact": "选择联系人开始对话",
     "sendMessage": "发信息",
-    "reply": "回复"
+    "reply": "回复",
+    "loadingImage": "載入圖片中...",
+    "imageNotAvailable": "圖片不可用",
+    "attachment": "附件",
+    "loadingMoreMessages": "載入更多訊息中..."
   },
   "orgActionItemCategories": {
     "enableButton": "使能够",
