@@ -1802,7 +1802,10 @@ describe('updateActionForInstanceHandler', () => {
     fireEvent.submit(submitButton);
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
       expect(mockRefetch).toHaveBeenCalled();
       expect(mockOrgRefetch).toHaveBeenCalled();
       expect(mockHide).toHaveBeenCalled();
@@ -2022,7 +2025,10 @@ describe('updateActionForInstanceHandler', () => {
     fireEvent.submit(submitButton);
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
       expect(mockRefetch).toHaveBeenCalledTimes(1);
       expect(mockOrgRefetch).toHaveBeenCalledTimes(1);
       expect(mockHide).toHaveBeenCalledTimes(1);
@@ -2253,7 +2259,10 @@ describe('updateActionForInstanceHandler', () => {
     fireEvent.submit(submitButton);
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
     });
   });
 
@@ -2328,7 +2337,10 @@ describe('updateActionForInstanceHandler', () => {
     fireEvent.submit(submitButton);
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
     });
   });
 });
@@ -2437,7 +2449,10 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
     await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
       expect(mockRefetch).toHaveBeenCalled();
       expect(mockHide).toHaveBeenCalled();
     });
@@ -2897,7 +2912,10 @@ describe('orgActionItemsRefetch functionality', () => {
     await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'eventActionItems.successfulCreation',
+        namespace: 'translation',
+      });
       expect(mockRefetch).toHaveBeenCalled();
       expect(mockOrgRefetch).toHaveBeenCalled();
       expect(mockHide).toHaveBeenCalled();
@@ -2982,7 +3000,10 @@ describe('orgActionItemsRefetch functionality', () => {
     await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(NotificationToast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
       expect(mockRefetch).toHaveBeenCalled();
       expect(mockOrgRefetch).toHaveBeenCalled();
       expect(mockHide).toHaveBeenCalled();
@@ -3122,7 +3143,10 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       await userEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalled();
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'eventActionItems.successfulCreation',
+          namespace: 'translation',
+        });
         expect(mockRefetch).toHaveBeenCalled();
         expect(mockHide).toHaveBeenCalled();
       });
@@ -4002,7 +4026,11 @@ describe('Partially Covered Lines Test Coverage', () => {
       await userEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(NotificationToast.success).toHaveBeenCalled();
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'eventActionItems.successfulCreation',
+          namespace: 'translation',
+        });
+
         expect(mockRefetch).toHaveBeenCalled();
         expect(mockHide).toHaveBeenCalled();
       });
