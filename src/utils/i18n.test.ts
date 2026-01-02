@@ -1,5 +1,15 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import i18n from './i18n';
+import LocalStorageBackend from 'i18next-localstorage-backend';
+import HttpApi from 'i18next-http-backend';
+
+type I18nBackendOptions = {
+  backends?: unknown[];
+  backendOptions?: Array<{
+    expirationTime?: number;
+    loadPath?: string;
+  }>;
+};
 
 describe('i18n Configuration', () => {
   beforeEach(async () => {
@@ -43,14 +53,12 @@ describe('i18n Configuration', () => {
   });
 
   it('should have chained backend configured', () => {
-    const backendOptions = i18n.options.backend as {
-      backends?: unknown[];
-      backendOptions?: Array<{
-        expirationTime?: number;
-        loadPath?: string;
-      }>;
-    };
+    const backendOptions = i18n.options.backend as I18nBackendOptions;
     expect(backendOptions?.backends).toHaveLength(2);
+
+    const backends = backendOptions?.backends;
+    expect(backends?.[0]).toBe(LocalStorageBackend);
+    expect(backends?.[1]).toBe(HttpApi);
   });
 
   it('should have partial bundled languages enabled', () => {
@@ -58,26 +66,14 @@ describe('i18n Configuration', () => {
   });
 
   it('should have correct cache expiration time', () => {
-    const backendOptions = i18n.options.backend as {
-      backends?: unknown[];
-      backendOptions?: Array<{
-        expirationTime?: number;
-        loadPath?: string;
-      }>;
-    };
+    const backendOptions = i18n.options.backend as I18nBackendOptions;
     expect(backendOptions?.backendOptions?.[0]?.expirationTime).toBe(
       7 * 24 * 60 * 60 * 1000,
     );
   });
 
   it('should have correct load path for HTTP backend', () => {
-    const backendOptions = i18n.options.backend as {
-      backends?: unknown[];
-      backendOptions?: Array<{
-        expirationTime?: number;
-        loadPath?: string;
-      }>;
-    };
+    const backendOptions = i18n.options.backend as I18nBackendOptions;
     expect(backendOptions?.backendOptions?.[1]?.loadPath).toBe(
       '/locales/{{lng}}/{{ns}}.json',
     );
