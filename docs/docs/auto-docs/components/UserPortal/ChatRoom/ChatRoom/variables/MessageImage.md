@@ -6,4 +6,4 @@
 
 > `const` **MessageImage**: `NamedExoticComponent`\<`IMessageImageProps`\>
 
-Defined in: [src/components/UserPortal/ChatRoom/ChatRoom.tsx:218](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/ChatRoom.tsx#L218)
+Defined in: [src/components/UserPortal/ChatRoom/ChatRoom.tsx:219](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/ChatRoom.tsx#L219)

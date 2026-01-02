@@ -1663,7 +1663,13 @@
     "attachment": "अनुलग्नक",
     "reply": "जवाब",
     "edit": "संपादित करें",
-    "delete": "हटाएं"
+    "delete": "हटाएं",
+    "errorBoundary": {
+      "title": "कुछ गलत हो गया",
+      "message": "चैट रूम में एक अप्रत्याशित त्रुटि हुई",
+      "resetButton": "फिर से प्रयास करें",
+      "resetButtonAriaLabel": "फिर से प्रयास करें"
+    }
   },
   "orgActionItemCategories": {
     "enableButton": "सक्षम",

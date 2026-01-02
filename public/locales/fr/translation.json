@@ -1663,7 +1663,13 @@
     "attachment": "pièce jointe",
     "reply": "Répondre",
     "edit": "Modifier",
-    "delete": "Supprimer"
+    "delete": "Supprimer",
+    "errorBoundary": {
+      "title": "Quelque chose s'est mal passé",
+      "message": "Une erreur inattendue s'est produite dans la salle de discussion",
+      "resetButton": "Réessayer",
+      "resetButtonAriaLabel": "Réessayer"
+    }
   },
   "orgActionItemCategories": {
     "enableButton": "Activer",

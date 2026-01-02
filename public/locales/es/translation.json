@@ -1663,7 +1663,13 @@
     "attachment": "Adjunto",
     "reply": "Responder",
     "edit": "Editar",
-    "delete": "Eliminar"
+    "delete": "Eliminar",
+    "errorBoundary": {
+      "title": "Algo salió mal",
+      "message": "Ocurrió un error inesperado en la sala de chat",
+      "resetButton": "Intentar de nuevo",
+      "resetButtonAriaLabel": "Intentar de nuevo"
+    }
   },
   "orgActionItemCategories": {
     "createButton": "Crear",
