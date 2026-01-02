@@ -49,7 +49,11 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
 
-import { Circle, WarningAmberRounded } from '@mui/icons-material';
+import {
+  Circle,
+  VolunteerActivism,
+  WarningAmberRounded,
+} from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
 import Loader from 'components/Loader/Loader';
@@ -58,7 +62,7 @@ import {
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Chip, debounce, Stack } from '@mui/material';
+import { Chip, debounce } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import styles from '../../../style/app-fixed.module.css';
 import { GET_EVENT_VOLUNTEERS } from 'GraphQl/Queries/EventVolunteerQueries';
@@ -67,6 +71,7 @@ import VolunteerCreateModal from './createModal/VolunteerCreateModal';
 import VolunteerDeleteModal from './deleteModal/VolunteerDeleteModal';
 import VolunteerViewModal from './viewModal/VolunteerViewModal';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 enum VolunteerStatus {
   All = 'all',
@@ -262,7 +267,7 @@ function Volunteers(): JSX.Element {
   const columns: GridColDef[] = [
     {
       field: 'volunteer',
-      headerName: 'Volunteer',
+      headerName: t('eventVolunteers.volunteerHeader'),
       flex: 1,
       align: 'center',
       minWidth: 100,
@@ -302,7 +307,7 @@ function Volunteers(): JSX.Element {
     },
     {
       field: 'status',
-      headerName: 'Status',
+      headerName: t('eventVolunteers.statusHeader'),
       flex: 1,
       align: 'center',
       minWidth: 100,
@@ -315,20 +320,20 @@ function Volunteers(): JSX.Element {
           switch (status) {
             case 'accepted':
               return {
-                label: 'Accepted',
+                label: t('eventVolunteers.accepted'),
                 color: 'success' as const,
                 className: styles.active,
               };
             case 'rejected':
               return {
-                label: 'Rejected',
+                label: t('eventVolunteers.rejected'),
                 color: 'error' as const,
                 className: styles.rejected,
               };
             case 'pending':
             default:
               return {
-                label: 'Pending',
+                label: t('eventVolunteers.pending'),
                 color: 'warning' as const,
                 className: styles.pending,
               };
@@ -350,7 +355,7 @@ function Volunteers(): JSX.Element {
     },
     {
       field: 'hours',
-      headerName: 'Hours Volunteered',
+      headerName: t('eventVolunteers.hoursVolunteeredHeader'),
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -388,7 +393,7 @@ function Volunteers(): JSX.Element {
     // },
     {
       field: 'options',
-      headerName: 'Options',
+      headerName: t('eventVolunteers.optionsHeader'),
       align: 'center',
       flex: 1,
       minWidth: 100,
@@ -500,9 +505,11 @@ function Volunteers(): JSX.Element {
         getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('eventVolunteers.noVolunteers')}
-            </Stack>
+            <EmptyState
+              icon={<VolunteerActivism />}
+              message={t('eventVolunteers.noVolunteers')}
+              dataTestId="volunteers-empty-state"
+            />
           ),
         }}
         className={styles.dataGridContainer}

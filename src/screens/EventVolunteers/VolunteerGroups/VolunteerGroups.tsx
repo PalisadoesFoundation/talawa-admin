@@ -21,10 +21,10 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
 
-import { WarningAmberRounded } from '@mui/icons-material';
+import { Groups, WarningAmberRounded } from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
-import { debounce, Stack } from '@mui/material';
+import { debounce } from '@mui/material';
 
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import Loader from 'components/Loader/Loader';
@@ -40,6 +40,7 @@ import VolunteerGroupModal from './modal/VolunteerGroupModal';
 import VolunteerGroupDeleteModal from './deleteModal/VolunteerGroupDeleteModal';
 import VolunteerGroupViewModal from './viewModal/VolunteerGroupViewModal';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 enum ModalState {
   SAME = 'same',
@@ -211,7 +212,7 @@ function volunteerGroups(): JSX.Element {
   const columns: GridColDef[] = [
     {
       field: 'group',
-      headerName: 'Group',
+      headerName: t('eventVolunteers.groupHeader'),
       flex: 1,
       align: 'left',
       minWidth: 100,
@@ -231,7 +232,7 @@ function volunteerGroups(): JSX.Element {
     },
     {
       field: 'leader',
-      headerName: 'Leader',
+      headerName: t('eventVolunteers.leaderHeader'),
       flex: 1,
       align: 'center',
       minWidth: 100,
@@ -270,7 +271,7 @@ function volunteerGroups(): JSX.Element {
     },
     {
       field: 'volunteers',
-      headerName: 'No. of Volunteers',
+      headerName: t('eventVolunteers.numVolunteersHeader'),
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -286,7 +287,7 @@ function volunteerGroups(): JSX.Element {
     },
     {
       field: 'options',
-      headerName: 'Options',
+      headerName: t('eventVolunteers.optionsHeader'),
       align: 'center',
       flex: 1,
       minWidth: 100,
@@ -403,9 +404,11 @@ function volunteerGroups(): JSX.Element {
         getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('eventVolunteers.noVolunteerGroups')}
-            </Stack>
+            <EmptyState
+              icon={<Groups />}
+              message={t('eventVolunteers.noVolunteerGroups')}
+              dataTestId="volunteerGroups-empty-state"
+            />
           ),
         }}
         className={styles.dataGridContainer}

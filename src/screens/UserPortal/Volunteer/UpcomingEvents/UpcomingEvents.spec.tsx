@@ -53,6 +53,7 @@ vi.mock('@mui/icons-material', () => ({
     React.createElement('div', { 'data-testid': 'warning-icon' }),
   ExpandMore: () =>
     React.createElement('div', { 'data-testid': 'expand-more-icon' }),
+  Event: () => React.createElement('div', { 'data-testid': 'event-icon' }),
 }));
 
 vi.mock('react-icons/io5', () => ({
@@ -177,8 +178,21 @@ describe('UpcomingEvents', () => {
     const link = new StaticMockLink(EMPTY_MOCKS);
     renderUpcomingEvents(link);
     await waitFor(() => {
-      expect(screen.getByTestId('noEventsMsg')).toBeInTheDocument();
-      expect(screen.getByText(/no upcoming events/i)).toBeInTheDocument();
+      expect(screen.getByTestId('events-empty-state')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('events-empty-state-message'),
+      ).toHaveTextContent(/no upcoming events/i);
+      expect(screen.getByTestId('events-empty-state-icon')).toBeInTheDocument();
+    });
+  });
+
+  it('should have proper accessibility attributes on empty state', async () => {
+    const link = new StaticMockLink(EMPTY_MOCKS);
+    renderUpcomingEvents(link);
+    await waitFor(() => {
+      const emptyState = screen.getByTestId('events-empty-state');
+      expect(emptyState).toHaveAttribute('role', 'status');
+      expect(emptyState).toHaveAttribute('aria-live', 'polite');
     });
   });
 
@@ -1650,7 +1664,7 @@ describe('UpcomingEvents', () => {
       const input = screen.getByTestId('searchByInput');
       await userEvent.type(input, 'xyz');
       await waitFor(() => {
-        expect(screen.getByTestId('noEventsMsg')).toBeInTheDocument();
+        expect(screen.getByTestId('events-empty-state')).toBeInTheDocument();
         expect(screen.getByText(/no upcoming events/i)).toBeInTheDocument();
       });
     });
