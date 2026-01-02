@@ -123,14 +123,14 @@ export const filterByExtensions = (
   extensions: Set<string>,
 ): string[] => files.filter((file) => extensions.has(path.extname(file)));
 
-const toRepoRelativePath = (file: string): string => {
+export const toRepoRelativePath = (file: string): string => {
   const relative = path.isAbsolute(file)
     ? path.relative(process.cwd(), file)
     : file;
   return normalizePath(relative);
 };
 
-const parseAddedLineNumbers = (diff: string): Set<number> => {
+export const parseAddedLineNumbers = (diff: string): Set<number> => {
   const addedLines = new Set<number>();
   let newLine = 0;
 
@@ -163,7 +163,7 @@ const parseAddedLineNumbers = (diff: string): Set<number> => {
   return addedLines;
 };
 
-const getStagedAddedLines = (file: string): Set<number> => {
+export const getStagedAddedLines = (file: string): Set<number> => {
   const repoPath = toRepoRelativePath(file);
   if (!repoPath) {
     return new Set();
@@ -191,7 +191,9 @@ const getStagedAddedLines = (file: string): Set<number> => {
   }
 };
 
-const getAddedLinesByFile = (files: string[]): Map<string, Set<number>> => {
+export const getAddedLinesByFile = (
+  files: string[],
+): Map<string, Set<number>> => {
   const addedLinesByFile = new Map<string, Set<number>>();
 
   files.forEach((file) => {
@@ -201,7 +203,7 @@ const getAddedLinesByFile = (files: string[]): Map<string, Set<number>> => {
   return addedLinesByFile;
 };
 
-const formatCount = (count: number, label: string): string =>
+export const formatCount = (count: number, label: string): string =>
   `${count} ${label}${count === 1 ? '' : 's'}`;
 
 export async function validateFiles(
