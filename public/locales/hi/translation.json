@@ -1,4 +1,6 @@
 {
+  "ends": "समाप्त होता है",
+  "occurrences": "घटनाओं",
   "leaderboard": {
     "title": "लीडरबोर्ड",
     "searchByVolunteer": "स्वयंसेवक द्वारा खोजें",
@@ -513,6 +515,7 @@
     "publicEvent": "सार्वजनिक है",
     "isRegistrable": "पंजीकरण योग्य है",
     "registerable": "पंजीकरण योग्य है",
+
     "createEvent": "कार्यक्रम बनाएँ",
     "enterFilter": "फ़िल्टर दर्ज करें",
     "enterName": "नाम दर्ज करें",
@@ -529,7 +532,7 @@
     "never": "कभी नहीं",
     "on": "पर",
     "after": "बाद",
-    "occurences": "घटनाओं",
+    "occurrences": "घटनाओं",
     "monthlyOn": "मासिक पर",
     "yearlyOn": "वार्षिक पर",
     "yearlyRecurrenceDesc": "यह घटना हर साल घटना की शुरुआत की तारीख को ही दोहराई जाएगी।",
@@ -558,6 +561,7 @@
     "actionItemDetails": "क्रिया वस्तु विवरण",
     "actionItemCompleted": "क्रिया वस्तु पूरी",
     "assignee": "प्राप्तकर्ता",
+    "assigneeOrCategory": "प्राप्तकर्ता या श्रेणी",
     "assignedTo": "किसे सौंपा गया",
     "assigner": "सौंपने वाला",
     "assignmentDate": "आवंटन तिथि",
@@ -724,7 +728,7 @@
     "never": "कभी नहीं",
     "on": "पर",
     "after": "बाद",
-    "occurences": "घटनाओं",
+    "occurrences": "घटनाओं",
     "location": "स्थान",
     "no": "नहीं",
     "yes": "हाँ",
@@ -1315,6 +1319,7 @@
     "chartPageNavigation": "चार्ट पृष्ठ नेविगेशन",
     "previousPage": "पिछला पृष्ठ",
     "nextPage": "अगला पृष्ठ",
+    "pageNumber": "पृष्ठ {{page}}",
     "goToToday": "आज पर जाएं",
     "genderDistribution": "लिंग वितरण",
     "ageDistribution": "आयु वितरण"
@@ -1505,7 +1510,14 @@
     "day": "दिन",
     "week": "सप्ताह",
     "month": "महीना",
-    "year": "वर्ष"
+    "year": "वर्ष",
+    "ends": "समाप्त होता है",
+    "occurrences": "घटनाओं",
+    "never": "कभी नहीं",
+    "on": "पर",
+    "after": "के बाद",
+    "customRecurrence": "कस्टम पुनरावृत्ति",
+    "repeatsEvery": "हर बार दोहराता है"
   },
   "userEventCard": {
     "starts": "प्रारंभ होगा",
@@ -1549,7 +1561,19 @@
     "edit": "संपादित करें",
     "saveChanges": "परिवर्तन सहेजें",
     "endOfResults": "परिणाम समाप्त",
-    "noDescription": "कोई विवरण नहीं"
+    "noDescription": "कोई विवरण नहीं",
+    "failedToFetchAdvertisements": "विज्ञापन लाने में विफल",
+    "advertisementMedia": "विज्ञापन मीडिया",
+    "noMediaAvailable": "कोई मीडिया उपलब्ध नहीं",
+    "advertisementImageAlt": "विज्ञापन छवि #{{index}} {{name}} के लिए",
+    "invalidFileType": "अमान्य फ़ाइल प्रकार: {{fileName}}",
+    "fileTooLarge": "फ़ाइल बहुत बड़ी है: {{fileName}}",
+    "invalidArgumentsForAction": "इस क्रिया के लिए अमान्य तर्क।",
+    "englishCaptions": "अंग्रेज़ी कैप्शन",
+    "preview": "पूर्वावलोकन",
+    "bannerAd": "बैनर विज्ञापन",
+    "popupAd": "पॉपअप विज्ञापन",
+    "menuAd": "मेनू विज्ञापन"
   },
   "userChat": {
     "title": "चैट्स",
@@ -1678,7 +1702,8 @@
     "user": "उपयोगकर्ता",
     "profile": "प्रोफ़ाइल",
     "customizedTable": "कस्टमाइज़्ड टेबल",
-    "page": "पृष्ठ"
+    "page": "पृष्ठ",
+    "add": "जोड़ें"
   },
   "eventActionItems": {
     "title": "एक्शन आइटम्स",
@@ -1722,6 +1747,7 @@
     "title": "धन उगाहने के अभियान",
     "searchByName": "नाम से खोजें...",
     "searchBy": "द्वारा खोजें",
+    "searchCampaigns": "अभियान खोजें",
     "pledgers": "प्रतिज्ञाकर्ता",
     "pledger": "प्रतिज्ञाकर्ता",
     "campaigns": "अभियान",
@@ -1745,7 +1771,8 @@
     "amountRaised": "एकत्रित राशि"
   },
   "userPledges": {
-    "title": "मेरी प्रतिज्ञाएँ"
+    "title": "मेरी प्रतिज्ञाएँ",
+    "searchPledges": "प्रतिज्ञाएँ खोजें"
   },
   "leaveOrganization": {
     "title": "संगठन छोड़ें"
@@ -1754,6 +1781,7 @@
     "toggleGroupAriaLabel": "स्वयंसेवक दृश्य चयनकर्ता",
     "volunteers": "स्वयंसेवक",
     "volunteer": "स्वयंसेवक",
+    "volunteerName": "स्वयंसेवक का नाम",
     "volunteerGroups": "स्वयंसेवक समूह",
     "individuals": "व्यक्ति",
     "groups": "समूह",
@@ -1776,6 +1804,7 @@
     "deleteVolunteerGroupMsg": "क्या आप वाकई इस स्वयंसेवक समूह को हटाना चाहते हैं?",
     "leader": "नेता",
     "group": "समूह",
+    "groupOrLeader": "समूह या नेता",
     "createGroup": "समूह बनाएं",
     "updateGroup": "समूह अपडेट करें",
     "deleteGroup": "समूह हटाएं",
@@ -1799,7 +1828,10 @@
     "leastVolunteers": "सबसे कम स्वयंसेवक",
     "applyTo": "लागू करें",
     "entireSeries": "पूरी श्रृंखला",
-    "thisEventOnly": "केवल यह घटना"
+    "thisEventOnly": "केवल यह घटना",
+    "volunteerAlt": "स्वयंसेवक प्रोफ़ाइल चित्र",
+    "groupTable": "समूह तालिका",
+    "volunteerActions": "स्वयंसेवक क्रियाएँ"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",
@@ -1811,11 +1843,15 @@
     "actions": "क्रिया वस्तुएँ",
     "search": "खोजें",
     "searchByName": "नाम से खोजें",
+    "startDate": "प्रारंभिक तिथि",
     "latestEndDate": "नवीनतम समाप्ति तिथि",
     "earliestEndDate": "प्रारंभिक समाप्ति तिथि",
     "noEvents": "कोई आगामी कार्यक्रम नहीं",
     "volunteer": "स्वयंसेवक",
     "volunteered": "स्वयंसेवित",
+    "volunteerName": "नाम",
+    "volunteerActions": "क्रियाएँ",
+    "volunteerAlt": "स्वयंसेवक",
     "join": "शामिल हों",
     "joined": "शामिल हुआ",
     "searchByEventName": "कार्यक्रम शीर्षक से खोजें",
@@ -1843,6 +1879,7 @@
     "event": "कार्यक्रम",
     "received": "प्राप्त",
     "location": "स्थान",
+    "titleOrLocation": "शीर्षक या स्थान",
     "recurrence": "पुनरावृत्ति",
     "endDate": "समाप्ति तिथि",
     "description": "विवरण",
@@ -1851,7 +1888,8 @@
     "srNo": "क्र.सं.",
     "groupName": "समूह का नाम",
     "noOfMembers": "सदस्यों की संख्या",
-    "options": "विकल्प"
+    "options": "विकल्प",
+    "notSpecified": "निर्दिष्ट नहीं"
   },
   "pluginStore": {
     "title": "प्लगइन स्टोर",

@@ -13,6 +13,21 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import LoadingState from './LoadingState';
+import { InterfaceTableLoader } from 'components/TableLoader/TableLoader';
+
+// Mock TableLoader component
+vi.mock('components/TableLoader/TableLoader', () => ({
+  default: ({
+    noOfRows,
+    headerTitles,
+    'data-testid': dataTestId,
+  }: InterfaceTableLoader) => (
+    <div data-testid={dataTestId || 'mock-table-loader'}>
+      <div data-testid="table-headers">{JSON.stringify(headerTitles)}</div>
+      <div data-testid="table-rows-count">{noOfRows}</div>
+    </div>
+  ),
+}));
 
 describe('LoadingState Component', () => {
   beforeEach(() => {
@@ -144,6 +159,155 @@ describe('LoadingState Component', () => {
     });
   });
 
+  describe('Table Variant', () => {
+    it('should render table variant', () => {
+      render(
+        <LoadingState isLoading={true} variant="table">
+          <div>Content</div>
+        </LoadingState>,
+      );
+
+      expect(screen.getByTestId('loading-state')).toBeInTheDocument();
+      // Verify mock table loader is present
+      expect(screen.getByTestId('table-rows-count')).toBeInTheDocument();
+    });
+
+    it('should pass correct props to TableLoader', () => {
+      const titles = ['Col 1', 'Col 2'];
+      render(
+        <LoadingState
+          isLoading={true}
+          variant="table"
+          noOfRows={10}
+          tableHeaderTitles={titles}
+        >
+          <div>Content</div>
+        </LoadingState>,
+      );
+
+      expect(screen.getByTestId('table-rows-count')).toHaveTextContent('10');
+      expect(screen.getByTestId('table-headers')).toHaveTextContent(
+        JSON.stringify(titles),
+      );
+    });
+
+    it('should use default rows if not provided', () => {
+      render(
+        <LoadingState isLoading={true} variant="table">
+          <div>Content</div>
+        </LoadingState>,
+      );
+
+      // Default is 5 rows
+      expect(screen.getByTestId('table-rows-count')).toHaveTextContent('5');
+    });
+  });
+
+  describe('Skeleton Variant', () => {
+    it('should render skeleton variant with defaults', () => {
+      render(
+        <LoadingState isLoading={true} variant="skeleton">
+          <div>Content</div>
+        </LoadingState>,
+      );
+
+      const loadingState = screen.getByTestId('loading-state');
+      expect(loadingState).toBeInTheDocument();
+      expect(loadingState.className).toContain('w-100');
+
+      // Check default rows (5)
+      const rows = loadingState.children;
+      expect(rows).toHaveLength(5);
+
+      // Check default cols (4) in first row
+      const firstRowCols = rows[0].children;
+      expect(firstRowCols).toHaveLength(4);
+
+      // Check classes
+      expect(firstRowCols[0].className).toContain('loadingItem');
+      expect(firstRowCols[0].className).toContain('shimmer');
+    });
+
+    it('should render skeleton variant with custom rows and columns', () => {
+      render(
+        <LoadingState
+          isLoading={true}
+          variant="skeleton"
+          skeletonRows={3}
+          skeletonCols={2}
+        >
+          <div>Content</div>
+        </LoadingState>,
+      );
+
+      const loadingState = screen.getByTestId('loading-state');
+      const rows = loadingState.children;
+      expect(rows).toHaveLength(3);
+
+      const firstRowCols = rows[0].children;
+      expect(firstRowCols).toHaveLength(2);
+    });
+
+    it('should have correct structure and styling', () => {
+      render(
+        <LoadingState isLoading={true} variant="skeleton">
+          <div>Content</div>
+        </LoadingState>,
+      );
+
+      const loadingState = screen.getByTestId('loading-state');
+      const row = loadingState.children[0];
+
+      // Row styling
+      expect(row.className).toContain('d-flex');
+      expect(row.className).toContain('mb-3');
+      expect(row.className).toContain('gap-3');
+    });
+
+    it('should render children when not loading in skeleton variant', () => {
+      render(
+        <LoadingState isLoading={false} variant="skeleton">
+          <div data-testid="skeleton-content">Real Content</div>
+        </LoadingState>,
+      );
+
+      expect(screen.queryByTestId('loading-state')).not.toBeInTheDocument();
+      expect(screen.getByTestId('skeleton-content')).toBeInTheDocument();
+    });
+
+    it('should handle edge cases for rows and cols', () => {
+      render(
+        <LoadingState
+          isLoading={true}
+          variant="skeleton"
+          skeletonRows={0}
+          skeletonCols={-1}
+        >
+          <div>Content</div>
+        </LoadingState>,
+      );
+
+      const loadingState = screen.getByTestId('loading-state');
+      expect(loadingState.children).toHaveLength(0);
+    });
+
+    it('should handle large number of rows/cols safely', () => {
+      render(
+        <LoadingState
+          isLoading={true}
+          variant="skeleton"
+          skeletonRows={50}
+          skeletonCols={1}
+        >
+          <div>Content</div>
+        </LoadingState>,
+      );
+
+      const loadingState = screen.getByTestId('loading-state');
+      expect(loadingState.children).toHaveLength(50);
+    });
+  });
+
   describe('Accessibility', () => {
     it('should have proper ARIA attributes for spinner variant', () => {
       render(
@@ -167,6 +331,31 @@ describe('LoadingState Component', () => {
       const loadingState = screen.getByRole('status');
       expect(loadingState).toHaveAttribute('aria-live', 'polite');
       expect(loadingState).toHaveAttribute('aria-label');
+    });
+
+    it('should have proper accessibility for table variant', () => {
+      render(
+        <LoadingState isLoading={true} variant="table">
+          <div>Content</div>
+        </LoadingState>,
+      );
+
+      // Table variant uses TableLoader which has its own accessibility
+      const loadingState = screen.getByTestId('loading-state');
+      expect(loadingState).toBeInTheDocument();
+    });
+
+    it('should have proper accessibility for skeleton variant', () => {
+      render(
+        <LoadingState isLoading={true} variant="skeleton">
+          <div>Content</div>
+        </LoadingState>,
+      );
+
+      // Skeleton variant provides visual loading indication
+      const loadingState = screen.getByTestId('loading-state');
+      expect(loadingState).toBeInTheDocument();
+      expect(loadingState.className).toContain('w-100');
     });
 
     it('should not have ARIA attributes when not loading', () => {
