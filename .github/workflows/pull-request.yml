@@ -986,13 +986,13 @@ jobs:
           set -euo pipefail
           POSTGRES_USER=postgres
           echo "Waiting for Postgres service via compose..."
-          timeout=90
-          until docker compose exec -T postgres pg_isready -h localhost -p 5432 -U "$POSTGRES_USER" >/dev/null 2>&1 || [ "$timeout" -le 0 ]; do
-            echo "Postgres not ready ($timeout s left)"
+          TIMEOUT=90
+          until docker compose exec -T postgres pg_isready -h localhost -p 5432 -U "$POSTGRES_USER" >/dev/null 2>&1 || [ "$TIMEOUT" -le 0 ]; do
+            echo "Postgres not ready ($TIMEOUT s left)"
             sleep 1
-            ((timeout--))
+            TIMEOUT=$((TIMEOUT - 1))
           done
-          if [ "$timeout" -le 0 ]; then
+          if [ "$TIMEOUT" -le 0 ]; then
             echo "Error: Postgres failed to start"
             docker compose ps
             docker compose logs postgres
@@ -1007,8 +1007,9 @@ jobs:
         run: |
           docker exec -d talawa-api-1 /bin/bash -c 'pnpm run start_development_server'
 
-      - name: Wait for Backend to be Ready
+      - name: Wait for backend to be ready
         run: |
+          set -euo pipefail
           echo "Waiting for backend at http://localhost:4000/healthcheck"
 
           TIMEOUT=60
@@ -1029,9 +1030,10 @@ jobs:
 
           echo "Backend is up and responding"
 
-      - name: Wait for GraphQL endpoint to be Ready
+      - name: Wait for GraphQL endpoint to be ready
         if: success()
         run: |
+          set -euo pipefail
           echo "Waiting for GraphQL endpoint at http://localhost:4000/graphql"
 
           TIMEOUT=60
