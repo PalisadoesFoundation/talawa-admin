@@ -426,7 +426,8 @@
     "sortTags": "排序标签",
     "tags": "标签",
     "Latest": "最新",
-    "Oldest": "最旧"
+    "Oldest": "最旧",
+    "viewSubTags": "查看 {{count}} 个子标签"
   },
   "manageTag": {
     "title": "标签详情",
@@ -555,7 +556,9 @@
     "endDate": "结束日期",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
     "done": "完成",
-    "createChat": "创建聊天"
+    "createChat": "创建聊天",
+    "viewType": "视图类型",
+    "search": "搜索"
   },
   "organizationActionItems": {
     "actionItemCategory": "行动项类别",
@@ -798,7 +801,9 @@
     "latestEndDate": "最新结束日期",
     "earliestEndDate": "最早结束日期",
     "lowestGoal": "最低目标",
-    "highestGoal": "最高目标"
+    "highestGoal": "最高目标",
+    "percentageRaised": "% 已筹集",
+    "campaignProgress": "活动进度: {{percentage}}%"
   },
   "pledges": {
     "title": "基金活动承诺",
@@ -967,7 +972,8 @@
     "agendas": "议程",
     "statistics": "统计数据",
     "to": "到",
-    "volunteers": "志愿者"
+    "volunteers": "志愿者",
+    "backToEvents": "返回活动"
   },
   "forgotPassword": {
     "title": "塔拉瓦 忘记密码",
@@ -1960,6 +1966,13 @@
     "altText": "{{name}}的个人资料图片",
     "modalTitle": "个人资料图片",
     "enlargedAltText": "{{name}}的放大个人资料图片"
+  },
+  "eventCalendar": {
+    "noEventsAvailable": "没有可用的活动",
+    "holidays": "节假日",
+    "events": "活动",
+    "eventsCreatedByOrganization": "组织创建的活动",
+    "today": "今天"
   },
   "common": {
     "signOut": "退出登录",
