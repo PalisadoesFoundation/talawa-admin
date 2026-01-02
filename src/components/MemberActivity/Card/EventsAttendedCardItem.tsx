@@ -26,7 +26,7 @@
  * ```tsx
  * <EventAttendedCard
  *   title="Community Meetup"
- *   startdate=dayjs().subtract(1, 'year').month(9).date(1).hour(10).toISOString()
+ *   startdate={dayjs().subtract(1, 'year').month(9).date(1).hour(10).toISOString()}
  *   location="Central Park"
  *   orgId="123"
  *   eventId="456"

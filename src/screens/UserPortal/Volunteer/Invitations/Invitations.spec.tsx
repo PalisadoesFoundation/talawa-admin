@@ -88,9 +88,13 @@ const membership1 = {
   _id: 'membershipId1',
   id: 'membershipId1',
   status: 'invited',
-  createdAt: dayjs().toISOString(),
-  updatedAt: dayjs().toISOString(),
-  event: baseEvent('eventId', 'Event 1', '2044-10-31T10:00:00Z'),
+  createdAt: dayjs().subtract(4, 'day').toISOString(),
+  updatedAt: dayjs().subtract(4, 'day').toISOString(),
+  event: baseEvent(
+    'eventId',
+    'Event 1',
+    dayjs.utc().add(20, 'year').toISOString(),
+  ),
   volunteer: baseVolunteer('volunteerId1', 'John Doe', 'img-url'),
   createdBy: baseAudit,
   updatedBy: baseAudit,
@@ -103,7 +107,11 @@ const membership2 = {
   status: 'invited',
   createdAt: dayjs().add(1, 'day').toISOString(),
   updatedAt: dayjs().add(1, 'day').toISOString(),
-  event: baseEvent('eventId2', 'Event 2', '2044-11-30T12:00:00Z'),
+  event: baseEvent(
+    'eventId2',
+    'Event 2',
+    dayjs.utc().add(20, 'year').toISOString(),
+  ),
   volunteer: baseVolunteer('volunteerId2', 'John Doe', null),
   group: {
     _id: 'groupId1',
@@ -121,9 +129,14 @@ const membership3 = {
   status: 'invited',
   createdAt: dayjs().add(1, 'day').toISOString(),
   updatedAt: dayjs().add(1, 'day').toISOString(),
-  event: baseEvent('eventId3', 'Event 3', '2044-11-30T12:00:00Z', {
-    id: 'recurrenceRuleId3',
-  }),
+  event: baseEvent(
+    'eventId3',
+    'Event 3',
+    dayjs.utc().add(20, 'year').toISOString(),
+    {
+      id: 'recurrenceRuleId3',
+    },
+  ),
   volunteer: baseVolunteer('volunteerId3', 'John Doe', null),
   group: {
     name: 'Group 2',
@@ -141,7 +154,11 @@ const membership4 = {
   status: 'invited',
   createdAt: dayjs().add(1, 'day').toISOString(),
   updatedAt: dayjs().add(1, 'day').toISOString(),
-  event: baseEvent('eventId4', 'Event 4', '2044-12-01T08:00:00Z'),
+  event: baseEvent(
+    'eventId4',
+    'Event 4',
+    dayjs.utc().add(20, 'year').toISOString(),
+  ),
   volunteer: baseVolunteer('volunteerId4', 'John Doe', null),
   group: null,
   createdBy: baseAudit,
@@ -154,9 +171,14 @@ const membership5 = {
   status: 'invited',
   createdAt: dayjs().add(1, 'day').toISOString(),
   updatedAt: dayjs().add(1, 'day').toISOString(),
-  event: baseEvent('eventId5', 'Event 5', '2044-11-30T13:00:00Z', {
-    id: 'recurrenceRuleId5',
-  }),
+  event: baseEvent(
+    'eventId5',
+    'Event 5',
+    dayjs().add(20, 'year').toISOString(),
+    {
+      id: 'recurrenceRuleId5',
+    },
+  ),
   volunteer: baseVolunteer('volunteerId5', 'John Doe', null),
   group: null,
   createdBy: baseAudit,

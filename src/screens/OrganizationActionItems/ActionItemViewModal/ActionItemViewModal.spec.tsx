@@ -512,8 +512,11 @@ describe('Testing ItemViewModal', () => {
   });
 
   describe('Date Display', () => {
+    const NOW = dayjs.utc().subtract(1, 'year').startOf('year');
     it('should display assignment date', () => {
-      const item = createActionItem();
+      const item = createActionItem({
+        assignedAt: NOW.toDate(),
+      });
       renderItemViewModal(link1, {
         isOpen: true,
         hide: mockHide,
@@ -522,7 +525,7 @@ describe('Testing ItemViewModal', () => {
 
       // Assignment date should be displayed in DD/MM/YYYY format
       const assignmentDateInput = screen.getByDisplayValue(
-        dayjs.utc().format('DD/MM/YYYY'),
+        NOW.format('DD/MM/YYYY'),
       );
       expect(assignmentDateInput).toBeInTheDocument();
       expect(assignmentDateInput).toBeDisabled();
@@ -531,6 +534,7 @@ describe('Testing ItemViewModal', () => {
     it('should display completion date when item is completed', () => {
       const item = createActionItem({
         isCompleted: true,
+        // Testing completion date 9 days in future to ensure proper date display and formatting
         completionAt: dayjs.utc().add(9, 'day').toDate(),
       });
       renderItemViewModal(link1, {

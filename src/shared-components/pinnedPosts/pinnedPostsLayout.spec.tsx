@@ -16,6 +16,8 @@ import { toast } from 'react-toastify';
 import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutations';
 import { DELETE_POST_MUTATION } from '../../GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 // Mock react-toastify
 vi.mock('react-toastify', () => ({
@@ -59,9 +61,9 @@ const createMockPinnedPost = (
     id,
     caption,
     // Use dynamic dates to avoid test staleness
-    createdAt: dayjs().subtract(14, 'days').toISOString(),
+    createdAt: dayjs.utc().subtract(14, 'days').toISOString(),
     attachmentURL: 'https://example.com/image.jpg',
-    pinnedAt: dayjs().subtract(14, 'days').toISOString(),
+    pinnedAt: dayjs.utc().subtract(14, 'days').toISOString(),
     pinned: true,
     attachments: [
       {

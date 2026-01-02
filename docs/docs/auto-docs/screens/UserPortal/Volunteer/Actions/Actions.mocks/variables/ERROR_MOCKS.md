@@ -6,4 +6,4 @@
 
 > `const` **ERROR\_MOCKS**: `MockedResponse`[]
 
-Defined in: [src/screens/UserPortal/Volunteer/Actions/Actions.mocks.ts:194](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/Actions/Actions.mocks.ts#L194)
+Defined in: [src/screens/UserPortal/Volunteer/Actions/Actions.mocks.ts:196](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Volunteer/Actions/Actions.mocks.ts#L196)

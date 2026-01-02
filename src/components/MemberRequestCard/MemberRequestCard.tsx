@@ -28,7 +28,7 @@
  *   memberName="John Doe"
  *   memberLocation="New York"
  *   email="john.doe@example.com"
- *   joinDate=dayjs().subtract(1, 'year').format('YYYY-MM-DD')
+ *   joinDate={dayjs().subtract(1, 'year').format('YYYY-MM-DD')}}
  * />
  * ```
  */

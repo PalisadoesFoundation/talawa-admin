@@ -28,9 +28,9 @@
  *   name="Sample Ad"
  *   type="Banner"
  *   mediaUrl="https://example.com/image.jpg"
- *   endDate={new Date(dayjs().subtract(1, 'year').endOf('year').format('YYYY-MM-DD'))}
+ *   endDate={dayjs().subtract(1, 'year').endOf('year').toDate()}
  *   organizationId="org123"
- *   startDate={new Date(dayjs().subtract(1, 'year').format('YYYY-MM-DD'))}
+ *   startDate={dayjs().subtract(1, 'year').startOf('year').toDate()}
  *   setAfter={(after) => console.log(after)}
  * />
  * ```

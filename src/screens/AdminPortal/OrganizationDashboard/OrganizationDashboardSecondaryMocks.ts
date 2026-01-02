@@ -1,7 +1,4 @@
 import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-
-dayjs.extend(utc);
 import {
   GET_ORGANIZATION_POSTS_COUNT_PG,
   GET_ORGANIZATION_EVENTS_PG,
@@ -70,11 +67,13 @@ export const MOCKS_ORG2 = [
                     .add(1, 'year')
                     .month(10)
                     .date(29)
+                    .startOf('day')
                     .toISOString(),
                   endAt: dayjs()
                     .add(1, 'year')
                     .month(10)
                     .date(30)
+                    .startOf('day')
                     .toISOString(),
                   allDay: false,
                   location: 'Test Location 2',
@@ -99,8 +98,16 @@ export const MOCKS_ORG2 = [
                     name: 'Test Organization 2',
                     __typename: 'Organization',
                   },
-                  createdAt: dayjs().add(1, 'year').toISOString(),
-                  updatedAt: dayjs().add(1, 'year').toISOString(),
+                  createdAt: dayjs()
+                    .add(1, 'year')
+                    .startOf('year')
+                    .hour(12)
+                    .toISOString(),
+                  updatedAt: dayjs()
+                    .add(1, 'year')
+                    .startOf('year')
+                    .hour(12)
+                    .toISOString(),
                   __typename: 'Event',
                 },
                 cursor: 'cursor2',

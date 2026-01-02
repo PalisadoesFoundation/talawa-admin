@@ -151,7 +151,11 @@ export const MOCKS2 = [
     request: {
       query: UPDATE_CURRENT_USER_MUTATION,
       variables: {
-        input: expect.any(Object),
+        input: {
+          // Specify the exact expected input fields
+          name: 'Rishav Jha',
+          // ... other expected fields
+        },
       },
     },
     result: {

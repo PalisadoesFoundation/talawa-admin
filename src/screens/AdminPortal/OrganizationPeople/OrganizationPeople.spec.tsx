@@ -891,10 +891,7 @@ describe('OrganizationPeople', () => {
               name: 'Bob Johnson',
               emailAddress: 'bob@example.com',
               avatarURL: null,
-              createdAt: dayjs()
-                .subtract(1, 'year')
-                .add(2, 'days')
-                .toISOString(),
+              createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
               role: 'member',
             },
             cursor: 'cursor3',
@@ -1005,10 +1002,7 @@ describe('OrganizationPeople', () => {
               name: 'Admin User',
               emailAddress: 'admin@example.com',
               avatarURL: null,
-              createdAt: dayjs()
-                .subtract(1, 'year')
-                .add(2, 'days')
-                .toISOString(),
+              createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
               role: 'administrator',
             },
             cursor: 'adminCursor1',

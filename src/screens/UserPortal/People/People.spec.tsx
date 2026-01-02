@@ -765,7 +765,7 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
                     role: 'member',
                     avatarURL: null,
                     emailAddress: null,
-                    createdAt: '2023-03-02T03:22:08.101Z',
+                    createdAt: dayjs().subtract(2, 'year').toISOString(),
                   },
                 },
               ],

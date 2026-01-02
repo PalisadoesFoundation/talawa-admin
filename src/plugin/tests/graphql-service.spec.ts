@@ -1,6 +1,9 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook } from '@testing-library/react';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import {
   PluginGraphQLService,
   useGetAllPlugins,
@@ -76,8 +79,8 @@ describe('PluginGraphQLService', () => {
           isActivated: true,
           isInstalled: true,
           backup: false,
-          createdAt: dayjs().subtract(1, 'year').format('YYYY-MM-DD'),
-          updatedAt: dayjs().subtract(1, 'year').format('YYYY-MM-DD'),
+          createdAt: dayjs.utc().subtract(1, 'year').format('YYYY-MM-DD'),
+          updatedAt: dayjs.utc().subtract(1, 'year').format('YYYY-MM-DD'),
         },
       ];
 

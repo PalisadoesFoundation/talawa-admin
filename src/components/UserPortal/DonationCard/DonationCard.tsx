@@ -22,14 +22,18 @@
  * <DonationCard
  *   name="John Doe"
  *   amount={100}
- *   updatedAt=dayjs().subtract(1, 'year').month(2).date(15).hour(12).toISOString()
+ *   updatedAt={dayjs.utc().subtract(1, 'year').month(2).date(15).hour(12).toISOString()}
  * />
  * ```
  */
 
 import React from 'react';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+
+dayjs.extend(utc);
 
 import UserPortalCard from 'components/UserPortal/UserPortalCard/UserPortalCard';
 import type { InterfaceDonationCardProps } from 'types/Donation/interface';

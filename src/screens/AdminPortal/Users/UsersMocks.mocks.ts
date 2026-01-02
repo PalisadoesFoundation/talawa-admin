@@ -5,6 +5,9 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { MOCK_USERS } from './Organization.mocks';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 // Add pagination and sorting variables to all USER_LIST mocks
 const paginationVariables = {
@@ -225,7 +228,11 @@ export const MOCKS_NEW = [
                 role: 'Member',
                 avatarURL: 'https://example.com/avatar1.png',
                 emailAddress: 'john@example.com',
-                createdAt: dayjs().add(1, 'year').startOf('year').toISOString(),
+                createdAt: dayjs
+                  .utc()
+                  .add(1, 'year')
+                  .startOf('year')
+                  .toISOString(),
                 city: 'New York',
                 state: 'NY',
                 countryCode: 'US',

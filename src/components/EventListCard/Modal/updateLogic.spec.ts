@@ -13,6 +13,9 @@ import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import { Frequency, InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 // Mock dependencies
 vi.mock('@apollo/client', async () => {

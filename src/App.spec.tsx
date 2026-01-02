@@ -13,6 +13,8 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import 'style/app-fixed.module.css';
 import * as useLSModule from 'utils/useLocalstorage';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 vi.mock('@mui/x-charts/PieChart', () => ({
   pieArcLabelClasses: vi.fn(),

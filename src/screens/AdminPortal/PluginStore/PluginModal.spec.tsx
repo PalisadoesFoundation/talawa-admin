@@ -7,6 +7,9 @@ import type { IPluginMeta, IPluginDetails, IInstalledPlugin } from 'plugin';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 // Mock AdminPluginFileService
 vi.mock('plugin/services/AdminPluginFileService', () => ({
@@ -55,7 +58,8 @@ describe('PluginModal', () => {
     changelog: [
       {
         version: '1.2.3',
-        date: dayjs()
+        date: dayjs
+          .utc()
           .subtract(1, 'year')
           .month(11)
           .date(1)
@@ -64,7 +68,8 @@ describe('PluginModal', () => {
       },
       {
         version: '1.2.2',
-        date: dayjs()
+        date: dayjs
+          .utc()
           .subtract(1, 'year')
           .month(10)
           .date(1)
@@ -510,7 +515,7 @@ describe('PluginModal', () => {
   describe('Install Elapsed Ticker', () => {
     beforeEach(() => {
       vi.useFakeTimers();
-      vi.setSystemTime(new Date('2020-01-01T00:00:00.000Z'));
+      vi.setSystemTime(dayjs().subtract(6, 'year').startOf('year').toDate());
     });
 
     afterEach(() => {

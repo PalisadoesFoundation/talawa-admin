@@ -14,6 +14,9 @@ import userEvent from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, it } from 'vitest';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 const { setItem, clearAllItems } = useLocalStorage();
 
@@ -49,8 +52,8 @@ describe('Testing Event Card In User portal', () => {
     description: 'This is a test event',
     location: 'Virtual',
     // Use dynamic dates to avoid test staleness
-    startAt: dayjs().add(10, 'days').toISOString(),
-    endAt: dayjs().add(12, 'days').toISOString(),
+    startAt: dayjs.utc().add(10, 'days').toISOString(),
+    endAt: dayjs.utc().add(12, 'days').toISOString(),
     isRegisterable: true,
     isPublic: true,
     endTime: '19:49:12',
@@ -156,8 +159,8 @@ describe('Event card when start and end time are not given', () => {
     description: 'This is a test event',
     location: 'Virtual',
     // Use dynamic dates to avoid test staleness
-    startAt: dayjs().add(10, 'days').startOf('day').toISOString(),
-    endAt: dayjs().add(12, 'days').endOf('day').toISOString(),
+    startAt: dayjs.utc().add(10, 'days').startOf('day').toISOString(),
+    endAt: dayjs.utc().add(12, 'days').endOf('day').toISOString(),
     isRegisterable: true,
     isPublic: true,
     endTime: '',

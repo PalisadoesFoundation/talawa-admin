@@ -141,8 +141,8 @@ describe('MemberDetail', () => {
   });
 
   test('prettyDate function should work properly', () => {
-    const testDate = dayjs().format('YYYY-MM-DD');
-    // prettyDate expected output in format "1 January 2024" but for current date
+    // Use ISO format with time to avoid UTC interpretation
+    const testDate = dayjs().format('YYYY-MM-DDTHH:mm:ss');
     const formattedDate = dayjs().format('D MMMM YYYY');
     expect(prettyDate(testDate)).toBe(formattedDate);
     expect(prettyDate('')).toBe('Unavailable');

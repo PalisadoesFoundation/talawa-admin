@@ -110,7 +110,11 @@ export const MOCKS = [
             _id: 'actionItemCategoryId1',
             name: 'Test 3',
             isDisabled: false,
-            createdAt: dayjs().month(7).date(25).format('YYYY-MM-DD'),
+            createdAt: dayjs()
+              .subtract(1, 'year')
+              .month(7)
+              .date(25)
+              .format('YYYY-MM-DD'),
             creator: {
               _id: '64378abd85008f171cf2990d',
               firstName: 'Wilt',

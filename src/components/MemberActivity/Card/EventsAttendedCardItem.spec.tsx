@@ -62,8 +62,8 @@ describe('EventAttendedCard', () => {
 
   describe('Basic rendering', () => {
     it('renders event details correctly', () => {
+      const futureDate = dayjs(mockProps.startdate);
       renderComponent();
-      const futureDate = dayjs().add(30, 'days');
 
       expect(screen.getByText('Test Event')).toBeInTheDocument();
       // Check for dynamically generated month and day
@@ -86,8 +86,8 @@ describe('EventAttendedCard', () => {
 
   describe('Date handling', () => {
     it('renders valid date correctly', () => {
+      const futureDate = dayjs(mockProps.startdate);
       renderComponent();
-      const futureDate = dayjs().add(30, 'days');
       // Check for dynamically generated month and day
       expect(
         screen.getByText(new RegExp(futureDate.format('MMM'), 'i')),

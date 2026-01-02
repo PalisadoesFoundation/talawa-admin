@@ -30,6 +30,9 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 const { mockLocalStorageStore } = vi.hoisted(() => ({
   mockLocalStorageStore: {} as Record<string, string>,
@@ -184,7 +187,8 @@ const INFINITE_SCROLL_MOCKS = [
             .fill(null)
             .map((_, i) => ({
               membershipRequestId: `request${i + 1}`,
-              createdAt: dayjs()
+              createdAt: dayjs
+                .utc()
                 .subtract(1, 'year')
                 .add(i, 'days')
                 .toISOString(),

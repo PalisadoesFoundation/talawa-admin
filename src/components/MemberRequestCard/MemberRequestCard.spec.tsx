@@ -31,7 +31,7 @@ describe('Testing Member Request Card', () => {
     id: '1',
     memberName: 'John Doe',
     memberLocation: 'India',
-    joinDate: dayjs.utc().format('DD/MM/YYYY'),
+    joinDate: dayjs.utc().subtract(6, 'months').format('DD/MM/YYYY'),
     memberImage: 'image',
     email: 'johndoe@gmail.com',
   };
@@ -76,7 +76,7 @@ describe('Testing Member Request Card', () => {
       id: '1',
       memberName: '',
       memberLocation: 'India',
-      joinDate: dayjs.utc().format('DD/MM/YYYY'),
+      joinDate: dayjs.utc().subtract(6, 'months').format('DD/MM/YYYY'),
       memberImage: '',
       email: 'johndoe@gmail.com',
     };
@@ -102,9 +102,7 @@ describe('Testing Member Request Card', () => {
     expect(screen.getByText(/Joined:/i)).toBeInTheDocument();
     expect(screen.queryByText(defaultProps.memberName)).not.toBeInTheDocument();
     expect(screen.getByText('India')).toBeInTheDocument();
-    expect(
-      screen.getByText(dayjs.utc().format('DD/MM/YYYY')),
-    ).toBeInTheDocument();
+    expect(screen.getByText(emptyProps.joinDate)).toBeInTheDocument();
     expect(screen.getByText('johndoe@gmail.com')).toBeInTheDocument();
   });
 

@@ -251,7 +251,11 @@ const MOCKS = [
                   id: 'event1',
                   name: 'Test Event 1',
                   description: 'Test Description 1',
-                  startAt: dayjs().subtract(7, 'months').date(5).toISOString(),
+                  startAt: dayjs()
+                    .subtract(7, 'months')
+                    .date(5)
+                    .startOf('day')
+                    .toISOString(),
                   endAt: dayjs()
                     .subtract(7, 'months')
                     .date(5)

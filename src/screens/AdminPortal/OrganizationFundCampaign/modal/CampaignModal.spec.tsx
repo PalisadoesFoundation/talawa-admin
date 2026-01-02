@@ -382,7 +382,7 @@ describe('CampaignModal', () => {
         startAt: dayjs.utc().add(1, 'year').toDate(),
         endAt: dayjs.utc().add(2, 'year').toDate(),
         currencyCode: 'USD',
-        createdAt: '2021-01-01T00:00:00.000Z',
+        createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
       },
     };
 
@@ -415,7 +415,7 @@ describe('CampaignModal', () => {
         startAt: dayjs.utc().add(10, 'year').toDate(),
         endAt: dayjs.utc().add(11, 'year').toDate(),
         currencyCode: 'USD',
-        createdAt: '2021-01-01T00:00:00.000Z',
+        createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
       },
     };
 
@@ -455,7 +455,7 @@ describe('CampaignModal', () => {
         startAt: dayjs.utc().add(1, 'year').toDate(),
         endAt: dayjs.utc().add(2, 'year').toDate(),
         currencyCode: 'USD',
-        createdAt: '2021-01-01T00:00:00.000Z',
+        createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
       },
     };
 
@@ -484,7 +484,7 @@ describe('CampaignModal', () => {
         startAt: dayjs.utc().add(1, 'year').toDate(),
         endAt: dayjs.utc().add(1, 'year').add(1, 'month').toDate(),
         currencyCode: 'USD',
-        createdAt: '2021-01-01T00:00:00.000Z',
+        createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
       },
     };
 
@@ -524,7 +524,7 @@ describe('CampaignModal', () => {
         startAt: dayjs.utc().add(1, 'year').toDate(),
         endAt: dayjs.utc().add(1, 'year').add(3, 'month').toDate(),
         currencyCode: 'USD',
-        createdAt: '2021-01-01T00:00:00.000Z',
+        createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
       },
     };
 
@@ -566,7 +566,7 @@ describe('CampaignModal', () => {
         startAt: dayjs.utc().add(1, 'year').toDate(),
         endAt: dayjs.utc().add(2, 'year').toDate(),
         currencyCode: 'USD',
-        createdAt: '2021-01-01T00:00:00.000Z',
+        createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
       },
     };
 

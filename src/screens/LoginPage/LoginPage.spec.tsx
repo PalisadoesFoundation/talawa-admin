@@ -2349,8 +2349,14 @@ describe('Cookie-based authentication verification', () => {
               slackURL: 'http://slack.com/test',
               redditURL: 'http://reddit.com/test',
               inactivityTimeoutDuration: 3600,
-              createdAt: '2023-01-01',
-              updatedAt: '2023-01-01',
+              createdAt: dayjs()
+                .subtract(1, 'year')
+                .startOf('year')
+                .format('YYYY-MM-DD'),
+              updatedAt: dayjs()
+                .subtract(1, 'year')
+                .startOf('year')
+                .format('YYYY-MM-DD'),
               logoMimeType: 'image/png',
               __typename: 'Community',
             },
@@ -2376,8 +2382,14 @@ describe('Cookie-based authentication verification', () => {
               slackURL: 'http://slack.com/test',
               redditURL: 'http://reddit.com/test',
               inactivityTimeoutDuration: 3600,
-              createdAt: dayjs().subtract(1, 'year').format('YYYY-MM-DD'),
-              updatedAt: dayjs().subtract(1, 'year').format('YYYY-MM-DD'),
+              createdAt: dayjs()
+                .subtract(1, 'year')
+                .startOf('year')
+                .format('YYYY-MM-DD'),
+              updatedAt: dayjs()
+                .subtract(1, 'year')
+                .startOf('year')
+                .format('YYYY-MM-DD'),
               logoMimeType: 'image/png',
               __typename: 'Community',
             },

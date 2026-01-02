@@ -7,6 +7,8 @@ import type { InterfacePostEdge } from 'types/Post/interface';
 import { DELETE_POST_MUTATION } from '../../GraphQl/Mutations/mutations';
 import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutations';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 // Mock react-toastify
 vi.mock('react-toastify', () => ({
@@ -117,8 +119,8 @@ describe('PinnedPostCard Component', () => {
       id: 'post-1',
       caption:
         'This is a test post caption that should be displayed in the card',
-      createdAt: dayjs().subtract(14, 'days').toISOString(),
-      pinnedAt: dayjs().subtract(14, 'days').toISOString(),
+      createdAt: dayjs.utc().subtract(14, 'days').toISOString(),
+      pinnedAt: dayjs.utc().subtract(14, 'days').toISOString(),
       pinned: true,
       attachments: [
         {

@@ -1,8 +1,6 @@
 import React, { act } from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-
-dayjs.extend(utc);
 import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
@@ -20,6 +18,8 @@ const link3 = new StaticMockLink(MOCKS_UPDATE, true);
 import userEvent from '@testing-library/user-event';
 import { vi, beforeEach, afterEach, describe, test, expect } from 'vitest';
 import type * as RouterTypes from 'react-router';
+
+dayjs.extend(utc);
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -117,10 +117,7 @@ describe('Testing User Table Item', () => {
                 name: 'Joined Organization 1',
                 avatarURL: 'image.png',
                 city: 'Kingston',
-                createdAt: dayjs
-                  .utc()
-                  .subtract(3, 'month')
-                  .format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
+                createdAt: dayjs.utc().subtract(3, 'month').toISOString(),
                 creator: {
                   id: '123',
                   name: 'John Doe',
@@ -135,10 +132,7 @@ describe('Testing User Table Item', () => {
                 name: 'Joined Organization 2',
                 avatarURL: 'image.png',
                 city: 'Kingston',
-                createdAt: dayjs
-                  .utc()
-                  .subtract(2, 'month')
-                  .format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
+                createdAt: dayjs.utc().subtract(2, 'month').toISOString(),
                 creator: {
                   id: '123',
                   name: 'John Doe',
@@ -726,19 +720,13 @@ describe('Testing User Table Item', () => {
             {
               node: {
                 id: 'ghi',
-                createdAt: dayjs
-                  .utc()
-                  .subtract(1, 'month')
-                  .format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
+                createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
                 organization: {
                   name: 'Blocked Organization 1',
                   avatarURL: 'image.png',
                   city: 'Toronto',
                   state: 'ON',
-                  createdAt: dayjs
-                    .utc()
-                    .subtract(1, 'month')
-                    .format('YYYY-MM-DDTHH:mm:ss.SSSZ'),
+                  createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
                   creator: {
                     name: 'Jane Smith',
                   },

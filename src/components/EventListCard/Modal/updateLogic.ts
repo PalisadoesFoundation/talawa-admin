@@ -147,17 +147,12 @@ export const useUpdateEventHandler = () => {
         ? dayjs.utc(eventListCardProps.startAt).isValid()
           ? dayjs.utc(eventListCardProps.startAt).startOf('day').toISOString()
           : ''
-        : dayjs
-              .utc(
-                `${dayjs.utc(eventListCardProps.startAt).format('YYYY-MM-DD')}T${eventListCardProps.startTime}`,
-              )
-              .isValid()
-          ? dayjs
-              .utc(
-                `${dayjs.utc(eventListCardProps.startAt).format('YYYY-MM-DD')}T${eventListCardProps.startTime}`,
-              )
-              .toISOString()
-          : '';
+        : (() => {
+            const dateTimeStr = `${dayjs.utc(eventListCardProps.startAt).format('YYYY-MM-DD')}T${eventListCardProps.startTime}`;
+            return dayjs.utc(dateTimeStr).isValid()
+              ? dayjs.utc(dateTimeStr).toISOString()
+              : '';
+          })();
 
       const originalEndAt = eventListCardProps.allDay
         ? dayjs.utc(eventListCardProps.endAt).isValid()

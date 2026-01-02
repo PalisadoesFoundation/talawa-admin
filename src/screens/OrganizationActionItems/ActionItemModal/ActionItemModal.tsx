@@ -574,7 +574,7 @@ const ItemModal: FC<IItemModalProps> = ({
                     getOptionLabel={(
                       volunteer: InterfaceEventVolunteerInfo,
                     ): string => {
-                      return volunteer.user?.name || 'Unknown Volunteer';
+                      return volunteer.user?.name || t('unknownVolunteer');
                     }}
                     onChange={(_, newVolunteer): void => {
                       const volunteerId = newVolunteer?.id;

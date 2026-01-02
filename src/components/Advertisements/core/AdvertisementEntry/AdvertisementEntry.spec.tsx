@@ -600,7 +600,7 @@ describe('Testing Advertisement Entry Component', () => {
               <MockedProvider>
                 <AdvertisementEntry
                   advertisement={{
-                    endAt: new Date('2030-01-01'),
+                    endAt: dayjs().add(4, 'year').toDate(),
                     startAt: new Date(),
                     id: '1',
                     attachments: [
@@ -658,8 +658,16 @@ describe('Testing Advertisement Entry Component', () => {
               <MockedProvider>
                 <AdvertisementEntry
                   advertisement={{
-                    endAt: dayjs().subtract(1, 'day').toDate(),
-                    startAt: dayjs().subtract(2, 'days').toDate(),
+                    endAt: dayjs
+                      .utc()
+                      .subtract(1, 'day')
+                      .startOf('day')
+                      .toDate(),
+                    startAt: dayjs
+                      .utc()
+                      .subtract(2, 'days')
+                      .startOf('day')
+                      .toDate(),
                     id: '1',
                     attachments: [
                       {

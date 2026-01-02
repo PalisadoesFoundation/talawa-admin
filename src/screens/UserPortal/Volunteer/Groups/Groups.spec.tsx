@@ -16,6 +16,9 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 const routerMocks = vi.hoisted(() => ({
   useParams: vi.fn(() => ({ orgId: 'orgId' })),

@@ -11,6 +11,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { toast } from 'react-toastify';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 // Mock toast at module level
 vi.mock('react-toastify', () => ({
@@ -1070,8 +1073,8 @@ describe('CustomRecurrenceModal – full coverage', () => {
 
   it('covers helper functions with 5th week date (edge case)', async () => {
     // Test with date in 5th week (e.g., 31st of a month)
-    // Using a dynamic date that falls on the 31st of a month with 31 days
-    const fifthWeekDate = dayjs().add(30, 'days').date(31).toDate();
+    // Ensure we're in a month with 31 days (Jan, Mar, May, Jul, Aug, Oct, Dec)
+    const fifthWeekDate = dayjs.utc().month(0).date(31).toDate(); // January 31st
     renderModal({
       startDate: fifthWeekDate,
       recurrenceRuleState: {

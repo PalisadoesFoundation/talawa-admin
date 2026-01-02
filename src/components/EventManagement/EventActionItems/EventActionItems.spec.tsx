@@ -921,7 +921,7 @@ describe('EventActionItems', () => {
         {
           ...mockActionItem,
           id: 'item1',
-          assignedAt: dayjs().add(1, 'day').toDate(),
+          assignedAt: dayjs.utc().add(1, 'day').toDate(),
         },
         {
           ...mockActionItem,
@@ -931,7 +931,7 @@ describe('EventActionItems', () => {
         {
           ...mockActionItem,
           id: 'item3',
-          assignedAt: dayjs().add(3, 'days').toDate(),
+          assignedAt: dayjs.utc().add(3, 'days').toDate(),
         },
       ];
 
