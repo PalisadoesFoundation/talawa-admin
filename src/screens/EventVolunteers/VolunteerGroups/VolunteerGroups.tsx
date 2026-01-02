@@ -21,10 +21,10 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
 
-import { WarningAmberRounded } from '@mui/icons-material';
+import { Groups, WarningAmberRounded } from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
-import { debounce, Stack } from '@mui/material';
+import { debounce } from '@mui/material';
 
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import Loader from 'components/Loader/Loader';
@@ -40,6 +40,7 @@ import VolunteerGroupModal from './modal/VolunteerGroupModal';
 import VolunteerGroupDeleteModal from './deleteModal/VolunteerGroupDeleteModal';
 import VolunteerGroupViewModal from './viewModal/VolunteerGroupViewModal';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 enum ModalState {
   SAME = 'same',
@@ -200,7 +201,10 @@ function volunteerGroups(): JSX.Element {
   if (groupsError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded className={`${styles.icon} ${styles.iconLg}`} />
+        <WarningAmberRounded
+          className={`${styles.icon} ${styles.iconLg}`}
+          aria-hidden="true"
+        />
         <h6 className="fw-bold text-danger text-center">
           {tErrors('errorLoading', { entity: 'Volunteer Groups' })}
         </h6>
@@ -211,7 +215,7 @@ function volunteerGroups(): JSX.Element {
   const columns: GridColDef[] = [
     {
       field: 'group',
-      headerName: 'Group',
+      headerName: t('eventVolunteers.groupHeader'),
       flex: 1,
       align: 'left',
       minWidth: 100,
@@ -231,7 +235,7 @@ function volunteerGroups(): JSX.Element {
     },
     {
       field: 'leader',
-      headerName: 'Leader',
+      headerName: t('eventVolunteers.leaderHeader'),
       flex: 1,
       align: 'center',
       minWidth: 100,
@@ -270,7 +274,7 @@ function volunteerGroups(): JSX.Element {
     },
     {
       field: 'volunteers',
-      headerName: 'No. of Volunteers',
+      headerName: t('eventVolunteers.numVolunteersHeader'),
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -286,7 +290,7 @@ function volunteerGroups(): JSX.Element {
     },
     {
       field: 'options',
-      headerName: 'Options',
+      headerName: t('eventVolunteers.optionsHeader'),
       align: 'center',
       flex: 1,
       minWidth: 100,
@@ -302,8 +306,11 @@ function volunteerGroups(): JSX.Element {
               className={`me-2 rounded ${styles.iconButton}`}
               data-testid="viewGroupBtn"
               onClick={() => handleModalClick(params.row, ModalState.VIEW)}
+              aria-label={t('eventVolunteers.viewDetails', {
+                name: params.row.name,
+              })}
             >
-              <i className="fa fa-info" />
+              <i className="fa fa-info" aria-hidden="true" />
             </Button>
             <Button
               variant="success"
@@ -311,8 +318,11 @@ function volunteerGroups(): JSX.Element {
               className="me-2 rounded"
               data-testid="editGroupBtn"
               onClick={() => handleModalClick(params.row, ModalState.SAME)}
+              aria-label={t('eventVolunteers.editVolunteerGroup', {
+                name: params.row.name,
+              })}
             >
-              <i className="fa fa-edit" />
+              <i className="fa fa-edit" aria-hidden="true" />
             </Button>
             <Button
               size="sm"
@@ -320,8 +330,11 @@ function volunteerGroups(): JSX.Element {
               className="rounded"
               data-testid="deleteGroupBtn"
               onClick={() => handleModalClick(params.row, ModalState.DELETE)}
+              aria-label={t('eventVolunteers.deleteVolunteerGroup', {
+                name: params.row.name,
+              })}
             >
-              <i className="fa fa-trash" />
+              <i className="fa fa-trash" aria-hidden="true" />
             </Button>
           </>
         );
@@ -388,8 +401,9 @@ function volunteerGroups(): JSX.Element {
             onClick={() => handleModalClick(null, ModalState.SAME)}
             className={styles.actionsButton}
             data-testid="createGroupBtn"
+            aria-label={tCommon('createNew', { item: 'Volunteer Group' })}
           >
-            <i className="fa fa-plus me-2" />
+            <i className="fa fa-plus me-2" aria-hidden="true" />
             {tCommon('create')}
           </Button>
         }
@@ -403,9 +417,11 @@ function volunteerGroups(): JSX.Element {
         getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('eventVolunteers.noVolunteerGroups')}
-            </Stack>
+            <EmptyState
+              icon={<Groups />}
+              message={t('eventVolunteers.noVolunteerGroups')}
+              dataTestId="volunteerGroups-empty-state"
+            />
           ),
         }}
         className={styles.dataGridContainer}
