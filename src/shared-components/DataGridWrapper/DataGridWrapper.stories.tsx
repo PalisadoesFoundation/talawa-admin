@@ -355,7 +355,7 @@ export const CompleteExample: Story = {
     actionColumn: (row: User) => (
       <>
         <IconButton
-          onClick={() => alert('Edit user' + row.name)}
+          onClick={() => alert(`Edit user: ${row.name}`)}
           aria-label={'Edit ' + row.name}
           size="small"
         >

@@ -19,6 +19,7 @@ import SearchBar from '../SearchBar/SearchBar';
 import SortingButton from '../../subComponents/SortingButton';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { DataGridLoadingOverlay } from './DataGridLoadingOverlay';
+import { DataGridErrorOverlay } from './DataGridErrorOverlay';
 /**
  * A generic wrapper around MUI DataGrid with built-in search, sorting, and pagination.
  *
@@ -68,9 +69,10 @@ export function DataGridWrapper<T extends { id: string | number }>(
 
   // Debounce search term to improve performance
   useEffect(() => {
+    const debounceDelay = searchConfig?.debounceMs ?? 300;
     const timer = setTimeout(() => {
       setDebouncedSearchTerm(searchTerm);
-    }, 300);
+    }, debounceDelay);
 
     return () => {
       clearTimeout(timer);
@@ -94,6 +96,10 @@ export function DataGridWrapper<T extends { id: string | number }>(
     if (field && (sort === 'asc' || sort === 'desc')) {
       return [{ field, sort: sort as 'asc' | 'desc' }];
     }
+    // Warn developers about invalid sort format
+    console.warn(
+      `[DataGridWrapper] Invalid sort format: "${selectedSort}". Expected format: "field_asc" or "field_desc"`,
+    );
     return [];
   }, [selectedSort]);
 
@@ -142,11 +148,18 @@ export function DataGridWrapper<T extends { id: string | number }>(
         loading={loading}
         slots={{
           loadingOverlay: DataGridLoadingOverlay,
-          noRowsOverlay: () => (
-            <EmptyState
-              message={emptyStateMessage || tCommon('noResultsFound')}
-            />
-          ),
+          noRowsOverlay: () => {
+            // Show error overlay if error exists
+            if (error) {
+              return <DataGridErrorOverlay message={error} />;
+            }
+            // Otherwise show empty state
+            return (
+              <EmptyState
+                message={emptyStateMessage || tCommon('noResultsFound')}
+              />
+            );
+          },
         }}
         sortModel={sortModel}
         pagination={paginationConfig?.enabled == true ? true : undefined}
@@ -160,11 +173,6 @@ export function DataGridWrapper<T extends { id: string | number }>(
         autoHeight
         disableRowSelectionOnClick
       />
-      {error && (
-        <div role="alert" className={styles.errorMessage}>
-          {error}
-        </div>
-      )}
     </div>
   );
 }

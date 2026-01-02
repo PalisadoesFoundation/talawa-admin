@@ -229,15 +229,5 @@
     "rimraf": "^6.1.2",
     "glob": "^13.0.0"
   },
-  "lint-staged": {
-    "src/screens/**/*.{ts,tsx}": [
-      "./scripts/lint-datagrid.sh",
-      "git add"
-    ],
-    "**/*.{ts, tsx, json, scss, css}": [
-      "prettier --write"
-    ],
-    "**/*.{ts, tsx, json}": "eslint --fix"
-  },
   "packageManager": "pnpm@10.4.1"
 }

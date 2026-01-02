@@ -3,8 +3,3 @@
   gap: var(--space-3);
   margin-bottom: var(--space-3);
 }
-
-.errorMessage {
-  color: var(--bs-danger);
-  padding: var(--space-4);
-}

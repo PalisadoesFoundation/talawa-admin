@@ -33,6 +33,8 @@ src/shared-components/DataGridWrapper/
   ├── DataGridWrapper.tsx
   ├── DataGridWrapper.spec.tsx
   ├── DataGridWrapper.module.css
+  ├── DataGridLoadingOverlay.tsx
+  └── DataGridErrorOverlay.tsx
 ```
 
 **Type Definitions:**
@@ -205,6 +207,11 @@ const { data, loading, error } = useQuery(GET_USERS);
   error={error ? 'Failed to load users. Please try again.' : undefined}
 />
 ```
+
+The error state is displayed using a custom error overlay component (`DataGridErrorOverlay`) that appears in place of the data grid, providing a consistent UX with the loading and empty states. The overlay includes an error icon and message, with proper accessibility attributes (`role="alert"`, `aria-live="assertive"`).
+
+> [!NOTE]
+> The error overlay uses the DataGrid's `slots` API for consistency. When an error is present, it takes precedence over the empty state overlay.
 
 ### With Action Column
 
@@ -460,6 +467,8 @@ const [sortModel, setSortModel] = useState([
 />
 ```
 
+The error now displays as an overlay within the DataGrid using the `slots` API, providing a consistent experience with the loading and empty states.
+
 #### Pattern 3: Action Buttons
 
 **Before:**
@@ -645,6 +654,35 @@ Ensure action buttons have proper aria labels:
 />
 ```
 
+### 8. Sort Format Validation
+
+The DataGridWrapper validates sort formats and provides helpful console warnings for debugging:
+
+```tsx
+// ✅ Good: Correct sort format
+sortConfig={{
+  sortingOptions: [
+    { label: 'Name (A-Z)', value: 'name_asc' },     // Correct
+    { label: 'Name (Z-A)', value: 'name_desc' },    // Correct
+  ],
+}}
+
+// ❌ Bad: Invalid sort format - will log warning
+sortConfig={{
+  sortingOptions: [
+    { label: 'Name', value: 'name' },              // Missing sort direction
+    { label: 'Email', value: 'email-ascending' },  // Wrong separator
+  ],
+}}
+```
+
+If an invalid format is detected, you'll see a console warning:
+```
+[DataGridWrapper] Invalid sort format: "name". Expected format: "field_asc" or "field_desc"
+```
+
+This helps developers quickly identify and fix configuration errors during development.
+
 ## Linter Enforcement
 
 The project includes a linter (`scripts/lint-datagrid.sh`) that prevents direct usage of `@mui/x-data-grid` or `<DataGrid` in `src/screens/**` files.
@@ -756,8 +794,9 @@ A: The DataGrid uses MUI's styling system. You can use the `sx` prop on columns 
 
 - **SearchBar**: Used internally by DataGridWrapper for search functionality
 - **SortingButton**: Used internally for sorting dropdown
-- **LoadingState**: Custom loading overlay component
-- **EmptyState**: Can be used alongside DataGridWrapper for advanced empty states
+- **DataGridLoadingOverlay**: Custom loading overlay component displayed via DataGrid slots
+- **DataGridErrorOverlay**: Custom error overlay component displayed via DataGrid slots when errors occur
+- **EmptyState**: Displayed via DataGrid slots when no data is available
 
 ## See Also
 

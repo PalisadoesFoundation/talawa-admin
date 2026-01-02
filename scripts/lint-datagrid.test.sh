@@ -45,7 +45,7 @@ fail_test() {
 }
 
 # Setup test environment
-cd "$TEST_DIR"
+cd "$TEST_DIR" || exit 1
 mkdir -p src/screens/Dashboard
 mkdir -p src/components
 mkdir -p src/shared-components
