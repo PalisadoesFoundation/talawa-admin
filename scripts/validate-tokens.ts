@@ -16,7 +16,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { execSync } from 'child_process';
+import { execSync, spawnSync } from 'child_process';
 import { glob } from 'glob';
 import { fileURLToPath } from 'url';
 
@@ -130,11 +130,6 @@ const toRepoRelativePath = (file: string): string => {
   return normalizePath(relative);
 };
 
-const quoteShellArg = (value: string): string => {
-  const escaped = value.replace(/(["\\$`])/g, '\\$1');
-  return `"${escaped}"`;
-};
-
 const parseAddedLineNumbers = (diff: string): Set<number> => {
   const addedLines = new Set<number>();
   let newLine = 0;
@@ -175,12 +170,17 @@ const getStagedAddedLines = (file: string): Set<number> => {
   }
 
   try {
-    const diff = execSync(
-      `git diff --cached -U0 -- ${quoteShellArg(repoPath)}`,
+    const result = spawnSync(
+      'git',
+      ['diff', '--cached', '-U0', '--', repoPath],
       {
         encoding: 'utf-8',
       },
     );
+    if (result.error) {
+      throw result.error;
+    }
+    const diff = result.stdout;
     return parseAddedLineNumbers(diff);
   } catch (error) {
     console.error(
