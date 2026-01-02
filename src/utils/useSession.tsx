@@ -1,5 +1,5 @@
 import { useMutation, useQuery } from '@apollo/client';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { t } from 'i18next';
 import { useEffect, useState, useRef } from 'react';
@@ -39,7 +39,7 @@ const useSession = (): UseSessionReturnType => {
   const warningTimerRef = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
 
-  const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
+  const [logout] = useMutation(LOGOUT_MUTATION);
   const { data, error: queryError } = useQuery(
     GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG,
   );
@@ -71,9 +71,9 @@ const useSession = (): UseSessionReturnType => {
 
   const handleLogout = async (): Promise<void> => {
     try {
-      await revokeRefreshToken();
+      await logout();
     } catch (error) {
-      console.error('Error revoking refresh token:', error);
+      console.error('Error during logout:', error);
       // toast.error('Failed to revoke session. Please try again.');
     }
     clearAllItems();

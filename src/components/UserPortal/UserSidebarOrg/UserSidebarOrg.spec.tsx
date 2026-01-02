@@ -11,7 +11,7 @@ import { MockedProvider } from '@apollo/react-testing';
 import { store } from 'state/store';
 import { ORGANIZATIONS_LIST } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, it } from 'vitest';
 import { usePluginDrawerItems } from 'plugin';
@@ -51,10 +51,7 @@ vi.mock('components/ProfileCard/ProfileCard', () => ({
 // Mock SignOut component to avoid router hook errors
 vi.mock('components/SignOut/SignOut', () => ({
   default: ({ hideDrawer }: { hideDrawer?: boolean }) => (
-    <div
-      data-testid="sign-out-component"
-      style={{ display: hideDrawer ? 'none' : 'block' }}
-    >
+    <div data-testid="sign-out-component" hidden={hideDrawer}>
       Sign Out Mock
     </div>
   ),
@@ -102,11 +99,11 @@ const props: InterfaceUserSidebarOrgProps = {
 const MOCKS = [
   {
     request: {
-      query: REVOKE_REFRESH_TOKEN,
+      query: LOGOUT_MUTATION,
     },
     result: {
       data: {
-        revokeRefreshTokenForUser: true,
+        logout: { success: true },
       },
     },
   },

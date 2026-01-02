@@ -255,14 +255,6 @@ export const LOGOUT_MUTATION = gql`
   }
 `;
 
-// to revoke a refresh token (legacy - use LOGOUT_MUTATION for cookie-based auth)
-
-export const REVOKE_REFRESH_TOKEN = gql`
-  mutation RevokeRefreshToken($refreshToken: String!) {
-    revokeRefreshToken(refreshToken: $refreshToken)
-  }
-`;
-
 // To verify the google recaptcha
 
 export const RECAPTCHA_MUTATION = gql`

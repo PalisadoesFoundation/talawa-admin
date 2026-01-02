@@ -29,9 +29,9 @@ import {
   organizationDataMock,
   organizationDataErrorMock,
   organizationDataNullMock,
-  revokeRefreshTokenMock,
-  revokeRefreshTokenErrorMock,
-  revokeRefreshTokenNetworkErrorMock,
+  logoutMock,
+  logoutErrorMock,
+  logoutNetworkErrorMock,
   mockNavigationLinksBase,
   getMockIcon,
 } from './UserPortalNavigationBarMocks';
@@ -219,7 +219,7 @@ describe('UserPortalNavigationBar', () => {
       });
 
       render(
-        <MockedProvider mocks={[revokeRefreshTokenMock]}>
+        <MockedProvider mocks={[logoutMock]}>
           <MemoryRouter>
             <UserPortalNavigationBar mode="user" />
           </MemoryRouter>
@@ -1033,7 +1033,7 @@ describe('UserPortalNavigationBar', () => {
       const toastErrorSpy = vi.spyOn(toast, 'error');
 
       render(
-        <MockedProvider mocks={[revokeRefreshTokenErrorMock]}>
+        <MockedProvider mocks={[logoutErrorMock]}>
           <MemoryRouter>
             <UserPortalNavigationBar mode="user" />
           </MemoryRouter>
@@ -1110,7 +1110,7 @@ describe('UserPortalNavigationBar', () => {
       });
 
       render(
-        <MockedProvider mocks={[revokeRefreshTokenErrorMock]}>
+        <MockedProvider mocks={[logoutErrorMock]}>
           <MemoryRouter>
             <UserPortalNavigationBar mode="user" />
           </MemoryRouter>
@@ -1146,7 +1146,7 @@ describe('UserPortalNavigationBar', () => {
       });
 
       render(
-        <MockedProvider mocks={[revokeRefreshTokenNetworkErrorMock]}>
+        <MockedProvider mocks={[logoutNetworkErrorMock]}>
           <MemoryRouter>
             <UserPortalNavigationBar mode="user" />
           </MemoryRouter>
@@ -1170,7 +1170,7 @@ describe('UserPortalNavigationBar', () => {
       const customOnLogout = vi.fn();
 
       render(
-        <MockedProvider mocks={[revokeRefreshTokenErrorMock]}>
+        <MockedProvider mocks={[logoutErrorMock]}>
           <MemoryRouter>
             <UserPortalNavigationBar mode="user" onLogout={customOnLogout} />
           </MemoryRouter>
@@ -1719,8 +1719,8 @@ describe('UserProfileDropdown Component', () => {
 });
 
 describe('UserPortalNavigationBarMocks', () => {
-  it('revokeRefreshTokenMock variableMatcher returns true for any variables', () => {
+  it('logoutMock variableMatcher returns true for any variables', () => {
     // Test the variableMatcher function to ensure 100% coverage of the mocks file
-    expect(revokeRefreshTokenMock.variableMatcher()).toBe(true);
+    expect(logoutMock.variableMatcher()).toBe(true);
   });
 });

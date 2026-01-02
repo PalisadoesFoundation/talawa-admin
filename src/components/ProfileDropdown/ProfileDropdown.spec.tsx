@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import ProfileDropdown, { MAX_NAME_LENGTH } from './ProfileDropdown';
 import { MockedProvider } from '@apollo/react-testing';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
@@ -30,8 +30,8 @@ vi.mock('react-router', async () => {
 
 const MOCKS = [
   {
-    request: { query: REVOKE_REFRESH_TOKEN },
-    result: { data: { revokeRefreshTokenForUser: true } },
+    request: { query: LOGOUT_MUTATION },
+    result: { data: { logout: { success: true } } },
   },
   {
     request: { query: GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG },
@@ -284,11 +284,11 @@ describe('ProfileDropdown Component', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/user/settings');
   });
 
-  test('handles error when revokeRefreshToken fails during logout', async () => {
+  test('handles error when logout fails during logout', async () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const errorMocks = [
       {
-        request: { query: REVOKE_REFRESH_TOKEN },
+        request: { query: LOGOUT_MUTATION },
         error: new Error('Network error'),
       },
       {
@@ -315,7 +315,7 @@ describe('ProfileDropdown Component', () => {
     });
 
     expect(consoleSpy).toHaveBeenCalledWith(
-      'Error revoking refresh token:',
+      'Error during logout:',
       expect.any(Error),
     );
     // Verify that navigation still happens even when revokeRefreshToken fails

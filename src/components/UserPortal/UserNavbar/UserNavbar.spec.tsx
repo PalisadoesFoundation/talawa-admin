@@ -12,7 +12,7 @@ import { vi } from 'vitest';
 import type { Mock } from 'vitest';
 import UserNavbar from './UserNavbar';
 import userEvent from '@testing-library/user-event';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -29,7 +29,7 @@ import useLocalStorage from 'utils/useLocalstorage';
  * 8. *Navigating to the 'Settings' page*: Confirms that clicking 'Settings' in the dropdown correctly navigates the user to the "/user/settings" page.
  *
  * The tests simulate interactions with the language dropdown and the user dropdown menu to ensure proper functionality of language switching and navigation.
- * Mocked GraphQL mutation (REVOKE_REFRESH_TOKEN) and mock store are used to test the component in an isolated environment.
+ * Mocked GraphQL mutation (LOGOUT_MUTATION) and mock store are used to test the component in an isolated environment.
  */
 
 vi.mock('utils/useLocalstorage', () => ({
@@ -77,9 +77,9 @@ async function wait(ms = 100): Promise<void> {
 const MOCKS = [
   {
     request: {
-      query: REVOKE_REFRESH_TOKEN,
+      query: LOGOUT_MUTATION,
     },
-    result: {},
+    result: { data: { logout: { success: true } } },
   },
   // Add a minimal mock for NotificationIcon's GET_USER_NOTIFICATIONS query
   {

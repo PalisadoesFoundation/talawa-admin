@@ -55,7 +55,7 @@ import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import LanguageIcon from '@mui/icons-material/Language';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 
@@ -73,7 +73,7 @@ function userNavbar(): JSX.Element {
   const { t: tCommon } = useTranslation('common');
 
   // Mutation hook for revoking the refresh token
-  const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
+  const [logout] = useMutation(LOGOUT_MUTATION);
 
   // State for managing the current language code
   const [currentLanguageCode, setCurrentLanguageCode] = React.useState(
@@ -89,7 +89,7 @@ function userNavbar(): JSX.Element {
    */
 
   const handleLogout = (): void => {
-    revokeRefreshToken();
+    logout();
     clearAllItems();
     navigate('/');
   };
