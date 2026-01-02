@@ -7,14 +7,15 @@ import { languageArray } from './languages';
 import translationEnglish from '../../public/locales/en/translation.json';
 import translationCommonEnglish from '../../public/locales/en/common.json';
 import translationErrorEnglish from '../../public/locales/en/errors.json';
+import loginEn from '../locales/login.en.json';
 
 i18n
   .use(LanguageDetector)
   .use(HttpApi)
   .use(initReactI18next)
   .init({
-    ns: ['translation', 'errors', 'common'],
-    defaultNS: 'translation',
+    ns: ['auth', 'translation', 'errors', 'common'],
+    defaultNS: 'auth',
     fallbackLng: 'en',
     supportedLngs: languageArray,
     detection: {
@@ -23,6 +24,7 @@ i18n
     },
     resources: {
       en: {
+        auth: loginEn,
         translation: translationEnglish,
         common: translationCommonEnglish,
         errors: translationErrorEnglish,

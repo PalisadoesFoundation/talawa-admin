@@ -33,8 +33,7 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
   onError,
   testId = 'login-form',
 }) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
-  const { t: tCommon } = useTranslation('common');
+  const { t } = useTranslation('auth');
 
   // Stable refs for callbacks to prevent multiple invocations on parent re-renders
   const onSuccessRef = useRef(onSuccess);
@@ -107,10 +106,10 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
       />
 
       <PasswordField
-        label={tCommon('password')}
+        label={t('password')}
         value={formData.password}
         onChange={handlePasswordChange}
-        placeholder={tCommon('enterPassword')}
+        placeholder={t('enterPassword')}
         testId={`${testId}-password`}
       />
 
@@ -120,7 +119,7 @@ export const LoginForm: React.FC<InterfaceLoginFormProps> = ({
         data-testid={`${testId}-submit`}
         className="w-100 mt-3"
       >
-        {loading ? t('loading') : tCommon('login')}
+        {loading ? t('loading') : t('login')}
       </Button>
     </Form>
   );

@@ -17,7 +17,7 @@ import { RequirementRow } from './RequirementRow';
 export const PasswordStrengthIndicator: React.FC<
   InterfacePasswordStrengthIndicatorProps
 > = ({ password, isVisible = true }) => {
-  const { t } = useTranslation('translation', { keyPrefix: 'loginPage' });
+  const { t } = useTranslation('auth');
 
   if (!isVisible) return null;
 

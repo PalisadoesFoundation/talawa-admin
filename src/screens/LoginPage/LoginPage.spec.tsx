@@ -1535,7 +1535,7 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
       1,
-      i18nForTest.t('loginPage.nameInvalid'),
+      'Name should contain only letters, spaces, and hyphens',
     );
   });
 
@@ -1556,7 +1556,7 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
       1,
-      i18nForTest.t('loginPage.passwordInvalid'),
+      'Password should contain at least one lowercase letter, one uppercase letter, one numeric value and one special character',
     );
   });
 
@@ -1598,7 +1598,7 @@ describe('Extra coverage for 100 %', () => {
     await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenCalledWith(
-      'Sorry! you are not Authorised!',
+      i18nForTest.t('errors:notAuthorised'),
     );
   });
 
@@ -1770,7 +1770,7 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
       1,
-      i18nForTest.t('loginPage.emailInvalid'),
+      'Please enter a valid email address',
     );
   });
 
@@ -1803,7 +1803,9 @@ describe('Extra coverage for 100 %', () => {
     // reCAPTCHA is now integrated directly in the mutation
     await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();
-    expect(toastMocks.warn).toHaveBeenCalledWith('Not found');
+    expect(toastMocks.warn).toHaveBeenCalledWith(
+      i18nForTest.t('errors:notFound'),
+    );
   });
 
   it('shows account locked message with countdown when retryAfter is provided', async () => {
@@ -1851,9 +1853,9 @@ describe('Extra coverage for 100 %', () => {
     await wait();
 
     // Should show the account locked message with countdown (15 minutes)
-    // Verify the message contains "locked" and a number for minutes
+    // The component uses tErrors() which should translate the key with the minutes parameter
     expect(toastMocks.error).toHaveBeenCalledWith(
-      expect.stringMatching(/locked.*\d+.*minute|minute.*\d+.*locked/i),
+      i18nForTest.t('errors:accountLockedWithTimer', { minutes: 15 }),
     );
 
     // Verify navigation does NOT occur (early return on error)
