@@ -249,11 +249,11 @@
     "rejectedSuccessfully": "अनुरोध सफलतापूर्वक अस्वीकार किया गया",
     "noOrgErrorTitle": "संगठन नहीं मिला",
     "noOrgErrorDescription": "कृपया डैशबोर्ड के माध्यम से संगठन बनाएं",
-    "newMembersWillAppearHere": "नए सदस्य यहां दिखाई देंगे",
     "name": "नाम",
     "email": "ईमेल",
     "profilePictureAlt": "{{name}} की प्रोफ़ाइल छवि",
-    "placeholderAvatarAlt": "प्लेसहोल्डर अवतार"
+    "placeholderAvatarAlt": "प्लेसहोल्डर अवतार",
+    "newMembersWillAppearHere": "नई सदस्यता अनुरोध यहाँ दिखाई देंगे"
   },
   "users": {
     "membershipStatus": {
@@ -398,7 +398,9 @@
     "join_success": "सदस्यता अनुरोध सफलतापूर्वक भेजा गया",
     "withdraw_success": "सदस्यता अनुरोध सफलतापूर्वक वापस लिया गया",
     "join_error": "सदस्यता अनुरोध भेजने में विफल",
-    "withdraw_error": "सदस्यता अनुरोध वापस लेने में विफल"
+    "withdraw_error": "सदस्यता अनुरोध वापस लेने में विफल",
+    "card_aria": "संगठन कार्ड",
+    "card_test_id": "organization-card-{{id}}"
   },
   "organizationTags": {
     "title": "संस्थान टैग",
@@ -406,6 +408,7 @@
     "manageTag": "प्रबंधित करें",
     "editTag": "संपादित करें",
     "removeTag": "हटाएँ",
+    "tags": "टैग",
     "tagDetails": "टैग विवरण",
     "tagName": "नाम",
     "tagType": "प्रकार",
@@ -416,6 +419,8 @@
     "noTagsFound": "कोई टैग नहीं मिला",
     "removeUserTag": "टैग हटाएँ",
     "removeUserTagMessage": "क्या आप इस टैग को हटाना चाहते हैं?",
+    "Latest": "नवीनतम",
+    "Oldest": "सबसे पुराना",
     "addChildTag": "उप-टैग जोड़ें",
     "enterTagName": "टैग का नाम दर्ज करें",
     "totalSubTags": "कुल उप-टैग",
@@ -1038,6 +1043,7 @@
     "deleteMsg": "क्या आप इस संगठन को हटाना चाहते हैं?",
     "confirmDelete": "हटाने की पुष्टि करें",
     "longDelOrgMsg": "संगठन हटाएं बटन पर क्लिक करने से संगठन अपने ईवेंट, टैग और सभी संबंधित डेटा के साथ स्थायी रूप से हटा दिया जाएगा।",
+    "deleteSampleOrganization": "नमूना संगठन हटाएँ",
     "successfullyDeletedSampleOrganization": "नमूना संगठन सफलतापूर्वक हटा दिया गया",
     "cancel": "रद्द करें"
   },
@@ -1094,7 +1100,34 @@
     "saveChanges": "परिवर्तन सहेजें",
     "cancel": "रद्द करें",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
-    "enterOrganizationDescription": "संगठन का विवरण दर्ज करें"
+    "enterOrganizationDescription": "संगठन का विवरण दर्ज करें",
+    "userRegistrationRequired": "उपयोगकर्ता पंजीकरण आवश्यक",
+    "nameDescriptionRequired": "नाम और विवरण आवश्यक हैं",
+    "updateFailed": "संगठन को अपडेट करने में विफल"
+  },
+  "public": {
+    "invitation": {
+      "title": "इवेंट आमंत्रण",
+      "previewText": "आपको इस इवेंट में शामिल होने के लिए आमंत्रित किया गया है।",
+      "inviteeEmail": "आमंत्रित का ईमेल",
+      "anyone": "कोई भी लॉग इन उपयोगकर्ता",
+      "organizationId": "संगठन आईडी",
+      "eventId": "इवेंट आईडी",
+      "eventTitle": "इवेंट {{eventId}}",
+      "expiresAt": "समाप्ति",
+      "mustLogin": "कृपया इस आमंत्रण को स्वीकार करने के लिए लॉग इन करें या खाता बनाएं।",
+      "login": "लॉग इन",
+      "signup": "साइन अप",
+      "invalidToken": "अमान्य आमंत्रण टोकन",
+      "invitationNotFound": "आमंत्रण नहीं मिला या अमान्य है",
+      "verifyError": "आमंत्रण सत्यापित करने में त्रुटि",
+      "accept": "आमंत्रण स्वीकार करें",
+      "accepted": "आमंत्रण स्वीकार किया गया",
+      "acceptError": "आमंत्रण स्वीकार नहीं किया जा सका",
+      "maskedNotice": "यह आमंत्रण एक मास्क किए गए ईमेल पते पर जारी किया गया था। स्वीकार करने से पहले सुनिश्चित करें कि आप आमंत्रित प्राप्तकर्ता हैं।",
+      "confirmMatch": "मैं पुष्टि करता/करती हूँ कि मेरे खाते का ईमेल आमंत्रित पते से मेल खाता है (ऊपर दिखाया गया)।",
+      "signInAsDifferent": "किसी अन्य उपयोगकर्ता के रूप में साइन इन करें"
+    }
   },
   "memberDetail": {
     "title": "उपयोगकर्ता विवरण",
@@ -1160,7 +1193,8 @@
     "name": "नाम",
     "email": "ईमेल",
     "role": "भूमिका",
-    "loading": "लोड हो रहा है..."
+    "loading": "लोड हो रहा है...",
+    "emailNotAvailable": "ईमेल उपलब्ध नहीं है"
   },
   "userLogin": {
     "login": "लॉग इन करें",
@@ -1612,12 +1646,23 @@
     "demoteToRegular": "नियमित में पदावनत करें",
     "promoteToAdmin": "व्यवस्थापक में पदोन्नत करें",
     "user": "उपयोगकर्ता",
-    "chatAction": "चैट कार्रवाई"
+    "chatAction": "चैट कार्रवाई",
+    "organizationMembersTable": "संगठन सदस्य तालिका",
+    "newGroup": "नया समूह",
+    "groupName": "समूह का नाम",
+    "groupDescription": "समूह विवरण",
+    "next": "अगला"
   },
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
     "sendMessage": "मेसेज भेजें",
-    "reply": "जवाब"
+    "reply": "जवाब",
+    "loadingImage": "चित्र लोड हो रहा है...",
+    "imageNotAvailable": "चित्र उपलब्ध नहीं है",
+    "attachment": "अनुलग्नक",
+    "loadingMoreMessages": "अधिक संदेश लोड हो रहे हैं...",
+    "loading": "लोड हो रहा है...",
+    "loadOlderMessages": "पुराने संदेश लोड करें"
   },
   "orgActionItemCategories": {
     "enableButton": "सक्षम",

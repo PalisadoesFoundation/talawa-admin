@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 import OrgUpdate from './OrgUpdate';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
@@ -15,10 +15,12 @@ import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 
-vi.mock('react-toastify', () => ({
-  toast: {
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
   },
 }));
 
@@ -35,6 +37,8 @@ i18n.init({
           isUserRegistrationRequired: 'User registration required',
           isVisibleInSearch: 'Is visible in search',
           'Is Public': 'Is Public',
+          nameDescriptionRequired: 'Name and description are required',
+          updateFailed: 'Failed to update organization',
         },
       },
       common: {
@@ -194,7 +198,7 @@ describe('OrgUpdate Component', () => {
     fireEvent.click(saveButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(NotificationToast.success).toHaveBeenCalledWith(
         i18n.t('orgUpdate.successfulUpdated'),
       );
     });
@@ -276,9 +280,8 @@ describe('OrgUpdate Component', () => {
     });
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(
+      expect(NotificationToast.error).toHaveBeenCalledWith(
         'Failed to update organization',
-        expect.any(Object),
       );
     });
 
@@ -528,7 +531,7 @@ describe('OrgUpdate Component', () => {
       fireEvent.click(saveButton);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
+        expect(NotificationToast.success).toHaveBeenCalledWith(
           i18n.t('orgUpdate.successfulUpdated'),
         );
       });
@@ -554,8 +557,8 @@ describe('OrgUpdate Component', () => {
       fireEvent.click(saveButton);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
-          'Name and description are required',
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          i18n.t('orgUpdate.nameDescriptionRequired'),
         );
       });
 
@@ -566,8 +569,8 @@ describe('OrgUpdate Component', () => {
       fireEvent.click(saveButton);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
-          'Name and description are required',
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          i18n.t('orgUpdate.nameDescriptionRequired'),
         );
       });
     });
@@ -624,9 +627,8 @@ describe('OrgUpdate Component', () => {
       fireEvent.click(saveButton);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
+        expect(NotificationToast.error).toHaveBeenCalledWith(
           'Failed to update organization',
-          expect.any(Object),
         );
       });
     });
@@ -824,9 +826,8 @@ describe('OrgUpdate Component', () => {
 
       await waitFor(
         () => {
-          expect(toast.error).toHaveBeenCalledWith(
-            i18n.t('orgUpdate.failedToUpdateOrg'),
-            expect.any(Object),
+          expect(NotificationToast.error).toHaveBeenCalledWith(
+            i18n.t('orgUpdate.updateFailed'),
           );
         },
         { timeout: 2000 },
@@ -859,5 +860,36 @@ describe('OrgUpdate Component', () => {
     fireEvent.change(addressInput, { target: { value: 'New Address Line' } });
 
     expect(addressInput).toHaveValue('New Address Line');
+  });
+
+  it('displays error message when query fails', async () => {
+    const errorMock = {
+      request: {
+        query: GET_ORGANIZATION_BASIC_DATA,
+        variables: { id: '1' },
+      },
+      error: new Error('Failed to fetch organization data'),
+    };
+
+    render(
+      <MockedProvider mocks={[errorMock]}>
+        <I18nextProvider i18n={i18n}>
+          <OrgUpdate orgId="1" />
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    await waitFor(() => {
+      // The error message is split across a <br /> tag within the h6 element
+      // Check for the error container and verify it contains both text parts
+      const errorContainer = screen.getByText((content, element) => {
+        return (
+          element?.tagName.toLowerCase() === 'h6' &&
+          content.includes('Error occured while loading Organization Data') &&
+          content.includes('Failed to fetch organization data')
+        );
+      });
+      expect(errorContainer).toBeInTheDocument();
+    });
   });
 });

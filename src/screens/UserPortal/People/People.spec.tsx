@@ -311,6 +311,10 @@ const fiveMembersMock = {
   },
 };
 
+// Debounce duration used by AdminSearchFilterBar component (default: 300ms)
+// NOTE: This value must be manually kept in sync with AdminSearchFilterBar's debounceDelay default
+const SEARCH_DEBOUNCE_MS = 300;
+
 async function wait(ms = 100): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -390,7 +394,7 @@ describe('Testing People Screen [User Portal]', () => {
     await wait();
 
     await userEvent.type(screen.getByTestId('searchInput'), 'Ad{enter}');
-    await wait();
+    await wait(SEARCH_DEBOUNCE_MS);
 
     expect(screen.queryByText('Admin User')).toBeInTheDocument();
     expect(screen.queryByText('Test User')).not.toBeInTheDocument();
@@ -414,6 +418,7 @@ describe('Testing People Screen [User Portal]', () => {
     await userEvent.clear(screen.getByTestId('searchInput'));
     await userEvent.click(searchBtn);
     await userEvent.type(screen.getByTestId('searchInput'), 'Admin');
+    await wait(SEARCH_DEBOUNCE_MS);
     await userEvent.click(searchBtn);
     await wait();
 
@@ -559,6 +564,7 @@ describe('People Component Mode Switch and Search Coverage', () => {
     );
 
     await userEvent.type(screen.getByTestId('searchInput'), 'Admin');
+    await wait(SEARCH_DEBOUNCE_MS);
     await userEvent.click(screen.getByTestId('searchBtn'));
 
     await waitFor(() => {
@@ -737,5 +743,62 @@ describe('People Component Field Tests (Email, ID, Role)', () => {
     await userEvent.click(clearBtn);
 
     expect(searchInput).toHaveValue('');
+  });
+
+  it('displays localized emailNotAvailable when email is missing', async () => {
+    // Create a mock with a member that has null email
+    const mockWithNullEmail = {
+      request: {
+        query: ORGANIZATIONS_MEMBER_CONNECTION_LIST,
+        variables: makeQueryVars(),
+      },
+      result: {
+        data: {
+          organization: {
+            members: {
+              edges: [
+                {
+                  cursor: 'cursor1',
+                  node: {
+                    id: 'user-null-email',
+                    name: 'Test User No Email',
+                    role: 'member',
+                    avatarURL: null,
+                    emailAddress: null,
+                    createdAt: '2023-03-02T03:22:08.101Z',
+                  },
+                },
+              ],
+              pageInfo: {
+                endCursor: 'cursor1',
+                hasPreviousPage: false,
+                hasNextPage: false,
+                startCursor: 'cursor1',
+              },
+            },
+          },
+        },
+      },
+    };
+
+    render(
+      <MockedProvider mocks={[mockWithNullEmail]}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <People />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    // Verify member is rendered
+    expect(screen.getByText('Test User No Email')).toBeInTheDocument();
+    // Verify emailNotAvailable translation is displayed
+    const emailElement = screen.getByTestId('people-email-user-null-email');
+    expect(emailElement).toHaveTextContent('Email not available');
   });
 });

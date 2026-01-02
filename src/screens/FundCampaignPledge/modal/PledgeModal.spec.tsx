@@ -23,15 +23,20 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfacePledgeModal } from './PledgeModal';
 import PledgeModal from './PledgeModal';
 import { vi } from 'vitest';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { MEMBERS_LIST_PG } from 'GraphQl/Queries/Queries';
 
-vi.mock('react-toastify', () => ({
-  toast: { success: vi.fn(), error: vi.fn() },
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  },
 }));
 
 export const getPickerInputByLabel = (label: string): HTMLElement => {
@@ -321,7 +326,9 @@ describe('PledgeModal', () => {
     });
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Failed to create pledge');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Failed to create pledge',
+      );
     });
   });
 
@@ -369,7 +376,9 @@ describe('PledgeModal', () => {
     });
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('Pledge created successfully');
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        'Pledge created successfully',
+      );
       expect(props.refetchPledge).toHaveBeenCalled();
       expect(props.hide).toHaveBeenCalled();
     });
@@ -436,7 +445,9 @@ describe('PledgeModal', () => {
     });
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith('Pledge updated successfully');
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        'Pledge updated successfully',
+      );
       expect(props.refetchPledge).toHaveBeenCalled();
       expect(props.hide).toHaveBeenCalled();
     });
@@ -499,7 +510,7 @@ describe('PledgeModal', () => {
     });
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Update failed');
+      expect(NotificationToast.error).toHaveBeenCalledWith('Update failed');
     });
   });
 
