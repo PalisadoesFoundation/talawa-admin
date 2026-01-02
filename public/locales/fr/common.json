@@ -200,5 +200,21 @@
   "no_email": "Pas d'email",
   "no_name": "Pas de nom",
   "na": "N/A",
-  "user_row": "Ligne utilisateur"
+  "user_row": "Ligne utilisateur",
+  "paginationPrev": "Préc \u2039",
+  "paginationNext": "Suiv \u203a",
+  "tablePagination": "Pagination du tableau",
+  "paginationPrevLabel": "Page précédente",
+  "paginationNextLabel": "Page suivante",
+  "closeModal": "Fermer la fenêtre modale",
+  "errorLoadingUsers": "Erreur de chargement des utilisateurs",
+  "noUsersFound": "Aucun utilisateur trouvé",
+  "clickToBrowseFile": "Cliquez pour parcourir les fichiers",
+  "selectAZipFile": "Sélectionnez un fichier ZIP",
+  "version": "Version",
+  "author": "Auteur",
+  "removePermanently": "Supprimer définitivement",
+  "previousPage": "Page précédente",
+  "nextPage": "Page suivante",
+  "pageNumber": "Page {{page}}"
 }

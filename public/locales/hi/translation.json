@@ -1,4 +1,6 @@
 {
+  "ends": "समाप्त होता है",
+  "occurrences": "घटनाओं",
   "leaderboard": {
     "title": "लीडरबोर्ड",
     "searchByVolunteer": "स्वयंसेवक द्वारा खोजें",
@@ -466,7 +468,10 @@
     "expand": "विस्तारित करें",
     "tagNamePlaceholder": "टैग का नाम लिखें",
     "allTags": "सभी टैग",
-    "noMoreMembersFound": "कोई और सदस्य नहीं मिला"
+    "noMoreMembersFound": "कोई और सदस्य नहीं मिला",
+    "errorOccurredWhileLoadingAssignedUser": "असाइन किए गए उपयोगकर्ता को लोड करते समय त्रुटि हुई",
+    "sortPeople": "लोगों को सॉर्ट करें",
+    "tagActions": "टैग क्रियाएँ"
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
@@ -512,6 +517,7 @@
     "publicEvent": "सार्वजनिक है",
     "isRegistrable": "पंजीकरण योग्य है",
     "registerable": "पंजीकरण योग्य है",
+
     "createEvent": "कार्यक्रम बनाएँ",
     "enterFilter": "फ़िल्टर दर्ज करें",
     "enterName": "नाम दर्ज करें",
@@ -528,7 +534,7 @@
     "never": "कभी नहीं",
     "on": "पर",
     "after": "बाद",
-    "occurences": "घटनाओं",
+    "occurrences": "घटनाओं",
     "monthlyOn": "मासिक पर",
     "yearlyOn": "वार्षिक पर",
     "yearlyRecurrenceDesc": "यह घटना हर साल घटना की शुरुआत की तारीख को ही दोहराई जाएगी।",
@@ -557,6 +563,7 @@
     "actionItemDetails": "क्रिया वस्तु विवरण",
     "actionItemCompleted": "क्रिया वस्तु पूरी",
     "assignee": "प्राप्तकर्ता",
+    "assigneeOrCategory": "प्राप्तकर्ता या श्रेणी",
     "assignedTo": "किसे सौंपा गया",
     "assigner": "सौंपने वाला",
     "assignmentDate": "आवंटन तिथि",
@@ -723,7 +730,7 @@
     "never": "कभी नहीं",
     "on": "पर",
     "after": "बाद",
-    "occurences": "घटनाओं",
+    "occurrences": "घटनाओं",
     "location": "स्थान",
     "no": "नहीं",
     "yes": "हाँ",
@@ -1315,6 +1322,7 @@
     "chartPageNavigation": "चार्ट पृष्ठ नेविगेशन",
     "previousPage": "पिछला पृष्ठ",
     "nextPage": "अगला पृष्ठ",
+    "pageNumber": "पृष्ठ {{page}}",
     "goToToday": "आज पर जाएं",
     "genderDistribution": "लिंग वितरण",
     "ageDistribution": "आयु वितरण"
@@ -1505,7 +1513,14 @@
     "day": "दिन",
     "week": "सप्ताह",
     "month": "महीना",
-    "year": "वर्ष"
+    "year": "वर्ष",
+    "ends": "समाप्त होता है",
+    "occurrences": "घटनाओं",
+    "never": "कभी नहीं",
+    "on": "पर",
+    "after": "के बाद",
+    "customRecurrence": "कस्टम पुनरावृत्ति",
+    "repeatsEvery": "हर बार दोहराता है"
   },
   "userEventCard": {
     "starts": "प्रारंभ होगा",
@@ -1549,7 +1564,19 @@
     "edit": "संपादित करें",
     "saveChanges": "परिवर्तन सहेजें",
     "endOfResults": "परिणाम समाप्त",
-    "noDescription": "कोई विवरण नहीं"
+    "noDescription": "कोई विवरण नहीं",
+    "failedToFetchAdvertisements": "विज्ञापन लाने में विफल",
+    "advertisementMedia": "विज्ञापन मीडिया",
+    "noMediaAvailable": "कोई मीडिया उपलब्ध नहीं",
+    "advertisementImageAlt": "विज्ञापन छवि #{{index}} {{name}} के लिए",
+    "invalidFileType": "अमान्य फ़ाइल प्रकार: {{fileName}}",
+    "fileTooLarge": "फ़ाइल बहुत बड़ी है: {{fileName}}",
+    "invalidArgumentsForAction": "इस क्रिया के लिए अमान्य तर्क।",
+    "englishCaptions": "अंग्रेज़ी कैप्शन",
+    "preview": "पूर्वावलोकन",
+    "bannerAd": "बैनर विज्ञापन",
+    "popupAd": "पॉपअप विज्ञापन",
+    "menuAd": "मेनू विज्ञापन"
   },
   "userChat": {
     "title": "चैट्स",
@@ -1660,7 +1687,10 @@
     "cancel": "रद्द करें",
     "create": "बनाएं",
     "user": "उपयोगकर्ता",
-    "profile": "प्रोफ़ाइल"
+    "profile": "प्रोफ़ाइल",
+    "customizedTable": "कस्टमाइज़्ड टेबल",
+    "page": "पृष्ठ",
+    "add": "जोड़ें"
   },
   "eventActionItems": {
     "title": "एक्शन आइटम्स",
@@ -1704,6 +1734,7 @@
     "title": "धन उगाहने के अभियान",
     "searchByName": "नाम से खोजें...",
     "searchBy": "द्वारा खोजें",
+    "searchCampaigns": "अभियान खोजें",
     "pledgers": "प्रतिज्ञाकर्ता",
     "pledger": "प्रतिज्ञाकर्ता",
     "campaigns": "अभियान",
@@ -1727,7 +1758,8 @@
     "amountRaised": "एकत्रित राशि"
   },
   "userPledges": {
-    "title": "मेरी प्रतिज्ञाएँ"
+    "title": "मेरी प्रतिज्ञाएँ",
+    "searchPledges": "प्रतिज्ञाएँ खोजें"
   },
   "leaveOrganization": {
     "title": "संगठन छोड़ें"
@@ -1736,6 +1768,7 @@
     "toggleGroupAriaLabel": "स्वयंसेवक दृश्य चयनकर्ता",
     "volunteers": "स्वयंसेवक",
     "volunteer": "स्वयंसेवक",
+    "volunteerName": "स्वयंसेवक का नाम",
     "volunteerGroups": "स्वयंसेवक समूह",
     "individuals": "व्यक्ति",
     "groups": "समूह",
@@ -1758,6 +1791,7 @@
     "deleteVolunteerGroupMsg": "क्या आप वाकई इस स्वयंसेवक समूह को हटाना चाहते हैं?",
     "leader": "नेता",
     "group": "समूह",
+    "groupOrLeader": "समूह या नेता",
     "createGroup": "समूह बनाएं",
     "updateGroup": "समूह अपडेट करें",
     "deleteGroup": "समूह हटाएं",
@@ -1781,7 +1815,10 @@
     "leastVolunteers": "सबसे कम स्वयंसेवक",
     "applyTo": "लागू करें",
     "entireSeries": "पूरी श्रृंखला",
-    "thisEventOnly": "केवल यह घटना"
+    "thisEventOnly": "केवल यह घटना",
+    "volunteerAlt": "स्वयंसेवक प्रोफ़ाइल चित्र",
+    "groupTable": "समूह तालिका",
+    "volunteerActions": "स्वयंसेवक क्रियाएँ"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",
@@ -1793,11 +1830,15 @@
     "actions": "क्रिया वस्तुएँ",
     "search": "खोजें",
     "searchByName": "नाम से खोजें",
+    "startDate": "प्रारंभिक तिथि",
     "latestEndDate": "नवीनतम समाप्ति तिथि",
     "earliestEndDate": "प्रारंभिक समाप्ति तिथि",
     "noEvents": "कोई आगामी कार्यक्रम नहीं",
     "volunteer": "स्वयंसेवक",
     "volunteered": "स्वयंसेवित",
+    "volunteerName": "नाम",
+    "volunteerActions": "क्रियाएँ",
+    "volunteerAlt": "स्वयंसेवक",
     "join": "शामिल हों",
     "joined": "शामिल हुआ",
     "searchByEventName": "कार्यक्रम शीर्षक से खोजें",
@@ -1825,6 +1866,7 @@
     "event": "कार्यक्रम",
     "received": "प्राप्त",
     "location": "स्थान",
+    "titleOrLocation": "शीर्षक या स्थान",
     "recurrence": "पुनरावृत्ति",
     "endDate": "समाप्ति तिथि",
     "description": "विवरण",
@@ -1833,7 +1875,8 @@
     "srNo": "क्र.सं.",
     "groupName": "समूह का नाम",
     "noOfMembers": "सदस्यों की संख्या",
-    "options": "विकल्प"
+    "options": "विकल्प",
+    "notSpecified": "निर्दिष्ट नहीं"
   },
   "pluginStore": {
     "title": "प्लगइन स्टोर",
@@ -1857,7 +1900,45 @@
     "checkBackLater": "नए प्लगइन के लिए बाद में जांचें",
     "tryDifferentSearch": "एक अलग खोज शब्द आज़माएं या सभी प्लगइन ब्राउज़ करें",
     "explorePluginStore": "नए प्लगइन खोजने के लिए प्लगइन स्टोर का अन्वेषण करें",
-    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला"
+    "noResultsFoundFor": "के लिए कोई परिणाम नहीं मिला",
+    "pluginIcon": "प्लगइन आइकन",
+    "backToDetails": "विवरण पर वापस जाएं",
+    "previousImage": "Previous Image (←)",
+    "nextImage": "Next Image (→)",
+    "screenshot": "स्क्रीनशॉट {{number}}",
+    "goTo": "पर जाएं",
+    "screenshots": "Screenshots",
+    "ss": "Screenshot",
+    "loadingDetails": "लोड हो रहा है विवरण...",
+    "features": "Features",
+    "noFeaturesInfoAvailableForThisPlugin": "इस प्लगइन के लिए कोई फीचर जानकारी उपलब्ध नहीं है।",
+    "loadingFeatures": "लोड हो रहा है फीचर्स...",
+    "loadingChangelog": "लोड हो रहा है चेंजलॉग...",
+    "changelog": "Changelog",
+    "v": "v",
+    "failedToUploadPlugin": "प्लगइन अपलोड करने में विफल रहा। कृपया पुनः प्रयास करें।",
+    "uploadPlugin": "प्लगइन अपलोड करें",
+    "uploadPluginDescription": "अपलोड करने के लिए एक ज़िप फ़ाइल चुनें या ड्रॉप करें",
+    "pluginId": "प्लगइन आईडी",
+    "adminDashboardComponents": "एडमिन डैशबोर्ड कंपोनेंट्स",
+    "componentsToInstall": "इंस्टॉल करने के लिए कंपोनेंट्स",
+    "apiBackendComponents": "API बैकएंड कंपोनेंट्स",
+    "pluginStructure": "प्लगइन संरचना",
+    "pluginStructureDescription": "प्लगइन को सही ढंग से काम करने के लिए निम्नलिखित निर्देशिका संरचना का पालन करना चाहिए:",
+    "detectedFiles": "पता चला फ़ाइलें",
+    "expectedDirectoryStructure": "अपेक्षित निर्देशिका संरचना",
+    "requiredManifestFields": "आवश्यक मैनिफेस्ट फ़ील्ड",
+    "uninstallPlugin": "प्लगइन अनइंस्टॉल करें",
+    "uninstallPluginMsg": "क्या आप वाकई इस {{pluginName}} को अनइंस्टॉल करना चाहते हैं?",
+    "clickToViewFullSize": "पूर्ण आकार देखने के लिए क्लिक करें",
+    "pluginInfo": "प्लगइन जानकारी",
+    "filterPlugins": "फिल्टर प्लगइन्स",
+    "details": "विवरण",
+    "installing": "इंस्टॉल हो रहा है ({{elapsed}})",
+    "uploading": "अपलोड हो रहा है...",
+    "screenshotCounter": "{{current}} में से {{total}}",
+    "uninstallWarning": "यह क्रिया प्लगइन और उसके सभी डेटा को स्थायी रूप से हटा देगी। इस क्रिया को पूर्ववत नहीं किया जा सकता।",
+    "errorInstalling": "प्लगइन विवरण लोड करने में विफल"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "टिप्पणी सफलतापूर्वक हटा दी गई",

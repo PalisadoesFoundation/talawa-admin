@@ -1,4 +1,6 @@
 {
+  "ends": "Prend fin",
+  "occurrences": "Occurrences",
   "leaderboard": {
     "title": "Tableau des Leaders",
     "searchByVolunteer": "Recherche par Bénévole",
@@ -466,7 +468,10 @@
     "expand": "Développer",
     "tagNamePlaceholder": "Écrire le nom de l'étiquette",
     "allTags": "Toutes les étiquettes",
-    "noMoreMembersFound": "Aucun autre membre trouvé"
+    "noMoreMembersFound": "Aucun autre membre trouvé",
+    "errorOccurredWhileLoadingAssignedUser": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
+    "sortPeople": "Trier les personnes",
+    "tagActions": "Actions d'étiquette"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
@@ -512,6 +517,7 @@
     "publicEvent": "est public",
     "isRegistrable": "Est enregistrable",
     "registerable": "Est enregistrable",
+
     "createEvent": "Créer un évènement",
     "enterFilter": "Entrer le filtre",
     "enterName": "Entrez le nom",
@@ -528,7 +534,7 @@
     "never": "Jamais",
     "on": "Sur",
     "after": "Après",
-    "occurences": "événements",
+    "occurrences": "événements",
     "monthlyOn": "Mensuel le",
     "yearlyOn": "Annuel le",
     "yearlyRecurrenceDesc": "Cet événement se répétera chaque année à la même date que la date de début de l'événement.",
@@ -557,6 +563,7 @@
     "actionItemDetails": "Détails de l'Action",
     "actionItemCompleted": "Action Terminée",
     "assignee": "Attribué à",
+    "assigneeOrCategory": "Attribué ou Catégorie",
     "assignedTo": "Assigné à",
     "assigner": "Assignateur",
     "assignmentDate": "Date d'Attribution",
@@ -723,7 +730,7 @@
     "never": "Jamais",
     "on": "Sur",
     "after": "Après",
-    "occurences": "événements",
+    "occurrences": "événements",
     "location": "Lieu",
     "no": "Non",
     "yes": "Oui",
@@ -1315,6 +1322,7 @@
     "chartPageNavigation": "Navigation de la page du graphique",
     "previousPage": "Page précédente",
     "nextPage": "Page suivante",
+    "pageNumber": "Page {{page}}",
     "goToToday": "Aller à aujourd'hui",
     "genderDistribution": "Distribution par sexe",
     "ageDistribution": "Distribution par âge"
@@ -1505,7 +1513,14 @@
     "day": "Jour",
     "week": "Semaine",
     "month": "Mois",
-    "year": "Année"
+    "year": "Année",
+    "ends": "Prend fin",
+    "occurrences": "Occurrences",
+    "never": "Jamais",
+    "on": "Le",
+    "after": "Après",
+    "customRecurrence": "Récurrence Personnalisée",
+    "repeatsEvery": "Se répète tous les"
   },
   "userEventCard": {
     "starts": "Départs",
@@ -1549,7 +1564,19 @@
     "edit": "Modifier",
     "saveChanges": "Enregistrer les modifications",
     "endOfResults": "Fin des résultats",
-    "noDescription": "Aucune description"
+    "noDescription": "Aucune description",
+    "failedToFetchAdvertisements": "Échec de la récupération des annonces",
+    "advertisementMedia": "Média publicitaire",
+    "noMediaAvailable": "Aucun média disponible",
+    "advertisementImageAlt": "Image publicitaire #{{index}} pour {{name}}",
+    "invalidFileType": "Type de fichier invalide : {{fileName}}",
+    "fileTooLarge": "Fichier trop volumineux : {{fileName}}",
+    "invalidArgumentsForAction": "Arguments invalides pour cette action.",
+    "englishCaptions": "Légendes en anglais",
+    "preview": "Aperçu",
+    "bannerAd": "Bannière publicitaire",
+    "popupAd": "Annonce popup",
+    "menuAd": "Annonce de menu"
   },
   "userChat": {
     "title": "Discussions",
@@ -1660,7 +1687,10 @@
     "cancel": "Annuler",
     "create": "Créer",
     "user": "Utilisateur",
-    "profile": "Profil"
+    "profile": "Profil",
+    "customizedTable": "Table personnalisée",
+    "page": "Page",
+    "add": "Ajouter"
   },
   "eventActionItems": {
     "title": "Éléments d'action",
@@ -1704,6 +1734,7 @@
     "title": "Campagnes de financement",
     "searchByName": "Rechercher par nom...",
     "searchBy": "Rechercher par",
+    "searchCampaigns": "Rechercher des campagnes",
     "pledgers": "Contributeurs",
     "pledger": "Prometteur",
     "campaigns": "Campagnes",
@@ -1727,7 +1758,8 @@
     "amountRaised": "Montant Collecté"
   },
   "userPledges": {
-    "title": "Mes Promesses"
+    "title": "Mes Promesses",
+    "searchPledges": "Rechercher des engagements"
   },
   "leaveOrganization": {
     "title": "Quitter l'organisation"
@@ -1736,6 +1768,7 @@
     "toggleGroupAriaLabel": "Sélecteur de vue des bénévoles",
     "volunteers": "Bénévoles",
     "volunteer": "Bénévole",
+    "volunteerName": "Nom du Bénévole",
     "volunteerGroups": "Groupes de Bénévoles",
     "individuals": "Individus",
     "groups": "Groupes",
@@ -1758,6 +1791,7 @@
     "deleteVolunteerGroupMsg": "Êtes-vous sûr de vouloir supprimer ce groupe de bénévoles?",
     "leader": "Chef",
     "group": "Groupe",
+    "groupOrLeader": "Groupe ou Chef",
     "createGroup": "Créer un Groupe",
     "updateGroup": "Mettre à Jour le Groupe",
     "deleteGroup": "Supprimer le Groupe",
@@ -1781,7 +1815,10 @@
     "leastVolunteers": "Le moins de bénévoles",
     "applyTo": "Appliquer à",
     "entireSeries": "Série entière",
-    "thisEventOnly": "Cet événement uniquement"
+    "thisEventOnly": "Cet événement uniquement",
+    "volunteerAlt": "Photo de profil du bénévole",
+    "groupTable": "Tableau des Groupes",
+    "volunteerActions": "Actions des Bénévoles"
   },
   "userVolunteer": {
     "title": "Volontariat",
@@ -1793,11 +1830,15 @@
     "actions": "Éléments d'Action",
     "search": "Rechercher",
     "searchByName": "Rechercher par Nom",
+    "startDate": "Date de début",
     "latestEndDate": "Date de Fin la Plus Récente",
     "earliestEndDate": "Date de Fin la Plus Ancienne",
     "noEvents": "Aucun Événement à Venir",
     "volunteer": "Bénévole",
     "volunteered": "A Bénévolé",
+    "volunteerName": "Nom",
+    "volunteerActions": "Actions",
+    "volunteerAlt": "bénévole",
     "join": "Rejoindre",
     "joined": "Rejoint",
     "searchByEventName": "Rechercher par Titre d'Événement",
@@ -1825,6 +1866,7 @@
     "event": "Événement",
     "received": "Reçu",
     "location": "Emplacement",
+    "titleOrLocation": "Titre ou Emplacement",
     "recurrence": "Récurrence",
     "endDate": "Date de Fin",
     "description": "Description",
@@ -1833,7 +1875,8 @@
     "srNo": "N°",
     "groupName": "Nom du Groupe",
     "noOfMembers": "Nombre de Membres",
-    "options": "Options"
+    "options": "Options",
+    "notSpecified": "Non Spécifié"
   },
   "pluginStore": {
     "title": "Boutique de Plugins",
@@ -1857,7 +1900,45 @@
     "checkBackLater": "Revenez plus tard pour de nouveaux plugins",
     "tryDifferentSearch": "Essayez un autre terme de recherche ou parcourez tous les plugins",
     "explorePluginStore": "Explorez la boutique de plugins pour découvrir de nouveaux plugins",
-    "noResultsFoundFor": "Aucun résultat trouvé pour"
+    "noResultsFoundFor": "Aucun résultat trouvé pour",
+    "pluginIcon": "Icône du Plugin",
+    "backToDetails": "(←) Retour aux détails du plugin",
+    "previousImage": "Image Précédente (←)",
+    "nextImage": "Image Suivante (→)",
+    "screenshot": "Capture d'écran {{number}}",
+    "goTo": "Aller à",
+    "screenshots": "Captures d'écran",
+    "ss": "Capture d'écran",
+    "loadingDetails": "Chargement des détails du plugin...",
+    "features": "Fonctionnalités",
+    "noFeaturesInfoAvailableForThisPlugin": "Aucune information sur les fonctionnalités disponible pour ce plugin.",
+    "loadingFeatures": "Chargement des fonctionnalités...",
+    "loadingChangelog": "Chargement du journal des modifications...",
+    "changelog": "Journal des Modifications",
+    "v": "v",
+    "failedToUploadPlugin": "Échec du téléchargement du plugin. Veuillez réessayer.",
+    "uploadPlugin": "Télécharger le Plugin",
+    "uploadPluginDescription": "Téléchargez un fichier ZIP de votre plugin pour l'installer dans votre organisation.",
+    "pluginId": "ID du Plugin",
+    "adminDashboardComponents": "Composants du Tableau de Bord Admin",
+    "componentsToInstall": "Composants à Installer:",
+    "apiBackendComponents": "Composants Backend API",
+    "pluginStructure": "Structure du Plugin",
+    "pluginStructureDescription": "La structure de répertoires attendue pour le plugin est la suivante :",
+    "detectedFiles": "Fichiers Détectés:",
+    "expectedDirectoryStructure": "Structure de Répertoire Attendue:",
+    "requiredManifestFields": "Champs Obligatoires du Manifeste:",
+    "uninstallPlugin": "Désinstaller le Plugin",
+    "uninstallPluginMsg": "Êtes-vous sûr de vouloir désinstaller ce {{pluginName}} ? Toutes les données associées au plugin seront supprimées et l'action ne peut pas être annulée.",
+    "clickToViewFullSize": "Cliquez pour voir en taille réelle",
+    "pluginInfo": "Informations sur le Plugin",
+    "filterPlugins": "Filtrer les Plugins",
+    "details": "Détails",
+    "installing": "Installation ({{elapsed}})",
+    "uploading": "Téléchargement...",
+    "screenshotCounter": "{{current}} sur {{total}}",
+    "uninstallWarning": "Cette action supprimera définitivement le plugin et toutes ses données. Cette action ne peut pas être annulée.",
+    "errorInstalling": "Échec du chargement des détails du plugin"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Commentaire supprimé avec succès",

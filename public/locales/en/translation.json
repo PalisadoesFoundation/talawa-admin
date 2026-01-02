@@ -1,4 +1,6 @@
 {
+  "ends": "Ends",
+  "occurrences": "Occurrences",
   "leaderboard": {
     "title": "Leaderboard",
     "searchByVolunteer": "Search By Volunteer",
@@ -466,7 +468,10 @@
     "expand": "Expand",
     "tagNamePlaceholder": "Write the name of the tag",
     "allTags": "All Tags",
-    "noMoreMembersFound": "No more members found"
+    "noMoreMembersFound": "No more members found",
+    "errorOccurredWhileLoadingAssignedUser": "Error occurred while loading assigned users",
+    "sortPeople": "Sort People",
+    "tagActions": "Tag Actions"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
@@ -509,6 +514,7 @@
     "publicEvent": "Is Public",
     "isRegistrable": "Is Registrable",
     "registerable": "Is Registerable",
+
     "createChat": "Create Chat",
     "createEvent": "Create Event",
     "enterFilter": "Enter Filter",
@@ -526,7 +532,7 @@
     "never": "Never",
     "on": "On",
     "after": "After",
-    "occurences": "occurences",
+    "occurrences": "Occurrences",
     "monthlyOn": "Monthly On",
     "yearlyOn": "Yearly On",
     "yearlyRecurrenceDesc": "This event will repeat every year on the same date as the event start date.",
@@ -557,6 +563,7 @@
     "actionItemDetails": "Action Item Details",
     "actionItemCompleted": "Action Item Completed",
     "assignee": "Assignee",
+    "assigneeOrCategory": "Assignee or Category",
     "assignedTo": "Assigned To",
     "assignTo": "Assign To",
     "volunteer": "Volunteer",
@@ -722,7 +729,7 @@
     "never": "Never",
     "on": "On",
     "after": "After",
-    "occurences": "occurences",
+    "occurrences": "Occurrences",
     "startTime": "startTime",
     "endTime": "endTime",
     "location": "location",
@@ -983,6 +990,7 @@
     "chartPageNavigation": "Chart page navigation",
     "previousPage": "Previous Page",
     "nextPage": "Next Page",
+    "pageNumber": "Page {{page}}",
     "goToToday": "Go to today",
     "genderDistribution": "Gender Distribution",
     "ageDistribution": "Age Distribution"
@@ -1505,7 +1513,14 @@
     "day": "Day",
     "week": "Week",
     "month": "Month",
-    "year": "Year"
+    "year": "Year",
+    "ends": "Ends",
+    "occurrences": "Occurrences",
+    "never": "Never",
+    "on": "On",
+    "after": "After",
+    "customRecurrence": "Custom Recurrence",
+    "repeatsEvery": "Repeats Every"
   },
   "userEventCard": {
     "starts": "Starts",
@@ -1549,7 +1564,19 @@
     "yes": "yes",
     "edit": "edit",
     "saveChanges": "saveChanges",
-    "endOfResults": "endOfResults"
+    "endOfResults": "endOfResults",
+    "failedToFetchAdvertisements": "Failed to fetch advertisements",
+    "advertisementMedia": "Advertisement media",
+    "noMediaAvailable": "No media available",
+    "advertisementImageAlt": "Advertisement image #{{index}} for {{name}}",
+    "invalidFileType": "Invalid file type: {{fileName}}",
+    "fileTooLarge": "File too large: {{fileName}}",
+    "invalidArgumentsForAction": "Invalid arguments for this action.",
+    "englishCaptions": "English captions",
+    "preview": "Preview",
+    "bannerAd": "Banner Ad",
+    "popupAd": "Popup Ad",
+    "menuAd": "Menu Ad"
   },
   "userChat": {
     "title": "Chats",
@@ -1660,7 +1687,10 @@
     "cancel": "cancel",
     "create": "create",
     "user": "user",
-    "profile": "profile"
+    "profile": "profile",
+    "customizedTable": "Customized Table",
+    "page": "Page",
+    "add": "Add"
   },
   "eventActionItems": {
     "title": "Action Items",
@@ -1724,10 +1754,12 @@
     "noPledges": "No Pledges Found",
     "noCampaigns": "No Campaigns Found",
     "raised": "Raised",
-    "amountRaised": "Amount Raised"
+    "amountRaised": "Amount Raised",
+    "searchCampaigns": "Search Campaigns"
   },
   "userPledges": {
-    "title": "My Pledges"
+    "title": "My Pledges",
+    "searchPledges": "Search Pledges"
   },
   "leaveOrganization": {
     "title": "Leave Organization"
@@ -1736,6 +1768,7 @@
     "toggleGroupAriaLabel": "Volunteer view selector",
     "volunteers": "Volunteers",
     "volunteer": "Volunteer",
+    "volunteerName": "Volunteer Name",
     "volunteerGroups": "Volunteer Groups",
     "individuals": "Individuals",
     "groups": "Groups",
@@ -1758,6 +1791,7 @@
     "deleteVolunteerGroupMsg": "Are you sure you want to delete this Volunteer Group?",
     "leader": "Leader",
     "group": "Group",
+    "groupOrLeader": "Group or Leader",
     "createGroup": "Create Group",
     "updateGroup": "Update Group",
     "deleteGroup": "Delete Group",
@@ -1781,7 +1815,10 @@
     "leastVolunteers": "Least Volunteers",
     "applyTo": "Apply To",
     "entireSeries": "Entire Series",
-    "thisEventOnly": "This Event Only"
+    "thisEventOnly": "This Event Only",
+    "volunteerAlt": "Volunteer profile picture",
+    "groupTable": "Group Table",
+    "volunteerActions": "Volunteer Actions"
   },
   "userVolunteer": {
     "title": "Volunteership",
@@ -1793,11 +1830,15 @@
     "actions": "Action Items",
     "search": "Search",
     "searchByName": "Search by Name",
+    "startDate": "Start Date",
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
     "noEvents": "No Upcoming Events",
     "volunteer": "Volunteer",
     "volunteered": "Volunteered",
+    "volunteerName": "Name",
+    "volunteerActions": "Actions",
+    "volunteerAlt": "volunteer",
     "join": "Join",
     "joined": "Joined",
     "pending": "Pending",
@@ -1825,6 +1866,7 @@
     "event": "Event",
     "received": "Received",
     "location": "Location",
+    "titleOrLocation": "Title or Location",
     "recurrence": "Recurrence",
     "endDate": "End Date",
     "description": "Description",
@@ -1833,7 +1875,8 @@
     "srNo": "Sr. No.",
     "groupName": "Group Name",
     "noOfMembers": "No. of Members",
-    "options": "Options"
+    "options": "Options",
+    "notSpecified": "Not Specified"
   },
   "pluginStore": {
     "title": "Plugin Store",
@@ -1857,7 +1900,45 @@
     "checkBackLater": "Check back later for new plugins",
     "tryDifferentSearch": "Try a different search term or browse all plugins",
     "explorePluginStore": "Explore the plugin store to discover new plugins",
-    "noResultsFoundFor": "No results found for"
+    "noResultsFoundFor": "No results found for",
+    "pluginIcon": "Plugin Icon",
+    "backToDetails": "(←) Back to Details",
+    "previousImage": "Previous Image (←)",
+    "nextImage": "Next Image (→)",
+    "screenshot": "Go to screenshot {{number}}",
+    "goTo": "Go to",
+    "screenshots": "Screenshots",
+    "ss": "Screenshot",
+    "loadingDetails": "Loading Details...",
+    "features": "Features",
+    "noFeaturesInfoAvailableForThisPlugin": "No features information available for this plugin.",
+    "loadingFeatures": "Loading Features...",
+    "loadingChangelog": "Loading Changelog...",
+    "changelog": "Changelog",
+    "v": "v",
+    "failedToUploadPlugin": "Failed to upload plugin. Please try again.",
+    "uploadPlugin": "Upload Plugin",
+    "uploadPluginDescription": "Upload a ZIP file to create a plugin entry. The plugin will be available for installation after upload.",
+    "pluginId": "Plugin ID",
+    "adminDashboardComponents": "Admin Dashboard Components",
+    "componentsToInstall": "Components to Install:",
+    "apiBackendComponents": "API Backend Components",
+    "pluginStructure": "Plugin Structure",
+    "pluginStructureDescription": "Expected plugin structure with admin and/or API components",
+    "detectedFiles": "Detected Files",
+    "expectedDirectoryStructure": "Expected Directory Structure",
+    "requiredManifestFields": "Required manifest.json Fields",
+    "uninstallPlugin": "Uninstall Plugin",
+    "uninstallPluginMsg": "Are you sure you want to uninstall {{pluginName}}?",
+    "clickToViewFullSize": "Click to view full size",
+    "pluginInfo": "Plugin Information",
+    "filterPlugins": "Filter Plugins",
+    "details": "Details",
+    "installing": "Installing ({{elapsed}})",
+    "uploading": "Uploading...",
+    "screenshotCounter": "{{current}} of {{total}}",
+    "uninstallWarning": "This action will permanently remove the plugin and all its data. This action cannot be undone.",
+    "errorInstalling": "Failed to load plugin details"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "Comment deleted successfully",

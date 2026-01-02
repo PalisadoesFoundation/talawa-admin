@@ -81,6 +81,7 @@ import type { ApolloError } from '@apollo/client';
 import { PersonOff, WarningAmberRounded } from '@mui/icons-material';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 
 const Users = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'users' });
@@ -380,92 +381,94 @@ const Users = (): JSX.Element => {
       {/* Error Panel */}
       {usersQueryErrorPanel}
 
-      {isLoading === false && displayedUsers.length === 0 ? (
-        <EmptyState
-          icon={<PersonOff />}
-          message={getEmptyStateMessage()}
-          description={
-            searchByName.length > 0 ? tCommon('tryAdjustingFilters') : undefined
-          }
-          dataTestId="users-empty-state"
-        />
-      ) : (
-        <div className={styles.listBox}>
-          {isLoading && (
-            <TableLoader
-              noOfCols={headerTitles.length}
-              noOfRows={perPageResult}
+      <div className={styles.listBox}>
+        <LoadingState
+          isLoading={isLoading}
+          variant="table"
+          tableHeaderTitles={headerTitles}
+          noOfRows={perPageResult}
+          data-testid="TableLoader"
+        >
+          {displayedUsers.length === 0 ? (
+            <EmptyState
+              icon={<PersonOff />}
+              message={getEmptyStateMessage()}
+              description={
+                searchByName.length > 0
+                  ? tCommon('tryAdjustingFilters')
+                  : undefined
+              }
+              dataTestId="users-empty-state"
             />
-          )}
-          <InfiniteScroll
-            dataLength={displayedUsers.length}
-            next={loadMoreUsers}
-            loader={
-              displayedUsers.length > 0 ? (
+          ) : (
+            <InfiniteScroll
+              dataLength={displayedUsers.length}
+              next={loadMoreUsers}
+              loader={
                 <TableLoader
                   noOfCols={headerTitles.length}
                   noOfRows={tableLoaderRowLength}
                 />
-              ) : null
-            }
-            hasMore={hasMore}
-            className={styles.listBox}
-            data-testid="users-list"
-            endMessage={
-              <div className={'w-100 text-center my-4'}>
-                <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
-              </div>
-            }
-          >
-            <Table className="mb-0" responsive>
-              <thead>
-                <tr>
-                  {headerTitles.map((title: string, index: number) => {
-                    return (
-                      <th key={index} scope="col">
-                        {title}
-                      </th>
-                    );
-                  })}
-                </tr>
-              </thead>
-              <tbody>
-                {displayedUsers.map(
-                  (user: InterfaceQueryUserListItem, index: number) => {
-                    return (
-                      <UserTableRow
-                        key={user.id}
-                        user={{
-                          id: String(user.id),
-                          name: user.name || '',
-                          emailAddress: user.emailAddress,
-                          avatarURL: user.avatarURL,
-                          createdAt: user.createdAt,
-                        }}
-                        rowNumber={index + 1}
-                        isDataGrid={false}
-                        showJoinedDate={true}
-                        actions={[
-                          {
-                            label: t('view'),
-                            onClick: () => {
-                              // TODO: Implement view user details modal
+              }
+              hasMore={hasMore}
+              className={styles.listBox}
+              data-testid="users-list"
+              endMessage={
+                <div className={'w-100 text-center my-4'}>
+                  <h5 className="m-0 ">{tCommon('endOfResults')}</h5>
+                </div>
+              }
+            >
+              <Table className="mb-0" responsive>
+                <thead>
+                  <tr>
+                    {headerTitles.map((title: string, index: number) => {
+                      return (
+                        <th key={index} scope="col">
+                          {title}
+                        </th>
+                      );
+                    })}
+                  </tr>
+                </thead>
+                <tbody>
+                  {displayedUsers.map(
+                    (user: InterfaceQueryUserListItem, index: number) => {
+                      return (
+                        <UserTableRow
+                          key={user.id}
+                          user={{
+                            id: String(user.id),
+                            name: user.name || '',
+                            emailAddress: user.emailAddress,
+                            avatarURL: user.avatarURL,
+                            createdAt: user.createdAt,
+                          }}
+                          rowNumber={index + 1}
+                          isDataGrid={false}
+                          showJoinedDate={true}
+                          actions={[
+                            {
+                              label: t('view'),
+                              onClick: () => {
+                                // TODO: Implement view user details modal
+                              },
+                              variant: 'primary',
+                              icon: <FontAwesomeIcon icon={faEye} />,
+                              testId: `viewUser${user.id}`,
                             },
-                            variant: 'primary',
-                            icon: <FontAwesomeIcon icon={faEye} />,
-                            testId: `viewUser${user.id}`,
-                          },
-                        ]}
-                        testIdPrefix="user"
-                      />
-                    );
-                  },
-                )}
-              </tbody>
-            </Table>
-          </InfiniteScroll>
-        </div>
-      )}
+                          ]}
+                          testIdPrefix="user"
+                        />
+                      );
+                    },
+                  )}
+                </tbody>
+              </Table>
+            </InfiniteScroll>
+          )}
+        </LoadingState>
+      </div>
     </>
   );
 };

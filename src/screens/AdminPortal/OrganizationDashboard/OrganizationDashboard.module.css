@@ -1,0 +1,27 @@
+.requestsIcon {
+  color: #555555;
+}
+
+.membershipEmptyContainer {
+  min-height: 150px;
+}
+
+.memReqCard {
+  min-height: 220px;
+}
+
+.memReqCardBody {
+  min-height: 150px;
+}
+
+.p0 {
+  padding: 0px;
+}
+
+.flex {
+  display: flex;
+}
+
+.iconGrey {
+  fill: #555555;
+}

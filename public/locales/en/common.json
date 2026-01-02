@@ -199,5 +199,21 @@
   "no_email": "No email",
   "no_name": "No name",
   "na": "N/A",
-  "user_row": "User row"
+  "user_row": "User row",
+  "paginationPrev": "Prev \u2039",
+  "paginationNext": "Next \u203a",
+  "tablePagination": "Table pagination",
+  "paginationPrevLabel": "Previous page",
+  "paginationNextLabel": "Next page",
+  "closeModal": "Close modal",
+  "errorLoadingUsers": "Error loading users",
+  "noUsersFound": "No users found",
+  "clickToBrowseFile": "Click to browse files",
+  "selectAZipFile": "Select ZIP file",
+  "version": "Version",
+  "author": "Author",
+  "removePermanently": "Remove Permanently",
+  "previousPage": "Previous Page",
+  "nextPage": "Next Page",
+  "pageNumber": "Page {{page}}"
 }
