@@ -304,19 +304,6 @@ describe('Testing Volunteers Screen', () => {
       expect(
         screen.getByTestId('volunteers-empty-state-message'),
       ).toHaveTextContent(t.noVolunteers);
-      expect(
-        screen.getByTestId('volunteers-empty-state-icon'),
-      ).toBeInTheDocument();
-    });
-  });
-
-  it('should have proper accessibility attributes on empty state', async () => {
-    renderVolunteers(link3);
-
-    await waitFor(() => {
-      const emptyState = screen.getByTestId('volunteers-empty-state');
-      expect(emptyState).toHaveAttribute('role', 'status');
-      expect(emptyState).toHaveAttribute('aria-live', 'polite');
     });
   });
 

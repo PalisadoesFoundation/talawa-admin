@@ -1881,7 +1881,11 @@
     "groupHeader": "समूह",
     "leaderHeader": "नेता",
     "numVolunteersHeader": "स्वयंसेवकों की संख्या",
-    "pending": "लंबित"
+    "pending": "लंबित",
+    "viewDetails": "{{name}} का विवरण देखें",
+    "editVolunteerGroup": "{{name}} स्वयंसेवक समूह संपादित करें",
+    "deleteVolunteerGroup": "{{name}} स्वयंसेवक समूह हटाएं",
+    "deleteVolunteerEntry": "{{name}} स्वयंसेवक प्रविष्टि हटाएं"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",

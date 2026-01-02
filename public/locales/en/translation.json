@@ -1881,7 +1881,11 @@
     "groupHeader": "Group",
     "leaderHeader": "Leader",
     "numVolunteersHeader": "No. of Volunteers",
-    "pending": "Pending"
+    "pending": "Pending",
+    "viewDetails": "View {{name}} details",
+    "editVolunteerGroup": "Edit {{name}} volunteer group",
+    "deleteVolunteerGroup": "Delete {{name}} volunteer group",
+    "deleteVolunteerEntry": "Delete {{name}} volunteer entry"
   },
   "userVolunteer": {
     "title": "Volunteership",

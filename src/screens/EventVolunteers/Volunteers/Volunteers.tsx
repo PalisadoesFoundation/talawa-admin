@@ -256,7 +256,10 @@ function Volunteers(): JSX.Element {
   if (volunteersError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded className={`${styles.icon} ${styles.iconLg}`} />
+        <WarningAmberRounded
+          className={`${styles.icon} ${styles.iconLg}`}
+          aria-hidden="true"
+        />
         <h6 className="fw-bold text-danger text-center">
           {tErrors('errorLoading', { entity: 'Volunteers' })}
         </h6>
@@ -409,8 +412,11 @@ function Volunteers(): JSX.Element {
               className={`me-2 rounded ${styles.iconButton}`}
               data-testid="viewItemBtn"
               onClick={() => handleOpenModal(params.row, ModalState.VIEW)}
+              aria-label={t('eventVolunteers.viewDetails', {
+                name: params.row.name,
+              })}
             >
-              <i className="fa fa-info" />
+              <i className="fa fa-info" aria-hidden="true" />
             </Button>
             <Button
               size="sm"
@@ -418,8 +424,11 @@ function Volunteers(): JSX.Element {
               className="rounded"
               data-testid="deleteItemBtn"
               onClick={() => handleOpenModal(params.row, ModalState.DELETE)}
+              aria-label={t('eventVolunteers.deleteVolunteerEntry', {
+                name: params.row.name,
+              })}
             >
-              <i className="fa fa-trash" />
+              <i className="fa fa-trash" aria-hidden="true" />
             </Button>
           </>
         );

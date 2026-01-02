@@ -201,7 +201,10 @@ function volunteerGroups(): JSX.Element {
   if (groupsError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded className={`${styles.icon} ${styles.iconLg}`} />
+        <WarningAmberRounded
+          className={`${styles.icon} ${styles.iconLg}`}
+          aria-hidden="true"
+        />
         <h6 className="fw-bold text-danger text-center">
           {tErrors('errorLoading', { entity: 'Volunteer Groups' })}
         </h6>
@@ -303,8 +306,11 @@ function volunteerGroups(): JSX.Element {
               className={`me-2 rounded ${styles.iconButton}`}
               data-testid="viewGroupBtn"
               onClick={() => handleModalClick(params.row, ModalState.VIEW)}
+              aria-label={t('eventVolunteers.viewDetails', {
+                name: params.row.name,
+              })}
             >
-              <i className="fa fa-info" />
+              <i className="fa fa-info" aria-hidden="true" />
             </Button>
             <Button
               variant="success"
@@ -312,8 +318,11 @@ function volunteerGroups(): JSX.Element {
               className="me-2 rounded"
               data-testid="editGroupBtn"
               onClick={() => handleModalClick(params.row, ModalState.SAME)}
+              aria-label={t('eventVolunteers.editVolunteerGroup', {
+                name: params.row.name,
+              })}
             >
-              <i className="fa fa-edit" />
+              <i className="fa fa-edit" aria-hidden="true" />
             </Button>
             <Button
               size="sm"
@@ -321,8 +330,11 @@ function volunteerGroups(): JSX.Element {
               className="rounded"
               data-testid="deleteGroupBtn"
               onClick={() => handleModalClick(params.row, ModalState.DELETE)}
+              aria-label={t('eventVolunteers.deleteVolunteerGroup', {
+                name: params.row.name,
+              })}
             >
-              <i className="fa fa-trash" />
+              <i className="fa fa-trash" aria-hidden="true" />
             </Button>
           </>
         );
@@ -389,8 +401,9 @@ function volunteerGroups(): JSX.Element {
             onClick={() => handleModalClick(null, ModalState.SAME)}
             className={styles.actionsButton}
             data-testid="createGroupBtn"
+            aria-label={tCommon('createNew', { item: 'Volunteer Group' })}
           >
-            <i className="fa fa-plus me-2" />
+            <i className="fa fa-plus me-2" aria-hidden="true" />
             {tCommon('create')}
           </Button>
         }

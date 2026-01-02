@@ -222,7 +222,10 @@ const UpcomingEvents = (): JSX.Element => {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} />
+          <WarningAmberRounded
+            className={styles.errorIcon}
+            aria-hidden="true"
+          />
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Events' })}
           </h6>

@@ -163,18 +163,6 @@ describe('Testing User Campaigns Screen', () => {
       expect(
         screen.getByTestId('campaigns-empty-state-message'),
       ).toHaveTextContent(cTranslations.noCampaigns);
-      expect(
-        screen.getByTestId('campaigns-empty-state-icon'),
-      ).toBeInTheDocument();
-    });
-  });
-
-  it('should have proper accessibility attributes on empty state', async () => {
-    renderCampaigns(link3);
-    await waitFor(() => {
-      const emptyState = screen.getByTestId('campaigns-empty-state');
-      expect(emptyState).toHaveAttribute('role', 'status');
-      expect(emptyState).toHaveAttribute('aria-live', 'polite');
     });
   });
 

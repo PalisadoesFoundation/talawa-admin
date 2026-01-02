@@ -1881,7 +1881,11 @@
     "groupHeader": "小组",
     "leaderHeader": "领导",
     "numVolunteersHeader": "志愿者数量",
-    "pending": "待审核"
+    "pending": "待审核",
+    "viewDetails": "查看 {{name}} 详情",
+    "editVolunteerGroup": "编辑 {{name}} 志愿者小组",
+    "deleteVolunteerGroup": "删除 {{name}} 志愿者小组",
+    "deleteVolunteerEntry": "删除 {{name}} 志愿者条目"
   },
   "userVolunteer": {
     "title": "志愿服务",

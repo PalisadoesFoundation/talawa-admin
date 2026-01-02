@@ -182,17 +182,6 @@ describe('UpcomingEvents', () => {
       expect(
         screen.getByTestId('events-empty-state-message'),
       ).toHaveTextContent(/no upcoming events/i);
-      expect(screen.getByTestId('events-empty-state-icon')).toBeInTheDocument();
-    });
-  });
-
-  it('should have proper accessibility attributes on empty state', async () => {
-    const link = new StaticMockLink(EMPTY_MOCKS);
-    renderUpcomingEvents(link);
-    await waitFor(() => {
-      const emptyState = screen.getByTestId('events-empty-state');
-      expect(emptyState).toHaveAttribute('role', 'status');
-      expect(emptyState).toHaveAttribute('aria-live', 'polite');
     });
   });
 

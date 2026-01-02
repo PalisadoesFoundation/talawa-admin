@@ -1881,7 +1881,11 @@
     "groupHeader": "Groupe",
     "leaderHeader": "Chef",
     "numVolunteersHeader": "Nombre de Bénévoles",
-    "pending": "En attente"
+    "pending": "En attente",
+    "viewDetails": "Voir les détails de {{name}}",
+    "editVolunteerGroup": "Modifier le groupe de bénévoles {{name}}",
+    "deleteVolunteerGroup": "Supprimer le groupe de bénévoles {{name}}",
+    "deleteVolunteerEntry": "Supprimer l'entrée bénévole {{name}}"
   },
   "userVolunteer": {
     "title": "Volontariat",

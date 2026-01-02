@@ -134,6 +134,7 @@ const Campaigns = (): JSX.Element => {
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded
             className={`${styles.errorIcon} ${styles.errorIconLarge}`}
+            aria-hidden="true"
           />
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Campaigns' })}
@@ -269,8 +270,9 @@ const Campaigns = (): JSX.Element => {
               e.stopPropagation();
               openModal(campaign);
             }}
+            aria-label={isEnded ? t('campaignEnded') : t('addPledge')}
           >
-            <i className="fa fa-plus me-1" />
+            <i className="fa fa-plus me-1" aria-hidden="true" />
             {t('addPledge')}
           </Button>
         );
