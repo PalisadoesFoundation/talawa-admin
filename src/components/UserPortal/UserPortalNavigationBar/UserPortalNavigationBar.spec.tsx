@@ -961,7 +961,6 @@ describe('UserPortalNavigationBar', () => {
 
     beforeEach(() => {
       // Suppress unhandled promise rejections for error tests
-      // These are expected since the component doesn't await logout()
       unhandledRejectionHandler = (reason: unknown) => {
         // Suppress Apollo errors from our test mocks
         const message =
@@ -1124,8 +1123,7 @@ describe('UserPortalNavigationBar', () => {
       fireEvent.click(logoutBtn);
 
       await waitFor(() => {
-        // Note: Component calls logout() without await
-        // so the try-catch block doesn't catch errors. Side effects still run.
+        // Component catches the error, so side effects still run.
         expect(clearAllItems).toHaveBeenCalled();
         expect(mockNavigate).toHaveBeenCalledWith('/');
       });
@@ -1160,7 +1158,7 @@ describe('UserPortalNavigationBar', () => {
       fireEvent.click(logoutBtn);
 
       await waitFor(() => {
-        // Network errors also don't prevent cleanup due to missing await
+        // Network errors also don't prevent cleanup as they are caught
         expect(clearAllItems).toHaveBeenCalled();
         expect(mockNavigate).toHaveBeenCalledWith('/');
       });

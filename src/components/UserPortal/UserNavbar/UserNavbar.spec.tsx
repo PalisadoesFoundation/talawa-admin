@@ -15,6 +15,7 @@ import userEvent from '@testing-library/user-event';
 import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
+import { toast } from 'react-toastify';
 
 /**
  * Unit tests for UserNavbar component [User Portal]:
@@ -31,6 +32,8 @@ import useLocalStorage from 'utils/useLocalstorage';
  * The tests simulate interactions with the language dropdown and the user dropdown menu to ensure proper functionality of language switching and navigation.
  * Mocked GraphQL mutation (LOGOUT_MUTATION) and mock store are used to test the component in an isolated environment.
  */
+
+vi.mock('react-toastify', () => ({ toast: { error: vi.fn() } }));
 
 vi.mock('utils/useLocalstorage', () => ({
   default: vi.fn(() => ({
@@ -365,6 +368,8 @@ describe('Testing UserNavbar Component [User Portal]', () => {
       'Error during logout:',
       expect.any(Error),
     );
+    // Verify toast was shown
+    expect(toast.error).toHaveBeenCalledWith('errorOccurred');
     // Verify cleanup still happens even on error
     expect(mockClearAllItems).toHaveBeenCalled();
     expect(window.location.pathname).toBe('/');
@@ -425,6 +430,8 @@ describe('Testing UserNavbar Component [User Portal]', () => {
       'Error during logout:',
       expect.any(Error),
     );
+    // Verify toast was shown
+    expect(toast.error).toHaveBeenCalledWith('errorOccurred');
     // Verify cleanup still happens even on error
     expect(mockClearAllItems).toHaveBeenCalled();
     expect(window.location.pathname).toBe('/');
