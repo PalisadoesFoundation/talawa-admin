@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`InterfaceOrganizationCardProps`](../../../../../types/OrganizationCard/interface/interfaces/InterfaceOrganizationCardProps.md)\>
 
-Defined in: [src/components/UserPortal/OrganizationCard/OrganizationCard.tsx:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/OrganizationCard/OrganizationCard.tsx#L58)
+Defined in: [src/components/UserPortal/OrganizationCard/OrganizationCard.tsx:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/OrganizationCard/OrganizationCard.tsx#L59)

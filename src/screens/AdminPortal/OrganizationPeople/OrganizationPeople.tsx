@@ -19,8 +19,7 @@
  * - `@apollo/client` for GraphQL queries.
  * - `@mui/x-data-grid` for table rendering.
  * - `NotificationToast` for notification messages (especially backend errors).
- * - `dayjs` for date formatting.
- * - Custom components: `SearchBar`, `SortingButton`, `Avatar`, `AddMember`, `OrgPeopleListCard`.
+ * - Custom components: `SearchBar`, `SortingButton`, `UserTableRow`, `AddMember`, `OrgPeopleListCard`.
  *
  * @example
  * ```tsx
@@ -67,7 +66,6 @@ import {
   COLUMN_BUFFER_PX,
   PAGE_SIZE,
 } from 'types/ReportingTable/utils';
-
 import styles from 'style/app-fixed.module.css';
 import TableLoader from 'components/TableLoader/TableLoader';
 import {

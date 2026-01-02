@@ -16,20 +16,16 @@ import {
 import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
 
-const sharedMocks = vi.hoisted(() => ({
-  toast: {
-    error: vi.fn(),
-    info: vi.fn(),
-    success: vi.fn(),
-  },
-}));
-
-// Mock the required modules
 vi.mock('components/NotificationToast/NotificationToast', () => ({
-  NotificationToast: sharedMocks.toast,
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
+  },
 }));
 
 vi.mock('./addMember/AddMember', () => ({
@@ -1096,9 +1092,7 @@ describe('OrganizationPeople', () => {
 
     // Wait for error handling
     await waitFor(() => {
-      expect(vi.mocked(NotificationToast.error)).toHaveBeenCalledWith(
-        'An error occurred',
-      );
+      expect(NotificationToast.error).toHaveBeenCalledWith('An error occurred');
     });
   });
 
@@ -1158,9 +1152,7 @@ describe('OrganizationPeople', () => {
 
     // Wait for error handling
     await waitFor(() => {
-      expect(vi.mocked(NotificationToast.error)).toHaveBeenCalledWith(
-        'An error occurred',
-      );
+      expect(NotificationToast.error).toHaveBeenCalledWith('An error occurred');
     });
   });
 

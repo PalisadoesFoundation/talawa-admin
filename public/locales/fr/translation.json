@@ -249,11 +249,11 @@
     "rejectedSuccessfully": "Demande rejetée avec succès",
     "noOrgErrorTitle": "Organisations introuvables",
     "noOrgErrorDescription": "Veuillez créer une organisation via le tableau de bord",
-    "newMembersWillAppearHere": "Les nouveaux membres apparaîtront ici",
     "name": "Nom",
     "email": "E-mail",
     "profilePictureAlt": "Image de profil de {{name}}",
-    "placeholderAvatarAlt": "Avatar par défaut"
+    "placeholderAvatarAlt": "Avatar par défaut",
+    "newMembersWillAppearHere": "Les nouvelles demandes d'adhésion apparaîtront ici"
   },
   "users": {
     "membershipStatus": {
@@ -400,7 +400,9 @@
     "join_success": "Demande d’adhésion envoyée avec succès",
     "withdraw_success": "Demande d’adhésion retirée avec succès",
     "join_error": "Échec de l’envoi de la demande d’adhésion",
-    "withdraw_error": "Échec du retrait de la demande d’adhésion"
+    "withdraw_error": "Échec du retrait de la demande d’adhésion",
+    "card_aria": "Carte d'organisation",
+    "card_test_id": "organization-card-{{id}}"
   },
   "organizationTags": {
     "title": "Étiquettes d'Organisation",
@@ -408,6 +410,7 @@
     "manageTag": "Gérer",
     "editTag": "Modifier",
     "removeTag": "Supprimer",
+    "tags": "Étiquettes",
     "tagDetails": "Détails de l'Étiquette",
     "tagName": "Nom",
     "tagType": "Type",
@@ -418,6 +421,8 @@
     "noTagsFound": "Aucune étiquette trouvée",
     "removeUserTag": "Supprimer l'Étiquette",
     "removeUserTagMessage": "Voulez-vous supprimer cette étiquette ?",
+    "Latest": "Le Plus Récent",
+    "Oldest": "Le Plus Ancien",
     "addChildTag": "Ajouter une Sous-Étiquette",
     "enterTagName": "Entrez le nom de l'étiquette",
     "totalSubTags": "Total des sous-étiquettes",
@@ -1041,6 +1046,7 @@
     "deleteMsg": "Voulez-vous supprimer cette organisation ?",
     "confirmDelete": "Confirmation de la suppression",
     "longDelOrgMsg": "En cliquant sur le bouton Supprimer l'organisation, l'organisation sera définitivement supprimée ainsi que ses événements, balises et toutes les données associées.",
+    "deleteSampleOrganization": "Supprimer l'organisation d'exemple",
     "successfullyDeletedSampleOrganization": "Exemple d'organisation supprimé avec succès",
     "cancel": "Annuler"
   },
@@ -1097,7 +1103,34 @@
     "saveChanges": "Enregistrer les modifications",
     "cancel": "Annuler",
     "talawaApiUnavailable": "API Talawa non disponible",
-    "enterOrganizationDescription": "Entrez la description de l'organisation"
+    "enterOrganizationDescription": "Entrez la description de l'organisation",
+    "userRegistrationRequired": "Inscription utilisateur requise",
+    "nameDescriptionRequired": "Le nom et la description sont requis",
+    "updateFailed": "Échec de la mise à jour de l'organisation"
+  },
+  "public": {
+    "invitation": {
+      "title": "Invitation à l'événement",
+      "previewText": "Vous avez été invité à rejoindre cet événement.",
+      "inviteeEmail": "E-mail de l'invité",
+      "anyone": "Tout utilisateur connecté",
+      "organizationId": "ID d'organisation",
+      "eventId": "ID de l'événement",
+      "eventTitle": "Événement {{eventId}}",
+      "expiresAt": "Expire le",
+      "mustLogin": "Veuillez vous connecter ou créer un compte pour accepter cette invitation.",
+      "login": "Se connecter",
+      "signup": "S'inscrire",
+      "invalidToken": "Jeton d'invitation invalide",
+      "invitationNotFound": "Invitation introuvable ou invalide",
+      "verifyError": "Erreur lors de la vérification de l'invitation",
+      "accept": "Accepter l'invitation",
+      "accepted": "Invitation acceptée",
+      "acceptError": "Impossible d'accepter l'invitation",
+      "maskedNotice": "Cette invitation a été envoyée à une adresse e-mail masquée. Assurez-vous d'être le destinataire invité avant d'accepter.",
+      "confirmMatch": "Je confirme que l'adresse e-mail de mon compte correspond à l'adresse invitée (affichée ci-dessus).",
+      "signInAsDifferent": "Se connecter en tant qu'utilisateur différent"
+    }
   },
   "memberDetail": {
     "title": "Détails de l'utilisateur",
@@ -1163,7 +1196,8 @@
     "name": "Nom",
     "email": "E-mail",
     "role": "Rôle",
-    "loading": "Chargement..."
+    "loading": "Chargement...",
+    "emailNotAvailable": "E-mail non disponible"
   },
   "userLogin": {
     "login": "Se connecter",
@@ -1615,12 +1649,23 @@
     "demoteToRegular": "Rétrograder au rang régulier",
     "promoteToAdmin": "Promouvoir administrateur",
     "user": "Utilisateur",
-    "chatAction": "Action de chat"
+    "chatAction": "Action de chat",
+    "organizationMembersTable": "Tableau des Membres de l'Organisation",
+    "newGroup": "Nouveau Groupe",
+    "groupName": "Nom du groupe",
+    "groupDescription": "Description du Groupe",
+    "next": "Suivant"
   },
   "userChatRoom": {
     "selectContact": "Sélectionnez un contact pour démarrer la conversation",
     "sendMessage": "Envoyer le message",
-    "reply": "répondre"
+    "reply": "répondre",
+    "loadingImage": "Chargement de l'image...",
+    "imageNotAvailable": "Image non disponible",
+    "attachment": "Pièce jointe",
+    "loadingMoreMessages": "Chargement de plus de messages...",
+    "loading": "Chargement...",
+    "loadOlderMessages": "Charger les messages plus anciens"
   },
   "orgActionItemCategories": {
     "enableButton": "Activer",
