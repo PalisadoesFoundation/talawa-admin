@@ -3,7 +3,7 @@ import Calendar from './EventCalender';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
-import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
+import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { weekdays, months } from 'types/Event/utils';

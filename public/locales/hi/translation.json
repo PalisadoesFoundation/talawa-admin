@@ -427,7 +427,8 @@
     "sortTags": "टैग सॉर्ट करें",
     "tags": "टैग",
     "Latest": "नवीनतम",
-    "Oldest": "सबसे पुराना"
+    "Oldest": "सबसे पुराना",
+    "viewSubTags": "{{count}} उप-टैग देखें"
   },
   "manageTag": {
     "title": "टैग विवरण",
@@ -556,7 +557,9 @@
     "endDate": "समाप्ति तिथि",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
     "done": "पूर्ण",
-    "createChat": "चैट बनाएं"
+    "createChat": "चैट बनाएं",
+    "viewType": "दृश्य प्रकार",
+    "search": "खोज"
   },
   "organizationActionItems": {
     "actionItemCategory": "क्रिया वस्तु श्रेणी",
@@ -799,7 +802,9 @@
     "latestEndDate": "अंतिम समाप्ति तिथि",
     "earliestEndDate": "सबसे पहली समाप्ति तिथि",
     "lowestGoal": "सबसे कम उद्देश्य",
-    "highestGoal": "सबसे ऊंचा उद्देश्य"
+    "highestGoal": "सबसे ऊंचा उद्देश्य",
+    "percentageRaised": "% एकत्रित",
+    "campaignProgress": "अभियान प्रगति: {{percentage}}%"
   },
   "pledges": {
     "title": "निधि अभियान प्रतिज्ञाएँ",
@@ -969,7 +974,8 @@
     "agendas": "एजेंडे",
     "statistics": "आँकड़े",
     "to": "को",
-    "volunteers": "स्वयंसेवक"
+    "volunteers": "स्वयंसेवक",
+    "backToEvents": "इवेंट्स पर वापस जाएं"
   },
   "forgotPassword": {
     "title": "तलावा पासवर्ड भूल गए",
@@ -1956,6 +1962,13 @@
     "altText": "{{name}} की प्रोफ़ाइल तस्वीर",
     "modalTitle": "प्रोफ़ाइल तस्वीर",
     "enlargedAltText": "{{name}} की बड़ी प्रोफ़ाइल तस्वीर"
+  },
+  "eventCalendar": {
+    "noEventsAvailable": "कोई इवेंट उपलब्ध नहीं है",
+    "holidays": "छुट्टियाँ",
+    "events": "इवेंट्स",
+    "eventsCreatedByOrganization": "संगठन द्वारा बनाए गए इवेंट्स",
+    "today": "आज"
   },
   "common": {
     "signOut": "साइन आउट",
