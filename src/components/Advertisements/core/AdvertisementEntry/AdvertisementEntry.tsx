@@ -56,6 +56,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Advertisement } from 'types/Advertisement/type';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 function AdvertisementEntry({
   advertisement,
@@ -72,6 +73,7 @@ function AdvertisementEntry({
 }): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
   // State for loading button
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -143,7 +145,12 @@ function AdvertisementEntry({
   };
 
   return (
-    <>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
       <Row data-testid="AdEntry" xs={1} md={2} className="g-4">
         {Array.from({ length: 1 }).map((_, idx) => (
           <Col key={idx}>
@@ -212,7 +219,10 @@ function AdvertisementEntry({
                               <img
                                 className={`d-block w-100 ${styles.cardImage}`}
                                 src={attachment.url}
-                                alt={`Advertisement image #${index + 1} for ${advertisement.name ?? 'ad'}`}
+                                alt={t('advertisementImageAlt', {
+                                  index: index + 1,
+                                  name: advertisement.name ?? 'ad',
+                                })}
                                 data-testid="media"
                                 crossOrigin="anonymous"
                               />
@@ -225,7 +235,7 @@ function AdvertisementEntry({
                         <img
                           className={`d-block w-100 ${styles.cardImage}`}
                           src={advertisement.attachments[0].url}
-                          alt="Advertisement media"
+                          alt={t('advertisementMedia')}
                           data-testid="media"
                           crossOrigin="anonymous"
                         />
@@ -236,7 +246,7 @@ function AdvertisementEntry({
                       className={`${styles.noMediaPlaceholder} ${styles.imageWrapper}`}
                       data-testid="media"
                     >
-                      No media available
+                      {t('noMediaAvailable')}
                     </div>
                   )}
                 </div>
@@ -334,7 +344,7 @@ function AdvertisementEntry({
         ))}
       </Row>
       <br />
-    </>
+    </ErrorBoundaryWrapper>
   );
 }
 

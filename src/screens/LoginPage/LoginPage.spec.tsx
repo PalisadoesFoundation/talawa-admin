@@ -2132,10 +2132,7 @@ describe('Cookie-based authentication verification', () => {
     });
 
     render(
-      <MockedProvider
-        mocks={SIGNIN_WITH_REFRESH_TOKEN_MOCK}
-        addTypename={false}
-      >
+      <MockedProvider mocks={SIGNIN_WITH_REFRESH_TOKEN_MOCK}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -2244,7 +2241,7 @@ describe('Cookie-based authentication verification', () => {
     });
 
     render(
-      <MockedProvider mocks={SIGNUP_SUCCESS_MOCK} addTypename={false}>
+      <MockedProvider mocks={SIGNUP_SUCCESS_MOCK}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

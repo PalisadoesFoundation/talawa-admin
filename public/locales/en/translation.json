@@ -1,4 +1,6 @@
 {
+  "ends": "Ends",
+  "occurrences": "Occurrences",
   "leaderboard": {
     "title": "Leaderboard",
     "searchByVolunteer": "Search By Volunteer",
@@ -423,7 +425,11 @@
     "totalAssignedUsers": "Total Assigned Users",
     "tagCreationFailed": "Tag creation failed",
     "errorLoadingTagsData": "Error occurred while loading Organization Tags Data",
-    "sortTags": "Sort Tags"
+    "sortTags": "Sort Tags",
+    "tags": "Tags",
+    "Latest": "Latest",
+    "Oldest": "Oldest",
+    "viewSubTags": "View {{count}} sub tags"
   },
   "manageTag": {
     "title": "Tag Details",
@@ -510,6 +516,7 @@
     "publicEvent": "Is Public",
     "isRegistrable": "Is Registrable",
     "registerable": "Is Registerable",
+
     "createChat": "Create Chat",
     "createEvent": "Create Event",
     "enterFilter": "Enter Filter",
@@ -527,7 +534,7 @@
     "never": "Never",
     "on": "On",
     "after": "After",
-    "occurences": "occurences",
+    "occurrences": "Occurrences",
     "monthlyOn": "Monthly On",
     "yearlyOn": "Yearly On",
     "yearlyRecurrenceDesc": "This event will repeat every year on the same date as the event start date.",
@@ -551,13 +558,16 @@
     "startDate": "startDate",
     "endDate": "endDate",
     "talawaApiUnavailable": "talawaApiUnavailable",
-    "done": "done"
+    "done": "done",
+    "viewType": "View Type",
+    "search": "Search"
   },
   "organizationActionItems": {
     "actionItemCategory": "Action Item Category",
     "actionItemDetails": "Action Item Details",
     "actionItemCompleted": "Action Item Completed",
     "assignee": "Assignee",
+    "assigneeOrCategory": "Assignee or Category",
     "assignedTo": "Assigned To",
     "assignTo": "Assign To",
     "volunteer": "Volunteer",
@@ -723,7 +733,7 @@
     "never": "Never",
     "on": "On",
     "after": "After",
-    "occurences": "occurences",
+    "occurrences": "Occurrences",
     "startTime": "startTime",
     "endTime": "endTime",
     "location": "location",
@@ -793,7 +803,9 @@
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
     "lowestGoal": "Lowest Goal",
-    "highestGoal": "Highest Goal"
+    "highestGoal": "Highest Goal",
+    "percentageRaised": "% Raised",
+    "campaignProgress": "Campaign progress: {{percentage}}%"
   },
   "pledges": {
     "title": "Fund Campaign Pledges",
@@ -962,7 +974,8 @@
     "agendas": "Agendas",
     "statistics": "Statistics",
     "to": "TO",
-    "volunteers": "Volunteers"
+    "volunteers": "Volunteers",
+    "backToEvents": "Back to Events"
   },
   "eventAttendance": {
     "historical_statistics": "Historical Statistics",
@@ -983,6 +996,7 @@
     "chartPageNavigation": "Chart page navigation",
     "previousPage": "Previous Page",
     "nextPage": "Next Page",
+    "pageNumber": "Page {{page}}",
     "goToToday": "Go to today",
     "genderDistribution": "Gender Distribution",
     "ageDistribution": "Age Distribution"
@@ -1533,7 +1547,14 @@
     "day": "Day",
     "week": "Week",
     "month": "Month",
-    "year": "Year"
+    "year": "Year",
+    "ends": "Ends",
+    "occurrences": "Occurrences",
+    "never": "Never",
+    "on": "On",
+    "after": "After",
+    "customRecurrence": "Custom Recurrence",
+    "repeatsEvery": "Repeats Every"
   },
   "userEventCard": {
     "starts": "Starts",
@@ -1577,7 +1598,19 @@
     "yes": "yes",
     "edit": "edit",
     "saveChanges": "saveChanges",
-    "endOfResults": "endOfResults"
+    "endOfResults": "endOfResults",
+    "failedToFetchAdvertisements": "Failed to fetch advertisements",
+    "advertisementMedia": "Advertisement media",
+    "noMediaAvailable": "No media available",
+    "advertisementImageAlt": "Advertisement image #{{index}} for {{name}}",
+    "invalidFileType": "Invalid file type: {{fileName}}",
+    "fileTooLarge": "File too large: {{fileName}}",
+    "invalidArgumentsForAction": "Invalid arguments for this action.",
+    "englishCaptions": "English captions",
+    "preview": "Preview",
+    "bannerAd": "Banner Ad",
+    "popupAd": "Popup Ad",
+    "menuAd": "Menu Ad"
   },
   "userChat": {
     "title": "Chats",
@@ -1690,7 +1723,8 @@
     "user": "user",
     "profile": "profile",
     "customizedTable": "Customized Table",
-    "page": "Page"
+    "page": "Page",
+    "add": "Add"
   },
   "eventActionItems": {
     "title": "Action Items",
@@ -1754,10 +1788,12 @@
     "noPledges": "No Pledges Found",
     "noCampaigns": "No Campaigns Found",
     "raised": "Raised",
-    "amountRaised": "Amount Raised"
+    "amountRaised": "Amount Raised",
+    "searchCampaigns": "Search Campaigns"
   },
   "userPledges": {
-    "title": "My Pledges"
+    "title": "My Pledges",
+    "searchPledges": "Search Pledges"
   },
   "leaveOrganization": {
     "title": "Leave Organization"
@@ -1766,6 +1802,7 @@
     "toggleGroupAriaLabel": "Volunteer view selector",
     "volunteers": "Volunteers",
     "volunteer": "Volunteer",
+    "volunteerName": "Volunteer Name",
     "volunteerGroups": "Volunteer Groups",
     "individuals": "Individuals",
     "groups": "Groups",
@@ -1788,6 +1825,7 @@
     "deleteVolunteerGroupMsg": "Are you sure you want to delete this Volunteer Group?",
     "leader": "Leader",
     "group": "Group",
+    "groupOrLeader": "Group or Leader",
     "createGroup": "Create Group",
     "updateGroup": "Update Group",
     "deleteGroup": "Delete Group",
@@ -1811,7 +1849,10 @@
     "leastVolunteers": "Least Volunteers",
     "applyTo": "Apply To",
     "entireSeries": "Entire Series",
-    "thisEventOnly": "This Event Only"
+    "thisEventOnly": "This Event Only",
+    "volunteerAlt": "Volunteer profile picture",
+    "groupTable": "Group Table",
+    "volunteerActions": "Volunteer Actions"
   },
   "userVolunteer": {
     "title": "Volunteership",
@@ -1823,11 +1864,15 @@
     "actions": "Action Items",
     "search": "Search",
     "searchByName": "Search by Name",
+    "startDate": "Start Date",
     "latestEndDate": "Latest End Date",
     "earliestEndDate": "Earliest End Date",
     "noEvents": "No Upcoming Events",
     "volunteer": "Volunteer",
     "volunteered": "Volunteered",
+    "volunteerName": "Name",
+    "volunteerActions": "Actions",
+    "volunteerAlt": "volunteer",
     "join": "Join",
     "joined": "Joined",
     "pending": "Pending",
@@ -1855,6 +1900,7 @@
     "event": "Event",
     "received": "Received",
     "location": "Location",
+    "titleOrLocation": "Title or Location",
     "recurrence": "Recurrence",
     "endDate": "End Date",
     "description": "Description",
@@ -1863,7 +1909,8 @@
     "srNo": "Sr. No.",
     "groupName": "Group Name",
     "noOfMembers": "No. of Members",
-    "options": "Options"
+    "options": "Options",
+    "notSpecified": "Not Specified"
   },
   "pluginStore": {
     "title": "Plugin Store",
@@ -1943,6 +1990,13 @@
     "altText": "Profile picture of {{name}}",
     "modalTitle": "Profile Picture",
     "enlargedAltText": "Enlarged profile picture of {{name}}"
+  },
+  "eventCalendar": {
+    "noEventsAvailable": "No events available",
+    "holidays": "Holidays",
+    "events": "Events",
+    "eventsCreatedByOrganization": "Events Created by Organization",
+    "today": "Today"
   },
   "common": {
     "signOut": "Sign out",

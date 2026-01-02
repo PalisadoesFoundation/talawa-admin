@@ -1,4 +1,6 @@
 {
+  "ends": "Prend fin",
+  "occurrences": "Occurrences",
   "leaderboard": {
     "title": "Tableau des Leaders",
     "searchByVolunteer": "Recherche par Bénévole",
@@ -423,7 +425,11 @@
     "totalAssignedUsers": "Total des utilisateurs assignés",
     "tagCreationFailed": "Échec de la création de l'étiquette",
     "errorLoadingTagsData": "Une erreur s'est produite lors du chargement des données des étiquettes de l'organisation",
-    "sortTags": "Trier les étiquettes"
+    "sortTags": "Trier les étiquettes",
+    "tags": "Étiquettes",
+    "Latest": "Le Plus Récent",
+    "Oldest": "Le Plus Ancien",
+    "viewSubTags": "Voir {{count}} sous-étiquettes"
   },
   "manageTag": {
     "title": "Détails de l'étiquette",
@@ -513,6 +519,7 @@
     "publicEvent": "est public",
     "isRegistrable": "Est enregistrable",
     "registerable": "Est enregistrable",
+
     "createEvent": "Créer un évènement",
     "enterFilter": "Entrer le filtre",
     "enterName": "Entrez le nom",
@@ -529,7 +536,7 @@
     "never": "Jamais",
     "on": "Sur",
     "after": "Après",
-    "occurences": "événements",
+    "occurrences": "événements",
     "monthlyOn": "Mensuel le",
     "yearlyOn": "Annuel le",
     "yearlyRecurrenceDesc": "Cet événement se répétera chaque année à la même date que la date de début de l'événement.",
@@ -551,13 +558,16 @@
     "endDate": "Date de fin",
     "talawaApiUnavailable": "API Talawa indisponible",
     "done": "Fait",
-    "createChat": "Créer une discussion"
+    "createChat": "Créer une discussion",
+    "viewType": "Type de Vue",
+    "search": "rechercher"
   },
   "organizationActionItems": {
     "actionItemCategory": "Catégorie de l'Action",
     "actionItemDetails": "Détails de l'Action",
     "actionItemCompleted": "Action Terminée",
     "assignee": "Attribué à",
+    "assigneeOrCategory": "Attribué ou Catégorie",
     "assignedTo": "Assigné à",
     "assigner": "Assignateur",
     "assignmentDate": "Date d'Attribution",
@@ -724,7 +734,7 @@
     "never": "Jamais",
     "on": "Sur",
     "after": "Après",
-    "occurences": "événements",
+    "occurrences": "événements",
     "location": "Lieu",
     "no": "Non",
     "yes": "Oui",
@@ -793,7 +803,9 @@
     "latestEndDate": "Dernière date de fin",
     "earliestEndDate": "Date de fin la plus ancienne",
     "lowestGoal": "Objectif le plus bas",
-    "highestGoal": "Objectif le plus élevé"
+    "highestGoal": "Objectif le plus élevé",
+    "percentageRaised": "% Collecté",
+    "campaignProgress": "Progression de la campagne: {{percentage}}%"
   },
   "pledges": {
     "title": "Engagements de campagne de financement",
@@ -962,7 +974,8 @@
     "agendas": "Ordres du jour",
     "statistics": "Statistiques",
     "to": "À",
-    "volunteers": "Bénévoles"
+    "volunteers": "Bénévoles",
+    "backToEvents": "Retour aux Événements"
   },
   "forgotPassword": {
     "title": "Talawa Mot de passe oublié",
@@ -1343,6 +1356,7 @@
     "chartPageNavigation": "Navigation de la page du graphique",
     "previousPage": "Page précédente",
     "nextPage": "Page suivante",
+    "pageNumber": "Page {{page}}",
     "goToToday": "Aller à aujourd'hui",
     "genderDistribution": "Distribution par sexe",
     "ageDistribution": "Distribution par âge"
@@ -1533,7 +1547,14 @@
     "day": "Jour",
     "week": "Semaine",
     "month": "Mois",
-    "year": "Année"
+    "year": "Année",
+    "ends": "Prend fin",
+    "occurrences": "Occurrences",
+    "never": "Jamais",
+    "on": "Le",
+    "after": "Après",
+    "customRecurrence": "Récurrence Personnalisée",
+    "repeatsEvery": "Se répète tous les"
   },
   "userEventCard": {
     "starts": "Départs",
@@ -1577,7 +1598,19 @@
     "edit": "Modifier",
     "saveChanges": "Enregistrer les modifications",
     "endOfResults": "Fin des résultats",
-    "noDescription": "Aucune description"
+    "noDescription": "Aucune description",
+    "failedToFetchAdvertisements": "Échec de la récupération des annonces",
+    "advertisementMedia": "Média publicitaire",
+    "noMediaAvailable": "Aucun média disponible",
+    "advertisementImageAlt": "Image publicitaire #{{index}} pour {{name}}",
+    "invalidFileType": "Type de fichier invalide : {{fileName}}",
+    "fileTooLarge": "Fichier trop volumineux : {{fileName}}",
+    "invalidArgumentsForAction": "Arguments invalides pour cette action.",
+    "englishCaptions": "Légendes en anglais",
+    "preview": "Aperçu",
+    "bannerAd": "Bannière publicitaire",
+    "popupAd": "Annonce popup",
+    "menuAd": "Annonce de menu"
   },
   "userChat": {
     "title": "Discussions",
@@ -1690,7 +1723,8 @@
     "user": "Utilisateur",
     "profile": "Profil",
     "customizedTable": "Table personnalisée",
-    "page": "Page"
+    "page": "Page",
+    "add": "Ajouter"
   },
   "eventActionItems": {
     "title": "Éléments d'action",
@@ -1734,6 +1768,7 @@
     "title": "Campagnes de financement",
     "searchByName": "Rechercher par nom...",
     "searchBy": "Rechercher par",
+    "searchCampaigns": "Rechercher des campagnes",
     "pledgers": "Contributeurs",
     "pledger": "Prometteur",
     "campaigns": "Campagnes",
@@ -1757,7 +1792,8 @@
     "amountRaised": "Montant Collecté"
   },
   "userPledges": {
-    "title": "Mes Promesses"
+    "title": "Mes Promesses",
+    "searchPledges": "Rechercher des engagements"
   },
   "leaveOrganization": {
     "title": "Quitter l'organisation"
@@ -1766,6 +1802,7 @@
     "toggleGroupAriaLabel": "Sélecteur de vue des bénévoles",
     "volunteers": "Bénévoles",
     "volunteer": "Bénévole",
+    "volunteerName": "Nom du Bénévole",
     "volunteerGroups": "Groupes de Bénévoles",
     "individuals": "Individus",
     "groups": "Groupes",
@@ -1788,6 +1825,7 @@
     "deleteVolunteerGroupMsg": "Êtes-vous sûr de vouloir supprimer ce groupe de bénévoles?",
     "leader": "Chef",
     "group": "Groupe",
+    "groupOrLeader": "Groupe ou Chef",
     "createGroup": "Créer un Groupe",
     "updateGroup": "Mettre à Jour le Groupe",
     "deleteGroup": "Supprimer le Groupe",
@@ -1811,7 +1849,10 @@
     "leastVolunteers": "Le moins de bénévoles",
     "applyTo": "Appliquer à",
     "entireSeries": "Série entière",
-    "thisEventOnly": "Cet événement uniquement"
+    "thisEventOnly": "Cet événement uniquement",
+    "volunteerAlt": "Photo de profil du bénévole",
+    "groupTable": "Tableau des Groupes",
+    "volunteerActions": "Actions des Bénévoles"
   },
   "userVolunteer": {
     "title": "Volontariat",
@@ -1823,11 +1864,15 @@
     "actions": "Éléments d'Action",
     "search": "Rechercher",
     "searchByName": "Rechercher par Nom",
+    "startDate": "Date de début",
     "latestEndDate": "Date de Fin la Plus Récente",
     "earliestEndDate": "Date de Fin la Plus Ancienne",
     "noEvents": "Aucun Événement à Venir",
     "volunteer": "Bénévole",
     "volunteered": "A Bénévolé",
+    "volunteerName": "Nom",
+    "volunteerActions": "Actions",
+    "volunteerAlt": "bénévole",
     "join": "Rejoindre",
     "joined": "Rejoint",
     "searchByEventName": "Rechercher par Titre d'Événement",
@@ -1855,6 +1900,7 @@
     "event": "Événement",
     "received": "Reçu",
     "location": "Emplacement",
+    "titleOrLocation": "Titre ou Emplacement",
     "recurrence": "Récurrence",
     "endDate": "Date de Fin",
     "description": "Description",
@@ -1863,7 +1909,8 @@
     "srNo": "N°",
     "groupName": "Nom du Groupe",
     "noOfMembers": "Nombre de Membres",
-    "options": "Options"
+    "options": "Options",
+    "notSpecified": "Non Spécifié"
   },
   "pluginStore": {
     "title": "Boutique de Plugins",
@@ -1943,6 +1990,13 @@
     "altText": "Photo de profil de {{name}}",
     "modalTitle": "Photo de profil",
     "enlargedAltText": "Photo de profil agrandie de {{name}}"
+  },
+  "eventCalendar": {
+    "noEventsAvailable": "Aucun événement disponible",
+    "holidays": "Jours fériés",
+    "events": "Événements",
+    "eventsCreatedByOrganization": "Événements créés par l'organisation",
+    "today": "Aujourd'hui"
   },
   "common": {
     "signOut": "Se déconnecter",
