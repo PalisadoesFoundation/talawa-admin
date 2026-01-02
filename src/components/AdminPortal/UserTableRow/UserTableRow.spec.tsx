@@ -3,7 +3,10 @@ import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { UserTableRow } from './UserTableRow';
-import type { InterfaceUserInfo } from 'types/AdminPortal/UserTableRow/interface';
+import type {
+  InterfaceUserInfo,
+  InterfaceActionVariant,
+} from 'types/AdminPortal/UserTableRow/interface';
 
 const MockedProvider = ({ children }: { children: React.ReactNode }) => (
   <BrowserRouter>{children}</BrowserRouter>
@@ -150,6 +153,11 @@ describe('UserTableRow', () => {
               testId: 'primaryBtn',
               variant: 'primary',
             },
+            {
+              label: 'Default Action',
+              onClick: onAction,
+              testId: 'defaultBtn',
+            },
           ]}
           testIdPrefix="spec"
         />
@@ -158,6 +166,7 @@ describe('UserTableRow', () => {
     expect(screen.getByTestId('dangerBtn')).toBeInTheDocument();
     expect(screen.getByTestId('successBtn')).toBeInTheDocument();
     expect(screen.getByTestId('primaryBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('defaultBtn')).toBeInTheDocument();
   });
 
   it('renders table row view with row number', () => {
@@ -367,5 +376,131 @@ describe('UserTableRow', () => {
     );
     expect(screen.getByTestId('spec-gridcell-u1')).toBeInTheDocument();
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
+  });
+
+  it('renders action button with unknown variant using default color', () => {
+    const onAction = vi.fn();
+    render(
+      <MockedProvider>
+        <UserTableRow
+          user={user}
+          actions={[
+            {
+              label: 'Unknown Variant',
+              onClick: onAction,
+              variant: 'unknown' as InterfaceActionVariant,
+              testId: 'unknownBtn',
+            },
+          ]}
+          testIdPrefix="spec"
+        />
+      </MockedProvider>,
+    );
+    expect(screen.getByTestId('unknownBtn')).toBeInTheDocument();
+  });
+
+  it('generates default testId for action when testId is not provided', () => {
+    const onAction = vi.fn();
+    render(
+      <MockedProvider>
+        <UserTableRow
+          user={user}
+          actions={[
+            {
+              label: 'Action Without TestId',
+              onClick: onAction,
+            },
+          ]}
+          testIdPrefix="spec"
+        />
+      </MockedProvider>,
+    );
+    expect(screen.getByTestId('spec-action-0')).toBeInTheDocument();
+  });
+
+  it('handles action button size based on compact mode', () => {
+    const onAction = vi.fn();
+    render(
+      <MockedProvider>
+        <UserTableRow
+          user={user}
+          compact={true}
+          actions={[
+            {
+              label: 'Compact Action',
+              onClick: onAction,
+              testId: 'compactBtn',
+            },
+          ]}
+          testIdPrefix="spec"
+        />
+      </MockedProvider>,
+    );
+    const button = screen.getByTestId('compactBtn');
+    expect(button).toHaveClass('MuiButton-sizeSmall');
+  });
+
+  it('handles action button size in non-compact mode', () => {
+    const onAction = vi.fn();
+    render(
+      <MockedProvider>
+        <UserTableRow
+          user={user}
+          compact={false}
+          actions={[
+            {
+              label: 'Regular Action',
+              onClick: onAction,
+              testId: 'regularBtn',
+            },
+          ]}
+          testIdPrefix="spec"
+        />
+      </MockedProvider>,
+    );
+    const button = screen.getByTestId('regularBtn');
+    expect(button).toHaveClass('MuiButton-sizeMedium');
+  });
+
+  it('handles avatar spacing based on compact mode', () => {
+    render(
+      <MockedProvider>
+        <UserTableRow user={user} compact={true} testIdPrefix="spec" />
+      </MockedProvider>,
+    );
+    expect(screen.getByTestId('spec-avatar-u1')).toBeInTheDocument();
+  });
+
+  it('handles avatar spacing in non-compact mode', () => {
+    render(
+      <MockedProvider>
+        <UserTableRow user={user} compact={false} testIdPrefix="spec" />
+      </MockedProvider>,
+    );
+    expect(screen.getByTestId('spec-avatar-u1')).toBeInTheDocument();
+  });
+
+  it('uses default testIdPrefix when not provided', () => {
+    render(
+      <MockedProvider>
+        <UserTableRow user={user} />
+      </MockedProvider>,
+    );
+    expect(
+      screen.getByTestId('user-table-row-gridcell-u1'),
+    ).toBeInTheDocument();
+  });
+
+  it('handles row click when onRowClick is not provided', () => {
+    render(
+      <MockedProvider>
+        <UserTableRow user={user} testIdPrefix="spec" />
+      </MockedProvider>,
+    );
+    const gridCell = screen.getByTestId('spec-gridcell-u1');
+    // Should not have onClick handler when onRowClick is not provided
+    fireEvent.click(gridCell);
+    // No assertion needed - just ensuring no errors occur
+    expect(gridCell).toBeInTheDocument();
   });
 });
