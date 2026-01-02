@@ -222,7 +222,9 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChatRoom',
   });
-  const { t: tErrors } = useTranslation('errors');
+  const { t: tErrors } = useTranslation('translation', {
+    keyPrefix: 'userChatRoom.errorBoundary',
+  });
   const isMountedRef = useRef<boolean>(true);
 
   useEffect(() => {
