@@ -317,6 +317,10 @@ describe('Testing UserNavbar Component [User Portal]', () => {
     expect(window.location.pathname).toBe('/');
   });
 
+  /**
+   * Helper to simulate logout error and verify error handling (console log, toast, cleanup, navigation).
+   * @param logoutMock - The mock response for the logout mutation (error or GraphQL error).
+   */
   const testLogoutError = async (logoutMock: MockedResponse) => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     const { mockClearAllItems } = createMock();
