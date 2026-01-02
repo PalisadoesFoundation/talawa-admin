@@ -167,7 +167,6 @@ export const UserTableRow: React.FC<InterfaceUserTableRowProps> = memo(
           fallbackName={name}
           imageUrl={user.avatarURL}
           size={compact ? 'small' : 'medium'}
-          dataTestId={`${testIdPrefix}-avatar-${user.id}`}
         />
         <Stack spacing={0}>
           {linkPath ? (
@@ -175,11 +174,12 @@ export const UserTableRow: React.FC<InterfaceUserTableRowProps> = memo(
               variant={compact ? 'body2' : 'body1'}
               component={Link}
               to={linkPath}
+              data-field="name"
             >
               {name}
             </Typography>
           ) : (
-            <Typography variant={compact ? 'body2' : 'body1'}>
+            <Typography variant={compact ? 'body2' : 'body1'} data-field="name">
               {name}
             </Typography>
           )}

@@ -40,7 +40,6 @@ describe('UserTableRow', () => {
       </MockedProvider>,
     );
 
-    expect(screen.getByTestId('spec-avatar-u1')).toBeInTheDocument();
     expect(screen.getByText('Admin User')).toBeInTheDocument();
     expect(screen.getByText('admin@example.com')).toBeInTheDocument();
     expect(screen.getByTestId('spec-joined-u1')).toBeInTheDocument();
@@ -468,7 +467,7 @@ describe('UserTableRow', () => {
         <UserTableRow user={user} compact={true} testIdPrefix="spec" />
       </MockedProvider>,
     );
-    expect(screen.getByTestId('spec-avatar-u1')).toBeInTheDocument();
+    expect(screen.getByTestId('spec-gridcell-u1')).toBeInTheDocument();
   });
 
   it('handles avatar spacing in non-compact mode', () => {
@@ -477,7 +476,7 @@ describe('UserTableRow', () => {
         <UserTableRow user={user} compact={false} testIdPrefix="spec" />
       </MockedProvider>,
     );
-    expect(screen.getByTestId('spec-avatar-u1')).toBeInTheDocument();
+    expect(screen.getByTestId('spec-gridcell-u1')).toBeInTheDocument();
   });
 
   it('uses default testIdPrefix when not provided', () => {
@@ -534,5 +533,53 @@ describe('UserTableRow', () => {
       </MockedProvider>,
     );
     expect(screen.getByText('2024-01-15')).toBeInTheDocument();
+  });
+
+  it('handles early return in handleRowClick when onRowClick is not provided', () => {
+    render(
+      <MockedProvider>
+        <UserTableRow user={user} testIdPrefix="spec" />
+      </MockedProvider>,
+    );
+    const gridCell = screen.getByTestId('spec-gridcell-u1');
+    // This should not throw an error even though onRowClick is undefined
+    fireEvent.click(gridCell);
+    expect(gridCell).toBeInTheDocument();
+  });
+
+  it('renders name as plain Typography when linkPath is not provided', () => {
+    render(
+      <MockedProvider>
+        <UserTableRow user={user} isDataGrid testIdPrefix="spec" />
+      </MockedProvider>,
+    );
+    const nameElement = screen.getByText('Admin User');
+    expect(nameElement).toBeInTheDocument();
+    expect(nameElement.tagName).toBe('P'); // Typography renders as p by default
+  });
+
+  it('adds data-field="name" attribute for Cypress compatibility', () => {
+    render(
+      <MockedProvider>
+        <UserTableRow user={user} isDataGrid testIdPrefix="spec" />
+      </MockedProvider>,
+    );
+    const nameElement = screen.getByText('Admin User');
+    expect(nameElement).toHaveAttribute('data-field', 'name');
+  });
+
+  it('adds data-field="name" attribute to linked name for Cypress compatibility', () => {
+    render(
+      <MockedProvider>
+        <UserTableRow
+          user={user}
+          linkPath="/member/u1"
+          isDataGrid
+          testIdPrefix="spec"
+        />
+      </MockedProvider>,
+    );
+    const nameElement = screen.getByText('Admin User');
+    expect(nameElement).toHaveAttribute('data-field', 'name');
   });
 });
