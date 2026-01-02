@@ -35,7 +35,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import styles from '../../../style/app-fixed.module.css';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import {
@@ -44,6 +43,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 export interface InterfaceVenueModalProps {
   show: boolean;
@@ -106,7 +106,10 @@ const VenueModal = ({
   const handleSubmit = useCallback(async () => {
     // Validate name
     if (formState.name.trim().length === 0) {
-      toast.error(t('venueTitleError') as string);
+      NotificationToast.error({
+        key: 'organizationVenues.venueTitleError',
+        namespace: 'translation',
+      });
       return;
     }
 
@@ -115,7 +118,10 @@ const VenueModal = ({
       // If name hasn't changed, validate capacity and update other fields
       const capacityNum = parseInt(formState.capacity, 10);
       if (Number.isNaN(capacityNum) || capacityNum <= 0) {
-        toast.error(t('venueCapacityError') as string);
+        NotificationToast.error({
+          key: 'organizationVenues.venueCapacityError',
+          namespace: 'translation',
+        });
         return;
       }
 
@@ -132,7 +138,10 @@ const VenueModal = ({
         const result = await mutate({ variables });
 
         if (result?.data?.updateVenue) {
-          toast.success(t('venueUpdated'));
+          NotificationToast.success({
+            key: 'organizationVenues.venueUpdated',
+            namespace: 'translation',
+          });
           refetchVenues();
           onHide();
         }
@@ -146,7 +155,10 @@ const VenueModal = ({
     // Validate capacity
     const capacityNum = parseInt(formState.capacity, 10);
     if (Number.isNaN(capacityNum) || capacityNum <= 0) {
-      toast.error(t('venueCapacityError') as string);
+      NotificationToast.error({
+        key: 'organizationVenues.venueCapacityError',
+        namespace: 'translation',
+      });
       return;
     }
 
@@ -167,7 +179,10 @@ const VenueModal = ({
         const result = await mutate({ variables });
 
         if (result?.data?.updateVenue) {
-          toast.success(t('venueUpdated'));
+          NotificationToast.success({
+            key: 'organizationVenues.venueUpdated',
+            namespace: 'translation',
+          });
           refetchVenues();
           onHide();
         }
@@ -186,7 +201,10 @@ const VenueModal = ({
         const result = await mutate({ variables });
 
         if (result?.data?.createVenue) {
-          toast.success(t('venueCreated'));
+          NotificationToast.success({
+            key: 'organizationVenuesNotification.venueCreated',
+            namespace: 'translation',
+          });
           refetchVenues();
           onHide();
         }
@@ -194,9 +212,10 @@ const VenueModal = ({
     } catch (error) {
       console.error('Mutation error:', error);
       if (error instanceof Error && error.message.includes('alreadyExists')) {
-        toast.error(
-          t('venueNameExists') || 'A venue with this name already exists',
-        );
+        NotificationToast.error({
+          key: 'organizationVenuesNotification.venueNameExists',
+          namespace: 'translation',
+        });
       } else {
         errorHandler(t, error);
       }
@@ -243,7 +262,10 @@ const VenueModal = ({
         ).toString();
         setImagePreviewUrl(previewUrl);
       } catch {
-        toast.error('Error creating preview URL');
+        NotificationToast.error({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
         setImagePreviewUrl(null);
       }
     } else {
@@ -272,17 +294,26 @@ const VenueModal = ({
       const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
 
       if (!allowedTypes.includes(file.type)) {
-        toast.error(`Invalid file type: ${file.name}`);
+        NotificationToast.error({
+          key: 'invalidFileType',
+          namespace: 'errors',
+        });
         return;
       }
 
       if (file.size > maxFileSize) {
-        toast.error(`File too large: ${file.name}`);
+        NotificationToast.error({
+          key: 'fileTooLarge',
+          namespace: 'errors',
+        });
         return;
       }
 
       if (!file.size) {
-        toast.error('Empty file selected');
+        NotificationToast.error({
+          key: 'emptyFile',
+          namespace: 'errors',
+        });
         return;
       }
 
@@ -370,7 +401,7 @@ const VenueModal = ({
           />
           {imagePreviewUrl && (
             <div className={styles.previewVenueModal}>
-              <img src={imagePreviewUrl} alt="Venue Image Preview" />
+              <img src={imagePreviewUrl} alt={t('venueImagePreview')} />
               <button
                 className={styles.closeButtonP}
                 onClick={clearImageInput}
