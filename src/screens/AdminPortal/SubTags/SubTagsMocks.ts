@@ -257,3 +257,79 @@ export const MOCKS_ERROR_SUB_TAGS = [
     error: new Error('Mock Graphql Error'),
   },
 ];
+
+export const emptyMocks = [
+  {
+    request: {
+      query: USER_TAG_SUB_TAGS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        getChildTags: {
+          name: 'userTag 1',
+          childTags: {
+            edges: [],
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: null,
+            },
+          },
+          ancestorTags: [],
+        },
+      },
+    },
+  },
+];
+
+export const MOCKS_CREATE_TAG_ERROR = [
+  {
+    request: {
+      query: USER_TAG_SUB_TAGS,
+      variables: {
+        id: '1',
+        first: TAGS_QUERY_DATA_CHUNK_SIZE,
+        where: { name: { starts_with: '' } },
+        sortedBy: { id: 'DESCENDING' },
+      },
+    },
+    result: {
+      data: {
+        getChildTags: {
+          name: 'userTag 1',
+          childTags: {
+            edges: [
+              createTagNode('subTag1', 'subTag 1', 5, 5, [
+                { _id: '1', name: 'userTag 1' },
+              ]),
+            ],
+            pageInfo: {
+              startCursor: '1',
+              endCursor: '1',
+              hasNextPage: false,
+              hasPreviousPage: false,
+            },
+            totalCount: 1,
+          },
+          ancestorTags: [],
+        },
+      },
+    },
+  },
+  {
+    request: {
+      query: CREATE_USER_TAG,
+      variables: {
+        name: 'subTag 12',
+        organizationId: '123',
+        folderId: '1',
+      },
+    },
+    error: new Error('Failed to create tag'),
+  },
+];

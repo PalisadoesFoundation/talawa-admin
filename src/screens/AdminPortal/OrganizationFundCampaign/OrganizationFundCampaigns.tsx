@@ -1,6 +1,6 @@
 import { useQuery } from '@apollo/client';
 import { Campaign, Search, WarningAmberRounded } from '@mui/icons-material';
-import { Stack, Typography, Box, CircularProgress } from '@mui/material';
+import { Typography, Box, CircularProgress } from '@mui/material';
 import { type GridCellParams } from '@mui/x-data-grid';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
@@ -370,13 +370,6 @@ const orgFundCampaign = (): JSX.Element => {
     loading: campaignLoading,
     hideFooter: true,
     compactColumns: columns.length >= 7,
-    slots: {
-      noRowsOverlay: () => (
-        <Stack height="100%" alignItems="center" justifyContent="center">
-          {t('noCampaignsFound')}
-        </Stack>
-      ),
-    },
     getRowClassName: () =>
       `${styles.rowBackgroundOrganizationFundCampaign} ${componentStyles.overflowVisible}`,
     isRowSelectable: () => false,

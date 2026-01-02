@@ -18,7 +18,12 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import SubTags from './SubTags';
-import { MOCKS, MOCKS_ERROR_SUB_TAGS } from './SubTagsMocks';
+import {
+  emptyMocks,
+  MOCKS,
+  MOCKS_CREATE_TAG_ERROR,
+  MOCKS_ERROR_SUB_TAGS,
+} from './SubTagsMocks';
 import { InMemoryCache, type ApolloLink } from '@apollo/client';
 import { vi, beforeEach, afterEach, expect, it } from 'vitest';
 
@@ -340,6 +345,136 @@ describe('Organisation Tags Page', () => {
       expect(NotificationToast.success).toHaveBeenCalledWith(
         translations.tagCreationSuccess,
       );
+    });
+  });
+
+  it('navigates to organization tags screen when pressing Enter on allTagsBtn', async () => {
+    renderSubTags(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('allTagsBtn')).toBeInTheDocument();
+    });
+
+    const allTagsBtn = screen.getByTestId('allTagsBtn');
+    fireEvent.keyDown(allTagsBtn, { key: 'Enter' });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('orgtagsScreen')).toBeInTheDocument();
+    });
+  });
+
+  it('navigates to organization tags screen when pressing Space on allTagsBtn', async () => {
+    renderSubTags(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('allTagsBtn')).toBeInTheDocument();
+    });
+
+    const allTagsBtn = screen.getByTestId('allTagsBtn');
+    fireEvent.keyDown(allTagsBtn, { key: ' ' });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('orgtagsScreen')).toBeInTheDocument();
+    });
+  });
+
+  it('navigates to sub tags screen when pressing Enter on breadcrumb ancestor', async () => {
+    renderSubTags(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('redirectToSubTags')[0]).toBeInTheDocument();
+    });
+
+    const breadcrumbBtn = screen.getAllByTestId('redirectToSubTags')[0];
+    fireEvent.keyDown(breadcrumbBtn, { key: 'Enter' });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
+    });
+  });
+
+  it('navigates to sub tags screen when pressing Space on breadcrumb ancestor', async () => {
+    renderSubTags(link);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('redirectToSubTags')[0]).toBeInTheDocument();
+    });
+
+    const breadcrumbBtn = screen.getAllByTestId('redirectToSubTags')[0];
+    fireEvent.keyDown(breadcrumbBtn, { key: ' ' });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
+    });
+  });
+
+  it('does nothing when pressing Tab on allTagsBtn', async () => {
+    renderSubTags(link);
+    await wait();
+
+    const allTagsBtn = screen.getByTestId('allTagsBtn');
+    fireEvent.keyDown(allTagsBtn, { key: 'Tab' });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
+    });
+  });
+
+  it('does nothing when pressing Tab on breadcrumb ancestor', async () => {
+    renderSubTags(link);
+    await wait();
+
+    const breadcrumbBtn = screen.getAllByTestId('redirectToSubTags')[0];
+    fireEvent.keyDown(breadcrumbBtn, { key: 'Tab' });
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
+    });
+  });
+
+  it('displays error toast when addSubTag mutation fails', async () => {
+    const errorLink = new StaticMockLink(MOCKS_CREATE_TAG_ERROR, true);
+
+    renderSubTags(errorLink);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addSubTagBtn')).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getByTestId('addSubTagBtn'));
+
+    await userEvent.type(
+      screen.getByPlaceholderText(translations.tagNamePlaceholder),
+      'subTag 12',
+    );
+
+    await userEvent.click(screen.getByTestId('addSubTagSubmitBtn'));
+
+    await waitFor(() => {
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Failed to create tag',
+      );
+    });
+  });
+
+  it('renders noRowsOverlay when there are no sub tags', async () => {
+    const emptyLink = new StaticMockLink(emptyMocks, true);
+
+    renderSubTags(emptyLink);
+
+    await wait();
+
+    await waitFor(() => {
+      expect(screen.getByText(translations.noTagsFound)).toBeInTheDocument();
     });
   });
 });
