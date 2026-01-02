@@ -28,6 +28,7 @@ export const MOCKS = [
                   endAt: '2026-01-01T00:00:00.000Z',
                   currencyCode: 'USD',
                   goalAmount: 100,
+                  amountRaised: 75,
                 },
               },
               {
@@ -38,6 +39,7 @@ export const MOCKS = [
                   endAt: '2026-01-01T00:00:00.000Z',
                   currencyCode: 'USD',
                   goalAmount: 200,
+                  amountRaised: 150,
                 },
               },
             ],
@@ -69,6 +71,7 @@ export const MOCKS = [
                   endAt: '2026-01-01T00:00:00.000Z',
                   currencyCode: 'USD',
                   goalAmount: 100,
+                  amountRaised: 75,
                 },
               },
               {
@@ -79,6 +82,7 @@ export const MOCKS = [
                   endAt: '2026-01-01T00:00:00.000Z',
                   currencyCode: 'USD',
                   goalAmount: 200,
+                  amountRaised: 150,
                 },
               },
             ],

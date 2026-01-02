@@ -487,15 +487,14 @@ describe('FundCampaigns Screen', () => {
 
     // Verify progress cells are rendered with the percentage display
     const progressCells = screen.getAllByTestId('progressCell');
-    expect(progressCells.length).toBeGreaterThan(0);
+    expect(progressCells.length).toBe(2);
 
-    // Each progress cell should contain 0% (since raised is hardcoded to 0)
-    progressCells.forEach((cell) => {
-      expect(cell).toHaveTextContent('0%');
-    });
+    // Campaign 1: 75/100 = 75%, Campaign 2: 150/200 = 75%
+    const percentages = progressCells.map((cell) => cell.textContent);
+    expect(percentages).toContain('75%');
   });
 
-  it('should display raised cells with currency symbol', async () => {
+  it('should display raised cells with currency symbol and amountRaised from API', async () => {
     mockRouteParams();
     renderFundCampaign(link1);
 
@@ -506,11 +505,16 @@ describe('FundCampaigns Screen', () => {
 
     // Verify raised cells are rendered
     const raisedCells = screen.getAllByTestId('raisedCell');
-    expect(raisedCells.length).toBeGreaterThan(0);
+    expect(raisedCells.length).toBe(2);
 
-    // Each raised cell should contain $0 (USD currency)
+    // Check that amountRaised values are displayed
+    const raisedTexts = raisedCells.map((cell) => cell.textContent);
+    expect(raisedTexts.some((text) => text?.includes('75'))).toBe(true);
+    expect(raisedTexts.some((text) => text?.includes('150'))).toBe(true);
+
+    // All should have USD currency symbol
     raisedCells.forEach((cell) => {
-      expect(cell).toHaveTextContent('$0');
+      expect(cell.textContent).toContain('$');
     });
   });
 
