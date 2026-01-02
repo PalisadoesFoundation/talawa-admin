@@ -3,6 +3,7 @@ import { DiscoveryManager } from '../../managers/discovery';
 import { PluginGraphQLService, IPlugin } from '../../graphql-service';
 import { IPluginManifest } from '../../types';
 import { validatePluginManifest } from '../../utils';
+import dayjs from 'dayjs';
 
 // Mock the dependencies
 vi.mock('../../graphql-service');
@@ -20,8 +21,8 @@ describe('DiscoveryManager', () => {
     isActivated: true,
     isInstalled: true,
     backup: false,
-    createdAt: '2023-01-01T00:00:00Z',
-    updatedAt: '2023-01-01T00:00:00Z',
+    createdAt: dayjs().subtract(1, 'year').toISOString(),
+    updatedAt: dayjs().subtract(1, 'year').toISOString(),
   };
 
   const mockManifest: IPluginManifest = {
@@ -690,8 +691,8 @@ describe('DiscoveryManager', () => {
         isActivated: true,
         isInstalled: true,
         backup: false,
-        createdAt: '2023-01-01T00:00:00Z',
-        updatedAt: '2023-01-01T00:00:00Z',
+        createdAt: dayjs().subtract(1, 'year').toISOString(),
+        updatedAt: dayjs().subtract(1, 'year').toISOString(),
       };
       (mockGraphQLService.createPlugin as Mock).mockResolvedValue(newPlugin);
       (mockGraphQLService.updatePlugin as Mock).mockResolvedValue(undefined);
@@ -806,8 +807,8 @@ describe('DiscoveryManager', () => {
           isActivated: true,
           isInstalled: true,
           backup: false,
-          createdAt: '2023-01-01T00:00:00Z',
-          updatedAt: '2023-01-01T00:00:00Z',
+          createdAt: dayjs().subtract(1, 'year').toISOString(),
+          updatedAt: dayjs().subtract(1, 'year').toISOString(),
         },
         {
           id: '2',
@@ -815,8 +816,8 @@ describe('DiscoveryManager', () => {
           isActivated: false,
           isInstalled: true,
           backup: false,
-          createdAt: '2023-01-01T00:00:00Z',
-          updatedAt: '2023-01-01T00:00:00Z',
+          createdAt: dayjs().subtract(1, 'year').toISOString(),
+          updatedAt: dayjs().subtract(1, 'year').toISOString(),
         },
         {
           id: '3',
@@ -824,8 +825,8 @@ describe('DiscoveryManager', () => {
           isActivated: true,
           isInstalled: true,
           backup: false,
-          createdAt: '2023-01-01T00:00:00Z',
-          updatedAt: '2023-01-01T00:00:00Z',
+          createdAt: dayjs().subtract(1, 'year').toISOString(),
+          updatedAt: dayjs().subtract(1, 'year').toISOString(),
         },
       ];
 
@@ -846,8 +847,8 @@ describe('DiscoveryManager', () => {
           isActivated: true,
           isInstalled: true,
           backup: false,
-          createdAt: '2023-01-01T00:00:00Z',
-          updatedAt: '2023-01-01T00:00:00Z',
+          createdAt: dayjs().subtract(1, 'year').toISOString(),
+          updatedAt: dayjs().subtract(1, 'year').toISOString(),
         },
       ];
       const updatedPlugins: IPlugin[] = [
@@ -857,8 +858,8 @@ describe('DiscoveryManager', () => {
           isActivated: false,
           isInstalled: true,
           backup: false,
-          createdAt: '2023-01-01T00:00:00Z',
-          updatedAt: '2023-01-01T00:00:00Z',
+          createdAt: dayjs().subtract(1, 'year').toISOString(),
+          updatedAt: dayjs().subtract(1, 'year').toISOString(),
         },
         {
           id: '2',
@@ -866,8 +867,8 @@ describe('DiscoveryManager', () => {
           isActivated: true,
           isInstalled: true,
           backup: false,
-          createdAt: '2023-01-01T00:00:00Z',
-          updatedAt: '2023-01-01T00:00:00Z',
+          createdAt: dayjs().subtract(1, 'year').toISOString(),
+          updatedAt: dayjs().subtract(1, 'year').toISOString(),
         },
       ];
 

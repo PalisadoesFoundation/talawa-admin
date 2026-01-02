@@ -1,5 +1,6 @@
 import type { MockedResponse } from '@apollo/react-testing';
 import { ACTION_ITEM_LIST } from 'GraphQl/Queries/ActionItemQueries';
+import dayjs from 'dayjs';
 
 const action1 = {
   id: 'actionId1',
@@ -32,7 +33,7 @@ const action1 = {
   },
   preCompletionNotes: '',
   postCompletionNotes: '',
-  assignedAt: '2024-08-25',
+  assignedAt: dayjs().month(7).date(25).format('YYYY-MM-DD'),
   completionAt: '2024-09-01',
   createdAt: '2024-08-20',
   isCompleted: false,

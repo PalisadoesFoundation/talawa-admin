@@ -11,6 +11,7 @@ import AcceptInvitation from './AcceptInvitation';
 import { useLocalStorage } from '../../../utils/useLocalstorage';
 import { toast } from 'react-toastify';
 import { vi } from 'vitest';
+import dayjs from 'dayjs';
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -260,7 +261,7 @@ describe('AcceptInvitation', () => {
 
   // NEW: Test for displaying all invitation metadata fields
   it('should display all invitation metadata fields correctly', async () => {
-    const expiryDate = '2025-12-31T23:59:59Z';
+    const expiryDate = dayjs().add(1, 'year').endOf('year').toISOString();
     const mocks = [
       {
         request: {

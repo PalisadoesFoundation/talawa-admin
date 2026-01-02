@@ -22,7 +22,7 @@
  * <DonationCard
  *   name="John Doe"
  *   amount={100}
- *   updatedAt="2023-03-15T12:00:00Z"
+ *   updatedAt=dayjs().subtract(1, 'year').month(2).date(15).hour(12).toISOString()
  * />
  * ```
  */

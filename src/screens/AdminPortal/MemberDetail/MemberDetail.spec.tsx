@@ -27,6 +27,9 @@ import {
 import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { urlToFile } from 'utils/urlToFile';
@@ -138,11 +141,11 @@ describe('MemberDetail', () => {
   });
 
   test('prettyDate function should work properly', () => {
-    const datePretty = vi.fn(prettyDate);
-    expect(datePretty('2023-02-18T09:22:27.969Z')).toBe(
-      prettyDate('2023-02-18T09:22:27.969Z'),
-    );
-    expect(datePretty('')).toBe('Unavailable');
+    const testDate = dayjs().format('YYYY-MM-DD');
+    // prettyDate expected output in format "1 January 2024" but for current date
+    const formattedDate = dayjs().format('D MMMM YYYY');
+    expect(prettyDate(testDate)).toBe(formattedDate);
+    expect(prettyDate('')).toBe('Unavailable');
   });
 
   test('getLanguageName function should work properly', () => {
@@ -155,7 +158,7 @@ describe('MemberDetail', () => {
     const formData = {
       addressLine1: 'Line 1',
       addressLine2: 'Line 2',
-      birthDate: '2000-01-01',
+      birthDate: dayjs.utc().subtract(24, 'year').format('YYYY-MM-DD'),
       city: 'nyc',
       countryCode: 'BB', // e.g., BB (adjust to your actual code)
       description: 'This is a description',

@@ -22,8 +22,8 @@
  *   name="Community Meetup"
  *   description="A meetup for community members."
  *   location="Community Hall"
- *   startDate="2023-10-01"
- *   endDate="2023-10-01"
+ *   startDate=dayjs().subtract(1, 'year').month(9).date(1).format('YYYY-MM-DD')
+ *   endDate=dayjs().subtract(1, 'year').month(9).date(1).format('YYYY-MM-DD')
  *   startTime="10:00:00"
  *   endTime="12:00:00"
  *   creator={{ firstName: "John", lastName: "Doe" }}

@@ -7,6 +7,10 @@ import MemberRequestCard from './MemberRequestCard';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { describe, vi, expect, beforeAll, beforeEach, afterEach } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import { MOCKS, MOCKS2, MOCKS3 } from './MemberRequestMocks';
 
 // Optimized mock links - reused for performance
@@ -27,7 +31,7 @@ describe('Testing Member Request Card', () => {
     id: '1',
     memberName: 'John Doe',
     memberLocation: 'India',
-    joinDate: '18/03/2022',
+    joinDate: dayjs.utc().format('DD/MM/YYYY'),
     memberImage: 'image',
     email: 'johndoe@gmail.com',
   };
@@ -72,7 +76,7 @@ describe('Testing Member Request Card', () => {
       id: '1',
       memberName: '',
       memberLocation: 'India',
-      joinDate: '18/03/2022',
+      joinDate: dayjs.utc().format('DD/MM/YYYY'),
       memberImage: '',
       email: 'johndoe@gmail.com',
     };
@@ -98,7 +102,9 @@ describe('Testing Member Request Card', () => {
     expect(screen.getByText(/Joined:/i)).toBeInTheDocument();
     expect(screen.queryByText(defaultProps.memberName)).not.toBeInTheDocument();
     expect(screen.getByText('India')).toBeInTheDocument();
-    expect(screen.getByText('18/03/2022')).toBeInTheDocument();
+    expect(
+      screen.getByText(dayjs.utc().format('DD/MM/YYYY')),
+    ).toBeInTheDocument();
     expect(screen.getByText('johndoe@gmail.com')).toBeInTheDocument();
   });
 

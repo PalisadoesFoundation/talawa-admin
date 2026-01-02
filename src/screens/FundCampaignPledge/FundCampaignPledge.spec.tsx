@@ -2,6 +2,10 @@ import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
+
 import {
   act,
   fireEvent,
@@ -121,8 +125,8 @@ const EMPTY_MOCK = {
         __typename: 'FundCampaign',
         id: '1',
         name: 'Test Campaign',
-        startDate: '2024-01-01',
-        endDate: '2024-12-31',
+        startDate: dayjs.utc().toISOString(),
+        endDate: dayjs.utc().add(1, 'year').toISOString(),
         currency: 'USD',
         fundingGoal: 1000,
         pledges: {
@@ -147,8 +151,8 @@ const updatedMocks = {
         __typename: 'FundCampaign',
         id: '1',
         name: 'Test Campaign',
-        startAt: '2023-01-01T00:00:00Z',
-        endAt: '2024-12-31T23:59:59Z',
+        startAt: dayjs.utc().toISOString(),
+        endAt: dayjs.utc().add(1, 'year').toISOString(),
         currency: 'USD',
         fundingGoal: 1000,
         pledges: {
@@ -240,8 +244,8 @@ const FUTURE_CAMPAIGN_MOCK = {
         __typename: 'FundCampaign',
         id: '1',
         name: 'Future Campaign',
-        startAt: '2025-03-31T05:53:45.871Z',
-        endAt: '2025-04-24T05:53:45.871Z',
+        startAt: dayjs.utc().add(3, 'month').toISOString(),
+        endAt: dayjs.utc().add(4, 'month').toISOString(),
         currency: 'USD',
         fundingGoal: 1000,
         pledges: {
@@ -266,8 +270,8 @@ const ACTIVE_CAMPAIGN_MOCK = {
         __typename: 'FundCampaign',
         id: '1',
         name: 'Active Campaign',
-        startAt: '2023-01-01T00:00:00Z',
-        endAt: '2024-12-31T23:59:59Z',
+        startAt: dayjs.utc().subtract(1, 'month').toISOString(),
+        endAt: dayjs.utc().add(6, 'month').toISOString(),
         currency: 'USD',
         fundingGoal: 1000,
         pledges: {
@@ -292,8 +296,8 @@ const mockWithExtraUsers = {
         __typename: 'FundCampaign',
         id: '1',
         name: 'Test Campaign',
-        startAt: '2023-01-01T00:00:00Z',
-        endAt: '2024-12-31T23:59:59Z',
+        startAt: dayjs.utc().subtract(1, 'month').toISOString(),
+        endAt: dayjs.utc().add(6, 'month').toISOString(),
         currencyCode: 'USD',
         goalAmount: 1000,
         pledges: {
@@ -305,7 +309,7 @@ const mockWithExtraUsers = {
                 __typename: 'Pledge',
                 id: '1',
                 amount: 100,
-                createdAt: '2024-01-01T00:00:00Z',
+                createdAt: dayjs.utc().toISOString(),
                 pledger: {
                   __typename: 'User',
                   id: '1',
@@ -346,8 +350,8 @@ const manyUsersMock = {
         __typename: 'FundCampaign',
         id: '1',
         name: 'Test Campaign',
-        startAt: '2023-01-01T00:00:00Z',
-        endAt: '2024-12-31T23:59:59Z',
+        startAt: dayjs.utc().subtract(1, 'month').toISOString(),
+        endAt: dayjs.utc().add(6, 'month').toISOString(),
         currencyCode: 'USD',
         goalAmount: 1000,
         pledges: {
@@ -359,7 +363,7 @@ const manyUsersMock = {
                 __typename: 'Pledge',
                 id: '1',
                 amount: 100,
-                createdAt: '2024-01-01T00:00:00Z',
+                createdAt: dayjs.utc().toISOString(),
                 note: 'Test note',
                 campaign: {
                   __typename: 'FundCampaign',
@@ -551,7 +555,7 @@ describe('Testing Campaign Pledge Screen', () => {
 
   it('open and closes Create Pledge modal', async () => {
     // Set up controlled date for active campaign
-    vi.setSystemTime(new Date('2024-06-15'));
+    vi.setSystemTime(dayjs.utc().add(10, 'day').toDate());
     renderFundCampaignPledge(link1);
 
     // Wait for component to be fully loaded
@@ -800,8 +804,8 @@ describe('Testing Campaign Pledge Screen', () => {
             __typename: 'FundCampaign',
             id: 'single',
             name: 'Solo Campaign',
-            startAt: '2023-01-01T00:00:00Z',
-            endAt: '2024-12-31T23:59:59Z',
+            startAt: dayjs().subtract(1, 'year').toISOString(),
+            endAt: dayjs().endOf('year').toISOString(),
             currencyCode: 'USD',
             goalAmount: 500,
             pledges: {
@@ -813,7 +817,10 @@ describe('Testing Campaign Pledge Screen', () => {
                     __typename: 'Pledge',
                     id: 'singlePledge',
                     amount: 50,
-                    createdAt: '2024-01-02T00:00:00Z',
+                    createdAt: dayjs()
+                      .add(1, 'day')
+                      .startOf('day')
+                      .toISOString(),
                     pledger: {
                       __typename: 'User',
                       id: 'solo',
@@ -935,8 +942,8 @@ describe('Testing Campaign Pledge Screen', () => {
             __typename: 'FundCampaign',
             id: 'zero',
             name: 'Zero Campaign',
-            startAt: '2023-01-01T00:00:00Z',
-            endAt: '2024-12-31T23:59:59Z',
+            startAt: dayjs().subtract(1, 'year').toISOString(),
+            endAt: dayjs().endOf('year').toISOString(),
             currencyCode: null,
             goalAmount: 0,
             pledges: {
@@ -1088,7 +1095,7 @@ describe('Testing Campaign Pledge Screen', () => {
   });
 
   it('should disable add pledge button for future campaign', async () => {
-    vi.setSystemTime(new Date('2024-01-01')); // Set current date to known value
+    vi.setSystemTime(dayjs.utc().toDate()); // Set current date to known value
     const futureCampaignLink = new StaticMockLink([FUTURE_CAMPAIGN_MOCK]);
     renderFundCampaignPledge(futureCampaignLink);
 
@@ -1104,7 +1111,7 @@ describe('Testing Campaign Pledge Screen', () => {
   });
 
   it('should enable add pledge button for active campaign', async () => {
-    vi.setSystemTime(new Date('2024-06-15')); // Set current date within campaign period
+    vi.setSystemTime(dayjs.utc().toDate()); // Set current date within campaign period
     const activeCampaignLink = new StaticMockLink([ACTIVE_CAMPAIGN_MOCK]);
     renderFundCampaignPledge(activeCampaignLink);
 
@@ -1191,8 +1198,8 @@ describe('Testing Campaign Pledge Screen', () => {
             __typename: 'FundCampaign',
             id: '1',
             name: 'Test Campaign',
-            startAt: '2023-01-01T00:00:00Z',
-            endAt: '2024-12-31T23:59:59Z',
+            startAt: dayjs().subtract(1, 'year').toISOString(),
+            endAt: dayjs().endOf('year').toISOString(),
             currencyCode: 'USD',
             goalAmount: 1000,
             pledges: {
@@ -1204,7 +1211,7 @@ describe('Testing Campaign Pledge Screen', () => {
                     __typename: 'Pledge',
                     id: 'avatarPledge',
                     amount: 100,
-                    createdAt: '2024-01-01T00:00:00Z',
+                    createdAt: dayjs().toISOString(),
                     pledger: {
                       __typename: 'User',
                       id: 'avatarUser',
@@ -1255,8 +1262,8 @@ describe('Testing Campaign Pledge Screen', () => {
             __typename: 'FundCampaign',
             id: '1',
             name: 'Test Campaign',
-            startAt: '2023-01-01T00:00:00Z',
-            endAt: '2024-12-31T23:59:59Z',
+            startAt: dayjs().subtract(1, 'year').toISOString(),
+            endAt: dayjs().endOf('year').toISOString(),
             currencyCode: 'USD',
             goalAmount: 1000,
             pledges: {
@@ -1268,7 +1275,7 @@ describe('Testing Campaign Pledge Screen', () => {
                     __typename: 'Pledge',
                     id: 'extraAvatarPledge',
                     amount: 100,
-                    createdAt: '2024-01-01T00:00:00Z',
+                    createdAt: dayjs().toISOString(),
                     pledger: {
                       __typename: 'User',
                       id: 'mainUser',
@@ -1341,8 +1348,8 @@ describe('Testing Campaign Pledge Screen', () => {
             __typename: 'FundCampaign',
             id: '1',
             name: 'Test Campaign',
-            startAt: '2023-01-01T00:00:00Z',
-            endAt: '2024-12-31T23:59:59Z',
+            startAt: dayjs().subtract(1, 'year').toISOString(),
+            endAt: dayjs().endOf('year').toISOString(),
             currencyCode: 'USD',
             goalAmount: 1000,
             pledges: {
@@ -1354,7 +1361,7 @@ describe('Testing Campaign Pledge Screen', () => {
                     __typename: 'Pledge',
                     id: 'noUsersArrayPledge',
                     amount: 150,
-                    createdAt: '2024-01-01T00:00:00Z',
+                    createdAt: dayjs().toISOString(),
                     pledger: {
                       __typename: 'User',
                       id: 'fallbackPledger',

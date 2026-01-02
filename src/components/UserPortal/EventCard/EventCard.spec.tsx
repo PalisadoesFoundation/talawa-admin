@@ -13,6 +13,7 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import userEvent from '@testing-library/user-event';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, it } from 'vitest';
+import dayjs from 'dayjs';
 
 const { setItem, clearAllItems } = useLocalStorage();
 
@@ -47,8 +48,9 @@ describe('Testing Event Card In User portal', () => {
     name: 'Test Event',
     description: 'This is a test event',
     location: 'Virtual',
-    startAt: '2023-04-13T17:49:12Z',
-    endAt: '2023-04-15T19:49:12Z',
+    // Use dynamic dates to avoid test staleness
+    startAt: dayjs().add(10, 'days').toISOString(),
+    endAt: dayjs().add(12, 'days').toISOString(),
     isRegisterable: true,
     isPublic: true,
     endTime: '19:49:12',
@@ -153,8 +155,9 @@ describe('Event card when start and end time are not given', () => {
     name: 'Test Event',
     description: 'This is a test event',
     location: 'Virtual',
-    startAt: '2023-04-13T00:00:00Z',
-    endAt: '2023-04-15T23:59:59Z',
+    // Use dynamic dates to avoid test staleness
+    startAt: dayjs().add(10, 'days').startOf('day').toISOString(),
+    endAt: dayjs().add(12, 'days').endOf('day').toISOString(),
     isRegisterable: true,
     isPublic: true,
     endTime: '',

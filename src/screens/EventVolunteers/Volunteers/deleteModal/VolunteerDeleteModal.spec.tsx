@@ -18,6 +18,7 @@ import VolunteerDeleteModal from './VolunteerDeleteModal';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { DELETE_VOLUNTEER_FOR_INSTANCE } from 'GraphQl/Mutations/EventVolunteerMutation';
+import dayjs from 'dayjs';
 
 /**
  * Mock implementation of the `react-toastify` module.
@@ -57,8 +58,8 @@ const itemProps: InterfaceDeleteVolunteerModal[] = [
       volunteerStatus: 'accepted',
       hoursVolunteered: 10,
       isPublic: true,
-      createdAt: '2024-10-25T16:16:32.978Z',
-      updatedAt: '2024-10-25T16:16:32.978Z',
+      createdAt: dayjs().toISOString(),
+      updatedAt: dayjs().toISOString(),
       user: {
         id: 'userId1',
         firstName: 'Teresa',

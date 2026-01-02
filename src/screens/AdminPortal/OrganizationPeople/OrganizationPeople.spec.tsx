@@ -1,4 +1,8 @@
 import React from 'react';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
@@ -190,7 +194,7 @@ const createMemberConnectionMock = (
               name: 'John Doe',
               emailAddress: 'john@example.com',
               avatarURL: 'https://example.com/avatar1.jpg',
-              createdAt: '2023-01-01T00:00:00Z',
+              createdAt: dayjs.utc().subtract(3, 'day').toISOString(),
               role: 'member',
             },
             cursor: 'cursor1',
@@ -201,7 +205,7 @@ const createMemberConnectionMock = (
               name: 'Jane Smith',
               emailAddress: 'jane@example.com',
               avatarURL: null,
-              createdAt: '2023-01-02T00:00:00Z',
+              createdAt: dayjs.utc().subtract(2, 'day').toISOString(),
               role: 'member',
             },
             cursor: 'cursor2',
@@ -293,7 +297,7 @@ const createUserListMock = (
             name: 'User One',
             emailAddress: 'user1@example.com',
             avatarURL: 'https://example.com/avatar1.jpg' as string | null,
-            createdAt: '2023-01-01T00:00:00Z',
+            createdAt: dayjs.utc().subtract(3, 'day').toISOString(),
             role: 'member',
           },
           cursor: 'userCursor1',
@@ -304,7 +308,7 @@ const createUserListMock = (
             name: 'User Two',
             emailAddress: 'user2@example.com',
             avatarURL: null as string | null,
-            createdAt: '2023-01-02T00:00:00Z',
+            createdAt: dayjs.utc().subtract(2, 'day').toISOString(),
             role: 'member',
           },
           cursor: 'userCursor2',
@@ -429,7 +433,9 @@ describe('OrganizationPeople', () => {
     });
 
     expect(screen.getByText('jane@example.com')).toBeInTheDocument();
-    expect(screen.getByText('01/01/2023')).toBeInTheDocument(); // Formatted date
+    expect(
+      screen.getByText(dayjs.utc().subtract(3, 'day').format('DD/MM/YYYY')),
+    ).toBeInTheDocument(); // Formatted date
   });
 
   test('handles search functionality correctly', async () => {
@@ -515,7 +521,7 @@ describe('OrganizationPeople', () => {
               name: 'Admin User',
               emailAddress: 'admin@example.com',
               avatarURL: null,
-              createdAt: '2023-01-03T00:00:00Z',
+              createdAt: dayjs.utc().toISOString(),
               role: 'administrator',
             },
             cursor: 'adminCursor1',
@@ -615,7 +621,7 @@ describe('OrganizationPeople', () => {
               name: 'Bob Johnson',
               emailAddress: 'bob@example.com',
               avatarURL: null,
-              createdAt: '2023-01-03T00:00:00Z',
+              createdAt: dayjs.utc().toISOString(),
             },
             cursor: 'cursor3',
           },
@@ -709,7 +715,7 @@ describe('OrganizationPeople', () => {
               name: 'Admin User',
               emailAddress: 'admin@example.com',
               avatarURL: null,
-              createdAt: '2023-01-03T00:00:00Z',
+              createdAt: dayjs.utc().toISOString(),
               role: 'administrator',
             },
             cursor: 'adminCursor1',
@@ -741,7 +747,7 @@ describe('OrganizationPeople', () => {
               name: 'Admin User 2',
               emailAddress: 'admin2@example.com',
               avatarURL: null,
-              createdAt: '2023-01-03T00:00:00Z',
+              createdAt: dayjs.utc().toISOString(),
               role: 'administrator',
             },
             cursor: 'adminCursor2',
@@ -773,7 +779,7 @@ describe('OrganizationPeople', () => {
               name: 'Admin User',
               emailAddress: 'admin1@example.com',
               avatarURL: null,
-              createdAt: '2023-01-03T00:00:00Z',
+              createdAt: dayjs.utc().toISOString(),
               role: 'administrator',
             },
             cursor: 'adminCursor1',
@@ -889,7 +895,10 @@ describe('OrganizationPeople', () => {
               name: 'Bob Johnson',
               emailAddress: 'bob@example.com',
               avatarURL: null,
-              createdAt: '2023-01-03T00:00:00Z',
+              createdAt: dayjs()
+                .subtract(1, 'year')
+                .add(2, 'days')
+                .toISOString(),
               role: 'member',
             },
             cursor: 'cursor3',
@@ -1000,7 +1009,10 @@ describe('OrganizationPeople', () => {
               name: 'Admin User',
               emailAddress: 'admin@example.com',
               avatarURL: null,
-              createdAt: '2023-01-03T00:00:00Z',
+              createdAt: dayjs()
+                .subtract(1, 'year')
+                .add(2, 'days')
+                .toISOString(),
               role: 'administrator',
             },
             cursor: 'adminCursor1',
@@ -1304,7 +1316,7 @@ describe('OrganizationPeople', () => {
               name: 'John Doe',
               emailAddress: 'john@example.com',
               avatarURL: 'https://example.com/avatar1.jpg',
-              createdAt: '2023-01-01T00:00:00Z',
+              createdAt: dayjs().subtract(1, 'year').toISOString(),
             },
             cursor: 'cursor1',
           },
@@ -1456,7 +1468,7 @@ describe('OrganizationPeople', () => {
               name: 'John Doe',
               emailAddress: 'john@example.com',
               avatarURL: 'https://example.com/avatar1.jpg',
-              createdAt: '2023-01-01T00:00:00Z',
+              createdAt: dayjs().subtract(1, 'year').toISOString(),
             },
             cursor: 'cursor1',
           },

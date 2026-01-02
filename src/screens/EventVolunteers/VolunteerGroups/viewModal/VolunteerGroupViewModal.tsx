@@ -30,7 +30,7 @@
  *     leader: { id: "1", name: "John Doe", avatarURL: null },
  *     creator: { id: "2", name: "Jane Smith", avatarURL: null },
  *     volunteersRequired: 5,
- *     createdAt: "2024-01-01T00:00:00Z",
+ *     createdAt: dayjs().toISOString(),
  *     event: { id: "event-123" }
  *   }}
  * />

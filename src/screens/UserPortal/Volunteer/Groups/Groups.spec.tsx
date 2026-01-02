@@ -15,6 +15,7 @@ import './Groups.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest';
 import { EVENT_VOLUNTEER_GROUP_LIST } from 'GraphQl/Queries/EventVolunteerQueries';
+import dayjs from 'dayjs';
 
 const routerMocks = vi.hoisted(() => ({
   useParams: vi.fn(() => ({ orgId: 'orgId' })),
@@ -83,7 +84,7 @@ const group1 = {
   name: 'Group 1',
   description: 'Volunteer Group Description',
   volunteersRequired: null,
-  createdAt: '2024-10-25T16:16:32.978Z',
+  createdAt: dayjs().toISOString(),
   leader: {
     __typename: 'User',
     id: 'userId',
@@ -124,7 +125,7 @@ const group2 = {
   name: 'Group 2',
   description: 'Volunteer Group Description',
   volunteersRequired: null,
-  createdAt: '2024-10-27T15:25:13.044Z',
+  createdAt: dayjs().toISOString(),
   leader: {
     __typename: 'User',
     id: 'differentUserId',

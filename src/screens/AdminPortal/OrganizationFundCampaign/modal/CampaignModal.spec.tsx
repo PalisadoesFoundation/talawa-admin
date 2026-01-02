@@ -1,4 +1,8 @@
 import React from 'react';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -51,10 +55,10 @@ const campaignProps: InterfaceCampaignModal[] = [
       id: 'campaignId1',
       name: 'Campaign 1',
       goalAmount: 100,
-      startAt: new Date('2025-01-01T00:00:00.000Z'),
-      endAt: new Date('2026-12-31T00:00:00.000Z'),
+      startAt: dayjs.utc().add(12, 'month').toDate(),
+      endAt: dayjs.utc().add(24, 'month').toDate(),
       currencyCode: 'USD',
-      createdAt: '2021-01-01T00:00:00.000Z',
+      createdAt: dayjs.utc().subtract(12, 'month').toISOString(),
     },
     refetchCampaign: vi.fn(),
     mode: 'create',
@@ -68,10 +72,10 @@ const campaignProps: InterfaceCampaignModal[] = [
       id: 'campaignId1',
       name: 'Campaign 1',
       goalAmount: 100,
-      startAt: new Date('2026-01-01T00:00:00.000Z'),
-      endAt: new Date('2027-01-01T00:00:00.000Z'),
+      startAt: dayjs.utc().add(12, 'month').toDate(),
+      endAt: dayjs.utc().add(24, 'month').toDate(),
       currencyCode: 'USD',
-      createdAt: '2021-01-01T00:00:00.000Z',
+      createdAt: dayjs.utc().subtract(12, 'month').toISOString(),
     },
     refetchCampaign: vi.fn(),
     mode: 'edit',
@@ -212,8 +216,12 @@ describe('CampaignModal', () => {
     const startDateInput = getPickerInputByLabel('Start Date');
     const endDateInput = getPickerInputByLabel('End Date');
 
-    expect(startDateInput).toHaveValue('01/01/2026');
-    expect(endDateInput).toHaveValue('01/01/2027');
+    expect(startDateInput).toHaveValue(
+      dayjs.utc(campaignProps[1].campaign?.startAt).format('DD/MM/YYYY'),
+    );
+    expect(endDateInput).toHaveValue(
+      dayjs.utc(campaignProps[1].campaign?.endAt).format('DD/MM/YYYY'),
+    );
     expect(screen.getByLabelText(translations.currency)).toHaveTextContent(
       'USD ($)',
     );
@@ -239,15 +247,17 @@ describe('CampaignModal', () => {
   it('should update Start Date when a new date is selected', async () => {
     renderCampaignModal(link1, campaignProps[1]);
     const startDateInput = getPickerInputByLabel('Start Date');
-    fireEvent.change(startDateInput, { target: { value: '02/01/2024' } });
-    expect(startDateInput).toHaveValue('02/01/2024');
+    const testDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY');
+    fireEvent.change(startDateInput, { target: { value: testDate } });
+    expect(startDateInput).toHaveValue(testDate);
   });
 
   it('should update End Date when a new date is selected', async () => {
     renderCampaignModal(link1, campaignProps[1]);
     const endDateInput = getPickerInputByLabel('End Date');
-    fireEvent.change(endDateInput, { target: { value: '02/01/2024' } });
-    expect(endDateInput).toHaveValue('02/01/2024');
+    const testDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY');
+    fireEvent.change(endDateInput, { target: { value: testDate } });
+    expect(endDateInput).toHaveValue(testDate);
   });
 
   it('should create campaign', async () => {
@@ -256,11 +266,13 @@ describe('CampaignModal', () => {
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Campaign 2' } });
 
+    const testStartDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY');
     const startDateInput = getPickerInputByLabel('Start Date');
-    fireEvent.change(startDateInput, { target: { value: '01/02/2024' } });
+    fireEvent.change(startDateInput, { target: { value: testStartDate } });
 
     const endDateInput = getPickerInputByLabel('End Date');
-    fireEvent.change(endDateInput, { target: { value: '31/12/2024' } });
+    const testEndDate = dayjs.utc().add(2, 'month').format('DD/MM/YYYY');
+    fireEvent.change(endDateInput, { target: { value: testEndDate } });
     const fundingGoal = screen.getByLabelText(translations.fundingGoal);
     fireEvent.change(fundingGoal, { target: { value: '200' } });
 
@@ -283,11 +295,13 @@ describe('CampaignModal', () => {
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Campaign 4' } });
 
+    const testStartDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY');
     const startDateInput = getPickerInputByLabel('Start Date');
-    fireEvent.change(startDateInput, { target: { value: '01/02/2024' } });
+    fireEvent.change(startDateInput, { target: { value: testStartDate } });
 
     const endDateInput = getPickerInputByLabel('End Date');
-    fireEvent.change(endDateInput, { target: { value: '31/12/2024' } });
+    const testEndDate = dayjs.utc().add(2, 'month').format('DD/MM/YYYY');
+    fireEvent.change(endDateInput, { target: { value: testEndDate } });
     const fundingGoal = screen.getByLabelText(translations.fundingGoal);
     fireEvent.change(fundingGoal, { target: { value: '400' } });
 
@@ -310,11 +324,13 @@ describe('CampaignModal', () => {
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Campaign 2' } });
 
+    const testStartDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY');
     const startDateInput = getPickerInputByLabel('Start Date');
-    fireEvent.change(startDateInput, { target: { value: '01/02/2024' } });
+    fireEvent.change(startDateInput, { target: { value: testStartDate } });
 
     const endDateInput = getPickerInputByLabel('End Date');
-    fireEvent.change(endDateInput, { target: { value: '02/02/2024' } });
+    const testEndDate = dayjs.utc().add(2, 'month').format('DD/MM/YYYY');
+    fireEvent.change(endDateInput, { target: { value: testEndDate } });
     const fundingGoal = screen.getByLabelText(translations.fundingGoal);
     fireEvent.change(fundingGoal, { target: { value: '200' } });
 
@@ -334,11 +350,13 @@ describe('CampaignModal', () => {
     const campaignName = screen.getByLabelText(translations.campaignName);
     fireEvent.change(campaignName, { target: { value: 'Campaign 4' } });
 
+    const testStartDate = dayjs.utc().add(1, 'month').format('DD/MM/YYYY');
     const startDateInput = getPickerInputByLabel('Start Date');
-    fireEvent.change(startDateInput, { target: { value: '01/02/2024' } });
+    fireEvent.change(startDateInput, { target: { value: testStartDate } });
 
     const endDateInput = getPickerInputByLabel('End Date');
-    fireEvent.change(endDateInput, { target: { value: '02/02/2024' } });
+    const testEndDate = dayjs.utc().add(2, 'month').format('DD/MM/YYYY');
+    fireEvent.change(endDateInput, { target: { value: testEndDate } });
     const fundingGoal = screen.getByLabelText(translations.fundingGoal);
     fireEvent.change(fundingGoal, { target: { value: '400' } });
 
@@ -361,8 +379,8 @@ describe('CampaignModal', () => {
         id: 'campaignId1',
         name: 'Original Name',
         goalAmount: 100,
-        startAt: new Date('2025-01-01T00:00:00.000Z'),
-        endAt: new Date('2026-01-01T00:00:00.000Z'),
+        startAt: dayjs.utc().add(1, 'year').toDate(),
+        endAt: dayjs.utc().add(2, 'year').toDate(),
         currencyCode: 'USD',
         createdAt: '2021-01-01T00:00:00.000Z',
       },
@@ -394,8 +412,8 @@ describe('CampaignModal', () => {
         id: 'campaignId1',
         name: 'Original Name',
         goalAmount: 100,
-        startAt: new Date('2025-01-01T00:00:00.000Z'),
-        endAt: new Date('2026-01-01T00:00:00.000Z'),
+        startAt: dayjs.utc().add(10, 'year').toDate(),
+        endAt: dayjs.utc().add(11, 'year').toDate(),
         currencyCode: 'USD',
         createdAt: '2021-01-01T00:00:00.000Z',
       },
@@ -411,10 +429,14 @@ describe('CampaignModal', () => {
     fireEvent.change(fundingGoal, { target: { value: '500' } });
 
     const startDateInput = getPickerInputByLabel('Start Date');
-    fireEvent.change(startDateInput, { target: { value: '01/02/2024' } });
+    fireEvent.change(startDateInput, {
+      target: { value: dayjs.utc().add(1, 'month').format('DD/MM/YYYY') },
+    });
 
     const endDateInput = getPickerInputByLabel('End Date');
-    fireEvent.change(endDateInput, { target: { value: '01/03/2024' } });
+    fireEvent.change(endDateInput, {
+      target: { value: dayjs.utc().add(2, 'month').format('DD/MM/YYYY') },
+    });
     // Submit the form
     const submitBtn = screen.getByTestId('submitCampaignBtn');
     fireEvent.click(submitBtn);
@@ -430,8 +452,8 @@ describe('CampaignModal', () => {
         id: 'campaignId1',
         name: 'Campaign 1',
         goalAmount: 100,
-        startAt: new Date('2026-01-01T00:00:00.000Z'),
-        endAt: new Date('2027-01-01T00:00:00.000Z'),
+        startAt: dayjs.utc().add(1, 'year').toDate(),
+        endAt: dayjs.utc().add(2, 'year').toDate(),
         currencyCode: 'USD',
         createdAt: '2021-01-01T00:00:00.000Z',
       },
@@ -459,8 +481,8 @@ describe('CampaignModal', () => {
         id: 'campaignId1',
         name: 'Campaign 1',
         goalAmount: 100,
-        startAt: new Date('2025-01-01T00:00:00.000Z'),
-        endAt: new Date('2025-02-01T00:00:00.000Z'),
+        startAt: dayjs.utc().add(1, 'year').toDate(),
+        endAt: dayjs.utc().add(1, 'year').add(1, 'month').toDate(),
         currencyCode: 'USD',
         createdAt: '2021-01-01T00:00:00.000Z',
       },
@@ -471,15 +493,23 @@ describe('CampaignModal', () => {
     // Verify initial dates
     const startDateInput = getPickerInputByLabel('Start Date');
     const endDateInput = getPickerInputByLabel('End Date');
-    expect(startDateInput).toHaveValue('01/01/2025');
-    expect(endDateInput).toHaveValue('01/02/2025');
+    expect(startDateInput).toHaveValue(
+      dayjs.utc(autoUpdateDateProps.campaign?.startAt).format('DD/MM/YYYY'),
+    );
+    expect(endDateInput).toHaveValue(
+      dayjs.utc(autoUpdateDateProps.campaign?.endAt).format('DD/MM/YYYY'),
+    );
 
     // Change start date to a date AFTER the current end date
-    fireEvent.change(startDateInput, { target: { value: '01/03/2025' } });
+    const testDate = dayjs
+      .utc(autoUpdateDateProps.campaign.endAt)
+      .add(1, 'month')
+      .format('DD/MM/YYYY');
+    fireEvent.change(startDateInput, { target: { value: testDate } });
 
     // Verify that end date was automatically updated to match the new start date
     await waitFor(() => {
-      expect(endDateInput).toHaveValue('01/03/2025');
+      expect(endDateInput).toHaveValue(testDate);
     });
   });
 
@@ -491,8 +521,8 @@ describe('CampaignModal', () => {
         id: 'campaignId1',
         name: 'Campaign 1',
         goalAmount: 100,
-        startAt: new Date('2025-01-01T00:00:00.000Z'),
-        endAt: new Date('2025-04-01T00:00:00.000Z'),
+        startAt: dayjs.utc().add(1, 'year').toDate(),
+        endAt: dayjs.utc().add(1, 'year').add(3, 'month').toDate(),
         currencyCode: 'USD',
         createdAt: '2021-01-01T00:00:00.000Z',
       },
@@ -503,16 +533,25 @@ describe('CampaignModal', () => {
     // Verify initial dates
     const startDateInput = getPickerInputByLabel('Start Date');
     const endDateInput = getPickerInputByLabel('End Date');
-    expect(startDateInput).toHaveValue('01/01/2025');
-    expect(endDateInput).toHaveValue('01/04/2025');
+    expect(startDateInput).toHaveValue(
+      dayjs.utc(keepEndDateProps.campaign?.startAt).format('DD/MM/YYYY'),
+    );
+    expect(endDateInput).toHaveValue(
+      dayjs.utc(keepEndDateProps.campaign?.endAt).format('DD/MM/YYYY'),
+    );
 
     // Change start date to a date that is still BEFORE the end date
-    fireEvent.change(startDateInput, { target: { value: '15/02/2025' } });
+    const testDate = dayjs.utc().add(1, 'month');
+    fireEvent.change(startDateInput, {
+      target: { value: testDate.format('DD/MM/YYYY') },
+    });
 
     // Verify that end date was NOT updated and remains the same
     await waitFor(() => {
-      expect(startDateInput).toHaveValue('15/02/2025');
-      expect(endDateInput).toHaveValue('01/04/2025'); // End date should remain unchanged
+      expect(startDateInput).toHaveValue(testDate.format('DD/MM/YYYY'));
+      expect(endDateInput).toHaveValue(
+        dayjs.utc(keepEndDateProps.campaign?.endAt).format('DD/MM/YYYY'),
+      ); // End date should remain unchanged
     });
   });
 
@@ -524,8 +563,8 @@ describe('CampaignModal', () => {
         id: 'campaignId1',
         name: 'Campaign Name',
         goalAmount: 100,
-        startAt: new Date('2025-01-01T00:00:00.000Z'),
-        endAt: new Date('2026-01-01T00:00:00.000Z'),
+        startAt: dayjs.utc().add(1, 'year').toDate(),
+        endAt: dayjs.utc().add(2, 'year').toDate(),
         currencyCode: 'USD',
         createdAt: '2021-01-01T00:00:00.000Z',
       },

@@ -19,6 +19,9 @@ import i18nForTest from '../../../utils/i18nForTest';
 import { MOCKS, MOCKS_ERROR } from '../OrganizationActionItem.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { toast } from 'react-toastify';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 import ItemDeleteModal, {
   type IItemDeleteModalProps,
 } from './ActionItemDeleteModal';
@@ -80,9 +83,9 @@ describe('Testing ItemDeleteModal', () => {
         organizationId: 'orgId1',
         creatorId: 'userId2',
         updaterId: null,
-        assignedAt: new Date('2024-08-27'),
-        completionAt: new Date('2044-09-03'),
-        createdAt: new Date('2024-01-01T00:00:00.000Z'),
+        assignedAt: dayjs.utc().toDate(),
+        completionAt: dayjs.utc().add(20, 'year').toDate(),
+        createdAt: dayjs.utc().subtract(1, 'year').toDate(),
         updatedAt: null,
         isCompleted: true,
         preCompletionNotes: 'Notes 1',
@@ -103,7 +106,7 @@ describe('Testing ItemDeleteModal', () => {
           name: 'Category 1',
           description: null,
           isDisabled: false,
-          createdAt: '2024-01-01T00:00:00.000Z',
+          createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
           organizationId: 'orgId1',
         },
       },

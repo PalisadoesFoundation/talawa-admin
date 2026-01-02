@@ -15,6 +15,10 @@ import type { IActionItemCategoryModal } from './ActionItemCategoryModal';
 import CategoryModal from './ActionItemCategoryModal';
 import { toast } from 'react-toastify';
 import { it, vi, describe, beforeEach } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 /**
  * This file contains unit tests for the `CategoryModal` component.
@@ -61,8 +65,8 @@ const categoryProps: IActionItemCategoryModal[] = [
       name: 'Category 1',
       description: 'This is a test category',
       isDisabled: false,
-      createdAt: '2044-01-01',
-      updatedAt: '2044-01-01',
+      createdAt: dayjs.utc().toISOString(),
+      updatedAt: dayjs.utc().toISOString(),
       creatorId: 'userId',
       organizationId: 'orgId',
     },
@@ -78,8 +82,8 @@ const categoryProps: IActionItemCategoryModal[] = [
       name: 'Category 1',
       description: 'This is a test category',
       isDisabled: false,
-      createdAt: '2044-01-01',
-      updatedAt: '2044-01-01',
+      createdAt: dayjs.utc().toISOString(),
+      updatedAt: dayjs.utc().toISOString(),
       creatorId: 'userId',
       organizationId: 'orgId',
     },
@@ -496,8 +500,8 @@ describe('Testing Action Item Category Modal', () => {
           name: 'Category 1',
           description: 'This is a test category',
           isDisabled: false,
-          createdAt: '2044-01-01',
-          updatedAt: '2044-01-01',
+          createdAt: dayjs.utc().toISOString(),
+          updatedAt: dayjs.utc().toISOString(),
           creatorId: 'userId',
           organizationId: 'orgId',
         },
@@ -575,8 +579,8 @@ describe('Testing Action Item Category Modal', () => {
           name: 'Category 1',
           description: 'This is a test category',
           isDisabled: false,
-          createdAt: '2044-01-01',
-          updatedAt: '2044-01-01',
+          createdAt: dayjs.utc().toISOString(),
+          updatedAt: dayjs.utc().toISOString(),
           creatorId: 'userId',
           organizationId: 'orgId',
         },
@@ -660,8 +664,8 @@ describe('Testing Action Item Category Modal', () => {
           name: 'Updated Category',
           description: 'Updated description',
           isDisabled: true,
-          createdAt: '2044-01-01',
-          updatedAt: '2044-01-01',
+          createdAt: dayjs.utc().toISOString(),
+          updatedAt: dayjs.utc().toISOString(),
           creatorId: 'userId',
           organizationId: 'orgId',
         },

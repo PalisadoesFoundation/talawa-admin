@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getPledgeColumns } from './PledgeColumns';
 import type { GridRenderCellParams } from '@mui/x-data-grid';
+import dayjs from 'dayjs';
 
 // Mock i18next
 vi.mock('react-i18next', () => ({
@@ -202,7 +203,7 @@ describe('getPledgeColumns', () => {
 
       const params = {
         row: {
-          pledgeDate: '2024-03-15T10:00:00Z',
+          pledgeDate: dayjs().month(2).date(15).hour(10).toISOString(),
         },
       } as GridRenderCellParams;
 

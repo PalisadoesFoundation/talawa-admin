@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { renderHook } from '@testing-library/react';
+import dayjs from 'dayjs';
 import {
   PluginGraphQLService,
   useGetAllPlugins,
@@ -75,8 +76,8 @@ describe('PluginGraphQLService', () => {
           isActivated: true,
           isInstalled: true,
           backup: false,
-          createdAt: '2023-01-01',
-          updatedAt: '2023-01-01',
+          createdAt: dayjs().subtract(1, 'year').format('YYYY-MM-DD'),
+          updatedAt: dayjs().subtract(1, 'year').format('YYYY-MM-DD'),
         },
       ];
 
@@ -137,8 +138,8 @@ describe('PluginGraphQLService', () => {
         isActivated: true,
         isInstalled: true,
         backup: false,
-        createdAt: '2023-01-01',
-        updatedAt: '2023-01-01',
+        createdAt: dayjs().subtract(1, 'year').format('YYYY-MM-DD'),
+        updatedAt: dayjs().subtract(1, 'year').format('YYYY-MM-DD'),
       };
       const input = { pluginId: 'new-plugin', isActivated: true };
 
@@ -193,8 +194,8 @@ describe('PluginGraphQLService', () => {
         isActivated: true,
         isInstalled: true,
         backup: false,
-        createdAt: '2023-01-01',
-        updatedAt: '2023-01-01',
+        createdAt: dayjs().subtract(1, 'year').format('YYYY-MM-DD'),
+        updatedAt: dayjs().subtract(1, 'year').format('YYYY-MM-DD'),
       };
       const input = { orgId: 'org1', pluginId: 'test-plugin' };
 
@@ -249,8 +250,11 @@ describe('PluginGraphQLService', () => {
         isActivated: false,
         isInstalled: true,
         backup: true,
-        createdAt: '2023-01-01',
-        updatedAt: '2023-01-02',
+        createdAt: dayjs().subtract(1, 'year').format('YYYY-MM-DD'),
+        updatedAt: dayjs()
+          .subtract(1, 'year')
+          .add(1, 'day')
+          .format('YYYY-MM-DD'),
       };
       const input = { id: '1', isActivated: false, backup: true };
 

@@ -15,6 +15,7 @@ import type { InterfacePostEdge } from 'types/Post/interface';
 import { toast } from 'react-toastify';
 import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutations';
 import { DELETE_POST_MUTATION } from '../../GraphQl/Mutations/mutations';
+import dayjs from 'dayjs';
 
 // Mock react-toastify
 vi.mock('react-toastify', () => ({
@@ -57,9 +58,10 @@ const createMockPinnedPost = (
   node: {
     id,
     caption,
-    createdAt: '2024-01-15T12:00:00Z',
+    // Use dynamic dates to avoid test staleness
+    createdAt: dayjs().subtract(14, 'days').toISOString(),
     attachmentURL: 'https://example.com/image.jpg',
-    pinnedAt: '2024-01-15T12:00:00Z',
+    pinnedAt: dayjs().subtract(14, 'days').toISOString(),
     pinned: true,
     attachments: [
       {

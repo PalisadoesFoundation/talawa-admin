@@ -119,11 +119,13 @@ export const useUpdateEventHandler = () => {
         ? dayjs.utc(eventStartDate).isValid()
           ? dayjs.utc(eventStartDate).startOf('day').toISOString()
           : ''
-        : dayjs(eventStartDate).isValid()
-          ? dayjs(eventStartDate)
+        : dayjs.utc(eventStartDate).isValid()
+          ? dayjs
+              .utc(eventStartDate)
               .hour(parseInt(formState.startTime.split(':')[0]))
               .minute(parseInt(formState.startTime.split(':')[1]))
               .second(parseInt(formState.startTime.split(':')[2]))
+              .millisecond(0)
               .toISOString()
           : '';
 
@@ -131,11 +133,13 @@ export const useUpdateEventHandler = () => {
         ? dayjs.utc(eventEndDate).isValid()
           ? dayjs.utc(eventEndDate).endOf('day').toISOString()
           : ''
-        : dayjs(eventEndDate).isValid()
-          ? dayjs(eventEndDate)
+        : dayjs.utc(eventEndDate).isValid()
+          ? dayjs
+              .utc(eventEndDate)
               .hour(parseInt(formState.endTime.split(':')[0]))
               .minute(parseInt(formState.endTime.split(':')[1]))
               .second(parseInt(formState.endTime.split(':')[2]))
+              .millisecond(0)
               .toISOString()
           : '';
 
@@ -143,24 +147,32 @@ export const useUpdateEventHandler = () => {
         ? dayjs.utc(eventListCardProps.startAt).isValid()
           ? dayjs.utc(eventListCardProps.startAt).startOf('day').toISOString()
           : ''
-        : dayjs(
-              `${dayjs(eventListCardProps.startAt).format('YYYY-MM-DD')}T${eventListCardProps.startTime}`,
-            ).isValid()
-          ? dayjs(
-              `${dayjs(eventListCardProps.startAt).format('YYYY-MM-DD')}T${eventListCardProps.startTime}`,
-            ).toISOString()
+        : dayjs
+              .utc(
+                `${dayjs.utc(eventListCardProps.startAt).format('YYYY-MM-DD')}T${eventListCardProps.startTime}`,
+              )
+              .isValid()
+          ? dayjs
+              .utc(
+                `${dayjs.utc(eventListCardProps.startAt).format('YYYY-MM-DD')}T${eventListCardProps.startTime}`,
+              )
+              .toISOString()
           : '';
 
       const originalEndAt = eventListCardProps.allDay
         ? dayjs.utc(eventListCardProps.endAt).isValid()
           ? dayjs.utc(eventListCardProps.endAt).endOf('day').toISOString()
           : ''
-        : dayjs(
-              `${dayjs(eventListCardProps.endAt).format('YYYY-MM-DD')}T${eventListCardProps.endTime}`,
-            ).isValid()
-          ? dayjs(
-              `${dayjs(eventListCardProps.endAt).format('YYYY-MM-DD')}T${eventListCardProps.endTime}`,
-            ).toISOString()
+        : dayjs
+              .utc(
+                `${dayjs.utc(eventListCardProps.endAt).format('YYYY-MM-DD')}T${eventListCardProps.endTime}`,
+              )
+              .isValid()
+          ? dayjs
+              .utc(
+                `${dayjs.utc(eventListCardProps.endAt).format('YYYY-MM-DD')}T${eventListCardProps.endTime}`,
+              )
+              .toISOString()
           : '';
 
       // Only include timing changes if they actually changed

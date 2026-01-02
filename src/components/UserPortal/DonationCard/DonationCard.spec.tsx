@@ -1,6 +1,10 @@
 import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router-dom';
@@ -28,7 +32,7 @@ const defaultProps: InterfaceDonationCardProps = {
   amount: '20',
   userId: '1234',
   payPalId: 'paypal-id',
-  updatedAt: new Date('2024-01-01T10:00:00Z').toISOString(),
+  updatedAt: dayjs.utc().toISOString(),
 };
 
 const renderComponent = (props = defaultProps) =>

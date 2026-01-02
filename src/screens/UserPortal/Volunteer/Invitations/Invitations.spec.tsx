@@ -1,4 +1,5 @@
 import React, { act } from 'react';
+import dayjs from 'dayjs';
 import { MockedProvider } from '@apollo/client/testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -87,8 +88,8 @@ const membership1 = {
   _id: 'membershipId1',
   id: 'membershipId1',
   status: 'invited',
-  createdAt: '2024-10-29T10:18:05.851Z',
-  updatedAt: '2024-10-29T10:18:05.851Z',
+  createdAt: dayjs().toISOString(),
+  updatedAt: dayjs().toISOString(),
   event: baseEvent('eventId', 'Event 1', '2044-10-31T10:00:00Z'),
   volunteer: baseVolunteer('volunteerId1', 'John Doe', 'img-url'),
   createdBy: baseAudit,
@@ -100,8 +101,8 @@ const membership2 = {
   _id: 'membershipId2',
   id: 'membershipId2',
   status: 'invited',
-  createdAt: '2024-10-30T10:18:05.851Z',
-  updatedAt: '2024-10-30T10:18:05.851Z',
+  createdAt: dayjs().add(1, 'day').toISOString(),
+  updatedAt: dayjs().add(1, 'day').toISOString(),
   event: baseEvent('eventId2', 'Event 2', '2044-11-30T12:00:00Z'),
   volunteer: baseVolunteer('volunteerId2', 'John Doe', null),
   group: {
@@ -118,8 +119,8 @@ const membership3 = {
   _id: 'membershipId3',
   id: 'membershipId3',
   status: 'invited',
-  createdAt: '2024-10-30T10:18:05.851Z',
-  updatedAt: '2024-10-30T10:18:05.851Z',
+  createdAt: dayjs().add(1, 'day').toISOString(),
+  updatedAt: dayjs().add(1, 'day').toISOString(),
   event: baseEvent('eventId3', 'Event 3', '2044-11-30T12:00:00Z', {
     id: 'recurrenceRuleId3',
   }),
@@ -138,8 +139,8 @@ const membership4 = {
   _id: 'membershipId4',
   id: 'membershipId4',
   status: 'invited',
-  createdAt: '2024-10-30T10:18:05.851Z',
-  updatedAt: '2024-10-30T10:18:05.851Z',
+  createdAt: dayjs().add(1, 'day').toISOString(),
+  updatedAt: dayjs().add(1, 'day').toISOString(),
   event: baseEvent('eventId4', 'Event 4', '2044-12-01T08:00:00Z'),
   volunteer: baseVolunteer('volunteerId4', 'John Doe', null),
   group: null,
@@ -151,8 +152,8 @@ const membership5 = {
   _id: 'membershipId5',
   id: 'membershipId5',
   status: 'invited',
-  createdAt: '2024-10-30T10:18:05.851Z',
-  updatedAt: '2024-10-30T10:18:05.851Z',
+  createdAt: dayjs().add(1, 'day').toISOString(),
+  updatedAt: dayjs().add(1, 'day').toISOString(),
   event: baseEvent('eventId5', 'Event 5', '2044-11-30T13:00:00Z', {
     id: 'recurrenceRuleId5',
   }),

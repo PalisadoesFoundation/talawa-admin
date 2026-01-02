@@ -21,7 +21,7 @@
  * <UserProfile
  *   firstName="John"
  *   lastName="Doe"
- *   createdAt="2023-01-01"
+ *   createdAt=dayjs().subtract(1, 'year').format('YYYY-MM-DD')
  *   email="john.doe@example.com"
  *   image="https://example.com/profile.jpg"
  * />

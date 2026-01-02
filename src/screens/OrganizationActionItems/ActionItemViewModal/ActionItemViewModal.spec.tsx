@@ -17,6 +17,9 @@ import type { InterfaceEvent } from 'types/Event/interface';
 import { GET_ACTION_ITEM_CATEGORY } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import { vi, it, describe, beforeEach, afterEach } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),
@@ -62,11 +65,11 @@ const mockCategory = {
   isDisabled: false,
   organizationId: 'orgId1',
   creatorId: 'userId1',
-  createdAt: '2024-01-01T00:00:00.000Z',
-  updatedAt: '2024-01-01T00:00:00.000Z',
+  createdAt: dayjs.utc().toISOString(),
+  updatedAt: dayjs.utc().toISOString(),
 };
 
-const baseTimestamp = '2024-01-01T00:00:00.000Z';
+const baseTimestamp = dayjs.utc().toISOString();
 
 const mockMembers = [
   {
@@ -106,8 +109,8 @@ const mockEvent: InterfaceEvent = {
   id: 'eventId1',
   name: 'Test Event',
   description: 'Test event description',
-  startAt: '2024-01-01T10:00:00Z',
-  endAt: '2024-01-02T18:00:00Z',
+  startAt: dayjs.utc().toISOString(),
+  endAt: dayjs.utc().add(1, 'day').toISOString(),
   startTime: '10:00',
   endTime: '18:00',
   location: 'Test Location',
@@ -161,9 +164,9 @@ const createActionItem = (
   organizationId: 'orgId1',
   creatorId: 'userId2',
   updaterId: null,
-  assignedAt: new Date('2024-01-01T10:00:00.000Z'),
-  completionAt: new Date('2024-01-10T15:30:00.000Z'),
-  createdAt: new Date('2024-01-01T10:00:00.000Z'),
+  assignedAt: dayjs.utc().toDate(),
+  completionAt: dayjs.utc().add(9, 'day').toDate(),
+  createdAt: dayjs.utc().toDate(),
   updatedAt: null,
   isCompleted: true,
   preCompletionNotes: 'Pre-completion notes for testing',
@@ -196,8 +199,8 @@ const createActionItem = (
     isDisabled: false,
     organizationId: 'orgId1',
     creatorId: 'userId1',
-    createdAt: '2024-01-01T00:00:00.000Z',
-    updatedAt: '2024-01-01T00:00:00.000Z',
+    createdAt: dayjs.utc().toISOString(),
+    updatedAt: dayjs.utc().toISOString(),
   },
   ...overrides,
 });
@@ -297,8 +300,8 @@ describe('Testing ItemViewModal', () => {
           isDisabled: false,
           organizationId: 'orgId1',
           creatorId: 'userId1',
-          createdAt: '2024-01-01T00:00:00.000Z',
-          updatedAt: '2024-01-01T00:00:00.000Z',
+          createdAt: dayjs.utc().toISOString(),
+          updatedAt: dayjs.utc().toISOString(),
         },
       });
 
@@ -518,7 +521,9 @@ describe('Testing ItemViewModal', () => {
       });
 
       // Assignment date should be displayed in DD/MM/YYYY format
-      const assignmentDateInput = screen.getByDisplayValue('01/01/2024');
+      const assignmentDateInput = screen.getByDisplayValue(
+        dayjs.utc().format('DD/MM/YYYY'),
+      );
       expect(assignmentDateInput).toBeInTheDocument();
       expect(assignmentDateInput).toBeDisabled();
     });
@@ -526,7 +531,7 @@ describe('Testing ItemViewModal', () => {
     it('should display completion date when item is completed', () => {
       const item = createActionItem({
         isCompleted: true,
-        completionAt: new Date('2024-01-10T15:30:00.000Z'),
+        completionAt: dayjs.utc().add(9, 'day').toDate(),
       });
       renderItemViewModal(link1, {
         isOpen: true,
@@ -535,7 +540,9 @@ describe('Testing ItemViewModal', () => {
       });
 
       // Completion date should be displayed in DD/MM/YYYY format
-      const completionDateInput = screen.getByDisplayValue('10/01/2024');
+      const completionDateInput = screen.getByDisplayValue(
+        dayjs.utc().add(9, 'day').format('DD/MM/YYYY'),
+      );
       expect(completionDateInput).toBeInTheDocument();
       expect(completionDateInput).toBeDisabled();
     });
@@ -552,7 +559,11 @@ describe('Testing ItemViewModal', () => {
       });
 
       // Completion date should not be displayed
-      expect(screen.queryByDisplayValue('10/01/2024')).not.toBeInTheDocument();
+      expect(
+        screen.queryByDisplayValue(
+          dayjs.utc().add(9, 'day').format('DD/MM/YYYY'),
+        ),
+      ).not.toBeInTheDocument();
     });
   });
 

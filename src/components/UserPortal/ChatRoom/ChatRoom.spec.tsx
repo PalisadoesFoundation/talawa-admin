@@ -13,6 +13,10 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import { useLocalStorage } from '../../../utils/useLocalstorage';
 
 vi.mock('react-bootstrap', async () => {
@@ -61,8 +65,8 @@ export const mockChatData = {
   description: 'Test Description',
   avatarMimeType: 'image/jpeg',
   avatarURL: 'https://example.com/avatar.jpg',
-  createdAt: '2023-01-01T00:00:00Z',
-  updatedAt: '2023-01-01T00:00:00Z',
+  createdAt: dayjs.utc().toISOString(),
+  updatedAt: dayjs.utc().toISOString(),
   isGroup: false,
   organization: {
     __typename: 'Organization',
@@ -138,8 +142,8 @@ export const mockChatData = {
           __typename: 'ChatMessage',
           id: 'msg1',
           body: 'Hello World',
-          createdAt: '2023-01-01T00:00:00Z',
-          updatedAt: '2023-01-01T00:00:00Z',
+          createdAt: dayjs.utc().toISOString(),
+          updatedAt: dayjs.utc().toISOString(),
           creator: {
             __typename: 'User',
             id: 'user123',
@@ -248,8 +252,8 @@ export const SEND_MESSAGE_MOCK = {
         __typename: 'ChatMessage',
         id: 'newMsg123',
         body: 'Test message',
-        createdAt: '2023-01-01T00:00:00Z',
-        updatedAt: '2023-01-01T00:00:00Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         creator: {
           __typename: 'User',
           id: 'user123',
@@ -280,8 +284,8 @@ export const SEND_MESSAGE_UPLOADED_MOCK = {
         __typename: 'ChatMessage',
         id: 'newMsgUploaded',
         body: 'uploaded_obj',
-        createdAt: '2023-01-01T00:00:00Z',
-        updatedAt: '2023-01-01T00:00:00Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         creator: {
           __typename: 'User',
           id: 'user123',
@@ -311,8 +315,8 @@ export const EDIT_MESSAGE_MOCK = {
         __typename: 'ChatMessage',
         id: 'msg1',
         body: 'Edited message',
-        createdAt: '2023-01-01T00:00:00Z',
-        updatedAt: '2023-01-01T00:00:00Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         creator: {
           __typename: 'User',
           id: 'user123',
@@ -341,7 +345,7 @@ export const DELETE_MESSAGE_MOCK = {
         __typename: 'ChatMessage',
         id: 'msg1',
         body: 'Hello World',
-        createdAt: '2023-01-01T00:00:00Z',
+        createdAt: dayjs.utc().toISOString(),
       },
     },
   },
@@ -413,8 +417,8 @@ export const MESSAGE_SENT_SUBSCRIPTION_MOCK = {
         __typename: 'ChatMessage',
         id: 'subMsg123',
         body: 'New message from subscription',
-        createdAt: '2023-01-01T00:00:00Z',
-        updatedAt: '2023-01-01T00:00:00Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         chat: {
           __typename: 'Chat',
           id: 'chat123',
@@ -455,8 +459,8 @@ export const LOAD_MORE_MESSAGES_MOCK = {
               node: {
                 id: 'oldMsg',
                 body: 'Older message',
-                createdAt: '2023-01-01T00:00:00Z',
-                updatedAt: '2023-01-01T00:00:00Z',
+                createdAt: dayjs.utc().toISOString(),
+                updatedAt: dayjs.utc().toISOString(),
                 creator: {
                   id: 'otherUser123',
                   name: 'Other User',
@@ -504,8 +508,8 @@ export const CHAT_BY_ID_AFTER_SEND_MOCK = {
               node: {
                 id: 'newMsg123',
                 body: 'Test message',
-                createdAt: '2023-01-01T00:00:00Z',
-                updatedAt: '2023-01-01T00:00:00Z',
+                createdAt: dayjs.utc().toISOString(),
+                updatedAt: dayjs.utc().toISOString(),
                 creator: {
                   id: 'user123',
                   name: 'Current User',
@@ -545,8 +549,8 @@ export const CHAT_BY_ID_AFTER_EDIT_MOCK = {
               node: {
                 id: 'msg1',
                 body: 'Edited message',
-                createdAt: '2023-01-01T00:00:00Z',
-                updatedAt: '2023-01-01T00:00:00Z',
+                createdAt: dayjs.utc().toISOString(),
+                updatedAt: dayjs.utc().toISOString(),
                 creator: {
                   id: 'user123',
                   name: 'Current User',
@@ -588,8 +592,8 @@ export const CHAT_BY_ID_AFTER_DELETE_MOCK = {
               node: {
                 id: 'subMsg123',
                 body: 'New message from subscription',
-                createdAt: '2023-01-01T00:00:00Z',
-                updatedAt: '2023-01-01T00:00:00Z',
+                createdAt: dayjs.utc().toISOString(),
+                updatedAt: dayjs.utc().toISOString(),
                 creator: {
                   id: 'otherUser123',
                   name: 'Other User',
@@ -666,8 +670,8 @@ export const CHAT_WITH_PARENT_MESSAGE_MOCK = {
               node: {
                 id: 'msg1',
                 body: 'Hello World',
-                createdAt: '2023-01-01T00:00:00Z',
-                updatedAt: '2023-01-01T00:00:00Z',
+                createdAt: dayjs.utc().toISOString(),
+                updatedAt: dayjs.utc().toISOString(),
                 creator: {
                   id: 'user123',
                   name: 'Current User',
@@ -677,7 +681,7 @@ export const CHAT_WITH_PARENT_MESSAGE_MOCK = {
                 parentMessage: {
                   id: 'parent1',
                   body: 'Parent body',
-                  createdAt: '2022-12-31T00:00:00Z',
+                  createdAt: dayjs.utc().subtract(1, 'day').toISOString(),
                   creator: {
                     id: 'otherUser123',
                     name: 'Other User',
@@ -1235,8 +1239,8 @@ describe('ChatRoom Component', () => {
                   node: {
                     id: 'msg1',
                     body: 'Hello World',
-                    createdAt: '2023-01-01T00:00:00Z',
-                    updatedAt: '2023-01-01T00:00:00Z',
+                    createdAt: dayjs.utc().startOf('year').toISOString(),
+                    updatedAt: dayjs.utc().startOf('year').toISOString(),
                     creator: {
                       id: 'user123',
                       name: 'Current User',
@@ -1431,8 +1435,8 @@ describe('ChatRoom Component', () => {
           chatMessageCreate: {
             id: 'subMsgFromMe',
             body: 'My new message',
-            createdAt: '2023-01-01T00:00:00Z',
-            updatedAt: '2023-01-01T00:00:00Z',
+            createdAt: dayjs.utc().toISOString(),
+            updatedAt: dayjs.utc().toISOString(),
             chat: {
               id: 'chat123',
             },
@@ -1497,8 +1501,8 @@ describe('ChatRoom Component', () => {
           chatMessageCreate: {
             id: 'malformedMsg',
             body: 'Malformed message',
-            createdAt: '2023-01-01T00:00:00Z',
-            updatedAt: '2023-01-01T00:00:00Z',
+            createdAt: dayjs.utc().toISOString(),
+            updatedAt: dayjs.utc().toISOString(),
             chat: {
               id: 'chat123',
             },
@@ -1610,8 +1614,8 @@ describe('ChatRoom Component', () => {
                   node: {
                     id: 'msg1', // Same ID as existing message
                     body: 'Hello World',
-                    createdAt: '2023-01-01T00:00:00Z',
-                    updatedAt: '2023-01-01T00:00:00Z',
+                    createdAt: dayjs.utc().startOf('year').toISOString(),
+                    updatedAt: dayjs.utc().startOf('year').toISOString(),
                     creator: {
                       id: 'user123',
                       name: 'Current User',
@@ -1768,8 +1772,8 @@ describe('ChatRoom Component', () => {
           chatMessageCreate: {
             id: 'errorMsg',
             body: 'Error message',
-            createdAt: '2023-01-01T00:00:00Z',
-            updatedAt: '2023-01-01T00:00:00Z',
+            createdAt: dayjs.utc().toISOString(),
+            updatedAt: dayjs.utc().toISOString(),
             chat: {
               id: 'chat123',
             },
@@ -1782,7 +1786,7 @@ describe('ChatRoom Component', () => {
             parentMessage: {
               id: 'parent1',
               body: 'Parent',
-              createdAt: '2022-12-31T00:00:00Z',
+              createdAt: dayjs.utc().subtract(1, 'day').toISOString(),
               creator: null, // This will cause an error when accessing creator.id
             },
           },
@@ -2076,8 +2080,8 @@ describe('ChatRoom Component', () => {
                   node: {
                     id: 'msg1',
                     body: 'Hello World',
-                    createdAt: '2023-01-01T00:00:00Z',
-                    updatedAt: '2023-01-01T00:00:00Z',
+                    createdAt: dayjs.utc().startOf('year').toISOString(),
+                    updatedAt: dayjs.utc().startOf('year').toISOString(),
                     creator: {
                       id: 'otherUser123',
                       name: 'Other User',
@@ -2140,8 +2144,8 @@ describe('ChatRoom Component', () => {
           createChatMessage: {
             id: 'replyMsg123',
             body: 'Reply message',
-            createdAt: '2023-01-01T00:00:00Z',
-            updatedAt: '2023-01-01T00:00:00Z',
+            createdAt: dayjs.utc().toISOString(),
+            updatedAt: dayjs.utc().toISOString(),
             creator: {
               id: 'user123',
               name: 'Current User',
@@ -2151,7 +2155,7 @@ describe('ChatRoom Component', () => {
             parentMessage: {
               id: 'msg1',
               body: 'Hello World',
-              createdAt: '2023-01-01T00:00:00Z',
+              createdAt: dayjs.utc().startOf('year').toISOString(),
               creator: {
                 id: 'otherUser123',
                 name: 'Other User',
@@ -2223,8 +2227,8 @@ describe('ChatRoom Component', () => {
                   node: {
                     id: 'msg1',
                     body: 'uploads/file.jpg', // File message
-                    createdAt: '2023-01-01T00:00:00Z',
-                    updatedAt: '2023-01-01T00:00:00Z',
+                    createdAt: dayjs.utc().startOf('year').toISOString(),
+                    updatedAt: dayjs.utc().startOf('year').toISOString(),
                     creator: {
                       id: 'user123',
                       name: 'Current User',
@@ -2694,8 +2698,8 @@ describe('ChatRoom Component', () => {
           chatMessageCreate: {
             id: 'msg1', // Same ID as existing message
             body: 'Hello World',
-            createdAt: '2023-01-01T00:00:00Z',
-            updatedAt: '2023-01-01T00:00:00Z',
+            createdAt: dayjs.utc().toISOString(),
+            updatedAt: dayjs.utc().toISOString(),
             chat: {
               id: 'chat123',
             },
@@ -2793,8 +2797,8 @@ describe('ChatRoom Component', () => {
           chatMessageCreate: {
             id: 'earlyMsg',
             body: 'Early message',
-            createdAt: '2023-01-01T00:00:00Z',
-            updatedAt: '2023-01-01T00:00:00Z',
+            createdAt: dayjs.utc().toISOString(),
+            updatedAt: dayjs.utc().toISOString(),
             chat: {
               id: 'chat123',
             },

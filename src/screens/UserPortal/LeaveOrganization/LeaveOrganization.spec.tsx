@@ -1,4 +1,5 @@
 import React from 'react';
+import dayjs from 'dayjs';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
@@ -114,7 +115,7 @@ const mocks = [
               { _id: 'user003' },
             ],
             admins: [{ _id: 'admin001' }, { _id: 'admin002' }],
-            createdAt: '2024-01-15T12:34:56.789Z',
+            createdAt: dayjs().date(15).toISOString(),
             address: {
               city: 'San Francisco',
               countryCode: 'US',

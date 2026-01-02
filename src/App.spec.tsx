@@ -12,6 +12,7 @@ import i18nForTest from './utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import 'style/app-fixed.module.css';
 import * as useLSModule from 'utils/useLocalstorage';
+import dayjs from 'dayjs';
 
 vi.mock('@mui/x-charts/PieChart', () => ({
   pieArcLabelClasses: vi.fn(),
@@ -273,7 +274,7 @@ const MOCKS = [
         currentUser: {
           id: '123',
           name: 'John Doe',
-          createdAt: '2023-04-13T04:53:17.742+00:00',
+          createdAt: dayjs().subtract(1, 'year').toISOString(),
           image: 'john.jpg',
           emailAddress: 'johndoe@gmail.com',
           birthDate: '1990-01-01',

@@ -4,6 +4,10 @@ import { render, screen } from '@testing-library/react';
 import PluginInjector from '../../components/PluginInjector';
 import { usePluginInjectors } from '../../hooks';
 import { getPluginComponent } from '../../registry';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 // Mock the hooks
 vi.mock('../../hooks', () => ({
@@ -319,7 +323,7 @@ describe('PluginInjector', () => {
       postId: 'abc123',
       userId: 'user456',
       metadata: {
-        timestamp: '2025-10-05',
+        timestamp: dayjs.utc().toISOString(),
         tags: ['ai', 'summary'],
       },
       callbacks: {

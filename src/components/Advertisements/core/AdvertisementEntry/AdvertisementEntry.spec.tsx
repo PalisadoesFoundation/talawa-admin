@@ -13,6 +13,10 @@ import { DELETE_ADVERTISEMENT_MUTATION } from 'GraphQl/Mutations/AdvertisementMu
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { client } from 'components/Advertisements/AdvertisementsMocks';
 import { AdvertisementType } from 'types/Advertisement/type';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 const translations = JSON.parse(
   JSON.stringify(
@@ -229,8 +233,8 @@ describe('Testing Advertisement Entry Component', () => {
     const mockName = 'Test Ad';
     const mockType = AdvertisementType.Menu;
     const mockCreatedAt = new Date();
-    const mockEndDate = new Date(2025, 11, 31);
-    const mockStartDate = new Date(2024, 0, 1);
+    const mockEndDate = dayjs().add(1, 'year').toDate();
+    const mockStartDate = dayjs().toDate();
     const mockUpdatedAt = new Date();
     const mockOrganizationId = 'org123';
 
@@ -321,6 +325,10 @@ describe('Testing Advertisement Entry Component', () => {
 
     mockUseMutation.mockReturnValue([updateAdByIdMock]);
 
+    // Dynamic future dates for active ad using UTC to avoid timezone issues
+    const futureStart = dayjs.utc().add(30, 'days').startOf('day');
+    const futureEnd = dayjs.utc().add(31, 'days').startOf('day');
+
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -328,8 +336,8 @@ describe('Testing Advertisement Entry Component', () => {
             <I18nextProvider i18n={i18nForTest}>
               <AdvertisementEntry
                 advertisement={{
-                  endAt: new Date('2025-04-09T18:30:00.000Z'),
-                  startAt: new Date('2025-04-08T18:30:00.000Z'),
+                  endAt: futureEnd.toDate(),
+                  startAt: futureStart.toDate(),
                   id: '1',
                   attachments: [],
                   name: 'Advert1',
@@ -374,8 +382,8 @@ describe('Testing Advertisement Entry Component', () => {
         id: '1',
         name: 'Updated Advertisement',
         type: 'menu',
-        endAt: '2025-04-09T00:00:00.000Z',
-        startAt: '2025-04-08T00:00:00.000Z',
+        endAt: futureEnd.toISOString(),
+        startAt: futureStart.toISOString(),
       },
     });
   });
@@ -405,8 +413,12 @@ describe('Testing Advertisement Entry Component', () => {
                       node: {
                         id: '1',
                         name: 'Advertisement1',
-                        startDate: '2022-01-01',
-                        endDate: '2023-01-01',
+                        startDate: dayjs()
+                          .subtract(2, 'years')
+                          .format('YYYY-MM-DD'),
+                        endDate: dayjs()
+                          .subtract(1, 'year')
+                          .format('YYYY-MM-DD'),
                         mediaUrl: 'http://example1.com',
                       },
                       cursor: 'cursor1',
@@ -415,8 +427,8 @@ describe('Testing Advertisement Entry Component', () => {
                       node: {
                         id: '2',
                         name: 'Advertisement2',
-                        startDate: '2024-02-01',
-                        endDate: '2025-02-01',
+                        startDate: dayjs().format('YYYY-MM-DD'),
+                        endDate: dayjs().add(1, 'year').format('YYYY-MM-DD'),
                         mediaUrl: 'http://example2.com',
                       },
                       cursor: 'cursor2',
@@ -425,8 +437,12 @@ describe('Testing Advertisement Entry Component', () => {
                       node: {
                         id: '3',
                         name: 'Advertisement1',
-                        startDate: '2022-01-01',
-                        endDate: '2023-01-01',
+                        startDate: dayjs()
+                          .subtract(2, 'years')
+                          .format('YYYY-MM-DD'),
+                        endDate: dayjs()
+                          .subtract(1, 'year')
+                          .format('YYYY-MM-DD'),
                         mediaUrl: 'http://example1.com',
                       },
                       cursor: 'cursor3',
@@ -435,8 +451,8 @@ describe('Testing Advertisement Entry Component', () => {
                       node: {
                         id: '4',
                         name: 'Advertisement2',
-                        startDate: '2024-02-01',
-                        endDate: '2025-02-01',
+                        startDate: dayjs().format('YYYY-MM-DD'),
+                        endDate: dayjs().add(1, 'year').format('YYYY-MM-DD'),
                         mediaUrl: 'http://example2.com',
                       },
                       cursor: 'cursor4',
@@ -445,8 +461,12 @@ describe('Testing Advertisement Entry Component', () => {
                       node: {
                         id: '5',
                         name: 'Advertisement1',
-                        startDate: '2022-01-01',
-                        endDate: '2023-01-01',
+                        startDate: dayjs()
+                          .subtract(2, 'years')
+                          .format('YYYY-MM-DD'),
+                        endDate: dayjs()
+                          .subtract(1, 'year')
+                          .format('YYYY-MM-DD'),
                         mediaUrl: 'http://example1.com',
                       },
                       cursor: 'cursor5',
@@ -455,8 +475,8 @@ describe('Testing Advertisement Entry Component', () => {
                       node: {
                         id: '6',
                         name: 'Advertisement2',
-                        startDate: '2024-02-01',
-                        endDate: '2025-02-01',
+                        startDate: dayjs().format('YYYY-MM-DD'),
+                        endDate: dayjs().add(1, 'year').format('YYYY-MM-DD'),
                         mediaUrl: 'http://example2.com',
                       },
                       cursor: 'cursor6',
@@ -638,8 +658,8 @@ describe('Testing Advertisement Entry Component', () => {
               <MockedProvider>
                 <AdvertisementEntry
                   advertisement={{
-                    endAt: new Date('2023-02-02'),
-                    startAt: new Date('2023-01-01'),
+                    endAt: dayjs().subtract(1, 'day').toDate(),
+                    startAt: dayjs().subtract(2, 'days').toDate(),
                     id: '1',
                     attachments: [
                       {

@@ -5,6 +5,7 @@ import {
 } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { GET_EVENT_VOLUNTEER_GROUPS } from 'GraphQl/Queries/EventVolunteerQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
+import dayjs from 'dayjs';
 
 const group1 = {
   id: 'groupId1',
@@ -138,7 +139,7 @@ export const MOCKS = [
             avatarURL: '',
             role: 'regular',
             createdAt: '2030-02-14',
-            updatedAt: '2023-01-01T00:00:00Z',
+            updatedAt: dayjs().subtract(1, 'year').toISOString(),
           },
           {
             id: 'userId2',
@@ -147,7 +148,7 @@ export const MOCKS = [
             avatarURL: '',
             role: 'regular',
             createdAt: '2030-02-14',
-            updatedAt: '2023-01-01T00:00:00Z',
+            updatedAt: dayjs().subtract(1, 'year').toISOString(),
           },
         ],
       },
@@ -361,7 +362,7 @@ export const MOCKS_ERROR = [
             role: 'regular',
             avatarURL: '',
             createdAt: '2030-02-14',
-            updatedAt: '2023-01-01T00:00:00Z',
+            updatedAt: dayjs().subtract(1, 'year').toISOString(),
           },
           {
             id: 'userId2',
@@ -370,7 +371,7 @@ export const MOCKS_ERROR = [
             role: 'regular',
             avatarURL: '',
             createdAt: '2030-02-14',
-            updatedAt: '2023-01-01T00:00:00Z',
+            updatedAt: dayjs().subtract(1, 'year').toISOString(),
           },
         ],
       },

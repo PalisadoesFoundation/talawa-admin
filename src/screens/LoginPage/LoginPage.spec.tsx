@@ -28,6 +28,7 @@ import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, expect, it, describe } from 'vitest';
 import { GraphQLError } from 'graphql';
+import dayjs from 'dayjs';
 
 vi.mock('utils/useLocalstorage');
 
@@ -2339,8 +2340,8 @@ describe('Cookie-based authentication verification', () => {
               slackURL: 'http://slack.com/test',
               redditURL: 'http://reddit.com/test',
               inactivityTimeoutDuration: 3600,
-              createdAt: '2023-01-01',
-              updatedAt: '2023-01-01',
+              createdAt: dayjs().subtract(1, 'year').format('YYYY-MM-DD'),
+              updatedAt: dayjs().subtract(1, 'year').format('YYYY-MM-DD'),
               logoMimeType: 'image/png',
               __typename: 'Community',
             },

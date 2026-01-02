@@ -6,6 +6,7 @@ import { AdminPluginFileService } from 'plugin/services/AdminPluginFileService';
 import type { IPluginMeta, IPluginDetails, IInstalledPlugin } from 'plugin';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
+import dayjs from 'dayjs';
 
 // Mock AdminPluginFileService
 vi.mock('plugin/services/AdminPluginFileService', () => ({
@@ -54,12 +55,20 @@ describe('PluginModal', () => {
     changelog: [
       {
         version: '1.2.3',
-        date: '2023-12-01',
+        date: dayjs()
+          .subtract(1, 'year')
+          .month(11)
+          .date(1)
+          .format('YYYY-MM-DD'),
         changes: ['Fixed bug X', 'Added feature Y'],
       },
       {
         version: '1.2.2',
-        date: '2023-11-01',
+        date: dayjs()
+          .subtract(1, 'year')
+          .month(10)
+          .date(1)
+          .format('YYYY-MM-DD'),
         changes: ['Initial release'],
       },
     ],

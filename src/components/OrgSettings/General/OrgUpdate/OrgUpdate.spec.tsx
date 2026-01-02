@@ -10,6 +10,10 @@ import { toast } from 'react-toastify';
 import OrgUpdate from './OrgUpdate';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import { UPDATE_ORGANIZATION_MUTATION } from 'GraphQl/Mutations/mutations';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 vi.mock('react-toastify', () => ({
   toast: {
@@ -61,8 +65,8 @@ const mockOrgData = {
     postalCode: '12345',
     countryCode: 'US',
     avatarURL: null,
-    createdAt: '2024-02-24T00:00:00Z',
-    updatedAt: '2024-02-24T00:00:00Z',
+    createdAt: dayjs.utc().toISOString(),
+    updatedAt: dayjs.utc().toISOString(),
     isUserRegistrationRequired: false,
   },
 };
@@ -112,7 +116,7 @@ describe('OrgUpdate Component', () => {
               countryCode: 'US',
               avatarMimeType: null,
               avatarURL: null,
-              updatedAt: '2023-01-01T00:00:00.000Z',
+              updatedAt: dayjs.utc().toISOString(),
             },
           },
         },
@@ -216,8 +220,8 @@ describe('OrgUpdate Component', () => {
             postalCode: '12345',
             countryCode: 'US',
             avatarURL: null,
-            createdAt: '2024-02-24T00:00:00Z',
-            updatedAt: '2024-02-24T00:00:00Z',
+            createdAt: dayjs.utc().toISOString(),
+            updatedAt: dayjs.utc().toISOString(),
           },
         },
       },
@@ -332,8 +336,8 @@ describe('OrgUpdate Component', () => {
         postalCode: '12345',
         countryCode: 'US',
         avatarURL: null,
-        createdAt: '2024-02-24T00:00:00Z',
-        updatedAt: '2024-02-24T00:00:00Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         creator: {
           __typename: 'User',
           id: '1',
@@ -363,8 +367,8 @@ describe('OrgUpdate Component', () => {
           postalCode: '12345',
           countryCode: 'US',
           avatarURL: null,
-          createdAt: '2024-02-24T00:00:00Z',
-          updatedAt: '2024-02-24T00:00:00Z',
+          createdAt: dayjs.utc().toISOString(),
+          updatedAt: dayjs.utc().toISOString(),
           creator: {
             id: '1',
             name: 'Test Creator',
@@ -456,8 +460,8 @@ describe('OrgUpdate Component', () => {
                 postalCode: '12345',
                 countryCode: 'US',
                 avatarURL: null,
-                createdAt: '2024-02-24T00:00:00Z',
-                updatedAt: '2024-02-24T00:00:00Z',
+                createdAt: dayjs.utc().toISOString(),
+                updatedAt: dayjs.utc().toISOString(),
                 isUserRegistrationRequired: false,
               },
             },
@@ -497,7 +501,7 @@ describe('OrgUpdate Component', () => {
                   countryCode: 'US',
                   avatarMimeType: null,
                   avatarURL: null,
-                  updatedAt: '2024-02-24T00:00:00Z',
+                  updatedAt: dayjs.utc().toISOString(),
                 },
               },
             },
@@ -642,8 +646,8 @@ describe('OrgUpdate Component', () => {
         postalCode: '12345',
         countryCode: 'US',
         avatarURL: null,
-        createdAt: '2024-02-24T00:00:00Z',
-        updatedAt: '2024-02-24T00:00:00Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         isUserRegistrationRequired: false,
       },
     };
@@ -744,8 +748,8 @@ describe('OrgUpdate Component', () => {
         postalCode: '12345',
         countryCode: 'US',
         avatarURL: null,
-        createdAt: '2024-02-24T00:00:00Z',
-        updatedAt: '2024-02-24T00:00:00Z',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
         creator: {
           id: '1',
           name: 'Test Creator',

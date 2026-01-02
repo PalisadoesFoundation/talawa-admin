@@ -19,8 +19,8 @@
  * <CardItem
  *   type="Event"
  *   title="Community Meetup"
- *   startdate="2023-10-01"
- *   enddate="2023-10-02"
+ *   startdate=dayjs().subtract(1, 'year').month(9).date(1).format('YYYY-MM-DD')
+ *   enddate=dayjs().subtract(1, 'year').month(9).date(2).format('YYYY-MM-DD')
  *   creator={{ id: 1, name: "John Doe" }}
  *   location="Central Park"
  * />
