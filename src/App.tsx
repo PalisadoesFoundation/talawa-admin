@@ -4,7 +4,7 @@ import { useQuery, useApolloClient } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import SecuredRoute from 'components/SecuredRoute/SecuredRoute';
 import SecuredRouteForUser from 'components/UserPortal/SecuredRouteForUser/SecuredRouteForUser';
-import OrganizationFundCampaign from 'screens/OrganizationFundCampaign/OrganizationFundCampaigns';
+import OrganizationFundCampaign from 'screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaigns';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
 import LoginPage from 'screens/LoginPage/LoginPage';
 import { usePluginRoutes, PluginRouteRenderer } from 'plugin';
@@ -16,6 +16,7 @@ import Loader from 'components/Loader/Loader';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 const OrganizationScreen = lazy(
   () => import('components/OrganizationScreen/OrganizationScreen'),
@@ -27,45 +28,51 @@ const SuperAdminScreen = lazy(
 );
 const BlockUser = lazy(() => import('screens/BlockUser/BlockUser'));
 const EventManagement = lazy(
-  () => import('screens/EventManagement/EventManagement'),
+  () => import('screens/AdminPortal/EventManagement/EventManagement'),
 );
 const ForgotPassword = lazy(
   () => import('screens/ForgotPassword/ForgotPassword'),
 );
-const MemberDetail = lazy(() => import('screens/MemberDetail/MemberDetail'));
+const MemberDetail = lazy(
+  () => import('screens/AdminPortal/MemberDetail/MemberDetail'),
+);
 const OrgContribution = lazy(
   () => import('screens/OrgContribution/OrgContribution'),
 );
-const OrgList = lazy(() => import('screens/OrgList/OrgList'));
+const OrgList = lazy(() => import('screens/AdminPortal/OrgList/OrgList'));
 const OrgSettings = lazy(() => import('screens/OrgSettings/OrgSettings'));
 
 const OrganizationDashboard = lazy(
-  () => import('screens/OrganizationDashboard/OrganizationDashboard'),
+  () =>
+    import('screens/AdminPortal/OrganizationDashboard/OrganizationDashboard'),
 );
 const OrganizationEvents = lazy(
-  () => import('screens/OrganizationEvents/OrganizationEvents'),
+  () => import('screens/AdminPortal/OrganizationEvents/OrganizationEvents'),
 );
 const OrganizationFunds = lazy(
-  () => import('screens/OrganizationFunds/OrganizationFunds'),
+  () => import('screens/AdminPortal/OrganizationFunds/OrganizationFunds'),
 );
 const OrganizationTransactions = lazy(
-  () => import('screens/OrganizationTransactions/OrganizationTransactions'),
+  () =>
+    import(
+      'screens/AdminPortal/OrganizationTransactions/OrganizationTransactions'
+    ),
 );
 const FundCampaignPledge = lazy(
   () => import('screens/FundCampaignPledge/FundCampaignPledge'),
 );
 const OrganizationPeople = lazy(
-  () => import('screens/OrganizationPeople/OrganizationPeople'),
+  () => import('screens/AdminPortal/OrganizationPeople/OrganizationPeople'),
 );
 const OrganizationTags = lazy(
-  () => import('screens/OrganizationTags/OrganizationTags'),
+  () => import('screens/AdminPortal/OrganizationTags/OrganizationTags'),
 );
-const ManageTag = lazy(() => import('screens/ManageTag/ManageTag'));
-const SubTags = lazy(() => import('screens/SubTags/SubTags'));
-const Requests = lazy(() => import('screens/Requests/Requests'));
-const Users = lazy(() => import('screens/Users/Users'));
+const ManageTag = lazy(() => import('screens/AdminPortal/ManageTag/ManageTag'));
+const SubTags = lazy(() => import('screens/AdminPortal/SubTags/SubTags'));
+const Requests = lazy(() => import('screens/AdminPortal/Requests/Requests'));
+const Users = lazy(() => import('screens/AdminPortal/Users/Users'));
 const CommunityProfile = lazy(
-  () => import('screens/CommunityProfile/CommunityProfile'),
+  () => import('screens/AdminPortal/CommunityProfile/CommunityProfile'),
 );
 const OrganizationVenues = lazy(
   () => import('screens/OrganizationVenues/OrganizationVenues'),
@@ -99,9 +106,13 @@ const VolunteerManagement = lazy(
 const LeaveOrganization = lazy(
   () => import('screens/UserPortal/LeaveOrganization/LeaveOrganization'),
 );
-const Notification = lazy(() => import('screens/Notification/Notification'));
+const Notification = lazy(
+  () => import('screens/AdminPortal/Notification/Notification'),
+);
 
-const PluginStore = lazy(() => import('screens/PluginStore/PluginStore'));
+const PluginStore = lazy(
+  () => import('screens/AdminPortal/PluginStore/PluginStore'),
+);
 
 const { setItem } = useLocalStorage();
 
@@ -126,6 +137,7 @@ function App(): React.ReactElement {
   const { data, loading } = useQuery(CURRENT_USER);
 
   const { t } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
   const apolloClient = useApolloClient();
 
@@ -176,7 +188,12 @@ function App(): React.ReactElement {
   }, [data, loading, setItem]);
 
   return (
-    <>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
       <Suspense fallback={<Loader />}>
         <NotificationToastContainer />
         <Routes>
@@ -345,7 +362,7 @@ function App(): React.ReactElement {
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </Suspense>
-    </>
+    </ErrorBoundaryWrapper>
   );
 }
 
