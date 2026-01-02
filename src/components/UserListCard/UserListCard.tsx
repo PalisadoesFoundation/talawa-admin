@@ -81,16 +81,15 @@ function UserListCard({ id }: InterfaceUserListCardProps): JSX.Element {
       });
 
       if (result.data?.createAdmin) {
-  NotificationToast.success({
-    key: 'addedAsAdmin',
-    namespace: 'translation',
-  });
+        NotificationToast.success({
+          key: 'addedAsAdmin',
+          namespace: 'translation',
+        });
 
-  reloadTimeoutRef.current = setTimeout(() => {
-    window.location.reload();
-  }, 2000);
-}
-
+        reloadTimeoutRef.current = setTimeout(() => {
+          window.location.reload();
+        }, 2000);
+      }
     } catch (error: unknown) {
       errorHandler(t, error);
     }
