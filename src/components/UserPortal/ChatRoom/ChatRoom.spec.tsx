@@ -2916,7 +2916,7 @@ describe('ChatRoom Component', () => {
       expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
     });
   });
-  describe('Issue #5011: Skip query and subscription when selectedContact is empty', () => {
+  describe('Issue 5011: Skip query and subscription when selectedContact is empty', () => {
     it('should not execute CHAT_BY_ID query when selectedContact is empty string', async () => {
       const chatListRefetch = vi.fn();
       const { setItem } = useLocalStorage();
