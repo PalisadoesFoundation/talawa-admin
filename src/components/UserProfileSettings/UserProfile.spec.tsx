@@ -5,13 +5,12 @@ import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
+import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 afterEach(() => {
   vi.clearAllMocks();
 });
-
-import userEvent from '@testing-library/user-event';
 
 const renderWithProviders = (ui: React.ReactElement) =>
   render(
