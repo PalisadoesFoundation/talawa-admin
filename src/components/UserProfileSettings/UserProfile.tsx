@@ -66,6 +66,9 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
   const { t: tCommon } = useTranslation('common');
 
+  // Compute fullName once for fallbackName and tooltip
+  const fullName = `${firstName ?? ''} ${lastName ?? ''}`.trim();
+
   return (
     <>
       <Card border="0" className="rounded-4 mb-4 ">
@@ -77,10 +80,7 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
             <div className={styles.imgContianer}>
               <ProfileAvatarDisplay
                 imageUrl={image && image !== 'null' ? image : undefined}
-                fallbackName={(() => {
-                  const name = `${firstName ?? ''} ${lastName ?? ''}`.trim();
-                  return name || '';
-                })()}
+                fallbackName={fullName}
                 size="custom"
                 shape="circle"
                 customSize={60}
@@ -94,10 +94,7 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
               <span
                 className={styles.profileName}
                 data-tooltip-id="name"
-                data-tooltip-content={(() => {
-                  const label = `${firstName ?? ''} ${lastName ?? ''}`.trim();
-                  return label || undefined;
-                })()}
+                data-tooltip-content={fullName || undefined}
               >
                 {firstName && firstName.length > 10
                   ? firstName?.slice(0, 5) + '..'
