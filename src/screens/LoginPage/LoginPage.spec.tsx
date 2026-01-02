@@ -176,17 +176,23 @@ const link = new StaticMockLink(MOCKS, true);
 const link3 = new StaticMockLink(MOCKS3, true);
 const link4 = new StaticMockLink(MOCKS4, true);
 
-const { toastMocks, routerMocks, resetReCAPTCHA } = vi.hoisted(() => ({
-  toastMocks: {
-    success: vi.fn(),
-    warn: vi.fn(),
-    error: vi.fn(),
-  },
-  routerMocks: {
-    navigate: vi.fn(),
-  },
-  resetReCAPTCHA: vi.fn(),
-}));
+const { toastMocks, routerMocks, resetReCAPTCHA } = vi.hoisted(() => {
+  const warning = vi.fn();
+  return {
+    toastMocks: {
+      success: vi.fn(),
+      warning,
+      // Backward-compat for older tests that asserted `toast.warn`
+      warn: warning,
+      error: vi.fn(),
+      info: vi.fn(),
+    },
+    routerMocks: {
+      navigate: vi.fn(),
+    },
+    resetReCAPTCHA: vi.fn(),
+  };
+});
 
 async function wait(ms = 100): Promise<void> {
   await act(() => {
@@ -1744,7 +1750,6 @@ describe('Extra coverage for 100 %', () => {
     await wait();
     expect(toastMocks.error).toHaveBeenCalledWith(
       expect.stringMatching(/captcha|Invalid reCAPTCHA/i),
-      expect.any(Object),
     );
   });
 
