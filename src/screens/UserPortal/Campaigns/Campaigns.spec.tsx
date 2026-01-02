@@ -160,9 +160,10 @@ describe('Testing User Campaigns Screen', () => {
     renderCampaigns(link3);
     await waitFor(() => {
       expect(screen.getByTestId('campaigns-empty-state')).toBeInTheDocument();
+      expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument();
       expect(
-        screen.getByTestId('campaigns-empty-state-message'),
-      ).toHaveTextContent(cTranslations.noCampaigns);
+        screen.getByText(cTranslations.createFirstCampaign),
+      ).toBeInTheDocument();
     });
   });
 

@@ -1810,7 +1810,8 @@
     "endDate": "End Date",
     "fundGoal": "Fund Goal",
     "percentRaised": "% Raised",
-    "createFirstCampaign": "Create your first fundraising campaign to see it here."
+    "createFirstCampaign": "Create your first fundraising campaign to see it here.",
+    "campaignEnded": "Campaign Ended"
   },
   "userPledges": {
     "title": "My Pledges",

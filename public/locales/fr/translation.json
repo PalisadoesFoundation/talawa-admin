@@ -1810,7 +1810,8 @@
     "endDate": "Date de Fin",
     "fundGoal": "Objectif de Financement",
     "percentRaised": "% Collecté",
-    "createFirstCampaign": "Créez votre première campagne de financement pour la voir ici."
+    "createFirstCampaign": "Créez votre première campagne de financement pour la voir ici.",
+    "campaignEnded": "Campagne terminée"
   },
   "userPledges": {
     "title": "Mes Promesses",

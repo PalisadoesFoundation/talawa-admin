@@ -215,9 +215,7 @@ describe('Testing VolunteerGroups Screen', () => {
       expect(
         screen.getByTestId('volunteerGroups-empty-state'),
       ).toBeInTheDocument();
-      expect(
-        screen.getByTestId('volunteerGroups-empty-state-message'),
-      ).toHaveTextContent(t.noVolunteerGroups);
+      expect(screen.getByText(t.noVolunteerGroups)).toBeInTheDocument();
     });
   });
 
