@@ -1719,8 +1719,8 @@ describe('UserProfileDropdown Component', () => {
 });
 
 describe('UserPortalNavigationBarMocks', () => {
+  // Test retained to cover mocks file: LOGOUT_MUTATION has no variables; variableMatcher always returns true
   it('logoutMock variableMatcher returns true for any variables', () => {
-    // Test the variableMatcher function to ensure 100% coverage of the mocks file
     expect(logoutMock.variableMatcher()).toBe(true);
   });
 });
