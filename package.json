@@ -27,6 +27,7 @@
     "@pdfme/schemas": "^5.1.6",
     "@reduxjs/toolkit": "^2.11.2",
     "@remix-run/router": "^1.23.0",
+    "@storybook/react": "^10.1.11",
     "@wry/equality": "^0.5.7",
     "apollo-upload-client": "^18.0.1",
     "bootstrap": "^5.3.3",
@@ -96,7 +97,8 @@
     "cy:run": "cross-env CYPRESS_COVERAGE=true pnpm run start-server cypress:run",
     "check-mock-cleanup": "bash scripts/githooks/check-mock-cleanup.sh",
     "check:pom": "node scripts/githooks/check_pom.js",
-    "check-i18n": "node scripts/check-i18n.js"
+    "check-i18n": "node scripts/check-i18n.js",
+    "lint:datagrid": "./scripts/lint-datagrid.sh"
   },
   "eslintConfig": {
     "extends": [
@@ -228,6 +230,10 @@
     "glob": "^13.0.0"
   },
   "lint-staged": {
+    "src/screens/**/*.{ts,tsx}": [
+      "./scripts/lint-datagrid.sh",
+      "git add"
+    ],
     "**/*.{ts, tsx, json, scss, css}": [
       "prettier --write"
     ],
