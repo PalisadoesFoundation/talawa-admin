@@ -2019,6 +2019,9 @@
   "donation": {
     "card_aria": "दान कार्ड"
   },
+  "securedRoute": {
+    "sessionExpired": "कृपया फिर से लॉगिन करें क्योंकि सत्र समाप्त हो गया है"
+  },
   "common": {
     "signOut": "साइन आउट",
     "signingOut": "साइन आउट हो रहा है...",

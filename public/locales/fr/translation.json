@@ -2019,6 +2019,9 @@
   "donation": {
     "card_aria": "Carte de don"
   },
+  "securedRoute": {
+    "sessionExpired": "Veuillez vous reconnecter car la session a expiré"
+  },
   "common": {
     "signOut": "Se déconnecter",
     "signingOut": "Déconnexion en cours...",

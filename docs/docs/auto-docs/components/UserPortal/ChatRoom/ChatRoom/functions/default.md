@@ -6,7 +6,7 @@
 
 > **default**(`props`): `Element`
 
-Defined in: [src/components/UserPortal/ChatRoom/ChatRoom.tsx:225](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/ChatRoom.tsx#L225)
+Defined in: [src/components/UserPortal/ChatRoom/ChatRoom.tsx:220](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/ChatRoom/ChatRoom.tsx#L220)
 
 ## Parameters
 

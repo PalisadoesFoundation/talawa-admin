@@ -2019,6 +2019,9 @@
   "donation": {
     "card_aria": "捐赠卡"
   },
+  "securedRoute": {
+    "sessionExpired": "请重新登录，因为会话已过期"
+  },
   "common": {
     "signOut": "退出登录",
     "signingOut": "正在退出...",

@@ -52,7 +52,6 @@ import { GrAttachment } from 'react-icons/gr';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import type { GroupChat } from 'types/Chat/type';
-import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 // import { toast } from 'react-toastify';
 // import { validateFile } from 'utils/fileValidation';
@@ -198,13 +197,9 @@ const MessageImageBase: React.FC<IMessageImageProps> = ({
 
   if (imageState.loading) {
     return <div className={styles.messageAttachment}>{t('loadingImage')}</div>;
-    return <div className={styles.messageAttachment}>{t('loadingImage')}</div>;
   }
 
   if (imageState.error || !imageState.url) {
-    return (
-      <div className={styles.messageAttachment}>{t('imageNotAvailable')}</div>
-    );
     return (
       <div className={styles.messageAttachment}>{t('imageNotAvailable')}</div>
     );
@@ -226,8 +221,6 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChatRoom',
   });
-  const { t: tErrors } = useTranslation('errors');
-  const { t: tCommon } = useTranslation('common');
   const isMountedRef = useRef<boolean>(true);
 
   useEffect(() => {

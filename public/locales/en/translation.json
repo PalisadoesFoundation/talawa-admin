@@ -2019,6 +2019,9 @@
   "donation": {
     "card_aria": "Donation card"
   },
+  "securedRoute": {
+    "sessionExpired": "Kindly relogin as session has expired"
+  },
   "common": {
     "signOut": "Sign out",
     "signingOut": "Signing out...",
