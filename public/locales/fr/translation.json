@@ -398,7 +398,9 @@
     "join_success": "Demande d’adhésion envoyée avec succès",
     "withdraw_success": "Demande d’adhésion retirée avec succès",
     "join_error": "Échec de l’envoi de la demande d’adhésion",
-    "withdraw_error": "Échec du retrait de la demande d’adhésion"
+    "withdraw_error": "Échec du retrait de la demande d’adhésion",
+    "card_aria": "Carte d'organisation",
+    "card_test_id": "organization-card-{{id}}"
   },
   "organizationTags": {
     "title": "Étiquettes d'Organisation",
@@ -1643,12 +1645,23 @@
     "demoteToRegular": "Rétrograder au rang régulier",
     "promoteToAdmin": "Promouvoir administrateur",
     "user": "Utilisateur",
-    "chatAction": "Action de chat"
+    "chatAction": "Action de chat",
+    "organizationMembersTable": "Tableau des Membres de l'Organisation",
+    "newGroup": "Nouveau Groupe",
+    "groupName": "Nom du groupe",
+    "groupDescription": "Description du Groupe",
+    "next": "Suivant"
   },
   "userChatRoom": {
     "selectContact": "Sélectionnez un contact pour démarrer la conversation",
     "sendMessage": "Envoyer le message",
-    "reply": "répondre"
+    "reply": "répondre",
+    "loadingImage": "Chargement de l'image...",
+    "imageNotAvailable": "Image non disponible",
+    "attachment": "Pièce jointe",
+    "loadingMoreMessages": "Chargement de plus de messages...",
+    "loading": "Chargement...",
+    "loadOlderMessages": "Charger les messages plus anciens"
   },
   "orgActionItemCategories": {
     "enableButton": "Activer",

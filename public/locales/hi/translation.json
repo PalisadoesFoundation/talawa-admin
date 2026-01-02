@@ -398,7 +398,9 @@
     "join_success": "सदस्यता अनुरोध सफलतापूर्वक भेजा गया",
     "withdraw_success": "सदस्यता अनुरोध सफलतापूर्वक वापस लिया गया",
     "join_error": "सदस्यता अनुरोध भेजने में विफल",
-    "withdraw_error": "सदस्यता अनुरोध वापस लेने में विफल"
+    "withdraw_error": "सदस्यता अनुरोध वापस लेने में विफल",
+    "card_aria": "संगठन कार्ड",
+    "card_test_id": "organization-card-{{id}}"
   },
   "organizationTags": {
     "title": "संस्थान टैग",
@@ -1643,12 +1645,23 @@
     "demoteToRegular": "नियमित में पदावनत करें",
     "promoteToAdmin": "व्यवस्थापक में पदोन्नत करें",
     "user": "उपयोगकर्ता",
-    "chatAction": "चैट कार्रवाई"
+    "chatAction": "चैट कार्रवाई",
+    "organizationMembersTable": "संगठन सदस्य तालिका",
+    "newGroup": "नया समूह",
+    "groupName": "समूह का नाम",
+    "groupDescription": "समूह विवरण",
+    "next": "अगला"
   },
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
     "sendMessage": "मेसेज भेजें",
-    "reply": "जवाब"
+    "reply": "जवाब",
+    "loadingImage": "चित्र लोड हो रहा है...",
+    "imageNotAvailable": "चित्र उपलब्ध नहीं है",
+    "attachment": "अनुलग्नक",
+    "loadingMoreMessages": "अधिक संदेश लोड हो रहे हैं...",
+    "loading": "लोड हो रहा है...",
+    "loadOlderMessages": "पुराने संदेश लोड करें"
   },
   "orgActionItemCategories": {
     "enableButton": "सक्षम",
