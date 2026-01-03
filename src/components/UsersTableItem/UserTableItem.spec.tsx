@@ -647,7 +647,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -745,7 +745,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -877,7 +877,7 @@ describe('Testing User Table Item', () => {
     };
     // Assuming MOCKS2 includes error for unblockUser mutation; adjust if needed
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -950,7 +950,7 @@ describe('Testing User Table Item', () => {
     };
     // Assuming link2 includes error for update role; adjust mocks accordingly
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1007,7 +1007,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1067,7 +1067,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1144,7 +1144,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1187,7 +1187,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1234,7 +1234,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1310,7 +1310,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1367,7 +1367,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1455,7 +1455,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1541,7 +1541,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1614,7 +1614,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1711,7 +1711,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1800,7 +1800,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1889,7 +1889,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1966,7 +1966,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />

@@ -42,7 +42,7 @@
  * - Apollo Client for GraphQL queries and mutations.
  * - Material-UI and Bootstrap for UI components.
  * - Day.js for date manipulation.
- * - React-Toastify for notifications.
+ * - NotificationToast for notifications.
  *
  * @css
  * - Uses global styles from `app-fixed.module.css`.
@@ -61,7 +61,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   Autocomplete,
   FormControl,
@@ -156,11 +156,11 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         await updatePledge({
           variables,
         });
-        toast.success(t('pledgeUpdated'));
+        NotificationToast.success(t('pledgeUpdated'));
         refetchPledge();
         hide();
       } catch (error: unknown) {
-        toast.error((error as Error).message);
+        NotificationToast.error((error as Error).message);
       }
     },
     [formState, pledge, updatePledge, t, refetchPledge, hide],
@@ -182,7 +182,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           },
         });
 
-        toast.success(t('pledgeCreated') as string);
+        NotificationToast.success(t('pledgeCreated') as string);
         refetchPledge();
         setFormState({
           pledgeUsers: [],
@@ -191,7 +191,7 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         });
         hide();
       } catch (error: unknown) {
-        toast.error((error as Error).message);
+        NotificationToast.error((error as Error).message);
       }
     },
     [formState, campaignId],

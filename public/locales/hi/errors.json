@@ -20,5 +20,8 @@
   "title": "कुछ गलत हो गया",
   "defaultErrorMessage": "एक अप्रत्याशित त्रुटि हुई",
   "resetButton": "फिर से प्रयास करें",
-  "resetButtonAriaLabel": "फिर से प्रयास करें"
+  "resetButtonAriaLabel": "फिर से प्रयास करें",
+  "fileTooLarge": "फ़ाइल बहुत बड़ी है: {{fileName}}",
+  "invalidFileType": "अमान्य फ़ाइल प्रकार: {{fileName}}",
+  "emptyFile": "खाली फ़ाइल चुनी गई"
 }

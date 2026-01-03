@@ -113,6 +113,7 @@ const EventForm: React.FC<IEventFormProps> = ({
   showCreateChat = false,
   showRegisterable = true,
   showPublicToggle = true,
+
   disableRecurrence = false,
   submitting = false,
   showRecurrenceToggle = false,
@@ -241,6 +242,7 @@ const EventForm: React.FC<IEventFormProps> = ({
       allDay: formState.allDay,
       isPublic: formState.isPublic,
       isRegisterable: formState.isRegisterable,
+
       recurrenceRule:
         recurrenceEnabled && formState.recurrenceRule
           ? formState.recurrenceRule
