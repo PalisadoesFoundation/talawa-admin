@@ -45,6 +45,7 @@ import styles from '../../style/app-fixed.module.css';
 import AgendaCategoryDeleteModal from 'components/AdminPortal/OrgSettings/AgendaItemCategories/Delete/AgendaCategoryDeleteModal';
 import AgendaCategoryPreviewModal from 'components/AdminPortal/OrgSettings/AgendaItemCategories/Preview/AgendaCategoryPreviewModal';
 import AgendaCategoryUpdateModal from 'components/AdminPortal/OrgSettings/AgendaItemCategories/Update/AgendaCategoryUpdateModal';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 function agendaCategoryContainer({
   agendaCategoryConnection,
@@ -59,6 +60,7 @@ function agendaCategoryContainer({
     keyPrefix: 'organizationAgendaCategory',
   });
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
   // State management for modals and form data
   const [
@@ -144,7 +146,9 @@ function agendaCategoryContainer({
       toast.success(t('agendaCategoryUpdated') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(`Agenda Category Update Failed ${error.message}`);
+        toast.error(
+          t('agendaCategoryUpdateFailed', { errorMessage: error.message }),
+        );
       }
     }
   };
@@ -166,7 +170,9 @@ function agendaCategoryContainer({
       toast.success(t('agendaCategoryDeleted') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(`Agenda Category Delete Failed, ${error.message}`);
+        toast.error(
+          t('agendaCategoryDeleteFailed', { errorMessage: error.message }),
+        );
       }
     }
   };
@@ -201,7 +207,13 @@ function agendaCategoryContainer({
   };
 
   return (
-    <>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+      onReset={agendaCategoryRefetch}
+    >
       <div
         className={`mx-1 ${agendaCategoryConnection === 'Organization' ? 'my-4' : 'my-0'}`}
       >
@@ -327,7 +339,7 @@ function agendaCategoryContainer({
         t={t}
         tCommon={tCommon}
       />
-    </>
+    </ErrorBoundaryWrapper>
   );
 }
 

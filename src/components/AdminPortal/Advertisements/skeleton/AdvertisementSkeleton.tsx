@@ -1,5 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import styles from 'style/app-fixed.module.css';
 
 /**
@@ -23,26 +24,32 @@ import styles from 'style/app-fixed.module.css';
 export function AdvertisementSkeleton() {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
   return [...Array(6)].map((_, index) => (
-    <div
-      key={index}
-      className={styles.itemCard}
-      data-testid={`skeleton-${index + 1}`}
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
     >
-      <div className={styles.loadingWrapper}>
-        <div className={styles.innerContainer}>
-          <div className={`${styles.orgImgContainer} shimmer`} />
-          <div className={styles.content}>
-            <h5 className="shimmer" title={tCommon('name')}>
-              <span className="visually-hidden">
-                {t('advertisementLoading')}
-              </span>
-            </h5>
+      <div
+        key={index}
+        className={styles.itemCard}
+        data-testid={`skeleton-${index + 1}`}
+      >
+        <div className={styles.loadingWrapper}>
+          <div className={styles.innerContainer}>
+            <div className={`${styles.orgImgContainer} shimmer`} />
+            <div className={styles.content}>
+              <h5 className="shimmer" title={t('name')}>
+                <span className="visually-hidden">{t('loading')}</span>
+              </h5>
+            </div>
           </div>
+          <div className={`shimmer ${styles.button}`} />
         </div>
-        <div className={`shimmer ${styles.button}`} />
       </div>
-    </div>
+    </ErrorBoundaryWrapper>
   ));
 }
