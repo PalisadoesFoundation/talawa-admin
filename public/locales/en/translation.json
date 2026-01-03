@@ -425,7 +425,6 @@
     "tagCreationFailed": "Tag creation failed",
     "errorLoadingTagsData": "Error occurred while loading Organization Tags Data",
     "sortTags": "Sort Tags",
-    "tags": "Tags",
     "Latest": "Latest",
     "Oldest": "Oldest",
     "viewSubTags": "View {{count}} sub tags"
@@ -1622,9 +1621,12 @@
     "newChat": "New Chat",
     "newGroupChat": "New Group Chat",
     "groupInfo": "Group Info",
+    "description": "Description",
+    "hash": "#",
     "members": "Members",
     "addMembers": "Add Members",
     "userNotFound": "User not found",
+    "Error": "Error",
     "roleUpdatedSuccessfully": "Role updated successfully",
     "failedToUpdateRole": "Failed to update role",
     "memberRemovedSuccessfully": "Member removed successfully",
@@ -1652,13 +1654,21 @@
   "userChatRoom": {
     "selectContact": "Select a contact to start conversation",
     "sendMessage": "Send Message",
-    "reply": "Reply",
+    "loading": "Loading...",
+    "loadOlderMessages": "Load older messages",
+    "loadingMoreMessages": "Loading more messages...",
     "loadingImage": "Loading image...",
     "imageNotAvailable": "Image not available",
-    "attachment": "attachment",
-    "loadingMoreMessages": "Loading more messages...",
-    "loading": "Loading...",
-    "loadOlderMessages": "Load older messages"
+    "attachment": "Attachment",
+    "reply": "Reply",
+    "edit": "Edit",
+    "delete": "Delete",
+    "errorBoundary": {
+      "title": "Something went wrong",
+      "message": "An unexpected error occurred in the chat room",
+      "resetButton": "Try Again",
+      "resetButtonAriaLabel": "Try again"
+    }
   },
   "orgActionItemCategories": {
     "enableButton": "Enable",
@@ -2030,6 +2040,15 @@
     "events": "Events",
     "eventsCreatedByOrganization": "Events Created by Organization",
     "today": "Today"
+  },
+  "contact": {
+    "card_aria": "Contact card"
+  },
+  "donation": {
+    "card_aria": "Donation card"
+  },
+  "securedRoute": {
+    "sessionExpired": "Kindly relogin as session has expired"
   },
   "common": {
     "signOut": "Sign out",

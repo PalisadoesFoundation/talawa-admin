@@ -41,6 +41,28 @@ vi.mock('utils/MinioDownload', () => {
   return { useMinioDownload };
 });
 
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: ({
+    imageUrl,
+    fallbackName,
+  }: {
+    imageUrl?: string;
+    fallbackName: string;
+  }) => (
+    <div data-testid="mock-profile-avatar-display">
+      {imageUrl ? (
+        <img
+          src={imageUrl}
+          alt={fallbackName}
+          data-testid="mock-profile-image"
+        />
+      ) : (
+        <div data-testid="mock-profile-fallback">{fallbackName}</div>
+      )}
+    </div>
+  ),
+}));
+
 // Note: no direct imports from Minio modules are necessary; they are mocked above
 
 import ChatRoom, { MessageImage } from './ChatRoom';
@@ -770,6 +792,20 @@ describe('ChatRoom Component', () => {
     });
   });
 
+  it('renders ProfileAvatarDisplay with correct props', async () => {
+    renderChatRoom();
+    await waitFor(() => {
+      // Check for main contact avatar
+      const avatars = screen.getAllByTestId('mock-profile-avatar-display');
+      expect(avatars.length).toBeGreaterThan(0);
+      // Since default mock data has image, fallback is not shown. Check image alt instead.
+      const img = screen.queryByTestId('mock-profile-image');
+      // Note: There might be multiple if messages also have avatars. Just check one exists or specific one.
+      // But here we are just establishing ProfileAvatarDisplay is used generally.
+      expect(img).toBeInTheDocument();
+    });
+  });
+
   it('renders chat room with group chat data', async () => {
     renderChatRoom([CHAT_BY_ID_GROUP_MOCK]);
     await waitFor(() => {
@@ -989,7 +1025,7 @@ describe('ChatRoom Component', () => {
 
       expect(getByText('Loading image...')).toBeInTheDocument();
 
-      const img = await findByAltText('attachment');
+      const img = await findByAltText('Attachment');
       expect(img).toBeTruthy();
       expect(img).toHaveAttribute('src', 'https://example.com/presigned.jpg');
     });
@@ -1018,7 +1054,7 @@ describe('ChatRoom Component', () => {
         />,
       );
 
-      const img = await findByAltText('attachment');
+      const img = await findByAltText('Attachment');
       fireEvent.error(img);
 
       const err = await findByText('Image not available');
@@ -1069,8 +1105,9 @@ describe('ChatRoom Component', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Other User')).toBeInTheDocument();
-      const avatar = screen.getByAltText('Other User');
+      const avatar = screen.getByTestId('mock-profile-image');
       expect(avatar).toBeInTheDocument();
+      expect(avatar).toHaveAttribute('alt', 'Other User');
     });
   });
 
@@ -1135,14 +1172,14 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(screen.getByAltText('attachment')).toBeInTheDocument();
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
     });
 
     const removeBtn = screen.getByTestId('removeAttachment');
     fireEvent.click(removeBtn);
 
     await waitFor(() => {
-      expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+      expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
     });
   });
 
@@ -1309,7 +1346,7 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() =>
-      expect(screen.getByAltText('attachment')).toBeInTheDocument(),
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument(),
     );
 
     const sendBtn = screen.getByTestId('sendMessage');
@@ -1831,7 +1868,7 @@ describe('ChatRoom Component', () => {
         'Error uploading file:',
         expect.any(Error),
       );
-      expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+      expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
     });
 
     // Reset the mock for other tests
@@ -1990,12 +2027,14 @@ describe('ChatRoom Component', () => {
     renderChatRoom([CHAT_NO_IMAGE]);
 
     await waitFor(() => {
-      expect(screen.getByText('Other User')).toBeInTheDocument();
+      const elements = screen.getAllByText('Other User');
+      expect(elements.length).toBeGreaterThan(0);
     });
 
-    // Should render Avatar component instead of img
-    const avatar = screen.getByAltText('Other User');
-    expect(avatar).toBeInTheDocument();
+    // Should render ProfileAvatarDisplay fallback instead of img
+    expect(screen.getByTestId('mock-profile-fallback')).toHaveTextContent(
+      'Other User',
+    );
   });
 
   it('does not open group chat details when isGroup is false', async () => {
@@ -2105,8 +2144,11 @@ describe('ChatRoom Component', () => {
     });
 
     // Should render Avatar component for message creator
-    const avatar = screen.getByAltText('Other User');
-    expect(avatar).toBeInTheDocument();
+    // Should render ProfileAvatarDisplay component for message creator
+    // In this test case avatarURL is undefined, so we expect fallback text
+    expect(screen.getByTestId('mock-profile-fallback')).toHaveTextContent(
+      'Other User',
+    );
   });
 
   it('sends message without attachment when attachmentObjectName is null', async () => {
@@ -2281,7 +2323,7 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(screen.getByAltText('attachment')).toBeInTheDocument();
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
     });
 
     // Mock fileInputRef.current to be null
@@ -2290,7 +2332,7 @@ describe('ChatRoom Component', () => {
     fireEvent.click(removeBtn);
 
     await waitFor(() => {
-      expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+      expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
     });
   });
 
@@ -2484,7 +2526,7 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     // Should not crash and should not show attachment
-    expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+    expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
   });
 
   it('uses default organization when chat organization is undefined', async () => {
@@ -2523,7 +2565,7 @@ describe('ChatRoom Component', () => {
 
     // Should use 'organization' as default
     await waitFor(() => {
-      expect(screen.getByAltText('attachment')).toBeInTheDocument();
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
     });
   });
 
@@ -2568,7 +2610,7 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(screen.getByAltText('attachment')).toBeInTheDocument();
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
     });
   });
 
@@ -2633,7 +2675,7 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(screen.getByAltText('attachment')).toBeInTheDocument();
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
     });
   });
 
@@ -2651,7 +2693,7 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(screen.getByAltText('attachment')).toBeInTheDocument();
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
     });
 
     // Test the branch at line 908 where fileInputRef.current might be null
@@ -2659,7 +2701,7 @@ describe('ChatRoom Component', () => {
     fireEvent.click(removeBtn);
 
     await waitFor(() => {
-      expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+      expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
     });
   });
 
@@ -2905,7 +2947,7 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(screen.getByAltText('attachment')).toBeInTheDocument();
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
     });
 
     // Remove attachment - tests line 908
@@ -2913,10 +2955,10 @@ describe('ChatRoom Component', () => {
     fireEvent.click(removeBtn);
 
     await waitFor(() => {
-      expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+      expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
     });
   });
-  describe('Issue 5011: Skip query and subscription when selectedContact is empty', () => {
+  describe('Skip query and subscription when selectedContact is empty', () => {
     it('should not execute CHAT_BY_ID query when selectedContact is empty string', async () => {
       const chatListRefetch = vi.fn();
       const { setItem } = useLocalStorage();
