@@ -20,5 +20,8 @@
   "title": "发生错误",
   "defaultErrorMessage": "發生未預期的錯誤",
   "resetButton": "再試一次",
-  "resetButtonAriaLabel": "再試一次"
+  "resetButtonAriaLabel": "再試一次",
+  "fileTooLarge": "文件过大：{{fileName}}",
+  "invalidFileType": "无效的文件类型：{{fileName}}",
+  "emptyFile": "选择了空文件"
 }
