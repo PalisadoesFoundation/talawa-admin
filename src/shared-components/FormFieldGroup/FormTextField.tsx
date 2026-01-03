@@ -42,7 +42,6 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
     );
   }
 
-
   return (
     <FormFieldGroup
       name={name}
