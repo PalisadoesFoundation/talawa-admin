@@ -43,10 +43,10 @@ import {
   REJECT_ORGANIZATION_REQUEST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import defaultImg from 'assets/images/blank.png';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceMemberRequestCardProps } from 'types/Member/interface';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 function MemberRequestCard({
   id,
@@ -67,7 +67,7 @@ function MemberRequestCard({
   const addMember = async (): Promise<void> => {
     try {
       await acceptMutation({ variables: { id } });
-      toast.success(t('memberAdded') as string);
+      NotificationToast.success(t('memberAdded') as string);
 
       setTimeout(() => {
         window.location.reload();

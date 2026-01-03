@@ -12,7 +12,6 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import i18n from 'utils/i18nForTest';
-import { toast } from 'react-toastify';
 import { vi } from 'vitest';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -26,11 +25,15 @@ import {
   MOCKS_ERROR_MUTATION,
 } from './OrganizationAgendaCategoryErrorMocks';
 import { MOCKS } from './OrganizationAgendaCategoryMocks';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     error: vi.fn(),
+    success: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
   },
 }));
 
@@ -208,7 +211,7 @@ describe('Testing Agenda Categories Component', () => {
     );
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(NotificationToast.success).toHaveBeenCalledWith(
         translations.agendaCategoryCreated,
       );
     });
@@ -256,7 +259,9 @@ describe('Testing Agenda Categories Component', () => {
     );
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Mock Graphql Error',
+      );
     });
   });
   test('allow user to type in the search field', async () => {
