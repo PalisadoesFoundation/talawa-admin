@@ -23,7 +23,7 @@
  * @property {number} [noOfRows] - Number of rows to render for the table variant
  * @property {number} [skeletonRows] - Number of rows to render for the skeleton variant
  * @property {number} [skeletonCols] - Number of columns to render for the skeleton variant
- * @property {React.ReactNode} [customLoader] - Custom loader component for the custom variant
+ * @property {React.ReactNode} [customLoader] - Custom loader component for the custom variant (required when variant='custom')
  *
  * @example
  * ```tsx
@@ -36,15 +36,28 @@
  * };
  * ```
  */
-export interface InterfaceLoadingStateProps {
+
+type BaseProps = {
   isLoading: boolean;
-  variant?: 'spinner' | 'inline' | 'table' | 'skeleton' | 'custom';
-  size?: 'sm' | 'lg' | 'xl';
   children: React.ReactNode;
   'data-testid'?: string;
+  size?: 'sm' | 'lg' | 'xl';
   tableHeaderTitles?: string[];
   noOfRows?: number;
   skeletonRows?: number;
   skeletonCols?: number;
-  customLoader?: React.ReactNode;
-}
+};
+
+type WithCustomVariant = BaseProps & {
+  variant: 'custom';
+  customLoader: React.ReactNode;
+};
+
+type WithoutCustomVariant = BaseProps & {
+  variant?: 'spinner' | 'inline' | 'table' | 'skeleton';
+  customLoader?: never;
+};
+
+export type InterfaceLoadingStateProps =
+  | WithCustomVariant
+  | WithoutCustomVariant;

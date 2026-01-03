@@ -118,7 +118,16 @@ const LoadingState = ({
 
   // Custom variant: renders user-provided custom loader
   if (variant === 'custom') {
-    return <>{customLoader}</>;
+    return (
+      <div
+        data-testid={dataTestId}
+        role="status"
+        aria-live="polite"
+        aria-label={t('loading', { defaultValue: 'Loading' })}
+      >
+        {customLoader}
+      </div>
+    );
   }
 
   // Spinner variant: full-screen with overlay
