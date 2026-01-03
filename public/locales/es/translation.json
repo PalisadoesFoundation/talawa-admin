@@ -2044,9 +2044,6 @@
   "contact": {
     "card_aria": "Tarjeta de contacto"
   },
-  "donation": {
-    "card_aria": "Tarjeta de donación"
-  },
   "securedRoute": {
     "sessionExpired": "Por favor, vuelva a iniciar sesión ya que la sesión ha expirado"
   },

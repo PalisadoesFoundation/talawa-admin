@@ -2044,9 +2044,6 @@
   "contact": {
     "card_aria": "Contact card"
   },
-  "donation": {
-    "card_aria": "Donation card"
-  },
   "securedRoute": {
     "sessionExpired": "Kindly relogin as session has expired"
   },
@@ -2067,8 +2064,8 @@
     "view": "View"
   },
   "donation": {
-    "amount_label": "Amount",
-    "card_aria": "Donation card",
+    "amount_label": "Montant",
+    "card_aria": "Carte de don",
     "card_test_id": "donation-card-{{id}}",
     "date_label": "Date"
   },

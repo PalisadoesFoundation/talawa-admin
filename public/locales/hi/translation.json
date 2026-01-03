@@ -2044,9 +2044,6 @@
   "contact": {
     "card_aria": "संपर्क कार्ड"
   },
-  "donation": {
-    "card_aria": "दान कार्ड"
-  },
   "securedRoute": {
     "sessionExpired": "कृपया फिर से लॉगिन करें क्योंकि सत्र समाप्त हो गया है"
   },
