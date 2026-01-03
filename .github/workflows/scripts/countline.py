@@ -166,7 +166,7 @@ def _read_exclusions_from_file(filepath):
                 # Skip empty lines and comments
                 if line and not line.startswith("#"):
                     result.append(line)
-    except IOError as e:
+    except OSError as e:
         print(f"Error reading exclusions file: {e}")
 
     return result
@@ -224,8 +224,8 @@ directories to exclude from the analysis.""",
         required=False,
         default=None,
         const=None,
-        help="""An optional space separated list of \
-files to analyze.""",
+        help="""Path to a file containing a list of files \
+to exclude from the analysis (one per line).""",
     )
     # Return parser
     result = parser.parse_args()

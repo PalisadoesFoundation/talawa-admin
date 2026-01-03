@@ -4,16 +4,6 @@ set -e
 
 REPO_ROOT=$(git rev-parse --show-toplevel)
 
-# FIND Python binary based on environment
-if command -v python3 >/dev/null 2>&1; then
-    PYTHON_BIN=python3
-elif command -v python >/dev/null 2>&1; then
-    PYTHON_BIN=python
-else
-    echo "Error: Python is not installed."
-    exit 1
-fi
-
 VENV_DIR="$REPO_ROOT/venv"
 if [ ! -d "$VENV_DIR" ]; then
     echo "Error: Virtual environment not found at $VENV_DIR"
