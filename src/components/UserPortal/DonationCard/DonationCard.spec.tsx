@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
@@ -49,8 +49,15 @@ const renderComponent = (props = defaultProps) =>
   );
 
 describe('DonationCard [User Portal]', () => {
-  afterEach(() => {
+  beforeEach(async () => {
+    // Ensure language is reset to English before each test
+    await i18nForTest.changeLanguage('en');
+  });
+
+  afterEach(async () => {
     vi.clearAllMocks();
+    // Reset language to English to ensure consistent test state
+    await i18nForTest.changeLanguage('en');
   });
 
   it('renders the donation card container', async () => {
@@ -114,7 +121,12 @@ describe('DonationCard [User Portal]', () => {
     await wait();
 
     const card = screen.getByTestId(`donation-card-${defaultProps.id}`);
-    expect(card).toHaveAttribute('aria-label', 'Donation card');
+    // Use the translation function to get the expected value based on current locale
+    const expectedAriaLabel = i18nForTest.t(
+      'donation.card_aria',
+      'Donation card',
+    );
+    expect(card).toHaveAttribute('aria-label', expectedAriaLabel);
   });
 
   it('formats donation date correctly for English locale', async () => {
