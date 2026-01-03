@@ -145,12 +145,11 @@ export default [
        * goes through the standardized DataGridWrapper component located at
        * src/shared-components/DataGridWrapper/
        *
-       * Note: Set to 'warn' temporarily to allow existing violations while preventing new ones.
-       * Approximately 20+ files currently use direct imports and will require migration.
-       * Once migration is complete, this should be changed to 'error'.
+       * Note: Approximately 20+ files currently use direct imports and will require
+       * migration in a future ticket. This rule prevents new violations.
        */
       'no-restricted-imports': [
-        'warn',
+        'error',
         {
           name: '@mui/x-data-grid',
           message:
@@ -165,9 +164,9 @@ export default [
     },
   },
   /**
-   * Exemption: DataGridWrapper and ReportingTable component files
+   * Exemption: DataGridWrapper component files
    *
-   * DataGridWrapper and ReportingTable files need direct MUI DataGrid access for wrapper implementation.
+   * DataGridWrapper files need direct MUI DataGrid access for wrapper implementation.
    * These files are the only ones allowed to import directly from @mui/x-data-grid.
    */
   {
@@ -176,10 +175,6 @@ export default [
       'src/shared-components/DataGridWrapper/**/*.tsx',
       'src/types/DataGridWrapper/**/*.ts',
       'src/types/DataGridWrapper/**/*.tsx',
-      'src/shared-components/ReportingTable/**/*.ts',
-      'src/shared-components/ReportingTable/**/*.tsx',
-      'src/types/ReportingTable/**/*.ts',
-      'src/types/ReportingTable/**/*.tsx',
     ],
     rules: {
       'no-restricted-imports': 'off',
