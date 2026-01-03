@@ -1274,6 +1274,8 @@
     "members": "成员"
   },
   "postCard": {
+    "pinnedPost": "置顶帖子",
+    "postImage": "帖子图像",
     "likes": "喜欢",
     "comments": "评论",
     "addComment": "添加评论",
@@ -1783,7 +1785,22 @@
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "添加与会者时出错",
-    "errorRemovingAttendee": "删除与会者时出错"
+    "errorRemovingAttendee": "删除与会者时出错",
+    "inviteByEmail": {
+      "addRecipient": "添加收件人",
+      "email": "邮箱",
+      "title": "通过邮件邀请",
+      "sending": "发送中...",
+      "sendInvites": "发送邀请",
+      "remove": "移除",
+      "name": "姓名",
+      "messagePlaceholder": "您被邀请参加此活动。",
+      "messageLabel": "消息（可选）",
+      "expiresInDaysLabel": "有效期（天）",
+      "errorSendingInvites": "发送邀请时出错",
+      "emailsLabel": "收件人邮箱和姓名",
+      "emailsHelp": "为每个收件人提供邮箱和可选姓名。根据需要添加多个收件人。"
+    }
   },
   "userCampaigns": {
     "title": "筹款活动",

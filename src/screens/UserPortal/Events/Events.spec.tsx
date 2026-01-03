@@ -1,10 +1,9 @@
 /**
- * @file Comprehensive unit tests for the Events component in User Portal.
- * @description This test suite provides 100% code coverage for the Events component,
- * testing all functionality including event creation, modal interactions, form inputs,
- * error handling, and different user roles.
- 
- * @module EventsSpec
+ * Comprehensive unit tests for the Events component in the User Portal.
+ *
+ * This test suite provides 100% code coverage for the Events component by
+ * validating event creation, modal interactions, form inputs, error handling,
+ * and behavior across different user roles.
  */
 
 // SKIP_LOCALSTORAGE_CHECK
@@ -30,9 +29,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { vi, beforeEach, afterEach } from 'vitest';
-import { toast } from 'react-toastify';
 import { Frequency } from 'utils/recurrenceUtils';
 import { green } from '@mui/material/colors';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 const { mockToast, mockUseParams } = vi.hoisted(() => ({
   mockToast: {
@@ -43,8 +42,8 @@ const { mockToast, mockUseParams } = vi.hoisted(() => ({
   mockUseParams: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: mockToast,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockToast,
 }));
 
 vi.mock('@mui/x-date-pickers', async () => {
@@ -1003,7 +1002,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait(500);
 
     // Error should be logged (console.error is called in catch block)
-    expect(toast.success).not.toHaveBeenCalled();
+    expect(NotificationToast.success).not.toHaveBeenCalled();
   });
 
   it('Should toggle all-day checkbox and enable/disable time inputs', async () => {
