@@ -4,8 +4,8 @@
 }
 
 .profileImage {
-  width: 60px;
-  height: 60px;
+  width: var(--space-11);
+  height: var(--space-11);
   object-fit: cover;
 }
 
