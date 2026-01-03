@@ -212,5 +212,6 @@
   "removePermanently": "永久删除",
   "previousPage": "上一页",
   "nextPage": "下一页",
-  "pageNumber": "第 {{page}} 页"
+  "pageNumber": "第 {{page}} 页",
+  "loadMoreItems": "加载更多"
 }

@@ -211,5 +211,6 @@
   "removePermanently": "Remove Permanently",
   "previousPage": "Previous Page",
   "nextPage": "Next Page",
-  "pageNumber": "Page {{page}}"
+  "pageNumber": "Page {{page}}",
+  "loadMoreItems": "Load more items"
 }
