@@ -158,9 +158,13 @@ describe('Testing User Campaigns Screen', () => {
 
   it('renders the empty campaign component', async () => {
     renderCampaigns(link3);
-    await waitFor(() =>
-      expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument(),
-    );
+    await waitFor(() => {
+      expect(screen.getByTestId('campaigns-empty-state')).toBeInTheDocument();
+      expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument();
+      expect(
+        screen.getByText(cTranslations.createFirstCampaign),
+      ).toBeInTheDocument();
+    });
   });
 
   it('Should display campaigns in DataGrid', async () => {

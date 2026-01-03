@@ -212,5 +212,7 @@
   "removePermanently": "स्थायी रूप से हटाएं",
   "previousPage": "पिछला पृष्ठ",
   "nextPage": "अगला पृष्ठ",
-  "pageNumber": "पृष्ठ {{page}}"
+  "pageNumber": "पृष्ठ {{page}}",
+  "tags": "टैग",
+  "unassign": "हटाएँ"
 }

@@ -125,6 +125,7 @@ export const SIGNUP_MUTATION = gql`
     $name: String!
     $email: EmailAddress!
     $password: String!
+    $recaptchaToken: String
   ) {
     signUp(
       input: {
@@ -132,6 +133,7 @@ export const SIGNUP_MUTATION = gql`
         name: $name
         emailAddress: $email
         password: $password
+        recaptchaToken: $recaptchaToken
       }
     ) {
       user {
@@ -255,11 +257,23 @@ export const LOGOUT_MUTATION = gql`
   }
 `;
 
-// To verify the google recaptcha
-
+/**
+ * To verify the google recaptcha
+ * @public
+ */
 export const RECAPTCHA_MUTATION = gql`
   mutation Recaptcha($recaptchaToken: String!) {
     recaptcha(data: { recaptchaToken: $recaptchaToken })
+  }
+`;
+
+/**
+ * to revoke a refresh token (legacy - use LOGOUT_MUTATION for cookie-based auth)
+ * @public
+ */
+export const REVOKE_REFRESH_TOKEN = gql`
+  mutation RevokeRefreshToken($refreshToken: String!) {
+    revokeRefreshToken(refreshToken: $refreshToken)
   }
 `;
 

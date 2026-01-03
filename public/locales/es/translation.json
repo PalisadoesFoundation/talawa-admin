@@ -239,10 +239,11 @@
   "requests": {
     "profile": "Perfil",
     "title": "Solicitudes",
-    "sl_no": "Núm.",
+    "sl_no": "Número de serie",
     "name": "Nombre",
     "email": "Correo electrónico",
     "accept": "Aceptar",
+    "newMembersWillAppearHere": "Los nuevos miembros aparecerán aquí",
     "reject": "Rechazar",
     "searchRequests": "Buscar solicitudes",
     "noOrgError": "Organizaciones no encontradas, por favor crea una organización a través del panel",
@@ -252,8 +253,7 @@
     "noOrgErrorTitle": "Organizaciones no encontradas",
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
     "profilePictureAlt": "Imagen de perfil de {{name}}",
-    "placeholderAvatarAlt": "Avatar predeterminado",
-    "newMembersWillAppearHere": "Las nuevas solicitudes de membresía aparecerán aquí"
+    "placeholderAvatarAlt": "Avatar predeterminado"
   },
   "users": {
     "membershipStatus": {
@@ -408,7 +408,6 @@
     "manageTag": "Gestionar",
     "editTag": "Editar",
     "removeTag": "Eliminar",
-    "tags": "Etiquetas",
     "tagDetails": "Detalles de la Etiqueta",
     "tagName": "Nombre",
     "tagType": "Tipo",
@@ -419,8 +418,6 @@
     "noTagsFound": "No se encontraron etiquetas",
     "removeUserTag": "Eliminar Etiqueta",
     "removeUserTagMessage": "¿Desea eliminar esta etiqueta?",
-    "Latest": "Más Reciente",
-    "Oldest": "Más Antiguo",
     "addChildTag": "Agregar una Sub Etiqueta",
     "enterTagName": "Ingrese el nombre de la etiqueta",
     "totalSubTags": "Total de sub-etiquetas",
@@ -428,7 +425,6 @@
     "tagCreationFailed": "Error al crear la etiqueta",
     "errorLoadingTagsData": "Se produjo un error al cargar los datos de las etiquetas de la organización",
     "sortTags": "Ordenar Etiquetas",
-    "tags": "Etiquetas",
     "Latest": "Más Reciente",
     "Oldest": "Más Antiguo",
     "viewSubTags": "Ver {{count}} sub-etiquetas"
@@ -475,12 +471,12 @@
     "noMoreMembersFound": "No se encontraron más miembros",
     "errorOccurredWhileLoadingAssignedUser": "Se produjo un error al cargar los usuarios asignados",
     "sortPeople": "Ordenar personas",
-    "tagActions": "Acciones de etiqueta"
+    "tagActions": "Acciones de etiqueta",
+    "loadAssignedUsersError": "Se produjo un error al cargar los usuarios asignados"
   },
   "userListCard": {
     "joined": "Unido",
     "addAdmin": "Agregar administrador",
-    "addedAsAdmin": "El usuario se agrega como administrador.",
     "talawaApiUnavailable": "El servicio Talawa-API no está disponible. ¿Está funcionando? Compruebe también la conectividad de su red."
   },
   "orgAdminListCard": {
@@ -526,7 +522,6 @@
     "publicEvent": "Es público",
     "isRegistrable": "Es registrable",
     "registerable": "Es registrable",
-
     "createEvent": "Crear evento",
     "enterFilter": "Introducir filtro",
     "enterName": "Introducir nombre",
@@ -1626,6 +1621,9 @@
     "create": "crear",
     "newChat": "nueva charla",
     "newGroupChat": "Nuevo chat grupal",
+    "Error": "Error",
+    "hash": "#",
+    "description": "Descripción",
     "groupInfo": "Información del grupo",
     "members": "Miembros",
     "addMembers": "Agregar miembros",
@@ -1656,13 +1654,21 @@
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",
     "sendMessage": "Enviar mensaje",
-    "reply": "responder",
+    "loading": "Cargando...",
+    "loadOlderMessages": "Cargar mensajes más antiguos",
+    "loadingMoreMessages": "Cargando más mensajes...",
     "loadingImage": "Cargando imagen...",
     "imageNotAvailable": "Imagen no disponible",
     "attachment": "Adjunto",
-    "loadingMoreMessages": "Cargando más mensajes...",
-    "loading": "Cargando...",
-    "loadOlderMessages": "Cargar mensajes anteriores"
+    "reply": "Responder",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "errorBoundary": {
+      "title": "Algo salió mal",
+      "message": "Ocurrió un error inesperado en la sala de chat",
+      "resetButton": "Intentar de nuevo",
+      "resetButtonAriaLabel": "Intentar de nuevo"
+    }
   },
   "orgActionItemCategories": {
     "createButton": "Crear",
@@ -1712,7 +1718,8 @@
     "venueCapacityError": "¡La capacidad debe ser un número positivo!",
     "searchBy": "Buscar por",
     "name": "Nombre",
-    "desc": "Descripción"
+    "desc": "Descripción",
+    "venueImagePreview": "Vista previa de la imagen del lugar"
   },
   "addMember": {
     "title": "Agregar miembro",
@@ -1782,7 +1789,6 @@
     "title": "Campañas de recaudación de fondos",
     "searchByName": "Buscar por nombre...",
     "searchBy": "Buscar por",
-    "searchCampaigns": "Buscar campañas",
     "pledgers": "Prometedores",
     "pledger": "Prometedor",
     "campaigns": "Campañas",
@@ -1803,7 +1809,18 @@
     "noPledges": "No se encontraron promesas",
     "noCampaigns": "No se encontraron campañas",
     "raised": "Recaudado",
-    "amountRaised": "Monto Recaudado"
+    "amountRaised": "Monto Recaudado",
+    "campaignIndex": "#",
+    "campaignName": "Nombre de la Campaña",
+    "startDate": "Fecha de Inicio",
+    "endDate": "Fecha de Finalización",
+    "fundGoal": "Meta de Financiación",
+    "percentRaised": "% Recaudado",
+    "searchCampaigns": "Buscar campañas",
+    "createFirstCampaign": "Crea tu primera campaña de recaudación de fondos para verla aquí.",
+    "campaignEnded": "Campaña finalizada",
+    "fundingGoal": "Meta de financiación",
+    "viewPledge": "Ver promesa"
   },
   "userPledges": {
     "title": "Mis Promesas",
@@ -1866,7 +1883,19 @@
     "thisEventOnly": "Solo este evento",
     "volunteerAlt": "Imagen de perfil del voluntario",
     "groupTable": "Tabla de Grupos",
-    "volunteerActions": "Acciones de Voluntarios"
+    "volunteerActions": "Acciones de Voluntarios",
+    "volunteerHeader": "Voluntario",
+    "statusHeader": "Estado",
+    "hoursVolunteeredHeader": "Horas de Voluntariado",
+    "optionsHeader": "Opciones",
+    "groupHeader": "Grupo",
+    "leaderHeader": "Líder",
+    "numVolunteersHeader": "Número de Voluntarios",
+    "pending": "Pendiente",
+    "viewDetails": "Ver detalles de {{name}}",
+    "editVolunteerGroup": "Editar grupo de voluntarios {{name}}",
+    "deleteVolunteerGroup": "Eliminar grupo de voluntarios {{name}}",
+    "deleteVolunteerEntry": "Eliminar entrada de voluntario {{name}}"
   },
   "userVolunteer": {
     "title": "Voluntariado",
@@ -2012,6 +2041,15 @@
     "eventsCreatedByOrganization": "Eventos creados por la organización",
     "today": "Hoy"
   },
+  "contact": {
+    "card_aria": "Tarjeta de contacto"
+  },
+  "donation": {
+    "card_aria": "Tarjeta de donación"
+  },
+  "securedRoute": {
+    "sessionExpired": "Por favor, vuelva a iniciar sesión ya que la sesión ha expirado"
+  },
   "common": {
     "signOut": "Cerrar sesión",
     "signingOut": "Cerrando sesión...",
@@ -2026,5 +2064,20 @@
     "title": "Portal de Usuario",
     "talawa": "Talawa",
     "talawaBranding": "Marca Talawa"
+  },
+  "organizationVenuesNotification": {
+    "venueCreated": "Lugar creado correctamente",
+    "venueUpdated": "Los detalles del lugar se actualizaron correctamente",
+    "venueNameExists": "El nombre del lugar ya existe",
+    "venueTitleError": "¡El nombre del lugar no puede estar vacío!",
+    "venueCapacityError": "¡La capacidad debe ser un número positivo!",
+    "previewUrlError": "Error al crear la vista previa",
+    "invalidCapacity": "La capacidad debe ser un número positivo"
+  },
+  "manageTags": {
+    "loadAssignedUsersError": "Se produjo un error al cargar los usuarios asignados",
+    "sortPeople": "Ordenar personas",
+    "unassign": "Desasignar",
+    "tags": "Etiquetas"
   }
 }

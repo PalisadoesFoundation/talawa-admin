@@ -86,6 +86,7 @@
     "update:toc": "node scripts/githooks/update-toc.js",
     "lint-staged": "lint-staged --concurrent false",
     "setup": "tsx src/setup/setup.ts",
+    "install-deps": "tsx src/install/index.ts",
     "check-localstorage": "tsx scripts/githooks/check-localstorage-usage.ts",
     "postgenerate-docs": "find docs/docs/auto-docs -name 'README.md' -delete && node scripts/docs/fix-repo-url.js",
     "generate-docs": "typedoc && pnpm run postgenerate-docs && node scripts/docs/fix-readme-links.js",
@@ -96,7 +97,8 @@
     "cy:run": "cross-env CYPRESS_COVERAGE=true pnpm run start-server cypress:run",
     "check-mock-cleanup": "bash scripts/githooks/check-mock-cleanup.sh",
     "check:pom": "node scripts/githooks/check_pom.js",
-    "check-i18n": "node scripts/check-i18n.js"
+    "check-i18n": "node scripts/check-i18n.js",
+    "lint:datagrid": "./scripts/lint-datagrid.sh"
   },
   "eslintConfig": {
     "extends": [
@@ -127,6 +129,7 @@
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
     "@types/apollo-upload-client": "^18.0.0",
+    "@storybook/react": "^10.1.11",
     "@types/js-cookie": "^3.0.6",
     "@types/lodash": "^4.17.21",
     "@types/node": "^24.3.0",
@@ -137,7 +140,7 @@
     "@types/sanitize-html": "^2.16.0",
     "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@typescript-eslint/parser": "^8.46.2",
-    "@vitejs/plugin-react": "^5.1.0",
+    "@vitejs/plugin-react": "^5.1.2",
     "@vitest/coverage-istanbul": "^3.2.4",
     "@vitest/eslint-plugin": "^1.4.2",
     "@vitest/ui": "^3.2.4",
@@ -226,12 +229,6 @@
     "gulp-header": "^2.0.9",
     "rimraf": "^6.1.2",
     "glob": "^13.0.0"
-  },
-  "lint-staged": {
-    "**/*.{ts, tsx, json, scss, css}": [
-      "prettier --write"
-    ],
-    "**/*.{ts, tsx, json}": "eslint --fix"
   },
   "packageManager": "pnpm@10.4.1"
 }
