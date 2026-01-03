@@ -212,6 +212,9 @@
   "previousPage": "Página anterior",
   "nextPage": "Siguiente página",
   "pageNumber": "Página {{page}}",
+  "loadMoreItems": "Cargar más elementos",
+  "loadMore": "Cargar Más",
+  "retry": "Reintentar",
   "tags": "Etiquetas",
   "unassign": "Desasignar"
 }
