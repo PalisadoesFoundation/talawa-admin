@@ -474,12 +474,12 @@
     "allTags": "All Tags",
     "noMoreMembersFound": "No more members found",
     "errorOccurredWhileLoadingAssignedUser": "Error occurred while loading assigned users",
-    "sortPeople": "Sort People",
-    "tagActions": "Tag Actions"
+    "tagActions": "Tag Actions",
+    "loadAssignedUsersError": "Error occurred while loading assigned users",
+    "sortPeople": "Sort People"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
-    "addedAsAdmin": "User is added as admin.",
     "joined": "joined",
     "talawaApiUnavailable": "talawaApiUnavailable"
   },
@@ -1713,7 +1713,8 @@
     "edit": "edit",
     "delete": "delete",
     "name": "name",
-    "desc": "desc"
+    "desc": "desc",
+    "venueImagePreview": "Preview of venue image"
   },
   "addMember": {
     "title": "Add Member",
@@ -1804,7 +1805,15 @@
     "noCampaigns": "No Campaigns Found",
     "raised": "Raised",
     "amountRaised": "Amount Raised",
-    "searchCampaigns": "Search Campaigns"
+    "searchCampaigns": "Search Campaigns",
+    "campaignIndex": "#",
+    "campaignName": "Campaign Name",
+    "startDate": "Start Date",
+    "endDate": "End Date",
+    "fundGoal": "Fund Goal",
+    "percentRaised": "% Raised",
+    "createFirstCampaign": "Create your first fundraising campaign to see it here.",
+    "campaignEnded": "Campaign Ended"
   },
   "userPledges": {
     "title": "My Pledges",
@@ -1867,7 +1876,19 @@
     "thisEventOnly": "This Event Only",
     "volunteerAlt": "Volunteer profile picture",
     "groupTable": "Group Table",
-    "volunteerActions": "Volunteer Actions"
+    "volunteerActions": "Volunteer Actions",
+    "volunteerHeader": "Volunteer",
+    "statusHeader": "Status",
+    "hoursVolunteeredHeader": "Hours Volunteered",
+    "optionsHeader": "Options",
+    "groupHeader": "Group",
+    "leaderHeader": "Leader",
+    "numVolunteersHeader": "No. of Volunteers",
+    "pending": "Pending",
+    "viewDetails": "View {{name}} details",
+    "editVolunteerGroup": "Edit {{name}} volunteer group",
+    "deleteVolunteerGroup": "Delete {{name}} volunteer group",
+    "deleteVolunteerEntry": "Delete {{name}} volunteer entry"
   },
   "userVolunteer": {
     "title": "Volunteership",
@@ -2034,5 +2055,20 @@
     "card_aria": "Donation card",
     "card_test_id": "donation-card-{{id}}",
     "date_label": "Date"
+  },
+  "organizationVenuesNotification": {
+    "venueCreated": "Venue created successfully",
+    "venueUpdated": "Venue details updated successfully",
+    "venueNameExists": "Venue name already exists",
+    "venueTitleError": "Venue title cannot be empty!",
+    "venueCapacityError": "Capacity must be a positive number!",
+    "previewUrlError": "Error creating preview URL",
+    "invalidCapacity": "Capacity must be a positive number!"
+  },
+  "manageTags": {
+    "loadAssignedUsersError": "Error occurred while loading assigned users",
+    "sortPeople": "Sort People",
+    "unassign": "Unassign",
+    "tags": "Tags"
   }
 }

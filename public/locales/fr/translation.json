@@ -474,12 +474,12 @@
     "allTags": "Toutes les étiquettes",
     "noMoreMembersFound": "Aucun autre membre trouvé",
     "errorOccurredWhileLoadingAssignedUser": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
-    "sortPeople": "Trier les personnes",
-    "tagActions": "Actions d'étiquette"
+    "tagActions": "Actions d'étiquette",
+    "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
+    "sortPeople": "Trier les personnes"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
-    "addedAsAdmin": "L'utilisateur est ajouté en tant qu'administrateur.",
     "joined": "Rejoint",
     "talawaApiUnavailable": "API Talawa indisponible"
   },
@@ -1712,7 +1712,8 @@
     "edit": "Modifier",
     "delete": "Supprimer",
     "name": "Nom",
-    "desc": "Description"
+    "desc": "Description",
+    "venueImagePreview": "Aperçu de l’image du lieu"
   },
   "addMember": {
     "title": "Ajouter un membre",
@@ -1803,7 +1804,15 @@
     "noPledges": "Aucune promesse trouvée",
     "noCampaigns": "Aucune campagne trouvée",
     "raised": "Collecté",
-    "amountRaised": "Montant Collecté"
+    "amountRaised": "Montant Collecté",
+    "campaignIndex": "#",
+    "campaignName": "Nom de la Campagne",
+    "startDate": "Date de Début",
+    "endDate": "Date de Fin",
+    "fundGoal": "Objectif de Financement",
+    "percentRaised": "% Collecté",
+    "createFirstCampaign": "Créez votre première campagne de financement pour la voir ici.",
+    "campaignEnded": "Campagne terminée"
   },
   "userPledges": {
     "title": "Mes Promesses",
@@ -1866,7 +1875,19 @@
     "thisEventOnly": "Cet événement uniquement",
     "volunteerAlt": "Photo de profil du bénévole",
     "groupTable": "Tableau des Groupes",
-    "volunteerActions": "Actions des Bénévoles"
+    "volunteerActions": "Actions des Bénévoles",
+    "volunteerHeader": "Bénévole",
+    "statusHeader": "Statut",
+    "hoursVolunteeredHeader": "Heures de Bénévolat",
+    "optionsHeader": "Options",
+    "groupHeader": "Groupe",
+    "leaderHeader": "Chef",
+    "numVolunteersHeader": "Nombre de Bénévoles",
+    "pending": "En attente",
+    "viewDetails": "Voir les détails de {{name}}",
+    "editVolunteerGroup": "Modifier le groupe de bénévoles {{name}}",
+    "deleteVolunteerGroup": "Supprimer le groupe de bénévoles {{name}}",
+    "deleteVolunteerEntry": "Supprimer l'entrée bénévole {{name}}"
   },
   "userVolunteer": {
     "title": "Volontariat",
@@ -2033,5 +2054,20 @@
     "card_aria": "Carte de don",
     "card_test_id": "donation-card-{{id}}",
     "date_label": "Date"
+  },
+  "organizationVenuesNotification": {
+    "venueCreated": "Lieu créé avec succès",
+    "venueUpdated": "Les détails du lieu ont été mis à jour avec succès",
+    "venueNameExists": "Le nom du lieu existe déjà",
+    "venueTitleError": "Le nom du lieu ne peut pas être vide !",
+    "venueCapacityError": "La capacité doit être un nombre positif !",
+    "previewUrlError": "Erreur lors de la création de l’aperçu",
+    "invalidCapacity": "La capacité doit être un nombre positif"
+  },
+  "manageTags": {
+    "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
+    "sortPeople": "Trier les personnes",
+    "unassign": "Désassigner",
+    "tags": "Tags"
   }
 }

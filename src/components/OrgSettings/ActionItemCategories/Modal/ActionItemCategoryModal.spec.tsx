@@ -13,7 +13,7 @@ import type { ApolloLink } from '@apollo/client';
 import { MOCKS, MOCKS_ERROR } from '../OrgActionItemCategoryMocks';
 import type { IActionItemCategoryModal } from './ActionItemCategoryModal';
 import CategoryModal from './ActionItemCategoryModal';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { it, vi, describe, beforeEach } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -33,10 +33,12 @@ dayjs.extend(utc);
  * - 100% code coverage including all conditional branches
  */
 
-vi.mock('react-toastify', () => ({
-  toast: {
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
   },
 }));
 
@@ -253,9 +255,10 @@ describe('Testing Action Item Category Modal', () => {
       await waitFor(() => {
         expect(categoryProps[0].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[0].hide).toHaveBeenCalled();
-        expect(toast.success).toHaveBeenCalledWith(
-          translations.successfulCreation,
-        );
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'eventActionItems.successfulCreation',
+          namespace: 'translation',
+        });
       });
     });
 
@@ -266,9 +269,10 @@ describe('Testing Action Item Category Modal', () => {
       await waitFor(() => {
         expect(categoryProps[0].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[0].hide).toHaveBeenCalled();
-        expect(toast.success).toHaveBeenCalledWith(
-          translations.successfulCreation,
-        );
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'eventActionItems.successfulCreation',
+          namespace: 'translation',
+        });
       });
     });
 
@@ -291,9 +295,10 @@ describe('Testing Action Item Category Modal', () => {
       await waitFor(() => {
         expect(categoryProps[0].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[0].hide).toHaveBeenCalled();
-        expect(toast.success).toHaveBeenCalledWith(
-          translations.successfulCreation,
-        );
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'eventActionItems.successfulCreation',
+          namespace: 'translation',
+        });
       });
     });
 
@@ -302,7 +307,10 @@ describe('Testing Action Item Category Modal', () => {
       await fillFormAndSubmit('New Category', 'New description', true);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalled();
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
       });
     });
   });
@@ -319,9 +327,10 @@ describe('Testing Action Item Category Modal', () => {
       await waitFor(() => {
         expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[1].hide).toHaveBeenCalled();
-        expect(toast.success).toHaveBeenCalledWith(
-          translations.successfulUpdation,
-        );
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'eventActionItems.successfulUpdation',
+          namespace: 'translation',
+        });
       });
     });
 
@@ -338,9 +347,10 @@ describe('Testing Action Item Category Modal', () => {
       await waitFor(() => {
         expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[1].hide).toHaveBeenCalled();
-        expect(toast.success).toHaveBeenCalledWith(
-          translations.successfulUpdation,
-        );
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'eventActionItems.successfulUpdation',
+          namespace: 'translation',
+        });
       });
     });
 
@@ -355,9 +365,10 @@ describe('Testing Action Item Category Modal', () => {
       await waitFor(() => {
         expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[1].hide).toHaveBeenCalled();
-        expect(toast.success).toHaveBeenCalledWith(
-          translations.successfulUpdation,
-        );
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'eventActionItems.successfulUpdation',
+          namespace: 'translation',
+        });
       });
     });
 
@@ -372,9 +383,10 @@ describe('Testing Action Item Category Modal', () => {
       await waitFor(() => {
         expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[1].hide).toHaveBeenCalled();
-        expect(toast.success).toHaveBeenCalledWith(
-          translations.successfulUpdation,
-        );
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'eventActionItems.successfulUpdation',
+          namespace: 'translation',
+        });
       });
     });
   });
@@ -395,9 +407,10 @@ describe('Testing Action Item Category Modal', () => {
       await waitFor(() => {
         expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[1].hide).toHaveBeenCalled();
-        expect(toast.success).toHaveBeenCalledWith(
-          translations.successfulUpdation,
-        );
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'eventActionItems.successfulUpdation',
+          namespace: 'translation',
+        });
       });
     });
 
@@ -414,9 +427,10 @@ describe('Testing Action Item Category Modal', () => {
       await waitFor(() => {
         expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[1].hide).toHaveBeenCalled();
-        expect(toast.success).toHaveBeenCalledWith(
-          translations.successfulUpdation,
-        );
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'eventActionItems.successfulUpdation',
+          namespace: 'translation',
+        });
       });
     });
 
@@ -435,9 +449,10 @@ describe('Testing Action Item Category Modal', () => {
       await waitFor(() => {
         expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[1].hide).toHaveBeenCalled();
-        expect(toast.success).toHaveBeenCalledWith(
-          translations.successfulUpdation,
-        );
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'eventActionItems.successfulUpdation',
+          namespace: 'translation',
+        });
       });
     });
 
@@ -452,9 +467,10 @@ describe('Testing Action Item Category Modal', () => {
       await waitFor(() => {
         expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[1].hide).toHaveBeenCalled();
-        expect(toast.success).toHaveBeenCalledWith(
-          translations.successfulUpdation,
-        );
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'eventActionItems.successfulUpdation',
+          namespace: 'translation',
+        });
       });
     });
   });
@@ -465,8 +481,9 @@ describe('Testing Action Item Category Modal', () => {
       const submitBtn = screen.getByTestId('formSubmitButton');
       await userEvent.click(submitBtn);
 
-      await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(translations.sameNameConflict);
+      expect(NotificationToast.error).toHaveBeenCalledWith({
+        key: 'sameNameConflict',
+        namespace: 'translation',
       });
     });
 
@@ -479,7 +496,10 @@ describe('Testing Action Item Category Modal', () => {
       await userEvent.click(submitBtn);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalled();
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
       });
     });
 
@@ -488,7 +508,10 @@ describe('Testing Action Item Category Modal', () => {
       await fillFormAndSubmit('Updated Name', 'Updated description', true);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalled();
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
       });
     });
 
@@ -529,9 +552,10 @@ describe('Testing Action Item Category Modal', () => {
       await waitFor(() => {
         expect(categoryProps[1].refetchCategories).toHaveBeenCalled();
         expect(categoryProps[1].hide).toHaveBeenCalled();
-        expect(toast.success).toHaveBeenCalledWith(
-          translations.categoryDeleted,
-        );
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'categoryDeleted',
+          namespace: 'translation',
+        });
       });
     });
 
@@ -541,7 +565,10 @@ describe('Testing Action Item Category Modal', () => {
       await userEvent.click(deleteBtn);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalled();
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
       });
     });
 
@@ -564,8 +591,8 @@ describe('Testing Action Item Category Modal', () => {
         expect(mockRefetch).not.toHaveBeenCalled();
         expect(mockHide).not.toHaveBeenCalled();
         // Verify no toast notifications were triggered
-        expect(toast.success).not.toHaveBeenCalled();
-        expect(toast.error).not.toHaveBeenCalled();
+        expect(NotificationToast.success).not.toHaveBeenCalled();
+        expect(NotificationToast.error).not.toHaveBeenCalled();
       });
     });
 
@@ -596,8 +623,8 @@ describe('Testing Action Item Category Modal', () => {
         expect(mockRefetch).not.toHaveBeenCalled();
         expect(mockHide).not.toHaveBeenCalled();
         // Verify no toast notifications were triggered
-        expect(toast.success).not.toHaveBeenCalled();
-        expect(toast.error).not.toHaveBeenCalled();
+        expect(NotificationToast.success).not.toHaveBeenCalled();
+        expect(NotificationToast.error).not.toHaveBeenCalled();
       });
     });
 

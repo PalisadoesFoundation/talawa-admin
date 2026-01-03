@@ -212,6 +212,9 @@ describe('Testing VolunteerGroups Screen', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('volunteerGroups-empty-state'),
+      ).toBeInTheDocument();
       expect(screen.getByText(t.noVolunteerGroups)).toBeInTheDocument();
     });
   });
