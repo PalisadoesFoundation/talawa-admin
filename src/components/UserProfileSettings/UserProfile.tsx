@@ -89,7 +89,7 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
             </div>
             <div className={styles.profileDetails}>
               <span
-                style={{ fontWeight: '700', fontSize: '28px' }}
+                className="profile-name"
                 data-tooltip-id="name"
                 data-tooltip-content={`${firstName} ${lastName}`}
               >
