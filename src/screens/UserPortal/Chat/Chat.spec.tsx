@@ -19,6 +19,15 @@ import '@testing-library/jest-dom';
 import Chat from './Chat';
 import { CHATS_LIST, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
 
+type MockType = {
+  request: {
+    query: typeof CHATS_LIST | typeof UNREAD_CHATS;
+    variables?: Record<string, unknown>;
+  };
+  result: { data: Record<string, unknown> };
+  error?: Error;
+};
+
 const { mockUseParams } = vi.hoisted(() => ({
   mockUseParams: vi.fn(),
 }));
@@ -35,6 +44,9 @@ vi.mock('components/UserPortal/ContactCard/ContactCard', () => ({
     <div
       data-testid={`contact-card-${props.id}`}
       onClick={() => props.setSelectedContact(props.id)}
+      onKeyDown={(e) => e.key === 'Enter' && props.setSelectedContact(props.id)}
+      role="button"
+      tabIndex={0}
       data-last-message={props.lastMessage}
       data-title={props.title}
       data-unseen={props.unseenMessages}
@@ -54,6 +66,9 @@ vi.mock('components/UserPortal/ChatRoom/ChatRoom', () => ({
       data-testid="chat-room"
       data-selected-contact={selectedContact}
       onClick={() => chatListRefetch()}
+      onKeyDown={(e) => e.key === 'Enter' && chatListRefetch()}
+      role="button"
+      tabIndex={0}
     ></div>
   ),
 }));
@@ -74,6 +89,14 @@ vi.mock(
           toggleCreateGroupChatModal();
           chatsListRefetch();
         }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            toggleCreateGroupChatModal();
+            chatsListRefetch();
+          }
+        }}
+        role="button"
+        tabIndex={0}
       ></div>
     ),
   }),
@@ -96,6 +119,14 @@ vi.mock('components/UserPortal/CreateDirectChat/CreateDirectChat', () => ({
         toggleCreateDirectChatModal();
         chatsListRefetch();
       }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') {
+          toggleCreateDirectChatModal();
+          chatsListRefetch();
+        }
+      }}
+      role="button"
+      tabIndex={0}
     ></div>
   ),
 }));
@@ -294,23 +325,13 @@ describe('Chat Component - Comprehensive Coverage', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
-  const renderComponent = (customMocks: unknown[] = mocks) =>
+  const renderComponent = (customMocks: MockType[] = mocks as MockType[]) =>
     render(
-      <MockedProvider
-        mocks={
-          customMocks as readonly {
-            request: {
-              query: typeof CHATS_LIST | typeof UNREAD_CHATS;
-              variables?: Record<string, unknown>;
-            };
-            result: { data: Record<string, unknown> };
-          }[]
-        }
-        addTypename={false}
-      >
+      <MockedProvider mocks={customMocks} addTypename={false}>
         <I18nextProvider i18n={i18nForTest}>
           <Provider store={store}>
             <Chat />
