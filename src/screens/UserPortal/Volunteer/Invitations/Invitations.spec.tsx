@@ -23,20 +23,20 @@ import {
   INDIVIDUAL_RECURRING_MOCKS,
   INDIVIDUAL_NON_RECURRING_MOCKS,
 } from './Invitations.mocks';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, expect, beforeEach, afterEach } from 'vitest';
 
 const sharedMocks = vi.hoisted(() => ({
-  toast: {
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
   },
   navigate: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: sharedMocks.toast,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: sharedMocks.NotificationToast,
 }));
 
 vi.mock('@mui/icons-material', () => ({
@@ -286,7 +286,9 @@ describe('Testing Invvitations Screen', () => {
     await userEvent.click(acceptBtn[0]);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(t.invitationAccepted);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        t.invitationAccepted,
+      );
     });
   });
 
@@ -302,7 +304,9 @@ describe('Testing Invvitations Screen', () => {
     await userEvent.click(rejectBtn[0]);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(t.invitationRejected);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        t.invitationRejected,
+      );
     });
   });
 
@@ -318,7 +322,9 @@ describe('Testing Invvitations Screen', () => {
     await userEvent.click(acceptBtn[0]);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        expect.stringContaining(t.unknownError.split(' {{')[0]),
+      );
     });
   });
 

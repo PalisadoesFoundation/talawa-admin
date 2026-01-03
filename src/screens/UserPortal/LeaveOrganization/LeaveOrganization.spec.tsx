@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import LeaveOrganization from './LeaveOrganization';
 import {
   ORGANIZATIONS_LIST_BASIC,
@@ -15,12 +16,12 @@ const routerMocks = vi.hoisted(() => ({
   navigate: vi.fn(),
 }));
 
-const toastMocks = vi.hoisted(() => ({
+const mockNotificationToast = vi.hoisted(() => ({
   success: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockNotificationToast,
 }));
 
 // Mock useParams to return a test organization ID
@@ -311,7 +312,7 @@ describe('LeaveOrganization Component', () => {
       expect(routerMocks.navigate).toHaveBeenCalledWith(`/user/organizations`);
     });
     await waitFor(() => {
-      expect(toastMocks.success).toHaveBeenCalledWith(
+      expect(NotificationToast.success).toHaveBeenCalledWith(
         'You have successfully left the organization!',
       );
     });

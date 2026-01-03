@@ -23,6 +23,8 @@
 }
 
 .postMedia {
+  padding-left: 16px;
+  padding-right: 16px;
   width: 100%;
 }
 
@@ -47,6 +49,7 @@
 .postContent {
   padding: 8px 16px 0px;
 }
+
 .likesCount {
   padding: 0px 16px 0px;
 }
@@ -159,4 +162,8 @@
 
 .closeButtonIcon {
   font-size: 20px !important;
+}
+
+.image {
+  width: 100%;
 }

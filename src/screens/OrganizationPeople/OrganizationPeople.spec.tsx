@@ -15,7 +15,8 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+
 import { PAGE_SIZE } from '../../types/ReportingTable/utils';
 
 const sharedMocks = vi.hoisted(() => ({
@@ -27,8 +28,8 @@ const sharedMocks = vi.hoisted(() => ({
 }));
 
 // Mock the required modules
-vi.mock('react-toastify', () => ({
-  toast: sharedMocks.toast,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: sharedMocks.toast,
 }));
 
 vi.mock('./addMember/AddMember', () => ({
@@ -1099,7 +1100,9 @@ describe('OrganizationPeople', () => {
 
     // Wait for error handling
     await waitFor(() => {
-      expect(vi.mocked(toast.error)).toHaveBeenCalledWith('An error occurred');
+      expect(vi.mocked(NotificationToast.error)).toHaveBeenCalledWith(
+        'An error occurred',
+      );
     });
   });
 
@@ -1159,7 +1162,9 @@ describe('OrganizationPeople', () => {
 
     // Wait for error handling
     await waitFor(() => {
-      expect(vi.mocked(toast.error)).toHaveBeenCalledWith('An error occurred');
+      expect(vi.mocked(NotificationToast.error)).toHaveBeenCalledWith(
+        'An error occurred',
+      );
     });
   });
 
@@ -1278,7 +1283,7 @@ describe('OrganizationPeople', () => {
 
     // Modal should be closed
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalled();
     });
   });
 
