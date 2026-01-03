@@ -15,6 +15,9 @@ import type {
 import ItemModal from './ActionItemModal';
 import { vi, it, describe, expect, beforeEach, afterEach } from 'vitest';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
@@ -80,8 +83,8 @@ const createVolunteer = (
   isPublic: true,
   isTemplate,
   isInstanceException: false,
-  createdAt: dayjs().format('YYYY-MM-DDTHH:mm:ss[Z]'),
-  updatedAt: dayjs().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+  createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+  updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
   user: {
     id: `user-${id}`,
     name,
@@ -124,7 +127,7 @@ const createVolunteerGroup = (
   volunteersRequired: 5,
   isTemplate,
   isInstanceException: false,
-  createdAt: dayjs().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+  createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
   creator: {
     id: 'user1',
     name: 'John Doe',
@@ -154,10 +157,10 @@ const createVolunteerGroup = (
 const createActionItemNode = (eventId: string) => ({
   id: '1',
   isCompleted: false,
-  assignedAt: dayjs().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+  assignedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
   completionAt: null,
-  createdAt: dayjs().format('YYYY-MM-DDTHH:mm:ss[Z]'),
-  updatedAt: dayjs().add(1, 'day').format('YYYY-MM-DDTHH:mm:ss[Z]'),
+  createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+  updatedAt: dayjs().utc().add(1, 'day').format('YYYY-MM-DDTHH:mm:ss[Z]'),
   preCompletionNotes: 'Test notes',
   postCompletionNotes: null,
   isInstanceException: false,
@@ -243,8 +246,8 @@ const mockQueries = [
             isDisabled: false,
             description: 'Test category 1',
             creator: { id: 'creator1', name: 'Creator 1' },
-            createdAt: dayjs().format('YYYY-MM-DD'),
-            updatedAt: dayjs().format('YYYY-MM-DD'),
+            createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+            updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
           },
           {
             id: 'cat2',
@@ -252,8 +255,8 @@ const mockQueries = [
             isDisabled: false,
             description: 'Test category 2',
             creator: { id: 'creator2', name: 'Creator 2' },
-            createdAt: dayjs().format('YYYY-MM-DD'),
-            updatedAt: dayjs().format('YYYY-MM-DD'),
+            createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+            updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
           },
         ],
       },
@@ -276,8 +279,8 @@ const mockQueries = [
             emailAddress: 'john@example.com',
             role: 'USER',
             avatarURL: '',
-            createdAt: dayjs().format('YYYY-MM-DD'),
-            updatedAt: dayjs().format('YYYY-MM-DD'),
+            createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+            updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
           },
           {
             id: 'user2',
@@ -288,8 +291,8 @@ const mockQueries = [
             emailAddress: 'jane@example.com',
             role: 'USER',
             avatarURL: '',
-            createdAt: dayjs().format('YYYY-MM-DD'),
-            updatedAt: dayjs().format('YYYY-MM-DD'),
+            createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+            updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
           },
         ],
       },
@@ -457,7 +460,7 @@ const mockQueries = [
         createActionItem: {
           id: 'created-action-item',
           isCompleted: false,
-          assignedAt: dayjs().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+          assignedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
           preCompletionNotes: 'Test notes',
           postCompletionNotes: null,
           isInstanceException: false,
@@ -477,9 +480,12 @@ const mockQueries = [
         updateActionItem: {
           id: '1',
           isCompleted: false,
-          assignedAt: dayjs().add(1, 'day').format('YYYY-MM-DDTHH:mm:ss[Z]'),
+          assignedAt: dayjs()
+            .utc()
+            .add(1, 'day')
+            .format('YYYY-MM-DDTHH:mm:ss[Z]'),
           completionAt: null,
-          createdAt: dayjs().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+          createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
           preCompletionNotes: 'Test notes',
           postCompletionNotes: null,
           isInstanceException: false,
@@ -526,9 +532,9 @@ const mockActionItem = {
   organizationId: 'org1',
   creatorId: 'creator1',
   updaterId: null,
-  assignedAt: dayjs().toDate(),
+  assignedAt: dayjs().utc().toDate(),
   completionAt: null,
-  createdAt: dayjs().toDate(),
+  createdAt: dayjs().utc().toDate(),
   updatedAt: null,
   isCompleted: false,
   preCompletionNotes: 'Test notes',
@@ -561,7 +567,7 @@ const mockActionItem = {
     name: 'Category 1',
     description: '',
     isDisabled: false,
-    createdAt: dayjs().format('YYYY-MM-DD'),
+    createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
     organizationId: 'org1',
   },
   organization: {
@@ -582,7 +588,7 @@ const mockActionItemWithGroup = {
     volunteersRequired: 5,
     isTemplate: true,
     isInstanceException: false,
-    createdAt: dayjs().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+    createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
     creator: {
       id: 'user1',
       name: 'John Doe',
@@ -1609,8 +1615,8 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
                 isDisabled: false,
                 description: 'Updated test category 1',
                 creator: { id: 'creator1', name: 'Creator 1' },
-                createdAt: dayjs().format('YYYY-MM-DD'),
-                updatedAt: dayjs().format('YYYY-MM-DD'),
+                createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+                updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
               },
               {
                 id: 'cat3',
@@ -1618,8 +1624,8 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
                 isDisabled: false,
                 description: 'New test category 3',
                 creator: { id: 'creator3', name: 'Creator 3' },
-                createdAt: dayjs().format('YYYY-MM-DD'),
-                updatedAt: dayjs().format('YYYY-MM-DD'),
+                createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+                updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
               },
             ],
           },
@@ -1991,9 +1997,9 @@ describe('updateActionForInstanceHandler', () => {
     const mockOrgRefetch = vi.fn();
     const mockHide = vi.fn();
 
-    const expectedAssignedAt = dayjs(
-      mockActionItemWithGroup.assignedAt,
-    ).toISOString();
+    const expectedAssignedAt = dayjs(mockActionItemWithGroup.assignedAt)
+      .utc()
+      .toISOString();
 
     const updateGroupMutationMock = {
       request: {
@@ -2389,7 +2395,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
             volunteerId: 'volunteer2',
             categoryId: 'cat2',
             preCompletionNotes: 'Updated notes for instance',
-            assignedAt: dayjs().toISOString(),
+            assignedAt: dayjs().utc().toISOString(),
           },
         },
       },
@@ -2837,9 +2843,9 @@ describe('orgActionItemsRefetch functionality', () => {
           createActionItem: {
             id: 'newId',
             isCompleted: false,
-            assignedAt: dayjs().format('YYYY-MM-DD'),
+            assignedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
             completionAt: null,
-            createdAt: dayjs().format('YYYY-MM-DD'),
+            createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
             preCompletionNotes: 'Test with org refetch',
             postCompletionNotes: null,
             volunteer: {
@@ -3080,9 +3086,9 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
             createActionItem: {
               id: 'newId',
               isCompleted: false,
-              assignedAt: dayjs().format('YYYY-MM-DD'),
+              assignedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
               completionAt: null,
-              createdAt: dayjs().format('YYYY-MM-DD'),
+              createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
               preCompletionNotes: 'Test with event',
               postCompletionNotes: null,
               volunteer: {
@@ -3343,7 +3349,10 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
             updateActionItem: {
               id: '1',
               isCompleted: false,
-              updatedAt: dayjs().add(1, 'day').format('YYYY-MM-DDTHH:mm:ss[Z]'),
+              updatedAt: dayjs()
+                .utc()
+                .add(1, 'day')
+                .format('YYYY-MM-DDTHH:mm:ss[Z]'),
             },
           },
         },
@@ -3969,9 +3978,9 @@ describe('Partially Covered Lines Test Coverage', () => {
             createActionItem: {
               id: 'newId',
               isCompleted: false,
-              assignedAt: dayjs().format('YYYY-MM-DD'),
+              assignedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
               completionAt: null,
-              createdAt: dayjs().format('YYYY-MM-DD'),
+              createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
               preCompletionNotes: '',
               postCompletionNotes: null,
               volunteer: null,
