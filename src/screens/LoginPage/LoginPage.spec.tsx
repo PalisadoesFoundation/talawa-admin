@@ -1454,8 +1454,8 @@ const renderLoginPage = (
       {...(isLink
         ? { link: mocksOrLink }
         : {
-          mocks: mocksOrLink as ReadonlyArray<MockedResponse>,
-        })}
+            mocks: mocksOrLink as ReadonlyArray<MockedResponse>,
+          })}
     >
       <BrowserRouter>
         <Provider store={store}>
@@ -1661,7 +1661,10 @@ describe('Extra coverage for 100 %', () => {
         result: {
           data: {
             community: {
-              createdAt: '2023-01-01',
+              createdAt: dayjs()
+                .subtract(1, 'year')
+                .startOf('year')
+                .format('YYYY-MM-DD'),
               facebookURL: null,
               githubURL: null,
               id: '1',
@@ -1673,7 +1676,10 @@ describe('Extra coverage for 100 %', () => {
               name: 'Test Community',
               redditURL: null,
               slackURL: null,
-              updatedAt: '2023-01-01',
+              updatedAt: dayjs()
+                .subtract(1, 'year')
+                .startOf('year')
+                .format('YYYY-MM-DD'),
               websiteURL: null,
               xURL: null,
               youtubeURL: null,

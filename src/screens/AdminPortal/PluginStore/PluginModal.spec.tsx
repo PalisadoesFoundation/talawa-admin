@@ -251,7 +251,7 @@ describe('PluginModal', () => {
     it('should show loading state while fetching', () => {
       (
         AdminPluginFileService.getPluginDetails as unknown as Mock
-      ).mockImplementationOnce(() => new Promise(() => { }));
+      ).mockImplementationOnce(() => new Promise(() => {}));
 
       render(<PluginModal {...defaultProps} />);
 
@@ -898,7 +898,7 @@ describe('PluginModal', () => {
     it('should show error toast and log error when plugin details loading fails', async () => {
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => { });
+        .mockImplementation(() => {});
       const testError = new Error('Failed to load plugin details');
 
       (
@@ -934,7 +934,7 @@ describe('PluginModal', () => {
     it('should handle different error types and set details to null', async () => {
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => { });
+        .mockImplementation(() => {});
 
       // Test with a string error
       (
@@ -961,7 +961,7 @@ describe('PluginModal', () => {
     it('should execute catch block and set details to null on network error', async () => {
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => { });
+        .mockImplementation(() => {});
       const networkError = new Error('Network request failed');
 
       (
@@ -997,7 +997,7 @@ describe('PluginModal', () => {
     it('should set details to null and setFetching to false in catch block', async () => {
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => { });
+        .mockImplementation(() => {});
 
       (
         AdminPluginFileService.getPluginDetails as unknown as Mock
@@ -1729,7 +1729,7 @@ describe('PluginModal', () => {
       (
         AdminPluginFileService.getPluginDetails as unknown as Mock
       ).mockImplementationOnce(
-        () => new Promise(() => { }), // Never resolves
+        () => new Promise(() => {}), // Never resolves
       );
 
       render(
@@ -2077,7 +2077,10 @@ describe('PluginModal', () => {
         changelog: [
           {
             version: '1.0.0',
-            date: '2024-01-01',
+            date: dayjs()
+              .subtract(1, 'year')
+              .startOf('year')
+              .format('YYYY-MM-DD'),
             changes: ['Mapped Change 1', 'Mapped Change 2', 'Mapped Change 3'],
           },
         ],
