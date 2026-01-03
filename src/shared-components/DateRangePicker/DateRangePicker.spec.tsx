@@ -206,4 +206,85 @@ describe('DateRangePicker', () => {
 
     expect(onChangeMock).not.toHaveBeenCalled();
   });
+
+  it('normalizes partial range safely', () => {
+    renderComponent({
+      value: { startDate: new Date(), endDate: null },
+    });
+
+    expect(screen.getByTestId(`${dataTestId}-start-input`)).toBeInTheDocument();
+  });
+
+  it('handles dayjs-like values safely', () => {
+    const fakeDayjs = {
+      toDate: () => new Date('2025-01-01'),
+    };
+
+    renderComponent({
+      value: {
+        startDate: fakeDayjs as unknown as Date,
+        endDate: null,
+      },
+    });
+
+    expect(screen.getByTestId(`${dataTestId}-start-input`)).toBeInTheDocument();
+  });
+
+  it('handles invalid dates gracefully', () => {
+    renderComponent({
+      value: {
+        startDate: new Date('invalid'),
+        endDate: null,
+      },
+    });
+
+    expect(screen.getByTestId(`${dataTestId}-start-input`)).toBeInTheDocument();
+  });
+  it('marks preset as active when range matches', () => {
+    const d = new Date('2025-01-01');
+
+    const presets = [
+      {
+        key: 'today',
+        label: 'Today',
+        getRange: () => ({ startDate: d, endDate: d }),
+      },
+    ];
+
+    renderComponent({
+      presets,
+      value: { startDate: d, endDate: d },
+    });
+
+    expect(screen.getByTestId(`${dataTestId}-preset-today`)).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+  });
+
+  it('does not mark preset active when range differs', () => {
+    const presets = [
+      {
+        key: 'x',
+        label: 'X',
+        getRange: () => ({
+          startDate: new Date('2025-01-01'),
+          endDate: new Date('2025-01-01'),
+        }),
+      },
+    ];
+
+    renderComponent({
+      presets,
+      value: {
+        startDate: new Date('2025-01-02'),
+        endDate: new Date('2025-01-02'),
+      },
+    });
+
+    expect(screen.getByTestId(`${dataTestId}-preset-x`)).toHaveAttribute(
+      'aria-pressed',
+      'false',
+    );
+  });
 });
