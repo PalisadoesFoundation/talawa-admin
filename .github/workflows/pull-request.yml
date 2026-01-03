@@ -354,13 +354,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Checkout central .github repository
-        uses: actions/checkout@v4
-        with:
-          repository: PalisadoesFoundation/.github
-          path: central-workflows
-          ref: main
-
       - name: Get changed files
         id: changed-files
         run: |
@@ -378,7 +371,7 @@ jobs:
           if [ -n "${{ steps.changed-files.outputs.all_changed_files }}" ]; then
             FILTERED_FILES=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | tr ' ' '\n' | grep -E '\.(js|jsx|ts|tsx)$' | tr '\n' ' ' || true)
             if [ -n "$FILTERED_FILES" ]; then
-              python central-workflows/.github/workflows/scripts/disable_statements_check.py --repo=admin --files $FILTERED_FILES
+              python .github/workflows/scripts/disable_statements_check.py --files $FILTERED_FILES
             else
               echo "No JS/TS files to check"
             fi
