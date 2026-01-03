@@ -20,6 +20,8 @@ export const FormSelect: React.FC<IFormSelectProps> = ({
   getOptionLabel,
   onChange,
   renderInput,
+  ariaLabel,
+  ariaDescribedBy,
   ...dataAttributes
 }) => {
   const showError = !!(touched && error);
@@ -47,6 +49,13 @@ export const FormSelect: React.FC<IFormSelectProps> = ({
             error={showError}
             helperText={errorMessage || helpText}
             required={required}
+            slotProps={{
+              htmlInput: {
+                ...params.inputProps,
+                'aria-label': ariaLabel,
+                'aria-describedby': ariaDescribedBy,
+              },
+            }}
           />
         ))
       }

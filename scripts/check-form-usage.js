@@ -13,11 +13,27 @@ function checkDirectory(dir, fsModule = fs, pathModule = path) {
   }
 
   function scanDir(directory) {
-    const files = fsModule.readdirSync(directory);
+    let files;
+    try {
+      files = fsModule.readdirSync(directory);
+    } catch (error) {
+      console.warn(
+        `Warning: Could not read directory ${directory}: ${error.message}`,
+      );
+      return;
+    }
 
     for (const file of files) {
       const filePath = pathModule.join(directory, file);
-      const stat = fsModule.statSync(filePath);
+      let stat;
+      try {
+        stat = fsModule.statSync(filePath);
+      } catch (error) {
+        console.warn(
+          `Warning: Could not stat file ${filePath}: ${error.message}`,
+        );
+        continue;
+      }
 
       if (stat.isDirectory()) {
         scanDir(filePath);
@@ -30,26 +46,60 @@ function checkDirectory(dir, fsModule = fs, pathModule = path) {
         !file.endsWith('.md') &&
         !file.includes('README')
       ) {
-        const content = fsModule.readFileSync(filePath, 'utf8');
+        let content;
+        try {
+          content = fsModule.readFileSync(filePath, 'utf8');
+        } catch (error) {
+          console.warn(
+            `Warning: Could not read file ${filePath}: ${error.message}`,
+          );
+          continue;
+        }
         const lines = content.split('\n');
+
+        let inBlockComment = false;
 
         lines.forEach((line, index) => {
           const trimmedLine = line.trim();
-          if (
-            trimmedLine.startsWith('//') ||
-            trimmedLine.startsWith('/*') ||
-            trimmedLine.startsWith('*')
-          ) {
-            return;
+
+          // Track block comment state
+          if (inBlockComment) {
+            if (trimmedLine.includes('*/')) {
+              inBlockComment = false;
+            }
+            return; // Skip lines inside block comments
           }
 
+          if (trimmedLine.includes('/*')) {
+            inBlockComment = true;
+            if (trimmedLine.includes('*/')) {
+              inBlockComment = false; // Single-line block comment
+            }
+          }
+          if (trimmedLine.startsWith('//') || trimmedLine.startsWith('*')) {
+            return;
+          }
+          const codeBeforeComment = line.split('//')[0];
           // Don't match if inside strings
-          if (
-            DEPRECATED_PATTERNS.test(line) &&
-            !line.match(/['"`].*Form\.(Group|Control|Label|Check).*['"`]/)
-          ) {
-            const relativePath = pathModule.relative(process.cwd(), filePath);
-            violations.push(`${relativePath}:${index + 1}: ${line.trim()}`);
+          // Don't match if inside strings (basic heuristic)
+          // Count quotes before the match to determine if inside string
+          const match = DEPRECATED_PATTERNS.exec(line);
+          if (match) {
+            const beforeMatch = line.substring(0, match.index);
+            const singleQuotes = (beforeMatch.match(/'/g) || []).length;
+            const doubleQuotes = (beforeMatch.match(/"/g) || []).length;
+            const backticks = (beforeMatch.match(/`/g) || []).length;
+
+            // If odd number of quotes before match, likely inside string
+            const likelyInString =
+              singleQuotes % 2 !== 0 ||
+              doubleQuotes % 2 !== 0 ||
+              backticks % 2 !== 0;
+
+            if (!likelyInString) {
+              const relativePath = pathModule.relative(process.cwd(), filePath);
+              violations.push(`${relativePath}:${index + 1}: ${line.trim()}`);
+            }
           }
         });
       }
