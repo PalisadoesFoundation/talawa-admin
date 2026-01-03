@@ -63,21 +63,17 @@ export class PeoplePage {
     this.searchMemberByName(name, timeout);
     this.verifyMemberInList(name, timeout);
 
-    // Wait for table to stabilize after search
-    cy.wait(500); // Allow debounce/render to complete
+    // Wait for DataGrid to stabilize after search
+    cy.wait(1000);
 
-    // Ensure we're working with a stable table
-    cy.get('tr', { timeout })
-      .should('have.length.greaterThan', 0)
-      .then(() => {
-        // Now find the specific row and click remove
-        cy.contains('tr', name, { timeout })
-          .should('be.visible')
-          .find(this._removeModalBtn)
-          .should('be.visible')
-          .should('have.length', 1) // Verify only ONE button found
-          .click();
-      });
+    // Scope search to DataGrid rows to avoid matching headers/other UI
+    cy.get('.MuiDataGrid-row', { timeout })
+      .contains(name)
+      .should('be.visible')
+      .parents('.MuiDataGrid-row')
+      .find(this._removeModalBtn)
+      .should('be.visible')
+      .click();
 
     cy.get(this._confirmRemoveBtn, { timeout }).should('be.visible').click();
     cy.get(this._alert, { timeout })
