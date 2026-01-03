@@ -231,12 +231,7 @@ export default [
   },
   {
     files: ['**/*.ts', '**/*.tsx'],
-    ignores: [
-      '**/*.spec.ts',
-      '**/*.spec.tsx',
-      '**/*.test.ts',
-      '**/*.test.tsx',
-    ],
+    ignores: ['**/*.spec.ts', '**/*.spec.tsx', '**/*.test.ts', '**/*.test.tsx'],
     plugins: {
       tsdoc,
     },
@@ -244,5 +239,4 @@ export default [
       'tsdoc/syntax': 'error',
     },
   },
-
 ];
