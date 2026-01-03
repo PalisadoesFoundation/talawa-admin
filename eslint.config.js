@@ -33,7 +33,7 @@ export default [
     ],
   },
   {
-    files: ['**/*.ts', '**/*.tsx'], // Changed from ['*.ts', '*.tsx'] to include subdirectories
+    files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
@@ -48,7 +48,6 @@ export default [
         localStorage: 'readonly',
         setTimeout: 'readonly',
         console: 'readonly',
-
         describe: 'readonly',
         test: 'readonly',
         expect: 'readonly',
@@ -74,6 +73,7 @@ export default [
     rules: {
       ...js.configs.recommended.rules,
       ...ts.configs.recommended.rules,
+      'tsdoc/syntax': 'error',
       '@typescript-eslint/no-require-imports': 'error',
       'react/destructuring-assignment': 'error',
       'react/no-multi-comp': ['error', { ignoreStateless: false }],
@@ -116,10 +116,7 @@ export default [
         },
         { selector: 'variable', modifiers: ['exported'], format: null },
       ],
-      'react/jsx-pascal-case': [
-        'error',
-        { allowAllCaps: false, allowNamespace: false },
-      ],
+      'react/jsx-pascal-case': ['error', { allowAllCaps: false }],
       'react/no-this-in-sfc': 'error',
       'react/no-unstable-nested-components': ['error', { allowAsProps: true }],
       'prettier/prettier': 'error',
@@ -133,7 +130,7 @@ export default [
           selector:
             "Property[key.name='authorization'] CallExpression[callee.name='getItem'][arguments.0.value='token']",
           message:
-            "Security Risk: Do not use getItem('token') directly inside authorization headers. Extract it to a variable first to handle null values.",
+            "Security Risk: Do not use getItem('token') directly inside authorization headers. Extract it to a variable first.",
         },
       ],
     },
@@ -146,7 +143,6 @@ export default [
     plugins: {
       '@graphql-eslint': graphql,
       prettier,
-      tsdoc,
     },
     rules: {
       '@typescript-eslint/consistent-type-imports': 'off',
@@ -155,10 +151,8 @@ export default [
       '@graphql-eslint/known-type-names': 'error',
       '@graphql-eslint/no-unreachable-types': 'off',
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
-      'tsdoc/syntax': 'error',
     },
   },
-  // Cypress-specific configuration
   {
     files: ['cypress/**/*.ts', 'cypress/**/*.js'],
     languageOptions: {
@@ -166,7 +160,6 @@ export default [
       sourceType: 'module',
       parser: tsParser,
       globals: {
-        // Cypress globals
         cy: 'readonly',
         Cypress: 'readonly',
         describe: 'readonly',
@@ -176,13 +169,9 @@ export default [
         after: 'readonly',
         afterEach: 'readonly',
         expect: 'readonly',
-
-        // Browser globals
         window: 'readonly',
         document: 'readonly',
         console: 'readonly',
-
-        // Node.js globals for config files
         require: 'readonly',
         module: 'readonly',
         exports: 'readonly',
@@ -204,7 +193,6 @@ export default [
       'prettier/prettier': 'error',
     },
   },
-  // Configuration files
   {
     files: ['*.config.ts', '*.config.js', 'cypress.config.ts'],
     languageOptions: {
@@ -232,7 +220,6 @@ export default [
       'prettier/prettier': 'error',
     },
   },
-  // Test file-specific configuration for mock isolation
   {
     files: ['**/*.spec.ts', '**/*.spec.tsx', '**/*.test.ts', '**/*.test.tsx'],
     plugins: {
@@ -242,4 +229,20 @@ export default [
       'vitest-isolation/require-aftereach-cleanup': 'error',
     },
   },
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    ignores: [
+      '**/*.spec.ts',
+      '**/*.spec.tsx',
+      '**/*.test.ts',
+      '**/*.test.tsx',
+    ],
+    plugins: {
+      tsdoc,
+    },
+    rules: {
+      'tsdoc/syntax': 'error',
+    },
+  },
+
 ];
