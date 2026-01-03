@@ -408,7 +408,6 @@
     "manageTag": "Gestionar",
     "editTag": "Editar",
     "removeTag": "Eliminar",
-    "tags": "Etiquetas",
     "tagDetails": "Detalles de la Etiqueta",
     "tagName": "Nombre",
     "tagType": "Tipo",
@@ -419,8 +418,6 @@
     "noTagsFound": "No se encontraron etiquetas",
     "removeUserTag": "Eliminar Etiqueta",
     "removeUserTagMessage": "¿Desea eliminar esta etiqueta?",
-    "Latest": "Más Reciente",
-    "Oldest": "Más Antiguo",
     "addChildTag": "Agregar una Sub Etiqueta",
     "enterTagName": "Ingrese el nombre de la etiqueta",
     "totalSubTags": "Total de sub-etiquetas",
@@ -526,7 +523,6 @@
     "publicEvent": "Es público",
     "isRegistrable": "Es registrable",
     "registerable": "Es registrable",
-
     "createEvent": "Crear evento",
     "enterFilter": "Introducir filtro",
     "enterName": "Introducir nombre",
@@ -1783,7 +1779,6 @@
     "title": "Campañas de recaudación de fondos",
     "searchByName": "Buscar por nombre...",
     "searchBy": "Buscar por",
-    "searchCampaigns": "Buscar campañas",
     "pledgers": "Prometedores",
     "pledger": "Prometedor",
     "campaigns": "Campañas",
@@ -1811,8 +1806,11 @@
     "endDate": "Fecha de Finalización",
     "fundGoal": "Meta de Financiación",
     "percentRaised": "% Recaudado",
+    "searchCampaigns": "Buscar campañas",
     "createFirstCampaign": "Crea tu primera campaña de recaudación de fondos para verla aquí.",
-    "campaignEnded": "Campaña finalizada"
+    "campaignEnded": "Campaña finalizada",
+    "fundingGoal": "Meta de financiación",
+    "viewPledge": "Ver promesa"
   },
   "userPledges": {
     "title": "Mis Promesas",
