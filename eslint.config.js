@@ -32,7 +32,6 @@ export default [
       '**/*.svg',
     ],
   },
-
   {
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
@@ -49,6 +48,7 @@ export default [
         localStorage: 'readonly',
         setTimeout: 'readonly',
         console: 'readonly',
+
         describe: 'readonly',
         test: 'readonly',
         expect: 'readonly',
@@ -141,7 +141,6 @@ export default [
       ],
     },
   },
-
   {
     files: ['*.graphql'],
     languageOptions: {
@@ -160,7 +159,7 @@ export default [
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
     },
   },
-
+  // Cypress-specific configuration
   {
     files: ['cypress/**/*.ts', 'cypress/**/*.js'],
     languageOptions: {
@@ -168,6 +167,7 @@ export default [
       sourceType: 'module',
       parser: tsParser,
       globals: {
+        // Cypress globals
         cy: 'readonly',
         Cypress: 'readonly',
         describe: 'readonly',
@@ -177,9 +177,13 @@ export default [
         after: 'readonly',
         afterEach: 'readonly',
         expect: 'readonly',
+
+        // Browser globals
         window: 'readonly',
         document: 'readonly',
         console: 'readonly',
+
+        // Node.js globals for config files
         require: 'readonly',
         module: 'readonly',
         exports: 'readonly',
@@ -201,7 +205,7 @@ export default [
       'prettier/prettier': 'error',
     },
   },
-
+  // Configuration files
   {
     files: ['*.config.ts', '*.config.js', 'cypress.config.ts'],
     languageOptions: {
@@ -229,7 +233,7 @@ export default [
       'prettier/prettier': 'error',
     },
   },
-
+  // Test file-specific configuration for mock isolation
   {
     files: ['**/*.spec.ts', '**/*.spec.tsx', '**/*.test.ts', '**/*.test.tsx'],
     plugins: {
