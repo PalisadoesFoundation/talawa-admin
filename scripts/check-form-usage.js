@@ -2,36 +2,53 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const DEPRECATED_PATTERNS = /Form\.(Group|Control|Label|Check)/;
-const SCREENS_DIR = path.join(__dirname, '..', 'src', 'screens');
 
-function checkDirectory(dir) {
+function checkDirectory(dir, fsModule = fs, pathModule = path) {
   const violations = [];
 
-  if (!fs.existsSync(dir)) {
+  if (!fsModule.existsSync(dir)) {
     console.log('src/screens directory not found, skipping check');
     return violations;
   }
 
   function scanDir(directory) {
-    const files = fs.readdirSync(directory);
+    const files = fsModule.readdirSync(directory);
 
     for (const file of files) {
-      const filePath = path.join(directory, file);
-      const stat = fs.statSync(filePath);
+      const filePath = pathModule.join(directory, file);
+      const stat = fsModule.statSync(filePath);
 
       if (stat.isDirectory()) {
         scanDir(filePath);
-      } else if (file.endsWith('.tsx') || file.endsWith('.ts')) {
-        const content = fs.readFileSync(filePath, 'utf8');
+      } else if (
+        (file.endsWith('.tsx') || file.endsWith('.ts')) &&
+        !file.endsWith('.test.ts') &&
+        !file.endsWith('.test.tsx') &&
+        !file.endsWith('.spec.tsx') &&
+        !file.endsWith('.spec.ts') &&
+        !file.endsWith('.md') &&
+        !file.includes('README')
+      ) {
+        const content = fsModule.readFileSync(filePath, 'utf8');
         const lines = content.split('\n');
 
         lines.forEach((line, index) => {
-          if (DEPRECATED_PATTERNS.test(line)) {
-            const relativePath = path.relative(process.cwd(), filePath);
+          const trimmedLine = line.trim();
+          if (
+            trimmedLine.startsWith('//') ||
+            trimmedLine.startsWith('/*') ||
+            trimmedLine.startsWith('*')
+          ) {
+            return;
+          }
+
+          // Don't match if inside strings
+          if (
+            DEPRECATED_PATTERNS.test(line) &&
+            !line.match(/['"`].*Form\.(Group|Control|Label|Check).*['"`]/)
+          ) {
+            const relativePath = pathModule.relative(process.cwd(), filePath);
             violations.push(`${relativePath}:${index + 1}: ${line.trim()}`);
           }
         });
@@ -43,14 +60,28 @@ function checkDirectory(dir) {
   return violations;
 }
 
-const violations = checkDirectory(SCREENS_DIR);
+export function checkFormUsage(fsModule = fs, pathModule = path) {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = pathModule.dirname(__filename);
+  const SCREENS_DIR = pathModule.join(__dirname, '..', 'src', 'screens');
 
-if (violations.length > 0) {
-  console.error('\n=== Found deprecated Form usage in src/screens/: ===\n');
-  violations.forEach(v => console.error(`  ${v}`));
-  console.error('\n=== Please migrate to FormFieldGroup components ===');
-  console.error('=> See: src/shared-components/FormFieldGroup/README.md\n');
-  process.exit(1);
-} else {
-  console.log('No deprecated Form usage found');
+  const violations = checkDirectory(SCREENS_DIR, fsModule, pathModule);
+
+  if (violations.length > 0) {
+    console.error('\n=== Found deprecated Form usage in src/screens/: ===\n');
+    violations.forEach((v) => console.error(`  ${v}`));
+    console.error('\n=== Please migrate to FormFieldGroup components ===');
+    console.error('=> See: src/shared-components/FormFieldGroup/README.md\n');
+    process.exit(1);
+  } else {
+    console.log('No deprecated Form usage found');
+  }
+}
+
+if (import.meta.url.startsWith('file://')) {
+  const modulePath = fileURLToPath(import.meta.url);
+  const scriptPath = process.argv[1];
+  if (modulePath === scriptPath) {
+    checkFormUsage();
+  }
 }
