@@ -212,6 +212,9 @@
   "previousPage": "Previous Page",
   "nextPage": "Next Page",
   "pageNumber": "Page {{page}}",
+  "loadMoreItems": "Load more items",
+  "loadMore": "Load More",
+  "retry": "Retry",
   "tags": "Tags",
   "unassign": "Unassign"
 }
