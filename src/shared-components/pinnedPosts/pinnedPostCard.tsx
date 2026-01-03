@@ -255,7 +255,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
             height="175"
             image={pinnedPost.node?.attachmentURL ?? defaultImg}
             crossOrigin="anonymous"
-            alt={t('postImageAlt')}
+            alt={t('postImage')}
             sx={{ objectFit: 'cover' }}
             draggable={false}
           />

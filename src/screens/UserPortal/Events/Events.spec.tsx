@@ -1,10 +1,9 @@
 /**
- * @file Comprehensive unit tests for the Events component in User Portal.
- * @description This test suite provides 100% code coverage for the Events component,
- * testing all functionality including event creation, modal interactions, form inputs,
- * error handling, and different user roles.
- 
- * @module EventsSpec
+ * Comprehensive unit tests for the Events component in the User Portal.
+ *
+ * This test suite provides 100% code coverage for the Events component by
+ * validating event creation, modal interactions, form inputs, error handling,
+ * and behavior across different user roles.
  */
 
 // SKIP_LOCALSTORAGE_CHECK

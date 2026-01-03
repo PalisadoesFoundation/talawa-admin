@@ -53,6 +53,7 @@ import { useTranslation } from 'react-i18next';
 import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
 import InviteByEmailModal from './InviteByEmail/InviteByEmailModal';
 import type { InterfaceUser } from 'types/User/interface';
+import styles from '../EventRegistrants.module.css';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 type ModalPropType = {
@@ -145,10 +146,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
             attendeesRefetch();
           }}
         />
-        <Modal.Header
-          closeButton
-          style={{ backgroundColor: 'var(--tableHeader-bg)' }}
-        >
+        <Modal.Header closeButton className={styles.modalHeader}>
           <Modal.Title>Event Registrants</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -161,11 +159,7 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
               <div className="d-flex ">
                 <p className="me-2">No Registrations found</p>
                 <span
-                  className="underline"
-                  style={{
-                    color: '#555',
-                    textDecoration: 'underline',
-                  }}
+                  className={`underline ${styles.underlineText}`}
                   onClick={() => {
                     setOpen(true);
                   }}
@@ -191,15 +185,12 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
         </Modal.Body>
         <Modal.Footer>
           <Button
-            style={{ backgroundColor: '#6CC9A6', color: '#fff' }}
+            className={styles.inviteButton}
             onClick={() => setInviteOpen(true)}
           >
             Invite by Email
           </Button>
-          <Button
-            style={{ backgroundColor: '#A8C7FA', color: '#555' }}
-            onClick={addRegistrant}
-          >
+          <Button className={styles.addButton} onClick={addRegistrant}>
             Add Registrant
           </Button>
         </Modal.Footer>

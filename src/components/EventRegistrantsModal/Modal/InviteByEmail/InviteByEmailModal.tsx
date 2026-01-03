@@ -10,6 +10,7 @@ import { SEND_EVENT_INVITATIONS } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import type { ApolloError } from '@apollo/client/errors';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import styles from './InviteByEmail.module.css';
 
 type Props = {
   show: boolean;
@@ -104,10 +105,7 @@ const InviteByEmailModal: React.FC<Props> = ({
 
   return (
     <Modal show={show} onHide={handleClose} backdrop="static" centered>
-      <Modal.Header
-        closeButton
-        style={{ backgroundColor: 'var(--tableHeader-bg)' }}
-      >
+      <Modal.Header closeButton className={styles.modalHeader}>
         <Modal.Title>
           {t('title', { defaultValue: 'Invite by Email' })}
         </Modal.Title>
@@ -131,7 +129,7 @@ const InviteByEmailModal: React.FC<Props> = ({
                     copy[idx] = { ...copy[idx], email: e.target.value };
                     setRecipients(copy);
                   }}
-                  style={{ flex: 1 }}
+                  className={styles.emailField}
                 />
 
                 <TextField
@@ -144,7 +142,7 @@ const InviteByEmailModal: React.FC<Props> = ({
                     copy[idx] = { ...copy[idx], name: e.target.value };
                     setRecipients(copy);
                   }}
-                  style={{ width: 220, marginLeft: 12 }}
+                  className={styles.nameField}
                 />
 
                 {recipients.length > 1 ? (
@@ -154,7 +152,7 @@ const InviteByEmailModal: React.FC<Props> = ({
                       const copy = recipients.filter((_, i) => i !== idx);
                       setRecipients(copy);
                     }}
-                    style={{ marginLeft: 8 }}
+                    className={styles.removeButton}
                   >
                     {t('remove', { defaultValue: 'Remove' })}
                   </Button>

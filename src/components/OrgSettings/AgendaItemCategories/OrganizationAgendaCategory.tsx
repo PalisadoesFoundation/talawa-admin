@@ -143,7 +143,9 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
     return (
       <div className={`${styles.container} bg-transparent rounded-4 my-3`}>
         <div className={styles.message}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded
+            className={`${styles.errorIcon} MuiSvgIcon-fontSizeLarge`}
+          />
           <h6 className="fw-bold text-danger text-center">
             Error occured while loading{' '}
             {agendaCategoryError && 'Agenda Categories'}

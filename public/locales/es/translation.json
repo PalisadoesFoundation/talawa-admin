@@ -1274,6 +1274,8 @@
     "noMembers": "No hay miembros para mostrar"
   },
   "postCard": {
+    "pinnedPost": "Publicación fijada",
+    "postImage": "Imagen de la publicación",
     "likes": "Gustos",
     "comments": "Comentarios",
     "view": "Ver",
@@ -1783,7 +1785,22 @@
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error al agregar asistente",
-    "errorRemovingAttendee": "Error al eliminar asistente"
+    "errorRemovingAttendee": "Error al eliminar asistente",
+    "inviteByEmail": {
+      "addRecipient": "Agregar destinatario",
+      "email": "Correo electrónico",
+      "title": "Invitar por correo electrónico",
+      "sending": "Enviando...",
+      "sendInvites": "Enviar invitaciones",
+      "remove": "Eliminar",
+      "name": "Nombre",
+      "messagePlaceholder": "Estás invitado a asistir a este evento.",
+      "messageLabel": "Mensaje (opcional)",
+      "expiresInDaysLabel": "Expira en (días)",
+      "errorSendingInvites": "Error al enviar invitaciones",
+      "emailsLabel": "Correos electrónicos y nombres de destinatarios",
+      "emailsHelp": "Proporcione el correo electrónico y el nombre opcional para cada destinatario. Agregue varios destinatarios según sea necesario."
+    }
   },
   "userCampaigns": {
     "title": "Campañas de recaudación de fondos",

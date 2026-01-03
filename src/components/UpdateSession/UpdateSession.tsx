@@ -177,7 +177,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
               </Form.Label>
             </div>
 
-            <Box sx={{ width: '100%' }}>
+            <Box>
               <Slider
                 data-testid="slider-thumb"
                 value={timeout}

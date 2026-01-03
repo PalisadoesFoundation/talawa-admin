@@ -1274,6 +1274,8 @@
     "members": "सदस्य"
   },
   "postCard": {
+    "pinnedPost": "पिन किया गया पोस्ट",
+    "postImage": "पोस्ट छवि",
     "likes": "पसंद",
     "comments": "टिप्पणियाँ",
     "addComment": "टिप्पणी जोड़ें",
@@ -1783,7 +1785,22 @@
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
-    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि"
+    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि",
+    "inviteByEmail": {
+      "addRecipient": "प्राप्तकर्ता जोड़ें",
+      "email": "ईमेल",
+      "title": "ईमेल द्वारा आमंत्रित करें",
+      "sending": "भेजा जा रहा है...",
+      "sendInvites": "निमंत्रण भेजें",
+      "remove": "हटाएं",
+      "name": "नाम",
+      "messagePlaceholder": "आपको इस कार्यक्रम में भाग लेने के लिए आमंत्रित किया गया है।",
+      "messageLabel": "संदेश (वैकल्पिक)",
+      "expiresInDaysLabel": "समाप्ति (दिनों में)",
+      "errorSendingInvites": "निमंत्रण भेजने में त्रुटि",
+      "emailsLabel": "प्राप्तकर्ता ईमेल और नाम",
+      "emailsHelp": "प्रत्येक प्राप्तकर्ता के लिए ईमेल और वैकल्पिक नाम प्रदान करें। आवश्यकतानुसार कई प्राप्तकर्ता जोड़ें।"
+    }
   },
   "userCampaigns": {
     "title": "धन उगाहने के अभियान",

@@ -4,7 +4,7 @@
  * Unit tests for ContactCard component.
  * - Ensures rendering with and without image
  * - Ensures clicking selects the contact (setSelectedContact called)
- * - Ensures unseen messages badge renders when count > 0
+ * - Ensures unseen messages badge renders when count is greater than zero
  * - Ensures data-selected toggles when selectedContact equals id
  */
 
