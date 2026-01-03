@@ -78,8 +78,8 @@ describe('DataGridWrapper', () => {
       />,
     );
     expect(screen.getByRole('alert')).toHaveTextContent('Error fetching data');
-    // Empty state should still be visible when there's an error
-    expect(screen.getByTestId('empty-state')).toBeInTheDocument();
+    // Empty state should NOT be visible when there's an error (error overlay takes precedence)
+    expect(screen.queryByTestId('empty-state')).not.toBeInTheDocument();
   });
 
   test('handles row click', () => {
