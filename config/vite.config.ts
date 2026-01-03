@@ -151,7 +151,7 @@ export default defineConfig(({ mode }) => {
         REACT_APP_TALAWA_URL: '/graphql',
         REACT_APP_BACKEND_WEBSOCKET_URL: '/graphql',
         REACT_APP_RECAPTCHA_SITE_KEY: null,
-        REACT_APP_USE_RECAPTCHA: null,
+        REACT_APP_USE_RECAPTCHA: 'false',
       }),
       svgrPlugin({
         svgrOptions: {

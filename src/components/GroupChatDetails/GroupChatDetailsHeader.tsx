@@ -162,7 +162,7 @@ export default function GroupChatDetailsHeader({
           )}
 
           <p>
-            {chat?.members.edges.length} {t('members')}
+            {chat?.members?.edges?.length ?? 0} {t('members')}
           </p>
           <p>{sanitizeText(chat?.description)}</p>
         </div>

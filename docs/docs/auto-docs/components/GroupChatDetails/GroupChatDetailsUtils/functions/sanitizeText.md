@@ -6,7 +6,7 @@
 
 > **sanitizeText**(`text?`): `string`
 
-Defined in: [src/components/GroupChatDetails/GroupChatDetailsUtils.ts:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/GroupChatDetails/GroupChatDetailsUtils.ts#L31)
+Defined in: [src/components/GroupChatDetails/GroupChatDetailsUtils.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/GroupChatDetails/GroupChatDetailsUtils.ts#L43)
 
 Sanitizes text content to prevent XSS attacks by escaping HTML
 special characters. This ensures user input is treated as plain text.

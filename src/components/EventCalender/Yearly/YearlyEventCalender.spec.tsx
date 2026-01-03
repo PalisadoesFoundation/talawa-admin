@@ -1409,7 +1409,13 @@ describe('Calendar Component', () => {
       { timeout: 3000 },
     );
 
-    expect(screen.queryByText('Event A')).toBeNull();
+    // Wait for Event A to be removed from the document after collapse
+    await waitFor(
+      () => {
+        expect(screen.queryByText('Event A')).toBeNull();
+      },
+      { timeout: 3000 },
+    );
   });
 
   it('handles month layout correctly when month starts on Sunday', async () => {

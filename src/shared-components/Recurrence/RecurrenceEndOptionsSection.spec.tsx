@@ -391,8 +391,8 @@ describe('RecurrenceEndOptionsSection', () => {
         'customRecurrenceEndDatePicker',
       ) as HTMLInputElement;
 
-      // Use fireEvent.change for HTML5 date inputs in JSDOM
-      fireEvent.change(datePicker, { target: { value: '2026-01-15' } });
+      // Use fireEvent.input to set the date value directly
+      fireEvent.input(datePicker, { target: { value: '2026-01-15' } });
 
       await waitFor(() => {
         expect(setRecurrenceRuleState).toHaveBeenCalled();
@@ -588,8 +588,8 @@ describe('RecurrenceEndOptionsSection', () => {
         'customRecurrenceEndDatePicker',
       ) as HTMLInputElement;
 
-      // Use fireEvent.change for HTML5 date inputs in JSDOM
-      fireEvent.change(datePicker, { target: { value: '2026-01-15' } });
+      // Use fireEvent.input to set the date value directly
+      fireEvent.input(datePicker, { target: { value: '2026-01-15' } });
 
       await waitFor(() => {
         expect(setRecurrenceRuleState).toHaveBeenCalled();

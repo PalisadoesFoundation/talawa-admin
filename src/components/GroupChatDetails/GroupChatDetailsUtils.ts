@@ -1,3 +1,15 @@
+/**
+ * Validates and sanitizes image URLs to prevent security issues.
+ *
+ * Only allows safe URL protocols (http, https, data, blob) and rejects:
+ * - Invalid/malformed URLs
+ * - URLs with whitespace characters
+ * - Empty or non-string values
+ * - Unsafe protocols (javascript:, file:, etc.)
+ *
+ * @param url - The URL string to validate, may be null or undefined
+ * @returns The validated URL string if safe, otherwise undefined
+ */
 export const getSafeImageSrc = (url?: string | null): string | undefined => {
   if (!url) return undefined;
   if (typeof url !== 'string') return undefined;
