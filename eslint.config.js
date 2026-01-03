@@ -217,7 +217,7 @@ export default [
           selector:
             "MemberExpression[object.name='Form'][property.name='Check']",
           message: 'Use FormCheck instead of Form.Check',
-        }
+        },
       ],
     },
   },

@@ -3,7 +3,6 @@ import { FormControl, TextField } from '@mui/material';
 import type { IFormTextAreaProps } from 'types/shared-components/FormFieldGroup/interface';
 
 export const FormTextArea: React.FC<IFormTextAreaProps> = ({
-  name,
   label,
   error,
   touched,
@@ -28,8 +27,10 @@ export const FormTextArea: React.FC<IFormTextAreaProps> = ({
         error={showError}
         helperText={errorMessage || helpText}
         required={required}
-        InputProps={{
-          endAdornment: endAdornment,
+        slotProps={{
+          input: {
+            endAdornment: endAdornment,
+          },
         }}
         aria-label={ariaLabel}
         aria-describedby={ariaDescribedBy}
