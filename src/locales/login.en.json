@@ -26,7 +26,7 @@
   "passwordInvalid": "Password should contain at least one lowercase letter, one uppercase letter, one numeric value and one special character",
   "emailInvalid": "Please enter a valid email address",
   "captchaError": "Captcha Error!",
-  "Please_check_the_captcha": "Please, check the captcha.",
+  "pleaseCheckTheCaptcha": "Please, check the captcha.",
   "passwordMismatches": "Password and confirm password do not match.",
   "successfullyRegistered": "Successfully Registered. Please wait until you will be approved.",
   "afterRegister": "Successfully registered. Please wait for admin to approve your request.",

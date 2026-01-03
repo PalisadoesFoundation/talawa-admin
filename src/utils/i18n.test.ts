@@ -111,5 +111,26 @@ describe('i18n Configuration', () => {
       'Password and confirm password do not match.',
     );
     expect(i18n.t('captchaError', { ns: 'auth' })).toBe('Captcha Error!');
+    expect(i18n.t('pleaseCheckTheCaptcha', { ns: 'auth' })).toBe(
+      'Please, check the captcha.',
+    );
+  });
+
+  it('should have password requirement translations bundled', () => {
+    expect(i18n.t('requirementMinLength', { ns: 'auth' })).toBe(
+      'At least 8 characters',
+    );
+    expect(i18n.t('requirementLowercase', { ns: 'auth' })).toBe(
+      'Contains lowercase',
+    );
+    expect(i18n.t('requirementUppercase', { ns: 'auth' })).toBe(
+      'Contains uppercase',
+    );
+    expect(i18n.t('requirementNumber', { ns: 'auth' })).toBe(
+      'Contains a number',
+    );
+    expect(i18n.t('requirementSpecialChar', { ns: 'auth' })).toBe(
+      'Contains a special character',
+    );
   });
 });
