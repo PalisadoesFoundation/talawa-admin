@@ -561,7 +561,10 @@ const Requests = (): JSX.Element => {
           ) : (
             <ReportingTable
               rows={
-                displayedRequests.map((req) => ({ ...req })) as ReportingRow[]
+                displayedRequests.map((req) => ({
+                  ...req,
+                  id: req.membershipRequestId,
+                })) as ReportingRow[]
               }
               columns={columns}
               gridProps={gridProps}

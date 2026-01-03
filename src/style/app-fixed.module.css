@@ -1656,18 +1656,6 @@ form label,
   }
 }
 
-/* Not Found */
-/**
-*Pages still using .notFound class are - screens/UserPortal/Campaigns, screens/BlockUser
-*/
-.notFound {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-}
-
 /* Row Background */
 
 .rowBackground {
@@ -10613,4 +10601,14 @@ form {
   .pageBtn {
     width: 100%;
   }
+}
+
+.manageTagErrorIcon {
+  font-size: 2rem;
+}
+
+.manageTagDivider {
+  border-color: var(--grey-border-box-color);
+  border-width: 2px;
+  width: 85%;
 }

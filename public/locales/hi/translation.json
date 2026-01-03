@@ -419,8 +419,6 @@
     "noTagsFound": "कोई टैग नहीं मिला",
     "removeUserTag": "टैग हटाएँ",
     "removeUserTagMessage": "क्या आप इस टैग को हटाना चाहते हैं?",
-    "Latest": "नवीनतम",
-    "Oldest": "सबसे पुराना",
     "addChildTag": "उप-टैग जोड़ें",
     "enterTagName": "टैग का नाम दर्ज करें",
     "totalSubTags": "कुल उप-टैग",
@@ -428,6 +426,8 @@
     "tagCreationFailed": "टैग निर्माण विफल",
     "errorLoadingTagsData": "संगठन टैग डेटा लोड करते समय त्रुटि हुई",
     "sortTags": "टैग सॉर्ट करें",
+    "Latest": "नवीनतम",
+    "Oldest": "सबसे पुराना",
     "viewSubTags": "{{count}} उप-टैग देखें"
   },
   "manageTag": {
@@ -474,11 +474,11 @@
     "tags": "टैग",
     "errorOccurredWhileLoadingAssignedUser": "असाइन किए गए उपयोगकर्ता को लोड करते समय त्रुटि हुई",
     "sortPeople": "लोगों को सॉर्ट करें",
-    "tagActions": "टैग क्रियाएँ"
+    "tagActions": "टैग क्रियाएँ",
+    "loadAssignedUsersError": "निर्दिष्ट उपयोगकर्ताओं को लोड करते समय त्रुटि हुई"
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
-    "addedAsAdmin": "उपयोगकर्ता को व्यवस्थापक के रूप में जोड़ा गया है.",
     "joined": "शामिल हुए",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
@@ -520,7 +520,6 @@
     "publicEvent": "सार्वजनिक है",
     "isRegistrable": "पंजीकरण योग्य है",
     "registerable": "पंजीकरण योग्य है",
-
     "createEvent": "कार्यक्रम बनाएँ",
     "enterFilter": "फ़िल्टर दर्ज करें",
     "enterName": "नाम दर्ज करें",
@@ -1712,7 +1711,8 @@
     "edit": "संपादित करें",
     "delete": "हटाएं",
     "name": "नाम",
-    "desc": "विवरण"
+    "desc": "विवरण",
+    "venueImagePreview": "स्थान की छवि का पूर्वावलोकन"
   },
   "addMember": {
     "title": "सदस्य जोड़ें",
@@ -1803,7 +1803,17 @@
     "noPledges": "कोई प्रतिज्ञा नहीं मिली",
     "noCampaigns": "कोई अभियान नहीं मिला",
     "raised": "एकत्रित",
-    "amountRaised": "एकत्रित राशि"
+    "amountRaised": "एकत्रित राशि",
+    "campaignIndex": "#",
+    "campaignName": "अभियान का नाम",
+    "startDate": "शुरुआत तिथि",
+    "endDate": "अंतिम तिथि",
+    "fundGoal": "वित्त पोषण लक्ष्य",
+    "percentRaised": "% एकत्रित",
+    "createFirstCampaign": "इसे यहाँ देखने के लिए अपना पहला धन उगाहने का अभियान बनाएं।",
+    "campaignEnded": "अभियान समाप्त हो गया",
+    "fundingGoal": "फंडिंग उद्देश्य",
+    "viewPledge": "प्लेज देखें"
   },
   "userPledges": {
     "title": "मेरी प्रतिज्ञाएँ",
@@ -1866,7 +1876,19 @@
     "thisEventOnly": "केवल यह घटना",
     "volunteerAlt": "स्वयंसेवक प्रोफ़ाइल चित्र",
     "groupTable": "समूह तालिका",
-    "volunteerActions": "स्वयंसेवक क्रियाएँ"
+    "volunteerActions": "स्वयंसेवक क्रियाएँ",
+    "volunteerHeader": "स्वयंसेवक",
+    "statusHeader": "स्थिति",
+    "hoursVolunteeredHeader": "स्वयंसेवा घंटे",
+    "optionsHeader": "विकल्प",
+    "groupHeader": "समूह",
+    "leaderHeader": "नेता",
+    "numVolunteersHeader": "स्वयंसेवकों की संख्या",
+    "pending": "लंबित",
+    "viewDetails": "{{name}} का विवरण देखें",
+    "editVolunteerGroup": "{{name}} स्वयंसेवक समूह संपादित करें",
+    "deleteVolunteerGroup": "{{name}} स्वयंसेवक समूह हटाएं",
+    "deleteVolunteerEntry": "{{name}} स्वयंसेवक प्रविष्टि हटाएं"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",
@@ -2026,5 +2048,20 @@
     "title": "उपयोगकर्ता पोर्टल",
     "talawa": "तलावा",
     "talawaBranding": "तालावा ब्रांडिंग"
+  },
+  "organizationVenuesNotification": {
+    "venueCreated": "स्थान सफलतापूर्वक बनाया गया",
+    "venueUpdated": "स्थान का विवरण सफलतापूर्वक अपडेट किया गया",
+    "venueNameExists": "स्थान का नाम पहले से मौजूद है",
+    "venueTitleError": "स्थान का नाम खाली नहीं हो सकता!",
+    "venueCapacityError": "क्षमता एक सकारात्मक संख्या होनी चाहिए!",
+    "previewUrlError": "पूर्वावलोकन URL बनाने में त्रुटि",
+    "invalidCapacity": "क्षमता एक सकारात्मक संख्या होनी चाहिए"
+  },
+  "manageTags": {
+    "loadAssignedUsersError": "निर्दिष्ट उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
+    "sortPeople": "लोगों को क्रमबद्ध करें",
+    "unassign": "हटाएँ",
+    "tags": "टैग"
   }
 }

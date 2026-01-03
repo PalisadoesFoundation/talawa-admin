@@ -300,6 +300,7 @@ describe('Testing Volunteers Screen', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByTestId('volunteers-empty-state')).toBeInTheDocument();
       expect(screen.getByText(t.noVolunteers)).toBeInTheDocument();
     });
   });

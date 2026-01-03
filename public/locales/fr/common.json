@@ -215,5 +215,7 @@
   "removePermanently": "Supprimer définitivement",
   "previousPage": "Page précédente",
   "nextPage": "Page suivante",
-  "pageNumber": "Page {{page}}"
+  "pageNumber": "Page {{page}}",
+  "tags": "Étiquettes",
+  "unassign": "Désassigner"
 }
