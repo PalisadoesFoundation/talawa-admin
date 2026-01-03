@@ -4,7 +4,7 @@
  * Unit tests for ContactCard component.
  * - Ensures rendering with and without image
  * - Ensures clicking selects the contact (setSelectedContact called)
- * - Ensures unseen messages badge renders when count > 0
+ * - Ensures unseen messages badge renders when count is greater than zero
  * - Ensures data-selected toggles when selectedContact equals id
  */
 
@@ -25,6 +25,29 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 
 const link = new StaticMockLink([], true);
+
+// Mock the child component
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: ({
+    imageUrl,
+    fallbackName,
+  }: {
+    imageUrl?: string;
+    fallbackName: string;
+  }) => (
+    <div data-testid="mock-profile-avatar-display">
+      {imageUrl ? (
+        <img
+          src={imageUrl}
+          alt={fallbackName}
+          data-testid="mock-profile-image"
+        />
+      ) : (
+        <div data-testid="mock-profile-fallback">{fallbackName}</div>
+      )}
+    </div>
+  ),
+}));
 
 async function wait(ms = 50): Promise<void> {
   await act(async () => {
@@ -76,29 +99,36 @@ describe('ContactCard [User Portal]', () => {
     ).toHaveTextContent(baseProps.lastMessage);
   });
 
-  it('renders fallback Avatar when image is not provided', async () => {
+  it('renders fallback ProfileAvatarDisplay when image is not provided', async () => {
     renderComponent(baseProps);
     await wait();
 
     expect(
       screen.getByTestId(`contact-container-${baseProps.id}`),
     ).toBeInTheDocument();
-    expect(screen.queryByTestId(`contact-${baseProps.id}-image`)).toBeNull();
+
+    // Check if the mock is rendered
     expect(
-      screen.getByRole('img', { name: baseProps.title }),
+      screen.getByTestId('mock-profile-avatar-display'),
     ).toBeInTheDocument();
+    // Check if fallback is rendered (image is not rendered)
+    expect(screen.queryByTestId('mock-profile-image')).toBeNull();
+    expect(screen.getByTestId('mock-profile-fallback')).toHaveTextContent(
+      baseProps.title,
+    );
   });
 
-  it('renders provided image when image prop exists', async () => {
+  it('renders provided image in ProfileAvatarDisplay when image prop exists', async () => {
     const props = { ...baseProps, image: 'http://example.com/avatar.png' };
     renderComponent(props);
     await wait();
 
-    const img = screen.getByTestId(`contact-${props.id}-image`);
+    const imgDisplay = screen.getByTestId('mock-profile-avatar-display');
+    expect(imgDisplay).toBeInTheDocument();
+
+    const img = screen.getByTestId('mock-profile-image');
     expect(img).toBeInTheDocument();
-    expect((img as HTMLImageElement).getAttribute('src')).toBe(
-      'http://example.com/avatar.png',
-    );
+    expect(img).toHaveAttribute('src', 'http://example.com/avatar.png');
   });
 
   it('renders unseen messages badge when unseenMessages > 0', async () => {

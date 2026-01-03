@@ -4,12 +4,15 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ErrorBoundaryWrapper } from './ErrorBoundaryWrapper';
 import type { InterfaceErrorFallbackProps } from 'types/shared-components/ErrorBoundaryWrapper/interface';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
-// Mock react-toastify
-vi.mock('react-toastify', () => ({
-  toast: {
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     error: vi.fn(),
+    success: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
   },
 }));
 
@@ -63,7 +66,7 @@ describe('ErrorBoundaryWrapper', () => {
 
       expect(screen.getByTestId('normal-component')).toBeInTheDocument();
       expect(screen.getByText('Normal content')).toBeInTheDocument();
-      expect(toast.error).not.toHaveBeenCalled();
+      expect(NotificationToast.error).not.toHaveBeenCalled();
     });
 
     it('renders multiple children normally', () => {
@@ -132,7 +135,9 @@ describe('ErrorBoundaryWrapper', () => {
         </ErrorBoundaryWrapper>,
       );
 
-      expect(toast.error).toHaveBeenCalledWith('Test error message');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Test error message',
+      );
     });
 
     it('uses custom errorMessage in toast when provided', () => {
@@ -145,7 +150,9 @@ describe('ErrorBoundaryWrapper', () => {
         </ErrorBoundaryWrapper>,
       );
 
-      expect(toast.error).toHaveBeenCalledWith('Custom error message');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Custom error message',
+      );
     });
 
     it('displays default error message in toast when error has no message', () => {
@@ -155,7 +162,9 @@ describe('ErrorBoundaryWrapper', () => {
         </ErrorBoundaryWrapper>,
       );
 
-      expect(toast.error).toHaveBeenCalledWith('An unexpected error occurred');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'An unexpected error occurred',
+      );
     });
 
     it('renders default fallback with custom i18n strings', () => {
@@ -431,7 +440,7 @@ describe('ErrorBoundaryWrapper', () => {
         </ErrorBoundaryWrapper>,
       );
 
-      expect(toast.error).not.toHaveBeenCalled();
+      expect(NotificationToast.error).not.toHaveBeenCalled();
     });
 
     it('shows toast when showToast is true', () => {
@@ -441,7 +450,9 @@ describe('ErrorBoundaryWrapper', () => {
         </ErrorBoundaryWrapper>,
       );
 
-      expect(toast.error).toHaveBeenCalledWith('Test error message');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Test error message',
+      );
     });
   });
 

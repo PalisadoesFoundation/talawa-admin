@@ -408,7 +408,6 @@
     "manageTag": "प्रबंधित करें",
     "editTag": "संपादित करें",
     "removeTag": "हटाएँ",
-    "tags": "टैग",
     "tagDetails": "टैग विवरण",
     "tagName": "नाम",
     "tagType": "प्रकार",
@@ -1275,6 +1274,8 @@
     "members": "सदस्य"
   },
   "postCard": {
+    "pinnedPost": "पिन किया गया पोस्ट",
+    "postImage": "पोस्ट छवि",
     "likes": "पसंद",
     "comments": "टिप्पणियाँ",
     "addComment": "टिप्पणी जोड़ें",
@@ -1622,10 +1623,13 @@
     "create": "बनाएं",
     "newChat": "नई चैट",
     "newGroupChat": "नया समूह चैट",
+    "description": "विवरण",
+    "hash": "#",
     "groupInfo": "समूह जानकारी",
     "members": "सदस्यों",
     "addMembers": "सदस्य जोड़ें",
     "userNotFound": "उपयोगकर्ता नहीं मिला",
+    "Error": "त्रुटि",
     "roleUpdatedSuccessfully": "भूमिका सफलतापूर्वक अपडेट की गई",
     "failedToUpdateRole": "भूमिका अपडेट करने में विफल",
     "memberRemovedSuccessfully": "सदस्य सफलतापूर्वक हटाया गया",
@@ -1652,13 +1656,21 @@
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
     "sendMessage": "मेसेज भेजें",
-    "reply": "जवाब",
+    "loading": "लोड हो रहा है...",
+    "loadOlderMessages": "पुराने संदेश लोड करें",
+    "loadingMoreMessages": "अधिक संदेश लोड हो रहे हैं...",
     "loadingImage": "चित्र लोड हो रहा है...",
     "imageNotAvailable": "चित्र उपलब्ध नहीं है",
     "attachment": "अनुलग्नक",
-    "loadingMoreMessages": "अधिक संदेश लोड हो रहे हैं...",
-    "loading": "लोड हो रहा है...",
-    "loadOlderMessages": "पुराने संदेश लोड करें"
+    "reply": "जवाब",
+    "edit": "संपादित करें",
+    "delete": "हटाएं",
+    "errorBoundary": {
+      "title": "कुछ गलत हो गया",
+      "message": "चैट रूम में एक अप्रत्याशित त्रुटि हुई",
+      "resetButton": "फिर से प्रयास करें",
+      "resetButtonAriaLabel": "फिर से प्रयास करें"
+    }
   },
   "orgActionItemCategories": {
     "enableButton": "सक्षम",
@@ -1773,7 +1785,22 @@
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
-    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि"
+    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि",
+    "inviteByEmail": {
+      "addRecipient": "प्राप्तकर्ता जोड़ें",
+      "email": "ईमेल",
+      "title": "ईमेल द्वारा आमंत्रित करें",
+      "sending": "भेजा जा रहा है...",
+      "sendInvites": "निमंत्रण भेजें",
+      "remove": "हटाएं",
+      "name": "नाम",
+      "messagePlaceholder": "आपको इस कार्यक्रम में भाग लेने के लिए आमंत्रित किया गया है।",
+      "messageLabel": "संदेश (वैकल्पिक)",
+      "expiresInDaysLabel": "समाप्ति (दिनों में)",
+      "errorSendingInvites": "निमंत्रण भेजने में त्रुटि",
+      "emailsLabel": "प्राप्तकर्ता ईमेल और नाम",
+      "emailsHelp": "प्रत्येक प्राप्तकर्ता के लिए ईमेल और वैकल्पिक नाम प्रदान करें। आवश्यकतानुसार कई प्राप्तकर्ता जोड़ें।"
+    }
   },
   "userCampaigns": {
     "title": "धन उगाहने के अभियान",
@@ -2030,6 +2057,15 @@
     "events": "इवेंट्स",
     "eventsCreatedByOrganization": "संगठन द्वारा बनाए गए इवेंट्स",
     "today": "आज"
+  },
+  "contact": {
+    "card_aria": "संपर्क कार्ड"
+  },
+  "donation": {
+    "card_aria": "दान कार्ड"
+  },
+  "securedRoute": {
+    "sessionExpired": "कृपया फिर से लॉगिन करें क्योंकि सत्र समाप्त हो गया है"
   },
   "common": {
     "signOut": "साइन आउट",
