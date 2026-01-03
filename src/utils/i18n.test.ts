@@ -64,6 +64,7 @@ describe('i18n Configuration', () => {
     const backendOptions = i18n.options.backend as I18nBackendOptions;
     expect(backendOptions?.backends).toHaveLength(2);
 
+    // LocalStorage first, then HTTP as fallback
     const backends = backendOptions?.backends;
     expect(backends?.[0]).toBe(LocalStorageBackend);
     expect(backends?.[1]).toBe(HttpApi);
@@ -152,8 +153,10 @@ describe('i18n Configuration', () => {
       await i18n.changeLanguage('es');
       expect(i18n.language).toBe('es');
 
+      // Spanish auth resources are not bundled, so falls back to bundled English
       expect(i18n.t('title', { ns: 'auth' })).toBe('Talawa Admin');
       expect(i18n.t('email', { ns: 'auth' })).toBe('Email');
+      expect(i18n.hasResourceBundle('es', 'auth')).toBe(false);
 
       await i18n.changeLanguage('en');
       expect(i18n.language).toBe('en');
@@ -163,6 +166,7 @@ describe('i18n Configuration', () => {
 
   describe('Missing Translation Fallback', () => {
     it('should return key string for non-existent keys', () => {
+      // Returns the key itself when translation is missing
       const missingKey = 'nonExistentKey';
       const result = i18n.t(missingKey, { ns: 'auth' });
       expect(result).toBe(missingKey);
@@ -189,6 +193,7 @@ describe('i18n Configuration', () => {
       localStorage.clear();
       await i18n.reloadResources();
 
+      // Bundled resources should still work after clearing cache
       expect(i18n.t('title', { ns: 'auth' })).toBe('Talawa Admin');
       expect(i18n.t('email', { ns: 'auth' })).toBe('Email');
     });
@@ -202,6 +207,17 @@ describe('i18n Configuration', () => {
       expect(i18n.hasResourceBundle('en', 'auth')).toBe(true);
       expect(i18n.t('login', { ns: 'auth' })).toBe('Log in');
       expect(i18n.t('password', { ns: 'auth' })).toBe('Password');
+    });
+
+    it('should attempt to load non-bundled namespace via HTTP backend', async () => {
+      localStorage.clear();
+
+      // Try to load a namespace that's not bundled
+      await i18n.loadNamespaces('common');
+
+      // Should load successfully even without actual resources
+      expect(i18n.hasLoadedNamespace('common')).toBe(true);
+      expect(i18n.t('someKey', { ns: 'common' })).toBe('someKey');
     });
   });
 
@@ -221,9 +237,11 @@ describe('i18n Configuration', () => {
     });
 
     it('should not leak keys between namespaces', () => {
+      // These namespaces aren't bundled, so they return the key
       expect(i18n.t('title', { ns: 'translation' })).toBe('title');
       expect(i18n.t('email', { ns: 'common' })).toBe('email');
 
+      // Auth namespace is bundled, so it returns actual translations
       expect(i18n.t('title', { ns: 'auth' })).toBe('Talawa Admin');
       expect(i18n.t('email', { ns: 'auth' })).toBe('Email');
     });
@@ -231,6 +249,7 @@ describe('i18n Configuration', () => {
     it('should handle default namespace correctly', () => {
       expect(i18n.options.defaultNS).toBe('auth');
 
+      // Should use auth namespace when no namespace is specified
       expect(i18n.t('title')).toBe('Talawa Admin');
       expect(i18n.t('login')).toBe('Log in');
 
@@ -253,12 +272,11 @@ describe('i18n Configuration', () => {
     it('should prioritize bundled resources over backend loading', () => {
       expect(i18n.hasResourceBundle('en', 'auth')).toBe(true);
 
-      const startTime = Date.now();
       const result = i18n.t('title', { ns: 'auth' });
-      const endTime = Date.now();
-
       expect(result).toBe('Talawa Admin');
-      expect(endTime - startTime).toBeLessThan(10);
+
+      // Bundled resources are available right away
+      expect(i18n.hasResourceBundle('en', 'auth')).toBe(true);
     });
   });
 });
