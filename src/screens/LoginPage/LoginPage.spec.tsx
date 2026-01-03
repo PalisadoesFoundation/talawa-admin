@@ -1370,7 +1370,7 @@ it('Render the Select Organization list and change the option', async () => {
     await userEvent.click(registerButton);
     await wait();
 
-    const autocomplete = screen.getByTestId('selectOrg');
+    const autocomplete = screen.getByTestId('selectOrganization');
     const input = within(autocomplete).getByRole('combobox');
     autocomplete.focus();
 

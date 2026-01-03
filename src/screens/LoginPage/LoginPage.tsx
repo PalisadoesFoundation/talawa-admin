@@ -879,11 +879,11 @@ const loginPage = (): JSX.Element => {
                       )}
                   </div>
                   <div className="position-relative  my-2">
-                    <Form.Label>{t('selectOrg')}</Form.Label>
+                    <Form.Label>{t('selectOrganization')}</Form.Label>
                     <div className="position-relative">
                       <Autocomplete
                         disablePortal
-                        data-testid="selectOrg"
+                        data-testid="selectOrganization"
                         onChange={(
                           event,
                           value: { label: string; id: string } | null,
@@ -898,7 +898,7 @@ const loginPage = (): JSX.Element => {
                           <TextField
                             {...params}
                             label={t('organizations')}
-                            className={styles.selectOrgText}
+                            className={styles.selectOrganizationText}
                           />
                         )}
                       />

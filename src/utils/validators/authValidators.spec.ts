@@ -22,7 +22,7 @@ describe('authValidators', () => {
     it('should reject invalid email formats', () => {
       const result = validateEmail('bad');
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe('loginPage.emailInvalid');
+      expect(result.error).toBe('emailInvalid');
     });
 
     it('should reject emails without @ symbol', () => {
@@ -38,7 +38,7 @@ describe('authValidators', () => {
     it('should reject short passwords', () => {
       const result = validatePassword('short');
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe('loginPage.atLeastEightCharLong');
+      expect(result.error).toBe('atLeastEightCharLong');
     });
 
     it('should reject null/undefined passwords', () => {
@@ -49,7 +49,7 @@ describe('authValidators', () => {
     it('should reject passwords missing requirements', () => {
       const result = validatePassword('password123');
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe('loginPage.passwordInvalid');
+      expect(result.error).toBe('passwordInvalid');
     });
   });
 
@@ -62,7 +62,7 @@ describe('authValidators', () => {
     it('should reject short names', () => {
       const result = validateName(' ');
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe('loginPage.nameInvalid');
+      expect(result.error).toBe('nameInvalid');
     });
 
     it('should handle null/undefined names', () => {
@@ -81,7 +81,7 @@ describe('authValidators', () => {
     it('should reject non-matching passwords', () => {
       const result = validatePasswordConfirmation('Abcd123!', 'xxxx');
       expect(result.isValid).toBe(false);
-      expect(result.error).toBe('loginPage.passwordMismatches');
+      expect(result.error).toBe('passwordMismatches');
     });
   });
 

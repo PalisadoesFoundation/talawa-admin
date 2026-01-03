@@ -20,7 +20,7 @@ export function validateEmail(email: string): InterfaceValidationResult {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email)
     ? { isValid: true }
-    : { isValid: false, error: 'loginPage.emailInvalid' };
+    : { isValid: false, error: 'emailInvalid' };
 }
 
 /**
@@ -32,7 +32,7 @@ export function validatePassword(
   password: string | null | undefined,
 ): InterfaceValidationResult {
   if (!password || password.length < 8) {
-    return { isValid: false, error: 'loginPage.atLeastEightCharLong' };
+    return { isValid: false, error: 'atLeastEightCharLong' };
   }
 
   const hasLowercase = PASSWORD_REGEX.lowercase.test(password);
@@ -46,7 +46,7 @@ export function validatePassword(
 
   return {
     isValid: false,
-    error: 'loginPage.passwordInvalid',
+    error: 'passwordInvalid',
   };
 }
 
@@ -61,7 +61,7 @@ export function validateName(
   const trimmedName = (name ?? '').trim();
   return trimmedName.length >= 2
     ? { isValid: true }
-    : { isValid: false, error: 'loginPage.nameInvalid' };
+    : { isValid: false, error: 'nameInvalid' };
 }
 
 /**
@@ -76,7 +76,7 @@ export function validatePasswordConfirmation(
 ): InterfaceValidationResult {
   return password === confirmPassword
     ? { isValid: true }
-    : { isValid: false, error: 'loginPage.passwordMismatches' };
+    : { isValid: false, error: 'passwordMismatches' };
 }
 
 /**
