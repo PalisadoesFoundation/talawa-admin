@@ -33,7 +33,7 @@ export default [
     ],
   },
   {
-    files: ['**/*.ts', '**/*.tsx'],
+    files: ['**/*.ts', '**/*.tsx'], // Changed from ['*.ts', '*.tsx'] to include subdirectories
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
@@ -60,7 +60,7 @@ export default [
     },
     plugins: {
       react,
-      '@typescript-eslint': ts,
+      ts,
       vitest,
       import: imports,
       prettier,
@@ -77,18 +77,18 @@ export default [
 
       'tsdoc/syntax': 'error',
 
-      '@typescript-eslint/no-require-imports': 'error',
+      'ts/no-require-imports': 'error',
       'react/destructuring-assignment': 'error',
       'react/no-multi-comp': ['error', { ignoreStateless: false }],
       'react/jsx-filename-extension': ['error', { extensions: ['.tsx'] }],
       'import/no-duplicates': 'error',
       'no-undef': 'off',
-      '@typescript-eslint/ban-ts-comment': 'error',
-      '@typescript-eslint/no-unused-vars': 'error',
-      '@typescript-eslint/no-explicit-any': 'error',
-      '@typescript-eslint/no-non-null-assertion': 'error',
-      '@typescript-eslint/consistent-type-assertions': 'error',
-      '@typescript-eslint/naming-convention': [
+      'ts/ban-ts-comment': 'error',
+      'ts/no-unused-vars': 'error',
+      'ts/no-explicit-any': 'error',
+      'ts/no-non-null-assertion': 'error',
+      'ts/consistent-type-assertions': 'error',
+      'ts/naming-convention': [
         'error',
         {
           selector: 'interface',
@@ -129,7 +129,7 @@ export default [
       'vitest/no-disabled-tests': 'error',
       'vitest/no-focused-tests': 'error',
       'vitest/no-identical-title': 'error',
-      '@typescript-eslint/no-unused-expressions': 'error',
+      'ts/no-unused-expressions': 'error',
       'no-restricted-syntax': [
         'error',
         {
@@ -151,9 +151,9 @@ export default [
       prettier,
     },
     rules: {
-      '@typescript-eslint/consistent-type-imports': 'off',
-      '@typescript-eslint/naming-convention': 'off',
-      '@typescript-eslint/explicit-function-return-type': 'off',
+      'ts/consistent-type-imports': 'off',
+      'ts/naming-convention': 'off',
+      'ts/explicit-function-return-type': 'off',
       '@graphql-eslint/known-type-names': 'error',
       '@graphql-eslint/no-unreachable-types': 'off',
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
@@ -192,15 +192,15 @@ export default [
       },
     },
     plugins: {
-      '@typescript-eslint': ts,
+      ts,
       prettier,
     },
     rules: {
       ...js.configs.recommended.rules,
       ...ts.configs.recommended.rules,
-      '@typescript-eslint/no-require-imports': 'off',
-      '@typescript-eslint/no-namespace': 'off',
-      '@typescript-eslint/naming-convention': 'off',
+      'ts/no-require-imports': 'off',
+      'ts/no-namespace': 'off',
+      'ts/naming-convention': 'off',
       'no-undef': 'off',
       'prettier/prettier': 'error',
     },
@@ -223,7 +223,7 @@ export default [
       },
     },
     plugins: {
-      '@typescript-eslint': ts,
+      ts,
       prettier,
     },
     rules: {
