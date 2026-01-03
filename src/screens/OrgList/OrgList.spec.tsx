@@ -28,6 +28,16 @@ import {
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
 } from 'GraphQl/Mutations/mutations';
 
+const emptyConnection = {
+  edges: [],
+  pageInfo: {
+    hasNextPage: false,
+    hasPreviousPage: false,
+    startCursor: null,
+    endCursor: null,
+  },
+};
+
 vi.setConfig({ testTimeout: 30000 });
 
 const mockToast = vi.hoisted(() => ({
@@ -141,7 +151,7 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Dog care center',
       createdAt: '2023-04-13T04:53:17.742+00:00',
-      members: { edges: [] },
+      members: emptyConnection,
       addressLine1: 'Texas, USA',
     },
   ],
@@ -152,7 +162,7 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Dog care center',
       createdAt: '2023-04-13T04:53:17.742+00:00',
-      members: { edges: [] },
+      members: emptyConnection,
       addressLine1: 'Texas, USA',
     },
     {
@@ -161,7 +171,7 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Cat care center',
       createdAt: '2023-04-14T04:53:17.742+00:00',
-      members: { edges: [] },
+      members: emptyConnection,
       addressLine1: 'Texas, USA',
     },
     {
@@ -170,7 +180,7 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Bird care center',
       createdAt: '2023-04-15T04:53:17.742+00:00',
-      members: { edges: [] },
+      members: emptyConnection,
       addressLine1: 'Texas, USA',
     },
     {
@@ -179,7 +189,7 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Fish care center',
       createdAt: '2023-04-16T04:53:17.742+00:00',
-      members: { edges: [] },
+      members: emptyConnection,
       addressLine1: 'Texas, USA',
     },
     {
@@ -188,7 +198,7 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Rabbit care center',
       createdAt: '2023-04-17T04:53:17.742+00:00',
-      members: { edges: [] },
+      members: emptyConnection,
       addressLine1: 'Texas, USA',
     },
     {
@@ -197,7 +207,7 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Horse care center',
       createdAt: '2023-04-18T04:53:17.742+00:00',
-      members: { edges: [] },
+      members: emptyConnection,
       addressLine1: 'Texas, USA',
     },
   ],
@@ -207,7 +217,7 @@ const mockOrgData = {
     avatarURL: '',
     description: `Description ${i + 1}`,
     createdAt: `2023-04-${13 + i}T04:53:17.742+00:00`,
-    members: { edges: [] },
+    members: emptyConnection,
     addressLine1: 'Test Address',
   })),
   manyOrgs: [
@@ -217,7 +227,7 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Dog care center 1',
       createdAt: '2023-04-13T04:53:17.742+00:00',
-      members: { edges: [] },
+      members: emptyConnection,
       addressLine1: 'Texas, USA',
     },
     {
@@ -226,7 +236,7 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Cat care center 2',
       createdAt: '2023-04-14T04:53:17.742+00:00',
-      members: { edges: [] },
+      members: emptyConnection,
       addressLine1: 'Texas, USA',
     },
     {
@@ -235,7 +245,7 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Bird care center 3',
       createdAt: '2023-04-15T04:53:17.742+00:00',
-      members: { edges: [] },
+      members: emptyConnection,
       addressLine1: 'Texas, USA',
     },
     {
@@ -244,7 +254,7 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Fish care center 4',
       createdAt: '2023-04-16T04:53:17.742+00:00',
-      members: { edges: [] },
+      members: emptyConnection,
       addressLine1: 'Texas, USA',
     },
     {
@@ -253,7 +263,7 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Rabbit care center 5',
       createdAt: '2023-04-17T04:53:17.742+00:00',
-      members: { edges: [] },
+      members: emptyConnection,
       addressLine1: 'Texas, USA',
     },
     {
@@ -262,7 +272,7 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Horse care center 6',
       createdAt: '2023-04-18T04:53:17.742+00:00',
-      members: { edges: [] },
+      members: emptyConnection,
       addressLine1: 'Texas, USA',
     },
     {
@@ -271,7 +281,7 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Turtle care center 7',
       createdAt: '2023-04-19T04:53:17.742+00:00',
-      members: { edges: [] },
+      members: emptyConnection,
       addressLine1: 'Texas, USA',
     },
     {
@@ -280,7 +290,7 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Hamster care center 8',
       createdAt: '2023-04-20T04:53:17.742+00:00',
-      members: { edges: [] },
+      members: emptyConnection,
       addressLine1: 'Texas, USA',
     },
   ],
@@ -291,7 +301,7 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Dog care center',
       createdAt: '2023-04-13T04:53:17.742+00:00',
-      members: { edges: [] },
+      members: emptyConnection,
       addressLine1: 'Texas, USA',
     },
     {
@@ -300,7 +310,7 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Cat care center',
       createdAt: '2023-04-14T04:53:17.742+00:00',
-      members: { edges: [] },
+      members: emptyConnection,
       addressLine1: 'Texas, USA',
     },
     {
@@ -309,7 +319,7 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Dog training facility',
       createdAt: '2023-04-15T04:53:17.742+00:00',
-      members: { edges: [] },
+      members: emptyConnection,
       addressLine1: 'Texas, USA',
     },
     {
@@ -318,7 +328,7 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Pet grooming',
       createdAt: '2023-04-16T04:53:17.742+00:00',
-      members: { edges: [] },
+      members: emptyConnection,
       addressLine1: 'Texas, USA',
     },
     {
@@ -327,7 +337,7 @@ const mockOrgData = {
       avatarURL: '',
       description: 'Professional dog walking',
       createdAt: '2023-04-17T04:53:17.742+00:00',
-      members: { edges: [] },
+      members: emptyConnection,
       addressLine1: 'Texas, USA',
     },
   ],
@@ -418,7 +428,7 @@ const mockConfigurations = {
               avatarURL: '',
               description: 'Dog care center',
               createdAt: '2023-04-13T04:53:17.742+00:00',
-              members: { edges: [] },
+              members: emptyConnection,
               addressLine1: 'Texas, USA',
             },
             {
@@ -427,7 +437,7 @@ const mockConfigurations = {
               avatarURL: '',
               description: 'Dog training facility',
               createdAt: '2023-04-15T04:53:17.742+00:00',
-              members: { edges: [] },
+              members: emptyConnection,
               addressLine1: 'Texas, USA',
             },
             {
@@ -436,7 +446,7 @@ const mockConfigurations = {
               avatarURL: '',
               description: 'Professional dog walking',
               createdAt: '2023-04-17T04:53:17.742+00:00',
-              members: { edges: [] },
+              members: emptyConnection,
               addressLine1: 'Texas, USA',
             },
           ],
@@ -888,7 +898,7 @@ describe('Advanced Component Functionality Tests', () => {
                 name: 'Single Organization',
                 avatarURL: '',
                 description: 'Only organization',
-                members: { edges: [] },
+                members: emptyConnection,
                 addressLine1: 'Single Address',
               },
             ],
@@ -1642,7 +1652,7 @@ describe('Advanced Component Functionality Tests', () => {
               avatarURL: '',
               description: `Description ${i + 1}`,
               createdAt: `2023-04-${String(13 + i).padStart(2, '0')}T04:53:17.742+00:00`,
-              members: { edges: [] },
+              members: emptyConnection,
               addressLine1: 'Test Address',
             })),
           },
@@ -1744,7 +1754,7 @@ describe('Advanced Component Functionality Tests', () => {
                 avatarURL: '',
                 description: 'Test',
                 createdAt: '2023-04-13T04:53:17.742+00:00',
-                members: { edges: [] },
+                members: emptyConnection,
                 addressLine1: 'Test Address',
               },
             ],

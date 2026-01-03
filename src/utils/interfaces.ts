@@ -386,6 +386,28 @@ export interface InterfaceCurrentUserTypePG {
     name: string;
     role: string;
     emailAddress: string;
+    addressLine1?: string | null;
+    addressLine2?: string | null;
+    avatarMimeType?: string | null;
+    avatarURL?: string | null;
+    birthDate?: string | null;
+    city?: string | null;
+    countryCode?: string | null;
+    createdAt?: string | null;
+    description?: string | null;
+    educationGrade?: string | null;
+    employmentStatus?: string | null;
+    homePhoneNumber?: string | null;
+    isEmailAddressVerified?: boolean;
+    maritalStatus?: string | null;
+    mobilePhoneNumber?: string | null;
+    natalSex?: string | null;
+    naturalLanguageCode?: string | null;
+    postalCode?: string | null;
+    state?: string | null;
+    updatedAt?: string | null;
+    workPhoneNumber?: string | null;
+    eventsAttended?: Array<{ id: string }>;
   };
 }
 
@@ -547,6 +569,9 @@ export interface InterfaceOrgInfoTypePG {
         id: string;
       };
     }[];
+    pageInfo?: {
+      hasNextPage: boolean;
+    };
   };
 }
 
