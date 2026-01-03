@@ -290,4 +290,72 @@ describe('DateRangePicker', () => {
 
     expect(dayjs(endPickerCall?.[0].minDate).toDate()).toEqual(start);
   });
+
+  it('calls onChange when preset button is clicked', () => {
+    const testPreset = {
+      key: 'last7days',
+      label: 'Last 7 Days',
+      getRange: () => ({
+        startDate: new Date('2025-01-01'),
+        endDate: new Date('2025-01-07'),
+      }),
+    };
+
+    renderComponent({ presets: [testPreset] });
+
+    const presetButton = screen.getByTestId(`${dataTestId}-preset-last7days`);
+    fireEvent.click(presetButton);
+
+    expect(onChangeMock).toHaveBeenCalledTimes(1);
+    const emitted = onChangeMock.mock.calls[0][0];
+    expect(emitted.startDate?.toDateString()).toBe('Wed Jan 01 2025');
+    expect(emitted.endDate?.toDateString()).toBe('Tue Jan 07 2025');
+  });
+
+  it('does not call onChange when preset clicked while disabled', () => {
+    const testPreset = {
+      key: 'test',
+      label: 'Test',
+      getRange: () => ({ startDate: new Date(), endDate: new Date() }),
+    };
+
+    renderComponent({ presets: [testPreset], disabled: true });
+
+    fireEvent.click(screen.getByTestId(`${dataTestId}-preset-test`));
+
+    expect(onChangeMock).not.toHaveBeenCalled();
+  });
+
+  it('hides presets when showPresets is false', () => {
+    renderComponent({
+      presets: [
+        {
+          key: 'test',
+          label: 'Test',
+          getRange: () => ({ startDate: new Date(), endDate: new Date() }),
+        },
+      ],
+      showPresets: false,
+    });
+
+    expect(
+      screen.queryByTestId(`${dataTestId}-preset-test`),
+    ).not.toBeInTheDocument();
+  });
+
+  it('does not render presets when presets array is empty', () => {
+    renderComponent({ presets: [] });
+
+    expect(
+      screen.queryByTestId(`${dataTestId}-preset-`),
+    ).not.toBeInTheDocument();
+  });
+
+  it('applies error state', () => {
+    renderComponent({ error: true, helperText: 'Error text' });
+
+    const helperElement = screen.getByTestId(`${dataTestId}-helper`);
+    expect(helperElement).toHaveTextContent('Error text');
+    expect(helperElement.className).toContain('text-danger'); // Add this assertion
+  });
 });
