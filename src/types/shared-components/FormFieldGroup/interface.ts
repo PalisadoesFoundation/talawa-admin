@@ -150,6 +150,12 @@ export interface IFormCheckBoxProps
  * Radio button group component props using Bootstrap Form.Check.
  * Renders individual radio buttons within a named group.
  */
+
+interface IRadioOption {
+  label: string;
+  value: string;
+}
+
 export interface IFormRadioGroupProps
   extends Omit<FormCheckProps, 'formAction' | 'type'>,
     Omit<
@@ -164,7 +170,7 @@ export interface IFormRadioGroupProps
   onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
   touched?: boolean;
   error?: string;
-  options: Array<{ label: string; value: string }>;
+  options: IRadioOption[];
   groupClass?: string;
   labelClass?: string;
 }

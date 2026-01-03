@@ -48,7 +48,7 @@ describe('check-form-usage', () => {
       };
     });
 
-    vi.mocked(fs.readFileSync).mockImplementation((filePath, encoding) => {
+    vi.mocked(fs.readFileSync).mockImplementation((filePath) => {
       const item = mockFileSystem[filePath];
       return item?.content || '';
     });
