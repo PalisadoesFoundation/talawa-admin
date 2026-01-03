@@ -1,13 +1,14 @@
-[Admin Docs](/)
+[**talawa-admin**](../../../../../README.md)
 
 ***
 
 # Interface: IDateRangeValue
 
-Defined in: [src/types/shared-components/DateRangePicker/interface.ts:11](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L11)
+Defined in: [src/types/shared-components/DateRangePicker/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L27)
 
 IDateRangeValue
-Represents a start and end date.
+
+Represents a controlled date range.
 
 ## Properties
 
@@ -15,7 +16,7 @@ Represents a start and end date.
 
 > **endDate**: `Date`
 
-Defined in: [src/types/shared-components/DateRangePicker/interface.ts:13](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L13)
+Defined in: [src/types/shared-components/DateRangePicker/interface.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L29)
 
 ***
 
@@ -23,4 +24,4 @@ Defined in: [src/types/shared-components/DateRangePicker/interface.ts:13](https:
 
 > **startDate**: `Date`
 
-Defined in: [src/types/shared-components/DateRangePicker/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L12)
+Defined in: [src/types/shared-components/DateRangePicker/interface.ts:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/DateRangePicker/interface.ts#L28)
