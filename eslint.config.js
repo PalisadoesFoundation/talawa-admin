@@ -140,11 +140,11 @@ export default [
        * Enforce usage of standardized DataGridWrapper component
        * Issue #6099: https://github.com/PalisadoesFoundation/talawa-admin/issues/6099
        * Parent Issue #5290: DataGridWrapper foundation component
-       * 
+       *
        * This rule blocks direct imports from @mui/x-data-grid to ensure all usage
        * goes through the standardized DataGridWrapper component located at
        * src/shared-components/DataGridWrapper/
-       * 
+       *
        * Note: Set to 'warn' temporarily to allow existing violations while preventing new ones.
        * Approximately 20+ files currently use direct imports and will require migration.
        * Once migration is complete, this should be changed to 'error'.
@@ -166,7 +166,7 @@ export default [
   },
   /**
    * Exemption: DataGridWrapper and ReportingTable component files
-   * 
+   *
    * DataGridWrapper and ReportingTable files need direct MUI DataGrid access for wrapper implementation.
    * These files are the only ones allowed to import directly from @mui/x-data-grid.
    */
