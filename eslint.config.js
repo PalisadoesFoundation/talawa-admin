@@ -32,7 +32,7 @@ export default [
     ],
   },
   {
-    files: ['*.ts', '*.tsx'],
+    files: ['**/*.ts', '**/*.tsx'], // Match TypeScript files in all directories
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
@@ -125,6 +125,52 @@ export default [
       'vitest/no-focused-tests': 'error',
       'vitest/no-identical-title': 'error',
       '@typescript-eslint/no-unused-expressions': 'error',
+      /**
+       * Enforce usage of standardized DataGridWrapper component
+       * Issue #6099: Add ESLint rule to block direct @mui/x-data-grid imports
+       * Parent Issue #5290: DataGridWrapper Foundation
+       * 
+       * This rule prevents direct imports from @mui/x-data-grid and @mui/x-data-grid-pro
+       * to enforce consistent usage of the project's DataGridWrapper component.
+       * 
+       * Note: 20+ existing files currently violate this rule and will need migration
+       * in a separate ticket. This rule prevents new violations from being introduced.
+       */
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@mui/x-data-grid', '@mui/x-data-grid/*'],
+              message:
+                'Direct imports from @mui/x-data-grid are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ or src/components/DataGridWrapper/ instead. See issue #5290 for details.',
+            },
+            {
+              group: ['@mui/x-data-grid-pro', '@mui/x-data-grid-pro/*'],
+              message:
+                'Direct imports from @mui/x-data-grid-pro are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ or src/components/DataGridWrapper/ instead. See issue #5290 for details.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  /**
+   * DataGridWrapper component exemption
+   * Files in the DataGridWrapper directory need direct access to MUI DataGrid
+   * components for wrapper implementation purposes.
+   */
+  {
+    files: [
+      '**/DataGridWrapper/**/*.ts',
+      '**/DataGridWrapper/**/*.tsx',
+      '**/shared-components/DataGridWrapper/**/*.ts',
+      '**/shared-components/DataGridWrapper/**/*.tsx',
+      '**/components/DataGridWrapper/**/*.ts',
+      '**/components/DataGridWrapper/**/*.tsx',
+    ],
+    rules: {
+      'no-restricted-imports': 'off',
     },
   },
   {
