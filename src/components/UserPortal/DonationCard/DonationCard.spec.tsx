@@ -92,13 +92,63 @@ describe('DonationCard [User Portal]', () => {
     expect(viewButton).toHaveClass('addButton');
   });
 
-  it('renders avatar image slot', async () => {
+  it('renders avatar image slot with aria-hidden attribute', async () => {
     renderComponent();
     await wait();
 
-    expect(
-      screen.getByTestId(`donation-${defaultProps.id}-avatar`),
-    ).toBeInTheDocument();
+    const avatar = screen.getByTestId(`donation-${defaultProps.id}-avatar`);
+    expect(avatar).toBeInTheDocument();
+    expect(avatar).toHaveAttribute('aria-hidden', 'true');
+  });
+
+  it('correctly interpolates the ID in data-testid via donation.card_test_id', async () => {
+    const customId = 'custom-id-123';
+    renderComponent({ ...defaultProps, id: customId });
+    await wait();
+
+    expect(screen.getByTestId(`donation-card-${customId}`)).toBeInTheDocument();
+  });
+
+  it('has correct aria-label from donation.card_aria', async () => {
+    renderComponent();
+    await wait();
+
+    const card = screen.getByTestId(`donation-card-${defaultProps.id}`);
+    expect(card).toHaveAttribute('aria-label', 'Donation card');
+  });
+
+  it('formats donation date correctly for English locale', async () => {
+    const testDate = dayjs.utc().subtract(10, 'days');
+    const date = testDate.toISOString();
+    renderComponent({ ...defaultProps, updatedAt: date });
+    await wait();
+
+    // Check that the formatted date contains expected parts (month abbreviation and year)
+    const dateElement = screen.getByTestId('donation-date');
+    expect(dateElement).toHaveTextContent(testDate.format('YYYY'));
+    expect(dateElement).toHaveTextContent(testDate.format('MMM'));
+  });
+
+  it('formats donation date correctly for a different locale (e.g., Hindi)', async () => {
+    // Change language to Hindi
+    await act(async () => {
+      await i18nForTest.changeLanguage('hi');
+    });
+
+    const testDate = dayjs.utc().subtract(10, 'days');
+    const date = testDate.toISOString();
+    renderComponent({ ...defaultProps, updatedAt: date });
+    await wait();
+
+    const dateElement = screen.getByTestId('donation-date');
+
+    // Verify the year is present in the formatted output
+    expect(dateElement).toHaveTextContent(testDate.format('YYYY'));
+
+    // Reset language after test
+    await act(async () => {
+      await i18nForTest.changeLanguage('en');
+    });
   });
 
   it('does not crash when updatedAt is missing', async () => {
@@ -108,5 +158,6 @@ describe('DonationCard [User Portal]', () => {
     expect(
       screen.getByTestId(`donation-card-${defaultProps.id}`),
     ).toBeInTheDocument();
+    expect(screen.queryByTestId('donation-date')).not.toBeInTheDocument();
   });
 });

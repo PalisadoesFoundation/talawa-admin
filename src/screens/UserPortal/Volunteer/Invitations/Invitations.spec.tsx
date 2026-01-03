@@ -107,8 +107,8 @@ const membership2 = {
   _id: 'membershipId2',
   id: 'membershipId2',
   status: 'invited',
-  createdAt: dayjs.utc().add(1, 'day').toISOString(),
-  updatedAt: dayjs.utc().add(1, 'day').toISOString(),
+  createdAt: dayjs.utc().subtract(3, 'day').toISOString(),
+  updatedAt: dayjs.utc().subtract(3, 'day').toISOString(),
   event: baseEvent(
     'eventId2',
     'Event 2',
@@ -129,8 +129,8 @@ const membership3 = {
   _id: 'membershipId3',
   id: 'membershipId3',
   status: 'invited',
-  createdAt: dayjs.utc().add(1, 'day').toISOString(),
-  updatedAt: dayjs.utc().add(1, 'day').toISOString(),
+  createdAt: dayjs.utc().subtract(2, 'day').toISOString(),
+  updatedAt: dayjs.utc().subtract(2, 'day').toISOString(),
   event: baseEvent(
     'eventId3',
     'Event 3',
@@ -154,8 +154,8 @@ const membership4 = {
   _id: 'membershipId4',
   id: 'membershipId4',
   status: 'invited',
-  createdAt: dayjs.utc().add(1, 'day').toISOString(),
-  updatedAt: dayjs.utc().add(1, 'day').toISOString(),
+  createdAt: dayjs.utc().subtract(1, 'day').toISOString(),
+  updatedAt: dayjs.utc().subtract(1, 'day').toISOString(),
   event: baseEvent(
     'eventId4',
     'Event 4',
@@ -171,8 +171,8 @@ const membership5 = {
   _id: 'membershipId5',
   id: 'membershipId5',
   status: 'invited',
-  createdAt: dayjs.utc().add(1, 'day').toISOString(),
-  updatedAt: dayjs.utc().add(1, 'day').toISOString(),
+  createdAt: dayjs.utc().toISOString(),
+  updatedAt: dayjs.utc().toISOString(),
   event: baseEvent(
     'eventId5',
     'Event 5',

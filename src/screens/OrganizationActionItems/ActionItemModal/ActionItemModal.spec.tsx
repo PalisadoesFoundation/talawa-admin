@@ -999,6 +999,9 @@ describe('ItemModal - Additional Test Cases', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
+      // Wait for the form to fully load by checking that volunteerSelect is present
+      await screen.findByTestId('volunteerSelect', {}, { timeout: 3000 });
+
       const volunteerGroupChip = screen.getByRole('button', {
         name: 'volunteerGroup',
       });
@@ -1006,6 +1009,8 @@ describe('ItemModal - Additional Test Cases', () => {
 
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
+        {},
+        { timeout: 3000 },
       );
       const volunteerGroupInput =
         within(volunteerGroupSelect).getByRole('combobox');
@@ -4077,15 +4082,23 @@ describe('Partially Covered Lines Test Coverage', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
+      // Wait for the form to fully load by checking that volunteerSelect is present
+      await screen.findByTestId('volunteerSelect', {}, { timeout: 3000 });
+
       // First switch to volunteer group to set some state
       const volunteerGroupChip = screen.getByRole('button', {
         name: 'volunteerGroup',
       });
       await userEvent.click(volunteerGroupChip);
 
-      await waitFor(() => {
-        expect(screen.getByTestId('volunteerGroupSelect')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('volunteerGroupSelect'),
+          ).toBeInTheDocument();
+        },
+        { timeout: 3000 },
+      );
 
       // Now click volunteer chip - this should execute the !isVolunteerChipDisabled path
       const volunteerChip = screen.getByRole('button', { name: 'volunteer' });

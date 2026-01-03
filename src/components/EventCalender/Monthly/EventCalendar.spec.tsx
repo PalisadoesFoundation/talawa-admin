@@ -49,12 +49,14 @@ describe('Calendar', () => {
   it('should initialize currentMonth and currentYear with the current date', () => {
     const today = new Date();
     const { getByTestId } = render(
-      <Calendar
-        eventData={eventData}
-        onMonthChange={onMonthChange}
-        currentMonth={new Date().getMonth()}
-        currentYear={new Date().getFullYear()}
-      />,
+      <Router>
+        <Calendar
+          eventData={eventData}
+          onMonthChange={onMonthChange}
+          currentMonth={new Date().getMonth()}
+          currentYear={new Date().getFullYear()}
+        />
+      </Router>,
     );
 
     const currentMonth = getByTestId('current-date');
@@ -72,12 +74,14 @@ describe('Calendar', () => {
 
   it('should render the current month and year', () => {
     const { getByTestId } = render(
-      <Calendar
-        eventData={eventData}
-        onMonthChange={onMonthChange}
-        currentMonth={new Date().getMonth()}
-        currentYear={new Date().getFullYear()}
-      />,
+      <Router>
+        <Calendar
+          eventData={eventData}
+          onMonthChange={onMonthChange}
+          currentMonth={new Date().getMonth()}
+          currentYear={new Date().getFullYear()}
+        />
+      </Router>,
     );
 
     // Find the element by its data-testid attribute
@@ -95,16 +99,18 @@ describe('Calendar', () => {
   it('Should show prev and next month on clicking < & > buttons', () => {
     //testing previous month button
     render(
-      <MockedProvider link={link}>
-        <I18nextProvider i18n={i18nForTest}>
-          <Calendar
-            eventData={eventData}
-            onMonthChange={onMonthChange}
-            currentMonth={new Date().getMonth()}
-            currentYear={new Date().getFullYear()}
-          />
-        </I18nextProvider>
-      </MockedProvider>,
+      <Router>
+        <MockedProvider link={link}>
+          <I18nextProvider i18n={i18nForTest}>
+            <Calendar
+              eventData={eventData}
+              onMonthChange={onMonthChange}
+              currentMonth={new Date().getMonth()}
+              currentYear={new Date().getFullYear()}
+            />
+          </I18nextProvider>
+        </MockedProvider>
+      </Router>,
     );
     const prevButton = screen.getByTestId('prevmonthordate');
     fireEvent.click(prevButton);
