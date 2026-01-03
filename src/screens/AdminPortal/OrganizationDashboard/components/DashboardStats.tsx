@@ -65,6 +65,7 @@ import UsersIcon from 'assets/svgs/users.svg?react';
 import VenuesIcon from 'assets/svgs/venues.svg?react';
 import DashBoardCard from 'components/OrganizationDashCards/DashboardCard';
 import DashboardCardLoading from 'components/OrganizationDashCards/Loader/DashboardCardLoading';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import orgStyles from '../OrganizationDashboard.module.css';
 
 interface InterfaceDashboardStatsProps {
@@ -100,117 +101,119 @@ const DashboardStats: React.FC<InterfaceDashboardStatsProps> = ({
 }) => {
   const { t: tCommon } = useTranslation('common');
 
-  if (isLoading) {
-    return (
-      <Row className={orgStyles.flex}>
-        {[...Array(6)].map((_, index) => (
-          <Col
-            xs={6}
-            sm={4}
-            className="mb-4"
-            key={`orgLoading_${index}`}
-            data-testid="fallback-ui"
-          >
-            <DashboardCardLoading />
-          </Col>
-        ))}
-      </Row>
-    );
-  }
-
   return (
-    <Row className={orgStyles.flex}>
-      <Col xs={6} sm={4} className="mb-4">
-        <button
-          type="button"
-          className="p-0 m-0 border-0 bg-transparent w-100 text-start"
-          data-testid="membersCount"
-          onClick={onMembersClick}
-          aria-label={tCommon('members')}
-        >
-          <DashBoardCard
-            count={memberCount}
-            title={tCommon('members')}
-            icon={<UsersIcon className={orgStyles.iconGrey} />}
-          />
-        </button>
-      </Col>
-      <Col xs={6} sm={4} className="mb-4">
-        <button
-          type="button"
-          className="p-0 m-0 border-0 bg-transparent w-100 text-start"
-          data-testid="adminsCount"
-          onClick={onAdminsClick}
-          aria-label={tCommon('admins')}
-        >
-          <DashBoardCard
-            count={adminCount}
-            title={tCommon('admins')}
-            icon={<AdminsIcon className={orgStyles.iconGrey} />}
-          />
-        </button>
-      </Col>
-      <Col xs={6} sm={4} className="mb-4">
-        <button
-          type="button"
-          className="p-0 m-0 border-0 bg-transparent w-100 text-start"
-          data-testid="postsCount"
-          onClick={onPostsClick}
-          aria-label={tCommon('posts')}
-        >
-          <DashBoardCard
-            count={postsCount ?? 0}
-            title={tCommon('posts')}
-            icon={<PostsIcon className={orgStyles.iconGrey} />}
-          />
-        </button>
-      </Col>
-      <Col xs={6} sm={4} className="mb-4">
-        <button
-          type="button"
-          className="p-0 m-0 border-0 bg-transparent w-100 text-start"
-          data-testid="eventsCount"
-          onClick={onEventsClick}
-          aria-label={tCommon('events')}
-        >
-          <DashBoardCard
-            count={eventCount}
-            title={tCommon('events')}
-            icon={<EventsIcon className={orgStyles.iconGrey} />}
-          />
-        </button>
-      </Col>
-      <Col xs={6} sm={4} className="mb-4">
-        <button
-          type="button"
-          className="p-0 m-0 border-0 bg-transparent w-100 text-start"
-          data-testid="blockedUsersCount"
-          onClick={onBlockedUsersClick}
-          aria-label={tCommon('blockedUsers')}
-        >
-          <DashBoardCard
-            count={blockedCount}
-            title={tCommon('blockedUsers')}
-            icon={<BlockedUsersIcon className={orgStyles.iconGrey} />}
-          />
-        </button>
-      </Col>
-      <Col xs={6} sm={4} className="mb-4">
-        <button
-          type="button"
-          className="p-0 m-0 border-0 bg-transparent w-100 text-start"
-          data-testid="venuesCount"
-          onClick={onVenuesClick}
-          aria-label={tCommon('venues')}
-        >
-          <DashBoardCard
-            count={venueCount}
-            title={tCommon('venues')}
-            icon={<VenuesIcon className={orgStyles.iconGrey} />}
-          />
-        </button>
-      </Col>
-    </Row>
+    <LoadingState
+      isLoading={isLoading}
+      variant="custom"
+      customLoader={
+        <Row className={orgStyles.flex}>
+          {[...Array(6)].map((_, index) => (
+            <Col
+              xs={6}
+              sm={4}
+              className="mb-4"
+              key={`orgLoading_${index}`}
+              data-testid="fallback-ui"
+            >
+              <DashboardCardLoading />
+            </Col>
+          ))}
+        </Row>
+      }
+    >
+      <Row className={orgStyles.flex}>
+        <Col xs={6} sm={4} className="mb-4">
+          <button
+            type="button"
+            className="p-0 m-0 border-0 bg-transparent w-100 text-start"
+            data-testid="membersCount"
+            onClick={onMembersClick}
+            aria-label={tCommon('members')}
+          >
+            <DashBoardCard
+              count={memberCount}
+              title={tCommon('members')}
+              icon={<UsersIcon className={orgStyles.iconGrey} />}
+            />
+          </button>
+        </Col>
+        <Col xs={6} sm={4} className="mb-4">
+          <button
+            type="button"
+            className="p-0 m-0 border-0 bg-transparent w-100 text-start"
+            data-testid="adminsCount"
+            onClick={onAdminsClick}
+            aria-label={tCommon('admins')}
+          >
+            <DashBoardCard
+              count={adminCount}
+              title={tCommon('admins')}
+              icon={<AdminsIcon className={orgStyles.iconGrey} />}
+            />
+          </button>
+        </Col>
+        <Col xs={6} sm={4} className="mb-4">
+          <button
+            type="button"
+            className="p-0 m-0 border-0 bg-transparent w-100 text-start"
+            data-testid="postsCount"
+            onClick={onPostsClick}
+            aria-label={tCommon('posts')}
+          >
+            <DashBoardCard
+              count={postsCount ?? 0}
+              title={tCommon('posts')}
+              icon={<PostsIcon className={orgStyles.iconGrey} />}
+            />
+          </button>
+        </Col>
+        <Col xs={6} sm={4} className="mb-4">
+          <button
+            type="button"
+            className="p-0 m-0 border-0 bg-transparent w-100 text-start"
+            data-testid="eventsCount"
+            onClick={onEventsClick}
+            aria-label={tCommon('events')}
+          >
+            <DashBoardCard
+              count={eventCount}
+              title={tCommon('events')}
+              icon={<EventsIcon className={orgStyles.iconGrey} />}
+            />
+          </button>
+        </Col>
+        <Col xs={6} sm={4} className="mb-4">
+          <button
+            type="button"
+            className="p-0 m-0 border-0 bg-transparent w-100 text-start"
+            data-testid="blockedUsersCount"
+            onClick={onBlockedUsersClick}
+            aria-label={tCommon('blockedUsers')}
+          >
+            <DashBoardCard
+              count={blockedCount}
+              title={tCommon('blockedUsers')}
+              icon={<BlockedUsersIcon className={orgStyles.iconGrey} />}
+            />
+          </button>
+        </Col>
+        <Col xs={6} sm={4} className="mb-4">
+          <button
+            type="button"
+            className="p-0 m-0 border-0 bg-transparent w-100 text-start"
+            data-testid="venuesCount"
+            onClick={onVenuesClick}
+            aria-label={tCommon('venues')}
+          >
+            <DashBoardCard
+              count={venueCount}
+              title={tCommon('venues')}
+              icon={<VenuesIcon className={orgStyles.iconGrey} />}
+            />
+          </button>
+        </Col>
+      </Row>
+    </LoadingState>
   );
 };
 
