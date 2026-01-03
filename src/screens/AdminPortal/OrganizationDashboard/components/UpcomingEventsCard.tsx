@@ -55,6 +55,7 @@ import { Button, Card, Col } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import CardItem from 'components/OrganizationDashCards/CardItem/CardItem';
 import CardItemLoading from 'components/OrganizationDashCards/CardItem/Loader/CardItemLoading';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type { IEvent } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 
@@ -88,34 +89,38 @@ const UpcomingEventsCard: React.FC<InterfaceUpcomingEventsCardProps> = ({
           </Button>
         </div>
         <Card.Body className={styles.containerBody}>
-          {eventLoading ? (
-            [...Array(4)].map((_, index) => (
+          <LoadingState
+            isLoading={eventLoading}
+            variant="custom"
+            customLoader={[...Array(4)].map((_, index) => (
               <CardItemLoading key={`eventLoading_${index}`} />
-            ))
-          ) : !upcomingEvents.length ? (
-            <div className={styles.emptyContainer}>
-              <h6>{t('noUpcomingEvents')}</h6>
-            </div>
-          ) : (
-            [...upcomingEvents]
-              .sort(
-                (a, b) =>
-                  new Date(a.node.startAt).getTime() -
-                  new Date(b.node.startAt).getTime(),
-              )
-              .slice(0, 10)
-              .map((event) => {
-                return (
-                  <CardItem
-                    type="Event"
-                    key={event.node.id}
-                    startdate={event.node.startAt}
-                    enddate={event.node.endAt}
-                    title={event.node.name}
-                  />
-                );
-              })
-          )}
+            ))}
+          >
+            {!upcomingEvents.length ? (
+              <div className={styles.emptyContainer}>
+                <h6>{t('noUpcomingEvents')}</h6>
+              </div>
+            ) : (
+              [...upcomingEvents]
+                .sort(
+                  (a, b) =>
+                    new Date(a.node.startAt).getTime() -
+                    new Date(b.node.startAt).getTime(),
+                )
+                .slice(0, 10)
+                .map((event) => {
+                  return (
+                    <CardItem
+                      type="Event"
+                      key={event.node.id}
+                      startdate={event.node.startAt}
+                      enddate={event.node.endAt}
+                      title={event.node.name}
+                    />
+                  );
+                })
+            )}
+          </LoadingState>
         </Card.Body>
       </Card>
     </Col>

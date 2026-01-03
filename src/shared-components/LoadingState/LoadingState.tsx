@@ -46,6 +46,7 @@ const LoadingState = ({
   noOfRows,
   skeletonRows = 5,
   skeletonCols = 4,
+  customLoader,
 }: InterfaceLoadingStateProps): JSX.Element => {
   const { t } = useTranslation('common');
 
@@ -113,6 +114,11 @@ const LoadingState = ({
         ))}
       </div>
     );
+  }
+
+  // Custom variant: renders user-provided custom loader
+  if (variant === 'custom') {
+    return <>{customLoader}</>;
   }
 
   // Spinner variant: full-screen with overlay
