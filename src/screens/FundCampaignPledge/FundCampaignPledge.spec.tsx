@@ -804,8 +804,8 @@ describe('Testing Campaign Pledge Screen', () => {
             __typename: 'FundCampaign',
             id: 'single',
             name: 'Solo Campaign',
-            startAt: dayjs().subtract(1, 'year').toISOString(),
-            endAt: dayjs().endOf('year').toISOString(),
+            startAt: dayjs.utc().subtract(1, 'year').toISOString(),
+            endAt: dayjs.utc().endOf('year').toISOString(),
             currencyCode: 'USD',
             goalAmount: 500,
             pledges: {
@@ -818,6 +818,7 @@ describe('Testing Campaign Pledge Screen', () => {
                     id: 'singlePledge',
                     amount: 50,
                     createdAt: dayjs()
+                      .utc()
                       .add(1, 'day')
                       .startOf('day')
                       .toISOString(),
@@ -942,8 +943,8 @@ describe('Testing Campaign Pledge Screen', () => {
             __typename: 'FundCampaign',
             id: 'zero',
             name: 'Zero Campaign',
-            startAt: dayjs().subtract(1, 'year').toISOString(),
-            endAt: dayjs().endOf('year').toISOString(),
+            startAt: dayjs.utc().subtract(1, 'year').toISOString(),
+            endAt: dayjs.utc().endOf('year').toISOString(),
             currencyCode: null,
             goalAmount: 0,
             pledges: {
@@ -1198,8 +1199,8 @@ describe('Testing Campaign Pledge Screen', () => {
             __typename: 'FundCampaign',
             id: '1',
             name: 'Test Campaign',
-            startAt: dayjs().subtract(1, 'year').toISOString(),
-            endAt: dayjs().endOf('year').toISOString(),
+            startAt: dayjs.utc().subtract(1, 'year').toISOString(),
+            endAt: dayjs.utc().endOf('year').toISOString(),
             currencyCode: 'USD',
             goalAmount: 1000,
             pledges: {
@@ -1211,7 +1212,7 @@ describe('Testing Campaign Pledge Screen', () => {
                     __typename: 'Pledge',
                     id: 'avatarPledge',
                     amount: 100,
-                    createdAt: dayjs().toISOString(),
+                    createdAt: dayjs.utc().toISOString(),
                     pledger: {
                       __typename: 'User',
                       id: 'avatarUser',
@@ -1262,8 +1263,8 @@ describe('Testing Campaign Pledge Screen', () => {
             __typename: 'FundCampaign',
             id: '1',
             name: 'Test Campaign',
-            startAt: dayjs().subtract(1, 'year').toISOString(),
-            endAt: dayjs().endOf('year').toISOString(),
+            startAt: dayjs.utc().subtract(1, 'year').toISOString(),
+            endAt: dayjs.utc().endOf('year').toISOString(),
             currencyCode: 'USD',
             goalAmount: 1000,
             pledges: {
@@ -1275,7 +1276,7 @@ describe('Testing Campaign Pledge Screen', () => {
                     __typename: 'Pledge',
                     id: 'extraAvatarPledge',
                     amount: 100,
-                    createdAt: dayjs().toISOString(),
+                    createdAt: dayjs.utc().toISOString(),
                     pledger: {
                       __typename: 'User',
                       id: 'mainUser',
@@ -1348,8 +1349,8 @@ describe('Testing Campaign Pledge Screen', () => {
             __typename: 'FundCampaign',
             id: '1',
             name: 'Test Campaign',
-            startAt: dayjs().subtract(1, 'year').toISOString(),
-            endAt: dayjs().endOf('year').toISOString(),
+            startAt: dayjs.utc().subtract(1, 'year').toISOString(),
+            endAt: dayjs.utc().endOf('year').toISOString(),
             currencyCode: 'USD',
             goalAmount: 1000,
             pledges: {
@@ -1361,7 +1362,7 @@ describe('Testing Campaign Pledge Screen', () => {
                     __typename: 'Pledge',
                     id: 'noUsersArrayPledge',
                     amount: 150,
-                    createdAt: dayjs().toISOString(),
+                    createdAt: dayjs.utc().toISOString(),
                     pledger: {
                       __typename: 'User',
                       id: 'fallbackPledger',
