@@ -32,6 +32,7 @@ export default [
       '**/*.svg',
     ],
   },
+
   {
     files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
@@ -73,7 +74,9 @@ export default [
     rules: {
       ...js.configs.recommended.rules,
       ...ts.configs.recommended.rules,
+
       'tsdoc/syntax': 'error',
+
       '@typescript-eslint/no-require-imports': 'error',
       'react/destructuring-assignment': 'error',
       'react/no-multi-comp': ['error', { ignoreStateless: false }],
@@ -133,11 +136,12 @@ export default [
           selector:
             "Property[key.name='authorization'] CallExpression[callee.name='getItem'][arguments.0.value='token']",
           message:
-            "Security Risk: Do not use getItem('token') directly inside authorization headers. Extract it to a variable first.",
+            "Security Risk: Do not use getItem('token') directly inside authorization headers. Extract it to a variable first to handle null values.",
         },
       ],
     },
   },
+
   {
     files: ['*.graphql'],
     languageOptions: {
@@ -156,6 +160,7 @@ export default [
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
     },
   },
+
   {
     files: ['cypress/**/*.ts', 'cypress/**/*.js'],
     languageOptions: {
@@ -196,6 +201,7 @@ export default [
       'prettier/prettier': 'error',
     },
   },
+
   {
     files: ['*.config.ts', '*.config.js', 'cypress.config.ts'],
     languageOptions: {
@@ -223,6 +229,7 @@ export default [
       'prettier/prettier': 'error',
     },
   },
+
   {
     files: ['**/*.spec.ts', '**/*.spec.tsx', '**/*.test.ts', '**/*.test.tsx'],
     plugins: {
@@ -230,16 +237,6 @@ export default [
     },
     rules: {
       'vitest-isolation/require-aftereach-cleanup': 'error',
-    },
-  },
-  {
-    files: ['**/*.ts', '**/*.tsx'],
-    ignores: ['**/*.spec.ts', '**/*.spec.tsx', '**/*.test.ts', '**/*.test.tsx'],
-    plugins: {
-      tsdoc,
-    },
-    rules: {
-      'tsdoc/syntax': 'error',
     },
   },
 ];
