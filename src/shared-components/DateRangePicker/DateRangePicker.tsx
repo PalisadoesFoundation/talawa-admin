@@ -91,10 +91,9 @@ export default function DateRangePicker({
   helperText,
   className,
   dataTestId = 'date-range-picker',
-  showPresets = true,
+  showPresets,
 }: InterfaceDateRangePickerProps) {
-  const { t } = useTranslation('translation', { keyPrefix: 'common' });
-
+  const { t } = useTranslation('common');
   const startDayjs = toDayjs(value.startDate);
   const endDayjs = toDayjs(value.endDate);
 
@@ -178,6 +177,9 @@ export default function DateRangePicker({
                 textField: (props) => (
                   <Form.Control
                     {...props.inputProps}
+                    ref={props.ref}
+                    disabled={props.disabled}
+                    required={props.required}
                     aria-label={t('startDate')}
                     data-testid={`${dataTestId}-start-input`}
                   />
@@ -197,6 +199,9 @@ export default function DateRangePicker({
                 textField: (props) => (
                   <Form.Control
                     {...props.inputProps}
+                    ref={props.ref}
+                    disabled={props.disabled}
+                    required={props.required}
                     aria-label={t('endDate')}
                     data-testid={`${dataTestId}-end-input`}
                   />
@@ -206,7 +211,7 @@ export default function DateRangePicker({
           </Col>
         </Row>
 
-        {presets && presets.length > 0 && showPresets && (
+        {presets && presets.length > 0 && showPresets !== false && (
           <div className={styles.presetRow}>
             {presets.map((preset) => {
               const isActive = preset.key === activePresetKey;

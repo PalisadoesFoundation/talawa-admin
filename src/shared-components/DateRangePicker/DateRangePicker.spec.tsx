@@ -60,6 +60,7 @@ describe('DateRangePicker', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -70,6 +71,7 @@ describe('DateRangePicker', () => {
       disabled: boolean;
       error: boolean;
       helperText: string;
+      showPresets: boolean;
     }>,
   ) {
     render(
@@ -80,6 +82,7 @@ describe('DateRangePicker', () => {
         disabled={props?.disabled}
         error={props?.error}
         helperText={props?.helperText}
+        showPresets={props?.showPresets}
         dataTestId={dataTestId}
       />,
     );
@@ -139,6 +142,66 @@ describe('DateRangePicker', () => {
 
     fireEvent.change(screen.getByTestId(`${dataTestId}-start-input`), {
       target: { value: '2025-01-01' },
+    });
+
+    expect(onChangeMock).not.toHaveBeenCalled();
+  });
+  it('calls onChange when a preset is clicked', () => {
+    const presets = [
+      {
+        key: 'today',
+        label: 'Today',
+        getRange: () => ({
+          startDate: new Date('2025-01-01'),
+          endDate: new Date('2025-01-01'),
+        }),
+      },
+    ];
+
+    renderComponent({ presets });
+
+    fireEvent.click(screen.getByTestId(`${dataTestId}-preset-today`));
+
+    expect(onChangeMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('renders helperText when provided', () => {
+    renderComponent({ helperText: 'Help text' });
+
+    expect(screen.getByTestId(`${dataTestId}-helper`)).toHaveTextContent(
+      'Help text',
+    );
+  });
+
+  it('applies error state when error is true', () => {
+    renderComponent({ error: true, helperText: 'Error text' });
+
+    expect(screen.getByText('Error text')).toBeInTheDocument();
+  });
+
+  it('hides presets when showPresets is false', () => {
+    renderComponent({
+      presets: [
+        {
+          key: 'x',
+          label: 'X',
+          getRange: () => ({
+            startDate: new Date(),
+            endDate: new Date(),
+          }),
+        },
+      ],
+      showPresets: false,
+    });
+
+    expect(
+      screen.queryByTestId(`${dataTestId}-preset-x`),
+    ).not.toBeInTheDocument();
+  });
+
+  it('handles null startDate and endDate safely', () => {
+    renderComponent({
+      value: { startDate: null, endDate: null },
     });
 
     expect(onChangeMock).not.toHaveBeenCalled();

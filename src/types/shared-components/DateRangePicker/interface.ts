@@ -1,12 +1,28 @@
 /**
- * DateRangePicker types
+ * DateRangePicker shared types
+ *
+ * @remarks
+ * All date values are local `Date` objects.
+ * Timezone conversion and serialization (ISO strings, server formats)
+ * must be handled by GraphQL middleware or API adapters.
+ *
+ * @example
+ * ```tsx
+ * const [range, setRange] = useState<IDateRangeValue>({
+ *   startDate: null,
+ *   endDate: null,
+ * });
+ *
+ * <DateRangePicker value={range} onChange={setRange} />
+ * ```
  */
 
 export type DateOrNull = Date | null;
 
 /**
  * IDateRangeValue
- * Represents a start and end date.
+ *
+ * Represents a controlled date range.
  */
 export interface IDateRangeValue {
   startDate: DateOrNull;
@@ -15,7 +31,23 @@ export interface IDateRangeValue {
 
 /**
  * IDateRangePreset
- * Configuration for a preset date range.
+ *
+ * Configuration for a preset date range button.
+ *
+ * @param refDate - Optional reference date for relative presets.
+ * Defaults to the current date if not provided.
+ *
+ * @example
+ * ```ts
+ * {
+ *   key: 'last7days',
+ *   label: 'Last 7 Days',
+ *   getRange: (refDate = new Date()) => ({
+ *     startDate: dayjs(refDate).subtract(7, 'day').toDate(),
+ *     endDate: refDate,
+ *   }),
+ * }
+ * ```
  */
 export interface IDateRangePreset {
   key: string;
@@ -25,7 +57,8 @@ export interface IDateRangePreset {
 
 /**
  * InterfaceDateRangePickerProps
- * Controlled props for DateRangePicker.
+ *
+ * Controlled props for the DateRangePicker component.
  */
 export interface InterfaceDateRangePickerProps {
   value: IDateRangeValue;
