@@ -4,7 +4,7 @@
 
 # Interface: InterfaceCursorPaginationManagerProps\<TNode, TVariables\>
 
-Defined in: [src/types/CursorPagination/interface.ts:32](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L32)
+Defined in: [src/types/CursorPagination/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L37)
 
 Props for the CursorPaginationManager component.
 
@@ -20,7 +20,7 @@ The type of individual items extracted from edges
 
 `TVariables` *extends* `Record`\<`string`, `unknown`\> = `Record`\<`string`, `unknown`\>
 
-The GraphQL query variables type (defaults to Record<string, unknown>)
+The GraphQL query variables type (defaults to `Record<string, unknown>`)
 
 ## Properties
 
@@ -28,7 +28,7 @@ The GraphQL query variables type (defaults to Record<string, unknown>)
 
 > **dataPath**: `string`
 
-Defined in: [src/types/CursorPagination/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L51)
+Defined in: [src/types/CursorPagination/interface.ts:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L56)
 
 Dot-separated path to extract connection data from the query response
 
@@ -48,7 +48,7 @@ Dot-separated path to extract connection data from the query response
 
 > `optional` **emptyStateComponent**: `ReactNode`
 
-Defined in: [src/types/CursorPagination/interface.ts:110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L110)
+Defined in: [src/types/CursorPagination/interface.ts:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L115)
 
 Custom component to show when no items are available
 
@@ -58,7 +58,7 @@ Custom component to show when no items are available
 
 > `optional` **itemsPerPage**: `number`
 
-Defined in: [src/types/CursorPagination/interface.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L57)
+Defined in: [src/types/CursorPagination/interface.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L62)
 
 Number of items to fetch per page
 
@@ -74,7 +74,7 @@ Number of items to fetch per page
 
 > `optional` **keyExtractor**: (`item`, `index`) => `string` \| `number`
 
-Defined in: [src/types/CursorPagination/interface.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L100)
+Defined in: [src/types/CursorPagination/interface.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L105)
 
 Optional function to extract a unique key for each item
 
@@ -115,7 +115,7 @@ keyExtractor={(user) => user.id}
 
 > `optional` **loadingComponent**: `ReactNode`
 
-Defined in: [src/types/CursorPagination/interface.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L105)
+Defined in: [src/types/CursorPagination/interface.ts:110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L110)
 
 Custom loading component to show during initial data fetch
 
@@ -125,7 +125,7 @@ Custom loading component to show during initial data fetch
 
 > `optional` **onDataChange**: (`data`) => `void`
 
-Defined in: [src/types/CursorPagination/interface.ts:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L115)
+Defined in: [src/types/CursorPagination/interface.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L120)
 
 Callback invoked when the data changes (initial load or after loading more)
 
@@ -145,7 +145,7 @@ Callback invoked when the data changes (initial load or after loading more)
 
 > **query**: `DocumentNode`
 
-Defined in: [src/types/CursorPagination/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L39)
+Defined in: [src/types/CursorPagination/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L44)
 
 GraphQL query document for fetching data
 
@@ -155,7 +155,7 @@ GraphQL query document for fetching data
 
 > `optional` **queryVariables**: `Omit`\<`TVariables`, `"first"` \| `"after"`\>
 
-Defined in: [src/types/CursorPagination/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L44)
+Defined in: [src/types/CursorPagination/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L49)
 
 Query variables (excluding pagination variables like 'first' and 'after')
 
@@ -165,7 +165,7 @@ Query variables (excluding pagination variables like 'first' and 'after')
 
 > `optional` **refetchTrigger**: `number`
 
-Defined in: [src/types/CursorPagination/interface.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L121)
+Defined in: [src/types/CursorPagination/interface.ts:126](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L126)
 
 Trigger value that causes a refetch when changed
 Can be a number (counter) or any value that changes
@@ -176,7 +176,7 @@ Can be a number (counter) or any value that changes
 
 > **renderItem**: (`item`, `index`) => `ReactNode`
 
-Defined in: [src/types/CursorPagination/interface.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L82)
+Defined in: [src/types/CursorPagination/interface.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L87)
 
 Function to render each item in the list
 

@@ -1055,13 +1055,15 @@ describe('CursorPaginationManager', () => {
         </MockedProvider>,
       );
 
-      // Should show empty state or handle gracefully
+      // Should render items even when pageInfo is missing
       await waitFor(() => {
-        const element =
-          screen.queryByTestId('cursor-pagination-empty') ||
-          screen.queryByTestId('cursor-pagination-manager');
-        expect(element).toBeInTheDocument();
+        expect(
+          screen.getByTestId('cursor-pagination-manager'),
+        ).toBeInTheDocument();
       });
+
+      // Verify the item is displayed
+      expect(screen.getByText('User 1')).toBeInTheDocument();
     });
 
     it('preserves existing items when load more fails', async () => {
@@ -1194,6 +1196,9 @@ describe('CursorPaginationManager', () => {
     });
 
     it('component unmounts cleanly during fetch', async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
       const mocks = [createSuccessMock()];
 
       const { unmount } = render(
@@ -1212,8 +1217,15 @@ describe('CursorPaginationManager', () => {
       // Unmount before data loads
       unmount();
 
-      // Should not throw any errors
-      expect(true).toBe(true);
+      // Flush any pending promises/microtasks
+      await waitFor(() => {
+        expect(true).toBe(true);
+      });
+
+      // Verify no console errors occurred during unmount
+      expect(consoleErrorSpy).not.toHaveBeenCalled();
+
+      consoleErrorSpy.mockRestore();
     });
 
     it('works with custom queryVariables merged with pagination vars', async () => {
@@ -1276,7 +1288,7 @@ describe('CursorPaginationManager', () => {
     it('falls back to index when keyExtractor is not provided', async () => {
       const mocks = [createSuccessMock()];
 
-      const { container } = render(
+      render(
         <MockedProvider mocks={mocks} addTypename={false}>
           <I18nextProvider i18n={i18nForTest}>
             <CursorPaginationManager
@@ -1294,10 +1306,8 @@ describe('CursorPaginationManager', () => {
       });
 
       // Items should be rendered (keys are internal to React, so we just verify rendering)
-      const itemsContainer = container.querySelector(
-        '[data-testid="cursor-pagination-manager"]',
-      );
-      expect(itemsContainer?.children[0].children).toHaveLength(2);
+      expect(screen.getByText('User 1')).toBeInTheDocument();
+      expect(screen.getByText('User 2')).toBeInTheDocument();
     });
 
     it('uses keyExtractor with index parameter', async () => {

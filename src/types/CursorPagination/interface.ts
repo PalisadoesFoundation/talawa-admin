@@ -14,20 +14,25 @@ export type PaginationVariables<T extends Record<string, unknown>> = T & {
  * This follows the Relay cursor pagination specification.
  *
  * @typeParam TNode - The type of individual items in the connection
+ *
+ * @remarks
+ * While the Relay spec requires both edges and pageInfo, this interface
+ * makes pageInfo optional to gracefully handle incomplete responses.
+ * When pageInfo is missing, items are still rendered but pagination is disabled.
  */
 export interface InterfaceConnectionData<TNode> {
   edges: Array<{
     cursor: string;
     node: TNode;
   }>;
-  pageInfo: DefaultConnectionPageInfo;
+  pageInfo?: DefaultConnectionPageInfo;
 }
 
 /**
  * Props for the CursorPaginationManager component.
  *
  * @typeParam TNode - The type of individual items extracted from edges
- * @typeParam TVariables - The GraphQL query variables type (defaults to Record<string, unknown>)
+ * @typeParam TVariables - The GraphQL query variables type (defaults to `Record<string, unknown>`)
  */
 export interface InterfaceCursorPaginationManagerProps<
   TNode,

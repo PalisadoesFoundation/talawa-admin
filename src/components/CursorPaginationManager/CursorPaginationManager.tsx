@@ -35,12 +35,11 @@ function extractDataFromPath<TNode>(
     current = (current as Record<string, unknown>)[segment];
   }
 
-  // Validate connection structure
+  // Validate connection structure (edges required, pageInfo optional)
   if (
     current &&
     typeof current === 'object' &&
     'edges' in current &&
-    'pageInfo' in current &&
     Array.isArray(current.edges)
   ) {
     return current as InterfaceConnectionData<TNode>;
@@ -178,7 +177,7 @@ export function CursorPaginationManager<
     if (connectionData) {
       const newNodes = extractNodes(connectionData.edges);
       setItems(newNodes);
-      setPageInfo(connectionData.pageInfo);
+      setPageInfo(connectionData.pageInfo || null);
 
       if (onDataChange) {
         onDataChange(newNodes);
@@ -220,7 +219,7 @@ export function CursorPaginationManager<
           }
           return updatedItems;
         });
-        setPageInfo(connectionData.pageInfo);
+        setPageInfo(connectionData.pageInfo || null);
       }
     } catch (err) {
       console.error('Error loading more items:', err);
