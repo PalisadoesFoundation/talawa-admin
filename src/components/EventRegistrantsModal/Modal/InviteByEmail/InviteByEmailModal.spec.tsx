@@ -267,7 +267,7 @@ describe('InviteByEmailModal', () => {
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
-          'eventRegistrantsModal.inviteByEmail.errorSendingInvites',
+          'Error sending invites',
         );
       });
       await waitFor(() => {

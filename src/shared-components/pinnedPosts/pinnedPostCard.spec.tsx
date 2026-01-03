@@ -246,7 +246,7 @@ describe('PinnedPostCard Component', () => {
         </MockedProvider>,
       );
 
-      const image = screen.getByAltText('postImageAlt');
+      const image = screen.getByAltText('postImage');
       expect(image).toHaveAttribute('src', '/src/assets/images/defaultImg.png');
     });
 

@@ -29,9 +29,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { vi, beforeEach, afterEach } from 'vitest';
-import { toast } from 'react-toastify';
 import { Frequency } from 'utils/recurrenceUtils';
 import { green } from '@mui/material/colors';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 const { mockToast, mockUseParams } = vi.hoisted(() => ({
   mockToast: {
@@ -42,8 +42,8 @@ const { mockToast, mockUseParams } = vi.hoisted(() => ({
   mockUseParams: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: mockToast,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockToast,
 }));
 
 vi.mock('@mui/x-date-pickers', async () => {
@@ -1002,7 +1002,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait(500);
 
     // Error should be logged (console.error is called in catch block)
-    expect(toast.success).not.toHaveBeenCalled();
+    expect(NotificationToast.success).not.toHaveBeenCalled();
   });
 
   it('Should toggle all-day checkbox and enable/disable time inputs', async () => {

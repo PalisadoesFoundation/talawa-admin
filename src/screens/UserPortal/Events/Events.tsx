@@ -71,6 +71,7 @@ import type {
   IEventFormSubmitPayload,
   IEventFormValues,
 } from 'types/EventForm/interface';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 export default function events(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userEvents' });
@@ -172,7 +173,7 @@ export default function events(): JSX.Element {
         variables: { input },
       });
       if (createEventData) {
-        toast.success(t('eventCreated') as string);
+        NotificationToast.success(t('eventCreated') as string);
         refetch();
         setFormResetKey((prev) => prev + 1);
         setCreateEventmodalisOpen(false);
