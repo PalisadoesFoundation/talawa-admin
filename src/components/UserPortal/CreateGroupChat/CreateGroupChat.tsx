@@ -38,7 +38,7 @@
  * - utils/useLocalstorage
  * - utils/MinioUpload
  * - components/Loader
- * - components/Avatar
+ * - components/ProfileAvatarDisplay
  *
  * @fileoverview
  * This file defines the `CreateGroupChat` component, which is used in the
@@ -64,11 +64,11 @@ import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import Avatar from 'components/Avatar/Avatar';
 import { FiEdit } from 'react-icons/fi';
 import { useMinioUpload } from 'utils/MinioUpload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
@@ -113,6 +113,8 @@ export default function CreateGroupChat({
   function reset(): void {
     setTitle('');
     setUserIds([]);
+    setSelectedImage(null);
+    setDescription('');
   }
 
   useEffect(() => {
@@ -127,7 +129,7 @@ export default function CreateGroupChat({
           organizationId: currentOrg,
           name: title,
           description: description,
-          avatar: null,
+          avatar: selectedImage,
         },
       },
     });
@@ -217,7 +219,10 @@ export default function CreateGroupChat({
       <Modal
         data-testid="createGroupChatModal"
         show={createGroupChatModalisOpen}
-        onHide={toggleCreateGroupChatModal}
+        onHide={() => {
+          toggleCreateGroupChatModal();
+          reset();
+        }}
         contentClassName={styles.modalContent}
       >
         <Modal.Header closeButton data-testid="">
@@ -235,11 +240,11 @@ export default function CreateGroupChat({
             data-testid="fileInput"
           />
           <div className={styles.groupInfo}>
-            {selectedImage ? (
-              <img className={styles.chatImage} src={selectedImage} alt="" />
-            ) : (
-              <Avatar avatarStyle={styles.groupImage} name={title} />
-            )}
+            <ProfileAvatarDisplay
+              className={styles.chatImage}
+              fallbackName={title}
+              imageUrl={selectedImage}
+            />
             <button
               data-testid="editImageBtn"
               onClick={handleImageClick}

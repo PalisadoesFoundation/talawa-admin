@@ -64,7 +64,7 @@ import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
 import { Add } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
-import Avatar from 'components/Avatar/Avatar';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import { FiEdit } from 'react-icons/fi';
 import { FaCheck, FaX, FaTrash } from 'react-icons/fa6';
 import { BsThreeDotsVertical } from 'react-icons/bs';
@@ -302,11 +302,13 @@ export default function groupChatDetails({
             data-testid="fileInput"
           />
           <div className={styles.groupInfo}>
-            {chat?.avatarURL ? (
-              <img className={styles.chatImage} src={chat?.avatarURL} alt="" />
-            ) : (
-              <Avatar avatarStyle={styles.groupImage} name={chat.name || ''} />
-            )}
+            <ProfileAvatarDisplay
+              className={styles.groupImage}
+              fallbackName={chat.name || ''}
+              imageUrl={chat?.avatarURL}
+              size="custom"
+              customSize={150}
+            />
             <button
               data-testid="editImageBtn"
               onClick={handleImageClick}
@@ -403,9 +405,11 @@ export default function groupChatDetails({
                       className={`${styles.chatUserDetails} d-flex align-items-center w-100`}
                     >
                       <div className="d-flex align-items-center flex-grow-1">
-                        <Avatar
-                          avatarStyle={styles.membersImage}
-                          name={user.name}
+                        <ProfileAvatarDisplay
+                          className={styles.membersImage}
+                          fallbackName={user.name}
+                          imageUrl={user.avatarURL}
+                          size="small"
                         />
                         <span className="ms-2">{user.name}</span>
                         <span

@@ -46,6 +46,7 @@ const LoadingState = ({
   noOfRows,
   skeletonRows = 5,
   skeletonCols = 4,
+  customLoader,
 }: InterfaceLoadingStateProps): JSX.Element => {
   const { t } = useTranslation('common');
 
@@ -111,6 +112,20 @@ const LoadingState = ({
             ))}
           </div>
         ))}
+      </div>
+    );
+  }
+
+  // Custom variant: renders user-provided custom loader
+  if (variant === 'custom') {
+    return (
+      <div
+        data-testid={dataTestId}
+        role="status"
+        aria-live="polite"
+        aria-label={t('loading', { defaultValue: 'Loading' })}
+      >
+        {customLoader}
       </div>
     );
   }

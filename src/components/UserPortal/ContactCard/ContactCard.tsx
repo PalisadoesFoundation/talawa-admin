@@ -39,10 +39,10 @@ import { Badge } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
 import UserPortalCard from 'components/UserPortal/UserPortalCard/UserPortalCard';
-import Avatar from 'components/Avatar/Avatar';
 import type { InterfaceContactCardProps } from 'types/Chat/interface';
 
 import styles from './ContactCard.module.css';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 const ContactCard: React.FC<InterfaceContactCardProps> = ({
   id,
@@ -61,20 +61,14 @@ const ContactCard: React.FC<InterfaceContactCardProps> = ({
     setSelectedContact(id);
   };
 
-  const avatarAlt = t('contact.avatar_alt', {
-    name: title,
-    defaultValue: title,
-  });
-
-  const imageSlot = image ? (
-    <img
-      src={image}
-      alt={avatarAlt}
+  const imageSlot = (
+    <ProfileAvatarDisplay
+      fallbackName={title}
       className={styles.contactImage}
-      data-testid={`contact-${id}-image`}
+      size="medium"
+      imageUrl={image}
+      enableEnlarge
     />
-  ) : (
-    <Avatar name={title} alt={avatarAlt} avatarStyle={styles.contactImage} />
   );
 
   const actionsSlot =
@@ -91,7 +85,7 @@ const ContactCard: React.FC<InterfaceContactCardProps> = ({
   return (
     <UserPortalCard
       variant="compact"
-      dataTestId={`contact-card-${id}`}
+      dataTestId={'contact-card-' + id}
       ariaLabel={t('contact.card_aria', 'Contact card')}
       imageSlot={imageSlot}
       actionsSlot={actionsSlot}

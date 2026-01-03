@@ -195,9 +195,7 @@ describe('SecuredRoute', () => {
       // Fast-forward through the setInterval check (1 minute)
       vi.advanceTimersByTime(1 * 60 * 1000);
 
-      expect(NotificationToast.warning).toHaveBeenCalledWith(
-        'Kindly relogin as session has expired',
-      );
+      expect(NotificationToast.warning).toHaveBeenCalledWith('sessionExpired');
 
       const storage = useLocalStorage();
       expect(storage.getItem('IsLoggedIn')).toBe('FALSE');

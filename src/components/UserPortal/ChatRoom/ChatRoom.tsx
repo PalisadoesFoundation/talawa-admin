@@ -46,13 +46,13 @@ import {
   DELETE_CHAT_MESSAGE,
 } from 'GraphQl/Mutations/OrganizationMutations';
 import useLocalStorage from 'utils/useLocalstorage';
-import Avatar from 'components/Avatar/Avatar';
 import { MoreVert, Close } from '@mui/icons-material';
 import GroupChatDetails from 'components/GroupChatDetails/GroupChatDetails';
 import { GrAttachment } from 'react-icons/gr';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import type { GroupChat } from 'types/Chat/type';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 // import { toast } from 'react-toastify';
 // import { validateFile } from 'utils/fileValidation';
@@ -222,8 +222,9 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChatRoom',
   });
-  const { t: tErrors } = useTranslation('errors');
-  const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('translation', {
+    keyPrefix: 'userChatRoom.errorBoundary',
+  });
   const isMountedRef = useRef<boolean>(true);
 
   useEffect(() => {
@@ -679,11 +680,10 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
 
   return (
     <ErrorBoundaryWrapper
-      fallbackErrorMessage={tErrors('defaultErrorMessage')}
       fallbackTitle={tErrors('title')}
-      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      fallbackErrorMessage={tErrors('message')}
       resetButtonText={tErrors('resetButton')}
-      onReset={chatRefetch}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
     >
       <div
         className={`d-flex flex-column ${styles.chatAreaContainer}`}
@@ -703,19 +703,12 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           <>
             <div className={styles.header}>
               <div className={styles.userInfo}>
-                {chatImage ? (
-                  <img
-                    src={chatImage}
-                    alt={chatTitle}
-                    className={styles.contactImage}
-                  />
-                ) : (
-                  <Avatar
-                    name={chatTitle}
-                    alt={chatTitle}
-                    avatarStyle={styles.contactImage}
-                  />
-                )}
+                <ProfileAvatarDisplay
+                  imageUrl={chatImage}
+                  fallbackName={chatTitle}
+                  className={styles.contactImage}
+                  enableEnlarge={true}
+                />
                 <div
                   onClick={() =>
                     chat?.isGroup ? openGroupChatDetails() : null
@@ -728,7 +721,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
               </div>
             </div>
             <div
-              className={`d-flex flex-grow-1 flex-column ${styles.flexContainer}`}
+              className={`d-flex flex-grow-1 flex-column ${styles.flexContainerMinHeight}`}
             >
               <div
                 className={styles.chatMessages}
@@ -772,21 +765,14 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                             }
                             key={message.id}
                           >
-                            {chat.isGroup &&
-                              message.creator.id !== userId &&
-                              (message.creator?.avatarURL ? (
-                                <img
-                                  src={message.creator.avatarURL}
-                                  alt={message.creator.avatarURL}
-                                  className={styles.contactImage}
-                                />
-                              ) : (
-                                <Avatar
-                                  name={message.creator.name}
-                                  alt={message.creator.name}
-                                  avatarStyle={styles.contactImage}
-                                />
-                              ))}
+                            {chat.isGroup && message.creator.id !== userId && (
+                              <ProfileAvatarDisplay
+                                imageUrl={message.creator.avatarURL}
+                                fallbackName={message.creator.name}
+                                className={styles.contactImage}
+                                enableEnlarge={true}
+                              />
+                            )}
                             <div
                               className={
                                 message.creator.id === userId
@@ -829,7 +815,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                               <div className={styles.messageAttributes}>
                                 <Dropdown
                                   data-testid="moreOptions"
-                                  className={styles.dropdownContainer}
+                                  className={styles.dropdownCursor}
                                 >
                                   <Dropdown.Toggle
                                     className={styles.customToggle}
@@ -858,7 +844,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                                             }}
                                             data-testid="replyToMessage"
                                           >
-                                            {tCommon('edit')}
+                                            {t('edit')}
                                           </Dropdown.Item>
                                         )}
                                         <Dropdown.Item
@@ -866,9 +852,9 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                                             deleteMessage(message.id)
                                           }
                                           data-testid="deleteMessage"
-                                          className="text-danger"
+                                          className={styles.deleteMenuItem}
                                         >
-                                          {tCommon('delete')}
+                                          {t('delete')}
                                         </Dropdown.Item>
                                       </>
                                     )}
@@ -897,7 +883,7 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                 type="file"
                 accept="image/*"
                 ref={fileInputRef}
-                className={styles.hiddenInput} // Hide the input
+                style={{ display: 'none' }} // Hide the input
                 onChange={handleImageChange}
                 data-testid="hidden-file-input"
               />
@@ -905,10 +891,10 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                 <div data-testid="replyMsg" className={styles.replyTo}>
                   <div className={styles.replyToMessageContainer}>
                     <div className={styles.userDetails}>
-                      <Avatar
-                        name={replyToDirectMessage.creator.name}
-                        alt={replyToDirectMessage.creator.name}
-                        avatarStyle={styles.userImage}
+                      <ProfileAvatarDisplay
+                        imageUrl={replyToDirectMessage.creator.avatarURL}
+                        fallbackName={replyToDirectMessage.creator.name}
+                        className={styles.userImage}
                       />
                       <span>{replyToDirectMessage.creator.name}</span>
                     </div>

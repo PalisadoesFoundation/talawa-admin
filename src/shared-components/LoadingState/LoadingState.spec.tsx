@@ -439,4 +439,202 @@ describe('LoadingState Component', () => {
       expect(screen.getByTestId('test-content')).toBeInTheDocument();
     });
   });
+
+  /* eslint-disable react/no-multi-comp */
+  describe('Custom Variant', () => {
+    it('should render provided customLoader when loading', () => {
+      const CustomLoader = () => (
+        <div data-testid="custom-loader">Custom Loading...</div>
+      );
+
+      render(
+        <LoadingState
+          isLoading={true}
+          variant="custom"
+          customLoader={<CustomLoader />}
+        >
+          <div data-testid="test-content">Content</div>
+        </LoadingState>,
+      );
+
+      expect(screen.getByTestId('custom-loader')).toBeInTheDocument();
+      expect(screen.queryByTestId('test-content')).not.toBeInTheDocument();
+    });
+
+    it('should have proper accessibility attributes', () => {
+      const CustomLoader = () => <div>Loading...</div>;
+
+      render(
+        <LoadingState
+          isLoading={true}
+          variant="custom"
+          customLoader={<CustomLoader />}
+        >
+          <div>Content</div>
+        </LoadingState>,
+      );
+
+      const loadingState = screen.getByRole('status');
+      expect(loadingState).toHaveAttribute('aria-live', 'polite');
+      expect(loadingState).toHaveAttribute('aria-label');
+    });
+
+    it('should respect data-testid prop', () => {
+      const CustomLoader = () => <div>Loading...</div>;
+
+      render(
+        <LoadingState
+          isLoading={true}
+          variant="custom"
+          customLoader={<CustomLoader />}
+          data-testid="my-custom-loading"
+        >
+          <div>Content</div>
+        </LoadingState>,
+      );
+
+      expect(screen.getByTestId('my-custom-loading')).toBeInTheDocument();
+    });
+
+    it('should properly translate aria-label via i18next', () => {
+      const CustomLoader = () => <div>Loading...</div>;
+
+      render(
+        <LoadingState
+          isLoading={true}
+          variant="custom"
+          customLoader={<CustomLoader />}
+        >
+          <div>Content</div>
+        </LoadingState>,
+      );
+
+      const loadingState = screen.getByRole('status');
+      // Verify aria-label is set (exact value depends on i18next mock)
+      expect(loadingState.getAttribute('aria-label')).toBeTruthy();
+    });
+
+    it('should render children when not loading in custom variant', () => {
+      const CustomLoader = () => <div>Loading...</div>;
+
+      render(
+        <LoadingState
+          isLoading={false}
+          variant="custom"
+          customLoader={<CustomLoader />}
+        >
+          <div data-testid="content">Content</div>
+        </LoadingState>,
+      );
+
+      expect(screen.getByTestId('content')).toBeInTheDocument();
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
+    });
+
+    it('should handle complex custom loaders', () => {
+      const ComplexLoader = () => (
+        <div data-testid="complex-loader">
+          <div className="shimmer">Skeleton 1</div>
+          <div className="shimmer">Skeleton 2</div>
+          <div className="shimmer">Skeleton 3</div>
+        </div>
+      );
+
+      render(
+        <LoadingState
+          isLoading={true}
+          variant="custom"
+          customLoader={<ComplexLoader />}
+        >
+          <div>Content</div>
+        </LoadingState>,
+      );
+
+      const complexLoader = screen.getByTestId('complex-loader');
+      expect(complexLoader).toBeInTheDocument();
+      expect(complexLoader.children).toHaveLength(3);
+    });
+
+    it('should integrate properly with LoadingState wrapper', () => {
+      const CustomDashboardLoader = () => (
+        <>
+          {[...Array(6)].map((_, index) => (
+            <div key={index} data-testid={`loader-${index}`}>
+              Loading card {index + 1}
+            </div>
+          ))}
+        </>
+      );
+
+      render(
+        <LoadingState
+          isLoading={true}
+          variant="custom"
+          customLoader={<CustomDashboardLoader />}
+        >
+          <div>Dashboard Content</div>
+        </LoadingState>,
+      );
+
+      // Verify all 6 loaders are rendered
+      for (let i = 0; i < 6; i++) {
+        expect(screen.getByTestId(`loader-${i}`)).toBeInTheDocument();
+      }
+
+      // Verify content is not shown
+      expect(screen.queryByText('Dashboard Content')).not.toBeInTheDocument();
+    });
+
+    it('should toggle between loading and not loading states', () => {
+      const CustomLoader = () => (
+        <div data-testid="custom-loader">Loading...</div>
+      );
+
+      const { rerender } = render(
+        <LoadingState
+          isLoading={true}
+          variant="custom"
+          customLoader={<CustomLoader />}
+        >
+          <div data-testid="test-content">Content</div>
+        </LoadingState>,
+      );
+
+      expect(screen.getByTestId('custom-loader')).toBeInTheDocument();
+      expect(screen.queryByTestId('test-content')).not.toBeInTheDocument();
+
+      rerender(
+        <LoadingState
+          isLoading={false}
+          variant="custom"
+          customLoader={<CustomLoader />}
+        >
+          <div data-testid="test-content">Content</div>
+        </LoadingState>,
+      );
+
+      expect(screen.queryByTestId('custom-loader')).not.toBeInTheDocument();
+      expect(screen.getByTestId('test-content')).toBeInTheDocument();
+    });
+
+    it('should verify aria-label translation value', () => {
+      const CustomLoader = () => <div>Loading...</div>;
+
+      render(
+        <LoadingState
+          isLoading={true}
+          variant="custom"
+          customLoader={<CustomLoader />}
+        >
+          <div>Content</div>
+        </LoadingState>,
+      );
+
+      const loadingState = screen.getByRole('status');
+      const ariaLabel = loadingState.getAttribute('aria-label');
+      // Verify exact translation (i18next mock returns the key or default)
+      expect(ariaLabel).toMatch(/loading/i);
+    });
+  });
+  /* eslint-enable react/no-multi-comp */
 });

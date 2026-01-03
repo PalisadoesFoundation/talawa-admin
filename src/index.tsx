@@ -21,13 +21,13 @@ import 'react-datepicker/dist/react-datepicker.css'; // React Datepicker Styles
 import 'flag-icons/css/flag-icons.min.css'; // Flag Icons Styles
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { Provider } from 'react-redux';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import App from './App';
 import { store } from './state/store';
 import { BACKEND_URL, BACKEND_WEBSOCKET_URL } from 'Constant/constant';
-import { ThemeProvider, createTheme } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { ApolloLink } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
 import './assets/css/scrollStyles.css';

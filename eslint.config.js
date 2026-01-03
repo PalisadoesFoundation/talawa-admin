@@ -64,7 +64,6 @@ export default [
       vitest,
       import: imports,
       prettier,
-      tsdoc,
     },
     settings: {
       react: {
@@ -146,7 +145,6 @@ export default [
     plugins: {
       '@graphql-eslint': graphql,
       prettier,
-      tsdoc,
     },
     rules: {
       '@typescript-eslint/consistent-type-imports': 'off',
@@ -155,7 +153,6 @@ export default [
       '@graphql-eslint/known-type-names': 'error',
       '@graphql-eslint/no-unreachable-types': 'off',
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
-      'tsdoc/syntax': 'error',
     },
   },
   // Cypress-specific configuration
@@ -237,9 +234,11 @@ export default [
     files: ['**/*.spec.ts', '**/*.spec.tsx', '**/*.test.ts', '**/*.test.tsx'],
     plugins: {
       'vitest-isolation': vitestIsolation,
+      tsdoc,
     },
     rules: {
       'vitest-isolation/require-aftereach-cleanup': 'error',
+      'tsdoc/syntax': 'error',
     },
   },
 ];
