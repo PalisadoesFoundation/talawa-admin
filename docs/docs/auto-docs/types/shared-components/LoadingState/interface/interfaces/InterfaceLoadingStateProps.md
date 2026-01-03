@@ -4,7 +4,7 @@
 
 # Interface: InterfaceLoadingStateProps
 
-Defined in: [src/types/shared-components/LoadingState/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L37)
+Defined in: [src/types/shared-components/LoadingState/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L39)
 
 Interface for LoadingState component props.
 
@@ -31,9 +31,19 @@ const props: InterfaceLoadingStateProps = {
 
 > **children**: `ReactNode`
 
-Defined in: [src/types/shared-components/LoadingState/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L41)
+Defined in: [src/types/shared-components/LoadingState/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L43)
 
 Content to display when not loading
+
+***
+
+### customLoader?
+
+> `optional` **customLoader**: `ReactNode`
+
+Defined in: [src/types/shared-components/LoadingState/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L49)
+
+Custom loader component for the custom variant
 
 ***
 
@@ -41,7 +51,7 @@ Content to display when not loading
 
 > `optional` **data-testid**: `string`
 
-Defined in: [src/types/shared-components/LoadingState/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L42)
+Defined in: [src/types/shared-components/LoadingState/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L44)
 
 Test ID for testing purposes
 
@@ -51,7 +61,7 @@ Test ID for testing purposes
 
 > **isLoading**: `boolean`
 
-Defined in: [src/types/shared-components/LoadingState/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L38)
+Defined in: [src/types/shared-components/LoadingState/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L40)
 
 Whether the loading state is active
 
@@ -61,7 +71,7 @@ Whether the loading state is active
 
 > `optional` **noOfRows**: `number`
 
-Defined in: [src/types/shared-components/LoadingState/interface.ts:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L44)
+Defined in: [src/types/shared-components/LoadingState/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L46)
 
 Number of rows to render for the table variant
 
@@ -71,7 +81,7 @@ Number of rows to render for the table variant
 
 > `optional` **size**: `"sm"` \| `"lg"` \| `"xl"`
 
-Defined in: [src/types/shared-components/LoadingState/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L40)
+Defined in: [src/types/shared-components/LoadingState/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L42)
 
 Size of the loading indicator
   - 'sm': Small
@@ -84,7 +94,7 @@ Size of the loading indicator
 
 > `optional` **skeletonCols**: `number`
 
-Defined in: [src/types/shared-components/LoadingState/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L46)
+Defined in: [src/types/shared-components/LoadingState/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L48)
 
 Number of columns to render for the skeleton variant
 
@@ -94,7 +104,7 @@ Number of columns to render for the skeleton variant
 
 > `optional` **skeletonRows**: `number`
 
-Defined in: [src/types/shared-components/LoadingState/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L45)
+Defined in: [src/types/shared-components/LoadingState/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L47)
 
 Number of rows to render for the skeleton variant
 
@@ -104,7 +114,7 @@ Number of rows to render for the skeleton variant
 
 > `optional` **tableHeaderTitles**: `string`[]
 
-Defined in: [src/types/shared-components/LoadingState/interface.ts:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L43)
+Defined in: [src/types/shared-components/LoadingState/interface.ts:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L45)
 
 Array of header titles for the table variant
 
@@ -112,12 +122,13 @@ Array of header titles for the table variant
 
 ### variant?
 
-> `optional` **variant**: `"spinner"` \| `"inline"` \| `"table"` \| `"skeleton"`
+> `optional` **variant**: `"custom"` \| `"spinner"` \| `"inline"` \| `"table"` \| `"skeleton"`
 
-Defined in: [src/types/shared-components/LoadingState/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L39)
+Defined in: [src/types/shared-components/LoadingState/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/LoadingState/interface.ts#L41)
 
 The variant of the loading indicator
   - 'spinner': Full-screen loading with overlay (default)
   - 'inline': Compact inline loading indicator
   - 'table': Table placeholder for tabular data loading
   - 'skeleton': Skeleton placeholder for initial content loading
+  - 'custom': Custom loader component provided via customLoader prop
