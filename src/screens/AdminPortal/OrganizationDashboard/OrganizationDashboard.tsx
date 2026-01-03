@@ -45,6 +45,7 @@ import CardItemLoading from 'components/OrganizationDashCards/CardItem/Loader/Ca
 import DashBoardCard from 'components/OrganizationDashCards/DashboardCard';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import DashboardStats from './components/DashboardStats';
 import UpcomingEventsCard from './components/UpcomingEventsCard';
 import type {
@@ -364,35 +365,41 @@ function OrganizationDashboard(): JSX.Element {
                   </Button>
                 </div>
                 <Card.Body className={styles.containerBody}>
-                  {loadingPost ? (
-                    [...Array(4)].map((_, index) => {
-                      return <CardItemLoading key={'postLoading_' + index} />;
-                    })
-                  ) : orgPostsData?.organization.postsCount == 0 ? (
-                    <div className={styles.emptyContainer}>
-                      <h6>{t('noPostsPresent')}</h6>
-                    </div>
-                  ) : (
-                    postData?.organization.posts.edges
-                      .slice(0, 5)
-                      .map(
-                        (edge: InterfaceOrganizationPostsConnectionEdgePg) => {
-                          const post = edge.node;
-                          return (
-                            <CardItem
-                              type="Post"
-                              key={post.id}
-                              title={post.caption}
-                              time={post.createdAt}
-                              creator={{
-                                id: post.creator.id,
-                                name: post.creator.name,
-                              }}
-                            />
-                          );
-                        },
-                      )
-                  )}
+                  <LoadingState
+                    isLoading={loadingPost}
+                    variant="custom"
+                    customLoader={[...Array(4)].map((_, index) => (
+                      <CardItemLoading key={'postLoading_' + index} />
+                    ))}
+                  >
+                    {orgPostsData?.organization.postsCount == 0 ? (
+                      <div className={styles.emptyContainer}>
+                        <h6>{t('noPostsPresent')}</h6>
+                      </div>
+                    ) : (
+                      postData?.organization.posts.edges
+                        .slice(0, 5)
+                        .map(
+                          (
+                            edge: InterfaceOrganizationPostsConnectionEdgePg,
+                          ) => {
+                            const post = edge.node;
+                            return (
+                              <CardItem
+                                type="Post"
+                                key={post.id}
+                                title={post.caption}
+                                time={post.createdAt}
+                                creator={{
+                                  id: post.creator.id,
+                                  name: post.creator.name,
+                                }}
+                              />
+                            );
+                          },
+                        )
+                    )}
+                  </LoadingState>
                 </Card.Body>
               </Card>
             </Col>
@@ -417,34 +424,38 @@ function OrganizationDashboard(): JSX.Element {
                 </Button>
               </div>
               <Card.Body className={styles.containerBody}>
-                {loadingMembershipRequests ? (
-                  [...Array(4)].map((_, index) => (
+                <LoadingState
+                  isLoading={loadingMembershipRequests}
+                  variant="custom"
+                  customLoader={[...Array(4)].map((_, index) => (
                     <CardItemLoading key={'requestsLoading_' + index} />
-                  ))
-                ) : pendingMembershipRequests.length === 0 ? (
-                  <div
-                    className={`${styles.emptyContainer} ${dashboardStyles.membershipEmptyContainer}`}
-                  >
-                    <h6>{t('noMembershipRequests')}</h6>
-                  </div>
-                ) : (
-                  pendingMembershipRequests
-                    .slice(0, 8)
-                    .map(
-                      (request: {
-                        status: string;
-                        membershipRequestId: string;
-                        user: { name: string; avatarURL?: string };
-                      }) => (
-                        <CardItem
-                          type="MembershipRequest"
-                          key={request.membershipRequestId}
-                          title={request.user.name}
-                          image={request.user.avatarURL}
-                        />
-                      ),
-                    )
-                )}
+                  ))}
+                >
+                  {pendingMembershipRequests.length === 0 ? (
+                    <div
+                      className={`${styles.emptyContainer} ${dashboardStyles.membershipEmptyContainer}`}
+                    >
+                      <h6>{t('noMembershipRequests')}</h6>
+                    </div>
+                  ) : (
+                    pendingMembershipRequests
+                      .slice(0, 8)
+                      .map(
+                        (request: {
+                          status: string;
+                          membershipRequestId: string;
+                          user: { name: string; avatarURL?: string };
+                        }) => (
+                          <CardItem
+                            type="MembershipRequest"
+                            key={request.membershipRequestId}
+                            title={request.user.name}
+                            image={request.user.avatarURL}
+                          />
+                        ),
+                      )
+                  )}
+                </LoadingState>
               </Card.Body>
             </Card>
           </Row>

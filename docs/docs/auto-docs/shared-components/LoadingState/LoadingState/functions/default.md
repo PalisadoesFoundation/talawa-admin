@@ -12,7 +12,7 @@ Defined in: [src/shared-components/LoadingState/LoadingState.tsx:39](https://git
 
 ### \_\_namedParameters
 
-[`InterfaceLoadingStateProps`](../../../../types/shared-components/LoadingState/interface/interfaces/InterfaceLoadingStateProps.md)
+[`InterfaceLoadingStateProps`](../../../../types/shared-components/LoadingState/interface/type-aliases/InterfaceLoadingStateProps.md)
 
 ## Returns
 
