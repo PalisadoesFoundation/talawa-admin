@@ -40,20 +40,20 @@ vi.mock('react-i18next', () => ({
 }));
 
 describe('ProfileImageSection', () => {
-    it('shows preview for selectedAvatar when avatarURL is undefined', () => {
-      const mockFile = new File(['test'], 'test.png', { type: 'image/png' });
-      const props = {
-        userDetails: { name: 'No Avatar User', avatarURL: undefined },
-        selectedAvatar: mockFile,
-        fileInputRef: React.createRef<HTMLInputElement | null>(),
-        handleFileUpload: vi.fn(),
-      };
-      render(<ProfileImageSection {...props} />);
-      // Should call sanitizeAvatars with selectedAvatar and empty string for URL
-      expect(sanitizeAvatars).toHaveBeenCalledWith(mockFile, '');
-      const avatar = screen.getByTestId('profile-avatar');
-      expect(avatar).toBeInTheDocument();
-    });
+  it('shows preview for selectedAvatar when avatarURL is undefined', () => {
+    const mockFile = new File(['test'], 'test.png', { type: 'image/png' });
+    const props = {
+      userDetails: { name: 'No Avatar User', avatarURL: undefined },
+      selectedAvatar: mockFile,
+      fileInputRef: React.createRef<HTMLInputElement | null>(),
+      handleFileUpload: vi.fn(),
+    };
+    render(<ProfileImageSection {...props} />);
+    // Should call sanitizeAvatars with selectedAvatar and empty string for URL
+    expect(sanitizeAvatars).toHaveBeenCalledWith(mockFile, '');
+    const avatar = screen.getByTestId('profile-avatar');
+    expect(avatar).toBeInTheDocument();
+  });
   const mockFileInputRef = React.createRef<HTMLInputElement | null>();
   const mockHandleFileUpload = vi.fn();
 
