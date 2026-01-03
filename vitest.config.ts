@@ -12,7 +12,7 @@ const MAX_LOCAL_THREADS = 16;
 
 const ciThreads = Math.min(
   MAX_CI_THREADS,
-  Math.max(4, Math.floor(cpuCount * 0.85)) // Increased utilization
+  Math.max(4, Math.floor(cpuCount * 0.85)), // Increased utilization
 );
 
 const localThreads = Math.min(MAX_LOCAL_THREADS, Math.max(4, cpuCount));
@@ -28,7 +28,8 @@ export default defineConfig({
   test: {
     include: [
       'src/**/*.{spec,test}.{js,jsx,ts,tsx}',
-      'config/**/*.{spec,test}.{js,jsx,ts,tsx}'
+      'config/**/*.{spec,test}.{js,jsx,ts,tsx}',
+      'scripts/**/*.{spec,test}.{js,jsx,ts,tsx}',
     ],
     exclude: [
       '**/node_modules/**',
@@ -41,11 +42,11 @@ export default defineConfig({
     css: false,
     setupFiles: 'vitest.setup.ts',
     // Inline specific dependencies to avoid vitest issues
-      server: {
-        deps: {
-          inline: ["@mui/x-charts", "@mui/x-data-grid", "@mui/x-date-pickers"]
-        }
+    server: {
+      deps: {
+        inline: ['@mui/x-charts', '@mui/x-data-grid', '@mui/x-date-pickers'],
       },
+    },
     testTimeout: 30000,
     hookTimeout: 10000,
     teardownTimeout: 10000,
@@ -75,7 +76,7 @@ export default defineConfig({
         '**/*.{spec,test}.{js,jsx,ts,tsx}',
         '**/*.{mocks,mock,helpers,mockHelpers}.{js,jsx,ts,tsx}', // Exclude mock/helper files from coverage
         'coverage/**',
-        'src/!(install)/index.{js,ts}',  // Exclude index files except in install folder
+        'src/!(install)/index.{js,ts}', // Exclude index files except in install folder
         '**/*.d.ts',
         'src/test/**',
         'vitest.config.ts',
