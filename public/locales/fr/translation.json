@@ -419,8 +419,6 @@
     "noTagsFound": "Aucune étiquette trouvée",
     "removeUserTag": "Supprimer l'Étiquette",
     "removeUserTagMessage": "Voulez-vous supprimer cette étiquette ?",
-    "Latest": "Le Plus Récent",
-    "Oldest": "Le Plus Ancien",
     "addChildTag": "Ajouter une Sous-Étiquette",
     "enterTagName": "Entrez le nom de l'étiquette",
     "totalSubTags": "Total des sous-étiquettes",
@@ -428,7 +426,6 @@
     "tagCreationFailed": "Échec de la création de l'étiquette",
     "errorLoadingTagsData": "Une erreur s'est produite lors du chargement des données des étiquettes de l'organisation",
     "sortTags": "Trier les étiquettes",
-    "tags": "Étiquettes",
     "Latest": "Le Plus Récent",
     "Oldest": "Le Plus Ancien",
     "viewSubTags": "Voir {{count}} sous-étiquettes"
@@ -474,12 +471,12 @@
     "allTags": "Toutes les étiquettes",
     "noMoreMembersFound": "Aucun autre membre trouvé",
     "errorOccurredWhileLoadingAssignedUser": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
-    "sortPeople": "Trier les personnes",
-    "tagActions": "Actions d'étiquette"
+    "tagActions": "Actions d'étiquette",
+    "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
+    "sortPeople": "Trier les personnes"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
-    "addedAsAdmin": "L'utilisateur est ajouté en tant qu'administrateur.",
     "joined": "Rejoint",
     "talawaApiUnavailable": "API Talawa indisponible"
   },
@@ -521,7 +518,6 @@
     "publicEvent": "est public",
     "isRegistrable": "Est enregistrable",
     "registerable": "Est enregistrable",
-
     "createEvent": "Créer un évènement",
     "enterFilter": "Entrer le filtre",
     "enterName": "Entrez le nom",
@@ -1712,7 +1708,8 @@
     "edit": "Modifier",
     "delete": "Supprimer",
     "name": "Nom",
-    "desc": "Description"
+    "desc": "Description",
+    "venueImagePreview": "Aperçu de l’image du lieu"
   },
   "addMember": {
     "title": "Ajouter un membre",
@@ -1804,10 +1801,12 @@
     "noCampaigns": "Aucune campagne trouvée",
     "raised": "Collecté",
     "amountRaised": "Montant Collecté",
+    "campaignName": "Nom de la campagne",
+    "startDate": "Date de début",
+    "endDate": "Date de fin",
+    "fundingGoal": "Objectif de financement",
+    "viewPledge": "Voir la promesse de don",
     "campaignIndex": "#",
-    "campaignName": "Nom de la Campagne",
-    "startDate": "Date de Début",
-    "endDate": "Date de Fin",
     "fundGoal": "Objectif de Financement",
     "percentRaised": "% Collecté",
     "createFirstCampaign": "Créez votre première campagne de financement pour la voir ici.",
@@ -2046,5 +2045,20 @@
     "title": "Portail Utilisateur",
     "talawa": "Talawa",
     "talawaBranding": "Image de marque Talawa"
+  },
+  "organizationVenuesNotification": {
+    "venueCreated": "Lieu créé avec succès",
+    "venueUpdated": "Les détails du lieu ont été mis à jour avec succès",
+    "venueNameExists": "Le nom du lieu existe déjà",
+    "venueTitleError": "Le nom du lieu ne peut pas être vide !",
+    "venueCapacityError": "La capacité doit être un nombre positif !",
+    "previewUrlError": "Erreur lors de la création de l’aperçu",
+    "invalidCapacity": "La capacité doit être un nombre positif"
+  },
+  "manageTags": {
+    "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
+    "sortPeople": "Trier les personnes",
+    "unassign": "Désassigner",
+    "tags": "Tags"
   }
 }

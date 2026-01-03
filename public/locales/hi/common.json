@@ -213,5 +213,7 @@
   "previousPage": "पिछला पृष्ठ",
   "nextPage": "अगला पृष्ठ",
   "pageNumber": "पृष्ठ {{page}}",
-  "loadMoreItems": "और चीज़ें लोड करें"
+  "loadMoreItems": "और चीज़ें लोड करें",
+  "tags": "टैग",
+  "unassign": "हटाएँ"
 }

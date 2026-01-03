@@ -213,5 +213,7 @@
   "previousPage": "上一页",
   "nextPage": "下一页",
   "pageNumber": "第 {{page}} 页",
-  "loadMoreItems": "加载更多"
+  "loadMoreItems": "加载更多",
+  "tags": "标签",
+  "unassign": "取消分配"
 }

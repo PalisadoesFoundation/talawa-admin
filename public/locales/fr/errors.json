@@ -20,5 +20,8 @@
   "title": "Une erreur s'est produite",
   "defaultErrorMessage": "Une erreur inattendue est survenue",
   "resetButton": "Réessayer",
-  "resetButtonAriaLabel": "Réessayer"
+  "resetButtonAriaLabel": "Réessayer",
+  "fileTooLarge": "Fichier trop volumineux : {{fileName}}",
+  "invalidFileType": "Type de fichier invalide : {{fileName}}",
+  "emptyFile": "Fichier vide sélectionné"
 }

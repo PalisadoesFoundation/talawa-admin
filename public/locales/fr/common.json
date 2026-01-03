@@ -213,5 +213,7 @@
   "previousPage": "Page précédente",
   "nextPage": "Page suivante",
   "pageNumber": "Page {{page}}",
-  "loadMoreItems": "Charger plus d'éléments"
+  "loadMoreItems": "Charger plus d'éléments",
+  "tags": "Étiquettes",
+  "unassign": "Désassigner"
 }

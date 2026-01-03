@@ -408,7 +408,6 @@
     "manageTag": "Manage",
     "editTag": "Edit",
     "removeTag": "Remove",
-    "tags": "Tags",
     "tagDetails": "Tag Details",
     "tagName": "Name",
     "tagType": "Type",
@@ -419,8 +418,6 @@
     "noTagsFound": "No tags found",
     "removeUserTag": "Delete Tag",
     "removeUserTagMessage": "Do you want to delete this tag?",
-    "Latest": "Latest",
-    "Oldest": "Oldest",
     "addChildTag": "Add a Sub Tag",
     "enterTagName": "Enter Tag Name",
     "totalSubTags": "Total Sub Tags",
@@ -474,12 +471,12 @@
     "allTags": "All Tags",
     "noMoreMembersFound": "No more members found",
     "errorOccurredWhileLoadingAssignedUser": "Error occurred while loading assigned users",
-    "sortPeople": "Sort People",
-    "tagActions": "Tag Actions"
+    "tagActions": "Tag Actions",
+    "loadAssignedUsersError": "Error occurred while loading assigned users",
+    "sortPeople": "Sort People"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
-    "addedAsAdmin": "User is added as admin.",
     "joined": "joined",
     "talawaApiUnavailable": "talawaApiUnavailable"
   },
@@ -518,7 +515,6 @@
     "publicEvent": "Is Public",
     "isRegistrable": "Is Registrable",
     "registerable": "Is Registerable",
-
     "createChat": "Create Chat",
     "createEvent": "Create Event",
     "enterFilter": "Enter Filter",
@@ -1712,7 +1708,8 @@
     "edit": "edit",
     "delete": "delete",
     "name": "name",
-    "desc": "desc"
+    "desc": "desc",
+    "venueImagePreview": "Preview of venue image"
   },
   "addMember": {
     "title": "Add Member",
@@ -1803,15 +1800,17 @@
     "noCampaigns": "No Campaigns Found",
     "raised": "Raised",
     "amountRaised": "Amount Raised",
-    "searchCampaigns": "Search Campaigns",
     "campaignIndex": "#",
     "campaignName": "Campaign Name",
     "startDate": "Start Date",
     "endDate": "End Date",
     "fundGoal": "Fund Goal",
+    "fundingGoal": "Funding Goal",
     "percentRaised": "% Raised",
     "createFirstCampaign": "Create your first fundraising campaign to see it here.",
-    "campaignEnded": "Campaign Ended"
+    "campaignEnded": "Campaign ended",
+    "searchCampaigns": "Search Campaigns",
+    "viewPledge": "View Pledge"
   },
   "userPledges": {
     "title": "My Pledges",
@@ -2046,5 +2045,20 @@
     "title": "User Portal",
     "talawa": "Talawa",
     "talawaBranding": "Talawa Branding"
+  },
+  "organizationVenuesNotification": {
+    "venueCreated": "Venue created successfully",
+    "venueUpdated": "Venue details updated successfully",
+    "venueNameExists": "Venue name already exists",
+    "venueTitleError": "Venue title cannot be empty!",
+    "venueCapacityError": "Capacity must be a positive number!",
+    "previewUrlError": "Error creating preview URL",
+    "invalidCapacity": "Capacity must be a positive number!"
+  },
+  "manageTags": {
+    "loadAssignedUsersError": "Error occurred while loading assigned users",
+    "sortPeople": "Sort People",
+    "unassign": "Unassign",
+    "tags": "Tags"
   }
 }
