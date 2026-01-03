@@ -1,3 +1,5 @@
+// SKIP_LOCALSTORAGE_CHECK
+
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import i18n from './i18n';
 import LocalStorageBackend from 'i18next-localstorage-backend';
@@ -13,13 +15,18 @@ type I18nBackendOptions = {
 
 describe('i18n Configuration', () => {
   beforeEach(async () => {
-    // Reset i18n instance before each test
+    localStorage.clear();
+    vi.clearAllMocks();
+
+    // Reset i18n instance
     await i18n.init();
   });
 
-  afterEach(() => {
-    // Clear all mocks to ensure test isolation
+  afterEach(async () => {
+    localStorage.clear();
     vi.clearAllMocks();
+
+    await i18n.changeLanguage('en');
   });
 
   it('should have auth namespace as default', () => {
@@ -133,5 +140,125 @@ describe('i18n Configuration', () => {
     expect(i18n.t('requirementSpecialChar', { ns: 'auth' })).toBe(
       'Contains a special character',
     );
+  });
+
+  // Edge-case tests
+  describe('Language Switching', () => {
+    it('should handle language switching and maintain bundled translations', async () => {
+      expect(i18n.t('title', { ns: 'auth' })).toBe('Talawa Admin');
+      expect(i18n.t('email', { ns: 'auth' })).toBe('Email');
+      expect(i18n.language).toBe('en');
+
+      await i18n.changeLanguage('es');
+      expect(i18n.language).toBe('es');
+
+      expect(i18n.t('title', { ns: 'auth' })).toBe('Talawa Admin');
+      expect(i18n.t('email', { ns: 'auth' })).toBe('Email');
+
+      await i18n.changeLanguage('en');
+      expect(i18n.language).toBe('en');
+      expect(i18n.t('title', { ns: 'auth' })).toBe('Talawa Admin');
+    });
+  });
+
+  describe('Missing Translation Fallback', () => {
+    it('should return key string for non-existent keys', () => {
+      const missingKey = 'nonExistentKey';
+      const result = i18n.t(missingKey, { ns: 'auth' });
+      expect(result).toBe(missingKey);
+
+      const nestedMissingKey = 'nested.nonExistent.key';
+      const nestedResult = i18n.t(nestedMissingKey, { ns: 'auth' });
+      expect(nestedResult).toBe(nestedMissingKey);
+    });
+
+    it('should handle missing keys with default values', () => {
+      const defaultValue = 'Default Value';
+      const result = i18n.t('nonExistentKey', {
+        ns: 'auth',
+        defaultValue,
+      });
+      expect(result).toBe(defaultValue);
+    });
+  });
+
+  describe('Backend Fallback', () => {
+    it('should handle localStorage clearing and resource reloading', async () => {
+      expect(i18n.t('title', { ns: 'auth' })).toBe('Talawa Admin');
+
+      localStorage.clear();
+      await i18n.reloadResources();
+
+      expect(i18n.t('title', { ns: 'auth' })).toBe('Talawa Admin');
+      expect(i18n.t('email', { ns: 'auth' })).toBe('Email');
+    });
+
+    it('should maintain bundled resources after re-initialization', async () => {
+      expect(i18n.t('login', { ns: 'auth' })).toBe('Log in');
+
+      localStorage.clear();
+      await i18n.init();
+
+      expect(i18n.hasResourceBundle('en', 'auth')).toBe(true);
+      expect(i18n.t('login', { ns: 'auth' })).toBe('Log in');
+      expect(i18n.t('password', { ns: 'auth' })).toBe('Password');
+    });
+  });
+
+  describe('Namespace Isolation', () => {
+    it('should maintain auth namespace isolation', async () => {
+      expect(i18n.hasResourceBundle('en', 'auth')).toBe(true);
+      expect(i18n.t('title', { ns: 'auth' })).toBe('Talawa Admin');
+
+      expect(i18n.hasResourceBundle('en', 'translation')).toBe(false);
+      expect(i18n.hasResourceBundle('en', 'common')).toBe(false);
+
+      const translationResult = i18n.t('someKey', { ns: 'translation' });
+      expect(translationResult).toBe('someKey');
+
+      expect(i18n.t('email', { ns: 'auth' })).toBe('Email');
+      expect(i18n.t('password', { ns: 'auth' })).toBe('Password');
+    });
+
+    it('should not leak keys between namespaces', () => {
+      expect(i18n.t('title', { ns: 'translation' })).toBe('title');
+      expect(i18n.t('email', { ns: 'common' })).toBe('email');
+
+      expect(i18n.t('title', { ns: 'auth' })).toBe('Talawa Admin');
+      expect(i18n.t('email', { ns: 'auth' })).toBe('Email');
+    });
+
+    it('should handle default namespace correctly', () => {
+      expect(i18n.options.defaultNS).toBe('auth');
+
+      expect(i18n.t('title')).toBe('Talawa Admin');
+      expect(i18n.t('login')).toBe('Log in');
+
+      expect(i18n.t('title', { ns: 'auth' })).toBe('Talawa Admin');
+      expect(i18n.t('login', { ns: 'auth' })).toBe('Log in');
+    });
+  });
+
+  describe('Performance and Caching', () => {
+    it('should have correct cache configuration', () => {
+      const backendOptions = i18n.options.backend as I18nBackendOptions;
+
+      expect(backendOptions?.backends?.[0]).toBe(LocalStorageBackend);
+
+      expect(backendOptions?.backendOptions?.[0]?.expirationTime).toBe(
+        7 * 24 * 60 * 60 * 1000,
+      );
+    });
+
+    it('should prioritize bundled resources over backend loading', () => {
+      expect(i18n.hasResourceBundle('en', 'auth')).toBe(true);
+
+      const startTime = Date.now();
+      const result = i18n.t('title', { ns: 'auth' });
+      const endTime = Date.now();
+
+      expect(result).toBe('Talawa Admin');
+      expect(endTime - startTime).toBeLessThan(10);
+    });
   });
 });
