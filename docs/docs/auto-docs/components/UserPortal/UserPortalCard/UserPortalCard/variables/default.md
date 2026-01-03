@@ -29,8 +29,8 @@ Accessibility:
 ```ts
 <UserPortalCard
   variant="compact"
-  ariaLabel={t('donation.card')}
-  imageSlot={<Avatar />}
+  ariaLabel={t('donation.card_aria')}
+  imageSlot={<ProfileAvatarDisplay fallbackName="User Name" />}
   actionsSlot={<Button />}
 >
   <CardContent />
