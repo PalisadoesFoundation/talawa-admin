@@ -48,7 +48,7 @@ Dot-separated path to extract connection data from the query response
 
 > `optional` **emptyStateComponent**: `ReactNode`
 
-Defined in: [src/types/CursorPagination/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L72)
+Defined in: [src/types/CursorPagination/interface.ts:110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L110)
 
 Custom component to show when no items are available
 
@@ -70,11 +70,52 @@ Number of items to fetch per page
 
 ***
 
+### keyExtractor()?
+
+> `optional` **keyExtractor**: (`item`, `index`) => `string` \| `number`
+
+Defined in: [src/types/CursorPagination/interface.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L100)
+
+Optional function to extract a unique key for each item
+
+#### Parameters
+
+##### item
+
+`TNode`
+
+The current item
+
+##### index
+
+`number`
+
+The index of the item in the array
+
+#### Returns
+
+`string` \| `number`
+
+A unique string or number identifier for the item
+
+#### Remarks
+
+Provides a stable key for React reconciliation. When not provided,
+falls back to using the array index as the key.
+
+#### Example
+
+```tsx
+keyExtractor={(user) => user.id}
+```
+
+***
+
 ### loadingComponent?
 
 > `optional` **loadingComponent**: `ReactNode`
 
-Defined in: [src/types/CursorPagination/interface.ts:67](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L67)
+Defined in: [src/types/CursorPagination/interface.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L105)
 
 Custom loading component to show during initial data fetch
 
@@ -84,7 +125,7 @@ Custom loading component to show during initial data fetch
 
 > `optional` **onDataChange**: (`data`) => `void`
 
-Defined in: [src/types/CursorPagination/interface.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L77)
+Defined in: [src/types/CursorPagination/interface.ts:115](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L115)
 
 Callback invoked when the data changes (initial load or after loading more)
 
@@ -124,7 +165,7 @@ Query variables (excluding pagination variables like 'first' and 'after')
 
 > `optional` **refetchTrigger**: `number`
 
-Defined in: [src/types/CursorPagination/interface.ts:83](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L83)
+Defined in: [src/types/CursorPagination/interface.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L121)
 
 Trigger value that causes a refetch when changed
 Can be a number (counter) or any value that changes
@@ -135,7 +176,7 @@ Can be a number (counter) or any value that changes
 
 > **renderItem**: (`item`, `index`) => `ReactNode`
 
-Defined in: [src/types/CursorPagination/interface.ts:62](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L62)
+Defined in: [src/types/CursorPagination/interface.ts:82](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L82)
 
 Function to render each item in the list
 
@@ -152,3 +193,25 @@ Function to render each item in the list
 #### Returns
 
 `ReactNode`
+
+#### Remarks
+
+When items have stable unique identifiers, provide a keyExtractor function
+to ensure proper React reconciliation. If keyExtractor is not provided,
+the component falls back to using the array index as the key, which works
+for append-only pagination but may cause issues if items are reordered.
+
+#### Example
+
+```tsx
+// With keyExtractor for stable keys:
+<CursorPaginationManager
+  keyExtractor={(user) => user.id}
+  renderItem={(user) => <div>{user.name}</div>}
+/>
+
+// Without keyExtractor (uses index):
+<CursorPaginationManager
+  renderItem={(user) => <div>{user.name}</div>}
+/>
+```

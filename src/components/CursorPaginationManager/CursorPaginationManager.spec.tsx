@@ -1097,8 +1097,10 @@ describe('CursorPaginationManager', () => {
       const loadMoreBtn = screen.getByTestId('load-more-button');
       await user.click(loadMoreBtn);
 
-      // Wait a bit for error
-      await new Promise((resolve) => setTimeout(resolve, 100));
+      // Wait for the button to be re-enabled after error (indicates error was handled)
+      await waitFor(() => {
+        expect(loadMoreBtn).not.toBeDisabled();
+      });
 
       // Original items should still be there
       expect(screen.getByText('User 1')).toBeInTheDocument();
@@ -1234,6 +1236,103 @@ describe('CursorPaginationManager', () => {
       await waitFor(() => {
         expect(screen.getByText('Member 1')).toBeInTheDocument();
       });
+    });
+  });
+
+  describe('KeyExtractor', () => {
+    it('uses keyExtractor when provided for item keys', async () => {
+      const mocks = [createSuccessMock()];
+      const keyExtractor = vi.fn((user: User) => user.id);
+
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={10}
+              keyExtractor={keyExtractor}
+              renderItem={(user: User) => <div>{user.name}</div>}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('User 1')).toBeInTheDocument();
+      });
+
+      // Verify keyExtractor was called for each item
+      expect(keyExtractor).toHaveBeenCalledWith(
+        { id: '1', name: 'User 1', email: 'user1@test.com' },
+        0,
+      );
+      expect(keyExtractor).toHaveBeenCalledWith(
+        { id: '2', name: 'User 2', email: 'user2@test.com' },
+        1,
+      );
+    });
+
+    it('falls back to index when keyExtractor is not provided', async () => {
+      const mocks = [createSuccessMock()];
+
+      const { container } = render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={10}
+              renderItem={(user: User) => <div>{user.name}</div>}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('User 1')).toBeInTheDocument();
+      });
+
+      // Items should be rendered (keys are internal to React, so we just verify rendering)
+      const itemsContainer = container.querySelector(
+        '[data-testid="cursor-pagination-manager"]',
+      );
+      expect(itemsContainer?.children[0].children).toHaveLength(2);
+    });
+
+    it('uses keyExtractor with index parameter', async () => {
+      const mocks = [createSuccessMock()];
+      const keyExtractor = vi.fn(
+        (user: User, index: number) => `${user.id}-${index}`,
+      );
+
+      render(
+        <MockedProvider mocks={mocks} addTypename={false}>
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={10}
+              keyExtractor={keyExtractor}
+              renderItem={(user: User) => <div>{user.name}</div>}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getByText('User 1')).toBeInTheDocument();
+      });
+
+      // Verify keyExtractor was called with both item and index
+      expect(keyExtractor).toHaveBeenCalledWith(
+        { id: '1', name: 'User 1', email: 'user1@test.com' },
+        0,
+      );
+      expect(keyExtractor).toHaveBeenCalledWith(
+        { id: '2', name: 'User 2', email: 'user2@test.com' },
+        1,
+      );
     });
   });
 
