@@ -152,6 +152,8 @@ describe('FormTextField', () => {
         />,
       );
       expect(screen.getByLabelText('Username')).toBeInTheDocument();
+      const input = screen.getByLabelText('Username') as HTMLInputElement;
+      expect(input).toHaveAttribute('name', 'username');
     });
 
     it('renders MUI format text field', () => {
@@ -166,6 +168,8 @@ describe('FormTextField', () => {
         />,
       );
       expect(screen.getByLabelText('Username')).toBeInTheDocument();
+      const input = screen.getByLabelText('Username') as HTMLInputElement;
+      expect(input).toHaveAttribute('name', 'username');
     });
 
     it('renders different input types', () => {
