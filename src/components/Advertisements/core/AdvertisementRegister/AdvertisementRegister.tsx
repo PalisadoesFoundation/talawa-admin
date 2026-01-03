@@ -65,6 +65,7 @@ import type {
 } from 'types/Advertisement/interface';
 import { FaTrashCan } from 'react-icons/fa6';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 function AdvertisementRegister({
   formStatus = 'register',
@@ -156,9 +157,11 @@ function AdvertisementRegister({
 
       Array.from(files).forEach((file) => {
         if (!allowedTypes.includes(file.type)) {
-          NotificationToast.error(`Invalid file type: ${file.name}`);
+          NotificationToast.error(
+            t('invalidFileType', { fileName: file.name }),
+          );
         } else if (file.size > maxFileSize) {
-          NotificationToast.error(`File too large: ${file.name}`);
+          NotificationToast.error(t('fileTooLarge', { fileName: file.name }));
         } else {
           validFiles.push(file);
         }
@@ -216,7 +219,7 @@ function AdvertisementRegister({
       }
 
       if (!formState.name) {
-        NotificationToast.error('Invalid arguments for this action.');
+        NotificationToast.error(t('invalidArgumentsForAction'));
         return;
       }
 
@@ -343,7 +346,13 @@ function AdvertisementRegister({
 
   return (
     //If register show register button else show edit button
-    <>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+      onReset={handleClose}
+    >
       {formStatus === 'register' ? (
         <Button
           className={styles.dropdown}
@@ -434,14 +443,14 @@ function AdvertisementRegister({
                         <track
                           kind="captions"
                           srcLang="en"
-                          label="English captions"
+                          label={t('englishCaptions')}
                         />
                       </video>
                     ) : (
                       <img
                         data-testid="mediaPreview"
                         src={encodeURI(URL.createObjectURL(file))}
-                        alt="Preview"
+                        alt={t('preview')}
                         className={styles.previewAdvertisementRegister}
                       />
                     )}
@@ -471,9 +480,9 @@ function AdvertisementRegister({
                 className={styles.inputField}
                 data-cy="advertisementTypeSelect"
               >
-                <option value="banner">Banner Ad </option>
-                <option value="pop_up">Popup Ad</option>
-                <option value="menu">Menu Ad</option>
+                <option value="banner">{t('bannerAd')} </option>
+                <option value="pop_up">{t('popupAd')}</option>
+                <option value="menu">{t('menuAd')}</option>
               </Form.Select>
             </Form.Group>
 
@@ -543,7 +552,7 @@ function AdvertisementRegister({
           )}
         </Modal.Footer>
       </Modal>
-    </>
+    </ErrorBoundaryWrapper>
   );
 }
 

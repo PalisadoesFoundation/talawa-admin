@@ -5,6 +5,7 @@ import type {
   IColumnDef,
   HeaderRender,
 } from '../../types/shared-components/DataTable/interface';
+import { PaginationControls } from './Pagination';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 
@@ -48,7 +49,70 @@ export function DataTable<T>(props: IDataTableProps<T>) {
     renderError,
     ariaLabel,
     skeletonRows = DEFAULT_SKELETON_ROWS,
+    // Pagination props
+    paginationMode,
+    pageSize = 10,
+    currentPage,
+    onPageChange,
+    totalItems,
+    pageInfo,
   } = props;
+
+  // Pagination state (controlled or uncontrolled)
+  const [internalPage, setInternalPage] = React.useState(1);
+  const isControlled = currentPage !== undefined && onPageChange !== undefined;
+  const page = isControlled ? currentPage : internalPage;
+
+  // Track warning state for each console.warn to prevent spam independently
+  const hasWarnedCurrentPageRef = React.useRef(false);
+  const hasWarnedServerPaginationRef = React.useRef(false);
+
+  React.useEffect(() => {
+    if (
+      process.env.NODE_ENV !== 'production' &&
+      currentPage !== undefined &&
+      !onPageChange &&
+      !hasWarnedCurrentPageRef.current
+    ) {
+      hasWarnedCurrentPageRef.current = true;
+      console.warn(
+        'DataTable: `currentPage` was provided without `onPageChange`. The table will fall back to uncontrolled pagination.',
+      );
+    }
+  }, [currentPage, onPageChange]);
+  React.useEffect(() => {
+    if (
+      process.env.NODE_ENV !== 'production' &&
+      paginationMode === 'server' &&
+      totalItems === undefined &&
+      !hasWarnedServerPaginationRef.current
+    ) {
+      hasWarnedServerPaginationRef.current = true;
+      console.warn(
+        'DataTable: `paginationMode="server"` requires `totalItems` to be provided for accurate pagination.',
+      );
+    }
+  }, [paginationMode, totalItems]);
+  const handlePageChange = (newPage: number) => {
+    if (onPageChange) {
+      onPageChange(newPage);
+    } else {
+      setInternalPage(newPage);
+    }
+  };
+
+  // Client-side data slicing and pagination control visibility
+  const shouldSliceClientSide = paginationMode === 'client';
+  // Show pagination controls for client mode OR server mode with pageInfo (variant A)
+  const showPaginationControls =
+    paginationMode === 'client' ||
+    (paginationMode === 'server' && pageInfo !== undefined);
+  const startIndex = shouldSliceClientSide ? (page - 1) * pageSize : 0;
+  const endIndex = shouldSliceClientSide ? startIndex + pageSize : data.length;
+  const paginatedData = shouldSliceClientSide
+    ? data.slice(startIndex, endIndex)
+    : data;
+  const total = totalItems ?? data.length;
 
   const getKey = (row: T, idx: number): string | number => {
     if (typeof rowKey === 'function') {
@@ -91,7 +155,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
   // 2) Table with skeleton rows when loading
   if (loading) {
     return (
-      <div className={styles.dataTableWrapper}>
+      <div className={styles.dataTableWrapper} data-testid="datatable-loading">
         <Table
           striped
           hover
@@ -132,7 +196,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
 
   // 3) Empty state
   // Query-specific empty states will be handled in a future phase.
-  if (!data || data.length === 0) {
+  if (!paginatedData || paginatedData.length === 0) {
     return (
       <div
         className={styles.dataEmptyState}
@@ -162,7 +226,7 @@ export function DataTable<T>(props: IDataTableProps<T>) {
           </tr>
         </thead>
         <tbody>
-          {data.map((row, idx) => (
+          {paginatedData.map((row, idx) => (
             <tr key={getKey(row, idx)}>
               {columns.map((col) => {
                 const val = getCellValue(row, col.accessor);
@@ -176,6 +240,15 @@ export function DataTable<T>(props: IDataTableProps<T>) {
           ))}
         </tbody>
       </Table>
+
+      {showPaginationControls && (
+        <PaginationControls
+          page={page}
+          pageSize={pageSize}
+          totalItems={total}
+          onPageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 }

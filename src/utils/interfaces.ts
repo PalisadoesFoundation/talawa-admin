@@ -1766,6 +1766,7 @@ export interface InterfaceQueryFundCampaignsPledges {
           id: string;
           name: string;
           fund: {
+            id: string;
             name: string;
           };
         };

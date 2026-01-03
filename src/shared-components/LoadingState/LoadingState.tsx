@@ -34,6 +34,7 @@ import { Spinner } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceLoadingStateProps } from 'types/shared-components/LoadingState/interface';
+import TableLoader from 'components/TableLoader/TableLoader';
 
 const LoadingState = ({
   isLoading,
@@ -41,6 +42,11 @@ const LoadingState = ({
   size = 'xl',
   children,
   'data-testid': dataTestId = 'loading-state',
+  tableHeaderTitles,
+  noOfRows,
+  skeletonRows = 5,
+  skeletonCols = 4,
+  customLoader,
 }: InterfaceLoadingStateProps): JSX.Element => {
   const { t } = useTranslation('common');
 
@@ -75,35 +81,51 @@ const LoadingState = ({
     );
   }
 
-  // Skeleton variant: animated placeholder for initial loading
+  // Table variant: renders TableLoader
+  if (variant === 'table') {
+    return (
+      <TableLoader
+        noOfRows={noOfRows || 5}
+        headerTitles={tableHeaderTitles}
+        data-testid={dataTestId}
+      />
+    );
+  }
+
+  // Skeleton variant: renders skeleton-like rows
   if (variant === 'skeleton') {
+    const safeRows = Math.max(0, skeletonRows);
+    const safeCols = Math.max(0, skeletonCols);
+
     return (
       <div
-        className={styles.skeletonContainer}
+        data-testid={dataTestId}
+        className="w-100"
+        role="status"
+        aria-live="polite"
+        aria-label={t('loading', { defaultValue: 'Loading' })}
+      >
+        {[...Array(safeRows)].map((_, rowIndex) => (
+          <div key={rowIndex} className="d-flex mb-3 gap-3">
+            {[...Array(safeCols)].map((_, colIndex) => (
+              <div key={colIndex} className={`${styles.loadingItem} shimmer`} />
+            ))}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // Custom variant: renders user-provided custom loader
+  if (variant === 'custom') {
+    return (
+      <div
         data-testid={dataTestId}
         role="status"
         aria-live="polite"
         aria-label={t('loading', { defaultValue: 'Loading' })}
       >
-        <div className={styles.skeletonHeader}>
-          <div className={`${styles.skeletonItem} ${styles.skeletonTitle}`} />
-          <div className={`${styles.skeletonItem} ${styles.skeletonButton}`} />
-        </div>
-        <div className={styles.skeletonContent}>
-          {[...Array(5)].map((_, index) => (
-            <div key={index} className={styles.skeletonRow}>
-              <div
-                className={`${styles.skeletonItem} ${styles.skeletonCell}`}
-              />
-              <div
-                className={`${styles.skeletonItem} ${styles.skeletonCell}`}
-              />
-              <div
-                className={`${styles.skeletonItem} ${styles.skeletonCellSmall}`}
-              />
-            </div>
-          ))}
-        </div>
+        {customLoader}
       </div>
     );
   }
