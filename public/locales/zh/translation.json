@@ -419,8 +419,6 @@
     "noTagsFound": "未找到标签",
     "removeUserTag": "删除标签",
     "removeUserTagMessage": "您确定要删除此标签吗？",
-    "Latest": "最新",
-    "Oldest": "最旧",
     "addChildTag": "添加子标签",
     "enterTagName": "输入标签名称",
     "totalSubTags": "总子标签",
@@ -428,7 +426,6 @@
     "tagCreationFailed": "标签创建失败",
     "errorLoadingTagsData": "加载组织标签数据时出错",
     "sortTags": "排序标签",
-    "tags": "标签",
     "Latest": "最新",
     "Oldest": "最旧",
     "viewSubTags": "查看 {{count}} 个子标签"
@@ -521,7 +518,6 @@
     "publicEvent": "是公开的",
     "isRegistrable": "可注册",
     "registerable": "可注册",
-
     "createEvent": "创建事件",
     "enterFilter": "输入过滤器",
     "enterName": "输入名称",
@@ -1804,15 +1800,17 @@
     "noPledges": "未找到承诺",
     "noCampaigns": "未找到活动",
     "raised": "已筹集",
-    "amountRaised": "已筹集金额",
     "campaignIndex": "#",
-    "campaignName": "活动名称",
-    "startDate": "开始日期",
-    "endDate": "结束日期",
     "fundGoal": "筹款目标",
     "percentRaised": "% 已筹集",
     "createFirstCampaign": "创建您的第一个筹款活动以在此处查看。",
-    "campaignEnded": "活动已结束"
+    "campaignEnded": "活动已结束",
+    "amountRaised": "已筹集金额",
+    "campaignName": "活动名称",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "fundingGoal": "资金目标",
+    "viewPledge": "查看承诺"
   },
   "userPledges": {
     "title": "我的承诺",
