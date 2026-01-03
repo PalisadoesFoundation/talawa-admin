@@ -31,14 +31,11 @@ export const PasswordStrengthIndicator: React.FC<
 
   return (
     <div role="status" aria-live="polite">
-      <RequirementRow ok={checks.minLen} text={t('requirement_min_length')} />
-      <RequirementRow ok={checks.lower} text={t('requirement_lowercase')} />
-      <RequirementRow ok={checks.upper} text={t('requirement_uppercase')} />
-      <RequirementRow ok={checks.num} text={t('requirement_number')} />
-      <RequirementRow
-        ok={checks.special}
-        text={t('requirement_special_char')}
-      />
+      <RequirementRow ok={checks.minLen} text={t('requirementMinLength')} />
+      <RequirementRow ok={checks.lower} text={t('requirementLowercase')} />
+      <RequirementRow ok={checks.upper} text={t('requirementUppercase')} />
+      <RequirementRow ok={checks.num} text={t('requirementNumber')} />
+      <RequirementRow ok={checks.special} text={t('requirementSpecialChar')} />
     </div>
   );
 };

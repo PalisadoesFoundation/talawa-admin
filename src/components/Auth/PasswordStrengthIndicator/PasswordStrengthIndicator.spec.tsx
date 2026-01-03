@@ -7,11 +7,11 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => {
       const translations: Record<string, string> = {
-        requirement_min_length: 'At least 8 characters',
-        requirement_lowercase: 'Contains lowercase',
-        requirement_uppercase: 'Contains uppercase',
-        requirement_number: 'Contains a number',
-        requirement_special_char: 'Contains a special character',
+        requirementMinLength: 'At least 8 characters',
+        requirementLowercase: 'Contains lowercase',
+        requirementUppercase: 'Contains uppercase',
+        requirementNumber: 'Contains a number',
+        requirementSpecialChar: 'Contains a special character',
       };
       return translations[key] || key;
     },
