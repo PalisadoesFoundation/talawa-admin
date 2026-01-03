@@ -84,6 +84,7 @@ const AgendaCategoryUpdateModal: React.FC<
             type="text"
             placeholder={t('name')}
             value={formState.name}
+            required
             onChange={(e) =>
               setFormState({ ...formState, name: e.target.value })
             }
@@ -95,6 +96,7 @@ const AgendaCategoryUpdateModal: React.FC<
             type="text"
             placeholder={t('description')}
             value={formState.description}
+            required
             onChange={(e) =>
               setFormState({ ...formState, description: e.target.value })
             }
