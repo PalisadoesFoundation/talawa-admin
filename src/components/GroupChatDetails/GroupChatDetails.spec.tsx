@@ -196,12 +196,39 @@ describe('GroupChatDetails', () => {
     );
 
     expect(toastSpy).toHaveBeenCalledTimes(0);
-    expect(screen.getByText('Test Group')).toBeInTheDocument();
+    const testGroupElements = screen.getAllByText('Test Group');
+    expect(testGroupElements.length).toBeGreaterThan(0);
     expect(screen.getByText('Test Description')).toBeInTheDocument();
     const closeButton = screen.getByRole('button', { name: /close/i });
     expect(closeButton).toBeInTheDocument();
 
     fireEvent.click(closeButton);
+  });
+
+  it('renders ProfileAvatarDisplay for group and members', () => {
+    useLocalStorage().setItem('userId', 'user1');
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mocks} cache={testCache}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={withSafeChat(filledMockChat)}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    // Group Avatar (Main)
+    const avatars = screen.getAllByTestId('mock-profile-avatar-display');
+    expect(avatars.length).toBeGreaterThan(0);
+    // filledMockChat has avatarURL? We verify at least one image/fallback shows up.
+    // filledMockChat in GroupChatDetailsMocks likely has an image or at least a name.
+    const images = screen.queryAllByTestId('mock-profile-image');
+    const fallbacks = screen.queryAllByTestId('mock-profile-fallback');
+    expect(images.length + fallbacks.length).toBeGreaterThan(0);
   });
 
   it('cancelling editing chat title', async () => {
@@ -548,7 +575,10 @@ describe('GroupChatDetails', () => {
       </I18nextProvider>,
     );
 
-    await waitFor(() => expect(screen.getByText('Alice')).toBeInTheDocument());
+    await waitFor(() => {
+      const aliceElements = screen.getAllByText('Alice');
+      expect(aliceElements.length).toBeGreaterThan(0);
+    });
 
     const toggles = await screen.findAllByRole('button');
     const dropdownToggle = toggles.find(
@@ -615,7 +645,10 @@ describe('GroupChatDetails', () => {
       </I18nextProvider>,
     );
 
-    await waitFor(() => expect(screen.getByText('Alice')).toBeInTheDocument());
+    await waitFor(() => {
+      const aliceElements = screen.getAllByText('Alice');
+      expect(aliceElements.length).toBeGreaterThan(0);
+    });
 
     const toggles = screen.getAllByRole('button');
     const dropdownToggle = toggles.find(
@@ -676,7 +709,10 @@ describe('GroupChatDetails', () => {
       </I18nextProvider>,
     );
 
-    await waitFor(() => expect(screen.getByText('Alice')).toBeInTheDocument());
+    await waitFor(() => {
+      const aliceElements = screen.getAllByText('Alice');
+      expect(aliceElements.length).toBeGreaterThan(0);
+    });
     const toggles = screen.getAllByRole('button');
     const dropdownToggle = toggles.find(
       (btn) => btn.id && btn.id.startsWith('dropdown-'),

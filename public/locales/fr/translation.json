@@ -411,7 +411,6 @@
     "manageTag": "Gérer",
     "editTag": "Modifier",
     "removeTag": "Supprimer",
-    "tags": "Étiquettes",
     "tagDetails": "Détails de l'Étiquette",
     "tagName": "Nom",
     "tagType": "Type",
@@ -1625,6 +1624,14 @@
     "create": "créer",
     "newChat": "nouvelle discussion",
     "newGroupChat": "Nouvelle discussion de groupe",
+    "Error": "Erreur",
+    "organizationMembersTable": "Table des membres de l'organisation",
+    "next": "Suivant",
+    "hash": "#",
+    "description": "Description",
+    "groupDescription": "Description du groupe",
+    "groupName": "Nom du groupe",
+    "newGroup": "Nouveau groupe",
     "groupInfo": "Informations sur le groupe",
     "members": "Membres",
     "addMembers": "Ajouter des membres",
@@ -1662,13 +1669,21 @@
   "userChatRoom": {
     "selectContact": "Sélectionnez un contact pour démarrer la conversation",
     "sendMessage": "Envoyer le message",
-    "reply": "répondre",
+    "loading": "Chargement...",
+    "loadOlderMessages": "Charger les messages plus anciens",
+    "loadingMoreMessages": "Chargement d'autres messages...",
     "loadingImage": "Chargement de l'image...",
     "imageNotAvailable": "Image non disponible",
-    "attachment": "Pièce jointe",
-    "loadingMoreMessages": "Chargement de plus de messages...",
-    "loading": "Chargement...",
-    "loadOlderMessages": "Charger les messages plus anciens"
+    "attachment": "pièce jointe",
+    "reply": "Répondre",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "errorBoundary": {
+      "title": "Quelque chose s'est mal passé",
+      "message": "Une erreur inattendue s'est produite dans la salle de discussion",
+      "resetButton": "Réessayer",
+      "resetButtonAriaLabel": "Réessayer"
+    }
   },
   "orgActionItemCategories": {
     "enableButton": "Activer",
@@ -2040,6 +2055,15 @@
     "events": "Événements",
     "eventsCreatedByOrganization": "Événements créés par l'organisation",
     "today": "Aujourd'hui"
+  },
+  "contact": {
+    "card_aria": "Carte de contact"
+  },
+  "donation": {
+    "card_aria": "Carte de don"
+  },
+  "securedRoute": {
+    "sessionExpired": "Veuillez vous reconnecter car la session a expiré"
   },
   "common": {
     "signOut": "Se déconnecter",

@@ -37,6 +37,23 @@ global.URL.createObjectURL = vi.fn(
   () => 'https://minio-test.com/test-image.jpg',
 );
 
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: vi.fn(({ imageUrl, fallbackName, className }) => (
+    <div
+      data-testid="profileAvatar"
+      data-image-url={imageUrl || ''}
+      data-fallback-name={fallbackName}
+      className={className}
+    >
+      {imageUrl ? (
+        <img src={imageUrl} alt={fallbackName || ''} />
+      ) : (
+        <div>{fallbackName}</div>
+      )}
+    </div>
+  )),
+}));
+
 const { mockLocalStorageStore } = vi.hoisted(() => ({
   mockLocalStorageStore: {} as Record<string, unknown>,
 }));
@@ -186,6 +203,35 @@ const CREATE_CHAT_MOCK = {
   },
 };
 
+const CREATE_CHAT_MOCK_NO_AVATAR = {
+  request: {
+    query: CREATE_CHAT,
+    variables: {
+      input: {
+        organizationId: 'test-org-id',
+        name: 'Test Group',
+        description: 'Test Description',
+        avatar: null,
+      },
+    },
+  },
+  result: {
+    data: {
+      createChat: {
+        __typename: 'Chat',
+        id: 'new-chat-id-no-avatar',
+        name: 'Test Group',
+        description: 'Test Description',
+        organization: {
+          __typename: 'Organization',
+          id: 'test-org-id',
+          name: 'Test Org Name',
+        },
+      },
+    },
+  },
+};
+
 const CREATE_CHAT_MEMBERSHIP_ADMIN_MOCK = {
   request: {
     query: CREATE_CHAT_MEMBERSHIP,
@@ -232,12 +278,42 @@ const CREATE_CHAT_MEMBERSHIP_MEMBER_MOCK = {
   },
 };
 
+const CREATE_CHAT_MEMBERSHIP_ADMIN_MOCK_NO_AVATAR = {
+  request: {
+    query: CREATE_CHAT_MEMBERSHIP,
+    variables: {
+      input: {
+        memberId: '1',
+        chatId: 'new-chat-id-no-avatar',
+        role: 'administrator',
+      },
+    },
+  },
+  result: {
+    data: {
+      createChatMembership: {
+        __typename: 'ChatMembership',
+        id: 'membership-admin-no-avatar',
+        name: 'Test Group',
+        description: 'Test Description',
+      },
+    },
+  },
+};
+
 const mocks = [
   ORGANIZATION_MEMBERS_MOCK,
   ORGANIZATION_MEMBERS_SEARCH_MOCK,
   CREATE_CHAT_MOCK,
   CREATE_CHAT_MEMBERSHIP_ADMIN_MOCK,
   CREATE_CHAT_MEMBERSHIP_MEMBER_MOCK,
+];
+
+const mocksNoAvatar = [
+  ORGANIZATION_MEMBERS_MOCK,
+  ORGANIZATION_MEMBERS_SEARCH_MOCK,
+  CREATE_CHAT_MOCK_NO_AVATAR,
+  CREATE_CHAT_MEMBERSHIP_ADMIN_MOCK_NO_AVATAR,
 ];
 
 describe('CreateGroupChat', () => {
@@ -289,7 +365,12 @@ describe('CreateGroupChat', () => {
 
     // Wait for the async state update to be reflected in the DOM
     await waitFor(() => {
-      const image = screen.getByAltText('');
+      const profileAvatar = screen.getByTestId('profileAvatar');
+      expect(profileAvatar).toHaveAttribute(
+        'data-image-url',
+        'https://minio-test.com/test-image.jpg',
+      );
+      const image = screen.getByAltText(/Test Group/i);
       expect(image).toHaveAttribute(
         'src',
         'https://minio-test.com/test-image.jpg',
@@ -339,6 +420,117 @@ describe('CreateGroupChat', () => {
       expect(chatsListRefetch).toHaveBeenCalled();
     });
     expect(toggleCreateGroupChatModal).toHaveBeenCalled();
+  });
+
+  test('should clear selectedImage and description after successful group creation', async () => {
+    const { rerender } = render(
+      <MockedProvider mocks={mocksNoAvatar}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Provider store={store}>
+            <CreateGroupChat
+              createGroupChatModalisOpen={true}
+              toggleCreateGroupChatModal={toggleCreateGroupChatModal}
+              chatsListRefetch={chatsListRefetch}
+            />
+          </Provider>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    // Fill in form with description
+    fireEvent.change(screen.getByTestId('groupTitleInput'), {
+      target: { value: 'Test Group' },
+    });
+    fireEvent.change(screen.getByTestId('groupDescriptionInput'), {
+      target: { value: 'Test Description' },
+    });
+
+    // Go to next modal
+    fireEvent.click(screen.getByTestId('nextBtn'));
+
+    await waitFor(() => {
+      expect(screen.getByTestId('addExistingUserModal')).toBeInTheDocument();
+    });
+
+    // Create the group
+    fireEvent.click(screen.getByTestId('createBtn'));
+
+    await waitFor(() => {
+      expect(chatsListRefetch).toHaveBeenCalled();
+    });
+
+    // Reopen modal to verify state was cleared
+    rerender(
+      <MockedProvider mocks={mocks}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Provider store={store}>
+            <CreateGroupChat
+              createGroupChatModalisOpen={true}
+              toggleCreateGroupChatModal={toggleCreateGroupChatModal}
+              chatsListRefetch={chatsListRefetch}
+            />
+          </Provider>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    // Verify description is cleared
+    const descriptionInput = screen.getByTestId('groupDescriptionInput');
+    expect(descriptionInput).toHaveValue('');
+  });
+
+  test('should clear selectedImage and description when modal is cancelled', async () => {
+    const { rerender } = render(
+      <MockedProvider mocks={mocksNoAvatar}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Provider store={store}>
+            <CreateGroupChat
+              createGroupChatModalisOpen={true}
+              toggleCreateGroupChatModal={toggleCreateGroupChatModal}
+              chatsListRefetch={chatsListRefetch}
+            />
+          </Provider>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    // Fill in form with description
+    fireEvent.change(screen.getByTestId('groupTitleInput'), {
+      target: { value: 'Test Group' },
+    });
+    fireEvent.change(screen.getByTestId('groupDescriptionInput'), {
+      target: { value: 'Test Description' },
+    });
+
+    // Close the modal (cancel)
+    const modal = screen.getByTestId('createGroupChatModal');
+    const closeButton = modal.querySelector('.btn-close');
+    if (closeButton) {
+      fireEvent.click(closeButton);
+    }
+
+    await waitFor(() => {
+      expect(toggleCreateGroupChatModal).toHaveBeenCalled();
+    });
+
+    // Reopen modal to verify state was cleared
+    rerender(
+      <MockedProvider mocks={mocks}>
+        <I18nextProvider i18n={i18nForTest}>
+          <Provider store={store}>
+            <CreateGroupChat
+              createGroupChatModalisOpen={true}
+              toggleCreateGroupChatModal={toggleCreateGroupChatModal}
+              chatsListRefetch={chatsListRefetch}
+            />
+          </Provider>
+        </I18nextProvider>
+      </MockedProvider>,
+    );
+
+    // Verify description is cleared
+    const descriptionInput = screen.getByTestId('groupDescriptionInput');
+    expect(descriptionInput).toHaveValue('');
   });
 
   test('should allow searching for users', async () => {

@@ -38,7 +38,7 @@
  * - utils/useLocalstorage
  * - utils/MinioUpload
  * - components/Loader
- * - components/Avatar
+ * - components/ProfileAvatarDisplay
  *
  * @fileoverview
  * This file defines the `CreateGroupChat` component, which is used in the
@@ -64,7 +64,6 @@ import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import Avatar from 'components/Avatar/Avatar';
 import { FiEdit } from 'react-icons/fi';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { toast } from 'react-toastify';
@@ -256,7 +255,10 @@ export default function CreateGroupChat({
       <Modal
         data-testid="createGroupChatModal"
         show={createGroupChatModalisOpen}
-        onHide={toggleCreateGroupChatModal}
+        onHide={() => {
+          toggleCreateGroupChatModal();
+          reset();
+        }}
         contentClassName={styles.modalContent}
       >
         <Modal.Header closeButton data-testid="">
@@ -272,11 +274,11 @@ export default function CreateGroupChat({
             data-testid="fileInput"
           />
           <div className={styles.groupInfo}>
-            {selectedImage ? (
-              <img className={styles.chatImage} src={selectedImage} alt="" />
-            ) : (
-              <Avatar avatarStyle={styles.groupImage} name={title} />
-            )}
+            <ProfileAvatarDisplay
+              className={styles.chatImage}
+              fallbackName={title}
+              imageUrl={selectedImage}
+            />
             <button
               data-testid="editImageBtn"
               onClick={handleImageClick}
