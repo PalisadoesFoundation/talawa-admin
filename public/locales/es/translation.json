@@ -239,10 +239,11 @@
   "requests": {
     "profile": "Perfil",
     "title": "Solicitudes",
-    "sl_no": "Núm.",
+    "sl_no": "Número de serie",
     "name": "Nombre",
     "email": "Correo electrónico",
     "accept": "Aceptar",
+    "newMembersWillAppearHere": "Los nuevos miembros aparecerán aquí",
     "reject": "Rechazar",
     "searchRequests": "Buscar solicitudes",
     "noOrgError": "Organizaciones no encontradas, por favor crea una organización a través del panel",
@@ -252,8 +253,7 @@
     "noOrgErrorTitle": "Organizaciones no encontradas",
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
     "profilePictureAlt": "Imagen de perfil de {{name}}",
-    "placeholderAvatarAlt": "Avatar predeterminado",
-    "newMembersWillAppearHere": "Las nuevas solicitudes de membresía aparecerán aquí"
+    "placeholderAvatarAlt": "Avatar predeterminado"
   },
   "users": {
     "membershipStatus": {
@@ -425,7 +425,6 @@
     "tagCreationFailed": "Error al crear la etiqueta",
     "errorLoadingTagsData": "Se produjo un error al cargar los datos de las etiquetas de la organización",
     "sortTags": "Ordenar Etiquetas",
-    "tags": "Etiquetas",
     "Latest": "Más Reciente",
     "Oldest": "Más Antiguo",
     "viewSubTags": "Ver {{count}} sub-etiquetas"
@@ -1622,6 +1621,9 @@
     "create": "crear",
     "newChat": "nueva charla",
     "newGroupChat": "Nuevo chat grupal",
+    "Error": "Error",
+    "hash": "#",
+    "description": "Descripción",
     "groupInfo": "Información del grupo",
     "members": "Miembros",
     "addMembers": "Agregar miembros",
@@ -1652,13 +1654,21 @@
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",
     "sendMessage": "Enviar mensaje",
-    "reply": "responder",
+    "loading": "Cargando...",
+    "loadOlderMessages": "Cargar mensajes más antiguos",
+    "loadingMoreMessages": "Cargando más mensajes...",
     "loadingImage": "Cargando imagen...",
     "imageNotAvailable": "Imagen no disponible",
     "attachment": "Adjunto",
-    "loadingMoreMessages": "Cargando más mensajes...",
-    "loading": "Cargando...",
-    "loadOlderMessages": "Cargar mensajes anteriores"
+    "reply": "Responder",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "errorBoundary": {
+      "title": "Algo salió mal",
+      "message": "Ocurrió un error inesperado en la sala de chat",
+      "resetButton": "Intentar de nuevo",
+      "resetButtonAriaLabel": "Intentar de nuevo"
+    }
   },
   "orgActionItemCategories": {
     "createButton": "Crear",
@@ -2030,6 +2040,15 @@
     "events": "Eventos",
     "eventsCreatedByOrganization": "Eventos creados por la organización",
     "today": "Hoy"
+  },
+  "contact": {
+    "card_aria": "Tarjeta de contacto"
+  },
+  "donation": {
+    "card_aria": "Tarjeta de donación"
+  },
+  "securedRoute": {
+    "sessionExpired": "Por favor, vuelva a iniciar sesión ya que la sesión ha expirado"
   },
   "common": {
     "signOut": "Cerrar sesión",
