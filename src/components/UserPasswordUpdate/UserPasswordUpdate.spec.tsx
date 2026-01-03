@@ -6,15 +6,18 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import UserPasswordUpdate from './UserPasswordUpdate';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { toast as mockToast } from 'react-toastify';
 import { MOCKS } from './UserPasswordUpdateMocks';
 import { vi } from 'vitest';
 import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
-vi.mock('react-toastify', () => ({
-  toast: {
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     error: vi.fn(),
     success: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
   },
 }));
 
@@ -88,7 +91,9 @@ describe('Testing User Password Update', () => {
     await userEvent.click(screen.getByText(/Save Changes/i));
 
     await wait();
-    expect(mockToast.error).toHaveBeenCalledWith(`Password can't be empty`);
+    expect(NotificationToast.error).toHaveBeenCalledWith(
+      `Password can't be empty`,
+    );
   });
 
   it('displays an error when new and confirm password field does not match', async () => {
@@ -119,7 +124,7 @@ describe('Testing User Password Update', () => {
 
     expect(screen.getByText(/Cancel/i)).toBeTruthy();
     await wait();
-    expect(mockToast.error).toHaveBeenCalledWith(
+    expect(NotificationToast.error).toHaveBeenCalledWith(
       'New and Confirm password do not match.',
     );
   });
@@ -147,7 +152,7 @@ describe('Testing User Password Update', () => {
     await userEvent.click(screen.getByText(/Save Changes/i));
 
     await waitFor(() => {
-      expect(mockToast.success).toHaveBeenCalledWith(
+      expect(NotificationToast.success).toHaveBeenCalledWith(
         'Password updated Successfully',
       );
     });
@@ -190,7 +195,7 @@ describe('Testing User Password Update', () => {
     await userEvent.click(screen.getByText(/Save Changes/i));
 
     await waitFor(() =>
-      expect(mockToast.error).toHaveBeenCalledWith(
+      expect(NotificationToast.error).toHaveBeenCalledWith(
         'ApolloError: Invalid previous password',
       ),
     );
@@ -236,7 +241,7 @@ describe('Testing User Password Update', () => {
 
     await waitFor(
       () => {
-        expect(mockToast.error).toHaveBeenCalledWith(
+        expect(NotificationToast.error).toHaveBeenCalledWith(
           'ApolloError: Network error',
         );
       },

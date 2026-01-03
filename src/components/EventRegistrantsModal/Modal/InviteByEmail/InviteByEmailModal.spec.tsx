@@ -7,12 +7,15 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from '../../../../utils/i18nForTest';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { SEND_EVENT_INVITATIONS } from 'GraphQl/Mutations/mutations';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     error: vi.fn(),
+    success: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
   },
 }));
 
@@ -147,7 +150,7 @@ describe('InviteByEmailModal', () => {
       renderComponent();
       fireEvent.click(screen.getByTestId('send-invites'));
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
+        expect(NotificationToast.error).toHaveBeenCalledWith(
           'Please provide at least one recipient email',
         );
       });
@@ -161,7 +164,7 @@ describe('InviteByEmailModal', () => {
       fireEvent.click(screen.getByTestId('send-invites'));
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
+        expect(NotificationToast.error).toHaveBeenCalledWith(
           'Invalid email(s): invalid-email',
         );
       });
@@ -197,7 +200,7 @@ describe('InviteByEmailModal', () => {
       });
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
+        expect(NotificationToast.success).toHaveBeenCalledWith(
           'Invites added Successfully',
         );
       });
@@ -231,7 +234,7 @@ describe('InviteByEmailModal', () => {
       fireEvent.click(screen.getByTestId('send-invites'));
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
+        expect(NotificationToast.success).toHaveBeenCalledWith(
           'Invites added Successfully',
         );
       });
@@ -263,12 +266,14 @@ describe('InviteByEmailModal', () => {
       fireEvent.click(screen.getByTestId('send-invites'));
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
+        expect(NotificationToast.error).toHaveBeenCalledWith(
           'eventRegistrantsModal.inviteByEmail.errorSendingInvites',
         );
       });
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('An error occurred');
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'An error occurred',
+        );
       });
       expect(mockHandleClose).not.toHaveBeenCalled();
       expect(screen.queryByText('Sending...')).not.toBeInTheDocument();

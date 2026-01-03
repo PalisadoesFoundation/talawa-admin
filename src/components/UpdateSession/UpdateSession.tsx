@@ -41,11 +41,11 @@ import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import { useMutation, useQuery } from '@apollo/client';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
-import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import { UPDATE_SESSION_TIMEOUT_PG } from 'GraphQl/Mutations/mutations';
 import styles from 'style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 interface TestInterfaceUpdateTimeoutProps {
   onValueChange?: (value: number) => void;
@@ -137,7 +137,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
         variables: { inactivityTimeoutDuration: timeout * 60 },
       });
 
-      toast.success(t('profileChangedMsg'));
+      NotificationToast.success(t('profileChangedMsg'));
       setCommunityTimeout(timeout);
     } catch (error: unknown) {
       errorHandler(t, error as Error);

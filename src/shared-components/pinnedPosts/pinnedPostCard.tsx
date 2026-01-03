@@ -31,7 +31,6 @@
 
 import React from 'react';
 import { useMutation } from '@apollo/client';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import {
   Card,
@@ -63,6 +62,7 @@ import { formatDate } from '../../utils/dateFormatter';
 import useLocalStorage from '../../utils/useLocalstorage';
 import styles from './pinnedPostsLayout.module.css';
 import defaultImg from '../../assets/images/defaultImg.png';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
   pinnedPost,
@@ -108,7 +108,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
       if (onPostUpdate) {
         onPostUpdate();
       }
-      toast.success(
+      NotificationToast.success(
         isPinned ? t('postUnpinnedSuccess') : t('postPinnedSuccess'),
       );
       handleDropdownClose();
@@ -124,7 +124,7 @@ const PinnedPostCard: React.FC<InterfacePinnedPostCardProps> = ({
       if (onPostUpdate) {
         onPostUpdate();
       }
-      toast.success(t('postDeletedSuccess'));
+      NotificationToast.success(t('postDeletedSuccess'));
       handleDropdownClose();
     } catch (error) {
       errorHandler(t, error);

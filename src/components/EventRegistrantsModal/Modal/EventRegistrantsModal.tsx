@@ -40,7 +40,6 @@
  */
 import React, { useState, useEffect } from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import { toast } from 'react-toastify';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   EVENT_ATTENDEES,
@@ -54,6 +53,7 @@ import { useTranslation } from 'react-i18next';
 import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
 import InviteByEmailModal from './InviteByEmail/InviteByEmailModal';
 import type { InterfaceUser } from 'types/User/interface';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 type ModalPropType = {
   show: boolean;
@@ -103,10 +103,10 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
   // Function to add a new registrant to the event
   const addRegistrant = (): void => {
     if (member == null) {
-      toast.warning('Please choose an user to add first!');
+      NotificationToast.warning('Please choose an user to add first!');
       return;
     }
-    toast.warn('Adding the attendee...');
+    NotificationToast.warning('Adding the attendee...');
     const addVariables = isRecurring
       ? { userId: member.id, recurringEventInstanceId: eventId }
       : { userId: member.id, eventId: eventId };
@@ -115,14 +115,14 @@ export const EventRegistrantsModal = (props: ModalPropType): JSX.Element => {
       variables: addVariables,
     })
       .then(() => {
-        toast.success(
+        NotificationToast.success(
           tCommon('addedSuccessfully', { item: 'Attendee' }) as string,
         );
         attendeesRefetch(); // Refresh the list of attendees
       })
       .catch((err) => {
-        toast.error(t('errorAddingAttendee') as string);
-        toast.error(err.message);
+        NotificationToast.error(t('errorAddingAttendee') as string);
+        NotificationToast.error(err.message);
       });
   };
 

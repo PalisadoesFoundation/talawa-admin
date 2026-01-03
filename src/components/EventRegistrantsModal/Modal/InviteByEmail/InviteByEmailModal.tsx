@@ -7,9 +7,9 @@ import { Modal, Button, Form, Spinner } from 'react-bootstrap';
 import TextField from '@mui/material/TextField';
 import { useMutation } from '@apollo/client';
 import { SEND_EVENT_INVITATIONS } from 'GraphQl/Mutations/mutations';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import type { ApolloError } from '@apollo/client/errors';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 type Props = {
   show: boolean;
@@ -60,13 +60,13 @@ const InviteByEmailModal: React.FC<Props> = ({
       .filter((r) => r.email !== '');
 
     if (cleaned.length === 0) {
-      toast.error('Please provide at least one recipient email');
+      NotificationToast.error('Please provide at least one recipient email');
       return;
     }
 
     const invalid = validateEmails(cleaned.map((r) => r.email));
     if (invalid.length) {
-      toast.error(`Invalid email(s): ${invalid.join(', ')}`);
+      NotificationToast.error(`Invalid email(s): ${invalid.join(', ')}`);
       return;
     }
 
@@ -83,7 +83,7 @@ const InviteByEmailModal: React.FC<Props> = ({
     try {
       await sendInvites({ variables: { input } });
 
-      toast.success(
+      NotificationToast.success(
         tCommon('addedSuccessfully', { item: 'Invites' }) || 'Invites sent',
       );
       setRecipients([{ email: '', name: '' }]);
@@ -93,8 +93,10 @@ const InviteByEmailModal: React.FC<Props> = ({
       handleClose();
     } catch (err) {
       const error = err as ApolloError;
-      toast.error(t('errorSendingInvites') || 'Error sending invites');
-      if (error?.message) toast.error(error.message);
+      NotificationToast.error(
+        t('errorSendingInvites') || 'Error sending invites',
+      );
+      if (error?.message) NotificationToast.error(error.message);
     } finally {
       setIsSubmitting(false);
     }

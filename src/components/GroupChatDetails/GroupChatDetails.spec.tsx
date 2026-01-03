@@ -13,7 +13,6 @@ import { I18nextProvider, initReactI18next } from 'react-i18next';
 import i18n from 'i18next';
 import { useLocalStorage } from 'utils/useLocalstorage';
 import { vi } from 'vitest';
-import { toast } from 'react-toastify';
 import {
   mocks,
   filledMockChat,
@@ -21,6 +20,7 @@ import {
   failingMocks,
 } from './GroupChatDetailsMocks';
 import type { NewChatType } from 'types/Chat/interface';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 // Standardized cache configuration for Apollo MockedProvider
 const testCache = new InMemoryCache();
@@ -188,7 +188,7 @@ describe('GroupChatDetails', () => {
   };
 
   it('renders Error modal if userId is not in localStorage', () => {
-    const toastSpy = vi.spyOn(toast, 'error');
+    const toastSpy = vi.spyOn(NotificationToast, 'error');
 
     useLocalStorage().setItem('userId', null);
 
@@ -211,7 +211,7 @@ describe('GroupChatDetails', () => {
   });
 
   it('renders correctly without name and image', () => {
-    const toastSpy = vi.spyOn(toast, 'error');
+    const toastSpy = vi.spyOn(NotificationToast, 'error');
     useLocalStorage().setItem('userId', 'user1');
 
     render(
@@ -236,7 +236,7 @@ describe('GroupChatDetails', () => {
   });
 
   it('renders correctly', () => {
-    const toastSpy = vi.spyOn(toast, 'error');
+    const toastSpy = vi.spyOn(NotificationToast, 'error');
     useLocalStorage().setItem('userId', 'user1');
 
     render(
@@ -551,7 +551,7 @@ describe('GroupChatDetails', () => {
   it('changes role and removes member via dropdown actions', async () => {
     useLocalStorage().setItem('userId', 'user1');
 
-    const toastSuccess = vi.spyOn(toast, 'success');
+    const toastSuccess = vi.spyOn(NotificationToast, 'success');
 
     const adminChat = withSafeChat({
       ...filledMockChat,
@@ -617,7 +617,7 @@ describe('GroupChatDetails', () => {
   it('shows error toast when role update fails', async () => {
     useLocalStorage().setItem('userId', 'user1');
 
-    const toastError = vi.spyOn(toast, 'error');
+    const toastError = vi.spyOn(NotificationToast, 'error');
     const consoleError = vi
       .spyOn(console, 'error')
       .mockImplementation(() => {});
@@ -677,7 +677,7 @@ describe('GroupChatDetails', () => {
 
   it('shows error toast when removing member fails', async () => {
     useLocalStorage().setItem('userId', 'user1');
-    const toastError = vi.spyOn(toast, 'error');
+    const toastError = vi.spyOn(NotificationToast, 'error');
     const consoleError = vi
       .spyOn(console, 'error')
       .mockImplementation(() => {});
@@ -830,7 +830,7 @@ describe('GroupChatDetails', () => {
     }).catch(() => {});
 
     vi.spyOn(window, 'confirm').mockReturnValue(true);
-    const toastSuccess = vi.spyOn(toast, 'success');
+    const toastSuccess = vi.spyOn(NotificationToast, 'success');
 
     const buttons = screen.getAllByRole('button');
     const trashButton = buttons.find((b) => b.querySelector('svg'));
@@ -843,7 +843,7 @@ describe('GroupChatDetails', () => {
 
   it('show error toast while deleting chat when current user is administrator and confirms', async () => {
     useLocalStorage().setItem('userId', 'user1');
-    const toastError = vi.spyOn(toast, 'error');
+    const toastError = vi.spyOn(NotificationToast, 'error');
     const consoleError = vi
       .spyOn(console, 'error')
       .mockImplementation(() => {});
@@ -897,7 +897,7 @@ describe('GroupChatDetails', () => {
   });
   it('shows error toast when title update fails', async () => {
     useLocalStorage().setItem('userId', '2');
-    const toastError = vi.spyOn(toast, 'error');
+    const toastError = vi.spyOn(NotificationToast, 'error');
     const consoleError = vi
       .spyOn(console, 'error')
       .mockImplementation(() => {});
@@ -954,7 +954,7 @@ describe('GroupChatDetails', () => {
 
   it('shows error toast when image upload fails', async () => {
     useLocalStorage().setItem('userId', 'user1');
-    const toastError = vi.spyOn(toast, 'error');
+    const toastError = vi.spyOn(NotificationToast, 'error');
     const consoleError = vi
       .spyOn(console, 'error')
       .mockImplementation(() => {});

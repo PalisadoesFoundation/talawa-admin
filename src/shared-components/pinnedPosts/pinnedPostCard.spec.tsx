@@ -7,14 +7,6 @@ import type { InterfacePostEdge } from 'types/Post/interface';
 import { DELETE_POST_MUTATION } from '../../GraphQl/Mutations/mutations';
 import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutations';
 
-// Mock react-toastify
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
-}));
-
 // Mock useTranslation
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -36,6 +28,10 @@ vi.mock('react-i18next', () => ({
       return translations[key] || key;
     },
   }),
+  initReactI18next: {
+    type: '3rdParty',
+    init: vi.fn(),
+  },
 }));
 
 // Mock useLocalStorage
