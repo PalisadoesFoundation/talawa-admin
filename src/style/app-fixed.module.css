@@ -10597,3 +10597,13 @@ form {
     width: 100%;
   }
 }
+
+.manageTagErrorIcon {
+  font-size: 2rem;
+}
+
+.manageTagDivider {
+  border-color: var(--grey-border-box-color);
+  border-width: 2px;
+  width: 85%;
+}
