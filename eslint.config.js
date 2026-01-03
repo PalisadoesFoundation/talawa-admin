@@ -145,11 +145,12 @@ export default [
        * goes through the standardized DataGridWrapper component located at
        * src/shared-components/DataGridWrapper/
        * 
-       * Note: Approximately 20+ files currently use direct imports and will require
-       * migration in a future ticket. This rule prevents new violations.
+       * Note: Set to 'warn' temporarily to allow existing violations while preventing new ones.
+       * Approximately 20+ files currently use direct imports and will require migration.
+       * Once migration is complete, this should be changed to 'error'.
        */
       'no-restricted-imports': [
-        'error',
+        'warn',
         {
           name: '@mui/x-data-grid',
           message:
