@@ -3548,14 +3548,12 @@ describe('handleFormChange function', () => {
     await userEvent.type(notesInput, 'Updated field 1');
     expect(notesInput).toHaveValue('Updated field 1');
 
-    // Test updating the date field if it exists
-    const expectedDateFormat = dayjs().format('MM/DD/YYYY');
-    const dateInput = screen.queryByDisplayValue(expectedDateFormat);
-    if (dateInput) {
-      await userEvent.click(dateInput);
-      // Date field should be interactable
-      expect(dateInput).toBeInTheDocument();
-    }
+    // Test updating the date field using the deterministic helper
+    const dateInput = getPickerInputByLabel('assignmentDate');
+    expect(dateInput).toBeInTheDocument();
+    await userEvent.click(dateInput);
+    // Date field should be interactable
+    expect(dateInput).toBeInTheDocument();
   });
 
   it('should preserve existing form state when updating single field', async () => {

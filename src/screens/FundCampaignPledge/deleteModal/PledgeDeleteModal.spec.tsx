@@ -16,7 +16,7 @@ import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
 import i18nForTest from '../../../utils/i18nForTest';
-import { MOCKS_DELETE_PLEDGE_ERROR, MOCKS } from '../PledgesMocks';
+import { MOCKS_DELETE_PLEDGE_ERROR, MOCKS } from '../Pledges.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { vi } from 'vitest';

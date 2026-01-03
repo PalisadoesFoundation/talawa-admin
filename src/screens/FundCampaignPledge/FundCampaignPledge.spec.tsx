@@ -21,7 +21,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from '../../utils/i18nForTest';
 import FundCampaignPledge from './FundCampaignPledge';
-import { MOCKS_FUND_CAMPAIGN_PLEDGE_ERROR } from './PledgesMocks';
+import { MOCKS_FUND_CAMPAIGN_PLEDGE_ERROR } from './Pledges.mocks';
 import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';

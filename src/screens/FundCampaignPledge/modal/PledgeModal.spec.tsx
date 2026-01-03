@@ -17,7 +17,7 @@ import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from '../../../utils/i18nForTest';
-import { PLEDGE_MODAL_MOCKS, PLEDGE_MODAL_ERROR_MOCKS } from '../PledgesMocks';
+import { PLEDGE_MODAL_MOCKS, PLEDGE_MODAL_ERROR_MOCKS } from '../Pledges.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';

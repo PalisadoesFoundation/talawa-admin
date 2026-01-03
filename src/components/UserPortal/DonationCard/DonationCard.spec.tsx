@@ -142,8 +142,16 @@ describe('DonationCard [User Portal]', () => {
 
     const dateElement = screen.getByTestId('donation-date');
 
-    // Verify the year is present in the formatted output
-    expect(dateElement).toHaveTextContent(testDate.format('YYYY'));
+    // Generate expected Hindi-localized string using the same Intl.DateTimeFormat as the component
+    const expectedFormattedDate = new Intl.DateTimeFormat('hi', {
+      weekday: 'short',
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    }).format(new Date(date));
+
+    // Verify the full Hindi-localized date is present in the formatted output
+    expect(dateElement).toHaveTextContent(expectedFormattedDate);
 
     // Reset language after test
     await act(async () => {
