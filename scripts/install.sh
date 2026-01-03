@@ -5,6 +5,7 @@ echo "🚀 Starting Talawa installation..."
 echo ""
 
 # Function to detect if running in WSL
+# NOTE: Keep in sync with src/install/os/detector.ts (isRunningInWsl function)
 is_wsl() {
     # Check WSL_DISTRO_NAME environment variable
     if [ -n "${WSL_DISTRO_NAME:-}" ]; then

@@ -140,6 +140,19 @@ describe('linux OS installers', () => {
         '     https://www.docker.com/products/docker-desktop',
       );
       expect(logInfo).toHaveBeenCalledWith(
+        '  2. Enable WSL 2 backend in Docker Desktop settings:',
+      );
+      expect(logInfo).toHaveBeenCalledWith(
+        '     Settings → General → "Use the WSL 2 based engine"',
+      );
+      expect(logInfo).toHaveBeenCalledWith(
+        '  3. Enable integration with your WSL distro:',
+      );
+      expect(logInfo).toHaveBeenCalledWith(
+        '     Settings → Resources → WSL Integration → Enable for your distro',
+      );
+      expect(logInfo).toHaveBeenCalledWith('  Documentation:');
+      expect(logInfo).toHaveBeenCalledWith(
         '  https://docs.docker.com/desktop/wsl/',
       );
     });
