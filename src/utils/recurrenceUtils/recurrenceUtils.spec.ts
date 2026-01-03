@@ -379,11 +379,12 @@ describe('Recurrence Utility Functions', () => {
 
     it('should create a default weekly rule', () => {
       const rule = createDefaultRecurrenceRule(startDate, Frequency.WEEKLY);
+      const expectedDay = dayIndexToWeekDay[dayjs(startDate).day()];
       expect(rule).toEqual({
         frequency: Frequency.WEEKLY,
         interval: 1,
         never: true,
-        byDay: [WeekDays.SU],
+        byDay: [expectedDay],
       });
     });
 

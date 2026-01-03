@@ -1,4 +1,3 @@
-import React from 'react';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
@@ -341,7 +340,7 @@ describe('Event Attendance Component', () => {
               id: 'admin1',
               name: 'Admin User',
               emailAddress: 'admin@example.com',
-              createdAt: dayjs().add(4, 'year').toISOString(),
+              createdAt: dayjs.utc().add(4, 'year').toISOString(),
               role: 'administrator',
               eventsAttended: [],
             },
@@ -369,7 +368,7 @@ describe('Event Attendance Component', () => {
               id: 'no-tags-1',
               name: 'ZZZ User',
               emailAddress: 'notags@example.com',
-              createdAt: dayjs().add(4, 'year').toISOString(),
+              createdAt: dayjs.utc().add(4, 'year').toISOString(),
               role: 'attendee',
               eventsAttended: null,
             },

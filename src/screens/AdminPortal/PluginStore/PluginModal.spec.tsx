@@ -2078,6 +2078,7 @@ describe('PluginModal', () => {
           {
             version: '1.0.0',
             date: dayjs()
+              .utc()
               .subtract(1, 'year')
               .startOf('year')
               .format('YYYY-MM-DD'),
