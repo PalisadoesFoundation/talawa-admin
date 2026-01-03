@@ -263,7 +263,11 @@ export function CursorPaginationManager<
         className={styles.stateMessage}
       >
         <p>{error.message}</p>
-        <button onClick={handleRefetch} className={styles.loadMoreButton}>
+        <button
+          type="button"
+          onClick={handleRefetch}
+          className={styles.loadMoreButton}
+        >
           {t('retry')}
         </button>
       </div>
@@ -311,6 +315,7 @@ export function CursorPaginationManager<
       {pageInfo?.hasNextPage && (
         <div className={styles.loadMoreSection}>
           <button
+            type="button"
             onClick={handleLoadMore}
             disabled={isLoadingMore}
             className={styles.loadMoreButton}
