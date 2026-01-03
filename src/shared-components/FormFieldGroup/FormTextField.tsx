@@ -57,6 +57,7 @@ export const FormTextField: React.FC<IFormTextFieldProps> = ({
         <Form.Control
           {...formControlProps}
           id={name}
+          name={name}
           required={required}
           isInvalid={!!(touched && error)}
           aria-label={ariaLabel}

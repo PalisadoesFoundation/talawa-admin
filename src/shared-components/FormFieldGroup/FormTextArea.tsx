@@ -9,13 +9,12 @@ export const FormTextArea: React.FC<IFormTextAreaProps> = ({
   helpText,
   required,
   ariaLabel,
-  ariaDescribedBy,
   endAdornment,
   rows,
   ...inputProps
 }) => {
   const showError = !!(touched && error);
-  const errorMessage = showError ? String(error) : '';
+  const errorMessage = showError && typeof error === 'string' ? error : '';
 
   return (
     <FormControl fullWidth error={showError}>
@@ -33,7 +32,6 @@ export const FormTextArea: React.FC<IFormTextAreaProps> = ({
           },
         }}
         aria-label={ariaLabel}
-        aria-describedby={ariaDescribedBy}
         aria-invalid={showError}
       />
     </FormControl>
