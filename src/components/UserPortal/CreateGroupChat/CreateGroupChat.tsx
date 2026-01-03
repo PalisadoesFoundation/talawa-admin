@@ -38,7 +38,7 @@
  * - utils/useLocalstorage
  * - utils/MinioUpload
  * - components/Loader
- * - shared-components/ProfileAvatarDisplay
+ * - components/ProfileAvatarDisplay
  *
  * @fileoverview
  * This file defines the `CreateGroupChat` component, which is used in the
@@ -66,7 +66,6 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
 import { FiEdit } from 'react-icons/fi';
 import { useMinioUpload } from 'utils/MinioUpload';
-import { useMinioDownload } from 'utils/MinioDownload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
@@ -100,11 +99,9 @@ export default function CreateGroupChat({
 
   const [addUserModalisOpen, setAddUserModalisOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [avatarUri, setAvatarUri] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { orgId: currentOrg } = useParams();
   const { uploadFileToMinio } = useMinioUpload();
-  const { getFileFromMinio } = useMinioDownload();
 
   function openAddUserModal(): void {
     setAddUserModalisOpen(true);
@@ -116,6 +113,8 @@ export default function CreateGroupChat({
   function reset(): void {
     setTitle('');
     setUserIds([]);
+    setSelectedImage(null);
+    setDescription('');
   }
 
   useEffect(() => {
@@ -130,7 +129,7 @@ export default function CreateGroupChat({
           organizationId: currentOrg,
           name: title,
           description: description,
-          avatar: avatarUri ? { uri: avatarUri } : null,
+          avatar: selectedImage,
         },
       },
     });
@@ -202,9 +201,7 @@ export default function CreateGroupChat({
     if (file && currentOrg) {
       try {
         const { objectName } = await uploadFileToMinio(file, currentOrg);
-        setAvatarUri(objectName);
-        const presignedUrl = await getFileFromMinio(objectName, currentOrg);
-        setSelectedImage(presignedUrl);
+        setSelectedImage(objectName);
       } catch (error) {
         console.error('Error uploading image to MinIO:', error);
       }
@@ -222,7 +219,10 @@ export default function CreateGroupChat({
       <Modal
         data-testid="createGroupChatModal"
         show={createGroupChatModalisOpen}
-        onHide={toggleCreateGroupChatModal}
+        onHide={() => {
+          toggleCreateGroupChatModal();
+          reset();
+        }}
         contentClassName={styles.modalContent}
       >
         <Modal.Header closeButton data-testid="">
@@ -243,7 +243,6 @@ export default function CreateGroupChat({
             <ProfileAvatarDisplay
               className={styles.chatImage}
               fallbackName={title}
-              size="large"
               imageUrl={selectedImage}
             />
             <button
