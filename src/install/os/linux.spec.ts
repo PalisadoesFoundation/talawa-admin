@@ -116,5 +116,32 @@ describe('linux OS installers', () => {
         '  other: https://docs.docker.com/engine/install/',
       );
     });
+
+    it('throws error and logs Docker Desktop instructions for WSL environments', async () => {
+      const os: IOSInfo = { name: 'linux', distro: 'ubuntu', isWsl: true };
+
+      await expect(installDocker(os)).rejects.toThrow(
+        'Docker must be installed manually. Please follow the instructions above.',
+      );
+
+      expect(logInfo).toHaveBeenCalledWith(
+        'Docker installation requires manual setup to choose your preferred edition.',
+      );
+      expect(logInfo).toHaveBeenCalledWith(
+        '🔷 WSL Detected: You should use Docker Desktop for Windows',
+      );
+      expect(logInfo).toHaveBeenCalledWith(
+        'Please install Docker Desktop with WSL backend:',
+      );
+      expect(logInfo).toHaveBeenCalledWith(
+        '  1. Install Docker Desktop for Windows:',
+      );
+      expect(logInfo).toHaveBeenCalledWith(
+        '     https://www.docker.com/products/docker-desktop',
+      );
+      expect(logInfo).toHaveBeenCalledWith(
+        '  https://docs.docker.com/desktop/wsl/',
+      );
+    });
   });
 });

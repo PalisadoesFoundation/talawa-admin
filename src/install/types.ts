@@ -5,6 +5,7 @@ export interface IOSInfo {
   name: OS;
   distro?: LinuxDistro;
   version?: string;
+  isWsl?: boolean;
 }
 
 export interface IPackageStatus {
