@@ -138,6 +138,7 @@ export function CursorPaginationManager<
     dataPath,
     itemsPerPage = 10,
     renderItem,
+    keyExtractor,
     loadingComponent,
     emptyStateComponent,
     onDataChange,
@@ -205,13 +206,20 @@ export function CursorPaginationManager<
 
       if (connectionData) {
         const newNodes = extractNodes(connectionData.edges);
-        const updatedItems = [...items, ...newNodes];
-        setItems(updatedItems);
+        setItems((prevItems) => {
+          if (
+            prevItems.length === 0 &&
+            connectionData.pageInfo.hasPreviousPage
+          ) {
+            return prevItems;
+          }
+          const updatedItems = [...prevItems, ...newNodes];
+          if (onDataChange) {
+            onDataChange(updatedItems);
+          }
+          return updatedItems;
+        });
         setPageInfo(connectionData.pageInfo);
-
-        if (onDataChange) {
-          onDataChange(updatedItems);
-        }
       }
     } catch (err) {
       console.error('Error loading more items:', err);
@@ -227,7 +235,6 @@ export function CursorPaginationManager<
     itemsPerPage,
     dataPath,
     onDataChange,
-    items,
   ]);
 
   // Refetch handler
@@ -235,11 +242,15 @@ export function CursorPaginationManager<
     setItems([]);
     setPageInfo(null);
 
-    await refetch({
-      ...queryVariables,
-      first: itemsPerPage,
-      after: null,
-    } as PaginationVariables<TVariables>);
+    try {
+      await refetch({
+        ...queryVariables,
+        first: itemsPerPage,
+        after: null,
+      } as PaginationVariables<TVariables>);
+    } catch (err) {
+      console.error('Error refetching data:', err);
+    }
   }, [refetch, queryVariables, itemsPerPage]);
 
   // Watch for refetchTrigger changes
@@ -308,9 +319,10 @@ export function CursorPaginationManager<
   return (
     <div data-testid="cursor-pagination-manager">
       <div className={styles.itemsContainer}>
-        {items.map((item, index) => (
-          <div key={index}>{renderItem(item, index)}</div>
-        ))}
+        {items.map((item, index) => {
+          const key = keyExtractor ? keyExtractor(item, index) : index;
+          return <div key={key}>{renderItem(item, index)}</div>;
+        })}
       </div>
       {pageInfo?.hasNextPage && (
         <div className={styles.loadMoreSection}>

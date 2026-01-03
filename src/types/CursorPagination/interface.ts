@@ -58,8 +58,46 @@ export interface InterfaceCursorPaginationManagerProps<
 
   /**
    * Function to render each item in the list
+   *
+   * @remarks
+   * When items have stable unique identifiers, provide a keyExtractor function
+   * to ensure proper React reconciliation. If keyExtractor is not provided,
+   * the component falls back to using the array index as the key, which works
+   * for append-only pagination but may cause issues if items are reordered.
+   *
+   * @example
+   * ```tsx
+   * // With keyExtractor for stable keys:
+   * <CursorPaginationManager
+   *   keyExtractor={(user) => user.id}
+   *   renderItem={(user) => <div>{user.name}</div>}
+   * />
+   *
+   * // Without keyExtractor (uses index):
+   * <CursorPaginationManager
+   *   renderItem={(user) => <div>{user.name}</div>}
+   * />
+   * ```
    */
   renderItem: (item: TNode, index: number) => React.ReactNode;
+
+  /**
+   * Optional function to extract a unique key for each item
+   *
+   * @remarks
+   * Provides a stable key for React reconciliation. When not provided,
+   * falls back to using the array index as the key.
+   *
+   * @param item - The current item
+   * @param index - The index of the item in the array
+   * @returns A unique string or number identifier for the item
+   *
+   * @example
+   * ```tsx
+   * keyExtractor={(user) => user.id}
+   * ```
+   */
+  keyExtractor?: (item: TNode, index: number) => string | number;
 
   /**
    * Custom loading component to show during initial data fetch
