@@ -154,6 +154,7 @@ export function CursorPaginationManager<
   );
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const previousRefetchTrigger = useRef(refetchTrigger);
+  const generationRef = useRef(0);
 
   // Apollo Client hook
   const { data, loading, error, fetchMore, refetch } = useQuery<
@@ -192,6 +193,7 @@ export function CursorPaginationManager<
     }
 
     setIsLoadingMore(true);
+    const currentGeneration = generationRef.current;
 
     try {
       const result = await fetchMore({
@@ -202,17 +204,16 @@ export function CursorPaginationManager<
         } as PaginationVariables<TVariables>,
       });
 
+      // Check if this request is stale
+      if (currentGeneration !== generationRef.current) {
+        return;
+      }
+
       const connectionData = extractDataFromPath<TNode>(result.data, dataPath);
 
       if (connectionData) {
         const newNodes = extractNodes(connectionData.edges);
         setItems((prevItems) => {
-          if (
-            prevItems.length === 0 &&
-            connectionData.pageInfo.hasPreviousPage
-          ) {
-            return prevItems;
-          }
           const updatedItems = [...prevItems, ...newNodes];
           if (onDataChange) {
             onDataChange(updatedItems);
@@ -239,6 +240,8 @@ export function CursorPaginationManager<
 
   // Refetch handler
   const handleRefetch = useCallback(async () => {
+    // Increment generation to invalidate any pending fetchMore requests
+    generationRef.current += 1;
     setItems([]);
     setPageInfo(null);
 
@@ -260,7 +263,7 @@ export function CursorPaginationManager<
       refetchTrigger !== previousRefetchTrigger.current
     ) {
       previousRefetchTrigger.current = refetchTrigger;
-      handleRefetch();
+      void handleRefetch();
     }
   }, [refetchTrigger, handleRefetch]);
 

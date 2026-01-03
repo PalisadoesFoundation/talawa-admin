@@ -1236,4 +1236,134 @@ describe('CursorPaginationManager', () => {
       });
     });
   });
+
+  describe('Race Condition Protection', () => {
+    it('discards stale fetchMore when refetch completes first', async () => {
+      const user = userEvent.setup();
+      const initialMock = createSuccessMock(true);
+
+      // Slow fetchMore that will complete AFTER refetch
+      const slowFetchMoreMock = {
+        request: {
+          query: MOCK_QUERY,
+          variables: { first: 10, after: 'cursor2' },
+        },
+        result: {
+          data: {
+            users: {
+              edges: [
+                {
+                  cursor: 'cursor3',
+                  node: {
+                    id: '3',
+                    name: 'Stale User 3',
+                    email: 'stale3@test.com',
+                  },
+                },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: true,
+                startCursor: 'cursor3',
+                endCursor: 'cursor3',
+              },
+            },
+          },
+        },
+        delay: 200,
+      };
+
+      // Fast refetch that completes before fetchMore
+      const refetchMock = {
+        request: {
+          query: MOCK_QUERY,
+          variables: { first: 10, after: null },
+        },
+        result: {
+          data: {
+            users: {
+              edges: [
+                {
+                  cursor: 'cursor1-new',
+                  node: {
+                    id: '1',
+                    name: 'Refetched User 1',
+                    email: 'user1@test.com',
+                  },
+                },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                hasPreviousPage: false,
+                startCursor: 'cursor1-new',
+                endCursor: 'cursor1-new',
+              },
+            },
+          },
+        },
+        delay: 50,
+      };
+
+      const { rerender } = render(
+        <MockedProvider
+          mocks={[initialMock, slowFetchMoreMock, refetchMock]}
+          addTypename={false}
+        >
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={10}
+              renderItem={(user: User) => <div>{user.name}</div>}
+              refetchTrigger={0}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Wait for initial load
+      await waitFor(() => {
+        expect(screen.getByText('User 1')).toBeInTheDocument();
+      });
+
+      // Click load more (starts slow fetchMore)
+      const loadMoreBtn = screen.getByTestId('load-more-button');
+      await user.click(loadMoreBtn);
+
+      // Immediately trigger refetch (increments generation counter)
+      rerender(
+        <MockedProvider
+          mocks={[initialMock, slowFetchMoreMock, refetchMock]}
+          addTypename={false}
+        >
+          <I18nextProvider i18n={i18nForTest}>
+            <CursorPaginationManager
+              query={MOCK_QUERY}
+              dataPath="users"
+              itemsPerPage={10}
+              renderItem={(user: User) => <div>{user.name}</div>}
+              refetchTrigger={1}
+            />
+          </I18nextProvider>
+        </MockedProvider>,
+      );
+
+      // Wait for refetch to complete
+      await waitFor(() => {
+        expect(screen.getByText('Refetched User 1')).toBeInTheDocument();
+      });
+
+      // Verify stale fetchMore data was NOT appended
+      await waitFor(
+        () => {
+          expect(screen.queryByText('Stale User 3')).not.toBeInTheDocument();
+        },
+        { timeout: 300 },
+      );
+
+      // Should only have refetched data
+      expect(screen.getByText('Refetched User 1')).toBeInTheDocument();
+      expect(screen.queryByText('User 2')).not.toBeInTheDocument();
+    });
+  });
 });
