@@ -120,6 +120,8 @@ export interface IFormSelectProps
   touched?: boolean;
   helpText?: string;
   required?: boolean;
+  ariaLabel?: string;
+  ariaDescribedBy?: string;
 }
 
 /**
