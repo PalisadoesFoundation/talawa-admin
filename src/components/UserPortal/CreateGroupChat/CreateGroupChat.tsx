@@ -93,6 +93,8 @@ export default function CreateGroupChat({
 }: InterfaceCreateGroupChatProps): JSX.Element {
   const userId: string | null = getItem('userId') || getItem('id');
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
+  const { t: tErrors } = useTranslation('errors');
+  const { t: tCommon } = useTranslation('common');
 
   const [createChat] = useMutation(CREATE_CHAT);
   const [createChatMembership] = useMutation(CREATE_CHAT_MEMBERSHIP);
@@ -244,7 +246,13 @@ export default function CreateGroupChat({
   };
 
   return (
-    <>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+      onReset={chatsListRefetch}
+    >
       <Modal
         data-testid="createGroupChatModal"
         show={createGroupChatModalisOpen}
@@ -465,6 +473,6 @@ export default function CreateGroupChat({
           </Button>
         </Modal.Body>
       </Modal>
-    </>
+    </ErrorBoundaryWrapper>
   );
 }

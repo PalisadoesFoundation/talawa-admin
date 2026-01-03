@@ -38,7 +38,35 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: 'build',
       chunkSizeWarningLimit: 1000,
+      // Use esbuild for fast minification
+      minify: 'esbuild',
+      // Target modern browsers for smaller bundle size
+      target: ['es2020', 'edge88', 'firefox78', 'chrome87', 'safari14'],
       rollupOptions: {
+        // Tree-shaking configuration - preserves side-effectful modules
+        treeshake: {
+          // Preserve side effects for CSS, Bootstrap, i18n, and other critical imports
+          moduleSideEffects: (id) => {
+            // Preserve all CSS/SCSS files
+            if (/\.(css|scss|sass|less)(\?|$)/.test(id)) return true;
+            // Preserve Bootstrap JS for interactive components
+            if (id.includes('bootstrap/dist/js')) return true;
+            // Preserve i18n initialization modules
+            if (id.includes('i18next') || id.includes('react-i18next'))
+              return true;
+            // Preserve react-datepicker styles and functionality
+            if (id.includes('react-datepicker')) return true;
+            // Preserve flag-icons for country flags
+            if (id.includes('flag-icons')) return true;
+            // Preserve chart.js registration
+            if (id.includes('chart.js')) return true;
+            // Default: allow tree-shaking for other modules
+            return false;
+          },
+          // Keep default safe behavior for property reads and try-catch
+          propertyReadSideEffects: true,
+          tryCatchDeoptimization: true,
+        },
         output: {
           manualChunks: (id) => {
             // Skip non-node_modules files
@@ -85,6 +113,28 @@ export default defineConfig(({ mode }) => {
           entryFileNames: 'assets/[name]-[hash].js',
           assetFileNames: 'assets/[name]-[hash].[ext]',
         },
+      },
+    },
+    // Esbuild configuration for production optimizations
+    esbuild: {
+      // Drop console and debugger statements in production
+      drop: mode === 'production' ? ['console', 'debugger'] : [],
+      // Remove legal comments to reduce bundle size
+      legalComments: 'none',
+    },
+    // Optimize dependency pre-bundling
+    optimizeDeps: {
+      include: [
+        'react',
+        'react-dom',
+        'react-router-dom',
+        '@apollo/client',
+        '@mui/material',
+        'i18next',
+        'react-i18next',
+      ],
+      esbuildOptions: {
+        target: 'es2020',
       },
     },
     // Global build definitions

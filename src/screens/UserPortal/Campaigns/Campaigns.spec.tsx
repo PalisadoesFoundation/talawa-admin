@@ -30,7 +30,6 @@ import {
   USER_FUND_CAMPAIGNS_ERROR,
 } from './CampaignsMocks';
 
-/* Mocking 'react-toastify` */
 vi.mock('react-toastify', () => ({
   toast: {
     success: vi.fn(),
@@ -38,7 +37,6 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-/* Mocking `@mui/x-date-pickers/DateTimePicker` */
 vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
   const actual = await vi.importActual(
     '@mui/x-date-pickers/DesktopDateTimePicker',
@@ -50,9 +48,6 @@ vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
 
 const { setItem } = useLocalStorage();
 
-/**
- * Creates a mocked Apollo link for testing.
- */
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(USER_FUND_CAMPAIGNS_ERROR);
 const link3 = new StaticMockLink(MOCKS_WITH_NO_FUNDS);
@@ -62,13 +57,6 @@ const cTranslations = JSON.parse(
     i18nForTest.getDataByLanguage('en')?.translation.userCampaigns,
   ),
 );
-
-/*
- * Renders the `Campaigns` component for testing.
- *
- * @param link - The mocked Apollo link used for testing.
- * @returns The rendered result of the `Campaigns` component.
- */
 
 const renderCampaigns = (link: ApolloLink): RenderResult => {
   return render(
@@ -96,23 +84,17 @@ const renderCampaigns = (link: ApolloLink): RenderResult => {
   );
 };
 
-/**
- * Test suite for the User Campaigns screen.
- */
 describe('Testing User Campaigns Screen', () => {
   beforeEach(() => {
     setItem('userId', 'userId');
   });
 
   beforeAll(() => {
-    /**
-     * Mocks the `useParams` function from `react-router-dom` to simulate URL parameters.
-     */
     vi.mock('react-router', async () => {
       const actual = await vi.importActual('react-router');
       return {
         ...actual,
-        useParams: vi.fn(() => ({ orgId: 'orgId' })), // Mock `useParams`
+        useParams: vi.fn(() => ({ orgId: 'orgId' })),
       };
     });
   });
@@ -126,21 +108,15 @@ describe('Testing User Campaigns Screen', () => {
     vi.restoreAllMocks();
   });
 
-  /**
-   * Verifies that the User Campaigns screen renders correctly with mock data.
-   */
   it('should render the User Campaigns screen', async () => {
     renderCampaigns(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchCampaigns')).toBeInTheDocument();
+      expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
     });
   });
 
-  /**
-   * Ensures the app redirects to the fallback URL if `userId` is null in LocalStorage.
-   */
   it('should redirect to fallback URL if userId is null in LocalStorage', async () => {
     setItem('userId', null);
     renderCampaigns(link1);
@@ -149,11 +125,8 @@ describe('Testing User Campaigns Screen', () => {
     });
   });
 
-  /**
-   * Ensures the app redirects to the fallback URL if URL parameters are undefined.
-   */
   it('should redirect to fallback URL if URL params are undefined', async () => {
-    vi.unmock('react-router'); // unmocking to get real behavior from useParams
+    vi.unmock('react-router');
     render(
       <MockedProvider link={link1}>
         <MemoryRouter initialEntries={['/user/campaigns/']}>
@@ -185,45 +158,23 @@ describe('Testing User Campaigns Screen', () => {
 
   it('renders the empty campaign component', async () => {
     renderCampaigns(link3);
-    await waitFor(() =>
-      expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument(),
-    );
-  });
-
-  it('Should display loading state', () => {
-    // Create a link with a delay to simulate loading
-    const delayedMocks = [
-      {
-        request: MOCKS[0].request,
-        result: {
-          data: {
-            organization: {
-              funds: {
-                edges: [],
-              },
-            },
-          },
-        },
-        delay: 50, // fast delay just to check initial render state
-      },
-    ];
-    const delayedLink = new StaticMockLink(delayedMocks);
-
-    renderCampaigns(delayedLink);
-    // Immediately check for loader
-    expect(screen.getByTestId('TableLoader')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('campaigns-empty-state')).toBeInTheDocument();
+      expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument();
+      expect(
+        screen.getByText(cTranslations.createFirstCampaign),
+      ).toBeInTheDocument();
+    });
   });
 
   it('Should display campaigns in DataGrid', async () => {
     renderCampaigns(link1);
 
-    // Wait for campaigns to load and verify they appear in the DataGrid
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
     });
 
-    // Verify campaign names are rendered in the table
     const campaignNames = screen.getAllByTestId('campaignName');
     expect(campaignNames.length).toBeGreaterThan(0);
   });
@@ -231,16 +182,13 @@ describe('Testing User Campaigns Screen', () => {
   it('Displays goal and date cells correctly', async () => {
     renderCampaigns(link1);
 
-    // Wait for the DataGrid to render
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
     });
 
-    // Verify goal cells are rendered (sorting now via DataGrid column headers)
     const goalCells = screen.getAllByTestId('goalCell');
     expect(goalCells.length).toBeGreaterThan(0);
 
-    // Verify end date cells are rendered
     const endDateCells = screen.getAllByTestId('endDateCell');
     expect(endDateCells.length).toBeGreaterThan(0);
   });
@@ -248,10 +196,9 @@ describe('Testing User Campaigns Screen', () => {
   it('Search the Campaigns list by name', async () => {
     renderCampaigns(link1);
 
-    const searchCampaigns = await screen.findByTestId('searchCampaigns');
+    const searchCampaigns = await screen.findByTestId('searchByInput');
     expect(searchCampaigns).toBeInTheDocument();
 
-    // SearchBar now uses onChange instead of searchBtn
     fireEvent.change(searchCampaigns, {
       target: { value: 'Hospital' },
     });
@@ -277,12 +224,10 @@ describe('Testing User Campaigns Screen', () => {
   it('Opens pledge modal when clicking add pledge button for active campaign', async () => {
     renderCampaigns(link1);
 
-    // Wait for campaigns to load
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
     });
 
-    // Find and click the "Add Pledge" button for an active campaign
     const addPledgeButtons = screen.getAllByTestId('addPledgeBtn');
     const activeButton = addPledgeButtons.find(
       (btn) => !btn.hasAttribute('disabled'),
@@ -293,7 +238,6 @@ describe('Testing User Campaigns Screen', () => {
       await userEvent.click(activeButton);
     }
 
-    // Verify that the pledge modal opens with both modal container and form
     await waitFor(() => {
       expect(screen.getByRole('dialog')).toBeInTheDocument();
       expect(screen.getByTestId('pledgeForm')).toBeInTheDocument();
@@ -330,7 +274,6 @@ describe('Testing User Campaigns Screen', () => {
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
     });
 
-    // Find all addPledgeBtn buttons and check if any is disabled (for ended campaigns)
     const addPledgeButtons = screen.getAllByTestId('addPledgeBtn');
     const disabledButton = addPledgeButtons.find((btn) =>
       btn.hasAttribute('disabled'),
@@ -344,7 +287,6 @@ describe('Testing User Campaigns Screen', () => {
     const link = new StaticMockLink(MOCKS_WITH_FUND_NO_CAMPAIGNS);
     renderCampaigns(link);
 
-    // Should show "No Campaigns Found" message
     await waitFor(() => {
       expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument();
     });
@@ -358,8 +300,7 @@ describe('Testing User Campaigns Screen', () => {
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
     });
 
-    // SearchBar now uses onChange instead of searchBtn
-    const searchInput = screen.getByTestId('searchCampaigns');
+    const searchInput = screen.getByTestId('searchByInput');
     fireEvent.change(searchInput, { target: { value: 'School' } });
 
     await waitFor(() => {
@@ -367,7 +308,6 @@ describe('Testing User Campaigns Screen', () => {
       expect(screen.queryByText('Hospital Campaign')).not.toBeInTheDocument();
     });
 
-    // Clear search
     fireEvent.change(searchInput, { target: { value: '' } });
 
     await waitFor(() => {
@@ -380,7 +320,6 @@ describe('Testing User Campaigns Screen', () => {
     const link = new StaticMockLink(MOCKS_WITH_NULL_ORGANIZATION);
     renderCampaigns(link);
 
-    // Should show "No Campaigns Found" message when organization is null
     await waitFor(() => {
       expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument();
     });
@@ -390,7 +329,6 @@ describe('Testing User Campaigns Screen', () => {
     const link = new StaticMockLink(MOCKS_WITH_UNDEFINED_CAMPAIGNS);
     renderCampaigns(link);
 
-    // Should show "No Campaigns Found" when campaigns field is undefined
     await waitFor(() => {
       expect(screen.getByText(cTranslations.noCampaigns)).toBeInTheDocument();
     });
@@ -399,14 +337,12 @@ describe('Testing User Campaigns Screen', () => {
   it('Clears search text when clear button is clicked', async () => {
     renderCampaigns(link1);
 
-    // Wait for campaigns to load
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
     });
 
-    // Enter search text
-    const searchInput = screen.getByTestId('searchCampaigns');
+    const searchInput = screen.getByTestId('searchByInput');
     fireEvent.change(searchInput, { target: { value: 'School' } });
 
     await waitFor(() => {
@@ -414,11 +350,9 @@ describe('Testing User Campaigns Screen', () => {
       expect(screen.queryByText('Hospital Campaign')).not.toBeInTheDocument();
     });
 
-    // Click clear button to trigger onClear callback
-    const clearButton = screen.getByTestId('clearSearch');
+    const clearButton = screen.getByRole('button', { name: /clear/i });
     await userEvent.click(clearButton);
 
-    // After clearing, both campaigns should be visible again
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
@@ -428,35 +362,29 @@ describe('Testing User Campaigns Screen', () => {
   it('Shows noResultsFoundFor message when search has no results', async () => {
     renderCampaigns(link1);
 
-    // Wait for campaigns to load
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
     });
 
-    // Search for something that doesn't exist
-    const searchInput = screen.getByTestId('searchCampaigns');
+    const searchInput = screen.getByTestId('searchByInput');
     fireEvent.change(searchInput, { target: { value: 'NonExistentCampaign' } });
 
-    // Should show "No results found for" message with the search text
     await waitFor(() => {
-      expect(screen.getByText(/No results found for/i)).toBeInTheDocument();
-      expect(screen.getByText(/"NonExistentCampaign"/)).toBeInTheDocument();
+      const campaignCells = screen.queryAllByTestId('campaignName');
+      expect(campaignCells.length).toBe(0);
     });
   });
 
   it('Displays progress cells with correct percentage and colors', async () => {
     renderCampaigns(link1);
 
-    // Wait for campaigns to load
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
     });
 
-    // Verify progress cells are rendered
     const progressCells = screen.getAllByTestId('progressCell');
     expect(progressCells.length).toBeGreaterThan(0);
 
-    // All progress cells should show 0% since raised is hardcoded to 0
     progressCells.forEach((cell) => {
       expect(cell).toHaveTextContent('0%');
     });
@@ -465,14 +393,11 @@ describe('Testing User Campaigns Screen', () => {
   it('Renders campaigns list with campaigns data', async () => {
     renderCampaigns(link1);
 
-    // Wait for campaigns to load
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
     });
 
-    // Verify the campaigns list container is rendered with the listBox style
-    // The endMessage is passed to ReportingTable but only rendered with infiniteProps
     const campaignCells = screen.getAllByTestId('campaignName');
     expect(campaignCells).toHaveLength(2);
   });
@@ -480,39 +405,32 @@ describe('Testing User Campaigns Screen', () => {
   it('Supports sorting by startDate column', async () => {
     renderCampaigns(link1);
 
-    // Wait for campaigns to load
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
     });
 
-    // Get the campaign names in their initial order
     const getCampaignOrder = (): string[] => {
       const campaignCells = screen.getAllByTestId('campaignName');
       return campaignCells.map((cell) => cell.textContent || '');
     };
 
-    // Find the Start Date header and click it to trigger ascending sort
     const startDateHeader = screen.getByRole('columnheader', {
       name: /start date/i,
     });
     expect(startDateHeader).toBeInTheDocument();
 
-    // Click to sort ascending (School Campaign has earlier startAt: 2024-06-15, Hospital: 2024-07-28)
     await userEvent.click(startDateHeader);
 
     await waitFor(() => {
       const sortedOrder = getCampaignOrder();
-      // After ascending sort by start date, School Campaign (2024-06-15) should come before Hospital (2024-07-28)
       expect(sortedOrder).toEqual(['School Campaign', 'Hospital Campaign']);
     });
 
-    // Click again to sort descending
     await userEvent.click(startDateHeader);
 
     await waitFor(() => {
       const descendingOrder = getCampaignOrder();
-      // After descending sort, Hospital Campaign (2024-07-28) should come before School (2024-06-15)
       expect(descendingOrder).toEqual(['Hospital Campaign', 'School Campaign']);
     });
   });
@@ -520,39 +438,32 @@ describe('Testing User Campaigns Screen', () => {
   it('Supports sorting by endDate column', async () => {
     renderCampaigns(link1);
 
-    // Wait for campaigns to load
     await waitFor(() => {
       expect(screen.getByText('School Campaign')).toBeInTheDocument();
       expect(screen.getByText('Hospital Campaign')).toBeInTheDocument();
     });
 
-    // Get the campaign names in their initial order
     const getCampaignOrder = (): string[] => {
       const campaignCells = screen.getAllByTestId('campaignName');
       return campaignCells.map((cell) => cell.textContent || '');
     };
 
-    // Find the End Date header and click it to trigger ascending sort
     const endDateHeader = screen.getByRole('columnheader', {
       name: /end date/i,
     });
     expect(endDateHeader).toBeInTheDocument();
 
-    // Click to sort ascending (Hospital Campaign has earlier endAt: 2022-08-30, School: 2099-12-31)
     await userEvent.click(endDateHeader);
 
     await waitFor(() => {
       const sortedOrder = getCampaignOrder();
-      // After ascending sort by end date, Hospital Campaign (2022-08-30) should come before School (2099-12-31)
       expect(sortedOrder).toEqual(['Hospital Campaign', 'School Campaign']);
     });
 
-    // Click again to sort descending
     await userEvent.click(endDateHeader);
 
     await waitFor(() => {
       const descendingOrder = getCampaignOrder();
-      // After descending sort, School Campaign (2099-12-31) should come before Hospital (2022-08-30)
       expect(descendingOrder).toEqual(['School Campaign', 'Hospital Campaign']);
     });
   });

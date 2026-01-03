@@ -23,13 +23,16 @@ import {
   BACKEND_WEBSOCKET_URL,
   deriveBackendWebsocketUrl,
 } from 'Constant/constant';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import i18n from './utils/i18n';
 import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { refreshToken } from 'utils/getRefreshToken';
 
 // Define types for mocked modules
+interface InterfaceNotificationToastMock {
+  error: ReturnType<typeof vi.fn>;
+}
 
 interface InterfaceLocalStorageMock {
   getItem: ReturnType<typeof vi.fn>;
@@ -51,6 +54,16 @@ const getTestExpiredToken = (): string =>
   process.env.VITE_TEST_EXPIRED_TOKEN || 'expired-token';
 
 // Mock external dependencies
+vi.mock(
+  'components/NotificationToast/NotificationToast',
+  (): { NotificationToast: InterfaceNotificationToastMock } => ({
+    NotificationToast: {
+      error: vi.fn(),
+    },
+  }),
+);
+
+// Kept for backwards compatibility: some tests may still import from react-toastify indirectly
 vi.mock('react-toastify', () => ({
   toast: {
     error: vi.fn(),
@@ -234,7 +247,7 @@ describe('Apollo Client Configuration', () => {
         networkError,
       }: InterfaceErrorCallbackParams): void => {
         if (networkError) {
-          toast.error(
+          NotificationToast.error(
             'API server unavailable. Check your connection or try again later',
             {
               toastId: 'apiServer',
@@ -246,7 +259,7 @@ describe('Apollo Client Configuration', () => {
       const mockNetworkError = new Error('Network Error');
       errorCallback({ networkError: mockNetworkError });
 
-      expect(toast.error).toHaveBeenCalledWith(
+      expect(NotificationToast.error).toHaveBeenCalledWith(
         'API server unavailable. Check your connection or try again later',
         {
           toastId: 'apiServer',

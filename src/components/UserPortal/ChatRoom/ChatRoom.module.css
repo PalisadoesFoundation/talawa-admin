@@ -288,6 +288,18 @@
   font-size: 20px;
 }
 
+.flexContainer {
+  min-height: 0;
+}
+
+.dropdownContainer {
+  cursor: pointer;
+}
+
+.hiddenInput {
+  display: none;
+}
+
 @keyframes test {
   from {
     background-color: white;

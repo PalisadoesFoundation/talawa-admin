@@ -53,6 +53,7 @@ import { GrAttachment } from 'react-icons/gr';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import type { GroupChat } from 'types/Chat/type';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 // import { toast } from 'react-toastify';
 // import { validateFile } from 'utils/fileValidation';
 import { normalizeMinioUrl } from 'utils/minioUtils';
@@ -166,6 +167,10 @@ const MessageImageBase: React.FC<IMessageImageProps> = ({
     error: false,
   });
 
+  const { t } = useTranslation('translation', {
+    keyPrefix: 'userChatRoom',
+  });
+
   useEffect(() => {
     if (!media) {
       setImageState((prev) => ({ ...prev, error: true, loading: false }));
@@ -193,18 +198,20 @@ const MessageImageBase: React.FC<IMessageImageProps> = ({
   }, [media, organizationId, getFileFromMinio]);
 
   if (imageState.loading) {
-    return <div className={styles.messageAttachment}>Loading image...</div>;
+    return <div className={styles.messageAttachment}>{t('loadingImage')}</div>;
   }
 
   if (imageState.error || !imageState.url) {
-    return <div className={styles.messageAttachment}>Image not available</div>;
+    return (
+      <div className={styles.messageAttachment}>{t('imageNotAvailable')}</div>
+    );
   }
 
   return (
     <img
       className={styles.messageAttachment}
       src={imageState.url}
-      alt="attachment"
+      alt={t('attachment')}
       onError={() => setImageState((prev) => ({ ...prev, error: true }))}
     />
   );
@@ -216,6 +223,8 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   const { t } = useTranslation('translation', {
     keyPrefix: 'userChatRoom',
   });
+  const { t: tErrors } = useTranslation('errors');
+  const { t: tCommon } = useTranslation('common');
   const isMountedRef = useRef<boolean>(true);
 
   useEffect(() => {
@@ -692,9 +701,12 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
   };
 
   return (
-    <div
-      className={`d-flex flex-column ${styles.chatAreaContainer}`}
-      id="chat-area"
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+      onReset={chatRefetch}
     >
       {!props.selectedContact ? (
         <div
@@ -733,10 +745,42 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
           <div
             className={`d-flex flex-grow-1 flex-column ${styles.minHeight0}`}
           >
+            <PermContactCalendarIcon
+              fontSize="medium"
+              className={styles.grey}
+            />
+            <h6 data-testid="noChatSelected">{t('selectContact')}</h6>
+          </div>
+        ) : (
+          <>
+            <div className={styles.header}>
+              <div className={styles.userInfo}>
+                {chatImage ? (
+                  <img
+                    src={chatImage}
+                    alt={chatTitle}
+                    className={styles.contactImage}
+                  />
+                ) : (
+                  <Avatar
+                    name={chatTitle}
+                    alt={chatTitle}
+                    avatarStyle={styles.contactImage}
+                  />
+                )}
+                <div
+                  onClick={() =>
+                    chat?.isGroup ? openGroupChatDetails() : null
+                  }
+                  className={styles.userDetails}
+                >
+                  <p className={styles.title}>{chatTitle}</p>
+                  <p className={styles.subtitle}>{chatSubtitle}</p>
+                </div>
+              </div>
+            </div>
             <div
-              className={styles.chatMessages}
-              ref={messagesContainerRef}
-              onScroll={handleScroll}
+              className={`d-flex flex-grow-1 flex-column ${styles.flexContainer}`}
             >
               {hasMoreMessages && (
                 <div className={styles.loadMoreBar}>
@@ -794,35 +838,18 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                           <div
                             className={
                               message.creator.id === userId
-                                ? styles.messageSent
-                                : styles.messageReceived
+                                ? styles.messageSentContainer
+                                : styles.messageReceivedContainer
                             }
-                            data-testid="message"
                             key={message.id}
-                            id={message.id}
                           >
-                            <span className={styles.messageContent}>
-                              {chat.isGroup &&
-                                message.creator.id !== userId && (
-                                  <p className={styles.senderInfo}>
-                                    {message.creator.name}
-                                  </p>
-                                )}
-                              {message.parentMessage && (
-                                <a href={`#${message.parentMessage.id}`}>
-                                  <div className={styles.replyToMessage}>
-                                    <p className={styles.replyToMessageSender}>
-                                      {message.parentMessage.creator.name}
-                                    </p>
-                                    <span>{message.parentMessage.body}</span>
-                                  </div>
-                                </a>
-                              )}
-                              {isFile ? (
-                                <MessageImage
-                                  media={message.body}
-                                  organizationId={chat?.organization?.id}
-                                  getFileFromMinio={getFileFromMinio}
+                            {chat.isGroup &&
+                              message.creator.id !== userId &&
+                              (message.creator?.avatarURL ? (
+                                <img
+                                  src={message.creator.avatarURL}
+                                  alt={message.creator.avatarURL}
+                                  className={styles.contactImage}
                                 />
                               ) : (
                                 message.body
@@ -837,28 +864,44 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                                   className={styles.customToggle}
                                   data-testid={'dropdown'}
                                 >
-                                  <MoreVert />
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                  <Dropdown.Item
-                                    onClick={() => {
-                                      setReplyToDirectMessage(message);
-                                    }}
-                                    data-testid="replyBtn"
+                                  <Dropdown.Toggle
+                                    className={styles.customToggle}
+                                    data-testid={'dropdown'}
                                   >
-                                    {t('reply')}
-                                  </Dropdown.Item>
-                                  {message.creator.id === userId && (
-                                    <>
-                                      {!message.body.startsWith('uploads/') && (
+                                    <MoreVert />
+                                  </Dropdown.Toggle>
+                                  <Dropdown.Menu>
+                                    <Dropdown.Item
+                                      onClick={() => {
+                                        setReplyToDirectMessage(message);
+                                      }}
+                                      data-testid="replyBtn"
+                                    >
+                                      {t('reply')}
+                                    </Dropdown.Item>
+                                    {message.creator.id === userId && (
+                                      <>
+                                        {!message.body.startsWith(
+                                          'uploads/',
+                                        ) && (
+                                          <Dropdown.Item
+                                            onClick={() => {
+                                              setEditMessage(message);
+                                              setNewMessage(message.body);
+                                            }}
+                                            data-testid="replyToMessage"
+                                          >
+                                            {tCommon('edit')}
+                                          </Dropdown.Item>
+                                        )}
                                         <Dropdown.Item
-                                          onClick={() => {
-                                            setEditMessage(message);
-                                            setNewMessage(message.body);
-                                          }}
-                                          data-testid="replyToMessage"
+                                          onClick={() =>
+                                            deleteMessage(message.id)
+                                          }
+                                          data-testid="deleteMessage"
+                                          className="text-danger"
                                         >
-                                          Edit
+                                          {tCommon('delete')}
                                         </Dropdown.Item>
                                       )}
                                       <Dropdown.Item
@@ -884,12 +927,12 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                               </span>
                             </div>
                           </div>
-                        </div>
-                      );
-                    },
-                  )}
-                </div>
-              )}
+                        );
+                      },
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
           <div id="messageInput">
@@ -912,32 +955,63 @@ export default function chatRoom(props: IChatRoomProps): JSX.Element {
                     />
                     <span>{replyToDirectMessage.creator.name}</span>
                   </div>
-                  <p>{replyToDirectMessage.body}</p>
+
+                  <Button
+                    data-testid="closeReply"
+                    onClick={() => setReplyToDirectMessage(null)}
+                    className={styles.closeBtn}
+                  >
+                    <Close />
+                  </Button>
                 </div>
+              )}
+              {attachment && (
+                <div className={styles.attachment}>
+                  <img src={attachment} alt={t('attachment')} />
 
-                <Button
-                  data-testid="closeReply"
-                  onClick={() => setReplyToDirectMessage(null)}
-                  className={styles.closeBtn}
+                  <Button
+                    data-testid="removeAttachment"
+                    onClick={() => {
+                      setAttachment(null);
+                      setAttachmentObjectName(null);
+                      if (fileInputRef.current) fileInputRef.current.value = '';
+                    }}
+                    className={styles.closeBtn}
+                  >
+                    <Close />
+                  </Button>
+                </div>
+              )}
+
+              <InputGroup>
+                <button
+                  type="button"
+                  onClick={handleAddAttachment}
+                  className={styles.addAttachmentBtn}
                 >
-                  <Close />
-                </Button>
-              </div>
-            )}
-            {attachment && (
-              <div className={styles.attachment}>
-                <img src={attachment} alt="attachment" />
-
-                <Button
-                  data-testid="removeAttachment"
-                  onClick={() => {
-                    setAttachment(null);
-                    setAttachmentObjectName(null);
-                    if (fileInputRef.current) fileInputRef.current.value = '';
+                  <GrAttachment />
+                </button>
+                <Form.Control
+                  placeholder={t('sendMessage')}
+                  aria-label={t('sendMessage')}
+                  value={newMessage}
+                  data-testid="messageInput"
+                  onChange={handleNewMessageChange}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                      e.preventDefault();
+                      sendMessage();
+                    }
                   }}
-                  className={styles.closeBtn}
+                  className={styles.sendMessageInput}
+                />
+                <Button
+                  onClick={sendMessage}
+                  variant="primary"
+                  id="button-send"
+                  data-testid="sendMessage"
                 >
-                  <Close />
+                  <SendIcon fontSize="small" />
                 </Button>
               </div>
             )}
