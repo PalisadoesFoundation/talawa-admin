@@ -579,7 +579,7 @@ const loginPage = (): JSX.Element => {
                     <div>
                       <div className="position-relative my-2">
                         <hr />
-                        <span className={styles.orText}>{t('OR')}</span>
+                        <span className={styles.orText}>{t('or')}</span>
                       </div>
                       <Button
                         variant="outline-secondary"
@@ -615,13 +615,13 @@ const loginPage = (): JSX.Element => {
                   <Row>
                     {/* <Col sm={6}> */}
                     <div>
-                      <Form.Label>{t('Name')}</Form.Label>
+                      <Form.Label>{t('name')}</Form.Label>
                       <Form.Control
                         disabled={signinLoading}
                         type="text"
                         id="signname"
                         className="mb-3"
-                        placeholder={t('Name')}
+                        placeholder={t('name')}
                         required
                         value={signformState.signName}
                         onChange={(e): void => {
@@ -929,7 +929,7 @@ const loginPage = (): JSX.Element => {
                   </Button>
                   <div className="position-relative my-2">
                     <hr />
-                    <span className={styles.orText}>{t('OR')}</span>
+                    <span className={styles.orText}>{t('or')}</span>
                   </div>
                   <Button
                     variant="outline-secondary"

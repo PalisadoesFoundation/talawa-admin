@@ -47,7 +47,8 @@ describe('i18n Configuration', () => {
       'Select an organization',
     );
     expect(i18n.t('organizations', { ns: 'auth' })).toBe('Organizations');
-    expect(i18n.t('OR', { ns: 'auth' })).toBe('OR');
+    expect(i18n.t('name', { ns: 'auth' })).toBe('Name');
+    expect(i18n.t('or', { ns: 'auth' })).toBe('OR');
     expect(i18n.t('loading', { ns: 'auth' })).toBe('Loading...');
     expect(i18n.t('backToLogin', { ns: 'auth' })).toBe('Back to Login');
   });
