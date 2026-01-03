@@ -657,7 +657,9 @@
     "agendaCategoryUpdated": "एजेंडा श्रेणी सफलतापूर्वक अपडेट की गई",
     "agendaCategoryDeleted": "एजेंडा श्रेणी सफलतापूर्वक हटा दी गई",
     "deleteAgendaCategory": "एजेंडा श्रेणी हटाएं",
-    "deleteAgendaCategoryMsg": "क्या आप इस एजेंडा श्रेणी को हटाना चाहते हैं?"
+    "deleteAgendaCategoryMsg": "क्या आप इस एजेंडा श्रेणी को हटाना चाहते हैं?",
+    "agendaCategoryUpdateFailed": "एजेंडा श्रेणी अपडेट विफल: {{errorMessage}}",
+    "agendaCategoryDeleteFailed": "एजेंडा श्रेणी हटाना विफल: {{errorMessage}}"
   },
   "agendaItems": {
     "agendaItemDetails": "एजेंडा आइटम विवरण",
@@ -691,7 +693,9 @@
     "agendaItemUpdated": "एजेंडा आइटम सफलतापूर्वक अपडेट किया गया",
     "agendaItemDeleted": "एजेंडा आइटम सफलतापूर्वक हटा दिया गया",
     "deleteAgendaItem": "एजेंडा आइटम हटाएं",
-    "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?"
+    "deleteAgendaItemMsg": "क्या आप इस एजेंडा आइटम को हटाना चाहते हैं?",
+    "noCategory": "कोई श्रेणी नहीं",
+    "attachmentPreview": "अनुलग्नक पूर्वावलोकन"
   },
   "eventListCard": {
     "deleteEvent": "ईवेंट हटाएँ",
@@ -1608,7 +1612,9 @@
     "preview": "पूर्वावलोकन",
     "bannerAd": "बैनर विज्ञापन",
     "popupAd": "पॉपअप विज्ञापन",
-    "menuAd": "मेनू विज्ञापन"
+    "menuAd": "मेनू विज्ञापन",
+    "name": "नाम",
+    "loading": "विज्ञापन लोड हो रहा है"
   },
   "userChat": {
     "title": "चैट्स",

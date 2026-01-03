@@ -32,6 +32,8 @@
  */
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceAgendaItemsDeleteModalProps } from 'types/Agenda/interface';
 const AgendaItemsDeleteModal: React.FC<
@@ -43,44 +45,53 @@ const AgendaItemsDeleteModal: React.FC<
   t,
   tCommon,
 }) => {
+  const { t: tErrors } = useTranslation('errors');
+
   return (
-    <Modal
-      size="sm"
-      id={`deleteAgendaItemModal`}
-      className={styles.agendaItemModal}
-      show={agendaItemDeleteModalIsOpen}
-      onHide={toggleDeleteModal}
-      backdrop="static"
-      keyboard={false}
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
     >
-      <Modal.Header closeButton className="bg-primary">
-        <Modal.Title className="text-white" id={`deleteAgendaItem`}>
-          {t('deleteAgendaItem')}
-        </Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <p>{t('deleteAgendaItemMsg')}</p>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button
-          type="button"
-          className="btn btn-danger"
-          data-dismiss="modal"
-          onClick={toggleDeleteModal}
-          data-testid="deleteAgendaItemCloseBtn"
-        >
-          {tCommon('no')}
-        </Button>
-        <Button
-          type="button"
-          className="btn btn-success"
-          onClick={deleteAgendaItemHandler}
-          data-testid="deleteAgendaItemBtn"
-        >
-          {tCommon('yes')}
-        </Button>
-      </Modal.Footer>
-    </Modal>
+      <Modal
+        size="sm"
+        id={`deleteAgendaItemModal`}
+        className={styles.agendaItemModal}
+        show={agendaItemDeleteModalIsOpen}
+        onHide={toggleDeleteModal}
+        backdrop="static"
+        keyboard={false}
+      >
+        <Modal.Header closeButton className="bg-primary">
+          <Modal.Title className="text-white" id={`deleteAgendaItem`}>
+            {t('deleteAgendaItem')}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>{t('deleteAgendaItemMsg')}</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            type="button"
+            className="btn btn-danger"
+            data-dismiss="modal"
+            onClick={toggleDeleteModal}
+            data-testid="deleteAgendaItemCloseBtn"
+          >
+            {tCommon('no')}
+          </Button>
+          <Button
+            type="button"
+            className="btn btn-success"
+            onClick={deleteAgendaItemHandler}
+            data-testid="deleteAgendaItemBtn"
+          >
+            {tCommon('yes')}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </ErrorBoundaryWrapper>
   );
 };
 

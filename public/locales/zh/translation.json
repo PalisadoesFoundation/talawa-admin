@@ -657,7 +657,9 @@
     "agendaCategoryUpdated": "议程类别更新成功",
     "agendaCategoryDeleted": "议程类别删除成功",
     "deleteAgendaCategory": "删除议程类别",
-    "deleteAgendaCategoryMsg": "是否要删除此议程类别？"
+    "deleteAgendaCategoryMsg": "是否要删除此议程类别？",
+    "agendaCategoryUpdateFailed": "議程類別更新失敗：{{errorMessage}}",
+    "agendaCategoryDeleteFailed": "議程類別刪除失敗：{{errorMessage}}"
   },
   "agendaItems": {
     "agendaItemDetails": "议程项目详细信息",
@@ -691,7 +693,9 @@
     "agendaItemUpdated": "议程项目已成功更新",
     "agendaItemDeleted": "议程项目已成功删除",
     "deleteAgendaItem": "删除议程项目",
-    "deleteAgendaItemMsg": "您要删除此议程项目吗？"
+    "deleteAgendaItemMsg": "您要删除此议程项目吗？",
+    "noCategory": "無類別",
+    "attachmentPreview": "附件預覽"
   },
   "eventListCard": {
     "deleteEvent": "删除事件",
@@ -1608,7 +1612,9 @@
     "preview": "預覽",
     "bannerAd": "橫幅廣告",
     "popupAd": "彈出廣告",
-    "menuAd": "菜單廣告"
+    "menuAd": "菜單廣告",
+    "name": "名稱",
+    "loading": "廣告載入中"
   },
   "userChat": {
     "title": "聊天",
