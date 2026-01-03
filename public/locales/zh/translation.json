@@ -472,11 +472,11 @@
     "noMoreMembersFound": "未找到更多成员",
     "errorOccurredWhileLoadingAssignedUser": "加载已分配用户时出错",
     "sortPeople": "排序人员",
-    "tagActions": "标签操作"
+    "tagActions": "标签操作",
+    "loadAssignedUsersError": "加载已分配用户时发生错误"
   },
   "userListCard": {
     "addAdmin": "添加管理员",
-    "addedAsAdmin": "用户被添加为管理员。",
     "joined": "已加入",
     "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
@@ -1708,7 +1708,8 @@
     "edit": "编辑",
     "delete": "删除",
     "name": "名称",
-    "desc": "描述"
+    "desc": "描述",
+    "venueImagePreview": "场地图片预览"
   },
   "addMember": {
     "title": "添加会员",
@@ -2044,5 +2045,20 @@
     "title": "用户门户",
     "talawa": "塔拉瓦",
     "talawaBranding": "Talawa 品牌形象"
+  },
+  "organizationVenuesNotification": {
+    "venueCreated": "场地创建成功",
+    "venueUpdated": "场地信息更新成功",
+    "venueNameExists": "场地名称已存在",
+    "venueTitleError": "场地名称不能为空！",
+    "venueCapacityError": "容量必须是正数！",
+    "previewUrlError": "创建预览时出错",
+    "invalidCapacity": "容量必须是正数"
+  },
+  "manageTags": {
+    "loadAssignedUsersError": "加载已分配用户时发生错误",
+    "sortPeople": "排序人员",
+    "unassign": "取消分配",
+    "tags": "标签"
   }
 }

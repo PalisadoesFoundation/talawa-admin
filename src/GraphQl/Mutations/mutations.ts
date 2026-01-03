@@ -125,6 +125,7 @@ export const SIGNUP_MUTATION = gql`
     $name: String!
     $email: EmailAddress!
     $password: String!
+    $recaptchaToken: String
   ) {
     signUp(
       input: {
@@ -132,6 +133,7 @@ export const SIGNUP_MUTATION = gql`
         name: $name
         emailAddress: $email
         password: $password
+        recaptchaToken: $recaptchaToken
       }
     ) {
       user {
@@ -260,14 +262,6 @@ export const LOGOUT_MUTATION = gql`
 export const REVOKE_REFRESH_TOKEN = gql`
   mutation RevokeRefreshToken($refreshToken: String!) {
     revokeRefreshToken(refreshToken: $refreshToken)
-  }
-`;
-
-// To verify the google recaptcha
-
-export const RECAPTCHA_MUTATION = gql`
-  mutation Recaptcha($recaptchaToken: String!) {
-    recaptcha(data: { recaptchaToken: $recaptchaToken })
   }
 `;
 

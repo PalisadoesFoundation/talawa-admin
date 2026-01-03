@@ -471,12 +471,12 @@
     "allTags": "All Tags",
     "noMoreMembersFound": "No more members found",
     "errorOccurredWhileLoadingAssignedUser": "Error occurred while loading assigned users",
-    "sortPeople": "Sort People",
-    "tagActions": "Tag Actions"
+    "tagActions": "Tag Actions",
+    "loadAssignedUsersError": "Error occurred while loading assigned users",
+    "sortPeople": "Sort People"
   },
   "userListCard": {
     "addAdmin": "Add Admin",
-    "addedAsAdmin": "User is added as admin.",
     "joined": "joined",
     "talawaApiUnavailable": "talawaApiUnavailable"
   },
@@ -1708,7 +1708,8 @@
     "edit": "edit",
     "delete": "delete",
     "name": "name",
-    "desc": "desc"
+    "desc": "desc",
+    "venueImagePreview": "Preview of venue image"
   },
   "addMember": {
     "title": "Add Member",
@@ -2044,5 +2045,20 @@
     "title": "User Portal",
     "talawa": "Talawa",
     "talawaBranding": "Talawa Branding"
+  },
+  "organizationVenuesNotification": {
+    "venueCreated": "Venue created successfully",
+    "venueUpdated": "Venue details updated successfully",
+    "venueNameExists": "Venue name already exists",
+    "venueTitleError": "Venue title cannot be empty!",
+    "venueCapacityError": "Capacity must be a positive number!",
+    "previewUrlError": "Error creating preview URL",
+    "invalidCapacity": "Capacity must be a positive number!"
+  },
+  "manageTags": {
+    "loadAssignedUsersError": "Error occurred while loading assigned users",
+    "sortPeople": "Sort People",
+    "unassign": "Unassign",
+    "tags": "Tags"
   }
 }
