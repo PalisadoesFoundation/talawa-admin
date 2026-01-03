@@ -64,9 +64,7 @@ describe('AgendaCategoryPreviewModal Component', () => {
       />,
     );
 
-    const closeButton = screen.getByTestId(
-      'modalCloseBtn',
-    );
+    const closeButton = screen.getByTestId('modalCloseBtn');
     fireEvent.click(closeButton);
 
     expect(mockOnClose).toHaveBeenCalledTimes(1);

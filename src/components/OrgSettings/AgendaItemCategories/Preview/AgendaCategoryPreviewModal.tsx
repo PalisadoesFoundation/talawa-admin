@@ -34,6 +34,8 @@ import { Form, Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { BaseModal } from 'shared-components/BaseModal';
 
+// translation-check-keyPrefix: organizationAgendaCategory
+
 interface InterfaceFormStateType {
   name: string;
   description: string;
@@ -71,45 +73,45 @@ const AgendaCategoryPreviewModal: React.FC<
         </p>
       }
       dataTestId="agendaCategoryPreviewModal"
-    >     
-        <Form>
-          <div>
-            <p className={styles.preview}>
-              {t('name')}
-              <span className={styles.view}>{formState.name}</span>
-            </p>
-            <p className={styles.preview}>
-              {t('description')}
-              <span className={styles.view}>{formState.description}</span>
-            </p>
-            <p className={styles.preview}>
-              {t('createdBy')}
-              <span className={styles.view}>{formState.createdBy}</span>
-            </p>
-          </div>
-          <div className={styles.iconContainer}>
-            <Button
-              size="sm"
-              data-testid="editAgendaCategoryPreviewModalBtn"
-              className={styles.icon}
-              onClick={() => {
-                showUpdateModal();
-                hidePreviewModal();
-              }}
-            >
-              <i className="fas fa-edit"></i>
-            </Button>
-            <Button
-              size="sm"
-              className={`${styles.icon} ms-2`}
-              data-testid="deleteAgendaCategoryModalBtn"
-              onClick={toggleDeleteModal}
-              variant="danger"
-            >
-              <i className="fas fa-trash"></i>
-            </Button>
-          </div>
-        </Form>
+    >
+      <Form>
+        <div>
+          <p className={styles.preview}>
+            {t('name')}
+            <span className={styles.view}>{formState.name}</span>
+          </p>
+          <p className={styles.preview}>
+            {t('description')}
+            <span className={styles.view}>{formState.description}</span>
+          </p>
+          <p className={styles.preview}>
+            {t('createdBy')}
+            <span className={styles.view}>{formState.createdBy}</span>
+          </p>
+        </div>
+        <div className={styles.iconContainer}>
+          <Button
+            size="sm"
+            data-testid="editAgendaCategoryPreviewModalBtn"
+            className={styles.icon}
+            onClick={() => {
+              showUpdateModal();
+              hidePreviewModal();
+            }}
+          >
+            <i className="fas fa-edit"></i>
+          </Button>
+          <Button
+            size="sm"
+            className={`${styles.icon} ms-2`}
+            data-testid="deleteAgendaCategoryModalBtn"
+            onClick={toggleDeleteModal}
+            variant="danger"
+          >
+            <i className="fas fa-trash"></i>
+          </Button>
+        </div>
+      </Form>
     </BaseModal>
   );
 };

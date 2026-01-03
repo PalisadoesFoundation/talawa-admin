@@ -36,6 +36,8 @@ import styles from 'style/app-fixed.module.css';
 
 import { BaseModal } from 'shared-components/BaseModal';
 
+// translation-check-keyPrefix: organizationAgendaCategory
+
 interface InterfaceFormStateType {
   name: string;
   description: string;
@@ -73,7 +75,6 @@ const AgendaCategoryCreateModal: React.FC<
         </p>
       }
       dataTestId="agendaCategoryCreateModal"
-      /* Uses BaseModal and with headerContent instead of Modal.Header */
     >
       <Form onSubmit={createAgendaCategoryHandler}>
         <Form.Group className="mb-3" controlId="name">

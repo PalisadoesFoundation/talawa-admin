@@ -36,6 +36,8 @@ import styles from 'style/app-fixed.module.css';
 
 import { BaseModal } from 'shared-components/BaseModal';
 
+// translation-check-keyPrefix: organizationAgendaCategory
+
 interface InterfaceFormStateType {
   name: string;
   description: string;
