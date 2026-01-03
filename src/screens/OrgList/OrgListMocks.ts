@@ -21,6 +21,28 @@ const superAdminCurrentUser: InterfaceCurrentUserTypePG = {
     name: 'John Doe',
     role: 'administrator',
     emailAddress: 'john.doe@akatsuki.com',
+    addressLine1: null,
+    addressLine2: null,
+    avatarMimeType: null,
+    avatarURL: null,
+    birthDate: null,
+    city: null,
+    countryCode: null,
+    createdAt: null,
+    description: null,
+    educationGrade: null,
+    employmentStatus: null,
+    homePhoneNumber: null,
+    isEmailAddressVerified: false,
+    maritalStatus: null,
+    mobilePhoneNumber: null,
+    natalSex: null,
+    naturalLanguageCode: null,
+    postalCode: null,
+    state: null,
+    updatedAt: null,
+    workPhoneNumber: null,
+    eventsAttended: [],
   },
 };
 
@@ -48,6 +70,9 @@ const organizations: InterfaceOrgInfoTypePG[] = [
     createdAt: '2023-04-13T04:53:17.742+00:00',
     members: {
       edges: [],
+      pageInfo: {
+        hasNextPage: false,
+      },
     },
     addressLine1: 'Texas, USA',
   },
@@ -58,7 +83,6 @@ const MOCKS = [
   {
     request: {
       query: CURRENT_USER,
-      variables: { userId: '123' },
     },
     result: {
       data: {
@@ -156,6 +180,9 @@ const MOCKS = [
                   },
                 },
               ],
+              pageInfo: {
+                hasNextPage: false,
+              },
             },
           },
           {
@@ -245,10 +272,12 @@ const MOCKS_EMPTY = [
   {
     request: {
       query: CURRENT_USER,
-      variables: { userId: '123' },
     },
     result: {
-      data: { user: superAdminUser },
+      data: {
+        user: superAdminUser,
+        currentUser: superAdminCurrentUser.currentUser,
+      },
     },
   },
   {
@@ -287,10 +316,12 @@ const MOCKS_WITH_ERROR = [
   {
     request: {
       query: CURRENT_USER,
-      variables: { userId: '123' },
     },
     result: {
-      data: { user: superAdminUser },
+      data: {
+        user: superAdminUser,
+        currentUser: superAdminCurrentUser.currentUser,
+      },
     },
   },
   {
@@ -317,10 +348,12 @@ const MOCKS_ADMIN = [
   {
     request: {
       query: CURRENT_USER,
-      variables: { userId: '123' },
     },
     result: {
-      data: { user: adminUser },
+      data: {
+        user: adminUser,
+        currentUser: superAdminCurrentUser.currentUser,
+      },
     },
   },
   {
