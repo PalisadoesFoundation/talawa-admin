@@ -64,7 +64,6 @@ export default [
       vitest,
       import: imports,
       prettier,
-      tsdoc,
     },
     settings: {
       react: {
@@ -74,9 +73,6 @@ export default [
     rules: {
       ...js.configs.recommended.rules,
       ...ts.configs.recommended.rules,
-
-      'tsdoc/syntax': 'error',
-
       '@typescript-eslint/no-require-imports': 'error',
       'react/destructuring-assignment': 'error',
       'react/no-multi-comp': ['error', { ignoreStateless: false }],
@@ -194,12 +190,10 @@ export default [
     plugins: {
       '@typescript-eslint': ts,
       prettier,
-      tsdoc,
     },
     rules: {
       ...js.configs.recommended.rules,
       ...ts.configs.recommended.rules,
-      'tsdoc/syntax': 'error',
       '@typescript-eslint/no-require-imports': 'off',
       '@typescript-eslint/no-namespace': 'off',
       '@typescript-eslint/naming-convention': 'off',
@@ -227,12 +221,10 @@ export default [
     plugins: {
       '@typescript-eslint': ts,
       prettier,
-      tsdoc,
     },
     rules: {
       ...js.configs.recommended.rules,
       ...ts.configs.recommended.rules,
-      'tsdoc/syntax': 'error',
       'no-undef': 'error',
       'prettier/prettier': 'error',
     },
@@ -242,9 +234,11 @@ export default [
     files: ['**/*.spec.ts', '**/*.spec.tsx', '**/*.test.ts', '**/*.test.tsx'],
     plugins: {
       'vitest-isolation': vitestIsolation,
+      tsdoc,
     },
     rules: {
       'vitest-isolation/require-aftereach-cleanup': 'error',
+      'tsdoc/syntax': 'error',
     },
   },
 ];
