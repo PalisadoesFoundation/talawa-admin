@@ -9,11 +9,22 @@ Talawa-Admin can be installed using either an [automated one-click installation 
 
 ## Automated Installation
 
-:::warning
-The automated installation is currently only supported on **macOS and Linux**. Windows users should use the [Manual Installation](#manual-installation) method instead.
+:::tip
+The automated installation is supported on **macOS, Linux, and Windows (via WSL)**. For native Windows without WSL, use the [Manual Installation](#manual-installation) method.
 :::
 
 The automated installation script provides a zero-prerequisite installation experience. It automatically installs Node.js (via fnm), pnpm, and all required dependencies.
+
+### WSL (Windows Subsystem for Linux) Support
+
+If you're using Windows with WSL:
+
+1. **Use the bash script** (`./scripts/install.sh`) inside your WSL terminal - not the PowerShell script
+2. **Docker**: Install Docker Desktop for Windows and enable the WSL 2 backend integration:
+   - Settings → General → "Use the WSL 2 based engine"
+   - Settings → Resources → WSL Integration → Enable for your distro
+   - See: https://docs.docker.com/desktop/wsl/
+
 
 ### Prerequisites
 

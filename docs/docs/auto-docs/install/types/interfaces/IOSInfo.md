@@ -16,6 +16,14 @@ Defined in: [src/install/types.ts:6](https://github.com/PalisadoesFoundation/tal
 
 ***
 
+### isWsl?
+
+> `optional` **isWsl**: `boolean`
+
+Defined in: [src/install/types.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/types.ts#L8)
+
+***
+
 ### name
 
 > **name**: [`OS`](../type-aliases/OS.md)
