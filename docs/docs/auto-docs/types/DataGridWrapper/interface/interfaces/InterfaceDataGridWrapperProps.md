@@ -45,9 +45,9 @@ A ReactNode (e.g., buttons, menu) to display in the actions cell.
 
 ***
 
-### columns
+### columns?
 
-> **columns**: `GridColDef`[]
+> `optional` **columns**: `GridColDef`[]
 
 Defined in: [src/types/DataGridWrapper/interface.ts:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L27)
 
@@ -148,9 +148,9 @@ Available options for rows per page. default: [10, 25, 50, 100]
 
 ***
 
-### rows
+### rows?
 
-> **rows**: readonly `T`[]
+> `optional` **rows**: readonly `T`[]
 
 Defined in: [src/types/DataGridWrapper/interface.ts:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L21)
 

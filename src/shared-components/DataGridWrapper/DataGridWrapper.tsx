@@ -41,8 +41,8 @@ export function DataGridWrapper<T extends { id: string | number }>(
   props: InterfaceDataGridWrapperProps<T>,
 ) {
   const {
-    rows,
-    columns,
+    rows = [],
+    columns = [],
     loading = false,
     searchConfig,
     sortConfig,

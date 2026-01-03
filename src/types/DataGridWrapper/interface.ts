@@ -18,13 +18,13 @@ export interface InterfaceDataGridWrapperProps<
    * The array of data rows to display in the grid.
    * Each row must include a unique `id` property (string or number).
    */
-  rows: GridRowsProp<T>;
+  rows?: GridRowsProp<T>;
 
   /**
    * Configuration for the grid columns.
    * Defines headers, widths, and cell rendering logic.
    */
-  columns: GridColDef[];
+  columns?: GridColDef[];
 
   /**
    * If `true`, displays a loading indicator (e.g., Progress Bar) overlaying the grid.
