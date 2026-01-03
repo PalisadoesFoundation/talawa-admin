@@ -116,7 +116,10 @@ export default [
         },
         { selector: 'variable', modifiers: ['exported'], format: null },
       ],
-      'react/jsx-pascal-case': ['error', { allowAllCaps: false, allowNamespace: false }],
+      'react/jsx-pascal-case': [
+        'error',
+        { allowAllCaps: false, allowNamespace: false },
+      ],
       'react/no-this-in-sfc': 'error',
       'react/no-unstable-nested-components': ['error', { allowAsProps: true }],
       'prettier/prettier': 'error',
