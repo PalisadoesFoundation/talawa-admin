@@ -194,10 +194,12 @@ export default [
     plugins: {
       '@typescript-eslint': ts,
       prettier,
+      tsdoc,
     },
     rules: {
       ...js.configs.recommended.rules,
       ...ts.configs.recommended.rules,
+      'tsdoc/syntax': 'error',
       '@typescript-eslint/no-require-imports': 'off',
       '@typescript-eslint/no-namespace': 'off',
       '@typescript-eslint/naming-convention': 'off',
@@ -225,10 +227,12 @@ export default [
     plugins: {
       '@typescript-eslint': ts,
       prettier,
+      tsdoc,
     },
     rules: {
       ...js.configs.recommended.rules,
       ...ts.configs.recommended.rules,
+      'tsdoc/syntax': 'error',
       'no-undef': 'error',
       'prettier/prettier': 'error',
     },
