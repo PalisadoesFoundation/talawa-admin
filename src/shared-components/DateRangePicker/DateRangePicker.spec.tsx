@@ -190,8 +190,6 @@ describe('DateRangePicker', () => {
     expect(screen.getByText('Error text')).toBeInTheDocument();
   });
 
-  /* ---------------------- CodeRabbit requested tests ---------------------- */
-
   it('applies custom className to root container', () => {
     renderComponent({ className: 'custom-class' });
 
@@ -351,7 +349,7 @@ describe('DateRangePicker', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('applies error state', () => {
+  it('applies text-danger class when error is true', () => {
     renderComponent({ error: true, helperText: 'Error text' });
 
     const helperElement = screen.getByTestId(`${dataTestId}-helper`);
