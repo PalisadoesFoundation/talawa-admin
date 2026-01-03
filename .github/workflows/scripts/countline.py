@@ -139,6 +139,7 @@ def _filepaths_in_directories(directories):
     # Return
     return result
 
+
 def _read_exclusions_from_file(filepath):
     """Read excluded filenames from a text file.
 
@@ -169,6 +170,7 @@ def _read_exclusions_from_file(filepath):
         print(f"Error reading exclusions file: {e}")
 
     return result
+
 
 def _arg_parser_resolver():
     """Resolve the CLI arguments provided by the user.
@@ -270,9 +272,7 @@ def main():
 
     # Get a corrected list of filenames to exclude
     exclude_list = _valid_exclusions(
-        Excludes(
-            files=exclude_files, directories=args.exclude_directories
-        )
+        Excludes(files=exclude_files, directories=args.exclude_directories)
     )
 
     # Get interesting filepaths

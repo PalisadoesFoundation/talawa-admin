@@ -228,7 +228,10 @@ Follow these steps:
 3. Install `python` from https://www.python.org
    1. Ensure Python 3.10 or later is installed.
    2. Verify installation by running `python --version` in your terminal.
-   3. Install required Python dependencies by running: `pip install -r .github/workflows/requirements.txt`
+   3. Create a Python virtual environment and install dependencies:
+      ```bash
+      python -m venv venv
+      ```
 
 Proceed to the next section.
 
@@ -292,26 +295,37 @@ python --version
 pip --version
 ```
 
-#### Install required Python dependencies
+#### Create a Python virtual environment and install dependencies
 
 From the repository root, run:
+
+```bash
+python -m venv venv
+```
+
+Then activate the virtual environment:
+
+**On macOS/Linux:**
+```bash
+source venv/bin/activate
+```
+
+**On Windows (PowerShell):**
+```powershell
+venv\Scripts\Activate.ps1
+```
+
+**On Windows (Git Bash/MSYS2):**
+```bash
+source venv/Scripts/activate
+```
+
+Now install the required Python packages:
 
 ```bash
 pip install -r .github/workflows/requirements.txt
 ```
 
-If these dependencies are missing, Husky pre-commit checks will fail
-and prevent commits.
-
-#### Verify installation (optional)
-
-You can verify your setup by running:
-
-```bash
-python .github/workflows/scripts/check_python_deps.py
-```
-
-If no output is shown, your Python environment is correctly configured.
 
 ### Install The Required Packages
 
