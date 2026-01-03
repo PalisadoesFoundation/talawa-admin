@@ -94,8 +94,12 @@ export default function DateRangePicker({
   showPresets,
 }: InterfaceDateRangePickerProps) {
   const { t } = useTranslation('common');
-  const startDayjs = toDayjs(value.startDate);
-  const endDayjs = toDayjs(value.endDate);
+
+  const normalizedStartDate = normalizeToDate(value.startDate);
+  const normalizedEndDate = normalizeToDate(value.endDate);
+
+  const startDayjs = toDayjs(normalizedStartDate);
+  const endDayjs = toDayjs(normalizedEndDate);
 
   const activePresetKey = useMemo(() => {
     if (!presets) return undefined;
@@ -194,7 +198,9 @@ export default function DateRangePicker({
               value={endDayjs}
               onChange={handleEndChange}
               disabled={disabled}
-              minDate={startDayjs ?? undefined}
+              minDate={
+                normalizedStartDate ? dayjs(normalizedStartDate) : undefined
+              }
               slots={{
                 textField: (props) => (
                   <Form.Control

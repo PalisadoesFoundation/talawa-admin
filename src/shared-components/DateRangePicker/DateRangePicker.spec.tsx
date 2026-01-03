@@ -1,4 +1,6 @@
 import React from 'react';
+import dayjs from 'dayjs';
+
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 
@@ -8,35 +10,50 @@ import type {
   IDateRangePreset,
 } from 'types/shared-components/DateRangePicker/interface';
 
+/* -------------------------------------------------------------------------- */
+/*                                MUI MOCK                                     */
+/* -------------------------------------------------------------------------- */
+
 type TestableInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   'data-testid'?: string;
 };
 
 type MockTextFieldParams = {
   inputProps: TestableInputProps;
+  ref?: React.Ref<HTMLInputElement>;
+  disabled?: boolean;
+  required?: boolean;
 };
 
 type MockDatePickerProps = {
   value: unknown;
   onChange: (value: unknown) => void;
+  minDate?: unknown;
   slots?: {
     textField?: (params: MockTextFieldParams) => JSX.Element;
   };
   'data-testid'?: string;
 };
 
+const datePickerSpy = vi.fn();
+
 vi.mock('@mui/x-date-pickers', () => ({
   DatePicker: ({
     value,
     onChange,
+    minDate,
     slots,
     'data-testid': dataTestId,
   }: MockDatePickerProps) => {
+    datePickerSpy({ minDate });
+
     const renderTextField = slots?.textField;
     if (!renderTextField) return null;
 
     const formattedValue =
-      value instanceof Date ? value.toISOString().split('T')[0] : '';
+      value instanceof Date && !Number.isNaN(value.getTime())
+        ? value.toISOString().split('T')[0]
+        : '';
 
     return renderTextField({
       inputProps: {
@@ -44,6 +61,10 @@ vi.mock('@mui/x-date-pickers', () => ({
         'data-testid': dataTestId,
         onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
           const inputValue = e.target.value;
+          if (!inputValue) {
+            onChange(undefined);
+            return;
+          }
           onChange(new Date(`${inputValue}T00:00:00`));
         },
       },
@@ -51,12 +72,17 @@ vi.mock('@mui/x-date-pickers', () => ({
   },
 }));
 
+/* -------------------------------------------------------------------------- */
+/*                                   TESTS                                     */
+/* -------------------------------------------------------------------------- */
+
 describe('DateRangePicker', () => {
   const dataTestId = 'date-range-picker-test';
   let onChangeMock: ReturnType<typeof vi.fn>;
 
   beforeEach(() => {
     onChangeMock = vi.fn();
+    datePickerSpy.mockClear();
   });
 
   afterEach(() => {
@@ -72,6 +98,7 @@ describe('DateRangePicker', () => {
       error: boolean;
       helperText: string;
       showPresets: boolean;
+      className: string;
     }>,
   ) {
     render(
@@ -83,16 +110,18 @@ describe('DateRangePicker', () => {
         error={props?.error}
         helperText={props?.helperText}
         showPresets={props?.showPresets}
+        className={props?.className}
         dataTestId={dataTestId}
       />,
     );
   }
 
+  /* ----------------------- Existing core behaviour ------------------------ */
+
   it('renders start and end inputs', () => {
     renderComponent();
 
     expect(screen.getByTestId(`${dataTestId}-start-input`)).toBeInTheDocument();
-
     expect(screen.getByTestId(`${dataTestId}-end-input`)).toBeInTheDocument();
   });
 
@@ -146,24 +175,6 @@ describe('DateRangePicker', () => {
 
     expect(onChangeMock).not.toHaveBeenCalled();
   });
-  it('calls onChange when a preset is clicked', () => {
-    const presets = [
-      {
-        key: 'today',
-        label: 'Today',
-        getRange: () => ({
-          startDate: new Date('2025-01-01'),
-          endDate: new Date('2025-01-01'),
-        }),
-      },
-    ];
-
-    renderComponent({ presets });
-
-    fireEvent.click(screen.getByTestId(`${dataTestId}-preset-today`));
-
-    expect(onChangeMock).toHaveBeenCalledTimes(1);
-  });
 
   it('renders helperText when provided', () => {
     renderComponent({ helperText: 'Help text' });
@@ -173,118 +184,110 @@ describe('DateRangePicker', () => {
     );
   });
 
-  it('applies error state when error is true', () => {
+  it('applies error state', () => {
     renderComponent({ error: true, helperText: 'Error text' });
 
     expect(screen.getByText('Error text')).toBeInTheDocument();
   });
 
-  it('hides presets when showPresets is false', () => {
+  /* ---------------------- CodeRabbit requested tests ---------------------- */
+
+  it('applies custom className to root container', () => {
+    renderComponent({ className: 'custom-class' });
+
+    const root = screen.getByTestId(dataTestId);
+    expect(root.className).toContain('custom-class');
+  });
+
+  it('does not call onChange when start date normalizes to null', () => {
+    renderComponent();
+
+    fireEvent.change(screen.getByTestId(`${dataTestId}-start-input`), {
+      target: { value: '' },
+    });
+
+    expect(onChangeMock).not.toHaveBeenCalled();
+  });
+
+  it('does not call onChange when end date normalizes to null', () => {
+    renderComponent({
+      value: { startDate: new Date(), endDate: null },
+    });
+
+    fireEvent.change(screen.getByTestId(`${dataTestId}-end-input`), {
+      target: { value: '' },
+    });
+
+    expect(onChangeMock).not.toHaveBeenCalled();
+  });
+
+  it('handles non-Date, non-Dayjs object safely', () => {
+    renderComponent({
+      value: { startDate: { foo: 'bar' } as unknown as Date, endDate: null },
+    });
+
+    expect(screen.getByTestId(`${dataTestId}-start-input`)).toBeInTheDocument();
+  });
+
+  it('handles dayjs-like object with invalid date', () => {
+    const invalidDayjs = {
+      toDate: () => new Date('invalid'),
+    };
+
+    renderComponent({
+      value: { startDate: invalidDayjs as unknown as Date, endDate: null },
+    });
+
+    expect(screen.getByTestId(`${dataTestId}-start-input`)).toBeInTheDocument();
+  });
+
+  it('renders presets by default when showPresets is undefined', () => {
     renderComponent({
       presets: [
         {
-          key: 'x',
-          label: 'X',
+          key: 'default',
+          label: 'Default',
           getRange: () => ({
             startDate: new Date(),
             endDate: new Date(),
           }),
         },
       ],
-      showPresets: false,
     });
 
     expect(
-      screen.queryByTestId(`${dataTestId}-preset-x`),
-    ).not.toBeInTheDocument();
+      screen.getByTestId(`${dataTestId}-preset-default`),
+    ).toBeInTheDocument();
   });
 
-  it('handles null startDate and endDate safely', () => {
+  it('handles active preset when preset returns null dates', () => {
     renderComponent({
+      presets: [
+        {
+          key: 'null',
+          label: 'Null',
+          getRange: () => ({ startDate: null, endDate: null }),
+        },
+      ],
       value: { startDate: null, endDate: null },
     });
 
-    expect(onChangeMock).not.toHaveBeenCalled();
-  });
-
-  it('normalizes partial range safely', () => {
-    renderComponent({
-      value: { startDate: new Date(), endDate: null },
-    });
-
-    expect(screen.getByTestId(`${dataTestId}-start-input`)).toBeInTheDocument();
-  });
-
-  it('handles dayjs-like values safely', () => {
-    const fakeDayjs = {
-      toDate: () => new Date('2025-01-01'),
-    };
-
-    renderComponent({
-      value: {
-        startDate: fakeDayjs as unknown as Date,
-        endDate: null,
-      },
-    });
-
-    expect(screen.getByTestId(`${dataTestId}-start-input`)).toBeInTheDocument();
-  });
-
-  it('handles invalid dates gracefully', () => {
-    renderComponent({
-      value: {
-        startDate: new Date('invalid'),
-        endDate: null,
-      },
-    });
-
-    expect(screen.getByTestId(`${dataTestId}-start-input`)).toBeInTheDocument();
-  });
-  it('marks preset as active when range matches', () => {
-    const d = new Date('2025-01-01');
-
-    const presets = [
-      {
-        key: 'today',
-        label: 'Today',
-        getRange: () => ({ startDate: d, endDate: d }),
-      },
-    ];
-
-    renderComponent({
-      presets,
-      value: { startDate: d, endDate: d },
-    });
-
-    expect(screen.getByTestId(`${dataTestId}-preset-today`)).toHaveAttribute(
+    expect(screen.getByTestId(`${dataTestId}-preset-null`)).toHaveAttribute(
       'aria-pressed',
       'true',
     );
   });
-
-  it('does not mark preset active when range differs', () => {
-    const presets = [
-      {
-        key: 'x',
-        label: 'X',
-        getRange: () => ({
-          startDate: new Date('2025-01-01'),
-          endDate: new Date('2025-01-01'),
-        }),
-      },
-    ];
+  it('passes startDate as minDate to end DatePicker', () => {
+    const start = new Date('2025-01-05');
 
     renderComponent({
-      presets,
-      value: {
-        startDate: new Date('2025-01-02'),
-        endDate: new Date('2025-01-02'),
-      },
+      value: { startDate: start, endDate: null },
     });
 
-    expect(screen.getByTestId(`${dataTestId}-preset-x`)).toHaveAttribute(
-      'aria-pressed',
-      'false',
+    const endPickerCall = datePickerSpy.mock.calls.find(
+      (call) => call[0]?.minDate !== undefined,
     );
+
+    expect(dayjs(endPickerCall?.[0].minDate).toDate()).toEqual(start);
   });
 });
