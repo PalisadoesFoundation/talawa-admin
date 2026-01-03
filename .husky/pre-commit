@@ -32,4 +32,6 @@ if [ -n "$CSS_STAGED" ]; then
   echo "$CSS_STAGED" | xargs $PYTHON_CMD .github/workflows/scripts/css_check.py --files
 fi
 
+.husky/check-forms
+
 git add .

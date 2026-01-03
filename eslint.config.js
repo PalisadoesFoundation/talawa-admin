@@ -134,6 +134,27 @@ export default [
           message:
             "Security Risk: Do not use getItem('token') directly inside authorization headers. Extract it to a variable first to handle null values.",
         },
+        {
+          selector:
+            "JSXMemberExpression[object.name='Form'][property.name='Group']",
+          message: 'Use FormFieldGroup instead of Form.Group',
+        },
+        {
+          selector:
+            "JSXMemberExpression[object.name='Form'][property.name='Control']",
+          message:
+            'Use FormTextField, FormTextArea, or FormSelect instead of Form.Control',
+        },
+        {
+          selector:
+            "JSXMemberExpression[object.name='Form'][property.name='Label']",
+          message: 'Labels are built into FormFieldGroup components',
+        },
+        {
+          selector:
+            "JSXMemberExpression[object.name='Form'][property.name='Check']",
+          message: 'Use FormCheckbox instead of Form.Check',
+        },
       ],
     },
   },
