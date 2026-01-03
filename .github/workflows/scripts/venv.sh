@@ -21,6 +21,8 @@ else
 fi
 
 # Install deps
-"$VENV_PY" -m pip install -q --disable-pip-version-check -r "$REPO_ROOT/.github/workflows/requirements.txt" 2>/dev/null || true
+if ! "$VENV_PY" -m pip check >/dev/null 2>&1; then
+  "$VENV_PY" -m pip install -q --disable-pip-version-check -r "$REPO_ROOT/.github/workflows/requirements.txt"
+fi
 
 echo "$VENV_PY"
