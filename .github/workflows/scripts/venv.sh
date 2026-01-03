@@ -1,6 +1,12 @@
 #!/usr/bin/env sh
+#
+# Bootstrap script for Python virtual environment.
+# Validates venv exists, locates the venv Python executable (cross-platform),
+# installs dependencies from requirements.txt, and outputs the Python path.
+# Used by pre-commit hooks to run Python-based CI checks locally.
+#
 
-set -e
+set -eu
 
 REPO_ROOT=$(git rev-parse --show-toplevel)
 
@@ -17,12 +23,11 @@ elif [ -x "$VENV_DIR/Scripts/python.exe" ]; then
   VENV_PY="$VENV_DIR/Scripts/python.exe"
 else
   echo "Error: Python executable not found in venv."
+  echo "Checked: $VENV_DIR/bin/python and $VENV_DIR/Scripts/python.exe"
   exit 1
 fi
 
 # Install deps
-if ! "$VENV_PY" -m pip check >/dev/null 2>&1; then
-  "$VENV_PY" -m pip install -q --disable-pip-version-check -r "$REPO_ROOT/.github/workflows/requirements.txt"
-fi
+"$VENV_PY" -m pip install -q --disable-pip-version-check -r "$REPO_ROOT/.github/workflows/requirements.txt"
 
 echo "$VENV_PY"
