@@ -2025,6 +2025,13 @@
     "logoutFailed": "साइन आउट विफल रहा",
     "title": "उपयोगकर्ता पोर्टल",
     "talawa": "तलावा",
-    "talawaBranding": "तालावा ब्रांडिंग"
+    "talawaBranding": "तालावा ब्रांडिंग",
+    "view": "देखें"
+  },
+  "donation": {
+    "amount_label": "राशि",
+    "card_aria": "दान कार्ड",
+    "card_test_id": "donation-card-{{id}}",
+    "date_label": "दिनांक"
   }
 }

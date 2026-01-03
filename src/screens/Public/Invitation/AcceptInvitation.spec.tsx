@@ -12,6 +12,8 @@ import { useLocalStorage } from '../../../utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
@@ -276,7 +278,7 @@ describe('AcceptInvitation', () => {
 
   // NEW: Test for displaying all invitation metadata fields
   it('should display all invitation metadata fields correctly', async () => {
-    const expiryDate = dayjs().add(1, 'year').endOf('year').toISOString();
+    const expiryDate = dayjs.utc().add(1, 'year').endOf('year').toISOString();
     const mocks = [
       {
         request: {

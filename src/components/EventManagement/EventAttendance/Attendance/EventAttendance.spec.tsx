@@ -1,5 +1,7 @@
 import React from 'react';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import {
@@ -253,7 +255,7 @@ describe('Event Attendance Component', () => {
               id: 'tagged-123',
               name: 'Tagged Member',
               emailAddress: 'tagged@example.com',
-              createdAt: dayjs().add(4, 'year').toISOString(),
+              createdAt: dayjs.utc().add(4, 'year').toISOString(),
               role: 'attendee',
               eventsAttended: [],
               tagsAssignedWith: {

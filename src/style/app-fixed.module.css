@@ -1796,6 +1796,25 @@ form label,
   border: 1px solid var(--createButton-border-active) !important;
 }
 
+.cardItemAuthor {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.userProfileName {
+  font-weight: 700;
+  font-size: 28px;
+}
+
+.volunteersLabel {
+  font-size: 0.8rem;
+  color: var(--search-button-border);
+}
+
+.testRedBackground {
+  background-color: red;
+}
+
 /* Add more Global CSS Classes above this */
 
 /* ----------------------------------------------------- */

@@ -2025,6 +2025,13 @@
     "logoutFailed": "Échec de la déconnexion",
     "title": "Portail Utilisateur",
     "talawa": "Talawa",
-    "talawaBranding": "Image de marque Talawa"
+    "talawaBranding": "Image de marque Talawa",
+    "view": "Voir"
+  },
+  "donation": {
+    "amount_label": "Montant",
+    "card_aria": "Carte de don",
+    "card_test_id": "donation-card-{{id}}",
+    "date_label": "Date"
   }
 }

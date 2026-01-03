@@ -515,7 +515,9 @@ describe('PluginModal', () => {
   describe('Install Elapsed Ticker', () => {
     beforeEach(() => {
       vi.useFakeTimers();
-      vi.setSystemTime(dayjs().subtract(6, 'year').startOf('year').toDate());
+      vi.setSystemTime(
+        dayjs().utc().subtract(6, 'year').startOf('year').toDate(),
+      );
     });
 
     afterEach(() => {

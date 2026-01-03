@@ -2025,6 +2025,13 @@
     "logoutFailed": "Falló el cierre de sesión",
     "title": "Portal de Usuario",
     "talawa": "Talawa",
-    "talawaBranding": "Marca Talawa"
+    "talawaBranding": "Marca Talawa",
+    "view": "Ver"
+  },
+  "donation": {
+    "amount_label": "Cantidad",
+    "card_aria": "Tarjeta de donación",
+    "card_test_id": "donation-card-{{id}}",
+    "date_label": "Fecha"
   }
 }

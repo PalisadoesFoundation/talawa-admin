@@ -2026,6 +2026,13 @@
     "logoutFailed": "Logout failed",
     "title": "User Portal",
     "talawa": "Talawa",
-    "talawaBranding": "Talawa Branding"
+    "talawaBranding": "Talawa Branding",
+    "view": "View"
+  },
+  "donation": {
+    "amount_label": "Amount",
+    "card_aria": "Donation card",
+    "card_test_id": "donation-card-{{id}}",
+    "date_label": "Date"
   }
 }

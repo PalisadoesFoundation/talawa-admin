@@ -9,6 +9,8 @@ import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 
+import styles from 'style/app-fixed.module.css';
+
 // Mock the hooks
 vi.mock('../../hooks', () => ({
   usePluginInjectors: vi.fn(),
@@ -162,8 +164,7 @@ describe('PluginInjector', () => {
 
     expect(usePluginInjectors).toHaveBeenCalledWith('G1');
   });
-
-  it('should apply custom style', () => {
+  it('should apply custom className from styles', () => {
     const mockInjectors = [
       {
         pluginId: 'test-plugin',
@@ -172,14 +173,14 @@ describe('PluginInjector', () => {
       },
     ];
 
-    const customStyle = { backgroundColor: 'red' };
-
     vi.mocked(usePluginInjectors).mockReturnValue(mockInjectors);
     vi.mocked(getPluginComponent).mockReturnValue(
       TestComponent as unknown as ComponentType<object>,
     );
 
-    render(<PluginInjector injectorType="G1" style={customStyle} />);
+    render(
+      <PluginInjector injectorType="G1" className={styles.testRedBackground} />,
+    );
 
     expect(usePluginInjectors).toHaveBeenCalledWith('G1');
   });

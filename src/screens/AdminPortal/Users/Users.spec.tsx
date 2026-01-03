@@ -522,7 +522,7 @@ describe('Testing Users screen', () => {
         'John',
         'Doe',
         'john@example.com',
-        dayjs().subtract(1, 'year').toISOString(),
+        dayjs.utc().subtract(1, 'year').toISOString(),
         true, // isSuperAdmin
       );
 
@@ -536,7 +536,7 @@ describe('Testing Users screen', () => {
         'Jane',
         'Doe',
         'jane@example.com',
-        dayjs().subtract(1, 'year').add(4, 'days').toISOString(),
+        dayjs.utc().subtract(1, 'year').add(4, 'days').toISOString(),
         false, // isSuperAdmin
       );
 

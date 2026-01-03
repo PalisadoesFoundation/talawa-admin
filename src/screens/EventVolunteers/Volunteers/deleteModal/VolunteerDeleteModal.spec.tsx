@@ -1,4 +1,3 @@
-import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -19,6 +18,8 @@ import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { DELETE_VOLUNTEER_FOR_INSTANCE } from 'GraphQl/Mutations/EventVolunteerMutation';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 /**
  * Mock implementation of the `NotificationToast` module.

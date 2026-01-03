@@ -2025,6 +2025,13 @@
     "logoutFailed": "退出登录失败",
     "title": "用户门户",
     "talawa": "塔拉瓦",
-    "talawaBranding": "Talawa 品牌形象"
+    "talawaBranding": "Talawa 品牌形象",
+    "view": "查看"
+  },
+  "donation": {
+    "amount_label": "金额",
+    "card_aria": "捐赠卡",
+    "card_test_id": "donation-card-{{id}}",
+    "date_label": "日期"
   }
 }

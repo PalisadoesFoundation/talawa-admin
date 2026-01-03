@@ -202,11 +202,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
           {volunteers && volunteers.length > 0 && (
             <Form.Group>
               <Form.Label
-                className="fw-lighter ms-2 mb-0"
-                style={{
-                  fontSize: '0.8rem',
-                  color: 'var(--search-button-border)',
-                }}
+                className={`fw-lighter ms-2 mb-0 ${styles.volunteersLabel}`}
               >
                 Volunteers
               </Form.Label>

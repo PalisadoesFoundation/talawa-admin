@@ -28,12 +28,8 @@
  */
 
 import React from 'react';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-
-dayjs.extend(utc);
 
 import UserPortalCard from 'components/UserPortal/UserPortalCard/UserPortalCard';
 import type { InterfaceDonationCardProps } from 'types/Donation/interface';
