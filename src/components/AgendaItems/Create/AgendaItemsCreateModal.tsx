@@ -49,6 +49,8 @@ import convertToBase64 from 'utils/convertToBase64';
 import type { InterfaceAgendaItemsCreateModalProps } from 'types/Agenda/interface';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { useTranslation } from 'react-i18next';
+
+// translation-check-keyPrefix: agendaItems
 const AgendaItemsCreateModal: React.FC<
   InterfaceAgendaItemsCreateModalProps
 > = ({
@@ -319,6 +321,7 @@ const AgendaItemsCreateModal: React.FC<
                       <img src={attachment} alt={t('attachmentPreview')} />
                     )}
                     <button
+                      type="button"
                       className={styles.closeButtonFile}
                       onClick={(e) => {
                         e.preventDefault();

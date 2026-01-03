@@ -28,16 +28,13 @@ export function AdvertisementSkeleton() {
 
   return [...Array(6)].map((_, index) => (
     <ErrorBoundaryWrapper
+      key={index}
       fallbackErrorMessage={tErrors('defaultErrorMessage')}
       fallbackTitle={tErrors('title')}
       resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
       resetButtonText={tErrors('resetButton')}
     >
-      <div
-        key={index}
-        className={styles.itemCard}
-        data-testid={`skeleton-${index + 1}`}
-      >
+      <div className={styles.itemCard} data-testid={`skeleton-${index + 1}`}>
         <div className={styles.loadingWrapper}>
           <div className={styles.innerContainer}>
             <div className={`${styles.orgImgContainer} shimmer`} />

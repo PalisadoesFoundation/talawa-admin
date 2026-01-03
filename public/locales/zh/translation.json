@@ -675,8 +675,8 @@
     "agendaCategoryDeleted": "议程类别删除成功",
     "deleteAgendaCategory": "删除议程类别",
     "deleteAgendaCategoryMsg": "是否要删除此议程类别？",
-    "agendaCategoryUpdateFailed": "議程類別更新失敗：{{errorMessage}}",
-    "agendaCategoryDeleteFailed": "議程類別刪除失敗：{{errorMessage}}"
+    "agendaCategoryUpdateFailed": "议程类别更新失败：{{errorMessage}}",
+    "agendaCategoryDeleteFailed": "议程类别删除失败：{{errorMessage}}"
   },
   "agendaItems": {
     "agendaItemDetails": "议程项目详细信息",
