@@ -3,10 +3,11 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { RecurrenceYearlySection } from './RecurrenceYearlySection';
 import { Frequency } from '../../utils/recurrenceUtils';
+import dayjs from 'dayjs';
 
 const defaultProps = {
   frequency: Frequency.YEARLY,
-  startDate: new Date('2024-07-21T10:00:00.000Z'),
+  startDate: dayjs().year(2024).month(6).date(21).toDate(), // July 21, 2024
   t: (key: string) => key,
 };
 
@@ -58,7 +59,7 @@ describe('RecurrenceYearlySection', () => {
       const { rerender } = render(
         <RecurrenceYearlySection
           {...defaultProps}
-          startDate={new Date('2024-01-01T10:00:00.000Z')}
+          startDate={dayjs().year(2024).month(0).date(1).toDate()}
         />,
       );
 
@@ -69,7 +70,7 @@ describe('RecurrenceYearlySection', () => {
       rerender(
         <RecurrenceYearlySection
           {...defaultProps}
-          startDate={new Date('2024-12-31T10:00:00.000Z')}
+          startDate={dayjs().year(2024).month(11).date(31).toDate()}
         />,
       );
 
@@ -137,7 +138,7 @@ describe('RecurrenceYearlySection', () => {
         const { unmount } = render(
           <RecurrenceYearlySection
             {...defaultProps}
-            startDate={new Date(`${year}-07-21T10:00:00.000Z`)}
+            startDate={dayjs().year(year).month(6).date(21).toDate()}
           />,
         );
 
@@ -153,7 +154,7 @@ describe('RecurrenceYearlySection', () => {
       render(
         <RecurrenceYearlySection
           {...defaultProps}
-          startDate={new Date('2024-02-29T10:00:00.000Z')}
+          startDate={dayjs().year(2024).month(1).date(29).toDate()}
         />,
       );
 
@@ -165,7 +166,7 @@ describe('RecurrenceYearlySection', () => {
       render(
         <RecurrenceYearlySection
           {...defaultProps}
-          startDate={new Date('2023-02-28T10:00:00.000Z')}
+          startDate={dayjs().year(2023).month(1).date(28).toDate()}
         />,
       );
 
@@ -177,7 +178,7 @@ describe('RecurrenceYearlySection', () => {
       render(
         <RecurrenceYearlySection
           {...defaultProps}
-          startDate={new Date('2024-01-01T10:00:00.000Z')}
+          startDate={dayjs().year(2024).month(0).date(1).toDate()}
         />,
       );
 
@@ -189,7 +190,7 @@ describe('RecurrenceYearlySection', () => {
       render(
         <RecurrenceYearlySection
           {...defaultProps}
-          startDate={new Date('2024-12-31T10:00:00.000Z')}
+          startDate={dayjs().year(2024).month(11).date(31).toDate()}
         />,
       );
 
@@ -201,7 +202,7 @@ describe('RecurrenceYearlySection', () => {
       render(
         <RecurrenceYearlySection
           {...defaultProps}
-          startDate={new Date('2024-04-30T10:00:00.000Z')}
+          startDate={dayjs().year(2024).month(3).date(30).toDate()}
         />,
       );
 
@@ -213,7 +214,7 @@ describe('RecurrenceYearlySection', () => {
       render(
         <RecurrenceYearlySection
           {...defaultProps}
-          startDate={new Date('2024-01-31T10:00:00.000Z')}
+          startDate={dayjs().year(2024).month(0).date(31).toDate()}
         />,
       );
 
@@ -227,7 +228,7 @@ describe('RecurrenceYearlySection', () => {
       const { rerender } = render(
         <RecurrenceYearlySection
           {...defaultProps}
-          startDate={new Date('2024-01-15T10:00:00.000Z')}
+          startDate={dayjs().year(2024).month(0).date(15).toDate()}
         />,
       );
 
@@ -237,7 +238,7 @@ describe('RecurrenceYearlySection', () => {
       rerender(
         <RecurrenceYearlySection
           {...defaultProps}
-          startDate={new Date('2024-06-20T10:00:00.000Z')}
+          startDate={dayjs().year(2024).month(5).date(20).toDate()}
         />,
       );
 

@@ -6,7 +6,7 @@
 
 > **createDates**: `object`
 
-Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:164](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L164)
+Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:175](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L175)
 
 ## Type Declaration
 
@@ -36,12 +36,12 @@ Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:164](https://g
 
 ### startAtCalledWith
 
-> **startAtCalledWith**: `string` = `'2024-12-31T00:00:00.000Z'`
+> **startAtCalledWith**: `string`
 
 ### startAtISO
 
-> **startAtISO**: `string` = `'2024-12-31T18:30:00.000Z'`
+> **startAtISO**: `string`
 
 ### startISOReceived
 
-> **startISOReceived**: `string` = `'2024-12-30T18:30:00.000Z'`
+> **startISOReceived**: `string`

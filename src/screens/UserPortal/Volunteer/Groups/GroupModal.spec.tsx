@@ -17,6 +17,7 @@ import type { InterfaceGroupModal } from './GroupModal';
 import GroupModal from './GroupModal';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
+import dayjs from 'dayjs';
 
 const sharedMocks = vi.hoisted(() => ({
   NotificationToast: {
@@ -61,7 +62,7 @@ const itemProps: InterfaceGroupModal[] = [
       name: 'Group 1',
       description: 'desc',
       volunteersRequired: null,
-      createdAt: '2024-10-25T16:16:32.978Z',
+      createdAt: dayjs().toISOString(),
       creator: {
         id: 'creatorId1',
         name: 'Wilt Shepherd',
@@ -106,7 +107,7 @@ const itemProps: InterfaceGroupModal[] = [
       name: 'Group 1',
       description: null,
       volunteersRequired: null,
-      createdAt: '2024-10-25T16:16:32.978Z',
+      createdAt: dayjs().toISOString(),
       creator: {
         id: 'creatorId1',
         name: 'Wilt Shepherd',

@@ -21,7 +21,7 @@
  * <OrgContriCards
  *   userName="John Doe"
  *   userEmail="john.doe@example.com"
- *   contriDate="2023-01-01"
+ *   contriDate=dayjs().subtract(1, 'year').format('YYYY-MM-DD')
  *   contriTransactionId="12345ABC"
  *   contriAmount={100}
  * />

@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import EventAttendedCard from './EventsAttendedCardItem';
 import type { InterfaceCardItem } from './EventsAttendedCardItem';
 import { vi } from 'vitest';
+import dayjs from 'dayjs';
 
 // Mock react-router Link (not react-router-dom!) to avoid router context issues
 vi.mock('react-router', async () => {
@@ -32,7 +33,8 @@ vi.mock('utils/useLocalstorage', () => ({
 describe('EventAttendedCard', () => {
   const mockProps: InterfaceCardItem = {
     title: 'Test Event',
-    startdate: '2023-05-15',
+    // Use dynamic date to avoid test staleness
+    startdate: dayjs().add(30, 'days').format('YYYY-MM-DD'),
     time: '14:00',
     location: 'Test Location',
     orgId: 'org123',
@@ -60,11 +62,17 @@ describe('EventAttendedCard', () => {
 
   describe('Basic rendering', () => {
     it('renders event details correctly', () => {
+      const futureDate = dayjs(mockProps.startdate);
       renderComponent();
 
       expect(screen.getByText('Test Event')).toBeInTheDocument();
-      expect(screen.getByText(/may/i)).toBeInTheDocument();
-      expect(screen.getByText('15')).toBeInTheDocument();
+      // Check for dynamically generated month and day
+      expect(
+        screen.getByText(new RegExp(futureDate.format('MMM'), 'i')),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(futureDate.date().toString()),
+      ).toBeInTheDocument();
       expect(screen.getByText('Test Location')).toBeInTheDocument();
     });
 
@@ -78,9 +86,15 @@ describe('EventAttendedCard', () => {
 
   describe('Date handling', () => {
     it('renders valid date correctly', () => {
+      const futureDate = dayjs(mockProps.startdate);
       renderComponent();
-      expect(screen.getByText(/may/i)).toBeInTheDocument();
-      expect(screen.getByText('15')).toBeInTheDocument();
+      // Check for dynamically generated month and day
+      expect(
+        screen.getByText(new RegExp(futureDate.format('MMM'), 'i')),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(futureDate.date().toString()),
+      ).toBeInTheDocument();
     });
 
     it('renders "Date N/A" for invalid date', () => {

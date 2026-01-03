@@ -1,4 +1,3 @@
-import React from 'react';
 import type { ApolloLink } from '@apollo/client';
 import { MockedProvider } from '@apollo/react-testing';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -18,6 +17,9 @@ import VolunteerDeleteModal from './VolunteerDeleteModal';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { DELETE_VOLUNTEER_FOR_INSTANCE } from 'GraphQl/Mutations/EventVolunteerMutation';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 /**
  * Mock implementation of the `NotificationToast` module.
@@ -59,8 +61,8 @@ const itemProps: InterfaceDeleteVolunteerModal[] = [
       volunteerStatus: 'accepted',
       hoursVolunteered: 10,
       isPublic: true,
-      createdAt: '2024-10-25T16:16:32.978Z',
-      updatedAt: '2024-10-25T16:16:32.978Z',
+      createdAt: dayjs().toISOString(),
+      updatedAt: dayjs().toISOString(),
       user: {
         id: 'userId1',
         firstName: 'Teresa',

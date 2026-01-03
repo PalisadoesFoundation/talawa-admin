@@ -6,7 +6,7 @@
 
 > `const` **memberListQuery**: `object`
 
-Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:222](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L222)
+Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:225](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L225)
 
 ## Type Declaration
 

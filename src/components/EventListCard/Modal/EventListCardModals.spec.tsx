@@ -11,6 +11,10 @@ import { useNavigate, useParams } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 import EventListCardModals from './EventListCardModals';
 import EventListCardPreviewModal from './Preview/EventListCardPreviewModal';
@@ -81,8 +85,13 @@ const mockEventListCardProps: MockEventListCardProps = {
   name: 'Test Event',
   description: 'Test Description',
   location: 'Test Location',
-  startAt: '2024-01-01T10:00:00Z',
-  endAt: '2024-01-01T12:00:00Z',
+  startAt: dayjs.utc().add(10, 'days').millisecond(0).toISOString(),
+  endAt: dayjs
+    .utc()
+    .add(10, 'days')
+    .add(2, 'hours')
+    .millisecond(0)
+    .toISOString(),
   startTime: '10:00:00',
   endTime: '12:00:00',
   allDay: false,
@@ -624,8 +633,22 @@ describe('EventListCardModals', () => {
         eventListCardProps: { ...mockEventListCardProps, allDay: true },
       });
       const initialPreviewProps = MockPreviewModal.mock.calls[0][0];
-      const newStartDate = new Date('2024-05-10T12:00:00.000Z');
-      const newEndDate = new Date('2024-05-11T12:00:00.000Z');
+      const newStartDate = dayjs
+        .utc()
+        .add(20, 'days')
+        .hour(12)
+        .minute(0)
+        .second(0)
+        .millisecond(0)
+        .toDate();
+      const newEndDate = dayjs
+        .utc()
+        .add(21, 'days')
+        .hour(12)
+        .minute(0)
+        .second(0)
+        .millisecond(0)
+        .toDate();
 
       act(() => {
         initialPreviewProps.setAllDayChecked(true);
@@ -642,8 +665,8 @@ describe('EventListCardModals', () => {
         variables: {
           input: {
             id: 'event1',
-            startAt: '2024-05-10T00:00:00.000Z',
-            endAt: '2024-05-11T23:59:59.999Z',
+            startAt: dayjs.utc(newStartDate).startOf('day').toISOString(),
+            endAt: dayjs.utc(newEndDate).endOf('day').toISOString(),
           },
         },
       });
@@ -654,7 +677,7 @@ describe('EventListCardModals', () => {
         eventListCardProps: buildRecurringEventProps({
           recurrenceRule: {
             frequency: Frequency.DAILY,
-            recurrenceEndDate: new Date('2025-01-01T00:00:00.000Z'),
+            recurrenceEndDate: dayjs.utc().add(1, 'year').toDate(),
           },
         }),
       });

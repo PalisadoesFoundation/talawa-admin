@@ -1,13 +1,14 @@
 import React from 'react';
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
+import dayjs from 'dayjs';
 import RecurringEventVolunteerModal from './RecurringEventVolunteerModal';
 
 const defaultProps = {
   show: true,
   onHide: vi.fn(),
   eventName: 'Weekly Cleanup',
-  eventDate: '2024-01-15',
+  eventDate: dayjs().add(1, 'day').format('YYYY-MM-DD'),
   onSelectSeries: vi.fn(),
   onSelectInstance: vi.fn(),
 };
@@ -23,7 +24,9 @@ describe('RecurringEventVolunteerModal', () => {
 
   test('renders modal with individual volunteering title, description and option texts', () => {
     // Make date formatting deterministic for this test
-    const formattedDate = '1/15/2024';
+    const formattedDate = dayjs(defaultProps.eventDate)
+      .toDate()
+      .toLocaleDateString();
     vi.spyOn(Date.prototype, 'toLocaleDateString').mockReturnValue(
       formattedDate,
     );
@@ -68,7 +71,9 @@ describe('RecurringEventVolunteerModal', () => {
 
   test('renders group volunteering title, description and option texts when isForGroup is true', () => {
     const groupName = 'Cleanup Crew';
-    const formattedDate = '1/15/2024';
+    const formattedDate = dayjs(defaultProps.eventDate)
+      .toDate()
+      .toLocaleDateString();
     vi.spyOn(Date.prototype, 'toLocaleDateString').mockReturnValue(
       formattedDate,
     );

@@ -2,8 +2,9 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import { vi, describe, it, expect, beforeEach } from 'vitest';
+import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import EventListCardDeleteModal from './EventListCardDeleteModal';
+import dayjs from 'dayjs';
 import type { InterfaceDeleteEventModalProps } from 'types/Event/interface';
 import i18n from 'utils/i18nForTest';
 
@@ -13,8 +14,8 @@ const mockStandaloneEventProps: InterfaceDeleteEventModalProps = {
     id: 'standalone-event-1',
     name: 'Standalone Event',
     description: 'A standalone event',
-    startAt: '2024-01-01T10:00:00Z',
-    endAt: '2024-01-01T11:00:00Z',
+    startAt: dayjs().add(10, 'days').toISOString(),
+    endAt: dayjs().add(10, 'days').add(1, 'hour').toISOString(),
     startTime: '10:00:00',
     endTime: '11:00:00',
     allDay: false,
@@ -48,8 +49,8 @@ const mockRecurringEventProps: InterfaceDeleteEventModalProps = {
     id: 'recurring-instance-1',
     name: 'Daily Meeting',
     description: 'Daily team meeting',
-    startAt: '2024-01-01T09:00:00Z',
-    endAt: '2024-01-01T10:00:00Z',
+    startAt: dayjs().add(10, 'days').subtract(1, 'hour').toISOString(),
+    endAt: dayjs().add(10, 'days').toISOString(),
     startTime: '09:00:00',
     endTime: '10:00:00',
     allDay: false,

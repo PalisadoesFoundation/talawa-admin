@@ -1,6 +1,7 @@
 import { renderHook, act } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { useInstallTimer } from './useInstallTimer';
+import dayjs from 'dayjs';
 
 describe('useInstallTimer', () => {
   beforeEach(() => {
@@ -23,7 +24,7 @@ describe('useInstallTimer', () => {
       { initialProps },
     );
 
-    vi.setSystemTime(new Date('2025-10-27T10:00:00.000Z'));
+    vi.setSystemTime(new Date(dayjs().add(1, 'year').toISOString()));
 
     act(() => {
       rerender({ loading: true });

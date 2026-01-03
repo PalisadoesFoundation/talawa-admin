@@ -12,6 +12,10 @@ import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceEvent } from 'types/Event/interface';
 import { UserRole } from 'types/Event/interface';
 import { Frequency, InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 // Mock dependencies
 vi.mock('@apollo/client', async () => {
@@ -44,8 +48,8 @@ const mockEventListCardProps: MockEventListCardProps = {
   name: 'Test Event',
   description: 'Test Description',
   location: 'Test Location',
-  startAt: '2024-01-01T10:00:00.000Z',
-  endAt: '2024-01-01T12:00:00.000Z',
+  startAt: dayjs().toISOString(),
+  endAt: dayjs().add(2, 'hours').toISOString(),
   startTime: '10:00:00',
   endTime: '12:00:00',
   allDay: false,
@@ -442,20 +446,37 @@ describe('useUpdateEventHandler', () => {
           eventListCardProps: {
             ...mockEventListCardProps,
             allDay: false,
-            startAt: '2024-04-20T10:00:00.000Z',
-            endAt: '2024-04-21T12:00:00.000Z',
+            startAt: dayjs().add(2, 'months').toISOString(),
+            endAt: dayjs()
+              .add(2, 'months')
+              .add(1, 'day')
+              .add(2, 'hours')
+              .toISOString(),
           },
           alldaychecked: true,
-          eventStartDate: new Date('2024-04-22T00:00:00.000Z'),
-          eventEndDate: new Date('2024-04-23T00:00:00.000Z'),
+          eventStartDate: dayjs().add(10, 'days').startOf('day').toDate(),
+          eventEndDate: dayjs().add(11, 'days').startOf('day').toDate(),
         }),
       );
 
       expect(mockUpdateStandaloneEvent).toHaveBeenCalledTimes(1);
       const calledInputs =
         mockUpdateStandaloneEvent.mock.calls[0][0].variables.input;
-      expect(calledInputs.startAt).toContain('2024-04-22T00:00:00');
-      expect(calledInputs.endAt).toContain('2024-04-23T23:59');
+      // The implementation uses dayjs.utc() to parse the Date objects
+      // When local dates (IST) are converted to UTC, they shift backwards
+      // So we need to expect the UTC-converted values, not the local values
+      const expectedStartDate = dayjs
+        .utc(dayjs().add(10, 'days').startOf('day').toDate())
+        .startOf('day');
+      const expectedEndDate = dayjs
+        .utc(dayjs().add(11, 'days').startOf('day').toDate())
+        .endOf('day');
+      expect(calledInputs.startAt).toContain(
+        expectedStartDate.format('YYYY-MM-DDTHH:mm:ss'),
+      );
+      expect(calledInputs.endAt).toContain(
+        expectedEndDate.format('YYYY-MM-DDTHH:mm'),
+      );
       expect(NotificationToast.success).toHaveBeenCalledWith('eventUpdated');
     });
 
@@ -498,7 +519,7 @@ describe('useUpdateEventHandler', () => {
         buildHandlerInput({
           alldaychecked: true,
           eventStartDate: new Date('invalid'),
-          eventEndDate: new Date('2024-04-23T00:00:00.000Z'),
+          eventEndDate: dayjs().add(11, 'days').startOf('day').toDate(),
           formState: {
             ...mockFormState,
             name: 'Changed Name',
@@ -516,7 +537,7 @@ describe('useUpdateEventHandler', () => {
       await updateEventHandler(
         buildHandlerInput({
           alldaychecked: true,
-          eventStartDate: new Date('2024-04-22T00:00:00.000Z'),
+          eventStartDate: dayjs().add(10, 'days').startOf('day').toDate(),
           eventEndDate: new Date('invalid'),
           formState: {
             ...mockFormState,
@@ -541,11 +562,11 @@ describe('useUpdateEventHandler', () => {
             ...mockEventListCardProps,
             allDay: true,
             startAt: 'invalid-date',
-            endAt: '2024-01-01T12:00:00.000Z',
+            endAt: dayjs().add(2, 'hours').toISOString(),
           },
           alldaychecked: true,
-          eventStartDate: new Date('2024-04-22T00:00:00.000Z'),
-          eventEndDate: new Date('2024-04-23T00:00:00.000Z'),
+          eventStartDate: dayjs().add(10, 'days').startOf('day').toDate(),
+          eventEndDate: dayjs().add(11, 'days').startOf('day').toDate(),
           formState: {
             ...mockFormState,
             name: 'Changed Name',
@@ -568,12 +589,12 @@ describe('useUpdateEventHandler', () => {
           eventListCardProps: {
             ...mockEventListCardProps,
             allDay: true,
-            startAt: '2024-01-01T10:00:00.000Z',
+            startAt: dayjs().toISOString(),
             endAt: 'invalid-date',
           },
           alldaychecked: true,
-          eventStartDate: new Date('2024-04-22T00:00:00.000Z'),
-          eventEndDate: new Date('2024-04-23T00:00:00.000Z'),
+          eventStartDate: dayjs().add(10, 'days').startOf('day').toDate(),
+          eventEndDate: dayjs().add(11, 'days').startOf('day').toDate(),
           formState: {
             ...mockFormState,
             name: 'Changed Name',
@@ -596,14 +617,24 @@ describe('useUpdateEventHandler', () => {
           eventListCardProps: {
             ...mockEventListCardProps,
             allDay: false,
-            startAt: '2024-01-01T10:00:00.000Z',
-            endAt: '2024-01-01T12:00:00.000Z',
+            startAt: dayjs().toISOString(),
+            endAt: dayjs().add(2, 'hours').toISOString(),
             startTime: 'invalid-time',
             endTime: '12:00:00',
           },
           alldaychecked: false,
-          eventStartDate: new Date('2024-04-22T11:00:00.000Z'),
-          eventEndDate: new Date('2024-04-22T13:00:00.000Z'),
+          eventStartDate: dayjs()
+            .add(10, 'days')
+            .hour(11)
+            .minute(0)
+            .second(0)
+            .toDate(),
+          eventEndDate: dayjs()
+            .add(10, 'days')
+            .hour(13)
+            .minute(0)
+            .second(0)
+            .toDate(),
           formState: {
             ...mockFormState,
             name: 'Changed Name',
@@ -628,14 +659,24 @@ describe('useUpdateEventHandler', () => {
           eventListCardProps: {
             ...mockEventListCardProps,
             allDay: false,
-            startAt: '2024-01-01T10:00:00.000Z',
-            endAt: '2024-01-01T12:00:00.000Z',
+            startAt: dayjs().toISOString(),
+            endAt: dayjs().add(2, 'hours').toISOString(),
             startTime: '10:00:00',
             endTime: 'invalid-time',
           },
           alldaychecked: false,
-          eventStartDate: new Date('2024-04-22T10:00:00.000Z'),
-          eventEndDate: new Date('2024-04-22T14:00:00.000Z'),
+          eventStartDate: dayjs()
+            .add(10, 'days')
+            .hour(10)
+            .minute(0)
+            .second(0)
+            .toDate(),
+          eventEndDate: dayjs()
+            .add(10, 'days')
+            .hour(14)
+            .minute(0)
+            .second(0)
+            .toDate(),
           formState: {
             ...mockFormState,
             name: 'Changed Name',

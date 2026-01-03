@@ -14,6 +14,10 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import OrganizationSidebar from './OrganizationSidebar';
 import { vi } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 /**
  * Unit tests for the OrganizationSidebar component in the User Portal.
@@ -48,8 +52,12 @@ const MOCKS = [
             _id: 1,
             title: 'Event',
             description: 'Event Test',
-            startDate: '2024-01-01',
-            endDate: '2024-01-02',
+            startDate: dayjs.utc().startOf('year').format('YYYY-MM-DD'),
+            endDate: dayjs
+              .utc()
+              .startOf('year')
+              .add(1, 'day')
+              .format('YYYY-MM-DD'),
             location: 'New Delhi',
             startTime: '02:00',
             endTime: '06:00',
@@ -84,7 +92,7 @@ const MOCKS = [
               lastName: 'Mittal',
               image: null,
               email: 'noble@gmail.com',
-              createdAt: '2023-03-02T03:22:08.101Z',
+              createdAt: dayjs.utc().toISOString(),
             },
             {
               _id: '64001660a711c62d5b4076a3',
@@ -92,7 +100,7 @@ const MOCKS = [
               lastName: 'Mittal',
               image: 'mockImage',
               email: 'noble@gmail.com',
-              createdAt: '2023-03-02T03:22:08.101Z',
+              createdAt: dayjs.utc().toISOString(),
             },
           ],
         },

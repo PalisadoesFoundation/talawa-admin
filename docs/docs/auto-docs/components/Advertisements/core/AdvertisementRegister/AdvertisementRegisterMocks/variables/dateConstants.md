@@ -40,15 +40,15 @@ Defined in: [src/components/Advertisements/core/AdvertisementRegister/Advertisem
 
 #### create.startAtCalledWith
 
-> **startAtCalledWith**: `string` = `'2024-12-31T00:00:00.000Z'`
+> **startAtCalledWith**: `string`
 
 #### create.startAtISO
 
-> **startAtISO**: `string` = `'2024-12-31T18:30:00.000Z'`
+> **startAtISO**: `string`
 
 #### create.startISOReceived
 
-> **startISOReceived**: `string` = `'2024-12-30T18:30:00.000Z'`
+> **startISOReceived**: `string`
 
 ### update
 
@@ -88,4 +88,4 @@ Defined in: [src/components/Advertisements/core/AdvertisementRegister/Advertisem
 
 #### update.startISOReceived
 
-> **startISOReceived**: `string` = `'2024-12-30T18:30:00.000Z'`
+> **startISOReceived**: `string`

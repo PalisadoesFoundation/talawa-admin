@@ -17,8 +17,12 @@ import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from '../../../utils/i18nForTest';
-import { PLEDGE_MODAL_MOCKS, PLEDGE_MODAL_ERROR_MOCKS } from '../PledgesMocks';
+import { PLEDGE_MODAL_MOCKS, PLEDGE_MODAL_ERROR_MOCKS } from '../Pledges.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
+
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfacePledgeModal } from './PledgeModal';
 import PledgeModal from './PledgeModal';
@@ -58,6 +62,9 @@ const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.pledges),
 );
 
+const FIXED_CREATED_AT = dayjs.utc().subtract(10, 'day').toISOString();
+const FIXED_UPDATED_AT = dayjs.utc().subtract(1, 'day').toISOString();
+
 const createPledgeProps = (): InterfacePledgeModal => ({
   isOpen: true,
   hide: vi.fn(),
@@ -65,7 +72,7 @@ const createPledgeProps = (): InterfacePledgeModal => ({
   refetchPledge: vi.fn(),
   campaignId: 'campaignId',
   orgId: 'orgId',
-  endDate: new Date('2024-12-31'),
+  endDate: dayjs.utc().add(1, 'year').toDate(),
   mode: 'create',
 });
 
@@ -75,8 +82,8 @@ const editPledgeProps = (): InterfacePledgeModal => ({
     id: '1',
     amount: 100,
     currency: 'USD',
-    createdAt: '2024-01-01T00:00:00.000Z',
-    updatedAt: '2024-01-10T00:00:00.000Z',
+    createdAt: FIXED_CREATED_AT,
+    updatedAt: FIXED_UPDATED_AT,
     pledger: {
       id: '1',
       firstName: 'John',
@@ -87,7 +94,7 @@ const editPledgeProps = (): InterfacePledgeModal => ({
     campaign: {
       id: '101',
       name: 'Campaign Name',
-      endAt: new Date('2024-01-15'),
+      endAt: dayjs.utc().add(1, 'month').toDate(),
       currencyCode: 'USD',
       goalAmount: 500,
     },
@@ -263,8 +270,8 @@ describe('PledgeModal', () => {
       const createdAt = pledgeProps[1].pledge?.createdAt;
       const updatedAt = pledgeProps[1].pledge?.updatedAt;
 
-      expect(createdAt).toBe('2024-01-01T00:00:00.000Z');
-      expect(updatedAt).toBe('2024-01-10T00:00:00.000Z');
+      expect(createdAt).toBe(FIXED_CREATED_AT);
+      expect(updatedAt).toBe(FIXED_UPDATED_AT);
     });
   });
 

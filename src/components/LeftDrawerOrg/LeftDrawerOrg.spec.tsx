@@ -1,4 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter } from 'react-router-dom';
@@ -212,8 +216,8 @@ const mockOrganizationData = {
     postalCode: '12345',
     countryCode: 'US',
     avatarURL: 'https://example.com/avatar.jpg',
-    createdAt: '2023-01-01T00:00:00Z',
-    updatedAt: '2023-01-02T00:00:00Z',
+    createdAt: dayjs.utc().toISOString(),
+    updatedAt: dayjs.utc().toISOString(),
     creator: {
       id: 'creator-123',
       name: 'Creator Name',

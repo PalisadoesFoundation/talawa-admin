@@ -3,6 +3,9 @@ import { render, screen, act, fireEvent } from '@testing-library/react';
 import CardItem from './CardItem';
 import type { InterfaceCardItem } from './CardItem';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import React from 'react';
 
 vi.mock('assets/svgs/cardItemLocation.svg?react', () => ({
@@ -20,9 +23,9 @@ describe('CardItem Component', () => {
   it('renders Event type card with all properties', () => {
     const props: InterfaceCardItem = {
       type: 'Event',
-      title: 'Tech Conference 2023',
-      startdate: '2023-09-15',
-      enddate: '2023-09-16',
+      title: `Tech Conference ${dayjs.utc().year()}`,
+      startdate: dayjs.utc().format('YYYY-MM-DD'),
+      enddate: dayjs.utc().add(1, 'day').format('YYYY-MM-DD'),
       location: 'Convention Center',
       creator: {
         id: '1',
@@ -31,7 +34,9 @@ describe('CardItem Component', () => {
     };
 
     render(<CardItem {...props} />);
-    expect(screen.getByText('Tech Conference 2023')).toBeInTheDocument();
+    expect(
+      screen.getByText(`Tech Conference ${dayjs.utc().year()}`),
+    ).toBeInTheDocument();
 
     expect(screen.getByText('Convention Center')).toBeInTheDocument();
 
@@ -50,7 +55,7 @@ describe('CardItem Component', () => {
     const props: InterfaceCardItem = {
       type: 'Event',
       title: 'No Location Event',
-      startdate: '2023-10-01',
+      startdate: dayjs.utc().add(10, 'days').format('YYYY-MM-DD'),
     };
 
     render(<CardItem {...props} />);
@@ -161,7 +166,7 @@ describe('CardItem Component', () => {
     const props: InterfaceCardItem = {
       type: 'Post',
       title: 'Post with Time',
-      time: '2023-10-15T10:00:00Z',
+      time: dayjs.utc().toISOString(),
     };
 
     render(<CardItem {...props} />);
@@ -169,7 +174,9 @@ describe('CardItem Component', () => {
     expect(screen.getByText('Post with Time')).toBeInTheDocument();
     expect(screen.getByText(/Posted on:/)).toBeInTheDocument();
     expect(
-      screen.getByText(/Oct 15, 2023/, { exact: false }),
+      screen.getByText(new RegExp(dayjs.utc().format('MMM D, YYYY')), {
+        exact: false,
+      }),
     ).toBeInTheDocument();
   });
 

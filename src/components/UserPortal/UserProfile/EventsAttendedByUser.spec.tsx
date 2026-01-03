@@ -3,6 +3,10 @@ import { render, screen } from '@testing-library/react';
 import { EventsAttendedByUser } from './EventsAttendedByUser';
 import { MockedProvider } from '@apollo/client/testing';
 import { EVENT_DETAILS_BASIC } from 'GraphQl/Queries/Queries';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 /**
  * Unit tests for EventsAttendedByUser component:
@@ -38,7 +42,7 @@ const mocks = [
           id: '1',
           name: 'Event 1',
           location: 'Location 1',
-          startAt: '2023-01-01',
+          startAt: dayjs.utc().toISOString(),
           organization: { id: 'org1', name: 'Org 1' },
         },
       },
@@ -55,7 +59,7 @@ const mocks = [
           id: '2',
           name: 'Event 2',
           location: 'Location 2',
-          startAt: '2023-01-01',
+          startAt: dayjs.utc().toISOString(),
           organization: { id: 'org1', name: 'Org 1' },
         },
       },
@@ -69,8 +73,8 @@ describe('EventsAttendedByUser Component', () => {
       name: 'John Doe',
       emailAddress: 'john@example.com',
       natalSex: 'Male',
-      createdAt: '2023-01-01',
-      birthDate: '1990-01-01',
+      createdAt: dayjs.utc().toISOString(),
+      birthDate: dayjs.utc().subtract(30, 'years').toISOString(),
       educationGrade: 'A',
       employmentStatus: 'Employed',
       maritalStatus: 'Single',
@@ -96,8 +100,8 @@ describe('EventsAttendedByUser Component', () => {
       name: 'Jane Doe',
       emailAddress: 'jane@example.com',
       natalSex: 'Female',
-      createdAt: '2023-01-01',
-      birthDate: '1990-01-01',
+      createdAt: dayjs.utc().toISOString(),
+      birthDate: dayjs.utc().subtract(30, 'years').toISOString(),
       educationGrade: 'B',
       employmentStatus: 'Unemployed',
       maritalStatus: 'Single',

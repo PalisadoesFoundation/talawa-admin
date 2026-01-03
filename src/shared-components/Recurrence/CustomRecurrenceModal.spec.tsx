@@ -10,6 +10,10 @@ import {
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { toast } from 'react-toastify';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 // Mock toast at module level
 vi.mock('react-toastify', () => ({
@@ -56,7 +60,8 @@ const renderModal = (
     hideCustomRecurrenceModal,
     setCustomRecurrenceModalIsOpen,
     t: (key: string) => key,
-    startDate: new Date('2025-01-15'),
+    // Use dynamic future date to avoid test staleness
+    startDate: dayjs().add(30, 'days').toDate(),
     ...override,
   };
 
@@ -889,7 +894,8 @@ describe('CustomRecurrenceModal – full coverage', () => {
 
   it('handles endsOn with endDate prop', () => {
     const { setRecurrenceRuleState } = renderModal({
-      endDate: new Date('2025-02-01'),
+      // Use dynamic future date to avoid test staleness
+      endDate: dayjs().add(60, 'days').toDate(),
     });
 
     fireEvent.click(screen.getByTestId(endsOn));
@@ -1027,9 +1033,11 @@ describe('CustomRecurrenceModal – full coverage', () => {
   });
 
   it('covers getWeekOfMonth, getOrdinalString, and getDayName helper functions with 3rd week date', async () => {
-    // Test with date in 3rd week (Wednesday, Jan 15)
+    // Test with date in 3rd week (e.g., 15th of a month)
+    // Using a dynamic date that falls on the 15th of a future month
+    const thirdWeekDate = dayjs().add(30, 'days').date(15).toDate();
     renderModal({
-      startDate: new Date('2025-01-15'),
+      startDate: thirdWeekDate,
       recurrenceRuleState: {
         ...baseRecurrenceRule,
         frequency: Frequency.MONTHLY,
@@ -1044,9 +1052,11 @@ describe('CustomRecurrenceModal – full coverage', () => {
   });
 
   it('covers helper functions with 1st week date and byWeekday', async () => {
-    // Test with date in 1st week (Saturday, Feb 1) with byDay set
+    // Test with date in 1st week (e.g., 1st of a month) with byDay set
+    // Using a dynamic date that falls on the 1st of a future month
+    const firstWeekDate = dayjs().add(30, 'days').date(1).toDate();
     renderModal({
-      startDate: new Date('2025-02-01'),
+      startDate: firstWeekDate,
       recurrenceRuleState: {
         ...baseRecurrenceRule,
         frequency: Frequency.MONTHLY,
@@ -1062,9 +1072,11 @@ describe('CustomRecurrenceModal – full coverage', () => {
   });
 
   it('covers helper functions with 5th week date (edge case)', async () => {
-    // Test with date in 5th week (Monday, Mar 31)
+    // Test with date in 5th week (e.g., 31st of a month)
+    // Ensure we're in a month with 31 days (Jan, Mar, May, Jul, Aug, Oct, Dec)
+    const fifthWeekDate = dayjs.utc().month(0).date(31).toDate(); // January 31st
     renderModal({
-      startDate: new Date('2025-03-31'),
+      startDate: fifthWeekDate,
       recurrenceRuleState: {
         ...baseRecurrenceRule,
         frequency: Frequency.MONTHLY,
@@ -1328,8 +1340,10 @@ describe('CustomRecurrenceModal – full coverage', () => {
     // We'll use a date calculation that might exceed 5 weeks
     // Actually, getWeekOfMonth returns 1-5, so we need to test the fallback in getOrdinalString
     // The fallback happens when num > 5 or num is not in the ordinals array
+    // Using a dynamic date on the 15th of a future month
+    const thirdWeekDate = dayjs().add(30, 'days').date(15).toDate();
     renderModal({
-      startDate: new Date('2025-01-15'), // This is in the 3rd week
+      startDate: thirdWeekDate,
       recurrenceRuleState: {
         ...baseRecurrenceRule,
         frequency: Frequency.MONTHLY,
@@ -1418,7 +1432,8 @@ describe('CustomRecurrenceModal – full coverage', () => {
         recurrenceRuleState: {
           ...baseRecurrenceRule,
           never: false,
-          endDate: new Date('2025-02-15'),
+          // Use dynamic future date to avoid test staleness
+          endDate: dayjs().add(60, 'days').toDate(),
         },
       });
 

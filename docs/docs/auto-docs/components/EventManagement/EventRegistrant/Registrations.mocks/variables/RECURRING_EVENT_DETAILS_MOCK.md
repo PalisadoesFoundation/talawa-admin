@@ -6,4 +6,4 @@
 
 > `const` **RECURRING\_EVENT\_DETAILS\_MOCK**: `MockedResponse`
 
-Defined in: [src/components/EventManagement/EventRegistrant/Registrations.mocks.ts:26](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventRegistrant/Registrations.mocks.ts#L26)
+Defined in: [src/components/EventManagement/EventRegistrant/Registrations.mocks.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/EventManagement/EventRegistrant/Registrations.mocks.ts#L29)

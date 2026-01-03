@@ -6,7 +6,7 @@
 
 > `const` **mockEventData**: `object`
 
-Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/MemberActivityMocks.ts#L3)
+Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:6](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/MemberActivityMocks.ts#L6)
 
 ## Type Declaration
 
@@ -28,7 +28,7 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://git
 
 #### event.createdAt
 
-> **createdAt**: `string` = `'2030-01-01T00:00:00Z'`
+> **createdAt**: `string`
 
 #### event.creator
 
@@ -52,7 +52,7 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://git
 
 #### event.endAt
 
-> **endAt**: `string` = `'2030-01-02T17:00:00.000Z'`
+> **endAt**: `string`
 
 #### event.endTime
 
@@ -104,7 +104,7 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://git
 
 #### event.startAt
 
-> **startAt**: `string` = `'2030-01-01T09:00:00.000Z'`
+> **startAt**: `string`
 
 #### event.startTime
 
@@ -116,7 +116,7 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:3](https://git
 
 #### event.updatedAt
 
-> **updatedAt**: `string` = `'2030-01-01T00:00:00Z'`
+> **updatedAt**: `string`
 
 #### event.updater
 

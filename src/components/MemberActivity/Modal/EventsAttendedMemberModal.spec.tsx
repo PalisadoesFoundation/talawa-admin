@@ -4,6 +4,10 @@ import { MockedProvider } from '@apollo/client/testing';
 import { BrowserRouter } from 'react-router';
 import EventsAttendedMemberModal from './EventsAttendedMemberModal';
 import { vi } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 /**
  * Mock the `react-i18next` module to provide translation functionality.
@@ -24,7 +28,7 @@ vi.mock('./CustomCell/customTableCell', () => ({
   CustomTableCell: ({ eventId }: { eventId: string }) => (
     <tr data-testid="event-row">
       <td>{`Event ${eventId}`}</td>
-      <td>2024-03-14</td>
+      <td>{dayjs.utc().format('YYYY-MM-DD')}</td>
       <td>Yes</td>
       <td>5</td>
     </tr>
@@ -34,7 +38,7 @@ vi.mock('./CustomCell/customTableCell', () => ({
 const mockEvents = Array.from({ length: 6 }, (_, index) => ({
   id: `${index + 1}`,
   name: `Event ${index + 1}`,
-  date: '2024-03-14',
+  date: dayjs.utc().format('YYYY-MM-DD'),
   isRecurring: true,
   attendees: [
     { id: '1', name: 'User 1', emailAddress: 'user1@example.com' },

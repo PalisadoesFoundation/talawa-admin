@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import UpcomingEventsCard from './UpcomingEventsCard';
 import type { IEvent } from 'utils/interfaces';
+import dayjs from 'dayjs';
 
 // Mock interfaces for test data - properly typed structures
 interface TestInterfaceUser {
@@ -84,11 +85,11 @@ describe('UpcomingEventsCard Component', () => {
       node: {
         id: 'event1',
         name: 'Test Event 1',
-        startAt: '2023-01-01T10:00:00Z',
-        endAt: '2023-01-01T12:00:00Z',
+        startAt: dayjs().subtract(1, 'year').hour(10).toISOString(),
+        endAt: dayjs().subtract(1, 'year').hour(12).toISOString(),
         description: 'Test event description',
-        createdAt: '2023-01-01T08:00:00Z',
-        updatedAt: '2023-01-01T08:00:00Z',
+        createdAt: dayjs().subtract(1, 'year').hour(8).toISOString(),
+        updatedAt: dayjs().subtract(1, 'year').hour(8).toISOString(),
         creator: { id: 'user1', name: 'Creator 1' },
         updater: { id: 'user1', name: 'Creator 1' },
         organization: { id: 'org1', name: 'Test Org' },
@@ -99,11 +100,23 @@ describe('UpcomingEventsCard Component', () => {
       node: {
         id: 'event2',
         name: 'Test Event 2',
-        startAt: '2023-01-02T10:00:00Z',
-        endAt: '2023-01-02T12:00:00Z',
+        startAt: dayjs()
+          .subtract(1, 'year')
+          .add(1, 'day')
+          .hour(10)
+          .toISOString(),
+        endAt: dayjs().subtract(1, 'year').add(1, 'day').hour(12).toISOString(),
         description: 'Another test event',
-        createdAt: '2023-01-02T08:00:00Z',
-        updatedAt: '2023-01-02T09:00:00Z',
+        createdAt: dayjs()
+          .subtract(1, 'year')
+          .add(1, 'day')
+          .hour(8)
+          .toISOString(),
+        updatedAt: dayjs()
+          .subtract(1, 'year')
+          .add(1, 'day')
+          .hour(9)
+          .toISOString(),
         creator: { id: 'user2', name: 'Creator 2' },
         updater: { id: 'user2', name: 'Creator 2' },
         organization: { id: 'org1', name: 'Test Org' },

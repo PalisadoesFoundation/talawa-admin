@@ -3,6 +3,9 @@ import {
   UPDATE_PLEDGE,
   DELETE_PLEDGE,
 } from 'GraphQl/Mutations/PledgeMutation';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 import { MEMBERS_LIST, USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
@@ -47,7 +50,7 @@ const memberList = {
               'Doe',
               'img-url',
               'testuser4@example.com',
-              '2030-04-13T04:53:17.742Z',
+              dayjs.utc().toISOString(),
             ),
             createUser(
               '2',
@@ -55,7 +58,7 @@ const memberList = {
               'Bradley',
               null,
               'testuser2@example.com',
-              '2030-04-13T04:53:17.742Z',
+              dayjs.utc().toISOString(),
             ),
           ],
         },
@@ -88,16 +91,16 @@ export const MOCKS = [
             name: 'Campaign Name',
             fundingGoal: 1000,
             currency: 'USD',
-            startDate: '2030-01-01',
-            endDate: '2034-08-08',
+            startDate: dayjs.utc().toISOString(),
+            endDate: dayjs.utc().add(1, 'year').toISOString(),
             pledges: [
               {
                 __typename: 'Pledge',
                 id: '1',
                 amount: 100,
                 currency: 'USD',
-                startDate: '2030-01-01',
-                endDate: '2030-01-10',
+                startDate: dayjs.utc().toISOString(),
+                endDate: dayjs.utc().add(10, 'day').toISOString(),
                 users: [createUser('1', 'John', 'Doe', 'img-url')],
               },
               {
@@ -105,8 +108,8 @@ export const MOCKS = [
                 id: '2',
                 amount: 200,
                 currency: 'USD',
-                startDate: '2030-01-01',
-                endDate: '2030-01-09',
+                startDate: dayjs.utc().toISOString(),
+                endDate: dayjs.utc().add(9, 'day').toISOString(),
                 users: [createUser('2', 'Jane', 'Doe')],
               },
             ],
@@ -137,16 +140,16 @@ export const MOCKS = [
             name: 'Campaign Name',
             fundingGoal: 1000,
             currency: 'USD',
-            startDate: '2030-01-01',
-            endDate: '2030-08-08',
+            startDate: dayjs.utc().toISOString(),
+            endDate: dayjs.utc().add(1, 'year').toISOString(),
             pledges: [
               {
                 __typename: 'Pledge',
                 id: '2',
                 amount: 200,
                 currency: 'USD',
-                startDate: '2030-01-01',
-                endDate: '2030-01-09',
+                startDate: dayjs.utc().toISOString(),
+                endDate: dayjs.utc().add(9, 'day').toISOString(),
                 users: [createUser('2', 'Jane', 'Doe')],
               },
               {
@@ -154,8 +157,8 @@ export const MOCKS = [
                 id: '1',
                 amount: 100,
                 currency: 'USD',
-                startDate: '2030-01-01',
-                endDate: '2030-01-10',
+                startDate: dayjs.utc().toISOString(),
+                endDate: dayjs.utc().add(10, 'day').toISOString(),
                 users: [createUser('1', 'John', 'Doe')],
               },
             ],
@@ -186,16 +189,16 @@ export const MOCKS = [
             name: 'Campaign Name',
             fundingGoal: 1000,
             currency: 'USD',
-            startDate: '2030-01-01',
-            endDate: '2030-08-08',
+            startDate: dayjs.utc().toISOString(),
+            endDate: dayjs.utc().add(1, 'year').toISOString(),
             pledges: [
               {
                 __typename: 'Pledge',
                 id: '2',
                 amount: 200,
                 currency: 'USD',
-                startDate: '2030-01-01',
-                endDate: '2030-01-09',
+                startDate: dayjs.utc().toISOString(),
+                endDate: dayjs.utc().add(9, 'day').toISOString(),
                 users: [
                   createUser('2', 'Jane', 'Doe'),
                   createUser('2', 'John', 'Doe2', 'img-url2'),
@@ -214,8 +217,8 @@ export const MOCKS = [
                 id: '1',
                 amount: 100,
                 currency: 'USD',
-                startDate: '2030-01-01',
-                endDate: '2030-01-10',
+                startDate: dayjs.utc().toISOString(),
+                endDate: dayjs.utc().add(10, 'day').toISOString(),
                 users: [createUser('1', 'John', 'Doe')],
               },
             ],
@@ -246,16 +249,16 @@ export const MOCKS = [
             name: 'Campaign Name',
             fundingGoal: 1000,
             currency: 'USD',
-            startDate: '2030-01-01',
-            endDate: '2030-08-08',
+            startDate: dayjs.utc().toISOString(),
+            endDate: dayjs.utc().add(1, 'year').toISOString(),
             pledges: [
               {
                 __typename: 'Pledge',
                 id: '1',
                 amount: 100,
                 currency: 'USD',
-                startDate: '2024-01-01',
-                endDate: '2024-01-10',
+                startDate: dayjs.utc().subtract(1, 'month').toISOString(),
+                endDate: dayjs.utc().subtract(20, 'day').toISOString(),
                 users: [createUser('1', 'John', 'Doe')],
               },
               {
@@ -263,8 +266,8 @@ export const MOCKS = [
                 id: '2',
                 amount: 200,
                 currency: 'USD',
-                startDate: '2024-01-01',
-                endDate: '2024-01-09',
+                startDate: dayjs.utc().subtract(1, 'month').toISOString(),
+                endDate: dayjs.utc().subtract(21, 'day').toISOString(),
                 users: [createUser('2', 'Jane', 'Doe')],
               },
             ],
@@ -342,15 +345,17 @@ export const PLEDGE_MODAL_MOCKS = [
   {
     request: {
       query: CREATE_PLEDGE,
-      variables: {
-        campaignId: 'campaignId',
-        amount: 200,
-        currency: 'USD',
-        startDate: '2024-01-02',
-        endDate: '2024-01-02',
-        userIds: ['1'],
-      },
     },
+    variableMatcher: (vars: {
+      campaignId: string;
+      amount: number;
+      currency: string;
+      userIds?: string[];
+    }) =>
+      vars.campaignId === 'campaignId' &&
+      vars.amount === 200 &&
+      vars.currency === 'USD' &&
+      vars.userIds?.[0] === '1',
     result: {
       data: {
         createFundraisingCampaignPledge: {
@@ -363,15 +368,17 @@ export const PLEDGE_MODAL_MOCKS = [
   {
     request: {
       query: CREATE_PLEDGE,
-      variables: {
-        campaignId: 'campaignId',
-        amount: 100,
-        currency: 'USD',
-        startDate: '2024-01-01',
-        endDate: '2024-01-10',
-        userIds: ['1'],
-      },
     },
+    variableMatcher: (vars: {
+      campaignId: string;
+      amount: number;
+      currency: string;
+      userIds?: string[];
+    }) =>
+      vars.campaignId === 'campaignId' &&
+      vars.amount === 100 &&
+      vars.currency === 'USD' &&
+      vars.userIds?.[0] === '1',
     result: {
       data: {
         createPledge: {
@@ -379,8 +386,8 @@ export const PLEDGE_MODAL_MOCKS = [
           id: '1',
           amount: 100,
           currency: 'USD',
-          startDate: '2024-01-01',
-          endDate: '2024-01-10',
+          startDate: dayjs.utc().toISOString(),
+          endDate: dayjs.utc().add(9, 'day').toISOString(),
           users: [createUser('1', 'John', 'Doe')],
         },
       },
@@ -401,8 +408,8 @@ export const PLEDGE_MODAL_MOCKS = [
           id: '1',
           amount: 200,
           currency: 'USD',
-          startDate: '2024-01-01',
-          endDate: '2024-01-10',
+          startDate: dayjs.utc().toISOString(),
+          endDate: dayjs.utc().add(9, 'day').toISOString(),
           users: [createUser('1', 'John', 'Doe')],
         },
       },

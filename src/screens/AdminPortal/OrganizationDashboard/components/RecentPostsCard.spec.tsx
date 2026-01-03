@@ -3,6 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
 import RecentPostsCard from './RecentPostsCard';
 import type { InterfaceOrganizationPg } from 'utils/interfaces';
+import dayjs from 'dayjs';
 
 // Narrow type that only includes the fields the component uses
 type MinimalOrgPg = Pick<InterfaceOrganizationPg, 'organization'>;
@@ -83,7 +84,7 @@ describe('RecentPostsCard Component', () => {
             node: {
               id: 'post1',
               caption: 'First Post Caption',
-              createdAt: '2023-01-01T00:00:00Z',
+              createdAt: dayjs().subtract(1, 'year').toISOString(),
               creator: {
                 id: 'user1',
                 name: 'John Doe',
@@ -94,7 +95,10 @@ describe('RecentPostsCard Component', () => {
             node: {
               id: 'post2',
               caption: 'Second Post Caption',
-              createdAt: '2023-01-02T00:00:00Z',
+              createdAt: dayjs()
+                .subtract(1, 'year')
+                .add(1, 'day')
+                .toISOString(),
               creator: {
                 id: 'user2',
                 name: 'Jane Smith',

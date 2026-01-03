@@ -12,6 +12,10 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import styles from '../../style/app-fixed.module.css';
 import { vi } from 'vitest';
 import { setItem, clearAllItems } from 'utils/useLocalstorage';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 // Create mocks for the router hooks
 let mockUseParams: ReturnType<typeof vi.fn>;
@@ -89,8 +93,21 @@ const MOCKS = [
                   id: 'event123',
                   name: 'Test Event Title',
                   description: 'Test Description',
-                  startAt: '2024-01-01T09:00:00.000Z',
-                  endAt: '2024-01-02T17:00:00.000Z',
+                  startAt: dayjs
+                    .utc()
+                    .startOf('year')
+                    .hour(9)
+                    .minute(0)
+                    .second(0)
+                    .toISOString(),
+                  endAt: dayjs
+                    .utc()
+                    .startOf('year')
+                    .add(1, 'day')
+                    .hour(17)
+                    .minute(0)
+                    .second(0)
+                    .toISOString(),
                   allDay: false,
                   location: 'Test Location',
                   isPublic: true,
@@ -106,8 +123,8 @@ const MOCKS = [
                   attachments: [],
                   creator: { id: 'u1', name: 'Test User' },
                   organization: { id: '123', name: 'Test Org' },
-                  createdAt: '2024-01-01T00:00:00.000Z',
-                  updatedAt: '2024-01-01T00:00:00.000Z',
+                  createdAt: dayjs.utc().startOf('year').toISOString(),
+                  updatedAt: dayjs.utc().startOf('year').toISOString(),
                 },
               },
             ],

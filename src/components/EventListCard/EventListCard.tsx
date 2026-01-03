@@ -23,7 +23,7 @@
  * <EventListCard
  *   title="Community Meetup"
  *   description="A meetup for the local community."
- *   date="2023-10-15"
+ *   date=dayjs().subtract(1, 'year').month(9).date(15).format('YYYY-MM-DD')
  *   location="Community Hall"
  *   refetchEvents={fetchEvents}
  * />

@@ -16,6 +16,10 @@ import {
   checkInMutationSuccessRecurring,
 } from '../../CheckInMocks';
 import { vi } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 // Mock @pdfme/generator
 vi.mock('@pdfme/generator', () => ({
@@ -83,7 +87,7 @@ describe('Testing Table Row for CheckIn Table', () => {
         id: '123',
         name: 'John Doe',
         userId: 'user123',
-        checkInTime: '2023-01-01T12:00:00Z',
+        checkInTime: dayjs.utc().toISOString(),
         checkOutTime: null,
         isCheckedIn: true,
         isCheckedOut: false,
@@ -160,7 +164,7 @@ describe('Testing Table Row for CheckIn Table', () => {
         id: `123`,
         name: '',
         userId: `user123`,
-        checkInTime: '2023-01-01T12:00:00Z',
+        checkInTime: dayjs.utc().toISOString(),
         checkOutTime: null,
         isCheckedIn: true,
         isCheckedOut: false,

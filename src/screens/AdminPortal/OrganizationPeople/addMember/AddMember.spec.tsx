@@ -17,6 +17,7 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { vi, afterEach } from 'vitest';
+import dayjs from 'dayjs';
 
 // Mock react-toastify
 const sharedMocks = vi.hoisted(() => ({
@@ -277,7 +278,7 @@ const createMemberConnectionMock = (
               name: 'John Doe',
               emailAddress: 'john@example.com',
               avatarURL: 'https://example.com/avatar1.jpg',
-              createdAt: '2023-01-01T00:00:00Z',
+              createdAt: dayjs().subtract(1, 'year').toISOString(),
               role: 'member',
             },
             cursor: 'cursor1',
@@ -288,7 +289,10 @@ const createMemberConnectionMock = (
               name: 'Jane Smith',
               emailAddress: 'jane@example.com',
               avatarURL: null,
-              createdAt: '2023-01-02T00:00:00Z',
+              createdAt: dayjs()
+                .subtract(1, 'year')
+                .add(1, 'day')
+                .toISOString(),
               role: 'member',
             },
             cursor: 'cursor2',
@@ -465,7 +469,7 @@ describe('AddMember Screen', () => {
               name: 'John Doe',
               emailAddress: 'john@example.com',
               avatarURL: 'https://example.com/avatar1.jpg',
-              createdAt: '2023-01-01T00:00:00Z',
+              createdAt: dayjs().subtract(1, 'year').toISOString(),
             },
           },
         ],
@@ -688,7 +692,10 @@ describe('AddMember Screen', () => {
               name: 'Bob Johnson',
               emailAddress: 'bob@example.com',
               avatarURL: null,
-              createdAt: '2023-01-03T00:00:00Z',
+              createdAt: dayjs()
+                .subtract(1, 'year')
+                .add(2, 'days')
+                .toISOString(),
             },
           },
         ],
@@ -1090,7 +1097,7 @@ describe('AddMember Screen', () => {
               name: 'John Doe',
               emailAddress: 'john@example.com',
               avatarURL: null,
-              createdAt: '2023-01-01T00:00:00Z',
+              createdAt: dayjs().subtract(1, 'year').toISOString(),
             },
           },
         ],

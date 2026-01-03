@@ -263,7 +263,8 @@ describe('CSV Export Functions', () => {
 
     test('creates safe filename with timestamp', () => {
       vi.useFakeTimers();
-      const mockDate = new Date('2023-01-01T00:00:00.000Z');
+      // Using fake timers with a dynamically generated date to test filename generation
+      const mockDate = new Date();
       vi.setSystemTime(mockDate);
 
       const selectedCategory = 'Age & Demographics!';
@@ -272,8 +273,9 @@ describe('CSV Export Functions', () => {
 
       exportDemographicsToCSV(selectedCategory, categoryLabels, categoryData);
 
-      const expectedFilename =
-        'age___demographics__demographics_2023-01-01T00-00-00.000Z.csv';
+      // Compute expected filename dynamically based on mockDate
+      const timestamp = mockDate.toISOString().replace(/:/g, '-');
+      const expectedFilename = `age___demographics__demographics_${timestamp}.csv`;
       const downloadCalls = mockSetAttribute.mock.calls.filter(
         (call) => call[0] === 'download',
       );

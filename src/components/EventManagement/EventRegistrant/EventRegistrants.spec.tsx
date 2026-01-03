@@ -1,4 +1,7 @@
 import React from 'react';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 import { MockedProvider } from '@apollo/react-testing';
 import type { RenderResult } from '@testing-library/react';
 import {
@@ -145,10 +148,10 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     await waitFor(() => {
       expect(
         screen.getByTestId('registrant-registered-at-0'),
-      ).toHaveTextContent('2030-04-13');
+      ).toHaveTextContent(dayjs.utc().add(4, 'year').format('YYYY-MM-DD'));
       expect(
         screen.getByTestId('registrant-registered-at-1'),
-      ).toHaveTextContent('2030-04-13');
+      ).toHaveTextContent(dayjs.utc().add(4, 'year').format('YYYY-MM-DD'));
     });
   });
 

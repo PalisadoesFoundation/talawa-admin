@@ -2044,9 +2044,6 @@
   "contact": {
     "card_aria": "Contact card"
   },
-  "donation": {
-    "card_aria": "Donation card"
-  },
   "securedRoute": {
     "sessionExpired": "Kindly relogin as session has expired"
   },
@@ -2063,7 +2060,14 @@
     "logoutFailed": "Logout failed",
     "title": "User Portal",
     "talawa": "Talawa",
-    "talawaBranding": "Talawa Branding"
+    "talawaBranding": "Talawa Branding",
+    "view": "View"
+  },
+  "donation": {
+    "amount_label": "Montant",
+    "card_aria": "Carte de don",
+    "card_test_id": "donation-card-{{id}}",
+    "date_label": "Date"
   },
   "organizationVenuesNotification": {
     "venueCreated": "Venue created successfully",

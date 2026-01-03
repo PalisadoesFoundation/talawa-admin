@@ -6,7 +6,7 @@
 
 > `const` **mocks**: `object`[]
 
-Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/MemberActivityMocks.ts#L51)
+Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/MemberActivity/MemberActivityMocks.ts#L54)
 
 ## Type Declaration
 
@@ -64,4 +64,4 @@ Defined in: [src/components/MemberActivity/MemberActivityMocks.ts:51](https://gi
 
 #### result.data.event.startAt
 
-> **startAt**: `string` = `'2030-01-01T09:00:00Z'`
+> **startAt**: `string`

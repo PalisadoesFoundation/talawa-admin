@@ -17,6 +17,7 @@ import type { RenderResult } from '@testing-library/react';
 import { InterfacePostEdge } from 'types/Post/interface';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'components/test-utils/I18nextProviderMock';
+import dayjs from 'dayjs';
 
 // Hoisted mocks (must be before vi.mock calls)
 const { mockNotificationToast } = vi.hoisted(() => ({
@@ -223,7 +224,8 @@ vi.mock('react-infinite-scroll-component', () => ({
 
 // Deterministic values for stable testing
 let nextId = 1;
-const FIXED_TIMESTAMP = '2024-01-15T12:00:00.000Z';
+// Use dynamic timestamp to avoid test staleness
+const FIXED_TIMESTAMP = dayjs().subtract(14, 'days').toISOString();
 
 // Helper function to enrich post node
 const enrichPostNode = (
@@ -274,7 +276,8 @@ const samplePosts = [
   {
     id: 'post-1',
     caption: 'First Post Title',
-    createdAt: '2024-01-01T12:00:00Z',
+    // Use dynamic past date to avoid test staleness
+    createdAt: dayjs().subtract(30, 'days').toISOString(),
     creator: {
       id: 'user-1',
       name: 'John Doe',
@@ -290,7 +293,8 @@ const samplePosts = [
   {
     id: 'post-2',
     caption: 'Second Post About Testing',
-    createdAt: '2024-01-02T12:00:00Z',
+    // Use dynamic past date to avoid test staleness
+    createdAt: dayjs().subtract(29, 'days').toISOString(),
     creator: {
       id: 'user-2',
       name: 'Jane Smith',
@@ -298,7 +302,8 @@ const samplePosts = [
       emailAddress: 'jane@example.com',
     },
     pinned: true,
-    pinnedAt: '2024-01-02T12:00:00Z',
+    // Use dynamic past date for pinnedAt
+    pinnedAt: dayjs().subtract(29, 'days').toISOString(),
     imageUrl: null,
     videoUrl: 'video.mp4',
     attachments: [],
@@ -306,7 +311,8 @@ const samplePosts = [
   {
     id: 'post-4-invalid-date',
     caption: 'Third Post Content',
-    createdAt: '2024-01-03T12:00:00Z',
+    // Use dynamic past date to avoid test staleness
+    createdAt: dayjs().subtract(28, 'days').toISOString(),
     creator: {
       id: 'user-1',
       name: 'John Doe',
@@ -1039,7 +1045,7 @@ describe('Edge Cases', () => {
         downVotesCount: undefined, // Test fallback
         upVotesCount: undefined, // Test fallback
         attachments: undefined,
-        createdAt: '2024-01-15T12:00:00.000Z',
+        createdAt: dayjs().subtract(14, 'days').toISOString(),
       },
       cursor: 'cursor-video-post-1',
     };
@@ -1220,8 +1226,8 @@ describe('FetchMore Success Coverage', () => {
                   node: {
                     id: 'new-post-1',
                     caption: 'New Post From FetchMore',
-                    createdAt: '2024-01-04T12:00:00Z',
-                    updatedAt: '2024-01-04T12:00:00Z',
+                    createdAt: dayjs().subtract(27, 'days').toISOString(),
+                    updatedAt: dayjs().subtract(27, 'days').toISOString(),
                     pinnedAt: null,
                     pinned: false,
                     attachments: [],

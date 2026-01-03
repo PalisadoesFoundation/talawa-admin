@@ -1,5 +1,9 @@
 import React from 'react';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import {
   RenderResult,
   within,
@@ -385,7 +389,7 @@ describe('OrganizationDashboard', () => {
               membershipRequests: [
                 {
                   membershipRequestId: 'request1',
-                  createdAt: '2023-01-01T00:00:00Z',
+                  createdAt: dayjs.utc().subtract(3, 'day').toISOString(),
                   status: 'pending',
                   user: {
                     id: 'pendingUser1',
@@ -398,7 +402,7 @@ describe('OrganizationDashboard', () => {
                 },
                 {
                   membershipRequestId: 'request2',
-                  createdAt: '2023-01-02T00:00:00Z',
+                  createdAt: dayjs.utc().subtract(2, 'day').toISOString(),
                   status: 'pending',
                   user: {
                     id: 'pendingUser2',
@@ -411,7 +415,7 @@ describe('OrganizationDashboard', () => {
                 },
                 {
                   membershipRequestId: 'request3',
-                  createdAt: '2023-01-03T00:00:00Z',
+                  createdAt: dayjs.utc().subtract(1, 'day').toISOString(),
                   status: 'pending',
                   user: {
                     id: 'pendingUser3',
@@ -424,7 +428,7 @@ describe('OrganizationDashboard', () => {
                 },
                 {
                   membershipRequestId: 'request4',
-                  createdAt: '2023-01-04T00:00:00Z',
+                  createdAt: dayjs.utc().toISOString(),
                   status: 'rejected',
                   user: {
                     id: 'rejectedUser4',

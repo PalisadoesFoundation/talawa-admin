@@ -1,4 +1,8 @@
 import React, { act } from 'react';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import * as convertToBase64Module from 'utils/convertToBase64';
 import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
@@ -125,8 +129,8 @@ const MOCKS3 = [
     result: {
       data: {
         community: {
-          createdAt: '2022-01-01T12:00:00Z',
-          updatedAt: '2022-01-01T12:00:00Z',
+          createdAt: dayjs.utc().toISOString(),
+          updatedAt: dayjs.utc().toISOString(),
           id: 'communityId',
           name: 'testName',
           logoURL: 'http://logo.com',

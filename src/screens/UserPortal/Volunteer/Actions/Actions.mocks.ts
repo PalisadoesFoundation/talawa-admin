@@ -1,5 +1,8 @@
 import type { MockedResponse } from '@apollo/react-testing';
 import { ACTION_ITEM_LIST } from 'GraphQl/Queries/ActionItemQueries';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 const action1 = {
   id: 'actionId1',
@@ -32,9 +35,9 @@ const action1 = {
   },
   preCompletionNotes: '',
   postCompletionNotes: '',
-  assignedAt: '2024-08-25',
-  completionAt: '2024-09-01',
-  createdAt: '2024-08-20',
+  assignedAt: dayjs.utc().month(7).date(25).format('YYYY-MM-DD'),
+  completionAt: dayjs.utc().month(8).date(1).format('YYYY-MM-DD'),
+  createdAt: dayjs.utc().month(7).date(20).format('YYYY-MM-DD'),
   isCompleted: false,
   event: {
     id: 'eventId1',

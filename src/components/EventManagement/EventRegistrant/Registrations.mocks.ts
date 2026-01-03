@@ -1,4 +1,7 @@
 import type { MockedResponse } from '@apollo/react-testing';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 import {
   EVENT_REGISTRANTS,
   EVENT_DETAILS,
@@ -94,7 +97,7 @@ export const REGISTRANTS_MOCK: MockedResponse = {
             emailAddress: 'bruce@example.com',
           },
           isRegistered: true,
-          createdAt: '2030-04-13T10:23:17.742Z',
+          createdAt: dayjs.utc().add(4, 'year').toISOString(),
         },
         {
           id: '6589386a2caa9d8d69087485',
@@ -104,7 +107,7 @@ export const REGISTRANTS_MOCK: MockedResponse = {
             emailAddress: 'jane@example.com',
           },
           isRegistered: true,
-          createdAt: '2030-04-13T10:23:17.742Z',
+          createdAt: dayjs.utc().add(4, 'year').toISOString(),
         },
       ],
     },
@@ -174,7 +177,7 @@ export const REGISTRANTS_MISSING_NAME_MOCK: MockedResponse = {
             emailAddress: 'john@example.com',
           },
           isRegistered: true,
-          createdAt: '2030-04-13T10:23:17.742Z',
+          createdAt: dayjs.utc().add(4, 'year').toISOString(),
         },
       ],
     },
@@ -197,7 +200,7 @@ export const REGISTRANTS_ERROR_USER_MOCK: MockedResponse = {
             emailAddress: 'error@example.com',
           },
           isRegistered: true,
-          createdAt: '2030-04-13T10:23:17.742Z',
+          createdAt: dayjs.utc().add(4, 'year').toISOString(),
         },
       ],
     },

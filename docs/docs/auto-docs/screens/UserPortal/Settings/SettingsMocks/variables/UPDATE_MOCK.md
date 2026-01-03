@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_MOCK**: `object`[]
 
-Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:127](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Settings/SettingsMocks.ts#L127)
+Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:128](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/UserPortal/Settings/SettingsMocks.ts#L128)
 
 ## Type Declaration
 
@@ -76,7 +76,7 @@ Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:127](https://githu
 
 #### result.data.updateCurrentUser.createdAt
 
-> **createdAt**: `string` = `'2023-04-13T04:53:17.742Z'`
+> **createdAt**: `string`
 
 #### result.data.updateCurrentUser.description
 
@@ -140,7 +140,7 @@ Defined in: [src/screens/UserPortal/Settings/SettingsMocks.ts:127](https://githu
 
 #### result.data.updateCurrentUser.updatedAt
 
-> **updatedAt**: `string` = `'2025-02-09T06:26:51.209Z'`
+> **updatedAt**: `string`
 
 #### result.data.updateCurrentUser.workPhoneNumber
 

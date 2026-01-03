@@ -11,8 +11,12 @@ import { store } from 'state/store';
 import type { InterfaceDeletePledgeModal } from './PledgeDeleteModal';
 import PledgeDeleteModal from './PledgeDeleteModal';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
+
 import i18nForTest from '../../../utils/i18nForTest';
-import { MOCKS_DELETE_PLEDGE_ERROR, MOCKS } from '../PledgesMocks';
+import { MOCKS_DELETE_PLEDGE_ERROR, MOCKS } from '../Pledges.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { vi } from 'vitest';
@@ -41,8 +45,8 @@ const pledgeProps: InterfaceDeletePledgeModal = {
     id: '1',
     amount: 100,
     currency: 'USD',
-    createdAt: '2024-01-01T00:00:00.000Z',
-    updatedAt: '2024-01-10T00:00:00.000Z',
+    createdAt: dayjs.utc().subtract(10, 'day').toISOString(),
+    updatedAt: dayjs.utc().toISOString(),
     pledger: {
       id: '1',
       firstName: 'John',
@@ -53,7 +57,7 @@ const pledgeProps: InterfaceDeletePledgeModal = {
     campaign: {
       id: '101',
       name: 'Campaign Name',
-      endAt: new Date('2024-01-15'),
+      endAt: dayjs.utc().add(1, 'month').toDate(),
       currencyCode: 'USD',
       goalAmount: 500,
     },

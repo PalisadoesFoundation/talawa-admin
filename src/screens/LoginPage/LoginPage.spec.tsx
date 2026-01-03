@@ -25,6 +25,7 @@ import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, expect, it, describe } from 'vitest';
 import { GraphQLError } from 'graphql';
+import dayjs from 'dayjs';
 
 vi.mock('utils/useLocalstorage');
 
@@ -1660,7 +1661,10 @@ describe('Extra coverage for 100 %', () => {
         result: {
           data: {
             community: {
-              createdAt: '2023-01-01',
+              createdAt: dayjs()
+                .subtract(1, 'year')
+                .startOf('year')
+                .format('YYYY-MM-DD'),
               facebookURL: null,
               githubURL: null,
               id: '1',
@@ -1672,7 +1676,10 @@ describe('Extra coverage for 100 %', () => {
               name: 'Test Community',
               redditURL: null,
               slackURL: null,
-              updatedAt: '2023-01-01',
+              updatedAt: dayjs()
+                .subtract(1, 'year')
+                .startOf('year')
+                .format('YYYY-MM-DD'),
               websiteURL: null,
               xURL: null,
               youtubeURL: null,
@@ -2200,8 +2207,47 @@ describe('Cookie-based authentication verification', () => {
               slackURL: 'http://slack.com/test',
               redditURL: 'http://reddit.com/test',
               inactivityTimeoutDuration: 3600,
-              createdAt: '2023-01-01',
-              updatedAt: '2023-01-01',
+              createdAt: dayjs()
+                .subtract(1, 'year')
+                .startOf('year')
+                .format('YYYY-MM-DD'),
+              updatedAt: dayjs()
+                .subtract(1, 'year')
+                .startOf('year')
+                .format('YYYY-MM-DD'),
+              logoMimeType: 'image/png',
+              __typename: 'Community',
+            },
+          },
+        },
+      },
+      // LoginPage refetches community data when `data` changes, so provide a second identical response
+      {
+        request: { query: GET_COMMUNITY_DATA_PG, variables: {} },
+        result: {
+          data: {
+            community: {
+              id: '1',
+              name: 'Test Community',
+              logoURL: 'http://example.com/logo.png',
+              websiteURL: 'http://example.com',
+              facebookURL: 'http://facebook.com/test',
+              linkedinURL: 'http://linkedin.com/test',
+              xURL: 'http://twitter.com/test',
+              githubURL: 'http://github.com/test',
+              instagramURL: 'http://instagram.com/test',
+              youtubeURL: 'http://youtube.com/test',
+              slackURL: 'http://slack.com/test',
+              redditURL: 'http://reddit.com/test',
+              inactivityTimeoutDuration: 3600,
+              createdAt: dayjs()
+                .subtract(1, 'year')
+                .startOf('year')
+                .format('YYYY-MM-DD'),
+              updatedAt: dayjs()
+                .subtract(1, 'year')
+                .startOf('year')
+                .format('YYYY-MM-DD'),
               logoMimeType: 'image/png',
               __typename: 'Community',
             },

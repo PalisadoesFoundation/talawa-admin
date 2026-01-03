@@ -13,6 +13,10 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { MOCKS_WITH_TIME } from 'components/EventManagement/Dashboard/EventDashboard.mocks';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, it } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 const { setItem, clearAllItems } = useLocalStorage();
 
 vi.mock('@mui/icons-material', () => ({
@@ -27,8 +31,12 @@ MOCKS_WITH_FIXED_TIME[0].result.data.event.startTime =
   MOCKS_WITH_TIME[0].result.data.event.startAt;
 MOCKS_WITH_FIXED_TIME[0].result.data.event.endTime =
   MOCKS_WITH_TIME[0].result.data.event.endAt;
-MOCKS_WITH_FIXED_TIME[0].result.data.event.createdAt = '2024-01-01T09:00:00Z';
-MOCKS_WITH_FIXED_TIME[0].result.data.event.updatedAt = '2024-01-01T09:00:00Z';
+MOCKS_WITH_FIXED_TIME[0].result.data.event.createdAt = dayjs
+  .utc()
+  .toISOString();
+MOCKS_WITH_FIXED_TIME[0].result.data.event.updatedAt = dayjs
+  .utc()
+  .toISOString();
 MOCKS_WITH_FIXED_TIME[0].result.data.event.creator.id = 'creator1';
 MOCKS_WITH_FIXED_TIME[0].result.data.event.creator.name = 'John Doe';
 MOCKS_WITH_FIXED_TIME[0].result.data.event.creator.emailAddress =

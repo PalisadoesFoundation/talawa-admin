@@ -7,6 +7,7 @@ import i18n from 'i18next';
 import SidebarOrgSection from './SidebarOrgSection';
 import type { ISidebarOrgSectionProps } from 'types/SidebarOrgSection/interface';
 import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
+import dayjs from 'dayjs';
 
 // Mock Avatar component
 vi.mock('components/Avatar/Avatar', () => ({
@@ -54,8 +55,9 @@ describe('SidebarOrgSection Component', () => {
       postalCode: '12345',
       countryCode: 'US',
       avatarURL: 'https://example.com/avatar.png',
-      createdAt: '2024-01-01',
-      updatedAt: '2024-01-02',
+      // Use dynamic dates to avoid test staleness
+      createdAt: dayjs().subtract(30, 'days').format('YYYY-MM-DD'),
+      updatedAt: dayjs().subtract(29, 'days').format('YYYY-MM-DD'),
       creator: {
         id: 'creator123',
         name: 'Creator Name',

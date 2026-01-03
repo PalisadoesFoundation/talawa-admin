@@ -1,6 +1,7 @@
 import { EVENT_CHECKINS, EVENT_DETAILS } from 'GraphQl/Queries/Queries';
 import { MARK_CHECKIN } from 'GraphQl/Mutations/mutations';
 import type { InterfaceAttendeeQueryResponse } from 'types/CheckIn/interface';
+import dayjs from 'dayjs';
 
 const checkInQueryData: InterfaceAttendeeQueryResponse = {
   event: {
@@ -25,7 +26,7 @@ const checkInQueryData: InterfaceAttendeeQueryResponse = {
           name: 'John2 Doe2',
           emailAddress: 'john2@example.com',
         },
-        checkInTime: '2023-01-01T08:00:00Z',
+        checkInTime: dayjs().subtract(1, 'year').hour(8).toISOString(),
         checkOutTime: null,
         isCheckedIn: true,
         isCheckedOut: false,
@@ -76,7 +77,7 @@ export const checkInMutationSuccess = [
           user: {
             id: 'user123',
           },
-          checkinTime: '2023-01-01T08:00:00Z',
+          checkinTime: dayjs().subtract(1, 'year').hour(8).toISOString(),
           checkoutTime: null,
           isCheckedIn: true,
           isCheckedOut: false,
@@ -116,7 +117,7 @@ export const checkInMutationSuccessRecurring = [
           user: {
             id: 'user123',
           },
-          checkinTime: '2023-01-01T08:00:00Z',
+          checkinTime: dayjs().subtract(1, 'year').hour(8).toISOString(),
           checkoutTime: null,
           isCheckedIn: true,
           isCheckedOut: false,

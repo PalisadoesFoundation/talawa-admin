@@ -195,7 +195,9 @@ describe('RecurrenceEndOptionsSection', () => {
     });
 
     it('should display endDate in DatePicker when provided', () => {
-      const endDate = new Date('2025-12-31T10:00:00.000Z');
+      // Use dynamic future date to avoid test staleness
+      const futureEndDate = dayjs().add(1, 'year').endOf('year');
+      const endDate = futureEndDate.toDate();
       const ruleWithEndDate: InterfaceRecurrenceRule = {
         ...defaultRecurrenceRule,
         endDate,
@@ -215,7 +217,7 @@ describe('RecurrenceEndOptionsSection', () => {
       const datePicker = screen.getByTestId(
         'customRecurrenceEndDatePicker',
       ) as HTMLInputElement;
-      expect(datePicker.value).toBe('2025-12-31');
+      expect(datePicker.value).toBe(futureEndDate.format('YYYY-MM-DD'));
     });
 
     it('should use current date as default when endDate is undefined', () => {
@@ -392,7 +394,9 @@ describe('RecurrenceEndOptionsSection', () => {
       ) as HTMLInputElement;
 
       // Use fireEvent.input for HTML5 date inputs in JSDOM
-      fireEvent.input(datePicker, { target: { value: '2026-01-15' } });
+      // Use dynamic date to avoid test staleness
+      const futureDateStr = dayjs().add(30, 'days').format('YYYY-MM-DD');
+      fireEvent.input(datePicker, { target: { value: futureDateStr } });
 
       await waitFor(() => {
         expect(setRecurrenceRuleState).toHaveBeenCalled();
@@ -493,10 +497,11 @@ describe('RecurrenceEndOptionsSection', () => {
 
     it('should handle null date change gracefully', async () => {
       const setRecurrenceRuleState = vi.fn();
+      // Use dynamic future date to avoid test staleness
       const testRecurrenceRule: InterfaceRecurrenceRule = {
         frequency: Frequency.WEEKLY,
         interval: 1,
-        endDate: new Date('2024-12-31'),
+        endDate: dayjs().add(1, 'year').endOf('year').toDate(),
         never: false,
         count: 10,
       };
@@ -589,7 +594,9 @@ describe('RecurrenceEndOptionsSection', () => {
       ) as HTMLInputElement;
 
       // Use fireEvent.input for HTML5 date inputs in JSDOM
-      fireEvent.input(datePicker, { target: { value: '2026-01-15' } });
+      // Use dynamic date to avoid test staleness
+      const futureDateStr = dayjs().add(30, 'days').format('YYYY-MM-DD');
+      fireEvent.input(datePicker, { target: { value: futureDateStr } });
 
       await waitFor(() => {
         expect(setRecurrenceRuleState).toHaveBeenCalled();

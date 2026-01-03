@@ -12,6 +12,7 @@ import i18n from 'utils/i18nForTest';
 import type { InterfaceVolunteerGroupViewModal } from './VolunteerGroupViewModal';
 import VolunteerGroupViewModal from './VolunteerGroupViewModal';
 import { vi } from 'vitest';
+import dayjs from 'dayjs';
 
 const t = {
   ...JSON.parse(
@@ -34,7 +35,7 @@ const itemProps: InterfaceVolunteerGroupViewModal[] = [
       volunteersRequired: null,
       isTemplate: true,
       isInstanceException: false,
-      createdAt: '2024-10-25T16:16:32.978Z',
+      createdAt: dayjs().toISOString(),
       creator: {
         id: 'creatorId1',
         name: 'Wilt Shepherd',
@@ -75,7 +76,7 @@ const itemProps: InterfaceVolunteerGroupViewModal[] = [
       volunteersRequired: 10,
       isTemplate: true,
       isInstanceException: false,
-      createdAt: '2024-10-25T16:16:32.978Z',
+      createdAt: dayjs().toISOString(),
       creator: {
         id: 'creatorId1',
         name: 'Wilt Shepherd',

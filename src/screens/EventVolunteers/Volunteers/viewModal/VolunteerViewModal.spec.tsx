@@ -12,6 +12,7 @@ import i18n from 'utils/i18nForTest';
 import type { InterfaceVolunteerViewModal } from './VolunteerViewModal';
 import VolunteerViewModal from './VolunteerViewModal';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import dayjs from 'dayjs';
 
 const t = {
   ...JSON.parse(
@@ -33,8 +34,8 @@ const itemProps: InterfaceVolunteerViewModal[] = [
       volunteerStatus: 'accepted',
       hoursVolunteered: 10,
       isPublic: true,
-      createdAt: '2024-10-25T16:16:32.978Z',
-      updatedAt: '2024-10-25T16:16:32.978Z',
+      createdAt: dayjs().toISOString(),
+      updatedAt: dayjs().toISOString(),
       user: {
         id: 'userId1',
         firstName: 'Teresa',
@@ -81,8 +82,8 @@ const itemProps: InterfaceVolunteerViewModal[] = [
       volunteerStatus: 'pending',
       hoursVolunteered: 0,
       isPublic: false,
-      createdAt: '2024-10-25T16:16:32.978Z',
-      updatedAt: '2024-10-25T16:16:32.978Z',
+      createdAt: dayjs().toISOString(),
+      updatedAt: dayjs().toISOString(),
       user: {
         id: 'userId3',
         firstName: 'Bruce',

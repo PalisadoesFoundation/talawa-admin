@@ -6,6 +6,10 @@ import { BrowserRouter } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { describe, it, expect } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 const renderWithProviders = (ui: React.ReactElement) =>
   render(
@@ -21,7 +25,7 @@ describe('UserProfile Component', () => {
     const userDetails = {
       firstName: 'Christopher',
       lastName: 'Doe',
-      createdAt: new Date('2023-04-13'),
+      createdAt: dayjs.utc().subtract(1, 'year').toDate(),
       email: 'john.doe@example.com',
       image: 'profile-image-url',
     };
@@ -37,7 +41,11 @@ describe('UserProfile Component', () => {
     const profileImage = getByAltText('profile picture');
     expect(profileImage).toBeInTheDocument();
     expect(profileImage).toHaveAttribute('src', 'profile-image-url');
-    expect(getByText('Joined 13 April 2023')).toBeInTheDocument();
+    expect(
+      getByText(
+        `Joined ${dayjs.utc(userDetails.createdAt).format('D MMMM YYYY')}`,
+      ),
+    ).toBeInTheDocument();
 
     expect(getByTestId('copyProfileLink')).toBeInTheDocument();
   });
@@ -46,7 +54,7 @@ describe('UserProfile Component', () => {
       firstName: 'Alice',
       lastName: 'Smith',
       email: 'alice@example.com',
-      createdAt: new Date('2022-12-12'),
+      createdAt: dayjs.utc().subtract(1, 'year').toDate(),
       image: 'null',
     };
 
@@ -60,7 +68,7 @@ describe('UserProfile Component', () => {
       firstName: 'Bob',
       lastName: 'Lee',
       email: 'bob@ex.com',
-      createdAt: new Date('2023-05-01'),
+      createdAt: dayjs.utc().subtract(1, 'year').toDate(),
       image: 'https://example.com/image.jpg',
     };
 
@@ -74,12 +82,16 @@ describe('UserProfile Component', () => {
       firstName: 'Lily',
       lastName: 'Brown',
       email: 'lily@example.com',
-      createdAt: new Date('2022-01-15'),
+      createdAt: dayjs.utc().subtract(1, 'year').toDate(),
       image: 'https://example.com/lily.jpg',
     };
 
     const { getByText } = renderWithProviders(<UserProfile {...userDetails} />);
-    expect(getByText('Joined 15 January 2022')).toBeInTheDocument();
+    expect(
+      getByText(
+        `Joined ${dayjs.utc(userDetails.createdAt).format('D MMMM YYYY')}`,
+      ),
+    ).toBeInTheDocument();
   });
   it('renders "Unavailable" when createdAt is invalid', () => {
     const userDetails = {
@@ -98,7 +110,7 @@ describe('UserProfile Component', () => {
       firstName: 'Clara',
       lastName: 'Jones',
       email: 'clara@example.com',
-      createdAt: '2023-02-10',
+      createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
       image: 'https://example.com/clara.jpg',
     };
 
@@ -107,6 +119,10 @@ describe('UserProfile Component', () => {
     >[0];
 
     const { getByText } = renderWithProviders(<UserProfile {...castedUser} />);
-    expect(getByText('Joined 10 February 2023')).toBeInTheDocument();
+    expect(
+      getByText(
+        `Joined ${dayjs.utc(userDetails.createdAt).format('D MMMM YYYY')}`,
+      ),
+    ).toBeInTheDocument();
   });
 });

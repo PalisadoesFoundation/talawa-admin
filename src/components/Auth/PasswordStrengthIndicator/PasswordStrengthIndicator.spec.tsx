@@ -19,6 +19,10 @@ vi.mock('react-i18next', () => ({
 }));
 
 import { PasswordStrengthIndicator } from './PasswordStrengthIndicator';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 describe('PasswordStrengthIndicator', () => {
   afterEach(() => {
@@ -161,7 +165,9 @@ describe('PasswordStrengthIndicator', () => {
 
     test('shows all satisfied with complex password', () => {
       const { container } = render(
-        <PasswordStrengthIndicator password="MyP@ssw0rd#2024" />,
+        <PasswordStrengthIndicator
+          password={`MyP@ssw0rd#${dayjs.utc().year()}`}
+        />,
       );
 
       const successElements = container.querySelectorAll('.text-success');

@@ -10,7 +10,11 @@ import i18nForTest from 'utils/i18nForTest';
 import { ToastContainer } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { describe, test, expect, vi } from 'vitest';
+import { describe, test, expect, vi, afterEach } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 import { EventRegistrantsModal } from './EventRegistrantsModal';
 import {
@@ -125,8 +129,8 @@ const makeMembersWithOneMock = (): ApolloMock => ({
           emailAddress: 'johndoe@example.com',
           role: 'member',
           avatarURL: null,
-          createdAt: '2023-01-01',
-          updatedAt: '2023-01-01',
+          createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+          updatedAt: dayjs.utc().subtract(1, 'month').toISOString(),
         },
       ],
     },
@@ -159,8 +163,8 @@ const makeMembersUnknownNameMock = (): ApolloMock => ({
           emailAddress: 'unknown@example.com',
           role: 'member',
           avatarURL: null,
-          createdAt: '2023-01-01',
-          updatedAt: '2023-01-01',
+          createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+          updatedAt: dayjs.utc().subtract(1, 'month').toISOString(),
         },
       ],
     },

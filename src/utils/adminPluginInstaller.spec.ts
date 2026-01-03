@@ -1,4 +1,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import JSZip from 'jszip';
 import {
@@ -468,8 +472,8 @@ describe('adminPluginInstaller', () => {
             main: 'index.js',
             pluginId: 'TestPlugin',
           },
-          installedAt: '2023-01-01T00:00:00.000Z',
-          lastUpdated: '2023-01-01T00:00:00.000Z',
+          installedAt: dayjs.utc().startOf('year').toISOString(),
+          lastUpdated: dayjs.utc().startOf('year').toISOString(),
         },
       ];
 

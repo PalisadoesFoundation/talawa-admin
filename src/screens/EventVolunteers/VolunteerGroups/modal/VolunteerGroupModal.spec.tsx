@@ -23,6 +23,7 @@ import type { InterfaceVolunteerGroupModal } from './VolunteerGroupModal';
 import GroupModal from './VolunteerGroupModal';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
+import dayjs from 'dayjs';
 
 const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),
@@ -78,7 +79,7 @@ beforeEach(() => {
         volunteersRequired: 2,
         isTemplate: true,
         isInstanceException: false,
-        createdAt: '2024-10-25T16:16:32.978Z',
+        createdAt: dayjs().toISOString(),
         creator: {
           id: 'creatorId1',
           name: 'Wilt Shepherd',
@@ -122,7 +123,7 @@ beforeEach(() => {
         volunteersRequired: null,
         isTemplate: true,
         isInstanceException: false,
-        createdAt: '2024-10-25T16:16:32.978Z',
+        createdAt: dayjs().toISOString(),
         creator: {
           id: 'creatorId1',
           name: 'Wilt Shepherd',
@@ -494,7 +495,7 @@ describe('Testing VolunteerGroupModal', () => {
           volunteersRequired: 2,
           isTemplate: true,
           isInstanceException: false,
-          createdAt: '2024-10-25T16:16:32.978Z',
+          createdAt: dayjs().toISOString(),
           creator: {
             id: 'creatorId1',
             name: 'Wilt Shepherd',
