@@ -33,7 +33,7 @@ export default [
     ],
   },
   {
-    files: ['**/*.ts', '**/*.tsx'], // Changed from ['*.ts', '*.tsx'] to include subdirectories
+    files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',
@@ -48,7 +48,6 @@ export default [
         localStorage: 'readonly',
         setTimeout: 'readonly',
         console: 'readonly',
-
         describe: 'readonly',
         test: 'readonly',
         expect: 'readonly',
@@ -135,45 +134,45 @@ export default [
             "Security Risk: Do not use getItem('token') directly inside authorization headers. Extract it to a variable first to handle null values.",
         },
       ],
-      /**
-       * Enforce usage of standardized DataGridWrapper component
-       * Issue #6099: https://github.com/PalisadoesFoundation/talawa-admin/issues/6099
-       * Parent Issue #5290: DataGridWrapper foundation component
-       *
-       * This rule blocks direct imports from @mui/x-data-grid to ensure all usage
-       * goes through the standardized DataGridWrapper component located at
-       * src/shared-components/DataGridWrapper/
-       *
-       * Note: Approximately 20+ files currently use direct imports and will require
-       * migration in a future ticket. This rule prevents new violations.
-       */
       'no-restricted-imports': [
         'error',
         {
           name: '@mui/x-data-grid',
           message:
-            'Direct imports from @mui/x-data-grid are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
+            'Direct imports from @mui/x-data-grid are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead.',
         },
         {
           name: '@mui/x-data-grid-pro',
           message:
-            'Direct imports from @mui/x-data-grid-pro are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
+            'Direct imports from @mui/x-data-grid-pro are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead.',
+        },
+        {
+          paths: [
+            {
+              name: 'react-bootstrap',
+              importNames: ['Spinner'],
+              message:
+                'Do not import Spinner from react-bootstrap. Use the shared LoadingState component instead.',
+            },
+          ],
         },
       ],
     },
   },
-  /**
-   * Exemption: DataGridWrapper component files
-   *
-   * DataGridWrapper files need direct MUI DataGrid access for wrapper implementation.
-   * These files are the only ones allowed to import directly from @mui/x-data-grid.
-   */
   {
     files: [
-      'src/shared-components/DataGridWrapper/**/*.ts',
-      'src/shared-components/DataGridWrapper/**/*.tsx',
-      'src/types/DataGridWrapper/**/*.ts',
-      'src/types/DataGridWrapper/**/*.tsx',
+      'src/shared-components/DataGridWrapper/**/*.{ts,tsx}',
+      'src/types/DataGridWrapper/**/*.{ts,tsx}',
+    ],
+    rules: {
+      'no-restricted-imports': 'off',
+    },
+  },
+  {
+    files: [
+      'src/shared-components/LoadingState/**/*.{ts,tsx}',
+      'src/types/shared-components/LoadingState/**/*.{ts,tsx}',
+      'src/components/Loader/**/*.{ts,tsx}',
     ],
     rules: {
       'no-restricted-imports': 'off',
@@ -197,7 +196,6 @@ export default [
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
     },
   },
-  // Cypress-specific configuration
   {
     files: ['cypress/**/*.ts', 'cypress/**/*.js'],
     languageOptions: {
@@ -205,7 +203,6 @@ export default [
       sourceType: 'module',
       parser: tsParser,
       globals: {
-        // Cypress globals
         cy: 'readonly',
         Cypress: 'readonly',
         describe: 'readonly',
@@ -215,13 +212,9 @@ export default [
         after: 'readonly',
         afterEach: 'readonly',
         expect: 'readonly',
-
-        // Browser globals
         window: 'readonly',
         document: 'readonly',
         console: 'readonly',
-
-        // Node.js globals for config files
         require: 'readonly',
         module: 'readonly',
         exports: 'readonly',
@@ -243,7 +236,6 @@ export default [
       'prettier/prettier': 'error',
     },
   },
-  // Configuration files
   {
     files: ['*.config.ts', '*.config.js', 'cypress.config.ts'],
     languageOptions: {
@@ -271,7 +263,6 @@ export default [
       'prettier/prettier': 'error',
     },
   },
-  // Test file-specific configuration for mock isolation
   {
     files: ['**/*.spec.ts', '**/*.spec.tsx', '**/*.test.ts', '**/*.test.tsx'],
     plugins: {
