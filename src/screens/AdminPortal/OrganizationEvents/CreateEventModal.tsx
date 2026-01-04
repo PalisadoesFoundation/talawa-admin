@@ -96,6 +96,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
 
   const handleClose = (): void => {
     setFormResetKey((prev) => prev + 1);
+    setDateRange({ startDate: todayUTC, endDate: todayUTC });
     onClose();
   };
 

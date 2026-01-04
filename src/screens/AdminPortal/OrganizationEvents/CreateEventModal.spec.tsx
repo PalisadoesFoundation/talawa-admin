@@ -693,8 +693,15 @@ describe('CreateEventModal', () => {
       target: { value: 'Test Description' },
     });
 
-    // Close modal
-    fireEvent.click(screen.getByTestId('createEventModalCloseBtn'));
+    // Close modal (parent controls isOpen)
+    rerender(
+      <CreateEventModal
+        isOpen={false}
+        onClose={vi.fn()}
+        onEventCreated={vi.fn()}
+        currentUrl="org1"
+      />,
+    );
 
     // Reopen modal
     rerender(
@@ -706,9 +713,18 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    // Form should be reset (empty values)
+    // Form should be reset
     expect(screen.getByTestId('eventTitleInput')).toHaveValue('');
     expect(screen.getByTestId('eventDescriptionInput')).toHaveValue('');
+
+    // DateRangePicker should also reset
+    expect(
+      screen.getByTestId('createEventDateRangePicker-start-input'),
+    ).toHaveValue(dayjs().utc().format('YYYY-MM-DD'));
+
+    expect(
+      screen.getByTestId('createEventDateRangePicker-end-input'),
+    ).toHaveValue(dayjs().utc().format('YYYY-MM-DD'));
   });
 
   it('disables create button when loading', () => {
