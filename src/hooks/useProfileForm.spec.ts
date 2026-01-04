@@ -534,7 +534,7 @@ describe('useProfileForm Hook', () => {
       expect(result.current.isUpdated).toBe(false);
     });
 
-test('should remain true after changing back to initial value due to dirty flag', () => {
+    test('should remain true after changing back to initial value due to dirty flag', () => {
       const { result } = renderHook(() => useProfileForm(initialProfile));
 
       // Initially false
@@ -549,7 +549,7 @@ test('should remain true after changing back to initial value due to dirty flag'
       act(() => {
         result.current.setField('name', initialProfile.name);
       });
-      
+
       // Still true because dirty flag is set
       expect(result.current.isUpdated).toBe(true);
     });

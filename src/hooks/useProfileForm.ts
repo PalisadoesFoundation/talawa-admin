@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { validatePassword } from 'utils/passwordValidator';
 
 /**
@@ -61,6 +61,13 @@ export function useProfileForm(initial: UserProfile) {
   // Use ref to maintain stable validate callback reference
   const formRef = useRef(form);
   formRef.current = form;
+
+  // Sync form state when initial prop changes (e.g., loading new user data)
+  useEffect(() => {
+    setForm(initial);
+    setErrors({});
+    setDirty(false);
+  }, [initial]);
 
   /**
    * Updates a single field in the form
