@@ -264,7 +264,6 @@ describe('useAvatarUpload', () => {
     it('uses fallback error message when validator returns no errorMessage', async () => {
       // Mock the validateFile utility to return isValid: false without errorMessage
 
-
       // We need to mock at the module level
       vi.doMock('../utils/fileValidation', () => ({
         validateFile: vi.fn().mockReturnValue({ isValid: false }),
@@ -289,7 +288,6 @@ describe('useAvatarUpload', () => {
       // Restore original module
       vi.doUnmock('../utils/fileValidation');
       vi.resetModules();
-
     });
   });
 
