@@ -16,7 +16,7 @@
  * import { MockedProvider } from '@apollo/client/testing';
  *
  * render(
- * <MockedProvider mocks={getActiveAdvertisementMocks} addTypename={false}>
+ * <MockedProvider mocks={getActiveAdvertisementMocks}>
  * <Advertisements />
  * </MockedProvider>
  * );

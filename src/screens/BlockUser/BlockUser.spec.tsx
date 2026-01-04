@@ -1196,9 +1196,7 @@ describe('BlockUser Component', () => {
       });
 
       // Check for table headers
-      expect(screen.getByText('#')).toBeInTheDocument();
-      expect(screen.getByText('name')).toBeInTheDocument();
-      expect(screen.getByText('email')).toBeInTheDocument();
+      expect(screen.getByText('user')).toBeInTheDocument();
       expect(screen.getByText('block_unblock')).toBeInTheDocument();
     });
   });

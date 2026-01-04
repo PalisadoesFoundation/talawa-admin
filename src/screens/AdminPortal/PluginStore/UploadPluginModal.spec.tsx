@@ -1,6 +1,10 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import {
+  ApolloClient,
+  NormalizedCacheObject,
+  InMemoryCache,
+} from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -37,6 +41,8 @@ vi.mock('GraphQl/Mutations/PluginMutations', () => ({
 
 // Mock GraphQL responses removed as they were unused
 
+const cache = new InMemoryCache();
+
 const defaultProps = {
   show: true,
   onHide: vi.fn(),
@@ -70,7 +76,7 @@ describe('UploadPluginModal Component', () => {
   describe('Initial Render', () => {
     it('should render the modal with correct title and description', () => {
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -87,7 +93,7 @@ describe('UploadPluginModal Component', () => {
 
     it('should show file upload area', () => {
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -102,7 +108,7 @@ describe('UploadPluginModal Component', () => {
 
     it('should show plugin structure guidelines', () => {
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -122,7 +128,7 @@ describe('UploadPluginModal Component', () => {
 
     it('should show disabled install button initially', () => {
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -160,7 +166,7 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -192,7 +198,7 @@ describe('UploadPluginModal Component', () => {
       );
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -224,7 +230,7 @@ describe('UploadPluginModal Component', () => {
       ).mockRejectedValue(new Error('Invalid ZIP file'));
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -272,7 +278,7 @@ describe('UploadPluginModal Component', () => {
 
     it('should validate plugin structure and show plugin information', async () => {
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -299,7 +305,7 @@ describe('UploadPluginModal Component', () => {
 
     it('should show components to install', async () => {
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -327,7 +333,7 @@ describe('UploadPluginModal Component', () => {
 
     it('should enable install button when plugin is valid', async () => {
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -358,7 +364,7 @@ describe('UploadPluginModal Component', () => {
       ).mockRejectedValue(new Error('Invalid admin manifest.json'));
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -392,7 +398,7 @@ describe('UploadPluginModal Component', () => {
       );
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -461,7 +467,7 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -514,7 +520,7 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -553,7 +559,7 @@ describe('UploadPluginModal Component', () => {
       ).mockRejectedValue(new Error('Network error'));
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -587,7 +593,7 @@ describe('UploadPluginModal Component', () => {
   describe('Modal Interactions', () => {
     it('should close modal when backdrop is clicked', () => {
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -602,7 +608,7 @@ describe('UploadPluginModal Component', () => {
   describe('Error Handling', () => {
     it('should handle file input errors', async () => {
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -618,7 +624,7 @@ describe('UploadPluginModal Component', () => {
 
     it('should handle empty file selection', async () => {
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -646,7 +652,7 @@ describe('UploadPluginModal Component', () => {
       ).mockRejectedValue('String error');
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -694,7 +700,7 @@ describe('UploadPluginModal Component', () => {
       ).mockRejectedValue('String error');
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -726,7 +732,7 @@ describe('UploadPluginModal Component', () => {
 
     it('should handle upload click when file input ref is null', () => {
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -838,7 +844,7 @@ describe('UploadPluginModal Component', () => {
       const mockOnHide = vi.fn();
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal show={true} onHide={mockOnHide} />
         </MockedProvider>,
       );
@@ -894,7 +900,7 @@ describe('UploadPluginModal Component', () => {
       ).mockResolvedValue(null);
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -955,7 +961,7 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -989,7 +995,7 @@ describe('UploadPluginModal Component', () => {
   describe('Accessibility', () => {
     it('should have proper ARIA labels', () => {
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -1001,7 +1007,7 @@ describe('UploadPluginModal Component', () => {
 
     it('should be keyboard accessible', () => {
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -1033,7 +1039,7 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -1090,7 +1096,7 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -1115,7 +1121,7 @@ describe('UploadPluginModal Component', () => {
 
     it('should handle file input ref being null', () => {
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -1173,7 +1179,7 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -1243,7 +1249,7 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -1313,7 +1319,7 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -1346,7 +1352,7 @@ describe('UploadPluginModal Component', () => {
 
     it('should handle modal close and reset state', () => {
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -1362,7 +1368,7 @@ describe('UploadPluginModal Component', () => {
 
     it('should handle file selection with no files', () => {
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -1383,7 +1389,7 @@ describe('UploadPluginModal Component', () => {
 
     it('should handle file selection with null files', () => {
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -1404,7 +1410,7 @@ describe('UploadPluginModal Component', () => {
 
     it('should handle file selection with undefined files', () => {
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -1462,7 +1468,7 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -1520,7 +1526,7 @@ describe('UploadPluginModal Component', () => {
       ).mockResolvedValue(undefined);
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -1577,7 +1583,7 @@ describe('UploadPluginModal Component', () => {
       ).mockResolvedValue(null);
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -1613,7 +1619,7 @@ describe('UploadPluginModal Component', () => {
       );
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -1698,7 +1704,7 @@ describe('UploadPluginModal Component', () => {
       };
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <TestComponent />
         </MockedProvider>,
       );
@@ -1749,7 +1755,7 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -1807,7 +1813,7 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -1855,7 +1861,7 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -1881,7 +1887,7 @@ describe('UploadPluginModal Component', () => {
 
     it('should show expected structure when no pluginFiles are available', () => {
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -1930,7 +1936,7 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -1978,7 +1984,7 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -2027,7 +2033,7 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
@@ -2092,7 +2098,7 @@ describe('UploadPluginModal Component', () => {
       });
 
       render(
-        <MockedProvider>
+        <MockedProvider cache={cache}>
           <UploadPluginModal {...defaultProps} />
         </MockedProvider>,
       );
