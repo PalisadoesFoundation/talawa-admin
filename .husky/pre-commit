@@ -39,6 +39,4 @@ if [ -n "$CSS_STAGED" ]; then
 fi
 
 
-.husky/check-forms
-
 git add .

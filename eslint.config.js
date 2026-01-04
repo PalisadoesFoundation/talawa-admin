@@ -152,6 +152,27 @@ export default [
           message:
             'HTTP-Only Cookie Violation: Do not pass refreshToken as a variable. The API reads refresh tokens from HTTP-only cookies automatically.',
         },
+        {
+          selector:
+            "JSXMemberExpression[object.name='Form'][property.name='Group']",
+          message: 'Use FormFieldGroup instead of Form.Group',
+        },
+        {
+          selector:
+            "JSXMemberExpression[object.name='Form'][property.name='Control']",
+          message:
+            'Use FormTextField, FormTextArea, or FormSelect instead of Form.Control',
+        },
+        {
+          selector:
+            "JSXMemberExpression[object.name='Form'][property.name='Label']",
+          message: 'Labels are built into FormFieldGroup components',
+        },
+        {
+          selector:
+            "JSXMemberExpression[object.name='Form'][property.name='Check']",
+          message: 'Use FormCheckbox instead of Form.Check',
+        },
       ],
       /**
        * Enforce usage of standardized DataGridWrapper component
@@ -195,30 +216,6 @@ export default [
     ],
     rules: {
       'no-restricted-imports': 'off',
-      'no-restricted-syntax': [
-        'error',
-        {
-          selector:
-            "JSXMemberExpression[object.name='Form'][property.name='Group']",
-          message: 'Use FormFieldGroup instead of Form.Group',
-        },
-        {
-          selector:
-            "JSXMemberExpression[object.name='Form'][property.name='Control']",
-          message:
-            'Use FormTextField, FormTextArea, or FormSelect instead of Form.Control',
-        },
-        {
-          selector:
-            "JSXMemberExpression[object.name='Form'][property.name='Label']",
-          message: 'Labels are built into FormFieldGroup components',
-        },
-        {
-          selector:
-            "JSXMemberExpression[object.name='Form'][property.name='Check']",
-          message: 'Use FormCheckbox instead of Form.Check',
-        },
-      ],
     },
   },
   {

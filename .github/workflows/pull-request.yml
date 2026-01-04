@@ -416,7 +416,6 @@ jobs:
         Python-Compliance,
         Translation-Tag-Check,
         DataGrid-Policy-Check,
-        lint-form-usage,
       ]
     steps:
       - name: This job intentionally does nothing
@@ -1209,26 +1208,3 @@ jobs:
           if [ -f .pidfile_dev ]; then
             kill "$(cat .pidfile_dev)"
           fi
-  lint-form-usage:
-    name: Check for deprecated Form usage
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          run_install: false
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24.x'
-          cache: 'pnpm'
-
-      - name: Install Dependencies
-        run: pnpm install --frozen-lockfile --prefer-offline
-
-      - name: Check for deprecated Form usage
-        run: pnpm run lint:forms
