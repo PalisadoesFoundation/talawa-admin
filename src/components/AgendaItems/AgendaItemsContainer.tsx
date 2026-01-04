@@ -50,6 +50,7 @@ import styles from 'style/app-fixed.module.css';
 import AgendaItemsPreviewModal from 'components/AgendaItems/Preview/AgendaItemsPreviewModal';
 import AgendaItemsDeleteModal from 'components/AgendaItems/Delete/AgendaItemsDeleteModal';
 import AgendaItemsUpdateModal from 'components/AgendaItems/Update/AgendaItemsUpdateModal';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 function AgendaItemsContainer({
   agendaItemConnection,
@@ -64,6 +65,7 @@ function AgendaItemsContainer({
 }): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'agendaItems' });
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
   // State for modals
   const [agendaItemPreviewModalIsOpen, setAgendaItemPreviewModalIsOpen] =
@@ -262,7 +264,13 @@ function AgendaItemsContainer({
   };
 
   return (
-    <>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+      onReset={agendaItemRefetch}
+    >
       <div
         className={`mx-1 ${agendaItemConnection == 'Event' ? 'my-4' : 'my-0'}`}
       >
@@ -379,7 +387,7 @@ function AgendaItemsContainer({
                                   ))
                                 ) : (
                                   <span className={styles.categoryChip}>
-                                    No Category
+                                    {t('noCategory')}
                                   </span>
                                 )}
                               </div>
@@ -461,7 +469,7 @@ function AgendaItemsContainer({
         t={t}
         agendaItemCategories={agendaItemCategories}
       />
-    </>
+    </ErrorBoundaryWrapper>
   );
 }
 
