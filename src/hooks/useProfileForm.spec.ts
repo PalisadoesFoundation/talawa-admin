@@ -80,11 +80,16 @@ describe('useProfileForm Hook', () => {
 
       act(() => {
         result.current.setField('password', 'NewPass123!');
-        result.current.setField('avatarURL', 'https://example.com/new-avatar.jpg');
+        result.current.setField(
+          'avatarURL',
+          'https://example.com/new-avatar.jpg',
+        );
       });
 
       expect(result.current.form.password).toBe('NewPass123!');
-      expect(result.current.form.avatarURL).toBe('https://example.com/new-avatar.jpg');
+      expect(result.current.form.avatarURL).toBe(
+        'https://example.com/new-avatar.jpg',
+      );
     });
 
     test('should set isUpdated to true after any field change', () => {
@@ -275,7 +280,9 @@ describe('useProfileForm Hook', () => {
         });
 
         expect(isValid).toBe(false);
-        expect(result.current.errors.password).toBe('Password does not meet policy');
+        expect(result.current.errors.password).toBe(
+          'Password does not meet policy',
+        );
       });
 
       test('should set error when password is invalid (missing special char)', () => {
@@ -291,7 +298,9 @@ describe('useProfileForm Hook', () => {
         });
 
         expect(isValid).toBe(false);
-        expect(result.current.errors.password).toBe('Password does not meet policy');
+        expect(result.current.errors.password).toBe(
+          'Password does not meet policy',
+        );
       });
 
       test('should set error when password is invalid (missing number)', () => {
@@ -307,7 +316,9 @@ describe('useProfileForm Hook', () => {
         });
 
         expect(isValid).toBe(false);
-        expect(result.current.errors.password).toBe('Password does not meet policy');
+        expect(result.current.errors.password).toBe(
+          'Password does not meet policy',
+        );
       });
 
       test('should set error when password is invalid (missing uppercase)', () => {
@@ -323,7 +334,9 @@ describe('useProfileForm Hook', () => {
         });
 
         expect(isValid).toBe(false);
-        expect(result.current.errors.password).toBe('Password does not meet policy');
+        expect(result.current.errors.password).toBe(
+          'Password does not meet policy',
+        );
       });
 
       test('should set error when password is invalid (missing lowercase)', () => {
@@ -339,7 +352,9 @@ describe('useProfileForm Hook', () => {
         });
 
         expect(isValid).toBe(false);
-        expect(result.current.errors.password).toBe('Password does not meet policy');
+        expect(result.current.errors.password).toBe(
+          'Password does not meet policy',
+        );
       });
 
       test('should pass when password meets all requirements', () => {
@@ -409,7 +424,9 @@ describe('useProfileForm Hook', () => {
         expect(isValid).toBe(false);
         expect(result.current.errors.name).toBe('Name is required');
         expect(result.current.errors.emailAddress).toBe('Email is required');
-        expect(result.current.errors.password).toBe('Password does not meet policy');
+        expect(result.current.errors.password).toBe(
+          'Password does not meet policy',
+        );
       });
     });
 
@@ -572,7 +589,9 @@ describe('useProfileForm Hook', () => {
         birthDate: null,
       };
 
-      const { result } = renderHook(() => useProfileForm(profileWithNullBirthDate));
+      const { result } = renderHook(() =>
+        useProfileForm(profileWithNullBirthDate),
+      );
 
       expect(result.current.form.birthDate).toBeNull();
 
@@ -598,7 +617,9 @@ describe('useProfileForm Hook', () => {
 
       expect(isValid).toBe(true);
       expect(result.current.form.name).toBe("O'Brien-Smith");
-      expect(result.current.form.description).toBe('Test with <html> & "quotes"');
+      expect(result.current.form.description).toBe(
+        'Test with <html> & "quotes"',
+      );
     });
 
     test('should handle empty strings in optional fields', () => {
@@ -662,13 +683,17 @@ describe('useProfileForm Hook', () => {
         result.current.setField('avatarURL', 'https://new-url.com/image.png');
       });
 
-      expect(result.current.form.avatarURL).toBe('https://new-url.com/image.png');
+      expect(result.current.form.avatarURL).toBe(
+        'https://new-url.com/image.png',
+      );
     });
   });
 
   describe('Callback stability', () => {
     test('setField should maintain referential equality', () => {
-      const { result, rerender } = renderHook(() => useProfileForm(initialProfile));
+      const { result, rerender } = renderHook(() =>
+        useProfileForm(initialProfile),
+      );
 
       const firstSetField = result.current.setField;
 
