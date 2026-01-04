@@ -64,6 +64,15 @@ export interface InterfaceDataGridWrapperProps<
     defaultSortOrder?: 'asc' | 'desc';
     /** Array of sorting options for the SortingButton component. */
     sortingOptions?: { label: string; value: string | number }[];
+    /**
+     * Custom sorting function to apply when a sort option is selected.
+     * If provided, this function will be used instead of MUI DataGrid's default sorting.
+     * The sort value is passed as a string in the format "field_direction" (e.g., "volunteers_asc").
+     */
+    sortFunction?: (
+      rows: readonly T[],
+      sortValue: string | number,
+    ) => readonly T[];
   };
 
   /**
@@ -132,4 +141,17 @@ export interface InterfaceDataGridWrapperProps<
    * Error message or component to display instead of the grid when data fetch fails.
    */
   error?: string | React.ReactNode;
+
+  /**
+   * Optional custom button or element to display in the toolbar (typically for actions like "Create New").
+   * @example
+   * ```tsx
+   * headerButton={
+   *   <Button onClick={handleCreate}>
+   *     Create New
+   *   </Button>
+   * }
+   * ```
+   */
+  headerButton?: React.ReactNode;
 }

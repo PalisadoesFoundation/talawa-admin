@@ -52,6 +52,7 @@ export function DataGridWrapper<T extends { id: string | number }>(
     actionColumn,
     emptyStateMessage,
     error,
+    headerButton,
   } = props;
   const { t: tCommon } = useTranslation('common');
   const [searchTerm, setSearchTerm] = useState('');
@@ -83,7 +84,7 @@ export function DataGridWrapper<T extends { id: string | number }>(
     };
   }, [searchTerm]);
 
-  // Apply filters first, then search
+  // Apply filters first, then search, then custom sort
   const filteredAndSearched = useMemo(() => {
     let processedRows = rows;
 
@@ -106,10 +107,26 @@ export function DataGridWrapper<T extends { id: string | number }>(
       );
     }
 
+    // Apply custom sort if provided
+    if (sortConfig?.sortFunction && selectedSort) {
+      processedRows = sortConfig.sortFunction(processedRows, selectedSort);
+    }
+
     return processedRows;
-  }, [rows, debouncedSearchTerm, searchConfig, filterConfig, selectedFilter]);
+  }, [
+    rows,
+    debouncedSearchTerm,
+    searchConfig,
+    filterConfig,
+    selectedFilter,
+    sortConfig,
+    selectedSort,
+  ]);
 
   const sortModel = useMemo(() => {
+    // Don't use MUI's sort model if custom sort function is provided
+    if (sortConfig?.sortFunction) return [];
+
     if (!selectedSort) return [];
     const [field, sort] = String(selectedSort).split('_');
     if (field && (sort === 'asc' || sort === 'desc')) {
@@ -120,7 +137,7 @@ export function DataGridWrapper<T extends { id: string | number }>(
       `[DataGridWrapper] Invalid sort format: "${selectedSort}". Expected format: "field_asc" or "field_desc"`,
     );
     return [];
-  }, [selectedSort]);
+  }, [selectedSort, sortConfig]);
 
   const actionCol = actionColumn
     ? [
@@ -171,6 +188,7 @@ export function DataGridWrapper<T extends { id: string | number }>(
             buttonLabel={tCommon('filter')}
           />
         )}
+        {headerButton}
       </div>
       <DataGrid
         rows={filteredAndSearched}

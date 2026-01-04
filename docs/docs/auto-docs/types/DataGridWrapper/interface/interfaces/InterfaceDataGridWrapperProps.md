@@ -141,6 +141,26 @@ filterConfig: {
 
 ***
 
+### headerButton?
+
+> `optional` **headerButton**: `ReactNode`
+
+Defined in: [src/types/DataGridWrapper/interface.ts:147](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L147)
+
+Optional custom button or element to display in the toolbar (typically for actions like "Create New").
+
+#### Example
+
+```tsx
+headerButton={
+  <Button onClick={handleCreate}>
+    Create New
+  </Button>
+}
+```
+
+***
+
 ### loading?
 
 > `optional` **loading**: `boolean`
