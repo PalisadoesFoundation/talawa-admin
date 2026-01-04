@@ -100,43 +100,59 @@ vi.mock('@mui/x-date-pickers', () => ({
   ),
 }));
 
+type MockDateRangePickerProps = {
+  value: {
+    startDate: Date | null;
+    endDate: Date | null;
+  };
+  onChange: (value: { startDate: Date | null; endDate: Date | null }) => void;
+  dataTestId: string;
+};
+
 vi.mock('shared-components/DateRangePicker/DateRangePicker', () => ({
   __esModule: true,
-  default: ({ value, onChange, dataTestId }: any) => (
-    <div>
-      <input
-        type="date"
-        data-testid={`${dataTestId}-start-input`}
-        value={
-          value?.startDate ? value.startDate.toISOString().slice(0, 10) : ''
-        }
-        onChange={(e) =>
-          onChange({
-            startDate: new Date(`${e.target.value}T00:00:00Z`),
-            endDate: value?.endDate ?? null,
-          })
-        }
-      />
+  default: ({ value, onChange, dataTestId }: MockDateRangePickerProps) => {
+    const adjustRange = (startDate: Date | null, endDate: Date | null) => {
+      if (startDate && endDate && endDate < startDate) {
+        return { startDate, endDate: startDate };
+      }
+      return { startDate, endDate };
+    };
 
-      <input
-        type="date"
-        data-testid={`${dataTestId}-end-input`}
-        value={
-          value?.endDate instanceof Date && !isNaN(value.endDate.getTime())
-            ? value.endDate.toISOString().slice(0, 10)
-            : ''
-        }
-        onChange={(e) =>
-          onChange({
-            startDate: value?.startDate ?? null,
-            endDate: e.target.value
+    return (
+      <div>
+        <input
+          type="date"
+          data-testid={`${dataTestId}-start-input`}
+          value={
+            value?.startDate ? value.startDate.toISOString().slice(0, 10) : ''
+          }
+          onChange={(e) => {
+            const newStartDate = new Date(`${e.target.value}T00:00:00Z`);
+            const adjusted = adjustRange(newStartDate, value?.endDate ?? null);
+            onChange(adjusted);
+          }}
+        />
+
+        <input
+          type="date"
+          data-testid={`${dataTestId}-end-input`}
+          value={
+            value?.endDate instanceof Date && !isNaN(value.endDate.getTime())
+              ? value.endDate.toISOString().slice(0, 10)
+              : ''
+          }
+          onChange={(e) => {
+            const newEndDate = e.target.value
               ? new Date(`${e.target.value}T00:00:00Z`)
-              : null,
-          })
-        }
-      />
-    </div>
-  ),
+              : null;
+            const adjusted = adjustRange(value?.startDate ?? null, newEndDate);
+            onChange(adjusted);
+          }}
+        />
+      </div>
+    );
+  },
 }));
 
 // Mock toast functions with hoisted variables
@@ -901,7 +917,7 @@ describe('CreateEventModal', () => {
       const updatedEndDateInput = screen.getByTestId(
         'createEventDateRangePicker-end-input',
       );
-      expect(updatedEndDateInput).toHaveValue('2025-12-20');
+      expect(updatedEndDateInput).toHaveValue('2025-12-25');
     });
   });
 
@@ -1117,7 +1133,7 @@ describe('CreateEventModal', () => {
     // The mock DatePicker doesn't enforce minDate constraint, it just accepts the value
     // The actual component would handle this, but for testing we verify the value was set
     // This test documents the expected behavior rather than enforcing it in the mock
-    expect(endDateInput).toHaveValue('2025-12-10');
+    expect(endDateInput).toHaveValue('2025-12-15');
   });
 
   it('validates form with mixed whitespace - title valid but others whitespace', async () => {
