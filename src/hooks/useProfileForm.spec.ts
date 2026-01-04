@@ -7,6 +7,7 @@ describe('useProfileForm Hook', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
+
   const initialProfile: UserProfile = {
     name: 'John Doe',
     natalSex: 'Male',

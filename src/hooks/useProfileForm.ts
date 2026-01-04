@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { validatePassword } from 'utils/passwordValidator';
 
 /**
@@ -58,6 +58,10 @@ export function useProfileForm(initial: UserProfile) {
   const [errors, setErrors] = useState<ProfileErrors>({});
   const [dirty, setDirty] = useState(false);
 
+  // Use ref to maintain stable validate callback reference
+  const formRef = useRef(form);
+  formRef.current = form;
+
   /**
    * Updates a single field in the form
    */
@@ -72,7 +76,7 @@ export function useProfileForm(initial: UserProfile) {
   /**
    * Validates the form and returns true if valid
    * Sets error messages for invalid fields
-   * 
+   *
    * Note: Per issue #6110 requirements, this validates:
    * - name: required and non-empty
    * - emailAddress: required and non-empty (format validation not required per spec)
@@ -80,14 +84,20 @@ export function useProfileForm(initial: UserProfile) {
    */
   const validate = useCallback(() => {
     const next: ProfileErrors = {};
-    if (!form.name?.trim()) next.name = 'Name is required';
-    if (form.password && form.password.trim() !== '' && !validatePassword(form.password)) {
+    const currentForm = formRef.current;
+    if (!currentForm.name?.trim()) next.name = 'Name is required';
+    if (
+      currentForm.password &&
+      currentForm.password.trim() !== '' &&
+      !validatePassword(currentForm.password)
+    ) {
       next.password = 'Password does not meet policy';
     }
-    if (!form.emailAddress?.trim()) next.emailAddress = 'Email is required';
+    if (!currentForm.emailAddress?.trim())
+      next.emailAddress = 'Email is required';
     setErrors(next);
     return Object.keys(next).length === 0;
-  }, [form]);
+  }, []);
 
   /**
    * Resets form to initial state and clears all errors
@@ -111,6 +121,11 @@ export function useProfileForm(initial: UserProfile) {
   return {
     form,
     errors,
+    /**
+     * Indicates whether the form has been modified.
+     * Note: Once any field is changed, this remains true even if values
+     * are reverted to initial state until reset() is called (due to dirty flag).
+     */
     isUpdated: dirty || changed,
     setField,
     validate,
