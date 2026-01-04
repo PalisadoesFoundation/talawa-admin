@@ -157,9 +157,11 @@ const LeaveOrganization = (): JSX.Element => {
 
   if (orgLoading) {
     return (
-      <LoadingState isLoading={orgLoading} variant="spinner">
-        <div />
-      </LoadingState>
+      <div className="text-center mt-4" role="status">
+        <LoadingState isLoading={orgLoading} variant="spinner">
+          <div />
+        </LoadingState>
+      </div>
     );
   }
   if (orgError)

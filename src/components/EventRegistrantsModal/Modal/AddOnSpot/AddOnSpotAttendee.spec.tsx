@@ -252,4 +252,24 @@ describe('AddOnSpotAttendee Component', () => {
       expect(toast.error).toHaveBeenCalled();
     });
   });
+
+  it('disables button and shows loading state during form submission', async () => {
+    renderAddOnSpotAttendee();
+
+    await userEvent.type(screen.getByLabelText('First Name'), 'John');
+    await userEvent.type(screen.getByLabelText('Last Name'), 'Doe');
+    await userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
+    await userEvent.type(screen.getByLabelText('Phone No.'), '1234567890');
+    const genderSelect = screen.getByLabelText('Gender');
+    fireEvent.change(genderSelect, { target: { value: 'Male' } });
+
+    const submitButton = screen.getByRole('button', { name: /add/i });
+    expect(submitButton).not.toBeDisabled();
+
+    fireEvent.submit(screen.getByTestId('onspot-attendee-form'));
+
+    await waitFor(() => {
+      expect(submitButton).toBeDisabled();
+    });
+  });
 });
