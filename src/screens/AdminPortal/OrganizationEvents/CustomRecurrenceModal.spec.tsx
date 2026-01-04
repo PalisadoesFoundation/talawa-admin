@@ -6,8 +6,11 @@ import { I18nextProvider } from 'react-i18next';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { createTheme, ThemeProvider } from '@mui/material';
-import { describe, test, expect, vi, beforeEach } from 'vitest';
+import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 import CustomRecurrenceModal from './CustomRecurrenceModal';
 import { store } from 'state/store';
@@ -37,7 +40,7 @@ vi.mock('@mui/x-date-pickers', async () => {
           data-testid="mocked-date-picker"
           onChange={(e) => {
             // Mock a dayjs date object
-            const mockDate = dayjs((e.target as HTMLInputElement).value);
+            const mockDate = dayjs.utc((e.target as HTMLInputElement).value);
             if (onChange && mockDate.isValid()) {
               onChange(mockDate);
             }
@@ -58,17 +61,17 @@ const theme = createTheme({
 
 const mockProps = {
   recurrenceRuleState: createDefaultRecurrenceRule(
-    new Date('2024-01-15'),
+    dayjs.utc().toDate(),
     Frequency.WEEKLY,
   ),
   setRecurrenceRuleState: vi.fn(),
-  endDate: new Date('2024-01-20'),
+  endDate: dayjs.utc().add(5, 'days').toDate(),
   setEndDate: vi.fn(),
   customRecurrenceModalIsOpen: true,
   hideCustomRecurrenceModal: vi.fn(),
   setCustomRecurrenceModalIsOpen: vi.fn(),
   t: (key: string) => key,
-  startDate: new Date('2024-01-15'),
+  startDate: dayjs.utc().toDate(),
 };
 
 const renderComponent = (props = mockProps) => {
@@ -262,7 +265,7 @@ describe('CustomRecurrenceModal', () => {
       ...mockProps,
       recurrenceRuleState: {
         ...mockProps.recurrenceRuleState,
-        endDate: new Date('2024-02-15'),
+        endDate: dayjs.utc().add(30, 'days').toDate(),
         never: false,
         count: undefined,
       },
@@ -281,7 +284,7 @@ describe('CustomRecurrenceModal', () => {
     renderComponent({
       ...mockProps,
       recurrenceRuleState: createDefaultRecurrenceRule(
-        new Date('2024-01-15'),
+        dayjs.utc().toDate(),
         Frequency.DAILY,
       ),
     });
@@ -391,7 +394,7 @@ describe('CustomRecurrenceModal', () => {
     renderComponent({
       ...mockProps,
       recurrenceRuleState: createDefaultRecurrenceRule(
-        new Date('2024-01-15'),
+        dayjs.utc().toDate(),
         Frequency.DAILY,
       ),
     });
@@ -449,7 +452,7 @@ describe('CustomRecurrenceModal', () => {
       setRecurrenceRuleState: mockSetRecurrenceRuleState,
       recurrenceRuleState: {
         ...mockProps.recurrenceRuleState,
-        endDate: new Date('2024-02-15'),
+        endDate: dayjs.utc().add(30, 'days').toDate(),
         never: false,
         count: undefined,
       },
@@ -524,7 +527,7 @@ describe('CustomRecurrenceModal', () => {
       ...mockProps,
       setRecurrenceRuleState: mockSetRecurrenceRuleState,
       recurrenceRuleState: createDefaultRecurrenceRule(
-        new Date('2024-01-15'),
+        dayjs.utc().toDate(),
         Frequency.DAILY,
       ),
     });
@@ -548,7 +551,7 @@ describe('CustomRecurrenceModal', () => {
       ...mockProps,
       setRecurrenceRuleState: mockSetRecurrenceRuleState,
       recurrenceRuleState: createDefaultRecurrenceRule(
-        new Date('2024-01-15'),
+        dayjs.utc().toDate(),
         Frequency.DAILY,
       ),
     });
@@ -773,7 +776,7 @@ describe('CustomRecurrenceModal', () => {
       setCustomRecurrenceModalIsOpen: mockSetModalOpen,
       recurrenceRuleState: {
         ...mockProps.recurrenceRuleState,
-        endDate: new Date('2024-02-15'),
+        endDate: dayjs.utc().add(30, 'days').toDate(),
         never: false,
         count: undefined,
       },
@@ -1048,7 +1051,7 @@ describe('CustomRecurrenceModal', () => {
 
     expect(newState).toEqual({
       ...prevState,
-      byMonthDay: [15], // Start date is 2024-01-15
+      byMonthDay: [dayjs.utc(mockProps.startDate).date()], // Should use startDate's day
       byDay: undefined,
     });
   });
@@ -1155,8 +1158,8 @@ describe('CustomRecurrenceModal', () => {
     expect(dateInput).toBeInTheDocument();
 
     // Trigger the DatePicker onChange by changing the input value
-    // This will trigger our mocked DatePicker's onChange which calls the real onChange with a dayjs object
-    fireEvent.change(dateInput, { target: { value: '2024-03-15' } });
+    const nextMonth = dayjs.utc().add(1, 'month').format('YYYY-MM-DD');
+    fireEvent.change(dateInput, { target: { value: nextMonth } });
 
     // Wait for the state update
     await waitFor(() => {
@@ -1176,14 +1179,15 @@ describe('CustomRecurrenceModal', () => {
 
     const newState = updateFunction(prevState);
 
+    const expectedDate = dayjs.utc(nextMonth);
     // Verify the callback produces the correct state transformation (lines 533-538)
     expect(newState.never).toBe(false);
     expect(newState.count).toBeUndefined();
     expect(newState.endDate).toBeInstanceOf(Date);
-    // Check that the date is March 15, 2024 (ignore timezone differences)
-    expect(newState.endDate.getFullYear()).toBe(2024);
-    expect(newState.endDate.getMonth()).toBe(2); // March is month 2 (0-indexed)
-    expect(newState.endDate.getDate()).toBe(15);
+    // Check that the date matches (ignore timezone differences by using UTC)
+    expect(newState.endDate.getUTCFullYear()).toBe(expectedDate.year());
+    expect(newState.endDate.getUTCMonth()).toBe(expectedDate.month());
+    expect(newState.endDate.getUTCDate()).toBe(expectedDate.date());
 
     // Verify spread operator preserved other properties
     expect(newState.frequency).toBe(prevState.frequency);

@@ -9,6 +9,9 @@ import {
   beforeAll,
   afterAll,
 } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 import { usePluginActions } from './usePluginActions';
 import { getPluginManager } from 'plugin/manager';
 import type { IPluginMeta } from 'plugin';
@@ -76,8 +79,8 @@ describe('usePluginActions', () => {
         isInstalled: true,
         isActivated: true,
         backup: false,
-        createdAt: '2023-01-01',
-        updatedAt: '2023-01-01',
+        createdAt: dayjs.utc().toISOString(),
+        updatedAt: dayjs.utc().toISOString(),
       },
     ],
   };

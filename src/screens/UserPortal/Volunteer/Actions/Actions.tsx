@@ -13,7 +13,7 @@ import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
-} from '@mui/x-data-grid';
+} from 'shared-components/DataGridWrapper';
 import { Chip, Stack } from '@mui/material';
 import ItemViewModal from 'screens/OrganizationActionItems/ActionItemViewModal/ActionItemViewModal';
 import Avatar from 'components/Avatar/Avatar';

@@ -6,7 +6,7 @@
 
 > `const` **EMPTY\_MOCKS**: `object`[]
 
-Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaignMocks.ts:177](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaignMocks.ts#L177)
+Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaignMocks.ts:204](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaignMocks.ts#L204)
 
 ## Type Declaration
 
