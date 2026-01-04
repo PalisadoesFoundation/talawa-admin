@@ -427,7 +427,8 @@
     "sortTags": "Sort Tags",
     "Latest": "Latest",
     "Oldest": "Oldest",
-    "viewSubTags": "View {{count}} sub tags"
+    "viewSubTags": "View {{count}} sub tags",
+    "tags": "Tags"
   },
   "manageTag": {
     "title": "Tag Details",
@@ -2064,9 +2065,6 @@
   "contact": {
     "card_aria": "Contact card"
   },
-  "donation": {
-    "card_aria": "Donation card"
-  },
   "securedRoute": {
     "sessionExpired": "Kindly relogin as session has expired"
   },
@@ -2083,7 +2081,14 @@
     "logoutFailed": "Logout failed",
     "title": "User Portal",
     "talawa": "Talawa",
-    "talawaBranding": "Talawa Branding"
+    "talawaBranding": "Talawa Branding",
+    "view": "View"
+  },
+  "donation": {
+    "amount_label": "Amount",
+    "card_aria": "Donation card",
+    "card_test_id": "donation-card-{{id}}",
+    "date_label": "Date"
   },
   "organizationVenuesNotification": {
     "venueCreated": "Venue created successfully",

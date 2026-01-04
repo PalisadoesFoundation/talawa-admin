@@ -29,6 +29,8 @@ Please read the [Palisadoes Contributing Guidelines](https://developer.palisadoe
 
 For detailed information about testing, linting, formatting, and code coverage, please refer to our comprehensive [Testing Guide](docs/docs/docs/developer-resources/testing.md).
 
+For security guidelines regarding token handling and authentication, please refer to our [Security Guidelines](docs/docs/docs/developer-resources/security.md).
+
 ### Quick Reference
 
 **Testing:**

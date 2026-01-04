@@ -24,7 +24,7 @@ import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
-} from '@mui/x-data-grid';
+} from 'shared-components/DataGridWrapper';
 import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import dayjs from 'dayjs';

@@ -427,7 +427,8 @@
     "sortTags": "排序标签",
     "Latest": "最新",
     "Oldest": "最旧",
-    "viewSubTags": "查看 {{count}} 个子标签"
+    "viewSubTags": "查看 {{count}} 个子标签",
+    "tags": "标签"
   },
   "manageTag": {
     "title": "标签详情",
@@ -2064,9 +2065,6 @@
   "contact": {
     "card_aria": "联系人卡片"
   },
-  "donation": {
-    "card_aria": "捐赠卡"
-  },
   "securedRoute": {
     "sessionExpired": "请重新登录，因为会话已过期"
   },
@@ -2083,7 +2081,14 @@
     "logoutFailed": "退出登录失败",
     "title": "用户门户",
     "talawa": "塔拉瓦",
-    "talawaBranding": "Talawa 品牌形象"
+    "talawaBranding": "Talawa 品牌形象",
+    "view": "查看"
+  },
+  "donation": {
+    "amount_label": "金额",
+    "card_aria": "捐赠卡",
+    "card_test_id": "donation-card-{{id}}",
+    "date_label": "日期"
   },
   "organizationVenuesNotification": {
     "venueCreated": "场地创建成功",

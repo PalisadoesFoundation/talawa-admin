@@ -15,6 +15,9 @@ import type {
 import ItemModal from './ActionItemModal';
 import { vi, it, describe, expect, beforeEach, afterEach } from 'vitest';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
@@ -80,8 +83,8 @@ const createVolunteer = (
   isPublic: true,
   isTemplate,
   isInstanceException: false,
-  createdAt: '2023-01-01T00:00:00Z',
-  updatedAt: '2023-01-01T00:00:00Z',
+  createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+  updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
   user: {
     id: `user-${id}`,
     name,
@@ -124,7 +127,7 @@ const createVolunteerGroup = (
   volunteersRequired: 5,
   isTemplate,
   isInstanceException: false,
-  createdAt: '2023-01-01T00:00:00Z',
+  createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
   creator: {
     id: 'user1',
     name: 'John Doe',
@@ -154,10 +157,10 @@ const createVolunteerGroup = (
 const createActionItemNode = (eventId: string) => ({
   id: '1',
   isCompleted: false,
-  assignedAt: '2024-01-01T00:00:00Z',
+  assignedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
   completionAt: null,
-  createdAt: '2024-01-01T00:00:00Z',
-  updatedAt: '2024-01-02T00:00:00Z',
+  createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+  updatedAt: dayjs().utc().add(1, 'day').format('YYYY-MM-DDTHH:mm:ss[Z]'),
   preCompletionNotes: 'Test notes',
   postCompletionNotes: null,
   isInstanceException: false,
@@ -243,8 +246,8 @@ const mockQueries = [
             isDisabled: false,
             description: 'Test category 1',
             creator: { id: 'creator1', name: 'Creator 1' },
-            createdAt: '2024-01-01',
-            updatedAt: '2024-01-01',
+            createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+            updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
           },
           {
             id: 'cat2',
@@ -252,8 +255,8 @@ const mockQueries = [
             isDisabled: false,
             description: 'Test category 2',
             creator: { id: 'creator2', name: 'Creator 2' },
-            createdAt: '2024-01-01',
-            updatedAt: '2024-01-01',
+            createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+            updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
           },
         ],
       },
@@ -276,8 +279,8 @@ const mockQueries = [
             emailAddress: 'john@example.com',
             role: 'USER',
             avatarURL: '',
-            createdAt: '2024-01-01',
-            updatedAt: '2024-01-01',
+            createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+            updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
           },
           {
             id: 'user2',
@@ -288,8 +291,8 @@ const mockQueries = [
             emailAddress: 'jane@example.com',
             role: 'USER',
             avatarURL: '',
-            createdAt: '2024-01-01',
-            updatedAt: '2024-01-01',
+            createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+            updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
           },
         ],
       },
@@ -457,7 +460,7 @@ const mockQueries = [
         createActionItem: {
           id: 'created-action-item',
           isCompleted: false,
-          assignedAt: '2024-01-01T00:00:00Z',
+          assignedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
           preCompletionNotes: 'Test notes',
           postCompletionNotes: null,
           isInstanceException: false,
@@ -477,9 +480,12 @@ const mockQueries = [
         updateActionItem: {
           id: '1',
           isCompleted: false,
-          assignedAt: '2024-01-02T00:00:00Z',
+          assignedAt: dayjs()
+            .utc()
+            .add(1, 'day')
+            .format('YYYY-MM-DDTHH:mm:ss[Z]'),
           completionAt: null,
-          createdAt: '2024-01-01T00:00:00Z',
+          createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
           preCompletionNotes: 'Test notes',
           postCompletionNotes: null,
           isInstanceException: false,
@@ -526,9 +532,9 @@ const mockActionItem = {
   organizationId: 'org1',
   creatorId: 'creator1',
   updaterId: null,
-  assignedAt: new Date('2024-01-01'),
+  assignedAt: dayjs().utc().toDate(),
   completionAt: null,
-  createdAt: new Date('2024-01-01'),
+  createdAt: dayjs().utc().toDate(),
   updatedAt: null,
   isCompleted: false,
   preCompletionNotes: 'Test notes',
@@ -561,7 +567,7 @@ const mockActionItem = {
     name: 'Category 1',
     description: '',
     isDisabled: false,
-    createdAt: '2024-01-01',
+    createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
     organizationId: 'org1',
   },
   organization: {
@@ -582,7 +588,7 @@ const mockActionItemWithGroup = {
     volunteersRequired: 5,
     isTemplate: true,
     isInstanceException: false,
-    createdAt: '2023-01-01T00:00:00Z',
+    createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
     creator: {
       id: 'user1',
       name: 'John Doe',
@@ -884,13 +890,27 @@ describe('ItemModal - Additional Test Cases', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
+      // Select a category first (required for volunteer group functionality)
+      const categorySelect = screen.getByTestId('categorySelect');
+      const categoryInput = within(categorySelect).getByRole('combobox');
+      await userEvent.click(categoryInput);
+      await userEvent.type(categoryInput, 'Category 1');
+      await waitFor(async () => {
+        const option = await screen.findByText('Category 1');
+        await userEvent.click(option);
+      });
+
+      // Now click volunteer group chip to switch mode
       const volunteerGroupChip = screen.getByRole('button', {
         name: 'volunteerGroup',
       });
       await userEvent.click(volunteerGroupChip);
 
+      // Wait for volunteer group select to appear
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
+        {},
+        { timeout: 3000 },
       );
       const volunteerGroupInput =
         within(volunteerGroupSelect).getByRole('combobox');
@@ -985,18 +1005,38 @@ describe('ItemModal - Additional Test Cases', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
+      // Wait for the form to fully load by checking that volunteerSelect is present
+      await screen.findByTestId('volunteerSelect', {}, { timeout: 3000 });
+
       const volunteerGroupChip = screen.getByRole('button', {
         name: 'volunteerGroup',
       });
       await userEvent.click(volunteerGroupChip);
 
+      // Wait for volunteerSelect to disappear (state update)
+      await waitFor(
+        () => {
+          expect(
+            screen.queryByTestId('volunteerSelect'),
+          ).not.toBeInTheDocument();
+        },
+        { timeout: 3000 },
+      );
+
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
+        {},
+        { timeout: 3000 },
       );
       const volunteerGroupInput =
         within(volunteerGroupSelect).getByRole('combobox');
       await userEvent.click(volunteerGroupInput);
       await userEvent.type(volunteerGroupInput, 'Test Group 2');
+
+      // Wait for the autocomplete dropdown to appear
+      await waitFor(() => {
+        expect(screen.getByRole('listbox')).toBeInTheDocument();
+      });
 
       const groupOption = await screen.findByText('Test Group 2');
       await userEvent.click(groupOption);
@@ -1580,8 +1620,8 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
                 isDisabled: false,
                 description: 'Updated test category 1',
                 creator: { id: 'creator1', name: 'Creator 1' },
-                createdAt: '2024-01-01',
-                updatedAt: '2024-01-01',
+                createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+                updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
               },
               {
                 id: 'cat3',
@@ -1589,8 +1629,8 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
                 isDisabled: false,
                 description: 'New test category 3',
                 creator: { id: 'creator3', name: 'Creator 3' },
-                createdAt: '2024-01-01',
-                updatedAt: '2024-01-01',
+                createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+                updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
               },
             ],
           },
@@ -1962,9 +2002,9 @@ describe('updateActionForInstanceHandler', () => {
     const mockOrgRefetch = vi.fn();
     const mockHide = vi.fn();
 
-    const expectedAssignedAt = dayjs(
-      mockActionItemWithGroup.assignedAt,
-    ).toISOString();
+    const expectedAssignedAt = dayjs(mockActionItemWithGroup.assignedAt)
+      .utc()
+      .toISOString();
 
     const updateGroupMutationMock = {
       request: {
@@ -2360,7 +2400,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
             volunteerId: 'volunteer2',
             categoryId: 'cat2',
             preCompletionNotes: 'Updated notes for instance',
-            assignedAt: new Date('2024-01-01').toISOString(),
+            assignedAt: dayjs().utc().toISOString(),
           },
         },
       },
@@ -2808,9 +2848,9 @@ describe('orgActionItemsRefetch functionality', () => {
           createActionItem: {
             id: 'newId',
             isCompleted: false,
-            assignedAt: '2024-01-01',
+            assignedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
             completionAt: null,
-            createdAt: '2024-01-01',
+            createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
             preCompletionNotes: 'Test with org refetch',
             postCompletionNotes: null,
             volunteer: {
@@ -3051,9 +3091,9 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
             createActionItem: {
               id: 'newId',
               isCompleted: false,
-              assignedAt: '2024-01-01',
+              assignedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
               completionAt: null,
-              createdAt: '2024-01-01',
+              createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
               preCompletionNotes: 'Test with event',
               postCompletionNotes: null,
               volunteer: {
@@ -3314,7 +3354,10 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
             updateActionItem: {
               id: '1',
               isCompleted: false,
-              updatedAt: '2024-01-02T00:00:00Z',
+              updatedAt: dayjs()
+                .utc()
+                .add(1, 'day')
+                .format('YYYY-MM-DDTHH:mm:ss[Z]'),
             },
           },
         },
@@ -3524,8 +3567,9 @@ describe('handleFormChange function', () => {
     await userEvent.type(notesInput, 'Updated field 1');
     expect(notesInput).toHaveValue('Updated field 1');
 
-    // Test updating the date field
-    const dateInput = screen.getByDisplayValue('01/01/2024');
+    // Test updating the date field using the deterministic helper
+    const dateInput = getPickerInputByLabel('assignmentDate');
+    expect(dateInput).toBeInTheDocument();
     await userEvent.click(dateInput);
     // Date field should be interactable
     expect(dateInput).toBeInTheDocument();
@@ -3939,9 +3983,9 @@ describe('Partially Covered Lines Test Coverage', () => {
             createActionItem: {
               id: 'newId',
               isCompleted: false,
-              assignedAt: '2024-01-01',
+              assignedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
               completionAt: null,
-              createdAt: '2024-01-01',
+              createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
               preCompletionNotes: '',
               postCompletionNotes: null,
               volunteer: null,
@@ -4055,15 +4099,23 @@ describe('Partially Covered Lines Test Coverage', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
+      // Wait for the form to fully load by checking that volunteerSelect is present
+      await screen.findByTestId('volunteerSelect', {}, { timeout: 3000 });
+
       // First switch to volunteer group to set some state
       const volunteerGroupChip = screen.getByRole('button', {
         name: 'volunteerGroup',
       });
       await userEvent.click(volunteerGroupChip);
 
-      await waitFor(() => {
-        expect(screen.getByTestId('volunteerGroupSelect')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('volunteerGroupSelect'),
+          ).toBeInTheDocument();
+        },
+        { timeout: 3000 },
+      );
 
       // Now click volunteer chip - this should execute the !isVolunteerChipDisabled path
       const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
@@ -4125,6 +4177,16 @@ describe('Partially Covered Lines Test Coverage', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
+      // Select a category first (required for volunteer functionality)
+      const categorySelect = screen.getByTestId('categorySelect');
+      const categoryInput = within(categorySelect).getByRole('combobox');
+      await userEvent.click(categoryInput);
+      await userEvent.type(categoryInput, 'Category 1');
+      await waitFor(async () => {
+        const option = await screen.findByText('Category 1');
+        await userEvent.click(option);
+      });
+
       // Initially should show volunteer select (default)
       await waitFor(() => {
         expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
@@ -4137,10 +4199,17 @@ describe('Partially Covered Lines Test Coverage', () => {
       await userEvent.click(volunteerGroupChip);
 
       // Should switch to volunteer group select and clear volunteer
-      await waitFor(() => {
-        expect(screen.getByTestId('volunteerGroupSelect')).toBeInTheDocument();
-        expect(screen.queryByTestId('volunteerSelect')).not.toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('volunteerGroupSelect'),
+          ).toBeInTheDocument();
+          expect(
+            screen.queryByTestId('volunteerSelect'),
+          ).not.toBeInTheDocument();
+        },
+        { timeout: 3000 },
+      );
     });
 
     it('should have isVolunteerGroupChipDisabled true when editing item with volunteer', () => {

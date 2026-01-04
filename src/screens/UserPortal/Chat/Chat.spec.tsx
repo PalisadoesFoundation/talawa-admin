@@ -18,6 +18,9 @@ import {
 import '@testing-library/jest-dom';
 import Chat from './Chat';
 import { CHATS_LIST, UNREAD_CHATS } from 'GraphQl/Queries/PlugInQueries';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 type MockType = {
   request: {
@@ -27,7 +30,6 @@ type MockType = {
   result: { data: Record<string, unknown> };
   error?: Error;
 };
-
 const { mockUseParams } = vi.hoisted(() => ({
   mockUseParams: vi.fn(),
 }));
@@ -1006,7 +1008,7 @@ describe('Chat Component - Comprehensive Coverage', () => {
               name: 'Group in Org 1',
               isGroup: true,
               description: '',
-              createdAt: '2024-01-01',
+              createdAt: dayjs.utc().toISOString(),
               users: [{}, {}, {}],
               image: '',
               organization: { id: 'org-1', _id: 'org-1', name: 'Org 1' },
@@ -1049,7 +1051,7 @@ describe('Chat Component - Comprehensive Coverage', () => {
               name: 'Group in Org 2',
               isGroup: true,
               description: '',
-              createdAt: '2024-01-01',
+              createdAt: dayjs.utc().toISOString(),
               users: [{}, {}, {}],
               image: '',
               organization: { id: 'org-2', _id: 'org-2', name: 'Org 2' },
@@ -1124,8 +1126,9 @@ describe('Chat Component - Comprehensive Coverage', () => {
               name: 'New Type Chat Org 1',
               isGroup: false,
               description: '',
-              createdAt: '2024-01-01',
-              avatarURL: '',
+              createdAt: dayjs.utc().toISOString(),
+              users: [{}, {}],
+              image: '',
               organization: { id: 'org-1', name: 'Org 1' },
               members: {
                 edges: [
@@ -1157,8 +1160,9 @@ describe('Chat Component - Comprehensive Coverage', () => {
               name: 'New Type Chat Org 2',
               isGroup: false,
               description: '',
-              createdAt: '2024-01-01',
-              avatarURL: '',
+              createdAt: dayjs.utc().toISOString(),
+              users: [{}, {}],
+              image: '',
               organization: { id: 'org-2', name: 'Org 2' },
               members: {
                 edges: [
@@ -1222,7 +1226,7 @@ describe('Chat Component - Comprehensive Coverage', () => {
               name: 'Legacy Chat Org 1',
               isGroup: false,
               description: '',
-              createdAt: '2024-01-01',
+              createdAt: dayjs.utc().toISOString(),
               users: [{}, {}],
               image: '',
               organization: { _id: 'org-1', id: 'org-1', name: 'Org 1' },
@@ -1236,7 +1240,7 @@ describe('Chat Component - Comprehensive Coverage', () => {
               name: 'Legacy Chat Org 2',
               isGroup: false,
               description: '',
-              createdAt: '2024-01-01',
+              createdAt: dayjs.utc().toISOString(),
               users: [{}, {}],
               image: '',
               organization: { _id: 'org-2', id: 'org-2', name: 'Org 2' },

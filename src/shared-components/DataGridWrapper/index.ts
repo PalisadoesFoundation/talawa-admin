@@ -8,4 +8,8 @@ export * from './DataGridWrapper';
  *
  */
 export { DataGrid } from '@mui/x-data-grid';
-export type { GridCellParams, GridColDef } from '@mui/x-data-grid';
+export type {
+  GridCellParams,
+  GridColDef,
+  GridPaginationModel,
+} from '@mui/x-data-grid';

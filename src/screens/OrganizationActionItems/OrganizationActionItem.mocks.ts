@@ -8,6 +8,9 @@ import {
   COMPLETE_ACTION_ITEM_FOR_INSTANCE,
   MARK_ACTION_ITEM_AS_PENDING_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 export const actionItemCategory1 = {
   id: 'actionItemCategoryId1',
@@ -15,8 +18,8 @@ export const actionItemCategory1 = {
   isDisabled: false,
   organizationId: 'orgId',
   creatorId: 'userId',
-  createdAt: '2024-08-26',
-  updatedAt: '2024-08-26',
+  createdAt: dayjs.utc().toISOString(),
+  updatedAt: dayjs.utc().toISOString(),
 };
 
 export const actionItemCategory2 = {
@@ -25,8 +28,8 @@ export const actionItemCategory2 = {
   isDisabled: false,
   organizationId: 'orgId',
   creatorId: 'userId',
-  createdAt: '2024-08-25',
-  updatedAt: '2024-08-25',
+  createdAt: dayjs.utc().subtract(1, 'day').toISOString(),
+  updatedAt: dayjs.utc().subtract(1, 'day').toISOString(),
 };
 
 export const baseActionItem = {
@@ -36,8 +39,8 @@ export const baseActionItem = {
   volunteerId: null,
   volunteerGroupId: null,
   recurringEventInstanceId: null,
-  createdAt: new Date('2024-08-27'),
-  updatedAt: new Date('2024-08-27'),
+  createdAt: dayjs.utc().toDate(),
+  updatedAt: dayjs.utc().toDate(),
   creator: {
     id: 'userId',
     name: 'Wilt Shepherd',
@@ -56,8 +59,8 @@ export const itemWithUser1 = {
   id: '1',
   categoryId: 'actionItemCategoryId1',
   eventId: 'eventId',
-  assignedAt: new Date('2024-08-27'),
-  completionAt: new Date('2044-09-03'),
+  assignedAt: dayjs.utc().toDate(),
+  completionAt: dayjs.utc().toDate(),
   preCompletionNotes: 'Notes 1',
   postCompletionNotes: 'Cmp Notes 1',
   isCompleted: true,
@@ -77,8 +80,8 @@ export const itemWithUser1 = {
     id: 'eventId',
     name: 'Test Event',
     description: 'Test Event Description',
-    startAt: new Date('2024-08-27'),
-    endAt: new Date('2024-08-30'),
+    startAt: dayjs.utc().toDate(),
+    endAt: dayjs.utc().add(3, 'day').toDate(),
   },
 };
 
@@ -89,7 +92,7 @@ export const itemWithUser2 = {
   id: '2',
   categoryId: 'actionItemCategoryId2',
   eventId: null,
-  assignedAt: new Date('2024-08-28'),
+  assignedAt: dayjs.utc().subtract(1, 'day').toDate(),
   completionAt: null,
   preCompletionNotes: 'Notes 2',
   postCompletionNotes: null,
@@ -117,7 +120,7 @@ export const itemWithoutAssignee = {
   id: '3',
   categoryId: 'actionItemCategoryId1',
   eventId: null,
-  assignedAt: new Date('2024-08-29'),
+  assignedAt: dayjs.utc().subtract(2, 'day').toDate(),
   completionAt: null,
   preCompletionNotes: 'Notes 3',
   postCompletionNotes: null,
@@ -135,7 +138,7 @@ export const itemWithoutCategory = {
   id: '4',
   categoryId: null,
   eventId: null,
-  assignedAt: new Date('2024-08-30'),
+  assignedAt: dayjs.utc().subtract(3, 'day').toDate(),
   completionAt: null,
   preCompletionNotes: 'Notes 4',
   postCompletionNotes: null,
@@ -162,7 +165,7 @@ export const itemWithEmptyAssigneeName = {
   id: '5',
   categoryId: 'actionItemCategoryId2',
   eventId: null,
-  assignedAt: new Date('2024-08-31'),
+  assignedAt: dayjs.utc().subtract(4, 'day').toDate(),
   completionAt: null,
   preCompletionNotes: 'Notes 5',
   postCompletionNotes: null,
@@ -189,7 +192,7 @@ export const itemWithVolunteerGroup = {
   volunteerGroupId: 'volunteerGroupId1',
   categoryId: 'actionItemCategoryId1',
   eventId: null,
-  assignedAt: new Date('2024-09-01'),
+  assignedAt: dayjs.utc().subtract(5, 'day').toDate(),
   completionAt: null,
   preCompletionNotes: 'Group task',
   postCompletionNotes: null,
@@ -233,8 +236,8 @@ export const memberListQuery = {
           emailAddress: 'john@example.com',
           role: 'REGULAR',
           avatarURL: 'user-image',
-          createdAt: '2024-02-14',
-          updatedAt: '2024-02-14',
+          createdAt: dayjs.utc().toISOString(),
+          updatedAt: dayjs.utc().toISOString(),
         },
         {
           id: 'userId2',
@@ -242,8 +245,8 @@ export const memberListQuery = {
           emailAddress: 'jane@example.com',
           role: 'REGULAR',
           avatarURL: null,
-          createdAt: '2024-02-14',
-          updatedAt: '2024-02-14',
+          createdAt: dayjs.utc().toISOString(),
+          updatedAt: dayjs.utc().toISOString(),
         },
         {
           id: 'userId3',
@@ -251,8 +254,8 @@ export const memberListQuery = {
           emailAddress: 'wilt@example.com',
           role: 'ADMIN',
           avatarURL: null,
-          createdAt: '2024-02-14',
-          updatedAt: '2024-02-14',
+          createdAt: dayjs.utc().toISOString(),
+          updatedAt: dayjs.utc().toISOString(),
         },
       ],
     },
@@ -277,8 +280,8 @@ export const actionItemCategoryListQuery = {
           isDisabled: false,
           organizationId: 'orgId',
           creatorId: 'creatorId1',
-          createdAt: '2024-08-26',
-          updatedAt: '2024-08-26',
+          createdAt: dayjs.utc().toISOString(),
+          updatedAt: dayjs.utc().toISOString(),
         },
         {
           id: 'categoryId2',
@@ -286,8 +289,8 @@ export const actionItemCategoryListQuery = {
           isDisabled: false,
           organizationId: 'orgId',
           creatorId: 'creatorId2',
-          createdAt: '2024-08-25',
-          updatedAt: '2024-08-25',
+          createdAt: dayjs.utc().subtract(1, 'day').toISOString(),
+          updatedAt: dayjs.utc().subtract(1, 'day').toISOString(),
         },
       ],
     },
@@ -345,7 +348,7 @@ export const updateActionItemMutation = {
         id: 'actionItemId1',
         isCompleted: true,
         postCompletionNotes: 'Cmp Notes 1',
-        updatedAt: '2025-07-01T07:49:24Z',
+        updatedAt: dayjs.utc().toISOString(),
       },
     },
   },
@@ -366,7 +369,7 @@ export const markActionItemAsPendingMutation = {
         id: 'actionItemId1',
         isCompleted: false,
         postCompletionNotes: null,
-        updatedAt: '2025-07-01T07:49:24Z',
+        updatedAt: dayjs.utc().toISOString(),
       },
     },
   },
