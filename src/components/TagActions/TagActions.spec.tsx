@@ -321,16 +321,25 @@ describe('Organisation Tags Page', () => {
       );
     });
   });
-  test('Toasts error when something wrong happen while assigning/removing tag', async () => {
+  test('Toasts error when something goes wrong while assigning/removing tags', async () => {
     renderTagActionsModal(props[0], link3);
     await wait();
+
+    // Select at least one tag so the mutation is actually invoked
+    await waitFor(() => {
+      expect(screen.getByTestId('checkTag2')).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getByTestId('checkTag2'));
 
     await waitFor(() => {
       expect(screen.getByTestId('tagActionSubmitBtn')).toBeInTheDocument();
     });
     await userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
+
     await waitFor(() => {
-      expect(NotificationToast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Mock Graphql Error While assigning/removing tags',
+      );
     });
   });
 

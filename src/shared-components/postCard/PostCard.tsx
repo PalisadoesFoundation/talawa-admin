@@ -421,12 +421,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               onDataChange={setComments}
               refetchTrigger={refetchTrigger}
               emptyStateComponent={
-                <Typography
-                  variant="body2"
-                  sx={{ color: 'text.secondary', textAlign: 'center', py: 2 }}
-                >
+                <div className={postCardStyles.noCommentsText}>
                   {t('postCard.noComments')}
-                </Typography>
+                </div>
               }
             />
           </Box>
