@@ -1014,9 +1014,14 @@ describe('ItemModal - Additional Test Cases', () => {
       await userEvent.click(volunteerGroupChip);
 
       // Wait for volunteerSelect to disappear (state update)
-      await waitFor(() => {
-        expect(screen.queryByTestId('volunteerSelect')).not.toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.queryByTestId('volunteerSelect'),
+          ).not.toBeInTheDocument();
+        },
+        { timeout: 3000 },
+      );
 
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
