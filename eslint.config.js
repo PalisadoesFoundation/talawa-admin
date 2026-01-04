@@ -334,6 +334,7 @@ export default [
         },
       ],
       'tsdoc/syntax': 'error',
+      'react/no-multi-comp': 'off',
     },
   },
 ];
