@@ -177,13 +177,9 @@ describe('Testing Organisation Action Item Categories', () => {
     await userEvent.click(addCategoryBtn);
 
     await waitFor(() => expect(screen.getAllByText(t.create)).toHaveLength(2));
-    await userEvent.click(
-      screen.getByTestId('actionItemCategoryModalCloseBtn'),
-    );
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
-      expect(
-        screen.queryByTestId('actionItemCategoryModalCloseBtn'),
-      ).toBeNull(),
+      expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
   });
 
@@ -197,13 +193,9 @@ describe('Testing Organisation Action Item Categories', () => {
     await waitFor(() =>
       expect(screen.getByText(t.updateActionItemCategory)).toBeInTheDocument(),
     );
-    await userEvent.click(
-      screen.getByTestId('actionItemCategoryModalCloseBtn'),
-    );
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
-      expect(
-        screen.queryByTestId('actionItemCategoryModalCloseBtn'),
-      ).toBeNull(),
+      expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
   });
 
@@ -219,15 +211,13 @@ describe('Testing Organisation Action Item Categories', () => {
 
     // Check modal is open by looking for the modal content
     await waitFor(() =>
-      expect(
-        screen.getByTestId('categoryViewModalCloseBtn'),
-      ).toBeInTheDocument(),
+      expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument(),
     );
 
     // Close the view modal
-    await userEvent.click(screen.getByTestId('categoryViewModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
-      expect(screen.queryByTestId('categoryViewModalCloseBtn')).toBeNull(),
+      expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
   });
 
