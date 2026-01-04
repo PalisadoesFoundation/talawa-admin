@@ -240,7 +240,7 @@ describe('useAvatarUpload', () => {
       expect(result.current.error).toBeNull();
     });
 
-    it('validates type before size', () => {
+    it('validates size before type', () => {
       const { result } = renderHook(() => useAvatarUpload());
       // Invalid type AND too large
       const file = createMockFile(
