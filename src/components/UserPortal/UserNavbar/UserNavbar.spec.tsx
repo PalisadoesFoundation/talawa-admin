@@ -1,5 +1,5 @@
 import React, { act } from 'react';
-import { MockedProvider } from '@apollo/react-testing';
+import { MockedProvider, MockedResponse } from '@apollo/react-testing';
 import { render, screen } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -12,9 +12,10 @@ import { vi } from 'vitest';
 import type { Mock } from 'vitest';
 import UserNavbar from './UserNavbar';
 import userEvent from '@testing-library/user-event';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
+import { toast } from 'react-toastify';
 
 /**
  * Unit tests for UserNavbar component [User Portal]:
@@ -29,8 +30,10 @@ import useLocalStorage from 'utils/useLocalstorage';
  * 8. *Navigating to the 'Settings' page*: Confirms that clicking 'Settings' in the dropdown correctly navigates the user to the "/user/settings" page.
  *
  * The tests simulate interactions with the language dropdown and the user dropdown menu to ensure proper functionality of language switching and navigation.
- * Mocked GraphQL mutation (REVOKE_REFRESH_TOKEN) and mock store are used to test the component in an isolated environment.
+ * Mocked GraphQL mutation (LOGOUT_MUTATION) and mock store are used to test the component in an isolated environment.
  */
+
+vi.mock('react-toastify', () => ({ toast: { error: vi.fn() } }));
 
 vi.mock('utils/useLocalstorage', () => ({
   default: vi.fn(() => ({
@@ -77,9 +80,9 @@ async function wait(ms = 100): Promise<void> {
 const MOCKS = [
   {
     request: {
-      query: REVOKE_REFRESH_TOKEN,
+      query: LOGOUT_MUTATION,
     },
-    result: {},
+    result: { data: { logout: { success: true } } },
   },
   // Add a minimal mock for NotificationIcon's GET_USER_NOTIFICATIONS query
   {
@@ -312,5 +315,86 @@ describe('Testing UserNavbar Component [User Portal]', () => {
 
     expect(mockClearAllItems).toHaveBeenCalled();
     expect(window.location.pathname).toBe('/');
+  });
+
+  /**
+   * Helper to simulate logout error and verify error handling (console log, toast, cleanup, navigation).
+   * @param logoutMock - The mock response for the logout mutation (error or GraphQL error).
+   */
+  const testLogoutError = async (logoutMock: MockedResponse) => {
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const { mockClearAllItems } = createMock();
+
+    const mocks = [
+      logoutMock,
+      {
+        request: {
+          query: GET_USER_NOTIFICATIONS,
+          variables: { userId: '123', input: { first: 5, skip: 0 } },
+        },
+        result: {
+          data: {
+            user: {
+              __typename: 'User',
+              notifications: [],
+            },
+          },
+        },
+      },
+    ];
+
+    const errorLink = new StaticMockLink(mocks, true);
+
+    render(
+      <MockedProvider link={errorLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <UserNavbar />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    await userEvent.click(screen.getByTestId('logoutDropdown'));
+    await userEvent.click(screen.getByTestId('logoutBtn'));
+
+    await wait();
+
+    // Verify error was logged
+    expect(consoleSpy).toHaveBeenCalledWith(
+      'Error during logout:',
+      expect.any(Error),
+    );
+    // Verify toast was shown
+    expect(toast.error).toHaveBeenCalledWith('errorOccurred');
+    // Verify cleanup still happens even on error
+    expect(mockClearAllItems).toHaveBeenCalled();
+    expect(window.location.pathname).toBe('/');
+
+    consoleSpy.mockRestore();
+  };
+
+  it('handles logout error and still clears local storage', async () => {
+    const logoutMock = {
+      request: { query: LOGOUT_MUTATION },
+      error: new Error('Network error'),
+    };
+
+    await testLogoutError(logoutMock);
+  });
+
+  it('handles logout GraphQL error and still clears local storage', async () => {
+    const logoutMock = {
+      request: { query: LOGOUT_MUTATION },
+      result: {
+        errors: [{ message: 'Logout failed' }],
+      },
+    };
+
+    await testLogoutError(logoutMock);
   });
 });
