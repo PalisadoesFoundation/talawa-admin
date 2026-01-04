@@ -6,7 +6,7 @@
 
 > **CheckInModal**(`__namedParameters`): `Element`
 
-Defined in: [src/components/CheckIn/Modal/CheckInModal.tsx:55](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/Modal/CheckInModal.tsx#L55)
+Defined in: [src/components/CheckIn/Modal/CheckInModal.tsx:56](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/CheckIn/Modal/CheckInModal.tsx#L56)
 
 ## Parameters
 

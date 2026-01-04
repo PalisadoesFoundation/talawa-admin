@@ -427,7 +427,8 @@
     "sortTags": "Trier les étiquettes",
     "Latest": "Le Plus Récent",
     "Oldest": "Le Plus Ancien",
-    "viewSubTags": "Voir {{count}} sous-étiquettes"
+    "viewSubTags": "Voir {{count}} sous-étiquettes",
+    "tags": "Étiquettes"
   },
   "manageTag": {
     "title": "Détails de l'étiquette",

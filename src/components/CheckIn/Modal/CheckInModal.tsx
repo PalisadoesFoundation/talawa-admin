@@ -51,6 +51,7 @@ import type {
 } from 'shared-components/DataGridWrapper';
 import { DataGrid } from 'shared-components/DataGridWrapper';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import styles from 'style/app-fixed.module.css';
 
 export const CheckInModal = ({
   show,
@@ -149,10 +150,7 @@ export const CheckInModal = ({
         centered
         size="lg"
       >
-        <Modal.Header
-          closeButton
-          style={{ backgroundColor: 'var(--tableHeader-bg)' }}
-        >
+        <Modal.Header closeButton className={styles.checkInModalHeader}>
           <Modal.Title
             className="text-tableHeader-color"
             data-testid="modal-title"
@@ -190,7 +188,7 @@ export const CheckInModal = ({
               clearButtonTestId="clearSearchAttendees"
             />
           </div>
-          <div style={{ height: 500, width: '100%' }}>
+          <div className={styles.checkInDataGridContainer}>
             <DataGrid
               rows={tableData}
               getRowHeight={(): GridRowHeightReturnValue => 'auto'}

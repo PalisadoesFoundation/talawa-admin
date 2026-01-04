@@ -10626,3 +10626,36 @@ form {
   border-width: 2px;
   width: 85%;
 }
+
+/* -- CheckInModal.tsx styles -- */
+
+.checkInModalHeader {
+  background-color: var(--tableHeader-bg);
+}
+
+.checkInDataGridContainer {
+  height: 500px;
+  width: 100%;
+}
+
+/* -- OrgActionItemCategories.tsx dataGrid styles -- */
+
+.actionItemCategoriesDataGrid
+  :global(.MuiDataGrid-root .MuiDataGrid-cell:focus-within) {
+  outline: none !important;
+}
+
+.actionItemCategoriesDataGrid
+  :global(.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within) {
+  outline: none;
+}
+
+.actionItemCategoriesDataGrid :global(.MuiDataGrid-row:hover),
+.actionItemCategoriesDataGrid :global(.MuiDataGrid-row.Mui-hovered) {
+  background-color: transparent;
+}
+
+.actionItemCategoriesDataGrid :global(.MuiDataGrid-root),
+.actionItemCategoriesDataGrid :global(.MuiDataGrid-main) {
+  border-radius: 0.5rem;
+}

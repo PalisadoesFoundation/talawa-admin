@@ -427,7 +427,8 @@
     "sortTags": "排序标签",
     "Latest": "最新",
     "Oldest": "最旧",
-    "viewSubTags": "查看 {{count}} 个子标签"
+    "viewSubTags": "查看 {{count}} 个子标签",
+    "tags": "标签"
   },
   "manageTag": {
     "title": "标签详情",

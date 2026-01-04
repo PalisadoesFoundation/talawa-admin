@@ -427,7 +427,8 @@
     "sortTags": "टैग सॉर्ट करें",
     "Latest": "नवीनतम",
     "Oldest": "सबसे पुराना",
-    "viewSubTags": "{{count}} उप-टैग देखें"
+    "viewSubTags": "{{count}} उप-टैग देखें",
+    "tags": "टैग"
   },
   "manageTag": {
     "title": "टैग विवरण",

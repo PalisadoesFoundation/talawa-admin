@@ -66,20 +66,6 @@ interface IActionItemCategoryProps {
   orgId: string;
 }
 
-/** DataGrid styling configuration */
-const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
-  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
-};
-
 /**
  * Represents the component for managing organization action item categories.
  * This component allows creating, updating, enabling, and disabling action item categories.
@@ -391,8 +377,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
             <Button
               variant="success"
               onClick={() => handleOpenModal(null, 'create')}
-              style={{ marginTop: '11px' }}
-              className={styles.createButton}
+              className={`${styles.createButton} ${styles.marginTopSm}`}
               data-testid="createActionItemCategoryBtn"
             >
               <i className={'fa fa-plus me-2'} />
@@ -415,7 +400,7 @@ const OrgActionItemCategories: FC<IActionItemCategoryProps> = ({ orgId }) => {
             </Stack>
           ),
         }}
-        sx={dataGridStyle}
+        className={styles.actionItemCategoriesDataGrid}
         getRowClassName={() => `${styles.rowBackground}`}
         autoHeight
         rowHeight={65}

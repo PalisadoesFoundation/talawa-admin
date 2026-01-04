@@ -427,7 +427,8 @@
     "sortTags": "Sort Tags",
     "Latest": "Latest",
     "Oldest": "Oldest",
-    "viewSubTags": "View {{count}} sub tags"
+    "viewSubTags": "View {{count}} sub tags",
+    "tags": "Tags"
   },
   "manageTag": {
     "title": "Tag Details",
@@ -2081,8 +2082,8 @@
     "view": "View"
   },
   "donation": {
-    "amount_label": "Montant",
-    "card_aria": "Carte de don",
+    "amount_label": "Amount",
+    "card_aria": "Donation card",
     "card_test_id": "donation-card-{{id}}",
     "date_label": "Date"
   },
