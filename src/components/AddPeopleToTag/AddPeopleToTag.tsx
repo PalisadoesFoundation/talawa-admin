@@ -39,8 +39,11 @@
  */
 // translation-check-keyPrefix: manageTag
 import { useMutation, useQuery } from '@apollo/client';
-import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
-import { DataGrid } from '@mui/x-data-grid';
+import type {
+  GridCellParams,
+  GridColDef,
+} from 'shared-components/DataGridWrapper';
+import { DataGrid } from 'shared-components/DataGridWrapper';
 import { USER_TAGS_MEMBERS_TO_ASSIGN_TO } from 'GraphQl/Queries/userTagQueries';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';

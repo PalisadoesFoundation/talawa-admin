@@ -1,4 +1,5 @@
 import React from 'react';
+import dayjs from 'dayjs';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { I18nextProvider } from 'react-i18next';
@@ -111,7 +112,7 @@ const MOCKS = [
             amount: 1,
             userId: '6391a15bcb738c181d238952',
             payPalId: 'payPalId',
-            updatedAt: '2024-04-03T16:43:01.514Z',
+            updatedAt: dayjs().month(3).date(3).toISOString(),
             __typename: 'Donation',
           },
         ],
@@ -196,7 +197,7 @@ const MULTIPLE_DONATIONS_MOCKS = [
           amount: (i + 1) * 10,
           userId: `user-${i}`,
           payPalId: `paypal-${i}`,
-          updatedAt: '2024-04-03T16:43:01.514Z',
+          updatedAt: dayjs().month(3).date(3).toISOString(),
           __typename: 'Donation',
         })),
         __typename: 'Query',
@@ -552,7 +553,7 @@ describe('Donate Component', () => {
               amount: (i + 1) * 10,
               userId: `user-${i}`,
               payPalId: `paypal-${i}`,
-              updatedAt: '2024-04-03T16:43:01.514Z',
+              updatedAt: dayjs().month(3).date(3).toISOString(),
               __typename: 'Donation',
             })),
             __typename: 'Query',

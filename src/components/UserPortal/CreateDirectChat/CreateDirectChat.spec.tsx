@@ -7,6 +7,10 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import CreateDirectChatModal from './CreateDirectChat';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import {
@@ -264,14 +268,14 @@ describe('CreateDirectChatModal', () => {
         users: [
           {
             _id: '1',
-            createdAt: new Date('2023-01-01T00:00:00Z'),
+            createdAt: dayjs.utc().toDate(),
             email: 'user1@example.com',
             firstName: 'Current',
             lastName: 'User',
           },
           {
             _id: 'user-2',
-            createdAt: new Date('2023-01-01T00:00:00Z'),
+            createdAt: dayjs.utc().toDate(),
             email: 'user2@example.com',
             firstName: 'Test',
             lastName: 'User2',
@@ -279,7 +283,7 @@ describe('CreateDirectChatModal', () => {
         ],
         unseenMessagesByUsers: '',
         description: 'A direct chat conversation',
-        createdAt: new Date('2023-01-01T00:00:00Z'),
+        createdAt: dayjs.utc().toDate(),
       },
     ];
 

@@ -10,6 +10,7 @@ import { StaticMockLink } from '../../utils/StaticMockLink';
 import { toast } from 'react-toastify';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
+import dayjs from 'dayjs';
 import type { InterfacePostCard } from '../../utils/interfaces';
 
 import PostCard from './PostCard';
@@ -80,7 +81,7 @@ const commentsQueryMock = {
                   name: 'Jane Smith',
                   avatarURL: null,
                 },
-                createdAt: '2023-01-01T00:00:00Z',
+                createdAt: dayjs().subtract(30, 'days').toISOString(),
                 upVotesCount: 2,
                 downVotesCount: 0,
                 hasUserVoted: {
@@ -185,7 +186,7 @@ const createCommentMock = {
           lastName: 'Doe',
           email: 'john@example.com',
         },
-        createdAt: '2024-01-01',
+        createdAt: dayjs().subtract(7, 'days').toISOString(),
         likeCount: 0,
       },
     },
@@ -274,7 +275,7 @@ const togglePinPostMock = {
       updatePost: {
         id: '1',
         caption: 'Test Post',
-        pinnedAt: '2023-01-01T00:00:00Z',
+        pinnedAt: dayjs().subtract(7, 'days').toISOString(),
         attachments: [],
       },
     },
@@ -364,7 +365,7 @@ const mocks = [
             lastName: 'Doe',
             email: 'john@example.com',
           },
-          createdAt: '2023-01-01T00:00:00Z',
+          createdAt: dayjs().subtract(30, 'days').toISOString(),
           likeCount: 0,
         },
       },
@@ -458,7 +459,7 @@ describe('PostCard', () => {
     mimeType: 'image/jpeg',
     image: 'test-image.jpg',
     video: '',
-    postedAt: '2023-01-01T00:00:00Z',
+    postedAt: dayjs().subtract(30, 'days').toISOString(),
     upVoteCount: 5,
     downVoteCount: 0,
     commentCount: 3,
@@ -581,7 +582,7 @@ describe('PostCard', () => {
 
   test('displays pinned icon when post is pinned with video', () => {
     renderPostCard({
-      pinnedAt: '2023-01-01T00:00:00Z',
+      pinnedAt: dayjs().subtract(7, 'days').toISOString(),
       mimeType: 'video/mp4',
       attachmentURL: 'http://example.com/video.mp4',
     });
@@ -1128,7 +1129,7 @@ describe('PostCard', () => {
     };
 
     renderPostCardWithCustomMockAndProps(toggleUnpinPostMock, {
-      pinnedAt: '2023-01-01T00:00:00Z',
+      pinnedAt: dayjs().subtract(7, 'days').toISOString(),
     });
     // Wait for component to render
     await waitFor(() => {

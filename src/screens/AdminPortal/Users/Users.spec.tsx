@@ -30,6 +30,9 @@ import {
   ORGANIZATION_LIST,
   USER_LIST_FOR_ADMIN,
 } from 'GraphQl/Queries/Queries';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
@@ -519,7 +522,7 @@ describe('Testing Users screen', () => {
         'John',
         'Doe',
         'john@example.com',
-        '2023-04-13T04:53:17.742+00:00',
+        dayjs.utc().subtract(1, 'year').toISOString(),
         true, // isSuperAdmin
       );
 
@@ -533,7 +536,7 @@ describe('Testing Users screen', () => {
         'Jane',
         'Doe',
         'jane@example.com',
-        '2023-04-17T04:53:17.742+00:00',
+        dayjs.utc().subtract(1, 'year').add(4, 'days').toISOString(),
         false, // isSuperAdmin
       );
 
@@ -819,8 +822,16 @@ function TestComponent({
 
 describe('sortUsers logic coverage', () => {
   const baseUsers = [
-    { id: '1', createdAt: '2020-01-01', role: 'regular' },
-    { id: '2', createdAt: '2024-01-01', role: 'administrator' },
+    {
+      id: '1',
+      createdAt: dayjs.utc().subtract(6, 'year').format('YYYY-MM-DD'),
+      role: 'regular',
+    },
+    {
+      id: '2',
+      createdAt: dayjs.utc().format('YYYY-MM-DD'),
+      role: 'administrator',
+    },
   ];
 
   it('should sort users by newest', async () => {
@@ -1017,7 +1028,7 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'Old User',
                     role: 'regular',
                     emailAddress: 'old@test.com',
-                    createdAt: '2020-01-01T00:00:00.000Z',
+                    createdAt: dayjs.utc().subtract(6, 'year').toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -1034,7 +1045,7 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'New User',
                     role: 'regular',
                     emailAddress: 'new@test.com',
-                    createdAt: '2024-01-01T00:00:00.000Z',
+                    createdAt: dayjs.utc().toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -2201,7 +2212,7 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'Single User',
                     emailAddress: 'single@test.com',
                     role: 'regular',
-                    createdAt: '2024-01-01T00:00:00Z',
+                    createdAt: dayjs.utc().toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -2272,7 +2283,12 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'Newer User',
                     emailAddress: 'newer@test.com',
                     role: 'regular',
-                    createdAt: '2025-06-01T00:00:00Z',
+                    createdAt: dayjs
+                      .utc()
+                      .add(1, 'year')
+                      .month(5)
+                      .date(1)
+                      .toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -2289,7 +2305,7 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'Older User',
                     emailAddress: 'older@test.com',
                     role: 'regular',
-                    createdAt: '2020-01-01T00:00:00Z',
+                    createdAt: dayjs.utc().subtract(6, 'year').toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -2375,7 +2391,7 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'Regular Person',
                     emailAddress: 'regular@test.com',
                     role: 'regular',
-                    createdAt: '2024-01-01T00:00:00Z',
+                    createdAt: dayjs.utc().toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -2392,7 +2408,12 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'Admin Person',
                     emailAddress: 'admin@test.com',
                     role: 'administrator',
-                    createdAt: '2024-02-01T00:00:00Z',
+                    createdAt: dayjs
+                      .utc()
+                      .month(1)
+                      .date(1)
+                      .startOf('day')
+                      .toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -2470,7 +2491,7 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'First User',
                     emailAddress: 'first@test.com',
                     role: 'regular',
-                    createdAt: '2024-01-01T00:00:00Z',
+                    createdAt: dayjs.utc().toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -2507,7 +2528,12 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'Second User',
                     emailAddress: 'second@test.com',
                     role: 'regular',
-                    createdAt: '2024-02-01T00:00:00Z',
+                    createdAt: dayjs
+                      .utc()
+                      .month(1)
+                      .date(1)
+                      .startOf('day')
+                      .toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -2639,7 +2665,7 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'Initial User',
                     emailAddress: 'initial@test.com',
                     role: 'regular',
-                    createdAt: '2024-01-01T00:00:00Z',
+                    createdAt: dayjs.utc().toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -2730,7 +2756,7 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'Only User',
                     emailAddress: 'only@test.com',
                     role: 'regular',
-                    createdAt: '2024-01-01T00:00:00Z',
+                    createdAt: dayjs.utc().toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',

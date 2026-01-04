@@ -1,3 +1,7 @@
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import {
   GET_ORGANIZATION_POSTS_COUNT_PG,
   GET_ORGANIZATION_EVENTS_PG,
@@ -66,8 +70,8 @@ export const MOCKS = [
                   id: 'event1',
                   name: 'Event One',
                   description: 'Description for Event One',
-                  startAt: '2025-10-29T00:00:00.000Z',
-                  endAt: '2025-10-30T00:00:00.000Z',
+                  startAt: dayjs().add(1, 'year').add(1, 'day').toISOString(),
+                  endAt: dayjs().add(1, 'year').add(2, 'days').toISOString(),
                   allDay: false,
                   location: 'Test Location',
                   isPublic: true,
@@ -83,7 +87,10 @@ export const MOCKS = [
                     id: 'recRule1',
                     frequency: 'DAILY',
                     interval: 1,
-                    recurrenceStartDate: '2025-10-29',
+                    recurrenceStartDate: dayjs()
+                      .add(1, 'year')
+                      .add(1, 'day')
+                      .format('YYYY-MM-DD'),
                     recurrenceEndDate: null,
                     count: null,
                     byDay: null,
@@ -108,8 +115,8 @@ export const MOCKS = [
                     name: 'Test Organization',
                     __typename: 'Organization',
                   },
-                  createdAt: '2025-10-28T00:00:00.000Z',
-                  updatedAt: '2025-10-28T00:00:00.000Z',
+                  createdAt: dayjs().add(1, 'year').toISOString(),
+                  updatedAt: dayjs().add(1, 'year').toISOString(),
                   __typename: 'Event',
                 },
                 cursor: 'cursor1',
@@ -146,7 +153,11 @@ export const MOCKS = [
                 node: {
                   id: 'post1',
                   caption: 'First Post',
-                  createdAt: '2025-01-01T12:00:00.000Z',
+                  createdAt: dayjs()
+                    .add(1, 'year')
+                    .startOf('year')
+                    .hour(12)
+                    .toISOString(),
                   creator: {
                     id: 'user1',
                     name: 'John Doe',
@@ -203,7 +214,7 @@ export const MOCKS = [
           membershipRequests: [
             {
               membershipRequestId: 'request1',
-              createdAt: '2023-01-01T00:00:00Z',
+              createdAt: dayjs().subtract(1, 'year').toISOString(),
               status: 'pending',
               user: {
                 id: 'user1',
@@ -216,7 +227,10 @@ export const MOCKS = [
             },
             {
               membershipRequestId: 'request2',
-              createdAt: '2023-01-02T00:00:00Z',
+              createdAt: dayjs()
+                .subtract(1, 'year')
+                .add(1, 'day')
+                .toISOString(),
               status: 'pending',
               user: {
                 id: 'user2',
