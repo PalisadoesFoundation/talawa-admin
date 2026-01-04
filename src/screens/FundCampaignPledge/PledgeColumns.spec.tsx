@@ -2,7 +2,11 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getPledgeColumns } from './PledgeColumns';
-import type { GridRenderCellParams } from '@mui/x-data-grid';
+import type { GridRenderCellParams } from 'shared-components/DataGridWrapper';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 // Mock i18next
 vi.mock('react-i18next', () => ({
@@ -200,14 +204,15 @@ describe('getPledgeColumns', () => {
       const columns = getPledgeColumns(defaultProps);
       const dateColumn = columns[1];
 
+      const pledgeDate = dayjs.utc().month(2).date(15).hour(10).toISOString();
       const params = {
         row: {
-          pledgeDate: '2024-03-15T10:00:00Z',
+          pledgeDate,
         },
       } as GridRenderCellParams;
 
       const result = dateColumn.renderCell?.(params);
-      expect(result).toBe('15/03/2024');
+      expect(result).toBe(dayjs.utc(pledgeDate).format('DD/MM/YYYY'));
     });
   });
 

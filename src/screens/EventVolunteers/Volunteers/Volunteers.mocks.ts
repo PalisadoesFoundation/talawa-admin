@@ -5,6 +5,7 @@ import {
 import { GET_EVENT_VOLUNTEERS } from 'GraphQl/Queries/EventVolunteerQueries';
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
 import { InterfaceEventVolunteerInfo } from 'types/Volunteer/interface';
+import dayjs from 'dayjs';
 
 const volunteer1: InterfaceEventVolunteerInfo = {
   id: 'volunteerId1',
@@ -14,8 +15,8 @@ const volunteer1: InterfaceEventVolunteerInfo = {
   isPublic: true,
   isTemplate: true,
   isInstanceException: false,
-  createdAt: '2023-01-01T00:00:00Z',
-  updatedAt: '2023-01-01T00:00:00Z',
+  createdAt: dayjs().subtract(1, 'year').toISOString(),
+  updatedAt: dayjs().subtract(1, 'year').toISOString(),
   user: {
     id: 'userId1',
     name: 'Teresa Bradley',
@@ -55,8 +56,8 @@ const volunteer2: InterfaceEventVolunteerInfo = {
   isPublic: true,
   isTemplate: true,
   isInstanceException: false,
-  createdAt: '2023-01-01T00:00:00Z',
-  updatedAt: '2023-01-01T00:00:00Z',
+  createdAt: dayjs().subtract(1, 'year').toISOString(),
+  updatedAt: dayjs().subtract(1, 'year').toISOString(),
   user: {
     id: 'userId2',
     name: 'Bruce Graza',
@@ -85,8 +86,8 @@ const volunteer3: InterfaceEventVolunteerInfo = {
   isPublic: true,
   isTemplate: true,
   isInstanceException: false,
-  createdAt: '2023-01-01T00:00:00Z',
-  updatedAt: '2023-01-01T00:00:00Z',
+  createdAt: dayjs().subtract(1, 'year').toISOString(),
+  updatedAt: dayjs().subtract(1, 'year').toISOString(),
   user: {
     id: 'userId3',
     name: 'Jane Doe',
@@ -271,8 +272,8 @@ export const MOCKS = [
             emailAddress: 'johndoe@example.com',
             role: 'regular',
             avatarURL: '',
-            createdAt: '2023-01-01T00:00:00Z',
-            updatedAt: '2023-01-01T00:00:00Z',
+            createdAt: dayjs().subtract(1, 'year').toISOString(),
+            updatedAt: dayjs().subtract(1, 'year').toISOString(),
           },
           {
             id: 'userId4',
@@ -280,8 +281,8 @@ export const MOCKS = [
             emailAddress: 'jane@example.com',
             role: 'regular',
             avatarURL: '',
-            createdAt: '2023-01-01T00:00:00Z',
-            updatedAt: '2023-01-01T00:00:00Z',
+            createdAt: dayjs().subtract(1, 'year').toISOString(),
+            updatedAt: dayjs().subtract(1, 'year').toISOString(),
           },
         ],
       },
@@ -389,8 +390,8 @@ export const MOCKS_ERROR = [
             emailAddress: 'johndoe@example.com',
             role: 'regular',
             avatarURL: '',
-            createdAt: '2023-01-01T00:00:00Z',
-            updatedAt: '2023-01-01T00:00:00Z',
+            createdAt: dayjs().subtract(1, 'year').toISOString(),
+            updatedAt: dayjs().subtract(1, 'year').toISOString(),
           },
         ],
       },

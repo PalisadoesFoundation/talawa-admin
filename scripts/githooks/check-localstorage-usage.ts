@@ -59,6 +59,7 @@ const checkLocalStorageUsage = (file: string): void => {
     fileName === 'localStorageMock.ts' || // Test utility that implements localStorage mock
     fileName === 'localStorageMock.spec.ts' || // Tests for localStorage mock utility
     fileName === 'vitest.setup.ts' || // Clears localStorage after each test providing test isolation
+    fileName === 'eslint.config.js' || // Configuration file defining rules about localStorage
     file.endsWith('.md') || // Skip documentation files
     file.startsWith('docs/') || // Skip auto-generated docs
     file.startsWith('cypress/') || // Skip Cypress E2E tests

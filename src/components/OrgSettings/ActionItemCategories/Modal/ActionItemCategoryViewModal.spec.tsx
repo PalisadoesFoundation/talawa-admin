@@ -10,6 +10,10 @@ import type { ICategoryViewModalProps } from './ActionItemCategoryViewModal';
 import CategoryViewModal from './ActionItemCategoryViewModal';
 import type { IActionItemCategoryInfo } from 'types/ActionItems/interface';
 import { vi, it, describe, beforeEach, expect } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 /**
  * This file contains unit tests for the `CategoryViewModal` component.
@@ -37,8 +41,8 @@ const mockActiveCategory: IActionItemCategoryInfo = {
   name: 'Active Category',
   description: 'This is an active category with description',
   isDisabled: false,
-  createdAt: '2024-01-15T10:00:00Z',
-  updatedAt: '2024-01-20T15:30:00Z',
+  createdAt: dayjs.utc().subtract(5, 'days').toISOString(),
+  updatedAt: dayjs.utc().toISOString(),
   creatorId: 'user123',
   organizationId: 'org456',
 };
@@ -48,8 +52,8 @@ const mockDisabledCategory: IActionItemCategoryInfo = {
   name: 'Disabled Category',
   description: '',
   isDisabled: true,
-  createdAt: '2024-01-10T08:00:00Z',
-  updatedAt: '2024-01-25T12:00:00Z',
+  createdAt: dayjs.utc().subtract(15, 'days').toISOString(),
+  updatedAt: dayjs.utc().toISOString(),
   creatorId: 'user789',
   organizationId: 'org456',
 };
@@ -60,8 +64,8 @@ const mockCategoryWithLongDescription: IActionItemCategoryInfo = {
   description:
     'This is a very long description that spans multiple lines and contains detailed information about the category purpose, usage guidelines, and important notes for users who will be working with this category in their daily operations.',
   isDisabled: false,
-  createdAt: '2024-01-01T00:00:00Z',
-  updatedAt: '2024-01-30T23:59:59Z',
+  createdAt: dayjs.utc().subtract(30, 'days').toISOString(),
+  updatedAt: dayjs.utc().toISOString(),
   creatorId: 'user456',
   organizationId: 'org456',
 };
@@ -243,8 +247,8 @@ describe('Testing CategoryViewModal Component', () => {
       name: 'Minimal Category',
       description: '',
       isDisabled: false,
-      createdAt: '2024-01-01T00:00:00Z',
-      updatedAt: '2024-01-01T00:00:00Z',
+      createdAt: dayjs.utc().toISOString(),
+      updatedAt: dayjs.utc().toISOString(),
       creatorId: 'test-user',
       organizationId: 'org123',
     };

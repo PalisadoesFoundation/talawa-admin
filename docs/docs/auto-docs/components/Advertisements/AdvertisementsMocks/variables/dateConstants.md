@@ -6,7 +6,7 @@
 
 > `const` **dateConstants**: `object`
 
-Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:139](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L139)
+Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:140](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/AdvertisementsMocks.ts#L140)
 
 ## Type Declaration
 
@@ -40,15 +40,15 @@ Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:139](https://g
 
 #### create.startAtCalledWith
 
-> **startAtCalledWith**: `string` = `'2024-12-31T00:00:00.000Z'`
+> **startAtCalledWith**: `string`
 
 #### create.startAtISO
 
-> **startAtISO**: `string` = `'2024-12-31T18:30:00.000Z'`
+> **startAtISO**: `string`
 
 #### create.startISOReceived
 
-> **startISOReceived**: `string` = `'2024-12-30T18:30:00.000Z'`
+> **startISOReceived**: `string`
 
 ### update
 
@@ -80,12 +80,12 @@ Defined in: [src/components/Advertisements/AdvertisementsMocks.ts:139](https://g
 
 #### update.startAtCalledWith
 
-> **startAtCalledWith**: `string` = `'2024-12-31T00:00:00.000Z'`
+> **startAtCalledWith**: `string`
 
 #### update.startAtISO
 
-> **startAtISO**: `string` = `'2024-12-31T18:30:00.000Z'`
+> **startAtISO**: `string`
 
 #### update.startISOReceived
 
-> **startISOReceived**: `string` = `'2024-12-30T18:30:00.000Z'`
+> **startISOReceived**: `string`
