@@ -12,18 +12,20 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from '../../utils/i18nForTest';
 import PinnedPostsLayout from './pinnedPostsLayout';
 import type { InterfacePostEdge } from 'types/Post/interface';
-import { toast } from 'react-toastify';
 import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutations';
 import { DELETE_POST_MUTATION } from '../../GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 dayjs.extend(utc);
 
-// Mock react-toastify
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     error: vi.fn(),
+    success: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
   },
 }));
 
@@ -431,7 +433,7 @@ describe('PinnedPostsLayout Component', () => {
       // Spy on console.error before render to catch any React warnings
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => {});
+        .mockImplementation(() => { });
 
       const { unmount } = render(
         <MockedProvider>
@@ -714,7 +716,7 @@ describe('PinnedPostsLayout Component', () => {
       fireEvent.click(pinMenuItem);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
+        expect(NotificationToast.success).toHaveBeenCalledWith(
           'Post unpinned successfully.',
         );
       });

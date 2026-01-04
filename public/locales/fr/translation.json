@@ -1274,6 +1274,8 @@
     "members": "Membres"
   },
   "postCard": {
+    "pinnedPost": "Message épinglé",
+    "postImage": "Image du message",
     "likes": "J'aime",
     "comments": "Commentaires",
     "addComment": "Ajouter un commentaire",
@@ -1783,7 +1785,22 @@
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",
-    "errorRemovingAttendee": "Erreur lors de la suppression du participant"
+    "errorRemovingAttendee": "Erreur lors de la suppression du participant",
+    "inviteByEmail": {
+      "addRecipient": "Ajouter un destinataire",
+      "email": "Email",
+      "title": "Inviter par email",
+      "sending": "Envoi en cours...",
+      "sendInvites": "Envoyer les invitations",
+      "remove": "Supprimer",
+      "name": "Nom",
+      "messagePlaceholder": "Vous êtes invité à assister à cet événement.",
+      "messageLabel": "Message (optionnel)",
+      "expiresInDaysLabel": "Expire dans (jours)",
+      "errorSendingInvites": "Erreur lors de l'envoi des invitations",
+      "emailsLabel": "Emails et noms des destinataires",
+      "emailsHelp": "Fournissez l'email et le nom facultatif pour chaque destinataire. Ajoutez plusieurs destinataires si nécessaire."
+    }
   },
   "userCampaigns": {
     "title": "Campagnes de financement",

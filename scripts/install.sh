@@ -4,6 +4,34 @@ set -euo pipefail
 echo "🚀 Starting Talawa installation..."
 echo ""
 
+# Function to detect if running in WSL
+# NOTE: Keep in sync with src/install/os/detector.ts (isRunningInWsl function)
+is_wsl() {
+    # Check WSL_DISTRO_NAME environment variable
+    if [ -n "${WSL_DISTRO_NAME:-}" ]; then
+        return 0
+    fi
+    
+    # Check /proc/version for Microsoft or WSL indicators
+    if [ -f /proc/version ]; then
+        if grep -qi "microsoft\|wsl" /proc/version 2>/dev/null; then
+            return 0
+        fi
+    fi
+    
+    return 1
+}
+
+# Display WSL-specific information if detected
+if is_wsl; then
+    echo "🔷 WSL Environment Detected"
+    echo ""
+    echo "ℹ️  Note: For Docker support in WSL, you should use Docker Desktop for Windows"
+    echo "   with the WSL 2 backend enabled, not docker-ce installed inside WSL."
+    echo "   See: https://docs.docker.com/desktop/wsl/"
+    echo ""
+fi
+
 # Function to install fnm (Fast Node Manager)
 install_fnm() {
     echo "📦 Installing fnm (Fast Node Manager)..."

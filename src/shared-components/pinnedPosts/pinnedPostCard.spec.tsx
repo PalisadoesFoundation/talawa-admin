@@ -10,14 +10,6 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
-// Mock react-toastify
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
-}));
-
 // Mock useTranslation
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -39,6 +31,10 @@ vi.mock('react-i18next', () => ({
       return translations[key] || key;
     },
   }),
+  initReactI18next: {
+    type: '3rdParty',
+    init: vi.fn(),
+  },
 }));
 
 // Mock useLocalStorage
@@ -253,7 +249,7 @@ describe('PinnedPostCard Component', () => {
         </MockedProvider>,
       );
 
-      const image = screen.getByAltText('postImageAlt');
+      const image = screen.getByAltText('postImage');
       expect(image).toHaveAttribute('src', '/src/assets/images/defaultImg.png');
     });
 

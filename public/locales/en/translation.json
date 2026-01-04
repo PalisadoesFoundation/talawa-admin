@@ -1327,6 +1327,8 @@
     "members": "members"
   },
   "postCard": {
+    "pinnedPost": "Pinned Post",
+    "postImage": "Post Image",
     "likes": "Likes",
     "comments": "Comments",
     "addComment": "Add Comment",
@@ -1783,7 +1785,22 @@
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error adding attendee",
-    "errorRemovingAttendee": "Error removing attendee"
+    "errorRemovingAttendee": "Error removing attendee",
+    "inviteByEmail": {
+      "addRecipient": "Add recipient",
+      "email": "Email",
+      "title": "Invite by Email",
+      "sending": "Sending...",
+      "sendInvites": "Send Invites",
+      "remove": "Remove",
+      "name": "Name",
+      "messagePlaceholder": "You are invited to attend this event.",
+      "messageLabel": "Message (optional)",
+      "expiresInDaysLabel": "Expires in (days)",
+      "errorSendingInvites": "Error sending invites",
+      "emailsLabel": "Recipient emails and names",
+      "emailsHelp": "Provide email and optional name for each recipient. Add multiple recipients as needed."
+    }
   },
   "userCampaigns": {
     "title": "Fundraising Campaigns",

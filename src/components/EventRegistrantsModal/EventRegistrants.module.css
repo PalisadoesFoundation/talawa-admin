@@ -1,0 +1,18 @@
+.modalHeader {
+  background-color: var(--tableHeader-bg);
+}
+
+.underlineText {
+  color: #555;
+  text-decoration: underline;
+}
+
+.inviteButton {
+  background-color: #6cc9a6;
+  color: #fff;
+}
+
+.addButton {
+  background-color: #a8c7fa;
+  color: #555;
+}

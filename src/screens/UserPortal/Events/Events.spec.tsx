@@ -1,9 +1,9 @@
 /**
- * Comprehensive unit tests for the Events component in User Portal.
+ * Comprehensive unit tests for the Events component in the User Portal.
  *
- * This test suite provides 100% code coverage for the Events component,
- * testing all functionality including event creation, modal interactions, form inputs,
- * error handling, and different user roles.
+ * This test suite provides 100% code coverage for the Events component by
+ * validating event creation, modal interactions, form inputs, error handling,
+ * and behavior across different user roles.
  */
 
 // SKIP_LOCALSTORAGE_CHECK
@@ -29,9 +29,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { vi, beforeEach, afterEach } from 'vitest';
-import { toast } from 'react-toastify';
 import { Frequency } from 'utils/recurrenceUtils';
 import { green } from '@mui/material/colors';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 const { mockToast, mockUseParams } = vi.hoisted(() => ({
   mockToast: {
@@ -42,8 +42,8 @@ const { mockToast, mockUseParams } = vi.hoisted(() => ({
   mockUseParams: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: mockToast,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockToast,
 }));
 
 vi.mock('@mui/x-date-pickers', async () => {
@@ -1047,7 +1047,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait(500);
 
     // Error should be logged (console.error is called in catch block)
-    expect(toast.success).not.toHaveBeenCalled();
+    expect(NotificationToast.success).not.toHaveBeenCalled();
   });
 
   it('Should toggle all-day checkbox and enable/disable time inputs', async () => {
@@ -1284,7 +1284,7 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should handle network error gracefully', async () => {
     const consoleWarnSpy = vi
       .spyOn(console, 'warn')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     render(
       <MockedProvider link={errorLink}>
@@ -1313,7 +1313,7 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should suppress rate limit errors silently', async () => {
     const consoleWarnSpy = vi
       .spyOn(console, 'warn')
-      .mockImplementation(() => {});
+      .mockImplementation(() => { });
 
     render(
       <MockedProvider link={rateLimitLink}>
@@ -1660,18 +1660,18 @@ describe('Testing Events Screen [User Portal]', () => {
         // Ensure all conditions return boolean (not undefined via optional chaining)
         return Boolean(
           input.name === 'Recurring Test Event' &&
-            input.description === 'Recurring Test Description' &&
-            input.organizationId === 'org123' &&
-            input.allDay === true &&
-            input.location === 'Recurring Test Location' &&
-            input.isPublic === true &&
-            input.isRegisterable === true &&
-            typeof input.startAt === 'string' &&
-            typeof input.endAt === 'string' &&
-            input.recurrence &&
-            input.recurrence.frequency === Frequency.WEEKLY &&
-            input.recurrence.interval === 1 &&
-            input.recurrence.byDay?.includes(weekDayByJs[dayOfWeek]),
+          input.description === 'Recurring Test Description' &&
+          input.organizationId === 'org123' &&
+          input.allDay === true &&
+          input.location === 'Recurring Test Location' &&
+          input.isPublic === true &&
+          input.isRegisterable === true &&
+          typeof input.startAt === 'string' &&
+          typeof input.endAt === 'string' &&
+          input.recurrence &&
+          input.recurrence.frequency === Frequency.WEEKLY &&
+          input.recurrence.interval === 1 &&
+          input.recurrence.byDay?.includes(weekDayByJs[dayOfWeek]),
         );
       },
       result: {

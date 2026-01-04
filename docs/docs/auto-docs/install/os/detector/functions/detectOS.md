@@ -6,7 +6,7 @@
 
 > **detectOS**(): [`IOSInfo`](../../../types/interfaces/IOSInfo.md)
 
-Defined in: [src/install/os/detector.ts:7](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/os/detector.ts#L7)
+Defined in: [src/install/os/detector.ts:29](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/install/os/detector.ts#L29)
 
 Detect the operating system
 

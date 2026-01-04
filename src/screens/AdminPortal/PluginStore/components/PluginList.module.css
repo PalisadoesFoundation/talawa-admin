@@ -1,7 +1,7 @@
 .pluginListContainer {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--space-6);
 }
 
 .pluginCard {
@@ -10,19 +10,19 @@
   background: #fff;
   border-radius: 12;
   box-shadow: 0 1px 4px rgba(60, 64, 67, 0.07);
-  border: 1px solid #e7e7e7;
-  padding: 16px 24px;
-  min-height: 80;
+  border: var(--border-1) solid #e7e7e7;
+  padding: var(--space-5) var(--space-7);
+  min-height: var(--space-12);
   transition: box-shadow 0.2s;
 }
 
 .pluginIcon {
-  width: 48;
-  height: 48;
+  width: var(--space-10);
+  height: var(--space-10);
   border-radius: 8;
   object-fit: cover;
   background: #f5f5f5;
-  margin-right: 24;
+  margin-right: var(--space-7);
 }
 
 .pluginInfo {
@@ -33,7 +33,7 @@
 .pluginName {
   font-weight: 600;
   font-size: 18;
-  margin-bottom: 2;
+  margin-bottom: var(--space-1);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -42,7 +42,7 @@
 .pluginDescription {
   font-size: 14;
   color: #555;
-  margin-bottom: 2;
+  margin-bottom: var(--space-1);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -54,6 +54,6 @@
 }
 
 .pluginActions {
-  margin-left: 24;
-  min-width: 120;
+  margin-left: var(--space-7);
+  min-width: var(--space-14);
 }
