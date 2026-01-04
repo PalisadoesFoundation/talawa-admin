@@ -13,6 +13,7 @@ import i18nForTest from '../../../utils/i18nForTest';
 import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
 import styles from './createPostModal.module.css';
+import dayjs from 'dayjs';
 
 // Capture originals before mocking
 const originalCrypto = global.crypto;
@@ -128,7 +129,8 @@ const createPinnedPostMock = {
         __typename: 'Post',
         id: 'test-post-id',
         caption: 'Pinned Post',
-        pinnedAt: '2023-01-01T00:00:00Z',
+        // Use dynamic past date to avoid test staleness
+        pinnedAt: dayjs().subtract(30, 'days').toISOString(),
         attachmentURL: null,
       },
     },

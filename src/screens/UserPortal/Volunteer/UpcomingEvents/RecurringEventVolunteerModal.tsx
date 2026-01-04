@@ -13,7 +13,7 @@
  *   show={showModal}
  *   onHide={() => setShowModal(false)}
  *   eventName="Weekly Community Cleanup"
- *   eventDate="2024-01-15"
+ *   eventDate=dayjs().date(15).format('YYYY-MM-DD')
  *   onSelectSeries={handleVolunteerSeries}
  *   onSelectInstance={handleVolunteerInstance}
  *   isForGroup={true}

@@ -129,7 +129,7 @@ describe('DateRangePicker', () => {
     renderComponent();
 
     fireEvent.change(screen.getByTestId(`${dataTestId}-start-input`), {
-      target: { value: '2025-01-05' },
+      target: { value: dayjs().add(5, 'days').format('YYYY-MM-DD') },
     });
 
     expect(onChangeMock).toHaveBeenCalledTimes(1);
@@ -137,11 +137,11 @@ describe('DateRangePicker', () => {
 
   it('updates end date', () => {
     renderComponent({
-      value: { startDate: new Date('2025-01-01'), endDate: null },
+      value: { startDate: dayjs().toDate(), endDate: null },
     });
 
     fireEvent.change(screen.getByTestId(`${dataTestId}-end-input`), {
-      target: { value: '2025-01-10' },
+      target: { value: dayjs().add(10, 'days').format('YYYY-MM-DD') },
     });
 
     expect(onChangeMock).toHaveBeenCalledTimes(1);
@@ -150,13 +150,13 @@ describe('DateRangePicker', () => {
   it('auto-adjusts end date when start > end', () => {
     renderComponent({
       value: {
-        startDate: new Date('2025-01-01'),
-        endDate: new Date('2025-01-05'),
+        startDate: dayjs().toDate(),
+        endDate: dayjs().add(5, 'days').toDate(),
       },
     });
 
     fireEvent.change(screen.getByTestId(`${dataTestId}-start-input`), {
-      target: { value: '2025-01-10' },
+      target: { value: dayjs().add(10, 'days').format('YYYY-MM-DD') },
     });
 
     const emitted = onChangeMock.mock.calls[0][0] as IDateRangeValue;
@@ -170,7 +170,7 @@ describe('DateRangePicker', () => {
     renderComponent({ disabled: true });
 
     fireEvent.change(screen.getByTestId(`${dataTestId}-start-input`), {
-      target: { value: '2025-01-01' },
+      target: { value: dayjs().format('YYYY-MM-DD') },
     });
 
     expect(onChangeMock).not.toHaveBeenCalled();
@@ -276,7 +276,7 @@ describe('DateRangePicker', () => {
     );
   });
   it('passes startDate as minDate to end DatePicker', () => {
-    const start = new Date('2025-01-05');
+    const start = dayjs().add(5, 'days').toDate();
 
     renderComponent({
       value: { startDate: start, endDate: null },
@@ -290,12 +290,13 @@ describe('DateRangePicker', () => {
   });
 
   it('calls onChange when preset button is clicked', () => {
+    const baseDate = dayjs();
     const testPreset = {
       key: 'last7days',
       label: 'Last 7 Days',
       getRange: () => ({
-        startDate: new Date('2025-01-01'),
-        endDate: new Date('2025-01-07'),
+        startDate: baseDate.toDate(),
+        endDate: baseDate.add(7, 'days').toDate(),
       }),
     };
 
@@ -306,8 +307,12 @@ describe('DateRangePicker', () => {
 
     expect(onChangeMock).toHaveBeenCalledTimes(1);
     const emitted = onChangeMock.mock.calls[0][0];
-    expect(emitted.startDate?.toDateString()).toBe('Wed Jan 01 2025');
-    expect(emitted.endDate?.toDateString()).toBe('Tue Jan 07 2025');
+    expect(emitted.startDate?.toDateString()).toBe(
+      baseDate.toDate().toDateString(),
+    );
+    expect(emitted.endDate?.toDateString()).toBe(
+      baseDate.add(7, 'days').toDate().toDateString(),
+    );
   });
 
   it('does not call onChange when preset clicked while disabled', () => {
