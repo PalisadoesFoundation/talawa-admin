@@ -263,11 +263,7 @@ describe('useAvatarUpload', () => {
   describe('fallback error handling', () => {
     it('uses fallback error message when validator returns no errorMessage', async () => {
       // Mock the validateFile utility to return isValid: false without errorMessage
-      const { validateFile } = await import('../utils/fileValidation');
-      const mockValidateFile = vi.spyOn(
-        { validateFile },
-        'validateFile',
-      ) as ReturnType<typeof vi.spyOn>;
+
 
       // We need to mock at the module level
       vi.doMock('../utils/fileValidation', () => ({
@@ -293,7 +289,7 @@ describe('useAvatarUpload', () => {
       // Restore original module
       vi.doUnmock('../utils/fileValidation');
       vi.resetModules();
-      mockValidateFile.mockRestore();
+
     });
   });
 
