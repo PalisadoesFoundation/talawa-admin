@@ -9,7 +9,7 @@ import i18n from 'utils/i18nForTest';
 import type { ICategoryViewModalProps } from './ActionItemCategoryViewModal';
 import CategoryViewModal from './ActionItemCategoryViewModal';
 import type { IActionItemCategoryInfo } from 'types/ActionItems/interface';
-import { vi, it, describe, beforeEach, expect } from 'vitest';
+import { vi, it, describe, beforeEach, afterEach, expect } from 'vitest';
 
 /**
  * This file contains unit tests for the `CategoryViewModal` component.
@@ -22,6 +22,11 @@ import { vi, it, describe, beforeEach, expect } from 'vitest';
  * - Modal close functionality
  * - Proper handling of null category prop
  */
+
+// Helper function to get translations matching the component's usage pattern
+// Component uses: useTranslation('translation', { keyPrefix: 'orgActionItemCategories' })
+const t = i18n.getFixedT('en', 'translation', 'orgActionItemCategories');
+const tCommon = i18n.getFixedT('en', 'common');
 
 const translations = {
   ...JSON.parse(
@@ -140,7 +145,7 @@ describe('Testing CategoryViewModal Component', () => {
     renderCategoryViewModal({ category: mockDisabledCategory });
 
     expect(screen.getByRole('textbox', { name: /description/i })).toHaveValue(
-      'No description provided',
+      t('noDescriptionProvided'),
     );
   });
 
@@ -255,10 +260,10 @@ describe('Testing CategoryViewModal Component', () => {
       'Minimal Category',
     );
     expect(screen.getByRole('textbox', { name: /description/i })).toHaveValue(
-      'No description provided',
+      t('noDescriptionProvided'),
     );
     expect(screen.getByRole('textbox', { name: /status/i })).toHaveValue(
-      translations.active || 'Active',
+      tCommon('active'),
     );
   });
 

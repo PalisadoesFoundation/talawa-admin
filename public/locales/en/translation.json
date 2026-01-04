@@ -1691,7 +1691,8 @@
     "deleteCategory": "Delete Category",
     "deleteCategoryMsg": "Are you sure you want to delete this Action Item Category?",
     "createButton": "createButton",
-    "editButton": "editButton"
+    "editButton": "editButton",
+    "noDescriptionProvided": "No description provided"
   },
   "organizationVenues": {
     "title": "Venues",

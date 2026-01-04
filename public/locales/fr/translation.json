@@ -1691,7 +1691,8 @@
     "deleteCategory": "Supprimer la catégorie",
     "deleteCategoryMsg": "Êtes-vous sûr de vouloir supprimer cette catégorie d'élément d'action ?",
     "createButton": "Créer",
-    "editButton": "Modifier"
+    "editButton": "Modifier",
+    "noDescriptionProvided": "Aucune description fournie"
   },
   "organizationVenues": {
     "title": "Lieux",
