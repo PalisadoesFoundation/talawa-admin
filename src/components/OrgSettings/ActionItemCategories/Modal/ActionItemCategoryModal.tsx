@@ -239,7 +239,12 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
 
         {/* Disabled Toggle */}
         <Form.Group className="d-flex flex-column mb-4">
-          <Form.Label htmlFor="isDisabledSwitch">
+          <Form.Label
+            htmlFor="isDisabledSwitch"
+            className={
+              isDisabled ? styles.statusFieldDisabled : styles.statusFieldActive
+            }
+          >
             {tCommon('disabled')}
           </Form.Label>
           <Form.Switch
@@ -248,6 +253,11 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
             checked={isDisabled}
             data-testid="isDisabledSwitch"
             className="mt-2 ms-2"
+            style={{
+              color: isDisabled
+                ? 'var(--status-disabled-color)'
+                : 'var(--status-active-color)',
+            }}
             onChange={() =>
               setFormState({ ...formState, isDisabled: !isDisabled })
             }
