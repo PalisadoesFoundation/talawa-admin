@@ -239,10 +239,11 @@
   "requests": {
     "profile": "Perfil",
     "title": "Solicitudes",
-    "sl_no": "Núm.",
+    "sl_no": "Número de serie",
     "name": "Nombre",
     "email": "Correo electrónico",
     "accept": "Aceptar",
+    "newMembersWillAppearHere": "Los nuevos miembros aparecerán aquí",
     "reject": "Rechazar",
     "searchRequests": "Buscar solicitudes",
     "noOrgError": "Organizaciones no encontradas, por favor crea una organización a través del panel",
@@ -252,8 +253,7 @@
     "noOrgErrorTitle": "Organizaciones no encontradas",
     "noOrgErrorDescription": "Por favor, crea una organización a través del panel de control",
     "profilePictureAlt": "Imagen de perfil de {{name}}",
-    "placeholderAvatarAlt": "Avatar predeterminado",
-    "newMembersWillAppearHere": "Las nuevas solicitudes de membresía aparecerán aquí"
+    "placeholderAvatarAlt": "Avatar predeterminado"
   },
   "users": {
     "membershipStatus": {
@@ -425,6 +425,8 @@
     "tagCreationFailed": "Error al crear la etiqueta",
     "errorLoadingTagsData": "Se produjo un error al cargar los datos de las etiquetas de la organización",
     "sortTags": "Ordenar Etiquetas",
+    "Latest": "Más Reciente",
+    "Oldest": "Más Antiguo",
     "viewSubTags": "Ver {{count}} sub-etiquetas"
   },
   "manageTag": {
@@ -1275,6 +1277,8 @@
     "noMembers": "No hay miembros para mostrar"
   },
   "postCard": {
+    "pinnedPost": "Publicación fijada",
+    "postImage": "Imagen de la publicación",
     "likes": "Gustos",
     "comments": "Comentarios",
     "view": "Ver",
@@ -1622,6 +1626,9 @@
     "create": "crear",
     "newChat": "nueva charla",
     "newGroupChat": "Nuevo chat grupal",
+    "Error": "Error",
+    "hash": "#",
+    "description": "Descripción",
     "groupInfo": "Información del grupo",
     "members": "Miembros",
     "addMembers": "Agregar miembros",
@@ -1652,13 +1659,21 @@
   "userChatRoom": {
     "selectContact": "Seleccione un contacto para iniciar una conversación",
     "sendMessage": "Enviar mensaje",
-    "reply": "responder",
+    "loading": "Cargando...",
+    "loadOlderMessages": "Cargar mensajes más antiguos",
+    "loadingMoreMessages": "Cargando más mensajes...",
     "loadingImage": "Cargando imagen...",
     "imageNotAvailable": "Imagen no disponible",
     "attachment": "Adjunto",
-    "loadingMoreMessages": "Cargando más mensajes...",
-    "loading": "Cargando...",
-    "loadOlderMessages": "Cargar mensajes anteriores"
+    "reply": "Responder",
+    "edit": "Editar",
+    "delete": "Eliminar",
+    "errorBoundary": {
+      "title": "Algo salió mal",
+      "message": "Ocurrió un error inesperado en la sala de chat",
+      "resetButton": "Intentar de nuevo",
+      "resetButtonAriaLabel": "Intentar de nuevo"
+    }
   },
   "orgActionItemCategories": {
     "createButton": "Crear",
@@ -1773,7 +1788,22 @@
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error al agregar asistente",
-    "errorRemovingAttendee": "Error al eliminar asistente"
+    "errorRemovingAttendee": "Error al eliminar asistente",
+    "inviteByEmail": {
+      "addRecipient": "Agregar destinatario",
+      "email": "Correo electrónico",
+      "title": "Invitar por correo electrónico",
+      "sending": "Enviando...",
+      "sendInvites": "Enviar invitaciones",
+      "remove": "Eliminar",
+      "name": "Nombre",
+      "messagePlaceholder": "Estás invitado a asistir a este evento.",
+      "messageLabel": "Mensaje (opcional)",
+      "expiresInDaysLabel": "Expira en (días)",
+      "errorSendingInvites": "Error al enviar invitaciones",
+      "emailsLabel": "Correos electrónicos y nombres de destinatarios",
+      "emailsHelp": "Proporcione el correo electrónico y el nombre opcional para cada destinatario. Agregue varios destinatarios según sea necesario."
+    }
   },
   "userCampaigns": {
     "title": "Campañas de recaudación de fondos",
@@ -2030,6 +2060,15 @@
     "events": "Eventos",
     "eventsCreatedByOrganization": "Eventos creados por la organización",
     "today": "Hoy"
+  },
+  "contact": {
+    "card_aria": "Tarjeta de contacto"
+  },
+  "donation": {
+    "card_aria": "Tarjeta de donación"
+  },
+  "securedRoute": {
+    "sessionExpired": "Por favor, vuelva a iniciar sesión ya que la sesión ha expirado"
   },
   "common": {
     "signOut": "Cerrar sesión",

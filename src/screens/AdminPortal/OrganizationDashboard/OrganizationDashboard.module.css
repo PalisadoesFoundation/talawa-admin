@@ -3,19 +3,19 @@
 }
 
 .membershipEmptyContainer {
-  min-height: 150px;
+  min-height: var(--space-15);
 }
 
 .memReqCard {
-  min-height: 220px;
+  min-height: var(--space-17);
 }
 
 .memReqCardBody {
-  min-height: 150px;
+  min-height: var(--space-15);
 }
 
 .p0 {
-  padding: 0px;
+  padding: var(--space-0);
 }
 
 .flex {

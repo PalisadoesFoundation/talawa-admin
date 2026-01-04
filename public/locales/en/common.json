@@ -216,5 +216,8 @@
   "previousPage": "Previous Page",
   "nextPage": "Next Page",
   "pageNumber": "Page {{page}}",
-  "tags": "Tags"
+  "tags": "Tags",
+  "loadMoreItems": "Load more items",
+  "loadMore": "Load More",
+  "retry": "Retry"
 }

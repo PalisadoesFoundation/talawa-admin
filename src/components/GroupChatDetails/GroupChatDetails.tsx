@@ -64,16 +64,16 @@ import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import Loader from 'components/Loader/Loader';
 import { Add } from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
-import Avatar from 'components/Avatar/Avatar';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import { FiEdit } from 'react-icons/fi';
 import { FaCheck, FaX, FaTrash } from 'react-icons/fa6';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import useLocalStorage from 'utils/useLocalstorage';
-import { toast } from 'react-toastify';
 import type { InterfaceGroupChatDetailsProps } from 'types/Chat/interface';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 export default function groupChatDetails({
   toggleGroupChatDetailsModal,
@@ -92,7 +92,7 @@ export default function groupChatDetails({
 
   useEffect(() => {
     if (!userId) {
-      toast.error(t('userNotFound'));
+      NotificationToast.error(t('userNotFound'));
     }
   }, [userId, t]);
 
@@ -146,9 +146,9 @@ export default function groupChatDetails({
         },
       });
       await chatRefetch();
-      toast.success(t('roleUpdatedSuccessfully'));
+      NotificationToast.success(t('roleUpdatedSuccessfully'));
     } catch (error) {
-      toast.error(t('failedToUpdateRole'));
+      NotificationToast.error(t('failedToUpdateRole'));
       console.error(error);
     }
   };
@@ -164,9 +164,9 @@ export default function groupChatDetails({
         },
       });
       await chatRefetch();
-      toast.success(t('memberRemovedSuccessfully'));
+      NotificationToast.success(t('memberRemovedSuccessfully'));
     } catch (error) {
-      toast.error(t('failedToRemoveMember'));
+      NotificationToast.error(t('failedToRemoveMember'));
       console.error(error);
     }
   };
@@ -241,10 +241,10 @@ export default function groupChatDetails({
           },
         });
         await chatRefetch({ input: { id: chat.id } });
-        toast.success(t('chatImageUpdatedSuccessfully'));
+        NotificationToast.success(t('chatImageUpdatedSuccessfully'));
         setSelectedImage('');
       } catch (error) {
-        toast.error(t('failedToUpdateChatImage'));
+        NotificationToast.error(t('failedToUpdateChatImage'));
         console.error(error);
         setSelectedImage('');
       }
@@ -277,11 +277,11 @@ export default function groupChatDetails({
                       await deleteChat({
                         variables: { input: { id: chat.id } },
                       });
-                      toast.success(t('chatDeletedSuccessfully'));
+                      NotificationToast.success(t('chatDeletedSuccessfully'));
                       toggleGroupChatDetailsModal();
                       // Maybe navigate away or refetch chats
                     } catch (error) {
-                      toast.error(t('failedToDeleteChat'));
+                      NotificationToast.error(t('failedToDeleteChat'));
                       console.error(error);
                     }
                   }
@@ -302,11 +302,13 @@ export default function groupChatDetails({
             data-testid="fileInput"
           />
           <div className={styles.groupInfo}>
-            {chat?.avatarURL ? (
-              <img className={styles.chatImage} src={chat?.avatarURL} alt="" />
-            ) : (
-              <Avatar avatarStyle={styles.groupImage} name={chat.name || ''} />
-            )}
+            <ProfileAvatarDisplay
+              className={styles.groupImage}
+              fallbackName={chat.name || ''}
+              imageUrl={chat?.avatarURL}
+              size="custom"
+              customSize={150}
+            />
             <button
               data-testid="editImageBtn"
               onClick={handleImageClick}
@@ -339,9 +341,11 @@ export default function groupChatDetails({
                       });
                       setEditChatTitle(false);
                       await chatRefetch({ input: { id: chat.id } });
-                      toast.success(t('chatNameUpdatedSuccessfully'));
+                      NotificationToast.success(
+                        t('chatNameUpdatedSuccessfully'),
+                      );
                     } catch (error) {
-                      toast.error(t('failedToUpdateChatName'));
+                      NotificationToast.error(t('failedToUpdateChatName'));
                       console.error(error);
                     }
                   }}
@@ -403,9 +407,11 @@ export default function groupChatDetails({
                       className={`${styles.chatUserDetails} d-flex align-items-center w-100`}
                     >
                       <div className="d-flex align-items-center flex-grow-1">
-                        <Avatar
-                          avatarStyle={styles.membersImage}
-                          name={user.name}
+                        <ProfileAvatarDisplay
+                          className={styles.membersImage}
+                          fallbackName={user.name}
+                          imageUrl={user.avatarURL}
+                          size="small"
                         />
                         <span className="ms-2">{user.name}</span>
                         <span

@@ -216,5 +216,8 @@
   "previousPage": "上一页",
   "nextPage": "下一页",
   "pageNumber": "第 {{page}} 页",
-  "tags": "标签"
+  "tags": "标签",
+  "loadMoreItems": "加载更多项目",
+  "loadMore": "加载更多",
+  "retry": "重试"
 }

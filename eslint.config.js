@@ -64,7 +64,6 @@ export default [
       vitest,
       import: imports,
       prettier,
-      tsdoc,
     },
     settings: {
       react: {
@@ -136,6 +135,48 @@ export default [
             "Security Risk: Do not use getItem('token') directly inside authorization headers. Extract it to a variable first to handle null values.",
         },
       ],
+      /**
+       * Enforce usage of standardized DataGridWrapper component
+       * Issue #6099: https://github.com/PalisadoesFoundation/talawa-admin/issues/6099
+       * Parent Issue #5290: DataGridWrapper foundation component
+       *
+       * This rule blocks direct imports from @mui/x-data-grid to ensure all usage
+       * goes through the standardized DataGridWrapper component located at
+       * src/shared-components/DataGridWrapper/
+       *
+       * Note: Approximately 20+ files currently use direct imports and will require
+       * migration in a future ticket. This rule prevents new violations.
+       */
+      'no-restricted-imports': [
+        'error',
+        {
+          name: '@mui/x-data-grid',
+          message:
+            'Direct imports from @mui/x-data-grid are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
+        },
+        {
+          name: '@mui/x-data-grid-pro',
+          message:
+            'Direct imports from @mui/x-data-grid-pro are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
+        },
+      ],
+    },
+  },
+  /**
+   * Exemption: DataGridWrapper component files
+   *
+   * DataGridWrapper files need direct MUI DataGrid access for wrapper implementation.
+   * These files are the only ones allowed to import directly from @mui/x-data-grid.
+   */
+  {
+    files: [
+      'src/shared-components/DataGridWrapper/**/*.ts',
+      'src/shared-components/DataGridWrapper/**/*.tsx',
+      'src/types/DataGridWrapper/**/*.ts',
+      'src/types/DataGridWrapper/**/*.tsx',
+    ],
+    rules: {
+      'no-restricted-imports': 'off',
     },
   },
   {
@@ -146,7 +187,6 @@ export default [
     plugins: {
       '@graphql-eslint': graphql,
       prettier,
-      tsdoc,
     },
     rules: {
       '@typescript-eslint/consistent-type-imports': 'off',
@@ -155,7 +195,6 @@ export default [
       '@graphql-eslint/known-type-names': 'error',
       '@graphql-eslint/no-unreachable-types': 'off',
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
-      'tsdoc/syntax': 'error',
     },
   },
   // Cypress-specific configuration
@@ -237,9 +276,11 @@ export default [
     files: ['**/*.spec.ts', '**/*.spec.tsx', '**/*.test.ts', '**/*.test.tsx'],
     plugins: {
       'vitest-isolation': vitestIsolation,
+      tsdoc,
     },
     rules: {
       'vitest-isolation/require-aftereach-cleanup': 'error',
+      'tsdoc/syntax': 'error',
     },
   },
 ];

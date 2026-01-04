@@ -1,20 +1,20 @@
 .container {
-  padding: 20px;
+  padding: var(--space-6);
 }
 
 .title {
-  margin-bottom: 20px;
+  margin-bottom: var(--space-6);
 }
 
 .notificationItem {
   display: flex;
   align-items: center;
   background: white;
-  border-bottom: 2px solid #ddd;
-  margin: 8px 0;
-  padding: 12px 16px;
-  max-width: 900px; /* Limit width */
-  max-height: 64px;
+  border-bottom: var(--border-2) solid #ddd;
+  margin: var(--space-3) var(--space-0);
+  padding: var(--space-4) var(--space-5);
+  max-width: var(--space-28); /* Limit width */
+  max-height: var(--space-11);
 }
 
 .unread {
@@ -31,7 +31,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 350px;
+  max-width: var(--space-22);
 }
 
 .notificationBody {
@@ -44,25 +44,25 @@
   align-items: center;
   justify-content: space-between;
   background: white;
-  border-bottom: 2px solid #ddd;
-  margin: 8px 0;
-  padding: 12px 16px;
-  max-width: 800px; /* Limit width */
-  min-height: 64px;
+  border-bottom: var(--border-2) solid #ddd;
+  margin: var(--space-3) var(--space-0);
+  padding: var(--space-4) var(--space-5);
+  max-width: var(--space-27); /* Limit width */
+  min-height: var(--space-11);
 }
 
 /* Add profile placeholder and vertical divider */
 .profileSection {
-  width: 44px;
-  height: 44px;
+  width: var(--space-10);
+  height: var(--space-10);
   border-radius: 50%;
-  margin-right: 16px;
+  margin-right: var(--space-5);
   background: #e0e7ef;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  border: 1.5px solid #b0b8c1;
+  border: var(--border-1-5) solid #b0b8c1;
 }
 
 .notificationTitle {
@@ -70,7 +70,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 350px;
+  max-width: var(--space-22);
 }
 
 .notificationBody {
@@ -79,7 +79,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 640px;
+  max-width: var(--space-26);
 }
 
 .notificationContent {
@@ -91,7 +91,7 @@
 }
 
 .markButton {
-  margin-left: 12px;
+  margin-left: var(--space-4);
   align-self: center; /* vertical center inside the item */
   background-color: #a8c7fa !important;
   border-color: #a8c7fa !important;
@@ -103,11 +103,11 @@
   display: flex;
   justify-content: center; /* center horizontally */
   align-items: center;
-  gap: 8px; /* low distance between buttons */
-  margin-top: 24px;
-  padding-bottom: 12px;
+  gap: var(--space-3); /* low distance between buttons */
+  margin-top: var(--space-7);
+  padding-bottom: var(--space-4);
   width: 100%;
-  max-width: 800px; /* match notification item width */
+  max-width: var(--space-27); /* match notification item width */
   margin-left: auto;
   margin-right: auto;
 }
@@ -121,14 +121,14 @@
 
 .listWrapper .list-group {
   width: 100%;
-  max-width: 800px; /* same as notification items */
+  max-width: var(--space-27); /* same as notification items */
 }
 
 .paginationButton {
   background-color: #a8c7fa; /* bluish base similar to site */
   color: #1f2937; /* text dark */
-  border: 1px solid #a8c7fa;
-  padding: 6px 12px;
+  border: var(--border-1) solid #a8c7fa;
+  padding: var(--space-3) var(--space-4);
   border-radius: 6px;
   cursor: pointer;
   transition:
@@ -148,22 +148,22 @@
 
 /* Skeleton loading styles */
 .skeletonTitle {
-  height: 14px;
+  height: var(--space-5);
   width: 60%;
   background: linear-gradient(90deg, #e6eefc, #f4f8ff);
   border-radius: 6px;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-3);
 }
 
 .skeletonBody {
-  height: 12px;
+  height: var(--space-4);
   width: 90%;
   background: linear-gradient(90deg, #eef6ff, #f9fbff);
   border-radius: 6px;
 }
 
 .buttonSpacer {
-  width: 92px;
+  width: var(--space-13);
 }
 
 .notificationLinkContent {

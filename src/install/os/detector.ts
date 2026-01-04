@@ -2,6 +2,28 @@ import { readFileSync } from 'fs';
 import type { IOSInfo, LinuxDistro } from '../types';
 
 /**
+ * Check if running inside WSL (Windows Subsystem for Linux)
+ */
+export function isRunningInWsl(): boolean {
+  // Check WSL_DISTRO_NAME environment variable (set by WSL)
+  if (process.env.WSL_DISTRO_NAME) {
+    return true;
+  }
+
+  // Check /proc/version for Microsoft or WSL indicators
+  try {
+    const procVersion = readFileSync('/proc/version', 'utf8').toLowerCase();
+    if (procVersion.includes('microsoft') || procVersion.includes('wsl')) {
+      return true;
+    }
+  } catch {
+    // File doesn't exist or can't be read - not WSL
+  }
+
+  return false;
+}
+
+/**
  * Detect the operating system
  */
 export function detectOS(): IOSInfo {
@@ -16,6 +38,8 @@ export function detectOS(): IOSInfo {
   }
 
   if (platform === 'linux') {
+    const isWsl = isRunningInWsl();
+
     try {
       const osRelease = readFileSync('/etc/os-release', 'utf8');
       const lines = osRelease.split('\n');
@@ -37,9 +61,9 @@ export function detectOS(): IOSInfo {
         }
       }
 
-      return { name: 'linux', distro, version };
+      return { name: 'linux', distro, version, isWsl };
     } catch {
-      return { name: 'linux', distro: 'other' };
+      return { name: 'linux', distro: 'other', isWsl };
     }
   }
 

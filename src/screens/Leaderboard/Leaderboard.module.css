@@ -1,22 +1,22 @@
 .leaderboardContainer {
-  margin-top: 1.5rem;
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
+  margin-top: var(--space-7);
+  margin-left: var(--space-3);
+  margin-right: var(--space-3);
   background-color: var(--rowBackground-bg);
-  padding: 1rem;
-  padding-top: 0.5rem;
+  padding: var(--space-5);
+  padding-top: var(--space-3);
   border-radius: 1rem;
   box-shadow: var(--bs-box-shadow-sm);
 }
 
 .dataGridStyle .MuiDataGrid-root .MuiDataGrid-cell:focus-within {
-  outline: 2px solid var(--primary-theme-color);
-  outline-offset: -2px;
+  outline: var(--border-2) solid var(--primary-theme-color);
+  outline-offset: calc(var(--space-1) * -1);
 }
 
 .dataGridStyle .MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within {
-  outline: 2px solid var(--primary-theme-color);
-  outline-offset: -2px;
+  outline: var(--border-2) solid var(--primary-theme-color);
+  outline-offset: calc(var(--space-1) * -1);
 }
 
 .dataGridStyle .MuiDataGrid-row:hover {
@@ -43,7 +43,7 @@
   display: flex;
   font-weight: bold;
   align-items: center;
-  margin-left: 1.25rem;
+  margin-left: var(--space-6);
   cursor: pointer;
 }
 

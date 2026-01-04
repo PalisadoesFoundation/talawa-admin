@@ -140,6 +140,38 @@ def _filepaths_in_directories(directories):
     return result
 
 
+def _read_exclusions_from_file(filepath):
+    """Read excluded filenames from a text file.
+
+    Args:
+        filepath: Path to the text file containing excluded files
+
+    Returns:
+        result: A list of excluded filenames (one per line)
+
+    """
+    # Initialize key variables
+    result = []
+
+    # Check if file exists
+    if not os.path.isfile(filepath):
+        print(f"Warning: Exclusions file not found: {filepath}")
+        return result
+
+    # Read the file and extract filenames
+    try:
+        with open(filepath, encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                # Skip empty lines and comments
+                if line and not line.startswith("#"):
+                    result.append(line)
+    except OSError as e:
+        print(f"Error reading exclusions file: {e}")
+
+    return result
+
+
 def _arg_parser_resolver():
     """Resolve the CLI arguments provided by the user.
 
@@ -186,7 +218,15 @@ files to exclude from the analysis.""",
         help="""An optional space separated list of \
 directories to exclude from the analysis.""",
     )
-
+    parser.add_argument(
+        "--files",
+        type=str,
+        required=False,
+        default=None,
+        const=None,
+        help="""Path to a file containing a list of files \
+to exclude from the analysis (one per line).""",
+    )
     # Return parser
     result = parser.parse_args()
     return result
@@ -221,11 +261,18 @@ def main():
         os.path.expanduser(os.path.join(args.directory, "test")),
     ]
 
+    # Read exclusions from file if provided
+    file_exclusions = []
+    if args.files:
+        file_exclusions = _read_exclusions_from_file(args.files)
+
+    # Combine exclusions from file and CLI args
+    exclude_files = args.exclude_files if args.exclude_files else []
+    exclude_files.extend(file_exclusions)
+
     # Get a corrected list of filenames to exclude
     exclude_list = _valid_exclusions(
-        Excludes(
-            files=args.exclude_files, directories=args.exclude_directories
-        )
+        Excludes(files=exclude_files, directories=args.exclude_directories)
     )
 
     # Get interesting filepaths
@@ -234,7 +281,7 @@ def main():
     # Iterate and analyze each directory
     for filepath in repo_filepath_list:
         # Skip excluded files
-        if filepath in exclude_list:
+        if os.path.normpath(filepath) in map(os.path.normpath, exclude_list):
             continue
 
         # Skip /node_modules/ sub directories
