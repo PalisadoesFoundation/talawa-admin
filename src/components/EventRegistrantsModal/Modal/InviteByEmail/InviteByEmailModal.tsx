@@ -112,7 +112,11 @@ const InviteByEmailModal: React.FC<Props> = ({
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={onSubmit} data-testid="invite-by-email-form">
+        <Form
+          onSubmit={onSubmit}
+          data-testid="invite-by-email-form"
+          id="invite-by-email-form"
+        >
           <Form.Group className="mb-3">
             <Form.Label>
               {t('emailsLabel', { defaultValue: 'Recipient emails and names' })}
@@ -221,12 +225,14 @@ const InviteByEmailModal: React.FC<Props> = ({
         </Button>
         <LoadingState isLoading={isSubmitting} variant="inline">
           <Button
-            variant="primary"
-            onClick={onSubmit}
+            type="submit"
+            form="invite-by-email-form"
+            className={`border-1 mx-4 ${styles.addButton}`}
+            variant="success"
             disabled={isSubmitting}
-            data-testid="send-invites"
+            data-testid="invite-submit"
           >
-            {t('sendInvites', { defaultValue: 'Send Invites' })}
+            {t('sendInvites')}
           </Button>
         </LoadingState>
       </Modal.Footer>

@@ -74,6 +74,7 @@ const mocks = [
         ],
       },
     },
+    delay: 50, // Add delay to show loading spinner
   },
   {
     request: {
@@ -181,6 +182,7 @@ describe('LeaveOrganization Component', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -192,8 +194,9 @@ describe('LeaveOrganization Component', () => {
         </BrowserRouter>
       </MockedProvider>,
     );
-    const spinner = await screen.findByRole('status');
-    expect(spinner).toBeInTheDocument();
+    // LoadingState renders with data-testid="loading-state"
+    const loadingState = await screen.findByTestId('loading-state');
+    expect(loadingState).toBeInTheDocument();
     await waitFor(() => {
       expect(screen.getByText('Test Organization')).toBeInTheDocument();
       expect(
@@ -342,11 +345,14 @@ describe('LeaveOrganization Component', () => {
     fireEvent.change(screen.getByPlaceholderText(/Enter your email/i), {
       target: { value: '' },
     });
-    fireEvent.click(screen.getByText('Confirm'));
+    const confirmButton = screen.getByRole('button', {
+      name: /confirm/i,
+    });
+    fireEvent.click(confirmButton);
     await waitFor(() => {
-      expect(
-        screen.getByText('Verification failed: Email does not match.'),
-      ).toBeInTheDocument();
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        'Verification failed: Email does not match.',
+      );
     });
   });
 
@@ -374,11 +380,14 @@ describe('LeaveOrganization Component', () => {
     fireEvent.change(screen.getByPlaceholderText(/Enter your email/i), {
       target: { value: 'different@example.com' },
     });
-    fireEvent.click(screen.getByText('Confirm'));
+    const confirmButton = screen.getByRole('button', {
+      name: /confirm/i,
+    });
+    fireEvent.click(confirmButton);
     await waitFor(() => {
-      expect(
-        screen.getByText('Verification failed: Email does not match.'),
-      ).toBeInTheDocument();
+      expect(screen.getByRole('alert')).toHaveTextContent(
+        'Verification failed: Email does not match.',
+      );
     });
   });
 
@@ -499,7 +508,7 @@ describe('LeaveOrganization Component', () => {
 
     // Use aria-label to find the confirm button
     const confirmButton = screen.getByRole('button', {
-      name: 'confirm-leave-button',
+      name: /confirm/i,
     });
     fireEvent.click(confirmButton);
 
@@ -556,7 +565,7 @@ describe('LeaveOrganization Component', () => {
 
     // Use aria-label to find the confirm button
     const confirmButton = screen.getByRole('button', {
-      name: 'confirm-leave-button',
+      name: /confirm/i,
     });
     fireEvent.click(confirmButton);
 
@@ -620,7 +629,7 @@ describe('LeaveOrganization Component', () => {
 
     // Use aria-label to find the confirm button
     const confirmButton = screen.getByRole('button', {
-      name: 'confirm-leave-button',
+      name: /confirm/i,
     });
     fireEvent.click(confirmButton);
 

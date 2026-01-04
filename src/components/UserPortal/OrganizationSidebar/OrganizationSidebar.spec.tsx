@@ -1,6 +1,7 @@
 import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
+import { InMemoryCache } from '@apollo/client';
 import { I18nextProvider } from 'react-i18next';
 
 import {
@@ -45,7 +46,7 @@ const MOCKS = [
       data: {
         eventsByOrganizationConnection: [
           {
-            _id: 1,
+            id: '1',
             title: 'Event',
             description: 'Event Test',
             startDate: '2024-01-01',
@@ -126,7 +127,7 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
   });
   it('Component should be rendered properly when members and events list is empty', async () => {
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={new InMemoryCache()}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>

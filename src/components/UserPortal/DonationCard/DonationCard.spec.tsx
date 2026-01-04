@@ -3,6 +3,7 @@ import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 
 import { MockedProvider } from '@apollo/react-testing';
+import { InMemoryCache } from '@apollo/client';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { I18nextProvider } from 'react-i18next';
@@ -33,7 +34,7 @@ const defaultProps: InterfaceDonationCardProps = {
 
 const renderComponent = (props = defaultProps) =>
   render(
-    <MockedProvider link={link}>
+    <MockedProvider link={link} cache={new InMemoryCache()}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
