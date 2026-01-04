@@ -325,11 +325,12 @@ describe('Organisation Tags Page', () => {
     renderTagActionsModal(props[0], link3);
     await wait();
 
-    // Select at least one tag so the mutation is actually invoked
+    // Select tags 2 and 3 to match the mock variables
     await waitFor(() => {
       expect(screen.getByTestId('checkTag2')).toBeInTheDocument();
     });
     await userEvent.click(screen.getByTestId('checkTag2'));
+    await userEvent.click(screen.getByTestId('checkTag3'));
 
     await waitFor(() => {
       expect(screen.getByTestId('tagActionSubmitBtn')).toBeInTheDocument();

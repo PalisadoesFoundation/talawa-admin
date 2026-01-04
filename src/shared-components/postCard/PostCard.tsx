@@ -359,6 +359,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             onClick={handleToggleLike}
             size="small"
             data-testid="like-btn"
+            aria-label={
+              isLikedByUser ? t('postCard.unlike') : t('postCard.like')
+            }
           >
             {likeLoading ? (
               <CircularProgress size={20} />
@@ -368,10 +371,18 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               <Favorite fontSize="small" data-testid="unliked" />
             )}
           </IconButton>
-          <IconButton onClick={toggleComments} size="small">
+          <IconButton
+            onClick={toggleComments}
+            size="small"
+            aria-label={
+              showComments
+                ? t('postCard.hideComments')
+                : t('postCard.viewComments')
+            }
+          >
             <ChatBubbleOutline fontSize="small" />
           </IconButton>
-          <IconButton size="small">
+          <IconButton size="small" aria-label={t('postCard.share')}>
             <Share fontSize="small" />
           </IconButton>
         </Box>

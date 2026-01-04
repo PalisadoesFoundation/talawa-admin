@@ -15,8 +15,9 @@
  *
  * @remarks
  * - Uses Apollo Client's `useQuery` and `useMutation` hooks for fetching and mutating data.
- * - Implements infinite scrolling for loading tags.
+ * - Uses CursorPaginationManager for standardized pagination with load more functionality.
  * - Handles ancestor tags to ensure hierarchical consistency when selecting or deselecting tags.
+ * - ancestorTagsDataMap tracks reference counts for ancestor tags (state used internally, never read directly).
  *
  * @example
  * ```tsx
@@ -93,45 +94,63 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   const [removeAncestorTagsData, setRemoveAncestorTagsData] = useState<
     Set<InterfaceUserTagsAncestorData>
   >(new Set());
+  /**
+   * Tracks reference counts for ancestor tags to maintain hierarchical consistency.
+   * State is updated via setAncestorTagsDataMap but never read directly in the component.
+   * The setter is used in useEffect hooks to manage tag selection/deselection logic.
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [ancestorTagsDataMap, setAncestorTagsDataMap] = useState(new Map());
 
   useEffect(() => {
-    const newCheckedTags = new Set(checkedTags);
-    const newAncestorTagsDataMap = new Map(ancestorTagsDataMap);
+    setCheckedTags((prevCheckedTags) => {
+      const newCheckedTags = new Set(prevCheckedTags);
+      addAncestorTagsData.forEach(
+        (ancestorTag: InterfaceUserTagsAncestorData) => {
+          newCheckedTags.add(ancestorTag._id);
+        },
+      );
+      return newCheckedTags;
+    });
 
-    addAncestorTagsData.forEach(
-      (ancestorTag: InterfaceUserTagsAncestorData) => {
-        const prevAncestorTagValue = ancestorTagsDataMap.get(ancestorTag._id);
-        newAncestorTagsDataMap.set(
-          ancestorTag._id,
-          prevAncestorTagValue ? prevAncestorTagValue + 1 : 1,
-        );
-        newCheckedTags.add(ancestorTag._id);
-      },
-    );
-
-    setCheckedTags(newCheckedTags);
-    setAncestorTagsDataMap(newAncestorTagsDataMap);
+    setAncestorTagsDataMap((prevMap) => {
+      const newMap = new Map(prevMap);
+      addAncestorTagsData.forEach(
+        (ancestorTag: InterfaceUserTagsAncestorData) => {
+          const prevValue = prevMap.get(ancestorTag._id);
+          newMap.set(ancestorTag._id, prevValue ? prevValue + 1 : 1);
+        },
+      );
+      return newMap;
+    });
   }, [addAncestorTagsData]);
 
   useEffect(() => {
-    const newCheckedTags = new Set(checkedTags);
-    const newAncestorTagsDataMap = new Map(ancestorTagsDataMap);
+    let tagsToDelete: string[] = [];
 
-    removeAncestorTagsData.forEach(
-      (ancestorTag: InterfaceUserTagsAncestorData) => {
-        const prevAncestorTagValue = ancestorTagsDataMap.get(ancestorTag._id);
-        if (prevAncestorTagValue === 1) {
-          newCheckedTags.delete(ancestorTag._id);
-          newAncestorTagsDataMap.delete(ancestorTag._id);
-        } else {
-          newAncestorTagsDataMap.set(ancestorTag._id, prevAncestorTagValue - 1);
-        }
-      },
-    );
+    setAncestorTagsDataMap((prevMap) => {
+      const newMap = new Map(prevMap);
+      removeAncestorTagsData.forEach(
+        (ancestorTag: InterfaceUserTagsAncestorData) => {
+          const prevValue = prevMap.get(ancestorTag._id);
+          if (prevValue === 1) {
+            newMap.delete(ancestorTag._id);
+            tagsToDelete.push(ancestorTag._id);
+          } else {
+            newMap.set(ancestorTag._id, prevValue - 1);
+          }
+        },
+      );
+      return newMap;
+    });
 
-    setCheckedTags(newCheckedTags);
-    setAncestorTagsDataMap(newAncestorTagsDataMap);
+    setCheckedTags((prevCheckedTags) => {
+      const newCheckedTags = new Set(prevCheckedTags);
+      tagsToDelete.forEach((tagId) => {
+        newCheckedTags.delete(tagId);
+      });
+      return newCheckedTags;
+    });
   }, [removeAncestorTagsData]);
 
   const selectTag = (tag: InterfaceTagData): void => {
