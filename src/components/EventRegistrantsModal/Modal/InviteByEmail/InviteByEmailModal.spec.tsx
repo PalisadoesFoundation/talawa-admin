@@ -219,7 +219,7 @@ describe('InviteByEmailModal', () => {
             },
           },
         },
-        delay: 100, // Add delay to capture loading state
+        delay: 50, // Add delay to capture loading state
       };
 
       renderComponent({}, [successMock]);
