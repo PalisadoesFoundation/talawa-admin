@@ -1,7 +1,7 @@
 /**
  * @file Requests.tsx
  * @description This component renders a table displaying volunteer membership requests for a specific event.
- * It allows administrators to search, sort, and manage these requests by accepting or rejecting them.
+ * It allows administrators to search, sort, filter, and manage these requests by accepting or rejecting them.
  *
  * @module Requests
  *
@@ -10,23 +10,22 @@
  * @requires react-bootstrap
  * @requires react-router-dom
  * @requires @apollo/client
- * @requires @mui/x-data-grid
  * @requires dayjs
  * @requires NotificationToast
  * @requires components/Loader/Loader
  * @requires components/Avatar/Avatar
- * @requires components/AdminSearchFilterBar/AdminSearchFilterBar
+ * @requires shared-components/DataGridWrapper/DataGridWrapper
  * @requires GraphQl/Queries/EventVolunteerQueries
  * @requires GraphQl/Mutations/EventVolunteerMutation
  * @requires utils/interfaces
  *
  * @function Requests
- * @returns {JSX.Element} A React component that displays a searchable and sortable table of volunteer membership requests.
+ * @returns {JSX.Element} A React component that displays a searchable, sortable, and filterable table of volunteer membership requests.
  *
  * @remarks
  * - Displays a loader while fetching data and handles errors gracefully.
  * - Uses Apollo Client's `useQuery` to fetch data and `useMutation` to update membership status.
- * - Uses AdminSearchFilterBar for unified search and filter interface with debouncing.
+ * - Uses DataGridWrapper for unified search, sort, and filter interface with debouncing.
  * - Provides sorting by creation date (latest/earliest) and filtering by request type (all/individuals/groups).
  * - Displays volunteer details with accessible avatar alt text, request type, request date, and action buttons.
  * - All UI text is internationalized using i18n translation keys.
@@ -35,9 +34,8 @@
  * @example
  * <Requests />
  */
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { debounce } from '@mui/material';
 import { Button } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
 import { FaXmark } from 'react-icons/fa6';
@@ -46,10 +44,9 @@ import { WarningAmberRounded } from '@mui/icons-material';
 import { useMutation, useQuery } from '@apollo/client';
 import Loader from 'components/Loader/Loader';
 import {
-  DataGrid,
   type GridCellParams,
   type GridColDef,
-} from '@mui/x-data-grid';
+} from 'shared-components/DataGridWrapper';
 import Avatar from 'components/Avatar/Avatar';
 import styles from '../../../style/app-fixed.module.css';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
@@ -57,7 +54,7 @@ import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import dayjs from 'dayjs';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapper';
 
 function Requests(): JSX.Element {
   const { t } = useTranslation('translation');
@@ -70,28 +67,6 @@ function Requests(): JSX.Element {
   if (!orgId || !eventId) {
     return <Navigate to={'/'} replace />;
   }
-
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  const [sortBy, setSortBy] = useState<
-    'createdAt_ASC' | 'createdAt_DESC' | null
-  >(null);
-  const [filterBy, setFilterBy] = useState<'all' | 'individual' | 'group'>(
-    'all',
-  );
-
-  const debouncedSearch = useCallback(
-    debounce((value: string) => {
-      setSearchTerm(value);
-    }, 300),
-    [],
-  );
-
-  // Debounce cleanup effect
-  useEffect(() => {
-    return () => {
-      debouncedSearch.clear();
-    };
-  }, [debouncedSearch]);
 
   const [updateMembership] = useMutation(UPDATE_VOLUNTEER_MEMBERSHIP);
 
@@ -130,26 +105,19 @@ function Requests(): JSX.Element {
       where: {
         eventId,
         status: 'requested',
-        userName: searchTerm ? searchTerm : undefined,
       },
-      orderBy: sortBy ? sortBy : undefined,
     },
   });
 
   const requests = useMemo(() => {
     if (!requestsData) return [];
 
-    let filteredRequests = requestsData.getVolunteerMembership;
-
-    // Apply filter by request type
-    if (filterBy === 'individual') {
-      filteredRequests = filteredRequests.filter((request) => !request.group);
-    } else if (filterBy === 'group') {
-      filteredRequests = filteredRequests.filter((request) => request.group);
-    }
-
-    return filteredRequests;
-  }, [requestsData, filterBy]);
+    // Add a computed field for volunteer name to enable search
+    return requestsData.getVolunteerMembership.map((request) => ({
+      ...request,
+      volunteerName: request.volunteer.user.name,
+    }));
+  }, [requestsData]);
 
   // loads the requests when the component mounts
   if (requestsLoading) return <Loader size="xl" />;
@@ -180,7 +148,6 @@ function Requests(): JSX.Element {
       align: 'center',
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         return params.api.getRowIndexRelativeToVisibleRows(params.row.id) + 1;
       },
@@ -193,7 +160,6 @@ function Requests(): JSX.Element {
       minWidth: 100,
       headerAlign: 'center',
       sortable: false,
-      headerClassName: `${styles.tableHeader}`,
       renderCell: (params: GridCellParams) => {
         const { name, avatarURL } = params.row.volunteer.user;
         return (
@@ -231,7 +197,6 @@ function Requests(): JSX.Element {
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         const { group } = params.row;
@@ -248,36 +213,67 @@ function Requests(): JSX.Element {
       },
     },
     {
-      field: 'requestDate',
+      field: 'createdAt',
       headerName: t('eventVolunteers.requestDate'),
       flex: 2,
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
         return dayjs(params.row.createdAt).format('DD/MM/YYYY');
       },
     },
-    {
-      field: 'options',
-      headerName: tCommon('options'),
-      align: 'center',
-      flex: 2,
-      minWidth: 100,
-      headerAlign: 'center',
-      sortable: false,
-      headerClassName: `${styles.tableHeader}`,
-      renderCell: (params: GridCellParams) => {
-        return (
+  ];
+
+  return (
+    <div>
+      {/* DataGridWrapper with Volunteer Membership Requests */}
+      <DataGridWrapper<InterfaceVolunteerMembership & { volunteerName: string }>
+        rows={requests}
+        columns={columns}
+        loading={requestsLoading}
+        searchConfig={{
+          enabled: true,
+          fields: ['volunteerName'],
+          placeholder: tCommon('searchBy', { item: tCommon('name') }),
+        }}
+        sortConfig={{
+          sortingOptions: [
+            { label: t('eventVolunteers.latest'), value: 'createdAt_desc' },
+            { label: t('eventVolunteers.earliest'), value: 'createdAt_asc' },
+          ],
+        }}
+        filterConfig={{
+          filterOptions: [
+            { label: tCommon('all'), value: 'all' },
+            {
+              label: t('eventVolunteers.individuals'),
+              value: 'individual',
+            },
+            { label: t('eventVolunteers.groups'), value: 'group' },
+          ],
+          defaultFilter: 'all',
+          filterFunction: (rows, filterValue) => {
+            if (filterValue === 'all') return rows;
+            if (filterValue === 'individual') {
+              return rows.filter((request) => !request.group);
+            }
+            if (filterValue === 'group') {
+              return rows.filter((request) => request.group);
+            }
+            return rows;
+          },
+        }}
+        emptyStateMessage={t('eventVolunteers.noRequests')}
+        actionColumn={(row: InterfaceVolunteerMembership) => (
           <>
             <Button
               variant="success"
               size="sm"
               className={`${styles.iconButton} me-2 rounded`}
               data-testid="acceptBtn"
-              onClick={() => updateMembershipStatus(params.row.id, 'accepted')}
+              onClick={() => updateMembershipStatus(row.id, 'accepted')}
             >
               <i className="fa fa-check" />
             </Button>
@@ -285,88 +281,14 @@ function Requests(): JSX.Element {
               size="sm"
               variant="danger"
               className="rounded"
-              data-testid={`rejectBtn`}
-              onClick={() => updateMembershipStatus(params.row.id, 'rejected')}
+              data-testid="rejectBtn"
+              onClick={() => updateMembershipStatus(row.id, 'rejected')}
             >
               <FaXmark size={18} />
             </Button>
           </>
-        );
-      },
-    },
-  ];
-
-  return (
-    <div>
-      {/* Header with search, filter  and Create Button */}
-      <AdminSearchFilterBar
-        searchPlaceholder={tCommon('searchBy', { item: tCommon('name') })}
-        searchValue={searchTerm}
-        onSearchChange={debouncedSearch}
-        onSearchSubmit={(value: string) => {
-          setSearchTerm(value);
-        }}
-        searchInputTestId="searchBy"
-        searchButtonTestId="searchBtn"
-        hasDropdowns
-        dropdowns={[
-          {
-            id: 'sort',
-            type: 'sort',
-            label: tCommon('sort'),
-            options: [
-              { label: t('eventVolunteers.latest'), value: 'createdAt_DESC' },
-              {
-                label: t('eventVolunteers.earliest'),
-                value: 'createdAt_ASC',
-              },
-            ],
-            selectedOption: sortBy ?? '',
-            onOptionChange: (value: string | number) =>
-              setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC'),
-            dataTestIdPrefix: 'sort',
-          },
-          {
-            id: 'filter',
-            type: 'filter',
-            label: tCommon('filter'),
-            options: [
-              { label: tCommon('all'), value: 'all' },
-              {
-                label: t('eventVolunteers.individuals'),
-                value: 'individual',
-              },
-              { label: t('eventVolunteers.groups'), value: 'group' },
-            ],
-            selectedOption: filterBy,
-            onOptionChange: (value: string | number) =>
-              setFilterBy(value as 'all' | 'individual' | 'group'),
-            dataTestIdPrefix: 'filter',
-          },
-        ]}
+        )}
       />
-
-      {/* Table with Volunteer Membership Requests */}
-
-      {requests.length > 0 ? (
-        <DataGrid
-          disableColumnMenu
-          columnBufferPx={5}
-          hideFooter={true}
-          getRowId={(row) => row.id}
-          className={styles.dataGridContainer}
-          getRowClassName={() => `${styles.rowBackgrounds}`}
-          autoHeight
-          rowHeight={65}
-          rows={requests}
-          columns={columns}
-          isRowSelectable={() => false}
-        />
-      ) : (
-        <div className="d-flex justify-content-center align-items-center mt-5">
-          <h5>{t('eventVolunteers.noRequests')}</h5>
-        </div>
-      )}
     </div>
   );
 }

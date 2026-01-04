@@ -20,7 +20,6 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import i18nForTest from 'utils/i18nForTest';
 const i18n = i18nForTest;
 import Requests from './Requests';
-import styles from 'style/app-fixed.module.css';
 import type { ApolloLink } from '@apollo/client';
 import {
   MOCKS,
@@ -122,7 +121,7 @@ describe('Testing Requests Screen', () => {
   it('should render Requests screen', async () => {
     renderRequests(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByTestId('search-bar')).toBeInTheDocument();
     });
   });
 
@@ -130,7 +129,7 @@ describe('Testing Requests Screen', () => {
     renderRequests(link1);
 
     await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByTestId('search-bar')).toBeInTheDocument();
     });
 
     let sortBtn = await screen.findByTestId('sort');
@@ -138,7 +137,7 @@ describe('Testing Requests Screen', () => {
 
     // Sort by createdAt_DESC
     fireEvent.click(sortBtn);
-    const createdAtDESC = await screen.findByTestId('createdAt_DESC');
+    const createdAtDESC = await screen.findByTestId('createdAt_desc');
     expect(createdAtDESC).toBeInTheDocument();
     fireEvent.click(createdAtDESC);
 
@@ -149,7 +148,7 @@ describe('Testing Requests Screen', () => {
     sortBtn = await screen.findByTestId('sort');
     expect(sortBtn).toBeInTheDocument();
     fireEvent.click(sortBtn);
-    const createdAtASC = await screen.findByTestId('createdAt_ASC');
+    const createdAtASC = await screen.findByTestId('createdAt_asc');
     expect(createdAtASC).toBeInTheDocument();
     fireEvent.click(createdAtASC);
 
@@ -160,7 +159,7 @@ describe('Testing Requests Screen', () => {
   it('Search Requests by volunteer name', async () => {
     renderRequests(link1);
 
-    const searchInput = await screen.findByTestId('searchBy');
+    const searchInput = await screen.findByTestId('search-bar');
     expect(searchInput).toBeInTheDocument();
 
     // Search by name with debounced search
@@ -176,7 +175,7 @@ describe('Testing Requests Screen', () => {
   it('Search Requests by volunteer name using submit (Enter key)', async () => {
     renderRequests(link1);
 
-    const searchInput = await screen.findByTestId('searchBy');
+    const searchInput = await screen.findByTestId('search-bar');
     expect(searchInput).toBeInTheDocument();
 
     // Search by name using Enter key to trigger onSearchSubmit
@@ -193,7 +192,7 @@ describe('Testing Requests Screen', () => {
     renderRequests(link3);
 
     await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByTestId('search-bar')).toBeInTheDocument();
       expect(screen.getByText(t.noRequests)).toBeInTheDocument();
     });
   });
@@ -209,7 +208,7 @@ describe('Testing Requests Screen', () => {
   it('Accept Request', async () => {
     renderRequests(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByTestId('search-bar')).toBeInTheDocument();
     });
 
     const acceptBtn = await screen.findAllByTestId('acceptBtn');
@@ -226,7 +225,7 @@ describe('Testing Requests Screen', () => {
   it('Reject Request', async () => {
     renderRequests(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByTestId('search-bar')).toBeInTheDocument();
     });
 
     const rejectBtn = await screen.findAllByTestId('rejectBtn');
@@ -243,7 +242,7 @@ describe('Testing Requests Screen', () => {
   it('Error in Update Request Mutation', async () => {
     renderRequests(link4);
     await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByTestId('search-bar')).toBeInTheDocument();
     });
 
     const acceptBtn = await screen.findAllByTestId('acceptBtn');
@@ -260,7 +259,7 @@ describe('Testing Requests Screen', () => {
   it('should filter requests by individual type', async () => {
     renderRequests(link5);
     await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByTestId('search-bar')).toBeInTheDocument();
     });
 
     // Initially should show all requests (2 individual + 1 group = 3)
@@ -287,7 +286,7 @@ describe('Testing Requests Screen', () => {
   it('should filter requests by group type', async () => {
     renderRequests(link5);
     await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByTestId('search-bar')).toBeInTheDocument();
     });
 
     // Initially should show all requests (2 individual + 1 group = 3)
@@ -313,7 +312,7 @@ describe('Testing Requests Screen', () => {
   it('should show all requests when filter is set to all', async () => {
     renderRequests(link5);
     await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.getByTestId('search-bar')).toBeInTheDocument();
     });
 
     // Click filter button
@@ -357,15 +356,6 @@ describe('Requests Component CSS Styling', () => {
     const dataGrid = container.querySelector('.MuiDataGrid-root');
     expect(dataGrid).toBeInTheDocument();
     expect(dataGrid).toHaveClass('MuiDataGrid-root');
-
-    // CSS variables are resolved in the browser; in tests we assert
-    // that the DataGrid container element (styled via CSS modules) is present
-    // Use CSS module class name for the data-grid container
-    const dataGridContainerEl = container.querySelector(
-      `.${styles.dataGridContainer}`,
-    );
-    expect(dataGridContainerEl).toBeInTheDocument();
-    expect(dataGridContainerEl).toHaveClass(styles.dataGridContainer);
   });
 
   test('Sort controls should be rendered', async () => {

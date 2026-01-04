@@ -46,6 +46,7 @@ export function DataGridWrapper<T extends { id: string | number }>(
     loading = false,
     searchConfig,
     sortConfig,
+    filterConfig,
     paginationConfig,
     onRowClick,
     actionColumn,
@@ -61,6 +62,9 @@ export function DataGridWrapper<T extends { id: string | number }>(
     }
     return '';
   });
+  const [selectedFilter, setSelectedFilter] = useState<string | number>(
+    () => filterConfig?.defaultFilter ?? '',
+  );
   const [page, setPage] = useState(0);
 
   const [pageSize, setPageSize] = useState(
@@ -79,16 +83,31 @@ export function DataGridWrapper<T extends { id: string | number }>(
     };
   }, [searchTerm]);
 
-  const filtered = useMemo(() => {
-    if (!searchConfig?.enabled || !debouncedSearchTerm) return rows;
-    return rows.filter((r: T) =>
-      searchConfig.fields.some((f) =>
-        String(r[f as keyof T] ?? '')
-          .toLowerCase()
-          .includes(debouncedSearchTerm.toLowerCase()),
-      ),
-    );
-  }, [rows, debouncedSearchTerm, searchConfig]);
+  // Apply filters first, then search
+  const filteredAndSearched = useMemo(() => {
+    let processedRows = rows;
+
+    // Apply filter if configured
+    if (filterConfig?.filterFunction && selectedFilter) {
+      processedRows = filterConfig.filterFunction(
+        processedRows,
+        selectedFilter,
+      );
+    }
+
+    // Then apply search
+    if (searchConfig?.enabled && debouncedSearchTerm) {
+      processedRows = processedRows.filter((r: T) =>
+        searchConfig.fields.some((f) =>
+          String(r[f as keyof T] ?? '')
+            .toLowerCase()
+            .includes(debouncedSearchTerm.toLowerCase()),
+        ),
+      );
+    }
+
+    return processedRows;
+  }, [rows, debouncedSearchTerm, searchConfig, filterConfig, selectedFilter]);
 
   const sortModel = useMemo(() => {
     if (!selectedSort) return [];
@@ -141,9 +160,20 @@ export function DataGridWrapper<T extends { id: string | number }>(
             buttonLabel={tCommon('sort')}
           />
         )}
+        {filterConfig?.filterOptions && (
+          <SortingButton
+            dataTestIdPrefix="filter"
+            sortingOptions={filterConfig.filterOptions}
+            selectedOption={selectedFilter}
+            onSortChange={setSelectedFilter}
+            type="filter"
+            title={tCommon('filter')}
+            buttonLabel={tCommon('filter')}
+          />
+        )}
       </div>
       <DataGrid
-        rows={filtered}
+        rows={filteredAndSearched}
         columns={[...columns, ...actionCol]}
         loading={loading}
         slots={{

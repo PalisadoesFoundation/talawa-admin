@@ -67,6 +67,37 @@ export interface InterfaceDataGridWrapperProps<
   };
 
   /**
+   * Configuration for filtering options displayed in a dropdown.
+   * Enables client-side filtering with custom filter functions.
+   *
+   * @example
+   * ```ts
+   * filterConfig: {
+   *   filterOptions: [
+   *     { label: 'All', value: 'all' },
+   *     { label: 'Active', value: 'active' },
+   *     { label: 'Inactive', value: 'inactive' }
+   *   ],
+   *   filterFunction: (rows, filterValue) => {
+   *     if (filterValue === 'all') return rows;
+   *     return rows.filter(row => row.status === filterValue);
+   *   }
+   * }
+   * ```
+   */
+  filterConfig?: {
+    /** Array of filter options for the filter dropdown. */
+    filterOptions?: { label: string; value: string | number }[];
+    /** Custom filter function to apply to rows based on selected filter value. */
+    filterFunction?: (
+      rows: readonly T[],
+      filterValue: string | number,
+    ) => readonly T[];
+    /** Default filter value to apply on component mount. */
+    defaultFilter?: string | number;
+  };
+
+  /**
    * Configuration for pagination.
    */
   paginationConfig?: {

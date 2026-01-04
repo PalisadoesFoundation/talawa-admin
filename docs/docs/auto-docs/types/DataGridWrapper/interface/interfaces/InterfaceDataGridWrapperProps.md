@@ -25,7 +25,7 @@ The type of the row data. Must extend `GridValidRowModel` (typically requires an
 
 > `optional` **actionColumn**: (`row`) => `ReactNode`
 
-Defined in: [src/types/DataGridWrapper/interface.ts:92](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L92)
+Defined in: [src/types/DataGridWrapper/interface.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L123)
 
 A function to render custom content in the "Actions" column (appended to the right).
 
@@ -60,7 +60,7 @@ Defines headers, widths, and cell rendering logic.
 
 > `optional` **emptyStateMessage**: `string`
 
-Defined in: [src/types/DataGridWrapper/interface.ts:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L98)
+Defined in: [src/types/DataGridWrapper/interface.ts:129](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L129)
 
 Custom message to display when there are no rows and `loading` is false.
 
@@ -76,9 +76,68 @@ Custom message to display when there are no rows and `loading` is false.
 
 > `optional` **error**: `ReactNode`
 
-Defined in: [src/types/DataGridWrapper/interface.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L103)
+Defined in: [src/types/DataGridWrapper/interface.ts:134](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L134)
 
 Error message or component to display instead of the grid when data fetch fails.
+
+***
+
+### filterConfig?
+
+> `optional` **filterConfig**: `object`
+
+Defined in: [src/types/DataGridWrapper/interface.ts:88](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L88)
+
+Configuration for filtering options displayed in a dropdown.
+Enables client-side filtering with custom filter functions.
+
+#### defaultFilter?
+
+> `optional` **defaultFilter**: `string` \| `number`
+
+Default filter value to apply on component mount.
+
+#### filterFunction()?
+
+> `optional` **filterFunction**: (`rows`, `filterValue`) => readonly `T`[]
+
+Custom filter function to apply to rows based on selected filter value.
+
+##### Parameters
+
+###### rows
+
+readonly `T`[]
+
+###### filterValue
+
+`string` | `number`
+
+##### Returns
+
+readonly `T`[]
+
+#### filterOptions?
+
+> `optional` **filterOptions**: `object`[]
+
+Array of filter options for the filter dropdown.
+
+#### Example
+
+```ts
+filterConfig: {
+  filterOptions: [
+    { label: 'All', value: 'all' },
+    { label: 'Active', value: 'active' },
+    { label: 'Inactive', value: 'inactive' }
+  ],
+  filterFunction: (rows, filterValue) => {
+    if (filterValue === 'all') return rows;
+    return rows.filter(row => row.status === filterValue);
+  }
+}
+```
 
 ***
 
@@ -102,7 +161,7 @@ false
 
 > `optional` **onRowClick**: (`row`) => `void`
 
-Defined in: [src/types/DataGridWrapper/interface.ts:85](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L85)
+Defined in: [src/types/DataGridWrapper/interface.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L116)
 
 Callback fired when a row is clicked.
 
@@ -124,7 +183,7 @@ The data object of the clicked row.
 
 > `optional` **paginationConfig**: `object`
 
-Defined in: [src/types/DataGridWrapper/interface.ts:72](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L72)
+Defined in: [src/types/DataGridWrapper/interface.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/DataGridWrapper/interface.ts#L103)
 
 Configuration for pagination.
 
