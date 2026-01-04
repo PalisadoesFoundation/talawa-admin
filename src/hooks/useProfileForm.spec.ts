@@ -3,6 +3,20 @@ import { renderHook, act } from '@testing-library/react';
 import { useProfileForm } from './useProfileForm';
 import type { UserProfile } from './useProfileForm';
 
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: () => ({
+    t: (key: string) => {
+      const translations: Record<string, string> = {
+        'profile.errors.nameRequired': 'Name is required',
+        'profile.errors.emailRequired': 'Email is required',
+        'profile.errors.passwordPolicy': 'Password does not meet policy',
+      };
+      return translations[key] || key;
+    },
+  }),
+}));
+
 describe('useProfileForm Hook', () => {
   afterEach(() => {
     vi.clearAllMocks();

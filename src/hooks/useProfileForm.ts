@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { validatePassword } from 'utils/passwordValidator';
 
 /**
@@ -54,6 +55,7 @@ export type ProfileErrors = Partial<Record<keyof UserProfile, string>>;
  * ```
  */
 export function useProfileForm(initial: UserProfile) {
+  const { t } = useTranslation('translation', { keyPrefix: 'profile' });
   const [form, setForm] = useState<UserProfile>(initial);
   const [errors, setErrors] = useState<ProfileErrors>({});
   const [dirty, setDirty] = useState(false);
@@ -73,7 +75,7 @@ export function useProfileForm(initial: UserProfile) {
    * Updates a single field in the form
    */
   const setField = useCallback(
-    <K extends keyof UserProfile>(key: K, value: UserProfile[K]) => {
+    <TKey extends keyof UserProfile>(key: TKey, value: UserProfile[TKey]) => {
       setForm((prev) => ({ ...prev, [key]: value }));
       setDirty(true);
     },
@@ -92,19 +94,19 @@ export function useProfileForm(initial: UserProfile) {
   const validate = useCallback(() => {
     const next: ProfileErrors = {};
     const currentForm = formRef.current;
-    if (!currentForm.name?.trim()) next.name = 'Name is required';
+    if (!currentForm.name?.trim()) next.name = t('errors.nameRequired');
     if (
       currentForm.password &&
       currentForm.password.trim() !== '' &&
       !validatePassword(currentForm.password)
     ) {
-      next.password = 'Password does not meet policy';
+      next.password = t('errors.passwordPolicy');
     }
     if (!currentForm.emailAddress?.trim())
-      next.emailAddress = 'Email is required';
+      next.emailAddress = t('errors.emailRequired');
     setErrors(next);
     return Object.keys(next).length === 0;
-  }, []);
+  }, [t]);
 
   /**
    * Resets form to initial state and clears all errors
