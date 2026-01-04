@@ -6,7 +6,6 @@ import InviteByEmailModal from './InviteByEmailModal';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from '../../../../utils/i18nForTest';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
-import { InMemoryCache } from '@apollo/client';
 import { SEND_EVENT_INVITATIONS } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -74,7 +73,7 @@ const renderComponent = (
   customMocks: MockedResponse[] = mocks as MockedResponse[],
 ) => {
   return render(
-    <MockedProvider mocks={customMocks} cache={new InMemoryCache()}>
+    <MockedProvider mocks={customMocks} addTypename={false}>
       <I18nextProvider i18n={i18nForTest}>
         <InviteByEmailModal {...defaultProps} {...props} />
       </I18nextProvider>
@@ -97,7 +96,7 @@ describe('InviteByEmailModal', () => {
   });
 
   afterEach(() => {
-    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
   it('renders the modal with initial fields when show is true', () => {

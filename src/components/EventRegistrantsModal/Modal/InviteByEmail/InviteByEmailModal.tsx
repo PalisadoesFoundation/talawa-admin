@@ -197,7 +197,7 @@ const InviteByEmailModal: React.FC<Props> = ({
               })}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              data-testid="invite-message"
+              inputProps={{ 'data-testid': 'invite-message' }}
             />
           </Form.Group>
 

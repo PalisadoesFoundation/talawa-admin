@@ -1,7 +1,6 @@
 import React, { act } from 'react';
 import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
-import { InMemoryCache } from '@apollo/client';
 import { I18nextProvider } from 'react-i18next';
 
 import {
@@ -135,7 +134,7 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
   });
   it('Component should be rendered properly when members and events list is empty', async () => {
     render(
-      <MockedProvider link={link} cache={new InMemoryCache()}>
+      <MockedProvider link={link} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -155,7 +154,7 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
   it('Component should be rendered properly when events list is not empty', async () => {
     mockId = 'events';
     render(
-      <MockedProvider link={link} cache={new InMemoryCache()}>
+      <MockedProvider link={link} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -175,7 +174,7 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
   it('Component should be rendered properly when members list is not empty', async () => {
     mockId = 'members';
     render(
-      <MockedProvider link={link} cache={new InMemoryCache()}>
+      <MockedProvider link={link} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -194,7 +193,7 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
   it('Handles GraphQL errors properly', async () => {
     mockId = 'error';
     render(
-      <MockedProvider link={link} cache={new InMemoryCache()}>
+      <MockedProvider link={link} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -211,7 +210,7 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
 
   it('Should show Loading state initially', () => {
     render(
-      <MockedProvider link={link} cache={new InMemoryCache()}>
+      <MockedProvider link={link} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -227,7 +226,7 @@ describe('Testing OrganizationSidebar Component [User Portal]', () => {
   it('Should render Member images properly', async () => {
     mockId = 'members';
     render(
-      <MockedProvider link={link} cache={new InMemoryCache()}>
+      <MockedProvider link={link} addTypename={false}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
