@@ -85,7 +85,7 @@ function checkDirectory(dir, fsModule = fs, pathModule = path) {
           // Count quotes before the match to determine if inside string
           const match = DEPRECATED_PATTERNS.exec(codeBeforeComment);
           if (match) {
-            const beforeMatch = line.substring(0, match.index);
+            const beforeMatch = codeBeforeComment.substring(0, match.index);
             const singleQuotes = (beforeMatch.match(/'/g) || []).length;
             const doubleQuotes = (beforeMatch.match(/"/g) || []).length;
             const backticks = (beforeMatch.match(/`/g) || []).length;

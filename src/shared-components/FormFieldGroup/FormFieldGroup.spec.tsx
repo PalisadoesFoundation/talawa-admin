@@ -3,15 +3,17 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom';
 import { describe, it, expect, vi } from 'vitest';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import { TextField } from '@mui/material';
-import { FormFieldGroup } from './FormFieldGroup';
-import { FormTextField } from './FormTextField';
-import { FormTextArea } from './FormTextArea';
-import { FormSelect } from './FormSelect';
-import { FormCheckbox } from './FormCheckbox';
-import { FormRadioGroup } from './FormRadioGroup';
-import { FormDateField } from './FormDateField';
+import {
+  FormFieldGroup,
+  FormTextField,
+  FormTextArea,
+  FormSelect,
+  FormCheckbox,
+  FormRadioGroup,
+  FormDateField,
+} from './';
 import type { InterfaceUserInfo } from 'utils/interfaces';
 import { Form } from 'react-bootstrap';
 
@@ -418,13 +420,13 @@ describe('FormSelect', () => {
       id: '1',
       name: 'John Doe',
       emailAddress: 'john@example.com',
-      createdAt: new Date('2024-03-15T08:30:00.000Z'),
+      createdAt: new Date(dayjs().add(30, 'days').format('YYYY-MM-DD')),
     },
     {
       id: '2',
       name: 'Jane Smith',
       emailAddress: 'jane@example.com',
-      createdAt: new Date('2024-06-20T14:45:00.000Z'),
+      createdAt: new Date(dayjs().add(30, 'days').format('YYYY-MM-DD')),
     },
   ];
 
@@ -725,7 +727,7 @@ describe('FormDateField', () => {
     });
 
     it('renders with selected date', () => {
-      const date = dayjs('2024-01-15');
+      const date: Dayjs = dayjs().add(30, 'days');
       render(
         <FormDateField
           label="Date"
@@ -734,13 +736,15 @@ describe('FormDateField', () => {
           format="YYYY-MM-DD"
         />,
       );
-      const input = screen.getByDisplayValue('2024-01-15');
+      const input = screen.getByDisplayValue(
+        dayjs().add(30, 'days').format('YYYY-MM-DD'),
+      );
       expect(input).toBeInTheDocument();
     });
 
     it('respects minDate and maxDate', () => {
-      const minDate = dayjs('2024-01-01');
-      const maxDate = dayjs('2024-12-31');
+      const minDate: Dayjs = dayjs().add(30, 'days');
+      const maxDate: Dayjs = dayjs().add(30, 'days');
       render(
         <FormDateField
           label="Date"

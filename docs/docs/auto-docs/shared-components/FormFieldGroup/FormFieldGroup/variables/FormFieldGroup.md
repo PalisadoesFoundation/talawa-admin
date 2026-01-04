@@ -4,6 +4,6 @@
 
 # Variable: FormFieldGroup
 
-> `const` **FormFieldGroup**: `React.FC`\<[`FormFieldGroupProps`](../../../../types/FormFieldGroup/interface/interfaces/FormFieldGroupProps.md) & `object`\>
+> `const` **FormFieldGroup**: `React.FC`\<[`IFormFieldGroupProps`](../../../../types/shared-components/FormFieldGroup/interface/interfaces/IFormFieldGroupProps.md) & `object`\>
 
-Defined in: src/shared-components/FormFieldGroup/FormFieldGroup.tsx:5
+Defined in: [src/shared-components/FormFieldGroup/FormFieldGroup.tsx:5](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/FormFieldGroup/FormFieldGroup.tsx#L5)

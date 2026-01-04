@@ -4,7 +4,7 @@
 
 # Interface: IFormSelectProps
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L101)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L100)
 
 Autocomplete/select component props using Material-UI Autocomplete.
 Supports single/multiple selection with user data (InterfaceUserInfo).
@@ -14,6 +14,22 @@ Supports single/multiple selection with user data (InterfaceUserInfo).
 - `Omit`\<`ICommonInputProps`, `"value"` \| `"onChange"` \| `"error"`\>
 
 ## Properties
+
+### ariaDescribedBy?
+
+> `optional` **ariaDescribedBy**: `string`
+
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:124](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L124)
+
+***
+
+### ariaLabel?
+
+> `optional` **ariaLabel**: `string`
+
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L123)
+
+***
 
 ### className?
 
@@ -43,7 +59,7 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:19](https:/
 
 > `optional` **error**: `string` \| `boolean`
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L120)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L119)
 
 ***
 
@@ -51,7 +67,7 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:120](https:
 
 > `optional` **filterSelectedOptions**: `boolean`
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L111)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:110](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L110)
 
 ***
 
@@ -59,7 +75,7 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:111](https:
 
 > `optional` **getOptionLabel**: (`option`) => `string`
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L112)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L111)
 
 #### Parameters
 
@@ -77,7 +93,7 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:112](https:
 
 > `optional` **helpText**: `string`
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L122)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L121)
 
 ***
 
@@ -85,7 +101,7 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:122](https:
 
 > `optional` **isOptionEqualToValue**: (`option`, `value`) => `boolean`
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L107)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L106)
 
 #### Parameters
 
@@ -107,7 +123,7 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:107](https:
 
 > `optional` **label**: `string`
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L118)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:117](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L117)
 
 ***
 
@@ -115,7 +131,7 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:118](https:
 
 > `optional` **limitTags**: `number`
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L106)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L105)
 
 ***
 
@@ -123,7 +139,7 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:106](https:
 
 > `optional` **multiple**: `boolean`
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L105)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L104)
 
 ***
 
@@ -131,7 +147,7 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:105](https:
 
 > `optional` **name**: `string`
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:119](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L119)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:118](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L118)
 
 ***
 
@@ -155,7 +171,7 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:21](https:/
 
 > `optional` **onChange**: (`event`, `value`) => `void`
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:113](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L113)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:112](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L112)
 
 #### Parameters
 
@@ -193,7 +209,7 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:20](https:/
 
 > `optional` **options**: [`InterfaceUserInfo`](../../../../../utils/interfaces/interfaces/InterfaceUserInfo.md)[]
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L103)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L102)
 
 ***
 
@@ -201,7 +217,7 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:103](https:
 
 > **renderInput**: (`params`) => `ReactNode`
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:117](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L117)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:116](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L116)
 
 #### Parameters
 
@@ -219,7 +235,7 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:117](https:
 
 > `optional` **required**: `boolean`
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:123](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L123)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:122](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L122)
 
 #### Overrides
 
@@ -231,7 +247,7 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:123](https:
 
 > `optional` **touched**: `boolean`
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:121](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L121)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:120](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L120)
 
 ***
 
@@ -239,4 +255,4 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:121](https:
 
 > `optional` **value**: [`InterfaceUserInfo`](../../../../../utils/interfaces/interfaces/InterfaceUserInfo.md) \| [`InterfaceUserInfo`](../../../../../utils/interfaces/interfaces/InterfaceUserInfo.md)[]
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L104)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L103)
