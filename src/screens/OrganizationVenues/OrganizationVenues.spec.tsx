@@ -28,6 +28,7 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { VENUE_LIST } from 'GraphQl/Queries/OrganizationQueries';
+import dayjs from 'dayjs';
 import type { ApolloLink } from '@apollo/client';
 import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
 import { describe, test, expect, beforeEach, afterEach, vi } from 'vitest';
@@ -51,7 +52,7 @@ const MOCKS = [
                   id: 'venue1',
                   name: 'Updated Venue 1',
                   description: 'Updated description for venue 1',
-                  createdAt: '2021-01-01T00:00:00Z',
+                  createdAt: dayjs().subtract(5, 'year').toISOString(),
                   attachments: [],
                   capacity: '1000',
                   image: null,
@@ -62,7 +63,7 @@ const MOCKS = [
                   id: 'venue2',
                   name: 'Updated Venue 2',
                   description: 'Updated description for venue 2',
-                  createdAt: '2021-01-01T00:00:00Z',
+                  createdAt: dayjs().subtract(5, 'year').toISOString(),
                   attachments: [],
                   capacity: '1500',
                   image: null,
@@ -74,7 +75,7 @@ const MOCKS = [
                   name: 'Venue with a name longer than 25 characters that should be truncated',
                   description:
                     'Venue description that should be truncated because it is longer than 75 characters',
-                  createdAt: '2021-01-01T00:00:00Z',
+                  createdAt: dayjs().subtract(5, 'year').toISOString(),
                   attachments: [],
                   capacity: '2000',
                   image: null,
@@ -440,7 +441,7 @@ describe('Organisation Venues Error Handling', () => {
                         description: 'Test Description',
                         capacity: '100',
                         image: null,
-                        createdAt: '2021-01-01T00:00:00Z',
+                        createdAt: dayjs().subtract(5, 'year').toISOString(),
                         attachments: [],
                       },
                     },

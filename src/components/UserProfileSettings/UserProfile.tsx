@@ -21,7 +21,7 @@
  * <UserProfile
  *   firstName="John"
  *   lastName="Doe"
- *   createdAt="2023-01-01"
+ *   createdAt=dayjs().subtract(1, 'year').format('YYYY-MM-DD')
  *   email="john.doe@example.com"
  *   image="https://example.com/profile.jpg"
  * />
@@ -86,7 +86,7 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
             </div>
             <div className={styles.profileDetails}>
               <span
-                style={{ fontWeight: '700', fontSize: '28px' }}
+                className={styles.userProfileName}
                 data-tooltip-id="name"
                 data-tooltip-content={`${firstName} ${lastName}`}
               >

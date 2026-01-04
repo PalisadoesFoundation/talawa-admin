@@ -1791,6 +1791,25 @@ form label,
   border: 1px solid var(--createButton-border-active) !important;
 }
 
+.cardItemAuthor {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.userProfileName {
+  font-weight: 700;
+  font-size: 28px;
+}
+
+.volunteersLabel {
+  font-size: 0.8rem;
+  color: var(--search-button-border);
+}
+
+.testRedBackground {
+  background-color: red;
+}
+
 /* Add more Global CSS Classes above this */
 
 /* ----------------------------------------------------- */
@@ -10630,4 +10649,35 @@ form {
 
 .statusIconDisabled {
   color: var(--status-disabled-color) !important;
+/* -- CheckInModal.tsx styles -- */
+
+.checkInModalHeader {
+  background-color: var(--tableHeader-bg);
+}
+
+.checkInDataGridContainer {
+  height: 500px;
+  width: 100%;
+}
+
+/* -- OrgActionItemCategories.tsx dataGrid styles -- */
+
+.actionItemCategoriesDataGrid
+  :global(.MuiDataGrid-root .MuiDataGrid-cell:focus-within) {
+  outline: none !important;
+}
+
+.actionItemCategoriesDataGrid
+  :global(.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within) {
+  outline: none;
+}
+
+.actionItemCategoriesDataGrid :global(.MuiDataGrid-row:hover),
+.actionItemCategoriesDataGrid :global(.MuiDataGrid-row.Mui-hovered) {
+  background-color: transparent;
+}
+
+.actionItemCategoriesDataGrid :global(.MuiDataGrid-root),
+.actionItemCategoriesDataGrid :global(.MuiDataGrid-main) {
+  border-radius: 0.5rem;
 }

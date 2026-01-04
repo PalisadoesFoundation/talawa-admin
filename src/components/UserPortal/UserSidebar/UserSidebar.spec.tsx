@@ -8,6 +8,10 @@ import UserSidebar from './UserSidebar';
 import type { InterfaceUserSidebarProps } from './UserSidebar';
 import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
 import { StaticMockLink } from 'utils/StaticMockLink';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 // Mock the dependencies
 let mockT: ReturnType<typeof vi.fn>;
@@ -152,7 +156,7 @@ describe('UserSidebar', () => {
   const buildCommunityData = () => ({
     community: {
       __typename: 'Community',
-      createdAt: '2024-01-01T00:00:00.000Z',
+      createdAt: dayjs.utc().toISOString(),
       facebookURL: null,
       githubURL: null,
       id: 'community-id',
@@ -164,7 +168,7 @@ describe('UserSidebar', () => {
       name: 'Talawa',
       redditURL: null,
       slackURL: null,
-      updatedAt: '2024-01-01T00:00:00.000Z',
+      updatedAt: dayjs.utc().toISOString(),
       websiteURL: null,
       xURL: null,
       youtubeURL: null,

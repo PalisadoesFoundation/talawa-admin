@@ -427,7 +427,8 @@
     "sortTags": "Trier les étiquettes",
     "Latest": "Le Plus Récent",
     "Oldest": "Le Plus Ancien",
-    "viewSubTags": "Voir {{count}} sous-étiquettes"
+    "viewSubTags": "Voir {{count}} sous-étiquettes",
+    "tags": "Étiquettes"
   },
   "manageTag": {
     "title": "Détails de l'étiquette",
@@ -2062,9 +2063,6 @@
   "contact": {
     "card_aria": "Carte de contact"
   },
-  "donation": {
-    "card_aria": "Carte de don"
-  },
   "securedRoute": {
     "sessionExpired": "Veuillez vous reconnecter car la session a expiré"
   },
@@ -2081,7 +2079,14 @@
     "logoutFailed": "Échec de la déconnexion",
     "title": "Portail Utilisateur",
     "talawa": "Talawa",
-    "talawaBranding": "Image de marque Talawa"
+    "talawaBranding": "Image de marque Talawa",
+    "view": "Voir"
+  },
+  "donation": {
+    "amount_label": "Montant",
+    "card_aria": "Carte de don",
+    "card_test_id": "donation-card-{{id}}",
+    "date_label": "Date"
   },
   "organizationVenuesNotification": {
     "venueCreated": "Lieu créé avec succès",

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid } from 'shared-components/DataGridWrapper';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type {
   ReportingTableProps,

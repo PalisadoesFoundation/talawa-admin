@@ -1,4 +1,8 @@
 import React from 'react';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import { render, screen } from '@testing-library/react';
 import type { NormalizedCacheObject } from '@apollo/client';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
@@ -18,7 +22,7 @@ describe('Testing the Organization Contributions Cards', () => {
     key: '123',
     id: '123',
     userName: 'John Doe',
-    contriDate: '06/03/2022',
+    contriDate: dayjs.utc().format('DD/MM/YYYY'),
     contriAmount: '500',
     contriTransactionId: 'QW56DA88',
     userEmail: 'johndoe@gmail.com',
@@ -42,7 +46,9 @@ describe('Testing the Organization Contributions Cards', () => {
     );
     expect(screen.getByText('Date:')).toBeInTheDocument();
     expect(screen.getByText('John Doe')).toBeInTheDocument();
-    expect(screen.getByText('06/03/2022')).toBeInTheDocument();
+    expect(
+      screen.getByText(dayjs.utc().format('DD/MM/YYYY')),
+    ).toBeInTheDocument();
     expect(screen.getByText('500')).toBeInTheDocument();
     expect(screen.getByText('QW56DA88')).toBeInTheDocument();
     expect(screen.getByText('johndoe@gmail.com')).toBeInTheDocument();

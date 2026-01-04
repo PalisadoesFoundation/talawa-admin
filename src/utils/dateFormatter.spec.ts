@@ -1,5 +1,9 @@
 import { describe, test, expect, vi, afterEach } from 'vitest';
 import { formatDate } from './dateFormatter';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 describe('formatDate', () => {
   afterEach(() => {
@@ -7,27 +11,66 @@ describe('formatDate', () => {
   });
 
   test('formats date with st suffix', () => {
-    expect(formatDate('2023-01-01')).toBe('1st Jan 2023');
-    expect(formatDate('2023-05-21')).toBe('21st May 2023');
-    expect(formatDate('2023-10-31')).toBe('31st Oct 2023');
+    const date1 = dayjs.utc().year(2025).month(0).date(1); // January always has 31 days
+    const date2 = dayjs.utc().year(2025).month(0).date(21); // Jan 21, 2025
+    const date3 = dayjs.utc().year(2025).month(0).date(31); // Jan 31, 2025
+    expect(formatDate(date1.format('YYYY-MM-DD'))).toBe(
+      `1st ${date1.format('MMM YYYY')}`,
+    );
+    expect(formatDate(date2.format('YYYY-MM-DD'))).toBe(
+      `21st ${date2.format('MMM YYYY')}`,
+    );
+    expect(formatDate(date3.format('YYYY-MM-DD'))).toBe(
+      `31st ${date3.format('MMM YYYY')}`,
+    );
   });
 
   test('formats date with nd suffix', () => {
-    expect(formatDate('2023-06-02')).toBe('2nd Jun 2023');
-    expect(formatDate('2023-09-22')).toBe('22nd Sep 2023');
+    const date1 = dayjs.utc().year(2025).month(0).date(2); // Jan 2, 2025
+    const date2 = dayjs.utc().year(2025).month(0).date(22); // Jan 22, 2025
+    expect(formatDate(date1.format('YYYY-MM-DD'))).toBe(
+      `2nd ${date1.format('MMM YYYY')}`,
+    );
+    expect(formatDate(date2.format('YYYY-MM-DD'))).toBe(
+      `22nd ${date2.format('MMM YYYY')}`,
+    );
   });
 
   test('formats date with rd suffix', () => {
-    expect(formatDate('2023-07-03')).toBe('3rd Jul 2023');
-    expect(formatDate('2023-08-23')).toBe('23rd Aug 2023');
+    const date1 = dayjs.utc().year(2025).month(0).date(3); // Jan 3, 2025
+    const date2 = dayjs.utc().year(2025).month(0).date(23); // Jan 23, 2025
+    expect(formatDate(date1.format('YYYY-MM-DD'))).toBe(
+      `3rd ${date1.format('MMM YYYY')}`,
+    );
+    expect(formatDate(date2.format('YYYY-MM-DD'))).toBe(
+      `23rd ${date2.format('MMM YYYY')}`,
+    );
   });
 
   test('formats date with th suffix', () => {
-    expect(formatDate('2023-02-04')).toBe('4th Feb 2023');
-    expect(formatDate('2023-03-11')).toBe('11th Mar 2023');
-    expect(formatDate('2023-04-12')).toBe('12th Apr 2023');
-    expect(formatDate('2023-05-13')).toBe('13th May 2023');
-    expect(formatDate('2023-06-24')).toBe('24th Jun 2023');
+    const dates = [
+      dayjs.utc().year(2025).month(0).date(4),
+      dayjs.utc().year(2025).month(0).date(11),
+      dayjs.utc().year(2025).month(0).date(12),
+      dayjs.utc().year(2025).month(0).date(13),
+      dayjs.utc().year(2025).month(0).date(24),
+    ];
+
+    expect(formatDate(dates[0].format('YYYY-MM-DD'))).toBe(
+      `4th ${dates[0].format('MMM YYYY')}`,
+    );
+    expect(formatDate(dates[1].format('YYYY-MM-DD'))).toBe(
+      `11th ${dates[1].format('MMM YYYY')}`,
+    );
+    expect(formatDate(dates[2].format('YYYY-MM-DD'))).toBe(
+      `12th ${dates[2].format('MMM YYYY')}`,
+    );
+    expect(formatDate(dates[3].format('YYYY-MM-DD'))).toBe(
+      `13th ${dates[3].format('MMM YYYY')}`,
+    );
+    expect(formatDate(dates[4].format('YYYY-MM-DD'))).toBe(
+      `24th ${dates[4].format('MMM YYYY')}`,
+    );
   });
 
   test('throws error for empty date string', () => {

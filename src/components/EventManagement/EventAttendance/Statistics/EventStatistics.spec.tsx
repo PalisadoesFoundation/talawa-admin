@@ -8,6 +8,10 @@ import { exportToCSV } from 'utils/chartToPdf';
 import { vi, describe, expect, it, beforeEach } from 'vitest';
 import type { Mock } from 'vitest';
 import type { IMember } from 'types/Event/interface';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 // Store the last Line chart options for tooltip callback testing
 let lastLineChartOptions: Record<string, unknown> | null = null;
@@ -94,10 +98,22 @@ const mocks = [
           allDay: false,
           isPublic: true,
           isRegisterable: true,
-          startAt: '2023-01-01T09:00:00Z',
-          endAt: '2023-01-02T17:00:00Z',
-          createdAt: '2023-01-01T00:00:00Z',
-          updatedAt: '2023-01-01T00:00:00Z',
+          startAt: dayjs
+            .utc()
+            .add(10, 'days')
+            .hour(9)
+            .minute(0)
+            .second(0)
+            .toISOString(),
+          endAt: dayjs
+            .utc()
+            .add(11, 'days')
+            .hour(17)
+            .minute(0)
+            .second(0)
+            .toISOString(),
+          createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+          updatedAt: dayjs.utc().subtract(1, 'month').toISOString(),
           isRecurringEventTemplate: false,
           baseEvent: {
             id: 'base123',
@@ -129,18 +145,48 @@ const mocks = [
     result: {
       data: {
         getRecurringEvents: [
-          createMockEvent('event123', '2023-01-01T09:00:00Z', [
-            { id: 'user1', natalSex: 'male' },
-            { id: 'user2', natalSex: 'female' },
-          ]),
-          createMockEvent('event456', '2023-01-08T09:00:00Z', [
-            { id: 'user1', natalSex: 'male' },
-            { id: 'user3', natalSex: 'other' },
-          ]),
-          createMockEvent('event789', '2023-01-15T09:00:00Z', [
-            { id: 'user2', natalSex: 'female' },
-            { id: 'user3', natalSex: 'intersex' },
-          ]),
+          createMockEvent(
+            'event123',
+            dayjs
+              .utc()
+              .add(10, 'days')
+              .hour(9)
+              .minute(0)
+              .second(0)
+              .toISOString(),
+            [
+              { id: 'user1', natalSex: 'male' },
+              { id: 'user2', natalSex: 'female' },
+            ],
+          ),
+          createMockEvent(
+            'event456',
+            dayjs
+              .utc()
+              .add(17, 'days')
+              .hour(9)
+              .minute(0)
+              .second(0)
+              .toISOString(),
+            [
+              { id: 'user1', natalSex: 'male' },
+              { id: 'user3', natalSex: 'other' },
+            ],
+          ),
+          createMockEvent(
+            'event789',
+            dayjs
+              .utc()
+              .add(24, 'days')
+              .hour(9)
+              .minute(0)
+              .second(0)
+              .toISOString(),
+            [
+              { id: 'user2', natalSex: 'female' },
+              { id: 'user3', natalSex: 'intersex' },
+            ],
+          ),
         ],
       },
     },
@@ -164,15 +210,30 @@ const recurringTemplateMocks = [
           allDay: false,
           isPublic: true,
           isRegisterable: true,
-          startAt: '2023-01-01T09:00:00Z',
-          endAt: '2023-01-02T17:00:00Z',
-          createdAt: '2023-01-01T00:00:00Z',
-          updatedAt: '2023-01-01T00:00:00Z',
+          startAt: dayjs
+            .utc()
+            .add(10, 'days')
+            .hour(9)
+            .minute(0)
+            .second(0)
+            .toISOString(),
+          endAt: dayjs
+            .utc()
+            .add(11, 'days')
+            .hour(17)
+            .minute(0)
+            .second(0)
+            .toISOString(),
+          createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+          updatedAt: dayjs.utc().subtract(1, 'month').toISOString(),
           isRecurringEventTemplate: true,
           baseEvent: null,
           recurrenceRule: {
             recurrenceRuleString: 'FREQ=WEEKLY',
-            recurrenceStartDate: '2023-01-01',
+            recurrenceStartDate: dayjs
+              .utc()
+              .add(10, 'days')
+              .format('YYYY-MM-DD'),
             recurrenceEndDate: null,
           },
           creator: {
@@ -201,12 +262,28 @@ const recurringTemplateMocks = [
     result: {
       data: {
         getRecurringEvents: [
-          createMockEvent('event1', '2023-01-01T09:00:00Z', [
-            { id: 'user1', natalSex: 'male' },
-          ]),
-          createMockEvent('event2', '2023-01-08T09:00:00Z', [
-            { id: 'user2', natalSex: 'female' },
-          ]),
+          createMockEvent(
+            'event1',
+            dayjs
+              .utc()
+              .add(10, 'days')
+              .hour(9)
+              .minute(0)
+              .second(0)
+              .toISOString(),
+            [{ id: 'user1', natalSex: 'male' }],
+          ),
+          createMockEvent(
+            'event2',
+            dayjs
+              .utc()
+              .add(17, 'days')
+              .hour(9)
+              .minute(0)
+              .second(0)
+              .toISOString(),
+            [{ id: 'user2', natalSex: 'female' }],
+          ),
         ],
       },
     },
@@ -230,10 +307,22 @@ const manyEventsMocks = [
           allDay: false,
           isPublic: true,
           isRegisterable: true,
-          startAt: '2023-01-01T09:00:00Z',
-          endAt: '2023-01-02T17:00:00Z',
-          createdAt: '2023-01-01T00:00:00Z',
-          updatedAt: '2023-01-01T00:00:00Z',
+          startAt: dayjs
+            .utc()
+            .add(10, 'days')
+            .hour(9)
+            .minute(0)
+            .second(0)
+            .toISOString(),
+          endAt: dayjs
+            .utc()
+            .add(11, 'days')
+            .hour(17)
+            .minute(0)
+            .second(0)
+            .toISOString(),
+          createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+          updatedAt: dayjs.utc().subtract(1, 'month').toISOString(),
           isRecurringEventTemplate: false,
           baseEvent: { id: 'base123' },
           recurrenceRule: null,
@@ -262,7 +351,13 @@ const manyEventsMocks = [
         getRecurringEvents: Array.from({ length: 15 }, (_, i) =>
           createMockEvent(
             `event${i}`,
-            `2023-01-${String(i + 1).padStart(2, '0')}T09:00:00Z`,
+            dayjs
+              .utc()
+              .add(10 + i, 'days')
+              .hour(9)
+              .minute(0)
+              .second(0)
+              .toISOString(),
             [
               {
                 id: `user${i}`,
@@ -283,8 +378,8 @@ const mockMemberData = [
     name: 'John Doe',
     emailAddress: 'john@example.com' as `${string}@${string}.${string}`,
     natalSex: 'male',
-    birthDate: new Date('1990-01-01'),
-    createdAt: '2023-01-01',
+    birthDate: dayjs.utc().subtract(35, 'years').toDate(),
+    createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
     role: 'MEMBER',
     tagsAssignedWith: { edges: [] },
   },
@@ -293,8 +388,8 @@ const mockMemberData = [
     name: 'Jane Smith',
     emailAddress: 'jane@example.com' as `${string}@${string}.${string}`,
     natalSex: 'female',
-    birthDate: new Date('1985-05-05'),
-    createdAt: '2023-01-01',
+    birthDate: dayjs.utc().subtract(40, 'years').toDate(),
+    createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
     role: 'MEMBER',
     tagsAssignedWith: { edges: [] },
   },
@@ -303,8 +398,8 @@ const mockMemberData = [
     name: 'Alex Johnson',
     emailAddress: 'alex@example.com' as `${string}@${string}.${string}`,
     natalSex: 'intersex',
-    birthDate: new Date('2010-03-15'),
-    createdAt: '2023-01-01',
+    birthDate: dayjs.utc().subtract(15, 'years').toDate(),
+    createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
     role: 'MEMBER',
     tagsAssignedWith: { edges: [] },
   },
@@ -313,8 +408,8 @@ const mockMemberData = [
     name: 'Sam Wilson',
     emailAddress: 'sam@example.com' as `${string}@${string}.${string}`,
     natalSex: 'other',
-    birthDate: new Date('1975-08-20'),
-    createdAt: '2023-01-01',
+    birthDate: dayjs.utc().subtract(50, 'years').toDate(),
+    createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
     role: 'MEMBER',
     tagsAssignedWith: { edges: [] },
   },
@@ -323,8 +418,8 @@ const mockMemberData = [
     name: 'Chris Brown',
     emailAddress: 'chris@example.com' as `${string}@${string}.${string}`,
     natalSex: 'male',
-    birthDate: new Date('2000-12-25'),
-    createdAt: '2023-01-01',
+    birthDate: dayjs.utc().subtract(36, 'years').toDate(),
+    createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
     role: 'MEMBER',
     tagsAssignedWith: { edges: [] },
   },
@@ -641,10 +736,22 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
               allDay: false,
               isPublic: true,
               isRegisterable: true,
-              startAt: '2023-01-01T09:00:00Z',
-              endAt: '2023-01-02T17:00:00Z',
-              createdAt: '2023-01-01T00:00:00Z',
-              updatedAt: '2023-01-01T00:00:00Z',
+              startAt: dayjs
+                .utc()
+                .add(10, 'days')
+                .hour(9)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              endAt: dayjs
+                .utc()
+                .add(11, 'days')
+                .hour(17)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+              updatedAt: dayjs.utc().subtract(1, 'month').toISOString(),
               isRecurringEventTemplate: false,
               baseEvent: null,
               recurrenceRule: null,
@@ -805,10 +912,22 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
               allDay: false,
               isPublic: true,
               isRegisterable: true,
-              startAt: '2023-01-01T09:00:00Z',
-              endAt: '2023-01-02T17:00:00Z',
-              createdAt: '2023-01-01T00:00:00Z',
-              updatedAt: '2023-01-01T00:00:00Z',
+              startAt: dayjs
+                .utc()
+                .add(10, 'days')
+                .hour(9)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              endAt: dayjs
+                .utc()
+                .add(11, 'days')
+                .hour(17)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+              updatedAt: dayjs.utc().subtract(1, 'month').toISOString(),
               isRecurringEventTemplate: false,
               baseEvent: { id: 'base123' },
               recurrenceRule: null,
@@ -835,10 +954,20 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
         result: {
           data: {
             getRecurringEvents: [
-              createMockEvent('event123', '2023-01-01T09:00:00Z', [
-                { id: 'user1', natalSex: null },
-                { id: 'user2', natalSex: 'female' },
-              ]),
+              createMockEvent(
+                'event123',
+                dayjs
+                  .utc()
+                  .add(10, 'days')
+                  .hour(9)
+                  .minute(0)
+                  .second(0)
+                  .toISOString(),
+                [
+                  { id: 'user1', natalSex: null },
+                  { id: 'user2', natalSex: 'female' },
+                ],
+              ),
             ],
           },
         },
@@ -905,10 +1034,22 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
               allDay: false,
               isPublic: true,
               isRegisterable: true,
-              startAt: '2023-01-01T09:00:00Z',
-              endAt: '2023-01-02T17:00:00Z',
-              createdAt: '2023-01-01T00:00:00Z',
-              updatedAt: '2023-01-01T00:00:00Z',
+              startAt: dayjs
+                .utc()
+                .add(10, 'days')
+                .hour(9)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              endAt: dayjs
+                .utc()
+                .add(11, 'days')
+                .hour(17)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
+              updatedAt: dayjs.utc().subtract(1, 'month').toISOString(),
               isRecurringEventTemplate: false,
               baseEvent: { id: 'base123' },
               recurrenceRule: null,
@@ -942,7 +1083,13 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
               },
               {
                 id: 'event2',
-                startAt: '2023-02-01T09:00:00Z',
+                startAt: dayjs
+                  .utc()
+                  .add(11, 'days')
+                  .hour(9)
+                  .minute(0)
+                  .second(0)
+                  .toISOString(),
                 attendees: [{ id: 'user2', natalSex: 'female' }],
               },
             ],
@@ -1003,10 +1150,14 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
               allDay: false,
               isPublic: true,
               isRegisterable: true,
-              startAt: '2023-01-01T09:00:00Z',
-              endAt: '2023-01-02T17:00:00Z',
-              createdAt: '2023-01-01T00:00:00Z',
-              updatedAt: '2023-01-01T00:00:00Z',
+              startAt: dayjs().subtract(1, 'year').hour(9).toISOString(),
+              endAt: dayjs()
+                .subtract(1, 'year')
+                .add(1, 'day')
+                .hour(17)
+                .toISOString(),
+              createdAt: dayjs().subtract(1, 'year').toISOString(),
+              updatedAt: dayjs().subtract(1, 'year').toISOString(),
               isRecurringEventTemplate: false,
               baseEvent: { id: 'base123' },
               recurrenceRule: null,
@@ -1035,7 +1186,13 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
             getRecurringEvents: [
               {
                 id: 'event1',
-                startAt: '2023-01-01T09:00:00Z',
+                startAt: dayjs
+                  .utc()
+                  .add(10, 'days')
+                  .hour(9)
+                  .minute(0)
+                  .second(0)
+                  .toISOString(),
                 attendees: [{ id: 'user1', natalSex: 'male' }],
               },
             ],
@@ -1104,7 +1261,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
         id: 'member1',
         natalSex: 'male',
         birthDate: birthDateBeforeToday,
-        createdAt: '2023-01-01T00:00:00.000Z',
+        createdAt: dayjs().subtract(1, 'year').toISOString(),
         name: 'Member 1',
         emailAddress: 'member1@test.com',
         role: 'member',
@@ -1114,7 +1271,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
         id: 'member2',
         natalSex: 'female',
         birthDate: birthDateAfterToday,
-        createdAt: '2023-01-01T00:00:00.000Z',
+        createdAt: dayjs().subtract(1, 'year').toISOString(),
         name: 'Member 2',
         emailAddress: 'member2@test.com',
         role: 'member',
@@ -1182,7 +1339,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
         id: 'member1',
         natalSex: 'male',
         birthDate: birthDateSameMonthFuture,
-        createdAt: '2023-01-01T00:00:00.000Z',
+        createdAt: dayjs().subtract(1, 'year').toISOString(),
         name: 'Member Future',
         emailAddress: 'future@test.com',
         role: 'member',
@@ -1192,7 +1349,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
         id: 'member2',
         natalSex: 'female',
         birthDate: birthDateSameMonthPast,
-        createdAt: '2023-01-01T00:00:00.000Z',
+        createdAt: dayjs().subtract(1, 'year').toISOString(),
         name: 'Member Past',
         emailAddress: 'past@test.com',
         role: 'member',
@@ -1236,7 +1393,12 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
     const manyRecurringEvents = Array.from({ length: 15 }, (_, i) => ({
       id: `event${i + 1}`,
       name: `Event ${i + 1}`,
-      startAt: new Date(2024, 0, i + 1).toISOString(),
+      startAt: dayjs
+        .utc()
+        .year(2024)
+        .month(0)
+        .date(i + 1)
+        .toISOString(),
       attendees: [
         {
           id: `attendee${i}`,
@@ -1262,10 +1424,38 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
               allDay: false,
               isPublic: true,
               isRegisterable: true,
-              startAt: '2024-01-01T09:00:00Z',
-              endAt: '2024-01-01T17:00:00Z',
-              createdAt: '2024-01-01T00:00:00Z',
-              updatedAt: '2024-01-01T00:00:00Z',
+              startAt: dayjs
+                .utc()
+                .year(2024)
+                .month(0)
+                .date(1)
+                .hour(9)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              endAt: dayjs
+                .utc()
+                .year(2024)
+                .month(0)
+                .date(1)
+                .hour(17)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              createdAt: dayjs
+                .utc()
+                .year(2024)
+                .month(0)
+                .date(1)
+                .startOf('day')
+                .toISOString(),
+              updatedAt: dayjs
+                .utc()
+                .year(2024)
+                .month(0)
+                .date(1)
+                .startOf('day')
+                .toISOString(),
               isRecurringEventTemplate: false,
               baseEvent: {
                 id: 'base1',
@@ -1376,7 +1566,15 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
               {
                 id: 'event1',
                 name: 'Template Event',
-                startAt: '2024-01-01T09:00:00Z',
+                startAt: dayjs
+                  .utc()
+                  .year(2024)
+                  .month(0)
+                  .date(1)
+                  .hour(9)
+                  .minute(0)
+                  .second(0)
+                  .toISOString(),
                 attendees: [],
               },
             ],
@@ -1546,7 +1744,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
         id: 'member1',
         natalSex: '',
         birthDate: new Date('1990-01-01'),
-        createdAt: '2023-01-01T00:00:00.000Z',
+        createdAt: dayjs().subtract(1, 'year').toISOString(),
         name: 'Empty Sex Member',
         emailAddress: 'empty@test.com',
         role: 'member',
@@ -1556,7 +1754,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
         id: 'member2',
         natalSex: 'male',
         birthDate: new Date('1995-06-15'),
-        createdAt: '2023-01-01T00:00:00.000Z',
+        createdAt: dayjs().subtract(1, 'year').toISOString(),
         name: 'Male Member',
         emailAddress: 'male@test.com',
         role: 'member',
@@ -1585,38 +1783,19 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
   });
 
   it('calculates age demographics for members at exact age boundaries', async () => {
-    const today = new Date();
     // Member exactly 18 years old (should be in 18-40 category)
-    const exactly18 = new Date(
-      today.getFullYear() - 18,
-      today.getMonth(),
-      today.getDate(),
-    );
+    const exactly18 = dayjs.utc().subtract(18, 'years').toDate();
     // Member exactly 40 years old (should be in 18-40 category)
-    const exactly40 = new Date(
-      today.getFullYear() - 40,
-      today.getMonth(),
-      today.getDate(),
-    );
-    // Member 41 years old (should be in over 40 category)
-    const age41 = new Date(
-      today.getFullYear() - 41,
-      today.getMonth(),
-      today.getDate(),
-    );
-    // Member 17 years old (should be in under 18 category)
-    const age17 = new Date(
-      today.getFullYear() - 17,
-      today.getMonth(),
-      today.getDate(),
-    );
+    const exactly40 = dayjs.utc().subtract(40, 'years').toDate();
+    const age41 = dayjs.utc().subtract(41, 'years').toDate();
+    const age17 = dayjs.utc().subtract(17, 'years').toDate();
 
     const boundaryMembers: IMember[] = [
       {
         id: 'exactly18',
         natalSex: 'male',
         birthDate: exactly18,
-        createdAt: '2023-01-01T00:00:00.000Z',
+        createdAt: dayjs().subtract(1, 'year').toISOString(),
         name: 'Exactly 18',
         emailAddress: 'e18@test.com',
         role: 'member',
@@ -1626,7 +1805,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
         id: 'exactly40',
         natalSex: 'female',
         birthDate: exactly40,
-        createdAt: '2023-01-01T00:00:00.000Z',
+        createdAt: dayjs().subtract(1, 'year').toISOString(),
         name: 'Exactly 40',
         emailAddress: 'e40@test.com',
         role: 'member',
@@ -1636,7 +1815,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
         id: 'age41',
         natalSex: 'male',
         birthDate: age41,
-        createdAt: '2023-01-01T00:00:00.000Z',
+        createdAt: dayjs().subtract(1, 'year').toISOString(),
         name: 'Age 41',
         emailAddress: 'a41@test.com',
         role: 'member',
@@ -1646,7 +1825,7 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
         id: 'age17',
         natalSex: 'female',
         birthDate: age17,
-        createdAt: '2023-01-01T00:00:00.000Z',
+        createdAt: dayjs().subtract(1, 'year').toISOString(),
         name: 'Age 17',
         emailAddress: 'a17@test.com',
         role: 'member',
@@ -1715,10 +1894,23 @@ describe('AttendanceStatisticsModal - Comprehensive Coverage', () => {
               allDay: false,
               isPublic: true,
               isRegisterable: true,
-              startAt: '2023-01-01T09:00:00Z',
-              endAt: '2023-01-02T17:00:00Z',
-              createdAt: '2023-01-01T00:00:00Z',
-              updatedAt: '2023-01-01T00:00:00Z',
+              startAt: dayjs
+                .utc()
+                .subtract(1, 'year')
+                .hour(9)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              endAt: dayjs
+                .utc()
+                .subtract(1, 'year')
+                .add(1, 'day')
+                .hour(17)
+                .minute(0)
+                .second(0)
+                .toISOString(),
+              createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
+              updatedAt: dayjs.utc().subtract(1, 'year').toISOString(),
               isRecurringEventTemplate: false,
               baseEvent: null, // No baseEvent
               recurrenceRule: null,

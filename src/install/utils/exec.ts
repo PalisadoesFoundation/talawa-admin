@@ -35,7 +35,7 @@ export async function execCommand(
   }
 
   if (sudo && process.platform !== 'win32') {
-    fullCommand = `sudo ${fullCommand}`;
+    fullCommand = `sudo ${fullCommand}`; // i18n-ignore-line
   } else if (sudo && process.platform === 'win32') {
     console.warn(
       'Warning: sudo is not supported on Windows. Command will run without elevation.',
