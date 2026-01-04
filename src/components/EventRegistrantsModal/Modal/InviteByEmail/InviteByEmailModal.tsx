@@ -3,12 +3,13 @@
  * Allows entering multiple recipient emails/names and an optional message, then sends invites.
  */
 import React, { useState } from 'react';
-import { Modal, Button, Form, Spinner } from 'react-bootstrap';
+import { Modal, Button, Form } from 'react-bootstrap';
 import TextField from '@mui/material/TextField';
 import { useMutation } from '@apollo/client';
 import { SEND_EVENT_INVITATIONS } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import type { ApolloError } from '@apollo/client/errors';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import styles from './InviteByEmail.module.css';
 
@@ -218,28 +219,16 @@ const InviteByEmailModal: React.FC<Props> = ({
         >
           {tCommon('close', { defaultValue: 'Close' })}
         </Button>
-        <Button
-          variant="primary"
-          onClick={onSubmit}
-          disabled={isSubmitting}
-          data-testid="send-invites"
-        >
-          {isSubmitting ? (
-            <>
-              <Spinner
-                as="span"
-                animation="border"
-                size="sm"
-                role="status"
-                aria-hidden="true"
-                className="me-2"
-              />
-              {t('sending', { defaultValue: 'Sending...' })}
-            </>
-          ) : (
-            t('sendInvites', { defaultValue: 'Send Invites' })
-          )}
-        </Button>
+        <LoadingState isLoading={isSubmitting} variant="inline">
+          <Button
+            variant="primary"
+            onClick={onSubmit}
+            disabled={isSubmitting}
+            data-testid="send-invites"
+          >
+            {t('sendInvites', { defaultValue: 'Send Invites' })}
+          </Button>
+        </LoadingState>
       </Modal.Footer>
     </Modal>
   );

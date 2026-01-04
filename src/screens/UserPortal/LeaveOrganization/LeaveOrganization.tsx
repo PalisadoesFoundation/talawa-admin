@@ -47,10 +47,11 @@ import {
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
+import { Button, Modal, Form, Alert } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router';
 import { getItem } from 'utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 
 const userEmail = (() => {
   try {
@@ -154,10 +155,9 @@ const LeaveOrganization = (): JSX.Element => {
 
   if (orgLoading) {
     return (
-      <div className="text-center mt-4" role="status">
-        <Spinner animation="border" />
-        <p>Loading organization details...</p>
-      </div>
+      <LoadingState isLoading={true} variant="spinner">
+        <div />
+      </LoadingState>
     );
   }
   if (orgError)
@@ -255,21 +255,16 @@ const LeaveOrganization = (): JSX.Element => {
               >
                 Back
               </Button>
-              <Button
-                variant="danger"
-                disabled={loading}
-                onClick={handleVerifyAndLeave}
-                aria-label="confirm-leave-button"
-              >
-                {loading ? (
-                  <>
-                    <Spinner animation="border" size="sm" role="status" />
-                    {' Loading...'}
-                  </>
-                ) : (
-                  'Confirm'
-                )}
-              </Button>
+              <LoadingState isLoading={loading} variant="inline">
+                <Button
+                  variant="danger"
+                  disabled={loading}
+                  onClick={handleVerifyAndLeave}
+                  aria-label="confirm-leave-button"
+                >
+                  Confirm
+                </Button>
+              </LoadingState>
             </>
           )}
         </Modal.Footer>
