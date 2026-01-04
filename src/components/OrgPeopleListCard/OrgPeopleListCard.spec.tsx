@@ -9,13 +9,14 @@ import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
-// Mock react-toastify
-vi.mock('react-toastify', () => ({
-  toast: {
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
   },
 }));
 
@@ -120,7 +121,7 @@ describe('Testing Organization People List Card', () => {
 
     // Verify that success toast and toggleRemoveModal were not called
     await waitFor(() => {
-      expect(toast.success).not.toHaveBeenCalled();
+      expect(NotificationToast.success).not.toHaveBeenCalled();
       expect(props.toggleRemoveModal).not.toHaveBeenCalled();
     });
   });
@@ -163,7 +164,7 @@ describe('Testing Organization People List Card', () => {
     // Wait for mutation and toast
     await waitFor(
       () => {
-        expect(toast.success).toHaveBeenCalled();
+        expect(NotificationToast.success).toHaveBeenCalled();
         expect(props.toggleRemoveModal).toHaveBeenCalled();
       },
       { timeout: 3000 },
@@ -190,7 +191,7 @@ describe('Testing Organization People List Card', () => {
     // Check error handling
     await waitFor(
       () => {
-        expect(toast.error).toHaveBeenCalled();
+        expect(NotificationToast.error).toHaveBeenCalled();
       },
       { timeout: 3000 },
     );

@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
 import { MockedProvider } from '@apollo/client/testing';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import userEvent from '@testing-library/user-event';
 import { vi, it } from 'vitest';
 import { client, wait } from 'components/Advertisements/AdvertisementsMocks';
@@ -34,11 +34,12 @@ vi.mock('react-router', async () => {
 
 global.URL.createObjectURL = vi.fn(() => 'mocked-url');
 
-vi.mock('react-toastify', () => ({
-  toast: {
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn(),
-    warn: vi.fn(),
     error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
   },
 }));
 
@@ -111,7 +112,7 @@ describe('Testing Advertisement Register Component', () => {
 
   test('Logs error to the console and shows error toast when advertisement creation fails', async () => {
     const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
     await act(async () => {
       render(
@@ -160,7 +161,7 @@ describe('Testing Advertisement Register Component', () => {
 
   test('Throws error at creation when the end date is less than the start date', async () => {
     const setTimeoutSpy = vi.spyOn(global, 'setTimeout');
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
     const { getByText, queryByText, getByLabelText } = render(
       <MockedProvider>
         <Provider store={store}>
@@ -288,7 +289,7 @@ describe('Testing Advertisement Register Component', () => {
   });
 
   test('Throws error when the end date is less than the start date while editing the advertisement', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
     const { getByText, getByLabelText, queryByText } = render(
       <MockedProvider mocks={[updateAdFailMock]}>
         <Provider store={store}>
@@ -468,7 +469,7 @@ describe('Testing Advertisement Register Component', () => {
         name: 'Ad1',
         type: 'banner',
         description: 'this is a banner',
-        attachments: undefined,
+        attachments: [],
       });
       expect(new Date(mockCall.variables.startAt)).toBeInstanceOf(Date);
       expect(new Date(mockCall.variables.endAt)).toBeInstanceOf(Date);
@@ -718,7 +719,7 @@ describe('Testing Advertisement Register Component', () => {
   });
 
   it('throw error while uploading attachment of more than 5 mb', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
     render(
       <ApolloProvider client={client}>
         <Provider store={store}>
@@ -818,7 +819,7 @@ describe('Testing Advertisement Register Component', () => {
   });
 
   it('Validates file types during upload', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
     render(
       <ApolloProvider client={client}>
@@ -852,7 +853,7 @@ describe('Testing Advertisement Register Component', () => {
   });
 
   it('Validates that name is required', async () => {
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
     render(
       <ApolloProvider client={client}>
@@ -1031,7 +1032,7 @@ describe('Testing Advertisement Register Component', () => {
     const createError = new Error('Creation failed due to server error');
     const createMock = vi.fn().mockRejectedValue(createError);
     mockUseMutation.mockReturnValue([createMock]);
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
     render(
       <ApolloProvider client={client}>
@@ -1070,7 +1071,7 @@ describe('Testing Advertisement Register Component', () => {
     const updateError = new Error('Update failed due to server error');
     const updateMock = vi.fn().mockRejectedValue(updateError);
     mockUseMutation.mockReturnValue([updateMock]);
-    const toastErrorSpy = vi.spyOn(toast, 'error');
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
 
     render(
       <ApolloProvider client={client}>
@@ -1168,7 +1169,7 @@ describe('Testing Advertisement Register Component', () => {
     });
   });
 
-  it('Updates advertisement name in edit mode', async () => {
+  it('Updates advertisement name and type in edit mode', async () => {
     const updateMock = vi.fn().mockResolvedValue({
       data: {
         updateAdvertisement: {
@@ -1206,6 +1207,10 @@ describe('Testing Advertisement Register Component', () => {
     fireEvent.change(nameField, { target: { value: 'Updated Name' } });
     expect(nameField).toHaveValue('Updated Name');
 
+    const typeField = screen.getByLabelText(translations.Rtype);
+    fireEvent.change(typeField, { target: { value: 'menu' } });
+    expect(typeField).toHaveValue('menu');
+
     fireEvent.click(screen.getByText(translations.saveChanges));
 
     await waitFor(() => {
@@ -1214,6 +1219,7 @@ describe('Testing Advertisement Register Component', () => {
           variables: expect.objectContaining({
             id: '1',
             name: 'Updated Name',
+            type: 'menu',
           }),
         }),
       );
@@ -1284,5 +1290,295 @@ describe('Testing Advertisement Register Component', () => {
 
     useParamsMock.mockRestore();
   });
+
+  it('Handles file upload with no files selected', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <router.BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister
+                formStatus="register"
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </router.BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    fireEvent.click(screen.getByText(translations.createAdvertisement));
+
+    const mediaInput = screen.getByTestId('advertisementMedia');
+    fireEvent.change(mediaInput, { target: { files: null } });
+
+    expect(screen.queryByTestId('mediaPreview')).not.toBeInTheDocument();
+  });
+
+  it('Handles createAdvertisement returning no data', async () => {
+    const createMock = vi.fn().mockResolvedValue({ data: null });
+    mockUseMutation.mockReturnValue([createMock]);
+    const setAfterActiveMock = vi.fn();
+    const setAfterCompletedMock = vi.fn();
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <router.BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister
+                formStatus="register"
+                setAfterActive={setAfterActiveMock}
+                setAfterCompleted={setAfterCompletedMock}
+              />
+            </I18nextProvider>
+          </router.BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    fireEvent.click(screen.getByText(translations.createAdvertisement));
+
+    fireEvent.change(screen.getByLabelText(translations.Rname), {
+      target: { value: 'Test Ad' },
+    });
+
+    fireEvent.click(screen.getByText(translations.register));
+
+    await waitFor(() => {
+      expect(createMock).toHaveBeenCalled();
+      expect(setAfterActiveMock).not.toHaveBeenCalled();
+      expect(setAfterCompletedMock).not.toHaveBeenCalled();
+    });
+  });
+
+  it('Successfully creates advertisement and resets form state', async () => {
+    const createMock = vi.fn().mockResolvedValue({
+      data: {
+        createAdvertisement: {
+          id: '123',
+        },
+      },
+    });
+    mockUseMutation.mockReturnValue([createMock]);
+
+    const setAfterActiveMock = vi.fn();
+    const setAfterCompletedMock = vi.fn();
+    const toastSuccessSpy = vi.spyOn(NotificationToast, 'success');
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <router.BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister
+                formStatus="register"
+                setAfterActive={setAfterActiveMock}
+                setAfterCompleted={setAfterCompletedMock}
+              />
+            </I18nextProvider>
+          </router.BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    fireEvent.click(screen.getByText(translations.createAdvertisement));
+
+    fireEvent.change(screen.getByLabelText(translations.Rname), {
+      target: { value: 'Test Ad' },
+    });
+
+    fireEvent.change(screen.getByLabelText(translations.Rtype), {
+      target: { value: 'banner' },
+    });
+
+    fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+      target: { value: dateConstants.create.startAtISO.split('T')[0] },
+    });
+
+    fireEvent.change(screen.getByLabelText(translations.RendDate), {
+      target: { value: dateConstants.create.endAtISO.split('T')[0] },
+    });
+
+    fireEvent.click(screen.getByText(translations.register));
+
+    await waitFor(() => {
+      expect(createMock).toHaveBeenCalled();
+
+      expect(toastSuccessSpy).toHaveBeenCalledWith(
+        translations.advertisementCreated,
+      );
+
+      expect(setAfterActiveMock).toHaveBeenCalledWith(null);
+      expect(setAfterCompletedMock).toHaveBeenCalledWith(null);
+
+      expect(screen.queryByText(translations.addNew)).not.toBeInTheDocument();
+    });
+  });
+
+  it('Does not show toast when create error is not an Error instance', async () => {
+    const createMock = vi.fn().mockRejectedValue('string error');
+    mockUseMutation.mockReturnValue([createMock]);
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <router.BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister
+                formStatus="register"
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </router.BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    fireEvent.click(screen.getByText(translations.createAdvertisement));
+
+    fireEvent.change(screen.getByLabelText(translations.Rname), {
+      target: { value: 'Test Ad' },
+    });
+
+    fireEvent.change(screen.getByLabelText(translations.RstartDate), {
+      target: { value: dateConstants.create.startAtISO.split('T')[0] },
+    });
+
+    fireEvent.change(screen.getByLabelText(translations.RendDate), {
+      target: { value: dateConstants.create.endAtISO.split('T')[0] },
+    });
+
+    fireEvent.click(screen.getByText(translations.register));
+
+    await waitFor(() => {
+      expect(createMock).toHaveBeenCalled();
+    });
+
+    expect(toastErrorSpy).not.toHaveBeenCalled();
+  });
+
+  it('Handles updateAdvertisement returning no data', async () => {
+    const updateMock = vi.fn().mockResolvedValue({ data: null });
+    mockUseMutation.mockReturnValue([updateMock]);
+    const setAfterActiveMock = vi.fn();
+    const setAfterCompletedMock = vi.fn();
+    const toastSuccessSpy = vi.spyOn(NotificationToast, 'success');
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <router.BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister
+                formStatus="edit"
+                startAtEdit={new Date()}
+                endAtEdit={new Date()}
+                typeEdit="banner"
+                nameEdit="Ad1"
+                idEdit="1"
+                setAfterActive={setAfterActiveMock}
+                setAfterCompleted={setAfterCompletedMock}
+              />
+            </I18nextProvider>
+          </router.BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    fireEvent.click(screen.getByTestId('editBtn'));
+
+    fireEvent.change(screen.getByLabelText(translations.Rname), {
+      target: { value: 'Updated Ad' },
+    });
+
+    fireEvent.click(screen.getByText(translations.saveChanges));
+
+    await waitFor(() => {
+      expect(updateMock).toHaveBeenCalled();
+      expect(toastSuccessSpy).not.toHaveBeenCalled();
+      expect(setAfterActiveMock).not.toHaveBeenCalled();
+    });
+  });
+
+  it('Handles update error that is not an Error instance', async () => {
+    const updateMock = vi.fn().mockRejectedValue('string error');
+    mockUseMutation.mockReturnValue([updateMock]);
+    const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
+
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <router.BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister
+                formStatus="edit"
+                startAtEdit={new Date()}
+                endAtEdit={new Date()}
+                typeEdit="banner"
+                nameEdit="Ad1"
+                idEdit="1"
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </router.BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    fireEvent.click(screen.getByTestId('editBtn'));
+
+    fireEvent.change(screen.getByLabelText(translations.Rname), {
+      target: { value: 'Updated Ad' },
+    });
+
+    fireEvent.click(screen.getByText(translations.saveChanges));
+
+    await waitFor(() => {
+      expect(updateMock).toHaveBeenCalled();
+      expect(toastErrorSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  it('Uses default type, name and description when typeEdit, nameEdit and descriptionEdit are empty string', async () => {
+    render(
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <router.BrowserRouter>
+            <I18nextProvider i18n={i18nForTest}>
+              <AdvertisementRegister
+                formStatus="edit"
+                idEdit="1"
+                nameEdit={undefined as unknown as string}
+                descriptionEdit={undefined as unknown as string}
+                typeEdit=""
+                startAtEdit={new Date()}
+                endAtEdit={new Date()}
+                setAfterActive={vi.fn()}
+                setAfterCompleted={vi.fn()}
+              />
+            </I18nextProvider>
+          </router.BrowserRouter>
+        </Provider>
+      </ApolloProvider>,
+    );
+
+    await wait();
+    fireEvent.click(screen.getByTestId('editBtn'));
+
+    expect(screen.getByLabelText(translations.Rtype)).toHaveValue('banner');
+    expect(screen.getByLabelText(translations.Rname)).toHaveValue('');
+    expect(screen.getByLabelText(translations.Rdesc)).toHaveValue('');
+  });
+
   vi.useRealTimers();
 });

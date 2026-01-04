@@ -39,22 +39,21 @@
  *   mode="create"
  * />
  */
-import { DatePicker } from '@mui/x-date-pickers';
-import dayjs, { type Dayjs } from 'dayjs';
 import type { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { currencyOptions, currencySymbols } from 'utils/currency';
 import type {
-  InterfaceCreatePledge,
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
+  InterfaceCreatePledge,
 } from 'utils/interfaces';
 import styles from '../../../style/app-fixed.module.css';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { errorHandler } from 'utils/errorHandler';
 import {
   Autocomplete,
   FormControl,
@@ -72,9 +71,38 @@ export interface InterfacePledgeModal {
   userId: string;
   pledge: InterfacePledgeInfo | null;
   refetchPledge: () => void;
-  endDate: Date;
   mode: 'create' | 'edit';
 }
+/**
+ * Compares two user options by ID.
+ * Used by MUI Autocomplete to determine equality.
+ *
+ * @param option - Option from the Autocomplete list
+ * @param value - Currently selected value
+ * @returns True if both options refer to the same user
+ *
+ * @example
+ * areOptionsEqual({ id: '1' } as InterfaceUserInfoPG, { id: '1' } as InterfaceUserInfoPG);
+ * // returns true
+ */
+export const areOptionsEqual = (
+  option: InterfaceUserInfoPG,
+  value: InterfaceUserInfoPG,
+): boolean => option.id === value.id;
+
+/**
+ * Builds a display label for a member.
+ * Empty name parts are safely ignored.
+ *
+ * @param member - User object containing name fields
+ * @returns Full name string constructed from available name parts
+ *
+ * @example
+ * getMemberLabel({ firstName: 'John', lastName: 'Doe' } as InterfaceUserInfoPG);
+ * // returns "John Doe"
+ */
+export const getMemberLabel = (member: InterfaceUserInfoPG): string =>
+  [member.firstName, member.lastName].filter(Boolean).join(' ') || member.name;
 
 const PledgeModal: React.FC<InterfacePledgeModal> = ({
   isOpen,
@@ -83,20 +111,16 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   userId,
   pledge,
   refetchPledge,
-  endDate,
   mode,
 }) => {
   // Translation functions to support internationalization
   const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
-  const { t: tCommon } = useTranslation('common');
 
   // State to manage the form inputs for the pledge
   const [formState, setFormState] = useState<InterfaceCreatePledge>({
-    pledgeUsers: [],
+    pledgeUsers: pledge?.pledger ? [pledge.pledger] : [],
     pledgeAmount: pledge?.amount ?? 0,
     pledgeCurrency: pledge?.currency ?? 'USD',
-    pledgeEndDate: new Date(pledge?.endDate ?? new Date()),
-    pledgeStartDate: new Date(pledge?.startDate ?? new Date()),
   });
 
   // State to manage the list of pledgers (users who are part of the pledge)
@@ -115,38 +139,42 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         pledgeUsers: pledge.pledger ? [pledge.pledger] : [],
         pledgeAmount: pledge?.amount ?? 0,
         pledgeCurrency: pledge?.currency ?? 'USD',
-        pledgeEndDate: new Date(pledge?.endDate ?? new Date()),
-        pledgeStartDate: new Date(pledge?.startDate ?? new Date()),
       });
     }
   }, [pledge]);
 
   // Destructuring the form state for easier access
-  const {
-    pledgeUsers,
-    pledgeAmount,
-    pledgeCurrency,
-    pledgeStartDate,
-    pledgeEndDate,
-  } = formState;
+  const { pledgeUsers, pledgeAmount, pledgeCurrency } = formState;
 
   // Query to get the user details based on the userId prop
   const { data: userData } = useQuery(USER_DETAILS, {
-    variables: { id: userId },
+    variables: { input: { id: userId } },
   });
 
   // Effect to update the pledgers state when user data is fetched
   useEffect(() => {
-    if (userData) {
-      setPledgers([
-        {
-          id: userData.user.user._id,
-          firstName: userData.user.user.firstName,
-          lastName: userData.user.user.lastName,
-          name: `${userData.user.user.firstName} ${userData.user.user.lastName}`,
-          avatarURL: userData.user.user.image,
-        },
-      ]);
+    if (userData?.user) {
+      const user = userData.user;
+      const nameParts = user.name ? user.name.split(' ') : [''];
+      const firstName = nameParts[0];
+      const lastName = nameParts.slice(1).join(' ');
+
+      const currentUser = {
+        id: user.id,
+        firstName,
+        lastName,
+        name: user.name,
+        avatarURL: user.avatarURL,
+      };
+
+      setPledgers([currentUser]);
+
+      if (user.role === 'regular') {
+        setFormState((prevState) => ({
+          ...prevState,
+          pledgeUsers: [currentUser],
+        }));
+      }
     }
   }, [userData]);
 
@@ -159,39 +187,24 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
    */
 
   const updatePledgeHandler = useCallback(
-    async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+    async (e: ChangeEvent<HTMLFormElement>) => {
       e.preventDefault();
-      const startDate = dayjs(pledgeStartDate).format('YYYY-MM-DD');
-      const endDate = dayjs(pledgeEndDate).format('YYYY-MM-DD');
-
-      const updatedFields: {
-        [key: string]: number | string | string[] | undefined;
-      } = {};
-      // checks if there are changes to the pledge and adds them to the updatedFields object
+      const updatedFields: { amount?: number } = {};
       if (pledgeAmount !== pledge?.amount) {
         updatedFields.amount = pledgeAmount;
-      }
-      if (pledgeCurrency !== pledge?.currency) {
-        updatedFields.currency = pledgeCurrency;
-      }
-      if (startDate !== dayjs(pledge?.startDate).format('YYYY-MM-DD')) {
-        updatedFields.startDate = startDate;
-      }
-      if (endDate !== dayjs(pledge?.endDate).format('YYYY-MM-DD')) {
-        updatedFields.endDate = endDate;
       }
       try {
         await updatePledge({
           variables: { id: pledge?.id, ...updatedFields },
         });
-        toast.success(t('pledgeUpdated') as string);
+        NotificationToast.success(t('pledgeUpdated'));
         refetchPledge();
         hide();
       } catch (error: unknown) {
-        toast.error((error as Error).message);
+        errorHandler(t, error);
       }
     },
-    [formState, pledge],
+    [formState, pledge, t],
   );
 
   /**
@@ -203,34 +216,44 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
    */
   const createPledgeHandler = useCallback(
     async (e: ChangeEvent<HTMLFormElement>): Promise<void> => {
+      e.preventDefault();
+      if (pledgeUsers.length === 0 || !pledgeUsers[0]) {
+        NotificationToast.error(t('selectPledger'));
+        return;
+      }
+
       try {
-        e.preventDefault();
         await createPledge({
           variables: {
             campaignId,
             amount: pledgeAmount,
-            currency: pledgeCurrency,
-            startDate: dayjs(pledgeStartDate).format('YYYY-MM-DD'),
-            endDate: dayjs(pledgeEndDate).format('YYYY-MM-DD'),
-            userIds: pledgeUsers.map((user) => user.id),
+            pledgerId: pledgeUsers[0].id,
           },
         });
 
-        toast.success(t('pledgeCreated') as string);
+        NotificationToast.success(t('pledgeCreated'));
         refetchPledge();
         setFormState({
           pledgeUsers: [],
           pledgeAmount: 0,
           pledgeCurrency: 'USD',
-          pledgeEndDate: new Date(),
-          pledgeStartDate: new Date(),
         });
         hide();
       } catch (error: unknown) {
-        toast.error((error as Error).message);
+        errorHandler(t, error);
       }
     },
-    [formState, campaignId],
+    [
+      formState,
+      campaignId,
+      pledgeAmount,
+      pledgeCurrency,
+      pledgeUsers,
+      t,
+      createPledge,
+      refetchPledge,
+      hide,
+    ],
   );
 
   return (
@@ -256,64 +279,33 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           }
           className="p-3"
         >
-          <Form.Group className="d-flex mb-3 w-100">
-            <Autocomplete
-              multiple
-              className={`${styles.noOutline} w-100`}
-              limitTags={2}
-              data-testid="pledgerSelect"
-              options={[...pledgers, ...pledgeUsers]}
-              value={pledgeUsers}
-              readOnly={mode === 'edit'}
-              isOptionEqualToValue={(option, value) => option.id === value.id}
-              filterSelectedOptions={true}
-              getOptionLabel={(member: InterfaceUserInfoPG): string =>
-                `${member.firstName} ${member.lastName}`
-              }
-              onChange={(_, newPledgers): void => {
-                setFormState({ ...formState, pledgeUsers: newPledgers });
-              }}
-              renderInput={(params) => (
-                <TextField {...params} label="Pledgers" />
-              )}
-            />
-          </Form.Group>
-          <Form.Group className="d-flex gap-3 mx-auto  mb-3">
-            <DatePicker
-              format="DD/MM/YYYY"
-              label={tCommon('startDate')}
-              value={dayjs(pledgeStartDate)}
-              className={styles.noOutline}
-              onChange={(date: Dayjs | null): void => {
-                if (date) {
+          {userData?.user?.role !== 'regular' && (
+            <Form.Group className="d-flex mb-3 w-100">
+              <Autocomplete
+                className={`${styles.noOutline} w-100`}
+                data-testid="pledgerSelect"
+                options={[...pledgers, ...pledgeUsers].filter(
+                  (v, i, a) => a.findIndex((t) => t.id === v.id) === i,
+                )}
+                value={pledgeUsers[0] || null}
+                readOnly={mode === 'edit'}
+                isOptionEqualToValue={(option, value) => option.id === value.id}
+                filterSelectedOptions={true}
+                getOptionLabel={(member: InterfaceUserInfoPG): string =>
+                  `${member.firstName} ${member.lastName}`
+                }
+                onChange={(_, newPledger): void => {
                   setFormState({
                     ...formState,
-                    pledgeStartDate: date.toDate(),
-                    pledgeEndDate:
-                      pledgeEndDate &&
-                      (pledgeEndDate < date?.toDate()
-                        ? date.toDate()
-                        : pledgeEndDate),
+                    pledgeUsers: newPledger ? [newPledger] : [],
                   });
-                }
-              }}
-              minDate={dayjs(pledgeStartDate)}
-              maxDate={dayjs(endDate)}
-            />
-            <DatePicker
-              format="DD/MM/YYYY"
-              label={tCommon('endDate')}
-              className={styles.noOutline}
-              value={dayjs(pledgeEndDate)}
-              onChange={(date: Dayjs | null): void => {
-                if (date) {
-                  setFormState({ ...formState, pledgeEndDate: date.toDate() });
-                }
-              }}
-              minDate={dayjs(pledgeStartDate)}
-              maxDate={dayjs(endDate)}
-            />
-          </Form.Group>
+                }}
+                renderInput={(params) => (
+                  <TextField {...params} label={t('pledgers')} />
+                )}
+              />
+            </Form.Group>
+          )}
           <Form.Group className="d-flex gap-3 mb-4">
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">

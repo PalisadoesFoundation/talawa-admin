@@ -20,15 +20,13 @@
  *
  * @returns A JSX.Element representing the post card.
  */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import {
-  Avatar,
   IconButton,
   Button,
-  Modal,
   FormControl,
   Input,
   InputAdornment,
@@ -63,7 +61,6 @@ import {
   CREATE_COMMENT_POST,
   DELETE_POST_MUTATION,
   UPDATE_POST_VOTE,
-  UPDATE_POST_MUTATION,
 } from '../../GraphQl/Mutations/mutations';
 import { TOGGLE_PINNED_POST } from '../../GraphQl/Mutations/OrganizationMutations';
 import { GET_POST_COMMENTS } from '../../GraphQl/Queries/Queries';
@@ -72,15 +69,19 @@ import CommentCard from '../../components/UserPortal/CommentCard/CommentCard';
 import styles from '../../style/app-fixed.module.css';
 import { PluginInjector } from '../../plugin';
 import useLocalStorage from '../../utils/useLocalstorage';
+import { handleLoadMoreComments as handleLoadMoreCommentsHelper } from './helperFunctions';
+import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'postCard' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
-  const isLikedByUser = props.hasUserVoted?.voteType === 'up_vote';
-
+  const [isLikedByUser, setIsLikedByUser] = useState<boolean>(
+    props.hasUserVoted?.voteType === 'up_vote',
+  );
+  const [likeCount, setLikeCount] = useState<number>(props.upVoteCount);
   const [commentInput, setCommentInput] = React.useState('');
   const [showEditPost, setShowEditPost] = React.useState(false);
-  const [postContent, setPostContent] = React.useState(props.text);
   const [showComments, setShowComments] = React.useState(false);
   const [comments, setComments] = React.useState<InterfaceComment[]>([]);
   const [endCursor, setEndCursor] = React.useState<string | null>(null);
@@ -88,6 +89,12 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const [loadingMoreComments, setLoadingMoreComments] = React.useState(false);
   const [dropdownAnchor, setDropdownAnchor] =
     React.useState<null | HTMLElement>(null);
+  const orgId = window.location.pathname.split('/')[2];
+
+  useEffect(() => {
+    setIsLikedByUser(props.hasUserVoted?.voteType === 'up_vote');
+    setLikeCount(props.upVoteCount);
+  }, [props.hasUserVoted?.voteType, props.upVoteCount]);
 
   const commentCount = props.commentCount;
   const { getItem } = useLocalStorage();
@@ -115,9 +122,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   });
 
   React.useEffect(() => {
-    if (!commentsData?.post?.comments) {
-      return;
-    }
+    if (!commentsData?.post?.comments) return;
 
     const { edges, pageInfo } = commentsData.post.comments;
     setComments(edges.map((edge: InterfaceCommentEdge) => edge.node));
@@ -136,64 +141,25 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   };
 
   const handleLoadMoreComments = async (): Promise<void> => {
-    setLoadingMoreComments(true);
-    try {
-      await fetchMoreComments({
-        variables: {
-          postId: props.id,
-          userId: userId as string,
-          first: 10,
-          after: endCursor,
-        },
-        updateQuery: (prev, { fetchMoreResult }) => {
-          if (!fetchMoreResult?.post?.comments) return prev;
-
-          const newEdges = fetchMoreResult.post.comments.edges;
-          const newPageInfo = fetchMoreResult.post.comments.pageInfo;
-
-          // Update local state
-          setComments((prevComments) => [
-            ...prevComments,
-            ...newEdges.map((edge: InterfaceCommentEdge) => edge.node),
-          ]);
-          setEndCursor(newPageInfo.endCursor);
-          setHasNextPage(newPageInfo.hasNextPage);
-
-          return {
-            ...prev,
-            post: {
-              ...prev.post,
-              comments: {
-                ...prev.post.comments,
-                edges: [...prev.post.comments.edges, ...newEdges],
-                pageInfo: newPageInfo,
-              },
-            },
-          };
-        },
-      });
-    } catch (error) {
-      errorHandler(t, error);
-    } finally {
-      setLoadingMoreComments(false);
-    }
+    await handleLoadMoreCommentsHelper({
+      fetchMoreComments,
+      postId: props.id,
+      userId: userId as string,
+      endCursor,
+      setComments,
+      setEndCursor,
+      setHasNextPage,
+      setLoadingMoreComments,
+      t,
+    });
   };
 
   const [likePost, { loading: likeLoading }] = useMutation(UPDATE_POST_VOTE);
   const [createComment, { loading: commentLoading }] =
     useMutation(CREATE_COMMENT_POST);
-  const [editPost] = useMutation(UPDATE_POST_MUTATION);
   const [deletePost] = useMutation(DELETE_POST_MUTATION);
   const [togglePinPost] = useMutation(TOGGLE_PINNED_POST);
-  let isPinned = false;
-
-  // Check if the post is pinned
-  if (props.pinnedAt !== null) {
-    isPinned = true;
-  }
-
-  const handlePostInput = (e: React.ChangeEvent<HTMLInputElement>): void =>
-    setPostContent(e.target.value);
+  const isPinned = props.pinnedAt != null;
 
   const handleToggleLike = async (): Promise<void> => {
     try {
@@ -205,7 +171,8 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           },
         },
       });
-      props.fetchPosts();
+      setIsLikedByUser(!isLikedByUser);
+      setLikeCount(isLikedByUser ? likeCount - 1 : likeCount + 1);
     } catch (error) {
       toast.error(error as string);
     }
@@ -220,8 +187,6 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
         variables: { input: { postId: props.id, body: commentInput } },
       });
       setCommentInput('');
-      // Refresh the post data and comments
-      props.fetchPosts();
 
       if (showComments && userId) {
         await refetchComments({
@@ -240,13 +205,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
     setDropdownAnchor(event.currentTarget);
   };
 
-  const handleDropdownClose = (): void => {
-    setDropdownAnchor(null);
-  };
-
   const toggleEditPost = (): void => {
     setShowEditPost(!showEditPost);
-    handleDropdownClose();
+    setDropdownAnchor(null);
   };
 
   // Toggle pin/unpin functionality
@@ -260,41 +221,14 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           },
         },
       });
-      props.fetchPosts();
+      await props.fetchPosts();
       toast.success(
-        isPinned ? t('postUnpinnedSuccess') : t('postPinnedSuccess'),
+        isPinned
+          ? t('postCard.postUnpinnedSuccess')
+          : t('postCard.postPinnedSuccess'),
       );
-      handleDropdownClose();
-    } catch (error) {
-      errorHandler(t, error);
-    }
-  };
-
-  // Update the handleEditPost function to use isPinned instead of pinnedAt
-  const handleEditPost = async (): Promise<void> => {
-    try {
-      const input: {
-        id: string;
-        caption: string;
-        isPinned?: boolean;
-      } = {
-        id: props.id,
-        caption: postContent,
-      };
-
-      // Only include isPinned if it's changed
-      if (isPinned !== !!props.pinnedAt) {
-        input.isPinned = isPinned;
-      }
-
-      await editPost({
-        variables: {
-          input,
-        },
-      });
-      props.fetchPosts();
-      toggleEditPost();
-      toast.success('Post updated successfully');
+      setDropdownAnchor(null);
+      window.location.reload();
     } catch (error) {
       errorHandler(t, error);
     }
@@ -303,9 +237,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const handleDeletePost = async (): Promise<void> => {
     try {
       await deletePost({ variables: { input: { id: props.id } } });
-      props.fetchPosts();
-      toast.success(t('postDeletedSuccess'));
-      handleDropdownClose();
+      await props.fetchPosts();
+      toast.success(t('postCard.postDeletedSuccess'));
+      setDropdownAnchor(null);
     } catch (error) {
       errorHandler(t, error);
     }
@@ -313,23 +247,19 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
 
   return (
     <Box
-      className={postCardStyles.postContainer}
-      sx={{ backgroundColor: 'background.paper' }}
+      className={`${postCardStyles.postContainer} ${postCardStyles.postContainerBackground}`}
     >
       {/* Post Header */}
 
       <Box className={postCardStyles.postHeader}>
         <Box className={postCardStyles.userInfo}>
-          <Avatar
+          <ProfileAvatarDisplay
+            fallbackName={props.creator.name}
+            size="small"
+            dataTestId="user-avatar"
             className={styles.userImageUserPost}
-            src={props.creator.avatarURL || UserDefault}
-            alt={props.creator.name}
-            slotProps={{
-              img: {
-                crossOrigin: 'anonymous',
-                loading: 'lazy',
-              },
-            }}
+            imageUrl={props.creator.avatarURL || UserDefault}
+            enableEnlarge
           />
           <Typography variant="subtitle2" fontWeight="bold">
             {props.creator.name}
@@ -339,15 +269,15 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           <IconButton
             onClick={handleDropdownOpen}
             size="small"
-            aria-label="more options"
-            data-testid="more-options-button"
+            aria-label={t('postCard.moreOptions')}
+            data-testid="post-more-options-button"
           >
             <MoreHoriz />
           </IconButton>
           <Menu
             anchorEl={dropdownAnchor}
             open={Boolean(dropdownAnchor)}
-            onClose={handleDropdownClose}
+            onClose={() => setDropdownAnchor(null)}
             anchorOrigin={{
               vertical: 'bottom',
               horizontal: 'right',
@@ -366,7 +296,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               },
             }}
           >
-            {(isPostCreator || isAdmin) && (
+            {isPostCreator && (
               <MenuItem
                 onClick={toggleEditPost}
                 data-testid="edit-post-menu-item"
@@ -375,7 +305,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                   <EditOutlined fontSize="small" />
                 </ListItemIcon>
                 <ListItemText
-                  primary={t('editPost')}
+                  primary={t('postCard.editPost')}
                   data-testid="edit-post-button"
                 />
               </MenuItem>
@@ -394,7 +324,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                   )}
                 </ListItemIcon>
                 <ListItemText
-                  primary={isPinned ? t('unpinPost') : t('pinPost')}
+                  primary={
+                    isPinned ? t('postCard.unpinPost') : t('postCard.pinPost')
+                  }
                 />
               </MenuItem>
             )}
@@ -410,27 +342,69 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                 <ListItemText
                   primary={tCommon('delete')}
                   data-testid="delete-post-button"
-                  primaryTypographyProps={{ color: 'error' }}
                 />
               </MenuItem>
             )}
           </Menu>
         </>
       </Box>
-
       {/* Post Media */}
-      <Box className={postCardStyles.postMedia}>
-        {props.image ||
-          (UserDefault && (
-            <img src={props.image || UserDefault} alt={props.title} />
-          ))}
-        {props.video && (
-          <video controls style={{ width: '100%' }}>
-            <source src={props.video} type="video/mp4" />
-          </video>
-        )}
-      </Box>
+      {props.attachmentURL && (
+        <Box className={postCardStyles.postMedia}>
+          {props.mimeType?.split('/')[0] == 'image' && (
+            <img
+              className={postCardStyles.image}
+              src={props.attachmentURL}
+              alt={props.title}
+              crossOrigin="anonymous"
+            />
+          )}
 
+          {props.mimeType?.split('/')[0] == 'video' && (
+            <video
+              controls
+              className={postCardStyles.video}
+              crossOrigin="anonymous"
+            >
+              <source src={props.attachmentURL} />
+            </video>
+          )}
+        </Box>
+      )}
+
+      {/* Post Content */}
+      <Box className={postCardStyles.postContent}>
+        <Typography className={postCardStyles.caption}>
+          {props.title}
+        </Typography>
+        {postCardStyles.body && (
+          <Box className={postCardStyles.bodyContainer}>
+            <Typography variant="body2" className={`${postCardStyles.body}`}>
+              {props.body}
+            </Typography>
+          </Box>
+        )}
+
+        {/* Plugin Extension Point G3 - Inject plugins below caption */}
+        <PluginInjector
+          injectorType="G4"
+          data={{
+            caption: props.title,
+            postId: props.id,
+            text: props.text,
+            creator: props.creator,
+            upVoteCount: likeCount,
+            downVoteCount: props.downVoteCount,
+            comments: comments,
+            commentCount: props.commentCount,
+            postedAt: props.postedAt,
+            pinnedAt: props.pinnedAt,
+            attachmentURL: props.attachmentURL,
+            mimeType: props.mimeType,
+            hasUserVoted: isLikedByUser,
+          }}
+        />
+      </Box>
       {/* Post Actions */}
       <Box className={postCardStyles.postActions}>
         <Box className={postCardStyles.leftActions}>
@@ -442,9 +416,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             {likeLoading ? (
               <CircularProgress size={20} />
             ) : isLikedByUser ? (
-              <Favorite color="error" fontSize="small" />
+              <Favorite color="error" fontSize="small" data-testid="liked" />
             ) : (
-              <Favorite fontSize="small" />
+              <Favorite fontSize="small" data-testid="unliked" />
             )}
           </IconButton>
           <IconButton onClick={toggleComments} size="small">
@@ -459,42 +433,18 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             fontSize="small"
             color="primary"
             data-testid="pinned-icon"
-            sx={{ marginLeft: 'auto' }}
+            className={postCardStyles.pinnedIcon}
           />
         )}
       </Box>
-
-      {/* Post Content */}
-      <Box className={postCardStyles.postContent}>
-        <Typography variant="subtitle2" fontWeight="bold">
-          {props.upVoteCount} {t('likes')}
+      <Box className={postCardStyles.likesCount}>
+        <Typography
+          variant="subtitle2"
+          fontWeight="bold"
+          data-testid="like-count"
+        >
+          {likeCount} {t('postCard.likes')}
         </Typography>
-        <Typography variant="body2" className={postCardStyles.caption}>
-          <Typography component="span" fontWeight="bold">
-            {props.creator.name}
-          </Typography>{' '}
-          {props.title}
-        </Typography>
-
-        {/* Plugin Extension Point G3 - Inject plugins below caption */}
-        <PluginInjector
-          injectorType="G4"
-          data={{
-            caption: props.title,
-            postId: props.id,
-            text: props.text,
-            creator: props.creator,
-            upVoteCount: props.upVoteCount,
-            downVoteCount: props.downVoteCount,
-            comments: comments,
-            commentCount: props.commentCount,
-            postedAt: props.postedAt,
-            pinnedAt: props.pinnedAt,
-            image: props.image,
-            video: props.video,
-            hasUserVoted: props.hasUserVoted,
-          }}
-        />
       </Box>
 
       {/* Comments Section */}
@@ -535,17 +485,17 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
                     {loadingMoreComments ? (
                       <>
                         <CircularProgress size={16} sx={{ mr: 1 }} />
-                        {t('loadingComments')}
+                        {t('postCard.loadingComments')}
                       </>
                     ) : (
-                      t('loadMoreComments')
+                      t('postCard.loadMoreComments')
                     )}
                   </Button>
                 </Box>
               ) : (
                 <Box display="flex" justifyContent="center" py={2}>
                   <Typography variant="body2" color="text.secondary">
-                    {t('noMoreComments')}
+                    {t('postCard.noMoreComments')}
                   </Typography>
                 </Box>
               )}
@@ -569,8 +519,8 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
           }}
         >
           {showComments
-            ? t('hideComments')
-            : t('viewComments', { count: commentCount })}
+            ? t('postCard.hideComments')
+            : t('postCard.viewComments', { count: commentCount })}
         </Button>
       )}
 
@@ -586,7 +536,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       <div className={postCardStyles.commentFormContainer}>
         <FormControl fullWidth className={postCardStyles.commentForm}>
           <Input
-            placeholder={t('addComment')}
+            placeholder={t('postCard.addComment')}
             value={commentInput}
             onChange={handleCommentInput}
             fullWidth
@@ -619,42 +569,18 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       </div>
 
       {/* Edit Post Modal */}
-      <Modal
-        open={showEditPost}
-        onClose={toggleEditPost}
-        data-testid="edit-post-button"
-      >
-        <Box
-          className={postCardStyles.editModalContent}
-          sx={{ backgroundColor: 'background.paper' }}
-        >
-          <Typography variant="h6">{t('editPost')}</Typography>
-          <FormControl fullWidth sx={{ mb: 2 }}>
-            <Input
-              multiline
-              rows={4}
-              value={postContent}
-              onChange={handlePostInput}
-              fullWidth
-              data-cy="editCaptionInput"
-            />
-          </FormControl>
-
-          <Box className={postCardStyles.modalActions}>
-            <Button variant="outlined" onClick={toggleEditPost}>
-              {tCommon('cancel')}
-            </Button>
-            <Button
-              variant="contained"
-              onClick={handleEditPost}
-              data-testid="save-post-button"
-              startIcon={<EditOutlined />}
-            >
-              {tCommon('save')}
-            </Button>
-          </Box>
-        </Box>
-      </Modal>
+      <div className={postCardStyles.editModalWrapper}>
+        <CreatePostModal
+          show={showEditPost}
+          onHide={toggleEditPost}
+          refetch={props.fetchPosts}
+          title={props.title}
+          body={props.body}
+          orgId={orgId}
+          id={props.id}
+          type="edit"
+        />
+      </div>
     </Box>
   );
 }

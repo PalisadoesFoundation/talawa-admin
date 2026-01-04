@@ -36,7 +36,7 @@ import styles from 'style/app-fixed.module.css';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   FormControl,
   Paper,
@@ -102,14 +102,14 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
           status: status,
         },
       });
-      toast.success(
+      NotificationToast.success(
         t(
           status === 'accepted' ? 'requestAccepted' : 'requestRejected',
         ) as string,
       );
       refetchRequests();
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
     }
   };
 
@@ -175,12 +175,12 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             data: { ...updatedFields, eventId },
           },
         });
-        toast.success(t('volunteerGroupUpdated'));
+        NotificationToast.success(t('volunteerGroupUpdated'));
         refetchGroups();
         hide();
       } catch (error: unknown) {
         console.log(error);
-        toast.error((error as Error).message);
+        NotificationToast.error((error as Error).message);
       }
     },
     [formState, group],
@@ -227,6 +227,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
             id="groupsRadio"
             onChange={() => setModalType('requests')}
             checked={modalType === 'requests'}
+            data-testid="requestsRadio"
           />
           <label
             className={`btn btn-outline-primary ${styles.toggleBtn}`}
@@ -321,11 +322,15 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                 variant="outlined"
                 className={styles.modalTable}
               >
-                <Table aria-label="group table">
+                <Table aria-label={t('groupTable')}>
                   <TableHead>
                     <TableRow>
-                      <TableCell className="fw-bold">Name</TableCell>
-                      <TableCell className="fw-bold">Actions</TableCell>
+                      <TableCell className="fw-bold">
+                        {t('volunteerName')}
+                      </TableCell>
+                      <TableCell className="fw-bold">
+                        {t('volunteerActions')}
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -347,7 +352,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                             {avatarURL ? (
                               <img
                                 src={avatarURL}
-                                alt="volunteer"
+                                alt={t('volunteerAlt')}
                                 data-testid={`image${id + 1}`}
                                 className={styles.TableImage}
                               />
@@ -369,7 +374,6 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                               <Button
                                 variant="success"
                                 size="sm"
-                                style={{ minWidth: '32px' }}
                                 className="me-2 rounded"
                                 data-testid={`acceptBtn`}
                                 onClick={() =>
@@ -387,7 +391,7 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                                   updateMembershipStatus(request.id, 'rejected')
                                 }
                               >
-                                <FaXmark size={18} fontWeight={900} />
+                                <FaXmark size={18} className="fw-bold" />
                               </Button>
                             </div>
                           </TableCell>

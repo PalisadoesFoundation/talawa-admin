@@ -41,6 +41,28 @@ vi.mock('utils/MinioDownload', () => {
   return { useMinioDownload };
 });
 
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: ({
+    imageUrl,
+    fallbackName,
+  }: {
+    imageUrl?: string;
+    fallbackName: string;
+  }) => (
+    <div data-testid="mock-profile-avatar-display">
+      {imageUrl ? (
+        <img
+          src={imageUrl}
+          alt={fallbackName}
+          data-testid="mock-profile-image"
+        />
+      ) : (
+        <div data-testid="mock-profile-fallback">{fallbackName}</div>
+      )}
+    </div>
+  ),
+}));
+
 // Note: no direct imports from Minio modules are necessary; they are mocked above
 
 import ChatRoom, { MessageImage } from './ChatRoom';
@@ -752,7 +774,10 @@ describe('ChatRoom Component', () => {
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    const { clearAllItems } = useLocalStorage();
+    clearAllItems();
+
+    vi.clearAllMocks();
   });
 
   it('renders loading state initially', () => {
@@ -764,6 +789,20 @@ describe('ChatRoom Component', () => {
     renderChatRoom();
     await waitFor(() => {
       expect(screen.getByText('Test Chat')).toBeInTheDocument();
+    });
+  });
+
+  it('renders ProfileAvatarDisplay with correct props', async () => {
+    renderChatRoom();
+    await waitFor(() => {
+      // Check for main contact avatar
+      const avatars = screen.getAllByTestId('mock-profile-avatar-display');
+      expect(avatars.length).toBeGreaterThan(0);
+      // Since default mock data has image, fallback is not shown. Check image alt instead.
+      const img = screen.queryByTestId('mock-profile-image');
+      // Note: There might be multiple if messages also have avatars. Just check one exists or specific one.
+      // But here we are just establishing ProfileAvatarDisplay is used generally.
+      expect(img).toBeInTheDocument();
     });
   });
 
@@ -789,6 +828,10 @@ describe('ChatRoom Component', () => {
 
     await waitFor(() => {
       expect(chatListRefetch).toHaveBeenCalled();
+    });
+
+    // Wait for the input to be cleared after state update
+    await waitFor(() => {
       const inputEl = screen.getByTestId('messageInput') as HTMLInputElement;
       expect(inputEl.value).toBe('');
     });
@@ -982,7 +1025,7 @@ describe('ChatRoom Component', () => {
 
       expect(getByText('Loading image...')).toBeInTheDocument();
 
-      const img = await findByAltText('attachment');
+      const img = await findByAltText('Attachment');
       expect(img).toBeTruthy();
       expect(img).toHaveAttribute('src', 'https://example.com/presigned.jpg');
     });
@@ -1011,7 +1054,7 @@ describe('ChatRoom Component', () => {
         />,
       );
 
-      const img = await findByAltText('attachment');
+      const img = await findByAltText('Attachment');
       fireEvent.error(img);
 
       const err = await findByText('Image not available');
@@ -1062,8 +1105,9 @@ describe('ChatRoom Component', () => {
 
     await waitFor(() => {
       expect(screen.getByText('Other User')).toBeInTheDocument();
-      const avatar = screen.getByAltText('Other User');
+      const avatar = screen.getByTestId('mock-profile-image');
       expect(avatar).toBeInTheDocument();
+      expect(avatar).toHaveAttribute('alt', 'Other User');
     });
   });
 
@@ -1128,14 +1172,14 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(screen.getByAltText('attachment')).toBeInTheDocument();
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
     });
 
     const removeBtn = screen.getByTestId('removeAttachment');
     fireEvent.click(removeBtn);
 
     await waitFor(() => {
-      expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+      expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
     });
   });
 
@@ -1302,7 +1346,7 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() =>
-      expect(screen.getByAltText('attachment')).toBeInTheDocument(),
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument(),
     );
 
     const sendBtn = screen.getByTestId('sendMessage');
@@ -1824,7 +1868,7 @@ describe('ChatRoom Component', () => {
         'Error uploading file:',
         expect.any(Error),
       );
-      expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+      expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
     });
 
     // Reset the mock for other tests
@@ -1983,12 +2027,14 @@ describe('ChatRoom Component', () => {
     renderChatRoom([CHAT_NO_IMAGE]);
 
     await waitFor(() => {
-      expect(screen.getByText('Other User')).toBeInTheDocument();
+      const elements = screen.getAllByText('Other User');
+      expect(elements.length).toBeGreaterThan(0);
     });
 
-    // Should render Avatar component instead of img
-    const avatar = screen.getByAltText('Other User');
-    expect(avatar).toBeInTheDocument();
+    // Should render ProfileAvatarDisplay fallback instead of img
+    expect(screen.getByTestId('mock-profile-fallback')).toHaveTextContent(
+      'Other User',
+    );
   });
 
   it('does not open group chat details when isGroup is false', async () => {
@@ -2098,8 +2144,11 @@ describe('ChatRoom Component', () => {
     });
 
     // Should render Avatar component for message creator
-    const avatar = screen.getByAltText('Other User');
-    expect(avatar).toBeInTheDocument();
+    // Should render ProfileAvatarDisplay component for message creator
+    // In this test case avatarURL is undefined, so we expect fallback text
+    expect(screen.getByTestId('mock-profile-fallback')).toHaveTextContent(
+      'Other User',
+    );
   });
 
   it('sends message without attachment when attachmentObjectName is null', async () => {
@@ -2274,7 +2323,7 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(screen.getByAltText('attachment')).toBeInTheDocument();
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
     });
 
     // Mock fileInputRef.current to be null
@@ -2283,7 +2332,7 @@ describe('ChatRoom Component', () => {
     fireEvent.click(removeBtn);
 
     await waitFor(() => {
-      expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+      expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
     });
   });
 
@@ -2477,7 +2526,7 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     // Should not crash and should not show attachment
-    expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+    expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
   });
 
   it('uses default organization when chat organization is undefined', async () => {
@@ -2516,7 +2565,7 @@ describe('ChatRoom Component', () => {
 
     // Should use 'organization' as default
     await waitFor(() => {
-      expect(screen.getByAltText('attachment')).toBeInTheDocument();
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
     });
   });
 
@@ -2561,7 +2610,7 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(screen.getByAltText('attachment')).toBeInTheDocument();
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
     });
   });
 
@@ -2626,7 +2675,7 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(screen.getByAltText('attachment')).toBeInTheDocument();
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
     });
   });
 
@@ -2644,7 +2693,7 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(screen.getByAltText('attachment')).toBeInTheDocument();
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
     });
 
     // Test the branch at line 908 where fileInputRef.current might be null
@@ -2652,7 +2701,7 @@ describe('ChatRoom Component', () => {
     fireEvent.click(removeBtn);
 
     await waitFor(() => {
-      expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+      expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
     });
   });
 
@@ -2898,7 +2947,7 @@ describe('ChatRoom Component', () => {
     fireEvent.change(fileInput);
 
     await waitFor(() => {
-      expect(screen.getByAltText('attachment')).toBeInTheDocument();
+      expect(screen.getByAltText('Attachment')).toBeInTheDocument();
     });
 
     // Remove attachment - tests line 908
@@ -2906,7 +2955,409 @@ describe('ChatRoom Component', () => {
     fireEvent.click(removeBtn);
 
     await waitFor(() => {
-      expect(screen.queryByAltText('attachment')).not.toBeInTheDocument();
+      expect(screen.queryByAltText('Attachment')).not.toBeInTheDocument();
+    });
+  });
+  describe('Skip query and subscription when selectedContact is empty', () => {
+    it('should not execute CHAT_BY_ID query when selectedContact is empty string', async () => {
+      const chatListRefetch = vi.fn();
+      const { setItem } = useLocalStorage();
+      setItem('userId', 'user123');
+
+      const mocks: MockedResponse[] = [];
+
+      render(
+        <MockedProvider mocks={mocks}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact=""
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Should show "no chat selected" message
+      expect(screen.getByTestId('noChatSelected')).toBeInTheDocument();
+
+      // Wait to ensure no GraphQL operations are attempted
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('noChatSelected')).toBeInTheDocument();
+        },
+        { timeout: 1000 },
+      );
+    });
+
+    it('should not execute MESSAGE_SENT_TO_CHAT subscription when selectedContact is empty', async () => {
+      const chatListRefetch = vi.fn();
+      const { setItem } = useLocalStorage();
+      setItem('userId', 'user123');
+
+      const mocks: MockedResponse[] = [];
+
+      render(
+        <MockedProvider mocks={mocks}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact=""
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Should show "no chat selected" message and not attempt subscription
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('noChatSelected')).toBeInTheDocument();
+        },
+        { timeout: 1000 },
+      );
+    });
+
+    it('should execute CHAT_BY_ID query when selectedContact has valid UUID', async () => {
+      const chatListRefetch = vi.fn();
+      const { setItem } = useLocalStorage();
+      setItem('userId', 'user123');
+      const validChatId = '01960b81-bfed-7369-ae96-689dbd4281ba';
+
+      const mocks: MockedResponse[] = [
+        {
+          request: {
+            query: CHAT_BY_ID,
+            variables: {
+              input: { id: validChatId },
+              first: 10,
+              after: null,
+              lastMessages: 10,
+              beforeMessages: null,
+            },
+          },
+          result: {
+            data: {
+              chat: {
+                ...mockChatData,
+                id: validChatId,
+              },
+            },
+          },
+        },
+        UNREAD_CHATS_MOCK,
+        MARK_READ_MOCK,
+      ];
+
+      render(
+        <MockedProvider mocks={mocks}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact={validChatId}
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Should NOT show "no chat selected" message
+      await waitFor(() => {
+        expect(screen.queryByTestId('noChatSelected')).not.toBeInTheDocument();
+      });
+
+      // Should load chat data
+      await waitFor(() => {
+        expect(screen.getByText('Test Chat')).toBeInTheDocument();
+      });
+    });
+
+    it('should handle null selectedContact gracefully without errors', () => {
+      const chatListRefetch = vi.fn();
+      const { setItem } = useLocalStorage();
+      setItem('userId', 'user123');
+
+      render(
+        <MockedProvider mocks={[]}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact={null as unknown as string}
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Should show "no chat selected" message
+      expect(screen.getByTestId('noChatSelected')).toBeInTheDocument();
+    });
+
+    it('should handle undefined selectedContact gracefully without errors', () => {
+      const chatListRefetch = vi.fn();
+      const { setItem } = useLocalStorage();
+      setItem('userId', 'user123');
+
+      render(
+        <MockedProvider mocks={[]}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact={undefined as unknown as string}
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Should show "no chat selected" message
+      expect(screen.getByTestId('noChatSelected')).toBeInTheDocument();
+    });
+
+    it('should not throw GraphQL "Invalid uuid" errors when mounting with empty selectedContact', async () => {
+      const chatListRefetch = vi.fn();
+      const { setItem } = useLocalStorage();
+      setItem('userId', 'user123');
+
+      // Mock console.error to catch any error logs
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      render(
+        <MockedProvider mocks={[]}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact=""
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Should show "no chat selected" message
+      expect(screen.getByTestId('noChatSelected')).toBeInTheDocument();
+
+      // Wait to ensure no GraphQL errors
+      await waitFor(
+        () => {
+          // Verify no "Invalid uuid" errors were logged
+          const errorCalls = consoleErrorSpy.mock.calls;
+          const hasInvalidUuidError = errorCalls.some((call) =>
+            call.some(
+              (arg) =>
+                typeof arg === 'string' &&
+                (arg.includes('Invalid uuid') ||
+                  arg.includes('invalid_arguments')),
+            ),
+          );
+          expect(hasInvalidUuidError).toBe(false);
+        },
+        { timeout: 2000 },
+      );
+
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('should properly transition from empty to valid selectedContact', async () => {
+      const chatListRefetch = vi.fn();
+      const { setItem } = useLocalStorage();
+      setItem('userId', 'user123');
+      const validChatId = 'chat123';
+
+      const mocks: MockedResponse[] = [
+        CHAT_BY_ID_MOCK,
+        UNREAD_CHATS_MOCK,
+        MARK_READ_MOCK,
+      ];
+
+      const { rerender } = render(
+        <MockedProvider mocks={mocks}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact=""
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Initially should show "no chat selected"
+      expect(screen.getByTestId('noChatSelected')).toBeInTheDocument();
+
+      // Update to valid chat ID
+      rerender(
+        <MockedProvider mocks={mocks}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact={validChatId}
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Should now load chat data
+      await waitFor(() => {
+        expect(screen.queryByTestId('noChatSelected')).not.toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('Test Chat')).toBeInTheDocument();
+      });
+    });
+
+    it('should execute MESSAGE_SENT_TO_CHAT subscription when selectedContact is valid', async () => {
+      const chatListRefetch = vi.fn();
+      const { setItem } = useLocalStorage();
+      setItem('userId', 'user123');
+      const validChatId = 'chat123';
+
+      const mocks: MockedResponse[] = [
+        CHAT_BY_ID_MOCK,
+        UNREAD_CHATS_MOCK,
+        MARK_READ_MOCK,
+        MESSAGE_SENT_SUBSCRIPTION_MOCK,
+        MARK_READ_SUBMSG_MOCK,
+      ];
+
+      render(
+        <MockedProvider mocks={mocks}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact={validChatId}
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Wait for chat to load
+      await waitFor(() => {
+        expect(screen.getByText('Test Chat')).toBeInTheDocument();
+      });
+
+      // Wait for subscription to process
+      await waitFor(
+        () => {
+          expect(chatListRefetch).toHaveBeenCalled();
+        },
+        { timeout: 3000 },
+      );
+    });
+
+    it('should skip both query and subscription with empty string', async () => {
+      const chatListRefetch = vi.fn();
+      const { setItem } = useLocalStorage();
+      setItem('userId', 'user123');
+
+      const mocks: MockedResponse[] = [];
+
+      render(
+        <MockedProvider mocks={mocks}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact=""
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Verify "no chat selected" is shown
+      expect(screen.getByTestId('noChatSelected')).toBeInTheDocument();
+
+      // Wait and verify component renders correctly without GraphQL operations
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('noChatSelected')).toBeInTheDocument();
+        },
+        { timeout: 1000 },
+      );
+    });
+
+    it('should prevent "API server unavailable" error on initial page load', async () => {
+      const chatListRefetch = vi.fn();
+      const { setItem } = useLocalStorage();
+      setItem('userId', 'user123');
+
+      // Mock network errors that would occur without the skip fix
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      render(
+        <MockedProvider mocks={[]}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18nForTest}>
+                <ChatRoom
+                  selectedContact=""
+                  chatListRefetch={chatListRefetch}
+                />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>,
+      );
+
+      // Should render without errors
+      expect(screen.getByTestId('noChatSelected')).toBeInTheDocument();
+
+      // Wait and verify no network errors occurred
+      await waitFor(
+        () => {
+          const errorCalls = consoleErrorSpy.mock.calls;
+          const hasNetworkError = errorCalls.some((call) =>
+            call.some(
+              (arg) =>
+                typeof arg === 'string' &&
+                (arg.includes('API server unavailable') ||
+                  arg.includes('Network error') ||
+                  arg.includes('Invalid uuid')),
+            ),
+          );
+          expect(hasNetworkError).toBe(false);
+        },
+        { timeout: 2000 },
+      );
+
+      consoleErrorSpy.mockRestore();
     });
   });
 });

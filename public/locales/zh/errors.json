@@ -13,5 +13,15 @@
   "invalidEmploymentStatus": "请选择有效的就业状况",
   "invalidMaritalStatus": "请选择有效的婚姻状况",
   "error400": "响应不成功. 从服务器收到状态代码 400",
-  "organizationNameAlreadyExists": "具有此名称的组织已存在"
+  "organizationNameAlreadyExists": "具有此名称的组织已存在",
+  "markAsReadError": "标记通知为已读时出错",
+  "accountLocked": "由于登录失败次数过多，账户已被临时锁定。请稍后再试。",
+  "accountLockedWithTimer": "账户已被临时锁定。请在 {{minutes}} 分钟后重试。",
+  "title": "发生错误",
+  "defaultErrorMessage": "發生未預期的錯誤",
+  "resetButton": "再試一次",
+  "resetButtonAriaLabel": "再試一次",
+  "fileTooLarge": "文件过大：{{fileName}}",
+  "invalidFileType": "无效的文件类型：{{fileName}}",
+  "emptyFile": "选择了空文件"
 }

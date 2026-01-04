@@ -41,11 +41,11 @@ import React, { useEffect } from 'react';
 import { Collapse } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import IconComponent from 'components/IconComponent/IconComponent';
-import { NavLink, useLocation, useNavigate } from 'react-router';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import type { InterfaceCollapsibleDropdown } from 'types/DropDown/interface';
 
-const collapsibleDropdown = ({
+const CollapsibleDropdown = ({
   target,
   showDropdown,
   setShowDropdown,
@@ -130,4 +130,4 @@ const collapsibleDropdown = ({
   );
 };
 
-export default collapsibleDropdown;
+export default CollapsibleDropdown;

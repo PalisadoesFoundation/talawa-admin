@@ -48,12 +48,11 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import Table from '@mui/material/Table';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { styled } from '@mui/material/styles';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
@@ -61,6 +60,7 @@ import { errorHandler } from 'utils/errorHandler';
 import type { TFunction } from 'i18next';
 import { type GroupChat } from 'types/Chat/type';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 interface InterfaceOrganizationMember {
   id: string;
@@ -76,22 +76,6 @@ interface InterfaceCreateDirectChatProps {
   ) => Promise<ApolloQueryResult<unknown>>;
   chats: GroupChat[];
 }
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: ['#31bb6b', '!important'],
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: { fontSize: 14 },
-}));
-
-/**
- * Styled table row with custom styles.
- */
-
-const StyledTableRow = styled(TableRow)(() => ({
-  '&:last-child td, &:last-child th': { border: 0 },
-}));
 
 const { getItem } = useLocalStorage();
 
@@ -218,6 +202,8 @@ export default function createDirectChatModal({
   chats,
 }: InterfaceCreateDirectChatProps): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
+  const { t: tErrors } = useTranslation('errors');
+  const { t: tCommon } = useTranslation('common');
   const { orgId: organizationId } = useParams();
 
   // Support both 'userId' (for regular users) and 'id' (for admins)
@@ -257,7 +243,13 @@ export default function createDirectChatModal({
   };
 
   return (
-    <>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+      onReset={chatsListRefetch}
+    >
       <Modal
         data-testid="createDirectChatModal"
         show={createDirectChatModalisOpen}
@@ -265,18 +257,21 @@ export default function createDirectChatModal({
         contentClassName={styles.modalContent}
       >
         <Modal.Header closeButton data-testid="createDirectChat">
-          <Modal.Title>{'Chat'}</Modal.Title>
+          <Modal.Title>{t('chat', { defaultValue: 'Chat' })}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {allUsersLoading ? (
-            <>
-              <Loader />
-            </>
-          ) : (
+          <LoadingState
+            isLoading={allUsersLoading}
+            variant="inline"
+            size="lg"
+            data-testid="createDirectChatLoading"
+          >
             <>
               <div className={styles.inputContainer}>
                 <SearchBar
-                  placeholder="searchFullName"
+                  placeholder={t('searchFullName', {
+                    defaultValue: 'Search full name',
+                  })}
                   value={userName}
                   onChange={(value) => setUserName(value)}
                   onSearch={(value) => handleUserModalSearchChange(value)}
@@ -293,12 +288,22 @@ export default function createDirectChatModal({
                 className={styles.tableContainer}
                 component={Paper}
               >
-                <Table aria-label="customized table">
+                <Table
+                  aria-label={t('organizationMembersTable', {
+                    defaultValue: 'Organization Members Table',
+                  })}
+                >
                   <TableHead>
                     <TableRow>
-                      <StyledTableCell>#</StyledTableCell>
-                      <StyledTableCell align="center">{'user'}</StyledTableCell>
-                      <StyledTableCell align="center">{'Chat'}</StyledTableCell>
+                      <TableCell>
+                        {tCommon('hash', { defaultValue: '#' })}
+                      </TableCell>
+                      <TableCell align="center">
+                        {t('user', { defaultValue: 'User' })}
+                      </TableCell>
+                      <TableCell align="center">
+                        {t('chat', { defaultValue: 'Chat' })}
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -319,19 +324,16 @@ export default function createDirectChatModal({
                             }: { node: InterfaceOrganizationMember },
                             index: number,
                           ) => (
-                            <StyledTableRow
-                              data-testid="user"
-                              key={userDetails.id}
-                            >
-                              <StyledTableCell component="th" scope="row">
+                            <TableRow data-testid="user" key={userDetails.id}>
+                              <TableCell component="th" scope="row">
                                 {index + 1}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
+                              </TableCell>
+                              <TableCell align="center">
                                 {userDetails.name}
                                 <br />
                                 {userDetails.role || 'Member'}
-                              </StyledTableCell>
-                              <StyledTableCell align="center">
+                              </TableCell>
+                              <TableCell align="center">
                                 <Button
                                   onClick={() => {
                                     handleCreateDirectChat(
@@ -350,19 +352,19 @@ export default function createDirectChatModal({
                                   }}
                                   data-testid="addBtn"
                                 >
-                                  {t('add')}
+                                  {t('add', { defaultValue: 'Add' })}
                                 </Button>
-                              </StyledTableCell>
-                            </StyledTableRow>
+                              </TableCell>
+                            </TableRow>
                           ),
                         )}
                   </TableBody>
                 </Table>
               </TableContainer>
             </>
-          )}
+          </LoadingState>
         </Modal.Body>
       </Modal>
-    </>
+    </ErrorBoundaryWrapper>
   );
 }

@@ -27,6 +27,23 @@ vi.mock('react-toastify', () => ({
   toast: toastMocks,
 }));
 
+export const getPickerInputByLabel = (label: string): HTMLElement => {
+  const allInputs = screen.getAllByRole('textbox', { hidden: true });
+  for (const input of allInputs) {
+    const formControl = input.closest('.MuiFormControl-root');
+    if (formControl) {
+      const labelEl = formControl.querySelector('label');
+      if (labelEl) {
+        const labelText = labelEl.textContent?.toLowerCase() || '';
+        if (labelText.includes(label.toLowerCase())) {
+          return formControl as HTMLElement;
+        }
+      }
+    }
+  }
+  throw new Error(`Could not find date picker for label: ${label}`);
+};
+
 const t = JSON.parse(
   JSON.stringify(
     i18nForTest.getDataByLanguage('en')?.translation.organizationActionItems,
@@ -649,7 +666,12 @@ describe('Testing ItemViewModal', () => {
       expect(screen.getByLabelText(t.creator)).toBeInTheDocument();
       expect(screen.getByLabelText(t.status)).toBeInTheDocument();
       expect(screen.getByLabelText(t.event)).toBeInTheDocument();
-      expect(screen.getByLabelText(t.assignmentDate)).toBeInTheDocument();
+      expect(
+        screen.getByLabelText(t.assignmentDate, {
+          selector: 'input',
+          exact: true,
+        }),
+      ).toBeInTheDocument();
       expect(screen.getByLabelText(t.preCompletionNotes)).toBeInTheDocument();
     });
 

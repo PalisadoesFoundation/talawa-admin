@@ -13,5 +13,15 @@
   "invalidEmploymentStatus": "Please select a valid employment status",
   "invalidMaritalStatus": "Please select a valid marital status",
   "error400": "The submitted information is invalid. Please check your inputs and try again",
-  "organizationNameAlreadyExists": "An organization with this name already exists"
+  "organizationNameAlreadyExists": "An organization with this name already exists",
+  "markAsReadError": "Error marking notifications as read",
+  "accountLocked": "Account is temporarily locked due to too many failed login attempts. Please try again later.",
+  "accountLockedWithTimer": "Account is temporarily locked. Please try again in {{minutes}} minute(s).",
+  "title": "Something went wrong",
+  "defaultErrorMessage": "An unexpected error occurred",
+  "resetButton": "Try again",
+  "resetButtonAriaLabel": "Try again",
+  "fileTooLarge": "File too large: {{fileName}}",
+  "invalidFileType": "Invalid file type: {{fileName}}",
+  "emptyFile": "Empty file selected"
 }

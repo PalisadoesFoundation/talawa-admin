@@ -1,18 +1,18 @@
 .containerHeight {
   height: 88vh;
-  padding: 1rem;
+  padding: var(--space-5);
 }
 
 .mainContainer {
   width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
+  max-width: var(--space-29);
+  margin: var(--space-0) auto;
   flex-grow: 3;
   max-height: 100%;
   overflow: hidden;
   display: flex;
   flex-direction: row;
-  border: 1px solid rgb(220, 220, 220);
+  border: var(--border-1) solid rgb(220, 220, 220);
   border-radius: 16px;
   background-color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -22,8 +22,8 @@
   flex: 3;
   display: flex;
   flex-direction: column;
-  margin: 16px;
-  border: 1px solid rgb(220, 220, 220);
+  margin: var(--space-5);
+  border: var(--border-1) solid rgb(220, 220, 220);
   border-radius: 12px;
   overflow-y: auto;
   background-color: #fafafa;
@@ -38,27 +38,27 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-width: 320px;
-  max-width: 400px;
-  border-right: 1px solid rgb(220, 220, 220);
+  min-width: var(--space-21);
+  max-width: var(--space-23);
+  border-right: var(--border-1) solid rgb(220, 220, 220);
   background-color: #f8f9fa;
 }
 
 .addChatContainer {
-  margin: 0 20px;
-  padding: 20px 0px 10px 0px;
-  border-bottom: 2px solid black;
+  margin: var(--space-0) var(--space-6);
+  padding: var(--space-6) var(--space-0) var(--space-4) var(--space-0);
+  border-bottom: var(--border-2) solid black;
 }
 
 .contactCardContainer {
-  padding: 10px 15px;
+  padding: var(--space-4) var(--space-5);
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: var(--space-2);
 }
 
 .chatHeadingContainer {
-  padding: 10px;
+  padding: var(--space-4);
 }
 
 .borderNone {
@@ -79,11 +79,11 @@
   --bs-accordion-active-bg: white;
   --bs-accordion-active-color: black;
   --bs-accordion-btn-focus-box-shadow: none;
-  --bs-accordion-border-width: 0px;
+  --bs-accordion-border-width: 0;
 }
 
 .chatType > button {
-  padding-bottom: 0;
+  padding-bottom: var(--space-0);
 }
 
 .createChat {
@@ -98,13 +98,13 @@
   justify-content: center;
   top: 0;
   left: 0;
-  width: 40px;
+  width: var(--space-9);
   height: 100vh;
   z-index: 9999;
   background-color: rgba(245, 245, 245);
   border: none;
-  border-radius: 0px;
-  margin-right: 20px;
+  border-radius: 0;
+  margin-right: var(--space-6);
   color: black;
 }
 
@@ -118,10 +118,10 @@
 }
 
 .customToggle {
-  padding: 0;
+  padding: var(--space-0);
   background: none;
   border: none;
-  margin-right: 1rem;
+  margin-right: var(--space-5);
   --bs-btn-active-bg: none;
 }
 .customToggle svg {
@@ -141,31 +141,31 @@
   color: black;
 }
 
-@media (max-width: 1120px) {
+@media (max-width: var(--breakpoint-1120)) {
   .collapseSidebarButton {
-    width: calc(250px);
+    width: var(--space-18);
   }
 }
 
-@media (max-height: 650px) {
+@media (max-height: var(--breakpoint-650)) {
   .collapseSidebarButton {
-    width: 250px;
-    height: 20px;
+    width: var(--space-18);
+    height: var(--space-6);
   }
   .opendrawer {
-    width: 30px;
+    width: var(--space-8);
   }
 }
 
 /* For tablets */
-@media (max-width: 820px) {
+@media (max-width: var(--breakpoint-820)) {
   .contract,
   .expand {
     animation: none;
   }
 
   .opendrawer {
-    width: 25px;
+    width: var(--space-7);
   }
 
   .collapseSidebarButton {
@@ -176,7 +176,7 @@
 }
 
 .accordionBody {
-  height: calc(100vh / 2 - 2rem - 60px) !important;
+  height: calc(100vh / 2 - var(--space-8) - var(--space-11)) !important;
   overflow-y: scroll;
 }
 
@@ -185,23 +185,23 @@
 }
 
 .filters {
-  padding: 20px 0px 0px 20px;
+  padding: var(--space-6) var(--space-0) var(--space-0) var(--space-6);
   display: flex;
-  gap: 8px;
+  gap: var(--space-3);
 }
 
 .filterButton {
   border-radius: 14px;
-  padding: 5px 10px;
+  padding: var(--space-2) var(--space-4);
   background-color: white;
   color: #a5a5a5;
   border: none;
-  border: 1px solid #a5a5a5;
+  border: var(--border-1) solid #a5a5a5;
 }
 
 .selectedBtn,
 .filterButton:hover {
-  border: 1px solid #98e0b6;
+  border: var(--border-1) solid #98e0b6;
   background-color: #98e0b6;
   color: rgb(255, 255, 255);
 }

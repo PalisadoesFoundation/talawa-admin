@@ -9,27 +9,16 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
-import { vi } from 'vitest';
+import { vi, beforeAll } from 'vitest';
 
-const createLocalStorageMock = () => {
-  let store: Record<string, string> = {};
-  return {
-    getItem: (key: string) => store[key] ?? null,
-    setItem: (key: string, value: unknown) => {
-      store[key] = String(value);
-    },
-    removeItem: (key: string) => {
-      delete store[key];
-    },
-    clear: () => {
-      store = {};
-    },
-  };
-};
+let setItem: ReturnType<typeof useLocalStorage>['setItem'];
+let clearAllItems: ReturnType<typeof useLocalStorage>['clearAllItems'];
 
-vi.stubGlobal('localStorage', createLocalStorageMock());
-
-const { setItem } = useLocalStorage();
+beforeAll(() => {
+  const storage = useLocalStorage();
+  setItem = storage.setItem;
+  clearAllItems = storage.clearAllItems;
+});
 
 let mockNavigate: ReturnType<typeof vi.fn>;
 
@@ -70,12 +59,7 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.clearAllMocks();
-  vi.restoreAllMocks();
-  localStorage.clear();
-});
-afterAll(() => {
-  // Ensure any global stubs are cleaned up for other test files
-  vi.unstubAllGlobals();
+  clearAllItems();
 });
 
 describe('ProfileDropdown Component', () => {
@@ -97,7 +81,7 @@ describe('ProfileDropdown Component', () => {
   });
 
   test('truncates long names to MAX_NAME_LENGTH characters with ellipsis', () => {
-    localStorage.clear();
+    clearAllItems();
     const longName = 'ThisIsAVeryLongNameThatExceedsTwentyCharacters';
     setItem('name', longName);
     setItem('UserImage', 'https://example.com/image.jpg');
@@ -119,7 +103,7 @@ describe('ProfileDropdown Component', () => {
   });
 
   test('renders Avatar component when no user image is available', () => {
-    localStorage.clear();
+    clearAllItems();
     setItem('name', 'John Doe');
     setItem('role', 'regular');
     // UserImage not set, should show Avatar fallback
@@ -138,7 +122,7 @@ describe('ProfileDropdown Component', () => {
   });
 
   test('renders Avatar component when user image is null string', () => {
-    localStorage.clear();
+    clearAllItems();
     setItem('name', 'John Doe');
     setItem('UserImage', 'null');
     setItem('role', 'regular');

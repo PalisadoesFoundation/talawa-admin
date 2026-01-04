@@ -42,14 +42,12 @@
  * - Apollo Client for GraphQL queries and mutations.
  * - Material-UI and Bootstrap for UI components.
  * - Day.js for date manipulation.
- * - React-Toastify for notifications.
+ * - NotificationToast for notifications.
  *
  * @css
  * - Uses global styles from `app-fixed.module.css`.
  * - Reusable class `.addButton` for consistent button styling.
  */
-import { DatePicker } from '@mui/x-date-pickers';
-import dayjs from 'dayjs';
 import type { ChangeEvent } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { currencyOptions, currencySymbols } from 'utils/currency';
@@ -63,7 +61,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   Autocomplete,
   FormControl,
@@ -96,18 +94,11 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
   mode,
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
-  const { t: tCommon } = useTranslation('common');
 
   const [formState, setFormState] = useState<InterfaceCreatePledge>({
     pledgeUsers: pledge?.pledger ? [pledge.pledger] : [],
     pledgeAmount: Math.max(0, pledge?.amount ?? 0),
     pledgeCurrency: pledge?.currency ?? 'USD',
-    pledgeEndDate: pledge?.endDate
-      ? dayjs(pledge.endDate).toDate()
-      : new Date(),
-    pledgeStartDate: pledge?.startDate
-      ? dayjs(pledge.startDate).toDate()
-      : new Date(),
   });
 
   const [pledgers, setPledgers] = useState<InterfaceUserInfoPG[]>([]);
@@ -124,8 +115,6 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         pledgeUsers: pledge.pledger ? [pledge.pledger] : [],
         pledgeAmount: pledge.amount ?? 0,
         pledgeCurrency: pledge.currency ?? 'USD',
-        pledgeEndDate: dayjs(pledge.endDate).toDate(),
-        pledgeStartDate: dayjs(pledge.startDate).toDate(),
       });
     }
   }, [pledge]);
@@ -167,11 +156,11 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
         await updatePledge({
           variables,
         });
-        toast.success(t('pledgeUpdated'));
+        NotificationToast.success(t('pledgeUpdated'));
         refetchPledge();
         hide();
       } catch (error: unknown) {
-        toast.error((error as Error).message);
+        NotificationToast.error((error as Error).message);
       }
     },
     [formState, pledge, updatePledge, t, refetchPledge, hide],
@@ -193,18 +182,16 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
           },
         });
 
-        toast.success(t('pledgeCreated') as string);
+        NotificationToast.success(t('pledgeCreated') as string);
         refetchPledge();
         setFormState({
           pledgeUsers: [],
           pledgeAmount: 0,
           pledgeCurrency: 'USD',
-          pledgeEndDate: new Date(),
-          pledgeStartDate: new Date(),
         });
         hide();
       } catch (error: unknown) {
-        toast.error((error as Error).message);
+        NotificationToast.error((error as Error).message);
       }
     },
     [formState, campaignId],
@@ -266,49 +253,16 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  label="Pledgers"
+                  label={t('pledgers')}
                   inputProps={{
                     ...params.inputProps,
-                    'aria-label': 'Pledgers',
+                    'aria-label': t('pledgers'),
                   }}
                 />
               )}
             />
           </Form.Group>
           <Form.Group className="d-flex gap-3 mx-auto  mb-3">
-            {/* Date Calendar Component to select start date of an event */}
-            <DatePicker
-              format="DD/MM/YYYY"
-              label={tCommon('startDate')}
-              value={dayjs(formState.pledgeStartDate)}
-              className={styles.noOutlinePledge}
-              onChange={(date): void => {
-                if (date) {
-                  setFormState({
-                    ...formState,
-                    pledgeStartDate: date.toDate(),
-                  });
-                }
-              }}
-              disabled
-            />
-            <DatePicker
-              format="DD/MM/YYYY"
-              label="End Date"
-              value={dayjs(formState.pledgeEndDate)}
-              className={styles.noOutlinePledge}
-              onChange={(date): void => {
-                if (date) {
-                  setFormState({
-                    ...formState,
-                    pledgeEndDate: date.toDate(),
-                  });
-                }
-              }}
-              disabled
-            />
-          </Form.Group>
-          <Form.Group className="d-flex gap-3 mb-4">
             {/* Dropdown to select the currency in which amount is to be pledged */}
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">
@@ -316,9 +270,9 @@ const PledgeModal: React.FC<InterfacePledgeModal> = ({
               </InputLabel>
               <Select
                 value={formState.pledgeCurrency || ''}
-                label="Currency"
+                label={t('currency')}
                 inputProps={{
-                  'aria-label': 'Currency',
+                  'aria-label': t('currency'),
                 }}
                 disabled
                 className="MuiSelect-disabled"
