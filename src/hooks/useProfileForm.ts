@@ -72,11 +72,16 @@ export function useProfileForm(initial: UserProfile) {
   /**
    * Validates the form and returns true if valid
    * Sets error messages for invalid fields
+   * 
+   * Note: Per issue #6110 requirements, this validates:
+   * - name: required and non-empty
+   * - emailAddress: required and non-empty (format validation not required per spec)
+   * - password: optional, but if provided must meet complexity requirements
    */
   const validate = useCallback(() => {
     const next: ProfileErrors = {};
     if (!form.name?.trim()) next.name = 'Name is required';
-    if (form.password && !validatePassword(form.password)) {
+    if (form.password && form.password.trim() !== '' && !validatePassword(form.password)) {
       next.password = 'Password does not meet policy';
     }
     if (!form.emailAddress?.trim()) next.emailAddress = 'Email is required';
@@ -95,6 +100,8 @@ export function useProfileForm(initial: UserProfile) {
 
   /**
    * Tracks if form has been modified from initial state
+   * Note: Uses JSON.stringify for deep equality as specified in starter code.
+   * This is acceptable for this use case as UserProfile objects are small.
    */
   const changed = useMemo(
     () => JSON.stringify(form) !== JSON.stringify(initial),

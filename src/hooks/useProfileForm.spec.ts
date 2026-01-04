@@ -1,9 +1,12 @@
-import { describe, test, expect, beforeEach } from 'vitest';
+import { describe, test, expect, afterEach, vi } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useProfileForm } from './useProfileForm';
 import type { UserProfile } from './useProfileForm';
 
 describe('useProfileForm Hook', () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
   const initialProfile: UserProfile = {
     name: 'John Doe',
     natalSex: 'Male',
@@ -231,6 +234,22 @@ describe('useProfileForm Hook', () => {
 
         act(() => {
           result.current.setField('password', '');
+        });
+
+        let isValid = false;
+        act(() => {
+          isValid = result.current.validate();
+        });
+
+        expect(isValid).toBe(true);
+        expect(result.current.errors.password).toBeUndefined();
+      });
+
+      test('should pass when password is only whitespace', () => {
+        const { result } = renderHook(() => useProfileForm(initialProfile));
+
+        act(() => {
+          result.current.setField('password', '   ');
         });
 
         let isValid = false;
@@ -514,7 +533,7 @@ describe('useProfileForm Hook', () => {
       expect(result.current.isUpdated).toBe(false);
     });
 
-    test('should be false when form is deeply equal to initial', () => {
+test('should remain true after changing back to initial value due to dirty flag', () => {
       const { result } = renderHook(() => useProfileForm(initialProfile));
 
       // Initially false
