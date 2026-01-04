@@ -83,8 +83,10 @@ const users: User[] = [
 | `paginationConfig` | `PaginationConfig` | No | - | Configuration for pagination |
 | `onRowClick` | `(row: T) => void` | No | - | Callback fired when a row is clicked |
 | `actionColumn` | `(row: T) => ReactNode` | No | - | Render function for custom actions column |
+| `emptyStateProps` | `InterfaceEmptyStateProps` | No | - | Full customization of empty state with icon, description, and actions. Takes precedence over `emptyStateMessage` |
 | `emptyStateMessage` | `string` | No | "No results found" | Message shown when no rows are available |
 | `error` | `string \| ReactNode` | No | - | Error message or component to display |
+
 
 ### SearchConfig
 
@@ -131,6 +133,27 @@ interface PaginationConfig {
 ```
 
 ## Usage Examples
+
+
+### With Custom Empty State
+
+```tsx
+<DataGridWrapper<User>
+  rows={users}
+  columns={columns}
+  emptyStateProps={{
+    icon: 'users',
+    message: 'noUsersFound',
+    description: 'inviteFirstUser',
+    action: {
+      label: 'inviteUser',
+      onClick: handleInvite,
+      variant: 'primary'
+    },
+    dataTestId: 'users-empty-state'
+  }}
+/>
+```
 
 ### WithSearch
 

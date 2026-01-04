@@ -69,6 +69,159 @@ describe('DataGridWrapper', () => {
     expect(screen.getByText('Custom Empty')).toBeInTheDocument();
   });
 
+  test('renders EmptyState with emptyStateProps (icon, description, action)', () => {
+    const handleAction = vi.fn();
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        rows={[]}
+        emptyStateProps={{
+          icon: 'users',
+          message: 'No users found',
+          description: 'Invite users to get started',
+          action: {
+            label: 'Invite User',
+            onClick: handleAction,
+            variant: 'primary',
+          },
+          dataTestId: 'users-empty-state',
+        }}
+      />,
+    );
+
+    expect(screen.getByText('No users found')).toBeInTheDocument();
+    expect(screen.getByText('Invite users to get started')).toBeInTheDocument();
+    const actionBtn = screen.getByRole('button', { name: /Invite User/i });
+    expect(actionBtn).toBeInTheDocument();
+    fireEvent.click(actionBtn);
+    expect(handleAction).toHaveBeenCalledTimes(1);
+  });
+
+  test('emptyStateProps takes precedence over emptyStateMessage', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        rows={[]}
+        emptyStateMessage="Legacy Message"
+        emptyStateProps={{
+          message: 'New Message',
+        }}
+      />,
+    );
+
+    expect(screen.getByText('New Message')).toBeInTheDocument();
+    expect(screen.queryByText('Legacy Message')).not.toBeInTheDocument();
+  });
+
+  test('emptyStateProps with custom dataTestId renders correctly', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        rows={[]}
+        emptyStateProps={{
+          message: 'Custom empty state',
+          dataTestId: 'custom-empty-state',
+        }}
+      />,
+    );
+
+    expect(screen.getByTestId('custom-empty-state')).toBeInTheDocument();
+  });
+
+  test('emptyStateProps action button variant renders correctly', () => {
+    const handleAction = vi.fn();
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        rows={[]}
+        emptyStateProps={{
+          message: 'No data',
+          action: {
+            label: 'Create',
+            onClick: handleAction,
+            variant: 'outlined',
+          },
+        }}
+      />,
+    );
+
+    const btn = screen.getByRole('button', { name: /Create/i });
+    expect(btn).toHaveClass('MuiButton-outlined');
+  });
+
+  test('backward compatibility: emptyStateMessage still works without emptyStateProps', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        rows={[]}
+        emptyStateMessage="Legacy behavior"
+      />,
+    );
+
+    expect(screen.getByText('Legacy behavior')).toBeInTheDocument();
+  });
+
+  test('emptyStateProps with icon and all features', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        rows={[]}
+        emptyStateProps={{
+          icon: 'dashboard',
+          message: 'noData',
+          description: 'startCreating',
+          action: {
+            label: 'createNew',
+            onClick: vi.fn(),
+            variant: 'primary',
+          },
+          dataTestId: 'full-empty-state',
+        }}
+      />,
+    );
+
+    expect(screen.getByTestId('full-empty-state-icon')).toBeInTheDocument();
+    expect(screen.getByTestId('full-empty-state-message')).toBeInTheDocument();
+    expect(
+      screen.getByTestId('full-empty-state-description'),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId('full-empty-state-action')).toBeInTheDocument();
+  });
+
+  test('accessibility: emptyStateProps preserves a11y attributes', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        rows={[]}
+        emptyStateProps={{
+          message: 'Accessible empty state',
+          description: 'This is the description',
+        }}
+      />,
+    );
+
+    const emptyState = screen.getByTestId('empty-state');
+    expect(emptyState).toHaveAttribute('role', 'status');
+    expect(emptyState).toHaveAttribute('aria-live', 'polite');
+    expect(emptyState).toHaveAttribute('aria-label', 'Accessible empty state');
+  });
+
+  test('renders error state (takes precedence over empty state)', () => {
+    render(
+      <DataGridWrapper
+        {...defaultProps}
+        rows={[]}
+        error="Data fetch failed"
+        emptyStateProps={{
+          message: 'No data',
+        }}
+      />,
+    );
+
+    expect(screen.getByRole('alert')).toHaveTextContent('Data fetch failed');
+    expect(screen.queryByText('No data')).not.toBeInTheDocument();
+  });
+
   test('renders error message and hides empty state', () => {
     render(
       <DataGridWrapper
