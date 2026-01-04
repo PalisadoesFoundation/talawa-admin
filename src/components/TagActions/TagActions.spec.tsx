@@ -16,7 +16,6 @@ import { I18nextProvider } from 'react-i18next';
 import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { toast } from 'react-toastify';
 import type { ApolloLink } from '@apollo/client';
 import type { InterfaceTagActionsProps } from './TagActions';
 import TagActions from './TagActions';
@@ -29,6 +28,7 @@ import {
   MOCKS_ERROR_SUBTAGS_QUERY,
 } from './TagActionsMocks';
 import type { TFunction } from 'i18next';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR_ORGANIZATION_TAGS_QUERY, true);
@@ -42,10 +42,13 @@ async function wait(ms = 500): Promise<void> {
   });
 }
 
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     error: vi.fn(),
+    success: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
   },
 }));
 
@@ -352,7 +355,9 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(translations.noTagSelected);
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        translations.noTagSelected,
+      );
     });
   });
   test('Toasts error when something wrong happen while assigning/removing tag', async () => {
@@ -364,7 +369,7 @@ describe('Organisation Tags Page', () => {
     });
     await userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -387,7 +392,7 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(NotificationToast.success).toHaveBeenCalledWith(
         translations.successfullyAssignedToTags,
       );
     });
@@ -407,7 +412,7 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('tagActionSubmitBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(NotificationToast.success).toHaveBeenCalledWith(
         translations.successfullyRemovedFromTags,
       );
     });

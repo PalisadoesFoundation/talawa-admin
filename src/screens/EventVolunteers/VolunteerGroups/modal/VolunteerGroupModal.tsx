@@ -49,7 +49,7 @@ import styles from 'style/app-fixed.module.css';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Autocomplete, FormControl, TextField } from '@mui/material';
 
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';
@@ -57,6 +57,7 @@ import {
   CREATE_VOLUNTEER_GROUP,
   UPDATE_VOLUNTEER_GROUP,
 } from 'GraphQl/Mutations/EventVolunteerMutation';
+import { errorHandler } from 'utils/errorHandler';
 
 export interface InterfaceVolunteerGroupModal {
   isOpen: boolean;
@@ -180,11 +181,11 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
             data: { ...updatedFields, eventId },
           },
         });
-        toast.success(t('volunteerGroupUpdated'));
+        NotificationToast.success(t('volunteerGroupUpdated'));
         refetchGroups();
         hide();
       } catch (error: unknown) {
-        toast.error((error as Error).message);
+        errorHandler(t, error);
       }
     },
     [formState, group],
@@ -225,7 +226,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
           },
         });
 
-        toast.success(t('volunteerGroupCreated'));
+        NotificationToast.success(t('volunteerGroupCreated'));
         refetchGroups();
         setFormState({
           name: '',
@@ -237,7 +238,7 @@ const VolunteerGroupModal: React.FC<InterfaceVolunteerGroupModal> = ({
         setApplyTo('series'); // Reset to default
         hide();
       } catch (error: unknown) {
-        toast.error((error as Error).message);
+        errorHandler(t, error);
       }
     },
     [formState, eventId, isRecurring, applyTo, baseEvent],

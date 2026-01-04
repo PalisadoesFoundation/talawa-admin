@@ -30,6 +30,7 @@
  * ```
  *
  */
+// translation-check-keyPrefix: manageTag
 import { useMutation, useQuery } from '@apollo/client';
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
@@ -40,13 +41,12 @@ import type {
   InterfaceQueryOrganizationUserTags,
   InterfaceTagData,
 } from 'utils/interfaces';
-import styles from '../../style/app-fixed.module.css';
+import styles from 'style/app-fixed.module.css';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import {
   ASSIGN_TO_TAGS,
   REMOVE_FROM_TAGS,
 } from 'GraphQl/Mutations/TagMutations';
-import { toast } from 'react-toastify';
 import type {
   InterfaceOrganizationTagsQuery,
   TagActionType,
@@ -57,6 +57,8 @@ import { WarningAmberRounded } from '@mui/icons-material';
 import TagNode from './Node/TagNode';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import type { TFunction } from 'i18next';
+import componentStyles from './TagAction.module.css';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 interface InterfaceUserTagsAncestorData {
   _id: string;
@@ -243,7 +245,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     e.preventDefault();
 
     if (!selectedTags.length) {
-      toast.error(t('noTagSelected'));
+      NotificationToast.error(t('noTagSelected'));
       return;
     }
 
@@ -262,15 +264,15 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
       if (data) {
         if (tagActionType === 'assignToTags') {
-          toast.success(t('successfullyAssignedToTags'));
+          NotificationToast.success(t('successfullyAssignedToTags'));
         } else {
-          toast.success(t('successfullyRemovedFromTags'));
+          NotificationToast.success(t('successfullyRemovedFromTags'));
         }
         hideTagActionsModal();
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(error.message);
+        NotificationToast.error(error.message);
       }
     }
   };
@@ -279,7 +281,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded className={`${styles.errorIcon} fs-1`} />
           <h6 className="fw-bold text-danger text-center">
             {t('errorOccurredWhileLoadingOrganizationUserTags')}
           </h6>
@@ -360,7 +362,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                 <div
                   id="scrollableDiv"
                   data-testid="scrollableDiv"
-                  style={{ height: 300, overflow: 'auto' }}
+                  className={componentStyles.tagActionsScrollableDiv}
                 >
                   <InfiniteScroll
                     dataLength={userTagsList?.length ?? 0}

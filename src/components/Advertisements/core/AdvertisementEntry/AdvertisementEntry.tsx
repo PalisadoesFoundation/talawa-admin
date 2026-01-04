@@ -38,6 +38,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styles from 'style/app-fixed.module.css';
+import localStyles from './AdvertisementEntry.module.css';
 import {
   Button,
   Card,
@@ -52,9 +53,10 @@ import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import AdvertisementRegister from '../AdvertisementRegister/AdvertisementRegister';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Advertisement } from 'types/Advertisement/type';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/AdvertisementQueries';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 function AdvertisementEntry({
   advertisement,
@@ -71,6 +73,7 @@ function AdvertisementEntry({
 }): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'advertisement' });
   const { t: tCommon } = useTranslation('common');
+  const { t: tErrors } = useTranslation('errors');
 
   // State for loading button
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -127,7 +130,7 @@ function AdvertisementEntry({
           id: advertisement.id,
         },
       });
-      toast.success(t('advertisementDeleted') as string);
+      NotificationToast.success(t('advertisementDeleted') as string);
       setButtonLoading(false);
       setAfterCompleted?.(null);
       setAfterActive?.(null);
@@ -135,14 +138,19 @@ function AdvertisementEntry({
       toggleShowDeleteModal(); // Close the modal after deletion
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(error.message);
+        NotificationToast.error(error.message);
       }
       setButtonLoading(false);
     }
   };
 
   return (
-    <>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+    >
       <Row data-testid="AdEntry" xs={1} md={2} className="g-4">
         {Array.from({ length: 1 }).map((_, idx) => (
           <Col key={idx}>
@@ -211,7 +219,10 @@ function AdvertisementEntry({
                               <img
                                 className={`d-block w-100 ${styles.cardImage}`}
                                 src={attachment.url}
-                                alt={`Advertisement image #${index + 1} for ${advertisement.name ?? 'ad'}`}
+                                alt={t('advertisementImageAlt', {
+                                  index: index + 1,
+                                  name: advertisement.name ?? 'ad',
+                                })}
                                 data-testid="media"
                                 crossOrigin="anonymous"
                               />
@@ -224,7 +235,7 @@ function AdvertisementEntry({
                         <img
                           className={`d-block w-100 ${styles.cardImage}`}
                           src={advertisement.attachments[0].url}
-                          alt="Advertisement media"
+                          alt={t('advertisementMedia')}
                           data-testid="media"
                           crossOrigin="anonymous"
                         />
@@ -235,7 +246,7 @@ function AdvertisementEntry({
                       className={`${styles.noMediaPlaceholder} ${styles.imageWrapper}`}
                       data-testid="media"
                     >
-                      No media available
+                      {t('noMediaAvailable')}
                     </div>
                   )}
                 </div>
@@ -246,13 +257,12 @@ function AdvertisementEntry({
                 </Card.Title>
                 <Card.Text
                   data-testid="Ad_desc"
-                  style={{
-                    color:
-                      advertisement.description &&
-                      advertisement.description.length > 0
-                        ? 'inherit'
-                        : 'gray',
-                  }}
+                  className={
+                    advertisement.description &&
+                    advertisement.description.length > 0
+                      ? undefined
+                      : localStyles.noDescription
+                  }
                 >
                   {advertisement.description &&
                   advertisement.description.length > 0
@@ -334,7 +344,7 @@ function AdvertisementEntry({
         ))}
       </Row>
       <br />
-    </>
+    </ErrorBoundaryWrapper>
   );
 }
 

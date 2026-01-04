@@ -1,7 +1,8 @@
-import { useQuery, type ApolloQueryResult } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
@@ -11,10 +12,11 @@ import { currencySymbols } from 'utils/currency';
 import styles from 'style/app-fixed.module.css';
 import PledgeDeleteModal from './deleteModal/PledgeDeleteModal';
 import PledgeModal from './modal/PledgeModal';
-import { Breadcrumbs, Link, Popover, Stack, Typography } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { Popover } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
-import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
+import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/BreadcrumbsComponent';
+import { DataGrid } from '@mui/x-data-grid';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 import type {
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
@@ -22,29 +24,18 @@ import type {
   InterfaceCampaignInfoPG,
 } from 'utils/interfaces';
 import ProgressBar from 'react-bootstrap/ProgressBar';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
+import { getPledgeColumns } from './PledgeColumns';
 
 enum ModalState {
   SAME = 'same',
   DELETE = 'delete',
 }
 
-const dataGridStyle = {
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
-  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
-};
-
+/**
+ * Renders the Fund Campaign Pledges screen with pledge management, search/sort, and progress tracking.
+ */
 const fundCampaignPledge = (): JSX.Element => {
-  const { t } = useTranslation('translation', { keyPrefix: 'pledges' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -87,80 +78,80 @@ const fundCampaignPledge = (): JSX.Element => {
     loading: pledgeLoading,
     error: pledgeError,
     refetch: refetchPledge,
-  }: {
-    data?: { fundCampaign: InterfaceQueryFundCampaignsPledges };
-    loading: boolean;
-    error?: Error | undefined;
-    refetch: () => Promise<
-      ApolloQueryResult<{
-        fundCampaign: InterfaceQueryFundCampaignsPledges;
-      }>
-    >;
-  } = useQuery(FUND_CAMPAIGN_PLEDGE, {
-    variables: {
-      input: { id: fundCampaignId },
+  } = useQuery<{ fundCampaign: InterfaceQueryFundCampaignsPledges }>(
+    FUND_CAMPAIGN_PLEDGE,
+    {
+      variables: { input: { id: fundCampaignId } },
     },
-  });
+  );
 
-  const { pledges, totalPledged, totalRaised, fundName } = useMemo(() => {
-    let totalPledged = 0;
-    let totalRaised = 0;
+  const { pledges, totalPledged, totalRaised, fundName, fundId } =
+    useMemo(() => {
+      let totalPledged = 0;
+      let totalRaised = 0;
 
-    const pledgesList =
-      pledgeData?.fundCampaign?.pledges?.edges.map((edge) => {
-        const amount = edge.node.amount || 0;
-        totalPledged += amount;
-        // Assuming there's no raised amount for now,
-        // this should be updated when raised amount data is available
-        totalRaised += 0;
+      const pledgesList =
+        pledgeData?.fundCampaign?.pledges?.edges.map((edge) => {
+          const amount = edge.node.amount || 0;
+          totalPledged += amount;
+          // Assuming there's no raised amount for now,
+          // this should be updated when raised amount data is available
+          totalRaised += 0;
 
-        const allUsers =
-          'users' in edge.node && Array.isArray(edge.node.users)
-            ? edge.node.users
-            : [edge.node.pledger];
+          const allUsers =
+            'users' in edge.node && Array.isArray(edge.node.users)
+              ? edge.node.users
+              : [edge.node.pledger];
 
-        return {
-          id: edge.node.id,
-          amount: amount,
-          pledgeDate: edge.node.createdAt
-            ? new Date(edge.node.createdAt)
-            : new Date(),
-          endDate: pledgeData.fundCampaign.endAt
-            ? new Date(pledgeData.fundCampaign.endAt)
-            : new Date(),
-          users: allUsers.filter(Boolean),
-          currency: pledgeData.fundCampaign.currencyCode || 'USD',
-        };
-      }) ?? [];
+          return {
+            id: edge.node.id,
+            amount: amount,
+            pledgeDate: edge.node.createdAt
+              ? new Date(edge.node.createdAt)
+              : new Date(),
+            endDate: pledgeData.fundCampaign.endAt
+              ? new Date(pledgeData.fundCampaign.endAt)
+              : new Date(),
+            users: allUsers.filter(Boolean),
+            currency: pledgeData.fundCampaign.currencyCode || 'USD',
+          };
+        }) ?? [];
 
-    const filteredPledges = searchTerm
-      ? pledgesList.filter((pledge) => {
-          const search = searchTerm.toLowerCase();
-          return pledge.users.some((user) =>
-            user.name?.toLowerCase().includes(search),
-          );
-        })
-      : pledgesList;
+      const filteredPledges = searchTerm
+        ? pledgesList.filter((pledge) => {
+            const search = searchTerm.toLowerCase();
+            return pledge.users.some((user) =>
+              user.name?.toLowerCase().includes(search),
+            );
+          })
+        : pledgesList;
 
-    const sortedPledges = [...filteredPledges].sort((a, b) => {
-      switch (sortBy) {
-        case 'amount_ASC':
-          return a.amount - b.amount;
-        case 'amount_DESC':
-          return b.amount - a.amount;
-        case 'endDate_ASC':
-          return a.endDate.getTime() - b.endDate.getTime();
-        case 'endDate_DESC':
-          return b.endDate.getTime() - a.endDate.getTime();
-      }
-    });
+      const sortedPledges = [...filteredPledges].sort((a, b) => {
+        switch (sortBy) {
+          case 'amount_ASC':
+            return a.amount - b.amount;
+          case 'amount_DESC':
+            return b.amount - a.amount;
+          case 'endDate_ASC':
+            return a.endDate.getTime() - b.endDate.getTime();
+          case 'endDate_DESC':
+            return b.endDate.getTime() - a.endDate.getTime();
+        }
+      });
 
-    // Get fund name from the campaign's fund property
-    const fundName =
-      pledgeData?.fundCampaign?.pledges?.edges[0]?.node?.campaign?.fund?.name ??
-      tCommon('Funds');
-    return { pledges: sortedPledges, totalPledged, totalRaised, fundName };
-  }, [pledgeData, searchTerm, sortBy, tCommon]);
+      // Get fund info from the campaign's fund property
+      const fundInfo =
+        pledgeData?.fundCampaign?.pledges?.edges[0]?.node?.campaign?.fund;
+      const fundName = fundInfo?.name ?? tCommon('funds');
+      const fundId = fundInfo?.id ?? null;
+      return {
+        pledges: sortedPledges,
+        totalPledged,
+        totalRaised,
+        fundName,
+        fundId,
+      };
+    }, [pledgeData, searchTerm, sortBy, tCommon]);
 
   useEffect(() => {
     if (pledgeData?.fundCampaign) {
@@ -177,7 +168,6 @@ const fundCampaignPledge = (): JSX.Element => {
   useEffect(() => {
     refetchPledge();
   }, [sortBy, refetchPledge]);
-  console.log('campaignInfo', campaignInfo);
 
   const openModal = (modal: ModalState): void => {
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
@@ -205,7 +195,9 @@ const fundCampaignPledge = (): JSX.Element => {
   );
 
   const handleClick = (
-    event: React.MouseEvent<HTMLDivElement>,
+    event:
+      | React.MouseEvent<HTMLDivElement>
+      | React.KeyboardEvent<HTMLDivElement>,
     users: InterfaceUserInfoPG[],
   ): void => {
     setExtraUsers(users);
@@ -227,7 +219,7 @@ const fundCampaignPledge = (): JSX.Element => {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message} data-testid="errorMsg">
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded className={styles.errorIcon} />
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Pledges' })}
             <br />
@@ -238,190 +230,35 @@ const fundCampaignPledge = (): JSX.Element => {
     );
   }
 
-  const columns: GridColDef[] = [
-    {
-      field: 'pledgers',
-      headerName: 'Pledgers',
-      flex: 3,
-      minWidth: 50,
-      align: 'left',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        const users = params.row.users || [];
-        const mainUsers = users.slice(0, 1);
-        const extraUsers = users.slice(1);
-
-        return (
-          <div className="d-flex flex-wrap gap-1" style={{ maxHeight: 120 }}>
-            {mainUsers.map((user: InterfaceUserInfoPG, index: number) => (
-              <div
-                className={styles.pledgerContainer}
-                key={`${params.row.id}-main-${index}`}
-                data-testid={`mainUser-${params.row.id}-${index}`}
-              >
-                {user.avatarURL ? (
-                  <img
-                    src={user.avatarURL}
-                    alt={user.name}
-                    className={styles.TableImagePledge}
-                  />
-                ) : (
-                  <Avatar
-                    containerStyle={styles.imageContainerPledge}
-                    avatarStyle={styles.TableImagePledge}
-                    name={user.name}
-                    alt={user.name}
-                  />
-                )}
-                <span>{user.name}</span>
-              </div>
-            ))}
-            {extraUsers.length > 0 && (
-              <div
-                className={styles.moreContainer}
-                aria-describedby={id}
-                onClick={(event) => handleClick(event, extraUsers)}
-                data-testid={`moreContainer-${params.row.id}`}
-              >
-                +{extraUsers.length} more...
-              </div>
-            )}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'pledgeDate',
-      headerName: 'Pledge Date',
-      flex: 1,
-      minWidth: 150,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return dayjs(params.row.pledgeDate).format('DD/MM/YYYY');
-      },
-    },
-    {
-      field: 'amount',
-      headerName: 'Pledged',
-      flex: 1,
-      minWidth: 100,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="amountCell"
-          >
-            {
-              currencySymbols[
-                params.row.currency as keyof typeof currencySymbols
-              ]
-            }
-            {params.row.amount.toLocaleString('en-US')}
-          </div>
-        );
-      },
-    },
-    {
-      field: 'donated',
-      headerName: 'Donated',
-      flex: 1,
-      minWidth: 100,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <div
-            className="d-flex justify-content-center fw-bold"
-            data-testid="paidCell"
-          >
-            {
-              currencySymbols[
-                params.row.currency as keyof typeof currencySymbols
-              ]
-            }
-            0
-          </div>
-        );
-      },
-    },
-    {
-      field: 'action',
-      headerName: 'Action',
-      flex: 1,
-      minWidth: 100,
-      align: 'center',
-      headerAlign: 'center',
-      headerClassName: `${styles.tableHeader}`,
-      sortable: false,
-      renderCell: (params: GridCellParams) => {
-        return (
-          <>
-            <Button
-              variant="success"
-              size="sm"
-              className={`me-2 ${styles.editButton}`}
-              data-testid="editPledgeBtn"
-              onClick={() =>
-                handleOpenModal(params.row as InterfacePledgeInfo, 'edit')
-              }
-            >
-              {' '}
-              <i className="fa fa-edit" />
-            </Button>
-            <Button
-              size="sm"
-              variant="danger"
-              className="rounded"
-              data-testid="deletePledgeBtn"
-              onClick={() =>
-                handleDeleteClick(params.row as InterfacePledgeInfo)
-              }
-            >
-              <i className="fa fa-trash" />
-            </Button>
-          </>
-        );
-      },
-    },
-  ];
+  const columns = getPledgeColumns({
+    t,
+    tCommon,
+    id,
+    handleClick,
+    handleOpenModal,
+    handleDeleteClick,
+  });
 
   return (
     <div>
-      <Breadcrumbs aria-label="breadcrumb" className="ms-1">
-        <Link
-          underline="hover"
-          color="inherit"
-          component="button"
-          onClick={() => history.go(-2)}
-        >
-          {fundName}
-        </Link>
-        <Link
-          underline="hover"
-          color="inherit"
-          component="button"
-          onClick={() => history.back()}
-        >
-          {campaignInfo?.name}
-        </Link>
-        <Typography color="text.primary">{t('pledges')}</Typography>
-      </Breadcrumbs>
+      <BreadcrumbsComponent
+        items={[
+          { label: fundName, to: `/orgfunds/${orgId}` },
+          fundId
+            ? {
+                label: campaignInfo?.name,
+                to: `/orgfundcampaign/${orgId}/${fundId}`,
+              }
+            : { label: campaignInfo?.name },
+          { translationKey: 'pledges.pledges', isCurrent: true },
+        ]}
+      />
       <div className={styles.overviewContainer}>
         <div className={styles.titleContainer}>
           <h3>{campaignInfo?.name}</h3>
           <span>
-            {t('endsOn')} {dayjs(campaignInfo?.endDate).format('DD/MM/YYYY')}
+            {t('pledges.endsOn')}{' '}
+            {dayjs(campaignInfo?.endDate).format('DD/MM/YYYY')}
           </span>
         </div>
         <div className={styles.progressContainer}>
@@ -429,7 +266,7 @@ const fundCampaignPledge = (): JSX.Element => {
             <div
               className={`btn-group ${styles.toggleGroup}`}
               role="group"
-              aria-label="Toggle between Pledged and Raised amounts"
+              aria-label={tCommon('togglePledgedRaised')}
             >
               <input
                 type="radio"
@@ -445,7 +282,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
                 htmlFor="pledgedRadio"
               >
-                {t('pledgedAmount')}
+                {t('pledges.pledgedAmount')}
               </label>
 
               <input
@@ -460,7 +297,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 className={`btn btn-outline-primary ${styles.toggleBtnPledge}`}
                 htmlFor="raisedRadio"
               >
-                {t('raisedAmount')}
+                {t('pledges.raisedAmount')}
               </label>
             </div>
           </div>
@@ -478,9 +315,8 @@ const fundCampaignPledge = (): JSX.Element => {
                 ] || '$'
               }${progressIndicator === 'pledged' ? totalPledged.toLocaleString('en-US') : totalRaised.toLocaleString('en-US')}`}
               max={100}
-              style={{ height: '1.5rem', fontSize: '0.9rem' }}
               data-testid="progressBar"
-              className={`${styles.progressBar}`}
+              className={`${styles.progressBar} ${styles.progressBarHeight}`}
             />
             <div className={styles.endpoints}>
               <div className={styles.start}>
@@ -500,49 +336,56 @@ const fundCampaignPledge = (): JSX.Element => {
         </div>
       </div>
       <div className={`${styles.btnsContainerPledge} align-items-center`}>
-        <SearchBar
-          placeholder={t('searchPledger')}
-          onSearch={setSearchTerm}
-          inputTestId="searchPledger"
-          buttonTestId="searchBtn"
-        />
-        <div className="d-flex gap-4 mb-1">
-          <div className="d-flex justify-space-between">
-            <SortingButton
-              sortingOptions={[
-                { label: t('lowestAmount'), value: 'amount_ASC' },
-                { label: t('highestAmount'), value: 'amount_DESC' },
-                { label: t('latestEndDate'), value: 'endDate_DESC' },
-                { label: t('earliestEndDate'), value: 'endDate_ASC' },
-              ]}
-              selectedOption={sortBy ?? ''}
-              onSortChange={(value) =>
+        <AdminSearchFilterBar
+          searchPlaceholder={t('pledges.searchPledger')}
+          searchValue={searchTerm}
+          onSearchChange={(value) => setSearchTerm(value.trim())}
+          onSearchSubmit={(value: string) => {
+            setSearchTerm(value.trim());
+          }}
+          searchInputTestId="searchPledger"
+          searchButtonTestId="searchBtn"
+          hasDropdowns={true}
+          dropdowns={[
+            {
+              id: 'sort-pledges',
+              label: tCommon('sort'),
+              title: tCommon('sort'),
+              dataTestIdPrefix: 'filter',
+              selectedOption: sortBy,
+              onOptionChange: (value) =>
                 setSortBy(
                   value as
                     | 'amount_ASC'
                     | 'amount_DESC'
                     | 'endDate_ASC'
                     | 'endDate_DESC',
-                )
-              }
-              dataTestIdPrefix="filter"
-              buttonLabel={tCommon('sort')}
-            />
-          </div>
-          <div>
+                ),
+              options: [
+                { label: t('pledges.lowestAmount'), value: 'amount_ASC' },
+                { label: t('pledges.highestAmount'), value: 'amount_DESC' },
+                { label: t('pledges.latestEndDate'), value: 'endDate_DESC' },
+                { label: t('pledges.earliestEndDate'), value: 'endDate_ASC' },
+              ],
+              type: 'sort',
+            },
+          ]}
+          additionalButtons={
             <Button
               variant="success"
               className={styles.dropdown}
               disabled={!isWithinCampaignDates}
               onClick={() => handleOpenModal(null, 'create')}
               data-testid="addPledgeBtn"
-              title={!isWithinCampaignDates ? t('campaignNotActive') : ''}
+              title={
+                !isWithinCampaignDates ? t('pledges.campaignNotActive') : ''
+              }
             >
               <i className={'fa fa-plus me-2'} />
-              {t('addPledge')}
+              {t('pledges.addPledge')}
             </Button>
-          </div>
-        </div>
+          }
+        />
       </div>
       <DataGrid
         disableColumnMenu
@@ -551,12 +394,24 @@ const fundCampaignPledge = (): JSX.Element => {
         getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noPledges')}
-            </Stack>
+            <EmptyState
+              icon="volunteer_activism"
+              message={t('pledges.noPledges')}
+              dataTestId="fund-campaign-pledge-empty-state"
+            />
           ),
         }}
-        sx={dataGridStyle}
+        className={`${styles.dataGridNoHover} ${styles.dataGridRounded}`}
+        sx={{
+          '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
+            outline: '2px solid var(--primary-theme-color)',
+            outlineOffset: '-2px',
+          },
+          '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
+            outline: '2px solid var(--primary-theme-color)',
+            outlineOffset: '-2px',
+          },
+        }}
         getRowClassName={() => `${styles.rowBackgroundPledge}`}
         autoHeight
         rowHeight={65}

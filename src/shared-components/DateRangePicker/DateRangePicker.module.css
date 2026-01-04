@@ -1,0 +1,41 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 15px;
+}
+
+.controlsRow {
+  display: flex;
+  flex-direction: row;
+  gap: 0.75rem;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.controlsRow > div {
+  flex: 1;
+  min-width: 240px;
+}
+
+.presetRow {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.presetButton {
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+
+.presetButtonActive {
+  background: var(--bs-primary, #0d6efd);
+  color: white;
+  border-color: var(--bs-primary, #0d6efd);
+}

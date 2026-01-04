@@ -187,7 +187,27 @@ pnpm run serve &
 
 #### Stopping The Application
 
-To do.
+Since the production server runs in the background, you need to find and stop the process:
+
+1. Find the process ID:
+
+   ```bash
+   pgrep -f "pnpm run serve"
+   ```
+
+2. Stop the process using the process ID from step 1:
+
+   ```bash
+   kill <process_id>
+   ```
+
+   Replace `<process_id>` with the actual process ID number.
+
+Alternatively, you can use a single command:
+
+```bash
+pkill -f "pnpm run serve"
+```
 
 ### For Development Environments
 
@@ -201,10 +221,11 @@ Run the following command to start the development server:
 pnpm run serve
 ```
 
-#### Stopping The Application
-
 The app will run until you hit: 
 
 ```
 <CTRL-C>
 ```
+
+
+

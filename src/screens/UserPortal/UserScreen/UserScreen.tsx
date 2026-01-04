@@ -43,12 +43,12 @@ import { useAppDispatch } from 'state/hooks';
 import type { RootState } from 'state/reducers';
 import type { TargetsType } from 'state/reducers/routesReducer';
 import styles from 'style/app-fixed.module.css';
+import localStyles from './UserScreen.module.css';
 import UserSidebarOrg from 'components/UserPortal/UserSidebarOrg/UserSidebarOrg';
 import UserSidebar from 'components/UserPortal/UserSidebar/UserSidebar';
 import type { InterfaceMapType } from 'utils/interfaces';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from 'utils/useLocalstorage';
-
 const map: InterfaceMapType = {
   organization: 'home',
   people: 'people',
@@ -61,6 +61,8 @@ const map: InterfaceMapType = {
   volunteer: 'userVolunteer',
   leaveorg: 'leaveOrganization',
   notification: 'notification',
+  organizations: 'userOrganizations',
+  settings: 'settings',
 };
 
 const UserScreen = (): React.JSX.Element => {
@@ -78,8 +80,12 @@ const UserScreen = (): React.JSX.Element => {
   // don't include an `orgId`. In that case render the global user sidebar
   // instead of redirecting to home.
 
-  const titleKey: string | undefined = map[location.pathname.split('/')[2]];
-  const { t } = useTranslation('translation', { keyPrefix: titleKey });
+  /* titleKey defaults to 'common' when the path segment is not found in the map.
+   * This allows using the existing 'common.title' ("User Portal") from translation.json
+   * without adding a new root-level title key.
+   */
+  const titleKey: string = map[location.pathname.split('/')[2]] || 'common';
+  const { t: tScoped } = useTranslation('translation', { keyPrefix: titleKey });
 
   const userRoutes: { targets: TargetsType[] } = useSelector(
     (state: RootState) => state.userRoutes,
@@ -163,13 +169,12 @@ const UserScreen = (): React.JSX.Element => {
         )}
       </div>
       <div
-        className={`${hideDrawer ? styles.expand : styles.contract}`}
-        style={{ marginLeft: hideDrawer ? '100px' : '' }}
+        className={`${hideDrawer ? styles.expand : styles.contract} ${hideDrawer ? localStyles.contentContainer : ''}`}
         data-testid="mainpageright"
       >
         <div className="d-flex justify-content-between align-items-center">
-          <div style={{ flex: 1 }}>
-            <h1>{t('title')}</h1>
+          <div className={localStyles.titleContainer}>
+            <h1>{tScoped('title')}</h1>
           </div>
           {/* <ProfileDropdown /> */}
         </div>

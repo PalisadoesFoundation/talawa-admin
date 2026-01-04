@@ -1,10 +1,9 @@
 /**
- * @file Comprehensive unit tests for the Events component in User Portal.
- * @description This test suite provides 100% code coverage for the Events component,
- * testing all functionality including event creation, modal interactions, form inputs,
- * error handling, and different user roles.
- 
- * @module EventsSpec
+ * Comprehensive unit tests for the Events component in the User Portal.
+ *
+ * This test suite provides 100% code coverage for the Events component by
+ * validating event creation, modal interactions, form inputs, error handling,
+ * and behavior across different user roles.
  */
 
 // SKIP_LOCALSTORAGE_CHECK
@@ -30,7 +29,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { vi, beforeEach, afterEach } from 'vitest';
-import { toast } from 'react-toastify';
+import { Frequency } from 'utils/recurrenceUtils';
+import { green } from '@mui/material/colors';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 const { mockToast, mockUseParams } = vi.hoisted(() => ({
   mockToast: {
@@ -41,8 +42,8 @@ const { mockToast, mockUseParams } = vi.hoisted(() => ({
   mockUseParams: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: mockToast,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockToast,
 }));
 
 vi.mock('@mui/x-date-pickers', async () => {
@@ -208,7 +209,7 @@ vi.mock('components/EventCalender/Header/EventHeader', () => ({
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#31bb6b',
+      main: green[600],
     },
   },
 });
@@ -232,10 +233,100 @@ const MOCKS = [
       query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
       variables: {
         id: 'org123',
-        first: 150,
+        first: 100,
         after: null,
         startAt: startDate,
         endAt: endDate,
+        includeRecurring: true,
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          events: {
+            edges: [
+              {
+                node: {
+                  id: 'event1',
+                  name: 'Test Event 1',
+                  description: 'Test Description 1',
+                  startAt: '2023-06-05T00:00:00.000Z',
+                  endAt: '2023-06-05T23:59:59.999Z',
+                  location: 'Test Location',
+                  allDay: true,
+                  isPublic: true,
+                  isRegisterable: true,
+                  isRecurringEventTemplate: false,
+                  baseEvent: null,
+                  sequenceNumber: null,
+                  totalCount: null,
+                  hasExceptions: false,
+                  progressLabel: null,
+                  recurrenceDescription: null,
+                  recurrenceRule: null,
+                  creator: {
+                    id: 'user1',
+                    name: 'Test User',
+                  },
+                  attachments: [],
+                  organization: {
+                    id: 'org123',
+                    name: 'Test Org',
+                  },
+                },
+                cursor: 'cursor1',
+              },
+              {
+                node: {
+                  id: 'event2',
+                  name: 'Test Event 2',
+                  description: 'Test Description 2',
+                  startAt: '2023-06-06T08:00:00.000Z',
+                  endAt: '2023-06-06T10:00:00.000Z',
+                  location: 'Test Location 2',
+                  allDay: false,
+                  isPublic: false,
+                  isRegisterable: false,
+                  isRecurringEventTemplate: false,
+                  baseEvent: null,
+                  sequenceNumber: null,
+                  totalCount: null,
+                  hasExceptions: false,
+                  progressLabel: null,
+                  recurrenceDescription: null,
+                  recurrenceRule: null,
+                  creator: {
+                    id: 'user2',
+                    name: 'Test User 2',
+                  },
+                  attachments: [],
+                  organization: {
+                    id: 'org123',
+                    name: 'Test Org',
+                  },
+                },
+                cursor: 'cursor2',
+              },
+            ],
+            pageInfo: {
+              hasNextPage: false,
+              endCursor: 'cursor2',
+            },
+          },
+        },
+      },
+    },
+  },
+  // Additional mock for month-change path using fixed May/June 2023 window
+  {
+    request: {
+      query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
+      variables: {
+        id: 'org123',
+        first: 100,
+        after: null,
+        startAt: '2023-05-31T18:30:00.000Z',
+        endAt: '2023-06-30T18:29:59.999Z',
         includeRecurring: true,
       },
     },
@@ -352,36 +443,7 @@ const MOCKS = [
       },
     },
   },
-  // Mock for successful CREATE_EVENT_MUTATION (all day event)
-  {
-    request: {
-      query: CREATE_EVENT_MUTATION,
-      variables: {
-        input: {
-          name: 'New Test Event',
-          description: 'New Test Description',
-          startAt: dayjs(new Date())
-            .startOf('day')
-            .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-          endAt: dayjs(new Date())
-            .endOf('day')
-            .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-          organizationId: 'org123',
-          allDay: true,
-          location: 'New Test Location',
-          isPublic: true,
-          isRegisterable: true,
-        },
-      },
-    },
-    result: {
-      data: {
-        createEvent: {
-          id: 'newEvent1',
-        },
-      },
-    },
-  },
+
   // Mock for successful CREATE_EVENT_MUTATION (non all-day event)
   {
     request: {
@@ -425,10 +487,10 @@ const ERROR_MOCKS = [
       query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
       variables: {
         id: 'org123',
-        first: 150,
+        first: 100,
         after: null,
-        startDate,
-        endDate,
+        startAt: startDate,
+        endAt: endDate,
         includeRecurring: true,
       },
     },
@@ -453,7 +515,7 @@ const RATE_LIMIT_MOCKS = [
       query: GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
       variables: {
         id: 'org123',
-        first: 150,
+        first: 100,
         after: null,
         startAt: startDate,
         endAt: endDate,
@@ -587,6 +649,9 @@ async function wait(ms = 500): Promise<void> {
   });
 }
 
+const getPickerInputByLabel = (label: string) =>
+  screen.getByLabelText(label, { selector: 'input' }) as HTMLElement;
+
 describe('Testing Events Screen [User Portal]', () => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
@@ -594,8 +659,6 @@ describe('Testing Events Screen [User Portal]', () => {
       matches: false,
       media: query,
       onchange: null,
-      addListener: vi.fn(),
-      removeListener: vi.fn(),
       addEventListener: vi.fn(),
       removeEventListener: vi.fn(),
       dispatchEvent: vi.fn(),
@@ -609,8 +672,6 @@ describe('Testing Events Screen [User Portal]', () => {
         matches: false,
         media: query,
         onchange: null,
-        addListener: vi.fn(),
-        removeListener: vi.fn(),
         addEventListener: vi.fn(),
         removeEventListener: vi.fn(),
         dispatchEvent: vi.fn(),
@@ -623,7 +684,7 @@ describe('Testing Events Screen [User Portal]', () => {
 
   afterEach(() => {
     localStorage.clear();
-    vi.restoreAllMocks();
+    vi.clearAllMocks();
   });
 
   it('Should render the Events screen properly', async () => {
@@ -687,8 +748,55 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should create an all-day event successfully', async () => {
+    // Test-specific mock using variableMatcher for flexible date matching
+    // The EventForm uses the current date as default, and for all-day events
+    // it may adjust startAt based on whether startOfDay is in the past
+    const allDayEventMock = {
+      request: {
+        query: CREATE_EVENT_MUTATION,
+      },
+      variableMatcher: (variables: {
+        input: {
+          name: string;
+          description?: string;
+          startAt: string;
+          endAt: string;
+          organizationId: string;
+          allDay: boolean;
+          location?: string;
+          isPublic: boolean;
+          isRegisterable: boolean;
+        };
+      }) => {
+        const { input } = variables;
+        return (
+          input.name === 'New Test Event' &&
+          input.description === 'New Test Description' &&
+          input.organizationId === 'org123' &&
+          input.allDay === true &&
+          input.location === 'New Test Location' &&
+          input.isPublic === true &&
+          input.isRegisterable === true &&
+          typeof input.startAt === 'string' &&
+          typeof input.endAt === 'string'
+        );
+      },
+      result: {
+        data: {
+          createEvent: {
+            id: 'newEvent1',
+          },
+        },
+      },
+    };
+
+    const testLink = new StaticMockLink(
+      [...MOCKS.slice(0, 2), allDayEventMock],
+      true,
+    );
+
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={testLink}>
         <BrowserRouter>
           <Provider store={store}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -726,15 +834,7 @@ describe('Testing Events Screen [User Portal]', () => {
       'New Test Location',
     );
 
-    // Submit form
-    const form = screen.getByTestId('eventTitleInput').closest('form');
-    if (form) {
-      fireEvent.submit(form);
-    }
-
-    await wait(500);
-
-    // Verify either success or error toast was called
+    await userEvent.click(screen.getByTestId('createEventBtn'));
     await waitFor(() => {
       expect(mockToast.success).toHaveBeenCalled();
     });
@@ -744,36 +844,36 @@ describe('Testing Events Screen [User Portal]', () => {
     // Ensure toast success mock is reset for this test
     mockToast.success.mockClear();
 
-    // Create a test-specific link with dynamic variables to avoid ms mismatch
-    const computedStartAt = dayjs(new Date())
-      .hour(8)
-      .minute(0)
-      .second(0)
-      .millisecond(0)
-      .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-    const computedEndAt = dayjs(new Date())
-      .hour(10)
-      .minute(0)
-      .second(0)
-      .millisecond(0)
-      .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]');
-
+    // Use variableMatcher for flexible date matching to avoid timing issues
     const nonAllDayMock = {
       request: {
         query: CREATE_EVENT_MUTATION,
-        variables: {
-          input: {
-            name: 'New Non All Day Event',
-            description: 'New Test Description Non All Day',
-            startAt: computedStartAt,
-            endAt: computedEndAt,
-            organizationId: 'org123',
-            allDay: false,
-            location: 'New Test Location',
-            isPublic: true,
-            isRegisterable: true,
-          },
-        },
+      },
+      variableMatcher: (variables: {
+        input: {
+          name: string;
+          description?: string;
+          startAt: string;
+          endAt: string;
+          organizationId: string;
+          allDay: boolean;
+          location?: string;
+          isPublic: boolean;
+          isRegisterable: boolean;
+        };
+      }) => {
+        const { input } = variables;
+        return (
+          input.name === 'New Non All Day Event' &&
+          input.description === 'New Test Description Non All Day' &&
+          input.organizationId === 'org123' &&
+          input.allDay === false &&
+          input.location === 'New Test Location' &&
+          input.isPublic === true &&
+          input.isRegisterable === true &&
+          typeof input.startAt === 'string' &&
+          typeof input.endAt === 'string'
+        );
       },
       result: {
         data: {
@@ -848,10 +948,9 @@ describe('Testing Events Screen [User Portal]', () => {
 
     await wait(500);
 
-    // Verify either success or error toast was called
-    expect(
-      mockToast.success.mock.calls.length + mockToast.error.mock.calls.length,
-    ).toBeGreaterThan(0);
+    await waitFor(() => {
+      expect(mockToast.success).toHaveBeenCalled();
+    });
   });
 
   it('Should handle create event error', async () => {
@@ -903,10 +1002,10 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait(500);
 
     // Error should be logged (console.error is called in catch block)
-    expect(toast.success).not.toHaveBeenCalled();
+    expect(NotificationToast.success).not.toHaveBeenCalled();
   });
 
-  it('Should toggle all-day checkbox and enable/disable time pickers', async () => {
+  it('Should toggle all-day checkbox and enable/disable time inputs', async () => {
     render(
       <MockedProvider link={link}>
         <BrowserRouter>
@@ -928,25 +1027,35 @@ describe('Testing Events Screen [User Portal]', () => {
     // Open modal
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
-    await waitFor(() => {
-      expect(screen.getByTestId('allDayEventCheck')).toBeInTheDocument();
-    });
+    const allDayCheckbox = await screen.findByTestId('allDayEventCheck');
 
-    const allDayCheckbox = screen.getByTestId('allDayEventCheck');
-    const startTimePicker = screen.getByLabelText('Start Time');
-    const endTimePicker = screen.getByLabelText('End Time');
+    // When all-day is enabled, time pickers are disabled
+    const startTimeInputWhenAllDay = screen.getByLabelText(
+      'Start Time',
+    ) as HTMLInputElement;
+    const endTimeInputWhenAllDay = screen.getByLabelText(
+      'End Time',
+    ) as HTMLInputElement;
+    expect(startTimeInputWhenAllDay).toBeDisabled();
+    expect(endTimeInputWhenAllDay).toBeDisabled();
 
-    // Initially all-day is true, time pickers should be disabled
-    expect(startTimePicker).toBeDisabled();
-    expect(endTimePicker).toBeDisabled();
-
-    // Toggle all-day off
+    // Toggle all-day OFF (uncheck it)
     await userEvent.click(allDayCheckbox);
 
-    await waitFor(() => {
-      expect(startTimePicker).not.toBeDisabled();
-      expect(endTimePicker).not.toBeDisabled();
-    });
+    const startTimeInput = (await screen.findByLabelText(
+      'Start Time',
+    )) as HTMLInputElement;
+    const endTimeInput = (await screen.findByLabelText(
+      'End Time',
+    )) as HTMLInputElement;
+
+    // AFTER toggle → visible + enabled
+    expect(startTimeInput).not.toBeDisabled();
+    expect(endTimeInput).not.toBeDisabled();
+
+    // Optional sanity: values unchanged
+    expect(startTimeInput.value).toBe('08:00:00');
+    expect(endTimeInput.value).toBe('10:00:00');
   });
 
   it('Should toggle public, registerable, recurring, and createChat checkboxes', async () => {
@@ -1014,12 +1123,11 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
-      expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
+      expect(getPickerInputByLabel('Start Date')).toBeInTheDocument();
     });
 
-    const startDatePicker = screen.getByLabelText('Start Date');
-    const endDatePicker = screen.getByLabelText('End Date');
-
+    const startDatePicker = getPickerInputByLabel('Start Date');
+    const endDatePicker = getPickerInputByLabel('End Date');
     const newDate = dayjs().add(1, 'day');
 
     fireEvent.change(startDatePicker, {
@@ -1066,13 +1174,12 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('allDayEventCheck'));
 
     await waitFor(() => {
-      const startTimePicker = screen.getByLabelText('Start Time');
+      const startTimePicker = getPickerInputByLabel('Start Time');
       expect(startTimePicker).not.toBeDisabled();
     });
 
-    const startTimePicker = screen.getByLabelText('Start Time');
-    const endTimePicker = screen.getByLabelText('End Time');
-
+    const startTimePicker = getPickerInputByLabel('Start Time');
+    const endTimePicker = getPickerInputByLabel('End Time');
     fireEvent.change(startTimePicker, {
       target: { value: '09:00 AM' },
     });
@@ -1110,24 +1217,23 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
-      expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
+      expect(getPickerInputByLabel('Start Date')).toBeInTheDocument();
     });
 
-    const startDatePicker = screen.getByLabelText('Start Date');
-    const endDatePicker = screen.getByLabelText('End Date');
-
+    const startDatePicker = getPickerInputByLabel('Start Date');
+    const endDatePicker = getPickerInputByLabel('End Date');
     fireEvent.change(startDatePicker, {
-      target: { value: null },
+      target: { value: '' },
     });
 
     fireEvent.change(endDatePicker, {
-      target: { value: null },
+      target: { value: '' },
     });
 
     await wait();
 
     // Should handle null values without crashing
-    expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
+    expect(getPickerInputByLabel('Start Date')).toBeInTheDocument();
   });
 
   it('Should handle network error gracefully', async () => {
@@ -1474,5 +1580,124 @@ describe('Testing Events Screen [User Portal]', () => {
     expect(parsed.length).toBeGreaterThan(0);
     // Creator fallback should be used when creator is null
     expect(parsed[0].creator).toEqual({ id: '', name: '' });
+  });
+
+  it('Should create an event with recurrence rule successfully', async () => {
+    const today = new Date();
+    const weekDayByJs = ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+    const dayOfWeek = today.getDay();
+
+    // Use variableMatcher for flexible date and recurrence matching
+    const createEventWithRecurrenceMock = {
+      request: {
+        query: CREATE_EVENT_MUTATION,
+      },
+      variableMatcher: (variables: {
+        input: {
+          name: string;
+          description?: string;
+          startAt: string;
+          endAt: string;
+          organizationId: string;
+          allDay: boolean;
+          location?: string;
+          isPublic: boolean;
+          isRegisterable: boolean;
+          recurrence?: {
+            frequency: string;
+            interval: number;
+            never?: boolean;
+            byDay?: string[];
+          };
+        };
+      }) => {
+        const { input } = variables;
+        // Ensure all conditions return boolean (not undefined via optional chaining)
+        return Boolean(
+          input.name === 'Recurring Test Event' &&
+            input.description === 'Recurring Test Description' &&
+            input.organizationId === 'org123' &&
+            input.allDay === true &&
+            input.location === 'Recurring Test Location' &&
+            input.isPublic === true &&
+            input.isRegisterable === true &&
+            typeof input.startAt === 'string' &&
+            typeof input.endAt === 'string' &&
+            input.recurrence &&
+            input.recurrence.frequency === Frequency.WEEKLY &&
+            input.recurrence.interval === 1 &&
+            input.recurrence.byDay?.includes(weekDayByJs[dayOfWeek]),
+        );
+      },
+      result: {
+        data: {
+          createEvent: {
+            id: 'newRecurringEvent1',
+          },
+        },
+      },
+    };
+
+    const testLink = new StaticMockLink(
+      [...MOCKS.slice(0, 2), createEventWithRecurrenceMock],
+      true,
+    );
+
+    mockToast.success.mockClear();
+
+    render(
+      <MockedProvider link={testLink}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <ThemeProvider theme={theme}>
+                <I18nextProvider i18n={i18nForTest}>
+                  <Events />
+                </I18nextProvider>
+              </ThemeProvider>
+            </LocalizationProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+    await userEvent.click(screen.getByTestId('createEventModalBtn'));
+    await waitFor(() => {
+      expect(screen.getByTestId('eventTitleInput')).toBeInTheDocument();
+    });
+
+    await userEvent.type(
+      screen.getByTestId('eventTitleInput'),
+      'Recurring Test Event',
+    );
+    await userEvent.type(
+      screen.getByTestId('eventDescriptionInput'),
+      'Recurring Test Description',
+    );
+    await userEvent.type(
+      screen.getByTestId('eventLocationInput'),
+      'Recurring Test Location',
+    );
+
+    await userEvent.click(screen.getByTestId('recurringEventCheck'));
+    await waitFor(() => {
+      expect(screen.getByTestId('recurrenceDropdown')).toBeInTheDocument();
+    });
+    await userEvent.click(screen.getByTestId('recurrenceDropdown'));
+    await waitFor(() => {
+      const options = screen.getAllByTestId(/recurrenceOption-/);
+      expect(options.length).toBeGreaterThan(2);
+    });
+    const options = screen.getAllByTestId(/recurrenceOption-/);
+    await userEvent.click(options[2]);
+
+    const form = screen.getByTestId('eventTitleInput').closest('form');
+    if (form) fireEvent.submit(form);
+
+    await wait(500);
+    await waitFor(() => {
+      expect(mockToast.success).toHaveBeenCalled();
+    });
   });
 });

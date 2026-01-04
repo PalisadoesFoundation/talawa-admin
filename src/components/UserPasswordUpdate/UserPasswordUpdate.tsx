@@ -39,8 +39,8 @@ import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import styles from '../../style/app-fixed.module.css';
-import { toast } from 'react-toastify';
 import { Form } from 'react-bootstrap';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 interface InterfaceUserPasswordUpdateProps {
   id: string;
@@ -75,12 +75,12 @@ export const UserUpdate: React.FC<
       !formState.newPassword ||
       !formState.confirmNewPassword
     ) {
-      toast.error(t('passCantBeEmpty') as string);
+      NotificationToast.error(t('passCantBeEmpty') as string);
       return;
     }
 
     if (formState.newPassword !== formState.confirmNewPassword) {
-      toast.error(t('passNoMatch') as string);
+      NotificationToast.error(t('passNoMatch') as string);
       return;
     }
 
@@ -93,7 +93,7 @@ export const UserUpdate: React.FC<
         },
       });
       if (data) {
-        toast.success(
+        NotificationToast.success(
           tCommon('updatedSuccessfully', { item: 'Password' }) as string,
         );
         // Reset form state after successful update
@@ -101,7 +101,7 @@ export const UserUpdate: React.FC<
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(error.toString());
+        NotificationToast.error(error.toString());
       }
     }
   };

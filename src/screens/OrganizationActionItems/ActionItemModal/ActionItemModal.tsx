@@ -27,7 +27,7 @@ import type {
 } from 'types/ActionItems/interface.ts';
 
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   CREATE_ACTION_ITEM_MUTATION,
@@ -209,7 +209,10 @@ const ItemModal: FC<IItemModalProps> = ({
     e.preventDefault();
     try {
       if (!categoryId || (!volunteerId && !volunteerGroupId)) {
-        toast.error(t('selectCategoryAndAssignment'));
+        NotificationToast.error({
+          key: 'selectCategoryAndAssignment',
+          namespace: 'translation',
+        });
         return;
       }
 
@@ -240,9 +243,15 @@ const ItemModal: FC<IItemModalProps> = ({
 
       runRefetches();
       hide();
-      toast.success(t('successfulCreation'));
-    } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.success({
+        key: 'eventActionItems.successfulCreation',
+        namespace: 'translation',
+      });
+    } catch {
+      NotificationToast.error({
+        key: 'unknownError',
+        namespace: 'errors',
+      });
     }
   };
 
@@ -250,7 +259,10 @@ const ItemModal: FC<IItemModalProps> = ({
     e.preventDefault();
     try {
       if (!actionItem?.id) {
-        toast.error('Action item ID is missing');
+        NotificationToast.error({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
         return;
       }
 
@@ -271,9 +283,15 @@ const ItemModal: FC<IItemModalProps> = ({
       setFormState(initializeFormState(null));
       runRefetches();
       hide();
-      toast.success(t('successfulUpdation'));
-    } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.success({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
+    } catch {
+      NotificationToast.error({
+        key: 'unknownError',
+        namespace: 'errors',
+      });
     }
   };
 
@@ -283,7 +301,10 @@ const ItemModal: FC<IItemModalProps> = ({
     e.preventDefault();
     try {
       if (!actionItem?.id) {
-        toast.error('Action item ID is missing');
+        NotificationToast.error({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
         return;
       }
 
@@ -307,9 +328,15 @@ const ItemModal: FC<IItemModalProps> = ({
       setFormState(initializeFormState(null));
       runRefetches();
       hide();
-      toast.success(t('successfulUpdation'));
-    } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.success({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
+    } catch {
+      NotificationToast.error({
+        key: 'unknownError',
+        namespace: 'errors',
+      });
     }
   };
 

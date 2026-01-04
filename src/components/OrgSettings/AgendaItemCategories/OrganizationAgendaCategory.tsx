@@ -33,7 +33,6 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 
 import { WarningAmberRounded } from '@mui/icons-material';
-import { toast } from 'react-toastify';
 
 import { useMutation, useQuery } from '@apollo/client';
 import { AGENDA_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/Queries';
@@ -45,6 +44,7 @@ import AgendaCategoryCreateModal from './Create/AgendaCategoryCreateModal';
 import styles from 'style/app-fixed.module.css';
 import Loader from 'components/Loader/Loader';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 interface InterfaceAgendaCategoryProps {
   orgId: string;
@@ -112,13 +112,13 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
           },
         },
       });
-      toast.success(t('agendaCategoryCreated') as string);
+      NotificationToast.success(t('agendaCategoryCreated') as string);
       setFormState({ name: '', description: '', createdBy: '' });
       refetchAgendaCategory();
       hideCreateModal();
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(error.message);
+        NotificationToast.error(error.message);
       }
     }
   };
@@ -143,7 +143,9 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
     return (
       <div className={`${styles.container} bg-transparent rounded-4 my-3`}>
         <div className={styles.message}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded
+            className={`${styles.errorIcon} MuiSvgIcon-fontSizeLarge`}
+          />
           <h6 className="fw-bold text-danger text-center">
             Error occured while loading{' '}
             {agendaCategoryError && 'Agenda Categories'}

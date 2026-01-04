@@ -9,7 +9,7 @@ import {
   UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
   DELETE_ACTION_ITEM_CATEGORY_MUTATION,
 } from 'GraphQl/Mutations/ActionItemCategoryMutations';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { FormControl, TextField } from '@mui/material';
 
 export interface IActionItemCategoryModal {
@@ -83,9 +83,15 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
       refetchCategories();
       hide();
       setFormState({ name: '', description: '', isDisabled: false });
-      toast.success(t('successfulCreation'));
-    } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.success({
+        key: 'eventActionItems.successfulCreation',
+        namespace: 'translation',
+      });
+    } catch {
+      NotificationToast.error({
+        key: 'unknownError',
+        namespace: 'errors',
+      });
     }
   };
 
@@ -99,7 +105,11 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
       description === category?.description &&
       isDisabled === category?.isDisabled
     ) {
-      toast.error(t('sameNameConflict'));
+      NotificationToast.error({
+        key: 'sameNameConflict',
+        namespace: 'translation',
+      });
+
       return;
     }
 
@@ -134,9 +144,15 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
       setFormState({ name: '', description: '', isDisabled: false });
       refetchCategories();
       hide();
-      toast.success(t('successfulUpdation'));
-    } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.success({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
+    } catch {
+      NotificationToast.error({
+        key: 'unknownError',
+        namespace: 'errors',
+      });
     }
   };
 
@@ -157,9 +173,15 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
 
       refetchCategories();
       hide();
-      toast.success(t('categoryDeleted'));
-    } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.success({
+        key: 'categoryDeleted',
+        namespace: 'translation',
+      });
+    } catch {
+      NotificationToast.error({
+        key: 'unknownError',
+        namespace: 'errors',
+      });
     }
   };
 

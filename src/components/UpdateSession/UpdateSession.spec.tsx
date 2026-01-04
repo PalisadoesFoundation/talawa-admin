@@ -13,7 +13,6 @@ import {
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { BrowserRouter } from 'react-router';
-import { toast } from 'react-toastify';
 import UpdateTimeout from './UpdateSession';
 
 import i18n from 'utils/i18nForTest';
@@ -21,6 +20,7 @@ import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { UPDATE_SESSION_TIMEOUT_PG } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 import { vi } from 'vitest';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 /**
  * This file contains unit tests for the `UpdateSession` component.
@@ -208,7 +208,7 @@ describe('Testing UpdateTimeout Component', () => {
   it('Should update session timeout', async () => {
     const user = userEvent.setup();
 
-    const toastSpy = vi.spyOn(toast, 'success');
+    const toastSpy = vi.spyOn(NotificationToast, 'success');
 
     const { container } = render(
       <MockedProvider mocks={MOCKS}>

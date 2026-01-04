@@ -14,16 +14,18 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from '../../../utils/i18nForTest';
 import { MOCKS_DELETE_PLEDGE_ERROR, MOCKS } from '../PledgesMocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { vi } from 'vitest';
 
 const toastMocks = vi.hoisted(() => ({
   success: vi.fn(),
   error: vi.fn(),
+  warning: vi.fn(),
+  info: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: toastMocks,
 }));
 
 const link = new StaticMockLink(MOCKS);
@@ -39,8 +41,8 @@ const pledgeProps: InterfaceDeletePledgeModal = {
     id: '1',
     amount: 100,
     currency: 'USD',
-    startDate: '2024-01-01',
-    endDate: '2024-01-10',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    updatedAt: '2024-01-10T00:00:00.000Z',
     pledger: {
       id: '1',
       firstName: 'John',
@@ -93,30 +95,35 @@ describe('PledgeDeleteModal', () => {
 
   it('should render PledgeDeleteModal', () => {
     renderPledgeDeleteModal(link, pledgeProps);
-    expect(screen.getByTestId('deletePledgeCloseBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('pledge-delete-modal')).toBeInTheDocument();
+    expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument();
   });
 
   it('should successfully Delete pledge', async () => {
     renderPledgeDeleteModal(link, pledgeProps);
-    expect(screen.getByTestId('deletePledgeCloseBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('pledge-delete-modal')).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('deleteyesbtn'));
 
     await waitFor(() => {
       expect(pledgeProps.refetchPledge).toHaveBeenCalled();
       expect(pledgeProps.hide).toHaveBeenCalled();
-      expect(toast.success).toHaveBeenCalledWith(translations.pledgeDeleted);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        translations.pledgeDeleted,
+      );
     });
   });
 
   it('should fail to Delete pledge', async () => {
     renderPledgeDeleteModal(link2, pledgeProps);
-    expect(screen.getByTestId('deletePledgeCloseBtn')).toBeInTheDocument();
+    expect(screen.getByTestId('pledge-delete-modal')).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('deleteyesbtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Error deleting pledge');
+      expect(NotificationToast.error).toHaveBeenCalledWith(
+        'Error deleting pledge',
+      );
     });
   });
 });

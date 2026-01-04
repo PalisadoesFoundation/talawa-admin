@@ -81,7 +81,7 @@ describe('SearchingButton Component', () => {
       />,
     );
     const toggle = screen.getByTestId('click-toggle');
-    userEvent.click(toggle);
+    await userEvent.click(toggle);
     // The Dropdown itself is rendered with data-testid "click-dropdown"
     expect(screen.getByTestId('click-dropdown')).toBeInTheDocument();
   });

@@ -7,7 +7,6 @@ import {
   within,
 } from '@testing-library/react';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { toast } from 'react-toastify';
 import type {
   IItemModalProps,
   IUpdateActionItemForInstanceVariables,
@@ -35,16 +34,15 @@ import {
 } from 'GraphQl/Mutations/ActionItemMutations';
 import userEvent from '@testing-library/user-event';
 import type { IActionItemInfo } from 'types/ActionItems/interface';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
-const toastMocks = vi.hoisted(() => ({
-  success: vi.fn(),
-  error: vi.fn(),
-  info: vi.fn(),
-  warning: vi.fn(),
-}));
-
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    warning: vi.fn(),
+  },
 }));
 
 vi.mock('react-i18next', () => ({
@@ -617,6 +615,9 @@ const mockActionItemWithGroup = {
   },
 };
 
+const getPickerInputByLabel = (label: string) =>
+  screen.getByLabelText(label, { selector: 'input' });
+
 // Additional test cases for ItemModal component
 describe('ItemModal - Additional Test Cases', () => {
   beforeEach(() => {
@@ -699,8 +700,11 @@ describe('ItemModal - Additional Test Cases', () => {
       );
       expect(volunteerGroupSelect).toBeInTheDocument();
 
-      const volunteerGroupInput = screen.getByLabelText(/volunteerGroup/i);
-      expect(volunteerGroupInput).toHaveValue('Test Group 1');
+      // Wait for the input to be populated with the preselected value
+      await waitFor(() => {
+        const input = screen.getByLabelText(/volunteerGroup/i);
+        expect(input).toHaveValue('Test Group 1');
+      });
 
       expect(screen.queryByTestId('volunteerSelect')).not.toBeInTheDocument();
     });
@@ -789,7 +793,10 @@ describe('ItemModal - Additional Test Cases', () => {
       }
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('selectCategoryAndAssignment');
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'selectCategoryAndAssignment',
+          namespace: 'translation',
+        });
       });
     });
   });
@@ -1061,7 +1068,10 @@ describe('ItemModal - Additional Test Cases', () => {
 
       // Should not throw an unhandled exception
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalled();
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'selectCategoryAndAssignment',
+          namespace: 'translation',
+        });
       });
     });
   });
@@ -1104,7 +1114,10 @@ describe('ItemModal - Additional Test Cases', () => {
 
       // Add await here to properly wait for the toast error
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalled();
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
       });
     });
   });
@@ -1259,7 +1272,10 @@ describe('ItemModal - Specific Test Coverage', () => {
       }
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('selectCategoryAndAssignment');
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'selectCategoryAndAssignment',
+          namespace: 'translation',
+        });
       });
     });
 
@@ -1290,7 +1306,10 @@ describe('ItemModal - Specific Test Coverage', () => {
       await userEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Action item ID is missing');
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
       });
     });
   });
@@ -1339,7 +1358,7 @@ describe('ItemModal - Specific Test Coverage', () => {
       });
 
       // Find date picker input
-      const dateInput = screen.getByLabelText(/assignmentDate/i);
+      const dateInput = getPickerInputByLabel('assignmentDate');
       expect(dateInput).toBeInTheDocument();
 
       // The date picker should be accessible and allow interaction
@@ -1783,7 +1802,10 @@ describe('updateActionForInstanceHandler', () => {
     fireEvent.submit(submitButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
       expect(mockRefetch).toHaveBeenCalled();
       expect(mockOrgRefetch).toHaveBeenCalled();
       expect(mockHide).toHaveBeenCalled();
@@ -1818,7 +1840,10 @@ describe('updateActionForInstanceHandler', () => {
     await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Action item ID is missing');
+      expect(NotificationToast.error).toHaveBeenCalledWith({
+        key: 'unknownError',
+        namespace: 'errors',
+      });
     });
   });
 
@@ -1854,7 +1879,10 @@ describe('updateActionForInstanceHandler', () => {
     await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Action item ID is missing');
+      expect(NotificationToast.error).toHaveBeenCalledWith({
+        key: 'unknownError',
+        namespace: 'errors',
+      });
     });
   });
 
@@ -1920,7 +1948,10 @@ describe('updateActionForInstanceHandler', () => {
     fireEvent.submit(submitButton);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Network error occurred');
+      expect(NotificationToast.error).toHaveBeenCalledWith({
+        key: 'unknownError',
+        namespace: 'errors',
+      });
     });
   });
 
@@ -1994,7 +2025,10 @@ describe('updateActionForInstanceHandler', () => {
     fireEvent.submit(submitButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
       expect(mockRefetch).toHaveBeenCalledTimes(1);
       expect(mockOrgRefetch).toHaveBeenCalledTimes(1);
       expect(mockHide).toHaveBeenCalledTimes(1);
@@ -2225,7 +2259,10 @@ describe('updateActionForInstanceHandler', () => {
     fireEvent.submit(submitButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
     });
   });
 
@@ -2300,7 +2337,10 @@ describe('updateActionForInstanceHandler', () => {
     fireEvent.submit(submitButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
     });
   });
 });
@@ -2409,7 +2449,10 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
     await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
       expect(mockRefetch).toHaveBeenCalled();
       expect(mockHide).toHaveBeenCalled();
     });
@@ -2869,7 +2912,10 @@ describe('orgActionItemsRefetch functionality', () => {
     await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'eventActionItems.successfulCreation',
+        namespace: 'translation',
+      });
       expect(mockRefetch).toHaveBeenCalled();
       expect(mockOrgRefetch).toHaveBeenCalled();
       expect(mockHide).toHaveBeenCalled();
@@ -2954,7 +3000,10 @@ describe('orgActionItemsRefetch functionality', () => {
     await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
       expect(mockRefetch).toHaveBeenCalled();
       expect(mockOrgRefetch).toHaveBeenCalled();
       expect(mockHide).toHaveBeenCalled();
@@ -3094,7 +3143,10 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       await userEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalled();
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'eventActionItems.successfulCreation',
+          namespace: 'translation',
+        });
         expect(mockRefetch).toHaveBeenCalled();
         expect(mockHide).toHaveBeenCalled();
       });
@@ -3195,9 +3247,10 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       await userEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
-          'Failed to create action item',
-        );
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
       });
     });
   });
@@ -3230,7 +3283,10 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       await userEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Action item ID is missing');
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
       });
     });
 
@@ -3293,7 +3349,10 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       await userEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith('successfulUpdation');
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'eventActionItems.successfulUpdation',
+          namespace: 'translation',
+        });
         expect(mockRefetch).toHaveBeenCalledTimes(1);
         expect(mockOrgRefetch).toHaveBeenCalledTimes(1);
         expect(mockHide).toHaveBeenCalledTimes(1);
@@ -3790,7 +3849,10 @@ describe('Partially Covered Lines Test Coverage', () => {
       }
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('selectCategoryAndAssignment');
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'selectCategoryAndAssignment',
+          namespace: 'translation',
+        });
       });
     });
 
@@ -3833,7 +3895,10 @@ describe('Partially Covered Lines Test Coverage', () => {
       }
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('selectCategoryAndAssignment');
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'selectCategoryAndAssignment',
+          namespace: 'translation',
+        });
       });
     });
   });
@@ -3961,7 +4026,11 @@ describe('Partially Covered Lines Test Coverage', () => {
       await userEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalled();
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'eventActionItems.successfulCreation',
+          namespace: 'translation',
+        });
+
         expect(mockRefetch).toHaveBeenCalled();
         expect(mockHide).toHaveBeenCalled();
       });

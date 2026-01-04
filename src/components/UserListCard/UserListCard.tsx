@@ -12,7 +12,7 @@
  * @requires React
  * @requires react-bootstrap/Button
  * @requires @apollo/client - For GraphQL mutation handling
- * @requires react-toastify - For displaying toast notifications
+ * @requires components/NotificationToast/NotificationToast - For displaying toast notifications
  * @requires react-i18next - For internationalization and translations
  * @requires react-router-dom - For accessing route parameters
  * @requires utils/errorHandler - For handling errors
@@ -36,10 +36,10 @@
  * - The `useTranslation` hook is used for internationalization.
  * - The button reloads the page after a successful operation.
  */
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useMutation } from '@apollo/client';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -52,21 +52,41 @@ interface InterfaceUserListCardProps {
   id: string;
 }
 
-function userListCard(props: InterfaceUserListCardProps): JSX.Element {
+function UserListCard({ id }: InterfaceUserListCardProps): JSX.Element {
   const { orgId: currentUrl } = useParams();
   const [adda] = useMutation(ADD_ADMIN_MUTATION);
+  const reloadTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const { t } = useTranslation('translation', { keyPrefix: 'userListCard' });
 
+  // Cleanup timeout on unmount to prevent memory leaks
+  useEffect(() => {
+    return () => {
+      if (reloadTimeoutRef.current) {
+        clearTimeout(reloadTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const addAdmin = async (): Promise<void> => {
+    // Clear any existing timeout
+    if (reloadTimeoutRef.current) {
+      clearTimeout(reloadTimeoutRef.current);
+      reloadTimeoutRef.current = null;
+    }
+
     try {
-      const { data } = await adda({
-        variables: { userid: props.id, orgid: currentUrl },
+      const result = await adda({
+        variables: { userid: id, orgid: currentUrl },
       });
 
-      if (data) {
-        toast.success(t('addedAsAdmin') as string);
-        setTimeout(() => {
+      if (result.data?.createAdmin) {
+        NotificationToast.success({
+          key: 'addedAsAdmin',
+          namespace: 'translation',
+        });
+
+        reloadTimeoutRef.current = setTimeout(() => {
           window.location.reload();
         }, 2000);
       }
@@ -87,4 +107,4 @@ function userListCard(props: InterfaceUserListCardProps): JSX.Element {
   );
 }
 export {};
-export default userListCard;
+export default UserListCard;

@@ -286,8 +286,9 @@ describe('Testing User Table Item', () => {
       target: { value: 'Joined Organization 3' },
     });
     expect(
-      screen.getByText(`No results found for "Joined Organization 3"`),
+      screen.getByText(/no results found for.*Joined Organization 3/i),
     ).toBeInTheDocument();
+
     // Now clear the search box
     fireEvent.change(inputBox, { target: { value: '' } });
     fireEvent.click(searchBtn);
@@ -646,7 +647,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -744,7 +745,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -800,8 +801,9 @@ describe('Testing User Table Item', () => {
       key: 'Enter',
     });
     expect(
-      screen.getByText(`No results found for "Blocked Organization 3"`),
+      screen.getByText(/no results found for.*Blocked Organization 3/i),
     ).toBeInTheDocument();
+
     fireEvent.change(inputBox, { target: { value: '' } });
     fireEvent.keyDown(inputBox, { key: 'Enter' });
     fireEvent.change(inputBox, { target: { value: '' } });
@@ -875,7 +877,7 @@ describe('Testing User Table Item', () => {
     };
     // Assuming MOCKS2 includes error for unblockUser mutation; adjust if needed
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -948,7 +950,7 @@ describe('Testing User Table Item', () => {
     };
     // Assuming link2 includes error for update role; adjust mocks accordingly
     render(
-      <MockedProvider addTypename={false} link={link2}>
+      <MockedProvider link={link2}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1005,7 +1007,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1065,7 +1067,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1142,7 +1144,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1185,7 +1187,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1232,7 +1234,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1308,7 +1310,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1365,7 +1367,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1453,7 +1455,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1539,7 +1541,7 @@ describe('Testing User Table Item', () => {
     };
 
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1612,7 +1614,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1709,7 +1711,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1728,7 +1730,7 @@ describe('Testing User Table Item', () => {
     fireEvent.change(inputBox, { target: { value: 'Test Search' } });
 
     // Find and click the clear button
-    const clearButton = screen.getByLabelText('Clear search');
+    const clearButton = screen.getByLabelText('Clear');
     expect(clearButton).toBeInTheDocument();
     fireEvent.click(clearButton);
 
@@ -1798,7 +1800,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1887,7 +1889,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />
@@ -1964,7 +1966,7 @@ describe('Testing User Table Item', () => {
       resetAndRefetch: resetAndRefetchMock,
     };
     render(
-      <MockedProvider addTypename={false} link={link}>
+      <MockedProvider link={link}>
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <UsersTableItem {...props} />

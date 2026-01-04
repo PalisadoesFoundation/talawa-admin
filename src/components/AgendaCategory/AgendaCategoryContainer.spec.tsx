@@ -128,17 +128,13 @@ describe('Testing Agenda Category Component', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('updateAgendaCategoryModalCloseBtn'),
+        screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(
-      screen.getByTestId('updateAgendaCategoryModalCloseBtn'),
-    );
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
 
     await waitFor(() =>
-      expect(
-        screen.queryByTestId('updateAgendaCategoryModalCloseBtn'),
-      ).not.toBeInTheDocument(),
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument(),
     );
   });
 
@@ -168,17 +164,13 @@ describe('Testing Agenda Category Component', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('previewAgendaCategoryModalCloseBtn'),
+        screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(
-      screen.getByTestId('previewAgendaCategoryModalCloseBtn'),
-    );
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
 
     await waitFor(() =>
-      expect(
-        screen.queryByTestId('previewAgendaCategoryModalCloseBtn'),
-      ).not.toBeInTheDocument(),
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument(),
     );
   });
 
@@ -208,7 +200,7 @@ describe('Testing Agenda Category Component', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('previewAgendaCategoryModalCloseBtn'),
+        screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
 
@@ -243,17 +235,13 @@ describe('Testing Agenda Category Component', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('updateAgendaCategoryModalCloseBtn'),
+        screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(
-      screen.getByTestId('updateAgendaCategoryModalCloseBtn'),
-    );
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
 
     await waitFor(() =>
-      expect(
-        screen.queryByTestId('updateAgendaCategoryModalCloseBtn'),
-      ).not.toBeInTheDocument(),
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument(),
     );
   });
 
@@ -377,7 +365,7 @@ describe('Testing Agenda Category Component', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('previewAgendaCategoryModalCloseBtn'),
+        screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
 
@@ -429,7 +417,7 @@ describe('Testing Agenda Category Component', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('previewAgendaCategoryModalCloseBtn'),
+        screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
 

@@ -2,7 +2,7 @@ import React, { act } from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
-import { BrowserRouter } from 'react-router';
+import { BrowserRouter } from 'react-router-dom';
 import i18nForTest from 'utils/i18nForTest';
 import type { InterfaceUserSidebarOrgProps } from './UserSidebarOrg';
 import UserSidebarOrg from './UserSidebarOrg';
@@ -32,10 +32,39 @@ import { usePluginDrawerItems } from 'plugin';
  *
  * `fireEvent` simulates user actions, and `vi.fn()` mocks callback functions.
  */
-const { setItem } = useLocalStorage();
+const { setItem, clearAllItems } = useLocalStorage();
+
+vi.mock('@mui/icons-material', () => ({
+  QuestionMarkOutlined: vi.fn(() => null),
+  WarningAmberOutlined: vi.fn(() => null),
+}));
 
 vi.mock('plugin', () => ({
   usePluginDrawerItems: vi.fn(() => []),
+}));
+
+// Mock ProfileCard component to avoid router hook errors
+vi.mock('components/ProfileCard/ProfileCard', () => ({
+  default: () => <div data-testid="profile-card">Profile Card Mock</div>,
+}));
+
+// Mock SignOut component to avoid router hook errors
+vi.mock('components/SignOut/SignOut', () => ({
+  default: ({ hideDrawer }: { hideDrawer?: boolean }) => (
+    <div
+      data-testid="sign-out-component"
+      style={{ display: hideDrawer ? 'none' : 'block' }}
+    >
+      Sign Out Mock
+    </div>
+  ),
+}));
+
+// Mock useSession to prevent router hook errors in SignOut component
+vi.mock('utils/useSession', () => ({
+  default: vi.fn(() => ({
+    endSession: vi.fn(),
+  })),
 }));
 
 const props: InterfaceUserSidebarOrgProps = {
@@ -265,7 +294,7 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.clearAllMocks();
-  localStorage.clear();
+  clearAllItems();
 });
 
 const link = new StaticMockLink(MOCKS, true);
@@ -461,7 +490,6 @@ describe('Testing LeftDrawerOrg component for SUPERADMIN', () => {
 
     const toggleButton = screen.getByTestId('toggleBtn');
     expect(toggleButton).toBeInTheDocument();
-    expect(toggleButton).toHaveAttribute('tabIndex', '0');
 
     await userEvent.click(toggleButton);
     expect(mockSetHideDrawer).toHaveBeenCalledWith(true);

@@ -34,6 +34,7 @@ export default defineConfig({
     // Environment variables
     env: {
       apiUrl: process.env.CYPRESS_API_URL || 'http://localhost:4000/graphql',
+      RECAPTCHA_SITE_KEY: process.env.REACT_APP_RECAPTCHA_SITE_KEY,
     },
     setupNodeEvents(on, config) {
       codeCoverageTask(on, config);

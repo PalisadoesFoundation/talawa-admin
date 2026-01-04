@@ -1,0 +1,141 @@
+.container {
+  position: relative;
+  display: flex;
+  min-height: var(--space-25);
+  background: #fff;
+  border-radius: 12px;
+}
+
+.panel {
+  width: 50%;
+  padding: var(--space-8);
+}
+
+.leftPanel {
+  border-right: var(--border-1) solid #e7e7e7;
+}
+
+.section {
+  margin-bottom: var(--space-8);
+}
+
+.sectionTitle {
+  margin: var(--space-0);
+  margin-bottom: var(--space-3);
+}
+
+.sectionDescription {
+  margin: var(--space-0);
+  color: #666;
+  font-size: 14px;
+}
+
+.dropzone {
+  border: var(--border-2) dashed #ddd;
+  border-radius: 12px;
+  padding: var(--space-9);
+  text-align: center;
+  background: #fafafa;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.uploadIcon {
+  font-size: 48px;
+  color: #ccc;
+  margin-bottom: var(--space-5);
+}
+
+.dropzoneTitle {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: var(--space-3);
+}
+
+.dropzoneHint {
+  font-size: 14px;
+  color: #666;
+}
+
+.hiddenInput {
+  display: none;
+}
+
+.errorBox {
+  margin-top: var(--space-5);
+  padding: var(--space-4);
+  background: #fff3cd;
+  border: var(--border-1) solid #ffeaa7;
+  border-radius: 8px;
+  color: #856404;
+  font-size: 14px;
+}
+
+.inlineIcon {
+  margin-right: var(--space-3);
+}
+
+.pluginInfoSection {
+  margin-top: var(--space-7);
+}
+
+.pluginInfoTitle {
+  margin: var(--space-0);
+  margin-bottom: var(--space-5);
+}
+
+.pluginInfoBody {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.infoRow {
+  margin-bottom: var(--space-3);
+}
+
+.componentsSection {
+  margin-top: var(--space-5);
+}
+
+.componentsList {
+  margin-top: var(--space-3);
+}
+
+.componentRow {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.checkIcon {
+  color: #28a745;
+  margin-right: var(--space-3);
+}
+
+.uploadButtonWrapper {
+  margin-top: var(--space-8);
+}
+
+.codeSection {
+  margin-bottom: var(--space-7);
+}
+
+.codeHeading {
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: var(--space-4);
+}
+
+.codeText {
+  font-size: 14px;
+  color: #666;
+}
+
+.codeBlock {
+  background: #f8f9fa;
+  padding: var(--space-5);
+  border-radius: 8px;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: var(--space-0);
+}

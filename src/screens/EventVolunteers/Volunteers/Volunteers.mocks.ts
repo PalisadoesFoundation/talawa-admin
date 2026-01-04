@@ -196,6 +196,25 @@ export const MOCKS = [
       query: GET_EVENT_VOLUNTEERS,
       variables: {
         input: { id: 'eventId' },
+        where: {
+          eventId: 'eventId',
+          name_contains: 'Teresa',
+          hasAccepted: undefined,
+        },
+        orderBy: null,
+      },
+    },
+    result: {
+      data: {
+        event: eventResponseWrapper([volunteer1]),
+      },
+    },
+  },
+  {
+    request: {
+      query: GET_EVENT_VOLUNTEERS,
+      variables: {
+        input: { id: 'eventId' },
         where: { eventId: 'eventId', name_contains: '', hasAccepted: false },
         orderBy: null,
       },

@@ -1,0 +1,61 @@
+.paginationContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.itemsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.loadMoreSection {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem 0;
+  border-top: 1px solid var(--pagination-border-top, #e5e7eb);
+}
+
+.loadMoreButton {
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--pagination-btn-color, #555555);
+  background-color: var(--pagination-btn-bg, #a8c7fa);
+  border: 2px solid var(--pagination-btn-border, #eaebef);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.loadMoreButton:hover:not(:disabled) {
+  background-color: var(--pagination-btn-bg-hover, #1778f2);
+  color: var(--pagination-btn-color-hover, #ffffff);
+  border-color: var(--pagination-btn-border-hover, #555555);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.loadMoreButton:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.loadMoreButton:disabled {
+  background-color: var(--pagination-btn-bg-disabled, #e7f0fe);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.loadMoreButton:focus-visible {
+  outline: 2px solid var(--pagination-btn-bg-focus, #1778f2);
+  outline-offset: 2px;
+}
+
+.stateMessage {
+  text-align: center;
+  padding: 2rem;
+  color: var(--bs-secondary, #6c757d);
+}

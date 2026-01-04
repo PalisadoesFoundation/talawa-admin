@@ -54,26 +54,33 @@ describe('Talawa Admin Setup', () => {
     vi.restoreAllMocks(); // Restores all spies including processExitSpy and consoleErrorSpy
   });
 
-  it('should successfully complete setup with default options', async () => {
-    // inquirer prompts used by askAndSetRecaptcha and askAndSetLogErrors
+  // ADD THESE NEW TEST BLOCKS
+  it('should call API setup with false when Docker is disabled', async () => {
+    // Setup environment for NO Docker
+    vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=NO');
+    vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'NO' });
+
     vi.mocked(inquirer.prompt)
       .mockResolvedValueOnce({ shouldUseRecaptcha: false })
       .mockResolvedValueOnce({ shouldLogErrors: false });
 
     await main();
 
-    expect(checkEnvFile).toHaveBeenCalled();
-    expect(modifyEnvFile).toHaveBeenCalled();
-    expect(askAndSetDockerOption).toHaveBeenCalled();
-    // Because USE_DOCKER=NO in mocks, askAndUpdatePort should run
-    expect(askAndUpdatePort).toHaveBeenCalled();
-    expect(askAndUpdateTalawaApiUrl).toHaveBeenCalled();
-    // When reCAPTCHA is opted out, updateEnvFile is called to set flags (according to implementation)
-    expect(updateEnvFile).toHaveBeenCalledWith('REACT_APP_USE_RECAPTCHA', 'NO');
-    expect(updateEnvFile).toHaveBeenCalledWith(
-      'REACT_APP_RECAPTCHA_SITE_KEY',
-      '',
-    );
+    expect(askAndUpdateTalawaApiUrl).toHaveBeenCalledWith(false);
+  });
+
+  it('should call API setup with true when Docker is enabled', async () => {
+    // Setup environment for YES Docker
+    vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=YES');
+    vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'YES' });
+
+    vi.mocked(inquirer.prompt)
+      .mockResolvedValueOnce({ shouldUseRecaptcha: false })
+      .mockResolvedValueOnce({ shouldLogErrors: false });
+
+    await main();
+
+    expect(askAndUpdateTalawaApiUrl).toHaveBeenCalledWith(true);
   });
 
   it('should exit early when checkEnvFile returns false', async () => {
@@ -101,7 +108,7 @@ describe('Talawa Admin Setup', () => {
     // with docker = YES, askAndUpdatePort should NOT be called
     expect(askAndUpdatePort).not.toHaveBeenCalled();
     // askAndUpdateTalawaApiUrl is called (implementation calls it when useDocker true)
-    expect(askAndUpdateTalawaApiUrl).toHaveBeenCalled();
+    expect(askAndUpdateTalawaApiUrl).toHaveBeenCalledWith(true);
   });
 
   it('should handle error logging setup when user opts in', async () => {

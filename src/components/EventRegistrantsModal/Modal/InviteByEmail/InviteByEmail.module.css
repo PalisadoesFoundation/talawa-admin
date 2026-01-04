@@ -1,0 +1,16 @@
+.modalHeader {
+  background-color: var(--tableHeader-bg);
+}
+
+.emailField {
+  flex: 1;
+}
+
+.nameField {
+  width: 220px;
+  margin-left: 12px;
+}
+
+.removeButton {
+  margin-left: 8px;
+}

@@ -32,9 +32,14 @@
  *   `.subtleBlueGrey` (for blue Text)
  *   `.activeTab` (for tabs which are active)
  *   `.inActiveTab` (for tabs which are not selected)
+ *   `.dataTableBase` (for styling data tables)
+ *   `.dataEmptyState` (for empty state displays)
+ *   `.dataErrorState` (for error state displays)
+ *   `.visuallyHidden` (for accessibility, hides content visually but keeps it accessible to screen readers)
  *
  */
 :root {
+  --errorState-border: #f5c2c7;
   --primary-theme-color: #1778f2;
 
   --addButton-font: #555555;
@@ -43,6 +48,17 @@
   --addButton-bg-hover: #1778f2;
   --addButton-border-hover: #555555;
   --disabled-btn: #e7f0fe;
+
+  /** pagination styles **/
+  --pagination-btn-color: var(--addButton-font, #555555);
+  --pagination-btn-bg: var(--addButton-bg, #a8c7fa);
+  --pagination-btn-border: var(--addButton-border, #eaebef);
+  --pagination-btn-bg-hover: var(--addButton-bg-hover, #1778f2);
+  --pagination-btn-border-hover: var(--addButton-border-hover, #555555);
+  --pagination-btn-bg-disabled: var(--disabled-btn, #e7f0fe);
+  --pagination-btn-bg-focus: var(--primary-theme-color, #1778f2);
+  --pagination-btn-color-hover: #ffffff;
+  --pagination-border-top: #e5e7eb;
 
   --sidebar-option-text-inactive: #000000;
   --sidebar-option-bg-hover: #eaebef;
@@ -119,9 +135,11 @@
 
   --font-size-header: 16px;
   --font-size-table-body: 14px;
+  --avatar-placeholder-bg: #ccc;
 
   --tableHeader-bg: #eaebef;
   --tableHeader-color: #000000;
+  --tableHeader-success-bg: var(--success-green-color);
 
   --LoginToggle-button-color: #555555;
   --LoginToggle-button-bg: #eaebef;
@@ -305,7 +323,8 @@
   --colorWhite: #555555;
 
   --errorIcon-color: #ff4d4f;
-
+  --errorState-color: #b00020;
+  --errorState-bg: #f8d7da;
   --tagsBreadCrumbs-color-hover: #0000ff;
   --tagsBreadCrumbs-color: #808080;
 
@@ -346,9 +365,15 @@
   --memberfontbtn-border: #e8e5e5;
   --memberfont-bg: #eaebef;
   --memberfont-color: #fff;
-  --removeMemberCancel-bg: #f8d6dc --loader-size: 10em;
+  --removeMemberCancel-bg: #f8d6dc;
+  --removeMemberCancel-border: #f8d6dc;
+  --loader-size: 10em;
   --loader-border: #ffffff33;
   --loader-border-left: #febc59;
+
+  /* Skeleton loading theme variables */
+  --skeleton-base: #e0e0e0;
+  --skeleton-highlight: #f0f0f0;
 
   --pledgeContainer-bg: #31bb6b33;
   --popup-border: #e2e8f0;
@@ -735,7 +760,8 @@
   --primary-theme-color: #1778f2;
   --advertisement-dropdown-border: 1px solid rgba(0, 0, 0, 0.15);
   --advertisement-dropdown-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175);
-  --advertisement-media-height: 12.5rem --pledgeModal-bg: #ffffff;
+  --advertisement-media-height: 12.5rem;
+  --pledgeModal-bg: #ffffff;
   --pledgeModal-header-text: #000000;
   --pledgeModal-title-text: #4b5563;
   --pledgeModal-close-button-bg: #f8d6dc;
@@ -845,6 +871,17 @@
   --dropdown-font-color: #555555;
 
   --input-bg: #f2f7ff;
+
+  --empty-state-bg: #fafafa;
+  --empty-state-border-color: #eeeeee;
+
+  /* OrgSelector Component */
+  --orgSelector-dropdown-bg: #ffffff;
+  --orgSelector-dropdown-border: #dee2e6;
+  --orgSelector-dropdown-shadow: rgba(0, 0, 0, 0.075);
+  --orgSelector-option-hover-bg: #f8f9fa;
+  --orgSelector-option-selected-bg: rgba(13, 110, 253, 0.1);
+  --orgSelector-no-results-color: #6c757d;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -983,15 +1020,22 @@
   border: 1px solid var(--search-border-color, #d0d5dd);
   border-radius: 8px;
   background-color: var(--search-background-color, #fcfcfc);
-  box-shadow: 0 15px 35px rgba(149, 156, 202, 0.2);
+  box-shadow: 0 4px 6px rgba(149, 156, 202, 0.1);
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease;
   overflow: hidden;
-  flex: 1 1 320px;
-  min-width: 240px;
+
+  /* Flex properties to make it sit on the same line */
+  flex-grow: 1;
+  /* Allow it to grow to fill space */
+  flex-shrink: 1;
+  /* Allow it to shrink if needed */
   width: auto;
+  /* Stop forcing 100% width */
+  min-width: 200px;
   max-width: 100%;
+  height: 48px;
 }
 
 .searchBarContainerWithButton {
@@ -1008,7 +1052,7 @@
   flex: 1;
   display: flex;
   align-items: center;
-  min-height: 55px;
+  min-height: 48px;
   padding: 0.75rem 2.5rem 0.75rem 1.25rem;
   background-color: transparent;
 }
@@ -1033,9 +1077,12 @@
   border: none;
   background: transparent;
   padding: 0;
+  padding-left: 3rem !important;
   font-size: 0.95rem;
   color: var(--search-text-color, #1e293b);
   outline: none;
+  width: 100%;
+  height: 100%;
 }
 
 .searchBarInput::-webkit-search-cancel-button,
@@ -1071,9 +1118,12 @@
 .searchBarIcon {
   position: absolute;
   left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
   color: var(--search-icon-color, #a0aec0);
   display: inline-flex;
-  font-size: 1rem;
+  font-size: 1.2rem;
+  pointer-events: none;
 }
 
 .searchBarClearButton {
@@ -1104,8 +1154,8 @@
   border-radius: 0;
   background-color: var(--search-button-bg, #b3ceff);
   color: #2f3f5f;
-  width: 55px;
-  height: 55px;
+  width: 48px;
+  height: 48px;
   font-weight: 600;
   transition:
     background-color 0.2s ease,
@@ -1360,12 +1410,15 @@ form label,
 
 /* btnsBlock & btnsContainer */
 
-.btnsContainer {
+.btnsContainer,
+.calendar__controls {
   display: flex;
-  margin: 2.5rem 0;
-  align-items: stretch;
-  gap: 0.75rem;
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  /* Space between the Sort, Create, and Bell icons */
+  flex-shrink: 0;
+  /* Prevents buttons from getting squished */
+  white-space: nowrap;
 }
 
 .btnsContainer > :first-child {
@@ -1456,7 +1509,7 @@ form label,
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 1rem;
+  margin-top: 0;
 }
 
 @media (max-width: 1020px) {
@@ -1523,7 +1576,7 @@ form label,
 
 .removeMemberCancel {
   background-color: var(--removeMemberCancel-bg);
-  color: '#C8102E';
+  color: var(--removeButton-color);
   border: 1px solid var(--removeMemberCancel-border);
 }
 
@@ -1595,22 +1648,13 @@ form label,
   transform: scale(1.5);
   color: var(--bs-danger, var(--errorIcon-color));
   margin-bottom: 1rem;
+  font-size: 1.5rem;
 
   /* Add error icon for non-color indication */
   &::before {
     content: '⚠️';
     margin-right: 0.5rem;
   }
-}
-
-/* Not Found */
-
-.notFound {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
 }
 
 /* Row Background */
@@ -2073,6 +2117,7 @@ form label,
 
 .orgCard .innerContainer {
   display: flex;
+  height: 100%;
 }
 
 .orgCard {
@@ -2100,6 +2145,8 @@ form label,
 }
 
 .orgCard .innerContainer .content {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   margin-left: 1rem;
   width: 70%;
@@ -2710,15 +2757,6 @@ form label,
   margin: 8px;
 }
 
-.calendar__header {
-  display: flex;
-  align-items: stretch;
-  justify-content: flex-start;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  margin-right: 0;
-}
-
 .calendar__search {
   flex: 1 1 360px;
   min-width: 260px;
@@ -2733,13 +2771,6 @@ form label,
 }
 
 @media (max-width: 520px) {
-  .calendar__header {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
   .space {
     display: block !important;
     text-align: center;
@@ -3759,6 +3790,101 @@ form label,
   border-width: 0.2rem;
 }
 
+/* -- LoadingState.tsx -- */
+
+/* Container for spinner variant - provides relative positioning context */
+.loadingContainer {
+  position: relative;
+  min-height: 200px;
+}
+
+/* Overlay that blocks interactions during loading */
+.loadingOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* Dimmed content underneath the overlay */
+.loadingContent {
+  opacity: 0.5;
+}
+
+/* Skeleton loading styles */
+.skeletonContainer {
+  padding: 1rem;
+  width: 100%;
+}
+
+.skeletonHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.skeletonContent {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.skeletonRow {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.skeletonItem {
+  background: linear-gradient(
+    90deg,
+    var(--skeleton-base, #e0e0e0) 25%,
+    var(--skeleton-highlight, #f0f0f0) 50%,
+    var(--skeleton-base, #e0e0e0) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+  border-radius: 4px;
+}
+
+.skeletonTitle {
+  height: 2rem;
+  width: 40%;
+}
+
+.skeletonButton {
+  height: 2.5rem;
+  width: 8rem;
+  border-radius: 6px;
+}
+
+.skeletonCell {
+  height: 3rem;
+  flex: 1;
+}
+
+.skeletonCellSmall {
+  height: 2rem;
+  width: 6rem;
+}
+
+@keyframes skeletonPulse {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 /* -- LoginPortalToggle.tsx -- */
 
 .navLinkClass {
@@ -3974,7 +4100,6 @@ form label,
 .joinedBtn {
   display: flex;
   justify-content: space-around;
-  width: 8rem;
 }
 
 .joinedBtn {
@@ -5638,6 +5763,12 @@ form {
   margin-left: 10px;
 }
 
+.signOutDisabled {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
 /* SortingButton.tsx */
 
 .dropdownItem {
@@ -5655,10 +5786,7 @@ form {
 .dropdownItem:hover,
 .dropdownItem:focus,
 .dropdownItem:active {
-  background-color: var(
-    --dropdownItem-hover-bg,
-    #eff1f7 var(--dropdownItem-hover-bg) #e8e5e5
-  ) !important;
+  background-color: var(--dropdownItem-hover-bg, #eff1f7) !important;
   color: var(--dropdownItem-color) !important;
   outline: none !important;
 }
@@ -5880,43 +6008,37 @@ form {
 }
 
 /* -- CreateGroupChat.tsx -- */
-
+/* Donation card styles */
 /* -- DonationCard.tsx -- */
 
-.mainContainerDonateCard {
-  width: 49%;
-  height: 8rem;
-  min-width: max-content;
-  display: flex;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 1rem;
-  background-color: var(--mainContainerDonateCard-bg);
-  border: 1px solid var(--mainContainerDonateCard-border);
-  border-radius: 10px;
-  overflow: hidden;
+.donationAvatar {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background-color: var(--people-card-header-bg);
+  flex-shrink: 0;
 }
 
-.img {
-  height: 100%;
-  aspect-ratio: 1 / 1;
-  background-color: var(--mainContainerDonateCard-bg);
-}
-
-.personDetails {
+.donationDetails {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: 0.25rem;
 }
 
-.btnDonate {
-  display: flex;
-  align-items: flex-end;
+.donationRow {
+  font-size: 14px;
+  color: var(--primaryText-color);
 }
 
-.btnDonate button {
-  padding-inline: 2rem !important;
-  border-radius: 5px;
+/* Donor name */
+.donorName {
+  font-weight: 600;
+  font-size: 15px;
+}
+
+.donationMeta {
+  font-size: 13px;
+  color: var(--secondText-color);
 }
 
 /* -- EventCard.tsx -- */
@@ -6284,6 +6406,7 @@ form {
   background-color: var(--leftDrawer-fixedModule-bg) !important;
   transition: 0.5s;
   font-family: var(--bs-leftDrawer-font-family);
+  overflow-x: hidden !important;
 }
 
 .activeDrawer {
@@ -6305,6 +6428,7 @@ form {
 
 .leftDrawer .sidebarcompheight {
   flex-grow: 1;
+  overflow-x: hidden !important;
 }
 
 .leftDrawer .brandingContainer {
@@ -6349,6 +6473,7 @@ form {
 .leftDrawer .optionList {
   /* height: 75%; */
   overflow-y: hidden;
+  overflow-x: hidden !important;
   scrollbar-width: thin;
   scrollbar-color: var(--leftDrawer-scrollbar-color) transparent;
   transition: overflow 0.3s ease-in-out;
@@ -6375,11 +6500,14 @@ form {
   background-color: var(--leftDrawer-optionList-bg);
 }
 
-.leftDrawer .optionList button {
+.leftDrawer .optionList button,
+.leftDrawer .optionList a {
   display: flex;
   align-items: center;
   width: 100%;
+  max-width: 100%;
   text-align: start;
+  text-decoration: none;
   margin-bottom: 0.8rem;
   border-radius: 12px;
   font-size: 16px;
@@ -6387,10 +6515,16 @@ form {
   padding-left: 0.8rem;
   outline: none;
   border: none;
+  overflow: hidden;
 }
 
-.leftDrawer button .iconWrapper {
+.leftDrawer button .iconWrapper,
+.leftDrawer a .iconWrapper {
   width: 36px;
+  min-width: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .leftDrawer .optionList .collapseBtn {
@@ -6820,6 +6954,7 @@ form {
   color: var(--eventManagementSelectedBtn-color);
   background-color: var(--eventManagementSelectedBtn-bg) !important;
   border: 1px solid var(--eventManagementSelectedBtn-border) !important;
+  height: 2.5rem;
 }
 
 .eventManagementSelectedBtn:hover {
@@ -6831,6 +6966,7 @@ form {
   color: var(--eventManagementBtn-color);
   background-color: var(--eventManagementBtn-bg) !important;
   border-color: var(--eventManagementBtn-border) !important;
+  height: 2.5rem;
 }
 
 .eventManagementBtn:hover {
@@ -7786,7 +7922,8 @@ form {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-left: 12px; /* bring controls closer together */
+  margin-left: 12px;
+  /* bring controls closer together */
   gap: 12px;
 }
 
@@ -7798,20 +7935,35 @@ form {
 }
 
 .btnsContainerSearchBar .inputOrgList {
-  flex: 1 1 640px; /* make input wider and flexible */
+  flex: 1 1 640px;
+  /* make input wider and flexible */
   max-width: 760px;
   position: relative;
   display: flex;
   align-items: center;
-  margin-left: 18px; /* gap from left */
+  margin-left: 18px;
+  /* gap from left */
 }
 
-.btnsContainerSearchBar input {
-  outline: 1px solid var(--bs-gray-400);
+/* Scope reset to the SearchBar input only so other inputs are unaffected */
+.btnsContainerSearchBar .searchBarInput,
+.btnsContainerSearchBar input[type='search'] {
+  outline: none;
+  box-shadow: none;
+  border: none;
+  background: transparent;
+}
+
+/* The wrapper provides focus-visible ring (see .searchBarContainer:focus-within) */
+.btnsContainerSearchBar .searchBarInput:focus,
+.btnsContainerSearchBar input[type='search']:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 .btnsContainerSearchBar .inputOrgList button {
-  width: 44px; /* slightly smaller square button */
+  width: 44px;
+  /* slightly smaller square button */
   height: 38px;
   margin-left: 8px;
   flex: 0 0 44px;
@@ -8105,7 +8257,6 @@ form {
 }
 
 .list_box {
-  height: 70vh;
   overflow-y: auto;
   width: auto;
 }
@@ -8222,6 +8373,7 @@ form {
   color: var(--infoButton-color);
   margin-right: 0.5rem;
   border-radius: 0.25rem;
+  min-width: 32px;
 }
 
 .infoButton:hover {
@@ -8253,6 +8405,14 @@ form {
   border-color: var(--checkbox-focus-border);
   outline: none;
   box-shadow: none;
+}
+
+.assigneeCellContainer {
+  height: 100%;
+}
+
+.groupIconSecondary {
+  color: var(--view-color);
 }
 
 /* -- OrganizationDashboard.tsx -- */
@@ -8287,6 +8447,13 @@ form {
   padding: 2px 5px;
   margin-right: 5px;
   margin-left: 5px;
+}
+
+/* Additional left offset required to visually align Bootstrap switches
+   with their labels in the Create Event modal.
+   Verified against Bootstrap 5.3.x + react-bootstrap Form.Switch rendering. */
+.switch :global(.form-check-input) {
+  margin-inline-start: -1.7em;
 }
 
 .checkboxdiv {
@@ -8331,7 +8498,7 @@ form {
 
 /* -- CampaignModal.tsx -- */
 
-/* -- OrganizationFundCampagins.tsx -- */
+/* -- OrganizationFundCampaigns.tsx -- */
 
 .organizationFundCampaignContainer {
   margin: 0.5rem 0;
@@ -8706,21 +8873,18 @@ form {
 /* -- Campaigns.tsx -- */
 
 .outlineBtn {
-  margin-bottom: 10px;
   background-color: var(--outlineBtn-bg);
   color: var(--outlineBtn-color);
   border-color: var(--outlineBtn-border);
 }
 
 .outlineBtn:is(:hover, :active) {
-  margin-bottom: 10px;
   background-color: var(--outlineBtn-hover-bg) !important;
   color: var(--outlineBtn-bg) !important;
   border-color: var(--outlineBtn-hover-bg);
 }
 
 .outlineBtn:disabled {
-  margin-bottom: 10px;
   background-color: var(--outlineBtn-bg);
   color: var(--outlineBtn-disabled);
   border-color: var(--outlineBtn-disabled);
@@ -8985,6 +9149,17 @@ form {
   margin-left: 5px;
 }
 
+.datediv {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 15px;
+}
+
+.datediv > div {
+  flex: 1;
+}
+
 @media only screen and (max-width: 600px) {
   .checkboxContainer {
     flex-direction: column;
@@ -9046,12 +9221,9 @@ form {
 }
 
 .content {
-  height: fit-content;
-  min-height: calc(100% - 40px);
-}
-
-.content {
-  min-height: calc(100% - 40px);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .orgCard .innerContainer .content {
@@ -9106,6 +9278,14 @@ form {
   margin-top: 1.5rem;
   border-top-left-radius: 16px;
   border-top-right-radius: 16px;
+}
+
+.people_card_header_col_1 {
+  flex: 1;
+}
+
+.people_card_header_col_2 {
+  flex: 2;
 }
 
 .people_card_main_container {
@@ -9576,6 +9756,10 @@ form {
   margin: 1px;
 }
 
+.iconLarge {
+  font-size: 1.5rem;
+}
+
 .chipIcon {
   height: 0.9rem !important;
 }
@@ -9671,24 +9855,39 @@ form {
 }
 
 .outlineBtn {
-  margin-bottom: 10px;
+  /* SAME layout as manageBtn */
+  display: flex;
+  justify-content: space-around;
+  width: 8rem;
+
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+
+  box-shadow: 0 2px 2px var(--manageBtn-box-shadow);
   background-color: var(--outlineBtn-bg);
   color: var(--outlineBtn-color);
-  border-color: var(--outlineBtn-border);
+  border: 1px solid var(--outlineBtn-border);
+}
+
+.outlineBtnPositioned {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
 }
 
 .outlineBtn:is(:hover, :active) {
-  margin-bottom: 10px;
   background-color: var(--outlineBtn-hover-bg) !important;
-  color: var(--outlineBtn-color-hover) !important;
-  border-color: var(--outlineBtn-hover-border);
+  color: var(--outlineBtn-bg) !important;
+  border-color: var(--outlineBtn-hover-bg);
+  box-shadow: var(--hover-shadow);
 }
 
 .outlineBtn:disabled {
-  margin-bottom: 10px;
-  background-color: var(--outlineBtn-bg-disabled);
-  color: var(--outlineBtn-color-disabled);
-  border-color: var(--outlineBtn-border-disabled);
+  background-color: var(--outlineBtn-bg);
+  color: var(--outlineBtn-disabled);
+  border-color: var(--outlineBtn-disabled);
 }
 
 .modalTable {
@@ -9821,6 +10020,7 @@ form {
 
 .collapsedDrawer {
   width: var(--sidebar-collapsed-width);
+  overflow-x: hidden !important;
 }
 
 .sidebarText {
@@ -9832,6 +10032,7 @@ form {
 
 .expandedDrawer {
   width: var(--sidebar-expanded-width);
+  overflow-x: hidden !important;
 }
 
 .venueimage {
@@ -9911,4 +10112,498 @@ form {
   background: linear-gradient(135deg, #a8c7fa 0%, #a8c7fa 100%);
 }
 
+.buttonContainer {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 10px;
+}
+
+.manageBtn,
+.withdrawBtn,
+.outlineBtn {
+  min-width: 8rem;
+  height: 2.4rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+
+.statusChip {
+  display: inline-block;
+  margin-top: 0.25rem;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 999px;
+  width: fit-content;
+}
+
+.member {
+  background-color: #e6f4ea;
+  color: #137333;
+}
+
+.pendingMembership {
+  background-color: #fff4e5;
+  color: #b26a00;
+}
+
+.notMember {
+  background-color: #f1f3f4;
+  color: #5f6368;
+}
+
+.btnsBlock {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  width: auto;
+  flex-shrink: 0;
+  height: 48px;
+  margin: 0;
+}
+
+/* 2. Ensure the header stays in one line and doesn't wrap on Desktop */
+.calendar__header {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: nowrap !important;
+  width: 100%;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  margin-top: 1rem;
+}
+
+/* 3. Mobile responsiveness: Only allow wrapping on actual small screens */
+@media (max-width: 768px) {
+  .calendar__header {
+    flex-wrap: wrap !important;
+  }
+
+  .btnsBlock {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+}
+
+.btnsBlock > button,
+.btnsBlock > .btn {
+  margin: 0;
+  height: 100%;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.4rem;
+}
+
 /* ----------------------------------------------------- */
+.orgListContainer {
+  padding-left: 40px;
+  padding-right: 30px;
+}
+
+@media (max-width: 768px) {
+  .orgListContainer {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+.addButtonIcon {
+  font-size: 25px;
+  margin-bottom: 2px;
+  margin-right: 2px;
+}
+
+/* Utility classes for inline style replacements */
+.flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.flexWrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flexWrapGap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.maxHeight120 {
+  max-height: 120px;
+}
+
+.cursorPointer {
+  cursor: pointer;
+}
+
+.fullWidthHeight {
+  width: 100%;
+  height: 100%;
+}
+
+.progressBarHeight {
+  height: 1.5rem;
+  font-size: 0.9rem;
+}
+
+.memberNameFontSize {
+  font-size: 15px;
+}
+
+/* Avatar placeholder background */
+.avatarPlaceholder {
+  background-color: var(--avatar-placeholder-bg, #ccc);
+}
+
+.avatarImage {
+  border-radius: 50%;
+  object-fit: cover;
+  width: var(--avatar-size, 40px);
+  height: var(--avatar-size, 40px);
+}
+
+.avatarPlaceholderSize {
+  width: var(--avatar-size, 40px);
+  height: var(--avatar-size, 40px);
+  font-size: calc(var(--avatar-size, 40px) * 0.4);
+  border-radius: 50%;
+}
+
+/* MUI DataGrid styles - using global selectors to target MUI classes */
+.dataGridNoHover :global(.MuiDataGrid-row:hover),
+.dataGridNoHover :global(.MuiDataGrid-row.Mui-hovered) {
+  background-color: transparent;
+}
+
+.dataGridRounded :global(.MuiDataGrid-root),
+.dataGridRounded :global(.MuiDataGrid-main) {
+  border-radius: 0.5rem;
+}
+
+.addIconStyle {
+  font-size: 25px;
+  margin-bottom: 2px;
+  margin-right: 2px;
+}
+
+.postContainer {
+  min-height: 100vh;
+}
+
+.addPost {
+  font-size: 20px;
+  margin-right: 6px;
+}
+
+.noPostsFound {
+  text-align: center;
+}
+
+.postInfiniteScroll {
+  overflow: visible;
+}
+
+.createPostModalContainer {
+  position: absolute;
+}
+
+.pinnedPostModal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.pinnedPostModalBody {
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 20px;
+  position: relative;
+}
+
+.dataGridContainer {
+  background-color: #ffffff;
+  border-radius: 16px;
+}
+
+.dataGridContainer :global(.MuiDataGrid-columnHeaders),
+.dataGridContainer :global(.MuiDataGrid-cell) {
+  border: none;
+}
+
+.dataGridContainer :global(.MuiDataGrid-columnSeparator) {
+  display: none;
+}
+
+.dataGridContainer :global(.MuiDataGrid-row:hover),
+.dataGridContainer :global(.MuiDataGrid-row.Mui-hovered) {
+  background-color: transparent;
+}
+
+.iconButton {
+  min-width: 32px;
+}
+
+.smallText {
+  font-size: var(--font-size-sm);
+}
+
+.marginTopSm {
+  margin-top: 11px;
+}
+
+.iconLg {
+  font-size: 2rem;
+}
+
+/* -- DataTable Component Styles -- */
+
+.dataTableWrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.dataTableBase {
+  font-size: 0.95rem;
+}
+
+.dataEmptyState {
+  padding: 16px;
+  text-align: center;
+  color: var(--secondText-color);
+  background: var(--empty-state-bg);
+  border: 1px solid var(--empty-state-border-color);
+  border-radius: 6px;
+}
+
+.dataErrorState {
+  padding: 16px;
+  text-align: left;
+  color: var(--errorState-color);
+  background: var(--errorState-bg);
+  border: 1px solid var(--errorState-border);
+  border-radius: 6px;
+}
+
+.visuallyHidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.tableBodyCell {
+  font-size: 14px;
+}
+
+.tableHeadCell {
+  background-color: var(--table-head-bg, blue);
+  color: var(--table-header-color, black);
+}
+
+.dataErrorDetails {
+  margin-top: 4px;
+  font-size: 0.875rem;
+  opacity: 0.85;
+}
+
+.dataSkeletonCell {
+  height: 1em;
+  width: 100%;
+  background: linear-gradient(90deg, #eee 25%, #f5f5f5 50%, #eee 75%);
+  border-radius: 4px;
+  animation: skeleton-loading 1.2s ease-in-out infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: -200px 0;
+  }
+
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+/* OrgSelector Component Styles */
+.orgSelectorDropdown {
+  position: absolute;
+  width: 100%;
+  background-color: var(--orgSelector-dropdown-bg);
+  border: 1px solid var(--orgSelector-dropdown-border);
+  border-radius: 0.375rem;
+  box-shadow: 0 0.125rem 0.25rem var(--orgSelector-dropdown-shadow);
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  top: 100%;
+  margin-top: 2px;
+}
+
+.orgSelectorOption {
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+}
+
+.orgSelectorOption:hover {
+  background-color: var(--orgSelector-option-hover-bg);
+}
+
+.orgSelectorOptionHighlighted {
+  background-color: var(--orgSelector-option-hover-bg);
+}
+
+.orgSelectorOptionSelected {
+  background-color: var(--orgSelector-option-selected-bg);
+}
+
+.orgSelectorNoResults {
+  padding: 0.75rem 1rem;
+  color: var(--orgSelector-no-results-color);
+}
+
+/* DataTable Pagination Styles */
+.paginationWrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1rem;
+  border-top: 1px solid var(--pagination-border-top);
+}
+
+.paginationRange {
+  font-size: 0.875rem;
+  color: var(--row-color);
+  min-width: 120px;
+  text-align: center;
+}
+
+.pageBtn {
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--pagination-btn-border);
+  border-radius: 0.375rem;
+  background-color: var(--pagination-btn-bg);
+  color: var(--pagination-btn-color);
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s,
+    opacity 0.2s;
+}
+
+.pageBtn:hover:not(:disabled) {
+  background-color: var(--pagination-btn-bg-hover);
+  border-color: var(--pagination-btn-border-hover);
+  color: var(--pagination-btn-color-hover);
+}
+
+.pageBtn:disabled {
+  opacity: 0.6;
+  background-color: var(--pagination-btn-bg-disabled);
+  cursor: not-allowed;
+}
+
+.pageBtn:focus {
+  outline: 2px solid var(--pagination-btn-bg-focus);
+  outline-offset: 2px;
+}
+
+/* Organizations page styles */
+.organizationsContainer {
+  padding-top: 20px;
+}
+
+.organizationsContainerExpanded {
+  margin-left: 40px;
+}
+
+.organizationsContainerContracted {
+  margin-left: 20px;
+}
+
+.organizationsMainContainer {
+  overflow-x: hidden;
+}
+
+.organizationsFlexContainer {
+  flex: 1;
+}
+
+/* Groups page styles */
+.groupsViewButton {
+  min-width: 32px;
+}
+
+/* DataGrid styles */
+.dataGridRoot {
+  border-radius: 0.5rem;
+}
+
+.dataGridMain {
+  border-radius: 0.5rem;
+}
+
+.dataGridRow:hover {
+  background-color: transparent;
+}
+
+.dataGridRow.Mui-hovered {
+  background-color: transparent;
+}
+
+.dataGridCell:focus-within {
+  outline: none;
+}
+
+.dataGridColumnHeader:focus-within {
+  outline: none;
+}
+
+.divider {
+  border: 2px solid var(--pagination-btn-border);
+  border-width: 2px;
+  width: 85%;
+}
+
+@media (max-width: 768px) {
+  .paginationWrap {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .pageBtn {
+    width: 100%;
+  }
+}
+
+.manageTagErrorIcon {
+  font-size: 2rem;
+}
+
+.manageTagDivider {
+  border-color: var(--grey-border-box-color);
+  border-width: 2px;
+  width: 85%;
+}

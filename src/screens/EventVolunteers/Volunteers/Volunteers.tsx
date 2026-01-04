@@ -49,7 +49,11 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
 
-import { Circle, WarningAmberRounded } from '@mui/icons-material';
+import {
+  Circle,
+  VolunteerActivism,
+  WarningAmberRounded,
+} from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
 import Loader from 'components/Loader/Loader';
@@ -58,7 +62,7 @@ import {
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { Chip, debounce, Stack } from '@mui/material';
+import { Chip, debounce } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import styles from '../../../style/app-fixed.module.css';
 import { GET_EVENT_VOLUNTEERS } from 'GraphQl/Queries/EventVolunteerQueries';
@@ -66,8 +70,8 @@ import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
 import VolunteerCreateModal from './createModal/VolunteerCreateModal';
 import VolunteerDeleteModal from './deleteModal/VolunteerDeleteModal';
 import VolunteerViewModal from './viewModal/VolunteerViewModal';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 enum VolunteerStatus {
   All = 'all',
@@ -82,26 +86,23 @@ enum ModalState {
   VIEW = 'view',
 }
 
-const dataGridStyle = {
-  backgroundColor: 'white',
-  borderRadius: '16px',
-  '& .MuiDataGrid-columnHeaders': { border: 'none' },
-  '& .MuiDataGrid-cell': { border: 'none' },
-  '& .MuiDataGrid-columnSeparator': { display: 'none' },
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
-  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
-};
-
-function volunteers(): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
+/**
+ * Renders the Event Volunteers screen.
+ *
+ * Responsibilities:
+ * - Displays volunteer listings with status chips
+ * - Supports search and filter via AdminSearchFilterBar
+ * - Shows volunteer avatars and hours volunteered
+ * - Handles add, view, and delete volunteer flows
+ * - Integrates with DataGrid for table display
+ *
+ * Localization:
+ * - Uses `common` and `eventVolunteers` namespaces
+ *
+ * @returns JSX.Element
+ */
+function Volunteers(): JSX.Element {
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -185,10 +186,22 @@ function volunteers(): JSX.Element {
     },
   });
 
+  // Extracted callback for proper coverage instrumentation
+  const handleSearchChange = useCallback((value: string): void => {
+    setSearchTerm(value);
+  }, []);
+
   const debouncedSearch = useMemo(
-    () => debounce((value: string) => setSearchTerm(value), 300),
-    [],
+    () => debounce(handleSearchChange, 300),
+    [handleSearchChange],
   );
+
+  // Debounce cleanup effect
+  useEffect(() => {
+    return () => {
+      debouncedSearch.clear();
+    };
+  }, [debouncedSearch]);
 
   // Effect to set recurring event info similar to EventActionItems
   useEffect(() => {
@@ -243,7 +256,10 @@ function volunteers(): JSX.Element {
   if (volunteersError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded className={styles.icon} fontSize="large" />
+        <WarningAmberRounded
+          className={`${styles.icon} ${styles.iconLg}`}
+          aria-hidden="true"
+        />
         <h6 className="fw-bold text-danger text-center">
           {tErrors('errorLoading', { entity: 'Volunteers' })}
         </h6>
@@ -254,7 +270,7 @@ function volunteers(): JSX.Element {
   const columns: GridColDef[] = [
     {
       field: 'volunteer',
-      headerName: 'Volunteer',
+      headerName: t('eventVolunteers.volunteerHeader'),
       flex: 1,
       align: 'center',
       minWidth: 100,
@@ -271,7 +287,7 @@ function volunteers(): JSX.Element {
             {avatarURL ? (
               <img
                 src={avatarURL}
-                alt="volunteer"
+                alt={tCommon('volunteer')}
                 data-testid="volunteer_image"
                 className={styles.TableImages}
               />
@@ -294,7 +310,7 @@ function volunteers(): JSX.Element {
     },
     {
       field: 'status',
-      headerName: 'Status',
+      headerName: t('eventVolunteers.statusHeader'),
       flex: 1,
       align: 'center',
       minWidth: 100,
@@ -307,20 +323,20 @@ function volunteers(): JSX.Element {
           switch (status) {
             case 'accepted':
               return {
-                label: 'Accepted',
+                label: t('eventVolunteers.accepted'),
                 color: 'success' as const,
                 className: styles.active,
               };
             case 'rejected':
               return {
-                label: 'Rejected',
+                label: t('eventVolunteers.rejected'),
                 color: 'error' as const,
                 className: styles.rejected,
               };
             case 'pending':
             default:
               return {
-                label: 'Pending',
+                label: t('eventVolunteers.pending'),
                 color: 'warning' as const,
                 className: styles.pending,
               };
@@ -342,7 +358,7 @@ function volunteers(): JSX.Element {
     },
     {
       field: 'hours',
-      headerName: 'Hours Volunteered',
+      headerName: t('eventVolunteers.hoursVolunteeredHeader'),
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -380,7 +396,7 @@ function volunteers(): JSX.Element {
     // },
     {
       field: 'options',
-      headerName: 'Options',
+      headerName: t('eventVolunteers.optionsHeader'),
       align: 'center',
       flex: 1,
       minWidth: 100,
@@ -393,12 +409,14 @@ function volunteers(): JSX.Element {
             <Button
               variant="success"
               size="sm"
-              style={{ minWidth: '32px' }}
-              className="me-2 rounded"
+              className={`me-2 rounded ${styles.iconButton}`}
               data-testid="viewItemBtn"
               onClick={() => handleOpenModal(params.row, ModalState.VIEW)}
+              aria-label={t('eventVolunteers.viewDetails', {
+                name: params.row.name,
+              })}
             >
-              <i className="fa fa-info" />
+              <i className="fa fa-info" aria-hidden="true" />
             </Button>
             <Button
               size="sm"
@@ -406,8 +424,11 @@ function volunteers(): JSX.Element {
               className="rounded"
               data-testid="deleteItemBtn"
               onClick={() => handleOpenModal(params.row, ModalState.DELETE)}
+              aria-label={t('eventVolunteers.deleteVolunteerEntry', {
+                name: params.row.name,
+              })}
             >
-              <i className="fa fa-trash" />
+              <i className="fa fa-trash" aria-hidden="true" />
             </Button>
           </>
         );
@@ -418,64 +439,71 @@ function volunteers(): JSX.Element {
   return (
     <div>
       {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} btncon gap-4 flex-wrap`}>
-        <SearchBar
-          placeholder={tCommon('searchBy', { item: 'Name' })}
-          onSearch={debouncedSearch}
-          inputTestId="searchBy"
-          buttonTestId="searchBtn"
-        />
-        <div className="d-flex gap-3 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-3">
-            <SortingButton
-              sortingOptions={[
-                {
-                  label: t('mostHoursVolunteered'),
-                  value: 'hoursVolunteered_DESC',
-                },
-                {
-                  label: t('leastHoursVolunteered'),
-                  value: 'hoursVolunteered_ASC',
-                },
-              ]}
-              selectedOption={sortBy ?? ''}
-              onSortChange={(value) =>
-                setSortBy(
-                  value as 'hoursVolunteered_DESC' | 'hoursVolunteered_ASC',
-                )
-              }
-              dataTestIdPrefix="sort"
-              buttonLabel={tCommon('sort')}
-            />
-
-            <SortingButton
-              type="filter"
-              sortingOptions={[
-                { label: tCommon('all'), value: VolunteerStatus.All },
-                { label: tCommon('pending'), value: VolunteerStatus.Pending },
-                { label: t('accepted'), value: VolunteerStatus.Accepted },
-                { label: t('rejected'), value: VolunteerStatus.Rejected },
-              ]}
-              selectedOption={status}
-              onSortChange={(value) => setStatus(value as VolunteerStatus)}
-              dataTestIdPrefix="filter"
-              buttonLabel={t('status')}
-            />
-          </div>
-          <div>
-            <Button
-              variant="success"
-              onClick={() => handleOpenModal(null, ModalState.ADD)}
-              style={{ marginTop: '11px' }}
-              className={styles.actionsButton}
-              data-testid="addVolunteerBtn"
-            >
-              <i className={'fa fa-plus me-2'} />
-              {t('add')}
-            </Button>
-          </div>
-        </div>
-      </div>
+      <AdminSearchFilterBar
+        searchPlaceholder={tCommon('searchBy', { item: tCommon('name') })}
+        searchValue={searchTerm}
+        onSearchChange={debouncedSearch}
+        onSearchSubmit={(value) => setSearchTerm(value)}
+        searchInputTestId="searchBy"
+        searchButtonTestId="searchBtn"
+        hasDropdowns
+        dropdowns={[
+          {
+            id: 'sort',
+            type: 'sort',
+            title: tCommon('sort'),
+            label: tCommon('sort'),
+            dataTestIdPrefix: 'sort',
+            selectedOption: sortBy ?? '',
+            options: [
+              {
+                label: t('eventVolunteers.mostHoursVolunteered'),
+                value: 'hoursVolunteered_DESC',
+              },
+              {
+                label: t('eventVolunteers.leastHoursVolunteered'),
+                value: 'hoursVolunteered_ASC',
+              },
+            ],
+            onOptionChange: (value) =>
+              setSortBy(
+                value as 'hoursVolunteered_DESC' | 'hoursVolunteered_ASC',
+              ),
+          },
+          {
+            id: 'filter',
+            type: 'filter',
+            title: tCommon('filter'),
+            label: t('eventVolunteers.status'),
+            dataTestIdPrefix: 'filter',
+            selectedOption: status,
+            options: [
+              { label: tCommon('all'), value: VolunteerStatus.All },
+              { label: tCommon('pending'), value: VolunteerStatus.Pending },
+              {
+                label: t('eventVolunteers.accepted'),
+                value: VolunteerStatus.Accepted,
+              },
+              {
+                label: t('eventVolunteers.rejected'),
+                value: VolunteerStatus.Rejected,
+              },
+            ],
+            onOptionChange: (value) => setStatus(value as VolunteerStatus),
+          },
+        ]}
+        additionalButtons={
+          <Button
+            variant="success"
+            onClick={() => handleOpenModal(null, ModalState.ADD)}
+            className={styles.actionsButton}
+            data-testid="addVolunteerBtn"
+          >
+            <i className="fa fa-plus me-2" />
+            {t('eventVolunteers.add')}
+          </Button>
+        }
+      />
 
       {/* Table with Volunteers */}
       <DataGrid
@@ -486,12 +514,14 @@ function volunteers(): JSX.Element {
         getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noVolunteers')}
-            </Stack>
+            <EmptyState
+              icon={<VolunteerActivism />}
+              message={t('eventVolunteers.noVolunteers')}
+              dataTestId="volunteers-empty-state"
+            />
           ),
         }}
-        sx={dataGridStyle}
+        className={styles.dataGridContainer}
         getRowClassName={() => `${styles.rowBackgrounds}`}
         autoHeight
         rowHeight={65}
@@ -532,4 +562,4 @@ function volunteers(): JSX.Element {
   );
 }
 
-export default volunteers;
+export default Volunteers;

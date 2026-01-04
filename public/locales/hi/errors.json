@@ -13,5 +13,15 @@
   "invalidEmploymentStatus": "कृपया वैध रोजगार स्थिति चुनें",
   "invalidMaritalStatus": "कृपया वैध वैवाहिक स्थिति चुनें",
   "error400": "आपकी जानकारी सहेजी नहीं जा सकी। कृपया अपनी प्रविष्टियों की जांच करें और पुनः प्रयास करें।",
-  "organizationNameAlreadyExists": "इस नाम का एक संगठन पहले से मौजूद है"
+  "organizationNameAlreadyExists": "इस नाम का एक संगठन पहले से मौजूद है",
+  "markAsReadError": "सूचनाओं को पढ़ा हुआ चिह्नित करने में त्रुटि",
+  "accountLocked": "बहुत अधिक विफल लॉगिन प्रयासों के कारण खाता अस्थायी रूप से लॉक है। कृपया बाद में पुनः प्रयास करें।",
+  "accountLockedWithTimer": "खाता अस्थायी रूप से लॉक है। कृपया {{minutes}} मिनट में पुनः प्रयास करें।",
+  "title": "कुछ गलत हो गया",
+  "defaultErrorMessage": "एक अप्रत्याशित त्रुटि हुई",
+  "resetButton": "फिर से प्रयास करें",
+  "resetButtonAriaLabel": "फिर से प्रयास करें",
+  "fileTooLarge": "फ़ाइल बहुत बड़ी है: {{fileName}}",
+  "invalidFileType": "अमान्य फ़ाइल प्रकार: {{fileName}}",
+  "emptyFile": "खाली फ़ाइल चुनी गई"
 }

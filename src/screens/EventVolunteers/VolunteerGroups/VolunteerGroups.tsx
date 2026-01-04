@@ -21,9 +21,10 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import { Navigate, useParams } from 'react-router';
 
-import { WarningAmberRounded } from '@mui/icons-material';
+import { Groups, WarningAmberRounded } from '@mui/icons-material';
 
 import { useQuery } from '@apollo/client';
+import { debounce } from '@mui/material';
 
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
 import Loader from 'components/Loader/Loader';
@@ -32,15 +33,14 @@ import {
   type GridCellParams,
   type GridColDef,
 } from '@mui/x-data-grid';
-import { debounce, Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import styles from 'style/app-fixed.module.css';
 import { GET_EVENT_VOLUNTEER_GROUPS } from 'GraphQl/Queries/EventVolunteerQueries';
 import VolunteerGroupModal from './modal/VolunteerGroupModal';
 import VolunteerGroupDeleteModal from './deleteModal/VolunteerGroupDeleteModal';
 import VolunteerGroupViewModal from './viewModal/VolunteerGroupViewModal';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 enum ModalState {
   SAME = 'same',
@@ -48,31 +48,23 @@ enum ModalState {
   VIEW = 'view',
 }
 
-const dataGridStyle = {
-  backgroundColor: 'white',
-  borderRadius: '16px',
-  '& .MuiDataGrid-columnHeaders': { border: 'none' },
-  '& .MuiDataGrid-cell': { border: 'none' },
-  '& .MuiDataGrid-columnSeparator': { display: 'none' },
-  '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-    outline: 'none !important',
-  },
-  '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-    outline: 'none',
-  },
-  '& .MuiDataGrid-row:hover': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-row.Mui-hovered': { backgroundColor: 'transparent' },
-  '& .MuiDataGrid-root': { borderRadius: '0.5rem' },
-  '& .MuiDataGrid-main': { borderRadius: '0.5rem' },
-};
-
 /**
- * Component for managing volunteer groups for an event.
- * This component allows users to view, filter, sort, and create action items. It also provides a modal for creating and editing action items.
- * @returns The rendered component.
+ * Renders the Volunteer Groups management screen.
+ *
+ * Responsibilities:
+ * - Displays volunteer groups for an event
+ * - Supports searching by group name or leader via AdminSearchFilterBar
+ * - Enables sorting by volunteer count
+ * - Handles create, edit, view, and delete group flows
+ * - Renders assignee avatars and volunteer counts
+ *
+ * Localization:
+ * - Uses `common` and `eventVolunteers` namespaces
+ *
+ * @returns JSX.Element
  */
 function volunteerGroups(): JSX.Element {
-  const { t } = useTranslation('translation', { keyPrefix: 'eventVolunteers' });
+  const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
 
@@ -99,6 +91,20 @@ function volunteerGroups(): JSX.Element {
     [ModalState.DELETE]: false,
     [ModalState.VIEW]: false,
   });
+
+  const debouncedSearch = useCallback(
+    debounce((value: string) => {
+      setSearchTerm(value);
+    }, 300),
+    [],
+  );
+
+  // Debounce cleanup effect
+  useEffect(() => {
+    return () => {
+      debouncedSearch.clear();
+    };
+  }, [debouncedSearch]);
 
   /**
    * Query to fetch event and volunteer groups for the event.
@@ -143,11 +149,6 @@ function volunteerGroups(): JSX.Element {
       openModal(modal);
     },
     [openModal],
-  );
-
-  const debouncedSearch = useMemo(
-    () => debounce((value: string) => setSearchTerm(value), 300),
-    [],
   );
 
   // Effect to set recurring event info similar to Volunteers component
@@ -200,7 +201,10 @@ function volunteerGroups(): JSX.Element {
   if (groupsError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
-        <WarningAmberRounded className={styles.icon} fontSize="large" />
+        <WarningAmberRounded
+          className={`${styles.icon} ${styles.iconLg}`}
+          aria-hidden="true"
+        />
         <h6 className="fw-bold text-danger text-center">
           {tErrors('errorLoading', { entity: 'Volunteer Groups' })}
         </h6>
@@ -211,7 +215,7 @@ function volunteerGroups(): JSX.Element {
   const columns: GridColDef[] = [
     {
       field: 'group',
-      headerName: 'Group',
+      headerName: t('eventVolunteers.groupHeader'),
       flex: 1,
       align: 'left',
       minWidth: 100,
@@ -231,7 +235,7 @@ function volunteerGroups(): JSX.Element {
     },
     {
       field: 'leader',
-      headerName: 'Leader',
+      headerName: t('eventVolunteers.leaderHeader'),
       flex: 1,
       align: 'center',
       minWidth: 100,
@@ -248,7 +252,7 @@ function volunteerGroups(): JSX.Element {
             {avatarURL ? (
               <img
                 src={avatarURL}
-                alt="Assignee"
+                alt={tCommon('assignee')}
                 data-testid={`image${id + 1}`}
                 className={styles.TableImages}
               />
@@ -270,7 +274,7 @@ function volunteerGroups(): JSX.Element {
     },
     {
       field: 'volunteers',
-      headerName: 'No. of Volunteers',
+      headerName: t('eventVolunteers.numVolunteersHeader'),
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -286,7 +290,7 @@ function volunteerGroups(): JSX.Element {
     },
     {
       field: 'options',
-      headerName: 'Options',
+      headerName: t('eventVolunteers.optionsHeader'),
       align: 'center',
       flex: 1,
       minWidth: 100,
@@ -299,12 +303,14 @@ function volunteerGroups(): JSX.Element {
             <Button
               variant="success"
               size="sm"
-              style={{ minWidth: '32px' }}
-              className="me-2 rounded"
+              className={`me-2 rounded ${styles.iconButton}`}
               data-testid="viewGroupBtn"
               onClick={() => handleModalClick(params.row, ModalState.VIEW)}
+              aria-label={t('eventVolunteers.viewDetails', {
+                name: params.row.name,
+              })}
             >
-              <i className="fa fa-info" />
+              <i className="fa fa-info" aria-hidden="true" />
             </Button>
             <Button
               variant="success"
@@ -312,8 +318,11 @@ function volunteerGroups(): JSX.Element {
               className="me-2 rounded"
               data-testid="editGroupBtn"
               onClick={() => handleModalClick(params.row, ModalState.SAME)}
+              aria-label={t('eventVolunteers.editVolunteerGroup', {
+                name: params.row.name,
+              })}
             >
-              <i className="fa fa-edit" />
+              <i className="fa fa-edit" aria-hidden="true" />
             </Button>
             <Button
               size="sm"
@@ -321,8 +330,11 @@ function volunteerGroups(): JSX.Element {
               className="rounded"
               data-testid="deleteGroupBtn"
               onClick={() => handleModalClick(params.row, ModalState.DELETE)}
+              aria-label={t('eventVolunteers.deleteVolunteerGroup', {
+                name: params.row.name,
+              })}
             >
-              <i className="fa fa-trash" />
+              <i className="fa fa-trash" aria-hidden="true" />
             </Button>
           </>
         );
@@ -333,55 +345,69 @@ function volunteerGroups(): JSX.Element {
   return (
     <div>
       {/* Header with search, filter  and Create Button */}
-      <div className={`${styles.btnsContainer} btncon gap-4 flex-wrap`}>
-        <SearchBar
-          placeholder={tCommon('searchBy', {
-            item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
-          })}
-          onSearch={debouncedSearch}
-          inputTestId="searchBy"
-          buttonTestId="searchBtn"
-        />
-        <div className="d-flex gap-3 mb-1">
-          <div className="d-flex justify-space-between align-items-center gap-3">
-            <SortingButton
-              sortingOptions={[
-                { label: t('leader'), value: 'leader' },
-                { label: t('group'), value: 'group' },
-              ]}
-              selectedOption={searchBy}
-              onSortChange={(value) => setSearchBy(value as 'leader' | 'group')}
-              dataTestIdPrefix="searchByToggle"
-              buttonLabel={tCommon('searchBy', { item: '' })}
-            />
-            <SortingButton
-              title={tCommon('sort')}
-              sortingOptions={[
-                { label: t('mostVolunteers'), value: 'volunteers_DESC' },
-                { label: t('leastVolunteers'), value: 'volunteers_ASC' },
-              ]}
-              selectedOption={sortBy ?? ''}
-              onSortChange={(value) =>
-                setSortBy(value as 'volunteers_DESC' | 'volunteers_ASC')
-              }
-              dataTestIdPrefix="sort"
-              buttonLabel={tCommon('sort')}
-            />
-          </div>
-          <div>
-            <Button
-              variant="success"
-              onClick={() => handleModalClick(null, ModalState.SAME)}
-              style={{ marginTop: '11px' }}
-              className={styles.actionsButton}
-              data-testid="createGroupBtn"
-            >
-              <i className={'fa fa-plus me-2'} />
-              {tCommon('create')}
-            </Button>
-          </div>
-        </div>
-      </div>
+      <AdminSearchFilterBar
+        searchPlaceholder={tCommon('searchBy', {
+          item: searchBy.charAt(0).toUpperCase() + searchBy.slice(1),
+        })}
+        searchValue={searchTerm}
+        onSearchChange={debouncedSearch}
+        onSearchSubmit={(value) => {
+          setSearchTerm(value);
+        }}
+        searchInputTestId="searchBy"
+        searchButtonTestId="searchBtn"
+        hasDropdowns
+        dropdowns={[
+          {
+            id: 'searchBy',
+            title: tCommon('searchBy'),
+            label: tCommon('searchBy', { item: '' }),
+            dataTestIdPrefix: 'searchByToggle',
+            selectedOption: searchBy,
+            options: [
+              { label: t('eventVolunteers.leader'), value: 'leader' },
+              { label: t('eventVolunteers.group'), value: 'group' },
+            ],
+            onOptionChange: (value) => {
+              setSearchBy(value as 'leader' | 'group');
+            },
+            type: 'filter',
+          },
+          {
+            id: 'sort',
+            title: tCommon('sort'),
+            label: tCommon('sort'),
+            dataTestIdPrefix: 'sort',
+            selectedOption: sortBy ?? '',
+            options: [
+              {
+                label: t('eventVolunteers.mostVolunteers'),
+                value: 'volunteers_DESC',
+              },
+              {
+                label: t('eventVolunteers.leastVolunteers'),
+                value: 'volunteers_ASC',
+              },
+            ],
+            onOptionChange: (value) => {
+              setSortBy(value as 'volunteers_DESC' | 'volunteers_ASC');
+            },
+            type: 'sort',
+          },
+        ]}
+        additionalButtons={
+          <Button
+            variant="success"
+            onClick={() => handleModalClick(null, ModalState.SAME)}
+            className={styles.actionsButton}
+            data-testid="createGroupBtn"
+            aria-label={tCommon('createNew', { item: 'Volunteer Group' })}
+          >
+            <i className="fa fa-plus me-2" aria-hidden="true" />
+            {tCommon('create')}
+          </Button>
+        }
+      />
 
       {/* Table with Volunteer Groups */}
       <DataGrid
@@ -391,12 +417,14 @@ function volunteerGroups(): JSX.Element {
         getRowId={(row) => row.id}
         slots={{
           noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noVolunteerGroups')}
-            </Stack>
+            <EmptyState
+              icon={<Groups />}
+              message={t('eventVolunteers.noVolunteerGroups')}
+              dataTestId="volunteerGroups-empty-state"
+            />
           ),
         }}
-        sx={dataGridStyle}
+        className={styles.dataGridContainer}
         getRowClassName={() => `${styles.rowBackgrounds}`}
         autoHeight
         rowHeight={65}

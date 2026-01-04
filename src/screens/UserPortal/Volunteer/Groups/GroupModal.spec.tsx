@@ -12,21 +12,21 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18n from 'utils/i18nForTest';
 import { MOCKS, UPDATE_ERROR_MOCKS } from './Groups.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceGroupModal } from './GroupModal';
 import GroupModal from './GroupModal';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 
 const sharedMocks = vi.hoisted(() => ({
-  toast: {
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
   },
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: sharedMocks.toast,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: sharedMocks.NotificationToast,
 }));
 
 const link1 = new StaticMockLink(MOCKS);
@@ -156,9 +156,9 @@ describe('Testing GroupModal', () => {
     renderGroupModal(link1, itemProps[0]);
     expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
 
-    const requestsBtn = screen.getByText(t.requests);
-    expect(requestsBtn).toBeInTheDocument();
-    await userEvent.click(requestsBtn);
+    const requestsRadio = screen.getByLabelText(t.requests);
+    expect(requestsRadio).toBeInTheDocument();
+    await userEvent.click(requestsRadio);
 
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(2);
@@ -169,7 +169,7 @@ describe('Testing GroupModal', () => {
     expect(acceptBtn).toHaveLength(2);
     await userEvent.click(acceptBtn[0]);
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(t.requestAccepted);
+      expect(NotificationToast.success).toHaveBeenCalledWith(t.requestAccepted);
     });
   });
 
@@ -177,9 +177,9 @@ describe('Testing GroupModal', () => {
     renderGroupModal(link1, itemProps[0]);
     expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
 
-    const requestsBtn = screen.getByText(t.requests);
-    expect(requestsBtn).toBeInTheDocument();
-    await userEvent.click(requestsBtn);
+    const requestsRadio = screen.getByLabelText(t.requests);
+    expect(requestsRadio).toBeInTheDocument();
+    await userEvent.click(requestsRadio);
 
     const userName = await screen.findAllByTestId('userName');
     expect(userName).toHaveLength(2);
@@ -190,7 +190,7 @@ describe('Testing GroupModal', () => {
     expect(rejectBtn).toHaveLength(2);
     await userEvent.click(rejectBtn[0]);
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(t.requestRejected);
+      expect(NotificationToast.success).toHaveBeenCalledWith(t.requestRejected);
     });
   });
 
@@ -198,13 +198,13 @@ describe('Testing GroupModal', () => {
     renderGroupModal(link1, itemProps[0]);
     expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
 
-    const requestsBtn = screen.getByText(t.requests);
-    expect(requestsBtn).toBeInTheDocument();
-    await userEvent.click(requestsBtn);
+    const requestsRadio = screen.getByLabelText(t.requests);
+    expect(requestsRadio).toBeInTheDocument();
+    await userEvent.click(requestsRadio);
 
-    const detailsBtn = await screen.findByText(t.details);
-    expect(detailsBtn).toBeInTheDocument();
-    await userEvent.click(detailsBtn);
+    const detailsRadio = screen.getByLabelText(t.details);
+    expect(detailsRadio).toBeInTheDocument();
+    await userEvent.click(detailsRadio);
   });
 
   it('GroupModal -> Details -> Update', async () => {
@@ -231,7 +231,9 @@ describe('Testing GroupModal', () => {
     await userEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(t.volunteerGroupUpdated);
+      expect(NotificationToast.success).toHaveBeenCalledWith(
+        t.volunteerGroupUpdated,
+      );
       expect(itemProps[0].refetchGroups).toHaveBeenCalled();
       expect(itemProps[0].hide).toHaveBeenCalled();
     });
@@ -261,7 +263,7 @@ describe('Testing GroupModal', () => {
     await userEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -269,20 +271,20 @@ describe('Testing GroupModal', () => {
     renderGroupModal(link2, itemProps[0]);
     expect(screen.getByText(t.manageGroup)).toBeInTheDocument();
 
-    const requestsBtn = screen.getByText(t.requests);
-    expect(requestsBtn).toBeInTheDocument();
-    await userEvent.click(requestsBtn);
+    const requestsRadio = screen.getByLabelText(t.requests);
+    expect(requestsRadio).toBeInTheDocument();
+    await userEvent.click(requestsRadio);
 
-    const userName = await screen.findAllByTestId('userName');
-    expect(userName).toHaveLength(2);
-    expect(userName[0]).toHaveTextContent('John Doe');
-    expect(userName[1]).toHaveTextContent('Teresa Bradley');
+    const userNameElements = await screen.findAllByTestId('userName');
+    expect(userNameElements).toHaveLength(2);
+    expect(userNameElements[0]).toHaveTextContent('John Doe');
+    expect(userNameElements[1]).toHaveTextContent('Teresa Bradley');
 
     const acceptBtn = screen.getAllByTestId('acceptBtn');
     expect(acceptBtn).toHaveLength(2);
     await userEvent.click(acceptBtn[0]);
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(NotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -325,7 +327,7 @@ describe('Testing GroupModal', () => {
     await userEvent.click(submitBtn);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalled();
     });
   });
 });

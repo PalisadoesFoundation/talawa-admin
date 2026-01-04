@@ -25,27 +25,6 @@ export interface InterfaceMembershipOptions {
   groupDescription?: string;
 }
 
-// Helper function to create common volunteer membership response
-export const createMembershipResponse = (
-  id: string,
-  eventId: string,
-  groupId?: string,
-) => ({
-  id: `membershipId${id}`,
-  status: 'requested',
-  createdAt: '2025-09-20T15:20:00.000Z',
-  volunteer: {
-    id: `volunteerId${id}`,
-    hasAccepted: false,
-    user: { id: 'userId', name: 'User Name' },
-  },
-  event: { id: eventId, name: `Event ${id}` },
-  createdBy: { id: 'createrId', name: 'Creator Name' },
-  ...(groupId && {
-    group: { id: groupId, name: `Group ${id}`, description: 'desc' },
-  }),
-});
-
 export const createEventVolunteer = (
   id: string,
   name: string,

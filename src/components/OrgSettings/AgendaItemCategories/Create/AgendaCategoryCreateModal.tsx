@@ -30,9 +30,13 @@
  * @returns {JSX.Element} The rendered modal component.
  */
 import React from 'react';
-import { Modal, Form, Button } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
 import styles from 'style/app-fixed.module.css';
+
+import { BaseModal } from 'shared-components/BaseModal';
+
+// translation-check-keyPrefix: organizationAgendaCategory
 
 interface InterfaceFormStateType {
   name: string;
@@ -61,60 +65,52 @@ const AgendaCategoryCreateModal: React.FC<
   t,
 }) => {
   return (
-    <Modal
-      className={`mt-5 ${styles.campaignModal}`}
+    <BaseModal
       show={agendaCategoryCreateModalIsOpen}
       onHide={hideCreateModal}
-    >
-      <Modal.Header>
+      className={`mt-5 ${styles.campaignModal}`}
+      headerContent={
         <p className={styles.titlemodalOrganizationEvents}>
           {t('agendaCategoryDetails')}
         </p>
+      }
+      dataTestId="agendaCategoryCreateModal"
+    >
+      <Form onSubmit={createAgendaCategoryHandler}>
+        <Form.Group className="mb-3" controlId="name">
+          <Form.Label>{t('name')}</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder={t('name')}
+            value={formState.name}
+            required
+            onChange={(e) =>
+              setFormState({ ...formState, name: e.target.value })
+            }
+          />
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="description">
+          <Form.Label>{t('description')}</Form.Label>
+          <Form.Control
+            type="text"
+            placeholder={t('description')}
+            required
+            value={formState.description}
+            onChange={(e) =>
+              setFormState({ ...formState, description: e.target.value })
+            }
+          />
+        </Form.Group>
         <Button
-          variant="danger"
-          onClick={hideCreateModal}
-          data-testid="createAgendaCategoryModalCloseBtn"
+          type="submit"
+          className={styles.regBtn}
+          value="createAgendaCategory"
+          data-testid="createAgendaCategoryFormSubmitBtn"
         >
-          <i className="fa fa-times"></i>
+          {t('createAgendaCategory')}
         </Button>
-      </Modal.Header>
-      <Modal.Body>
-        <Form onSubmit={createAgendaCategoryHandler}>
-          <Form.Group className="mb-3" controlId="name">
-            <Form.Label>{t('name')}</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder={t('name')}
-              value={formState.name}
-              required
-              onChange={(e) =>
-                setFormState({ ...formState, name: e.target.value })
-              }
-            />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="description">
-            <Form.Label>{t('description')}</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder={t('description')}
-              required
-              value={formState.description}
-              onChange={(e) =>
-                setFormState({ ...formState, description: e.target.value })
-              }
-            />
-          </Form.Group>
-          <Button
-            type="submit"
-            className={styles.regBtn}
-            value="createAgendaCategory"
-            data-testid="createAgendaCategoryFormSubmitBtn"
-          >
-            {t('createAgendaCategory')}
-          </Button>
-        </Form>
-      </Modal.Body>
-    </Modal>
+      </Form>
+    </BaseModal>
   );
 };
 

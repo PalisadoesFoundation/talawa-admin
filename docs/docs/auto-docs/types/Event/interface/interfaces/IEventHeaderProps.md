@@ -40,6 +40,6 @@ Defined in: [src/types/Event/interface.ts:116](https://github.com/PalisadoesFoun
 
 ### viewType
 
-> **viewType**: [`ViewType`](../../../../screens/OrganizationEvents/OrganizationEvents/enumerations/ViewType.md)
+> **viewType**: [`ViewType`](../../../../screens/AdminPortal/OrganizationEvents/OrganizationEvents/enumerations/ViewType.md)
 
 Defined in: [src/types/Event/interface.ts:114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/Event/interface.ts#L114)

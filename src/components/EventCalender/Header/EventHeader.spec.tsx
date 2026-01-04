@@ -1,7 +1,7 @@
 import React, { act } from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import EventHeader from './EventHeader';
-import { ViewType } from 'screens/OrganizationEvents/OrganizationEvents';
+import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { vi } from 'vitest';
@@ -253,7 +253,7 @@ describe('EventHeader Component', () => {
     );
 
     const createButton = getByTestId('createEventModalBtn');
-    expect(createButton).toHaveTextContent('Create');
+    expect(createButton).toHaveTextContent(/create/i);
   });
 
   it('renders with ViewType.DAY as initial viewType', () => {

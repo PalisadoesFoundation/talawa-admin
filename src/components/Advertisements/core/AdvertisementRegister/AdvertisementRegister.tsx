@@ -51,7 +51,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { ORGANIZATION_ADVERTISEMENT_LIST } from 'GraphQl/Queries/Queries';
@@ -65,6 +65,7 @@ import type {
 } from 'types/Advertisement/interface';
 import { FaTrashCan } from 'react-icons/fa6';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 function AdvertisementRegister({
   formStatus = 'register',
@@ -127,7 +128,7 @@ function AdvertisementRegister({
     type: 'banner',
     startAt: new Date(),
     endAt: dayjs().add(1, 'day').toDate(),
-    attachments: undefined,
+    attachments: [],
   });
 
   const handleClose = (): void => {
@@ -137,7 +138,7 @@ function AdvertisementRegister({
       description: null,
       startAt: new Date(),
       endAt: dayjs().add(1, 'day').toDate(),
-      attachments: undefined,
+      attachments: [],
     });
     setShow(false);
   };
@@ -156,9 +157,11 @@ function AdvertisementRegister({
 
       Array.from(files).forEach((file) => {
         if (!allowedTypes.includes(file.type)) {
-          toast.error(`Invalid file type: ${file.name}`);
+          NotificationToast.error(
+            t('invalidFileType', { fileName: file.name }),
+          );
         } else if (file.size > maxFileSize) {
-          toast.error(`File too large: ${file.name}`);
+          NotificationToast.error(t('fileTooLarge', { fileName: file.name }));
         } else {
           validFiles.push(file);
         }
@@ -167,7 +170,7 @@ function AdvertisementRegister({
       if (validFiles.length > 0) {
         setFormState((prev) => ({
           ...prev,
-          attachments: [...(prev.attachments || []), ...validFiles],
+          attachments: [...prev.attachments, ...validFiles],
         }));
       }
     }
@@ -177,7 +180,7 @@ function AdvertisementRegister({
   const removeFile = (index: number): void => {
     setFormState((prev) => ({
       ...prev,
-      attachments: (prev?.attachments || []).filter((_, i) => i !== index),
+      attachments: prev.attachments.filter((_, i) => i !== index),
     }));
   };
 
@@ -189,8 +192,8 @@ function AdvertisementRegister({
         name: nameEdit || '',
         description: descriptionEdit || null,
         type: typeEdit || 'banner',
-        startAt: startAtEdit || new Date(),
-        endAt: endAtEdit || new Date(),
+        startAt: startAtEdit,
+        endAt: endAtEdit,
         organizationId: currentOrg,
       }));
     }
@@ -211,12 +214,12 @@ function AdvertisementRegister({
       const endDate = dayjs(formState.endAt).startOf('day');
 
       if (!endDate.isAfter(startDate)) {
-        toast.error(t('endDateGreater') as string);
+        NotificationToast.error(t('endDateGreater') as string);
         return;
       }
 
       if (!formState.name) {
-        toast.error('Invalid arguments for this action.');
+        NotificationToast.error(t('invalidArgumentsForAction'));
         return;
       }
 
@@ -248,16 +251,16 @@ function AdvertisementRegister({
         variables,
       });
       if (data) {
-        toast.success(t('advertisementCreated') as string);
+        NotificationToast.success(t('advertisementCreated') as string);
         handleClose();
         setFormState({
           name: '',
           type: 'banner',
           description: null,
-          startAt: new Date(formState.startAt || new Date()),
+          startAt: new Date(formState.startAt),
           endAt: new Date(),
           organizationId: currentOrg,
-          attachments: undefined,
+          attachments: [],
           existingAttachments: undefined,
         });
         setAfterActive(null);
@@ -265,7 +268,7 @@ function AdvertisementRegister({
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(
+        NotificationToast.error(
           tErrors('errorOccurredCouldntCreate', {
             entity: 'advertisement',
           }) as string,
@@ -302,24 +305,17 @@ function AdvertisementRegister({
         const endDate = dayjs(updatedFields.endAt).startOf('day');
 
         if (!endDate.isAfter(startDate)) {
-          toast.error(t('endDateGreater') as string);
+          NotificationToast.error(t('endDateGreater') as string);
           return;
         }
       }
 
-      const startAt = formState.startAt
-        ? dayjs.utc(formState.startAt).startOf('day').toISOString()
-        : null;
-      const endAt = formState.endAt
-        ? dayjs.utc(formState.endAt).startOf('day').toISOString()
-        : null;
+      const startAt = dayjs.utc(formState.startAt).startOf('day').toISOString();
+      const endAt = dayjs.utc(formState.endAt).startOf('day').toISOString();
 
       const mutationVariables = {
         id: idEdit,
         ...(updatedFields.name && { name: updatedFields.name }),
-        ...(updatedFields.attachments && {
-          attachments: updatedFields.attachments,
-        }),
         ...(updatedFields.description && {
           description: updatedFields.description,
         }),
@@ -334,7 +330,7 @@ function AdvertisementRegister({
       });
 
       if (data) {
-        toast.success(
+        NotificationToast.success(
           tCommon('updatedSuccessfully', { item: 'Advertisement' }) as string,
         );
         handleClose();
@@ -343,14 +339,20 @@ function AdvertisementRegister({
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(error.message);
+        NotificationToast.error(error.message);
       }
     }
   };
 
   return (
     //If register show register button else show edit button
-    <>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+      onReset={handleClose}
+    >
       {formStatus === 'register' ? (
         <Button
           className={styles.dropdown}
@@ -429,7 +431,7 @@ function AdvertisementRegister({
                   data-cy="advertisementMediaInput"
                 />
                 {/* Preview section */}
-                {(formState.attachments || []).map((file, index) => (
+                {formState.attachments.map((file, index) => (
                   <div key={index}>
                     {file.type.startsWith('video/') ? (
                       <video
@@ -441,14 +443,14 @@ function AdvertisementRegister({
                         <track
                           kind="captions"
                           srcLang="en"
-                          label="English captions"
+                          label={t('englishCaptions')}
                         />
                       </video>
                     ) : (
                       <img
                         data-testid="mediaPreview"
                         src={encodeURI(URL.createObjectURL(file))}
-                        alt="Preview"
+                        alt={t('preview')}
                         className={styles.previewAdvertisementRegister}
                       />
                     )}
@@ -478,9 +480,9 @@ function AdvertisementRegister({
                 className={styles.inputField}
                 data-cy="advertisementTypeSelect"
               >
-                <option value="banner">Banner Ad </option>
-                <option value="pop_up">Popup Ad</option>
-                <option value="menu">Menu Ad</option>
+                <option value="banner">{t('bannerAd')} </option>
+                <option value="pop_up">{t('popupAd')}</option>
+                <option value="menu">{t('menuAd')}</option>
               </Form.Select>
             </Form.Group>
 
@@ -489,11 +491,7 @@ function AdvertisementRegister({
               <Form.Control
                 type="date"
                 required
-                value={
-                  formState.startAt instanceof Date
-                    ? dayjs.utc(formState.startAt).format('YYYY-MM-DD')
-                    : ''
-                }
+                value={dayjs.utc(formState.startAt).format('YYYY-MM-DD')}
                 onChange={(e): void => {
                   // Create UTC date from date input to avoid timezone issues
                   const newDate = dayjs.utc(e.target.value).toDate();
@@ -510,11 +508,7 @@ function AdvertisementRegister({
               <Form.Control
                 type="date"
                 required
-                value={
-                  formState.endAt instanceof Date
-                    ? dayjs.utc(formState.endAt).format('YYYY-MM-DD')
-                    : ''
-                }
+                value={dayjs.utc(formState.endAt).format('YYYY-MM-DD')}
                 onChange={(e): void => {
                   // Create UTC date from date input to avoid timezone issues
                   const newDate = dayjs.utc(e.target.value).toDate();
@@ -558,7 +552,7 @@ function AdvertisementRegister({
           )}
         </Modal.Footer>
       </Modal>
-    </>
+    </ErrorBoundaryWrapper>
   );
 }
 

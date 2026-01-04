@@ -37,12 +37,12 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useMutation } from '@apollo/client';
-import { toast } from 'react-toastify';
 import { REMOVE_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceOrgPeopleListCardProps } from 'types/Organization/interface';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
   if (!props.id) {
@@ -69,7 +69,7 @@ function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
         },
       });
       if (data) {
-        toast.success(t('adminRemoved') as string);
+        NotificationToast.success(t('adminRemoved') as string);
         setTimeout(() => {
           window.location.reload();
         }, 2000);
