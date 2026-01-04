@@ -154,10 +154,7 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
         <Modal.Body>
           <DateRangePicker
             dataTestId="createEventDateRangePicker"
-            value={{
-              startDate: dateRange.startDate,
-              endDate: dateRange.endDate,
-            }}
+            value={dateRange}
             onChange={(range) => {
               setDateRange({
                 startDate: range.startDate,
