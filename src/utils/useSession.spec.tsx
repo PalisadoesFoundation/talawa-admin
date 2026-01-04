@@ -558,7 +558,7 @@ test('should handle missing community data', async () => {
 
   const { result } = renderHook(() => useSession(), {
     wrapper: ({ children }: { children?: ReactNode }) => (
-      <MockedProvider mocks={nullDataMocks}>
+      <MockedProvider mocks={nullDataMocks} addTypename={false}>
         <BrowserRouter>{children}</BrowserRouter>
       </MockedProvider>
     ),
@@ -648,7 +648,7 @@ test('should handle session timeout data updates', async () => {
 
   const { result } = renderHook(() => useSession(), {
     wrapper: ({ children }: { children?: ReactNode }) => (
-      <MockedProvider mocks={customMocks}>
+      <MockedProvider mocks={customMocks} addTypename={false}>
         <BrowserRouter>{children}</BrowserRouter>
       </MockedProvider>
     ),
