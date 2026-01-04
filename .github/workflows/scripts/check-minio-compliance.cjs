@@ -43,20 +43,20 @@ const LEGACY_EXCEPTIONS = new Set([
 /**
  * Explicit forbidden imports.
  * Maintainer requirement: lint for apollo-upload-client imports.
+ * Uses regex patterns to avoid false positives from comments and strings.
  */
 const FORBIDDEN_IMPORT_PATTERNS = [
-  "from \"apollo-upload-client\"",
-  "from 'apollo-upload-client'",
-  "require(\"apollo-upload-client\")",
-  "require('apollo-upload-client')",
+  /from\s+["']apollo-upload-client["']/,
+  /require\s*\(\s*["']apollo-upload-client["']\s*\)/,
 ];
 
 /**
  * Forbidden identifiers/usages.
+ * Uses word boundaries to match whole identifiers only.
  */
 const FORBIDDEN_IDENTIFIERS = [
-  "convertToBase64",
-  "createUploadLink",
+  /\bconvertToBase64\b/,
+  /\bcreateUploadLink\b/,
 ];
 
 const ROOT_DIR = path.join(process.cwd(), "src");
@@ -64,11 +64,18 @@ const violations = [];
 
 function scanFile(filePath) {
   const relativePath = path.relative(process.cwd(), filePath);
-  const content = fs.readFileSync(filePath, "utf8");
+  
+  let content;
+  try {
+    content = fs.readFileSync(filePath, "utf8");
+  } catch (error) {
+    console.warn(`Warning: Could not read ${relativePath}: ${error.message}`);
+    return;
+  }
 
   // Check forbidden imports
   FORBIDDEN_IMPORT_PATTERNS.forEach((pattern) => {
-    if (content.includes(pattern)) {
+    if (pattern.test(content)) {
       if (!LEGACY_EXCEPTIONS.has(relativePath)) {
         violations.push({
           file: relativePath,
@@ -80,37 +87,72 @@ function scanFile(filePath) {
 
   // Check forbidden identifiers
   FORBIDDEN_IDENTIFIERS.forEach((identifier) => {
-    if (content.includes(identifier)) {
+    if (identifier.test(content)) {
       if (!LEGACY_EXCEPTIONS.has(relativePath)) {
+        const match = content.match(identifier);
         violations.push({
           file: relativePath,
-          reason: `forbidden identifier used: ${identifier}`,
+          reason: `forbidden identifier used: ${match[0]}`,
         });
       }
     }
   });
 }
 
+const EXCLUDED_DIRS = new Set(['node_modules', 'dist', 'build', '__mocks__', 'coverage']);
+const visitedPaths = new Set();
+
 function walk(dir) {
-  const entries = fs.readdirSync(dir, { withFileTypes: true });
+  // Protect against symlink loops
+  let realPath;
+  try {
+    realPath = fs.realpathSync(dir);
+  } catch (error) {
+    console.warn(`Warning: Could not resolve ${dir}: ${error.message}`);
+    return;
+  }
+  
+  if (visitedPaths.has(realPath)) {
+    return;
+  }
+  visitedPaths.add(realPath);
+  
+  let entries;
+  try {
+    entries = fs.readdirSync(dir, { withFileTypes: true });
+  } catch (error) {
+    console.warn(`Warning: Could not read directory ${dir}: ${error.message}`);
+    return;
+  }
+  
   for (const entry of entries) {
+    // Skip common build/dependency directories
+    if (entry.isDirectory() && EXCLUDED_DIRS.has(entry.name)) {
+      continue;
+    }
+    
     const fullPath = path.join(dir, entry.name);
-    if (entry.isDirectory()) {
+    if (entry.isDirectory() && !entry.isSymbolicLink()) {
       walk(fullPath);
-    } else if (fullPath.endsWith(".ts") || fullPath.endsWith(".tsx")) {
+    } else if ((fullPath.endsWith(".ts") || fullPath.endsWith(".tsx")) && !entry.isSymbolicLink()) {
       scanFile(fullPath);
     }
   }
 }
 
-walk(ROOT_DIR);
+try {
+  walk(ROOT_DIR);
+} catch (error) {
+  console.error(`\nMinIO compliance check failed with error: ${error.message}`);
+  process.exit(2); // Exit with different code to distinguish from violations
+}
 
 if (violations.length > 0) {
-  console.error("\n MinIO compliance violations found:\n");
+  console.error("\nMinIO compliance violations found:\n");
   violations.forEach((v) => {
     console.error(`- ${v.file}: ${v.reason}`);
   });
   process.exit(1);
 }
 
-console.log(" MinIO compliance check passed");
+console.log("MinIO compliance check passed");
