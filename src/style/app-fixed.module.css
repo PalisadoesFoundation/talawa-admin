@@ -882,6 +882,18 @@
   --orgSelector-option-hover-bg: #f8f9fa;
   --orgSelector-option-selected-bg: rgba(13, 110, 253, 0.1);
   --orgSelector-no-results-color: #6c757d;
+
+  --active-color: #a8c7fa;
+  --active-bg: #e8f5e9; /* Light green background for active state */
+  --active-border-color: #a8c7fa;
+  --pending-color: #ffc21a;
+  --pending-bg: #ffebee; /* Light red background for pending/disabled state */
+  --pending-border-color: #ffc21a;
+
+  /* Status indicator colors for TextField icons and text */
+  --status-active-color: #4caf50; /* Green for active/enabled */
+  --status-disabled-color: #ff5252; /* Red for disabled */
+  --status-icon-margin: 8px;
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
@@ -10606,4 +10618,21 @@ form {
   border-color: var(--grey-border-box-color);
   border-width: 2px;
   width: 85%;
+}
+
+/* Status Field Classes */
+.statusFieldActive {
+  color: var(--status-active-color) !important;
+}
+
+.statusFieldDisabled {
+  color: var(--status-disabled-color) !important;
+}
+
+.statusIconActive {
+  color: var(--status-active-color) !important;
+}
+
+.statusIconDisabled {
+  color: var(--status-disabled-color) !important;
 }

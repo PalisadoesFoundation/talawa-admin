@@ -86,20 +86,24 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
                 <Circle
                   sx={{
                     fontSize: '0.8rem',
-                    color: category.isDisabled ? '#ff5252' : '#4caf50',
+                    color: category.isDisabled
+                      ? 'var(--status-disabled-color)'
+                      : 'var(--status-active-color)',
                     marginRight: '8px',
                   }}
                 />
               ),
               style: {
-                color: category.isDisabled ? '#ff5252' : '#4caf50',
+                color: category.isDisabled
+                  ? 'var(--status-disabled-color)'
+                  : 'var(--status-active-color)',
               },
             }}
             inputProps={{
               style: {
                 WebkitTextFillColor: category.isDisabled
-                  ? '#ff5252'
-                  : '#4caf50',
+                  ? 'var(--status-disabled-color)'
+                  : 'var(--status-active-color)',
               },
             }}
             disabled
