@@ -1681,6 +1681,7 @@ export interface InterfaceQueryOrganizationAdvertisementListItem {
  * @property {string} campaigns.edges.node.endAt - The end date and time of the campaign.
  * @property {string} campaigns.edges.node.currencyCode - The currency code of the campaign.
  * @property {number} campaigns.edges.node.goalAmount - The goal amount of the campaign.
+ * @property {number} campaigns.edges.node.amountRaised - The amount raised for the campaign.
  */
 export interface InterfaceQueryOrganizationFundCampaigns {
   id: string;
@@ -1695,6 +1696,7 @@ export interface InterfaceQueryOrganizationFundCampaigns {
         endAt: string;
         currencyCode: string;
         goalAmount: number;
+        amountRaised: number;
       };
     }[];
   };
@@ -1709,6 +1711,7 @@ export interface InterfaceQueryOrganizationFundCampaigns {
  * @property {Date} startDate - The start date of the campaign.
  * @property {Date} endDate - The end date of the campaign.
  * @property {string} currency - The currency of the campaign.
+ * @property {number} amountRaised - The amount raised for the campaign.
  */
 export interface InterfaceUserCampaign {
   _id: string;
@@ -1717,6 +1720,7 @@ export interface InterfaceUserCampaign {
   startDate: Date;
   endDate: Date;
   currency: string;
+  amountRaised: number;
 }
 /**
  * @interface InterfaceQueryFundCampaignsPledges
@@ -1855,6 +1859,7 @@ export interface InterfaceFundInfo {
  * @property {Date} endAt - The end date and time of the campaign.
  * @property {string} createdAt - The creation date of the campaign record.
  * @property {string} currencyCode - The currency code of the campaign.
+ * @property {number} amountRaised - The amount raised for the campaign.
  */
 export interface InterfaceCampaignInfo {
   id: string;
@@ -1864,6 +1869,7 @@ export interface InterfaceCampaignInfo {
   endAt: Date;
   createdAt: string;
   currencyCode: string;
+  amountRaised?: number;
 }
 /**
  * @interface InterfacePledgeInfo

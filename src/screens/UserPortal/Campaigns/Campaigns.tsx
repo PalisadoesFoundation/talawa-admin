@@ -106,6 +106,7 @@ const Campaigns = (): JSX.Element => {
             goalAmount: number;
             startAt: string;
             endAt: string;
+            amountRaised: number;
           };
         }) => ({
           _id: campaign.id,
@@ -114,6 +115,7 @@ const Campaigns = (): JSX.Element => {
           startDate: new Date(campaign.startAt),
           endDate: new Date(campaign.endAt),
           currency: campaign.currencyCode,
+          amountRaised: campaign.amountRaised ?? 0,
         }),
       );
   }, [campaignData]);
@@ -228,7 +230,8 @@ const Campaigns = (): JSX.Element => {
       sortable: false,
       renderCell: (params: GridCellParams) => (
         <div className="fw-bold" data-testid="raisedCell">
-          {currencySymbols[params.row.currency]}0
+          {currencySymbols[params.row.currency]}
+          {params.row.amountRaised ?? 0}
         </div>
       ),
     },
@@ -241,11 +244,18 @@ const Campaigns = (): JSX.Element => {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: () => (
-        <Box data-testid="progressCell">
-          <Typography>0%</Typography>
-        </Box>
-      ),
+      renderCell: (params: GridCellParams) => {
+        const campaign = params.row as InterfaceUserCampaign;
+        const amountRaised = campaign.amountRaised ?? 0;
+        const goal = campaign.fundingGoal ?? 0;
+        const percentage =
+          goal > 0 ? Math.min(Math.round((amountRaised / goal) * 100), 100) : 0;
+        return (
+          <Box data-testid="progressCell">
+            <Typography>{percentage}%</Typography>
+          </Box>
+        );
+      },
     },
     {
       field: 'action',

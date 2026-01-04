@@ -28,6 +28,11 @@ import {
   MOCKS_WITH_NULL_ORGANIZATION,
   MOCKS_WITH_UNDEFINED_CAMPAIGNS,
   USER_FUND_CAMPAIGNS_ERROR,
+  MOCKS_WITH_NULL_AMOUNT_RAISED,
+  MOCKS_WITH_ZERO_GOAL,
+  MOCKS_WITH_ZERO_RAISED,
+  MOCKS_WITH_100_PERCENT,
+  MOCKS_WITH_OVER_100_PERCENT,
 } from './CampaignsMocks';
 
 vi.mock('react-toastify', () => ({
@@ -375,7 +380,7 @@ describe('Testing User Campaigns Screen', () => {
     });
   });
 
-  it('Displays progress cells with correct percentage and colors', async () => {
+  it('Displays progress cells with correct percentage based on amountRaised', async () => {
     renderCampaigns(link1);
 
     await waitFor(() => {
@@ -383,11 +388,13 @@ describe('Testing User Campaigns Screen', () => {
     });
 
     const progressCells = screen.getAllByTestId('progressCell');
-    expect(progressCells.length).toBeGreaterThan(0);
+    expect(progressCells.length).toBe(2);
 
-    progressCells.forEach((cell) => {
-      expect(cell).toHaveTextContent('0%');
-    });
+    // School Campaign: 15000 / 22000 = 68%
+    // Hospital Campaign: 5000 / 9000 = 56%
+    const percentages = progressCells.map((cell) => cell.textContent);
+    expect(percentages).toContain('68%');
+    expect(percentages).toContain('56%');
   });
 
   it('Renders campaigns list with campaigns data', async () => {
@@ -465,6 +472,112 @@ describe('Testing User Campaigns Screen', () => {
     await waitFor(() => {
       const descendingOrder = getCampaignOrder();
       expect(descendingOrder).toEqual(['School Campaign', 'Hospital Campaign']);
+    });
+  });
+
+  it('Displays amountRaised field correctly from API', async () => {
+    renderCampaigns(link1);
+
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+    });
+
+    const raisedCells = screen.getAllByTestId('raisedCell');
+    expect(raisedCells.length).toBe(2);
+
+    // Check that amountRaised values are displayed
+    const raisedTexts = raisedCells.map((cell) => cell.textContent);
+    expect(raisedTexts.some((text) => text?.includes('15000'))).toBe(true);
+    expect(raisedTexts.some((text) => text?.includes('5000'))).toBe(true);
+  });
+
+  it('Handles null amountRaised by displaying 0', async () => {
+    const link = new StaticMockLink(MOCKS_WITH_NULL_AMOUNT_RAISED);
+    renderCampaigns(link);
+
+    await waitFor(() => {
+      expect(screen.getByText('Test Campaign')).toBeInTheDocument();
+    });
+
+    const raisedCells = screen.getAllByTestId('raisedCell');
+    expect(raisedCells.length).toBe(1);
+    expect(raisedCells[0]).toHaveTextContent('$0');
+
+    const progressCells = screen.getAllByTestId('progressCell');
+    expect(progressCells[0]).toHaveTextContent('0%');
+  });
+
+  it('Calculates percentage correctly for zero goal', async () => {
+    const link = new StaticMockLink(MOCKS_WITH_ZERO_GOAL);
+    renderCampaigns(link);
+
+    await waitFor(() => {
+      expect(screen.getByText('Zero Goal Campaign')).toBeInTheDocument();
+    });
+
+    const progressCells = screen.getAllByTestId('progressCell');
+    expect(progressCells[0]).toHaveTextContent('0%');
+  });
+
+  it('Calculates percentage correctly for zero raised', async () => {
+    const link = new StaticMockLink(MOCKS_WITH_ZERO_RAISED);
+    renderCampaigns(link);
+
+    await waitFor(() => {
+      expect(screen.getByText('Zero Raised Campaign')).toBeInTheDocument();
+    });
+
+    const raisedCells = screen.getAllByTestId('raisedCell');
+    expect(raisedCells[0]).toHaveTextContent('$0');
+
+    const progressCells = screen.getAllByTestId('progressCell');
+    expect(progressCells[0]).toHaveTextContent('0%');
+  });
+
+  it('Calculates percentage correctly for 100% completion', async () => {
+    const link = new StaticMockLink(MOCKS_WITH_100_PERCENT);
+    renderCampaigns(link);
+
+    await waitFor(() => {
+      expect(screen.getByText('Complete Campaign')).toBeInTheDocument();
+    });
+
+    const progressCells = screen.getAllByTestId('progressCell');
+    expect(progressCells[0]).toHaveTextContent('100%');
+
+    const raisedCells = screen.getAllByTestId('raisedCell');
+    expect(raisedCells[0]).toHaveTextContent('$10000');
+  });
+
+  it('Calculates percentage correctly when amountRaised exceeds goal', async () => {
+    const link = new StaticMockLink(MOCKS_WITH_OVER_100_PERCENT);
+    renderCampaigns(link);
+
+    await waitFor(() => {
+      expect(screen.getByText('Over Goal Campaign')).toBeInTheDocument();
+    });
+
+    const progressCells = screen.getAllByTestId('progressCell');
+    // Should show 100% even if raised exceeds goal (15000/10000 = 150%, but capped at 100%)
+    expect(progressCells[0]).toHaveTextContent('100%');
+
+    const raisedCells = screen.getAllByTestId('raisedCell');
+    expect(raisedCells[0]).toHaveTextContent('$15000');
+  });
+
+  it('Displays correct currency symbol with amountRaised', async () => {
+    renderCampaigns(link1);
+
+    await waitFor(() => {
+      expect(screen.getByText('School Campaign')).toBeInTheDocument();
+    });
+
+    const raisedCells = screen.getAllByTestId('raisedCell');
+    expect(raisedCells.length).toBe(2);
+
+    // All should have USD currency symbol
+    raisedCells.forEach((cell) => {
+      expect(cell.textContent).toContain('$');
     });
   });
 });

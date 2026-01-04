@@ -82,6 +82,7 @@ export const MOCKS = [
                           goalAmount: 22000,
                           startAt: '2024-06-15',
                           endAt: '2099-12-31',
+                          amountRaised: 15000,
                         },
                       },
                       {
@@ -92,6 +93,7 @@ export const MOCKS = [
                           goalAmount: 9000,
                           startAt: '2024-07-28',
                           endAt: '2022-08-30',
+                          amountRaised: 5000,
                         },
                       },
                     ],
@@ -210,6 +212,211 @@ export const USER_FUND_CAMPAIGNS_ERROR = [
       },
     },
     error: new Error('Error fetching campaigns'),
+  },
+  userDetailsQuery,
+];
+
+export const MOCKS_WITH_NULL_AMOUNT_RAISED = [
+  {
+    request: {
+      query: USER_FUND_CAMPAIGNS,
+      variables: {
+        input: { id: 'orgId' },
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          funds: {
+            edges: [
+              {
+                node: {
+                  campaigns: {
+                    edges: [
+                      {
+                        node: {
+                          id: 'campaignId1',
+                          name: 'Test Campaign',
+                          currencyCode: 'USD',
+                          goalAmount: 10000,
+                          startAt: '2024-06-15',
+                          endAt: '2099-12-31',
+                          amountRaised: null,
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  userDetailsQuery,
+];
+
+export const MOCKS_WITH_ZERO_GOAL = [
+  {
+    request: {
+      query: USER_FUND_CAMPAIGNS,
+      variables: {
+        input: { id: 'orgId' },
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          funds: {
+            edges: [
+              {
+                node: {
+                  campaigns: {
+                    edges: [
+                      {
+                        node: {
+                          id: 'campaignId1',
+                          name: 'Zero Goal Campaign',
+                          currencyCode: 'USD',
+                          goalAmount: 0,
+                          startAt: '2024-06-15',
+                          endAt: '2099-12-31',
+                          amountRaised: 5000,
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  userDetailsQuery,
+];
+
+export const MOCKS_WITH_ZERO_RAISED = [
+  {
+    request: {
+      query: USER_FUND_CAMPAIGNS,
+      variables: {
+        input: { id: 'orgId' },
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          funds: {
+            edges: [
+              {
+                node: {
+                  campaigns: {
+                    edges: [
+                      {
+                        node: {
+                          id: 'campaignId1',
+                          name: 'Zero Raised Campaign',
+                          currencyCode: 'USD',
+                          goalAmount: 10000,
+                          startAt: '2024-06-15',
+                          endAt: '2099-12-31',
+                          amountRaised: 0,
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  userDetailsQuery,
+];
+
+export const MOCKS_WITH_100_PERCENT = [
+  {
+    request: {
+      query: USER_FUND_CAMPAIGNS,
+      variables: {
+        input: { id: 'orgId' },
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          funds: {
+            edges: [
+              {
+                node: {
+                  campaigns: {
+                    edges: [
+                      {
+                        node: {
+                          id: 'campaignId1',
+                          name: 'Complete Campaign',
+                          currencyCode: 'USD',
+                          goalAmount: 10000,
+                          startAt: '2024-06-15',
+                          endAt: '2099-12-31',
+                          amountRaised: 10000,
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  },
+  userDetailsQuery,
+];
+
+export const MOCKS_WITH_OVER_100_PERCENT = [
+  {
+    request: {
+      query: USER_FUND_CAMPAIGNS,
+      variables: {
+        input: { id: 'orgId' },
+      },
+    },
+    result: {
+      data: {
+        organization: {
+          funds: {
+            edges: [
+              {
+                node: {
+                  campaigns: {
+                    edges: [
+                      {
+                        node: {
+                          id: 'campaignId1',
+                          name: 'Over Goal Campaign',
+                          currencyCode: 'USD',
+                          goalAmount: 10000,
+                          startAt: '2024-06-15',
+                          endAt: '2099-12-31',
+                          amountRaised: 15000,
+                        },
+                      },
+                    ],
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
   },
   userDetailsQuery,
 ];
