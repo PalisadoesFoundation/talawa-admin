@@ -65,7 +65,7 @@ import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceQueryUserTagsAssignedMembers } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid } from 'shared-components/DataGridWrapper';
 import type {
   InterfaceTagAssignedMembersQuery,
   SortedByType,
@@ -75,7 +75,10 @@ import {
   TAGS_QUERY_DATA_CHUNK_SIZE,
   dataGridStyle,
 } from 'utils/organizationTagsUtils';
-import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
+import type {
+  GridCellParams,
+  GridColDef,
+} from 'shared-components/DataGridWrapper';
 import { Stack } from '@mui/material';
 import {
   REMOVE_USER_TAG,

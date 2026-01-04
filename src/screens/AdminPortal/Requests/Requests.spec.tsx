@@ -29,6 +29,10 @@ import {
   REJECT_ORGANIZATION_REQUEST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 const { mockLocalStorageStore } = vi.hoisted(() => ({
   mockLocalStorageStore: {} as Record<string, string>,
@@ -183,7 +187,11 @@ const INFINITE_SCROLL_MOCKS = [
             .fill(null)
             .map((_, i) => ({
               membershipRequestId: `request${i + 1}`,
-              createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
+              createdAt: dayjs
+                .utc()
+                .subtract(1, 'year')
+                .add(i, 'days')
+                .toISOString(),
               status: 'pending',
               user: {
                 avatarURL: null,
@@ -215,7 +223,10 @@ const INFINITE_SCROLL_MOCKS = [
             .fill(null)
             .map((_, i) => ({
               membershipRequestId: `request${i + 11}`,
-              createdAt: `2023-01-${String(i + 11).padStart(2, '0')}T00:00:00Z`,
+              createdAt: dayjs()
+                .subtract(1, 'year')
+                .add(i + 10, 'days')
+                .toISOString(),
               status: 'pending',
               user: {
                 avatarURL: null,
@@ -315,7 +326,7 @@ describe('Testing Requests screen', () => {
           id: variablesOverrides.input?.id ?? '',
           membershipRequests: requests.map((r) => ({
             membershipRequestId: r.membershipRequestId,
-            createdAt: r.createdAt ?? '2023-01-01T00:00:00Z',
+            createdAt: r.createdAt ?? dayjs().subtract(1, 'year').toISOString(),
             status: r.status ?? 'pending',
             user: r.user,
           })),
@@ -712,7 +723,10 @@ describe('Testing Requests screen', () => {
                 .fill(null)
                 .map((_, i) => ({
                   membershipRequestId: `request${i + 1}`,
-                  createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
+                  createdAt: dayjs()
+                    .subtract(1, 'year')
+                    .add(i, 'days')
+                    .toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -743,7 +757,10 @@ describe('Testing Requests screen', () => {
                 .fill(null)
                 .map((_, i) => ({
                   membershipRequestId: `request${i + 11}`,
-                  createdAt: `2023-01-${String(i + 11).padStart(2, '0')}T00:00:00Z`,
+                  createdAt: dayjs()
+                    .subtract(1, 'year')
+                    .add(i + 10, 'days')
+                    .toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -925,7 +942,7 @@ describe('Testing Requests screen', () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: '2023-01-01T00:00:00Z',
+                  createdAt: dayjs().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -1166,7 +1183,7 @@ describe('Testing Requests screen', () => {
               id: '',
               membershipRequests: Array(10).fill({
                 membershipRequestId: '1',
-                createdAt: '2023-01-01T00:00:00Z',
+                createdAt: dayjs().subtract(1, 'year').toISOString(),
                 status: 'pending',
                 user: {
                   id: 'user1',
@@ -1503,7 +1520,7 @@ describe('Testing Requests screen', () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: '2023-01-01T00:00:00Z',
+                  createdAt: dayjs().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: 'http://invalid-url.com/avatar.jpg',
@@ -1583,7 +1600,7 @@ describe('Testing Requests screen', () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: '2023-01-01T00:00:00Z',
+                  createdAt: dayjs().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -1662,7 +1679,7 @@ describe('Testing Requests screen', () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: '2023-01-01T00:00:00Z',
+                  createdAt: dayjs().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -1782,7 +1799,7 @@ describe('Testing Requests screen', () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: '2023-01-01T00:00:00Z',
+                  createdAt: dayjs().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -1902,7 +1919,7 @@ describe('Testing Requests screen', () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: '2023-01-01T00:00:00Z',
+                  createdAt: dayjs().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -1993,7 +2010,7 @@ describe('Testing Requests screen', () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: '2023-01-01T00:00:00Z',
+                  createdAt: dayjs().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -2084,7 +2101,7 @@ describe('Testing Requests screen', () => {
               membershipRequests: [
                 {
                   membershipRequestId: '',
-                  createdAt: '2023-01-01T00:00:00Z',
+                  createdAt: dayjs().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -2160,7 +2177,7 @@ describe('Testing Requests screen', () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: '2023-01-01T00:00:00Z',
+                  createdAt: dayjs().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: 'null',
@@ -2237,7 +2254,7 @@ describe('Testing Requests screen', () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: '2023-01-01T00:00:00Z',
+                  createdAt: dayjs().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -2313,7 +2330,7 @@ describe('Testing Requests screen', () => {
               membershipRequests: [
                 {
                   membershipRequestId: '1',
-                  createdAt: '2023-01-01T00:00:00Z',
+                  createdAt: dayjs().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -2471,7 +2488,7 @@ describe('Testing Requests screen', () => {
               membershipRequests: [
                 {
                   membershipRequestId: '456',
-                  createdAt: '2023-01-01T00:00:00Z',
+                  createdAt: dayjs().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -2561,7 +2578,7 @@ describe('Testing Requests screen', () => {
               membershipRequests: [
                 {
                   membershipRequestId: '789',
-                  createdAt: '2023-01-01T00:00:00Z',
+                  createdAt: dayjs().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,
@@ -2651,7 +2668,7 @@ describe('Testing Requests screen', () => {
               membershipRequests: [
                 {
                   membershipRequestId: '101',
-                  createdAt: '2023-01-01T00:00:00Z',
+                  createdAt: dayjs().subtract(1, 'year').toISOString(),
                   status: 'pending',
                   user: {
                     avatarURL: null,

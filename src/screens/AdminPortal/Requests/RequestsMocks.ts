@@ -3,6 +3,7 @@ import {
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
+import dayjs from 'dayjs';
 
 // Helper functions for mocks
 
@@ -76,7 +77,7 @@ export const MOCKS = [
           membershipRequests: [
             {
               membershipRequestId: '1',
-              createdAt: '2023-01-01T00:00:00Z',
+              createdAt: dayjs().subtract(1, 'year').toISOString(),
               status: 'pending',
               user: {
                 avatarURL: null,
@@ -87,7 +88,10 @@ export const MOCKS = [
             },
             {
               membershipRequestId: '2',
-              createdAt: '2023-01-02T00:00:00Z',
+              createdAt: dayjs()
+                .subtract(1, 'year')
+                .add(1, 'day')
+                .toISOString(),
               status: 'pending',
               user: {
                 avatarURL: null,
@@ -114,96 +118,26 @@ export const MOCKS4 = [
       data: {
         organization: {
           id: '',
-          membershipRequests: [
-            {
-              membershipRequestId: '1',
-              createdAt: '2023-01-01T00:00:00Z',
-              status: 'pending',
-              user: {
-                avatarURL: null,
-                id: 'user2',
-                name: 'Scott Tony',
-                emailAddress: 'testuser3@example.com',
-              },
+          membershipRequests: Array.from({ length: 8 }, (_, i) => ({
+            membershipRequestId: `${i + 1}`,
+            createdAt: dayjs().subtract(1, 'year').add(i, 'days').toISOString(),
+            status: 'pending',
+            user: {
+              avatarURL: null,
+              id: `user${i + 2}`,
+              name: [
+                'Scott Tony',
+                'Teresa Bradley',
+                'Jesse Hart',
+                'Lena Mcdonald',
+                'David Smith',
+                'Emily Johnson',
+                'Michael Davis',
+                'Sarah Wilson',
+              ][i],
+              emailAddress: `testuser${i + 3}@example.com`,
             },
-            {
-              membershipRequestId: '2',
-              createdAt: '2023-01-02T00:00:00Z',
-              status: 'pending',
-              user: {
-                avatarURL: null,
-                id: 'user3',
-                name: 'Teresa Bradley',
-                emailAddress: 'testuser4@example.com',
-              },
-            },
-            {
-              membershipRequestId: '3',
-              createdAt: '2023-01-03T00:00:00Z',
-              status: 'pending',
-              user: {
-                avatarURL: null,
-                id: 'user4',
-                name: 'Jesse Hart',
-                emailAddress: 'testuser5@example.com',
-              },
-            },
-            {
-              membershipRequestId: '4',
-              createdAt: '2023-01-04T00:00:00Z',
-              status: 'pending',
-              user: {
-                avatarURL: null,
-                id: 'user5',
-                name: 'Lena Mcdonald',
-                emailAddress: 'testuser6@example.com',
-              },
-            },
-            {
-              membershipRequestId: '5',
-              createdAt: '2023-01-05T00:00:00Z',
-              status: 'pending',
-              user: {
-                avatarURL: null,
-                id: 'user6',
-                name: 'David Smith',
-                emailAddress: 'testuser7@example.com',
-              },
-            },
-            {
-              membershipRequestId: '6',
-              createdAt: '2023-01-06T00:00:00Z',
-              status: 'pending',
-              user: {
-                avatarURL: null,
-                id: 'user7',
-                name: 'Emily Johnson',
-                emailAddress: 'testuser8@example.com',
-              },
-            },
-            {
-              membershipRequestId: '7',
-              createdAt: '2023-01-07T00:00:00Z',
-              status: 'pending',
-              user: {
-                avatarURL: null,
-                id: 'user8',
-                name: 'Michael Davis',
-                emailAddress: 'testuser9@example.com',
-              },
-            },
-            {
-              membershipRequestId: '8',
-              createdAt: '2023-01-08T00:00:00Z',
-              status: 'pending',
-              user: {
-                avatarURL: null,
-                id: 'user9',
-                name: 'Sarah Wilson',
-                emailAddress: 'testuser10@example.com',
-              },
-            },
-          ],
+          })),
         },
       },
     },
@@ -222,96 +156,29 @@ export const MOCKS4 = [
       data: {
         organization: {
           id: '',
-          membershipRequests: [
-            {
-              membershipRequestId: '9',
-              createdAt: '2023-01-09T00:00:00Z',
-              status: 'pending',
-              user: {
-                avatarURL: null,
-                id: 'user10',
-                name: 'Daniel Brown',
-                emailAddress: 'testuser11@example.com',
-              },
+          membershipRequests: Array.from({ length: 8 }, (_, i) => ({
+            membershipRequestId: `${i + 9}`,
+            createdAt: dayjs()
+              .subtract(1, 'year')
+              .add(i + 8, 'days')
+              .toISOString(),
+            status: 'pending',
+            user: {
+              avatarURL: null,
+              id: `user${i + 10}`,
+              name: [
+                'Daniel Brown',
+                'Jessica Martinez',
+                'Matthew Taylor',
+                'Amanda Anderson',
+                'Christopher Thomas',
+                'Ashley Hernandez',
+                'Andrew Young',
+                'Nicole Garcia',
+              ][i],
+              emailAddress: `testuser${i + 11}@example.com`,
             },
-            {
-              membershipRequestId: '10',
-              createdAt: '2023-01-10T00:00:00Z',
-              status: 'pending',
-              user: {
-                avatarURL: null,
-                id: 'user11',
-                name: 'Jessica Martinez',
-                emailAddress: 'testuser12@example.com',
-              },
-            },
-            {
-              membershipRequestId: '11',
-              createdAt: '2023-01-11T00:00:00Z',
-              status: 'pending',
-              user: {
-                avatarURL: null,
-                id: 'user12',
-                name: 'Matthew Taylor',
-                emailAddress: 'testuser13@example.com',
-              },
-            },
-            {
-              membershipRequestId: '12',
-              createdAt: '2023-01-12T00:00:00Z',
-              status: 'pending',
-              user: {
-                avatarURL: null,
-                id: 'user13',
-                name: 'Amanda Anderson',
-                emailAddress: 'testuser14@example.com',
-              },
-            },
-            {
-              membershipRequestId: '13',
-              createdAt: '2023-01-13T00:00:00Z',
-              status: 'pending',
-              user: {
-                avatarURL: null,
-                id: 'user14',
-                name: 'Christopher Thomas',
-                emailAddress: 'testuser15@example.com',
-              },
-            },
-            {
-              membershipRequestId: '14',
-              createdAt: '2023-01-14T00:00:00Z',
-              status: 'pending',
-              user: {
-                avatarURL: null,
-                id: 'user15',
-                name: 'Ashley Hernandez',
-                emailAddress: 'testuser16@example.com',
-              },
-            },
-            {
-              membershipRequestId: '15',
-              createdAt: '2023-01-15T00:00:00Z',
-              status: 'pending',
-              user: {
-                avatarURL: null,
-                id: 'user16',
-                name: 'Andrew Young',
-                emailAddress: 'testuser17@example.com',
-              },
-            },
-            {
-              membershipRequestId: '16',
-              createdAt: '2023-01-16T00:00:00Z',
-              status: 'pending',
-              user: {
-                avatarURL: null,
-                id: 'user17',
-                name: 'Nicole Garcia',
-                emailAddress: 'testuser18@example.com',
-              },
-            },
-          ],
+          })),
         },
       },
     },
@@ -331,7 +198,7 @@ export const UPDATED_MOCKS = [
           id: '',
           membershipRequests: Array.from({ length: 8 }, (_, i) => ({
             membershipRequestId: `${i + 1}`,
-            createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
+            createdAt: dayjs().subtract(1, 'year').add(i, 'days').toISOString(),
             status: 'pending',
             user: {
               avatarURL: null,
@@ -376,7 +243,7 @@ export const UPDATED_MOCKS = [
           id: '',
           membershipRequests: Array.from({ length: 10 }, (_, i) => ({
             membershipRequestId: `${i + 1}`,
-            createdAt: `2023-01-${String(i + 1).padStart(2, '0')}T00:00:00Z`,
+            createdAt: dayjs().subtract(1, 'year').add(i, 'days').toISOString(),
             status: 'pending',
             user: {
               avatarURL: null,
@@ -410,7 +277,7 @@ export const MOCKS2 = [
           membershipRequests: [
             {
               membershipRequestId: '1',
-              createdAt: '2023-01-01T00:00:00Z',
+              createdAt: dayjs().subtract(1, 'year').toISOString(),
               status: 'pending',
               user: {
                 avatarURL: null,

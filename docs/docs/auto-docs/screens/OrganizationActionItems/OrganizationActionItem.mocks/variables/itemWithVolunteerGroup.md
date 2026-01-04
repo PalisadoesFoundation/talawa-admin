@@ -6,7 +6,7 @@
 
 > `const` **itemWithVolunteerGroup**: `object`
 
-Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:185](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L185)
+Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts:188](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts#L188)
 
 ## Type Declaration
 
@@ -20,7 +20,7 @@ Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts
 
 #### category.createdAt
 
-> **createdAt**: `string` = `'2024-08-26'`
+> **createdAt**: `string`
 
 #### category.creatorId
 
@@ -44,7 +44,7 @@ Defined in: [src/screens/OrganizationActionItems/OrganizationActionItem.mocks.ts
 
 #### category.updatedAt
 
-> **updatedAt**: `string` = `'2024-08-26'`
+> **updatedAt**: `string`
 
 ### categoryId
 

@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import {
   GET_ORGANIZATION_POSTS_COUNT_PG,
   GET_ORGANIZATION_EVENTS_PG,
@@ -62,8 +63,18 @@ export const MOCKS_ORG2 = [
                   id: 'event2',
                   name: 'Event Two',
                   description: 'Description for Event Two',
-                  startAt: '2025-11-29T00:00:00.000Z',
-                  endAt: '2025-11-30T00:00:00.000Z',
+                  startAt: dayjs()
+                    .add(1, 'year')
+                    .month(10)
+                    .date(29)
+                    .startOf('day')
+                    .toISOString(),
+                  endAt: dayjs()
+                    .add(1, 'year')
+                    .month(10)
+                    .date(30)
+                    .startOf('day')
+                    .toISOString(),
                   allDay: false,
                   location: 'Test Location 2',
                   isPublic: true,
@@ -87,8 +98,16 @@ export const MOCKS_ORG2 = [
                     name: 'Test Organization 2',
                     __typename: 'Organization',
                   },
-                  createdAt: '2025-10-28T00:00:00.000Z',
-                  updatedAt: '2025-10-28T00:00:00.000Z',
+                  createdAt: dayjs()
+                    .add(1, 'year')
+                    .startOf('year')
+                    .hour(12)
+                    .toISOString(),
+                  updatedAt: dayjs()
+                    .add(1, 'year')
+                    .startOf('year')
+                    .hour(12)
+                    .toISOString(),
                   __typename: 'Event',
                 },
                 cursor: 'cursor2',
@@ -124,7 +143,12 @@ export const MOCKS_ORG2 = [
                 node: {
                   id: 'post2',
                   caption: 'Second Org Post',
-                  createdAt: '2025-01-02T12:00:00.000Z',
+                  createdAt: dayjs()
+                    .add(1, 'year')
+                    .startOf('year')
+                    .add(1, 'day')
+                    .hour(12)
+                    .toISOString(),
                   creator: {
                     id: 'user2',
                     name: 'Jane Doe',

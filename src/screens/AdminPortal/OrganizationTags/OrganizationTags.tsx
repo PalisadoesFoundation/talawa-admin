@@ -48,7 +48,7 @@ import IconComponent from 'components/IconComponent/IconComponent';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type { InterfaceTagDataPG } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
-import type { GridCellParams } from '@mui/x-data-grid';
+import type { GridCellParams } from 'shared-components/DataGridWrapper';
 import type {
   InterfaceOrganizationTagsQueryPG,
   SortedByType,

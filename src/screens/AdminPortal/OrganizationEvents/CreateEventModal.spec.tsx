@@ -2,6 +2,9 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 // Mock react-i18next properly with importOriginal to avoid missing exports
 vi.mock('react-i18next', async (importOriginal) => {
@@ -648,11 +651,14 @@ describe('CreateEventModal', () => {
       'createEventDateRangePicker-end-input',
     );
 
-    fireEvent.change(startDateInput, { target: { value: '2025-12-25' } });
-    fireEvent.change(endDateInput, { target: { value: '2025-12-26' } });
+    const futureStart = dayjs().add(10, 'days').format('YYYY-MM-DD');
+    const futureEnd = dayjs().add(11, 'days').format('YYYY-MM-DD');
 
-    expect(startDateInput).toHaveValue('2025-12-25');
-    expect(endDateInput).toHaveValue('2025-12-26');
+    fireEvent.change(startDateInput, { target: { value: futureStart } });
+    fireEvent.change(endDateInput, { target: { value: futureEnd } });
+
+    expect(startDateInput).toHaveValue(futureStart);
+    expect(endDateInput).toHaveValue(futureEnd);
   });
 
   it('updates time when all-day is unchecked', async () => {
@@ -908,24 +914,29 @@ describe('CreateEventModal', () => {
       'createEventDateRangePicker-end-input',
     );
 
+    const baseDate = dayjs().add(10, 'days');
+    const earlyDate = baseDate.format('YYYY-MM-DD');
+    const laterDate = baseDate.add(10, 'days').format('YYYY-MM-DD');
+    const evenLaterDate = baseDate.add(15, 'days').format('YYYY-MM-DD');
+
     // First set startDate to an early date to establish a baseline
-    fireEvent.change(startDateInput, { target: { value: '2025-12-10' } });
+    fireEvent.change(startDateInput, { target: { value: earlyDate } });
     await waitFor(() => {
-      expect(startDateInput).toHaveValue('2025-12-10');
+      expect(startDateInput).toHaveValue(earlyDate);
     });
 
     // Set endDate to a date after startDate
-    fireEvent.change(endDateInput, { target: { value: '2025-12-20' } });
+    fireEvent.change(endDateInput, { target: { value: laterDate } });
     await waitFor(() => {
-      expect(endDateInput).toHaveValue('2025-12-20');
+      expect(endDateInput).toHaveValue(laterDate);
     });
 
     // Now set startDate to a date AFTER the endDate - this should trigger auto-adjust
-    fireEvent.change(startDateInput, { target: { value: '2025-12-25' } });
+    fireEvent.change(startDateInput, { target: { value: evenLaterDate } });
 
     // Verify startDate was set
     await waitFor(() => {
-      expect(startDateInput).toHaveValue('2025-12-25');
+      expect(startDateInput).toHaveValue(evenLaterDate);
     });
 
     // endDate should be auto-adjusted to match startDate
@@ -933,7 +944,11 @@ describe('CreateEventModal', () => {
       const updatedEndDateInput = screen.getByTestId(
         'createEventDateRangePicker-end-input',
       );
-      expect(updatedEndDateInput).toHaveValue('2025-12-25');
+      const startInput = screen.getByTestId(
+        'createEventDateRangePicker-start-input',
+      ) as HTMLInputElement;
+
+      expect(updatedEndDateInput).toHaveValue(startInput.value);
     });
   });
 
@@ -1140,16 +1155,23 @@ describe('CreateEventModal', () => {
       'createEventDateRangePicker-end-input',
     );
 
+    const futureStart = dayjs().add(10, 'days').format('YYYY-MM-DD');
+    const futureEnd = dayjs().add(5, 'days').format('YYYY-MM-DD');
+
     // Set startDate
-    fireEvent.change(startDateInput, { target: { value: '2025-12-15' } });
+    fireEvent.change(startDateInput, { target: { value: futureStart } });
 
     // Attempt to set endDate before startDate
-    fireEvent.change(endDateInput, { target: { value: '2025-12-10' } });
+    fireEvent.change(endDateInput, { target: { value: futureEnd } });
 
     // The mock DatePicker doesn't enforce minDate constraint, it just accepts the value
     // The actual component would handle this, but for testing we verify the value was set
     // This test documents the expected behavior rather than enforcing it in the mock
-    expect(endDateInput).toHaveValue('2025-12-15');
+    const startInput = startDateInput as HTMLInputElement;
+
+    expect(endDateInput).toHaveValue(
+      dayjs(startInput.value).format('YYYY-MM-DD'),
+    );
   });
 
   it('validates form with mixed whitespace - title valid but others whitespace', async () => {
@@ -1355,14 +1377,19 @@ describe('CreateEventModal', () => {
     );
 
     // Step 1: Change dates
+    const startDate = dayjs().utc().add(10, 'days').format('YYYY-MM-DD');
+    const endDate = dayjs().utc().add(11, 'days').format('YYYY-MM-DD');
+
     fireEvent.change(
       screen.getByTestId('createEventDateRangePicker-start-input'),
-      { target: { value: '2025-12-20' } },
+      { target: { value: startDate } },
     );
+
     fireEvent.change(
       screen.getByTestId('createEventDateRangePicker-end-input'),
-      { target: { value: '2025-12-21' } },
+      { target: { value: endDate } },
     );
+
     // Step 2: Toggle all-day off
     fireEvent.click(screen.getByTestId('allDayEventCheck'));
 
@@ -1543,8 +1570,11 @@ describe('CreateEventModal', () => {
     });
 
     it('sets default start date to today 00:00 UTC (standard case)', () => {
-      // Mock time: 2023-10-10T12:00:00.000Z
-      const mockDate = new Date(Date.UTC(2023, 9, 10, 12, 0, 0));
+      // Mock time using current year/month/day to maintain test robustness
+      const now = dayjs();
+      const mockDate = new Date(
+        Date.UTC(now.year(), now.month(), now.date(), 12, 0, 0),
+      );
       vi.setSystemTime(mockDate);
 
       render(
@@ -1560,17 +1590,21 @@ describe('CreateEventModal', () => {
       const startDateInput = screen.getByTestId(
         'createEventDateRangePicker-start-input',
       );
-      expect(startDateInput).toHaveValue('2023-10-10');
-
+      expect(startDateInput).toHaveValue(
+        dayjs().utc().startOf('day').format('YYYY-MM-DD'),
+      );
       const endDateInput = screen.getByTestId(
         'createEventDateRangePicker-end-input',
       );
-      expect(endDateInput).toHaveValue('2023-10-10');
+      const todayUTC = dayjs().utc().format('YYYY-MM-DD');
+      expect(startDateInput).toHaveValue(todayUTC);
+      expect(endDateInput).toHaveValue(todayUTC);
     });
 
     it('sets default start date to today (no month crossing)', () => {
-      // Mock time: 2023-10-31T23:00:00.000Z
-      const mockDate = new Date(Date.UTC(2023, 9, 31, 23, 0, 0)); // Oct 31
+      // Mock time: Last day of a month
+      const oct31 = dayjs.utc().year(2023).month(9).date(31).hour(23);
+      const mockDate = oct31.toDate();
       vi.setSystemTime(mockDate);
 
       render(
@@ -1586,12 +1620,13 @@ describe('CreateEventModal', () => {
       const startDateInput = screen.getByTestId(
         'createEventDateRangePicker-start-input',
       );
-      expect(startDateInput).toHaveValue('2023-10-31');
+      expect(startDateInput).toHaveValue(dayjs.utc().format('YYYY-MM-DD'));
     });
 
     it('sets default start date to today (no year crossing)', () => {
-      // Mock time: 2023-12-31T10:00:00.000Z
-      const mockDate = new Date(Date.UTC(2023, 11, 31, 10, 0, 0)); // Dec 31
+      // Mock time: Last day of the year
+      const dec31 = dayjs.utc().year(2023).month(11).date(31).hour(10);
+      const mockDate = dec31.toDate();
       vi.setSystemTime(mockDate);
 
       render(
@@ -1607,7 +1642,7 @@ describe('CreateEventModal', () => {
       const startDateInput = screen.getByTestId(
         'createEventDateRangePicker-start-input',
       );
-      expect(startDateInput).toHaveValue('2023-12-31');
+      expect(startDateInput).toHaveValue(dayjs.utc().format('YYYY-MM-DD'));
     });
 
     it('calculates Today UTC correctly even if local time is different day', () => {
@@ -1615,10 +1650,14 @@ describe('CreateEventModal', () => {
       // Since we use Date.UTC logic in the component, the local timezone shouldn't matter for the "Today UTC" calculation result.
 
       // Mock time: 2023-01-01T23:00:00.000Z
-      // If Local is UTC-2, it's Jan 1 21:00.
-      // If Local is UTC+2, it's Jan 2 01:00.
       // Logic uses getUTCDate() -> 1. Result -> Jan 1 00:00 UTC (today).
-      const mockDate = new Date(Date.UTC(2023, 0, 1, 23, 0, 0));
+      const mockDate = dayjs
+        .utc()
+        .year(2023)
+        .month(0)
+        .date(1)
+        .hour(23)
+        .toDate();
       vi.setSystemTime(mockDate);
 
       render(
@@ -1634,7 +1673,9 @@ describe('CreateEventModal', () => {
       const startDateInput = screen.getByTestId(
         'createEventDateRangePicker-start-input',
       );
-      expect(startDateInput).toHaveValue('2023-01-01');
+      expect(startDateInput).toHaveValue(
+        dayjs.utc().startOf('day').format('YYYY-MM-DD'),
+      );
     });
   });
 });
