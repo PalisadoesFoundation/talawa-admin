@@ -1,6 +1,6 @@
 // SKIP_LOCALSTORAGE_CHECK
 import React from 'react';
-import { MockedProvider, MockedResponse } from '@apollo/react-testing';
+import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import {
   act,
   render,
@@ -90,7 +90,7 @@ const setupUser = (userType: keyof typeof mockUsers) => {
 // Helper function to render component with common providers.
 const renderWithProviders = (link = mockLinks.superAdmin) => {
   return render(
-    <MockedProvider addTypename={false} link={link}>
+    <MockedProvider link={link}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -107,7 +107,7 @@ const renderWithProviders = (link = mockLinks.superAdmin) => {
 // Helper function for rendering with custom mocks
 const renderWithMocks = (mocks: MockedResponse[]) => {
   return render(
-    <MockedProvider addTypename={false} mocks={mocks}>
+    <MockedProvider mocks={mocks}>
       <BrowserRouter>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
@@ -813,10 +813,7 @@ describe('Plugin Modal Tests', () => {
     setItem('role', 'administrator');
 
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={mockConfigurations.orgCreationMocks}
-      >
+      <MockedProvider mocks={mockConfigurations.orgCreationMocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -908,7 +905,7 @@ describe('Advanced Component Functionality Tests', () => {
     ];
 
     render(
-      <MockedProvider addTypename={false} mocks={singleOrgMocks}>
+      <MockedProvider mocks={singleOrgMocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1012,10 +1009,7 @@ describe('Advanced Component Functionality Tests', () => {
     setItem('role', 'administrator');
 
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={mockConfigurations.orgCreationMocks}
-      >
+      <MockedProvider mocks={mockConfigurations.orgCreationMocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1105,10 +1099,7 @@ describe('Advanced Component Functionality Tests', () => {
     setItem('role', 'administrator');
 
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={mockConfigurations.orgCreationMocks}
-      >
+      <MockedProvider mocks={mockConfigurations.orgCreationMocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1172,10 +1163,7 @@ describe('Advanced Component Functionality Tests', () => {
     setItem('role', 'administrator');
 
     render(
-      <MockedProvider
-        addTypename={false}
-        mocks={mockConfigurations.orgCreationMocks}
-      >
+      <MockedProvider mocks={mockConfigurations.orgCreationMocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1269,7 +1257,7 @@ describe('Advanced Component Functionality Tests', () => {
     ];
 
     render(
-      <MockedProvider addTypename={false} mocks={errorMocks}>
+      <MockedProvider mocks={errorMocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1380,7 +1368,7 @@ describe('Advanced Component Functionality Tests', () => {
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
     render(
-      <MockedProvider mocks={MOCKS_ADMIN} addTypename={false}>
+      <MockedProvider mocks={MOCKS_ADMIN}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1474,7 +1462,7 @@ describe('Advanced Component Functionality Tests', () => {
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
     render(
-      <MockedProvider mocks={MOCKS} addTypename={false}>
+      <MockedProvider mocks={MOCKS}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1565,7 +1553,7 @@ describe('Advanced Component Functionality Tests', () => {
     ];
 
     render(
-      <MockedProvider mocks={errorMocks} addTypename={false}>
+      <MockedProvider mocks={errorMocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1661,7 +1649,7 @@ describe('Advanced Component Functionality Tests', () => {
     ];
 
     render(
-      <MockedProvider mocks={paginationMocks} addTypename={false}>
+      <MockedProvider mocks={paginationMocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
@@ -1805,7 +1793,7 @@ describe('Advanced Component Functionality Tests', () => {
     ];
 
     render(
-      <MockedProvider mocks={successMocks} addTypename={false}>
+      <MockedProvider mocks={successMocks}>
         <BrowserRouter>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
