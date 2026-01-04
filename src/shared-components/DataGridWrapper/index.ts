@@ -12,4 +12,6 @@ export type {
   GridCellParams,
   GridColDef,
   GridPaginationModel,
+  GridRenderCellParams,
+  GridRowHeightReturnValue,
 } from '@mui/x-data-grid';
