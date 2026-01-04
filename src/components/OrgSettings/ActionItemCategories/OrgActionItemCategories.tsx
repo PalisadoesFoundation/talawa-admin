@@ -40,7 +40,7 @@ import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
-} from '@mui/x-data-grid';
+} from 'shared-components/DataGridWrapper';
 import dayjs from 'dayjs';
 import { Chip, Stack } from '@mui/material';
 import CategoryModal from './Modal/ActionItemCategoryModal';

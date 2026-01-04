@@ -433,7 +433,7 @@ describe('PinnedPostsLayout Component', () => {
       // Spy on console.error before render to catch any React warnings
       const consoleErrorSpy = vi
         .spyOn(console, 'error')
-        .mockImplementation(() => { });
+        .mockImplementation(() => {});
 
       const { unmount } = render(
         <MockedProvider>

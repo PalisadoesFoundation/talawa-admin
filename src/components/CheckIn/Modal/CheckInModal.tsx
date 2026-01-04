@@ -45,8 +45,11 @@ import type {
   InterfaceModalProp,
   InterfaceTableData,
 } from 'types/CheckIn/interface';
-import type { GridColDef, GridRowHeightReturnValue } from '@mui/x-data-grid';
-import { DataGrid } from '@mui/x-data-grid';
+import type {
+  GridColDef,
+  GridRowHeightReturnValue,
+} from 'shared-components/DataGridWrapper';
+import { DataGrid } from 'shared-components/DataGridWrapper';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 
 export const CheckInModal = ({

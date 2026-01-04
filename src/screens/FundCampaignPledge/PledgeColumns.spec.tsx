@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getPledgeColumns } from './PledgeColumns';
-import type { GridRenderCellParams } from '@mui/x-data-grid';
+import type { GridRenderCellParams } from 'shared-components/DataGridWrapper';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
