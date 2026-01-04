@@ -1,4 +1,6 @@
-import React from 'react';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 import { render, screen } from '@testing-library/react';
 import { MockedProvider } from '@apollo/client/testing';
 import EventsAttendedByMember from './EventsAttendedByMember';
@@ -63,7 +65,7 @@ describe('EventsAttendedByMember', () => {
             event: {
               id: 'event123', // Using id instead of _id
               name: 'Fallback Event', // Using name instead of title
-              startAt: '2030-01-01T09:00:00.000Z', // Using startAt instead of startDate
+              startAt: dayjs.utc().add(4, 'year').toISOString(), // Using startAt instead of startDate
               location: 'Fallback Location',
               organization: {
                 id: 'org123', // Using id instead of _id

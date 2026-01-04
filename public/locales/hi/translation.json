@@ -427,7 +427,8 @@
     "sortTags": "टैग सॉर्ट करें",
     "Latest": "नवीनतम",
     "Oldest": "सबसे पुराना",
-    "viewSubTags": "{{count}} उप-टैग देखें"
+    "viewSubTags": "{{count}} उप-टैग देखें",
+    "tags": "टैग"
   },
   "manageTag": {
     "title": "टैग विवरण",
@@ -2061,9 +2062,6 @@
   "contact": {
     "card_aria": "संपर्क कार्ड"
   },
-  "donation": {
-    "card_aria": "दान कार्ड"
-  },
   "securedRoute": {
     "sessionExpired": "कृपया फिर से लॉगिन करें क्योंकि सत्र समाप्त हो गया है"
   },
@@ -2080,7 +2078,14 @@
     "logoutFailed": "साइन आउट विफल रहा",
     "title": "उपयोगकर्ता पोर्टल",
     "talawa": "तलावा",
-    "talawaBranding": "तालावा ब्रांडिंग"
+    "talawaBranding": "तालावा ब्रांडिंग",
+    "view": "देखें"
+  },
+  "donation": {
+    "amount_label": "राशि",
+    "card_aria": "दान कार्ड",
+    "card_test_id": "donation-card-{{id}}",
+    "date_label": "दिनांक"
   },
   "organizationVenuesNotification": {
     "venueCreated": "स्थान सफलतापूर्वक बनाया गया",
