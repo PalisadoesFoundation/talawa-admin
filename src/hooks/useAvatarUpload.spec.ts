@@ -93,7 +93,9 @@ describe('useAvatarUpload', () => {
       });
 
       expect(result.current.file).toBeNull();
-      expect(result.current.error).toBe('Only JPEG/PNG/GIF allowed');
+      expect(result.current.error).toBe(
+        'Invalid file type. Please upload a file of type: JPEG, PNG, GIF.',
+      );
     });
 
     it('rejects webp files', () => {
@@ -105,7 +107,9 @@ describe('useAvatarUpload', () => {
       });
 
       expect(result.current.file).toBeNull();
-      expect(result.current.error).toBe('Only JPEG/PNG/GIF allowed');
+      expect(result.current.error).toBe(
+        'Invalid file type. Please upload a file of type: JPEG, PNG, GIF.',
+      );
     });
   });
 
@@ -147,7 +151,9 @@ describe('useAvatarUpload', () => {
       });
 
       expect(result.current.file).toBeNull();
-      expect(result.current.error).toBe('Max file size is 5MB');
+      expect(result.current.error).toBe(
+        'File is too large. Maximum size is 5MB.',
+      );
     });
   });
 
@@ -203,7 +209,9 @@ describe('useAvatarUpload', () => {
         result.current.onFileSelect(invalidFile);
       });
 
-      expect(result.current.error).toBe('Only JPEG/PNG/GIF allowed');
+      expect(result.current.error).toBe(
+        'Invalid file type. Please upload a file of type: JPEG, PNG, GIF.',
+      );
 
       act(() => {
         result.current.clearError();
@@ -221,7 +229,9 @@ describe('useAvatarUpload', () => {
         result.current.onFileSelect(invalidFile);
       });
 
-      expect(result.current.error).toBe('Only JPEG/PNG/GIF allowed');
+      expect(result.current.error).toBe(
+        'Invalid file type. Please upload a file of type: JPEG, PNG, GIF.',
+      );
 
       act(() => {
         result.current.onFileSelect(validFile);
@@ -243,8 +253,47 @@ describe('useAvatarUpload', () => {
         result.current.onFileSelect(file);
       });
 
-      // Should get type error first
-      expect(result.current.error).toBe('Only JPEG/PNG/GIF allowed');
+      // Size is checked first by the centralized validator
+      expect(result.current.error).toBe(
+        'File is too large. Maximum size is 5MB.',
+      );
+    });
+  });
+
+  describe('fallback error handling', () => {
+    it('uses fallback error message when validator returns no errorMessage', async () => {
+      // Mock the validateFile utility to return isValid: false without errorMessage
+      const { validateFile } = await import('../utils/fileValidation');
+      const mockValidateFile = vi.spyOn(
+        { validateFile },
+        'validateFile',
+      ) as ReturnType<typeof vi.spyOn>;
+
+      // We need to mock at the module level
+      vi.doMock('../utils/fileValidation', () => ({
+        validateFile: vi.fn().mockReturnValue({ isValid: false }),
+      }));
+
+      // Re-import the hook with mocked dependency
+      vi.resetModules();
+      const { useAvatarUpload: useAvatarUploadMocked } = await import(
+        './useAvatarUpload'
+      );
+
+      const { result } = renderHook(() => useAvatarUploadMocked());
+      const file = createMockFile('test.jpg', 'image/jpeg', 1024);
+
+      act(() => {
+        result.current.onFileSelect(file);
+      });
+
+      // Should use fallback error message
+      expect(result.current.error).toBe('Invalid file');
+
+      // Restore original module
+      vi.doUnmock('../utils/fileValidation');
+      vi.resetModules();
+      mockValidateFile.mockRestore();
     });
   });
 

@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-
-const MAX_BYTES = 5 * 1024 * 1024;
-const ACCEPT = ['image/jpeg', 'image/png', 'image/gif'];
+import { validateFile } from '../utils/fileValidation';
 
 /**
  * Custom hook for handling avatar file uploads with validation.
@@ -33,24 +31,15 @@ export function useAvatarUpload(initialUrl?: string): {
   const [previewUrl, setPreviewUrl] = useState<string | undefined>(initialUrl);
   const [error, setError] = useState<string | null>(null);
 
-  const validateFile = useCallback((f: File): string | null => {
-    if (!ACCEPT.includes(f.type)) return 'Only JPEG/PNG/GIF allowed';
-    if (f.size > MAX_BYTES) return 'Max file size is 5MB';
-    return null;
+  const onFileSelect = useCallback((f: File): void => {
+    const validationResult = validateFile(f);
+    if (!validationResult.isValid) {
+      setError(validationResult.errorMessage ?? 'Invalid file');
+      return;
+    }
+    setError(null);
+    setFile(f);
   }, []);
-
-  const onFileSelect = useCallback(
-    (f: File): void => {
-      const err = validateFile(f);
-      if (err) {
-        setError(err);
-        return;
-      }
-      setError(null);
-      setFile(f);
-    },
-    [validateFile],
-  );
 
   const clearError = useCallback((): void => {
     setError(null);

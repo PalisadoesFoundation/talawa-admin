@@ -6,7 +6,7 @@
 
 > **useAvatarUpload**(`initialUrl?`): `object`
 
-Defined in: [src/hooks/useAvatarUpload.ts:25](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/useAvatarUpload.ts#L25)
+Defined in: [src/hooks/useAvatarUpload.ts:23](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/useAvatarUpload.ts#L23)
 
 Custom hook for handling avatar file uploads with validation.
 
