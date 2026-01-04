@@ -177,6 +177,12 @@ export default [
           message:
             'Direct imports from @mui/x-data-grid-pro are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
         },
+        {
+          name: 'react-bootstrap',
+          importNames: ['Modal'],
+          message:
+            'Do not import Modal directly. Use the shared BaseModal component instead.',
+        },
       ],
     },
   },
@@ -192,6 +198,23 @@ export default [
       'src/shared-components/DataGridWrapper/**/*.tsx',
       'src/types/DataGridWrapper/**/*.ts',
       'src/types/DataGridWrapper/**/*.tsx',
+    ],
+    rules: {
+      'no-restricted-imports': 'off',
+    },
+  },
+  /**
+   * Exemption: BaseModal component files
+   *
+   * BaseModal files need direct react-bootstrap Modal access for wrapper implementation.
+   * These files are the only ones allowed to import Modal directly from react-bootstrap.
+   */
+  {
+    files: [
+      'src/shared-components/BaseModal/**/*.ts',
+      'src/shared-components/BaseModal/**/*.tsx',
+      'src/types/shared-components/BaseModal/**/*.ts',
+      'src/types/shared-components/BaseModal/**/*.tsx',
     ],
     rules: {
       'no-restricted-imports': 'off',
