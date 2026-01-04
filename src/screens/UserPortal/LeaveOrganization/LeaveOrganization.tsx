@@ -52,6 +52,7 @@ import { useParams, useNavigate } from 'react-router';
 import { getItem } from 'utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
+import { useTranslation } from 'react-i18next';
 
 const userEmail = (() => {
   try {
@@ -75,6 +76,7 @@ export { userEmail, userId };
 const LeaveOrganization = (): JSX.Element => {
   const navigate = useNavigate();
   const { orgId: organizationId } = useParams();
+  const { t: tCommon } = useTranslation('common');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -155,7 +157,7 @@ const LeaveOrganization = (): JSX.Element => {
 
   if (orgLoading) {
     return (
-      <LoadingState isLoading={true} variant="spinner">
+      <LoadingState isLoading={orgLoading} variant="spinner">
         <div />
       </LoadingState>
     );
@@ -253,7 +255,7 @@ const LeaveOrganization = (): JSX.Element => {
                   setError('');
                 }}
               >
-                Back
+                {tCommon('back')}
               </Button>
               <LoadingState isLoading={loading} variant="inline">
                 <Button
@@ -262,7 +264,7 @@ const LeaveOrganization = (): JSX.Element => {
                   onClick={handleVerifyAndLeave}
                   aria-label="confirm-leave-button"
                 >
-                  Confirm
+                  {tCommon('confirm')}
                 </Button>
               </LoadingState>
             </>

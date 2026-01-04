@@ -26,6 +26,8 @@
   "requests": "请求",
   "OR": "或",
   "cancel": "取消",
+  "back": "返回",
+  "confirm": "确认",
   "close": "关闭",
   "create": "创建",
   "delete": "删除",
@@ -143,7 +145,6 @@
   "searchRequests": "搜索请求",
   "itemTitle": "标题",
   "assignee": "负责人",
-
   "signOut": "退出登录",
   "signingOut": "正在退出...",
   "retryPrompt": "会话撤销失败，重试？",

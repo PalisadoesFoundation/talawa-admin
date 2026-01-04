@@ -26,6 +26,8 @@
   "requests": "Requests",
   "OR": "OR",
   "cancel": "Cancel",
+  "back": "Back",
+  "confirm": "Confirm",
   "close": "Close",
   "create": "Create",
   "delete": "Delete",

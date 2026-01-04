@@ -49,6 +49,7 @@ import type {
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
+import modalStyles from '../../EventRegistrants.module.css';
 
 const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   show,
@@ -136,10 +137,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   return (
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" centered>
-        <Modal.Header
-          closeButton
-          style={{ backgroundColor: 'var(--tableHeader-bg)' }}
-        >
+        <Modal.Header closeButton className={modalStyles.modalHeader}>
           <Modal.Title>{t('title')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -219,7 +217,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
                 className={`border-1 mx-4 ${styles.addButton}`}
                 disabled={isSubmitting}
               >
-                Add
+                {t('addAttendee')}
               </Button>
             </LoadingState>
           </Form>
