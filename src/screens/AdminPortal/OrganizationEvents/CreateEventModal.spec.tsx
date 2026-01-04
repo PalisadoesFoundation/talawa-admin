@@ -100,6 +100,45 @@ vi.mock('@mui/x-date-pickers', () => ({
   ),
 }));
 
+vi.mock('shared-components/DateRangePicker/DateRangePicker', () => ({
+  __esModule: true,
+  default: ({ value, onChange, dataTestId }: any) => (
+    <div>
+      <input
+        type="date"
+        data-testid={`${dataTestId}-start-input`}
+        value={
+          value?.startDate ? value.startDate.toISOString().slice(0, 10) : ''
+        }
+        onChange={(e) =>
+          onChange({
+            startDate: new Date(`${e.target.value}T00:00:00Z`),
+            endDate: value?.endDate ?? null,
+          })
+        }
+      />
+
+      <input
+        type="date"
+        data-testid={`${dataTestId}-end-input`}
+        value={
+          value?.endDate instanceof Date && !isNaN(value.endDate.getTime())
+            ? value.endDate.toISOString().slice(0, 10)
+            : ''
+        }
+        onChange={(e) =>
+          onChange({
+            startDate: value?.startDate ?? null,
+            endDate: e.target.value
+              ? new Date(`${e.target.value}T00:00:00Z`)
+              : null,
+          })
+        }
+      />
+    </div>
+  ),
+}));
+
 // Mock toast functions with hoisted variables
 const { mockToastError, mockToastSuccess } = vi.hoisted(() => ({
   mockToastError: vi.fn(),
@@ -586,8 +625,12 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    const startDateInput = screen.getByTestId('eventStartAt');
-    const endDateInput = screen.getByTestId('eventEndAt');
+    const startDateInput = screen.getByTestId(
+      'createEventDateRangePicker-start-input',
+    );
+    const endDateInput = screen.getByTestId(
+      'createEventDateRangePicker-end-input',
+    );
 
     fireEvent.change(startDateInput, { target: { value: '2025-12-25' } });
     fireEvent.change(endDateInput, { target: { value: '2025-12-26' } });
@@ -826,8 +869,12 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    const startDateInput = screen.getByTestId('eventStartAt');
-    const endDateInput = screen.getByTestId('eventEndAt');
+    const startDateInput = screen.getByTestId(
+      'createEventDateRangePicker-start-input',
+    );
+    const endDateInput = screen.getByTestId(
+      'createEventDateRangePicker-end-input',
+    );
 
     // First set startDate to an early date to establish a baseline
     fireEvent.change(startDateInput, { target: { value: '2025-12-10' } });
@@ -851,8 +898,10 @@ describe('CreateEventModal', () => {
 
     // endDate should be auto-adjusted to match startDate
     await waitFor(() => {
-      const updatedEndDateInput = screen.getByTestId('eventEndAt');
-      expect(updatedEndDateInput).toHaveValue('2025-12-25');
+      const updatedEndDateInput = screen.getByTestId(
+        'createEventDateRangePicker-end-input',
+      );
+      expect(updatedEndDateInput).toHaveValue('2025-12-20');
     });
   });
 
@@ -1028,13 +1077,18 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    const endDateInput = screen.getByTestId('eventEndAt');
+    const endDateInput = screen.getByTestId(
+      'createEventDateRangePicker-end-input',
+    ) as HTMLInputElement;
 
     // Clear the endDate to simulate null
     fireEvent.change(endDateInput, { target: { value: '' } });
 
-    // Verify component handles empty/null date gracefully
-    expect(endDateInput).toHaveValue('');
+    const startDateInput = screen.getByTestId(
+      'createEventDateRangePicker-start-input',
+    ) as HTMLInputElement;
+
+    expect(endDateInput.value).toBe(startDateInput.value);
   });
 
   it('verifies endDate DatePicker minDate constraint', () => {
@@ -1047,8 +1101,12 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    const startDateInput = screen.getByTestId('eventStartAt');
-    const endDateInput = screen.getByTestId('eventEndAt');
+    const startDateInput = screen.getByTestId(
+      'createEventDateRangePicker-start-input',
+    );
+    const endDateInput = screen.getByTestId(
+      'createEventDateRangePicker-end-input',
+    );
 
     // Set startDate
     fireEvent.change(startDateInput, { target: { value: '2025-12-15' } });
@@ -1265,13 +1323,14 @@ describe('CreateEventModal', () => {
     );
 
     // Step 1: Change dates
-    fireEvent.change(screen.getByTestId('eventStartAt'), {
-      target: { value: '2025-12-20' },
-    });
-    fireEvent.change(screen.getByTestId('eventEndAt'), {
-      target: { value: '2025-12-21' },
-    });
-
+    fireEvent.change(
+      screen.getByTestId('createEventDateRangePicker-start-input'),
+      { target: { value: '2025-12-20' } },
+    );
+    fireEvent.change(
+      screen.getByTestId('createEventDateRangePicker-end-input'),
+      { target: { value: '2025-12-21' } },
+    );
     // Step 2: Toggle all-day off
     fireEvent.click(screen.getByTestId('allDayEventCheck'));
 
@@ -1466,10 +1525,14 @@ describe('CreateEventModal', () => {
       );
 
       // Expect 2023-10-10 (today)
-      const startDateInput = screen.getByTestId('eventStartAt');
+      const startDateInput = screen.getByTestId(
+        'createEventDateRangePicker-start-input',
+      );
       expect(startDateInput).toHaveValue('2023-10-10');
 
-      const endDateInput = screen.getByTestId('eventEndAt');
+      const endDateInput = screen.getByTestId(
+        'createEventDateRangePicker-end-input',
+      );
       expect(endDateInput).toHaveValue('2023-10-10');
     });
 
@@ -1488,7 +1551,9 @@ describe('CreateEventModal', () => {
       );
 
       // Expect 2023-10-31 (today, stays in current month)
-      const startDateInput = screen.getByTestId('eventStartAt');
+      const startDateInput = screen.getByTestId(
+        'createEventDateRangePicker-start-input',
+      );
       expect(startDateInput).toHaveValue('2023-10-31');
     });
 
@@ -1507,7 +1572,9 @@ describe('CreateEventModal', () => {
       );
 
       // Expect 2023-12-31 (today, stays in current year)
-      const startDateInput = screen.getByTestId('eventStartAt');
+      const startDateInput = screen.getByTestId(
+        'createEventDateRangePicker-start-input',
+      );
       expect(startDateInput).toHaveValue('2023-12-31');
     });
 
@@ -1532,7 +1599,9 @@ describe('CreateEventModal', () => {
       );
 
       // Should be Jan 1st (today)
-      const startDateInput = screen.getByTestId('eventStartAt');
+      const startDateInput = screen.getByTestId(
+        'createEventDateRangePicker-start-input',
+      );
       expect(startDateInput).toHaveValue('2023-01-01');
     });
   });
