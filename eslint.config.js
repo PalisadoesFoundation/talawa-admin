@@ -137,17 +137,17 @@ export default [
       'no-restricted-imports': [
         'error',
         {
-          name: '@mui/x-data-grid',
-          message:
-            'Direct imports from @mui/x-data-grid are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead.',
-        },
-        {
-          name: '@mui/x-data-grid-pro',
-          message:
-            'Direct imports from @mui/x-data-grid-pro are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead.',
-        },
-        {
           paths: [
+            {
+              name: '@mui/x-data-grid',
+              message:
+                'Direct imports from @mui/x-data-grid are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead.',
+            },
+            {
+              name: '@mui/x-data-grid-pro',
+              message:
+                'Direct imports from @mui/x-data-grid-pro are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead.',
+            },
             {
               name: 'react-bootstrap',
               importNames: ['Spinner'],
