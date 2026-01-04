@@ -1,3 +1,10 @@
+---
+id: security
+title: Security Guidelines
+slug: /developer-resources/security
+sidebar_position: 12
+---
+
 # Security Guidelines
 
 Last updated: January 3, 2026
