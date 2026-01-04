@@ -36,7 +36,7 @@
  *
  * @module UserProfile
  */
-import Avatar from 'components/Avatar/Avatar';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
@@ -44,6 +44,7 @@ import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import { Tooltip as ReactTooltip } from 'react-tooltip';
 import type { InterfaceUser } from 'types/User/interface';
+import './UserProfile.css';
 
 const joinedDate = (param: string | Date): string => {
   const date = typeof param === 'string' ? new Date(param) : param;
@@ -66,6 +67,9 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
   const { t } = useTranslation('translation', { keyPrefix: 'settings' });
   const { t: tCommon } = useTranslation('common');
 
+  // Compute fullName once for fallbackName and tooltip
+  const fullName = `${firstName ?? ''} ${lastName ?? ''}`.trim();
+
   return (
     <>
       <Card border="0" className="rounded-4 mb-4 ">
@@ -75,20 +79,23 @@ const UserProfile: React.FC<Partial<InterfaceUser>> = ({
         <Card.Body className={styles.cardBody}>
           <div className={`d-flex mb-2 ${styles.profileContainer}`}>
             <div className={styles.imgContianer}>
-              {image && image !== 'null' ? (
-                <img src={image} alt={`profile picture`} />
-              ) : (
-                <Avatar
-                  name={`${firstName} ${lastName}`}
-                  alt={`dummy picture`}
-                />
-              )}
+              <ProfileAvatarDisplay
+                imageUrl={image && image !== 'null' ? image : undefined}
+                fallbackName={fullName}
+                size="custom"
+                shape="circle"
+                customSize={60}
+                border={false}
+                dataTestId="profile-avatar"
+                objectFit="cover"
+                enableEnlarge={true}
+              />
             </div>
             <div className={styles.profileDetails}>
               <span
-                style={{ fontWeight: '700', fontSize: '28px' }}
+                className="profileName"
                 data-tooltip-id="name"
-                data-tooltip-content={`${firstName} ${lastName}`}
+                data-tooltip-content={fullName || undefined}
               >
                 {firstName && firstName.length > 10
                   ? firstName?.slice(0, 5) + '..'
