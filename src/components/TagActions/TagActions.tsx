@@ -31,34 +31,27 @@
  *
  */
 // translation-check-keyPrefix: manageTag
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { useParams } from 'react-router';
-import type {
-  InterfaceQueryOrganizationUserTags,
-  InterfaceTagData,
-} from 'utils/interfaces';
+import type { InterfaceTagData } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import {
   ASSIGN_TO_TAGS,
   REMOVE_FROM_TAGS,
 } from 'GraphQl/Mutations/TagMutations';
-import type {
-  InterfaceOrganizationTagsQuery,
-  TagActionType,
-} from 'utils/organizationTagsUtils';
+import type { TagActionType } from 'utils/organizationTagsUtils';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import { WarningAmberRounded } from '@mui/icons-material';
 import TagNode from './Node/TagNode';
-import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import type { TFunction } from 'i18next';
 import componentStyles from './TagAction.module.css';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 
 interface InterfaceUserTagsAncestorData {
   _id: string;
@@ -83,62 +76,6 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   const { orgId, tagId: currentTagId } = useParams();
 
   const [tagSearchName, setTagSearchName] = useState('');
-
-  const {
-    data: orgUserTagsData,
-    loading: orgUserTagsLoading,
-    error: orgUserTagsError,
-    fetchMore: orgUserTagsFetchMore,
-  }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST, {
-    variables: {
-      id: orgId,
-      first: TAGS_QUERY_DATA_CHUNK_SIZE,
-      where: { name: { starts_with: tagSearchName } },
-    },
-    skip: !tagActionsModalIsOpen,
-  });
-
-  const loadMoreUserTags = (): void => {
-    orgUserTagsFetchMore({
-      variables: {
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after: orgUserTagsData?.organizations[0].userTags.pageInfo.endCursor,
-      },
-      updateQuery: (
-        prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
-        {
-          fetchMoreResult,
-        }: {
-          fetchMoreResult?: {
-            organizations: InterfaceQueryOrganizationUserTags[];
-          };
-        },
-      ) => {
-        if (!fetchMoreResult) return prevResult;
-
-        return {
-          organizations: [
-            {
-              ...prevResult.organizations[0],
-              userTags: {
-                ...prevResult.organizations[0].userTags,
-                edges: [
-                  ...prevResult.organizations[0].userTags.edges,
-                  ...fetchMoreResult.organizations[0].userTags.edges,
-                ],
-                pageInfo: fetchMoreResult.organizations[0].userTags.pageInfo,
-              },
-            },
-          ],
-        };
-      },
-    });
-  };
-
-  const userTagsList =
-    orgUserTagsData?.organizations[0]?.userTags.edges.map(
-      (edge) => edge.node,
-    ) ?? [];
 
   // tags that we have selected to assigned
   const [selectedTags, setSelectedTags] = useState<InterfaceTagData[]>([]);
@@ -277,19 +214,6 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     }
   };
 
-  if (orgUserTagsError) {
-    return (
-      <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
-        <div className={styles.errorMessage}>
-          <WarningAmberRounded className={`${styles.errorIcon} fs-1`} />
-          <h6 className="fw-bold text-danger text-center">
-            {t('errorOccurredWhileLoadingOrganizationUserTags')}
-          </h6>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <>
       <Modal
@@ -353,64 +277,62 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
             <div className="mt-3 mb-2 fs-5 fw-semibold text-dark-emphasis">
               {t('allTags')}
             </div>
-            {orgUserTagsLoading ? (
-              <div className={styles.loadingDiv}>
-                <InfiniteScrollLoader />
-              </div>
-            ) : (
-              <>
-                <div
-                  id="scrollableDiv"
-                  data-testid="scrollableDiv"
-                  className={componentStyles.tagActionsScrollableDiv}
-                >
-                  <InfiniteScroll
-                    dataLength={userTagsList?.length ?? 0}
-                    next={loadMoreUserTags}
-                    hasMore={
-                      orgUserTagsData?.organizations[0].userTags.pageInfo
-                        .hasNextPage ?? false
-                    }
-                    loader={<InfiniteScrollLoader />}
-                    scrollableTarget="scrollableDiv"
-                  >
-                    {userTagsList?.map((tag) => (
-                      <div key={tag._id} className="position-relative w-100">
-                        <div
-                          className="d-inline-block w-100"
-                          data-testid="orgUserTag"
-                        >
-                          <TagNode
-                            tag={tag}
-                            checkedTags={checkedTags}
-                            toggleTagSelection={toggleTagSelection}
-                            t={t}
-                          />
-                        </div>
-
-                        {/* Ancestor tags breadcrumbs positioned at the end of TagNode */}
-                        {tag.parentTag && (
-                          <div className="position-absolute end-0 top-0 d-flex flex-row mt-2 me-3 pt-0 text-secondary">
-                            <>{'('}</>
-                            {tag.ancestorTags?.map((ancestorTag) => (
-                              <span
-                                key={ancestorTag._id}
-                                className="ms-2 my-0"
-                                data-testid="ancestorTagsBreadCrumbs"
-                              >
-                                {ancestorTag.name}
-                                <i className="ms-2 fa fa-caret-right" />
-                              </span>
-                            ))}
-                            <>{')'}</>
-                          </div>
-                        )}
+            <div
+              id="scrollableDiv"
+              data-testid="scrollableDiv"
+              className={componentStyles.tagActionsScrollableDiv}
+            >
+              {tagActionsModalIsOpen && (
+                <CursorPaginationManager
+                  query={ORGANIZATION_USER_TAGS_LIST}
+                  queryVariables={{
+                    id: orgId,
+                    where: { name: { starts_with: tagSearchName } },
+                  }}
+                  dataPath="organizations.0.userTags"
+                  itemsPerPage={TAGS_QUERY_DATA_CHUNK_SIZE}
+                  renderItem={(tag: InterfaceTagData) => (
+                    <div key={tag._id} className="position-relative w-100">
+                      <div
+                        className="d-inline-block w-100"
+                        data-testid="orgUserTag"
+                      >
+                        <TagNode
+                          tag={tag}
+                          checkedTags={checkedTags}
+                          toggleTagSelection={toggleTagSelection}
+                          t={t}
+                        />
                       </div>
-                    ))}
-                  </InfiniteScroll>
-                </div>
-              </>
-            )}
+
+                      {/* Ancestor tags breadcrumbs positioned at the end of TagNode */}
+                      {tag.parentTag && (
+                        <div className="position-absolute end-0 top-0 d-flex flex-row mt-2 me-3 pt-0 text-secondary">
+                          <>{'('}</>
+                          {tag.ancestorTags?.map((ancestorTag) => (
+                            <span
+                              key={ancestorTag._id}
+                              className="ms-2 my-0"
+                              data-testid="ancestorTagsBreadCrumbs"
+                            >
+                              {ancestorTag.name}
+                              <i className="ms-2 fa fa-caret-right" />
+                            </span>
+                          ))}
+                          <>{')'}</>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  keyExtractor={(tag: InterfaceTagData) => tag._id}
+                  loadingComponent={
+                    <div className={styles.loadingDiv}>
+                      <InfiniteScrollLoader />
+                    </div>
+                  }
+                />
+              )}
+            </div>
           </Modal.Body>
 
           <Modal.Footer>

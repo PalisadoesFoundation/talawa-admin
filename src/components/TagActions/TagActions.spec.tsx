@@ -24,16 +24,14 @@ import { vi } from 'vitest';
 import {
   MOCKS,
   MOCKS_ERROR_ASSIGN_OR_REMOVAL_TAGS,
-  MOCKS_ERROR_ORGANIZATION_TAGS_QUERY,
   MOCKS_ERROR_SUBTAGS_QUERY,
 } from './TagActionsMocks';
 import type { TFunction } from 'i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
-const link = new StaticMockLink(MOCKS, true);
-const link2 = new StaticMockLink(MOCKS_ERROR_ORGANIZATION_TAGS_QUERY, true);
-const link3 = new StaticMockLink(MOCKS_ERROR_SUBTAGS_QUERY, true);
-const link4 = new StaticMockLink(MOCKS_ERROR_ASSIGN_OR_REMOVAL_TAGS);
+const link1 = new StaticMockLink(MOCKS, true);
+const link2 = new StaticMockLink(MOCKS_ERROR_SUBTAGS_QUERY, true);
+const link3 = new StaticMockLink(MOCKS_ERROR_ASSIGN_OR_REMOVAL_TAGS);
 async function wait(ms = 500): Promise<void> {
   await act(() => {
     return new Promise((resolve) => {
@@ -127,7 +125,7 @@ describe('Organisation Tags Page', () => {
   });
 
   test('Component loads correctly and opens assignToTags modal', async () => {
-    const { getByText } = renderTagActionsModal(props[0], link);
+    const { getByText } = renderTagActionsModal(props[0], link1);
 
     await wait();
 
@@ -137,7 +135,7 @@ describe('Organisation Tags Page', () => {
   });
 
   test('Component loads correctly and opens removeFromTags modal', async () => {
-    const { getByText } = renderTagActionsModal(props[1], link);
+    const { getByText } = renderTagActionsModal(props[1], link1);
 
     await wait();
 
@@ -163,7 +161,7 @@ describe('Organisation Tags Page', () => {
       >,
     };
 
-    renderTagActionsModal(props2, link);
+    renderTagActionsModal(props2, link1);
 
     await wait();
 
@@ -177,18 +175,8 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('Renders error component when when query is unsuccessful', async () => {
-    const { queryByText } = renderTagActionsModal(props[0], link2);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(queryByText(translations.assign)).not.toBeInTheDocument();
-    });
-  });
-
   test('Renders error component when when subTags query is unsuccessful', async () => {
-    const { getByText } = renderTagActionsModal(props[0], link3);
+    const { getByText } = renderTagActionsModal(props[0], link2);
 
     await wait();
 
@@ -206,7 +194,7 @@ describe('Organisation Tags Page', () => {
   });
 
   test('searchs for tags where the name matches the provided search input', async () => {
-    renderTagActionsModal(props[0], link);
+    renderTagActionsModal(props[0], link1);
 
     await wait();
 
@@ -226,35 +214,8 @@ describe('Organisation Tags Page', () => {
     });
   });
 
-  test('Renders more members with infinite scroll', async () => {
-    const { getByText } = renderTagActionsModal(props[0], link);
-
-    await wait();
-
-    await waitFor(() => {
-      expect(getByText(translations.assign)).toBeInTheDocument();
-    });
-
-    // Find the infinite scroll div by test ID or another selector
-    const scrollableDiv = screen.getByTestId('scrollableDiv');
-
-    const initialTagsDataLength = screen.getAllByTestId('orgUserTag').length;
-
-    // Set scroll position to the bottom
-    fireEvent.scroll(scrollableDiv, {
-      target: { scrollY: scrollableDiv.scrollHeight },
-    });
-
-    await waitFor(() => {
-      const finalTagsDataLength = screen.getAllByTestId('orgUserTag').length;
-      expect(finalTagsDataLength).toBeGreaterThan(initialTagsDataLength);
-
-      expect(getByText(translations.assign)).toBeInTheDocument();
-    });
-  });
-
   test('Selects and deselects tags', async () => {
-    renderTagActionsModal(props[0], link);
+    renderTagActionsModal(props[0], link1);
 
     await wait();
 
@@ -280,7 +241,7 @@ describe('Organisation Tags Page', () => {
   });
 
   test('fetches and lists the child tags and then selects and deselects them', async () => {
-    renderTagActionsModal(props[0], link);
+    renderTagActionsModal(props[0], link1);
 
     await wait();
 
@@ -345,7 +306,7 @@ describe('Organisation Tags Page', () => {
   });
 
   test('Toasts error when no tag is selected while assigning', async () => {
-    renderTagActionsModal(props[0], link);
+    renderTagActionsModal(props[0], link1);
 
     await wait();
 
@@ -361,7 +322,7 @@ describe('Organisation Tags Page', () => {
     });
   });
   test('Toasts error when something wrong happen while assigning/removing tag', async () => {
-    renderTagActionsModal(props[0], link4);
+    renderTagActionsModal(props[0], link3);
     await wait();
 
     await waitFor(() => {
@@ -374,7 +335,7 @@ describe('Organisation Tags Page', () => {
   });
 
   test('Successfully assigns to tags', async () => {
-    renderTagActionsModal(props[0], link);
+    renderTagActionsModal(props[0], link1);
 
     await wait();
 
@@ -399,7 +360,7 @@ describe('Organisation Tags Page', () => {
   });
 
   test('Successfully removes from tags', async () => {
-    renderTagActionsModal(props[1], link);
+    renderTagActionsModal(props[1], link1);
 
     await wait();
 

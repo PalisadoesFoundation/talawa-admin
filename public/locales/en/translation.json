@@ -1346,6 +1346,7 @@
     "loadingComments": "Loading comments…",
     "loadMoreComments": "Load more comments",
     "noMoreComments": "No more comments",
+    "noComments": "No comments",
     "moreOptions": "more options",
     "postedOn": "Posted on {{date}}",
     "emptyCommentError": "Please enter a comment before submitting.",

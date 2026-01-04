@@ -20,8 +20,8 @@
  *
  * @returns A JSX.Element representing the post card.
  */
-import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import {
@@ -53,7 +53,6 @@ import {
 import UserDefault from '../../assets/images/defaultImg.png';
 import type {
   InterfaceComment,
-  InterfaceCommentEdge,
   InterfacePostCard,
 } from '../../utils/interfaces';
 import postCardStyles from './PostCard.module.css';
@@ -69,9 +68,9 @@ import CommentCard from '../../components/UserPortal/CommentCard/CommentCard';
 import styles from '../../style/app-fixed.module.css';
 import { PluginInjector } from '../../plugin';
 import useLocalStorage from '../../utils/useLocalstorage';
-import { handleLoadMoreComments as handleLoadMoreCommentsHelper } from './helperFunctions';
 import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
+import { CursorPaginationManager } from '../../components/CursorPaginationManager/CursorPaginationManager';
 
 export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation');
@@ -84,74 +83,25 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const [showEditPost, setShowEditPost] = React.useState(false);
   const [showComments, setShowComments] = React.useState(false);
   const [comments, setComments] = React.useState<InterfaceComment[]>([]);
-  const [endCursor, setEndCursor] = React.useState<string | null>(null);
-  const [hasNextPage, setHasNextPage] = React.useState(false);
-  const [loadingMoreComments, setLoadingMoreComments] = React.useState(false);
+  const [refetchTrigger, setRefetchTrigger] = React.useState(0);
   const [dropdownAnchor, setDropdownAnchor] =
     React.useState<null | HTMLElement>(null);
   const orgId = window.location.pathname.split('/')[2];
 
-  useEffect(() => {
+  React.useEffect(() => {
     setIsLikedByUser(props.hasUserVoted?.voteType === 'up_vote');
     setLikeCount(props.upVoteCount);
   }, [props.hasUserVoted?.voteType, props.upVoteCount]);
 
   const commentCount = props.commentCount;
   const { getItem } = useLocalStorage();
-  const userId = getItem('userId') ?? getItem('id');
+  const userId = (getItem('userId') ?? getItem('id')) as string | null;
 
   const isPostCreator = props.creator.id === userId;
   const isAdmin = getItem('role') === 'administrator';
 
-  // Query for paginated comments
-  const shouldSkipComments = !showComments || !userId;
-  const {
-    data: commentsData,
-    loading: commentsLoading,
-    fetchMore: fetchMoreComments,
-    refetch: refetchComments,
-  } = useQuery(GET_POST_COMMENTS, {
-    skip: shouldSkipComments,
-    variables: shouldSkipComments
-      ? undefined
-      : {
-          postId: props.id,
-          userId: userId as string,
-          first: 10,
-        },
-  });
-
-  React.useEffect(() => {
-    if (!commentsData?.post?.comments) return;
-
-    const { edges, pageInfo } = commentsData.post.comments;
-    setComments(edges.map((edge: InterfaceCommentEdge) => edge.node));
-    setEndCursor(pageInfo.endCursor);
-    setHasNextPage(pageInfo.hasNextPage);
-  }, [commentsData]);
-
   const toggleComments = (): void => {
     setShowComments((prev) => !prev);
-    // Reset comments when hiding
-    if (showComments) {
-      setComments([]);
-      setEndCursor(null);
-      setHasNextPage(false);
-    }
-  };
-
-  const handleLoadMoreComments = async (): Promise<void> => {
-    await handleLoadMoreCommentsHelper({
-      fetchMoreComments,
-      postId: props.id,
-      userId: userId as string,
-      endCursor,
-      setComments,
-      setEndCursor,
-      setHasNextPage,
-      setLoadingMoreComments,
-      t,
-    });
   };
 
   const [likePost, { loading: likeLoading }] = useMutation(UPDATE_POST_VOTE);
@@ -189,11 +139,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       setCommentInput('');
 
       if (showComments && userId) {
-        await refetchComments({
-          postId: props.id,
-          userId: userId as string,
-          first: 10,
-        });
+        setRefetchTrigger((prev) => prev + 1);
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -384,11 +330,12 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             </Typography>
           </Box>
         )}
+      </Box>
 
-        {/* Plugin Extension Point G3 - Inject plugins below caption */}
-        <PluginInjector
-          injectorType="G4"
-          data={{
+      {
+        PluginInjector({
+          injectorType: 'G4',
+          data: {
             caption: props.title,
             postId: props.id,
             text: props.text,
@@ -402,9 +349,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             attachmentURL: props.attachmentURL,
             mimeType: props.mimeType,
             hasUserVoted: isLikedByUser,
-          }}
-        />
-      </Box>
+          },
+        }) as React.ReactNode
+      }
       {/* Post Actions */}
       <Box className={postCardStyles.postActions}>
         <Box className={postCardStyles.leftActions}>
@@ -448,59 +395,41 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       </Box>
 
       {/* Comments Section */}
-      {showComments && (
+      {showComments && userId && (
         <>
           <Divider />
-          {commentsLoading && comments.length === 0 ? (
-            <Box display="flex" justifyContent="center" p={2}>
-              <CircularProgress size={24} />
-            </Box>
-          ) : (
-            <Box className={postCardStyles.commentSection}>
-              {comments.map((comment) => (
+          <Box className={postCardStyles.commentSection}>
+            <CursorPaginationManager
+              query={GET_POST_COMMENTS}
+              queryVariables={{
+                postId: props.id,
+                userId: userId as string,
+              }}
+              dataPath="post.comments"
+              itemsPerPage={10}
+              renderItem={(comment: InterfaceComment) => (
                 <CommentCard
-                  key={comment.id}
                   id={comment.id}
                   creator={comment.creator}
                   text={comment.body}
                   upVoteCount={comment.upVotesCount}
                   hasUserVoted={comment.hasUserVoted}
-                  refetchComments={refetchComments}
+                  refetchComments={() => setRefetchTrigger((prev) => prev + 1)}
                 />
-              ))}
-
-              {/* Load More Comments Button */}
-              {hasNextPage ? (
-                <Box display="flex" justifyContent="center" py={2}>
-                  <Button
-                    onClick={handleLoadMoreComments}
-                    disabled={loadingMoreComments}
-                    size="small"
-                    sx={{
-                      color: 'primary.main',
-                      fontSize: '0.875rem',
-                      textTransform: 'none',
-                    }}
-                  >
-                    {loadingMoreComments ? (
-                      <>
-                        <CircularProgress size={16} sx={{ mr: 1 }} />
-                        {t('postCard.loadingComments')}
-                      </>
-                    ) : (
-                      t('postCard.loadMoreComments')
-                    )}
-                  </Button>
-                </Box>
-              ) : (
-                <Box display="flex" justifyContent="center" py={2}>
-                  <Typography variant="body2" color="text.secondary">
-                    {t('postCard.noMoreComments')}
-                  </Typography>
-                </Box>
               )}
-            </Box>
-          )}
+              keyExtractor={(comment: InterfaceComment) => comment.id}
+              onDataChange={setComments}
+              refetchTrigger={refetchTrigger}
+              emptyStateComponent={
+                <Typography
+                  variant="body2"
+                  sx={{ color: 'text.secondary', textAlign: 'center', py: 2 }}
+                >
+                  {t('postCard.noComments')}
+                </Typography>
+              }
+            />
+          </Box>
         </>
       )}
 

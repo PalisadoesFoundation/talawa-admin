@@ -56,6 +56,7 @@ const commentsQueryMock = {
       postId: '1',
       userId: '1',
       first: 10,
+      after: null,
     },
   },
   result: {
@@ -112,6 +113,7 @@ const undefinedDataMock = {
       postId: '1',
       userId: '1',
       first: 10,
+      after: null,
     },
   },
   result: {
@@ -127,6 +129,7 @@ const undefinedPostMock = {
       postId: '1',
       userId: '1',
       first: 10,
+      after: null,
     },
   },
   result: {
@@ -144,6 +147,7 @@ const undefinedCommentsMock = {
       postId: '1',
       userId: '1',
       first: 10,
+      after: null,
     },
   },
   result: {
@@ -155,133 +159,6 @@ const undefinedCommentsMock = {
       },
     },
   },
-};
-
-// Comments with pagination mock (for testing pagination)
-const commentsWithPaginationMock = {
-  request: {
-    query: GET_POST_COMMENTS,
-    variables: {
-      postId: '1',
-      userId: '1',
-      first: 10,
-    },
-  },
-  result: {
-    data: {
-      post: {
-        __typename: 'Post',
-        id: '1',
-        caption: 'Test Post',
-        comments: {
-          __typename: 'CommentConnection',
-          edges: [
-            {
-              __typename: 'CommentEdge',
-              node: {
-                __typename: 'Comment',
-                id: '1',
-                body: 'First comment',
-                creator: {
-                  __typename: 'User',
-                  id: '2',
-                  name: 'Jane Smith',
-                  avatarURL: null,
-                },
-                createdAt: '2023-01-01T00:00:00Z',
-                upVotesCount: 2,
-                downVotesCount: 0,
-                hasUserVoted: {
-                  __typename: 'HasUserVotedResponse',
-                  hasVoted: false,
-                  voteType: null,
-                },
-              },
-              cursor: 'cc1',
-            },
-          ],
-          pageInfo: {
-            __typename: 'PageInfo',
-            startCursor: 'cc1',
-            endCursor: 'cc1',
-            hasNextPage: true,
-            hasPreviousPage: false,
-          },
-        },
-      },
-    },
-  },
-};
-
-// Fetch more comments mock (for testing pagination)
-const fetchMoreCommentsMock = {
-  request: {
-    query: GET_POST_COMMENTS,
-    variables: {
-      postId: '1',
-      userId: '1',
-      first: 10,
-      after: 'cc1',
-    },
-  },
-  result: {
-    data: {
-      post: {
-        __typename: 'Post',
-        id: '1',
-        caption: 'Test Post',
-        comments: {
-          __typename: 'CommentConnection',
-          edges: [
-            {
-              __typename: 'CommentEdge',
-              node: {
-                __typename: 'Comment',
-                id: '2',
-                body: 'Second comment',
-                creator: {
-                  __typename: 'User',
-                  id: '3',
-                  name: 'John Smith',
-                  avatarURL: null,
-                },
-                createdAt: '2023-01-01T01:00:00Z',
-                upVotesCount: 1,
-                downVotesCount: 0,
-                hasUserVoted: {
-                  __typename: 'HasUserVotedResponse',
-                  hasVoted: false,
-                  voteType: null,
-                },
-              },
-              cursor: 'cc2',
-            },
-          ],
-          pageInfo: {
-            __typename: 'PageInfo',
-            startCursor: 'cc2',
-            endCursor: 'cc2',
-            hasNextPage: false,
-            hasPreviousPage: true,
-          },
-        },
-      },
-    },
-  },
-};
-
-// Fetch more comments error mock
-const fetchMoreCommentsErrorMock = {
-  request: {
-    query: GET_POST_COMMENTS,
-    variables: {
-      postId: '1',
-      userId: '1',
-      first: 10,
-      after: 'cc1',
-    },
-  },
-  error: new Error('Network error occurred'),
 };
 
 // Create comment mock
@@ -412,6 +289,7 @@ const nullCommentsMock = {
       postId: '1',
       userId: '1',
       first: 10,
+      after: null,
     },
   },
   result: {
@@ -423,27 +301,6 @@ const nullCommentsMock = {
   },
 };
 
-// Null fetch more mock
-const nullFetchMoreMock = {
-  request: {
-    query: GET_POST_COMMENTS,
-    variables: {
-      postId: '1',
-      userId: '1',
-      first: 10,
-      after: 'cc1',
-    },
-  },
-  result: {
-    data: {
-      post: {
-        comments: null,
-      },
-    },
-  },
-};
-
-// ===== BASE MOCKS ARRAY =====
 // ===== BASE MOCKS ARRAY =====
 const mocks = [
   {
@@ -1042,109 +899,27 @@ describe('PostCard', () => {
     expect(sendButton).not.toBeDisabled();
   });
 
-  // Render helper for pagination tests
-  const renderPostCardWithPagination = (
-    options: {
-      mockOverrides?: Partial<InterfacePostCard>;
-      customMocks?: MockedResponse[];
-      fetchMoreMock?: MockedResponse;
-    } = {},
-  ) => {
-    const {
-      mockOverrides = {},
-      customMocks = [],
-      fetchMoreMock = fetchMoreCommentsMock,
-    } = options;
+  it('renders CursorPaginationManager when comments are shown', async () => {
+    renderPostCard();
 
-    const mocksWithPagination = [
-      commentsWithPaginationMock,
-      fetchMoreMock,
-      ...customMocks,
-      ...mocks,
-    ];
-
-    const linkWithPagination = new StaticMockLink(mocksWithPagination, true);
-
-    return render(
-      <MockedProvider link={linkWithPagination}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <PostCard {...defaultProps} {...mockOverrides} />
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-  };
-
-  it('should load more comments successfully when button is clicked', async () => {
-    const { setItem } = useLocalStorage();
-    setItem('userId', '1');
-    renderPostCardWithPagination();
-
-    // Open comments section
+    // Show comments
     const viewCommentsButton = screen.getByTestId('comment-card');
     fireEvent.click(viewCommentsButton);
 
-    // Wait for initial comments to load
+    // Verify CursorPaginationManager is rendered
     await waitFor(() => {
-      expect(screen.getByText('First comment')).toBeInTheDocument();
-    });
-
-    // Click "Load more comments" button
-    const loadMoreButton = screen.getByText('Load more comments');
-    fireEvent.click(loadMoreButton);
-
-    // Verify that the loading state is triggered (this tests the function execution)
-    await waitFor(() => {
-      // The button should change to loading state or disappear
-      // Since the pagination mock resolves with hasNextPage: false, button should disappear
-      expect(screen.queryByText('Load more comments')).not.toBeInTheDocument();
-    });
-
-    // Verify that the second comment was loaded
-    await waitFor(() => {
-      expect(screen.getByText('Second comment')).toBeInTheDocument();
-    });
-  });
-
-  it('should handle error when loading more comments fails', async () => {
-    const { setItem } = useLocalStorage();
-    setItem('userId', '1');
-
-    renderPostCardWithPagination({
-      fetchMoreMock: fetchMoreCommentsErrorMock,
-    });
-
-    // Open comments section
-    const viewCommentsButton = screen.getByTestId('comment-card');
-    fireEvent.click(viewCommentsButton);
-
-    // Wait for initial comments to load
-    await waitFor(() => {
-      expect(screen.getByText('First comment')).toBeInTheDocument();
-    });
-
-    // Click "Load more comments" button
-    const loadMoreButton = screen.getByText('Load more comments');
-    fireEvent.click(loadMoreButton);
-
-    // Wait for error handling to be called
-    await waitFor(() => {
-      expect(errorHandler).toHaveBeenCalledWith(
-        expect.any(Function),
-        expect.any(Object),
-      );
+      expect(
+        screen.getByTestId('cursor-pagination-manager'),
+      ).toBeInTheDocument();
     });
   });
 
   it('should handle comment creation with showComments true', async () => {
     const mockFetchPosts = vi.fn();
 
-    renderPostCardWithPagination({
-      customMocks: [createCommentMock],
-      mockOverrides: { fetchPosts: mockFetchPosts },
+    // Reuse helper to inject CREATE_COMMENT_POST mock alongside base mocks
+    renderPostCardWithCustomMockAndProps(createCommentMock, {
+      fetchPosts: mockFetchPosts,
     });
 
     await waitFor(() => {
@@ -1177,9 +952,7 @@ describe('PostCard', () => {
     const { setItem } = useLocalStorage();
     setItem('userId', '1');
 
-    renderPostCardWithPagination({
-      customMocks: [nullCommentsMock],
-    });
+    renderPostCardWithCustomMock(nullCommentsMock);
 
     // Show comments to trigger the query
     const viewCommentsButton = screen.getByTestId('comment-card');
@@ -1188,34 +961,6 @@ describe('PostCard', () => {
     // Wait for query to complete without throwing errors
     await waitFor(() => {
       expect(screen.queryByText('First comment')).not.toBeInTheDocument();
-    });
-  });
-
-  it('should handle fetchMoreResult with null comments in updateQuery', async () => {
-    const { setItem } = useLocalStorage();
-    setItem('userId', '1');
-
-    renderPostCardWithPagination({
-      fetchMoreMock: nullFetchMoreMock,
-    });
-
-    // Open comments section
-    const viewCommentsButton = screen.getByTestId('comment-card');
-    fireEvent.click(viewCommentsButton);
-
-    // Wait for initial comments to load
-    await waitFor(() => {
-      expect(screen.getByText('First comment')).toBeInTheDocument();
-    });
-
-    // Click "Load more comments" button
-    const loadMoreButton = screen.getByText('Load more comments');
-    fireEvent.click(loadMoreButton);
-
-    // Wait for the load more to complete (should return prev data since fetchMoreResult is null)
-    await waitFor(() => {
-      // Load more button should still be present since fetch returned null
-      expect(screen.getByText('Load more comments')).toBeInTheDocument();
     });
   });
 
