@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 type VolunteerStatus =
   | 'accepted'
   | 'pending'
@@ -53,8 +55,8 @@ export const createMembershipRecord = ({
 }: InterfaceMembershipOptions) => ({
   id,
   status,
-  createdAt: '2024-10-30T10:00:00.000Z',
-  updatedAt: '2024-10-30T10:00:00.000Z',
+  createdAt: dayjs().toISOString(),
+  updatedAt: dayjs().toISOString(),
   event: {
     id: eventId,
     name: eventName ?? `Event ${eventId}`,

@@ -1,3 +1,7 @@
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import {
   CREATE_FUND_MUTATION,
   UPDATE_FUND_MUTATION,
@@ -25,7 +29,7 @@ export const MOCKS = [
                   name: 'Fund 1',
                   organization: { name: 'Org 1' },
                   updater: null,
-                  createdAt: '2024-06-22T00:00:00Z', // Later date
+                  createdAt: dayjs.utc().toISOString(), // Later date
                 },
               },
               {
@@ -36,7 +40,7 @@ export const MOCKS = [
                   name: 'Fund 2',
                   organization: { name: 'Org 1' },
                   updater: null,
-                  createdAt: '2024-06-21T00:00:00Z', // Earlier date
+                  createdAt: dayjs.utc().subtract(1, 'day').toISOString(), // Earlier date
                 },
               },
               // Add extra funds to enable pagination (dates earlier than Fund 2)
@@ -48,7 +52,11 @@ export const MOCKS = [
                   name: `Extra Fund ${i + 1}`,
                   organization: { name: 'Org 1' },
                   updater: null,
-                  createdAt: `2024-01-${String((i % 28) + 1).padStart(2, '0')}T00:00:00Z`,
+                  createdAt: dayjs
+                    .utc()
+                    .subtract(1, 'month')
+                    .subtract(i, 'day')
+                    .toISOString(),
                 },
               })),
             ],
@@ -77,7 +85,7 @@ export const MOCKS = [
                   name: 'Fund 2',
                   organization: { name: 'Org 1' },
                   updater: null,
-                  createdAt: '2024-06-21T00:00:00Z', // Earlier date
+                  createdAt: dayjs.utc().subtract(1, 'day').toISOString(), // Earlier date
                 },
               },
               {
@@ -88,7 +96,7 @@ export const MOCKS = [
                   name: 'Fund 1',
                   organization: { name: 'Org 1' },
                   updater: null,
-                  createdAt: '2024-06-22T00:00:00Z', // Later date
+                  createdAt: dayjs.utc().toISOString(), // Later date
                 },
               },
               // Include same extra funds to keep data shape consistent
@@ -100,7 +108,11 @@ export const MOCKS = [
                   name: `Extra B Fund ${i + 1}`,
                   organization: { name: 'Org 1' },
                   updater: null,
-                  createdAt: `2024-01-${String((i % 28) + 1).padStart(2, '0')}T00:00:00Z`,
+                  createdAt: dayjs
+                    .utc()
+                    .subtract(1, 'month')
+                    .subtract(i, 'day')
+                    .toISOString(),
                 },
               })),
             ],

@@ -1,3 +1,8 @@
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
+
 import {
   CREATE_CAMPAIGN_MUTATION,
   UPDATE_CAMPAIGN_MUTATION,
@@ -24,8 +29,8 @@ export const MOCKS = [
                 node: {
                   id: 'campaignId1',
                   name: 'Campaign 1',
-                  startAt: '2024-01-01T00:00:00.000Z',
-                  endAt: '2026-01-01T00:00:00.000Z',
+                  startAt: dayjs.utc().add(1, 'month').toISOString(),
+                  endAt: dayjs.utc().add(13, 'month').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 100,
                 },
@@ -34,8 +39,8 @@ export const MOCKS = [
                 node: {
                   id: '2',
                   name: 'Campaign 2',
-                  startAt: '2021-01-01T00:00:00.000Z',
-                  endAt: '2026-01-01T00:00:00.000Z',
+                  startAt: dayjs.utc().subtract(1, 'month').toISOString(),
+                  endAt: dayjs.utc().add(11, 'month').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 200,
                 },
@@ -65,8 +70,8 @@ export const MOCKS = [
                 node: {
                   id: 'campaignId1',
                   name: 'Campaign 1',
-                  startAt: '2024-01-01T00:00:00.000Z',
-                  endAt: '2026-01-01T00:00:00.000Z',
+                  startAt: dayjs().toISOString(),
+                  endAt: dayjs().add(2, 'years').startOf('year').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 100,
                 },
@@ -76,7 +81,7 @@ export const MOCKS = [
                   id: '2',
                   name: 'Campaign 2',
                   startAt: '2021-01-01T00:00:00.000Z',
-                  endAt: '2026-01-01T00:00:00.000Z',
+                  endAt: dayjs().add(2, 'years').startOf('year').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 200,
                 },
@@ -91,15 +96,21 @@ export const MOCKS = [
   {
     request: {
       query: CREATE_CAMPAIGN_MUTATION,
-      variables: {
-        fundId: 'fundId',
-        name: 'Campaign 2',
-        goalAmount: 200,
-        startAt: '2024-02-01T00:00:00.000Z',
-        endAt: '2024-12-31T00:00:00.000Z',
-        currencyCode: 'USD',
-      },
     },
+    variableMatcher: (vars: {
+      fundId: string;
+      name: string;
+      goalAmount: number;
+      startAt: string;
+      endAt: string;
+      currencyCode: string;
+    }) =>
+      vars.fundId === 'fundId' &&
+      vars.name === 'Campaign 2' &&
+      vars.goalAmount === 200 &&
+      typeof vars.startAt === 'string' &&
+      typeof vars.endAt === 'string' &&
+      vars.currencyCode === 'USD',
     result: {
       data: {
         createFundCampaign: {
@@ -113,16 +124,21 @@ export const MOCKS = [
   {
     request: {
       query: UPDATE_CAMPAIGN_MUTATION,
-      variables: {
-        input: {
-          id: 'campaignId1',
-          name: 'Campaign 4',
-          goalAmount: 400,
-          startAt: '2024-02-01T00:00:00.000Z',
-          endAt: '2024-12-31T00:00:00.000Z',
-        },
-      },
     },
+    variableMatcher: (vars: {
+      input: {
+        id: string;
+        name: string;
+        goalAmount: number;
+        startAt: string;
+        endAt: string;
+      };
+    }) =>
+      vars.input.id === 'campaignId1' &&
+      vars.input.name === 'Campaign 4' &&
+      vars.input.goalAmount === 400 &&
+      typeof vars.input.startAt === 'string' &&
+      typeof vars.input.endAt === 'string',
     result: {
       data: {
         updateFundCampaign: {
@@ -146,30 +162,41 @@ export const MOCK_ERROR = [
   {
     request: {
       query: CREATE_CAMPAIGN_MUTATION,
-      variables: {
-        fundId: 'fundId',
-        name: 'Campaign 2',
-        goalAmount: 200,
-        startAt: '2024-02-01T00:00:00.000Z',
-        endAt: '2024-02-02T00:00:00.000Z',
-        currencyCode: 'USD',
-      },
     },
+    variableMatcher: (vars: {
+      fundId: string;
+      name: string;
+      goalAmount: number;
+      startAt: string;
+      endAt: string;
+      currencyCode: string;
+    }) =>
+      vars.fundId === 'fundId' &&
+      vars.name === 'Campaign 2' &&
+      vars.goalAmount === 200 &&
+      typeof vars.startAt === 'string' &&
+      typeof vars.endAt === 'string' &&
+      vars.currencyCode === 'USD',
     error: new Error('Mock graphql error'),
   },
   {
     request: {
       query: UPDATE_CAMPAIGN_MUTATION,
-      variables: {
-        input: {
-          id: 'campaignId1',
-          name: 'Campaign 4',
-          goalAmount: 400,
-          startAt: '2024-02-01T00:00:00.000Z',
-          endAt: '2024-02-02T00:00:00.000Z',
-        },
-      },
     },
+    variableMatcher: (vars: {
+      input: {
+        id: string;
+        name: string;
+        goalAmount: number;
+        startAt: string;
+        endAt: string;
+      };
+    }) =>
+      vars.input.id === 'campaignId1' &&
+      vars.input.name === 'Campaign 4' &&
+      vars.input.goalAmount === 400 &&
+      typeof vars.input.startAt === 'string' &&
+      typeof vars.input.endAt === 'string',
     error: new Error('Mock graphql error'),
   },
 ];

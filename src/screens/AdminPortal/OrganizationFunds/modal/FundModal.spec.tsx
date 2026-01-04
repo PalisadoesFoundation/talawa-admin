@@ -22,6 +22,7 @@ import { MOCKS, MOCKS_ERROR } from '../OrganizationFundsMocks';
 import type { InterfaceFundModal } from './FundModal';
 import FundModal from './FundModal';
 import { vi } from 'vitest';
+import dayjs from 'dayjs';
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
@@ -49,7 +50,7 @@ const fundProps: InterfaceFundModal[] = [
       isTaxDeductible: true,
       isArchived: false,
       isDefault: false,
-      createdAt: '2024-06-22',
+      createdAt: dayjs().month(5).date(22).format('YYYY-MM-DD'),
       organizationId: 'orgId',
       creator: {
         name: 'John Doe',
@@ -65,10 +66,10 @@ const fundProps: InterfaceFundModal[] = [
           id: 'nodeId',
           name: 'Node Name',
           fundingGoal: 1000,
-          startDate: '2024-01-01',
-          endDate: '2024-12-31',
+          startDate: dayjs().format('YYYY-MM-DD'),
+          endDate: dayjs().endOf('year').format('YYYY-MM-DD'),
           currency: 'USD',
-          createdAt: '2024-06-22',
+          createdAt: dayjs().month(5).date(22).format('YYYY-MM-DD'),
         },
       },
     },
@@ -86,7 +87,7 @@ const fundProps: InterfaceFundModal[] = [
       isTaxDeductible: true,
       isArchived: false,
       isDefault: false,
-      createdAt: '2024-06-22',
+      createdAt: dayjs().month(5).date(22).format('YYYY-MM-DD'),
       organizationId: 'orgId',
       creator: {
         name: 'John Doe',
@@ -102,10 +103,10 @@ const fundProps: InterfaceFundModal[] = [
           id: 'nodeId',
           name: 'Node Name',
           fundingGoal: 1000,
-          startDate: '2024-01-01',
-          endDate: '2024-12-31',
+          startDate: dayjs().format('YYYY-MM-DD'),
+          endDate: dayjs().endOf('year').format('YYYY-MM-DD'),
           currency: 'USD',
-          createdAt: '2024-06-22',
+          createdAt: dayjs().month(5).date(22).format('YYYY-MM-DD'),
         },
       },
     },

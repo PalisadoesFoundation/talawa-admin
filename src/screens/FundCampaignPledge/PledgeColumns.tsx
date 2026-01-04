@@ -1,5 +1,8 @@
 import React from 'react';
-import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
+import type {
+  GridCellParams,
+  GridColDef,
+} from 'shared-components/DataGridWrapper';
 import type { TFunction } from 'i18next';
 import dayjs from 'dayjs';
 import { Button } from 'react-bootstrap';

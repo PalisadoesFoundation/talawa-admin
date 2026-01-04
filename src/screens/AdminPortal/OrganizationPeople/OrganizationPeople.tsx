@@ -52,7 +52,10 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, Link } from 'react-router';
 import { useLazyQuery } from '@apollo/client';
-import { GridCellParams, GridPaginationModel } from '@mui/x-data-grid';
+import {
+  GridCellParams,
+  GridPaginationModel,
+} from 'shared-components/DataGridWrapper';
 import { Delete } from '@mui/icons-material';
 import type {
   ReportingRow,

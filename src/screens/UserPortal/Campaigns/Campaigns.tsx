@@ -12,7 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import { Campaign, WarningAmberRounded } from '@mui/icons-material';
 import { Box, Typography } from '@mui/material';
-import { type GridCellParams } from '@mui/x-data-grid';
+import { type GridCellParams } from 'shared-components/DataGridWrapper';
 import useLocalStorage from 'utils/useLocalstorage';
 import PledgeModal from './PledgeModal';
 import { USER_FUND_CAMPAIGNS } from 'GraphQl/Queries/fundQueries';
