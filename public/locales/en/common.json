@@ -216,6 +216,5 @@
   "previousPage": "Previous Page",
   "nextPage": "Next Page",
   "pageNumber": "Page {{page}}",
-  "tags": "Tags",
-  "unassign": "Unassign"
+  "tags": "Tags"
 }

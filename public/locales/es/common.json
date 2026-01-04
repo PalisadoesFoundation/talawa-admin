@@ -216,6 +216,5 @@
   "previousPage": "Página anterior",
   "nextPage": "Siguiente página",
   "pageNumber": "Página {{page}}",
-  "tags": "Etiquetas",
-  "unassign": "Desasignar"
+  "tags": "Etiquetas"
 }
