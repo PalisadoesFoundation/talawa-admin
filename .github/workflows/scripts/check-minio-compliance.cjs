@@ -63,7 +63,7 @@ const ROOT_DIR = path.join(process.cwd(), "src");
 const violations = [];
 
 function scanFile(filePath) {
-  const relativePath = path.relative(process.cwd(), filePath);
+  const relativePath = path.relative(process.cwd(), filePath).replace(/\\/g, '/');
   
   let content;
   try {
