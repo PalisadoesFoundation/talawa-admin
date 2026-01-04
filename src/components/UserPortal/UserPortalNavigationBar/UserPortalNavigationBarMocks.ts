@@ -3,7 +3,7 @@
  */
 
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 
 /**
  * Mock user and organization IDs
@@ -63,17 +63,17 @@ export const organizationDataMock = {
 };
 
 /**
- * Mock GraphQL mutation for revoking refresh token
- * Using variableMatcher to match any refresh token string
+ * Mock GraphQL mutation for logout
+ * Using variableMatcher to match any variables
  */
-export const revokeRefreshTokenMock = {
+export const logoutMock = {
   request: {
-    query: REVOKE_REFRESH_TOKEN,
+    query: LOGOUT_MUTATION,
   },
   variableMatcher: () => true, // Match any variables
   result: {
     data: {
-      revokeRefreshToken: true,
+      logout: { success: true },
     },
   },
 };
@@ -114,24 +114,24 @@ export const organizationDataErrorMock = {
 };
 
 /**
- * Mock GraphQL error response for revoking refresh token
+ * Mock GraphQL error response for logout
  * Used to test error handling during logout
  */
-export const revokeRefreshTokenErrorMock = {
+export const logoutErrorMock = {
   request: {
-    query: REVOKE_REFRESH_TOKEN,
+    query: LOGOUT_MUTATION,
   },
   variableMatcher: () => true, // Match any variables
-  error: new Error('Failed to revoke refresh token'),
+  error: new Error('Failed to logout'),
 };
 
 /**
- * Mock network error for revoking refresh token
+ * Mock network error for logout
  * Simulates network failure during logout
  */
-export const revokeRefreshTokenNetworkErrorMock = {
+export const logoutNetworkErrorMock = {
   request: {
-    query: REVOKE_REFRESH_TOKEN,
+    query: LOGOUT_MUTATION,
   },
   variableMatcher: () => true,
   result: {

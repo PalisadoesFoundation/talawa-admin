@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { describe, beforeEach, afterEach, test, expect, vi } from 'vitest';
 import useSession from './useSession';
 import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 import { BrowserRouter } from 'react-router';
 
@@ -69,11 +69,11 @@ const MOCKS = [
   },
   {
     request: {
-      query: REVOKE_REFRESH_TOKEN,
+      query: LOGOUT_MUTATION,
     },
     result: {
       data: {
-        revokeRefreshTokenForUser: true,
+        logout: { success: true },
       },
     },
   },
@@ -265,7 +265,7 @@ describe('useSession Hook', () => {
     vi.useRealTimers();
   });
 
-  test('should handle error when revoking token fails', async () => {
+  test('should handle error when logout fails', async () => {
     const consoleErrorMock = vi
       .spyOn(console, 'error')
       .mockImplementation(() => {});
@@ -286,10 +286,9 @@ describe('useSession Hook', () => {
       },
       {
         request: {
-          query: REVOKE_REFRESH_TOKEN,
-          variables: { refreshToken: 'test-refresh-token' },
+          query: LOGOUT_MUTATION,
         },
-        error: new Error('Failed to revoke refresh token'),
+        error: new Error('Failed to logout'),
       },
     ];
 
@@ -306,7 +305,7 @@ describe('useSession Hook', () => {
 
     await vi.waitFor(() =>
       expect(consoleErrorMock).toHaveBeenCalledWith(
-        'Error revoking refresh token:',
+        'Error during logout:',
         expect.any(Error),
       ),
     );
@@ -486,7 +485,7 @@ describe('useSession Hook', () => {
     vi.useRealTimers();
   });
 
-  test('should handle logout and revoke token', async () => {
+  test('should handle logout', async () => {
     vi.useFakeTimers();
 
     const { result } = renderHook(() => useSession(), {

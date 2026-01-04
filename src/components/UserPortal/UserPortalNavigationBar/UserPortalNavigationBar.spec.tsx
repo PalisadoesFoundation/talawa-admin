@@ -29,9 +29,9 @@ import {
   organizationDataMock,
   organizationDataErrorMock,
   organizationDataNullMock,
-  revokeRefreshTokenMock,
-  revokeRefreshTokenErrorMock,
-  revokeRefreshTokenNetworkErrorMock,
+  logoutMock,
+  logoutErrorMock,
+  logoutNetworkErrorMock,
   mockNavigationLinksBase,
   getMockIcon,
 } from './UserPortalNavigationBarMocks';
@@ -219,7 +219,7 @@ describe('UserPortalNavigationBar', () => {
       });
 
       render(
-        <MockedProvider mocks={[revokeRefreshTokenMock]}>
+        <MockedProvider mocks={[logoutMock]}>
           <MemoryRouter>
             <UserPortalNavigationBar mode="user" />
           </MemoryRouter>
@@ -961,7 +961,6 @@ describe('UserPortalNavigationBar', () => {
 
     beforeEach(() => {
       // Suppress unhandled promise rejections for error tests
-      // These are expected since the component doesn't await revokeRefreshToken()
       unhandledRejectionHandler = (reason: unknown) => {
         // Suppress Apollo errors from our test mocks
         const message =
@@ -970,7 +969,7 @@ describe('UserPortalNavigationBar', () => {
             ?.message ||
           '';
         if (
-          message.includes('Failed to revoke refresh token') ||
+          message.includes('Failed to logout') ||
           message.includes('Network error') ||
           message.includes('Failed to fetch organization data')
         ) {
@@ -1014,7 +1013,7 @@ describe('UserPortalNavigationBar', () => {
       expect(screen.getByTestId('offcanvasTitle')).toBeInTheDocument();
     });
 
-    it('handles revoke refresh token mutation error and shows toast', async () => {
+    it('handles logout mutation error and shows toast', async () => {
       const clearAllItems = vi.fn();
 
       (useLocalStorage as Mock).mockReturnValue({
@@ -1033,7 +1032,7 @@ describe('UserPortalNavigationBar', () => {
       const toastErrorSpy = vi.spyOn(toast, 'error');
 
       render(
-        <MockedProvider mocks={[revokeRefreshTokenErrorMock]}>
+        <MockedProvider mocks={[logoutErrorMock]}>
           <MemoryRouter>
             <UserPortalNavigationBar mode="user" />
           </MemoryRouter>
@@ -1095,7 +1094,7 @@ describe('UserPortalNavigationBar', () => {
       );
     });
 
-    it('handles revoke refresh token GraphQL error - side effects still run', async () => {
+    it('handles logout GraphQL error - side effects still run', async () => {
       const clearAllItems = vi.fn();
 
       (useLocalStorage as Mock).mockReturnValue({
@@ -1110,7 +1109,7 @@ describe('UserPortalNavigationBar', () => {
       });
 
       render(
-        <MockedProvider mocks={[revokeRefreshTokenErrorMock]}>
+        <MockedProvider mocks={[logoutErrorMock]}>
           <MemoryRouter>
             <UserPortalNavigationBar mode="user" />
           </MemoryRouter>
@@ -1124,14 +1123,13 @@ describe('UserPortalNavigationBar', () => {
       fireEvent.click(logoutBtn);
 
       await waitFor(() => {
-        // Note: Component calls revokeRefreshToken() without await (line 130)
-        // so the try-catch block doesn't catch errors. Side effects still run.
+        // Component catches the error, so side effects still run.
         expect(clearAllItems).toHaveBeenCalled();
         expect(mockNavigate).toHaveBeenCalledWith('/');
       });
     });
 
-    it('handles revoke refresh token network error - side effects still run', async () => {
+    it('handles logout network error - side effects still run', async () => {
       const clearAllItems = vi.fn();
 
       (useLocalStorage as Mock).mockReturnValue({
@@ -1146,7 +1144,7 @@ describe('UserPortalNavigationBar', () => {
       });
 
       render(
-        <MockedProvider mocks={[revokeRefreshTokenNetworkErrorMock]}>
+        <MockedProvider mocks={[logoutNetworkErrorMock]}>
           <MemoryRouter>
             <UserPortalNavigationBar mode="user" />
           </MemoryRouter>
@@ -1160,7 +1158,7 @@ describe('UserPortalNavigationBar', () => {
       fireEvent.click(logoutBtn);
 
       await waitFor(() => {
-        // Network errors also don't prevent cleanup due to missing await
+        // Network errors also don't prevent cleanup as they are caught
         expect(clearAllItems).toHaveBeenCalled();
         expect(mockNavigate).toHaveBeenCalledWith('/');
       });
@@ -1170,7 +1168,7 @@ describe('UserPortalNavigationBar', () => {
       const customOnLogout = vi.fn();
 
       render(
-        <MockedProvider mocks={[revokeRefreshTokenErrorMock]}>
+        <MockedProvider mocks={[logoutErrorMock]}>
           <MemoryRouter>
             <UserPortalNavigationBar mode="user" onLogout={customOnLogout} />
           </MemoryRouter>
@@ -1719,8 +1717,8 @@ describe('UserProfileDropdown Component', () => {
 });
 
 describe('UserPortalNavigationBarMocks', () => {
-  it('revokeRefreshTokenMock variableMatcher returns true for any variables', () => {
-    // Test the variableMatcher function to ensure 100% coverage of the mocks file
-    expect(revokeRefreshTokenMock.variableMatcher()).toBe(true);
+  // Test retained to cover mocks file: LOGOUT_MUTATION has no variables; variableMatcher always returns true
+  it('logoutMock variableMatcher returns true for any variables', () => {
+    expect(logoutMock.variableMatcher()).toBe(true);
   });
 });

@@ -257,8 +257,10 @@ export const LOGOUT_MUTATION = gql`
   }
 `;
 
-// to revoke a refresh token (legacy - use LOGOUT_MUTATION for cookie-based auth)
-
+/**
+ * to revoke a refresh token (legacy - use LOGOUT_MUTATION for cookie-based auth)
+ * @public
+ */
 export const REVOKE_REFRESH_TOKEN = gql`
   mutation RevokeRefreshToken($refreshToken: String!) {
     revokeRefreshToken(refreshToken: $refreshToken)

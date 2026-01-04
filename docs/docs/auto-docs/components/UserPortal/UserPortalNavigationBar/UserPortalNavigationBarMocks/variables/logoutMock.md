@@ -2,14 +2,14 @@
 
 ***
 
-# Variable: revokeRefreshTokenMock
+# Variable: logoutMock
 
-> `const` **revokeRefreshTokenMock**: `object`
+> `const` **logoutMock**: `object`
 
 Defined in: [src/components/UserPortal/UserPortalNavigationBar/UserPortalNavigationBarMocks.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserPortalNavigationBar/UserPortalNavigationBarMocks.ts#L69)
 
-Mock GraphQL mutation for revoking refresh token
-Using variableMatcher to match any refresh token string
+Mock GraphQL mutation for logout
+Using variableMatcher to match any variables
 
 ## Type Declaration
 
@@ -19,7 +19,7 @@ Using variableMatcher to match any refresh token string
 
 #### request.query
 
-> **query**: `DocumentNode` = `REVOKE_REFRESH_TOKEN`
+> **query**: `DocumentNode` = `LOGOUT_MUTATION`
 
 ### result
 
@@ -29,9 +29,13 @@ Using variableMatcher to match any refresh token string
 
 > **data**: `object`
 
-#### result.data.revokeRefreshToken
+#### result.data.logout
 
-> **revokeRefreshToken**: `boolean` = `true`
+> **logout**: `object`
+
+#### result.data.logout.success
+
+> **success**: `boolean` = `true`
 
 ### variableMatcher()
 

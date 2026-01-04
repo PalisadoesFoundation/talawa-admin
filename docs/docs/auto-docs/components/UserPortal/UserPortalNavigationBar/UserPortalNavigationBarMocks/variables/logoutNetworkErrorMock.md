@@ -2,13 +2,13 @@
 
 ***
 
-# Variable: revokeRefreshTokenNetworkErrorMock
+# Variable: logoutNetworkErrorMock
 
-> `const` **revokeRefreshTokenNetworkErrorMock**: `object`
+> `const` **logoutNetworkErrorMock**: `object`
 
 Defined in: [src/components/UserPortal/UserPortalNavigationBar/UserPortalNavigationBarMocks.ts:132](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserPortal/UserPortalNavigationBar/UserPortalNavigationBarMocks.ts#L132)
 
-Mock network error for revoking refresh token
+Mock network error for logout
 Simulates network failure during logout
 
 ## Type Declaration
@@ -19,7 +19,7 @@ Simulates network failure during logout
 
 #### request.query
 
-> **query**: `DocumentNode` = `REVOKE_REFRESH_TOKEN`
+> **query**: `DocumentNode` = `LOGOUT_MUTATION`
 
 ### result
 

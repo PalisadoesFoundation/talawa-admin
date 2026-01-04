@@ -4,7 +4,7 @@ import userEvent from '@testing-library/user-event';
 import { BrowserRouter, Route, Routes } from 'react-router';
 import ProfileCard from './ProfileCard';
 import { MockedProvider } from '@apollo/react-testing';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import useLocalStorage from 'utils/useLocalstorage';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
@@ -27,11 +27,11 @@ vi.mock('react-router', async () => {
 const MOCKS = [
   {
     request: {
-      query: REVOKE_REFRESH_TOKEN,
+      query: LOGOUT_MUTATION,
     },
     result: {
       data: {
-        revokeRefreshTokenForUser: true,
+        logout: { success: true },
       },
     },
   },

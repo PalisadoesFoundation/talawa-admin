@@ -28,7 +28,7 @@ import { NavigationLink } from 'types/UserPortalNavigationBar/types';
 import styles from './UserPortalNavigationBar.module.css';
 import TalawaImage from 'assets/images/talawa-logo-600x600.png';
 import useLocalStorage from 'utils/useLocalstorage';
-import { REVOKE_REFRESH_TOKEN } from 'GraphQl/Mutations/mutations';
+import { LOGOUT_MUTATION } from 'GraphQl/Mutations/mutations';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import LanguageSelector from './LanguageSelector';
@@ -91,7 +91,7 @@ export const UserPortalNavigationBar = (
     skip: !shouldFetchOrgData,
   });
 
-  const [revokeRefreshToken] = useMutation(REVOKE_REFRESH_TOKEN);
+  const [logout] = useMutation(LOGOUT_MUTATION);
 
   // Determine final values
   const finalUserName = userName || (getItem('name') as string);
@@ -127,7 +127,7 @@ export const UserPortalNavigationBar = (
       window.location.replace('/');
     } else {
       try {
-        await revokeRefreshToken();
+        await logout();
       } catch {
         toast.error(tCommon('logoutFailed'));
       }
