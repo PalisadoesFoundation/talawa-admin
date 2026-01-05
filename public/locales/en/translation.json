@@ -312,7 +312,8 @@
     "UserIdNotFound": "User ID not found",
     "MembershipRequestNotFound": "Membership request not found",
     "MembershipRequestWithdrawn": "Membership request withdrawn successfully",
-    "errorLoadingUsers": "Error occurred while loading Users"
+    "errorLoadingUsers": "Error occurred while loading Users",
+    "profilePageComingSoon": "Profile Page Coming Soon!"
   },
   "communityProfile": {
     "title": "Community Profile",
