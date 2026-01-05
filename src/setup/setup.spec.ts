@@ -31,7 +31,7 @@ describe('Talawa Admin Setup', () => {
     vi.mocked(checkEnvFile).mockReturnValue(true);
 
     // default fs content says NO docker
-    vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=NO');
+    vi.mocked(fs.promises.readFile).mockResolvedValue('USE_DOCKER=NO');
     vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'NO' });
 
     // mock external functions to resolve normally
@@ -57,7 +57,7 @@ describe('Talawa Admin Setup', () => {
   // ADD THESE NEW TEST BLOCKS
   it('should call API setup with false when Docker is disabled', async () => {
     // Setup environment for NO Docker
-    vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=NO');
+    vi.mocked(fs.promises.readFile).mockResolvedValue('USE_DOCKER=NO');
     vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'NO' });
 
     vi.mocked(inquirer.prompt)
@@ -71,7 +71,7 @@ describe('Talawa Admin Setup', () => {
 
   it('should call API setup with true when Docker is enabled', async () => {
     // Setup environment for YES Docker
-    vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=YES');
+    vi.mocked(fs.promises.readFile).mockResolvedValue('USE_DOCKER=YES');
     vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'YES' });
 
     vi.mocked(inquirer.prompt)
@@ -96,7 +96,7 @@ describe('Talawa Admin Setup', () => {
   });
 
   it('should call askAndUpdateTalawaApiUrl when Docker is used and skip port setup', async () => {
-    vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=YES');
+    vi.mocked(fs.promises.readFile).mockResolvedValue('USE_DOCKER=YES');
     vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'YES' });
 
     vi.mocked(inquirer.prompt)
