@@ -24,7 +24,27 @@ Defined in: [src/hooks/auth/useRegistration.ts:8](https://github.com/PalisadoesF
 
 ### register()
 
-> **register**: () => `Promise`\<`void`\>
+> **register**: (`data`) => `Promise`\<`void`\>
+
+#### Parameters
+
+##### data
+
+###### email
+
+`string`
+
+###### name
+
+`string`
+
+###### organizationId
+
+`string`
+
+###### password
+
+`string`
 
 #### Returns
 
