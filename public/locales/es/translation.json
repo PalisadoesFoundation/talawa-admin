@@ -1697,7 +1697,8 @@
     "status": "Estado",
     "categoryDeleted": "Categoría de elemento de acción eliminada con éxito",
     "deleteCategory": "Eliminar categoría",
-    "deleteCategoryMsg": "¿Está seguro de que desea eliminar esta categoría de elemento de acción?"
+    "deleteCategoryMsg": "¿Está seguro de que desea eliminar esta categoría de elemento de acción?",
+    "noDescriptionProvided": "No se ha proporcionado descripción"
   },
   "organizationVenues": {
     "title": "Lugares",

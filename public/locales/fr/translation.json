@@ -1696,6 +1696,7 @@
     "categoryDeleted": "Catégorie d'élément d'action supprimée avec succès",
     "deleteCategory": "Supprimer la catégorie",
     "deleteCategoryMsg": "Êtes-vous sûr de vouloir supprimer cette catégorie d'élément d'action ?",
+    "noDescriptionProvided": "Aucune description fournie",
     "createButton": "Créer",
     "editButton": "Modifier"
   },

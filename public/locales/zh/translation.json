@@ -1696,6 +1696,7 @@
     "categoryDeleted": "操作项目类别已成功删除",
     "deleteCategory": "删除类别",
     "deleteCategoryMsg": "您确定要删除此操作项目类别吗？",
+    "noDescriptionProvided": "未提供描述",
     "createButton": "创建按钮",
     "editButton": "编辑按钮"
   },
