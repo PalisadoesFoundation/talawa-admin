@@ -3,6 +3,7 @@ import type {
   GridRowsProp,
   GridValidRowModel,
 } from '@mui/x-data-grid';
+import type { InterfaceEmptyStateProps } from '../shared-components/EmptyState/interface';
 /**
  * Props for the DataGridWrapper component.
  *
@@ -132,8 +133,34 @@ export interface InterfaceDataGridWrapperProps<
   actionColumn?: (row: T) => React.ReactNode;
 
   /**
+   * Full EmptyState component props for flexible empty state rendering.
+   * Takes precedence over `emptyStateMessage`.
+   * Allows customization of icon, description, action buttons, and more.
+   *
+   * @example
+   * ```tsx
+   * emptyStateProps={{
+   *   icon: "users",
+   *   message: "noUsers",
+   *   description: "inviteFirstUser",
+   *   action: {
+   *     label: "inviteUser",
+   *     onClick: handleInvite,
+   *     variant: "primary"
+   *   },
+   *   dataTestId: "users-empty-state"
+   * }}
+   * ```
+   */
+  emptyStateProps?: InterfaceEmptyStateProps;
+
+  /**
    * Custom message to display when there are no rows and `loading` is false.
+   * @deprecated Use `emptyStateProps` instead for full customization.
    * @default "No results found" (localized)
+   * @remarks
+   * If `emptyStateProps` is provided, this prop is ignored.
+   * This property is maintained for backward compatibility.
    */
   emptyStateMessage?: string;
 

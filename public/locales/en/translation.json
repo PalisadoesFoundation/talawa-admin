@@ -216,15 +216,15 @@
     "endOfResults": "endOfResults",
     "noResultsFoundFor": "noResultsFoundFor",
     "OR": "OR",
+    "admins": "Admins",
+    "members": "Members",
+    "orgName": "Organization Name",
+    "goToStore": "Go To Store",
+    "manageFeaturesInfo": "Install and manage features from the Plugin Store for your Organization. You can also install these plugins later from Plugin Store.",
     "imageUploadError": "Image upload failed. Please try again.",
     "imageUploadSuccess": "Image uploaded successfully.",
     "congratulationOrgCreated": "Congratulations! The Organization is created.",
-    "goToStore": "Go to Store",
-    "manageFeaturesInfo": "Manage the features and plugins available for this organization.",
-    "orgName": "Enter Name",
-    "sortOrganizations": "Sort Organizations",
-    "admins": "Admins",
-    "members": "Members"
+    "sortOrganizations": "Sort Organizations"
   },
   "orgListCard": {
     "manage": "Manage",
@@ -427,7 +427,8 @@
     "sortTags": "Sort Tags",
     "Latest": "Latest",
     "Oldest": "Oldest",
-    "viewSubTags": "View {{count}} sub tags"
+    "viewSubTags": "View {{count}} sub tags",
+    "tags": "Tags"
   },
   "manageTag": {
     "title": "Tag Details",
@@ -469,6 +470,8 @@
     "tagNamePlaceholder": "Write the name of the tag",
     "allTags": "All Tags",
     "noMoreMembersFound": "No more members found",
+    "errorLoadingAssignedMembers": "Error occurred while loading assigned users",
+    "tags": "Tags",
     "errorOccurredWhileLoadingAssignedUser": "Error occurred while loading assigned users",
     "tagActions": "Tag Actions",
     "loadAssignedUsersError": "Error occurred while loading assigned users",
@@ -955,6 +958,7 @@
     "noSpammerFound": "No spammer found",
     "noUsersFound": "No users found",
     "searchByName": "Search by name...",
+    "view": "View",
     "name": "name",
     "email": "email",
     "talawaApiUnavailable": "talawaApiUnavailable",
@@ -2061,9 +2065,6 @@
   "contact": {
     "card_aria": "Contact card"
   },
-  "donation": {
-    "card_aria": "Donation card"
-  },
   "securedRoute": {
     "sessionExpired": "Kindly relogin as session has expired"
   },
@@ -2080,7 +2081,14 @@
     "logoutFailed": "Logout failed",
     "title": "User Portal",
     "talawa": "Talawa",
-    "talawaBranding": "Talawa Branding"
+    "talawaBranding": "Talawa Branding",
+    "view": "View"
+  },
+  "donation": {
+    "amount_label": "Amount",
+    "card_aria": "Donation card",
+    "card_test_id": "donation-card-{{id}}",
+    "date_label": "Date"
   },
   "organizationVenuesNotification": {
     "venueCreated": "Venue created successfully",

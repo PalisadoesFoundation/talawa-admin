@@ -1,5 +1,8 @@
 import { renderHook, act } from '@testing-library/react';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 import { usePluginFilters } from './usePluginFilters';
 import type { IPlugin } from 'plugin/graphql-service';
 
@@ -65,8 +68,8 @@ describe('usePluginFilters', () => {
       isActivated: true,
       id: 'db-plugin-1',
       backup: false,
-      createdAt: '2023-01-01',
-      updatedAt: '2023-01-01',
+      createdAt: dayjs.utc().toISOString(),
+      updatedAt: dayjs.utc().toISOString(),
     },
     {
       pluginId: 'graphql-plugin-2',
@@ -74,8 +77,8 @@ describe('usePluginFilters', () => {
       isActivated: false,
       id: 'db-plugin-2',
       backup: false,
-      createdAt: '2023-01-01',
-      updatedAt: '2023-01-01',
+      createdAt: dayjs.utc().toISOString(),
+      updatedAt: dayjs.utc().toISOString(),
     },
     {
       pluginId: 'graphql-plugin-3',
@@ -83,8 +86,8 @@ describe('usePluginFilters', () => {
       isActivated: false,
       id: 'db-plugin-3',
       backup: false,
-      createdAt: '2023-01-01',
-      updatedAt: '2023-01-01',
+      createdAt: dayjs.utc().toISOString(),
+      updatedAt: dayjs.utc().toISOString(),
     },
   ];
 
@@ -535,8 +538,8 @@ describe('usePluginFilters', () => {
           isInstalled: true,
           isActivated: false,
           backup: false,
-          createdAt: '2023-01-01',
-          updatedAt: '2023-01-01',
+          createdAt: dayjs.utc().toISOString(),
+          updatedAt: dayjs.utc().toISOString(),
         },
       ];
 
@@ -603,8 +606,8 @@ describe('usePluginFilters', () => {
           isActivated: true,
           id: '1',
           backup: false,
-          createdAt: '2023-01-01',
-          updatedAt: '2023-01-01',
+          createdAt: dayjs.utc().toISOString(),
+          updatedAt: dayjs.utc().toISOString(),
         },
       ];
 
@@ -631,8 +634,8 @@ describe('usePluginFilters', () => {
           isInstalled: true,
           isActivated: true,
           backup: false,
-          createdAt: '2023-01-01',
-          updatedAt: '2023-01-01',
+          createdAt: dayjs.utc().toISOString(),
+          updatedAt: dayjs.utc().toISOString(),
         },
       ];
 
@@ -750,8 +753,8 @@ describe('usePluginFilters', () => {
           isInstalled: i % 2 === 0,
           isActivated: i % 4 === 0,
           backup: false,
-          createdAt: '2023-01-01',
-          updatedAt: '2023-01-01',
+          createdAt: dayjs.utc().toISOString(),
+          updatedAt: dayjs.utc().toISOString(),
         })),
       };
 

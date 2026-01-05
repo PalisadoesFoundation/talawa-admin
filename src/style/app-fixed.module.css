@@ -1645,10 +1645,9 @@ form label,
 }
 
 .errorIcon {
-  transform: scale(1.5);
+  font-size: var(--error-icon-size, 40px);
   color: var(--bs-danger, var(--errorIcon-color));
   margin-bottom: 1rem;
-  font-size: 1.5rem;
 
   /* Add error icon for non-color indication */
   &::before {
@@ -1782,6 +1781,25 @@ form label,
   color: var(--createButton-color-active) !important;
   background-color: var(--createButton-bg-active) !important;
   border: 1px solid var(--createButton-border-active) !important;
+}
+
+.cardItemAuthor {
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.userProfileName {
+  font-weight: 700;
+  font-size: 28px;
+}
+
+.volunteersLabel {
+  font-size: 0.8rem;
+  color: var(--search-button-border);
+}
+
+.testRedBackground {
+  background-color: red;
 }
 
 /* Add more Global CSS Classes above this */
@@ -10479,6 +10497,12 @@ form {
 .orgSelectorNoResults {
   padding: 0.75rem 1rem;
   color: var(--orgSelector-no-results-color);
+  .tagActionsDivider {
+    border-color: var(--grey-border-box-color);
+    border-style: solid;
+    border-width: 2px;
+    width: 85%;
+  }
 }
 
 /* DataTable Pagination Styles */
@@ -10606,4 +10630,37 @@ form {
   border-color: var(--grey-border-box-color);
   border-width: 2px;
   width: 85%;
+}
+
+/* -- CheckInModal.tsx styles -- */
+
+.checkInModalHeader {
+  background-color: var(--tableHeader-bg);
+}
+
+.checkInDataGridContainer {
+  height: 500px;
+  width: 100%;
+}
+
+/* -- OrgActionItemCategories.tsx dataGrid styles -- */
+
+.actionItemCategoriesDataGrid
+  :global(.MuiDataGrid-root .MuiDataGrid-cell:focus-within) {
+  outline: none !important;
+}
+
+.actionItemCategoriesDataGrid
+  :global(.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within) {
+  outline: none;
+}
+
+.actionItemCategoriesDataGrid :global(.MuiDataGrid-row:hover),
+.actionItemCategoriesDataGrid :global(.MuiDataGrid-row.Mui-hovered) {
+  background-color: transparent;
+}
+
+.actionItemCategoriesDataGrid :global(.MuiDataGrid-root),
+.actionItemCategoriesDataGrid :global(.MuiDataGrid-main) {
+  border-radius: 0.5rem;
 }
