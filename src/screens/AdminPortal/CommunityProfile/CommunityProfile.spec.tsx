@@ -14,7 +14,7 @@ import CommunityProfile from './CommunityProfile';
 import i18n from 'utils/i18nForTest';
 import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import {
   RESET_COMMUNITY,
   UPDATE_COMMUNITY_PG,
@@ -35,7 +35,7 @@ vi.mock('utils/errorHandler', () => ({
   errorHandler: errorHandlerMock,
 }));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: toastMocks,
 }));
 

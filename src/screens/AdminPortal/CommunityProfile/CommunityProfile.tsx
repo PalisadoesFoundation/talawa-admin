@@ -39,7 +39,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button, Card, Form } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';

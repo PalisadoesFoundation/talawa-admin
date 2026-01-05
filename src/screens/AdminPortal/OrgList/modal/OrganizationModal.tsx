@@ -40,7 +40,7 @@
  */
 import React, { type ChangeEvent } from 'react';
 import { Button, Col, Form, Row } from 'react-bootstrap';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { countryOptions } from 'utils/formEnumFields';

@@ -23,7 +23,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import {
   ACCEPT_ORGANIZATION_REQUEST_MUTATION,
   REJECT_ORGANIZATION_REQUEST_MUTATION,

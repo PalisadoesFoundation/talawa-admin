@@ -24,7 +24,7 @@ import Row from 'react-bootstrap/Row';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import {
   REACT_APP_USE_RECAPTCHA,

@@ -86,7 +86,7 @@ import {
   UPDATE_USER_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { languages } from 'utils/languages';
 import { errorHandler } from 'utils/errorHandler';
 import { Card, Row, Col, Form } from 'react-bootstrap';

@@ -20,7 +20,7 @@ import {
   failingMocks,
 } from './GroupChatDetailsMocks';
 import type { NewChatType } from 'types/Chat/interface';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 // Standardized cache configuration for Apollo MockedProvider
 const testCache = new InMemoryCache();

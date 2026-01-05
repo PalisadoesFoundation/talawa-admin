@@ -53,7 +53,6 @@ import {
   ORGANIZATION_FILTER_LIST,
 } from 'GraphQl/Queries/Queries';
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
@@ -67,6 +66,7 @@ import type {
 import useLocalStorage from 'utils/useLocalstorage';
 import OrganizationModal from './modal/OrganizationModal';
 import styles from './OrgList.module.css';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 const { getItem } = useLocalStorage();
 

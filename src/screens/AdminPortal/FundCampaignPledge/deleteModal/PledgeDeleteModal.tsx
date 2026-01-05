@@ -36,7 +36,7 @@ import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import { DELETE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import type { InterfacePledgeInfo } from 'utils/interfaces';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { BaseModal } from 'shared-components/BaseModal';
 
 export interface InterfaceDeletePledgeModal {

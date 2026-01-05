@@ -21,9 +21,9 @@ import ItemUpdateStatusModal, {
   type IItemUpdateStatusModalProps,
 } from './ActionItemUpdateStatusModal';
 import { vi, it, describe, afterEach } from 'vitest';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),

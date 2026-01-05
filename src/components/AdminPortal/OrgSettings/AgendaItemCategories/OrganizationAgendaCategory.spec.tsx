@@ -26,9 +26,9 @@ import {
   MOCKS_ERROR_MUTATION,
 } from './OrganizationAgendaCategoryErrorMocks';
 import { MOCKS } from './OrganizationAgendaCategoryMocks';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     error: vi.fn(),
     success: vi.fn(),

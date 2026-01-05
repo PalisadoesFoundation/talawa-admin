@@ -29,7 +29,7 @@ const { mockNotificationToast } = vi.hoisted(() => ({
   },
 }));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: mockNotificationToast,
 }));
 

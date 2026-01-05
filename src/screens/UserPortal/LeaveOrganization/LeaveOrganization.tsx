@@ -50,9 +50,9 @@ import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { Button, Modal, Form, Alert } from 'react-bootstrap';
 import { useParams, useNavigate } from 'react-router';
 import { getItem } from 'utils/useLocalstorage';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useTranslation } from 'react-i18next';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 const userEmail = (() => {
   try {

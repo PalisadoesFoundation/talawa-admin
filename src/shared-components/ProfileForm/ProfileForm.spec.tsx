@@ -27,7 +27,7 @@ import {
 import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { urlToFile } from 'utils/urlToFile';
 
 const link1 = new StaticMockLink(MOCKS1, true);
@@ -52,7 +52,7 @@ async function wait(ms = 500): Promise<void> {
   await act(() => new Promise((resolve) => setTimeout(resolve, ms)));
 }
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),

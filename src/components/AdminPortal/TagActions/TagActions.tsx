@@ -50,9 +50,9 @@ import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import TagNode from './Node/TagNode';
 import type { TFunction } from 'i18next';
 import componentStyles from './TagAction.module.css';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 interface InterfaceUserTagsAncestorData {
   _id: string;

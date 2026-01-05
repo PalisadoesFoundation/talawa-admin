@@ -40,7 +40,7 @@ const toastMocks = vi.hoisted(() => ({
   info: vi.fn(),
 }));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: toastMocks,
 }));
 

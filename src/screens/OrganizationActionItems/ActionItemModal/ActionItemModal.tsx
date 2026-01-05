@@ -24,7 +24,7 @@ import type {
 } from 'types/shared-components/ActionItems/interface';
 
 import { useTranslation } from 'react-i18next';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   CREATE_ACTION_ITEM_MUTATION,

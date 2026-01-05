@@ -22,7 +22,7 @@ import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import styles from './RemoveUserTagModal.module.css';
 import { BaseModal } from 'shared-components/BaseModal';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 
 export interface InterfaceRemoveUserTagModalProps {

@@ -19,7 +19,7 @@ import { useInstallTimer } from './hooks/useInstallTimer';
 import LoadingState from '../../../shared-components/LoadingState/LoadingState';
 import { useTranslation } from 'react-i18next';
 import { X } from '@mui/icons-material';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 const TABS = ['details', 'features', 'changelog'] as const;
 type TabType = (typeof TABS)[number];

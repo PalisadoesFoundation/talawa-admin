@@ -8,10 +8,10 @@ import {
   MARK_NOTIFICATION_AS_READ,
 } from 'GraphQl/Queries/NotificationQueries';
 import { describe, it, expect, vi, afterEach } from 'vitest';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import i18nForTest from 'utils/i18nForTest';
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),

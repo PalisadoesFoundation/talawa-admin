@@ -53,7 +53,7 @@ import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 enum ItemFilter {
   Group = 'group',

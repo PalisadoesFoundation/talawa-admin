@@ -10,7 +10,7 @@ import {
   UPDATE_ACTION_ITEM_CATEGORY_MUTATION,
   DELETE_ACTION_ITEM_CATEGORY_MUTATION,
 } from 'GraphQl/Mutations/ActionItemCategoryMutations';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { FormControl, TextField } from '@mui/material';
 
 export interface IActionItemCategoryModal {

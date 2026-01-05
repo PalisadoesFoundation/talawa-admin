@@ -13,7 +13,7 @@ import type { ApolloLink } from '@apollo/client';
 import { MOCKS, MOCKS_ERROR } from '../OrgActionItemCategoryMocks';
 import type { IActionItemCategoryModal } from './ActionItemCategoryModal';
 import CategoryModal from './ActionItemCategoryModal';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { it, vi, describe, beforeEach } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -33,7 +33,7 @@ dayjs.extend(utc);
  * - 100% code coverage including all conditional branches
  */
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),

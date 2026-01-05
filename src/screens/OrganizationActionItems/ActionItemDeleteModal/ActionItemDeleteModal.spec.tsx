@@ -20,7 +20,7 @@ import { store } from 'state/store';
 import i18nForTest from '../../../utils/i18nForTest';
 import { MOCKS, MOCKS_ERROR } from '../OrganizationActionItem.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
@@ -28,7 +28,7 @@ import ItemDeleteModal, {
   type IItemDeleteModalProps,
 } from './ActionItemDeleteModal';
 import { vi, afterEach, beforeEach } from 'vitest';
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),

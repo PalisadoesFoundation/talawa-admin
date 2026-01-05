@@ -45,7 +45,7 @@ import AgendaCategoryCreateModal from './Create/AgendaCategoryCreateModal';
 import styles from 'style/app-fixed.module.css';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 interface InterfaceAgendaCategoryProps {
   orgId: string;

@@ -14,7 +14,7 @@ import { store } from 'state/store';
 import i18n from 'utils/i18nForTest';
 import { MOCKS, UPDATE_ERROR_MOCKS } from './Groups.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import type { InterfaceGroupModal } from './GroupModal';
 import GroupModal from './GroupModal';
 import userEvent from '@testing-library/user-event';
@@ -28,7 +28,7 @@ const sharedMocks = vi.hoisted(() => ({
   },
 }));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: sharedMocks.NotificationToast,
 }));
 

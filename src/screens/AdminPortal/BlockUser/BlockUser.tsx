@@ -43,7 +43,7 @@
 import { useQuery, useMutation } from '@apollo/client';
 import React, { useEffect, useState, useCallback } from 'react';
 import Button from 'react-bootstrap/Button';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import {
   BLOCK_USER_MUTATION_PG,
   UNBLOCK_USER_MUTATION_PG,

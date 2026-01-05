@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
 import { MockedProvider } from '@apollo/client/testing';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import userEvent from '@testing-library/user-event';
 import { vi, it } from 'vitest';
 import {
@@ -37,7 +37,7 @@ vi.mock('react-router', async () => {
 
 global.URL.createObjectURL = vi.fn(() => 'mocked-url');
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),

@@ -2,7 +2,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider, type MockedResponse } from '@apollo/client/testing';
 import { MemoryRouter, Route, Routes } from 'react-router';
 import { I18nextProvider } from 'react-i18next';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import userEvent from '@testing-library/user-event';
 import AddMember from './AddMember';
 import i18nForTest from 'utils/i18nForTest';
@@ -25,7 +25,7 @@ const sharedMocks = vi.hoisted(() => ({
 }));
 
 // Mock NotificationToast
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: sharedMocks.toast,
 }));
 

@@ -1,4 +1,4 @@
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 /** 
   This function is used to handle api errors in the application.

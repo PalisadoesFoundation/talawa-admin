@@ -69,7 +69,7 @@ import type {
   IEventFormSubmitPayload,
   IEventFormValues,
 } from 'types/EventForm/interface';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 export default function events(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userEvents' });

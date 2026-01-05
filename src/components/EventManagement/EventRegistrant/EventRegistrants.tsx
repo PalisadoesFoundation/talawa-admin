@@ -46,7 +46,7 @@ import { useParams } from 'react-router';
 import { EventRegistrantsWrapper } from 'components/EventRegistrantsModal/EventRegistrantsWrapper';
 import { CheckInWrapper } from 'components/CheckIn/CheckInWrapper';
 import type { InterfaceUserAttendee } from 'types/shared-components/User/interface';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import DataTable from 'shared-components/DataTable/DataTable';
 import { IColumnDef } from 'types/shared-components/DataTable/interface';
 

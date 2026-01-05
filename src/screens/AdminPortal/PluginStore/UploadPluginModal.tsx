@@ -6,7 +6,7 @@ import React, { useRef, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import { Button } from '@mui/material';
 import { FaUpload, FaExclamationTriangle, FaCheck } from 'react-icons/fa';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import styles from './UploadPluginModal.module.css';
 import {
   useApolloClient,

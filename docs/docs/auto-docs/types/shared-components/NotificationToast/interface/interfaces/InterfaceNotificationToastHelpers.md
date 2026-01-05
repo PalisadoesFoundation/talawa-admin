@@ -4,7 +4,7 @@
 
 # Interface: InterfaceNotificationToastHelpers
 
-Defined in: [src/types/NotificationToast/interface.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/NotificationToast/interface.ts#L50)
+Defined in: [src/types/shared-components/NotificationToast/interface.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/NotificationToast/interface.ts#L50)
 
 Reusable helper API exposed by `NotificationToast`.
 
@@ -14,7 +14,7 @@ Reusable helper API exposed by `NotificationToast`.
 
 > **dismiss**: () => `void`
 
-Defined in: [src/types/NotificationToast/interface.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/NotificationToast/interface.ts#L74)
+Defined in: [src/types/shared-components/NotificationToast/interface.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/NotificationToast/interface.ts#L74)
 
 Dismiss all active toasts.
 
@@ -28,7 +28,7 @@ Dismiss all active toasts.
 
 > **error**: (`message`, `options?`) => `Id`
 
-Defined in: [src/types/NotificationToast/interface.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/NotificationToast/interface.ts#L59)
+Defined in: [src/types/shared-components/NotificationToast/interface.ts:59](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/NotificationToast/interface.ts#L59)
 
 Show an error toast.
 
@@ -52,7 +52,7 @@ Show an error toast.
 
 > **info**: (`message`, `options?`) => `Id`
 
-Defined in: [src/types/NotificationToast/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/NotificationToast/interface.ts#L69)
+Defined in: [src/types/shared-components/NotificationToast/interface.ts:69](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/NotificationToast/interface.ts#L69)
 
 Show an info toast.
 
@@ -76,7 +76,7 @@ Show an info toast.
 
 > **success**: (`message`, `options?`) => `Id`
 
-Defined in: [src/types/NotificationToast/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/NotificationToast/interface.ts#L54)
+Defined in: [src/types/shared-components/NotificationToast/interface.ts:54](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/NotificationToast/interface.ts#L54)
 
 Show a success toast.
 
@@ -100,7 +100,7 @@ Show a success toast.
 
 > **warning**: (`message`, `options?`) => `Id`
 
-Defined in: [src/types/NotificationToast/interface.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/NotificationToast/interface.ts#L64)
+Defined in: [src/types/shared-components/NotificationToast/interface.ts:64](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/NotificationToast/interface.ts#L64)
 
 Show a warning toast.
 

@@ -63,7 +63,7 @@
 import { useQuery } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 import {
   ORGANIZATION_LIST,

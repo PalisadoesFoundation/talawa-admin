@@ -57,8 +57,8 @@ import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import dayjs from 'dayjs';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import SearchFilterBar from 'shared-components/SearchFilterBar/SearchFilterBar';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 function Requests(): JSX.Element {
   const { t } = useTranslation('translation');

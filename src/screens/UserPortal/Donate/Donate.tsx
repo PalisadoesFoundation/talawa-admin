@@ -22,7 +22,7 @@ import {
   InterfaceDonation,
   InterfaceDonationCardProps,
 } from 'types/Donation/interface';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 /**
  * Component for handling donations to an organization.

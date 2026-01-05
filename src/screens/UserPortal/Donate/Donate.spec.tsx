@@ -35,7 +35,7 @@ vi.mock('react-router', async () => ({
   useParams: mockUseParams,
 }));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: mockToast,
 }));
 

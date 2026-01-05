@@ -18,7 +18,7 @@ import {
   UNBLOCK_USER_MUTATION_PG,
 } from 'GraphQl/Mutations/mutations';
 import { BrowserRouter } from 'react-router';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import type { DocumentNode } from 'graphql';
 
@@ -38,7 +38,7 @@ const { toastMocks, routerMocks, errorHandlerMock } = vi.hoisted(() => {
   };
 });
 
-vi.mock('components/NotificationToast/NotificationToast', async () => {
+vi.mock('shared-components/NotificationToast/NotificationToast', async () => {
   return {
     NotificationToast: toastMocks,
   };

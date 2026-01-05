@@ -74,7 +74,7 @@ import type { InterfaceGroupChatDetailsProps } from 'types/Chat/interface';
 import { useMinioUpload } from 'utils/MinioUpload';
 import { useMinioDownload } from 'utils/MinioDownload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 export default function groupChatDetails({
   toggleGroupChatDetailsModal,

@@ -42,7 +42,7 @@ import { useTranslation } from 'react-i18next';
 import { Navigate, useParams } from 'react-router';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceOrgPeopleListCardProps } from 'types/Organization/interface';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
   if (!props.id) {
