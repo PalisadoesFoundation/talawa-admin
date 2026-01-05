@@ -910,7 +910,16 @@ jobs:
           BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
           ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
           echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
+          if [ -z "$ALL_CHANGED_FILES" ]; then
+            echo "any_changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "any_changed=true" >> $GITHUB_OUTPUT
+          fi
 
+      - name: Run Disable Statements Check
+        if: steps.changed-files.outputs.any_changed == 'true'
+        run: |
+          python .github-central/.github/workflows/scripts/disable_statements_check.py --repo=admin --files ${{ steps.changed-files.outputs.all_changed_files }}
       - name: Set up Python 3.11
         uses: actions/setup-python@v4
         with:
