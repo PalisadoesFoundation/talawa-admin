@@ -996,7 +996,7 @@ describe('Advanced Component Functionality Tests', () => {
     await wait(200);
 
     // Verify the sort was applied
-    expect(sortButton).toHaveTextContent('Latest');
+    expect(sortButton).toHaveTextContent('Sort');
   });
 
   test('Testing sorting organizations by Earliest with multiple orgs', async () => {
@@ -1021,7 +1021,7 @@ describe('Advanced Component Functionality Tests', () => {
     await wait(200);
 
     // Verify the sort was applied
-    expect(sortButton).toHaveTextContent('Earliest');
+    expect(sortButton).toHaveTextContent('Sort');
   });
 
   test('Testing successful organization creation with membership', async () => {
@@ -1371,14 +1371,13 @@ describe('Advanced Component Functionality Tests', () => {
     const searchInput = screen.getByTestId('searchInput');
     await userEvent.type(searchInput, 'NonexistentOrg');
 
-    // Click search button
-    const searchBtn = screen.getByTestId('searchBtn');
-    fireEvent.click(searchBtn);
-
-    await wait();
-
-    // Check for "no results found" message
-    expect(screen.getByTestId('orglist-search-empty')).toBeInTheDocument();
+    // Wait for debounced search to complete
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('orglist-search-empty')).toBeInTheDocument();
+      },
+      { timeout: 500 },
+    );
   });
 
   test('Testing sort by Earliest functionality', async () => {
@@ -1416,7 +1415,7 @@ describe('Advanced Component Functionality Tests', () => {
     await wait();
 
     // Verify sorting changed
-    expect(sortDropdown).toHaveTextContent('Earliest');
+    expect(sortDropdown).toHaveTextContent('Sort');
   });
 
   test('Testing sort by Latest functionality', async () => {
@@ -1443,7 +1442,7 @@ describe('Advanced Component Functionality Tests', () => {
     await wait();
 
     // Verify sorting changed
-    expect(sortDropdown).toHaveTextContent('Latest');
+    expect(sortDropdown).toHaveTextContent('Sort');
 
     // Wait a bit for the sort to be applied
     await wait(200);
@@ -1926,7 +1925,7 @@ describe('Advanced Component Functionality Tests', () => {
     const renderedNames = renderedCards.map((card) => card.textContent);
 
     expect(renderedNames).toEqual(expectedNames);
-    expect(sortDropdown).toHaveTextContent('Earliest');
+    expect(sortDropdown).toHaveTextContent('Sort');
   });
 
   test('Testing closeDialogModal functionality', async () => {

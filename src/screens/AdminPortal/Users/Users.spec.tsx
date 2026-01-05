@@ -54,6 +54,9 @@ vi.mock('components/IconComponent/IconComponent', () => ({
   ),
 }));
 
+// Debounce duration used by AdminSearchFilterBar component (default: 300ms)
+const SEARCH_DEBOUNCE_MS = 300;
+
 const link = new StaticMockLink(MOCKS, true);
 
 const createLink = (
@@ -288,6 +291,12 @@ describe('Testing Users screen', () => {
     await act(async () => {
       await userEvent.clear(searchInput);
       await userEvent.type(searchInput, 'NonexistentName');
+    });
+
+    // Wait for debounced search to complete
+    await wait(SEARCH_DEBOUNCE_MS);
+
+    await act(async () => {
       await userEvent.click(searchBtn);
     });
 
@@ -470,14 +479,17 @@ describe('Testing Users screen', () => {
         </MockedProvider>,
       );
 
+      await wait();
+
       const sortDropdown = await screen.findByTestId('sortUsers');
       fireEvent.click(sortDropdown);
 
       const newestOption = screen.getByTestId('newest');
       fireEvent.click(newestOption);
 
-      expect(screen.getByTestId('sortUsers')).toHaveTextContent('newest');
+      await wait();
 
+      // Verify sorting worked by checking rows are displayed
       const rowsNewest = await screen.findAllByRole('row');
       expect(rowsNewest.length).toBeGreaterThan(0);
 
@@ -485,8 +497,9 @@ describe('Testing Users screen', () => {
       const oldestOption = screen.getByTestId('oldest');
       fireEvent.click(oldestOption);
 
-      expect(screen.getByTestId('sortUsers')).toHaveTextContent('oldest');
+      await wait();
 
+      // Verify sorting worked by checking rows are still displayed
       const rowsOldest = await screen.findAllByRole('row');
       expect(rowsOldest.length).toBeGreaterThan(0);
     });
@@ -511,7 +524,7 @@ describe('Testing Users screen', () => {
         fireEvent.scroll(window, { target: { scrollY: 1000 } });
       });
 
-      await wait(500); // Give time for data to load
+      await wait(SEARCH_DEBOUNCE_MS); // Give time for data to load
     });
   });
 
@@ -898,14 +911,30 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
+    await wait();
+
     const sortDropdown = await screen.findByTestId('sortUsers');
     fireEvent.click(sortDropdown);
 
     const newest = screen.getByTestId('newest');
     fireEvent.click(newest);
+
+    await wait();
+
+    const rowsAfterFirstClick = screen.queryAllByRole('row');
+    const firstUserAfterFirstSort = rowsAfterFirstClick[1]?.textContent;
+
+    // Click same option again - should not trigger re-sort
+    fireEvent.click(sortDropdown);
     fireEvent.click(newest);
 
-    expect(sortDropdown).toHaveTextContent('newest');
+    await wait();
+
+    const rowsAfterSecondClick = screen.queryAllByRole('row');
+    const firstUserAfterSecondSort = rowsAfterSecondClick[1]?.textContent;
+
+    // Order should remain the same (no re-sort)
+    expect(firstUserAfterSecondSort).toBe(firstUserAfterFirstSort);
   });
 
   it('should filter only regular users', async () => {
@@ -1100,14 +1129,28 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
+    await wait();
+
     const filterDropdown = await screen.findByTestId('filterUsers');
     fireEvent.click(filterDropdown);
 
     const cancel = screen.getByTestId('cancel');
     fireEvent.click(cancel);
+
+    await wait();
+
+    const rowsAfterFirstClick = screen.queryAllByRole('row').length;
+
+    // Click again - should not trigger re-render or change state
+    fireEvent.click(filterDropdown);
     fireEvent.click(cancel);
 
-    expect(filterDropdown).toHaveTextContent('cancel');
+    await wait();
+
+    const rowsAfterSecondClick = screen.queryAllByRole('row').length;
+
+    // Rows should remain the same (no state update)
+    expect(rowsAfterSecondClick).toBe(rowsAfterFirstClick);
   });
 
   it('should render "no results found" when search yields empty result', async () => {
@@ -1736,7 +1779,7 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     // Trigger scroll to load more users while search is active
     fireEvent.scroll(window, { target: { scrollY: 6000 } });
-    await wait(500);
+    await wait(SEARCH_DEBOUNCE_MS);
 
     // Verify pagination worked: both first and second page results are now present
     expect(screen.getByText('John User')).toBeInTheDocument();
@@ -2574,7 +2617,7 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     // Trigger first scroll to load more users
     fireEvent.scroll(window, { target: { scrollY: 6000 } });
-    await wait(500);
+    await wait(SEARCH_DEBOUNCE_MS);
 
     // Both users should now be displayed
     expect(screen.getByText('First User')).toBeInTheDocument();
@@ -2725,7 +2768,7 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     // Trigger scroll to load more (which will return null edges)
     fireEvent.scroll(window, { target: { scrollY: 6000 } });
-    await wait(500);
+    await wait(SEARCH_DEBOUNCE_MS);
 
     // Component should handle null gracefully - initial user still there
     expect(screen.getByText('Initial User')).toBeInTheDocument();

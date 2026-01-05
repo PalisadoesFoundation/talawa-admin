@@ -65,7 +65,11 @@ import { useTranslation } from 'react-i18next';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type { InterfaceQueryUserTagsAssignedMembers } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
-import { DataGrid } from 'shared-components/DataGridWrapper';
+import {
+  DataGrid,
+  type GridCellParams,
+  type GridColDef,
+} from 'shared-components/DataGridWrapper';
 import type {
   InterfaceTagAssignedMembersQuery,
   SortedByType,
@@ -75,10 +79,6 @@ import {
   TAGS_QUERY_DATA_CHUNK_SIZE,
   dataGridStyle,
 } from 'utils/organizationTagsUtils';
-import type {
-  GridCellParams,
-  GridColDef,
-} from 'shared-components/DataGridWrapper';
 import { Stack } from '@mui/material';
 import {
   REMOVE_USER_TAG,
@@ -93,8 +93,7 @@ import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScroll
 import EditUserTagModal from './editModal/EditUserTagModal';
 import RemoveUserTagModal from './removeModal/RemoveUserTagModal';
 import UnassignUserTagModal from './unassignModal/UnassignUserTagModal';
-import SortingButton from 'subComponents/SortingButton';
-import SearchBar from 'shared-components/SearchBar/SearchBar';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
 export const getManageTagErrorMessage = (error: unknown): string => {
   if (error instanceof Error) {
@@ -301,12 +300,9 @@ function ManageTag(): JSX.Element {
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
-          <WarningAmberRounded
-            className={`${styles.errorIcon} ${styles.manageTagErrorIcon}`}
-          />
-
+          <WarningAmberRounded className={styles.errorIcon} />
           <h6 className="fw-bold text-danger text-center">
-            {t('loadAssignedUsersError')}
+            {t('errorLoadingAssignedMembers')}
           </h6>
         </div>
       </div>
@@ -362,7 +358,7 @@ function ManageTag(): JSX.Element {
     },
     {
       field: 'userName',
-      headerName: t('userName'),
+      headerName: tCommon('userName'),
       flex: 2,
       minWidth: 100,
       sortable: false,
@@ -426,44 +422,52 @@ function ManageTag(): JSX.Element {
       <Row className={styles.head}>
         <div className={styles.mainpageright}>
           <div className={styles.btnsContainer}>
-            <SearchBar
-              placeholder={tCommon('searchByName')}
-              onSearch={(term) => setAssignedMemberSearchInput(term.trim())}
-              inputTestId="searchByName"
-              buttonTestId="searchBtn"
+            <AdminSearchFilterBar
+              hasDropdowns={true}
+              searchPlaceholder={tCommon('searchByName')}
+              searchValue={assignedMemberSearchInput}
+              onSearchChange={(term) =>
+                setAssignedMemberSearchInput(term.trim())
+              }
+              searchInputTestId="searchInput"
+              searchButtonTestId="searchBtn"
+              dropdowns={[
+                {
+                  id: 'manage-tag-sort',
+                  label: tCommon('sort'),
+                  type: 'sort',
+                  options: [
+                    { label: tCommon('Latest'), value: 'DESCENDING' },
+                    { label: tCommon('Oldest'), value: 'ASCENDING' },
+                  ],
+                  selectedOption: assignedMemberSortOrder,
+                  onOptionChange: (value) =>
+                    setAssignedMemberSortOrder(value as SortedByType),
+                  dataTestIdPrefix: 'sortPeople',
+                },
+              ]}
+              additionalButtons={
+                <>
+                  <Button
+                    variant="success"
+                    onClick={() => redirectToSubTags(currentTagId as string)}
+                    className={`${styles.createButton} mb-2`}
+                    data-testid="subTagsBtn"
+                  >
+                    {t('subTags')}
+                  </Button>
+                  <Button
+                    variant="success"
+                    onClick={showAddPeopleToTagModal}
+                    data-testid="addPeopleToTagBtn"
+                    className={`${styles.createButton} mb-2 ms-3`}
+                  >
+                    <i className={'fa fa-plus me-2'} />
+                    {t('addPeopleToTag')}
+                  </Button>
+                </>
+              }
             />
-            <div className={styles.btnsBlock}>
-              <SortingButton
-                title={t('sortPeople')}
-                sortingOptions={[
-                  { label: tCommon('Latest'), value: 'DESCENDING' },
-                  { label: tCommon('Oldest'), value: 'ASCENDING' },
-                ]}
-                selectedOption={assignedMemberSortOrder}
-                onSortChange={(value) =>
-                  setAssignedMemberSortOrder(value as SortedByType)
-                }
-                dataTestIdPrefix="sortPeople"
-                buttonLabel={tCommon('sort')}
-              />
-              <Button
-                variant="success"
-                onClick={() => redirectToSubTags(currentTagId as string)}
-                className={`${styles.createButton} mb-2`}
-                data-testid="subTagsBtn"
-              >
-                {t('subTags')}
-              </Button>
-            </div>
-            <Button
-              variant="success"
-              onClick={showAddPeopleToTagModal}
-              data-testid="addPeopleToTagBtn"
-              className={`${styles.createButton} mb-2 ms-3`}
-            >
-              <i className={'fa fa-plus me-2'} />
-              {t('addPeopleToTag')}
-            </Button>
           </div>
 
           {userTagAssignedMembersLoading ? (
@@ -480,8 +484,7 @@ function ManageTag(): JSX.Element {
                     className={`fs-6 ms-3 my-1 ${styles.tagsBreadCrumbs}`}
                     data-testid="allTagsBtn"
                   >
-                    {tCommon('tags')}
-
+                    {t('tags')}
                     <i className={'mx-2 fa fa-caret-right'} />
                   </div>
                   {orgUserTagAncestors?.map((tag, index) => (
@@ -567,8 +570,7 @@ function ManageTag(): JSX.Element {
                   >
                     {t('removeFromTags')}
                   </div>
-                  <hr className={styles.manageTagDivider} />
-
+                  <hr className={styles.tagActionsDivider} />
                   <div
                     onClick={showEditUserTagModal}
                     className={`mt-1 mb-2 btn btn-primary btn-sm w-75 ${styles.editButton}`}
