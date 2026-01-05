@@ -1307,9 +1307,12 @@ describe('PostCard', () => {
       result: {
         data: {
           post: {
+            __typename: 'Post',
             comments: {
+              __typename: 'CommentConnection',
               edges: [],
               pageInfo: {
+                __typename: 'PageInfo',
                 hasNextPage: false,
                 endCursor: null,
               },
@@ -1327,12 +1330,113 @@ describe('PostCard', () => {
 
     // Verify empty state message appears
     await waitFor(() => {
-      expect(screen.getByText('No comments')).toBeInTheDocument();
+      expect(screen.getByText(/No comments/i)).toBeInTheDocument();
     });
   });
 
   it('should refetch comments when refetchTrigger is incremented', async () => {
-    renderPostCardWithCustomMockAndProps(commentsQueryMock, {});
+    // Mock for refetch after comment creation
+    const refetchCommentsMock = {
+      request: {
+        query: GET_POST_COMMENTS,
+        variables: {
+          postId: '1',
+          userId: '1',
+          first: 10,
+          after: null,
+        },
+      },
+      result: {
+        data: {
+          post: {
+            __typename: 'Post',
+            id: '1',
+            caption: 'Test Post',
+            comments: {
+              __typename: 'CommentConnection',
+              edges: [
+                {
+                  __typename: 'CommentEdge',
+                  node: {
+                    __typename: 'Comment',
+                    id: '1',
+                    body: 'Test comment',
+                    creator: {
+                      __typename: 'User',
+                      id: '2',
+                      name: 'Jane Smith',
+                      avatarURL: null,
+                    },
+                    createdAt: dayjs().subtract(30, 'days').toISOString(),
+                    upVotesCount: 2,
+                    downVotesCount: 0,
+                    hasUserVoted: {
+                      __typename: 'HasUserVotedResponse',
+                      hasVoted: false,
+                      voteType: null,
+                    },
+                  },
+                  cursor: 'cc1',
+                },
+                {
+                  __typename: 'CommentEdge',
+                  node: {
+                    __typename: 'Comment',
+                    id: '3',
+                    body: 'New test comment',
+                    creator: {
+                      __typename: 'User',
+                      id: '1',
+                      name: 'John Doe',
+                      avatarURL: null,
+                    },
+                    createdAt: dayjs().subtract(7, 'days').toISOString(),
+                    upVotesCount: 0,
+                    downVotesCount: 0,
+                    hasUserVoted: {
+                      __typename: 'HasUserVotedResponse',
+                      hasVoted: false,
+                      voteType: null,
+                    },
+                  },
+                  cursor: 'cc2',
+                },
+              ],
+              pageInfo: {
+                __typename: 'PageInfo',
+                startCursor: 'cc1',
+                endCursor: 'cc2',
+                hasNextPage: false,
+                hasPreviousPage: false,
+              },
+            },
+          },
+        },
+      },
+    };
+
+    const mocksWithRefetch = [
+      commentsQueryMock, // First call (initial load)
+      refetchCommentsMock, // Second call (after refetch)
+      createCommentMock, // Comment creation
+      ...mocks.filter(
+        (m) =>
+          m.request.query !== GET_POST_COMMENTS &&
+          m.request.query !== CREATE_COMMENT_POST,
+      ),
+    ];
+
+    render(
+      <MockedProvider mocks={mocksWithRefetch}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <PostCard {...defaultProps} />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
 
     // Show comments
     const viewCommentsButton = screen.getByTestId('comment-card');
@@ -1344,7 +1448,17 @@ describe('PostCard', () => {
       ).toBeInTheDocument(),
     );
 
-    // Since refetchTrigger is internal state, we test that the component renders with comments
+    // Initially should have one comment
     expect(screen.getByText('Test comment')).toBeInTheDocument();
+
+    // Create a comment while comments are visible (this increments refetchTrigger)
+    const commentInput = screen.getByPlaceholderText(/add comment/i);
+    fireEvent.change(commentInput, { target: { value: 'New test comment' } });
+    fireEvent.click(screen.getByTestId('comment-send'));
+
+    // Wait for refetch to occur and new comment to appear
+    await waitFor(() => {
+      expect(screen.getByText('New test comment')).toBeInTheDocument();
+    });
   });
 });
