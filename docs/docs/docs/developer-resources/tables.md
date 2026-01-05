@@ -304,7 +304,11 @@ Empty and Error
 />
 ```
 
-## Hook: useTableData
+## Hooks
+
+This section explains how we use hooks in the table related components.
+
+### Hook: useTableData
 
 The useTableData hook flattens GraphQL connections (edges → rows) and exposes pagination signals.
 
