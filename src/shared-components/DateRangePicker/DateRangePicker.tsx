@@ -177,6 +177,7 @@ export default function DateRangePicker({
               value={startDayjs}
               onChange={handleStartChange}
               disabled={disabled}
+              enableAccessibleFieldDOMStructure={false}
               slots={{
                 textField: (props) => (
                   <Form.Control
@@ -198,6 +199,7 @@ export default function DateRangePicker({
               value={endDayjs}
               onChange={handleEndChange}
               disabled={disabled}
+              enableAccessibleFieldDOMStructure={false}
               minDate={
                 normalizedStartDate ? dayjs(normalizedStartDate) : undefined
               }
