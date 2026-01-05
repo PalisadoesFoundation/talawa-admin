@@ -3,13 +3,15 @@
  * Allows entering multiple recipient emails/names and an optional message, then sends invites.
  */
 import React, { useState } from 'react';
-import { Modal, Button, Form, Spinner } from 'react-bootstrap';
+import { Modal, Button, Form } from 'react-bootstrap';
 import TextField from '@mui/material/TextField';
 import { useMutation } from '@apollo/client';
 import { SEND_EVENT_INVITATIONS } from 'GraphQl/Mutations/mutations';
-import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import type { ApolloError } from '@apollo/client/errors';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import styles from './InviteByEmail.module.css';
 
 type Props = {
   show: boolean;
@@ -60,13 +62,13 @@ const InviteByEmailModal: React.FC<Props> = ({
       .filter((r) => r.email !== '');
 
     if (cleaned.length === 0) {
-      toast.error('Please provide at least one recipient email');
+      NotificationToast.error('Please provide at least one recipient email');
       return;
     }
 
     const invalid = validateEmails(cleaned.map((r) => r.email));
     if (invalid.length) {
-      toast.error(`Invalid email(s): ${invalid.join(', ')}`);
+      NotificationToast.error(`Invalid email(s): ${invalid.join(', ')}`);
       return;
     }
 
@@ -83,7 +85,7 @@ const InviteByEmailModal: React.FC<Props> = ({
     try {
       await sendInvites({ variables: { input } });
 
-      toast.success(
+      NotificationToast.success(
         tCommon('addedSuccessfully', { item: 'Invites' }) || 'Invites sent',
       );
       setRecipients([{ email: '', name: '' }]);
@@ -93,8 +95,10 @@ const InviteByEmailModal: React.FC<Props> = ({
       handleClose();
     } catch (err) {
       const error = err as ApolloError;
-      toast.error(t('errorSendingInvites') || 'Error sending invites');
-      if (error?.message) toast.error(error.message);
+      NotificationToast.error(
+        t('errorSendingInvites') || 'Error sending invites',
+      );
+      if (error?.message) NotificationToast.error(error.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -102,16 +106,17 @@ const InviteByEmailModal: React.FC<Props> = ({
 
   return (
     <Modal show={show} onHide={handleClose} backdrop="static" centered>
-      <Modal.Header
-        closeButton
-        style={{ backgroundColor: 'var(--tableHeader-bg)' }}
-      >
+      <Modal.Header closeButton className={styles.modalHeader}>
         <Modal.Title>
           {t('title', { defaultValue: 'Invite by Email' })}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={onSubmit} data-testid="invite-by-email-form">
+        <Form
+          onSubmit={onSubmit}
+          data-testid="invite-by-email-form"
+          id="invite-by-email-form"
+        >
           <Form.Group className="mb-3">
             <Form.Label>
               {t('emailsLabel', { defaultValue: 'Recipient emails and names' })}
@@ -129,7 +134,7 @@ const InviteByEmailModal: React.FC<Props> = ({
                     copy[idx] = { ...copy[idx], email: e.target.value };
                     setRecipients(copy);
                   }}
-                  style={{ flex: 1 }}
+                  className={styles.emailField}
                 />
 
                 <TextField
@@ -142,7 +147,7 @@ const InviteByEmailModal: React.FC<Props> = ({
                     copy[idx] = { ...copy[idx], name: e.target.value };
                     setRecipients(copy);
                   }}
-                  style={{ width: 220, marginLeft: 12 }}
+                  className={styles.nameField}
                 />
 
                 {recipients.length > 1 ? (
@@ -152,7 +157,7 @@ const InviteByEmailModal: React.FC<Props> = ({
                       const copy = recipients.filter((_, i) => i !== idx);
                       setRecipients(copy);
                     }}
-                    style={{ marginLeft: 8 }}
+                    className={styles.removeButton}
                   >
                     {t('remove', { defaultValue: 'Remove' })}
                   </Button>
@@ -192,7 +197,7 @@ const InviteByEmailModal: React.FC<Props> = ({
               })}
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              data-testid="invite-message"
+              inputProps={{ 'data-testid': 'invite-message' }}
             />
           </Form.Group>
 
@@ -218,28 +223,18 @@ const InviteByEmailModal: React.FC<Props> = ({
         >
           {tCommon('close', { defaultValue: 'Close' })}
         </Button>
-        <Button
-          variant="primary"
-          onClick={onSubmit}
-          disabled={isSubmitting}
-          data-testid="send-invites"
-        >
-          {isSubmitting ? (
-            <>
-              <Spinner
-                as="span"
-                animation="border"
-                size="sm"
-                role="status"
-                aria-hidden="true"
-                className="me-2"
-              />
-              {t('sending', { defaultValue: 'Sending...' })}
-            </>
-          ) : (
-            t('sendInvites', { defaultValue: 'Send Invites' })
-          )}
-        </Button>
+        <LoadingState isLoading={isSubmitting} variant="inline">
+          <Button
+            type="submit"
+            form="invite-by-email-form"
+            className={`border-1 mx-4 ${styles.addButton}`}
+            variant="success"
+            disabled={isSubmitting}
+            data-testid="invite-submit"
+          >
+            {t('sendInvites')}
+          </Button>
+        </LoadingState>
       </Modal.Footer>
     </Modal>
   );

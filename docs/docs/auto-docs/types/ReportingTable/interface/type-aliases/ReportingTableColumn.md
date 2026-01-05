@@ -6,7 +6,7 @@
 
 > **ReportingTableColumn** = `Partial`\<`GridColDef`\> & `object`
 
-Defined in: [src/types/ReportingTable/interface.ts:12](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L12)
+Defined in: [src/types/ReportingTable/interface.ts:15](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/ReportingTable/interface.ts#L15)
 
 ReportingTableColumnDef
 App-level column shape used across the app. It's a thin composition over

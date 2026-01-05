@@ -45,8 +45,8 @@ import type {
   InterfaceErrorBoundaryWrapperProps,
   InterfaceErrorBoundaryWrapperState,
 } from 'types/shared-components/ErrorBoundaryWrapper/interface';
-import { toast } from 'react-toastify';
 import styles from './ErrorBoundaryWrapper.module.css';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 export class ErrorBoundaryWrapper extends React.Component<
   InterfaceErrorBoundaryWrapperProps,
@@ -92,7 +92,7 @@ export class ErrorBoundaryWrapper extends React.Component<
     if (showToast) {
       const message =
         errorMessage || error.message || 'An unexpected error occurred';
-      toast.error(message);
+      NotificationToast.error(message);
     }
 
     // Call custom error handler (e.g., for error tracking services)

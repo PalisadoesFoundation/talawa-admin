@@ -12,19 +12,22 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from '../../../utils/i18nForTest';
 import { MOCKS, MOCKS_ERROR } from '../OrganizationActionItem.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { toast } from 'react-toastify';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 import ItemUpdateStatusModal, {
   type IItemUpdateStatusModalProps,
 } from './ActionItemUpdateStatusModal';
 import { vi, it, describe, afterEach } from 'vitest';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
-const toastMocks = vi.hoisted(() => ({
-  success: vi.fn(),
-  error: vi.fn(),
-}));
-
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+  },
 }));
 
 const link1 = new StaticMockLink(MOCKS);
@@ -52,9 +55,9 @@ const itemProps: IItemUpdateStatusModalProps[] = [
       organizationId: 'orgId1',
       creatorId: 'userId2',
       updaterId: null,
-      assignedAt: new Date('2024-08-27'),
-      completionAt: new Date('2044-09-03'),
-      createdAt: new Date('2024-08-27'),
+      assignedAt: dayjs.utc().toDate(),
+      completionAt: dayjs.utc().toDate(),
+      createdAt: dayjs.utc().toDate(),
       updatedAt: null,
       isCompleted: true,
       preCompletionNotes: 'Notes 1',
@@ -87,7 +90,7 @@ const itemProps: IItemUpdateStatusModalProps[] = [
         name: 'Category 1',
         description: null,
         isDisabled: false,
-        createdAt: '2024-08-27',
+        createdAt: dayjs.utc().toISOString(),
         organizationId: 'orgId1',
       },
     },
@@ -106,9 +109,9 @@ const itemProps: IItemUpdateStatusModalProps[] = [
       organizationId: 'orgId1',
       creatorId: 'userId2',
       updaterId: null,
-      assignedAt: new Date('2024-08-27'),
+      assignedAt: dayjs.utc().toDate(),
       completionAt: null,
-      createdAt: new Date('2024-08-27'),
+      createdAt: dayjs.utc().toDate(),
       updatedAt: null,
       isCompleted: false,
       preCompletionNotes: 'Notes 1',
@@ -140,7 +143,7 @@ const itemProps: IItemUpdateStatusModalProps[] = [
         name: 'Category 1',
         description: null,
         isDisabled: false,
-        createdAt: '2024-08-27',
+        createdAt: dayjs.utc().toISOString(),
         organizationId: 'orgId1',
       },
     },
@@ -159,9 +162,9 @@ const itemProps: IItemUpdateStatusModalProps[] = [
       organizationId: 'orgId1',
       creatorId: 'userId2',
       updaterId: null,
-      assignedAt: new Date('2024-08-27'),
-      completionAt: new Date('2044-09-03'),
-      createdAt: new Date('2024-08-27'),
+      assignedAt: dayjs.utc().toDate(),
+      completionAt: dayjs.utc().toDate(),
+      createdAt: dayjs.utc().toDate(),
       updatedAt: null,
       isCompleted: true,
       preCompletionNotes: 'Notes 1',
@@ -193,7 +196,7 @@ const itemProps: IItemUpdateStatusModalProps[] = [
         name: 'Category 1',
         description: null,
         isDisabled: false,
-        createdAt: '2024-08-27',
+        createdAt: dayjs.utc().toISOString(),
         organizationId: 'orgId1',
       },
     },
@@ -285,7 +288,10 @@ describe('Testing ItemUpdateStatusModal', () => {
 
     // Wait for the error message to appear
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+      expect(NotificationToast.error).toHaveBeenCalledWith({
+        key: 'unknownError',
+        namespace: 'errors',
+      });
     });
   });
 
@@ -304,7 +310,10 @@ describe('Testing ItemUpdateStatusModal', () => {
     fireEvent.click(createBtn);
 
     // Check that error toast is shown for required post completion notes
-    expect(toast.error).toHaveBeenCalledWith(t.postCompletionNotesRequired);
+    expect(NotificationToast.error).toHaveBeenCalledWith({
+      key: 'postCompletionNotesRequired',
+      namespace: 'translation',
+    });
 
     // Verify that the modal is still open (hide function not called)
     expect(itemProps[1].hide).not.toHaveBeenCalled();
@@ -325,9 +334,9 @@ describe('Testing ItemUpdateStatusModal', () => {
         organizationId: 'orgId1',
         creatorId: 'userId2',
         updaterId: null,
-        assignedAt: new Date('2024-08-27'),
+        assignedAt: dayjs.utc().toDate(),
         completionAt: null,
-        createdAt: new Date('2024-08-27'),
+        createdAt: dayjs.utc().toDate(),
         updatedAt: null,
         isCompleted: false,
         preCompletionNotes: 'Notes 1',
@@ -358,7 +367,7 @@ describe('Testing ItemUpdateStatusModal', () => {
           name: 'Category 1',
           description: null,
           isDisabled: false,
-          createdAt: '2024-08-27',
+          createdAt: dayjs.utc().toISOString(),
           organizationId: 'orgId1',
         },
       },
@@ -378,9 +387,10 @@ describe('Testing ItemUpdateStatusModal', () => {
       fireEvent.click(completeBtn);
 
       // Check that error toast is shown
-      expect(toast.error).toHaveBeenCalledWith(
-        'Post completion notes are required',
-      );
+      expect(NotificationToast.error).toHaveBeenCalledWith({
+        key: 'postCompletionNotesRequired',
+        namespace: 'translation',
+      });
     });
 
     it('should successfully complete action for instance with valid notes', async () => {
@@ -398,7 +408,11 @@ describe('Testing ItemUpdateStatusModal', () => {
 
       // Wait for success
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith('Completed');
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'isCompleted',
+          namespace: 'translation',
+        });
+
         expect(recurringProps.actionItemsRefetch).toHaveBeenCalled();
         expect(recurringProps.hide).toHaveBeenCalled();
       });
@@ -419,7 +433,10 @@ describe('Testing ItemUpdateStatusModal', () => {
 
       // Wait for error
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
       });
     });
   });
@@ -439,9 +456,9 @@ describe('Testing ItemUpdateStatusModal', () => {
         organizationId: 'orgId1',
         creatorId: 'userId2',
         updaterId: null,
-        assignedAt: new Date('2024-08-27'),
-        completionAt: new Date('2044-09-03'),
-        createdAt: new Date('2024-08-27'),
+        assignedAt: dayjs.utc().toDate(),
+        completionAt: dayjs.utc().toDate(),
+        createdAt: dayjs.utc().toDate(),
         updatedAt: null,
         isCompleted: true,
         preCompletionNotes: 'Notes 1',
@@ -472,7 +489,7 @@ describe('Testing ItemUpdateStatusModal', () => {
           name: 'Category 1',
           description: null,
           isDisabled: false,
-          createdAt: '2024-08-27',
+          createdAt: dayjs.utc().toISOString(),
           organizationId: 'orgId1',
         },
       },
@@ -489,9 +506,11 @@ describe('Testing ItemUpdateStatusModal', () => {
 
       // Wait for success
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith(
-          'organizationActionItems.isPending',
-        );
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'isPending',
+          namespace: 'translation',
+        });
+
         expect(completedRecurringProps.actionItemsRefetch).toHaveBeenCalled();
         expect(completedRecurringProps.hide).toHaveBeenCalled();
       });
@@ -506,7 +525,10 @@ describe('Testing ItemUpdateStatusModal', () => {
 
       // Wait for error
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Mock Graphql Error');
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
       });
     });
   });

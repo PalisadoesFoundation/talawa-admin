@@ -37,10 +37,13 @@
  * This component is used in the context of managing tags and their associated members.
  * It is designed to be displayed as a modal and requires integration with GraphQL APIs.
  */
-
+// translation-check-keyPrefix: manageTag
 import { useMutation, useQuery } from '@apollo/client';
-import type { GridCellParams, GridColDef } from '@mui/x-data-grid';
-import { DataGrid } from '@mui/x-data-grid';
+import type {
+  GridCellParams,
+  GridColDef,
+} from 'shared-components/DataGridWrapper';
+import { DataGrid } from 'shared-components/DataGridWrapper';
 import { USER_TAGS_MEMBERS_TO_ASSIGN_TO } from 'GraphQl/Queries/userTagQueries';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
@@ -62,6 +65,8 @@ import type {
 } from 'types/Tag/interface';
 import { TAGS_QUERY_DATA_CHUNK_SIZE, dataGridStyle } from 'types/Tag/utils';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import componentStyles from './AddPeopleToTag.module.css';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 
 const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   addPeopleToTagModalIsOpen,
@@ -72,7 +77,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
 }) => {
   const { tagId: currentTagId } = useParams();
 
-  const { t: tErrors } = useTranslation('error');
+  const { t: tErrors } = useTranslation('errors');
 
   const [assignToMembers, setAssignToMembers] = useState<InterfaceMemberData[]>(
     [],
@@ -209,7 +214,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     return (
       <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
         <div className={styles.errorMessage}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded className={`${styles.errorIcon} fs-1`} />
           <h6 className="fw-bold text-danger text-center">
             {t('errorOccurredWhileLoadingMembers')}
             <br />
@@ -282,7 +287,13 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
   ];
 
   return (
-    <>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+      onReset={hideAddPeopleToTagModal}
+    >
       <Modal
         show={addPeopleToTagModalIsOpen}
         onHide={hideAddPeopleToTagModal}
@@ -361,7 +372,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
                 <div
                   id="addPeopleToTagScrollableDiv"
                   data-testid="addPeopleToTagScrollableDiv"
-                  style={{ height: 300, overflow: 'auto' }}
+                  className={componentStyles.dataGridContainer}
                 >
                   <InfiniteScroll
                     dataLength={userTagMembersToAssignTo?.length ?? 0} // This is important field to render the next data
@@ -433,7 +444,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
           </Modal.Footer>
         </Form>
       </Modal>
-    </>
+    </ErrorBoundaryWrapper>
   );
 };
 

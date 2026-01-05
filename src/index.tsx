@@ -15,23 +15,24 @@ import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import { onError } from '@apollo/link-error';
 import './assets/css/app.css';
+import './style/tokens/index.css';
 import 'bootstrap/dist/js/bootstrap.min.js'; // Bootstrap JS (ensure Bootstrap is installed)
 import 'react-datepicker/dist/react-datepicker.css'; // React Datepicker Styles
 import 'flag-icons/css/flag-icons.min.css'; // Flag Icons Styles
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { Provider } from 'react-redux';
-import { ToastContainer, toast } from 'react-toastify';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import App from './App';
 import { store } from './state/store';
 import { BACKEND_URL, BACKEND_WEBSOCKET_URL } from 'Constant/constant';
-import { ThemeProvider, createTheme } from '@mui/material';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { ApolloLink } from '@apollo/client/core';
 import { setContext } from '@apollo/client/link/context';
 import './assets/css/scrollStyles.css';
 import './style/app-fixed.module.css';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 const theme = createTheme({
   palette: {
     primary: {
@@ -149,7 +150,7 @@ const errorLink = onError(
     }
 
     if (networkError) {
-      toast.error(
+      NotificationToast.error(
         'API server unavailable. Check your connection or try again later',
         { toastId: 'apiServer' },
       );
@@ -263,7 +264,6 @@ root.render(
           <ThemeProvider theme={theme}>
             <Provider store={store}>
               <App />
-              <ToastContainer limit={5} />
             </Provider>
           </ThemeProvider>
         </LocalizationProvider>

@@ -1,4 +1,6 @@
 {
+  "ends": "结束",
+  "occurrences": "次",
   "leaderboard": {
     "title": "排行榜",
     "searchByVolunteer": "按志愿者搜索",
@@ -16,7 +18,8 @@
     "rank": "排名",
     "volunteer": "志愿者",
     "email": "电子邮件",
-    "hoursVolunteered": "志愿服务时数"
+    "hoursVolunteered": "志愿服务时数",
+    "volunteerRankings": "志愿者排名"
   },
   "loginPage": {
     "title": "塔拉瓦管理员",
@@ -239,6 +242,7 @@
     "title": "会员申请",
     "sl_no": "SL。",
     "accept": "接受",
+    "newMembersWillAppearHere": "新成员会显示在这里",
     "reject": "拒绝",
     "searchRequests": "搜索会员请求",
     "noOrgError": "未找到组织，请通过仪表板创建组织",
@@ -247,7 +251,6 @@
     "rejectedSuccessfully": "请求被成功拒绝",
     "noOrgErrorTitle": "未找到组织",
     "noOrgErrorDescription": "请通过仪表板创建组织",
-    "newMembersWillAppearHere": "新成员将显示在此处",
     "name": "名称",
     "email": "电子邮件",
     "profilePictureAlt": "{{name}} 的头像",
@@ -396,7 +399,9 @@
     "join_success": "成员申请已成功发送",
     "withdraw_success": "成员申请已成功撤回",
     "join_error": "发送成员申请失败",
-    "withdraw_error": "撤回成员申请失败"
+    "withdraw_error": "撤回成员申请失败",
+    "card_aria": "組織卡片",
+    "card_test_id": "organization-card-{{id}}"
   },
   "organizationTags": {
     "title": "组织标签",
@@ -421,9 +426,10 @@
     "tagCreationFailed": "标签创建失败",
     "errorLoadingTagsData": "加载组织标签数据时出错",
     "sortTags": "排序标签",
-    "tags": "标签",
     "Latest": "最新",
-    "Oldest": "最旧"
+    "Oldest": "最旧",
+    "viewSubTags": "查看 {{count}} 个子标签",
+    "tags": "标签"
   },
   "manageTag": {
     "title": "标签详情",
@@ -464,11 +470,16 @@
     "expand": "展开",
     "tagNamePlaceholder": "输入标签名称",
     "allTags": "所有标签",
-    "noMoreMembersFound": "未找到更多成员"
+    "noMoreMembersFound": "未找到更多成员",
+    "errorLoadingAssignedMembers": "加载分配的成员时出错",
+    "tags": "标签",
+    "errorOccurredWhileLoadingAssignedUser": "加载已分配用户时出错",
+    "sortPeople": "排序人员",
+    "tagActions": "标签操作",
+    "loadAssignedUsersError": "加载已分配用户时发生错误"
   },
   "userListCard": {
     "addAdmin": "添加管理员",
-    "addedAsAdmin": "用户被添加为管理员。",
     "joined": "已加入",
     "talawaApiUnavailable": "塔拉瓦 API 不可用"
   },
@@ -526,7 +537,7 @@
     "never": "绝不",
     "on": "在",
     "after": "后",
-    "occurences": "事件",
+    "occurrences": "次",
     "monthlyOn": "每月开",
     "yearlyOn": "每年开",
     "yearlyRecurrenceDesc": "此事件将在每年的事件开始日期的同一天重复。",
@@ -548,13 +559,16 @@
     "endDate": "结束日期",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
     "done": "完成",
-    "createChat": "创建聊天"
+    "createChat": "创建聊天",
+    "viewType": "视图类型",
+    "search": "搜索"
   },
   "organizationActionItems": {
     "actionItemCategory": "行动项类别",
     "actionItemDetails": "行动项详情",
     "actionItemCompleted": "行动项已完成",
     "assignee": "受托人",
+    "assigneeOrCategory": "受托人或类别",
     "assignedTo": "分配给",
     "assigner": "分配人",
     "assignmentDate": "分配日期",
@@ -709,6 +723,8 @@
     "eventDetails": "活动详情",
     "eventDeleted": "活动删除成功。",
     "eventUpdated": "活动更新成功。",
+    "registeredSuccessfully": "Successfully registered for {{eventName}}",
+    "noChangesToUpdate": "No changes to update",
     "thisInstance": "本实例",
     "thisAndFollowingInstances": "本实例及后续实例",
     "allInstances": "所有实例",
@@ -719,7 +735,7 @@
     "never": "绝不",
     "on": "在",
     "after": "后",
-    "occurences": "事件",
+    "occurrences": "次",
     "location": "位置",
     "no": "否",
     "yes": "是",
@@ -730,6 +746,7 @@
     "close": "关闭",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
     "done": "完成",
+    "invalidDate": "Invalid Date",
     "createChat": "创建聊天"
   },
   "funds": {
@@ -787,7 +804,9 @@
     "latestEndDate": "最新结束日期",
     "earliestEndDate": "最早结束日期",
     "lowestGoal": "最低目标",
-    "highestGoal": "最高目标"
+    "highestGoal": "最高目标",
+    "percentageRaised": "% 已筹集",
+    "campaignProgress": "活动进度: {{percentage}}%"
   },
   "pledges": {
     "title": "基金活动承诺",
@@ -868,11 +887,15 @@
     "Next": "下一页",
     "Previous": "上一页",
     "cancel": "取消",
+    "invalidDate": "Invalid Date",
     "messageTitleError": "帖子标题不能为空！",
     "organizationIdMissing": "组织ID 缺失！",
     "messageDescription": "帖子描述",
     "addVideo": "添加视频",
-    "creatingMessage": "正在创建帖子..."
+    "creatingMessage": "正在创建帖子...",
+    "orgPostListError": "Organization post list error:",
+    "pinnedPostsLoadError": "Error loading pinned posts",
+    "errorSearchingPosts": "Error searching posts"
   },
   "postNotFound": {
     "post": "邮政",
@@ -936,10 +959,12 @@
     "noSpammerFound": "未发现垃圾邮件发送者",
     "noUsersFound": "未找到用户",
     "searchByName": "按名称搜索",
+    "view": "查看",
     "name": "名称",
     "email": "电子邮件",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
-    "noResultsFoundFor": "未找到结果"
+    "noResultsFoundFor": "未找到结果",
+    "sortOrganizations": "Sort Organizations"
   },
   "eventManagement": {
     "name": "事件管理",
@@ -951,7 +976,8 @@
     "agendas": "议程",
     "statistics": "统计数据",
     "to": "到",
-    "volunteers": "志愿者"
+    "volunteers": "志愿者",
+    "backToEvents": "返回活动"
   },
   "forgotPassword": {
     "title": "塔拉瓦 忘记密码",
@@ -1017,6 +1043,7 @@
     "deleteMsg": "您想删除该组织吗？",
     "confirmDelete": "确认删除",
     "longDelOrgMsg": "通过单击\"删除组织\"按钮，该组织及其事件、标签和所有相关数据将被永久删除。",
+    "deleteSampleOrganization": "删除示例组织",
     "successfullyDeletedSampleOrganization": "已成功删除样本组织",
     "cancel": "取消"
   },
@@ -1073,7 +1100,34 @@
     "saveChanges": "保存更改",
     "cancel": "取消",
     "talawaApiUnavailable": "塔拉瓦 API 不可用",
-    "enterOrganizationDescription": "输入组织描述"
+    "enterOrganizationDescription": "输入组织描述",
+    "userRegistrationRequired": "需要用户注册",
+    "nameDescriptionRequired": "名称和描述为必填项",
+    "updateFailed": "更新组织失败"
+  },
+  "public": {
+    "invitation": {
+      "title": "活动邀请",
+      "previewText": "您已被邀请加入此活动。",
+      "inviteeEmail": "受邀者邮箱",
+      "anyone": "任何已登录用户",
+      "organizationId": "组织 ID",
+      "eventId": "活动 ID",
+      "eventTitle": "活动 {{eventId}}",
+      "expiresAt": "到期时间",
+      "mustLogin": "请登录或创建账号以接受此邀请。",
+      "login": "登录",
+      "signup": "注册",
+      "invalidToken": "无效的邀请令牌",
+      "invitationNotFound": "邀请不存在或无效",
+      "verifyError": "验证邀请时出错",
+      "accept": "接受邀请",
+      "accepted": "邀请已接受",
+      "acceptError": "无法接受邀请",
+      "maskedNotice": "此邀请发给了一个被遮罩的邮箱地址。接受前请确认您是受邀者。",
+      "confirmMatch": "我确认我的账户邮箱与受邀邮箱（如上所示）一致。",
+      "signInAsDifferent": "以其他用户登录"
+    }
   },
   "memberDetail": {
     "title": "用户详细信息",
@@ -1153,7 +1207,8 @@
     "name": "姓名",
     "email": "邮箱",
     "role": "角色",
-    "loading": "加载中..."
+    "loading": "加载中...",
+    "emailNotAvailable": "邮箱不可用"
   },
   "userRegister": {
     "enterFirstName": "输入您的名字",
@@ -1224,6 +1279,8 @@
     "members": "成员"
   },
   "postCard": {
+    "pinnedPost": "置顶帖子",
+    "postImage": "帖子图像",
     "likes": "喜欢",
     "comments": "评论",
     "addComment": "添加评论",
@@ -1304,6 +1361,7 @@
     "chartPageNavigation": "图表页面导航",
     "previousPage": "上一页",
     "nextPage": "下一页",
+    "pageNumber": "第 {{page}} 页",
     "goToToday": "转到今天",
     "genderDistribution": "性别分布",
     "ageDistribution": "年龄分布"
@@ -1494,7 +1552,14 @@
     "day": "天",
     "week": "周",
     "month": "月",
-    "year": "年"
+    "year": "年",
+    "ends": "结束",
+    "occurrences": "次",
+    "never": "从不",
+    "on": "在",
+    "after": "之后",
+    "customRecurrence": "自定义重复",
+    "repeatsEvery": "重复周期"
   },
   "userEventCard": {
     "starts": "开始",
@@ -1538,23 +1603,37 @@
     "edit": "编辑",
     "saveChanges": "保存更改",
     "endOfResults": "结果结束",
-    "noDescription": "没有描述"
+    "noDescription": "没有描述",
+    "failedToFetchAdvertisements": "無法獲取廣告",
+    "advertisementMedia": "廣告媒體",
+    "noMediaAvailable": "無可用媒體",
+    "advertisementImageAlt": "廣告圖片 #{{index}} 用於 {{name}}",
+    "invalidFileType": "無效的文件類型：{{fileName}}",
+    "fileTooLarge": "文件太大：{{fileName}}",
+    "invalidArgumentsForAction": "此操作的參數無效。",
+    "englishCaptions": "英文字幕",
+    "preview": "預覽",
+    "bannerAd": "橫幅廣告",
+    "popupAd": "彈出廣告",
+    "menuAd": "菜單廣告"
   },
   "userChat": {
     "title": "聊天",
-    "deleteChat": "删除聊天",
     "add": "添加",
     "chat": "聊天",
-    "contacts": "联系方式",
     "search": "搜索",
     "messages": "消息",
+    "contacts": "联系方式",
     "create": "创造",
     "newChat": "新聊天",
     "newGroupChat": "新群聊",
-    "groupInfo": "集团信息",
+    "groupInfo": "群组信息",
+    "description": "描述",
+    "hash": "#",
     "members": "会员",
     "addMembers": "添加成员",
     "userNotFound": "未找到用户",
+    "Error": "错误",
     "roleUpdatedSuccessfully": "角色更新成功",
     "failedToUpdateRole": "更新角色失败",
     "memberRemovedSuccessfully": "成员删除成功",
@@ -1565,18 +1644,38 @@
     "failedToDeleteChat": "删除聊天失败",
     "chatNameUpdatedSuccessfully": "聊天名称更新成功",
     "failedToUpdateChatName": "更新聊天名称失败",
+    "deleteChat": "删除聊天",
     "remove": "删除",
     "searchFullName": "按全名搜索",
     "customizedTable": "自定义表格",
     "demoteToRegular": "降级为普通用户",
     "promoteToAdmin": "提升为管理员",
     "user": "用户",
-    "chatAction": "聊天操作"
+    "chatAction": "聊天操作",
+    "organizationMembersTable": "组织成员表",
+    "newGroup": "新群组",
+    "groupName": "组名",
+    "groupDescription": "群组描述",
+    "next": "下一步"
   },
   "userChatRoom": {
     "selectContact": "选择联系人开始对话",
     "sendMessage": "发信息",
-    "reply": "回复"
+    "loading": "正在加载…",
+    "loadOlderMessages": "加载旧消息",
+    "loadingMoreMessages": "正在加载更多消息…",
+    "loadingImage": "正在加载图片…",
+    "imageNotAvailable": "图片不可用",
+    "attachment": "附件",
+    "reply": "回复",
+    "edit": "编辑",
+    "delete": "删除",
+    "errorBoundary": {
+      "title": "出现问题",
+      "message": "聊天室中发生了意外错误",
+      "resetButton": "重试",
+      "resetButtonAriaLabel": "重试"
+    }
   },
   "orgActionItemCategories": {
     "enableButton": "使能够",
@@ -1626,7 +1725,9 @@
     "edit": "编辑",
     "delete": "删除",
     "name": "名称",
-    "desc": "描述"
+    "desc": "描述",
+    "venueImagePreview": "场地图片预览",
+    "sortVenues": "排序场地"
   },
   "addMember": {
     "title": "添加会员",
@@ -1649,7 +1750,10 @@
     "create": "创建",
     "addMember": "添加会员",
     "user": "用户",
-    "profile": "个人资料"
+    "profile": "个人资料",
+    "customizedTable": "自定义表格",
+    "page": "页",
+    "add": "添加"
   },
   "eventActionItems": {
     "title": "行动项目",
@@ -1687,12 +1791,28 @@
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "添加与会者时出错",
-    "errorRemovingAttendee": "删除与会者时出错"
+    "errorRemovingAttendee": "删除与会者时出错",
+    "inviteByEmail": {
+      "addRecipient": "添加收件人",
+      "email": "邮箱",
+      "title": "通过邮件邀请",
+      "sending": "发送中...",
+      "sendInvites": "发送邀请",
+      "remove": "移除",
+      "name": "姓名",
+      "messagePlaceholder": "您被邀请参加此活动。",
+      "messageLabel": "消息（可选）",
+      "expiresInDaysLabel": "有效期（天）",
+      "errorSendingInvites": "发送邀请时出错",
+      "emailsLabel": "收件人邮箱和姓名",
+      "emailsHelp": "为每个收件人提供邮箱和可选姓名。根据需要添加多个收件人。"
+    }
   },
   "userCampaigns": {
     "title": "筹款活动",
     "searchByName": "按名字搜索...",
     "searchBy": "按...搜索",
+    "searchCampaigns": "搜索活动",
     "pledgers": "承诺者",
     "pledger": "承诺者",
     "campaigns": "活动",
@@ -1713,10 +1833,21 @@
     "noPledges": "未找到承诺",
     "noCampaigns": "未找到活动",
     "raised": "已筹集",
-    "amountRaised": "已筹集金额"
+    "campaignIndex": "#",
+    "fundGoal": "筹款目标",
+    "percentRaised": "% 已筹集",
+    "createFirstCampaign": "创建您的第一个筹款活动以在此处查看。",
+    "campaignEnded": "活动已结束",
+    "amountRaised": "已筹集金额",
+    "campaignName": "活动名称",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "fundingGoal": "资金目标",
+    "viewPledge": "查看承诺"
   },
   "userPledges": {
-    "title": "我的承诺"
+    "title": "我的承诺",
+    "searchPledges": "搜索承诺"
   },
   "leaveOrganization": {
     "title": "离开组织"
@@ -1725,6 +1856,7 @@
     "toggleGroupAriaLabel": "志愿者视图选择器",
     "volunteers": "志愿者",
     "volunteer": "志愿者",
+    "volunteerName": "志愿者姓名",
     "volunteerGroups": "志愿者小组",
     "individuals": "个人",
     "groups": "小组",
@@ -1747,6 +1879,7 @@
     "deleteVolunteerGroupMsg": "您确定要删除此志愿者小组吗？",
     "leader": "领导",
     "group": "小组",
+    "groupOrLeader": "小组或领导",
     "createGroup": "创建小组",
     "updateGroup": "更新小组",
     "deleteGroup": "删除小组",
@@ -1770,7 +1903,22 @@
     "leastVolunteers": "最少的志愿者",
     "applyTo": "适用于",
     "entireSeries": "整个系列",
-    "thisEventOnly": "仅限本次活动"
+    "thisEventOnly": "仅限本次活动",
+    "volunteerAlt": "志愿者头像",
+    "groupTable": "小组表",
+    "volunteerActions": "志愿者操作",
+    "volunteerHeader": "志愿者",
+    "statusHeader": "状态",
+    "hoursVolunteeredHeader": "志愿时数",
+    "optionsHeader": "选项",
+    "groupHeader": "小组",
+    "leaderHeader": "领导",
+    "numVolunteersHeader": "志愿者数量",
+    "pending": "待审核",
+    "viewDetails": "查看 {{name}} 详情",
+    "editVolunteerGroup": "编辑 {{name}} 志愿者小组",
+    "deleteVolunteerGroup": "删除 {{name}} 志愿者小组",
+    "deleteVolunteerEntry": "删除 {{name}} 志愿者条目"
   },
   "userVolunteer": {
     "title": "志愿服务",
@@ -1782,11 +1930,15 @@
     "actions": "行动项",
     "search": "搜索",
     "searchByName": "按名称搜索",
+    "startDate": "开始日期",
     "latestEndDate": "最晚结束日期",
     "earliestEndDate": "最早结束日期",
     "noEvents": "无即将举行的活动",
     "volunteer": "志愿者",
     "volunteered": "已志愿",
+    "volunteerName": "姓名",
+    "volunteerActions": "操作",
+    "volunteerAlt": "志愿者",
     "join": "加入",
     "joined": "已加入",
     "searchByEventName": "按活动标题搜索",
@@ -1814,6 +1966,7 @@
     "event": "活动",
     "received": "已收到",
     "location": "位置",
+    "titleOrLocation": "标题或位置",
     "recurrence": "重复",
     "endDate": "结束日期",
     "description": "描述",
@@ -1822,7 +1975,8 @@
     "srNo": "序号",
     "groupName": "小组名称",
     "noOfMembers": "成员数量",
-    "options": "选项"
+    "options": "选项",
+    "notSpecified": "未指定"
   },
   "pluginStore": {
     "title": "插件商店",
@@ -1846,7 +2000,45 @@
     "checkBackLater": "稍后查看新插件",
     "tryDifferentSearch": "尝试使用不同的搜索词或浏览所有插件",
     "explorePluginStore": "探索插件商店以发现新插件",
-    "noResultsFoundFor": "未找到相关结果"
+    "noResultsFoundFor": "未找到相关结果",
+    "pluginIcon": "插件图标",
+    "backToDetails": "返回详情",
+    "previousImage": "上一张图片 (←)",
+    "nextImage": "下一张图片 (→)",
+    "screenshot": "截图 {{number}}",
+    "goTo": "前往",
+    "screenshots": "截图",
+    "ss": "截图",
+    "loadingDetails": "加载详情...",
+    "features": "功能",
+    "noFeaturesInfoAvailableForThisPlugin": "此插件无可用功能信息。",
+    "loadingFeatures": "加载功能...",
+    "loadingChangelog": "加载更新日志...",
+    "changelog": "更新日志",
+    "v": "版本",
+    "failedToUploadPlugin": "上传插件失败。",
+    "uploadPlugin": "上传插件",
+    "uploadPluginDescription": "从您的计算机上传一个插件的 ZIP 文件。",
+    "pluginId": "插件 ID",
+    "adminDashboardComponents": "管理仪表板组件",
+    "componentsToInstall": "要安装的组件",
+    "apiBackendComponents": "API 后端组件",
+    "pluginStructure": "插件结构",
+    "pluginStructureDescription": "以下是插件应遵循的目录结构示例：",
+    "detectedFiles": "检测到的文件",
+    "expectedDirectoryStructure": "预期的目录结构",
+    "requiredManifestFields": "必需的清单字段",
+    "uninstallPlugin": "卸载插件",
+    "uninstallPluginMsg": "您确定要卸载此插件吗 {{pluginName}}？",
+    "clickToViewFullSize": "点击查看全尺寸",
+    "pluginInfo": "插件信息",
+    "filterPlugins": "筛选插件",
+    "details": "详情",
+    "installing": "安装中 ({{elapsed}})",
+    "uploading": "上传中...",
+    "screenshotCounter": "{{current}} / {{total}}",
+    "uninstallWarning": "此操作将永久删除该插件及其所有数据。此操作无法撤销。",
+    "errorInstalling": "加载插件详情失败"
   },
   "commentCard": {
     "commentDeletedSuccessfully": "评论删除成功",
@@ -1865,6 +2057,19 @@
     "modalTitle": "个人资料图片",
     "enlargedAltText": "{{name}}的放大个人资料图片"
   },
+  "eventCalendar": {
+    "noEventsAvailable": "没有可用的活动",
+    "holidays": "节假日",
+    "events": "活动",
+    "eventsCreatedByOrganization": "组织创建的活动",
+    "today": "今天"
+  },
+  "contact": {
+    "card_aria": "联系人卡片"
+  },
+  "securedRoute": {
+    "sessionExpired": "请重新登录，因为会话已过期"
+  },
   "common": {
     "signOut": "退出登录",
     "signingOut": "正在退出...",
@@ -1878,6 +2083,28 @@
     "logoutFailed": "退出登录失败",
     "title": "用户门户",
     "talawa": "塔拉瓦",
-    "talawaBranding": "Talawa 品牌形象"
+    "talawaBranding": "Talawa 品牌形象",
+    "view": "查看"
+  },
+  "donation": {
+    "amount_label": "金额",
+    "card_aria": "捐赠卡",
+    "card_test_id": "donation-card-{{id}}",
+    "date_label": "日期"
+  },
+  "organizationVenuesNotification": {
+    "venueCreated": "场地创建成功",
+    "venueUpdated": "场地信息更新成功",
+    "venueNameExists": "场地名称已存在",
+    "venueTitleError": "场地名称不能为空！",
+    "venueCapacityError": "容量必须是正数！",
+    "previewUrlError": "创建预览时出错",
+    "invalidCapacity": "容量必须是正数"
+  },
+  "manageTags": {
+    "loadAssignedUsersError": "加载已分配用户时发生错误",
+    "sortPeople": "排序人员",
+    "unassign": "取消分配",
+    "tags": "标签"
   }
 }

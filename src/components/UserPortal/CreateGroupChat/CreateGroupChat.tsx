@@ -38,7 +38,7 @@
  * - utils/useLocalstorage
  * - utils/MinioUpload
  * - components/Loader
- * - components/Avatar
+ * - components/ProfileAvatarDisplay
  *
  * @fileoverview
  * This file defines the `CreateGroupChat` component, which is used in the
@@ -64,10 +64,11 @@ import { ORGANIZATION_MEMBERS } from 'GraphQl/Queries/OrganizationQueries';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import Avatar from 'components/Avatar/Avatar';
 import { FiEdit } from 'react-icons/fi';
 import { useMinioUpload } from 'utils/MinioUpload';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 interface InterfaceCreateGroupChatProps {
   toggleCreateGroupChatModal: () => void;
@@ -86,6 +87,8 @@ export default function CreateGroupChat({
 }: InterfaceCreateGroupChatProps): JSX.Element {
   const userId: string | null = getItem('userId') || getItem('id');
   const { t } = useTranslation('translation', { keyPrefix: 'userChat' });
+  const { t: tErrors } = useTranslation('errors');
+  const { t: tCommon } = useTranslation('common');
 
   const [createChat] = useMutation(CREATE_CHAT);
   const [createChatMembership] = useMutation(CREATE_CHAT_MEMBERSHIP);
@@ -110,6 +113,8 @@ export default function CreateGroupChat({
   function reset(): void {
     setTitle('');
     setUserIds([]);
+    setSelectedImage(null);
+    setDescription('');
   }
 
   useEffect(() => {
@@ -124,7 +129,7 @@ export default function CreateGroupChat({
           organizationId: currentOrg,
           name: title,
           description: description,
-          avatar: null,
+          avatar: selectedImage,
         },
       },
     });
@@ -204,11 +209,20 @@ export default function CreateGroupChat({
   };
 
   return (
-    <>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+      onReset={chatsListRefetch}
+    >
       <Modal
         data-testid="createGroupChatModal"
         show={createGroupChatModalisOpen}
-        onHide={toggleCreateGroupChatModal}
+        onHide={() => {
+          toggleCreateGroupChatModal();
+          reset();
+        }}
         contentClassName={styles.modalContent}
       >
         <Modal.Header closeButton data-testid="">
@@ -226,11 +240,11 @@ export default function CreateGroupChat({
             data-testid="fileInput"
           />
           <div className={styles.groupInfo}>
-            {selectedImage ? (
-              <img className={styles.chatImage} src={selectedImage} alt="" />
-            ) : (
-              <Avatar avatarStyle={styles.groupImage} name={title} />
-            )}
+            <ProfileAvatarDisplay
+              className={styles.chatImage}
+              fallbackName={title}
+              imageUrl={selectedImage}
+            />
             <button
               data-testid="editImageBtn"
               onClick={handleImageClick}
@@ -256,7 +270,7 @@ export default function CreateGroupChat({
             </Form.Group>
             <Form.Group className="mb-3" controlId="registerForm.Rname">
               <Form.Label>
-                {t('description', { defaultValue: 'Description' })}
+                {tCommon('description', { defaultValue: 'Description' })}
               </Form.Label>
               <Form.Control
                 type="text"
@@ -328,7 +342,9 @@ export default function CreateGroupChat({
                 >
                   <TableHead>
                     <TableRow>
-                      <TableCell>{t('hash', { defaultValue: '#' })}</TableCell>
+                      <TableCell>
+                        {tCommon('hash', { defaultValue: '#' })}
+                      </TableCell>
                       <TableCell align="center">
                         {t('user', { defaultValue: 'User' })}
                       </TableCell>
@@ -420,6 +436,6 @@ export default function CreateGroupChat({
           </Button>
         </Modal.Body>
       </Modal>
-    </>
+    </ErrorBoundaryWrapper>
   );
 }

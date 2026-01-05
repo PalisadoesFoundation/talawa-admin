@@ -13,6 +13,7 @@ import i18nForTest from '../../../utils/i18nForTest';
 import { errorHandler } from 'utils/errorHandler';
 import { toast } from 'react-toastify';
 import styles from './createPostModal.module.css';
+import dayjs from 'dayjs';
 
 // Capture originals before mocking
 const originalCrypto = global.crypto;
@@ -100,10 +101,11 @@ const createPostSuccessMock = {
   result: {
     data: {
       createPost: {
+        __typename: 'Post',
         id: 'test-post-id',
         caption: 'Test Post Title',
         pinnedAt: null,
-        attachments: [],
+        attachmentURL: null,
       },
     },
   },
@@ -124,10 +126,12 @@ const createPinnedPostMock = {
   result: {
     data: {
       createPost: {
+        __typename: 'Post',
         id: 'test-post-id',
         caption: 'Pinned Post',
-        pinnedAt: '2023-01-01T00:00:00Z',
-        attachments: [],
+        // Use dynamic past date to avoid test staleness
+        pinnedAt: dayjs().subtract(30, 'days').toISOString(),
+        attachmentURL: null,
       },
     },
   },
@@ -148,18 +152,11 @@ const createPostWithAttachmentMock = {
   result: {
     data: {
       createPost: {
+        __typename: 'Post',
         id: 'test-post-id',
         caption: 'Post with Image',
         pinnedAt: null,
-        attachments: [
-          {
-            fileHash:
-              '123456789abcdef0112233445566778899aabbccddeeff001122334455667788',
-            mimeType: 'IMAGE_JPEG',
-            name: 'test-image.jpg',
-            objectName: 'uploads/test-image.jpg',
-          },
-        ],
+        attachmentURL: 'https://example.com/uploads/test-image.jpg',
       },
     },
   },
@@ -263,7 +260,7 @@ describe('CreatePostModal Integration Tests', () => {
   ) => {
     return render(
       <I18nextProvider i18n={i18nForTest}>
-        <MockedProvider mocks={mocks} addTypename={false}>
+        <MockedProvider mocks={mocks}>
           <CreatePostModal {...defaultProps} {...props} />
         </MockedProvider>
       </I18nextProvider>,

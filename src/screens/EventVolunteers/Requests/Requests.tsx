@@ -12,7 +12,7 @@
  * @requires @apollo/client
  * @requires @mui/x-data-grid
  * @requires dayjs
- * @requires react-toastify
+ * @requires NotificationToast
  * @requires components/Loader/Loader
  * @requires components/Avatar/Avatar
  * @requires components/AdminSearchFilterBar/AdminSearchFilterBar
@@ -49,14 +49,14 @@ import {
   DataGrid,
   type GridCellParams,
   type GridColDef,
-} from '@mui/x-data-grid';
+} from 'shared-components/DataGridWrapper';
 import Avatar from 'components/Avatar/Avatar';
 import styles from '../../../style/app-fixed.module.css';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import dayjs from 'dayjs';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
 function Requests(): JSX.Element {
@@ -101,14 +101,14 @@ function Requests(): JSX.Element {
   ): Promise<void> => {
     try {
       await updateMembership({ variables: { id: id, status: status } });
-      toast.success(
+      NotificationToast.success(
         t(
           status === 'accepted' ? 'requestAccepted' : 'requestRejected',
         ) as string,
       );
       refetchRequests();
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
     }
   };
 

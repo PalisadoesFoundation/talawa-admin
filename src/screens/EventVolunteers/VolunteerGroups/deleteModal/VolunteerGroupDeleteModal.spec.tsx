@@ -18,6 +18,7 @@ import VolunteerGroupDeleteModal from './VolunteerGroupDeleteModal';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
 import { DELETE_VOLUNTEER_GROUP_FOR_INSTANCE } from 'GraphQl/Mutations/EventVolunteerMutation';
+import dayjs from 'dayjs';
 
 /**
  * Mock implementation of the `react-toastify` module.
@@ -58,7 +59,7 @@ const itemProps: InterfaceDeleteVolunteerGroupModal[] = [
       volunteersRequired: null,
       isTemplate: true,
       isInstanceException: false,
-      createdAt: '2024-10-25T16:16:32.978Z',
+      createdAt: dayjs().toISOString(),
       creator: {
         id: 'creatorId1',
         name: 'Wilt Shepherd',
@@ -217,7 +218,7 @@ describe('Testing Group Delete Modal', () => {
         volunteersRequired: null,
         isTemplate: true,
         isInstanceException: false,
-        createdAt: '2024-10-25T16:16:32.978Z',
+        createdAt: dayjs().toISOString(),
         creator: {
           id: 'creatorId1',
           name: 'Wilt Shepherd',
@@ -251,7 +252,7 @@ describe('Testing Group Delete Modal', () => {
               name: 'Group 1',
               description: 'desc',
               volunteersRequired: null,
-              createdAt: '2024-10-25T16:16:32.978Z',
+              createdAt: dayjs().toISOString(),
               leader: {
                 id: 'userId',
                 name: 'Teresa Bradley',
@@ -316,7 +317,7 @@ describe('Testing Group Delete Modal', () => {
           volunteersRequired: null,
           isTemplate,
           isInstanceException,
-          createdAt: '2024-10-25T16:16:32.978Z',
+          createdAt: dayjs().toISOString(),
           creator: {
             id: 'creatorId1',
             name: 'Wilt Shepherd',

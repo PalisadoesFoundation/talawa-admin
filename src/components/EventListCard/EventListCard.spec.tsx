@@ -14,6 +14,7 @@ import { store } from 'state/store';
 import { toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
 import { useLocalStorage } from 'utils/useLocalstorage';
 import { props } from './EventListCardProps';
 import { ERROR_MOCKS, MOCKS } from './Modal/EventListCardMocks';
@@ -95,8 +96,8 @@ const renderEventListCard = (
 
 describe('Testing Event List Card', () => {
   afterEach(() => {
-    clearAllItems();
     vi.clearAllMocks();
+    clearAllItems();
   });
   beforeAll(() => {
     vi.mock('react-router', async () => ({
@@ -119,8 +120,8 @@ describe('Testing Event List Card', () => {
               name=""
               location=""
               description=""
-              startAt="2022-03-19T02:00:00Z"
-              endAt="2022-03-26T06:00:00Z"
+              startAt={dayjs().add(10, 'days').toISOString()}
+              endAt={dayjs().add(17, 'days').toISOString()}
               startTime="02:00"
               endTime="06:00"
               allDay={true}
@@ -235,7 +236,10 @@ describe('Testing Event List Card', () => {
     await userEvent.click(screen.getByTestId('deleteEventBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(translations.eventDeleted);
+      expect(toast.success).toHaveBeenCalledWith(
+        translations.eventDeleted,
+        expect.any(Object),
+      );
     });
 
     await waitFor(() => {
@@ -295,6 +299,7 @@ describe('Testing Event List Card', () => {
     await waitFor(() => {
       expect(toast.success).toHaveBeenCalledWith(
         `Successfully registered for ${props[2].name}`,
+        expect.any(Object),
       );
     });
 

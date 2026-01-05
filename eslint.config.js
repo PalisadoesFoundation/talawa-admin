@@ -64,7 +64,6 @@ export default [
       vitest,
       import: imports,
       prettier,
-      tsdoc,
     },
     settings: {
       react: {
@@ -129,13 +128,108 @@ export default [
       '@typescript-eslint/no-unused-expressions': 'error',
       'no-restricted-syntax': [
         'error',
+        // Prevent insecure token handling in authorization headers
+        // See docs/docs/docs/developer-resources/security.md for details on these rules
+        // Note: No current violations exist. This rule is retained to prevent future regressions.
+        // Prohibited: { authorization: localStorage.getItem('token') }
+        // Safe pattern: const token = localStorage.getItem('token'); { authorization: token }
         {
           selector:
-            "Property[key.name='authorization'] CallExpression[callee.name='getItem'][arguments.0.value='token']",
+            "Property[key.name='authorization'][value.type='CallExpression'][value.callee.type='MemberExpression'][value.callee.object.name='localStorage'][value.callee.property.name='getItem'][value.arguments.0.value='token']",
           message:
             "Security Risk: Do not use getItem('token') directly inside authorization headers. Extract it to a variable first to handle null values.",
         },
+        // Prevent using deprecated REVOKE_REFRESH_TOKEN mutation
+        {
+          selector: "ImportSpecifier[imported.name='REVOKE_REFRESH_TOKEN']",
+          message:
+            'HTTP-Only Cookie Violation: Do not use REVOKE_REFRESH_TOKEN for logout. Use LOGOUT_MUTATION instead, which correctly reads refresh tokens from HTTP-only cookies.',
+        },
+        // Prevent passing refreshToken as a variable to mutations
+        {
+          selector:
+            "Property[key.name='variables'] Property[key.name='refreshToken']",
+          message:
+            'HTTP-Only Cookie Violation: Do not pass refreshToken as a variable. The API reads refresh tokens from HTTP-only cookies automatically.',
+        },
       ],
+      /**
+       * Enforce usage of standardized DataGridWrapper component
+       * Issue #6099: https://github.com/PalisadoesFoundation/talawa-admin/issues/6099
+       * Parent Issue #5290: DataGridWrapper foundation component
+       *
+       * This rule blocks direct imports from @mui/x-data-grid to ensure all usage
+       * goes through the standardized DataGridWrapper component located at
+       * src/shared-components/DataGridWrapper/
+       *
+       * Note: Approximately 20+ files currently use direct imports and will require
+       * migration in a future ticket. This rule prevents new violations.
+       */
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@mui/x-data-grid',
+              message:
+                'Direct imports from @mui/x-data-grid are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
+            },
+            {
+              name: '@mui/x-data-grid-pro',
+              message:
+                'Direct imports from @mui/x-data-grid-pro are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
+            },
+            {
+              name: 'react-bootstrap',
+              importNames: ['Spinner'],
+              message:
+                'Do not import Spinner from react-bootstrap. Use the shared LoadingState component instead.',
+            },
+          ],
+        },
+        {
+          name: 'react-bootstrap',
+          importNames: ['Modal'],
+          message:
+            'Do not import Modal directly. Use the shared BaseModal component instead.',
+        },
+      ],
+    },
+  },
+  /**
+   * Exemption: DataGridWrapper and LoadingState component files
+   *
+   * DataGridWrapper files need direct MUI DataGrid access for wrapper implementation.
+   * LoadingState files need direct Spinner access from react-bootstrap for wrapper implementation.
+   * These files are the only ones allowed to import directly from restricted libraries.
+   */
+  {
+    files: [
+      'src/shared-components/DataGridWrapper/**/*.{ts,tsx}',
+      'src/types/DataGridWrapper/**/*.{ts,tsx}',
+      'src/shared-components/LoadingState/**/*.{ts,tsx}',
+      'src/types/shared-components/LoadingState/**/*.{ts,tsx}',
+      'src/components/Loader/**/*.{ts,tsx}',
+    ],
+    rules: {
+      'no-restricted-imports': 'off',
+    },
+  },
+  /**
+   * Exemption: BaseModal component files
+   *
+   * BaseModal files need direct react-bootstrap Modal access for wrapper implementation.
+   * These files are the only ones allowed to import Modal directly from react-bootstrap.
+   */
+  {
+    files: [
+      'src/shared-components/BaseModal/**/*.ts',
+      'src/shared-components/BaseModal/**/*.tsx',
+      'src/types/shared-components/BaseModal/**/*.ts',
+      'src/types/shared-components/BaseModal/**/*.tsx',
+    ],
+    rules: {
+      'no-restricted-imports': 'off',
     },
   },
   {
@@ -146,7 +240,6 @@ export default [
     plugins: {
       '@graphql-eslint': graphql,
       prettier,
-      tsdoc,
     },
     rules: {
       '@typescript-eslint/consistent-type-imports': 'off',
@@ -155,7 +248,6 @@ export default [
       '@graphql-eslint/known-type-names': 'error',
       '@graphql-eslint/no-unreachable-types': 'off',
       'prettier/prettier': ['error', { endOfLine: 'auto' }],
-      'tsdoc/syntax': 'error',
     },
   },
   // Cypress-specific configuration
@@ -237,9 +329,25 @@ export default [
     files: ['**/*.spec.ts', '**/*.spec.tsx', '**/*.test.ts', '**/*.test.tsx'],
     plugins: {
       'vitest-isolation': vitestIsolation,
+      tsdoc,
     },
     rules: {
       'vitest-isolation/require-aftereach-cleanup': 'error',
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'Literal[value=/20[2-9]\\d-\\d{2}-\\d{2}/]',
+          message:
+            'Avoid hardcoded date strings in tests. Use dynamic dates with dayjs instead (e.g., dayjs().add(30, "days").format("YYYY-MM-DD")).',
+        },
+        {
+          selector:
+            'Literal[value=/\\d{1,2}\\s+(January|February|March|April|May|June|July|August|September|October|November|December)\\s+20[2-9]\\d/]',
+          message:
+            'Avoid hardcoded date strings like "31 December 2025". Use dynamic dates with dayjs instead.',
+        },
+      ],
+      'tsdoc/syntax': 'error',
     },
   },
 ];

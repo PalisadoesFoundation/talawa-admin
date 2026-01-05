@@ -1,11 +1,12 @@
 import { useMutation } from '@apollo/client';
+// translation-check-keyPrefix: eventListCard
 import {
   UPDATE_EVENT_MUTATION,
   UPDATE_SINGLE_RECURRING_EVENT_INSTANCE_MUTATION,
   UPDATE_THIS_AND_FOLLOWING_EVENTS_MUTATION,
   UPDATE_ENTIRE_RECURRING_EVENT_SERIES_MUTATION,
 } from 'GraphQl/Mutations/EventMutations';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -118,11 +119,13 @@ export const useUpdateEventHandler = () => {
         ? dayjs.utc(eventStartDate).isValid()
           ? dayjs.utc(eventStartDate).startOf('day').toISOString()
           : ''
-        : dayjs(eventStartDate).isValid()
-          ? dayjs(eventStartDate)
+        : dayjs.utc(eventStartDate).isValid()
+          ? dayjs
+              .utc(eventStartDate)
               .hour(parseInt(formState.startTime.split(':')[0]))
               .minute(parseInt(formState.startTime.split(':')[1]))
               .second(parseInt(formState.startTime.split(':')[2]))
+              .millisecond(0)
               .toISOString()
           : '';
 
@@ -130,11 +133,13 @@ export const useUpdateEventHandler = () => {
         ? dayjs.utc(eventEndDate).isValid()
           ? dayjs.utc(eventEndDate).endOf('day').toISOString()
           : ''
-        : dayjs(eventEndDate).isValid()
-          ? dayjs(eventEndDate)
+        : dayjs.utc(eventEndDate).isValid()
+          ? dayjs
+              .utc(eventEndDate)
               .hour(parseInt(formState.endTime.split(':')[0]))
               .minute(parseInt(formState.endTime.split(':')[1]))
               .second(parseInt(formState.endTime.split(':')[2]))
+              .millisecond(0)
               .toISOString()
           : '';
 
@@ -142,24 +147,27 @@ export const useUpdateEventHandler = () => {
         ? dayjs.utc(eventListCardProps.startAt).isValid()
           ? dayjs.utc(eventListCardProps.startAt).startOf('day').toISOString()
           : ''
-        : dayjs(
-              `${dayjs(eventListCardProps.startAt).format('YYYY-MM-DD')}T${eventListCardProps.startTime}`,
-            ).isValid()
-          ? dayjs(
-              `${dayjs(eventListCardProps.startAt).format('YYYY-MM-DD')}T${eventListCardProps.startTime}`,
-            ).toISOString()
-          : '';
+        : (() => {
+            const dateTimeStr = `${dayjs.utc(eventListCardProps.startAt).format('YYYY-MM-DD')}T${eventListCardProps.startTime}`;
+            return dayjs.utc(dateTimeStr).isValid()
+              ? dayjs.utc(dateTimeStr).toISOString()
+              : '';
+          })();
 
       const originalEndAt = eventListCardProps.allDay
         ? dayjs.utc(eventListCardProps.endAt).isValid()
           ? dayjs.utc(eventListCardProps.endAt).endOf('day').toISOString()
           : ''
-        : dayjs(
-              `${dayjs(eventListCardProps.endAt).format('YYYY-MM-DD')}T${eventListCardProps.endTime}`,
-            ).isValid()
-          ? dayjs(
-              `${dayjs(eventListCardProps.endAt).format('YYYY-MM-DD')}T${eventListCardProps.endTime}`,
-            ).toISOString()
+        : dayjs
+              .utc(
+                `${dayjs.utc(eventListCardProps.endAt).format('YYYY-MM-DD')}T${eventListCardProps.endTime}`,
+              )
+              .isValid()
+          ? dayjs
+              .utc(
+                `${dayjs.utc(eventListCardProps.endAt).format('YYYY-MM-DD')}T${eventListCardProps.endTime}`,
+              )
+              .toISOString()
           : '';
 
       // Only include timing changes if they actually changed
@@ -182,12 +190,12 @@ export const useUpdateEventHandler = () => {
 
       const hasChanges = Object.keys(updateInput).length > 1;
       if (!hasChanges) {
-        toast.info(t('eventListCard.noChangesToUpdate'));
+        NotificationToast.info(t('noChangesToUpdate'));
         return;
       }
 
       if (updateInput.startAt === '' || updateInput.endAt === '') {
-        toast.error(t('invalidDate'));
+        NotificationToast.error(t('invalidDate'));
         return;
       }
 
@@ -232,7 +240,7 @@ export const useUpdateEventHandler = () => {
       }
 
       if (data) {
-        toast.success(t('eventUpdated') as string);
+        NotificationToast.success(t('eventUpdated') as string);
         setEventUpdateModalIsOpen(false);
         hideViewModal();
         if (refetchEvents) {

@@ -9,6 +9,7 @@ import {
   ALL_ORGANIZATIONS_PG,
 } from 'GraphQl/Queries/Queries';
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
+import dayjs from 'dayjs';
 import type {
   InterfaceOrgInfoTypePG,
   InterfaceUserType,
@@ -45,7 +46,7 @@ const organizations: InterfaceOrgInfoTypePG[] = [
     name: 'Dogs Care',
     avatarURL: 'https://api.dicebear.com/5.x/initials/svg?seed=John%20Doe',
     description: 'Dog care center',
-    createdAt: '2023-04-13T04:53:17.742+00:00',
+    createdAt: dayjs().subtract(1, 'year').toISOString(),
     members: {
       edges: [],
     },
@@ -148,7 +149,7 @@ const MOCKS = [
             avatarURL: 'image1.jpg',
             addressLine1: 'Address 1',
             description: 'Description 1',
-            createdAt: '2023-04-13T04:53:17.742+00:00',
+            createdAt: dayjs().subtract(1, 'year').toISOString(),
             members: {
               edges: [
                 {
@@ -165,7 +166,7 @@ const MOCKS = [
             avatarURL: 'image2.jpg',
             addressLine1: 'Address 2',
             description: 'Description 2',
-            createdAt: '2023-04-14T04:53:17.742+00:00',
+            createdAt: dayjs().subtract(1, 'year').add(1, 'day').toISOString(),
             members: {
               edges: [
                 {
@@ -198,7 +199,7 @@ const MOCKS = [
             avatarURL: 'image3.jpg',
             addressLine1: 'Address 3',
             description: 'Description 3',
-            createdAt: '2023-04-15T04:53:17.742+00:00',
+            createdAt: dayjs().subtract(1, 'year').add(2, 'days').toISOString(),
             members: {
               edges: [
                 {

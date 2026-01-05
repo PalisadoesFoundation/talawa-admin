@@ -30,7 +30,7 @@
  *     leader: { id: "1", name: "John Doe", avatarURL: null },
  *     creator: { id: "2", name: "Jane Smith", avatarURL: null },
  *     volunteersRequired: 5,
- *     createdAt: "2024-01-01T00:00:00Z",
+ *     createdAt: dayjs().toISOString(),
  *     event: { id: "event-123" }
  *   }}
  * />
@@ -202,11 +202,7 @@ const VolunteerGroupViewModal: React.FC<InterfaceVolunteerGroupViewModal> = ({
           {volunteers && volunteers.length > 0 && (
             <Form.Group>
               <Form.Label
-                className="fw-lighter ms-2 mb-0"
-                style={{
-                  fontSize: '0.8rem',
-                  color: 'var(--search-button-border)',
-                }}
+                className={`fw-lighter ms-2 mb-0 ${styles.volunteersLabel}`}
               >
                 Volunteers
               </Form.Label>

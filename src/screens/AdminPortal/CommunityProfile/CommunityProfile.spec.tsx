@@ -1,4 +1,8 @@
 import React, { act } from 'react';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import * as convertToBase64Module from 'utils/convertToBase64';
 import { MockedProvider } from '@apollo/react-testing';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
@@ -10,7 +14,7 @@ import CommunityProfile from './CommunityProfile';
 import i18n from 'utils/i18nForTest';
 import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
 import { BrowserRouter } from 'react-router';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   RESET_COMMUNITY,
   UPDATE_COMMUNITY_PG,
@@ -20,8 +24,9 @@ import { errorHandler } from 'utils/errorHandler';
 const { toastMocks, errorHandlerMock } = vi.hoisted(() => ({
   toastMocks: {
     success: vi.fn(),
-    warn: vi.fn(),
+    warning: vi.fn(),
     error: vi.fn(),
+    info: vi.fn(),
   },
   errorHandlerMock: vi.fn(),
 }));
@@ -30,8 +35,8 @@ vi.mock('utils/errorHandler', () => ({
   errorHandler: errorHandlerMock,
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: toastMocks,
 }));
 
 const MOCKS1 = [
@@ -124,8 +129,8 @@ const MOCKS3 = [
     result: {
       data: {
         community: {
-          createdAt: '2022-01-01T12:00:00Z',
-          updatedAt: '2022-01-01T12:00:00Z',
+          createdAt: dayjs.utc().toISOString(),
+          updatedAt: dayjs.utc().toISOString(),
           id: 'communityId',
           name: 'testName',
           logoURL: 'http://logo.com',
@@ -471,7 +476,7 @@ describe('Testing Community Profile Screen', () => {
     expect(screen.getByTestId(/youtube/i)).toHaveValue('');
     expect(screen.getByTestId(/reddit/i)).toHaveValue('');
     expect(screen.getByTestId(/slack/i)).toHaveValue('');
-    expect(toast.success).toHaveBeenCalled();
+    expect(NotificationToast.success).toHaveBeenCalled();
   });
 
   test('Should have empty input fields when queried result is null', async () => {
@@ -654,7 +659,7 @@ describe('Testing Community Profile Screen', () => {
     // Wait for success toast
     await waitFor(
       () => {
-        expect(toast.success).toHaveBeenCalled();
+        expect(NotificationToast.success).toHaveBeenCalled();
       },
       { timeout: 2000 },
     );

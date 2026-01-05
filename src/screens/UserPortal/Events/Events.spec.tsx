@@ -1,10 +1,9 @@
 /**
- * @file Comprehensive unit tests for the Events component in User Portal.
- * @description This test suite provides 100% code coverage for the Events component,
- * testing all functionality including event creation, modal interactions, form inputs,
- * error handling, and different user roles.
- 
- * @module EventsSpec
+ * Comprehensive unit tests for the Events component in the User Portal.
+ *
+ * This test suite provides 100% code coverage for the Events component by
+ * validating event creation, modal interactions, form inputs, error handling,
+ * and behavior across different user roles.
  */
 
 // SKIP_LOCALSTORAGE_CHECK
@@ -30,9 +29,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { vi, beforeEach, afterEach } from 'vitest';
-import { toast } from 'react-toastify';
 import { Frequency } from 'utils/recurrenceUtils';
 import { green } from '@mui/material/colors';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 const { mockToast, mockUseParams } = vi.hoisted(() => ({
   mockToast: {
@@ -43,8 +42,8 @@ const { mockToast, mockUseParams } = vi.hoisted(() => ({
   mockUseParams: vi.fn(),
 }));
 
-vi.mock('react-toastify', () => ({
-  toast: mockToast,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockToast,
 }));
 
 vi.mock('@mui/x-date-pickers', async () => {
@@ -251,8 +250,16 @@ const MOCKS = [
                   id: 'event1',
                   name: 'Test Event 1',
                   description: 'Test Description 1',
-                  startAt: '2023-06-05T00:00:00.000Z',
-                  endAt: '2023-06-05T23:59:59.999Z',
+                  startAt: dayjs()
+                    .subtract(7, 'months')
+                    .date(5)
+                    .startOf('day')
+                    .toISOString(),
+                  endAt: dayjs()
+                    .subtract(7, 'months')
+                    .date(5)
+                    .endOf('day')
+                    .toISOString(),
                   location: 'Test Location',
                   allDay: true,
                   isPublic: true,
@@ -282,8 +289,20 @@ const MOCKS = [
                   id: 'event2',
                   name: 'Test Event 2',
                   description: 'Test Description 2',
-                  startAt: '2023-06-06T08:00:00.000Z',
-                  endAt: '2023-06-06T10:00:00.000Z',
+                  startAt: dayjs()
+                    .subtract(7, 'months')
+                    .date(6)
+                    .hour(8)
+                    .minute(0)
+                    .second(0)
+                    .toISOString(),
+                  endAt: dayjs()
+                    .subtract(7, 'months')
+                    .date(6)
+                    .hour(10)
+                    .minute(0)
+                    .second(0)
+                    .toISOString(),
                   location: 'Test Location 2',
                   allDay: false,
                   isPublic: false,
@@ -326,8 +345,17 @@ const MOCKS = [
         id: 'org123',
         first: 100,
         after: null,
-        startAt: '2023-05-31T18:30:00.000Z',
-        endAt: '2023-06-30T18:29:59.999Z',
+        startAt: dayjs()
+          .subtract(1, 'year')
+          .month(4)
+          .endOf('month')
+          .subtract(1, 'day')
+          .toISOString(),
+        endAt: dayjs()
+          .subtract(1, 'year')
+          .month(5)
+          .endOf('month')
+          .toISOString(),
         includeRecurring: true,
       },
     },
@@ -341,8 +369,12 @@ const MOCKS = [
                   id: 'event1',
                   name: 'Test Event 1',
                   description: 'Test Description 1',
-                  startAt: '2024-03-05T00:00:00.000Z',
-                  endAt: '2024-03-05T23:59:59.999Z',
+                  startAt: dayjs()
+                    .month(2)
+                    .date(5)
+                    .startOf('day')
+                    .toISOString(),
+                  endAt: dayjs().month(2).date(5).endOf('day').toISOString(),
                   location: 'Test Location',
                   allDay: true,
                   isPublic: true,
@@ -372,8 +404,20 @@ const MOCKS = [
                   id: 'event2',
                   name: 'Test Event 2',
                   description: 'Test Description 2',
-                  startAt: '2024-03-06T08:00:00.000Z',
-                  endAt: '2024-03-06T10:00:00.000Z',
+                  startAt: dayjs()
+                    .month(2)
+                    .date(6)
+                    .hour(8)
+                    .minute(0)
+                    .second(0)
+                    .toISOString(),
+                  endAt: dayjs()
+                    .month(2)
+                    .date(6)
+                    .hour(10)
+                    .minute(0)
+                    .second(0)
+                    .toISOString(),
                   location: 'Test Location 2',
                   allDay: false,
                   isPublic: false,
@@ -427,8 +471,8 @@ const MOCKS = [
             postalCode: '12345',
             countryCode: 'US',
             avatarURL: '',
-            createdAt: '2024-01-01T00:00:00.000Z',
-            updatedAt: '2024-01-01T00:00:00.000Z',
+            createdAt: dayjs().toISOString(),
+            updatedAt: dayjs().toISOString(),
             creator: {
               id: 'user1',
               name: 'Creator User',
@@ -606,8 +650,8 @@ const CREATOR_NULL_MOCKS = (() => {
                 id: null,
                 name: null,
                 description: null,
-                startAt: '2024-03-05T00:00:00.000Z',
-                endAt: '2024-03-05T23:59:59.999Z',
+                startAt: dayjs().month(2).date(5).startOf('day').toISOString(),
+                endAt: dayjs().month(2).date(5).endOf('day').toISOString(),
                 location: null,
                 allDay: true,
                 isPublic: true,
@@ -1003,7 +1047,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait(500);
 
     // Error should be logged (console.error is called in catch block)
-    expect(toast.success).not.toHaveBeenCalled();
+    expect(NotificationToast.success).not.toHaveBeenCalled();
   });
 
   it('Should toggle all-day checkbox and enable/disable time inputs', async () => {
