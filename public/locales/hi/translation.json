@@ -18,7 +18,8 @@
     "rank": "रैंक",
     "volunteer": "स्वयंसेवक",
     "email": "ईमेल",
-    "hoursVolunteered": "स्वयंसेवक घंटे"
+    "hoursVolunteered": "स्वयंसेवक घंटे",
+    "volunteerRankings": "स्वयंसेवक रैंकिंग"
   },
   "loginPage": {
     "title": "तालावा व्यवस्थापक",
@@ -1725,7 +1726,8 @@
     "delete": "हटाएं",
     "name": "नाम",
     "desc": "विवरण",
-    "venueImagePreview": "स्थान की छवि का पूर्वावलोकन"
+    "venueImagePreview": "स्थान की छवि का पूर्वावलोकन",
+    "sortVenues": "स्थानों को क्रमबद्ध करें"
   },
   "addMember": {
     "title": "सदस्य जोड़ें",
