@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { FormField } from '../FormField/FormField';
 import { EmailField } from '../EmailField/EmailField';
 import { PasswordField } from '../PasswordField/PasswordField';
@@ -25,6 +26,7 @@ export const RegistrationForm = ({
   onError,
   enableRecaptcha = false,
 }: IRegistrationFormProps) => {
+  const { t } = useTranslation('common');
   const [f, setF] = useState<IRegistrationFormData>({
     name: '',
     email: '',
@@ -80,10 +82,8 @@ export const RegistrationForm = ({
   return (
     <form onSubmit={submit} aria-busy={loading}>
       <FormField
-        label=""
+        label={t('name')}
         name="name"
-        placeholder=""
-        data-field="name"
         value={f.name}
         onChange={(e) => setF((s) => ({ ...s, name: e.target.value }))}
       />
@@ -96,10 +96,8 @@ export const RegistrationForm = ({
       {errors.email && <div className="text-danger small">{errors.email}</div>}
 
       <PasswordField
-        label=""
+        label={t('password')}
         name="password"
-        placeholder=""
-        data-field="password"
         value={f.password}
         onChange={(e) => setF((s) => ({ ...s, password: e.target.value }))}
       />
@@ -108,10 +106,8 @@ export const RegistrationForm = ({
       )}
 
       <PasswordField
-        label=""
+        label={t('confirmPassword')}
         name="confirmPassword"
-        placeholder=""
-        data-field="confirmPassword"
         value={f.confirmPassword}
         onChange={(e) =>
           setF((s) => ({ ...s, confirmPassword: e.target.value }))
@@ -131,8 +127,8 @@ export const RegistrationForm = ({
           {/* reCAPTCHA component will be rendered here */}
         </div>
       )}
-      <button type="submit" disabled={loading} data-action="submit">
-        {loading ? '...' : ''}
+      <button type="submit" disabled={loading}>
+        {loading ? t('loading') : t('register')}
       </button>
     </form>
   );
