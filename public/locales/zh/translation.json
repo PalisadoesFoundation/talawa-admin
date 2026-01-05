@@ -1788,7 +1788,11 @@
   },
   "checkIn": {
     "errorCheckingIn": "签到错误",
-    "checkedInSuccessfully": "成功签到"
+    "checkedInSuccessfully": "成功签到",
+    "generatingPdf": "正在生成 PDF...",
+    "pdfGeneratedSuccessfully": "PDF 生成成功！",
+    "errorGeneratingPdf": "生成 PDF 时出错",
+    "unknownError": "未知错误"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "添加与会者时出错",

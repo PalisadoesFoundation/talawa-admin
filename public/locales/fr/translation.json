@@ -1788,7 +1788,11 @@
   },
   "checkIn": {
     "errorCheckingIn": "Erreur lors de l'enregistrement",
-    "checkedInSuccessfully": "Enregistrement réussi"
+    "checkedInSuccessfully": "Enregistrement réussi",
+    "generatingPdf": "Génération du PDF...",
+    "pdfGeneratedSuccessfully": "PDF généré avec succès !",
+    "errorGeneratingPdf": "Erreur lors de la génération du PDF",
+    "unknownError": "Erreur inconnue"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",

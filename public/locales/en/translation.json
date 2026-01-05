@@ -1788,7 +1788,11 @@
   },
   "checkIn": {
     "errorCheckingIn": "Error checking in",
-    "checkedInSuccessfully": "Checked in successfully"
+    "checkedInSuccessfully": "Checked in successfully",
+    "generatingPdf": "Generating pdf...",
+    "pdfGeneratedSuccessfully": "PDF generated successfully!",
+    "errorGeneratingPdf": "Error generating pdf",
+    "unknownError": "Unknown error"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error adding attendee",

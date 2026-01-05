@@ -1788,7 +1788,11 @@
   },
   "checkIn": {
     "errorCheckingIn": "चेक-इन में त्रुटि",
-    "checkedInSuccessfully": "सफलतापूर्वक चेक-इन किया गया"
+    "checkedInSuccessfully": "सफलतापूर्वक चेक-इन किया गया",
+    "generatingPdf": "PDF जेनरेट हो रहा है...",
+    "pdfGeneratedSuccessfully": "PDF सफलतापूर्वक जेनरेट किया गया!",
+    "errorGeneratingPdf": "PDF जेनरेट करने में त्रुटि",
+    "unknownError": "अज्ञात त्रुटि"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",

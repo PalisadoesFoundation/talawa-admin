@@ -1788,7 +1788,11 @@
   },
   "checkIn": {
     "errorCheckingIn": "Error al registrarse",
-    "checkedInSuccessfully": "Registrado con éxito"
+    "checkedInSuccessfully": "Registrado con éxito",
+    "generatingPdf": "Generando PDF...",
+    "pdfGeneratedSuccessfully": "¡PDF generado con éxito!",
+    "errorGeneratingPdf": "Error al generar PDF",
+    "unknownError": "Error desconocido"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error al agregar asistente",

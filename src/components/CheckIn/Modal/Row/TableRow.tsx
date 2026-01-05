@@ -19,7 +19,7 @@
  * - If the user is not checked in, a "Check In" button is displayed.
  * - The component uses Apollo Client's `useMutation` hook to perform the check-in operation.
  * - The `generate` function from `@pdfme/generator` is used to create the PDF tag.
- * - Notifications are displayed using `react-toastify` for success, error, and pending states.
+ * - Notifications are displayed using `NotificationToast` for success, error, and pending states.
  *
  * @example
  * ```tsx
@@ -81,7 +81,7 @@ export const TableRow = ({
    * @returns A promise that resolves when the PDF is generated and opened.
    */
   const notify = async (): Promise<void> => {
-    NotificationToast.info('Generating pdf...');
+    NotificationToast.info(t('generatingPdf') as string);
     await generateTag();
   };
 
@@ -104,11 +104,13 @@ export const TableRow = ({
       const url = URL.createObjectURL(blob);
       window.open(url);
 
-      NotificationToast.success('PDF generated successfully!');
+      NotificationToast.success(t('pdfGeneratedSuccessfully') as string);
     } catch (error: unknown) {
       const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error';
-      NotificationToast.error(`Error generating pdf: ${errorMessage}`);
+        error instanceof Error ? error.message : (t('unknownError') as string);
+      NotificationToast.error(
+        `${t('errorGeneratingPdf') as string}: ${errorMessage}`,
+      );
     }
   };
 
