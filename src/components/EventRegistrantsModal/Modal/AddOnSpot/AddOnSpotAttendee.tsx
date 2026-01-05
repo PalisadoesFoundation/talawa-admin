@@ -37,7 +37,7 @@
  */
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import React, { useState } from 'react';
-import { Modal, Form, Button, Spinner } from 'react-bootstrap';
+import { Modal, Form, Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import componentStyles from '../../EventRegistrants.module.css';
 import { useParams } from 'react-router';
@@ -49,6 +49,8 @@ import type {
 } from 'utils/interfaces';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
+import modalStyles from '../../EventRegistrants.module.css';
 
 const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   show,
@@ -136,7 +138,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   return (
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" centered>
-        <Modal.Header closeButton className={componentStyles.modalHeader}>
+        <Modal.Header closeButton className={modalStyles.modalHeader}>
           <Modal.Title>{t('title')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
@@ -209,28 +211,16 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
               </Form.Control>
             </Form.Group>
             <br />
-            <Button
-              variant="success"
-              type="submit"
-              className={`border-1 mx-4 ${styles.addButton}`}
-              disabled={isSubmitting}
-            >
-              {isSubmitting ? (
-                <>
-                  <Spinner
-                    as="span"
-                    animation="border"
-                    size="sm"
-                    role="status"
-                    aria-hidden="true"
-                    className="me-2"
-                  />
-                  {t('addingAttendee')}
-                </>
-              ) : (
-                'Add'
-              )}
-            </Button>
+            <LoadingState isLoading={isSubmitting} variant="inline">
+              <Button
+                variant="success"
+                type="submit"
+                className={`border-1 mx-4 ${styles.addButton}`}
+                disabled={isSubmitting}
+              >
+                {t('addAttendee')}
+              </Button>
+            </LoadingState>
           </Form>
         </Modal.Body>
       </Modal>
