@@ -88,6 +88,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   // next 3 states are there to keep track of the ancestor tags of the the tags that we have selected
   // i.e. when we check a tag, all of it's ancestor tags will be checked too
   // indicating that the users will be assigned all of the ancestor tags as well
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [addAncestorTagsData, setAddAncestorTagsData] = useState<
     Set<InterfaceUserTagsAncestorData>
   >(new Set());
@@ -103,27 +104,33 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   const [ancestorTagsDataMap, setAncestorTagsDataMap] = useState(new Map());
 
   useEffect(() => {
-    setCheckedTags((prevCheckedTags) => {
-      const newCheckedTags = new Set(prevCheckedTags);
-      addAncestorTagsData.forEach(
-        (ancestorTag: InterfaceUserTagsAncestorData) => {
-          newCheckedTags.add(ancestorTag._id);
-        },
-      );
-      return newCheckedTags;
-    });
-
+    // Compute what needs to be deleted first (pure computation)
     setAncestorTagsDataMap((prevMap) => {
       const newMap = new Map(prevMap);
-      addAncestorTagsData.forEach(
-        (ancestorTag: InterfaceUserTagsAncestorData) => {
-          const prevValue = prevMap.get(ancestorTag._id);
-          newMap.set(ancestorTag._id, prevValue ? prevValue + 1 : 1);
-        },
-      );
+      const tagsToDelete: string[] = [];
+
+      removeAncestorTagsData.forEach((ancestorTag) => {
+        const prevValue = prevMap.get(ancestorTag._id);
+        if (prevValue === 1) {
+          newMap.delete(ancestorTag._id);
+          tagsToDelete.push(ancestorTag._id);
+        } else {
+          newMap.set(ancestorTag._id, prevValue - 1);
+        }
+      });
+
+      // Nested setState is allowed and will batch correctly
+      if (tagsToDelete.length > 0) {
+        setCheckedTags((prev) => {
+          const next = new Set(prev);
+          tagsToDelete.forEach((id) => next.delete(id));
+          return next;
+        });
+      }
+
       return newMap;
     });
-  }, [addAncestorTagsData]);
+  }, [removeAncestorTagsData]);
 
   useEffect(() => {
     let tagsToDelete: string[] = [];
@@ -300,6 +307,8 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
               id="scrollableDiv"
               data-testid="scrollableDiv"
               className={componentStyles.tagActionsScrollableDiv}
+              role="list"
+              aria-label={t('allTags')}
             >
               {tagActionsModalIsOpen && (
                 <CursorPaginationManager
@@ -311,7 +320,11 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                   dataPath="organizations.0.userTags"
                   itemsPerPage={TAGS_QUERY_DATA_CHUNK_SIZE}
                   renderItem={(tag: InterfaceTagData) => (
-                    <div key={tag._id} className="position-relative w-100">
+                    <div
+                      key={tag._id}
+                      className="position-relative w-100"
+                      role="listitem"
+                    >
                       <div
                         className="d-inline-block w-100"
                         data-testid="orgUserTag"

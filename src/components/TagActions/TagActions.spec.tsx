@@ -330,6 +330,9 @@ describe('Organisation Tags Page', () => {
       expect(screen.getByTestId('checkTag2')).toBeInTheDocument();
     });
     await userEvent.click(screen.getByTestId('checkTag2'));
+    await waitFor(() => {
+      expect(screen.getByTestId('checkTag3')).toBeInTheDocument();
+    });
     await userEvent.click(screen.getByTestId('checkTag3'));
 
     await waitFor(() => {
