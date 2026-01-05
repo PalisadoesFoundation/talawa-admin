@@ -21,7 +21,6 @@ export const useRegistration = ({
     try {
       // Mock registration - in real implementation, this would call GraphQL mutation
       await new Promise((resolve) => setTimeout(resolve, 100));
-      console.log('Registration data:', data); // For development purposes
       if (onSuccess) {
         onSuccess();
       }

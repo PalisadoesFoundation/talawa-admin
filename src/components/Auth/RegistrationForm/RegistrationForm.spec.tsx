@@ -283,4 +283,22 @@ describe('RegistrationForm', () => {
       expect(mockCallback).toHaveBeenCalled();
     });
   });
+
+  it('handles registration errors', async () => {
+    // Mock useRegistration to simulate error
+    const mockRegisterError = vi.fn().mockRejectedValue(new Error('Registration failed'));
+    vi.mocked(useRegistration).mockReturnValue({
+      register: mockRegisterError,
+      loading: false,
+    });
+
+    renderComponent({ onError: mockOnError });
+
+    fillValidForm();
+    fireEvent.click(screen.getByRole('button', { name: /create account/i }));
+
+    await waitFor(() => {
+      expect(mockOnError).toHaveBeenCalledWith(expect.any(Error));
+    });
+  });
 });
