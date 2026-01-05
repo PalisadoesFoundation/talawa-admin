@@ -1696,6 +1696,7 @@
     "categoryDeleted": "Action Item Category deleted successfully",
     "deleteCategory": "Delete Category",
     "deleteCategoryMsg": "Are you sure you want to delete this Action Item Category?",
+    "noDescriptionProvided": "No description provided",
     "createButton": "createButton",
     "editButton": "editButton"
   },
