@@ -6,7 +6,7 @@
 
 > **main**(): `Promise`\<`void`\>
 
-Defined in: [src/setup/setup.ts:87](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L87)
+Defined in: [src/setup/setup.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/setup/setup.ts#L75)
 
 ## Returns
 

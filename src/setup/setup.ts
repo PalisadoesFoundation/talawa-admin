@@ -60,46 +60,33 @@ export const askAndSetRecaptcha = async (): Promise<void> => {
 
 // Ask and set up logging errors in the console
 const askAndSetLogErrors = async (): Promise<void> => {
-  try {
-    const { shouldLogErrors } = await inquirer.prompt({
-      type: 'confirm',
-      name: 'shouldLogErrors',
-      message:
-        'Would you like to log Compiletime and Runtime errors in the console?',
-      default: true,
-    });
+  const { shouldLogErrors } = await inquirer.prompt({
+    type: 'confirm',
+    name: 'shouldLogErrors',
+    message:
+      'Would you like to log Compiletime and Runtime errors in the console?',
+    default: true,
+  });
 
-    updateEnvFile('ALLOW_LOGS', shouldLogErrors ? 'YES' : 'NO');
-  } catch (error) {
-    if (isExitPromptError(error)) {
-      throw error;
-    }
-    console.error('Error setting up log configuration:', error);
-    throw new Error(
-      `Failed to set up log configuration: ${
-        error instanceof Error ? error.message : String(error)
-      }`,
-    );
-  }
+  updateEnvFile('ALLOW_LOGS', shouldLogErrors ? 'YES' : 'NO');
 };
 
 // Main function to run the setup process
 export async function main(): Promise<void> {
   // Handle user cancellation (CTRL+C)
-  process.on('SIGINT', () => {
+  const sigintHandler = (): void => {
     console.log('\n\n⚠️  Setup cancelled by user.');
     console.log(
       'Configuration may be incomplete. Run setup again to complete.',
     );
     process.exit(130);
-  });
+  };
+
+  process.on('SIGINT', sigintHandler);
 
   try {
     if (!checkEnvFile()) {
-      console.error(
-        '❌ Environment file check failed. Please ensure .env exists.',
-      );
-      process.exit(1);
+      return;
     }
 
     console.log('Welcome to the Talawa Admin setup! 🚀');
@@ -134,6 +121,8 @@ export async function main(): Promise<void> {
     console.error('\n❌ Setup failed:', error);
     console.log('\nPlease try again or contact support if the issue persists.');
     process.exit(1);
+  } finally {
+    process.removeListener('SIGINT', sigintHandler);
   }
 }
 
