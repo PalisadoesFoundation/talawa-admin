@@ -29,7 +29,7 @@ import { Stack } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import dayjs from 'dayjs';
 import { currencySymbols } from 'utils/currency';
-import PledgeDeleteModal from 'screens/FundCampaignPledge/deleteModal/PledgeDeleteModal';
+import PledgeDeleteModal from 'screens/AdminPortal/FundCampaignPledge/deleteModal/PledgeDeleteModal';
 import { Navigate, useParams } from 'react-router';
 import PledgeModal from '../Campaigns/PledgeModal';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';

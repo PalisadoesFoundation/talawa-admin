@@ -18,7 +18,8 @@
     "rank": "Rank",
     "volunteer": "Volunteer",
     "email": "Email",
-    "hoursVolunteered": "Hours Volunteered"
+    "hoursVolunteered": "Hours Volunteered",
+    "volunteerRankings": "Volunteer Rankings"
   },
   "loginPage": {
     "title": "Talawa Admin",
@@ -311,7 +312,8 @@
     "UserIdNotFound": "User ID not found",
     "MembershipRequestNotFound": "Membership request not found",
     "MembershipRequestWithdrawn": "Membership request withdrawn successfully",
-    "errorLoadingUsers": "Error occurred while loading Users"
+    "errorLoadingUsers": "Error occurred while loading Users",
+    "profilePageComingSoon": "Profile Page Coming Soon!"
   },
   "communityProfile": {
     "title": "Community Profile",
@@ -1694,6 +1696,7 @@
     "categoryDeleted": "Action Item Category deleted successfully",
     "deleteCategory": "Delete Category",
     "deleteCategoryMsg": "Are you sure you want to delete this Action Item Category?",
+    "noDescriptionProvided": "No description provided",
     "createButton": "createButton",
     "editButton": "editButton"
   },
@@ -1725,7 +1728,8 @@
     "delete": "delete",
     "name": "name",
     "desc": "desc",
-    "venueImagePreview": "Preview of venue image"
+    "venueImagePreview": "Preview of venue image",
+    "sortVenues": "Sort Venues"
   },
   "addMember": {
     "title": "Add Member",
