@@ -48,7 +48,7 @@ import IconComponent from 'components/IconComponent/IconComponent';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import type { InterfaceTagDataPG } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
-import type { GridCellParams } from '@mui/x-data-grid';
+import type { GridCellParams } from 'shared-components/DataGridWrapper';
 import type {
   InterfaceOrganizationTagsQueryPG,
   SortedByType,
@@ -68,7 +68,7 @@ import {
 } from 'types/ReportingTable/utils';
 import { ORGANIZATION_USER_TAGS_LIST_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { CREATE_USER_TAG } from 'GraphQl/Mutations/TagMutations';
-import PageHeader from 'shared-components/Navbar/Navbar';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
 function OrganizationTags(): JSX.Element {
   const { t } = useTranslation('translation', {
@@ -355,27 +355,33 @@ function OrganizationTags(): JSX.Element {
     <>
       <Row>
         <div>
-          <div className={styles.btnsContainer}>
-            <PageHeader
-              search={{
-                placeholder: tCommon('searchByName'),
-                onSearch: (term) => setTagSearchName(term.trim()),
-                inputTestId: 'searchByName',
-                buttonTestId: 'searchBtn',
-              }}
-              sorting={[
+          <div
+            className={styles.btnsContainer}
+            data-testid="organizationTags-header"
+          >
+            <AdminSearchFilterBar
+              hasDropdowns={true}
+              searchPlaceholder={tCommon('searchByName')}
+              searchValue={tagSearchName}
+              onSearchChange={(value) => setTagSearchName(value.trim())}
+              searchInputTestId="searchByName"
+              searchButtonTestId="searchBtn"
+              dropdowns={[
                 {
-                  title: t('sortTags'),
+                  id: 'tags-sort',
+                  label: t('sortTags'),
+                  type: 'sort',
                   options: [
                     { label: tCommon('Latest'), value: 'latest' },
                     { label: tCommon('Oldest'), value: 'oldest' },
                   ],
-                  selected: tagSortOrder === 'DESCENDING' ? 'latest' : 'oldest',
-                  onChange: (value) => handleSortChange(value.toString()),
-                  testIdPrefix: 'sortedBy',
+                  selectedOption:
+                    tagSortOrder === 'DESCENDING' ? 'latest' : 'oldest',
+                  onOptionChange: (value) => handleSortChange(value.toString()),
+                  dataTestIdPrefix: 'sortTags',
                 },
               ]}
-              actions={
+              additionalButtons={
                 <Button
                   onClick={showCreateTagModal}
                   data-testid="createTagBtn"

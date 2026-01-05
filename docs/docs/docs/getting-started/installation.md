@@ -9,11 +9,22 @@ Talawa-Admin can be installed using either an [automated one-click installation 
 
 ## Automated Installation
 
-:::warning
-The automated installation is currently only supported on **macOS and Linux**. Windows users should use the [Manual Installation](#manual-installation) method instead.
+:::tip
+The automated installation is supported on **macOS, Linux, and Windows (via WSL)**. For native Windows without WSL, use the [Manual Installation](#manual-installation) method.
 :::
 
 The automated installation script provides a zero-prerequisite installation experience. It automatically installs Node.js (via fnm), pnpm, and all required dependencies.
+
+### WSL (Windows Subsystem for Linux) Support
+
+If you're using Windows with WSL:
+
+1. **Use the bash script** (`./scripts/install.sh`) inside your WSL terminal - not the PowerShell script
+2. **Docker**: Install Docker Desktop for Windows and enable the WSL 2 backend integration:
+   - Settings → General → "Use the WSL 2 based engine"
+   - Settings → Resources → WSL Integration → Enable for your distro
+   - See: https://docs.docker.com/desktop/wsl/
+
 
 ### Prerequisites
 
@@ -225,6 +236,13 @@ Follow these steps:
       6. Exit `notepad`
       7. Exit PowerShell
       8. This will ensure that you are always using the correct version of `node.js`
+3. Install `python` from https://www.python.org
+   1. Ensure Python 3.10 or later is installed.
+   2. Verify installation by running `python --version` in your terminal.
+   3. Create a Python virtual environment and install dependencies:
+      ```bash
+      python -m venv venv
+      ```
 
 Proceed to the next section.
 
@@ -261,6 +279,64 @@ pnpm install -g typescript
 This command installs TypeScript globally on your system so that it can be accessed from any project.
 
 Proceed to the next section.
+
+### Install Python (Required for Contributors)
+
+Talawa Admin uses several Python scripts for code quality checks that run:
+
+- In GitHub Actions (CI)
+- Locally via Husky pre-commit hooks
+
+To avoid pre-commit failures and CI errors, contributors **must install Python and
+the required dependencies before committing code**.
+
+```note
+This step is required only for contributors. End users running Talawa Admin do not need Python.
+```
+
+#### Prerequisites
+
+- Python **3.10 or later**
+- `pip` available in PATH
+
+You can verify your Python installation by running:
+
+```bash
+python --version
+pip --version
+```
+
+#### Create a Python virtual environment and install dependencies
+
+From the repository root, run:
+
+```bash
+python -m venv venv
+```
+
+Then activate the virtual environment:
+
+**On macOS/Linux:**
+```bash
+source venv/bin/activate
+```
+
+**On Windows (PowerShell):**
+```powershell
+venv\Scripts\Activate.ps1
+```
+
+**On Windows (Git Bash/MSYS2):**
+```bash
+source venv/Scripts/activate
+```
+
+Now install the required Python packages:
+
+```bash
+pip install -r .github/workflows/requirements.txt
+```
+
 
 ### Install The Required Packages
 

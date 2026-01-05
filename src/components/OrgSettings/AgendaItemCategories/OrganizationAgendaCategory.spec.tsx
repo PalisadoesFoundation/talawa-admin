@@ -156,17 +156,13 @@ describe('Testing Agenda Categories Component', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('createAgendaCategoryModalCloseBtn'),
+        screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
-    await userEvent.click(
-      screen.getByTestId('createAgendaCategoryModalCloseBtn'),
-    );
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
 
     await waitFor(() => {
-      expect(
-        screen.queryByTestId('createAgendaCategoryModalCloseBtn'),
-      ).not.toBeInTheDocument();
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
     });
   });
   it('creates new agenda cagtegory', async () => {
@@ -193,7 +189,7 @@ describe('Testing Agenda Categories Component', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('createAgendaCategoryModalCloseBtn'),
+        screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
 
@@ -241,7 +237,7 @@ describe('Testing Agenda Categories Component', () => {
 
     await waitFor(() => {
       return expect(
-        screen.findByTestId('createAgendaCategoryModalCloseBtn'),
+        screen.findByTestId('modalCloseBtn'),
       ).resolves.toBeInTheDocument();
     });
 

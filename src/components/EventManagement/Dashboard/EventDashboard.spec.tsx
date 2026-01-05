@@ -11,6 +11,10 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { ApolloLink, DefaultOptions } from '@apollo/client';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 import {
   MOCKS_WITHOUT_TIME,
@@ -312,8 +316,12 @@ describe('Testing Event Dashboard Screen', () => {
                 id: 'event123',
                 name: 'Test Event',
                 description: 'Test Description',
-                startAt: '2024-01-01T00:00:00Z',
-                endAt: '2024-01-02T00:00:00Z',
+                startAt: dayjs
+                  .utc()
+                  .add(10, 'days')
+                  .startOf('day')
+                  .toISOString(),
+                endAt: dayjs.utc().add(11, 'days').startOf('day').toISOString(),
                 allDay: false,
                 location: 'India',
                 isPublic: true,
@@ -354,8 +362,12 @@ describe('Testing Event Dashboard Screen', () => {
                 id: 'event123',
                 name: 'Test Event',
                 description: 'Test Description',
-                startAt: '2024-01-01T00:00:00Z',
-                endAt: '2024-01-02T00:00:00Z',
+                startAt: dayjs
+                  .utc()
+                  .add(10, 'days')
+                  .startOf('day')
+                  .toISOString(),
+                endAt: dayjs.utc().add(11, 'days').startOf('day').toISOString(),
                 startTime: null,
                 endTime: null,
                 allDay: true, // Changed to true - no time display expected

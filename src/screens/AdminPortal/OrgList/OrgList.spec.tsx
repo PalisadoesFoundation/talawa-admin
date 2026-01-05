@@ -26,6 +26,10 @@ import {
 import { GET_USER_NOTIFICATIONS } from 'GraphQl/Queries/NotificationQueries';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import {
   CREATE_ORGANIZATION_MUTATION_PG,
   CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
@@ -164,7 +168,7 @@ const mockOrgData = {
       name: 'Dogs Care',
       avatarURL: '',
       description: 'Dog care center',
-      createdAt: '2023-04-13T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').toISOString(),
       members: { edges: [] },
       addressLine1: 'Texas, USA',
     },
@@ -175,7 +179,7 @@ const mockOrgData = {
       name: 'Dogs Care',
       avatarURL: '',
       description: 'Dog care center',
-      createdAt: '2023-04-13T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').toISOString(),
       members: { edges: [] },
       addressLine1: 'Texas, USA',
     },
@@ -184,7 +188,7 @@ const mockOrgData = {
       name: 'Cats Care',
       avatarURL: '',
       description: 'Cat care center',
-      createdAt: '2023-04-14T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').add(1, 'day').toISOString(),
       members: { edges: [] },
       addressLine1: 'Texas, USA',
     },
@@ -193,7 +197,7 @@ const mockOrgData = {
       name: 'Birds Care',
       avatarURL: '',
       description: 'Bird care center',
-      createdAt: '2023-04-15T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').add(2, 'days').toISOString(),
       members: { edges: [] },
       addressLine1: 'Texas, USA',
     },
@@ -202,7 +206,7 @@ const mockOrgData = {
       name: 'Fish Care',
       avatarURL: '',
       description: 'Fish care center',
-      createdAt: '2023-04-16T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').add(3, 'days').toISOString(),
       members: { edges: [] },
       addressLine1: 'Texas, USA',
     },
@@ -211,7 +215,7 @@ const mockOrgData = {
       name: 'Rabbit Care',
       avatarURL: '',
       description: 'Rabbit care center',
-      createdAt: '2023-04-17T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').add(4, 'days').toISOString(),
       members: { edges: [] },
       addressLine1: 'Texas, USA',
     },
@@ -220,7 +224,7 @@ const mockOrgData = {
       name: 'Horse Care',
       avatarURL: '',
       description: 'Horse care center',
-      createdAt: '2023-04-18T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').add(5, 'days').toISOString(),
       members: { edges: [] },
       addressLine1: 'Texas, USA',
     },
@@ -230,7 +234,7 @@ const mockOrgData = {
     name: `Organization ${i + 1}`,
     avatarURL: '',
     description: `Description ${i + 1}`,
-    createdAt: `2023-04-${13 + i}T04:53:17.742+00:00`,
+    createdAt: dayjs().subtract(1, 'year').add(i, 'days').toISOString(),
     members: { edges: [] },
     addressLine1: 'Test Address',
   })),
@@ -240,7 +244,7 @@ const mockOrgData = {
       name: 'Dogs Care 1',
       avatarURL: '',
       description: 'Dog care center 1',
-      createdAt: '2023-04-13T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').toISOString(),
       members: { edges: [] },
       addressLine1: 'Texas, USA',
     },
@@ -249,7 +253,7 @@ const mockOrgData = {
       name: 'Cats Care 2',
       avatarURL: '',
       description: 'Cat care center 2',
-      createdAt: '2023-04-14T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').add(1, 'day').toISOString(),
       members: { edges: [] },
       addressLine1: 'Texas, USA',
     },
@@ -258,7 +262,7 @@ const mockOrgData = {
       name: 'Birds Care 3',
       avatarURL: '',
       description: 'Bird care center 3',
-      createdAt: '2023-04-15T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').add(2, 'days').toISOString(),
       members: { edges: [] },
       addressLine1: 'Texas, USA',
     },
@@ -267,7 +271,7 @@ const mockOrgData = {
       name: 'Fish Care 4',
       avatarURL: '',
       description: 'Fish care center 4',
-      createdAt: '2023-04-16T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').add(3, 'days').toISOString(),
       members: { edges: [] },
       addressLine1: 'Texas, USA',
     },
@@ -276,7 +280,7 @@ const mockOrgData = {
       name: 'Rabbit Care 5',
       avatarURL: '',
       description: 'Rabbit care center 5',
-      createdAt: '2023-04-17T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').add(4, 'days').toISOString(),
       members: { edges: [] },
       addressLine1: 'Texas, USA',
     },
@@ -285,7 +289,7 @@ const mockOrgData = {
       name: 'Horse Care 6',
       avatarURL: '',
       description: 'Horse care center 6',
-      createdAt: '2023-04-18T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').add(5, 'days').toISOString(),
       members: { edges: [] },
       addressLine1: 'Texas, USA',
     },
@@ -294,7 +298,7 @@ const mockOrgData = {
       name: 'Turtle Care 7',
       avatarURL: '',
       description: 'Turtle care center 7',
-      createdAt: '2023-04-19T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').add(6, 'days').toISOString(),
       members: { edges: [] },
       addressLine1: 'Texas, USA',
     },
@@ -303,7 +307,7 @@ const mockOrgData = {
       name: 'Hamster Care 8',
       avatarURL: '',
       description: 'Hamster care center 8',
-      createdAt: '2023-04-20T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').add(7, 'days').toISOString(),
       members: { edges: [] },
       addressLine1: 'Texas, USA',
     },
@@ -314,7 +318,7 @@ const mockOrgData = {
       name: 'Dog Shelter North',
       avatarURL: '',
       description: 'Dog care center',
-      createdAt: '2023-04-13T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').toISOString(),
       members: { edges: [] },
       addressLine1: 'Texas, USA',
     },
@@ -323,7 +327,7 @@ const mockOrgData = {
       name: 'Cat Rescue Center',
       avatarURL: '',
       description: 'Cat care center',
-      createdAt: '2023-04-14T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').add(1, 'day').toISOString(),
       members: { edges: [] },
       addressLine1: 'Texas, USA',
     },
@@ -332,7 +336,7 @@ const mockOrgData = {
       name: 'Dog Training Center',
       avatarURL: '',
       description: 'Dog training facility',
-      createdAt: '2023-04-15T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').add(2, 'days').toISOString(),
       members: { edges: [] },
       addressLine1: 'Texas, USA',
     },
@@ -341,7 +345,7 @@ const mockOrgData = {
       name: 'Pet Grooming Service',
       avatarURL: '',
       description: 'Pet grooming',
-      createdAt: '2023-04-16T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').add(3, 'days').toISOString(),
       members: { edges: [] },
       addressLine1: 'Texas, USA',
     },
@@ -350,7 +354,7 @@ const mockOrgData = {
       name: 'Dog Walking Service',
       avatarURL: '',
       description: 'Professional dog walking',
-      createdAt: '2023-04-17T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').add(4, 'days').toISOString(),
       members: { edges: [] },
       addressLine1: 'Texas, USA',
     },
@@ -362,7 +366,7 @@ const mockOrgData = {
       addressLine1: '123 Main Street',
       description: 'Description 1',
       avatarURL: null,
-      createdAt: '2023-04-13T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').toISOString(),
       membersCount: 4,
       adminsCount: 2,
       __typename: 'Organization',
@@ -389,7 +393,7 @@ const mockOrgData = {
       addressLine1: '456 Oak Avenue',
       description: 'Description 2',
       avatarURL: null,
-      createdAt: '2023-04-14T04:53:17.742+00:00',
+      createdAt: dayjs().subtract(1, 'year').add(1, 'day').toISOString(),
       membersCount: 5,
       adminsCount: 2,
       __typename: 'Organization',
@@ -441,7 +445,7 @@ const mockConfigurations = {
               name: 'Dog Shelter North',
               avatarURL: '',
               description: 'Dog care center',
-              createdAt: '2023-04-13T04:53:17.742+00:00',
+              createdAt: dayjs().subtract(1, 'year').toISOString(),
               members: { edges: [] },
               addressLine1: 'Texas, USA',
             },
@@ -450,7 +454,10 @@ const mockConfigurations = {
               name: 'Dog Training Center',
               avatarURL: '',
               description: 'Dog training facility',
-              createdAt: '2023-04-15T04:53:17.742+00:00',
+              createdAt: dayjs()
+                .subtract(1, 'year')
+                .add(2, 'days')
+                .toISOString(),
               members: { edges: [] },
               addressLine1: 'Texas, USA',
             },
@@ -459,7 +466,10 @@ const mockConfigurations = {
               name: 'Dog Walking Service',
               avatarURL: '',
               description: 'Professional dog walking',
-              createdAt: '2023-04-17T04:53:17.742+00:00',
+              createdAt: dayjs()
+                .subtract(1, 'year')
+                .add(4, 'days')
+                .toISOString(),
               members: { edges: [] },
               addressLine1: 'Texas, USA',
             },
@@ -986,7 +996,7 @@ describe('Advanced Component Functionality Tests', () => {
     await wait(200);
 
     // Verify the sort was applied
-    expect(sortButton).toHaveTextContent('Latest');
+    expect(sortButton).toHaveTextContent('Sort');
   });
 
   test('Testing sorting organizations by Earliest with multiple orgs', async () => {
@@ -1011,7 +1021,7 @@ describe('Advanced Component Functionality Tests', () => {
     await wait(200);
 
     // Verify the sort was applied
-    expect(sortButton).toHaveTextContent('Earliest');
+    expect(sortButton).toHaveTextContent('Sort');
   });
 
   test('Testing successful organization creation with membership', async () => {
@@ -1361,14 +1371,13 @@ describe('Advanced Component Functionality Tests', () => {
     const searchInput = screen.getByTestId('searchInput');
     await userEvent.type(searchInput, 'NonexistentOrg');
 
-    // Click search button
-    const searchBtn = screen.getByTestId('searchBtn');
-    fireEvent.click(searchBtn);
-
-    await wait();
-
-    // Check for "no results found" message
-    expect(screen.getByTestId('orglist-search-empty')).toBeInTheDocument();
+    // Wait for debounced search to complete
+    await waitFor(
+      () => {
+        expect(screen.getByTestId('orglist-search-empty')).toBeInTheDocument();
+      },
+      { timeout: 500 },
+    );
   });
 
   test('Testing sort by Earliest functionality', async () => {
@@ -1406,7 +1415,7 @@ describe('Advanced Component Functionality Tests', () => {
     await wait();
 
     // Verify sorting changed
-    expect(sortDropdown).toHaveTextContent('Earliest');
+    expect(sortDropdown).toHaveTextContent('Sort');
   });
 
   test('Testing sort by Latest functionality', async () => {
@@ -1433,7 +1442,7 @@ describe('Advanced Component Functionality Tests', () => {
     await wait();
 
     // Verify sorting changed
-    expect(sortDropdown).toHaveTextContent('Latest');
+    expect(sortDropdown).toHaveTextContent('Sort');
 
     // Wait a bit for the sort to be applied
     await wait(200);
@@ -1749,7 +1758,7 @@ describe('Advanced Component Functionality Tests', () => {
                 name: 'Test Org',
                 avatarURL: '',
                 description: 'Test',
-                createdAt: '2023-04-13T04:53:17.742+00:00',
+                createdAt: dayjs().subtract(1, 'year').toISOString(),
                 members: { edges: [] },
                 addressLine1: 'Test Address',
               },
@@ -1916,7 +1925,7 @@ describe('Advanced Component Functionality Tests', () => {
     const renderedNames = renderedCards.map((card) => card.textContent);
 
     expect(renderedNames).toEqual(expectedNames);
-    expect(sortDropdown).toHaveTextContent('Earliest');
+    expect(sortDropdown).toHaveTextContent('Sort');
   });
 
   test('Testing closeDialogModal functionality', async () => {

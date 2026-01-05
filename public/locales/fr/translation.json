@@ -18,7 +18,8 @@
     "rank": "Rang",
     "volunteer": "Bénévole",
     "email": "E-mail",
-    "hoursVolunteered": "Heures Bénévoles"
+    "hoursVolunteered": "Heures Bénévoles",
+    "volunteerRankings": "Classement des Bénévoles"
   },
   "loginPage": {
     "title": "Administrateur Talawa",
@@ -427,7 +428,8 @@
     "sortTags": "Trier les étiquettes",
     "Latest": "Le Plus Récent",
     "Oldest": "Le Plus Ancien",
-    "viewSubTags": "Voir {{count}} sous-étiquettes"
+    "viewSubTags": "Voir {{count}} sous-étiquettes",
+    "tags": "Étiquettes"
   },
   "manageTag": {
     "title": "Détails de l'étiquette",
@@ -469,6 +471,8 @@
     "tagNamePlaceholder": "Écrire le nom de l'étiquette",
     "allTags": "Toutes les étiquettes",
     "noMoreMembersFound": "Aucun autre membre trouvé",
+    "errorLoadingAssignedMembers": "Une erreur s'est produite lors du chargement des utilisateurs affectés",
+    "tags": "Étiquettes",
     "errorOccurredWhileLoadingAssignedUser": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
     "tagActions": "Actions d'étiquette",
     "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
@@ -955,6 +959,7 @@
     "noSpammerFound": "Aucun spammeur trouvé",
     "noUsersFound": "Aucun utilisateur trouvé",
     "searchByName": "Rechercher par nom",
+    "view": "Voir",
     "name": "Nom",
     "email": "Email",
     "talawaApiUnavailable": "API Talawa non disponible",
@@ -1721,7 +1726,8 @@
     "delete": "Supprimer",
     "name": "Nom",
     "desc": "Description",
-    "venueImagePreview": "Aperçu de l’image du lieu"
+    "venueImagePreview": "Aperçu de l’image du lieu",
+    "sortVenues": "Trier les lieux"
   },
   "addMember": {
     "title": "Ajouter un membre",
@@ -2061,9 +2067,6 @@
   "contact": {
     "card_aria": "Carte de contact"
   },
-  "donation": {
-    "card_aria": "Carte de don"
-  },
   "securedRoute": {
     "sessionExpired": "Veuillez vous reconnecter car la session a expiré"
   },
@@ -2080,7 +2083,14 @@
     "logoutFailed": "Échec de la déconnexion",
     "title": "Portail Utilisateur",
     "talawa": "Talawa",
-    "talawaBranding": "Image de marque Talawa"
+    "talawaBranding": "Image de marque Talawa",
+    "view": "Voir"
+  },
+  "donation": {
+    "amount_label": "Montant",
+    "card_aria": "Carte de don",
+    "card_test_id": "donation-card-{{id}}",
+    "date_label": "Date"
   },
   "organizationVenuesNotification": {
     "venueCreated": "Lieu créé avec succès",

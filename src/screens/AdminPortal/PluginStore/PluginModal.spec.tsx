@@ -7,6 +7,10 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 import type { IPluginMeta, IPluginDetails } from 'plugin';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 // Mock AdminPluginFileService
 vi.mock('plugin/services/AdminPluginFileService', () => ({
@@ -65,8 +69,23 @@ describe('PluginModal', () => {
     changelog: [
       {
         version: '1.2.3',
-        date: '2023-12-01',
+        date: dayjs
+          .utc()
+          .subtract(1, 'year')
+          .month(11)
+          .date(1)
+          .format('YYYY-MM-DD'),
         changes: ['Fixed bug X', 'Added feature Y'],
+      },
+      {
+        version: '1.2.2',
+        date: dayjs
+          .utc()
+          .subtract(1, 'year')
+          .month(10)
+          .date(1)
+          .format('YYYY-MM-DD'),
+        changes: ['Initial release'],
       },
     ],
   };
@@ -479,7 +498,9 @@ describe('PluginModal', () => {
   describe('Install Elapsed Ticker', () => {
     beforeEach(() => {
       vi.useFakeTimers();
-      vi.setSystemTime(new Date('2020-01-01T00:00:00.000Z'));
+      vi.setSystemTime(
+        dayjs().utc().subtract(6, 'year').startOf('year').toDate(),
+      );
     });
 
     afterEach(() => {
@@ -2056,7 +2077,11 @@ describe('PluginModal', () => {
         changelog: [
           {
             version: '1.0.0',
-            date: '2024-01-01',
+            date: dayjs()
+              .utc()
+              .subtract(1, 'year')
+              .startOf('year')
+              .format('YYYY-MM-DD'),
             changes: ['Mapped Change 1', 'Mapped Change 2', 'Mapped Change 3'],
           },
         ],

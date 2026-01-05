@@ -18,7 +18,8 @@
     "rank": "रैंक",
     "volunteer": "स्वयंसेवक",
     "email": "ईमेल",
-    "hoursVolunteered": "स्वयंसेवक घंटे"
+    "hoursVolunteered": "स्वयंसेवक घंटे",
+    "volunteerRankings": "स्वयंसेवक रैंकिंग"
   },
   "loginPage": {
     "title": "तालावा व्यवस्थापक",
@@ -427,7 +428,8 @@
     "sortTags": "टैग सॉर्ट करें",
     "Latest": "नवीनतम",
     "Oldest": "सबसे पुराना",
-    "viewSubTags": "{{count}} उप-टैग देखें"
+    "viewSubTags": "{{count}} उप-टैग देखें",
+    "tags": "टैग"
   },
   "manageTag": {
     "title": "टैग विवरण",
@@ -469,6 +471,8 @@
     "tagNamePlaceholder": "टैग का नाम लिखें",
     "allTags": "सभी टैग",
     "noMoreMembersFound": "कोई और सदस्य नहीं मिला",
+    "errorLoadingAssignedMembers": "सौंपे गए सदस्यों को लोड करते समय त्रुटि हुई",
+    "tags": "टैग",
     "errorOccurredWhileLoadingAssignedUser": "असाइन किए गए उपयोगकर्ता को लोड करते समय त्रुटि हुई",
     "sortPeople": "लोगों को सॉर्ट करें",
     "tagActions": "टैग क्रियाएँ",
@@ -955,6 +959,7 @@
     "noSpammerFound": "कोई स्पैमर नहीं मिला",
     "noUsersFound": "कोई उपयोगकर्ता नहीं मिला",
     "searchByName": "नाम से खोजें",
+    "view": "देखें",
     "name": "नाम",
     "email": "ईमेल",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
@@ -1721,7 +1726,8 @@
     "delete": "हटाएं",
     "name": "नाम",
     "desc": "विवरण",
-    "venueImagePreview": "स्थान की छवि का पूर्वावलोकन"
+    "venueImagePreview": "स्थान की छवि का पूर्वावलोकन",
+    "sortVenues": "स्थानों को क्रमबद्ध करें"
   },
   "addMember": {
     "title": "सदस्य जोड़ें",
@@ -2061,9 +2067,6 @@
   "contact": {
     "card_aria": "संपर्क कार्ड"
   },
-  "donation": {
-    "card_aria": "दान कार्ड"
-  },
   "securedRoute": {
     "sessionExpired": "कृपया फिर से लॉगिन करें क्योंकि सत्र समाप्त हो गया है"
   },
@@ -2080,7 +2083,14 @@
     "logoutFailed": "साइन आउट विफल रहा",
     "title": "उपयोगकर्ता पोर्टल",
     "talawa": "तलावा",
-    "talawaBranding": "तालावा ब्रांडिंग"
+    "talawaBranding": "तालावा ब्रांडिंग",
+    "view": "देखें"
+  },
+  "donation": {
+    "amount_label": "राशि",
+    "card_aria": "दान कार्ड",
+    "card_test_id": "donation-card-{{id}}",
+    "date_label": "दिनांक"
   },
   "organizationVenuesNotification": {
     "venueCreated": "स्थान सफलतापूर्वक बनाया गया",

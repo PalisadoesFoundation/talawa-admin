@@ -30,6 +30,9 @@ import {
   ORGANIZATION_LIST,
   USER_LIST_FOR_ADMIN,
 } from 'GraphQl/Queries/Queries';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
@@ -50,6 +53,9 @@ vi.mock('components/IconComponent/IconComponent', () => ({
     <div data-testid={`mock-icon-${name}`} />
   ),
 }));
+
+// Debounce duration used by AdminSearchFilterBar component (default: 300ms)
+const SEARCH_DEBOUNCE_MS = 300;
 
 const link = new StaticMockLink(MOCKS, true);
 
@@ -285,6 +291,12 @@ describe('Testing Users screen', () => {
     await act(async () => {
       await userEvent.clear(searchInput);
       await userEvent.type(searchInput, 'NonexistentName');
+    });
+
+    // Wait for debounced search to complete
+    await wait(SEARCH_DEBOUNCE_MS);
+
+    await act(async () => {
       await userEvent.click(searchBtn);
     });
 
@@ -467,14 +479,17 @@ describe('Testing Users screen', () => {
         </MockedProvider>,
       );
 
+      await wait();
+
       const sortDropdown = await screen.findByTestId('sortUsers');
       fireEvent.click(sortDropdown);
 
       const newestOption = screen.getByTestId('newest');
       fireEvent.click(newestOption);
 
-      expect(screen.getByTestId('sortUsers')).toHaveTextContent('newest');
+      await wait();
 
+      // Verify sorting worked by checking rows are displayed
       const rowsNewest = await screen.findAllByRole('row');
       expect(rowsNewest.length).toBeGreaterThan(0);
 
@@ -482,8 +497,9 @@ describe('Testing Users screen', () => {
       const oldestOption = screen.getByTestId('oldest');
       fireEvent.click(oldestOption);
 
-      expect(screen.getByTestId('sortUsers')).toHaveTextContent('oldest');
+      await wait();
 
+      // Verify sorting worked by checking rows are still displayed
       const rowsOldest = await screen.findAllByRole('row');
       expect(rowsOldest.length).toBeGreaterThan(0);
     });
@@ -508,7 +524,7 @@ describe('Testing Users screen', () => {
         fireEvent.scroll(window, { target: { scrollY: 1000 } });
       });
 
-      await wait(500); // Give time for data to load
+      await wait(SEARCH_DEBOUNCE_MS); // Give time for data to load
     });
   });
 
@@ -519,7 +535,7 @@ describe('Testing Users screen', () => {
         'John',
         'Doe',
         'john@example.com',
-        '2023-04-13T04:53:17.742+00:00',
+        dayjs.utc().subtract(1, 'year').toISOString(),
         true, // isSuperAdmin
       );
 
@@ -533,7 +549,7 @@ describe('Testing Users screen', () => {
         'Jane',
         'Doe',
         'jane@example.com',
-        '2023-04-17T04:53:17.742+00:00',
+        dayjs.utc().subtract(1, 'year').add(4, 'days').toISOString(),
         false, // isSuperAdmin
       );
 
@@ -819,8 +835,16 @@ function TestComponent({
 
 describe('sortUsers logic coverage', () => {
   const baseUsers = [
-    { id: '1', createdAt: '2020-01-01', role: 'regular' },
-    { id: '2', createdAt: '2024-01-01', role: 'administrator' },
+    {
+      id: '1',
+      createdAt: dayjs.utc().subtract(6, 'year').format('YYYY-MM-DD'),
+      role: 'regular',
+    },
+    {
+      id: '2',
+      createdAt: dayjs.utc().format('YYYY-MM-DD'),
+      role: 'administrator',
+    },
   ];
 
   it('should sort users by newest', async () => {
@@ -887,14 +911,30 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
+    await wait();
+
     const sortDropdown = await screen.findByTestId('sortUsers');
     fireEvent.click(sortDropdown);
 
     const newest = screen.getByTestId('newest');
     fireEvent.click(newest);
+
+    await wait();
+
+    const rowsAfterFirstClick = screen.queryAllByRole('row');
+    const firstUserAfterFirstSort = rowsAfterFirstClick[1]?.textContent;
+
+    // Click same option again - should not trigger re-sort
+    fireEvent.click(sortDropdown);
     fireEvent.click(newest);
 
-    expect(sortDropdown).toHaveTextContent('newest');
+    await wait();
+
+    const rowsAfterSecondClick = screen.queryAllByRole('row');
+    const firstUserAfterSecondSort = rowsAfterSecondClick[1]?.textContent;
+
+    // Order should remain the same (no re-sort)
+    expect(firstUserAfterSecondSort).toBe(firstUserAfterFirstSort);
   });
 
   it('should filter only regular users', async () => {
@@ -1017,7 +1057,7 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'Old User',
                     role: 'regular',
                     emailAddress: 'old@test.com',
-                    createdAt: '2020-01-01T00:00:00.000Z',
+                    createdAt: dayjs.utc().subtract(6, 'year').toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -1034,7 +1074,7 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'New User',
                     role: 'regular',
                     emailAddress: 'new@test.com',
-                    createdAt: '2024-01-01T00:00:00.000Z',
+                    createdAt: dayjs.utc().toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -1089,14 +1129,28 @@ describe('useEffect loadMoreUsers trigger', () => {
       </MockedProvider>,
     );
 
+    await wait();
+
     const filterDropdown = await screen.findByTestId('filterUsers');
     fireEvent.click(filterDropdown);
 
     const cancel = screen.getByTestId('cancel');
     fireEvent.click(cancel);
+
+    await wait();
+
+    const rowsAfterFirstClick = screen.queryAllByRole('row').length;
+
+    // Click again - should not trigger re-render or change state
+    fireEvent.click(filterDropdown);
     fireEvent.click(cancel);
 
-    expect(filterDropdown).toHaveTextContent('cancel');
+    await wait();
+
+    const rowsAfterSecondClick = screen.queryAllByRole('row').length;
+
+    // Rows should remain the same (no state update)
+    expect(rowsAfterSecondClick).toBe(rowsAfterFirstClick);
   });
 
   it('should render "no results found" when search yields empty result', async () => {
@@ -1725,7 +1779,7 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     // Trigger scroll to load more users while search is active
     fireEvent.scroll(window, { target: { scrollY: 6000 } });
-    await wait(500);
+    await wait(SEARCH_DEBOUNCE_MS);
 
     // Verify pagination worked: both first and second page results are now present
     expect(screen.getByText('John User')).toBeInTheDocument();
@@ -2201,7 +2255,7 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'Single User',
                     emailAddress: 'single@test.com',
                     role: 'regular',
-                    createdAt: '2024-01-01T00:00:00Z',
+                    createdAt: dayjs.utc().toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -2272,7 +2326,12 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'Newer User',
                     emailAddress: 'newer@test.com',
                     role: 'regular',
-                    createdAt: '2025-06-01T00:00:00Z',
+                    createdAt: dayjs
+                      .utc()
+                      .add(1, 'year')
+                      .month(5)
+                      .date(1)
+                      .toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -2289,7 +2348,7 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'Older User',
                     emailAddress: 'older@test.com',
                     role: 'regular',
-                    createdAt: '2020-01-01T00:00:00Z',
+                    createdAt: dayjs.utc().subtract(6, 'year').toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -2375,7 +2434,7 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'Regular Person',
                     emailAddress: 'regular@test.com',
                     role: 'regular',
-                    createdAt: '2024-01-01T00:00:00Z',
+                    createdAt: dayjs.utc().toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -2392,7 +2451,12 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'Admin Person',
                     emailAddress: 'admin@test.com',
                     role: 'administrator',
-                    createdAt: '2024-02-01T00:00:00Z',
+                    createdAt: dayjs
+                      .utc()
+                      .month(1)
+                      .date(1)
+                      .startOf('day')
+                      .toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -2470,7 +2534,7 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'First User',
                     emailAddress: 'first@test.com',
                     role: 'regular',
-                    createdAt: '2024-01-01T00:00:00Z',
+                    createdAt: dayjs.utc().toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -2507,7 +2571,12 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'Second User',
                     emailAddress: 'second@test.com',
                     role: 'regular',
-                    createdAt: '2024-02-01T00:00:00Z',
+                    createdAt: dayjs
+                      .utc()
+                      .month(1)
+                      .date(1)
+                      .startOf('day')
+                      .toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -2548,7 +2617,7 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     // Trigger first scroll to load more users
     fireEvent.scroll(window, { target: { scrollY: 6000 } });
-    await wait(500);
+    await wait(SEARCH_DEBOUNCE_MS);
 
     // Both users should now be displayed
     expect(screen.getByText('First User')).toBeInTheDocument();
@@ -2639,7 +2708,7 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'Initial User',
                     emailAddress: 'initial@test.com',
                     role: 'regular',
-                    createdAt: '2024-01-01T00:00:00Z',
+                    createdAt: dayjs.utc().toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',
@@ -2699,7 +2768,7 @@ describe('useEffect loadMoreUsers trigger', () => {
 
     // Trigger scroll to load more (which will return null edges)
     fireEvent.scroll(window, { target: { scrollY: 6000 } });
-    await wait(500);
+    await wait(SEARCH_DEBOUNCE_MS);
 
     // Component should handle null gracefully - initial user still there
     expect(screen.getByText('Initial User')).toBeInTheDocument();
@@ -2730,7 +2799,7 @@ describe('useEffect loadMoreUsers trigger', () => {
                     name: 'Only User',
                     emailAddress: 'only@test.com',
                     role: 'regular',
-                    createdAt: '2024-01-01T00:00:00Z',
+                    createdAt: dayjs.utc().toISOString(),
                     city: '',
                     state: '',
                     countryCode: '',

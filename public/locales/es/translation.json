@@ -18,7 +18,8 @@
     "rank": "Rango",
     "volunteer": "Voluntario",
     "email": "Correo electrónico",
-    "hoursVolunteered": "Horas Voluntarias"
+    "hoursVolunteered": "Horas Voluntarias",
+    "volunteerRankings": "Clasificación de Voluntarios"
   },
   "loginPage": {
     "title": "Administrador Talawa",
@@ -427,7 +428,8 @@
     "sortTags": "Ordenar Etiquetas",
     "Latest": "Más Reciente",
     "Oldest": "Más Antiguo",
-    "viewSubTags": "Ver {{count}} sub-etiquetas"
+    "viewSubTags": "Ver {{count}} sub-etiquetas",
+    "tags": "Etiquetas"
   },
   "manageTag": {
     "title": "Detalles de la Etiqueta",
@@ -469,6 +471,8 @@
     "tagNamePlaceholder": "Escribe el nombre de la etiqueta",
     "allTags": "Todas las etiquetas",
     "noMoreMembersFound": "No se encontraron más miembros",
+    "errorLoadingAssignedMembers": "Se produjo un error al cargar los usuarios asignados",
+    "tags": "Etiquetas",
     "errorOccurredWhileLoadingAssignedUser": "Se produjo un error al cargar los usuarios asignados",
     "sortPeople": "Ordenar personas",
     "tagActions": "Acciones de etiqueta",
@@ -942,6 +946,7 @@
     "title": "Usuario de bloqueo/desbloqueo de Talawa",
     "pageName": "Bloqueo/desbloqueo",
     "searchByName": "Buscar por nombre",
+    "view": "Ver",
     "listOfUsers": "Lista de Usuarios que enviaron spam",
     "name": "Nombre",
     "email": "Correo electrónico",
@@ -1721,7 +1726,8 @@
     "searchBy": "Buscar por",
     "name": "Nombre",
     "desc": "Descripción",
-    "venueImagePreview": "Vista previa de la imagen del lugar"
+    "venueImagePreview": "Vista previa de la imagen del lugar",
+    "sortVenues": "Ordenar lugares"
   },
   "addMember": {
     "title": "Agregar miembro",
@@ -2061,9 +2067,6 @@
   "contact": {
     "card_aria": "Tarjeta de contacto"
   },
-  "donation": {
-    "card_aria": "Tarjeta de donación"
-  },
   "securedRoute": {
     "sessionExpired": "Por favor, vuelva a iniciar sesión ya que la sesión ha expirado"
   },
@@ -2080,7 +2083,14 @@
     "logoutFailed": "Falló el cierre de sesión",
     "title": "Portal de Usuario",
     "talawa": "Talawa",
-    "talawaBranding": "Marca Talawa"
+    "talawaBranding": "Marca Talawa",
+    "view": "Ver"
+  },
+  "donation": {
+    "amount_label": "Cantidad",
+    "card_aria": "Tarjeta de donación",
+    "card_test_id": "donation-card-{{id}}",
+    "date_label": "Fecha"
   },
   "organizationVenuesNotification": {
     "venueCreated": "Lugar creado correctamente",

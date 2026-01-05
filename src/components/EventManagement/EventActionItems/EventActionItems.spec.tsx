@@ -9,6 +9,10 @@ import { BrowserRouter } from 'react-router';
 import { store } from 'state/store';
 import i18nForTest from '../../../utils/i18nForTest';
 import { vi } from 'vitest';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import EventActionItems from './EventActionItems';
 import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
 import type { IActionItemInfo } from 'types/ActionItems/interface';
@@ -159,9 +163,9 @@ const mockActionItem: IActionItemInfo = {
   organizationId: 'orgId1',
   creatorId: 'userId2',
   updaterId: null,
-  assignedAt: new Date('2024-08-27'),
-  completionAt: new Date('2044-09-03'),
-  createdAt: new Date('2024-01-01T00:00:00.000Z'),
+  assignedAt: dayjs.utc().add(10, 'day').toDate(),
+  completionAt: dayjs.utc().add(20, 'years').toDate(),
+  createdAt: dayjs.utc().subtract(1, 'month').toDate(),
   updatedAt: null,
   isCompleted: false,
   preCompletionNotes: 'Notes 1',
@@ -191,8 +195,20 @@ const mockActionItem: IActionItemInfo = {
     name: 'Test Event',
     description: 'Test event description',
     location: 'Test Location',
-    startAt: '2024-08-27T09:00:00Z',
-    endAt: '2024-08-27T17:00:00Z',
+    startAt: dayjs
+      .utc()
+      .add(10, 'day')
+      .hour(9)
+      .minute(0)
+      .second(0)
+      .toISOString(),
+    endAt: dayjs
+      .utc()
+      .add(10, 'day')
+      .hour(17)
+      .minute(0)
+      .second(0)
+      .toISOString(),
     startTime: '09:00:00',
     endTime: '17:00:00',
     allDay: false,
@@ -203,7 +219,7 @@ const mockActionItem: IActionItemInfo = {
       id: 'userId2',
       name: 'Jane Smith',
       emailAddress: 'jane@example.com',
-      createdAt: new Date('2024-01-01T00:00:00.000Z'),
+      createdAt: dayjs.utc().subtract(1, 'month').toDate(),
     },
   },
   recurringEventInstance: null,
@@ -212,7 +228,7 @@ const mockActionItem: IActionItemInfo = {
     name: 'Category 1',
     description: 'Test category',
     isDisabled: false,
-    createdAt: '2024-01-01T00:00:00.000Z',
+    createdAt: dayjs.utc().subtract(1, 'month').toISOString(),
     organizationId: 'orgId1',
   },
 };
@@ -400,7 +416,9 @@ describe('EventActionItems', () => {
       renderEventActionItems();
 
       await waitFor(() => {
-        expect(screen.getAllByText('27/08/2024')).toHaveLength(2);
+        expect(
+          screen.getAllByText(dayjs.utc().add(10, 'day').format('DD/MM/YYYY')),
+        ).toHaveLength(2);
       });
     });
 
@@ -686,14 +704,14 @@ describe('EventActionItems', () => {
                 node: {
                   ...mockActionItem,
                   id: 'item1',
-                  assignedAt: new Date('2024-08-25'),
+                  assignedAt: dayjs.utc().add(10, 'day').toDate(),
                 },
               },
               {
                 node: {
                   ...mockActionItem,
                   id: 'item2',
-                  assignedAt: new Date('2024-08-27'),
+                  assignedAt: dayjs.utc().add(12, 'days').toDate(),
                 },
               },
             ],
@@ -718,16 +736,24 @@ describe('EventActionItems', () => {
       renderEventActionItems('eventId1', mocksWithDates);
 
       await waitFor(() => {
-        expect(screen.getByText('25/08/2024')).toBeInTheDocument();
-        expect(screen.getByText('27/08/2024')).toBeInTheDocument();
+        expect(
+          screen.getByText(dayjs.utc().add(10, 'day').format('DD/MM/YYYY')),
+        ).toBeInTheDocument();
+        expect(
+          screen.getByText(dayjs.utc().add(12, 'days').format('DD/MM/YYYY')),
+        ).toBeInTheDocument();
       });
 
       const sortBtn = screen.getByTestId('sortBtn');
       fireEvent.click(sortBtn);
 
       await waitFor(() => {
-        expect(screen.getByText('25/08/2024')).toBeInTheDocument();
-        expect(screen.getByText('27/08/2024')).toBeInTheDocument();
+        expect(
+          screen.getByText(dayjs.utc().add(10, 'day').format('DD/MM/YYYY')),
+        ).toBeInTheDocument();
+        expect(
+          screen.getByText(dayjs.utc().add(12, 'days').format('DD/MM/YYYY')),
+        ).toBeInTheDocument();
       });
     });
 
@@ -741,14 +767,14 @@ describe('EventActionItems', () => {
                 node: {
                   ...mockActionItem,
                   id: 'item1',
-                  assignedAt: new Date('2024-08-27'),
+                  assignedAt: dayjs.utc().add(12, 'days').toDate(),
                 },
               },
               {
                 node: {
                   ...mockActionItem,
                   id: 'item2',
-                  assignedAt: new Date('2024-08-25'),
+                  assignedAt: dayjs.utc().add(10, 'day').toDate(),
                 },
               },
             ],
@@ -773,8 +799,12 @@ describe('EventActionItems', () => {
       renderEventActionItems('eventId1', mocksWithDates);
 
       await waitFor(() => {
-        expect(screen.getByText('27/08/2024')).toBeInTheDocument();
-        expect(screen.getByText('25/08/2024')).toBeInTheDocument();
+        expect(
+          screen.getByText(dayjs.utc().add(12, 'days').format('DD/MM/YYYY')),
+        ).toBeInTheDocument();
+        expect(
+          screen.getByText(dayjs.utc().add(10, 'day').format('DD/MM/YYYY')),
+        ).toBeInTheDocument();
       });
 
       const sortBtn = screen.getByTestId('sortBtn');
@@ -782,8 +812,12 @@ describe('EventActionItems', () => {
       fireEvent.click(sortBtn);
 
       await waitFor(() => {
-        expect(screen.getByText('27/08/2024')).toBeInTheDocument();
-        expect(screen.getByText('25/08/2024')).toBeInTheDocument();
+        expect(
+          screen.getByText(dayjs.utc().add(12, 'days').format('DD/MM/YYYY')),
+        ).toBeInTheDocument();
+        expect(
+          screen.getByText(dayjs.utc().add(10, 'day').format('DD/MM/YYYY')),
+        ).toBeInTheDocument();
       });
     });
 
@@ -797,14 +831,14 @@ describe('EventActionItems', () => {
                 node: {
                   ...mockActionItem,
                   id: 'item1',
-                  assignedAt: new Date('2024-08-27'),
+                  assignedAt: dayjs.utc().add(10, 'day').toDate(),
                 },
               },
               {
                 node: {
                   ...mockActionItem,
                   id: 'item2',
-                  assignedAt: new Date('2024-08-27'),
+                  assignedAt: dayjs.utc().add(10, 'day').toDate(),
                 },
               },
             ],
@@ -829,14 +863,18 @@ describe('EventActionItems', () => {
       renderEventActionItems('eventId1', mocksWithSameDates);
 
       await waitFor(() => {
-        expect(screen.getAllByText('27/08/2024')).toHaveLength(2);
+        expect(
+          screen.getAllByText(dayjs.utc().add(10, 'day').format('DD/MM/YYYY')),
+        ).toHaveLength(2);
       });
 
       const sortBtn = screen.getByTestId('sortBtn');
       fireEvent.click(sortBtn);
 
       await waitFor(() => {
-        expect(screen.getAllByText('27/08/2024')).toHaveLength(2);
+        expect(
+          screen.getAllByText(dayjs.utc().add(10, 'day').format('DD/MM/YYYY')),
+        ).toHaveLength(2);
       });
     });
 
@@ -850,7 +888,7 @@ describe('EventActionItems', () => {
         {
           ...mockActionItem,
           id: 'item2',
-          assignedAt: new Date('2024-08-27'),
+          assignedAt: dayjs.utc().add(10, 'day').toDate(),
         },
       ];
 
@@ -883,7 +921,7 @@ describe('EventActionItems', () => {
         {
           ...mockActionItem,
           id: 'item1',
-          assignedAt: new Date('2024-08-25'),
+          assignedAt: dayjs.utc().add(1, 'day').toDate(),
         },
         {
           ...mockActionItem,
@@ -893,7 +931,7 @@ describe('EventActionItems', () => {
         {
           ...mockActionItem,
           id: 'item3',
-          assignedAt: new Date('2024-08-27'),
+          assignedAt: dayjs.utc().add(3, 'days').toDate(),
         },
       ];
 
@@ -927,12 +965,12 @@ describe('EventActionItems', () => {
         {
           ...mockActionItem,
           id: 'item1',
-          assignedAt: new Date('2024-08-25'),
+          assignedAt: dayjs().add(1, 'day').toDate(),
         },
         {
           ...mockActionItem,
           id: 'item2',
-          assignedAt: new Date('2024-08-27'),
+          assignedAt: dayjs().add(3, 'days').toDate(),
         },
       ];
 
