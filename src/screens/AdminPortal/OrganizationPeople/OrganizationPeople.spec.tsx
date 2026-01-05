@@ -40,88 +40,6 @@ vi.mock('./addMember/AddMember', () => ({
   ),
 }));
 
-interface TestInterfaceMockSearch {
-  placeholder: string;
-  onSearch: (value: string) => void;
-  inputTestId?: string;
-  buttonTestId?: string;
-}
-
-interface TestInterfaceTestInterfaceMockSortingOption {
-  label: string;
-  value: string | number;
-}
-
-interface TestInterfaceMockSorting {
-  title: string;
-  options: TestInterfaceTestInterfaceMockSortingOption[];
-  selected: string | number;
-  onChange: (value: string | number) => void;
-  testIdPrefix: string;
-}
-
-vi.mock('screens/components/Navbar', () => {
-  return {
-    default: function MockPageHeader({
-      search,
-      sorting,
-      actions,
-    }: {
-      search?: TestInterfaceMockSearch;
-      sorting?: TestInterfaceMockSorting[];
-      actions?: React.ReactNode;
-    }) {
-      return (
-        <div data-testid="calendarEventHeader">
-          <div>
-            {search && (
-              <>
-                <input
-                  placeholder={search.placeholder}
-                  onChange={(e) => search.onSearch(e.target.value)}
-                  autoComplete="off"
-                  required
-                  type="text"
-                  className="form-control"
-                />
-                <button
-                  data-testid={search.buttonTestId}
-                  onClick={() => {}}
-                  tabIndex={-1}
-                  type="button"
-                >
-                  Search
-                </button>
-              </>
-            )}
-          </div>
-
-          {sorting?.map((sort, index) => (
-            <div key={index}>
-              <button title={sort.title} data-testid={sort.testIdPrefix}>
-                {sort.selected}
-              </button>
-              <div>
-                {sort.options.map((option) => (
-                  <button
-                    key={option.value}
-                    data-testid={option.value.toString()}
-                    onClick={() => sort.onChange(option.value)}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ))}
-
-          {actions}
-        </div>
-      );
-    },
-  };
-});
-
 // Setup mock window.location
 const setupLocationMock = () => {
   Object.defineProperty(window, 'location', {
@@ -470,19 +388,22 @@ describe('OrganizationPeople', () => {
     });
 
     // Search for "Jane"
-    const searchInput = screen.getByPlaceholderText(/Enter Full Name/i);
+    const searchInput = screen.getByTestId('searchbtn');
     await userEvent.type(searchInput, 'Jane');
 
-    const searchButton = screen.getByTestId('searchbtn');
-    fireEvent.click(searchButton);
+    // Wait for debounced search (AdminSearchFilterBar has 300ms debounce)
+    await waitFor(
+      () => {
+        expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+      },
+      { timeout: 1000 },
+    );
 
     // Should show Jane but not John
-    expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
     expect(screen.getByText('Jane Smith')).toBeInTheDocument();
 
     // Clear search
     await userEvent.clear(searchInput);
-    fireEvent.click(searchButton);
 
     // Should show both again
     await waitFor(() => {
