@@ -17,6 +17,10 @@ inputs:
     default: |
       Hi {assignee}, this issue has been unassigned due to inactivity after being marked as stale.
       Feel free to reassign yourself if you plan to continue working on it.
+  max-issues-per-run:
+    description: 'Maximum number of issues to process per run (0 for unlimited). Helps avoid rate limiting.'
+    required: false
+    default: '50'
   github-token:
     description: 'GitHub token for API calls'
     required: true
@@ -30,20 +34,41 @@ runs:
         GRACE_PERIOD_DAYS: ${{ inputs.grace-period-days }}
         STALE_LABEL: ${{ inputs.stale-label }}
         COMMENT_TEMPLATE: ${{ inputs.comment-message }}
+        MAX_ISSUES_PER_RUN: ${{ inputs.max-issues-per-run }}
       with:
         github-token: ${{ inputs.github-token }}
         script: |
           // Read inputs from environment variables to prevent script injection
           const DEFAULT_GRACE_PERIOD = 7;
+          const DEFAULT_MAX_ISSUES = 50;
+
           let gracePeriodDays = parseInt(process.env.GRACE_PERIOD_DAYS, 10);
           if (!Number.isFinite(gracePeriodDays) || gracePeriodDays < 0) {
             console.warn(`Invalid grace period "${process.env.GRACE_PERIOD_DAYS}", using default: ${DEFAULT_GRACE_PERIOD}`);
             gracePeriodDays = DEFAULT_GRACE_PERIOD;
           }
+
           const staleLabel = process.env.STALE_LABEL;
           const commentTemplate = process.env.COMMENT_TEMPLATE;
 
-          console.log(`Configuration: grace-period=${gracePeriodDays} days, stale-label="${staleLabel}"`);
+          let maxIssuesPerRun = parseInt(process.env.MAX_ISSUES_PER_RUN, 10);
+          if (!Number.isFinite(maxIssuesPerRun) || maxIssuesPerRun < 0) {
+            console.warn(`Invalid max-issues-per-run "${process.env.MAX_ISSUES_PER_RUN}", using default: ${DEFAULT_MAX_ISSUES}`);
+            maxIssuesPerRun = DEFAULT_MAX_ISSUES;
+          }
+
+          // Validate stale-label is non-empty
+          if (!staleLabel || staleLabel.trim() === '') {
+            console.error('Error: stale-label input is empty. Cannot proceed.');
+            return;
+          }
+
+          // Warn if comment template doesn't contain {assignee} placeholder
+          if (!commentTemplate.includes('{assignee}')) {
+            console.warn('Warning: comment-message does not contain {assignee} placeholder. Unassigned users will not be mentioned.');
+          }
+
+          console.log(`Configuration: grace-period=${gracePeriodDays} days, stale-label="${staleLabel}", max-issues=${maxIssuesPerRun || 'unlimited'}`);
 
           // Check if repository is archived
           const { data: repo } = await github.rest.repos.get({
@@ -88,6 +113,12 @@ runs:
 
           console.log(`Found ${issues.length} open issues with "${staleLabel}" label`);
 
+          // Apply max issues limit if set
+          if (maxIssuesPerRun > 0 && issues.length > maxIssuesPerRun) {
+            console.log(`Limiting to ${maxIssuesPerRun} issues per run (rate limit protection)`);
+            issues = issues.slice(0, maxIssuesPerRun);
+          }
+
           let processedCount = 0;
           let skippedCount = 0;
 
@@ -99,17 +130,17 @@ runs:
                 skippedCount++;
                 continue;
               }
-              
+
               // Skip if no assignees
               if (!issue.assignees || issue.assignees.length === 0) {
                 console.log(`Issue #${issue.number}: No assignees, skipping`);
                 skippedCount++;
                 continue;
               }
-              
+
               const assigneeCount = issue.assignees.length;
               console.log(`Issue #${issue.number}: Has ${assigneeCount} assignee(s)`);
-              
+
               // Check for linked PRs in the same repository using timeline events
               let timelineEvents = [];
               try {
@@ -124,7 +155,7 @@ runs:
                 skippedCount++;
                 continue;
               }
-              
+
               // Check for OPEN linked PRs only (ignore closed/merged PRs)
               const hasOpenLinkedPR = timelineEvents.some(event => {
                 if (event.event === 'cross-referenced' && event.source?.issue?.pull_request) {
@@ -132,59 +163,59 @@ runs:
                   const prRepoFullName = event.source.issue.repository?.full_name;
                   const currentRepoFullName = `${context.repo.owner}/${context.repo.repo}`;
                   const isSameRepo = prRepoFullName === currentRepoFullName;
-                  
+
                   // Only count OPEN PRs (ignore closed/merged)
                   const prState = event.source.issue.state;
                   const isOpen = prState === 'open';
-                  
+
                   if (isSameRepo && !isOpen) {
                     console.log(`Issue #${issue.number}: Found closed/merged PR, ignoring`);
                   }
-                  
+
                   return isSameRepo && isOpen;
                 }
                 return false;
               });
-              
+
               // Skip if there IS an OPEN linked PR (contributor is actively working)
               if (hasOpenLinkedPR) {
                 console.log(`Issue #${issue.number}: Has open linked PR in same repo, skipping (contributor is working)`);
                 skippedCount++;
                 continue;
               }
-              
+
               console.log(`Issue #${issue.number}: No open linked PR found, checking grace period...`);
-              
+
               // Find when stale label was added (get the most recent one in case of re-labeling)
-              const labelEvents = timelineEvents.filter(event => 
-                event.event === 'labeled' && 
+              const labelEvents = timelineEvents.filter(event =>
+                event.event === 'labeled' &&
                 event.label?.name === staleLabel
               );
-              
+
               if (labelEvents.length === 0) {
                 console.log(`Issue #${issue.number}: Could not find label event in timeline, skipping`);
                 skippedCount++;
                 continue;
               }
-              
+
               // Sort by date and use the most recent label event
               labelEvents.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
               const latestLabelEvent = labelEvents[labelEvents.length - 1];
               const labelAddedDate = new Date(latestLabelEvent.created_at);
               const now = new Date();
               const daysSinceLabel = (now - labelAddedDate) / (1000 * 60 * 60 * 24);
-              
+
               if (daysSinceLabel < gracePeriodDays) {
                 console.log(`Issue #${issue.number}: Grace period not exceeded (${daysSinceLabel.toFixed(1)}/${gracePeriodDays} days), skipping`);
                 skippedCount++;
                 continue;
               }
-              
+
               console.log(`Issue #${issue.number}: Grace period exceeded (${daysSinceLabel.toFixed(1)} days). Processing ${assigneeCount} assignee(s)...`);
-              
+
               // Collect all assignee logins
               const assigneeLogins = issue.assignees.map(a => a.login);
-              
+
               // Remove all assignees at once (more efficient)
               try {
                 await github.rest.issues.removeAssignees({
@@ -198,11 +229,11 @@ runs:
                 skippedCount++;
                 continue;
               }
-              
+
               // Post a single comment addressing all unassigned users
               const assigneeMentions = assigneeLogins.map(login => `@${login}`).join(', ');
               const comment = commentTemplate.replace(/\{assignee\}/g, assigneeMentions);
-              
+
               try {
                 await github.rest.issues.createComment({
                   owner: context.repo.owner,
@@ -214,10 +245,10 @@ runs:
                 console.error(`Issue #${issue.number}: Error posting comment: ${error.message}`);
                 // Don't fail the whole workflow for a comment error
               }
-              
+
               console.log(`Issue #${issue.number}: Successfully unassigned ${assigneeLogins.join(', ')}`);
               processedCount++;
-              
+
             } catch (error) {
               console.error(`Issue #${issue.number}: Unexpected error: ${error.message}`);
               skippedCount++;
