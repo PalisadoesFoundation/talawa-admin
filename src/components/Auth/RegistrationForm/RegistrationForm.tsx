@@ -41,12 +41,7 @@ export const RegistrationForm = ({
     if (!validatePassword(f.password).isValid) return;
     if (!validatePasswordConfirmation(f.password, f.confirmPassword).isValid)
       return;
-    await register({
-      name: f.name,
-      email: f.email,
-      password: f.password,
-      organizationId: f.orgId || '',
-    });
+    await register();
   };
 
   return (
