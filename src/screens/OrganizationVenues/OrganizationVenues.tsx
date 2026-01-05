@@ -59,7 +59,7 @@ import VenueModal from 'components/Venues/Modal/VenueModal';
 import { DELETE_VENUE_MUTATION } from 'GraphQl/Mutations/VenueMutations';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
 import VenueCard from 'components/Venues/VenueCard';
-import PageHeader from 'shared-components/Navbar/Navbar';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
 function organizationVenues(): JSX.Element {
   // Translation hooks for i18n support
@@ -185,12 +185,12 @@ function organizationVenues(): JSX.Element {
               return venue.node.name
                 .toLowerCase()
                 .includes(searchTerm.toLowerCase());
-            } else if (searchBy === 'desc') {
+            } else {
+              // searchBy === 'desc'
               return venue.node.description
                 ?.toLowerCase()
                 .includes(searchTerm.toLowerCase());
             }
-            return true;
           },
         );
       }
@@ -213,36 +213,40 @@ function organizationVenues(): JSX.Element {
   return (
     <>
       <div className={`${styles.btnsContainer} gap-3 flex-wrap`}>
-        <PageHeader
-          search={{
-            placeholder: `${t('searchBy')} ${tCommon(searchBy)}`,
-            onSearch: handleSearch,
-            inputTestId: 'searchBy',
-            buttonTestId: 'searchBtn',
-          }}
-          sorting={[
+        <AdminSearchFilterBar
+          hasDropdowns={true}
+          searchPlaceholder={`${t('searchBy')} ${tCommon(searchBy)}`}
+          searchValue={searchTerm}
+          onSearchChange={handleSearch}
+          searchInputTestId="searchInput"
+          searchButtonTestId="searchBtn"
+          dropdowns={[
             {
-              title: 'SearchBy',
+              id: 'org-venue-SearchBy',
+              label: '',
+              type: 'filter',
               options: [
                 { label: tCommon('name'), value: 'name' },
                 { label: tCommon('description'), value: 'desc' },
               ],
-              selected: searchBy,
-              onChange: (value) => handleSearchByChange(value as string),
-              testIdPrefix: 'searchByButton',
+              selectedOption: searchBy,
+              onOptionChange: (value) => handleSearchByChange(value.toString()),
+              dataTestIdPrefix: 'searchByButton',
             },
             {
-              title: 'Sort Venues',
+              id: 'org-venue-Venues',
+              label: '',
+              type: 'sort',
               options: [
                 { label: t('highestCapacity'), value: 'highest' },
                 { label: t('lowestCapacity'), value: 'lowest' },
               ],
-              selected: sortOrder,
-              onChange: (value) => handleSortChange(value as string),
-              testIdPrefix: 'sortVenues',
+              selectedOption: sortOrder,
+              onOptionChange: (value) => handleSortChange(value.toString()),
+              dataTestIdPrefix: 'sortVenues',
             },
           ]}
-          actions={
+          additionalButtons={
             <Button
               variant="success"
               className={styles.dropdown}
