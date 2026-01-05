@@ -7,6 +7,7 @@ import { I18nextProvider } from 'react-i18next';
 import i18nForTest from '../../../../utils/i18nForTest';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { SEND_EVENT_INVITATIONS } from 'GraphQl/Mutations/mutations';
+import dayjs from 'dayjs';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 vi.mock('components/NotificationToast/NotificationToast', () => ({
@@ -48,6 +49,19 @@ const mocks = [
       data: {
         sendEventInvitations: {
           id: '1',
+          eventId: 'test-event-1',
+          recurringEventInstanceId: null,
+          invitedBy: 'user1',
+          userId: 'user2',
+          inviteeEmail: 'test@example.com',
+          inviteeName: 'Test User',
+          invitationToken: 'token123',
+          status: 'PENDING',
+          expiresAt: dayjs().add(1, 'year').format('YYYY-MM-DD'),
+          respondedAt: null,
+          metadata: null,
+          createdAt: dayjs().format('YYYY-MM-DD'),
+          updatedAt: dayjs().format('YYYY-MM-DD'),
         },
       },
     },
@@ -59,7 +73,7 @@ const renderComponent = (
   customMocks: MockedResponse[] = mocks as MockedResponse[],
 ) => {
   return render(
-    <MockedProvider mocks={customMocks}>
+    <MockedProvider mocks={customMocks} addTypename={false}>
       <I18nextProvider i18n={i18nForTest}>
         <InviteByEmailModal {...defaultProps} {...props} />
       </I18nextProvider>
@@ -92,7 +106,7 @@ describe('InviteByEmailModal', () => {
     expect(screen.getByLabelText('Email')).toBeInTheDocument();
     expect(screen.getByLabelText('Name')).toBeInTheDocument();
     expect(screen.getByText('Add recipient')).toBeInTheDocument();
-    expect(screen.getByTestId('send-invites')).toBeInTheDocument();
+    expect(screen.getByTestId('invite-submit')).toBeInTheDocument();
   });
 
   it('does not render the modal when show is false', () => {
@@ -148,7 +162,7 @@ describe('InviteByEmailModal', () => {
   describe('Form Submission', () => {
     it('shows an error toast if no recipients are provided', async () => {
       renderComponent();
-      fireEvent.click(screen.getByTestId('send-invites'));
+      fireEvent.click(screen.getByTestId('invite-submit'));
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
           'Please provide at least one recipient email',
@@ -161,7 +175,7 @@ describe('InviteByEmailModal', () => {
       const user = userEvent.setup();
       const emailInput = screen.getByLabelText('Email');
       await user.type(emailInput, 'invalid-email');
-      fireEvent.click(screen.getByTestId('send-invites'));
+      fireEvent.click(screen.getByTestId('invite-submit'));
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -178,13 +192,33 @@ describe('InviteByEmailModal', () => {
             input: {
               eventId: 'test-event-1',
               recurringEventInstanceId: null,
-              message: null,
+              message: 'Test Message',
               expiresInDays: 7,
               recipients: [{ email: 'test@example.com', name: 'Test User' }],
             },
           },
         },
-        result: { data: { sendEventInvitations: { id: '1' } } },
+        result: {
+          data: {
+            sendEventInvitations: {
+              id: '1',
+              eventId: 'test-event-1',
+              recurringEventInstanceId: null,
+              invitedBy: 'user1',
+              userId: 'user2',
+              inviteeEmail: 'test@example.com',
+              inviteeName: 'Test User',
+              invitationToken: 'token123',
+              status: 'PENDING',
+              expiresAt: dayjs().add(1, 'year').format('YYYY-MM-DD'),
+              respondedAt: null,
+              metadata: null,
+              createdAt: dayjs().format('YYYY-MM-DD'),
+              updatedAt: dayjs().format('YYYY-MM-DD'),
+            },
+          },
+        },
+        delay: 50, // Add delay to capture loading state
       };
 
       renderComponent({}, [successMock]);
@@ -192,11 +226,20 @@ describe('InviteByEmailModal', () => {
 
       await user.type(screen.getByLabelText('Email'), 'test@example.com');
       await user.type(screen.getByLabelText('Name'), 'Test User');
+      const messageInput = screen.getByTestId('invite-message');
+      await user.type(messageInput, 'Test Message');
 
-      fireEvent.click(screen.getByTestId('send-invites'));
+      // Verify initial state before submission
+      const sendButton = screen.getByTestId('invite-submit');
+      expect(sendButton).not.toBeDisabled();
+      expect(screen.queryByTestId('loading-state')).not.toBeInTheDocument();
 
+      fireEvent.click(sendButton);
+
+      // Wait for loading state to appear AND button to be gone (atomic check)
       await waitFor(() => {
-        expect(screen.getByText('Sending...')).toBeInTheDocument();
+        expect(screen.getByTestId('loading-state')).toBeInTheDocument();
+        expect(screen.queryByTestId('invite-submit')).not.toBeInTheDocument();
       });
 
       await waitFor(() => {
@@ -223,7 +266,26 @@ describe('InviteByEmailModal', () => {
             },
           },
         },
-        result: { data: { sendEventInvitations: { id: '2' } } },
+        result: {
+          data: {
+            sendEventInvitations: {
+              id: '2',
+              eventId: 'test-event-1',
+              recurringEventInstanceId: 'test-event-1',
+              invitedBy: 'user1',
+              userId: 'user2',
+              inviteeEmail: 'recurring@example.com',
+              inviteeName: '',
+              invitationToken: 'token456',
+              status: 'PENDING',
+              expiresAt: dayjs().add(1, 'year').format('YYYY-MM-DD'),
+              respondedAt: null,
+              metadata: null,
+              createdAt: dayjs().format('YYYY-MM-DD'),
+              updatedAt: dayjs().format('YYYY-MM-DD'),
+            },
+          },
+        },
       };
 
       renderComponent({ isRecurring: true }, [recurringMock]);
@@ -231,7 +293,7 @@ describe('InviteByEmailModal', () => {
 
       await user.type(screen.getByLabelText('Email'), 'recurring@example.com');
 
-      fireEvent.click(screen.getByTestId('send-invites'));
+      fireEvent.click(screen.getByTestId('invite-submit'));
 
       await waitFor(() => {
         expect(NotificationToast.success).toHaveBeenCalledWith(
@@ -256,14 +318,33 @@ describe('InviteByEmailModal', () => {
           },
         },
         error: new Error('An error occurred'),
-        result: { data: { sendEventInvitations: { id: 'error-id' } } },
+        result: {
+          data: {
+            sendEventInvitations: {
+              id: 'error-id',
+              eventId: 'test-event-1',
+              recurringEventInstanceId: null,
+              invitedBy: 'user1',
+              userId: 'user2',
+              inviteeEmail: 'test@example.com',
+              inviteeName: '',
+              invitationToken: 'token-error',
+              status: 'ERROR',
+              expiresAt: dayjs().add(1, 'year').format('YYYY-MM-DD'),
+              respondedAt: null,
+              metadata: null,
+              createdAt: dayjs().format('YYYY-MM-DD'),
+              updatedAt: dayjs().format('YYYY-MM-DD'),
+            },
+          },
+        },
       };
 
       renderComponent({}, [errorMock]);
       const user = userEvent.setup();
 
       await user.type(screen.getByLabelText('Email'), 'test@example.com');
-      fireEvent.click(screen.getByTestId('send-invites'));
+      fireEvent.click(screen.getByTestId('invite-submit'));
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
@@ -276,8 +357,8 @@ describe('InviteByEmailModal', () => {
         );
       });
       expect(mockHandleClose).not.toHaveBeenCalled();
-      expect(screen.queryByText('Sending...')).not.toBeInTheDocument();
-      expect(screen.getByTestId('send-invites')).not.toBeDisabled();
+      expect(screen.queryByTestId('loading-state')).not.toBeInTheDocument();
+      expect(screen.getByTestId('invite-submit')).not.toBeDisabled();
     });
   });
 });

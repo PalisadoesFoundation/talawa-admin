@@ -410,7 +410,7 @@ export interface InterfaceUserInfo {
 /**
  * @interface InterfaceBaseEvent
  * @description Base interface for common event properties.
- * @property {string} id - The unique identifier of the event.
+ * @property {string} _id - The unique identifier of the event.
  * @property {string} title - The title of the event.
  * @property {string} description - The description of the event.
  * @property {string} startDate - The start date of the event.
@@ -422,7 +422,7 @@ export interface InterfaceUserInfo {
  * @property {boolean} recurring - Indicates if the event is a recurring event.
  */
 export interface InterfaceBaseEvent {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   startDate: string;
