@@ -47,7 +47,8 @@ import { DataGrid } from 'shared-components/DataGridWrapper';
 import { USER_TAGS_MEMBERS_TO_ASSIGN_TO } from 'GraphQl/Queries/userTagQueries';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Button } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useParams } from 'react-router';
 import styles from 'style/app-fixed.module.css';
 import { Stack } from '@mui/material';
@@ -278,6 +279,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
             className={
               !isToBeAssigned ? styles.editButton : `btn btn-danger btn-sm`
             }
+            aria-label={isToBeAssigned ? t('removeMember') : t('addMember')}
           >
             {isToBeAssigned ? 'x' : '+'}
           </Button>
@@ -285,6 +287,28 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       },
     },
   ];
+
+  const modalFooter = (
+    <>
+      <Button
+        onClick={hideAddPeopleToTagModal}
+        variant="outline-danger"
+        data-testid="closeAddPeopleToTagModal"
+        className={styles.removeButton}
+      >
+        {tCommon('cancel')}
+      </Button>
+      <Button
+        type="submit"
+        disabled={addPeopleToTagLoading}
+        data-testid="assignPeopleBtn"
+        className={styles.addButton}
+        form="addPeopleToTagForm"
+      >
+        {t('assign')}
+      </Button>
+    </>
+  );
 
   return (
     <ErrorBoundaryWrapper
@@ -294,156 +318,130 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       resetButtonText={tErrors('resetButton')}
       onReset={hideAddPeopleToTagModal}
     >
-      <Modal
+      <BaseModal
         show={addPeopleToTagModalIsOpen}
         onHide={hideAddPeopleToTagModal}
-        backdrop="static"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
+        title={t('addPeople')}
+        headerClassName={`bg-primary ${styles.modalHeader}`}
+        footer={modalFooter}
+        dataTestId="modalOrganizationHeader"
       >
-        <Modal.Header
-          className={`bg-primary ${styles.modalHeader}`}
-          data-testid="modalOrganizationHeader"
-          closeButton
-        >
-          <Modal.Title className="text-white">{t('addPeople')}</Modal.Title>
-        </Modal.Header>
-        <Form onSubmitCapture={addPeopleToCurrentTag}>
-          <Modal.Body>
-            <div
-              className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
-            >
-              {assignToMembers.length === 0 ? (
-                <div className="text-body-tertiary mx-auto">
-                  {t('noOneSelected')}
-                </div>
-              ) : (
-                assignToMembers.map((member) => (
-                  <div
-                    key={member._id}
-                    className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.memberBadge}`}
-                  >
-                    {member.firstName} {member.lastName}
-                    <i
-                      className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary`}
-                      onClick={() => removeMember(member._id)}
-                      data-testid="clearSelectedMember"
-                    />
-                  </div>
-                ))
-              )}
-            </div>
-
-            <div className="my-3 d-flex flex-wrap gap-3">
-              <div className="flex-grow-1">
-                <SearchBar
-                  placeholder={tCommon('firstName')}
-                  value={memberToAssignToSearchFirstName}
-                  onChange={(value) =>
-                    setMemberToAssignToSearchFirstName(value.trim())
-                  }
-                  onClear={() => setMemberToAssignToSearchFirstName('')}
-                  showSearchButton={false}
-                  inputTestId="searchByFirstName"
-                  clearButtonTestId="clearFirstNameSearch"
-                />
-              </div>
-              <div className="flex-grow-1">
-                <SearchBar
-                  placeholder={tCommon('lastName')}
-                  value={memberToAssignToSearchLastName}
-                  onChange={(value) =>
-                    setMemberToAssignToSearchLastName(value.trim())
-                  }
-                  onClear={() => setMemberToAssignToSearchLastName('')}
-                  showSearchButton={false}
-                  inputTestId="searchByLastName"
-                  clearButtonTestId="clearLastNameSearch"
-                />
-              </div>
-            </div>
-
-            {userTagsMembersToAssignToLoading ? (
-              <div className={styles.loadingDiv}>
-                <InfiniteScrollLoader />
+        <Form onSubmit={addPeopleToCurrentTag} id="addPeopleToTagForm">
+          <div
+            className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
+          >
+            {assignToMembers.length === 0 ? (
+              <div className="text-body-tertiary mx-auto">
+                {t('noOneSelected')}
               </div>
             ) : (
-              <>
+              assignToMembers.map((member) => (
                 <div
-                  id="addPeopleToTagScrollableDiv"
-                  data-testid="addPeopleToTagScrollableDiv"
-                  className={componentStyles.dataGridContainer}
+                  key={member._id}
+                  className={`badge bg-dark-subtle text-secondary-emphasis lh-lg my-2 ms-2 d-flex align-items-center ${styles.memberBadge}`}
                 >
-                  <InfiniteScroll
-                    dataLength={userTagMembersToAssignTo?.length ?? 0} // This is important field to render the next data
-                    next={loadMoreMembersToAssignTo}
-                    hasMore={
-                      userTagsMembersToAssignToData?.getUsersToAssignTo
-                        .usersToAssignTo.pageInfo.hasNextPage ?? false
-                    }
-                    loader={<InfiniteScrollLoader />}
-                    scrollableTarget="addPeopleToTagScrollableDiv"
-                  >
-                    <DataGrid
-                      disableColumnMenu
-                      columnBufferPx={7}
-                      hideFooter={true}
-                      getRowId={(row) => row.id}
-                      slots={{
-                        noRowsOverlay: () => (
-                          <Stack
-                            height="100%"
-                            alignItems="center"
-                            justifyContent="center"
-                          >
-                            {t('noMoreMembersFound')}
-                          </Stack>
-                        ),
-                      }}
-                      sx={{
-                        ...dataGridStyle,
-                        '& .MuiDataGrid-topContainer': { position: 'static' },
-                        '& .MuiDataGrid-virtualScrollerContent': {
-                          marginTop: '0',
-                        },
-                      }}
-                      getRowClassName={() => `${styles.rowBackground}`}
-                      autoHeight
-                      rowHeight={65}
-                      rows={userTagMembersToAssignTo?.map(
-                        (membersToAssignTo, index) => ({
-                          id: index + 1,
-                          ...membersToAssignTo,
-                        }),
-                      )}
-                      columns={columns}
-                      isRowSelectable={() => false}
-                    />
-                  </InfiniteScroll>
+                  {member.firstName} {member.lastName}
+                  <i
+                    className={`${styles.removeFilterIcon} fa fa-times ms-2 text-body-tertiary`}
+                    onClick={() => removeMember(member._id)}
+                    data-testid="clearSelectedMember"
+                  />
                 </div>
-              </>
+              ))
             )}
-          </Modal.Body>
-          <Modal.Footer>
-            <Button
-              onClick={hideAddPeopleToTagModal}
-              variant="outline-danger"
-              data-testid="closeAddPeopleToTagModal"
-              className={styles.removeButton}
-            >
-              {tCommon('cancel')}
-            </Button>
-            <Button
-              type="submit"
-              disabled={addPeopleToTagLoading}
-              data-testid="assignPeopleBtn"
-              className={styles.addButton}
-            >
-              {t('assign')}
-            </Button>
-          </Modal.Footer>
+          </div>
+
+          <div className="my-3 d-flex flex-wrap gap-3">
+            <div className="flex-grow-1">
+              <SearchBar
+                placeholder={tCommon('firstName')}
+                value={memberToAssignToSearchFirstName}
+                onChange={(value) =>
+                  setMemberToAssignToSearchFirstName(value.trim())
+                }
+                onClear={() => setMemberToAssignToSearchFirstName('')}
+                showSearchButton={false}
+                inputTestId="searchByFirstName"
+                clearButtonTestId="clearFirstNameSearch"
+              />
+            </div>
+            <div className="flex-grow-1">
+              <SearchBar
+                placeholder={tCommon('lastName')}
+                value={memberToAssignToSearchLastName}
+                onChange={(value) =>
+                  setMemberToAssignToSearchLastName(value.trim())
+                }
+                onClear={() => setMemberToAssignToSearchLastName('')}
+                showSearchButton={false}
+                inputTestId="searchByLastName"
+                clearButtonTestId="clearLastNameSearch"
+              />
+            </div>
+          </div>
+
+          {userTagsMembersToAssignToLoading ? (
+            <div className={styles.loadingDiv}>
+              <InfiniteScrollLoader />
+            </div>
+          ) : (
+            <>
+              <div
+                id="addPeopleToTagScrollableDiv"
+                data-testid="addPeopleToTagScrollableDiv"
+                className={componentStyles.dataGridContainer}
+              >
+                <InfiniteScroll
+                  dataLength={userTagMembersToAssignTo?.length ?? 0} // This is important field to render the next data
+                  next={loadMoreMembersToAssignTo}
+                  hasMore={
+                    userTagsMembersToAssignToData?.getUsersToAssignTo
+                      .usersToAssignTo.pageInfo.hasNextPage ?? false
+                  }
+                  loader={<InfiniteScrollLoader />}
+                  scrollableTarget="addPeopleToTagScrollableDiv"
+                >
+                  <DataGrid
+                    disableColumnMenu
+                    columnBufferPx={7}
+                    hideFooter={true}
+                    getRowId={(row) => row.id}
+                    slots={{
+                      noRowsOverlay: () => (
+                        <Stack
+                          height="100%"
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          {t('noMoreMembersFound')}
+                        </Stack>
+                      ),
+                    }}
+                    sx={{
+                      ...dataGridStyle,
+                      '& .MuiDataGrid-topContainer': { position: 'static' },
+                      '& .MuiDataGrid-virtualScrollerContent': {
+                        marginTop: '0',
+                      },
+                    }}
+                    getRowClassName={() => `${styles.rowBackground}`}
+                    autoHeight
+                    rowHeight={65}
+                    rows={userTagMembersToAssignTo?.map(
+                      (membersToAssignTo, index) => ({
+                        id: index + 1,
+                        ...membersToAssignTo,
+                      }),
+                    )}
+                    columns={columns}
+                    isRowSelectable={() => false}
+                  />
+                </InfiniteScroll>
+              </div>
+            </>
+          )}
         </Form>
-      </Modal>
+      </BaseModal>
     </ErrorBoundaryWrapper>
   );
 };

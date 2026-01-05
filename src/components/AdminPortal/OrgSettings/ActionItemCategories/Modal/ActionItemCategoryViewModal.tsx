@@ -3,8 +3,8 @@
  * Modal to display detailed view of an action item category
  */
 import type { FC } from 'react';
-import { Form } from 'react-bootstrap';
-import { BaseModal } from 'shared-components/BaseModal';
+import { Button, Form } from 'react-bootstrap';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import type { IActionItemCategoryInfo } from 'types/ActionItems/interface';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
@@ -29,15 +29,23 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
 
   if (!category) return null;
 
+  const modalFooter = (
+    <Button
+      variant="secondary"
+      onClick={hide}
+      data-testid="categoryViewModalCloseBtn"
+    >
+      {tCommon('close')}
+    </Button>
+  );
+
   return (
     <BaseModal
       show={isOpen}
       onHide={hide}
-      className={styles.itemModal}
+      title={t('categoryDetails')}
+      footer={modalFooter}
       dataTestId="categoryViewModal"
-      headerContent={
-        <p className={styles.titlemodal}>{t('categoryDetails')}</p>
-      }
     >
       <Form className="p-3">
         {/* Category Name */}
@@ -61,7 +69,7 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
               label={t('actionItemCategoryDescription')}
               variant="outlined"
               className={styles.noOutline}
-              value={category.description || t('noDescriptionProvided')}
+              value={category.description || 'No description provided'}
               disabled
               multiline
               rows={4}
@@ -82,21 +90,23 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
             InputProps={{
               startAdornment: (
                 <Circle
-                  className={`${styles.actionItemCategoryStatusIcon} ${
-                    category.isDisabled
-                      ? styles.statusIconDisabled
-                      : styles.statusIconActive
-                  }`}
+                  sx={{
+                    fontSize: '0.8rem',
+                    color: category.isDisabled ? '#ff5252' : '#4caf50',
+                    marginRight: '8px',
+                  }}
                 />
               ),
-              className: category.isDisabled
-                ? styles.statusTextDisabled
-                : styles.statusTextActive,
+              style: {
+                color: category.isDisabled ? '#ff5252' : '#4caf50',
+              },
             }}
             inputProps={{
-              className: category.isDisabled
-                ? styles.statusTextDisabled
-                : styles.statusTextActive,
+              style: {
+                WebkitTextFillColor: category.isDisabled
+                  ? '#ff5252'
+                  : '#4caf50',
+              },
             }}
             disabled
             data-testid="categoryStatusView"

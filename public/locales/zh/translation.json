@@ -458,6 +458,7 @@
     "userName": "用户名",
     "actions": "操作",
     "noOneSelected": "未选择任何人",
+    "addMember": "添加成员",
     "assignToTags": "分配到标签",
     "removeFromTags": "从标签中移除",
     "assign": "分配",

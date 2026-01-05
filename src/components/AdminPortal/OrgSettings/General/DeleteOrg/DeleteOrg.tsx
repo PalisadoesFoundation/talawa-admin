@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Button, Card, Modal } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { errorHandler } from 'utils/errorHandler';
@@ -113,32 +114,33 @@ function deleteOrg(): JSX.Element {
       )}
       {/* Delete Organization Modal */}
       {canDelete && (
-        <Modal
+        <BaseModal
           show={showDeleteModal}
           onHide={toggleDeleteModal}
-          data-testid="orgDeleteModal"
+          title={t('deleteOrganization')}
+          dataTestId="orgDeleteModal"
+          headerClassName={styles.modelHeaderDelete}
+          footer={
+            <>
+              <Button
+                onClick={toggleDeleteModal}
+                data-testid="closeDelOrgModalBtn"
+                className={styles.btnDelete}
+              >
+                {tCommon('cancel')}
+              </Button>
+              <Button
+                className={styles.btnConfirmDelete}
+                onClick={deleteOrg}
+                data-testid="deleteOrganizationBtn"
+              >
+                {t('confirmDelete')}
+              </Button>
+            </>
+          }
         >
-          <Modal.Header className={styles.modelHeaderDelete} closeButton>
-            <h5 className="text-white fw-bold">{t('deleteOrganization')}</h5>
-          </Modal.Header>
-          <Modal.Body>{t('deleteMsg')}</Modal.Body>
-          <Modal.Footer>
-            <Button
-              onClick={toggleDeleteModal}
-              data-testid="closeDelOrgModalBtn"
-              className={styles.btnDelete}
-            >
-              {tCommon('cancel')}
-            </Button>
-            <Button
-              className={styles.btnConfirmDelete}
-              onClick={deleteOrg}
-              data-testid="deleteOrganizationBtn"
-            >
-              {t('confirmDelete')}
-            </Button>
-          </Modal.Footer>
-        </Modal>
+          {t('deleteMsg')}
+        </BaseModal>
       )}
     </>
   );

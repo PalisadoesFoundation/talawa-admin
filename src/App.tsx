@@ -24,7 +24,7 @@ const OrganizationScreen = lazy(
 const PostsPage = lazy(() => import('shared-components/posts/posts'));
 
 const SuperAdminScreen = lazy(
-  () => import('components/SuperAdminScreen/SuperAdminScreen'),
+  () => import('components/AdminPortal/SuperAdminScreen/SuperAdminScreen'),
 );
 const BlockUser = lazy(() => import('screens/AdminPortal/BlockUser/BlockUser'));
 const EventManagement = lazy(
