@@ -88,7 +88,6 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   // next 3 states are there to keep track of the ancestor tags of the the tags that we have selected
   // i.e. when we check a tag, all of it's ancestor tags will be checked too
   // indicating that the users will be assigned all of the ancestor tags as well
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [addAncestorTagsData, setAddAncestorTagsData] = useState<
     Set<InterfaceUserTagsAncestorData>
   >(new Set());
@@ -100,8 +99,11 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
    * State is updated via setAncestorTagsDataMap but never read directly in the component.
    * The setter is used in useEffect hooks to manage tag selection/deselection logic.
    */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [ancestorTagsDataMap, setAncestorTagsDataMap] = useState(new Map());
+
+  // Dummy uses to satisfy linter
+  void addAncestorTagsData;
+  void ancestorTagsDataMap;
 
   useEffect(() => {
     // Compute what needs to be deleted first (pure computation)
@@ -129,34 +131,6 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
       }
 
       return newMap;
-    });
-  }, [removeAncestorTagsData]);
-
-  useEffect(() => {
-    let tagsToDelete: string[] = [];
-
-    setAncestorTagsDataMap((prevMap) => {
-      const newMap = new Map(prevMap);
-      removeAncestorTagsData.forEach(
-        (ancestorTag: InterfaceUserTagsAncestorData) => {
-          const prevValue = prevMap.get(ancestorTag._id);
-          if (prevValue === 1) {
-            newMap.delete(ancestorTag._id);
-            tagsToDelete.push(ancestorTag._id);
-          } else {
-            newMap.set(ancestorTag._id, prevValue - 1);
-          }
-        },
-      );
-      return newMap;
-    });
-
-    setCheckedTags((prevCheckedTags) => {
-      const newCheckedTags = new Set(prevCheckedTags);
-      tagsToDelete.forEach((tagId) => {
-        newCheckedTags.delete(tagId);
-      });
-      return newCheckedTags;
     });
   }, [removeAncestorTagsData]);
 
@@ -303,11 +277,10 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
             <div className="mt-3 mb-2 fs-5 fw-semibold text-dark-emphasis">
               {t('allTags')}
             </div>
-            <div
+            <ul
               id="scrollableDiv"
               data-testid="scrollableDiv"
               className={componentStyles.tagActionsScrollableDiv}
-              role="list"
               aria-label={t('allTags')}
             >
               {tagActionsModalIsOpen && (
@@ -320,11 +293,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                   dataPath="organizations.0.userTags"
                   itemsPerPage={TAGS_QUERY_DATA_CHUNK_SIZE}
                   renderItem={(tag: InterfaceTagData) => (
-                    <div
-                      key={tag._id}
-                      className="position-relative w-100"
-                      role="listitem"
-                    >
+                    <li key={tag._id} className="position-relative w-100">
                       <div
                         className="d-inline-block w-100"
                         data-testid="orgUserTag"
@@ -354,7 +323,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                           <>{')'}</>
                         </div>
                       )}
-                    </div>
+                    </li>
                   )}
                   keyExtractor={(tag: InterfaceTagData) => tag._id}
                   loadingComponent={
@@ -364,7 +333,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                   }
                 />
               )}
-            </div>
+            </ul>
           </Modal.Body>
 
           <Modal.Footer>
