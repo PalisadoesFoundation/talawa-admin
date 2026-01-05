@@ -20,7 +20,7 @@ import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import i18n from 'utils/i18nForTest';
 import { vi } from 'vitest';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   COMBINED_MOCKS,
   EMPTY_STATE_MOCKS,
@@ -30,12 +30,14 @@ import {
   ERROR_DELETION_MOCKS,
 } from './Registrations.mocks';
 
-// Mock toast
-vi.mock('react-toastify', () => ({
-  toast: {
+// Mock NotificationToast
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),
-    warn: vi.fn(),
+    warning: vi.fn(),
+    info: vi.fn(),
+    dismiss: vi.fn(),
   },
 }));
 
@@ -228,7 +230,7 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     });
 
     // Toast should not be called since button is disabled
-    expect(toast.warn).not.toHaveBeenCalled();
+    expect(NotificationToast.warning).not.toHaveBeenCalled();
   });
 
   test('Successfully triggers delete for non-checked-in registrant', async () => {
@@ -240,12 +242,14 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     });
 
     await waitFor(() => {
-      expect(toast.warn).toHaveBeenCalledWith('Removing the attendee...');
+      expect(NotificationToast.warning).toHaveBeenCalledWith(
+        'Removing the attendee...',
+      );
     });
 
     await waitFor(
       () => {
-        expect(toast.success).toHaveBeenCalledWith(
+        expect(NotificationToast.success).toHaveBeenCalledWith(
           'Attendee removed successfully',
         );
       },
@@ -265,7 +269,7 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
     });
 
     // Should not show warning toast since button is disabled
-    expect(toast.warn).not.toHaveBeenCalled();
+    expect(NotificationToast.warning).not.toHaveBeenCalled();
   });
 
   // Empty state tests
@@ -343,7 +347,7 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
 
     await waitFor(
       () => {
-        expect(toast.success).toHaveBeenCalledWith(
+        expect(NotificationToast.success).toHaveBeenCalledWith(
           'Attendee removed successfully',
         );
       },
@@ -365,7 +369,9 @@ describe('Event Registrants Component - Enhanced Coverage', () => {
 
     await waitFor(
       () => {
-        expect(toast.error).toHaveBeenCalledWith('Error removing attendee');
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          'Error removing attendee',
+        );
       },
       { timeout: 3000 },
     );

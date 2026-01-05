@@ -39,6 +39,7 @@ import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import React, { useState } from 'react';
 import { Modal, Form, Button, Spinner } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
+import componentStyles from '../../EventRegistrants.module.css';
 import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -135,10 +136,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   return (
     <>
       <Modal show={show} onHide={handleClose} backdrop="static" centered>
-        <Modal.Header
-          closeButton
-          style={{ backgroundColor: 'var(--tableHeader-bg)' }}
-        >
+        <Modal.Header closeButton className={componentStyles.modalHeader}>
           <Modal.Title>{t('title')}</Modal.Title>
         </Modal.Header>
         <Modal.Body>

@@ -125,7 +125,10 @@ export const TableRow = ({
         </div>
       ) : (
         <Button
-          style={{ backgroundColor: '#A8C7FA', color: '#555' }}
+          sx={{
+            backgroundColor: 'var(--bs-primary-bg-subtle)',
+            color: 'var(--bs-body-color)',
+          }}
           onClick={markCheckIn}
           className="m-2 p-2"
         >

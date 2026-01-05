@@ -12,7 +12,6 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import i18nForTest from 'utils/i18nForTest';
-import { toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
@@ -31,11 +30,16 @@ import { vi, describe, test, expect } from 'vitest';
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR_MUTATIONS, true);
 
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+const mockNotificationToast = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+  warning: vi.fn(),
+  info: vi.fn(),
+  dismiss: vi.fn(),
+}));
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockNotificationToast,
 }));
 
 async function wait(ms = 100): Promise<void> {
@@ -286,7 +290,7 @@ describe('Testing Agenda Category Component', () => {
     await userEvent.click(screen.getByTestId('editAgendaCategoryBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(mockNotificationToast.success).toHaveBeenCalledWith(
         translations.agendaCategoryUpdated,
       );
     });
@@ -333,7 +337,7 @@ describe('Testing Agenda Category Component', () => {
     await userEvent.click(screen.getByTestId('editAgendaCategoryBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(mockNotificationToast.error).toHaveBeenCalled();
     });
   });
 
@@ -385,7 +389,7 @@ describe('Testing Agenda Category Component', () => {
     await userEvent.click(screen.getByTestId('deleteAgendaCategoryBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(mockNotificationToast.success).toHaveBeenCalledWith(
         translations.agendaCategoryDeleted,
       );
     });
@@ -436,7 +440,7 @@ describe('Testing Agenda Category Component', () => {
     await userEvent.click(screen.getByTestId('deleteAgendaCategoryBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(mockNotificationToast.error).toHaveBeenCalled();
     });
   });
 });

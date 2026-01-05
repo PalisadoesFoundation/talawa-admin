@@ -218,8 +218,7 @@ function EventRegistrants(): JSX.Element {
       </div>
       <TableContainer
         component={Paper}
-        className="mt-3"
-        sx={{ borderRadius: '16px' }}
+        className={`mt-3 ${styles.roundedTableContainer}`}
       >
         <Table aria-label={t('eventRegistrantsTable')} role="grid">
           <TableHead>

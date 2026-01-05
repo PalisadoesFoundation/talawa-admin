@@ -192,7 +192,9 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
     return (
       <div className={`${styles.container} bg-white rounded-4 my-3`}>
         <div className={styles.message}>
-          <WarningAmberRounded className={styles.errorIcon} fontSize="large" />
+          <WarningAmberRounded
+            className={`${styles.errorIcon} ${styles.errorIconLarge}`}
+          />
           <h6 className="fw-bold text-danger text-center">
             Error occurred while loading{' '}
             {agendaCategoryError ? 'Agenda Categories' : 'Agenda Items'} Data

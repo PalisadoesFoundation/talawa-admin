@@ -7,7 +7,6 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import i18n from 'utils/i18nForTest';
-import { toast } from 'react-toastify';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { store } from 'state/store';
@@ -24,11 +23,16 @@ import {
   MOCKS_ERROR_QUERY,
   MOCKS_MUTATION_ERROR,
 } from './EventAgendaItemsMocks';
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+const mockNotificationToast = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+  warning: vi.fn(),
+  info: vi.fn(),
+  dismiss: vi.fn(),
+}));
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockNotificationToast,
 }));
 
 vi.mock('react-router', async () => ({
@@ -554,7 +558,9 @@ describe('Testing Agenda Items Components', () => {
     await userEvent.click(screen.getByTestId('createAgendaItemFormBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toBeCalledWith(translations.agendaItemCreated);
+      expect(mockNotificationToast.success).toHaveBeenCalledWith(
+        translations.agendaItemCreated,
+      );
       expect(
         screen.queryByTestId('createAgendaItemModalCloseBtn'),
       ).not.toBeInTheDocument();
@@ -613,7 +619,9 @@ describe('Testing Agenda Items Components', () => {
     await userEvent.click(screen.getByTestId('createAgendaItemFormBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toBeCalledWith('Mock Graphql Error');
+      expect(mockNotificationToast.error).toHaveBeenCalledWith(
+        'Mock Graphql Error',
+      );
     });
     expect(
       screen.getByTestId('createAgendaItemModalCloseBtn'),
@@ -661,7 +669,7 @@ describe('Testing Agenda Items Components', () => {
 
     await waitFor(() => {
       expect(sequences).toContain(1);
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(mockNotificationToast.success).toHaveBeenCalledWith(
         translations.agendaItemCreated,
       );
     });
@@ -734,7 +742,7 @@ describe('Testing Agenda Items Components', () => {
 
       await waitFor(() => {
         expect(sequences).toContain(1);
-        expect(toast.success).toHaveBeenCalledWith(
+        expect(mockNotificationToast.success).toHaveBeenCalledWith(
           translations.agendaItemCreated,
         );
       });
@@ -824,8 +832,8 @@ describe('Testing Agenda Items Components', () => {
       await userEvent.click(screen.getByTestId('createAgendaItemFormBtn'));
 
       await waitFor(() => {
-        expect(toast.success).not.toHaveBeenCalled();
-        expect(toast.error).not.toHaveBeenCalled();
+        expect(mockNotificationToast.success).not.toHaveBeenCalled();
+        expect(mockNotificationToast.error).not.toHaveBeenCalled();
         expect(
           screen.getByTestId('createAgendaItemModalCloseBtn'),
         ).toBeInTheDocument();

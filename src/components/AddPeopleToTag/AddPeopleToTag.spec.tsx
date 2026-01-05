@@ -16,7 +16,6 @@ import { I18nextProvider } from 'react-i18next';
 import { store } from 'state/store';
 import userEvent from '@testing-library/user-event';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { toast } from 'react-toastify';
 import { InMemoryCache, type ApolloLink } from '@apollo/client';
 import type { InterfaceAddPeopleToTagProps } from 'types/Tag/interface';
 import AddPeopleToTag from './AddPeopleToTag';
@@ -39,11 +38,16 @@ async function wait(): Promise<void> {
   });
 }
 
-vi.mock('react-toastify', () => ({
-  toast: {
-    success: vi.fn(),
-    error: vi.fn(),
-  },
+const mockNotificationToast = vi.hoisted(() => ({
+  success: vi.fn(),
+  error: vi.fn(),
+  warning: vi.fn(),
+  info: vi.fn(),
+  dismiss: vi.fn(),
+}));
+
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: mockNotificationToast,
 }));
 
 const translations = {
@@ -356,7 +360,9 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith(translations.noOneSelected);
+      expect(mockNotificationToast.error).toHaveBeenCalledWith(
+        translations.noOneSelected,
+      );
     });
   });
 
@@ -384,7 +390,7 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalledWith(
+      expect(mockNotificationToast.success).toHaveBeenCalledWith(
         translations.successfullyAssignedToPeople,
       );
     });
@@ -456,7 +462,7 @@ describe('Organisation Tags Page', () => {
     await userEvent.click(screen.getByTestId('assignPeopleBtn'));
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalled();
+      expect(mockNotificationToast.error).toHaveBeenCalled();
     });
   });
 });
