@@ -6,16 +6,18 @@
 
 > **default**(): `Element`
 
-Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.tsx:104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/Volunteers.tsx#L104)
+Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.tsx:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/Volunteers.tsx#L106)
 
 Renders the Event Volunteers screen.
 
 Responsibilities:
-- Displays volunteer listings with status chips
-- Supports search and filter via AdminSearchFilterBar
+- Displays volunteer listings with status chips (Accepted/Pending/Rejected)
+- Uses DataGridWrapper for integrated search, sort, and filter capabilities
+- Search by volunteer name with debouncing
+- Sort by hours volunteered (most/least)
+- Filter by status (All/Pending/Accepted/Rejected)
 - Shows volunteer avatars and hours volunteered
-- Handles add, view, and delete volunteer flows
-- Integrates with DataGrid for table display
+- Handles add, view, and delete volunteer flows via modals
 
 Localization:
 - Uses `common` and `eventVolunteers` namespaces
