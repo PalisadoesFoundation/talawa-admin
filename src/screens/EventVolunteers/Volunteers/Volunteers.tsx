@@ -173,10 +173,7 @@ function Volunteers(): JSX.Element {
       },
       where: {
         eventId: eventId,
-        hasAccepted:
-          status === VolunteerStatus.All
-            ? undefined
-            : status === VolunteerStatus.Accepted,
+        hasAccepted: undefined,
       },
     },
   });
@@ -197,7 +194,7 @@ function Volunteers(): JSX.Element {
       ...volunteer,
       volunteerName: volunteer.user?.name || '',
     }));
-  }, [eventData, status]);
+  }, [eventData]);
 
   if (volunteersLoading) {
     return <Loader size="xl" />;
