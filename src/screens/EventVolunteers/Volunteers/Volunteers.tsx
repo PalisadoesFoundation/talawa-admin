@@ -59,9 +59,9 @@ import {
 
 import { useQuery } from '@apollo/client';
 import Loader from 'components/Loader/Loader';
-import type {
-  GridCellParams,
-  GridColDef,
+import {
+  type GridCellParams,
+  type GridColDef,
 } from 'shared-components/DataGridWrapper';
 import { Chip } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
