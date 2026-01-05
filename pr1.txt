@@ -1,0 +1,882 @@
+Skip to content
+Navigation Menu
+PalisadoesFoundation
+talawa-admin
+
+Type / to search
+Code
+Issues
+224
+Pull requests
+29
+Actions
+Projects
+7
+Security
+Insights
+ Open
+feat: Phase 1: Admin — Extract UserTableRow reusable component
+#5969
+NavyasreeBalu wants to merge 31 commits into PalisadoesFoundation:develop from NavyasreeBalu:feature/extract-user-table-row-component 
++1,410 −266 
+ Conversation 58
+ Commits 31
+ Checks 37
+ Files changed 29
+Conversation
+@NavyasreeBalu
+NavyasreeBalu
+commented
+5 days ago
+• 
+What kind of change does this PR introduce?
+
+Feature - Extract reusable UserTableRow component for admin screens
+
+Issue Number:
+
+Fixes #5085
+
+Snapshots/Videos:
+
+N/A - Component refactoring with no visual changes
+
+If relevant, did you update the documentation?
+
+Yes - Added comprehensive TSDoc documentation with @example blocks to UserTableRow component
+
+Summary
+
+This PR extracts a reusable UserTableRow component to consolidate repeated user row UI (avatar, name/link, email, dates, actions) used across multiple admin screens. The component eliminates code duplication and provides consistent user table rendering across OrganizationPeople, BlockUser, and Users screens.
+
+Key Changes:
+
+Created UserTableRow component in src/components/AdminPortal/UserTableRow/
+Added TypeScript interfaces in src/types/AdminPortal/UserTableRow/interface.ts
+Migrated OrganizationPeople, BlockUser, and Users screens to use UserTableRow
+Added comprehensive TSDoc documentation with usage examples
+Fixed header alignment and joined date display bugs in BlockUser screen
+Removed unused imports and cleaned up code
+Does this PR introduce a breaking change?
+
+No - All existing functionality preserved with improved consistency
+
+Checklist
+CodeRabbit AI Review
+ I have reviewed and addressed all critical issues flagged by CodeRabbit AI
+ I have implemented or provided justification for each non-critical suggestion
+ I have documented my reasoning in the PR comments where CodeRabbit AI suggestions were not implemented
+Test Coverage
+ I have written tests for all new changes/features
+ I have verified that test coverage meets or exceeds 95%
+ I have run the test suite locally and all tests pass
+Other information
+
+All 54 tests passing for Users.tsx migration
+Zero TypeScript compilation errors
+All user-visible text uses i18n translation keys
+Component follows AdminPortal folder conventions and reusable component guidelines
+Have you read the contributing guide?
+
+Yes
+
+Summary by CodeRabbit
+New Features
+
+Unified, reusable user row used across admin screens — supports grid/table modes, compact layout, clickable rows, per-row actions and optional "Joined" date; column headers updated (e.g., "User", "Joined", "Actions").
+Style
+
+Added layout and pointer-interaction styles for rows and grid cells.
+Tests
+
+Expanded test coverage for rendering modes, actions, accessibility, edge cases and updated expectations to match UI changes.
+Localization
+
+Added/updated user-related translation keys across languages.
+✏️ Tip: You can customize this high-level summary in your review settings.
+
+NavyasreeBalu added 7 commits 5 days ago
+@NavyasreeBalu
+fix: add dataTestId to i18n checker non-user-visible attributes 
+90839e2
+@NavyasreeBalu
+fix: correct TypeScript type assertion formatting in UserTableRow
+aa26b99
+@NavyasreeBalu
+feat: migrate OrganizationPeople to use UserTableRow component
+3c4c3aa
+@NavyasreeBalu
+fix: complete OrganizationPeople test migration for UserTableRow 
+d2e1ffd
+@NavyasreeBalu
+docs: add UserTableRow migration documentation 
+5481479
+@NavyasreeBalu
+feat: complete UserTableRow migration for Users and BlockUser screens 
+55ae9da
+@NavyasreeBalu
+chore: remove unnecessary files and revert package changes 
+7d0085a
+@keploy
+keploy bot
+commented
+5 days ago
+• 
+No significant changes currently retry
+
+@github-actions
+github-actions bot
+commented
+5 days ago
+Our Pull Request Approval Process
+This PR will be reviewed according to our:
+
+Palisadoes Contributing Guidelines
+
+AI Usage Policy
+
+Your PR may be automatically closed if:
+
+Our PR template isn't filled in correctly
+
+You haven't correctly linked your PR to an issue
+
+Thanks for contributing!
+
+@coderabbitai
+Contributor
+coderabbitai bot
+commented
+5 days ago
+• 
+Important
+
+Review skipped
+Review was skipped due to path filters
+
+⛔ Files ignored due to path filters (1)
+CodeRabbit blocks several paths by default. You can override this behavior by explicitly including those paths in the path filters. For example, including **/dist/** will override the default block on the dist directory, by removing the pattern from both the lists.
+
+You can disable this status message by setting the reviews.review_status to false in the CodeRabbit configuration file.
+
+Walkthrough
+Adds a reusable UserTableRow React component (with types, CSS, and tests), migrates admin screens to use it, updates locale keys across languages, adjusts related tests and mocks, and removes a MockedProvider flag.
+
+Changes
+Cohort / File(s)	Summary
+UserTableRow component
+src/components/AdminPortal/UserTableRow/UserTableRow.tsx, src/components/AdminPortal/UserTableRow/UserTableRow.spec.tsx, src/components/AdminPortal/UserTableRow/UserTableRow.module.css	New component (named + default export) and tests; CSS adds gridCell, gridCellPointer, tableRowPointer; supports data-grid/table modes, compact mode, link navigation, rowNumber, joined date, configurable actions, onRowClick with action click suppression, and testId generation.
+Type definitions
+src/types/AdminPortal/UserTableRow/interface.ts	New exported types: InterfaceUserInfo, InterfaceActionVariant, InterfaceActionButton, InterfaceUserTableRowProps.
+Screens — migrations
+src/screens/AdminPortal/Users/Users.tsx, src/screens/AdminPortal/OrganizationPeople/OrganizationPeople.tsx, src/screens/BlockUser/BlockUser.tsx	Replaced per-row renderers with UserTableRow; updated headers, action arrays, navigation (useNavigate), ID coercions to string, removed direct Button/Link usage and localStorage access, and wired testIdPrefix/action testIds.
+Tests updated / added
+src/screens/AdminPortal/OrganizationPeople/OrganizationPeople.spec.tsx, src/screens/BlockUser/BlockUser.spec.tsx, src/screens/AdminPortal/Users/Users.spec.tsx	Adjusted assertions for new "user"/"Joined" column and date format; updated tab selection queries; added null-name handling test; aligned tests to new component behavior.
+Localization
+public/locales/... (multiple files)	Added no_email, no_name, na, user_row to common.json and added joined and actions keys in translation.json across en/es/fr/hi/zh locales.
+Mocks / tests utility
+src/components/Advertisements/AdvertisementsMocks.ts, src/screens/AdminPortal/PluginStore/UploadPluginModal.spec.tsx	Removed addTypename={false} from MockedProvider in mocks; tests updated to use a shared InMemoryCache in some MockedProvider usages.
+Sequence Diagram(s)
+
+Estimated code review effort
+🎯 4 (Complex) | ⏱️ ~45 minutes
+
+Possibly related PRs
+feat: Refactor all reporting tables into modular components #5082 — Same Phase 1 objective: extract reusable AdminPortal UserTableRow and migrate admin screens.
+Support for Users section - Administrators only #4552 — Overlapping users-table refactor and locale/test updates affecting OrganizationPeople rendering.
+Suggested reviewers
+palisadoes
+meetulr
+Pre-merge checks and finishing touches
+❌ Failed checks (2 warnings)
+✅ Passed checks (4 passed)
+Thanks for using CodeRabbit! It's free for OSS, and your support helps us grow. If you like it, consider giving us a shout-out.
+
+❤️ Share
+Comment @coderabbitai help to get the list of available commands and usage tips.
+
+@NavyasreeBalu
+revert: unauthorized changes to sensitive files 
+e55a0e9
+coderabbitai[bot]
+coderabbitai bot requested changes 5 days ago
+Contributor
+coderabbitai bot
+left a comment
+Actionable comments posted: 8
+
+📜 Review details
+src/components/AdminPortal/UserTableRow/UserTableRow.spec.tsx
+src/components/AdminPortal/UserTableRow/UserTableRow.spec.tsx
+src/components/AdminPortal/UserTableRow/UserTableRow.tsx
+src/components/AdminPortal/UserTableRow/UserTableRow.tsx
+Comment on lines +138 to +145
+                    color={
+                      color as
+                        | 'primary'
+                        | 'secondary'
+                        | 'error'
+                        | 'success'
+                        | 'inherit'
+                    }
+Contributor
+@coderabbitai
+coderabbitai bot
+5 days ago
+🧹 Nitpick | 🔵 Trivial
+
+Simplify verbose type assertion.
+
+The inline type assertion can be replaced with a simpler approach by ensuring mapVariantToColor returns the MUI ButtonProps color type directly.
+
+🔎 Proposed refactor
+Committable suggestion skipped: line range outside the PR's diff.
+
+🤖 Prompt for AI Agents
+@NavyasreeBalu	Reply...
+src/screens/AdminPortal/Users/Users.tsx
+Outdated
+src/screens/AdminPortal/Users/Users.tsx
+Outdated
+src/screens/BlockUser/BlockUser.tsx
+src/types/AdminPortal/UserTableRow/interface.ts
+NavyasreeBalu added 2 commits 5 days ago
+@NavyasreeBalu
+fix: address CodeRabbit review feedback 
+8516c30
+@NavyasreeBalu
+revert: remove unauthorized changes to sensitive file scripts/check-i… 
+508b23a
+coderabbitai[bot]
+coderabbitai bot requested changes 5 days ago
+Contributor
+coderabbitai bot
+left a comment
+Actionable comments posted: 3
+
+♻️ Duplicate comments (3)
+src/components/AdminPortal/UserTableRow/UserTableRow.tsx
+src/screens/AdminPortal/Users/Users.tsx
+src/screens/BlockUser/BlockUser.tsx
+NavyasreeBalu added 2 commits 5 days ago
+@NavyasreeBalu
+fix: add missing i18n translation keys and fix JSON syntax errors 
+40e886a
+@NavyasreeBalu
+fix: update pnpm lockfile to resolve CI installation issues 
+5265935
+coderabbitai[bot]
+coderabbitai bot requested changes 5 days ago
+Contributor
+coderabbitai bot
+left a comment
+Actionable comments posted: 4
+
+📜 Review details
+public/locales/fr/translation.json
+Outdated
+public/locales/fr/translation.json
+Outdated
+public/locales/zh/translation.json
+Outdated
+public/locales/zh/translation.json
+Outdated
+@NavyasreeBalu
+fix: resolve failing test issues in RecurrenceEndOptionsSection and Y… 
+6537986
+coderabbitai[bot]
+coderabbitai bot reviewed 5 days ago
+Contributor
+coderabbitai bot
+left a comment
+Actionable comments posted: 0
+
+Caution
+
+Some comments are outside the diff and can’t be posted inline due to platform limitations.
+
+⚠️ Outside diff range comments (2)
+📜 Review details
+NavyasreeBalu added 3 commits 5 days ago
+@NavyasreeBalu
+fix: resolve CI test failures 
+b939c38
+@NavyasreeBalu
+fix: recurrence end options section test failure 
+1856ec9
+@NavyasreeBalu
+fix: remove deprecated Apollo Client addTypename warnings from Upload… 
+e866ecd
+coderabbitai[bot]
+coderabbitai bot requested changes 5 days ago
+Contributor
+coderabbitai bot
+left a comment
+Actionable comments posted: 3
+
+Caution
+
+Some comments are outside the diff and can’t be posted inline due to platform limitations.
+
+⚠️ Outside diff range comments (5)
+src/screens/AdminPortal/PluginStore/UploadPluginModal.spec.tsx
+Comment on lines +3 to +7
+import {
+  ApolloClient,
+  NormalizedCacheObject,
+  InMemoryCache,
+} from '@apollo/client';
+Contributor
+@coderabbitai
+coderabbitai bot
+5 days ago
+🧹 Nitpick | 🔵 Trivial
+
+Shared InMemoryCache across tests may leak Apollo state
+
+Using a single module‑scope const cache = new InMemoryCache() and passing it into nearly every <MockedProvider cache={cache}> means all tests share one Apollo cache instance. If UploadPluginModal (now or in future changes) performs real GraphQL operations, writes from one test can affect subsequent tests via cached data.
+
+A more isolated pattern is to create a fresh cache per render/helper, e.g. cache={new InMemoryCache()} or a small renderWithProvider helper that instantiates a new cache each time. Not strictly a blocker today (most behavior is mocked via adminPluginInstaller), but worth adjusting to avoid subtle cross‑test coupling.
+
+Also applies to: 43-44, 78-81
+
+🤖 Prompt for AI Agents
+@NavyasreeBalu	Reply...
+src/screens/SubTags/SubTags.spec.tsx
+const renderSubTags = (link: ApolloLink): RenderResult => {
+  return render(
+    <MockedProvider cache={cache} addTypename={false} link={link}>
+    <MockedProvider cache={cache} link={link}>
+Contributor
+@coderabbitai
+coderabbitai bot
+5 days ago
+⚠️ Potential issue | 🟠 Major
+
+Out-of-scope change: Remove from this PR.
+
+This file tests the SubTags screen, which is not mentioned in the PR objectives (UserTableRow extraction for OrganizationPeople, BlockUser, and Users screens). While removing addTypename={false} is technically correct per Apollo Client deprecation guidelines, it represents unrelated test infrastructure cleanup that should be handled in a separate PR.
+
+Rationale:
+
+Mixing feature work (UserTableRow extraction) with unrelated test maintenance increases review complexity and risk
+The PR should focus solely on UserTableRow component and its adoption in the three target screens
+Test infrastructure cleanup (addTypename removal across 115+ files) warrants its own dedicated PR for proper tracking and rollback capability
+Recommendation:
+Revert this change and include it in a focused PR specifically for Apollo MockedProvider deprecation cleanup across all affected test files.
+
+🤖 Prompt for AI Agents
+@NavyasreeBalu	Reply...
+src/shared-components/Recurrence/RecurrenceEndOptionsSection.spec.tsx
+Outdated
+@palisadoes
+Contributor
+palisadoes
+commented
+5 days ago
+Please fix the conflicting files. They were edited to make sure tests pass.
+
+NavyasreeBalu added 3 commits 4 days ago
+@NavyasreeBalu
+fix: resolve merge conflicts with upstream/develop
+425d9b2
+@NavyasreeBalu
+fix: translate missing i18n keys in French and Chinese locales 
+0a1f337
+@NavyasreeBalu
+test: improve UserTableRow test coverage to 96.96% 
+5b1125f
+coderabbitai[bot]
+coderabbitai bot requested changes 4 days ago
+Contributor
+coderabbitai bot
+left a comment
+Actionable comments posted: 2
+
+♻️ Duplicate comments (3)
+📜 Review details
+src/components/AdminPortal/UserTableRow/UserTableRow.spec.tsx
+src/components/AdminPortal/UserTableRow/UserTableRow.spec.tsx
+@NavyasreeBalu
+test: add comprehensive test coverage for UserTableRow component 
+2a9326c
+4 hidden items
+Load more…
+@codecov
+codecov bot
+commented
+4 days ago
+• 
+Codecov Report
+❌ Patch coverage is 97.33333% with 2 lines in your changes missing coverage. Please review.
+✅ Project coverage is 96.75%. Comparing base (92c7045) to head (34c1b1a).
+⚠️ Report is 32 commits behind head on develop.
+
+Files with missing lines	Patch %	Lines
+...inPortal/OrganizationPeople/OrganizationPeople.tsx	66.66%	2 Missing ⚠️
+Additional details and impacted files
+☔ View full report in Codecov by Sentry.
+📢 Have feedback on the report? Share it here.
+
+🚀 New features to boost your workflow:
+@NavyasreeBalu
+test: improve UserTableRow test coverage with additional edge cases
+95c4668
+@NavyasreeBalu
+Author
+NavyasreeBalu
+commented
+4 days ago
+Please upload a video of your changes.
+
+@palisadoes
+
+Hi! I've addressed the feedback and uploaded the video demonstration.
+
+Video Demo:
+
+ UserTableRow_Component_Extraction_Demo.mp4 
+palisadoes
+palisadoes requested changes 4 days ago
+Contributor
+palisadoes
+left a comment
+Please fix the failing tests.
+https://docs-admin.talawa.io/docs/developer-resources/e2e-testing
+Try to make the code coverage closer to 100%
+@palisadoes
+Contributor
+palisadoes
+commented
+4 days ago
+Please fix the conflicting files
+
+NavyasreeBalu added 3 commits 4 days ago
+@NavyasreeBalu
+Merge upstream/develop into feature branch 
+98a43f8
+@NavyasreeBalu
+Merge remote-tracking branch 'upstream/develop' into feature/extract-… 
+324ec35
+@NavyasreeBalu
+test: improve UserTableRow test coverage to 96.96% and fix TypeScript… 
+cfdc8d5
+coderabbitai[bot]
+coderabbitai bot requested changes 3 days ago
+Contributor
+coderabbitai bot
+left a comment
+Actionable comments posted: 2
+
+📜 Review details
+public/locales/hi/translation.json
+Outdated
+public/locales/hi/translation.json
+Outdated
+NavyasreeBalu added 4 commits 3 days ago
+@NavyasreeBalu
+fix: add Hindi translations and improve test coverage for UserTableRow
+c36f47a
+@NavyasreeBalu
+test: add coverage for null name branch in Users.tsx
+480dd3b
+@NavyasreeBalu
+Merge branch 'feature/extract-user-table-row-component' of https://gi… 
+5d75f0f
+@NavyasreeBalu
+feat: add Cypress compatibility and improve test coverage
+76d8a7d
+@palisadoes
+Contributor
+palisadoes
+commented
+3 days ago
+@coderabbitai full review including dismissed and resolved comments
+
+palisadoes
+palisadoes approved these changes 3 days ago
+@coderabbitai
+Contributor
+coderabbitai bot
+commented
+3 days ago
+@palisadoes I'll perform a full review of all changes in this PR, including previously dismissed and resolved comments.
+
+✅ Actions performed
+coderabbitai[bot]
+coderabbitai bot requested changes 3 days ago
+Contributor
+coderabbitai bot
+left a comment
+Actionable comments posted: 7
+
+Caution
+
+Some comments are outside the diff and can’t be posted inline due to platform limitations.
+
+⚠️ Outside diff range comments (4)
+♻️ Duplicate comments (1)
+📜 Review details
+src/components/AdminPortal/UserTableRow/UserTableRow.module.css
+Comment on lines +1 to +14
+.gridCell {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gridCellPointer {
+  cursor: pointer;
+}
+
+.tableRowPointer {
+  cursor: pointer;
+}
+Contributor
+@coderabbitai
+coderabbitai bot
+3 days ago
+🧹 Nitpick | 🔵 Trivial
+
+Consider consolidating duplicate cursor pointer styles.
+
+The .gridCellPointer and .tableRowPointer classes both define identical cursor: pointer styles. While functionally correct, consolidating them into a single reusable class would reduce duplication.
+
+🔎 Suggested refactor
+Committable suggestion skipped: line range outside the PR's diff.
+
+🤖 Prompt for AI Agents
+@NavyasreeBalu	Reply...
+src/components/AdminPortal/UserTableRow/UserTableRow.spec.tsx
+Comment on lines +493 to +548
+  it('handles row click when onRowClick is not provided', () => {
+    render(
+      <MockedProvider>
+        <UserTableRow user={user} testIdPrefix="spec" />
+      </MockedProvider>,
+    );
+    const gridCell = screen.getByTestId('spec-gridcell-u1');
+    // Should not have onClick handler when onRowClick is not provided
+    fireEvent.click(gridCell);
+    // No assertion needed - just ensuring no errors occur
+    expect(gridCell).toBeInTheDocument();
+  });
+
+  it('handles table mode without row number', () => {
+    render(
+      <MockedProvider>
+        <table>
+          <tbody>
+            <UserTableRow user={user} isDataGrid={false} testIdPrefix="spec" />
+          </tbody>
+        </table>
+      </MockedProvider>,
+    );
+    expect(screen.queryByTestId('spec-no-u1')).not.toBeInTheDocument();
+    expect(screen.getByTestId('spec-tr-u1')).toBeInTheDocument();
+  });
+
+  it('handles table mode with joined date column', () => {
+    render(
+      <MockedProvider>
+        <table>
+          <tbody>
+            <UserTableRow
+              user={user}
+              isDataGrid={false}
+              showJoinedDate={true}
+              testIdPrefix="spec"
+            />
+          </tbody>
+        </table>
+      </MockedProvider>,
+    );
+    expect(screen.getByText('2024-01-15')).toBeInTheDocument();
+  });
+
+  it('handles early return in handleRowClick when onRowClick is not provided', () => {
+    render(
+      <MockedProvider>
+        <UserTableRow user={user} testIdPrefix="spec" />
+      </MockedProvider>,
+    );
+    const gridCell = screen.getByTestId('spec-gridcell-u1');
+    // This should not throw an error even though onRowClick is undefined
+    fireEvent.click(gridCell);
+    expect(gridCell).toBeInTheDocument();
+  });
+Contributor
+@coderabbitai
+coderabbitai bot
+3 days ago
+🧹 Nitpick | 🔵 Trivial
+
+Consider consolidating the two “no onRowClick” tests
+
+handles row click when onRowClick is not provided and handles early return in handleRowClick when onRowClick is not provided exercise the same code path; keeping only one of them would reduce noise without losing coverage.
+
+🤖 Prompt for AI Agents
+@NavyasreeBalu	Reply...
+src/screens/AdminPortal/OrganizationPeople/OrganizationPeople.spec.tsx
+Comment on lines +433 to 435
+    // The new component includes a "Joined:" label and a different date format.
+    expect(screen.getByText(/Joined: 2023-01-01/i)).toBeInTheDocument();
+  });
+Contributor
+@coderabbitai
+coderabbitai bot
+3 days ago
+🧹 Nitpick | 🔵 Trivial
+
+Screen test is tightly coupled to UserTableRow’s joined-date rendering
+
+Asserting the exact string Joined: 2023-01-01 binds this screen test to the shared UserTableRow’s internal text/formatting, which is already validated in the component’s own spec. Per the shared testing guidelines, consider only asserting that the member rows render correctly (names/emails, presence of rows) and rely on UserTableRow.spec.tsx for the detailed “Joined” label/format checks.
+
+🤖 Prompt for AI Agents
+@NavyasreeBalu	Reply...
+src/screens/AdminPortal/OrganizationPeople/OrganizationPeople.tsx
+Comment on lines +349 to 350
+      align: 'left',
+      headerAlign: 'center',
+Contributor
+@coderabbitai
+coderabbitai bot
+3 days ago
+🧹 Nitpick | 🔵 Trivial
+
+Consider aligning header and cell alignment for visual consistency.
+
+The column has align: 'left' for cell content but headerAlign: 'center'. This may cause the header text to appear misaligned with the row content. If intentional, this is fine; otherwise, consider aligning both.
+
+🤖 Prompt for AI Agents
+@NavyasreeBalu	Reply...
+src/screens/AdminPortal/OrganizationPeople/OrganizationPeople.tsx
+Outdated
+src/screens/AdminPortal/OrganizationPeople/OrganizationPeople.tsx
+Comment on lines +372 to +380
+            actions={[
+              {
+                label: tCommon('remove'),
+                onClick: () => toggleRemoveMemberModal(params.row.id),
+                variant: 'danger',
+                icon: <Delete />,
+                disabled: state === 2,
+                testId: 'removeMemberModalBtn',
+                ariaLabel: tCommon('removeMember'),
+Contributor
+@coderabbitai
+coderabbitai bot
+3 days ago
+🧹 Nitpick | 🔵 Trivial
+
+Use the user parameter in action onClick for interface consistency.
+
+The UserTableRow component passes the user object to action.onClick(user). The current implementation uses a closure capturing params.row.id, which works but doesn't follow the interface contract. Using the passed parameter improves consistency and makes the code more resilient to refactoring.
+
+🔎 Proposed fix
+📝 Committable suggestion
+🤖 Prompt for AI Agents
+@NavyasreeBalu	Reply...
+src/screens/AdminPortal/Users/Users.tsx
+palisadoes
+palisadoes requested changes 3 days ago
+Contributor
+palisadoes
+left a comment
+Please address the code rabbit suggestions
+
+NavyasreeBalu added 3 commits 3 days ago
+@NavyasreeBalu
+fix: address CodeRabbit critical issues 
+3eb65fa
+@NavyasreeBalu
+merge upstream/develop 
+64ea0f9
+@NavyasreeBalu
+docs: update OrganizationPeople documentation 
+34c1b1a
+coderabbitai[bot]
+coderabbitai bot reviewed 3 days ago
+Contributor
+coderabbitai bot
+left a comment
+Actionable comments posted: 0
+
+Caution
+
+Some comments are outside the diff and can’t be posted inline due to platform limitations.
+
+⚠️ Outside diff range comments (2)
+♻️ Duplicate comments (3)
+📜 Review details
+@palisadoes
+Contributor
+palisadoes
+commented
+3 days ago
+Please fix the failing tests
+
+https://docs-admin.talawa.io/docs/developer-resources/e2e-testing
+@palisadoes
+Contributor
+palisadoes
+commented
+2 days ago
+Are you still working on this? It's blocking some other issues
+
+@palisadoes
+Contributor
+palisadoes
+commented
+17 hours ago
+Closing as abandoned
+
+@palisadoes palisadoes closed this 17 hours ago
+@palisadoes palisadoes mentioned this pull request 17 hours ago
+Phase 1: Admin — Extract UserTableRow reusable component #5085
+Open
+@NavyasreeBalu
+Author
+NavyasreeBalu
+commented
+3 hours ago
+@palisadoes I'd like to continue working on this issue. Sorry for not responding - my laptop had hardware issues and I couldn't work on it. Everything's working now and I'm ready to finish this.
+
+I've gone through the CodeRabbit feedback and can fix the remaining test issues. Should I continue with this PR if you reopen it, or would you prefer a new PR?
+
+Thanks for your patience!
+
+@palisadoes palisadoes reopened this 3 hours ago
+@palisadoes
+Contributor
+palisadoes
+commented
+3 hours ago
+OK
+Please resolve the conflicting files and the failing tests
+
+Merge info
+Checks awaiting conflict resolution
+1 failing, 1 skipped, 36 successful checks
+
+
+failing checks
+PR Workflow / Test-Application-E2E (pull_request)
+PR Workflow / Test-Application-E2E (pull_request)Failing after 29s
+skipped checks
+PR Workflow / ZAP Security Scan (pull_request)
+PR Workflow / ZAP Security Scan (pull_request)Skipped 3 days ago
+successful checks
+Code scanning results / CodeQL
+Code scanning results / CodeQLSuccessful in 2s — No new alerts in code changed by this pull request
+codecov/patch
+codecov/patch — 97.33% of diff hit (target 96.75%)
+codecov/patch
+codecov/patch — 97.33% of diff hit (target 96.75%)
+codecov/project
+codecov/project — 96.75% (-0.01%) compared to 92c7045, passed because coverage increased by 0% when compared to adjusted base (96.75%)
+codecov/project
+codecov/projectSuccessful in 1s — 96.75% (-0.01%) compared to 92c7045, passed because coverage increased by 0% when compared to adjusted base (96.75%)
+codeql codescan workflow / Analyse Code With CodeQL (javascript) (pull_request)
+codeql codescan workflow / Analyse Code With CodeQL (javascript) (pull_request)Successful in 2m
+CodeRabbit
+CodeRabbit — Review completed
+Required
+PR Target Workflow / Check Correct PR Issue Assignment (pull_request_target)
+PR Target Workflow / Check Correct PR Issue Assignment (pull_request_target)Successful in 17s
+PR Target Workflow / Pull Request Greeting (pull_request_target)
+PR Target Workflow / Pull Request Greeting (pull_request_target)Successful in 6s
+PR Workflow / All Pre-Testing Checks Pass (pull_request)
+PR Workflow / All Pre-Testing Checks Pass (pull_request)Successful in 3s
+PR Workflow / Check for disable statements (eslint-disable, istanbul-ignore, it.skip) (pull_request)
+PR Workflow / Check for disable statements (eslint-disable, istanbul-ignore, it.skip) (pull_request)Successful in 43s
+PR Workflow / Check for proper mock cleanup in test files (pull_request)
+PR Workflow / Check for proper mock cleanup in test files (pull_request)Successful in 8s
+PR Workflow / Check if Talawa Admin app starts (No Docker) (pull_request)
+PR Workflow / Check if Talawa Admin app starts (No Docker) (pull_request)Successful in 1m
+PR Workflow / Check if Talawa Admin app starts in Docker (pull_request)
+PR Workflow / Check if Talawa Admin app starts in Docker (pull_request)Successful in 6m
+PR Workflow / Check Python Code Style (pull_request)
+PR Workflow / Check Python Code Style (pull_request)Successful in 56s
+PR Workflow / Check Target Branch (pull_request)
+PR Workflow / Check Target Branch (pull_request)Successful in 2s
+PR Workflow / Checks if sensitive files have been changed without authorization (pull_request)
+PR Workflow / Checks if sensitive files have been changed without authorization (pull_request)Successful in 42s
+PR Workflow / Count-Changed-Files / Checks if number of files changed is acceptable (pull_request)
+PR Workflow / Count-Changed-Files / Checks if number of files changed is acceptable (pull_request)Successful in 39s
+PR Workflow / CSS Policy Check (pull_request)
+PR Workflow / CSS Policy Check (pull_request)Successful in 39s
+PR Workflow / Generate and Validate Documentation / autodocs (pull_request)
+PR Workflow / Generate and Validate Documentation / autodocs (pull_request)Successful in 1m
+PR Workflow / Merge Coverage Reports (pull_request)
+PR Workflow / Merge Coverage Reports (pull_request)Successful in 1m
+PR Workflow / Performs linting, formatting, type-checking, unused file detection, checking for different source... (pull_request)
+PR Workflow / Performs linting, formatting, type-checking, unused file detection, checking for different source... (pull_request)Successful in 1m
+PR Workflow / Test Application (Shard 1) (pull_request)
+PR Workflow / Test Application (Shard 1) (pull_request)Successful in 2m
+PR Workflow / Test Application (Shard 2) (pull_request)
+PR Workflow / Test Application (Shard 2) (pull_request)Successful in 2m
+PR Workflow / Test Application (Shard 3) (pull_request)
+PR Workflow / Test Application (Shard 3) (pull_request)Successful in 2m
+PR Workflow / Test Application (Shard 4) (pull_request)
+PR Workflow / Test Application (Shard 4) (pull_request)Successful in 2m
+PR Workflow / Test Application (Shard 5) (pull_request)
+PR Workflow / Test Application (Shard 5) (pull_request)Successful in 2m
+PR Workflow / Test Application (Shard 6) (pull_request)
+PR Workflow / Test Application (Shard 6) (pull_request)Successful in 2m
+PR Workflow / Test Application (Shard 7) (pull_request)
+PR Workflow / Test Application (Shard 7) (pull_request)Successful in 2m
+PR Workflow / Test Application (Shard 8) (pull_request)
+PR Workflow / Test Application (Shard 8) (pull_request)Successful in 3m
+PR Workflow / Test Application (Shard 9) (pull_request)
+PR Workflow / Test Application (Shard 9) (pull_request)Successful in 2m
+PR Workflow / Test Application (Shard 10) (pull_request)
+PR Workflow / Test Application (Shard 10) (pull_request)Successful in 2m
+PR Workflow / Test Application (Shard 11) (pull_request)
+PR Workflow / Test Application (Shard 11) (pull_request)Successful in 2m
+PR Workflow / Test Application (Shard 12) (pull_request)
+PR Workflow / Test Application (Shard 12) (pull_request)Successful in 2m
+PR Workflow / Test Deployment to https://docs-admin.talawa.io (pull_request)
+PR Workflow / Test Deployment to https://docs-admin.talawa.io (pull_request)Successful in 2m
+PR Workflow / Translation Tag Check (pull_request)
+PR Workflow / Translation Tag Check (pull_request)Successful in 44s
+This branch has conflicts that must be resolved
+Changes can be cleanly merged.
+
+docs/docs/auto-docs/screens/AdminPortal/OrganizationPeople/OrganizationPeople/functions/default.md
+docs/docs/auto-docs/screens/AdminPortal/Users/Users/functions/default.md
+src/screens/AdminPortal/OrganizationPeople/OrganizationPeople.spec.tsx
+src/screens/AdminPortal/Users/Users.tsx
+src/screens/BlockUser/BlockUser.spec.tsx
+src/screens/BlockUser/BlockUser.tsx
+Still in progress?
+@NavyasreeBalu
+
+
+Add a comment
+Comment
+ 
+Add your comment here...
+ 
+Remember, contributions to this repository should follow its contributing guidelines and code of conduct.
+ ProTip! Add comments to specific lines under Files changed.
+Reviewers
+@coderabbitai
+coderabbitai[bot]
+@palisadoes
+palisadoes
+Requested changes must be addressed to merge this pull request.
+
+Still in progress?
+Assignees
+No one assigned
+Labels
+None yet
+Projects
+None yet
+Milestone
+No milestone
+Development
+Successfully merging this pull request may close these issues.
+
