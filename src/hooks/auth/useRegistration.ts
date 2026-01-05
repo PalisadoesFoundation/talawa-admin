@@ -1,10 +1,18 @@
 import { useState } from 'react';
 
+/**
+ * Props for the useRegistration hook
+ */
 interface IUseRegistrationProps {
+  /** Callback function called on successful registration */
   onSuccess?: () => void;
+  /** Callback function called on registration error */
   onError?: (error: Error) => void;
 }
 
+/**
+ * Custom hook for user registration
+ */
 export const useRegistration = ({
   onSuccess,
   onError,

@@ -6,7 +6,9 @@
 
 > **useRegistration**(`__namedParameters`): `object`
 
-Defined in: [src/hooks/auth/useRegistration.ts:8](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L8)
+Defined in: [src/hooks/auth/useRegistration.ts:16](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/hooks/auth/useRegistration.ts#L16)
+
+Custom hook for user registration
 
 ## Parameters
 

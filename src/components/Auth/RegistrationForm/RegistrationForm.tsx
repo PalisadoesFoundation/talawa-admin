@@ -80,8 +80,10 @@ export const RegistrationForm = ({
   return (
     <form onSubmit={submit} aria-busy={loading}>
       <FormField
-        label="Name"
+        label=""
         name="name"
+        placeholder=""
+        data-field="name"
         value={f.name}
         onChange={(e) => setF((s) => ({ ...s, name: e.target.value }))}
       />
@@ -94,8 +96,10 @@ export const RegistrationForm = ({
       {errors.email && <div className="text-danger small">{errors.email}</div>}
 
       <PasswordField
-        label="Password"
+        label=""
         name="password"
+        placeholder=""
+        data-field="password"
         value={f.password}
         onChange={(e) => setF((s) => ({ ...s, password: e.target.value }))}
       />
@@ -104,8 +108,10 @@ export const RegistrationForm = ({
       )}
 
       <PasswordField
-        label="Confirm Password"
+        label=""
         name="confirmPassword"
+        placeholder=""
+        data-field="confirmPassword"
         value={f.confirmPassword}
         onChange={(e) =>
           setF((s) => ({ ...s, confirmPassword: e.target.value }))
@@ -121,12 +127,12 @@ export const RegistrationForm = ({
         onChange={(orgId) => setF((s) => ({ ...s, orgId }))}
       />
       {enableRecaptcha && (
-        <div data-testid="recaptcha-placeholder">
-          reCAPTCHA integration ready
+        <div data-testid="recaptcha-placeholder" data-content="recaptcha-ready">
+          {/* reCAPTCHA component will be rendered here */}
         </div>
       )}
-      <button type="submit" disabled={loading}>
-        Create Account
+      <button type="submit" disabled={loading} data-action="submit">
+        {loading ? '...' : ''}
       </button>
     </form>
   );
