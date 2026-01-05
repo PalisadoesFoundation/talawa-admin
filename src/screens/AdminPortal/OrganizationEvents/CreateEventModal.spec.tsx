@@ -116,12 +116,18 @@ vi.mock('shared-components/DateRangePicker/DateRangePicker', () => ({
   __esModule: true,
   default: ({ value, onChange, dataTestId }: MockDateRangePickerProps) => {
     const adjustRange = (startDate: Date | null, endDate: Date | null) => {
+      // Auto-adjust null endDate to startDate
+      if (startDate && !endDate) {
+        return { startDate, endDate: startDate };
+      }
+
+      // Auto-adjust if endDate is before startDate
       if (startDate && endDate && endDate < startDate) {
         return { startDate, endDate: startDate };
       }
+
       return { startDate, endDate };
     };
-
     return (
       <div>
         <input
