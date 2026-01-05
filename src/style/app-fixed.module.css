@@ -891,21 +891,19 @@
 }
 
 .statusIconActive {
-  color: var(--bs-success, #4caf50);
+  color: var(--bs-success, #31bb6b);
 }
 
 .statusIconDisabled {
-  color: var(--bs-danger, #ff5252);
+  color: var(--bs-danger, #dc3545);
 }
 
 .statusTextActive {
-  color: var(--bs-success, #4caf50);
-  -webkit-text-fill-color: var(--bs-success, #4caf50);
+  color: var(--bs-success, #31bb6b);
 }
 
 .statusTextDisabled {
-  color: var(--bs-danger, #ff5252);
-  -webkit-text-fill-color: var(--bs-danger, #ff5252);
+  color: var(--bs-danger, #dc3545);
 }
 
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
