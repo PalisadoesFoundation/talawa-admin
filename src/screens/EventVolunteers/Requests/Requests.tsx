@@ -219,7 +219,7 @@ function Requests(): JSX.Element {
       minWidth: 150,
       align: 'center',
       headerAlign: 'center',
-      sortable: false,
+      sortable: true,
       renderCell: (params: GridCellParams) => {
         return dayjs(params.row.createdAt).format('DD/MM/YYYY');
       },

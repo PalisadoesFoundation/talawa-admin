@@ -6,7 +6,7 @@
 
 > `const` **MOCKS\_EMPTY**: `object`[]
 
-Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:414](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts#L414)
+Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:332](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts#L332)
 
 ## Type Declaration
 
@@ -30,10 +30,6 @@ Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:414](htt
 
 > **id**: `string` = `'eventId'`
 
-#### request.variables.orderBy
-
-> **orderBy**: `any` = `null`
-
 #### request.variables.where
 
 > **where**: `object`
@@ -45,10 +41,6 @@ Defined in: [src/screens/EventVolunteers/Volunteers/Volunteers.mocks.ts:414](htt
 #### request.variables.where.hasAccepted
 
 > **hasAccepted**: `any` = `undefined`
-
-#### request.variables.where.name\_contains
-
-> **name\_contains**: `string` = `''`
 
 ### result
 

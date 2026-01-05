@@ -117,7 +117,6 @@ function Volunteers(): JSX.Element {
 
   const [volunteer, setVolunteer] =
     useState<InterfaceEventVolunteerInfo | null>(null);
-  const [status] = useState<VolunteerStatus>(VolunteerStatus.All);
   const [isRecurring, setIsRecurring] = useState<boolean>(false);
   const [baseEvent, setBaseEvent] = useState<{ id: string } | null>(null);
   const [modalState, setModalState] = useState<{
@@ -194,31 +193,10 @@ function Volunteers(): JSX.Element {
     const allVolunteers = eventData?.event?.volunteers || [];
 
     // Add computed field for volunteer name to enable search
-    const volunteersWithNames = allVolunteers.map((volunteer) => ({
+    return allVolunteers.map((volunteer) => ({
       ...volunteer,
       volunteerName: volunteer.user?.name || '',
     }));
-
-    // Apply client-side filtering based on status
-    if (status === VolunteerStatus.All) {
-      return volunteersWithNames;
-    } else if (status === VolunteerStatus.Pending) {
-      return volunteersWithNames.filter(
-        (volunteer: InterfaceEventVolunteerInfo) =>
-          volunteer.volunteerStatus === 'pending',
-      );
-    } else if (status === VolunteerStatus.Rejected) {
-      return volunteersWithNames.filter(
-        (volunteer: InterfaceEventVolunteerInfo) =>
-          volunteer.volunteerStatus === 'rejected',
-      );
-    } else {
-      // VolunteerStatus.Accepted
-      return volunteersWithNames.filter(
-        (volunteer: InterfaceEventVolunteerInfo) =>
-          volunteer.volunteerStatus === 'accepted',
-      );
-    }
   }, [eventData, status]);
 
   if (volunteersLoading) {
