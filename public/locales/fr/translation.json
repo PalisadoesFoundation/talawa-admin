@@ -18,7 +18,8 @@
     "rank": "Rang",
     "volunteer": "Bénévole",
     "email": "E-mail",
-    "hoursVolunteered": "Heures Bénévoles"
+    "hoursVolunteered": "Heures Bénévoles",
+    "volunteerRankings": "Classement des Bénévoles"
   },
   "loginPage": {
     "title": "Administrateur Talawa",
@@ -278,6 +279,7 @@
     "noUserFound": "Aucun utilisateur trouvé",
     "filterByRole": "Filter par rôle",
     "errorLoadingUsers": "Erreur lors du chargement des utilisateurs",
+    "profilePageComingSoon": "Page de profil à venir !",
     "sort": "Trier",
     "sortBy": "Trier par",
     "Newest": "Le plus récent d'abord",
@@ -1694,6 +1696,7 @@
     "categoryDeleted": "Catégorie d'élément d'action supprimée avec succès",
     "deleteCategory": "Supprimer la catégorie",
     "deleteCategoryMsg": "Êtes-vous sûr de vouloir supprimer cette catégorie d'élément d'action ?",
+    "noDescriptionProvided": "Aucune description fournie",
     "createButton": "Créer",
     "editButton": "Modifier"
   },
@@ -1725,7 +1728,8 @@
     "delete": "Supprimer",
     "name": "Nom",
     "desc": "Description",
-    "venueImagePreview": "Aperçu de l’image du lieu"
+    "venueImagePreview": "Aperçu de l’image du lieu",
+    "sortVenues": "Trier les lieux"
   },
   "addMember": {
     "title": "Ajouter un membre",
