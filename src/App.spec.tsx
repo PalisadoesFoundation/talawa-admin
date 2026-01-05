@@ -51,7 +51,7 @@ vi.mock('./plugin', () => ({
   PluginInjector: vi.fn(() => <div>Mock Plugin Injector</div>),
 }));
 
-vi.mock('screens/UserPortal/Settings/Settings', () => ({
+vi.mock('shared-components/ProfileForm/ProfileForm', () => ({
   default: () => <div data-testid="mock-settings">Mock Settings</div>,
 }));
 

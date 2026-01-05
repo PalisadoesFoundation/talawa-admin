@@ -36,7 +36,7 @@
 import Avatar from 'components/Avatar/Avatar';
 import React from 'react';
 import { ButtonGroup, Dropdown } from 'react-bootstrap';
-import { useNavigate, useParams } from 'react-router';
+import { useNavigate } from 'react-router';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
 import dropdownStyles from './ProfileDropdown.module.css';
@@ -63,7 +63,6 @@ const ProfileDropdown = ({
   const name: string = getItem<string>('name') || '';
   const userImage: string = getItem<string>('UserImage') || '';
   const navigate = useNavigate();
-  const { orgId } = useParams();
 
   const handleLogout = async (): Promise<void> => {
     try {
@@ -83,7 +82,6 @@ const ProfileDropdown = ({
   const profileDestination = resolveProfileNavigation({
     portal,
     role: userRole,
-    orgId,
   });
 
   return (

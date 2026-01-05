@@ -73,6 +73,13 @@
     "communityLogo": "Community Logo",
     "organizations": "Organizations"
   },
+  "adminProfile": {
+    "title": "Admin Profile",
+    "settings": "Settings",
+    "profile": "Profile",
+    "personalInfo": "Personal Information",
+    "accountSettings": "Account Settings"
+  },
   "signOut": {
     "retryPrompt": "Failed to revoke session. Retry?",
     "signingOut": "Signing out...",

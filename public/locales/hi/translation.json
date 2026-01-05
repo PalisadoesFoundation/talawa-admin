@@ -73,6 +73,13 @@
     "communityLogo": "समुदाय लोगो",
     "organizations": "संगठन"
   },
+  "adminProfile": {
+    "title": "एडमिन प्रोफ़ाइल",
+    "settings": "सेटिंग्स",
+    "profile": "प्रोफ़ाइल",
+    "personalInfo": "व्यक्तिगत जानकारी",
+    "accountSettings": "खाता सेटिंग्स"
+  },
   "signOut": {
     "retryPrompt": "सेशन रद्द करने में विफल। पुनः प्रयास करें?",
     "signingOut": "साइन आउट हो रहा है...",

@@ -73,6 +73,13 @@
     "communityLogo": "Logo Communautaire",
     "organizations": "Organisations"
   },
+  "adminProfile": {
+    "title": "Profil Administrateur",
+    "settings": "Paramètres",
+    "profile": "Profil",
+    "personalInfo": "Informations Personnelles",
+    "accountSettings": "Paramètres du Compte"
+  },
   "signOut": {
     "retryPrompt": "Échec de la révocation de la session. Réessayer ?",
     "signingOut": "Déconnexion en cours...",
