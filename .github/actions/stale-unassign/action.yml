@@ -34,23 +34,28 @@ runs:
         github-token: ${{ inputs.github-token }}
         script: |
           // Read inputs from environment variables to prevent script injection
-          const gracePeriodDays = parseInt(process.env.GRACE_PERIOD_DAYS, 10);
+          const DEFAULT_GRACE_PERIOD = 7;
+          let gracePeriodDays = parseInt(process.env.GRACE_PERIOD_DAYS, 10);
+          if (!Number.isFinite(gracePeriodDays) || gracePeriodDays < 0) {
+            console.warn(`Invalid grace period "${process.env.GRACE_PERIOD_DAYS}", using default: ${DEFAULT_GRACE_PERIOD}`);
+            gracePeriodDays = DEFAULT_GRACE_PERIOD;
+          }
           const staleLabel = process.env.STALE_LABEL;
           const commentTemplate = process.env.COMMENT_TEMPLATE;
-          
+
           console.log(`Configuration: grace-period=${gracePeriodDays} days, stale-label="${staleLabel}"`);
-          
+
           // Check if repository is archived
           const { data: repo } = await github.rest.repos.get({
             owner: context.repo.owner,
             repo: context.repo.repo
           });
-          
+
           if (repo.archived) {
             console.log('Repository is archived. Skipping.');
             return;
           }
-          
+
           // Check if the stale label exists in this repository
           try {
             await github.rest.issues.getLabel({
@@ -65,7 +70,7 @@ runs:
             }
             throw error;
           }
-          
+
           // Find open issues with stale label
           let issues = [];
           try {
@@ -80,12 +85,12 @@ runs:
             console.error(`Error fetching issues: ${error.message}`);
             throw error;
           }
-          
+
           console.log(`Found ${issues.length} open issues with "${staleLabel}" label`);
-          
+
           let processedCount = 0;
           let skippedCount = 0;
-          
+
           for (const issue of issues) {
             try {
               // Skip pull requests (they appear in issues API too)
@@ -162,7 +167,8 @@ runs:
                 continue;
               }
               
-              // Use the most recent label event
+              // Sort by date and use the most recent label event
+              labelEvents.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
               const latestLabelEvent = labelEvents[labelEvents.length - 1];
               const labelAddedDate = new Date(latestLabelEvent.created_at);
               const now = new Date();
@@ -217,5 +223,5 @@ runs:
               skippedCount++;
             }
           }
-          
+
           console.log(`\nSummary: Processed ${processedCount} issues, skipped ${skippedCount} issues`);
