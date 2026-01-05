@@ -26,26 +26,31 @@ runs:
   steps:
     - name: Unassign stale issues
       uses: actions/github-script@v7
+      env:
+        GRACE_PERIOD_DAYS: ${{ inputs.grace-period-days }}
+        STALE_LABEL: ${{ inputs.stale-label }}
+        COMMENT_TEMPLATE: ${{ inputs.comment-message }}
       with:
         github-token: ${{ inputs.github-token }}
         script: |
-          const gracePeriodDays = parseInt('${{ inputs.grace-period-days }}', 10);
-          const staleLabel = '${{ inputs.stale-label }}';
-          const commentTemplate = `${{ inputs.comment-message }}`;
-
+          // Read inputs from environment variables to prevent script injection
+          const gracePeriodDays = parseInt(process.env.GRACE_PERIOD_DAYS, 10);
+          const staleLabel = process.env.STALE_LABEL;
+          const commentTemplate = process.env.COMMENT_TEMPLATE;
+          
           console.log(`Configuration: grace-period=${gracePeriodDays} days, stale-label="${staleLabel}"`);
-
+          
           // Check if repository is archived
           const { data: repo } = await github.rest.repos.get({
             owner: context.repo.owner,
             repo: context.repo.repo
           });
-
+          
           if (repo.archived) {
             console.log('Repository is archived. Skipping.');
             return;
           }
-
+          
           // Check if the stale label exists in this repository
           try {
             await github.rest.issues.getLabel({
@@ -60,7 +65,7 @@ runs:
             }
             throw error;
           }
-
+          
           // Find open issues with stale label
           let issues = [];
           try {
@@ -75,12 +80,12 @@ runs:
             console.error(`Error fetching issues: ${error.message}`);
             throw error;
           }
-
+          
           console.log(`Found ${issues.length} open issues with "${staleLabel}" label`);
-
+          
           let processedCount = 0;
           let skippedCount = 0;
-
+          
           for (const issue of issues) {
             try {
               // Skip pull requests (they appear in issues API too)
@@ -115,24 +120,35 @@ runs:
                 continue;
               }
               
-              const hasLinkedPR = timelineEvents.some(event => {
+              // Check for OPEN linked PRs only (ignore closed/merged PRs)
+              const hasOpenLinkedPR = timelineEvents.some(event => {
                 if (event.event === 'cross-referenced' && event.source?.issue?.pull_request) {
                   // Check if PR is from the same repository
                   const prRepoFullName = event.source.issue.repository?.full_name;
                   const currentRepoFullName = `${context.repo.owner}/${context.repo.repo}`;
-                  return prRepoFullName === currentRepoFullName;
+                  const isSameRepo = prRepoFullName === currentRepoFullName;
+                  
+                  // Only count OPEN PRs (ignore closed/merged)
+                  const prState = event.source.issue.state;
+                  const isOpen = prState === 'open';
+                  
+                  if (isSameRepo && !isOpen) {
+                    console.log(`Issue #${issue.number}: Found closed/merged PR, ignoring`);
+                  }
+                  
+                  return isSameRepo && isOpen;
                 }
                 return false;
               });
               
-              // Skip if there IS a linked PR (contributor is actively working)
-              if (hasLinkedPR) {
-                console.log(`Issue #${issue.number}: Has linked PR in same repo, skipping (contributor is working)`);
+              // Skip if there IS an OPEN linked PR (contributor is actively working)
+              if (hasOpenLinkedPR) {
+                console.log(`Issue #${issue.number}: Has open linked PR in same repo, skipping (contributor is working)`);
                 skippedCount++;
                 continue;
               }
               
-              console.log(`Issue #${issue.number}: No linked PR found, checking grace period...`);
+              console.log(`Issue #${issue.number}: No open linked PR found, checking grace period...`);
               
               // Find when stale label was added (get the most recent one in case of re-labeling)
               const labelEvents = timelineEvents.filter(event => 
@@ -201,5 +217,5 @@ runs:
               skippedCount++;
             }
           }
-
+          
           console.log(`\nSummary: Processed ${processedCount} issues, skipped ${skippedCount} issues`);
