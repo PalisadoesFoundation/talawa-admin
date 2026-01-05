@@ -7,6 +7,10 @@ inputs:
     description: 'Days after label application before unassignment'
     required: false
     default: '1'
+  dry-run:
+    description: 'Run without making changes. Logs intended actions.'
+    required: false
+    default: 'false'
   stale-label:
     description: 'Label that marks issues as stale'
     required: false
@@ -35,12 +39,27 @@ runs:
         STALE_LABEL: ${{ inputs.stale-label }}
         COMMENT_TEMPLATE: ${{ inputs.comment-message }}
         MAX_ISSUES_PER_RUN: ${{ inputs.max-issues-per-run }}
+        DRY_RUN: ${{ inputs.dry-run }}
       with:
         github-token: ${{ inputs.github-token }}
         script: |
           // Read inputs from environment variables to prevent script injection
           const DEFAULT_GRACE_PERIOD = 1;
           const DEFAULT_MAX_ISSUES = 50;
+
+          // Helper function for retrying API calls with exponential backoff
+          async function retry(fn, retries = 3, delay = 1000) {
+            try {
+              return await fn();
+            } catch (error) {
+              if (retries > 0 && (error.status >= 500 || error.message.includes('network'))) {
+                console.warn(`API call failed (${error.message}). Retrying in ${delay}ms...`);
+                await new Promise(r => setTimeout(r, delay));
+                return retry(fn, retries - 1, delay * 2);
+              }
+              throw error;
+            }
+          }
 
           let gracePeriodDays = parseInt(process.env.GRACE_PERIOD_DAYS, 10);
           if (!Number.isFinite(gracePeriodDays) || gracePeriodDays < 0) {
@@ -50,6 +69,7 @@ runs:
 
           const staleLabel = process.env.STALE_LABEL;
           const commentTemplate = process.env.COMMENT_TEMPLATE;
+          const dryRun = process.env.DRY_RUN === 'true';
 
           let maxIssuesPerRun = parseInt(process.env.MAX_ISSUES_PER_RUN, 10);
           if (!Number.isFinite(maxIssuesPerRun) || maxIssuesPerRun < 0) {
@@ -68,13 +88,11 @@ runs:
             console.warn('Warning: comment-message does not contain {assignee} placeholder. Unassigned users will not be mentioned.');
           }
 
-          console.log(`Configuration: grace-period=${gracePeriodDays} days, stale-label="${staleLabel}", max-issues=${maxIssuesPerRun || 'unlimited'}`);
+          console.log(`Configuration: grace-period=${gracePeriodDays} days, stale-label="${staleLabel}", max-issues=${maxIssuesPerRun || 'unlimited'}, dry-run=${dryRun}`);
 
           // Check if repository is archived
-          const { data: repo } = await github.rest.repos.get({
-            owner: context.repo.owner,
             repo: context.repo.repo
-          });
+          }));
 
           if (repo.archived) {
             console.log('Repository is archived. Skipping.');
@@ -83,11 +101,8 @@ runs:
 
           // Check if the stale label exists in this repository
           try {
-            await github.rest.issues.getLabel({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
               name: staleLabel
-            });
+            }));
           } catch (error) {
             if (error.status === 404) {
               console.log(`Label "${staleLabel}" does not exist in this repository. Skipping.`);
@@ -99,13 +114,8 @@ runs:
           // Find open issues with stale label
           let issues = [];
           try {
-            issues = await github.paginate(github.rest.issues.listForRepo, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'open',
-              labels: staleLabel,
               per_page: 100
-            });
+            }));
           } catch (error) {
             console.error(`Error fetching issues: ${error.message}`);
             throw error;
@@ -121,6 +131,7 @@ runs:
 
           let processedCount = 0;
           let skippedCount = 0;
+          let errorCount = 0;
 
           for (const issue of issues) {
             try {
@@ -144,12 +155,8 @@ runs:
               // Check for linked PRs in the same repository using timeline events
               let timelineEvents = [];
               try {
-                timelineEvents = await github.paginate(github.rest.issues.listEventsForTimeline, {
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: issue.number,
                   per_page: 100
-                });
+                }));
               } catch (error) {
                 console.error(`Issue #${issue.number}: Error fetching timeline: ${error.message}`);
                 skippedCount++;
@@ -218,14 +225,19 @@ runs:
 
               // Remove all assignees at once (more efficient)
               try {
-                await github.rest.issues.removeAssignees({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: issue.number,
-                  assignees: assigneeLogins
-                });
+                if (dryRun) {
+                  console.log(`[DRY RUN] Would remove assignees: ${assigneeLogins.join(', ')} from issue #${issue.number}`);
+                } else {
+                  await retry(() => github.rest.issues.removeAssignees({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    assignees: assigneeLogins
+                  }));
+                }
               } catch (error) {
                 console.error(`Issue #${issue.number}: Error removing assignees: ${error.message}`);
+                errorCount++;
                 skippedCount++;
                 continue;
               }
@@ -235,24 +247,40 @@ runs:
               const comment = commentTemplate.replace(/\{assignee\}/g, assigneeMentions);
 
               try {
-                await github.rest.issues.createComment({
-                  owner: context.repo.owner,
-                  repo: context.repo.repo,
-                  issue_number: issue.number,
-                  body: comment
-                });
+                if (dryRun) {
+                  console.log(`[DRY RUN] Would post comment to issue #${issue.number}: "${comment.replace(/\n/g, '\\n')}"`);
+                } else {
+                  await retry(() => github.rest.issues.createComment({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    issue_number: issue.number,
+                    body: comment
+                  }));
+                }
               } catch (error) {
                 console.error(`Issue #${issue.number}: Error posting comment: ${error.message}`);
                 // Don't fail the whole workflow for a comment error
               }
 
-              console.log(`Issue #${issue.number}: Successfully unassigned ${assigneeLogins.join(', ')}`);
+              console.log(`Issue #${issue.number}: Successfully processed ${assigneeLogins.join(', ')}`);
               processedCount++;
 
             } catch (error) {
               console.error(`Issue #${issue.number}: Unexpected error: ${error.message}`);
+              errorCount++;
               skippedCount++;
             }
           }
 
-          console.log(`\nSummary: Processed ${processedCount} issues, skipped ${skippedCount} issues`);
+          console.log(`\nSummary: Processed ${processedCount}, Skipped ${skippedCount}, Errors ${errorCount}`);
+
+          // Post job summary
+          await core.summary
+            .addHeading('Stale Issue Unassignment Report')
+            .addTable([
+              ['Metric', 'Count'],
+              ['Processed', processedCount.toString()],
+              ['Skipped', skippedCount.toString()],
+              ['Errors', errorCount.toString()]
+            ])
+            .write();
