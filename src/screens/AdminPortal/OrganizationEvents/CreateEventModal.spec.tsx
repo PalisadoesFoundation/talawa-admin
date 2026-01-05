@@ -1586,7 +1586,7 @@ describe('CreateEventModal', () => {
         />,
       );
 
-      // Expect 2023-10-10 (today)
+      // Expect today's date (mocked system time)
       const startDateInput = screen.getByTestId(
         'createEventDateRangePicker-start-input',
       );
