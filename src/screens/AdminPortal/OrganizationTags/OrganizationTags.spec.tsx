@@ -214,14 +214,17 @@ describe('Organisation Tags Page', () => {
     });
     const input = screen.getByPlaceholderText(translations.searchByName);
     fireEvent.change(input, { target: { value: 'searchUserTag' } });
-    fireEvent.click(screen.getByTestId('searchBtn'));
 
+    // Wait for debounced search to complete
     // should render the two searched tags from the mock data
     // where name starts with "searchUserTag"
-    await waitFor(() => {
-      const buttons = screen.getAllByTestId('manageTagBtn');
-      expect(buttons.length).toEqual(2);
-    });
+    await waitFor(
+      () => {
+        const buttons = screen.getAllByTestId('manageTagBtn');
+        expect(buttons.length).toEqual(2);
+      },
+      { timeout: 500 },
+    );
   });
 
   interface TestInterfaceMockSearch {
@@ -334,7 +337,7 @@ describe('Organisation Tags Page', () => {
         'userTag 1',
       );
     });
-    await userEvent.click(screen.getByTestId('sortedBy'));
+    await userEvent.click(screen.getByTestId('sortTags'));
     // Click the "Oldest" button to sort in ascending order
     await userEvent.click(screen.getByTestId('oldest'));
 
@@ -533,8 +536,8 @@ describe('Organisation Tags Page', () => {
     // Search for tags that have parent/ancestor tags
     const input = screen.getByPlaceholderText(translations.searchByName);
     fireEvent.change(input, { target: { value: 'searchUserTag' } });
-    fireEvent.click(screen.getByTestId('searchBtn'));
 
+    // Wait for debounced search to complete
     await waitFor(() => {
       // Should render ancestor breadcrumbs for tags with parents
       const ancestorBreadcrumbs = screen.getAllByTestId(
@@ -618,14 +621,17 @@ describe('Organisation Tags Page', () => {
     const input = screen.getByPlaceholderText(translations.searchByName);
     // Type search term with leading and trailing whitespace
     fireEvent.change(input, { target: { value: '  searchUserTag  ' } });
-    fireEvent.click(screen.getByTestId('searchBtn'));
 
+    // Wait for debounced search to complete
     // The component should trim the whitespace before searching
-    await waitFor(() => {
-      const buttons = screen.getAllByTestId('manageTagBtn');
-      // Should still find the tags because whitespace is trimmed
-      expect(buttons.length).toEqual(2);
-    });
+    await waitFor(
+      () => {
+        const buttons = screen.getAllByTestId('manageTagBtn');
+        // Should still find the tags because whitespace is trimmed
+        expect(buttons.length).toEqual(2);
+      },
+      { timeout: 500 },
+    );
   });
 
   test('handles fetchMore when fetchMoreResult is undefined (line 129)', async () => {

@@ -348,7 +348,7 @@ describe('BlockUser Component', () => {
       });
 
       // Switch to blocked users view
-      const sortingButton = await screen.findByTestId('sortOrganizations');
+      const sortingButton = await screen.findByTestId('blockUserView');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
@@ -404,7 +404,7 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      const sortingButton = await screen.findByTestId('sortOrganizations');
+      const sortingButton = await screen.findByTestId('blockUserView');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
@@ -455,7 +455,7 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      const sortingButton = await screen.findByTestId('sortOrganizations');
+      const sortingButton = await screen.findByTestId('blockUserView');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
@@ -497,15 +497,14 @@ describe('BlockUser Component', () => {
         fireEvent.change(searchInput, { target: { value: 'John' } });
       });
 
-      const searchButton = screen.getByTestId('searchBtn');
-      await act(async () => {
-        fireEvent.click(searchButton);
-      });
-
-      await waitFor(() => {
-        expect(screen.getByText('John Doe')).toBeInTheDocument();
-        expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
-      });
+      // Wait for debounced search to complete
+      await waitFor(
+        () => {
+          expect(screen.getByText('John Doe')).toBeInTheDocument();
+          expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
+        },
+        { timeout: 500 },
+      );
     });
 
     it('searches members by email address', async () => {
@@ -532,15 +531,14 @@ describe('BlockUser Component', () => {
         });
       });
 
-      const searchButton = screen.getByTestId('searchBtn');
-      await act(async () => {
-        fireEvent.click(searchButton);
-      });
-
-      await waitFor(() => {
-        expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
-        expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-      });
+      // Wait for debounced search to complete
+      await waitFor(
+        () => {
+          expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+          expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+        },
+        { timeout: 500 },
+      );
     });
 
     it('searches blocked users by name', async () => {
@@ -556,7 +554,7 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      const sortingButton = await screen.findByTestId('sortOrganizations');
+      const sortingButton = await screen.findByTestId('blockUserView');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
@@ -575,14 +573,13 @@ describe('BlockUser Component', () => {
         fireEvent.change(searchInput, { target: { value: 'Bob' } });
       });
 
-      const searchButton = screen.getByTestId('searchBtn');
-      await act(async () => {
-        fireEvent.click(searchButton);
-      });
-
-      await waitFor(() => {
-        expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
-      });
+      // Wait for debounced search to complete
+      await waitFor(
+        () => {
+          expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
+        },
+        { timeout: 500 },
+      );
     });
 
     it('searches blocked users by email address', async () => {
@@ -598,7 +595,7 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      const sortingButton = await screen.findByTestId('sortOrganizations');
+      const sortingButton = await screen.findByTestId('blockUserView');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
@@ -617,14 +614,13 @@ describe('BlockUser Component', () => {
         fireEvent.change(searchInput, { target: { value: 'bob@example.com' } });
       });
 
-      const searchButton = screen.getByTestId('searchBtn');
-      await act(async () => {
-        fireEvent.click(searchButton);
-      });
-
-      await waitFor(() => {
-        expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
-      });
+      // Wait for debounced search to complete
+      await waitFor(
+        () => {
+          expect(screen.getByText('Bob Johnson')).toBeInTheDocument();
+        },
+        { timeout: 500 },
+      );
     });
 
     it('handles search with no results for members', async () => {
@@ -649,14 +645,13 @@ describe('BlockUser Component', () => {
         fireEvent.change(searchInput, { target: { value: 'nonexistent' } });
       });
 
-      const searchButton = screen.getByTestId('searchBtn');
-      await act(async () => {
-        fireEvent.click(searchButton);
-      });
-
-      await waitFor(() => {
-        expect(screen.getByText(/noResultsFoundFor/i)).toBeInTheDocument();
-      });
+      // Wait for debounced search to complete
+      await waitFor(
+        () => {
+          expect(screen.getByText(/noResultsFoundFor/i)).toBeInTheDocument();
+        },
+        { timeout: 500 },
+      );
     });
 
     it('handles search with no results for blocked users', async () => {
@@ -672,7 +667,7 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      const sortingButton = await screen.findByTestId('sortOrganizations');
+      const sortingButton = await screen.findByTestId('blockUserView');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
@@ -691,14 +686,13 @@ describe('BlockUser Component', () => {
         fireEvent.change(searchInput, { target: { value: 'nonexistent' } });
       });
 
-      const searchButton = screen.getByTestId('searchBtn');
-      await act(async () => {
-        fireEvent.click(searchButton);
-      });
-
-      await waitFor(() => {
-        expect(screen.getByText(/noResultsFoundFor/i)).toBeInTheDocument();
-      });
+      // Wait for debounced search to complete
+      await waitFor(
+        () => {
+          expect(screen.getByText(/noResultsFoundFor/i)).toBeInTheDocument();
+        },
+        { timeout: 500 },
+      );
     });
 
     it('clears search results when search term is empty', async () => {
@@ -725,29 +719,28 @@ describe('BlockUser Component', () => {
         fireEvent.change(searchInput, { target: { value: 'John' } });
       });
 
-      const searchButton = screen.getByTestId('searchBtn');
-      await act(async () => {
-        fireEvent.click(searchButton);
-      });
-
-      await waitFor(() => {
-        expect(screen.getByText('John Doe')).toBeInTheDocument();
-        expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
-      });
+      // Wait for debounced search to complete
+      await waitFor(
+        () => {
+          expect(screen.getByText('John Doe')).toBeInTheDocument();
+          expect(screen.queryByText('Jane Smith')).not.toBeInTheDocument();
+        },
+        { timeout: 500 },
+      );
 
       // Then clear the search
       await act(async () => {
         fireEvent.change(searchInput, { target: { value: '' } });
       });
 
-      await act(async () => {
-        fireEvent.click(searchButton);
-      });
-
-      await waitFor(() => {
-        expect(screen.getByText('John Doe')).toBeInTheDocument();
-        expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-      });
+      // Wait for debounced clear to complete
+      await waitFor(
+        () => {
+          expect(screen.getByText('John Doe')).toBeInTheDocument();
+          expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+        },
+        { timeout: 500 },
+      );
     });
   });
 
@@ -794,7 +787,7 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      const sortingButton = await screen.findByTestId('sortOrganizations');
+      const sortingButton = await screen.findByTestId('blockUserView');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
@@ -860,7 +853,7 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument();
       });
 
-      const sortingButton = await screen.findByTestId('sortOrganizations');
+      const sortingButton = await screen.findByTestId('blockUserView');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
@@ -968,7 +961,7 @@ describe('BlockUser Component', () => {
       });
 
       // Switch to blocked users view
-      const sortingButton = await screen.findByTestId('sortOrganizations');
+      const sortingButton = await screen.findByTestId('blockUserView');
       await act(async () => {
         fireEvent.click(sortingButton);
       });
@@ -1138,7 +1131,7 @@ describe('BlockUser Component', () => {
         expect(screen.queryByTestId('TableLoader')).not.toBeInTheDocument(),
       );
 
-      const sortingButton = await screen.findByTestId('sortOrganizations');
+      const sortingButton = await screen.findByTestId('blockUserView');
 
       await act(async () => {
         fireEvent.click(sortingButton);

@@ -106,6 +106,8 @@
   "pending": "लंबित",
   "completed": "पूर्ण",
   "late": "देर से",
+  "Latest": "नवीनतम",
+  "Oldest": "सबसे पुराना",
   "createdLatest": "नवीनतम",
   "createdEarliest": "सबसे पुराना",
   "searchBy": "{{item}} से खोजें",
@@ -176,6 +178,8 @@
   "unableToLoadData": "डेटा लोड करने में असमर्थ",
   "unblockedSuccessfully": "{{item}} सफलतापूर्वक अनब्लॉक किया गया",
   "pluginSettings": "प्लगइन सेटिंग्स",
+  "unassign": "असाइन हटाएं",
+  "userName": "उपयोगकर्ता नाम",
   "fileTooLarge": "फ़ाइल बहुत बड़ी है। अधिकतम अनुमत आकार {{size}} एमबी है",
   "invalidFileType": "अमान्य फ़ाइल प्रकार। कृपया एक {{types}} फ़ाइल अपलोड करें",
   "enterDescription": "विवरण दर्ज करें",
@@ -214,9 +218,8 @@
   "previousPage": "पिछला पृष्ठ",
   "nextPage": "अगला पृष्ठ",
   "pageNumber": "पृष्ठ {{page}}",
+  "tags": "टैग",
   "loadMoreItems": "और चीज़ें लोड करें",
   "loadMore": "और लोड करें",
-  "retry": "पुनः प्रयास करें",
-  "tags": "टैग",
-  "unassign": "हटाएँ"
+  "retry": "पुनः प्रयास करें"
 }

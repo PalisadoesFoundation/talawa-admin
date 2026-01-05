@@ -89,11 +89,12 @@ const renderAddOnSpotAttendee = (): RenderResult => {
 };
 
 describe('AddOnSpotAttendee Component', () => {
-  afterEach(() => {
-    vi.restoreAllMocks();
-  });
   beforeEach(() => {
     vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
   });
 
   it('renders the component with all form fields', async () => {
@@ -113,17 +114,16 @@ describe('AddOnSpotAttendee Component', () => {
         request: {
           query: SIGNUP_MUTATION,
           variables: {
-            firstName: 'John',
-            lastName: 'Doe',
+            ID: '123',
+            name: 'John Doe',
             email: 'john@example.com',
-            phoneNo: '1234567890',
-            gender: 'Male',
             password: '123456',
-            orgId: '123',
           },
         },
         result: {
-          data: {}, // No signUp property
+          data: {
+            signUp: null,
+          },
         },
       },
     ];
@@ -283,6 +283,18 @@ describe('AddOnSpotAttendee Component', () => {
     // Verify loading state eventually disappears
     await waitFor(() => {
       expect(screen.queryByTestId('loading-state')).not.toBeInTheDocument();
+    });
+
+    // Verify success state
+    await waitFor(() => {
+      // Button should reappear (if modal is still open, which it is in this render context)
+      expect(screen.getByRole('button', { name: /add/i })).toBeInTheDocument();
+      expect(toast.success).toHaveBeenCalledWith(
+        'Attendee added successfully!',
+      );
+      // Callbacks should be invoked
+      expect(mockProps.reloadMembers).toHaveBeenCalled();
+      expect(mockProps.handleClose).toHaveBeenCalled();
     });
   });
 });
