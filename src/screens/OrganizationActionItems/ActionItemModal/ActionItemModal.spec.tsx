@@ -4108,14 +4108,9 @@ describe('Partially Covered Lines Test Coverage', () => {
       });
       await userEvent.click(volunteerGroupChip);
 
-      await waitFor(
-        () => {
-          expect(
-            screen.getByTestId('volunteerGroupSelect'),
-          ).toBeInTheDocument();
-        },
-        { timeout: 3000 },
-      );
+      // Wait for the volunteerGroupSelect to appear after state update
+      // Use findByTestId which is better for async element queries
+      await screen.findByTestId('volunteerGroupSelect', {}, { timeout: 3000 });
 
       // Now click volunteer chip - this should execute the !isVolunteerChipDisabled path
       const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
