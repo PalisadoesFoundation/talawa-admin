@@ -168,14 +168,24 @@ export default [
       'no-restricted-imports': [
         'error',
         {
-          name: '@mui/x-data-grid',
-          message:
-            'Direct imports from @mui/x-data-grid are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
-        },
-        {
-          name: '@mui/x-data-grid-pro',
-          message:
-            'Direct imports from @mui/x-data-grid-pro are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
+          paths: [
+            {
+              name: '@mui/x-data-grid',
+              message:
+                'Direct imports from @mui/x-data-grid are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
+            },
+            {
+              name: '@mui/x-data-grid-pro',
+              message:
+                'Direct imports from @mui/x-data-grid-pro are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
+            },
+            {
+              name: 'react-bootstrap',
+              importNames: ['Spinner'],
+              message:
+                'Do not import Spinner from react-bootstrap. Use the shared LoadingState component instead.',
+            },
+          ],
         },
         {
           name: 'react-bootstrap',
@@ -187,17 +197,19 @@ export default [
     },
   },
   /**
-   * Exemption: DataGridWrapper component files
+   * Exemption: DataGridWrapper and LoadingState component files
    *
    * DataGridWrapper files need direct MUI DataGrid access for wrapper implementation.
-   * These files are the only ones allowed to import directly from @mui/x-data-grid.
+   * LoadingState files need direct Spinner access from react-bootstrap for wrapper implementation.
+   * These files are the only ones allowed to import directly from restricted libraries.
    */
   {
     files: [
-      'src/shared-components/DataGridWrapper/**/*.ts',
-      'src/shared-components/DataGridWrapper/**/*.tsx',
-      'src/types/DataGridWrapper/**/*.ts',
-      'src/types/DataGridWrapper/**/*.tsx',
+      'src/shared-components/DataGridWrapper/**/*.{ts,tsx}',
+      'src/types/DataGridWrapper/**/*.{ts,tsx}',
+      'src/shared-components/LoadingState/**/*.{ts,tsx}',
+      'src/types/shared-components/LoadingState/**/*.{ts,tsx}',
+      'src/components/Loader/**/*.{ts,tsx}',
     ],
     rules: {
       'no-restricted-imports': 'off',
