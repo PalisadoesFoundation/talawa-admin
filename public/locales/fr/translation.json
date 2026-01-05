@@ -687,6 +687,7 @@
     "options": "Options",
     "createAgendaItem": "Créer un point à l'ordre du jour",
     "noAgendaItems": "Aucun point à l'ordre du jour",
+    "search": "Rechercher",
     "selectAgendaItemCategory": "Sélectionner une catégorie de point de l'ordre du jour",
     "update": "Mettre à jour",
     "delete": "Supprimer",

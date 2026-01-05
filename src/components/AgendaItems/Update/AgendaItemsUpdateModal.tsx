@@ -48,6 +48,7 @@ import { FaLink, FaTrash } from 'react-icons/fa';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import convertToBase64 from 'utils/convertToBase64';
 import styles from '../../../style/app-fixed.module.css';
+// translation-check-keyPrefix: agendaItems
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import type { InterfaceAgendaItemsUpdateModalProps } from 'types/Agenda/interface';
 const AgendaItemsUpdateModal: React.FC<

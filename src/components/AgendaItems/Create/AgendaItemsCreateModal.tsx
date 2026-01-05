@@ -47,6 +47,7 @@ import styles from '../../../style/app-fixed.module.css';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import convertToBase64 from 'utils/convertToBase64';
 import type { InterfaceAgendaItemsCreateModalProps } from 'types/Agenda/interface';
+// translation-check-keyPrefix: agendaItems
 const AgendaItemsCreateModal: React.FC<
   InterfaceAgendaItemsCreateModalProps
 > = ({
