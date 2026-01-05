@@ -6,7 +6,7 @@
 
 > **default**(): `Element`
 
-Defined in: [src/components/OrgSettings/General/DeleteOrg/DeleteOrg.tsx:27](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/General/DeleteOrg/DeleteOrg.tsx#L27)
+Defined in: [src/components/OrgSettings/General/DeleteOrg/DeleteOrg.tsx:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/OrgSettings/General/DeleteOrg/DeleteOrg.tsx#L28)
 
 A component for deleting an organization.
 

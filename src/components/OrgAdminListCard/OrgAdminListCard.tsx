@@ -46,7 +46,7 @@ import { NotificationToast } from 'components/NotificationToast/NotificationToas
 
 function orgAdminListCard(props: InterfaceOrgPeopleListCardProps): JSX.Element {
   if (!props.id) {
-    return <Navigate to={'/orglist'} />;
+    return <Navigate to={'/admin/orglist'} />;
   }
   const { orgId: currentUrl } = useParams();
   const [remove] = useMutation(REMOVE_ADMIN_MUTATION);

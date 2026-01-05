@@ -334,7 +334,7 @@ describe('Testing Community Profile Screen', () => {
   });
 
   test('Components should render properly', async () => {
-    window.location.assign('/communityProfile');
+    window.location.assign('/admin/communityProfile');
 
     render(
       <MockedProvider link={link1}>
@@ -364,7 +364,7 @@ describe('Testing Community Profile Screen', () => {
   });
 
   test('Testing all the input fields and update community data feature', async () => {
-    window.location.assign('/communityProfile');
+    window.location.assign('/admin/communityProfile');
 
     await act(async () => {
       render(

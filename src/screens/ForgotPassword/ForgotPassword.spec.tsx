@@ -131,7 +131,7 @@ afterEach(() => {
 
 describe('Testing Forgot Password screen', () => {
   it('Component should be rendered properly', async () => {
-    window.history.pushState({}, 'Test page', '/orglist');
+    window.history.pushState({}, 'Test page', '/admin/orglist');
 
     render(
       <MockedProvider link={link}>
@@ -151,7 +151,7 @@ describe('Testing Forgot Password screen', () => {
     expect(screen.getByText(/Registered Email/i)).toBeInTheDocument();
     expect(screen.getByText(/Get Otp/i)).toBeInTheDocument();
     expect(screen.getByText(/Back to Login/i)).toBeInTheDocument();
-    expect(window.location.pathname).toBe('/orglist');
+    expect(window.location.pathname).toBe('/admin/orglist');
   });
 
   it('Testing, If user is already loggedIn', async () => {

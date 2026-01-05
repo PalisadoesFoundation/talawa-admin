@@ -346,7 +346,7 @@ type RenderConfig = {
   initialEntry?: string;
 };
 
-const DEFAULT_ROUTE = '/orgpeople/org123';
+const DEFAULT_ROUTE = '/admin/orgpeople/org123';
 
 const renderAddMemberView = ({
   mocks = [],
@@ -357,7 +357,7 @@ const renderAddMemberView = ({
     <MemoryRouter initialEntries={[initialEntry]}>
       <I18nextProvider i18n={i18nForTest}>
         <Routes>
-          <Route path="/orgpeople/:orgId" element={<AddMember />} />
+          <Route path="/admin/orgpeople/:orgId" element={<AddMember />} />
         </Routes>
       </I18nextProvider>
     </MemoryRouter>

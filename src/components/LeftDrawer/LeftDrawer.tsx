@@ -55,7 +55,7 @@ const LeftDrawer = ({
     () => (
       <div className={styles.optionList}>
         <SidebarNavItem
-          to="/orglist"
+          to="/admin/orglist"
           icon={<OrganizationsIcon />}
           label={t('my organizations')}
           testId="organizationsBtn"
@@ -64,7 +64,7 @@ const LeftDrawer = ({
         />
 
         <SidebarNavItem
-          to="/users"
+          to="/admin/users"
           icon={<FaUsers />}
           label={t('users')}
           testId="usersBtn"
@@ -74,7 +74,7 @@ const LeftDrawer = ({
         />
 
         <SidebarNavItem
-          to="/pluginstore"
+          to="/admin/pluginstore"
           icon={<PluginLogo />}
           label={t('plugin store')}
           testId="pluginStoreBtn"
@@ -83,7 +83,7 @@ const LeftDrawer = ({
         />
 
         <SidebarNavItem
-          to="/communityProfile"
+          to="/admin/communityProfile"
           icon={<SettingsIcon />}
           label={t('communityProfile')}
           testId="communityProfileBtn"
@@ -92,7 +92,7 @@ const LeftDrawer = ({
         />
 
         <SidebarNavItem
-          to="/notification"
+          to="/admin/notification"
           icon={<FaBell />}
           label={t('notification')}
           testId="notificationBtn"

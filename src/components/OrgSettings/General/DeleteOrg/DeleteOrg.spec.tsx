@@ -100,7 +100,7 @@ describe('DeleteOrg Component', () => {
       expect(deleteOrgMutationMock).toHaveBeenCalledWith({
         variables: { input: { id: '1' } },
       });
-      expect(navigateMock).toHaveBeenCalledWith('/orglist');
+      expect(navigateMock).toHaveBeenCalledWith('/admin/orglist');
     });
   });
 
@@ -154,7 +154,7 @@ describe('DeleteOrg Component', () => {
 
     await waitFor(
       () => {
-        expect(navigateMock).toHaveBeenCalledWith('/orglist');
+        expect(navigateMock).toHaveBeenCalledWith('/admin/orglist');
       },
       { timeout: 1500 },
     );

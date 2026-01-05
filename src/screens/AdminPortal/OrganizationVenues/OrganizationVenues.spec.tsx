@@ -174,16 +174,16 @@ afterEach(() => {
 const renderOrganizationVenue = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/orgvenues/orgId']}>
+      <MemoryRouter initialEntries={['/admin/orgvenues/orgId']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
             <Routes>
               <Route
-                path="/orgvenues/:orgId"
+                path="/admin/orgvenues/:orgId"
                 element={<OrganizationVenues />}
               />
               <Route
-                path="/orglist"
+                path="/admin/orglist"
                 element={<div data-testid="paramsError">paramsError</div>}
               />
             </Routes>
@@ -198,13 +198,16 @@ describe('OrganizationVenue with missing orgId', () => {
   test('Redirect to /orglist when orgId is falsy/undefined', async () => {
     render(
       <MockedProvider link={link}>
-        <MemoryRouter initialEntries={['/orgvenues/']}>
+        <MemoryRouter initialEntries={['/admin/orgvenues/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
-                <Route path="/orgvenues/" element={<OrganizationVenues />} />
                 <Route
-                  path="/orglist"
+                  path="/admin/orgvenues/"
+                  element={<OrganizationVenues />}
+                />
+                <Route
+                  path="/admin/orglist"
                   element={<div data-testid="paramsError"></div>}
                 />
               </Routes>

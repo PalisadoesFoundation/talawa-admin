@@ -91,16 +91,16 @@ const props = {
 const renderMemberDetailScreen = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/orgtags/123']}>
+      <MemoryRouter initialEntries={['/admin/orgtags/123']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18nForTest}>
             <Routes>
               <Route
-                path="/orgtags/:orgId"
+                path="/admin/orgtags/:orgId"
                 element={<MemberDetail {...props} />}
               />
               <Route
-                path="/orgtags/:orgId/manageTag/:tagId"
+                path="/admin/orgtags/:orgId/manageTag/:tagId"
                 element={<div data-testid="manageTagScreen"></div>}
               />
             </Routes>

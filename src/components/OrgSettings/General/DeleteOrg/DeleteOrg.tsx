@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Button, Card, Modal } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
 import { errorHandler } from 'utils/errorHandler';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import {
   DELETE_ORGANIZATION_MUTATION,
   REMOVE_SAMPLE_ORGANIZATION_MUTATION,
@@ -71,7 +72,7 @@ function deleteOrg(): JSX.Element {
             t('successfullyDeletedSampleOrganization') as string,
           );
           setTimeout(() => {
-            navigate('/orglist');
+            navigate('/admin/orglist');
           }, 1000);
         })
         .catch((error) => {
@@ -81,7 +82,7 @@ function deleteOrg(): JSX.Element {
       // For regular organizations, use a different mutation
       try {
         await del({ variables: { input: { id: currentUrl || '' } } });
-        navigate('/orglist');
+        navigate('/admin/orglist');
       } catch (error) {
         errorHandler(t, error);
       }
@@ -113,32 +114,30 @@ function deleteOrg(): JSX.Element {
       )}
       {/* Delete Organization Modal */}
       {canDelete && (
-        <Modal
+        <BaseModal
           show={showDeleteModal}
           onHide={toggleDeleteModal}
+          title={t('deleteOrganization')}
           data-testid="orgDeleteModal"
         >
-          <Modal.Header className={styles.modelHeaderDelete} closeButton>
-            <h5 className="text-white fw-bold">{t('deleteOrganization')}</h5>
-          </Modal.Header>
-          <Modal.Body>{t('deleteMsg')}</Modal.Body>
-          <Modal.Footer>
+          <p>{t('deleteMsg')}</p>
+          <div className="d-flex gap-2 justify-content-end mt-3">
             <Button
               onClick={toggleDeleteModal}
               data-testid="closeDelOrgModalBtn"
-              className={styles.btnDelete}
+              variant="secondary"
             >
               {tCommon('cancel')}
             </Button>
             <Button
-              className={styles.btnConfirmDelete}
+              variant="danger"
               onClick={deleteOrg}
               data-testid="deleteOrganizationBtn"
             >
               {t('confirmDelete')}
             </Button>
-          </Modal.Footer>
-        </Modal>
+          </div>
+        </BaseModal>
       )}
     </>
   );

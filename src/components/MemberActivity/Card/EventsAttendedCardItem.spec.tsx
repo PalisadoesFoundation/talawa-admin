@@ -163,7 +163,7 @@ describe('EventAttendedCard', () => {
         renderComponent();
         const card = screen.getByTestId('EventsAttendedCard');
         const link = within(card).getByRole('link');
-        expect(link).toHaveAttribute('href', '/event/org123/event456');
+        expect(link).toHaveAttribute('href', '/admin/event/org123/event456');
       });
 
       it('renders chevron right icon', () => {
@@ -182,7 +182,7 @@ describe('EventAttendedCard', () => {
         renderComponent(propsWithoutOrgId);
         const card = screen.getByTestId('EventsAttendedCard');
         const link = within(card).getByRole('link');
-        expect(link).toHaveAttribute('href', '/event/undefined/event456');
+        expect(link).toHaveAttribute('href', '/admin/event/undefined/event456');
       });
 
       it('renders link when eventId is missing', () => {
@@ -193,7 +193,7 @@ describe('EventAttendedCard', () => {
         renderComponent(propsWithoutEventId);
         const card = screen.getByTestId('EventsAttendedCard');
         const link = within(card).getByRole('link');
-        expect(link).toHaveAttribute('href', '/event/org123/undefined');
+        expect(link).toHaveAttribute('href', '/admin/event/org123/undefined');
       });
 
       it('renders link when both IDs are missing', () => {
@@ -205,7 +205,10 @@ describe('EventAttendedCard', () => {
         renderComponent(propsWithoutIds);
         const card = screen.getByTestId('EventsAttendedCard');
         const link = within(card).getByRole('link');
-        expect(link).toHaveAttribute('href', '/event/undefined/undefined');
+        expect(link).toHaveAttribute(
+          'href',
+          '/admin/event/undefined/undefined',
+        );
       });
     });
 

@@ -95,17 +95,20 @@ vi.mock('shared-components/ReportingTable/ReportingTable', async () => {
 const renderOrganizationTags = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/orgtags/orgId']}>
+      <MemoryRouter initialEntries={['/admin/orgtags/orgId']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
-              <Route path="/orgtags/:orgId" element={<OrganizationTags />} />
               <Route
-                path="/orgtags/:orgId/manageTag/:tagId"
+                path="/admin/orgtags/:orgId"
+                element={<OrganizationTags />}
+              />
+              <Route
+                path="/admin/orgtags/:orgId/manageTag/:tagId"
                 element={<div data-testid="manageTagScreen"></div>}
               />
               <Route
-                path="/orgtags/:orgId/subTags/:tagId"
+                path="/admin/orgtags/:orgId/subTags/:tagId"
                 element={<div data-testid="subTagsScreen"></div>}
               />
             </Routes>

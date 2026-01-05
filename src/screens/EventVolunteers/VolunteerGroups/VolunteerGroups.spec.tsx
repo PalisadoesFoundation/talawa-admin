@@ -59,13 +59,13 @@ const debounceWait = async (ms = 300): Promise<void> => {
 const renderVolunteerGroups = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/event/orgId/eventId']}>
+      <MemoryRouter initialEntries={['/admin/event/orgId/eventId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18n}>
               <Routes>
                 <Route
-                  path="/event/:orgId/:eventId"
+                  path="/admin/event/:orgId/:eventId"
                   element={<VolunteerGroups />}
                 />
                 <Route
@@ -105,11 +105,11 @@ describe('Testing VolunteerGroups Screen', () => {
     mockRouteParams('', '');
     render(
       <MockedProvider link={link1}>
-        <MemoryRouter initialEntries={['/event/']}>
+        <MemoryRouter initialEntries={['/admin/event/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
               <Routes>
-                <Route path="/event/" element={<VolunteerGroups />} />
+                <Route path="/admin/event/" element={<VolunteerGroups />} />
                 <Route
                   path="/"
                   element={<div data-testid="paramsError"></div>}

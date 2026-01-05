@@ -50,7 +50,7 @@ function orgPeopleListCard(
 
   // If the member ID is not provided, navigate to the organization list
   if (!props.id) {
-    return <Navigate to={'/orglist'} />;
+    return <Navigate to={'/admin/orglist'} />;
   }
 
   // Mutation to remove a member from the organization

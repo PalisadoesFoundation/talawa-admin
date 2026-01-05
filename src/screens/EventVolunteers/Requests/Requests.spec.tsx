@@ -70,12 +70,15 @@ const t = {
 const renderRequests = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/event/orgId/eventId']}>
+      <MemoryRouter initialEntries={['/admin/event/orgId/eventId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18n}>
               <Routes>
-                <Route path="/event/:orgId/:eventId" element={<Requests />} />
+                <Route
+                  path="/admin/event/:orgId/:eventId"
+                  element={<Requests />}
+                />
                 <Route
                   path="/"
                   element={<div data-testid="paramsError"></div>}
@@ -101,11 +104,11 @@ describe('Testing Requests Screen', () => {
   it('should redirect to fallback URL if URL params are undefined', async () => {
     render(
       <MockedProvider link={link1}>
-        <MemoryRouter initialEntries={['/event/']}>
+        <MemoryRouter initialEntries={['/admin/event/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
               <Routes>
-                <Route path="/event/" element={<Requests />} />
+                <Route path="/admin/event/" element={<Requests />} />
                 <Route
                   path="/"
                   element={<div data-testid="paramsError"></div>}

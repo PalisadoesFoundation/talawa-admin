@@ -180,7 +180,7 @@ describe('NotificationIcon Component', () => {
     await waitFor(() => {
       fireEvent.click(screen.getByText('View all notifications'));
     });
-    expect(mockNavigate).toHaveBeenCalledWith('/notification');
+    expect(mockNavigate).toHaveBeenCalledWith('/admin/notification');
   });
 
   it('should navigate to user notification page from user portal', async () => {
@@ -217,7 +217,7 @@ describe('NotificationIcon Component', () => {
     await waitFor(() => {
       fireEvent.click(screen.getByText('Test body'));
     });
-    expect(mockNavigate).toHaveBeenCalledWith('/notification');
+    expect(mockNavigate).toHaveBeenCalledWith('/admin/notification');
   });
 
   it('should show unread dot for unread notifications', async () => {

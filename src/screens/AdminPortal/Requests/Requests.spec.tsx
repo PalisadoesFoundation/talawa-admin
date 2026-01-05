@@ -377,7 +377,7 @@ describe('Testing Requests screen', () => {
 
     await wait(200);
 
-    expect(window.location.assign).toHaveBeenCalledWith('/orglist');
+    expect(window.location.assign).toHaveBeenCalledWith('/admin/orglist');
   });
 
   test('Component should be rendered properly when user is Admin', async () => {

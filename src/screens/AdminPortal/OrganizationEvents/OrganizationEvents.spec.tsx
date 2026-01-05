@@ -72,7 +72,7 @@ Object.defineProperty(window, 'location', {
       }
     }),
     reload: vi.fn(),
-    pathname: '/orglist',
+    pathname: '/admin/orglist',
     search: '',
     hash: '',
     origin: 'http://localhost',
@@ -198,14 +198,14 @@ describe('Organisation Events Page', () => {
     );
 
   test('renders events page and keeps current route', async () => {
-    window.location.assign('/orglist');
+    window.location.assign('/admin/orglist');
 
     const { container } = renderWithLink(defaultLink);
 
     expect(container.textContent).not.toBe('Loading data...');
     await wait();
     expect(container.textContent).toMatch('Month');
-    expect(window.location.pathname).toBe('/orglist');
+    expect(window.location.pathname).toBe('/admin/orglist');
   });
 
   test('renders when there is no mock event data (no events query result)', async () => {
@@ -498,7 +498,7 @@ describe('Organisation Events Page', () => {
       expect(screen.getByTestId('createEventModalBtn')).toBeInTheDocument(),
     );
 
-    expect(window.location.pathname).toBe('/orglist');
+    expect(window.location.pathname).toBe('/admin/orglist');
 
     const messages = mockWarn.mock.calls.map((args) => args.join(' '));
     expect(

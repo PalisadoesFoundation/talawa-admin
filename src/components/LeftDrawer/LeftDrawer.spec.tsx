@@ -244,7 +244,7 @@ describe('LeftDrawer Component', () => {
         clearAllItems: vi.fn(),
       }));
 
-      window.history.pushState({}, '', '/users');
+      window.history.pushState({}, '', '/admin/users');
 
       renderComponent();
       const element = screen.getByTestId('usersBtn');
@@ -275,7 +275,7 @@ describe('LeftDrawer Component', () => {
       const organizationsButton = screen.getByTestId('organizationsBtn');
 
       // Simulate active route
-      window.history.pushState({}, '', '/orglist');
+      window.history.pushState({}, '', '/admin/orglist');
 
       expect(organizationsButton).toHaveClass(`${styles.sidebarBtnActive}`);
     });

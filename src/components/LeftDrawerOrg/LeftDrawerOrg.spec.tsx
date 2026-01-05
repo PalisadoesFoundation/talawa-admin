@@ -284,9 +284,9 @@ describe('LeftDrawerOrg', () => {
   const defaultProps: ILeftDrawerProps = {
     orgId: 'org-123',
     targets: [
-      { name: 'Dashboard', url: '/orgdash/org-123' },
-      { name: 'Members', url: '/orgpeople/org-123' },
-      { name: 'Events', url: '/orgevents/org-123' },
+      { name: 'Dashboard', url: '/admin/orgdash/org-123' },
+      { name: 'Members', url: '/admin/orgpeople/org-123' },
+      { name: 'Events', url: '/admin/orgevents/org-123' },
       {
         name: 'Action Items',
         url: undefined,
@@ -334,7 +334,7 @@ describe('LeftDrawerOrg', () => {
   const renderComponent = (
     props: Partial<ILeftDrawerProps> = {},
     mocks: IMockedResponse[] = successMocks,
-    initialRoute = '/orgdash/org-123',
+    initialRoute = '/admin/orgdash/org-123',
   ) => {
     return render(
       <MockedProvider mocks={mocks}>
@@ -475,7 +475,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should not show error state on profile page when data fails to load', async () => {
-      renderComponent({}, errorMocks, '/member/user-123');
+      renderComponent({}, errorMocks, '/admin/member/user-123');
 
       await waitFor(() => {
         expect(
@@ -552,31 +552,31 @@ describe('LeftDrawerOrg', () => {
       renderComponent();
 
       const dashboardLink = screen.getByText('Dashboard').closest('a');
-      expect(dashboardLink).toHaveAttribute('href', '/orgdash/org-123');
+      expect(dashboardLink).toHaveAttribute('href', '/admin/orgdash/org-123');
 
       const membersLink = screen.getByText('Members').closest('a');
-      expect(membersLink).toHaveAttribute('href', '/orgpeople/org-123');
+      expect(membersLink).toHaveAttribute('href', '/admin/orgpeople/org-123');
 
       const eventsLink = screen.getByText('Events').closest('a');
-      expect(eventsLink).toHaveAttribute('href', '/orgevents/org-123');
+      expect(eventsLink).toHaveAttribute('href', '/admin/orgevents/org-123');
     });
 
     it('should apply active styles when on corresponding route', () => {
-      renderComponent({}, successMocks, '/orgpeople/org-123');
+      renderComponent({}, successMocks, '/admin/orgpeople/org-123');
 
       const membersLink = screen.getByText('Members').closest('a');
       expect(membersLink).toHaveClass('leftDrawerActiveButton');
     });
 
     it('should apply inactive styles when not on corresponding route', () => {
-      renderComponent({}, successMocks, '/orgdash/org-123');
+      renderComponent({}, successMocks, '/admin/orgdash/org-123');
 
       const membersLink = screen.getByText('Members').closest('a');
       expect(membersLink).toHaveClass('leftDrawerInactiveButton');
     });
 
     it('should render icon components with correct props', () => {
-      renderComponent({}, successMocks, '/orgdash/org-123');
+      renderComponent({}, successMocks, '/admin/orgdash/org-123');
 
       const iconComponents = screen.getAllByTestId('icon-component');
       const dashboardIcon = iconComponents.find(
@@ -587,7 +587,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should render inactive icon with correct fill color', () => {
-      renderComponent({}, successMocks, '/orgdash/org-123');
+      renderComponent({}, successMocks, '/admin/orgdash/org-123');
 
       const iconComponents = screen.getAllByTestId('icon-component');
       const inactiveIcon = iconComponents.find(
@@ -749,7 +749,7 @@ describe('LeftDrawerOrg', () => {
 
   describe('Profile Page Detection', () => {
     it('should detect profile page when pathname contains user ID', () => {
-      renderComponent({}, successMocks, '/member/user-123');
+      renderComponent({}, successMocks, '/admin/member/user-123');
 
       // Profile page detection is internal state, but we can test its effect
       // by checking that error message doesn't show on profile page
@@ -759,7 +759,7 @@ describe('LeftDrawerOrg', () => {
     });
 
     it('should not detect profile page when pathname contains different ID', () => {
-      renderComponent({}, successMocks, '/member/other-user');
+      renderComponent({}, successMocks, '/admin/member/other-user');
 
       // This should not be considered a profile page for the current user
       expect(true).toBe(true); // Profile page logic is internal

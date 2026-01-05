@@ -393,7 +393,7 @@ describe('Testing the App Component', () => {
   });
 
   it('Component should be rendered properly and user is logged in', async () => {
-    renderApp(link, '/orglist');
+    renderApp(link, '/admin/orglist');
 
     await wait();
 

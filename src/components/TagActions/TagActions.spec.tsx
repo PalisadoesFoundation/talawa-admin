@@ -95,12 +95,12 @@ const renderTagActionsModal = (
 ): RenderResult => {
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/orgtags/123/manageTag/1']}>
+      <MemoryRouter initialEntries={['/admin/orgtags/123/manageTag/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
               <Route
-                path="/orgtags/:orgId/manageTag/:tagId"
+                path="/admin/orgtags/:orgId/manageTag/:tagId"
                 element={<TagActions {...props} />}
               />
             </Routes>

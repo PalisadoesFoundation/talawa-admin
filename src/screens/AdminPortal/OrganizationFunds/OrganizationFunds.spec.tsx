@@ -66,16 +66,16 @@ const renderOrganizationFunds = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
       <Provider store={store}>
-        <MemoryRouter initialEntries={['/orgfunds/orgId']}>
+        <MemoryRouter initialEntries={['/admin/orgfunds/orgId']}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
                 <Route
-                  path="/orgfunds/:orgId"
+                  path="/admin/orgfunds/:orgId"
                   element={<OrganizationFunds />}
                 />
                 <Route
-                  path="/orgfundcampaign/:orgId/:fundId"
+                  path="/admin/orgfundcampaign/:orgId/:fundId"
                   element={
                     <div data-testid="campaignScreen">Campaign Screen</div>
                   }
@@ -165,7 +165,7 @@ describe('OrganizationFunds Screen =>', () => {
     });
     render(
       <MockedProvider link={link1}>
-        <MemoryRouter initialEntries={['/orgfunds/']}>
+        <MemoryRouter initialEntries={['/admin/orgfunds/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
@@ -173,7 +173,10 @@ describe('OrganizationFunds Screen =>', () => {
                   path="/"
                   element={<div data-testid="paramsError"></div>}
                 />
-                <Route path="/orgfunds/" element={<OrganizationFunds />} />
+                <Route
+                  path="/admin/orgfunds/"
+                  element={<OrganizationFunds />}
+                />
               </Routes>
             </I18nextProvider>
           </Provider>

@@ -29,7 +29,7 @@ describe('resolveProfileNavigation', () => {
         role: 'administrator',
         orgId: '999',
       }),
-    ).toBe('/member/999');
+    ).toBe('/admin/member/999');
   });
 
   it('returns member route when org id is missing for admin', () => {
@@ -39,7 +39,7 @@ describe('resolveProfileNavigation', () => {
         role: 'administrator',
         orgId: '',
       }),
-    ).toBe('/member');
+    ).toBe('/admin/member');
   });
 
   it('returns member route when role is undefined on admin portal', () => {
@@ -49,7 +49,7 @@ describe('resolveProfileNavigation', () => {
         role: undefined,
         orgId: '123',
       }),
-    ).toBe('/member/123');
+    ).toBe('/admin/member/123');
   });
 
   it('returns member route when orgId is null for admin', () => {
@@ -59,7 +59,7 @@ describe('resolveProfileNavigation', () => {
         role: 'administrator',
         orgId: null,
       }),
-    ).toBe('/member');
+    ).toBe('/admin/member');
   });
 
   it('handles case-insensitive role values and returns user settings for regular', () => {
@@ -89,7 +89,7 @@ describe('resolveProfileNavigation', () => {
         role: 'Administrator',
         orgId: '42',
       }),
-    ).toBe('/member/42');
+    ).toBe('/admin/member/42');
   });
 
   it('defaults portal to admin and returns member route', () => {
@@ -99,6 +99,6 @@ describe('resolveProfileNavigation', () => {
         role: 'administrator',
         orgId: '7',
       }),
-    ).toBe('/member/7');
+    ).toBe('/admin/member/7');
   });
 });

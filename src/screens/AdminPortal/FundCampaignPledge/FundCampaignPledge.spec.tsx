@@ -90,9 +90,9 @@ vi.mock('shared-components/BreadcrumbsComponent/BreadcrumbsComponent', () => ({
             );
           }
 
-          const testId = item.to?.includes('/orgfunds/')
+          const testId = item.to?.includes('/admin/orgfunds/')
             ? 'fundsLink'
-            : item.to?.includes('/orgfundcampaign/')
+            : item.to?.includes('/admin/orgfundcampaign/')
               ? 'campaignsLink'
               : 'breadcrumbLink';
 
@@ -450,14 +450,14 @@ const renderFundCampaignPledge = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
       <MemoryRouter
-        initialEntries={['/fundCampaignPledge/orgId/fundCampaignId']}
+        initialEntries={['/admin/fundCampaignPledge/orgId/fundCampaignId']}
       >
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
                 <Route
-                  path="/fundCampaignPledge/:orgId/:fundCampaignId"
+                  path="/admin/fundCampaignPledge/:orgId/:fundCampaignId"
                   element={<FundCampaignPledge />}
                 />
                 <Route
@@ -493,12 +493,12 @@ describe('Testing Campaign Pledge Screen', () => {
 
     render(
       <MockedProvider link={link1}>
-        <MemoryRouter initialEntries={['/fundCampaignPledge/']}>
+        <MemoryRouter initialEntries={['/admin/fundCampaignPledge/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
                 <Route
-                  path="/fundCampaignPledge/"
+                  path="/admin/fundCampaignPledge/"
                   element={<FundCampaignPledge />}
                 />
                 <Route
@@ -665,7 +665,7 @@ describe('Testing Campaign Pledge Screen', () => {
     // Verify fund link is present with correct href
     const fundsLink = screen.getByTestId('fundsLink');
     expect(fundsLink).toBeInTheDocument();
-    expect(fundsLink).toHaveAttribute('href', '/orgfunds/orgId');
+    expect(fundsLink).toHaveAttribute('href', '/admin/orgfunds/orgId');
     expect(fundsLink).toHaveTextContent('Test Fund');
 
     // Verify campaign link is present with correct href
@@ -673,7 +673,7 @@ describe('Testing Campaign Pledge Screen', () => {
     expect(campaignsLink).toBeInTheDocument();
     expect(campaignsLink).toHaveAttribute(
       'href',
-      '/orgfundcampaign/orgId/fundId123',
+      '/admin/orgfundcampaign/orgId/fundId123',
     );
     expect(campaignsLink).toHaveTextContent('Test Campaign');
 

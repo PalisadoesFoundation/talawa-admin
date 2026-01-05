@@ -287,7 +287,7 @@ describe('Member screen routing testing', () => {
   });
 
   test('navigates to /member/:orgId for non-user roles when orgId is not present', async () => {
-    window.history.pushState({}, 'Test page', '/orglist');
+    window.history.pushState({}, 'Test page', '/admin/orglist');
     setItem('SuperAdmin', true); // Set as admin
     setItem('id', '123');
 
@@ -296,7 +296,7 @@ describe('Member screen routing testing', () => {
         <BrowserRouter>
           <I18nextProvider i18n={i18nForTest}>
             <Routes>
-              <Route path="/orglist" element={<ProfileCard />} />
+              <Route path="/admin/orglist" element={<ProfileCard />} />
             </Routes>
           </I18nextProvider>
         </BrowserRouter>
@@ -307,7 +307,7 @@ describe('Member screen routing testing', () => {
       await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
-    expect(mockNavigate).toHaveBeenCalledWith('/member');
+    expect(mockNavigate).toHaveBeenCalledWith('/admin/member');
   });
 
   test('navigates to /member/:userID for non-user roles', async () => {
@@ -331,7 +331,7 @@ describe('Member screen routing testing', () => {
       await userEvent.click(screen.getByTestId('profileBtn'));
     });
 
-    expect(mockNavigate).toHaveBeenCalledWith('/member/321');
+    expect(mockNavigate).toHaveBeenCalledWith('/admin/member/321');
   });
 
   test('navigates to /user/settings when admin is in user portal', async () => {

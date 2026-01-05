@@ -109,12 +109,12 @@ const renderAddPeopleToTagModal = (
 ): RenderResult => {
   return render(
     <MockedProvider cache={cache} link={link}>
-      <MemoryRouter initialEntries={['/orgtags/123/manageTag/1']}>
+      <MemoryRouter initialEntries={['/admin/orgtags/123/manageTag/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
               <Route
-                path="/orgtags/:orgId/manageTag/:tagId"
+                path="/admin/orgtags/:orgId/manageTag/:tagId"
                 element={<AddPeopleToTag {...props} />}
               />
             </Routes>
@@ -130,12 +130,12 @@ const renderComponent = (
 ): RenderResult =>
   render(
     <MockedProvider cache={cache} link={new StaticMockLink(MOCKS, true)}>
-      <MemoryRouter initialEntries={['/orgtags/1/manageTag/1']}>
+      <MemoryRouter initialEntries={['/admin/orgtags/1/manageTag/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
               <Route
-                path="/orgtags/:orgId/manageTag/:tagId"
+                path="/admin/orgtags/:orgId/manageTag/:tagId"
                 element={
                   <AddPeopleToTag {...defaultProps} {...(customProps ?? {})} />
                 }
@@ -411,12 +411,12 @@ describe('Organisation Tags Page', () => {
     act(() => {
       rerender(
         <MockedProvider cache={cache} link={new StaticMockLink(MOCKS, true)}>
-          <MemoryRouter initialEntries={['/orgtags/1/manageTag/1']}>
+          <MemoryRouter initialEntries={['/admin/orgtags/1/manageTag/1']}>
             <Provider store={store}>
               <I18nextProvider i18n={i18n}>
                 <Routes>
                   <Route
-                    path="/orgtags/:orgId/manageTag/:tagId"
+                    path="/admin/orgtags/:orgId/manageTag/:tagId"
                     element={
                       <AddPeopleToTag
                         {...defaultProps}

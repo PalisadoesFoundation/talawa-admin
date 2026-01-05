@@ -63,14 +63,17 @@ const debounceWait = async (ms = 400): Promise<void> => {
 const renderLeaderboard = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
-      <MemoryRouter initialEntries={['/leaderboard/orgId']}>
+      <MemoryRouter initialEntries={['/admin/leaderboard/orgId']}>
         <Provider store={store}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18n}>
               <Routes>
-                <Route path="/leaderboard/:orgId" element={<Leaderboard />} />
                 <Route
-                  path="/member/:orgId"
+                  path="/admin/leaderboard/:orgId"
+                  element={<Leaderboard />}
+                />
+                <Route
+                  path="/admin/member/:orgId"
                   element={<div data-testid="memberScreen" />}
                 />
                 <Route
@@ -112,11 +115,11 @@ describe('Testing Leaderboard Screen', () => {
     routerMocks.useParams.mockReturnValue({ orgId: '' });
     render(
       <MockedProvider link={link1}>
-        <MemoryRouter initialEntries={['/leaderboard/']}>
+        <MemoryRouter initialEntries={['/admin/leaderboard/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18n}>
               <Routes>
-                <Route path="/leaderboard/" element={<Leaderboard />} />
+                <Route path="/admin/leaderboard/" element={<Leaderboard />} />
                 <Route
                   path="/"
                   element={<div data-testid="paramsError"></div>}

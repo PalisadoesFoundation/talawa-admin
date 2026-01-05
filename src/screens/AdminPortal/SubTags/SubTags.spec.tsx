@@ -87,20 +87,20 @@ const cache = new InMemoryCache({
 const renderSubTags = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider cache={cache} link={link}>
-      <MemoryRouter initialEntries={['/orgtags/123/subTags/1']}>
+      <MemoryRouter initialEntries={['/admin/orgtags/123/subTags/1']}>
         <Provider store={store}>
           <I18nextProvider i18n={i18n}>
             <Routes>
               <Route
-                path="/orgtags/:orgId"
+                path="/admin/orgtags/:orgId"
                 element={<div data-testid="orgtagsScreen"></div>}
               />
               <Route
-                path="/orgtags/:orgId/manageTag/:tagId"
+                path="/admin/orgtags/:orgId/manageTag/:tagId"
                 element={<div data-testid="manageTagScreen"></div>}
               />
               <Route
-                path="/orgtags/:orgId/subTags/:tagId"
+                path="/admin/orgtags/:orgId/subTags/:tagId"
                 element={<SubTags />}
               />
             </Routes>

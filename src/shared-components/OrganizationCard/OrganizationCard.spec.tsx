@@ -199,7 +199,7 @@ describe('OrganizationCard', () => {
     expect(button).toHaveTextContent('Manage');
 
     fireEvent.click(button);
-    expect(mockNavigate).toHaveBeenCalledWith('/orgdash/123');
+    expect(mockNavigate).toHaveBeenCalledWith('/admin/orgdash/123');
   });
 
   it('renders "Visit" button and navigates correctly for joined user', () => {

@@ -309,8 +309,8 @@ describe('Testing User Table Item', () => {
     expect(toast.success).toHaveBeenCalledWith('Profile Page Coming Soon!');
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Joined Organization 1/i));
-    expect(window.location.replace).toHaveBeenCalledWith('/orgdash/abc');
-    expect(mockNavigatePush).toHaveBeenCalledWith('/orgdash/abc');
+    expect(window.location.replace).toHaveBeenCalledWith('/admin/orgdash/abc');
+    expect(mockNavigatePush).toHaveBeenCalledWith('/admin/orgdash/abc');
     fireEvent.click(screen.getByTestId(`closeJoinedOrgsBtn${123}`));
   });
   test('Remove user from Organization should function properly in Organizations Joined Modal', async () => {
@@ -831,8 +831,8 @@ describe('Testing User Table Item', () => {
     expect(toast.success).toHaveBeenCalledWith('Profile Page Coming Soon!');
     // Click on Organization Link
     fireEvent.click(screen.getByText(/Blocked Organization 1/i));
-    expect(window.location.replace).toHaveBeenCalledWith('/orgdash/ghi');
-    expect(mockNavigatePush).toHaveBeenCalledWith('/orgdash/ghi');
+    expect(window.location.replace).toHaveBeenCalledWith('/admin/orgdash/ghi');
+    expect(mockNavigatePush).toHaveBeenCalledWith('/admin/orgdash/ghi');
     fireEvent.click(screen.getByTestId(`closeUnblockOrgsBtn${123}`));
   });
   test('handles errors in unblockUser mutation', async () => {

@@ -40,7 +40,10 @@ const renderOrganisationSettings = (
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
-                <Route path="/orgsetting/:orgId" element={<OrgSettings />} />
+                <Route
+                  path="/admin/orgsetting/:orgId"
+                  element={<OrgSettings />}
+                />
                 <Route
                   path="/"
                   element={
@@ -78,11 +81,11 @@ describe('Organisation Settings Page', () => {
     const OrgSettings = await SetupRedirectTest();
     render(
       <MockedProvider>
-        <MemoryRouter initialEntries={['/orgsetting/']}>
+        <MemoryRouter initialEntries={['/admin/orgsetting/']}>
           <Provider store={store}>
             <I18nextProvider i18n={i18nForTest}>
               <Routes>
-                <Route path="/orgsetting/" element={OrgSettings} />
+                <Route path="/admin/orgsetting/" element={OrgSettings} />
                 <Route
                   path="/"
                   element={

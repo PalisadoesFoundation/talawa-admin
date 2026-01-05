@@ -1176,7 +1176,7 @@ describe('Testing redirect if already logged in', () => {
       </MockedProvider>,
     );
     await wait();
-    expect(routerMocks.navigate).toHaveBeenCalledWith('/orglist');
+    expect(routerMocks.navigate).toHaveBeenCalledWith('/admin/orglist');
   });
 });
 
@@ -1298,7 +1298,9 @@ describe('Testing invitation functionality', () => {
         expect(mockRemoveItem).toHaveBeenCalledWith('pendingInvitationToken');
 
         // Verify that window.location.href was set to the invitation URL
-        expect(window.location.href).toBe(`/event/invitation/${mockToken}`);
+        expect(window.location.href).toBe(
+          `/admin/event/invitation/${mockToken}`,
+        );
       }
     }
   });

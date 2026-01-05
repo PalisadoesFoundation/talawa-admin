@@ -75,8 +75,8 @@ const generateRoutes = (
     .map((comp) => {
       const entry: TargetsType = comp.comp_id
         ? comp.comp_id === 'orglist'
-          ? { name: comp.name, url: `/${comp.comp_id}` }
-          : { name: comp.name, url: `/${comp.comp_id}/${currentOrg}` }
+          ? { name: comp.name, url: `/admin/${comp.comp_id}` }
+          : { name: comp.name, url: `/admin/${comp.comp_id}/${currentOrg}` }
         : {
             name: comp.name,
             subTargets: comp.subTargets?.map(
@@ -88,7 +88,7 @@ const generateRoutes = (
               }) => {
                 return {
                   name: subTarget.name,
-                  url: `/${subTarget.comp_id}/${currentOrg}`,
+                  url: `/admin/${subTarget.comp_id}/${currentOrg}`,
                   icon: subTarget.icon,
                 };
               },

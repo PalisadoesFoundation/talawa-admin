@@ -49,7 +49,7 @@ describe('CustomTableCell', () => {
     expect(screen.getByText('2')).toBeInTheDocument();
 
     const link = screen.getByRole('link', { name: 'Test Event' });
-    expect(link).toHaveAttribute('href', '/event/org123/event123');
+    expect(link).toHaveAttribute('href', '/admin/event/org123/event123');
   });
 
   it('displays loading state', () => {
@@ -186,7 +186,7 @@ describe('CustomTableCell', () => {
     expect(screen.getByText('3')).toBeInTheDocument();
 
     const link = screen.getByRole('link', { name: 'Non-Recurring Event' });
-    expect(link).toHaveAttribute('href', '/event/org456/event456');
+    expect(link).toHaveAttribute('href', '/admin/event/org456/event456');
   });
 
   it('displays event with no attendees correctly', async () => {

@@ -485,9 +485,9 @@ const renderComponent = (mocks: MockedResponse[]): RenderResult =>
   render(
     <I18nextProvider i18n={i18nForTest}>
       <MockedProvider mocks={mocks}>
-        <MemoryRouter initialEntries={['/orgpost/123']}>
+        <MemoryRouter initialEntries={['/admin/orgpost/123']}>
           <Routes>
-            <Route path="/orgpost/:orgId" element={<PostsPage />} />
+            <Route path="/admin/orgpost/:orgId" element={<PostsPage />} />
           </Routes>
         </MemoryRouter>
       </MockedProvider>
