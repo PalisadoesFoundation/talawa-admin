@@ -884,6 +884,30 @@
   --orgSelector-no-results-color: #6c757d;
 }
 
+/* Action Item Category Status Styles */
+.actionItemCategoryStatusIcon {
+  font-size: 0.8rem;
+  margin-right: 8px;
+}
+
+.statusIconActive {
+  color: var(--bs-success, #4caf50);
+}
+
+.statusIconDisabled {
+  color: var(--bs-danger, #ff5252);
+}
+
+.statusTextActive {
+  color: var(--bs-success, #4caf50);
+  -webkit-text-fill-color: var(--bs-success, #4caf50);
+}
+
+.statusTextDisabled {
+  color: var(--bs-danger, #ff5252);
+  -webkit-text-fill-color: var(--bs-danger, #ff5252);
+}
+
 /* Global Classes (Add CSS classes as Global Classes that are used at multiple place)*/
 
 /* Add Button */

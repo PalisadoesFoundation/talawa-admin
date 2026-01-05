@@ -82,23 +82,21 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
             InputProps={{
               startAdornment: (
                 <Circle
-                  sx={{
-                    fontSize: '0.8rem',
-                    color: category.isDisabled ? '#ff5252' : '#4caf50',
-                    marginRight: '8px',
-                  }}
+                  className={`${styles.actionItemCategoryStatusIcon} ${
+                    category.isDisabled
+                      ? styles.statusIconDisabled
+                      : styles.statusIconActive
+                  }`}
                 />
               ),
-              style: {
-                color: category.isDisabled ? '#ff5252' : '#4caf50',
-              },
+              className: category.isDisabled
+                ? styles.statusTextDisabled
+                : styles.statusTextActive,
             }}
             inputProps={{
-              style: {
-                WebkitTextFillColor: category.isDisabled
-                  ? '#ff5252'
-                  : '#4caf50',
-              },
+              className: category.isDisabled
+                ? styles.statusTextDisabled
+                : styles.statusTextActive,
             }}
             disabled
             data-testid="categoryStatusView"
