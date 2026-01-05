@@ -11,7 +11,13 @@ export const useRegistration = ({
 }: IUseRegistrationProps) => {
   const [loading, setLoading] = useState(false);
 
-  const register = async () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const register = async (_data: {
+    name: string;
+    email: string;
+    password: string;
+    organizationId: string;
+  }) => {
     setLoading(true);
     try {
       await new Promise((resolve) => setTimeout(resolve, 100));

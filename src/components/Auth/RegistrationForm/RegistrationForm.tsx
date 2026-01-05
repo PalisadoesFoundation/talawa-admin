@@ -42,7 +42,7 @@ export const RegistrationForm = ({
       name: f.name,
       email: f.email,
       password: f.password,
-      organizationId: f.orgId ?? '',
+      organizationId: f.orgId || '',
     });
   };
 

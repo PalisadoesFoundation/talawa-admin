@@ -17,10 +17,6 @@ describe('RegistrationForm', () => {
   const mockOnSuccess = vi.fn();
   const mockOnError = vi.fn();
 
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
-
   const renderComponent = (props = {}) => {
     return render(
       <I18nextProvider i18n={i18nForTest}>
