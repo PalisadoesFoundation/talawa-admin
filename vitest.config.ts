@@ -41,7 +41,7 @@ export default defineConfig({
       concurrent: false, // Disabled for test stability - files still run in parallel across shards
     },
     coverage: {
-      enabled: false, // Only enable when --coverage flag is used
+      enabled: true,
       provider: 'istanbul',
       reportsDirectory: './coverage/vitest',
       // Don't use 'all: true' with sharding - let merge handle combining partial coverage
