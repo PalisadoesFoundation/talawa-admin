@@ -331,4 +331,57 @@ describe('RegistrationForm', () => {
       screen.queryByTestId('recaptcha-placeholder'),
     ).not.toBeInTheDocument();
   });
+
+  it('shows validation errors when form is submitted with invalid data', async () => {
+    renderComponent();
+
+    const submitButton = screen.getByRole('button', {
+      name: /create account/i,
+    });
+    fireEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(screen.getByText('Name is required')).toBeInTheDocument();
+      expect(screen.getByText('Valid email is required')).toBeInTheDocument();
+      expect(screen.getByText('Password is required')).toBeInTheDocument();
+    });
+  });
+
+  it('clears validation errors when valid data is entered', async () => {
+    renderComponent();
+
+    // Submit empty form to trigger errors
+    fireEvent.click(screen.getByRole('button', { name: /create account/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText('Name is required')).toBeInTheDocument();
+    });
+
+    // Fill in valid data
+    fireEvent.change(screen.getByLabelText('Name'), {
+      target: { value: 'John Doe' },
+    });
+    fireEvent.change(screen.getByLabelText(/Email/), {
+      target: { value: 'john@example.com' },
+    });
+    fireEvent.change(screen.getByLabelText('Password'), {
+      target: { value: 'Password123!' },
+    });
+    fireEvent.change(screen.getByLabelText('Confirm Password'), {
+      target: { value: 'Password123!' },
+    });
+
+    // Submit again
+    fireEvent.click(screen.getByRole('button', { name: /create account/i }));
+
+    await waitFor(() => {
+      expect(screen.queryByText('Name is required')).not.toBeInTheDocument();
+      expect(
+        screen.queryByText('Valid email is required'),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByText('Password is required'),
+      ).not.toBeInTheDocument();
+    });
+  });
 });

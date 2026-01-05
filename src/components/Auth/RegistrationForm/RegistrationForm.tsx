@@ -32,15 +32,43 @@ export const RegistrationForm = ({
     confirmPassword: '',
     orgId: '',
   });
+  const [errors, setErrors] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
   const { register, loading } = useRegistration({ onSuccess, onError });
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateName(f.name).isValid) return;
-    if (!validateEmail(f.email).isValid) return;
-    if (!validatePassword(f.password).isValid) return;
-    if (!validatePasswordConfirmation(f.password, f.confirmPassword).isValid)
+
+    const nameValidation = validateName(f.name);
+    const emailValidation = validateEmail(f.email);
+    const passwordValidation = validatePassword(f.password);
+    const confirmPasswordValidation = validatePasswordConfirmation(
+      f.password,
+      f.confirmPassword,
+    );
+
+    setErrors({
+      name: nameValidation.isValid ? '' : 'Name is required',
+      email: emailValidation.isValid ? '' : 'Valid email is required',
+      password: passwordValidation.isValid ? '' : 'Password is required',
+      confirmPassword: confirmPasswordValidation.isValid
+        ? ''
+        : 'Passwords must match',
+    });
+
+    if (
+      !nameValidation.isValid ||
+      !emailValidation.isValid ||
+      !passwordValidation.isValid ||
+      !confirmPasswordValidation.isValid
+    ) {
       return;
+    }
+
     await register({
       name: f.name,
       email: f.email,
@@ -57,16 +85,24 @@ export const RegistrationForm = ({
         value={f.name}
         onChange={(e) => setF((s) => ({ ...s, name: e.target.value }))}
       />
+      {errors.name && <div className="text-danger small">{errors.name}</div>}
+
       <EmailField
         value={f.email}
         onChange={(e) => setF((s) => ({ ...s, email: e.target.value }))}
       />
+      {errors.email && <div className="text-danger small">{errors.email}</div>}
+
       <PasswordField
         label="Password"
         name="password"
         value={f.password}
         onChange={(e) => setF((s) => ({ ...s, password: e.target.value }))}
       />
+      {errors.password && (
+        <div className="text-danger small">{errors.password}</div>
+      )}
+
       <PasswordField
         label="Confirm Password"
         name="confirmPassword"
@@ -75,6 +111,9 @@ export const RegistrationForm = ({
           setF((s) => ({ ...s, confirmPassword: e.target.value }))
         }
       />
+      {errors.confirmPassword && (
+        <div className="text-danger small">{errors.confirmPassword}</div>
+      )}
       <PasswordStrengthIndicator password={f.password} isVisible />
       <OrgSelector
         options={organizations}
