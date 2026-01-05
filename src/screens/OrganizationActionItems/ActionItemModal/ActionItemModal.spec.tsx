@@ -1013,15 +1013,8 @@ describe('ItemModal - Additional Test Cases', () => {
       });
       await userEvent.click(volunteerGroupChip);
 
-      // Wait for volunteerSelect to disappear (state update)
-      await waitFor(
-        () => {
-          expect(
-            screen.queryByTestId('volunteerSelect'),
-          ).not.toBeInTheDocument();
-        },
-        { timeout: 3000 },
-      );
+      // Wait for volunteerGroupSelect to appear (this confirms the switch happened)
+      await screen.findByTestId('volunteerGroupSelect', {}, { timeout: 3000 });
 
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
