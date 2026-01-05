@@ -154,6 +154,14 @@ export function CursorPaginationManager<
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const previousRefetchTrigger = useRef(refetchTrigger);
   const generationRef = useRef(0);
+  const isMounted = useRef(true);
+
+  // Handle component unmount
+  useEffect(() => {
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
 
   // Apollo Client hook
   const { data, loading, error, fetchMore, refetch } = useQuery<
@@ -203,8 +211,8 @@ export function CursorPaginationManager<
         } as PaginationVariables<TVariables>,
       });
 
-      // Check if this request is stale
-      if (currentGeneration !== generationRef.current) {
+      // Check if this request is stale or component unmounted
+      if (currentGeneration !== generationRef.current || !isMounted.current) {
         return;
       }
 
@@ -221,10 +229,14 @@ export function CursorPaginationManager<
         });
         setPageInfo(connectionData.pageInfo || null);
       }
+      if (isMounted.current) {
+        setIsLoadingMore(false);
+      }
     } catch (err) {
       console.error('Error loading more items:', err);
-    } finally {
-      setIsLoadingMore(false);
+      if (currentGeneration === generationRef.current && isMounted.current) {
+        setIsLoadingMore(false);
+      }
     }
   }, [
     pageInfo,
@@ -243,6 +255,7 @@ export function CursorPaginationManager<
     generationRef.current += 1;
     setItems([]);
     setPageInfo(null);
+    setIsLoadingMore(false);
 
     try {
       await refetch({
