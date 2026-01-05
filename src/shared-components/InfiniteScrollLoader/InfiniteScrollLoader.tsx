@@ -25,8 +25,13 @@
  */
 import React from 'react';
 import styles from 'style/app-fixed.module.css';
+import { IInfiniteScrollLoaderProps } from 'types/shared-components/InfiniteScrollLoader/interface';
 
-const InfiniteScrollLoader = (): JSX.Element => {
+/**
+ * InfiniteScrollLoader Component
+ * (Keep your existing TSDoc headers here)
+ */
+const InfiniteScrollLoader: React.FC<IInfiniteScrollLoaderProps> = () => {
   return (
     <div data-testid="infiniteScrollLoader" className={styles.simpleLoader}>
       <div
