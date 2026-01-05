@@ -236,8 +236,9 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
 
         {/* Disabled Toggle */}
         <Form.Group className="d-flex flex-column mb-4">
-          <label>{tCommon('disabled')} </label>
+          <label htmlFor="isDisabledSwitch">{tCommon('disabled')} </label>
           <Form.Switch
+            id="isDisabledSwitch"
             type="checkbox"
             checked={isDisabled}
             data-testid="isDisabledSwitch"
