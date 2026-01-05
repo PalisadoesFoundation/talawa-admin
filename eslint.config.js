@@ -185,13 +185,13 @@ export default [
               message:
                 'Do not import Spinner from react-bootstrap. Use the shared LoadingState component instead.',
             },
+            {
+              name: 'react-bootstrap',
+              importNames: ['Modal'],
+              message:
+                'Do not import Modal directly. Use the shared BaseModal component instead.',
+            },
           ],
-        },
-        {
-          name: 'react-bootstrap',
-          importNames: ['Modal'],
-          message:
-            'Do not import Modal directly. Use the shared BaseModal component instead.',
         },
       ],
     },
