@@ -13,25 +13,48 @@ import inquirer from 'inquirer';
 vi.mock('./backupEnvFile/backupEnvFile', () => ({
   backupEnvFile: vi.fn().mockResolvedValue(undefined),
 }));
-vi.mock('inquirer');
+vi.mock('inquirer', () => ({
+  default: {
+    prompt: vi.fn(),
+  },
+}));
 vi.mock('dotenv');
-vi.mock('fs');
+vi.mock('fs', async () => {
+  const actual = await vi.importActual<typeof import('fs')>('fs');
+  return {
+    default: actual,
+    promises: {
+      ...actual.promises,
+      readFile: vi.fn(),
+    },
+  };
+});
 vi.mock('./checkEnvFile/checkEnvFile');
 vi.mock('./validateRecaptcha/validateRecaptcha');
-vi.mock('./askAndSetDockerOption/askAndSetDockerOption');
-vi.mock('./updateEnvFile/updateEnvFile');
-vi.mock('./askAndUpdatePort/askAndUpdatePort');
+vi.mock('./askAndSetDockerOption/askAndSetDockerOption', () => ({
+  default: vi.fn(),
+}));
+vi.mock('./updateEnvFile/updateEnvFile', () => ({
+  default: vi.fn(),
+}));
+vi.mock('./askAndUpdatePort/askAndUpdatePort', () => ({
+  default: vi.fn(),
+}));
 vi.mock('./askForDocker/askForDocker');
 
 describe('Talawa Admin Setup', () => {
+  let mockReadFile: ReturnType<typeof vi.fn>;
+
   beforeEach(() => {
     vi.clearAllMocks();
 
     // default flow: env file check passes
     vi.mocked(checkEnvFile).mockReturnValue(true);
 
-    // default fs content says NO docker
-    vi.mocked(fs.promises.readFile).mockResolvedValue('USE_DOCKER=NO');
+    // Create a mock function for fs.promises.readFile
+    mockReadFile = vi.fn().mockResolvedValue('USE_DOCKER=NO');
+    (fs.promises.readFile as unknown) = mockReadFile;
+
     vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'NO' });
 
     // mock external functions to resolve normally
@@ -48,16 +71,16 @@ describe('Talawa Admin Setup', () => {
     });
 
     vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    vi.spyOn(console, 'log').mockImplementation(() => undefined);
   });
 
   afterEach(() => {
-    vi.restoreAllMocks(); // Restores all spies including processExitSpy and consoleErrorSpy
+    vi.restoreAllMocks();
   });
 
-  // ADD THESE NEW TEST BLOCKS
   it('should call API setup with false when Docker is disabled', async () => {
     // Setup environment for NO Docker
-    vi.mocked(fs.promises.readFile).mockResolvedValue('USE_DOCKER=NO');
+    mockReadFile.mockResolvedValue('USE_DOCKER=NO');
     vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'NO' });
 
     vi.mocked(inquirer.prompt)
@@ -71,7 +94,7 @@ describe('Talawa Admin Setup', () => {
 
   it('should call API setup with true when Docker is enabled', async () => {
     // Setup environment for YES Docker
-    vi.mocked(fs.promises.readFile).mockResolvedValue('USE_DOCKER=YES');
+    mockReadFile.mockResolvedValue('USE_DOCKER=YES');
     vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'YES' });
 
     vi.mocked(inquirer.prompt)
@@ -96,7 +119,7 @@ describe('Talawa Admin Setup', () => {
   });
 
   it('should call askAndUpdateTalawaApiUrl when Docker is used and skip port setup', async () => {
-    vi.mocked(fs.promises.readFile).mockResolvedValue('USE_DOCKER=YES');
+    mockReadFile.mockResolvedValue('USE_DOCKER=YES');
     vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'YES' });
 
     vi.mocked(inquirer.prompt)
@@ -167,6 +190,7 @@ describe('Talawa Admin Setup', () => {
 
     localConsoleError.mockRestore();
   });
+
   it('should handle reCAPTCHA setup when user opts in with valid key', async () => {
     const mockValidKey = 'valid-key';
     const { validateRecaptcha: mockValidateRecaptcha } = await vi.importMock<
