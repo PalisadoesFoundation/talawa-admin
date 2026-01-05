@@ -11,10 +11,17 @@ export const useRegistration = ({
 }: IUseRegistrationProps) => {
   const [loading, setLoading] = useState(false);
 
-  const register = async () => {
+  const register = async (data: {
+    name: string;
+    email: string;
+    password: string;
+    organizationId: string;
+  }) => {
     setLoading(true);
     try {
+      // Mock registration - in real implementation, this would call GraphQL mutation
       await new Promise((resolve) => setTimeout(resolve, 100));
+      console.log('Registration data:', data); // For development purposes
       if (onSuccess) {
         onSuccess();
       }
