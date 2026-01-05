@@ -20,6 +20,7 @@ import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItemForAdmin } from 'utils/interfaces';
 import styles from '../../style/app-fixed.module.css';
+import usertableStyles from './UsersTableItem.module.css';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 type Props = {
@@ -372,7 +373,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             {t('removeUserFrom', { org: removeUserProps.orgName })}
           </Modal.Title>
         </Modal.Header>
-        <hr style={{ margin: 0 }} />
+        <hr className={usertableStyles.divider} />
         <Modal.Body>
           <p>
             {t('removeConfirmation', {
@@ -530,7 +531,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
             {t('unblockUserFrom', { org: removeUserProps.orgName })}
           </Modal.Title>
         </Modal.Header>
-        <hr style={{ margin: 0 }} />
+        <hr className={usertableStyles.divider} />
         <Modal.Body>
           <p>
             {t('unblockConfirmation', {
