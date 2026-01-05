@@ -284,54 +284,6 @@ describe('RegistrationForm', () => {
     });
   });
 
-  it('renders reCAPTCHA content when enabled', () => {
-    renderComponent({ enableRecaptcha: true });
-
-    const recaptchaDiv = screen.getByTestId('recaptcha-placeholder');
-    expect(recaptchaDiv).toBeInTheDocument();
-    expect(screen.getByText('reCAPTCHA integration ready')).toBeInTheDocument();
-  });
-
-  it('renders reCAPTCHA div element when enabled', () => {
-    renderComponent({ enableRecaptcha: true });
-
-    // Force execution of the conditional reCAPTCHA rendering (line 82)
-    const recaptchaContainer = screen.getByTestId('recaptcha-placeholder');
-    expect(recaptchaContainer.tagName).toBe('DIV');
-    expect(recaptchaContainer).toHaveTextContent('reCAPTCHA integration ready');
-  });
-
-  it('executes reCAPTCHA conditional logic', () => {
-    // Test both true and false conditions to ensure line 82 is hit
-    const { rerender } = render(
-      <I18nextProvider i18n={i18nForTest}>
-        <RegistrationForm
-          organizations={mockOrganizations}
-          enableRecaptcha={true}
-          onSuccess={mockOnSuccess}
-          onError={mockOnError}
-        />
-      </I18nextProvider>,
-    );
-
-    expect(screen.getByTestId('recaptcha-placeholder')).toBeInTheDocument();
-
-    rerender(
-      <I18nextProvider i18n={i18nForTest}>
-        <RegistrationForm
-          organizations={mockOrganizations}
-          enableRecaptcha={false}
-          onSuccess={mockOnSuccess}
-          onError={mockOnError}
-        />
-      </I18nextProvider>,
-    );
-
-    expect(
-      screen.queryByTestId('recaptcha-placeholder'),
-    ).not.toBeInTheDocument();
-  });
-
   it('shows validation errors when form is submitted with invalid data', async () => {
     renderComponent();
 

@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react';
+import { renderHook, act, waitFor } from '@testing-library/react';
 import { useRegistration } from './useRegistration';
 
 describe('useRegistration', () => {
@@ -107,8 +107,9 @@ describe('useRegistration', () => {
 
     expect(result.current.loading).toBe(false);
 
-    const registerPromise = act(async () => {
-      await result.current.register({
+    // Start registration and check loading state immediately
+    act(() => {
+      result.current.register({
         name: 'Test User',
         email: 'test@example.com',
         password: 'password123',
@@ -116,7 +117,12 @@ describe('useRegistration', () => {
       });
     });
 
-    await registerPromise;
-    expect(result.current.loading).toBe(false);
+    // Should be loading now
+    expect(result.current.loading).toBe(true);
+
+    // Wait for completion
+    await waitFor(() => {
+      expect(result.current.loading).toBe(false);
+    });
   });
 });
