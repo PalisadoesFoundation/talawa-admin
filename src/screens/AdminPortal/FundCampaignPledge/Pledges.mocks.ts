@@ -27,6 +27,7 @@ const createUser = (
   email,
   createdAt,
   organizationsBlockedBy: [],
+  eventsAttended: [],
   name: `${firstName} ${lastName}`,
 });
 

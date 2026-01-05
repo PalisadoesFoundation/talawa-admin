@@ -108,9 +108,7 @@ import { sanitizeAvatars } from 'utils/sanitizeAvatar';
 import type { IEvent } from 'types/Event/interface';
 import ProfileFormWrapper from './ProfileFormWrapper';
 
-type MemberDetailProps = { id?: string };
-
-const MemberDetail: React.FC<MemberDetailProps> = (): JSX.Element => {
+const MemberDetail: React.FC = (): JSX.Element => {
   const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { t: tCommon } = useTranslation('common');
@@ -308,10 +306,7 @@ const MemberDetail: React.FC<MemberDetailProps> = (): JSX.Element => {
         }
         setSelectedAvatar(null);
 
-        // wait for the toast to complete
-        await new Promise((resolve) => setTimeout(resolve, 2000));
-
-        window.location.reload();
+        setisUpdated(false);
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -323,7 +318,6 @@ const MemberDetail: React.FC<MemberDetailProps> = (): JSX.Element => {
   };
 
   const resetChanges = (): void => {
-    console.log('userData?.user', userData?.user);
     setisUpdated(false);
     if (userData?.user) {
       setFormState({
@@ -864,13 +858,8 @@ export const prettyDate = (param: string): string => {
   return `${day} ${month} ${year}`;
 };
 export const getLanguageName = (code: string): string => {
-  let language = 'Unavailable';
-  languages.map((data) => {
-    if (data.code == code) {
-      language = data.name;
-    }
-  });
-  return language;
+  const found = languages.find((data) => data.code === code);
+  return found?.name ?? 'Unavailable';
 };
 
 export default MemberDetail;

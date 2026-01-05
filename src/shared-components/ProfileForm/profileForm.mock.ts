@@ -52,15 +52,9 @@ export const MOCKS1 = [
           eventsAttended: [
             {
               id: 'event1',
-              title: 'Sample Event 1',
-              description: 'Event description 1',
-              __typename: 'Event',
             },
             {
               id: 'event2',
-              title: 'Sample Event 2',
-              description: 'Event description 2',
-              __typename: 'Event',
             },
           ],
           __typename: 'User',

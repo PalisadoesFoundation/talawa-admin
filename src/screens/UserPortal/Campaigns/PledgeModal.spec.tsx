@@ -162,6 +162,7 @@ const USER_DETAILS_MOCK = {
         workPhoneNumber: null,
         organizationsWhereMember: { edges: [] },
         createdOrganizations: [],
+        eventsAttended: [],
         __typename: 'User',
       },
     },

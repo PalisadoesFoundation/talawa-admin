@@ -463,6 +463,7 @@ const EMPTY_MOCKS = [
           },
           registeredEvents: [],
           membershipRequests: [],
+          eventsAttended: [],
           __typename: 'User',
         },
       },

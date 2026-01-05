@@ -28,7 +28,6 @@ import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { urlToFile } from 'utils/urlToFile';
 
 const link1 = new StaticMockLink(MOCKS1, true);
@@ -91,7 +90,9 @@ vi.mock('components/UserPortal/UserSidebar/UserSidebar', () => ({
     setHideDrawer: (value: boolean) => void;
   }) => (
     <div data-testid="user-sidebar">
-      <button onClick={() => setHideDrawer(!hideDrawer)}>Toggle Sidebar</button>
+      <button type="button" onClick={() => setHideDrawer(!hideDrawer)}>
+        Toggle Sidebar
+      </button>
     </div>
   ),
 }));
@@ -105,10 +106,6 @@ vi.mock('screens/UserPortal/Settings/ProfileHeader/ProfileHeader', () => ({
   ),
 }));
 
-const props = {
-  id: 'rishav-jha-mech',
-};
-
 const renderMemberDetailScreen = (link: ApolloLink): RenderResult => {
   return render(
     <MockedProvider link={link}>
@@ -118,7 +115,7 @@ const renderMemberDetailScreen = (link: ApolloLink): RenderResult => {
             <Routes>
               <Route
                 path="/orgtags/:orgId/member/:userId"
-                element={<MemberDetail {...props} />}
+                element={<MemberDetail />}
               />
               <Route
                 path="/orgtags/:orgId/manageTag/:tagId"
@@ -391,7 +388,7 @@ describe('MemberDetail', () => {
       render(
         <MockedProvider link={link1}>
           <BrowserRouter>
-            <MemberDetail id="123" />
+            <MemberDetail />
           </BrowserRouter>
         </MockedProvider>,
       );
@@ -705,56 +702,6 @@ describe('MemberDetail', () => {
   });
 
   describe('Data Update and Processing Tests', () => {
-    // Test for empty fields removal (Lines 397-425)
-    test('removes empty fields before update', async () => {
-      const mockUpdateUser = vi.fn();
-      const updatedMock = {
-        request: {
-          query: UPDATE_CURRENT_USER_MUTATION,
-          variables: {
-            input: {
-              name: 'Test User',
-              // Empty fields should be removed
-              description: '',
-              addressLine1: '',
-              addressLine2: '',
-            },
-          },
-        },
-        result: {
-          data: {
-            updateCurrentUser: {
-              name: 'Test User',
-              id: '123',
-            },
-          },
-        },
-      };
-
-      renderMemberDetailScreen(new StaticMockLink([updatedMock], true));
-      await wait();
-
-      // Set some fields empty and some with values
-      const nameInput = screen.getByTestId('inputName');
-      const descriptionInput = screen.getByTestId('inputDescription');
-      const addressInput = screen.getByTestId('addressLine1');
-
-      await userEvent.clear(descriptionInput);
-      await userEvent.clear(addressInput);
-      await userEvent.type(nameInput, 'Test User');
-
-      // Trigger update
-      const saveButton = screen.getByTestId('saveChangesBtn');
-      await userEvent.click(saveButton);
-
-      // Verify empty fields were removed from mutation
-      expect(mockUpdateUser).not.toHaveBeenCalledWith(
-        expect.objectContaining({
-          description: '',
-          addressLine1: '',
-        }),
-      );
-    });
     test('handles user profile localStorage updates on successful save', async () => {
       const mockSetItem = vi.fn();
       Object.defineProperty(window, 'localStorage', {
@@ -777,15 +724,12 @@ describe('MemberDetail', () => {
 
       const saveButton = screen.getByTestId('saveChangesBtn');
       fireEvent.click(saveButton);
-
       await waitFor(() => {
         expect(mockSetItem).toHaveBeenCalledWith(
           'Talawa-admin_name',
           '"Updated User Name"',
         );
       });
-      await wait(2500); //wait for reload to call
-      expect(window.location.reload).toHaveBeenCalled();
     });
   });
 
@@ -1155,30 +1099,6 @@ describe('MemberDetail', () => {
       // This exercises the hideDrawer conditional in line 826
       const mainContainer = document.querySelector('.d-flex.flex-row');
       expect(mainContainer).toBeInTheDocument();
-    });
-
-    test('covers window reload after user profile update', async () => {
-      const mockReload = vi.fn();
-      Object.defineProperty(window, 'location', {
-        value: { reload: mockReload },
-        writable: true,
-      });
-
-      renderUserProfileScreen(link5);
-      await wait();
-
-      const nameInput = screen.getByTestId('inputName');
-      fireEvent.change(nameInput, { target: { value: 'Updated User Name' } });
-
-      const saveButton = screen.getByTestId('saveChangesBtn');
-      fireEvent.click(saveButton);
-
-      await waitFor(
-        () => {
-          expect(mockReload).toHaveBeenCalled();
-        },
-        { timeout: 10000 },
-      );
     });
 
     test('type password with valid value', async () => {

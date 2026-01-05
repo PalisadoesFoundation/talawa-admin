@@ -6,7 +6,7 @@
 
 > `const` **UPDATE\_MOCK**: `object`[]
 
-Defined in: [src/shared-components/ProfileForm/profileForm.mock.ts:223](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileForm/profileForm.mock.ts#L223)
+Defined in: [src/shared-components/ProfileForm/profileForm.mock.ts:217](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileForm/profileForm.mock.ts#L217)
 
 ## Type Declaration
 

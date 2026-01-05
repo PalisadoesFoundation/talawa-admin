@@ -81,7 +81,7 @@ const ProfileFormWrapper: React.FC<InterfaceProfileFormWrapperProps> = ({
       >
         <div className={styles.mainContainer}>
           <ProfileHeader title={tCommon('settings')} />
-          <div className={styles.mainContainer}>{children}</div>
+          {children}
         </div>
       </div>
     </>

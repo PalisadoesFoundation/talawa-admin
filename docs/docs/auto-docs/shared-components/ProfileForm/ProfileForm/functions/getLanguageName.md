@@ -6,7 +6,7 @@
 
 > **getLanguageName**(`code`): `string`
 
-Defined in: [src/shared-components/ProfileForm/ProfileForm.tsx:866](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileForm/ProfileForm.tsx#L866)
+Defined in: [src/shared-components/ProfileForm/ProfileForm.tsx:860](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileForm/ProfileForm.tsx#L860)
 
 ## Parameters
 
