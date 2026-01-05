@@ -1005,34 +1005,24 @@ describe('ItemModal - Additional Test Cases', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
-      // Wait for the form to fully load and the volunteer select to be interactive
-      const volunteerSelect = await screen.findByTestId(
-        'volunteerSelect',
-        {},
-        { timeout: 3000 },
-      );
-
-      // Interact with volunteer input first to ensure the component is fully loaded
-      // This ensures all async data has been loaded before we try to switch assignment types
+      // Wait for volunteer select and its data to be fully loaded
+      const volunteerSelect = await screen.findByTestId('volunteerSelect');
       const volunteerInput = within(volunteerSelect).getByRole('combobox');
-      await userEvent.click(volunteerInput);
 
-      // Wait a moment for any pending state updates
+      // Ensure volunteer data has loaded by waiting for the input to be enabled/ready
       await waitFor(() => {
-        expect(volunteerInput).toBeInTheDocument();
+        expect(volunteerInput).not.toBeDisabled();
       });
 
       // Now click the volunteerGroup chip to switch assignment type
       const volunteerGroupChip = screen.getByRole('button', {
         name: 'volunteerGroup',
       });
-      fireEvent.click(volunteerGroupChip);
+      await userEvent.click(volunteerGroupChip);
 
       // Wait for volunteerGroupSelect to appear (this confirms the switch happened)
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
-        {},
-        { timeout: 5000 },
       );
       const volunteerGroupInput =
         within(volunteerGroupSelect).getByRole('combobox');
@@ -1052,7 +1042,7 @@ describe('ItemModal - Additional Test Cases', () => {
       });
 
       const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
-      fireEvent.click(volunteerChip);
+      await userEvent.click(volunteerChip);
 
       await waitFor(() => {
         expect(
@@ -1063,12 +1053,10 @@ describe('ItemModal - Additional Test Cases', () => {
       const volunteerGroupChipAgain = screen.getByRole('button', {
         name: 'volunteerGroup',
       });
-      fireEvent.click(volunteerGroupChipAgain);
+      await userEvent.click(volunteerGroupChipAgain);
 
       const reopenedGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
-        {},
-        { timeout: 5000 },
       );
       const reopenedGroupInput =
         within(reopenedGroupSelect).getByRole('combobox');
@@ -4107,35 +4095,28 @@ describe('Partially Covered Lines Test Coverage', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
-      // Wait for the form to fully load by checking that volunteerSelect is present
-      const volunteerSelect = await screen.findByTestId(
-        'volunteerSelect',
-        {},
-        { timeout: 3000 },
-      );
-
-      // Interact with volunteer input first to ensure the component is fully loaded
+      // Wait for volunteer select and its data to be fully loaded
+      const volunteerSelect = await screen.findByTestId('volunteerSelect');
       const volunteerInput = within(volunteerSelect).getByRole('combobox');
-      await userEvent.click(volunteerInput);
+
+      // Ensure volunteer data has loaded by waiting for the input to be enabled/ready
+      await waitFor(() => {
+        expect(volunteerInput).not.toBeDisabled();
+      });
 
       // First switch to volunteer group to set some state
       const volunteerGroupChip = screen.getByRole('button', {
         name: 'volunteerGroup',
       });
-      fireEvent.click(volunteerGroupChip);
+      await userEvent.click(volunteerGroupChip);
 
-      await waitFor(
-        () => {
-          expect(
-            screen.getByTestId('volunteerGroupSelect'),
-          ).toBeInTheDocument();
-        },
-        { timeout: 5000 },
-      );
+      await waitFor(() => {
+        expect(screen.getByTestId('volunteerGroupSelect')).toBeInTheDocument();
+      });
 
       // Now click volunteer chip - this should execute the !isVolunteerChipDisabled path
       const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
-      fireEvent.click(volunteerChip);
+      await userEvent.click(volunteerChip);
 
       // Should switch back to volunteer select and clear volunteer group
       await waitFor(() => {
