@@ -96,14 +96,42 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   >(new Set());
   /**
    * Tracks reference counts for ancestor tags to maintain hierarchical consistency.
-   * State is updated via setAncestorTagsDataMap but never read directly in the component.
-   * The setter is used in useEffect hooks to manage tag selection/deselection logic.
+   * Updated by two useEffect hooks (one for additions, one for removals) to manage
+   * the count of selected tags that share each ancestor. When count reaches zero,
+   * the ancestor is removed from checkedTags. Never read directly in render.
    */
   const [ancestorTagsDataMap, setAncestorTagsDataMap] = useState(new Map());
 
   // Dummy uses to satisfy linter
   void addAncestorTagsData;
   void ancestorTagsDataMap;
+
+  useEffect(() => {
+    setAncestorTagsDataMap((prevMap) => {
+      const newMap = new Map(prevMap);
+
+      addAncestorTagsData.forEach((ancestorTag) => {
+        const prevValue = prevMap.get(ancestorTag._id);
+        if (prevValue !== undefined) {
+          newMap.set(ancestorTag._id, prevValue + 1);
+        } else {
+          newMap.set(ancestorTag._id, 1);
+        }
+      });
+
+      if (addAncestorTagsData.size > 0) {
+        setCheckedTags((prev) => {
+          const next = new Set(prev);
+          addAncestorTagsData.forEach((ancestorTag) => {
+            next.add(ancestorTag._id);
+          });
+          return next;
+        });
+      }
+
+      return newMap;
+    });
+  }, [addAncestorTagsData]);
 
   useEffect(() => {
     // Compute what needs to be deleted first (pure computation)
