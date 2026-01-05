@@ -49,7 +49,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { useMutation, useQuery } from '@apollo/client';
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import { FaRegClock } from 'react-icons/fa';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
 import { toast } from 'react-toastify';
@@ -140,8 +140,6 @@ const Invitations = (): JSX.Element => {
     return data;
   }, [invitationData, filter]);
 
-  // loads the invitations when the component mounts
-  if (invitationLoading) return <Loader size="xl" />;
   if (invitationError) {
     // Displays an error message if there is an issue loading the invitations
     return (
@@ -187,7 +185,7 @@ const Invitations = (): JSX.Element => {
   };
 
   return (
-    <>
+    <LoadingState isLoading={invitationLoading} variant="spinner">
       <AdminSearchFilterBar
         searchPlaceholder={t('searchByEventName')}
         searchValue={searchTerm}
@@ -283,7 +281,7 @@ const Invitations = (): JSX.Element => {
           </div>
         ))
       )}
-    </>
+    </LoadingState>
   );
 };
 

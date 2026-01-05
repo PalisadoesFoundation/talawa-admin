@@ -55,7 +55,7 @@ import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import IconComponent from 'components/IconComponent/IconComponent';
 import { useNavigate, useParams, Link } from 'react-router';
 import { Col } from 'react-bootstrap';
@@ -470,9 +470,10 @@ function ManageTag(): JSX.Element {
             />
           </div>
 
-          {userTagAssignedMembersLoading ? (
-            <Loader />
-          ) : (
+          <LoadingState
+            isLoading={userTagAssignedMembersLoading}
+            variant="spinner"
+          >
             <Row className="mb-4">
               <Col xs={9}>
                 <div className="bg-white light border rounded-top mb-0 py-2 d-flex align-items-center">
@@ -588,7 +589,7 @@ function ManageTag(): JSX.Element {
                 </div>
               </Col>
             </Row>
-          )}
+          </LoadingState>
         </div>
       </Row>
 

@@ -57,9 +57,18 @@ vi.mock('utils/useLocalstorage', () => ({
   }),
 }));
 
-// Mock Loader component
-vi.mock('components/Loader/Loader', () => ({
-  default: () => <div data-testid="loader">Loading...</div>,
+// Mock LoadingState component
+vi.mock('shared-components/LoadingState/LoadingState', () => ({
+  default: ({
+    isLoading,
+    children,
+  }: {
+    isLoading: boolean;
+    children: React.ReactNode;
+  }) => {
+    if (isLoading) return <div data-testid="loader">Loading...</div>;
+    return children;
+  },
 }));
 
 // Mock InfiniteScrollLoader

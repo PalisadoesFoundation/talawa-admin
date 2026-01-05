@@ -160,7 +160,12 @@ describe('Testing Requests Screen', () => {
   it('Search Requests by volunteer name', async () => {
     renderRequests(link1);
 
-    const searchInput = await screen.findByTestId('searchBy');
+    // Wait for LoadingState to complete and table data to render
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
 
     // Search by name with debounced search
@@ -176,7 +181,12 @@ describe('Testing Requests Screen', () => {
   it('Search Requests by volunteer name using submit (Enter key)', async () => {
     renderRequests(link1);
 
-    const searchInput = await screen.findByTestId('searchBy');
+    // Wait for LoadingState to complete and table data to render
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
 
     // Search by name using Enter key to trigger onSearchSubmit
@@ -377,5 +387,12 @@ describe('Requests Component CSS Styling', () => {
 
     const sortButton = await screen.findByTestId('sort');
     expect(sortButton).toBeInTheDocument();
+  });
+
+  it('should render volunteer requests table after loading', async () => {
+    const { container } = renderComponent();
+    await wait();
+
+    expect(container.querySelector('.MuiDataGrid-root')).toBeInTheDocument();
   });
 });

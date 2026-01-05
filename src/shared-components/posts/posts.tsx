@@ -55,7 +55,7 @@ import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import { Add, Close } from '@mui/icons-material';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import PinnedPostsLayout from 'shared-components/pinnedPosts/pinnedPostsLayout';
 import PostCard from 'shared-components/postCard/PostCard';
@@ -63,7 +63,7 @@ import styles from 'style/app-fixed.module.css';
 import { Box, Typography } from '@mui/material';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
-import { Modal } from 'react-bootstrap';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { formatDate } from 'utils/dateFormatter';
 import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
 
@@ -315,15 +315,14 @@ export default function PostsPage() {
     return posts;
   }, [allPosts, filteredPosts, isFiltering, sortingOption]);
 
-  if (orgPostListLoading || orgPinnedPostListLoading) {
-    return <Loader />;
-  }
-
   const pinnedPosts =
     orgPinnedPostListData?.organization?.pinnedPosts?.edges ?? [];
 
   return (
-    <>
+    <LoadingState
+      isLoading={orgPostListLoading || orgPinnedPostListLoading}
+      variant="spinner"
+    >
       <Row className={`${styles.head} ${styles.postContainer}`}>
         <div className={styles.mainpagerightOrgPost}>
           <PageHeader
@@ -460,16 +459,16 @@ export default function PostsPage() {
 
       {/* Pinned Post Modal */}
       {selectedPinnedPost && (
-        <Modal
+        <BaseModal
           show={showPinnedPostModal}
           onHide={handleClosePinnedModal}
-          data-testid="pinned-post-modal"
-          centered
+          dataTestId="pinned-post-modal"
           size="lg"
           backdrop="static"
           className={styles.pinnedPostModal}
+          showCloseButton={false}
         >
-          <Modal.Body className={styles.pinnedPostModalBody}>
+          <div className={styles.pinnedPostModalBody}>
             <Button
               variant="light"
               onClick={handleClosePinnedModal}
@@ -481,9 +480,9 @@ export default function PostsPage() {
             </Button>
             {/* Render the pinned post */}
             <PostCard {...formatPostForCard(selectedPinnedPost)} />
-          </Modal.Body>
-        </Modal>
+          </div>
+        </BaseModal>
       )}
-    </>
+    </LoadingState>
   );
 }

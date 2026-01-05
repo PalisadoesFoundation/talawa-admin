@@ -84,7 +84,12 @@ describe('Testing Organisation Action Item Categories', () => {
   it('Sort the Categories (asc/desc) by createdAt', async () => {
     renderActionItemCategories(link1, 'orgId');
 
-    const sortBtn = await screen.findByTestId('sort');
+    // Wait for LoadingState to complete and categories to render
+    await waitFor(() => {
+      expect(screen.getByText('Category 1')).toBeInTheDocument();
+    });
+
+    const sortBtn = screen.getByTestId('sort');
     expect(sortBtn).toBeInTheDocument();
 
     // Sort by createdAt_DESC
@@ -115,7 +120,12 @@ describe('Testing Organisation Action Item Categories', () => {
   it('Filter the categories by status (All/Disabled)', async () => {
     renderActionItemCategories(link1, 'orgId');
 
-    const filterBtn = await screen.findByTestId('filter');
+    // Wait for LoadingState to complete and categories to render
+    await waitFor(() => {
+      expect(screen.getByText('Category 1')).toBeInTheDocument();
+    });
+
+    const filterBtn = screen.getByTestId('filter');
     expect(filterBtn).toBeInTheDocument();
 
     // Filter by All
@@ -145,7 +155,12 @@ describe('Testing Organisation Action Item Categories', () => {
   it('Filter the categories by status (Active)', async () => {
     renderActionItemCategories(link1, 'orgId');
 
-    const filterBtn = await screen.findByTestId('filter');
+    // Wait for LoadingState to complete and categories to render
+    await waitFor(() => {
+      expect(screen.getByText('Category 1')).toBeInTheDocument();
+    });
+
+    const filterBtn = screen.getByTestId('filter');
     expect(filterBtn).toBeInTheDocument();
 
     fireEvent.click(filterBtn);
@@ -162,9 +177,12 @@ describe('Testing Organisation Action Item Categories', () => {
   it('open and closes Create Category modal', async () => {
     renderActionItemCategories(link1, 'orgId');
 
-    const addCategoryBtn = await screen.findByTestId(
-      'createActionItemCategoryBtn',
-    );
+    // Wait for LoadingState to complete and categories to render
+    await waitFor(() => {
+      expect(screen.getByText('Category 1')).toBeInTheDocument();
+    });
+
+    const addCategoryBtn = screen.getByTestId('createActionItemCategoryBtn');
     expect(addCategoryBtn).toBeInTheDocument();
     await userEvent.click(addCategoryBtn);
 
@@ -216,7 +234,12 @@ describe('Testing Organisation Action Item Categories', () => {
   it('Search categories by name', async () => {
     renderActionItemCategories(link1, 'orgId');
 
-    const searchInput = await screen.findByTestId('searchByName');
+    // Wait for LoadingState to complete and categories to render
+    await waitFor(() => {
+      expect(screen.getByText('Category 1')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
 
     await userEvent.type(searchInput, 'Category 1');
@@ -230,7 +253,12 @@ describe('Testing Organisation Action Item Categories', () => {
   it('Search categories by description', async () => {
     renderActionItemCategories(link1, 'orgId');
 
-    const searchInput = await screen.findByTestId('searchByName');
+    // Wait for LoadingState to complete and categories to render
+    await waitFor(() => {
+      expect(screen.getByText('Category 1')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
 
     // Search by description - "Test description" matches Category 1's description
@@ -245,7 +273,12 @@ describe('Testing Organisation Action Item Categories', () => {
   it('Search categories by name and clear the input by backspace', async () => {
     renderActionItemCategories(link1, 'orgId');
 
-    const searchInput = await screen.findByTestId('searchByName');
+    // Wait for LoadingState to complete and categories to render
+    await waitFor(() => {
+      expect(screen.getByText('Category 1')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
 
     // Clear the search input by backspace
@@ -259,7 +292,12 @@ describe('Testing Organisation Action Item Categories', () => {
   it('Search categories by name on press of ENTER', async () => {
     renderActionItemCategories(link1, 'orgId');
 
-    const searchInput = await screen.findByTestId('searchByName');
+    // Wait for LoadingState to complete and categories to render
+    await waitFor(() => {
+      expect(screen.getByText('Category 1')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
 
     // Simulate typing and pressing ENTER
@@ -286,6 +324,58 @@ describe('Testing Organisation Action Item Categories', () => {
     renderActionItemCategories(link3, 'orgId');
     await waitFor(() => {
       expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
+    });
+  });
+
+  describe('LoadingState Behavior', () => {
+    it('should show LoadingState spinner while data is loading', async () => {
+      renderActionItemCategories(new StaticMockLink([]), 'orgId');
+
+      expect(screen.getByTestId('spinner')).toBeInTheDocument();
+    });
+
+    it('should hide LoadingState spinner after data loads', async () => {
+      renderActionItemCategories(link1, 'orgId');
+
+      await waitFor(() => {
+        expect(screen.getByText('Category 1')).toBeInTheDocument();
+      });
+
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
+
+    it('should render content after LoadingState completes', async () => {
+      renderActionItemCategories(link1, 'orgId');
+
+      await waitFor(() => {
+        expect(screen.getByTestId('searchByName')).toBeInTheDocument();
+        expect(screen.getByTestId('sort')).toBeInTheDocument();
+        expect(screen.getByTestId('filter')).toBeInTheDocument();
+      });
+    });
+
+    it('should prevent interaction during loading state', async () => {
+      renderActionItemCategories(new StaticMockLink([]), 'orgId');
+
+      const spinner = screen.getByTestId('spinner');
+      expect(spinner.parentElement?.className).toContain('loadingOverlay');
+    });
+
+    it('should display categories after LoadingState completes', async () => {
+      renderActionItemCategories(link1, 'orgId');
+
+      await waitFor(() => {
+        const categories = screen.getAllByTestId('categoryName');
+        expect(categories.length).toBeGreaterThan(0);
+      });
+    });
+
+    it('should handle LoadingState with empty results', async () => {
+      renderActionItemCategories(link2, 'orgId');
+
+      await waitFor(() => {
+        expect(screen.getByText(t.noActionItemCategories)).toBeInTheDocument();
+      });
     });
   });
 });

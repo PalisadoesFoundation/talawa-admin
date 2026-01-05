@@ -37,7 +37,7 @@
  * - react-router-dom
  * - utils/useLocalstorage
  * - utils/MinioUpload
- * - components/Loader
+ * - shared-components/LoadingState/LoadingState
  * - components/ProfileAvatarDisplay
  *
  * @fileoverview
@@ -46,8 +46,9 @@
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { Paper, TableBody } from '@mui/material';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import styles from '../../../style/app-fixed.module.css';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import type { ApolloQueryResult } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -216,216 +217,89 @@ export default function CreateGroupChat({
       resetButtonText={tErrors('resetButton')}
       onReset={chatsListRefetch}
     >
-      <Modal
-        data-testid="createGroupChatModal"
+      <BaseModal
         show={createGroupChatModalisOpen}
         onHide={() => {
           toggleCreateGroupChatModal();
           reset();
         }}
-        contentClassName={styles.modalContent}
+        title={t('newGroup', { defaultValue: 'New Group' })}
+        dataTestId="createGroupChatModal"
+        className={styles.modalContent}
       >
-        <Modal.Header closeButton data-testid="">
-          <Modal.Title>
-            {t('newGroup', { defaultValue: 'New Group' })}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <input
-            type="file"
-            accept="image/*"
-            ref={fileInputRef}
-            style={{ display: 'none' }}
-            onChange={handleImageChange}
-            data-testid="fileInput"
+        <input
+          type="file"
+          accept="image/*"
+          ref={fileInputRef}
+          style={{ display: 'none' }}
+          onChange={handleImageChange}
+          data-testid="fileInput"
+        />
+        <div className={styles.groupInfo}>
+          <ProfileAvatarDisplay
+            className={styles.chatImage}
+            fallbackName={title}
+            imageUrl={selectedImage}
           />
-          <div className={styles.groupInfo}>
-            <ProfileAvatarDisplay
-              className={styles.chatImage}
-              fallbackName={title}
-              imageUrl={selectedImage}
+          <button
+            type="button"
+            data-testid="editImageBtn"
+            onClick={handleImageClick}
+            className={styles.editImgBtn}
+          >
+            <FiEdit />
+          </button>
+        </div>
+        <Form>
+          <Form.Group className="mb-3" controlId="registerForm.Rname">
+            <Form.Label>{t('title', { defaultValue: 'Title' })}</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder={t('groupName', { defaultValue: 'Group name' })}
+              autoComplete="off"
+              required
+              data-testid="groupTitleInput"
+              value={title}
+              onChange={(e): void => {
+                setTitle(e.target.value);
+              }}
             />
-            <button
-              data-testid="editImageBtn"
-              onClick={handleImageClick}
-              className={styles.editImgBtn}
-            >
-              <FiEdit />
-            </button>
-          </div>
-          <Form>
-            <Form.Group className="mb-3" controlId="registerForm.Rname">
-              <Form.Label>{t('title', { defaultValue: 'Title' })}</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder={t('groupName', { defaultValue: 'Group name' })}
-                autoComplete="off"
-                required
-                data-testid="groupTitleInput"
-                value={title}
-                onChange={(e): void => {
-                  setTitle(e.target.value);
-                }}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="registerForm.Rname">
-              <Form.Label>
-                {tCommon('description', { defaultValue: 'Description' })}
-              </Form.Label>
-              <Form.Control
-                type="text"
-                placeholder={t('groupDescription', {
-                  defaultValue: 'Group Description',
-                })}
-                autoComplete="off"
-                required
-                data-testid="groupDescriptionInput" //corrected spelling
-                value={description}
-                onChange={(e): void => {
-                  setDescription(e.target.value);
-                }}
-              />
-            </Form.Group>
-            <Button
-              className={`${styles.colorPrimary} ${styles.borderNone}`}
-              variant="success"
-              onClick={openAddUserModal}
-              data-testid="nextBtn"
-            >
-              {t('next', { defaultValue: 'Next' })}
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
-      <Modal
-        data-testid="addExistingUserModal"
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="registerForm.Rname">
+            <Form.Label>
+              {tCommon('description', { defaultValue: 'Description' })}
+            </Form.Label>
+            <Form.Control
+              type="text"
+              placeholder={t('groupDescription', {
+                defaultValue: 'Group Description',
+              })}
+              autoComplete="off"
+              required
+              data-testid="groupDescriptionInput" //corrected spelling
+              value={description}
+              onChange={(e): void => {
+                setDescription(e.target.value);
+              }}
+            />
+          </Form.Group>
+          <Button
+            className={`${styles.colorPrimary} ${styles.borderNone}`}
+            variant="success"
+            onClick={openAddUserModal}
+            data-testid="nextBtn"
+          >
+            {t('next', { defaultValue: 'Next' })}
+          </Button>
+        </Form>
+      </BaseModal>
+      <BaseModal
         show={addUserModalisOpen}
         onHide={toggleAddUserModal}
-        contentClassName={styles.modalContent}
-      >
-        <Modal.Header closeButton data-testid="pluginNotificationHeader">
-          <Modal.Title>{t('chat', { defaultValue: 'Chat' })}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <LoadingState
-            isLoading={allUsersLoading}
-            variant="inline"
-            size="lg"
-            data-testid="loading-state"
-          >
-            <>
-              <div className={styles.input}>
-                <SearchBar
-                  placeholder={t('searchFullName', {
-                    defaultValue: 'Search full name',
-                  })}
-                  value={userName}
-                  onChange={(value) => setUserName(value)}
-                  onSearch={(value) => handleUserModalSearchChange(value)}
-                  onClear={() => {
-                    setUserName('');
-                    handleUserModalSearchChange('');
-                  }}
-                  inputTestId="searchUser"
-                  buttonTestId="submitBtn"
-                />
-              </div>
-
-              <TableContainer
-                className={styles.tableContainer}
-                component={Paper}
-              >
-                <Table
-                  aria-label={t('organizationMembersTable', {
-                    defaultValue: 'Organization Members Table',
-                  })}
-                >
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>
-                        {tCommon('hash', { defaultValue: '#' })}
-                      </TableCell>
-                      <TableCell align="center">
-                        {t('user', { defaultValue: 'User' })}
-                      </TableCell>
-                      <TableCell align="center">
-                        {t('chat', { defaultValue: 'Chat' })}
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {allUsersData &&
-                      allUsersData.organization?.members?.edges?.length > 0 &&
-                      allUsersData.organization.members.edges
-                        .filter(
-                          ({
-                            node: userDetails,
-                          }: {
-                            node: {
-                              id: string;
-                              name: string;
-                              avatarURL?: string;
-                              role: string;
-                            };
-                          }) => userDetails.id !== userId,
-                        )
-                        .map(
-                          (
-                            {
-                              node: userDetails,
-                            }: {
-                              node: {
-                                id: string;
-                                name: string;
-                                avatarURL?: string;
-                                role: string;
-                              };
-                            },
-                            index: number,
-                          ) => (
-                            <TableRow data-testid="user" key={userDetails.id}>
-                              <TableCell component="th" scope="row">
-                                {index + 1}
-                              </TableCell>
-                              <TableCell align="center">
-                                {userDetails.name}
-                                <br />
-                                {userDetails.role || 'Member'}
-                              </TableCell>
-                              <TableCell align="center">
-                                {userIds.includes(userDetails.id) ? (
-                                  <Button
-                                    variant="danger"
-                                    onClick={() => {
-                                      const updatedUserIds = userIds.filter(
-                                        (id) => id !== userDetails.id,
-                                      );
-                                      setUserIds(updatedUserIds);
-                                    }}
-                                    data-testid="removeBtn"
-                                  >
-                                    {t('remove', { defaultValue: 'Remove' })}
-                                  </Button>
-                                ) : (
-                                  <Button
-                                    className={`${styles.colorPrimary} ${styles.borderNone}`}
-                                    onClick={() => {
-                                      setUserIds([...userIds, userDetails.id]);
-                                    }}
-                                    data-testid="addBtn"
-                                  >
-                                    {t('add', { defaultValue: 'Add' })}
-                                  </Button>
-                                )}
-                              </TableCell>
-                            </TableRow>
-                          ),
-                        )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </>
-          </LoadingState>
+        title={t('chat', { defaultValue: 'Chat' })}
+        dataTestId="addExistingUserModal"
+        className={styles.modalContent}
+        footer={
           <Button
             className={`${styles.colorPrimary} ${styles.borderNone}`}
             variant="success"
@@ -434,8 +308,125 @@ export default function CreateGroupChat({
           >
             {t('create', { defaultValue: 'Create' })}
           </Button>
-        </Modal.Body>
-      </Modal>
+        }
+      >
+        <LoadingState
+          isLoading={allUsersLoading}
+          variant="inline"
+          size="lg"
+          data-testid="loading-state"
+        >
+          <>
+            <div className={styles.input}>
+              <SearchBar
+                placeholder={t('searchFullName', {
+                  defaultValue: 'Search full name',
+                })}
+                value={userName}
+                onChange={(value) => setUserName(value)}
+                onSearch={(value) => handleUserModalSearchChange(value)}
+                onClear={() => {
+                  setUserName('');
+                  handleUserModalSearchChange('');
+                }}
+                inputTestId="searchUser"
+                buttonTestId="submitBtn"
+              />
+            </div>
+
+            <TableContainer className={styles.tableContainer} component={Paper}>
+              <Table
+                aria-label={t('organizationMembersTable', {
+                  defaultValue: 'Organization Members Table',
+                })}
+              >
+                <TableHead>
+                  <TableRow>
+                    <TableCell>
+                      {tCommon('hash', { defaultValue: '#' })}
+                    </TableCell>
+                    <TableCell align="center">
+                      {t('user', { defaultValue: 'User' })}
+                    </TableCell>
+                    <TableCell align="center">
+                      {t('chat', { defaultValue: 'Chat' })}
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {allUsersData &&
+                    allUsersData.organization?.members?.edges?.length > 0 &&
+                    allUsersData.organization.members.edges
+                      .filter(
+                        ({
+                          node: userDetails,
+                        }: {
+                          node: {
+                            id: string;
+                            name: string;
+                            avatarURL?: string;
+                            role: string;
+                          };
+                        }) => userDetails.id !== userId,
+                      )
+                      .map(
+                        (
+                          {
+                            node: userDetails,
+                          }: {
+                            node: {
+                              id: string;
+                              name: string;
+                              avatarURL?: string;
+                              role: string;
+                            };
+                          },
+                          index: number,
+                        ) => (
+                          <TableRow data-testid="user" key={userDetails.id}>
+                            <TableCell component="th" scope="row">
+                              {index + 1}
+                            </TableCell>
+                            <TableCell align="center">
+                              {userDetails.name}
+                              <br />
+                              {userDetails.role || 'Member'}
+                            </TableCell>
+                            <TableCell align="center">
+                              {userIds.includes(userDetails.id) ? (
+                                <Button
+                                  variant="danger"
+                                  onClick={() => {
+                                    const updatedUserIds = userIds.filter(
+                                      (id) => id !== userDetails.id,
+                                    );
+                                    setUserIds(updatedUserIds);
+                                  }}
+                                  data-testid="removeBtn"
+                                >
+                                  {t('remove', { defaultValue: 'Remove' })}
+                                </Button>
+                              ) : (
+                                <Button
+                                  className={`${styles.colorPrimary} ${styles.borderNone}`}
+                                  onClick={() => {
+                                    setUserIds([...userIds, userDetails.id]);
+                                  }}
+                                  data-testid="addBtn"
+                                >
+                                  {t('add', { defaultValue: 'Add' })}
+                                </Button>
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        ),
+                      )}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </>
+        </LoadingState>
+      </BaseModal>
     </ErrorBoundaryWrapper>
   );
 }

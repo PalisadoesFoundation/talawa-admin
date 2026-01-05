@@ -43,7 +43,7 @@ import AdvertisementRegister from './core/AdvertisementRegister/AdvertisementReg
 import { useParams } from 'react-router';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { Advertisement } from 'types/Advertisement/type';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { AdvertisementSkeleton } from './skeleton/AdvertisementSkeleton';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import PageHeader from 'shared-components/Navbar/Navbar';
@@ -191,7 +191,9 @@ export default function Advertisements(): JSX.Element {
     >
       <Row data-testid="advertisements" className={styles.rowAdvertisements}>
         <Col md={8} className={styles.containerAdvertisements}>
-          {loading && <Loader />}
+          <LoadingState isLoading={loading} variant="spinner">
+            <div />
+          </LoadingState>
           <Col className={styles.colAdvertisements}>
             <PageHeader
               search={{

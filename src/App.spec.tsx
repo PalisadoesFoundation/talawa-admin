@@ -277,6 +277,10 @@ vi.mock(
   }),
 );
 
+vi.mock('shared-components/LoadingState/LoadingState', () => ({
+  default: () => <div data-testid="mock-loading-state">Mock LoadingState</div>,
+}));
+
 const MOCKS = [
   {
     request: { query: CURRENT_USER },

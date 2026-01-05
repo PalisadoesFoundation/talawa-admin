@@ -32,11 +32,18 @@ vi.mock('react-router', async () => {
   };
 });
 
-vi.mock('@mui/icons-material', () => ({
-  WarningAmberRounded: () => (
-    <span data-testid="warning-icon">WarningAmberRounded</span>
-  ),
-}));
+vi.mock('@mui/icons-material', async () => {
+  const actual = (await vi.importActual('@mui/icons-material')) as Record<
+    string,
+    unknown
+  >;
+  return {
+    ...actual,
+    WarningAmberRounded: () => (
+      <span data-testid="warning-icon">WarningAmberRounded</span>
+    ),
+  };
+});
 
 vi.mock('./GroupModal', () => ({
   default: ({
@@ -357,18 +364,22 @@ describe('Groups Screen [User Portal]', () => {
 
   it('renders groups screen with search bar and data', async () => {
     renderGroups(linkSuccess);
-    expect(await screen.findByTestId('searchByInput')).toBeInTheDocument();
-    expect(await screen.findByText('Group 1')).toBeInTheDocument();
+    // Wait for data to load (LoadingState completes)
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+    expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
   });
 
   it('search filters groups by name', async () => {
     renderGroups(linkSuccess);
-    const searchInput = await screen.findByTestId('searchByInput');
 
-    // Wait for initial data to load
+    // Wait for initial data to load (LoadingState completes)
     await waitFor(() => {
       expect(screen.getByText('Group 1')).toBeInTheDocument();
     });
+
+    const searchInput = screen.getByTestId('searchByInput');
 
     // Clear and type in the search input
     await userEvent.clear(searchInput);
@@ -893,5 +904,14 @@ describe('Groups Screen [User Portal]', () => {
     // Verify groups are displayed in DataGrid
     const groupNames = screen.getAllByTestId('groupName');
     expect(groupNames).toHaveLength(2);
+  });
+
+  it('should display volunteer groups after fetching', async () => {
+    renderGroups(linkSuccess);
+
+    await waitFor(() => {
+      const groupNames = screen.getAllByTestId('groupName');
+      expect(groupNames.length).toBeGreaterThan(0);
+    });
   });
 });

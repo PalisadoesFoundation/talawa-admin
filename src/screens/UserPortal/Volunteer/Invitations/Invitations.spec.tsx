@@ -33,11 +33,18 @@ vi.mock('react-toastify', () => ({
   toast: sharedMocks.toast,
 }));
 
-vi.mock('@mui/icons-material', () => ({
-  WarningAmberRounded: () => (
-    <span data-test-id="warning-amber-icon">WarningAmberRounded</span>
-  ),
-}));
+vi.mock('@mui/icons-material', async () => {
+  const actual = (await vi.importActual('@mui/icons-material')) as Record<
+    string,
+    unknown
+  >;
+  return {
+    ...actual,
+    WarningAmberRounded: () => (
+      <span data-test-id="warning-amber-icon">WarningAmberRounded</span>
+    ),
+  };
+});
 
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
@@ -519,18 +526,21 @@ describe('Testing Invitations Screen', () => {
 
   it('should render Invitations screen', async () => {
     renderInvitations(link1);
-    const searchInput = await screen.findByTestId('searchByInput');
-    expect(searchInput).toBeInTheDocument();
+    await waitFor(async () => {
+      const searchInput = await screen.findByTestId('searchByInput');
+      expect(searchInput).toBeInTheDocument();
+    });
   });
 
   it('Check Sorting Functionality', async () => {
     renderInvitations(link1);
-    const searchInput = await screen.findByTestId('searchByInput');
-    expect(searchInput).toBeInTheDocument();
+    await waitFor(async () => {
+      const searchInput = await screen.findByTestId('searchByInput');
+      expect(searchInput).toBeInTheDocument();
+    });
 
     let sortBtn = await screen.findByTestId('sort');
     expect(sortBtn).toBeInTheDocument();
-
     // Sort by createdAt_DESC (default)
     await waitFor(() => {
       const inviteSubject = screen.getAllByTestId('inviteSubject');
@@ -556,8 +566,10 @@ describe('Testing Invitations Screen', () => {
 
   it('Filter Invitations (all)', async () => {
     renderInvitations(link1);
-    const searchInput = await screen.findByTestId('searchByInput');
-    expect(searchInput).toBeInTheDocument();
+    await waitFor(async () => {
+      const searchInput = await screen.findByTestId('searchByInput');
+      expect(searchInput).toBeInTheDocument();
+    });
 
     // Filter by All
     const filter = await screen.findByTestId('filter');
@@ -576,8 +588,10 @@ describe('Testing Invitations Screen', () => {
 
   it('Filter Invitations (group)', async () => {
     renderInvitations(link1);
-    const searchInput = await screen.findByTestId('searchByInput');
-    expect(searchInput).toBeInTheDocument();
+    await waitFor(async () => {
+      const searchInput = await screen.findByTestId('searchByInput');
+      expect(searchInput).toBeInTheDocument();
+    });
 
     // Filter by group
     const filter = await screen.findByTestId('filter');
@@ -603,8 +617,10 @@ describe('Testing Invitations Screen', () => {
 
   it('Filter Invitations (individual)', async () => {
     renderInvitations(link1);
-    const searchInput = await screen.findByTestId('searchByInput');
-    expect(searchInput).toBeInTheDocument();
+    await waitFor(async () => {
+      const searchInput = await screen.findByTestId('searchByInput');
+      expect(searchInput).toBeInTheDocument();
+    });
 
     // Filter by individual
     const filter = await screen.findByTestId('filter');
@@ -630,11 +646,13 @@ describe('Testing Invitations Screen', () => {
 
   it('Search Invitations', async () => {
     renderInvitations(link1);
-    const searchInput = await screen.findByTestId('searchByInput');
-    expect(searchInput).toBeInTheDocument();
+    await waitFor(async () => {
+      const searchInput = await screen.findByTestId('searchByInput');
+      expect(searchInput).toBeInTheDocument();
+      // Search by name on press of search button
+      await userEvent.type(searchInput, '1');
+    });
 
-    // Search by name on press of search button
-    await userEvent.type(searchInput, '1');
     await debounceWait();
     fireEvent.click(screen.getByTestId('searchBtn'));
 
@@ -665,8 +683,10 @@ describe('Testing Invitations Screen', () => {
 
   it('Accept Invite', async () => {
     renderInvitations(link1);
-    const searchInput = await screen.findByTestId('searchByInput');
-    expect(searchInput).toBeInTheDocument();
+    await waitFor(async () => {
+      const searchInput = await screen.findByTestId('searchByInput');
+      expect(searchInput).toBeInTheDocument();
+    });
 
     const acceptBtn = await screen.findAllByTestId('acceptBtn');
     expect(acceptBtn.length).toBeGreaterThan(0);
@@ -683,8 +703,10 @@ describe('Testing Invitations Screen', () => {
 
   it('Reject Invite', async () => {
     renderInvitations(link1);
-    const searchInput = await screen.findByTestId('searchByInput');
-    expect(searchInput).toBeInTheDocument();
+    await waitFor(async () => {
+      const searchInput = await screen.findByTestId('searchByInput');
+      expect(searchInput).toBeInTheDocument();
+    });
 
     const rejectBtn = await screen.findAllByTestId('rejectBtn');
     expect(rejectBtn.length).toBeGreaterThan(0);
@@ -701,8 +723,10 @@ describe('Testing Invitations Screen', () => {
 
   it('Error in Update Invite Mutation', async () => {
     renderInvitations(link4);
-    const searchInput = await screen.findByTestId('searchByInput');
-    expect(searchInput).toBeInTheDocument();
+    await waitFor(async () => {
+      const searchInput = await screen.findByTestId('searchByInput');
+      expect(searchInput).toBeInTheDocument();
+    });
 
     const acceptBtn = await screen.findAllByTestId('acceptBtn');
     expect(acceptBtn.length).toBeGreaterThan(0);
@@ -767,6 +791,17 @@ describe('Testing Invitations Screen', () => {
         expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
         const inviteSubject = screen.getByTestId('inviteSubject');
         expect(inviteSubject).toHaveTextContent(t.eventInvitationSubject);
+      });
+    });
+
+    it('should render invitations list after data loads', async () => {
+      const individualNonRecurringLink = new StaticMockLink(
+        INDIVIDUAL_NON_RECURRING_MOCKS,
+      );
+      renderInvitations(individualNonRecurringLink);
+
+      await waitFor(() => {
+        expect(screen.getByTestId('inviteSubject')).toBeInTheDocument();
       });
     });
   });

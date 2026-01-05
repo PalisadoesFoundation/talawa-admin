@@ -48,8 +48,17 @@ vi.mock('react-toastify', () => ({
 }));
 
 // Mock sub-components
-vi.mock('components/Loader/Loader', () => ({
-  default: () => <div data-testid="loader">Loading...</div>,
+vi.mock('shared-components/LoadingState/LoadingState', () => ({
+  default: ({
+    isLoading,
+    children,
+  }: {
+    isLoading: boolean;
+    children: React.ReactNode;
+  }) => {
+    if (isLoading) return <div data-testid="loader">Loading...</div>;
+    return children;
+  },
 }));
 
 vi.mock('components/Avatar/Avatar', () => ({
@@ -1432,6 +1441,26 @@ describe('EventActionItems', () => {
       await waitFor(() => {
         const checkbox = screen.getByTestId('statusCheckboxactionItemId1');
         expect(checkbox).toHaveAttribute('aria-label', 'markCompletion');
+      });
+    });
+
+    it('should display loading state while fetching action items', async () => {
+      const loadingMocks = [
+        {
+          request: {
+            query: GET_EVENT_ACTION_ITEMS,
+            variables: { input: { id: 'eventId1' } },
+          },
+          result: { data: { event: { actionItems: { edges: [] } } } },
+          delay: 100,
+        },
+      ];
+
+      renderEventActionItems('eventId1', loadingMocks);
+
+      // Verify component renders and eventually loads data
+      await waitFor(() => {
+        expect(screen.getByTestId('createActionItemBtn')).toBeInTheDocument();
       });
     });
   });

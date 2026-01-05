@@ -57,7 +57,7 @@ import type { InterfaceVolunteerRank } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import leaderboardStyles from './Leaderboard.module.css';
 
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import Avatar from 'components/Avatar/Avatar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
@@ -142,10 +142,6 @@ function Leaderboard(): JSX.Element {
 
   if (!orgId) {
     return <Navigate to="/" replace />;
-  }
-
-  if (loading) {
-    return <Loader size="xl" />;
   }
 
   if (error) {
@@ -242,41 +238,43 @@ function Leaderboard(): JSX.Element {
   ];
 
   return (
-    <div className={leaderboardStyles.leaderboardContainer}>
-      <AdminSearchFilterBar
-        searchPlaceholder={t('searchByVolunteer')}
-        searchValue={searchTerm}
-        onSearchChange={setSearchTerm}
-        onSearchSubmit={setSearchTerm}
-        searchInputTestId="searchBy"
-        searchButtonTestId="searchBtn"
-        hasDropdowns
-        dropdowns={leaderboardDropdowns}
-      />
-
-      <div className={leaderboardStyles.dataGridStyle}>
-        <DataGrid
-          hideFooter
-          autoHeight
-          getRowId={(row) => row.user._id}
-          rows={rankings.map((r: InterfaceVolunteerRank, i: number) => ({
-            id: i + 1,
-            ...r,
-          }))}
-          columns={columns}
-          isRowSelectable={() => false}
-          slots={{
-            noRowsOverlay: () => (
-              <EmptyState
-                icon="emoji_events"
-                message={t('noVolunteers')}
-                dataTestId="leaderboard-empty-state"
-              />
-            ),
-          }}
+    <LoadingState isLoading={loading} variant="spinner">
+      <div className={leaderboardStyles.leaderboardContainer}>
+        <AdminSearchFilterBar
+          searchPlaceholder={t('searchByVolunteer')}
+          searchValue={searchTerm}
+          onSearchChange={setSearchTerm}
+          onSearchSubmit={setSearchTerm}
+          searchInputTestId="searchBy"
+          searchButtonTestId="searchBtn"
+          hasDropdowns
+          dropdowns={leaderboardDropdowns}
         />
+
+        <div className={leaderboardStyles.dataGridStyle}>
+          <DataGrid
+            hideFooter
+            autoHeight
+            getRowId={(row) => row.user._id}
+            rows={rankings.map((r: InterfaceVolunteerRank, i: number) => ({
+              id: i + 1,
+              ...r,
+            }))}
+            columns={columns}
+            isRowSelectable={() => false}
+            slots={{
+              noRowsOverlay: () => (
+                <EmptyState
+                  icon="emoji_events"
+                  message={t('noVolunteers')}
+                  dataTestId="leaderboard-empty-state"
+                />
+              ),
+            }}
+          />
+        </div>
       </div>
-    </div>
+    </LoadingState>
   );
 }
 

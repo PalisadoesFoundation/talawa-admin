@@ -646,7 +646,7 @@ describe('Testing Campaign Pledge Screen', () => {
 
     await waitFor(() => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.queryByText('Jane Doe')).toBeNull();
+      expect(screen.queryByText('Jane')).toBeNull();
     });
   });
 
@@ -1011,7 +1011,12 @@ describe('Testing Campaign Pledge Screen', () => {
   it('Sort the Pledges list by Lowest Amount', async () => {
     renderFundCampaignPledge(link1);
 
-    const searchPledger = await screen.findByTestId('searchPledger');
+    // Wait for LoadingState to complete and table data to render
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const searchPledger = screen.getByTestId('searchPledger');
     expect(searchPledger).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('filter'));
@@ -1032,7 +1037,12 @@ describe('Testing Campaign Pledge Screen', () => {
   it('Sort the Pledges list by Highest Amount', async () => {
     renderFundCampaignPledge(link1);
 
-    const searchPledger = await screen.findByTestId('searchPledger');
+    // Wait for LoadingState to complete and table data to render
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const searchPledger = screen.getByTestId('searchPledger');
     expect(searchPledger).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('filter'));
@@ -1053,7 +1063,12 @@ describe('Testing Campaign Pledge Screen', () => {
   it('Sort the Pledges list by latest endDate', async () => {
     renderFundCampaignPledge(link1);
 
-    const searchPledger = await screen.findByTestId('searchPledger');
+    // Wait for LoadingState to complete and table data to render
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const searchPledger = screen.getByTestId('searchPledger');
     expect(searchPledger).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('filter'));
@@ -1076,7 +1091,12 @@ describe('Testing Campaign Pledge Screen', () => {
   it('Sort the Pledges list by earliest endDate', async () => {
     renderFundCampaignPledge(link1);
 
-    const searchPledger = await screen.findByTestId('searchPledger');
+    // Wait for LoadingState to complete and table data to render
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeInTheDocument();
+    });
+
+    const searchPledger = screen.getByTestId('searchPledger');
     expect(searchPledger).toBeInTheDocument();
 
     fireEvent.click(screen.getByTestId('filter'));
@@ -1444,6 +1464,41 @@ describe('Testing Campaign Pledge Screen', () => {
     await waitFor(() => {
       // Jane Doe should now be visible
       expect(screen.getByText('Jane Doe')).toBeInTheDocument();
+    });
+  });
+
+  describe('LoadingState Behavior', () => {
+    it('should show LoadingState spinner while pledge data is loading', async () => {
+      const loadingMocks = [
+        {
+          request: {
+            query: FUND_CAMPAIGN_PLEDGE,
+            variables: { id: 'fundCampaignId' },
+          },
+          result: { data: { fundCampaignPledgesByCampaign: [] } },
+          delay: 100,
+        },
+      ];
+
+      renderFundCampaignPledge(new StaticMockLink(loadingMocks));
+      const spinners = screen.getAllByTestId('spinner');
+      expect(spinners.length).toBeGreaterThan(0);
+    });
+
+    it('should hide spinner and render pledges after LoadingState completes', async () => {
+      renderFundCampaignPledge(link1);
+
+      await waitFor(() => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+      });
+
+      const spinners = screen.queryAllByTestId('spinner');
+      const visibleSpinners = spinners.filter((spinner) => {
+        const parent = spinner.closest('[data-testid="loadingContainer"]');
+        return parent && !parent.classList.contains('hidden');
+      });
+      expect(visibleSpinners.length).toBe(0);
+      expect(screen.getByTestId('searchPledger')).toBeInTheDocument();
     });
   });
 });

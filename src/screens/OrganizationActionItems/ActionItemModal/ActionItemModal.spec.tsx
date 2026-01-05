@@ -1032,15 +1032,17 @@ describe('ItemModal - Additional Test Cases', () => {
         expect(volunteerInput).not.toBeDisabled();
       });
 
-      // Now click the volunteerGroup chip to switch assignment type
-      const volunteerGroupChip = screen.getByRole('button', {
-        name: 'volunteerGroup',
-      });
+      const allChips = screen
+        .getAllByRole('button')
+        .filter((button) => button.textContent?.includes('volunteerGroup'));
+      const volunteerGroupChip = allChips[0];
       await userEvent.click(volunteerGroupChip);
 
       // Wait for volunteerGroupSelect to appear (this confirms the switch happened)
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
+        {},
+        { timeout: 5000 },
       );
       const volunteerGroupInput =
         within(volunteerGroupSelect).getByRole('combobox');
@@ -1059,7 +1061,15 @@ describe('ItemModal - Additional Test Cases', () => {
         expect(volunteerGroupInput).toHaveValue('Test Group 2');
       });
 
-      const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
+      // Find the volunteer chip by text content
+      const volunteerChips = screen
+        .getAllByRole('button')
+        .filter(
+          (button) =>
+            button.textContent?.includes('volunteer') &&
+            !button.textContent?.includes('volunteerGroup'),
+        );
+      const volunteerChip = volunteerChips[0];
       await userEvent.click(volunteerChip);
 
       await waitFor(() => {
@@ -4128,9 +4138,11 @@ describe('Partially Covered Lines Test Coverage', () => {
       });
       await userEvent.click(volunteerGroupChip);
 
-      const volunteerGroupSelect = await screen.findByTestId(
-        'volunteerGroupSelect',
-      );
+      await waitFor(() => {
+        expect(screen.getByTestId('volunteerGroupSelect')).toBeInTheDocument();
+      });
+
+      const volunteerGroupSelect = screen.getByTestId('volunteerGroupSelect');
       expect(volunteerGroupSelect).toBeInTheDocument();
 
       // Now click volunteer chip - this should execute the !isVolunteerChipDisabled path

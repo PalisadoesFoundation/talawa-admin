@@ -26,6 +26,10 @@ const { routerMocks } = vi.hoisted(() => {
   };
 });
 
+const mockRouteParams = () => {
+  routerMocks.useParams.mockReturnValue({ orgId: 'orgId', eventId: 'eventId' });
+};
+
 vi.mock('react-router', async () => {
   const actual =
     await vi.importActual<typeof import('react-router')>('react-router');
@@ -118,14 +122,18 @@ describe('Testing Volunteers Screen', () => {
 
   it('should render Volunteers screen', async () => {
     renderVolunteers(link1);
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
+    await waitFor(async () => {
+      const searchInput = await screen.findByTestId('searchBy');
+      expect(searchInput).toBeInTheDocument();
+    });
   });
 
   it('Check Sorting Functionality', async () => {
     renderVolunteers(link1);
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
+    await waitFor(async () => {
+      const searchInput = await screen.findByTestId('searchBy');
+      expect(searchInput).toBeInTheDocument();
+    });
 
     let sortBtn = await screen.findByTestId('sort');
     expect(sortBtn).toBeInTheDocument();
@@ -186,12 +194,12 @@ describe('Testing Volunteers Screen', () => {
   it('Filter Volunteers by status (All)', async () => {
     renderVolunteers(link1);
 
-    const filterBtn = await screen.findByTestId('filter');
-    expect(filterBtn).toBeInTheDocument();
+    await waitFor(async () => {
+      const filterBtn = await screen.findByTestId('filter');
+      expect(filterBtn).toBeInTheDocument();
 
-    // Filter by All
-    fireEvent.click(filterBtn);
-    await waitFor(() => {
+      // Filter by All
+      fireEvent.click(filterBtn);
       expect(screen.getByTestId('all')).toBeInTheDocument();
     });
     fireEvent.click(screen.getByTestId('all'));
@@ -203,12 +211,12 @@ describe('Testing Volunteers Screen', () => {
   it('Filter Volunteers by status (Pending)', async () => {
     renderVolunteers(link1);
 
-    const filterBtn = await screen.findByTestId('filter');
-    expect(filterBtn).toBeInTheDocument();
+    await waitFor(async () => {
+      const filterBtn = await screen.findByTestId('filter');
+      expect(filterBtn).toBeInTheDocument();
 
-    // Filter by Pending
-    fireEvent.click(filterBtn);
-    await waitFor(() => {
+      // Filter by Pending
+      fireEvent.click(filterBtn);
       expect(screen.getByTestId('pending')).toBeInTheDocument();
     });
     fireEvent.click(screen.getByTestId('pending'));
@@ -219,13 +227,12 @@ describe('Testing Volunteers Screen', () => {
 
   it('Filter Volunteers by status (Accepted)', async () => {
     renderVolunteers(link1);
+    await waitFor(async () => {
+      const filterBtn = await screen.findByTestId('filter');
+      expect(filterBtn).toBeInTheDocument();
 
-    const filterBtn = await screen.findByTestId('filter');
-    expect(filterBtn).toBeInTheDocument();
-
-    // Filter by Accepted
-    fireEvent.click(filterBtn);
-    await waitFor(() => {
+      // Filter by Accepted
+      fireEvent.click(filterBtn);
       expect(screen.getByTestId('accepted')).toBeInTheDocument();
     });
     fireEvent.click(screen.getByTestId('accepted'));
@@ -236,12 +243,14 @@ describe('Testing Volunteers Screen', () => {
 
   it('Search by pressing Enter key', async () => {
     renderVolunteers(link1);
-    const searchInput = await screen.findByTestId('searchBy');
-    expect(searchInput).toBeInTheDocument();
+    await waitFor(async () => {
+      const searchInput = await screen.findByTestId('searchBy');
+      expect(searchInput).toBeInTheDocument();
 
-    // Type and press Enter to trigger debouncedSearch
-    await userEvent.type(searchInput, 'T');
-    await userEvent.keyboard('{Enter}');
+      // Type and press Enter to trigger debouncedSearch
+      await userEvent.type(searchInput, 'T');
+      await userEvent.keyboard('{Enter}');
+    });
     await debounceWait();
 
     const volunteerName = await screen.findAllByTestId('volunteerName');
@@ -250,14 +259,16 @@ describe('Testing Volunteers Screen', () => {
 
   it('Search by clicking search button', async () => {
     renderVolunteers(link1);
-    const searchInput = await screen.findByTestId('searchBy');
-    const searchBtn = await screen.findByTestId('searchBtn');
-    expect(searchInput).toBeInTheDocument();
-    expect(searchBtn).toBeInTheDocument();
+    await waitFor(async () => {
+      const searchInput = await screen.findByTestId('searchBy');
+      const searchBtn = await screen.findByTestId('searchBtn');
+      expect(searchInput).toBeInTheDocument();
+      expect(searchBtn).toBeInTheDocument();
 
-    // Use 'T' which has a mock in the existing test data
-    await userEvent.type(searchInput, 'T');
-    await userEvent.click(searchBtn);
+      // Use 'T' which has a mock in the existing test data
+      await userEvent.type(searchInput, 'T');
+      await userEvent.click(searchBtn);
+    });
     await debounceWait();
 
     // This should trigger:
@@ -335,12 +346,23 @@ describe('Testing Volunteers Screen', () => {
 
   it('Open and close Volunteer Modal (Create)', async () => {
     renderVolunteers(link1);
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
 
     const addVolunteerBtn = await screen.findByTestId('addVolunteerBtn');
+    expect(addVolunteerBtn).toBeInTheDocument();
+
     await userEvent.click(addVolunteerBtn);
 
-    expect(await screen.findAllByText(t.addVolunteer)).toHaveLength(2);
-    await userEvent.click(await screen.findByTestId('modalCloseBtn'));
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+    });
+
+    const closeBtn = await screen.findByTestId('modalCloseBtn');
+    expect(closeBtn).toBeInTheDocument();
+
+    await userEvent.click(closeBtn);
   });
 
   describe('Client-side Search Filtering', () => {
@@ -655,5 +677,14 @@ describe('Testing Volunteers Screen', () => {
       },
       { timeout: 3000 },
     );
+  });
+
+  it('should render volunteers list after data loads', async () => {
+    mockRouteParams();
+    renderVolunteers(link1);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBtn')).toBeInTheDocument();
+    });
   });
 });

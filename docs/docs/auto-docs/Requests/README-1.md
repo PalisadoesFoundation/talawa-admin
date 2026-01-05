@@ -49,7 +49,7 @@ NotificationToast
 
 ## Requires
 
-components/Loader/Loader
+shared-components/LoadingState/LoadingState
 
 ## Requires
 

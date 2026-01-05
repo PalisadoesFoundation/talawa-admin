@@ -48,14 +48,21 @@ vi.mock('react-toastify', () => ({
   toast: sharedMocks.toast,
 }));
 
-vi.mock('@mui/icons-material', () => ({
-  Circle: () => React.createElement('div', { 'data-testid': 'circle-icon' }),
-  WarningAmberRounded: () =>
-    React.createElement('div', { 'data-testid': 'warning-icon' }),
-  ExpandMore: () =>
-    React.createElement('div', { 'data-testid': 'expand-more-icon' }),
-  Event: () => React.createElement('div', { 'data-testid': 'event-icon' }),
-}));
+vi.mock('@mui/icons-material', async () => {
+  const actual = (await vi.importActual('@mui/icons-material')) as Record<
+    string,
+    unknown
+  >;
+  return {
+    ...actual,
+    Circle: () => React.createElement('div', { 'data-testid': 'circle-icon' }),
+    WarningAmberRounded: () =>
+      React.createElement('div', { 'data-testid': 'warning-icon' }),
+    ExpandMore: () =>
+      React.createElement('div', { 'data-testid': 'expand-more-icon' }),
+    Event: () => React.createElement('div', { 'data-testid': 'event-icon' }),
+  };
+});
 
 vi.mock('react-icons/io5', () => ({
   IoLocationOutline: () =>
@@ -1636,8 +1643,10 @@ describe('UpcomingEvents', () => {
       await waitFor(() => {
         expect(screen.getAllByTestId('eventTitle').length).toBe(2);
       });
-      const input = screen.getByTestId('searchByInput');
-      await userEvent.type(input, 'beach');
+      await waitFor(async () => {
+        const input = screen.getByTestId('searchByInput');
+        await userEvent.type(input, 'beach');
+      });
       await waitFor(() => {
         const titles = screen.getAllByTestId('eventTitle');
         expect(titles.length).toBe(1);
@@ -1651,8 +1660,10 @@ describe('UpcomingEvents', () => {
       await waitFor(() => {
         expect(screen.getAllByTestId('eventTitle').length).toBe(2);
       });
-      const input = screen.getByTestId('searchByInput');
-      await userEvent.type(input, 'xyz');
+      await waitFor(async () => {
+        const input = screen.getByTestId('searchByInput');
+        await userEvent.type(input, 'xyz');
+      });
       await waitFor(() => {
         expect(screen.getByTestId('events-empty-state')).toBeInTheDocument();
         expect(screen.getByText(/no upcoming events/i)).toBeInTheDocument();
@@ -1670,8 +1681,10 @@ describe('UpcomingEvents', () => {
       await userEvent.click(dropdownButton);
       const locationOption = screen.getByTestId('location');
       await userEvent.click(locationOption);
-      const input = screen.getByTestId('searchByInput');
-      await userEvent.type(input, 'park');
+      await waitFor(async () => {
+        const input = screen.getByTestId('searchByInput');
+        await userEvent.type(input, 'park');
+      });
       await waitFor(() => {
         const titles = screen.getAllByTestId('eventTitle');
         expect(titles.length).toBe(1);
@@ -1750,8 +1763,10 @@ describe('UpcomingEvents', () => {
       await userEvent.click(dropdownButton);
       const locationOption = screen.getByTestId('location');
       await userEvent.click(locationOption);
-      const input = screen.getByTestId('searchByInput');
-      await userEvent.type(input, 'park');
+      await waitFor(async () => {
+        const input = screen.getByTestId('searchByInput');
+        await userEvent.type(input, 'park');
+      });
       await waitFor(() => {
         const titles = screen.getAllByTestId('eventTitle');
         expect(titles.length).toBe(1);
@@ -1879,6 +1894,16 @@ describe('UpcomingEvents', () => {
       });
       await userEvent.click(accordionSummary);
       expect(screen.queryByText('Volunteer Groups')).not.toBeInTheDocument();
+    });
+
+    it('should load upcoming events successfully', async () => {
+      const link = new StaticMockLink(MOCKS);
+      renderUpcomingEvents(link);
+
+      await waitFor(() => {
+        const eventTitles = screen.getAllByTestId('eventTitle');
+        expect(eventTitles.length).toBeGreaterThan(0);
+      });
     });
   });
 });

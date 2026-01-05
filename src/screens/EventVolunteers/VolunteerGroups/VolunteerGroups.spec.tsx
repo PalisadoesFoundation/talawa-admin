@@ -129,14 +129,26 @@ describe('Testing VolunteerGroups Screen', () => {
   it('should render Groups screen', async () => {
     mockRouteParams();
     renderVolunteerGroups(link1);
-    const searchInput = await screen.findByTestId('searchBy');
+
+    // Wait for LoadingState to complete and table data to render
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
   });
 
   it('Check Sorting Functionality', async () => {
     mockRouteParams();
     renderVolunteerGroups(link1);
-    const searchInput = await screen.findByTestId('searchBy');
+
+    // Wait for LoadingState to complete and table data to render
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
 
     let sortBtn = await screen.findByTestId('sort');
@@ -166,7 +178,13 @@ describe('Testing VolunteerGroups Screen', () => {
   it('Search by Groups', async () => {
     mockRouteParams();
     renderVolunteerGroups(link1);
-    const searchInput = await screen.findByTestId('searchBy');
+
+    // Wait for LoadingState to complete and table data to render
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
 
     const searchToggle = await screen.findByTestId('searchByToggle');
@@ -187,7 +205,13 @@ describe('Testing VolunteerGroups Screen', () => {
   it('Search by Leader', async () => {
     mockRouteParams();
     renderVolunteerGroups(link1);
-    const searchInput = await screen.findByTestId('searchBy');
+
+    // Wait for LoadingState to complete and table data to render
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchBy');
     expect(searchInput).toBeInTheDocument();
 
     const searchToggle = await screen.findByTestId('searchByToggle');
@@ -267,7 +291,12 @@ describe('Testing VolunteerGroups Screen', () => {
     mockRouteParams();
     renderVolunteerGroups(link1);
 
-    const createGroupBtn = await screen.findByTestId('createGroupBtn');
+    // Wait for LoadingState to complete and table data to render
+    await waitFor(() => {
+      expect(screen.getByText('Group 1')).toBeInTheDocument();
+    });
+
+    const createGroupBtn = screen.getByTestId('createGroupBtn');
     await userEvent.click(createGroupBtn);
 
     expect(await screen.findAllByText(t.createGroup)).toHaveLength(2);
@@ -608,6 +637,16 @@ describe('Testing VolunteerGroups Screen', () => {
 
       // This ensures debouncedSearch is called and filtering occurs
       const groupNames = await screen.findAllByTestId('groupName');
+      expect(groupNames.length).toBeGreaterThan(0);
+    });
+  });
+
+  it('should load volunteer groups successfully from GraphQL', async () => {
+    mockRouteParams();
+    renderVolunteerGroups(link1);
+
+    await waitFor(() => {
+      const groupNames = screen.getAllByTestId('groupName');
       expect(groupNames.length).toBeGreaterThan(0);
     });
   });

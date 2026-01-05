@@ -104,7 +104,12 @@ describe('Testing UpdateTimeout Component', () => {
       </MockedProvider>,
     );
 
-    const slider = await screen.findByTestId('slider-thumb');
+    // Wait for LoadingState to complete - component will be rendered once data loads
+    await waitFor(() => {
+      expect(screen.getByText(/Update Timeout/i)).toBeInTheDocument();
+    });
+
+    const slider = screen.getByTestId('slider-thumb');
 
     // Simulate dragging to minimum value
     fireEvent.mouseDown(slider, { clientX: -999 }); // Adjust the clientX to simulate different slider positions
@@ -122,7 +127,12 @@ describe('Testing UpdateTimeout Component', () => {
       </MockedProvider>,
     );
 
-    const slider = await screen.findByTestId('slider-thumb');
+    // Wait for LoadingState to complete - component will be rendered once data loads
+    await waitFor(() => {
+      expect(screen.getByText(/Update Timeout/i)).toBeInTheDocument();
+    });
+
+    const slider = screen.getByTestId('slider-thumb');
 
     // Simulate dragging to maximum value
     fireEvent.mouseDown(slider, { clientX: 999 }); // Adjust the clientX to simulate different slider positions
@@ -159,8 +169,13 @@ describe('Testing UpdateTimeout Component', () => {
       </MockedProvider>,
     );
 
-    // Wait for the slider to be present
-    const slider = await screen.findByTestId('slider-thumb');
+    // Wait for LoadingState to complete - component will be rendered once data loads
+    await waitFor(() => {
+      expect(screen.getByText(/Update Timeout/i)).toBeInTheDocument();
+    });
+
+    // Now get the slider
+    const slider = screen.getByTestId('slider-thumb');
 
     fireEvent.mouseDown(slider, { clientX: 45 }); // Adjust the clientX to simulate different slider positions
     fireEvent.mouseUp(slider);
@@ -653,5 +668,17 @@ describe('Testing UpdateTimeout Component', () => {
     handleOnChange(mockChangeEvent);
 
     expect(mockOnValueChange).toHaveBeenCalledWith(Number(largeValue));
+  });
+
+  it('should handle update session loading state', () => {
+    const mockOnValueChange = vi.fn();
+
+    render(
+      <MockedProvider>
+        <UpdateTimeout onValueChange={mockOnValueChange} />
+      </MockedProvider>,
+    );
+
+    expect(screen.getByTestId('timeout-value')).toBeInTheDocument();
   });
 });

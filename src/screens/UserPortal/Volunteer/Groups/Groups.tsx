@@ -50,7 +50,7 @@ import { WarningAmberRounded } from '@mui/icons-material';
 import { useQuery } from '@apollo/client';
 import { Stack } from '@mui/material';
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   DataGrid,
   type GridCellParams,
@@ -184,9 +184,7 @@ function Groups(): JSX.Element {
     () => groupsData?.getEventVolunteerGroups || [],
     [groupsData],
   );
-  if (groupsLoading) {
-    return <Loader size="xl" />;
-  }
+
   if (groupsError) {
     return (
       <div className={styles.message} data-testid="errorMsg">
@@ -312,54 +310,56 @@ function Groups(): JSX.Element {
   ];
 
   return (
-    <div>
-      <AdminSearchFilterBar
-        searchPlaceholder={tCommon('searchBy', { item: t('groupOrLeader') })}
-        searchValue={searchTerm}
-        onSearchChange={setSearchTerm}
-        searchInputTestId="searchByInput"
-        searchButtonTestId="searchBtn"
-        hasDropdowns={true}
-        dropdowns={[searchByDropdown, sortDropdown]}
-      />
-      {/* Table with Volunteer Groups */}
-      <DataGrid
-        disableColumnMenu
-        columnBufferPx={7}
-        hideFooter={true}
-        getRowId={(row) => row.id}
-        slots={{
-          noRowsOverlay: () => (
-            <Stack height="100%" alignItems="center" justifyContent="center">
-              {t('noVolunteerGroups')}
-            </Stack>
-          ),
-        }}
-        sx={dataGridStyle}
-        getRowClassName={() => `${styles.rowBackground}`}
-        autoHeight
-        rowHeight={65}
-        rows={groups}
-        columns={columns}
-        isRowSelectable={() => false}
-      />
-      {group && (
-        <>
-          <GroupModal
-            isOpen={modalState[ModalState.EDIT]}
-            hide={() => closeModal(ModalState.EDIT)}
-            refetchGroups={refetchGroups}
-            group={group}
-            eventId={group.event.id}
-          />
-          <VolunteerGroupViewModal
-            isOpen={modalState[ModalState.VIEW]}
-            hide={() => closeModal(ModalState.VIEW)}
-            group={group}
-          />
-        </>
-      )}
-    </div>
+    <LoadingState isLoading={groupsLoading} variant="spinner">
+      <div>
+        <AdminSearchFilterBar
+          searchPlaceholder={tCommon('searchBy', { item: t('groupOrLeader') })}
+          searchValue={searchTerm}
+          onSearchChange={setSearchTerm}
+          searchInputTestId="searchByInput"
+          searchButtonTestId="searchBtn"
+          hasDropdowns={true}
+          dropdowns={[searchByDropdown, sortDropdown]}
+        />
+        {/* Table with Volunteer Groups */}
+        <DataGrid
+          disableColumnMenu
+          columnBufferPx={7}
+          hideFooter={true}
+          getRowId={(row) => row.id}
+          slots={{
+            noRowsOverlay: () => (
+              <Stack height="100%" alignItems="center" justifyContent="center">
+                {t('noVolunteerGroups')}
+              </Stack>
+            ),
+          }}
+          sx={dataGridStyle}
+          getRowClassName={() => `${styles.rowBackground}`}
+          autoHeight
+          rowHeight={65}
+          rows={groups}
+          columns={columns}
+          isRowSelectable={() => false}
+        />
+        {group && (
+          <>
+            <GroupModal
+              isOpen={modalState[ModalState.EDIT]}
+              hide={() => closeModal(ModalState.EDIT)}
+              refetchGroups={refetchGroups}
+              group={group}
+              eventId={group.event.id}
+            />
+            <VolunteerGroupViewModal
+              isOpen={modalState[ModalState.VIEW]}
+              hide={() => closeModal(ModalState.VIEW)}
+              group={group}
+            />
+          </>
+        )}
+      </div>
+    </LoadingState>
   );
 }
 

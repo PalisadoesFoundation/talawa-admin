@@ -167,13 +167,11 @@ describe('Testing Event Dashboard Screen', () => {
   it('Should show loader while data is being fetched', async () => {
     const { getByTestId, queryByTestId } = renderEventDashboard(mockWithTime);
 
-    expect(getByTestId('spinner-wrapper')).toBeInTheDocument();
     expect(getByTestId('spinner')).toBeInTheDocument();
     expect(queryByTestId('event-details')).not.toBeInTheDocument();
 
     await wait();
 
-    expect(queryByTestId('spinner-wrapper')).not.toBeInTheDocument();
     expect(queryByTestId('spinner')).not.toBeInTheDocument();
     expect(getByTestId('event-details')).toBeInTheDocument();
     expect(getByTestId('event-name')).toBeInTheDocument();
@@ -395,5 +393,45 @@ describe('Testing Event Dashboard Screen', () => {
     expect(getByTestId('start-time')).toHaveTextContent('');
     expect(getByTestId('end-time')).toHaveTextContent('');
     expect(getByTestId('event-details')).toBeInTheDocument();
+  });
+
+  describe('LoadingState Behavior', () => {
+    it('should show LoadingState spinner while event data is loading', async () => {
+      const loadingMocks = [
+        {
+          request: { query: EVENT_DETAILS, variables: { eventId: mockID } },
+          result: { data: { event: null } },
+          delay: 100,
+        },
+      ];
+
+      const mockLink = new StaticMockLink(loadingMocks);
+      render(
+        <MockedProvider link={mockLink}>
+          <BrowserRouter>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <I18nextProvider i18n={i18nForTest}>
+                <EventDashboard eventId={mockID} />
+              </I18nextProvider>
+            </LocalizationProvider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        const spinner = document.querySelector('[data-testid="spinner"]');
+        expect(spinner).toBeInTheDocument();
+      });
+    });
+
+    it('should hide spinner and render event details after LoadingState completes', async () => {
+      const mockLink = new StaticMockLink(MOCKS_WITH_TIME);
+      const { getByTestId } = renderEventDashboard(mockLink);
+      await wait();
+
+      const spinner = document.querySelector('[data-testid="spinner"]');
+      expect(spinner).not.toBeInTheDocument();
+      expect(getByTestId('event-details')).toBeInTheDocument();
+    });
   });
 });

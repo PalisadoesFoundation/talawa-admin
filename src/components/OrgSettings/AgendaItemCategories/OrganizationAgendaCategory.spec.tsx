@@ -107,7 +107,7 @@ describe('Testing Agenda Categories Component', () => {
       </MockedProvider>,
     );
 
-    expect(getByTestId('spinner-wrapper')).toBeInTheDocument();
+    expect(getByTestId('spinner')).toBeInTheDocument();
   });
 
   it('render error component on unsuccessful agenda category list query', async () => {
@@ -274,7 +274,15 @@ describe('Testing Agenda Categories Component', () => {
         </Provider>
       </MockedProvider>,
     );
-    const searchInput = await screen.findByTestId('searchByName');
+
+    // Wait for data to load (LoadingState completes)
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.createAgendaCategory),
+      ).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
 
     await userEvent.type(searchInput, 'Category 1');
@@ -296,7 +304,15 @@ describe('Testing Agenda Categories Component', () => {
         </Provider>
       </MockedProvider>,
     );
-    const searchInput = await screen.findByTestId('searchByName');
+
+    // Wait for data to load (LoadingState completes)
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.createAgendaCategory),
+      ).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
 
     await userEvent.type(searchInput, 'Category');
@@ -322,11 +338,19 @@ describe('Testing Agenda Categories Component', () => {
         </Provider>
       </MockedProvider>,
     );
-    const searchInput = await screen.findByTestId('searchByName');
+
+    // Wait for data to load (LoadingState completes)
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.createAgendaCategory),
+      ).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
     await userEvent.type(searchInput, 'Category');
 
-    const searchButton = await screen.findByTestId('searchBtn');
+    const searchButton = screen.getByTestId('searchBtn');
     await userEvent.click(searchButton);
     await waitFor(() => {
       expect(screen.getAllByText('Category').length).toBe(2);
@@ -346,11 +370,39 @@ describe('Testing Agenda Categories Component', () => {
         </Provider>
       </MockedProvider>,
     );
-    const searchInput = await screen.findByTestId('searchByName');
+
+    // Wait for data to load (LoadingState completes)
+    await waitFor(() => {
+      expect(
+        screen.getByText(translations.createAgendaCategory),
+      ).toBeInTheDocument();
+    });
+
+    const searchInput = screen.getByTestId('searchByName');
     expect(searchInput).toBeInTheDocument();
     await userEvent.type(searchInput, 'A{backspace}');
     await waitFor(() => {
       expect(screen.getAllByText('Category').length).toBe(2);
+    });
+  });
+
+  it('should display categories after loading completes', async () => {
+    render(
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <MockedProvider link={new StaticMockLink(MOCKS)}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18n}>
+                <OrganizationAgendaCategory orgId="123" />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>
+      </LocalizationProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('searchByName')).toBeInTheDocument();
     });
   });
 });

@@ -40,7 +40,7 @@ import { Button, Card, Form } from 'react-bootstrap';
 import { useMutation, useQuery } from '@apollo/client';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { GET_COMMUNITY_DATA_PG } from 'GraphQl/Queries/Queries';
 import {
   UPDATE_COMMUNITY_PG,
@@ -220,12 +220,8 @@ const CommunityProfile = (): JSX.Element => {
     }
   };
 
-  if (loading) {
-    <Loader />;
-  }
-
   return (
-    <>
+    <LoadingState isLoading={loading} variant="spinner">
       <Card border="0" className={`${styles.card} "rounded-4 my-4 shadow-sm"`}>
         <div className={styles.cardHeader}>
           <div className={styles.cardTitle}>{t('editProfile')}</div>
@@ -437,7 +433,7 @@ const CommunityProfile = (): JSX.Element => {
       </Card>
 
       <UpdateSession />
-    </>
+    </LoadingState>
   );
 };
 

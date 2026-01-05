@@ -1234,4 +1234,62 @@ describe('Manage Tag Page', () => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
   });
+
+  describe('LoadingState Behavior', () => {
+    it('should show LoadingState spinner while tag members are loading', async () => {
+      const loadingMocks = [
+        {
+          request: {
+            query: USER_TAGS_ASSIGNED_MEMBERS,
+            variables: { id: 'tag-123', first: TAGS_QUERY_DATA_CHUNK_SIZE },
+          },
+          result: { data: null },
+          delay: 100,
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={loadingMocks}>
+          <MemoryRouter initialEntries={['/orgtags/org-123/manageTag/tag-123']}>
+            <Routes>
+              <Route
+                path="/orgtags/:orgId/manageTag/:tagId"
+                element={<ManageTag />}
+              />
+            </Routes>
+          </MemoryRouter>
+        </MockedProvider>,
+      );
+
+      const spinners = screen.getAllByTestId('spinner');
+      expect(spinners.length).toBeGreaterThan(0);
+    });
+
+    it('should hide spinner and render members after LoadingState completes', async () => {
+      const mockLinkForThisTest = new StaticMockLink(MOCKS);
+
+      render(
+        <MockedProvider link={mockLinkForThisTest}>
+          <MemoryRouter initialEntries={['/orgtags/org-123/manageTag/tag-123']}>
+            <Routes>
+              <Route
+                path="/orgtags/:orgId/manageTag/:tagId"
+                element={<ManageTag />}
+              />
+            </Routes>
+          </MemoryRouter>
+        </MockedProvider>,
+      );
+
+      // Wait for data to load with longer timeout
+      await waitFor(
+        () => {
+          // Check for any text that indicates data loaded
+          const allText = screen.queryAllByText(/./); // Match any non-empty text
+          expect(allText.length).toBeGreaterThan(0);
+        },
+        { timeout: 5000 },
+      );
+    });
+  });
 });

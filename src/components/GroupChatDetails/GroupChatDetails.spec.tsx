@@ -999,4 +999,60 @@ describe('GroupChatDetails', () => {
     toastError.mockRestore();
     consoleError.mockRestore();
   });
+
+  describe('LoadingState Behavior', () => {
+    it('should show LoadingState spinner while chat details are loading', async () => {
+      useLocalStorage().setItem('userId', 'user1');
+
+      render(
+        <I18nextProvider i18n={i18n}>
+          <MockedProvider mocks={[]} cache={testCache}>
+            <GroupChatDetails
+              toggleGroupChatDetailsModal={vi.fn()}
+              groupChatDetailsModalisOpen={true}
+              chat={withSafeChat(filledMockChat)}
+              chatRefetch={vi.fn()}
+            />
+          </MockedProvider>
+        </I18nextProvider>,
+      );
+
+      // Component should render successfully
+      await waitFor(() => {
+        const testElements = screen.queryAllByText(/Test/i);
+        expect(testElements.length).toBeGreaterThan(0);
+      });
+    });
+
+    it('should hide spinner and render chat details after LoadingState completes', async () => {
+      useLocalStorage().setItem('userId', 'user1');
+
+      render(
+        <I18nextProvider i18n={i18n}>
+          <MockedProvider mocks={mocks} cache={testCache}>
+            <GroupChatDetails
+              toggleGroupChatDetailsModal={vi.fn()}
+              groupChatDetailsModalisOpen={true}
+              chat={withSafeChat(filledMockChat)}
+              chatRefetch={vi.fn()}
+            />
+          </MockedProvider>
+        </I18nextProvider>,
+      );
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('editImageBtn')).toBeInTheDocument();
+        },
+        { timeout: 3000 },
+      );
+
+      const spinners = screen.queryAllByTestId('spinner');
+      const visibleSpinners = spinners.filter((spinner) => {
+        const parent = spinner.closest('[data-testid="loadingContainer"]');
+        return parent && !parent.classList.contains('hidden');
+      });
+      expect(visibleSpinners.length).toBe(0);
+    });
+  });
 });

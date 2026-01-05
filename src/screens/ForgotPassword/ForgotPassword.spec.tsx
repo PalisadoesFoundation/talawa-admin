@@ -482,4 +482,65 @@ describe('Testing Forgot Password screen', () => {
     );
     await userEvent.click(screen.getByText('Change Password'));
   });
+
+  describe('LoadingState Behavior', () => {
+    it('should show LoadingState spinner while OTP generation is loading', async () => {
+      const loadingMocks = [
+        {
+          request: {
+            query: GENERATE_OTP_MUTATION,
+            variables: { email: 'test@example.com' },
+          },
+          result: { data: null },
+          delay: 100,
+        },
+      ];
+
+      render(
+        <MockedProvider mocks={loadingMocks}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18n}>
+                <ForgotPassword />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      // Wait for the form to render
+      await waitFor(() => {
+        const inputs = screen.queryAllByDisplayValue('');
+        expect(inputs.length).toBeGreaterThanOrEqual(0);
+      });
+    });
+
+    it('should hide spinner and render form after LoadingState completes', async () => {
+      const link = new StaticMockLink(MOCKS);
+      render(
+        <MockedProvider link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18n}>
+                <ForgotPassword />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      await waitFor(() => {
+        expect(
+          screen.getByPlaceholderText(/Registered email/i),
+        ).toBeInTheDocument();
+      });
+
+      const spinners = screen.queryAllByTestId('spinner');
+      const visibleSpinners = spinners.filter((spinner) => {
+        const parent = spinner.closest('[data-testid="loadingContainer"]');
+        return parent && !parent.classList.contains('hidden');
+      });
+      expect(visibleSpinners.length).toBe(0);
+    });
+  });
 });

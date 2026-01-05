@@ -1656,4 +1656,42 @@ describe('Testing User Pledge Screen', () => {
       expect(screen.getByText('Pledger User')).toBeInTheDocument();
     });
   });
+
+  describe('LoadingState Behavior', () => {
+    it('should show LoadingState spinner while pledges are loading', async () => {
+      const loadingMocks = [
+        {
+          request: { query: USER_DETAILS },
+          result: {
+            data: { me: { id: '1', firstName: 'John', lastName: 'Doe' } },
+          },
+        },
+        {
+          request: { query: USER_PLEDGES },
+          result: { data: { me: { pledges: [] } } },
+          delay: 100,
+        },
+      ];
+
+      renderMyPledges(new StaticMockLink(loadingMocks));
+      const spinners = screen.getAllByTestId('spinner');
+      expect(spinners.length).toBeGreaterThan(0);
+    });
+
+    it('should hide spinner and render pledges after LoadingState completes', async () => {
+      renderMyPledges(new StaticMockLink(MOCKS));
+
+      await waitFor(() => {
+        expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
+      });
+
+      const spinners = screen.queryAllByTestId('spinner');
+      const visibleSpinners = spinners.filter((spinner) => {
+        const parent = spinner.closest('[data-testid="loadingContainer"]');
+        return parent && !parent.classList.contains('hidden');
+      });
+      expect(visibleSpinners.length).toBe(0);
+      expect(screen.getByRole('grid')).toBeInTheDocument();
+    });
+  });
 });

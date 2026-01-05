@@ -834,4 +834,35 @@ describe('Testing Agenda Items Components', () => {
       useMutationSpy.mockRestore();
     }
   });
+
+  it('should handle loading state when fetching agenda items', async () => {
+    const loadingMocks = [
+      {
+        request: {
+          query: AgendaItemByEvent,
+          variables: { eventId: 'eventId' },
+        },
+        result: { data: { agendaItemByEvent: [] } },
+        delay: 100,
+      },
+    ];
+
+    render(
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <MockedProvider mocks={loadingMocks}>
+          <Provider store={store}>
+            <BrowserRouter>
+              <I18nextProvider i18n={i18n}>
+                <EventAgendaItems eventId="abc" />
+              </I18nextProvider>
+            </BrowserRouter>
+          </Provider>
+        </MockedProvider>
+      </LocalizationProvider>,
+    );
+
+    await waitFor(() => {
+      expect(screen.getByTestId('createAgendaItemBtn')).toBeInTheDocument();
+    });
+  });
 });

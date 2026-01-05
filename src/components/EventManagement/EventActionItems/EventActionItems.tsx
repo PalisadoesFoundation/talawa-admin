@@ -31,7 +31,7 @@ import { GET_EVENT_ACTION_ITEMS } from 'GraphQl/Queries/ActionItemQueries';
 import type { IActionItemInfo } from 'types/ActionItems/interface';
 
 import styles from 'style/app-fixed.module.css';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   DataGrid,
   type GridCellParams,
@@ -204,7 +204,11 @@ const EventActionItems: React.FC<InterfaceEventActionItemsProps> = ({
   }, [eventId, eventActionItemsRefetch]);
 
   if (eventInfoLoading) {
-    return <Loader size="xl" />;
+    return (
+      <LoadingState isLoading={true} variant="spinner">
+        <div />
+      </LoadingState>
+    );
   }
 
   if (eventInfoError) {

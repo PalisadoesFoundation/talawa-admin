@@ -13,7 +13,7 @@
  * @requires @mui/x-data-grid
  * @requires dayjs
  * @requires NotificationToast
- * @requires components/Loader/Loader
+ * @requires shared-components/LoadingState/LoadingState
  * @requires components/Avatar/Avatar
  * @requires components/AdminSearchFilterBar/AdminSearchFilterBar
  * @requires GraphQl/Queries/EventVolunteerQueries
@@ -44,7 +44,7 @@ import { FaXmark } from 'react-icons/fa6';
 import { WarningAmberRounded } from '@mui/icons-material';
 
 import { useMutation, useQuery } from '@apollo/client';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import {
   DataGrid,
   type GridCellParams,
@@ -151,8 +151,6 @@ function Requests(): JSX.Element {
     return filteredRequests;
   }, [requestsData, filterBy]);
 
-  // loads the requests when the component mounts
-  if (requestsLoading) return <Loader size="xl" />;
   if (requestsError) {
     // Displays an error message if there is an issue loading the requests
     return (
@@ -297,77 +295,79 @@ function Requests(): JSX.Element {
   ];
 
   return (
-    <div>
-      {/* Header with search, filter  and Create Button */}
-      <AdminSearchFilterBar
-        searchPlaceholder={tCommon('searchBy', { item: tCommon('name') })}
-        searchValue={searchTerm}
-        onSearchChange={debouncedSearch}
-        onSearchSubmit={(value: string) => {
-          setSearchTerm(value);
-        }}
-        searchInputTestId="searchBy"
-        searchButtonTestId="searchBtn"
-        hasDropdowns
-        dropdowns={[
-          {
-            id: 'sort',
-            type: 'sort',
-            label: tCommon('sort'),
-            options: [
-              { label: t('eventVolunteers.latest'), value: 'createdAt_DESC' },
-              {
-                label: t('eventVolunteers.earliest'),
-                value: 'createdAt_ASC',
-              },
-            ],
-            selectedOption: sortBy ?? '',
-            onOptionChange: (value: string | number) =>
-              setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC'),
-            dataTestIdPrefix: 'sort',
-          },
-          {
-            id: 'filter',
-            type: 'filter',
-            label: tCommon('filter'),
-            options: [
-              { label: tCommon('all'), value: 'all' },
-              {
-                label: t('eventVolunteers.individuals'),
-                value: 'individual',
-              },
-              { label: t('eventVolunteers.groups'), value: 'group' },
-            ],
-            selectedOption: filterBy,
-            onOptionChange: (value: string | number) =>
-              setFilterBy(value as 'all' | 'individual' | 'group'),
-            dataTestIdPrefix: 'filter',
-          },
-        ]}
-      />
-
-      {/* Table with Volunteer Membership Requests */}
-
-      {requests.length > 0 ? (
-        <DataGrid
-          disableColumnMenu
-          columnBufferPx={5}
-          hideFooter={true}
-          getRowId={(row) => row.id}
-          className={styles.dataGridContainer}
-          getRowClassName={() => `${styles.rowBackgrounds}`}
-          autoHeight
-          rowHeight={65}
-          rows={requests}
-          columns={columns}
-          isRowSelectable={() => false}
+    <LoadingState isLoading={requestsLoading} variant="spinner">
+      <div>
+        {/* Header with search, filter  and Create Button */}
+        <AdminSearchFilterBar
+          searchPlaceholder={tCommon('searchBy', { item: tCommon('name') })}
+          searchValue={searchTerm}
+          onSearchChange={debouncedSearch}
+          onSearchSubmit={(value: string) => {
+            setSearchTerm(value);
+          }}
+          searchInputTestId="searchBy"
+          searchButtonTestId="searchBtn"
+          hasDropdowns
+          dropdowns={[
+            {
+              id: 'sort',
+              type: 'sort',
+              label: tCommon('sort'),
+              options: [
+                { label: t('eventVolunteers.latest'), value: 'createdAt_DESC' },
+                {
+                  label: t('eventVolunteers.earliest'),
+                  value: 'createdAt_ASC',
+                },
+              ],
+              selectedOption: sortBy ?? '',
+              onOptionChange: (value: string | number) =>
+                setSortBy(value as 'createdAt_DESC' | 'createdAt_ASC'),
+              dataTestIdPrefix: 'sort',
+            },
+            {
+              id: 'filter',
+              type: 'filter',
+              label: tCommon('filter'),
+              options: [
+                { label: tCommon('all'), value: 'all' },
+                {
+                  label: t('eventVolunteers.individuals'),
+                  value: 'individual',
+                },
+                { label: t('eventVolunteers.groups'), value: 'group' },
+              ],
+              selectedOption: filterBy,
+              onOptionChange: (value: string | number) =>
+                setFilterBy(value as 'all' | 'individual' | 'group'),
+              dataTestIdPrefix: 'filter',
+            },
+          ]}
         />
-      ) : (
-        <div className="d-flex justify-content-center align-items-center mt-5">
-          <h5>{t('eventVolunteers.noRequests')}</h5>
-        </div>
-      )}
-    </div>
+
+        {/* Table with Volunteer Membership Requests */}
+
+        {requests.length > 0 ? (
+          <DataGrid
+            disableColumnMenu
+            columnBufferPx={5}
+            hideFooter={true}
+            getRowId={(row) => row.id}
+            className={styles.dataGridContainer}
+            getRowClassName={() => `${styles.rowBackgrounds}`}
+            autoHeight
+            rowHeight={65}
+            rows={requests}
+            columns={columns}
+            isRowSelectable={() => false}
+          />
+        ) : (
+          <div className="d-flex justify-content-center align-items-center mt-5">
+            <h5>{t('eventVolunteers.noRequests')}</h5>
+          </div>
+        )}
+      </div>
+    </LoadingState>
   );
 }
 

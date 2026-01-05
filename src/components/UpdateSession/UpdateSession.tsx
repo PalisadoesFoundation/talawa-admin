@@ -28,7 +28,7 @@
  *
  * @dependencies
  * - `react`, `react-bootstrap`, `@mui/material`, `@apollo/client`, `react-toastify`
- * - Custom modules: `GraphQl/Queries/Queries`, `GraphQl/Mutations/mutations`, `utils/errorHandler`, `components/Loader/Loader`
+ * - Custom modules: `GraphQl/Queries/Queries`, `GraphQl/Mutations/mutations`, `utils/errorHandler`, `shared-components/LoadingState/LoadingState`
  *
  * @todo
  * - Add additional validation for slider input if needed.
@@ -44,7 +44,7 @@ import { GET_COMMUNITY_SESSION_TIMEOUT_DATA_PG } from 'GraphQl/Queries/Queries';
 import { errorHandler } from 'utils/errorHandler';
 import { UPDATE_SESSION_TIMEOUT_PG } from 'GraphQl/Mutations/mutations';
 import styles from 'style/app-fixed.module.css';
-import Loader from 'components/Loader/Loader';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 interface TestInterfaceUpdateTimeoutProps {
@@ -144,13 +144,8 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
     }
   };
 
-  // Show a loader while the data is being fetched
-  if (loading) {
-    return <Loader />;
-  }
-
   return (
-    <>
+    <LoadingState isLoading={loading} variant="spinner">
       <Card className={`${styles.updateTimeoutCard} rounded-4 shadow-sm`}>
         <Card.Header className={styles.updateTimeoutCardHeader}>
           <div className={styles.updateTimeoutCardTitle}>
@@ -211,7 +206,7 @@ const UpdateTimeout: React.FC<TestInterfaceUpdateTimeoutProps> = ({
           </Form>
         </Card.Body>
       </Card>
-    </>
+    </LoadingState>
   );
 };
 
