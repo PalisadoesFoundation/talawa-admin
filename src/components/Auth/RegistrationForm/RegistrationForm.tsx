@@ -16,6 +16,9 @@ import type {
   IRegistrationFormData,
 } from '../../../types/Auth/RegistrationForm/interface';
 
+/**
+ * RegistrationForm component for user registration with validation and reCAPTCHA support
+ */
 export const RegistrationForm = ({
   organizations,
   onSuccess,
