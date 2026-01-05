@@ -2,11 +2,11 @@
 
 ***
 
-# Variable: EMPTY\_MOCKS
+# Variable: MOCKS\_WITH\_EDGE\_CASES
 
-> `const` **EMPTY\_MOCKS**: `object`[]
+> `const` **MOCKS\_WITH\_EDGE\_CASES**: `object`[]
 
-Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaignMocks.ts:208](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaignMocks.ts#L208)
+Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaignMocks.ts:231](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCampaignMocks.ts#L231)
 
 ## Type Declaration
 
@@ -48,7 +48,7 @@ Defined in: [src/screens/AdminPortal/OrganizationFundCampaign/OrganizationFundCa
 
 #### result.data.fund.campaigns.edges
 
-> **edges**: `any`[] = `[]`
+> **edges**: `object`[]
 
 #### result.data.fund.id
 

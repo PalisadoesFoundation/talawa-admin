@@ -122,7 +122,12 @@ const orgFundCampaign = (): JSX.Element => {
   });
 
   const campaignsData = useMemo(() => {
-    return campaignData?.fund?.campaigns?.edges.map((edge) => edge.node) ?? [];
+    return (
+      campaignData?.fund?.campaigns?.edges.map((edge) => ({
+        ...edge.node,
+        amountRaised: edge.node.pledgedAmount ?? null,
+      })) ?? []
+    );
   }, [campaignData]);
 
   const filteredCampaigns = useMemo(() => {
@@ -266,6 +271,9 @@ const orgFundCampaign = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
+        const amountRaised = params.row.amountRaised
+          ? Number(params.row.amountRaised)
+          : 0;
         return (
           <div
             className="d-flex justify-content-center fw-bold"
@@ -276,7 +284,7 @@ const orgFundCampaign = (): JSX.Element => {
                 params.row.currencyCode as keyof typeof currencySymbols
               ]
             }
-            0
+            {amountRaised}
           </div>
         );
       },
@@ -291,9 +299,12 @@ const orgFundCampaign = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        const raised = 0; // Currently hardcoded, will be updated when actual data is available
+        const amountRaised = params.row.amountRaised
+          ? Number(params.row.amountRaised)
+          : 0;
         const goal = params.row.goalAmount as number;
-        const percentage = goal > 0 ? Math.min((raised / goal) * 100, 100) : 0;
+        const percentage =
+          goal > 0 ? Math.min((amountRaised / goal) * 100, 100) : 0;
 
         return (
           <Box

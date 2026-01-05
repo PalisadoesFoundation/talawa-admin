@@ -16,6 +16,7 @@ import {
   EMPTY_MOCKS,
   MOCKS,
   MOCK_ERROR,
+  MOCKS_WITH_EDGE_CASES,
 } from './OrganizationFundCampaignMocks';
 import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
@@ -87,6 +88,7 @@ vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
 const link1 = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCK_ERROR, true);
 const link3 = new StaticMockLink(EMPTY_MOCKS, true);
+const link4 = new StaticMockLink(MOCKS_WITH_EDGE_CASES, true);
 
 const translations = JSON.parse(
   JSON.stringify(i18nForTest.getDataByLanguage('en')?.translation.fundCampaign),
@@ -489,13 +491,13 @@ describe('FundCampaigns Screen', () => {
     const progressCells = screen.getAllByTestId('progressCell');
     expect(progressCells.length).toBeGreaterThan(0);
 
-    // Each progress cell should contain 0% (since raised is hardcoded to 0)
-    progressCells.forEach((cell) => {
-      expect(cell).toHaveTextContent('0%');
-    });
+    // Campaign 1: goalAmount 100, amountRaised 50 = 50%
+    // Campaign 2: goalAmount 200, amountRaised 150 = 75%
+    expect(progressCells[0]).toHaveTextContent('50%');
+    expect(progressCells[1]).toHaveTextContent('75%');
   });
 
-  it('should display raised cells with currency symbol', async () => {
+  it('should display raised cells with currency symbol and actual amountRaised', async () => {
     mockRouteParams();
     renderFundCampaign(link1);
 
@@ -508,10 +510,10 @@ describe('FundCampaigns Screen', () => {
     const raisedCells = screen.getAllByTestId('raisedCell');
     expect(raisedCells.length).toBeGreaterThan(0);
 
-    // Each raised cell should contain $0 (USD currency)
-    raisedCells.forEach((cell) => {
-      expect(cell).toHaveTextContent('$0');
-    });
+    // Campaign 1: amountRaised 50
+    // Campaign 2: amountRaised 150
+    expect(raisedCells[0]).toHaveTextContent('$50');
+    expect(raisedCells[1]).toHaveTextContent('$150');
   });
 
   it('should display end of results message when campaigns are displayed', async () => {
@@ -531,5 +533,176 @@ describe('FundCampaigns Screen', () => {
     // Verify goal cells are also visible (confirming table rendering)
     const goalCells = screen.getAllByTestId('goalCell');
     expect(goalCells.length).toBe(2);
+  });
+
+  it('should handle null amountRaised correctly - covers nullable path (lines 276, 304)', async () => {
+    mockRouteParams();
+    renderFundCampaign(link4);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('Campaign 1')).toBeInTheDocument();
+    });
+
+    // Campaign 1 has null amountRaised, should display $0
+    // This tests the nullable path: amountRaised ? Number(amountRaised) : 0 (line 276 in raisedCell)
+    const raisedCells = screen.getAllByTestId('raisedCell');
+    expect(raisedCells[0]).toHaveTextContent('$0');
+
+    // Progress should be 0% for null amountRaised
+    // This tests the nullable path: amountRaised ? Number(amountRaised) : 0 (line 304 in percentageRaised)
+    const progressCells = screen.getAllByTestId('progressCell');
+    expect(progressCells[0]).toHaveTextContent('0%');
+  });
+
+  it('should handle zero amountRaised correctly', async () => {
+    mockRouteParams();
+    renderFundCampaign(link4);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('Campaign 2')).toBeInTheDocument();
+    });
+
+    // Campaign 2 has amountRaised '0', should display $0
+    const raisedCells = screen.getAllByTestId('raisedCell');
+    expect(raisedCells[1]).toHaveTextContent('$0');
+
+    // Progress should be 0% for zero amountRaised
+    const progressCells = screen.getAllByTestId('progressCell');
+    expect(progressCells[1]).toHaveTextContent('0%');
+  });
+
+  it('should handle 100% amountRaised correctly', async () => {
+    mockRouteParams();
+    renderFundCampaign(link4);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('Campaign 3')).toBeInTheDocument();
+    });
+
+    // Campaign 3 has amountRaised '100' with goalAmount 100 = 100%
+    const raisedCells = screen.getAllByTestId('raisedCell');
+    expect(raisedCells[2]).toHaveTextContent('$100');
+
+    // Progress should be 100%
+    const progressCells = screen.getAllByTestId('progressCell');
+    expect(progressCells[2]).toHaveTextContent('100%');
+  });
+
+  it('should cap percentage at 100% when amountRaised exceeds goalAmount - covers Math.min cap (line 307)', async () => {
+    mockRouteParams();
+    renderFundCampaign(link4);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('Campaign 4')).toBeInTheDocument();
+    });
+
+    // Campaign 4 has amountRaised '150' with goalAmount 100 = should cap at 100%
+    // This tests Math.min((amountRaised / goal) * 100, 100) cap at 100% (line 307)
+    const raisedCells = screen.getAllByTestId('raisedCell');
+    expect(raisedCells[3]).toHaveTextContent('$150');
+
+    // Progress should be capped at 100% even though amountRaised > goalAmount
+    const progressCells = screen.getAllByTestId('progressCell');
+    expect(progressCells[3]).toHaveTextContent('100%');
+  });
+
+  it('should handle zero goalAmount correctly - covers goal > 0 ternary false branch (line 307)', async () => {
+    mockRouteParams();
+    renderFundCampaign(link4);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('Campaign 5')).toBeInTheDocument();
+    });
+
+    // Campaign 5 has goalAmount 0, amountRaised 50
+    const raisedCells = screen.getAllByTestId('raisedCell');
+    expect(raisedCells[4]).toHaveTextContent('$50');
+
+    // Progress should be 0% when goalAmount is 0
+    // This tests the goal > 0 ternary false branch: goal > 0 ? ... : 0 (line 307)
+    const progressCells = screen.getAllByTestId('progressCell');
+    expect(progressCells[4]).toHaveTextContent('0%');
+  });
+
+  it('should sort campaigns by funding goal when clicking goal column header', async () => {
+    mockRouteParams();
+    renderFundCampaign(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('Campaign 1')).toBeInTheDocument();
+      expect(screen.getByText('Campaign 2')).toBeInTheDocument();
+    });
+
+    // Find and click the Funding Goal column header to trigger sorting
+    const goalHeader = screen.getByText('Funding Goal');
+    expect(goalHeader).toBeInTheDocument();
+    await userEvent.click(goalHeader);
+
+    // Wait for sorting to be applied - the campaigns should still be visible
+    await waitFor(() => {
+      expect(screen.getByText('Campaign 1')).toBeInTheDocument();
+      expect(screen.getByText('Campaign 2')).toBeInTheDocument();
+    });
+
+    // Click again to reverse sort order
+    await userEvent.click(goalHeader);
+
+    await waitFor(() => {
+      expect(screen.getByText('Campaign 1')).toBeInTheDocument();
+      expect(screen.getByText('Campaign 2')).toBeInTheDocument();
+    });
+  });
+
+  it('should handle row click navigation correctly', async () => {
+    mockRouteParams();
+    renderFundCampaign(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('Campaign 1')).toBeInTheDocument();
+    });
+
+    // Get the row element (via campaign name cell)
+    const campaignNameCells = screen.getAllByTestId('campaignName');
+    expect(campaignNameCells[0]).toBeInTheDocument();
+
+    // Click on the row (via campaign name)
+    fireEvent.click(campaignNameCells[0]);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('pledgeScreen')).toBeInTheDocument();
+    });
+  });
+
+  it('should handle edit button click with stopPropagation', async () => {
+    mockRouteParams();
+    renderFundCampaign(link1);
+
+    // Wait for campaigns to load
+    await waitFor(() => {
+      expect(screen.getByText('Campaign 1')).toBeInTheDocument();
+    });
+
+    // Get the edit button
+    const editButtons = screen.getAllByTestId('editCampaignBtn');
+    expect(editButtons[0]).toBeInTheDocument();
+
+    // Click edit button - should open modal, not navigate
+    await userEvent.click(editButtons[0]);
+
+    await waitFor(() => {
+      expect(
+        screen.getAllByText(translations.updateCampaign)[0],
+      ).toBeInTheDocument();
+    });
+
+    // Verify we're still on the campaigns page (not navigated away)
+    expect(screen.getByText('Campaign 1')).toBeInTheDocument();
   });
 });

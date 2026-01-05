@@ -62,6 +62,7 @@ export const FUND_CAMPAIGN = gql`
             endAt
             currencyCode
             goalAmount
+            pledgedAmount
           }
         }
       }

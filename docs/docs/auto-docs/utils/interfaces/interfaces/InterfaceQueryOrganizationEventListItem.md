@@ -4,7 +4,7 @@
 
 # Interface: InterfaceQueryOrganizationEventListItem
 
-Defined in: [src/utils/interfaces.ts:1961](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1961)
+Defined in: [src/utils/interfaces.ts:1965](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1965)
 
 InterfaceQueryOrganizationEventListItem
 
@@ -92,7 +92,7 @@ The unique identifier of the event.
 
 > **isPublic**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1963](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1963)
+Defined in: [src/utils/interfaces.ts:1967](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1967)
 
 Indicates if the event is public.
 
@@ -102,7 +102,7 @@ Indicates if the event is public.
 
 > **isRegisterable**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1964](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1964)
+Defined in: [src/utils/interfaces.ts:1968](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1968)
 
 Indicates if the event is registerable.
 
