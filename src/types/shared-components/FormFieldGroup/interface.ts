@@ -148,9 +148,8 @@ export interface IFormCheckBoxProps
 
 /**
  * Radio button group component props using Bootstrap Form.Check.
- * Renders individual radio buttons within a named group.
+ * Individual radio button option with label and value.
  */
-
 interface IRadioOption {
   label: string;
   value: string;
