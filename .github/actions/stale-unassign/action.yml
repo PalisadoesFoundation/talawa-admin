@@ -15,7 +15,7 @@ inputs:
     description: 'Comment posted when assignee is removed. Use {assignee} placeholder for username.'
     required: false
     default: |
-      Hi @{assignee}, this issue has been unassigned due to inactivity after being marked as stale.
+      Hi {assignee}, this issue has been unassigned due to inactivity after being marked as stale.
       Feel free to reassign yourself if you plan to continue working on it.
   github-token:
     description: 'GitHub token for API calls'
