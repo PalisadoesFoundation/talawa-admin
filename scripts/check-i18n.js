@@ -110,8 +110,12 @@ const parseArgs = (args) => {
   const files = [];
   let diffOnly = false;
   let staged = false;
+  let base = null;
+  let head = null;
 
-  for (const arg of args) {
+  for (let i = 0; i < args.length; i += 1) {
+    const arg = args[i];
+
     if (arg === '--staged') {
       diffOnly = true;
       staged = true;
@@ -121,10 +125,23 @@ const parseArgs = (args) => {
       diffOnly = true;
       continue;
     }
+    if (arg === '--base' || arg.startsWith('--base=')) {
+      const value = arg === '--base' ? args[i + 1] : arg.split('=')[1];
+      if (arg === '--base') i += 1;
+      if (value) base = value;
+      continue;
+    }
+    if (arg === '--head' || arg.startsWith('--head=')) {
+      const value = arg === '--head' ? args[i + 1] : arg.split('=')[1];
+      if (arg === '--head') i += 1;
+      if (value) head = value;
+      continue;
+    }
+
     files.push(arg);
   }
 
-  return { files, diffOnly, staged };
+  return { files, diffOnly, staged, base, head };
 };
 
 const stripDiffPrefix = (filePath) => filePath.replace(/^[ab]\//, '');
@@ -182,9 +199,10 @@ const parseUnifiedDiff = (diffText) => {
   return filesToLines;
 };
 
-const getDiffLineMap = ({ staged, files }) => {
+const getDiffLineMap = ({ staged, files, base, head }) => {
   const args = ['diff', '-U0'];
   if (staged) args.push('--cached');
+  if (!staged && base && head) args.push(`${base}...${head}`);
   if (files.length > 0) {
     args.push('--', ...files);
   }
@@ -912,9 +930,17 @@ const collectViolations = (filePath, lineFilter = null) => {
  * // pnpm run check-i18n -- --staged src/Component.tsx (scan added staged lines in file)
  * // pnpm run check-i18n -- --diff (scan added lines in working tree diff)
  * // pnpm run check-i18n -- --diff src/Component.tsx (scan added working tree lines in file)
+ * // pnpm run check-i18n -- --diff --base <base_sha> --head <head_sha> (scan added lines between refs)
+ * // pnpm run check-i18n -- --diff --base <base_sha> --head <head_sha> src/Component.tsx
  */
 const main = () => {
-  const { files: cliFiles, diffOnly, staged } = parseArgs(process.argv.slice(2));
+  const {
+    files: cliFiles,
+    diffOnly,
+    staged,
+    base,
+    head,
+  } = parseArgs(process.argv.slice(2));
   if (cliFiles.length === 0 && !fs.existsSync(SRC_DIR)) {
     console.log('No files to scan for i18n violations.');
     process.exit(0);
@@ -923,7 +949,12 @@ const main = () => {
   let changedLinesByFile = null;
   if (diffOnly) {
     try {
-      changedLinesByFile = getDiffLineMap({ staged, files: cliFiles });
+      changedLinesByFile = getDiffLineMap({
+        staged,
+        files: cliFiles,
+        base,
+        head,
+      });
     } catch (error) {
       console.error(`Error: Unable to read git diff (${error.message}).`);
       process.exit(1);

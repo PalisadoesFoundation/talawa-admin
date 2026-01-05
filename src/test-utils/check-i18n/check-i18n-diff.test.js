@@ -147,21 +147,45 @@ describe.sequential('check-i18n diff and CLI behavior', () => {
       files: [],
       diffOnly: false,
       staged: false,
+      base: null,
+      head: null,
     });
     expect(parseArgs(['--diff', 'src/a.tsx'])).toEqual({
       files: ['src/a.tsx'],
       diffOnly: true,
       staged: false,
+      base: null,
+      head: null,
     });
     expect(parseArgs(['--diff-only', 'a', 'b'])).toEqual({
       files: ['a', 'b'],
       diffOnly: true,
       staged: false,
+      base: null,
+      head: null,
     });
     expect(parseArgs(['--staged', 'file.tsx'])).toEqual({
       files: ['file.tsx'],
       diffOnly: true,
       staged: true,
+      base: null,
+      head: null,
+    });
+    expect(
+      parseArgs([
+        '--diff',
+        '--base',
+        'origin/develop',
+        '--head',
+        'feature',
+        'src/with-diff.tsx',
+      ]),
+    ).toEqual({
+      files: ['src/with-diff.tsx'],
+      diffOnly: true,
+      staged: false,
+      base: 'origin/develop',
+      head: 'feature',
     });
   });
 
@@ -246,6 +270,35 @@ describe.sequential('check-i18n diff and CLI behavior', () => {
 
     const filePath = path.resolve(process.cwd(), 'src/one.tsx');
     expect([...map.get(filePath)]).toEqual([1, 2]);
+  });
+
+  it('builds git diff args for base/head comparisons', async () => {
+    const { getDiffLineMap } = await loadCheckI18nModule();
+    const diffText = [
+      'diff --git a/src/compare.tsx b/src/compare.tsx',
+      '--- a/src/compare.tsx',
+      '+++ b/src/compare.tsx',
+      '@@ -2,0 +3,1 @@',
+      '+<div>Added</div>',
+    ].join('\n');
+
+    spawnSyncMock.mockReturnValue({ status: 0, stdout: diffText, stderr: '' });
+
+    const map = getDiffLineMap({
+      staged: false,
+      base: 'origin/develop',
+      head: 'feature',
+      files: ['src/compare.tsx'],
+    });
+
+    expect(spawnSyncMock).toHaveBeenCalledWith(
+      'git',
+      ['diff', '-U0', 'origin/develop...feature', '--', 'src/compare.tsx'],
+      { encoding: 'utf-8' },
+    );
+
+    const filePath = path.resolve(process.cwd(), 'src/compare.tsx');
+    expect([...map.get(filePath)]).toEqual([3]);
   });
 
   it('throws when git diff returns an error status', async () => {
