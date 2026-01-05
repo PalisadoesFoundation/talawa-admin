@@ -43,18 +43,14 @@ vi.mock('./askAndUpdatePort/askAndUpdatePort', () => ({
 vi.mock('./askForDocker/askForDocker');
 
 describe('Talawa Admin Setup', () => {
-  let mockReadFile: ReturnType<typeof vi.fn>;
-
   beforeEach(() => {
     vi.clearAllMocks();
 
     // default flow: env file check passes
     vi.mocked(checkEnvFile).mockReturnValue(true);
 
-    // Create a mock function for fs.promises.readFile
-    mockReadFile = vi.fn().mockResolvedValue('USE_DOCKER=NO');
-    (fs.promises.readFile as unknown) = mockReadFile;
-
+    // default fs content says NO docker
+    vi.mocked(fs.promises.readFile).mockResolvedValue('USE_DOCKER=NO');
     vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'NO' });
 
     // mock external functions to resolve normally
@@ -75,12 +71,13 @@ describe('Talawa Admin Setup', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
   it('should call API setup with false when Docker is disabled', async () => {
     // Setup environment for NO Docker
-    mockReadFile.mockResolvedValue('USE_DOCKER=NO');
+    vi.mocked(fs.promises.readFile).mockResolvedValue('USE_DOCKER=NO');
     vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'NO' });
 
     vi.mocked(inquirer.prompt)
@@ -94,7 +91,7 @@ describe('Talawa Admin Setup', () => {
 
   it('should call API setup with true when Docker is enabled', async () => {
     // Setup environment for YES Docker
-    mockReadFile.mockResolvedValue('USE_DOCKER=YES');
+    vi.mocked(fs.promises.readFile).mockResolvedValue('USE_DOCKER=YES');
     vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'YES' });
 
     vi.mocked(inquirer.prompt)
@@ -119,7 +116,7 @@ describe('Talawa Admin Setup', () => {
   });
 
   it('should call askAndUpdateTalawaApiUrl when Docker is used and skip port setup', async () => {
-    mockReadFile.mockResolvedValue('USE_DOCKER=YES');
+    vi.mocked(fs.promises.readFile).mockResolvedValue('USE_DOCKER=YES');
     vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'YES' });
 
     vi.mocked(inquirer.prompt)
