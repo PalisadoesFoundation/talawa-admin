@@ -26,7 +26,7 @@ const PostsPage = lazy(() => import('shared-components/posts/posts'));
 const SuperAdminScreen = lazy(
   () => import('components/SuperAdminScreen/SuperAdminScreen'),
 );
-const BlockUser = lazy(() => import('screens/BlockUser/BlockUser'));
+const BlockUser = lazy(() => import('screens/AdminPortal/BlockUser/BlockUser'));
 const EventManagement = lazy(
   () => import('screens/AdminPortal/EventManagement/EventManagement'),
 );
@@ -37,10 +37,12 @@ const MemberDetail = lazy(
   () => import('screens/AdminPortal/MemberDetail/MemberDetail'),
 );
 const OrgContribution = lazy(
-  () => import('screens/OrgContribution/OrgContribution'),
+  () => import('screens/AdminPortal/OrgContribution/OrgContribution'),
 );
 const OrgList = lazy(() => import('screens/AdminPortal/OrgList/OrgList'));
-const OrgSettings = lazy(() => import('screens/OrgSettings/OrgSettings'));
+const OrgSettings = lazy(
+  () => import('screens/AdminPortal/OrgSettings/OrgSettings'),
+);
 
 const OrganizationDashboard = lazy(
   () =>
@@ -59,7 +61,7 @@ const OrganizationTransactions = lazy(
     ),
 );
 const FundCampaignPledge = lazy(
-  () => import('screens/FundCampaignPledge/FundCampaignPledge'),
+  () => import('screens/AdminPortal/FundCampaignPledge/FundCampaignPledge'),
 );
 const OrganizationPeople = lazy(
   () => import('screens/AdminPortal/OrganizationPeople/OrganizationPeople'),
@@ -75,9 +77,11 @@ const CommunityProfile = lazy(
   () => import('screens/AdminPortal/CommunityProfile/CommunityProfile'),
 );
 const OrganizationVenues = lazy(
-  () => import('screens/OrganizationVenues/OrganizationVenues'),
+  () => import('screens/AdminPortal/OrganizationVenues/OrganizationVenues'),
 );
-const Leaderboard = lazy(() => import('screens/Leaderboard/Leaderboard'));
+const Leaderboard = lazy(
+  () => import('screens/AdminPortal/Leaderboard/Leaderboard'),
+);
 const Advertisements = lazy(
   () => import('components/Advertisements/Advertisements'),
 );

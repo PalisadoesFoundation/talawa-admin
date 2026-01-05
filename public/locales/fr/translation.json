@@ -18,7 +18,8 @@
     "rank": "Rang",
     "volunteer": "Bénévole",
     "email": "E-mail",
-    "hoursVolunteered": "Heures Bénévoles"
+    "hoursVolunteered": "Heures Bénévoles",
+    "volunteerRankings": "Classement des Bénévoles"
   },
   "loginPage": {
     "title": "Administrateur Talawa",
@@ -1729,7 +1730,8 @@
     "delete": "Supprimer",
     "name": "Nom",
     "desc": "Description",
-    "venueImagePreview": "Aperçu de l’image du lieu"
+    "venueImagePreview": "Aperçu de l’image du lieu",
+    "sortVenues": "Trier les lieux"
   },
   "addMember": {
     "title": "Ajouter un membre",

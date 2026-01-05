@@ -18,7 +18,8 @@
     "rank": "Rango",
     "volunteer": "Voluntario",
     "email": "Correo electrónico",
-    "hoursVolunteered": "Horas Voluntarias"
+    "hoursVolunteered": "Horas Voluntarias",
+    "volunteerRankings": "Clasificación de Voluntarios"
   },
   "loginPage": {
     "title": "Administrador Talawa",
@@ -1729,7 +1730,8 @@
     "searchBy": "Buscar por",
     "name": "Nombre",
     "desc": "Descripción",
-    "venueImagePreview": "Vista previa de la imagen del lugar"
+    "venueImagePreview": "Vista previa de la imagen del lugar",
+    "sortVenues": "Ordenar lugares"
   },
   "addMember": {
     "title": "Agregar miembro",

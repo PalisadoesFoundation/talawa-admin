@@ -18,7 +18,8 @@
     "rank": "Rank",
     "volunteer": "Volunteer",
     "email": "Email",
-    "hoursVolunteered": "Hours Volunteered"
+    "hoursVolunteered": "Hours Volunteered",
+    "volunteerRankings": "Volunteer Rankings"
   },
   "loginPage": {
     "title": "Talawa Admin",
@@ -1729,7 +1730,8 @@
     "delete": "delete",
     "name": "name",
     "desc": "desc",
-    "venueImagePreview": "Preview of venue image"
+    "venueImagePreview": "Preview of venue image",
+    "sortVenues": "Sort Venues"
   },
   "addMember": {
     "title": "Add Member",
