@@ -1,0 +1,47 @@
+##############################################################################
+##############################################################################
+#
+# NOTE!
+#
+# Please read the README.md file in this directory that defines what should
+# be placed in this file
+#
+##############################################################################
+##############################################################################
+
+name: Auto-unassign Stale Issues
+
+on:
+  schedule:
+    # Run daily at midnight UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+    # Manual trigger for testing
+    inputs:
+      grace-period-days:
+        description: 'Override grace period (days)'
+        required: false
+        default: '7'
+
+permissions:
+  issues: write
+  contents: read
+  pull-requests: read
+
+jobs:
+  unassign-stale:
+    name: Unassign Stale Issues
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run stale unassign action
+        uses: ./.github/actions/stale-unassign
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          grace-period-days: ${{ github.event.inputs.grace-period-days || '7' }}
+          # Uncomment to customize the comment message:
+          # comment-message: |
+          #   Hi @{assignee}, this issue has been unassigned due to inactivity.
+          #   Feel free to reassign yourself if you plan to continue.

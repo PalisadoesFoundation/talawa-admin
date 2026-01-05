@@ -1,0 +1,205 @@
+name: 'Stale Issue Unassigner'
+description: 'Automatically unassigns stale issues after a grace period'
+author: 'PalisadoesFoundation'
+
+inputs:
+  grace-period-days:
+    description: 'Days after label application before unassignment'
+    required: false
+    default: '7'
+  stale-label:
+    description: 'Label that marks issues as stale'
+    required: false
+    default: 'no-issue-activity'
+  comment-message:
+    description: 'Comment posted when assignee is removed. Use {assignee} placeholder for username.'
+    required: false
+    default: |
+      Hi @{assignee}, this issue has been unassigned due to inactivity after being marked as stale.
+      Feel free to reassign yourself if you plan to continue working on it.
+  github-token:
+    description: 'GitHub token for API calls'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Unassign stale issues
+      uses: actions/github-script@v7
+      with:
+        github-token: ${{ inputs.github-token }}
+        script: |
+          const gracePeriodDays = parseInt('${{ inputs.grace-period-days }}', 10);
+          const staleLabel = '${{ inputs.stale-label }}';
+          const commentTemplate = `${{ inputs.comment-message }}`;
+
+          console.log(`Configuration: grace-period=${gracePeriodDays} days, stale-label="${staleLabel}"`);
+
+          // Check if repository is archived
+          const { data: repo } = await github.rest.repos.get({
+            owner: context.repo.owner,
+            repo: context.repo.repo
+          });
+
+          if (repo.archived) {
+            console.log('Repository is archived. Skipping.');
+            return;
+          }
+
+          // Check if the stale label exists in this repository
+          try {
+            await github.rest.issues.getLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: staleLabel
+            });
+          } catch (error) {
+            if (error.status === 404) {
+              console.log(`Label "${staleLabel}" does not exist in this repository. Skipping.`);
+              return;
+            }
+            throw error;
+          }
+
+          // Find open issues with stale label
+          let issues = [];
+          try {
+            issues = await github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: staleLabel,
+              per_page: 100
+            });
+          } catch (error) {
+            console.error(`Error fetching issues: ${error.message}`);
+            throw error;
+          }
+
+          console.log(`Found ${issues.length} open issues with "${staleLabel}" label`);
+
+          let processedCount = 0;
+          let skippedCount = 0;
+
+          for (const issue of issues) {
+            try {
+              // Skip pull requests (they appear in issues API too)
+              if (issue.pull_request) {
+                console.log(`Issue #${issue.number}: Is a pull request, skipping`);
+                skippedCount++;
+                continue;
+              }
+              
+              // Skip if no assignees
+              if (!issue.assignees || issue.assignees.length === 0) {
+                console.log(`Issue #${issue.number}: No assignees, skipping`);
+                skippedCount++;
+                continue;
+              }
+              
+              const assigneeCount = issue.assignees.length;
+              console.log(`Issue #${issue.number}: Has ${assigneeCount} assignee(s)`);
+              
+              // Check for linked PRs in the same repository using timeline events
+              let timelineEvents = [];
+              try {
+                timelineEvents = await github.paginate(github.rest.issues.listEventsForTimeline, {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  per_page: 100
+                });
+              } catch (error) {
+                console.error(`Issue #${issue.number}: Error fetching timeline: ${error.message}`);
+                skippedCount++;
+                continue;
+              }
+              
+              const hasLinkedPR = timelineEvents.some(event => {
+                if (event.event === 'cross-referenced' && event.source?.issue?.pull_request) {
+                  // Check if PR is from the same repository
+                  const prRepoFullName = event.source.issue.repository?.full_name;
+                  const currentRepoFullName = `${context.repo.owner}/${context.repo.repo}`;
+                  return prRepoFullName === currentRepoFullName;
+                }
+                return false;
+              });
+              
+              // Skip if there IS a linked PR (contributor is actively working)
+              if (hasLinkedPR) {
+                console.log(`Issue #${issue.number}: Has linked PR in same repo, skipping (contributor is working)`);
+                skippedCount++;
+                continue;
+              }
+              
+              console.log(`Issue #${issue.number}: No linked PR found, checking grace period...`);
+              
+              // Find when stale label was added (get the most recent one in case of re-labeling)
+              const labelEvents = timelineEvents.filter(event => 
+                event.event === 'labeled' && 
+                event.label?.name === staleLabel
+              );
+              
+              if (labelEvents.length === 0) {
+                console.log(`Issue #${issue.number}: Could not find label event in timeline, skipping`);
+                skippedCount++;
+                continue;
+              }
+              
+              // Use the most recent label event
+              const latestLabelEvent = labelEvents[labelEvents.length - 1];
+              const labelAddedDate = new Date(latestLabelEvent.created_at);
+              const now = new Date();
+              const daysSinceLabel = (now - labelAddedDate) / (1000 * 60 * 60 * 24);
+              
+              if (daysSinceLabel < gracePeriodDays) {
+                console.log(`Issue #${issue.number}: Grace period not exceeded (${daysSinceLabel.toFixed(1)}/${gracePeriodDays} days), skipping`);
+                skippedCount++;
+                continue;
+              }
+              
+              console.log(`Issue #${issue.number}: Grace period exceeded (${daysSinceLabel.toFixed(1)} days). Processing ${assigneeCount} assignee(s)...`);
+              
+              // Collect all assignee logins
+              const assigneeLogins = issue.assignees.map(a => a.login);
+              
+              // Remove all assignees at once (more efficient)
+              try {
+                await github.rest.issues.removeAssignees({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  assignees: assigneeLogins
+                });
+              } catch (error) {
+                console.error(`Issue #${issue.number}: Error removing assignees: ${error.message}`);
+                skippedCount++;
+                continue;
+              }
+              
+              // Post a single comment addressing all unassigned users
+              const assigneeMentions = assigneeLogins.map(login => `@${login}`).join(', ');
+              const comment = commentTemplate.replace(/\{assignee\}/g, assigneeMentions);
+              
+              try {
+                await github.rest.issues.createComment({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
+                  body: comment
+                });
+              } catch (error) {
+                console.error(`Issue #${issue.number}: Error posting comment: ${error.message}`);
+                // Don't fail the whole workflow for a comment error
+              }
+              
+              console.log(`Issue #${issue.number}: Successfully unassigned ${assigneeLogins.join(', ')}`);
+              processedCount++;
+              
+            } catch (error) {
+              console.error(`Issue #${issue.number}: Unexpected error: ${error.message}`);
+              skippedCount++;
+            }
+          }
+
+          console.log(`\nSummary: Processed ${processedCount} issues, skipped ${skippedCount} issues`);
