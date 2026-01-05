@@ -9,15 +9,13 @@ import askAndUpdatePort from './askAndUpdatePort/askAndUpdatePort';
 import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
 import { backupEnvFile } from './backupEnvFile/backupEnvFile';
 
-const isExitPromptError = (error: unknown): boolean => {
-  return (
-    typeof error === 'object' &&
-    error !== null &&
-    'name' in error &&
-    (error as { name: string }).name === 'ExitPromptError'
-  );
-};
+const isExitPromptError = (error: unknown): boolean =>
+  typeof error === 'object' &&
+  error !== null &&
+  'name' in error &&
+  (error as { name: string }).name === 'ExitPromptError';
 
+// Ask and set up reCAPTCHA
 export const askAndSetRecaptcha = async (): Promise<void> => {
   try {
     const { shouldUseRecaptcha } = await inquirer.prompt([
@@ -60,6 +58,7 @@ export const askAndSetRecaptcha = async (): Promise<void> => {
   }
 };
 
+// Ask and set up logging errors in the console
 const askAndSetLogErrors = async (): Promise<void> => {
   try {
     const { shouldLogErrors } = await inquirer.prompt({
@@ -84,73 +83,56 @@ const askAndSetLogErrors = async (): Promise<void> => {
   }
 };
 
+// Main function to run the setup process
 export async function main(): Promise<void> {
+  // Handle user cancellation (CTRL+C)
+  process.on('SIGINT', () => {
+    console.log('\n\n⚠️  Setup cancelled by user.');
+    console.log(
+      'Configuration may be incomplete. Run setup again to complete.',
+    );
+    process.exit(130);
+  });
+
   try {
     if (!checkEnvFile()) {
-      return;
-    }
-
-    console.log('\nWelcome to the Talawa Admin setup!\n');
-
-    try {
-      await backupEnvFile();
-    } catch (error) {
-      if (isExitPromptError(error)) {
-        throw error;
-      }
-      console.error('Error backing up .env file:', error);
-      throw new Error(
-        `Failed to backup .env file: ${
-          error instanceof Error ? error.message : String(error)
-        }`,
+      console.error(
+        '❌ Environment file check failed. Please ensure .env exists.',
       );
+      process.exit(1);
     }
 
+    console.log('Welcome to the Talawa Admin setup! 🚀');
+
+    await backupEnvFile();
     modifyEnvFile();
+    await askAndSetDockerOption();
 
-    try {
-      await askAndSetDockerOption();
-    } catch (error) {
-      if (isExitPromptError(error)) {
-        throw error;
-      }
-      console.error('Error setting up Docker option:', error);
-      throw error;
-    }
-
+    // Use async file read instead of sync
     const envFileContent = await fs.promises.readFile('.env', 'utf8');
     const envConfig = dotenv.parse(envFileContent);
     const useDocker = envConfig.USE_DOCKER === 'YES';
 
-    try {
-      if (useDocker) {
-        await askAndUpdateTalawaApiUrl(useDocker);
-      } else {
-        await askAndUpdatePort();
-        await askAndUpdateTalawaApiUrl(useDocker);
-      }
-    } catch (error) {
-      if (isExitPromptError(error)) {
-        throw error;
-      }
-      console.error('Error setting up Talawa API URL:', error);
-      throw error;
+    if (useDocker) {
+      await askAndUpdateTalawaApiUrl(useDocker);
+    } else {
+      await askAndUpdatePort();
+      await askAndUpdateTalawaApiUrl(useDocker);
     }
 
     await askAndSetRecaptcha();
     await askAndSetLogErrors();
 
-    console.log('\nTalawa Admin setup completed successfully!\n');
+    console.log(
+      '\nCongratulations! Talawa Admin has been successfully set up! 🥂🎉',
+    );
   } catch (error) {
     if (isExitPromptError(error)) {
-      console.log('\nSetup cancelled by user.\n');
       process.exit(130);
     }
 
-    console.error('\nSetup failed:', error);
-    console.error(
-      '\nPlease try again or contact support if the issue persists.',
-    );
+    console.error('\n❌ Setup failed:', error);
+    console.log('\nPlease try again or contact support if the issue persists.');
     process.exit(1);
   }
 }
