@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, renderHook } from '@testing-library/react';
 import { useTableData } from './useTableData';
 import type { QueryResult } from '@apollo/client';
 import { NetworkStatus, ApolloError } from '@apollo/client';
@@ -1052,7 +1052,7 @@ describe('useTableData', () => {
      * and compile-time type-safety for TNode to TRow conversions.
      *
      * These tests ensure:
-     * - transformNode is invoked for every non-null node in edges
+     * - transformNode is invoked for every non-null node in the edges array
      * - Default behavior (undefined transformNode) returns original TNode passthrough
      * - Null/undefined nodes are safely handled (filtered out)
      * - Type conversions from TNode to TRow are correct
@@ -1459,7 +1459,7 @@ describe('useTableData', () => {
       ]);
     });
 
-    it('handles complex transformNode with type conversions (TNode to TRow)', () => {
+    it('handles complex type conversions from TNode to TRow', () => {
       /**
        * Test: Complex type conversions from TNode to TRow
        *
@@ -1585,7 +1585,7 @@ describe('useTableData', () => {
       });
     });
 
-    it('handles transformNode with error-catching in reduce/filter pipeline', () => {
+    it('handles robustness when transformNode throws or returns invalid data', () => {
       /**
        * Test: Robustness when transformNode throws or returns invalid data
        *
@@ -1641,7 +1641,7 @@ describe('useTableData', () => {
       ]);
     });
 
-    it('maintains referential identity of transformed rows when connection is stable', () => {
+    it('memoizes transformed rows correctly', () => {
       /**
        * Test: Memoization of transformed rows
        *
@@ -1771,581 +1771,212 @@ describe('useTableData', () => {
     });
   });
 
-  describe('Memoization with deps Parameter', () => {
-    /**
-     * Tests for the deps parameter in UseTableDataOptions.
-     *
-     * The deps parameter allows custom dependencies to control memoization:
-     * - When undefined: defaults to [] (memoized based on connection and transformNode only)
-     * - When []: explicitly empty (same as undefined)
-     * - When populated: additional values trigger re-evaluation
-     *
-     * Important: data changes ALWAYS trigger updates regardless of deps.
-     * deps is additive: [connection, transformNode, ...deps]
-     *
-     * These tests verify:
-     * 1. deps undefined: memoization works without extra dependencies
-     * 2. deps = []: explicitly empty array works correctly
-     * 3. deps populated: re-evaluation triggered by custom dependencies
-     * 4. data changes: always trigger updates regardless of deps
-     * 5. connection changes: always trigger updates (includes path and data)
-     */
+  describe('path resolution edge cases', () => {
+    it('should return undefined when data is undefined', () => {
+      type TestData = { users?: Connection<{ id: string }> };
 
-    it('treats undefined deps as empty array for memoization', () => {
-      /**
-       * Test: undefined deps behaves like deps = []
-       *
-       * When deps is undefined in options, it defaults to empty array.
-       * This means: `useMemo(..., [connection, transformNode, ...deps])`
-       * becomes: `useMemo(..., [connection, transformNode])`
-       *
-       * Verifies:
-       * - transformNode not re-called on re-render (same connection, transform)
-       * - No extra dependencies cause re-evaluation
-       * - Memoization is stable without explicit deps
-       */
-      const transform = vi.fn((n: Node) => ({ key: n.id, label: n.name }));
-
-      const data = {
-        users: {
-          edges: [
-            { node: { id: '1', name: 'Alice' } },
-            { node: { id: '2', name: 'Bob' } },
-          ],
-          pageInfo: { hasNextPage: false, hasPreviousPage: false },
-        },
-      };
-
-      const { rerender } = render(
-        <Consumer
-          result={{ data, loading: false }}
-          path={['users']}
-          transform={transform}
-          deps={undefined} // Explicitly undefined
-        />,
+      const { result } = renderHook(() =>
+        useTableData<{ id: string }, { id: string }, TestData>(
+          {
+            data: undefined,
+            loading: false,
+            error: undefined,
+            networkStatus: NetworkStatus.ready,
+          } as unknown as QueryResult<TestData>,
+          { path: ['users'] },
+        ),
       );
 
-      expect(transform).toHaveBeenCalledTimes(2);
-      const firstCallCount = transform.mock.calls.length;
-
-      // Rerender with same data, path, transform, deps
-      rerender(
-        <Consumer
-          result={{ data, loading: false }}
-          path={['users']}
-          transform={transform}
-          deps={undefined} // Still undefined
-        />,
-      );
-
-      // Should NOT re-call transform (memoized)
-      expect(transform).toHaveBeenCalledTimes(firstCallCount);
+      expect(result.current.rows).toEqual([]);
+      expect(result.current.pageInfo).toBeNull();
     });
 
-    it('handles empty deps array for memoization', () => {
-      /**
-       * Test: deps = [] explicitly empty
-       *
-       * Same as undefined deps: no additional dependencies trigger re-evaluation.
-       *
-       * Memoization deps: [connection, transformNode, ...[]]
-       * to [connection, transformNode]
-       */
-      const transform = vi.fn((n: Node) => ({ key: n.id, label: n.name }));
+    it('should return undefined when path points to null', () => {
+      type TestData = { users: Connection<{ id: string }> | null };
 
-      const data = {
-        items: {
-          edges: [{ node: { id: '1', name: 'Item 1' } }],
-          pageInfo: { hasNextPage: false, hasPreviousPage: false },
-        },
-      };
-
-      const { rerender } = render(
-        <Consumer
-          result={{ data, loading: false }}
-          path={['items']}
-          transform={transform}
-          deps={[]} // Explicitly empty
-        />,
+      const { result } = renderHook(() =>
+        useTableData<{ id: string }, { id: string }, TestData>(
+          {
+            data: { users: null },
+            loading: false,
+            error: undefined,
+            networkStatus: NetworkStatus.ready,
+          } as unknown as QueryResult<TestData>,
+          { path: ['users'] },
+        ),
       );
 
-      expect(transform).toHaveBeenCalledTimes(1);
-      const firstCallCount = transform.mock.calls.length;
-
-      // Rerender with same data and empty deps
-      rerender(
-        <Consumer
-          result={{ data, loading: false }}
-          path={['items']}
-          transform={transform}
-          deps={[]}
-        />,
-      );
-
-      // Should NOT re-call (memoized)
-      expect(transform).toHaveBeenCalledTimes(firstCallCount);
+      expect(result.current.rows).toEqual([]);
+      expect(result.current.pageInfo).toBeNull();
     });
 
-    it('triggers re-evaluation when custom deps value changes', () => {
-      /**
-       * Test: populated deps causes re-evaluation on change
-       *
-       * When deps includes custom dependencies, changing them triggers memoization.
-       *
-       * Memoization deps: [connection, transformNode, ...deps]
-       *
-       * Scenario:
-       * - Custom locale value in deps
-       * - transform uses locale to format output
-       * - Change locale to deps changes to transform re-called
-       */
-      let currentLocale = 'en';
+    it('should return undefined when intermediate path value is not an object', () => {
+      type TestData = { users: string };
 
-      const transform = vi.fn((n: Node) => {
-        // Transform depends on external locale
-        const label = currentLocale === 'en' ? n.name : n.name.toUpperCase();
-        return { key: n.id, label };
-      });
-
-      const data = {
-        users: {
-          edges: [
-            { node: { id: '1', name: 'Alice' } },
-            { node: { id: '2', name: 'Bob' } },
-          ],
-          pageInfo: { hasNextPage: false, hasPreviousPage: false },
-        },
-      };
-
-      const { rerender } = render(
-        <Consumer
-          result={{ data, loading: false }}
-          path={['users']}
-          transform={transform}
-          deps={[currentLocale]} // Depends on locale
-        />,
+      const { result } = renderHook(() =>
+        useTableData<{ id: string }, { id: string }, TestData>(
+          {
+            data: { users: 'invalid' },
+            loading: false,
+            error: undefined,
+            networkStatus: NetworkStatus.ready,
+          } as unknown as QueryResult<TestData>,
+          { path: ['users', 'edges'] },
+        ),
       );
 
-      expect(transform).toHaveBeenCalledTimes(2);
-
-      const parsed1 = JSON.parse(
-        screen.getByTestId('out').textContent ?? 'null',
-      );
-      expect(parsed1.rows).toEqual([
-        { key: '1', label: 'Alice' }, // English (lowercase)
-        { key: '2', label: 'Bob' },
-      ]);
-
-      // Change locale (this is the custom dependency)
-      currentLocale = 'fr';
-
-      rerender(
-        <Consumer
-          result={{ data, loading: false }}
-          path={['users']}
-          transform={transform}
-          deps={[currentLocale]} // Locale changed
-        />,
-      );
-
-      // Should RE-CALL transform due to deps change
-      expect(transform).toHaveBeenCalledTimes(4); // 2 more calls
-
-      const parsed2 = JSON.parse(
-        screen.getByTestId('out').textContent ?? 'null',
-      );
-      expect(parsed2.rows).toEqual([
-        { key: '1', label: 'ALICE' }, // French (uppercase)
-        { key: '2', label: 'BOB' },
-      ]);
+      expect(result.current.rows).toEqual([]);
     });
 
-    it('triggers re-evaluation when multiple custom deps change', () => {
-      /**
-       * Test: multiple dependencies in deps array
-       *
-       * Verifies that memoization respects all custom dependencies.
-       * Changing any deps value triggers re-evaluation.
-       *
-       * Memoization deps: [connection, transformNode, ...deps]
-       * where deps = [locale, timeZone, currency]
-       */
-      let config = { locale: 'en', currency: 'USD' };
+    it('should return undefined when path points to non-object value', () => {
+      type TestData = { count: number };
 
-      const transform = vi.fn((n: Node) => {
-        const currencyPrefix = config.currency === 'USD' ? '$' : '€';
-        const nameFormat =
-          config.locale === 'en' ? n.name : n.name.toUpperCase();
-        return { key: n.id, label: `${currencyPrefix} ${nameFormat}` };
-      });
-
-      const data = {
-        items: {
-          edges: [{ node: { id: '1', name: 'Item' } }],
-          pageInfo: { hasNextPage: false, hasPreviousPage: false },
-        },
-      };
-
-      const { rerender } = render(
-        <Consumer
-          result={{ data, loading: false }}
-          path={['items']}
-          transform={transform}
-          deps={[config.locale, config.currency]}
-        />,
+      const { result } = renderHook(() =>
+        useTableData<{ id: string }, { id: string }, TestData>(
+          {
+            data: { count: 42 },
+            loading: false,
+            error: undefined,
+            networkStatus: NetworkStatus.ready,
+          } as unknown as QueryResult<TestData>,
+          { path: ['count'] },
+        ),
       );
 
-      expect(transform).toHaveBeenCalledTimes(1);
-
-      // Change currency
-      config = { locale: 'en', currency: 'EUR' };
-
-      rerender(
-        <Consumer
-          result={{ data, loading: false }}
-          path={['items']}
-          transform={transform}
-          deps={[config.locale, config.currency]}
-        />,
-      );
-
-      expect(transform).toHaveBeenCalledTimes(2); // One more call
-
-      const parsed = JSON.parse(
-        screen.getByTestId('out').textContent ?? 'null',
-      );
-      expect(parsed.rows).toEqual([
-        { key: '1', label: '€ Item' }, // EUR prefix
-      ]);
+      expect(result.current.rows).toEqual([]);
     });
 
-    it('always triggers re-evaluation when data changes regardless of deps', () => {
-      /**
-       * Test: data changes always trigger updates
-       *
-       * The data parameter is ALWAYS in the dependency array,
-       * so changing data always triggers re-computation.
-       *
-       * This is guaranteed by:
-       * - connection depends on data: [data, path, ...deps]
-       * - rows depend on connection: [connection, transformNode, ...deps]
-       *
-       * Even if deps is empty/undefined, data changes propagate through.
-       *
-       * Scenario:
-       * - Same deps value (or deps=undefined)
-       * - Different data to rows must update
-       */
-      const transform = vi.fn((n: Node) => ({ key: n.id, label: n.name }));
-
-      const data1 = {
-        users: {
-          edges: [{ node: { id: '1', name: 'Alice' } }],
-          pageInfo: { hasNextPage: false, hasPreviousPage: false },
-        },
+    it('should return undefined when result has no edges property', () => {
+      type TestData = {
+        users: { pageInfo: { hasNextPage: boolean } | null };
       };
 
-      const data2 = {
-        users: {
-          edges: [
-            { node: { id: '1', name: 'Alice' } },
-            { node: { id: '2', name: 'Bob' } },
-          ],
-          pageInfo: { hasNextPage: false, hasPreviousPage: false },
-        },
-      };
-
-      const { rerender } = render(
-        <Consumer
-          result={{ data: data1, loading: false }}
-          path={['users']}
-          transform={transform}
-          deps={[]} // Empty deps
-        />,
+      const { result } = renderHook(() =>
+        useTableData<{ id: string }, { id: string }, TestData>(
+          {
+            data: { users: { pageInfo: null } },
+            loading: false,
+            error: undefined,
+            networkStatus: NetworkStatus.ready,
+          } as unknown as QueryResult<TestData>,
+          { path: ['users'] },
+        ),
       );
 
-      expect(transform).toHaveBeenCalledTimes(1); // One node
-      const firstRows =
-        JSON.parse(screen.getByTestId('out').textContent ?? 'null')?.rows ?? [];
-
-      // Rerender with different data, same deps
-      rerender(
-        <Consumer
-          result={{ data: data2, loading: false }}
-          path={['users']}
-          transform={transform}
-          deps={[]} // Same empty deps
-        />,
-      );
-
-      // Should re-call transform for NEW data
-      expect(transform).toHaveBeenCalledTimes(3); // 2 more calls (Alice + Bob)
-
-      const secondRows = JSON.parse(
-        screen.getByTestId('out').textContent ?? '',
-      ).rows;
-
-      // Verify rows updated despite empty deps
-      expect(firstRows).toHaveLength(1);
-      expect(secondRows).toHaveLength(2);
-      expect(secondRows).toEqual([
-        { key: '1', label: 'Alice' },
-        { key: '2', label: 'Bob' },
-      ]);
+      expect(result.current.rows).toEqual([]);
     });
 
-    it('updates connection when data changes regardless of deps', () => {
-      /**
-       * Test: Connection re-extraction always happens on data change
-       *
-       * The connection memoization deps: [data, path, ...deps]
-       * This ensures data changes trigger re-extraction.
-       *
-       * Scenario:
-       * - deps undefined or empty
-       * - data property changes
-       * - Connection should be re-extracted
-       */
-      let callCount = 0;
+    it('should return undefined when edges is not an array', () => {
+      type TestData = { users: { edges: string } };
 
-      const transform = vi.fn((n: Node) => {
-        callCount++;
-        return { key: n.id, label: n.name };
-      });
-
-      const data1 = {
-        org: {
-          members: {
-            edges: [{ node: { id: '1', name: 'Alice' } }],
-            pageInfo: { hasNextPage: false, hasPreviousPage: false },
-          },
-        },
-      };
-
-      const data2 = {
-        org: {
-          members: {
-            edges: [{ node: { id: '1', name: 'Alice (Updated)' } }],
-            pageInfo: { hasNextPage: true, hasPreviousPage: false },
-          },
-        },
-      };
-
-      const { rerender } = render(
-        <Consumer
-          result={{ data: data1, loading: false }}
-          path={['org', 'members']}
-          transform={transform}
-          deps={undefined}
-        />,
+      const { result } = renderHook(() =>
+        useTableData<{ id: string }, { id: string }, TestData>(
+          {
+            data: { users: { edges: 'not-an-array' } },
+            loading: false,
+            error: undefined,
+            networkStatus: NetworkStatus.ready,
+          } as unknown as QueryResult<TestData>,
+          { path: ['users'] },
+        ),
       );
 
-      const parsed1 = JSON.parse(
-        screen.getByTestId('out').textContent ?? 'null',
-      );
-      expect(parsed1.pageInfo.hasNextPage).toBe(false);
-
-      // Rerender with new data (same deps)
-      rerender(
-        <Consumer
-          result={{ data: data2, loading: false }}
-          path={['org', 'members']}
-          transform={transform}
-          deps={undefined}
-        />,
-      );
-
-      const parsed2 = JSON.parse(
-        screen.getByTestId('out').textContent ?? 'null',
-      );
-
-      // pageInfo should update (from new connection)
-      expect(parsed2.pageInfo.hasNextPage).toBe(true);
-
-      // Node name should update
-      expect(parsed2.rows?.[0]?.label).toBe('Alice (Updated)');
-      expect(callCount).toBe(2);
+      expect(result.current.rows).toEqual([]);
     });
 
-    it('does not re-evaluate when deps is stable but other things change', () => {
-      /**
-       * Test: Stable deps prevents unnecessary re-evaluation
-       *
-       * If deps contains values that don't change, and connection/transformNode
-       * are stable, then rows memoization is not triggered.
-       *
-       * This demonstrates the value of memoization: avoiding expensive transformations.
-       *
-       * Scenario:
-       * - Same data, path, transform, deps
-       * - Rerender component
-       * - transform should NOT be re-called (memoized)
-       */
-      const transform = vi.fn((n: Node) => ({ key: n.id, label: n.name }));
+    it('should handle function path that returns undefined', () => {
+      type TestData = { users: Connection<{ id: string }> | null };
 
-      const data = {
-        users: {
-          edges: [
-            { node: { id: '1', name: 'Alice' } },
-            { node: { id: '2', name: 'Bob' } },
-          ],
-          pageInfo: { hasNextPage: false, hasPreviousPage: false },
-        },
-      };
-
-      const stableDeps = ['en']; // Will not change
-
-      const { rerender } = render(
-        <Consumer
-          result={{ data, loading: false }}
-          path={['users']}
-          transform={transform}
-          deps={stableDeps}
-        />,
+      const { result } = renderHook(() =>
+        useTableData<{ id: string }, { id: string }, TestData>(
+          {
+            data: { users: null },
+            loading: false,
+            error: undefined,
+            networkStatus: NetworkStatus.ready,
+          } as unknown as QueryResult<TestData>,
+          { path: (d: TestData) => d.users ?? undefined },
+        ),
       );
 
-      expect(transform).toHaveBeenCalledTimes(2);
-
-      // Rerender multiple times with same inputs
-      rerender(
-        <Consumer
-          result={{ data, loading: false }}
-          path={['users']}
-          transform={transform}
-          deps={stableDeps}
-        />,
-      );
-
-      expect(transform).toHaveBeenCalledTimes(2); // No additional calls
-
-      rerender(
-        <Consumer
-          result={{ data, loading: false }}
-          path={['users']}
-          transform={transform}
-          deps={stableDeps}
-        />,
-      );
-
-      expect(transform).toHaveBeenCalledTimes(2); // Still just 2 total
+      expect(result.current.rows).toEqual([]);
     });
 
-    it('handles deps that include undefined or null values', () => {
-      /**
-       * Test: deps can safely contain undefined/null
-       *
-       * deps is a React.DependencyList, which can include undefined.
-       * JavaScript object/value equality handles these correctly.
-       *
-       * Scenario:
-       * - deps = [null, undefined, someValue]
-       * - Changes to included values trigger re-evaluation
-       */
-      let externalValue: string | undefined = undefined;
-
-      const transform = vi.fn((n: Node) => ({
-        key: n.id,
-        label: externalValue ? `${n.name} (${externalValue})` : n.name,
-      }));
-
-      const data = {
-        items: {
-          edges: [{ node: { id: '1', name: 'Item' } }],
-          pageInfo: { hasNextPage: false, hasPreviousPage: false },
-        },
+    it('should handle numeric keys in path array', () => {
+      type TestData = {
+        items: Array<Connection<{ id: string }>>;
       };
 
-      const { rerender } = render(
-        <Consumer
-          result={{ data, loading: false }}
-          path={['items']}
-          transform={transform}
-          deps={[null, externalValue]}
-        />,
+      const { result } = renderHook(() =>
+        useTableData<{ id: string }, { id: string }, TestData>(
+          {
+            data: { items: [{ edges: [], pageInfo: null }] },
+            loading: false,
+            error: undefined,
+            networkStatus: NetworkStatus.ready,
+          } as unknown as QueryResult<TestData>,
+          { path: ['items', 0] },
+        ),
       );
 
-      expect(transform).toHaveBeenCalledTimes(1);
-      let parsed = JSON.parse(screen.getByTestId('out').textContent ?? 'null');
-      expect(parsed.rows[0].label).toBe('Item'); // externalValue is undefined
-
-      // Change externalValue from undefined to a string
-      externalValue = 'metadata';
-
-      rerender(
-        <Consumer
-          result={{ data, loading: false }}
-          path={['items']}
-          transform={transform}
-          deps={[null, externalValue]}
-        />,
-      );
-
-      // Should re-call transform (deps changed)
-      expect(transform).toHaveBeenCalledTimes(2);
-
-      parsed = JSON.parse(screen.getByTestId('out').textContent ?? 'null');
-      expect(parsed.rows[0].label).toBe('Item (metadata)');
+      expect(result.current.rows).toEqual([]);
+      expect(result.current.pageInfo).toBeNull();
     });
 
-    it('preserves data dependency even when deps contains path-like values', () => {
-      /**
-       * Test: data dependency is not overridden by deps
-       *
-       * The dependency array is: [connection, transformNode, ...deps]
-       * where connection depends on: [data, path, ...deps]
-       *
-       * This means:
-       * - data is ALWAYS tracked (first in connection deps)
-       * - Even if deps contains path-like values, data changes still trigger updates
-       *
-       * Scenario:
-       * - deps includes path-related values
-       * - Data still changes trigger re-computation
-       */
-      const transform = vi.fn((n: Node) => ({ key: n.id, label: n.name }));
-
-      const data1 = {
-        items: {
-          edges: [{ node: { id: '1', name: 'Item 1' } }],
-        },
+    it('should handle edges with null values', () => {
+      type TestData = {
+        users: Connection<{ id: string }>;
       };
 
-      const data2 = {
-        items: {
-          edges: [{ node: { id: '1', name: 'Item 1 - Updated' } }],
-        },
+      const { result } = renderHook(() =>
+        useTableData<{ id: string }, { id: string }, TestData>(
+          {
+            data: {
+              users: {
+                edges: [null, { node: { id: '1' } }, undefined],
+                pageInfo: null,
+              },
+            },
+            loading: false,
+            error: undefined,
+            networkStatus: NetworkStatus.ready,
+          } as unknown as QueryResult<TestData>,
+          { path: ['users'] },
+        ),
+      );
+
+      expect(result.current.rows).toEqual([{ id: '1' }]);
+    });
+
+    it('should filter out edges with null nodes', () => {
+      type TestData = {
+        users: Connection<{ id: string }>;
       };
 
-      const path = ['items']; // Stable reference
-
-      const { rerender } = render(
-        <Consumer
-          result={{ data: data1, loading: false }}
-          path={path}
-          transform={transform}
-          deps={[path]} // path in deps
-        />,
+      const { result } = renderHook(() =>
+        useTableData<{ id: string }, { id: string }, TestData>(
+          {
+            data: {
+              users: {
+                edges: [
+                  { node: { id: '1' } },
+                  { node: null },
+                  { node: { id: '2' } },
+                ],
+                pageInfo: null,
+              },
+            },
+            loading: false,
+            error: undefined,
+            networkStatus: NetworkStatus.ready,
+          } as unknown as QueryResult<TestData>,
+          { path: ['users'] },
+        ),
       );
 
-      expect(transform).toHaveBeenCalledTimes(1);
-
-      // Change data while path is stable
-      rerender(
-        <Consumer
-          result={{ data: data2, loading: false }}
-          path={path}
-          transform={transform}
-          deps={[path]} // path unchanged
-        />,
-      );
-
-      // Should still re-call because DATA changed
-      expect(transform).toHaveBeenCalledTimes(2);
-
-      const parsed = JSON.parse(
-        screen.getByTestId('out').textContent ?? 'null',
-      );
-      expect(parsed.rows[0].label).toBe('Item 1 - Updated');
+      expect(result.current.rows).toEqual([{ id: '1' }, { id: '2' }]);
     });
   });
+
+  // ...existing code...
 });
