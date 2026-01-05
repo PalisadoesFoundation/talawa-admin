@@ -66,7 +66,7 @@ import type {
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBan, faUserPlus } from '@fortawesome/free-solid-svg-icons';
-import PageHeader from 'shared-components/Navbar/Navbar';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 const BlockUser = (): JSX.Element => {
@@ -241,32 +241,32 @@ const BlockUser = (): JSX.Element => {
   return (
     <>
       <div>
-        <div className={styles.head}>
-          <div className={styles.btnsContainer}>
-            <PageHeader
-              search={{
-                placeholder: t('searchByName'),
-                onSearch: handleSearch,
-                inputTestId: 'searchByName',
-                buttonTestId: 'searchBtn',
-              }}
-              sorting={[
-                {
-                  title: t('sortOrganizations'),
-                  options: [
-                    { label: t('allMembers'), value: 'allMembers' },
-                    { label: t('blockedUsers'), value: 'blockedUsers' },
-                  ],
-                  selected: showBlockedMembers
-                    ? 'Blocked Users'
-                    : 'All Members',
-                  onChange: (value) =>
-                    setShowBlockedMembers(value === 'blockedUsers'),
-                  testIdPrefix: 'sortOrganizations',
-                },
-              ]}
-            />
-          </div>
+        <div className={styles.btnsContainer} data-testid="testcomp">
+          <AdminSearchFilterBar
+            hasDropdowns={true}
+            searchPlaceholder={t('searchByName')}
+            searchValue={searchTerm}
+            onSearchChange={handleSearch}
+            searchInputTestId="searchByName"
+            searchButtonTestId="searchBtn"
+            dropdowns={[
+              {
+                id: 'block-user-view',
+                label: t('view'),
+                type: 'filter',
+                options: [
+                  { label: t('allMembers'), value: 'allMembers' },
+                  { label: t('blockedUsers'), value: 'blockedUsers' },
+                ],
+                selectedOption: showBlockedMembers
+                  ? 'blockedUsers'
+                  : 'allMembers',
+                onOptionChange: (value) =>
+                  setShowBlockedMembers(value === 'blockedUsers'),
+                dataTestIdPrefix: 'blockUserView',
+              },
+            ]}
+          />
         </div>
         <div className={styles.listBox}>
           {(!showBlockedMembers && filteredAllMembers.length > 0) ||
