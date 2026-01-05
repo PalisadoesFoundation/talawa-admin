@@ -91,6 +91,7 @@ export interface IFormTextAreaProps
   helpText?: string;
   required?: boolean;
   ariaLabel?: string;
+  ariaDescribedBy?: string;
 }
 
 /**

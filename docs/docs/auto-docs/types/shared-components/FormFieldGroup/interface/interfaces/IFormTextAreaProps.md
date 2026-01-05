@@ -15,6 +15,14 @@ Always renders as multiline with configurable row count.
 
 ## Properties
 
+### ariaDescribedBy?
+
+> `optional` **ariaDescribedBy**: `string`
+
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:94](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L94)
+
+***
+
 ### ariaLabel?
 
 > `optional` **ariaLabel**: `string`
