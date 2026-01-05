@@ -6,7 +6,7 @@ inputs:
   grace-period-days:
     description: 'Days after label application before unassignment'
     required: false
-    default: '7'
+    default: '1'
   stale-label:
     description: 'Label that marks issues as stale'
     required: false
@@ -39,7 +39,7 @@ runs:
         github-token: ${{ inputs.github-token }}
         script: |
           // Read inputs from environment variables to prevent script injection
-          const DEFAULT_GRACE_PERIOD = 7;
+          const DEFAULT_GRACE_PERIOD = 1;
           const DEFAULT_MAX_ISSUES = 50;
 
           let gracePeriodDays = parseInt(process.env.GRACE_PERIOD_DAYS, 10);

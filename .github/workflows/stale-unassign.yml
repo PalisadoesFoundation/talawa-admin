@@ -21,7 +21,7 @@ on:
       grace-period-days:
         description: 'Override grace period (days)'
         required: false
-        default: '7'
+        default: '1'
 
 permissions:
   issues: write
@@ -40,7 +40,7 @@ jobs:
         uses: ./.github/actions/stale-unassign
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          grace-period-days: ${{ github.event.inputs.grace-period-days || '7' }}
+          grace-period-days: ${{ github.event.inputs.grace-period-days || '1' }}
           # Uncomment to customize the comment message:
           # comment-message: |
           #   Hi @{assignee}, this issue has been unassigned due to inactivity.
