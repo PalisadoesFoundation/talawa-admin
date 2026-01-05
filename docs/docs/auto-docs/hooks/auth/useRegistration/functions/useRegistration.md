@@ -24,11 +24,11 @@ Defined in: [src/hooks/auth/useRegistration.ts:8](https://github.com/PalisadoesF
 
 ### register()
 
-> **register**: (`data`) => `Promise`\<`void`\>
+> **register**: (`_data`) => `Promise`\<`void`\>
 
 #### Parameters
 
-##### data
+##### \_data
 
 ###### email
 

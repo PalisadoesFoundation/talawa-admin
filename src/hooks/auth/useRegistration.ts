@@ -11,7 +11,6 @@ export const useRegistration = ({
 }: IUseRegistrationProps) => {
   const [loading, setLoading] = useState(false);
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const register = async (_data: {
     name: string;
     email: string;
