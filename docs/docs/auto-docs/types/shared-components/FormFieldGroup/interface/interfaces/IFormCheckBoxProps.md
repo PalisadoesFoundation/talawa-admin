@@ -4,7 +4,7 @@
 
 # Interface: IFormCheckBoxProps
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:132](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L132)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:131](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L131)
 
 Checkbox component props using Bootstrap Form.Check.
 Provides labeled checkbox with custom container and label attributes.
@@ -19,7 +19,7 @@ Provides labeled checkbox with custom container and label attributes.
 
 > `optional` **containerClass**: `string`
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:141](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L141)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:140](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L140)
 
 ***
 
@@ -27,7 +27,7 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:141](https:
 
 > `optional` **containerProps**: `Omit`\<`React.HTMLAttributes`\<`HTMLDivElement`\>, `"onChange"` \| `"onBlur"` \| `"onFocus"` \| `"formAction"`\>
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:142](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L142)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:141](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L141)
 
 ***
 
@@ -35,7 +35,7 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:142](https:
 
 > `optional` **error**: `string`
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:147](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L147)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:146](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L146)
 
 ***
 
@@ -43,7 +43,7 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:147](https:
 
 > `optional` **labelProps**: `LabelHTMLAttributes`\<`HTMLLabelElement`\>
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:140](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L140)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:139](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L139)
 
 ***
 
@@ -51,7 +51,7 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:140](https:
 
 > `optional` **labelText**: `string`
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:139](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L139)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:138](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L138)
 
 ***
 
@@ -59,7 +59,7 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:139](https:
 
 > `optional` **touched**: `boolean`
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:146](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L146)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:145](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L145)
 
 ***
 
@@ -67,4 +67,4 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:146](https:
 
 > `optional` **type**: `"checkbox"`
 
-Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:138](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L138)
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:137](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L137)

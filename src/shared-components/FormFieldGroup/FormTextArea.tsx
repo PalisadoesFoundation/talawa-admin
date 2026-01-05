@@ -9,7 +9,6 @@ export const FormTextArea: React.FC<IFormTextAreaProps> = ({
   helpText,
   required,
   ariaLabel,
-  ariaDescribedBy,
   endAdornment,
   rows,
   ...inputProps
@@ -30,7 +29,6 @@ export const FormTextArea: React.FC<IFormTextAreaProps> = ({
         slotProps={{
           input: {
             endAdornment,
-            'aria-describedby': ariaDescribedBy,
           },
         }}
         aria-label={ariaLabel}
