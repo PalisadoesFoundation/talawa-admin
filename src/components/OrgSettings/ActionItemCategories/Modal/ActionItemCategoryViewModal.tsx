@@ -33,9 +33,11 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
     <BaseModal
       show={isOpen}
       onHide={hide}
-      title={t('categoryDetails')}
       className={styles.itemModal}
       dataTestId="categoryViewModal"
+      headerContent={
+        <p className={styles.titlemodal}>{t('categoryDetails')}</p>
+      }
     >
       <Form className="p-3">
         {/* Category Name */}

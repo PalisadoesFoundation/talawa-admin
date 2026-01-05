@@ -189,9 +189,11 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
     <BaseModal
       show={isOpen}
       onHide={hide}
-      title={t('categoryDetails')}
       className={styles.createModal}
       dataTestId="actionItemCategoryModal"
+      headerContent={
+        <p className={styles.titlemodal}>{t('categoryDetails')}</p>
+      }
     >
       <Form
         onSubmit={mode === 'create' ? handleCreate : handleEdit}
