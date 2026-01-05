@@ -45,7 +45,7 @@ import {
 } from '@mui/material';
 import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import styles from 'style/app-fixed.module.css';
 import { useLazyQuery, useQuery, useMutation } from '@apollo/client';
 import {
@@ -138,23 +138,25 @@ function EventRegistrants(): JSX.Element {
     (userId: string): void => {
       // Check if user is already checked in
       if (checkedInUsers.includes(userId)) {
-        toast.error('Cannot unregister a user who has already checked in');
+        NotificationToast.error(
+          'Cannot unregister a user who has already checked in',
+        );
         return;
       }
 
-      toast.warn('Removing the attendee...');
+      NotificationToast.warning('Removing the attendee...');
       const removeVariables = isRecurring
         ? { userId, recurringEventInstanceId: eventId }
         : { userId, eventId: eventId };
 
       removeRegistrantMutation({ variables: removeVariables })
         .then(() => {
-          toast.success('Attendee removed successfully');
+          NotificationToast.success('Attendee removed successfully');
           refreshData(); // Refresh the data after removal
         })
         .catch((err) => {
-          toast.error('Error removing attendee');
-          toast.error(err.message);
+          NotificationToast.error('Error removing attendee');
+          NotificationToast.error(err.message);
         });
     },
     [

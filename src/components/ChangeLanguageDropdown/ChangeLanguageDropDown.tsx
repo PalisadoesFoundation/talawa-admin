@@ -41,7 +41,7 @@ import { useMutation } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import type { InterfaceDropDownProps } from 'types/DropDown/interface';
 import { urlToFile } from 'utils/urlToFile';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
   const currentLanguageCode = cookies.get('i18next') || 'en';
@@ -60,7 +60,7 @@ const ChangeLanguageDropDown = (props: InterfaceDropDownProps): JSX.Element => {
     }
 
     if (!userId) {
-      toast.error('User not found');
+      NotificationToast.error('User not found');
       return;
     }
 

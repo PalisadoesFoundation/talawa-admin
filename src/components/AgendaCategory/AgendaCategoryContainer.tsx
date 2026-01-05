@@ -34,7 +34,7 @@ import React, { useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { Button, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { useMutation } from '@apollo/client';
 
 import {
@@ -143,10 +143,12 @@ function agendaCategoryContainer({
 
       agendaCategoryRefetch();
       hideUpdateModal();
-      toast.success(t('agendaCategoryUpdated') as string);
+      NotificationToast.success(t('agendaCategoryUpdated') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(`Agenda Category Update Failed ${error.message}`);
+        NotificationToast.error(
+          `Agenda Category Update Failed ${error.message}`,
+        );
       }
     }
   };
@@ -165,10 +167,12 @@ function agendaCategoryContainer({
       });
       agendaCategoryRefetch();
       toggleDeleteModal();
-      toast.success(t('agendaCategoryDeleted') as string);
+      NotificationToast.success(t('agendaCategoryDeleted') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(`Agenda Category Delete Failed, ${error.message}`);
+        NotificationToast.error(
+          `Agenda Category Delete Failed, ${error.message}`,
+        );
       }
     }
   };

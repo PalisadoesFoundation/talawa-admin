@@ -51,7 +51,7 @@ import { Modal, Form, Button } from 'react-bootstrap';
 import { useParams } from 'react-router';
 import styles from 'style/app-fixed.module.css';
 import { Stack } from '@mui/material';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { ADD_PEOPLE_TO_TAG } from 'GraphQl/Mutations/TagMutations';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { WarningAmberRounded } from '@mui/icons-material';
@@ -185,7 +185,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     e.preventDefault();
 
     if (!assignToMembers.length) {
-      toast.error(t('noOneSelected'));
+      NotificationToast.error(t('noOneSelected'));
       return;
     }
 
@@ -198,7 +198,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
       });
 
       if (data) {
-        toast.success(t('successfullyAssignedToPeople'));
+        NotificationToast.success(t('successfullyAssignedToPeople'));
         refetchAssignedMembersData();
         hideAddPeopleToTagModal();
         setAssignToMembers([]);
@@ -206,7 +206,7 @@ const AddPeopleToTag: React.FC<InterfaceAddPeopleToTagProps> = ({
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : tErrors('unknownError');
-      toast.error(errorMessage);
+      NotificationToast.error(errorMessage);
     }
   };
 

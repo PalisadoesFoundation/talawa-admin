@@ -41,7 +41,7 @@ import { Modal, Form, Button, Spinner } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { useParams } from 'react-router';
 import { useMutation } from '@apollo/client';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import type {
   InterfaceAddOnSpotAttendeeProps,
   InterfaceFormData,
@@ -68,7 +68,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   const [addSignUp] = useMutation(SIGNUP_MUTATION);
   const validateForm = (): boolean => {
     if (!formData.firstName || !formData.lastName || !formData.email) {
-      toast.error(t('invalidDetailsMessage'));
+      NotificationToast.error(t('invalidDetailsMessage'));
       return false;
     }
     return true;
@@ -121,7 +121,7 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
       });
 
       if (response.data?.signUp) {
-        toast.success(t('attendeeAddedSuccess'));
+        NotificationToast.success(t('attendeeAddedSuccess'));
         resetForm();
         reloadMembers();
         handleClose();

@@ -40,7 +40,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 
 import { WarningAmberRounded } from '@mui/icons-material';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 import { useMutation, useQuery } from '@apollo/client';
 import {
@@ -157,10 +157,10 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
       });
       hideCreateModal();
       refetchAgendaItem();
-      toast.success(t('agendaItemCreated') as string);
+      NotificationToast.success(t('agendaItemCreated') as string);
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(error.message);
+        NotificationToast.error(error.message);
       }
     }
   };

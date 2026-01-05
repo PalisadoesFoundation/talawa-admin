@@ -39,7 +39,7 @@ import type { InterfaceTableCheckIn } from 'types/CheckIn/interface';
 import Button from '@mui/material/Button';
 import { useMutation } from '@apollo/client';
 import { MARK_CHECKIN } from 'GraphQl/Mutations/mutations';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { generate } from '@pdfme/generator';
 import { tagTemplate } from '../../tagTemplate';
 import { useTranslation } from 'react-i18next';
@@ -65,14 +65,14 @@ export const TableRow = ({
       variables: variables,
     })
       .then(() => {
-        toast.success(t('checkedInSuccessfully') as string);
+        NotificationToast.success(t('checkedInSuccessfully') as string);
         refetch();
         // Call the callback to refresh data in parent component (EventRegistrants)
         onCheckInUpdate?.();
       })
       .catch((err) => {
-        toast.error(t('errorCheckingIn') as string);
-        toast.error(err.message);
+        NotificationToast.error(t('errorCheckingIn') as string);
+        NotificationToast.error(err.message);
       });
   };
   /**
@@ -80,12 +80,10 @@ export const TableRow = ({
    *
    * @returns A promise that resolves when the PDF is generated and opened.
    */
-  const notify = (): Promise<void> =>
-    toast.promise(generateTag, {
-      pending: 'Generating pdf...',
-      success: 'PDF generated successfully!',
-      error: 'Error generating pdf!',
-    });
+  const notify = async (): Promise<void> => {
+    NotificationToast.info('Generating pdf...');
+    await generateTag();
+  };
 
   /**
    * Generates a PDF tag based on the provided data and opens it in a new tab.
@@ -106,11 +104,11 @@ export const TableRow = ({
       const url = URL.createObjectURL(blob);
       window.open(url);
 
-      toast.success('PDF generated successfully!');
+      NotificationToast.success('PDF generated successfully!');
     } catch (error: unknown) {
       const errorMessage =
         error instanceof Error ? error.message : 'Unknown error';
-      toast.error(`Error generating pdf: ${errorMessage}`);
+      NotificationToast.error(`Error generating pdf: ${errorMessage}`);
     }
   };
 

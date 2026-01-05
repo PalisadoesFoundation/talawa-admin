@@ -52,7 +52,7 @@ import { FaRegClock } from 'react-icons/fa';
 import Loader from 'components/Loader/Loader';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
 enum ItemFilter {
@@ -92,14 +92,14 @@ const Invitations = (): JSX.Element => {
   ): Promise<void> => {
     try {
       await updateMembership({ variables: { id: id, status: status } });
-      toast.success(
+      NotificationToast.success(
         t(
           status === 'accepted' ? 'invitationAccepted' : 'invitationRejected',
         ) as string,
       );
       refetchInvitations();
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
     }
   };
 
