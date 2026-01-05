@@ -2,7 +2,6 @@ import { useQuery } from '@apollo/client';
 import { WarningAmberRounded } from '@mui/icons-material';
 import { FUND_CAMPAIGN_PLEDGE } from 'GraphQl/Queries/fundQueries';
 import Loader from 'components/Loader/Loader';
-import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 import dayjs from 'dayjs';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Button } from 'react-bootstrap';
@@ -15,8 +14,7 @@ import PledgeModal from './modal/PledgeModal';
 import { Popover } from '@mui/material';
 import Avatar from 'components/Avatar/Avatar';
 import BreadcrumbsComponent from 'shared-components/BreadcrumbsComponent/BreadcrumbsComponent';
-import { DataGrid } from 'shared-components/DataGridWrapper';
-import EmptyState from 'shared-components/EmptyState/EmptyState';
+import { DataGridWrapper } from 'shared-components/DataGridWrapper/DataGridWrapper';
 import type {
   InterfacePledgeInfo,
   InterfaceUserInfoPG,
@@ -67,11 +65,6 @@ const fundCampaignPledge = (): JSX.Element => {
     'create',
   );
   const [pledge, setPledge] = useState<InterfacePledgeInfo | null>(null);
-  const [searchTerm, setSearchTerm] = useState('');
-
-  const [sortBy, setSortBy] = useState<
-    'amount_ASC' | 'amount_DESC' | 'endDate_ASC' | 'endDate_DESC'
-  >('endDate_DESC');
 
   const {
     data: pledgeData,
@@ -103,6 +96,8 @@ const fundCampaignPledge = (): JSX.Element => {
               ? edge.node.users
               : [edge.node.pledger];
 
+          const users = allUsers.filter(Boolean);
+
           return {
             id: edge.node.id,
             amount: amount,
@@ -112,32 +107,12 @@ const fundCampaignPledge = (): JSX.Element => {
             endDate: pledgeData.fundCampaign.endAt
               ? new Date(pledgeData.fundCampaign.endAt)
               : new Date(),
-            users: allUsers.filter(Boolean),
+            users: users,
             currency: pledgeData.fundCampaign.currencyCode || 'USD',
+            // Add computed field for searchability
+            pledgerNames: users.map((u) => u.name || '').join(' '),
           };
         }) ?? [];
-
-      const filteredPledges = searchTerm
-        ? pledgesList.filter((pledge) => {
-            const search = searchTerm.toLowerCase();
-            return pledge.users.some((user) =>
-              user.name?.toLowerCase().includes(search),
-            );
-          })
-        : pledgesList;
-
-      const sortedPledges = [...filteredPledges].sort((a, b) => {
-        switch (sortBy) {
-          case 'amount_ASC':
-            return a.amount - b.amount;
-          case 'amount_DESC':
-            return b.amount - a.amount;
-          case 'endDate_ASC':
-            return a.endDate.getTime() - b.endDate.getTime();
-          case 'endDate_DESC':
-            return b.endDate.getTime() - a.endDate.getTime();
-        }
-      });
 
       // Get fund info from the campaign's fund property
       const fundInfo =
@@ -145,13 +120,13 @@ const fundCampaignPledge = (): JSX.Element => {
       const fundName = fundInfo?.name ?? tCommon('funds');
       const fundId = fundInfo?.id ?? null;
       return {
-        pledges: sortedPledges,
+        pledges: pledgesList,
         totalPledged,
         totalRaised,
         fundName,
         fundId,
       };
-    }, [pledgeData, searchTerm, sortBy, tCommon]);
+    }, [pledgeData, tCommon]);
 
   useEffect(() => {
     if (pledgeData?.fundCampaign) {
@@ -164,10 +139,6 @@ const fundCampaignPledge = (): JSX.Element => {
       });
     }
   }, [pledgeData]);
-
-  useEffect(() => {
-    refetchPledge();
-  }, [sortBy, refetchPledge]);
 
   const openModal = (modal: ModalState): void => {
     setModalState((prevState) => ({ ...prevState, [modal]: true }));
@@ -335,97 +306,58 @@ const fundCampaignPledge = (): JSX.Element => {
           </div>
         </div>
       </div>
-      <div className={`${styles.btnsContainerPledge} align-items-center`}>
-        <AdminSearchFilterBar
-          searchPlaceholder={t('pledges.searchPledger')}
-          searchValue={searchTerm}
-          onSearchChange={(value) => setSearchTerm(value.trim())}
-          onSearchSubmit={(value: string) => {
-            setSearchTerm(value.trim());
-          }}
-          searchInputTestId="searchPledger"
-          searchButtonTestId="searchBtn"
-          hasDropdowns={true}
-          dropdowns={[
-            {
-              id: 'sort-pledges',
-              label: tCommon('sort'),
-              title: tCommon('sort'),
-              dataTestIdPrefix: 'filter',
-              selectedOption: sortBy,
-              onOptionChange: (value) =>
-                setSortBy(
-                  value as
-                    | 'amount_ASC'
-                    | 'amount_DESC'
-                    | 'endDate_ASC'
-                    | 'endDate_DESC',
-                ),
-              options: [
-                { label: t('pledges.lowestAmount'), value: 'amount_ASC' },
-                { label: t('pledges.highestAmount'), value: 'amount_DESC' },
-                { label: t('pledges.latestEndDate'), value: 'endDate_DESC' },
-                { label: t('pledges.earliestEndDate'), value: 'endDate_ASC' },
-              ],
-              type: 'sort',
-            },
-          ]}
-          additionalButtons={
-            <Button
-              variant="success"
-              className={styles.dropdown}
-              disabled={!isWithinCampaignDates}
-              onClick={() => handleOpenModal(null, 'create')}
-              data-testid="addPledgeBtn"
-              title={
-                !isWithinCampaignDates ? t('pledges.campaignNotActive') : ''
-              }
-            >
-              <i className={'fa fa-plus me-2'} />
-              {t('pledges.addPledge')}
-            </Button>
-          }
-        />
-      </div>
-      <DataGrid
-        disableColumnMenu
-        columnBufferPx={7}
-        hideFooter={true}
-        getRowId={(row) => row.id}
-        slots={{
-          noRowsOverlay: () => (
-            <EmptyState
-              icon="volunteer_activism"
-              message={t('pledges.noPledges')}
-              dataTestId="fund-campaign-pledge-empty-state"
-            />
-          ),
-        }}
-        className={`${styles.dataGridNoHover} ${styles.dataGridRounded}`}
-        sx={{
-          '&.MuiDataGrid-root .MuiDataGrid-cell:focus-within': {
-            outline: '2px solid var(--primary-theme-color)',
-            outlineOffset: '-2px',
-          },
-          '&.MuiDataGrid-root .MuiDataGrid-columnHeader:focus-within': {
-            outline: '2px solid var(--primary-theme-color)',
-            outlineOffset: '-2px',
-          },
-        }}
-        getRowClassName={() => `${styles.rowBackgroundPledge}`}
-        autoHeight
-        rowHeight={65}
-        rows={pledges.map((pledge) => ({
-          id: pledge.id,
-          users: pledge.users,
-          endDate: pledge.endDate,
-          pledgeDate: pledge.pledgeDate,
-          amount: pledge.amount,
-          currency: pledge.currency,
-        }))}
+      <DataGridWrapper
+        rows={pledges}
         columns={columns}
-        isRowSelectable={() => false}
+        loading={pledgeLoading}
+        searchConfig={{
+          enabled: true,
+          fields: ['pledgerNames'],
+          placeholder: t('pledges.searchPledger'),
+          searchInputTestId: 'searchPledger',
+        }}
+        sortConfig={{
+          sortingOptions: [
+            { label: t('pledges.lowestAmount'), value: 'amount_ASC' },
+            { label: t('pledges.highestAmount'), value: 'amount_DESC' },
+            { label: t('pledges.latestEndDate'), value: 'endDate_DESC' },
+            { label: t('pledges.earliestEndDate'), value: 'endDate_ASC' },
+          ],
+          sortFunction: (rows, sortValue) => {
+            const [field, order] = String(sortValue).split('_');
+            return [...rows].sort((a, b) => {
+              if (field === 'amount') {
+                return order === 'ASC'
+                  ? a.amount - b.amount
+                  : b.amount - a.amount;
+              } else if (field === 'endDate') {
+                return order === 'ASC'
+                  ? a.endDate.getTime() - b.endDate.getTime()
+                  : b.endDate.getTime() - a.endDate.getTime();
+              }
+              return 0;
+            });
+          },
+        }}
+        emptyStateProps={{
+          icon: 'volunteer_activism',
+          message: t('pledges.noPledges'),
+          dataTestId: 'fund-campaign-pledge-empty-state',
+        }}
+        headerButton={
+          <Button
+            variant="success"
+            disabled={!isWithinCampaignDates}
+            onClick={() => handleOpenModal(null, 'create')}
+            data-testid="addPledgeBtn"
+            title={!isWithinCampaignDates ? t('pledges.campaignNotActive') : ''}
+          >
+            <i className={'fa fa-plus me-2'} />
+            {t('pledges.addPledge')}
+          </Button>
+        }
       />
+
       <PledgeModal
         isOpen={modalState[ModalState.SAME]}
         hide={() => closeModal(ModalState.SAME)}

@@ -131,13 +131,16 @@ export function DataGridWrapper<T extends { id: string | number }>(
 
     // Then apply search
     if (searchConfig?.enabled && debouncedSearchTerm) {
-      processedRows = processedRows.filter((r: T) =>
-        searchConfig.fields.some((f) =>
-          String(r[f as keyof T] ?? '')
-            .toLowerCase()
-            .includes(debouncedSearchTerm.toLowerCase()),
-        ),
-      );
+      const trimmedSearch = debouncedSearchTerm.trim();
+      if (trimmedSearch) {
+        processedRows = processedRows.filter((r: T) =>
+          searchConfig.fields.some((f) =>
+            String(r[f as keyof T] ?? '')
+              .toLowerCase()
+              .includes(trimmedSearch.toLowerCase()),
+          ),
+        );
+      }
     }
 
     // Apply custom sort if provided
@@ -195,7 +198,7 @@ export function DataGridWrapper<T extends { id: string | number }>(
             onChange={(val) => setSearchTerm(val)}
             onSearch={(val) => setSearchTerm(val)}
             onClear={() => setSearchTerm('')}
-            inputTestId="search-bar"
+            inputTestId={searchConfig.searchInputTestId ?? 'search-bar'}
             aria-label={tCommon('search')}
           />
         )}

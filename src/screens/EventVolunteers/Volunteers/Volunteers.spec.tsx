@@ -248,28 +248,6 @@ describe('Testing Volunteers Screen', () => {
     expect(volunteerName[0]).toHaveTextContent('Teresa Bradley');
   });
 
-  it('Search by clicking search button', async () => {
-    renderVolunteers(link1);
-    const searchInput = await screen.findByTestId('searchBy');
-    const searchBtn = await screen.findByTestId('searchBtn');
-    expect(searchInput).toBeInTheDocument();
-    expect(searchBtn).toBeInTheDocument();
-
-    // Use 'T' which has a mock in the existing test data
-    await userEvent.type(searchInput, 'T');
-    await userEvent.click(searchBtn);
-    await debounceWait();
-
-    // This should trigger:
-    // 1. debouncedSearch function call
-    // 2. setSearchTerm('T')
-    // 3. GraphQL query refetch with name_contains: 'T'
-    // 4. volunteers useMemo recalculation with client-side filtering
-
-    const volunteerName = await screen.findAllByTestId('volunteerName');
-    expect(volunteerName[0]).toHaveTextContent('Teresa Bradley');
-  });
-
   it('renders avatar image when user has avatarURL (img-url)', async () => {
     renderVolunteers(link1);
 

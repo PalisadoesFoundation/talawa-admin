@@ -123,10 +123,8 @@ export const MOCKS = [
         input: { id: 'eventId' },
         where: {
           eventId: 'eventId',
-          name_contains: '',
           hasAccepted: undefined,
         },
-        orderBy: null,
       },
     },
     result: {
@@ -140,84 +138,7 @@ export const MOCKS = [
       query: GET_EVENT_VOLUNTEERS,
       variables: {
         input: { id: 'eventId' },
-        where: {
-          eventId: 'eventId',
-          name_contains: '',
-          hasAccepted: undefined,
-        },
-        orderBy: 'hoursVolunteered_ASC',
-      },
-    },
-    result: {
-      data: {
-        event: eventResponseWrapper([volunteer2, volunteer3, volunteer1]),
-      },
-    },
-  },
-  {
-    request: {
-      query: GET_EVENT_VOLUNTEERS,
-      variables: {
-        input: { id: 'eventId' },
-        where: {
-          eventId: 'eventId',
-          name_contains: '',
-          hasAccepted: undefined,
-        },
-        orderBy: 'hoursVolunteered_DESC',
-      },
-    },
-    result: {
-      data: {
-        event: eventResponseWrapper([volunteer1, volunteer3, volunteer2]),
-      },
-    },
-  },
-  {
-    request: {
-      query: GET_EVENT_VOLUNTEERS,
-      variables: {
-        input: { id: 'eventId' },
-        where: {
-          eventId: 'eventId',
-          name_contains: 'T',
-          hasAccepted: undefined,
-        },
-        orderBy: null,
-      },
-    },
-    result: {
-      data: {
-        event: eventResponseWrapper([volunteer1]),
-      },
-    },
-  },
-  {
-    request: {
-      query: GET_EVENT_VOLUNTEERS,
-      variables: {
-        input: { id: 'eventId' },
-        where: {
-          eventId: 'eventId',
-          name_contains: 'Teresa',
-          hasAccepted: undefined,
-        },
-        orderBy: null,
-      },
-    },
-    result: {
-      data: {
-        event: eventResponseWrapper([volunteer1]),
-      },
-    },
-  },
-  {
-    request: {
-      query: GET_EVENT_VOLUNTEERS,
-      variables: {
-        input: { id: 'eventId' },
-        where: { eventId: 'eventId', name_contains: '', hasAccepted: false },
-        orderBy: null,
+        where: { eventId: 'eventId', hasAccepted: false },
       },
     },
     result: {
@@ -231,8 +152,7 @@ export const MOCKS = [
       query: GET_EVENT_VOLUNTEERS,
       variables: {
         input: { id: 'eventId' },
-        where: { eventId: 'eventId', name_contains: '', hasAccepted: true },
-        orderBy: null,
+        where: { eventId: 'eventId', hasAccepted: true },
       },
     },
     result: {
@@ -357,10 +277,8 @@ export const MOCKS_ERROR = [
         input: { id: 'eventId' },
         where: {
           eventId: 'eventId',
-          name_contains: '',
           hasAccepted: undefined,
         },
-        orderBy: null,
       },
     },
     error: new Error('An error occurred'),
@@ -419,10 +337,8 @@ export const MOCKS_EMPTY = [
         input: { id: 'eventId' },
         where: {
           eventId: 'eventId',
-          name_contains: '',
           hasAccepted: undefined,
         },
-        orderBy: null,
       },
     },
     result: {

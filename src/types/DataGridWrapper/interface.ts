@@ -54,6 +54,8 @@ export interface InterfaceDataGridWrapperProps<
     placeholder?: string;
     /** Delay in milliseconds for search debounce (if implemented). */
     debounceMs?: number;
+    /** Custom test ID for the search input element. */
+    searchInputTestId?: string;
   };
 
   /**

@@ -642,12 +642,15 @@ describe('Testing Campaign Pledge Screen', () => {
     fireEvent.change(searchPledger, {
       target: { value: 'John' },
     });
-    fireEvent.click(screen.getByTestId('searchBtn'));
 
-    await waitFor(() => {
-      expect(screen.getByText('John Doe')).toBeInTheDocument();
-      expect(screen.queryByText('Jane Doe')).toBeNull();
-    });
+    // Wait for debounced search to complete (DataGridWrapper auto-searches)
+    await waitFor(
+      () => {
+        expect(screen.getByText('John Doe')).toBeInTheDocument();
+        expect(screen.queryByText('Jane Doe')).toBeNull();
+      },
+      { timeout: 2000 },
+    );
   });
 
   it('should render breadcrumbs with correct navigation links', async () => {
@@ -1014,7 +1017,7 @@ describe('Testing Campaign Pledge Screen', () => {
     const searchPledger = await screen.findByTestId('searchPledger');
     expect(searchPledger).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('filter'));
+    fireEvent.click(screen.getByTestId('sort'));
     await waitFor(() => {
       expect(screen.getByTestId('amount_ASC')).toBeInTheDocument();
     });
@@ -1035,7 +1038,7 @@ describe('Testing Campaign Pledge Screen', () => {
     const searchPledger = await screen.findByTestId('searchPledger');
     expect(searchPledger).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('filter'));
+    fireEvent.click(screen.getByTestId('sort'));
     await waitFor(() => {
       expect(screen.getByTestId('amount_DESC')).toBeInTheDocument();
     });
@@ -1056,7 +1059,7 @@ describe('Testing Campaign Pledge Screen', () => {
     const searchPledger = await screen.findByTestId('searchPledger');
     expect(searchPledger).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('filter'));
+    fireEvent.click(screen.getByTestId('sort'));
     await waitFor(() => {
       expect(screen.getByTestId('endDate_DESC')).toBeInTheDocument();
     });
@@ -1079,7 +1082,7 @@ describe('Testing Campaign Pledge Screen', () => {
     const searchPledger = await screen.findByTestId('searchPledger');
     expect(searchPledger).toBeInTheDocument();
 
-    fireEvent.click(screen.getByTestId('filter'));
+    fireEvent.click(screen.getByTestId('sort'));
     await waitFor(() => {
       expect(screen.getByTestId('endDate_ASC')).toBeInTheDocument();
     });
@@ -1132,8 +1135,8 @@ describe('Testing Campaign Pledge Screen', () => {
     });
 
     // Directly test the sorting by manipulating the state
-    const filterButton = screen.getByTestId('filter');
-    fireEvent.click(filterButton);
+    const sortButton = screen.getByTestId('sort');
+    fireEvent.click(sortButton);
 
     // The default case should maintain the original order
     await waitFor(() => {
@@ -1163,7 +1166,7 @@ describe('Testing Campaign Pledge Screen', () => {
     ];
 
     for (const option of sortOptions) {
-      fireEvent.click(screen.getByTestId('filter'));
+      fireEvent.click(screen.getByTestId('sort'));
       await waitFor(() => {
         expect(screen.getByTestId(option)).toBeInTheDocument();
       });

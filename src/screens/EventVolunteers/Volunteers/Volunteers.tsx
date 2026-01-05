@@ -371,7 +371,7 @@ function Volunteers(): JSX.Element {
   return (
     <div>
       {/* DataGridWrapper with Volunteers */}
-      <DataGridWrapper<InterfaceEventVolunteerInfo & { volunteerName: string }>
+      <DataGridWrapper
         rows={volunteers}
         columns={columns}
         loading={volunteersLoading}
@@ -379,6 +379,7 @@ function Volunteers(): JSX.Element {
           enabled: true,
           fields: ['volunteerName'],
           placeholder: tCommon('searchBy', { item: tCommon('name') }),
+          searchInputTestId: 'searchBy',
         }}
         sortConfig={{
           sortingOptions: [
