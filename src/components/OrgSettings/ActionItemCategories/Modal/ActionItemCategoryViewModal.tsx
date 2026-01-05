@@ -61,7 +61,7 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
               label={t('actionItemCategoryDescription')}
               variant="outlined"
               className={styles.noOutline}
-              value={category.description || 'No description provided'}
+              value={category.description || t('noDescriptionProvided')}
               disabled
               multiline
               rows={4}

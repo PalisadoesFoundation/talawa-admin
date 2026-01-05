@@ -257,7 +257,6 @@ const CategoryModal: FC<IActionItemCategoryModal> = ({
               variant="danger"
               onClick={handleDelete}
               data-testid="deleteCategoryButton"
-              className="btn btn-danger"
             >
               <i className="fa fa-trash me-2" />
               {tCommon('delete')}
