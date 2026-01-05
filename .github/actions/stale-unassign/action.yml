@@ -52,9 +52,25 @@ runs:
             try {
               return await fn();
             } catch (error) {
-              if (retries > 0 && (error.status >= 500 || error.message.includes('network'))) {
-                console.warn(`API call failed (${error.message}). Retrying in ${delay}ms...`);
-                await new Promise(r => setTimeout(r, delay));
+              const status = error.status || 0;
+              const isRateLimit = status === 429 || status === 403;
+              const isServerErr = status >= 500;
+              const isNetworkErr = error.message && error.message.includes('network');
+
+              if (retries > 0 && (isServerErr || isNetworkErr || isRateLimit)) {
+                let waitTime = delay;
+
+                // Check Retry-After header
+                if (isRateLimit && error.response && error.response.headers) {
+                  const retryAfter = error.response.headers['retry-after'];
+                  if (retryAfter) {
+                     // Retry-After is usually in seconds
+                     waitTime = Math.max(waitTime, parseInt(retryAfter, 10) * 1000);
+                  }
+                }
+
+                console.warn(`API call failed (${error.message}). Retrying in ${waitTime}ms...`);
+                await new Promise(r => setTimeout(r, waitTime));
                 return retry(fn, retries - 1, delay * 2);
               }
               throw error;
@@ -91,6 +107,8 @@ runs:
           console.log(`Configuration: grace-period=${gracePeriodDays} days, stale-label="${staleLabel}", max-issues=${maxIssuesPerRun || 'unlimited'}, dry-run=${dryRun}`);
 
           // Check if repository is archived
+          const { data: repo } = await retry(() => github.rest.repos.get({
+            owner: context.repo.owner,
             repo: context.repo.repo
           }));
 
@@ -101,6 +119,9 @@ runs:
 
           // Check if the stale label exists in this repository
           try {
+            await retry(() => github.rest.issues.getLabel({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
               name: staleLabel
             }));
           } catch (error) {
@@ -114,6 +135,11 @@ runs:
           // Find open issues with stale label
           let issues = [];
           try {
+            issues = await retry(() => github.paginate(github.rest.issues.listForRepo, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: staleLabel,
               per_page: 100
             }));
           } catch (error) {
@@ -155,6 +181,10 @@ runs:
               // Check for linked PRs in the same repository using timeline events
               let timelineEvents = [];
               try {
+                timelineEvents = await retry(() => github.paginate(github.rest.issues.listEventsForTimeline, {
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: issue.number,
                   per_page: 100
                 }));
               } catch (error) {
