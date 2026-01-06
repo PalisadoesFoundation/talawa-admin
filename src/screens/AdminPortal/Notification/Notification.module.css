@@ -75,7 +75,7 @@
 
 .notificationBody {
   color: #555;
-  font-size: var(--font-size-15-2);
+  font-size: var(--font-size-15);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

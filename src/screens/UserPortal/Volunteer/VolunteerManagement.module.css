@@ -51,7 +51,7 @@
 }
 
 .subContainer span {
-  font-size: var(--font-size-14-4);
+  font-size: var(--font-size-sm);
   margin-left: var(--space-3);
   font-weight: var(--font-weight-lighter);
   color: #707070;
@@ -84,7 +84,7 @@
 .progressBar {
   margin: var(--space-0) var(--space-4);
   width: 100%;
-  font-size: var(--font-size-14-4);
+  font-size: var(--font-size-sm);
   height: 1.25rem;
 }
 

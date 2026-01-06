@@ -49,7 +49,7 @@
 }
 
 .pluginAuthor {
-  font-size: var(--font-size-13);
+  font-size: var(--font-size-sm);
   color: #888;
 }
 

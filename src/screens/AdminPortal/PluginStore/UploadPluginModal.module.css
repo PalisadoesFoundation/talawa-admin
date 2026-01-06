@@ -41,7 +41,7 @@
 }
 
 .uploadIcon {
-  font-size: var(--font-size-48);
+  font-size: var(--font-size-4xl);
   color: #ccc;
   margin-bottom: var(--space-5);
 }
@@ -135,7 +135,7 @@
   background: #f8f9fa;
   padding: var(--space-5);
   border-radius: 8px;
-  font-size: var(--font-size-13);
+  font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
   margin: var(--space-0);
 }

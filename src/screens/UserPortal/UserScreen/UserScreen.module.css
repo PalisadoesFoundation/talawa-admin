@@ -52,7 +52,7 @@
   white-space: normal;
 }
 .profileContainer .profileText .secondaryText {
-  font-size: var(--font-size-12-8);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-regular);
   color: var(--bs-secondary);
   display: block;
