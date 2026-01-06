@@ -206,4 +206,6 @@ export interface IFormDateFieldProps {
   name?: string;
   error?: boolean;
   required?: boolean;
+  touched?: boolean;
+  helpText?: string;
 }

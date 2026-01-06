@@ -5,6 +5,15 @@ import React from 'react';
 import { Form } from 'react-bootstrap';
 import type { IFormFieldGroupProps } from 'types/shared-components/FormFieldGroup/interface';
 
+type ChildPropsWithAria = {
+  id?: string;
+  'aria-describedby'?: string;
+  'aria-invalid'?: string | boolean;
+  className?: string;
+  children?: React.ReactNode;
+  [key: string]: unknown;
+};
+
 export const FormFieldGroup: React.FC<
   IFormFieldGroupProps & { children: React.ReactNode }
 > = ({
@@ -25,7 +34,7 @@ export const FormFieldGroup: React.FC<
 
   const childrenWithAria = React.Children.map(children, (child) => {
     if (React.isValidElement(child)) {
-      const childProps = child.props as Record<string, unknown>;
+      const childProps = child.props as ChildPropsWithAria;
 
       const existingDescribedBy = childProps['aria-describedby'] as
         | string
@@ -65,11 +74,14 @@ export const FormFieldGroup: React.FC<
         } as Partial<unknown>);
       }
 
-      return React.cloneElement(child, {
-        id: fieldId,
-        'aria-describedby': shouldShowError ? errorId : existingDescribedBy,
-        'aria-invalid': shouldShowError ? 'true' : existingInvalid,
-      } as Partial<unknown>);
+      if (child.type && typeof child.type !== 'string') {
+        return React.cloneElement(child, {
+          id: fieldId,
+          'aria-describedby': shouldShowError ? errorId : existingDescribedBy,
+          'aria-invalid': shouldShowError ? 'true' : existingInvalid,
+        } as Partial<unknown>);
+      }
+      return child;
     }
     return child;
   });

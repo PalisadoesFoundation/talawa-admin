@@ -43,6 +43,14 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:184](https:
 
 ***
 
+### helpText?
+
+> `optional` **helpText**: `string`
+
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:210](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L210)
+
+***
+
 ### label?
 
 > `optional` **label**: `string`
@@ -158,6 +166,14 @@ Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:190](https:
 ##### textField.required?
 
 > `optional` **required**: `boolean`
+
+***
+
+### touched?
+
+> `optional` **touched**: `boolean`
+
+Defined in: [src/types/shared-components/FormFieldGroup/interface.ts:209](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/shared-components/FormFieldGroup/interface.ts#L209)
 
 ***
 
