@@ -31,7 +31,8 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Events from './Events';
 import userEvent from '@testing-library/user-event';
-import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
+import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
+
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { vi, beforeEach, afterEach } from 'vitest';
 import { Frequency } from 'utils/recurrenceUtils';

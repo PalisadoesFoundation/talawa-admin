@@ -65,14 +65,30 @@ vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   },
 }));
 
-vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
-  const actual = await vi.importActual(
-    '@mui/x-date-pickers/DesktopDateTimePicker',
-  );
-  return {
-    DateTimePicker: actual.DesktopDateTimePicker,
-  };
-});
+vi.mock('shared-components/DatePicker', () => ({
+  __esModule: true,
+  default: ({
+    value,
+    onChange,
+    slotProps,
+    'data-testid': dataTestId,
+  }: {
+    value: dayjs.Dayjs | null;
+    onChange: (value: dayjs.Dayjs | null) => void;
+    slotProps: { textField?: { 'aria-label'?: string } };
+    'data-testid': string;
+  }) => (
+    <input
+      data-testid={dataTestId}
+      aria-label={slotProps?.textField?.['aria-label']}
+      value={value ? value.format('MM/DD/YYYY') : ''}
+      onChange={(e) => {
+        const val = e.target.value;
+        onChange?.(val ? dayjs(val, ['MM/DD/YYYY', 'YYYY-MM-DD']) : null);
+      }}
+    />
+  ),
+}));
 
 vi.mock('@dicebear/core', () => ({
   createAvatar: vi.fn(() => ({
@@ -349,10 +365,8 @@ describe('MemberDetail', () => {
     });
 
     const birthDateInput = screen.getByTestId('birthDate') as HTMLInputElement;
-    // Set a hardcoded future date value
-    fireEvent.change(birthDateInput, {
-      target: { value: '02/02/2080' },
-    });
+    // Set a hardcoded past birth date value
+    fireEvent.change(birthDateInput, { target: { value: '02/02/2000' } });
     fireEvent.blur(birthDateInput);
 
     expect(birthDateInput.value).toMatch(/\d{1,2}\/\d{1,2}\/\d{4}/);
@@ -536,8 +550,9 @@ describe('MemberDetail', () => {
     await userEvent.type(birthDateInput, futureDate.format('YYYY-MM-DD'));
     fireEvent.blur(birthDateInput);
 
-    // Verify the date wasn't accepted (should revert to original value)
-    expect(birthDateInput).not.toHaveValue(futureDate.format('YYYY-MM-DD'));
+    // Verify the date wasn't accepted (should revert to original value or remain empty)
+    expect(birthDateInput).not.toHaveValue(futureDate.format('MM/DD/YYYY'));
+    expect(birthDateInput).toHaveValue('');
   });
 
   // Test for file validation (Lines 305-313)
@@ -584,21 +599,20 @@ describe('MemberDetail', () => {
     expect(homePhoneInput).toHaveValue('+1555555555');
   });
 
-  // Test for empty fields removal (Lines 397-425)
   test('removes empty fields before update', async () => {
-    const mockUpdateUser = vi.fn();
     const updatedMock = {
       request: {
         query: UPDATE_CURRENT_USER_MUTATION,
-        variables: {
-          input: {
-            name: 'Test User',
-            // Empty fields should be removed
-            description: '',
-            addressLine1: '',
-            addressLine2: '',
-          },
-        },
+        variables: {},
+      },
+      variableMatcher: (variables: { input: Record<string, unknown> }) => {
+        // Only non-empty fields should be sent
+        return (
+          variables.input.name === 'Test User' &&
+          !('description' in variables.input) &&
+          !('addressLine1' in variables.input) &&
+          !('addressLine2' in variables.input)
+        );
       },
       result: {
         data: {
@@ -620,19 +634,18 @@ describe('MemberDetail', () => {
 
     await userEvent.clear(descriptionInput);
     await userEvent.clear(addressInput);
+    await userEvent.clear(nameInput);
     await userEvent.type(nameInput, 'Test User');
 
     // Trigger update
     const saveButton = screen.getByTestId('saveChangesBtn');
     await userEvent.click(saveButton);
 
-    // Verify empty fields were removed from mutation
-    expect(mockUpdateUser).not.toHaveBeenCalledWith(
-      expect.objectContaining({
-        description: '',
-        addressLine1: '',
-      }),
-    );
+    // variableMatcher assertions above will ensure only non-empty fields are sent
+    // We can also verify success notification if applicable
+    await waitFor(() => {
+      expect(NotificationToast.success).toHaveBeenCalled();
+    });
   });
 
   // Test for window reload after update (Line 634)
