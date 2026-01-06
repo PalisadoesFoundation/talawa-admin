@@ -1559,7 +1559,7 @@ describe('OrganizationPeople', () => {
     const prevPageButton = screen.getByRole('button', {
       name: /previous page/i,
     });
-    
+
     // This click should trigger the line 353 return statement
     fireEvent.click(prevPageButton);
 
@@ -1626,7 +1626,9 @@ describe('OrganizationPeople', () => {
     });
 
     // Find the actual img element - this covers line 473
-    const imgElement = container.querySelector('img[src="https://example.com/user-avatar.jpg"]');
+    const imgElement = container.querySelector(
+      'img[src="https://example.com/user-avatar.jpg"]',
+    );
     expect(imgElement).toBeInTheDocument();
     expect(imgElement).toHaveAttribute('crossorigin', 'anonymous');
   });
