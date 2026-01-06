@@ -22,7 +22,7 @@ vi.mock('shared-components/DatePicker', () => ({
   default: vi.fn(
     (props: {
       label?: string;
-      value: unknown;
+      value: dayjs.Dayjs | null;
       onChange?: (date: dayjs.Dayjs | null) => void;
       minDate?: dayjs.Dayjs | null;
       'data-testid'?: string;
@@ -38,9 +38,7 @@ vi.mock('shared-components/DatePicker', () => ({
         <div data-testid="date-picker-wrapper">
           <input
             data-testid={dataTestId || label || 'date-picker-input'}
-            value={
-              value ? dayjs(value as dayjs.Dayjs).format('YYYY-MM-DD') : ''
-            }
+            value={value ? value.format('YYYY-MM-DD') : ''}
             onChange={(e) => {
               if (onChange) {
                 const newDate = e.target.value ? dayjs(e.target.value) : null;
@@ -66,7 +64,7 @@ vi.mock('shared-components/TimePicker', () => ({
   default: vi.fn(
     (props: {
       label?: string;
-      value: unknown;
+      value: dayjs.Dayjs | null;
       onChange?: (time: dayjs.Dayjs | null) => void;
       minTime?: dayjs.Dayjs | null;
       disabled?: boolean;
@@ -85,7 +83,7 @@ vi.mock('shared-components/TimePicker', () => ({
         <div data-testid="time-picker-wrapper">
           <input
             data-testid={dataTestId || label || 'time-picker-input'}
-            value={value ? dayjs(value as dayjs.Dayjs).format('HH:mm:ss') : ''}
+            value={value ? value.format('HH:mm:ss') : ''}
             disabled={disabled}
             onChange={(e) => {
               if (!disabled && onChange) {

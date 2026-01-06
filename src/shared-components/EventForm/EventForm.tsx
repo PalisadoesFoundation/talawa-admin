@@ -1,8 +1,6 @@
 /**
  * EventForm - A reusable form component for creating and editing events.
  * Supports date/time selection, recurrence configuration, and various event options.
- *
- * @module EventForm
  */
 // translation-check-keyPrefix: organizationEvents
 import DatePicker from '../DatePicker';

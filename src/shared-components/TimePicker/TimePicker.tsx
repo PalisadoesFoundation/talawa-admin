@@ -1,8 +1,8 @@
 /**
  * TimePicker component - A wrapper around MUI TimePicker with custom styling
  *
- * @accessibility
- * Note: This component sets enableAccessibleFieldDOMStructure={false}
+ * @remarks
+ * Note: This component sets enableAccessibleFieldDOMStructure=\{false\}
  * to maintain compatibility with react-bootstrap Form.Control styling.
  * This disables MUI's accessible field structure. The tradeoff is acceptable
  * because we provide:
@@ -36,7 +36,7 @@ interface InterfaceTimePickerProps {
   value?: Dayjs | null;
   /**
    * Callback fired when the time changes.
-   * @param {Dayjs | null} date The new time value.
+   * @param date - The new time value.
    */
   onChange: (date: Dayjs | null) => void;
   /** Minimum selectable time constraint */
@@ -65,19 +65,7 @@ interface InterfaceTimePickerProps {
  * This component provides a standardized time picker interface that maintains consistency
  * across the application by using react-bootstrap Form.Control for styling.
  *
- * @param {InterfaceTimePickerProps} props - The component props.
- * @param {string} [props.label] - Label displayed for the time picker.
- * @param {Dayjs | null} [props.value] - Current time value.
- * @param {(date: Dayjs | null) => void} props.onChange - Callback fired when the time changes.
- * @param {Dayjs} [props.minTime] - Minimum selectable time constraint.
- * @param {Dayjs} [props.maxTime] - Maximum selectable time constraint.
- * @param {boolean} [props.disabled] - Whether the time picker is disabled.
- * @param {string} [props.className] - Additional CSS class name.
- * @param {string} [props.'data-testid'] - Test ID for testing purposes.
- * @param {Partial<TimePickerSlotProps<false>>} [props.slotProps] - Additional props passed to MUI TimePicker slots.
- * @param {Record<string, React.ElementType>} [props.slots] - Custom slot component overrides.
- * @param {Object} [props.timeSteps] - Step increments for time controls.
- * @param {boolean} [props.disableOpenPicker] - Whether to disable the open picker button.
+ * @param props - The component props.
  *
  * @example
  * ```tsx

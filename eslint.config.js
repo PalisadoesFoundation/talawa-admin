@@ -233,8 +233,6 @@ export default [
       'src/components/Loader/**/*.{ts,tsx}',
       'src/shared-components/BaseModal/**/*.{ts,tsx}',
       'src/types/shared-components/BaseModal/**/*.{ts,tsx}',
-      'src/index.tsx',
-      'src/components/test-utils/TestWrapper.tsx',
     ],
     rules: {
       'no-restricted-imports': 'off',
@@ -245,7 +243,7 @@ export default [
    *
    * These wrapper components need direct access to @mui/x-date-pickers
    * to provide standardized date/time picker interfaces for the application.
-   * 
+   *
    * Note: This exemption is specific - it only allows @mui/x-date-pickers imports.
    * Other restricted imports (like react-bootstrap Modal) are still blocked.
    */
@@ -255,6 +253,7 @@ export default [
       'src/types/shared-components/DateRangePicker/**/*.{ts,tsx}',
       'src/shared-components/DatePicker/**/*.{ts,tsx}',
       'src/shared-components/TimePicker/**/*.{ts,tsx}',
+      'src/index.tsx',
     ],
     rules: {
       'no-restricted-imports': [

@@ -4,20 +4,9 @@
  * A reusable, controlled component that provides unified date range selection
  * across the Talawa Admin application.
  *
- * @component
+ * @param props - Component props
  *
- * @param {InterfaceDateRangePickerProps} props - Component props
- * @param {IDateRangeValue} props.value - Controlled value containing startDate and endDate
- * @param {(val: IDateRangeValue) => void} props.onChange - Callback fired when the date range changes
- * @param {IDateRangePreset[]} [props.presets] - Optional preset configurations
- * @param {boolean} [props.disabled=false] - Disables all interactions
- * @param {boolean} [props.error=false] - Displays error styling
- * @param {string} [props.helperText] - Helper or validation text
- * @param {string} [props.className] - Optional className for root container
- * @param {string} [props.dataTestId='date-range-picker'] - Base test id
- * @param {boolean} [props.showPresets=true] - Controls preset visibility
- *
- * @returns {JSX.Element} DateRangePicker component
+ * @returns DateRangePicker component
  *
  * @remarks
  * - Fully controlled component
@@ -180,9 +169,7 @@ export default function DateRangePicker({
               data-testid={`${dataTestId}-start-input`}
               slotProps={{
                 textField: {
-                  inputProps: {
-                    'aria-label': t('startDate'),
-                  },
+                  'aria-label': t('startDate'),
                 },
               }}
             />
@@ -199,9 +186,7 @@ export default function DateRangePicker({
               data-testid={`${dataTestId}-end-input`}
               slotProps={{
                 textField: {
-                  inputProps: {
-                    'aria-label': t('endDate'),
-                  },
+                  'aria-label': t('endDate'),
                 },
               }}
             />

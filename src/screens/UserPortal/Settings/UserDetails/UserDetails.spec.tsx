@@ -213,19 +213,6 @@ describe('UserDetailsForm', () => {
     ).toBeGreaterThan(1);
   });
 
-  it('validates birth date to not be in the future', () => {
-    render(
-      <MockedProvider mocks={MOCKS}>
-        <UserDetailsForm {...defaultProps} />
-      </MockedProvider>,
-    );
-
-    const birthDateInput = screen.getByLabelText(mockT('birthDate'));
-    const maxDate = dayjs().format('YYYY-MM-DD');
-
-    expect(birthDateInput).toHaveAttribute('max', maxDate);
-  });
-
   it('renders description field with sanitized content', () => {
     const userDetailsWithHtml = {
       ...defaultProps.userDetails,

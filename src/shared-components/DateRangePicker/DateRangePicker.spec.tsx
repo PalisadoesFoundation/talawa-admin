@@ -28,7 +28,12 @@ vi.mock('shared-components/DatePicker', () => ({
     value: dayjs.Dayjs | null;
     onChange: (value: dayjs.Dayjs | null) => void;
     minDate?: dayjs.Dayjs;
-    slotProps?: { textField: { inputProps: { 'aria-label': string } } };
+    slotProps?: {
+      textField: {
+        'aria-label'?: string;
+        inputProps?: { 'aria-label': string };
+      };
+    };
     'data-testid': string;
   }) => {
     datePickerSpy({ minDate });
@@ -41,7 +46,10 @@ vi.mock('shared-components/DatePicker', () => ({
         type="text"
         value={formattedValue}
         data-testid={dataTestId}
-        aria-label={slotProps?.textField?.inputProps?.['aria-label']}
+        aria-label={
+          slotProps?.textField?.['aria-label'] ||
+          slotProps?.textField?.inputProps?.['aria-label']
+        }
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           const inputValue = e.target.value;
           if (!inputValue) {

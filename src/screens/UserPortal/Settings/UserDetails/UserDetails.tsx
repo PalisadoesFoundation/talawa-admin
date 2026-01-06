@@ -9,15 +9,7 @@
  * sanitization where necessary.
  *
  * @param props - The properties required by the component.
- * @param props.userDetails - The current user details to populate the form fields.
- * @param props.handleFieldChange - Callback function to handle changes in form fields.
- * @param props.isUpdated - A flag indicating if the user details have been modified.
- * @param props.handleResetChanges - Function to reset any unsaved changes in the form.
- * @param props.handleUpdateUserDetails - Function to save the updated user details.
- * @param props.t - Translation function for localized strings specific to the form.
- * @param props.tCommon - Translation function for common localized strings.
  *
- * @component
  * @example
  * ```tsx
  * <UserDetailsForm
@@ -30,13 +22,6 @@
  *   tCommon={tCommon}
  * />
  * ```
- *
- * @dependencies
- * - React
- * - react-bootstrap for UI components
- * - shared-components/DatePicker for date selection
- * - dayjs for date manipulation
- * - sanitize-html for sanitizing user input
  *
  * @returns A React functional component rendering the user details form.
  */
@@ -223,7 +208,6 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
             textField: {
               inputProps: {
                 'aria-label': t('birthDate'),
-                max: dayjs().format('YYYY-MM-DD'),
               },
             },
           }}

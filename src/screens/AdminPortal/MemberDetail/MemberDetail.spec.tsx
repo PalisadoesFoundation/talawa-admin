@@ -81,7 +81,7 @@ vi.mock('shared-components/DatePicker', () => ({
     <input
       data-testid={dataTestId}
       aria-label={slotProps?.textField?.['aria-label']}
-      value={value ? dayjs(value).format('MM/DD/YYYY') : ''}
+      value={value ? value.format('MM/DD/YYYY') : ''}
       onChange={(e) => {
         const val = e.target.value;
         onChange?.(val ? dayjs(val, ['MM/DD/YYYY', 'YYYY-MM-DD']) : null);

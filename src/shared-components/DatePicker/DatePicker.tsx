@@ -1,8 +1,8 @@
 /**
  * DatePicker component - A wrapper around MUI DatePicker with custom styling
  *
- * @accessibility
- * Note: This component sets enableAccessibleFieldDOMStructure={false}
+ * @remarks
+ * Note: This component sets enableAccessibleFieldDOMStructure=\{false\}
  * to maintain compatibility with react-bootstrap Form.Control styling.
  * This disables MUI's accessible field structure. The tradeoff is acceptable
  * because we provide:
@@ -35,7 +35,7 @@ interface InterfaceDatePickerProps {
   value?: Dayjs | null;
   /**
    * Callback fired when the date changes.
-   * @param {Dayjs | null} date The new date value.
+   * @param date - The new date value.
    */
   onChange: (date: Dayjs | null) => void;
   /** Minimum selectable date constraint */
@@ -64,18 +64,7 @@ interface InterfaceDatePickerProps {
  * This component provides a standardized date picker interface that maintains consistency
  * across the application by using react-bootstrap Form.Control for styling.
  *
- * @param {InterfaceDatePickerProps} props - The component props.
- * @param {string} [props.label] - Label displayed for the date picker.
- * @param {Dayjs | null} [props.value] - Current date value.
- * @param {(date: Dayjs | null) => void} props.onChange - Callback fired when the date changes.
- * @param {Dayjs} [props.minDate] - Minimum selectable date constraint.
- * @param {Dayjs} [props.maxDate] - Maximum selectable date constraint.
- * @param {boolean} [props.disabled] - Whether the date picker is disabled.
- * @param {string} [props.className] - Additional CSS class name.
- * @param {string} [props.'data-testid'] - Test ID for testing purposes.
- * @param {string} [props.'data-cy'] - Cypress Test ID.
- * @param {Partial<DatePickerSlotProps<false>>} [props.slotProps] - Additional props passed to MUI DatePicker slots.
- * @param {Record<string, React.ElementType>} [props.slots] - Custom slot component overrides.
+ * @param props - The component props.
  *
  * @example
  * ```tsx

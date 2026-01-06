@@ -4,11 +4,9 @@
  * This component renders the detailed view of a member's profile, allowing users to view and update personal and contact information.
  * It includes features such as avatar upload, form validation, and dynamic dropdowns for various fields.
  *
- * @component
- * @param {MemberDetailProps} props - The props for the component.
- * @param {string} [props.id] - Optional member ID to fetch and display details.
+ * @param props - The props for the component.
  *
- * @returns {JSX.Element} The rendered MemberDetail component.
+ * @returns The rendered MemberDetail component.
  *
  * @remarks
  * - Uses Apollo Client's `useQuery` and `useMutation` hooks for fetching and updating user data.
@@ -20,15 +18,6 @@
  * ```tsx
  * <MemberDetail id="12345" />
  * ```
- *
- * @dependencies
- * - `@apollo/client` for GraphQL queries and mutations.
- * - `react-bootstrap` for UI components.
- * - `@mui/x-date-pickers` for date selection.
- * - `NotificationToast` for toast notifications.
- * - `dayjs` for date manipulation.
- *
- *
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
@@ -397,15 +386,13 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                       }
                       handleFieldChange(
                         'birthDate',
-                        picked.toISOString().split('T')[0],
+                        picked.format('YYYY-MM-DD'),
                       );
                     }}
                     data-testid="birthDate"
                     slotProps={{
                       textField: {
-                        inputProps: {
-                          'aria-label': t('birthDate'),
-                        },
+                        'aria-label': t('birthDate'),
                       },
                     }}
                   />
