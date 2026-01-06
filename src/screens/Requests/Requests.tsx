@@ -54,7 +54,7 @@ import { Table } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { MEMBERSHIP_REQUEST, ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
-import TableLoader from 'components/TableLoader/TableLoader';
+import TableLoader from 'shared-components/TableLoader/TableLoader';
 import RequestsTableItem from 'components/RequestsTableItem/RequestsTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import styles from '../../style/app-fixed.module.css';

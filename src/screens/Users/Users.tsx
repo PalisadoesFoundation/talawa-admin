@@ -67,7 +67,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
 import { ORGANIZATION_LIST, USER_LIST } from 'GraphQl/Queries/Queries';
-import TableLoader from 'components/TableLoader/TableLoader';
+import TableLoader from 'shared-components/TableLoader/TableLoader';
 import UsersTableItem from 'components/UsersTableItem/UsersTableItem';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import type { InterfaceQueryUserListItem } from 'utils/interfaces';
@@ -94,11 +94,7 @@ const Users = (): JSX.Element => {
   const [sortingOption, setSortingOption] = useState('newest');
   const [filteringOption, setFilteringOption] = useState('cancel');
   const [loadUnqUsers, setLoadUnqUsers] = useState(0);
-  const userType = getItem('SuperAdmin')
-    ? 'SUPERADMIN'
-    : getItem('AdminFor')
-      ? 'ADMIN'
-      : 'USER';
+
   const loggedInUserId = getItem('id') as string;
   const [usersData, setUsersData] = useState<InterfaceQueryUserListItem[]>([]);
 
