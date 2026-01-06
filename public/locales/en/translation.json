@@ -402,6 +402,7 @@
     "user": "user",
     "actions": "Actions",
     "profile": "Profile",
+    "joined": "Joined",
     "notFound": "No Members Found"
   },
   "organizationTags": {
