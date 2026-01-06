@@ -221,5 +221,12 @@
   "tags": "Tags",
   "loadMoreItems": "Load more items",
   "loadMore": "Load More",
-  "retry": "Retry"
+  "retry": "Retry",
+  "publicEvent": "Public (Community Visible)",
+  "publicEventDescription": "Visible to everyone in the community",
+  "eventVisibility": "Event Visibility",
+  "organizationEvent": "Organization Members",
+  "organizationEventDescription": "Visible to all members of the organization",
+  "inviteOnlyEvent": "Invite Only",
+  "inviteOnlyEventDescription": "Visible only to invited members and event admins"
 }
