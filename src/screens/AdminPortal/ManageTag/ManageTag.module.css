@@ -1,5 +1,5 @@
-.errorContainer {
-  min-height: 100vh;
+.errorIcon {
+  font-size: var(--font-size-3xl);
 }
 
 .errorMessage {
