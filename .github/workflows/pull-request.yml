@@ -402,6 +402,38 @@ jobs:
             echo "No relevant files changed, skipping check."
           fi
 
+  MinIO-Compliance-Check:
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    name: MinIO Compliance Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get changed source files
+        id: changed-src
+        run: |
+          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
+          CHANGED=$(git diff --name-only --diff-filter=ACMRT "$BASE_SHA" ${{ github.event.pull_request.head.sha }} \
+            | grep -E '^src/.*\.(ts|tsx|js|jsx)$' | tr '\n' ' ' || true)
+          echo "files=$CHANGED" >> $GITHUB_OUTPUT
+          if [ -z "$CHANGED" ]; then
+            echo "none=true" >> $GITHUB_OUTPUT
+          else
+            echo "none=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24.x'
+
+      - name: Run MinIO compliance check
+        if: steps.changed-src.outputs.none != 'true'
+        run: node .github/workflows/scripts/check-minio-compliance.cjs
+
   Pre-Test-Checks-Pass:
     name: All Pre-Testing Checks Pass
     runs-on: ubuntu-latest
@@ -412,6 +444,7 @@ jobs:
         Check-Disable-Statements,
         Check-Mock-Isolation,
         CSS-Policy-Check,
+        MinIO-Compliance-Check,
         Python-Compliance,
         Translation-Tag-Check,
         DataGrid-Policy-Check,
