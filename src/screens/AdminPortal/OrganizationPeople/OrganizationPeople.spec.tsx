@@ -349,7 +349,9 @@ describe('OrganizationPeople', () => {
     expect(screen.getByText('jane@example.com')).toBeInTheDocument();
 
     // The new component includes a "Joined:" label and a different date format.
-    expect(screen.getByText(/Joined: 2023-01-01/i)).toBeInTheDocument();
+    expect(screen.getByText(/Joined:/i)).toBeInTheDocument();
+    // Check for the dynamic date format (YYYY-MM-DD)
+    expect(screen.getByText(new RegExp(dayjs.utc().subtract(3, 'day').format('YYYY-MM-DD')))).toBeInTheDocument();
   });
 
   test('handles search functionality correctly', async () => {
