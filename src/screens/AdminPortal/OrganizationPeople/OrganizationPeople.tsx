@@ -68,7 +68,7 @@ import {
   COLUMN_BUFFER_PX,
   PAGE_SIZE,
 } from 'types/ReportingTable/utils';
-import dayjs from 'dayjs';
+
 import styles from 'style/app-fixed.module.css';
 import TableLoader from 'shared-components/TableLoader/TableLoader';
 import {
@@ -83,6 +83,7 @@ import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFil
 
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { errorHandler } from 'utils/errorHandler';
+import { languages } from 'utils/languages';
 
 /**
  * Maps numeric filter state to string option identifiers.
@@ -158,7 +159,7 @@ interface IQueryVariable {
 }
 
 function OrganizationPeople(): JSX.Element {
-  const { t } = useTranslation('translation', {
+  const { t, i18n } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
   });
   const { t: tCommon } = useTranslation('common');
@@ -491,8 +492,26 @@ function OrganizationPeople(): JSX.Element {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) =>
-        dayjs(params.row.createdAt).format('DD/MM/YYYY'),
+      renderCell: (params: GridCellParams) => {
+        const currentLang = languages.find(
+          (lang: { code: string; country_code: string }) =>
+            lang.code === i18n.language,
+        );
+        const locale = currentLang
+          ? `${currentLang.code}-${currentLang.country_code}`
+          : 'en-US';
+        return (
+          <div data-testid={`org-people-joined-${params.row.id}`}>
+            {t('joined')} :{' '}
+            {new Intl.DateTimeFormat(locale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              timeZone: 'UTC',
+            }).format(new Date(params.row.createdAt))}
+          </div>
+        );
+      },
     },
     {
       field: 'action',

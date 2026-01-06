@@ -76,7 +76,7 @@
     "test:shard": "node scripts/run-shard.js",
     "test:shard:coverage": "node scripts/run-shard.js --coverage",
     "eject": "react-scripts eject",
-    "lint:check": "eslint \"**/*.{ts,tsx,graphql}\" --max-warnings=0 && python .github/workflows/scripts/eslint_disable_check.py",
+    "lint:check": "eslint \"**/*.{ts,tsx,graphql}\" --max-warnings=0",
     "lint:fix": "eslint --fix \"**/*.{ts,tsx,graphql}\"",
     "format:fix": "prettier --write \"**/*.{ts,tsx,json,json5,scss,css,graphql,yaml,yml}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,json,json5,scss,css,graphql,yaml,yml}\"",

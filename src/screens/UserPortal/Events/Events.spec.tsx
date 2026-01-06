@@ -10,7 +10,16 @@
 import React, { act } from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
+import { InMemoryCache } from '@apollo/client';
 import { I18nextProvider } from 'react-i18next';
+
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+
+dayjs.extend(utc);
+dayjs.extend(customParseFormat);
+
 import {
   GET_ORGANIZATION_EVENTS_USER_PORTAL_PG,
   ORGANIZATIONS_LIST,
@@ -22,11 +31,7 @@ import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Events from './Events';
 import userEvent from '@testing-library/user-event';
-import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/mutations';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { vi, beforeEach, afterEach } from 'vitest';
 import { Frequency } from 'utils/recurrenceUtils';
@@ -46,66 +51,65 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
   NotificationToast: mockToast,
 }));
 
-vi.mock('@mui/x-date-pickers', async () => {
-  const actual = await vi.importActual('@mui/x-date-pickers');
-
-  const datePicker = ({
-    label,
-    value,
-    onChange,
-    'data-testid': dataTestId,
-  }: {
-    label?: string;
-    value?: { format?: (fmt: string) => string } | null;
-    onChange?: (v: unknown) => void;
-    'data-testid'?: string;
-  }) => {
-    return (
-      <input
-        aria-label={label}
-        data-testid={dataTestId || label}
-        value={value?.format ? value.format('MM/DD/YYYY') : ''}
-        onChange={(e) => {
-          const parsed = dayjs(e.target.value, ['MM/DD/YYYY', 'YYYY-MM-DD']);
-          onChange?.(parsed);
-        }}
-      />
-    );
-  };
-
-  const timePicker = ({
-    label,
-    value,
-    onChange,
-    'data-testid': dataTestId,
-    disabled,
-  }: {
-    label?: string;
-    value?: { format?: (fmt: string) => string } | null;
-    onChange?: (v: unknown) => void;
-    'data-testid'?: string;
+vi.mock('shared-components/DatePicker', () => ({
+  __esModule: true,
+  default: (props: {
+    label: string;
+    value: dayjs.Dayjs | null;
+    onChange: (value: dayjs.Dayjs | null) => void;
     disabled?: boolean;
+    slotProps?: { textField?: { 'aria-label'?: string } };
+    'data-testid'?: string;
   }) => {
+    const { label, value, onChange, slotProps } = props;
+    const testId = props['data-testid'];
+    const ariaLabel = slotProps?.textField?.['aria-label'] || label;
+
     return (
       <input
-        aria-label={label}
-        data-testid={dataTestId || label}
-        value={value?.format ? value.format('HH:mm:ss') : ''}
-        disabled={disabled}
+        aria-label={ariaLabel}
+        data-testid={testId || 'date-picker'}
+        type="text"
+        disabled={props.disabled}
+        value={value ? dayjs(value).format('MM/DD/YYYY') : ''}
         onChange={(e) => {
-          const parsed = dayjs(e.target.value, ['HH:mm:ss', 'hh:mm A']);
-          onChange?.(parsed);
+          const val = e.target.value;
+          onChange(val ? dayjs(val, ['MM/DD/YYYY', 'YYYY-MM-DD']) : null);
         }}
       />
     );
-  };
+  },
+}));
 
-  return {
-    ...actual,
-    DatePicker: datePicker,
-    TimePicker: timePicker,
-  };
-});
+vi.mock('shared-components/TimePicker', () => ({
+  __esModule: true,
+  default: (props: {
+    label: string;
+    value: dayjs.Dayjs | null;
+    onChange: (value: dayjs.Dayjs | null) => void;
+    disabled?: boolean;
+    slotProps?: { textField?: { 'aria-label'?: string } };
+    'data-testid'?: string;
+  }) => {
+    const { label, value, onChange, slotProps } = props;
+    const testId = props['data-testid'];
+    const ariaLabel = slotProps?.textField?.['aria-label'] || label;
+
+    return (
+      <input
+        aria-label={ariaLabel}
+        data-testid={testId || 'time-picker'}
+        type="text"
+        disabled={props.disabled}
+        value={value ? dayjs(value).format('HH:mm:ss') : ''}
+        onChange={(e) => {
+          const val = e.target.value;
+          onChange(val ? dayjs(val, ['hh:mm A', 'HH:mm:ss']) : null);
+        }}
+      />
+    );
+  },
+}));
 
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
@@ -213,8 +217,6 @@ const theme = createTheme({
     },
   },
 });
-
-dayjs.extend(utc);
 
 // Helper variables to match Events.tsx query structure
 const currentMonth = new Date().getMonth();
@@ -512,6 +514,7 @@ const MOCKS = [
           location: 'New Test Location',
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
         },
       },
     },
@@ -602,6 +605,7 @@ const CREATE_EVENT_ERROR_MOCKS = [
           location: 'New Test Location',
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
         },
       },
     },
@@ -630,6 +634,7 @@ const CREATE_EVENT_NULL_MOCKS = [
           location: 'New Test Location',
           isPublic: true,
           isRegisterable: true,
+          isInviteOnly: false,
         },
       },
     },
@@ -694,9 +699,6 @@ async function wait(ms = 500): Promise<void> {
   });
 }
 
-const getPickerInputByLabel = (label: string) =>
-  screen.getByLabelText(label, { selector: 'input' }) as HTMLElement;
-
 describe('Testing Events Screen [User Portal]', () => {
   Object.defineProperty(window, 'matchMedia', {
     writable: true,
@@ -733,17 +735,18 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should render the Events screen properly', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nForTest}>
                   <Events />
                 </I18nextProvider>
               </ThemeProvider>
-            </LocalizationProvider>
+            </>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -757,17 +760,18 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should open and close the create event modal', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nForTest}>
                   <Events />
                 </I18nextProvider>
               </ThemeProvider>
-            </LocalizationProvider>
+            </>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -811,6 +815,7 @@ describe('Testing Events Screen [User Portal]', () => {
           location?: string;
           isPublic: boolean;
           isRegisterable: boolean;
+          isInviteOnly: boolean;
         };
       }) => {
         const { input } = variables;
@@ -820,8 +825,9 @@ describe('Testing Events Screen [User Portal]', () => {
           input.organizationId === 'org123' &&
           input.allDay === true &&
           input.location === 'New Test Location' &&
-          input.isPublic === true &&
+          input.isPublic === false &&
           input.isRegisterable === true &&
+          input.isInviteOnly === true &&
           typeof input.startAt === 'string' &&
           typeof input.endAt === 'string'
         );
@@ -830,6 +836,31 @@ describe('Testing Events Screen [User Portal]', () => {
         data: {
           createEvent: {
             id: 'newEvent1',
+            name: 'New Test Event',
+            description: 'New Test Description',
+            startAt: new Date().toISOString(),
+            endAt: new Date().toISOString(),
+            allDay: true,
+            location: 'New Test Location',
+            isPublic: true,
+            isRegisterable: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            isRecurringEventTemplate: false,
+            hasExceptions: false,
+            sequenceNumber: null,
+            totalCount: null,
+            progressLabel: null,
+            attachments: [],
+            creator: {
+              id: 'user1',
+              name: 'Test User',
+            },
+            organization: {
+              id: 'org123',
+              name: 'Test Org',
+            },
+            baseEvent: null,
           },
         },
       },
@@ -840,17 +871,18 @@ describe('Testing Events Screen [User Portal]', () => {
       true,
     );
 
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={testLink}>
+      <MockedProvider link={testLink} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nForTest}>
                   <Events />
                 </I18nextProvider>
               </ThemeProvider>
-            </LocalizationProvider>
+            </>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -905,6 +937,7 @@ describe('Testing Events Screen [User Portal]', () => {
           location?: string;
           isPublic: boolean;
           isRegisterable: boolean;
+          isInviteOnly: boolean;
         };
       }) => {
         const { input } = variables;
@@ -914,8 +947,9 @@ describe('Testing Events Screen [User Portal]', () => {
           input.organizationId === 'org123' &&
           input.allDay === false &&
           input.location === 'New Test Location' &&
-          input.isPublic === true &&
+          input.isPublic === false &&
           input.isRegisterable === true &&
+          input.isInviteOnly === true &&
           typeof input.startAt === 'string' &&
           typeof input.endAt === 'string'
         );
@@ -924,6 +958,31 @@ describe('Testing Events Screen [User Portal]', () => {
         data: {
           createEvent: {
             id: 'newEvent2',
+            name: 'New Non All Day Event',
+            description: 'New Test Description Non All Day',
+            startAt: new Date().toISOString(),
+            endAt: new Date().toISOString(),
+            allDay: false,
+            location: 'New Test Location',
+            isPublic: true,
+            isRegisterable: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            isRecurringEventTemplate: false,
+            hasExceptions: false,
+            sequenceNumber: null,
+            totalCount: null,
+            progressLabel: null,
+            attachments: [],
+            creator: {
+              id: 'user1',
+              name: 'Test User',
+            },
+            organization: {
+              id: 'org123',
+              name: 'Test Org',
+            },
+            baseEvent: null,
           },
         },
       },
@@ -931,17 +990,18 @@ describe('Testing Events Screen [User Portal]', () => {
 
     const testLink = new StaticMockLink([...MOCKS, nonAllDayMock], true);
 
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={testLink}>
+      <MockedProvider link={testLink} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nForTest}>
                   <Events />
                 </I18nextProvider>
               </ThemeProvider>
-            </LocalizationProvider>
+            </>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -961,10 +1021,10 @@ describe('Testing Events Screen [User Portal]', () => {
     const startDatePicker = screen.getByLabelText('Start Date');
     const endDatePicker = screen.getByLabelText('End Date');
     fireEvent.change(startDatePicker, {
-      target: { value: newDateSet.format('MM/DD/YYYY') },
+      target: { value: newDateSet.format('YYYY-MM-DD') },
     });
     fireEvent.change(endDatePicker, {
-      target: { value: newDateSet.format('MM/DD/YYYY') },
+      target: { value: newDateSet.format('YYYY-MM-DD') },
     });
 
     await userEvent.type(
@@ -982,9 +1042,12 @@ describe('Testing Events Screen [User Portal]', () => {
 
     const startTimePicker = screen.getByLabelText('Start Time');
     const endTimePicker = screen.getByLabelText('End Time');
-
-    fireEvent.change(startTimePicker, { target: { value: '08:00 AM' } });
-    fireEvent.change(endTimePicker, { target: { value: '10:00 AM' } });
+    fireEvent.change(startTimePicker, {
+      target: { value: '09:00:00' },
+    });
+    fireEvent.change(endTimePicker, {
+      target: { value: '11:00:00' },
+    });
 
     const form = screen.getByTestId('eventTitleInput').closest('form');
     if (form) {
@@ -999,17 +1062,18 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle create event error', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={createEventErrorLink}>
+      <MockedProvider link={createEventErrorLink} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nForTest}>
                   <Events />
                 </I18nextProvider>
               </ThemeProvider>
-            </LocalizationProvider>
+            </>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -1051,17 +1115,18 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should toggle all-day checkbox and enable/disable time inputs', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nForTest}>
                   <Events />
                 </I18nextProvider>
               </ThemeProvider>
-            </LocalizationProvider>
+            </>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -1104,17 +1169,18 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should toggle public, registerable, recurring, and createChat checkboxes', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nForTest}>
                   <Events />
                 </I18nextProvider>
               </ThemeProvider>
-            </LocalizationProvider>
+            </>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -1126,37 +1192,41 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
-      expect(screen.getByTestId('publicEventCheck')).toBeInTheDocument();
+      expect(screen.getByTestId('visibilityPublicRadio')).toBeInTheDocument();
     });
 
-    // Toggle all checkboxes
-    await userEvent.click(screen.getByTestId('publicEventCheck'));
+    // Test visibility radio buttons
+    await userEvent.click(screen.getByTestId('visibilityOrgRadio'));
+    await userEvent.click(screen.getByTestId('visibilityInviteRadio'));
+    await userEvent.click(screen.getByTestId('visibilityPublicRadio'));
+
+    // Toggle other checkboxes
     await userEvent.click(screen.getByTestId('registerableEventCheck'));
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
     await userEvent.click(screen.getByTestId('createChatCheck'));
 
     // Toggle back
-    await userEvent.click(screen.getByTestId('publicEventCheck'));
     await userEvent.click(screen.getByTestId('registerableEventCheck'));
     await userEvent.click(screen.getByTestId('recurringEventCheck'));
     await userEvent.click(screen.getByTestId('createChatCheck'));
 
     // All toggles should work without errors
-    expect(screen.getByTestId('publicEventCheck')).toBeInTheDocument();
+    expect(screen.getByTestId('visibilityPublicRadio')).toBeInTheDocument();
   });
 
   it('Should handle date picker changes', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nForTest}>
                   <Events />
                 </I18nextProvider>
               </ThemeProvider>
-            </LocalizationProvider>
+            </>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -1168,39 +1238,43 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
-      expect(getPickerInputByLabel('Start Date')).toBeInTheDocument();
+      expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
     });
 
-    const startDatePicker = getPickerInputByLabel('Start Date');
-    const endDatePicker = getPickerInputByLabel('End Date');
+    const startDatePicker = screen.getByLabelText(
+      'Start Date',
+    ) as HTMLInputElement;
+    const endDatePicker = screen.getByLabelText('End Date') as HTMLInputElement;
     const newDate = dayjs().add(1, 'day');
 
     fireEvent.change(startDatePicker, {
-      target: { value: newDate.format('MM/DD/YYYY') },
+      target: { value: newDate.format('YYYY-MM-DD') },
     });
 
     fireEvent.change(endDatePicker, {
-      target: { value: newDate.format('MM/DD/YYYY') },
+      target: { value: newDate.format('YYYY-MM-DD') },
     });
 
     await wait();
 
-    // Date pickers should accept the changes
-    expect(startDatePicker).toBeInTheDocument();
+    // Date pickers should accept the changes - re-query as elements might have been detached
+    expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
+    expect(screen.getByLabelText('End Date')).toBeInTheDocument();
   });
 
   it('Should handle time picker changes when all-day is disabled', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nForTest}>
                   <Events />
                 </I18nextProvider>
               </ThemeProvider>
-            </LocalizationProvider>
+            </>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -1219,38 +1293,44 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('allDayEventCheck'));
 
     await waitFor(() => {
-      const startTimePicker = getPickerInputByLabel('Start Time');
+      const startTimePicker = screen.getByLabelText(
+        'Start Time',
+      ) as HTMLInputElement;
       expect(startTimePicker).not.toBeDisabled();
     });
 
-    const startTimePicker = getPickerInputByLabel('Start Time');
-    const endTimePicker = getPickerInputByLabel('End Time');
+    const startTimePicker = screen.getByLabelText(
+      'Start Time',
+    ) as HTMLInputElement;
+    const endTimePicker = screen.getByLabelText('End Time') as HTMLInputElement;
     fireEvent.change(startTimePicker, {
-      target: { value: '09:00 AM' },
+      target: { value: '09:00:00' },
     });
 
     fireEvent.change(endTimePicker, {
-      target: { value: '11:00 AM' },
+      target: { value: '11:00:00' },
     });
 
     await wait();
 
-    // Time pickers should accept the changes
-    expect(startTimePicker).toBeInTheDocument();
+    // Time pickers should accept the changes - re-query as elements might have been detached
+    expect(screen.getByLabelText('Start Time')).toBeInTheDocument();
+    expect(screen.getByLabelText('End Time')).toBeInTheDocument();
   });
 
   it('Should handle null date values gracefully', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nForTest}>
                   <Events />
                 </I18nextProvider>
               </ThemeProvider>
-            </LocalizationProvider>
+            </>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -1262,11 +1342,13 @@ describe('Testing Events Screen [User Portal]', () => {
     await userEvent.click(screen.getByTestId('createEventModalBtn'));
 
     await waitFor(() => {
-      expect(getPickerInputByLabel('Start Date')).toBeInTheDocument();
+      expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
     });
 
-    const startDatePicker = getPickerInputByLabel('Start Date');
-    const endDatePicker = getPickerInputByLabel('End Date');
+    const startDatePicker = screen.getByLabelText(
+      'Start Date',
+    ) as HTMLInputElement;
+    const endDatePicker = screen.getByLabelText('End Date') as HTMLInputElement;
     fireEvent.change(startDatePicker, {
       target: { value: '' },
     });
@@ -1278,7 +1360,7 @@ describe('Testing Events Screen [User Portal]', () => {
     await wait();
 
     // Should handle null values without crashing
-    expect(getPickerInputByLabel('Start Date')).toBeInTheDocument();
+    expect(screen.getByLabelText('Start Date')).toBeInTheDocument();
   });
 
   it('Should handle network error gracefully', async () => {
@@ -1286,17 +1368,18 @@ describe('Testing Events Screen [User Portal]', () => {
       .spyOn(console, 'warn')
       .mockImplementation(() => {});
 
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={errorLink}>
+      <MockedProvider link={errorLink} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nForTest}>
                   <Events />
                 </I18nextProvider>
               </ThemeProvider>
-            </LocalizationProvider>
+            </>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -1315,17 +1398,18 @@ describe('Testing Events Screen [User Portal]', () => {
       .spyOn(console, 'warn')
       .mockImplementation(() => {});
 
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={rateLimitLink}>
+      <MockedProvider link={rateLimitLink} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nForTest}>
                   <Events />
                 </I18nextProvider>
               </ThemeProvider>
-            </LocalizationProvider>
+            </>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -1350,17 +1434,18 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should handle input changes for title, description, and location', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nForTest}>
                   <Events />
                 </I18nextProvider>
               </ThemeProvider>
-            </LocalizationProvider>
+            </>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -1393,17 +1478,18 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should test userRole as administrator', async () => {
     localStorage.setItem('Talawa-admin_role', JSON.stringify('administrator'));
 
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nForTest}>
                   <Events />
                 </I18nextProvider>
               </ThemeProvider>
-            </LocalizationProvider>
+            </>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -1421,17 +1507,18 @@ describe('Testing Events Screen [User Portal]', () => {
   it('Should test userRole as regular user', async () => {
     localStorage.setItem('Talawa-admin_role', JSON.stringify('user'));
 
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nForTest}>
                   <Events />
                 </I18nextProvider>
               </ThemeProvider>
-            </LocalizationProvider>
+            </>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -1447,17 +1534,18 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should change view type', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nForTest}>
                   <Events />
                 </I18nextProvider>
               </ThemeProvider>
-            </LocalizationProvider>
+            </>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -1481,17 +1569,18 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should not change viewType when handleChangeView is called with null', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nForTest}>
                   <Events />
                 </I18nextProvider>
               </ThemeProvider>
-            </LocalizationProvider>
+            </>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -1516,17 +1605,18 @@ describe('Testing Events Screen [User Portal]', () => {
   });
 
   it('Should call onMonthChange callback from EventCalendar', async () => {
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={link}>
+      <MockedProvider link={link} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nForTest}>
                   <Events />
                 </I18nextProvider>
               </ThemeProvider>
-            </LocalizationProvider>
+            </>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -1546,17 +1636,18 @@ describe('Testing Events Screen [User Portal]', () => {
     const testLink = new StaticMockLink(CREATE_EVENT_NULL_MOCKS, true);
     mockToast.success.mockClear();
     mockToast.error.mockClear();
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={testLink}>
+      <MockedProvider link={testLink} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nForTest}>
                   <Events />
                 </I18nextProvider>
               </ThemeProvider>
-            </LocalizationProvider>
+            </>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -1599,17 +1690,18 @@ describe('Testing Events Screen [User Portal]', () => {
 
   it('Should map missing creator to default (fallback) in eventData mapping', async () => {
     const testLink = new StaticMockLink(CREATOR_NULL_MOCKS, true);
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={testLink}>
+      <MockedProvider link={testLink} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nForTest}>
                   <Events />
                 </I18nextProvider>
               </ThemeProvider>
-            </LocalizationProvider>
+            </>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
@@ -1648,6 +1740,7 @@ describe('Testing Events Screen [User Portal]', () => {
           location?: string;
           isPublic: boolean;
           isRegisterable: boolean;
+          isInviteOnly: boolean;
           recurrence?: {
             frequency: string;
             interval: number;
@@ -1664,8 +1757,9 @@ describe('Testing Events Screen [User Portal]', () => {
             input.organizationId === 'org123' &&
             input.allDay === true &&
             input.location === 'Recurring Test Location' &&
-            input.isPublic === true &&
+            input.isPublic === false &&
             input.isRegisterable === true &&
+            input.isInviteOnly === true &&
             typeof input.startAt === 'string' &&
             typeof input.endAt === 'string' &&
             input.recurrence &&
@@ -1678,6 +1772,31 @@ describe('Testing Events Screen [User Portal]', () => {
         data: {
           createEvent: {
             id: 'newRecurringEvent1',
+            name: 'Recurring Test Event',
+            description: 'Recurring Test Description',
+            startAt: new Date().toISOString(),
+            endAt: new Date().toISOString(),
+            allDay: true,
+            location: 'Recurring Test Location',
+            isPublic: true,
+            isRegisterable: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            isRecurringEventTemplate: true,
+            hasExceptions: false,
+            sequenceNumber: 1,
+            totalCount: 5,
+            progressLabel: '1 of 5',
+            attachments: [],
+            creator: {
+              id: 'user1',
+              name: 'Test User',
+            },
+            organization: {
+              id: 'org123',
+              name: 'Test Org',
+            },
+            baseEvent: null,
           },
         },
       },
@@ -1690,17 +1809,18 @@ describe('Testing Events Screen [User Portal]', () => {
 
     mockToast.success.mockClear();
 
+    const cache = new InMemoryCache();
     render(
-      <MockedProvider link={testLink}>
+      <MockedProvider link={testLink} cache={cache}>
         <BrowserRouter>
           <Provider store={store}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <>
               <ThemeProvider theme={theme}>
                 <I18nextProvider i18n={i18nForTest}>
                   <Events />
                 </I18nextProvider>
               </ThemeProvider>
-            </LocalizationProvider>
+            </>
           </Provider>
         </BrowserRouter>
       </MockedProvider>,
