@@ -4,11 +4,9 @@
  * This component renders the detailed view of a member's profile, allowing users to view and update personal and contact information.
  * It includes features such as avatar upload, form validation, and dynamic dropdowns for various fields.
  *
- * @component
- * @param {MemberDetailProps} props - The props for the component.
- * @param {string} [props.id] - Optional member ID to fetch and display details.
+ * @param props - The props for the component.
  *
- * @returns {JSX.Element} The rendered MemberDetail component.
+ * @returns The rendered MemberDetail component.
  *
  * @remarks
  * - Uses Apollo Client's `useQuery` and `useMutation` hooks for fetching and updating user data.
@@ -20,15 +18,6 @@
  * ```tsx
  * <MemberDetail id="12345" />
  * ```
- *
- * @dependencies
- * - `@apollo/client` for GraphQL queries and mutations.
- * - `react-bootstrap` for UI components.
- * - `@mui/x-date-pickers` for date selection.
- * - `NotificationToast` for toast notifications.
- * - `dayjs` for date manipulation.
- *
- *
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery } from '@apollo/client';
@@ -48,8 +37,8 @@ import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import EventsAttendedByMember from 'components/MemberActivity/EventsAttendedByMember';
 import MemberAttendedEventsModal from 'components/MemberActivity/Modal/EventsAttendedMemberModal';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import DatePicker from 'shared-components/DatePicker';
+
 import {
   countryOptions,
   educationGradeEnum,
@@ -267,7 +256,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   }
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <>
       {show && (
         <MemberAttendedEventsModal
           eventsAttended={userData?.currentUser?.eventsAttended || []}
@@ -380,21 +369,30 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     {t('birthDate')}
                   </label>
                   <DatePicker
-                    className={`${styles.dateboxMemberDetail} w-100`}
-                    value={dayjs(formState.birthDate)}
-                    onChange={(date) =>
+                    className="w-100"
+                    value={
+                      formState.birthDate ? dayjs(formState.birthDate) : null
+                    }
+                    maxDate={dayjs()}
+                    onChange={(date) => {
+                      if (!date || !dayjs(date).isValid()) {
+                        handleFieldChange('birthDate', '');
+                        return;
+                      }
+                      const picked = dayjs(date);
+                      if (picked.isAfter(dayjs(), 'day')) {
+                        handleFieldChange('birthDate', '');
+                        return;
+                      }
                       handleFieldChange(
                         'birthDate',
-                        date ? date.toISOString().split('T')[0] : '',
-                      )
-                    }
+                        picked.format('YYYY-MM-DD'),
+                      );
+                    }}
                     data-testid="birthDate"
                     slotProps={{
                       textField: {
-                        inputProps: {
-                          'data-testid': 'birthDate',
-                          'aria-label': t('birthDate'),
-                        },
+                        'aria-label': t('birthDate'),
                       },
                     }}
                   />
@@ -768,7 +766,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           </Card>
         </Col>
       </Row>
-    </LocalizationProvider>
+    </>
   );
 };
 
