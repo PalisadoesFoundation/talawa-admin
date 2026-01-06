@@ -115,6 +115,7 @@ export async function main(): Promise<void> {
     );
   } catch (error) {
     if (isExitPromptError(error)) {
+      console.log('\n\n⚠️  Setup cancelled by user.');
       process.exit(130);
     }
 

@@ -337,14 +337,6 @@ describe('Talawa Admin Setup', () => {
         return process;
       });
 
-    // Capture removeListener to prevent cleanup
-    const removeListenerSpy = vi
-      .spyOn(process, 'removeListener')
-      .mockImplementation(() => {
-        // Prevent actual cleanup
-        return process;
-      });
-
     const exitMock = vi.spyOn(process, 'exit').mockImplementation((code) => {
       throw new Error(`process.exit called with code ${code}`);
     });
@@ -359,7 +351,7 @@ describe('Talawa Admin Setup', () => {
     );
 
     // Start main (it will hang at askAndSetDockerOption)
-    main();
+    const mainPromise = main();
 
     // Wait for SIGINT handler to be registered
     await new Promise((resolve) => setTimeout(resolve, 50));
@@ -382,11 +374,14 @@ describe('Talawa Admin Setup', () => {
 
     // Clean up
     onSpy.mockRestore();
-    removeListenerSpy.mockRestore();
     consoleLogSpy.mockRestore();
     exitMock.mockRestore();
 
-    // mainPromise will never resolve since askAndSetDockerOption hangs, so we just leave it
+    // mainPromise will never resolve since askAndSetDockerOption hangs
+    await Promise.race([
+      mainPromise,
+      new Promise((resolve) => setTimeout(resolve, 10)),
+    ]);
   });
 
   it('should handle ExitPromptError in main and exit with code 130', async () => {
@@ -401,10 +396,18 @@ describe('Talawa Admin Setup', () => {
         throw new Error(`process.exit called with code ${code}`);
       });
 
+    const consoleLogSpy = vi
+      .spyOn(console, 'log')
+      .mockImplementation(() => undefined);
+
     await expect(main()).rejects.toThrow('process.exit called with code 130');
 
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      '\n\n⚠️  Setup cancelled by user.',
+    );
     expect(exitMock).toHaveBeenCalledWith(130);
 
+    consoleLogSpy.mockRestore();
     exitMock.mockRestore();
   });
 
