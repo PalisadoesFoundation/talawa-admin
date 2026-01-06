@@ -349,7 +349,7 @@ describe('OrganizationPeople', () => {
     expect(screen.getByText('jane@example.com')).toBeInTheDocument();
 
     // The new component includes a "Joined:" label and a different date format.
-    expect(screen.getByText(/Joined:/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Joined:/i)).toHaveLength(2); // Two members should show joined dates
     // Check for the dynamic date format (YYYY-MM-DD)
     expect(
       screen.getByText(
