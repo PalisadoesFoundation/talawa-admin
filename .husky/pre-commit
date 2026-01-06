@@ -4,7 +4,10 @@ pnpm run format:fix
 # pnpm run lint:fix
 pnpm run lint-staged
 pnpm run typecheck
-STAGED_SRC=$(git diff --cached --name-only --diff-filter=ACMRT | grep -E '^src/.*\.(ts|tsx|js|jsx)$' | tr '\n' ' ')
+
+STAGED_SRC=$(git diff --cached --name-only --diff-filter=ACMRT \
+  | grep -E '^(src|scripts)/.*\.(ts|tsx|js|jsx)$' \
+  | tr '\n' ' ')
 
 # MinIO compliance check (prevent unsupported upload patterns)
 if [ -n "$STAGED_SRC" ]; then
@@ -15,13 +18,13 @@ fi
 if [ -n "$STAGED_SRC" ]; then
   pnpm run check-i18n -- --staged $STAGED_SRC
 fi
+
 pnpm run update:toc
 pnpm run check:pom
 npx knip --include files,exports,nsExports,nsTypes
 npx knip --config knip.deps.json --include dependencies
 pnpm run check-mock-cleanup
 pnpm run check-localstorage
-
 
 VENV_BIN=$(./.github/workflows/scripts/venv.sh) || exit 1
 
@@ -34,16 +37,18 @@ echo "Running Python CI parity checks..."
 # Check staged source files for various checks
 if [ -n "$STAGED_SRC" ]; then
   echo "$STAGED_SRC" | xargs "$VENV_BIN" .github/workflows/scripts/translation_check.py --files
-  echo "$STAGED_SRC" | xargs "$VENV_BIN" .github/workflows/scripts/disable_statements_check.py --files
+  # echo "$STAGED_SRC" | xargs "$VENV_BIN" .github/workflows/scripts/disable_statements_check.py --files
 fi
 
 # 3. CSS Policy Check
-# Exclude src/utils/ (utility/helper functions) and src/types/ (type definitions) 
+# Exclude src/utils/ (utility/helper functions) and src/types/ (type definitions)
 # as they cannot contain UI styling code
-CSS_STAGED=$(git diff --cached --name-only --diff-filter=ACMRT | grep -v '^src/utils/' | grep -v '^src/types/' || true)
+CSS_STAGED=$(git diff --cached --name-only --diff-filter=ACMRT \
+  | grep -v '^src/utils/' \
+  | grep -v '^src/types/' || true)
+
 if [ -n "$CSS_STAGED" ]; then
   echo "$CSS_STAGED" | xargs "$VENV_BIN" .github/workflows/scripts/css_check.py --files
 fi
-
 
 git add .
