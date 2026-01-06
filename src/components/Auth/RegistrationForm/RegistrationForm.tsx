@@ -27,9 +27,7 @@ export const RegistrationForm = ({
   enableRecaptcha = false,
 }: IRegistrationFormProps) => {
   const { t } = useTranslation('common');
-  const { t: tLogin } = useTranslation('translation', {
-    keyPrefix: 'loginPage',
-  });
+  const { t: tErrors } = useTranslation('translation');
   const [formData, setFormData] = useState<IRegistrationFormData>({
     name: '',
     email: '',
@@ -60,11 +58,9 @@ export const RegistrationForm = ({
       isValid: boolean;
       error?: string;
     }) => {
-      if (validation.isValid || !validation.error) return '';
-      const key = validation.error.startsWith('loginPage.')
-        ? validation.error.substring(10)
-        : validation.error;
-      return tLogin(key);
+      return validation.isValid || !validation.error
+        ? ''
+        : tErrors(validation.error);
     };
 
     setErrors({

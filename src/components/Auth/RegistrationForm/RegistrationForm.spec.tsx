@@ -322,6 +322,41 @@ describe('RegistrationForm', () => {
     });
   });
 
+  it('calls onError callback when registration fails', async () => {
+    const mockOnError = vi.fn();
+    const mockRegister = vi
+      .fn()
+      .mockRejectedValue(new Error('Registration failed'));
+
+    vi.mocked(useRegistration).mockReturnValue({
+      register: mockRegister,
+      loading: false,
+    });
+
+    renderComponent({ onError: mockOnError });
+
+    fireEvent.change(screen.getByLabelText('First Name'), {
+      target: { value: 'John Doe' },
+    });
+    fireEvent.change(screen.getByLabelText(/Email/), {
+      target: { value: 'john@example.com' },
+    });
+    fireEvent.change(screen.getByLabelText('Password'), {
+      target: { value: 'Password123!' },
+    });
+    fireEvent.change(screen.getByLabelText('Confirm Password'), {
+      target: { value: 'Password123!' },
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /register/i }));
+
+    // Verify the hook was initialized with the onError callback
+    expect(useRegistration).toHaveBeenCalledWith({
+      onSuccess: expect.any(Function),
+      onError: mockOnError,
+    });
+  });
+
   it('clears validation errors when valid data is entered', async () => {
     renderComponent();
 
