@@ -167,6 +167,18 @@ const EventForm: React.FC<IEventFormProps> = ({
       !disableRecurrence &&
         (!!initialValues.recurrenceRule || !showRecurrenceToggle),
     );
+    // Sync visibility state with initialValues
+    if (
+      !initialValues.name &&
+      !initialValues.isPublic &&
+      !initialValues.isInviteOnly
+    ) {
+      setVisibility('INVITE_ONLY');
+    } else {
+      setVisibility(
+        getVisibilityType(initialValues.isPublic, initialValues.isInviteOnly),
+      );
+    }
   }, [initialValues, disableRecurrence, showRecurrenceToggle]);
 
   const recurrenceOptions = useMemo(
@@ -543,16 +555,16 @@ const EventForm: React.FC<IEventFormProps> = ({
         </div>
         {showPublicToggle && (
           <div className="mb-3">
-            <Form.Label>{t('eventVisibility')}</Form.Label>
+            <Form.Label>{tCommon('eventVisibility')}</Form.Label>
             <div className="ms-3">
               <Form.Check
                 type="radio"
                 id="visibility-public"
                 label={
                   <div>
-                    <strong>{t('publicEvent')}</strong>
+                    <strong>{tCommon('publicEvent')}</strong>
                     <div className="text-muted small">
-                      {t('publicEventDescription')}
+                      {tCommon('publicEventDescription')}
                     </div>
                   </div>
                 }
@@ -567,9 +579,9 @@ const EventForm: React.FC<IEventFormProps> = ({
                 id="visibility-org"
                 label={
                   <div>
-                    <strong>{t('organizationEvent')}</strong>
+                    <strong>{tCommon('organizationEvent')}</strong>
                     <div className="text-muted small">
-                      {t('organizationEventDescription')}
+                      {tCommon('organizationEventDescription')}
                     </div>
                   </div>
                 }
@@ -584,9 +596,9 @@ const EventForm: React.FC<IEventFormProps> = ({
                 id="visibility-invite"
                 label={
                   <div>
-                    <strong>{t('inviteOnlyEvent')}</strong>
+                    <strong>{tCommon('inviteOnlyEvent')}</strong>
                     <div className="text-muted small">
-                      {t('inviteOnlyEventDescription')}
+                      {tCommon('inviteOnlyEventDescription')}
                     </div>
                   </div>
                 }

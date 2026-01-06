@@ -79,8 +79,8 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
     startTime: '08:00:00',
     endTime: '18:00:00',
     allDay: true,
-    isPublic: true,
-    isInviteOnly: false,
+    isPublic: false,
+    isInviteOnly: true,
     isRegisterable: false,
 
     recurrenceRule: null,

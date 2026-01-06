@@ -343,7 +343,17 @@ describe('CreateEventModal', () => {
     fireEvent.click(createBtn);
 
     await waitFor(() => {
-      expect(mockCreate).toHaveBeenCalled();
+      expect(mockCreate).toHaveBeenCalledWith(
+        expect.objectContaining({
+          variables: expect.objectContaining({
+            input: expect.objectContaining({
+              isPublic: false,
+              isInviteOnly: true,
+              isRegisterable: false,
+            }),
+          }),
+        }),
+      );
       expect(mockToast.success).toHaveBeenCalled();
       expect(onEventCreated).toHaveBeenCalled();
       expect(onClose).toHaveBeenCalled();
@@ -372,7 +382,7 @@ describe('CreateEventModal', () => {
     expect(screen.queryByTestId('allDayEventCheck')).not.toBeChecked();
   });
 
-  it('toggles public checkbox', () => {
+  it('toggles event visibility options', () => {
     render(
       <CreateEventModal
         isOpen={true}
@@ -383,12 +393,31 @@ describe('CreateEventModal', () => {
     );
 
     const publicRadio = screen.getByTestId('visibilityPublicRadio');
-    expect(publicRadio).toBeChecked();
+    const orgRadio = screen.getByTestId('visibilityOrgRadio');
+    const inviteRadio = screen.getByTestId('visibilityInviteRadio');
+
+    // Default should be Invite Only
+    expect(inviteRadio).toBeChecked();
+    expect(publicRadio).not.toBeChecked();
+    expect(orgRadio).not.toBeChecked();
 
     // Toggle to organization visibility
-    fireEvent.click(screen.getByTestId('visibilityOrgRadio'));
-    expect(screen.getByTestId('visibilityOrgRadio')).toBeChecked();
+    fireEvent.click(orgRadio);
+    expect(orgRadio).toBeChecked();
+    expect(inviteRadio).not.toBeChecked();
     expect(publicRadio).not.toBeChecked();
+
+    // Toggle to public visibility
+    fireEvent.click(publicRadio);
+    expect(publicRadio).toBeChecked();
+    expect(orgRadio).not.toBeChecked();
+    expect(inviteRadio).not.toBeChecked();
+
+    // Toggle back to invite only
+    fireEvent.click(inviteRadio);
+    expect(inviteRadio).toBeChecked();
+    expect(publicRadio).not.toBeChecked();
+    expect(orgRadio).not.toBeChecked();
   });
 
   it('toggles registrable checkbox', () => {

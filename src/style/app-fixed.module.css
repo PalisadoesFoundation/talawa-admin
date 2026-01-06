@@ -9231,11 +9231,12 @@ form {
 .checkboxdivEvents {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  --events-gap: 1rem;
+  gap: var(--events-gap, 1rem);
 }
 
 .checkboxdivEvents > div {
-  flex: 0 0 calc(50% - 0.5rem);
+  flex: 0 0 calc(50% - (var(--events-gap, 1rem) / 2));
   min-width: 200px;
 }
 

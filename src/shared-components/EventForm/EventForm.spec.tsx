@@ -945,6 +945,44 @@ describe('EventForm', () => {
       expect(screen.getByTestId('visibilityOrgRadio')).toBeChecked();
     });
 
+    test('updates visibility when initialValues change dynamically', () => {
+      const { rerender } = render(
+        <EventForm
+          initialValues={{
+            ...baseValues,
+            isPublic: false, // Start as Invite Only
+            isInviteOnly: true,
+          }}
+          onSubmit={vi.fn()}
+          onCancel={vi.fn()}
+          submitLabel="Update"
+          t={t}
+          tCommon={tCommon}
+          showPublicToggle
+        />,
+      );
+      expect(screen.getByTestId('visibilityInviteRadio')).toBeChecked();
+
+      // Rerender with Organization visibility
+      rerender(
+        <EventForm
+          initialValues={{
+            ...baseValues,
+            name: 'Existing Event',
+            isPublic: false,
+            isInviteOnly: false,
+          }}
+          onSubmit={vi.fn()}
+          onCancel={vi.fn()}
+          submitLabel="Update"
+          t={t}
+          tCommon={tCommon}
+          showPublicToggle
+        />,
+      );
+      expect(screen.getByTestId('visibilityOrgRadio')).toBeChecked();
+    });
+
     test('toggles event visibility options correctly', async () => {
       const handleSubmit = vi.fn();
       render(
