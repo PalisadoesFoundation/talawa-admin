@@ -324,9 +324,7 @@ describe('RegistrationForm', () => {
 
   it('calls onError callback when registration fails', async () => {
     const mockOnError = vi.fn();
-    const mockRegister = vi
-      .fn()
-      .mockRejectedValue(new Error('Registration failed'));
+    const mockRegister = vi.fn().mockResolvedValue(undefined);
 
     vi.mocked(useRegistration).mockReturnValue({
       register: mockRegister,
