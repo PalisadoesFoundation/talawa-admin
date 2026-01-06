@@ -1241,28 +1241,39 @@ describe('Manage Tag Page', () => {
         {
           request: {
             query: USER_TAGS_ASSIGNED_MEMBERS,
-            variables: { id: 'tag-123', first: TAGS_QUERY_DATA_CHUNK_SIZE },
+            variables: {
+              id: '1',
+              first: TAGS_QUERY_DATA_CHUNK_SIZE,
+              where: {
+                firstName: { starts_with: '' },
+                lastName: { starts_with: '' },
+              },
+              sortedBy: { id: 'DESCENDING' },
+            },
           },
-          result: { data: null },
-          delay: 100,
+          delay: 1000,
         },
       ];
-
       render(
         <MockedProvider mocks={loadingMocks}>
           <MemoryRouter initialEntries={['/orgtags/org-123/manageTag/tag-123']}>
-            <Routes>
-              <Route
-                path="/orgtags/:orgId/manageTag/:tagId"
-                element={<ManageTag />}
-              />
-            </Routes>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18n}>
+                <Routes>
+                  <Route
+                    path="/orgtags/:orgId/manageTag/:tagId"
+                    element={<ManageTag />}
+                  />
+                </Routes>
+              </I18nextProvider>
+            </Provider>
           </MemoryRouter>
         </MockedProvider>,
       );
 
-      const spinners = screen.getAllByTestId('spinner');
-      expect(spinners.length).toBeGreaterThan(0);
+      await waitFor(() => {
+        expect(screen.getByTestId('spinner')).toBeInTheDocument();
+      });
     });
 
     it('should hide spinner and render members after LoadingState completes', async () => {

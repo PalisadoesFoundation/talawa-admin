@@ -1,7 +1,9 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -25,10 +27,6 @@ const { routerMocks } = vi.hoisted(() => {
     },
   };
 });
-
-const mockRouteParams = () => {
-  routerMocks.useParams.mockReturnValue({ orgId: 'orgId', eventId: 'eventId' });
-};
 
 vi.mock('react-router', async () => {
   const actual =
@@ -122,18 +120,20 @@ describe('Testing Volunteers Screen', () => {
 
   it('should render Volunteers screen', async () => {
     renderVolunteers(link1);
-    await waitFor(async () => {
-      const searchInput = await screen.findByTestId('searchBy');
-      expect(searchInput).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
+    const searchInput = await screen.findByTestId('searchBy');
+    expect(searchInput).toBeInTheDocument();
   });
 
   it('Check Sorting Functionality', async () => {
     renderVolunteers(link1);
-    await waitFor(async () => {
-      const searchInput = await screen.findByTestId('searchBy');
-      expect(searchInput).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
+    const searchInput = await screen.findByTestId('searchBy');
+    expect(searchInput).toBeInTheDocument();
 
     let sortBtn = await screen.findByTestId('sort');
     expect(sortBtn).toBeInTheDocument();
@@ -194,12 +194,17 @@ describe('Testing Volunteers Screen', () => {
   it('Filter Volunteers by status (All)', async () => {
     renderVolunteers(link1);
 
-    await waitFor(async () => {
-      const filterBtn = await screen.findByTestId('filter');
-      expect(filterBtn).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
 
-      // Filter by All
-      fireEvent.click(filterBtn);
+    const filterBtn = await screen.findByTestId('filter');
+    expect(filterBtn).toBeInTheDocument();
+
+    // Filter by All
+    fireEvent.click(filterBtn);
+
+    await waitFor(() => {
       expect(screen.getByTestId('all')).toBeInTheDocument();
     });
     fireEvent.click(screen.getByTestId('all'));
@@ -210,13 +215,16 @@ describe('Testing Volunteers Screen', () => {
 
   it('Filter Volunteers by status (Pending)', async () => {
     renderVolunteers(link1);
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
+    const filterBtn = await screen.findByTestId('filter');
+    expect(filterBtn).toBeInTheDocument();
 
-    await waitFor(async () => {
-      const filterBtn = await screen.findByTestId('filter');
-      expect(filterBtn).toBeInTheDocument();
+    // Filter by Pending
+    fireEvent.click(filterBtn);
 
-      // Filter by Pending
-      fireEvent.click(filterBtn);
+    await waitFor(() => {
       expect(screen.getByTestId('pending')).toBeInTheDocument();
     });
     fireEvent.click(screen.getByTestId('pending'));
@@ -227,12 +235,16 @@ describe('Testing Volunteers Screen', () => {
 
   it('Filter Volunteers by status (Accepted)', async () => {
     renderVolunteers(link1);
-    await waitFor(async () => {
-      const filterBtn = await screen.findByTestId('filter');
-      expect(filterBtn).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
+    const filterBtn = await screen.findByTestId('filter');
+    expect(filterBtn).toBeInTheDocument();
 
-      // Filter by Accepted
-      fireEvent.click(filterBtn);
+    // Filter by Accepted
+    fireEvent.click(filterBtn);
+
+    await waitFor(() => {
       expect(screen.getByTestId('accepted')).toBeInTheDocument();
     });
     fireEvent.click(screen.getByTestId('accepted'));
@@ -259,16 +271,17 @@ describe('Testing Volunteers Screen', () => {
 
   it('Search by clicking search button', async () => {
     renderVolunteers(link1);
-    await waitFor(async () => {
-      const searchInput = await screen.findByTestId('searchBy');
-      const searchBtn = await screen.findByTestId('searchBtn');
-      expect(searchInput).toBeInTheDocument();
-      expect(searchBtn).toBeInTheDocument();
-
-      // Use 'T' which has a mock in the existing test data
-      await userEvent.type(searchInput, 'T');
-      await userEvent.click(searchBtn);
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
+    const searchInput = await screen.findByTestId('searchBy');
+    const searchBtn = await screen.findByTestId('searchBtn');
+    expect(searchInput).toBeInTheDocument();
+    expect(searchBtn).toBeInTheDocument();
+
+    // Use 'T' which has a mock in the existing test data
+    await userEvent.type(searchInput, 'T');
+    await userEvent.click(searchBtn);
     await debounceWait();
 
     // This should trigger:
@@ -284,10 +297,10 @@ describe('Testing Volunteers Screen', () => {
   it('renders avatar image when user has avatarURL (img-url)', async () => {
     renderVolunteers(link1);
 
-    // Wait for volunteers to load and DataGrid to render
     await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
+    expect(screen.getByTestId('searchBy')).toBeInTheDocument();
 
     // Find volunteer names to ensure DataGrid cells are rendered
     const volunteerNames = await screen.findAllByTestId('volunteerName');
@@ -308,12 +321,12 @@ describe('Testing Volunteers Screen', () => {
 
   it('should render screen with No Volunteers', async () => {
     renderVolunteers(link3);
-
     await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
-      expect(screen.getByTestId('volunteers-empty-state')).toBeInTheDocument();
-      expect(screen.getByText(t.noVolunteers)).toBeInTheDocument();
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
+    expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    expect(screen.getByTestId('volunteers-empty-state')).toBeInTheDocument();
+    expect(screen.getByText(t.noVolunteers)).toBeInTheDocument();
   });
 
   it('Error while fetching volunteers data', async () => {
@@ -347,22 +360,20 @@ describe('Testing Volunteers Screen', () => {
   it('Open and close Volunteer Modal (Create)', async () => {
     renderVolunteers(link1);
     await waitFor(() => {
-      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
+
+    expect(screen.getByTestId('searchBy')).toBeInTheDocument();
 
     const addVolunteerBtn = await screen.findByTestId('addVolunteerBtn');
-    expect(addVolunteerBtn).toBeInTheDocument();
-
     await userEvent.click(addVolunteerBtn);
-
-    await act(async () => {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-    });
-
     const closeBtn = await screen.findByTestId('modalCloseBtn');
-    expect(closeBtn).toBeInTheDocument();
-
     await userEvent.click(closeBtn);
+
+    // Optional: verify modal closed
+    await waitFor(() => {
+      expect(screen.queryByTestId('modalCloseBtn')).not.toBeInTheDocument();
+    });
   });
 
   describe('Client-side Search Filtering', () => {
@@ -677,14 +688,5 @@ describe('Testing Volunteers Screen', () => {
       },
       { timeout: 3000 },
     );
-  });
-
-  it('should render volunteers list after data loads', async () => {
-    mockRouteParams();
-    renderVolunteers(link1);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('searchBtn')).toBeInTheDocument();
-    });
   });
 });

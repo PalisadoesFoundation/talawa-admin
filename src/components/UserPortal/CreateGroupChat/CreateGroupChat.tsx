@@ -1,24 +1,24 @@
 /**
- * Component for creating a new group chat.
+ * Renders a modal interface for creating a new group chat.
  *
- * This component provides a modal interface for creating a group chat,
- * allowing users to set a title, description, and add members to the group.
- * It also supports uploading a group image and integrates with GraphQL
- * mutations and queries for managing chat data.
- *
- * @component
- * @param {InterfaceCreateGroupChatProps} props - Component props.
- * @param {() => void} props.toggleCreateGroupChatModal - Function to toggle the visibility of the create group chat modal.
- * @param {boolean} props.createGroupChatModalisOpen - Boolean indicating whether the create group chat modal is open.
- * @param {(variables?: Partial<{ id: string }> | undefined) => Promise<ApolloQueryResult<unknown>>} props.chatsListRefetch - Function to refetch the chat list.
- *
- * @returns {JSX.Element} The rendered CreateGroupChat component.
+ * This component allows users to create a group chat by setting a title,
+ * description, selecting members, and optionally uploading a group image.
+ * It integrates with GraphQL mutations and queries to manage chat data.
  *
  * @remarks
- * - Uses `useMutation` to create a new chat via the `CREATE_CHAT` GraphQL mutation.
- * - Fetches user data using the `USERS_CONNECTION_LIST` GraphQL query.
- * - Allows users to search for and add members to the group.
- * - Supports image upload functionality using MinIO.
+ * Key features include:
+ * - Creating a chat using the `CREATE_CHAT` GraphQL mutation.
+ * - Fetching users via the `USERS_CONNECTION_LIST` GraphQL query.
+ * - Searching for and adding members to the group.
+ * - Uploading a group image using MinIO.
+ * - Displaying loading states using the shared `LoadingState` component.
+ *
+ * @param props - Component props.
+ * @param toggleCreateGroupChatModal - Toggles the visibility of the create group chat modal.
+ * @param createGroupChatModalisOpen - Indicates whether the create group chat modal is open.
+ * @param chatsListRefetch - Refetch function for updating the chat list after creation.
+ *
+ * @returns A React element that renders the CreateGroupChat modal.
  *
  * @example
  * ```tsx
@@ -29,20 +29,17 @@
  * />
  * ```
  *
- * @dependencies
+ * @remarks
+ * Dependencies used by this component include:
  * - React
- * - @apollo/client
- * - @mui/material
+ * - \@apollo/client
+ * - \@mui/material
  * - react-bootstrap
  * - react-router-dom
  * - utils/useLocalstorage
  * - utils/MinioUpload
  * - shared-components/LoadingState/LoadingState
  * - components/ProfileAvatarDisplay
- *
- * @fileoverview
- * This file defines the `CreateGroupChat` component, which is used in the
- * user portal for creating group chats within an organization.
  */
 import React, { useEffect, useRef, useState } from 'react';
 import { Paper, TableBody } from '@mui/material';
@@ -251,7 +248,7 @@ export default function CreateGroupChat({
           </button>
         </div>
         <Form>
-          <Form.Group className="mb-3" controlId="registerForm.Rname">
+          <Form.Group className="mb-3" controlId="groupTitleInput">
             <Form.Label>{t('title', { defaultValue: 'Title' })}</Form.Label>
             <Form.Control
               type="text"
@@ -265,7 +262,7 @@ export default function CreateGroupChat({
               }}
             />
           </Form.Group>
-          <Form.Group className="mb-3" controlId="registerForm.Rname">
+          <Form.Group className="mb-3" controlId="groupDescriptionInput">
             <Form.Label>
               {tCommon('description', { defaultValue: 'Description' })}
             </Form.Label>
@@ -276,7 +273,7 @@ export default function CreateGroupChat({
               })}
               autoComplete="off"
               required
-              data-testid="groupDescriptionInput" //corrected spelling
+              data-testid="groupDescriptionInput"
               value={description}
               onChange={(e): void => {
                 setDescription(e.target.value);
@@ -390,7 +387,8 @@ export default function CreateGroupChat({
                             <TableCell align="center">
                               {userDetails.name}
                               <br />
-                              {userDetails.role || 'Member'}
+                              {userDetails.role ||
+                                tCommon('member', { defaultValue: 'Member' })}
                             </TableCell>
                             <TableCell align="center">
                               {userIds.includes(userDetails.id) ? (

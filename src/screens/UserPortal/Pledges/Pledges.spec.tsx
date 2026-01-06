@@ -1,8 +1,10 @@
 import React from 'react';
 import { GraphQLError } from 'graphql';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import { cleanup, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -1661,14 +1663,29 @@ describe('Testing User Pledge Screen', () => {
     it('should show LoadingState spinner while pledges are loading', async () => {
       const loadingMocks = [
         {
-          request: { query: USER_DETAILS },
+          request: {
+            query: USER_DETAILS,
+            variables: { input: { id: 'userId' } },
+          },
           result: {
-            data: { me: { id: '1', firstName: 'John', lastName: 'Doe' } },
+            data: {
+              user: {
+                id: 'userId',
+                __typename: 'User',
+              },
+            },
           },
         },
         {
-          request: { query: USER_PLEDGES },
-          result: { data: { me: { pledges: [] } } },
+          request: {
+            query: USER_PLEDGES,
+            variables: {
+              input: { userId: 'userId' },
+              where: {},
+              orderBy: 'endDate_DESC',
+            },
+          },
+          result: { data: { getPledgesByUserId: [] } },
           delay: 100,
         },
       ];

@@ -1,7 +1,9 @@
 import React from 'react';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
@@ -1457,6 +1459,8 @@ describe('EventActionItems', () => {
       ];
 
       renderEventActionItems('eventId1', loadingMocks);
+
+      expect(screen.getByTestId('loader')).toBeInTheDocument();
 
       // Verify component renders and eventually loads data
       await waitFor(() => {

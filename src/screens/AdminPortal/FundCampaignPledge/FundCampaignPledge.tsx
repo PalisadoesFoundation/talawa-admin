@@ -265,7 +265,7 @@ const fundCampaignPledge = (): JSX.Element => {
           </div>
           <div className={styles.progressContainer}>
             <div className="d-flex justify-content-center">
-              <div
+              <fieldset
                 className={`btn-group ${styles.toggleGroup}`}
                 role="group"
                 aria-label={tCommon('togglePledgedRaised')}
@@ -301,7 +301,7 @@ const fundCampaignPledge = (): JSX.Element => {
                 >
                   {t('pledges.raisedAmount')}
                 </label>
-              </div>
+              </fieldset>
             </div>
 
             <div className={styles.progress}>

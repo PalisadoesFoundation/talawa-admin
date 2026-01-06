@@ -3,8 +3,10 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 import { MockedProvider } from '@apollo/client/testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
@@ -791,17 +793,6 @@ describe('Testing Invitations Screen', () => {
         expect(screen.queryByTestId('errorMsg')).not.toBeInTheDocument();
         const inviteSubject = screen.getByTestId('inviteSubject');
         expect(inviteSubject).toHaveTextContent(t.eventInvitationSubject);
-      });
-    });
-
-    it('should render invitations list after data loads', async () => {
-      const individualNonRecurringLink = new StaticMockLink(
-        INDIVIDUAL_NON_RECURRING_MOCKS,
-      );
-      renderInvitations(individualNonRecurringLink);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('inviteSubject')).toBeInTheDocument();
       });
     });
   });

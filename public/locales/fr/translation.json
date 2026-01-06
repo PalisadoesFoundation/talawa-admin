@@ -1673,11 +1673,6 @@
     "promoteToAdmin": "Promouvoir administrateur",
     "user": "Utilisateur",
     "chatAction": "Action de chat",
-    "organizationMembersTable": "Table des membres de l'organisation",
-    "next": "Suivant",
-    "newGroup": "Nouveau groupe",
-    "groupName": "Nom du groupe",
-    "groupDescription": "Description du groupe",
     "confirmRemoveMember": "Confirmer la suppression du membre",
     "failedToAddUser": "Échec de l'ajout de l'utilisateur",
     "userAddedSuccessfully": "Utilisateur ajouté avec succès"

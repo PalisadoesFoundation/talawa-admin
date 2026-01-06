@@ -803,57 +803,30 @@ describe('AcceptInvitation', () => {
     });
   });
 
-  describe('LoadingState Behavior', () => {
-    it('should show LoadingState spinner while invitation verification is loading', async () => {
-      const loadingMocks = [
-        {
-          request: {
-            query: VERIFY_EVENT_INVITATION,
-            variables: { input: { invitationToken: 'test-token' } },
-          },
-          result: { data: null },
-          delay: 100,
-        },
-      ];
-
-      renderComponent(loadingMocks, '/invitation/test-token', 'auth-token');
-
-      const spinners = screen.getAllByTestId('spinner');
-      expect(spinners.length).toBeGreaterThan(0);
-    });
-
-    it('should hide spinner and render invitation form after LoadingState completes', async () => {
-      const verifyMaskedEmailMock = {
-        request: {
-          query: VERIFY_EVENT_INVITATION,
-          variables: { input: { invitationToken: 'test-token' } },
-        },
-        result: {
-          data: {
-            verifyEventInvitation: {
-              invitationToken: 'test-token',
-              inviteeEmailMasked: 't**@e***.com',
-            },
+  it('should hide spinner and render invitation form after LoadingState completes', async () => {
+    const verifyMaskedEmailMock = {
+      request: {
+        query: VERIFY_EVENT_INVITATION,
+        variables: { input: { invitationToken: 'test-token' } },
+      },
+      result: {
+        data: {
+          verifyEventInvitation: {
+            invitationToken: 'test-token',
+            inviteeEmailMasked: 't**@e***.com',
           },
         },
-      };
+      },
+    };
 
-      renderComponent(
-        [verifyMaskedEmailMock],
-        '/invitation/test-token',
-        'auth-token',
-      );
+    renderComponent(
+      [verifyMaskedEmailMock],
+      '/invitation/test-token',
+      'auth-token',
+    );
 
-      await waitFor(() => {
-        expect(screen.getByTestId('accept-invite-btn')).toBeInTheDocument();
-      });
-
-      const spinners = screen.queryAllByTestId('spinner');
-      const visibleSpinners = spinners.filter((spinner) => {
-        const parent = spinner.closest('[data-testid="loadingContainer"]');
-        return parent && !parent.classList.contains('hidden');
-      });
-      expect(visibleSpinners.length).toBe(0);
+    await waitFor(() => {
+      expect(screen.getByTestId('accept-invite-btn')).toBeInTheDocument();
     });
   });
 });

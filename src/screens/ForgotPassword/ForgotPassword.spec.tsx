@@ -508,10 +508,16 @@ describe('Testing Forgot Password screen', () => {
         </MockedProvider>,
       );
 
-      // Wait for the form to render
+      // Enter email to trigger OTP request
+      await userEvent.type(
+        screen.getByPlaceholderText(/Registered email/i),
+        'test@example.com',
+      );
+      await userEvent.click(screen.getByText('Get OTP'));
+
+      // Verify spinner is shown during loading
       await waitFor(() => {
-        const inputs = screen.queryAllByDisplayValue('');
-        expect(inputs.length).toBeGreaterThanOrEqual(0);
+        expect(screen.getByTestId('spinner')).toBeInTheDocument();
       });
     });
 
@@ -533,14 +539,10 @@ describe('Testing Forgot Password screen', () => {
         expect(
           screen.getByPlaceholderText(/Registered email/i),
         ).toBeInTheDocument();
+        expect(screen.getByText('Get OTP')).toBeInTheDocument();
       });
 
-      const spinners = screen.queryAllByTestId('spinner');
-      const visibleSpinners = spinners.filter((spinner) => {
-        const parent = spinner.closest('[data-testid="loadingContainer"]');
-        return parent && !parent.classList.contains('hidden');
-      });
-      expect(visibleSpinners.length).toBe(0);
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
   });
 });

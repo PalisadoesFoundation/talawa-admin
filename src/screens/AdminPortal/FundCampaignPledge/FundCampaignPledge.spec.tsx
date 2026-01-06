@@ -1473,15 +1473,28 @@ describe('Testing Campaign Pledge Screen', () => {
         {
           request: {
             query: FUND_CAMPAIGN_PLEDGE,
-            variables: { id: 'fundCampaignId' },
+            variables: { input: { id: 'fundCampaignId' } },
           },
-          result: { data: { fundCampaignPledgesByCampaign: [] } },
-          delay: 100,
+          result: {
+            data: {
+              fundCampaign: {
+                __typename: 'FundCampaign',
+                id: 'fundLoading',
+                name: 'Loading Campaign',
+                startAt: dayjs.utc().toISOString(),
+                endAt: dayjs.utc().add(1, 'year').toISOString(),
+                currencyCode: 'USD',
+                goalAmount: 0,
+                pledges: { __typename: 'PledgeConnection', edges: [] },
+              },
+            },
+          },
+          delay: 200,
         },
       ];
 
       renderFundCampaignPledge(new StaticMockLink(loadingMocks));
-      const spinners = screen.getAllByTestId('spinner');
+      const spinners = await screen.findAllByTestId('spinner');
       expect(spinners.length).toBeGreaterThan(0);
     });
 

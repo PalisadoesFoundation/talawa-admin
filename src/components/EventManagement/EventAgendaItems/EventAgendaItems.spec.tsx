@@ -8,8 +8,10 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import i18n from 'utils/i18nForTest';
 import { toast } from 'react-toastify';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import type { MockedResponse } from '@apollo/react-testing';
@@ -853,7 +855,7 @@ describe('Testing Agenda Items Components', () => {
           <Provider store={store}>
             <BrowserRouter>
               <I18nextProvider i18n={i18n}>
-                <EventAgendaItems eventId="abc" />
+                <EventAgendaItems eventId="eventId" />
               </I18nextProvider>
             </BrowserRouter>
           </Provider>

@@ -6,10 +6,12 @@ import EventDashboard from './EventDashboard';
 import { BrowserRouter } from 'react-router';
 import { ToastContainer } from 'react-toastify';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { ApolloLink, DefaultOptions } from '@apollo/client';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -406,7 +408,7 @@ describe('Testing Event Dashboard Screen', () => {
       ];
 
       const mockLink = new StaticMockLink(loadingMocks);
-      render(
+      const { queryByTestId } = render(
         <MockedProvider link={mockLink}>
           <BrowserRouter>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -421,6 +423,12 @@ describe('Testing Event Dashboard Screen', () => {
       await waitFor(() => {
         const spinner = document.querySelector('[data-testid="spinner"]');
         expect(spinner).toBeInTheDocument();
+      });
+
+      await waitFor(() => {
+        const spinner = document.querySelector('[data-testid="spinner"]');
+        expect(spinner).not.toBeInTheDocument();
+        expect(queryByTestId('no-event')).toBeInTheDocument();
       });
     });
 

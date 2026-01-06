@@ -1004,9 +1004,14 @@ describe('GroupChatDetails', () => {
     it('should show LoadingState spinner while chat details are loading', async () => {
       useLocalStorage().setItem('userId', 'user1');
 
+      const delayedMocks = mocks.map((mock) => ({
+        ...mock,
+        delay: 300,
+      }));
+
       render(
         <I18nextProvider i18n={i18n}>
-          <MockedProvider mocks={[]} cache={testCache}>
+          <MockedProvider mocks={delayedMocks} cache={testCache}>
             <GroupChatDetails
               toggleGroupChatDetailsModal={vi.fn()}
               groupChatDetailsModalisOpen={true}
@@ -1017,11 +1022,20 @@ describe('GroupChatDetails', () => {
         </I18nextProvider>,
       );
 
-      // Component should render successfully
-      await waitFor(() => {
-        const testElements = screen.queryAllByText(/Test/i);
-        expect(testElements.length).toBeGreaterThan(0);
+      // Click "Add Members" to open the modal that triggers ORGANIZATION_MEMBERS query
+      const addMembersBtn = screen.getByTestId('addMembers');
+      await act(async () => {
+        fireEvent.click(addMembersBtn);
       });
+
+      // Wait for spinner to appear during the ORGANIZATION_MEMBERS query loading
+      await waitFor(
+        () => {
+          const spinner = document.querySelector('[data-testid="spinner"]');
+          expect(spinner).toBeInTheDocument();
+        },
+        { timeout: 2000 },
+      );
     });
 
     it('should hide spinner and render chat details after LoadingState completes', async () => {

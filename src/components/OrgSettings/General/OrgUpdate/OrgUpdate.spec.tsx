@@ -925,9 +925,22 @@ describe('OrgUpdate Component', () => {
           },
           result: {
             data: {
-              organizations: [
-                { _id: '1', name: 'Test Org', description: 'Desc' },
-              ],
+              organization: {
+                __typename: 'Organization',
+                id: '1',
+                name: 'Test Org',
+                description: 'Test Description',
+                addressLine1: '123 Test St',
+                addressLine2: 'Suite 100',
+                city: 'Test City',
+                state: 'Test State',
+                postalCode: '12345',
+                countryCode: 'US',
+                avatarURL: null,
+                createdAt: dayjs.utc().toISOString(),
+                updatedAt: dayjs.utc().toISOString(),
+                isUserRegistrationRequired: false,
+              },
             },
           },
         },
