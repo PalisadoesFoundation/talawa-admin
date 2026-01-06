@@ -477,7 +477,8 @@
     "errorOccurredWhileLoadingAssignedUser": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
     "tagActions": "Actions d'étiquette",
     "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
-    "sortPeople": "Trier les personnes"
+    "sortPeople": "Trier les personnes",
+    "noTagsFound": "Aucun tag trouvé"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",

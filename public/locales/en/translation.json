@@ -477,7 +477,8 @@
     "errorOccurredWhileLoadingAssignedUser": "Error occurred while loading assigned users",
     "tagActions": "Tag Actions",
     "loadAssignedUsersError": "Error occurred while loading assigned users",
-    "sortPeople": "Sort People"
+    "sortPeople": "Sort People",
+    "noTagsFound": "No tags found"
   },
   "userListCard": {
     "addAdmin": "Add Admin",

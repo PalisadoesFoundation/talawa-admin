@@ -477,7 +477,8 @@
     "errorOccurredWhileLoadingAssignedUser": "加载已分配用户时出错",
     "sortPeople": "排序人员",
     "tagActions": "标签操作",
-    "loadAssignedUsersError": "加载已分配用户时发生错误"
+    "loadAssignedUsersError": "加载已分配用户时发生错误",
+    "noTagsFound": "未找到标签"
   },
   "userListCard": {
     "addAdmin": "添加管理员",

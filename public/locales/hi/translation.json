@@ -477,7 +477,8 @@
     "errorOccurredWhileLoadingAssignedUser": "असाइन किए गए उपयोगकर्ता को लोड करते समय त्रुटि हुई",
     "sortPeople": "लोगों को सॉर्ट करें",
     "tagActions": "टैग क्रियाएँ",
-    "loadAssignedUsersError": "निर्दिष्ट उपयोगकर्ताओं को लोड करते समय त्रुटि हुई"
+    "loadAssignedUsersError": "निर्दिष्ट उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
+    "noTagsFound": "कोई टैग नहीं मिला"
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
