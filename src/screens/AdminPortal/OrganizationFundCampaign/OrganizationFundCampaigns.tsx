@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import dayjs from 'dayjs';
-import TableLoader from 'components/TableLoader/TableLoader';
+import TableLoader from 'shared-components/TableLoader/TableLoader';
 import ReportingTable from 'shared-components/ReportingTable/ReportingTable';
 import CampaignModal from './modal/CampaignModal';
 import { FUND_CAMPAIGN } from 'GraphQl/Queries/fundQueries';
@@ -248,7 +248,7 @@ const orgFundCampaign = (): JSX.Element => {
           >
             {
               currencySymbols[
-                params.row.currencyCode as keyof typeof currencySymbols
+              params.row.currencyCode as keyof typeof currencySymbols
               ]
             }
             {params.row.goalAmount as number}
@@ -273,7 +273,7 @@ const orgFundCampaign = (): JSX.Element => {
           >
             {
               currencySymbols[
-                params.row.currencyCode as keyof typeof currencySymbols
+              params.row.currencyCode as keyof typeof currencySymbols
               ]
             }
             0
@@ -319,13 +319,12 @@ const orgFundCampaign = (): JSX.Element => {
                 aria-valuemin={0}
                 aria-valuemax={100}
                 aria-valuenow={percentage}
-                className={`${componentStyles.progressCircleForeground} ${
-                  percentage >= 100
+                className={`${componentStyles.progressCircleForeground} ${percentage >= 100
                     ? componentStyles.progressComplete
                     : percentage >= 50
                       ? componentStyles.progressHalf
                       : componentStyles.progressLow
-                }`}
+                  }`}
               />
             </Box>
             <Typography variant="body2" className={styles.progressTypography}>
@@ -420,9 +419,9 @@ const orgFundCampaign = (): JSX.Element => {
       </div>
 
       {!campaignLoading &&
-      campaignData &&
-      filteredCampaigns.length === 0 &&
-      searchText.length > 0 ? (
+        campaignData &&
+        filteredCampaigns.length === 0 &&
+        searchText.length > 0 ? (
         <EmptyState
           icon={<Search />}
           message="noResultsFound"

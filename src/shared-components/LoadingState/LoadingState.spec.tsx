@@ -13,10 +13,10 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import LoadingState from './LoadingState';
-import { InterfaceTableLoader } from 'components/TableLoader/TableLoader';
+import { InterfaceTableLoader } from 'types/shared-components/TableLoader/interface';
 
 // Mock TableLoader component
-vi.mock('components/TableLoader/TableLoader', () => ({
+vi.mock('shared-components/TableLoader/TableLoader', () => ({
   default: ({
     noOfRows,
     headerTitles,

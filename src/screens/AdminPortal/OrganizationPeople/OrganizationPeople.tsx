@@ -41,7 +41,7 @@ import {
 } from 'types/ReportingTable/utils';
 
 import styles from 'style/app-fixed.module.css';
-import TableLoader from 'components/TableLoader/TableLoader';
+import TableLoader from 'shared-components/TableLoader/TableLoader';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
@@ -159,14 +159,14 @@ function OrganizationPeople(): JSX.Element {
   const [currentRows, setCurrentRows] = useState<IProcessedRow[]>([]);
   const [data, setData] = useState<
     | {
-        edges: IEdges[];
-        pageInfo: {
-          startCursor?: string;
-          endCursor?: string;
-          hasNextPage: boolean;
-          hasPreviousPage: boolean;
-        };
-      }
+      edges: IEdges[];
+      pageInfo: {
+        startCursor?: string;
+        endCursor?: string;
+        hasNextPage: boolean;
+        hasPreviousPage: boolean;
+      };
+    }
     | undefined
   >();
 

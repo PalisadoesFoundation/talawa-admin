@@ -31,15 +31,9 @@
 import React, { useEffect } from 'react';
 import styles from './TableLoader.module.css';
 import { Table } from 'react-bootstrap';
+import { InterfaceTableLoader } from 'types/shared-components/TableLoader/interface';
 
-export interface InterfaceTableLoader {
-  noOfRows: number;
-  headerTitles?: string[];
-  noOfCols?: number;
-  'data-testid'?: string;
-}
-
-const tableLoader = (props: InterfaceTableLoader): JSX.Element => {
+const TableLoader = (props: InterfaceTableLoader): JSX.Element => {
   const { noOfRows, headerTitles, noOfCols, 'data-testid': dataTestId } = props;
 
   useEffect(() => {
@@ -57,12 +51,12 @@ const tableLoader = (props: InterfaceTableLoader): JSX.Element => {
           <tr>
             {headerTitles
               ? headerTitles.map((title, index) => {
-                  return <th key={index}>{title}</th>;
-                })
+                return <th key={index}>{title}</th>;
+              })
               : noOfCols &&
-                [...Array(noOfCols)].map((_, index) => {
-                  return <th key={index} />;
-                })}
+              [...Array(noOfCols)].map((_, index) => {
+                return <th key={index} />;
+              })}
           </tr>
         </thead>
 
@@ -95,4 +89,4 @@ const tableLoader = (props: InterfaceTableLoader): JSX.Element => {
   );
 };
 
-export default tableLoader;
+export default TableLoader;

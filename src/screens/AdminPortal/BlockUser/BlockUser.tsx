@@ -53,7 +53,7 @@ import {
   GET_ORGANIZATION_MEMBERS_PG,
   GET_ORGANIZATION_BLOCKED_USERS_PG,
 } from 'GraphQl/Queries/Queries';
-import TableLoader from 'components/TableLoader/TableLoader';
+import TableLoader from 'shared-components/TableLoader/TableLoader';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import styles from 'style/app-fixed.module.css';
@@ -270,7 +270,7 @@ const BlockUser = (): JSX.Element => {
         </div>
         <div className={styles.listBox}>
           {(!showBlockedMembers && filteredAllMembers.length > 0) ||
-          (showBlockedMembers && filteredBlockedUsers.length > 0) ? (
+            (showBlockedMembers && filteredBlockedUsers.length > 0) ? (
             <Table
               responsive
               data-testid="userList"
@@ -288,55 +288,55 @@ const BlockUser = (): JSX.Element => {
               <tbody>
                 {!showBlockedMembers
                   ? filteredAllMembers.map((user, index: number) => (
-                      <tr key={user.id}>
-                        <th scope="row">{index + 1}</th>
-                        <td>{user.name}</td>
-                        <td>{user.emailAddress}</td>
-                        <td>
-                          <Button
-                            variant="success"
-                            size="sm"
-                            className={styles.removeButton}
-                            onClick={async (): Promise<void> => {
-                              await handleBlockUser(user);
-                            }}
-                            data-testid={`blockUser${user.id}`}
-                            aria-label={t('block') + ': ' + user.name}
-                          >
-                            <FontAwesomeIcon
-                              icon={faBan}
-                              className={styles.banIcon}
-                            />
-                            {t('block')}
-                          </Button>
-                        </td>
-                      </tr>
-                    ))
+                    <tr key={user.id}>
+                      <th scope="row">{index + 1}</th>
+                      <td>{user.name}</td>
+                      <td>{user.emailAddress}</td>
+                      <td>
+                        <Button
+                          variant="success"
+                          size="sm"
+                          className={styles.removeButton}
+                          onClick={async (): Promise<void> => {
+                            await handleBlockUser(user);
+                          }}
+                          data-testid={`blockUser${user.id}`}
+                          aria-label={t('block') + ': ' + user.name}
+                        >
+                          <FontAwesomeIcon
+                            icon={faBan}
+                            className={styles.banIcon}
+                          />
+                          {t('block')}
+                        </Button>
+                      </td>
+                    </tr>
+                  ))
                   : filteredBlockedUsers.map((user, index: number) => (
-                      <tr key={user.id}>
-                        <th scope="row">{index + 1}</th>
-                        <td>{user.name}</td>
-                        <td>{user.emailAddress}</td>
-                        <td>
-                          <Button
-                            variant="success"
-                            size="sm"
-                            className={styles.unblockButton}
-                            onClick={async (): Promise<void> => {
-                              await handleUnBlockUser(user);
-                            }}
-                            data-testid={`blockUser${user.id}`}
-                            aria-label={t('unblock') + ': ' + user.name}
-                          >
-                            <FontAwesomeIcon
-                              icon={faUserPlus}
-                              className={styles.unbanIcon}
-                            />
-                            {t('unblock')}
-                          </Button>
-                        </td>
-                      </tr>
-                    ))}
+                    <tr key={user.id}>
+                      <th scope="row">{index + 1}</th>
+                      <td>{user.name}</td>
+                      <td>{user.emailAddress}</td>
+                      <td>
+                        <Button
+                          variant="success"
+                          size="sm"
+                          className={styles.unblockButton}
+                          onClick={async (): Promise<void> => {
+                            await handleUnBlockUser(user);
+                          }}
+                          data-testid={`blockUser${user.id}`}
+                          aria-label={t('unblock') + ': ' + user.name}
+                        >
+                          <FontAwesomeIcon
+                            icon={faUserPlus}
+                            className={styles.unbanIcon}
+                          />
+                          {t('unblock')}
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </Table>
           ) : (

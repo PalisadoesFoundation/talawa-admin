@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router';
 
-import type { InterfaceTableLoader } from './TableLoader';
+import type { InterfaceTableLoader } from 'types/shared-components/TableLoader/interface';
 import TableLoader from './TableLoader';
 import { vi } from 'vitest';
 
