@@ -59,15 +59,22 @@ if [ -n "$STAGED_SRC" ]; then
       FILE_MOD_TIME=$(stat -c %Y "$SCRIPT_PATH")
     fi
     
-    CURRENT_TIME=$(date +%s)
-    AGE_SECONDS=$((CURRENT_TIME - FILE_MOD_TIME))
-    AGE_HOURS=$((AGE_SECONDS / 3600))
     
-    if [ "$AGE_HOURS" -lt "$CACHE_MAX_AGE_HOURS" ]; then
-      echo "✅ Using cached disable_statements_check.py (${AGE_HOURS}h old, cache valid for ${CACHE_MAX_AGE_HOURS}h)"
-      NEEDS_DOWNLOAD=false
+    # Fallback if stat failed (unsupported platform)
+    if [ -z "$FILE_MOD_TIME" ]; then
+      echo "⚠️  Could not determine cache age, forcing re-download"
+      NEEDS_DOWNLOAD=true
     else
-      echo "⏰ Cache is ${AGE_HOURS}h old (max: ${CACHE_MAX_AGE_HOURS}h), attempting fresh download..."
+      CURRENT_TIME=$(date +%s)
+      AGE_SECONDS=$((CURRENT_TIME - FILE_MOD_TIME))
+      AGE_HOURS=$((AGE_SECONDS / 3600))
+      
+      if [ "$AGE_HOURS" -lt "$CACHE_MAX_AGE_HOURS" ]; then
+        echo "✅ Using cached disable_statements_check.py (${AGE_HOURS}h old, cache valid for ${CACHE_MAX_AGE_HOURS}h)"
+        NEEDS_DOWNLOAD=false
+      else
+        echo "⏰ Cache is ${AGE_HOURS}h old (max: ${CACHE_MAX_AGE_HOURS}h), attempting fresh download..."
+      fi
     fi
   else
     echo "📥 No cached script found, downloading disable_statements_check.py..."
