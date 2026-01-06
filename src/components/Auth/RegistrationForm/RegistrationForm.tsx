@@ -27,7 +27,7 @@ export const RegistrationForm = ({
   enableRecaptcha = false,
 }: IRegistrationFormProps) => {
   const { t } = useTranslation('common');
-  const [f, setF] = useState<IRegistrationFormData>({
+  const [formData, setFormData] = useState<IRegistrationFormData>({
     name: '',
     email: '',
     password: '',
@@ -45,21 +45,23 @@ export const RegistrationForm = ({
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const nameValidation = validateName(f.name);
-    const emailValidation = validateEmail(f.email);
-    const passwordValidation = validatePassword(f.password);
+    const nameValidation = validateName(formData.name);
+    const emailValidation = validateEmail(formData.email);
+    const passwordValidation = validatePassword(formData.password);
     const confirmPasswordValidation = validatePasswordConfirmation(
-      f.password,
-      f.confirmPassword,
+      formData.password,
+      formData.confirmPassword,
     );
 
     setErrors({
-      name: nameValidation.isValid ? '' : 'Name is required',
-      email: emailValidation.isValid ? '' : 'Valid email is required',
-      password: passwordValidation.isValid ? '' : 'Password is required',
+      name: nameValidation.isValid ? '' : nameValidation.error || '',
+      email: emailValidation.isValid ? '' : emailValidation.error || '',
+      password: passwordValidation.isValid
+        ? ''
+        : passwordValidation.error || '',
       confirmPassword: confirmPasswordValidation.isValid
         ? ''
-        : 'Passwords must match',
+        : confirmPasswordValidation.error || '',
     });
 
     if (
@@ -72,10 +74,10 @@ export const RegistrationForm = ({
     }
 
     await register({
-      name: f.name,
-      email: f.email,
-      password: f.password,
-      organizationId: f.orgId || '',
+      name: formData.name,
+      email: formData.email,
+      password: formData.password,
+      organizationId: formData.orgId || '',
     });
   };
 
@@ -84,43 +86,41 @@ export const RegistrationForm = ({
       <FormField
         label={t('name')}
         name="name"
-        value={f.name}
-        onChange={(e) => setF((s) => ({ ...s, name: e.target.value }))}
+        value={formData.name}
+        error={errors.name}
+        onChange={(e) => setFormData((s) => ({ ...s, name: e.target.value }))}
       />
-      {errors.name && <div className="text-danger small">{errors.name}</div>}
 
       <EmailField
-        value={f.email}
-        onChange={(e) => setF((s) => ({ ...s, email: e.target.value }))}
+        value={formData.email}
+        error={errors.email}
+        onChange={(e) => setFormData((s) => ({ ...s, email: e.target.value }))}
       />
-      {errors.email && <div className="text-danger small">{errors.email}</div>}
 
       <PasswordField
         label={t('password')}
         name="password"
-        value={f.password}
-        onChange={(e) => setF((s) => ({ ...s, password: e.target.value }))}
+        value={formData.password}
+        error={errors.password}
+        onChange={(e) =>
+          setFormData((s) => ({ ...s, password: e.target.value }))
+        }
       />
-      {errors.password && (
-        <div className="text-danger small">{errors.password}</div>
-      )}
 
       <PasswordField
         label={t('confirmPassword')}
         name="confirmPassword"
-        value={f.confirmPassword}
+        value={formData.confirmPassword}
+        error={errors.confirmPassword}
         onChange={(e) =>
-          setF((s) => ({ ...s, confirmPassword: e.target.value }))
+          setFormData((s) => ({ ...s, confirmPassword: e.target.value }))
         }
       />
-      {errors.confirmPassword && (
-        <div className="text-danger small">{errors.confirmPassword}</div>
-      )}
-      <PasswordStrengthIndicator password={f.password} isVisible />
+      <PasswordStrengthIndicator password={formData.password} isVisible />
       <OrgSelector
         options={organizations}
-        value={f.orgId}
-        onChange={(orgId) => setF((s) => ({ ...s, orgId }))}
+        value={formData.orgId}
+        onChange={(orgId) => setFormData((s) => ({ ...s, orgId }))}
       />
       {enableRecaptcha && (
         <div data-testid="recaptcha-placeholder" data-content="recaptcha-ready">

@@ -38,7 +38,7 @@ describe('RegistrationForm', () => {
     expect(screen.getByLabelText('Confirm Password')).toBeInTheDocument();
     expect(screen.getByLabelText('Organization')).toBeInTheDocument();
     expect(
-      screen.getByRole('button', { name: /create account/i }),
+      screen.getByRole('button', { name: /register/i }),
     ).toBeInTheDocument();
   });
 
