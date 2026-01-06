@@ -95,7 +95,7 @@ export const UPDATE_CURRENT_USER_MUTATION = gql`
   }
 `;
 
-export const UPDATE_USER = gql`
+export const UPDATE_USER_MUTATION = gql`
   mutation UpdateUser($input: MutationUpdateUserInput!) {
     updateUser(input: $input) {
       addressLine1

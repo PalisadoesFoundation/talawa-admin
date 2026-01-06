@@ -16,7 +16,7 @@ import { store } from 'state/store';
 import { I18nextProvider } from 'react-i18next';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import MemberDetail, { getLanguageName, prettyDate } from './ProfileForm';
+import MemberDetail, { getLanguageName } from './ProfileForm';
 import {
   MOCKS1,
   MOCKS2,
@@ -301,17 +301,10 @@ describe('MemberDetail', () => {
   });
 
   describe('Shared Functionality', () => {
-    test('prettyDate function should work properly', () => {
-      // Use ISO format with time to avoid UTC interpretation
-      const testDate = dayjs().format('YYYY-MM-DDTHH:mm:ss');
-      const formattedDate = dayjs().format('D MMMM YYYY');
-      expect(prettyDate(testDate)).toBe(formattedDate);
-      expect(prettyDate('')).toBe(null);
-    });
-
     test('getLanguageName function should work properly', () => {
       expect(getLanguageName('en')).toBe('English');
       expect(getLanguageName('')).toBe(null);
+      expect(getLanguageName('xyz')).toBe(null);
     });
 
     test('should render props and text elements test for the page component', async () => {

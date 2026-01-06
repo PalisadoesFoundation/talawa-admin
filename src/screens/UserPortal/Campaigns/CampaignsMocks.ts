@@ -52,7 +52,6 @@ const userDetailsQuery = {
           createdOrganizations: [],
           createdEvents: [],
           eventAdmin: [],
-          eventsAttended: [],
           __typename: 'AppUserProfile',
         },
         __typename: 'UserData',

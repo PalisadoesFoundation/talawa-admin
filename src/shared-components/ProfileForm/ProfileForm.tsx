@@ -8,7 +8,7 @@
  * - **Admin Profile**: When super admins view/edit admin profiles (/adminprofile/settings)
  *
  * The component intelligently adapts its behavior and UI based on the context:
- * - Uses different GraphQL mutations (UPDATE_CURRENT_USER vs UPDATE_USER)
+ * - Uses different GraphQL mutations (UPDATE_CURRENT_USER vs UPDATE_USER_MUTATION)
  * - Conditionally renders UserSidebar for user profile views via ProfileFormWrapper
  * - Handles localStorage updates for current user profile changes
  * - Provides role-specific form validation and field accessibility
@@ -39,7 +39,7 @@
  * - Triggers window.location.reload after save
  *
  * **Admin/Member Context** (`/member/:orgId/:userId`, `/adminprofile/settings`):
- * - Uses UPDATE_USER mutation
+ * - Uses UPDATE_USER_MUTATION mutation
  * - No localStorage updates
  * - Direct rendering without sidebar wrapper
  * - Standard success notification
@@ -83,7 +83,7 @@ import styles from 'style/app-fixed.module.css';
 import memberDetailStyles from './MemberDetail.module.css';
 import {
   UPDATE_CURRENT_USER_MUTATION,
-  UPDATE_USER,
+  UPDATE_USER_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -162,7 +162,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
   });
 
   // Mutation to update the user details
-  const [updateUser] = useMutation(UPDATE_USER);
+  const [updateUser] = useMutation(UPDATE_USER_MUTATION);
   const [updateCurrentUser] = useMutation(UPDATE_CURRENT_USER_MUTATION);
   const { data: userData, loading } = useQuery(USER_DETAILS, {
     variables: {
@@ -843,16 +843,6 @@ const MemberDetail: React.FC = (): JSX.Element => {
   );
 };
 
-export const prettyDate = (param: string): string | null => {
-  const date = new Date(param);
-  if (date?.toDateString() === 'Invalid Date') {
-    return null;
-  }
-  const day = date.getDate();
-  const month = date.toLocaleString('default', { month: 'long' });
-  const year = date.getFullYear();
-  return `${day} ${month} ${year}`;
-};
 export const getLanguageName = (code: string): string | null => {
   const found = languages.find((data) => data.code === code);
   return found?.name ?? null;

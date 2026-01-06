@@ -5,7 +5,7 @@ dayjs.extend(utc);
 
 import {
   UPDATE_CURRENT_USER_MUTATION,
-  UPDATE_USER,
+  UPDATE_USER_MUTATION,
 } from 'GraphQl/Mutations/mutations';
 import { UNASSIGN_USER_TAG } from 'GraphQl/Mutations/TagMutations';
 import { USER_DETAILS } from 'GraphQl/Queries/Queries';
@@ -123,7 +123,7 @@ export const MOCKS1 = [
   },
   {
     request: {
-      query: UPDATE_USER,
+      query: UPDATE_USER_MUTATION,
       variables: {
         input: expect.any(Object),
       },
@@ -357,7 +357,7 @@ export const UPDATE_USER_ERROR_MOCKS = [
   },
   {
     request: {
-      query: UPDATE_USER,
+      query: UPDATE_USER_MUTATION,
       variables: {
         input: {
           name: 'Test User',

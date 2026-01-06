@@ -12,7 +12,7 @@ export const sanitizeAvatars = (
     if (objectUrl.startsWith('blob:')) {
       return objectUrl;
     }
-
+    URL.revokeObjectURL(objectUrl);
     return '';
   }
 

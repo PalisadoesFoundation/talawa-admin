@@ -2,8 +2,8 @@
 
 ***
 
-# Variable: UPDATE\_USER
+# Variable: UPDATE\_USER\_MUTATION
 
-> `const` **UPDATE\_USER**: `DocumentNode`
+> `const` **UPDATE\_USER\_MUTATION**: `DocumentNode`
 
 Defined in: [src/GraphQl/Mutations/mutations.ts:98](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/GraphQl/Mutations/mutations.ts#L98)

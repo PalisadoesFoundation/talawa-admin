@@ -3556,17 +3556,6 @@ form label,
   text-decoration: underline;
 }
 
-.customTooltip {
-  background-color: var(--bs-white) !important;
-  font-size: 2em !important;
-  max-height: 170px !important;
-  overflow-y: scroll !important;
-  scrollbar-color: white !important;
-  border: var(--primary-border-solid) !important;
-  border-radius: 6px !important;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1) !important;
-}
-
 /* -- AttendedEventList.tsx -- */
 
 /* -- EventStatistics.tsx -- */
