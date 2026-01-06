@@ -1,5 +1,11 @@
 ﻿import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  act,
+} from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
@@ -376,11 +382,13 @@ describe('CreateEventModal', () => {
       />,
     );
 
-    const publicCheck = screen.getByTestId('publicEventCheck');
-    expect(publicCheck).toBeChecked();
+    const publicRadio = screen.getByTestId('visibilityPublicRadio');
+    expect(publicRadio).toBeChecked();
 
-    fireEvent.click(publicCheck);
-    expect(publicCheck).not.toBeChecked();
+    // Toggle to organization visibility
+    fireEvent.click(screen.getByTestId('visibilityOrgRadio'));
+    expect(screen.getByTestId('visibilityOrgRadio')).toBeChecked();
+    expect(publicRadio).not.toBeChecked();
   });
 
   it('toggles registrable checkbox', () => {
@@ -535,12 +543,16 @@ describe('CreateEventModal', () => {
     // Enable recurring event checkbox first
     fireEvent.click(screen.getByTestId('recurringEventCheck'));
 
-    const dropdown = screen.getByTestId('recurrenceDropdown');
-    fireEvent.click(dropdown);
+    act(() => {
+      const dropdown = screen.getByTestId('recurrenceDropdown');
+      fireEvent.click(dropdown);
+    });
 
-    // Click on "Custom..." option (index 6)
-    const customOption = screen.getByTestId('recurrenceOption-6');
-    fireEvent.click(customOption);
+    act(() => {
+      // Click on "Custom..." option (index 6)
+      const customOption = screen.getByTestId('recurrenceOption-6');
+      fireEvent.click(customOption);
+    });
 
     expect(mockCreateDefaultRecurrenceRule).toHaveBeenCalled();
   });
@@ -716,14 +728,16 @@ describe('CreateEventModal', () => {
     const dropdown = screen.getByTestId('recurrenceDropdown');
 
     // Open dropdown
-    fireEvent.click(dropdown);
+    act(() => {
+      fireEvent.click(dropdown);
+    });
 
     // Verify dropdown options are visible
     expect(screen.getByTestId('recurrenceOption-0')).toBeInTheDocument();
     expect(screen.getByTestId('recurrenceOption-1')).toBeInTheDocument();
   });
 
-  it('selects different recurrence options correctly', () => {
+  it('selects different recurrence options correctly', async () => {
     render(
       <CreateEventModal
         isOpen={true}
@@ -740,11 +754,15 @@ describe('CreateEventModal', () => {
 
     // Select "Does not repeat"
     fireEvent.click(dropdown);
-    fireEvent.click(screen.getByTestId('recurrenceOption-0'));
+    await waitFor(() => {
+      fireEvent.click(screen.getByTestId('recurrenceOption-0'));
+    });
 
     // Select "Daily"
     fireEvent.click(dropdown);
-    fireEvent.click(screen.getByTestId('recurrenceOption-1'));
+    await waitFor(() => {
+      fireEvent.click(screen.getByTestId('recurrenceOption-1'));
+    });
 
     expect(mockCreateDefaultRecurrenceRule).toHaveBeenCalled();
   });
@@ -790,7 +808,7 @@ describe('CreateEventModal', () => {
 
     // Toggle all checkboxes
     fireEvent.click(screen.getByTestId('allDayEventCheck')); // Turn off
-    fireEvent.click(screen.getByTestId('publicEventCheck')); // Turn off
+    fireEvent.click(screen.getByTestId('visibilityOrgRadio')); // Change to org visibility
     fireEvent.click(screen.getByTestId('registerableEventCheck')); // Turn on
 
     // Fill form
@@ -1008,7 +1026,9 @@ describe('CreateEventModal', () => {
     fireEvent.click(screen.getByTestId('recurringEventCheck'));
 
     const dropdown = screen.getByTestId('recurrenceDropdown');
-    fireEvent.click(dropdown);
+    act(() => {
+      fireEvent.click(dropdown);
+    });
 
     // Verify the dynamically generated labels based on current date
     const options = screen.getAllByRole('button');
@@ -1304,8 +1324,8 @@ describe('CreateEventModal', () => {
     fireEvent.click(dropdown);
     fireEvent.click(screen.getByTestId('recurrenceOption-2')); // Weekly
 
-    // Step 5: Toggle visibility
-    fireEvent.click(screen.getByTestId('publicEventCheck'));
+    // Step 5: Toggle visibility to organization
+    fireEvent.click(screen.getByTestId('visibilityOrgRadio'));
 
     // Step 6: Fill form
     fireEvent.change(screen.getByTestId('eventTitleInput'), {

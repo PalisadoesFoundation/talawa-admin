@@ -24,6 +24,16 @@ import {
   validateRecurrenceInput,
 } from 'utils/recurrenceUtils';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
+type EventVisibility = 'PUBLIC' | 'ORGANIZATION' | 'INVITE_ONLY';
+
+const getVisibilityType = (
+  isPublic?: boolean,
+  isInviteOnly?: boolean,
+): EventVisibility => {
+  if (isPublic) return 'PUBLIC';
+  if (isInviteOnly) return 'INVITE_ONLY';
+  return 'ORGANIZATION';
+};
 
 // Extend dayjs with utc plugin
 dayjs.extend(utc);
@@ -119,6 +129,30 @@ const EventForm: React.FC<IEventFormProps> = ({
   showCancelButton = false,
 }) => {
   const [formState, setFormState] = useState<IEventFormValues>(initialValues);
+  // Default to INVITE_ONLY for new events (no ID/name usually implies new, or explicit logic)
+  // But initialValues might be partial.
+  // Ideally, initialValues coming in should have isInviteOnly set.
+  // If editing an old event where isInviteOnly is undefined, it treats as false.
+  const [visibility, setVisibility] = useState<EventVisibility>(() => {
+    // If it's a new event (empty name/desc usually), default to INVITE_ONLY
+    // However, initialValues are passed in.
+    // If initialValues has ALREADY set defaults, we use them.
+    // But typically initialValues for NEW event are all false/empty.
+    // We want NEW events to be Invite Only by default.
+    // Let's assume if name is empty, it's new.
+    if (
+      !initialValues.name &&
+      !initialValues.isPublic &&
+      !initialValues.isInviteOnly
+    ) {
+      return 'INVITE_ONLY';
+    }
+    return getVisibilityType(
+      initialValues.isPublic,
+      initialValues.isInviteOnly,
+    );
+  });
+
   const [recurrenceDropdownOpen, setRecurrenceDropdownOpen] = useState(false);
   const [customRecurrenceModalIsOpen, setCustomRecurrenceModalIsOpen] =
     useState(false);
@@ -239,7 +273,8 @@ const EventForm: React.FC<IEventFormProps> = ({
       description: formState.description.trim(),
       location: formState.location.trim(),
       allDay: formState.allDay,
-      isPublic: formState.isPublic,
+      isPublic: visibility === 'PUBLIC',
+      isInviteOnly: visibility === 'INVITE_ONLY',
       isRegisterable: formState.isRegisterable,
 
       recurrenceRule:
@@ -467,27 +502,6 @@ const EventForm: React.FC<IEventFormProps> = ({
               />
             </div>
           )}
-        </div>
-        <div className={styles.checkboxdivEvents}>
-          {showPublicToggle && (
-            <div className={styles.dispflexEvents}>
-              <label htmlFor="ispublic">{t('publicEvent')}?</label>
-              <Form.Switch
-                className={`me-4 ${styles.switch}`}
-                id="ispublic"
-                type="checkbox"
-                checked={formState.isPublic}
-                data-testid="publicEventCheck"
-                onChange={(): void =>
-                  setFormState((prev) => ({
-                    ...prev,
-                    isPublic: !prev.isPublic,
-                  }))
-                }
-                aria-label={t('publicEvent')}
-              />
-            </div>
-          )}
           {showRegisterable && (
             <div className={styles.dispflexEvents}>
               <label htmlFor="registrable">{t('registerable')}?</label>
@@ -507,10 +521,8 @@ const EventForm: React.FC<IEventFormProps> = ({
               />
             </div>
           )}
-        </div>
-        {showCreateChat && (
-          <div>
-            <div className={styles.dispflex}>
+          {showCreateChat && (
+            <div className={styles.dispflexEvents}>
               <label htmlFor="createChat">{t('createChat')}?</label>
               <Form.Switch
                 className={`me-4 ${styles.switch}`}
@@ -527,8 +539,67 @@ const EventForm: React.FC<IEventFormProps> = ({
                 aria-label={t('createChat')}
               />
             </div>
+          )}
+        </div>
+        {showPublicToggle && (
+          <div className="mb-3">
+            <Form.Label>{t('eventVisibility')}</Form.Label>
+            <div className="ms-3">
+              <Form.Check
+                type="radio"
+                id="visibility-public"
+                label={
+                  <div>
+                    <strong>{t('publicEvent')}</strong>
+                    <div className="text-muted small">
+                      {t('publicEventDescription')}
+                    </div>
+                  </div>
+                }
+                name="eventVisibility"
+                checked={visibility === 'PUBLIC'}
+                onChange={() => setVisibility('PUBLIC')}
+                className="mb-2"
+                data-testid="visibilityPublicRadio"
+              />
+              <Form.Check
+                type="radio"
+                id="visibility-org"
+                label={
+                  <div>
+                    <strong>{t('organizationEvent')}</strong>
+                    <div className="text-muted small">
+                      {t('organizationEventDescription')}
+                    </div>
+                  </div>
+                }
+                name="eventVisibility"
+                checked={visibility === 'ORGANIZATION'}
+                onChange={() => setVisibility('ORGANIZATION')}
+                className="mb-2"
+                data-testid="visibilityOrgRadio"
+              />
+              <Form.Check
+                type="radio"
+                id="visibility-invite"
+                label={
+                  <div>
+                    <strong>{t('inviteOnlyEvent')}</strong>
+                    <div className="text-muted small">
+                      {t('inviteOnlyEventDescription')}
+                    </div>
+                  </div>
+                }
+                name="eventVisibility"
+                checked={visibility === 'INVITE_ONLY'}
+                onChange={() => setVisibility('INVITE_ONLY')}
+                className="mb-2"
+                data-testid="visibilityInviteRadio"
+              />
+            </div>
           </div>
         )}
+
         {!disableRecurrence && recurrenceEnabled && (
           <div>
             <Dropdown
