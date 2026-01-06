@@ -113,7 +113,7 @@ export interface IFormSelectProps
     event: React.SyntheticEvent,
     value: InterfaceUserInfo | InterfaceUserInfo[] | null,
   ) => void;
-  renderInput: (params: AutocompleteRenderInputParams) => React.ReactNode;
+  renderInput?: (params: AutocompleteRenderInputParams) => React.ReactNode;
   label?: string;
   name?: string;
   error?: string | boolean;

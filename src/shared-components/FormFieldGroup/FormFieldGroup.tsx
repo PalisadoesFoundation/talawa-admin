@@ -79,7 +79,7 @@ export const FormFieldGroup: React.FC<
       {label && (
         <Form.Label className={labelClass} htmlFor={fieldId}>
           {label}
-          {required && <span aria-label="required">*</span>}
+          {required && <span aria-hidden="true">*</span>}
         </Form.Label>
       )}
 
