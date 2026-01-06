@@ -9,7 +9,16 @@ interface IEventFormBase {
   description: string;
   location: string;
   allDay: boolean;
+  /**
+   * Determines if the event is visible to the entire community.
+   * Often referred to as "Community Visible" in the UI.
+   */
   isPublic: boolean;
+  /**
+   * Determines if the event is accessible only by invitation.
+   * Mutually exclusive with isPublic.
+   */
+  isInviteOnly: boolean;
   isRegisterable: boolean;
 
   recurrenceRule: InterfaceRecurrenceRule | null;
@@ -42,19 +51,19 @@ export interface IEventFormSubmitPayload extends IEventFormBase {
  * Props interface for the EventForm component.
  * Provides a reusable form for creating and editing events across Admin and User portals.
  *
- * @property initialValues - Initial form values
- * @property onSubmit - Callback fired when form is submitted with valid data
- * @property onCancel - Callback fired when form is cancelled
- * @property submitLabel - Label text for the submit button
- * @property t - Translation function for event-specific keys
- * @property tCommon - Translation function for common keys
- * @property showCreateChat - Whether to show the "Create Chat" toggle
- * @property showRegisterable - Whether to show the "Is Registerable" toggle
- * @property showPublicToggle - Whether to show the "Is Public" toggle
- * @property disableRecurrence - Whether to disable recurrence options
- * @property submitting - Whether the form is currently submitting
- * @property showRecurrenceToggle - Whether to show the recurrence toggle
- * @property showCancelButton - Whether to show the cancel button
+ * - `initialValues`: Initial form values
+ * - `onSubmit`: Callback fired when form is submitted with valid data
+ * - `onCancel`: Callback fired when form is cancelled
+ * - `submitLabel`: Label text for the submit button
+ * - `t`: Translation function for event-specific keys
+ * - `tCommon`: Translation function for common keys
+ * - `showCreateChat`: Whether to show the "Create Chat" toggle
+ * - `showRegisterable`: Whether to show the "Is Registerable" toggle
+ * - `showPublicToggle`: Whether to show the "Is Public" toggle
+ * - `disableRecurrence`: Whether to disable recurrence options
+ * - `submitting`: Whether the form is currently submitting
+ * - `showRecurrenceToggle`: Whether to show the recurrence toggle
+ * - `showCancelButton`: Whether to show the cancel button
  */
 export interface IEventFormProps {
   initialValues: IEventFormValues;
