@@ -349,8 +349,19 @@ describe('OrganizationPeople', () => {
     const joinedLabels = screen.getAllByText(/Joined :/i);
     expect(joinedLabels).toHaveLength(2);
 
-    const expectedDate1 = dayjs.utc().subtract(3, 'day').format('DD/MM/YYYY');
-    const expectedDate2 = dayjs.utc().subtract(2, 'day').format('DD/MM/YYYY');
+    // Use the same Intl.DateTimeFormat as the component
+    const dateFormatter = new Intl.DateTimeFormat('en-GB', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      timeZone: 'UTC',
+    });
+    const expectedDate1 = dateFormatter.format(
+      dayjs.utc().subtract(3, 'day').toDate(),
+    );
+    const expectedDate2 = dateFormatter.format(
+      dayjs.utc().subtract(2, 'day').toDate(),
+    );
     expect(screen.getByTestId('org-people-joined-member1')).toHaveTextContent(
       `Joined : ${expectedDate1}`,
     );
@@ -1669,8 +1680,16 @@ describe('OrganizationPeople', () => {
       expect(screen.getByText('Jane Smith')).toBeInTheDocument();
     });
 
-    // Verify rows exist (which means getRowClassName was called)
+    // Verify rows exist and getRowClassName was called for each
     const dataGridRows = container.querySelectorAll('.MuiDataGrid-row');
     expect(dataGridRows.length).toBeGreaterThanOrEqual(2);
+
+    // Verify each row has a class attribute (indicating getRowClassName returned a class)
+    dataGridRows.forEach((row) => {
+      expect(row).toHaveAttribute('class');
+      expect(row.getAttribute('class')).not.toBe('');
+      // Verify the class contains the transformed CSS module class (will include rowBackground)
+      expect(row.getAttribute('class')).toMatch(/rowBackground/);
+    });
   });
 });
