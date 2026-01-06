@@ -10,6 +10,7 @@ import { askAndUpdateTalawaApiUrl } from './askForDocker/askForDocker';
 import { backupEnvFile } from './backupEnvFile/backupEnvFile';
 
 // Ask and set up reCAPTCHA
+//testing for git tracking 
 export const askAndSetRecaptcha = async (): Promise<void> => {
   try {
     const { shouldUseRecaptcha } = await inquirer.prompt([
