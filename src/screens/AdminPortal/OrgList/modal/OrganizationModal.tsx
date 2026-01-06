@@ -12,15 +12,12 @@
  * @param t - Translation function
  * @param tCommon - Common translation function
  * @param userData - Current user data
- *
- * @remarks
- * - This component supports organization creation only.
- * - Image uploads are handled via MinIO using `useMinioUpload`.
  */
+
 import React from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
 import BaseModal from 'shared-components/BaseModal/BaseModal';
-import { useMinioUpload } from 'utils/MinioUpload';
+import convertToBase64 from 'utils/convertToBase64';
 import type { ChangeEvent } from 'react';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
@@ -67,7 +64,6 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
   t,
   tCommon,
 }) => {
-  const { uploadFileToMinio } = useMinioUpload();
   return (
     <BaseModal
       show={showModal}
@@ -118,7 +114,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           }}
         />
         <Form.Label>{tCommon('address')}</Form.Label>
-        <Row className="mb-1">
+        <Row>
           <Col sm={6} className="mb-1">
             <Form.Control
               required
@@ -258,14 +254,10 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               }
 
               try {
-                const { objectName } = await uploadFileToMinio(
-                  file,
-                  'organization',
-                );
-                setFormState({ ...formState, avatar: objectName });
+                const base64String = await convertToBase64(file);
+                setFormState({ ...formState, avatar: base64String });
                 toast.success(t('imageUploadSuccess'));
-              } catch (error) {
-                console.error('Error uploading image:', error);
+              } catch {
                 toast.error(t('imageUploadError'));
               }
             }
