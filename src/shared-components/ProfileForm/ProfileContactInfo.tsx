@@ -1,16 +1,16 @@
-import React from 'react';
+/**
+ * ProfileContactInfo component
+ *
+ * This component renders the contact information section of the user profile form.
+ * It includes fields for email, phone numbers, and address details.
+ */
+import React, { useMemo } from 'react';
 import { Card, Row, Col, Form } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import memberDetailStyles from './MemberDetail.module.css';
 import { countryOptions } from 'utils/formEnumFields';
 import { useTranslation } from 'react-i18next';
-import { IProfileFormState } from './types';
-
-interface IProfileContactInfoProps {
-  formState: IProfileFormState;
-  handleFieldChange: (fieldName: string, value: string) => void;
-  userEmail?: string;
-}
+import { IProfileContactInfoProps } from './types';
 
 const ProfileContactInfo: React.FC<IProfileContactInfoProps> = ({
   formState,
@@ -19,6 +19,12 @@ const ProfileContactInfo: React.FC<IProfileContactInfoProps> = ({
 }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
   const { t: tCommon } = useTranslation('common');
+
+  const sortedCountryOptions = useMemo(
+    () => [...countryOptions].sort((a, b) => a.label.localeCompare(b.label)),
+    [],
+  );
+
   return (
     <Card className={`${styles.allRound}`}>
       <Card.Header
@@ -34,7 +40,7 @@ const ProfileContactInfo: React.FC<IProfileContactInfoProps> = ({
             </label>
             <input
               id="email"
-              value={userEmail}
+              value={userEmail ?? ''}
               className={`form-control ${styles.inputColor}`}
               type="email"
               name="email"
@@ -197,19 +203,17 @@ const ProfileContactInfo: React.FC<IProfileContactInfoProps> = ({
               <option value="" disabled>
                 {tCommon('select')} {tCommon('country')}
               </option>
-              {[...countryOptions]
-                .sort((a, b) => a.label.localeCompare(b.label))
-                .map((country) => (
-                  <option
-                    key={country.value.toUpperCase()}
-                    value={country.value.toLowerCase()}
-                    aria-label={tCommon('selectAsYourCountry', {
-                      country: country.label,
-                    })}
-                  >
-                    {country.label}
-                  </option>
-                ))}
+              {sortedCountryOptions.map((country) => (
+                <option
+                  key={country.value.toUpperCase()}
+                  value={country.value}
+                  aria-label={tCommon('selectAsYourCountry', {
+                    country: country.label,
+                  })}
+                >
+                  {country.label}
+                </option>
+              ))}
             </Form.Select>
           </Col>
         </Row>

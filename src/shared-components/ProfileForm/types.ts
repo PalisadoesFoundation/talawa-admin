@@ -24,5 +24,26 @@ export interface IProfileFormState {
   postalCode: string;
   state: string;
   workPhoneNumber: string;
-  [key: string]: unknown;
+}
+
+export interface IProfileContactInfoProps {
+  formState: IProfileFormState;
+  handleFieldChange: (
+    fieldName: keyof IProfileFormState,
+    value: string,
+  ) => void;
+  userEmail?: string;
+}
+
+export interface IProfilePersonalDetailsProps {
+  formState: IProfileFormState;
+  setFormState: React.Dispatch<React.SetStateAction<IProfileFormState>>;
+  handleFieldChange: (
+    fieldName: keyof IProfileFormState,
+    value: string,
+  ) => void;
+  selectedAvatar: File | null;
+  fileInputRef: React.RefObject<HTMLInputElement | null>;
+  handleFileUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  userRole?: string;
 }

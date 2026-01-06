@@ -1,7 +1,30 @@
 /**
+ * LoginPage.tsx
+ *
  * This file contains the implementation of the Login and Registration page for the Talawa Admin application.
  * It includes functionality for user authentication, password validation, reCAPTCHA verification, and organization selection.
  * The page supports both admin and user roles and provides localization support.
+ *
+ * Dependencies:
+ * - react
+ * - react-router-dom
+ * - react-bootstrap
+ * - react-google-recaptcha
+ * - `@apollo/client`
+ * - `@mui/icons-material`
+ * - `@mui/material`
+ * - NotificationToast
+ * - i18next
+ * - utils/errorHandler
+ * - utils/useLocalstorage
+ * - utils/useSession
+ * - utils/i18n
+ * - GraphQl/Mutations/mutations
+ * - GraphQl/Queries/Queries
+ * - components/ChangeLanguageDropdown/ChangeLanguageDropDown
+ * - components/LoginPortalToggle/LoginPortalToggle
+ * - assets/svgs/palisadoes.svg
+ * - assets/svgs/talawa.svg
  *
  * The `loginPage` component renders a login and registration interface with the following features:
  * - Login and registration forms with validation.

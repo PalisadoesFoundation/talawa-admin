@@ -89,7 +89,7 @@ import { USER_DETAILS } from 'GraphQl/Queries/Queries';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { languages } from 'utils/languages';
 import { errorHandler } from 'utils/errorHandler';
-import { Card, Row, Col, Form } from 'react-bootstrap';
+import { Card, Row, Col } from 'react-bootstrap';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import useLocalStorage from 'utils/useLocalstorage';
 import EventsAttendedByMember from 'components/MemberActivity/EventsAttendedByMember';
@@ -173,7 +173,14 @@ const MemberDetail: React.FC = (): JSX.Element => {
 
   // Function to handle the click on the edit icon
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    const file = e.target?.files?.[0];
+    // Use currentTarget for type safety - guaranteed to be HTMLInputElement
+    const { files } = e.currentTarget;
+
+    if (!files || files.length === 0) {
+      return;
+    }
+
+    const file = files[0];
 
     const isValid = validateImageFile(file, tCommon);
     if (!isValid || !file) {
@@ -186,11 +193,14 @@ const MemberDetail: React.FC = (): JSX.Element => {
   };
 
   // to handle the change in the form fields
-  const handleFieldChange = (fieldName: string, value: string): void => {
+  const handleFieldChange = (
+    fieldName: keyof IProfileFormState,
+    value: string | File | null,
+  ): void => {
     // future birthdates are not possible to select.
 
     // password validation
-    if (fieldName === 'password' && value) {
+    if (fieldName === 'password' && typeof value === 'string' && value) {
       if (!validatePassword(value)) {
         NotificationToast.error(
           tCommon('passwordLengthRequirement', { length: 8 }) as string,
@@ -241,7 +251,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
       ...(!isUser && !isAdmin ? { id: userId } : {}),
     };
 
-    const input = removeEmptyFields(data as Record<string, string | File | null>);
+    const input = removeEmptyFields(data);
 
     // Update the user details
     try {
@@ -305,7 +315,7 @@ const MemberDetail: React.FC = (): JSX.Element => {
               setFormState={setFormState}
               handleFieldChange={handleFieldChange}
               selectedAvatar={selectedAvatar}
-              fileInputRef={fileInputRef as React.RefObject<HTMLInputElement>}
+              fileInputRef={fileInputRef}
               handleFileUpload={handleFileUpload}
               userRole={userData?.user?.role}
             />

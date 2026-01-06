@@ -2,7 +2,7 @@
  * A reusable dynamic dropdown component built using React and React-Bootstrap.
  * This component allows for dynamic field selection and state management.
  *
- * @template T - A generic type extending `Record<string, unknown>` to represent the form state.
+ *
  *
  * @param parentContainerStyle - Optional CSS class for the parent container of the dropdown.
  * @param btnStyle - Optional CSS class for the dropdown button.
@@ -48,11 +48,11 @@ interface InterfaceChangeDropDownProps<T> extends InterfaceDropDownProps {
   setFormState: React.Dispatch<React.SetStateAction<T>>;
   formState: T;
   fieldOptions: { value: string; label: string }[];
-  fieldName: string;
+  fieldName: keyof T & string;
   handleChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-const DynamicDropDown = <T extends Record<string, unknown>>({
+const DynamicDropDown = <T extends object>({
   parentContainerStyle = '',
   btnStyle = '',
   setFormState,
@@ -91,7 +91,7 @@ const DynamicDropDown = <T extends Record<string, unknown>>({
         data-testid={`${fieldName.toLowerCase()}-dropdown-btn`}
         aria-expanded="false"
       >
-        {getLabel(formState[fieldName] as string)}
+        {getLabel((formState as unknown as Record<string, string>)[fieldName])}
       </Dropdown.Toggle>
       <Dropdown.Menu
         data-testid={`${fieldName.toLowerCase()}-dropdown-menu`}
@@ -113,7 +113,10 @@ const DynamicDropDown = <T extends Record<string, unknown>>({
             onClick={() => handleFieldChange(option.value)}
             data-testid={`change-${fieldName.toLowerCase()}-btn-${option.value}`}
             role="option"
-            aria-selected={option.value === formState[fieldName]}
+            aria-selected={
+              option.value ===
+              (formState as unknown as Record<string, string>)[fieldName]
+            }
           >
             {option.label}
           </Dropdown.Item>

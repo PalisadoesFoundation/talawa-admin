@@ -1193,7 +1193,8 @@
     "unassignUserTagMessage": "¿Desea eliminar la etiqueta de este usuario?",
     "successfullyUnassigned": "Etiqueta desasignada del usuario",
     "tagsAssigned": "Etiquetas asignadas",
-    "noTagsAssigned": "No se asignaron etiquetas"
+    "noTagsAssigned": "No se asignaron etiquetas",
+    "passwordPlaceholder": "Dejar en blanco para mantener la contraseña actual"
   },
   "userLogin": {
     "login": "Acceso",

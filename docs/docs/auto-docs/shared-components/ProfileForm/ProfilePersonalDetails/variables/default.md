@@ -4,6 +4,6 @@
 
 # Variable: default
 
-> `const` **default**: `React.FC`\<`IProfilePersonalDetailsProps`\>
+> `const` **default**: `React.FC`\<[`IProfilePersonalDetailsProps`](../../types/interfaces/IProfilePersonalDetailsProps.md)\>
 
-Defined in: [src/shared-components/ProfileForm/ProfilePersonalDetails.tsx:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileForm/ProfilePersonalDetails.tsx#L53)
+Defined in: [src/shared-components/ProfileForm/ProfilePersonalDetails.tsx:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileForm/ProfilePersonalDetails.tsx#L28)

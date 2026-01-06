@@ -24,7 +24,10 @@ const renderComponent = (props: Record<string, unknown> = {}) => {
   return render(
     <BrowserRouter>
       <I18nextProvider i18n={i18nForTest}>
-        <DynamicDropDown {...defaultProps} />
+        <DynamicDropDown
+          {...defaultProps}
+          formState={defaultProps.formState as Record<string, unknown>}
+        />
       </I18nextProvider>
     </BrowserRouter>,
   );

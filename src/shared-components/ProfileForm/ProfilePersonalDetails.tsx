@@ -1,5 +1,13 @@
-import React, { LegacyRef } from 'react';
-import { Card, Row, Col, Button } from 'react-bootstrap';
+/**
+ * ProfilePersonalDetails component
+ *
+ * This component renders the personal details section of the user profile form.
+ * It includes fields for name, gender, birth date, education, employment, marital status,
+ * password, and description, as well as the avatar upload functionality.
+ */
+import React from 'react';
+import { Card, Row, Col, Badge } from 'react-bootstrap';
+import Edit from '@mui/icons-material/Edit';
 import styles from 'style/app-fixed.module.css';
 import memberDetailStyles from './MemberDetail.module.css';
 import Avatar from 'components/Avatar/Avatar';
@@ -14,17 +22,8 @@ import {
   employmentStatusEnum,
 } from 'utils/formEnumFields';
 import { useTranslation } from 'react-i18next';
-import { IProfileFormState } from './types';
-
-interface IProfilePersonalDetailsProps {
-  formState: IProfileFormState;
-  setFormState: React.Dispatch<React.SetStateAction<IProfileFormState>>;
-  handleFieldChange: (fieldName: string, value: string) => void;
-  selectedAvatar: File | null;
-  fileInputRef: React.RefObject<HTMLInputElement>;
-  handleFileUpload: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  userRole?: string;
-}
+import { IProfilePersonalDetailsProps } from './types';
+import { USER_ROLES } from 'constants/userRoles';
 
 const ProfilePersonalDetails: React.FC<IProfilePersonalDetailsProps> = ({
   formState,
@@ -43,14 +42,22 @@ const ProfilePersonalDetails: React.FC<IProfilePersonalDetailsProps> = ({
         className={`py-3 px-4 d-flex justify-content-between align-items-center ${styles.topRadius} ${memberDetailStyles.personalDetailsHeader}`}
       >
         <h3 className="m-0">{t('personalDetailsHeading')}</h3>
-        <Button
-          variant="light"
-          size="sm"
-          disabled
-          className="rounded-pill fw-bolder"
+        <Badge
+          bg="light"
+          text="dark"
+          className="rounded-pill fw-bolder fs-6 px-3 py-2"
         >
-          {userRole === 'administrator' ? tCommon('Admin') : tCommon('User')}
-        </Button>
+          {(() => {
+            switch (userRole) {
+              case USER_ROLES.ADMIN:
+                return tCommon('Admin');
+              case USER_ROLES.USER:
+                return tCommon('User');
+              default:
+                return tCommon('User');
+            }
+          })()}
+        </Badge>
       </Card.Header>
       <Card.Body className="py-3 px-3">
         <Col lg={12} className="mb-2">
@@ -62,7 +69,8 @@ const ProfilePersonalDetails: React.FC<IProfilePersonalDetailsProps> = ({
                   src={sanitizeAvatars(selectedAvatar, formState.avatarURL)}
                   alt={tCommon('user')}
                   data-testid="profile-picture"
-                  crossOrigin="anonymous" // to avoid Cors
+                  // enables credential-free CORS so the browser can load cross-origin images for use in canvas operations without tainting the canvas
+                  crossOrigin="anonymous"
                 />
               ) : (
                 <Avatar
@@ -75,7 +83,7 @@ const ProfilePersonalDetails: React.FC<IProfilePersonalDetailsProps> = ({
               )}
               <button
                 type="button"
-                className={`fas fa-edit position-absolute border-0 bottom-0 right-0 p-2 bg-white rounded-circle ${memberDetailStyles.editProfileIcon}`}
+                className={`position-absolute border-0 bottom-0 right-0 p-2 bg-white rounded-circle ${memberDetailStyles.editProfileIcon}`}
                 onClick={() => fileInputRef.current?.click()}
                 data-testid="uploadImageBtn"
                 title={`${tCommon('edit')} ${tCommon('profilePicture')}`}
@@ -84,7 +92,9 @@ const ProfilePersonalDetails: React.FC<IProfilePersonalDetailsProps> = ({
                 onKeyDown={(e) =>
                   e.key === 'Enter' && fileInputRef.current?.click()
                 }
-              />
+              >
+                <Edit fontSize="small" />
+              </button>
             </div>
           </div>
           <input
@@ -95,7 +105,7 @@ const ProfilePersonalDetails: React.FC<IProfilePersonalDetailsProps> = ({
             className={`${styles.cardControl} ${memberDetailStyles.hiddenFileInput}`}
             data-testid="fileInput"
             multiple={false}
-            ref={fileInputRef as LegacyRef<HTMLInputElement>}
+            ref={fileInputRef}
             onChange={handleFileUpload}
           />
         </Col>
@@ -208,7 +218,10 @@ const ProfilePersonalDetails: React.FC<IProfilePersonalDetailsProps> = ({
               name="password"
               onChange={(e) => handleFieldChange('password', e.target.value)}
               data-testid="inputPassword"
-              placeholder="* * * * * * * *"
+              placeholder={t(
+                'passwordPlaceholder',
+                'Leave blank to keep current password',
+              )}
             />
           </Col>
           <Col md={12}>
