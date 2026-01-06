@@ -10,3 +10,7 @@
   margin-bottom: 0.5rem;
   display: block;
 }
+
+.paddedInput {
+  padding-right: calc(var(--picker-icon-space) + 0.75rem);
+}

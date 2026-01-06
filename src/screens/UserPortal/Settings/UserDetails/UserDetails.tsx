@@ -206,9 +206,7 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
           data-testid="birth-date-input"
           slotProps={{
             textField: {
-              inputProps: {
-                'aria-label': t('birthDate'),
-              },
+              'aria-label': t('birthDate'),
             },
           }}
         />

@@ -122,7 +122,7 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
                 inputProps,
                 ref,
                 ownerState: _ownerState,
-                InputProps: _InputProps,
+                InputProps,
                 error: _error,
                 label: _label,
                 focused: _focused,
@@ -131,17 +131,26 @@ const DatePicker: React.FC<InterfaceDatePickerProps> = ({
                 ...other
               } = props;
               return (
-                <Form.Control
-                  {...inputProps}
-                  {...other}
-                  id={dataTestId} // Link label to input
-                  ref={ref}
-                  required={props.required}
-                  disabled={props.disabled}
-                  data-testid={dataTestId}
-                  data-cy={dataCy}
-                  className={`${commonStyles.fullWidth} ${textFieldClassName || ''}`.trim()}
-                />
+                <div
+                  className={`${commonStyles.fullWidth} ${textFieldClassName || ''} d-flex position-relative`.trim()}
+                >
+                  <Form.Control
+                    {...inputProps}
+                    {...other}
+                    id={dataTestId} // Link label to input
+                    ref={ref}
+                    required={props.required}
+                    disabled={props.disabled}
+                    data-testid={dataTestId}
+                    data-cy={dataCy}
+                    className={`${commonStyles.fullWidth} ${textFieldClassName || ''} ${InputProps?.endAdornment ? commonStyles.paddedInput : ''}`.trim()}
+                  />
+                  {InputProps?.endAdornment && (
+                    <div className="position-absolute end-0 top-50 translate-middle-y pe-2">
+                      {InputProps.endAdornment}
+                    </div>
+                  )}
+                </div>
               );
             },
           }}

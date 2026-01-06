@@ -13,6 +13,24 @@ const handlerMocks = vi.hoisted(() => ({
   handleUpdateUserDetails: vi.fn(),
 }));
 
+const originalConsoleError = console.error;
+beforeEach(() => {
+  console.error = (...args) => {
+    if (
+      typeof args[0] === 'string' &&
+      args[0].includes('Please remove the `addTypename` option')
+    ) {
+      return;
+    }
+    originalConsoleError(...args);
+  };
+});
+afterEach(() => {
+  console.error = originalConsoleError;
+});
+
+// Mock the dependencies
+
 // Mock the dependencies
 vi.mock('sanitize-html', () => ({
   default: (content: string) => content,
@@ -29,14 +47,14 @@ vi.mock('shared-components/DatePicker', () => ({
     value: dayjs.Dayjs | null;
     onChange: (value: dayjs.Dayjs | null) => void;
     slotProps: {
-      textField: { inputProps: { 'aria-label': string; max?: string } };
+      textField: { 'aria-label'?: string; max?: string };
     };
     'data-testid': string;
   }) => (
     <input
       data-testid={dataTestId}
-      aria-label={slotProps?.textField?.inputProps?.['aria-label']}
-      max={slotProps?.textField?.inputProps?.max}
+      aria-label={slotProps?.textField?.['aria-label']}
+      max={slotProps?.textField?.max}
       value={value ? value.format('MM/DD/YYYY') : ''}
       onChange={(e) => {
         const val = e.target.value;
