@@ -20,7 +20,7 @@
  *
  * @remarks
  * - The form includes validation for input fields such as name, description, and address.
- * - The `uploadFileToMinio` function is used to handle image uploads to MinIO storage.
+ * - The `convertToBase64` function is used to handle image uploads and convert them to Base64 strings.
  * - Displays success or error messages using `react-toastify` for image upload feedback.
  *
  * @example
@@ -39,7 +39,7 @@
  */
 import React from 'react';
 import { Modal, Form, Row, Col, Button } from 'react-bootstrap';
-import { useMinioUpload } from 'utils/MinioUpload';
+import convertToBase64 from 'utils/convertToBase64';
 import type { ChangeEvent } from 'react';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
@@ -86,8 +86,6 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
   t,
   tCommon,
 }) => {
-  const { uploadFileToMinio } = useMinioUpload();
-
   return (
     <Modal
       show={showModal}
@@ -283,9 +281,8 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 }
 
                 try {
-                  const { objectName: avatarobjectName } =
-                    await uploadFileToMinio(file, 'organization');
-                  setFormState({ ...formState, avatar: avatarobjectName });
+                  const base64String = await convertToBase64(file);
+                  setFormState({ ...formState, avatar: base64String });
                   toast.success(t('imageUploadSuccess'));
                 } catch (error) {
                   console.error('Error uploading image:', error);

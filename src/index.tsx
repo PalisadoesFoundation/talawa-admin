@@ -9,6 +9,7 @@ import {
   split,
   Observable,
   fromPromise,
+  HttpLink,
 } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
@@ -19,7 +20,6 @@ import './style/tokens/index.css';
 import 'bootstrap/dist/js/bootstrap.min.js'; // Bootstrap JS (ensure Bootstrap is installed)
 import 'react-datepicker/dist/react-datepicker.css'; // React Datepicker Styles
 import 'flag-icons/css/flag-icons.min.css'; // Flag Icons Styles
-import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { Provider } from 'react-redux';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -158,11 +158,9 @@ const errorLink = onError(
   },
 );
 
-const uploadLink = createUploadLink({
+const httpLinkInstance = new HttpLink({
   uri: BACKEND_URL,
-  headers: { 'Apollo-Require-Preflight': 'true' },
   credentials: 'include',
-  useGETForQueries: false,
 });
 
 const wsLink = new GraphQLWsLink(
@@ -187,7 +185,7 @@ const httpLink = ApolloLink.from([
   authLink, // Only apply to HTTP operations
   requestMiddleware,
   responseMiddleware,
-  uploadLink,
+  httpLinkInstance,
 ]);
 
 // The split function routes operations correctly

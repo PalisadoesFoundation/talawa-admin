@@ -31,16 +31,6 @@ vi.mock('utils/fileValidation', () => ({
   validateFile: vi.fn(() => ({ isValid: true })),
 }));
 
-const { mockUploadFileToMinio } = vi.hoisted(() => ({
-  mockUploadFileToMinio: vi
-    .fn()
-    .mockResolvedValue({ objectName: 'mocked-object-name' }),
-}));
-
-vi.mock('utils/MinioUpload', () => ({
-  useMinioUpload: () => ({ uploadFileToMinio: mockUploadFileToMinio }),
-}));
-
 describe('OrganizationModal Component', () => {
   const mockToggleModal = vi.fn();
 
@@ -66,9 +56,6 @@ describe('OrganizationModal Component', () => {
         isValid: true,
       }),
     );
-    mockUploadFileToMinio.mockResolvedValue({
-      objectName: 'mocked-object-name',
-    });
   });
 
   afterEach(() => {
@@ -167,22 +154,20 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [file] } });
     await waitFor(() =>
       expect(mockSetFormState).toHaveBeenCalledWith(
-        expect.objectContaining({ avatar: 'mocked-object-name' }),
+        expect.objectContaining({ avatar: 'mockBase64String' }),
       ),
     );
-    expect(mockUploadFileToMinio).toHaveBeenCalledWith(file, 'organization');
   });
 
   test('handles image upload error correctly', async () => {
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-    mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
-
     setup();
     const fileInput = screen.getByTestId('organisationImage');
-    const file = new File(['dummy content'], 'example.png', {
+    // Create a file larger than 5MB to trigger the error
+    const largeFile = new File(['x'.repeat(6000000)], 'large.png', {
       type: 'image/png',
     });
-    fireEvent.change(fileInput, { target: { files: [file] } });
+    fireEvent.change(fileInput, { target: { files: [largeFile] } });
 
     await waitFor(() => {
       expect(consoleSpy).toHaveBeenCalledWith(
@@ -422,7 +407,7 @@ describe('OrganizationModal Component', () => {
     await userEvent.upload(fileInput, file);
 
     expect(mockSetFormState).toHaveBeenCalledWith(
-      expect.objectContaining({ avatar: 'mocked-object-name' }),
+      expect.objectContaining({ avatar: 'mockBase64String' }),
     );
   });
 
@@ -445,7 +430,6 @@ describe('OrganizationModal Component', () => {
         'Invalid file type. Please upload a file of type: JPEG, PNG, GIF.',
       );
     });
-    expect(mockUploadFileToMinio).not.toHaveBeenCalled();
     expect(mockSetFormState).not.toHaveBeenCalled();
   });
 
@@ -591,7 +575,6 @@ describe('OrganizationModal Component', () => {
       expect(toastMocks.error).toHaveBeenCalledWith(
         'File is too large. Maximum size is 5MB.',
       );
-      expect(mockUploadFileToMinio).not.toHaveBeenCalled();
       expect(mockSetFormState).not.toHaveBeenCalled();
     });
   });
@@ -607,17 +590,18 @@ describe('OrganizationModal Component', () => {
       expect(toastMocks.success).toHaveBeenCalledWith('imageUploadSuccess');
     });
     expect(mockSetFormState).toHaveBeenCalledWith(
-      expect.objectContaining({ avatar: 'mocked-object-name' }),
+      expect.objectContaining({ avatar: 'mockBase64String' }),
     );
   });
 
   test('should show error toast on upload failure', async () => {
-    mockUploadFileToMinio.mockRejectedValueOnce(new Error('Upload failed'));
     setup();
-    const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
+    const largeFile = new File(['x'.repeat(6000000)], 'large.png', {
+      type: 'image/png',
+    });
     const fileInput = screen.getByTestId('organisationImage');
 
-    fireEvent.change(fileInput, { target: { files: [file] } });
+    fireEvent.change(fileInput, { target: { files: [largeFile] } });
 
     await waitFor(() => {
       expect(toastMocks.error).toHaveBeenCalledWith('imageUploadError');

@@ -26,7 +26,6 @@ import {
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import i18n from './utils/i18n';
 import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
-import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
 import { refreshToken } from 'utils/getRefreshToken';
 
 // Define types for mocked modules
@@ -132,17 +131,6 @@ describe('Apollo Client Configuration', () => {
 
     expect(client).toBeInstanceOf(ApolloClient);
     expect(client.cache).toBeInstanceOf(InMemoryCache);
-  });
-
-  it('should configure upload link with correct URI', (): void => {
-    const uploadLink = createUploadLink({
-      uri: BACKEND_URL,
-      headers: {
-        'Apollo-Require-Preflight': 'true',
-      },
-    });
-
-    expect(uploadLink).toBeDefined();
   });
 
   it('should configure WebSocket link with correct URL', (): void => {
