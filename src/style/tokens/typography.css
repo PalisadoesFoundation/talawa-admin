@@ -1,20 +1,33 @@
 :root {
-  --font-size-xs: 12px;
-  --font-size-sm: 14px;
-  --font-size-md: 16px;
-  --font-size-lg: 18px;
-  --font-size-xl: 20px;
-  --font-size-2xl: 24px;
-  --font-size-3xl: 32px;
+  --font-size-xs: 0.75rem;
+  --font-size-12-8: 0.8rem;
+  --font-size-13: 0.8125rem;
+  --font-size-sm: 0.875rem;
+  --font-size-14-4: 0.9rem;
+  --font-size-15: 0.9375rem;
+  --font-size-15-2: 0.95rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-19-2: 1.2rem;
+  --font-size-xl: 1.25rem;
+  --font-size-22: 1.375rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-28: 1.75rem;
+  --font-size-3xl: 2rem;
+  --font-size-48: 3rem;
 
+  --line-height-none: 1;
   --line-height-tight: 1.2;
   --line-height-normal: 1.5;
+  --line-height-loose: 1.6;
   --line-height-relaxed: 1.75;
 
+  --font-weight-lighter: lighter;
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
   --font-weight-bold: 700;
+  --font-weight-heavy: 750;
 
   --letter-spacing-tight: -0.01em;
   --letter-spacing-normal: 0;
