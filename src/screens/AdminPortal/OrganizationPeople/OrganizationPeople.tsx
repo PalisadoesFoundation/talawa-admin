@@ -54,7 +54,7 @@ import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFil
 
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { errorHandler } from 'utils/errorHandler';
-import languages from 'utils/languages';
+import { languages } from 'utils/languages';
 
 /**
  * Maps numeric filter state to string option identifiers.
@@ -466,8 +466,13 @@ function OrganizationPeople(): JSX.Element {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        const currentLang = languages.find(lang => lang.code === i18n.language);
-        const locale = currentLang ? `${currentLang.code}-${currentLang.country_code}` : 'en-US';
+        const currentLang = languages.find(
+          (lang: { code: string; country_code: string }) =>
+            lang.code === i18n.language,
+        );
+        const locale = currentLang
+          ? `${currentLang.code}-${currentLang.country_code}`
+          : 'en-US';
         return (
           <div data-testid={`org-people-joined-${params.row.id}`}>
             {t('joined')} :{' '}
