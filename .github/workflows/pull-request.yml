@@ -372,7 +372,7 @@ jobs:
 
       - name: Run Disable Statements Check
         run: |
-          python .github-central/.github/workflows/scripts/disable_statements_check.py --repo=admin --files ${{ steps.changed-files.outputs.all_changed_files }}
+          python .github-central/.github/workflows/scripts/disable_statements_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
   Translation-Tag-Check:
     name: Translation Tag Check

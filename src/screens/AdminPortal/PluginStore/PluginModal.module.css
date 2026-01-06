@@ -15,10 +15,10 @@
   z-index: 10;
   background: none;
   border: none;
-  font-size: 28px;
+  font-size: var(--font-size-28);
   color: #888;
   cursor: pointer;
-  line-height: 1;
+  line-height: var(--line-height-none);
 }
 
 .sidebar {
@@ -44,21 +44,21 @@
 }
 
 .pluginName {
-  font-weight: 700;
-  font-size: 22px;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-22);
   margin-bottom: var(--space-3);
   text-align: center;
 }
 
 .pluginAuthor {
-  font-size: 15px;
+  font-size: var(--font-size-15);
   color: #555;
   margin-bottom: var(--space-3);
   text-align: center;
 }
 
 .pluginVersion {
-  font-size: 14px;
+  font-size: var(--font-size-sm);
   color: #888;
   margin-bottom: var(--space-5);
 }
@@ -70,8 +70,8 @@
 
 .actionButton {
   height: var(--space-9);
-  font-size: 14px;
-  font-weight: 500;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
   box-shadow: none;
   border: var(--border-1) solid #dee2e6;
 }
@@ -134,8 +134,8 @@
   border-radius: 8px;
   padding: var(--space-4) var(--space-5);
   color: #495057;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
   cursor: pointer;
   transition: all 0.2s ease;
   display: flex;
@@ -157,8 +157,8 @@
   color: #495057;
   padding: var(--space-3) var(--space-5);
   border-radius: 16px;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
   border: var(--border-1) solid rgba(0, 0, 0, 0.1);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
@@ -178,7 +178,7 @@
   justify-content: center;
   align-items: center;
   color: #495057;
-  font-size: 18px;
+  font-size: var(--font-size-lg);
   cursor: pointer;
   z-index: 10;
   transition: all 0.2s ease;
@@ -261,10 +261,10 @@
 .tab {
   padding: var(--space-6) var(--space-8);
   cursor: pointer;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   color: #888;
   border-bottom: var(--border-3) solid transparent;
-  font-size: 16px;
+  font-size: var(--font-size-md);
   letter-spacing: 0.2px;
   transition: color 0.2s;
   background: none;
@@ -288,8 +288,8 @@
 }
 
 .sectionTitle {
-  font-weight: 600;
-  font-size: 18px;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-lg);
   margin-bottom: var(--space-3);
 }
 
@@ -327,15 +327,15 @@
 
 .loadingText {
   color: #888;
-  font-size: 15px;
+  font-size: var(--font-size-15);
   margin-top: var(--space-7);
 }
 
 .featuresList {
   color: #555;
-  font-size: 15px;
+  font-size: var(--font-size-15);
   padding-left: var(--space-7);
-  line-height: 1.6;
+  line-height: var(--line-height-loose);
 }
 
 .featuresListItem {
@@ -344,7 +344,7 @@
 
 .noFeaturesMessage {
   color: #888;
-  font-size: 15px;
+  font-size: var(--font-size-15);
   font-style: italic;
   background: #f8f9fa;
   padding: var(--space-5);
@@ -357,14 +357,14 @@
 }
 
 .changelogVersion {
-  font-weight: 600;
-  font-size: 15px;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-15);
   margin-bottom: var(--space-2);
 }
 
 .changelogList {
   color: #555;
-  font-size: 15px;
+  font-size: var(--font-size-15);
   padding-left: var(--space-7);
 }
 
@@ -393,7 +393,7 @@
 
 /* Icon styles */
 .iconPowerOff {
-  font-size: 14px;
+  font-size: var(--font-size-sm);
 }
 
 .iconPowerOffActive {
@@ -407,5 +407,5 @@
 }
 
 .iconTrash {
-  font-size: 14px;
+  font-size: var(--font-size-sm);
 }

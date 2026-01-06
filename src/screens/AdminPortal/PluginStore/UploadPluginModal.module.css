@@ -27,7 +27,7 @@
 .sectionDescription {
   margin: var(--space-0);
   color: #666;
-  font-size: 14px;
+  font-size: var(--font-size-sm);
 }
 
 .dropzone {
@@ -41,19 +41,19 @@
 }
 
 .uploadIcon {
-  font-size: 48px;
+  font-size: var(--font-size-4xl);
   color: #ccc;
   margin-bottom: var(--space-5);
 }
 
 .dropzoneTitle {
-  font-size: 16px;
-  font-weight: 500;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
   margin-bottom: var(--space-3);
 }
 
 .dropzoneHint {
-  font-size: 14px;
+  font-size: var(--font-size-sm);
   color: #666;
 }
 
@@ -68,7 +68,7 @@
   border: var(--border-1) solid #ffeaa7;
   border-radius: 8px;
   color: #856404;
-  font-size: 14px;
+  font-size: var(--font-size-sm);
 }
 
 .inlineIcon {
@@ -85,8 +85,8 @@
 }
 
 .pluginInfoBody {
-  font-size: 14px;
-  line-height: 1.6;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-loose);
 }
 
 .infoRow {
@@ -121,13 +121,13 @@
 }
 
 .codeHeading {
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-md);
   margin-bottom: var(--space-4);
 }
 
 .codeText {
-  font-size: 14px;
+  font-size: var(--font-size-sm);
   color: #666;
 }
 
@@ -135,7 +135,7 @@
   background: #f8f9fa;
   padding: var(--space-5);
   border-radius: 8px;
-  font-size: 13px;
-  line-height: 1.5;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
   margin: var(--space-0);
 }
