@@ -68,9 +68,14 @@ export function validateImageFile(
   if (!FILE_UPLOAD_ALLOWED_TYPES.includes(file.type)) {
     const allowedTypesDisplay = FILE_UPLOAD_ALLOWED_TYPES.map((type) =>
       type.split('/')[1].toUpperCase(),
-    ).join(', ');
+    );
+    const formattedTypes =
+      allowedTypesDisplay.length > 1
+        ? `${allowedTypesDisplay.slice(0, -1).join(', ')}, or ${allowedTypesDisplay.slice(-1)}`
+        : allowedTypesDisplay[0];
+
     NotificationToast.error(
-      tCommon('invalidFileType', { types: allowedTypesDisplay }) as string,
+      tCommon('invalidFileType', { types: formattedTypes }) as string,
     );
     return false;
   }
