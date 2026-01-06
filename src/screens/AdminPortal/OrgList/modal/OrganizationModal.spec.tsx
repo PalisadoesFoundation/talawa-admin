@@ -17,15 +17,13 @@ import i18nForTest from '../../../../utils/i18nForTest'; // Update path based on
 
 import { validateFile } from 'utils/fileValidation';
 
-// Mock MinIO Upload
-const { mockUploadFileToMinio } = vi.hoisted(() => ({
-  mockUploadFileToMinio: vi.fn().mockResolvedValue({
-    objectName: 'mocked-object-name',
-  }),
+// Mock convertToBase64
+const { mockConvertToBase64 } = vi.hoisted(() => ({
+  mockConvertToBase64: vi.fn().mockResolvedValue('mockBase64String'),
 }));
 
-vi.mock('utils/MinioUpload', () => ({
-  useMinioUpload: () => ({ uploadFileToMinio: mockUploadFileToMinio }),
+vi.mock('utils/convertToBase64', () => ({
+  default: mockConvertToBase64,
 }));
 
 // Mock toast
@@ -62,15 +60,12 @@ describe('OrganizationModal Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockUploadFileToMinio.mockImplementation(async (file: File) => {
+    mockConvertToBase64.mockImplementation(async (file: File) => {
       // Simulate file size validation - reject files larger than 5MB
       if (file.size > 5000000) {
         throw new Error('File too large');
       }
-      return {
-        objectName: 'mocked-object-name',
-        fileHash: 'mock-hash',
-      };
+      return 'mockBase64String';
     });
     (validateFile as unknown as ReturnType<typeof vi.fn>).mockImplementation(
       () => ({
@@ -166,13 +161,12 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [file] } });
     await waitFor(() =>
       expect(mockSetFormState).toHaveBeenCalledWith(
-        expect.objectContaining({ avatar: 'mocked-object-name' }),
+        expect.objectContaining({ avatar: 'mockBase64String' }),
       ),
     );
   });
 
   test('handles image upload error correctly', async () => {
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
     setup();
     const fileInput = screen.getByTestId('organisationImage');
     // Create a file larger than 5MB to trigger the error
@@ -182,14 +176,10 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [largeFile] } });
 
     await waitFor(() => {
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Error uploading image:',
-        expect.any(Error),
-      );
+      expect(toastMocks.error).toHaveBeenCalledWith('imageUploadError');
     });
 
     expect(mockSetFormState).not.toHaveBeenCalled();
-    consoleSpy.mockRestore();
   });
 
   test('closes modal when close button is clicked', () => {
@@ -419,7 +409,7 @@ describe('OrganizationModal Component', () => {
     await userEvent.upload(fileInput, file);
 
     expect(mockSetFormState).toHaveBeenCalledWith(
-      expect.objectContaining({ avatar: 'mocked-object-name' }),
+      expect.objectContaining({ avatar: 'mockBase64String' }),
     );
   });
 
@@ -602,7 +592,7 @@ describe('OrganizationModal Component', () => {
       expect(toastMocks.success).toHaveBeenCalledWith('imageUploadSuccess');
     });
     expect(mockSetFormState).toHaveBeenCalledWith(
-      expect.objectContaining({ avatar: 'mocked-object-name' }),
+      expect.objectContaining({ avatar: 'mockBase64String' }),
     );
   });
 
@@ -614,6 +604,21 @@ describe('OrganizationModal Component', () => {
     const fileInput = screen.getByTestId('organisationImage');
 
     fireEvent.change(fileInput, { target: { files: [largeFile] } });
+
+    await waitFor(() => {
+      expect(toastMocks.error).toHaveBeenCalledWith('imageUploadError');
+    });
+    expect(mockSetFormState).not.toHaveBeenCalled();
+  });
+
+  test('shows error toast when base64 conversion fails', async () => {
+    mockConvertToBase64.mockRejectedValueOnce(new Error('Conversion failed'));
+
+    setup();
+    const file = new File(['x'], 'test.png', { type: 'image/png' });
+    fireEvent.change(screen.getByTestId('organisationImage'), {
+      target: { files: [file] },
+    });
 
     await waitFor(() => {
       expect(toastMocks.error).toHaveBeenCalledWith('imageUploadError');

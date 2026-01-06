@@ -2,7 +2,6 @@
  * OrganizationModal Component
  *
  * Renders a modal for creating an organization.
- * Includes form fields for organization details and image upload.
  *
  * @param showModal - Whether the modal is visible
  * @param toggleModal - Toggles modal visibility
@@ -241,25 +240,26 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           name="photo"
           type="file"
           multiple={false}
-          onChange={async (e: React.ChangeEvent): Promise<void> => {
-            const target = e.target as HTMLInputElement;
-            const file = target.files && target.files[0];
+          onChange={async (
+            e: React.ChangeEvent<HTMLInputElement>,
+          ): Promise<void> => {
+            const file = e.target.files?.[0];
+            if (!file) {
+              return;
+            }
 
-            if (file) {
-              const validation = validateFile(file);
+            const validation = validateFile(file);
+            if (!validation.isValid) {
+              toast.error(validation.errorMessage);
+              return;
+            }
 
-              if (!validation.isValid) {
-                toast.error(validation.errorMessage);
-                return;
-              }
-
-              try {
-                const base64String = await convertToBase64(file);
-                setFormState({ ...formState, avatar: base64String });
-                toast.success(t('imageUploadSuccess'));
-              } catch {
-                toast.error(t('imageUploadError'));
-              }
+            try {
+              const base64String: string = await convertToBase64(file);
+              setFormState({ ...formState, avatar: base64String });
+              toast.success(t('imageUploadSuccess'));
+            } catch (error) {
+              toast.error(t('imageUploadError'));
             }
           }}
           data-testid="organisationImage"
