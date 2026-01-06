@@ -6,7 +6,12 @@ patterns=(-e '@mui/x-data-grid' -e '<DataGrid\b')
 # If arguments are provided (lint-staged mode), check those files
 if [ "$#" -gt 0 ]; then
   # filter for files in src/screens
-  mapfile -t files < <(printf "%s\n" "$@" | grep "^src/screens/" || true)
+  files=()
+  for file in "$@"; do
+    if [[ "$file" == src/screens/* ]]; then
+      files+=("$file")
+    fi
+  done
   
   if [ "${#files[@]}" -eq 0 ]; then
     exit 0

@@ -1,51 +1,47 @@
 /**
- * @file Requests.tsx
- * @description This file contains the implementation of the Requests component, which displays
- *              a list of membership requests for an organization. It includes features like
- *              infinite scrolling, search functionality, and role-based access control.
+ * Requests Component
  *
- * @module Requests
+ * This file contains the implementation of the Requests component, which displays
+ * a list of membership requests for an organization. It includes features like
+ * infinite scrolling, search functionality, and role-based access control.
  *
- * @requires react
- * @requires @apollo/client
- * @requires react-bootstrap
- * @requires react-i18next
- * @requires react-router-dom
- * @requires @mui/material
- * @requires GraphQl/Queries/Queries
- * @requires components/TableLoader/TableLoader
- * @requires components/RequestsTableItem/RequestsTableItem
- * @requires subComponents/SearchBar
- * @requires utils/interfaces
- * @requires utils/useLocalstorage
- * @requires style/app-fixed.module.css
+ * Requirements:
+ * - react
+ * - \@apollo/client
+ * - react-bootstrap
+ * - react-i18next
+ * - react-router-dom
+ * - \@mui/material
+ * - GraphQl/Queries/Queries
+ * - components/TableLoader/TableLoader
+ * - components/RequestsTableItem/RequestsTableItem
+ * - subComponents/SearchBar
+ * - utils/interfaces
+ * - utils/useLocalstorage
+ * - style/app-fixed.module.css
  *
+ * InterfaceRequestsListItem:
+ * - `_id` (string): The unique identifier for the request.
+ * - `user` (Object): The user details associated with the request.
+ * - `user.firstName` (string): The first name of the user.
+ * - `user.lastName` (string): The last name of the user.
+ * - `user.email` (string): The email address of the user.
  *
- * @typedef {Object} InterfaceRequestsListItem
- * @property {string} _id - The unique identifier for the request.
- * @property {Object} user - The user details associated with the request.
- * @property {string} user.firstName - The first name of the user.
- * @property {string} user.lastName - The last name of the user.
- * @property {string} user.email - The email address of the user.
- *
- * @component
- * @name Requests
- * @description Displays a list of membership requests for an organization. Includes search,
- *              infinite scrolling, and role-based access control. Redirects unauthorized users
- *              to the organization list page.
- *
- * @returns {JSX.Element} The rendered Requests component.
+ * Displays a list of membership requests for an organization. Includes search,
+ * infinite scrolling, and role-based access control. Redirects unauthorized users
+ * to the organization list page.
  *
  * @example
+ * ```tsx
  * <Requests />
+ * ```
  *
- * @remarks
+ * Remarks:
  * - Uses Apollo Client's `useQuery` for fetching data.
  * - Implements infinite scrolling using `react-infinite-scroll-component`.
  * - Displays a search bar for filtering requests by user name.
  * - Handles role-based access control for `ADMIN` and `SUPERADMIN` roles.
  * - Displays appropriate messages when no data is available.
- *
  */
 import { useQuery, useMutation } from '@apollo/client';
 import React, { useEffect, useState } from 'react';
@@ -61,7 +57,7 @@ import {
   MEMBERSHIP_REQUEST_PG,
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
-import TableLoader from 'components/TableLoader/TableLoader';
+import TableLoader from 'shared-components/TableLoader/TableLoader';
 import { GridCellParams } from 'shared-components/DataGridWrapper';
 import type {
   ReportingTableColumn,

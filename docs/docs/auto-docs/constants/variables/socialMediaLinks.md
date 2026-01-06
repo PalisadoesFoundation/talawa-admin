@@ -16,7 +16,7 @@ Defined in: [src/constants.ts:12](https://github.com/PalisadoesFoundation/talawa
 
 ### logo
 
-> **logo**: `string` = `FacebookLogo`
+> **logo**: `any` = `FacebookLogo`
 
 ### tag
 

@@ -17,7 +17,7 @@ It allows users to search, sort, view and edit campaigns.
 - Offers sorting options based on funding goal and end date.
 - Opens modals for creating or editing campaigns.
 
-### State
+State
 - `campaign`: The current campaign being edited or deleted.
 - `searchTerm`: The term used for searching campaigns by name.
 - `modalState`: An object indicating the visibility of different modals (`same` for create/edit).

@@ -5,7 +5,7 @@
  * administrators, or users. It provides functionality for sorting, searching, and
  * managing members within an organization.
  *
- * @component
+
  *
  * @remarks
  * - Uses Apollo Client's `useLazyQuery` for fetching data.
@@ -14,7 +14,7 @@
  * - Includes local search functionality for filtering rows by name or email.
  * - Displays a modal for removing members.
  *
- * @requires
+ * Requirements:
  * - `react`, `react-router-dom` for routing and state management.
  * - `@apollo/client` for GraphQL queries.
  * - `@mui/x-data-grid` for table rendering.
@@ -27,9 +27,9 @@
  * <OrganizationPeople />
  * ```
  *
- * @returns {JSX.Element} A JSX element rendering the organization people table.
+ * @returns A JSX element rendering the organization people table.
  *
- * @state
+ * State:
  * - `state` (number): Current tab state (0: members, 1: administrators, 2: users).
  * - `searchTerm` (string): Search input for filtering rows.
  * - `paginationModel` (GridPaginationModel): Pagination state for the table.
@@ -38,13 +38,13 @@
  * - `showRemoveModal` (boolean): Controls visibility of the remove member modal.
  * - `selectedMemId` (string | undefined): ID of the member selected for removal.
  *
- * @methods
+ * Methods:
  * - `handlePaginationModelChange`: Handles pagination changes and fetches data accordingly.
  * - `handleSortChange`: Updates the tab state based on sorting selection.
  * - `toggleRemoveModal`: Toggles the visibility of the remove member modal.
  * - `toggleRemoveMemberModal`: Sets the selected member ID and toggles the modal.
  *
- * @dependencies
+ * Dependencies:
  * - GraphQL Queries: `ORGANIZATIONS_MEMBER_CONNECTION_LIST`, `USER_LIST_FOR_TABLE`.
  * - Styles: `style/app-fixed.module.css`.
  */
@@ -70,7 +70,7 @@ import {
 } from 'types/ReportingTable/utils';
 import dayjs from 'dayjs';
 import styles from 'style/app-fixed.module.css';
-import TableLoader from 'components/TableLoader/TableLoader';
+import TableLoader from 'shared-components/TableLoader/TableLoader';
 import {
   ORGANIZATIONS_MEMBER_CONNECTION_LIST,
   USER_LIST_FOR_TABLE,
@@ -86,14 +86,18 @@ import { errorHandler } from 'utils/errorHandler';
 
 /**
  * Maps numeric filter state to string option identifiers.
- * @type {Record<number, string>}
- * @description Converts internal numeric state values to their corresponding string filter options:
+ *
+ * Converts internal numeric state values to their corresponding string filter options:
  * - 0 = 'members': Regular organization members
  * - 1 = 'admin': Organization administrators
  * - 2 = 'users': All users
+ *
  * @example
+ * ```ts
  * const option = STATE_TO_OPTION[0]; // 'members'
- * @note This mapping must stay in sync with OPTION_TO_STATE. Any changes to one require updating the other.
+ * ```
+ *
+ * Note: This mapping must stay in sync with OPTION_TO_STATE. Any changes to one require updating the other.
  */
 const STATE_TO_OPTION: Record<number, string> = {
   0: 'members',
@@ -103,14 +107,18 @@ const STATE_TO_OPTION: Record<number, string> = {
 
 /**
  * Maps string option identifiers to numeric filter state.
- * @type {Record<string, number>}
- * @description Converts string filter options to their corresponding internal numeric state values:
+ *
+ * Converts string filter options to their corresponding internal numeric state values:
  * - 'members' = 0: Regular organization members
  * - 'admin' = 1: Organization administrators
  * - 'users' = 2: All users
+ *
  * @example
+ * ```ts
  * const state = OPTION_TO_STATE['admin']; // 1
- * @note This mapping must stay in sync with STATE_TO_OPTION. Any changes to one require updating the other.
+ * ```
+ *
+ * Note: This mapping must stay in sync with STATE_TO_OPTION. Any changes to one require updating the other.
  */
 const OPTION_TO_STATE: Record<string, number> = {
   members: 0,
