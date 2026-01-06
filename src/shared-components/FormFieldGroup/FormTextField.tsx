@@ -1,3 +1,6 @@
+/*
+ *A reusable text input field supporting both Material-UI and React-Bootstrap formats, with optional character counting and end adornments.
+ */
 import React from 'react';
 import { Form } from 'react-bootstrap';
 import { FormControl, TextField } from '@mui/material';

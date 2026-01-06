@@ -1,3 +1,6 @@
+/*
+ *Multi-line text input component for longer content like descriptions and comments, built on MUI's TextField.
+ */
 import React from 'react';
 import { FormControl, TextField } from '@mui/material';
 import type { IFormTextAreaProps } from 'types/shared-components/FormFieldGroup/interface';

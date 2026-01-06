@@ -1,3 +1,6 @@
+/*
+ *The base wrapper component that combines labels, inputs, error messages, and help text with automatic ARIA attribute injection for accessibility compliance.
+ */
 import React from 'react';
 import { Form } from 'react-bootstrap';
 import type { IFormFieldGroupProps } from 'types/shared-components/FormFieldGroup/interface';

@@ -239,7 +239,7 @@ export default [
         {
           selector:
             "JSXMemberExpression[object.name='Form'][property.name='Check']",
-          message: 'Use FormCheckbox instead of Form.Check',
+          message: 'Use FormCheckbox or FormRadioGroup instead of Form.Check',
         },
       ],
     },

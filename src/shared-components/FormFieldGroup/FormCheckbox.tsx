@@ -1,3 +1,6 @@
+/*
+ *Accessible checkbox input with validation error display and proper ARIA attributes for screen reader support.
+ */
 import React from 'react';
 import { IFormCheckBoxProps } from 'types/shared-components/FormFieldGroup/interface';
 import { Form } from 'react-bootstrap';

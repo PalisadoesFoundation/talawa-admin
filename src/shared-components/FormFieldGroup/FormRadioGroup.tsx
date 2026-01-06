@@ -1,3 +1,6 @@
+/*
+ *Radio button group component that renders multiple options with integrated validation and accessibility features.
+ */
 import React from 'react';
 import { IFormRadioGroupProps } from 'types/shared-components/FormFieldGroup/interface';
 import { Form } from 'react-bootstrap';

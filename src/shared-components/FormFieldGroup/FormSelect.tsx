@@ -1,3 +1,6 @@
+/*
+ *Autocomplete dropdown field with search functionality, supporting single and multiple selection modes with tag limiting.
+ */
 import { Autocomplete, TextField } from '@mui/material';
 import React from 'react';
 import { IFormSelectProps } from 'types/shared-components/FormFieldGroup/interface';
