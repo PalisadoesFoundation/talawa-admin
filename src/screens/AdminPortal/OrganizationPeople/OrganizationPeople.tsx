@@ -5,8 +5,6 @@
  * administrators, or users. It provides functionality for sorting, searching, and
  * managing members within an organization.
  *
- * @component
- *
  * @remarks
  * - Uses Apollo Client's `useLazyQuery` for fetching data.
  * - Implements server-side pagination with cursor-based navigation.
@@ -14,39 +12,12 @@
  * - Includes local search functionality for filtering rows by name or email.
  * - Displays a modal for removing members.
  *
- * @requires
- * - `react`, `react-router-dom` for routing and state management.
- * - `@apollo/client` for GraphQL queries.
- * - `@mui/x-data-grid` for table rendering.
- * - `NotificationToast` for error notifications.
- * - `dayjs` for date formatting.
- * - Custom components: `SearchBar`, `SortingButton`, `Avatar`, `AddMember`, `OrgPeopleListCard`.
- *
  * @example
  * ```tsx
  * <OrganizationPeople />
  * ```
  *
  * @returns {JSX.Element} A JSX element rendering the organization people table.
- *
- * @state
- * - `state` (number): Current tab state (0: members, 1: administrators, 2: users).
- * - `searchTerm` (string): Search input for filtering rows.
- * - `paginationModel` (GridPaginationModel): Pagination state for the table.
- * - `currentRows` (ProcessedRow[]): Processed rows for the current page.
- * - `paginationMeta` (object): Metadata for pagination (hasNextPage, hasPreviousPage).
- * - `showRemoveModal` (boolean): Controls visibility of the remove member modal.
- * - `selectedMemId` (string | undefined): ID of the member selected for removal.
- *
- * @methods
- * - `handlePaginationModelChange`: Handles pagination changes and fetches data accordingly.
- * - `handleSortChange`: Updates the tab state based on sorting selection.
- * - `toggleRemoveModal`: Toggles the visibility of the remove member modal.
- * - `toggleRemoveMemberModal`: Sets the selected member ID and toggles the modal.
- *
- * @dependencies
- * - GraphQL Queries: `ORGANIZATIONS_MEMBER_CONNECTION_LIST`, `USER_LIST_FOR_TABLE`.
- * - Styles: `style/app-fixed.module.css`.
  */
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
