@@ -73,6 +73,13 @@
     "communityLogo": "Community Logo",
     "organizations": "Organizations"
   },
+  "adminProfile": {
+    "title": "Admin Profile",
+    "settings": "Settings",
+    "profile": "Profile",
+    "personalInfo": "Personal Information",
+    "accountSettings": "Account Settings"
+  },
   "signOut": {
     "retryPrompt": "Failed to revoke session. Retry?",
     "signingOut": "Signing out...",
@@ -982,6 +989,7 @@
     "backToEvents": "Back to Events"
   },
   "eventAttendance": {
+    "event_attendance_table": "Event Attendance Table",
     "historical_statistics": "Historical Statistics",
     "Search member": "Search member",
     "Member Name": "Member Name",

@@ -34,7 +34,7 @@ const ForgotPassword = lazy(
   () => import('screens/ForgotPassword/ForgotPassword'),
 );
 const MemberDetail = lazy(
-  () => import('screens/AdminPortal/MemberDetail/MemberDetail'),
+  () => import('shared-components/ProfileForm/ProfileForm'),
 );
 const OrgContribution = lazy(
   () => import('screens/AdminPortal/OrgContribution/OrgContribution'),
@@ -94,7 +94,6 @@ const Organizations = lazy(
   () => import('screens/UserPortal/Organizations/Organizations'),
 );
 const People = lazy(() => import('screens/UserPortal/People/People'));
-const Settings = lazy(() => import('screens/UserPortal/Settings/Settings'));
 const Chat = lazy(() => import('screens/UserPortal/Chat/Chat'));
 const EventDashboardScreen = lazy(
   () => import('components/EventDashboardScreen/EventDashboardScreen'),
@@ -208,7 +207,7 @@ function App(): React.ReactElement {
             <Route element={<SuperAdminScreen />}>
               <Route path="/orglist" element={<OrgList />} />
               <Route path="/notification" element={<Notification />} />
-              <Route path="/member" element={<MemberDetail />} />
+              <Route path="/admin/profile" element={<MemberDetail />} />
               <Route path="/users" element={<Users />} />
               <Route path="/communityProfile" element={<CommunityProfile />} />
               <Route path="/pluginstore" element={<PluginStore />} />
@@ -245,7 +244,7 @@ function App(): React.ReactElement {
                 path="orgtags/:orgId/subTags/:tagId"
                 element={<SubTags />}
               />
-              <Route path="/member/:orgId" element={<MemberDetail />} />
+              <Route path="/member/:orgId/:userId" element={<MemberDetail />} />
               <Route
                 path="/orgevents/:orgId"
                 element={<OrganizationEvents />}
@@ -303,7 +302,7 @@ function App(): React.ReactElement {
           {/* User Portal Routes */}
           <Route element={<SecuredRouteForUser />}>
             <Route path="/user/organizations" element={<Organizations />} />
-            <Route path="/user/settings" element={<Settings />} />
+            <Route path="/user/settings" element={<MemberDetail />} />
             {/* User global plugin routes (no orgId required) */}
             <Route element={<UserGlobalScreen />}>
               {userGlobalPluginRoutes.map((route) => (
