@@ -1357,6 +1357,7 @@
     "processingPost": "正在处理您的帖子。请稍候。"
   },
   "eventAttendance": {
+    "event_attendance_table": "活动出席表",
     "historical_statistics": "历史统计",
     "Search member": "搜索成员",
     "Member Name": "成员姓名",

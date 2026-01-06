@@ -1357,6 +1357,7 @@
     "processingPost": "Procesando tu publicación. Por favor espera."
   },
   "eventAttendance": {
+    "event_attendance_table": "Tabla de asistencia al evento",
     "historical_statistics": "Estadísticas históricas",
     "Search member": "Buscar miembro",
     "Member Name": "Nombre del miembro",

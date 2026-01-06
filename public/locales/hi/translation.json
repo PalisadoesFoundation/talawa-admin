@@ -1357,6 +1357,7 @@
     "processingPost": "आपकी पोस्ट प्रसंस्करण कर रहे हैं। कृपया प्रतीक्षा करें।"
   },
   "eventAttendance": {
+    "event_attendance_table": "इवेंट उपस्थिति तालिका",
     "historical_statistics": "ऐतिहासिक आंकड़े",
     "Search member": "सदस्य खोजें",
     "Member Name": "सदस्य का नाम",

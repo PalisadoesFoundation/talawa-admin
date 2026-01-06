@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`
 
-Defined in: [src/shared-components/ProfileForm/ProfileForm.tsx:111](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileForm/ProfileForm.tsx#L111)
+Defined in: [src/shared-components/ProfileForm/ProfileForm.tsx:114](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileForm/ProfileForm.tsx#L114)

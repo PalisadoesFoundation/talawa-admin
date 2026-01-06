@@ -990,6 +990,7 @@
     "backToEvents": "Back to Events"
   },
   "eventAttendance": {
+    "event_attendance_table": "Event Attendance Table",
     "historical_statistics": "Historical Statistics",
     "Search member": "Search member",
     "Member Name": "Member Name",

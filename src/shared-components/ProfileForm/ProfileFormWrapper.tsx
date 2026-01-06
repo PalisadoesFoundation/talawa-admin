@@ -28,12 +28,12 @@ interface InterfaceProfileFormWrapperProps {
  * and ProfileHeader to maintain consistent user portal layout.
  *
  * @param props - The component props
- * @param props.isUser - If true, renders with UserSidebar and ProfileHeader for user profile view.
+ * @param isUser - If true, renders with UserSidebar and ProfileHeader for user profile view.
  *                       If false, renders children directly for admin member view.
- * @param props.hideDrawer - Controls sidebar visibility state
- * @param props.setHideDrawer - Function to toggle sidebar visibility
- * @param props.tCommon - Translation function for internationalized text
- * @param props.children - The ProfileForm content to be wrapped
+ * @param hideDrawer - Controls sidebar visibility state
+ * @param setHideDrawer - Function to toggle sidebar visibility
+ * @param tCommon - Translation function for internationalized text
+ * @param children - The ProfileForm content to be wrapped
  *
  * @returns JSX element with conditional layout based on user context
  *

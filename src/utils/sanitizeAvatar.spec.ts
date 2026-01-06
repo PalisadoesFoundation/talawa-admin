@@ -17,6 +17,7 @@ describe('sanitizeAvatars', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 

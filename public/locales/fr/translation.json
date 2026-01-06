@@ -1357,6 +1357,7 @@
     "processingPost": "Traitement de votre publication. Veuillez patienter."
   },
   "eventAttendance": {
+    "event_attendance_table": "Table de présence aux événements",
     "historical_statistics": "Statistiques historiques",
     "Search member": "Rechercher un membre",
     "Member Name": "Nom du membre",

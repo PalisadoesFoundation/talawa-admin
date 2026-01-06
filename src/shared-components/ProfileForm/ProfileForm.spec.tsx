@@ -20,9 +20,9 @@ import MemberDetail, { getLanguageName, prettyDate } from './ProfileForm';
 import {
   MOCKS1,
   MOCKS2,
-  ERROR_MOCK,
   MOCK_FILE,
   UPDATE_MOCK,
+  UPDATE_USER_ERROR_MOCKS,
 } from './profileForm.mock';
 import type { ApolloLink } from '@apollo/client';
 import { vi } from 'vitest';
@@ -32,7 +32,7 @@ import { urlToFile } from 'utils/urlToFile';
 
 const link1 = new StaticMockLink(MOCKS1, true);
 const link2 = new StaticMockLink(MOCKS2, true);
-const link3 = new StaticMockLink(ERROR_MOCK, true);
+const link3 = new StaticMockLink(UPDATE_USER_ERROR_MOCKS, true);
 const link4 = new StaticMockLink(MOCK_FILE, true);
 const link5 = new StaticMockLink(UPDATE_MOCK, true);
 
@@ -61,14 +61,49 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
   },
 }));
 
-vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
-  const actual = await vi.importActual(
-    '@mui/x-date-pickers/DesktopDateTimePicker',
-  );
-  return {
-    DateTimePicker: actual.DesktopDateTimePicker,
-  };
-});
+vi.mock('shared-components/DatePicker', () => ({
+  __esModule: true,
+  default: ({
+    value,
+    onChange,
+    maxDate,
+    slotProps,
+    'data-testid': dataTestId,
+  }: {
+    value: dayjs.Dayjs | null;
+    onChange: (value: dayjs.Dayjs | null) => void;
+    maxDate?: dayjs.Dayjs;
+    slotProps?: { textField?: { 'aria-label'?: string } };
+    'data-testid'?: string;
+  }) => (
+    <input
+      data-testid={dataTestId}
+      aria-label={slotProps?.textField?.['aria-label']}
+      value={value ? value.format('MM/DD/YYYY') : ''}
+      onChange={(e) => {
+        const val = e.target.value;
+        if (!val) {
+          onChange?.(null);
+          return;
+        }
+
+        const parsedDate = dayjs(val, ['MM/DD/YYYY', 'YYYY-MM-DD']);
+        if (!parsedDate.isValid()) {
+          onChange?.(null);
+          return;
+        }
+
+        // Simulate maxDate validation like the real component
+        if (maxDate && parsedDate.isAfter(maxDate, 'day')) {
+          onChange?.(null);
+          return;
+        }
+
+        onChange?.(parsedDate);
+      }}
+    />
+  ),
+}));
 
 vi.mock('@dicebear/core', () => ({
   createAvatar: vi.fn(() => ({
@@ -271,13 +306,12 @@ describe('MemberDetail', () => {
       const testDate = dayjs().format('YYYY-MM-DDTHH:mm:ss');
       const formattedDate = dayjs().format('D MMMM YYYY');
       expect(prettyDate(testDate)).toBe(formattedDate);
-      expect(prettyDate('')).toBe('Unavailable');
+      expect(prettyDate('')).toBe(null);
     });
 
     test('getLanguageName function should work properly', () => {
-      const getLangName = vi.fn(getLanguageName);
-      expect(getLangName('en')).toBe('English');
-      expect(getLangName('')).toBe('Unavailable');
+      expect(getLanguageName('en')).toBe('English');
+      expect(getLanguageName('')).toBe(null);
     });
 
     test('should render props and text elements test for the page component', async () => {
@@ -475,13 +509,22 @@ describe('MemberDetail', () => {
       const birthDateInput = screen.getByTestId(
         'birthDate',
       ) as HTMLInputElement;
-      // Set a hardcoded future date value
+
+      // Test valid past date
+      fireEvent.change(birthDateInput, {
+        target: { value: '01/01/1990' },
+      });
+      expect(birthDateInput.value).toBe('01/01/1990');
+
+      // Test that future dates are rejected (should clear the field)
       fireEvent.change(birthDateInput, {
         target: { value: '02/02/2080' },
       });
-      fireEvent.blur(birthDateInput);
 
-      expect(birthDateInput.value).toMatch(/\d{1,2}\/\d{1,2}\/\d{4}/);
+      // The onChange handler should reject future dates and clear the field
+      await waitFor(() => {
+        expect(birthDateInput.value).toBe('');
+      });
     });
 
     test('handles form field changes', async () => {
@@ -890,6 +933,7 @@ describe('MemberDetail', () => {
       // Should render the no events message
       const noEventsMessage = screen.queryByText('No events attended');
       if (noEventsMessage) {
+        // Note: MOCKS2 guarantees empty eventsAttended array
         expect(noEventsMessage).toBeInTheDocument();
       }
     });

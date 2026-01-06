@@ -6,7 +6,7 @@
 
 > **prettyDate**(`param`): `string`
 
-Defined in: [src/shared-components/ProfileForm/ProfileForm.tsx:850](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileForm/ProfileForm.tsx#L850)
+Defined in: [src/shared-components/ProfileForm/ProfileForm.tsx:846](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileForm/ProfileForm.tsx#L846)
 
 ## Parameters
 
