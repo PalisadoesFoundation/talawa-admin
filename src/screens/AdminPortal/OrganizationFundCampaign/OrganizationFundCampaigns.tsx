@@ -125,7 +125,7 @@ const orgFundCampaign = (): JSX.Element => {
     return (
       campaignData?.fund?.campaigns?.edges.map((edge) => ({
         ...edge.node,
-        amountRaised: edge.node.pledgedAmount ?? null,
+        amountRaised: edge.node.amountRaised ?? 0,
       })) ?? []
     );
   }, [campaignData]);
@@ -271,9 +271,7 @@ const orgFundCampaign = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        const amountRaised = params.row.amountRaised
-          ? Number(params.row.amountRaised)
-          : 0;
+        const amountRaised = params.row.amountRaised ?? 0;
         return (
           <div
             className="d-flex justify-content-center fw-bold"
@@ -299,9 +297,7 @@ const orgFundCampaign = (): JSX.Element => {
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
       renderCell: (params: GridCellParams) => {
-        const amountRaised = params.row.amountRaised
-          ? Number(params.row.amountRaised)
-          : 0;
+        const amountRaised = params.row.amountRaised ?? 0;
         const goal = params.row.goalAmount as number;
         const percentage =
           goal > 0 ? Math.min((amountRaised / goal) * 100, 100) : 0;

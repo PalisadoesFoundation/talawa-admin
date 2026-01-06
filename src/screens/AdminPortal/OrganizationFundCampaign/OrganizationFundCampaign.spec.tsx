@@ -535,7 +535,7 @@ describe('FundCampaigns Screen', () => {
     expect(goalCells.length).toBe(2);
   });
 
-  it('should handle null amountRaised correctly - covers nullable path (lines 276, 304)', async () => {
+  it('should handle zero amountRaised correctly - covers default value (lines 274, 302)', async () => {
     mockRouteParams();
     renderFundCampaign(link4);
 
@@ -544,13 +544,13 @@ describe('FundCampaigns Screen', () => {
       expect(screen.getByText('Campaign 1')).toBeInTheDocument();
     });
 
-    // Campaign 1 has null amountRaised, should display $0
-    // This tests the nullable path: amountRaised ? Number(amountRaised) : 0 (line 276 in raisedCell)
+    // Campaign 1 has amountRaised 0, should display $0
+    // This tests the default value path: amountRaised ?? 0 (line 274 in raisedCell)
     const raisedCells = screen.getAllByTestId('raisedCell');
     expect(raisedCells[0]).toHaveTextContent('$0');
 
-    // Progress should be 0% for null amountRaised
-    // This tests the nullable path: amountRaised ? Number(amountRaised) : 0 (line 304 in percentageRaised)
+    // Progress should be 0% for zero amountRaised
+    // This tests the default value path: amountRaised ?? 0 (line 302 in percentageRaised)
     const progressCells = screen.getAllByTestId('progressCell');
     expect(progressCells[0]).toHaveTextContent('0%');
   });

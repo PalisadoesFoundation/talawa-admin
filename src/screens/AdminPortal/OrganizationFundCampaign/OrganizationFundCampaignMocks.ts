@@ -34,6 +34,7 @@ export const MOCKS = [
                   currencyCode: 'USD',
                   goalAmount: 100,
                   pledgedAmount: '50',
+                  amountRaised: 50,
                 },
               },
               {
@@ -45,6 +46,7 @@ export const MOCKS = [
                   currencyCode: 'USD',
                   goalAmount: 200,
                   pledgedAmount: '150',
+                  amountRaised: 150,
                 },
               },
             ],
@@ -77,6 +79,7 @@ export const MOCKS = [
                   currencyCode: 'USD',
                   goalAmount: 100,
                   pledgedAmount: '50',
+                  amountRaised: 50,
                 },
               },
               {
@@ -88,6 +91,7 @@ export const MOCKS = [
                   currencyCode: 'USD',
                   goalAmount: 200,
                   pledgedAmount: '150',
+                  amountRaised: 150,
                 },
               },
             ],
@@ -227,7 +231,7 @@ export const EMPTY_MOCKS = [
   },
 ];
 
-// Mock with various pledgedAmount edge cases for testing
+// Mock with various amountRaised edge cases for testing
 export const MOCKS_WITH_EDGE_CASES = [
   {
     request: {
@@ -251,7 +255,8 @@ export const MOCKS_WITH_EDGE_CASES = [
                   endAt: dayjs.utc().add(13, 'month').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 100,
-                  pledgedAmount: null, // null pledgedAmount - tests nullable path (line 276, 304)
+                  pledgedAmount: null,
+                  amountRaised: 0, // zero amountRaised - tests default value (line 274, 302)
                 },
               },
               {
@@ -262,7 +267,8 @@ export const MOCKS_WITH_EDGE_CASES = [
                   endAt: dayjs.utc().add(13, 'month').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 100,
-                  pledgedAmount: '0', // zero pledgedAmount
+                  pledgedAmount: '0',
+                  amountRaised: 0, // zero amountRaised
                 },
               },
               {
@@ -273,7 +279,8 @@ export const MOCKS_WITH_EDGE_CASES = [
                   endAt: dayjs.utc().add(13, 'month').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 100,
-                  pledgedAmount: '100', // 100% pledgedAmount
+                  pledgedAmount: '100',
+                  amountRaised: 100, // 100% amountRaised
                 },
               },
               {
@@ -284,7 +291,8 @@ export const MOCKS_WITH_EDGE_CASES = [
                   endAt: dayjs.utc().add(13, 'month').toISOString(),
                   currencyCode: 'USD',
                   goalAmount: 100,
-                  pledgedAmount: '150', // over 100% pledgedAmount - tests Math.min cap at 100% (line 307)
+                  pledgedAmount: '150',
+                  amountRaised: 150, // over 100% amountRaised - tests Math.min cap at 100% (line 307)
                 },
               },
               {
@@ -296,6 +304,7 @@ export const MOCKS_WITH_EDGE_CASES = [
                   currencyCode: 'USD',
                   goalAmount: 0, // zero goal - tests goal > 0 ternary false branch (line 307)
                   pledgedAmount: '50',
+                  amountRaised: 50,
                 },
               },
             ],
