@@ -19,16 +19,21 @@ vi.mock('inquirer', () => ({
   },
 }));
 vi.mock('dotenv');
-vi.mock('fs', async () => {
-  const actual = await vi.importActual<typeof import('fs')>('fs');
+vi.mock('fs', () => {
+  const readFile = vi.fn();
+
   return {
-    default: actual,
+    default: {
+      promises: {
+        readFile,
+      },
+    },
     promises: {
-      ...actual.promises,
-      readFile: vi.fn(),
+      readFile,
     },
   };
 });
+
 vi.mock('./checkEnvFile/checkEnvFile');
 vi.mock('./validateRecaptcha/validateRecaptcha');
 vi.mock('./askAndSetDockerOption/askAndSetDockerOption', () => ({
