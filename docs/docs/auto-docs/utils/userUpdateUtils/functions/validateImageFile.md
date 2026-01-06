@@ -6,7 +6,7 @@
 
 > **validateImageFile**(`file`, `tCommon`): `boolean`
 
-Defined in: [src/utils/userUpdateUtils.ts:57](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/userUpdateUtils.ts#L57)
+Defined in: [src/utils/userUpdateUtils.ts:60](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/userUpdateUtils.ts#L60)
 
 Validates an image file for type and size constraints.
 Shows error notifications for invalid files using the provided translation function.

@@ -1,5 +1,8 @@
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
-
+import {
+  FILE_UPLOAD_MAX_SIZE_MB,
+  FILE_UPLOAD_ALLOWED_TYPES,
+} from '../Constant/fileUpload';
 /**
  * Removes empty fields from an object, filtering out null, undefined, and empty/whitespace-only strings.
  * File objects are preserved regardless of their content.
@@ -61,17 +64,15 @@ export function validateImageFile(
   if (!file) {
     return false; // No file to validate
   }
-  const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
-  const maxSize = 5 * 1024 * 1024; // 5MB
 
-  if (!validTypes.includes(file.type)) {
+  if (!(FILE_UPLOAD_ALLOWED_TYPES as unknown as string[]).includes(file.type)) {
     NotificationToast.error(
       tCommon('invalidFileType', { types: 'JPEG, PNG, or GIF' }) as string,
     );
     return false;
   }
 
-  if (file.size > maxSize) {
+  if (file.size > FILE_UPLOAD_MAX_SIZE_MB * 1024 * 1024) {
     NotificationToast.error(tCommon('fileTooLarge', { size: 5 }) as string);
     return false;
   }
