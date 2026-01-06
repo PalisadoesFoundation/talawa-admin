@@ -213,6 +213,7 @@ const baseValues: IEventFormValues = {
   endTime: '10:00:00',
   allDay: true,
   isPublic: true,
+  isInviteOnly: false,
   isRegisterable: true,
   recurrenceRule: null,
   createChat: false,
@@ -867,33 +868,182 @@ describe('EventForm', () => {
     );
   });
 
-  test('toggles public event', async () => {
-    const handleSubmit = vi.fn();
-    render(
-      <EventForm
-        initialValues={{ ...baseValues, isPublic: false }}
-        onSubmit={handleSubmit}
-        onCancel={vi.fn()}
-        submitLabel="Create"
-        t={t}
-        tCommon={tCommon}
-        showPublicToggle
-      />,
-    );
+  describe('Event Visibility', () => {
+    test('defaults to INVITE_ONLY when creating a new event', () => {
+      // Create empty initial values typical for a "Create" scenario
+      const newEventValues: IEventFormValues = {
+        ...baseValues,
+        name: '', // Empty name implies new
+        isPublic: false,
+        isInviteOnly: false,
+      };
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('publicEventCheck'));
+      render(
+        <EventForm
+          initialValues={newEventValues}
+          onSubmit={vi.fn()}
+          onCancel={vi.fn()}
+          submitLabel="Create"
+          t={t}
+          tCommon={tCommon}
+          showPublicToggle
+        />,
+      );
+
+      // Verify Invite Only is checked by default
+      expect(screen.getByTestId('visibilityInviteRadio')).toBeChecked();
+      expect(screen.getByTestId('visibilityPublicRadio')).not.toBeChecked();
+      expect(screen.getByTestId('visibilityOrgRadio')).not.toBeChecked();
     });
 
-    await act(async () => {
-      fireEvent.click(screen.getByTestId('createEventBtn'));
+    test('populates visibility correctly from existing initialValues (PUBLIC)', () => {
+      render(
+        <EventForm
+          initialValues={{ ...baseValues, isPublic: true, isInviteOnly: false }}
+          onSubmit={vi.fn()}
+          onCancel={vi.fn()}
+          submitLabel="Update"
+          t={t}
+          tCommon={tCommon}
+          showPublicToggle
+        />,
+      );
+      expect(screen.getByTestId('visibilityPublicRadio')).toBeChecked();
     });
 
-    expect(handleSubmit).toHaveBeenCalledWith(
-      expect.objectContaining({
-        isPublic: true,
-      }),
-    );
+    test('populates visibility correctly from existing initialValues (INVITE_ONLY)', () => {
+      render(
+        <EventForm
+          initialValues={{ ...baseValues, isPublic: false, isInviteOnly: true }}
+          onSubmit={vi.fn()}
+          onCancel={vi.fn()}
+          submitLabel="Update"
+          t={t}
+          tCommon={tCommon}
+          showPublicToggle
+        />,
+      );
+      expect(screen.getByTestId('visibilityInviteRadio')).toBeChecked();
+    });
+
+    test('populates visibility correctly from existing initialValues (ORGANIZATION)', () => {
+      render(
+        <EventForm
+          initialValues={{
+            ...baseValues,
+            isPublic: false,
+            isInviteOnly: false,
+          }}
+          onSubmit={vi.fn()}
+          onCancel={vi.fn()}
+          submitLabel="Update"
+          t={t}
+          tCommon={tCommon}
+          showPublicToggle
+        />,
+      );
+      expect(screen.getByTestId('visibilityOrgRadio')).toBeChecked();
+    });
+
+    test('updates visibility when initialValues change dynamically', () => {
+      const { rerender } = render(
+        <EventForm
+          initialValues={{
+            ...baseValues,
+            isPublic: false, // Start as Invite Only
+            isInviteOnly: true,
+          }}
+          onSubmit={vi.fn()}
+          onCancel={vi.fn()}
+          submitLabel="Update"
+          t={t}
+          tCommon={tCommon}
+          showPublicToggle
+        />,
+      );
+      expect(screen.getByTestId('visibilityInviteRadio')).toBeChecked();
+
+      // Rerender with Organization visibility
+      rerender(
+        <EventForm
+          initialValues={{
+            ...baseValues,
+            name: 'Existing Event',
+            isPublic: false,
+            isInviteOnly: false,
+          }}
+          onSubmit={vi.fn()}
+          onCancel={vi.fn()}
+          submitLabel="Update"
+          t={t}
+          tCommon={tCommon}
+          showPublicToggle
+        />,
+      );
+      expect(screen.getByTestId('visibilityOrgRadio')).toBeChecked();
+    });
+
+    test('toggles event visibility options correctly', async () => {
+      const handleSubmit = vi.fn();
+      render(
+        <EventForm
+          initialValues={{
+            ...baseValues,
+            isPublic: false,
+            isInviteOnly: false, // Starts as ORGANIZATION
+          }}
+          onSubmit={handleSubmit}
+          onCancel={vi.fn()}
+          submitLabel="Create"
+          t={t}
+          tCommon={tCommon}
+          showPublicToggle
+        />,
+      );
+
+      // 1. Switch to PUBLIC
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('visibilityPublicRadio'));
+      });
+      // Submit and verify payload
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('createEventBtn'));
+      });
+      expect(handleSubmit).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          isPublic: true,
+          isInviteOnly: false,
+        }),
+      );
+
+      // 2. Switch to INVITE_ONLY
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('visibilityInviteRadio'));
+      });
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('createEventBtn'));
+      });
+      expect(handleSubmit).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          isPublic: false,
+          isInviteOnly: true,
+        }),
+      );
+
+      // 3. Switch to ORGANIZATION
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('visibilityOrgRadio'));
+      });
+      await act(async () => {
+        fireEvent.click(screen.getByTestId('createEventBtn'));
+      });
+      expect(handleSubmit).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          isPublic: false,
+          isInviteOnly: false,
+        }),
+      );
+    });
   });
 
   test('toggles registerable event', async () => {
@@ -1852,7 +2002,13 @@ describe('EventForm', () => {
       />,
     );
 
-    expect(screen.queryByTestId('publicEventCheck')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('visibilityPublicRadio'),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByTestId('visibilityOrgRadio')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('visibilityInviteRadio'),
+    ).not.toBeInTheDocument();
   });
 
   test('does not show registerable toggle when showRegisterable is false', () => {

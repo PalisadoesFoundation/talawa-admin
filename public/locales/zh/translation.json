@@ -521,7 +521,6 @@
     "recurringEvent": "重复事件",
     "recurring": "重复",
     "isPublic": "是公开的",
-    "publicEvent": "是公开的",
     "isRegistrable": "可注册",
     "registerable": "可注册",
     "createEvent": "创建事件",
@@ -1537,7 +1536,7 @@
     "enterName": "输入名称",
     "enterDescription": "输入描述",
     "enterLocation": "输入位置",
-    "publicEvent": "是公开的",
+
     "registerable": "可注册",
     "monthlyCalendarView": "月历",
     "yearlyCalendarView": "年历",

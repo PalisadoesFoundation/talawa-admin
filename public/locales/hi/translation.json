@@ -521,7 +521,6 @@
     "recurringEvent": "पुनरावर्ती ईवेंट",
     "recurring": "पुनरावर्ती",
     "isPublic": "सार्वजनिक है",
-    "publicEvent": "सार्वजनिक है",
     "isRegistrable": "पंजीकरण योग्य है",
     "registerable": "पंजीकरण योग्य है",
     "createEvent": "कार्यक्रम बनाएँ",
@@ -1537,7 +1536,7 @@
     "enterName": "नाम दर्ज करें",
     "enterDescription": "विवरण दर्ज करें",
     "enterLocation": "स्थान दर्ज करें",
-    "publicEvent": "सार्वजनिक है",
+
     "registerable": "पंजीकरण योग्य है",
     "monthlyCalendarView": "मासिक कैलेंडर",
     "yearlyCalendarView": "वार्षिक कैलेंडर",

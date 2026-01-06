@@ -49,6 +49,10 @@ export interface IEvent {
   endTime?: string | null;
   allDay: boolean;
   userId?: string;
+  /**
+   * Determines if the event is visible to the entire community.
+   * Often referred to as "Community Visible" in the UI.
+   */
   isPublic: boolean;
   isRegisterable: boolean;
   attendees: Partial<User>[];
@@ -210,6 +214,10 @@ export interface IEventEdge {
     endAt: string;
     allDay: boolean;
     location?: string | null;
+    /**
+     * Determines if the event is visible to the entire community.
+     * Often referred to as "Community Visible" in the UI.
+     */
     isPublic: boolean;
     isRegisterable: boolean;
     // Recurring event fields
@@ -246,8 +254,13 @@ export interface ICreateEventInput {
   endAt: string;
   organizationId: string | undefined;
   allDay: boolean;
+  /**
+   * Determines if the event is visible to the entire community.
+   * Often referred to as "Community Visible" in the UI.
+   */
   isPublic: boolean;
   isRegisterable: boolean;
+  isInviteOnly: boolean;
   description?: string;
   location?: string;
   recurrence?:
