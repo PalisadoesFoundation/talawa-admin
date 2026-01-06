@@ -13,10 +13,7 @@ import userEvent from '@testing-library/user-event';
 import { I18nextProvider } from 'react-i18next';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import LoginPage from './LoginPage';
-import {
-  RECAPTCHA_MUTATION,
-  SIGNUP_MUTATION,
-} from 'GraphQl/Mutations/mutations';
+import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import {
   SIGNIN_QUERY,
   GET_COMMUNITY_DATA_PG,
@@ -28,6 +25,7 @@ import { BACKEND_URL } from 'Constant/constant';
 import useLocalStorage from 'utils/useLocalstorage';
 import { vi, beforeEach, expect, it, describe } from 'vitest';
 import { GraphQLError } from 'graphql';
+import dayjs from 'dayjs';
 
 vi.mock('utils/useLocalstorage');
 
@@ -81,17 +79,6 @@ const MOCKS = [
         },
       },
     },
-  },
-  {
-    request: { query: RECAPTCHA_MUTATION, variables: { recaptchaToken: null } },
-    result: { data: { recaptcha: true } },
-  },
-  {
-    request: {
-      query: RECAPTCHA_MUTATION,
-      variables: { recaptchaToken: 'token' },
-    },
-    result: { data: { recaptcha: true } },
   },
   {
     request: { query: GET_COMMUNITY_DATA_PG },
@@ -226,6 +213,7 @@ const mockUseLocalStorage = {
 beforeEach(() => {
   vi.clearAllMocks();
   routerMocks.navigate.mockReset();
+  resetReCAPTCHA.mockClear();
   mockUseLocalStorage.getItem.mockReset();
   mockUseLocalStorage.setItem.mockReset();
   mockUseLocalStorage.removeItem.mockReset();
@@ -247,7 +235,7 @@ vi.mock('components/NotificationToast/NotificationToast', () => ({
 
 vi.mock('Constant/constant.ts', async () => ({
   ...(await vi.importActual('Constant/constant.ts')),
-  REACT_APP_USE_RECAPTCHA: 'yes',
+  REACT_APP_USE_RECAPTCHA: 'YES',
   RECAPTCHA_SITE_KEY: 'xxx',
   BACKEND_URL: 'http://localhost:4000/graphql',
 }));
@@ -1498,7 +1486,6 @@ describe('Extra coverage for 100 %', () => {
     vi.doUnmock('Constant/constant.ts');
   });
 
-  /* 1.  bypass recaptcha when feature is off (UI path) */
   it('bypasses recaptcha when feature is off', async () => {
     vi.resetModules();
     vi.doMock('Constant/constant.ts', async () => ({
@@ -1532,7 +1519,6 @@ describe('Extra coverage for 100 %', () => {
     expect(routerMocks.navigate).toHaveBeenCalledWith('/user/organizations');
   });
 
-  /* 2.  Invalid name toast */
   it('shows toast for invalid name during registration', async () => {
     setLocationPath('/');
     renderLoginPage();
@@ -1545,7 +1531,7 @@ describe('Extra coverage for 100 %', () => {
       screen.getByPlaceholderText('Confirm Password'),
       'Valid@123',
     );
-    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[1], 'token');
+    // reCAPTCHA is now integrated directly in the mutation
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
@@ -1554,7 +1540,6 @@ describe('Extra coverage for 100 %', () => {
     );
   });
 
-  /* 3.  Invalid password toast */
   it('shows toast for weak password', async () => {
     setLocationPath('/');
     renderLoginPage();
@@ -1567,7 +1552,7 @@ describe('Extra coverage for 100 %', () => {
       screen.getByPlaceholderText('Confirm Password'),
       'weak',
     );
-    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[1], 'token');
+    // reCAPTCHA is now integrated directly in the mutation
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
@@ -1576,22 +1561,10 @@ describe('Extra coverage for 100 %', () => {
     );
   });
 
-  /* 4.  Non-admin tries to log in on /admin */
   it('warns when non-admin logs in from admin portal', async () => {
     setLocationPath('/admin');
     const NON_ADMIN_MOCK = [
-      ...MOCKS.filter(
-        (m) =>
-          m.request.query !== SIGNIN_QUERY &&
-          m.request.query !== RECAPTCHA_MUTATION,
-      ),
-      {
-        request: {
-          query: RECAPTCHA_MUTATION,
-          variables: { recaptchaToken: 'token' },
-        },
-        result: { data: { recaptcha: true } },
-      },
+      ...MOCKS.filter((m) => m.request.query !== SIGNIN_QUERY),
       {
         request: {
           query: SIGNIN_QUERY,
@@ -1622,7 +1595,7 @@ describe('Extra coverage for 100 %', () => {
       screen.getByPlaceholderText(/Enter Password/i),
       'pass',
     );
-    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[0], 'token');
+    // reCAPTCHA is now integrated directly in the mutation
     await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenCalledWith(
@@ -1630,14 +1603,12 @@ describe('Extra coverage for 100 %', () => {
     );
   });
 
-  /* 5.  component renders after mount (was refetch test) */
   it('renders component after mount', async () => {
     renderLoginPage(link);
     await wait();
     expect(screen.getByTestId('loginBtn')).toBeInTheDocument();
   });
 
-  /* 6.  fetch(BACKEND_URL) catch block */
   it('handles Talawa-API unreachable', async () => {
     // Mock fetch to reject before rendering
     const fetchSpy = vi
@@ -1671,31 +1642,50 @@ describe('Extra coverage for 100 %', () => {
     }
   });
 
-  /* 7.  reset signup recaptcha on error */
   it('resets signup recaptcha when signup fails', async () => {
     const FAIL_MOCK = [
-      {
-        request: {
-          query: RECAPTCHA_MUTATION,
-          variables: { recaptchaToken: 'token' },
-        },
-        result: { data: { recaptcha: true } },
-      },
       {
         request: {
           query: SIGNUP_MUTATION,
           variables: {
             ID: '',
-            name: 'John',
-            email: 'john@doe.com',
-            password: 'John@123',
+            name: 'John Doe',
+            email: 'johndoe@gmail.com',
+            password: 'Johndoe@123',
           },
         },
         error: new Error('Signup failed'),
       },
       {
         request: { query: GET_COMMUNITY_DATA_PG },
-        result: { data: { community: null } },
+        result: {
+          data: {
+            community: {
+              createdAt: dayjs()
+                .subtract(1, 'year')
+                .startOf('year')
+                .format('YYYY-MM-DD'),
+              facebookURL: null,
+              githubURL: null,
+              id: '1',
+              inactivityTimeoutDuration: 3600,
+              instagramURL: null,
+              linkedinURL: null,
+              logoMimeType: null,
+              logoURL: null,
+              name: 'Test Community',
+              redditURL: null,
+              slackURL: null,
+              updatedAt: dayjs()
+                .subtract(1, 'year')
+                .startOf('year')
+                .format('YYYY-MM-DD'),
+              websiteURL: null,
+              xURL: null,
+              youtubeURL: null,
+            },
+          },
+        },
       },
       {
         request: { query: ORGANIZATION_LIST_NO_MEMBERS },
@@ -1706,28 +1696,41 @@ describe('Extra coverage for 100 %', () => {
     renderLoginPage(FAIL_MOCK);
     await wait();
     await userEvent.click(screen.getByTestId('goToRegisterPortion'));
-    await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John');
-    await userEvent.type(screen.getByTestId('signInEmail'), 'john@doe.com');
-    await userEvent.type(screen.getByPlaceholderText('Password'), 'John@123');
+    await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John Doe');
+    await userEvent.type(
+      screen.getByTestId('signInEmail'),
+      'johndoe@gmail.com',
+    );
+    await userEvent.type(
+      screen.getByPlaceholderText('Password'),
+      'Johndoe@123',
+    );
     await userEvent.type(
       screen.getByPlaceholderText('Confirm Password'),
-      'John@123',
+      'Johndoe@123',
     );
-    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[1], 'token');
+    // reCAPTCHA is now integrated directly in the mutation
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
+
     expect(resetReCAPTCHA).toHaveBeenCalled();
   });
 
-  /* 8. recaptcha mutation failure */
-  it('shows error toast when recaptcha verification mutation fails', async () => {
+  it('shows error toast when recaptcha verification fails during signup', async () => {
     const RECAPTCHA_ERROR_MOCK = [
       {
         request: {
-          query: RECAPTCHA_MUTATION,
-          variables: { recaptchaToken: 'token' },
+          query: SIGNUP_MUTATION,
+          variables: {
+            ID: '',
+            name: 'John',
+            email: 'john@doe.com',
+            password: 'John@123',
+          },
         },
-        error: new Error('Recaptcha service unavailable'),
+        result: {
+          errors: [{ message: 'Invalid reCAPTCHA token' }],
+        },
       },
       {
         request: { query: GET_COMMUNITY_DATA_PG },
@@ -1749,90 +1752,14 @@ describe('Extra coverage for 100 %', () => {
       screen.getByPlaceholderText('Confirm Password'),
       'John@123',
     );
-    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[1], 'token');
+    // reCAPTCHA is now integrated directly in the mutation
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.error).toHaveBeenCalledWith(
-      expect.stringMatching(/captcha/i),
+      expect.stringMatching(/captcha|Invalid reCAPTCHA/i),
     );
   });
 
-  /* 9. signup captcha verification returns false */
-  it('shows captcha error when verification returns false on signup', async () => {
-    const RECAPTCHA_FALSE_MOCK = [
-      {
-        request: {
-          query: RECAPTCHA_MUTATION,
-          variables: { recaptchaToken: 'bad-token' },
-        },
-        result: { data: { recaptcha: false } },
-      },
-      {
-        request: { query: GET_COMMUNITY_DATA_PG },
-        result: { data: { community: null } },
-      },
-      {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
-        result: { data: { organizations: [] } },
-      },
-    ];
-    setLocationPath('/');
-    renderLoginPage(RECAPTCHA_FALSE_MOCK);
-    await wait();
-    await userEvent.click(screen.getByTestId('goToRegisterPortion'));
-    await userEvent.type(screen.getByPlaceholderText(/Name/i), 'John');
-    await userEvent.type(screen.getByTestId('signInEmail'), 'john@doe.com');
-    await userEvent.type(screen.getByPlaceholderText('Password'), 'John@123');
-    await userEvent.type(
-      screen.getByPlaceholderText('Confirm Password'),
-      'John@123',
-    );
-    await userEvent.type(
-      screen.getAllByTestId('mock-recaptcha')[1],
-      'bad-token',
-    );
-    await userEvent.click(screen.getByTestId('registrationBtn'));
-    await wait();
-    expect(toastMocks.error).toHaveBeenCalledWith('Please, check the captcha.');
-  });
-
-  /* 10. login captcha verification returns false */
-  it('shows captcha error when verification returns false on login', async () => {
-    const RECAPTCHA_FALSE_LOGIN = [
-      {
-        request: {
-          query: RECAPTCHA_MUTATION,
-          variables: { recaptchaToken: 'bad-token' },
-        },
-        result: { data: { recaptcha: false } },
-      },
-      {
-        request: { query: GET_COMMUNITY_DATA_PG },
-        result: { data: { community: null } },
-      },
-      {
-        request: { query: ORGANIZATION_LIST_NO_MEMBERS },
-        result: { data: { organizations: [] } },
-      },
-    ];
-    setLocationPath('/');
-    renderLoginPage(RECAPTCHA_FALSE_LOGIN);
-    await wait();
-    await userEvent.type(screen.getByTestId('loginEmail'), 'user@example.com');
-    await userEvent.type(
-      screen.getByPlaceholderText(/Enter Password/i),
-      'pass',
-    );
-    await userEvent.type(
-      screen.getAllByTestId('mock-recaptcha')[0],
-      'bad-token',
-    );
-    await userEvent.click(screen.getByTestId('loginBtn'));
-    await wait();
-    expect(toastMocks.error).toHaveBeenCalledWith('Please, check the captcha.');
-  });
-
-  /* 11. email too short validation */
   it('shows email invalid toast when email is too short', async () => {
     setLocationPath('/');
     renderLoginPage();
@@ -1845,7 +1772,7 @@ describe('Extra coverage for 100 %', () => {
       screen.getByPlaceholderText('Confirm Password'),
       'Test@123',
     );
-    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[1], 'token');
+    // reCAPTCHA is now integrated directly in the mutation
     await userEvent.click(screen.getByTestId('registrationBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenNthCalledWith(
@@ -1854,16 +1781,8 @@ describe('Extra coverage for 100 %', () => {
     );
   });
 
-  /* 12. signIn returns null */
   it('shows not found warning when signIn returns null', async () => {
     const NULL_SIGNIN_MOCK = [
-      {
-        request: {
-          query: RECAPTCHA_MUTATION,
-          variables: { recaptchaToken: 'token' },
-        },
-        result: { data: { recaptcha: true } },
-      },
       {
         request: {
           query: SIGNIN_QUERY,
@@ -1888,25 +1807,17 @@ describe('Extra coverage for 100 %', () => {
       screen.getByPlaceholderText(/Enter Password/i),
       'pass',
     );
-    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[0], 'token');
+    // reCAPTCHA is now integrated directly in the mutation
     await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();
     expect(toastMocks.warn).toHaveBeenCalledWith('Not found');
   });
 
-  /* 13. account_locked error with retryAfter timestamp */
   it('shows account locked message with countdown when retryAfter is provided', async () => {
     // Set retryAfter to 15 minutes from now
     const retryAfterDate = new Date(Date.now() + 15 * 60 * 1000).toISOString();
 
     const ACCOUNT_LOCKED_MOCK = [
-      {
-        request: {
-          query: RECAPTCHA_MUTATION,
-          variables: { recaptchaToken: 'token' },
-        },
-        result: { data: { recaptcha: true } },
-      },
       {
         request: {
           query: SIGNIN_QUERY,
@@ -1942,7 +1853,7 @@ describe('Extra coverage for 100 %', () => {
       screen.getByPlaceholderText(/Enter Password/i),
       'wrongpass',
     );
-    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[0], 'token');
+    // reCAPTCHA is now integrated directly in the mutation
     await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();
 
@@ -1952,23 +1863,12 @@ describe('Extra coverage for 100 %', () => {
       expect.stringMatching(/locked.*\d+.*minute|minute.*\d+.*locked/i),
     );
 
-    // Verify reCAPTCHA is reset to allow retry
-    expect(resetReCAPTCHA).toHaveBeenCalled();
-
     // Verify navigation does NOT occur (early return on error)
     expect(routerMocks.navigate).not.toHaveBeenCalled();
   });
 
-  /* 14. account_locked error without retryAfter timestamp */
   it('shows generic account locked message when retryAfter is missing', async () => {
     const ACCOUNT_LOCKED_NO_TIMER_MOCK = [
-      {
-        request: {
-          query: RECAPTCHA_MUTATION,
-          variables: { recaptchaToken: 'token' },
-        },
-        result: { data: { recaptcha: true } },
-      },
       {
         request: {
           query: SIGNIN_QUERY,
@@ -2004,7 +1904,7 @@ describe('Extra coverage for 100 %', () => {
       screen.getByPlaceholderText(/Enter Password/i),
       'wrongpass',
     );
-    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[0], 'token');
+    // reCAPTCHA is now integrated directly in the mutation
     await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();
 
@@ -2014,23 +1914,12 @@ describe('Extra coverage for 100 %', () => {
       namespace: 'errors',
     });
 
-    // Verify reCAPTCHA is reset to allow retry
-    expect(resetReCAPTCHA).toHaveBeenCalled();
-
     // Verify navigation does NOT occur (early return on error)
     expect(routerMocks.navigate).not.toHaveBeenCalled();
   });
 
-  /* 15. Other GraphQL errors should use errorHandler */
   it('handles non-account_locked GraphQL errors via errorHandler', async () => {
     const OTHER_GRAPHQL_ERROR_MOCK = [
-      {
-        request: {
-          query: RECAPTCHA_MUTATION,
-          variables: { recaptchaToken: 'token' },
-        },
-        result: { data: { recaptcha: true } },
-      },
       {
         request: {
           query: SIGNIN_QUERY,
@@ -2065,16 +1954,13 @@ describe('Extra coverage for 100 %', () => {
       screen.getByPlaceholderText(/Enter Password/i),
       'wrongpass',
     );
-    await userEvent.type(screen.getAllByTestId('mock-recaptcha')[0], 'token');
+    // reCAPTCHA is now integrated directly in the mutation
     await userEvent.click(screen.getByTestId('loginBtn'));
     await wait();
 
     // Should call errorHandler which shows the error message
     // Note: errorHandler passes raw backend error messages directly without i18n wrapping
     expect(toastMocks.error).toHaveBeenCalledWith('Invalid credentials');
-
-    // Verify reCAPTCHA is reset to allow retry
-    expect(resetReCAPTCHA).toHaveBeenCalled();
 
     // Verify navigation does NOT occur (early return on error)
     expect(routerMocks.navigate).not.toHaveBeenCalled();
@@ -2084,13 +1970,6 @@ describe('Extra coverage for 100 %', () => {
 describe('Cookie-based authentication verification', () => {
   it('should NOT store tokens in localStorage (tokens handled by HTTP-Only cookies)', async () => {
     const SIGNIN_WITH_REFRESH_TOKEN_MOCK = [
-      {
-        request: {
-          query: RECAPTCHA_MUTATION,
-          variables: { recaptchaToken: 'validToken' },
-        },
-        result: { data: { recaptcha: true } },
-      },
       {
         request: {
           query: SIGNIN_QUERY,
@@ -2150,10 +2029,7 @@ describe('Cookie-based authentication verification', () => {
       screen.getByPlaceholderText(/Enter Password/i),
       'testPassword',
     );
-    await userEvent.type(
-      screen.getAllByTestId('mock-recaptcha')[0],
-      'validToken',
-    );
+    // reCAPTCHA is now integrated directly in the mutation
     await userEvent.click(screen.getByTestId('loginBtn'));
 
     await wait();
@@ -2191,13 +2067,6 @@ describe('Cookie-based authentication verification', () => {
   // Test case for registration/signup flow
   it('registers user without storing tokens in localStorage (cookie-based auth)', async () => {
     const SIGNUP_SUCCESS_MOCK = [
-      {
-        request: {
-          query: RECAPTCHA_MUTATION,
-          variables: { recaptchaToken: 'validToken' },
-        },
-        result: { data: { recaptcha: true } },
-      },
       {
         request: {
           query: SIGNUP_MUTATION,
@@ -2271,10 +2140,7 @@ describe('Cookie-based authentication verification', () => {
       screen.getByPlaceholderText('Confirm Password'),
       'Password@123',
     );
-    await userEvent.type(
-      screen.getAllByTestId('mock-recaptcha')[1],
-      'validToken',
-    );
+    // reCAPTCHA is now integrated directly in the mutation
 
     // Submit registration
     await userEvent.click(screen.getByTestId('registrationBtn'));
@@ -2324,14 +2190,7 @@ describe('Cookie-based authentication verification', () => {
         error: new Error('Network Error'),
       },
       {
-        request: {
-          query: RECAPTCHA_MUTATION,
-          variables: { recaptchaToken: 'test-token' },
-        },
-        result: { data: { recaptcha: true } },
-      },
-      {
-        request: { query: GET_COMMUNITY_DATA_PG },
+        request: { query: GET_COMMUNITY_DATA_PG, variables: {} },
         result: {
           data: {
             community: {
@@ -2348,8 +2207,14 @@ describe('Cookie-based authentication verification', () => {
               slackURL: 'http://slack.com/test',
               redditURL: 'http://reddit.com/test',
               inactivityTimeoutDuration: 3600,
-              createdAt: '2023-01-01',
-              updatedAt: '2023-01-01',
+              createdAt: dayjs()
+                .subtract(1, 'year')
+                .startOf('year')
+                .format('YYYY-MM-DD'),
+              updatedAt: dayjs()
+                .subtract(1, 'year')
+                .startOf('year')
+                .format('YYYY-MM-DD'),
               logoMimeType: 'image/png',
               __typename: 'Community',
             },
@@ -2358,7 +2223,7 @@ describe('Cookie-based authentication verification', () => {
       },
       // LoginPage refetches community data when `data` changes, so provide a second identical response
       {
-        request: { query: GET_COMMUNITY_DATA_PG },
+        request: { query: GET_COMMUNITY_DATA_PG, variables: {} },
         result: {
           data: {
             community: {
@@ -2375,8 +2240,14 @@ describe('Cookie-based authentication verification', () => {
               slackURL: 'http://slack.com/test',
               redditURL: 'http://reddit.com/test',
               inactivityTimeoutDuration: 3600,
-              createdAt: '2023-01-01',
-              updatedAt: '2023-01-01',
+              createdAt: dayjs()
+                .subtract(1, 'year')
+                .startOf('year')
+                .format('YYYY-MM-DD'),
+              updatedAt: dayjs()
+                .subtract(1, 'year')
+                .startOf('year')
+                .format('YYYY-MM-DD'),
               logoMimeType: 'image/png',
               __typename: 'Community',
             },
@@ -2413,11 +2284,7 @@ describe('Cookie-based authentication verification', () => {
       'password',
     );
 
-    // Simulate reCAPTCHA completion
-    const recaptcha = screen.getAllByTestId('mock-recaptcha')[0];
-    fireEvent.change(recaptcha, {
-      target: { value: 'test-token' },
-    });
+    // reCAPTCHA is now integrated directly in the mutation
 
     await wait();
 
@@ -2442,9 +2309,6 @@ describe('Cookie-based authentication verification', () => {
         expect(networkErrorCall[1]).toEqual(expect.any(Object));
       }
     }
-
-    // Verify ReCAPTCHA is reset on error
-    expect(resetReCAPTCHA).toHaveBeenCalled();
   });
 
   describe('Checks presence of back to login button', () => {
@@ -2521,5 +2385,42 @@ describe('Cookie-based authentication verification', () => {
     const socialLinks = screen.getAllByTestId('preLoginSocialMedia');
     expect(socialLinks.length).toBeGreaterThan(0);
     expect(socialLinks[0]).toHaveAttribute('href');
+  });
+
+  it('sets recaptcha token when recaptcha is completed', async () => {
+    render(
+      <MockedProvider link={link}>
+        <BrowserRouter>
+          <Provider store={store}>
+            <I18nextProvider i18n={i18nForTest}>
+              <LoginPage />
+            </I18nextProvider>
+          </Provider>
+        </BrowserRouter>
+      </MockedProvider>,
+    );
+
+    await wait();
+
+    const [loginRecaptcha] = screen.getAllByTestId('mock-recaptcha');
+
+    await userEvent.type(loginRecaptcha, 'fake-recaptcha-token');
+
+    await userEvent.type(
+      screen.getByTestId('loginEmail'),
+      'testadmin2@example.com',
+    );
+    await userEvent.type(
+      screen.getByPlaceholderText(/Enter Password/i),
+      'Pass@123',
+    );
+
+    await userEvent.click(screen.getByTestId('loginBtn'));
+
+    await wait();
+
+    expect(link.operation?.variables?.recaptchaToken).toBe(
+      'fake-recaptcha-token',
+    );
   });
 });

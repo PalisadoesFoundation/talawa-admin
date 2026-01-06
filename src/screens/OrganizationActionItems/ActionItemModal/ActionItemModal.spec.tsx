@@ -7,7 +7,6 @@ import {
   within,
 } from '@testing-library/react';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { toast } from 'react-toastify';
 import type {
   IItemModalProps,
   IUpdateActionItemForInstanceVariables,
@@ -16,6 +15,9 @@ import type {
 import ItemModal from './ActionItemModal';
 import { vi, it, describe, expect, beforeEach, afterEach } from 'vitest';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
@@ -35,16 +37,15 @@ import {
 } from 'GraphQl/Mutations/ActionItemMutations';
 import userEvent from '@testing-library/user-event';
 import type { IActionItemInfo } from 'types/ActionItems/interface';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
-const toastMocks = vi.hoisted(() => ({
-  success: vi.fn(),
-  error: vi.fn(),
-  info: vi.fn(),
-  warning: vi.fn(),
-}));
-
-vi.mock('react-toastify', () => ({
-  toast: toastMocks,
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    success: vi.fn(),
+    error: vi.fn(),
+    info: vi.fn(),
+    warning: vi.fn(),
+  },
 }));
 
 vi.mock('react-i18next', () => ({
@@ -82,8 +83,8 @@ const createVolunteer = (
   isPublic: true,
   isTemplate,
   isInstanceException: false,
-  createdAt: '2023-01-01T00:00:00Z',
-  updatedAt: '2023-01-01T00:00:00Z',
+  createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+  updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
   user: {
     id: `user-${id}`,
     name,
@@ -126,7 +127,7 @@ const createVolunteerGroup = (
   volunteersRequired: 5,
   isTemplate,
   isInstanceException: false,
-  createdAt: '2023-01-01T00:00:00Z',
+  createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
   creator: {
     id: 'user1',
     name: 'John Doe',
@@ -156,10 +157,10 @@ const createVolunteerGroup = (
 const createActionItemNode = (eventId: string) => ({
   id: '1',
   isCompleted: false,
-  assignedAt: '2024-01-01T00:00:00Z',
+  assignedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
   completionAt: null,
-  createdAt: '2024-01-01T00:00:00Z',
-  updatedAt: '2024-01-02T00:00:00Z',
+  createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+  updatedAt: dayjs().utc().add(1, 'day').format('YYYY-MM-DDTHH:mm:ss[Z]'),
   preCompletionNotes: 'Test notes',
   postCompletionNotes: null,
   isInstanceException: false,
@@ -245,8 +246,8 @@ const mockQueries = [
             isDisabled: false,
             description: 'Test category 1',
             creator: { id: 'creator1', name: 'Creator 1' },
-            createdAt: '2024-01-01',
-            updatedAt: '2024-01-01',
+            createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+            updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
           },
           {
             id: 'cat2',
@@ -254,8 +255,8 @@ const mockQueries = [
             isDisabled: false,
             description: 'Test category 2',
             creator: { id: 'creator2', name: 'Creator 2' },
-            createdAt: '2024-01-01',
-            updatedAt: '2024-01-01',
+            createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+            updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
           },
         ],
       },
@@ -278,8 +279,8 @@ const mockQueries = [
             emailAddress: 'john@example.com',
             role: 'USER',
             avatarURL: '',
-            createdAt: '2024-01-01',
-            updatedAt: '2024-01-01',
+            createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+            updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
           },
           {
             id: 'user2',
@@ -290,8 +291,8 @@ const mockQueries = [
             emailAddress: 'jane@example.com',
             role: 'USER',
             avatarURL: '',
-            createdAt: '2024-01-01',
-            updatedAt: '2024-01-01',
+            createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+            updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
           },
         ],
       },
@@ -459,7 +460,7 @@ const mockQueries = [
         createActionItem: {
           id: 'created-action-item',
           isCompleted: false,
-          assignedAt: '2024-01-01T00:00:00Z',
+          assignedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
           preCompletionNotes: 'Test notes',
           postCompletionNotes: null,
           isInstanceException: false,
@@ -479,9 +480,12 @@ const mockQueries = [
         updateActionItem: {
           id: '1',
           isCompleted: false,
-          assignedAt: '2024-01-02T00:00:00Z',
+          assignedAt: dayjs()
+            .utc()
+            .add(1, 'day')
+            .format('YYYY-MM-DDTHH:mm:ss[Z]'),
           completionAt: null,
-          createdAt: '2024-01-01T00:00:00Z',
+          createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
           preCompletionNotes: 'Test notes',
           postCompletionNotes: null,
           isInstanceException: false,
@@ -528,9 +532,9 @@ const mockActionItem = {
   organizationId: 'org1',
   creatorId: 'creator1',
   updaterId: null,
-  assignedAt: new Date('2024-01-01'),
+  assignedAt: dayjs().utc().toDate(),
   completionAt: null,
-  createdAt: new Date('2024-01-01'),
+  createdAt: dayjs().utc().toDate(),
   updatedAt: null,
   isCompleted: false,
   preCompletionNotes: 'Test notes',
@@ -563,7 +567,7 @@ const mockActionItem = {
     name: 'Category 1',
     description: '',
     isDisabled: false,
-    createdAt: '2024-01-01',
+    createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
     organizationId: 'org1',
   },
   organization: {
@@ -584,7 +588,7 @@ const mockActionItemWithGroup = {
     volunteersRequired: 5,
     isTemplate: true,
     isInstanceException: false,
-    createdAt: '2023-01-01T00:00:00Z',
+    createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
     creator: {
       id: 'user1',
       name: 'John Doe',
@@ -795,7 +799,10 @@ describe('ItemModal - Additional Test Cases', () => {
       }
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('selectCategoryAndAssignment');
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'selectCategoryAndAssignment',
+          namespace: 'translation',
+        });
       });
     });
   });
@@ -883,13 +890,27 @@ describe('ItemModal - Additional Test Cases', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
+      // Select a category first (required for volunteer group functionality)
+      const categorySelect = screen.getByTestId('categorySelect');
+      const categoryInput = within(categorySelect).getByRole('combobox');
+      await userEvent.click(categoryInput);
+      await userEvent.type(categoryInput, 'Category 1');
+      await waitFor(async () => {
+        const option = await screen.findByText('Category 1');
+        await userEvent.click(option);
+      });
+
+      // Now click volunteer group chip to switch mode
       const volunteerGroupChip = screen.getByRole('button', {
         name: 'volunteerGroup',
       });
       await userEvent.click(volunteerGroupChip);
 
+      // Wait for volunteer group select to appear
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
+        {},
+        { timeout: 3000 },
       );
       const volunteerGroupInput =
         within(volunteerGroupSelect).getByRole('combobox');
@@ -984,11 +1005,22 @@ describe('ItemModal - Additional Test Cases', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
+      // Wait for volunteer select and its data to be fully loaded
+      const volunteerSelect = await screen.findByTestId('volunteerSelect');
+      const volunteerInput = within(volunteerSelect).getByRole('combobox');
+
+      // Ensure volunteer data has loaded by waiting for the input to be enabled/ready
+      await waitFor(() => {
+        expect(volunteerInput).not.toBeDisabled();
+      });
+
+      // Now click the volunteerGroup chip to switch assignment type
       const volunteerGroupChip = screen.getByRole('button', {
         name: 'volunteerGroup',
       });
       await userEvent.click(volunteerGroupChip);
 
+      // Wait for volunteerGroupSelect to appear (this confirms the switch happened)
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
       );
@@ -996,6 +1028,11 @@ describe('ItemModal - Additional Test Cases', () => {
         within(volunteerGroupSelect).getByRole('combobox');
       await userEvent.click(volunteerGroupInput);
       await userEvent.type(volunteerGroupInput, 'Test Group 2');
+
+      // Wait for the autocomplete dropdown to appear
+      await waitFor(() => {
+        expect(screen.getByRole('listbox')).toBeInTheDocument();
+      });
 
       const groupOption = await screen.findByText('Test Group 2');
       await userEvent.click(groupOption);
@@ -1067,7 +1104,10 @@ describe('ItemModal - Additional Test Cases', () => {
 
       // Should not throw an unhandled exception
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalled();
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'selectCategoryAndAssignment',
+          namespace: 'translation',
+        });
       });
     });
   });
@@ -1110,7 +1150,10 @@ describe('ItemModal - Additional Test Cases', () => {
 
       // Add await here to properly wait for the toast error
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalled();
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
       });
     });
   });
@@ -1265,7 +1308,10 @@ describe('ItemModal - Specific Test Coverage', () => {
       }
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('selectCategoryAndAssignment');
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'selectCategoryAndAssignment',
+          namespace: 'translation',
+        });
       });
     });
 
@@ -1296,7 +1342,10 @@ describe('ItemModal - Specific Test Coverage', () => {
       await userEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Action item ID is missing');
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
       });
     });
   });
@@ -1567,8 +1616,8 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
                 isDisabled: false,
                 description: 'Updated test category 1',
                 creator: { id: 'creator1', name: 'Creator 1' },
-                createdAt: '2024-01-01',
-                updatedAt: '2024-01-01',
+                createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+                updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
               },
               {
                 id: 'cat3',
@@ -1576,8 +1625,8 @@ describe('actionItemCategories Memoization with [actionItemCategoriesData] depen
                 isDisabled: false,
                 description: 'New test category 3',
                 creator: { id: 'creator3', name: 'Creator 3' },
-                createdAt: '2024-01-01',
-                updatedAt: '2024-01-01',
+                createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
+                updatedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
               },
             ],
           },
@@ -1789,7 +1838,10 @@ describe('updateActionForInstanceHandler', () => {
     fireEvent.submit(submitButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
       expect(mockRefetch).toHaveBeenCalled();
       expect(mockOrgRefetch).toHaveBeenCalled();
       expect(mockHide).toHaveBeenCalled();
@@ -1824,7 +1876,10 @@ describe('updateActionForInstanceHandler', () => {
     await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Action item ID is missing');
+      expect(NotificationToast.error).toHaveBeenCalledWith({
+        key: 'unknownError',
+        namespace: 'errors',
+      });
     });
   });
 
@@ -1860,7 +1915,10 @@ describe('updateActionForInstanceHandler', () => {
     await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Action item ID is missing');
+      expect(NotificationToast.error).toHaveBeenCalledWith({
+        key: 'unknownError',
+        namespace: 'errors',
+      });
     });
   });
 
@@ -1926,7 +1984,10 @@ describe('updateActionForInstanceHandler', () => {
     fireEvent.submit(submitButton);
 
     await waitFor(() => {
-      expect(toast.error).toHaveBeenCalledWith('Network error occurred');
+      expect(NotificationToast.error).toHaveBeenCalledWith({
+        key: 'unknownError',
+        namespace: 'errors',
+      });
     });
   });
 
@@ -1937,9 +1998,9 @@ describe('updateActionForInstanceHandler', () => {
     const mockOrgRefetch = vi.fn();
     const mockHide = vi.fn();
 
-    const expectedAssignedAt = dayjs(
-      mockActionItemWithGroup.assignedAt,
-    ).toISOString();
+    const expectedAssignedAt = dayjs(mockActionItemWithGroup.assignedAt)
+      .utc()
+      .toISOString();
 
     const updateGroupMutationMock = {
       request: {
@@ -2000,7 +2061,10 @@ describe('updateActionForInstanceHandler', () => {
     fireEvent.submit(submitButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
       expect(mockRefetch).toHaveBeenCalledTimes(1);
       expect(mockOrgRefetch).toHaveBeenCalledTimes(1);
       expect(mockHide).toHaveBeenCalledTimes(1);
@@ -2231,7 +2295,10 @@ describe('updateActionForInstanceHandler', () => {
     fireEvent.submit(submitButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
     });
   });
 
@@ -2306,7 +2373,10 @@ describe('updateActionForInstanceHandler', () => {
     fireEvent.submit(submitButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
     });
   });
 });
@@ -2326,7 +2396,7 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
             volunteerId: 'volunteer2',
             categoryId: 'cat2',
             preCompletionNotes: 'Updated notes for instance',
-            assignedAt: new Date('2024-01-01').toISOString(),
+            assignedAt: dayjs().utc().toISOString(),
           },
         },
       },
@@ -2415,7 +2485,10 @@ describe('ItemModal › updateActionForInstanceHandler', () => {
     await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
       expect(mockRefetch).toHaveBeenCalled();
       expect(mockHide).toHaveBeenCalled();
     });
@@ -2771,9 +2844,9 @@ describe('orgActionItemsRefetch functionality', () => {
           createActionItem: {
             id: 'newId',
             isCompleted: false,
-            assignedAt: '2024-01-01',
+            assignedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
             completionAt: null,
-            createdAt: '2024-01-01',
+            createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
             preCompletionNotes: 'Test with org refetch',
             postCompletionNotes: null,
             volunteer: {
@@ -2875,7 +2948,10 @@ describe('orgActionItemsRefetch functionality', () => {
     await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'eventActionItems.successfulCreation',
+        namespace: 'translation',
+      });
       expect(mockRefetch).toHaveBeenCalled();
       expect(mockOrgRefetch).toHaveBeenCalled();
       expect(mockHide).toHaveBeenCalled();
@@ -2960,7 +3036,10 @@ describe('orgActionItemsRefetch functionality', () => {
     await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(toast.success).toHaveBeenCalled();
+      expect(NotificationToast.success).toHaveBeenCalledWith({
+        key: 'eventActionItems.successfulUpdation',
+        namespace: 'translation',
+      });
       expect(mockRefetch).toHaveBeenCalled();
       expect(mockOrgRefetch).toHaveBeenCalled();
       expect(mockHide).toHaveBeenCalled();
@@ -3008,9 +3087,9 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
             createActionItem: {
               id: 'newId',
               isCompleted: false,
-              assignedAt: '2024-01-01',
+              assignedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
               completionAt: null,
-              createdAt: '2024-01-01',
+              createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
               preCompletionNotes: 'Test with event',
               postCompletionNotes: null,
               volunteer: {
@@ -3100,7 +3179,10 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       await userEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalled();
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'eventActionItems.successfulCreation',
+          namespace: 'translation',
+        });
         expect(mockRefetch).toHaveBeenCalled();
         expect(mockHide).toHaveBeenCalled();
       });
@@ -3201,9 +3283,10 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       await userEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith(
-          'Failed to create action item',
-        );
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
       });
     });
   });
@@ -3236,7 +3319,10 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       await userEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('Action item ID is missing');
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'unknownError',
+          namespace: 'errors',
+        });
       });
     });
 
@@ -3264,7 +3350,10 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
             updateActionItem: {
               id: '1',
               isCompleted: false,
-              updatedAt: '2024-01-02T00:00:00Z',
+              updatedAt: dayjs()
+                .utc()
+                .add(1, 'day')
+                .format('YYYY-MM-DDTHH:mm:ss[Z]'),
             },
           },
         },
@@ -3299,7 +3388,10 @@ describe('GraphQL Mutations - CREATE_ACTION_ITEM_MUTATION and UPDATE_ACTION_ITEM
       await userEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalledWith('successfulUpdation');
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'eventActionItems.successfulUpdation',
+          namespace: 'translation',
+        });
         expect(mockRefetch).toHaveBeenCalledTimes(1);
         expect(mockOrgRefetch).toHaveBeenCalledTimes(1);
         expect(mockHide).toHaveBeenCalledTimes(1);
@@ -3471,8 +3563,9 @@ describe('handleFormChange function', () => {
     await userEvent.type(notesInput, 'Updated field 1');
     expect(notesInput).toHaveValue('Updated field 1');
 
-    // Test updating the date field
-    const dateInput = screen.getByDisplayValue('01/01/2024');
+    // Test updating the date field using the deterministic helper
+    const dateInput = getPickerInputByLabel('assignmentDate');
+    expect(dateInput).toBeInTheDocument();
     await userEvent.click(dateInput);
     // Date field should be interactable
     expect(dateInput).toBeInTheDocument();
@@ -3796,7 +3889,10 @@ describe('Partially Covered Lines Test Coverage', () => {
       }
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('selectCategoryAndAssignment');
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'selectCategoryAndAssignment',
+          namespace: 'translation',
+        });
       });
     });
 
@@ -3839,7 +3935,10 @@ describe('Partially Covered Lines Test Coverage', () => {
       }
 
       await waitFor(() => {
-        expect(toast.error).toHaveBeenCalledWith('selectCategoryAndAssignment');
+        expect(NotificationToast.error).toHaveBeenCalledWith({
+          key: 'selectCategoryAndAssignment',
+          namespace: 'translation',
+        });
       });
     });
   });
@@ -3880,9 +3979,9 @@ describe('Partially Covered Lines Test Coverage', () => {
             createActionItem: {
               id: 'newId',
               isCompleted: false,
-              assignedAt: '2024-01-01',
+              assignedAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
               completionAt: null,
-              createdAt: '2024-01-01',
+              createdAt: dayjs().utc().format('YYYY-MM-DDTHH:mm:ss[Z]'),
               preCompletionNotes: '',
               postCompletionNotes: null,
               volunteer: null,
@@ -3967,7 +4066,11 @@ describe('Partially Covered Lines Test Coverage', () => {
       await userEvent.click(submitButton);
 
       await waitFor(() => {
-        expect(toast.success).toHaveBeenCalled();
+        expect(NotificationToast.success).toHaveBeenCalledWith({
+          key: 'eventActionItems.successfulCreation',
+          namespace: 'translation',
+        });
+
         expect(mockRefetch).toHaveBeenCalled();
         expect(mockHide).toHaveBeenCalled();
       });
@@ -3992,15 +4095,25 @@ describe('Partially Covered Lines Test Coverage', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
+      // Wait for volunteer select and its data to be fully loaded
+      const volunteerSelect = await screen.findByTestId('volunteerSelect');
+      const volunteerInput = within(volunteerSelect).getByRole('combobox');
+
+      // Ensure volunteer data has loaded by waiting for the input to be enabled/ready
+      await waitFor(() => {
+        expect(volunteerInput).not.toBeDisabled();
+      });
+
       // First switch to volunteer group to set some state
       const volunteerGroupChip = screen.getByRole('button', {
         name: 'volunteerGroup',
       });
       await userEvent.click(volunteerGroupChip);
 
-      await waitFor(() => {
-        expect(screen.getByTestId('volunteerGroupSelect')).toBeInTheDocument();
-      });
+      const volunteerGroupSelect = await screen.findByTestId(
+        'volunteerGroupSelect',
+      );
+      expect(volunteerGroupSelect).toBeInTheDocument();
 
       // Now click volunteer chip - this should execute the !isVolunteerChipDisabled path
       const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
@@ -4062,6 +4175,16 @@ describe('Partially Covered Lines Test Coverage', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
+      // Select a category first (required for volunteer functionality)
+      const categorySelect = screen.getByTestId('categorySelect');
+      const categoryInput = within(categorySelect).getByRole('combobox');
+      await userEvent.click(categoryInput);
+      await userEvent.type(categoryInput, 'Category 1');
+      await waitFor(async () => {
+        const option = await screen.findByText('Category 1');
+        await userEvent.click(option);
+      });
+
       // Initially should show volunteer select (default)
       await waitFor(() => {
         expect(screen.getByTestId('volunteerSelect')).toBeInTheDocument();
@@ -4074,10 +4197,17 @@ describe('Partially Covered Lines Test Coverage', () => {
       await userEvent.click(volunteerGroupChip);
 
       // Should switch to volunteer group select and clear volunteer
-      await waitFor(() => {
-        expect(screen.getByTestId('volunteerGroupSelect')).toBeInTheDocument();
-        expect(screen.queryByTestId('volunteerSelect')).not.toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(
+            screen.getByTestId('volunteerGroupSelect'),
+          ).toBeInTheDocument();
+          expect(
+            screen.queryByTestId('volunteerSelect'),
+          ).not.toBeInTheDocument();
+        },
+        { timeout: 3000 },
+      );
     });
 
     it('should have isVolunteerGroupChipDisabled true when editing item with volunteer', () => {

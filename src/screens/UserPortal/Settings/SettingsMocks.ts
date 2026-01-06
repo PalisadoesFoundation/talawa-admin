@@ -1,5 +1,6 @@
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
+import dayjs from 'dayjs';
 
 export const MOCKS = [
   {
@@ -57,7 +58,7 @@ export const MOCKS1 = [
           birthDate: '2000-01-01',
           city: 'nyc',
           countryCode: 'in',
-          createdAt: '2025-02-06T03:10:50.254Z',
+          createdAt: dayjs().add(1, 'year').month(1).toISOString(),
           description: 'This is a description',
           educationGrade: 'grade_8',
           emailAddress: 'test221@gmail.com',
@@ -73,7 +74,7 @@ export const MOCKS1 = [
           postalCode: '11111111f',
           role: 'regular',
           state: 'State1',
-          updatedAt: '2025-02-06T03:22:17.808Z',
+          updatedAt: dayjs().add(1, 'year').month(1).toISOString(),
           workPhoneNumber: '+9999999998',
           __typename: 'User',
           eventsAttended: [],
@@ -145,7 +146,7 @@ export const UPDATE_MOCK = [
           birthDate: null,
           city: '',
           countryCode: null,
-          createdAt: '2023-04-13T04:53:17.742Z',
+          createdAt: dayjs().subtract(1, 'year').toISOString(),
           description: '',
           educationGrade: null,
           emailAddress: 'testadmin1@example.com',
@@ -161,7 +162,7 @@ export const UPDATE_MOCK = [
           postalCode: '',
           role: 'regular',
           state: '',
-          updatedAt: '2025-02-09T06:26:51.209Z',
+          updatedAt: dayjs().add(1, 'year').month(1).toISOString(),
           workPhoneNumber: '',
         },
       },

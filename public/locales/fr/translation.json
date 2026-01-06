@@ -18,7 +18,8 @@
     "rank": "Rang",
     "volunteer": "Bénévole",
     "email": "E-mail",
-    "hoursVolunteered": "Heures Bénévoles"
+    "hoursVolunteered": "Heures Bénévoles",
+    "volunteerRankings": "Classement des Bénévoles"
   },
   "loginPage": {
     "title": "Administrateur Talawa",
@@ -278,6 +279,7 @@
     "noUserFound": "Aucun utilisateur trouvé",
     "filterByRole": "Filter par rôle",
     "errorLoadingUsers": "Erreur lors du chargement des utilisateurs",
+    "profilePageComingSoon": "Page de profil à venir !",
     "sort": "Trier",
     "sortBy": "Trier par",
     "Newest": "Le plus récent d'abord",
@@ -410,7 +412,6 @@
     "manageTag": "Gérer",
     "editTag": "Modifier",
     "removeTag": "Supprimer",
-    "tags": "Étiquettes",
     "tagDetails": "Détails de l'Étiquette",
     "tagName": "Nom",
     "tagType": "Type",
@@ -421,8 +422,6 @@
     "noTagsFound": "Aucune étiquette trouvée",
     "removeUserTag": "Supprimer l'Étiquette",
     "removeUserTagMessage": "Voulez-vous supprimer cette étiquette ?",
-    "Latest": "Le Plus Récent",
-    "Oldest": "Le Plus Ancien",
     "addChildTag": "Ajouter une Sous-Étiquette",
     "enterTagName": "Entrez le nom de l'étiquette",
     "totalSubTags": "Total des sous-étiquettes",
@@ -430,10 +429,10 @@
     "tagCreationFailed": "Échec de la création de l'étiquette",
     "errorLoadingTagsData": "Une erreur s'est produite lors du chargement des données des étiquettes de l'organisation",
     "sortTags": "Trier les étiquettes",
-    "tags": "Étiquettes",
     "Latest": "Le Plus Récent",
     "Oldest": "Le Plus Ancien",
-    "viewSubTags": "Voir {{count}} sous-étiquettes"
+    "viewSubTags": "Voir {{count}} sous-étiquettes",
+    "tags": "Étiquettes"
   },
   "manageTag": {
     "title": "Détails de l'étiquette",
@@ -475,13 +474,15 @@
     "tagNamePlaceholder": "Écrire le nom de l'étiquette",
     "allTags": "Toutes les étiquettes",
     "noMoreMembersFound": "Aucun autre membre trouvé",
+    "errorLoadingAssignedMembers": "Une erreur s'est produite lors du chargement des utilisateurs affectés",
+    "tags": "Étiquettes",
     "errorOccurredWhileLoadingAssignedUser": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
-    "sortPeople": "Trier les personnes",
-    "tagActions": "Actions d'étiquette"
+    "tagActions": "Actions d'étiquette",
+    "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
+    "sortPeople": "Trier les personnes"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
-    "addedAsAdmin": "L'utilisateur est ajouté en tant qu'administrateur.",
     "joined": "Rejoint",
     "talawaApiUnavailable": "API Talawa indisponible"
   },
@@ -523,7 +524,6 @@
     "publicEvent": "est public",
     "isRegistrable": "Est enregistrable",
     "registerable": "Est enregistrable",
-
     "createEvent": "Créer un évènement",
     "enterFilter": "Entrer le filtre",
     "enterName": "Entrez le nom",
@@ -963,6 +963,7 @@
     "noUsersFound": "Aucun utilisateur trouvé",
     "joined": "Rejoint",
     "searchByName": "Rechercher par nom",
+    "view": "Voir",
     "name": "Nom",
     "email": "Email",
     "talawaApiUnavailable": "API Talawa non disponible",
@@ -1282,6 +1283,8 @@
     "members": "Membres"
   },
   "postCard": {
+    "pinnedPost": "Message épinglé",
+    "postImage": "Image du message",
     "likes": "J'aime",
     "comments": "Commentaires",
     "addComment": "Ajouter un commentaire",
@@ -1629,6 +1632,14 @@
     "create": "créer",
     "newChat": "nouvelle discussion",
     "newGroupChat": "Nouvelle discussion de groupe",
+    "Error": "Erreur",
+    "organizationMembersTable": "Table des membres de l'organisation",
+    "next": "Suivant",
+    "hash": "#",
+    "description": "Description",
+    "groupDescription": "Description du groupe",
+    "groupName": "Nom du groupe",
+    "newGroup": "Nouveau groupe",
     "groupInfo": "Informations sur le groupe",
     "members": "Membres",
     "addMembers": "Ajouter des membres",
@@ -1649,23 +1660,26 @@
     "demoteToRegular": "Rétrograder au rang régulier",
     "promoteToAdmin": "Promouvoir administrateur",
     "user": "Utilisateur",
-    "chatAction": "Action de chat",
-    "organizationMembersTable": "Tableau des Membres de l'Organisation",
-    "newGroup": "Nouveau Groupe",
-    "groupName": "Nom du groupe",
-    "groupDescription": "Description du Groupe",
-    "next": "Suivant"
+    "chatAction": "Action de chat"
   },
   "userChatRoom": {
     "selectContact": "Sélectionnez un contact pour démarrer la conversation",
     "sendMessage": "Envoyer le message",
-    "reply": "répondre",
+    "loading": "Chargement...",
+    "loadOlderMessages": "Charger les messages plus anciens",
+    "loadingMoreMessages": "Chargement d'autres messages...",
     "loadingImage": "Chargement de l'image...",
     "imageNotAvailable": "Image non disponible",
-    "attachment": "Pièce jointe",
-    "loadingMoreMessages": "Chargement de plus de messages...",
-    "loading": "Chargement...",
-    "loadOlderMessages": "Charger les messages plus anciens"
+    "attachment": "pièce jointe",
+    "reply": "Répondre",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "errorBoundary": {
+      "title": "Quelque chose s'est mal passé",
+      "message": "Une erreur inattendue s'est produite dans la salle de discussion",
+      "resetButton": "Réessayer",
+      "resetButtonAriaLabel": "Réessayer"
+    }
   },
   "orgActionItemCategories": {
     "enableButton": "Activer",
@@ -1685,6 +1699,7 @@
     "categoryDeleted": "Catégorie d'élément d'action supprimée avec succès",
     "deleteCategory": "Supprimer la catégorie",
     "deleteCategoryMsg": "Êtes-vous sûr de vouloir supprimer cette catégorie d'élément d'action ?",
+    "noDescriptionProvided": "Aucune description fournie",
     "createButton": "Créer",
     "editButton": "Modifier"
   },
@@ -1715,7 +1730,9 @@
     "edit": "Modifier",
     "delete": "Supprimer",
     "name": "Nom",
-    "desc": "Description"
+    "desc": "Description",
+    "venueImagePreview": "Aperçu de l’image du lieu",
+    "sortVenues": "Trier les lieux"
   },
   "addMember": {
     "title": "Ajouter un membre",
@@ -1779,7 +1796,22 @@
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Erreur lors de l'ajout du participant",
-    "errorRemovingAttendee": "Erreur lors de la suppression du participant"
+    "errorRemovingAttendee": "Erreur lors de la suppression du participant",
+    "inviteByEmail": {
+      "addRecipient": "Ajouter un destinataire",
+      "email": "Email",
+      "title": "Inviter par email",
+      "sending": "Envoi en cours...",
+      "sendInvites": "Envoyer les invitations",
+      "remove": "Supprimer",
+      "name": "Nom",
+      "messagePlaceholder": "Vous êtes invité à assister à cet événement.",
+      "messageLabel": "Message (optionnel)",
+      "expiresInDaysLabel": "Expire dans (jours)",
+      "errorSendingInvites": "Erreur lors de l'envoi des invitations",
+      "emailsLabel": "Emails et noms des destinataires",
+      "emailsHelp": "Fournissez l'email et le nom facultatif pour chaque destinataire. Ajoutez plusieurs destinataires si nécessaire."
+    }
   },
   "userCampaigns": {
     "title": "Campagnes de financement",
@@ -1806,7 +1838,17 @@
     "noPledges": "Aucune promesse trouvée",
     "noCampaigns": "Aucune campagne trouvée",
     "raised": "Collecté",
-    "amountRaised": "Montant Collecté"
+    "amountRaised": "Montant Collecté",
+    "campaignName": "Nom de la campagne",
+    "startDate": "Date de début",
+    "endDate": "Date de fin",
+    "fundingGoal": "Objectif de financement",
+    "viewPledge": "Voir la promesse de don",
+    "campaignIndex": "#",
+    "fundGoal": "Objectif de Financement",
+    "percentRaised": "% Collecté",
+    "createFirstCampaign": "Créez votre première campagne de financement pour la voir ici.",
+    "campaignEnded": "Campagne terminée"
   },
   "userPledges": {
     "title": "Mes Promesses",
@@ -1869,7 +1911,19 @@
     "thisEventOnly": "Cet événement uniquement",
     "volunteerAlt": "Photo de profil du bénévole",
     "groupTable": "Tableau des Groupes",
-    "volunteerActions": "Actions des Bénévoles"
+    "volunteerActions": "Actions des Bénévoles",
+    "volunteerHeader": "Bénévole",
+    "statusHeader": "Statut",
+    "hoursVolunteeredHeader": "Heures de Bénévolat",
+    "optionsHeader": "Options",
+    "groupHeader": "Groupe",
+    "leaderHeader": "Chef",
+    "numVolunteersHeader": "Nombre de Bénévoles",
+    "pending": "En attente",
+    "viewDetails": "Voir les détails de {{name}}",
+    "editVolunteerGroup": "Modifier le groupe de bénévoles {{name}}",
+    "deleteVolunteerGroup": "Supprimer le groupe de bénévoles {{name}}",
+    "deleteVolunteerEntry": "Supprimer l'entrée bénévole {{name}}"
   },
   "userVolunteer": {
     "title": "Volontariat",
@@ -2015,6 +2069,12 @@
     "eventsCreatedByOrganization": "Événements créés par l'organisation",
     "today": "Aujourd'hui"
   },
+  "contact": {
+    "card_aria": "Carte de contact"
+  },
+  "securedRoute": {
+    "sessionExpired": "Veuillez vous reconnecter car la session a expiré"
+  },
   "common": {
     "signOut": "Se déconnecter",
     "signingOut": "Déconnexion en cours...",
@@ -2028,6 +2088,28 @@
     "logoutFailed": "Échec de la déconnexion",
     "title": "Portail Utilisateur",
     "talawa": "Talawa",
-    "talawaBranding": "Image de marque Talawa"
+    "talawaBranding": "Image de marque Talawa",
+    "view": "Voir"
+  },
+  "donation": {
+    "amount_label": "Montant",
+    "card_aria": "Carte de don",
+    "card_test_id": "donation-card-{{id}}",
+    "date_label": "Date"
+  },
+  "organizationVenuesNotification": {
+    "venueCreated": "Lieu créé avec succès",
+    "venueUpdated": "Les détails du lieu ont été mis à jour avec succès",
+    "venueNameExists": "Le nom du lieu existe déjà",
+    "venueTitleError": "Le nom du lieu ne peut pas être vide !",
+    "venueCapacityError": "La capacité doit être un nombre positif !",
+    "previewUrlError": "Erreur lors de la création de l’aperçu",
+    "invalidCapacity": "La capacité doit être un nombre positif"
+  },
+  "manageTags": {
+    "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
+    "sortPeople": "Trier les personnes",
+    "unassign": "Désassigner",
+    "tags": "Tags"
   }
 }

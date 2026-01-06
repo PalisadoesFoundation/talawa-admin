@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import {
   UPDATE_VOLUNTEER_GROUP,
   UPDATE_VOLUNTEER_MEMBERSHIP,
@@ -13,7 +14,7 @@ const group1 = {
   name: 'Group 1',
   description: 'Volunteer Group Description',
   volunteersRequired: null,
-  createdAt: '2024-10-25T16:16:32.978Z',
+  createdAt: dayjs().toISOString(),
   leader: {
     __typename: 'User',
     id: 'userId',
@@ -30,7 +31,7 @@ const group2 = {
   name: 'Group 2',
   description: 'Volunteer Group Description',
   volunteersRequired: null,
-  createdAt: '2024-10-27T15:25:13.044Z',
+  createdAt: dayjs().toISOString(),
   leader: {
     __typename: 'User',
     id: 'userId',

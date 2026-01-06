@@ -1,15 +1,15 @@
 /* PluginStore component styles */
 
 .pageContent {
-  padding-right: 1.5rem;
+  padding-right: var(--space-7);
 }
 
 .pluginListContainer {
-  margin-top: 1.5rem;
+  margin-top: var(--space-7);
 }
 
 .paginationContainer {
-  margin-top: 2rem;
+  margin-top: var(--space-8);
   display: flex;
   justify-content: end;
 }

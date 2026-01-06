@@ -77,8 +77,11 @@ import type { InterfaceQueryUserListItem } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import type { ApolloError } from '@apollo/client';
 import { PersonOff, WarningAmberRounded } from '@mui/icons-material';
-import PageHeader from 'shared-components/Navbar/Navbar';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+
+type SortingOption = 'newest' | 'oldest';
+type FilteringOption = 'admin' | 'user' | 'cancel';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 
 const Users = (): JSX.Element => {
@@ -95,9 +98,9 @@ const Users = (): JSX.Element => {
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [searchByName, setSearchByName] = useState('');
-  const [sortingOption, setSortingOption] = useState('newest');
-  const [filteringOption, setFilteringOption] = useState('cancel');
-
+  const [sortingOption, setSortingOption] = useState<SortingOption>('newest');
+  const [filteringOption, setFilteringOption] =
+    useState<FilteringOption>('cancel');
   const [usersData, setUsersData] = useState<InterfaceQueryUserListItem[]>([]);
 
   const {
@@ -266,15 +269,16 @@ const Users = (): JSX.Element => {
   };
 
   const handleSorting = (option: string): void => {
-    if (option === sortingOption) {
+    const sortOption = option as SortingOption;
+    if (sortOption === sortingOption) {
       return;
     }
-    setSortingOption(option);
+    setSortingOption(sortOption);
   };
 
   const sortUsers = (
     allUsers: InterfaceQueryUserListItem[],
-    sortingOption: string,
+    sortingOption: SortingOption,
   ): InterfaceQueryUserListItem[] => {
     const sortedUsers = [...allUsers];
 
@@ -293,12 +297,13 @@ const Users = (): JSX.Element => {
   };
 
   const handleFiltering = (option: string): void => {
-    if (option !== filteringOption) setFilteringOption(option);
+    const filterOption = option as FilteringOption;
+    if (filterOption !== filteringOption) setFilteringOption(filterOption);
   };
 
   const filterUsers = (
     allUsers: InterfaceQueryUserListItem[],
-    filteringOption: string,
+    filteringOption: FilteringOption,
   ): InterfaceQueryUserListItem[] => {
     if (filteringOption === 'user')
       return allUsers.filter((u) => u.role === 'regular');
@@ -343,34 +348,38 @@ const Users = (): JSX.Element => {
     <>
       {/* Buttons Container */}
       <div className={styles.btnsContainer} data-testid="testcomp">
-        <PageHeader
-          search={{
-            placeholder: t('enterName'),
-            onSearch: handleSearch,
-            inputTestId: 'searchByName',
-            buttonTestId: 'searchButton',
-          }}
-          sorting={[
+        <AdminSearchFilterBar
+          hasDropdowns={true}
+          searchPlaceholder={t('enterName')}
+          searchValue={searchByName}
+          onSearchChange={handleSearch}
+          searchInputTestId="searchByName"
+          searchButtonTestId="searchButton"
+          dropdowns={[
             {
-              title: t('sortBy'),
+              id: 'users-sort',
+              label: t('sortBy'),
+              type: 'sort',
               options: [
                 { label: t('Newest'), value: 'newest' },
                 { label: t('Oldest'), value: 'oldest' },
               ],
-              selected: sortingOption,
-              onChange: (value) => handleSorting(value.toString()),
-              testIdPrefix: 'sortUsers',
+              selectedOption: sortingOption,
+              onOptionChange: (value) => handleSorting(value.toString()),
+              dataTestIdPrefix: 'sortUsers',
             },
             {
-              title: t('filterByRole'),
+              id: 'users-filter',
+              label: t('filterByRole'),
+              type: 'filter',
               options: [
                 { label: tCommon('admin'), value: 'admin' },
                 { label: tCommon('user'), value: 'user' },
                 { label: tCommon('cancel'), value: 'cancel' },
               ],
-              selected: filteringOption,
-              onChange: (value) => handleFiltering(value.toString()),
-              testIdPrefix: 'filterUsers',
+              selectedOption: filteringOption,
+              onOptionChange: (value) => handleFiltering(value.toString()),
+              dataTestIdPrefix: 'filterUsers',
             },
           ]}
         />

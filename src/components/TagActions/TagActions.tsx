@@ -47,7 +47,6 @@ import {
   ASSIGN_TO_TAGS,
   REMOVE_FROM_TAGS,
 } from 'GraphQl/Mutations/TagMutations';
-import { toast } from 'react-toastify';
 import type {
   InterfaceOrganizationTagsQuery,
   TagActionType,
@@ -59,6 +58,7 @@ import TagNode from './Node/TagNode';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import type { TFunction } from 'i18next';
 import componentStyles from './TagAction.module.css';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 interface InterfaceUserTagsAncestorData {
   _id: string;
@@ -245,7 +245,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     e.preventDefault();
 
     if (!selectedTags.length) {
-      toast.error(t('noTagSelected'));
+      NotificationToast.error(t('noTagSelected'));
       return;
     }
 
@@ -264,15 +264,15 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
       if (data) {
         if (tagActionType === 'assignToTags') {
-          toast.success(t('successfullyAssignedToTags'));
+          NotificationToast.success(t('successfullyAssignedToTags'));
         } else {
-          toast.success(t('successfullyRemovedFromTags'));
+          NotificationToast.success(t('successfullyRemovedFromTags'));
         }
         hideTagActionsModal();
       }
     } catch (error: unknown) {
       if (error instanceof Error) {
-        toast.error(error.message);
+        NotificationToast.error(error.message);
       }
     }
   };

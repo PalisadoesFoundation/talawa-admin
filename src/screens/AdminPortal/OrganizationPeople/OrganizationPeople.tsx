@@ -51,7 +51,10 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, useNavigate } from 'react-router';
 import { useLazyQuery } from '@apollo/client';
-import { GridCellParams, GridPaginationModel } from '@mui/x-data-grid';
+import {
+  GridCellParams,
+  GridPaginationModel,
+} from 'shared-components/DataGridWrapper';
 import { Delete } from '@mui/icons-material';
 import type {
   ReportingRow,
@@ -74,11 +77,44 @@ import {
 } from 'GraphQl/Queries/Queries';
 import OrgPeopleListCard from 'components/OrgPeopleListCard/OrgPeopleListCard';
 import AddMember from './addMember/AddMember';
-import { errorHandler } from 'utils/errorHandler';
-// Imports added for manual header construction
-import SearchBar from 'shared-components/SearchBar/SearchBar';
-import SortingButton from 'subComponents/SortingButton';
+import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+
 import EmptyState from 'shared-components/EmptyState/EmptyState';
+import { errorHandler } from 'utils/errorHandler';
+
+/**
+ * Maps numeric filter state to string option identifiers.
+ * @type {Record<number, string>}
+ * @description Converts internal numeric state values to their corresponding string filter options:
+ * - 0 = 'members': Regular organization members
+ * - 1 = 'admin': Organization administrators
+ * - 2 = 'users': All users
+ * @example
+ * const option = STATE_TO_OPTION[0]; // 'members'
+ * @note This mapping must stay in sync with OPTION_TO_STATE. Any changes to one require updating the other.
+ */
+const STATE_TO_OPTION: Record<number, string> = {
+  0: 'members',
+  1: 'admin',
+  2: 'users',
+};
+
+/**
+ * Maps string option identifiers to numeric filter state.
+ * @type {Record<string, number>}
+ * @description Converts string filter options to their corresponding internal numeric state values:
+ * - 'members' = 0: Regular organization members
+ * - 'admin' = 1: Organization administrators
+ * - 'users' = 2: All users
+ * @example
+ * const state = OPTION_TO_STATE['admin']; // 1
+ * @note This mapping must stay in sync with STATE_TO_OPTION. Any changes to one require updating the other.
+ */
+const OPTION_TO_STATE: Record<string, number> = {
+  members: 0,
+  admin: 1,
+  users: 2,
+};
 
 interface IProcessedRow {
   id: string;
@@ -331,7 +367,7 @@ function OrganizationPeople(): JSX.Element {
   };
 
   const handleSortChange = (value: string): void => {
-    setState(value === 'users' ? 2 : value === 'members' ? 0 : 1);
+    setState(OPTION_TO_STATE[value] ?? 0);
   };
 
   // Header titles for the table
@@ -418,41 +454,31 @@ function OrganizationPeople(): JSX.Element {
 
   return (
     <>
-      {/* --- FIX START: Standardized Header using manual structure --- */}
-      {/* This structure uses the global 'calendar__header' and 'btnsBlock' which we fixed in CSS to ensure perfect alignment. */}
-      <div className={styles.calendar__header}>
-        <SearchBar
-          placeholder={t('searchFullName')}
-          value={searchTerm}
-          onChange={(val) => setSearchTerm(val)}
-          onSearch={(term) => setSearchTerm(term)}
-          inputTestId="searchbtn"
-          buttonAriaLabel={tCommon('search')}
-          // Standard Props for consistency
-          showSearchButton={true}
-          showLeadingIcon={true}
-          showClearButton={true}
-        />
-
-        <div className={styles.btnsBlock}>
-          <SortingButton
-            title={tCommon('sort')}
-            sortingOptions={[
+      <AdminSearchFilterBar
+        hasDropdowns={true}
+        searchPlaceholder={t('searchFullName')}
+        searchValue={searchTerm}
+        onSearchChange={(value) => setSearchTerm(value)}
+        searchInputTestId="searchbtn"
+        searchButtonTestId="searchBtn"
+        containerClassName={styles.calendar__header}
+        dropdowns={[
+          {
+            id: 'organization-people-sort',
+            label: tCommon('sort'),
+            type: 'sort',
+            options: [
               { label: tCommon('members'), value: 'members' },
               { label: tCommon('admin'), value: 'admin' },
               { label: tCommon('users'), value: 'users' },
-            ]}
-            selectedOption={
-              state === 2 ? 'users' : state === 1 ? 'admin' : 'members'
-            }
-            onSortChange={(value) => handleSortChange(value.toString())}
-            dataTestIdPrefix="sort"
-          />
-          {/* AddMember placed directly in the flex container for correct alignment */}
-          <AddMember />
-        </div>
-      </div>
-      {/* --- FIX END --- */}
+            ],
+            selectedOption: STATE_TO_OPTION[state] ?? 'members',
+            onOptionChange: (value) => handleSortChange(value.toString()),
+            dataTestIdPrefix: 'sort',
+          },
+        ]}
+        additionalButtons={<AddMember />}
+      />
 
       <ReportingTable
         rows={filteredRows.map((req) => ({ ...req })) as ReportingRow[]}

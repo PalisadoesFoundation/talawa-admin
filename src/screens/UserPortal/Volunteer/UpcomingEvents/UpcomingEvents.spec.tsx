@@ -28,6 +28,7 @@ import {
   expect,
   beforeAll,
 } from 'vitest';
+import dayjs from 'dayjs';
 import {
   MOCKS,
   MEMBERSHIP_LOOKUP_MOCKS,
@@ -53,6 +54,7 @@ vi.mock('@mui/icons-material', () => ({
     React.createElement('div', { 'data-testid': 'warning-icon' }),
   ExpandMore: () =>
     React.createElement('div', { 'data-testid': 'expand-more-icon' }),
+  Event: () => React.createElement('div', { 'data-testid': 'event-icon' }),
 }));
 
 vi.mock('react-icons/io5', () => ({
@@ -177,8 +179,10 @@ describe('UpcomingEvents', () => {
     const link = new StaticMockLink(EMPTY_MOCKS);
     renderUpcomingEvents(link);
     await waitFor(() => {
-      expect(screen.getByTestId('noEventsMsg')).toBeInTheDocument();
-      expect(screen.getByText(/no upcoming events/i)).toBeInTheDocument();
+      expect(screen.getByTestId('events-empty-state')).toBeInTheDocument();
+      expect(
+        screen.getByTestId('events-empty-state-message'),
+      ).toHaveTextContent(/no upcoming events/i);
     });
   });
 
@@ -217,8 +221,8 @@ describe('UpcomingEvents', () => {
                       id: 'event1',
                       name: 'One-time Event',
                       description: 'A single event',
-                      startAt: '2024-12-25T10:00:00Z',
-                      endAt: '2024-12-26T18:00:00Z',
+                      startAt: dayjs().add(30, 'days').toISOString(),
+                      endAt: dayjs().add(31, 'days').toISOString(),
                       location: 'Downtown',
                       isRecurringEventTemplate: false,
                       baseEvent: null,
@@ -278,8 +282,8 @@ describe('UpcomingEvents', () => {
                       id: 'event1',
                       name: 'Weekly Cleanup',
                       description: null,
-                      startAt: '2024-12-25T10:00:00Z',
-                      endAt: '2024-12-26T18:00:00Z',
+                      startAt: dayjs().add(30, 'days').toISOString(),
+                      endAt: dayjs().add(31, 'days').toISOString(),
                       location: 'Downtown',
                       isRecurringEventTemplate: true,
                       baseEvent: null,
@@ -344,8 +348,8 @@ describe('UpcomingEvents', () => {
                       id: 'event1',
                       name: 'No Desc Event',
                       description: null,
-                      startAt: '2024-12-25T10:00:00Z',
-                      endAt: '2024-12-26T18:00:00Z',
+                      startAt: dayjs().add(30, 'days').toISOString(),
+                      endAt: dayjs().add(31, 'days').toISOString(),
                       location: 'Downtown',
                       isRecurringEventTemplate: false,
                       baseEvent: null,
@@ -414,8 +418,8 @@ describe('UpcomingEvents', () => {
                       node: {
                         id: 'eventId1',
                         name: 'Requested Event',
-                        startAt: '2024-12-25T10:00:00Z',
-                        endAt: '2024-12-26T18:00:00Z',
+                        startAt: dayjs().add(30, 'days').toISOString(),
+                        endAt: dayjs().add(31, 'days').toISOString(),
                         location: 'Location',
                         isRecurringEventTemplate: false,
                         baseEvent: null,
@@ -479,8 +483,8 @@ describe('UpcomingEvents', () => {
                       node: {
                         id: 'eventId1',
                         name: 'Accepted Event',
-                        startAt: '2024-12-25T10:00:00Z',
-                        endAt: '2024-12-26T18:00:00Z',
+                        startAt: dayjs().add(30, 'days').toISOString(),
+                        endAt: dayjs().add(31, 'days').toISOString(),
                         location: 'Location',
                         isRecurringEventTemplate: false,
                         baseEvent: null,
@@ -544,8 +548,8 @@ describe('UpcomingEvents', () => {
                       node: {
                         id: 'eventId1',
                         name: 'Rejected Event',
-                        startAt: '2024-12-25T10:00:00Z',
-                        endAt: '2024-12-26T18:00:00Z',
+                        startAt: dayjs().add(30, 'days').toISOString(),
+                        endAt: dayjs().add(31, 'days').toISOString(),
                         location: 'Location',
                         isRecurringEventTemplate: false,
                         baseEvent: null,
@@ -609,8 +613,8 @@ describe('UpcomingEvents', () => {
                       node: {
                         id: 'eventId1',
                         name: 'Unknown Status Event',
-                        startAt: '2024-12-25T10:00:00Z',
-                        endAt: '2024-12-26T18:00:00Z',
+                        startAt: dayjs().add(30, 'days').toISOString(),
+                        endAt: dayjs().add(31, 'days').toISOString(),
                         location: 'Location',
                         isRecurringEventTemplate: false,
                         baseEvent: null,
@@ -676,8 +680,8 @@ describe('UpcomingEvents', () => {
                       node: {
                         id: 'event1',
                         name: 'Event with Groups',
-                        startAt: '2024-12-25T10:00:00Z',
-                        endAt: '2024-12-26T18:00:00Z',
+                        startAt: dayjs().add(30, 'days').toISOString(),
+                        endAt: dayjs().add(31, 'days').toISOString(),
                         location: 'Location',
                         isRecurringEventTemplate: false,
                         baseEvent: null,
@@ -752,8 +756,8 @@ describe('UpcomingEvents', () => {
                       node: {
                         id: 'event1',
                         name: 'Event with Groups',
-                        startAt: '2024-12-25T10:00:00Z',
-                        endAt: '2024-12-26T18:00:00Z',
+                        startAt: dayjs().add(30, 'days').toISOString(),
+                        endAt: dayjs().add(31, 'days').toISOString(),
                         location: 'Location',
                         isRecurringEventTemplate: false,
                         baseEvent: null,
@@ -840,8 +844,8 @@ describe('UpcomingEvents', () => {
                       node: {
                         id: 'event1',
                         name: 'Event with Group',
-                        startAt: '2024-12-25T10:00:00Z',
-                        endAt: '2024-12-26T18:00:00Z',
+                        startAt: dayjs().add(30, 'days').toISOString(),
+                        endAt: dayjs().add(31, 'days').toISOString(),
                         location: 'Location',
                         isRecurringEventTemplate: false,
                         baseEvent: null,
@@ -911,8 +915,8 @@ describe('UpcomingEvents', () => {
                       node: {
                         id: 'event1',
                         name: 'Event with Group Unknown Status',
-                        startAt: '2024-12-25T10:00:00Z',
-                        endAt: '2024-12-26T18:00:00Z',
+                        startAt: dayjs().add(30, 'days').toISOString(),
+                        endAt: dayjs().add(31, 'days').toISOString(),
                         location: 'Location',
                         isRecurringEventTemplate: false,
                         baseEvent: null,
@@ -992,8 +996,8 @@ describe('UpcomingEvents', () => {
                       node: {
                         id: 'event1',
                         name: 'Event with Joined Group',
-                        startAt: '2024-12-25T10:00:00Z',
-                        endAt: '2024-12-26T18:00:00Z',
+                        startAt: dayjs().add(30, 'days').toISOString(),
+                        endAt: dayjs().add(31, 'days').toISOString(),
                         location: 'Location',
                         isRecurringEventTemplate: false,
                         baseEvent: null,
@@ -1097,8 +1101,8 @@ describe('UpcomingEvents', () => {
                             description: null,
                           },
                         ],
-                        startAt: '2024-12-25T10:00:00Z',
-                        endAt: '2024-12-26T18:00:00Z',
+                        startAt: dayjs().add(30, 'days').toISOString(),
+                        endAt: dayjs().add(31, 'days').toISOString(),
                         location: 'Downtown',
                         isRecurringEventTemplate: false,
                         recurrenceRule: {
@@ -1174,8 +1178,8 @@ describe('UpcomingEvents', () => {
                           isRecurringEventTemplate: true,
                         },
                         volunteerGroups: [],
-                        startAt: '2024-12-25T10:00:00Z',
-                        endAt: '2024-12-26T18:00:00Z',
+                        startAt: dayjs().add(30, 'days').toISOString(),
+                        endAt: dayjs().add(31, 'days').toISOString(),
                         location: 'Downtown',
                         isRecurringEventTemplate: false,
                         recurrenceRule: null,
@@ -1249,8 +1253,8 @@ describe('UpcomingEvents', () => {
                           isRecurringEventTemplate: true,
                         },
                         volunteerGroups: [],
-                        startAt: '2024-12-25T10:00:00Z',
-                        endAt: '2024-12-26T18:00:00Z',
+                        startAt: dayjs().add(30, 'days').toISOString(),
+                        endAt: dayjs().add(31, 'days').toISOString(),
                         location: 'Downtown',
                         isRecurringEventTemplate: false,
                         recurrenceRule: null,
@@ -1315,8 +1319,8 @@ describe('UpcomingEvents', () => {
                       node: {
                         id: 'event1',
                         name: 'Test Event',
-                        startAt: '2024-01-01T10:00:00Z',
-                        endAt: '2024-01-01T18:00:00Z',
+                        startAt: dayjs().toISOString(),
+                        endAt: dayjs().add(8, 'hours').toISOString(),
                         location: 'Test Location',
                         isRecurringEventTemplate: false,
                         baseEvent: null,
@@ -1377,8 +1381,8 @@ describe('UpcomingEvents', () => {
                       node: {
                         id: 'event1',
                         name: 'Group Event',
-                        startAt: '2024-01-01T10:00:00Z',
-                        endAt: '2024-01-01T18:00:00Z',
+                        startAt: dayjs().toISOString(),
+                        endAt: dayjs().add(8, 'hours').toISOString(),
                         location: 'Test Location',
                         isRecurringEventTemplate: false,
                         baseEvent: null,
@@ -1451,8 +1455,8 @@ describe('UpcomingEvents', () => {
                       node: {
                         id: 'recurringId',
                         name: 'Recurring Event',
-                        startAt: '2024-12-25T10:00:00Z',
-                        endAt: '2024-12-26T18:00:00Z',
+                        startAt: dayjs().add(30, 'days').toISOString(),
+                        endAt: dayjs().add(31, 'days').toISOString(),
                         location: 'Test Location',
                         isRecurringEventTemplate: true,
                         recurrenceRule: { frequency: 'WEEKLY' },
@@ -1512,8 +1516,8 @@ describe('UpcomingEvents', () => {
                       node: {
                         id: 'event1',
                         name: 'Test Event',
-                        startAt: '2024-01-01T10:00:00Z',
-                        endAt: '2024-01-01T18:00:00Z',
+                        startAt: dayjs().toISOString(),
+                        endAt: dayjs().add(8, 'hours').toISOString(),
                         location: 'Test Location',
                         isRecurringEventTemplate: false,
                         baseEvent: null,
@@ -1577,8 +1581,8 @@ describe('UpcomingEvents', () => {
                       id: 'e1',
                       name: 'Beach Cleanup',
                       location: 'Park',
-                      startAt: '2024-12-25T10:00:00Z',
-                      endAt: '2024-12-26T18:00:00Z',
+                      startAt: dayjs().add(30, 'days').toISOString(),
+                      endAt: dayjs().add(31, 'days').toISOString(),
                       isRecurringEventTemplate: false,
                       baseEvent: null,
                       recurrenceRule: null,
@@ -1591,8 +1595,8 @@ describe('UpcomingEvents', () => {
                       id: 'e2',
                       name: 'City Run',
                       location: 'Beach',
-                      startAt: '2024-12-25T10:00:00Z',
-                      endAt: '2024-12-26T18:00:00Z',
+                      startAt: dayjs().add(30, 'days').toISOString(),
+                      endAt: dayjs().add(31, 'days').toISOString(),
                       isRecurringEventTemplate: false,
                       baseEvent: null,
                       recurrenceRule: null,
@@ -1650,7 +1654,7 @@ describe('UpcomingEvents', () => {
       const input = screen.getByTestId('searchByInput');
       await userEvent.type(input, 'xyz');
       await waitFor(() => {
-        expect(screen.getByTestId('noEventsMsg')).toBeInTheDocument();
+        expect(screen.getByTestId('events-empty-state')).toBeInTheDocument();
         expect(screen.getByText(/no upcoming events/i)).toBeInTheDocument();
       });
     });
@@ -1697,8 +1701,8 @@ describe('UpcomingEvents', () => {
                         id: 'e1',
                         name: 'Event with Location',
                         location: 'Park',
-                        startAt: '2024-12-25T10:00:00Z',
-                        endAt: '2024-12-26T18:00:00Z',
+                        startAt: dayjs().add(30, 'days').toISOString(),
+                        endAt: dayjs().add(31, 'days').toISOString(),
                         isRecurringEventTemplate: false,
                         baseEvent: null,
                         recurrenceRule: null,
@@ -1711,8 +1715,8 @@ describe('UpcomingEvents', () => {
                         id: 'e2',
                         name: 'Event without Location',
                         location: null,
-                        startAt: '2024-12-25T10:00:00Z',
-                        endAt: '2024-12-26T18:00:00Z',
+                        startAt: dayjs().add(30, 'days').toISOString(),
+                        endAt: dayjs().add(31, 'days').toISOString(),
                         isRecurringEventTemplate: false,
                         baseEvent: null,
                         recurrenceRule: null,
@@ -1779,8 +1783,8 @@ describe('UpcomingEvents', () => {
                         id: 'e1',
                         name: 'No Location Event',
                         location: null,
-                        startAt: '2024-12-25T10:00:00Z',
-                        endAt: '2024-12-26T18:00:00Z',
+                        startAt: dayjs().add(30, 'days').toISOString(),
+                        endAt: dayjs().add(31, 'days').toISOString(),
                         isRecurringEventTemplate: false,
                         baseEvent: null,
                         recurrenceRule: null,
@@ -1839,8 +1843,8 @@ describe('UpcomingEvents', () => {
                       node: {
                         id: 'e1',
                         name: 'No Groups Event',
-                        startAt: '2024-12-25T10:00:00Z',
-                        endAt: '2024-12-26T18:00:00Z',
+                        startAt: dayjs().add(30, 'days').toISOString(),
+                        endAt: dayjs().add(31, 'days').toISOString(),
                         location: 'Location',
                         isRecurringEventTemplate: false,
                         baseEvent: null,

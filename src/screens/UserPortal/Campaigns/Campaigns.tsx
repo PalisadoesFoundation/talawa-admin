@@ -10,9 +10,9 @@ import { Button } from 'react-bootstrap';
 import styles from '../../../style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
 import { Navigate, useNavigate, useParams } from 'react-router';
-import { WarningAmberRounded } from '@mui/icons-material';
-import { Stack, Box, Typography } from '@mui/material';
-import { type GridCellParams } from '@mui/x-data-grid';
+import { Campaign, WarningAmberRounded } from '@mui/icons-material';
+import { Box, Typography } from '@mui/material';
+import { type GridCellParams } from 'shared-components/DataGridWrapper';
 import useLocalStorage from 'utils/useLocalstorage';
 import PledgeModal from './PledgeModal';
 import { USER_FUND_CAMPAIGNS } from 'GraphQl/Queries/fundQueries';
@@ -28,6 +28,7 @@ import {
   ReportingTableGridProps,
 } from 'types/ReportingTable/interface';
 import { PAGE_SIZE, ROW_HEIGHT } from 'types/ReportingTable/utils';
+import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 const dataGridStyle = {
   borderRadius: 'var(--table-head-radius)',
@@ -133,6 +134,7 @@ const Campaigns = (): JSX.Element => {
         <div className={styles.message} data-testid="errorMsg">
           <WarningAmberRounded
             className={`${styles.errorIcon} ${styles.errorIconLarge}`}
+            aria-hidden="true"
           />
           <h6 className="fw-bold text-danger text-center">
             {tErrors('errorLoading', { entity: 'Campaigns' })}
@@ -147,7 +149,7 @@ const Campaigns = (): JSX.Element => {
   const columns: ReportingTableColumn[] = [
     {
       field: 'id',
-      headerName: '#',
+      headerName: t('campaignIndex'),
       flex: 1,
       minWidth: 60,
       align: 'center',
@@ -162,7 +164,7 @@ const Campaigns = (): JSX.Element => {
     },
     {
       field: 'name',
-      headerName: 'Campaign Name',
+      headerName: t('campaignName'),
       flex: 2,
       align: 'center',
       headerAlign: 'center',
@@ -174,7 +176,7 @@ const Campaigns = (): JSX.Element => {
     },
     {
       field: 'startDate',
-      headerName: 'Start Date',
+      headerName: t('startDate'),
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -186,7 +188,7 @@ const Campaigns = (): JSX.Element => {
     },
     {
       field: 'endDate',
-      headerName: 'End Date',
+      headerName: t('endDate'),
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -201,7 +203,7 @@ const Campaigns = (): JSX.Element => {
     },
     {
       field: 'fundingGoal',
-      headerName: 'Fund Goal',
+      headerName: t('fundGoal'),
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -217,7 +219,7 @@ const Campaigns = (): JSX.Element => {
     },
     {
       field: 'amountRaised',
-      headerName: 'Amount Raised',
+      headerName: t('amountRaised'),
       flex: 1,
       minWidth: 100,
       align: 'center',
@@ -232,7 +234,7 @@ const Campaigns = (): JSX.Element => {
     },
     {
       field: 'percentageRaised',
-      headerName: '% Raised',
+      headerName: t('percentRaised'),
       flex: 1,
       minWidth: 120,
       align: 'center',
@@ -268,8 +270,9 @@ const Campaigns = (): JSX.Element => {
               e.stopPropagation();
               openModal(campaign);
             }}
+            aria-label={isEnded ? t('campaignEnded') : t('addPledge')}
           >
-            <i className="fa fa-plus me-1" />
+            <i className="fa fa-plus me-1" aria-hidden="true" />
             {t('addPledge')}
           </Button>
         );
@@ -288,9 +291,12 @@ const Campaigns = (): JSX.Element => {
     compactColumns: columns.length >= 7,
     slots: {
       noRowsOverlay: () => (
-        <Stack height="100%" alignItems="center" justifyContent="center">
-          {t('noCampaigns')}
-        </Stack>
+        <EmptyState
+          icon={<Campaign />}
+          message={t('noCampaigns')}
+          description={t('createFirstCampaign')}
+          dataTestId="campaigns-empty-state"
+        />
       ),
     },
     getRowClassName: () => `${styles.rowBackground}`,

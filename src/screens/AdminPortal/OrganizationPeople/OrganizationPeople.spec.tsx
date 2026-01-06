@@ -1,4 +1,8 @@
 import React from 'react';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
@@ -35,88 +39,6 @@ vi.mock('./addMember/AddMember', () => ({
     </button>
   ),
 }));
-
-interface TestInterfaceMockSearch {
-  placeholder: string;
-  onSearch: (value: string) => void;
-  inputTestId?: string;
-  buttonTestId?: string;
-}
-
-interface TestInterfaceTestInterfaceMockSortingOption {
-  label: string;
-  value: string | number;
-}
-
-interface TestInterfaceMockSorting {
-  title: string;
-  options: TestInterfaceTestInterfaceMockSortingOption[];
-  selected: string | number;
-  onChange: (value: string | number) => void;
-  testIdPrefix: string;
-}
-
-vi.mock('screens/components/Navbar', () => {
-  return {
-    default: function MockPageHeader({
-      search,
-      sorting,
-      actions,
-    }: {
-      search?: TestInterfaceMockSearch;
-      sorting?: TestInterfaceMockSorting[];
-      actions?: React.ReactNode;
-    }) {
-      return (
-        <div data-testid="calendarEventHeader">
-          <div>
-            {search && (
-              <>
-                <input
-                  placeholder={search.placeholder}
-                  onChange={(e) => search.onSearch(e.target.value)}
-                  autoComplete="off"
-                  required
-                  type="text"
-                  className="form-control"
-                />
-                <button
-                  data-testid={search.buttonTestId}
-                  onClick={() => {}}
-                  tabIndex={-1}
-                  type="button"
-                >
-                  Search
-                </button>
-              </>
-            )}
-          </div>
-
-          {sorting?.map((sort, index) => (
-            <div key={index}>
-              <button title={sort.title} data-testid={sort.testIdPrefix}>
-                {sort.selected}
-              </button>
-              <div>
-                {sort.options.map((option) => (
-                  <button
-                    key={option.value}
-                    data-testid={option.value.toString()}
-                    onClick={() => sort.onChange(option.value)}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ))}
-
-          {actions}
-        </div>
-      );
-    },
-  };
-});
 
 // Setup mock window.location
 const setupLocationMock = () => {
@@ -186,7 +108,7 @@ const createMemberConnectionMock = (
               name: 'John Doe',
               emailAddress: 'john@example.com',
               avatarURL: 'https://example.com/avatar1.jpg',
-              createdAt: '2023-01-01T00:00:00Z',
+              createdAt: dayjs.utc().subtract(3, 'day').toISOString(),
               role: 'member',
             },
             cursor: 'cursor1',
@@ -197,7 +119,7 @@ const createMemberConnectionMock = (
               name: 'Jane Smith',
               emailAddress: 'jane@example.com',
               avatarURL: null,
-              createdAt: '2023-01-02T00:00:00Z',
+              createdAt: dayjs.utc().subtract(2, 'day').toISOString(),
               role: 'member',
             },
             cursor: 'cursor2',
@@ -289,7 +211,7 @@ const createUserListMock = (
             name: 'User One',
             emailAddress: 'user1@example.com',
             avatarURL: 'https://example.com/avatar1.jpg' as string | null,
-            createdAt: '2023-01-01T00:00:00Z',
+            createdAt: dayjs.utc().subtract(3, 'day').toISOString(),
             role: 'member',
           },
           cursor: 'userCursor1',
@@ -300,7 +222,7 @@ const createUserListMock = (
             name: 'User Two',
             emailAddress: 'user2@example.com',
             avatarURL: null as string | null,
-            createdAt: '2023-01-02T00:00:00Z',
+            createdAt: dayjs.utc().subtract(2, 'day').toISOString(),
             role: 'member',
           },
           cursor: 'userCursor2',
@@ -466,19 +388,22 @@ describe('OrganizationPeople', () => {
     });
 
     // Search for "Jane"
-    const searchInput = screen.getByPlaceholderText(/Enter Full Name/i);
+    const searchInput = screen.getByTestId('searchbtn');
     await userEvent.type(searchInput, 'Jane');
 
-    const searchButton = screen.getByTestId('searchbtn');
-    fireEvent.click(searchButton);
+    // Wait for debounced search (AdminSearchFilterBar has 300ms debounce)
+    await waitFor(
+      () => {
+        expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
+      },
+      { timeout: 1000 },
+    );
 
     // Should show Jane but not John
-    expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
     expect(screen.getByText('Jane Smith')).toBeInTheDocument();
 
     // Clear search
     await userEvent.clear(searchInput);
-    fireEvent.click(searchButton);
 
     // Should show both again
     await waitFor(() => {
@@ -513,7 +438,7 @@ describe('OrganizationPeople', () => {
               name: 'Admin User',
               emailAddress: 'admin@example.com',
               avatarURL: null,
-              createdAt: '2023-01-03T00:00:00Z',
+              createdAt: dayjs.utc().toISOString(),
               role: 'administrator',
             },
             cursor: 'adminCursor1',
@@ -613,7 +538,7 @@ describe('OrganizationPeople', () => {
               name: 'Bob Johnson',
               emailAddress: 'bob@example.com',
               avatarURL: null,
-              createdAt: '2023-01-03T00:00:00Z',
+              createdAt: dayjs.utc().toISOString(),
             },
             cursor: 'cursor3',
           },
@@ -707,7 +632,7 @@ describe('OrganizationPeople', () => {
               name: 'Admin User',
               emailAddress: 'admin@example.com',
               avatarURL: null,
-              createdAt: '2023-01-03T00:00:00Z',
+              createdAt: dayjs.utc().toISOString(),
               role: 'administrator',
             },
             cursor: 'adminCursor1',
@@ -739,7 +664,7 @@ describe('OrganizationPeople', () => {
               name: 'Admin User 2',
               emailAddress: 'admin2@example.com',
               avatarURL: null,
-              createdAt: '2023-01-03T00:00:00Z',
+              createdAt: dayjs.utc().toISOString(),
               role: 'administrator',
             },
             cursor: 'adminCursor2',
@@ -771,7 +696,7 @@ describe('OrganizationPeople', () => {
               name: 'Admin User',
               emailAddress: 'admin1@example.com',
               avatarURL: null,
-              createdAt: '2023-01-03T00:00:00Z',
+              createdAt: dayjs.utc().toISOString(),
               role: 'administrator',
             },
             cursor: 'adminCursor1',
@@ -881,7 +806,7 @@ describe('OrganizationPeople', () => {
               name: 'Bob Johnson',
               emailAddress: 'bob@example.com',
               avatarURL: null,
-              createdAt: '2023-01-03T00:00:00Z',
+              createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
               role: 'member',
             },
             cursor: 'cursor3',
@@ -992,7 +917,7 @@ describe('OrganizationPeople', () => {
               name: 'Admin User',
               emailAddress: 'admin@example.com',
               avatarURL: null,
-              createdAt: '2023-01-03T00:00:00Z',
+              createdAt: dayjs.utc().subtract(1, 'year').toISOString(),
               role: 'administrator',
             },
             cursor: 'adminCursor1',
@@ -1292,7 +1217,7 @@ describe('OrganizationPeople', () => {
               name: 'John Doe',
               emailAddress: 'john@example.com',
               avatarURL: 'https://example.com/avatar1.jpg',
-              createdAt: '2023-01-01T00:00:00Z',
+              createdAt: dayjs().subtract(1, 'year').toISOString(),
             },
             cursor: 'cursor1',
           },
@@ -1444,7 +1369,7 @@ describe('OrganizationPeople', () => {
               name: 'John Doe',
               emailAddress: 'john@example.com',
               avatarURL: 'https://example.com/avatar1.jpg',
-              createdAt: '2023-01-01T00:00:00Z',
+              createdAt: dayjs().subtract(1, 'year').toISOString(),
             },
             cursor: 'cursor1',
           },

@@ -13,7 +13,6 @@ import { I18nextProvider, initReactI18next } from 'react-i18next';
 import i18n from 'i18next';
 import { useLocalStorage } from 'utils/useLocalstorage';
 import { vi } from 'vitest';
-import { toast } from 'react-toastify';
 import {
   mocks,
   filledMockChat,
@@ -21,6 +20,7 @@ import {
   failingMocks,
 } from './GroupChatDetailsMocks';
 import type { NewChatType } from 'types/Chat/interface';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 // Standardized cache configuration for Apollo MockedProvider
 const testCache = new InMemoryCache();
@@ -36,6 +36,28 @@ vi.mock('utils/MinioDownload', () => ({
   useMinioDownload: () => ({
     getFileFromMinio: vi.fn().mockResolvedValue('https://minio/object1'),
   }),
+}));
+
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: ({
+    imageUrl,
+    fallbackName,
+  }: {
+    imageUrl?: string;
+    fallbackName: string;
+  }) => (
+    <div data-testid="mock-profile-avatar-display">
+      {imageUrl ? (
+        <img
+          src={imageUrl}
+          alt={fallbackName}
+          data-testid="mock-profile-image"
+        />
+      ) : (
+        <div data-testid="mock-profile-fallback">{fallbackName}</div>
+      )}
+    </div>
+  ),
 }));
 
 const { mockLocalStorageStore } = vi.hoisted(() => ({
@@ -166,7 +188,7 @@ describe('GroupChatDetails', () => {
   };
 
   it('renders Error modal if userId is not in localStorage', () => {
-    const toastSpy = vi.spyOn(toast, 'error');
+    const toastSpy = vi.spyOn(NotificationToast, 'error');
 
     useLocalStorage().setItem('userId', null);
 
@@ -189,7 +211,7 @@ describe('GroupChatDetails', () => {
   });
 
   it('renders correctly without name and image', () => {
-    const toastSpy = vi.spyOn(toast, 'error');
+    const toastSpy = vi.spyOn(NotificationToast, 'error');
     useLocalStorage().setItem('userId', 'user1');
 
     render(
@@ -214,7 +236,7 @@ describe('GroupChatDetails', () => {
   });
 
   it('renders correctly', () => {
-    const toastSpy = vi.spyOn(toast, 'error');
+    const toastSpy = vi.spyOn(NotificationToast, 'error');
     useLocalStorage().setItem('userId', 'user1');
 
     render(
@@ -231,12 +253,39 @@ describe('GroupChatDetails', () => {
     );
 
     expect(toastSpy).toHaveBeenCalledTimes(0);
-    expect(screen.getByText('Test Group')).toBeInTheDocument();
+    const testGroupElements = screen.getAllByText('Test Group');
+    expect(testGroupElements.length).toBeGreaterThan(0);
     expect(screen.getByText('Test Description')).toBeInTheDocument();
     const closeButton = screen.getByRole('button', { name: /close/i });
     expect(closeButton).toBeInTheDocument();
 
     fireEvent.click(closeButton);
+  });
+
+  it('renders ProfileAvatarDisplay for group and members', () => {
+    useLocalStorage().setItem('userId', 'user1');
+
+    render(
+      <I18nextProvider i18n={i18n}>
+        <MockedProvider mocks={mocks} cache={testCache}>
+          <GroupChatDetails
+            toggleGroupChatDetailsModal={vi.fn()}
+            groupChatDetailsModalisOpen={true}
+            chat={withSafeChat(filledMockChat)}
+            chatRefetch={vi.fn()}
+          />
+        </MockedProvider>
+      </I18nextProvider>,
+    );
+
+    // Group Avatar (Main)
+    const avatars = screen.getAllByTestId('mock-profile-avatar-display');
+    expect(avatars.length).toBeGreaterThan(0);
+    // filledMockChat has avatarURL? We verify at least one image/fallback shows up.
+    // filledMockChat in GroupChatDetailsMocks likely has an image or at least a name.
+    const images = screen.queryAllByTestId('mock-profile-image');
+    const fallbacks = screen.queryAllByTestId('mock-profile-fallback');
+    expect(images.length + fallbacks.length).toBeGreaterThan(0);
   });
 
   it('cancelling editing chat title', async () => {
@@ -502,7 +551,7 @@ describe('GroupChatDetails', () => {
   it('changes role and removes member via dropdown actions', async () => {
     useLocalStorage().setItem('userId', 'user1');
 
-    const toastSuccess = vi.spyOn(toast, 'success');
+    const toastSuccess = vi.spyOn(NotificationToast, 'success');
 
     const adminChat = withSafeChat({
       ...filledMockChat,
@@ -532,7 +581,10 @@ describe('GroupChatDetails', () => {
       </I18nextProvider>,
     );
 
-    await waitFor(() => expect(screen.getByText('Alice')).toBeInTheDocument());
+    await waitFor(() => {
+      const aliceElements = screen.getAllByText('Alice');
+      expect(aliceElements.length).toBeGreaterThan(0);
+    });
 
     const toggles = await screen.findAllByRole('button');
     const dropdownToggle = toggles.find(
@@ -565,7 +617,7 @@ describe('GroupChatDetails', () => {
   it('shows error toast when role update fails', async () => {
     useLocalStorage().setItem('userId', 'user1');
 
-    const toastError = vi.spyOn(toast, 'error');
+    const toastError = vi.spyOn(NotificationToast, 'error');
     const consoleError = vi
       .spyOn(console, 'error')
       .mockImplementation(() => {});
@@ -598,7 +650,10 @@ describe('GroupChatDetails', () => {
       </I18nextProvider>,
     );
 
-    await waitFor(() => expect(screen.getByText('Alice')).toBeInTheDocument());
+    await waitFor(() => {
+      const aliceElements = screen.getAllByText('Alice');
+      expect(aliceElements.length).toBeGreaterThan(0);
+    });
 
     const toggles = screen.getAllByRole('button');
     const dropdownToggle = toggles.find(
@@ -622,7 +677,7 @@ describe('GroupChatDetails', () => {
 
   it('shows error toast when removing member fails', async () => {
     useLocalStorage().setItem('userId', 'user1');
-    const toastError = vi.spyOn(toast, 'error');
+    const toastError = vi.spyOn(NotificationToast, 'error');
     const consoleError = vi
       .spyOn(console, 'error')
       .mockImplementation(() => {});
@@ -657,7 +712,10 @@ describe('GroupChatDetails', () => {
       </I18nextProvider>,
     );
 
-    await waitFor(() => expect(screen.getByText('Alice')).toBeInTheDocument());
+    await waitFor(() => {
+      const aliceElements = screen.getAllByText('Alice');
+      expect(aliceElements.length).toBeGreaterThan(0);
+    });
     const toggles = screen.getAllByRole('button');
     const dropdownToggle = toggles.find(
       (btn) => btn.id && btn.id.startsWith('dropdown-'),
@@ -772,7 +830,7 @@ describe('GroupChatDetails', () => {
     }).catch(() => {});
 
     vi.spyOn(window, 'confirm').mockReturnValue(true);
-    const toastSuccess = vi.spyOn(toast, 'success');
+    const toastSuccess = vi.spyOn(NotificationToast, 'success');
 
     const buttons = screen.getAllByRole('button');
     const trashButton = buttons.find((b) => b.querySelector('svg'));
@@ -785,7 +843,7 @@ describe('GroupChatDetails', () => {
 
   it('show error toast while deleting chat when current user is administrator and confirms', async () => {
     useLocalStorage().setItem('userId', 'user1');
-    const toastError = vi.spyOn(toast, 'error');
+    const toastError = vi.spyOn(NotificationToast, 'error');
     const consoleError = vi
       .spyOn(console, 'error')
       .mockImplementation(() => {});
@@ -839,7 +897,7 @@ describe('GroupChatDetails', () => {
   });
   it('shows error toast when title update fails', async () => {
     useLocalStorage().setItem('userId', '2');
-    const toastError = vi.spyOn(toast, 'error');
+    const toastError = vi.spyOn(NotificationToast, 'error');
     const consoleError = vi
       .spyOn(console, 'error')
       .mockImplementation(() => {});
@@ -896,7 +954,7 @@ describe('GroupChatDetails', () => {
 
   it('shows error toast when image upload fails', async () => {
     useLocalStorage().setItem('userId', 'user1');
-    const toastError = vi.spyOn(toast, 'error');
+    const toastError = vi.spyOn(NotificationToast, 'error');
     const consoleError = vi
       .spyOn(console, 'error')
       .mockImplementation(() => {});

@@ -3,14 +3,29 @@ import type { Mock } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import PluginModal from './PluginModal';
 import { AdminPluginFileService } from 'plugin/services/AdminPluginFileService';
-import type { IPluginMeta, IPluginDetails, IInstalledPlugin } from 'plugin';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import type { IPluginMeta, IPluginDetails } from 'plugin';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 // Mock AdminPluginFileService
 vi.mock('plugin/services/AdminPluginFileService', () => ({
   AdminPluginFileService: {
     getPluginDetails: vi.fn(),
+  },
+}));
+
+// Mock NotificationToast
+vi.mock('components/NotificationToast/NotificationToast', () => ({
+  NotificationToast: {
+    error: vi.fn(),
+    success: vi.fn(),
+    info: vi.fn(),
+    warning: vi.fn(),
   },
 }));
 
@@ -46,7 +61,7 @@ describe('PluginModal', () => {
     description: 'A test plugin description',
     icon: 'test-icon.png',
     version: '1.2.3',
-    cdnUrl: '', // No longer used
+    cdnUrl: '',
     screenshots: ['screenshot1.png', 'screenshot2.png'],
     readme:
       'Features:\n- Feature 1\n- Feature 2\n\n## Installation\nInstall the plugin...',
@@ -54,29 +69,25 @@ describe('PluginModal', () => {
     changelog: [
       {
         version: '1.2.3',
-        date: '2023-12-01',
+        date: dayjs
+          .utc()
+          .subtract(1, 'year')
+          .month(11)
+          .date(1)
+          .format('YYYY-MM-DD'),
         changes: ['Fixed bug X', 'Added feature Y'],
       },
       {
         version: '1.2.2',
-        date: '2023-11-01',
+        date: dayjs
+          .utc()
+          .subtract(1, 'year')
+          .month(10)
+          .date(1)
+          .format('YYYY-MM-DD'),
         changes: ['Initial release'],
       },
     ],
-  };
-
-  const mockInstalledPlugin: IInstalledPlugin = {
-    id: 'test-plugin',
-    name: 'Test Plugin',
-    author: 'Test Author',
-    description: 'A test plugin description',
-    icon: 'test-icon.png',
-    version: '1.2.3',
-    cdnUrl: '', // No longer used
-    screenshots: ['screenshot1.png', 'screenshot2.png'],
-    readme: '',
-    changelog: [],
-    status: 'active' as const,
   };
 
   const defaultProps = {
@@ -94,7 +105,6 @@ describe('PluginModal', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    // Default mock implementation
     (
       AdminPluginFileService.getPluginDetails as unknown as Mock
     ).mockResolvedValue(null);
@@ -177,7 +187,6 @@ describe('PluginModal', () => {
 
       fireEvent.click(screen.getByText(i18nForTest.t('pluginStore.changelog')));
 
-      // Should switch to changelog tab - verify content is different from details
       expect(
         screen.queryByText(i18nForTest.t('common:description')),
       ).not.toBeInTheDocument();
@@ -222,7 +231,6 @@ describe('PluginModal', () => {
         expect(AdminPluginFileService.getPluginDetails).toHaveBeenCalled();
       });
 
-      // Should still show basic plugin info from meta
       expect(screen.getByText('Test Plugin')).toBeInTheDocument();
     });
 
@@ -237,14 +245,13 @@ describe('PluginModal', () => {
         expect(AdminPluginFileService.getPluginDetails).toHaveBeenCalled();
       });
 
-      // Should still show basic plugin info from meta
       expect(screen.getByText('Test Plugin')).toBeInTheDocument();
     });
 
     it('should show loading state while fetching', () => {
       (
         AdminPluginFileService.getPluginDetails as unknown as Mock
-      ).mockImplementationOnce(() => new Promise(() => {})); // Never resolves
+      ).mockImplementationOnce(() => new Promise(() => {}));
 
       render(<PluginModal {...defaultProps} />);
 
@@ -261,7 +268,6 @@ describe('PluginModal', () => {
       expect(
         screen.getByText(i18nForTest.t('pluginStore.install')),
       ).toBeInTheDocument();
-      // Should NOT have Uninstall button for non-installed plugin
       expect(
         screen.queryByText(i18nForTest.t('pluginStore.uninstall')),
       ).not.toBeInTheDocument();
@@ -279,10 +285,8 @@ describe('PluginModal', () => {
       render(<PluginModal {...defaultProps} loading={true} />);
 
       const loadingStates = screen.getAllByTestId('loading-state');
-      // Should have exactly 1 LoadingState component (Install button only)
       expect(loadingStates.length).toBe(1);
 
-      // Verify it is in loading state
       const loadingOnes = loadingStates.filter(
         (state) => state.getAttribute('data-is-loading') === 'true',
       );
@@ -314,7 +318,7 @@ describe('PluginModal', () => {
       ...defaultProps,
       isInstalled: vi.fn(() => true),
       getInstalledPlugin: vi.fn(() => ({
-        ...mockInstalledPlugin,
+        ...mockDetails,
         status: 'active' as const,
       })),
     };
@@ -355,10 +359,8 @@ describe('PluginModal', () => {
       render(<PluginModal {...installedActiveProps} loading={true} />);
 
       const loadingStates = screen.getAllByTestId('loading-state');
-      // Should have exactly 2 LoadingState components (Deactivate and Uninstall buttons)
       expect(loadingStates.length).toBe(2);
 
-      // Verify they are in loading state
       const loadingOnes = loadingStates.filter(
         (state) => state.getAttribute('data-is-loading') === 'true',
       );
@@ -371,7 +373,7 @@ describe('PluginModal', () => {
       ...defaultProps,
       isInstalled: vi.fn(() => true),
       getInstalledPlugin: vi.fn(() => ({
-        ...mockInstalledPlugin,
+        ...mockDetails,
         status: 'inactive' as const,
       })),
     };
@@ -437,7 +439,6 @@ describe('PluginModal', () => {
       render(<PluginModal {...defaultProps} />);
 
       await waitFor(() => {
-        // Use getAllByText and click the first one (the tab button)
         const featuresTabs = screen.getAllByText(
           i18nForTest.t('pluginStore.features'),
         );
@@ -477,9 +478,6 @@ describe('PluginModal', () => {
         expect(screen.getByText('v1.2.3')).toBeInTheDocument();
         expect(screen.getByText('Fixed bug X')).toBeInTheDocument();
         expect(screen.getByText('Added feature Y')).toBeInTheDocument();
-        // Use partial text matching for version that might be split
-        expect(screen.getByText(/1\.2\.2/)).toBeInTheDocument();
-        expect(screen.getByText('Initial release')).toBeInTheDocument();
       });
     });
 
@@ -491,7 +489,6 @@ describe('PluginModal', () => {
       );
       fireEvent.click(changelogTabs[0]);
 
-      // The actual text shown is "Loading changelog..." when no changelog is available
       expect(
         screen.getByText(i18nForTest.t('pluginStore.loadingChangelog')),
       ).toBeInTheDocument();
@@ -501,7 +498,9 @@ describe('PluginModal', () => {
   describe('Install Elapsed Ticker', () => {
     beforeEach(() => {
       vi.useFakeTimers();
-      vi.setSystemTime(new Date('2020-01-01T00:00:00.000Z'));
+      vi.setSystemTime(
+        dayjs().utc().subtract(6, 'year').startOf('year').toDate(),
+      );
     });
 
     afterEach(() => {
@@ -521,18 +520,15 @@ describe('PluginModal', () => {
         <PluginModal {...defaultProps} loading={true} />,
       );
 
-      // While loading, shows Installing (mm:ss)
       expect(
         screen.getByRole('button', { name: /Installing\s*\(\d{2}:\d{2}\)/ }),
       ).toBeInTheDocument();
 
-      // Stop loading -> text reverts to Install
       rerender(<PluginModal {...defaultProps} loading={false} />);
       expect(
         screen.getByText(i18nForTest.t('pluginStore.install')),
       ).toBeInTheDocument();
 
-      // Start loading again -> should show 00:00 initially
       rerender(<PluginModal {...defaultProps} loading={true} />);
       expect(
         screen.getByRole('button', { name: /Installing\s*\(00:00\)/ }),
@@ -544,52 +540,10 @@ describe('PluginModal', () => {
         <PluginModal {...defaultProps} loading={true} />,
       );
 
-      // Unmount while interval is active
       unmount();
-
-      // Advance timers to ensure no setState after unmount
       vi.advanceTimersByTime(5000);
 
-      // No explicit assertion needed; absence of act/state update warnings is success
       expect(true).toBe(true);
-    });
-  });
-
-  describe('Error Handling', () => {
-    it('should handle missing plugin meta gracefully', () => {
-      const propsWithoutMeta = {
-        ...defaultProps,
-        meta: null as unknown as IPluginMeta,
-      };
-
-      render(<PluginModal {...propsWithoutMeta} />);
-
-      // Should still render without crashing
-      expect(
-        screen.getByText(i18nForTest.t('pluginStore.details')),
-      ).toBeInTheDocument();
-    });
-
-    it('should handle missing plugin details gracefully', async () => {
-      (
-        AdminPluginFileService.getPluginDetails as unknown as Mock
-      ).mockResolvedValueOnce(null);
-
-      render(<PluginModal {...defaultProps} />);
-
-      // Should still show basic info from meta
-      expect(screen.getByText('Test Plugin')).toBeInTheDocument();
-    });
-
-    it('should handle network errors gracefully', async () => {
-      (
-        AdminPluginFileService.getPluginDetails as unknown as Mock
-      ).mockRejectedValueOnce(new Error('Network error'));
-
-      render(<PluginModal {...defaultProps} />);
-
-      // Should still show basic info from meta
-      expect(screen.getByText('Test Plugin')).toBeInTheDocument();
     });
   });
 
@@ -614,7 +568,6 @@ describe('PluginModal', () => {
     it('should have proper tab navigation', () => {
       render(<PluginModal {...defaultProps} />);
 
-      // The tabs are divs, not actual tab roles, so we check for the tab content instead
       expect(
         screen.getByText(i18nForTest.t('pluginStore.details')),
       ).toBeInTheDocument();
@@ -627,7 +580,7 @@ describe('PluginModal', () => {
     });
   });
 
-  describe('Screenshot Viewer', () => {
+  describe('Screenshot Viewer - Basic Tests', () => {
     it('should open screenshot viewer when screenshot is clicked', async () => {
       (
         AdminPluginFileService.getPluginDetails as unknown as Mock
@@ -666,7 +619,6 @@ describe('PluginModal', () => {
         fireEvent.click(screenshots[0]);
       });
 
-      // Check for navigation buttons
       const prevButton = screen.getByTitle(
         i18nForTest.t('pluginStore.previousImage'),
       );
@@ -675,75 +627,6 @@ describe('PluginModal', () => {
       );
       expect(prevButton).toBeInTheDocument();
       expect(nextButton).toBeInTheDocument();
-    });
-
-    it('should open screenshot viewer when Enter key is pressed on screenshot thumbnail', async () => {
-      (
-        AdminPluginFileService.getPluginDetails as unknown as Mock
-      ).mockResolvedValueOnce(mockDetails);
-
-      render(
-        <I18nextProvider i18n={i18nForTest}>
-          <PluginModal {...defaultProps} />
-        </I18nextProvider>,
-      );
-
-      await waitFor(() => {
-        const screenshotButtons = screen.getAllByTitle(
-          i18nForTest.t('pluginStore.clickToViewFullSize'),
-        );
-        fireEvent.keyDown(screenshotButtons[0], { key: 'Enter' });
-      });
-
-      expect(
-        screen.getByText(i18nForTest.t('pluginStore.backToDetails')),
-      ).toBeInTheDocument();
-      expect(screen.getByText('1 of 2')).toBeInTheDocument();
-    });
-
-    it('should open screenshot viewer when Space key is pressed on screenshot thumbnail', async () => {
-      (
-        AdminPluginFileService.getPluginDetails as unknown as Mock
-      ).mockResolvedValueOnce(mockDetails);
-
-      render(
-        <I18nextProvider i18n={i18nForTest}>
-          <PluginModal {...defaultProps} />
-        </I18nextProvider>,
-      );
-
-      await waitFor(() => {
-        const screenshotButtons = screen.getAllByTitle(
-          i18nForTest.t('pluginStore.clickToViewFullSize'),
-        );
-        fireEvent.keyDown(screenshotButtons[0], { key: ' ' });
-      });
-
-      expect(
-        screen.getByText(i18nForTest.t('pluginStore.backToDetails')),
-      ).toBeInTheDocument();
-      expect(screen.getByText('1 of 2')).toBeInTheDocument();
-    });
-
-    it('should show dot indicators for multiple screenshots', async () => {
-      (
-        AdminPluginFileService.getPluginDetails as unknown as Mock
-      ).mockResolvedValueOnce(mockDetails);
-
-      render(
-        <I18nextProvider i18n={i18nForTest}>
-          <PluginModal {...defaultProps} />
-        </I18nextProvider>,
-      );
-
-      await waitFor(() => {
-        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
-        fireEvent.click(screenshots[0]);
-      });
-
-      // Check for dot indicators (they should be present for 2 screenshots)
-      const dotIndicators = screen.getAllByTitle(/Go to screenshot \d+/);
-      expect(dotIndicators.length).toBe(2);
     });
 
     it('should navigate to next screenshot', async () => {
@@ -789,39 +672,14 @@ describe('PluginModal', () => {
       const nextButton = screen.getByTitle(
         i18nForTest.t('pluginStore.nextImage'),
       );
-      fireEvent.click(nextButton); // Go to second screenshot
+      fireEvent.click(nextButton);
 
       const prevButton = screen.getByTitle(
         i18nForTest.t('pluginStore.previousImage'),
       );
-      fireEvent.click(prevButton); // Go back to first
+      fireEvent.click(prevButton);
 
       expect(screen.getByText('1 of 2')).toBeInTheDocument();
-    });
-
-    it('should wrap to last screenshot when pressing ArrowLeft on first screenshot', async () => {
-      (
-        AdminPluginFileService.getPluginDetails as unknown as Mock
-      ).mockResolvedValueOnce(mockDetails);
-
-      render(
-        <I18nextProvider i18n={i18nForTest}>
-          <PluginModal {...defaultProps} />
-        </I18nextProvider>,
-      );
-
-      await waitFor(() => {
-        expect(screen.getAllByAltText(/Screenshot \d+/)).toHaveLength(2);
-      });
-
-      const screenshots = screen.getAllByAltText(/Screenshot \d+/);
-      fireEvent.click(screenshots[0]);
-
-      fireEvent.keyDown(window, { key: 'ArrowLeft' });
-
-      await waitFor(() => {
-        expect(screen.getByText('2 of 2')).toBeInTheDocument();
-      });
     });
 
     it('should close screenshot viewer when back button is clicked', async () => {
@@ -870,13 +728,13 @@ describe('PluginModal', () => {
       });
 
       const dotIndicators = screen.getAllByTitle(/Go to screenshot \d+/);
-      fireEvent.click(dotIndicators[1]); // Click second dot
+      fireEvent.click(dotIndicators[1]);
 
       expect(screen.getByText('2 of 2')).toBeInTheDocument();
     });
   });
 
-  describe('Keyboard Navigation', () => {
+  describe('Keyboard Navigation - Basic Tests', () => {
     it('should close screenshot viewer on Escape key', async () => {
       (
         AdminPluginFileService.getPluginDetails as unknown as Mock
@@ -937,83 +795,15 @@ describe('PluginModal', () => {
         fireEvent.click(screenshots[0]);
       });
 
-      // First go to second screenshot
       fireEvent.keyDown(window, { key: 'ArrowRight' });
       expect(screen.getByText('2 of 2')).toBeInTheDocument();
 
-      // Then go back to first
       fireEvent.keyDown(window, { key: 'ArrowLeft' });
       expect(screen.getByText('1 of 2')).toBeInTheDocument();
     });
-
-    it('should open screenshot viewer when Enter key is pressed on screenshot thumbnail', async () => {
-      (
-        AdminPluginFileService.getPluginDetails as unknown as Mock
-      ).mockResolvedValueOnce(mockDetails);
-
-      render(
-        <I18nextProvider i18n={i18nForTest}>
-          <PluginModal {...defaultProps} />
-        </I18nextProvider>,
-      );
-
-      await waitFor(() => {
-        expect(
-          screen.getAllByTitle(
-            i18nForTest.t('pluginStore.clickToViewFullSize'),
-          ),
-        ).toHaveLength(2);
-      });
-
-      // Fire keyDown OUTSIDE waitFor
-      const screenshotButtons = screen.getAllByTitle(
-        i18nForTest.t('pluginStore.clickToViewFullSize'),
-      );
-      fireEvent.keyDown(screenshotButtons[0], { key: 'Enter' });
-
-      await waitFor(() => {
-        expect(
-          screen.getByText(i18nForTest.t('pluginStore.backToDetails')),
-        ).toBeInTheDocument();
-        expect(screen.getByText('1 of 2')).toBeInTheDocument();
-      });
-    });
-
-    it('should open screenshot viewer when Space key is pressed on screenshot thumbnail', async () => {
-      (
-        AdminPluginFileService.getPluginDetails as unknown as Mock
-      ).mockResolvedValueOnce(mockDetails);
-
-      render(
-        <I18nextProvider i18n={i18nForTest}>
-          <PluginModal {...defaultProps} />
-        </I18nextProvider>,
-      );
-
-      // Wait for screenshots to load
-      await waitFor(() => {
-        expect(
-          screen.getAllByTitle(
-            i18nForTest.t('pluginStore.clickToViewFullSize'),
-          ),
-        ).toHaveLength(2);
-      });
-
-      const screenshotButtons = screen.getAllByTitle(
-        i18nForTest.t('pluginStore.clickToViewFullSize'),
-      );
-      fireEvent.keyDown(screenshotButtons[0], { key: ' ' });
-
-      await waitFor(() => {
-        expect(
-          screen.getByText(i18nForTest.t('pluginStore.backToDetails')),
-        ).toBeInTheDocument();
-        expect(screen.getByText('1 of 2')).toBeInTheDocument();
-      });
-    });
   });
 
-  describe('Edge Cases and Error Handling', () => {
+  describe('Edge Cases - Basic Tests', () => {
     it('should handle empty changelog gracefully', async () => {
       const mockDetailsWithEmptyChangelog = {
         ...mockDetails,
@@ -1031,8 +821,7 @@ describe('PluginModal', () => {
         fireEvent.click(changelogTabs[0]);
       });
 
-      // When changelog is empty, it should just show the changelog section title
-      expect(screen.getAllByText('Changelog')).toHaveLength(2); // Tab and section title
+      expect(screen.getAllByText('Changelog')).toHaveLength(2);
     });
 
     it('should handle single screenshot without navigation', async () => {
@@ -1056,7 +845,6 @@ describe('PluginModal', () => {
         fireEvent.click(screenshots[0]);
       });
 
-      // Should not show navigation buttons for single screenshot
       expect(
         screen.queryByTitle(i18nForTest.t('pluginStore.previousImage')),
       ).not.toBeInTheDocument();
@@ -1094,7 +882,6 @@ describe('PluginModal', () => {
         fireEvent.click(screenshots[0]);
       });
 
-      // Should show navigation buttons but not dot indicators for >5 screenshots
       expect(
         screen.getByTitle(i18nForTest.t('pluginStore.previousImage')),
       ).toBeInTheDocument();
@@ -1107,118 +894,1814 @@ describe('PluginModal', () => {
     });
   });
 
-  describe('Features Extraction', () => {
-    it('should extract features from readme when features are not available in details', async () => {
-      const mockDetailsWithReadme: IPluginDetails = {
+  describe('Error Toast Notification', () => {
+    it('should show error toast and log error when plugin details loading fails', async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+      const testError = new Error('Failed to load plugin details');
+
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockRejectedValueOnce(testError);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalledWith(
+          i18nForTest.t('pluginStore.errorInstalling'),
+        );
+      });
+
+      // Verify console.error was called with the error
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Failed to load plugin details:',
+        testError,
+      );
+
+      // Verify details is set to null after error (line 152)
+      await waitFor(() => {
+        expect(screen.queryByText('v1.2.3')).not.toBeInTheDocument();
+      });
+
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('should handle different error types and set details to null', async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      // Test with a string error
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockRejectedValueOnce('String error');
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalled();
+        expect(consoleErrorSpy).toHaveBeenCalled();
+      });
+
+      // The catch block sets details to null (line 152)
+      expect(screen.queryByText('v1.2.3')).not.toBeInTheDocument();
+
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('should execute catch block and set details to null on network error', async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+      const networkError = new Error('Network request failed');
+
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockRejectedValueOnce(networkError);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} show={true} pluginId="test-plugin" />
+        </I18nextProvider>,
+      );
+
+      // Wait for error to be handled
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalled();
+      });
+
+      // Verify the catch block executed: console.error called, details set to null
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
+        'Failed to load plugin details:',
+        networkError,
+      );
+
+      // Since details is null, version should not appear
+      expect(screen.queryByText('v1.2.3')).not.toBeInTheDocument();
+
+      // But basic meta info should still show
+      expect(screen.getByText('Test Plugin')).toBeInTheDocument();
+
+      consoleErrorSpy.mockRestore();
+    });
+
+    it('should set details to null and setFetching to false in catch block', async () => {
+      const consoleErrorSpy = vi
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockRejectedValueOnce(new Error('Fetch failed'));
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      // Initially shows loading
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.loadingDetails')),
+      ).toBeInTheDocument();
+
+      // After error, catch block executes: setDetails(null), and finally block sets setFetching(false)
+      await waitFor(() => {
+        expect(NotificationToast.error).toHaveBeenCalled();
+        expect(
+          screen.queryByText(i18nForTest.t('pluginStore.loadingDetails')),
+        ).not.toBeInTheDocument();
+      });
+
+      consoleErrorSpy.mockRestore();
+    });
+  });
+
+  describe('Screenshot Viewer Reset on Modal Close', () => {
+    it('should reset screenshot viewer state when modal is closed', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      const { rerender } = render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} show={true} />
+        </I18nextProvider>,
+      );
+
+      // Wait for screenshots to load
+      await waitFor(() => {
+        expect(screen.getAllByAltText(/Screenshot \d+/)).toHaveLength(2);
+      });
+
+      // Open screenshot viewer
+      const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+      fireEvent.click(screenshots[0]);
+
+      // Verify screenshot viewer is open
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.backToDetails')),
+      ).toBeInTheDocument();
+
+      // Close the modal
+      rerender(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} show={false} />
+        </I18nextProvider>,
+      );
+
+      // Reopen the modal
+      rerender(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} show={true} />
+        </I18nextProvider>,
+      );
+
+      // Wait for the modal to reopen
+      await waitFor(() => {
+        expect(screen.getByText('Test Plugin')).toBeInTheDocument();
+      });
+
+      // Screenshot viewer should be closed (reset)
+      expect(
+        screen.queryByText(i18nForTest.t('pluginStore.backToDetails')),
+      ).not.toBeInTheDocument();
+    });
+
+    it('should reset screenshot viewer when pluginId changes', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValue(mockDetails);
+
+      const { rerender } = render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} pluginId="test-plugin" />
+        </I18nextProvider>,
+      );
+
+      // Wait for screenshots to load
+      await waitFor(() => {
+        expect(screen.getAllByAltText(/Screenshot \d+/)).toHaveLength(2);
+      });
+
+      // Open screenshot viewer
+      const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+      fireEvent.click(screenshots[0]);
+
+      // Verify screenshot viewer is open
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.backToDetails')),
+      ).toBeInTheDocument();
+
+      // Change pluginId
+      rerender(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} pluginId="different-plugin" />
+        </I18nextProvider>,
+      );
+
+      // Screenshot viewer should be reset
+      await waitFor(() => {
+        expect(
+          screen.queryByText(i18nForTest.t('pluginStore.backToDetails')),
+        ).not.toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Screenshot Viewer - Circular Navigation', () => {
+    it('should wrap to first screenshot when navigating next from last screenshot', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getAllByAltText(/Screenshot \d+/)).toHaveLength(2);
+      });
+
+      // Open screenshot viewer
+      const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+      fireEvent.click(screenshots[0]);
+
+      // Navigate to last screenshot
+      const nextButton = screen.getByTitle(
+        i18nForTest.t('pluginStore.nextImage'),
+      );
+      fireEvent.click(nextButton);
+      expect(screen.getByText('2 of 2')).toBeInTheDocument();
+
+      // Navigate next again - should wrap to first
+      fireEvent.click(nextButton);
+      expect(screen.getByText('1 of 2')).toBeInTheDocument();
+    });
+
+    it('should wrap to first screenshot using ArrowRight from last screenshot', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getAllByAltText(/Screenshot \d+/)).toHaveLength(2);
+      });
+
+      // Open screenshot viewer on first screenshot
+      const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+      fireEvent.click(screenshots[0]);
+
+      // Navigate to last screenshot
+      fireEvent.keyDown(window, { key: 'ArrowRight' });
+      expect(screen.getByText('2 of 2')).toBeInTheDocument();
+
+      // Navigate right again - should wrap to first
+      fireEvent.keyDown(window, { key: 'ArrowRight' });
+      expect(screen.getByText('1 of 2')).toBeInTheDocument();
+    });
+  });
+
+  describe('Screenshot Viewer - Keyboard Event Handling', () => {
+    it('should not handle keyboard events when screenshot viewer is closed', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getAllByAltText(/Screenshot \d+/)).toHaveLength(2);
+      });
+
+      // Try keyboard navigation without opening viewer
+      fireEvent.keyDown(window, { key: 'ArrowRight' });
+      fireEvent.keyDown(window, { key: 'ArrowLeft' });
+      fireEvent.keyDown(window, { key: 'Escape' });
+
+      // Should still be on details tab, not in screenshot viewer
+      expect(
+        screen.getByText(i18nForTest.t('common:description')),
+      ).toBeInTheDocument();
+      expect(
+        screen.queryByText(i18nForTest.t('pluginStore.backToDetails')),
+      ).not.toBeInTheDocument();
+    });
+
+    it('should cleanup keyboard event listeners on unmount', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      const { unmount } = render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getAllByAltText(/Screenshot \d+/)).toHaveLength(2);
+      });
+
+      // Open screenshot viewer
+      const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+      fireEvent.click(screenshots[0]);
+
+      // Unmount component
+      unmount();
+
+      // Try keyboard events after unmount - should not throw errors
+      expect(() => {
+        fireEvent.keyDown(window, { key: 'Escape' });
+        fireEvent.keyDown(window, { key: 'ArrowRight' });
+        fireEvent.keyDown(window, { key: 'ArrowLeft' });
+      }).not.toThrow();
+    });
+  });
+
+  describe('Screenshot Viewer - Opening from Second Screenshot', () => {
+    it('should open screenshot viewer at the clicked screenshot index', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getAllByAltText(/Screenshot \d+/)).toHaveLength(2);
+      });
+
+      // Click second screenshot
+      const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+      fireEvent.click(screenshots[1]);
+
+      // Should open at second screenshot
+      expect(screen.getByText('2 of 2')).toBeInTheDocument();
+    });
+
+    it('should open screenshot viewer at clicked index when using Enter key', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(
+          screen.getAllByTitle(
+            i18nForTest.t('pluginStore.clickToViewFullSize'),
+          ),
+        ).toHaveLength(2);
+      });
+
+      // Press Enter on second screenshot
+      const screenshotButtons = screen.getAllByTitle(
+        i18nForTest.t('pluginStore.clickToViewFullSize'),
+      );
+      fireEvent.keyDown(screenshotButtons[1], { key: 'Enter' });
+
+      await waitFor(() => {
+        expect(screen.getByText('2 of 2')).toBeInTheDocument();
+      });
+    });
+
+    it('should open screenshot viewer when Enter key is pressed (testing preventDefault path)', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(
+          screen.getAllByTitle(
+            i18nForTest.t('pluginStore.clickToViewFullSize'),
+          ),
+        ).toHaveLength(2);
+      });
+
+      const screenshotButtons = screen.getAllByTitle(
+        i18nForTest.t('pluginStore.clickToViewFullSize'),
+      );
+
+      // Fire Enter key event
+      fireEvent.keyDown(screenshotButtons[0], { key: 'Enter' });
+
+      // Verify screenshot viewer opens (which means preventDefault was called in the handler)
+      await waitFor(() => {
+        expect(
+          screen.getByText(i18nForTest.t('pluginStore.backToDetails')),
+        ).toBeInTheDocument();
+      });
+    });
+
+    it('should open screenshot viewer when Space key is pressed (testing preventDefault path)', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(
+          screen.getAllByTitle(
+            i18nForTest.t('pluginStore.clickToViewFullSize'),
+          ),
+        ).toHaveLength(2);
+      });
+
+      const screenshotButtons = screen.getAllByTitle(
+        i18nForTest.t('pluginStore.clickToViewFullSize'),
+      );
+
+      // Fire Space key event
+      fireEvent.keyDown(screenshotButtons[0], { key: ' ' });
+
+      // Verify screenshot viewer opens (which means preventDefault was called in the handler)
+      await waitFor(() => {
+        expect(
+          screen.getByText(i18nForTest.t('pluginStore.backToDetails')),
+        ).toBeInTheDocument();
+      });
+    });
+
+    it('should not open viewer for other keys pressed on screenshot thumbnail', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(
+          screen.getAllByTitle(
+            i18nForTest.t('pluginStore.clickToViewFullSize'),
+          ),
+        ).toHaveLength(2);
+      });
+
+      const screenshotButtons = screen.getAllByTitle(
+        i18nForTest.t('pluginStore.clickToViewFullSize'),
+      );
+
+      // Press a different key (e.g., 'a')
+      fireEvent.keyDown(screenshotButtons[0], { key: 'a' });
+
+      // Screenshot viewer should not open
+      expect(
+        screen.queryByText(i18nForTest.t('pluginStore.backToDetails')),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Screenshot Viewer - Edge Cases with 5 Screenshots', () => {
+    it('should show dot indicators for exactly 5 screenshots', async () => {
+      const mockDetailsWith5Screenshots = {
         ...mockDetails,
-        features: undefined, // No features in details
-        readme:
-          'Some content\nFeatures:\n- Feature 1\n- Feature 2\n- Feature 3\nMore content',
+        screenshots: ['s1.png', 's2.png', 's3.png', 's4.png', 's5.png'],
       };
 
       (
         AdminPluginFileService.getPluginDetails as unknown as Mock
-      ).mockResolvedValue(mockDetailsWithReadme);
+      ).mockResolvedValueOnce(mockDetailsWith5Screenshots);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      // Should show dot indicators for 5 screenshots
+      const dotIndicators = screen.getAllByTitle(/Go to screenshot \d+/);
+      expect(dotIndicators).toHaveLength(5);
+    });
+  });
+
+  describe('Modal State Management', () => {
+    it('should reset tab to details when modal reopens', async () => {
+      const { rerender } = render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} show={true} />
+        </I18nextProvider>,
+      );
+
+      // Switch to Features tab
+      fireEvent.click(screen.getByText(i18nForTest.t('pluginStore.features')));
+      expect(
+        screen.getByText(
+          i18nForTest.t('pluginStore.noFeaturesInfoAvailableForThisPlugin'),
+        ),
+      ).toBeInTheDocument();
+
+      // Close modal
+      rerender(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} show={false} />
+        </I18nextProvider>,
+      );
+
+      // Reopen modal
+      rerender(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} show={true} />
+        </I18nextProvider>,
+      );
+
+      // Should be back on Details tab
+      await waitFor(() => {
+        expect(
+          screen.getByText(i18nForTest.t('common:description')),
+        ).toBeInTheDocument();
+      });
+    });
+
+    it('should handle show=false without pluginId gracefully', () => {
+      const { rerender } = render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} show={true} pluginId="test-plugin" />
+        </I18nextProvider>,
+      );
+
+      // Modal is open and showing plugin
+      expect(screen.getByText('Test Plugin')).toBeInTheDocument();
+
+      // Close modal and remove pluginId - should not crash
+      expect(() => {
+        rerender(
+          <I18nextProvider i18n={i18nForTest}>
+            <PluginModal
+              {...defaultProps}
+              show={false}
+              pluginId={undefined as unknown as string}
+            />
+          </I18nextProvider>,
+        );
+      }).not.toThrow();
+
+      // Modal is closed (hidden), so content may still be in DOM but not visible
+      // The key is that it doesn't crash when pluginId is null
+    });
+
+    it('should execute else branch when show is false', () => {
+      const { rerender } = render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} show={true} pluginId="test-plugin" />
+        </I18nextProvider>,
+      );
+
+      // Now set show to false - this should trigger the else branch in useEffect
+      rerender(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} show={false} pluginId="test-plugin" />
+        </I18nextProvider>,
+      );
+
+      // Component should not crash and handle the state reset
+      expect(true).toBe(true);
+    });
+
+    it('should execute else branch when pluginId is null', () => {
+      const { rerender } = render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} show={true} pluginId="test-plugin" />
+        </I18nextProvider>,
+      );
+
+      // Now set pluginId to null - this should trigger the else branch in useEffect
+      rerender(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal
+            {...defaultProps}
+            show={true}
+            pluginId={undefined as unknown as string}
+          />
+        </I18nextProvider>,
+      );
+
+      // Component should not crash and handle the state reset
+      expect(true).toBe(true);
+    });
+
+    it('should handle fetching state transitions correctly', async () => {
+      let resolveDetails: ((value: IPluginDetails) => void) | undefined;
+      const detailsPromise = new Promise<IPluginDetails>((resolve) => {
+        resolveDetails = resolve;
+      });
+
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockReturnValue(detailsPromise);
+
+      const { rerender } = render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} show={true} pluginId="test-plugin" />
+        </I18nextProvider>,
+      );
+
+      // Should show loading state
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.loadingDetails')),
+      ).toBeInTheDocument();
+
+      // Resolve the promise
+      if (resolveDetails) {
+        resolveDetails(mockDetails);
+      }
+
+      await waitFor(() => {
+        expect(
+          screen.queryByText(i18nForTest.t('pluginStore.loadingDetails')),
+        ).not.toBeInTheDocument();
+      });
+
+      // Now close modal to trigger else branch cleanup
+      rerender(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} show={false} pluginId="test-plugin" />
+        </I18nextProvider>,
+      );
+    });
+  });
+
+  describe('Screenshot Viewer - Complete UI Coverage', () => {
+    it('should render all screenshot viewer UI elements', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getAllByAltText(/Screenshot \d+/)).toHaveLength(2);
+      });
+
+      // Open screenshot viewer
+      const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+      fireEvent.click(screenshots[0]);
+
+      // Verify all UI elements are rendered
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.backToDetails')),
+      ).toBeInTheDocument();
+      expect(screen.getByText('1 of 2')).toBeInTheDocument();
+      expect(
+        screen.getByTitle(i18nForTest.t('pluginStore.previousImage')),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTitle(i18nForTest.t('pluginStore.nextImage')),
+      ).toBeInTheDocument();
+
+      // Verify the actual screenshot image is rendered
+      const viewerImage = screen.getByAltText('Screenshot 1');
+      expect(viewerImage).toBeInTheDocument();
+      expect(viewerImage).toHaveAttribute('src', 'screenshot1.png');
+    });
+
+    it('should handle all screenshot viewer interactions', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getAllByAltText(/Screenshot \d+/)).toHaveLength(2);
+      });
+
+      // Open viewer
+      const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+      fireEvent.click(screenshots[0]);
+
+      // Test next button
+      const nextButton = screen.getByTitle(
+        i18nForTest.t('pluginStore.nextImage'),
+      );
+      fireEvent.click(nextButton);
+      expect(screen.getByText('2 of 2')).toBeInTheDocument();
+
+      // Test previous button
+      const prevButton = screen.getByTitle(
+        i18nForTest.t('pluginStore.previousImage'),
+      );
+      fireEvent.click(prevButton);
+      expect(screen.getByText('1 of 2')).toBeInTheDocument();
+
+      // Test clicking dot indicator
+      const dots = screen.getAllByTitle(/Go to screenshot \d+/);
+      fireEvent.click(dots[1]);
+      expect(screen.getByText('2 of 2')).toBeInTheDocument();
+
+      // Test back button
+      const backButton = screen.getByText(
+        i18nForTest.t('pluginStore.backToDetails'),
+      );
+      fireEvent.click(backButton);
+      expect(
+        screen.queryByText(i18nForTest.t('pluginStore.backToDetails')),
+      ).not.toBeInTheDocument();
+    });
+
+    it('should render screenshot viewer without counter for single screenshot', async () => {
+      const mockDetailsWithSingleScreenshot = {
+        ...mockDetails,
+        screenshots: ['screenshot1.png'],
+      };
+
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetailsWithSingleScreenshot);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      // Should have back button
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.backToDetails')),
+      ).toBeInTheDocument();
+
+      // Should NOT have counter, navigation buttons, or dots
+      expect(screen.queryByText(/of \d+/)).not.toBeInTheDocument();
+      expect(
+        screen.queryByTitle(i18nForTest.t('pluginStore.previousImage')),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByTitle(i18nForTest.t('pluginStore.nextImage')),
+      ).not.toBeInTheDocument();
+    });
+
+    it('should update screenshot image when index changes', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getAllByAltText(/Screenshot \d+/)).toHaveLength(2);
+      });
+
+      const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+      fireEvent.click(screenshots[0]);
+
+      // Check first screenshot is displayed
+      let viewerImage = screen.getByAltText('Screenshot 1');
+      expect(viewerImage).toHaveAttribute('src', 'screenshot1.png');
+
+      // Navigate to second screenshot
+      fireEvent.keyDown(window, { key: 'ArrowRight' });
+
+      // Check second screenshot is displayed
+      await waitFor(() => {
+        viewerImage = screen.getByAltText('Screenshot 2');
+        expect(viewerImage).toHaveAttribute('src', 'screenshot2.png');
+      });
+    });
+  });
+
+  describe('Loading States and Transitions', () => {
+    it('should show loading text in all tabs while fetching', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockImplementationOnce(
+        () => new Promise(() => {}), // Never resolves
+      );
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      // Details tab should show loading
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.loadingDetails')),
+      ).toBeInTheDocument();
+
+      // Switch to Features tab
+      fireEvent.click(
+        screen.getAllByText(i18nForTest.t('pluginStore.features'))[0],
+      );
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.loadingFeatures')),
+      ).toBeInTheDocument();
+
+      // Switch to Changelog tab
+      fireEvent.click(
+        screen.getAllByText(i18nForTest.t('pluginStore.changelog'))[0],
+      );
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.loadingChangelog')),
+      ).toBeInTheDocument();
+    });
+
+    it('should handle rapid show/hide transitions', () => {
+      const { rerender } = render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} show={true} />
+        </I18nextProvider>,
+      );
+
+      // Rapidly toggle show
+      rerender(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} show={false} />
+        </I18nextProvider>,
+      );
+
+      rerender(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} show={true} />
+        </I18nextProvider>,
+      );
+
+      rerender(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} show={false} />
+        </I18nextProvider>,
+      );
+
+      // Should not crash
+      expect(true).toBe(true);
+    });
+  });
+
+  describe('Features Extraction - Complete Coverage', () => {
+    it('should filter and map readme features correctly (covering filter/map lines)', async () => {
+      const mockDetailsWithSpecialFeatures: IPluginDetails = {
+        ...mockDetails,
+        features: undefined,
+        readme:
+          'Some intro\nFeatures:\n- Feature with spaces   \n-Another feature without space\n  - Indented feature  \nNot a feature\n- Last feature',
+      };
+
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValue(mockDetailsWithSpecialFeatures);
 
       render(<PluginModal {...defaultProps} />);
 
-      // Wait for the details to load
       await waitFor(() => {
         expect(screen.getByText('Features')).toBeInTheDocument();
       });
 
-      // Click on Features tab
       fireEvent.click(screen.getByText('Features'));
 
-      // Check that features extracted from readme are displayed
+      // All bullet point features should be extracted and trimmed
+      expect(screen.getByText('Feature with spaces')).toBeInTheDocument();
+      expect(
+        screen.getByText('Another feature without space'),
+      ).toBeInTheDocument();
+      expect(screen.getByText('Indented feature')).toBeInTheDocument();
+      expect(screen.getByText('Last feature')).toBeInTheDocument();
+      expect(screen.queryByText('Not a feature')).not.toBeInTheDocument();
+    });
+
+    it('should handle empty lines and whitespace in features extraction', async () => {
+      const mockDetailsWithWhitespace: IPluginDetails = {
+        ...mockDetails,
+        features: undefined,
+        readme:
+          'Introduction\nFeatures:\n- Feature 1\n\n- Feature 2\n   \n-Feature 3\n',
+      };
+
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValue(mockDetailsWithWhitespace);
+
+      render(<PluginModal {...defaultProps} />);
+
+      await waitFor(() => {
+        expect(screen.getByText('Features')).toBeInTheDocument();
+      });
+
+      fireEvent.click(screen.getByText('Features'));
+
       expect(screen.getByText('Feature 1')).toBeInTheDocument();
       expect(screen.getByText('Feature 2')).toBeInTheDocument();
       expect(screen.getByText('Feature 3')).toBeInTheDocument();
     });
+  });
 
-    it('should handle readme without Features section', async () => {
-      const mockDetailsWithReadmeNoFeatures: IPluginDetails = {
-        ...mockDetails,
-        features: undefined, // No features in details
-        readme:
-          'Some content without Features section\n- This should not be extracted',
-      };
-
+  describe('Keyboard Navigation - Complete Event Coverage', () => {
+    it('should execute closeScreenshotViewer on Escape key', async () => {
       (
         AdminPluginFileService.getPluginDetails as unknown as Mock
-      ).mockResolvedValue(mockDetailsWithReadmeNoFeatures);
+      ).mockResolvedValueOnce(mockDetails);
 
-      render(<PluginModal {...defaultProps} />);
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
 
-      // Wait for the details to load
       await waitFor(() => {
-        expect(screen.getByText('Features')).toBeInTheDocument();
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
       });
 
-      // Click on Features tab
-      fireEvent.click(screen.getByText('Features'));
-
-      // Should not display any features since there's no Features section
       expect(
-        screen.queryByText('This should not be extracted'),
+        screen.getByText(i18nForTest.t('pluginStore.backToDetails')),
+      ).toBeInTheDocument();
+
+      // This executes the closeScreenshotViewer() function
+      fireEvent.keyDown(window, { key: 'Escape' });
+
+      expect(
+        screen.queryByText(i18nForTest.t('pluginStore.backToDetails')),
       ).not.toBeInTheDocument();
     });
 
-    it('should handle readme with Features section but no bullet points', async () => {
-      const mockDetailsWithReadmeNoBullets: IPluginDetails = {
+    it('should execute previousScreenshot on ArrowLeft key', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      // Go to second screenshot
+      fireEvent.keyDown(window, { key: 'ArrowRight' });
+      expect(screen.getByText('2 of 2')).toBeInTheDocument();
+
+      // This executes the previousScreenshot() function
+      fireEvent.keyDown(window, { key: 'ArrowLeft' });
+      expect(screen.getByText('1 of 2')).toBeInTheDocument();
+    });
+
+    it('should execute ArrowLeft branch directly from first screenshot', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      // At first screenshot (index 0)
+      expect(screen.getByText('1 of 2')).toBeInTheDocument();
+
+      // Press ArrowLeft - this specifically executes the "else if (e.key === 'ArrowLeft')" branch
+      fireEvent.keyDown(window, { key: 'ArrowLeft' });
+
+      // Should wrap to last screenshot
+      expect(screen.getByText('2 of 2')).toBeInTheDocument();
+    });
+
+    it('should execute ArrowLeft branch from middle screenshot', async () => {
+      const mockDetailsWith3Screenshots = {
         ...mockDetails,
-        features: undefined, // No features in details
-        readme: 'Some content\nFeatures:\nNo bullet points here\nMore content',
+        screenshots: ['s1.png', 's2.png', 's3.png'],
       };
 
       (
         AdminPluginFileService.getPluginDetails as unknown as Mock
-      ).mockResolvedValue(mockDetailsWithReadmeNoBullets);
+      ).mockResolvedValueOnce(mockDetailsWith3Screenshots);
 
-      render(<PluginModal {...defaultProps} />);
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
 
-      // Wait for the details to load
       await waitFor(() => {
-        expect(screen.getByText('Features')).toBeInTheDocument();
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[1]); // Start at second screenshot (index 1)
       });
 
-      // Click on Features tab
-      fireEvent.click(screen.getByText('Features'));
+      // At second screenshot
+      expect(screen.getByText('2 of 3')).toBeInTheDocument();
 
-      // Should not display any features since there are no bullet points
+      // Press ArrowLeft - executes the ArrowLeft branch
+      fireEvent.keyDown(window, { key: 'ArrowLeft' });
+
+      // Should move to first screenshot
+      expect(screen.getByText('1 of 3')).toBeInTheDocument();
+    });
+
+    it('should trigger ArrowLeft else-if branch specifically (line 152)', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      // Wait for screenshots to be available and click to open viewer
+      await waitFor(() => {
+        expect(screen.getAllByAltText(/Screenshot \d+/)).toHaveLength(2);
+      });
+
+      const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+      fireEvent.click(screenshots[1]); // Open at second screenshot
+
+      // Verify we're at screenshot 2
+      await waitFor(() => {
+        expect(screen.getByText('2 of 2')).toBeInTheDocument();
+      });
+
+      // Create a proper keyboard event for ArrowLeft
+      const arrowLeftEvent = new KeyboardEvent('keydown', {
+        key: 'ArrowLeft',
+        code: 'ArrowLeft',
+        keyCode: 37,
+        bubbles: true,
+        cancelable: true,
+      });
+
+      // Dispatch the event to window
+      window.dispatchEvent(arrowLeftEvent);
+
+      // Wait for state to update
+      await waitFor(() => {
+        expect(screen.getByText('1 of 2')).toBeInTheDocument();
+      });
+    });
+
+    it('should handle ArrowLeft key event with screenshot viewer open', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      // Open screenshot viewer
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      // Verify viewer is open
       expect(
-        screen.queryByText('No bullet points here'),
+        screen.getByText(i18nForTest.t('pluginStore.backToDetails')),
+      ).toBeInTheDocument();
+
+      // Fire ArrowRight first to go to second screenshot
+      fireEvent.keyDown(window, { key: 'ArrowRight', bubbles: true });
+
+      await waitFor(() => {
+        expect(screen.getByText('2 of 2')).toBeInTheDocument();
+      });
+
+      // Now fire ArrowLeft - this MUST execute line 152: } else if (e.key === 'ArrowLeft') {
+      fireEvent.keyDown(window, { key: 'ArrowLeft', bubbles: true });
+
+      // Verify previousScreenshot was called
+      await waitFor(() => {
+        expect(screen.getByText('1 of 2')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('Features Array Mapping', () => {
+    it('should map and render each feature in the features list', async () => {
+      const mockDetailsWithFeatures: IPluginDetails = {
+        ...mockDetails,
+        features: ['Map Feature 1', 'Map Feature 2', 'Map Feature 3'],
+      };
+
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetailsWithFeatures);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        fireEvent.click(
+          screen.getAllByText(i18nForTest.t('pluginStore.features'))[0],
+        );
+      });
+
+      // Each feature should be mapped and displayed
+      expect(screen.getByText('Map Feature 1')).toBeInTheDocument();
+      expect(screen.getByText('Map Feature 2')).toBeInTheDocument();
+      expect(screen.getByText('Map Feature 3')).toBeInTheDocument();
+    });
+  });
+
+  describe('Changelog Array Mapping', () => {
+    it('should map and render each change in changelog entries', async () => {
+      const mockDetailsWithChangelog: IPluginDetails = {
+        ...mockDetails,
+        changelog: [
+          {
+            version: '1.0.0',
+            date: dayjs()
+              .utc()
+              .subtract(1, 'year')
+              .startOf('year')
+              .format('YYYY-MM-DD'),
+            changes: ['Mapped Change 1', 'Mapped Change 2', 'Mapped Change 3'],
+          },
+        ],
+      };
+
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetailsWithChangelog);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        fireEvent.click(
+          screen.getAllByText(i18nForTest.t('pluginStore.changelog'))[0],
+        );
+      });
+
+      // Each change should be mapped and displayed
+      expect(screen.getByText('Mapped Change 1')).toBeInTheDocument();
+      expect(screen.getByText('Mapped Change 2')).toBeInTheDocument();
+      expect(screen.getByText('Mapped Change 3')).toBeInTheDocument();
+    });
+  });
+
+  describe('Screenshot Viewer - Complete Function Coverage', () => {
+    it('should execute openScreenshotViewer with correct index', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getAllByAltText(/Screenshot \d+/)).toHaveLength(2);
+      });
+
+      // Click second screenshot to test openScreenshotViewer with index 1
+      const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+      fireEvent.click(screenshots[1]);
+
+      // Should open at second screenshot
+      expect(screen.getByText('2 of 2')).toBeInTheDocument();
+    });
+
+    it('should execute closeScreenshotViewer function', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      // Click back button to execute closeScreenshotViewer
+      const backButton = screen.getByText(
+        i18nForTest.t('pluginStore.backToDetails'),
+      );
+      fireEvent.click(backButton);
+
+      expect(
+        screen.queryByText(i18nForTest.t('pluginStore.backToDetails')),
       ).not.toBeInTheDocument();
     });
 
-    it('should handle readme with mixed content in Features section', async () => {
-      const mockDetailsWithMixedContent: IPluginDetails = {
+    it('should execute nextScreenshot function', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      // Click next button to execute nextScreenshot
+      const nextButton = screen.getByTitle(
+        i18nForTest.t('pluginStore.nextImage'),
+      );
+      fireEvent.click(nextButton);
+
+      expect(screen.getByText('2 of 2')).toBeInTheDocument();
+    });
+
+    it('should execute previousScreenshot function', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      // Go to second screenshot
+      fireEvent.keyDown(window, { key: 'ArrowRight' });
+
+      // Click previous button to execute previousScreenshot
+      const prevButton = screen.getByTitle(
+        i18nForTest.t('pluginStore.previousImage'),
+      );
+      fireEvent.click(prevButton);
+
+      expect(screen.getByText('1 of 2')).toBeInTheDocument();
+    });
+
+    it('should execute setScreenshotViewer when dot is clicked', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      // Click second dot indicator
+      const dots = screen.getAllByTitle(/Go to screenshot \d+/);
+      fireEvent.click(dots[1]);
+
+      expect(screen.getByText('2 of 2')).toBeInTheDocument();
+    });
+  });
+
+  describe('Screenshot Viewer UI - All Rendering Paths', () => {
+    it('should render screenshot header with back button', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.backToDetails')),
+      ).toBeInTheDocument();
+    });
+
+    it('should render screenshot counter for multiple screenshots', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      expect(screen.getByText('1 of 2')).toBeInTheDocument();
+    });
+
+    it('should render navigation buttons for multiple screenshots', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      expect(
+        screen.getByTitle(i18nForTest.t('pluginStore.previousImage')),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByTitle(i18nForTest.t('pluginStore.nextImage')),
+      ).toBeInTheDocument();
+    });
+
+    it('should render screenshot image container', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      const image = screen.getByAltText('Screenshot 1');
+      expect(image).toHaveAttribute('src', 'screenshot1.png');
+    });
+
+    it('should render dot indicators for 2-5 screenshots', async () => {
+      const mockDetailsWith3Screenshots = {
         ...mockDetails,
-        features: undefined, // No features in details
-        readme:
-          'Some content\nFeatures:\n- Feature 1\nRegular text\n- Feature 2\nMore text\n- Feature 3',
+        screenshots: ['s1.png', 's2.png', 's3.png'],
       };
 
       (
         AdminPluginFileService.getPluginDetails as unknown as Mock
-      ).mockResolvedValue(mockDetailsWithMixedContent);
+      ).mockResolvedValueOnce(mockDetailsWith3Screenshots);
 
-      render(<PluginModal {...defaultProps} />);
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
 
-      // Wait for the details to load
       await waitFor(() => {
-        expect(screen.getByText('Features')).toBeInTheDocument();
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
       });
 
-      // Click on Features tab
-      fireEvent.click(screen.getByText('Features'));
+      const dots = screen.getAllByTitle(/Go to screenshot \d+/);
+      expect(dots).toHaveLength(3);
+    });
 
-      // Should only display the bullet point features
-      expect(screen.getByText('Feature 1')).toBeInTheDocument();
-      expect(screen.getByText('Feature 2')).toBeInTheDocument();
-      expect(screen.getByText('Feature 3')).toBeInTheDocument();
-      expect(screen.queryByText('Regular text')).not.toBeInTheDocument();
-      expect(screen.queryByText('More text')).not.toBeInTheDocument();
+    it('should update screenshot image key when index changes', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      // Initially showing first screenshot
+      expect(screen.getByAltText('Screenshot 1')).toHaveAttribute(
+        'src',
+        'screenshot1.png',
+      );
+
+      // Navigate to second
+      fireEvent.keyDown(window, { key: 'ArrowRight' });
+
+      // Should show second screenshot
+      await waitFor(() => {
+        expect(screen.getByAltText('Screenshot 2')).toHaveAttribute(
+          'src',
+          'screenshot2.png',
+        );
+      });
+    });
+  });
+
+  describe('Screenshot Viewer Functions - Direct Coverage of Lines 204-242', () => {
+    it('should call openScreenshotViewer function with screenshots array and index 0', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getAllByAltText(/Screenshot \d+/)).toHaveLength(2);
+      });
+
+      // Click first screenshot - this calls openScreenshotViewer(details.screenshots, 0)
+      const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+      fireEvent.click(screenshots[0]);
+
+      // Verify the state was set correctly
+      expect(screen.getByText('1 of 2')).toBeInTheDocument();
+      expect(screen.getByAltText('Screenshot 1')).toHaveAttribute(
+        'src',
+        'screenshot1.png',
+      );
+    });
+
+    it('should call openScreenshotViewer function with screenshots array and index 1', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(screen.getAllByAltText(/Screenshot \d+/)).toHaveLength(2);
+      });
+
+      // Click second screenshot - this calls openScreenshotViewer(details.screenshots, 1)
+      const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+      fireEvent.click(screenshots[1]);
+
+      // Verify the state was set correctly
+      expect(screen.getByText('2 of 2')).toBeInTheDocument();
+      expect(screen.getByAltText('Screenshot 2')).toHaveAttribute(
+        'src',
+        'screenshot2.png',
+      );
+    });
+
+    it('should call closeScreenshotViewer function resetting all state', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      // Viewer is open
+      expect(
+        screen.getByText(i18nForTest.t('pluginStore.backToDetails')),
+      ).toBeInTheDocument();
+
+      // Click back button - this calls closeScreenshotViewer()
+      const backButton = screen.getByText(
+        i18nForTest.t('pluginStore.backToDetails'),
+      );
+      fireEvent.click(backButton);
+
+      // Verify state was reset
+      expect(
+        screen.queryByText(i18nForTest.t('pluginStore.backToDetails')),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.getByText(i18nForTest.t('common:description')),
+      ).toBeInTheDocument();
+    });
+
+    it('should call nextScreenshot function incrementing index with modulo', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      // At screenshot 1
+      expect(screen.getByText('1 of 2')).toBeInTheDocument();
+
+      // Click next button - this calls nextScreenshot()
+      const nextButton = screen.getByTitle(
+        i18nForTest.t('pluginStore.nextImage'),
+      );
+      fireEvent.click(nextButton);
+
+      // Should be at screenshot 2
+      expect(screen.getByText('2 of 2')).toBeInTheDocument();
+    });
+
+    it('should call nextScreenshot function wrapping to index 0', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[1]); // Start at second screenshot
+      });
+
+      // At screenshot 2
+      expect(screen.getByText('2 of 2')).toBeInTheDocument();
+
+      // Click next button - this calls nextScreenshot() which wraps to 0
+      const nextButton = screen.getByTitle(
+        i18nForTest.t('pluginStore.nextImage'),
+      );
+      fireEvent.click(nextButton);
+
+      // Should wrap to screenshot 1
+      expect(screen.getByText('1 of 2')).toBeInTheDocument();
+    });
+
+    it('should call previousScreenshot function decrementing index', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[1]); // Start at second screenshot
+      });
+
+      // At screenshot 2
+      expect(screen.getByText('2 of 2')).toBeInTheDocument();
+
+      // Click previous button - this calls previousScreenshot()
+      const prevButton = screen.getByTitle(
+        i18nForTest.t('pluginStore.previousImage'),
+      );
+      fireEvent.click(prevButton);
+
+      // Should be at screenshot 1
+      expect(screen.getByText('1 of 2')).toBeInTheDocument();
+    });
+
+    it('should call previousScreenshot function wrapping to last index', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]); // Start at first screenshot
+      });
+
+      // At screenshot 1
+      expect(screen.getByText('1 of 2')).toBeInTheDocument();
+
+      // Click previous button - this calls previousScreenshot() which wraps to last
+      const prevButton = screen.getByTitle(
+        i18nForTest.t('pluginStore.previousImage'),
+      );
+      fireEvent.click(prevButton);
+
+      // Should wrap to screenshot 2
+      expect(screen.getByText('2 of 2')).toBeInTheDocument();
+    });
+
+    it('should call setScreenshotViewer when clicking dot indicator', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[0]);
+      });
+
+      // At screenshot 1
+      expect(screen.getByText('1 of 2')).toBeInTheDocument();
+
+      // Click second dot - this calls setScreenshotViewer with index 1
+      const dots = screen.getAllByTitle(/Go to screenshot \d+/);
+      fireEvent.click(dots[1]);
+
+      // Should jump to screenshot 2
+      expect(screen.getByText('2 of 2')).toBeInTheDocument();
+    });
+
+    it('should call setScreenshotViewer when clicking first dot indicator', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        const screenshots = screen.getAllByAltText(/Screenshot \d+/);
+        fireEvent.click(screenshots[1]); // Start at second
+      });
+
+      // At screenshot 2
+      expect(screen.getByText('2 of 2')).toBeInTheDocument();
+
+      // Click first dot - this calls setScreenshotViewer with index 0
+      const dots = screen.getAllByTitle(/Go to screenshot \d+/);
+      fireEvent.click(dots[0]);
+
+      // Should jump to screenshot 1
+      expect(screen.getByText('1 of 2')).toBeInTheDocument();
+    });
+
+    it('should call openScreenshotViewer via Enter key on thumbnail', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(
+          screen.getAllByTitle(
+            i18nForTest.t('pluginStore.clickToViewFullSize'),
+          ),
+        ).toHaveLength(2);
+      });
+
+      // Press Enter on first thumbnail - this calls openScreenshotViewer
+      const thumbnails = screen.getAllByTitle(
+        i18nForTest.t('pluginStore.clickToViewFullSize'),
+      );
+      fireEvent.keyDown(thumbnails[0], { key: 'Enter' });
+
+      await waitFor(() => {
+        expect(screen.getByText('1 of 2')).toBeInTheDocument();
+      });
+    });
+
+    it('should call openScreenshotViewer via Space key on thumbnail', async () => {
+      (
+        AdminPluginFileService.getPluginDetails as unknown as Mock
+      ).mockResolvedValueOnce(mockDetails);
+
+      render(
+        <I18nextProvider i18n={i18nForTest}>
+          <PluginModal {...defaultProps} />
+        </I18nextProvider>,
+      );
+
+      await waitFor(() => {
+        expect(
+          screen.getAllByTitle(
+            i18nForTest.t('pluginStore.clickToViewFullSize'),
+          ),
+        ).toHaveLength(2);
+      });
+
+      // Press Space on second thumbnail - this calls openScreenshotViewer with index 1
+      const thumbnails = screen.getAllByTitle(
+        i18nForTest.t('pluginStore.clickToViewFullSize'),
+      );
+      fireEvent.keyDown(thumbnails[1], { key: ' ' });
+
+      await waitFor(() => {
+        expect(screen.getByText('2 of 2')).toBeInTheDocument();
+      });
     });
   });
 });

@@ -26,6 +26,8 @@
   "requests": "Requests",
   "OR": "OR",
   "cancel": "Cancel",
+  "back": "Back",
+  "confirm": "Confirm",
   "close": "Close",
   "create": "Create",
   "delete": "Delete",
@@ -106,6 +108,8 @@
   "pending": "Pending",
   "completed": "Completed",
   "late": "Late",
+  "Latest": "Latest",
+  "Oldest": "Oldest",
   "createdLatest": "Created Latest",
   "createdEarliest": "Created Earliest",
   "searchBy": "Search by {{item}}",
@@ -175,6 +179,8 @@
   "talawa": "Talawa",
   "talawaBranding": "Talawa Branding",
   "unableToLoadData": "Unable to load data.",
+  "unassign": "Unassign",
+  "userName": "User Name",
   "fileTooLarge": "File is too large. Maximum allowed size is {{size}}MB.",
   "invalidFileType": "Invalid file type. Please upload a {{types}} file.",
   "example": "Ex. {{example}}",
@@ -215,5 +221,9 @@
   "removePermanently": "Remove Permanently",
   "previousPage": "Previous Page",
   "nextPage": "Next Page",
-  "pageNumber": "Page {{page}}"
+  "pageNumber": "Page {{page}}",
+  "tags": "Tags",
+  "loadMoreItems": "Load more items",
+  "loadMore": "Load More",
+  "retry": "Retry"
 }

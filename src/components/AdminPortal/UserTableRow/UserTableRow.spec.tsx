@@ -2,6 +2,7 @@ import React from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import dayjs from 'dayjs';
 import { UserTableRow } from './UserTableRow';
 import type {
   InterfaceUserInfo,
@@ -17,7 +18,7 @@ const user: InterfaceUserInfo = {
   name: 'Admin User',
   emailAddress: 'admin@example.com',
   avatarURL: null,
-  createdAt: '2024-01-15T00:00:00.000Z',
+  createdAt: dayjs().subtract(30, 'days').toISOString(),
 };
 
 describe('UserTableRow', () => {
@@ -532,7 +533,9 @@ describe('UserTableRow', () => {
         </table>
       </MockedProvider>,
     );
-    expect(screen.getByText('2024-01-15')).toBeInTheDocument();
+    expect(
+      screen.getByText(dayjs().subtract(30, 'days').format('YYYY-MM-DD')),
+    ).toBeInTheDocument();
   });
 
   it('handles early return in handleRowClick when onRowClick is not provided', () => {

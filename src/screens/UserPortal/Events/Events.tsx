@@ -58,7 +58,6 @@ import { Button } from 'react-bootstrap';
 import Modal from 'react-bootstrap/Modal';
 import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router';
-import { toast } from 'react-toastify';
 import { ViewType } from 'screens/AdminPortal/OrganizationEvents/OrganizationEvents';
 import { errorHandler } from 'utils/errorHandler';
 import useLocalStorage from 'utils/useLocalstorage';
@@ -71,6 +70,7 @@ import type {
   IEventFormSubmitPayload,
   IEventFormValues,
 } from 'types/EventForm/interface';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 export default function events(): JSX.Element {
   const { t } = useTranslation('translation', { keyPrefix: 'userEvents' });
@@ -172,7 +172,7 @@ export default function events(): JSX.Element {
         variables: { input },
       });
       if (createEventData) {
-        toast.success(t('eventCreated') as string);
+        NotificationToast.success(t('eventCreated') as string);
         refetch();
         setFormResetKey((prev) => prev + 1);
         setCreateEventmodalisOpen(false);

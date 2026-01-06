@@ -3,7 +3,8 @@
  * Modal to display detailed view of an action item category
  */
 import type { FC } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
+import { BaseModal } from 'shared-components/BaseModal';
 import type { IActionItemCategoryInfo } from 'types/ActionItems/interface';
 import styles from 'style/app-fixed.module.css';
 import { useTranslation } from 'react-i18next';
@@ -29,87 +30,80 @@ const CategoryViewModal: FC<ICategoryViewModalProps> = ({
   if (!category) return null;
 
   return (
-    <Modal className={styles.itemModal} onHide={hide} show={isOpen}>
-      <Modal.Header>
+    <BaseModal
+      show={isOpen}
+      onHide={hide}
+      className={styles.itemModal}
+      dataTestId="categoryViewModal"
+      headerContent={
         <p className={styles.titlemodal}>{t('categoryDetails')}</p>
-        <Button
-          variant="danger"
-          onClick={hide}
-          className={styles.closeButton}
-          data-testid="categoryViewModalCloseBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
-      </Modal.Header>
-      <Modal.Body>
-        <Form className="p-3">
-          {/* Category Name */}
-          <Form.Group className="d-flex mb-3 w-100">
-            <FormControl fullWidth>
-              <TextField
-                label={t('actionItemCategoryName')}
-                variant="outlined"
-                className={styles.noOutline}
-                value={category.name}
-                disabled
-                data-testid="categoryNameView"
-              />
-            </FormControl>
-          </Form.Group>
-
-          {/* Category Description */}
-          <Form.Group className="d-flex mb-3 w-100">
-            <FormControl fullWidth>
-              <TextField
-                label={t('actionItemCategoryDescription')}
-                variant="outlined"
-                className={styles.noOutline}
-                value={category.description || 'No description provided'}
-                disabled
-                multiline
-                rows={4}
-                data-testid="categoryDescriptionView"
-              />
-            </FormControl>
-          </Form.Group>
-
-          {/* Status and Created Date */}
-          <Form.Group className="d-flex gap-3 mb-3">
-            {/* Status */}
+      }
+    >
+      <Form className="p-3">
+        {/* Category Name */}
+        <Form.Group className="d-flex mb-3 w-100">
+          <FormControl fullWidth>
             <TextField
-              label={t('status')}
-              fullWidth
-              value={
-                category.isDisabled ? tCommon('disabled') : tCommon('active')
-              }
-              InputProps={{
-                startAdornment: (
-                  <Circle
-                    sx={{
-                      fontSize: '0.8rem',
-                      color: category.isDisabled ? '#ff5252' : '#4caf50',
-                      marginRight: '8px',
-                    }}
-                  />
-                ),
-                style: {
-                  color: category.isDisabled ? '#ff5252' : '#4caf50',
-                },
-              }}
-              inputProps={{
-                style: {
-                  WebkitTextFillColor: category.isDisabled
-                    ? '#ff5252'
-                    : '#4caf50',
-                },
-              }}
+              label={t('actionItemCategoryName')}
+              variant="outlined"
+              className={styles.noOutline}
+              value={category.name}
               disabled
-              data-testid="categoryStatusView"
+              data-testid="categoryNameView"
             />
-          </Form.Group>
-        </Form>
-      </Modal.Body>
-    </Modal>
+          </FormControl>
+        </Form.Group>
+
+        {/* Category Description */}
+        <Form.Group className="d-flex mb-3 w-100">
+          <FormControl fullWidth>
+            <TextField
+              label={t('actionItemCategoryDescription')}
+              variant="outlined"
+              className={styles.noOutline}
+              value={category.description || t('noDescriptionProvided')}
+              disabled
+              multiline
+              rows={4}
+              data-testid="categoryDescriptionView"
+            />
+          </FormControl>
+        </Form.Group>
+
+        {/* Status and Created Date */}
+        <Form.Group className="d-flex gap-3 mb-3">
+          {/* Status */}
+          <TextField
+            label={t('status')}
+            fullWidth
+            value={
+              category.isDisabled ? tCommon('disabled') : tCommon('active')
+            }
+            InputProps={{
+              startAdornment: (
+                <Circle
+                  className={`${styles.actionItemCategoryStatusIcon} ${
+                    category.isDisabled
+                      ? styles.statusIconDisabled
+                      : styles.statusIconActive
+                  }`}
+                />
+              ),
+              className: category.isDisabled
+                ? styles.statusTextDisabled
+                : styles.statusTextActive,
+            }}
+            inputProps={{
+              className: category.isDisabled
+                ? styles.statusTextDisabled
+                : styles.statusTextActive,
+            }}
+            disabled
+            data-testid="categoryStatusView"
+          />
+        </Form.Group>
+      </Form>
+    </BaseModal>
   );
 };
 

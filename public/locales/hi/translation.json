@@ -18,7 +18,8 @@
     "rank": "रैंक",
     "volunteer": "स्वयंसेवक",
     "email": "ईमेल",
-    "hoursVolunteered": "स्वयंसेवक घंटे"
+    "hoursVolunteered": "स्वयंसेवक घंटे",
+    "volunteerRankings": "स्वयंसेवक रैंकिंग"
   },
   "loginPage": {
     "title": "तालावा व्यवस्थापक",
@@ -280,6 +281,7 @@
     "sortBy": "क्रमबद्ध करें",
     "filterByRole": "भूमिका के अनुसार फ़िल्टर करें",
     "errorLoadingUsers": "उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
+    "profilePageComingSoon": "प्रोफ़ाइल पेज जल्द आ रहा है!",
     "Newest": "नवीनतम",
     "Oldest": "सबसे पुराना",
     "noOrgError": "संगठन नहीं मिला, कृपया डैशबोर्ड के माध्यम से संगठन बनाएं",
@@ -410,7 +412,6 @@
     "manageTag": "प्रबंधित करें",
     "editTag": "संपादित करें",
     "removeTag": "हटाएँ",
-    "tags": "टैग",
     "tagDetails": "टैग विवरण",
     "tagName": "नाम",
     "tagType": "प्रकार",
@@ -421,8 +422,6 @@
     "noTagsFound": "कोई टैग नहीं मिला",
     "removeUserTag": "टैग हटाएँ",
     "removeUserTagMessage": "क्या आप इस टैग को हटाना चाहते हैं?",
-    "Latest": "नवीनतम",
-    "Oldest": "सबसे पुराना",
     "addChildTag": "उप-टैग जोड़ें",
     "enterTagName": "टैग का नाम दर्ज करें",
     "totalSubTags": "कुल उप-टैग",
@@ -430,10 +429,10 @@
     "tagCreationFailed": "टैग निर्माण विफल",
     "errorLoadingTagsData": "संगठन टैग डेटा लोड करते समय त्रुटि हुई",
     "sortTags": "टैग सॉर्ट करें",
-    "tags": "टैग",
     "Latest": "नवीनतम",
     "Oldest": "सबसे पुराना",
-    "viewSubTags": "{{count}} उप-टैग देखें"
+    "viewSubTags": "{{count}} उप-टैग देखें",
+    "tags": "टैग"
   },
   "manageTag": {
     "title": "टैग विवरण",
@@ -475,13 +474,15 @@
     "tagNamePlaceholder": "टैग का नाम लिखें",
     "allTags": "सभी टैग",
     "noMoreMembersFound": "कोई और सदस्य नहीं मिला",
+    "errorLoadingAssignedMembers": "सौंपे गए सदस्यों को लोड करते समय त्रुटि हुई",
+    "tags": "टैग",
     "errorOccurredWhileLoadingAssignedUser": "असाइन किए गए उपयोगकर्ता को लोड करते समय त्रुटि हुई",
     "sortPeople": "लोगों को सॉर्ट करें",
-    "tagActions": "टैग क्रियाएँ"
+    "tagActions": "टैग क्रियाएँ",
+    "loadAssignedUsersError": "निर्दिष्ट उपयोगकर्ताओं को लोड करते समय त्रुटि हुई"
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
-    "addedAsAdmin": "उपयोगकर्ता को व्यवस्थापक के रूप में जोड़ा गया है.",
     "joined": "शामिल हुए",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध"
   },
@@ -523,7 +524,6 @@
     "publicEvent": "सार्वजनिक है",
     "isRegistrable": "पंजीकरण योग्य है",
     "registerable": "पंजीकरण योग्य है",
-
     "createEvent": "कार्यक्रम बनाएँ",
     "enterFilter": "फ़िल्टर दर्ज करें",
     "enterName": "नाम दर्ज करें",
@@ -963,6 +963,7 @@
     "noUsersFound": "कोई उपयोगकर्ता नहीं मिला",
     "joined": "शामिल हुए",
     "searchByName": "नाम से खोजें",
+    "view": "देखें",
     "name": "नाम",
     "email": "ईमेल",
     "talawaApiUnavailable": "Talawa API अनुपलब्ध",
@@ -1282,6 +1283,8 @@
     "members": "सदस्य"
   },
   "postCard": {
+    "pinnedPost": "पिन किया गया पोस्ट",
+    "postImage": "पोस्ट छवि",
     "likes": "पसंद",
     "comments": "टिप्पणियाँ",
     "addComment": "टिप्पणी जोड़ें",
@@ -1629,10 +1632,13 @@
     "create": "बनाएं",
     "newChat": "नई चैट",
     "newGroupChat": "नया समूह चैट",
+    "description": "विवरण",
+    "hash": "#",
     "groupInfo": "समूह जानकारी",
     "members": "सदस्यों",
     "addMembers": "सदस्य जोड़ें",
     "userNotFound": "उपयोगकर्ता नहीं मिला",
+    "Error": "त्रुटि",
     "roleUpdatedSuccessfully": "भूमिका सफलतापूर्वक अपडेट की गई",
     "failedToUpdateRole": "भूमिका अपडेट करने में विफल",
     "memberRemovedSuccessfully": "सदस्य सफलतापूर्वक हटाया गया",
@@ -1659,13 +1665,21 @@
   "userChatRoom": {
     "selectContact": "बातचीत शुरू करने के लिए एक संपर्क चुनें",
     "sendMessage": "मेसेज भेजें",
-    "reply": "जवाब",
+    "loading": "लोड हो रहा है...",
+    "loadOlderMessages": "पुराने संदेश लोड करें",
+    "loadingMoreMessages": "अधिक संदेश लोड हो रहे हैं...",
     "loadingImage": "चित्र लोड हो रहा है...",
     "imageNotAvailable": "चित्र उपलब्ध नहीं है",
     "attachment": "अनुलग्नक",
-    "loadingMoreMessages": "अधिक संदेश लोड हो रहे हैं...",
-    "loading": "लोड हो रहा है...",
-    "loadOlderMessages": "पुराने संदेश लोड करें"
+    "reply": "जवाब",
+    "edit": "संपादित करें",
+    "delete": "हटाएं",
+    "errorBoundary": {
+      "title": "कुछ गलत हो गया",
+      "message": "चैट रूम में एक अप्रत्याशित त्रुटि हुई",
+      "resetButton": "फिर से प्रयास करें",
+      "resetButtonAriaLabel": "फिर से प्रयास करें"
+    }
   },
   "orgActionItemCategories": {
     "enableButton": "सक्षम",
@@ -1685,6 +1699,7 @@
     "categoryDeleted": "कार्रवाई आइटम श्रेणी सफलतापूर्वक हटा दी गई",
     "deleteCategory": "श्रेणी हटाएं",
     "deleteCategoryMsg": "क्या आप वाकई इस कार्रवाई आइटम श्रेणी को हटाना चाहते हैं?",
+    "noDescriptionProvided": "कोई विवरण प्रदान नहीं किया गया",
     "createButton": "बटन बनाएं",
     "editButton": "संपादित बटन"
   },
@@ -1715,7 +1730,9 @@
     "edit": "संपादित करें",
     "delete": "हटाएं",
     "name": "नाम",
-    "desc": "विवरण"
+    "desc": "विवरण",
+    "venueImagePreview": "स्थान की छवि का पूर्वावलोकन",
+    "sortVenues": "स्थानों को क्रमबद्ध करें"
   },
   "addMember": {
     "title": "सदस्य जोड़ें",
@@ -1779,7 +1796,22 @@
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "उपस्थित होने वाले को जोड़ने में त्रुटि",
-    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि"
+    "errorRemovingAttendee": "उपस्थित होने वाले को हटाने में त्रुटि",
+    "inviteByEmail": {
+      "addRecipient": "प्राप्तकर्ता जोड़ें",
+      "email": "ईमेल",
+      "title": "ईमेल द्वारा आमंत्रित करें",
+      "sending": "भेजा जा रहा है...",
+      "sendInvites": "निमंत्रण भेजें",
+      "remove": "हटाएं",
+      "name": "नाम",
+      "messagePlaceholder": "आपको इस कार्यक्रम में भाग लेने के लिए आमंत्रित किया गया है।",
+      "messageLabel": "संदेश (वैकल्पिक)",
+      "expiresInDaysLabel": "समाप्ति (दिनों में)",
+      "errorSendingInvites": "निमंत्रण भेजने में त्रुटि",
+      "emailsLabel": "प्राप्तकर्ता ईमेल और नाम",
+      "emailsHelp": "प्रत्येक प्राप्तकर्ता के लिए ईमेल और वैकल्पिक नाम प्रदान करें। आवश्यकतानुसार कई प्राप्तकर्ता जोड़ें।"
+    }
   },
   "userCampaigns": {
     "title": "धन उगाहने के अभियान",
@@ -1806,7 +1838,17 @@
     "noPledges": "कोई प्रतिज्ञा नहीं मिली",
     "noCampaigns": "कोई अभियान नहीं मिला",
     "raised": "एकत्रित",
-    "amountRaised": "एकत्रित राशि"
+    "amountRaised": "एकत्रित राशि",
+    "campaignIndex": "#",
+    "campaignName": "अभियान का नाम",
+    "startDate": "शुरुआत तिथि",
+    "endDate": "अंतिम तिथि",
+    "fundGoal": "वित्त पोषण लक्ष्य",
+    "percentRaised": "% एकत्रित",
+    "createFirstCampaign": "इसे यहाँ देखने के लिए अपना पहला धन उगाहने का अभियान बनाएं।",
+    "campaignEnded": "अभियान समाप्त हो गया",
+    "fundingGoal": "फंडिंग उद्देश्य",
+    "viewPledge": "प्लेज देखें"
   },
   "userPledges": {
     "title": "मेरी प्रतिज्ञाएँ",
@@ -1869,7 +1911,19 @@
     "thisEventOnly": "केवल यह घटना",
     "volunteerAlt": "स्वयंसेवक प्रोफ़ाइल चित्र",
     "groupTable": "समूह तालिका",
-    "volunteerActions": "स्वयंसेवक क्रियाएँ"
+    "volunteerActions": "स्वयंसेवक क्रियाएँ",
+    "volunteerHeader": "स्वयंसेवक",
+    "statusHeader": "स्थिति",
+    "hoursVolunteeredHeader": "स्वयंसेवा घंटे",
+    "optionsHeader": "विकल्प",
+    "groupHeader": "समूह",
+    "leaderHeader": "नेता",
+    "numVolunteersHeader": "स्वयंसेवकों की संख्या",
+    "pending": "लंबित",
+    "viewDetails": "{{name}} का विवरण देखें",
+    "editVolunteerGroup": "{{name}} स्वयंसेवक समूह संपादित करें",
+    "deleteVolunteerGroup": "{{name}} स्वयंसेवक समूह हटाएं",
+    "deleteVolunteerEntry": "{{name}} स्वयंसेवक प्रविष्टि हटाएं"
   },
   "userVolunteer": {
     "title": "स्वयंसेवकता",
@@ -2015,6 +2069,12 @@
     "eventsCreatedByOrganization": "संगठन द्वारा बनाए गए इवेंट्स",
     "today": "आज"
   },
+  "contact": {
+    "card_aria": "संपर्क कार्ड"
+  },
+  "securedRoute": {
+    "sessionExpired": "कृपया फिर से लॉगिन करें क्योंकि सत्र समाप्त हो गया है"
+  },
   "common": {
     "signOut": "साइन आउट",
     "signingOut": "साइन आउट हो रहा है...",
@@ -2028,6 +2088,28 @@
     "logoutFailed": "साइन आउट विफल रहा",
     "title": "उपयोगकर्ता पोर्टल",
     "talawa": "तलावा",
-    "talawaBranding": "तालावा ब्रांडिंग"
+    "talawaBranding": "तालावा ब्रांडिंग",
+    "view": "देखें"
+  },
+  "donation": {
+    "amount_label": "राशि",
+    "card_aria": "दान कार्ड",
+    "card_test_id": "donation-card-{{id}}",
+    "date_label": "दिनांक"
+  },
+  "organizationVenuesNotification": {
+    "venueCreated": "स्थान सफलतापूर्वक बनाया गया",
+    "venueUpdated": "स्थान का विवरण सफलतापूर्वक अपडेट किया गया",
+    "venueNameExists": "स्थान का नाम पहले से मौजूद है",
+    "venueTitleError": "स्थान का नाम खाली नहीं हो सकता!",
+    "venueCapacityError": "क्षमता एक सकारात्मक संख्या होनी चाहिए!",
+    "previewUrlError": "पूर्वावलोकन URL बनाने में त्रुटि",
+    "invalidCapacity": "क्षमता एक सकारात्मक संख्या होनी चाहिए"
+  },
+  "manageTags": {
+    "loadAssignedUsersError": "निर्दिष्ट उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
+    "sortPeople": "लोगों को क्रमबद्ध करें",
+    "unassign": "हटाएँ",
+    "tags": "टैग"
   }
 }

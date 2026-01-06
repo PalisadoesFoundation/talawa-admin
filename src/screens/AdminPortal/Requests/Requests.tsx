@@ -62,7 +62,7 @@ import {
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import TableLoader from 'components/TableLoader/TableLoader';
-import { GridCellParams } from '@mui/x-data-grid';
+import { GridCellParams } from 'shared-components/DataGridWrapper';
 import type {
   ReportingTableColumn,
   ReportingTableGridProps,
@@ -561,7 +561,10 @@ const Requests = (): JSX.Element => {
           ) : (
             <ReportingTable
               rows={
-                displayedRequests.map((req) => ({ ...req })) as ReportingRow[]
+                displayedRequests.map((req) => ({
+                  ...req,
+                  id: req.membershipRequestId,
+                })) as ReportingRow[]
               }
               columns={columns}
               gridProps={gridProps}
