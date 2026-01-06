@@ -351,7 +351,11 @@ describe('OrganizationPeople', () => {
     // The new component includes a "Joined:" label and a different date format.
     expect(screen.getByText(/Joined:/i)).toBeInTheDocument();
     // Check for the dynamic date format (YYYY-MM-DD)
-    expect(screen.getByText(new RegExp(dayjs.utc().subtract(3, 'day').format('YYYY-MM-DD')))).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        new RegExp(dayjs.utc().subtract(3, 'day').format('YYYY-MM-DD')),
+      ),
+    ).toBeInTheDocument();
   });
 
   test('handles search functionality correctly', async () => {
