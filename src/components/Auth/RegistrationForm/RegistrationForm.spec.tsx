@@ -32,7 +32,7 @@ describe('RegistrationForm', () => {
 
   it('renders registration form', () => {
     renderComponent();
-    expect(screen.getByLabelText('Name')).toBeInTheDocument();
+    expect(screen.getByLabelText('First Name')).toBeInTheDocument();
     expect(screen.getByLabelText(/Email/)).toBeInTheDocument();
     expect(screen.getByLabelText('Password')).toBeInTheDocument();
     expect(screen.getByLabelText('Confirm Password')).toBeInTheDocument();
@@ -45,7 +45,7 @@ describe('RegistrationForm', () => {
   it('handles form submission', async () => {
     renderComponent();
 
-    fireEvent.change(screen.getByLabelText('Name'), {
+    fireEvent.change(screen.getByLabelText('First Name'), {
       target: { value: 'John Doe' },
     });
     fireEvent.change(screen.getByLabelText(/Email/), {
@@ -68,7 +68,7 @@ describe('RegistrationForm', () => {
   it('handles form submission without onSuccess callback', async () => {
     renderComponent({ onSuccess: undefined });
 
-    fireEvent.change(screen.getByLabelText('Name'), {
+    fireEvent.change(screen.getByLabelText('First Name'), {
       target: { value: 'John Doe' },
     });
     fireEvent.change(screen.getByLabelText(/Email/), {
@@ -111,7 +111,7 @@ describe('RegistrationForm', () => {
   it('validates email field', () => {
     renderComponent();
 
-    fireEvent.change(screen.getByLabelText('Name'), {
+    fireEvent.change(screen.getByLabelText('First Name'), {
       target: { value: 'John Doe' },
     });
     fireEvent.change(screen.getByLabelText('Password'), {
@@ -129,7 +129,7 @@ describe('RegistrationForm', () => {
   it('validates password field', () => {
     renderComponent();
 
-    fireEvent.change(screen.getByLabelText('Name'), {
+    fireEvent.change(screen.getByLabelText('First Name'), {
       target: { value: 'John Doe' },
     });
     fireEvent.change(screen.getByLabelText(/Email/), {
@@ -147,7 +147,7 @@ describe('RegistrationForm', () => {
   it('validates password confirmation field', () => {
     renderComponent();
 
-    fireEvent.change(screen.getByLabelText('Name'), {
+    fireEvent.change(screen.getByLabelText('First Name'), {
       target: { value: 'John Doe' },
     });
     fireEvent.change(screen.getByLabelText(/Email/), {
@@ -168,7 +168,7 @@ describe('RegistrationForm', () => {
   it('updates form state on input changes', () => {
     renderComponent();
 
-    const nameInput = screen.getByLabelText('Name');
+    const nameInput = screen.getByLabelText('First Name');
     const emailInput = screen.getByLabelText(/Email/);
 
     fireEvent.change(nameInput, { target: { value: 'Test User' } });
@@ -181,7 +181,7 @@ describe('RegistrationForm', () => {
   it('shows loading state during submission', async () => {
     renderComponent();
 
-    fireEvent.change(screen.getByLabelText('Name'), {
+    fireEvent.change(screen.getByLabelText('First Name'), {
       target: { value: 'John Doe' },
     });
     fireEvent.change(screen.getByLabelText(/Email/), {
@@ -216,7 +216,7 @@ describe('RegistrationForm', () => {
   it('handles form with empty orgId', async () => {
     renderComponent();
 
-    fireEvent.change(screen.getByLabelText('Name'), {
+    fireEvent.change(screen.getByLabelText('First Name'), {
       target: { value: 'John Doe' },
     });
     fireEvent.change(screen.getByLabelText(/Email/), {
@@ -263,7 +263,7 @@ describe('RegistrationForm', () => {
     const mockCallback = vi.fn();
     renderComponent({ onSuccess: mockCallback });
 
-    fireEvent.change(screen.getByLabelText('Name'), {
+    fireEvent.change(screen.getByLabelText('First Name'), {
       target: { value: 'John Doe' },
     });
     fireEvent.change(screen.getByLabelText(/Email/), {
@@ -321,7 +321,7 @@ describe('RegistrationForm', () => {
     });
 
     // Fill in valid data
-    fireEvent.change(screen.getByLabelText('Name'), {
+    fireEvent.change(screen.getByLabelText('First Name'), {
       target: { value: 'John Doe' },
     });
     fireEvent.change(screen.getByLabelText(/Email/), {
