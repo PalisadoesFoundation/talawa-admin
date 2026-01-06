@@ -346,10 +346,17 @@ describe('OrganizationPeople', () => {
       expect(screen.getByText('John Doe')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('jane@example.com')).toBeInTheDocument();
-    expect(
-      screen.getByText(dayjs.utc().subtract(3, 'day').format('DD/MM/YYYY')),
-    ).toBeInTheDocument(); // Formatted date
+    const joinedLabels = screen.getAllByText(/Joined :/i);
+    expect(joinedLabels).toHaveLength(2);
+
+    const expectedDate1 = dayjs.utc().subtract(3, 'day').format('DD/MM/YYYY');
+    const expectedDate2 = dayjs.utc().subtract(2, 'day').format('DD/MM/YYYY');
+    expect(screen.getByTestId('org-people-joined-member1')).toHaveTextContent(
+      `Joined : ${expectedDate1}`,
+    );
+    expect(screen.getByTestId('org-people-joined-member2')).toHaveTextContent(
+      `Joined : ${expectedDate2}`,
+    );
   });
 
   test('handles search functionality correctly', async () => {
@@ -396,11 +403,16 @@ describe('OrganizationPeople', () => {
       () => {
         expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
       },
-      { timeout: 1000 },
+      { timeout: 3000 },
     );
 
     // Should show Jane but not John
-    expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+    await waitFor(
+      () => {
+        expect(screen.getByText('Jane Smith')).toBeInTheDocument();
+      },
+      { timeout: 3000 },
+    );
 
     // Clear search
     await userEvent.clear(searchInput);

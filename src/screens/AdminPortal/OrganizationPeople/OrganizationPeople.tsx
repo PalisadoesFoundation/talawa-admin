@@ -69,6 +69,10 @@ import {
   PAGE_SIZE,
 } from 'types/ReportingTable/utils';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
+
 import styles from 'style/app-fixed.module.css';
 import TableLoader from 'components/TableLoader/TableLoader';
 import {
@@ -483,8 +487,11 @@ function OrganizationPeople(): JSX.Element {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) =>
-        dayjs(params.row.createdAt).format('DD/MM/YYYY'),
+      renderCell: (params: GridCellParams) => (
+        <div data-testid={`org-people-joined-${params.row.id}`}>
+          {t('joined')} : {dayjs.utc(params.row.createdAt).format('DD/MM/YYYY')}
+        </div>
+      ),
     },
     {
       field: 'action',
