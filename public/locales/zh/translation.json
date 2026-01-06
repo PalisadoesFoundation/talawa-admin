@@ -478,7 +478,8 @@
     "errorOccurredWhileLoadingAssignedUser": "加载已分配用户时出错",
     "sortPeople": "排序人员",
     "tagActions": "标签操作",
-    "loadAssignedUsersError": "加载已分配用户时发生错误"
+    "loadAssignedUsersError": "加载已分配用户时发生错误",
+    "noTagsFound": "未找到标签"
   },
   "userListCard": {
     "addAdmin": "添加管理员",
@@ -1295,11 +1296,15 @@
     "editPost": "编辑帖子",
     "pinPost": "置顶帖子",
     "unpinPost": "取消置顶",
+    "like": "点赞帖子",
+    "unlike": "取消点赞",
+    "share": "分享帖子",
     "viewComments": "查看 {{count}} 条评论",
     "hideComments": "隐藏评论",
     "loadingComments": "评论加载中…",
     "loadMoreComments": "加载更多评论",
     "noMoreComments": "没有更多评论了",
+    "noComments": "无评论",
     "postedOn": "发布于 {{date}}",
     "emptyCommentError": "请在提交前输入评论。",
     "unexpectedError": "发生了意外错误。请重试。",

@@ -478,7 +478,8 @@
     "errorOccurredWhileLoadingAssignedUser": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
     "tagActions": "Actions d'étiquette",
     "loadAssignedUsersError": "Une erreur s'est produite lors du chargement des utilisateurs assignés",
-    "sortPeople": "Trier les personnes"
+    "sortPeople": "Trier les personnes",
+    "noTagsFound": "Aucun tag trouvé"
   },
   "userListCard": {
     "addAdmin": "Ajouter un administrateur",
@@ -1295,11 +1296,15 @@
     "editPost": "Modifier le message",
     "pinPost": "Épingler le message",
     "unpinPost": "Désépingler le message",
-    "viewComments": "Voir les {{count}} commentaires",
+    "like": "J'aime",
+    "unlike": "Je n'aime plus",
+    "share": "Partager",
+    "viewComments": "Voir {{count}} commentaires",
     "hideComments": "Masquer les commentaires",
     "loadingComments": "Chargement des commentaires…",
     "loadMoreComments": "Charger plus de commentaires",
     "noMoreComments": "Plus de commentaires à charger",
+    "noComments": "Aucun commentaire",
     "postedOn": "Publié le {{date}}",
     "emptyCommentError": "Veuillez saisir un commentaire avant de soumettre.",
     "unexpectedError": "Une erreur inattendue s'est produite. Veuillez réessayer.",

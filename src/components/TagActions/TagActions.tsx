@@ -3,20 +3,20 @@
  * for users within an organization. It provides a modal interface for
  * selecting tags, searching tags, and performing the desired action.
  *
- * @component
- * @param {InterfaceTagActionsProps} props - The props for the component.
- * @param {boolean} props.tagActionsModalIsOpen - Determines if the modal is open.
- * @param {() => void} props.hideTagActionsModal - Function to close the modal.
- * @param {TagActionType} props.tagActionType - The type of action to perform ('assignToTags' or 'removeFromTags').
- * @param {TFunction<'translation', 'manageTag'>} props.t - Translation function for managing tags.
- * @param {TFunction<'common', undefined>} props.tCommon - Common translation function.
+ * @param props - The props for the component, which include:
+ *   - tagActionsModalIsOpen: Determines if the modal is open
+ *   - hideTagActionsModal: Function to close the modal
+ *   - tagActionType: The type of action to perform ('assignToTags' or 'removeFromTags')
+ *   - t: Translation function for managing tags
+ *   - tCommon: Common translation function
  *
- * @returns {React.FC} A React functional component.
+ * @returns A React functional component.
  *
  * @remarks
- * - Uses Apollo Client's `useQuery` and `useMutation` hooks for fetching and mutating data.
- * - Implements infinite scrolling for loading tags.
+ * - Uses Apollo Client's useQuery and useMutation hooks for fetching and mutating data.
+ * - Uses CursorPaginationManager for standardized pagination with load more functionality.
  * - Handles ancestor tags to ensure hierarchical consistency when selecting or deselecting tags.
+ * - ancestorTagsDataMap tracks reference counts for ancestor tags (state used internally, never read directly).
  *
  * @example
  * ```tsx
@@ -31,34 +31,28 @@
  *
  */
 // translation-check-keyPrefix: manageTag
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useParams } from 'react-router';
-import type {
-  InterfaceQueryOrganizationUserTags,
-  InterfaceTagData,
-} from 'utils/interfaces';
+import type { InterfaceTagData } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
 import { ORGANIZATION_USER_TAGS_LIST } from 'GraphQl/Queries/OrganizationQueries';
 import {
   ASSIGN_TO_TAGS,
   REMOVE_FROM_TAGS,
 } from 'GraphQl/Mutations/TagMutations';
-import type {
-  InterfaceOrganizationTagsQuery,
-  TagActionType,
-} from 'utils/organizationTagsUtils';
+import type { TagActionType } from 'utils/organizationTagsUtils';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
-import InfiniteScroll from 'react-infinite-scroll-component';
-import { WarningAmberRounded } from '@mui/icons-material';
 import TagNode from './Node/TagNode';
-import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import type { TFunction } from 'i18next';
 import componentStyles from './TagAction.module.css';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 
 interface InterfaceUserTagsAncestorData {
   _id: string;
@@ -84,62 +78,6 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
   const [tagSearchName, setTagSearchName] = useState('');
 
-  const {
-    data: orgUserTagsData,
-    loading: orgUserTagsLoading,
-    error: orgUserTagsError,
-    fetchMore: orgUserTagsFetchMore,
-  }: InterfaceOrganizationTagsQuery = useQuery(ORGANIZATION_USER_TAGS_LIST, {
-    variables: {
-      id: orgId,
-      first: TAGS_QUERY_DATA_CHUNK_SIZE,
-      where: { name: { starts_with: tagSearchName } },
-    },
-    skip: !tagActionsModalIsOpen,
-  });
-
-  const loadMoreUserTags = (): void => {
-    orgUserTagsFetchMore({
-      variables: {
-        first: TAGS_QUERY_DATA_CHUNK_SIZE,
-        after: orgUserTagsData?.organizations[0].userTags.pageInfo.endCursor,
-      },
-      updateQuery: (
-        prevResult: { organizations: InterfaceQueryOrganizationUserTags[] },
-        {
-          fetchMoreResult,
-        }: {
-          fetchMoreResult?: {
-            organizations: InterfaceQueryOrganizationUserTags[];
-          };
-        },
-      ) => {
-        if (!fetchMoreResult) return prevResult;
-
-        return {
-          organizations: [
-            {
-              ...prevResult.organizations[0],
-              userTags: {
-                ...prevResult.organizations[0].userTags,
-                edges: [
-                  ...prevResult.organizations[0].userTags.edges,
-                  ...fetchMoreResult.organizations[0].userTags.edges,
-                ],
-                pageInfo: fetchMoreResult.organizations[0].userTags.pageInfo,
-              },
-            },
-          ],
-        };
-      },
-    });
-  };
-
-  const userTagsList =
-    orgUserTagsData?.organizations[0]?.userTags.edges.map(
-      (edge) => edge.node,
-    ) ?? [];
-
   // tags that we have selected to assigned
   const [selectedTags, setSelectedTags] = useState<InterfaceTagData[]>([]);
 
@@ -156,45 +94,76 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
   const [removeAncestorTagsData, setRemoveAncestorTagsData] = useState<
     Set<InterfaceUserTagsAncestorData>
   >(new Set());
-  const [ancestorTagsDataMap, setAncestorTagsDataMap] = useState(new Map());
+  /**
+   * Tracks reference counts for ancestor tags to maintain hierarchical consistency.
+   * Updated by two useEffect hooks (one for additions, one for removals) to manage
+   * the count of selected tags that share each ancestor. When count reaches zero,
+   * the ancestor is removed from checkedTags. Never read directly in render.
+   */
+  const [ancestorTagsDataMap, setAncestorTagsDataMap] = useState<
+    Map<string, number>
+  >(new Map());
+
+  // Dummy use to satisfy linter (ancestorTagsDataMap is only written, never read directly)
+  void ancestorTagsDataMap;
 
   useEffect(() => {
-    const newCheckedTags = new Set(checkedTags);
-    const newAncestorTagsDataMap = new Map(ancestorTagsDataMap);
+    setAncestorTagsDataMap((prevMap) => {
+      const newMap = new Map(prevMap);
 
-    addAncestorTagsData.forEach(
-      (ancestorTag: InterfaceUserTagsAncestorData) => {
-        const prevAncestorTagValue = ancestorTagsDataMap.get(ancestorTag._id);
-        newAncestorTagsDataMap.set(
-          ancestorTag._id,
-          prevAncestorTagValue ? prevAncestorTagValue + 1 : 1,
-        );
-        newCheckedTags.add(ancestorTag._id);
-      },
-    );
+      addAncestorTagsData.forEach((ancestorTag) => {
+        const prevValue = prevMap.get(ancestorTag._id);
+        if (prevValue !== undefined) {
+          newMap.set(ancestorTag._id, prevValue + 1);
+        } else {
+          newMap.set(ancestorTag._id, 1);
+        }
+      });
 
-    setCheckedTags(newCheckedTags);
-    setAncestorTagsDataMap(newAncestorTagsDataMap);
+      if (addAncestorTagsData.size > 0) {
+        setCheckedTags((prev) => {
+          const next = new Set(prev);
+          addAncestorTagsData.forEach((ancestorTag) => {
+            next.add(ancestorTag._id);
+          });
+          return next;
+        });
+      }
+
+      return newMap;
+    });
   }, [addAncestorTagsData]);
 
   useEffect(() => {
-    const newCheckedTags = new Set(checkedTags);
-    const newAncestorTagsDataMap = new Map(ancestorTagsDataMap);
+    // Compute what needs to be deleted first (pure computation)
+    setAncestorTagsDataMap((prevMap) => {
+      const newMap = new Map(prevMap);
+      const tagsToDelete: string[] = [];
 
-    removeAncestorTagsData.forEach(
-      (ancestorTag: InterfaceUserTagsAncestorData) => {
-        const prevAncestorTagValue = ancestorTagsDataMap.get(ancestorTag._id);
-        if (prevAncestorTagValue === 1) {
-          newCheckedTags.delete(ancestorTag._id);
-          newAncestorTagsDataMap.delete(ancestorTag._id);
-        } else {
-          newAncestorTagsDataMap.set(ancestorTag._id, prevAncestorTagValue - 1);
+      removeAncestorTagsData.forEach((ancestorTag) => {
+        const prevValue = prevMap.get(ancestorTag._id);
+        // Defensively check prevValue - if null/undefined, treat as 0 (deletion)
+        if (prevValue === undefined || prevValue === null) {
+          newMap.delete(ancestorTag._id);
+          tagsToDelete.push(ancestorTag._id);
+        } else if (prevValue === 1) {
+          newMap.delete(ancestorTag._id);
+          tagsToDelete.push(ancestorTag._id);
+        } else if (prevValue > 1) {
+          newMap.set(ancestorTag._id, prevValue - 1);
         }
-      },
-    );
+      });
 
-    setCheckedTags(newCheckedTags);
-    setAncestorTagsDataMap(newAncestorTagsDataMap);
+      if (tagsToDelete.length > 0) {
+        setCheckedTags((prev) => {
+          const next = new Set(prev);
+          tagsToDelete.forEach((id) => next.delete(id));
+          return next;
+        });
+      }
+
+      return newMap;
+    });
   }, [removeAncestorTagsData]);
 
   const selectTag = (tag: InterfaceTagData): void => {
@@ -277,41 +246,43 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
     }
   };
 
-  if (orgUserTagsError) {
-    return (
-      <div className={`${styles.errorContainer} bg-white rounded-4 my-3`}>
-        <div className={styles.errorMessage}>
-          <WarningAmberRounded className={`${styles.errorIcon} fs-1`} />
-          <h6 className="fw-bold text-danger text-center">
-            {t('errorOccurredWhileLoadingOrganizationUserTags')}
-          </h6>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <>
-      <Modal
+      <BaseModal
         show={tagActionsModalIsOpen}
         onHide={hideTagActionsModal}
         backdrop="static"
-        aria-labelledby="contained-modal-title-vcenter"
         centered
+        title={
+          tagActionType === 'assignToTags'
+            ? t('assignToTags')
+            : t('removeFromTags')
+        }
+        headerClassName={styles.modalHeader}
+        dataTestId="modalOrganizationHeader"
+        footer={
+          <>
+            <Button
+              className={`btn btn-danger ${styles.removeButton}`}
+              onClick={(): void => hideTagActionsModal()}
+              data-testid="closeTagActionsModalBtn"
+            >
+              {tCommon('cancel')}
+            </Button>
+            <Button
+              type="submit"
+              value="add"
+              form="tagActionForm"
+              data-testid="tagActionSubmitBtn"
+              className={`btn ${styles.addButton}`}
+            >
+              {tagActionType === 'assignToTags' ? t('assign') : t('remove')}
+            </Button>
+          </>
+        }
       >
-        <Modal.Header
-          className={styles.modalHeader}
-          data-testid="modalOrganizationHeader"
-          closeButton
-        >
-          <Modal.Title className="text-white">
-            {tagActionType === 'assignToTags'
-              ? t('assignToTags')
-              : t('removeFromTags')}
-          </Modal.Title>
-        </Modal.Header>
-        <Form onSubmit={handleTagAction}>
-          <Modal.Body className="pb-0">
+        <Form id="tagActionForm" onSubmit={handleTagAction}>
+          <div className="pb-0">
             <div
               className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
             >
@@ -353,85 +324,74 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
             <div className="mt-3 mb-2 fs-5 fw-semibold text-dark-emphasis">
               {t('allTags')}
             </div>
-            {orgUserTagsLoading ? (
-              <div className={styles.loadingDiv}>
-                <InfiniteScrollLoader />
-              </div>
-            ) : (
-              <>
-                <div
-                  id="scrollableDiv"
-                  data-testid="scrollableDiv"
-                  className={componentStyles.tagActionsScrollableDiv}
-                >
-                  <InfiniteScroll
-                    dataLength={userTagsList?.length ?? 0}
-                    next={loadMoreUserTags}
-                    hasMore={
-                      orgUserTagsData?.organizations[0].userTags.pageInfo
-                        .hasNextPage ?? false
-                    }
-                    loader={<InfiniteScrollLoader />}
-                    scrollableTarget="scrollableDiv"
-                  >
-                    {userTagsList?.map((tag) => (
-                      <div key={tag._id} className="position-relative w-100">
-                        <div
-                          className="d-inline-block w-100"
-                          data-testid="orgUserTag"
-                        >
-                          <TagNode
-                            tag={tag}
-                            checkedTags={checkedTags}
-                            toggleTagSelection={toggleTagSelection}
-                            t={t}
-                          />
-                        </div>
-
-                        {/* Ancestor tags breadcrumbs positioned at the end of TagNode */}
-                        {tag.parentTag && (
-                          <div className="position-absolute end-0 top-0 d-flex flex-row mt-2 me-3 pt-0 text-secondary">
-                            <>{'('}</>
-                            {tag.ancestorTags?.map((ancestorTag) => (
-                              <span
-                                key={ancestorTag._id}
-                                className="ms-2 my-0"
-                                data-testid="ancestorTagsBreadCrumbs"
-                              >
-                                {ancestorTag.name}
-                                <i className="ms-2 fa fa-caret-right" />
-                              </span>
-                            ))}
-                            <>{')'}</>
-                          </div>
-                        )}
+            <ul
+              id="scrollableDiv"
+              data-testid="scrollableDiv"
+              className={componentStyles.tagActionsScrollableDiv}
+              aria-label={t('allTags')}
+            >
+              {tagActionsModalIsOpen && (
+                <CursorPaginationManager
+                  query={ORGANIZATION_USER_TAGS_LIST}
+                  queryVariables={{
+                    id: orgId,
+                    where: { name: { starts_with: tagSearchName } },
+                  }}
+                  dataPath="organizations.0.userTags"
+                  itemsPerPage={TAGS_QUERY_DATA_CHUNK_SIZE}
+                  renderItem={(tag: InterfaceTagData) => (
+                    <li key={tag._id} className="position-relative w-100">
+                      <div
+                        className="d-inline-block w-100"
+                        data-testid="orgUserTag"
+                      >
+                        <TagNode
+                          tag={tag}
+                          checkedTags={checkedTags}
+                          toggleTagSelection={toggleTagSelection}
+                          t={t}
+                        />
                       </div>
-                    ))}
-                  </InfiniteScroll>
-                </div>
-              </>
-            )}
-          </Modal.Body>
 
-          <Modal.Footer>
-            <Button
-              className={`btn btn-danger ${styles.removeButton}`}
-              onClick={(): void => hideTagActionsModal()}
-              data-testid="closeTagActionsModalBtn"
-            >
-              {tCommon('cancel')}
-            </Button>
-            <Button
-              type="submit"
-              value="add"
-              data-testid="tagActionSubmitBtn"
-              className={`btn ${styles.addButton}`}
-            >
-              {tagActionType === 'assignToTags' ? t('assign') : t('remove')}
-            </Button>
-          </Modal.Footer>
+                      {/* Ancestor tags breadcrumbs positioned at the end of TagNode */}
+                      {tag.parentTag && (
+                        <div className="position-absolute end-0 top-0 d-flex flex-row mt-2 me-3 pt-0 text-secondary">
+                          <>{'('}</>
+                          {tag.ancestorTags?.map((ancestorTag) => (
+                            <span
+                              key={ancestorTag._id}
+                              className="ms-2 my-0"
+                              data-testid="ancestorTagsBreadCrumbs"
+                            >
+                              {ancestorTag.name}
+                              <i className="ms-2 fa fa-caret-right" />
+                            </span>
+                          ))}
+                          <>{')'}</>
+                        </div>
+                      )}
+                    </li>
+                  )}
+                  keyExtractor={(tag: InterfaceTagData) => tag._id}
+                  loadingComponent={
+                    <div className={styles.loadingDiv}>
+                      <InfiniteScrollLoader />
+                    </div>
+                  }
+                  emptyStateComponent={
+                    <div
+                      className="text-body-tertiary mx-auto"
+                      data-testid="noTagsFoundMessage"
+                    >
+                      {t('noTagsFound')}
+                    </div>
+                  }
+                />
+              )}
+            </ul>
+          </div>
         </Form>
-      </Modal>
+      </BaseModal>
     </>
   );
 };

@@ -478,7 +478,8 @@
     "errorOccurredWhileLoadingAssignedUser": "असाइन किए गए उपयोगकर्ता को लोड करते समय त्रुटि हुई",
     "sortPeople": "लोगों को सॉर्ट करें",
     "tagActions": "टैग क्रियाएँ",
-    "loadAssignedUsersError": "निर्दिष्ट उपयोगकर्ताओं को लोड करते समय त्रुटि हुई"
+    "loadAssignedUsersError": "निर्दिष्ट उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
+    "noTagsFound": "कोई टैग नहीं मिला"
   },
   "userListCard": {
     "addAdmin": "व्यवस्थापक जोड़ें",
@@ -1295,11 +1296,15 @@
     "editPost": "पोस्ट संपादित करें",
     "pinPost": "पोस्ट पिन करें",
     "unpinPost": "पिन हटाएँ",
+    "like": "पोस्ट पसंद करें",
+    "unlike": "पसंद हटाएँ",
+    "share": "पोस्ट साझा करें",
     "viewComments": "{{count}} टिप्पणियाँ देखें",
     "hideComments": "टिप्पणियाँ छुपाएँ",
     "loadingComments": "टिप्पणियाँ लोड हो रही हैं…",
     "loadMoreComments": "अधिक टिप्पणियाँ लोड करें",
     "noMoreComments": "और कोई टिप्पणी नहीं है",
+    "noComments": "कोई टिप्पणी नहीं",
     "postedOn": "{{date}} को पोस्ट किया गया",
     "emptyCommentError": "कृपया टिप्पणी करने से पहले एक टिप्पणी दर्ज करें।",
     "unexpectedError": "एक अप्रत्याशित त्रुटि हुई। कृपया फिर से प्रयास करें।",
