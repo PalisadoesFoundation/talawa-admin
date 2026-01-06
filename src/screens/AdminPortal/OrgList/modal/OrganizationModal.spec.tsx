@@ -17,6 +17,17 @@ import i18nForTest from '../../../../utils/i18nForTest'; // Update path based on
 
 import { validateFile } from 'utils/fileValidation';
 
+// Mock MinIO Upload
+const { mockUploadFileToMinio } = vi.hoisted(() => ({
+  mockUploadFileToMinio: vi.fn().mockResolvedValue({
+    objectName: 'mocked-object-name',
+  }),
+}));
+
+vi.mock('utils/MinioUpload', () => ({
+  useMinioUpload: () => ({ uploadFileToMinio: mockUploadFileToMinio }),
+}));
+
 // Mock toast
 const toastMocks = vi.hoisted(() => ({
   error: vi.fn(),
@@ -51,6 +62,16 @@ describe('OrganizationModal Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    mockUploadFileToMinio.mockImplementation(async (file: File) => {
+      // Simulate file size validation - reject files larger than 5MB
+      if (file.size > 5000000) {
+        throw new Error('File too large');
+      }
+      return {
+        objectName: 'mocked-object-name',
+        fileHash: 'mock-hash',
+      };
+    });
     (validateFile as unknown as ReturnType<typeof vi.fn>).mockImplementation(
       () => ({
         isValid: true,
@@ -61,15 +82,6 @@ describe('OrganizationModal Component', () => {
   afterEach(() => {
     vi.restoreAllMocks();
   });
-
-  vi.mock('utils/convertToBase64', () => ({
-    default: vi.fn((file) => {
-      if (file.size > 5000000) {
-        return Promise.reject(new Error('File too large'));
-      }
-      return Promise.resolve('mockBase64String');
-    }),
-  }));
 
   const setup = (): RenderResult => {
     return render(
@@ -154,7 +166,7 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [file] } });
     await waitFor(() =>
       expect(mockSetFormState).toHaveBeenCalledWith(
-        expect.objectContaining({ avatar: 'mockBase64String' }),
+        expect.objectContaining({ avatar: 'mocked-object-name' }),
       ),
     );
   });
@@ -407,7 +419,7 @@ describe('OrganizationModal Component', () => {
     await userEvent.upload(fileInput, file);
 
     expect(mockSetFormState).toHaveBeenCalledWith(
-      expect.objectContaining({ avatar: 'mockBase64String' }),
+      expect.objectContaining({ avatar: 'mocked-object-name' }),
     );
   });
 
@@ -590,7 +602,7 @@ describe('OrganizationModal Component', () => {
       expect(toastMocks.success).toHaveBeenCalledWith('imageUploadSuccess');
     });
     expect(mockSetFormState).toHaveBeenCalledWith(
-      expect.objectContaining({ avatar: 'mockBase64String' }),
+      expect.objectContaining({ avatar: 'mocked-object-name' }),
     );
   });
 
