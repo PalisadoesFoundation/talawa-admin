@@ -18,7 +18,9 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
+// eslint-disable-next-line no-restricted-imports
 import { LocalizationProvider } from '@mui/x-date-pickers';
+// eslint-disable-next-line no-restricted-imports
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import {
