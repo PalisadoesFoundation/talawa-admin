@@ -1,7 +1,7 @@
 /**
  * OrganizationModal Component
  *
- * Renders a modal for creating or editing an organization.
+ * Renders a modal for creating an organization.
  * Includes form fields for organization details and image upload.
  *
  * @param showModal - Whether the modal is visible
@@ -12,6 +12,10 @@
  * @param t - Translation function
  * @param tCommon - Common translation function
  * @param userData - Current user data
+ *
+ * @remarks
+ * - This component supports organization creation only.
+ * - Image uploads are handled via MinIO using `useMinioUpload`.
  */
 import React from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
@@ -231,8 +235,9 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
             />
           </Col>
         </Row>
-        <Row className="mb-1"></Row>
-        <Form.Label htmlFor="orgphoto">{tCommon('displayImage')}</Form.Label>
+        <Form.Label htmlFor="orgphoto" className="mt-3">
+          {tCommon('displayImage')}
+        </Form.Label>
         <Form.Control
           accept="image/*"
           id="orgphoto"
