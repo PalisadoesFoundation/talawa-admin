@@ -5,18 +5,18 @@
  * likes, comments, and associated actions like editing, deleting, liking, and commenting.
  * It also includes modals for viewing the post in detail and editing the post content.
  *
- * @param props - The properties of the post card.
- * @param props.id - Unique identifier for the post.
- * @param props.creator - Object containing the creator's details (id, firstName, lastName, email).
- * @param props.title - Title of the post.
- * @param props.text - Content of the post.
- * @param props.image - URL of the post's image.
- * @param props.postedAt - Date when the post was created.
- * @param props.likeCount - Number of likes on the post.
- * @param props.likedBy - Array of users who liked the post.
- * @param props.comments - Array of comments on the post.
- * @param props.commentCount - Total number of comments on the post.
- * @param props.fetchPosts - Function to refresh the list of posts.
+ * @param props - The properties of the post card, which include:
+ *   - id: Unique identifier for the post
+ *   - creator: Object containing the creator's details (id, firstName, lastName, email)
+ *   - title: Title of the post
+ *   - text: Content of the post
+ *   - image: URL of the post's image
+ *   - postedAt: Date when the post was created
+ *   - likeCount: Number of likes on the post
+ *   - likedBy: Array of users who liked the post
+ *   - comments: Array of comments on the post
+ *   - commentCount: Total number of comments on the post
+ *   - fetchPosts: Function to refresh the list of posts
  *
  * @returns A JSX.Element representing the post card.
  */
@@ -311,6 +311,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               controls
               className={postCardStyles.video}
               crossOrigin="anonymous"
+              data-testid="video-attachment"
             >
               <source src={props.attachmentURL} />
             </video>

@@ -3,18 +3,17 @@
  * for users within an organization. It provides a modal interface for
  * selecting tags, searching tags, and performing the desired action.
  *
- * @component
- * @param {InterfaceTagActionsProps} props - The props for the component.
- * @param {boolean} props.tagActionsModalIsOpen - Determines if the modal is open.
- * @param {() => void} props.hideTagActionsModal - Function to close the modal.
- * @param {TagActionType} props.tagActionType - The type of action to perform ('assignToTags' or 'removeFromTags').
- * @param {TFunction<'translation', 'manageTag'>} props.t - Translation function for managing tags.
- * @param {TFunction<'common', undefined>} props.tCommon - Common translation function.
+ * @param props - The props for the component, which include:
+ *   - tagActionsModalIsOpen: Determines if the modal is open
+ *   - hideTagActionsModal: Function to close the modal
+ *   - tagActionType: The type of action to perform ('assignToTags' or 'removeFromTags')
+ *   - t: Translation function for managing tags
+ *   - tCommon: Common translation function
  *
- * @returns {React.FC} A React functional component.
+ * @returns A React functional component.
  *
  * @remarks
- * - Uses Apollo Client's `useQuery` and `useMutation` hooks for fetching and mutating data.
+ * - Uses Apollo Client's useQuery and useMutation hooks for fetching and mutating data.
  * - Uses CursorPaginationManager for standardized pagination with load more functionality.
  * - Handles ancestor tags to ensure hierarchical consistency when selecting or deselecting tags.
  * - ancestorTagsDataMap tracks reference counts for ancestor tags (state used internally, never read directly).
@@ -35,8 +34,9 @@
 import { useMutation } from '@apollo/client';
 import type { FormEvent } from 'react';
 import React, { useEffect, useState } from 'react';
-import { Modal, Button, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { useParams } from 'react-router';
 import type { InterfaceTagData } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';
@@ -244,26 +244,40 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
   return (
     <>
-      <Modal
+      <BaseModal
         show={tagActionsModalIsOpen}
         onHide={hideTagActionsModal}
         backdrop="static"
-        aria-labelledby="contained-modal-title-vcenter"
         centered
+        title={
+          tagActionType === 'assignToTags'
+            ? t('assignToTags')
+            : t('removeFromTags')
+        }
+        headerClassName={styles.modalHeader}
+        dataTestId="modalOrganizationHeader"
+        footer={
+          <>
+            <Button
+              className={`btn btn-danger ${styles.removeButton}`}
+              onClick={(): void => hideTagActionsModal()}
+              data-testid="closeTagActionsModalBtn"
+            >
+              {tCommon('cancel')}
+            </Button>
+            <Button
+              type="submit"
+              value="add"
+              data-testid="tagActionSubmitBtn"
+              className={`btn ${styles.addButton}`}
+            >
+              {tagActionType === 'assignToTags' ? t('assign') : t('remove')}
+            </Button>
+          </>
+        }
       >
-        <Modal.Header
-          className={styles.modalHeader}
-          data-testid="modalOrganizationHeader"
-          closeButton
-        >
-          <Modal.Title className="text-white">
-            {tagActionType === 'assignToTags'
-              ? t('assignToTags')
-              : t('removeFromTags')}
-          </Modal.Title>
-        </Modal.Header>
         <Form onSubmit={handleTagAction}>
-          <Modal.Body className="pb-0">
+          <div className="pb-0">
             <div
               className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
             >
@@ -362,27 +376,9 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                 />
               )}
             </ul>
-          </Modal.Body>
-
-          <Modal.Footer>
-            <Button
-              className={`btn btn-danger ${styles.removeButton}`}
-              onClick={(): void => hideTagActionsModal()}
-              data-testid="closeTagActionsModalBtn"
-            >
-              {tCommon('cancel')}
-            </Button>
-            <Button
-              type="submit"
-              value="add"
-              data-testid="tagActionSubmitBtn"
-              className={`btn ${styles.addButton}`}
-            >
-              {tagActionType === 'assignToTags' ? t('assign') : t('remove')}
-            </Button>
-          </Modal.Footer>
+          </div>
         </Form>
-      </Modal>
+      </BaseModal>
     </>
   );
 };

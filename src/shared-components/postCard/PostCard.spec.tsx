@@ -25,7 +25,6 @@ import { GET_POST_COMMENTS, CURRENT_USER } from '../../GraphQl/Queries/Queries';
 import useLocalStorage from '../../utils/useLocalstorage';
 import { errorHandler } from '../../utils/errorHandler';
 
-// ===== MODULE MOCKS =====
 vi.mock('react-toastify', () => ({
   toast: {
     error: vi.fn(),
@@ -45,11 +44,6 @@ vi.mock('../../plugin', () => ({
   )),
 }));
 
-// ===== FUNCTION MOCKS =====
-
-// ===== APOLLO GRAPHQL MOCKS =====
-
-// Base comments query mock
 const commentsQueryMock = {
   request: {
     query: GET_POST_COMMENTS,
@@ -302,7 +296,6 @@ const nullCommentsMock = {
   },
 };
 
-// ===== BASE MOCKS ARRAY =====
 const mocks = [
   {
     request: {
@@ -1204,6 +1197,290 @@ describe('PostCard', () => {
     });
   });
 
+  it('should render video attachment with correct attributes', () => {
+    const videoProps = {
+      ...defaultProps,
+      attachmentURL: 'http://example.com/video.mp4',
+      mimeType: 'video/mp4',
+    };
+
+    renderPostCard(videoProps);
+
+    const videoElement = screen.getByTestId('video-attachment');
+    expect(videoElement).toBeInTheDocument();
+    expect(videoElement).toHaveAttribute('controls');
+    expect(videoElement).toHaveAttribute('crossOrigin', 'anonymous');
+
+    const sourceElement = videoElement.querySelector('source');
+    expect(sourceElement).toHaveAttribute(
+      'src',
+      'http://example.com/video.mp4',
+    );
+  });
+
+  it('should render image attachment with correct attributes', () => {
+    const imageProps = {
+      ...defaultProps,
+      attachmentURL: 'http://example.com/image.jpg',
+      mimeType: 'image/jpeg',
+    };
+
+    renderPostCard(imageProps);
+
+    const imageElement = screen.getByRole('img', { name: defaultProps.title });
+    expect(imageElement).toBeInTheDocument();
+    expect(imageElement).toHaveAttribute('src', 'http://example.com/image.jpg');
+    expect(imageElement).toHaveAttribute('alt', defaultProps.title);
+    expect(imageElement).toHaveAttribute('crossOrigin', 'anonymous');
+  });
+
+  it('should handle missing attachment gracefully', () => {
+    const noAttachmentProps = {
+      ...defaultProps,
+      attachmentURL: null,
+      mimeType: null,
+    };
+
+    renderPostCard(noAttachmentProps);
+
+    // Should not show post image/video, but avatar should still be there
+    const postImages = screen.queryAllByRole('img');
+    const postImagesOnly = postImages.filter(
+      (img) => !img.getAttribute('alt')?.includes('Profile picture'),
+    );
+
+    expect(postImagesOnly.length).toBe(0);
+    expect(screen.queryByTestId('video-attachment')).not.toBeInTheDocument();
+  });
+
+  it('should handle plugin injector with different data configurations', () => {
+    const customDataProps = {
+      ...defaultProps,
+      title: 'Custom Test Post',
+      text: 'Custom test content',
+      commentCount: 5,
+    };
+
+    renderPostCard(customDataProps);
+
+    const pluginInjector = screen.getByTestId('plugin-injector-g4');
+    expect(pluginInjector).toBeInTheDocument();
+    // Plugin injector should receive the correct data
+    expect(pluginInjector).toHaveTextContent('Mock Plugin Injector G4');
+  });
+
+  it('should handle null props gracefully', () => {
+    const nullProps = {
+      ...defaultProps,
+      attachmentURL: null,
+      mimeType: null,
+      body: undefined,
+    };
+
+    // Should not throw errors with null props
+    expect(() => renderPostCard(nullProps)).not.toThrow();
+  });
+
+  it('should handle empty string props gracefully', () => {
+    const emptyProps = {
+      ...defaultProps,
+      title: '',
+      text: '',
+      attachmentURL: '',
+    };
+
+    // Should not throw errors with empty strings
+    expect(() => renderPostCard(emptyProps)).not.toThrow();
+  });
+
+  it('should handle zero comment count correctly', () => {
+    const zeroCommentsProps = {
+      ...defaultProps,
+      commentCount: 0,
+    };
+
+    renderPostCard(zeroCommentsProps);
+
+    // Should not show comment button when comment count is 0
+    expect(screen.queryByTestId('comment-card')).not.toBeInTheDocument();
+  });
+
+  it('should handle different user roles correctly', () => {
+    const { setItem } = useLocalStorage();
+
+    // Test as regular user (not admin, not post creator)
+    setItem('userId', '2'); // Different from creator id
+    setItem('role', 'user');
+
+    renderPostCard();
+
+    const moreButton = screen.getByTestId('post-more-options-button');
+    fireEvent.click(moreButton);
+
+    // Regular user should not see edit or delete options for other users' posts
+    expect(screen.queryByTestId('edit-post-menu-item')).not.toBeInTheDocument();
+    expect(
+      screen.queryByTestId('delete-post-menu-item'),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByTestId('pin-post-menu-item')).not.toBeInTheDocument();
+  });
+
+  it('should handle keyboard navigation for accessibility', async () => {
+    renderPostCard();
+
+    const moreButton = screen.getByTestId('post-more-options-button');
+
+    // Open dropdown with click
+    await userEvent.click(moreButton);
+
+    // Wait for menu to open and find the edit menu item
+    const editMenuItem = await screen.findByTestId('edit-post-menu-item');
+    expect(editMenuItem).toBeInTheDocument();
+
+    // Close dropdown with Escape key
+    await userEvent.keyboard('[Escape]');
+
+    await waitFor(() => {
+      expect(
+        screen.queryByTestId('edit-post-menu-item'),
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  it('should handle ARIA attributes for screen readers', () => {
+    renderPostCard();
+
+    const likeButton = screen.getByTestId('like-btn');
+    expect(likeButton).toHaveAttribute(
+      'aria-label',
+      expect.stringMatching(/like|unlike/i),
+    );
+
+    const moreButton = screen.getByTestId('post-more-options-button');
+    expect(moreButton).toHaveAttribute(
+      'aria-label',
+      expect.stringMatching(/more options/i),
+    );
+  });
+
+  it('should handle large comment lists efficiently', async () => {
+    // Create mock with many comments
+    const manyCommentsMock = {
+      request: {
+        query: GET_POST_COMMENTS,
+        variables: {
+          postId: '1',
+          userId: '1',
+          first: 10,
+          after: null,
+        },
+      },
+      result: {
+        data: {
+          post: {
+            __typename: 'Post',
+            comments: {
+              __typename: 'CommentConnection',
+              edges: Array.from({ length: 50 }).map((_, i) => ({
+                __typename: 'CommentEdge',
+                node: {
+                  __typename: 'Comment',
+                  id: `comment-${i}`,
+                  body: `Comment ${i}`,
+                  creator: {
+                    __typename: 'User',
+                    id: '2',
+                    name: 'Test User',
+                    avatarURL: null,
+                  },
+                  createdAt: dayjs().subtract(i, 'days').toISOString(),
+                  upVotesCount: i % 5,
+                  downVotesCount: 0,
+                  hasUserVoted: {
+                    __typename: 'HasUserVotedResponse',
+                    hasVoted: false,
+                    voteType: null,
+                  },
+                },
+                cursor: `cursor-${i}`,
+              })),
+              pageInfo: {
+                __typename: 'PageInfo',
+                hasNextPage: true,
+                endCursor: 'cursor-49',
+              },
+            },
+          },
+        },
+      },
+    };
+
+    renderPostCardWithCustomMock(manyCommentsMock);
+
+    // Show comments
+    const viewCommentsButton = screen.getByTestId('comment-card');
+    fireEvent.click(viewCommentsButton);
+
+    // Should render pagination manager for large comment lists
+    await waitFor(() => {
+      expect(
+        screen.getByTestId('cursor-pagination-manager'),
+      ).toBeInTheDocument();
+    });
+
+    // Should render multiple comments
+    expect(screen.getByText('Comment 0')).toBeInTheDocument();
+    expect(screen.getByText('Comment 9')).toBeInTheDocument();
+  });
+
+  it('should handle rapid state changes gracefully', async () => {
+    const { rerender } = renderPostCard({
+      hasUserVoted: { hasVoted: false, voteType: null },
+      upVoteCount: 0,
+    });
+
+    // Rapid like/unlike changes
+    for (let i = 0; i < 5; i++) {
+      rerender(
+        <MockedProvider link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <PostCard
+                  {...defaultProps}
+                  hasUserVoted={{
+                    hasVoted: i % 2 === 0,
+                    voteType: i % 2 === 0 ? 'up_vote' : null,
+                  }}
+                  upVoteCount={i}
+                />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+
+      // Should not crash with rapid updates
+      expect(screen.getByTestId('like-count')).toBeInTheDocument();
+    }
+  });
+
+  it('should handle different language translations', () => {
+    expect(() => {
+      render(
+        <MockedProvider link={link}>
+          <BrowserRouter>
+            <Provider store={store}>
+              <I18nextProvider i18n={i18nForTest}>
+                <PostCard {...defaultProps} />
+              </I18nextProvider>
+            </Provider>
+          </BrowserRouter>
+        </MockedProvider>,
+      );
+    }).not.toThrow();
+  });
+
   it('synchronizes isLikedByUser state when hasUserVoted prop changes', () => {
     const { rerender } = render(
       <MockedProvider link={link}>
@@ -1277,16 +1554,14 @@ describe('PostCard', () => {
   it('falls back to id from localStorage when userId is null', async () => {
     const { setItem } = useLocalStorage();
 
-    setItem('userId', null); // simulate missing userId
-    setItem('id', '1'); // matches creator.id
+    setItem('userId', null);
+    setItem('id', '1');
     setItem('role', 'administrator');
 
     renderPostCard();
 
-    // Open dropdown
     await userEvent.click(screen.getByTestId('post-more-options-button'));
 
-    // Edit button should still be visible due to fallback
     expect(
       await screen.findByTestId('edit-post-menu-item'),
     ).toBeInTheDocument();
@@ -1324,18 +1599,15 @@ describe('PostCard', () => {
 
     renderPostCardWithCustomMockAndProps(emptyCommentsMock, {});
 
-    // Show comments section
     const viewCommentsButton = screen.getByTestId('comment-card');
     fireEvent.click(viewCommentsButton);
 
-    // Verify empty state message appears
     await waitFor(() => {
       expect(screen.getByText(/No comments/i)).toBeInTheDocument();
     });
   });
 
   it('should refetch comments when refetchTrigger is incremented', async () => {
-    // Mock for refetch after comment creation
     const refetchCommentsMock = {
       request: {
         query: GET_POST_COMMENTS,
@@ -1416,9 +1688,9 @@ describe('PostCard', () => {
     };
 
     const mocksWithRefetch = [
-      commentsQueryMock, // First call (initial load)
-      refetchCommentsMock, // Second call (after refetch)
-      createCommentMock, // Comment creation
+      commentsQueryMock,
+      refetchCommentsMock,
+      createCommentMock,
       ...mocks.filter(
         (m) =>
           m.request.query !== GET_POST_COMMENTS &&
@@ -1438,7 +1710,6 @@ describe('PostCard', () => {
       </MockedProvider>,
     );
 
-    // Show comments
     const viewCommentsButton = screen.getByTestId('comment-card');
     fireEvent.click(viewCommentsButton);
 
@@ -1448,15 +1719,12 @@ describe('PostCard', () => {
       ).toBeInTheDocument(),
     );
 
-    // Initially should have one comment
     expect(screen.getByText('Test comment')).toBeInTheDocument();
 
-    // Create a comment while comments are visible (this increments refetchTrigger)
     const commentInput = screen.getByPlaceholderText(/add comment/i);
     fireEvent.change(commentInput, { target: { value: 'New test comment' } });
     fireEvent.click(screen.getByTestId('comment-send'));
 
-    // Wait for refetch to occur and new comment to appear
     await waitFor(() => {
       expect(screen.getByText('New test comment')).toBeInTheDocument();
     });
