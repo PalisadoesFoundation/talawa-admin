@@ -156,17 +156,17 @@ describe('userUpdateUtils', () => {
       Object.defineProperty(invalidFile, 'size', { value: 1024 }); // 1KB
 
       mockTCommon.mockReturnValue(
-        'Invalid file type. Please use JPEG, PNG, or GIF.',
+        'Invalid file type. Please use JPEG, PNG, GIF.',
       );
 
       const result = validateImageFile(invalidFile, mockTCommon);
 
       expect(result).toBe(false);
       expect(mockTCommon).toHaveBeenCalledWith('invalidFileType', {
-        types: 'JPEG, PNG, or GIF',
+        types: 'JPEG, PNG, GIF',
       });
       expect(NotificationToast.error).toHaveBeenCalledWith(
-        'Invalid file type. Please use JPEG, PNG, or GIF.',
+        'Invalid file type. Please use JPEG, PNG, GIF.',
       );
     });
 
@@ -196,17 +196,17 @@ describe('userUpdateUtils', () => {
       Object.defineProperty(invalidFile, 'size', { value: 1024 }); // 1KB
 
       mockTCommon.mockReturnValue(
-        'Invalid file type. Please use JPEG, PNG, or GIF.',
+        'Invalid file type. Please use JPEG, PNG, GIF.',
       );
 
       const result = validateImageFile(invalidFile, mockTCommon);
 
       expect(result).toBe(false);
       expect(mockTCommon).toHaveBeenCalledWith('invalidFileType', {
-        types: 'JPEG, PNG, or GIF',
+        types: 'JPEG, PNG, GIF',
       });
       expect(NotificationToast.error).toHaveBeenCalledWith(
-        'Invalid file type. Please use JPEG, PNG, or GIF.',
+        'Invalid file type. Please use JPEG, PNG, GIF.',
       );
     });
 

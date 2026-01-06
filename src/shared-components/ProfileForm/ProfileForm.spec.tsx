@@ -630,7 +630,7 @@ describe('MemberDetail', () => {
       await userEvent.upload(fileInput, invalidFile);
 
       expect(NotificationToast.error).toHaveBeenCalledWith(
-        'Invalid file type. Please upload a JPEG, PNG, or GIF file.',
+        'Invalid file type. Please upload a JPEG, PNG, GIF file.',
       );
 
       // Test file size limit
@@ -1028,7 +1028,7 @@ describe('MemberDetail', () => {
 
       await waitFor(() => {
         expect(NotificationToast.error).toHaveBeenCalledWith(
-          'Invalid file type. Please upload a JPEG, PNG, or GIF file.',
+          'Invalid file type. Please upload a JPEG, PNG, GIF file.',
         );
       });
     });

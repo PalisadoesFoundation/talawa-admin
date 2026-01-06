@@ -65,15 +65,20 @@ export function validateImageFile(
     return false; // No file to validate
   }
 
-  if (!(FILE_UPLOAD_ALLOWED_TYPES as unknown as string[]).includes(file.type)) {
+  if (!FILE_UPLOAD_ALLOWED_TYPES.includes(file.type)) {
+    const allowedTypesDisplay = FILE_UPLOAD_ALLOWED_TYPES.map((type) =>
+      type.split('/')[1].toUpperCase(),
+    ).join(', ');
     NotificationToast.error(
-      tCommon('invalidFileType', { types: 'JPEG, PNG, or GIF' }) as string,
+      tCommon('invalidFileType', { types: allowedTypesDisplay }) as string,
     );
     return false;
   }
 
   if (file.size > FILE_UPLOAD_MAX_SIZE_MB * 1024 * 1024) {
-    NotificationToast.error(tCommon('fileTooLarge', { size: 5 }) as string);
+    NotificationToast.error(
+      tCommon('fileTooLarge', { size: FILE_UPLOAD_MAX_SIZE_MB }) as string,
+    );
     return false;
   }
   return true;
