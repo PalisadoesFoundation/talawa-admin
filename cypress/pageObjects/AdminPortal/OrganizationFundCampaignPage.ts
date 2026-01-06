@@ -42,6 +42,10 @@ export class OrganizationFundCampaignPage {
       .should('exist')
       .click({ force: true });
     cy.url().should('match', /\/orgfunds\/[a-f0-9-]+/);
+    // Wait for funds page to fully load - either funds list or empty state
+    cy.get('[data-testid="funds-list"], [data-testid="funds-empty"]', {
+      timeout,
+    }).should('exist');
     return this;
   }
 
@@ -129,7 +133,17 @@ export class OrganizationFundCampaignPage {
   }
 
   clickViewBtn(timeout = 10000) {
-    cy.get(this._viewBtn, { timeout }).first().should('be.visible').click();
+    // First ensure funds page is loaded
+    cy.get('[data-testid="funds-list"], [data-testid="funds-empty"]', {
+      timeout,
+    }).should('exist');
+    // Wait for viewBtn to be available (only exists when funds are present)
+    cy.get(this._viewBtn, { timeout })
+      .first()
+      .should('exist')
+      .should('be.visible')
+      .should('not.be.disabled')
+      .click({ force: true });
     return this;
   }
 
