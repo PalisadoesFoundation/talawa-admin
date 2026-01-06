@@ -1696,6 +1696,7 @@
     "categoryDeleted": "कार्रवाई आइटम श्रेणी सफलतापूर्वक हटा दी गई",
     "deleteCategory": "श्रेणी हटाएं",
     "deleteCategoryMsg": "क्या आप वाकई इस कार्रवाई आइटम श्रेणी को हटाना चाहते हैं?",
+    "noDescriptionProvided": "कोई विवरण प्रदान नहीं किया गया",
     "createButton": "बटन बनाएं",
     "editButton": "संपादित बटन"
   },
