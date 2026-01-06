@@ -11,7 +11,7 @@
 
 .editProfileIcon {
   cursor: pointer;
-  font-size: 1.2rem;
+  font-size: var(--font-size-19);
 }
 
 .hiddenFileInput {
