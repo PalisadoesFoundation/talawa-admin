@@ -4,12 +4,9 @@
 
 # Interface: InterfaceOrganizationFundsConnectionPg
 
-Defined in: [src/utils/interfaces.ts:999](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L999)
+Defined in: [src/utils/interfaces.ts:989](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L989)
 
 InterfaceOrganizationFundsConnectionPg
-
-## Description
-
 Defines the structure for a connection of organization funds with PostgreSQL-specific fields.
 
 ## Properties
@@ -18,7 +15,7 @@ Defines the structure for a connection of organization funds with PostgreSQL-spe
 
 > **edges**: [`InterfaceOrganizationFundsConnectionEdgePg`](InterfaceOrganizationFundsConnectionEdgePg.md)[]
 
-Defined in: [src/utils/interfaces.ts:1000](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1000)
+Defined in: [src/utils/interfaces.ts:990](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L990)
 
 An array of edges, where each edge contains a cursor and a fund node.
 
@@ -28,6 +25,6 @@ An array of edges, where each edge contains a cursor and a fund node.
 
 > **pageInfo**: [`InterfacePageInfoPg`](InterfacePageInfoPg.md)
 
-Defined in: [src/utils/interfaces.ts:1001](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1001)
+Defined in: [src/utils/interfaces.ts:991](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L991)
 
 Pagination information.

@@ -4,12 +4,9 @@
 
 # Interface: InterfaceCreatePledge
 
-Defined in: [src/utils/interfaces.ts:2342](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2342)
+Defined in: [src/utils/interfaces.ts:2332](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2332)
 
 InterfaceCreatePledge
-
-## Description
-
 Defines the structure for creating a pledge.
 
 ## Properties
@@ -18,7 +15,7 @@ Defines the structure for creating a pledge.
 
 > **pledgeAmount**: `number`
 
-Defined in: [src/utils/interfaces.ts:2344](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2344)
+Defined in: [src/utils/interfaces.ts:2334](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2334)
 
 The amount of the pledge.
 
@@ -28,7 +25,7 @@ The amount of the pledge.
 
 > **pledgeCurrency**: `string`
 
-Defined in: [src/utils/interfaces.ts:2345](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2345)
+Defined in: [src/utils/interfaces.ts:2335](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2335)
 
 The currency of the pledge.
 
@@ -38,6 +35,6 @@ The currency of the pledge.
 
 > **pledgeUsers**: [`InterfaceUserInfoPG`](InterfaceUserInfoPG.md)[]
 
-Defined in: [src/utils/interfaces.ts:2343](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2343)
+Defined in: [src/utils/interfaces.ts:2333](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2333)
 
 An array of user information for the pledgers.

@@ -4,12 +4,9 @@
 
 # Interface: InterfacePostPg
 
-Defined in: [src/utils/interfaces.ts:1097](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1097)
+Defined in: [src/utils/interfaces.ts:1087](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1087)
 
 InterfacePostPg
-
-## Description
-
 Defines the structure for a post with PostgreSQL-specific fields.
 
 ## Properties
@@ -18,7 +15,7 @@ Defines the structure for a post with PostgreSQL-specific fields.
 
 > **caption**: `string`
 
-Defined in: [src/utils/interfaces.ts:1099](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1099)
+Defined in: [src/utils/interfaces.ts:1089](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1089)
 
 The caption of the post.
 
@@ -28,7 +25,7 @@ The caption of the post.
 
 > **commentsCount**: `number`
 
-Defined in: [src/utils/interfaces.ts:1100](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1100)
+Defined in: [src/utils/interfaces.ts:1090](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1090)
 
 The number of comments on the post.
 
@@ -38,7 +35,7 @@ The number of comments on the post.
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1101](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1101)
+Defined in: [src/utils/interfaces.ts:1091](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1091)
 
 The creation date of the post record.
 
@@ -48,7 +45,7 @@ The creation date of the post record.
 
 > **creator**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:1102](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1102)
+Defined in: [src/utils/interfaces.ts:1092](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1092)
 
 The user who created this post.
 
@@ -58,7 +55,7 @@ The user who created this post.
 
 > **downVotesCount**: `number`
 
-Defined in: [src/utils/interfaces.ts:1103](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1103)
+Defined in: [src/utils/interfaces.ts:1093](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1093)
 
 The number of downvotes on the post.
 
@@ -68,7 +65,7 @@ The number of downvotes on the post.
 
 > **id**: `ID`
 
-Defined in: [src/utils/interfaces.ts:1098](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1098)
+Defined in: [src/utils/interfaces.ts:1088](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1088)
 
 The unique identifier of the post.
 
@@ -78,7 +75,7 @@ The unique identifier of the post.
 
 > **organization**: [`InterfaceOrganizationPg`](InterfaceOrganizationPg.md)
 
-Defined in: [src/utils/interfaces.ts:1104](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1104)
+Defined in: [src/utils/interfaces.ts:1094](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1094)
 
 The organization associated with this post.
 
@@ -88,7 +85,7 @@ The organization associated with this post.
 
 > **pinnedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1105](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1105)
+Defined in: [src/utils/interfaces.ts:1095](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1095)
 
 The date and time the post was pinned.
 
@@ -98,7 +95,7 @@ The date and time the post was pinned.
 
 > **updatedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1107)
+Defined in: [src/utils/interfaces.ts:1097](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1097)
 
 The last update date of the post record.
 
@@ -108,7 +105,7 @@ The last update date of the post record.
 
 > **updater**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:1108](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1108)
+Defined in: [src/utils/interfaces.ts:1098](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1098)
 
 The user who last updated this post.
 
@@ -118,6 +115,6 @@ The user who last updated this post.
 
 > **upVotesCount**: `number`
 
-Defined in: [src/utils/interfaces.ts:1106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1106)
+Defined in: [src/utils/interfaces.ts:1096](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1096)
 
 The number of upvotes on the post.

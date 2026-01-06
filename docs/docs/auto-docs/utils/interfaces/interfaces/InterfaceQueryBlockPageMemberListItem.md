@@ -4,12 +4,9 @@
 
 # Interface: InterfaceQueryBlockPageMemberListItem
 
-Defined in: [src/utils/interfaces.ts:1983](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1983)
+Defined in: [src/utils/interfaces.ts:1973](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1973)
 
 InterfaceQueryBlockPageMemberListItem
-
-## Description
-
 Defines the structure for a blocked page member list item returned from a query.
 
 ## Properties
@@ -18,7 +15,7 @@ Defines the structure for a blocked page member list item returned from a query.
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1984](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1984)
+Defined in: [src/utils/interfaces.ts:1974](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1974)
 
 The unique identifier of the member.
 
@@ -28,7 +25,7 @@ The unique identifier of the member.
 
 > **email**: `string`
 
-Defined in: [src/utils/interfaces.ts:1987](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1987)
+Defined in: [src/utils/interfaces.ts:1977](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1977)
 
 The email address of the member.
 
@@ -38,7 +35,7 @@ The email address of the member.
 
 > **firstName**: `string`
 
-Defined in: [src/utils/interfaces.ts:1985](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1985)
+Defined in: [src/utils/interfaces.ts:1975](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1975)
 
 The first name of the member.
 
@@ -48,7 +45,7 @@ The first name of the member.
 
 > **lastName**: `string`
 
-Defined in: [src/utils/interfaces.ts:1986](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1986)
+Defined in: [src/utils/interfaces.ts:1976](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1976)
 
 The last name of the member.
 
@@ -58,7 +55,7 @@ The last name of the member.
 
 > **organizationsBlockedBy**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:1988](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1988)
+Defined in: [src/utils/interfaces.ts:1978](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1978)
 
 An array of organizations that have blocked this member.
 

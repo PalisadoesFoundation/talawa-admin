@@ -4,12 +4,9 @@
 
 # Interface: InterfacePaginationArgs
 
-Defined in: [src/utils/interfaces.ts:1279](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1279)
+Defined in: [src/utils/interfaces.ts:1269](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1269)
 
 InterfacePaginationArgs
-
-## Description
-
 Defines the arguments for pagination.
 
 ## Properties
@@ -18,7 +15,7 @@ Defines the arguments for pagination.
 
 > **after**: `string`
 
-Defined in: [src/utils/interfaces.ts:1280](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1280)
+Defined in: [src/utils/interfaces.ts:1270](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1270)
 
 The cursor to paginate after.
 
@@ -28,7 +25,7 @@ The cursor to paginate after.
 
 > **before**: `string`
 
-Defined in: [src/utils/interfaces.ts:1281](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1281)
+Defined in: [src/utils/interfaces.ts:1271](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1271)
 
 The cursor to paginate before.
 
@@ -38,7 +35,7 @@ The cursor to paginate before.
 
 > **first**: `number`
 
-Defined in: [src/utils/interfaces.ts:1282](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1282)
+Defined in: [src/utils/interfaces.ts:1272](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1272)
 
 The maximum number of items to return from the beginning.
 
@@ -48,6 +45,6 @@ The maximum number of items to return from the beginning.
 
 > **last**: `number`
 
-Defined in: [src/utils/interfaces.ts:1283](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1283)
+Defined in: [src/utils/interfaces.ts:1273](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1273)
 
 The maximum number of items to return from the end.

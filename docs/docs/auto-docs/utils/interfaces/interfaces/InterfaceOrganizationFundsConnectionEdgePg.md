@@ -4,12 +4,9 @@
 
 # Interface: InterfaceOrganizationFundsConnectionEdgePg
 
-Defined in: [src/utils/interfaces.ts:1010](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1010)
+Defined in: [src/utils/interfaces.ts:1000](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1000)
 
 InterfaceOrganizationFundsConnectionEdgePg
-
-## Description
-
 Defines the structure for an edge in the organization funds connection with PostgreSQL-specific fields.
 
 ## Properties
@@ -18,7 +15,7 @@ Defines the structure for an edge in the organization funds connection with Post
 
 > **cursor**: `string`
 
-Defined in: [src/utils/interfaces.ts:1011](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1011)
+Defined in: [src/utils/interfaces.ts:1001](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1001)
 
 The cursor for this edge.
 
@@ -28,6 +25,6 @@ The cursor for this edge.
 
 > **node**: [`InterfaceFundPg`](InterfaceFundPg.md)
 
-Defined in: [src/utils/interfaces.ts:1012](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1012)
+Defined in: [src/utils/interfaces.ts:1002](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1002)
 
 The fund node.

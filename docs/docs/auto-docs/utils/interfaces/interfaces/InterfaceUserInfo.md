@@ -4,12 +4,9 @@
 
 # Interface: InterfaceUserInfo
 
-Defined in: [src/utils/interfaces.ts:400](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L400)
+Defined in: [src/utils/interfaces.ts:390](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L390)
 
 InterfaceUserInfo
-
-## Description
-
 Defines the basic information for a user.
 
 ## Properties
@@ -18,7 +15,7 @@ Defines the basic information for a user.
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/utils/interfaces.ts:404](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L404)
+Defined in: [src/utils/interfaces.ts:394](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L394)
 
 The URL of the user's avatar, or null if not available.
 
@@ -28,7 +25,7 @@ The URL of the user's avatar, or null if not available.
 
 > `optional` **createdAt**: `Date`
 
-Defined in: [src/utils/interfaces.ts:406](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L406)
+Defined in: [src/utils/interfaces.ts:396](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L396)
 
 ***
 
@@ -36,7 +33,7 @@ Defined in: [src/utils/interfaces.ts:406](https://github.com/PalisadoesFoundatio
 
 > **emailAddress**: `string`
 
-Defined in: [src/utils/interfaces.ts:403](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L403)
+Defined in: [src/utils/interfaces.ts:393](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L393)
 
 The email address of the user.
 
@@ -46,7 +43,7 @@ The email address of the user.
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:401](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L401)
+Defined in: [src/utils/interfaces.ts:391](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L391)
 
 The unique identifier of the user.
 
@@ -56,7 +53,7 @@ The unique identifier of the user.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:402](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L402)
+Defined in: [src/utils/interfaces.ts:392](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L392)
 
 The full name of the user.
 
@@ -66,7 +63,7 @@ The full name of the user.
 
 > `optional` **role**: `string`
 
-Defined in: [src/utils/interfaces.ts:405](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L405)
+Defined in: [src/utils/interfaces.ts:395](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L395)
 
 ***
 
@@ -74,4 +71,4 @@ Defined in: [src/utils/interfaces.ts:405](https://github.com/PalisadoesFoundatio
 
 > `optional` **updatedAt**: `Date`
 
-Defined in: [src/utils/interfaces.ts:407](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L407)
+Defined in: [src/utils/interfaces.ts:397](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L397)

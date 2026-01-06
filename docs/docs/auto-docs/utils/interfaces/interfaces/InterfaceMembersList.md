@@ -4,12 +4,9 @@
 
 # Interface: InterfaceMembersList
 
-Defined in: [src/utils/interfaces.ts:444](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L444)
+Defined in: [src/utils/interfaces.ts:434](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L434)
 
 InterfaceMembersList
-
-## Description
-
 Defines the structure for a list of organizations with their members.
 
 ## Properties
@@ -18,7 +15,7 @@ Defines the structure for a list of organizations with their members.
 
 > **organizations**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:445](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L445)
+Defined in: [src/utils/interfaces.ts:435](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L435)
 
 An array of organization objects.
 
