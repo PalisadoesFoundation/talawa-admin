@@ -100,10 +100,11 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
    * the count of selected tags that share each ancestor. When count reaches zero,
    * the ancestor is removed from checkedTags. Never read directly in render.
    */
-  const [ancestorTagsDataMap, setAncestorTagsDataMap] = useState(new Map());
+  const [ancestorTagsDataMap, setAncestorTagsDataMap] = useState<
+    Map<string, number>
+  >(new Map());
 
-  // Dummy uses to satisfy linter
-  void addAncestorTagsData;
+  // Dummy use to satisfy linter (ancestorTagsDataMap is only written, never read directly)
   void ancestorTagsDataMap;
 
   useEffect(() => {
@@ -141,15 +142,18 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
 
       removeAncestorTagsData.forEach((ancestorTag) => {
         const prevValue = prevMap.get(ancestorTag._id);
-        if (prevValue === 1) {
+        // Defensively check prevValue - if null/undefined, treat as 0 (deletion)
+        if (prevValue === undefined || prevValue === null) {
           newMap.delete(ancestorTag._id);
           tagsToDelete.push(ancestorTag._id);
-        } else {
+        } else if (prevValue === 1) {
+          newMap.delete(ancestorTag._id);
+          tagsToDelete.push(ancestorTag._id);
+        } else if (prevValue > 1) {
           newMap.set(ancestorTag._id, prevValue - 1);
         }
       });
 
-      // Nested setState is allowed and will batch correctly
       if (tagsToDelete.length > 0) {
         setCheckedTags((prev) => {
           const next = new Set(prev);
@@ -268,6 +272,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
             <Button
               type="submit"
               value="add"
+              form="tagActionForm"
               data-testid="tagActionSubmitBtn"
               className={`btn ${styles.addButton}`}
             >
@@ -276,7 +281,7 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
           </>
         }
       >
-        <Form onSubmit={handleTagAction}>
+        <Form id="tagActionForm" onSubmit={handleTagAction}>
           <div className="pb-0">
             <div
               className={`d-flex flex-wrap align-items-center border border-2 border-dark-subtle bg-light-subtle rounded-3 p-2 ${styles.scrollContainer}`}
@@ -371,6 +376,14 @@ const TagActions: React.FC<InterfaceTagActionsProps> = ({
                   loadingComponent={
                     <div className={styles.loadingDiv}>
                       <InfiniteScrollLoader />
+                    </div>
+                  }
+                  emptyStateComponent={
+                    <div
+                      className="text-body-tertiary mx-auto"
+                      data-testid="noTagsFoundMessage"
+                    >
+                      {t('noTagsFound')}
                     </div>
                   }
                 />

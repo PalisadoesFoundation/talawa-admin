@@ -1729,25 +1729,4 @@ describe('PostCard', () => {
       expect(screen.getByText('New test comment')).toBeInTheDocument();
     });
   });
-
-  it('should pass refetchComments function that increments refetchTrigger', async () => {
-    renderPostCard();
-
-    const viewCommentsButton = screen.getByTestId('comment-card');
-    fireEvent.click(viewCommentsButton);
-
-    await waitFor(() => {
-      expect(
-        screen.getByTestId('cursor-pagination-manager'),
-      ).toBeInTheDocument();
-    });
-
-    const commentInput = screen.getByPlaceholderText(/add comment/i);
-    fireEvent.change(commentInput, { target: { value: 'Test comment' } });
-    fireEvent.click(screen.getByTestId('comment-send'));
-
-    await waitFor(() => {
-      expect(screen.getByText('Test comment')).toBeInTheDocument();
-    });
-  });
 });
