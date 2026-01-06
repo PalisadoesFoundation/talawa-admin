@@ -19,7 +19,6 @@ import { GraphQLError, type DocumentNode } from 'graphql';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import {
-  BACKEND_URL,
   BACKEND_WEBSOCKET_URL,
   deriveBackendWebsocketUrl,
 } from 'Constant/constant';

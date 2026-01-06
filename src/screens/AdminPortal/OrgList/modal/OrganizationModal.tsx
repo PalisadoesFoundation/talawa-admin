@@ -1,44 +1,22 @@
 /**
  * OrganizationModal Component
  *
- * This component renders a modal for creating or editing an organization.
- * It includes a form with fields for organization details such as name,
- * description, address, and an option to upload a display image.
+ * Renders a modal for creating or editing an organization.
+ * Includes form fields for organization details and image upload.
  *
- * @component
- * @param {InterfaceOrganizationModalProps} props - The properties passed to the component.
- * @param {boolean} props.showModal - Determines whether the modal is visible.
- * @param {() => void} props.toggleModal - Function to toggle the visibility of the modal.
- * @param {InterfaceFormStateType} props.formState - The current state of the form fields.
- * @param {(state: React.SetStateAction<InterfaceFormStateType>) => void} props.setFormState -
- * Function to update the form state.
- * @param {(e: ChangeEvent<HTMLFormElement>) => Promise<void>} props.createOrg -
- * Function to handle form submission for creating an organization.
- * @param {(key: string) => string} props.t - Translation function for component-specific strings.
- * @param {(key: string) => string} props.tCommon - Translation function for common strings.
- * @param {InterfaceCurrentUserTypePG | undefined} props.userData - Current user data.
- *
- * @remarks
- * - The form includes validation for input fields such as name, description, and address.
- * - The `convertToBase64` function is used to handle image uploads and convert them to Base64 strings.
- * - Displays success or error messages using `react-toastify` for image upload feedback.
- *
- * @example
- * ```tsx
- * <OrganizationModal
- *   showModal={true}
- *   toggleModal={handleToggleModal}
- *   formState={formState}
- *   setFormState={setFormState}
- *   createOrg={handleCreateOrg}
- *   t={translate}
- *   tCommon={translateCommon}
- *   userData={currentUser}
- * />
- * ```
+ * @param props - Component props
+ * @param props.showModal - Whether the modal is visible
+ * @param props.toggleModal - Toggles modal visibility
+ * @param props.formState - Current form state
+ * @param props.setFormState - Updates form state
+ * @param props.createOrg - Submits organization data
+ * @param props.t - Translation function
+ * @param props.tCommon - Common translation function
+ * @param props.userData - Current user data
  */
 import React from 'react';
-import { Modal, Form, Row, Col, Button } from 'react-bootstrap';
+import { Form, Row, Col, Button } from 'react-bootstrap';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import convertToBase64 from 'utils/convertToBase64';
 import type { ChangeEvent } from 'react';
 import styles from 'style/app-fixed.module.css';
@@ -87,23 +65,16 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
   tCommon,
 }) => {
   return (
-    <Modal
+    <BaseModal
       show={showModal}
       onHide={toggleModal}
-      aria-labelledby="contained-modal-title-vcenter"
-      centered
+      headerContent={
+        <div className={styles.modalHeader} data-testid="modalOrganizationHeader">
+          <h4 className="text-white">{t('createOrganization')}</h4>
+        </div>
+      }
     >
-      <Modal.Header
-        className={styles.modalHeader}
-        closeButton
-        data-testid="modalOrganizationHeader"
-      >
-        <Modal.Title className="text-white">
-          {t('createOrganization')}
-        </Modal.Title>
-      </Modal.Header>
       <Form onSubmitCapture={createOrg}>
-        <Modal.Body>
           <Form.Label htmlFor="orgname">{tCommon('name')}</Form.Label>
           <Form.Control
             type="name"
@@ -302,9 +273,8 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               {tCommon('createOrganization')}
             </Button>
           </Col>
-        </Modal.Body>
       </Form>
-    </Modal>
+    </BaseModal>
   );
 };
 
