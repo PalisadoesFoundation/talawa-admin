@@ -4,15 +4,14 @@
  * Renders a modal for creating or editing an organization.
  * Includes form fields for organization details and image upload.
  *
- * @param props - Component props
- * @param props.showModal - Whether the modal is visible
- * @param props.toggleModal - Toggles modal visibility
- * @param props.formState - Current form state
- * @param props.setFormState - Updates form state
- * @param props.createOrg - Submits organization data
- * @param props.t - Translation function
- * @param props.tCommon - Common translation function
- * @param props.userData - Current user data
+ * @param showModal - Whether the modal is visible
+ * @param toggleModal - Toggles modal visibility
+ * @param formState - Current form state
+ * @param setFormState - Updates form state
+ * @param createOrg - Submits organization data
+ * @param t - Translation function
+ * @param tCommon - Common translation function
+ * @param userData - Current user data
  */
 import React from 'react';
 import { Form, Row, Col, Button } from 'react-bootstrap';
