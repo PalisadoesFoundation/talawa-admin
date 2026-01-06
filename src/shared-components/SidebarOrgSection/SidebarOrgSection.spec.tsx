@@ -25,14 +25,45 @@ vi.mock('assets/svgs/angleRight.svg?react', () => ({
   ),
 }));
 
+// Mock ProfileAvatarDisplay
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: ({
+    imageUrl,
+    fallbackName,
+    crossOrigin,
+  }: {
+    imageUrl?: string;
+    fallbackName: string;
+    crossOrigin?: string;
+  }) => (
+    <div
+      data-testid="mock-profile-avatar-display"
+      data-image-url={imageUrl}
+      data-fallback-name={fallbackName}
+    >
+      {imageUrl && (
+        <img
+          src={imageUrl}
+          alt={fallbackName}
+          crossOrigin={crossOrigin as any}
+        />
+      )}
+    </div>
+  ),
+}));
+
 // Mock translations
 vi.mock('react-i18next', async () => {
   const actual = await vi.importActual('react-i18next');
   return {
     ...actual,
     useTranslation: () => ({
-      t: (key: string, options?: { entity?: string }) =>
-        options?.entity ? `Error loading ${options.entity}` : key,
+      t: (key: string, options?: { entity?: string; name?: string }) => {
+        if (key === 'profileAvatar.altText') {
+          return options?.name || 'Avatar';
+        }
+        return options?.entity ? `Error loading ${options.entity}` : key;
+      },
     }),
   };
 });
@@ -89,7 +120,7 @@ describe('SidebarOrgSection Component', () => {
     {
       request: {
         query: GET_ORGANIZATION_DATA_PG,
-        variables: { id: mockOrgId, first: 10, after: null },
+        variables: { id: mockOrgId, first: 1, after: null },
       },
       result: {
         data: mockOrganizationData,
@@ -101,7 +132,7 @@ describe('SidebarOrgSection Component', () => {
     {
       request: {
         query: GET_ORGANIZATION_DATA_PG,
-        variables: { id: mockOrgId, first: 10, after: null },
+        variables: { id: mockOrgId, first: 1, after: null },
       },
       delay: 1000000, // Very long delay to keep in loading state
       result: {
@@ -114,7 +145,7 @@ describe('SidebarOrgSection Component', () => {
     {
       request: {
         query: GET_ORGANIZATION_DATA_PG,
-        variables: { id: mockOrgId, first: 10, after: null },
+        variables: { id: mockOrgId, first: 1, after: null },
       },
       result: {
         data: { organization: null },
@@ -126,7 +157,7 @@ describe('SidebarOrgSection Component', () => {
     {
       request: {
         query: GET_ORGANIZATION_DATA_PG,
-        variables: { id: mockOrgId, first: 10, after: null },
+        variables: { id: mockOrgId, first: 1, after: null },
       },
       result: {
         data: mockOrganizationWithoutAvatar,
@@ -138,7 +169,7 @@ describe('SidebarOrgSection Component', () => {
     {
       request: {
         query: GET_ORGANIZATION_DATA_PG,
-        variables: { id: mockOrgId, first: 10, after: null },
+        variables: { id: mockOrgId, first: 1, after: null },
       },
       result: {
         data: mockOrganizationWithoutCity,
@@ -268,18 +299,19 @@ describe('SidebarOrgSection Component', () => {
       await waitFor(() => {
         const img = screen.getByAltText('Test Organization');
         expect(img).toHaveAttribute('crossOrigin', 'anonymous');
-        expect(img).toHaveAttribute('referrerPolicy', 'no-referrer');
-        expect(img).toHaveAttribute('loading', 'lazy');
-        expect(img).toHaveAttribute('decoding', 'async');
       });
     });
 
-    it('renders Avatar component when avatarURL is not provided', async () => {
+    it('renders ProfileAvatarDisplay with correct props when avatarURL is not provided', async () => {
       renderComponent({}, noAvatarMocks);
       await waitFor(() => {
-        const avatar = screen.getByTestId('avatar');
-        expect(avatar).toBeInTheDocument();
-        expect(avatar).toHaveAttribute('data-name', 'Test Organization');
+        const avatarDisplay = screen.getByTestId('mock-profile-avatar-display');
+        expect(avatarDisplay).toBeInTheDocument();
+        expect(avatarDisplay).toHaveAttribute(
+          'data-fallback-name',
+          'Test Organization',
+        );
+        expect(avatarDisplay).not.toHaveAttribute('data-image-url');
       });
     });
 
@@ -315,7 +347,7 @@ describe('SidebarOrgSection Component', () => {
         {
           request: {
             query: GET_ORGANIZATION_DATA_PG,
-            variables: { id: customOrgId, first: 10, after: null },
+            variables: { id: customOrgId, first: 1, after: null },
           },
           result: {
             data: mockOrganizationData,

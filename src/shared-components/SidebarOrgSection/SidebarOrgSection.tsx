@@ -22,15 +22,19 @@
  * ```
  */
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useQuery } from '@apollo/client';
-import { WarningAmberOutlined } from '@mui/icons-material';
+import {
+  ConstructionOutlined,
+  WarningAmberOutlined,
+} from '@mui/icons-material';
 import { useTranslation } from 'react-i18next';
 import { GET_ORGANIZATION_DATA_PG } from 'GraphQl/Queries/Queries';
 import Avatar from 'components/Avatar/Avatar';
 import AngleRightIcon from 'assets/svgs/angleRight.svg?react';
 import styles from '../../style/app-fixed.module.css';
 import type { ISidebarOrgSectionProps } from '../../types/SidebarOrgSection/interface';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 interface IOrganizationData {
   id: string;
@@ -67,7 +71,7 @@ const SidebarOrgSection = ({
   const { data, loading } = useQuery<{
     organization: IOrganizationData;
   }>(GET_ORGANIZATION_DATA_PG, {
-    variables: { id: orgId, first: 10, after: null },
+    variables: { id: orgId, first: 1, after: null },
   });
 
   // Don't render if drawer is hidden
@@ -104,22 +108,12 @@ const SidebarOrgSection = ({
           data-testid="OrgBtn"
         >
           <div className={styles.imageContainer}>
-            {data.organization.avatarURL ? (
-              <img
-                crossOrigin="anonymous"
-                referrerPolicy="no-referrer"
-                loading="lazy"
-                decoding="async"
-                src={data.organization.avatarURL}
-                alt={`${data.organization.name}`}
-              />
-            ) : (
-              <Avatar
-                name={data.organization.name}
-                containerStyle={styles.avatarContainer}
-                alt={`${data.organization.name} Picture`}
-              />
-            )}
+            <ProfileAvatarDisplay
+              imageUrl={data.organization.avatarURL}
+              fallbackName={data.organization.name}
+              size="medium"
+              crossOrigin="anonymous"
+            />
           </div>
           <div className={styles.ProfileRightConatiner}>
             <div className={styles.profileText}>

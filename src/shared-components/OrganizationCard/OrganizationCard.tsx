@@ -56,6 +56,7 @@ import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQueries';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import useLocalStorage from 'utils/useLocalstorage';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 export interface InterfaceOrganizationCardPropsPG {
   data: InterfaceOrganizationCardProps;
@@ -181,22 +182,12 @@ function OrganizationCard({
         <div className={styles.innerContainer} data-cy="orgCardContainer">
           {/* Container for the organization image */}
           <div className={styles.orgImgContainer}>
-            {avatarURL ? (
-              <img
-                src={avatarURL}
-                alt={name}
-                crossOrigin="anonymous"
-                referrerPolicy="no-referrer"
-                loading="lazy"
-                decoding="async"
-              />
-            ) : (
-              <Avatar
-                name={name}
-                alt={name}
-                dataTestId="emptyContainerForImage"
-              />
-            )}
+            <ProfileAvatarDisplay
+              fallbackName={name}
+              imageUrl={avatarURL}
+              dataTestId="emptyContainerForImage"
+              enableEnlarge
+            />
           </div>
           <div className={styles.content}>
             <div>

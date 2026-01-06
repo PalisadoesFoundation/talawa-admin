@@ -58,6 +58,7 @@ import { TbListDetails } from 'react-icons/tb';
 import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries';
 import Avatar from 'components/Avatar/Avatar';
 import { FaXmark } from 'react-icons/fa6';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 export interface InterfaceGroupModal {
   isOpen: boolean;
@@ -349,24 +350,14 @@ const GroupModal: React.FC<InterfaceGroupModal> = ({
                             className="d-flex gap-1 align-items-center"
                             data-testid="userName"
                           >
-                            {avatarURL ? (
-                              <img
-                                src={avatarURL}
-                                alt={t('volunteerAlt')}
-                                data-testid={`image${id + 1}`}
-                                className={styles.TableImage}
-                              />
-                            ) : (
-                              <div className={styles.avatarContainer}>
-                                <Avatar
-                                  key={id + '1'}
-                                  containerStyle={styles.imageContainer}
-                                  avatarStyle={styles.TableImage}
-                                  name={name}
-                                  alt={name}
-                                />
-                              </div>
-                            )}
+                            <ProfileAvatarDisplay
+                              key={id + '1'}
+                              imageUrl={avatarURL}
+                              fallbackName={t('volunteerAlt')}
+                              data-testid={`image${id + 1}`}
+                              className={styles.TableImage}
+                            />
+
                             {name}
                           </TableCell>
                           <TableCell component="th" scope="row">

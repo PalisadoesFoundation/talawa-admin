@@ -28,6 +28,7 @@ import { Form, Col } from 'react-bootstrap';
 import Avatar from 'components/Avatar/Avatar';
 import { sanitizeAvatars } from 'utils/sanitizeAvatar';
 import styles from 'style/app-fixed.module.css';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 interface InterfaceProfileImageSectionProps {
   /**
@@ -66,24 +67,16 @@ const ProfileImageSection: React.FC<InterfaceProfileImageSectionProps> = ({
   <Col lg={12} className="mb-2">
     <div className="text-center mb-3">
       <div className="position-relative d-inline-block">
-        {userDetails?.avatarURL ? (
-          <img
-            className="rounded-circle"
-            style={{ width: '60px', height: '60px', objectFit: 'cover' }}
-            src={sanitizeAvatars(selectedAvatar, userDetails.avatarURL)}
-            alt="User"
-            data-testid="profile-picture"
-            crossOrigin="anonymous"
-          />
-        ) : (
-          <Avatar
-            name={userDetails.name}
-            alt="User Image"
-            size={60}
-            dataTestId="profile-picture"
-            radius={150}
-          />
-        )}
+        <ProfileAvatarDisplay
+          imageUrl={sanitizeAvatars(
+            selectedAvatar,
+            userDetails.avatarURL || '',
+          )}
+          fallbackName={userDetails.name}
+          enableEnlarge={true}
+          size="large"
+          dataTestId="profile-picture"
+        />
         <i
           className="fas fa-edit position-absolute bottom-0 right-0 p-2 bg-white rounded-circle"
           onClick={() => fileInputRef.current?.click()}

@@ -25,8 +25,26 @@ const sharedMocks = vi.hoisted(() => ({
 }));
 
 // Mock dependencies
-vi.mock('components/Avatar/Avatar', () => ({
-  default: sharedMocks.Avatar,
+// Mock dependencies
+vi.mock('shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay', () => ({
+  ProfileAvatarDisplay: ({
+    imageUrl,
+    dataTestId,
+    size,
+    fallbackName,
+  }: {
+    imageUrl?: string;
+    dataTestId: string;
+    size: string;
+    fallbackName: string;
+  }) => (
+    <img
+      data-testid={dataTestId}
+      src={imageUrl || 'mock-default-avatar-url'}
+      alt={fallbackName}
+      data-size={size}
+    />
+  ),
 }));
 
 vi.mock('utils/sanitizeAvatar', () => ({
@@ -57,7 +75,6 @@ describe('ProfileImageSection', () => {
     const img = screen.getByTestId('profile-picture');
     expect(img.tagName).toBe('IMG');
     expect(img).toHaveAttribute('src', defaultProps.userDetails.avatarURL);
-    expect(img).toHaveAttribute('crossOrigin', 'anonymous');
   });
 
   it('renders Avatar component when no avatarURL is provided', () => {
@@ -71,7 +88,8 @@ describe('ProfileImageSection', () => {
     render(<ProfileImageSection {...propsWithoutAvatar} />);
 
     const avatar = screen.getByTestId('profile-picture');
-    expect(avatar.textContent).toContain('Mock Avatar: John Doe');
+    expect(avatar).toHaveAttribute('src', 'mock-default-avatar-url');
+    expect(avatar).toHaveAttribute('alt', 'John Doe');
   });
 
   it('handles file upload button click', async () => {
@@ -115,10 +133,7 @@ describe('ProfileImageSection', () => {
     render(<ProfileImageSection {...defaultProps} />);
 
     const img = screen.getByTestId('profile-picture');
-    expect(img).toHaveClass('rounded-circle');
-    expect(img.style.width).toBe('60px');
-    expect(img.style.height).toBe('60px');
-    expect(img.style.objectFit).toBe('cover');
+    expect(img).toHaveAttribute('data-size', 'large');
   });
 
   it('applies correct styling to edit icon', () => {

@@ -46,6 +46,7 @@ vi.mock('react-i18next', () => ({
         'users.membershipStatus.member': 'Membership status: Member',
         'users.membershipStatus.pending': 'Membership status: Pending',
         'users.membershipStatus.notMember': 'Membership status: Not a member',
+        'profileAvatar.altText': 'Test Org',
       };
 
       return translations[key] || key;
@@ -361,6 +362,15 @@ describe('OrganizationCard', () => {
           },
         },
       },
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+          variables: {},
+        },
+        result: {
+          data: {},
+        },
+      },
     ];
 
     render(
@@ -572,6 +582,15 @@ describe('OrganizationCard', () => {
               id: 'req123',
             },
           },
+        },
+      },
+      {
+        request: {
+          query: ORGANIZATION_LIST,
+          variables: {},
+        },
+        result: {
+          data: {},
         },
       },
     ];
