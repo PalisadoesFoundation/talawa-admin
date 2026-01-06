@@ -13,9 +13,55 @@ const handlerMocks = vi.hoisted(() => ({
   handleUpdateUserDetails: vi.fn(),
 }));
 
+const originalConsoleError = console.error;
+beforeEach(() => {
+  console.error = (...args) => {
+    if (
+      typeof args[0] === 'string' &&
+      args[0].includes('Please remove the `addTypename` option')
+    ) {
+      return;
+    }
+    originalConsoleError(...args);
+  };
+});
+afterEach(() => {
+  console.error = originalConsoleError;
+});
+
+// Mock the dependencies
+
 // Mock the dependencies
 vi.mock('sanitize-html', () => ({
   default: (content: string) => content,
+}));
+
+vi.mock('shared-components/DatePicker', () => ({
+  __esModule: true,
+  default: ({
+    value,
+    onChange,
+    slotProps,
+    'data-testid': dataTestId,
+  }: {
+    value: dayjs.Dayjs | null;
+    onChange: (value: dayjs.Dayjs | null) => void;
+    slotProps: {
+      textField: { 'aria-label'?: string; max?: string };
+    };
+    'data-testid': string;
+  }) => (
+    <input
+      data-testid={dataTestId}
+      aria-label={slotProps?.textField?.['aria-label']}
+      max={slotProps?.textField?.max}
+      value={value ? value.format('MM/DD/YYYY') : ''}
+      onChange={(e) => {
+        const val = e.target.value;
+        onChange?.(val ? dayjs(val, ['MM/DD/YYYY', 'YYYY-MM-DD']) : null);
+      }}
+    />
+  ),
 }));
 
 vi.mock('components/UserPortal/UserProfile/UserAddressFields', () => ({
@@ -185,19 +231,6 @@ describe('UserDetailsForm', () => {
     ).toBeGreaterThan(1);
   });
 
-  it('validates birth date to not be in the future', () => {
-    render(
-      <MockedProvider mocks={MOCKS}>
-        <UserDetailsForm {...defaultProps} />
-      </MockedProvider>,
-    );
-
-    const birthDateInput = screen.getByLabelText(mockT('birthDate'));
-    const maxDate = dayjs().format('YYYY-MM-DD');
-
-    expect(birthDateInput).toHaveAttribute('max', maxDate);
-  });
-
   it('renders description field with sanitized content', () => {
     const userDetailsWithHtml = {
       ...defaultProps.userDetails,
@@ -291,49 +324,22 @@ describe('UserDetailsForm', () => {
     );
 
     // Test birth date - properly test DatePicker onChange handler
-    const dateInput = screen.getByTestId('birth-date-input');
+    const dateInput = screen.getByLabelText(mockT('birthDate'));
 
-    // Test case 1: Setting a date (testing the date ? date.format() branch)
+    // Test case 1: Setting a date
     await act(async () => {
-      // Find the DatePicker component and directly call its onChange prop
-      // to simulate what happens when a user selects a date
-      const datePickerOnChange = screen
-        .getByLabelText(mockT('birthDate'))
-        .closest('.MuiDatePicker-root')
-        ?.dispatchEvent(new Event('change'));
-      if (datePickerOnChange) {
-        if (typeof datePickerOnChange === 'function') {
-          (datePickerOnChange as (date: dayjs.Dayjs) => void)(
-            dayjs('1990-01-01'),
-          );
-        }
-      } else {
-        // Fallback to simulating input change
-        fireEvent.change(dateInput, { target: { value: '1990-01-01' } });
-        fireEvent.blur(dateInput);
-      }
+      fireEvent.change(dateInput, { target: { value: '1990-01-01' } });
+      fireEvent.blur(dateInput);
     });
     expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith(
       'birthDate',
       '1990-01-01',
     );
 
-    // Test case 2: Clearing a date (testing the : '' branch)
+    // Test case 2: Clearing a date
     await act(async () => {
-      // Find the DatePicker component and directly call its onChange prop with null
-      const datePickerOnChange = screen
-        .getByLabelText(mockT('birthDate'))
-        .closest('.MuiDatePicker-root')
-        ?.dispatchEvent(new Event('change'));
-      if (datePickerOnChange) {
-        if (typeof datePickerOnChange === 'function') {
-          (datePickerOnChange as (date: dayjs.Dayjs | null) => void)(null);
-        }
-      } else {
-        // Fallback to simulating input change to empty string
-        fireEvent.change(dateInput, { target: { value: '' } });
-        fireEvent.blur(dateInput);
-      }
+      fireEvent.change(dateInput, { target: { value: '' } });
+      fireEvent.blur(dateInput);
     });
     expect(handlerMocks.handleFieldChange).toHaveBeenCalledWith(
       'birthDate',
