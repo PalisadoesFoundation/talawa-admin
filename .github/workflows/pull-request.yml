@@ -353,30 +353,26 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Checkout centralized scripts
+        uses: actions/checkout@v4
+        with:
+          repository: PalisadoesFoundation/.github
+          path: .github-central
+          ref: main
+
       - name: Get changed files
         id: changed-files
         run: |
-          BASE_SHA=$(git merge-base ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }})
-          ALL_CHANGED_FILES=$(git diff --name-only --diff-filter=ACMRT $BASE_SHA ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')
-          echo "all_changed_files=${ALL_CHANGED_FILES}" >> $GITHUB_OUTPUT
+          echo "all_changed_files=$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.event.pull_request.head.sha }} | tr '\n' ' ')" >> $GITHUB_OUTPUT
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: 3.11
 
-      - name: Run consolidated disable statements check
+      - name: Run Disable Statements Check
         run: |
-          if [ -n "${{ steps.changed-files.outputs.all_changed_files }}" ]; then
-            FILTERED_FILES=$(echo "${{ steps.changed-files.outputs.all_changed_files }}" | tr ' ' '\n' | grep -E '\.(js|jsx|ts|tsx)$' | tr '\n' ' ' || true)
-            if [ -n "$FILTERED_FILES" ]; then
-              python .github/workflows/scripts/disable_statements_check.py --files $FILTERED_FILES
-            else
-              echo "No JS/TS files to check"
-            fi
-          else
-            echo "No files to check"
-          fi
+          python .github-central/.github/workflows/scripts/disable_statements_check.py --files ${{ steps.changed-files.outputs.all_changed_files }}
 
   Translation-Tag-Check:
     name: Translation Tag Check

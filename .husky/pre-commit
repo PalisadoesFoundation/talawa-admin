@@ -37,7 +37,7 @@ echo "Running Python CI parity checks..."
 # Check staged source files for various checks
 if [ -n "$STAGED_SRC" ]; then
   echo "$STAGED_SRC" | xargs "$VENV_BIN" .github/workflows/scripts/translation_check.py --files
-  echo "$STAGED_SRC" | xargs "$VENV_BIN" .github/workflows/scripts/disable_statements_check.py --files
+  # echo "$STAGED_SRC" | xargs "$VENV_BIN" .github/workflows/scripts/disable_statements_check.py --files
 fi
 
 # 3. CSS Policy Check

@@ -1,9 +1,6 @@
 # Docusaurus related
 .docusaurus
 
-# generated docs using husky pre-commit hook
-# /docs/docs/auto-docs
-
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # lockfiles from other package managers (YARN, npm)
@@ -66,6 +63,9 @@ dump.rdb
 /*.log
 config/node_modules/
 **/.vite/
+
+# GitHub Actions
+.github-central
 
 ################################################################
 # Python related
