@@ -38,7 +38,7 @@ reviews:
   path_instructions:
     - path: '**/*'
       instructions: |
-        Conduct a comprehensive review and reevaluate all resolved and dismissed items.
+        Full review and reevaluate all resolved and dismissed items and include the following points:
 
         # VALIDATION FRAMEWORK
 

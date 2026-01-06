@@ -706,9 +706,16 @@ describe('ItemModal - Additional Test Cases', () => {
 
       await waitFor(
         () => {
+          expect(screen.getByRole('dialog')).toBeInTheDocument();
+        },
+        { timeout: 3000 },
+      );
+
+      await waitFor(
+        () => {
           expect(screen.getByTestId('categorySelect')).toBeInTheDocument();
         },
-        { timeout: 5000 },
+        { timeout: 3000 },
       );
 
       const volunteerGroupSelect = await screen.findByTestId(
@@ -725,7 +732,7 @@ describe('ItemModal - Additional Test Cases', () => {
         () => {
           expect(volunteerGroupInput).toHaveValue('Test Group 1');
         },
-        { timeout: 5000 },
+        { timeout: 3000 },
       );
 
       expect(screen.queryByTestId('volunteerSelect')).not.toBeInTheDocument();

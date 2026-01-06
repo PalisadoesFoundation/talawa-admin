@@ -53,6 +53,8 @@ import componentStyles from './TagAction.module.css';
 import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
+import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
+import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 
 interface InterfaceUserTagsAncestorData {
   _id: string;
