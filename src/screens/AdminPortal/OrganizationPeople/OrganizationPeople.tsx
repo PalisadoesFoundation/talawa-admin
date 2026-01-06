@@ -17,7 +17,7 @@
  * <OrganizationPeople />
  * ```
  *
- * @returns {JSX.Element} A JSX element rendering the organization people table.
+ * @returns A JSX element rendering the organization people table.
  */
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -39,10 +39,6 @@ import {
   COLUMN_BUFFER_PX,
   PAGE_SIZE,
 } from 'types/ReportingTable/utils';
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
-
-dayjs.extend(utc);
 
 import styles from 'style/app-fixed.module.css';
 import TableLoader from 'components/TableLoader/TableLoader';
@@ -61,14 +57,19 @@ import { errorHandler } from 'utils/errorHandler';
 
 /**
  * Maps numeric filter state to string option identifiers.
- * @type {Record<number, string>}
- * @description Converts internal numeric state values to their corresponding string filter options:
+ *
+ * @remarks
+ * Converts internal numeric state values to their corresponding string filter options:
  * - 0 = 'members': Regular organization members
  * - 1 = 'admin': Organization administrators
  * - 2 = 'users': All users
+ *
+ * This mapping must stay in sync with OPTION_TO_STATE. Any changes to one require updating the other.
+ *
  * @example
+ * ```ts
  * const option = STATE_TO_OPTION[0]; // 'members'
- * @note This mapping must stay in sync with OPTION_TO_STATE. Any changes to one require updating the other.
+ * ```
  */
 const STATE_TO_OPTION: Record<number, string> = {
   0: 'members',
@@ -78,14 +79,19 @@ const STATE_TO_OPTION: Record<number, string> = {
 
 /**
  * Maps string option identifiers to numeric filter state.
- * @type {Record<string, number>}
- * @description Converts string filter options to their corresponding internal numeric state values:
+ *
+ * @remarks
+ * Converts string filter options to their corresponding internal numeric state values:
  * - 'members' = 0: Regular organization members
  * - 'admin' = 1: Organization administrators
  * - 'users' = 2: All users
+ *
+ * This mapping must stay in sync with STATE_TO_OPTION. Any changes to one require updating the other.
+ *
  * @example
+ * ```ts
  * const state = OPTION_TO_STATE['admin']; // 1
- * @note This mapping must stay in sync with STATE_TO_OPTION. Any changes to one require updating the other.
+ * ```
  */
 const OPTION_TO_STATE: Record<string, number> = {
   members: 0,
@@ -125,7 +131,7 @@ interface IQueryVariable {
 }
 
 function OrganizationPeople(): JSX.Element {
-  const { t } = useTranslation('translation', {
+  const { t, i18n } = useTranslation('translation', {
     keyPrefix: 'organizationPeople',
   });
   const { t: tCommon } = useTranslation('common');
@@ -460,7 +466,13 @@ function OrganizationPeople(): JSX.Element {
       sortable: false,
       renderCell: (params: GridCellParams) => (
         <div data-testid={`org-people-joined-${params.row.id}`}>
-          {t('joined')} : {dayjs.utc(params.row.createdAt).format('DD/MM/YYYY')}
+          {t('joined')} :{' '}
+          {new Intl.DateTimeFormat(i18n.language ?? 'en-US', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            timeZone: 'UTC',
+          }).format(new Date(params.row.createdAt))}
         </div>
       ),
     },
