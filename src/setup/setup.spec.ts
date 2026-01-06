@@ -293,4 +293,158 @@ describe('Talawa Admin Setup', () => {
     const result = capturedValidationFn('invalid-key');
     expect(result).toBe('Invalid reCAPTCHA site key. Please try again.');
   });
+
+  it('should rethrow ExitPromptError in askAndSetRecaptcha', async () => {
+    const exitPromptError = new Error('User cancelled');
+    (exitPromptError as { name: string }).name = 'ExitPromptError';
+
+    vi.spyOn(inquirer, 'prompt').mockRejectedValueOnce(exitPromptError);
+
+    await expect(askAndSetRecaptcha()).rejects.toThrow('User cancelled');
+  });
+
+  it('should handle non-Error objects thrown in askAndSetRecaptcha', async () => {
+    const nonErrorObject = { message: 'Something went wrong' };
+
+    vi.spyOn(inquirer, 'prompt').mockRejectedValueOnce(nonErrorObject);
+
+    const localConsoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
+
+    await expect(askAndSetRecaptcha()).rejects.toThrow(
+      'Failed to set up reCAPTCHA: [object Object]',
+    );
+
+    expect(localConsoleError).toHaveBeenCalledWith(
+      'Error setting up reCAPTCHA:',
+      nonErrorObject,
+    );
+
+    localConsoleError.mockRestore();
+  });
+
+  it('should handle SIGINT (CTRL+C) during setup and exit with code 130', async () => {
+    let sigintHandler: (() => void) | undefined;
+
+    // Capture the SIGINT handler when it's registered
+    const onSpy = vi
+      .spyOn(process, 'on')
+      .mockImplementation((event, handler) => {
+        if (event === 'SIGINT') {
+          sigintHandler = handler as () => void;
+        }
+        return process;
+      });
+
+    // Capture removeListener to prevent cleanup
+    const removeListenerSpy = vi
+      .spyOn(process, 'removeListener')
+      .mockImplementation(() => {
+        // Prevent actual cleanup
+        return process;
+      });
+
+    const exitMock = vi.spyOn(process, 'exit').mockImplementation((code) => {
+      throw new Error(`process.exit called with code ${code}`);
+    });
+
+    const consoleLogSpy = vi
+      .spyOn(console, 'log')
+      .mockImplementation(() => undefined);
+
+    // Mock to make main() hang after setting up SIGINT handler
+    vi.mocked(askAndSetDockerOption).mockImplementationOnce(
+      () => new Promise(() => {}), // Never resolves
+    );
+
+    // Start main (it will hang at askAndSetDockerOption)
+    main();
+
+    // Wait for SIGINT handler to be registered
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    // Verify the handler was captured
+    expect(sigintHandler).toBeDefined();
+
+    // Call the SIGINT handler directly and expect it to throw
+    expect(() => sigintHandler?.()).toThrow(
+      'process.exit called with code 130',
+    );
+
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      '\n\n⚠️  Setup cancelled by user.',
+    );
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      'Configuration may be incomplete. Run setup again to complete.',
+    );
+    expect(exitMock).toHaveBeenCalledWith(130);
+
+    // Clean up
+    onSpy.mockRestore();
+    removeListenerSpy.mockRestore();
+    consoleLogSpy.mockRestore();
+    exitMock.mockRestore();
+
+    // mainPromise will never resolve since askAndSetDockerOption hangs, so we just leave it
+  });
+
+  it('should handle ExitPromptError in main and exit with code 130', async () => {
+    const exitPromptError = new Error('User cancelled prompt');
+    (exitPromptError as { name: string }).name = 'ExitPromptError';
+
+    vi.mocked(askAndSetDockerOption).mockRejectedValueOnce(exitPromptError);
+
+    const exitMock = vi
+      .spyOn(process, 'exit')
+      .mockImplementationOnce((code) => {
+        throw new Error(`process.exit called with code ${code}`);
+      });
+
+    await expect(main()).rejects.toThrow('process.exit called with code 130');
+
+    expect(exitMock).toHaveBeenCalledWith(130);
+
+    exitMock.mockRestore();
+  });
+
+  it('should remove SIGINT listener after setup completes successfully', async () => {
+    const removeListenerSpy = vi.spyOn(process, 'removeListener');
+
+    vi.spyOn(inquirer, 'prompt')
+      .mockResolvedValueOnce({ shouldUseRecaptcha: false })
+      .mockResolvedValueOnce({ shouldLogErrors: false });
+
+    await main();
+
+    expect(removeListenerSpy).toHaveBeenCalledWith(
+      'SIGINT',
+      expect.any(Function),
+    );
+
+    removeListenerSpy.mockRestore();
+  });
+
+  it('should remove SIGINT listener even when an error occurs', async () => {
+    const removeListenerSpy = vi.spyOn(process, 'removeListener');
+    const mockError = new Error('Some error');
+
+    vi.mocked(askAndSetDockerOption).mockRejectedValueOnce(mockError);
+
+    const exitMock = vi
+      .spyOn(process, 'exit')
+      .mockImplementationOnce((code) => {
+        throw new Error(`process.exit called with code ${code}`);
+      });
+
+    await expect(main()).rejects.toThrow('process.exit called with code 1');
+
+    expect(removeListenerSpy).toHaveBeenCalledWith(
+      'SIGINT',
+      expect.any(Function),
+    );
+
+    removeListenerSpy.mockRestore();
+    exitMock.mockRestore();
+  });
 });
