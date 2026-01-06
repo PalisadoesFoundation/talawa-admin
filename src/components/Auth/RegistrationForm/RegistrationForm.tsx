@@ -27,6 +27,9 @@ export const RegistrationForm = ({
   enableRecaptcha = false,
 }: IRegistrationFormProps) => {
   const { t } = useTranslation('common');
+  const { t: tLogin } = useTranslation('translation', {
+    keyPrefix: 'loginPage',
+  });
   const [formData, setFormData] = useState<IRegistrationFormData>({
     name: '',
     email: '',
@@ -54,14 +57,20 @@ export const RegistrationForm = ({
     );
 
     setErrors({
-      name: nameValidation.isValid ? '' : nameValidation.error || '',
-      email: emailValidation.isValid ? '' : emailValidation.error || '',
+      name: nameValidation.isValid
+        ? ''
+        : tLogin(nameValidation.error?.replace('loginPage.', '') || ''),
+      email: emailValidation.isValid
+        ? ''
+        : tLogin(emailValidation.error?.replace('loginPage.', '') || ''),
       password: passwordValidation.isValid
         ? ''
-        : passwordValidation.error || '',
+        : tLogin(passwordValidation.error?.replace('loginPage.', '') || ''),
       confirmPassword: confirmPasswordValidation.isValid
         ? ''
-        : confirmPasswordValidation.error || '',
+        : tLogin(
+            confirmPasswordValidation.error?.replace('loginPage.', '') || '',
+          ),
     });
 
     if (
@@ -84,7 +93,7 @@ export const RegistrationForm = ({
   return (
     <form onSubmit={submit} aria-busy={loading}>
       <FormField
-        label={t('name')}
+        label={t('firstName')}
         name="name"
         value={formData.name}
         error={errors.name}

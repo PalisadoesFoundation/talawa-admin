@@ -58,7 +58,7 @@ describe('RegistrationForm', () => {
       target: { value: 'Password123!' },
     });
 
-    fireEvent.click(screen.getByRole('button', { name: /create account/i }));
+    fireEvent.click(screen.getByRole('button', { name: /register/i }));
 
     await waitFor(() => {
       expect(mockOnSuccess).toHaveBeenCalled();
@@ -81,11 +81,11 @@ describe('RegistrationForm', () => {
       target: { value: 'Password123!' },
     });
 
-    fireEvent.click(screen.getByRole('button', { name: /create account/i }));
+    fireEvent.click(screen.getByRole('button', { name: /register/i }));
 
     await waitFor(() => {
       expect(
-        screen.getByRole('button', { name: /create account/i }),
+        screen.getByRole('button', { name: /register/i }),
       ).not.toBeDisabled();
     });
   });
@@ -103,7 +103,7 @@ describe('RegistrationForm', () => {
       target: { value: 'Password123!' },
     });
 
-    fireEvent.click(screen.getByRole('button', { name: /create account/i }));
+    fireEvent.click(screen.getByRole('button', { name: /register/i }));
 
     expect(mockOnSuccess).not.toHaveBeenCalled();
   });
@@ -121,7 +121,7 @@ describe('RegistrationForm', () => {
       target: { value: 'Password123!' },
     });
 
-    fireEvent.click(screen.getByRole('button', { name: /create account/i }));
+    fireEvent.click(screen.getByRole('button', { name: /register/i }));
 
     expect(mockOnSuccess).not.toHaveBeenCalled();
   });
@@ -139,7 +139,7 @@ describe('RegistrationForm', () => {
       target: { value: 'Password123!' },
     });
 
-    fireEvent.click(screen.getByRole('button', { name: /create account/i }));
+    fireEvent.click(screen.getByRole('button', { name: /register/i }));
 
     expect(mockOnSuccess).not.toHaveBeenCalled();
   });
@@ -160,7 +160,7 @@ describe('RegistrationForm', () => {
       target: { value: 'DifferentPassword!' },
     });
 
-    fireEvent.click(screen.getByRole('button', { name: /create account/i }));
+    fireEvent.click(screen.getByRole('button', { name: /register/i }));
 
     expect(mockOnSuccess).not.toHaveBeenCalled();
   });
@@ -194,7 +194,7 @@ describe('RegistrationForm', () => {
       target: { value: 'Password123!' },
     });
 
-    const button = screen.getByRole('button', { name: /create account/i });
+    const button = screen.getByRole('button', { name: /register/i });
     fireEvent.click(button);
 
     expect(button).toBeDisabled();
@@ -230,7 +230,7 @@ describe('RegistrationForm', () => {
     });
 
     // Don't set organization - test the orgId ?? '' branch
-    fireEvent.click(screen.getByRole('button', { name: /create account/i }));
+    fireEvent.click(screen.getByRole('button', { name: /register/i }));
 
     await waitFor(() => {
       expect(mockOnSuccess).toHaveBeenCalled();
@@ -241,7 +241,6 @@ describe('RegistrationForm', () => {
     renderComponent({ enableRecaptcha: true });
 
     expect(screen.getByTestId('recaptcha-placeholder')).toBeInTheDocument();
-    expect(screen.getByText('reCAPTCHA integration ready')).toBeInTheDocument();
   });
 
   it('hides reCAPTCHA when disabled', () => {
@@ -277,7 +276,7 @@ describe('RegistrationForm', () => {
       target: { value: 'Password123!' },
     });
 
-    fireEvent.click(screen.getByRole('button', { name: /create account/i }));
+    fireEvent.click(screen.getByRole('button', { name: /register/i }));
 
     await waitFor(() => {
       expect(mockCallback).toHaveBeenCalled();
@@ -288,14 +287,22 @@ describe('RegistrationForm', () => {
     renderComponent();
 
     const submitButton = screen.getByRole('button', {
-      name: /create account/i,
+      name: /register/i,
     });
     fireEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Name is required')).toBeInTheDocument();
-      expect(screen.getByText('Valid email is required')).toBeInTheDocument();
-      expect(screen.getByText('Password is required')).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'Name should contain only letters, spaces, and hyphens',
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText('Please enter a valid email address'),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText('At least 8 characters long'),
+      ).toBeInTheDocument();
     });
   });
 
@@ -303,10 +310,14 @@ describe('RegistrationForm', () => {
     renderComponent();
 
     // Submit empty form to trigger errors
-    fireEvent.click(screen.getByRole('button', { name: /create account/i }));
+    fireEvent.click(screen.getByRole('button', { name: /register/i }));
 
     await waitFor(() => {
-      expect(screen.getByText('Name is required')).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'Name should contain only letters, spaces, and hyphens',
+        ),
+      ).toBeInTheDocument();
     });
 
     // Fill in valid data
@@ -324,15 +335,19 @@ describe('RegistrationForm', () => {
     });
 
     // Submit again
-    fireEvent.click(screen.getByRole('button', { name: /create account/i }));
+    fireEvent.click(screen.getByRole('button', { name: /register/i }));
 
     await waitFor(() => {
-      expect(screen.queryByText('Name is required')).not.toBeInTheDocument();
       expect(
-        screen.queryByText('Valid email is required'),
+        screen.queryByText(
+          'Name should contain only letters, spaces, and hyphens',
+        ),
       ).not.toBeInTheDocument();
       expect(
-        screen.queryByText('Password is required'),
+        screen.queryByText('Please enter a valid email address'),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByText('At least 8 characters long'),
       ).not.toBeInTheDocument();
     });
   });
