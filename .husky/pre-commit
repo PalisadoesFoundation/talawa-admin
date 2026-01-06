@@ -63,7 +63,7 @@ if [ -n "$STAGED_SRC" ]; then
     AGE_SECONDS=$((CURRENT_TIME - FILE_MOD_TIME))
     AGE_HOURS=$((AGE_SECONDS / 3600))
     
-    if [ $AGE_HOURS -lt $CACHE_MAX_AGE_HOURS ]; then
+    if [ "$AGE_HOURS" -lt "$CACHE_MAX_AGE_HOURS" ]; then
       echo "✅ Using cached disable_statements_check.py (${AGE_HOURS}h old, cache valid for ${CACHE_MAX_AGE_HOURS}h)"
       NEEDS_DOWNLOAD=false
     else
@@ -78,7 +78,7 @@ if [ -n "$STAGED_SRC" ]; then
     DOWNLOAD_SUCCESS=false
     
     # Try curl first
-    if command -v curl &> /dev/null; then
+    if command -v curl >/dev/null 2>&1; then
       if curl -sSfL "$SCRIPT_URL" -o "$SCRIPT_PATH" 2>/dev/null; then
         DOWNLOAD_SUCCESS=true
         echo "✅ Script downloaded successfully"
@@ -86,7 +86,7 @@ if [ -n "$STAGED_SRC" ]; then
     fi
     
     # Try wget as fallback
-    if [ "$DOWNLOAD_SUCCESS" = false ] && command -v wget &> /dev/null; then
+    if [ "$DOWNLOAD_SUCCESS" = false ] && command -v wget >/dev/null 2>&1; then
       if wget -q -O "$SCRIPT_PATH" "$SCRIPT_URL" 2>/dev/null; then
         DOWNLOAD_SUCCESS=true
         echo "✅ Script downloaded successfully"
@@ -99,7 +99,7 @@ if [ -n "$STAGED_SRC" ]; then
         # Stale cache exists, use it as fallback
         echo "⚠️  Download failed (offline?), using stale cached version"
         echo "   (Script will work, but may be outdated)"
-      elif ! command -v curl &> /dev/null && ! command -v wget &> /dev/null; then
+      elif ! command -v curl >/dev/null 2>&1 && ! command -v wget >/dev/null 2>&1; then
         # No download tool available
         echo "❌ Error: Neither curl nor wget is installed."
         echo ""
