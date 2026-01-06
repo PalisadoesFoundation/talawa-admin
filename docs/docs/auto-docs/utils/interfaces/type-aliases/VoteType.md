@@ -6,7 +6,6 @@
 
 > **VoteType** = `"up_vote"` \| `"down_vote"` \| `null`
 
-Defined in: [src/utils/interfaces.ts:2264](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2264)
+Defined in: [src/utils/interfaces.ts:2193](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2193)
 
-InterfacePostCard
 Defines the structure for a post card.

@@ -4,9 +4,8 @@
 
 # Interface: InterfaceOrgInfoTypePG
 
-Defined in: [src/utils/interfaces.ts:527](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L527)
+Defined in: [src/utils/interfaces.ts:519](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L519)
 
-InterfaceOrgInfoTypePG
 Defines the structure for organization information with PostgreSQL-specific fields.
 
 ## Properties
@@ -15,7 +14,7 @@ Defines the structure for organization information with PostgreSQL-specific fiel
 
 > **addressLine1**: `string`
 
-Defined in: [src/utils/interfaces.ts:530](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L530)
+Defined in: [src/utils/interfaces.ts:522](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L522)
 
 The first line of the organization's address.
 
@@ -25,7 +24,7 @@ The first line of the organization's address.
 
 > **avatarURL**: `string`
 
-Defined in: [src/utils/interfaces.ts:532](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L532)
+Defined in: [src/utils/interfaces.ts:524](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L524)
 
 The URL of the organization's avatar, or null.
 
@@ -35,7 +34,7 @@ The URL of the organization's avatar, or null.
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:533](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L533)
+Defined in: [src/utils/interfaces.ts:525](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L525)
 
 ***
 
@@ -43,7 +42,7 @@ Defined in: [src/utils/interfaces.ts:533](https://github.com/PalisadoesFoundatio
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:531](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L531)
+Defined in: [src/utils/interfaces.ts:523](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L523)
 
 The description of the organization.
 
@@ -53,7 +52,7 @@ The description of the organization.
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:528](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L528)
+Defined in: [src/utils/interfaces.ts:520](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L520)
 
 The unique identifier of the organization.
 
@@ -63,7 +62,7 @@ The unique identifier of the organization.
 
 > `optional` **members**: `object`
 
-Defined in: [src/utils/interfaces.ts:535](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L535)
+Defined in: [src/utils/interfaces.ts:527](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L527)
 
 The members connection object.
 
@@ -77,7 +76,7 @@ The members connection object.
 
 > `optional` **membersCount**: `number`
 
-Defined in: [src/utils/interfaces.ts:534](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L534)
+Defined in: [src/utils/interfaces.ts:526](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L526)
 
 ***
 
@@ -85,7 +84,7 @@ Defined in: [src/utils/interfaces.ts:534](https://github.com/PalisadoesFoundatio
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:529](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L529)
+Defined in: [src/utils/interfaces.ts:521](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L521)
 
 The name of the organization.
 
@@ -95,4 +94,4 @@ The name of the organization.
 
 > **role**: `string`
 
-Defined in: [src/utils/interfaces.ts:542](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L542)
+Defined in: [src/utils/interfaces.ts:534](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L534)

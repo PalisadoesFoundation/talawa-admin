@@ -4,9 +4,8 @@
 
 # Interface: InterfaceCampaignInfo
 
-Defined in: [src/utils/interfaces.ts:1854](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1854)
+Defined in: [src/utils/interfaces.ts:1793](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1793)
 
-InterfaceCampaignInfo
 Defines the structure for campaign information.
 
 ## Properties
@@ -15,7 +14,7 @@ Defines the structure for campaign information.
 
 > `optional` **amountRaised**: `number`
 
-Defined in: [src/utils/interfaces.ts:1862](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1862)
+Defined in: [src/utils/interfaces.ts:1801](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1801)
 
 The total amount raised for the campaign.
 
@@ -25,7 +24,7 @@ The total amount raised for the campaign.
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1860](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1860)
+Defined in: [src/utils/interfaces.ts:1799](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1799)
 
 The creation date of the campaign record.
 
@@ -35,7 +34,7 @@ The creation date of the campaign record.
 
 > **currencyCode**: `string`
 
-Defined in: [src/utils/interfaces.ts:1861](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1861)
+Defined in: [src/utils/interfaces.ts:1800](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1800)
 
 The currency code of the campaign.
 
@@ -45,7 +44,7 @@ The currency code of the campaign.
 
 > **endAt**: `Date`
 
-Defined in: [src/utils/interfaces.ts:1859](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1859)
+Defined in: [src/utils/interfaces.ts:1798](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1798)
 
 The end date and time of the campaign.
 
@@ -55,7 +54,7 @@ The end date and time of the campaign.
 
 > **goalAmount**: `number`
 
-Defined in: [src/utils/interfaces.ts:1857](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1857)
+Defined in: [src/utils/interfaces.ts:1796](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1796)
 
 The goal amount of the campaign.
 
@@ -65,7 +64,7 @@ The goal amount of the campaign.
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1855](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1855)
+Defined in: [src/utils/interfaces.ts:1794](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1794)
 
 The unique identifier of the campaign.
 
@@ -75,7 +74,7 @@ The unique identifier of the campaign.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1856](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1856)
+Defined in: [src/utils/interfaces.ts:1795](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1795)
 
 The name of the campaign.
 
@@ -85,6 +84,6 @@ The name of the campaign.
 
 > **startAt**: `Date`
 
-Defined in: [src/utils/interfaces.ts:1858](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1858)
+Defined in: [src/utils/interfaces.ts:1797](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1797)
 
 The start date and time of the campaign.

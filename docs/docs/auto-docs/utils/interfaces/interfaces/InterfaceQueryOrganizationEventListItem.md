@@ -4,9 +4,8 @@
 
 # Interface: InterfaceQueryOrganizationEventListItem
 
-Defined in: [src/utils/interfaces.ts:1957](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1957)
+Defined in: [src/utils/interfaces.ts:1892](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1892)
 
-InterfaceQueryOrganizationEventListItem
 Extends `InterfaceBaseEvent` with additional properties for an organization event list item.
 
 ## Extends
@@ -19,7 +18,7 @@ Extends `InterfaceBaseEvent` with additional properties for an organization even
 
 > **allDay**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:423](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L423)
+Defined in: [src/utils/interfaces.ts:420](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L420)
 
 Indicates if the event is an all-day event.
 
@@ -33,7 +32,7 @@ Indicates if the event is an all-day event.
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:417](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L417)
+Defined in: [src/utils/interfaces.ts:414](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L414)
 
 The description of the event.
 
@@ -47,7 +46,7 @@ The description of the event.
 
 > **endDate**: `string`
 
-Defined in: [src/utils/interfaces.ts:419](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L419)
+Defined in: [src/utils/interfaces.ts:416](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L416)
 
 The end date of the event.
 
@@ -61,7 +60,7 @@ The end date of the event.
 
 > **endTime**: `string`
 
-Defined in: [src/utils/interfaces.ts:422](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L422)
+Defined in: [src/utils/interfaces.ts:419](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L419)
 
 The end time of the event.
 
@@ -75,7 +74,7 @@ The end time of the event.
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:415](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L415)
+Defined in: [src/utils/interfaces.ts:412](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L412)
 
 The unique identifier of the event.
 
@@ -89,7 +88,7 @@ The unique identifier of the event.
 
 > **isPublic**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1959](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1959)
+Defined in: [src/utils/interfaces.ts:1894](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1894)
 
 Indicates if the event is public.
 
@@ -99,7 +98,7 @@ Indicates if the event is public.
 
 > **isRegisterable**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1960](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1960)
+Defined in: [src/utils/interfaces.ts:1895](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1895)
 
 Indicates if the event is registerable.
 
@@ -109,7 +108,7 @@ Indicates if the event is registerable.
 
 > **location**: `string`
 
-Defined in: [src/utils/interfaces.ts:420](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L420)
+Defined in: [src/utils/interfaces.ts:417](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L417)
 
 The location of the event.
 
@@ -123,7 +122,7 @@ The location of the event.
 
 > **recurring**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:424](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L424)
+Defined in: [src/utils/interfaces.ts:421](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L421)
 
 Indicates if the event is a recurring event.
 
@@ -137,7 +136,7 @@ Indicates if the event is a recurring event.
 
 > **startDate**: `string`
 
-Defined in: [src/utils/interfaces.ts:418](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L418)
+Defined in: [src/utils/interfaces.ts:415](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L415)
 
 The start date of the event.
 
@@ -151,7 +150,7 @@ The start date of the event.
 
 > **startTime**: `string`
 
-Defined in: [src/utils/interfaces.ts:421](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L421)
+Defined in: [src/utils/interfaces.ts:418](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L418)
 
 The start time of the event.
 
@@ -165,7 +164,7 @@ The start time of the event.
 
 > **title**: `string`
 
-Defined in: [src/utils/interfaces.ts:416](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L416)
+Defined in: [src/utils/interfaces.ts:413](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L413)
 
 The title of the event.
 

@@ -4,9 +4,8 @@
 
 # Interface: InterfaceCustomFieldData
 
-Defined in: [src/utils/interfaces.ts:2513](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2513)
+Defined in: [src/utils/interfaces.ts:2432](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2432)
 
-InterfaceCustomFieldData
 Defines the structure for custom field data.
 
 ## Properties
@@ -15,7 +14,7 @@ Defines the structure for custom field data.
 
 > `optional` **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:2514](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2514)
+Defined in: [src/utils/interfaces.ts:2433](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2433)
 
 The unique identifier of the custom field (optional).
 
@@ -25,7 +24,7 @@ The unique identifier of the custom field (optional).
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:2515](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2515)
+Defined in: [src/utils/interfaces.ts:2434](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2434)
 
 The name of the custom field.
 
@@ -35,7 +34,7 @@ The name of the custom field.
 
 > `optional` **organizationId**: `string`
 
-Defined in: [src/utils/interfaces.ts:2517](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2517)
+Defined in: [src/utils/interfaces.ts:2436](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2436)
 
 The unique identifier of the associated organization (optional).
 
@@ -45,6 +44,6 @@ The unique identifier of the associated organization (optional).
 
 > **type**: `string`
 
-Defined in: [src/utils/interfaces.ts:2516](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2516)
+Defined in: [src/utils/interfaces.ts:2435](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2435)
 
 The type of the custom field.

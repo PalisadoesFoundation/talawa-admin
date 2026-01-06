@@ -4,9 +4,8 @@
 
 # Interface: InterfaceOrganizationPinnedPostsConnectionPg
 
-Defined in: [src/utils/interfaces.ts:1056](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1056)
+Defined in: [src/utils/interfaces.ts:1027](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1027)
 
-InterfaceOrganizationPinnedPostsConnectionPg
 Defines the structure for a connection of organization pinned posts with PostgreSQL-specific fields.
 
 ## Properties
@@ -15,7 +14,7 @@ Defines the structure for a connection of organization pinned posts with Postgre
 
 > **edges**: [`InterfaceOrganizationPinnedPostsConnectionEdgePg`](InterfaceOrganizationPinnedPostsConnectionEdgePg.md)[]
 
-Defined in: [src/utils/interfaces.ts:1057](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1057)
+Defined in: [src/utils/interfaces.ts:1028](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1028)
 
 An array of edges, where each edge contains a cursor and a post node.
 
@@ -25,6 +24,6 @@ An array of edges, where each edge contains a cursor and a post node.
 
 > **pageInfo**: [`InterfacePageInfoPg`](InterfacePageInfoPg.md)
 
-Defined in: [src/utils/interfaces.ts:1058](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1058)
+Defined in: [src/utils/interfaces.ts:1029](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1029)
 
 Pagination information.

@@ -4,9 +4,8 @@
 
 # Interface: InterfaceQueryOrganizationFundCampaigns
 
-Defined in: [src/utils/interfaces.ts:1677](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1677)
+Defined in: [src/utils/interfaces.ts:1621](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1621)
 
-InterfaceQueryOrganizationFundCampaigns
 Defines the structure for a query result containing organization fund campaigns.
 
 ## Properties
@@ -15,7 +14,7 @@ Defines the structure for a query result containing organization fund campaigns.
 
 > **campaigns**: `object`
 
-Defined in: [src/utils/interfaces.ts:1681](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1681)
+Defined in: [src/utils/interfaces.ts:1625](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1625)
 
 The campaigns connection object.
 
@@ -29,7 +28,7 @@ The campaigns connection object.
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1678](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1678)
+Defined in: [src/utils/interfaces.ts:1622](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1622)
 
 The unique identifier of the fund.
 
@@ -39,7 +38,7 @@ The unique identifier of the fund.
 
 > **isArchived**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1680](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1680)
+Defined in: [src/utils/interfaces.ts:1624](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1624)
 
 Indicates if the fund is archived.
 
@@ -49,6 +48,6 @@ Indicates if the fund is archived.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1679](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1679)
+Defined in: [src/utils/interfaces.ts:1623](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1623)
 
 The name of the fund.

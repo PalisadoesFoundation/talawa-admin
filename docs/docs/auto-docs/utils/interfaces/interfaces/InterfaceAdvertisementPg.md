@@ -4,9 +4,8 @@
 
 # Interface: InterfaceAdvertisementPg
 
-Defined in: [src/utils/interfaces.ts:713](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L713)
+Defined in: [src/utils/interfaces.ts:701](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L701)
 
-InterfaceAdvertisementPg
 Defines the structure for an advertisement with PostgreSQL-specific fields.
 
 ## Properties
@@ -15,7 +14,7 @@ Defines the structure for an advertisement with PostgreSQL-specific fields.
 
 > **attachments**: [`InterfaceAdvertisementAttachmentPg`](InterfaceAdvertisementAttachmentPg.md)[]
 
-Defined in: [src/utils/interfaces.ts:725](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L725)
+Defined in: [src/utils/interfaces.ts:713](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L713)
 
 An array of attachments for the advertisement.
 
@@ -25,7 +24,7 @@ An array of attachments for the advertisement.
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:720](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L720)
+Defined in: [src/utils/interfaces.ts:708](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L708)
 
 The creation date of the advertisement record.
 
@@ -35,7 +34,7 @@ The creation date of the advertisement record.
 
 > **creator**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:722](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L722)
+Defined in: [src/utils/interfaces.ts:710](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L710)
 
 The user who created this advertisement.
 
@@ -45,7 +44,7 @@ The user who created this advertisement.
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:716](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L716)
+Defined in: [src/utils/interfaces.ts:704](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L704)
 
 The description of the advertisement.
 
@@ -55,7 +54,7 @@ The description of the advertisement.
 
 > **endAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:719](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L719)
+Defined in: [src/utils/interfaces.ts:707](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L707)
 
 The end date and time of the advertisement.
 
@@ -65,7 +64,7 @@ The end date and time of the advertisement.
 
 > **id**: `ID`
 
-Defined in: [src/utils/interfaces.ts:714](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L714)
+Defined in: [src/utils/interfaces.ts:702](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L702)
 
 The unique identifier of the advertisement.
 
@@ -75,7 +74,7 @@ The unique identifier of the advertisement.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:715](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L715)
+Defined in: [src/utils/interfaces.ts:703](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L703)
 
 The name of the advertisement.
 
@@ -85,7 +84,7 @@ The name of the advertisement.
 
 > **organization**: [`InterfaceOrganizationPg`](InterfaceOrganizationPg.md)
 
-Defined in: [src/utils/interfaces.ts:724](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L724)
+Defined in: [src/utils/interfaces.ts:712](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L712)
 
 The organization associated with this advertisement.
 
@@ -95,7 +94,7 @@ The organization associated with this advertisement.
 
 > **startAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:718](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L718)
+Defined in: [src/utils/interfaces.ts:706](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L706)
 
 The start date and time of the advertisement.
 
@@ -105,7 +104,7 @@ The start date and time of the advertisement.
 
 > **type**: `AdvertisementTypePg`
 
-Defined in: [src/utils/interfaces.ts:717](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L717)
+Defined in: [src/utils/interfaces.ts:705](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L705)
 
 The type of the advertisement.
 
@@ -115,7 +114,7 @@ The type of the advertisement.
 
 > **updatedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:721](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L721)
+Defined in: [src/utils/interfaces.ts:709](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L709)
 
 The last update date of the advertisement record.
 
@@ -125,6 +124,6 @@ The last update date of the advertisement record.
 
 > **updater**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:723](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L723)
+Defined in: [src/utils/interfaces.ts:711](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L711)
 
 The user who last updated this advertisement.

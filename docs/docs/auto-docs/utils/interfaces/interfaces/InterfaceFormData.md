@@ -4,9 +4,8 @@
 
 # Interface: InterfaceFormData
 
-Defined in: [src/utils/interfaces.ts:2419](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2419)
+Defined in: [src/utils/interfaces.ts:2342](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2342)
 
-InterfaceFormData
 Defines the structure for form data.
 
 ## Properties
@@ -15,7 +14,7 @@ Defines the structure for form data.
 
 > **email**: `string`
 
-Defined in: [src/utils/interfaces.ts:2422](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2422)
+Defined in: [src/utils/interfaces.ts:2345](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2345)
 
 The email address.
 
@@ -25,7 +24,7 @@ The email address.
 
 > **firstName**: `string`
 
-Defined in: [src/utils/interfaces.ts:2420](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2420)
+Defined in: [src/utils/interfaces.ts:2343](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2343)
 
 The first name.
 
@@ -35,7 +34,7 @@ The first name.
 
 > **gender**: `string`
 
-Defined in: [src/utils/interfaces.ts:2424](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2424)
+Defined in: [src/utils/interfaces.ts:2347](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2347)
 
 The gender.
 
@@ -45,7 +44,7 @@ The gender.
 
 > **lastName**: `string`
 
-Defined in: [src/utils/interfaces.ts:2421](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2421)
+Defined in: [src/utils/interfaces.ts:2344](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2344)
 
 The last name.
 
@@ -55,6 +54,6 @@ The last name.
 
 > **phoneNo**: `string`
 
-Defined in: [src/utils/interfaces.ts:2423](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2423)
+Defined in: [src/utils/interfaces.ts:2346](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2346)
 
 The phone number.

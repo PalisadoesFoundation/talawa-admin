@@ -4,9 +4,8 @@
 
 # Interface: InterfacePledgeInfoPG
 
-Defined in: [src/utils/interfaces.ts:1917](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1917)
+Defined in: [src/utils/interfaces.ts:1854](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1854)
 
-InterfacePledgeInfoPG
 Defines the structure for pledge information with PostgreSQL-specific fields.
 
 ## Properties
@@ -15,7 +14,7 @@ Defines the structure for pledge information with PostgreSQL-specific fields.
 
 > **amount**: `number`
 
-Defined in: [src/utils/interfaces.ts:1926](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1926)
+Defined in: [src/utils/interfaces.ts:1863](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1863)
 
 The amount of the pledge.
 
@@ -25,7 +24,7 @@ The amount of the pledge.
 
 > `optional` **campaign**: `object`
 
-Defined in: [src/utils/interfaces.ts:1919](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1919)
+Defined in: [src/utils/interfaces.ts:1856](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1856)
 
 The campaign associated with the pledge (optional).
 
@@ -55,7 +54,7 @@ The campaign associated with the pledge (optional).
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1928](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1928)
+Defined in: [src/utils/interfaces.ts:1865](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1865)
 
 The date the pledge was created.
 
@@ -65,7 +64,7 @@ The date the pledge was created.
 
 > **currencyCode**: `string`
 
-Defined in: [src/utils/interfaces.ts:1927](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1927)
+Defined in: [src/utils/interfaces.ts:1864](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1864)
 
 The currency code of the pledge.
 
@@ -75,7 +74,7 @@ The currency code of the pledge.
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1918](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1918)
+Defined in: [src/utils/interfaces.ts:1855](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1855)
 
 The unique identifier of the pledge.
 
@@ -85,7 +84,7 @@ The unique identifier of the pledge.
 
 > **pledger**: [`InterfaceUserInfoPG`](InterfaceUserInfoPG.md)
 
-Defined in: [src/utils/interfaces.ts:1930](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1930)
+Defined in: [src/utils/interfaces.ts:1867](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1867)
 
 The pledger information.
 
@@ -95,6 +94,6 @@ The pledger information.
 
 > `optional` **updatedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1929](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1929)
+Defined in: [src/utils/interfaces.ts:1866](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1866)
 
 The date the pledge was last updated.

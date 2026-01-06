@@ -4,9 +4,8 @@
 
 # Interface: InterfaceUserInfoPG
 
-Defined in: [src/utils/interfaces.ts:1942](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1942)
+Defined in: [src/utils/interfaces.ts:1878](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1878)
 
-InterfaceUserInfoPG
 Defines the structure for user information with PostgreSQL-specific fields.
 
 ## Properties
@@ -15,7 +14,7 @@ Defines the structure for user information with PostgreSQL-specific fields.
 
 > `optional` **avatarURL**: `string`
 
-Defined in: [src/utils/interfaces.ts:1947](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1947)
+Defined in: [src/utils/interfaces.ts:1883](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1883)
 
 ***
 
@@ -23,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1947](https://github.com/PalisadoesFoundati
 
 > `optional` **firstName**: `string`
 
-Defined in: [src/utils/interfaces.ts:1943](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1943)
+Defined in: [src/utils/interfaces.ts:1879](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1879)
 
 The first name of the user.
 
@@ -33,7 +32,7 @@ The first name of the user.
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1946](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1946)
+Defined in: [src/utils/interfaces.ts:1882](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1882)
 
 The unique identifier of the user.
 
@@ -43,7 +42,7 @@ The unique identifier of the user.
 
 > `optional` **lastName**: `string`
 
-Defined in: [src/utils/interfaces.ts:1944](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1944)
+Defined in: [src/utils/interfaces.ts:1880](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1880)
 
 The last name of the user.
 
@@ -53,6 +52,6 @@ The last name of the user.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1945](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1945)
+Defined in: [src/utils/interfaces.ts:1881](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1881)
 
 The full name of the user.

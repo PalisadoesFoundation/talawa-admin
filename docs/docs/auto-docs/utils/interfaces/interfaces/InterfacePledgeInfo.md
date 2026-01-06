@@ -4,9 +4,8 @@
 
 # Interface: InterfacePledgeInfo
 
-Defined in: [src/utils/interfaces.ts:1878](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1878)
+Defined in: [src/utils/interfaces.ts:1816](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1816)
 
-InterfacePledgeInfo
 Defines the structure for pledge information.
 
 ## Properties
@@ -15,7 +14,7 @@ Defines the structure for pledge information.
 
 > **amount**: `number`
 
-Defined in: [src/utils/interfaces.ts:1887](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1887)
+Defined in: [src/utils/interfaces.ts:1825](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1825)
 
 The amount of the pledge.
 
@@ -25,7 +24,7 @@ The amount of the pledge.
 
 > `optional` **campaign**: `object`
 
-Defined in: [src/utils/interfaces.ts:1880](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1880)
+Defined in: [src/utils/interfaces.ts:1818](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1818)
 
 The campaign associated with the pledge (optional).
 
@@ -55,7 +54,7 @@ The campaign associated with the pledge (optional).
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1890](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1890)
+Defined in: [src/utils/interfaces.ts:1828](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1828)
 
 The date the pledge was created.
 
@@ -65,7 +64,7 @@ The date the pledge was created.
 
 > **currency**: `string`
 
-Defined in: [src/utils/interfaces.ts:1889](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1889)
+Defined in: [src/utils/interfaces.ts:1827](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1827)
 
 The currency of the pledge.
 
@@ -75,7 +74,7 @@ The currency of the pledge.
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1879](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1879)
+Defined in: [src/utils/interfaces.ts:1817](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1817)
 
 The unique identifier of the pledge.
 
@@ -85,7 +84,7 @@ The unique identifier of the pledge.
 
 > `optional` **note**: `string`
 
-Defined in: [src/utils/interfaces.ts:1888](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1888)
+Defined in: [src/utils/interfaces.ts:1826](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1826)
 
 ***
 
@@ -93,7 +92,7 @@ Defined in: [src/utils/interfaces.ts:1888](https://github.com/PalisadoesFoundati
 
 > **pledger**: [`InterfaceUserInfoPG`](InterfaceUserInfoPG.md)
 
-Defined in: [src/utils/interfaces.ts:1895](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1895)
+Defined in: [src/utils/interfaces.ts:1833](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1833)
 
 The primary pledger who made this pledge
 
@@ -103,7 +102,7 @@ The primary pledger who made this pledge
 
 > `optional` **updatedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:1891](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1891)
+Defined in: [src/utils/interfaces.ts:1829](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1829)
 
 The date the pledge was last updated.
 
@@ -113,6 +112,6 @@ The date the pledge was last updated.
 
 > `optional` **users**: [`InterfaceUserInfoPG`](InterfaceUserInfoPG.md)[]
 
-Defined in: [src/utils/interfaces.ts:1900](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1900)
+Defined in: [src/utils/interfaces.ts:1838](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1838)
 
 An array of user information associated with the pledge.

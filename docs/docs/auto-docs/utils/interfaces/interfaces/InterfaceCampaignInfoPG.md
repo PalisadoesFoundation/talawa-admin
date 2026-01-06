@@ -4,9 +4,8 @@
 
 # Interface: InterfaceCampaignInfoPG
 
-Defined in: [src/utils/interfaces.ts:1781](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1781)
+Defined in: [src/utils/interfaces.ts:1722](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1722)
 
-InterfaceCampaignInfoPG
 Defines the structure for campaign information with PostgreSQL-specific fields.
 
 ## Properties
@@ -15,7 +14,7 @@ Defines the structure for campaign information with PostgreSQL-specific fields.
 
 > **currency**: `string`
 
-Defined in: [src/utils/interfaces.ts:1786](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1786)
+Defined in: [src/utils/interfaces.ts:1727](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1727)
 
 The currency of the campaign.
 
@@ -25,7 +24,7 @@ The currency of the campaign.
 
 > **endDate**: `Date`
 
-Defined in: [src/utils/interfaces.ts:1785](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1785)
+Defined in: [src/utils/interfaces.ts:1726](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1726)
 
 The end date of the campaign.
 
@@ -35,7 +34,7 @@ The end date of the campaign.
 
 > **goal**: `number`
 
-Defined in: [src/utils/interfaces.ts:1783](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1783)
+Defined in: [src/utils/interfaces.ts:1724](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1724)
 
 The goal amount of the campaign.
 
@@ -45,7 +44,7 @@ The goal amount of the campaign.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1782](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1782)
+Defined in: [src/utils/interfaces.ts:1723](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1723)
 
 The name of the campaign.
 
@@ -55,6 +54,6 @@ The name of the campaign.
 
 > **startDate**: `Date`
 
-Defined in: [src/utils/interfaces.ts:1784](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1784)
+Defined in: [src/utils/interfaces.ts:1725](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1725)
 
 The start date of the campaign.

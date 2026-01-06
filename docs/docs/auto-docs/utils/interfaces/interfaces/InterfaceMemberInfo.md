@@ -4,9 +4,8 @@
 
 # Interface: InterfaceMemberInfo
 
-Defined in: [src/utils/interfaces.ts:453](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L453)
+Defined in: [src/utils/interfaces.ts:448](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L448)
 
-InterfaceMemberInfo
 Defines the structure for member information.
 
 ## Properties
@@ -15,7 +14,7 @@ Defines the structure for member information.
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:454](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L454)
+Defined in: [src/utils/interfaces.ts:449](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L449)
 
 The unique identifier of the member.
 
@@ -25,7 +24,7 @@ The unique identifier of the member.
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:459](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L459)
+Defined in: [src/utils/interfaces.ts:454](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L454)
 
 The creation date of the member record.
 
@@ -35,7 +34,7 @@ The creation date of the member record.
 
 > **email**: `string`
 
-Defined in: [src/utils/interfaces.ts:457](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L457)
+Defined in: [src/utils/interfaces.ts:452](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L452)
 
 The email address of the member.
 
@@ -45,7 +44,7 @@ The email address of the member.
 
 > **firstName**: `string`
 
-Defined in: [src/utils/interfaces.ts:455](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L455)
+Defined in: [src/utils/interfaces.ts:450](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L450)
 
 The first name of the member.
 
@@ -55,7 +54,7 @@ The first name of the member.
 
 > **image**: `string`
 
-Defined in: [src/utils/interfaces.ts:458](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L458)
+Defined in: [src/utils/interfaces.ts:453](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L453)
 
 The URL of the member's image.
 
@@ -65,7 +64,7 @@ The URL of the member's image.
 
 > **lastName**: `string`
 
-Defined in: [src/utils/interfaces.ts:456](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L456)
+Defined in: [src/utils/interfaces.ts:451](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L451)
 
 The last name of the member.
 
@@ -75,7 +74,7 @@ The last name of the member.
 
 > **organizationsBlockedBy**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:460](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L460)
+Defined in: [src/utils/interfaces.ts:455](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L455)
 
 An array of organizations that have blocked this member.
 

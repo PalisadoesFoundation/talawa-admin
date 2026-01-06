@@ -4,9 +4,8 @@
 
 # Interface: InterfaceQueryOrganizationListObject
 
-Defined in: [src/utils/interfaces.ts:1367](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1367)
+Defined in: [src/utils/interfaces.ts:1322](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1322)
 
-InterfaceQueryOrganizationListObject
 Defines the structure for an organization list object returned from a query.
 
 ## Properties
@@ -15,7 +14,7 @@ Defines the structure for an organization list object returned from a query.
 
 > **addressLine1**: `string`
 
-Defined in: [src/utils/interfaces.ts:1370](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1370)
+Defined in: [src/utils/interfaces.ts:1325](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1325)
 
 ***
 
@@ -23,7 +22,7 @@ Defined in: [src/utils/interfaces.ts:1370](https://github.com/PalisadoesFoundati
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:1371](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1371)
+Defined in: [src/utils/interfaces.ts:1326](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1326)
 
 ***
 
@@ -31,7 +30,7 @@ Defined in: [src/utils/interfaces.ts:1371](https://github.com/PalisadoesFoundati
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1368](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1368)
+Defined in: [src/utils/interfaces.ts:1323](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1323)
 
 ***
 
@@ -39,6 +38,6 @@ Defined in: [src/utils/interfaces.ts:1368](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1369](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1369)
+Defined in: [src/utils/interfaces.ts:1324](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1324)
 
 The name of the organization.

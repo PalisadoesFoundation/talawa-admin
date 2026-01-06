@@ -4,9 +4,8 @@
 
 # Interface: InterfaceQueryOrganizationsListObject
 
-Defined in: [src/utils/interfaces.ts:582](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L582)
+Defined in: [src/utils/interfaces.ts:573](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L573)
 
-InterfaceQueryOrganizationsListObject
 Defines the structure for an organization object returned from a query.
 
 ## Properties
@@ -15,7 +14,7 @@ Defines the structure for an organization object returned from a query.
 
 > **address**: [`InterfaceAddress`](InterfaceAddress.md)
 
-Defined in: [src/utils/interfaces.ts:592](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L592)
+Defined in: [src/utils/interfaces.ts:583](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L583)
 
 The address of the organization.
 
@@ -25,7 +24,7 @@ The address of the organization.
 
 > **admins**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:601](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L601)
+Defined in: [src/utils/interfaces.ts:592](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L592)
 
 An array of administrators in the organization.
 
@@ -55,7 +54,7 @@ An array of administrators in the organization.
 
 > **blockedUsers**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:616](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L616)
+Defined in: [src/utils/interfaces.ts:607](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L607)
 
 An array of users blocked by the organization.
 
@@ -81,7 +80,7 @@ An array of users blocked by the organization.
 
 > **creator**: `object`
 
-Defined in: [src/utils/interfaces.ts:585](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L585)
+Defined in: [src/utils/interfaces.ts:576](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L576)
 
 The creator of the organization.
 
@@ -103,7 +102,7 @@ The creator of the organization.
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:591](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L591)
+Defined in: [src/utils/interfaces.ts:582](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L582)
 
 The description of the organization.
 
@@ -113,7 +112,7 @@ The description of the organization.
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:583](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L583)
+Defined in: [src/utils/interfaces.ts:574](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L574)
 
 The unique identifier of the organization.
 
@@ -123,7 +122,7 @@ The unique identifier of the organization.
 
 > **image**: `string`
 
-Defined in: [src/utils/interfaces.ts:584](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L584)
+Defined in: [src/utils/interfaces.ts:575](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L575)
 
 The URL of the organization's image, or null.
 
@@ -133,7 +132,7 @@ The URL of the organization's image, or null.
 
 > **members**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:595](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L595)
+Defined in: [src/utils/interfaces.ts:586](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L586)
 
 An array of members in the organization.
 
@@ -159,7 +158,7 @@ An array of members in the organization.
 
 > **membershipRequests**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:608](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L608)
+Defined in: [src/utils/interfaces.ts:599](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L599)
 
 An array of membership requests for the organization.
 
@@ -189,7 +188,7 @@ An array of membership requests for the organization.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:590](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L590)
+Defined in: [src/utils/interfaces.ts:581](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L581)
 
 The name of the organization.
 
@@ -199,7 +198,7 @@ The name of the organization.
 
 > **userRegistrationRequired**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:593](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L593)
+Defined in: [src/utils/interfaces.ts:584](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L584)
 
 Indicates if user registration is required for this organization.
 
@@ -209,6 +208,6 @@ Indicates if user registration is required for this organization.
 
 > **visibleInSearch**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:594](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L594)
+Defined in: [src/utils/interfaces.ts:585](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L585)
 
 Indicates if the organization is visible in search results.

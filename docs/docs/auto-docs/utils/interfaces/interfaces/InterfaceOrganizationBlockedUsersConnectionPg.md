@@ -4,9 +4,8 @@
 
 # Interface: InterfaceOrganizationBlockedUsersConnectionPg
 
-Defined in: [src/utils/interfaces.ts:778](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L778)
+Defined in: [src/utils/interfaces.ts:761](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L761)
 
-InterfaceOrganizationBlockedUsersConnectionPg
 Defines the structure for a connection of organization blocked users with PostgreSQL-specific fields.
 
 ## Properties
@@ -15,7 +14,7 @@ Defines the structure for a connection of organization blocked users with Postgr
 
 > **edges**: [`InterfaceOrganizationBlockedUsersConnectionEdgePg`](InterfaceOrganizationBlockedUsersConnectionEdgePg.md)[]
 
-Defined in: [src/utils/interfaces.ts:779](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L779)
+Defined in: [src/utils/interfaces.ts:762](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L762)
 
 An array of edges, where each edge contains a cursor and a user node.
 
@@ -25,6 +24,6 @@ An array of edges, where each edge contains a cursor and a user node.
 
 > **pageInfo**: [`InterfacePageInfoPg`](InterfacePageInfoPg.md)
 
-Defined in: [src/utils/interfaces.ts:780](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L780)
+Defined in: [src/utils/interfaces.ts:763](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L763)
 
 Pagination information.

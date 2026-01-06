@@ -4,7 +4,7 @@
 
 # Interface: InterfaceTagDataPG
 
-Defined in: [src/utils/interfaces.ts:1463](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1463)
+Defined in: [src/utils/interfaces.ts:1415](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1415)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/utils/interfaces.ts:1463](https://github.com/PalisadoesFoundati
 
 > **ancestorTags**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:1473](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1473)
+Defined in: [src/utils/interfaces.ts:1425](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1425)
 
 #### id
 
@@ -28,7 +28,7 @@ Defined in: [src/utils/interfaces.ts:1473](https://github.com/PalisadoesFoundati
 
 > **childTags**: `object`
 
-Defined in: [src/utils/interfaces.ts:1470](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1470)
+Defined in: [src/utils/interfaces.ts:1422](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1422)
 
 #### totalCount
 
@@ -40,7 +40,7 @@ Defined in: [src/utils/interfaces.ts:1470](https://github.com/PalisadoesFoundati
 
 > **id**: `string`
 
-Defined in: [src/utils/interfaces.ts:1464](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1464)
+Defined in: [src/utils/interfaces.ts:1416](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1416)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/utils/interfaces.ts:1464](https://github.com/PalisadoesFoundati
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:1465](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1465)
+Defined in: [src/utils/interfaces.ts:1417](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1417)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [src/utils/interfaces.ts:1465](https://github.com/PalisadoesFoundati
 
 > **parentTag**: `object`
 
-Defined in: [src/utils/interfaces.ts:1466](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1466)
+Defined in: [src/utils/interfaces.ts:1418](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1418)
 
 #### id
 
@@ -68,7 +68,7 @@ Defined in: [src/utils/interfaces.ts:1466](https://github.com/PalisadoesFoundati
 
 > **usersAssignedTo**: `object`
 
-Defined in: [src/utils/interfaces.ts:1467](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1467)
+Defined in: [src/utils/interfaces.ts:1419](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1419)
 
 #### totalCount
 

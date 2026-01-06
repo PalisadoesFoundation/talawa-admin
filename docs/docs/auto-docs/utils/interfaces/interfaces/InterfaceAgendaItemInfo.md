@@ -4,9 +4,8 @@
 
 # Interface: InterfaceAgendaItemInfo
 
-Defined in: [src/utils/interfaces.ts:2455](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2455)
+Defined in: [src/utils/interfaces.ts:2377](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2377)
 
-InterfaceAgendaItemInfo
 Defines the structure for agenda item information.
 
 ## Properties
@@ -15,7 +14,7 @@ Defines the structure for agenda item information.
 
 > **\_id**: `string`
 
-Defined in: [src/utils/interfaces.ts:2456](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2456)
+Defined in: [src/utils/interfaces.ts:2378](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2378)
 
 The unique identifier of the agenda item.
 
@@ -25,7 +24,7 @@ The unique identifier of the agenda item.
 
 > **attachments**: `string`[]
 
-Defined in: [src/utils/interfaces.ts:2460](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2460)
+Defined in: [src/utils/interfaces.ts:2382](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2382)
 
 An array of attachment URLs.
 
@@ -35,7 +34,7 @@ An array of attachment URLs.
 
 > **categories**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:2473](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2473)
+Defined in: [src/utils/interfaces.ts:2395](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2395)
 
 An array of categories for the agenda item.
 
@@ -53,7 +52,7 @@ An array of categories for the agenda item.
 
 > **createdBy**: `object`
 
-Defined in: [src/utils/interfaces.ts:2461](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2461)
+Defined in: [src/utils/interfaces.ts:2383](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2383)
 
 The user who created this agenda item.
 
@@ -75,7 +74,7 @@ The user who created this agenda item.
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:2458](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2458)
+Defined in: [src/utils/interfaces.ts:2380](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2380)
 
 The description of the agenda item.
 
@@ -85,7 +84,7 @@ The description of the agenda item.
 
 > **duration**: `string`
 
-Defined in: [src/utils/interfaces.ts:2459](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2459)
+Defined in: [src/utils/interfaces.ts:2381](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2381)
 
 The duration of the agenda item.
 
@@ -95,7 +94,7 @@ The duration of the agenda item.
 
 > **organization**: `object`
 
-Defined in: [src/utils/interfaces.ts:2477](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2477)
+Defined in: [src/utils/interfaces.ts:2399](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2399)
 
 The organization associated with the agenda item.
 
@@ -113,7 +112,7 @@ The organization associated with the agenda item.
 
 > **relatedEvent**: `object`
 
-Defined in: [src/utils/interfaces.ts:2481](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2481)
+Defined in: [src/utils/interfaces.ts:2403](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2403)
 
 The related event.
 
@@ -131,7 +130,7 @@ The related event.
 
 > **sequence**: `number`
 
-Defined in: [src/utils/interfaces.ts:2472](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2472)
+Defined in: [src/utils/interfaces.ts:2394](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2394)
 
 The sequence number of the agenda item.
 
@@ -141,7 +140,7 @@ The sequence number of the agenda item.
 
 > **title**: `string`
 
-Defined in: [src/utils/interfaces.ts:2457](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2457)
+Defined in: [src/utils/interfaces.ts:2379](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2379)
 
 The title of the agenda item.
 
@@ -151,7 +150,7 @@ The title of the agenda item.
 
 > **urls**: `string`[]
 
-Defined in: [src/utils/interfaces.ts:2466](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2466)
+Defined in: [src/utils/interfaces.ts:2388](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2388)
 
 An array of URLs related to the agenda item.
 
@@ -161,7 +160,7 @@ An array of URLs related to the agenda item.
 
 > **users**: `object`[]
 
-Defined in: [src/utils/interfaces.ts:2467](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2467)
+Defined in: [src/utils/interfaces.ts:2389](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2389)
 
 An array of users associated with the agenda item.
 

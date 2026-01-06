@@ -4,9 +4,8 @@
 
 # Interface: InterfacePostForm
 
-Defined in: [src/utils/interfaces.ts:1383](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1383)
+Defined in: [src/utils/interfaces.ts:1337](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1337)
 
-InterfacePostForm
 Defines the structure for a post form.
 
 ## Properties
@@ -15,7 +14,7 @@ Defines the structure for a post form.
 
 > **pinned**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:1388](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1388)
+Defined in: [src/utils/interfaces.ts:1342](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1342)
 
 Indicates if the post is pinned.
 
@@ -25,7 +24,7 @@ Indicates if the post is pinned.
 
 > **postinfo**: `string`
 
-Defined in: [src/utils/interfaces.ts:1385](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1385)
+Defined in: [src/utils/interfaces.ts:1339](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1339)
 
 The information/content of the post.
 
@@ -35,7 +34,7 @@ The information/content of the post.
 
 > **postphoto**: `string`
 
-Defined in: [src/utils/interfaces.ts:1386](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1386)
+Defined in: [src/utils/interfaces.ts:1340](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1340)
 
 The URL of the post's photo, or null.
 
@@ -45,7 +44,7 @@ The URL of the post's photo, or null.
 
 > **posttitle**: `string`
 
-Defined in: [src/utils/interfaces.ts:1384](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1384)
+Defined in: [src/utils/interfaces.ts:1338](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1338)
 
 The title of the post.
 
@@ -55,6 +54,6 @@ The title of the post.
 
 > **postvideo**: `string`
 
-Defined in: [src/utils/interfaces.ts:1387](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1387)
+Defined in: [src/utils/interfaces.ts:1341](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L1341)
 
 The URL of the post's video, or null.

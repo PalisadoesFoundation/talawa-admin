@@ -4,9 +4,8 @@
 
 # Interface: InterfaceCreateFund
 
-Defined in: [src/utils/interfaces.ts:2222](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2222)
+Defined in: [src/utils/interfaces.ts:2152](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2152)
 
-InterfaceCreateFund
 Defines the structure for creating a fund.
 
 ## Properties
@@ -15,7 +14,7 @@ Defines the structure for creating a fund.
 
 > **fundName**: `string`
 
-Defined in: [src/utils/interfaces.ts:2223](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2223)
+Defined in: [src/utils/interfaces.ts:2153](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2153)
 
 The name of the fund.
 
@@ -25,7 +24,7 @@ The name of the fund.
 
 > **fundRef**: `string`
 
-Defined in: [src/utils/interfaces.ts:2224](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2224)
+Defined in: [src/utils/interfaces.ts:2154](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2154)
 
 The reference for the fund.
 
@@ -35,7 +34,7 @@ The reference for the fund.
 
 > **isArchived**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:2226](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2226)
+Defined in: [src/utils/interfaces.ts:2156](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2156)
 
 Indicates if the fund is archived.
 
@@ -45,7 +44,7 @@ Indicates if the fund is archived.
 
 > **isDefault**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:2225](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2225)
+Defined in: [src/utils/interfaces.ts:2155](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2155)
 
 Indicates if the fund is the default.
 
@@ -55,6 +54,6 @@ Indicates if the fund is the default.
 
 > **isTaxDeductible**: `boolean`
 
-Defined in: [src/utils/interfaces.ts:2227](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2227)
+Defined in: [src/utils/interfaces.ts:2157](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L2157)
 
 Indicates if the fund is tax deductible.
