@@ -28,7 +28,6 @@
     "@reduxjs/toolkit": "^2.11.2",
     "@remix-run/router": "^1.23.0",
     "@wry/equality": "^0.5.7",
-    "apollo-upload-client": "^18.0.1",
     "bootstrap": "^5.3.3",
     "chart.js": "^4.4.6",
     "dayjs": "^1.11.13",
