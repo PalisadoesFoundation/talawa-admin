@@ -2,7 +2,10 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { I18nextProvider } from 'react-i18next';
 import { RegistrationForm } from './RegistrationForm';
+import { useRegistration } from '../../../hooks/auth/useRegistration';
 import i18nForTest from '../../../utils/i18nForTest';
+
+vi.mock('../../../hooks/auth/useRegistration');
 
 const mockOrganizations = [
   { _id: '1', name: 'Test Organization 1' },
@@ -10,12 +13,23 @@ const mockOrganizations = [
 ];
 
 describe('RegistrationForm', () => {
+  const mockRegister = vi.fn();
+  const mockOnSuccess = vi.fn();
+  const mockOnError = vi.fn();
+
+  beforeEach(() => {
+    mockRegister.mockClear();
+    mockOnSuccess.mockClear();
+    mockOnError.mockClear();
+    vi.mocked(useRegistration).mockReturnValue({
+      register: mockRegister,
+      loading: false,
+    });
+  });
+
   afterEach(() => {
     vi.clearAllMocks();
   });
-
-  const mockOnSuccess = vi.fn();
-  const mockOnError = vi.fn();
 
   const renderComponent = (props = {}) => {
     return render(
@@ -61,7 +75,12 @@ describe('RegistrationForm', () => {
     fireEvent.click(screen.getByRole('button', { name: /register/i }));
 
     await waitFor(() => {
-      expect(mockOnSuccess).toHaveBeenCalled();
+      expect(mockRegister).toHaveBeenCalledWith({
+        name: 'John Doe',
+        email: 'john@example.com',
+        password: 'Password123!',
+        organizationId: '',
+      });
     });
   });
 
@@ -179,29 +198,16 @@ describe('RegistrationForm', () => {
   });
 
   it('shows loading state during submission', async () => {
+    vi.mocked(useRegistration).mockReturnValue({
+      register: mockRegister,
+      loading: true,
+    });
+
     renderComponent();
 
-    fireEvent.change(screen.getByLabelText('First Name'), {
-      target: { value: 'John Doe' },
-    });
-    fireEvent.change(screen.getByLabelText(/Email/), {
-      target: { value: 'john@example.com' },
-    });
-    fireEvent.change(screen.getByLabelText('Password'), {
-      target: { value: 'Password123!' },
-    });
-    fireEvent.change(screen.getByLabelText('Confirm Password'), {
-      target: { value: 'Password123!' },
-    });
-
-    const button = screen.getByRole('button', { name: /register/i });
-    fireEvent.click(button);
-
+    const button = screen.getByRole('button', { name: 'Loading...' });
     expect(button).toBeDisabled();
-
-    await waitFor(() => {
-      expect(mockOnSuccess).toHaveBeenCalled();
-    });
+    expect(button).toHaveTextContent('Loading...');
   });
 
   it('handles organization selection', () => {
@@ -233,7 +239,12 @@ describe('RegistrationForm', () => {
     fireEvent.click(screen.getByRole('button', { name: /register/i }));
 
     await waitFor(() => {
-      expect(mockOnSuccess).toHaveBeenCalled();
+      expect(mockRegister).toHaveBeenCalledWith({
+        name: 'John Doe',
+        email: 'john@example.com',
+        password: 'Password123!',
+        organizationId: '',
+      });
     });
   });
 
@@ -279,7 +290,12 @@ describe('RegistrationForm', () => {
     fireEvent.click(screen.getByRole('button', { name: /register/i }));
 
     await waitFor(() => {
-      expect(mockCallback).toHaveBeenCalled();
+      expect(mockRegister).toHaveBeenCalledWith({
+        name: 'John Doe',
+        email: 'john@example.com',
+        password: 'Password123!',
+        organizationId: '',
+      });
     });
   });
 

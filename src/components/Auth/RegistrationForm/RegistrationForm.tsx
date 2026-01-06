@@ -56,21 +56,22 @@ export const RegistrationForm = ({
       formData.confirmPassword,
     );
 
+    const getTranslatedError = (validation: {
+      isValid: boolean;
+      error?: string;
+    }) => {
+      if (validation.isValid || !validation.error) return '';
+      const key = validation.error.startsWith('loginPage.')
+        ? validation.error.substring(10)
+        : validation.error;
+      return tLogin(key);
+    };
+
     setErrors({
-      name: nameValidation.isValid
-        ? ''
-        : tLogin(nameValidation.error?.replace('loginPage.', '') || ''),
-      email: emailValidation.isValid
-        ? ''
-        : tLogin(emailValidation.error?.replace('loginPage.', '') || ''),
-      password: passwordValidation.isValid
-        ? ''
-        : tLogin(passwordValidation.error?.replace('loginPage.', '') || ''),
-      confirmPassword: confirmPasswordValidation.isValid
-        ? ''
-        : tLogin(
-            confirmPasswordValidation.error?.replace('loginPage.', '') || '',
-          ),
+      name: getTranslatedError(nameValidation),
+      email: getTranslatedError(emailValidation),
+      password: getTranslatedError(passwordValidation),
+      confirmPassword: getTranslatedError(confirmPasswordValidation),
     });
 
     if (
