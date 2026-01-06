@@ -177,4 +177,56 @@ export class OrganizationFundCampaignPage {
       });
     return this;
   }
+
+  waitForCampaignsPageLoad(timeout = 15000) {
+    cy.url({ timeout }).should('include', '/orgfundcampaign/');
+    cy.get('[data-testid="campaigns-list"], [data-testid="campaigns-empty"]', {
+      timeout,
+    }).should('exist');
+    return this;
+  }
+
+  verifyCampaignsListOrEmptyState() {
+    this.checkEmptyStateExists((exists) => {
+      if (exists) {
+        this.verifyEmptyState();
+      } else {
+        this.verifyCampaignsListVisible();
+      }
+    });
+    return this;
+  }
+
+  getFirstRaisedCellTextAndVerify(callback: (text: string) => void) {
+    cy.get(this._raisedCell)
+      .first()
+      .should('be.visible')
+      .invoke('text')
+      .then((text) => {
+        callback(text);
+      });
+    return this;
+  }
+
+  getFirstProgressCellTextAndVerify(callback: (text: string) => void) {
+    cy.get(this._progressCell)
+      .first()
+      .should('be.visible')
+      .invoke('text')
+      .then((text) => {
+        callback(text);
+      });
+    return this;
+  }
+
+  verifyCampaignsExistAndRun(callback: () => void) {
+    this.checkEmptyStateExists((exists) => {
+      if (!exists) {
+        callback();
+      } else {
+        this.verifyEmptyState();
+      }
+    });
+    return this;
+  }
 }
