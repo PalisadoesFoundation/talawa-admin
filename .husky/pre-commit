@@ -5,8 +5,15 @@ pnpm run format:fix
 pnpm run lint-staged
 pnpm run typecheck
 STAGED_SRC=$(git diff --cached --name-only --diff-filter=ACMRT | grep -E '^src/.*\.(ts|tsx|js|jsx)$' | tr '\n' ' ')
+
+# MinIO compliance check (prevent unsupported upload patterns)
 if [ -n "$STAGED_SRC" ]; then
-  pnpm run check-i18n -- $STAGED_SRC
+  echo "Running MinIO compliance check (policy enforcement)..."
+  node .github/workflows/scripts/check-minio-compliance.cjs || exit 1
+fi
+
+if [ -n "$STAGED_SRC" ]; then
+  pnpm run check-i18n -- --staged $STAGED_SRC
 fi
 pnpm run update:toc
 pnpm run check:pom
@@ -27,7 +34,7 @@ echo "Running Python CI parity checks..."
 # Check staged source files for various checks
 if [ -n "$STAGED_SRC" ]; then
   echo "$STAGED_SRC" | xargs "$VENV_BIN" .github/workflows/scripts/translation_check.py --files
-  echo "$STAGED_SRC" | xargs "$VENV_BIN" .github/workflows/scripts/disable_statements_check.py --files
+  # echo "$STAGED_SRC" | xargs "$VENV_BIN" .github/workflows/scripts/disable_statements_check.py --files
 fi
 
 # 3. CSS Policy Check

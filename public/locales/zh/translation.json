@@ -18,7 +18,8 @@
     "rank": "排名",
     "volunteer": "志愿者",
     "email": "电子邮件",
-    "hoursVolunteered": "志愿服务时数"
+    "hoursVolunteered": "志愿服务时数",
+    "volunteerRankings": "志愿者排名"
   },
   "loginPage": {
     "title": "塔拉瓦管理员",
@@ -278,6 +279,7 @@
     "sortBy": "排序方式",
     "filterByRole": "按角色筛选",
     "errorLoadingUsers": "加载用户时出错",
+    "profilePageComingSoon": "个人资料页面即将推出！",
     "noUserFound": "未找到用户",
     "sort": "种类",
     "Newest": "新的先来",
@@ -1698,6 +1700,7 @@
     "categoryDeleted": "操作项目类别已成功删除",
     "deleteCategory": "删除类别",
     "deleteCategoryMsg": "您确定要删除此操作项目类别吗？",
+    "noDescriptionProvided": "未提供描述",
     "createButton": "创建按钮",
     "editButton": "编辑按钮"
   },
@@ -1729,7 +1732,8 @@
     "delete": "删除",
     "name": "名称",
     "desc": "描述",
-    "venueImagePreview": "场地图片预览"
+    "venueImagePreview": "场地图片预览",
+    "sortVenues": "排序场地"
   },
   "addMember": {
     "title": "添加会员",

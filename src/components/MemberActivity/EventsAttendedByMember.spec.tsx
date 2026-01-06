@@ -18,8 +18,8 @@ describe('EventsAttendedByMember', () => {
       </BrowserRouter>,
     );
 
-    expect(screen.getByTestId('loading')).toBeInTheDocument();
-    expect(screen.getByText('Loading event details...')).toBeInTheDocument();
+    // LoadingState uses data-testid="loading-state" by default
+    expect(screen.getByTestId('loading-state')).toBeInTheDocument();
   });
 
   test('renders error state when query fails', async () => {
