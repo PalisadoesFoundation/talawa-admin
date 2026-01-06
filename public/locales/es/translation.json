@@ -73,6 +73,13 @@
     "communityLogo": "Logo de la comunidad",
     "organizations": "Organizaciones"
   },
+  "adminProfile": {
+    "title": "Perfil de Administrador",
+    "settings": "Configuraciones",
+    "profile": "Perfil",
+    "personalInfo": "Información Personal",
+    "accountSettings": "Configuración de la Cuenta"
+  },
   "signOut": {
     "retryPrompt": "Error al Cerrar sesión. ¿Reintentar?",
     "signingOut": "Cerrando sesión...",
@@ -1349,6 +1356,7 @@
     "processingPost": "Procesando tu publicación. Por favor espera."
   },
   "eventAttendance": {
+    "event_attendance_table": "Tabla de asistencia al evento",
     "historical_statistics": "Estadísticas históricas",
     "Search member": "Buscar miembro",
     "Member Name": "Nombre del miembro",
