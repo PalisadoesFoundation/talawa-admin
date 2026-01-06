@@ -28,7 +28,7 @@
  * - The `styles.loadingItem` class is applied to each cell for the shimmer effect.
  * - The `react-bootstrap` Table component is used for table structure.
  */
-import React, { useEffect } from 'react';
+import React from 'react';
 import styles from './TableLoader.module.css';
 import { Table } from 'react-bootstrap';
 import { InterfaceTableLoader } from 'types/shared-components/TableLoader/interface';
@@ -36,13 +36,11 @@ import { InterfaceTableLoader } from 'types/shared-components/TableLoader/interf
 const TableLoader = (props: InterfaceTableLoader): JSX.Element => {
   const { noOfRows, headerTitles, noOfCols, 'data-testid': dataTestId } = props;
 
-  useEffect(() => {
-    if (headerTitles == undefined && noOfCols == undefined) {
-      throw new Error(
-        'TableLoader error Either headerTitles or noOfCols is required !',
-      );
-    }
-  }, []);
+  if (headerTitles === undefined && noOfCols === undefined) {
+    throw new Error(
+      'TableLoader error: Either headerTitles or noOfCols is required!',
+    );
+  }
 
   return (
     <div data-testid={dataTestId || 'TableLoader'}>

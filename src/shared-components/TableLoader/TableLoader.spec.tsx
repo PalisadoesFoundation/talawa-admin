@@ -12,6 +12,7 @@ beforeAll(() => {
 
 describe('Testing Loader component', () => {
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
   test('Component should be rendered properly only headerTitles is provided', () => {
