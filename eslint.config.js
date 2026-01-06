@@ -64,6 +64,7 @@ export default [
       vitest,
       import: imports,
       prettier,
+      tsdoc,
     },
     settings: {
       react: {
@@ -73,6 +74,9 @@ export default [
     rules: {
       ...js.configs.recommended.rules,
       ...ts.configs.recommended.rules,
+
+      'tsdoc/syntax': 'error',
+
       '@typescript-eslint/no-require-imports': 'error',
       'react/destructuring-assignment': 'error',
       'react/no-multi-comp': ['error', { ignoreStateless: false }],
@@ -135,7 +139,7 @@ export default [
         // Safe pattern: const token = localStorage.getItem('token'); { authorization: token }
         {
           selector:
-            "Property[key.name='authorization'][value.type='CallExpression'][value.callee.type='MemberExpression'][value.callee.object.name='localStorage'][value.callee.property.name='getItem'][value.arguments.0.value='token']",
+            "Property[key.name='authorization'][value.type='CallExpression'][value.callee.type='MemberExpression'][value.callee.property.name='getItem'][value.arguments.0.value='token']",
           message:
             "Security Risk: Do not use getItem('token') directly inside authorization headers. Extract it to a variable first to handle null values.",
         },
@@ -329,7 +333,6 @@ export default [
     files: ['**/*.spec.ts', '**/*.spec.tsx', '**/*.test.ts', '**/*.test.tsx'],
     plugins: {
       'vitest-isolation': vitestIsolation,
-      tsdoc,
     },
     rules: {
       'vitest-isolation/require-aftereach-cleanup': 'error',
@@ -347,7 +350,6 @@ export default [
             'Avoid hardcoded date strings like "31 December 2025". Use dynamic dates with dayjs instead.',
         },
       ],
-      'tsdoc/syntax': 'error',
     },
   },
 ];
