@@ -40,7 +40,7 @@ import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import styles from '../../style/app-fixed.module.css';
 import { Form } from 'react-bootstrap';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 interface InterfaceUserPasswordUpdateProps {
   id: string;

@@ -30,7 +30,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { urlToFile } from 'utils/urlToFile';
 
@@ -56,7 +56,7 @@ async function wait(ms = 500): Promise<void> {
   await act(() => new Promise((resolve) => setTimeout(resolve, ms)));
 }
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),

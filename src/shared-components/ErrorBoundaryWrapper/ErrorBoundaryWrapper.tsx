@@ -46,7 +46,7 @@ import type {
   InterfaceErrorBoundaryWrapperState,
 } from 'types/shared-components/ErrorBoundaryWrapper/interface';
 import styles from './ErrorBoundaryWrapper.module.css';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 export class ErrorBoundaryWrapper extends React.Component<
   InterfaceErrorBoundaryWrapperProps,

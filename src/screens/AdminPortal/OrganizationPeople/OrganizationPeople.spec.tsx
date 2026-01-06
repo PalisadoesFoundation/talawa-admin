@@ -19,10 +19,10 @@ import {
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import { store } from 'state/store';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { PAGE_SIZE } from 'types/ReportingTable/utils';
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),

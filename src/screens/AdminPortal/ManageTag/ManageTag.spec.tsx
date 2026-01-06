@@ -37,7 +37,7 @@ import { USER_TAGS_ASSIGNED_MEMBERS } from 'GraphQl/Queries/userTagQueries';
 import { TAGS_QUERY_DATA_CHUNK_SIZE } from 'utils/organizationTagsUtils';
 import { type ApolloLink } from '@apollo/client';
 import { vi, beforeEach, afterEach, expect, it, describe } from 'vitest';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 const translations = {
   ...JSON.parse(
@@ -100,7 +100,7 @@ async function wait(ms = 500): Promise<void> {
   });
 }
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),

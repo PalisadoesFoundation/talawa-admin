@@ -9,9 +9,9 @@ import { REMOVE_MEMBER_MUTATION_PG } from 'GraphQl/Mutations/mutations';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import { describe, test, expect, vi, beforeEach } from 'vitest';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),

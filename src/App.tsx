@@ -14,7 +14,7 @@ import UserScreen from 'screens/UserPortal/UserScreen/UserScreen';
 import UserGlobalScreen from 'screens/UserPortal/UserGlobalScreen/UserGlobalScreen';
 import Loader from 'components/Loader/Loader';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
-import { NotificationToastContainer } from 'components/NotificationToast/NotificationToast';
+import { NotificationToastContainer } from 'shared-components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 

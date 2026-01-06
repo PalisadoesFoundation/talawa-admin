@@ -54,7 +54,7 @@ import {
 } from 'GraphQl/Mutations/OrganizationMutations';
 import { ORGANIZATION_LIST } from 'GraphQl/Queries/Queries';
 import { USER_JOINED_ORGANIZATIONS_PG } from 'GraphQl/Queries/OrganizationQueries';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import useLocalStorage from 'utils/useLocalstorage';
 
 export interface InterfaceOrganizationCardPropsPG {

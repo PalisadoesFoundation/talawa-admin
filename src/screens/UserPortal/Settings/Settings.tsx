@@ -46,7 +46,7 @@ import ProfileHeader from './ProfileHeader/ProfileHeader';
 import ProfileImageSection from './ProfileImageSection/ProfileImageSection';
 import UserDetailsForm from './UserDetails/UserDetails';
 import { validatePassword } from 'utils/passwordValidator';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import EventsAttendedByUser from 'components/UserPortal/UserProfile/EventsAttendedByUser';
 
 // Exported helper extracted from component to allow unit testing of reset logic.

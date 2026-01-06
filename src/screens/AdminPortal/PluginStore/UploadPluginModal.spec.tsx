@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import { MockedProvider } from '@apollo/client/testing';
 import { vi, describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import UploadPluginModal from './UploadPluginModal';
 import i18nForTest from 'utils/i18nForTest';
 
@@ -17,7 +17,7 @@ const sharedMocks = vi.hoisted(() => ({
 }));
 
 // Mock dependencies
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: sharedMocks.NotificationToast,
 }));
 

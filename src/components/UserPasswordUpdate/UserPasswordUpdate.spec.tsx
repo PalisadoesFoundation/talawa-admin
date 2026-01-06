@@ -9,9 +9,9 @@ import { StaticMockLink } from 'utils/StaticMockLink';
 import { MOCKS } from './UserPasswordUpdateMocks';
 import { vi } from 'vitest';
 import { UPDATE_USER_PASSWORD_MUTATION } from 'GraphQl/Mutations/mutations';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     error: vi.fn(),
     success: vi.fn(),

@@ -58,7 +58,7 @@ import TagNode from './Node/TagNode';
 import InfiniteScrollLoader from 'components/InfiniteScrollLoader/InfiniteScrollLoader';
 import type { TFunction } from 'i18next';
 import componentStyles from './TagAction.module.css';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 interface InterfaceUserTagsAncestorData {
   _id: string;

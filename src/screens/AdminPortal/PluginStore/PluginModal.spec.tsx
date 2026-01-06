@@ -3,7 +3,7 @@ import type { Mock } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import PluginModal from './PluginModal';
 import { AdminPluginFileService } from 'plugin/services/AdminPluginFileService';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import type { IPluginMeta, IPluginDetails } from 'plugin';
 import i18nForTest from 'utils/i18nForTest';
 import { I18nextProvider } from 'react-i18next';
@@ -20,7 +20,7 @@ vi.mock('plugin/services/AdminPluginFileService', () => ({
 }));
 
 // Mock NotificationToast
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     error: vi.fn(),
     success: vi.fn(),

@@ -19,7 +19,7 @@ import { NotificationsNone } from '@mui/icons-material';
 import styles from './Notification.module.css';
 import { FaUserCircle } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 
 interface InterfaceNotification {

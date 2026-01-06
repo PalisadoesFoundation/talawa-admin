@@ -3,7 +3,7 @@ import dayjs from 'dayjs';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MockedProvider } from '@apollo/react-testing';
 import { BrowserRouter, MemoryRouter, Route, Routes } from 'react-router';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import LeaveOrganization from './LeaveOrganization';
 import {
   ORGANIZATIONS_LIST_BASIC,
@@ -21,7 +21,7 @@ const mockNotificationToast = vi.hoisted(() => ({
   success: vi.fn(),
 }));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: mockNotificationToast,
 }));
 

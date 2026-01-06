@@ -39,7 +39,7 @@
 import React, { useRef, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import { useMutation } from '@apollo/client';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 
 import { ADD_ADMIN_MUTATION } from 'GraphQl/Mutations/mutations';

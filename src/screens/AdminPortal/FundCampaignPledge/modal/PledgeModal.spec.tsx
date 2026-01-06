@@ -23,14 +23,14 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
 
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import type { InterfacePledgeModal } from './PledgeModal';
 import PledgeModal from './PledgeModal';
 import { vi } from 'vitest';
 import { CREATE_PLEDGE, UPDATE_PLEDGE } from 'GraphQl/Mutations/PledgeMutation';
 import { MEMBERS_LIST_PG } from 'GraphQl/Queries/Queries';
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),

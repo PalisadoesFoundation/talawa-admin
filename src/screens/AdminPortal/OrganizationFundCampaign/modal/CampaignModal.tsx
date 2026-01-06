@@ -15,7 +15,7 @@ import {
   CREATE_CAMPAIGN_MUTATION,
   UPDATE_CAMPAIGN_MUTATION,
 } from 'GraphQl/Mutations/CampaignMutation';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import {
   FormControl,
   InputLabel,

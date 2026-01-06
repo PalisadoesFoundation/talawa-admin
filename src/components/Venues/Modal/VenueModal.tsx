@@ -43,7 +43,7 @@ import {
 } from 'GraphQl/Mutations/mutations';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryVenueListItem } from 'utils/interfaces';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 export interface InterfaceVenueModalProps {
   show: boolean;

@@ -54,7 +54,7 @@ import AddOnSpotAttendee from './AddOnSpot/AddOnSpotAttendee';
 import InviteByEmailModal from './InviteByEmail/InviteByEmailModal';
 import type { InterfaceUser } from 'types/User/interface';
 import styles from '../EventRegistrants.module.css';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 type ModalPropType = {
   show: boolean;

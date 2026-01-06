@@ -66,7 +66,7 @@ import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
 import { Button } from '@mui/material';
 import OrganizationModal from './modal/OrganizationModal';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { Link } from 'react-router';
 import { Modal } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';

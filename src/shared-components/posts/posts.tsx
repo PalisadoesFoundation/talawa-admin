@@ -44,7 +44,7 @@ import { ORGANIZATION_PINNED_POST_LIST } from 'GraphQl/Queries/OrganizationQueri
 import { ORGANIZATION_POST_LIST_WITH_VOTES } from 'GraphQl/Queries/Queries';
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { useParams } from 'react-router';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import {
   InterfaceOrganizationPostListData,
   InterfacePost,

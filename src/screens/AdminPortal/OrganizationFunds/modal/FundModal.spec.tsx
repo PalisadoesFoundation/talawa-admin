@@ -17,14 +17,14 @@ import { store } from 'state/store';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { MOCKS, MOCKS_ERROR } from '../OrganizationFundsMocks';
 import type { InterfaceFundModal } from './FundModal';
 import FundModal from './FundModal';
 import { vi } from 'vitest';
 import dayjs from 'dayjs';
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),

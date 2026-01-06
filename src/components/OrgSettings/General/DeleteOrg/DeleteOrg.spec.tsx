@@ -5,7 +5,7 @@ import type { DocumentNode } from '@apollo/client';
 import { useMutation, useQuery } from '@apollo/client';
 import useLocalStorage from 'utils/useLocalstorage';
 import DeleteOrg from './DeleteOrg';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import { describe, beforeEach, it, expect, vi, type Mock } from 'vitest';
 import {
@@ -37,7 +37,7 @@ vi.mock('utils/useLocalstorage', () => ({
   })),
 }));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),

@@ -17,7 +17,7 @@ dayjs.extend(utc);
 import i18nForTest from 'utils/i18nForTest';
 import { MOCKS_DELETE_PLEDGE_ERROR, MOCKS } from '../Pledges.mocks';
 import { StaticMockLink } from 'utils/StaticMockLink';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { vi } from 'vitest';
 
 const toastMocks = vi.hoisted(() => ({
@@ -27,7 +27,7 @@ const toastMocks = vi.hoisted(() => ({
   info: vi.fn(),
 }));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: toastMocks,
 }));
 

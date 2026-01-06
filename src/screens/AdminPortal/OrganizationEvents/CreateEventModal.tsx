@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { useMutation } from '@apollo/client';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
 import { CREATE_EVENT_MUTATION } from 'GraphQl/Mutations/EventMutations';

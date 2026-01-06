@@ -28,7 +28,7 @@ import {
   MOCKS_ERROR_SUBTAGS_QUERY,
 } from './TagActionsMocks';
 import type { TFunction } from 'i18next';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 const link = new StaticMockLink(MOCKS, true);
 const link2 = new StaticMockLink(MOCKS_ERROR_ORGANIZATION_TAGS_QUERY, true);
@@ -42,7 +42,7 @@ async function wait(ms = 500): Promise<void> {
   });
 }
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     error: vi.fn(),
     success: vi.fn(),

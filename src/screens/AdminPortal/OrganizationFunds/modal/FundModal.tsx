@@ -9,7 +9,7 @@ import {
   CREATE_FUND_MUTATION,
   UPDATE_FUND_MUTATION,
 } from 'GraphQl/Mutations/FundMutation';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { FormControl, TextField } from '@mui/material';
 
 export interface InterfaceFundModal {

@@ -45,7 +45,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import type { Advertisement } from 'types/Advertisement/type';
 import Loader from 'components/Loader/Loader';
 import { AdvertisementSkeleton } from './skeleton/AdvertisementSkeleton';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import PageHeader from 'shared-components/Navbar/Navbar';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 

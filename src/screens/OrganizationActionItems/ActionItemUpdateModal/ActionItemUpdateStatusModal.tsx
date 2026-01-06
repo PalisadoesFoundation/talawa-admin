@@ -38,7 +38,7 @@ import {
   COMPLETE_ACTION_ITEM_FOR_INSTANCE,
   MARK_ACTION_ITEM_AS_PENDING_FOR_INSTANCE,
 } from 'GraphQl/Mutations/ActionItemMutations';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import type {
   IActionItemInfo,
   IUpdateActionItemInput,

@@ -56,7 +56,7 @@ import { USER_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Queries/EventVolunteerQueries
 import type { InterfaceVolunteerMembership } from 'utils/interfaces';
 import dayjs from 'dayjs';
 import { UPDATE_VOLUNTEER_MEMBERSHIP } from 'GraphQl/Mutations/EventVolunteerMutation';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
 
 function Requests(): JSX.Element {

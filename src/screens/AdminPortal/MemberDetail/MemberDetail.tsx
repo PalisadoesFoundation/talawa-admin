@@ -39,7 +39,7 @@ import styles from 'style/app-fixed.module.css';
 import memberDetailStyles from './MemberDetail.module.css';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
 import { CURRENT_USER } from 'GraphQl/Queries/Queries';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { languages } from 'utils/languages';
 import { errorHandler } from 'utils/errorHandler';
 import { Card, Row, Col, Form } from 'react-bootstrap';

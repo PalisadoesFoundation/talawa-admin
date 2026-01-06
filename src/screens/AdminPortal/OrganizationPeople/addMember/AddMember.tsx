@@ -63,7 +63,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Button, Form, InputGroup, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryOrganizationsListObject } from 'utils/interfaces';
 import styles from 'style/app-fixed.module.css';

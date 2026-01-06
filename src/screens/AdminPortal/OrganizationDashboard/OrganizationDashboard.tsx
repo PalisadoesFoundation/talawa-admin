@@ -44,7 +44,7 @@ import CardItem from 'components/OrganizationDashCards/CardItem/CardItem';
 import CardItemLoading from 'components/OrganizationDashCards/CardItem/Loader/CardItemLoading';
 import DashBoardCard from 'components/OrganizationDashCards/DashboardCard';
 import { Navigate, useNavigate, useParams } from 'react-router';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
 import DashboardStats from './components/DashboardStats';
 import UpcomingEventsCard from './components/UpcomingEventsCard';

@@ -23,7 +23,7 @@ import {
   BACKEND_WEBSOCKET_URL,
   deriveBackendWebsocketUrl,
 } from 'Constant/constant';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import i18n from './utils/i18n';
 import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
@@ -55,7 +55,7 @@ const getTestExpiredToken = (): string =>
 
 // Mock external dependencies
 vi.mock(
-  'components/NotificationToast/NotificationToast',
+  'shared-components/NotificationToast/NotificationToast',
   (): { NotificationToast: InterfaceNotificationToastMock } => ({
     NotificationToast: {
       error: vi.fn(),

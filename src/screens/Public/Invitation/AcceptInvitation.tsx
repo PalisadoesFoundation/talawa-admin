@@ -12,7 +12,7 @@ import {
 import { Button } from 'react-bootstrap';
 import Loader from 'components/Loader/Loader';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { useTranslation } from 'react-i18next';
 import useLocalStorage from '../../../utils/useLocalstorage';
 

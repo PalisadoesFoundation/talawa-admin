@@ -229,7 +229,7 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: toastMocks,
 }));
 

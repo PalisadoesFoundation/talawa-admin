@@ -5,7 +5,7 @@ import userEvent from '@testing-library/user-event';
 import { MockedProvider } from '@apollo/client/testing';
 import { I18nextProvider } from 'react-i18next';
 import i18n from 'i18next';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 import OrgUpdate from './OrgUpdate';
 import { GET_ORGANIZATION_BASIC_DATA } from 'GraphQl/Queries/Queries';
@@ -15,7 +15,7 @@ import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     success: vi.fn(),
     error: vi.fn(),

@@ -9,7 +9,7 @@ import { store } from 'state/store';
 import i18nForTest from 'utils/i18nForTest';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import Settings from './Settings';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import useLocalStorage from 'utils/useLocalstorage';
 import { MOCKS1, MOCKS2 } from './SettingsMocks';
 import { UPDATE_CURRENT_USER_MUTATION } from 'GraphQl/Mutations/mutations';
@@ -21,7 +21,7 @@ const sharedMocks = vi.hoisted(() => ({
   urlToFile: vi.fn(),
 }));
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: sharedMocks.NotificationToast,
 }));
 

@@ -39,7 +39,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import type { InterfaceEventVolunteerInfo } from 'utils/interfaces';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import {
   DELETE_VOLUNTEER,
   DELETE_VOLUNTEER_FOR_INSTANCE,

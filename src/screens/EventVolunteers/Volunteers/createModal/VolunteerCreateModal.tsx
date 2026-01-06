@@ -37,7 +37,7 @@ import styles from 'style/app-fixed.module.css';
 import React, { useCallback, useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation, useQuery } from '@apollo/client';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 import { Autocomplete, TextField } from '@mui/material';
 
 import { MEMBERS_LIST } from 'GraphQl/Queries/Queries';

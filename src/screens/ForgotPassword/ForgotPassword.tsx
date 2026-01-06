@@ -43,7 +43,7 @@ import { useMutation } from '@apollo/client';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
 import {
   FORGOT_PASSWORD_MUTATION,

@@ -8,9 +8,9 @@ import i18nForTest from '../../../../utils/i18nForTest';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import { SEND_EVENT_INVITATIONS } from 'GraphQl/Mutations/mutations';
 import dayjs from 'dayjs';
-import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import { NotificationToast } from 'shared-components/NotificationToast/NotificationToast';
 
-vi.mock('components/NotificationToast/NotificationToast', () => ({
+vi.mock('shared-components/NotificationToast/NotificationToast', () => ({
   NotificationToast: {
     error: vi.fn(),
     success: vi.fn(),
