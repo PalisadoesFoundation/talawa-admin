@@ -1,11 +1,17 @@
 /**
- * LoginPage component.
+ * This file contains the implementation of the Login and Registration page for the Talawa Admin application.
+ * It includes functionality for user authentication, password validation, reCAPTCHA verification, and organization selection.
+ * The page supports both admin and user roles and provides localization support.
  *
- * Provides login and registration flows with validation, reCAPTCHA, and
- * organization selection. Supports admin and user roles with localization.
+ * The `loginPage` component renders a login and registration interface with the following features:
+ * - Login and registration forms with validation.
+ * - Password strength checks and visibility toggles.
+ * - reCAPTCHA integration for bot prevention.
+ * - Organization selection using an autocomplete dropdown.
+ * - Social media links and community branding.
+ * - Role-based navigation for admin and user.
  *
- * @remarks
- * Includes password strength checks, social links, and community branding.
+ * @returns The rendered login and registration page.
  *
  * @example
  * ```tsx
@@ -13,7 +19,8 @@
  * ```
  */
 import { useQuery, useMutation, useLazyQuery } from '@apollo/client';
-import { Check, Clear } from '@mui/icons-material';
+import Check from '@mui/icons-material/Check';
+import Clear from '@mui/icons-material/Clear';
 import type { ChangeEvent } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Form } from 'react-bootstrap';
@@ -44,7 +51,8 @@ import useLocalStorage from 'utils/useLocalstorage';
 import { socialMediaLinks } from '../../constants';
 import styles from './LoginPage.module.css';
 import type { InterfaceQueryOrganizationListObject } from 'utils/interfaces';
-import { Autocomplete, TextField } from '@mui/material';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 import useSession from 'utils/useSession';
 import i18n from 'utils/i18n';
 
