@@ -54,6 +54,7 @@ import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFil
 
 import EmptyState from 'shared-components/EmptyState/EmptyState';
 import { errorHandler } from 'utils/errorHandler';
+import languages from 'utils/languages';
 
 /**
  * Maps numeric filter state to string option identifiers.
@@ -464,17 +465,21 @@ function OrganizationPeople(): JSX.Element {
       headerAlign: 'center',
       headerClassName: `${styles.tableHeader}`,
       sortable: false,
-      renderCell: (params: GridCellParams) => (
-        <div data-testid={`org-people-joined-${params.row.id}`}>
-          {t('joined')} :{' '}
-          {new Intl.DateTimeFormat(i18n.language ?? 'en-US', {
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            timeZone: 'UTC',
-          }).format(new Date(params.row.createdAt))}
-        </div>
-      ),
+      renderCell: (params: GridCellParams) => {
+        const currentLang = languages.find(lang => lang.code === i18n.language);
+        const locale = currentLang ? `${currentLang.code}-${currentLang.country_code}` : 'en-US';
+        return (
+          <div data-testid={`org-people-joined-${params.row.id}`}>
+            {t('joined')} :{' '}
+            {new Intl.DateTimeFormat(locale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              timeZone: 'UTC',
+            }).format(new Date(params.row.createdAt))}
+          </div>
+        );
+      },
     },
     {
       field: 'action',
