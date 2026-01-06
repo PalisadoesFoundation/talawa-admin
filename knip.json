@@ -17,6 +17,6 @@
     "src/shared-components/DateRangePicker/index.ts",
     "src/types/shared-components/DateRangePicker/index.ts"
   ],
-  "ignoreDependencies": [],
+  "ignoreDependencies": ["nyc", "@types/apollo-upload-client", "apollo-upload-client"],
   "ignoreExportsUsedInFile": true
 }
