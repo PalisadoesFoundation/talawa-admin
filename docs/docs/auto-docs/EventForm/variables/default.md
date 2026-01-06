@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<[`IEventFormProps`](../../types/EventForm/interface/interfaces/IEventFormProps.md)\>
 
-Defined in: [src/shared-components/EventForm/EventForm.tsx:106](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/EventForm/EventForm.tsx#L106)
+Defined in: [src/shared-components/EventForm/EventForm.tsx:107](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/EventForm/EventForm.tsx#L107)

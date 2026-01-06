@@ -15,8 +15,6 @@ import type {
   IEventFormValues,
 } from 'types/EventForm/interface';
 import type { ICreateEventInput } from 'types/Event/interface';
-import DateRangePicker from 'shared-components/DateRangePicker/DateRangePicker';
-import type { IDateRangeValue } from 'types/shared-components/DateRangePicker/interface';
 
 interface ICreateEventModalProps {
   /** Whether the modal is currently open/visible */
@@ -89,14 +87,8 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
   };
   const [formResetKey, setFormResetKey] = useState(0);
 
-  const [dateRange, setDateRange] = useState<IDateRangeValue>({
-    startDate: todayUTC,
-    endDate: todayUTC,
-  });
-
   const handleClose = (): void => {
     setFormResetKey((prev) => prev + 1);
-    setDateRange({ startDate: todayUTC, endDate: todayUTC });
     onClose();
   };
 
@@ -153,24 +145,9 @@ const CreateEventModal: React.FC<ICreateEventModalProps> = ({
           </Button>
         </Modal.Header>
         <Modal.Body>
-          <DateRangePicker
-            dataTestId="createEventDateRangePicker"
-            value={dateRange}
-            onChange={(range) => {
-              setDateRange({
-                startDate: range.startDate,
-                endDate: range.endDate ?? range.startDate,
-              });
-            }}
-          />
-
           <EventForm
             key={formResetKey}
-            initialValues={{
-              ...defaultValues,
-              startDate: dateRange.startDate ?? todayUTC,
-              endDate: dateRange.endDate ?? dateRange.startDate ?? todayUTC,
-            }}
+            initialValues={defaultValues}
             onSubmit={handleSubmit}
             onCancel={handleClose}
             submitLabel={t('createEvent')}

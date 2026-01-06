@@ -84,7 +84,14 @@ export default [
       'import/no-duplicates': 'error',
       'no-undef': 'off',
       '@typescript-eslint/ban-ts-comment': 'error',
-      '@typescript-eslint/no-unused-vars': 'error',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          ignoreRestSiblings: true, // Allow unused vars when using rest properties for filtering
+          varsIgnorePattern: '^_', // Allow unused vars that start with underscore
+          argsIgnorePattern: '^_', // Allow unused function args that start with underscore
+        },
+      ],
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-non-null-assertion': 'error',
       '@typescript-eslint/consistent-type-assertions': 'error',
@@ -168,6 +175,9 @@ export default [
        *
        * Note: Approximately 20+ files currently use direct imports and will require
        * migration in a future ticket. This rule prevents new violations.
+       *
+       * Also enforces usage of standardized date picker wrappers
+       * Issue #6146: https://github.com/PalisadoesFoundation/talawa-admin/issues/6146
        */
       'no-restricted-imports': [
         'error',
@@ -195,17 +205,24 @@ export default [
               message:
                 'Do not import Modal directly. Use the shared BaseModal component instead.',
             },
+            {
+              name: '@mui/x-date-pickers',
+              message:
+                'Direct imports from @mui/x-date-pickers are not allowed. Please use the wrappers (DateRangePicker, DatePicker, TimePicker) from src/shared-components/ instead. See issue #6146 for details.',
+            },
           ],
         },
       ],
     },
   },
   /**
-   * Exemption: DataGridWrapper and LoadingState component files
+   * Exemption: Wrapper component files
    *
-   * DataGridWrapper files need direct MUI DataGrid access for wrapper implementation.
-   * LoadingState files need direct Spinner access from react-bootstrap for wrapper implementation.
-   * These files are the only ones allowed to import directly from restricted libraries.
+   * These wrapper components need direct access to their underlying libraries:
+   * - DataGridWrapper: Direct MUI DataGrid access
+   * - LoadingState: Direct Spinner access from react-bootstrap
+   * - BaseModal: Direct react-bootstrap Modal access
+   * - DatePicker/TimePicker/DateRangePicker: Direct @mui/x-date-pickers access
    */
   {
     files: [
@@ -214,26 +231,52 @@ export default [
       'src/shared-components/LoadingState/**/*.{ts,tsx}',
       'src/types/shared-components/LoadingState/**/*.{ts,tsx}',
       'src/components/Loader/**/*.{ts,tsx}',
+      'src/shared-components/BaseModal/**/*.{ts,tsx}',
+      'src/types/shared-components/BaseModal/**/*.{ts,tsx}',
+      'src/index.tsx',
+      'src/components/test-utils/TestWrapper.tsx',
     ],
     rules: {
       'no-restricted-imports': 'off',
     },
   },
   /**
-   * Exemption: BaseModal component files
+   * Exemption: Date picker wrapper components
    *
-   * BaseModal files need direct react-bootstrap Modal access for wrapper implementation.
-   * These files are the only ones allowed to import Modal directly from react-bootstrap.
+   * These wrapper components need direct access to @mui/x-date-pickers
+   * to provide standardized date/time picker interfaces for the application.
+   * 
+   * Note: This exemption is specific - it only allows @mui/x-date-pickers imports.
+   * Other restricted imports (like react-bootstrap Modal) are still blocked.
    */
   {
     files: [
-      'src/shared-components/BaseModal/**/*.ts',
-      'src/shared-components/BaseModal/**/*.tsx',
-      'src/types/shared-components/BaseModal/**/*.ts',
-      'src/types/shared-components/BaseModal/**/*.tsx',
+      'src/shared-components/DateRangePicker/**/*.{ts,tsx}',
+      'src/types/shared-components/DateRangePicker/**/*.{ts,tsx}',
+      'src/shared-components/DatePicker/**/*.{ts,tsx}',
+      'src/shared-components/TimePicker/**/*.{ts,tsx}',
     ],
     rules: {
-      'no-restricted-imports': 'off',
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            // Still enforce other restrictions, only allow @mui/x-date-pickers
+            {
+              name: 'react-bootstrap',
+              importNames: ['Modal'],
+              message:
+                'Do not import Modal directly. Use the shared BaseModal component instead.',
+            },
+            {
+              name: 'react-bootstrap',
+              importNames: ['Spinner'],
+              message:
+                'Do not import Spinner from react-bootstrap. Use the shared LoadingState component instead.',
+            },
+          ],
+        },
+      ],
     },
   },
   {

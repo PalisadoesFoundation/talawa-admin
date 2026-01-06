@@ -48,8 +48,8 @@ import useLocalStorage from 'utils/useLocalstorage';
 import Avatar from 'components/Avatar/Avatar';
 import EventsAttendedByMember from 'components/MemberActivity/EventsAttendedByMember';
 import MemberAttendedEventsModal from 'components/MemberActivity/Modal/EventsAttendedMemberModal';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import DatePicker from 'shared-components/DatePicker';
+
 import {
   countryOptions,
   educationGradeEnum,
@@ -267,7 +267,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   }
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <>
       {show && (
         <MemberAttendedEventsModal
           eventsAttended={userData?.currentUser?.eventsAttended || []}
@@ -380,19 +380,30 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
                     {t('birthDate')}
                   </label>
                   <DatePicker
-                    className={`${styles.dateboxMemberDetail} w-100`}
-                    value={dayjs(formState.birthDate)}
-                    onChange={(date) =>
+                    className="w-100"
+                    value={
+                      formState.birthDate ? dayjs(formState.birthDate) : null
+                    }
+                    maxDate={dayjs()}
+                    onChange={(date) => {
+                      if (!date || !dayjs(date).isValid()) {
+                        handleFieldChange('birthDate', '');
+                        return;
+                      }
+                      const picked = dayjs(date);
+                      if (picked.isAfter(dayjs(), 'day')) {
+                        handleFieldChange('birthDate', '');
+                        return;
+                      }
                       handleFieldChange(
                         'birthDate',
-                        date ? date.toISOString().split('T')[0] : '',
-                      )
-                    }
+                        picked.toISOString().split('T')[0],
+                      );
+                    }}
                     data-testid="birthDate"
                     slotProps={{
                       textField: {
                         inputProps: {
-                          'data-testid': 'birthDate',
                           'aria-label': t('birthDate'),
                         },
                       },
@@ -768,7 +779,7 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
           </Card>
         </Col>
       </Row>
-    </LocalizationProvider>
+    </>
   );
 };
 

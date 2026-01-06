@@ -1,0 +1,12 @@
+:root {
+  --picker-icon-space: 40px;
+}
+
+.fullWidth {
+  width: 100%;
+}
+
+.pickerLabel {
+  margin-bottom: 0.5rem;
+  display: block;
+}

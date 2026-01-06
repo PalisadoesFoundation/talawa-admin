@@ -32,7 +32,7 @@
  */
 
 import React, { useCallback, useMemo } from 'react';
-import { DatePicker } from '@mui/x-date-pickers';
+import DatePicker from 'shared-components/DatePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import Form from 'react-bootstrap/Form';
@@ -177,43 +177,32 @@ export default function DateRangePicker({
               value={startDayjs}
               onChange={handleStartChange}
               disabled={disabled}
-              enableAccessibleFieldDOMStructure={false}
-              slots={{
-                textField: (props) => (
-                  <Form.Control
-                    {...props.inputProps}
-                    ref={props.ref}
-                    disabled={props.disabled}
-                    required={props.required}
-                    aria-label={t('startDate')}
-                    data-testid={`${dataTestId}-start-input`}
-                  />
-                ),
+              data-testid={`${dataTestId}-start-input`}
+              slotProps={{
+                textField: {
+                  inputProps: {
+                    'aria-label': t('startDate'),
+                  },
+                },
               }}
             />
           </Col>
-
           <Col xs={12} sm={6}>
             <Form.Label>{t('endDate')}</Form.Label>
             <DatePicker
               value={endDayjs}
               onChange={handleEndChange}
               disabled={disabled}
-              enableAccessibleFieldDOMStructure={false}
               minDate={
                 normalizedStartDate ? dayjs(normalizedStartDate) : undefined
               }
-              slots={{
-                textField: (props) => (
-                  <Form.Control
-                    {...props.inputProps}
-                    ref={props.ref}
-                    disabled={props.disabled}
-                    required={props.required}
-                    aria-label={t('endDate')}
-                    data-testid={`${dataTestId}-end-input`}
-                  />
-                ),
+              data-testid={`${dataTestId}-end-input`}
+              slotProps={{
+                textField: {
+                  inputProps: {
+                    'aria-label': t('endDate'),
+                  },
+                },
               }}
             />
           </Col>

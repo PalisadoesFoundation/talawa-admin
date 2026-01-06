@@ -16,77 +16,97 @@ import type { IEventFormValues } from 'types/EventForm/interface';
 import { Frequency, createDefaultRecurrenceRule } from 'utils/recurrenceUtils';
 import type { InterfaceRecurrenceRule } from 'utils/recurrenceUtils';
 
-vi.mock('@mui/x-date-pickers', () => {
-  const mockDatePicker = ({
-    label,
-    value,
-    onChange,
-    minDate,
-    'data-testid': dataTestId,
-  }: {
-    label: string;
-    value: unknown;
-    onChange?: (date: dayjs.Dayjs) => void;
-    minDate?: dayjs.Dayjs;
-    'data-testid'?: string;
-  }) => (
-    <input
-      data-testid={dataTestId || label}
-      value={dayjs(value as dayjs.Dayjs).format('YYYY-MM-DD')}
-      onChange={(e) => {
-        const newDate = dayjs(e.target.value);
-        if (
-          onChange &&
-          (!minDate || newDate.isAfter(minDate) || newDate.isSame(minDate))
-        ) {
-          onChange(newDate);
-        }
-      }}
-    />
-  );
-
-  const mockTimePicker = ({
-    label,
-    value,
-    onChange,
-    minTime,
-    disabled,
-    'data-testid': dataTestId,
-  }: {
-    label: string;
-    value: unknown;
-    onChange?: (time: dayjs.Dayjs) => void;
-    minTime?: dayjs.Dayjs;
-    disabled?: boolean;
-    'data-testid'?: string;
-  }) => {
-    const today = dayjs().format('YYYY-MM-DD');
-    return (
-      <input
-        data-testid={dataTestId || label}
-        value={dayjs(value as dayjs.Dayjs).format('HH:mm:ss')}
-        disabled={disabled}
-        onChange={(e) => {
-          if (!disabled && onChange && e.target.value) {
-            const newTime = dayjs(`${today}T${e.target.value}`);
-            if (
-              !minTime ||
-              newTime.isAfter(minTime) ||
-              newTime.isSame(minTime)
-            ) {
-              onChange(newTime);
+// Mock the wrapper components instead of MUI directly to verify EventForm uses them
+vi.mock('shared-components/DatePicker', () => ({
+  __esModule: true,
+  default: vi.fn(
+    (props: {
+      label?: string;
+      value: unknown;
+      onChange?: (date: dayjs.Dayjs | null) => void;
+      minDate?: dayjs.Dayjs | null;
+      'data-testid'?: string;
+    }) => {
+      const {
+        label,
+        value,
+        onChange,
+        minDate,
+        'data-testid': dataTestId,
+      } = props;
+      return (
+        <div data-testid="date-picker-wrapper">
+          <input
+            data-testid={dataTestId || label || 'date-picker-input'}
+            value={
+              value ? dayjs(value as dayjs.Dayjs).format('YYYY-MM-DD') : ''
             }
-          }
-        }}
-      />
-    );
-  };
+            onChange={(e) => {
+              if (onChange) {
+                const newDate = e.target.value ? dayjs(e.target.value) : null;
+                if (
+                  !minDate ||
+                  !newDate ||
+                  newDate.isAfter(minDate) ||
+                  newDate.isSame(minDate)
+                ) {
+                  onChange(newDate);
+                }
+              }
+            }}
+          />
+        </div>
+      );
+    },
+  ),
+}));
 
-  return {
-    DatePicker: mockDatePicker,
-    TimePicker: mockTimePicker,
-  };
-});
+vi.mock('shared-components/TimePicker', () => ({
+  __esModule: true,
+  default: vi.fn(
+    (props: {
+      label?: string;
+      value: unknown;
+      onChange?: (time: dayjs.Dayjs | null) => void;
+      minTime?: dayjs.Dayjs | null;
+      disabled?: boolean;
+      'data-testid'?: string;
+    }) => {
+      const {
+        label,
+        value,
+        onChange,
+        minTime,
+        disabled,
+        'data-testid': dataTestId,
+      } = props;
+      const today = dayjs().format('YYYY-MM-DD');
+      return (
+        <div data-testid="time-picker-wrapper">
+          <input
+            data-testid={dataTestId || label || 'time-picker-input'}
+            value={value ? dayjs(value as dayjs.Dayjs).format('HH:mm:ss') : ''}
+            disabled={disabled}
+            onChange={(e) => {
+              if (!disabled && onChange) {
+                const val = e.target.value;
+                const newTime = val ? dayjs(`${today}T${val}`) : null;
+                if (
+                  !minTime ||
+                  !newTime ||
+                  newTime.isAfter(minTime) ||
+                  newTime.isSame(minTime)
+                ) {
+                  onChange(newTime);
+                }
+              }
+            }}
+          />
+        </div>
+      );
+    },
+  ),
+}));
 
 vi.mock('shared-components/Recurrence/CustomRecurrenceModal', () => ({
   __esModule: true,

@@ -1,4 +1,5 @@
 /**
+ * // translation-check-keyPrefix: settings
  * UserDetailsForm component provides a form interface for updating user details.
  *
  * @remarks
@@ -33,7 +34,7 @@
  * @dependencies
  * - React
  * - react-bootstrap for UI components
- * - @mui/x-date-pickers for date selection
+ * - shared-components/DatePicker for date selection
  * - dayjs for date manipulation
  * - sanitize-html for sanitizing user input
  *
@@ -53,8 +54,7 @@ import UserAddressFields from 'components/UserPortal/UserProfile/UserAddressFiel
 import sanitizeHtml from 'sanitize-html';
 import SyncIcon from '@mui/icons-material/Sync';
 import SaveIcon from '@mui/icons-material/Save';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import DatePicker from 'shared-components/DatePicker';
 
 interface InterfaceUserDetailsFormProps {
   userDetails: {
@@ -139,7 +139,7 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
           type="password"
           id="inputPassword"
           data-testid="inputPassword"
-          placeholder="enter new password"
+          placeholder={tCommon('enterPassword')}
           onChange={(e) => handleFieldChange('password', e.target.value)}
           className={styles.cardControl}
         />
@@ -207,29 +207,27 @@ const UserDetailsForm: React.FC<InterfaceUserDetailsFormProps> = ({
         <Form.Label htmlFor="birthDate" className={styles.cardLabel}>
           {t('birthDate')}
         </Form.Label>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DatePicker
-            format="YYYY-MM-DD"
-            value={userDetails.birthDate ? dayjs(userDetails.birthDate) : null}
-            onChange={(date) =>
-              handleFieldChange(
-                'birthDate',
-                date ? date.format('YYYY-MM-DD') : '',
-              )
-            }
-            className={`${styles.cardLabel} w-100`}
-            maxDate={dayjs().startOf('day')}
-            slotProps={{
-              textField: {
-                inputProps: {
-                  'data-testid': 'birth-date-input',
-                  'aria-label': t('birthDate'),
-                  max: dayjs().format('YYYY-MM-DD'),
-                },
+        <DatePicker
+          format="YYYY-MM-DD"
+          value={userDetails.birthDate ? dayjs(userDetails.birthDate) : null}
+          onChange={(date) =>
+            handleFieldChange(
+              'birthDate',
+              date ? date.format('YYYY-MM-DD') : '',
+            )
+          }
+          className="w-100"
+          maxDate={dayjs().startOf('day')}
+          data-testid="birth-date-input"
+          slotProps={{
+            textField: {
+              inputProps: {
+                'aria-label': t('birthDate'),
+                max: dayjs().format('YYYY-MM-DD'),
               },
-            }}
-          />
-        </LocalizationProvider>
+            },
+          }}
+        />
       </Col>
       <Col lg={4}>
         <Form.Label htmlFor="grade" className={styles.cardLabel}>
