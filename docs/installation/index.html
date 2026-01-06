@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="generator" content="Docusaurus v3.9.2">
 <title data-rh="true">Installation | Talawa-Admin Documentation</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:url" content="https://docs-admin.talawa.io/docs/installation"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Installation | Talawa-Admin Documentation"><meta data-rh="true" name="description" content="Talawa-Admin can be installed using either an automated one-click installation script or manually. The automated installation is recommended for most users as it handles all prerequisites automatically."><meta data-rh="true" property="og:description" content="Talawa-Admin can be installed using either an automated one-click installation script or manually. The automated installation is recommended for most users as it handles all prerequisites automatically."><link data-rh="true" rel="icon" href="/img/icons/favicon_palisadoes.ico"><link data-rh="true" rel="canonical" href="https://docs-admin.talawa.io/docs/installation"><link data-rh="true" rel="alternate" href="https://docs-admin.talawa.io/docs/installation" hreflang="en"><link data-rh="true" rel="alternate" href="https://docs-admin.talawa.io/docs/installation" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Installation","item":"https://docs-admin.talawa.io/docs/installation"}]}</script><link rel="stylesheet" href="https://docs.talawa.io/css/styles-latest.css"><link rel="stylesheet" href="/assets/css/styles.18736644.css">
-<script src="/assets/js/runtime~main.5b6878b0.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.f96e851e.js" defer="defer"></script>
 <script src="/assets/js/main.55600a06.js" defer="defer"></script>
 </head>
 <body class="navigation-with-keyboard">
@@ -29,6 +29,18 @@
 </ol>
 <h3 class="anchor anchorTargetStickyNavbar_g03t" id="prerequisites">Prerequisites<a href="#prerequisites" class="hash-link" aria-label="Direct link to Prerequisites" title="Direct link to Prerequisites" translate="no">​</a></h3>
 <p>The only prerequisite is having <code>git</code> installed on your system (usually pre-installed on macOS/Linux, or install via your package manager).</p>
+<p><strong>Additional prerequisites for contributors:</strong></p>
+<ul>
+<li class=""><strong>curl</strong> or <strong>wget</strong>: Required by pre-commit hooks to download centralized scripts<!-- -->
+<ul>
+<li class=""><strong>macOS</strong>: <code>curl</code> is pre-installed</li>
+<li class=""><strong>Linux (Ubuntu/Debian)</strong>: Install with <code>sudo apt install curl</code></li>
+<li class=""><strong>Linux (Fedora/RHEL)</strong>: Install with <code>sudo dnf install curl</code></li>
+<li class=""><strong>Windows (WSL)</strong>: Install with <code>sudo apt install curl</code> (inside WSL)</li>
+<li class="">Alternatively, you can install <code>wget</code> instead</li>
+</ul>
+</li>
+</ul>
 <h3 class="anchor anchorTargetStickyNavbar_g03t" id="setting-up-the-repository">Setting up the repository<a href="#setting-up-the-repository" class="hash-link" aria-label="Direct link to Setting up the repository" title="Direct link to Setting up the repository" translate="no">​</a></h3>
 <p>First you need a local copy of <code>talawa-admin</code>. Run the following command in the directory of choice on your local system.</p>
 <ol>
