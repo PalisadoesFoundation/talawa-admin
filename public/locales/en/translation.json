@@ -1621,6 +1621,7 @@
     "failedToFetchAdvertisements": "Failed to fetch advertisements",
     "advertisementMedia": "Advertisement media",
     "noMediaAvailable": "No media available",
+    "mediaUnavailable": "Media unavailable",
     "advertisementImageAlt": "Advertisement image #{{index}} for {{name}}",
     "invalidFileType": "Invalid file type: {{fileName}}",
     "fileTooLarge": "File too large: {{fileName}}",

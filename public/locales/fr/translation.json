@@ -1622,6 +1622,7 @@
     "failedToFetchAdvertisements": "Échec de la récupération des annonces",
     "advertisementMedia": "Média publicitaire",
     "noMediaAvailable": "Aucun média disponible",
+    "mediaUnavailable": "Médias indisponibles",
     "advertisementImageAlt": "Image publicitaire #{{index}} pour {{name}}",
     "invalidFileType": "Type de fichier invalide : {{fileName}}",
     "fileTooLarge": "Fichier trop volumineux : {{fileName}}",

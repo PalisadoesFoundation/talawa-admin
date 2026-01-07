@@ -1622,6 +1622,7 @@
     "failedToFetchAdvertisements": "無法獲取廣告",
     "advertisementMedia": "廣告媒體",
     "noMediaAvailable": "無可用媒體",
+    "mediaUnavailable": "媒体不可用",
     "advertisementImageAlt": "廣告圖片 #{{index}} 用於 {{name}}",
     "invalidFileType": "無效的文件類型：{{fileName}}",
     "fileTooLarge": "文件太大：{{fileName}}",

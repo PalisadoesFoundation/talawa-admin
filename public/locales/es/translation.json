@@ -1621,6 +1621,7 @@
     "failedToFetchAdvertisements": "Error al obtener anuncios",
     "advertisementMedia": "Medios publicitarios",
     "noMediaAvailable": "No hay medios disponibles",
+    "mediaUnavailable": "Medios no disponibles",
     "advertisementImageAlt": "Imagen publicitaria #{{index}} para {{name}}",
     "invalidFileType": "Tipo de archivo no válido: {{fileName}}",
     "fileTooLarge": "Archivo demasiado grande: {{fileName}}",

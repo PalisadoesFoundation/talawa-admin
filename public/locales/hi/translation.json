@@ -1622,6 +1622,7 @@
     "failedToFetchAdvertisements": "विज्ञापन लाने में विफल",
     "advertisementMedia": "विज्ञापन मीडिया",
     "noMediaAvailable": "कोई मीडिया उपलब्ध नहीं",
+    "mediaUnavailable": "मीडिया उपलब्ध नहीं है",
     "advertisementImageAlt": "विज्ञापन छवि #{{index}} {{name}} के लिए",
     "invalidFileType": "अमान्य फ़ाइल प्रकार: {{fileName}}",
     "fileTooLarge": "फ़ाइल बहुत बड़ी है: {{fileName}}",

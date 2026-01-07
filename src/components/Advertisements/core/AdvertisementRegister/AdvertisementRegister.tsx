@@ -274,7 +274,7 @@ function AdvertisementRegister({
               data-cy="advertisementMediaInput"
             />
             <Form.Text className="text-muted">
-              Media uploads are temporarily unavailable.
+              {t('mediaUnavailable')}
             </Form.Text>
           </Form.Group>
           <Form.Group className="mb-3" controlId="registerForm.RstartAt">
