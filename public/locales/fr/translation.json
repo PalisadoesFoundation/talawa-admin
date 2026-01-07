@@ -1629,7 +1629,15 @@
     "preview": "Aperçu",
     "bannerAd": "Bannière publicitaire",
     "popupAd": "Annonce popup",
-    "menuAd": "Annonce de menu"
+    "menuAd": "Annonce de menu",
+    "ads": {
+      "starts": "Starts",
+      "ends": "Ends",
+      "type": "Type",
+      "types": {
+        "pop_up": "pop up"
+      }
+    }
   },
   "userChat": {
     "title": "Discussions",

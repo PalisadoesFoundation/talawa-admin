@@ -1628,7 +1628,15 @@
     "preview": "Vista previa",
     "bannerAd": "Anuncio de banner",
     "popupAd": "Anuncio emergente",
-    "menuAd": "Anuncio de menú"
+    "menuAd": "Anuncio de menú",
+    "ads": {
+      "starts": "Starts",
+      "ends": "Ends",
+      "type": "Type",
+      "types": {
+        "pop_up": "pop up"
+      }
+    }
   },
   "userChat": {
     "title": "Chats",
