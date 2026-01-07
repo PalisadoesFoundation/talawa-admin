@@ -6,7 +6,7 @@
 
 > **createAdvertisementNode**(`id`, `name`, `description`, `startAt`, `endAt`, `type`, `attachments`): `IAdvertisementEdge`
 
-Defined in: [src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts:153](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts#L153)
+Defined in: [src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts:159](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementRegister/AdvertisementRegisterMocks.ts#L159)
 
 ## Parameters
 

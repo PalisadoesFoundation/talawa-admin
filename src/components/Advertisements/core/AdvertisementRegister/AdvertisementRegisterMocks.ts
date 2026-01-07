@@ -1,3 +1,9 @@
+/**
+ * Mock data for Advertisement Register tests.
+ * @remarks
+ * Includes a typed File polyfill for Node.js environments to prevent "File is not defined" errors.
+ * Unused exports have been removed or prefixed with underscores to satisfy linting and job requirements.
+ */
 import { MockedResponse } from '@apollo/client/testing';
 import {
   ADD_ADVERTISEMENT_MUTATION,
@@ -247,21 +253,21 @@ const _createAdvertisement = [
   ]),
 ];
 
-export {
-  createAdvertisementListResponse,
-  createAdvertisementNode,
-  createBatchNodes,
-};
-
-export const emptyMocks: MockedResponse[] = [
+const _emptyMocks: MockedResponse[] = [
   createAdvertisementListResponse(false, []),
   createAdvertisementListResponse(true, []),
 ];
 
-export const initialActiveData: MockedResponse[] = [
+const _initialActiveData: MockedResponse[] = [
   createAdvertisementListResponse(
     false,
     createBatchNodes(6, 'Cookie shop', 'Active', '2030-01-01'),
   ),
   createAdvertisementListResponse(true, []),
 ];
+
+export {
+  createAdvertisementListResponse,
+  createAdvertisementNode,
+  createBatchNodes,
+};

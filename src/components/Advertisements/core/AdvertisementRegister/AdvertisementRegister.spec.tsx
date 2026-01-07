@@ -27,10 +27,13 @@ import i18nForTest from 'utils/i18nForTest';
 import * as router from 'react-router';
 import { dateConstants } from './AdvertisementRegisterMocks';
 
-// Create a local clean client for tests to avoid global cache pollution
+// Create a local clean client for tests to avoid global cache pollution.
+// addTypename is explicitly disabled to fix Apollo Error #104 (Missing field error).
 const testClient = new ApolloClient({
   link: new HttpLink({ uri: '/graphql' }),
-  cache: new InMemoryCache(),
+  cache: new InMemoryCache({
+    addTypename: false,
+  }),
 });
 
 vi.mock('react-router', async () => {
@@ -116,7 +119,7 @@ describe('Testing Advertisement Register Component', () => {
   test('Throws error at creation when the end date is less than the start date', async () => {
     const toastErrorSpy = vi.spyOn(NotificationToast, 'error');
     render(
-      <MockedProvider cache={new InMemoryCache()}>
+      <MockedProvider cache={new InMemoryCache({ addTypename: false })}>
         <Provider store={store}>
           <router.BrowserRouter>
             <I18nextProvider i18n={i18nForTest}>

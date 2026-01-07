@@ -34,6 +34,13 @@ import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
 import { BaseModal } from 'shared-components/BaseModal';
 
+/**
+ * Type guard to ensure the organization ID is a valid string.
+ * @param id - The ID to validate.
+ * @returns True if the ID is a string.
+ */
+const isValidOrg = (id: unknown): id is string => typeof id === 'string';
+
 function AdvertisementRegister({
   formStatus = 'register',
   idEdit,
@@ -52,16 +59,19 @@ function AdvertisementRegister({
   const { orgId: currentOrg } = useParams();
   const [show, setShow] = useState(false);
 
-  if (currentOrg === undefined) {
+  // Narrow the ID early for use in hooks and component logic
+  if (!isValidOrg(currentOrg)) {
     return <PageNotFound />;
   }
+
+  const organizationId = currentOrg;
 
   const [createAdvertisement] = useMutation(ADD_ADVERTISEMENT_MUTATION, {
     refetchQueries: [
       {
         query: ORGANIZATION_ADVERTISEMENT_LIST,
         variables: {
-          id: currentOrg,
+          id: organizationId,
           first: 6,
           after: null,
           before: null,
@@ -71,7 +81,7 @@ function AdvertisementRegister({
       {
         query: ORGANIZATION_ADVERTISEMENT_LIST,
         variables: {
-          id: currentOrg,
+          id: organizationId,
           first: 6,
           after: null,
           before: null,
@@ -115,7 +125,7 @@ function AdvertisementRegister({
         type: typeEdit || 'banner',
         startAt: startAtEdit,
         endAt: endAtEdit,
-        organizationId: currentOrg,
+        organizationId: organizationId,
       }));
     }
   }, [
@@ -125,7 +135,7 @@ function AdvertisementRegister({
     typeEdit,
     startAtEdit,
     endAtEdit,
-    currentOrg,
+    organizationId,
   ]);
 
   const handleRegister = async (): Promise<void> => {
@@ -151,7 +161,7 @@ function AdvertisementRegister({
         endAt: string;
         description?: string | null;
       } = {
-        organizationId: currentOrg as string,
+        organizationId: organizationId,
         name: formState.name as string,
         type: formState.type as string,
         startAt: dayjs.utc(formState.startAt).startOf('day').toISOString(),

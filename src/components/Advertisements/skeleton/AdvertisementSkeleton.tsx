@@ -19,7 +19,7 @@ import styles from 'style/app-fixed.module.css';
  *
  * @returns An array of JSX elements representing the skeleton loaders.
  */
-export function AdvertisementSkeleton() {
+export function AdvertisementSkeleton(): JSX.Element[] {
   return [...Array(6)].map((_, index) => (
     <div
       key={index}

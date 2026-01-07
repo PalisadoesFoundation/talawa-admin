@@ -92,6 +92,14 @@ function AdvertisementEntry({
     }
   };
 
+  const handleKeyboardDelete = (e: React.KeyboardEvent): void => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      toggleShowDeleteModal();
+      setDropdown(false);
+    }
+  };
+
   const hasAttachments =
     advertisement.attachments && advertisement.attachments.length > 0;
 
@@ -107,6 +115,7 @@ function AdvertisementEntry({
           <Card className={styles.addCard}>
             <div className={styles.dropdownContainer} ref={dropdownRef}>
               <button
+                type="button"
                 className={styles.dropdownButton}
                 onClick={() => setDropdown(!dropdown)}
                 data-testid="moreiconbtn"
@@ -130,10 +139,13 @@ function AdvertisementEntry({
                     />
                   </li>
                   <li
+                    role="button"
+                    tabIndex={0}
                     onClick={() => {
                       toggleShowDeleteModal();
                       setDropdown(false);
                     }}
+                    onKeyDown={handleKeyboardDelete}
                     data-testid="deletebtn"
                     data-cy="deletebtn"
                   >
@@ -216,26 +228,26 @@ function AdvertisementEntry({
                 {advertisement.description || t('noDescription')}
               </Card.Text>
               <Card.Text data-testid="Ad_start_date">
-                Starts :{' '}
+                {t('ads.starts')} :{' '}
                 {advertisement.startAt
                   ? new Date(advertisement.startAt).toDateString()
-                  : 'N/A'}
+                  : tCommon('na')}
               </Card.Text>
               <Card.Text data-testid="Ad_end_date">
-                Ends :{' '}
+                {t('ads.ends')} :{' '}
                 {advertisement.endAt
                   ? new Date(advertisement.endAt).toDateString()
-                  : 'N/A'}
+                  : tCommon('na')}
               </Card.Text>
 
               <Card.Subtitle
                 className="mb-2 text-muted author"
                 data-testid="Ad_type"
               >
-                Type:{' '}
+                {t('ads.type')} :{' '}
                 {advertisement.type === 'pop_up'
-                  ? 'pop up'
-                  : advertisement.type}
+                  ? t('ads.types.pop_up')
+                  : advertisement.type || tCommon('na')}
               </Card.Subtitle>
               <div className={styles.buttons}>
                 <Button
@@ -259,7 +271,11 @@ function AdvertisementEntry({
                     <h5 data-testid="delete_title" className="mb-0">
                       {t('deleteAdvertisement')}
                     </h5>
-                    <Button variant="danger" onClick={toggleShowDeleteModal}>
+                    <Button
+                      type="button"
+                      variant="danger"
+                      onClick={toggleShowDeleteModal}
+                    >
                       <i className="fa fa-times"></i>
                     </Button>
                   </div>
@@ -270,6 +286,7 @@ function AdvertisementEntry({
                 </div>
                 <div className="d-flex justify-content-end gap-2">
                   <Button
+                    type="button"
                     className={`btn btn-danger ${styles.removeButton}`}
                     onClick={toggleShowDeleteModal}
                     data-testid="delete_no"
@@ -296,7 +313,29 @@ function AdvertisementEntry({
 }
 
 AdvertisementEntry.propTypes = {
-  advertisement: PropTypes.object.isRequired,
+  advertisement: PropTypes.shape({
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    name: PropTypes.string.isRequired,
+    description: PropTypes.string,
+    type: PropTypes.string,
+    startAt: PropTypes.oneOfType([
+      PropTypes.instanceOf(Date),
+      PropTypes.string,
+    ]),
+    endAt: PropTypes.oneOfType([PropTypes.instanceOf(Date), PropTypes.string]),
+    organization: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+    }).isRequired,
+    attachments: PropTypes.arrayOf(
+      PropTypes.shape({
+        url: PropTypes.string,
+        mimeType: PropTypes.string,
+      }),
+    ),
+    clickUrl: PropTypes.string,
+    active: PropTypes.bool,
+    completed: PropTypes.bool,
+  }).isRequired,
   setAfterActive: PropTypes.func,
   setAfterCompleted: PropTypes.func,
 };
