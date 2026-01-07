@@ -155,7 +155,7 @@ describe('OrganizationModal Component', () => {
     fireEvent.change(fileInput, { target: { files: [file] } });
     await waitFor(() =>
       expect(mockSetFormState).toHaveBeenCalledWith(
-        expect.objectContaining({ avatar: 'mockBase64String' }),
+        expect.objectContaining({ avatarPreview: 'mockBase64String' }),
       ),
     );
   });
@@ -401,7 +401,7 @@ describe('OrganizationModal Component', () => {
     await userEvent.upload(fileInput, file);
 
     expect(mockSetFormState).toHaveBeenCalledWith(
-      expect.objectContaining({ avatar: 'mockBase64String' }),
+      expect.objectContaining({ avatarPreview: 'mockBase64String' }),
     );
   });
 
@@ -584,7 +584,7 @@ describe('OrganizationModal Component', () => {
       expect(toastMocks.success).toHaveBeenCalledWith('imageUploadSuccess');
     });
     expect(mockSetFormState).toHaveBeenCalledWith(
-      expect.objectContaining({ avatar: 'mockBase64String' }),
+      expect.objectContaining({ avatarPreview: 'mockBase64String' }),
     );
   });
 

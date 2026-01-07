@@ -83,6 +83,7 @@ interface InterfaceFormStateType {
   addressLine1: string;
   addressLine2: string;
   avatar: string | null;
+  avatarPreview: string | null;
   city: string;
   countryCode: string;
   description: string;
@@ -137,6 +138,7 @@ function orgList(): JSX.Element {
     addressLine1: '',
     addressLine2: '',
     avatar: null,
+    avatarPreview: null,
     city: '',
     countryCode: '',
     description: '',
@@ -216,7 +218,7 @@ function orgList(): JSX.Element {
     const {
       addressLine1: _addressLine1,
       addressLine2: _addressLine2,
-      avatar: _avatar,
+      // avatar: _avatar,
       city: _city,
       countryCode: _countryCode,
       description: _description,
@@ -227,7 +229,7 @@ function orgList(): JSX.Element {
 
     const addressLine1 = _addressLine1.trim() || undefined;
     const addressLine2 = _addressLine2.trim() || undefined;
-    const avatar = _avatar;
+    // const avatar = _avatar;
     const city = _city.trim() || undefined;
     const countryCode = _countryCode.trim() || undefined;
     const description = _description.trim() || undefined;
@@ -240,7 +242,9 @@ function orgList(): JSX.Element {
         variables: {
           addressLine1,
           addressLine2,
-          avatar,
+          // TODO(PR-3/4): Avatar upload will be re-enabled using MinIO + Upload scalar.
+          // Phase-2 intentionally skips avatar submission to avoid Upload/Base64 mismatch.
+          // avatar,
           city,
           countryCode,
           description,
@@ -267,6 +271,7 @@ function orgList(): JSX.Element {
           addressLine1: '',
           addressLine2: '',
           avatar: null,
+          avatarPreview: null,
           city: '',
           countryCode: '',
           description: '',

@@ -28,6 +28,7 @@ interface InterfaceFormStateType {
   addressLine1: string;
   addressLine2: string;
   avatar: string | null;
+  avatarPreview: string | null;
   city: string;
   countryCode: string;
   description: string;
@@ -256,7 +257,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
 
             try {
               const base64String: string = await convertToBase64(file);
-              setFormState({ ...formState, avatar: base64String });
+              setFormState({ ...formState, avatarPreview: base64String });
               toast.success(t('imageUploadSuccess'));
             } catch {
               // Error available for debugging if needed
