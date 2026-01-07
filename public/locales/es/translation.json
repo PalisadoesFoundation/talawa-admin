@@ -73,6 +73,13 @@
     "communityLogo": "Logo de la comunidad",
     "organizations": "Organizaciones"
   },
+  "adminProfile": {
+    "title": "Perfil de Administrador",
+    "settings": "Configuraciones",
+    "profile": "Perfil",
+    "personalInfo": "Información Personal",
+    "accountSettings": "Configuración de la Cuenta"
+  },
   "signOut": {
     "retryPrompt": "Error al Cerrar sesión. ¿Reintentar?",
     "signingOut": "Cerrando sesión...",
@@ -387,6 +394,7 @@
     "user": "Usuario",
     "actions": "Acciones",
     "profile": "Perfil",
+    "joined": "Unido",
     "notFound": "No se encontraron miembros",
     "createUser": "Crear usuario"
   },
@@ -476,6 +484,7 @@
     "tags": "Etiquetas",
     "errorOccurredWhileLoadingAssignedUser": "Se produjo un error al cargar los usuarios asignados",
     "sortPeople": "Ordenar personas",
+    "noTagsFound": "No se encontraron etiquetas",
     "tagActions": "Acciones de etiqueta",
     "loadAssignedUsersError": "Se produjo un error al cargar los usuarios asignados"
   },
@@ -524,7 +533,6 @@
     "recurringEvent": "Evento recurrente",
     "recurring": "Recurrente",
     "isPublic": "Es público",
-    "publicEvent": "Es público",
     "isRegistrable": "Es registrable",
     "registerable": "Es registrable",
     "createEvent": "Crear evento",
@@ -1295,11 +1303,15 @@
     "editPost": "Editar publicación",
     "pinPost": "Fijar publicación",
     "unpinPost": "Desfijar publicación",
+    "like": "Me gusta la publicación",
+    "unlike": "Quitar me gusta",
+    "share": "Compartir publicación",
     "viewComments": "Ver {{count}} comentarios",
     "hideComments": "Ocultar comentarios",
     "loadingComments": "Cargando comentarios…",
     "loadMoreComments": "Cargar más comentarios",
     "noMoreComments": "No hay más comentarios",
+    "noComments": "Sin comentarios",
     "postedOn": "Publicado el {{date}}",
     "emptyCommentError": "Por favor ingrese un comentario antes de enviarlo.",
     "unexpectedError": "Ocurrió un error inesperado. Por favor, inténtelo de nuevo.",
@@ -1345,6 +1357,7 @@
     "processingPost": "Procesando tu publicación. Por favor espera."
   },
   "eventAttendance": {
+    "event_attendance_table": "Tabla de asistencia al evento",
     "historical_statistics": "Estadísticas históricas",
     "Search member": "Buscar miembro",
     "Member Name": "Nombre del miembro",
@@ -1539,7 +1552,6 @@
     "enterLocation": "Ingresar Ubicación",
     "startDate": "Fecha de inicio",
     "endDate": "Fecha de finalización",
-    "publicEvent": "Es público",
     "registerable": "Es registrable",
     "monthlyCalendarView": "Calendario mensual",
     "yearlyCalendarView": "Calendario anual",
@@ -1698,7 +1710,8 @@
     "status": "Estado",
     "categoryDeleted": "Categoría de elemento de acción eliminada con éxito",
     "deleteCategory": "Eliminar categoría",
-    "deleteCategoryMsg": "¿Está seguro de que desea eliminar esta categoría de elemento de acción?"
+    "deleteCategoryMsg": "¿Está seguro de que desea eliminar esta categoría de elemento de acción?",
+    "noDescriptionProvided": "No se ha proporcionado descripción"
   },
   "organizationVenues": {
     "title": "Lugares",

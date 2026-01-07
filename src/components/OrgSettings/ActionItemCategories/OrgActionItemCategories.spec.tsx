@@ -36,15 +36,6 @@ vi.mock('react-toastify', () => ({
   },
 }));
 
-vi.mock('@mui/x-date-pickers/DateTimePicker', async () => {
-  const dateTimePickerModule = await vi.importActual(
-    '@mui/x-date-pickers/DesktopDateTimePicker',
-  );
-  return {
-    DateTimePicker: dateTimePickerModule.DesktopDateTimePicker,
-  };
-});
-
 const link1 = new StaticMockLink(MOCKS);
 const link2 = new StaticMockLink(MOCKS_EMPTY);
 const link3 = new StaticMockLink(MOCKS_ERROR);
@@ -77,6 +68,7 @@ const renderActionItemCategories = (
 
 describe('Testing Organisation Action Item Categories', () => {
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -177,13 +169,9 @@ describe('Testing Organisation Action Item Categories', () => {
     await userEvent.click(addCategoryBtn);
 
     await waitFor(() => expect(screen.getAllByText(t.create)).toHaveLength(2));
-    await userEvent.click(
-      screen.getByTestId('actionItemCategoryModalCloseBtn'),
-    );
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
-      expect(
-        screen.queryByTestId('actionItemCategoryModalCloseBtn'),
-      ).toBeNull(),
+      expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
   });
 
@@ -197,13 +185,9 @@ describe('Testing Organisation Action Item Categories', () => {
     await waitFor(() =>
       expect(screen.getByText(t.updateActionItemCategory)).toBeInTheDocument(),
     );
-    await userEvent.click(
-      screen.getByTestId('actionItemCategoryModalCloseBtn'),
-    );
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
-      expect(
-        screen.queryByTestId('actionItemCategoryModalCloseBtn'),
-      ).toBeNull(),
+      expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
   });
 
@@ -219,15 +203,13 @@ describe('Testing Organisation Action Item Categories', () => {
 
     // Check modal is open by looking for the modal content
     await waitFor(() =>
-      expect(
-        screen.getByTestId('categoryViewModalCloseBtn'),
-      ).toBeInTheDocument(),
+      expect(screen.getByTestId('modalCloseBtn')).toBeInTheDocument(),
     );
 
     // Close the view modal
-    await userEvent.click(screen.getByTestId('categoryViewModalCloseBtn'));
+    await userEvent.click(screen.getByTestId('modalCloseBtn'));
     await waitFor(() =>
-      expect(screen.queryByTestId('categoryViewModalCloseBtn')).toBeNull(),
+      expect(screen.queryByTestId('modalCloseBtn')).toBeNull(),
     );
   });
 

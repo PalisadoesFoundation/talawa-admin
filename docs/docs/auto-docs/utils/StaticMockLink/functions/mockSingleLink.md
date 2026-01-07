@@ -6,7 +6,7 @@
 
 > **mockSingleLink**(...`mockedResponses`): [`InterfaceMockApolloLink`](../interfaces/InterfaceMockApolloLink.md)
 
-Defined in: [src/utils/StaticMockLink.ts:186](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L186)
+Defined in: [src/utils/StaticMockLink.ts:195](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/StaticMockLink.ts#L195)
 
 ## Parameters
 

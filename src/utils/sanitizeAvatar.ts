@@ -2,18 +2,31 @@ export const sanitizeAvatars = (
   file: File | null,
   fallbackUrl: string,
 ): string => {
-  // Allow only image MIME types
-  if (file instanceof File && file.type.startsWith('image/')) {
-    return URL.createObjectURL(file);
-  }
-  try {
-    if (!fallbackUrl) {
-      throw new Error('Invalid fallback URL');
+  if (
+    file instanceof File &&
+    file.type.startsWith('image/') &&
+    file.type !== 'image/svg+xml'
+  ) {
+    const objectUrl = URL.createObjectURL(file);
+
+    if (objectUrl.startsWith('blob:')) {
+      return objectUrl;
     }
-    const safeUrl = new URL(fallbackUrl, window.location.origin);
-    return safeUrl.toString();
+    URL.revokeObjectURL(objectUrl);
+    return '';
+  }
+
+  try {
+    if (!fallbackUrl) return '';
+
+    const parsed = new URL(fallbackUrl, window.location.origin);
+
+    if (!['http:', 'https:'].includes(parsed.protocol)) {
+      return '';
+    }
+
+    return parsed.toString();
   } catch {
-    console.error('Invalid fallback URL provided');
     return '';
   }
 };
