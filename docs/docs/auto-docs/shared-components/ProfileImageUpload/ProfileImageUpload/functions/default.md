@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx:58
+Defined in: [src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx:58](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx#L58)
 
 ProfileImageUpload Component
 

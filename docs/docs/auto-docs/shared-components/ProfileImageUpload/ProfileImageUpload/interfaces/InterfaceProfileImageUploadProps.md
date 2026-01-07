@@ -4,7 +4,7 @@
 
 # Interface: InterfaceProfileImageUploadProps
 
-Defined in: src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx:31
+Defined in: [src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx:31](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx#L31)
 
 Props for the ProfileImageUpload component.
 
@@ -14,7 +14,7 @@ Props for the ProfileImageUpload component.
 
 > `optional` **avatarURL**: `string`
 
-Defined in: src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx:35
+Defined in: [src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx:35](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx#L35)
 
 Current avatar URL (optional)
 
@@ -24,7 +24,7 @@ Current avatar URL (optional)
 
 > `optional` **dataTestId**: `string`
 
-Defined in: src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx:43
+Defined in: [src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx#L43)
 
 Test ID prefix for testing
 
@@ -34,7 +34,7 @@ Test ID prefix for testing
 
 > **name**: `string`
 
-Defined in: src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx:33
+Defined in: [src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx:33](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx#L33)
 
 User's name for fallback avatar generation
 
@@ -44,7 +44,7 @@ User's name for fallback avatar generation
 
 > **onFileSelect**: (`file`) => `void`
 
-Defined in: src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx:39
+Defined in: [src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx#L39)
 
 Callback when a valid file is selected
 
@@ -64,7 +64,7 @@ Callback when a valid file is selected
 
 > `optional` **selectedFile**: `File`
 
-Defined in: src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx:37
+Defined in: [src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx#L37)
 
 Newly selected file for preview (optional)
 
@@ -74,6 +74,6 @@ Newly selected file for preview (optional)
 
 > `optional` **size**: `"small"` \| `"medium"` \| `"large"`
 
-Defined in: src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx:41
+Defined in: [src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/shared-components/ProfileImageUpload/ProfileImageUpload.tsx#L41)
 
 Avatar size preset (default: 'large')
