@@ -49,12 +49,12 @@ const TableLoader = (props: InterfaceTableLoader): JSX.Element => {
           <tr>
             {headerTitles
               ? headerTitles.map((title, index) => {
-                return <th key={index}>{title}</th>;
-              })
+                  return <th key={index}>{title}</th>;
+                })
               : noOfCols &&
-              [...Array(noOfCols)].map((_, index) => {
-                return <th key={index} />;
-              })}
+                [...Array(noOfCols)].map((_, index) => {
+                  return <th key={index} />;
+                })}
           </tr>
         </thead>
 

@@ -159,14 +159,14 @@ function OrganizationPeople(): JSX.Element {
   const [currentRows, setCurrentRows] = useState<IProcessedRow[]>([]);
   const [data, setData] = useState<
     | {
-      edges: IEdges[];
-      pageInfo: {
-        startCursor?: string;
-        endCursor?: string;
-        hasNextPage: boolean;
-        hasPreviousPage: boolean;
-      };
-    }
+        edges: IEdges[];
+        pageInfo: {
+          startCursor?: string;
+          endCursor?: string;
+          hasNextPage: boolean;
+          hasPreviousPage: boolean;
+        };
+      }
     | undefined
   >();
 
