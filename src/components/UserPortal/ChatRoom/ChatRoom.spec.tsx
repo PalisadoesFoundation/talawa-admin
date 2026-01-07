@@ -742,6 +742,9 @@ const renderChatRoom = (mocks: MockedResponse[] = []) => {
     SEND_MESSAGE_MOCK,
     EDIT_MESSAGE_MOCK,
     DELETE_MESSAGE_MOCK,
+    // MARK_READ_MOCK can be requested multiple times during lifecycle; include several copies
+    MARK_READ_MOCK,
+    MARK_READ_MOCK,
     MARK_READ_MOCK,
     MARK_READ_NEWMSG_MOCK,
     MARK_READ_SUBMSG_MOCK,

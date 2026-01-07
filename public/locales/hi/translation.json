@@ -18,7 +18,8 @@
     "rank": "रैंक",
     "volunteer": "स्वयंसेवक",
     "email": "ईमेल",
-    "hoursVolunteered": "स्वयंसेवक घंटे"
+    "hoursVolunteered": "स्वयंसेवक घंटे",
+    "volunteerRankings": "स्वयंसेवक रैंकिंग"
   },
   "loginPage": {
     "title": "तालावा व्यवस्थापक",
@@ -280,6 +281,7 @@
     "sortBy": "क्रमबद्ध करें",
     "filterByRole": "भूमिका के अनुसार फ़िल्टर करें",
     "errorLoadingUsers": "उपयोगकर्ताओं को लोड करते समय त्रुटि हुई",
+    "profilePageComingSoon": "प्रोफ़ाइल पेज जल्द आ रहा है!",
     "Newest": "नवीनतम",
     "Oldest": "सबसे पुराना",
     "noOrgError": "संगठन नहीं मिला, कृपया डैशबोर्ड के माध्यम से संगठन बनाएं",
@@ -383,6 +385,7 @@
     "confirmPassword": "पासवर्ड की पुष्टि करें",
     "user": "उपयोगकर्ता",
     "profile": "प्रोफ़ाइल",
+    "joined": "शामिल हुए",
     "create": "बनाएं",
     "cancel": "रद्द करें",
     "createUser": "उपयोगकर्ता बनाएं",
@@ -1694,6 +1697,7 @@
     "categoryDeleted": "कार्रवाई आइटम श्रेणी सफलतापूर्वक हटा दी गई",
     "deleteCategory": "श्रेणी हटाएं",
     "deleteCategoryMsg": "क्या आप वाकई इस कार्रवाई आइटम श्रेणी को हटाना चाहते हैं?",
+    "noDescriptionProvided": "कोई विवरण प्रदान नहीं किया गया",
     "createButton": "बटन बनाएं",
     "editButton": "संपादित बटन"
   },
@@ -1725,7 +1729,8 @@
     "delete": "हटाएं",
     "name": "नाम",
     "desc": "विवरण",
-    "venueImagePreview": "स्थान की छवि का पूर्वावलोकन"
+    "venueImagePreview": "स्थान की छवि का पूर्वावलोकन",
+    "sortVenues": "स्थानों को क्रमबद्ध करें"
   },
   "addMember": {
     "title": "सदस्य जोड़ें",

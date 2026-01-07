@@ -1,11 +1,10 @@
 /**
  * EventForm - A reusable form component for creating and editing events.
  * Supports date/time selection, recurrence configuration, and various event options.
- *
- * @module EventForm
  */
 // translation-check-keyPrefix: organizationEvents
-import { DatePicker, TimePicker } from '@mui/x-date-pickers';
+import DatePicker from '../DatePicker';
+import TimePicker from '../TimePicker';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import React, { useEffect, useMemo, useState } from 'react';
@@ -384,6 +383,7 @@ const EventForm: React.FC<IEventFormProps> = ({
           <div className="mr-3">
             <TimePicker
               label={tCommon('startTime')}
+              data-testid="startTime"
               className={styles.dateboxEvents}
               timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
               value={timeToDayJs(formState.startTime)}
@@ -418,6 +418,7 @@ const EventForm: React.FC<IEventFormProps> = ({
           <div>
             <TimePicker
               label={tCommon('endTime')}
+              data-testid="endTime"
               className={styles.dateboxEvents}
               timeSteps={{ hours: 1, minutes: 1, seconds: 1 }}
               value={timeToDayJs(formState.endTime)}

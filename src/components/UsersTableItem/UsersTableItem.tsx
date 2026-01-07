@@ -10,10 +10,10 @@ import {
   UNBLOCK_USER_MUTATION_PG,
   UPDATE_USER_ROLE_IN_ORG_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import Avatar from 'components/Avatar/Avatar';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Modal, Row, Table } from 'react-bootstrap';
+import { Button, Form, Row, Table } from 'react-bootstrap';
+import { BaseModal } from 'shared-components/BaseModal';
 import SearchBar from 'shared-components/SearchBar/SearchBar';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
@@ -21,6 +21,8 @@ import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import type { InterfaceQueryUserListItemForAdmin } from 'utils/interfaces';
 import styles from '../../style/app-fixed.module.css';
+import usertableStyles from './UsersTableItem.module.css';
+import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
 
 type Props = {
   user: InterfaceQueryUserListItemForAdmin;
@@ -126,7 +128,7 @@ const UsersTableItem = (props: Props): JSX.Element => {
   }
 
   function handleCreator(): void {
-    toast.success('Profile Page Coming Soon !');
+    toast.success(t('profilePageComingSoon') as string);
   }
 
   const searchJoinedOrgs = (value: string): void => {
@@ -195,150 +197,14 @@ const UsersTableItem = (props: Props): JSX.Element => {
           </Button>
         </td>
       </tr>
-      <Modal
+      <BaseModal
         show={showJoinedOrganizations}
-        key={`modal-joined-org-${index}`}
         size="xl"
-        data-testid={`modal-joined-org-${user.id}`}
+        dataTestId={`modal-joined-org-${user.id}`}
         onHide={() => setShowJoinedOrganizations(false)}
-      >
-        <Modal.Header className={styles.modalHeader} closeButton>
-          <Modal.Title className="text-white">
-            {t('orgJoinedBy')} {user.name} ({memberOrgs.length})
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {memberOrgs.length !== 0 && (
-            <div className="mb-4">
-              <SearchBar
-                placeholder={t('searchByOrgName')}
-                value={searchByNameJoinedOrgs}
-                onChange={searchJoinedOrgs}
-                onSearch={searchJoinedOrgs}
-                onClear={() => searchJoinedOrgs('')}
-                inputTestId="searchByNameJoinedOrgs"
-                buttonTestId="searchBtnJoinedOrgs"
-              />
-            </div>
-          )}
-          <Row>
-            {memberOrgs.length === 0 ? (
-              <div className={styles.notJoined}>
-                <h4>
-                  {user.name} {t('hasNotJoinedAnyOrg')}
-                </h4>
-              </div>
-            ) : joinedOrgs.length === 0 ? (
-              <div className={styles.notJoined}>
-                <h4>
-                  {tCommon('noResultsFoundFor')} &quot;{searchByNameJoinedOrgs}
-                  &quot;
-                </h4>
-              </div>
-            ) : (
-              <Table className={styles.modalTable} responsive>
-                <thead>
-                  <tr>
-                    <th>{tCommon('name')}</th>
-                    <th>{tCommon('address')}</th>
-                    <th>{tCommon('createdOn')}</th>
-                    <th>{tCommon('createdBy')}</th>
-                    <th>{tCommon('usersRole')}</th>
-                    <th>{tCommon('changeRole')}</th>
-                    <th>{tCommon('action')}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {joinedOrgs.map((org) => {
-                    return (
-                      <tr key={`org-joined-${org.id}`}>
-                        <td>
-                          <Button
-                            variant="link"
-                            className="p-0"
-                            onClick={() => goToOrg(org.id)}
-                          >
-                            {org.avatarURL ? (
-                              <img src={org.avatarURL} alt="orgImage" />
-                            ) : (
-                              <Avatar name={org.name} alt="orgImage" />
-                            )}
-                            {org.name}
-                          </Button>
-                        </td>
-                        <td>{org.city ?? ''}</td>
-                        <td>{dayjs(org.createdAt).format('DD-MM-YYYY')}</td>
-                        <td>
-                          <Button
-                            variant="link"
-                            className="p-0"
-                            onClick={() => handleCreator()}
-                            data-testid={`creator${org.id}`}
-                          >
-                            {org.creator.avatarURL ? (
-                              <img src={org.creator.avatarURL} alt="creator" />
-                            ) : (
-                              <Avatar name={org.creator.name} alt="creator" />
-                            )}
-                            {org.creator.name}
-                          </Button>
-                        </td>
-                        <td> {isAdmin ? 'ADMIN' : 'USER'} </td>
-                        <td>
-                          <Form.Select
-                            size="sm"
-                            onChange={changeRoleInOrg}
-                            data-testid={`changeRoleInOrg${org.id}`}
-                            disabled={isAdmin}
-                            defaultValue={
-                              isAdmin ? `ADMIN?${org.id}` : `USER?${org.id}`
-                            }
-                          >
-                            {isAdmin ? (
-                              <>
-                                <option value={`ADMIN?${org.id}`}>ADMIN</option>
-                                <option value={`USER?${org.id}`}>USER</option>
-                              </>
-                            ) : isAdmin ? (
-                              <>
-                                <option value={`ADMIN?${org.id}`}>ADMIN</option>
-                                <option value={`USER?${org.id}`}>USER</option>
-                              </>
-                            ) : (
-                              <>
-                                <option value={`USER?${org.id}`}>USER</option>
-                                <option value={`ADMIN?${org.id}`}>ADMIN</option>
-                              </>
-                            )}
-                          </Form.Select>
-                        </td>
-                        <td>
-                          <Button
-                            className={`btn btn-danger ${styles.removeButton}`}
-                            size="sm"
-                            data-testid={`removeUserFromOrgBtn${org.id}`}
-                            onClick={() => {
-                              setremoveUserProps({
-                                orgId: org.id,
-                                orgName: org.name,
-                                setShowOnCancel: 'JOINED',
-                              });
-                              setShowJoinedOrganizations(false);
-                              setShowRemoveUserModal(true);
-                            }}
-                          >
-                            {tCommon('removeUser')}
-                          </Button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
-            )}
-          </Row>
-        </Modal.Body>
-        <Modal.Footer>
+        title={`${t('orgJoinedBy')} ${user.name} (${memberOrgs.length})`}
+        headerClassName={styles.modalHeader}
+        footer={
           <Button
             variant="secondary"
             onClick={() => setShowJoinedOrganizations(false)}
@@ -346,169 +212,189 @@ const UsersTableItem = (props: Props): JSX.Element => {
           >
             {tCommon('close')}
           </Button>
-        </Modal.Footer>
-      </Modal>
-      <Modal
-        show={showRemoveUserModal}
-        key={`modal-remove-org-${index}`}
-        data-testid={`modal-remove-user-${user.id}`}
-        onHide={() => onHideRemoveUserModal()}
+        }
       >
-        <Modal.Header className={styles.modalHeader} closeButton>
-          <Modal.Title className="text-white">
-            {t('removeUserFrom', { org: removeUserProps.orgName })}
-          </Modal.Title>
-        </Modal.Header>
-        <hr style={{ margin: 0 }} />
-        <Modal.Body>
-          <p>
-            {t('removeConfirmation', {
-              name: user.name,
-              org: removeUserProps.orgName,
-            })}
-          </p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="secondary"
-            onClick={onHideRemoveUserModal}
-            data-testid={`closeRemoveUserModal${user.id}`}
-          >
-            {tCommon('close')}
-          </Button>
-          <Button
-            className={`btn btn-danger ${styles.removeButton}`}
-            onClick={confirmRemoveUser}
-            data-testid={`confirmRemoveUser${user.id}`}
-          >
-            {tCommon('remove')}
-          </Button>
-        </Modal.Footer>
-      </Modal>
-      <Modal
-        show={showBlockedOrganizations}
-        key={`modal-blocked-org-${index}`}
-        size="xl"
-        data-testid={`modal-blocked-org-${user.id}`}
-        onHide={() => setShowBlockedOrganizations(false)}
-      >
-        <Modal.Header className={styles.modalHeader} closeButton>
-          <Modal.Title className="text-white">
-            {t('orgThatBlocked')} {user.name} ({blockedUsers.length})
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {blockedOrgs.length !== 0 && (
-            <div className="search-bar-container">
-              <SearchBar
-                placeholder={t('searchByOrgName')}
-                onSearch={searchBlockedOrgs}
-                inputTestId="searchByNameBlockedOrgs"
-                buttonTestId="searchBtnBlockedOrgs"
-              />
+        {memberOrgs.length !== 0 && (
+          <div className="mb-4">
+            <SearchBar
+              placeholder={t('searchByOrgName')}
+              value={searchByNameJoinedOrgs}
+              onChange={searchJoinedOrgs}
+              onSearch={searchJoinedOrgs}
+              onClear={() => searchJoinedOrgs('')}
+              inputTestId="searchByNameJoinedOrgs"
+              buttonTestId="searchBtnJoinedOrgs"
+            />
+          </div>
+        )}
+        <Row>
+          {memberOrgs.length === 0 ? (
+            <div className={styles.notJoined}>
+              <h4>
+                {user.name} {t('hasNotJoinedAnyOrg')}
+              </h4>
             </div>
+          ) : joinedOrgs.length === 0 ? (
+            <div className={styles.notJoined}>
+              <h4>
+                {tCommon('noResultsFoundFor')} &quot;{searchByNameJoinedOrgs}
+                &quot;
+              </h4>
+            </div>
+          ) : (
+            <Table className={styles.modalTable} responsive>
+              <thead>
+                <tr>
+                  <th>{tCommon('name')}</th>
+                  <th>{tCommon('address')}</th>
+                  <th>{tCommon('createdOn')}</th>
+                  <th>{tCommon('createdBy')}</th>
+                  <th>{tCommon('usersRole')}</th>
+                  <th>{tCommon('changeRole')}</th>
+                  <th>{tCommon('action')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {joinedOrgs.map((org) => {
+                  return (
+                    <tr key={`org-joined-${org.id}`}>
+                      <td>
+                        <Button
+                          variant="link"
+                          className="p-0"
+                          onClick={() => goToOrg(org.id)}
+                        >
+                          <ProfileAvatarDisplay
+                            fallbackName={org.name}
+                            imageUrl={org.avatarURL}
+                          />
+                          {org.name}
+                        </Button>
+                      </td>
+                      <td>{org.city ?? ''}</td>
+                      <td>{dayjs(org.createdAt).format('DD-MM-YYYY')}</td>
+                      <td>
+                        <Button
+                          variant="link"
+                          className="p-0"
+                          onClick={() => handleCreator()}
+                          data-testid={`creator${org.id}`}
+                        >
+                          <ProfileAvatarDisplay
+                            fallbackName={org.creator.name}
+                            imageUrl={org.creator.avatarURL}
+                          />
+                          {org.creator.name}
+                        </Button>
+                      </td>
+                      <td> {isAdmin ? tCommon('admin') : tCommon('user')} </td>
+                      <td>
+                        <Form.Select
+                          size="sm"
+                          onChange={changeRoleInOrg}
+                          data-testid={`changeRoleInOrg${org.id}`}
+                          disabled={isAdmin}
+                          defaultValue={
+                            isAdmin ? `ADMIN?${org.id}` : `USER?${org.id}`
+                          }
+                        >
+                          {isAdmin ? (
+                            <>
+                              <option value={`ADMIN?${org.id}`}>
+                                {tCommon('admin')}
+                              </option>
+                              <option value={`USER?${org.id}`}>
+                                {tCommon('user')}
+                              </option>
+                            </>
+                          ) : isAdmin ? (
+                            <>
+                              <option value={`ADMIN?${org.id}`}>
+                                {tCommon('admin')}
+                              </option>
+                              <option value={`USER?${org.id}`}>
+                                {tCommon('user')}
+                              </option>
+                            </>
+                          ) : (
+                            <>
+                              <option value={`USER?${org.id}`}>
+                                {tCommon('user')}
+                              </option>
+                              <option value={`ADMIN?${org.id}`}>
+                                {tCommon('admin')}
+                              </option>
+                            </>
+                          )}
+                        </Form.Select>
+                      </td>
+                      <td>
+                        <Button
+                          className={`btn btn-danger ${styles.removeButton}`}
+                          size="sm"
+                          data-testid={`removeUserFromOrgBtn${org.id}`}
+                          onClick={() => {
+                            setremoveUserProps({
+                              orgId: org.id,
+                              orgName: org.name,
+                              setShowOnCancel: 'JOINED',
+                            });
+                            setShowJoinedOrganizations(false);
+                            setShowRemoveUserModal(true);
+                          }}
+                        >
+                          {tCommon('removeUser')}
+                        </Button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
           )}
-          <Row>
-            {blockedOrgs.length === 0 ? (
-              <div className={styles.notJoined}>
-                <h4>
-                  {user.name} {t('isNotBlockedByAnyOrg')}
-                </h4>
-              </div>
-            ) : blockedUsers.length === 0 ? (
-              <div className={styles.notJoined}>
-                <h4>
-                  {tCommon('noResultsFoundFor')} &quot;{searchByNameBlockedOrgs}
-                  &quot;
-                </h4>
-              </div>
-            ) : (
-              <Table className={styles.modalTable} responsive>
-                <thead>
-                  <tr>
-                    <th>{tCommon('name')}</th>
-                    <th>{tCommon('address')}</th>
-                    <th>{tCommon('createdOn')}</th>
-                    <th>{tCommon('createdBy')}</th>
-                    <th>{tCommon('usersRole')}</th>
-                    <th>{tCommon('action')}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {blockedUsers.map((org) => {
-                    return (
-                      <tr key={`org-blocked-${org.id}`}>
-                        <td>
-                          <Button
-                            variant="link"
-                            className="p-0"
-                            onClick={() => goToOrg(org.id)}
-                          >
-                            {org.organization.avatarURL ? (
-                              <img
-                                src={org.organization.avatarURL}
-                                alt="orgImage"
-                              />
-                            ) : (
-                              <Avatar
-                                name={org.organization.name}
-                                alt="orgImage"
-                              />
-                            )}
-                            {org.organization.name}
-                          </Button>
-                        </td>
-                        <td>{org.organization.city ?? ''}</td>
-                        <td>{dayjs(org.createdAt).format('DD-MM-YYYY')}</td>
-                        <td>
-                          <Button
-                            variant="link"
-                            className="p-0"
-                            onClick={() => handleCreator()}
-                            data-testid={`creator${org.id}`}
-                          >
-                            {org.organization.avatarURL ? (
-                              <img
-                                src={org.organization.avatarURL}
-                                alt="creator"
-                              />
-                            ) : (
-                              <Avatar
-                                name={org.organization.name}
-                                alt="creator"
-                              />
-                            )}
-                            {org.organization.creator.name}
-                          </Button>
-                        </td>
-                        <td> {isAdmin ? 'ADMIN' : 'USER'} </td>
-                        <td>
-                          <Button
-                            className={`btn btn-danger ${styles.removeButton}`}
-                            size="sm"
-                            data-testid={`unblockUserFromOrgBtn${org.id}`}
-                            onClick={() => {
-                              setremoveUserProps({
-                                orgId: org.id,
-                                orgName: org.organization.creator.name,
-                                setShowOnCancel: 'Blocked',
-                              });
-                              setShowBlockedOrganizations(false);
-                              setShowBlockedUserModal(true);
-                            }}
-                          >
-                            {tCommon('unblock')}
-                          </Button>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </Table>
-            )}
-          </Row>
-        </Modal.Body>
-        <Modal.Footer>
+        </Row>
+      </BaseModal>
+      <BaseModal
+        show={showRemoveUserModal}
+        dataTestId={`modal-remove-user-${user.id}`}
+        onHide={() => onHideRemoveUserModal()}
+        title={t('removeUserFrom', { org: removeUserProps.orgName })}
+        headerClassName={styles.modalHeader}
+        footer={
+          <>
+            <Button
+              variant="secondary"
+              onClick={onHideRemoveUserModal}
+              data-testid={`closeRemoveUserModal${user.id}`}
+            >
+              {tCommon('close')}
+            </Button>
+            <Button
+              className={`btn btn-danger ${styles.removeButton}`}
+              onClick={confirmRemoveUser}
+              data-testid={`confirmRemoveUser${user.id}`}
+            >
+              {tCommon('remove')}
+            </Button>
+          </>
+        }
+      >
+        <hr className={usertableStyles.divider} />
+        <p>
+          {t('removeConfirmation', {
+            name: user.name,
+            org: removeUserProps.orgName,
+          })}
+        </p>
+      </BaseModal>
+      <BaseModal
+        show={showBlockedOrganizations}
+        size="xl"
+        dataTestId={`modal-blocked-org-${user.id}`}
+        onHide={() => setShowBlockedOrganizations(false)}
+        title={`${t('orgThatBlocked')} ${user.name} (${blockedUsers.length})`}
+        headerClassName={styles.modalHeader}
+        footer={
           <Button
             variant="secondary"
             onClick={() => setShowBlockedOrganizations(false)}
@@ -516,45 +402,136 @@ const UsersTableItem = (props: Props): JSX.Element => {
           >
             {tCommon('close')}
           </Button>
-        </Modal.Footer>
-      </Modal>
-      <Modal
-        show={showBlockedUserModal}
-        key={`modal-unblock-user-${index}`}
-        data-testid={`modal-unblock-user-${user.id}`}
-        onHide={() => onHideBlockUserModal()}
+        }
       >
-        <Modal.Header className={styles.modalHeader} closeButton>
-          <Modal.Title className="text-white">
-            {t('unblockUserFrom', { org: removeUserProps.orgName })}
-          </Modal.Title>
-        </Modal.Header>
-        <hr style={{ margin: 0 }} />
-        <Modal.Body>
-          <p>
-            {t('unblockConfirmation', {
-              name: user.name,
-              org: removeUserProps.orgName,
-            })}
-          </p>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button
-            variant="secondary"
-            onClick={onHideBlockUserModal}
-            data-testid={`closeUnblockUserModal${user.id}`}
-          >
-            {tCommon('close')}
-          </Button>
-          <Button
-            className={`btn btn-danger ${styles.removeButton}`}
-            onClick={confirmUnblockUser}
-            data-testid={`confirmUnblockUser${user.id}`}
-          >
-            {tCommon('unblock')}
-          </Button>
-        </Modal.Footer>
-      </Modal>
+        {blockedOrgs.length !== 0 && (
+          <div className="search-bar-container">
+            <SearchBar
+              placeholder={t('searchByOrgName')}
+              onSearch={searchBlockedOrgs}
+              inputTestId="searchByNameBlockedOrgs"
+              buttonTestId="searchBtnBlockedOrgs"
+            />
+          </div>
+        )}
+        <Row>
+          {blockedOrgs.length === 0 ? (
+            <div className={styles.notJoined}>
+              <h4>
+                {user.name} {t('isNotBlockedByAnyOrg')}
+              </h4>
+            </div>
+          ) : blockedUsers.length === 0 ? (
+            <div className={styles.notJoined}>
+              <h4>
+                {tCommon('noResultsFoundFor')} &quot;{searchByNameBlockedOrgs}
+                &quot;
+              </h4>
+            </div>
+          ) : (
+            <Table className={styles.modalTable} responsive>
+              <thead>
+                <tr>
+                  <th>{tCommon('name')}</th>
+                  <th>{tCommon('address')}</th>
+                  <th>{tCommon('createdOn')}</th>
+                  <th>{tCommon('createdBy')}</th>
+                  <th>{tCommon('usersRole')}</th>
+                  <th>{tCommon('action')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {blockedUsers.map((org) => {
+                  return (
+                    <tr key={`org-blocked-${org.id}`}>
+                      <td>
+                        <Button
+                          variant="link"
+                          className="p-0"
+                          onClick={() => goToOrg(org.id)}
+                        >
+                          <ProfileAvatarDisplay
+                            fallbackName={org.organization.name}
+                            imageUrl={org.organization.avatarURL}
+                          />
+                          {org.organization.name}
+                        </Button>
+                      </td>
+                      <td>{org.organization.city ?? ''}</td>
+                      <td>{dayjs(org.createdAt).format('DD-MM-YYYY')}</td>
+                      <td>
+                        <Button
+                          variant="link"
+                          className="p-0"
+                          onClick={() => handleCreator()}
+                          data-testid={`creator${org.id}`}
+                        >
+                          <ProfileAvatarDisplay
+                            fallbackName={org.organization.creator.name}
+                          />
+                          {org.organization.creator.name}
+                        </Button>
+                      </td>
+                      <td> {isAdmin ? tCommon('admin') : tCommon('user')} </td>
+                      <td>
+                        <Button
+                          className={`btn btn-danger ${styles.removeButton}`}
+                          size="sm"
+                          data-testid={`unblockUserFromOrgBtn${org.id}`}
+                          onClick={() => {
+                            setremoveUserProps({
+                              orgId: org.id,
+                              orgName: org.organization.creator.name,
+                              setShowOnCancel: 'Blocked',
+                            });
+                            setShowBlockedOrganizations(false);
+                            setShowBlockedUserModal(true);
+                          }}
+                        >
+                          {tCommon('unblock')}
+                        </Button>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </Table>
+          )}
+        </Row>
+      </BaseModal>
+      <BaseModal
+        show={showBlockedUserModal}
+        dataTestId={`modal-unblock-user-${user.id}`}
+        onHide={() => onHideBlockUserModal()}
+        title={t('unblockUserFrom', { org: removeUserProps.orgName })}
+        headerClassName={styles.modalHeader}
+        footer={
+          <>
+            <Button
+              variant="secondary"
+              onClick={onHideBlockUserModal}
+              data-testid={`closeUnblockUserModal${user.id}`}
+            >
+              {tCommon('close')}
+            </Button>
+            <Button
+              className={`btn btn-danger ${styles.removeButton}`}
+              onClick={confirmUnblockUser}
+              data-testid={`confirmUnblockUser${user.id}`}
+            >
+              {tCommon('unblock')}
+            </Button>
+          </>
+        }
+      >
+        <hr className={usertableStyles.divider} />
+        <p>
+          {t('unblockConfirmation', {
+            name: user.name,
+            org: removeUserProps.orgName,
+          })}
+        </p>
+      </BaseModal>
     </>
   );
 };

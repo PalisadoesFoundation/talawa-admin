@@ -4,7 +4,11 @@
 
 # Interface: InterfaceCurrentUserTypePG
 
-Defined in: [src/utils/interfaces.ts:372](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L372)
+Defined in: [src/utils/interfaces.ts:383](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L383)
+
+InterfaceCurrentUserTypePG
+
+## Description
 
 Defines the structure for the current user type with PostgreSQL-specific fields.
 
@@ -14,7 +18,7 @@ Defines the structure for the current user type with PostgreSQL-specific fields.
 
 > **currentUser**: `object`
 
-Defined in: [src/utils/interfaces.ts:373](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L373)
+Defined in: [src/utils/interfaces.ts:384](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L384)
 
 The current user object.
 

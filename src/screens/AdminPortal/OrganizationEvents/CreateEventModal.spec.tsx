@@ -31,6 +31,9 @@ vi.mock('react-i18next', async (importOriginal) => {
 
 // Mock @mui/x-date-pickers to simple inputs
 vi.mock('@mui/x-date-pickers', () => ({
+  LocalizationProvider: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
   DatePicker: vi.fn(
     ({
       label,

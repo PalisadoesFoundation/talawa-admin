@@ -47,10 +47,13 @@ import {
   ORGANIZATION_LIST,
 } from 'GraphQl/Queries/Queries';
 import { REMOVE_MEMBER_MUTATION } from 'GraphQl/Mutations/mutations';
-import { Button, Modal, Form, Spinner, Alert } from 'react-bootstrap';
+import { Button, Form, Alert } from 'react-bootstrap';
+import { BaseModal } from 'shared-components/BaseModal';
 import { useParams, useNavigate } from 'react-router';
 import { getItem } from 'utils/useLocalstorage';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
+import LoadingState from 'shared-components/LoadingState/LoadingState';
+import { useTranslation } from 'react-i18next';
 
 const userEmail = (() => {
   try {
@@ -74,6 +77,7 @@ export { userEmail, userId };
 const LeaveOrganization = (): JSX.Element => {
   const navigate = useNavigate();
   const { orgId: organizationId } = useParams();
+  const { t: tCommon } = useTranslation('common');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -155,8 +159,9 @@ const LeaveOrganization = (): JSX.Element => {
   if (orgLoading) {
     return (
       <div className="text-center mt-4" role="status">
-        <Spinner animation="border" />
-        <p>Loading organization details...</p>
+        <LoadingState isLoading={orgLoading} variant="spinner">
+          <div />
+        </LoadingState>
       </div>
     );
   }
@@ -179,59 +184,18 @@ const LeaveOrganization = (): JSX.Element => {
         Leave Organization
       </Button>
 
-      <Modal
+      <BaseModal
         show={showModal}
-        data-testid="leave-organization-modal"
-        aria-labelledby="leave-organization-modal"
+        dataTestId="leave-organization-modal"
         onHide={() => {
           setShowModal(false);
           setVerificationStep(false);
           setEmail('');
           setError('');
         }}
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="leave-organization-modal">
-            Leave Joined Organization
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          {!verificationStep ? (
-            <>
-              <p>Are you sure you want to leave this organization?</p>
-              <p>
-                This action cannot be undone, and you may need to request access
-                again if you reconsider.
-              </p>
-            </>
-          ) : (
-            <Form>
-              <Form.Group>
-                <Form.Label htmlFor="confirm-email">
-                  Enter your email to confirm:
-                </Form.Label>
-                <Form.Control
-                  id="confirm-email"
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  required
-                  aria-describedby={error ? 'email-error' : undefined}
-                  onChange={(e) => setEmail(e.target.value)}
-                  onKeyDown={handleKeyPress}
-                  aria-label="confirm-email-input"
-                />
-              </Form.Group>
-              {error && (
-                <Alert variant="danger" id="email-error" role="alert">
-                  {error}
-                </Alert>
-              )}
-            </Form>
-          )}
-        </Modal.Body>
-        <Modal.Footer>
-          {!verificationStep ? (
+        title="Leave Joined Organization"
+        footer={
+          !verificationStep ? (
             <>
               <Button variant="secondary" onClick={() => setShowModal(false)}>
                 Cancel
@@ -253,27 +217,56 @@ const LeaveOrganization = (): JSX.Element => {
                   setError('');
                 }}
               >
-                Back
+                {tCommon('back')}
               </Button>
-              <Button
-                variant="danger"
-                disabled={loading}
-                onClick={handleVerifyAndLeave}
-                aria-label="confirm-leave-button"
-              >
-                {loading ? (
-                  <>
-                    <Spinner animation="border" size="sm" role="status" />
-                    {' Loading...'}
-                  </>
-                ) : (
-                  'Confirm'
-                )}
-              </Button>
+              <LoadingState isLoading={loading} variant="inline">
+                <Button
+                  variant="danger"
+                  disabled={loading}
+                  onClick={handleVerifyAndLeave}
+                  aria-label="confirm-leave-button"
+                >
+                  {tCommon('confirm')}
+                </Button>
+              </LoadingState>
             </>
-          )}
-        </Modal.Footer>
-      </Modal>
+          )
+        }
+      >
+        {!verificationStep ? (
+          <>
+            <p>Are you sure you want to leave this organization?</p>
+            <p>
+              This action cannot be undone, and you may need to request access
+              again if you reconsider.
+            </p>
+          </>
+        ) : (
+          <Form>
+            <Form.Group>
+              <Form.Label htmlFor="confirm-email">
+                Enter your email to confirm:
+              </Form.Label>
+              <Form.Control
+                id="confirm-email"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                required
+                aria-describedby={error ? 'email-error' : undefined}
+                onChange={(e) => setEmail(e.target.value)}
+                onKeyDown={handleKeyPress}
+                aria-label="confirm-email-input"
+              />
+            </Form.Group>
+            {error && (
+              <Alert variant="danger" id="email-error" role="alert">
+                {error}
+              </Alert>
+            )}
+          </Form>
+        )}
+      </BaseModal>
     </div>
   );
 };

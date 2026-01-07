@@ -1,5 +1,6 @@
 /**
- * Represents the ISO 3166-1 alpha-2 country codes.
+ * @enum Iso3166Alpha2CountryCode
+ * @description Represents the ISO 3166-1 alpha-2 country codes.
  */
 export enum Iso3166Alpha2CountryCode {
   ad = 'ad',
@@ -254,7 +255,8 @@ export enum Iso3166Alpha2CountryCode {
 }
 
 /**
- * Represents the education grades for a user.
+ * @enum UserEducationGrade
+ * @description Represents the education grades for a user.
  */
 enum UserEducationGrade {
   GRADE_1 = 'grade_1',
@@ -276,7 +278,8 @@ enum UserEducationGrade {
 }
 
 /**
- * Represents the employment status of a user.
+ * @enum UserEmploymentStatus
+ * @description Represents the employment status of a user.
  */
 enum UserEmploymentStatus {
   FULL_TIME = 'full_time',
@@ -285,7 +288,8 @@ enum UserEmploymentStatus {
 }
 
 /**
- * Represents the marital status of a user.
+ * @enum UserMaritalStatus
+ * @description Represents the marital status of a user.
  */
 enum UserMaritalStatus {
   DIVORCED = 'divorced',
@@ -297,7 +301,8 @@ enum UserMaritalStatus {
 }
 
 /**
- * Represents the natal sex of a user.
+ * @enum UserNatalSex
+ * @description Represents the natal sex of a user.
  */
 enum UserNatalSex {
   FEMALE = 'female',
@@ -306,12 +311,14 @@ enum UserNatalSex {
 }
 
 /**
- * Represents a generic ID type, which can be either a string or a number.
+ * @typedef {string | number} ID
+ * @description Represents a generic ID type, which can be either a string or a number.
  */
 type ID = string | number;
 
 /**
- * Represents the role of a user within the system.
+ * @enum UserRole
+ * @description Represents the role of a user within the system.
  */
 enum UserRole {
   Administrator = 'administrator',
@@ -319,7 +326,8 @@ enum UserRole {
 }
 
 /**
- * Represents the type of an advertisement.
+ * @enum AdvertisementTypePg
+ * @description Represents the type of an advertisement.
  */
 enum AdvertisementTypePg {
   BANNER = 'banner',
@@ -328,7 +336,8 @@ enum AdvertisementTypePg {
 }
 
 /**
- * Defines the structure for a basic user type.
+ * @interface InterfaceUserType
+ * @description Defines the structure for a basic user type.
  * @property {object} user - The user object.
  * @property {string} user.firstName - The first name of the user.
  * @property {string} user.lastName - The last name of the user.
@@ -345,7 +354,8 @@ export interface InterfaceUserType {
 }
 
 /**
- * Defines the structure for a user type with PostgreSQL-specific fields.
+ * @interface InterfaceUserTypePG
+ * @description Defines the structure for a user type with PostgreSQL-specific fields.
  * @property {object} user - The user object.
  * @property {string} user.id - The unique identifier of the user.
  * @property {string} user.name - The full name of the user.
@@ -362,7 +372,8 @@ export interface InterfaceUserTypePG {
 }
 
 /**
- * Defines the structure for the current user type with PostgreSQL-specific fields.
+ * @interface InterfaceCurrentUserTypePG
+ * @description Defines the structure for the current user type with PostgreSQL-specific fields.
  * @property {object} currentUser - The current user object.
  * @property {string} currentUser.id - The unique identifier of the current user.
  * @property {string} currentUser.name - The full name of the current user.
@@ -379,7 +390,8 @@ export interface InterfaceCurrentUserTypePG {
 }
 
 /**
- * Defines the basic information for a user.
+ * @interface InterfaceUserInfo
+ * @description Defines the basic information for a user.
  * @property {string} id - The unique identifier of the user.
  * @property {string} name - The full name of the user.
  * @property {string} emailAddress - The email address of the user.
@@ -396,8 +408,9 @@ export interface InterfaceUserInfo {
 }
 
 /**
- * Base interface for common event properties.
- * @property {string} id - The unique identifier of the event.
+ * @interface InterfaceBaseEvent
+ * @description Base interface for common event properties.
+ * @property {string} _id - The unique identifier of the event.
  * @property {string} title - The title of the event.
  * @property {string} description - The description of the event.
  * @property {string} startDate - The start date of the event.
@@ -409,7 +422,7 @@ export interface InterfaceUserInfo {
  * @property {boolean} recurring - Indicates if the event is a recurring event.
  */
 export interface InterfaceBaseEvent {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   startDate: string;
@@ -422,7 +435,8 @@ export interface InterfaceBaseEvent {
 }
 
 /**
- * Defines the structure for a list of organizations with their members.
+ * @interface InterfaceMembersList
+ * @description Defines the structure for a list of organizations with their members.
  * @property {object[]} organizations - An array of organization objects.
  * @property {string} organizations._id - The unique identifier of the organization.
  * @property {InterfaceMemberInfo[]} organizations.members - An array of member information for the organization.
@@ -435,7 +449,8 @@ export interface InterfaceMembersList {
 }
 
 /**
- * Defines the structure for member information.
+ * @interface InterfaceMemberInfo
+ * @description Defines the structure for member information.
  * @property {string} _id - The unique identifier of the member.
  * @property {string} firstName - The first name of the member.
  * @property {string} lastName - The last name of the member.
@@ -458,7 +473,8 @@ export interface InterfaceMemberInfo {
 }
 
 /**
- * Defines the structure for organization connection information.
+ * @interface InterfaceOrgConnectionInfoType
+ * @description Defines the structure for organization connection information.
  * @property {string} _id - The unique identifier of the organization.
  * @property {string | null} image - The URL of the organization's image, or null.
  * @property {object} creator - The creator of the organization.
@@ -497,7 +513,8 @@ export interface InterfaceOrgConnectionInfoType {
 // }
 
 /**
- * Defines the structure for organization connection information with PostgreSQL-specific fields.
+ * @interface InterfaceOrgConnectionInfoTypePG
+ * @description Defines the structure for organization connection information with PostgreSQL-specific fields.
  * @property {InterfaceOrgInfoTypePG[]} organizations - An array of organization information.
  */
 export interface InterfaceOrgConnectionInfoTypePG {
@@ -505,7 +522,8 @@ export interface InterfaceOrgConnectionInfoTypePG {
 }
 
 /**
- * Defines the structure for organization information with PostgreSQL-specific fields.
+ * @interface InterfaceOrgInfoTypePG
+ * @description Defines the structure for organization information with PostgreSQL-specific fields.
  * @property {string} id - The unique identifier of the organization.
  * @property {string} name - The name of the organization.
  * @property {string} addressLine1 - The first line of the organization's address.
@@ -535,7 +553,8 @@ export interface InterfaceOrgInfoTypePG {
 }
 
 /**
- * Defines the structure for an organization object returned from a query.
+ * @interface InterfaceQueryOrganizationsListObject
+ * @description Defines the structure for an organization object returned from a query.
  * @property {string} id - The unique identifier of the organization.
  * @property {string | null} image - The URL of the organization's image, or null.
  * @property {object} creator - The creator of the organization.
@@ -613,7 +632,8 @@ export interface InterfaceQueryOrganizationsListObject {
 }
 
 /**
- * Defines the structure for pagination information in PostgreSQL-backed connections.
+ * @interface InterfacePageInfoPg
+ * @description Defines the structure for pagination information in PostgreSQL-backed connections.
  * @property {string} endCursor - The cursor for the last item in the current page.
  * @property {boolean} hasNextPage - Indicates if there is a next page.
  * @property {boolean} hasPreviousPage - Indicates if there is a previous page.
@@ -626,7 +646,8 @@ export interface InterfacePageInfoPg {
   startCursor: string;
 }
 /**
- * Defines the structure for a user with PostgreSQL-specific fields.
+ * @interface InterfaceUserPg
+ * @description Defines the structure for a user with PostgreSQL-specific fields.
  * @property {string} addressLine1 - The first line of the user's address.
  * @property {string} addressLine2 - The second line of the user's address.
  * @property {string} avatarMimeType - The MIME type of the user's avatar.
@@ -684,7 +705,8 @@ export interface InterfaceUserPg {
 }
 
 /**
- * Defines the structure for an advertisement with PostgreSQL-specific fields.
+ * @interface InterfaceAdvertisementPg
+ * @description Defines the structure for an advertisement with PostgreSQL-specific fields.
  * @property {ID} id - The unique identifier of the advertisement.
  * @property {string} name - The name of the advertisement.
  * @property {string} description - The description of the advertisement.
@@ -714,7 +736,8 @@ export interface InterfaceAdvertisementPg {
 }
 
 /**
- * Defines the structure for an advertisement attachment with PostgreSQL-specific fields.
+ * @interface InterfaceAdvertisementAttachmentPg
+ * @description Defines the structure for an advertisement attachment with PostgreSQL-specific fields.
  * @property {string} mimeType - The MIME type of the attachment.
  * @property {string} url - The URL of the attachment.
  */
@@ -724,7 +747,8 @@ export interface InterfaceAdvertisementAttachmentPg {
 }
 
 /**
- * Defines the structure for a connection of organization advertisements with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationAdvertisementsConnectionPg
+ * @description Defines the structure for a connection of organization advertisements with PostgreSQL-specific fields.
  * @property {InterfaceOrganizationAdvertisementsConnectionEdgePg[]} edges - An array of edges, where each edge contains a cursor and an advertisement node.
  * @property {InterfacePageInfoPg} pageInfo - Pagination information.
  */
@@ -734,7 +758,8 @@ export interface InterfaceOrganizationAdvertisementsConnectionPg {
 }
 
 /**
- * Defines the structure for an edge in the organization advertisements connection with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationAdvertisementsConnectionEdgePg
+ * @description Defines the structure for an edge in the organization advertisements connection with PostgreSQL-specific fields.
  * @property {string} cursor - The cursor for this edge.
  * @property {InterfaceAdvertisementPg} node - The advertisement node.
  */
@@ -744,7 +769,8 @@ export interface InterfaceOrganizationAdvertisementsConnectionEdgePg {
 }
 
 /**
- * Defines the structure for an edge in the organization blocked users connection with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationBlockedUsersConnectionEdgePg
+ * @description Defines the structure for an edge in the organization blocked users connection with PostgreSQL-specific fields.
  * @property {string} cursor - The cursor for this edge.
  * @property {InterfaceUserPg} node - The user node.
  */
@@ -754,7 +780,8 @@ export interface InterfaceOrganizationBlockedUsersConnectionEdgePg {
 }
 
 /**
- * Defines the structure for a connection of organization blocked users with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationBlockedUsersConnectionPg
+ * @description Defines the structure for a connection of organization blocked users with PostgreSQL-specific fields.
  * @property {InterfaceOrganizationBlockedUsersConnectionEdgePg[]} edges - An array of edges, where each edge contains a cursor and a user node.
  * @property {InterfacePageInfoPg} pageInfo - Pagination information.
  */
@@ -764,7 +791,8 @@ export interface InterfaceOrganizationBlockedUsersConnectionPg {
 }
 
 /**
- * Defines the structure for a chat with PostgreSQL-specific fields.
+ * @interface InterfaceChatPg
+ * @description Defines the structure for a chat with PostgreSQL-specific fields.
  * @property {ID} id - The unique identifier of the chat.
  * @property {string} name - The name of the chat.
  * @property {string} description - The description of the chat.
@@ -790,7 +818,8 @@ export interface InterfaceChatPg {
 }
 
 /**
- * Defines the structure for a chat message with PostgreSQL-specific fields.
+ * @interface InterfaceChatMessagePg
+ * @description Defines the structure for a chat message with PostgreSQL-specific fields.
  * @property {ID} id - The unique identifier of the chat message.
  * @property {string} body - The body content of the chat message.
  * @property {InterfaceChatPg} chat - The chat associated with this message.
@@ -810,8 +839,8 @@ export interface InterfaceChatMessagePg {
 }
 
 /**
- * {object} InterfaceOrganizationChatsConnectionPg
- * Defines the structure for a connection of organization chats with PostgreSQL-specific fields.
+ * @typedef {object} InterfaceOrganizationChatsConnectionPg
+ * @description Defines the structure for a connection of organization chats with PostgreSQL-specific fields.
  * @property {InterfaceOrganizationChatsConnectionEdgePg[]} edges - An array of edges, where each edge contains a cursor and a chat node.
  * @property {InterfacePageInfoPg} pageInfo - Pagination information.
  */
@@ -821,8 +850,8 @@ type InterfaceOrganizationChatsConnectionPg = {
 };
 
 /**
- * {object} InterfaceOrganizationChatsConnectionEdgePg
- * Defines the structure for an edge in the organization chats connection with PostgreSQL-specific fields.
+ * @typedef {object} InterfaceOrganizationChatsConnectionEdgePg
+ * @description Defines the structure for an edge in the organization chats connection with PostgreSQL-specific fields.
  * @property {string} cursor - The cursor for this edge.
  * @property {ChatPg} node - The chat node.
  */
@@ -832,8 +861,8 @@ type InterfaceOrganizationChatsConnectionEdgePg = {
 };
 
 /**
- * {object} InterfaceChatMembersConnectionPg
- * Defines the structure for a connection of chat members with PostgreSQL-specific fields.
+ * @typedef {object} InterfaceChatMembersConnectionPg
+ * @description Defines the structure for a connection of chat members with PostgreSQL-specific fields.
  * @property {InterfaceChatMembersConnectionEdgePg[]} edges - An array of edges, where each edge contains a cursor and a user node.
  * @property {InterfacePageInfoPg} pageInfo - Pagination information.
  */
@@ -843,8 +872,8 @@ type InterfaceChatMembersConnectionPg = {
 };
 
 /**
- * {object} InterfaceChatMembersConnectionEdgePg
- * Defines the structure for an edge in the chat members connection with PostgreSQL-specific fields.
+ * @typedef {object} InterfaceChatMembersConnectionEdgePg
+ * @description Defines the structure for an edge in the chat members connection with PostgreSQL-specific fields.
  * @property {string} cursor - The cursor for this edge.
  * @property {InterfaceUserPg} node - The user node.
  */
@@ -854,8 +883,8 @@ type InterfaceChatMembersConnectionEdgePg = {
 };
 
 /**
- * {object} InterfaceChatMessagesConnectionPg
- * Defines the structure for a connection of chat messages with PostgreSQL-specific fields.
+ * @typedef {object} InterfaceChatMessagesConnectionPg
+ * @description Defines the structure for a connection of chat messages with PostgreSQL-specific fields.
  * @property {InterfaceChatMessagesConnectionEdgePg[]} edges - An array of edges, where each edge contains a cursor and a chat message node.
  * @property {InterfacePageInfoPg} pageInfo - Pagination information.
  */
@@ -865,8 +894,8 @@ type InterfaceChatMessagesConnectionPg = {
 };
 
 /**
- * {object} InterfaceChatMessagesConnectionEdgePg
- * Defines the structure for an edge in the chat messages connection with PostgreSQL-specific fields.
+ * @typedef {object} InterfaceChatMessagesConnectionEdgePg
+ * @description Defines the structure for an edge in the chat messages connection with PostgreSQL-specific fields.
  * @property {string} cursor - The cursor for this edge.
  * @property {InterfaceChatMessagePg} node - The chat message node.
  */
@@ -876,8 +905,8 @@ type InterfaceChatMessagesConnectionEdgePg = {
 };
 
 /**
- * {object} ChatPg
- * Defines the structure for a chat with PostgreSQL-specific fields.
+ * @typedef {object} ChatPg
+ * @description Defines the structure for a chat with PostgreSQL-specific fields.
  * @property {string} id - The unique identifier of the chat.
  * @property {string} name - The name of the chat.
  * @property {string} description - The description of the chat.
@@ -907,7 +936,8 @@ type ChatPg = {
 };
 
 /**
- * Defines the structure for a connection of organization events with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationEventsConnectionPg
+ * @description Defines the structure for a connection of organization events with PostgreSQL-specific fields.
  * @property {InterfaceOrganizationEventsConnectionEdgePg[]} edges - An array of edges, where each edge contains a cursor and an event node.
  * @property {InterfacePageInfoPg} pageInfo - Pagination information.
  */
@@ -917,7 +947,8 @@ export interface InterfaceOrganizationEventsConnectionPg {
 }
 
 /**
- * Defines the structure for an edge in the organization events connection with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationEventsConnectionEdgePg
+ * @description Defines the structure for an edge in the organization events connection with PostgreSQL-specific fields.
  * @property {string} cursor - The cursor for this edge.
  * @property {InterfaceEventPg} node - The event node.
  */
@@ -943,7 +974,8 @@ export interface IEvent {
 }
 
 /**
- * Defines the structure for an event attachment with PostgreSQL-specific fields.
+ * @interface InterfaceEventAttachmentPg
+ * @description Defines the structure for an event attachment with PostgreSQL-specific fields.
  * @property {string} mimeType - The MIME type of the attachment.
  * @property {string} url - The URL of the attachment.
  */
@@ -953,12 +985,14 @@ export interface InterfaceEventAttachmentPg {
 }
 
 /**
- * Defines the structure for a connection of organization funds with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationFundsConnectionPg
+ * @description Defines the structure for a connection of organization funds with PostgreSQL-specific fields.
  * @property {InterfaceOrganizationFundsConnectionEdgePg[]} edges - An array of edges, where each edge contains a cursor and a fund node.
  * @property {InterfacePageInfoPg} pageInfo - Pagination information.
  */
 /**
- * Defines the structure for a connection of organization funds with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationFundsConnectionPg
+ * @description Defines the structure for a connection of organization funds with PostgreSQL-specific fields.
  * @property {InterfaceOrganizationFundsConnectionEdgePg[]} edges - An array of edges, where each edge contains a cursor and a fund node.
  * @property {InterfacePageInfoPg} pageInfo - Pagination information.
  */
@@ -968,7 +1002,8 @@ export interface InterfaceOrganizationFundsConnectionPg {
 }
 
 /**
- * Defines the structure for an edge in the organization funds connection with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationFundsConnectionEdgePg
+ * @description Defines the structure for an edge in the organization funds connection with PostgreSQL-specific fields.
  * @property {string} cursor - The cursor for this edge.
  * @property {InterfaceFundPg} node - The fund node.
  */
@@ -978,7 +1013,8 @@ export interface InterfaceOrganizationFundsConnectionEdgePg {
 }
 
 /**
- * Defines the structure for a fund with PostgreSQL-specific fields.
+ * @interface InterfaceFundPg
+ * @description Defines the structure for a fund with PostgreSQL-specific fields.
  * @property {ID} id - The unique identifier of the fund.
  * @property {string} name - The name of the fund.
  * @property {InterfaceOrganizationPg} organization - The organization associated with this fund.
@@ -1000,7 +1036,8 @@ export interface InterfaceFundPg {
 }
 
 /**
- * Defines the structure for a connection of organization members with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationMembersConnectionPg
+ * @description Defines the structure for a connection of organization members with PostgreSQL-specific fields.
  * @property {InterfaceOrganizationMembersConnectionEdgePg[]} edges - An array of edges, where each edge contains a cursor and a user node.
  * @property {InterfacePageInfoPg} pageInfo - Pagination information.
  */
@@ -1010,7 +1047,8 @@ export interface InterfaceOrganizationMembersConnectionPg {
 }
 
 /**
- * Defines the structure for an edge in the organization members connection with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationMembersConnectionEdgePg
+ * @description Defines the structure for an edge in the organization members connection with PostgreSQL-specific fields.
  * @property {string} cursor - The cursor for this edge.
  * @property {InterfaceUserPg} node - The user node.
  */
@@ -1020,7 +1058,8 @@ export interface InterfaceOrganizationMembersConnectionEdgePg {
 }
 
 /**
- * Defines the structure for a connection of organization pinned posts with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationPinnedPostsConnectionPg
+ * @description Defines the structure for a connection of organization pinned posts with PostgreSQL-specific fields.
  * @property {InterfaceOrganizationPinnedPostsConnectionEdgePg[]} edges - An array of edges, where each edge contains a cursor and a post node.
  * @property {InterfacePageInfoPg} pageInfo - Pagination information.
  */
@@ -1030,7 +1069,8 @@ export interface InterfaceOrganizationPinnedPostsConnectionPg {
 }
 
 /**
- * Defines the structure for an edge in the organization pinned posts connection with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationPinnedPostsConnectionEdgePg
+ * @description Defines the structure for an edge in the organization pinned posts connection with PostgreSQL-specific fields.
  * @property {string} cursor - The cursor for this edge.
  * @property {InterfacePostPg} node - The post node.
  */
@@ -1040,7 +1080,8 @@ export interface InterfaceOrganizationPinnedPostsConnectionEdgePg {
 }
 
 /**
- * Defines the structure for a post with PostgreSQL-specific fields.
+ * @interface InterfacePostPg
+ * @description Defines the structure for a post with PostgreSQL-specific fields.
  * @property {ID} id - The unique identifier of the post.
  * @property {string} caption - The caption of the post.
  * @property {number} commentsCount - The number of comments on the post.
@@ -1068,7 +1109,8 @@ export interface InterfacePostPg {
 }
 
 /**
- * Defines the structure for a connection of organization posts with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationPostsConnectionPg
+ * @description Defines the structure for a connection of organization posts with PostgreSQL-specific fields.
  * @property {InterfaceOrganizationPostsConnectionEdgePg[]} edges - An array of edges, where each edge contains a cursor and a post node.
  * @property {InterfacePageInfoPg} pageInfo - Pagination information.
  */
@@ -1078,7 +1120,8 @@ export interface InterfaceOrganizationPostsConnectionPg {
 }
 
 /**
- * Defines the structure for an edge in the organization posts connection with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationPostsConnectionEdgePg
+ * @description Defines the structure for an edge in the organization posts connection with PostgreSQL-specific fields.
  * @property {string} cursor - The cursor for this edge.
  * @property {InterfacePostPg} node - The post node.
  */
@@ -1088,7 +1131,8 @@ export interface InterfaceOrganizationPostsConnectionEdgePg {
 }
 
 /**
- * Defines the structure for a connection of organization tag folders with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationTagFoldersConnectionPg
+ * @description Defines the structure for a connection of organization tag folders with PostgreSQL-specific fields.
  * @property {InterfaceOrganizationTagFoldersConnectionEdgePg[]} edges - An array of edges, where each edge contains a cursor and a tag folder node.
  * @property {InterfacePageInfoPg} pageInfo - Pagination information.
  */
@@ -1098,7 +1142,8 @@ export interface InterfaceOrganizationTagFoldersConnectionPg {
 }
 
 /**
- * Defines the structure for an edge in the organization tag folders connection with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationTagFoldersConnectionEdgePg
+ * @description Defines the structure for an edge in the organization tag folders connection with PostgreSQL-specific fields.
  * @property {string} cursor - The cursor for this edge.
  * @property {InterfaceTagFolderPg} node - The tag folder node.
  */
@@ -1108,7 +1153,8 @@ export interface InterfaceOrganizationTagFoldersConnectionEdgePg {
 }
 
 /**
- * Defines the structure for a tag folder with PostgreSQL-specific fields.
+ * @interface InterfaceTagFolderPg
+ * @description Defines the structure for a tag folder with PostgreSQL-specific fields.
  * @property {ID} id - The unique identifier of the tag folder.
  * @property {string} name - The name of the tag folder.
  * @property {string} createdAt - The creation date of the tag folder record.
@@ -1128,7 +1174,8 @@ export interface InterfaceTagFolderPg {
 }
 
 /**
- * Defines the structure for a connection of organization tags with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationTagsConnectionPg
+ * @description Defines the structure for a connection of organization tags with PostgreSQL-specific fields.
  * @property {InterfaceOrganizationTagsConnectionEdgePg[]} edges - An array of edges, where each edge contains a cursor and a tag node.
  * @property {InterfacePageInfoPg} pageInfo - Pagination information.
  */
@@ -1138,7 +1185,8 @@ export interface InterfaceOrganizationTagsConnectionPg {
 }
 
 /**
- * Defines the structure for an edge in the organization tags connection with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationTagsConnectionEdgePg
+ * @description Defines the structure for an edge in the organization tags connection with PostgreSQL-specific fields.
  * @property {string} cursor - The cursor for this edge.
  * @property {InterfaceTagPg} node - The tag node.
  */
@@ -1148,7 +1196,8 @@ export interface InterfaceOrganizationTagsConnectionEdgePg {
 }
 
 /**
- * Defines the structure for a tag with PostgreSQL-specific fields.
+ * @interface InterfaceTagPg
+ * @description Defines the structure for a tag with PostgreSQL-specific fields.
  * @property {ID} id - The unique identifier of the tag.
  * @property {string} name - The name of the tag.
  * @property {string} createdAt - The creation date of the tag record.
@@ -1168,7 +1217,8 @@ export interface InterfaceTagPg {
 }
 
 /**
- * Defines the structure for a connection of organization venues with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationVenuesConnectionPg
+ * @description Defines the structure for a connection of organization venues with PostgreSQL-specific fields.
  * @property {InterfaceOrganizationVenuesConnectionEdgePg[]} edges - An array of edges, where each edge contains a cursor and a venue node.
  * @property {InterfacePageInfoPg} pageInfo - Pagination information.
  */
@@ -1178,7 +1228,8 @@ export interface InterfaceOrganizationVenuesConnectionPg {
 }
 
 /**
- * Defines the structure for an edge in the organization venues connection with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationVenuesConnectionEdgePg
+ * @description Defines the structure for an edge in the organization venues connection with PostgreSQL-specific fields.
  * @property {string} cursor - The cursor for this edge.
  * @property {InterfaceVenuePg} node - The venue node.
  */
@@ -1188,7 +1239,8 @@ export interface InterfaceOrganizationVenuesConnectionEdgePg {
 }
 
 /**
- * Defines the structure for a venue with PostgreSQL-specific fields.
+ * @interface InterfaceVenuePg
+ * @description Defines the structure for a venue with PostgreSQL-specific fields.
  * @property {ID} id - The unique identifier of the venue.
  * @property {string} name - The name of the venue.
  * @property {string | null} description - The description of the venue.
@@ -1217,7 +1269,8 @@ export interface InterfaceVenuePg {
 }
 
 /**
- * Defines the arguments for pagination.
+ * @interface InterfacePaginationArgs
+ * @description Defines the arguments for pagination.
  * @property {string} after - The cursor to paginate after.
  * @property {string} before - The cursor to paginate before.
  * @property {number} first - The maximum number of items to return from the beginning.
@@ -1231,7 +1284,8 @@ export interface InterfacePaginationArgs {
 }
 
 /**
- * Defines the structure for an organization with PostgreSQL-specific fields.
+ * @interface InterfaceOrganizationPg
+ * @description Defines the structure for an organization with PostgreSQL-specific fields.
  * @property {object} organization - The organization object.
  * @property {string} organization.id - The unique identifier of the organization.
  * @property {string} organization.name - The name of the organization.
@@ -1305,7 +1359,8 @@ export interface InterfaceOrganizationPg {
 }
 
 /**
- * Defines the structure for an organization list object returned from a query.
+ * @interface InterfaceQueryOrganizationListObject
+ * @description Defines the structure for an organization list object returned from a query.
  * @property {string} _id - The unique identifier of the organization.
  * @property {string | null} image - The URL of the organization's image, or null.
  * @property {object} creator - The creator of the organization.
@@ -1327,7 +1382,8 @@ export interface InterfaceQueryOrganizationListObject {
 }
 
 /**
- * Defines the structure for a post form.
+ * @interface InterfacePostForm
+ * @description Defines the structure for a post form.
  * @property {string} posttitle - The title of the post.
  * @property {string} postinfo - The information/content of the post.
  * @property {string | null} postphoto - The URL of the post's photo, or null.
@@ -1342,7 +1398,8 @@ export interface InterfacePostForm {
   pinned: boolean;
 }
 /**
- * Defines the structure for an organization post list item returned from a query.
+ * @interface InterfaceQueryOrganizationPostListItem
+ * @description Defines the structure for an organization post list item returned from a query.
  * @property {object} posts - The posts connection object.
  * @property {object[]} posts.edges - An array of edges, where each edge contains a cursor and a post node.
  * @property {object} posts.edges.node - The post node.
@@ -1383,7 +1440,8 @@ export interface InterfaceQueryOrganizationPostListItem {
 }
 
 /**
- * Defines the structure for tag data.
+ * @interface InterfaceTagData
+ * @description Defines the structure for tag data.
  * @property {string} id - The unique identifier of the tag.
  * @property {string} name - The name of the tag.
  * @property {object} parentTag - The parent tag object.
@@ -1429,7 +1487,8 @@ export interface InterfaceTagDataPG {
 }
 
 /**
- * Defines the structure for tag node data, typically used in connections.
+ * @interface InterfaceTagNodeData
+ * @description Defines the structure for tag node data, typically used in connections.
  * @property {object[]} edges - An array of edges, where each edge contains a node and a cursor.
  * @property {InterfaceTagData} edges.node - The tag data node.
  * @property {string} edges.cursor - The cursor for this edge.
@@ -1469,7 +1528,8 @@ interface InterfaceTagNodeDataPG {
 }
 
 /**
- * Defines the structure for tag members data, typically used in connections.
+ * @interface InterfaceTagMembersData
+ * @description Defines the structure for tag members data, typically used in connections.
  * @property {object[]} edges - An array of edges, where each edge contains a node.
  * @property {object} edges.node - The member node.
  * @property {string} edges.node._id - The unique identifier of the member.
@@ -1500,7 +1560,8 @@ interface InterfaceTagMembersData {
 }
 
 /**
- * Defines the structure for a query result containing organization user tags.
+ * @interface InterfaceQueryOrganizationUserTags
+ * @description Defines the structure for a query result containing organization user tags.
  * @property {InterfaceTagNodeData} tags - The tags data.
  * @property {string} id - The organization ID.
  * @property {string} name - The organization name.
@@ -1516,7 +1577,8 @@ export interface InterfaceQueryOrganizationUserTagsPG {
 }
 
 /**
- * Defines the structure for a query result containing user tag child tags.
+ * @interface InterfaceQueryUserTagChildTags
+ * @description Defines the structure for a query result containing user tag child tags.
  * @property {string} name - The name of the user tag.
  * @property {InterfaceTagNodeData} childTags - The child tags data.
  * @property {object[]} ancestorTags - An array of ancestor tags.
@@ -1533,7 +1595,8 @@ export interface InterfaceQueryUserTagChildTags {
 }
 
 /**
- * Defines the structure for a query result containing user tags and their assigned members.
+ * @interface InterfaceQueryUserTagsAssignedMembers
+ * @description Defines the structure for a query result containing user tags and their assigned members.
  * @property {string} name - The name of the user tag.
  * @property {InterfaceTagMembersData} usersAssignedTo - The assigned members data.
  * @property {object[]} ancestorTags - An array of ancestor tags.
@@ -1550,7 +1613,8 @@ export interface InterfaceQueryUserTagsAssignedMembers {
 }
 
 /**
- * Defines the structure for a query result containing user tags and members available to assign.
+ * @interface InterfaceQueryUserTagsMembersToAssignTo
+ * @description Defines the structure for a query result containing user tags and members available to assign.
  * @property {string} name - The name of the user tag.
  * @property {InterfaceTagMembersData} usersToAssignTo - The members available to assign data.
  */
@@ -1560,7 +1624,8 @@ export interface InterfaceQueryUserTagsMembersToAssignTo {
 }
 
 /**
- * Defines the structure for an organization advertisement list item returned from a query.
+ * @interface InterfaceQueryOrganizationAdvertisementListItem
+ * @description Defines the structure for an organization advertisement list item returned from a query.
  * @property {object} advertisements - The advertisements connection object.
  * @property {object[]} advertisements.edges - An array of edges, where each edge contains an advertisement node.
  * @property {object} advertisements.edges.node - The advertisement node.
@@ -1602,7 +1667,8 @@ export interface InterfaceQueryOrganizationAdvertisementListItem {
 }
 
 /**
- * Defines the structure for a query result containing organization fund campaigns.
+ * @interface InterfaceQueryOrganizationFundCampaigns
+ * @description Defines the structure for a query result containing organization fund campaigns.
  * @property {string} id - The unique identifier of the fund.
  * @property {string} name - The name of the fund.
  * @property {boolean} isArchived - Indicates if the fund is archived.
@@ -1615,7 +1681,6 @@ export interface InterfaceQueryOrganizationAdvertisementListItem {
  * @property {string} campaigns.edges.node.endAt - The end date and time of the campaign.
  * @property {string} campaigns.edges.node.currencyCode - The currency code of the campaign.
  * @property {number} campaigns.edges.node.goalAmount - The goal amount of the campaign.
- * @property {string | null} campaigns.edges.node.pledgedAmount - The total amount pledged/raised for the campaign.
  * @property {number} campaigns.edges.node.amountRaised - The total amount raised for the campaign.
  */
 export interface InterfaceQueryOrganizationFundCampaigns {
@@ -1631,7 +1696,6 @@ export interface InterfaceQueryOrganizationFundCampaigns {
         endAt: string;
         currencyCode: string;
         goalAmount: number;
-        pledgedAmount: string | null;
         amountRaised: number;
       };
     }[];
@@ -1639,7 +1703,8 @@ export interface InterfaceQueryOrganizationFundCampaigns {
 }
 
 /**
- * Defines the structure for a user campaign.
+ * @interface InterfaceUserCampaign
+ * @description Defines the structure for a user campaign.
  * @property {string} _id - The unique identifier of the campaign.
  * @property {string} name - The name of the campaign.
  * @property {number} fundingGoal - The funding goal of the campaign.
@@ -1656,7 +1721,8 @@ export interface InterfaceUserCampaign {
   currency: string;
 }
 /**
- * Defines the structure for a query result containing fund campaigns and their pledges.
+ * @interface InterfaceQueryFundCampaignsPledges
+ * @description Defines the structure for a query result containing fund campaigns and their pledges.
  * @property {object} fundId - The fund ID object.
  * @property {string} fundId.name - The name of the fund.
  * @property {string} name - The name of the campaign.
@@ -1712,7 +1778,8 @@ export interface InterfaceQueryFundCampaignsPledges {
 }
 
 /**
- * Defines the structure for campaign information with PostgreSQL-specific fields.
+ * @interface InterfaceCampaignInfoPG
+ * @description Defines the structure for campaign information with PostgreSQL-specific fields.
  * @property {string} name - The name of the campaign.
  * @property {number} goal - The goal amount of the campaign.
  * @property {Date} startDate - The start date of the campaign.
@@ -1728,7 +1795,8 @@ export interface InterfaceCampaignInfoPG {
 }
 
 /**
- * Defines the structure for fund information.
+ * @interface InterfaceFundInfo
+ * @description Defines the structure for fund information.
  * @property {string} id - The unique identifier of the fund.
  * @property {string} name - The name of the fund.
  * @property {string} refrenceNumber - The reference number of the fund.
@@ -1780,7 +1848,8 @@ export interface InterfaceFundInfo {
   };
 }
 /**
- * Defines the structure for campaign information.
+ * @interface InterfaceCampaignInfo
+ * @description Defines the structure for campaign information.
  * @property {string} id - The unique identifier of the campaign.
  * @property {string} name - The name of the campaign.
  * @property {number} goalAmount - The goal amount of the campaign.
@@ -1801,7 +1870,8 @@ export interface InterfaceCampaignInfo {
   amountRaised?: number;
 }
 /**
- * Defines the structure for pledge information.
+ * @interface InterfacePledgeInfo
+ * @description Defines the structure for pledge information.
  * @property {string} id - The unique identifier of the pledge.
  * @property {object} [campaign] - The campaign associated with the pledge (optional).
  * @property {string} campaign.id - The unique identifier of the campaign.
@@ -1839,7 +1909,8 @@ export interface InterfacePledgeInfo {
 }
 
 /**
- * Defines the structure for pledge information with PostgreSQL-specific fields.
+ * @interface InterfacePledgeInfoPG
+ * @description Defines the structure for pledge information with PostgreSQL-specific fields.
  * @property {string} id - The unique identifier of the pledge.
  * @property {object} [campaign] - The campaign associated with the pledge (optional).
  * @property {string} campaign.id - The unique identifier of the campaign.
@@ -1868,7 +1939,8 @@ export interface InterfacePledgeInfoPG {
 }
 
 /**
- * Defines the structure for user information with PostgreSQL-specific fields.
+ * @interface InterfaceUserInfoPG
+ * @description Defines the structure for user information with PostgreSQL-specific fields.
  * @property {string} firstName - The first name of the user.
  * @property {string} lastName - The last name of the user.
  * @property {string} name - The full name of the user.
@@ -1884,7 +1956,8 @@ export interface InterfaceUserInfoPG {
 }
 
 /**
- * Extends `InterfaceBaseEvent` with additional properties for an organization event list item.
+ * @interface InterfaceQueryOrganizationEventListItem
+ * @description Extends `InterfaceBaseEvent` with additional properties for an organization event list item.
  * @augments {InterfaceBaseEvent}
  * @property {boolean} isPublic - Indicates if the event is public.
  * @property {boolean} isRegisterable - Indicates if the event is registerable.
@@ -1896,7 +1969,8 @@ export interface InterfaceQueryOrganizationEventListItem
 }
 
 /**
- * Defines the structure for a blocked page member list item returned from a query.
+ * @interface InterfaceQueryBlockPageMemberListItem
+ * @description Defines the structure for a blocked page member list item returned from a query.
  * @property {string} _id - The unique identifier of the member.
  * @property {string} firstName - The first name of the member.
  * @property {string} lastName - The last name of the member.
@@ -1915,7 +1989,8 @@ export interface InterfaceQueryBlockPageMemberListItem {
 }
 
 /**
- * Defines the structure for a user list item returned from a query.
+ * @interface InterfaceQueryUserListItem
+ * @description Defines the structure for a user list item returned from a query.
  * @property {object} user - The user object.
  * @property {string} user._id - The unique identifier of the user.
  * @property {string} user.firstName - The first name of the user.
@@ -2099,7 +2174,8 @@ export interface InterfaceQueryUserListItemForAdmin {
 }
 
 /**
- * Defines the structure for a venue list item returned from a query.
+ * @interface InterfaceQueryVenueListItem
+ * @description Defines the structure for a venue list item returned from a query.
  * @property {string} _id - The unique identifier of the venue.
  * @property {string} name - The name of the venue.
  * @property {string | null} description - The description of the venue, or null.
@@ -2121,7 +2197,8 @@ export interface InterfaceQueryVenueListItem {
 }
 
 /**
- * Defines the structure for an address.
+ * @interface InterfaceAddress
+ * @description Defines the structure for an address.
  * @property {string} city - The city.
  * @property {string} countryCode - The country code.
  * @property {string} dependentLocality - The dependent locality.
@@ -2142,7 +2219,8 @@ export interface InterfaceAddress {
   state: string;
 }
 /**
- * Defines the structure for creating a fund.
+ * @interface InterfaceCreateFund
+ * @description Defines the structure for creating a fund.
  * @property {string} fundName - The name of the fund.
  * @property {string} fundRef - The reference for the fund.
  * @property {boolean} isDefault - Indicates if the fund is the default.
@@ -2158,7 +2236,8 @@ export interface InterfaceCreateFund {
 }
 
 /**
- * Defines the structure for a post card.
+ * @interface InterfacePostCard
+ * @description Defines the structure for a post card.
  * @property {string} id - The unique identifier of the post.
  * @property {object} creator - The creator of the post.
  * @property {string} creator.firstName - The first name of the creator.
@@ -2252,7 +2331,8 @@ export interface InterfaceCommentEdge {
 }
 
 /**
- * Defines the structure for creating a pledge.
+ * @interface InterfaceCreatePledge
+ * @description Defines the structure for creating a pledge.
  * @property {InterfaceUserInfoPG[]} pledgeUsers - An array of user information for the pledgers.
  * @property {number} pledgeAmount - The amount of the pledge.
  * @property {string} pledgeCurrency - The currency of the pledge.
@@ -2264,7 +2344,8 @@ export interface InterfaceCreatePledge {
 }
 
 /**
- * Defines the structure for a membership requests list item returned from a query.
+ * @interface InterfaceQueryMembershipRequestsListItem
+ * @description Defines the structure for a membership requests list item returned from a query.
  * @property {object[]} organizations - An array of organization objects.
  * @property {string} organizations.id - The unique identifier of the organization.
  * @property {object[]} organizations.membershipRequests - An array of membership requests for the organization.
@@ -2291,7 +2372,8 @@ export interface InterfaceQueryMembershipRequestsListItem {
 }
 
 /**
- * Defines the structure for agenda item category information.
+ * @interface InterfaceAgendaItemCategoryInfo
+ * @description Defines the structure for agenda item category information.
  * @property {string} _id - The unique identifier of the agenda item category.
  * @property {string} name - The name of the agenda item category.
  * @property {string} description - The description of the agenda item category.
@@ -2312,7 +2394,8 @@ export interface InterfaceAgendaItemCategoryInfo {
 }
 
 /**
- * Defines the structure for a list of agenda item categories by organization.
+ * @interface InterfaceAgendaItemCategoryList
+ * @description Defines the structure for a list of agenda item categories by organization.
  * @property {InterfaceAgendaItemCategoryInfo[]} agendaItemCategoriesByOrganization - An array of agenda item category information.
  */
 export interface InterfaceAgendaItemCategoryList {
@@ -2320,7 +2403,8 @@ export interface InterfaceAgendaItemCategoryList {
 }
 
 /**
- * Defines the props for the AddOnSpotAttendee component.
+ * @interface InterfaceAddOnSpotAttendeeProps
+ * @description Defines the props for the AddOnSpotAttendee component.
  * @property {boolean} show - Indicates if the modal should be shown.
  * @property {function} handleClose - Callback function to close the modal.
  * @property {function} reloadMembers - Callback function to reload members.
@@ -2332,7 +2416,8 @@ export interface InterfaceAddOnSpotAttendeeProps {
 }
 
 /**
- * Defines the structure for form data.
+ * @interface InterfaceFormData
+ * @description Defines the structure for form data.
  * @property {string} firstName - The first name.
  * @property {string} lastName - The last name.
  * @property {string} email - The email address.
@@ -2348,7 +2433,8 @@ export interface InterfaceFormData {
 }
 
 /**
- * Defines the structure for agenda item information.
+ * @interface InterfaceAgendaItemInfo
+ * @description Defines the structure for agenda item information.
  * @property {string} _id - The unique identifier of the agenda item.
  * @property {string} title - The title of the agenda item.
  * @property {string} description - The description of the agenda item.
@@ -2407,7 +2493,8 @@ export interface InterfaceAgendaItemInfo {
 }
 
 /**
- * Defines the structure for a list of agenda items by event.
+ * @interface InterfaceAgendaItemList
+ * @description Defines the structure for a list of agenda items by event.
  * @property {InterfaceAgendaItemInfo[]} agendaItemByEvent - An array of agenda item information.
  */
 export interface InterfaceAgendaItemList {
@@ -2415,7 +2502,8 @@ export interface InterfaceAgendaItemList {
 }
 
 /**
- * Defines a generic map type where keys and values are strings.
+ * @interface InterfaceMapType
+ * @description Defines a generic map type where keys and values are strings.
  * @property {string} [key: string] - A string key with a string value.
  */
 export interface InterfaceMapType {
@@ -2423,7 +2511,8 @@ export interface InterfaceMapType {
 }
 
 /**
- * Defines the structure for custom field data.
+ * @interface InterfaceCustomFieldData
+ * @description Defines the structure for custom field data.
  * @property {string} [id] - The unique identifier of the custom field (optional).
  * @property {string} name - The name of the custom field.
  * @property {string} type - The type of the custom field.
@@ -2437,7 +2526,8 @@ export interface InterfaceCustomFieldData {
 }
 
 /**
- * Defines the structure for event volunteer information.
+ * @interface InterfaceEventVolunteerInfo
+ * @description Defines the structure for event volunteer information.
  * @property {string} id - The unique identifier of the event volunteer.
  * @property {boolean} hasAccepted - Indicates if the volunteer has accepted.
  * @property {number} hoursVolunteered - The number of hours volunteered.
@@ -2485,7 +2575,8 @@ export interface InterfaceEventVolunteerInfo {
 }
 
 /**
- * Defines the structure for volunteer group information.
+ * @interface InterfaceVolunteerGroupInfo
+ * @description Defines the structure for volunteer group information.
  * @property {string} id - The unique identifier of the volunteer group.
  * @property {string} name - The name of the volunteer group.
  * @property {string | null} description - The description of the volunteer group, or null.
@@ -2532,7 +2623,8 @@ export interface InterfaceVolunteerGroupInfo {
 }
 
 /**
- * Defines the structure for creating a volunteer group.
+ * @interface InterfaceCreateVolunteerGroup
+ * @description Defines the structure for creating a volunteer group.
  * @property {string} name - The name of the volunteer group.
  * @property {string | null} description - The description of the volunteer group, or null.
  * @property {InterfaceUserInfo | null} leader - The leader of the volunteer group, or null.
@@ -2548,7 +2640,8 @@ export interface InterfaceCreateVolunteerGroup {
 }
 
 /**
- * Defines the structure for user-related events with volunteer information.
+ * @interface InterfaceUserEvents
+ * @description Defines the structure for user-related events with volunteer information.
  * @property {string} id - The unique identifier of the event.
  * @property {string} name - The name of the event.
  * @property {string | null} description - The description of the event, or null.
@@ -2560,7 +2653,8 @@ export interface InterfaceCreateVolunteerGroup {
  */
 
 /**
- * Defines the structure for volunteer membership information.
+ * @interface InterfaceVolunteerMembership
+ * @description Defines the structure for volunteer membership information.
  * @property {string} _id - The unique identifier of the volunteer membership.
  * @property {string} status - The status of the volunteer membership.
  * @property {string} createdAt - The creation date of the volunteer membership record.
@@ -2615,7 +2709,8 @@ export interface InterfaceVolunteerMembership {
 }
 
 /**
- * Defines the structure for volunteer ranking information.
+ * @interface InterfaceVolunteerRank
+ * @description Defines the structure for volunteer ranking information.
  * @property {number} rank - The rank of the volunteer.
  * @property {number} hoursVolunteered - The number of hours volunteered.
  * @property {object} user - The user information of the volunteer.

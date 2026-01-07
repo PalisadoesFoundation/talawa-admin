@@ -4,7 +4,11 @@
 
 # Interface: InterfaceEventAttachmentPg
 
-Defined in: [src/utils/interfaces.ts:950](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L950)
+Defined in: [src/utils/interfaces.ts:982](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L982)
+
+InterfaceEventAttachmentPg
+
+## Description
 
 Defines the structure for an event attachment with PostgreSQL-specific fields.
 
@@ -14,7 +18,7 @@ Defines the structure for an event attachment with PostgreSQL-specific fields.
 
 > **mimeType**: `string`
 
-Defined in: [src/utils/interfaces.ts:951](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L951)
+Defined in: [src/utils/interfaces.ts:983](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L983)
 
 The MIME type of the attachment.
 
@@ -24,6 +28,6 @@ The MIME type of the attachment.
 
 > **url**: `string`
 
-Defined in: [src/utils/interfaces.ts:952](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L952)
+Defined in: [src/utils/interfaces.ts:984](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L984)
 
 The URL of the attachment.

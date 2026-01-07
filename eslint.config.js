@@ -64,6 +64,7 @@ export default [
       vitest,
       import: imports,
       prettier,
+      tsdoc,
     },
     settings: {
       react: {
@@ -73,6 +74,9 @@ export default [
     rules: {
       ...js.configs.recommended.rules,
       ...ts.configs.recommended.rules,
+
+      'tsdoc/syntax': 'error',
+
       '@typescript-eslint/no-require-imports': 'error',
       'react/destructuring-assignment': 'error',
       'react/no-multi-comp': ['error', { ignoreStateless: false }],
@@ -80,7 +84,15 @@ export default [
       'import/no-duplicates': 'error',
       'no-undef': 'off',
       '@typescript-eslint/ban-ts-comment': 'error',
-      '@typescript-eslint/no-unused-vars': 'error',
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          ignoreRestSiblings: true, // Allow unused vars when using rest properties for filtering
+          varsIgnorePattern: '^_', // Allow unused vars that start with underscore
+          argsIgnorePattern: '^_', // Allow unused function args that start with underscore
+        },
+      ],
       '@typescript-eslint/no-explicit-any': 'error',
       '@typescript-eslint/no-non-null-assertion': 'error',
       '@typescript-eslint/consistent-type-assertions': 'error',
@@ -135,7 +147,7 @@ export default [
         // Safe pattern: const token = localStorage.getItem('token'); { authorization: token }
         {
           selector:
-            "Property[key.name='authorization'][value.type='CallExpression'][value.callee.type='MemberExpression'][value.callee.object.name='localStorage'][value.callee.property.name='getItem'][value.arguments.0.value='token']",
+            "Property[key.name='authorization'][value.type='CallExpression'][value.callee.type='MemberExpression'][value.callee.property.name='getItem'][value.arguments.0.value='token']",
           message:
             "Security Risk: Do not use getItem('token') directly inside authorization headers. Extract it to a variable first to handle null values.",
         },
@@ -164,37 +176,107 @@ export default [
        *
        * Note: Approximately 20+ files currently use direct imports and will require
        * migration in a future ticket. This rule prevents new violations.
+       *
+       * Also enforces usage of standardized date picker wrappers
+       * Issue #6146: https://github.com/PalisadoesFoundation/talawa-admin/issues/6146
        */
       'no-restricted-imports': [
         'error',
         {
-          name: '@mui/x-data-grid',
-          message:
-            'Direct imports from @mui/x-data-grid are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
-        },
-        {
-          name: '@mui/x-data-grid-pro',
-          message:
-            'Direct imports from @mui/x-data-grid-pro are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
+          paths: [
+            {
+              name: '@mui/x-data-grid',
+              message:
+                'Direct imports from @mui/x-data-grid are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
+            },
+            {
+              name: '@mui/x-data-grid-pro',
+              message:
+                'Direct imports from @mui/x-data-grid-pro are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
+            },
+            {
+              name: 'react-bootstrap',
+              importNames: ['Spinner'],
+              message:
+                'Do not import Spinner from react-bootstrap. Use the shared LoadingState component instead.',
+            },
+            {
+              name: 'react-bootstrap',
+              importNames: ['Modal'],
+              message:
+                'Do not import Modal directly. Use the shared BaseModal component instead.',
+            },
+            {
+              name: '@mui/x-date-pickers',
+              message:
+                'Direct imports from @mui/x-date-pickers are not allowed. Please use the wrappers (DateRangePicker, DatePicker, TimePicker) from src/shared-components/ instead. See issue #6146 for details.',
+            },
+          ],
         },
       ],
     },
   },
   /**
-   * Exemption: DataGridWrapper component files
+   * Exemption: Wrapper component files
    *
-   * DataGridWrapper files need direct MUI DataGrid access for wrapper implementation.
-   * These files are the only ones allowed to import directly from @mui/x-data-grid.
+   * These wrapper components need direct access to their underlying libraries:
+   * - DataGridWrapper: Direct MUI DataGrid access
+   * - LoadingState: Direct Spinner access from react-bootstrap
+   * - BaseModal: Direct react-bootstrap Modal access
+   * - DatePicker/TimePicker/DateRangePicker: Direct @mui/x-date-pickers access
    */
   {
     files: [
-      'src/shared-components/DataGridWrapper/**/*.ts',
-      'src/shared-components/DataGridWrapper/**/*.tsx',
-      'src/types/DataGridWrapper/**/*.ts',
-      'src/types/DataGridWrapper/**/*.tsx',
+      'src/shared-components/DataGridWrapper/**/*.{ts,tsx}',
+      'src/types/DataGridWrapper/**/*.{ts,tsx}',
+      'src/shared-components/LoadingState/**/*.{ts,tsx}',
+      'src/types/shared-components/LoadingState/**/*.{ts,tsx}',
+      'src/components/Loader/**/*.{ts,tsx}',
+      'src/shared-components/BaseModal/**/*.{ts,tsx}',
+      'src/types/shared-components/BaseModal/**/*.{ts,tsx}',
     ],
     rules: {
       'no-restricted-imports': 'off',
+    },
+  },
+  /**
+   * Exemption: Date picker wrapper components
+   *
+   * These wrapper components need direct access to @mui/x-date-pickers
+   * to provide standardized date/time picker interfaces for the application.
+   *
+   * Note: This exemption is specific - it only allows @mui/x-date-pickers imports.
+   * Other restricted imports (like react-bootstrap Modal) are still blocked.
+   */
+  {
+    files: [
+      'src/shared-components/DateRangePicker/**/*.{ts,tsx}',
+      'src/types/shared-components/DateRangePicker/**/*.{ts,tsx}',
+      'src/shared-components/DatePicker/**/*.{ts,tsx}',
+      'src/shared-components/TimePicker/**/*.{ts,tsx}',
+      'src/index.tsx',
+    ],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            // Still enforce other restrictions, only allow @mui/x-date-pickers
+            {
+              name: 'react-bootstrap',
+              importNames: ['Modal'],
+              message:
+                'Do not import Modal directly. Use the shared BaseModal component instead.',
+            },
+            {
+              name: 'react-bootstrap',
+              importNames: ['Spinner'],
+              message:
+                'Do not import Spinner from react-bootstrap. Use the shared LoadingState component instead.',
+            },
+          ],
+        },
+      ],
     },
   },
   {
@@ -289,15 +371,55 @@ export default [
       'prettier/prettier': 'error',
     },
   },
-  // Test file-specific configuration for mock isolation
+  /**
+   * Exemption: interfaces.ts file
+   *
+   * This file contains JSDoc-style comments that predate TSDoc linting.
+   * The file is large and contains many interface definitions with JSDoc syntax.
+   * TSDoc linting is disabled for this file to avoid breaking existing documentation.
+   */
+  {
+    files: ['src/utils/interfaces.ts'],
+    rules: {
+      'tsdoc/syntax': 'off',
+    },
+  },
+  /**
+   * Test file-specific configuration
+   *
+   * This config MUST come after all other configs to override the main
+   * no-restricted-imports rule and allow @mui/x-date-pickers in test files
+   * (needed for testing date picker components).
+   * Only Modal and Spinner remain restricted in test files.
+   */
   {
     files: ['**/*.spec.ts', '**/*.spec.tsx', '**/*.test.ts', '**/*.test.tsx'],
     plugins: {
       'vitest-isolation': vitestIsolation,
-      tsdoc,
     },
     rules: {
       'vitest-isolation/require-aftereach-cleanup': 'error',
+      // Allow @mui/x-date-pickers in test files for testing date picker components
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'react-bootstrap',
+              importNames: ['Modal'],
+              message:
+                'Do not import Modal directly. Use the shared BaseModal component instead.',
+            },
+            {
+              name: 'react-bootstrap',
+              importNames: ['Spinner'],
+              message:
+                'Do not import Spinner from react-bootstrap. Use the shared LoadingState component instead.',
+            },
+            // Note: @mui/x-date-pickers is allowed in test files for testing purposes
+          ],
+        },
+      ],
       'no-restricted-syntax': [
         'error',
         {
@@ -312,7 +434,20 @@ export default [
             'Avoid hardcoded date strings like "31 December 2025". Use dynamic dates with dayjs instead.',
         },
       ],
-      'tsdoc/syntax': 'error',
+    },
+  },
+  /**
+   * Exemption: interfaces.ts file
+   *
+   * This file contains JSDoc-style comments that predate TSDoc linting.
+   * The file is large and contains many interface definitions with JSDoc syntax.
+   * TSDoc linting is disabled for this file to avoid breaking existing documentation.
+   * This must come last to override all other TypeScript configs.
+   */
+  {
+    files: ['src/utils/interfaces.ts'],
+    rules: {
+      'tsdoc/syntax': 'off',
     },
   },
 ];

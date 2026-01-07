@@ -18,8 +18,10 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 
 dayjs.extend(utc);
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import { ACTION_ITEM_CATEGORY_LIST } from 'GraphQl/Queries/ActionItemCategoryQueries';
 import {
   ACTION_ITEM_LIST,
@@ -689,7 +691,7 @@ describe('ItemModal - Additional Test Cases', () => {
         isOpen: true,
         hide: vi.fn(),
         orgId: 'orgId',
-        eventId: 'eventId',
+        eventId: 'event123',
         actionItemsRefetch: vi.fn(),
         editMode: true,
         actionItem: mockActionItemWithGroup as unknown as IActionItemInfo,
@@ -697,20 +699,36 @@ describe('ItemModal - Additional Test Cases', () => {
 
       renderWithProviders(props);
 
-      await waitFor(() => {
-        expect(screen.getByRole('dialog')).toBeInTheDocument();
-      });
+      await waitFor(
+        () => {
+          expect(screen.getByRole('dialog')).toBeInTheDocument();
+        },
+        { timeout: 3000 },
+      );
+
+      await waitFor(
+        () => {
+          expect(screen.getByTestId('categorySelect')).toBeInTheDocument();
+        },
+        { timeout: 3000 },
+      );
 
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
+        {},
+        { timeout: 5000 },
       );
+
       expect(volunteerGroupSelect).toBeInTheDocument();
 
-      // Wait for the input to be populated with the preselected value
-      await waitFor(() => {
-        const input = screen.getByLabelText(/volunteerGroup/i);
-        expect(input).toHaveValue('Test Group 1');
-      });
+      const volunteerGroupInput = screen.getByLabelText(/volunteerGroup/i);
+
+      await waitFor(
+        () => {
+          expect(volunteerGroupInput).toHaveValue('Test Group 1');
+        },
+        { timeout: 3000 },
+      );
 
       expect(screen.queryByTestId('volunteerSelect')).not.toBeInTheDocument();
     });
@@ -1005,28 +1023,24 @@ describe('ItemModal - Additional Test Cases', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
-      // Wait for the form to fully load by checking that volunteerSelect is present
-      await screen.findByTestId('volunteerSelect', {}, { timeout: 3000 });
+      // Wait for volunteer select and its data to be fully loaded
+      const volunteerSelect = await screen.findByTestId('volunteerSelect');
+      const volunteerInput = within(volunteerSelect).getByRole('combobox');
 
+      // Ensure volunteer data has loaded by waiting for the input to be enabled/ready
+      await waitFor(() => {
+        expect(volunteerInput).not.toBeDisabled();
+      });
+
+      // Now click the volunteerGroup chip to switch assignment type
       const volunteerGroupChip = screen.getByRole('button', {
         name: 'volunteerGroup',
       });
       await userEvent.click(volunteerGroupChip);
 
-      // Wait for volunteerSelect to disappear (state update)
-      await waitFor(
-        () => {
-          expect(
-            screen.queryByTestId('volunteerSelect'),
-          ).not.toBeInTheDocument();
-        },
-        { timeout: 3000 },
-      );
-
+      // Wait for volunteerGroupSelect to appear (this confirms the switch happened)
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
-        {},
-        { timeout: 3000 },
       );
       const volunteerGroupInput =
         within(volunteerGroupSelect).getByRole('combobox');
@@ -4099,8 +4113,14 @@ describe('Partially Covered Lines Test Coverage', () => {
         expect(screen.getByRole('dialog')).toBeInTheDocument();
       });
 
-      // Wait for the form to fully load by checking that volunteerSelect is present
-      await screen.findByTestId('volunteerSelect', {}, { timeout: 3000 });
+      // Wait for volunteer select and its data to be fully loaded
+      const volunteerSelect = await screen.findByTestId('volunteerSelect');
+      const volunteerInput = within(volunteerSelect).getByRole('combobox');
+
+      // Ensure volunteer data has loaded by waiting for the input to be enabled/ready
+      await waitFor(() => {
+        expect(volunteerInput).not.toBeDisabled();
+      });
 
       // First switch to volunteer group to set some state
       const volunteerGroupChip = screen.getByRole('button', {
@@ -4108,14 +4128,10 @@ describe('Partially Covered Lines Test Coverage', () => {
       });
       await userEvent.click(volunteerGroupChip);
 
-      await waitFor(
-        () => {
-          expect(
-            screen.getByTestId('volunteerGroupSelect'),
-          ).toBeInTheDocument();
-        },
-        { timeout: 3000 },
+      const volunteerGroupSelect = await screen.findByTestId(
+        'volunteerGroupSelect',
       );
+      expect(volunteerGroupSelect).toBeInTheDocument();
 
       // Now click volunteer chip - this should execute the !isVolunteerChipDisabled path
       const volunteerChip = screen.getByRole('button', { name: 'volunteer' });

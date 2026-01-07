@@ -18,7 +18,8 @@
     "rank": "Rango",
     "volunteer": "Voluntario",
     "email": "Correo electrónico",
-    "hoursVolunteered": "Horas Voluntarias"
+    "hoursVolunteered": "Horas Voluntarias",
+    "volunteerRankings": "Clasificación de Voluntarios"
   },
   "loginPage": {
     "title": "Administrador Talawa",
@@ -285,6 +286,7 @@
     "loadingUsers": "Cargando usuarios ...",
     "noUserFound": "No se encontró ningún usuario.",
     "errorLoadingUsers": "Se produjo un error al cargar los usuarios",
+    "profilePageComingSoon": "Página de perfil próximamente!",
     "sort": "Ordenar",
     "Oldest": "Más Antiguas Primero",
     "Newest": "Más Recientes Primero",
@@ -385,6 +387,7 @@
     "user": "Usuario",
     "actions": "Acciones",
     "profile": "Perfil",
+    "joined": "Unido",
     "notFound": "No se encontraron miembros",
     "createUser": "Crear usuario"
   },
@@ -1695,7 +1698,8 @@
     "status": "Estado",
     "categoryDeleted": "Categoría de elemento de acción eliminada con éxito",
     "deleteCategory": "Eliminar categoría",
-    "deleteCategoryMsg": "¿Está seguro de que desea eliminar esta categoría de elemento de acción?"
+    "deleteCategoryMsg": "¿Está seguro de que desea eliminar esta categoría de elemento de acción?",
+    "noDescriptionProvided": "No se ha proporcionado descripción"
   },
   "organizationVenues": {
     "title": "Lugares",
@@ -1725,7 +1729,8 @@
     "searchBy": "Buscar por",
     "name": "Nombre",
     "desc": "Descripción",
-    "venueImagePreview": "Vista previa de la imagen del lugar"
+    "venueImagePreview": "Vista previa de la imagen del lugar",
+    "sortVenues": "Ordenar lugares"
   },
   "addMember": {
     "title": "Agregar miembro",

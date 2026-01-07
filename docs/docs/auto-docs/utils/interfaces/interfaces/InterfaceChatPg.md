@@ -4,7 +4,11 @@
 
 # Interface: InterfaceChatPg
 
-Defined in: [src/utils/interfaces.ts:779](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L779)
+Defined in: [src/utils/interfaces.ts:807](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L807)
+
+InterfaceChatPg
+
+## Description
 
 Defines the structure for a chat with PostgreSQL-specific fields.
 
@@ -14,7 +18,7 @@ Defines the structure for a chat with PostgreSQL-specific fields.
 
 > **avatarMimeType**: `string`
 
-Defined in: [src/utils/interfaces.ts:783](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L783)
+Defined in: [src/utils/interfaces.ts:811](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L811)
 
 The MIME type of the chat's avatar.
 
@@ -24,7 +28,7 @@ The MIME type of the chat's avatar.
 
 > **avatarURL**: `string`
 
-Defined in: [src/utils/interfaces.ts:784](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L784)
+Defined in: [src/utils/interfaces.ts:812](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L812)
 
 The URL of the chat's avatar.
 
@@ -34,7 +38,7 @@ The URL of the chat's avatar.
 
 > **createdAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:785](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L785)
+Defined in: [src/utils/interfaces.ts:813](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L813)
 
 The creation date of the chat record.
 
@@ -44,7 +48,7 @@ The creation date of the chat record.
 
 > **creator**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:787](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L787)
+Defined in: [src/utils/interfaces.ts:815](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L815)
 
 The user who created this chat.
 
@@ -54,7 +58,7 @@ The user who created this chat.
 
 > **description**: `string`
 
-Defined in: [src/utils/interfaces.ts:782](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L782)
+Defined in: [src/utils/interfaces.ts:810](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L810)
 
 The description of the chat.
 
@@ -64,7 +68,7 @@ The description of the chat.
 
 > **id**: `ID`
 
-Defined in: [src/utils/interfaces.ts:780](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L780)
+Defined in: [src/utils/interfaces.ts:808](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L808)
 
 The unique identifier of the chat.
 
@@ -74,7 +78,7 @@ The unique identifier of the chat.
 
 > **name**: `string`
 
-Defined in: [src/utils/interfaces.ts:781](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L781)
+Defined in: [src/utils/interfaces.ts:809](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L809)
 
 The name of the chat.
 
@@ -84,7 +88,7 @@ The name of the chat.
 
 > **organization**: [`InterfaceOrganizationPg`](InterfaceOrganizationPg.md)
 
-Defined in: [src/utils/interfaces.ts:789](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L789)
+Defined in: [src/utils/interfaces.ts:817](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L817)
 
 The organization associated with this chat.
 
@@ -94,7 +98,7 @@ The organization associated with this chat.
 
 > **updatedAt**: `string`
 
-Defined in: [src/utils/interfaces.ts:786](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L786)
+Defined in: [src/utils/interfaces.ts:814](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L814)
 
 The last update date of the chat record.
 
@@ -104,6 +108,6 @@ The last update date of the chat record.
 
 > **updater**: [`InterfaceUserPg`](InterfaceUserPg.md)
 
-Defined in: [src/utils/interfaces.ts:788](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L788)
+Defined in: [src/utils/interfaces.ts:816](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/utils/interfaces.ts#L816)
 
 The user who last updated this chat.
