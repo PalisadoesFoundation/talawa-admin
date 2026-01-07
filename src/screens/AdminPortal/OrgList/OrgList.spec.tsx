@@ -549,7 +549,7 @@ const mockConfigurations = {
           countryCode: 'af',
           postalCode: '12345',
           state: 'Test State',
-          avatar: null,
+          // avatar removed to match production code variables
         },
       },
       result: {
@@ -1269,7 +1269,7 @@ describe('Advanced Component Functionality Tests', () => {
             countryCode: 'af',
             postalCode: '12345',
             state: 'Test State',
-            avatar: null,
+            // avatar removed
           },
         },
         error: new Error('Failed to create organization'),
@@ -1386,35 +1386,43 @@ describe('Advanced Component Functionality Tests', () => {
     setItem('role', 'admin');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
-    render(
-      <MockedProvider mocks={MOCKS_ADMIN}>
-        <BrowserRouter>
-          <Provider store={store}>
-            <I18nextProvider i18n={i18nForTest}>
-              <ThemeProvider theme={createTheme()}>
-                <OrgList />
-              </ThemeProvider>
-            </I18nextProvider>
-          </Provider>
-        </BrowserRouter>
-      </MockedProvider>,
-    );
-
+    const mocks = createOrgMock(mockOrgData.multipleOrgs);
+    renderWithMocks(mocks);
     await wait();
 
+    // Verify organizations are loaded by checking for one of them
+    const orgs = screen.queryAllByTestId('organization-card-mock');
+    expect(orgs.length).toBeGreaterThan(0);
+
+    // Ensure no search filter is active
+    const searchInput = screen.queryByTestId('searchInput');
+    if (searchInput) {
+      await userEvent.clear(searchInput);
+      await wait(100);
+    }
+
+    // Find and open sort dropdown
     const sortDropdown = screen.getByTestId('sortOrgs');
     expect(sortDropdown).toBeInTheDocument();
-
-    // Click to open dropdown
     await userEvent.click(sortDropdown);
+    await wait(100);
 
-    // Select Earliest option - use the exact test ID from the component
+    // Select "Earliest" option
     const earliestOption = screen.getByTestId('Earliest');
+    expect(earliestOption).toBeInTheDocument();
     await userEvent.click(earliestOption);
+    await wait(300);
 
-    await wait();
+    const sortedOrgs = [...mockOrgData.multipleOrgs].sort(
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+    );
+    const expectedNames = sortedOrgs.slice(0, 5).map((org) => org.name);
 
-    // Verify sorting changed
+    const renderedCards = screen.getAllByTestId('organization-card-mock');
+    const renderedNames = renderedCards.map((card) => card.textContent);
+
+    expect(renderedNames).toEqual(expectedNames);
     expect(sortDropdown).toHaveTextContent('Sort');
   });
 
@@ -1461,13 +1469,13 @@ describe('Advanced Component Functionality Tests', () => {
 
     const sortDropdown = screen.getByTestId('sortOrgs');
 
-    // Test Latest sorting (dateB - dateA path)
+    // Test Latest sorting
     await userEvent.click(sortDropdown);
     const latestOption = screen.getByTestId('Latest');
     await userEvent.click(latestOption);
     await wait(200);
 
-    // Test Earliest sorting (dateA - dateB path)
+    // Test Earliest sorting
     await userEvent.click(sortDropdown);
     const earliestOption = screen.getByTestId('Earliest');
     await userEvent.click(earliestOption);
@@ -1496,7 +1504,7 @@ describe('Advanced Component Functionality Tests', () => {
 
     await wait();
 
-    // Find all select elements (pagination uses MUI Select)
+    // Find all select elements
     const selects = screen.queryAllByRole('combobox');
 
     if (selects.length > 0) {
@@ -1505,8 +1513,6 @@ describe('Advanced Component Functionality Tests', () => {
       fireEvent.mouseDown(paginationSelect);
       await wait(100);
     }
-
-    // Test passes - we've exercised the pagination component
   });
 
   test('Testing error handler clears localStorage and redirects', async () => {
@@ -1528,7 +1534,7 @@ describe('Advanced Component Functionality Tests', () => {
       writable: true,
     });
 
-    // Create mocks with errors to trigger the error handler
+    // Create mocks with errors
     const errorMocks = [
       {
         request: {
@@ -1584,12 +1590,7 @@ describe('Advanced Component Functionality Tests', () => {
       </MockedProvider>,
     );
 
-    // Wait for error to be processed
     await wait(500);
-
-    // The error handler should have been called
-    // Note: Depending on error handler implementation, these may or may not be called
-    // This test ensures the error path is covered
 
     // Restore original window.location
     Object.defineProperty(
@@ -1609,7 +1610,6 @@ describe('Advanced Component Functionality Tests', () => {
     setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
-    // Use data with enough items to enable pagination
     const paginationMocks = [
       {
         request: {
@@ -1681,11 +1681,9 @@ describe('Advanced Component Functionality Tests', () => {
 
     await wait();
 
-    // Get pagination controls
     const paginationElement = screen.getByTestId('table-pagination');
     expect(paginationElement).toBeInTheDocument();
 
-    // Verify pagination button navigation works correctly
     const buttons = screen.getAllByRole('button');
     const nextButton = buttons.find((btn) =>
       btn.getAttribute('aria-label')?.toLowerCase().includes('next'),
@@ -1696,7 +1694,6 @@ describe('Advanced Component Functionality Tests', () => {
       await wait(200);
     }
 
-    // Also test previous button
     const prevButton = buttons.find((btn) =>
       btn.getAttribute('aria-label')?.toLowerCase().includes('previous'),
     );
@@ -1778,7 +1775,7 @@ describe('Advanced Component Functionality Tests', () => {
             countryCode: 'af',
             postalCode: '12345',
             state: 'Test State',
-            avatar: null,
+            // avatar removed
           },
         },
         result: {
@@ -1825,13 +1822,11 @@ describe('Advanced Component Functionality Tests', () => {
 
     await wait();
 
-    // Open create org modal
     const createBtn = screen.getByTestId('createOrganizationBtn');
     await userEvent.click(createBtn);
 
     await wait();
 
-    // Fill the form with values matching our mock
     await userEvent.type(
       screen.getByTestId('modalOrganizationName'),
       'New Test Org',
@@ -1861,64 +1856,49 @@ describe('Advanced Component Functionality Tests', () => {
       'Afghanistan',
     );
 
-    // Submit the form to verify organization creation flow
     const submitBtn = screen.getByTestId('submitOrganizationForm');
     await userEvent.click(submitBtn);
 
-    // Wait for the modal to close, indicating mutations completed
     await waitFor(() => {
       expect(
         screen.queryByTestId('submitOrganizationForm'),
       ).not.toBeInTheDocument();
     });
-
-    // Verify organization creation flow completed successfully:
-    // - Membership creation mutation executed
-    // - Success condition checked and toast displayed
-    // - Organization list refreshed
-    // - Modal state reset
-    // - Form state cleared
   });
 
   test('Testing Earliest sorting functionality', async () => {
     setItem('id', '123');
-    setItem('SuperAdmin', false); // Set to false so it uses multipleOrgs data
-    setItem('role', 'admin'); // Use 'admin' not 'administrator'
+    setItem('SuperAdmin', false);
+    setItem('role', 'admin');
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
 
     const mocks = createOrgMock(mockOrgData.multipleOrgs);
     renderWithMocks(mocks);
     await wait();
 
-    // Verify organizations are loaded by checking for one of them
     const orgs = screen.queryAllByTestId('organization-card-mock');
     expect(orgs.length).toBeGreaterThan(0);
 
-    // Ensure no search filter is active - clear search input if it exists
     const searchInput = screen.queryByTestId('searchInput');
     if (searchInput) {
       await userEvent.clear(searchInput);
       await wait(100);
     }
 
-    // Find and open sort dropdown
     const sortDropdown = screen.getByTestId('sortOrgs');
     expect(sortDropdown).toBeInTheDocument();
     await userEvent.click(sortDropdown);
     await wait(100);
 
-    // Select "Earliest" option to verify ascending date sort works correctly
     const earliestOption = screen.getByTestId('Earliest');
     expect(earliestOption).toBeInTheDocument();
     await userEvent.click(earliestOption);
-    await wait(300); // Give more time for re-render
+    await wait(300);
 
-    // Verify sorting was applied by checking the order of rendered cards
     const sortedOrgs = [...mockOrgData.multipleOrgs].sort(
       (a, b) =>
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
     );
-    // Default pagination is 5, so we expect only the first 5 sorted items
     const expectedNames = sortedOrgs.slice(0, 5).map((org) => org.name);
 
     const renderedCards = screen.getAllByTestId('organization-card-mock');
@@ -1931,10 +1911,9 @@ describe('Advanced Component Functionality Tests', () => {
   test('Testing closeDialogModal functionality', async () => {
     setItem('id', '123');
     setItem('SuperAdmin', false);
-    setItem('role', 'administrator'); // Must be 'administrator' to see create button
+    setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'Dogs Care', _id: 'xyz', image: '' }]);
 
-    // Create complete mocks including mutations
     const completeMocks = [
       ...createOrgMock(mockOrgData.singleOrg),
       {
@@ -1949,7 +1928,7 @@ describe('Advanced Component Functionality Tests', () => {
             countryCode: 'us',
             postalCode: '12345',
             state: 'Test State',
-            avatar: null,
+            // avatar removed
           },
         },
         result: {
@@ -1983,12 +1962,10 @@ describe('Advanced Component Functionality Tests', () => {
     renderWithMocks(completeMocks);
     await wait();
 
-    // Open create org modal
     const createBtn = screen.getByTestId('createOrganizationBtn');
     await userEvent.click(createBtn);
     await wait();
 
-    // Fill and submit form with exact values matching our mock
     await userEvent.type(
       screen.getByTestId('modalOrganizationName'),
       'New Test Organization',
@@ -2021,7 +1998,6 @@ describe('Advanced Component Functionality Tests', () => {
     const submitBtn = screen.getByTestId('submitOrganizationForm');
     await userEvent.click(submitBtn);
 
-    // Wait for the plugin modal to appear and verify closeDialogModal is triggered
     try {
       const enableEverythingBtn = await screen.findByTestId(
         'enableEverythingForm',
@@ -2031,17 +2007,16 @@ describe('Advanced Component Functionality Tests', () => {
       await userEvent.click(enableEverythingBtn);
       await wait(200);
     } catch {
-      // If button doesn't appear, test still passes
+      // Button not found
     }
   });
 
   test('Testing toggleDialogModal functionality', async () => {
     setItem('id', '123');
     setItem('SuperAdmin', false);
-    setItem('role', 'administrator'); // Must be 'administrator' to see create button
+    setItem('role', 'administrator');
     setItem('AdminFor', [{ name: 'Dogs Care', _id: 'xyz', image: '' }]);
 
-    // Create complete mocks including mutations
     const completeMocks = [
       ...createOrgMock(mockOrgData.singleOrg),
       {
@@ -2056,7 +2031,7 @@ describe('Advanced Component Functionality Tests', () => {
             countryCode: 'us',
             postalCode: '54321',
             state: 'Toggle State',
-            avatar: null,
+            // avatar removed
           },
         },
         result: {
@@ -2090,12 +2065,10 @@ describe('Advanced Component Functionality Tests', () => {
     renderWithMocks(completeMocks);
     await wait();
 
-    // Create an organization to trigger the plugin modal
     const createBtn = screen.getByTestId('createOrganizationBtn');
     await userEvent.click(createBtn);
     await wait();
 
-    // Fill and submit form with exact values matching our mock
     await userEvent.type(
       screen.getByTestId('modalOrganizationName'),
       'Toggle Test Org',
@@ -2128,9 +2101,7 @@ describe('Advanced Component Functionality Tests', () => {
     const submitBtn = screen.getByTestId('submitOrganizationForm');
     await userEvent.click(submitBtn);
 
-    // Wait for plugin modal to appear, then verify toggleDialogModal behavior when closing
     try {
-      // Wait for the modal to appear
       await waitFor(
         () => {
           const enableBtn = screen.queryByTestId('enableEverythingForm');
@@ -2139,14 +2110,13 @@ describe('Advanced Component Functionality Tests', () => {
         { timeout: 3000 },
       );
 
-      // Find close button or backdrop to trigger onHide (toggleDialogModal)
       const closeButtons = screen.queryAllByLabelText(/close/i);
       if (closeButtons.length > 0) {
         await userEvent.click(closeButtons[closeButtons.length - 1]);
         await wait(200);
       }
     } catch {
-      // If modal doesn't appear, test still passes
+      // Modal not found
     }
   });
 
@@ -2154,7 +2124,6 @@ describe('Advanced Component Functionality Tests', () => {
     setItem('id', '123');
     setItem('role', 'administrator');
 
-    // Mock with null data response
     const mockWithNullData = [
       ...MOCKS,
       {
@@ -2180,28 +2149,11 @@ describe('Advanced Component Functionality Tests', () => {
             countryCode: 'af',
             postalCode: '12345',
             state: 'Test State',
-            avatar: null,
+            // avatar removed
           },
         },
         result: {
           data: null,
-        },
-      },
-      {
-        request: {
-          query: CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
-          variables: {
-            memberId: '123',
-            organizationId: undefined,
-            role: 'administrator',
-          },
-        },
-        result: {
-          data: {
-            createOrganizationMembership: {
-              id: 'membership-id',
-            },
-          },
         },
       },
     ];
@@ -2222,10 +2174,9 @@ describe('Advanced Component Functionality Tests', () => {
 
     await wait();
 
-    // Open organization creation modal
-    await userEvent.click(screen.getByTestId('createOrganizationBtn'));
+    const createBtn = screen.getByTestId('createOrganizationBtn');
+    await userEvent.click(createBtn);
 
-    // Fill form
     await userEvent.type(
       screen.getByTestId('modalOrganizationName'),
       'Test Organization',
@@ -2255,16 +2206,12 @@ describe('Advanced Component Functionality Tests', () => {
       'Afghanistan',
     );
 
-    // Submit form
-    await userEvent.click(screen.getByTestId('submitOrganizationForm'));
+    const submitBtn = screen.getByTestId('submitOrganizationForm');
+    await userEvent.click(submitBtn);
 
-    // Wait for form submission to complete
     await wait();
 
-    // Verify that toast.success was NOT called since data is null
     expect(mockToast.success).not.toHaveBeenCalled();
-
-    // Verify that the modal should still be open since the success path wasn't taken
     expect(screen.getByTestId('modalOrganizationHeader')).toBeInTheDocument();
   });
 
@@ -2308,12 +2255,10 @@ describe('Advanced Component Functionality Tests', () => {
     setItem('id', '123');
     setItem('SuperAdmin', true);
     setItem('AdminFor', [{ name: 'adi', _id: '1234', image: '' }]);
-    // Explicitly do NOT set token to test the else branch
 
     renderWithProviders();
     await wait();
 
-    // Verify component renders without authorization header
     expect(screen.getByTestId('searchInput')).toBeInTheDocument();
   });
 });

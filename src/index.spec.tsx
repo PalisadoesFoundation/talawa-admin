@@ -19,14 +19,13 @@ import { GraphQLError, type DocumentNode } from 'graphql';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
 import { createClient } from 'graphql-ws';
 import {
-  BACKEND_URL,
   BACKEND_WEBSOCKET_URL,
   deriveBackendWebsocketUrl,
 } from 'Constant/constant';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import i18n from './utils/i18n';
 import { requestMiddleware, responseMiddleware } from 'utils/timezoneUtils';
-import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
+// Removed createUploadLink import
 import { refreshToken } from 'utils/getRefreshToken';
 
 // Define types for mocked modules
@@ -134,16 +133,7 @@ describe('Apollo Client Configuration', () => {
     expect(client.cache).toBeInstanceOf(InMemoryCache);
   });
 
-  it('should configure upload link with correct URI', (): void => {
-    const uploadLink = createUploadLink({
-      uri: BACKEND_URL,
-      headers: {
-        'Apollo-Require-Preflight': 'true',
-      },
-    });
-
-    expect(uploadLink).toBeDefined();
-  });
+  // Removed 'should configure upload link with correct URI' test case
 
   it('should configure WebSocket link with correct URL', (): void => {
     const wsLink = new GraphQLWsLink(

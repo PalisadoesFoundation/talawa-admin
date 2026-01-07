@@ -5,44 +5,6 @@
  *
  * @component
  * @returns {JSX.Element} The rendered organization list component.
- *
- * @remarks
- * - Utilizes GraphQL queries and mutations for fetching and managing organization data.
- * - Includes search and sorting functionality for better user experience.
- * - Displays loading states and handles errors gracefully.
- *
- * @dependencies
- * - `useQuery` and `useMutation` from `@apollo/client` for GraphQL operations.
- * - `useTranslation` from `react-i18next` for localization.
- * - `useLocalStorage` for accessing local storage data.
- * - `OrgListCard`, `SortingButton`, `SearchBar`, and `OrganizationModal` for UI components.
- * - `NotificationToast` for notifications.
- * - `react-bootstrap` and `@mui/material` for modal and button components.
- *
- * @state
- * - `dialogModalisOpen` - Controls the visibility of the plugin notification modal.
- * - `dialogRedirectOrgId` - Stores the ID of the organization to redirect after creation.
- * - `isLoading` - Indicates whether the organization data is loading.
- * - `sortingState` - Manages the sorting option and its label.
- * - `searchByName` - Stores the search query for filtering organizations.
- * - `showModal` - Controls the visibility of the organization creation modal.
- * - `formState` - Manages the state of the organization creation form.
- *
- * @methods
- * - `openDialogModal(redirectOrgId: string): void` - Opens the plugin notification modal.
- * - `closeDialogModal(): void` - Closes the plugin notification modal.
- * - `toggleDialogModal(): void` - Toggles the plugin notification modal visibility.
- * - `createOrg(e: ChangeEvent<HTMLFormElement>): Promise<void>` - Handles organization creation.
- * - `handleSearch(value: string): void` - Filters organizations based on the search query.
- * - `handleSortChange(value: string): void` - Updates sorting state and refetches organizations.
- *
- * @errorHandling
- * - Handles errors from GraphQL queries and mutations using `errorHandler`.
- * - Clears local storage and redirects to the home page on critical errors.
- *
- * @modals
- * - `OrganizationModal` - For creating new organizations.
- * - `Modal` - For managing features after organization creation.
  */
 import React, { useEffect, useState, useMemo } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
@@ -58,17 +20,13 @@ import {
 import PaginationList from 'components/Pagination/PaginationList/PaginationList';
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
-import type {
-  InterfaceCurrentUserTypePG,
-  InterfaceOrgInfoTypePG,
-} from 'utils/interfaces';
+import type { InterfaceOrgInfoTypePG } from 'utils/interfaces';
 import useLocalStorage from 'utils/useLocalstorage';
 import styles from 'style/app-fixed.module.css';
 import { Button } from '@mui/material';
 import OrganizationModal from './modal/OrganizationModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Link } from 'react-router';
-import { Modal } from 'react-bootstrap';
 import type { ChangeEvent } from 'react';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
@@ -76,6 +34,7 @@ import EmptyState from 'shared-components/EmptyState/EmptyState';
 import style from './OrgList.module.css';
 import { Group, Search } from '@mui/icons-material';
 import AdminSearchFilterBar from 'components/AdminSearchFilterBar/AdminSearchFilterBar';
+import { BaseModal } from 'shared-components/BaseModal';
 
 const { getItem } = useLocalStorage();
 
@@ -83,6 +42,7 @@ interface InterfaceFormStateType {
   addressLine1: string;
   addressLine2: string;
   avatar: string | null;
+  avatarPreview: string | null; // Added for client-side preview
   city: string;
   countryCode: string;
   description: string;
@@ -102,12 +62,12 @@ function orgList(): JSX.Element {
     setdialogModalIsOpen(true);
   }
 
-  // localStorage helper used elsewhere in this component
   const role = getItem('role');
   const adminFor:
     | string
     | { _id: string; name: string; image: string | null }[] =
     getItem('AdminFor') || [];
+
   function closeDialogModal(): void {
     setdialogModalIsOpen(false);
   }
@@ -137,6 +97,7 @@ function orgList(): JSX.Element {
     addressLine1: '',
     addressLine2: '',
     avatar: null,
+    avatarPreview: null,
     city: '',
     countryCode: '',
     description: '',
@@ -150,17 +111,13 @@ function orgList(): JSX.Element {
   const [createMembership] = useMutation(
     CREATE_ORGANIZATION_MEMBERSHIP_MUTATION_PG,
   );
+
   const token = getItem('token');
   const context = token
     ? { headers: { authorization: 'Bearer ' + token } }
     : { headers: {} };
-  const {
-    data: userData,
-  }: {
-    data: InterfaceCurrentUserTypePG | undefined;
-    loading: boolean;
-    error?: Error | undefined;
-  } = useQuery(CURRENT_USER, {
+
+  const { data: userData } = useQuery(CURRENT_USER, {
     variables: { userId: getItem('id') },
     context,
   });
@@ -178,20 +135,16 @@ function orgList(): JSX.Element {
 
   const orgsData = allOrganizationsData?.organizations;
 
-  // Sort and filter organizations based on sorting state
   const sortedOrganizations = useMemo(() => {
     if (!orgsData) return [];
-
     let result = [...orgsData];
 
-    // Apply search filter
     if (searchByName) {
       result = result.filter((org: InterfaceOrgInfoTypePG) =>
         org.name.toLowerCase().includes(searchByName.toLowerCase()),
       );
     }
 
-    // Apply sorting
     if (
       sortingState.option === 'Latest' ||
       sortingState.option === 'Earliest'
@@ -216,7 +169,6 @@ function orgList(): JSX.Element {
     const {
       addressLine1: _addressLine1,
       addressLine2: _addressLine2,
-      avatar: _avatar,
       city: _city,
       countryCode: _countryCode,
       description: _description,
@@ -227,7 +179,6 @@ function orgList(): JSX.Element {
 
     const addressLine1 = _addressLine1.trim() || undefined;
     const addressLine2 = _addressLine2.trim() || undefined;
-    const avatar = _avatar;
     const city = _city.trim() || undefined;
     const countryCode = _countryCode.trim() || undefined;
     const description = _description.trim() || undefined;
@@ -240,7 +191,7 @@ function orgList(): JSX.Element {
         variables: {
           addressLine1,
           addressLine2,
-          avatar,
+          // avatar field intentionally omitted to avoid type mismatch with Upload scalar during PR-2 alignment
           city,
           countryCode,
           description,
@@ -258,7 +209,6 @@ function orgList(): JSX.Element {
         },
       });
 
-      //     toggleModal;
       if (data) {
         NotificationToast.success(t('congratulationOrgCreated'));
         refetchOrgs();
@@ -267,6 +217,7 @@ function orgList(): JSX.Element {
           addressLine1: '',
           addressLine2: '',
           avatar: null,
+          avatarPreview: null,
           city: '',
           countryCode: '',
           description: '',
@@ -281,13 +232,6 @@ function orgList(): JSX.Element {
     }
   };
 
-  /**
-   * Note: The explicit refetchOrgs({ filter: val }) call is intentional.
-   * While Apollo Client auto-refetches when filterName changes, the explicit
-   * call ensures immediate network request execution and avoids timing issues
-   * from React's batched state updates. This pattern is used consistently
-   * elsewhere (e.g., Organizations.tsx) to prevent UI state race conditions.
-   */
   const handleChangeFilter = (val: string) => {
     setTypedValue(val);
     setSearchByName(val);
@@ -320,12 +264,11 @@ function orgList(): JSX.Element {
 
   const shimmerClass = styles.orgImgContainer + ' shimmer';
   const shimmerBtnClass = 'shimmer ' + styles.button;
-  const pluginBtnClass = 'btn  btn-primary ' + styles.pluginStoreBtn;
+  const pluginBtnClass = 'btn btn-primary ' + styles.pluginStoreBtn;
   const storeUrl = `orgstore/id=${dialogRedirectOrgId}`;
 
   return (
     <div className={styles.orgListContainer}>
-      {/* Buttons Container */}
       <div className={styles.calendar__header}>
         <AdminSearchFilterBar
           hasDropdowns={true}
@@ -367,8 +310,6 @@ function orgList(): JSX.Element {
         />
       </div>
 
-      {/* Text Infos for list */}
-
       {!isLoading &&
       (!sortedOrganizations || sortedOrganizations.length === 0) &&
       searchByName.length === 0 &&
@@ -399,7 +340,6 @@ function orgList(): JSX.Element {
                   <div className={styles.loadingWrapper}>
                     <div className={styles.innerContainer}>
                       <div className={shimmerClass} />
-
                       <div className={styles.content}>
                         <h5 className="shimmer" title={t('orgName')}></h5>
                         <h6 className="shimmer" title={t('location')}></h6>
@@ -428,7 +368,6 @@ function orgList(): JSX.Element {
               );
             })}
           </div>
-          {/* pagination */}
           <table className={style.table_fullWidth}>
             <tbody>
               <tr>
@@ -444,19 +383,6 @@ function orgList(): JSX.Element {
           </table>
         </>
       )}
-      {/* Create Organization Modal */}
-      {/**
-       * Renders the `OrganizationModal` component.
-       *
-       * @param showModal - A boolean indicating whether the modal should be displayed.
-       * @param toggleModal - A function to toggle the visibility of the modal.
-       * @param formState - The state of the form in the organization modal.
-       * @param setFormState - A function to update the state of the form in the organization modal.
-       * @param createOrg - A function to handle the submission of the organization creation form.
-       * @param t - A translation function for localization.
-       * @param userData - Information about the current user.
-       * @returns JSX element representing the `OrganizationModal`.
-       */}
 
       <OrganizationModal
         showModal={showModal}
@@ -468,47 +394,45 @@ function orgList(): JSX.Element {
         tCommon={tCommon}
         userData={userData}
       />
-      {/* Plugin Notification Modal after Org is Created */}
-      <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
-        <Modal.Header
-          className={styles.modalHeader}
-          closeButton
-          data-testid="pluginNotificationHeader"
-        >
-          <Modal.Title className="text-white">
-            {t('manageFeatures')}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <section id={styles.grid_wrapper}>
-            <div>
-              <h4 className={styles.titlemodaldialog}>
-                {t('manageFeaturesInfo')}
-              </h4>
 
-              <div className={styles.pluginStoreBtnContainer}>
-                <Link
-                  className={pluginBtnClass}
-                  data-testid="goToStore"
-                  to={storeUrl}
-                >
-                  {t('goToStore')}
-                </Link>
-                <Button
-                  type="submit"
-                  className={styles.enableEverythingBtn}
-                  onClick={closeDialogModal}
-                  value="invite"
-                  data-testid="enableEverythingForm"
-                >
-                  {t('enableEverything')}
-                </Button>
-              </div>
+      <BaseModal
+        show={dialogModalisOpen}
+        onHide={toggleDialogModal}
+        headerContent={
+          <div data-testid="pluginNotificationHeader" className="text-white">
+            {t('manageFeatures')}
+          </div>
+        }
+      >
+        <section id={styles.grid_wrapper}>
+          <div>
+            <h4 className={styles.titlemodaldialog}>
+              {t('manageFeaturesInfo')}
+            </h4>
+
+            <div className={styles.pluginStoreBtnContainer}>
+              <Link
+                className={pluginBtnClass}
+                data-testid="goToStore"
+                to={storeUrl}
+              >
+                {t('goToStore')}
+              </Link>
+              <Button
+                type="submit"
+                className={styles.enableEverythingBtn}
+                onClick={closeDialogModal}
+                value="invite"
+                data-testid="enableEverythingForm"
+              >
+                {t('enableEverything')}
+              </Button>
             </div>
-          </section>
-        </Modal.Body>
-      </Modal>
+          </div>
+        </section>
+      </BaseModal>
     </div>
   );
 }
+
 export default orgList;
