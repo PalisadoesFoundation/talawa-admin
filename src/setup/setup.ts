@@ -120,8 +120,8 @@ const askAndSetLogErrors = async (): Promise<void> => {
  * If any step fails, attempts to restore from backup and exits with error code 1.
  * Can be cancelled with CTRL+C (exits with code 130).
  *
- * @throws \{Error\} If any setup step fails
- * @returns \{Promise<void>\}
+ * @throws Error If any setup step fails
+ * @returns Promise<void>
  *
  * @example
  * ```typescript
