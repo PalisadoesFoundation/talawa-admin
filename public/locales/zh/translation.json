@@ -1631,11 +1631,11 @@
     "popupAd": "彈出廣告",
     "menuAd": "菜單廣告",
     "ads": {
-      "starts": "Starts",
-      "ends": "Ends",
-      "type": "Type",
+      "starts": "開始日期",
+      "ends": "結束日期",
+      "type": "類型",
       "types": {
-        "pop_up": "pop up"
+        "pop_up": "彈出式"
       }
     }
   },

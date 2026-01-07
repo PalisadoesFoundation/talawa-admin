@@ -1631,11 +1631,11 @@
     "popupAd": "Annonce popup",
     "menuAd": "Annonce de menu",
     "ads": {
-      "starts": "Starts",
-      "ends": "Ends",
+      "starts": "Commence",
+      "ends": "Se termine",
       "type": "Type",
       "types": {
-        "pop_up": "pop up"
+        "pop_up": "fenêtre contextuelle"
       }
     }
   },

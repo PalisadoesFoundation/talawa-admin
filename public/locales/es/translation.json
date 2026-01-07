@@ -1630,11 +1630,11 @@
     "popupAd": "Anuncio emergente",
     "menuAd": "Anuncio de menú",
     "ads": {
-      "starts": "Starts",
-      "ends": "Ends",
-      "type": "Type",
+      "starts": "Comienza",
+      "ends": "Termina",
+      "type": "Tipo",
       "types": {
-        "pop_up": "pop up"
+        "pop_up": "ventana emergente"
       }
     }
   },

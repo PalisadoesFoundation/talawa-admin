@@ -1631,11 +1631,11 @@
     "popupAd": "पॉपअप विज्ञापन",
     "menuAd": "मेनू विज्ञापन",
     "ads": {
-      "starts": "Starts",
-      "ends": "Ends",
-      "type": "Type",
+      "starts": "शुरू",
+      "ends": "समाप्त",
+      "type": "प्रकार",
       "types": {
-        "pop_up": "pop up"
+        "pop_up": "पॉप-अप"
       }
     }
   },
