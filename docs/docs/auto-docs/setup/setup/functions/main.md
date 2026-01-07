@@ -25,11 +25,11 @@ Can be cancelled with CTRL+C (exits with code 130).
 
 `Promise`\<`void`\>
 
-{Promise<void>}
+Promise<void>
 
 ## Throws
 
-{Error} If any setup step fails
+Error If any setup step fails
 
 ## Example
 

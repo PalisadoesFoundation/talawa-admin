@@ -39,8 +39,8 @@ const ENV_KEYS = {
  * Asks whether to enable reCAPTCHA and, if yes, validates and stores the site key.
  * Updates REACT_APP_USE_RECAPTCHA and REACT_APP_RECAPTCHA_SITE_KEY in .env.
  *
- * @throws \{Error\} If user input fails or environment update fails
- * @returns \{Promise<void>\}
+ * @throws Error If user input fails or environment update fails
+ * @returns Promise<void>
  *
  * @example
  * await askAndSetRecaptcha();

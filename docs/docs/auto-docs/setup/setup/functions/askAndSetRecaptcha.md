@@ -17,11 +17,11 @@ Updates REACT_APP_USE_RECAPTCHA and REACT_APP_RECAPTCHA_SITE_KEY in .env.
 
 `Promise`\<`void`\>
 
-{Promise<void>}
+Promise<void>
 
 ## Throws
 
-{Error} If user input fails or environment update fails
+Error If user input fails or environment update fails
 
 ## Example
 
