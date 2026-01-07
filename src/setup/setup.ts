@@ -49,7 +49,7 @@ export const askAndSetRecaptcha = async (): Promise<void> => {
 };
 
 // Ask and set up logging errors in the console
-const askAndSetLogErrors = async (): Promise<void> => {
+export const askAndSetLogErrors = async (): Promise<void> => {
   const { shouldLogErrors } = await inquirer.prompt({
     type: 'confirm',
     name: 'shouldLogErrors',
@@ -97,4 +97,9 @@ export async function main(): Promise<void> {
   }
 }
 
-main();
+if (require.main === module) {
+  main().catch((error) => {
+    console.error('Setup failed:', error);
+    process.exit(1);
+  });
+}
