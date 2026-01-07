@@ -6,7 +6,7 @@
 
 > **TestWrapper**(`__namedParameters`): `Element`
 
-Defined in: [src/components/test-utils/TestWrapper.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/test-utils/TestWrapper.tsx#L51)
+Defined in: [src/test-utils/TestWrapper.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/test-utils/TestWrapper.tsx#L51)
 
 ## Parameters
 

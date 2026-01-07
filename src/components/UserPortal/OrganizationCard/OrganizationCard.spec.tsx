@@ -6,7 +6,7 @@ import type { MockedResponse } from '@apollo/client/testing';
 import { toast } from 'react-toastify';
 import i18n from 'i18next';
 import OrganizationCard from './OrganizationCard';
-import { TestWrapper } from '../../../components/test-utils/TestWrapper';
+import { TestWrapper } from '../../../test-utils/TestWrapper';
 import {
   SEND_MEMBERSHIP_REQUEST,
   JOIN_PUBLIC_ORGANIZATION,

@@ -6,4 +6,4 @@
  * `Dropdown` mock that exposes `Toggle`, `Menu` and `Item` subcomponents.
  */
 
-export { Dropdown } from './react-bootstrap/Dropdown';
+export { Dropdown } from './mocks/react-bootstrap/Dropdown';
