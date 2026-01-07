@@ -121,7 +121,7 @@ const TagNode: React.FC<InterfaceTagNodeProps> = ({
             queryVariables={{ id: tag._id, first: TAGS_QUERY_DATA_CHUNK_SIZE }}
             dataPath="getChildTags.childTags"
             itemsPerPage={TAGS_QUERY_DATA_CHUNK_SIZE}
-            renderItem={() => <></>}
+
             useExternalUI={true}
           >
             {({ items, loading, pageInfo, handleLoadMore, error }) => {

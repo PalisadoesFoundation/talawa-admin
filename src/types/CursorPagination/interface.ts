@@ -27,6 +27,10 @@ export interface InterfaceConnectionData<TNode> {
 
 /**
  * Props for CursorPaginationManager component.
+ *
+ * @remarks
+ * When `useExternalUI` is true, the component uses render prop pattern via `children`.
+ * In this mode, `renderItem` is ignored and can be omitted or set to an empty function.
  */
 export interface InterfaceCursorPaginationManagerProps<
   TNode,
@@ -37,7 +41,8 @@ export interface InterfaceCursorPaginationManagerProps<
   /** Dot-separated path to the connection field in the GraphQL response (e.g. "post.comments") */
   dataPath: string;
   itemsPerPage?: number;
-  renderItem: (item: TNode, index: number) => ReactNode;
+  /** Function to render each item. Ignored when useExternalUI is true. */
+  renderItem?: (item: TNode, index: number) => ReactNode;
   /** Optional function to extract unique key from item */
   keyExtractor?: (item: TNode, index: number) => string | number;
   loadingComponent?: ReactNode;

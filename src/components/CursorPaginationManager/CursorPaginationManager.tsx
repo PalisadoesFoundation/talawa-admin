@@ -352,7 +352,7 @@ export function CursorPaginationManager<
       <div className={styles.itemsContainer}>
         {items.map((item, index) => {
           const key = keyExtractor ? keyExtractor(item, index) : index;
-          return <div key={key}>{renderItem(item, index)}</div>;
+          return <div key={key}>{renderItem?.(item, index)}</div>;
         })}
       </div>
       {pageInfo?.hasNextPage && (
