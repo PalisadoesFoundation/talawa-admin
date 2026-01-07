@@ -3,7 +3,6 @@
  * and providing functionality for searching, sorting, and creating new organizations.
  * It also includes modals for creating organizations and managing features after creation.
  *
- * @component
  * @returns {JSX.Element} The rendered organization list component.
  *
  * @remarks
@@ -11,7 +10,8 @@
  * - Includes search and sorting functionality for better user experience.
  * - Displays loading states and handles errors gracefully.
  *
- * @dependencies
+ * @remarks
+ * Dependencies:
  * - `useQuery` and `useMutation` from `@apollo/client` for GraphQL operations.
  * - `useTranslation` from `react-i18next` for localization.
  * - `useLocalStorage` for accessing local storage data.
@@ -19,7 +19,8 @@
  * - `NotificationToast` for notifications.
  * - `react-bootstrap` and `@mui/material` for modal and button components.
  *
- * @state
+ * @remarks
+ * State:
  * - `dialogModalisOpen` - Controls the visibility of the plugin notification modal.
  * - `dialogRedirectOrgId` - Stores the ID of the organization to redirect after creation.
  * - `isLoading` - Indicates whether the organization data is loading.
@@ -28,7 +29,8 @@
  * - `showModal` - Controls the visibility of the organization creation modal.
  * - `formState` - Manages the state of the organization creation form.
  *
- * @methods
+ * @remarks
+ * Methods:
  * - `openDialogModal(redirectOrgId: string): void` - Opens the plugin notification modal.
  * - `closeDialogModal(): void` - Closes the plugin notification modal.
  * - `toggleDialogModal(): void` - Toggles the plugin notification modal visibility.
@@ -36,13 +38,15 @@
  * - `handleSearch(value: string): void` - Filters organizations based on the search query.
  * - `handleSortChange(value: string): void` - Updates sorting state and refetches organizations.
  *
- * @errorHandling
+ * @remarks
+ * Error Handling:
  * - Handles errors from GraphQL queries and mutations using `errorHandler`.
  * - Clears local storage and redirects to the home page on critical errors.
  *
- * @modals
+ * @remarks
+ * Modals:
  * - `OrganizationModal` - For creating new organizations.
- * - `Modal` - For managing features after organization creation.
+ * - `BaseModal` - For managing features after organization creation.
  */
 import React, { useEffect, useState, useMemo } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
@@ -68,7 +72,7 @@ import { Button } from '@mui/material';
 import OrganizationModal from './modal/OrganizationModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Link } from 'react-router';
-import { Modal } from 'react-bootstrap';
+import BaseModal from 'shared-components/BaseModal';
 import type { ChangeEvent } from 'react';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
@@ -474,45 +478,44 @@ function orgList(): JSX.Element {
         userData={userData}
       />
       {/* Plugin Notification Modal after Org is Created */}
-      <Modal show={dialogModalisOpen} onHide={toggleDialogModal}>
-        <Modal.Header
-          className={styles.modalHeader}
-          closeButton
-          data-testid="pluginNotificationHeader"
-        >
-          <Modal.Title className="text-white">
+      <BaseModal
+        show={dialogModalisOpen}
+        onHide={toggleDialogModal}
+        headerContent={
+          <span className="text-white">
             {t('manageFeatures')}
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <section id={styles.grid_wrapper}>
-            <div>
-              <h4 className={styles.titlemodaldialog}>
-                {t('manageFeaturesInfo')}
-              </h4>
+          </span>
+        }
+        headerClassName={styles.modalHeader}
+        dataTestId="pluginNotificationHeader"
+      >
+        <section id={styles.grid_wrapper}>
+          <div>
+            <h4 className={styles.titlemodaldialog}>
+              {t('manageFeaturesInfo')}
+            </h4>
 
-              <div className={styles.pluginStoreBtnContainer}>
-                <Link
-                  className={pluginBtnClass}
-                  data-testid="goToStore"
-                  to={storeUrl}
-                >
-                  {t('goToStore')}
-                </Link>
-                <Button
-                  type="submit"
-                  className={styles.enableEverythingBtn}
-                  onClick={closeDialogModal}
-                  value="invite"
-                  data-testid="enableEverythingForm"
-                >
-                  {t('enableEverything')}
-                </Button>
-              </div>
+            <div className={styles.pluginStoreBtnContainer}>
+              <Link
+                className={pluginBtnClass}
+                data-testid="goToStore"
+                to={storeUrl}
+              >
+                {t('goToStore')}
+              </Link>
+              <Button
+                type="submit"
+                className={styles.enableEverythingBtn}
+                onClick={closeDialogModal}
+                value="invite"
+                data-testid="enableEverythingForm"
+              >
+                {t('enableEverything')}
+              </Button>
             </div>
-          </section>
-        </Modal.Body>
-      </Modal>
+          </div>
+        </section>
+      </BaseModal>
     </div>
   );
 }
