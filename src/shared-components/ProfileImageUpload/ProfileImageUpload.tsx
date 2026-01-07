@@ -67,27 +67,34 @@ export default function ProfileImageUpload({
   const inputRef = useRef<HTMLInputElement>(null);
 
   /**
-   * Computes the display image URL.
-   * If a new file is selected, creates an object URL for preview.
-   * Otherwise, uses the existing avatar URL.
+   * State for the display image URL.
+   * Managed by useEffect to ensure proper cleanup of object URLs.
    */
-  const displayImageUrl = React.useMemo(() => {
-    if (selectedFile) {
-      return URL.createObjectURL(selectedFile);
-    }
-    return avatarURL ?? undefined;
-  }, [selectedFile, avatarURL]);
+  const [displayImageUrl, setDisplayImageUrl] = React.useState<
+    string | undefined
+  >(undefined);
 
   /**
-   * Cleanup object URL when component unmounts or selectedFile changes
+   * Effect to manage object URL lifecycle.
+   * Creates object URL for selectedFile and revokes it on cleanup/change.
    */
   React.useEffect(() => {
+    let objectUrl: string | undefined;
+
+    if (selectedFile) {
+      objectUrl = URL.createObjectURL(selectedFile);
+      setDisplayImageUrl(objectUrl);
+    } else {
+      setDisplayImageUrl(avatarURL ?? undefined);
+    }
+
+    // Cleanup: revoke the exact object URL we created
     return () => {
-      if (selectedFile) {
-        URL.revokeObjectURL(URL.createObjectURL(selectedFile));
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
       }
     };
-  }, [selectedFile]);
+  }, [selectedFile, avatarURL]);
 
   /**
    * Handles file selection from the input element.
@@ -134,24 +141,14 @@ export default function ProfileImageUpload({
     inputRef.current?.click();
   }
 
-  /**
-   * Handles keyboard navigation (Enter/Space) for accessibility.
-   */
-  function handleKeyDown(e: React.KeyboardEvent): void {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      handleClick();
-    }
-  }
+
 
   return (
     <div className={styles.container} data-testid={dataTestId}>
-      <div
-        className={styles.avatarWrapper}
+      <button
+        type="button"
+        className={styles.avatarButton}
         onClick={handleClick}
-        onKeyDown={handleKeyDown}
-        role="button"
-        tabIndex={0}
         aria-label={tCommon('editProfilePicture')}
       >
         <ProfileAvatarDisplay
@@ -167,7 +164,7 @@ export default function ProfileImageUpload({
         >
           <i className="fas fa-edit" aria-hidden="true" />
         </span>
-      </div>
+      </button>
       <input
         ref={inputRef}
         type="file"

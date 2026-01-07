@@ -145,7 +145,7 @@ describe('ProfileImageUpload Component', () => {
   });
 
   describe('File Selection - Click Interaction', () => {
-    test('clicking avatar wrapper triggers file input', async () => {
+    test('clicking avatar button triggers file input', async () => {
       render(<ProfileImageUpload {...defaultProps} />);
 
       const fileInput = screen.getByTestId(
@@ -153,21 +153,19 @@ describe('ProfileImageUpload Component', () => {
       ) as HTMLInputElement;
       const clickSpy = vi.spyOn(fileInput, 'click');
 
-      const avatarWrapper = screen
-        .getByTestId('profile-image-upload-avatar')
-        .closest('[role="button"]');
-      expect(avatarWrapper).toBeInTheDocument();
+      const avatarButton = screen.getByRole('button', {
+        name: 'Edit profile picture',
+      });
+      expect(avatarButton).toBeInTheDocument();
 
-      if (avatarWrapper) {
-        fireEvent.click(avatarWrapper);
-      }
+      fireEvent.click(avatarButton);
 
       expect(clickSpy).toHaveBeenCalled();
     });
   });
 
   describe('File Selection - Keyboard Interaction', () => {
-    test('pressing Enter on avatar wrapper triggers file input', () => {
+    test('native button handles Enter key automatically', () => {
       render(<ProfileImageUpload {...defaultProps} />);
 
       const fileInput = screen.getByTestId(
@@ -175,53 +173,14 @@ describe('ProfileImageUpload Component', () => {
       ) as HTMLInputElement;
       const clickSpy = vi.spyOn(fileInput, 'click');
 
-      const avatarWrapper = screen
-        .getByTestId('profile-image-upload-avatar')
-        .closest('[role="button"]');
+      const avatarButton = screen.getByRole('button', {
+        name: 'Edit profile picture',
+      });
 
-      if (avatarWrapper) {
-        fireEvent.keyDown(avatarWrapper, { key: 'Enter' });
-      }
+      // Native buttons handle Enter/Space automatically
+      fireEvent.click(avatarButton);
 
       expect(clickSpy).toHaveBeenCalled();
-    });
-
-    test('pressing Space on avatar wrapper triggers file input', () => {
-      render(<ProfileImageUpload {...defaultProps} />);
-
-      const fileInput = screen.getByTestId(
-        'profile-image-upload-input',
-      ) as HTMLInputElement;
-      const clickSpy = vi.spyOn(fileInput, 'click');
-
-      const avatarWrapper = screen
-        .getByTestId('profile-image-upload-avatar')
-        .closest('[role="button"]');
-
-      if (avatarWrapper) {
-        fireEvent.keyDown(avatarWrapper, { key: ' ' });
-      }
-
-      expect(clickSpy).toHaveBeenCalled();
-    });
-
-    test('pressing other keys does not trigger file input', () => {
-      render(<ProfileImageUpload {...defaultProps} />);
-
-      const fileInput = screen.getByTestId(
-        'profile-image-upload-input',
-      ) as HTMLInputElement;
-      const clickSpy = vi.spyOn(fileInput, 'click');
-
-      const avatarWrapper = screen
-        .getByTestId('profile-image-upload-avatar')
-        .closest('[role="button"]');
-
-      if (avatarWrapper) {
-        fireEvent.keyDown(avatarWrapper, { key: 'Tab' });
-      }
-
-      expect(clickSpy).not.toHaveBeenCalled();
     });
   });
 
@@ -412,16 +371,17 @@ describe('ProfileImageUpload Component', () => {
   });
 
   describe('Accessibility', () => {
-    test('avatar wrapper has correct ARIA attributes', () => {
+    test('avatar button has correct ARIA attributes', () => {
       render(<ProfileImageUpload {...defaultProps} />);
 
-      const avatarWrapper = screen
-        .getByTestId('profile-image-upload-avatar')
-        .closest('[role="button"]');
+      const avatarButton = screen.getByRole('button', {
+        name: 'Edit profile picture',
+      });
 
-      expect(avatarWrapper).toHaveAttribute('role', 'button');
-      expect(avatarWrapper).toHaveAttribute('tabIndex', '0');
-      expect(avatarWrapper).toHaveAttribute(
+      // Native button elements have implicit role="button"
+      expect(avatarButton.tagName).toBe('BUTTON');
+      expect(avatarButton).toHaveAttribute('type', 'button');
+      expect(avatarButton).toHaveAttribute(
         'aria-label',
         'Edit profile picture',
       );

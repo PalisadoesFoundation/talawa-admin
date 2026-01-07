@@ -228,5 +228,7 @@
   "organizationEvent": "Membres de l'organisation",
   "organizationEventDescription": "Visible par tous les membres de l'organisation",
   "inviteOnlyEvent": "Sur invitation uniquement",
-  "inviteOnlyEventDescription": "Visible uniquement par les membres invités et les administrateurs de l'événement"
+  "inviteOnlyEventDescription": "Visible uniquement par les membres invités et les administrateurs de l'événement",
+  "editProfilePicture": "Modifier la photo de profil",
+  "uploadProfilePicture": "Télécharger la photo de profil"
 }
