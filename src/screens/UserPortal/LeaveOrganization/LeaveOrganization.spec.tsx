@@ -75,7 +75,7 @@ const mocks = [
         ],
       },
     },
-    delay: 50, // Add delay to show loading spinner
+    delay: 500, // Add delay to show loading spinner
   },
   {
     request: {

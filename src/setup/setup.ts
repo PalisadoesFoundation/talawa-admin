@@ -14,7 +14,7 @@ const isExitPromptError = (error: unknown): boolean =>
   error !== null &&
   'name' in error &&
   (error as { name: string }).name === 'ExitPromptError';
-  
+
 /**
  * Environment variable value constants
  */
@@ -39,8 +39,8 @@ const ENV_KEYS = {
  * Asks whether to enable reCAPTCHA and, if yes, validates and stores the site key.
  * Updates REACT_APP_USE_RECAPTCHA and REACT_APP_RECAPTCHA_SITE_KEY in .env.
  *
- * @throws {Error} If user input fails or environment update fails
- * @returns {Promise<void>}
+ * @throws \{Error\} If user input fails or environment update fails
+ * @returns \{Promise<void>\}
  *
  * @example
  * await askAndSetRecaptcha();
@@ -120,16 +120,18 @@ const askAndSetLogErrors = async (): Promise<void> => {
  * If any step fails, attempts to restore from backup and exits with error code 1.
  * Can be cancelled with CTRL+C (exits with code 130).
  *
- * @throws {Error} If any setup step fails
- * @returns {Promise<void>}
+ * @throws \{Error\} If any setup step fails
+ * @returns \{Promise<void>\}
  *
  * @example
+ * ```typescript
  * // When run directly:
  * // node setup.ts
  *
  * // When imported for testing:
  * import { main } from './setup';
  * await main();
+ * ```
  */
 export async function main(): Promise<void> {
   // Handle user cancellation (CTRL+C)
@@ -188,9 +190,7 @@ export async function main(): Promise<void> {
 }
 
 // Only execute if run directly, not when imported
-if (require.main === module) {
-  main().catch((error) => {
-    console.error('Setup failed:', error);
-    process.exit(1);
-  });
+// i18n-ignore-next-line
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main();
 }

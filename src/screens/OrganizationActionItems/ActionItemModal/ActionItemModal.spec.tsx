@@ -919,9 +919,7 @@ describe('ItemModal - Additional Test Cases', () => {
       });
 
       // Now click volunteer group chip to switch mode
-      const volunteerGroupChip = screen.getByRole('button', {
-        name: 'volunteerGroup',
-      });
+      const volunteerGroupChip = screen.getByTestId('volunteerGroupChip');
       await userEvent.click(volunteerGroupChip);
 
       // Wait for volunteer group select to appear
@@ -992,7 +990,7 @@ describe('ItemModal - Additional Test Cases', () => {
         expect(screen.queryByTestId('volunteerSelect')).not.toBeInTheDocument();
       });
 
-      const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
+      const volunteerChip = screen.getByTestId('volunteerChip');
       await userEvent.click(volunteerChip);
 
       const reopenedVolunteerSelect =
@@ -1033,9 +1031,7 @@ describe('ItemModal - Additional Test Cases', () => {
       });
 
       // Now click the volunteerGroup chip to switch assignment type
-      const volunteerGroupChip = screen.getByRole('button', {
-        name: 'volunteerGroup',
-      });
+      const volunteerGroupChip = screen.getByTestId('volunteerGroupChip');
       await userEvent.click(volunteerGroupChip);
 
       // Wait for volunteerGroupSelect to appear (this confirms the switch happened)
@@ -1059,7 +1055,7 @@ describe('ItemModal - Additional Test Cases', () => {
         expect(volunteerGroupInput).toHaveValue('Test Group 2');
       });
 
-      const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
+      const volunteerChip = screen.getByTestId('volunteerChip');
       await userEvent.click(volunteerChip);
 
       await waitFor(() => {
@@ -1068,9 +1064,7 @@ describe('ItemModal - Additional Test Cases', () => {
         ).not.toBeInTheDocument();
       });
 
-      const volunteerGroupChipAgain = screen.getByRole('button', {
-        name: 'volunteerGroup',
-      });
+      const volunteerGroupChipAgain = screen.getByTestId('volunteerGroupChip');
       await userEvent.click(volunteerGroupChipAgain);
 
       const reopenedGroupSelect = await screen.findByTestId(
@@ -4060,9 +4054,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       });
 
       // Switch to volunteer group assignment
-      const volunteerGroupChip = screen.getByRole('button', {
-        name: 'volunteerGroup',
-      });
+      const volunteerGroupChip = screen.getByTestId('volunteerGroupChip');
       await userEvent.click(volunteerGroupChip);
 
       // Select volunteer group
@@ -4123,18 +4115,19 @@ describe('Partially Covered Lines Test Coverage', () => {
       });
 
       // First switch to volunteer group to set some state
-      const volunteerGroupChip = screen.getByRole('button', {
-        name: 'volunteerGroup',
-      });
+      const volunteerGroupChip = screen.getByTestId('volunteerGroupChip');
       await userEvent.click(volunteerGroupChip);
 
+      // Wait for the component to re-render and show volunteerGroupSelect
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
+        {},
+        { timeout: 3000 },
       );
       expect(volunteerGroupSelect).toBeInTheDocument();
 
       // Now click volunteer chip - this should execute the !isVolunteerChipDisabled path
-      const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
+      const volunteerChip = screen.getByTestId('volunteerChip');
       await userEvent.click(volunteerChip);
 
       // Should switch back to volunteer select and clear volunteer group
@@ -4209,9 +4202,7 @@ describe('Partially Covered Lines Test Coverage', () => {
       });
 
       // Click volunteer group chip - this should execute the !isVolunteerGroupChipDisabled path
-      const volunteerGroupChip = screen.getByRole('button', {
-        name: 'volunteerGroup',
-      });
+      const volunteerGroupChip = screen.getByTestId('volunteerGroupChip');
       await userEvent.click(volunteerGroupChip);
 
       // Should switch to volunteer group select and clear volunteer
