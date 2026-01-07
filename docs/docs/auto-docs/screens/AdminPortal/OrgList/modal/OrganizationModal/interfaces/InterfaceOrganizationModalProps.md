@@ -4,7 +4,7 @@
 
 # Interface: InterfaceOrganizationModalProps
 
-Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L43)
+Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L42)
 
 Represents the properties of the OrganizationModal component.
 
@@ -14,7 +14,7 @@ Represents the properties of the OrganizationModal component.
 
 > **createOrg**: (`e`) => `Promise`\<`void`\>
 
-Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L48)
+Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L47)
 
 #### Parameters
 
@@ -32,7 +32,7 @@ Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:48](htt
 
 > **formState**: `InterfaceFormStateType`
 
-Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L46)
+Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L45)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:46](htt
 
 > **setFormState**: (`state`) => `void`
 
-Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L47)
+Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L46)
 
 #### Parameters
 
@@ -58,7 +58,7 @@ Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:47](htt
 
 > **showModal**: `boolean`
 
-Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L44)
+Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:43](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L43)
 
 ***
 
@@ -66,7 +66,7 @@ Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:44](htt
 
 > **t**: (`key`) => `string`
 
-Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L49)
+Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L48)
 
 #### Parameters
 
@@ -84,7 +84,7 @@ Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:49](htt
 
 > **tCommon**: (`key`) => `string`
 
-Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L50)
+Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L49)
 
 #### Parameters
 
@@ -102,7 +102,7 @@ Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:50](htt
 
 > **toggleModal**: () => `void`
 
-Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:45](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L45)
+Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:44](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L44)
 
 #### Returns
 
@@ -114,4 +114,4 @@ Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:45](htt
 
 > **userData**: [`InterfaceCurrentUserTypePG`](../../../../../../utils/interfaces/interfaces/InterfaceCurrentUserTypePG.md)
 
-Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L51)
+Defined in: [src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/screens/AdminPortal/OrgList/modal/OrganizationModal.tsx#L50)

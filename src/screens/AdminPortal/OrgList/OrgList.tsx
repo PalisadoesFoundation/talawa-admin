@@ -286,7 +286,7 @@ function orgList(): JSX.Element {
   };
 
   /**
-   * Note: The explicit refetchOrgs({ filter: val }) call is intentional.
+   * Note: The explicit refetchOrgs call with filter parameter is intentional.
    * While Apollo Client auto-refetches when filterName changes, the explicit
    * call ensures immediate network request execution and avoids timing issues
    * from React's batched state updates. This pattern is used consistently
