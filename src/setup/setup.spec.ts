@@ -44,9 +44,9 @@ describe('Talawa Admin Setup', () => {
     vi.mocked(validateRecaptcha).mockReturnValue(true);
     vi.mocked(backupEnvFile).mockResolvedValue(undefined);
 
-    processExitSpy = vi.spyOn(process, 'exit').mockImplementation(() => {
-      return undefined as never;
-    });
+    processExitSpy = vi.spyOn(process, 'exit').mockImplementation(((code?: number) => {
+      throw new Error(`process.exit called with code ${code}`);
+    }) as never);
 
     consoleErrorSpy = vi
       .spyOn(console, 'error')
@@ -116,23 +116,10 @@ describe('Talawa Admin Setup', () => {
       const mockError = new Error('Setup failed');
       vi.mocked(askAndSetDockerOption).mockRejectedValueOnce(mockError);
 
-      const exitMock = vi
-        .spyOn(process, 'exit')
-        .mockImplementationOnce((code) => {
-          throw new Error(`process.exit called with code ${code}`);
-        });
-
-      const consoleSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => undefined);
-
       await expect(main()).rejects.toThrow('process.exit called with code 1');
 
-      expect(consoleSpy).toHaveBeenCalledWith('\n❌ Setup failed:', mockError);
-      expect(exitMock).toHaveBeenCalledWith(1);
-
-      consoleSpy.mockRestore();
-      exitMock.mockRestore();
+      expect(consoleErrorSpy).toHaveBeenCalledWith('\n❌ Setup failed:', mockError);
+      expect(processExitSpy).toHaveBeenCalledWith(1);
     });
 
     it('should return early when checkEnvFile returns false', async () => {
@@ -162,21 +149,11 @@ describe('Talawa Admin Setup', () => {
       const mockError = new Error('Setup failed');
       vi.mocked(askAndSetDockerOption).mockRejectedValueOnce(mockError);
 
-      const exitMock = vi.spyOn(process, 'exit').mockImplementationOnce(() => {
-        throw new Error('process.exit called');
-      });
-
-      try {
-        await main();
-      } catch (error) {
-        // Expected
-      }
+      await expect(main()).rejects.toThrow('process.exit called with code 1');
 
       expect(consoleLogSpy).toHaveBeenCalledWith(
         '\nPlease try again or contact support if the issue persists.',
       );
-
-      exitMock.mockRestore();
     });
 
     it('should complete full setup flow with Docker=NO and all options enabled', async () => {
@@ -233,20 +210,12 @@ describe('Talawa Admin Setup', () => {
       const mockError = new Error('Backup failed');
       vi.mocked(backupEnvFile).mockRejectedValueOnce(mockError);
 
-      const exitMock = vi
-        .spyOn(process, 'exit')
-        .mockImplementationOnce((code) => {
-          throw new Error(`process.exit called with code ${code}`);
-        });
-
       await expect(main()).rejects.toThrow('process.exit called with code 1');
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         '\n❌ Setup failed:',
         mockError,
       );
-
-      exitMock.mockRestore();
     });
 
     it('should handle errors during modifyEnvFile', async () => {
@@ -255,71 +224,41 @@ describe('Talawa Admin Setup', () => {
         throw mockError;
       });
 
-      const exitMock = vi
-        .spyOn(process, 'exit')
-        .mockImplementationOnce((code) => {
-          throw new Error(`process.exit called with code ${code}`);
-        });
-
       await expect(main()).rejects.toThrow('process.exit called with code 1');
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         '\n❌ Setup failed:',
         mockError,
       );
-
-      exitMock.mockRestore();
     });
 
     it('should handle errors during askAndUpdatePort', async () => {
       const mockError = new Error('Port update failed');
       vi.mocked(askAndUpdatePort).mockRejectedValueOnce(mockError);
 
-      const exitMock = vi
-        .spyOn(process, 'exit')
-        .mockImplementationOnce((code) => {
-          throw new Error(`process.exit called with code ${code}`);
-        });
-
       await expect(main()).rejects.toThrow('process.exit called with code 1');
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         '\n❌ Setup failed:',
         mockError,
       );
-
-      exitMock.mockRestore();
     });
 
     it('should handle errors during askAndUpdateTalawaApiUrl', async () => {
       const mockError = new Error('API URL update failed');
       vi.mocked(askAndUpdateTalawaApiUrl).mockRejectedValueOnce(mockError);
 
-      const exitMock = vi
-        .spyOn(process, 'exit')
-        .mockImplementationOnce((code) => {
-          throw new Error(`process.exit called with code ${code}`);
-        });
-
       await expect(main()).rejects.toThrow('process.exit called with code 1');
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         '\n❌ Setup failed:',
         mockError,
       );
-
-      exitMock.mockRestore();
     });
 
     it('should handle errors during askAndSetRecaptcha in main flow', async () => {
       const mockError = new Error('Recaptcha setup failed in main');
       vi.mocked(inquirer.prompt).mockRejectedValueOnce(mockError);
-
-      const exitMock = vi
-        .spyOn(process, 'exit')
-        .mockImplementationOnce((code) => {
-          throw new Error(`process.exit called with code ${code}`);
-        });
 
       await expect(main()).rejects.toThrow('process.exit called with code 1');
 
@@ -327,8 +266,6 @@ describe('Talawa Admin Setup', () => {
         '\n❌ Setup failed:',
         expect.any(Error),
       );
-
-      exitMock.mockRestore();
     });
 
     it('should handle errors during askAndSetLogErrors in main flow', async () => {
@@ -337,17 +274,9 @@ describe('Talawa Admin Setup', () => {
         .mockResolvedValueOnce({ shouldUseRecaptcha: false })
         .mockRejectedValueOnce(mockError);
 
-      const exitMock = vi
-        .spyOn(process, 'exit')
-        .mockImplementationOnce((code) => {
-          throw new Error(`process.exit called with code ${code}`);
-        });
-
       await expect(main()).rejects.toThrow('process.exit called with code 1');
 
       expect(consoleErrorSpy).toHaveBeenCalled();
-
-      exitMock.mockRestore();
     });
   });
 
@@ -648,20 +577,12 @@ describe('Talawa Admin Setup', () => {
         throw mockError1;
       });
 
-      const exitMock = vi
-        .spyOn(process, 'exit')
-        .mockImplementationOnce((code) => {
-          throw new Error(`process.exit called with code ${code}`);
-        });
-
       await expect(main()).rejects.toThrow('process.exit called with code 1');
 
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         '\n❌ Setup failed:',
         mockError1,
       );
-
-      exitMock.mockRestore();
     });
   });
 });
