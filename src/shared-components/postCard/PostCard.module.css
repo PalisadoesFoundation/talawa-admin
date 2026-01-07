@@ -167,3 +167,10 @@
 .image {
   width: 100%;
 }
+
+.noCommentsText {
+  color: var(--bs-secondary);
+  text-align: center;
+  padding: 16px 0;
+  font-size: 0.875rem;
+}

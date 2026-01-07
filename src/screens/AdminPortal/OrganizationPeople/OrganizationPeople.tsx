@@ -402,6 +402,78 @@ function OrganizationPeople(): JSX.Element {
         );
       },
     },
+          <Link
+            to={`/member/${currentUrl}/${params.row.id}`}
+            state={{ id: params.row.id }}
+            className={`${styles.membername} ${styles.subtleBlueGrey} ${styles.memberNameFontSize}`}
+          >
+            {params.row.name}
+          </Link>
+        );
+      },
+    },
+    {
+      field: 'email',
+      headerName: tCommon('email'),
+      minWidth: 150,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      flex: 2,
+      sortable: false,
+    },
+    {
+      field: 'joined',
+      headerName: tCommon('joinedOn'),
+      flex: 2,
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => {
+        const currentLang = languages.find(
+          (lang: { code: string; country_code: string }) =>
+            lang.code === i18n.language,
+        );
+        const locale = currentLang
+          ? `${currentLang.code}-${currentLang.country_code}`
+          : 'en-US';
+        return (
+          <div data-testid={`org-people-joined-${params.row.id}`}>
+            {t('joined')} :{' '}
+            {new Intl.DateTimeFormat(locale, {
+              year: 'numeric',
+              month: '2-digit',
+              day: '2-digit',
+              timeZone: 'UTC',
+            }).format(new Date(params.row.createdAt))}
+          </div>
+        );
+      },
+    },
+    {
+      field: 'action',
+      headerName: tCommon('action'),
+      flex: 1,
+      minWidth: 100,
+      align: 'center',
+      headerAlign: 'center',
+      headerClassName: `${styles.tableHeader}`,
+      sortable: false,
+      renderCell: (params: GridCellParams) => (
+        <Button
+          className={`${styles.removeButton}`}
+          variant="danger"
+          disabled={state === 2}
+          onClick={() => toggleRemoveMemberModal(params.row.id)}
+          aria-label={tCommon('removeMember')}
+          data-testid="removeMemberModalBtn"
+        >
+          <Delete />
+        </Button>
+      ),
+    },
   ];
 
   const gridProps: ReportingTableGridProps = {

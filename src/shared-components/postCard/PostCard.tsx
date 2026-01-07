@@ -5,23 +5,23 @@
  * likes, comments, and associated actions like editing, deleting, liking, and commenting.
  * It also includes modals for viewing the post in detail and editing the post content.
  *
- * @param props - The properties of the post card.
- * @param props.id - Unique identifier for the post.
- * @param props.creator - Object containing the creator's details (id, firstName, lastName, email).
- * @param props.title - Title of the post.
- * @param props.text - Content of the post.
- * @param props.image - URL of the post's image.
- * @param props.postedAt - Date when the post was created.
- * @param props.likeCount - Number of likes on the post.
- * @param props.likedBy - Array of users who liked the post.
- * @param props.comments - Array of comments on the post.
- * @param props.commentCount - Total number of comments on the post.
- * @param props.fetchPosts - Function to refresh the list of posts.
+ * @param props - The properties of the post card, which include:
+ *   - id: Unique identifier for the post
+ *   - creator: Object containing the creator's details (id, firstName, lastName, email)
+ *   - title: Title of the post
+ *   - text: Content of the post
+ *   - image: URL of the post's image
+ *   - postedAt: Date when the post was created
+ *   - likeCount: Number of likes on the post
+ *   - likedBy: Array of users who liked the post
+ *   - comments: Array of comments on the post
+ *   - commentCount: Total number of comments on the post
+ *   - fetchPosts: Function to refresh the list of posts
  *
  * @returns A JSX.Element representing the post card.
  */
-import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery } from '@apollo/client';
+import React, { useState } from 'react';
+import { useMutation } from '@apollo/client';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import {
@@ -53,7 +53,6 @@ import {
 import UserDefault from '../../assets/images/defaultImg.png';
 import type {
   InterfaceComment,
-  InterfaceCommentEdge,
   InterfacePostCard,
 } from '../../utils/interfaces';
 import postCardStyles from './PostCard.module.css';
@@ -69,9 +68,9 @@ import CommentCard from '../../components/UserPortal/CommentCard/CommentCard';
 import styles from '../../style/app-fixed.module.css';
 import { PluginInjector } from '../../plugin';
 import useLocalStorage from '../../utils/useLocalstorage';
-import { handleLoadMoreComments as handleLoadMoreCommentsHelper } from './helperFunctions';
 import CreatePostModal from 'shared-components/posts/createPostModal/createPostModal';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
+import { CursorPaginationManager } from '../../components/CursorPaginationManager/CursorPaginationManager';
 
 export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const { t } = useTranslation('translation');
@@ -84,74 +83,25 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
   const [showEditPost, setShowEditPost] = React.useState(false);
   const [showComments, setShowComments] = React.useState(false);
   const [comments, setComments] = React.useState<InterfaceComment[]>([]);
-  const [endCursor, setEndCursor] = React.useState<string | null>(null);
-  const [hasNextPage, setHasNextPage] = React.useState(false);
-  const [loadingMoreComments, setLoadingMoreComments] = React.useState(false);
+  const [refetchTrigger, setRefetchTrigger] = React.useState(0);
   const [dropdownAnchor, setDropdownAnchor] =
     React.useState<null | HTMLElement>(null);
   const orgId = window.location.pathname.split('/')[2];
 
-  useEffect(() => {
+  React.useEffect(() => {
     setIsLikedByUser(props.hasUserVoted?.voteType === 'up_vote');
     setLikeCount(props.upVoteCount);
   }, [props.hasUserVoted?.voteType, props.upVoteCount]);
 
   const commentCount = props.commentCount;
   const { getItem } = useLocalStorage();
-  const userId = getItem('userId') ?? getItem('id');
+  const userId = (getItem('userId') ?? getItem('id')) as string | null;
 
   const isPostCreator = props.creator.id === userId;
   const isAdmin = getItem('role') === 'administrator';
 
-  // Query for paginated comments
-  const shouldSkipComments = !showComments || !userId;
-  const {
-    data: commentsData,
-    loading: commentsLoading,
-    fetchMore: fetchMoreComments,
-    refetch: refetchComments,
-  } = useQuery(GET_POST_COMMENTS, {
-    skip: shouldSkipComments,
-    variables: shouldSkipComments
-      ? undefined
-      : {
-          postId: props.id,
-          userId: userId as string,
-          first: 10,
-        },
-  });
-
-  React.useEffect(() => {
-    if (!commentsData?.post?.comments) return;
-
-    const { edges, pageInfo } = commentsData.post.comments;
-    setComments(edges.map((edge: InterfaceCommentEdge) => edge.node));
-    setEndCursor(pageInfo.endCursor);
-    setHasNextPage(pageInfo.hasNextPage);
-  }, [commentsData]);
-
   const toggleComments = (): void => {
     setShowComments((prev) => !prev);
-    // Reset comments when hiding
-    if (showComments) {
-      setComments([]);
-      setEndCursor(null);
-      setHasNextPage(false);
-    }
-  };
-
-  const handleLoadMoreComments = async (): Promise<void> => {
-    await handleLoadMoreCommentsHelper({
-      fetchMoreComments,
-      postId: props.id,
-      userId: userId as string,
-      endCursor,
-      setComments,
-      setEndCursor,
-      setHasNextPage,
-      setLoadingMoreComments,
-      t,
-    });
   };
 
   const [likePost, { loading: likeLoading }] = useMutation(UPDATE_POST_VOTE);
@@ -189,11 +139,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       setCommentInput('');
 
       if (showComments && userId) {
-        await refetchComments({
-          postId: props.id,
-          userId: userId as string,
-          first: 10,
-        });
+        setRefetchTrigger((prev) => prev + 1);
       }
     } catch (error: unknown) {
       errorHandler(t, error);
@@ -365,6 +311,7 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               controls
               className={postCardStyles.video}
               crossOrigin="anonymous"
+              data-testid="video-attachment"
             >
               <source src={props.attachmentURL} />
             </video>
@@ -384,11 +331,12 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             </Typography>
           </Box>
         )}
+      </Box>
 
-        {/* Plugin Extension Point G3 - Inject plugins below caption */}
-        <PluginInjector
-          injectorType="G4"
-          data={{
+      {
+        PluginInjector({
+          injectorType: 'G4',
+          data: {
             caption: props.title,
             postId: props.id,
             text: props.text,
@@ -402,9 +350,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             attachmentURL: props.attachmentURL,
             mimeType: props.mimeType,
             hasUserVoted: isLikedByUser,
-          }}
-        />
-      </Box>
+          },
+        }) as React.ReactNode
+      }
       {/* Post Actions */}
       <Box className={postCardStyles.postActions}>
         <Box className={postCardStyles.leftActions}>
@@ -412,6 +360,9 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
             onClick={handleToggleLike}
             size="small"
             data-testid="like-btn"
+            aria-label={
+              isLikedByUser ? t('postCard.unlike') : t('postCard.like')
+            }
           >
             {likeLoading ? (
               <CircularProgress size={20} />
@@ -421,10 +372,18 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
               <Favorite fontSize="small" data-testid="unliked" />
             )}
           </IconButton>
-          <IconButton onClick={toggleComments} size="small">
+          <IconButton
+            onClick={toggleComments}
+            size="small"
+            aria-label={
+              showComments
+                ? t('postCard.hideComments')
+                : t('postCard.viewComments')
+            }
+          >
             <ChatBubbleOutline fontSize="small" />
           </IconButton>
-          <IconButton size="small">
+          <IconButton size="small" aria-label={t('postCard.share')}>
             <Share fontSize="small" />
           </IconButton>
         </Box>
@@ -448,59 +407,38 @@ export default function PostCard({ ...props }: InterfacePostCard): JSX.Element {
       </Box>
 
       {/* Comments Section */}
-      {showComments && (
+      {showComments && userId && (
         <>
           <Divider />
-          {commentsLoading && comments.length === 0 ? (
-            <Box display="flex" justifyContent="center" p={2}>
-              <CircularProgress size={24} />
-            </Box>
-          ) : (
-            <Box className={postCardStyles.commentSection}>
-              {comments.map((comment) => (
+          <Box className={postCardStyles.commentSection}>
+            <CursorPaginationManager
+              query={GET_POST_COMMENTS}
+              queryVariables={{
+                postId: props.id,
+                userId: userId as string,
+              }}
+              dataPath="post.comments"
+              itemsPerPage={10}
+              renderItem={(comment: InterfaceComment) => (
                 <CommentCard
-                  key={comment.id}
                   id={comment.id}
                   creator={comment.creator}
                   text={comment.body}
                   upVoteCount={comment.upVotesCount}
                   hasUserVoted={comment.hasUserVoted}
-                  refetchComments={refetchComments}
+                  refetchComments={() => setRefetchTrigger((prev) => prev + 1)}
                 />
-              ))}
-
-              {/* Load More Comments Button */}
-              {hasNextPage ? (
-                <Box display="flex" justifyContent="center" py={2}>
-                  <Button
-                    onClick={handleLoadMoreComments}
-                    disabled={loadingMoreComments}
-                    size="small"
-                    sx={{
-                      color: 'primary.main',
-                      fontSize: '0.875rem',
-                      textTransform: 'none',
-                    }}
-                  >
-                    {loadingMoreComments ? (
-                      <>
-                        <CircularProgress size={16} sx={{ mr: 1 }} />
-                        {t('postCard.loadingComments')}
-                      </>
-                    ) : (
-                      t('postCard.loadMoreComments')
-                    )}
-                  </Button>
-                </Box>
-              ) : (
-                <Box display="flex" justifyContent="center" py={2}>
-                  <Typography variant="body2" color="text.secondary">
-                    {t('postCard.noMoreComments')}
-                  </Typography>
-                </Box>
               )}
-            </Box>
-          )}
+              keyExtractor={(comment: InterfaceComment) => comment.id}
+              onDataChange={setComments}
+              refetchTrigger={refetchTrigger}
+              emptyStateComponent={
+                <div className={postCardStyles.noCommentsText}>
+                  {t('postCard.noComments')}
+                </div>
+              }
+            />
+          </Box>
         </>
       )}
 
