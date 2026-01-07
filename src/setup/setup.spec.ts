@@ -13,14 +13,38 @@ import inquirer from 'inquirer';
 vi.mock('./backupEnvFile/backupEnvFile', () => ({
   backupEnvFile: vi.fn().mockResolvedValue(undefined),
 }));
-vi.mock('inquirer');
+vi.mock('inquirer', () => ({
+  default: {
+    prompt: vi.fn(),
+  },
+}));
 vi.mock('dotenv');
-vi.mock('fs');
+vi.mock('fs', () => {
+  const readFile = vi.fn();
+
+  return {
+    default: {
+      promises: {
+        readFile,
+      },
+    },
+    promises: {
+      readFile,
+    },
+  };
+});
+
 vi.mock('./checkEnvFile/checkEnvFile');
 vi.mock('./validateRecaptcha/validateRecaptcha');
-vi.mock('./askAndSetDockerOption/askAndSetDockerOption');
-vi.mock('./updateEnvFile/updateEnvFile');
-vi.mock('./askAndUpdatePort/askAndUpdatePort');
+vi.mock('./askAndSetDockerOption/askAndSetDockerOption', () => ({
+  default: vi.fn(),
+}));
+vi.mock('./updateEnvFile/updateEnvFile', () => ({
+  default: vi.fn(),
+}));
+vi.mock('./askAndUpdatePort/askAndUpdatePort', () => ({
+  default: vi.fn(),
+}));
 vi.mock('./askForDocker/askForDocker');
 
 describe('Talawa Admin Setup', () => {
@@ -31,7 +55,7 @@ describe('Talawa Admin Setup', () => {
     vi.mocked(checkEnvFile).mockReturnValue(true);
 
     // default fs content says NO docker
-    vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=NO');
+    vi.mocked(fs.promises.readFile).mockResolvedValue('USE_DOCKER=NO');
     vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'NO' });
 
     // mock external functions to resolve normally
@@ -48,16 +72,17 @@ describe('Talawa Admin Setup', () => {
     });
 
     vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    vi.spyOn(console, 'log').mockImplementation(() => undefined);
   });
 
   afterEach(() => {
-    vi.restoreAllMocks(); // Restores all spies including processExitSpy and consoleErrorSpy
+    vi.clearAllMocks();
+    vi.restoreAllMocks();
   });
 
-  // ADD THESE NEW TEST BLOCKS
   it('should call API setup with false when Docker is disabled', async () => {
     // Setup environment for NO Docker
-    vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=NO');
+    vi.mocked(fs.promises.readFile).mockResolvedValue('USE_DOCKER=NO');
     vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'NO' });
 
     vi.mocked(inquirer.prompt)
@@ -71,7 +96,7 @@ describe('Talawa Admin Setup', () => {
 
   it('should call API setup with true when Docker is enabled', async () => {
     // Setup environment for YES Docker
-    vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=YES');
+    vi.mocked(fs.promises.readFile).mockResolvedValue('USE_DOCKER=YES');
     vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'YES' });
 
     vi.mocked(inquirer.prompt)
@@ -96,7 +121,7 @@ describe('Talawa Admin Setup', () => {
   });
 
   it('should call askAndUpdateTalawaApiUrl when Docker is used and skip port setup', async () => {
-    vi.mocked(fs.readFileSync).mockReturnValue('USE_DOCKER=YES');
+    vi.mocked(fs.promises.readFile).mockResolvedValue('USE_DOCKER=YES');
     vi.mocked(dotenv.parse).mockReturnValue({ USE_DOCKER: 'YES' });
 
     vi.mocked(inquirer.prompt)
@@ -167,6 +192,7 @@ describe('Talawa Admin Setup', () => {
 
     localConsoleError.mockRestore();
   });
+
   it('should handle reCAPTCHA setup when user opts in with valid key', async () => {
     const mockValidKey = 'valid-key';
     const { validateRecaptcha: mockValidateRecaptcha } = await vi.importMock<
@@ -266,5 +292,162 @@ describe('Talawa Admin Setup', () => {
     }
     const result = capturedValidationFn('invalid-key');
     expect(result).toBe('Invalid reCAPTCHA site key. Please try again.');
+  });
+
+  it('should rethrow ExitPromptError in askAndSetRecaptcha', async () => {
+    const exitPromptError = new Error('User cancelled');
+    (exitPromptError as { name: string }).name = 'ExitPromptError';
+
+    vi.spyOn(inquirer, 'prompt').mockRejectedValueOnce(exitPromptError);
+
+    await expect(askAndSetRecaptcha()).rejects.toThrow('User cancelled');
+  });
+
+  it('should handle non-Error objects thrown in askAndSetRecaptcha', async () => {
+    const nonErrorObject = { message: 'Something went wrong' };
+
+    vi.spyOn(inquirer, 'prompt').mockRejectedValueOnce(nonErrorObject);
+
+    const localConsoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
+
+    await expect(askAndSetRecaptcha()).rejects.toThrow(
+      'Failed to set up reCAPTCHA: [object Object]',
+    );
+
+    expect(localConsoleError).toHaveBeenCalledWith(
+      'Error setting up reCAPTCHA:',
+      nonErrorObject,
+    );
+
+    localConsoleError.mockRestore();
+  });
+
+  it('should handle SIGINT (CTRL+C) during setup and exit with code 130', async () => {
+    let sigintHandler: (() => void) | undefined;
+
+    // Capture the SIGINT handler when it's registered
+    const onSpy = vi
+      .spyOn(process, 'on')
+      .mockImplementation((event, handler) => {
+        if (event === 'SIGINT') {
+          sigintHandler = handler as () => void;
+        }
+        return process;
+      });
+
+    const exitMock = vi.spyOn(process, 'exit').mockImplementation((code) => {
+      throw new Error(`process.exit called with code ${code}`);
+    });
+
+    const consoleLogSpy = vi
+      .spyOn(console, 'log')
+      .mockImplementation(() => undefined);
+
+    // Mock to make main() hang after setting up SIGINT handler
+    vi.mocked(askAndSetDockerOption).mockImplementationOnce(
+      () => new Promise(() => {}), // Never resolves
+    );
+
+    // Start main (it will hang at askAndSetDockerOption)
+    const mainPromise = main();
+
+    // Wait for SIGINT handler to be registered
+    await new Promise((resolve) => setTimeout(resolve, 50));
+
+    // Verify the handler was captured
+    expect(sigintHandler).toBeDefined();
+
+    // Call the SIGINT handler directly and expect it to throw
+    expect(() => sigintHandler?.()).toThrow(
+      'process.exit called with code 130',
+    );
+
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      '\n\n⚠️  Setup cancelled by user.',
+    );
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      'Configuration may be incomplete. Run setup again to complete.',
+    );
+    expect(exitMock).toHaveBeenCalledWith(130);
+
+    // Clean up
+    onSpy.mockRestore();
+    consoleLogSpy.mockRestore();
+    exitMock.mockRestore();
+
+    // mainPromise will never resolve since askAndSetDockerOption hangs
+    await Promise.race([
+      mainPromise,
+      new Promise((resolve) => setTimeout(resolve, 10)),
+    ]);
+  });
+
+  it('should handle ExitPromptError in main and exit with code 130', async () => {
+    const exitPromptError = new Error('User cancelled prompt');
+    (exitPromptError as { name: string }).name = 'ExitPromptError';
+
+    vi.mocked(askAndSetDockerOption).mockRejectedValueOnce(exitPromptError);
+
+    const exitMock = vi
+      .spyOn(process, 'exit')
+      .mockImplementationOnce((code) => {
+        throw new Error(`process.exit called with code ${code}`);
+      });
+
+    const consoleLogSpy = vi
+      .spyOn(console, 'log')
+      .mockImplementation(() => undefined);
+
+    await expect(main()).rejects.toThrow('process.exit called with code 130');
+
+    expect(consoleLogSpy).toHaveBeenCalledWith(
+      '\n\n⚠️  Setup cancelled by user.',
+    );
+    expect(exitMock).toHaveBeenCalledWith(130);
+
+    consoleLogSpy.mockRestore();
+    exitMock.mockRestore();
+  });
+
+  it('should remove SIGINT listener after setup completes successfully', async () => {
+    const removeListenerSpy = vi.spyOn(process, 'removeListener');
+
+    vi.spyOn(inquirer, 'prompt')
+      .mockResolvedValueOnce({ shouldUseRecaptcha: false })
+      .mockResolvedValueOnce({ shouldLogErrors: false });
+
+    await main();
+
+    expect(removeListenerSpy).toHaveBeenCalledWith(
+      'SIGINT',
+      expect.any(Function),
+    );
+
+    removeListenerSpy.mockRestore();
+  });
+
+  it('should remove SIGINT listener even when an error occurs', async () => {
+    const removeListenerSpy = vi.spyOn(process, 'removeListener');
+    const mockError = new Error('Some error');
+
+    vi.mocked(askAndSetDockerOption).mockRejectedValueOnce(mockError);
+
+    const exitMock = vi
+      .spyOn(process, 'exit')
+      .mockImplementationOnce((code) => {
+        throw new Error(`process.exit called with code ${code}`);
+      });
+
+    await expect(main()).rejects.toThrow('process.exit called with code 1');
+
+    expect(removeListenerSpy).toHaveBeenCalledWith(
+      'SIGINT',
+      expect.any(Function),
+    );
+
+    removeListenerSpy.mockRestore();
+    exitMock.mockRestore();
   });
 });

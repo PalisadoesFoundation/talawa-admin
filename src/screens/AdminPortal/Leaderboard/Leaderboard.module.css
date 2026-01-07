@@ -41,7 +41,7 @@
 
 .volunteerCell {
   display: flex;
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
   align-items: center;
   margin-left: var(--space-6);
   cursor: pointer;
@@ -53,9 +53,9 @@
 }
 
 .hoursCell {
-  font-weight: bold;
+  font-weight: var(--font-weight-bold);
 }
 
 .headerSm {
-  font-size: var(--font-size-table-body);
+  font-size: var(--font-size-sm);
 }
