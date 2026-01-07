@@ -141,8 +141,6 @@ export default function ProfileImageUpload({
     inputRef.current?.click();
   }
 
-
-
   return (
     <div className={styles.container} data-testid={dataTestId}>
       <button
