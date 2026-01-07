@@ -163,8 +163,6 @@
   "personalDetailsHeading": "Détails du profil",
   "workPhoneNumber": "Numéro de téléphone professionnel",
   "postalCode": "Code postal",
-
-  "pluginSettings": "Paramètres du plugin",
   "showPassword": "Afficher le mot de passe",
   "hidePassword": "Masquer le mot de passe",
   "volunteer": "Bénévole",
@@ -179,7 +177,6 @@
   "searchRequests": "Rechercher des demandes",
   "itemTitle": "Titre",
   "assignee": "Assigné",
-
   "signOut": "Se déconnecter",
   "signingOut": "Déconnexion en cours...",
   "retryPrompt": "Échec de la révocation de la session. Réessayer ?",

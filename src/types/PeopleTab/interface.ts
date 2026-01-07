@@ -21,10 +21,38 @@ export interface InterfacePageHeaderProps {
   actions?: React.ReactNode;
 }
 
+export interface InterfacePeopleTabNavbarProps {
+  title?: string;
+  search?: {
+    placeholder: string;
+    onSearch: (value: string) => void;
+    inputTestId?: string;
+    buttonTestId?: string;
+  };
+  sorting?: Array<{
+    title: string;
+    options: { label: string; value: string | number }[];
+    selected: string | number;
+    onChange: (value: string | number) => void;
+    testIdPrefix: string;
+    icon?: string | null;
+  }>;
+  showEventTypeFilter?: boolean;
+  actions?: React.ReactNode;
+}
+
 // Props for individual tab in a tab list
 export interface InterfacePeopleTab {
   title: string;
   icon?: React.ReactElement<React.SVGProps<SVGSVGElement>>;
+  isActive?: boolean;
+  action: () => void;
+  testId?: string;
+}
+
+export interface InterfacePeopleTabNavbar {
+  title: string;
+  icon?: string;
   isActive?: boolean;
   action: () => void;
   testId?: string;

@@ -58,9 +58,19 @@ const PeopleTabUserEvents: React.FC<InterfacePeopletabUserEventsProps> = ({
       {/* Time section */}
       <div className={styles.peopleTabUserEventTimeWrapper}>
         <div className={styles.peopleTabUserEventTime}>
-          {startTime && <p className={styles.timeText}>{startTime}</p>}
-          <p className={styles.timeSeparator}>{tCommon('to')}</p>
-          {endTime && <p className={styles.timeText}>{endTime}</p>}
+          {startTime && (
+            <p className={styles.peopleTabUserOrganizationEventPageTime}>
+              {startTime}
+            </p>
+          )}
+          <p className={styles.peopleTabUserOrganizationEventPageTimeSeparator}>
+            {tCommon('to')}
+          </p>
+          {endTime && (
+            <p className={styles.peopleTabUserOrganizationEventPageTime}>
+              {endTime}
+            </p>
+          )}
         </div>
 
         <div className={styles.peopleTabUserEventDate}>
@@ -74,7 +84,13 @@ const PeopleTabUserEvents: React.FC<InterfacePeopletabUserEventsProps> = ({
         {eventName && <h4 className={styles.eventName}>{eventName}</h4>}
         {eventDescription && (
           <div>
-            <p className={styles.eventDescription}>{eventDescription}</p>
+            <p
+              className={
+                styles.peopleTabUserOrganizationEventPageEventDescription
+              }
+            >
+              {eventDescription}
+            </p>
 
             {actionName && (
               <div className={styles.peopleTabUserEventAction}>

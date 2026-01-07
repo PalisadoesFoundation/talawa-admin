@@ -160,7 +160,7 @@
   "invalidFileType": "Invalid file type. Please upload a JPEG, PNG, or GIF.",
   "maritalStatus": "Marital Status",
   "mobilePhoneNumber": "Mobile Phone Number",
-  "personalDetailsHeading": "Profile Details",
+  "personalDetailsHeading": "Personal Information",
   "workPhoneNumber": "Work Phone Number",
   "postalCode": "Postal Code",
   "showPassword": "Show password",
@@ -203,5 +203,6 @@
   "selectLanguage": "Select Language",
   "talawa": "Talawa",
   "talawaBranding": "Talawa Branding",
-  "unableToLoadData": "Unable to load data."
+  "unableToLoadData": "Unable to load data.",
+  "peopleTabTagName": "Tag Name"
 }

@@ -1026,18 +1026,23 @@
     border-color 0.2s ease,
     box-shadow 0.2s ease;
   overflow: hidden;
-
-  /* Flex properties to make it sit on the same line */
   flex-grow: 1;
-  /* Allow it to grow to fill space */
   flex-shrink: 1;
-  /* Allow it to shrink if needed */
   width: auto;
-  /* Stop forcing 100% width */
-  min-width: 450px;
   min-width: 200px;
   max-width: 100%;
   height: 57px;
+  margin: 2.5rem 0;
+  align-items: center;
+  max-width: 775px;
+  margin: 2.5rem 0;
+  gap: 0.75rem;
+}
+
+.searchBarContainer > :first-child {
+  flex: 1 1 320px;
+  min-width: 240px;
+  max-width: 100%;
 }
 
 .searchBarContainerWithButton {
@@ -1410,26 +1415,6 @@ form label,
   align-items: center;
 }
 
-.searchBarContainer {
-  display: flex;
-  margin: 2.5rem 0;
-  align-items: center;
-  max-width: 600px;
-}
-
-.searchBarContainer {
-  display: flex;
-  margin: 2.5rem 0;
-  align-items: stretch;
-  gap: 0.75rem;
-}
-
-.searchBarContainer > :first-child {
-  flex: 1 1 320px;
-  min-width: 240px;
-  max-width: 100%;
-}
-
 /* Table Header */
 
 .tableHeader {
@@ -1499,14 +1484,8 @@ form label,
     display: flex;
     align-items: center;
     gap: 8px;
-  }
-
-  .peopleTabBtnBlock {
-    height: 100%;
-    padding-bottom: 4px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    color: #808080;
+    border: 1px solid #dddddd;
   }
 
   .btnsContainer .btnsBlock div {
@@ -2796,7 +2775,6 @@ form label,
 
 .calendarEventHeader {
   width: 100%;
-  margin-bottom: 20px;
   border-radius: 10px;
   padding: 5px;
 }
@@ -4329,10 +4307,24 @@ form label,
 .peopleTabIconWrapper {
   display: flex;
   align-items: center;
-  color: grey;
+  color: #dddddd;
   border: 1px solid grey;
   border-radius: 9px;
   padding: 0 20px;
+  color: #808080;
+  border: 1px solid #ddd;
+}
+
+.peopleTabActiveButton {
+  color: #555555;
+  background: #eaebef;
+  border-radius: 9px;
+  border: 1px solid #555555;
+}
+
+.peopleTabActiveHeader {
+  color: #555555;
+  background: #eaebef;
 }
 
 .peopleTabIcon {
@@ -4343,14 +4335,20 @@ form label,
   padding: 1rem 1.2rem;
 }
 
+.peopleTabComponent {
+  background: #fff;
+  padding-top: 1rem;
+  border-radius: 20px;
+  margin: 1rem;
+}
+
 .peopleTabComponentSection {
-  padding: 0.5rem 0.5rem;
   border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin: 10px 5px;
+  padding: 1rem 3rem;
 }
 
 .peopleTabUserTagContainer {
@@ -4365,7 +4363,8 @@ form label,
 }
 
 .peopleTabUserTagColumnHeader {
-  background: #6261613b;
+  background: #dddddd;
+  border: 1px solid #ddd;
 }
 
 .peopleTabUserTagTableCell {
@@ -4405,45 +4404,47 @@ form label,
 .peopleTabUserTagTableHeaderCell {
   padding: 0.75rem 1.5rem;
   text-align: left;
-  font-size: 0.75rem;
-  font-weight: 500;
+  font-size: 0.9rem;
   color: var(--peopleTabUserTagTableHeaderCell-color);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
   height: 4rem;
-  font-weight: bold;
 }
 
 .peopleTabUserTagTableBody {
   background: var(--peopleTabUserTagTableBody-bg);
+  border: 1px solid #ddd;
 }
 
 .peopleTabUserTagTable {
   width: 100%;
 }
 
+.peopleTabNavbarButtonHeader {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  margin-left: 4rem;
+  margin-top: 2rem;
+}
+
 .peopleTabIconWrapper:hover {
-  color: var(--groupsLabel-color);
-  border: 1px solid var(--groupsLabel-color);
+  color: #808080;
+  border: 1px solid #dddddd;
   cursor: pointer;
 }
 
 .peopleTabUserEventsContainer {
   width: 100%;
-  margin-top: 1rem;
 }
 
 .peopleTabUserEventContainer {
-  flex: 1 1 calc(50% - 1rem);
-  max-width: 45%;
-  min-width: 300px;
   background: white;
   border-radius: 3px;
   height: 200px;
   display: flex;
   flex-direction: column;
   padding: 1rem 2rem;
-  margin: 0.5rem; /* spacing for flex-wrap */
+  margin: 0.5rem;
   border-left: 6px solid #a8c7fa;
   border-right: 1px solid #80808036;
   border-top: 1px solid #80808036;
@@ -4468,11 +4469,10 @@ form label,
   flex-direction: column;
 }
 .peoplePageUserEventCardBody {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
   gap: 1rem;
   justify-content: center;
-  margin: 1rem 1.2rem;
+  grid-template-columns: repeat(2, minmax(650px, 1fr));
 }
 
 .peopleTabUserEventActionButton {
@@ -4544,21 +4544,27 @@ form label,
   background-color: #fff;
   width: 100%;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  width: 700px;
-  height: 250px;
+  height: 230px;
+  width: 660x;
+  align-items: center;
+  justify-content: center;
 }
 
 .peopleTabUserOrganizationsCardContent {
   display: flex;
-  gap: 1rem;
+  gap: 3rem;
 }
 
 .peopleTabUserOrganizationsCardImage {
-  width: 200px;
-  height: 150px;
+  width: 140px;
+  height: 130px;
   object-fit: cover;
   border-radius: 6px;
-  background-color: #f0f0f0;
+  background-color: #eaebef;
+  border: 2px solid #eaebef;
+  box-shadow:
+    0 6px 12px rgba(0, 0, 0, 0.12),
+    0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
 .peopleTabUserOrganizationsCardText {
@@ -4566,6 +4572,26 @@ form label,
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+.peopleTabUserOrganizationEventPageTime {
+  margin: 0;
+  font-weight: bold;
+  font-size: 1.5rem;
+  line-height: 1.3;
+}
+
+.peopleTabUserOrganizationEventPageTimeSeparator {
+  margin: 4px 0;
+  font-size: 1rem;
+}
+
+.peopleTabUserOrganizationEventPageEventDescription {
+  margin: 0;
+  font-size: 14px;
+  color: #6b7280;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 .peopleTabUserOrganizationsCardTitle {
@@ -4594,19 +4620,22 @@ form label,
   display: flex;
   justify-content: flex-end;
   margin-top: 0.75rem;
+  width: 100%;
 }
 
 .peopleTabUserOrganizationsEditButton {
   padding: 0.4rem 0.8rem;
-  background-color: #b0d4ff;
+  background-color: #92b5f5;
   border: none;
-  border-radius: 4px;
-  color: #000;
+  border-radius: 8px;
+  color: #555555;
   font-weight: 500;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  width: 7.3rem;
+  height: 2.5rem;
 }
 
 .peopleTabUserOrganizationsEditButton:hover {
@@ -4620,13 +4649,19 @@ form label,
 .peopleTabUserOrganizationsGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 16px; /* space between cards */
+  gap: 16px;
 }
 
 .peopleTabUserEventsGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
+}
+
+.peopleTabNavbarAlignment {
+  display: flex;
+  gap: 4rem;
+  align-items: center;
 }
 
 /* Optional: mobile fallback */
@@ -6172,6 +6207,27 @@ form {
 }
 
 /* SortingButton.tsx */
+.sortingImgIcon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 6px; /* space between icon & text */
+}
+
+.dropdownItemButton {
+  background-color: var(--dropdownItem-bg) !important;
+  color: var(--dropdownItem-color) !important;
+  border: none !important;
+  box-shadow: var(--dropdownItem-box-shadow);
+  border-radius: 9px;
+}
+
+.iconRightMargin {
+  margin-right: 0.6rem;
+}
 
 .dropdownItem {
   background-color: var(--dropdownItem-bg) !important;
@@ -8043,8 +8099,8 @@ form {
 .topRadius {
   border-top-left-radius: 24px;
   border-top-right-radius: 24px;
-  background-color: '#A8C7FA';
   color: '#555';
+  background: #eaebef;
 }
 
 .inputColor {
@@ -9701,15 +9757,13 @@ form {
 }
 
 .userContactDetailPersonalCardHeader {
-  background-color: #a8c7fa;
-  color: #555;
-  background-color: #a8c7fa;
-  padding: 1rem 1.5rem; /* py-3 px-4 */
-  display: flex; /* d-flex */
-  justify-content: space-between; /* justify-content-between */
-  align-items: center; /* align-items-center */
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   border-top-left-radius: 0.5rem;
   border-top-right-radius: 0.5rem;
+  background: #eaebef;
 }
 
 .userContactDetailContactCardHeader {
@@ -10614,8 +10668,6 @@ form {
   flex-wrap: nowrap !important;
   width: 100%;
   gap: 1rem;
-  margin-bottom: 2rem;
-  margin-top: 1rem;
 }
 
 /* 3. Mobile responsiveness: Only allow wrapping on actual small screens */

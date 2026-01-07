@@ -17,7 +17,7 @@
  * - Uses React state to manage sorting and search input.
  * - Supports sorting tags by latest or oldest creation time.
  * - Supports searching tags by tag name or creator name.
- * - Uses a reusable `PageHeader` component for search and sort controls.
+ * - Uses a reusable `PeopleTabNavbar` component for search and sort controls.
  * - Applies client-side filtering and sorting before rendering.
  * - Displays tags in a semantic HTML table for structured data presentation.
  *
@@ -29,19 +29,19 @@
  * @dependencies
  * - `react` for component state management
  * - Custom CSS modules for layout and styling
- * - Shared `PageHeader` component for search and sorting controls
+ * - Shared `PeopleTabNavbar` component for search and sorting controls
  *
  */
 import React, { useState } from 'react';
 import styles from 'style/app-fixed.module.css';
-// import { useTranslation } from 'react-i18next';
-import PageHeader from 'shared-components/Navbar/Navbar';
 import { useTranslation } from 'react-i18next';
+import PeopleTabNavbar from 'shared-components/PeopleTabNavbar/PeopleTabNavbar';
 
 const UserTags = () => {
   const { t: tCommon } = useTranslation('common');
-  const [sortBy, setSortBy] = useState('latest');
+  const [sortBy, setSortBy] = useState('Sort');
   const [searchTerm, setSearchTerm] = useState('');
+
   const dummyTags = [
     {
       id: 1,
@@ -146,7 +146,7 @@ const UserTags = () => {
   return (
     <div className={styles.peopleTabUserTagContainer}>
       {/* Controls */}
-      <PageHeader
+      <PeopleTabNavbar
         sorting={[
           {
             title: 'Sort By',
@@ -154,6 +154,7 @@ const UserTags = () => {
               { label: 'Latest', value: 'latest' },
               { label: 'Oldest', value: 'oldest' },
             ],
+            icon: '/images/svg/ri_arrow-up-down-line.svg',
             selected: sortBy,
             onChange: (value: string | number) =>
               setSortBy(value as 'latest' | 'oldest'),
@@ -161,7 +162,7 @@ const UserTags = () => {
           },
         ]}
         search={{
-          placeholder: 'Search tags...',
+          placeholder: 'Search tags',
           onSearch: (value: string) => setSearchTerm(value),
           inputTestId: 'tagsSearchInput',
           buttonTestId: 'tagsSearchBtn',
@@ -174,7 +175,7 @@ const UserTags = () => {
           <thead className={styles.peopleTabUserTagTableHeader}>
             <tr className={styles.peopleTabUserTagColumnHeader}>
               <th className={styles.peopleTabUserTagTableHeaderCell}>
-                {tCommon('title')}
+                {tCommon('peopleTabTagName')}
               </th>
               <th className={styles.peopleTabUserTagTableHeaderCell}>
                 {tCommon('assignedTo')}

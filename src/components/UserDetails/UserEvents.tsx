@@ -19,7 +19,7 @@
  * @remarks
  * - Uses React state hooks to manage search input and sorting order.
  * - Applies memoization via `useMemo` to efficiently filter and sort event data.
- * - Integrates a reusable `PageHeader` component for search and sort controls.
+ * - Integrates a reusable `PeopleTabNavbar` component for search and sort controls.
  * - Displays an empty state message when no events match the search criteria.
  * - Uses `react-i18next` for localization of UI text.
  * - Designed to be easily extended to support API-driven event data.
@@ -33,30 +33,25 @@
  * - `react-bootstrap` for layout and card structure
  * - `@mui/material` and `@mui/icons-material` for action icons
  * - `react-i18next` for translations
- * - Shared UI components such as `PageHeader` and `PeopleTabUserEvents`
+ * - Shared UI components such as `PeopleTabNavbar` and `PeopleTabUserEvents`
  *
  */
 import React, { useState, useMemo } from 'react';
 import { Card } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import styles from 'style/app-fixed.module.css';
-// import useLocalStorage from 'utils/useLocalstorage';
 import PeopleTabUserEvents from 'shared-components/PeopleTabUserEvents/PeopleTabUserEvents';
-import PageHeader from 'shared-components/Navbar/Navbar';
+import PeopleTabNavbar from 'shared-components/PeopleTabNavbar/PeopleTabNavbar';
 import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
-// import { useLocation } from 'react-router';
 
 type PeopleTabUserEventsProps = { id?: string };
 
 const UserEvents: React.FC<PeopleTabUserEventsProps> = () => {
-  // const { getItem } = useLocalStorage();
   const { t } = useTranslation('translation', { keyPrefix: 'memberDetail' });
-  // const location = useLocation();
-  // const currentId = location.state?.id || getItem('id') || id;
 
   const [searchValue, setSearchValue] = useState('');
-  const [sortOption, setSortOption] = useState<'ASC' | 'DESC'>('ASC');
+  const [sortOption, setSortOption] = useState('Sort');
 
   // Example dummy events
   const dummyEvents = [
@@ -157,8 +152,11 @@ const UserEvents: React.FC<PeopleTabUserEventsProps> = () => {
     <div>
       <div className={styles.peopleTabUserEventsContainer}>
         {/* ===== Page Header with Search & Sort ===== */}
-        <PageHeader
-          search={{ placeholder: 'Search events...', onSearch: setSearchValue }}
+        <PeopleTabNavbar
+          search={{
+            placeholder: 'Search created events',
+            onSearch: setSearchValue,
+          }}
           sorting={[
             {
               title: 'Sort By Name',
@@ -166,6 +164,7 @@ const UserEvents: React.FC<PeopleTabUserEventsProps> = () => {
                 { label: 'A → Z', value: 'ASC' },
                 { label: 'Z → A', value: 'DESC' },
               ],
+              icon: '/images/svg/ri_arrow-up-down-line.svg',
               selected: sortOption,
               onChange: (value: string | number) =>
                 setSortOption(value as 'ASC' | 'DESC'),
@@ -174,7 +173,7 @@ const UserEvents: React.FC<PeopleTabUserEventsProps> = () => {
           ]}
         />
 
-        <Card.Body className={`${styles.peoplePageUserEventCardBody} px-4 `}>
+        <Card.Body className={`${styles.peoplePageUserEventCardBody}`}>
           {filteredEvents.length === 0 ? (
             <div
               className={`${styles.emptyContainer} w-100 h-100 d-flex justify-content-center align-items-center fw-semibold text-secondary`}

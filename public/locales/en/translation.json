@@ -246,8 +246,7 @@
     "name": "name",
     "email": "email",
     "profilePictureAlt": "User profile picture",
-    "placeholderAvatarAlt": "Placeholder avatar",
-    "newMembersWillAppearHere": "New membership requests will appear here"
+    "placeholderAvatarAlt": "Placeholder avatar"
   },
   "users": {
     "membershipStatus": {
@@ -754,11 +753,8 @@
     "viewCampaigns": "View Campaigns",
     "searchByName": "Search by Name",
     "assocCampaigns": "Associated Campaigns",
-    "errorLoadingFundsData": "Error loading funds data"
-    "associatedCampaigns": "Associated Campaigns",
-    "searchFunds": "Search Funds",
     "errorLoadingFundsData": "Error loading funds data",
-    "editFund": "Edit Fund"
+    "associatedCampaigns": "Associated Campaigns"
   },
   "fundCampaign": {
     "title": "Fundraising Campaigns",
@@ -770,7 +766,6 @@
     "progress": "Progress",
     "raised": "Raised",
     "addCampaign": "Add Campaign",
-    "editCampaign": "Edit Campaign",
     "createdCampaign": "Campaign created successfully",
     "updatedCampaign": "Campaign updated successfully",
     "deletedCampaign": "Campaign deleted successfully",
@@ -782,7 +777,6 @@
     "currency": "Currency",
     "selectCurrency": "Select Currency",
     "searchFullName": "Search By Name",
-    "searchCampaigns": "Search Campaigns",
     "viewPledges": "View Pledges",
     "noCampaignsFound": "No Campaigns Found",
     "latestEndDate": "Latest End Date",
@@ -1164,7 +1158,7 @@
     "contactInfoHeading": "Contact Information",
     "actionsHeading": "Actions",
     "actions": "Action",
-    "personalDetailsHeading": "Profile Details",
+    "personalDetailsHeading": "Profile Information",
     "appLanguageCode": "Choose Language",
     "deleteUser": "Delete User",
     "created": "Created",

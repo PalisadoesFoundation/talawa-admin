@@ -6,4 +6,4 @@
 
 > `const` **default**: `React.FC`\<`PeopleTabUserEventsProps`\>
 
-Defined in: [src/components/UserDetails/UserEvents.tsx:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserDetails/UserEvents.tsx#L52)
+Defined in: [src/components/UserDetails/UserEvents.tsx:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/UserDetails/UserEvents.tsx#L50)

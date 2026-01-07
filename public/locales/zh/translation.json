@@ -246,8 +246,7 @@
     "name": "名称",
     "email": "电子邮件",
     "profilePictureAlt": "{{name}} 的头像",
-    "placeholderAvatarAlt": "占位符头像",
-    "newMembersWillAppearHere": "新的会员请求将出现在这里"
+    "placeholderAvatarAlt": "占位符头像"
   },
   "users": {
     "membershipStatus": {
@@ -755,8 +754,7 @@
     "associatedCampaigns": "相关活动",
     "searchFunds": "搜索基金",
     "errorLoadingFundsData": "加载基金数据时出错",
-    "editFund": "编辑基金",
-    "searchFunds": "搜索基金"
+    "editFund": "编辑基金"
   },
   "fundCampaign": {
     "title": "募捐活动",
@@ -785,8 +783,6 @@
     "earliestEndDate": "最早结束日期",
     "lowestGoal": "最低目标",
     "highestGoal": "最高目标",
-    "editCampaign": "编辑活动",
-    "searchCampaigns": "搜索活动",
     "errorLoading": "加载活动数据时出错"
   },
   "pledges": {

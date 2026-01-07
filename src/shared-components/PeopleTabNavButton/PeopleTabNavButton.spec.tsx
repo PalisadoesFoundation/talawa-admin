@@ -2,11 +2,6 @@ import React from 'react';
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import PeopleTabNavbarButton from './PeopleTabNavButton';
-
-const MockIcon = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg data-testid="icon" {...props} />
-);
-
 describe('PeopleTabNavbarButton', () => {
   afterEach(() => {
     vi.clearAllMocks();
@@ -21,7 +16,7 @@ describe('PeopleTabNavbarButton', () => {
     render(
       <PeopleTabNavbarButton
         title="Events"
-        icon={<MockIcon />}
+        icon="/images/svg/mdi_events.svg"
         action={vi.fn()}
       />,
     );
@@ -33,7 +28,7 @@ describe('PeopleTabNavbarButton', () => {
     render(
       <PeopleTabNavbarButton
         title="Events"
-        icon={<MockIcon />}
+        icon="/images/svg/mdi_events.svg"
         isActive
         action={vi.fn()}
       />,

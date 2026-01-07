@@ -4,7 +4,7 @@
 
 # Interface: InterfacePeopleTabUserOrganizationProps
 
-Defined in: [src/types/PeopleTab/interface.ts:46](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L46)
+Defined in: [src/types/PeopleTab/interface.ts:74](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L74)
 
 ## Properties
 
@@ -12,7 +12,7 @@ Defined in: [src/types/PeopleTab/interface.ts:46](https://github.com/PalisadoesF
 
 > `optional` **actionIcon**: `ReactNode`
 
-Defined in: [src/types/PeopleTab/interface.ts:52](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L52)
+Defined in: [src/types/PeopleTab/interface.ts:80](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L80)
 
 ***
 
@@ -20,7 +20,7 @@ Defined in: [src/types/PeopleTab/interface.ts:52](https://github.com/PalisadoesF
 
 > `optional` **actionName**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:53](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L53)
+Defined in: [src/types/PeopleTab/interface.ts:81](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L81)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/PeopleTab/interface.ts:53](https://github.com/PalisadoesF
 
 > **adminCount**: `number`
 
-Defined in: [src/types/PeopleTab/interface.ts:50](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L50)
+Defined in: [src/types/PeopleTab/interface.ts:78](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L78)
 
 ***
 
@@ -36,7 +36,7 @@ Defined in: [src/types/PeopleTab/interface.ts:50](https://github.com/PalisadoesF
 
 > **description**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:49](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L49)
+Defined in: [src/types/PeopleTab/interface.ts:77](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L77)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [src/types/PeopleTab/interface.ts:49](https://github.com/PalisadoesF
 
 > `optional` **img**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:47](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L47)
+Defined in: [src/types/PeopleTab/interface.ts:75](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L75)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [src/types/PeopleTab/interface.ts:47](https://github.com/PalisadoesF
 
 > **membersCount**: `number`
 
-Defined in: [src/types/PeopleTab/interface.ts:51](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L51)
+Defined in: [src/types/PeopleTab/interface.ts:79](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L79)
 
 ***
 
@@ -60,4 +60,4 @@ Defined in: [src/types/PeopleTab/interface.ts:51](https://github.com/PalisadoesF
 
 > **title**: `string`
 
-Defined in: [src/types/PeopleTab/interface.ts:48](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L48)
+Defined in: [src/types/PeopleTab/interface.ts:76](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/PeopleTab/interface.ts#L76)

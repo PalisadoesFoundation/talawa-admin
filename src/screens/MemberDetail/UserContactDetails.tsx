@@ -183,7 +183,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
         <Col md={6}>
           <Card className={`${styles.allRound}`}>
             <Card.Header className={styles.userContactDetailPersonalCardHeader}>
-              <h3 className="m-0">{t('personalDetailsHeading')}</h3>
+              <h3 className="m-0 font-black">{t('personalDetailsHeading')}</h3>
               <Button
                 variant="light"
                 size="sm"
@@ -386,7 +386,7 @@ const UserContactDetails: React.FC<MemberDetailProps> = ({
         <Col md={6}>
           <Card className={`${styles.allRound}`}>
             <Card.Header className={`py-3 px-4 ${styles.topRadius}`}>
-              <h3 className="m-0">{t('contactInfoHeading')}</h3>
+              <h3 className="m-0 font-black">{t('contactInfoHeading')}</h3>
             </Card.Header>
             <Card.Body className="py-3 px-3">
               <Row className="g-3">

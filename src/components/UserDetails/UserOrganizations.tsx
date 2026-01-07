@@ -24,7 +24,7 @@
  * - Supports client-side search, sorting, and filtering by organization type.
  * - Uses `useMemo` to optimize derived organization lists and avoid unnecessary
  *   recalculations.
- * - Integrates a reusable `PageHeader` component for search, sort, and filter controls.
+ * - Integrates a reusable `PeopleTabNavbar` component for search, sort, and filter controls.
  * - Displays an empty state message when no organizations match the criteria.
  *
  * @example
@@ -37,13 +37,13 @@
  * - `react-router` for resolving route-based user IDs
  * - `react-bootstrap` and custom CSS modules for layout
  * - `@mui/material` and `@mui/icons-material` for action icons
- * - Shared UI components such as `PageHeader` and `PeopleTabUserOrganizations`
+ * - Shared UI components such as `PeopleTabNavbar` and `PeopleTabUserOrganizations`
  *
  */
 import React, { useMemo, useState } from 'react';
 import { useQuery } from '@apollo/client';
 import PeopleTabUserOrganizations from 'shared-components/PeopleTabUserOrganizations/PeopleTabUserOrganizations';
-import PageHeader from 'shared-components/Navbar/Navbar';
+import PeopleTabNavbar from 'shared-components/PeopleTabNavbar/PeopleTabNavbar';
 import styles from 'style/app-fixed.module.css';
 import { IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
@@ -215,9 +215,9 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
   return (
     <div className={styles.peopleTabUserOrganizationsContainer}>
       {/* ===== Page Header with Search & Sort ===== */}
-      <PageHeader
+      <PeopleTabNavbar
         search={{
-          placeholder: 'Search organizations...',
+          placeholder: 'Search created organizations',
           onSearch: setSearchValue,
         }}
         sorting={[
@@ -227,6 +227,7 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
               { label: 'A → Z', value: 'ASC' },
               { label: 'Z → A', value: 'DESC' },
             ],
+            icon: '/images/svg/ion_options-outline.svg',
             selected: sortOption,
             onChange: (value: string | number) =>
               setSortOption(value as 'ASC' | 'DESC'),
@@ -236,10 +237,11 @@ const UserOrganizations: React.FC<MemberDetailProps> = ({
             title: 'Filter By Type',
             options: [
               { label: 'All', value: 'ALL' },
-              { label: 'Created', value: 'CREATED' },
-              { label: 'Belong To', value: 'BELONG_TO' },
-              { label: 'Joined', value: 'JOINED' },
+              { label: 'Created Organizations', value: 'CREATED' },
+              { label: 'Organizations user belong To', value: 'BELONG_TO' },
+              { label: 'Joined Organizations', value: 'JOINED' },
             ],
+            icon: '/images/svg/ri_arrow-up-down-line.svg',
             selected: orgFilter,
             onChange: (value: string | number) =>
               setOrgFilter(value as 'ALL' | OrgRelationType),

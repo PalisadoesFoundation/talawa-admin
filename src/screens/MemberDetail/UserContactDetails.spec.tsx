@@ -14,7 +14,7 @@ vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => {
       if (key === 'title') return 'User Profile';
-      if (key === 'personalDetailsHeading') return 'Personal Details';
+      if (key === 'personalDetailsHeading') return 'Personal Information';
       if (key === 'contactInfoHeading') return 'Contact Information';
       if (key === 'gender') return 'Gender';
       if (key === 'birthDate') return 'Birth Date';

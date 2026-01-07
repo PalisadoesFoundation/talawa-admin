@@ -33,6 +33,7 @@ interface InterfaceSortingButtonProps {
   type?: 'sort' | 'filter';
   /** Accessible label for the dropdown button (screen readers) */
   ariaLabel?: string;
+  icon?: string | null;
 }
 
 /**
@@ -54,6 +55,7 @@ const SortingButton: React.FC<InterfaceSortingButtonProps> = ({
   buttonLabel,
   type = 'sort',
   ariaLabel,
+  icon,
 }) => {
   // Determine the icon based on the type
   const IconComponent = type === 'filter' ? FilterAltOutlined : SortIcon;
@@ -66,12 +68,17 @@ const SortingButton: React.FC<InterfaceSortingButtonProps> = ({
         className={className}
         aria-label={ariaLabel}
       >
-        <IconComponent
-          className={'me-1'}
-          data-testid="sorting-icon"
-          data-icon-type={type}
-          aria-hidden="true"
-        />{' '}
+        <span className={styles.iconRightMargin}>
+          {icon ? (
+            <img src={String(icon)} alt={title} aria-hidden="true" />
+          ) : (
+            <IconComponent
+              data-testid={title}
+              data-icon-type={type}
+              aria-hidden="true"
+            />
+          )}
+        </span>
         {/* Use the appropriate icon */}
         {buttonLabel || selectedOption}
         {/* Use buttonLabel if provided, otherwise use selectedOption */}

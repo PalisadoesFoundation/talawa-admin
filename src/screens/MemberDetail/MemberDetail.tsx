@@ -37,11 +37,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import PeopleTabNavbarButton from 'shared-components/PeopleTabNavButton/PeopleTabNavButton';
-
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import BusinessIcon from '@mui/icons-material/Business';
-import EventsIcon from 'assets/svgs/events.svg?react';
-import TagsIcon from 'assets/svgs/tag.svg?react';
 import UserContactDetails from './UserContactDetails';
 import UserOrganizations from 'components/UserDetails/UserOrganizations';
 import UserEvents from 'components/UserDetails/UserEvents';
@@ -54,41 +49,43 @@ const MemberDetail: React.FC<MemberDetailProps> = ({ id }): JSX.Element => {
   const [activeTab, setActiveTab] = useState(tCommon('overview'));
 
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <div className="d-flex gap-3 mb-3">
-        <PeopleTabNavbarButton
-          title={tCommon('overview')}
-          icon={<DashboardIcon />}
-          isActive={activeTab === tCommon('overview')}
-          action={() => setActiveTab(tCommon('overview'))}
-        />
-        <PeopleTabNavbarButton
-          title={tCommon('organizations')}
-          icon={<BusinessIcon />}
-          isActive={activeTab === tCommon('organizations')}
-          action={() => setActiveTab(tCommon('organizations'))}
-        />
-        <PeopleTabNavbarButton
-          title={tCommon('events')}
-          icon={<EventsIcon />}
-          isActive={activeTab === tCommon('events')}
-          action={() => setActiveTab(tCommon('events'))}
-        />
-        <PeopleTabNavbarButton
-          title={tCommon('tags')}
-          icon={<TagsIcon />}
-          isActive={activeTab === tCommon('tags')}
-          action={() => setActiveTab(tCommon('tags'))}
-        />
-      </div>
+    <div className={styles.peopleTabComponent}>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <div className={styles.peopleTabNavbarButtonHeader}>
+          <PeopleTabNavbarButton
+            title={tCommon('overview')}
+            icon={'/images/svg/material-symbols_dashboard-outline.svg'}
+            isActive={activeTab === tCommon('overview')}
+            action={() => setActiveTab(tCommon('overview'))}
+          />
+          <PeopleTabNavbarButton
+            title={tCommon('organizations')}
+            icon={'/images/svg/octicon_organization-24.svg'}
+            isActive={activeTab === tCommon('organizations')}
+            action={() => setActiveTab(tCommon('organizations'))}
+          />
+          <PeopleTabNavbarButton
+            title={tCommon('events')}
+            icon={'/images/svg/mdi_events.svg'}
+            isActive={activeTab === tCommon('events')}
+            action={() => setActiveTab(tCommon('events'))}
+          />
+          <PeopleTabNavbarButton
+            title={tCommon('tags')}
+            icon={'/images/svg/bi_tags.svg'}
+            isActive={activeTab === tCommon('tags')}
+            action={() => setActiveTab(tCommon('tags'))}
+          />
+        </div>
 
-      <div className={styles.peopleTabComponentSection}>
-        {activeTab === tCommon('overview') && <UserContactDetails id={id} />}
-        {activeTab === tCommon('organizations') && <UserOrganizations />}
-        {activeTab === tCommon('events') && <UserEvents />}
-        {activeTab === tCommon('tags') && <UserTags />}
-      </div>
-    </LocalizationProvider>
+        <div className={styles.peopleTabComponentSection}>
+          {activeTab === tCommon('overview') && <UserContactDetails id={id} />}
+          {activeTab === tCommon('organizations') && <UserOrganizations />}
+          {activeTab === tCommon('events') && <UserEvents />}
+          {activeTab === tCommon('tags') && <UserTags />}
+        </div>
+      </LocalizationProvider>
+    </div>
   );
 };
 

@@ -246,8 +246,7 @@
     "name": "Nom",
     "email": "E-mail",
     "profilePictureAlt": "Image de profil de {{name}}",
-    "placeholderAvatarAlt": "Avatar par défaut",
-    "newMembersWillAppearHere": "Les nouvelles demandes d'adhésion apparaîtront ici"
+    "placeholderAvatarAlt": "Avatar par défaut"
   },
   "users": {
     "membershipStatus": {
@@ -755,8 +754,7 @@
     "associatedCampaigns": "Campagnes associées",
     "searchFunds": "Rechercher des fonds",
     "errorLoadingFundsData": "Erreur lors du chargement des données des fonds",
-    "editFund": "Modifier le fonds",
-    "searchFunds": "Rechercher des fonds"
+    "editFund": "Modifier le fonds"
   },
   "fundCampaign": {
     "title": "Campagnes de collecte de fonds",
@@ -766,7 +764,6 @@
     "progress": "Progrès",
     "raised": "Collecté",
     "addCampaign": "Ajouter une campagne",
-    "editCampaign": "Modifier la campagne",
     "createdCampaign": "Campagne créée avec succès",
     "updatedCampaign": "Campagne mise à jour avec succès",
     "deletedCampaign": "Campagne supprimée avec succès",
@@ -778,7 +775,6 @@
     "currency": "Devise",
     "selectCurrency": "Sélectionner la devise",
     "searchFullName": "Rechercher par nom",
-    "searchCampaigns": "Rechercher des campagnes",
     "viewPledges": "Voir les promesses de dons",
     "noCampaignsFound": "Aucune campagne trouvée",
     "latestEndDate": "Dernière date de fin",

@@ -1,0 +1,146 @@
+/**
+ * PageHeader Component
+ *
+ * A flexible and reusable header component used across multiple screens.
+ * It supports page title, search bar, sorting dropdowns, optional event type filter,
+ * and action buttons.
+ *
+ * @component
+ *
+ * @remarks
+ * - Primarily used for pages that require filtering, sorting, or search.
+ * - Uses `SearchBar` and `SortingButton` subcomponents for search and sorting functionality.
+ * - Layout is responsive and adjusts based on provided props.
+ *
+ * @example
+ * ```tsx
+ * <PageHeader
+ *   title="Users"
+ *   search={{
+ *     placeholder: "Search user...",
+ *     onSearch: handleSearch
+ *   }}
+ *   sorting={[
+ *     {
+ *       title: "Sort By",
+ *       options: [
+ *         { label: "Newest", value: "DESC" },
+ *         { label: "Oldest", value: "ASC" }
+ *       ],
+ *       selected: "DESC",
+ *       onChange: handleSort,
+ *       testIdPrefix: "usersSort"
+ *     }
+ *   ]}
+ *   actions={<Button>Add User</Button>}
+ * />
+ * ```
+ *
+ * @param {string} [title] — Optional title displayed at the top of the page.
+ * @param {{
+ *   placeholder: string;
+ *   onSearch: (value: string) => void;
+ *   inputTestId?: string;
+ *   buttonTestId?: string;
+ * }} [search] — Search bar configuration.
+ *
+ * @param {Array<{
+ *   title: string;
+ *   options: { label: string; value: string | number }[];
+ *   selected: string | number;
+ *   onChange: (value: string | number) => void;
+ *   testIdPrefix: string;
+ * }>} [sorting] — List of sorting dropdown selectors.
+ *
+ * @param {boolean} [showEventTypeFilter=false] — Whether to show the event type dropdown.
+ *
+ * @param {React.ReactNode} [actions] — Action buttons/elements rendered on the right side.
+ *
+ * @returns {JSX.Element} The rendered PageHeader component.
+ */
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import styles from 'style/app-fixed.module.css';
+import SearchBar from 'shared-components/SearchBar/SearchBar';
+import SortingButton from 'subComponents/SortingButton';
+import { InterfacePeopleTabNavbarProps } from 'types/PeopleTab/interface';
+
+export default function PeopleTabNavbar({
+  title,
+  search,
+  sorting,
+  showEventTypeFilter = false,
+  actions,
+}: InterfacePeopleTabNavbarProps) {
+  const { t: tCommon } = useTranslation('common');
+
+  return (
+    <div
+      className={styles.calendarEventHeader}
+      data-testid="calendarEventHeader"
+    >
+      <div className={styles.calendar__header}>
+        {title && <h2 className={styles.pageHeaderTitle}>{title}</h2>}
+        <div className={styles.peopleTabNavbarAlignment}>
+          {/* ===== Action Buttons ===== */}
+          {actions && (
+            <div className={styles.btnsBlock}>
+              <div className={styles.selectTypeEventHeader}>{actions}</div>
+            </div>
+          )}
+          {/* ===== Sorting Props ===== */}
+          {sorting &&
+            sorting.map(
+              (
+                sort: (typeof sorting)[0],
+                idx: React.Key | null | undefined,
+              ) => (
+                <div key={idx} className={styles.dropdownItemButton}>
+                  <SortingButton
+                    title={sort.title}
+                    sortingOptions={sort.options}
+                    selectedOption={sort.selected}
+                    onSortChange={sort.onChange}
+                    dataTestIdPrefix={sort.testIdPrefix}
+                    className={styles.dropdown}
+                    icon={sort.icon}
+                  />
+                </div>
+              ),
+            )}
+
+          {/*  Optional Event Type dropdown */}
+          {showEventTypeFilter && (
+            <div className={styles.btnsBlock}>
+              <SortingButton
+                title={tCommon('eventType')}
+                sortingOptions={[
+                  { label: 'Events', value: 'Events' },
+                  { label: 'Workshops', value: 'Workshops' },
+                ]}
+                selectedOption={'Events'}
+                onSortChange={() => {}}
+                dataTestIdPrefix="eventType"
+                className={styles.dropdown}
+                buttonLabel={tCommon('eventType')}
+              />
+            </div>
+          )}
+        </div>
+
+        {/* ===== Search Bar ===== */}
+        {search && (
+          <SearchBar
+            placeholder={search.placeholder}
+            onSearch={search.onSearch}
+            inputTestId={search.inputTestId}
+            buttonTestId={search.buttonTestId}
+            showSearchButton={true} //  true
+            showLeadingIcon={true} //  true (Magnifying glass)
+            showClearButton={true}
+          />
+        )}
+      </div>
+    </div>
+  );
+}

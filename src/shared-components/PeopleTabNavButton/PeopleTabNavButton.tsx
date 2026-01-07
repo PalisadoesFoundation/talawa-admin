@@ -32,9 +32,9 @@
  */
 import React from 'react';
 import styles from 'style/app-fixed.module.css';
-import { InterfacePeopleTab } from 'types/PeopleTab/interface';
+import { InterfacePeopleTabNavbar } from 'types/PeopleTab/interface';
 
-const PeopleTabNavbarButton: React.FC<InterfacePeopleTab> = ({
+const PeopleTabNavbarButton: React.FC<InterfacePeopleTabNavbar> = ({
   title,
   icon,
   isActive,
@@ -44,22 +44,25 @@ const PeopleTabNavbarButton: React.FC<InterfacePeopleTab> = ({
   return (
     <div
       onClick={action}
-      className={`${styles.peopleTabBtnBlock} ${isActive ? styles.active : ''}`}
+      className={`${styles.peopleTabBtnBlock} ${isActive ? styles.peopleTabActiveButton : ''}`}
       data-testid={testId}
     >
       <div className={styles.peopleTabIconWrapper}>
         {icon && (
           <span className={styles.peopleTabIcon}>
-            {React.cloneElement(
-              icon as React.ReactElement<React.SVGProps<SVGSVGElement>>,
-              {
-                fill: isActive ? 'var(--bs-black)' : 'var(--bs-secondary)',
-              },
-            )}
+            <img
+              src={icon}
+              alt={`${title}`}
+              className={styles.peopleTabImgIcon}
+            />
           </span>
         )}
 
-        <span className={styles.peopleTabEventHeader}>{title}</span>
+        <span
+          className={`${styles.peopleTabEventHeader} ${isActive ? styles.peopleTabActiveHeader : ''}`}
+        >
+          {title}
+        </span>
       </div>
     </div>
   );
