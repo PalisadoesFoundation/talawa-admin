@@ -23,6 +23,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useParams, useNavigate } from 'react-router';
 import { useLazyQuery } from '@apollo/client';
+import { Button } from 'react-bootstrap';
 import {
   GridCellParams,
   GridPaginationModel,
