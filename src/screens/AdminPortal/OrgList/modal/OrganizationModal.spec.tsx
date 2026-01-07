@@ -60,13 +60,7 @@ describe('OrganizationModal Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    mockConvertToBase64.mockImplementation(async (file: File) => {
-      // Simulate file size validation - reject files larger than 5MB
-      if (file.size > 5000000) {
-        throw new Error('File too large');
-      }
-      return 'mockBase64String';
-    });
+    mockConvertToBase64.mockResolvedValue('mockBase64String');
     (validateFile as unknown as ReturnType<typeof vi.fn>).mockImplementation(
       () => ({
         isValid: true,
@@ -167,13 +161,11 @@ describe('OrganizationModal Component', () => {
   });
 
   test('handles image upload error correctly', async () => {
+    mockConvertToBase64.mockRejectedValueOnce(new Error('Network error'));
     setup();
     const fileInput = screen.getByTestId('organisationImage');
-    // Create a file larger than 5MB to trigger the error
-    const largeFile = new File(['x'.repeat(6000000)], 'large.png', {
-      type: 'image/png',
-    });
-    fireEvent.change(fileInput, { target: { files: [largeFile] } });
+    const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
+    fireEvent.change(fileInput, { target: { files: [file] } });
 
     await waitFor(() => {
       expect(toastMocks.error).toHaveBeenCalledWith('imageUploadError');
@@ -597,13 +589,12 @@ describe('OrganizationModal Component', () => {
   });
 
   test('should show error toast on upload failure', async () => {
+    mockConvertToBase64.mockRejectedValueOnce(new Error('Server error'));
     setup();
-    const largeFile = new File(['x'.repeat(6000000)], 'large.png', {
-      type: 'image/png',
-    });
+    const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
     const fileInput = screen.getByTestId('organisationImage');
 
-    fireEvent.change(fileInput, { target: { files: [largeFile] } });
+    fireEvent.change(fileInput, { target: { files: [file] } });
 
     await waitFor(() => {
       expect(toastMocks.error).toHaveBeenCalledWith('imageUploadError');

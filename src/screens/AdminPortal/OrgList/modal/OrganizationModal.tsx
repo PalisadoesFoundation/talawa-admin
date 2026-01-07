@@ -258,7 +258,8 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               const base64String: string = await convertToBase64(file);
               setFormState({ ...formState, avatar: base64String });
               toast.success(t('imageUploadSuccess'));
-            } catch {
+            } catch (error) {
+              // Error available for debugging if needed
               toast.error(t('imageUploadError'));
             }
           }}
