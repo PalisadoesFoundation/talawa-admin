@@ -1,10 +1,10 @@
-[**talawa-admin**](../../../../README.md)
+[Admin Docs](/)
 
 ***
 
 # Interface: InterfaceCursorPaginationRenderProps\<TNode\>
 
-Defined in: [src/types/CursorPagination/interface.ts:36](https://github.com/krishvsoni/talawa-admin/blob/442c1c84098d4833874ec872b1d3535c8ab0599b/src/types/CursorPagination/interface.ts#L36)
+Defined in: [src/types/CursorPagination/interface.ts:36](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L36)
 
 Props passed to children render function when useExternalUI is true
 
@@ -20,7 +20,7 @@ Props passed to children render function when useExternalUI is true
 
 > **error**: `Error`
 
-Defined in: [src/types/CursorPagination/interface.ts:42](https://github.com/krishvsoni/talawa-admin/blob/442c1c84098d4833874ec872b1d3535c8ab0599b/src/types/CursorPagination/interface.ts#L42)
+Defined in: [src/types/CursorPagination/interface.ts:42](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L42)
 
 ***
 
@@ -28,7 +28,7 @@ Defined in: [src/types/CursorPagination/interface.ts:42](https://github.com/kris
 
 > **handleLoadMore**: () => `void`
 
-Defined in: [src/types/CursorPagination/interface.ts:41](https://github.com/krishvsoni/talawa-admin/blob/442c1c84098d4833874ec872b1d3535c8ab0599b/src/types/CursorPagination/interface.ts#L41)
+Defined in: [src/types/CursorPagination/interface.ts:41](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L41)
 
 #### Returns
 
@@ -40,7 +40,7 @@ Defined in: [src/types/CursorPagination/interface.ts:41](https://github.com/kris
 
 > **items**: `TNode`[]
 
-Defined in: [src/types/CursorPagination/interface.ts:37](https://github.com/krishvsoni/talawa-admin/blob/442c1c84098d4833874ec872b1d3535c8ab0599b/src/types/CursorPagination/interface.ts#L37)
+Defined in: [src/types/CursorPagination/interface.ts:37](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L37)
 
 ***
 
@@ -48,7 +48,7 @@ Defined in: [src/types/CursorPagination/interface.ts:37](https://github.com/kris
 
 > **loading**: `boolean`
 
-Defined in: [src/types/CursorPagination/interface.ts:38](https://github.com/krishvsoni/talawa-admin/blob/442c1c84098d4833874ec872b1d3535c8ab0599b/src/types/CursorPagination/interface.ts#L38)
+Defined in: [src/types/CursorPagination/interface.ts:38](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L38)
 
 ***
 
@@ -56,7 +56,7 @@ Defined in: [src/types/CursorPagination/interface.ts:38](https://github.com/kris
 
 > **loadingMore**: `boolean`
 
-Defined in: [src/types/CursorPagination/interface.ts:39](https://github.com/krishvsoni/talawa-admin/blob/442c1c84098d4833874ec872b1d3535c8ab0599b/src/types/CursorPagination/interface.ts#L39)
+Defined in: [src/types/CursorPagination/interface.ts:39](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L39)
 
 ***
 
@@ -64,4 +64,4 @@ Defined in: [src/types/CursorPagination/interface.ts:39](https://github.com/kris
 
 > **pageInfo**: [`InterfacePageInfo`](InterfacePageInfo.md)
 
-Defined in: [src/types/CursorPagination/interface.ts:40](https://github.com/krishvsoni/talawa-admin/blob/442c1c84098d4833874ec872b1d3535c8ab0599b/src/types/CursorPagination/interface.ts#L40)
+Defined in: [src/types/CursorPagination/interface.ts:40](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/types/CursorPagination/interface.ts#L40)
