@@ -5,15 +5,7 @@
  * It provides a modal-based form to input advertisement details such as name, media, type,
  * start date, and end date. The component supports both "register" and "edit" modes.
  *
- * @param props - The properties for the component.
- * @param props.formStatus - Determines whether the form is in "register" or "edit" mode.
- * @param props.idEdit - The ID of the advertisement being edited (used in "edit" mode).
- * @param props.nameEdit - The name of the advertisement being edited.
- * @param props.typeEdit - The type of the advertisement being edited.
- * @param props.advertisementMediaEdit - The media file of the advertisement being edited.
- * @param props.startDateEdit - The start date of the advertisement being edited.
- * @param props.endDateEdit - The end date of the advertisement being edited.
- * @param props.setAfter - Callback to reset pagination or refetch data after mutation.
+ * @param props The properties for the component. See InterfaceAddOnRegisterProps for details.
  *
  * @returns The AdvertisementRegister component.
  *
