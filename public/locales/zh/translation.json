@@ -1854,7 +1854,8 @@
   },
   "checkIn": {
     "errorCheckingIn": "签到错误",
-    "checkedInSuccessfully": "成功签到"
+    "checkedInSuccessfully": "成功签到",
+    "searchAttendees": "搜尋參與者"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "添加与会者时出错",

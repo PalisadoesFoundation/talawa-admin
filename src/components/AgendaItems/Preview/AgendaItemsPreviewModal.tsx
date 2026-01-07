@@ -5,32 +5,15 @@
  * It displays various properties of the agenda item, such as category, title,
  * description, duration, creator, URLs, and attachments. It also provides
  * options to update or delete the agenda item.
- *
- * @component
- * @param {InterfaceAgendaItemsPreviewModalProps} props - The props for the component.
- * @param {boolean} props.agendaItemPreviewModalIsOpen - Determines if the modal is open.
- * @param {() => void} props.hidePreviewModal - Function to close the modal.
- * @param {() => void} props.showUpdateModal - Function to open the update modal.
- * @param {() => void} props.toggleDeleteModal - Function to toggle the delete modal.
- * @param {object} props.formState - The state containing agenda item details.
- * @param {string[]} props.formState.agendaItemCategoryNames - List of category names.
- * @param {string} props.formState.title - Title of the agenda item.
- * @param {string} props.formState.description - Description of the agenda item.
- * @param {string} props.formState.duration - Duration of the agenda item.
- * @param {object} props.formState.createdBy - Creator details of the agenda item.
- * @param {string} props.formState.createdBy.firstName - First name of the creator.
- * @param {string} props.formState.createdBy.lastName - Last name of the creator.
- * @param {string[]} props.formState.urls - List of URLs associated with the agenda item.
- * @param {string[]} props.formState.attachments - List of attachment URLs.
- * @param {(key: string) => string} props.t - Translation function for localization.
- *
- * @returns {JSX.Element} A modal displaying the agenda item details.
  */
 import React from 'react';
-import { Modal, Form, Button } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import styles from 'style/app-fixed.module.css';
 import { FaLink } from 'react-icons/fa';
 import type { InterfaceAgendaItemsPreviewModalProps } from 'types/Agenda/interface';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { useTranslation } from 'react-i18next';
+import { BaseModal } from 'shared-components/BaseModal';
 const AgendaItemsPreviewModal: React.FC<
   InterfaceAgendaItemsPreviewModalProps
 > = ({
@@ -41,10 +24,9 @@ const AgendaItemsPreviewModal: React.FC<
   formState,
   t,
 }) => {
+  const { t: tErrors } = useTranslation('errors');
   /**
    * Renders the attachments preview.
-   *
-   * @returns JSX elements for each attachment, displaying videos and images.
    */
   const renderAttachments = (): JSX.Element[] => {
     return formState.attachments.map((attachment, index) => (
@@ -73,8 +55,6 @@ const AgendaItemsPreviewModal: React.FC<
 
   /**
    * Renders the URLs list.
-   *
-   * @returns JSX elements for each URL, displaying clickable links.
    */
   const renderUrls = (): JSX.Element[] => {
     return formState.urls.map((url, index) => (
@@ -88,21 +68,32 @@ const AgendaItemsPreviewModal: React.FC<
   };
 
   return (
-    <Modal
-      className={styles.agendaItemModal}
-      show={agendaItemPreviewModalIsOpen}
-      onHide={hidePreviewModal}
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+      onReset={hidePreviewModal}
     >
-      <Modal.Header>
-        <p className={styles.titlemodalAgendaItems}>{t('agendaItemDetails')}</p>
-        <Button
-          onClick={hidePreviewModal}
-          data-testid="previewAgendaItemModalCloseBtn"
-        >
-          <i className="fa fa-times"></i>
-        </Button>
-      </Modal.Header>
-      <Modal.Body>
+      <BaseModal
+        className={styles.agendaItemModal}
+        show={agendaItemPreviewModalIsOpen}
+        onHide={hidePreviewModal}
+        showCloseButton={false}
+        headerContent={
+          <>
+            <p className={styles.titlemodalAgendaItems}>
+              {t('agendaItemDetails')}
+            </p>
+            <Button
+              onClick={hidePreviewModal}
+              data-testid="previewAgendaItemModalCloseBtn"
+            >
+              <i className="fa fa-times"></i>
+            </Button>
+          </>
+        }
+      >
         <Form>
           <div>
             <div className={styles.preview}>
@@ -158,8 +149,8 @@ const AgendaItemsPreviewModal: React.FC<
             </Button>
           </div>
         </Form>
-      </Modal.Body>
-    </Modal>
+      </BaseModal>
+    </ErrorBoundaryWrapper>
   );
 };
 

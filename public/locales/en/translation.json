@@ -1837,7 +1837,8 @@
   },
   "checkIn": {
     "errorCheckingIn": "Error checking in",
-    "checkedInSuccessfully": "Checked in successfully"
+    "checkedInSuccessfully": "Checked in successfully",
+    "searchAttendees": "Search Attendees"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error adding attendee",

@@ -1837,7 +1837,8 @@
   },
   "checkIn": {
     "errorCheckingIn": "Error al registrarse",
-    "checkedInSuccessfully": "Registrado con éxito"
+    "checkedInSuccessfully": "Registrado con éxito",
+    "searchAttendees": "Buscar asistentes"
   },
   "eventRegistrantsModal": {
     "errorAddingAttendee": "Error al agregar asistente",

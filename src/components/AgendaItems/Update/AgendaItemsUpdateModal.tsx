@@ -6,23 +6,14 @@
  * description, categories, URLs, and attachments. The modal also includes
  * validation for URLs and file size limits for attachments.
  *
- * @component
- * @param props - The props for the component.
- * @param props.agendaItemUpdateModalIsOpen - Boolean indicating if the modal is open.
- * @param props.hideUpdateModal - Function to close the modal.
- * @param props.formState - The current state of the agenda item form.
- * @param props.setFormState - Function to update the form state.
- * @param props.updateAgendaItemHandler - Function to handle form submission.
- * @param props.t - Translation function for localized strings.
- * @param props.agendaItemCategories - List of available agenda item categories.
- *
  * @remarks
  * - The component uses `react-bootstrap` for modal and form elements.
  * - `@mui/material` is used for the Autocomplete component.
  * - File attachments are converted to base64 format before being added to the form state.
  * - URLs are validated using a regular expression.
  *
- * @example
+ * @remarks
+ * Example usage:
  * ```tsx
  * <AgendaItemsUpdateModal
  *   agendaItemUpdateModalIsOpen={true}
@@ -34,15 +25,10 @@
  *   agendaItemCategories={categories}
  * />
  * ```
- *
- * @dependencies
- * - `react`, `react-bootstrap`, `@mui/material`, `react-icons`, `react-toastify`
- * - Custom utility functions: `convertToBase64`
- *
  */
 
 import React, { useState, useEffect } from 'react';
-import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
+import { Form, Button, Row, Col } from 'react-bootstrap';
 import { Autocomplete, TextField } from '@mui/material';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { toast } from 'react-toastify';
@@ -50,6 +36,9 @@ import convertToBase64 from 'utils/convertToBase64';
 import styles from '../../../style/app-fixed.module.css';
 import type { InterfaceAgendaItemCategoryInfo } from 'utils/interfaces';
 import type { InterfaceAgendaItemsUpdateModalProps } from 'types/Agenda/interface';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import { useTranslation } from 'react-i18next';
+import { BaseModal } from 'shared-components/BaseModal';
 const AgendaItemsUpdateModal: React.FC<
   InterfaceAgendaItemsUpdateModalProps
 > = ({
@@ -62,6 +51,7 @@ const AgendaItemsUpdateModal: React.FC<
   agendaItemCategories,
 }) => {
   const [newUrl, setNewUrl] = useState('');
+  const { t: tErrors } = useTranslation('errors');
 
   useEffect(() => {
     setFormState((prevState) => ({
@@ -73,9 +63,6 @@ const AgendaItemsUpdateModal: React.FC<
 
   /**
    * Validates if a given URL is in a correct format.
-   *
-   * @param url - The URL to validate.
-   * @returns True if the URL is valid, false otherwise.
    */
   const isValidUrl = (url: string): boolean => {
     // Regular expression for basic URL validation
@@ -101,8 +88,6 @@ const AgendaItemsUpdateModal: React.FC<
 
   /**
    * Handles removing a URL from the form state.
-   *
-   * @param url - The URL to remove.
    */
   const handleRemoveUrl = (url: string): void => {
     setFormState({
@@ -115,8 +100,6 @@ const AgendaItemsUpdateModal: React.FC<
    * Handles file input change event.
    * Converts selected files to base64 format and updates the form state.
    * Displays an error toast if the total file size exceeds the limit.
-   *
-   * @param e - The change event for file input.
    */
   const handleFileChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -144,8 +127,6 @@ const AgendaItemsUpdateModal: React.FC<
 
   /**
    * Handles removing an attachment from the form state.
-   *
-   * @param attachment - The attachment to remove.
    */
   const handleRemoveAttachment = (attachment: string): void => {
     setFormState({
@@ -155,21 +136,32 @@ const AgendaItemsUpdateModal: React.FC<
   };
 
   return (
-    <Modal
-      className={styles.AgendaItemModal}
-      show={agendaItemUpdateModalIsOpen}
-      onHide={hideUpdateModal}
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+      onReset={hideUpdateModal}
     >
-      <Modal.Header>
-        <p className={styles.titlemodalAgendaItems}>{t('updateAgendaItem')}</p>
-        <Button
-          onClick={hideUpdateModal}
-          data-testid="updateAgendaItemModalCloseBtn"
-        >
-          <i className="fa fa-times" />
-        </Button>
-      </Modal.Header>
-      <Modal.Body>
+      <BaseModal
+        className={styles.AgendaItemModal}
+        show={agendaItemUpdateModalIsOpen}
+        onHide={hideUpdateModal}
+        showCloseButton={false}
+        headerContent={
+          <>
+            <p className={styles.titlemodalAgendaItems}>
+              {t('updateAgendaItem')}
+            </p>
+            <Button
+              onClick={hideUpdateModal}
+              data-testid="updateAgendaItemModalCloseBtn"
+            >
+              <i className="fa fa-times" />
+            </Button>
+          </>
+        }
+      >
         <Form onSubmit={updateAgendaItemHandler}>
           <Form.Group className="d-flex mb-3 w-100">
             <Autocomplete
@@ -330,8 +322,8 @@ const AgendaItemsUpdateModal: React.FC<
             {t('update')}
           </Button>
         </Form>
-      </Modal.Body>
-    </Modal>
+      </BaseModal>
+    </ErrorBoundaryWrapper>
   );
 };
 

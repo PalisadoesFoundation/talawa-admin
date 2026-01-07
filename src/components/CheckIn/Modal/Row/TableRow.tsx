@@ -5,15 +5,6 @@
  * - Mark a user as checked in for an event.
  * - Generate and download a PDF tag for the user.
  *
- * @param data - The data object containing user and event details.
- * @param data.userId - The unique identifier for the user.
- * @param data.eventId - The unique identifier for the event.
- * @param data.name - The name of the user.
- * @param data.isCheckedIn - Whether the user is currently checked in.
- * @param refetch - A function to refetch the data after a mutation.
- *
- * @returns A JSX element that displays buttons for checking in or downloading a tag.
- *
  * @remarks
  * - If the user is already checked in, the "Checked In" button is disabled, and a "Download Tag" button is displayed.
  * - If the user is not checked in, a "Check In" button is displayed.
@@ -21,7 +12,8 @@
  * - The `generate` function from `@pdfme/generator` is used to create the PDF tag.
  * - Notifications are displayed using `react-toastify` for success, error, and pending states.
  *
- * @example
+ * @remarks
+ * Example usage:
  * ```tsx
  * <TableRow
  *   data={{
@@ -43,6 +35,8 @@ import { toast } from 'react-toastify';
 import { generate } from '@pdfme/generator';
 import { tagTemplate } from '../../tagTemplate';
 import { useTranslation } from 'react-i18next';
+import { ErrorBoundaryWrapper } from 'shared-components/ErrorBoundaryWrapper/ErrorBoundaryWrapper';
+import styles from './TableRow.module.css';
 
 export const TableRow = ({
   data,
@@ -55,6 +49,7 @@ export const TableRow = ({
 }): JSX.Element => {
   const [checkInMutation] = useMutation(MARK_CHECKIN);
   const { t } = useTranslation('translation', { keyPrefix: 'checkIn' });
+  const { t: tErrors } = useTranslation('errors');
 
   const markCheckIn = (): void => {
     const variables = data.isRecurring
@@ -77,8 +72,6 @@ export const TableRow = ({
   };
   /**
    * Triggers a notification while generating and downloading a PDF tag.
-   *
-   * @returns A promise that resolves when the PDF is generated and opened.
    */
   const notify = (): Promise<void> =>
     toast.promise(generateTag, {
@@ -89,8 +82,6 @@ export const TableRow = ({
 
   /**
    * Generates a PDF tag based on the provided data and opens it in a new tab.
-   *
-   * @returns A promise that resolves when the PDF is successfully generated and opened.
    */
   const generateTag = async (): Promise<void> => {
     try {
@@ -115,7 +106,13 @@ export const TableRow = ({
   };
 
   return (
-    <>
+    <ErrorBoundaryWrapper
+      fallbackErrorMessage={tErrors('defaultErrorMessage')}
+      fallbackTitle={tErrors('title')}
+      resetButtonAriaLabel={tErrors('resetButtonAriaLabel')}
+      resetButtonText={tErrors('resetButton')}
+      onReset={refetch}
+    >
       {data.isCheckedIn ? (
         <div>
           <Button variant="contained" disabled className="m-2 p-2">
@@ -126,14 +123,10 @@ export const TableRow = ({
           </Button>
         </div>
       ) : (
-        <Button
-          style={{ backgroundColor: '#A8C7FA', color: '#555' }}
-          onClick={markCheckIn}
-          className="m-2 p-2"
-        >
+        <Button onClick={markCheckIn} className={styles.buttonStyle}>
           Check In
         </Button>
       )}
-    </>
+    </ErrorBoundaryWrapper>
   );
 };
