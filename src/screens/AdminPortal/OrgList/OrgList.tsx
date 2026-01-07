@@ -72,7 +72,7 @@ import { Button } from '@mui/material';
 import OrganizationModal from './modal/OrganizationModal';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { Link } from 'react-router';
-import BaseModal from 'shared-components/BaseModal';
+import { BaseModal } from 'shared-components/BaseModal';
 import type { ChangeEvent } from 'react';
 import NotificationIcon from 'components/NotificationIcon/NotificationIcon';
 import OrganizationCard from 'shared-components/OrganizationCard/OrganizationCard';
