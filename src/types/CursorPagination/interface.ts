@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import type { DocumentNode } from 'graphql';
+import type { ApolloError } from '@apollo/client';
 import type { DefaultConnectionPageInfo } from '../pagination';
 
 // Re-export DefaultConnectionPageInfo as InterfacePageInfo for consistency
@@ -66,5 +67,5 @@ export interface InterfaceCursorPaginationRenderProps<TNode> {
   pageInfo: InterfacePageInfo | null;
   handleLoadMore: () => void;
   handleRefetch: () => void;
-  error: Error | undefined;
+  error: ApolloError | undefined;
 }
