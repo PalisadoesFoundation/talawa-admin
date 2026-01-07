@@ -570,11 +570,12 @@ describe('Testing Invitations Screen', () => {
 
   it('Filter Invitations (all)', async () => {
     renderInvitations(link1);
-    await waitFor(async () => {
-      const searchInput = await screen.findByTestId('searchByInput');
-      expect(searchInput).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
 
+    const searchInput = await screen.findByTestId('searchByInput');
+    expect(searchInput).toBeInTheDocument();
     // Filter by All
     const filter = await screen.findByTestId('filter');
     expect(filter).toBeInTheDocument();
@@ -592,11 +593,12 @@ describe('Testing Invitations Screen', () => {
 
   it('Filter Invitations (group)', async () => {
     renderInvitations(link1);
-    await waitFor(async () => {
-      const searchInput = await screen.findByTestId('searchByInput');
-      expect(searchInput).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
 
+    const searchInput = await screen.findByTestId('searchByInput');
+    expect(searchInput).toBeInTheDocument();
     // Filter by group
     const filter = await screen.findByTestId('filter');
     expect(filter).toBeInTheDocument();
@@ -621,11 +623,13 @@ describe('Testing Invitations Screen', () => {
 
   it('Filter Invitations (individual)', async () => {
     renderInvitations(link1);
-    await waitFor(async () => {
-      const searchInput = await screen.findByTestId('searchByInput');
-      expect(searchInput).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
 
+    const searchInput = await screen.findByTestId('searchByInput');
+    expect(searchInput).toBeInTheDocument();
     // Filter by individual
     const filter = await screen.findByTestId('filter');
     expect(filter).toBeInTheDocument();

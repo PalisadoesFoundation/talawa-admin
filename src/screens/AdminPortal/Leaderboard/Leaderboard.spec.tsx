@@ -304,14 +304,15 @@ describe('Testing Leaderboard Screen', () => {
     routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
-    await waitFor(async () => {
-      const searchInput = await screen.findByTestId('searchBy');
-      expect(searchInput).toBeInTheDocument();
-      const userName = screen.getAllByTestId('userName');
-      userName[0].focus();
-      fireEvent.keyDown(userName[0], { key: 'Enter' });
-      expect(screen.getByTestId('memberScreen')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
     });
+    const searchInput = await screen.findByTestId('searchBy');
+    expect(searchInput).toBeInTheDocument();
+    const userName = screen.getAllByTestId('userName');
+    userName[0].focus();
+    fireEvent.keyDown(userName[0], { key: 'Enter' });
+    expect(screen.getByTestId('memberScreen')).toBeInTheDocument();
   });
 
   it('OnKeyDown Space key on Member navigate to Member Screen', async () => {
@@ -372,7 +373,7 @@ describe('Testing Leaderboard Screen', () => {
     );
   });
 
-  it('should handle loading state and display error when data fetch fails', async () => {
+  it('should display error message when data fetch fails', async () => {
     routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link2);
 

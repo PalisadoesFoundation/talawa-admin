@@ -648,7 +648,7 @@ describe('Testing VolunteerGroups Screen', () => {
     // Use delayed mock to test loading state
     const delayedMocks = MOCKS.map((mock) => ({
       ...mock,
-      delay: 50,
+      delay: 100,
     }));
     const link = new StaticMockLink(delayedMocks);
     renderVolunteerGroups(link);

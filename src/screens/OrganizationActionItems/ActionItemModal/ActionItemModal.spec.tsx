@@ -1032,20 +1032,15 @@ describe('ItemModal - Additional Test Cases', () => {
         expect(volunteerInput).not.toBeDisabled();
       });
 
+      // Now click the volunteerGroup chip to switch assignment type
       const volunteerGroupChip = screen.getByRole('button', {
-        name: /volunteerGroup/i,
+        name: 'volunteerGroup',
       });
-      expect(volunteerGroupChip).toBeInTheDocument();
       await userEvent.click(volunteerGroupChip);
 
-      await waitFor(() => {
-        expect(screen.getByTestId('volunteerGroupSelect')).toBeInTheDocument();
-      });
       // Wait for volunteerGroupSelect to appear (this confirms the switch happened)
       const volunteerGroupSelect = await screen.findByTestId(
         'volunteerGroupSelect',
-        undefined,
-        { timeout: 5000 },
       );
       const volunteerGroupInput =
         within(volunteerGroupSelect).getByRole('combobox');
@@ -1064,10 +1059,7 @@ describe('ItemModal - Additional Test Cases', () => {
         expect(volunteerGroupInput).toHaveValue('Test Group 2');
       });
 
-      // Find the volunteer chip by text content
-      const volunteerChip = screen.getByRole('button', {
-        name: /^volunteer$/i,
-      });
+      const volunteerChip = screen.getByRole('button', { name: 'volunteer' });
       await userEvent.click(volunteerChip);
 
       await waitFor(() => {

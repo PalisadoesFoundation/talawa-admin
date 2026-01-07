@@ -3,7 +3,7 @@
  *
  * module - GroupChatDetails
  *
- * description -
+ * Description:
  * This component provides a modal interface for viewing and editing group chat details,
  * including the chat name, image, description, and members. It also allows adding new users
  * to the group chat and updating chat information.
@@ -33,7 +33,7 @@
  * />
  * ```
  *
- * Dependencies-
+ * Dependencies:
  * - `@mui/material`
  * - `react-bootstrap`
  * - `@apollo/client`

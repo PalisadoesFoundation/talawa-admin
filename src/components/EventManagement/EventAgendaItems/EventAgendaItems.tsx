@@ -222,6 +222,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
               </div>
 
               <Button
+                type="button"
                 variant="success"
                 onClick={showCreateModal}
                 data-testid="createAgendaItemBtn"

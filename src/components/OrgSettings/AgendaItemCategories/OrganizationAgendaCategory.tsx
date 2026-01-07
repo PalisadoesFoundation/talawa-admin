@@ -24,7 +24,7 @@
  *
  * @returns The rendered component.
  *
- * throws Error If there is an error while fetching agenda item categories.
+ * @throws Error If there is an error while fetching agenda item categories.
  *
  * todo - Add additional error handling and improve UI for error states.
  */
@@ -171,6 +171,7 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
               />
 
               <Button
+                type="button"
                 variant="success"
                 onClick={showCreateModal}
                 data-testid="createAgendaCategoryBtn"

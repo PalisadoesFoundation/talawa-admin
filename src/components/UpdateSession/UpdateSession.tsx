@@ -24,11 +24,11 @@
  * - Submits the updated timeout value to the server using a GraphQL mutation.
  * - Displays a success toast on successful update or handles errors gracefully.
  *
- * Dependencies -
+ * Dependencies:
  * - `react`, `react-bootstrap`, `@mui/material`, `@apollo/client`, `react-toastify`
  * - Custom modules: `GraphQl/Queries/Queries`, `GraphQl/Mutations/mutations`, `utils/errorHandler`, `shared-components/LoadingState/LoadingState`
  *
- * TODO -
+ * TODO:
  * - Add additional validation for slider input if needed.
  * - Improve error handling for edge cases.
  */
