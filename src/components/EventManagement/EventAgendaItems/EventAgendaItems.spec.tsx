@@ -7,8 +7,10 @@ import { I18nextProvider } from 'react-i18next';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router';
 import i18n from 'utils/i18nForTest';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import {
+  LocalizationProvider,
+  AdapterDayjs,
+} from 'shared-components/DateRangePicker';
 import { store } from 'state/store';
 import { StaticMockLink } from 'utils/StaticMockLink';
 import type { MockedResponse } from '@apollo/react-testing';
