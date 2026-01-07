@@ -36,13 +36,14 @@
  * ```
  *
  * @dependencies
- * - `react`, `react-bootstrap`, `@mui/material`, `react-icons`, `react-toastify`
+ * - `react`, `react-bootstrap`, `@mui/material`, `react-icons`, `NotificationToast`
  * - Custom utility functions: `convertToBase64`
  *
  */
 
 import React, { useState, useEffect } from 'react';
-import { Modal, Form, Button, Row, Col } from 'react-bootstrap';
+import { Form, Button, Row, Col } from 'react-bootstrap';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import { Autocomplete, TextField } from '@mui/material';
 import { FaLink, FaTrash } from 'react-icons/fa';
 import { NotificationToast } from 'components/NotificationToast/NotificationToast';
@@ -156,183 +157,175 @@ const AgendaItemsUpdateModal: React.FC<
   };
 
   return (
-    <Modal
+    <BaseModal
       className={styles.AgendaItemModal}
       show={agendaItemUpdateModalIsOpen}
       onHide={hideUpdateModal}
-    >
-      <Modal.Header>
+      headerContent={
         <p className={styles.titlemodalAgendaItems}>{t('updateAgendaItem')}</p>
-        <Button
-          onClick={hideUpdateModal}
-          data-testid="updateAgendaItemModalCloseBtn"
-        >
-          <i className="fa fa-times" />
-        </Button>
-      </Modal.Header>
-      <Modal.Body>
-        <Form onSubmit={updateAgendaItemHandler}>
-          <Form.Group className="d-flex mb-3 w-100">
-            <Autocomplete
-              multiple
-              className={`${styles.noOutline} w-100`}
-              limitTags={2}
-              data-testid="categorySelect"
-              options={agendaItemCategories || []}
-              value={
-                agendaItemCategories?.filter((category) =>
-                  formState.agendaItemCategoryIds.includes(category._id),
-                ) || []
-              }
-              filterSelectedOptions={true}
-              getOptionLabel={(
-                category: InterfaceAgendaItemCategoryInfo,
-              ): string => category.name}
-              onChange={(_, newCategories): void => {
-                setFormState({
-                  ...formState,
-                  agendaItemCategoryIds: newCategories.map(
-                    (category) => category._id,
-                  ),
-                });
-              }}
-              renderInput={(params) => (
-                <TextField {...params} label={t('category')} />
-              )}
-            />
-          </Form.Group>
+      }
+    >
+      <Form onSubmit={updateAgendaItemHandler}>
+        <Form.Group className="d-flex mb-3 w-100">
+          <Autocomplete
+            multiple
+            className={`${styles.noOutline} w-100`}
+            limitTags={2}
+            data-testid="categorySelect"
+            options={agendaItemCategories || []}
+            value={
+              agendaItemCategories?.filter((category) =>
+                formState.agendaItemCategoryIds.includes(category._id),
+              ) || []
+            }
+            filterSelectedOptions={true}
+            getOptionLabel={(
+              category: InterfaceAgendaItemCategoryInfo,
+            ): string => category.name}
+            onChange={(_, newCategories): void => {
+              setFormState({
+                ...formState,
+                agendaItemCategoryIds: newCategories.map(
+                  (category) => category._id,
+                ),
+              });
+            }}
+            renderInput={(params) => (
+              <TextField {...params} label={t('category')} />
+            )}
+          />
+        </Form.Group>
 
-          <Row className="mb-3">
-            <Col>
-              <Form.Group className="mb-3" controlId="title">
-                <Form.Label>{t('title')}</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder={t('enterTitle')}
-                  value={formState.title}
-                  onChange={(e) =>
-                    setFormState({ ...formState, title: e.target.value })
-                  }
-                />
-              </Form.Group>
-            </Col>
-            <Col>
-              <Form.Group controlId="duration">
-                <Form.Label>{t('duration')}</Form.Label>
-                <Form.Control
-                  type="text"
-                  placeholder={t('enterDuration')}
-                  value={formState.duration}
-                  required
-                  onChange={(e) =>
-                    setFormState({ ...formState, duration: e.target.value })
-                  }
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-
-          <Form.Group className="mb-3" controlId="description">
-            <Form.Label>{t('description')}</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows={1}
-              placeholder={t('enterDescription')}
-              value={formState.description}
-              onChange={(e) =>
-                setFormState({ ...formState, description: e.target.value })
-              }
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label>{t('url')}</Form.Label>
-            <div className="d-flex">
+        <Row className="mb-3">
+          <Col>
+            <Form.Group className="mb-3" controlId="title">
+              <Form.Label>{t('title')}</Form.Label>
               <Form.Control
                 type="text"
-                placeholder={t('enterUrl')}
-                id="basic-url"
-                data-testid="urlInput"
-                value={newUrl}
-                onChange={(e) => setNewUrl(e.target.value)}
+                placeholder={t('enterTitle')}
+                value={formState.title}
+                onChange={(e) =>
+                  setFormState({ ...formState, title: e.target.value })
+                }
               />
-              <Button onClick={handleAddUrl} data-testid="linkBtn">
-                {t('link')}
-              </Button>
-            </div>
+            </Form.Group>
+          </Col>
+          <Col>
+            <Form.Group controlId="duration">
+              <Form.Label>{t('duration')}</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder={t('enterDuration')}
+                value={formState.duration}
+                required
+                onChange={(e) =>
+                  setFormState({ ...formState, duration: e.target.value })
+                }
+              />
+            </Form.Group>
+          </Col>
+        </Row>
 
-            {formState.urls.map((url, index) => (
-              <li key={index} className={styles.urlListItem}>
-                <FaLink className={styles.urlIcon} />
-                <a href={url} target="_blank" rel="noopener noreferrer">
-                  {url.length > 50 ? url.substring(0, 50) + '...' : url}
-                </a>
-                <Button
-                  variant="danger"
-                  size="sm"
-                  data-testid="deleteUrl"
-                  className={styles.deleteButtonAgendaItems}
-                  onClick={() => handleRemoveUrl(url)}
-                >
-                  <FaTrash />
-                </Button>
-              </li>
-            ))}
-          </Form.Group>
-          <Form.Group className="mb-3">
-            <Form.Label>{t('attachments')}</Form.Label>
+        <Form.Group className="mb-3" controlId="description">
+          <Form.Label>{t('description')}</Form.Label>
+          <Form.Control
+            as="textarea"
+            rows={1}
+            placeholder={t('enterDescription')}
+            value={formState.description}
+            onChange={(e) =>
+              setFormState({ ...formState, description: e.target.value })
+            }
+          />
+        </Form.Group>
+
+        <Form.Group className="mb-3">
+          <Form.Label>{t('url')}</Form.Label>
+          <div className="d-flex">
             <Form.Control
-              accept="image/*, video/*"
-              data-testid="attachment"
-              name="attachment"
-              type="file"
-              id="attachment"
-              multiple={true}
-              onChange={handleFileChange}
+              type="text"
+              placeholder={t('enterUrl')}
+              id="basic-url"
+              data-testid="urlInput"
+              value={newUrl}
+              onChange={(e) => setNewUrl(e.target.value)}
             />
-            <Form.Text>{t('attachmentLimit')}</Form.Text>
-          </Form.Group>
-          {formState.attachments && (
-            <div className={styles.previewFile} data-testid="mediaPreview">
-              {formState.attachments.map((attachment, index) => (
-                <div key={index} className={styles.attachmentPreview}>
-                  {attachment.includes('video') ? (
-                    <video
-                      muted
-                      autoPlay={true}
-                      loop={true}
-                      playsInline
-                      crossOrigin="anonymous"
-                    >
-                      <source src={attachment} type="video/mp4" />
-                    </video>
-                  ) : (
-                    <img src={attachment} alt="Attachment preview" />
-                  )}
-                  <button
-                    className={styles.closeButtonFile}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleRemoveAttachment(attachment);
-                    }}
-                    data-testid="deleteAttachment"
+            <Button onClick={handleAddUrl} data-testid="linkBtn">
+              {t('link')}
+            </Button>
+          </div>
+
+          {formState.urls.map((url, index) => (
+            <li key={index} className={styles.urlListItem}>
+              <FaLink className={styles.urlIcon} />
+              <a href={url} target="_blank" rel="noopener noreferrer">
+                {url.length > 50 ? url.substring(0, 50) + '...' : url}
+              </a>
+              <Button
+                variant="danger"
+                size="sm"
+                data-testid="deleteUrl"
+                className={styles.deleteButtonAgendaItems}
+                onClick={() => handleRemoveUrl(url)}
+              >
+                <FaTrash />
+              </Button>
+            </li>
+          ))}
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>{t('attachments')}</Form.Label>
+          <Form.Control
+            accept="image/*, video/*"
+            data-testid="attachment"
+            name="attachment"
+            type="file"
+            id="attachment"
+            multiple={true}
+            onChange={handleFileChange}
+          />
+          <Form.Text>{t('attachmentLimit')}</Form.Text>
+        </Form.Group>
+        {formState.attachments && (
+          <div className={styles.previewFile} data-testid="mediaPreview">
+            {formState.attachments.map((attachment, index) => (
+              <div key={index} className={styles.attachmentPreview}>
+                {attachment.includes('video') ? (
+                  <video
+                    muted
+                    autoPlay={true}
+                    loop={true}
+                    playsInline
+                    crossOrigin="anonymous"
                   >
-                    <i className="fa fa-times" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          )}
-          <Button
-            type="submit"
-            className={styles.greenregbtnAgendaItems}
-            data-testid="updateAgendaItemBtn"
-          >
-            {t('update')}
-          </Button>
-        </Form>
-      </Modal.Body>
-    </Modal>
+                    <source src={attachment} type="video/mp4" />
+                  </video>
+                ) : (
+                  <img src={attachment} alt="Attachment preview" />
+                )}
+                <button
+                  className={styles.closeButtonFile}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleRemoveAttachment(attachment);
+                  }}
+                  data-testid="deleteAttachment"
+                >
+                  <i className="fa fa-times" />
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+        <Button
+          type="submit"
+          className={styles.greenregbtnAgendaItems}
+          data-testid="updateAgendaItemBtn"
+        >
+          {t('update')}
+        </Button>
+      </Form>
+    </BaseModal>
   );
 };
 

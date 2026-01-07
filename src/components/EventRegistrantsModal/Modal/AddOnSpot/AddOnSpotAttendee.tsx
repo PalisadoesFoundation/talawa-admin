@@ -16,7 +16,7 @@
  *
  * @remarks
  * - Uses `react-bootstrap` for modal and form styling.
- * - Utilizes `react-toastify` for displaying success and error messages.
+ * - Utilizes `NotificationToast` for displaying success and error messages.
  * - Integrates `react-i18next` for translations.
  * - Includes form validation to ensure required fields are filled.
  *
@@ -32,12 +32,13 @@
  * @dependencies
  * - `@apollo/client` for GraphQL mutation.
  * - `react-bootstrap` for UI components.
- * - `react-toastify` for notifications.
+ * - `NotificationToast` for notifications.
  * - `react-i18next` for translations.
  */
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import React, { useState } from 'react';
-import { Modal, Form, Button } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
+import BaseModal from 'shared-components/BaseModal/BaseModal';
 import styles from 'style/app-fixed.module.css';
 import componentStyles from '../../EventRegistrants.module.css';
 import { useParams } from 'react-router';
@@ -50,7 +51,6 @@ import type {
 import { useTranslation } from 'react-i18next';
 import { errorHandler } from 'utils/errorHandler';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
-import modalStyles from '../../EventRegistrants.module.css';
 
 const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   show,
@@ -137,93 +137,93 @@ const AddOnSpotAttendee: React.FC<InterfaceAddOnSpotAttendeeProps> = ({
   };
   return (
     <>
-      <Modal show={show} onHide={handleClose} backdrop="static" centered>
-        <Modal.Header closeButton className={modalStyles.modalHeader}>
-          <Modal.Title>{t('title')}</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit} data-testid="onspot-attendee-form">
-            <div className="d-flex justify-content-between">
-              <Form.Group className="mb-1">
-                <Form.Label htmlFor="firstName">
-                  {tCommon('firstName')}
-                </Form.Label>
-                <Form.Control
-                  id="firstName"
-                  type="text"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleChange}
-                  placeholder="John"
-                />
-              </Form.Group>
-              <Form.Group className="mb-1">
-                <Form.Label htmlFor="lastName">
-                  {tCommon('lastName')}
-                </Form.Label>
-                <Form.Control
-                  id="lastName"
-                  type="text"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  placeholder="Doe"
-                />
-              </Form.Group>
-            </div>
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="phoneNo">{t('phoneNumber')}</Form.Label>
+      <BaseModal
+        show={show}
+        onHide={handleClose}
+        backdrop="static"
+        centered
+        title={t('title')}
+        headerClassName={componentStyles.modalHeader}
+      >
+        <Form onSubmit={handleSubmit} data-testid="onspot-attendee-form">
+          <div className="d-flex justify-content-between">
+            <Form.Group className="mb-1">
+              <Form.Label htmlFor="firstName">
+                {tCommon('firstName')}
+              </Form.Label>
               <Form.Control
-                id="phoneNo"
-                type="tel"
-                name="phoneNo"
-                value={formData.phoneNo}
+                id="firstName"
+                type="text"
+                name="firstName"
+                value={formData.firstName}
                 onChange={handleChange}
-                placeholder="1234567890"
+                placeholder="John"
               />
             </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="email">{tCommon('email')}</Form.Label>
+            <Form.Group className="mb-1">
+              <Form.Label htmlFor="lastName">{tCommon('lastName')}</Form.Label>
               <Form.Control
-                id="email"
-                type="email"
-                name="email"
-                value={formData.email}
+                id="lastName"
+                type="text"
+                name="lastName"
+                value={formData.lastName}
                 onChange={handleChange}
-                placeholder="abc@gmail.com"
+                placeholder="Doe"
               />
             </Form.Group>
+          </div>
+          <Form.Group className="mb-3">
+            <Form.Label htmlFor="phoneNo">{t('phoneNumber')}</Form.Label>
+            <Form.Control
+              id="phoneNo"
+              type="tel"
+              name="phoneNo"
+              value={formData.phoneNo}
+              onChange={handleChange}
+              placeholder="1234567890"
+            />
+          </Form.Group>
 
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="gender">{tCommon('gender')}</Form.Label>
-              <Form.Control
-                id="gender"
-                as="select"
-                name="gender"
-                value={formData.gender}
-                onChange={handleChange}
-              >
-                <option value="">{t('selectGender')}</option>
-                <option value="Male">{t('male')}</option>
-                <option value="Female">{t('female')}</option>
-                <option value="Other">{t('other')}</option>
-              </Form.Control>
-            </Form.Group>
-            <br />
-            <LoadingState isLoading={isSubmitting} variant="inline">
-              <Button
-                variant="success"
-                type="submit"
-                className={`border-1 mx-4 ${styles.addButton}`}
-                disabled={isSubmitting}
-              >
-                {t('addAttendee')}
-              </Button>
-            </LoadingState>
-          </Form>
-        </Modal.Body>
-      </Modal>
+          <Form.Group className="mb-3">
+            <Form.Label htmlFor="email">{tCommon('email')}</Form.Label>
+            <Form.Control
+              id="email"
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="abc@gmail.com"
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3">
+            <Form.Label htmlFor="gender">{tCommon('gender')}</Form.Label>
+            <Form.Control
+              id="gender"
+              as="select"
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+            >
+              <option value="">{t('selectGender')}</option>
+              <option value="Male">{t('male')}</option>
+              <option value="Female">{t('female')}</option>
+              <option value="Other">{t('other')}</option>
+            </Form.Control>
+          </Form.Group>
+          <br />
+          <LoadingState isLoading={isSubmitting} variant="inline">
+            <Button
+              variant="success"
+              type="submit"
+              className={`border-1 mx-4 ${styles.addButton}`}
+              disabled={isSubmitting}
+            >
+              {t('addAttendee')}
+            </Button>
+          </LoadingState>
+        </Form>
+      </BaseModal>
     </>
   );
 };
