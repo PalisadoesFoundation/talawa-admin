@@ -229,7 +229,7 @@ function AdvertisementRegister({
         type: string;
         startAt: string;
         endAt: string;
-        attachments: File[] | undefined;
+        // attachments: File[] | undefined;
         description?: string | null;
       } = {
         organizationId: currentOrg,
@@ -237,7 +237,7 @@ function AdvertisementRegister({
         type: formState.type as string,
         startAt: dayjs.utc(formState.startAt).startOf('day').toISOString(),
         endAt: dayjs.utc(formState.endAt).startOf('day').toISOString(),
-        attachments: formState.attachments,
+        // attachments intentionally omitted for PR-2/5 (see TODO below)
       };
 
       if (formState.description !== null) {
@@ -248,6 +248,7 @@ function AdvertisementRegister({
       }
 
       const { data } = await createAdvertisement({
+        // TODO(PR-3/4): Enable advertisement image upload once MinIO / Upload transport is restored
         variables,
       });
       if (data) {
