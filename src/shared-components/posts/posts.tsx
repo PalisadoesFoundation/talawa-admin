@@ -25,7 +25,7 @@
  * - Supports both admin and user role-based interactions
  * - Implements proper data formatting for PostCard components
  *
- * dependencies
+ * Dependencies:
  * - Apollo Client for GraphQL operations
  * - React Router for URL parameters
  * - React i18n for internationalization
@@ -315,14 +315,22 @@ export default function PostsPage() {
     return posts;
   }, [allPosts, filteredPosts, isFiltering, sortingOption]);
 
+  if (orgPostListLoading || orgPinnedPostListLoading) {
+    return (
+      <LoadingState
+        isLoading={orgPostListLoading || orgPinnedPostListLoading}
+        variant="spinner"
+      >
+        <div />
+      </LoadingState>
+    );
+  }
+
   const pinnedPosts =
     orgPinnedPostListData?.organization?.pinnedPosts?.edges ?? [];
 
   return (
-    <LoadingState
-      isLoading={orgPostListLoading || orgPinnedPostListLoading}
-      variant="spinner"
-    >
+    <>
       <Row className={`${styles.head} ${styles.postContainer}`}>
         <div className={styles.mainpagerightOrgPost}>
           <PageHeader
@@ -483,6 +491,6 @@ export default function PostsPage() {
           </div>
         </BaseModal>
       )}
-    </LoadingState>
+    </>
   );
 }

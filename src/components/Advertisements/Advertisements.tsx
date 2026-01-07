@@ -190,121 +190,122 @@ export default function Advertisements(): JSX.Element {
     >
       <Row data-testid="advertisements" className={styles.rowAdvertisements}>
         <Col md={8} className={styles.containerAdvertisements}>
-          <LoadingState isLoading={loading} variant="spinner">
-            <Col className={styles.colAdvertisements}>
-              <PageHeader
-                search={{
-                  placeholder: 'Search advertisements...',
-                  onSearch: (value) => {
-                    const searchValue = value.toLowerCase();
-                    const filteredActiveAds = activeAdvertisements.filter(
-                      (ad) =>
-                        ad.name.toLowerCase().includes(searchValue) ||
-                        (ad.description ?? '')
-                          .toLowerCase()
-                          .includes(searchValue),
-                    );
-                    const filteredCompletedAds = completedAdvertisements.filter(
-                      (ad) =>
-                        ad.name.toLowerCase().includes(searchValue) ||
-                        (ad.description ?? '')
-                          .toLowerCase()
-                          .includes(searchValue),
-                    );
-
-                    setActiveAdvertisements(filteredActiveAds);
-                    setCompletedAdvertisements(filteredCompletedAds);
-                  },
-                  inputTestId: 'searchname',
-                  buttonTestId: 'searchButton',
-                }}
-                actions={
-                  <AdvertisementRegister
-                    setAfterActive={setAfterActive}
-                    setAfterCompleted={setAfterCompleted}
-                  />
-                }
-              />
-            </Col>
-            <Tabs
-              key="advertisements-tabs"
-              defaultActiveKey="archivedAds"
-              id="uncontrolled-tab-example"
-              className="mt-4"
-            >
-              <Tab
-                eventKey="activeAds"
-                title={t('activeAds')}
-                className="pt-4 m-2"
-              >
-                {activeAdvertisements.length === 0 ? (
-                  <div className={styles.pMessageAdvertisement}>
-                    {t('pMessage')}
-                  </div>
-                ) : (
-                  <InfiniteScroll
-                    dataLength={activeAdvertisements.length}
-                    next={loadMoreActiveAdvertisements}
-                    loader={<AdvertisementSkeleton />}
-                    hasMore={
-                      orgActiveAdvertisementListData?.organization
-                        ?.advertisements?.pageInfo?.hasNextPage ?? false
-                    }
-                    className={styles.listBoxAdvertisements}
-                  >
-                    <div className={styles.justifyspAdvertisements}>
-                      {activeAdvertisements.map((ad) => {
-                        return (
-                          <AdvertisementEntry
-                            key={ad.id}
-                            advertisement={ad}
-                            setAfterActive={setAfterActive}
-                            setAfterCompleted={setAfterCompleted}
-                          />
-                        );
-                      })}
-                    </div>
-                  </InfiniteScroll>
-                )}
-              </Tab>
-
-              <Tab
-                eventKey="archivedAds"
-                title={t('archivedAds')}
-                className="pt-4 m-2"
-              >
-                {completedAdvertisements.length === 0 ? (
-                  <div className={styles.pMessageAdvertisement}>
-                    {t('pMessage')}
-                  </div>
-                ) : (
-                  <InfiniteScroll
-                    dataLength={completedAdvertisements.length}
-                    next={loadMoreCompletedAdvertisements}
-                    loader={<AdvertisementSkeleton />}
-                    hasMore={
-                      orgCompletedAdvertisementListData?.organization
-                        ?.advertisements?.pageInfo?.hasNextPage ?? false
-                    }
-                    className={styles.listBoxAdvertisements}
-                  >
-                    <div className={styles.justifyspAdvertisements}>
-                      {completedAdvertisements.map((ad) => {
-                        return (
-                          <AdvertisementEntry
-                            key={ad.id}
-                            advertisement={ad}
-                            setAfterActive={setAfterActive}
-                            setAfterCompleted={setAfterCompleted}
-                          />
-                        );
-                      })}
-                    </div>
-                  </InfiniteScroll>
-                )}
-              </Tab>
-            </Tabs>
+          <LoadingState variant="spinner" isLoading={loading}>
+            <div />
           </LoadingState>
+          <Col className={styles.colAdvertisements}>
+            <PageHeader
+              search={{
+                placeholder: 'Search advertisements...',
+                onSearch: (value) => {
+                  const searchValue = value.toLowerCase();
+                  const filteredActiveAds = activeAdvertisements.filter(
+                    (ad) =>
+                      ad.name.toLowerCase().includes(searchValue) ||
+                      (ad.description ?? '')
+                        .toLowerCase()
+                        .includes(searchValue),
+                  );
+                  const filteredCompletedAds = completedAdvertisements.filter(
+                    (ad) =>
+                      ad.name.toLowerCase().includes(searchValue) ||
+                      (ad.description ?? '')
+                        .toLowerCase()
+                        .includes(searchValue),
+                  );
+
+                  setActiveAdvertisements(filteredActiveAds);
+                  setCompletedAdvertisements(filteredCompletedAds);
+                },
+                inputTestId: 'searchname',
+                buttonTestId: 'searchButton',
+              }}
+              actions={
+                <AdvertisementRegister
+                  setAfterActive={setAfterActive}
+                  setAfterCompleted={setAfterCompleted}
+                />
+              }
+            />
+          </Col>
+          <Tabs
+            key="advertisements-tabs"
+            defaultActiveKey="archivedAds"
+            id="uncontrolled-tab-example"
+            className="mt-4"
+          >
+            <Tab
+              eventKey="activeAds"
+              title={t('activeAds')}
+              className="pt-4 m-2"
+            >
+              {activeAdvertisements.length === 0 ? (
+                <div className={styles.pMessageAdvertisement}>
+                  {t('pMessage')}
+                </div>
+              ) : (
+                <InfiniteScroll
+                  dataLength={activeAdvertisements.length}
+                  next={loadMoreActiveAdvertisements}
+                  loader={<AdvertisementSkeleton />}
+                  hasMore={
+                    orgActiveAdvertisementListData?.organization?.advertisements
+                      ?.pageInfo?.hasNextPage ?? false
+                  }
+                  className={styles.listBoxAdvertisements}
+                >
+                  <div className={styles.justifyspAdvertisements}>
+                    {activeAdvertisements.map((ad) => {
+                      return (
+                        <AdvertisementEntry
+                          key={ad.id}
+                          advertisement={ad}
+                          setAfterActive={setAfterActive}
+                          setAfterCompleted={setAfterCompleted}
+                        />
+                      );
+                    })}
+                  </div>
+                </InfiniteScroll>
+              )}
+            </Tab>
+
+            <Tab
+              eventKey="archivedAds"
+              title={t('archivedAds')}
+              className="pt-4 m-2"
+            >
+              {completedAdvertisements.length === 0 ? (
+                <div className={styles.pMessageAdvertisement}>
+                  {t('pMessage')}
+                </div>
+              ) : (
+                <InfiniteScroll
+                  dataLength={completedAdvertisements.length}
+                  next={loadMoreCompletedAdvertisements}
+                  loader={<AdvertisementSkeleton />}
+                  hasMore={
+                    orgCompletedAdvertisementListData?.organization
+                      ?.advertisements?.pageInfo?.hasNextPage ?? false
+                  }
+                  className={styles.listBoxAdvertisements}
+                >
+                  <div className={styles.justifyspAdvertisements}>
+                    {completedAdvertisements.map((ad) => {
+                      return (
+                        <AdvertisementEntry
+                          key={ad.id}
+                          advertisement={ad}
+                          setAfterActive={setAfterActive}
+                          setAfterCompleted={setAfterCompleted}
+                        />
+                      );
+                    })}
+                  </div>
+                </InfiniteScroll>
+              )}
+            </Tab>
+          </Tabs>
         </Col>
       </Row>
     </ErrorBoundaryWrapper>
