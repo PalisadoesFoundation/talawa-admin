@@ -49,7 +49,6 @@ describe('OrganizationModal Component', () => {
   const formState = {
     addressLine1: '',
     addressLine2: '',
-    avatar: '',
     avatarPreview: '',
     city: '',
     countryCode: '',
@@ -70,6 +69,7 @@ describe('OrganizationModal Component', () => {
   });
 
   afterEach(() => {
+    vi.clearAllMocks();
     vi.restoreAllMocks();
   });
 
@@ -120,7 +120,6 @@ describe('OrganizationModal Component', () => {
       state: 'Test State',
       countryCode: 'us',
       postalCode: '12345',
-      avatar: '',
       avatarPreview: '',
     };
 
@@ -193,7 +192,6 @@ describe('OrganizationModal Component', () => {
       state: 'Test State',
       countryCode: 'us',
       postalCode: '12345',
-      avatar: '',
       avatarPreview: '',
     };
 
@@ -525,7 +523,6 @@ describe('OrganizationModal Component', () => {
       state: 'Test State',
       countryCode: 'us',
       postalCode: '12345',
-      avatar: '',
       avatarPreview: '',
     };
 

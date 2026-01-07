@@ -27,7 +27,6 @@ import { validateFile } from 'utils/fileValidation';
 interface InterfaceFormStateType {
   addressLine1: string;
   addressLine2: string;
-  avatar: string | null;
   avatarPreview: string | null;
   city: string;
   countryCode: string;

@@ -3,7 +3,7 @@
  * and providing functionality for searching, sorting, and creating new organizations.
  * It also includes modals for creating organizations and managing features after creation.
  *
- * @returns {JSX.Element} The rendered organization list component.
+ * @returns JSX.Element The rendered organization list component.
  *
  * @remarks
  * - Utilizes GraphQL queries and mutations for fetching and managing organization data.
@@ -86,7 +86,6 @@ const { getItem } = useLocalStorage();
 interface InterfaceFormStateType {
   addressLine1: string;
   addressLine2: string;
-  avatar: string | null;
   avatarPreview: string | null;
   city: string;
   countryCode: string;
@@ -141,7 +140,6 @@ function orgList(): JSX.Element {
   const [formState, setFormState] = useState<InterfaceFormStateType>({
     addressLine1: '',
     addressLine2: '',
-    avatar: null,
     avatarPreview: null,
     city: '',
     countryCode: '',
@@ -222,7 +220,7 @@ function orgList(): JSX.Element {
     const {
       addressLine1: _addressLine1,
       addressLine2: _addressLine2,
-      // avatar: _avatar,
+
       city: _city,
       countryCode: _countryCode,
       description: _description,
@@ -233,7 +231,7 @@ function orgList(): JSX.Element {
 
     const addressLine1 = _addressLine1.trim() || undefined;
     const addressLine2 = _addressLine2.trim() || undefined;
-    // const avatar = _avatar;
+
     const city = _city.trim() || undefined;
     const countryCode = _countryCode.trim() || undefined;
     const description = _description.trim() || undefined;
@@ -246,9 +244,7 @@ function orgList(): JSX.Element {
         variables: {
           addressLine1,
           addressLine2,
-          // TODO(PR-3/4): Avatar upload will be re-enabled using MinIO + Upload scalar.
-          // Phase-2 intentionally skips avatar submission to avoid Upload/Base64 mismatch.
-          // avatar,
+          // Avatar submission is intentionally skipped in Phase-2 to avoid Upload/Base64 mismatch.
           city,
           countryCode,
           description,
@@ -274,7 +270,6 @@ function orgList(): JSX.Element {
         setFormState({
           addressLine1: '',
           addressLine2: '',
-          avatar: null,
           avatarPreview: null,
           city: '',
           countryCode: '',
@@ -291,7 +286,7 @@ function orgList(): JSX.Element {
   };
 
   /**
-   * Note: The explicit refetchOrgs({ filter: val }) call is intentional.
+   * Note: The explicit refetchOrgs({ filter: val \}) call is intentional.
    * While Apollo Client auto-refetches when filterName changes, the explicit
    * call ensures immediate network request execution and avoids timing issues
    * from React's batched state updates. This pattern is used consistently

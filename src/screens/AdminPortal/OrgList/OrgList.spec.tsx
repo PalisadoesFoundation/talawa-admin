@@ -549,7 +549,6 @@ const mockConfigurations = {
           countryCode: 'af',
           postalCode: '12345',
           state: 'Test State',
-          avatar: null,
         },
       },
       result: {
@@ -1269,7 +1268,6 @@ describe('Advanced Component Functionality Tests', () => {
             countryCode: 'af',
             postalCode: '12345',
             state: 'Test State',
-            avatar: null,
           },
         },
         error: new Error('Failed to create organization'),
@@ -1778,7 +1776,6 @@ describe('Advanced Component Functionality Tests', () => {
             countryCode: 'af',
             postalCode: '12345',
             state: 'Test State',
-            avatar: null,
           },
         },
         result: {
@@ -1949,7 +1946,6 @@ describe('Advanced Component Functionality Tests', () => {
             countryCode: 'us',
             postalCode: '12345',
             state: 'Test State',
-            avatar: null,
           },
         },
         result: {
@@ -2056,7 +2052,6 @@ describe('Advanced Component Functionality Tests', () => {
             countryCode: 'us',
             postalCode: '54321',
             state: 'Toggle State',
-            avatar: null,
           },
         },
         result: {
@@ -2180,7 +2175,6 @@ describe('Advanced Component Functionality Tests', () => {
             countryCode: 'af',
             postalCode: '12345',
             state: 'Test State',
-            avatar: null,
           },
         },
         result: {
