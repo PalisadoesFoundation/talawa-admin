@@ -1,12 +1,5 @@
 /**
  * AdvertisementEntry component displays an advertisement entry card.
- *
- * @param props - The properties for the AdvertisementEntry component.
- * @returns A JSX element representing the advertisement entry card.
- *
- * @remarks
- * - Includes a dropdown menu for editing or deleting the advertisement.
- * - Media rendering is resilient to empty attachment arrays during the MinIO migration.
  */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
@@ -38,7 +31,6 @@ function AdvertisementEntry({
     React.SetStateAction<string | null | undefined>
   >;
 }): JSX.Element {
-  // Removed keyPrefix to ensure the translation script can resolve full paths
   const { t } = useTranslation('translation');
   const { t: tCommon } = useTranslation('common');
   const { t: tErrors } = useTranslation('errors');
@@ -95,14 +87,6 @@ function AdvertisementEntry({
     }
   };
 
-  const handleKeyboardDelete = (e: React.KeyboardEvent): void => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      toggleShowDeleteModal();
-      setDropdown(false);
-    }
-  };
-
   const hasAttachments =
     advertisement.attachments && advertisement.attachments.length > 0;
 
@@ -141,18 +125,19 @@ function AdvertisementEntry({
                       setAfterCompleted={setAfterCompleted}
                     />
                   </li>
-                  <li
-                    role="button"
-                    tabIndex={0}
-                    onClick={() => {
-                      toggleShowDeleteModal();
-                      setDropdown(false);
-                    }}
-                    onKeyDown={handleKeyboardDelete}
-                    data-testid="deletebtn"
-                    data-cy="deletebtn"
-                  >
-                    {tCommon('delete')}
+                  <li className={styles.dropdownItem}>
+                    <button
+                      type="button"
+                      className={localStyles.deleteMenuButton}
+                      onClick={() => {
+                        toggleShowDeleteModal();
+                        setDropdown(false);
+                      }}
+                      data-testid="deletebtn"
+                      data-cy="deletebtn"
+                    >
+                      {tCommon('delete')}
+                    </button>
                   </li>
                 </ul>
               )}

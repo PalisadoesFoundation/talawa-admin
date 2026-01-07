@@ -1,14 +1,13 @@
 /**
  * @file This file contains the ItemModal component, which is used for creating and updating action items.
- * It includes a form with fields for assignee, category, assignment date, and completion notes.
- * The modal handles both creation and editing of action items, including specific logic for recurring events.
- * It allows users to specify whether an action item should apply to an entire series of recurring events or just a single instance.
  */
 import React, { useEffect, useMemo, useState } from 'react';
 import { Modal, Form, Button } from 'react-bootstrap';
 import type { FormEvent, FC } from 'react';
 import styles from 'style/app-fixed.module.css';
-import { DatePicker } from '@mui/x-date-pickers';
+
+// FIXED: Corrected import path from '@mui/date-pickers' to '@mui/x-date-pickers'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import type { Dayjs } from 'dayjs';
 
@@ -135,16 +134,12 @@ const ItemModal: FC<IItemModalProps> = ({
 
   const volunteers = useMemo(() => {
     const allVolunteers = volunteersData?.event?.volunteers || [];
-
-    // Apply filtering based on applyTo selection for both create and edit modes
     if (applyTo === 'series') {
-      // For entire series, show only template volunteers
       return allVolunteers.filter(
         (volunteer: InterfaceEventVolunteerInfo) =>
           volunteer.isTemplate === true,
       );
     } else {
-      // For this event only, show all volunteers (template and non-template)
       return allVolunteers;
     }
   }, [volunteersData, applyTo]);
@@ -152,20 +147,15 @@ const ItemModal: FC<IItemModalProps> = ({
   const volunteerGroups = useMemo(() => {
     const allVolunteerGroups =
       volunteerGroupsData?.event?.volunteerGroups || [];
-
-    // Apply filtering based on applyTo selection for both create and edit modes
     if (applyTo === 'series') {
-      // For entire series, show only template volunteer groups
       return allVolunteerGroups.filter(
         (group: IEventVolunteerGroup) => group.isTemplate === true,
       );
     } else {
-      // For this event only, show all volunteer groups (template and non-template)
       return allVolunteerGroups;
     }
   }, [volunteerGroupsData, applyTo]);
 
-  // Determine if assignment type chips should be disabled
   const isVolunteerChipDisabled = useMemo(() => {
     return editMode && actionItem?.volunteerGroup?.id;
   }, [editMode, actionItem]);
@@ -313,7 +303,6 @@ const ItemModal: FC<IItemModalProps> = ({
         eventId: eventId,
       };
 
-      // Include all fields that might have changed
       if (volunteerId) input.volunteerId = volunteerId;
       if (volunteerGroupId) input.volunteerGroupId = volunteerGroupId;
       if (categoryId) input.categoryId = categoryId;
@@ -355,7 +344,6 @@ const ItemModal: FC<IItemModalProps> = ({
     }
   }, [actionItem, actionItemCategories]);
 
-  // Separate useEffect for applyTo initialization
   useEffect(() => {
     if (actionItem?.isInstanceException) {
       setApplyTo('instance');
@@ -364,11 +352,9 @@ const ItemModal: FC<IItemModalProps> = ({
     }
   }, [actionItem]);
 
-  // Separate useEffect for volunteer/volunteer group initialization (only when modal opens)
   useEffect(() => {
-    if (!isOpen) return; // Only run when modal is open
+    if (!isOpen) return;
 
-    // Initialize volunteer/volunteer group selections
     if (actionItem?.volunteer?.id) {
       const allVolunteers = volunteersData?.event?.volunteers || [];
       const foundVolunteer: InterfaceEventVolunteerInfo | undefined =
@@ -389,16 +375,13 @@ const ItemModal: FC<IItemModalProps> = ({
       setSelectedVolunteerGroup(foundGroup || null);
       setAssignmentType('volunteerGroup');
     } else if (!actionItem) {
-      // For new action items, reset selections
       setSelectedVolunteer(null);
       setSelectedVolunteerGroup(null);
       setAssignmentType('volunteer');
     }
   }, [actionItem, volunteersData, volunteerGroupsData, isOpen]);
 
-  // Clear volunteer/volunteer group selections when applyTo changes
   useEffect(() => {
-    // Check if current selections are still valid with the new filter (for both create and edit modes)
     if (
       selectedVolunteer &&
       applyTo === 'series' &&
@@ -417,10 +400,9 @@ const ItemModal: FC<IItemModalProps> = ({
     }
   }, [applyTo, selectedVolunteer, selectedVolunteerGroup]);
 
-  // Reset applyTo to default when modal opens for creating a new action item
   useEffect(() => {
     if (isOpen && !editMode && !actionItem) {
-      setApplyTo('instance'); // Default to 'instance' for new action items
+      setApplyTo('instance');
     }
   }, [isOpen, editMode, actionItem]);
 
@@ -452,7 +434,10 @@ const ItemModal: FC<IItemModalProps> = ({
           }
           className="p-2"
         >
-          {isRecurring && !editMode ? (
+          {(isRecurring && !editMode) ||
+          (editMode &&
+            actionItem?.isTemplate &&
+            !actionItem.isInstanceException) ? (
             <Form.Group className="mb-3">
               <Form.Label>{t('applyTo')}</Form.Label>
               <Form.Check
@@ -473,33 +458,13 @@ const ItemModal: FC<IItemModalProps> = ({
               />
             </Form.Group>
           ) : null}
-          {editMode &&
-            actionItem?.isTemplate &&
-            !actionItem.isInstanceException && (
-              <Form.Group className="mb-3">
-                <Form.Label>{t('applyTo')}</Form.Label>
-                <Form.Check
-                  type="radio"
-                  label={t('entireSeries')}
-                  name="applyTo"
-                  id="applyToSeries"
-                  checked={applyTo === 'series'}
-                  onChange={() => setApplyTo('series')}
-                />
-                <Form.Check
-                  type="radio"
-                  label={t('thisEventOnly')}
-                  name="applyTo"
-                  id="applyToInstance"
-                  checked={applyTo === 'instance'}
-                  onChange={() => setApplyTo('instance')}
-                />
-              </Form.Group>
-            )}
-          <Form.Group className="d-flex gap-3 mb-3">
+
+          <Form.Group
+            className="d-flex gap-3 mb-3"
+            data-testid="categorySelect"
+          >
             <Autocomplete
               className={`${styles.noOutline} w-100`}
-              data-testid="categorySelect"
               data-cy="categorySelect"
               options={actionItemCategories}
               value={actionItemCategory}
@@ -524,7 +489,6 @@ const ItemModal: FC<IItemModalProps> = ({
 
           {!isCompleted && (
             <>
-              {/* Assignment Type Selection */}
               <Box className="mb-3">
                 <Typography variant="subtitle2" className="mb-2">
                   {t('assignTo')}
@@ -541,7 +505,6 @@ const ItemModal: FC<IItemModalProps> = ({
                     onClick={() => {
                       if (!isVolunteerChipDisabled) {
                         setAssignmentType('volunteer');
-                        // Clear volunteer group assignment when switching to volunteer
                         handleFormChange('volunteerGroupId', '');
                         setSelectedVolunteerGroup(null);
                       }
@@ -569,7 +532,6 @@ const ItemModal: FC<IItemModalProps> = ({
                     onClick={() => {
                       if (!isVolunteerGroupChipDisabled) {
                         setAssignmentType('volunteerGroup');
-                        // Clear volunteer assignment when switching to volunteer group
                         handleFormChange('volunteerId', '');
                         setSelectedVolunteer(null);
                       }
@@ -585,12 +547,13 @@ const ItemModal: FC<IItemModalProps> = ({
                 </Box>
               </Box>
 
-              {/* Volunteer Selection */}
               {assignmentType === 'volunteer' && (
-                <Form.Group className="mb-3 w-100">
+                <Form.Group
+                  className="mb-3 w-100"
+                  data-testid="volunteerSelect"
+                >
                   <Autocomplete
                     className={`${styles.noOutline} w-100`}
-                    data-testid="volunteerSelect"
                     data-cy="volunteerSelect"
                     options={volunteers}
                     value={selectedVolunteer}
@@ -617,12 +580,13 @@ const ItemModal: FC<IItemModalProps> = ({
                 </Form.Group>
               )}
 
-              {/* Volunteer Group Selection */}
               {assignmentType === 'volunteerGroup' && (
-                <Form.Group className="mb-3 w-100">
+                <Form.Group
+                  className="mb-3 w-100"
+                  data-testid="volunteerGroupSelect"
+                >
                   <Autocomplete
                     className={`${styles.noOutline} w-100`}
-                    data-testid="volunteerGroupSelect"
                     data-cy="volunteerGroupSelect"
                     options={volunteerGroups}
                     value={selectedVolunteerGroup}

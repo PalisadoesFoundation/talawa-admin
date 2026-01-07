@@ -6,7 +6,7 @@
 
 > **default**(`__namedParameters`): `Element`
 
-Defined in: [src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx:28](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx#L28)
+Defined in: [src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx:21](https://github.com/PalisadoesFoundation/talawa-admin/blob/main/src/components/Advertisements/core/AdvertisementEntry/AdvertisementEntry.tsx#L21)
 
 ## Parameters
 

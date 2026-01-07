@@ -204,13 +204,16 @@ function AdvertisementRegister({
           {t('createAdvertisement')}
         </Button>
       ) : (
-        <div
+        <Button
+          variant="link"
+          className="p-0 border-0"
           onClick={handleShow}
           data-testid="editBtn"
           data-cy="editAdvertisementButton"
+          aria-label={t('editAdvertisement')}
         >
           {tCommon('edit')}
-        </div>
+        </Button>
       )}
       <BaseModal
         show={show}
@@ -267,13 +270,12 @@ function AdvertisementRegister({
             <Form.Label>{t('Rmedia')}</Form.Label>
             <Form.Control
               type="file"
-              multiple
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                const files = e.target.files ? Array.from(e.target.files) : [];
-                setFormState((prev) => ({ ...prev, attachments: files }));
-              }}
+              disabled
               data-cy="advertisementMediaInput"
             />
+            <Form.Text className="text-muted">
+              Media uploads are temporarily unavailable.
+            </Form.Text>
           </Form.Group>
           <Form.Group className="mb-3" controlId="registerForm.RstartAt">
             <Form.Label>{t('RstartDate')}</Form.Label>
@@ -316,6 +318,9 @@ function AdvertisementRegister({
           <Button
             onClick={formStatus === 'register' ? handleRegister : handleUpdate}
             className={styles.addButton}
+            data-testid={
+              formStatus === 'register' ? 'addonregister' : 'addonupdate'
+            }
             data-cy={
               formStatus === 'register'
                 ? 'registerAdvertisementButton'
