@@ -190,9 +190,11 @@ export default function Advertisements(): JSX.Element {
     >
       <Row data-testid="advertisements" className={styles.rowAdvertisements}>
         <Col md={8} className={styles.containerAdvertisements}>
-          <LoadingState variant="spinner" isLoading={loading}>
-            <div />
-          </LoadingState>
+          {loading && (
+            <LoadingState variant="spinner" isLoading={loading}>
+              <div />
+            </LoadingState>
+          )}
           <Col className={styles.colAdvertisements}>
             <PageHeader
               search={{
