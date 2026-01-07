@@ -4,8 +4,8 @@ import type {
   InterfaceCursorPaginationManagerProps,
   InterfaceConnectionData,
   PaginationVariables,
+  InterfacePageInfo,
 } from 'types/CursorPagination/interface';
-import type { DefaultConnectionPageInfo } from 'types/pagination';
 import styles from './CursorPaginationManager.module.css';
 import { useTranslation } from 'react-i18next';
 import LoadingState from 'shared-components/LoadingState/LoadingState';
@@ -69,45 +69,45 @@ function extractNodes<TNode>(
  *
  * @example
  * ```tsx
- * import { CursorPaginationManager } from 'components/CursorPaginationManager/CursorPaginationManager';
- * import { gql } from '@apollo/client';
+ * import \{ CursorPaginationManager \} from 'components/CursorPaginationManager/CursorPaginationManager';
+ * import \{ gql \} from '@apollo/client';
  *
  * const GET_USERS_QUERY = gql`
- *   query GetUsers($first: Int!, $after: String) {
- *     users(first: $first, after: $after) {
- *       edges {
+ *   query GetUsers($first: Int!, $after: String) \{
+ *     users(first: $first, after: $after) \{
+ *       edges \{
  *         cursor
- *         node {
+ *         node \{
  *           id
  *           name
  *           email
- *         }
- *       }
- *       pageInfo {
+ *         \}
+ *       \}
+ *       pageInfo \{
  *         hasNextPage
  *         hasPreviousPage
  *         startCursor
  *         endCursor
- *       }
- *     }
- *   }
+ *       \}
+ *     \}
+ *   \}
  * `;
  *
- * function UsersList() {
+ * function UsersList() \{
  *   return (
  *     <CursorPaginationManager
- *       query={GET_USERS_QUERY}
+ *       query=\{GET_USERS_QUERY\}
  *       dataPath="users"
- *       itemsPerPage={10}
- *       renderItem={(user) => (
- *         <div key={user.id}>
- *           <h3>{user.name}</h3>
- *           <p>{user.email}</p>
+ *       itemsPerPage=\{10\}
+ *       renderItem=\{(user) => (
+ *         <div key=\{user.id\}>
+ *           <h3>\{user.name\}</h3>
+ *           <p>\{user.email\}</p>
  *         </div>
- *       )}
+ *       )\}
  *     />
  *   );
- * }
+ * \}
  * ```
  *
  * @remarks
@@ -142,15 +142,15 @@ export function CursorPaginationManager<
     emptyStateComponent,
     onDataChange,
     refetchTrigger,
+    useExternalUI,
+    children,
   } = props;
 
   const { t } = useTranslation('common');
 
   // Internal state
   const [items, setItems] = useState<TNode[]>([]);
-  const [pageInfo, setPageInfo] = useState<DefaultConnectionPageInfo | null>(
-    null,
-  );
+  const [pageInfo, setPageInfo] = useState<InterfacePageInfo | null>(null);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const previousRefetchTrigger = useRef(refetchTrigger);
   const generationRef = useRef(0);
@@ -232,8 +232,8 @@ export function CursorPaginationManager<
       if (isMounted.current) {
         setIsLoadingMore(false);
       }
-    } catch (err) {
-      console.error('Error loading more items:', err);
+    } catch {
+      // Error state is handled via Apollo's error prop
       if (currentGeneration === generationRef.current && isMounted.current) {
         setIsLoadingMore(false);
       }
@@ -263,8 +263,8 @@ export function CursorPaginationManager<
         first: itemsPerPage,
         after: null,
       } as PaginationVariables<TVariables>);
-    } catch (err) {
-      console.error('Error refetching data:', err);
+    } catch {
+      // Error state is handled via Apollo's error prop
     }
   }, [refetch, queryVariables, itemsPerPage]);
 
@@ -278,6 +278,22 @@ export function CursorPaginationManager<
       void handleRefetch();
     }
   }, [refetchTrigger, handleRefetch]);
+
+  // If using external UI (render prop pattern), provide data to children
+  if (useExternalUI && children) {
+    return (
+      <>
+        {children({
+          items,
+          loading,
+          loadingMore: isLoadingMore,
+          pageInfo,
+          handleLoadMore,
+          error,
+        })}
+      </>
+    );
+  }
 
   // Error state (no items yet)
   if (error && !items.length) {

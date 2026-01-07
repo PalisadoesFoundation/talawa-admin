@@ -1,33 +1,54 @@
+import type { ReactNode } from 'react';
 import type { DocumentNode } from 'graphql';
+import type { DefaultConnectionPageInfo } from '../pagination';
 
-export interface InterfacePageInfo {
-  endCursor: string | null;
-  startCursor: string | null;
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
+// Re-export DefaultConnectionPageInfo as InterfacePageInfo for consistency
+export type InterfacePageInfo = DefaultConnectionPageInfo;
+
+/**
+ * Helper type to combine pagination variables with custom query variables
+ */
+export type PaginationVariables<T extends Record<string, unknown>> = T & {
+  first: number;
+  after?: string | null;
+};
+
+/**
+ * Represents the GraphQL connection structure with edges and pageInfo.
+ * This follows the Relay cursor pagination specification.
+ */
+export interface InterfaceConnectionData<TNode> {
+  edges: Array<{
+    cursor: string;
+    node: TNode;
+  }>;
+  pageInfo?: InterfacePageInfo;
 }
 
 /**
  * Props for CursorPaginationManager component.
  */
-export interface InterfaceCursorPaginationProps<TNode> {
+export interface InterfaceCursorPaginationManagerProps<
+  TNode,
+  TVariables extends Record<string, unknown> = Record<string, unknown>,
+> {
   query: DocumentNode;
-  queryVariables?: Record<string, unknown>;
+  queryVariables?: TVariables;
   /** Dot-separated path to the connection field in the GraphQL response (e.g. "post.comments") */
   dataPath: string;
   itemsPerPage?: number;
-  renderItem: (item: TNode, index: number) => React.ReactNode;
-  loadingComponent?: React.ReactNode;
-  emptyStateComponent?: React.ReactNode;
+  renderItem: (item: TNode, index: number) => ReactNode;
+  /** Optional function to extract unique key from item */
+  keyExtractor?: (item: TNode, index: number) => string | number;
+  loadingComponent?: ReactNode;
+  emptyStateComponent?: ReactNode;
   onDataChange?: (data: TNode[]) => void;
   /** Changing this numeric prop triggers a refetch when it updates */
   refetchTrigger?: number;
   /** When true, component only manages data and exposes children as render prop */
   useExternalUI?: boolean;
   /** Render prop for external UI integration (e.g., InfiniteScroll) */
-  children?: (
-    props: InterfaceCursorPaginationRenderProps<TNode>,
-  ) => React.ReactNode;
+  children?: (props: InterfaceCursorPaginationRenderProps<TNode>) => ReactNode;
 }
 
 /**

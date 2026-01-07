@@ -4154,10 +4154,8 @@ describe('Partially Covered Lines Test Coverage', () => {
       const categoryInput = within(categorySelect).getByRole('combobox');
       await userEvent.click(categoryInput);
       await userEvent.type(categoryInput, 'Category 1');
-      await waitFor(async () => {
-        const option = await screen.findByText('Category 1');
-        await userEvent.click(option);
-      });
+      const categoryOption = await screen.findByText('Category 1');
+      await userEvent.click(categoryOption);
 
       // Wait for volunteer select to be in the document
       await waitFor(

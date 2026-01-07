@@ -371,7 +371,7 @@ function SubTags(): JSX.Element {
                 data-testid="subTagsScrollableDiv"
                 className={styles.subTagsScrollableDiv}
               >
-                <CursorPaginationManager<InterfaceTagData>
+                <CursorPaginationManager<unknown, InterfaceTagData>
                   query={USER_TAG_SUB_TAGS}
                   queryVariables={{
                     id: parentTagId,
