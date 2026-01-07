@@ -50,9 +50,9 @@ import {
   CREATE_POST_MUTATION,
   UPDATE_POST_MUTATION,
 } from 'GraphQl/Mutations/mutations';
-import { toast } from 'react-toastify';
 import { errorHandler } from 'utils/errorHandler';
 import { useTranslation } from 'react-i18next';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { ICreatePostData, ICreatePostInput } from 'types/Post/type';
 import { ICreatePostModalProps } from 'types/Post/interface';
 import { ProfileAvatarDisplay } from 'shared-components/ProfileAvatarDisplay/ProfileAvatarDisplay';
@@ -138,7 +138,7 @@ function CreatePostModal({
     if (getMimeTypeEnum(file.type) === '0') {
       setFile(null);
       setPreview(null);
-      toast.error(t('createPostModal.unsupportedFileType'));
+      NotificationToast.error(t('createPostModal.unsupportedFileType'));
       return;
     }
     if (file.type.startsWith('image/')) {
@@ -154,7 +154,7 @@ function CreatePostModal({
   };
 
   const onSuccess = async (type: 'edited' | 'created') => {
-    toast.success(
+    NotificationToast.success(
       type === 'created'
         ? (t('createPostModal.postCreatedSuccess') as string)
         : (t('createPostModal.postUpdatedSuccess') as string),
@@ -181,7 +181,7 @@ function CreatePostModal({
 
     try {
       if (!orgId) {
-        toast.error(t('createPostModal.organizationIdMissing'));
+        NotificationToast.error(t('createPostModal.organizationIdMissing'));
         return;
       }
       if (type === 'create') {
@@ -373,9 +373,8 @@ function CreatePostModal({
           <div className={styles.postActions}>
             <form onSubmit={createPostHandler}>
               <button
-                className={`${styles.postButton} ${
-                  isPostDisabled || isLoading ? styles.postButtonDisabled : ''
-                }`}
+                className={`${styles.postButton} ${isPostDisabled || isLoading ? styles.postButtonDisabled : ''
+                  }`}
                 type="submit"
                 disabled={isPostDisabled || isLoading}
                 data-testid="createPostBtn"

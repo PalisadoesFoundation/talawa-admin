@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import styles from '../../style/app-fixed.module.css';
 import {
   Days,
@@ -289,9 +289,9 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
         : localInterval;
     if (isNaN(parsedInterval) || parsedInterval < 1) {
       console.error('Invalid interval:', localInterval);
-      toast.error(
+      NotificationToast.error(
         t('invalidDetailsMessage') ||
-          'Please enter a valid interval (must be at least 1)',
+        'Please enter a valid interval (must be at least 1)',
       );
       return;
     }
@@ -299,9 +299,9 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
 
     // Validate weekly recurrence has at least one day selected
     if (frequency === Frequency.WEEKLY && (!byDay || byDay.length === 0)) {
-      toast.error(
+      NotificationToast.error(
         t('selectAtLeastOneDay') ||
-          'Please select at least one day for weekly recurrence',
+        'Please select at least one day for weekly recurrence',
       );
       return;
     }
@@ -329,9 +329,9 @@ const CustomRecurrenceModal: React.FC<InterfaceCustomRecurrenceModalProps> = ({
         typeof localCount === 'string' ? parseInt(localCount) : localCount;
       if (isNaN(parsedCount) || parsedCount < 1) {
         console.error('Invalid count:', localCount);
-        toast.error(
+        NotificationToast.error(
           t('invalidDetailsMessage') ||
-            'Please enter a valid occurrence count (must be at least 1)',
+          'Please enter a valid occurrence count (must be at least 1)',
         );
         return;
       }

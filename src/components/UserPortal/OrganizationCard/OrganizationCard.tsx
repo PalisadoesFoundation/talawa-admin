@@ -43,9 +43,9 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { useMutation } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 
 import UserPortalCard from 'components/UserPortal/UserPortalCard/UserPortalCard';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 import {
   SEND_MEMBERSHIP_REQUEST,
@@ -85,9 +85,9 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
   const handleJoin = async (): Promise<void> => {
     try {
       await sendRequest({ variables: { organizationId: id } });
-      toast.success(t('join_success'));
+      NotificationToast.success(t('join_success'));
     } catch {
-      toast.error(t('join_error'));
+      NotificationToast.error(t('join_error'));
     }
   };
 
@@ -99,9 +99,9 @@ const OrganizationCard: React.FC<InterfaceOrganizationCardProps> = ({
         variables: { membershipRequestId: pendingRequest.id },
       });
 
-      toast.success(t('withdraw_success'));
+      NotificationToast.success(t('withdraw_success'));
     } catch {
-      toast.error(t('withdraw_error'));
+      NotificationToast.error(t('withdraw_error'));
     }
   };
 

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { Button, Dropdown, Form, InputGroup } from 'react-bootstrap';
-import { toast } from 'react-toastify';
 import { useQuery, useMutation } from '@apollo/client';
 import SendIcon from '@mui/icons-material/Send';
 import HourglassBottomIcon from '@mui/icons-material/HourglassBottom';
 import { useTranslation } from 'react-i18next';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 import {
   ORGANIZATION_DONATION_CONNECTION_LIST,
@@ -79,7 +79,7 @@ export default function Donate(): JSX.Element {
 
   const donateToOrg = async (): Promise<void> => {
     if (amount === '' || Number.isNaN(Number(amount))) {
-      toast.error(t('invalidAmount'));
+      NotificationToast.error(t('invalidAmount'));
       return;
     }
 
@@ -87,7 +87,7 @@ export default function Donate(): JSX.Element {
     const maxDonation = 10000000;
 
     if (Number(amount) < minDonation || Number(amount) > maxDonation) {
-      toast.error(
+      NotificationToast.error(
         t('donationOutOfRange', { min: minDonation, max: maxDonation }),
       );
       return;
@@ -106,7 +106,7 @@ export default function Donate(): JSX.Element {
       });
 
       refetch();
-      toast.success(t('success') as string);
+      NotificationToast.success(t('success') as string);
     } catch (error) {
       errorHandler(t, error);
     }

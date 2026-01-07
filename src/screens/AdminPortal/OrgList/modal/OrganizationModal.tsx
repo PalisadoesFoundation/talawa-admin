@@ -44,7 +44,7 @@ import type { ChangeEvent } from 'react';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
 import { countryOptions } from 'utils/formEnumFields';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import { validateFile } from 'utils/fileValidation';
 
 interface InterfaceFormStateType {
@@ -278,7 +278,9 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 const validation = validateFile(file);
 
                 if (!validation.isValid) {
-                  toast.error(validation.errorMessage);
+                  NotificationToast.error(
+                    validation.errorMessage || 'Invalid file',
+                  );
                   return;
                 }
 
@@ -286,10 +288,10 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                   const { objectName: avatarobjectName } =
                     await uploadFileToMinio(file, 'organization');
                   setFormState({ ...formState, avatar: avatarobjectName });
-                  toast.success(t('imageUploadSuccess'));
+                  NotificationToast.success(t('imageUploadSuccess'));
                 } catch (error) {
                   console.error('Error uploading image:', error);
-                  toast.error(t('imageUploadError'));
+                  NotificationToast.error(t('imageUploadError'));
                 }
               }
             }}

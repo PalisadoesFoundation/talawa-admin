@@ -30,9 +30,9 @@
  */
 import React, { useEffect, useRef } from 'react';
 import { Navigate, Outlet } from 'react-router';
-import { toast } from 'react-toastify';
 import PageNotFound from 'screens/PageNotFound/PageNotFound';
 import useLocalStorage from 'utils/useLocalstorage';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 
 // Time constants for session timeout and inactivity interval
 const timeoutMinutes = 15;
@@ -71,7 +71,7 @@ const SecuredRouteForUser = (): JSX.Element => {
 
         // If inactive for longer than the timeout period, show a warning and log out
         if (timeSinceLastActive > timeoutMilliseconds) {
-          toast.warn('Kindly relogin as session has expired');
+          NotificationToast.warning('Kindly relogin as session has expired');
 
           setItem('IsLoggedIn', 'FALSE');
           removeItem('email');

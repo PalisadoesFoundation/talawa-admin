@@ -36,7 +36,7 @@
 import React from 'react';
 import { Button, Card, Col, Row } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import CardItem from 'components/OrganizationDashCards/CardItem/CardItem';
 import CardItemLoading from 'components/OrganizationDashCards/CardItem/Loader/CardItemLoading';
 import styles from 'style/app-fixed.module.css';
@@ -127,7 +127,7 @@ const MembershipRequestsCard: React.FC<InterfaceMembershipRequestsProps> = ({
               variant="light"
               data-testid="viewAllLeaderboard"
               onClick={() => {
-                toast.success(t('comingSoon'));
+                NotificationToast.success(t('comingSoon'));
               }}
             >
               {t('viewAll')}

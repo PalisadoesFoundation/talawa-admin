@@ -37,7 +37,7 @@ import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useMutation } from '@apollo/client';
 import type { InterfaceVolunteerGroupInfo } from 'utils/interfaces';
-import { toast } from 'react-toastify';
+import { NotificationToast } from 'components/NotificationToast/NotificationToast';
 import {
   DELETE_VOLUNTEER_GROUP,
   DELETE_VOLUNTEER_GROUP_FOR_INSTANCE,
@@ -85,9 +85,9 @@ const VolunteerGroupDeleteModal: React.FC<
 
       refetchGroups();
       hide();
-      toast.success(t('volunteerGroupDeleted'));
+      NotificationToast.success(t('volunteerGroupDeleted'));
     } catch (error: unknown) {
-      toast.error((error as Error).message);
+      NotificationToast.error((error as Error).message);
     }
   };
   return (
