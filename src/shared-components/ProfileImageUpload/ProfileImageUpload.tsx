@@ -159,7 +159,7 @@ export default function ProfileImageUpload({
           fallbackName={name}
           size={size}
           shape="circle"
-          dataTestId={`${dataTestId}-avatar`}
+          dataTestId={`${dataTestId}-avatar`} // i18n-ignore-line
         />
         <span
           className={styles.editBadge}
