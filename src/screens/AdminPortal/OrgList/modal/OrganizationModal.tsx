@@ -3,14 +3,13 @@
  *
  * This component renders a modal for creating an organization.
  * It includes a form with fields for organization details such as name,
- * description, address, and an option to upload a display image.
+ * description, and address.
  *
  * @param props - The properties passed to the component.
  *
  * @remarks
  * - The form includes validation for input fields such as name, description, and address.
- * - The `convertToBase64` function is used to handle image previews.
- * - Displays success or error messages using `react-toastify` for image feedback.
+ * - Avatar upload is temporarily disabled to align with the Apollo transport refactor (PR 2/5).
  *
  * @example
  * ```tsx
@@ -32,9 +31,6 @@ import type { ChangeEvent } from 'react';
 import styles from 'style/app-fixed.module.css';
 import type { InterfaceCurrentUserTypePG } from 'utils/interfaces';
 import { countryOptions } from 'utils/formEnumFields';
-import { toast } from 'react-toastify';
-import { validateFile } from 'utils/fileValidation';
-import convertToBase64 from 'utils/convertToBase64';
 import { BaseModal } from 'shared-components/BaseModal';
 
 /**
@@ -100,7 +96,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           onChange={(e): void => {
             const inputText = e.target.value;
             if (inputText.length < 50) {
-              setFormState({ ...formState, name: e.target.value });
+              setFormState((prev) => ({ ...prev, name: inputText }));
             }
           }}
         />
@@ -118,7 +114,10 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           onChange={(e): void => {
             const descriptionText = e.target.value;
             if (descriptionText.length < 200) {
-              setFormState({ ...formState, description: e.target.value });
+              setFormState((prev) => ({
+                ...prev,
+                description: descriptionText,
+              }));
             }
           }}
         />
@@ -133,7 +132,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               onChange={(e): void => {
                 const inputText = e.target.value;
                 if (inputText.length < 50) {
-                  setFormState({ ...formState, countryCode: e.target.value });
+                  setFormState((prev) => ({ ...prev, countryCode: inputText }));
                 }
               }}
               className={`mb-3 ${styles.inputField}`}
@@ -161,7 +160,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               onChange={(e): void => {
                 const inputText = e.target.value;
                 if (inputText.length < 50) {
-                  setFormState({ ...formState, state: e.target.value });
+                  setFormState((prev) => ({ ...prev, state: inputText }));
                 }
               }}
               className={`mb-3 ${styles.inputField}`}
@@ -179,7 +178,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               onChange={(e): void => {
                 const inputText = e.target.value;
                 if (inputText.length < 50) {
-                  setFormState({ ...formState, city: e.target.value });
+                  setFormState((prev) => ({ ...prev, city: inputText }));
                 }
               }}
               className={`mb-3 ${styles.inputField}`}
@@ -194,7 +193,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               onChange={(e): void => {
                 const inputText = e.target.value;
                 if (inputText.length < 50) {
-                  setFormState({ ...formState, postalCode: e.target.value });
+                  setFormState((prev) => ({ ...prev, postalCode: inputText }));
                 }
               }}
               className={`mb-3 ${styles.inputField}`}
@@ -212,10 +211,10 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               onChange={(e): void => {
                 const inputText = e.target.value;
                 if (inputText.length < 50) {
-                  setFormState({
-                    ...formState,
-                    addressLine1: e.target.value,
-                  });
+                  setFormState((prev) => ({
+                    ...prev,
+                    addressLine1: inputText,
+                  }));
                 }
               }}
               className={`mb-3 ${styles.inputField}`}
@@ -230,10 +229,10 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
               onChange={(e): void => {
                 const inputText = e.target.value;
                 if (inputText.length < 50) {
-                  setFormState({
-                    ...formState,
+                  setFormState((prev) => ({
+                    ...prev,
                     addressLine2: inputText,
-                  });
+                  }));
                 }
               }}
               className={`mb-3 ${styles.inputField}`}
@@ -241,38 +240,13 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
           </Col>
         </Row>
         <div className="mt-3"></div>
-        <Form.Label htmlFor="orgphoto">{tCommon('displayImage')}</Form.Label>
-        <Form.Control
-          accept="image/*"
-          id="orgphoto"
-          className={`mb-3 ${styles.inputField}`}
-          name="photo"
-          type="file"
-          multiple={false}
-          onChange={async (e: React.ChangeEvent): Promise<void> => {
-            const target = e.target as HTMLInputElement;
-            const file = target.files && target.files[0];
-
-            if (file) {
-              const validation = validateFile(file);
-
-              if (!validation.isValid) {
-                toast.error(validation.errorMessage);
-                return;
-              }
-
-              try {
-                const base64String = await convertToBase64(file);
-                setFormState({ ...formState, avatarPreview: base64String });
-                toast.success(t('imageUploadSuccess'));
-              } catch (error: unknown) {
-                console.error('Image preview conversion failed:', error);
-                toast.error(t('imageUploadError'));
-              }
-            }
-          }}
-          data-testid="organisationImage"
-        />
+        {/*
+          NOTE: Avatar upload input has been temporarily removed.
+          In PR 2/5, we standardized the Apollo transport layer to HttpLink.
+          Multipart file uploads are currently incompatible with this change.
+          The field will be restored in PR 4/5 once the backend supports
+          MinIO object names (String) instead of the Upload scalar.
+        */}
         <Col className={styles.sampleOrgSection}>
           <Button
             className="addButton"

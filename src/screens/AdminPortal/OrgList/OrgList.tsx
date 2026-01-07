@@ -190,6 +190,13 @@ function orgList(): JSX.Element {
         variables: {
           addressLine1,
           addressLine2,
+          /**
+           * NOTE: The avatar field is intentionally omitted in this PR (2 of 5).
+           * Following the removal of `apollo-upload-client`, the frontend no longer
+           * supports multipart/form-data for GraphQL operations.
+           * This field will be re-added in PR 4/5 once the backend mutation is
+           * updated to accept a MinIO object name (String) instead of the Upload scalar.
+           */
           city,
           countryCode,
           description,
