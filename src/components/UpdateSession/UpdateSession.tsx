@@ -1,17 +1,14 @@
 /**
+ *
+ * UpdateTimeout Component
+ *
  * A React component that allows users to update the session timeout for a community.
  * It fetches the current timeout value from the server, displays it, and provides
  * a slider to update the timeout value. The updated value is submitted to the server
  * via a GraphQL mutation.
  *
- * module - UpdateTimeout
- *
- * interface TestInterfaceUpdateTimeoutProps
- * description Props for the `UpdateTimeout` component.
- * property - onValueChange - Optional callback function triggered when the slider value changes.
- * component -
- * - name UpdateTimeout
- * - description A React functional component that manages and updates the session timeout for a community.
+ * Props interface: TestInterfaceUpdateTimeoutProps
+ * - onValueChange: Optional callback function triggered when the slider value changes.
  *
  * @param props - Component props.
  * @returns The rendered component.
@@ -27,11 +24,11 @@
  * - Submits the updated timeout value to the server using a GraphQL mutation.
  * - Displays a success toast on successful update or handles errors gracefully.
  *
- * dependencies -
+ * Dependencies -
  * - `react`, `react-bootstrap`, `@mui/material`, `@apollo/client`, `react-toastify`
  * - Custom modules: `GraphQl/Queries/Queries`, `GraphQl/Mutations/mutations`, `utils/errorHandler`, `shared-components/LoadingState/LoadingState`
  *
- * todo -
+ * TODO -
  * - Add additional validation for slider input if needed.
  * - Improve error handling for edge cases.
  */

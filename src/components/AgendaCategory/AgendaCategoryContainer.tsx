@@ -51,7 +51,7 @@ function agendaCategoryContainer({
   agendaCategoryData,
   agendaCategoryRefetch,
 }: {
-  agendaCategoryConnection: string;
+  agendaCategoryConnection: 'Organization';
   agendaCategoryData: InterfaceAgendaItemCategoryInfo[] | undefined;
   agendaCategoryRefetch: () => void;
 }): JSX.Element {
@@ -203,13 +203,13 @@ function agendaCategoryContainer({
   return (
     <>
       <div
-        className={`mx-1 ${agendaCategoryConnection === tCommon('organization') ? 'my-4' : 'my-0'}`}
+        className={`mx-1 ${agendaCategoryConnection === 'Organization' ? 'my-4' : 'my-0'}`}
       >
         <div
-          className={`shadow-sm ${agendaCategoryConnection === tCommon('organization') ? 'rounded-top-4 mx-4' : 'rounded-top-2 mx-0'}`}
+          className={`shadow-sm ${agendaCategoryConnection === 'Organization' ? 'rounded-top-4 mx-4' : 'rounded-top-2 mx-0'}`}
         >
           <Row
-            className={`mx-0 border border-light-subtle py-3 ${agendaCategoryConnection === tCommon('organization') ? 'rounded-top-4' : 'rounded-top-2'}`}
+            className={`mx-0 border border-light-subtle py-3 ${agendaCategoryConnection === 'Organization' ? 'rounded-top-4' : 'rounded-top-2'}`}
           >
             <Col
               xs={7}
@@ -236,7 +236,7 @@ function agendaCategoryContainer({
           </Row>
         </div>
         <div
-          className={`bg-light-subtle border border-light-subtle border-top-0 shadow-sm ${agendaCategoryConnection === tCommon('organization') ? 'rounded-bottom-4 mx-4' : 'rounded-bottom-2 mb-2 mx-0'}`}
+          className={`bg-light-subtle border border-light-subtle border-top-0 shadow-sm ${agendaCategoryConnection === 'Organization' ? 'rounded-bottom-4 mx-4' : 'rounded-bottom-2 mb-2 mx-0'}`}
         >
           {agendaCategoryData?.map((agendaCategory, index) => (
             <div key={index}>

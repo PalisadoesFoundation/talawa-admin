@@ -13,7 +13,7 @@
  * - Modal for viewing individual pinned posts
  * - Loading states and error handling
  *
- * remarks
+ * @remarks
  * - Uses Apollo Client for GraphQL queries (ORGANIZATION_POST_LIST_WITH_VOTES, ORGANIZATION_PINNED_POST_LIST)
  * - Implements search functionality that filters posts by caption text
  * - Supports sorting by creation date (oldest/newest) with local state management

@@ -548,7 +548,7 @@ describe('Actions Screen', () => {
     renderActions(link1);
 
     await waitFor(() => {
-      expect(screen.getAllByTestId('assigneeName')).toBeDefined();
+      expect(screen.getAllByTestId('assigneeName').length).toBeGreaterThan(0);
     });
 
     const input = screen.getByTestId('searchByInput');
@@ -675,6 +675,7 @@ describe('Actions Screen', () => {
     renderActions(link1);
 
     await waitFor(() => {
+      expect(screen.getAllByTestId('assigneeName').length).toBeGreaterThan(0);
       expect(screen.getByTestId('searchByInput')).toBeInTheDocument();
     });
   });

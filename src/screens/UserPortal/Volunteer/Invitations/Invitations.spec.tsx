@@ -538,9 +538,10 @@ describe('Testing Invitations Screen', () => {
   it('Check Sorting Functionality', async () => {
     renderInvitations(link1);
     await waitFor(async () => {
-      const searchInput = await screen.findByTestId('searchByInput');
-      expect(searchInput).toBeInTheDocument();
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
+    const searchInput = await screen.findByTestId('searchByInput');
+    expect(searchInput).toBeInTheDocument();
 
     let sortBtn = await screen.findByTestId('sort');
     expect(sortBtn).toBeInTheDocument();

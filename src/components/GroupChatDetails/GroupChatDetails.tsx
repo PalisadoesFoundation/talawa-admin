@@ -33,7 +33,7 @@
  * />
  * ```
  *
- * dependencies-
+ * Dependencies-
  * - `@mui/material`
  * - `react-bootstrap`
  * - `@apollo/client`

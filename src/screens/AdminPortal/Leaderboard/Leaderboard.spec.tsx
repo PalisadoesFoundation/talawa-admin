@@ -235,8 +235,8 @@ describe('Testing Leaderboard Screen', () => {
     expect(timeFrameMonthly).toBeInTheDocument();
     fireEvent.click(timeFrameMonthly);
 
-    await waitFor(async () => {
-      const userName = await screen.findAllByTestId('userName');
+    await waitFor(() => {
+      const userName = screen.getAllByTestId('userName');
       expect(userName).toHaveLength(2);
     });
   });
@@ -318,13 +318,15 @@ describe('Testing Leaderboard Screen', () => {
     routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
     renderLeaderboard(link1);
 
-    await waitFor(async () => {
-      const searchInput = await screen.findByTestId('searchBy');
-      expect(searchInput).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
+    });
 
-      const userName = screen.getAllByTestId('userName');
-      userName[0].focus();
-      fireEvent.keyDown(userName[0], { key: ' ' });
+    const userName = screen.getAllByTestId('userName');
+    userName[0].focus();
+    fireEvent.keyDown(userName[0], { key: ' ' });
+
+    await waitFor(() => {
       expect(screen.getByTestId('memberScreen')).toBeInTheDocument();
     });
   });
@@ -377,6 +379,19 @@ describe('Testing Leaderboard Screen', () => {
     // Should render component even during error state
     await waitFor(() => {
       expect(screen.getByTestId('errorMsg')).toBeInTheDocument();
+    });
+  });
+
+  it('should show spinner while loading data', async () => {
+    routerMocks.useParams.mockReturnValue({ orgId: 'orgId' });
+    renderLeaderboard(link1);
+
+    // Verify spinner is initially visible during loading
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+
+    // Then verify content appears after loading completes
+    await waitFor(() => {
+      expect(screen.getByTestId('searchBy')).toBeInTheDocument();
     });
   });
 });

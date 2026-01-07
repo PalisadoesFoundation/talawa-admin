@@ -18,7 +18,7 @@ Defined in: [src/components/AgendaItems/AgendaItemsContainer.tsx:54](https://git
 
 #### agendaItemConnection
 
-`string`
+`"Event"`
 
 #### agendaItemData
 

@@ -14,7 +14,7 @@ Defined in: [src/components/AgendaCategory/AgendaCategoryContainer.tsx:49](https
 
 #### agendaCategoryConnection
 
-`string`
+`"Organization"`
 
 #### agendaCategoryData
 

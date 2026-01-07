@@ -185,7 +185,7 @@ const organizationAgendaCategory: FC<InterfaceAgendaCategoryProps> = ({
           <hr />
 
           <AgendaCategoryContainer
-            agendaCategoryConnection={tCommon('organization')}
+            agendaCategoryConnection={'Organization'}
             agendaCategoryData={
               agendaCategoryData?.agendaItemCategoriesByOrganization
             }

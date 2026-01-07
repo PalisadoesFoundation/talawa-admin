@@ -235,7 +235,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
           <hr />
 
           <AgendaItemsContainer
-            agendaItemConnection={t('event')}
+            agendaItemConnection={'Event'}
             agendaItemData={agendaItemData?.agendaItemByEvent}
             agendaItemRefetch={refetchAgendaItem}
             agendaItemCategories={

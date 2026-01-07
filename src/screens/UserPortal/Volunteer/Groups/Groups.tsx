@@ -6,7 +6,7 @@
  *
  * @returns The rendered Groups component.
  *
- * remarks
+ * @remarks
  * - Uses `@apollo/client` to fetch volunteer group data from the GraphQL API.
  * - Implements debounced search functionality for better performance.
  * - Displays a loader while data is being fetched and an error message if the query fails.
