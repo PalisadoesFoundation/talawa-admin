@@ -482,9 +482,7 @@ function orgList(): JSX.Element {
         show={dialogModalisOpen}
         onHide={toggleDialogModal}
         headerContent={
-          <span className="text-white">
-            {t('manageFeatures')}
-          </span>
+          <span className="text-white">{t('manageFeatures')}</span>
         }
         headerClassName={styles.modalHeader}
         dataTestId="pluginNotificationHeader"

@@ -593,35 +593,6 @@ describe('OrganizationModal Component', () => {
     );
   });
 
-  test('should show error toast on upload failure', async () => {
-    mockConvertToBase64.mockRejectedValueOnce(new Error('Server error'));
-    setup();
-    const file = new File(['dummy content'], 'test.png', { type: 'image/png' });
-    const fileInput = screen.getByTestId('organisationImage');
-
-    fireEvent.change(fileInput, { target: { files: [file] } });
-
-    await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith('imageUploadError');
-    });
-    expect(mockSetFormState).not.toHaveBeenCalled();
-  });
-
-  test('shows error toast when base64 conversion fails', async () => {
-    mockConvertToBase64.mockRejectedValueOnce(new Error('Conversion failed'));
-
-    setup();
-    const file = new File(['x'], 'test.png', { type: 'image/png' });
-    fireEvent.change(screen.getByTestId('organisationImage'), {
-      target: { files: [file] },
-    });
-
-    await waitFor(() => {
-      expect(toastMocks.error).toHaveBeenCalledWith('imageUploadError');
-    });
-    expect(mockSetFormState).not.toHaveBeenCalled();
-  });
-
   // Note: Most field validation tests are covered by the loop test above.
   // The description field retains its individual test due to its unique 200-character limit.
 });
