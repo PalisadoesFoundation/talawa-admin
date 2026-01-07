@@ -30,7 +30,7 @@ import { dateConstants } from './AdvertisementRegisterMocks';
 // Create a local clean client for tests to avoid global cache pollution
 const testClient = new ApolloClient({
   link: new HttpLink({ uri: '/graphql' }),
-  cache: new InMemoryCache(), // Note: addTypename is omitted here to fix Apollo Error #104
+  cache: new InMemoryCache(),
 });
 
 vi.mock('react-router', async () => {
@@ -57,7 +57,6 @@ vi.mock('@apollo/client', async () => {
   return {
     ...actual,
     useMutation: () => mockUseMutation(),
-    // Explicitly re-exporting these to fix initialization errors
     ApolloProvider: actual.ApolloProvider,
     InMemoryCache: actual.InMemoryCache,
     ApolloClient: actual.ApolloClient,
@@ -83,7 +82,6 @@ describe('Testing Advertisement Register Component', () => {
   beforeEach(() => {
     mockUseMutation = vi.fn();
     vi.clearAllMocks();
-    // Resolves TimeoutNaNWarning by ensuring timers are clean before each test
     vi.useRealTimers();
     mockUseMutation.mockReturnValue([vi.fn(), { loading: false }]);
   });
@@ -189,7 +187,6 @@ describe('Testing Advertisement Register Component', () => {
     await waitFor(() => {
       expect(createAdMock).toHaveBeenCalled();
       const mockCall = createAdMock.mock.calls[0][0];
-      // Verification: attachments property should be undefined in PR 2/5
       expect(mockCall.variables.attachments).toBeUndefined();
     });
   });
