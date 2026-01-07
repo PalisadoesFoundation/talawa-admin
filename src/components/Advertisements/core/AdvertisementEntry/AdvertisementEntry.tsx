@@ -79,7 +79,9 @@ function AdvertisementEntry({
       await deleteAd({
         variables: { id: advertisement.id },
       });
-      NotificationToast.success(t('advertisement.advertisementDeleted') as string);
+      NotificationToast.success(
+        t('advertisement.advertisementDeleted') as string,
+      );
       setButtonLoading(false);
       setAfterCompleted?.(null);
       setAfterActive?.(null);
