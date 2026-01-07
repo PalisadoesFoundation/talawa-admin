@@ -4221,7 +4221,9 @@ describe('Partially Covered Lines Test Coverage', () => {
         { timeout: 3000 },
       );
       expect(volunteerGroupSelect).toBeInTheDocument();
-      expect(screen.queryByTestId('volunteerSelect')).not.toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.queryByTestId('volunteerSelect')).not.toBeInTheDocument();
+      });
     });
 
     it('should have isVolunteerGroupChipDisabled true when editing item with volunteer', () => {
