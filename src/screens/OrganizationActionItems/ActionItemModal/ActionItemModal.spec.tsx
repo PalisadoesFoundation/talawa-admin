@@ -2990,7 +2990,7 @@ describe('orgActionItemsRefetch functionality', () => {
           variables.input.actionId === '1' &&
           variables.input.eventId === 'event123' &&
           variables.input.preCompletionNotes ===
-          'Updated notes for instance with org refetch'
+            'Updated notes for instance with org refetch'
         );
       },
       result: {
