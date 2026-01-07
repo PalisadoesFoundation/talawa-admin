@@ -9,6 +9,59 @@ import vitest from '@vitest/eslint-plugin';
 import tsdoc from 'eslint-plugin-tsdoc';
 import vitestIsolation from './scripts/eslint-plugin-vitest-isolation/index.js';
 
+/**
+  * Central registry for restricted imports used by the base rule and overrides.
+  * Add new restrictions here, then allow them in specific folders via IDs.
+  * For more details refer `docs/docs/docs/developer-resources/reusable-components.md`
+*/
+const restrictedImports = [
+  {
+    id: 'mui-data-grid',
+    name: '@mui/x-data-grid',
+    message:
+      'Direct imports from @mui/x-data-grid are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead.',
+  },
+  {
+    id: 'mui-data-grid-pro',
+    name: '@mui/x-data-grid-pro',
+    message:
+      'Direct imports from @mui/x-data-grid-pro are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead.',
+  },
+  {
+    id: 'rb-spinner',
+    name: 'react-bootstrap',
+    importNames: ['Spinner'],
+    message:
+      'Do not import Spinner from react-bootstrap. Use the shared LoadingState component instead.',
+  },
+  {
+    id: 'rb-modal',
+    name: 'react-bootstrap',
+    importNames: ['Modal'],
+    message:
+      'Do not import Modal directly. Use the shared BaseModal component instead.',
+  },
+  {
+    id: 'mui-date-pickers',
+    name: '@mui/x-date-pickers',
+    message:
+      'Direct imports from @mui/x-date-pickers are not allowed. Please use the wrappers (DateRangePicker, DatePicker, TimePicker) from src/shared-components/ instead.',
+  },
+];
+
+const restrictedImportPaths = restrictedImports.map(({ id, ...rule }) => rule);
+
+const restrictImportsExcept = (allowedIds = []) => ({
+  'no-restricted-imports': [
+    'error',
+    {
+      paths: restrictedImports
+        .filter(({ id }) => !allowedIds.includes(id))
+        .map(({ id, ...rule }) => rule),
+    },
+  ],
+});
+
 export default [
   {
     ignores: [
@@ -180,40 +233,7 @@ export default [
        * Also enforces usage of standardized date picker wrappers
        * Issue #6146: https://github.com/PalisadoesFoundation/talawa-admin/issues/6146
        */
-      'no-restricted-imports': [
-        'error',
-        {
-          paths: [
-            {
-              name: '@mui/x-data-grid',
-              message:
-                'Direct imports from @mui/x-data-grid are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
-            },
-            {
-              name: '@mui/x-data-grid-pro',
-              message:
-                'Direct imports from @mui/x-data-grid-pro are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
-            },
-            {
-              name: 'react-bootstrap',
-              importNames: ['Spinner'],
-              message:
-                'Do not import Spinner from react-bootstrap. Use the shared LoadingState component instead.',
-            },
-            {
-              name: 'react-bootstrap',
-              importNames: ['Modal'],
-              message:
-                'Do not import Modal directly. Use the shared BaseModal component instead.',
-            },
-            {
-              name: '@mui/x-date-pickers',
-              message:
-                'Direct imports from @mui/x-date-pickers are not allowed. Please use the wrappers (DateRangePicker, DatePicker, TimePicker) from src/shared-components/ instead. See issue #6146 for details.',
-            },
-          ],
-        },
-      ],
+      'no-restricted-imports': ['error', { paths: restrictedImportPaths }],
     },
   },
   /**
@@ -221,44 +241,21 @@ export default [
    *
    * DataGridWrapper files need direct MUI DataGrid access for wrapper implementation.
    * These files are the only ones allowed to import from @mui/x-data-grid/-pro.
+   * Allowed IDs: mui-data-grid, mui-data-grid-pro.
    */
   {
     files: [
       'src/shared-components/DataGridWrapper/**/*.{ts,tsx}',
       'src/types/DataGridWrapper/**/*.{ts,tsx}',
     ],
-    rules: {
-      'no-restricted-imports': [
-        'error',
-        {
-          paths: [
-            {
-              name: 'react-bootstrap',
-              importNames: ['Spinner'],
-              message:
-                'Do not import Spinner from react-bootstrap. Use the shared LoadingState component instead.',
-            },
-            {
-              name: 'react-bootstrap',
-              importNames: ['Modal'],
-              message:
-                'Do not import Modal directly. Use the shared BaseModal component instead.',
-            },
-            {
-              name: '@mui/x-date-pickers',
-              message:
-                'Direct imports from @mui/x-date-pickers are not allowed. Please use the wrappers (DateRangePicker, DatePicker, TimePicker) from src/shared-components/ instead. See issue #6146 for details.',
-            },
-          ],
-        },
-      ],
-    },
+    rules: restrictImportsExcept(['mui-data-grid', 'mui-data-grid-pro']),
   },
   /**
    * Exemption: LoadingState and Loader component files
    *
    * LoadingState/Loader files need direct Spinner access from react-bootstrap for wrapper implementation.
    * These files are the only ones allowed to import Spinner directly from react-bootstrap.
+   * Allowed ID: rb-spinner.
    */
   {
     files: [
@@ -266,78 +263,21 @@ export default [
       'src/types/shared-components/LoadingState/**/*.{ts,tsx}',
       'src/components/Loader/**/*.{ts,tsx}',
     ],
-    rules: {
-      'no-restricted-imports': [
-        'error',
-        {
-          paths: [
-            {
-              name: '@mui/x-data-grid',
-              message:
-                'Direct imports from @mui/x-data-grid are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
-            },
-            {
-              name: '@mui/x-data-grid-pro',
-              message:
-                'Direct imports from @mui/x-data-grid-pro are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
-            },
-            {
-              name: 'react-bootstrap',
-              importNames: ['Modal'],
-              message:
-                'Do not import Modal directly. Use the shared BaseModal component instead.',
-            },
-            {
-              name: '@mui/x-date-pickers',
-              message:
-                'Direct imports from @mui/x-date-pickers are not allowed. Please use the wrappers (DateRangePicker, DatePicker, TimePicker) from src/shared-components/ instead. See issue #6146 for details.',
-            },
-          ],
-        },
-      ],
-    },
+    rules: restrictImportsExcept(['rb-spinner']),
   },
   /**
    * Exemption: BaseModal component files
    *
    * BaseModal files need direct react-bootstrap Modal access for wrapper implementation.
    * These files are the only ones allowed to import Modal directly from react-bootstrap.
+   * Allowed ID: rb-modal.
    */
   {
     files: [
       'src/shared-components/BaseModal/**/*.{ts,tsx}',
       'src/types/shared-components/BaseModal/**/*.{ts,tsx}',
     ],
-    rules: {
-      'no-restricted-imports': [
-        'error',
-        {
-          paths: [
-            {
-              name: '@mui/x-data-grid',
-              message:
-                'Direct imports from @mui/x-data-grid are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
-            },
-            {
-              name: '@mui/x-data-grid-pro',
-              message:
-                'Direct imports from @mui/x-data-grid-pro are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
-            },
-            {
-              name: 'react-bootstrap',
-              importNames: ['Spinner'],
-              message:
-                'Do not import Spinner from react-bootstrap. Use the shared LoadingState component instead.',
-            },
-            {
-              name: '@mui/x-date-pickers',
-              message:
-                'Direct imports from @mui/x-date-pickers are not allowed. Please use the wrappers (DateRangePicker, DatePicker, TimePicker) from src/shared-components/ instead. See issue #6146 for details.',
-            },
-          ],
-        },
-      ],
-    },
+    rules: restrictImportsExcept(['rb-modal']),
   },
   /**
    * Exemption: Date picker wrapper components
@@ -347,6 +287,7 @@ export default [
    *
    * Note: This exemption is specific - it only allows @mui/x-date-pickers imports.
    * Other restricted imports (like react-bootstrap Modal) are still blocked.
+   * Allowed ID: mui-date-pickers.
    */
   {
     files: [
@@ -356,37 +297,7 @@ export default [
       'src/shared-components/TimePicker/**/*.{ts,tsx}',
       'src/index.tsx',
     ],
-    rules: {
-      'no-restricted-imports': [
-        'error',
-        {
-          paths: [
-            {
-              name: '@mui/x-data-grid',
-              message:
-                'Direct imports from @mui/x-data-grid are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
-            },
-            {
-              name: '@mui/x-data-grid-pro',
-              message:
-                'Direct imports from @mui/x-data-grid-pro are not allowed. Please use the DataGridWrapper component from src/shared-components/DataGridWrapper/ instead. See issue #5290 for details.',
-            },
-            {
-              name: 'react-bootstrap',
-              importNames: ['Spinner'],
-              message:
-                'Do not import Spinner from react-bootstrap. Use the shared LoadingState component instead.',
-            },
-            {
-              name: 'react-bootstrap',
-              importNames: ['Modal'],
-              message:
-                'Do not import Modal directly. Use the shared BaseModal component instead.',
-            },
-          ],
-        },
-      ],
-    },
+    rules: restrictImportsExcept(['mui-date-pickers']),
   },
   {
     files: ['*.graphql'],

@@ -151,6 +151,79 @@ import { ProfileAvatarDisplay } from '/shared-components/ProfileAvatarDisplay/Pr
 import { UserTableRow } from 'components/AdminPortal/UserTableRow/UserTableRow';
 ```
 
+## Wrapper Components and Restricted Imports
+
+Some shared components are wrappers around third-party UI libraries. To enforce consistent usage, direct imports from those libraries are restricted by ESLint, and only the wrapper implementations may import them.
+
+### What is restricted (and what to use instead)
+
+- `@mui/x-data-grid` and `@mui/x-data-grid-pro` -> use `DataGridWrapper`
+- `react-bootstrap` `Spinner` -> use `LoadingState`
+- `react-bootstrap` `Modal` -> use `BaseModal`
+- `@mui/x-date-pickers` -> use `DateRangePicker`, `DatePicker`, or `TimePicker`
+
+These restrictions are enforced by `no-restricted-imports` in `eslint.config.js`.
+
+### Where direct imports are allowed
+
+Direct imports are only allowed inside the wrapper component implementations. The ESLint config defines a central registry of restricted imports and then allows specific IDs per folder.
+
+```js
+const restrictedImports = [
+  { id: 'mui-data-grid', name: '@mui/x-data-grid', message: '...' },
+  { id: 'mui-data-grid-pro', name: '@mui/x-data-grid-pro', message: '...' },
+  { id: 'rb-spinner', name: 'react-bootstrap', importNames: ['Spinner'], message: '...' },
+  { id: 'rb-modal', name: 'react-bootstrap', importNames: ['Modal'], message: '...' },
+  { id: 'mui-date-pickers', name: '@mui/x-date-pickers', message: '...' },
+];
+
+const restrictImportsExcept = (allowedIds = []) => ({
+  'no-restricted-imports': [
+    'error',
+    {
+      paths: restrictedImports
+        .filter(({ id }) => !allowedIds.includes(id))
+        .map(({ id, ...rule }) => rule),
+    },
+  ],
+});
+```
+
+Allowed IDs by folder:
+
+- DataGridWrapper: `mui-data-grid`, `mui-data-grid-pro`
+  - `src/shared-components/DataGridWrapper/**`
+  - `src/types/DataGridWrapper/**`
+- LoadingState/Loader: `rb-spinner`
+  - `src/shared-components/LoadingState/**`
+  - `src/types/shared-components/LoadingState/**`
+  - `src/components/Loader/**`
+- BaseModal: `rb-modal`
+  - `src/shared-components/BaseModal/**`
+  - `src/types/shared-components/BaseModal/**`
+- Date pickers: `mui-date-pickers`
+  - `src/shared-components/DateRangePicker/**`
+  - `src/types/shared-components/DateRangePicker/**`
+  - `src/shared-components/DatePicker/**`
+  - `src/shared-components/TimePicker/**`
+  - `src/index.tsx`
+
+### Adding a new restricted import or wrapper
+
+1. Add a new entry to `restrictedImports` in `eslint.config.js` with a unique `id`, `name`, and `message`.
+2. Allow that ID in the wrapper folder override using `restrictImportsExcept([...])`.
+3. Update this document to list the new restriction and allowed folder(s).
+
+### Troubleshooting
+
+If you see an error like:
+
+```
+'@mui/x-data-grid' import is restricted from being used. ...
+```
+
+it means you are importing a restricted library outside the allowed wrapper folders. Switch to the shared wrapper component or update the ESLint exception only if you are building the wrapper itself.
+
 ### i18n
 
 1. All screen-visible text must use translation keys. No hardcoded strings.
