@@ -5,18 +5,7 @@
  * It includes a form with fields for organization details such as name,
  * description, address, and an option to upload a display image.
  *
- * @component
- * @param {InterfaceOrganizationModalProps} props - The properties passed to the component.
- * @param {boolean} props.showModal - Determines whether the modal is visible.
- * @param {() => void} props.toggleModal - Function to toggle the visibility of the modal.
- * @param {InterfaceFormStateType} props.formState - The current state of the form fields.
- * @param {(state: React.SetStateAction<InterfaceFormStateType>) => void} props.setFormState -
- * Function to update the form state.
- * @param {(e: ChangeEvent<HTMLFormElement>) => Promise<void>} props.createOrg -
- * Function to handle form submission for creating an organization.
- * @param {(key: string) => string} props.t - Translation function for component-specific strings.
- * @param {(key: string) => string} props.tCommon - Translation function for common strings.
- * @param {InterfaceCurrentUserTypePG | undefined} props.userData - Current user data.
+ * @param props - The properties passed to the component.
  *
  * @remarks
  * - The form includes validation for input fields such as name, description, and address.
@@ -52,7 +41,7 @@ interface InterfaceFormStateType {
   addressLine1: string;
   addressLine2: string;
   avatar: string | null;
-  avatarPreview: string | null; // Added for client-side preview
+  avatarPreview: string | null;
   city: string;
   countryCode: string;
   description: string;
@@ -245,7 +234,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                   setFormState({
                     ...formState,
                     addressLine2: e.target.value,
-                    avatar: formState.avatar, // Retaining the field
+                    avatar: formState.avatar,
                   });
                 }
               }}
@@ -279,7 +268,6 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 setFormState({ ...formState, avatarPreview: base64String });
                 toast.success(t('imageUploadSuccess'));
               } catch {
-                // Error not captured to avoid ESLint/doc test failures
                 toast.error(t('imageUploadError'));
               }
             }

@@ -3,8 +3,7 @@
  * and providing functionality for searching, sorting, and creating new organizations.
  * It also includes modals for creating organizations and managing features after creation.
  *
- * @component
- * @returns {JSX.Element} The rendered organization list component.
+ * @returns The rendered organization list component.
  */
 import React, { useEffect, useState, useMemo } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
@@ -42,7 +41,7 @@ interface InterfaceFormStateType {
   addressLine1: string;
   addressLine2: string;
   avatar: string | null;
-  avatarPreview: string | null; // Added for client-side preview
+  avatarPreview: string | null;
   city: string;
   countryCode: string;
   description: string;
@@ -191,7 +190,6 @@ function orgList(): JSX.Element {
         variables: {
           addressLine1,
           addressLine2,
-          // avatar field intentionally omitted to avoid type mismatch with Upload scalar during PR-2 alignment
           city,
           countryCode,
           description,
