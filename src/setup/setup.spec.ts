@@ -240,6 +240,9 @@ describe('Talawa Admin Setup', () => {
         '\n❌ Setup failed:',
         mockError,
       );
+      
+      // Verify subsequent steps were not executed due to early error
+      expect(askAndSetDockerOption).not.toHaveBeenCalled();
     });
 
     it('should handle errors during askAndUpdatePort', async () => {
@@ -335,19 +338,14 @@ describe('Talawa Admin Setup', () => {
       const mockError = new Error('ReCAPTCHA setup failed');
       vi.mocked(inquirer.prompt).mockRejectedValueOnce(mockError);
 
-      const localConsoleError = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => undefined);
-
       await expect(askAndSetRecaptcha()).rejects.toThrow(
         'Failed to set up reCAPTCHA: ReCAPTCHA setup failed',
       );
 
-      expect(localConsoleError).toHaveBeenCalledWith(
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Error setting up reCAPTCHA:',
         mockError,
       );
-      localConsoleError.mockRestore();
     });
 
     it('should pass validation config to inquirer prompt for reCAPTCHA', async () => {
@@ -393,12 +391,13 @@ describe('Talawa Admin Setup', () => {
       const questions = Array.isArray(promptCall) ? promptCall : [promptCall];
       const validateFn = questions[0].validate;
 
+      // Explicitly assert validateFn is defined
+      expect(validateFn).toBeDefined();
+
       // Test validation with invalid key
       vi.mocked(validateRecaptcha).mockReturnValue(false);
-      if (validateFn) {
-        const result = validateFn('invalid-key');
-        expect(result).toBe('Invalid reCAPTCHA site key. Please try again.');
-      }
+      const result = validateFn!('invalid-key');
+      expect(result).toBe('Invalid reCAPTCHA site key. Please try again.');
     });
 
     it('should have validation function that returns true for valid key', async () => {
@@ -414,12 +413,13 @@ describe('Talawa Admin Setup', () => {
       const questions = Array.isArray(promptCall) ? promptCall : [promptCall];
       const validateFn = questions[0].validate;
 
+      // Explicitly assert validateFn is defined
+      expect(validateFn).toBeDefined();
+
       // Test validation with valid key
       vi.mocked(validateRecaptcha).mockReturnValue(true);
-      if (validateFn) {
-        const result = validateFn('valid-key');
-        expect(result).toBe(true);
-      }
+      const result = validateFn!('valid-key');
+      expect(result).toBe(true);
     });
 
     it('should handle errors during the second prompt (site key input)', async () => {
@@ -429,19 +429,14 @@ describe('Talawa Admin Setup', () => {
         .mockResolvedValueOnce({ shouldUseRecaptcha: true })
         .mockRejectedValueOnce(mockError);
 
-      const localConsoleError = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => undefined);
-
       await expect(askAndSetRecaptcha()).rejects.toThrow(
         'Failed to set up reCAPTCHA: Site key input failed',
       );
 
-      expect(localConsoleError).toHaveBeenCalledWith(
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Error setting up reCAPTCHA:',
         mockError,
       );
-      localConsoleError.mockRestore();
     });
 
     it('should handle updateEnvFile errors gracefully', async () => {
@@ -454,19 +449,14 @@ describe('Talawa Admin Setup', () => {
         shouldUseRecaptcha: false,
       });
 
-      const localConsoleError = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => undefined);
-
       await expect(askAndSetRecaptcha()).rejects.toThrow(
         'Failed to set up reCAPTCHA: Update env failed',
       );
 
-      expect(localConsoleError).toHaveBeenCalledWith(
+      expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Error setting up reCAPTCHA:',
         mockError,
       );
-      localConsoleError.mockRestore();
     });
   });
 
@@ -592,22 +582,6 @@ describe('Talawa Admin Setup', () => {
       // Should treat as false since it's not exactly "YES"
       expect(askAndUpdatePort).toHaveBeenCalled();
       expect(askAndUpdateTalawaApiUrl).toHaveBeenCalledWith(false);
-    });
-
-    it('should handle synchronous error from modifyEnvFile', async () => {
-      const mockError = new Error('Modify env failed');
-      vi.mocked(modifyEnvFile).mockImplementation(() => {
-        throw mockError;
-      });
-
-      await expect(main()).rejects.toThrow('process.exit called with code 1');
-
-      expect(consoleErrorSpy).toHaveBeenCalledWith(
-        '\n❌ Setup failed:',
-        mockError,
-      );
-      
-      expect(askAndSetDockerOption).not.toHaveBeenCalled();
     });
   });
 });
