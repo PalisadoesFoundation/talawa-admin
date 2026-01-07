@@ -5,19 +5,19 @@
  * - Mark a user as checked in for an event.
  * - Generate and download a PDF tag for the user.
  *
- * @param data - The data object containing user and event details.
- * @param data.userId - The unique identifier for the user.
- * @param data.eventId - The unique identifier for the event.
- * @param data.name - The name of the user.
- * @param data.isCheckedIn - Whether the user is currently checked in.
- * @param refetch - A function to refetch the data after a mutation.
+ * @param data - The data object containing user and event details with:
+ *   - `userId`: The unique identifier for the user
+ *   - `eventId`: The unique identifier for the event
+ *   - `name`: The name of the user
+ *   - `isCheckedIn`: Whether the user is currently checked in
+ * @param refetch - A function to refetch the data after a mutation
  *
- * @returns A JSX element that displays buttons for checking in or downloading a tag.
+ * @returns A JSX element that displays buttons for checking in or downloading a tag
  *
  * @remarks
- * - If the user is already checked in, the "Checked In" button is disabled, and a "Download Tag" button is displayed.
- * - If the user is not checked in, a "Check In" button is displayed.
- * - The component uses Apollo Client's `useMutation` hook to perform the check-in operation.
+ * - If the user is already checked in, the "Checked In" button is disabled, and a "Download Tag" button is displayed
+ * - If the user is not checked in, a "Check In" button is displayed
+ * - The component uses Apollo Client's `useMutation` hook to perform the check-in operation
  * - The `generate` function from `@pdfme/generator` is used to create the PDF tag.
  * - Notifications are displayed using `NotificationToast` for success, error, and pending states.
  *

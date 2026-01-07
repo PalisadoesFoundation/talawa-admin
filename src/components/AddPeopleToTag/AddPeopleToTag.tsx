@@ -6,36 +6,32 @@
  * and assign them to the tag. The component uses Apollo Client for GraphQL queries
  * and mutations, and Material-UI's DataGrid for displaying member data.
  *
- * @props
- * - `addPeopleToTagModalIsOpen` (boolean): Controls the visibility of the modal.
- * - `hideAddPeopleToTagModal` (function): Callback to close the modal.
- * - `refetchAssignedMembersData` (function): Callback to refetch the assigned members data.
- * - `t` (function): Translation function for component-specific strings.
- * - `tCommon` (function): Translation function for common strings.
+ * @param props - Component props containing:
+ *   - `addPeopleToTagModalIsOpen`: Controls the visibility of the modal
+ *   - `hideAddPeopleToTagModal`: Callback to close the modal
+ *   - `refetchAssignedMembersData`: Callback to refetch the assigned members data
+ *   - `t`: Translation function for component-specific strings
+ *   - `tCommon`: Translation function for common strings
  *
- * @state
- * - `assignToMembers` (InterfaceMemberData[]): List of members selected for assignment.
- * - `memberToAssignToSearchFirstName` (string): Search filter for first name.
- * - `memberToAssignToSearchLastName` (string): Search filter for last name.
+ * @remarks
+ * - Uses `useState` for managing selected members and search filters
+ * - Integrates `useQuery` and `useMutation` from Apollo Client
+ * - Features infinite scrolling for loading more members
+ * - Includes search functionality for filtering members by name
+ * - Displays selected members with the ability to remove them
+ * - Handles errors and loading states with appropriate UI feedback
+ * - Dependencies: React, Apollo Client, Material-UI, React-Bootstrap, NotificationToast, React-Infinite-Scroll
  *
- * @queries
- * - `USER_TAGS_MEMBERS_TO_ASSIGN_TO`: Fetches members available for assignment to the tag.
- *
- * @mutations
- * - `ADD_PEOPLE_TO_TAG`: Assigns selected members to the tag.
- *
- * @features
- * - Infinite scrolling for loading more members.
- * - Search functionality for filtering members by name.
- * - Displays selected members with the ability to remove them.
- * - Handles errors and loading states with appropriate UI feedback.
- *
- * @dependencies
- * - React, Apollo Client, Material-UI, React-Bootstrap, React-Toastify, React-Infinite-Scroll.
- *
- * @usage
- * This component is used in the context of managing tags and their associated members.
- * It is designed to be displayed as a modal and requires integration with GraphQL APIs.
+ * @example
+ * ```tsx
+ * <AddPeopleToTag
+ *   addPeopleToTagModalIsOpen={true}
+ *   hideAddPeopleToTagModal={handleClose}
+ *   refetchAssignedMembersData={refetch}
+ *   t={t}
+ *   tCommon={tCommon}
+ * />
+ * ```
  */
 // translation-check-keyPrefix: manageTag
 import { useMutation, useQuery } from '@apollo/client';

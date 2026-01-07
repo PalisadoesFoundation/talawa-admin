@@ -5,30 +5,25 @@
  * It integrates with i18next for internationalization and updates the user's language preference
  * on the server using a GraphQL mutation.
  *
- * @param props - The properties passed to the component.
- * @param props.btnTextStyle - Optional CSS class for styling the button text.
+ * @param props - The properties passed to the component containing:
+ *   - `btnTextStyle`: Optional CSS class for styling the button text
  *
- * @returns A JSX.Element representing the language selection dropdown.
+ * @returns A JSX.Element representing the language selection dropdown
  *
  * @remarks
- * - The component uses `react-bootstrap` for the dropdown UI.
- * - The current language is determined using a cookie (`i18next`).
- * - Updates the user's language preference on the server using the `UPDATE_CURRENT_USER_MUTATION`.
- * - If a user avatar exists in localStorage, it is processed and included in the mutation.
- * - Displays a toast notification if the user ID is not found.
+ * - The component uses `react-bootstrap` for the dropdown UI
+ * - The current language is determined using a cookie (`i18next`)
+ * - Updates the user's language preference on the server using the `UPDATE_CURRENT_USER_MUTATION`
+ * - If a user avatar exists in localStorage, it is processed and included in the mutation
+ * - Displays a toast notification if the user ID is not found
+ * - Dependencies: `react-bootstrap` for dropdown UI, `i18next` for language management,
+ *   `js-cookie` for managing cookies, `NotificationToast` for displaying notifications,
+ *   `@apollo/client` for GraphQL mutation
  *
  * @example
  * ```tsx
  * <ChangeLanguageDropDown btnTextStyle="custom-style" />
  * ```
- *
- * @dependencies
- * - `react-bootstrap` for dropdown UI.
- * - `i18next` for language management.
- * - `js-cookie` for managing cookies.
- * - `react-toastify` for displaying notifications.
- * - `@apollo/client` for GraphQL mutation.
- *
  */
 import React from 'react';
 import { Dropdown } from 'react-bootstrap';

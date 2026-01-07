@@ -1,23 +1,20 @@
 /**
  * Component for managing and displaying agenda items for a specific event.
  *
- * @component
- * @param props - Component props.
- * @param props.eventId - The ID of the event for which agenda items are managed.
+ * @param props - Component props containing:
+ *   - `eventId`: The ID of the event for which agenda items are managed
+ *
+ * @returns A JSX element containing the agenda items management UI
  *
  * @remarks
  * This component fetches and displays agenda items associated with a specific event.
  * It also allows users to create new agenda items using a modal form.
- *
- * @requires
- * - `useQuery` from `@apollo/client` for fetching agenda categories and agenda items.
- * - `useMutation` from `@apollo/client` for creating new agenda items.
- * - `useTranslation` from `react-i18next` for internationalization.
- * - `react-toastify` for displaying success and error notifications.
- * - `react-bootstrap` for UI components.
- * - `@mui/icons-material` for displaying error icons.
- *
- * @returns A JSX element containing the agenda items management UI.
+ * - Uses `useQuery` from `@apollo/client` for fetching agenda categories and agenda items
+ * - Uses `useMutation` from `@apollo/client` for creating new agenda items
+ * - Uses `useTranslation` from `react-i18next` for internationalization
+ * - Uses NotificationToast for displaying success and error notifications
+ * - Uses `react-bootstrap` for UI components
+ * - Uses `@mui/icons-material` for displaying error icons
  *
  * @example
  * ```tsx

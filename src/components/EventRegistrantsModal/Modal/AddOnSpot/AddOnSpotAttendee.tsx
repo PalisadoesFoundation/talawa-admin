@@ -6,19 +6,20 @@
  * It validates the form inputs, submits the data to the server using a GraphQL
  * mutation, and handles success or error responses appropriately.
  *
- * @component
- * @param {InterfaceAddOnSpotAttendeeProps} props - The props for the component.
- * @param {boolean} props.show - Determines whether the modal is visible.
- * @param {() => void} props.handleClose - Function to close the modal.
- * @param {() => void} props.reloadMembers - Function to reload the list of members.
+ * @param props - The props for the component containing:
+ *   - `show`: Determines whether the modal is visible
+ *   - `handleClose`: Function to close the modal
+ *   - `reloadMembers`: Function to reload the list of members
  *
- * @returns {JSX.Element} The rendered AddOnSpotAttendee component.
+ * @returns The rendered AddOnSpotAttendee component
  *
  * @remarks
- * - Uses `react-bootstrap` for modal and form styling.
- * - Utilizes `NotificationToast` for displaying success and error messages.
- * - Integrates `react-i18next` for translations.
- * - Includes form validation to ensure required fields are filled.
+ * - Uses `react-bootstrap` for modal and form styling
+ * - Utilizes `NotificationToast` for displaying success and error messages
+ * - Integrates `react-i18next` for translations
+ * - Includes form validation to ensure required fields are filled
+ * - Dependencies: `@apollo/client` for GraphQL mutation, `react-bootstrap` for UI components,
+ *   `NotificationToast` for notifications, `react-i18next` for translations
  *
  * @example
  * ```tsx
@@ -28,12 +29,6 @@
  *   reloadMembers={fetchMembers}
  * />
  * ```
- *
- * @dependencies
- * - `@apollo/client` for GraphQL mutation.
- * - `react-bootstrap` for UI components.
- * - `NotificationToast` for notifications.
- * - `react-i18next` for translations.
  */
 import { SIGNUP_MUTATION } from 'GraphQl/Mutations/mutations';
 import React, { useState } from 'react';

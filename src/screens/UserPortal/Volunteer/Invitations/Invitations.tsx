@@ -1,34 +1,24 @@
 /**
- * @file Invitations.tsx
- * @description This component renders the Invitations screen for the user portal,
+ * Invitations Component
+ *
+ * This component renders the Invitations screen for the user portal,
  * allowing users to view, search, sort, and manage their volunteer invitations.
  * It integrates with GraphQL queries and mutations to fetch and update invitation data.
  *
- * @module Invitations
- *
- * @enum ItemFilter
- * @description Enum for filtering invitations by type.
- * @property {string} Group - Represents group invitations.
- * @property {string} Individual - Represents individual invitations.
- *
- * @function Invitations
- * @description Renders the Invitations screen, displaying a list of volunteer invitations
- * with options to search, sort, filter, and accept/reject invitations.
- *
- * @returns {JSX.Element} The Invitations component.
+ * @returns The Invitations component
  *
  * @remarks
- * - Redirects to the homepage if `orgId` or `userId` is missing.
- * - Displays a loader while fetching data and handles errors gracefully.
- * - Uses `useQuery` to fetch invitations and `useMutation` to update invitation status.
- * - Provides search and sorting functionality using `SearchBar` and `SortingButton` components.
+ * - Redirects to the homepage if `orgId` or `userId` is missing
+ * - Displays a loader while fetching data and handles errors gracefully
+ * - Uses `useQuery` to fetch invitations and `useMutation` to update invitation status
+ * - Provides search and sorting functionality using `SearchBar` and `SortingButton` components
+ * - Dependencies: `react`, `react-router-dom`, `react-bootstrap`, `NotificationToast`,
+ *   `@apollo/client` for GraphQL queries and mutations, `@mui/icons-material`, `react-icons` for icons,
+ *   Custom hooks: `useLocalStorage`, Custom components: `Loader`, `SearchBar`, `SortingButton`
  *
- * @dependencies
- * - `react`, `react-router-dom`, `react-bootstrap`, `react-toastify`
- * - `@apollo/client` for GraphQL queries and mutations
- * - `@mui/icons-material`, `react-icons` for icons
- * - Custom hooks: `useLocalStorage`
- * - Custom components: `Loader`, `SearchBar`, `SortingButton`
+ * ItemFilter enum:
+ * - `Group`: Represents group invitations
+ * - `Individual`: Represents individual invitations
  *
  * @example
  * ```tsx

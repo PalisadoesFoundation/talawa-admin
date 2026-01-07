@@ -3,19 +3,19 @@
  * the agenda categories for an organization. It provides functionalities to
  * preview, update, and delete agenda categories using modals and GraphQL mutations.
  *
- * @param props - Component props.
- * @param props.agendaCategoryConnection - Specifies the connection type, e.g., 'Organization'.
- * @param props.agendaCategoryData - Array of agenda category data to display.
- * @param props.agendaCategoryRefetch - Function to refetch agenda category data after updates.
+ * @param props - Component props containing:
+ *   - `agendaCategoryConnection`: Specifies the connection type, e.g., 'Organization'
+ *   - `agendaCategoryData`: Array of agenda category data to display
+ *   - `agendaCategoryRefetch`: Function to refetch agenda category data after updates
  *
  * @returns A JSX element that displays a list of agenda categories with options
  *          to preview, edit, and delete each category.
  *
  * @remarks
- * - Uses `useState` for managing modal visibility and form state.
- * - Integrates `useMutation` from Apollo Client for GraphQL operations.
- * - Displays success and error messages using `react-toastify`.
- * - Includes three modals: Preview, Update, and Delete.
+ * - Uses `useState` for managing modal visibility and form state
+ * - Integrates `useMutation` from Apollo Client for GraphQL operations
+ * - Displays success and error messages using NotificationToast
+ * - Includes three modals: Preview, Update, and Delete
  *
  * @example
  * ```tsx
@@ -25,9 +25,6 @@
  *   agendaCategoryRefetch={refetchAgendaCategories}
  * />
  * ```
- *
- * @component
- * @category Components
  */
 
 import React, { useState } from 'react';

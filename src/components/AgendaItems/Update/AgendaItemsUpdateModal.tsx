@@ -6,21 +6,22 @@
  * description, categories, URLs, and attachments. The modal also includes
  * validation for URLs and file size limits for attachments.
  *
- * @component
- * @param props - The props for the component.
- * @param props.agendaItemUpdateModalIsOpen - Boolean indicating if the modal is open.
- * @param props.hideUpdateModal - Function to close the modal.
- * @param props.formState - The current state of the agenda item form.
- * @param props.setFormState - Function to update the form state.
- * @param props.updateAgendaItemHandler - Function to handle form submission.
- * @param props.t - Translation function for localized strings.
- * @param props.agendaItemCategories - List of available agenda item categories.
+ * @param props - The props for the component containing:
+ *   - `agendaItemUpdateModalIsOpen`: Boolean indicating if the modal is open
+ *   - `hideUpdateModal`: Function to close the modal
+ *   - `formState`: The current state of the agenda item form
+ *   - `setFormState`: Function to update the form state
+ *   - `updateAgendaItemHandler`: Function to handle form submission
+ *   - `t`: Translation function for localized strings
+ *   - `agendaItemCategories`: List of available agenda item categories
  *
  * @remarks
- * - The component uses `react-bootstrap` for modal and form elements.
- * - `@mui/material` is used for the Autocomplete component.
- * - File attachments are converted to base64 format before being added to the form state.
- * - URLs are validated using a regular expression.
+ * - The component uses `react-bootstrap` for modal and form elements
+ * - `@mui/material` is used for the Autocomplete component
+ * - File attachments are converted to base64 format before being added to the form state
+ * - URLs are validated using a regular expression
+ * - Dependencies: `react`, `react-bootstrap`, `@mui/material`, `react-icons`, `NotificationToast`
+ * - Custom utility functions: `convertToBase64`
  *
  * @example
  * ```tsx
@@ -34,11 +35,6 @@
  *   agendaItemCategories={categories}
  * />
  * ```
- *
- * @dependencies
- * - `react`, `react-bootstrap`, `@mui/material`, `react-icons`, `NotificationToast`
- * - Custom utility functions: `convertToBase64`
- *
  */
 
 import React, { useState, useEffect } from 'react';

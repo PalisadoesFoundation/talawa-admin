@@ -6,23 +6,22 @@
  * categories, URLs, and attachments. The modal also provides functionality
  * for validating URLs, managing attachments, and submitting the form.
  *
- * @component
- * @param {InterfaceAgendaItemsCreateModalProps} props - The props for the component.
- * @param {boolean} props.agendaItemCreateModalIsOpen - Determines if the modal is open.
- * @param {() => void} props.hideCreateModal - Function to close the modal.
- * @param {object} props.formState - The current state of the form.
- * @param {React.Dispatch<React.SetStateAction<object>>} props.setFormState - Function to update the form state.
- * @param {() => void} props.createAgendaItemHandler - Function to handle form submission.
- * @param {(key: string) => string} props.t - Translation function for localization.
- * @param {InterfaceAgendaItemCategoryInfo[]} props.agendaItemCategories - List of available agenda item categories.
+ * @param props - The props for the component containing:
+ *   - `agendaItemCreateModalIsOpen`: Determines if the modal is open
+ *   - `hideCreateModal`: Function to close the modal
+ *   - `formState`: The current state of the form
+ *   - `setFormState`: Function to update the form state
+ *   - `createAgendaItemHandler`: Function to handle form submission
+ *   - `t`: Translation function for localization
+ *   - `agendaItemCategories`: List of available agenda item categories
  *
- * @returns {JSX.Element} The rendered modal component.
+ * @returns The rendered modal component
  *
  * @remarks
- * - The component uses `react-bootstrap` for modal and form styling.
- * - `@mui/material` is used for the Autocomplete component.
- * - Attachments are converted to base64 format before being added to the form state.
- * - URLs are validated using a regular expression before being added.
+ * - The component uses `react-bootstrap` for modal and form styling
+ * - `@mui/material` is used for the Autocomplete component
+ * - Attachments are converted to base64 format before being added to the form state
+ * - URLs are validated using a regular expression before being added
  *
  * @example
  * ```tsx

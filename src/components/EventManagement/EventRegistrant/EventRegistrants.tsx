@@ -1,38 +1,34 @@
 /**
- * @EventRegistrants Component
+ * EventRegistrants Component
  *
  * This component is responsible for displaying a list of event registrants
  * and attendees in a tabular format. It fetches data from GraphQL queries
  * and combines registrants and attendees data to display relevant information.
  *
- * @Features
- * - Fetches event registrants and attendees using GraphQL lazy queries.
- * - Combines registrants and attendees data to display enriched information.
- * - Displays a table with serial number, registrant name, registration date,
- *   and creation time.
- * - Provides a button to add new registrants and a wrapper for event check-in.
+ * @returns A JSX element containing a table of event registrants and attendees
  *
- * @Props
- * - None
+ * @remarks
+ * Features:
+ * - Fetches event registrants and attendees using GraphQL lazy queries
+ * - Combines registrants and attendees data to display enriched information
+ * - Displays a table with serial number, registrant name, registration date, and creation time
+ * - Provides a button to add new registrants and a wrapper for event check-in
  *
- * @Hooks
- * - `useTranslation`: For internationalization of text content.
- * - `useParams`: To extract `orgId` and `eventId` from the route parameters.
- * - `useLazyQuery`: To fetch event registrants and attendees data.
- * - `useState`: To manage state for registrants, attendees, and combined data.
- * - `useEffect`: To fetch and combine data on component mount and updates.
- * - `useCallback`: To memoize the data refresh function.
+ * Hooks:
+ * - `useTranslation`: For internationalization of text content
+ * - `useParams`: To extract `orgId` and `eventId` from the route parameters
+ * - `useLazyQuery`: To fetch event registrants and attendees data
+ * - `useState`: To manage state for registrants, attendees, and combined data
+ * - `useEffect`: To fetch and combine data on component mount and updates
+ * - `useCallback`: To memoize the data refresh function
  *
- * @GraphQLQueries
- * - `EVENT_REGISTRANTS`: Fetches the list of registrants for the event.
- * - `EVENT_ATTENDEES`: Fetches the list of attendees for the event.
+ * GraphQL Queries:
+ * - `EVENT_REGISTRANTS`: Fetches the list of registrants for the event
+ * - `EVENT_ATTENDEES`: Fetches the list of attendees for the event
  *
- * @Returns
- * - A JSX element containing a table of event registrants and attendees.
- *
- * @Usage
- * - This component is used in the event management section of the application
- *   to display and manage event registrants and attendees.
+ * Usage:
+ * This component is used in the event management section of the application
+ * to display and manage event registrants and attendees.
  */
 import React, { useEffect, useState, useCallback } from 'react';
 import {
