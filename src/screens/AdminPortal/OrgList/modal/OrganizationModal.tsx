@@ -37,7 +37,10 @@ import { validateFile } from 'utils/fileValidation';
 import convertToBase64 from 'utils/convertToBase64';
 import { BaseModal } from 'shared-components/BaseModal';
 
-interface InterfaceFormStateType {
+/**
+ * Shared form state interface for Organization creation.
+ */
+export interface InterfaceFormStateType {
   addressLine1: string;
   addressLine2: string;
   avatar: string | null;
@@ -63,10 +66,6 @@ export interface InterfaceOrganizationModalProps {
   tCommon: (key: string) => string;
   userData: InterfaceCurrentUserTypePG | undefined;
 }
-
-/**
- * Represents the organization modal component.
- */
 
 const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
   showModal,
@@ -233,8 +232,7 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 if (inputText.length < 50) {
                   setFormState({
                     ...formState,
-                    addressLine2: e.target.value,
-                    avatar: formState.avatar,
+                    addressLine2: inputText,
                   });
                 }
               }}
@@ -267,7 +265,8 @@ const OrganizationModal: React.FC<InterfaceOrganizationModalProps> = ({
                 const base64String = await convertToBase64(file);
                 setFormState({ ...formState, avatarPreview: base64String });
                 toast.success(t('imageUploadSuccess'));
-              } catch {
+              } catch (error: unknown) {
+                console.error('Image preview conversion failed:', error);
                 toast.error(t('imageUploadError'));
               }
             }

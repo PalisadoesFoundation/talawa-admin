@@ -9,7 +9,7 @@ import {
   split,
   Observable,
   fromPromise,
-  HttpLink, // Added HttpLink
+  HttpLink,
 } from '@apollo/client';
 import { getMainDefinition } from '@apollo/client/utilities';
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions';
@@ -17,10 +17,26 @@ import { createClient } from 'graphql-ws';
 import { onError } from '@apollo/link-error';
 import './assets/css/app.css';
 import './style/tokens/index.css';
-import 'bootstrap/dist/js/bootstrap.min.js'; // Bootstrap JS (ensure Bootstrap is installed)
-import 'react-datepicker/dist/react-datepicker.css'; // React Datepicker Styles
-import 'flag-icons/css/flag-icons.min.css'; // Flag Icons Styles
-// Removed createUploadLink import
+import 'bootstrap/dist/js/bootstrap.min.js';
+import 'react-datepicker/dist/react-datepicker.css';
+import 'flag-icons/css/flag-icons.min.css';
+
+/**
+ * Rationale for Apollo Client Link Migration:
+ * Previously, this application used `apollo-upload-client` (createUploadLink) to handle multipart/form-data
+ * for file uploads. This approach is being phased out in favor of a MinIO-based architecture.
+ *
+ * Current Strategy:
+ * 1. `apollo-upload-client` has been replaced with the standard `HttpLink`.
+ * 2. File uploads are now handled by converting files to base64-encoded strings on the client side
+ * and passing them as standard GraphQL variables, or by using direct MinIO upload paths.
+ *
+ * Considerations:
+ * - Size Limits: Base64 encoding increases payload size by ~33%. Ensure server-side body limits are adjusted.
+ * - Performance: Large files may impact client-side UI responsiveness during encoding.
+ * - Security: Standardize decoding and sanitization on the server for base64 inputs.
+ */
+
 import { Provider } from 'react-redux';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -51,7 +67,6 @@ import { refreshToken } from 'utils/getRefreshToken';
 const { getItem, clearAllItems } = useLocalStorage();
 const BEARER_PREFIX = 'Bearer ';
 
-// Track if we're currently refreshing to avoid multiple simultaneous refresh attempts
 let isRefreshing = false;
 let pendingRequests: Array<() => void> = [];
 
@@ -79,27 +94,21 @@ const errorLink = onError(
     if (graphQLErrors) {
       for (const error of graphQLErrors) {
         const errorCode = error.extensions?.code;
-
-        // Skip token refresh logic for authentication operations (login/signup/logout)
         const operationName = operation.operationName;
         const authOperations = ['SignIn', 'SignUp', 'RefreshToken', 'Logout'];
         if (authOperations.includes(operationName)) {
           continue;
         }
 
-        // Check for unauthenticated error (token expired)
         if (
           errorCode === 'unauthenticated' ||
           error.message === 'You must be authenticated to perform this action.'
         ) {
-          // Check if user is logged in via localStorage flag
-          // (actual tokens are in HTTP-Only cookies)
           const isLoggedIn = getItem('IsLoggedIn');
           if (isLoggedIn !== 'TRUE') {
             return;
           }
 
-          // If already refreshing, queue this request
           if (isRefreshing) {
             return new Observable((observer) => {
               pendingRequests.push(() => {
@@ -122,7 +131,6 @@ const errorLink = onError(
                   resolvePendingRequests();
                   return true;
                 } else {
-                  // Refresh failed, clear storage and redirect
                   clearAllItems();
                   window.location.href = '/';
                   return false;
@@ -138,8 +146,6 @@ const errorLink = onError(
               }),
           ).flatMap((success) => {
             if (success) {
-              // Retry the original request
-              // No need to set headers - HTTP-Only cookies are automatically included
               return forward(operation);
             }
             return new Observable((observer) => {
@@ -159,7 +165,10 @@ const errorLink = onError(
   },
 );
 
-// Replaced createUploadLink with standard HttpLink
+/**
+ * Migrated from createUploadLink to HttpLink.
+ * Multipart file uploads via GraphQL are no longer supported.
+ */
 const httpLinkInstance = new HttpLink({
   uri: BACKEND_URL,
   credentials: 'include',
@@ -176,21 +185,17 @@ const wsLink = new GraphQLWsLink(
         'Accept-Language': i18n.language,
       };
     },
-    on: {
-      // WebSocket connection events - debug logs removed for production
-    },
+    on: {},
   }),
 );
 
-// Create HTTP link with authentication
 const httpLink = ApolloLink.from([
-  authLink, // Only apply to HTTP operations
+  authLink,
   requestMiddleware,
   responseMiddleware,
-  httpLinkInstance, // Replaced uploadLink with httpLinkInstance
+  httpLinkInstance,
 ]);
 
-// The split function routes operations correctly
 const splitLink = split(
   ({ query }) => {
     const definition = getMainDefinition(query);
@@ -199,11 +204,10 @@ const splitLink = split(
       definition.operation === 'subscription'
     );
   },
-  wsLink, // WebSocket for subscriptions (auth via connectionParams)
-  httpLink, // HTTP with auth headers for queries/mutations
+  wsLink,
+  httpLink,
 );
 
-// Simplified combined link
 const combinedLink = ApolloLink.from([errorLink, splitLink]);
 
 export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
@@ -212,10 +216,8 @@ export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
       Query: {
         fields: {
           organization: {
-            // Cache organization separately by ID
             keyArgs: ['input.id'],
             merge(existing, incoming) {
-              // Merge organization fields, keeping both old and new event queries
               return {
                 ...existing,
                 ...incoming,
@@ -227,16 +229,13 @@ export const client: ApolloClient<NormalizedCacheObject> = new ApolloClient({
       Organization: {
         fields: {
           events: {
-            // Cache by date range and recurring flag only
             keyArgs: ['startDate', 'endDate', 'includeRecurring'],
             merge(_existing, incoming) {
-              // Always replace with incoming data to avoid cache conflicts
               return incoming;
             },
           },
         },
       },
-      // Normalize chat entities for stable references (non-breaking)
       Chat: {
         keyFields: ['id'],
       },
