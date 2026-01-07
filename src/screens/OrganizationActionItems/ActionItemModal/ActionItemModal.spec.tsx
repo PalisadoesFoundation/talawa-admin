@@ -2990,7 +2990,7 @@ describe('orgActionItemsRefetch functionality', () => {
           variables.input.actionId === '1' &&
           variables.input.eventId === 'event123' &&
           variables.input.preCompletionNotes ===
-            'Updated notes for instance with org refetch'
+          'Updated notes for instance with org refetch'
         );
       },
       result: {
@@ -4215,17 +4215,13 @@ describe('Partially Covered Lines Test Coverage', () => {
       await userEvent.click(volunteerGroupChip);
 
       // Should switch to volunteer group select and clear volunteer
-      await waitFor(
-        () => {
-          expect(
-            screen.getByTestId('volunteerGroupSelect'),
-          ).toBeInTheDocument();
-          expect(
-            screen.queryByTestId('volunteerSelect'),
-          ).not.toBeInTheDocument();
-        },
+      const volunteerGroupSelect = await screen.findByTestId(
+        'volunteerGroupSelect',
+        {},
         { timeout: 3000 },
       );
+      expect(volunteerGroupSelect).toBeInTheDocument();
+      expect(screen.queryByTestId('volunteerSelect')).not.toBeInTheDocument();
     });
 
     it('should have isVolunteerGroupChipDisabled true when editing item with volunteer', () => {
