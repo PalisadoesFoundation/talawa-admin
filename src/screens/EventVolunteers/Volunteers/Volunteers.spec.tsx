@@ -255,16 +255,22 @@ describe('Testing Volunteers Screen', () => {
 
   it('Search by pressing Enter key', async () => {
     renderVolunteers(link1);
-    await waitFor(async () => {
-      const searchInput = await screen.findByTestId('searchBy');
-      expect(searchInput).toBeInTheDocument();
 
-      // Type and press Enter to trigger debouncedSearch
-      await userEvent.type(searchInput, 'T');
-      await userEvent.keyboard('{Enter}');
+    // Wait for LoadingState to complete (if needed)
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
+
+    // Get element (findBy already waits)
+    const searchInput = await screen.findByTestId('searchBy');
+    expect(searchInput).toBeInTheDocument();
+
+    // Perform interactions OUTSIDE waitFor
+    await userEvent.type(searchInput, 'T');
+    await userEvent.keyboard('{Enter}');
     await debounceWait();
 
+    // Assert results
     const volunteerName = await screen.findAllByTestId('volunteerName');
     expect(volunteerName[0]).toHaveTextContent('Teresa Bradley');
   });

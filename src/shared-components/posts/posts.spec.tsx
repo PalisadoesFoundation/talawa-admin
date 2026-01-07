@@ -1299,4 +1299,44 @@ describe('FetchMore Success Coverage', () => {
     const infiniteScroll = screen.getByTestId('infinite-scroll');
     expect(infiniteScroll).toHaveAttribute('data-has-more', 'false');
   });
+
+  describe('LoadingState Wrapper', () => {
+    beforeEach(() => {
+      nextId = 1;
+      vi.clearAllMocks();
+      routerMocks.useParams.mockReturnValue({ orgId: '123' });
+    });
+
+    afterEach(() => {
+      vi.clearAllMocks();
+    });
+
+    it('shows loader during initial data loading', async () => {
+      renderComponent([orgPostListMock, orgPinnedPostListMock]);
+
+      // Loader should be present initially
+      const loader = screen.queryByTestId('loader');
+      if (loader) {
+        expect(loader).toBeInTheDocument();
+      }
+
+      // Wait for content to load
+      await waitFor(() => {
+        expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+        expect(screen.getByTestId('page-header')).toBeInTheDocument();
+      });
+    });
+
+    it('renders content when not loading', async () => {
+      renderComponent([orgPostListMock, emptyPinnedPostsMock]);
+
+      await waitFor(() => {
+        expect(screen.queryByTestId('loader')).not.toBeInTheDocument();
+      });
+
+      // Verify main content is visible
+      expect(screen.getByTestId('page-header')).toBeInTheDocument();
+      expect(screen.getByTestId('posts-renderer')).toBeInTheDocument();
+    });
+  });
 });

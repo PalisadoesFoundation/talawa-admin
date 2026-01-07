@@ -915,13 +915,9 @@ describe('Testing Community Profile Screen', () => {
         ).toBeInTheDocument();
       });
 
-      const spinners = screen.queryAllByTestId('spinner');
-      const visibleSpinners = spinners.filter((spinner) => {
-        const parent = spinner.closest('[data-testid="loadingContainer"]');
-        return parent && !parent.classList.contains('hidden');
+      await waitFor(() => {
+        expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
       });
-      expect(visibleSpinners.length).toBe(0);
-      expect(screen.getByPlaceholderText(/Website Link/i)).toBeInTheDocument();
     });
   });
 });

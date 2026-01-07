@@ -12,7 +12,7 @@ Defined in: [src/components/GroupChatDetails/GroupChatDetails.tsx:79](https://gi
 
 ### \_\_namedParameters
 
-[`InterfaceGroupChatDetailsProps`](../../types/Chat/interface/interfaces/InterfaceGroupChatDetailsProps.md)
+[`InterfaceGroupChatDetailsProps`](../../../../types/Chat/interface/interfaces/InterfaceGroupChatDetailsProps.md)
 
 ## Returns
 

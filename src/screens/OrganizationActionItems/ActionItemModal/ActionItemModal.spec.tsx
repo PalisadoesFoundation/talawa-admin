@@ -1035,6 +1035,7 @@ describe('ItemModal - Additional Test Cases', () => {
       const allChips = screen
         .getAllByRole('button')
         .filter((button) => button.textContent?.includes('volunteerGroup'));
+      expect(allChips.length).toBeGreaterThanOrEqual(1);
       const volunteerGroupChip = allChips[0];
       await userEvent.click(volunteerGroupChip);
 
@@ -1069,6 +1070,7 @@ describe('ItemModal - Additional Test Cases', () => {
             button.textContent?.includes('volunteer') &&
             !button.textContent?.includes('volunteerGroup'),
         );
+      expect(volunteerChips.length).toBeGreaterThanOrEqual(1);
       const volunteerChip = volunteerChips[0];
       await userEvent.click(volunteerChip);
 
@@ -4142,7 +4144,9 @@ describe('Partially Covered Lines Test Coverage', () => {
         expect(screen.getByTestId('volunteerGroupSelect')).toBeInTheDocument();
       });
 
-      const volunteerGroupSelect = screen.getByTestId('volunteerGroupSelect');
+      const volunteerGroupSelect = await screen.getByTestId(
+        'volunteerGroupSelect',
+      );
       expect(volunteerGroupSelect).toBeInTheDocument();
 
       // Now click volunteer chip - this should execute the !isVolunteerChipDisabled path

@@ -1664,20 +1664,6 @@ describe('Testing User Pledge Screen', () => {
       const loadingMocks = [
         {
           request: {
-            query: USER_DETAILS,
-            variables: { input: { id: 'userId' } },
-          },
-          result: {
-            data: {
-              user: {
-                id: 'userId',
-                __typename: 'User',
-              },
-            },
-          },
-        },
-        {
-          request: {
             query: USER_PLEDGES,
             variables: {
               input: { userId: 'userId' },
@@ -1691,8 +1677,10 @@ describe('Testing User Pledge Screen', () => {
       ];
 
       renderMyPledges(new StaticMockLink(loadingMocks));
-      const spinners = screen.getAllByTestId('spinner');
-      expect(spinners.length).toBeGreaterThan(0);
+      await waitFor(() => {
+        const spinners = screen.getAllByTestId('spinner');
+        expect(spinners.length).toBeGreaterThan(0);
+      });
     });
 
     it('should hide spinner and render pledges after LoadingState completes', async () => {

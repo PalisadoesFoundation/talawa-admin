@@ -1453,7 +1453,22 @@ describe('EventActionItems', () => {
             query: GET_EVENT_ACTION_ITEMS,
             variables: { input: { id: 'eventId1' } },
           },
-          result: { data: { event: { actionItems: { edges: [] } } } },
+          result: {
+            data: {
+              event: {
+                id: 'eventId1',
+                recurrenceRule: null,
+                baseEvent: null,
+                actionItems: {
+                  edges: [],
+                  pageInfo: {
+                    hasNextPage: false,
+                    endCursor: null,
+                  },
+                },
+              },
+            },
+          },
           delay: 100,
         },
       ];

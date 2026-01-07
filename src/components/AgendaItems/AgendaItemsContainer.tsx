@@ -57,7 +57,7 @@ function AgendaItemsContainer({
   agendaItemRefetch,
   agendaItemCategories,
 }: {
-  agendaItemConnection: 'Event';
+  agendaItemConnection: string;
   agendaItemData: InterfaceAgendaItemInfo[] | undefined;
   agendaItemRefetch: () => void;
   agendaItemCategories: InterfaceAgendaItemCategoryInfo[] | undefined;

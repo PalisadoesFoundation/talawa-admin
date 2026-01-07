@@ -1642,13 +1642,12 @@ describe('UpcomingEvents', () => {
     it('filters events by title search', async () => {
       const link = new StaticMockLink(searchMocks);
       renderUpcomingEvents(link);
+
       await waitFor(() => {
         expect(screen.getAllByTestId('eventTitle').length).toBe(2);
       });
-      await waitFor(async () => {
-        const input = screen.getByTestId('searchByInput');
-        await userEvent.type(input, 'beach');
-      });
+      const input = screen.getByTestId('searchByInput');
+      await userEvent.type(input, 'beach');
       await waitFor(() => {
         const titles = screen.getAllByTestId('eventTitle');
         expect(titles.length).toBe(1);

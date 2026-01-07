@@ -912,8 +912,9 @@ describe('Groups Screen [User Portal]', () => {
     renderGroups(linkSuccess);
 
     await waitFor(() => {
-      const groupNames = screen.getAllByTestId('groupName');
-      expect(groupNames.length).toBeGreaterThan(0);
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
+    const groupNames = screen.getAllByTestId('groupName');
+    expect(groupNames.length).toBeGreaterThan(0);
   });
 });

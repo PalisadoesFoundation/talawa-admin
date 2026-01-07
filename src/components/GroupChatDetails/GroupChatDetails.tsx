@@ -1,20 +1,20 @@
 /**
  * Component for displaying and managing group chat details.
  *
- * @module GroupChatDetails
+ * module - GroupChatDetails
  *
- * @description
+ * description -
  * This component provides a modal interface for viewing and editing group chat details,
  * including the chat name, image, description, and members. It also allows adding new users
  * to the group chat and updating chat information.
  *
- * @param {InterfaceGroupChatDetailsProps} props - The props for the component.
- * @param {boolean} props.groupChatDetailsModalisOpen - Determines if the group chat details modal is open.
- * @param {Function} props.toggleGroupChatDetailsModal - Function to toggle the visibility of the modal.
- * @param {Object} props.chat - The chat object containing details like name, image, description, and users.
- * @param {Function} props.chatRefetch - Function to refetch chat data after updates.
+ * @param props - The props for the component.
+ * @param groupChatDetailsModalisOpen - Determines if the group chat details modal is open.
+ * @param toggleGroupChatDetailsModal - Function to toggle the visibility of the modal.
+ * @param chat - The chat object containing details like name, image, description, and users.
+ * @param chatRefetch - Function to refetch chat data after updates.
  *
- * @returns {JSX.Element} The rendered GroupChatDetails component.
+ * @returns The rendered GroupChatDetails component.
  *
  * @remarks
  * - Uses `@mui/material` for table and modal styling.
@@ -33,7 +33,7 @@
  * />
  * ```
  *
- * @dependencies
+ * dependencies-
  * - `@mui/material`
  * - `react-bootstrap`
  * - `@apollo/client`
@@ -568,7 +568,8 @@ export default function groupChatDetails({
                           >
                             {userDetails.name}
                             <br />
-                            {userDetails.role || 'Member'}
+                            {userDetails.role ||
+                              tCommon('member', { defaultValue: 'Member' })}
                           </TableCell>
                           <TableCell
                             align="center"

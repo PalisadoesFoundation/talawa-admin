@@ -1,15 +1,15 @@
 /**
  * Component for managing and displaying agenda items for a specific event.
  *
- * @component
+ * component
  * @param props - Component props.
- * @param props.eventId - The ID of the event for which agenda items are managed.
+ * @param eventId - The ID of the event for which agenda items are managed.
  *
  * @remarks
  * This component fetches and displays agenda items associated with a specific event.
  * It also allows users to create new agenda items using a modal form.
  *
- * @requires
+ * requires-
  * - `useQuery` from `@apollo/client` for fetching agenda categories and agenda items.
  * - `useMutation` from `@apollo/client` for creating new agenda items.
  * - `useTranslation` from `react-i18next` for internationalization.
@@ -235,7 +235,7 @@ function EventAgendaItems(props: { eventId: string }): JSX.Element {
           <hr />
 
           <AgendaItemsContainer
-            agendaItemConnection={t('event') as 'Event'}
+            agendaItemConnection={t('event')}
             agendaItemData={agendaItemData?.agendaItemByEvent}
             agendaItemRefetch={refetchAgendaItem}
             agendaItemCategories={

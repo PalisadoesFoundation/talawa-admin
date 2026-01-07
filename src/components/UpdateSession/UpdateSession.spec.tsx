@@ -686,7 +686,7 @@ describe('Testing UpdateTimeout Component', () => {
     // Verify that the timeout value is displayed after loading completes
     expect(screen.getByTestId('timeout-value')).toHaveTextContent('30 minutes');
   });
-  it('should render LoadingState component during query loading', () => {
+  it('should display loading spinner during query and hide it after data loads', async () => {
     // Use a mock that delays the response to keep loading state visible longer
     const delayedMocks = [
       {
@@ -710,9 +710,18 @@ describe('Testing UpdateTimeout Component', () => {
       </MockedProvider>,
     );
 
-    // During loading, content should still be rendered but potentially under a loading overlay
-    // The exact assertion depends on how LoadingState is implemented
-    // At minimum, verify the component doesn't crash during loading
-    expect(screen.getByTestId('timeout-value')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).toBeInTheDocument();
+    });
+
+    // Wait for loading to complete
+    await waitFor(() => {
+      expect(screen.getByTestId('timeout-value')).toBeInTheDocument();
+    });
+
+    // Verify loading spinner is gone
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+    });
   });
 });

@@ -529,9 +529,10 @@ describe('Testing Invitations Screen', () => {
   it('should render Invitations screen', async () => {
     renderInvitations(link1);
     await waitFor(async () => {
-      const searchInput = await screen.findByTestId('searchByInput');
-      expect(searchInput).toBeInTheDocument();
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
+    const searchInput = await screen.findByTestId('searchByInput');
+    expect(searchInput).toBeInTheDocument();
   });
 
   it('Check Sorting Functionality', async () => {

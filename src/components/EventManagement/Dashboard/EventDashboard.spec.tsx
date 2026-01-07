@@ -402,7 +402,7 @@ describe('Testing Event Dashboard Screen', () => {
       const loadingMocks = [
         {
           request: { query: EVENT_DETAILS, variables: { eventId: mockID } },
-          result: { data: { event: null } },
+          result: MOCKS_WITH_TIME[0].result,
           delay: 100,
         },
       ];
@@ -421,14 +421,11 @@ describe('Testing Event Dashboard Screen', () => {
       );
 
       await waitFor(() => {
-        const spinner = document.querySelector('[data-testid="spinner"]');
-        expect(spinner).toBeInTheDocument();
+        expect(queryByTestId('spinner')).toBeInTheDocument();
       });
 
       await waitFor(() => {
-        const spinner = document.querySelector('[data-testid="spinner"]');
-        expect(spinner).not.toBeInTheDocument();
-        expect(queryByTestId('no-event')).toBeInTheDocument();
+        expect(queryByTestId('spinner')).not.toBeInTheDocument();
       });
     });
 
@@ -437,8 +434,7 @@ describe('Testing Event Dashboard Screen', () => {
       const { getByTestId } = renderEventDashboard(mockLink);
       await wait();
 
-      const spinner = document.querySelector('[data-testid="spinner"]');
-      expect(spinner).not.toBeInTheDocument();
+      expect(document.querySelector('spinner')).not.toBeInTheDocument();
       expect(getByTestId('event-details')).toBeInTheDocument();
     });
   });

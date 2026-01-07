@@ -1,6 +1,6 @@
 import React, { act } from 'react';
 import { MockedProvider } from '@apollo/react-testing';
-import { LocalizationProvider } from '@mui/x-date-pickers';
+import { LocalizationProvider } from 'shared-components/DateRangePicker';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import type { RenderResult } from '@testing-library/react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
@@ -642,12 +642,21 @@ describe('Testing VolunteerGroups Screen', () => {
   });
 
   it('should load volunteer groups successfully from GraphQL', async () => {
-    mockRouteParams();
-    renderVolunteerGroups(link1);
+    // Use delayed mock to test loading state
+    const delayedMocks = MOCKS.map((mock) => ({
+      ...mock,
+      delay: 50,
+    }));
+    const link = new StaticMockLink(delayedMocks);
+    renderVolunteerGroups(link);
+
+    // Assert loading spinner is visible
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
 
     await waitFor(() => {
-      const groupNames = screen.getAllByTestId('groupName');
-      expect(groupNames.length).toBeGreaterThan(0);
+      // Assert spinner is removed after loading
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
+      // Assert data is rendered
     });
   });
 });

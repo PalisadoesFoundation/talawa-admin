@@ -899,8 +899,27 @@ describe('OrgUpdate Component', () => {
             query: GET_ORGANIZATION_BASIC_DATA,
             variables: { id: '1' },
           },
-          result: { data: null },
-          delay: 100,
+          result: {
+            data: {
+              organization: {
+                __typename: 'Organization',
+                id: '1',
+                name: 'Test Org',
+                description: 'Test Description',
+                addressLine1: '123 Test St',
+                addressLine2: 'Suite 100',
+                city: 'Test City',
+                state: 'Test State',
+                postalCode: '12345',
+                countryCode: 'US',
+                avatarURL: null,
+                createdAt: dayjs.utc().toISOString(),
+                updatedAt: dayjs.utc().toISOString(),
+                isUserRegistrationRequired: false,
+              },
+            },
+            delay: 100,
+          },
         },
       ];
 

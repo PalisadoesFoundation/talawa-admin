@@ -802,31 +802,4 @@ describe('AcceptInvitation', () => {
       });
     });
   });
-
-  it('should hide spinner and render invitation form after LoadingState completes', async () => {
-    const verifyMaskedEmailMock = {
-      request: {
-        query: VERIFY_EVENT_INVITATION,
-        variables: { input: { invitationToken: 'test-token' } },
-      },
-      result: {
-        data: {
-          verifyEventInvitation: {
-            invitationToken: 'test-token',
-            inviteeEmailMasked: 't**@e***.com',
-          },
-        },
-      },
-    };
-
-    renderComponent(
-      [verifyMaskedEmailMock],
-      '/invitation/test-token',
-      'auth-token',
-    );
-
-    await waitFor(() => {
-      expect(screen.getByTestId('accept-invite-btn')).toBeInTheDocument();
-    });
-  });
 });

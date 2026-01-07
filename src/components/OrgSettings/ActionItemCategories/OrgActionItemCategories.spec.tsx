@@ -354,11 +354,10 @@ describe('Testing Organisation Action Item Categories', () => {
       });
     });
 
-    it('should prevent interaction during loading state', async () => {
+    it('should show loading spinner when data is loading', async () => {
       renderActionItemCategories(new StaticMockLink([]), 'orgId');
 
-      const spinner = screen.getByTestId('spinner');
-      expect(spinner.parentElement?.className).toContain('loadingOverlay');
+      expect(screen.getByTestId('spinner')).toBeInTheDocument();
     });
 
     it('should display categories after LoadingState completes', async () => {

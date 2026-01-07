@@ -839,32 +839,34 @@ describe('Testing Agenda Items Components', () => {
 
   it('should handle loading state when fetching agenda items', async () => {
     const loadingMocks = [
+      createCategorySuccessMock(),
       {
         request: {
           query: AgendaItemByEvent,
-          variables: { eventId: 'eventId' },
+          variables: { relatedEventId: formData.relatedEventId },
         },
         result: { data: { agendaItemByEvent: [] } },
         delay: 100,
       },
     ];
 
-    render(
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <MockedProvider mocks={loadingMocks}>
-          <Provider store={store}>
-            <BrowserRouter>
-              <I18nextProvider i18n={i18n}>
-                <EventAgendaItems eventId="eventId" />
-              </I18nextProvider>
-            </BrowserRouter>
-          </Provider>
-        </MockedProvider>
-      </LocalizationProvider>,
-    );
+    renderEventAgendaItems({
+      mocks: loadingMocks,
+      withLocalization: true,
+      eventId: formData.relatedEventId,
+    });
 
+    // Assert spinner is visible during loading
+    expect(screen.getByTestId('spinner')).toBeInTheDocument();
+
+    // Wait for loading to complete and button to appear
     await waitFor(() => {
       expect(screen.getByTestId('createAgendaItemBtn')).toBeInTheDocument();
+    });
+
+    // Assert spinner is no longer visible after loading
+    await waitFor(() => {
+      expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
     });
   });
 });

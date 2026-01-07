@@ -1236,6 +1236,10 @@ describe('Manage Tag Page', () => {
   });
 
   describe('LoadingState Behavior', () => {
+    afterEach(() => {
+      vi.clearAllMocks();
+    });
+
     it('should show LoadingState spinner while tag members are loading', async () => {
       const loadingMocks = [
         {
@@ -1249,6 +1253,27 @@ describe('Manage Tag Page', () => {
                 lastName: { starts_with: '' },
               },
               sortedBy: { id: 'DESCENDING' },
+            },
+          },
+          result: {
+            data: {
+              getAssignedUsers: {
+                __typename: 'UserTag',
+                name: 'tag1',
+                ancestorTags: [],
+                usersAssignedTo: {
+                  __typename: 'UserTagUsersAssignedToConnection',
+                  edges: [],
+                  pageInfo: {
+                    __typename: 'PageInfo',
+                    startCursor: null,
+                    endCursor: null,
+                    hasNextPage: false,
+                    hasPreviousPage: false,
+                  },
+                  totalCount: 0,
+                },
+              },
             },
           },
           delay: 1000,
@@ -1277,30 +1302,60 @@ describe('Manage Tag Page', () => {
     });
 
     it('should hide spinner and render members after LoadingState completes', async () => {
-      const mockLinkForThisTest = new StaticMockLink(MOCKS);
+      const loadingMocks = [
+        {
+          request: {
+            query: USER_TAGS_ASSIGNED_MEMBERS,
+            variables: {
+              id: '1',
+              first: TAGS_QUERY_DATA_CHUNK_SIZE,
+              where: {
+                firstName: { starts_with: '' },
+                lastName: { starts_with: '' },
+              },
+              sortedBy: { id: 'DESCENDING' },
+            },
+          },
+          result: {
+            data: {
+              getAssignedUsers: {
+                __typename: 'UserTag',
+                name: 'tag1',
+                ancestorTags: [],
+                usersAssignedTo: {
+                  __typename: 'UserTagUsersAssignedToConnection',
+                  edges: [],
+                  pageInfo: {
+                    __typename: 'PageInfo',
+                    startCursor: null,
+                    endCursor: null,
+                    hasNextPage: false,
+                    hasPreviousPage: false,
+                  },
+                  totalCount: 0,
+                },
+              },
+            },
+          },
+          delay: 1000,
+        },
+      ];
+      const link = new StaticMockLink(loadingMocks);
 
-      render(
-        <MockedProvider link={mockLinkForThisTest}>
-          <MemoryRouter initialEntries={['/orgtags/org-123/manageTag/tag-123']}>
-            <Routes>
-              <Route
-                path="/orgtags/:orgId/manageTag/:tagId"
-                element={<ManageTag />}
-              />
-            </Routes>
-          </MemoryRouter>
-        </MockedProvider>,
-      );
+      renderManageTag(link);
 
-      // Wait for data to load with longer timeout
+      // Verify spinner is no longer present after loading
       await waitFor(
         () => {
-          // Check for any text that indicates data loaded
-          const allText = screen.queryAllByText(/./); // Match any non-empty text
-          expect(allText.length).toBeGreaterThan(0);
+          expect(screen.queryByTestId('spinner')).not.toBeInTheDocument();
         },
         { timeout: 5000 },
       );
+
+      // Verify actual content is rendered
+      await waitFor(() => {
+        expect(screen.getByTestId('allTagsBtn')).toBeInTheDocument();
+      });
     });
   });
 });
